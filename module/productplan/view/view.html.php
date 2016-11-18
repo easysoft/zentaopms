@@ -101,7 +101,7 @@
                     </td>
                     <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
                     <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($viewLink , $story->title);?></td>
-                    <td><?php echo $modules[$story->module];?></td>
+                    <td class='text-left'><?php echo $modules[$story->module];?></td>
                     <td><?php echo zget($users, $story->openedBy);?></td>
                     <td><?php echo zget($users, $story->assignedTo);?></td>
                     <td><?php echo $story->estimate;?></td>
@@ -123,35 +123,163 @@
                 <tr>
                   <td colspan='9'>
                     <div class='table-actions clearfix'>
-                      <?php 
-                      if(count($planStories) and ($canBatchUnlink or $canBatchChangePlan))
-                      {
-                          echo html::selectButton();
-                          echo "<div class='btn-group dropup'>";
-                          $actionLink = inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");
-                          echo html::commonButton($lang->productplan->unlinkStory, ($canBatchUnlink ? '' : 'disabled') . "onclick=\"setFormAction('$actionLink', '', this)\"");
-                          echo "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
-                          echo "<ul class='dropdown-menu'>";
-                          echo "<li class='dropdown-submenu'>";
-                          echo html::a('javascript:;', $lang->story->planAB, '', "id='changePlan' " . ($canBatchChangePlan ? '' : "class='disabled'"));
-                          if($canBatchChangePlan)
+                      <?php if(count($planStories)):?>
+                      <?php echo html::selectButton();?>
+                      <?php
+                      $disabled   = $canBatchUnlink ? '' : "disabled='disabled'";
+                      $actionLink = inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");
+                      ?>
+                      <div class='btn-group dropup'>
+                        <?php echo html::commonButton($lang->productplan->unlinkStory, ($canBatchUnlink ? '' : 'disabled') . "onclick=\"setFormAction('$actionLink', '', this)\"");?>
+                        <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+                        <ul class='dropdown-menu'>
+                          <?php
+                          $class = "class='disabled'";
+
+                          $canBatchEdit = common::hasPriv('story', 'batchEdit');
+                          $actionLink   = $this->createLink('story', 'batchEdit', "productID=$plan->product&projectID=0&branch=$branch");
+                          $misc = $canBatchEdit ? "onclick=\"setFormAction('$actionLink', '', this)\"" : $class;
+                          echo "<li>" . html::a('#', $lang->edit, '', $misc) . "</li>";
+
+                          if(common::hasPriv('story', 'batchReview'))
+                          {
+                              echo "<li class='dropdown-submenu'>";
+                              echo html::a('javascript:;', $lang->story->review, '', "id='reviewItem'");
+                              echo "<ul class='dropdown-menu'>";
+                              unset($lang->story->reviewResultList['']);
+                              unset($lang->story->reviewResultList['revert']);
+                              foreach($lang->story->reviewResultList as $key => $result)
+                              {
+                                  $actionLink = $this->createLink('story', 'batchReview', "result=$key");
+                                  if($key == 'reject')
+                                  {
+                                      echo "<li class='dropdown-submenu'>";
+                                      echo html::a('#', $result, '', "id='rejectItem'");
+                                      echo "<ul class='dropdown-menu'>";
+                                      unset($lang->story->reasonList['']);
+                                      unset($lang->story->reasonList['subdivided']);
+                                      unset($lang->story->reasonList['duplicate']);
+
+                                      foreach($lang->story->reasonList as $key => $reason)
+                                      {
+                                          $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key");
+                                          echo "<li>";
+                                          echo html::a('#', $reason, '', "onclick=\"setFormAction('$actionLink','hiddenwin', this)\"");
+                                          echo "</li>";
+                                      }
+                                      echo '</ul></li>';
+                                  }
+                                  else
+                                  {
+                                    echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink','hiddenwin', this)\"") . '</li>';
+                                  }
+                              }
+                              echo '</ul></li>';
+                          }
+                          else
+                          {
+                              echo '<li>' . html::a('javascript:;', $lang->story->review,  '', $class) . '</li>';
+                          }
+
+                          if(common::hasPriv('story', 'batchChangeBranch') and $this->session->currentProductType != 'normal')
+                          {
+                              $withSearch = count($branches) > 8;
+                              echo "<li class='dropdown-submenu'>";
+                              echo html::a('javascript:;', $lang->product->branchName[$this->session->currentProductType], '', "id='branchItem'");
+                              echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                              foreach($branches as $branchID => $branchName)
+                              {
+                                  $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID");
+                                  echo "<li class='option' data-key='$branchID'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', this)\"") . "</li>";
+                              }
+                              if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                              echo '</ul></li>';
+                          }
+
+                          if(common::hasPriv('story', 'batchChangeModule'))
+                          {
+                              $withSearch = count($modules) > 8;
+                              echo "<li class='dropdown-submenu'>";
+                              echo html::a('javascript:;', $lang->story->moduleAB, '', "id='moduleItem'");
+                              echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                              foreach($modules as $moduleId => $module)
+                              {
+                                  $actionLink = $this->createLink('story', 'batchChangeModule', "moduleID=$moduleId");
+                                  echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin', this)\"") . "</li>";
+                              }
+                              if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                              echo '</ul></li>';
+                          }
+                          else
+                          {
+                              echo '<li>' . html::a('javascript:;', $lang->story->moduleAB, '', $class) . '</li>';
+                          }
+
+                          if(common::hasPriv('story', 'batchChangePlan'))
                           {
                               unset($plans['']);
                               unset($plans[$plan->id]);
                               $plans      = array(0 => $lang->null) + $plans;
-                              $withSearch = count($plans) > 10;
+                              $withSearch = count($plans) > 8;
+                              echo "<li class='dropdown-submenu'>";
+                              echo html::a('javascript:;', $lang->story->planAB, '', "id='planItem'");
                               echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                               foreach($plans as $planID => $planName)
                               {
                                   $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID&oldPlanID=$plan->id");
-                                  echo "<li class='option' data-key='$planID'>" . html::a('#', $planName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', this)\"") . "</li>";
+                                  echo "<li class='option' data-key='$planID'>" . html::a('#', $planName, '', "onclick=\"setFormAction('$actionLink','hiddenwin', this)\"") . "</li>";
                               }
                               if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
-                              echo '</ul>';
+                              echo '</ul></li>';
                           }
-                          echo '</li></ul></div>';
-                      }
-                      ?>
+                          else
+                          {
+                              echo '<li>' . html::a('javascript:;', $lang->story->planAB, '', $class) . '</li>';
+                          }
+
+                          if(common::hasPriv('story', 'batchChangeStage'))
+                          {
+                              echo "<li class='dropdown-submenu'>";
+                              echo html::a('javascript:;', $lang->story->stageAB, '', "id='stageItem'");
+                              echo "<ul class='dropdown-menu'>";
+                              $lang->story->stageList[''] = $lang->null;
+                              foreach($lang->story->stageList as $key => $stage)
+                              {
+                                  $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
+                                  echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink','hiddenwin', this)\"") . "</li>";
+                              }
+                              echo '</ul></li>';
+                          }
+                          else
+                          {
+                              echo '<li>' . html::a('javascript:;', $lang->story->stageAB, '', $class) . '</li>';
+                          }
+
+                          if(common::hasPriv('story', 'batchAssignTo'))
+                          {
+                                $withSearch = count($users) > 10;
+                                $actionLink = $this->createLink('story', 'batchAssignTo', "productID=$plan->product");
+                                echo html::select('assignedTo', $users, '', 'class="hidden"');
+                                echo "<li class='dropdown-submenu'>";
+                                echo html::a('javascript::', $lang->story->assignedTo, '', 'id="assignItem"');
+                                echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                                foreach ($users as $key => $value)
+                                {
+                                    if(empty($key) or $key == 'closed') continue;
+                                    echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
+                                }
+                                if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                                echo "</ul>";
+                                echo "</li>";
+                          }
+                          else
+                          {
+                              echo '<li>' . html::a('javascript:;', $lang->story->assignedTo, '', $class) . '</li>';
+                          }
+                          ?>
+                        </ul>
+                      </div>
+                      <?php endif;?>
                       <div class='text'><?php echo $summary;?></div>
                     </div>
                   </td>

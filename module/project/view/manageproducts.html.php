@@ -17,28 +17,55 @@
       <?php echo html::icon($lang->icons['product']);?> <?php echo $lang->project->manageProducts;?>
     </div>
   </div>
-  <form class='form-condensed' method='post'>
-    <div id='productsBox' class='row'>
-      <?php foreach($allProducts as $productID => $productName):?>
-      <?php $checked = isset($linkedProducts[$productID]) ? 'checked' : ''; ?>
-      <div class='col-sm-4 <?php echo $checked?>'>
-        <?php if(isset($branchGroups[$productID])) echo "<div class='col-sm-6' style='padding-left:0px'>"?>
-        <label for='<?php echo 'products'. $productID?>';>
-          <?php echo "<input type='checkbox' name='products[$productID]' value='$productID' $checked id='products{$productID}'> $productName";?>
-        </label>
-        <?php
-        if(isset($branchGroups[$productID]))
-        {
-            echo "</div><div class='col-sm-6'>";
-            echo html::select("branch[$productID]", $branchGroups[$productID], $checked ? $linkedProducts[$productID]->branch : '', "class='from-control chosen'");
-            echo '</div>';
-        }
-        ?>
+  <form id='productsBox' class='form-condensed' method='post'>
+    <fieldset>
+      <legend><?php echo $lang->project->linkedProducts;?></legend>
+      <div class='row'>
+        <?php foreach($allProducts as $productID => $productName):?>
+        <?php if(isset($linkedProducts[$productID])):?>
+        <?php $checked = 'checked';?>
+        <div class='col-sm-4 <?php echo $checked?>'>
+          <?php if(isset($branchGroups[$productID])) echo "<div class='col-sm-6' style='padding-left:0px'>"?>
+          <label for='<?php echo 'products'. $productID?>';>
+            <?php echo "<input type='checkbox' name='products[$productID]' value='$productID' $checked id='products{$productID}'> $productName";?>
+          </label>
+          <?php
+          if(isset($branchGroups[$productID]))
+          {
+              echo "</div><div class='col-sm-6'>";
+              echo html::select("branch[$productID]", $branchGroups[$productID], $linkedProducts[$productID]->branch, "class='from-control chosen'");
+              echo '</div>';
+          }
+          ?>
+        </div>
+        <?php unset($allProducts[$productID]);?>
+        <?php endif;?>
+        <?php endforeach;?>
       </div>
-      <?php endforeach;?>
-      <?php echo html::hidden("post", 'post');?>
-    </div>
+    </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->project->unlinkedProducts;?></legend>
+      <div class='row'>
+        <?php foreach($allProducts as $productID => $productName):?>
+        <div class='col-sm-4'>
+          <?php if(isset($branchGroups[$productID])) echo "<div class='col-sm-6' style='padding-left:0px'>"?>
+          <label for='<?php echo 'products'. $productID?>';>
+            <?php echo "<input type='checkbox' name='products[$productID]' value='$productID' id='products{$productID}'> $productName";?>
+          </label>
+          <?php
+          if(isset($branchGroups[$productID]))
+          {
+              echo "</div><div class='col-sm-6'>";
+              echo html::select("branch[$productID]", $branchGroups[$productID], '', "class='from-control chosen'");
+              echo '</div>';
+          }
+          ?>
+        </div>
+        <?php endforeach;?>
+      </div>
+    </fieldset>
     <div class="text-center">
+      <?php echo html::hidden("post", 'post');?>
       <?php echo html::submitButton();?>
     </div>
   </form>
