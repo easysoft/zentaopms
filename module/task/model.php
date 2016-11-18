@@ -1190,6 +1190,20 @@ class taskModel extends model
             $task->productType = $product->type;
         }
 
+        /* Compute task progess. */
+        if($task->consumed == 0 and $task->left == 0)
+        {
+            $task->progess = 0;
+        }
+        elseif($task->consumed != 0 and $task->left == 0)
+        {
+            $task->progess = 100;
+        }
+        else
+        {
+            $task->progess = round($task->consumed / ($task->consumed + $task->left), 3) * 100;
+        }
+
         return $task;
     }
 

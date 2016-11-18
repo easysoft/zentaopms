@@ -14,15 +14,13 @@
 $webRoot = $this->app->getWebRoot();
 $jsRoot  = $webRoot . "js/";
 ?>
-<?php include '../../common/view/chosen.html.php'?>
+<?php include '../../common/view/chosen.html.php';?>
 <div class='modal-dialog w-500px'>
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h4 class="modal-title"><strong><?php echo $lang->tree->edit;?></strong></h4>
+  </div>
   <div class='modal-body'>
-    <div id='titlebar'>
-      <div class='heading'>
-        <span class='prefix'><?php echo html::icon($lang->icons['tree']);?></span>
-        <strong><small class='text-muted'><?php echo html::icon($lang->icons['edit']);?></small> <?php echo $lang->tree->edit;?></strong>
-      </div>
-    </div>
     <form action="<?php echo inlink('edit', 'module=' . $module->id .'&type=' .$type);?>" target='hiddenwin' class='form-condensed' method='post' class='mt-10px' id='dataform'>
       <table class='table table-form'> 
         <?php if($showProduct):?>

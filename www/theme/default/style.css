@@ -360,13 +360,14 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 
 /* === Layout === */
 /* Background */
-body {font-size: 13px; color:#141414;padding-bottom: 40px;}
+body {color:#141414; padding-bottom: 40px;}
 
 /* Header */
 #header {padding: 12px 20px 0; background:#003366;}
 
 #topbar {color: #ACCADF;}
 #topbar > .pull-right {margin-top: -4px; margin-right: -4px;}
+#topnav .dropdown-submenu > a,
 #topnav .dropdown-menu {min-width: 110px;}
 #topnav > .dropdown .caret {border-top-color: #fff}
 #topnav > .dropdown, #topnav > a {display: block; float: left;}
@@ -679,7 +680,6 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 
 /* Tree menu. */
 .tree li:before {width: 8px; height: 8px; background: #f1f1f1; border: 1px solid #ccc; border-radius: 2px; top: 7px;left: 6px;}
-.tree-lines ul>li:after {width: 15px}
 .tree-lines li > a.active{font-weight: bold;}
 
 /* Select all and select reverse. */
@@ -722,7 +722,16 @@ body {font-size: 13px; color:#141414;padding-bottom: 40px;}
 #passwordStrength{display:none;}
 
 .fixedTfootAction {position: fixed; bottom: 40px; box-shadow: 0 -3px 4px rgba(0,0,0,0.05)}
-.table > .fixedTfootAction > tr > td {background: #F8FAFE; border-top-color: #bbb; border-bottom: none}
+.table > .fixedTfootAction > tr > td {background: #114f8e; border: none; color: #fff}
+.fixedTfootAction .btn {border: 1px solid #fff; border-color: rgba(255,255,255,.5); background-color: #2e6dad!important; text-shadow: none; color: #e5e5e5!important;}
+.fixedTfootAction .btn:hover {background-color: #114f8e!important;}
+.fixedTfootAction .pager,
+.fixedTfootAction .pager > a,
+.fixedTfootAction .pager > .dropdown > a,
+.fixedTfootAction .table-actions > .text {color: #e5e5e5}
+.fixedTfootAction .pager strong,
+.fixedTfootAction .table-actions > .text strong {color: #fff;}
+.fixedTfootAction .pager .dropdown > a:hover, .fixedTfootAction .pager > a:hover {background-color: #2e6dad}
 .fixedTheadOfList {position: fixed; top: 0px; z-index:1000;}
 .datatable.head-fixed > .datatable-head .table > thead > tr > th, 
 .fixedTheadOfList > thead > tr > th {background-color: #114f8e; border-bottom-color: #bbb; color: #aaa}

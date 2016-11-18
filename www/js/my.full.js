@@ -989,18 +989,14 @@ function setModal()
                 var type = (setting ? setting.type : false) || ($e.hasClass('iframe') ? 'iframe' : ($e.data('type') || 'ajax'));
                 if(type == 'iframe')
                 {
-                    var options = 
+                    var options = $.extend(
                     {
                         url:        url,
-                        width:      $e.data('width') || 800,
-                        height:     $e.data('height') || 'auto',
-                        icon:       $e.data('icon') || '?',
-                        title:      $e.data('title') || $e.attr('title') || $e.text(),
-                        name:       $e.data('name') || 'modalIframe',
+                        title:      $e.attr('title') || $e.text(),
                         cssClass:   $e.data('class'),
-                        headerless: $e.data('headerless') || false,
-                        center:     $e.data('center') || true
-                    };
+                        icon:       '?',
+                        center:     true
+                    }, setting, $e.data());
 
                     if(options.icon == '?')
                     {
@@ -1008,19 +1004,23 @@ function setModal()
                         options.icon = i.length ? i.attr('class').substring(5) : 'file-text';
                     }
 
-                    showIframeModal($.extend(options, setting));
+                    showIframeModal(options);
                 }
                 else
                 {
                     initModalFrame();
                     $.get(url, function(data)
                     {
-                        var options = 
+                        var options = $.extend(
                         {
-                            width:      $e.data('width') || 800,
-                            icon:       $e.data('icon') || '?',
-                            title:      $e.data('title') || $e.attr('title') || $e.text(),
-                        };
+                            width: 800,
+                            title: $e.attr('title') || $e.text(),
+                            icon: '?',
+                            backdrop: 'static',
+                            keyboard: false,
+                            show: true
+                        }, setting, $e.data());
+
                         var ajaxModal = $('#ajaxModal');
                         if(data.indexOf('modal-dialog') < 0)
                         {
@@ -1035,8 +1035,7 @@ function setModal()
                             $ajaxModal.data('width', modalWidth).find('.modal-dialog').css('width', modalWidth);
                             ajustModalPosition();
                         }
-
-                        ajaxModal.modal('show');
+                        ajaxModal.modal(options);
                     });
                 }
 
@@ -1061,8 +1060,11 @@ function setModal()
             cssClass:   '',
             headerless: false,
             waittime:   0,
-            center:     true
-        }
+            center:     true,
+            backdrop:   'static',
+            keyboard:   false,
+            show:       true
+        };
         
         if(typeof(settings) == 'string')
         {
@@ -1118,7 +1120,8 @@ function setModal()
             }
             showModal(options, modal, modalBody, dialog);
         }
-        modal.modal('show');
+        console.log('iframe modal options', options);
+        modal.modal(options);
     }
 
     function showModal(options, modal, modalBody, dialog)

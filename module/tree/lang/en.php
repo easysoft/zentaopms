@@ -30,6 +30,7 @@ $lang->tree->manageCaseChild   = 'Manage Child Case';
 $lang->tree->manageTaskChild   = "Manage Child {$lang->projectCommon}";
 $lang->tree->syncFromProduct   = 'Copy';
 $lang->tree->dragAndSort       = "Drag and Sort";
+$lang->tree->sort              = "Sort";
 $lang->tree->addChild          = "Add Child Module";
 
 $lang->tree->confirmDelete = 'Do you want to delete this Module and its Child?';
