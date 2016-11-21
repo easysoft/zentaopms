@@ -6,4 +6,5 @@ $lang->branch->delete = 'Delete Branch';
 $lang->branch->manageTitle = '%s Management';
 $lang->branch->all         = 'All';
 
-$lang->branch->confirmDelete = '@branch@ Delete will affect @branch@ related Story、Module、Planning、Release、Bug、Case, etc. Please think before you delete this @branch@.';
+$lang->branch->confirmDelete = 'Are you sure delete this @branch@?';
+$lang->branch->canNotDelete  = 'It has data in @branch@, can not deleted.';
