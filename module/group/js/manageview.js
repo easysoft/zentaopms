@@ -1,11 +1,3 @@
-function setNoChecked()
-{
-    var noCheckValue = '';
-    $(':checkbox').each(function(){
-        if(!$(this).attr('checked') && $(this).next('span').attr('id') != undefined) noCheckValue = noCheckValue + ',' + $(this).next('span').attr('id');
-    })
-    $('#noChecked').val(noCheckValue);
-}
 function toggleProduct()
 { 
     $('#productBox').toggle($('#product').prop("checked"));
@@ -27,4 +19,13 @@ $(function()
 {
     toggleProduct();
     toggleProject();
+    $('.group-item :checkbox[name^="actions"]').change(function()
+    {
+        var allChecked = true;
+        $('.group-item :checkbox[name^="actions"]').each(function()
+        {
+            if(!$(this).prop('checked')) allChecked = false;
+        })
+        $('input:checkbox[name^="allchecker"]').prop('checked', allChecked);
+    })
 })
