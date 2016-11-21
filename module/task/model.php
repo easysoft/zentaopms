@@ -991,7 +991,7 @@ class taskModel extends model
      */
     public function getStoryTasks($storyID, $projectID = 0)
     {
-        return $this->dao->select('id, name, assignedTo, status, estimate, consumed, `left`')
+        return $this->dao->select('id, name, assignedTo, pri, status, estimate, consumed, `left`')
             ->from(TABLE_TASK)
             ->where('story')->eq((int)$storyID)
             ->andWhere('deleted')->eq(0)
