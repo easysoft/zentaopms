@@ -70,15 +70,54 @@
     <tfoot>
       <tr>
         <td colspan='10'>
+        <?php if($bugs):?>
         <div class='table-actions clearfix'>
-        <?php
-        if($bugs and $canBatchEdit)
-        {
+          <?php echo html::selectButton();?>
+          <div class='btn-group dropup'>
+            <?php
             $actionLink = $this->createLink('bug', 'batchEdit');
-            echo html::selectButton() . html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
-        }
-        ?>
+            $misc       = common::hasPriv('bug', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+            echo html::commonButton($lang->edit, $misc);
+            ?>
+            <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+            <ul class='dropdown-menu'>
+              <?php
+              $class = "class='disabled'";
+              $actionLink = $this->createLink('bug', 'batchConfirm');
+              $misc = common::hasPriv('bug', 'batchConfirm') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : $class;
+              if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->confirmBug, '', $misc) . "</li>";
+
+              $actionLink = $this->createLink('bug', 'batchClose');
+              $misc = common::hasPriv('bug', 'batchClose') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : $class;
+              if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->close, '', $misc) . "</li>";
+
+              $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
+              if($canBatchAssignTo && count($bugs))
+              {
+                  $withSearch = count($memberPairs) > 10;
+                  $actionLink = $this->createLink('bug', 'batchAssignTo', "productID=0&type=my");
+                  echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
+                  echo "<li class='dropdown-submenu'>";
+                  echo html::a('javascript::', $lang->bug->assignedTo, 'id="assignItem"');
+                  echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                  foreach ($memberPairs as $key => $value)
+                  {
+                      if(empty($key)) continue;
+                      echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
+                  }
+                  if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
+                  echo "</ul>";
+                  echo "</li>";
+              }
+              else
+              {
+                  echo "<li>" . html::a('javascript:;', $lang->bug->assignedTo,  '', $class);
+              }
+              ?>
+            </ul>
+          </div>
         </div>
+        <?php endif;?>
         <?php $pager->show();?>
         </td>
       </tr>
