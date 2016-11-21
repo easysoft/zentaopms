@@ -36,6 +36,28 @@ function downloadFile(fileID)
       {
           $fileTitle = "<li class='list-group-item'><i class='icon-file-text text-muted icon'></i> &nbsp;" . $file->title .'.' . $file->extension;
           echo html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $fileTitle, '_blank', "onclick='return downloadFile($file->id)'");
+
+          /* Show size info. */
+          if($file->size < 1024)
+          {
+              echo "<span>(" . $file->size . 'B' . ")</span>";
+          }
+          elseif($file->size < 1024 * 1024)
+          {
+              $file->size = round($file->size / 1024, 2);
+              echo "<span>(" . $file->size . 'K' . ")</span>";
+          }
+          elseif($file->size < 1024 * 1024 * 1024)
+          {
+              $file->size = round($file->size / (1024 * 1024), 2);
+              echo "<span>(" . $file->size . 'M' . ")</span>";
+          }
+          else
+          {
+              $file->size = round($file->size / (1024 * 1024 * 1024), 2);
+              echo "<span>(" . $file->size . 'G' . ")</span>";
+          }
+
           echo "<span class='right-icon'>";
           common::printLink('file', 'edit', "fileID=$file->id", "<i class='icon-pencil'></i>", '', "class='edit btn-icon' title='{$lang->file->edit}'");
           if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon-remove'></i>", '', "class='btn-icon' onclick='deleteFile($file->id)' title='$lang->delete'");
