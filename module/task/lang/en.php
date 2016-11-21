@@ -90,6 +90,8 @@ $lang->task->editEstimate      = 'Edit Man-Hour';
 $lang->task->deleteEstimate    = 'Delete Man-Hour';
 $lang->task->colorTag          = 'Color Tag';
 $lang->task->files             = 'Files';
+$lang->task->hasConsumed       = 'Has Consumed';
+$lang->task->thisConsume       = 'This Consumption';
 
 $lang->task->ditto         = 'Ditto';
 $lang->task->dittoNotice   = "This Task does not belong to the Project as the previous one does!";

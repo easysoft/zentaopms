@@ -28,7 +28,7 @@
       <td class='w-p25-f'><div class='datepicker-wrapper datepicker-date'><?php echo html::input('realStarted', $task->realStarted == '0000-00-00' ? helper::today() : $task->realStarted, "class='form-control form-date'");?></div></td><td></td>
     </tr>  
     <tr>
-      <th><?php echo $lang->task->consumed;?></th>
+      <th><?php echo $lang->task->thisConsume;?></th>
       <td><div class='input-group'><?php echo html::input('consumed', $task->consumed, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td><td></td>
     </tr>  
     <tr>
