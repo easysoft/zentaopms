@@ -31,6 +31,7 @@ $lang->story->linkStory   = '关联需求';
 $lang->story->unlinkStory = '移除相关需求';
 $lang->story->export      = "导出数据";
 $lang->story->zeroCase    = "零用例需求";
+$lang->story->zeroTask    = "零任务需求";
 $lang->story->reportChart = "统计报表";
 $lang->story->batchChangePlan   = "批量修改计划";
 $lang->story->batchChangeBranch = "批量修改分支";

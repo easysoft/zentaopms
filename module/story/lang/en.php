@@ -31,6 +31,7 @@ $lang->story->linkStory   = 'Link Story';
 $lang->story->unlinkStory = 'Unlink Story';
 $lang->story->export      = "Export Data";
 $lang->story->zeroCase    = "Zero Case";
+$lang->story->zeroTask    = "Zero Task";
 $lang->story->reportChart = "Report";
 $lang->story->batchChangePlan   = "Batch Change Planning";
 $lang->story->batchChangeBranch = "Batch Change Branch";

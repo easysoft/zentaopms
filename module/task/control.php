@@ -199,14 +199,15 @@ class task extends control
         $position[] = $this->lang->task->common;
         $position[] = $this->lang->task->batchCreate;
 
-        $this->view->title    = $title;
-        $this->view->position = $position;
-        $this->view->project  = $project;
-        $this->view->stories  = $stories;
-        $this->view->modules  = $modules;
-        $this->view->storyID  = $storyID;
-        $this->view->story    = $this->loadModel('story')->getByID($storyID);
-        $this->view->members  = $members;
+        $this->view->title      = $title;
+        $this->view->position   = $position;
+        $this->view->project    = $project;
+        $this->view->stories    = $stories;
+        $this->view->modules    = $modules;
+        $this->view->storyID    = $storyID;
+        $this->view->story      = $this->story->getByID($storyID);
+        $this->view->storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
+        $this->view->members    = $members;
         $this->display();
     }
 
