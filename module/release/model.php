@@ -196,7 +196,11 @@ class releaseModel extends model
         if($release->stories)
         {
             $this->loadModel('story');
-            foreach($this->post->stories as $storyID) $this->story->setStage($storyID);
+            foreach($this->post->stories as $storyID)
+            {
+                $this->story->setStage($storyID);
+                $this->loadModel('action')->create('story', $storyID, 'linked2release', '', $releaseID);
+            }
         }
     }
 
@@ -213,6 +217,7 @@ class releaseModel extends model
         $release = $this->getByID($releaseID);
         $release->stories = trim(str_replace(",$storyID,", ',', ",$release->stories,"), ',');
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
+        $this->loadModel('action')->create('story', $storyID, 'unlinkedfromrelease', '', $releaseID);
     }
 
     /**
@@ -232,6 +237,10 @@ class releaseModel extends model
         foreach($storyList as $storyID) $release->stories = str_replace(",$storyID,", ',', $release->stories);
         $release->stories = trim($release->stories, ',');
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
+        foreach($this->post->unlinkStories as $unlinkStoryID)
+        {
+            $this->loadModel('action')->create('story', $unlinkStoryID, 'unlinkedfromrelease', '', $releaseID);
+        }
     }
 
     /**
@@ -248,6 +257,10 @@ class releaseModel extends model
         $field = $type == 'bug' ? 'bugs' : 'leftBugs';
         $release->$field .= ',' . join(',', $this->post->bugs);
         $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
+        foreach($this->post->bugs as $bugID)
+        {
+            $this->loadModel('action')->create('bug', $bugID, 'linked2release', '', $releaseID);
+        }
     }
 
     /**
@@ -264,6 +277,7 @@ class releaseModel extends model
         $field = $type == 'bug' ? 'bugs' : 'leftBugs';
         $release->{$field} = trim(str_replace(",$bugID,", ',', ",{$release->$field},"), ',');
         $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
+        $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromrelease', '', $releaseID);
     }
 
     /**
@@ -285,6 +299,10 @@ class releaseModel extends model
         foreach($bugList as $bugID) $release->$field = str_replace(",$bugID,", ',', $release->$field);
         $release->$field = trim($release->$field, ',');
         $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
+        foreach($this->post->unlinkBugs as $unlinkBugID)
+        {
+            $this->loadModel('action')->create('bug', $unlinkBugID, 'unlinkedfromrelease', '', $releaseID);
+        }
     }
 
     /**
