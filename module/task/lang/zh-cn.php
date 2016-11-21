@@ -148,6 +148,7 @@ $lang->task->remindBug             = "该任务为Bug转化得到，是否更新
 $lang->task->confirmChangeProject  = "修改{$lang->projectCommon}会导致相应的所属模块、相关需求和指派人发生变化，确定吗？";
 $lang->task->confirmFinish         = '"预计剩余"为0，确认将任务状态改为"已完成"吗？';
 $lang->task->confirmRecord         = '"剩余"为0，任务将标记为"已完成"，您确定吗？';
+$lang->task->noticeLinkStory       = "没有可关联的相关需求，您可以为当前项目%s，然后%s";
 $lang->task->noticeSaveRecord      = '您有尚未保存的工时记录，请先将其保存。';
 $lang->task->commentActions        = '%s. %s, 由 <strong>%s</strong> 添加备注。';
 

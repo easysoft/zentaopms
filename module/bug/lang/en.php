@@ -331,13 +331,17 @@ $lang->bug->report->bugHistories->graph->xAxisName          = 'Handling Steps';
 
 /* 操作记录。*/
 $lang->bug->action = new stdclass();
-$lang->bug->action->resolved         = array('main' => '$date, solved by <strong>$actor</strong> and the solution is <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
-$lang->bug->action->tostory          = array('main' => '$date, transferred by <strong>$actor</strong> to <strong>Story</strong> with ID <strong>$extra</strong>.');
-$lang->bug->action->totask           = array('main' => '$date, imported by <strong>$actor</strong> as <strong>Task</strong> with ID <strong>$extra</strong>.');
-$lang->bug->action->linked2plan      = array('main' => '$date, linked by <strong>$actor</strong> to Planning <strong>$extra</strong>.'); 
-$lang->bug->action->unlinkedfromplan = array('main' => '$date, deleted by <strong>$actor</strong> from Planning <strong>$extra</strong>.'); 
-$lang->bug->action->linkrelatedbug   = array('main' => '$date, related by <strong>$actor</strong> to Bug <strong>$extra</strong>.');
-$lang->bug->action->unlinkrelatedbug = array('main' => '$date, removed by <strong>$actor</strong> from Bug <strong>$extra</strong>.');
+$lang->bug->action->resolved            = array('main' => '$date, solved by <strong>$actor</strong> and the solution is <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
+$lang->bug->action->tostory             = array('main' => '$date, transferred by <strong>$actor</strong> to <strong>Story</strong> with ID <strong>$extra</strong>.');
+$lang->bug->action->totask              = array('main' => '$date, imported by <strong>$actor</strong> as <strong>Task</strong> with ID <strong>$extra</strong>.');
+$lang->bug->action->linked2plan         = array('main' => '$date, linked by <strong>$actor</strong> to Planning <strong>$extra</strong>.');
+$lang->bug->action->unlinkedfromplan    = array('main' => '$date, deleted by <strong>$actor</strong> from Planning <strong>$extra</strong>.');
+$lang->bug->action->linked2build        = array('main' => '$date, linked by <strong>$actor</strong> to Build <strong>$extra</strong>.');
+$lang->bug->action->unlinkedfrombuild   = array('main' => '$date, removed by <strong>$actor</strong> from Build <strong>$extra</strong>.');
+$lang->bug->action->linked2release      = array('main' => '$date, linked by <strong>$actor</strong> to Release <strong>$extra</strong>.');
+$lang->bug->action->unlinkedfromrelease = array('main' => '$date, removed by <strong>$actor</strong> from Release <strong>$extra</strong>.');
+$lang->bug->action->linkrelatedbug      = array('main' => '$date, related by <strong>$actor</strong> to Bug <strong>$extra</strong>.');
+$lang->bug->action->unlinkrelatedbug    = array('main' => '$date, removed by <strong>$actor</strong> from Bug <strong>$extra</strong>.');
 
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = 'Choose Build...';
