@@ -1,0 +1,4 @@
+.dropdown-menu.with-search {padding-bottom: 34px; min-width: 150px; overflow: hidden; max-height: 305px}
+.dropdown-menu > .menu-search {padding: 0; position: absolute; z-index: 0; bottom: 0; left: 0; right: 0}
+.dropdown-menu > .menu-search .input-group {width:100%;}
+.dropdown-menu > .menu-search .input-group-addon {position: absolute; right: 10px; top: 0; z-index: 10; background: none; border: none; color: #666}
