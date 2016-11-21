@@ -207,8 +207,6 @@ $lang->bug->browserList['other']    = '其他';
 $lang->bug->typeList['']             = '';
 $lang->bug->typeList['codeerror']    = '代码错误';
 $lang->bug->typeList['interface']    = '界面优化';
-$lang->bug->typeList['designchange'] = '设计变更';
-$lang->bug->typeList['newfeature']   = '新增需求';
 $lang->bug->typeList['designdefect'] = '设计缺陷';
 $lang->bug->typeList['config']       = '配置相关';
 $lang->bug->typeList['install']      = '安装部署';
@@ -216,7 +214,6 @@ $lang->bug->typeList['security']     = '安全相关';
 $lang->bug->typeList['performance']  = '性能问题';
 $lang->bug->typeList['standard']     = '标准规范';
 $lang->bug->typeList['automation']   = '测试脚本';
-$lang->bug->typeList['trackthings']  = '事务跟踪';
 $lang->bug->typeList['others']       = '其他';
 
 $lang->bug->statusList['']         = '';
