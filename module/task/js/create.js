@@ -94,6 +94,19 @@ function setAfter()
 }
 
 /**
+ * Load stories.
+ * 
+ * @param  int    $projectID 
+ * @access public
+ * @return void
+ */
+function loadStories(projectID)
+{
+    moduleID  = $('#module').val();
+    setStories(moduleID, projectID);
+}
+
+/**
  * load stories of module.
  * 
  * @access public
