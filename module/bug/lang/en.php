@@ -207,6 +207,8 @@ $lang->bug->browserList['other']    = 'Other';
 $lang->bug->typeList['']             = '';
 $lang->bug->typeList['codeerror']    = 'Code Error';
 $lang->bug->typeList['interface']    = 'Interface Optimization';
+$lang->bug->typeList['designchange'] = 'Design Change';
+$lang->bug->typeList['newfeature']   = 'New Feature';
 $lang->bug->typeList['designdefect'] = 'Design Defect';
 $lang->bug->typeList['config']       = 'Config';
 $lang->bug->typeList['install']      = 'Install/Deploy';
@@ -214,6 +216,7 @@ $lang->bug->typeList['security']     = 'Security';
 $lang->bug->typeList['performance']  = 'Performance';
 $lang->bug->typeList['standard']     = 'Standard';
 $lang->bug->typeList['automation']   = 'Testing Script';
+$lang->bug->typeList['trackthings']  = 'Issue Tracking';
 $lang->bug->typeList['others']       = 'Other';
 
 $lang->bug->statusList['']         = '';
