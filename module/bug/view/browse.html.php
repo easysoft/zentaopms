@@ -62,7 +62,7 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
       </div>
     </div>
     <div class='btn-group'>
-      <div class='btn-group'>
+      <div class='btn-group btn-bug-create'>
         <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
           <i class='icon icon-plus'></i> <?php echo $lang->bug->common;?>
           <span class='caret'></span>
@@ -72,7 +72,7 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
         if(commonModel::isTutorialMode())
         {
             $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
-            echo html::a($this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams"), $lang->bug->create);
+            echo '<li>' . html::a($this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams"), $lang->bug->create) . '</li>';
         }
         else
         {
