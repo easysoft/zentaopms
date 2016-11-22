@@ -207,8 +207,6 @@ $lang->bug->browserList['other']    = '其他';
 $lang->bug->typeList['']             = '';
 $lang->bug->typeList['codeerror']    = '代码错误';
 $lang->bug->typeList['interface']    = '界面优化';
-$lang->bug->typeList['designchange'] = '设计变更';
-$lang->bug->typeList['newfeature']   = '新增需求';
 $lang->bug->typeList['designdefect'] = '设计缺陷';
 $lang->bug->typeList['config']       = '配置相关';
 $lang->bug->typeList['install']      = '安装部署';
@@ -216,7 +214,6 @@ $lang->bug->typeList['security']     = '安全相关';
 $lang->bug->typeList['performance']  = '性能问题';
 $lang->bug->typeList['standard']     = '标准规范';
 $lang->bug->typeList['automation']   = '测试脚本';
-$lang->bug->typeList['trackthings']  = '事务跟踪';
 $lang->bug->typeList['others']       = '其他';
 
 $lang->bug->statusList['']         = '';
@@ -331,13 +328,17 @@ $lang->bug->report->bugHistories->graph->xAxisName          = '处理步骤';
 
 /* 操作记录。*/
 $lang->bug->action = new stdclass();
-$lang->bug->action->resolved         = array('main' => '$date, 由 <strong>$actor</strong> 解决，方案为 <strong>$extra</strong> $appendLink。', 'extra' => 'resolutionList');
-$lang->bug->action->tostory          = array('main' => '$date, 由 <strong>$actor</strong> 转为<strong>需求</strong>，编号为 <strong>$extra</strong>。');
-$lang->bug->action->totask           = array('main' => '$date, 由 <strong>$actor</strong> 导入为<strong>任务</strong>，编号为 <strong>$extra</strong>。');
-$lang->bug->action->linked2plan      = array('main' => '$date, 由 <strong>$actor</strong> 关联到计划 <strong>$extra</strong>。'); 
-$lang->bug->action->unlinkedfromplan = array('main' => '$date, 由 <strong>$actor</strong> 从计划 <strong>$extra</strong> 移除。'); 
-$lang->bug->action->linkrelatedbug   = array('main' => '$date, 由 <strong>$actor</strong> 关联相关Bug <strong>$extra</strong>。');
-$lang->bug->action->unlinkrelatedbug = array('main' => '$date, 由 <strong>$actor</strong> 移除相关Bug <strong>$extra</strong>。');
+$lang->bug->action->resolved          = array('main' => '$date, 由 <strong>$actor</strong> 解决，方案为 <strong>$extra</strong> $appendLink。', 'extra' => 'resolutionList');
+$lang->bug->action->tostory           = array('main' => '$date, 由 <strong>$actor</strong> 转为<strong>需求</strong>，编号为 <strong>$extra</strong>。');
+$lang->bug->action->totask            = array('main' => '$date, 由 <strong>$actor</strong> 导入为<strong>任务</strong>，编号为 <strong>$extra</strong>。');
+$lang->bug->action->linked2plan         = array('main' => '$date, 由 <strong>$actor</strong> 关联到计划 <strong>$extra</strong>。');
+$lang->bug->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 从计划 <strong>$extra</strong> 移除。');
+$lang->bug->action->linked2build        = array('main' => '$date, 由 <strong>$actor</strong> 关联到版本 <strong>$extra</strong>。');
+$lang->bug->action->unlinkedfrombuild   = array('main' => '$date, 由 <strong>$actor</strong> 从版本 <strong>$extra</strong> 移除。');
+$lang->bug->action->linked2release      = array('main' => '$date, 由 <strong>$actor</strong> 关联到发布 <strong>$extra</strong>。');
+$lang->bug->action->unlinkedfromrelease = array('main' => '$date, 由 <strong>$actor</strong> 从发布 <strong>$extra</strong> 移除。');
+$lang->bug->action->linkrelatedbug      = array('main' => '$date, 由 <strong>$actor</strong> 关联相关Bug <strong>$extra</strong>。');
+$lang->bug->action->unlinkrelatedbug    = array('main' => '$date, 由 <strong>$actor</strong> 移除相关Bug <strong>$extra</strong>。');
 
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = '选择相关版本...';

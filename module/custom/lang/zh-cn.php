@@ -31,6 +31,7 @@ $lang->custom->task->fields['priList']    = '优先级';
 $lang->custom->task->fields['typeList']   = '类型';
 $lang->custom->task->fields['reasonList'] = '关闭原因';
 $lang->custom->task->fields['statusList'] = '状态';
+$lang->custom->task->fields['hours']      = '工时';
 
 $lang->custom->bug = new stdClass();
 $lang->custom->bug->fields['priList']        = '优先级';
@@ -40,6 +41,7 @@ $lang->custom->bug->fields['browserList']    = '浏览器';
 $lang->custom->bug->fields['typeList']       = '类型';
 $lang->custom->bug->fields['resolutionList'] = '解决方案';
 $lang->custom->bug->fields['statusList']     = '状态';
+$lang->custom->bug->fields['longlife']       = '久未处理天数';
 
 $lang->custom->testcase = new stdClass();
 $lang->custom->testcase->fields['priList']    = '优先级';
@@ -67,14 +69,23 @@ $lang->custom->allLang     = '适用所有语言';
 $lang->custom->confirmRestore = '是否要恢复默认配置？';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userRole  = '键的长度必须小于20个字符！';
+$lang->custom->notice->userRole    = '键的长度必须小于20个字符！';
+$lang->custom->notice->canNotAdd   = '该项值已经在禅道中固定，不能添加新值';
+$lang->custom->notice->forceReview = '指定人提交的需求必须评审。';
+$lang->custom->notice->longlife    = 'Bug列表页面的久未处理标签中，列出设置天数之前未处理的Bug。';
 $lang->custom->notice->indexPage['product'] = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
 $lang->custom->notice->indexPage['project'] = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";
 $lang->custom->notice->indexPage['qa']      = "从8.2版本起增加了测试主页视图，是否默认进入测试主页？";
 
 $lang->custom->storyReview   = '评审流程';
+$lang->custom->forceReview   = '强制评审';
 $lang->custom->reviewList[1] = '开启';
 $lang->custom->reviewList[0] = '关闭';
+
+$lang->custom->workingHours   = '每天可用工时';
+$lang->custom->weekend        = '周休';
+$lang->custom->weekendList[2] = '双休';
+$lang->custom->weekendList[1] = '单休';
 
 $lang->custom->productProject = new stdclass();
 $lang->custom->productProject->relation['0_0'] = '产品 - 项目';

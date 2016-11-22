@@ -78,4 +78,5 @@ $minWidth = (count($visibleFields) > 5) ? 'w-150px' : '';
 </form>
 <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=project&section=custom&key=batchEditFields')?>
 <?php include '../../common/view/customfield.html.php';?>
+<?php js::set('weekend', $config->project->weekend);?>
 <?php include '../../common/view/footer.html.php';?>

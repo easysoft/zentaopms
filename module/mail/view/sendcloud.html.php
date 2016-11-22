@@ -58,6 +58,6 @@ include '../../common/view/header.html.php';
        </tr>
     </table>
   </form>
-  <div class='alert alert-info alert-block'><?php printf($lang->mail->sendCloudHelp, common::hasPriv('mail', 'sendcloudUser') ? inlink('sendcloudUser') : '#')?></div>
+  <div class='alert alert-info alert-block' style='border-top:1px solid #ddd'><?php printf($lang->mail->sendCloudHelp, common::hasPriv('mail', 'sendcloudUser') ? inlink('sendcloudUser') : '#')?></div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

@@ -48,7 +48,7 @@
       </div>
     </div>
   </form>
-  <table class='table table-condensed table-striped table-bordered tablesorter table-fixed active-disabled' id="workload">
+  <table class='table table-condensed table-striped table-bordered table-fixed active-disabled' id="workload">
     <thead>
     <tr class='colhead'>
       <th><?php echo $lang->report->user;?></th>

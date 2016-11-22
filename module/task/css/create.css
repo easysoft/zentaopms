@@ -2,9 +2,10 @@
 #mailto + .chosen-container-multi .chosen-choices {border-top-left-radius: 0; border-bottom-left-radius: 0}
 
 #mailtoGroup .input-group-btn > .btn {margin-left: -1px!important;}
+#mailtoGroup .chosen-container-single a {border-left-width: 0px;}
 
 .chosen-container {max-width: 980px}
 
-.minw-80px {min-width: 80px;}
-.minw-60px {min-width: 60px;}
+.minw-80px {min-width: 120px;}
+.minw-60px {min-width: 50px;}
 

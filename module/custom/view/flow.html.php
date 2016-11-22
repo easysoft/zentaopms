@@ -29,19 +29,18 @@
 <div class='main'>
   <form method='post' class='form-condensed' target='hiddenwin'>
     <table class='table table-form'>
-      <tr><th class='w-100px'><?php echo $lang->custom->select;?></th><th></th><th></th></tr>
-      <?php $checkedKey = isset($config->custom->productProject) ? $config->custom->productProject : '0_0' ?>
-      <?php foreach($lang->custom->productProject->relation as $key => $value):?>
       <tr>
-        <td></td>
-        <td class='w-300px'>
-          <label class="radio-inline"><input type="radio" name="productProject" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="productProject<?php echo $key;?>"><?php echo $value;?></label>
+        <th class='w-150px text-top'><?php echo $lang->custom->select;?></th>
+        <?php $checkedKey = isset($config->custom->productProject) ? $config->custom->productProject : '0_0' ?>
+        <td>
+          <?php foreach($lang->custom->productProject->relation as $key => $value):?>
+          <p><label class="radio-inline"><input type="radio" name="productProject" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="productProject<?php echo $key;?>"><?php echo $value;?></label></p>
+          <?php endforeach;?>
         </td>
       </tr>
-      <?php endforeach;?>
       <tr><td></td><td><?php echo html::submitButton()?></td></tr>
       <tr>
-        <td colspan='3' class='pd-0'>
+        <td colspan='2' class='pd-0'>
           <div class='alert alert-info alert-block'><strong><?php echo $lang->custom->productProject->notice?></strong></div>
         </td>
       </tr>

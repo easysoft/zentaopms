@@ -25,6 +25,7 @@ include '../../common/view/tablesorter.html.php';
           <th class='w-pri'>   <?php echo $lang->priAB;?></th>
           <th class='w-200px'> <?php echo $lang->story->plan;?></th>
           <th>                 <?php echo $lang->story->title;?></th>
+          <th class='w-80px'>  <?php echo $lang->story->module;?></th>
           <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
           <th class='w-user'>  <?php echo $lang->assignedToAB;?></th>
           <th class='w-30px'>  <?php echo $lang->story->estimateAB;?></th>
@@ -43,6 +44,7 @@ include '../../common/view/tablesorter.html.php';
         <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
         <td><?php echo $story->planTitle;?></td>
         <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
+        <td title='<?php echo $modules[$story->module]?>'><?php echo $modules[$story->module];?></td>
         <td><?php echo zget($users, $story->openedBy);?></td>
         <td><?php echo zget($users, $story->assignedTo);?></td>
         <td><?php echo $story->estimate;?></td>

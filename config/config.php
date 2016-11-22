@@ -31,7 +31,7 @@ $config->requestFix  = '-';               // The divider in the url when PATH_IN
 $config->moduleVar   = 'm';               // requestType=GET: the module var name.
 $config->methodVar   = 'f';               // requestType=GET: the method var name.
 $config->viewVar     = 't';               // requestType=GET: the view var name.
-$config->sessionVar  = 'sid';             // requestType=GET: the session var name.
+$config->sessionVar  = 'zentaosid';       // requestType=GET: the session var name.
 $config->allowedTags = '<p><span><h1><h2><h3><h4><h5><em><u><strong><br><ol><ul><li><img><a><b><font><hr><pre><div><table><td><th><tr><tbody><embed><style>';
 $config->accountRule = '|^[a-zA-Z0-9_]{1}[a-zA-Z0-9_\.]{1,}[a-zA-Z0-9_]{1}$|';
 

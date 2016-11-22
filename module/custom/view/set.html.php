@@ -48,33 +48,72 @@ EOT;
 </div>
 <div class='side'>
   <div class='list-group'>
-  <?php 
+    <?php 
     foreach($lang->custom->{$module}->fields as $key => $value)
     {
         echo "<li class='list-group-item' id='{$key}Tab'>" . html::a(inlink('set', "module=$module&field=$key"), $value) . "</li>";
     }
-  ?>
+    ?>
   </div>
 </div>
 <div class='main'>
   <form method='post' class='form-condensed' target='hiddenwin'>
     <div class='panel panel-sm'>
       <div class='panel-heading'>
-        <strong><?php echo $lang->custom->object[$module] . ' >> ' . $lang->custom->$module->fields[$field]?></strong>
+        <strong><?php echo $lang->custom->object[$module] . $lang->arrow . $lang->custom->$module->fields[$field]?></strong>
       </div>
-      <?php if($field == 'review'):?>
-      <table class='table table-borderless mw-600px'>
+      <?php if($module == 'story' and $field == 'review'):?>
+      <table class='table table-form mw-800px'>
         <tr>
-          <td><?php echo $lang->custom->storyReview;?></td>
+          <th class='w-80px'><?php echo $lang->custom->storyReview;?></th>
           <td><?php echo html::radio('needReview', $lang->custom->reviewList, $needReview);?></td>
+          <td></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->custom->forceReview;?></th>
+          <td><?php echo html::select('forceReview[]', $users, $forceReview, "class='form-control chosen' multiple");?></td>
+          <td class='w-180px'><?php echo $lang->custom->notice->forceReview;?></td>
+        </tr>
+        <tr>
+          <td></td>
           <td><?php echo html::submitButton();?></td>
         </tr>
       </table>
+      <?php elseif($module == 'task' and $field == 'hours'):?>
+      <table class='table table-form mw-600px'>
+        <tr>
+          <th class='w-150px'><?php echo $lang->custom->workingHours;?></th>
+          <td><?php echo html::input('defaultWorkhours', $workhours, "class='form-control w-80px'");?></td>
+          <td></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->custom->weekend;?></th>
+          <td><?php echo html::radio('weekend', $lang->custom->weekendList, $weekend);?></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><?php echo html::submitButton();?></td>
+        </tr>
+      </table>
+      <?php elseif($module == 'bug' and $field == 'longlife'):?>
+      <table class='table table-form mw-600px'>
+        <tr>
+          <th class='w-100px'><?php echo $lang->custom->bug->fields['longlife'];?></th>
+          <td class='w-100px'>
+            <div class='input-group'>
+              <?php echo html::input('longlife', $longlife, "class='form-control'");?>
+              <span class='input-group-addon'><?php echo $lang->day?></span>
+            </div>
+          </td>
+          <td><?php echo html::submitButton();?></td>
+        </tr>
+      </table>
+      <div class='alert alert-info alert-block'><?php echo $lang->custom->notice->longlife;?></div>
       <?php else:?>
-      <table class='table table-borderless active-disabled table-condensed mw-600px'>
+      <table class='table table-form active-disabled table-condensed mw-600px'>
         <tr class='text-center'>
-          <th class='w-120px'><?php echo $lang->custom->key;?></th>
-          <th><?php echo $lang->custom->value;?></th>
+          <td class='w-120px'><strong><?php echo $lang->custom->key;?></strong></td>
+          <td><strong><?php echo $lang->custom->value;?></strong></td>
           <?php if($canAdd):?><th class='w-40px'></th><?php endif;?>
         </tr>
         <?php foreach($fieldList as $key => $value):?>
@@ -87,7 +126,7 @@ EOT;
           <?php if($canAdd):?>
           <td class='text-left w-100px'>
             <a href='javascript:void()' class='btn-icon' onclick='addItem(this)'><i class='icon-plus'></i></a>
-            <?php if(!$system):?><a href='javascript:void()' onclick='delItem(this)' class='btn-icon'><i class='icon-remove'></i></a><?php endif;?>
+            <a href='javascript:void()' onclick='delItem(this)' class='btn-icon'><i class='icon-remove'></i></a>
           </td>
           <?php endif;?>
         </tr>
@@ -103,6 +142,9 @@ EOT;
           </td>
         </tr>
       </table>
+      <?php if(!$canAdd):?>
+      <div class='alert alert-warning alert-block'><?php echo $lang->custom->notice->canNotAdd;?></div>
+      <?php endif;?>
       <?php endif;?>
     </div>
   </form>

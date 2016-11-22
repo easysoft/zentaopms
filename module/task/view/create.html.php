@@ -47,8 +47,12 @@
         <th><?php echo $lang->task->story;?></th>
         <td colspan='3'>
           <div class='input-group'>
+            <?php if(empty($stories)):?>
+            <span id='story'><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('project', 'linkStory', "projectID=$project->id"), $lang->project->linkStory, '_blank'), html::a("javascript:loadStories($project->id)", $lang->refresh));?></span>
+            <?php else:?>
             <?php echo html::select('story', $stories, $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
             <span class='input-group-btn' id='preview'><a href='#' class='btn iframe'><?php echo $lang->preview;?></a></span>
+            <?php endif;?>
           </div>
         </td>
       </tr>
@@ -110,12 +114,12 @@
       <tr>
         <th><?php echo $lang->task->desc;?></th>
         <td colspan='3'><?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?></td>
-      </tr>  
-<?php
-            $hiddenEstStarted = strpos(",$showFields,", ',estStarted,') === false;
-            $hiddenDeadline   = strpos(",$showFields,", ',deadline,') === false;
-            $hiddenMailto     = strpos(",$showFields,", ',mailto,') === false;
-?>
+      </tr>
+      <?php
+      $hiddenEstStarted = strpos(",$showFields,", ',estStarted,') === false;
+      $hiddenDeadline   = strpos(",$showFields,", ',deadline,')   === false;
+      $hiddenMailto     = strpos(",$showFields,", ',mailto,')     === false;
+      ?>
       <?php if(!$hiddenEstStarted or !$hiddenDeadline or !$hiddenMailto):?>
       <tr>
         <th><?php echo ($hiddenEstStarted and $hiddenDeadline) ? $lang->task->mailto : $lang->task->datePlan;?></th>

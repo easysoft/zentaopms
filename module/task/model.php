@@ -645,7 +645,6 @@ class taskModel extends model
     public function finish($taskID)
     {
         $oldTask = $this->getById($taskID);
-        if($this->post->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
         $now  = helper::now();
         $task = fixer::input('post')
             ->setDefault('left', 0)
@@ -654,22 +653,24 @@ class taskModel extends model
             ->setDefault('status', 'done')
             ->setDefault('finishedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('finishedDate, lastEditedDate', $now) 
-            ->remove('comment,files,labels')
+            ->remove('comment,files,labels,thisConsume')
             ->get();
         if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
+        if(!isset($task->consumed)) $task->consumed = $oldTask->consumed + $this->post->thisConsume;
 
         if(!is_numeric($task->consumed)) die(js::error($this->lang->task->error->consumedNumber));
 
         /* Record consumed and left. */
-        $consumed = $task->consumed - $oldTask->consumed; 
+        $consumed = $task->consumed - $oldTask->consumed;
+        if($consumed < 0) die(js::error($this->lang->task->error->consumedSmall));
         $estimate = fixer::input('post')
             ->setDefault('account', $this->app->user->account) 
             ->setDefault('task', $taskID) 
             ->setDefault('date', date(DT_DATE1)) 
             ->setDefault('left', 0)
-            ->remove('finishedDate,comment,assignedTo,files,labels')
+            ->remove('finishedDate,comment,assignedTo,files,labels,consumed,thisConsume')
             ->get();
-        $estimate->consumed = $estimate->consumed - $oldTask->consumed; 
+        $estimate->consumed = $consumed; 
         if($estimate->consumed) $this->addTaskEstimate($estimate);
 
         $this->dao->update(TABLE_TASK)->data($task)
@@ -990,7 +991,7 @@ class taskModel extends model
      */
     public function getStoryTasks($storyID, $projectID = 0)
     {
-        return $this->dao->select('id, name, assignedTo, status, estimate, consumed, `left`')
+        return $this->dao->select('id, name, assignedTo, pri, status, estimate, consumed, `left`')
             ->from(TABLE_TASK)
             ->where('story')->eq((int)$storyID)
             ->andWhere('deleted')->eq(0)
@@ -1622,6 +1623,9 @@ class taskModel extends model
                 break;
             case 'left':
                 echo round($task->left, 1);
+                break;
+            case 'progess':
+                echo $task->progess . '%';
                 break;
             case 'deadline':
                 if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);

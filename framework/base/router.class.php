@@ -1801,11 +1801,8 @@ class baseRouter
         {
             foreach($lang->db->custom[$moduleName] as $section => $fields)
             {
-                foreach($fields as $key => $value)
-                {
-                    unset($lang->{$moduleName}->{$section}[$key]);
-                    $lang->{$moduleName}->{$section}[$key] = $value;
-                }
+                unset($lang->{$moduleName}->{$section});
+                foreach($fields as $key => $value) $lang->{$moduleName}->{$section}[$key] = $value;
             }
         }
 

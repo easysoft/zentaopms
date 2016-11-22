@@ -192,6 +192,7 @@ class story extends control
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
         $this->view->needReview       = ($this->app->user->account == $product->PO || $projectID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
+        if($this->story->checkForceReview()) $this->view->needReview = '';
 
         $this->display();
     }
@@ -277,6 +278,7 @@ class story extends control
         $this->view->branch           = $branch;
         $this->view->branches         = $this->loadModel('branch')->getPairs($productID);
         $this->view->needReview       = ($this->app->user->account == $product->PO || $this->config->story->needReview == 0) ? 0 : 1;
+        if($this->story->checkForceReview()) $this->view->needReview = 1;
 
         $this->display();
     }
@@ -492,6 +494,7 @@ class story extends control
         $this->view->users      = $this->user->getPairs('nodeleted|pofirst', $this->view->story->assignedTo);
         $this->view->position[] = $this->lang->story->change;
         $this->view->needReview = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0) ? "checked='checked'" : "";
+        if($this->story->checkForceReview()) $this->view->needReview = '';
         $this->display();
     }
 
@@ -944,8 +947,9 @@ class story extends control
     public function cases($storyID)
     {
         $this->loadModel('testcase');
-        $this->view->cases = $this->testcase->getStoryCases($storyID);
-        $this->view->users = $this->user->getPairs('noletter');
+        $this->view->cases      = $this->testcase->getStoryCases($storyID);
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->resultList = array('' => '') + $this->lang->testcase->resultList;
         $this->display();
     }
 
@@ -1082,7 +1086,7 @@ class story extends control
      */
     public function ajaxGetProjectStories($projectID, $productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $number = '', $type= 'full')
     {
-        if($moduleID) 
+        if($moduleID)
         {
             $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
             $moduleID = $this->tree->getAllChildID($moduleID);

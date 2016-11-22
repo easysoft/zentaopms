@@ -165,6 +165,7 @@ class storyModel extends model
         $result = $this->loadModel('common')->removeDuplicate('story', $story, "product={$story->product}");
         if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
+        if($this->checkForceReview()) $story->status = 'draft';
         $story = $this->loadModel('file')->processEditor($story, $this->config->story->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
@@ -265,6 +266,7 @@ class storyModel extends model
 
         if(isset($stories->uploadImage)) $this->loadModel('file');
 
+        $forceReview = $this->checkForceReview();
         for($i = 0; $i < $batchNum; $i++)
         {
             if(!empty($stories->title[$i]))
@@ -277,7 +279,7 @@ class storyModel extends model
                 $data->source     = $stories->source[$i];
                 $data->pri        = $stories->pri[$i];
                 $data->estimate   = $stories->estimate[$i];
-                $data->status     = $stories->needReview[$i] == 0 ? 'active' : 'draft';
+                $data->status     = ($stories->needReview[$i] == 0 and !$forceReview) ? 'active' : 'draft';
                 $data->keywords   = $stories->keywords[$i];
                 $data->product    = $productID;
                 $data->branch     = $branch;
@@ -394,6 +396,7 @@ class storyModel extends model
             ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
             ->remove('files,labels,comment,needNotReview,uid')
             ->get();
+        if($this->checkForceReview()) $story->status = 'changed';
         $story = $this->loadModel('file')->processEditor($story, $this->config->story->editor->change['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify')
             ->autoCheck()
@@ -2152,10 +2155,14 @@ class storyModel extends model
      * @param  array  $users 
      * @param  array  $branches 
      * @param  array  $storyStages 
+     * @param  array  $modulePairs
+     * @param  array  $storyTasks
+     * @param  array  $storyBugs
+     * @param  array  $storyCases
      * @access public
      * @return void
      */
-    public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array())
+    public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks, $storyBugs, $storyCases)
     {
         $storyLink = helper::createLink('story', 'view', "storyID=$story->id");
         $account   = $this->app->user->account;
@@ -2213,6 +2220,18 @@ class storyModel extends model
                     foreach($storyStages[$story->id] as $storyBranch => $storyStage) echo $branches[$storyBranch] . ": " . $this->lang->story->stageList[$storyStage->stage] . '<br />';
                     echo "</div>";
                 }
+                break;
+            case 'taskCount':
+                $tasksLink = helper::createLink('story', 'tasks', "storyID=$story->id");
+                $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
+                break;
+            case 'bugCount':
+                $bugsLink = helper::createLink('story', 'bugs', "storyID=$story->id");
+                $storyBugs[$story->id] > 0 ? print(html::a($bugsLink, $storyBugs[$story->id], '', 'class="iframe"')) : print(0);
+                break;
+            case 'caseCount':
+                $casesLink = helper::createLink('story', 'cases', "storyID=$story->id");
+                $storyCases[$story->id] > 0 ? print(html::a($casesLink, $storyCases[$story->id], '', 'class="iframe"')) : print(0);
                 break;
             case 'openedBy':
                 echo zget($users, $story->openedBy, $story->openedBy);
@@ -2272,5 +2291,19 @@ class storyModel extends model
             return $this->session->storyQueryCondition;
         }
         return true;
+    }
+
+    /**
+     * Check force review for user.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function checkForceReview()
+    {
+        $forceReview = false;
+        if(!empty($this->config->story->forceReview)) $forceReview = strpos(",{$this->config->story->forceReview},", ",{$this->app->user->account},") !== false;
+
+        return $forceReview;
     }
 }

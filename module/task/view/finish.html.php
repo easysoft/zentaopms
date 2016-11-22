@@ -23,8 +23,12 @@
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table table-form'>
     <tr>
-      <th class='w-80px'><?php echo $lang->task->consumed;?></th>
-      <td class='w-p25-f'><div class='input-group'><?php echo html::input('consumed', $task->consumed, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td><td></td>
+      <th class='w-80px'><?php echo $lang->task->hasConsumed;?></th>
+      <td class='w-p25-f'> <?php echo $task->consumed;?> <?php echo $lang->workingHour;?></td><td></td>
+    </tr>
+    <tr>
+      <th><?php echo $lang->task->thisConsume;?></th>
+      <td><div class='input-group'><?php echo html::input('thisConsume', 0, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td>
     </tr>
     <tr>
       <th><?php echo $lang->task->assignedTo;?></th>
