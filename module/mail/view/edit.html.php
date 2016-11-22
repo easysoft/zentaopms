@@ -11,7 +11,7 @@
  */
 include '../../common/view/header.html.php';
 ?>
-<div class='container mw-700px'>
+<div class='container mw-800px'>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['mail']);?></span>
@@ -22,8 +22,9 @@ include '../../common/view/header.html.php';
   <form class='form-condensed' method='post' action='<?php echo inlink('save');?>' id='dataform'>
     <table class='table table-form'>
       <tr>
-        <th class='rowhead w-120px'><?php echo $lang->mail->turnon; ?></th>
-        <td><?php echo html::radio('turnon', $lang->mail->turnonList, 1);?></td>
+        <th class='rowhead w-110px'><?php echo $lang->mail->turnon; ?></th>
+        <td class='w-p25-f'><?php echo html::radio('turnon', $lang->mail->turnonList, 1);?></td>
+        <td></td>
       </tr>
       <?php if(!empty($config->global->cron)):?>
       <tr>
@@ -34,33 +35,34 @@ include '../../common/view/header.html.php';
       <tr>
         <th><?php echo $lang->mail->fromAddress; ?></th>
         <td><?php echo html::input('fromAddress', $mailConfig->fromAddress, "class='form-control'");?></td>
+        <td><?php echo $lang->mail->addressWhiteList?></td>
       </tr>
       <tr>
         <th><?php echo $lang->mail->fromName; ?></th>
-        <td>
+        <td colspan='2'>
           <div class='required required-wrapper'></div>
           <?php echo html::input('fromName', $mailConfig->fromName, "class='form-control'");?>
         </td>
       </tr>
       <tr>
         <th><?php echo $lang->mail->host; ?></th>
-        <td><?php echo html::input('host', $mailConfig->host, "class='form-control'");?></td>
+        <td colspan='2'><?php echo html::input('host', $mailConfig->host, "class='form-control'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->mail->port; ?></th>
-        <td><?php echo html::input('port', $mailConfig->port, "class='form-control'");?></td>
+        <td colspan='2'><?php echo html::input('port', $mailConfig->port, "class='form-control'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->mail->auth; ?></th>
-        <td><?php echo html::radio('auth', $lang->mail->authList, $mailConfig->auth, 'onchange=setAuth(this.value)'); ?></td>
+        <td colspan='2'><?php echo html::radio('auth', $lang->mail->authList, $mailConfig->auth, 'onchange=setAuth(this.value)'); ?></td>
       </tr>
       <tr>
         <th><?php echo $lang->mail->username; ?></th>
-        <td><?php echo html::input('username', $mailConfig->username, "class='form-control'") ?></td>
+        <td colspan='2'><?php echo html::input('username', $mailConfig->username, "class='form-control' autocomplete='off'") ?></td>
       </tr>
       <tr>
         <th><?php echo $lang->mail->password; ?></th>
-        <td><?php echo html::password('password', $mailConfig->password, 'class="form-control" autocomplete="off"') ?></td>
+        <td colspan='2'><?php echo html::password('password', $mailConfig->password, "class='form-control' autocomplete='off' placeholder='{$lang->mail->placeholder->password}'") ?></td>
       </tr>
       <tr>
         <th><?php echo $lang->mail->secure; ?></th>
