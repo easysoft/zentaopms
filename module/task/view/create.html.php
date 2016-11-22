@@ -114,12 +114,12 @@
       <tr>
         <th><?php echo $lang->task->desc;?></th>
         <td colspan='3'><?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?></td>
-      </tr>  
-<?php
-            $hiddenEstStarted = strpos(",$showFields,", ',estStarted,') === false;
-            $hiddenDeadline   = strpos(",$showFields,", ',deadline,') === false;
-            $hiddenMailto     = strpos(",$showFields,", ',mailto,') === false;
-?>
+      </tr>
+      <?php
+      $hiddenEstStarted = strpos(",$showFields,", ',estStarted,') === false;
+      $hiddenDeadline   = strpos(",$showFields,", ',deadline,')   === false;
+      $hiddenMailto     = strpos(",$showFields,", ',mailto,')     === false;
+      ?>
       <?php if(!$hiddenEstStarted or !$hiddenDeadline or !$hiddenMailto):?>
       <tr>
         <th><?php echo ($hiddenEstStarted and $hiddenDeadline) ? $lang->task->mailto : $lang->task->datePlan;?></th>
