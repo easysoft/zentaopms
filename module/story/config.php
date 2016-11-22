@@ -89,6 +89,21 @@ $config->story->datatable->fieldList['stage']['fixed']    = 'no';
 $config->story->datatable->fieldList['stage']['width']    = '90';
 $config->story->datatable->fieldList['stage']['required'] = 'no';
 
+$config->story->datatable->fieldList['taskCount']['title']    = 'taskCount';
+$config->story->datatable->fieldList['taskCount']['fixed']    = 'no';
+$config->story->datatable->fieldList['taskCount']['width']    = '90';
+$config->story->datatable->fieldList['taskCount']['required'] = 'no';
+
+$config->story->datatable->fieldList['bugCount']['title']    = 'bugCount';
+$config->story->datatable->fieldList['bugCount']['fixed']    = 'no';
+$config->story->datatable->fieldList['bugCount']['width']    = '90';
+$config->story->datatable->fieldList['bugCount']['required'] = 'no';
+
+$config->story->datatable->fieldList['caseCount']['title']    = 'caseCount';
+$config->story->datatable->fieldList['caseCount']['fixed']    = 'no';
+$config->story->datatable->fieldList['caseCount']['width']    = '90';
+$config->story->datatable->fieldList['caseCount']['required'] = 'no';
+
 $config->story->datatable->fieldList['openedBy']['title']    = 'openedByAB';
 $config->story->datatable->fieldList['openedBy']['fixed']    = 'no';
 $config->story->datatable->fieldList['openedBy']['width']    = '80';

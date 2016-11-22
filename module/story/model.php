@@ -2155,10 +2155,14 @@ class storyModel extends model
      * @param  array  $users 
      * @param  array  $branches 
      * @param  array  $storyStages 
+     * @param  array  $modulePairs
+     * @param  array  $storyTasks
+     * @param  array  $storyBugs
+     * @param  array  $storyCases
      * @access public
      * @return void
      */
-    public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array())
+    public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks, $storyBugs, $storyCases)
     {
         $storyLink = helper::createLink('story', 'view', "storyID=$story->id");
         $account   = $this->app->user->account;
@@ -2216,6 +2220,18 @@ class storyModel extends model
                     foreach($storyStages[$story->id] as $storyBranch => $storyStage) echo $branches[$storyBranch] . ": " . $this->lang->story->stageList[$storyStage->stage] . '<br />';
                     echo "</div>";
                 }
+                break;
+            case 'taskCount':
+                $tasksLink = helper::createLink('story', 'tasks', "storyID=$story->id");
+                $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
+                break;
+            case 'bugCount':
+                $bugsLink = helper::createLink('story', 'bugs', "storyID=$story->id");
+                $storyBugs[$story->id] > 0 ? print(html::a($bugsLink, $storyBugs[$story->id], '', 'class="iframe"')) : print(0);
+                break;
+            case 'caseCount':
+                $casesLink = helper::createLink('story', 'cases', "storyID=$story->id");
+                $storyCases[$story->id] > 0 ? print(html::a($casesLink, $storyCases[$story->id], '', 'class="iframe"')) : print(0);
                 break;
             case 'openedBy':
                 echo zget($users, $story->openedBy, $story->openedBy);

@@ -123,6 +123,16 @@ class datatableModel extends model
             {
                 echo $this->lang->actions;
             }
+            elseif($id == 'progess')
+            {
+                $this->app->loadLang('task');
+                echo $this->lang->task->progess;
+            }
+            elseif($id == 'taskCount' or $id == 'bugCount' or $id == 'caseCount')
+            {
+                $this->app->loadLang('story');
+                echo $this->lang->story->$id;
+            }
             else
             {
                 common::printOrderLink($id, $orderBy, $vars, $col->title);
