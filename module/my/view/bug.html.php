@@ -99,15 +99,16 @@
                   echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
                   echo "<li class='dropdown-submenu'>";
                   echo html::a('javascript::', $lang->bug->assignedTo, 'id="assignItem"');
-                  echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                  echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                  echo "<ul  class='dropdown-list'>";
                   foreach ($memberPairs as $key => $value)
                   {
                       if(empty($key)) continue;
                       echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
                   }
-                  if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
                   echo "</ul>";
-                  echo "</li>";
+                  if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                  echo "</div></li>";
               }
               else
               {

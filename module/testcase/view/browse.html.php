@@ -75,14 +75,16 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
                       $withSearch = count($modules) > 8;
                       echo "<li class='dropdown-submenu'>";
                       echo html::a('javascript:;', $lang->testcase->moduleAB, '', "id='moduleItem'");
-                      echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search' : '') . "'>";
+                      echo "<div class='dropdown-menu" . ($withSearch ? ' with-search' : '') . "'>";
+                      echo '<ul class="dropdown-list">';
                       foreach($modules as $moduleId => $module)
                       {
                           $actionLink = $this->createLink('testcase', 'batchChangeModule', "moduleID=$moduleId");
                           echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
                       }
-                      if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
-                      echo '</ul></li>';
+                      echo '</ul>';
+                      if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                      echo '</div></li>';
                   }
                   else
                   {

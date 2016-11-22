@@ -8,8 +8,9 @@ $(function()
         return false;
     }).on('keyup change paste', 'input', function()
     {
-        var val = $(this).val().toLowerCase();
-        var $options = $(this).closest('ul.dropdown-menu.with-search').find('.option');
+        var $input = $(this);
+        var val = $input.val().toLowerCase();
+        var $options = $input.closest('.dropdown-menu.with-search').find('.option');
         if(val == '') return $options.removeClass('hide');
         $options.each(function()
         {

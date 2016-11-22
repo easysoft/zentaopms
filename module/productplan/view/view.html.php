@@ -121,7 +121,7 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                  <td colspan='9'>
+                  <td colspan='10'>
                     <div class='table-actions clearfix'>
                       <?php if(count($planStories)):?>
                       <?php echo html::selectButton();?>
@@ -186,14 +186,16 @@
                               $withSearch = count($branches) > 8;
                               echo "<li class='dropdown-submenu'>";
                               echo html::a('javascript:;', $lang->product->branchName[$this->session->currentProductType], '', "id='branchItem'");
-                              echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                              echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                              echo '<ul class="dropdown-list">';
                               foreach($branches as $branchID => $branchName)
                               {
                                   $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID");
                                   echo "<li class='option' data-key='$branchID'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', this)\"") . "</li>";
                               }
-                              if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
-                              echo '</ul></li>';
+                              echo '</ul>';
+                              if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                              echo '</div></li>';
                           }
 
                           if(common::hasPriv('story', 'batchChangeModule'))
@@ -201,14 +203,16 @@
                               $withSearch = count($modules) > 8;
                               echo "<li class='dropdown-submenu'>";
                               echo html::a('javascript:;', $lang->story->moduleAB, '', "id='moduleItem'");
-                              echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                              echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                              echo '<ul class="dropdown-list">';
                               foreach($modules as $moduleId => $module)
                               {
                                   $actionLink = $this->createLink('story', 'batchChangeModule', "moduleID=$moduleId");
                                   echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin', this)\"") . "</li>";
                               }
-                              if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
-                              echo '</ul></li>';
+                              echo '</ul>';
+                              if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                              echo '</div></li>';
                           }
                           else
                           {
@@ -223,14 +227,16 @@
                               $withSearch = count($plans) > 8;
                               echo "<li class='dropdown-submenu'>";
                               echo html::a('javascript:;', $lang->story->planAB, '', "id='planItem'");
-                              echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                              echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                              echo '<ul class="dropdown-list">';
                               foreach($plans as $planID => $planName)
                               {
                                   $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID&oldPlanID=$plan->id");
                                   echo "<li class='option' data-key='$planID'>" . html::a('#', $planName, '', "onclick=\"setFormAction('$actionLink','hiddenwin', this)\"") . "</li>";
                               }
-                              if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
-                              echo '</ul></li>';
+                              echo '</ul>';
+                              if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                              echo '</div></li>';
                           }
                           else
                           {
@@ -262,15 +268,16 @@
                                 echo html::select('assignedTo', $users, '', 'class="hidden"');
                                 echo "<li class='dropdown-submenu'>";
                                 echo html::a('javascript::', $lang->story->assignedTo, '', 'id="assignItem"');
-                                echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                                echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                                echo '<ul class="dropdown-list">';
                                 foreach ($users as $key => $value)
                                 {
                                     if(empty($key) or $key == 'closed') continue;
                                     echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
                                 }
-                                if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
                                 echo "</ul>";
-                                echo "</li>";
+                                if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                                echo "</div></li>";
                           }
                           else
                           {

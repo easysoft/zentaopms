@@ -5,7 +5,11 @@
 .confirm1 {color:green; font-size:9px}
 .red{color:red;}
 
-.dropdown-menu.with-search {padding-bottom: 34px; min-width: 150px; overflow: hidden; max-height: 305px}
-.dropdown-menu > .menu-search {padding: 0; position: absolute; z-index: 0; bottom: 0; left: 0; right: 0}
+.dropdown-menu.with-search {padding: 0; min-width: 150px; overflow: hidden; max-height: 302px;}
 .dropdown-menu > .menu-search .input-group {width:100%;}
 .dropdown-menu > .menu-search .input-group-addon {position: absolute; right: 10px; top: 0; z-index: 10; background: none; border: none; color: #666}
+.dropdown-menu > .menu-search .form-control {border: none!important; box-shadow: none!important; border-top: 1px solid #ddd!important;}
+.dropdown-list {display: block; padding: 0; max-height: 270px; overflow-y: auto;}
+.dropdown-list > li > a {display: block; padding: 3px 20px; clear: both; font-weight: normal; line-height: 1.53846154; color: #141414; white-space: nowrap;}
+.dropdown-list > li > a:hover,
+.dropdown-list > li > a:focus {color: #1a4f85;text-decoration: none;background-color: #ddd;}
