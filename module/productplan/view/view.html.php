@@ -65,7 +65,7 @@
             <div class='linkBox'></div>
             <?php endif;?>
             <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");?>">
-              <table class='table tablesorter table-condensed table-hover table-striped table-borderless table-fixed' id='storyList'>
+              <table class='table tablesorter table-condensed table-hover table-striped table-fixed' id='storyList'>
                 <?php $vars = "planID={$plan->id}&type=story&orderBy=%s&link=$link&param=$param"; ?>
                 <thead>
                 <tr>
@@ -307,7 +307,7 @@
             <div class='linkBox'></div>
             <?php endif;?>
             <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy");?>">
-              <table class='table tablesorter table-condensed table-hover table-striped table-borderless table-fixed' id='bugList'>
+              <table class='table tablesorter table-condensed table-hover table-striped table-fixed' id='bugList'>
                 <?php $vars = "planID={$plan->id}&type=bug&orderBy=%s&link=$link&param=$param"; ?>
                 <thead>
                 <tr>

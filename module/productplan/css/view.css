@@ -1,5 +1,8 @@
 .tabs{position:relative;}
-.tabs .tab-content .tab-pane .action{position: absolute; right: 0px; top: 0px;}
+.tabs .nav-tabs{border-bottom:none;}
+.tabs .nav-tabs > li{margin-bottom:0px;}
+.tabs .tab-content {padding: 0; border: none;}
+.tabs .tab-content .tab-pane .action{position: absolute; right: 0px; top: -1px;}
 .tabs .tab-content .tab-pane #querybox{margin:0px}
 .tabs .tab-content .tab-pane #querybox form{padding-left:0px;}
 
@@ -17,3 +20,5 @@ input[type=checkbox].ml-10px{margin-left:10px;}
 .dropdown-list > li > a {display: block; padding: 3px 20px; clear: both; font-weight: normal; line-height: 1.53846154; color: #141414; white-space: nowrap;}
 .dropdown-list > li > a:hover,
 .dropdown-list > li > a:focus {color: #1a4f85;text-decoration: none;background-color: #ddd;}
+
+.table-actions {padding-left: 8px;}

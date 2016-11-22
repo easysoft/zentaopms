@@ -68,7 +68,7 @@
           <li <?php if($type == 'bug')     echo "class='active'"?>><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'green') . ' ' . $lang->release->bugs;?></a></li>
           <li <?php if($type == 'leftBug') echo "class='active'"?>><a href='#leftBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'red') . ' ' . $lang->release->generatedBugs;?></a></li>
           <?php if($countStories or $countBugs or $countLeftBugs):?>
-          <li class='pull-right'><?php common::printIcon('release', 'export', '', '', 'button', '', '', "export");?></li>
+          <li class='pull-right'><div><?php common::printIcon('release', 'export', '', '', 'button', '', '', "export btn-sm");?></div></li>
           <?php endif;?>
         </ul>
         <div class='tab-content'>
@@ -121,8 +121,8 @@
               <tfoot>
                 <tr>
                   <td colspan='8'>
-                    <div class='table-actions clearfix'>
-                      <?php if($countStories and $canBatchUnlink) echo "<div class='table-actions clearfix pdl-8px'>" . html::selectButton() . html::submitButton($lang->release->batchUnlink) . '</div>';?>
+                    <div class='table-actions clearfix pdl-8px'>
+                      <?php if($countStories and $canBatchUnlink) echo html::selectButton() . html::submitButton($lang->release->batchUnlink);?>
                       <div class='text'><?php echo sprintf($lang->release->finishStories, $countStories);?></div>
                     </div>
                   </td>
@@ -180,8 +180,8 @@
               <tfoot>
                 <tr>
                   <td colspan='8'>
-                    <div class='table-actions clearfix'>
-                      <?php if($countBugs and $canBatchUnlink) echo "<div class='table-actions clearfix pdl-8px'>" . html::selectButton() . html::submitButton($lang->release->batchUnlink) . '</div>';?>
+                    <div class='table-actions clearfix pdl-8px'>
+                      <?php if($countBugs and $canBatchUnlink) echo html::selectButton() . html::submitButton($lang->release->batchUnlink);?>
                       <div class='text'><?php echo sprintf($lang->release->resolvedBugs, $countBugs);?></div>
                     </div>
                   </td>
@@ -237,9 +237,9 @@
               <tfoot>
                 <tr>
                   <td colspan='7'>
-                    <div class='table-actions clearfix'>
+                    <div class='table-actions clearfix pdl-8px'>
                       <div class='text'>
-                        <?php if($countLeftBugs and $canBatchUnlink) echo "<div class='table-actions clearfix pdl-8px'>" . html::selectButton() . html::submitButton($lang->release->batchUnlink) . '</div>';?>
+                        <?php if($countLeftBugs and $canBatchUnlink) echo html::selectButton() . html::submitButton($lang->release->batchUnlink);?>
                         <?php echo sprintf($lang->release->createdBugs, $countLeftBugs);?>
                       </div>
                     </div>
@@ -314,7 +314,7 @@
   </div>
 </div>
 <style>
-.tabs .tab-content .tab-pane .action{position: absolute; right: <?php echo ($countStories or $countBugs or $countLeftBugs) ? '110px' : '0px'?>; top: 0px;}
+.tabs .tab-content .tab-pane .action{position: absolute; right: <?php echo ($countStories or $countBugs or $countLeftBugs) ? '110px' : '-1px'?>; top: 0px;}
 </style>
 <?php js::set('param', helper::safe64Decode($param))?>
 <?php js::set('link', $link)?>
