@@ -89,7 +89,7 @@ $lang->product->statusList['normal'] = 'Normal';
 $lang->product->statusList['closed'] = 'Closed';
 
 $lang->product->aclList['open']    = "Default({$lang->productCommon} with View permission can access to it)";
-$lang->product->aclList['private'] = "Private{$lang->productCommon}({$lang->projectCommon}team members only)";
+$lang->product->aclList['private'] = "Private {$lang->productCommon}({$lang->productCommon} of pesponsible person and {$lang->projectCommon} team members only)";
 $lang->product->aclList['custom']  = 'Custom(Team members and Whitelisr members have access to it.)';
 
 $lang->product->storySummary = " <strong>%s</strong> Story in total on this page, <strong>%s</strong> man-hour estimated. Case coverage is <strong>%s</strong>.";
@@ -104,5 +104,5 @@ $lang->product->featureBar['browse']['closedbyme']   = $lang->product->closedByM
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
 $lang->product->featureBar['browse']['activestory']  = $lang->product->activeStory;
 $lang->product->featureBar['browse']['changedstory'] = $lang->product->changedStory;
-$lang->product->featureBar['browse']['willclose']    = $lang->product->willOff;
+$lang->product->featureBar['browse']['willclose']    = $lang->product->willClose;
 $lang->product->featureBar['browse']['closedstory']  = $lang->product->closedStory;
