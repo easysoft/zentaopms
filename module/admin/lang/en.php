@@ -45,6 +45,7 @@ $lang->admin->safe->password  = 'Password Security';
 $lang->admin->safe->weak      = 'Common Weak Password';
 $lang->admin->safe->reason    = 'Type';
 $lang->admin->safe->checkWeak = 'Weak Password Check';
+$lang->admin->safe->modifyPasswordFirstLogin = 'Modify password in frist login';
 
 $lang->admin->safe->modeList[0] = 'N/A';
 $lang->admin->safe->modeList[1] = 'Medium';
@@ -55,6 +56,9 @@ $lang->admin->safe->reasonList['account']  = 'Same as your account';
 $lang->admin->safe->reasonList['mobile']   = 'Same as your mobile number';
 $lang->admin->safe->reasonList['phone']    = 'Same as your phone number';
 $lang->admin->safe->reasonList['birthday'] = 'Same as your DOB';
+
+$lang->admin->safe->modifyPasswordList[1] = 'Must';
+$lang->admin->safe->modifyPasswordList[0] = 'No';
 
 $lang->admin->safe->noticeMode   = 'User password will be checked when login, add/edit user password.';
 $lang->admin->safe->noticeStrong = 'The more capitalized letters and numbers a password has, the more secure it is!';
