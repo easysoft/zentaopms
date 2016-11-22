@@ -70,6 +70,7 @@
                   <div class='dropdown-menu pull-right'>
                     <?php
                     echo (common::hasPriv('task', 'create')) ? html::a($this->createLink('task', 'create', "projectID=$story->project&storyID=$story->story&moduleID=$story->module", '', true), $lang->project->wbs, '', "class='kanbanFrame'") : '';
+                    echo (common::hasPriv('task', 'batchCreate')) ? html::a($this->createLink('task', 'batchCreate', "projectID=$story->project&storyID=$story->story&iframe=true", '', true), $lang->project->batchWBS, '', "class='kanbanFrame'") : '';
                     echo (common::hasPriv('project', 'unlinkStory')) ? html::a($this->createLink('project', 'unlinkStory', "projectID=$story->project&storyID=$story->story&confirm=no", '', true), $lang->project->unlinkStory, 'hiddenwin') : '';
                     echo (common::hasPriv('story', 'activate') and storyModel::isClickable($story, 'activate')) ? html::a($this->createLink('story', 'activate', "storyID=$story->id", '', 'true'), $lang->story->activate, '', "class='kanbanFrame'") : '';
                     echo (common::hasPriv('story', 'close')    and storyModel::isClickable($story, 'close')) ? html::a($this->createLink('story', 'close', "storyID=$story->id", '', 'true'), $lang->story->close, '', "class='kanbanFrame'") : '';
