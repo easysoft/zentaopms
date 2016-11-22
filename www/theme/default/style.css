@@ -736,6 +736,8 @@ body {color:#141414; padding-bottom: 40px;}
 .fixedTheadOfList {position: fixed; top: 0px; z-index:1000;}
 .datatable.head-fixed > .datatable-head .table > thead > tr > th, 
 .fixedTheadOfList > thead > tr > th {background-color: #114f8e; border-bottom-color: #bbb; color: #aaa}
+.tablesorter.fixedTheadOfList thead tr .headerSortDown a,
+.tablesorter.fixedTheadOfList thead tr .headerSortUp a,
 .tablesorter.fixedTheadOfList thead tr .headerSortUp > a:after,
 .tablesorter.fixedTheadOfList thead tr .headerSortDown > a:after,
 .datatable.head-fixed thead tr .headerSortUp > a:after,
