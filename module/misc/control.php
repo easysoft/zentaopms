@@ -141,7 +141,7 @@ class misc extends control
     public function qrCode()
     {
         $loginAPI = common::getSysURL() . $this->config->webRoot;
-        $session  = $this->loadModel('user')->isLogon() ? '?sid=' . session_id() : '';
+        $session  = $this->loadModel('user')->isLogon() ? '?' . $this->config->sessionVar . '=' . session_id() : '';
 
         if(!extension_loaded('gd'))
         {
