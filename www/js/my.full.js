@@ -1684,17 +1684,17 @@ function initHotKey()
         e.stopPropagation();
         e.preventDefault();
         return false;
-    }).bind('keydown', 'Alt+up', function(e)
+    }).bind('keydown', 'Alt+up', function()
     {
         /* Alt+up, go back to the previous page. */
         var backLink = $('#back').attr('href');
         if(backLink) location.href = backLink;
-    }).bind('keydown', 'left', function(e)
+    }).bind('keydown', 'left', function()
     {
         /* left, go to pre object. */
         var preLink = $('#pre').attr('href');
         if(preLink) location.href = preLink;
-    }).bind('keydown', 'right', function(e)
+    }).bind('keydown', 'right', function()
     {
         /* right, go to next object. */
         var nextLink = $('#next').attr('href');
