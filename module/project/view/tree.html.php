@@ -78,10 +78,7 @@ $(function()
         action: function(event)
         {
             var action = event.action, $target = $(event.target), item = event.item;
-            if(action.type === 'add')
-            {
-                window.open(item.taskCreateUrl);
-            }
+            if(action.type === 'add') window.open(item.taskCreateUrl);
         },
         itemCreator: function($li, item)
         {
@@ -100,7 +97,7 @@ $(function()
             }
             else if(item.type === 'task')
             {
-                $li.append('<span class="task-pri pri' + item.pri + '">' + (item.pri || '') + '</span> <span class="text-muted">#' + item.id + ' </span>').append($('<a>').attr({href: item.url}).text(item.title).css('color', item.color));
+                $li.append('<span class="text-muted">#' + item.id + ' </span>').append($('<a>').attr({href: item.url}).text(item.title).css('color', item.color));
                 if(item.assignedTo) $li.append($('<span class="task-assignto"/>').html(item.assignedTo ? ('<i class="icon icon-user text-muted"></i> ' + item.assignedTo) : ''));
                 var $info = $('<div class="task-info clearfix"/>');
                 $info.append($('<div/>').addClass('status-' + item.status).text(statusMap[item.status]));
