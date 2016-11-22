@@ -220,6 +220,15 @@ class testcase extends control
 
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
+
+            /* If link from no head then reload. */
+            if(isonlybody())
+            {
+                $response['locate'] = 'reload';
+                $response['target'] = 'parent';
+                $this->send($response);
+            }
+
             $response['locate'] = $this->createLink('testcase', 'browse', "productID={$_POST['product']}&branch=" . (isset($_POST['branch']) ? $_POST['branch'] : '') . "&browseType=byModule&args={$_POST['module']}");
             $this->send($response);
         }

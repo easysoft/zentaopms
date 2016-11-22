@@ -80,5 +80,9 @@ $lang->mail->sendCloudHelp  = <<<EOD
 <p>2、accessKey和secretKey可以到登陆后的"设置"页面查看。Email人地址和名称也在"设置"页面设置。</p>
 <p>3、Email时，Notice SendCloudContact里面的昵称要跟Email一致，否则无法成功Email。可以到[<a href='%s'>同步Contact</a>]页面，将ZenTaoUser同步到SendCloudContact中</p>
 EOD;
-$lang->mail->sendCloudSuccess = '操作成功';
-$lang->mail->closeSendCloud   = '关闭发送';
+$lang->mail->sendCloudSuccess = 'Success';
+$lang->mail->closeSendCloud   = 'Close sendcloud';
+$lang->mail->addressWhiteList = 'Please add the email to the whilte list on email server to avoid be treated as spam';
+
+$lang->mail->placeholder = new stdclass();
+$lang->mail->placeholder->password = 'Some mail needs to fill in the auth code, specific to the mailbox related settings query.';

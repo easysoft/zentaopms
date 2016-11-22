@@ -82,3 +82,7 @@ $lang->mail->sendCloudHelp  = <<<EOD
 EOD;
 $lang->mail->sendCloudSuccess = '操作成功';
 $lang->mail->closeSendCloud   = '关闭SendCloud';
+$lang->mail->addressWhiteList = '为防止邮件被屏蔽，请在邮件服务器里面将发信邮箱设为白名单';
+
+$lang->mail->placeholder = new stdclass();
+$lang->mail->placeholder->password = '有些邮箱需要填写单独申请的授权码，具体请到邮箱相关设置查询。';
