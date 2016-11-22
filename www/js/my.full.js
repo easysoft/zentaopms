@@ -1677,28 +1677,28 @@ function removeCookieByKey(cookieKey)
  */
 function initHotKey()
 {
-    $(document).on('keydown', 'Ctrl+g', function(e)
+    $(document).bind('keydown', 'Ctrl+g', function(e)
     {
         /* CTRL+g, auto focus on the search box. */
         $('#searchQuery').val('').focus();
         e.stopPropagation();
         e.preventDefault();
         return false;
-    }).on('keydown', 'Alt+up', function()
+    }).bind('keydown', 'Alt+up', function(e)
     {
         /* Alt+up, go back to the previous page. */
-        var backLink = $('#back').attr("href");
+        var backLink = $('#back').attr('href');
         if(backLink) location.href = backLink;
-    }).on('keydown', 'left', function()
+    }).bind('keydown', 'left', function(e)
     {
         /* left, go to pre object. */
-        var preLink = $('#pre').attr("href");
+        var preLink = $('#pre').attr('href');
         if(preLink) location.href = preLink;
-    }).on('keydown', 'right', function()
+    }).bind('keydown', 'right', function(e)
     {
         /* right, go to next object. */
-        var nextLink = $('#next').attr("href");
-        if(preLink) location.href = nextLink;
+        var nextLink = $('#next').attr('href');
+        if(nextLink) location.href = nextLink;
     });
 }
 
