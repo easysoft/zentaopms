@@ -1624,6 +1624,9 @@ class taskModel extends model
             case 'left':
                 echo round($task->left, 1);
                 break;
+            case 'progess':
+                echo $task->progess . '%';
+                break;
             case 'deadline':
                 if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);
                 break;

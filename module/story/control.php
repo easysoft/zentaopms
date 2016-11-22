@@ -947,8 +947,9 @@ class story extends control
     public function cases($storyID)
     {
         $this->loadModel('testcase');
-        $this->view->cases = $this->testcase->getStoryCases($storyID);
-        $this->view->users = $this->user->getPairs('noletter');
+        $this->view->cases      = $this->testcase->getStoryCases($storyID);
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->resultList = array('' => '') + $this->lang->testcase->resultList;
         $this->display();
     }
 

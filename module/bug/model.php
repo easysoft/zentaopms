@@ -1222,7 +1222,7 @@ class bugModel extends model
      */
     public function getStoryBugs($storyID)
     {
-        return $this->dao->select('id, title, type, status, assignedTo, resolvedBy, resolution')
+        return $this->dao->select('id, title, pri, type, status, assignedTo, resolvedBy, resolution')
             ->from(TABLE_BUG)
             ->where('story')->eq((int)$storyID)
             ->andWhere('deleted')->eq(0)
