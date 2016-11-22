@@ -45,6 +45,7 @@ $lang->admin->safe->password  = '密码安全';
 $lang->admin->safe->weak      = '常用弱口令';
 $lang->admin->safe->reason    = '类型';
 $lang->admin->safe->checkWeak = '弱口令扫描';
+$lang->admin->safe->modifyPasswordFirstLogin = '首次登陆修改密码';
 
 $lang->admin->safe->modeList[0] = '不检查';
 $lang->admin->safe->modeList[1] = '中';
@@ -55,6 +56,9 @@ $lang->admin->safe->reasonList['account']  = '与帐号相同';
 $lang->admin->safe->reasonList['mobile']   = '与手机相同';
 $lang->admin->safe->reasonList['phone']    = '与电话相同';
 $lang->admin->safe->reasonList['birthday'] = '与生日相同';
+
+$lang->admin->safe->modifyPasswordList[1] = '必须修改';
+$lang->admin->safe->modifyPasswordList[0] = '不强制';
 
 $lang->admin->safe->noticeMode   = '系统会在登录、创建和修改用户、修改密码的时候检查用户口令。';
 $lang->admin->safe->noticeStrong = '密码长度越长，含有大写字母或数字或特殊符合越多，密码字母越不重复，安全度越强！';

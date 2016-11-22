@@ -1149,6 +1149,7 @@ class commonModel extends model
     {
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
+        if(isset($this->app->user->modifyPassword) and $this->app->user->modifyPassword and $module != 'my' and $method != 'changepassword') die(js::locate(helper::createLink('my', 'changepassword')));
         if($this->isOpenMethod($module, $method)) return true;
         if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
         if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
