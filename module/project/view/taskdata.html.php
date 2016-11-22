@@ -48,7 +48,7 @@
           <input type='checkbox' name='taskIDList[]'  value='<?php echo $task->id;?>'/> 
           <?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?>
         </td>
-        <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
+        <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
         <td class='text-left' title="<?php echo $task->name?>">
           <?php if(isset($branchGroups[$task->product][$task->branch])) echo "<span title='{$lang->product->branchName[$task->productType]}' class='label label-branch label-badge'>" . $branchGroups[$task->product][$task->branch] . '</span>';?>
           <?php if($modulePairs and $task->module) echo "<span title='{$lang->task->module}' class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span>';?>

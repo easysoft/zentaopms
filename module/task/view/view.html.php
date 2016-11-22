@@ -187,7 +187,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->task->pri;?></th>
-            <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri)?></span></td>
+            <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri);?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri)?></span></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->mailto;?></th>
