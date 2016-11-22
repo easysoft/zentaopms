@@ -597,7 +597,7 @@ body {color:#141414; padding-bottom: 40px;}
 .outer .main ul.list-unstyled li {padding: 2px 0}
 
 .outer .main .table tr > th:first-child, .outer .main .table tr > td:first-child {padding-left: 0;}
-.outer .main-side > fieldset {padding: 5px 20px 10px 10px;}
+.outer .main-side > fieldset {padding: 5px 0px 10px 10px;}
 .outer .main-side > fieldset > .table {border: none}
 
 .outer .main .tabs {margin-bottom: 15px;}

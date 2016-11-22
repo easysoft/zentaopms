@@ -83,16 +83,25 @@
           </tr>  
           <tr>
             <th><?php echo $lang->product->type;?></th>
-            <td><?php echo $lang->product->typeList[$product->type];?></td><td></td>
+            <td><?php echo $lang->product->typeList[$product->type];?></td>
           </tr>  
           <tr>
             <th><?php echo $lang->product->status;?></th>
             <td class='product-<?php echo $product->status?>'><?php echo $lang->product->statusList[$product->status];?></td>
           </tr>  
           <tr>
+            <th><?php echo $lang->story->openedBy?></th>
+            <td><?php echo zget($users, $product->createdBy);?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->story->openedDate?></th>
+            <td><?php echo $product->createdDate;?></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->product->acl;?></th>
             <td><?php echo $lang->product->aclList[$product->acl];?></td>
           </tr>  
+          <?php if($product->acl == 'custom'):?>
           <tr>
             <th><?php echo $lang->product->whitelist;?></th>
             <td>
@@ -101,15 +110,8 @@
               foreach($whitelist as $groupID) if(isset($groups[$groupID])) echo $groups[$groupID] . '&nbsp;';
               ?>
             </td>
-          </tr>  
-          <tr>
-            <th><?php echo $lang->story->openedBy?></th>
-            <td><?php echo zget($users, $product->createdBy);?></td>
-          </tr>  
-          <tr>
-            <th><?php echo $lang->story->openedDate?></th>
-            <td><?php echo $product->createdDate;?></td>
-          </tr>  
+          </tr>
+          <?php endif;?>
         </table>
       </fieldset>
       <fieldset>
