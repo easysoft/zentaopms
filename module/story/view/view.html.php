@@ -53,8 +53,8 @@
         echo "<span class='caret'></span>";
         echo "</button>";
         echo "<ul class='dropdown-menu' id='createCaseActionMenu'>";
-        $misc = common::hasPriv('testcase', 'create') ? " " : "class='disabled'";
-        $link = common::hasPriv('testcase', 'create') ?  $this->createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&storyID=$story->id") : '#';
+        $misc = common::hasPriv('testcase', 'create') ? "data-toggle='modal' data-type='iframe' data-width='95%'" : "class='disabled'";
+        $link = common::hasPriv('testcase', 'create') ?  $this->createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&storyID=$story->id", '', true) : '#';
         echo "<li>" . html::a($link, $lang->testcase->create, '', $misc) . "</li>";
         $misc = common::hasPriv('testcase', 'batchCreate') ? "data-toggle='modal' data-type='iframe' data-width='95%'" : "class='disabled'";
         $link = common::hasPriv('testcase', 'batchCreate') ?  $this->createLink('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&storyID=$story->id", '', true) : '#';
