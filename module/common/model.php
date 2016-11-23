@@ -1015,10 +1015,12 @@ class commonModel extends model
         if($onlyCondition)
         {
             $queryCondition = explode('WHERE', $sql);
-            if(!isset($queryCondition[1])) return true;
-
-            $queryCondition = explode('ORDER', $queryCondition[1]);
-            $queryCondition = str_replace('t1.', '', $queryCondition[0]);
+            $queryCondition = isset($queryCondition[1]) ? $queryCondition[1] : '';
+            if($queryCondition)
+            {
+                $queryCondition = explode('ORDER', $queryCondition);
+                $queryCondition = str_replace('t1.', '', $queryCondition[0]);
+            }
         }
         else
         {
@@ -1033,17 +1035,14 @@ class commonModel extends model
 
         /* Set the query condition session. */
         $orderBy = explode('ORDER BY', $sql);
-        if(isset($orderBy[1]))
+        $orderBy = isset($orderBy[1]) ? $orderBy[1] : '';
+        if($orderBy)
         {
-            $orderBy = explode('limit', $orderBy[1]);
-            $orderBy = str_replace('t1.', '', $orderBy[0]);
-
-            $this->session->set($objectType . 'OrderBy', $orderBy);
+            $orderBy = explode('limit', $orderBy);
+            $orderBy = $orderBy[0];
+            if($onlyCondition) $orderBy = str_replace('t1.', '', $orderBy);
         }
-        else
-        {
-            $this->session->set($objectType . 'OrderBy', '');
-        }
+        $this->session->set($objectType . 'OrderBy', $orderBy);
     }
 
     /**

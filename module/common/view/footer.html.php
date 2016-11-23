@@ -15,7 +15,6 @@
   <a href='http://www.zentao.net' target='_blank' class='text-primary'><i class='icon-zentao'></i> <?php echo $lang->zentaoPMS . $config->version;?></a> &nbsp;
     <?php echo $lang->proVersion;?>
     <?php commonModel::printNotifyLink();?>
-    <?php commonModel::printQRCodeLink();?>
   </div>
 </div>
 <?php endif;?>
