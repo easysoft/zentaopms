@@ -253,9 +253,20 @@ class story extends control
         $sourceList['ditto'] = $this->lang->story->ditto;
 
         /* Set Custom*/
-        foreach(explode(',', $this->config->story->list->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
+        foreach(explode(',', $this->config->story->list->customBatchCreateFields) as $field)
+        {
+            if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
+            $customFields[$field] = $this->lang->story->$field;
+        }
+        $showFields = $this->config->story->custom->batchCreateFields;
+        if($product->type == 'normal')
+        {
+            $showFields = str_replace(array(0 => ",branch,", 1 => ",platform,"), '', ",$showFields,");
+            $showFields = trim($showFields, ',');
+        }
+
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->story->custom->batchCreateFields;
+        $this->view->showFields   = $showFields;
 
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->batchCreate;
         $this->view->productName      = $product->name;

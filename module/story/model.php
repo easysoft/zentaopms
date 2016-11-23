@@ -245,7 +245,7 @@ class storyModel extends model
         $stories  = fixer::input('post')->get();
         $batchNum = count(reset($stories));
 
-        $result  = $this->loadModel('common')->removeDuplicate('story', $stories, "product={$productID} and branch={$branch}");
+        $result  = $this->loadModel('common')->removeDuplicate('story', $stories, "product={$productID}");
         $stories = $result['data'];
 
         $module = 0;
@@ -272,6 +272,7 @@ class storyModel extends model
             if(!empty($stories->title[$i]))
             {
                 $data = new stdclass();
+                $data->branch     = $stories->branch[$i];
                 $data->module     = $stories->module[$i];
                 $data->plan       = $stories->plan[$i];
                 $data->color      = $stories->color[$i];
@@ -282,7 +283,6 @@ class storyModel extends model
                 $data->status     = ($stories->needReview[$i] == 0 and !$forceReview) ? 'active' : 'draft';
                 $data->keywords   = $stories->keywords[$i];
                 $data->product    = $productID;
-                $data->branch     = $branch;
                 $data->openedBy   = $this->app->user->account;
                 $data->openedDate = $now;
                 $data->version    = 1;
