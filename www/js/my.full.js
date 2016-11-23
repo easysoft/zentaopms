@@ -1320,7 +1320,11 @@ function setModal4List(triggerClass, replaceID, callback, width)
  */
 function setTableBehavior()
 {
-    $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data, .table-form, .table-custom').addClass('table table-condensed table-hover table-striped tablesorter');
+    $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data, .table-form, .table-custom').addClass('table table-condensed table-hover table-striped tablesorter').each(function()
+    {
+        var $tbody = $(this).children('tbody');
+        if(!$tbody.children().length) $tbody.remove();
+    });
 
     $(document).on('click', 'tr[data-url]', function()
     {
