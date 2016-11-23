@@ -1,12 +1,10 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 <style>
-tbody.sortable > tr {position: relative; z-index: 5}
 tbody.sortable > tr.drag-shadow {display: none}
 tbody.sortable > tr > td.sort-handler {cursor: move; color: #999;}
 tbody.sortable > tr > td.sort-handler > i {position: relative; top: 2px}
-tbody.sortable-sorting > tr {transition: all .2s;}
+tbody.sortable-sorting > tr {transition: all .2s; position: relative; z-index: 5; opacity: .3;}
 tbody.sortable-sorting {cursor: move;}
-tbody.sortable-sorting > tr {opacity: .3;}
 tbody.sortable-sorting > tr.drag-row {opacity: 1; z-index: 10; box-shadow: 0 2px 4px red}
 tbody.sortable-sorting > tr.drag-row + tr > td {box-shadow: inset 0 4px 2px rgba(0,0,0,.2)}
 tbody.sortable-sorting > tr.drag-row > td {background-color: #edf3fe!important}
