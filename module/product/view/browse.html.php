@@ -56,7 +56,7 @@
         <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", '', 'button', 'bar-chart'); ?>
     </div>
     <div class='btn-group'>
-      <div class='btn-group'>
+      <div class='btn-group create-story-btn'>
         <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
           <i class='icon icon-plus'></i> <?php echo $lang->story->common;?>
           <span class='caret'></span>

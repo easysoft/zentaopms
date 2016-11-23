@@ -107,4 +107,56 @@ class git extends control
             exit;
         }
     }
+
+    /**
+     * Ajax save log.
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveLog()
+    {
+        $repoUrl  = trim($this->post->repoUrl);
+        $repoRoot = str_replace('\\', '/', trim($this->post->repoRoot));
+        $message  = trim($this->post->message);
+        $revision = trim($this->post->revision);
+        $files    = $this->post->files;
+
+        /* Ignore git. */
+        if(strpos($repoUrl, '://') === false) die();
+
+        $parsedFiles = array();
+        foreach($files as $file)
+        {
+            $file = trim($file);
+            if(empty($file)) continue;
+            $path = str_replace($repoRoot,  '', $file);
+            $parsedFiles[''][] = $path;
+        }
+
+        $objects = $this->git->parseComment($message);
+        if($objects)
+        {
+            $log = new stdclass();
+            $log->author   = $this->app->user->account;
+            $log->date     = helper::now();
+            $log->msg      = $message;
+            $log->revision = $revision;
+            $log->files    = $parsedFiles;
+            $this->git->saveAction2PMS($objects, $log, $repoUrl);
+        }
+        die();
+    }
+
+    /**
+     * Ajax get repos.
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetRepos()
+    {
+        $repos = $this->git->getRepos();
+        die(json_encode($repos));
+    }
 }

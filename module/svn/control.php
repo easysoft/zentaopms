@@ -135,4 +135,16 @@ class svn extends control
         }
         die();
     }
+
+    /**
+     * Ajax get repos.
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetRepos()
+    {
+        $repos = $this->svn->getRepos();
+        die(json_encode($repos));
+    }
 }

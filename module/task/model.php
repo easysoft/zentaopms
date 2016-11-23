@@ -1191,6 +1191,9 @@ class taskModel extends model
             $task->productType = $product->type;
         }
 
+        /* Set closed realname. */
+        if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
+
         /* Compute task progess. */
         if($task->consumed == 0 and $task->left == 0)
         {

@@ -289,6 +289,14 @@ class project extends control
                 $groupTasks[$task->$groupBy][] = $task;
             }
         }
+        /* Process closed data when group by assignedTo. */
+        if($groupBy == 'assignedTo' and isset($groupTasks['Closed']))
+        {
+            $closedTasks = $groupTasks['Closed'];
+            unset($groupTasks['Closed']);
+            $groupTasks['closed'] = $closedTasks;
+        }
+
 
         /* Assign. */
         $this->app->loadLang('tree');

@@ -148,20 +148,13 @@ $lang->project->groups['assignedTo'] = 'By AssignedTo';
 $lang->project->groups['finishedBy'] = 'By FinishedBy';
 $lang->project->groups['closedBy']   = 'By ClosedBy';
 $lang->project->groups['type']       = 'By Type';
-$lang->project->groups['deadline']   = 'By Deadline';
 
 $lang->project->groupFilter['story']['all']         = $lang->project->all;
 $lang->project->groupFilter['story']['linked']      = 'Task Linked to Story';
 $lang->project->groupFilter['pri']['all']           = $lang->project->all;
-$lang->project->groupFilter['pri']['setted']        = 'Congfigured';
+$lang->project->groupFilter['pri']['noset']         = 'Not set';
 $lang->project->groupFilter['assignedTo']['undone'] = 'Pending';
 $lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
-$lang->project->groupFilter['finishedBy']['done']   = 'Done';
-$lang->project->groupFilter['finishedBy']['all']    = $lang->project->all;
-$lang->project->groupFilter['closedBy']['closed']   = 'Closed';
-$lang->project->groupFilter['closedBy']['all']      = $lang->project->all;
-$lang->project->groupFilter['deadline']['all']      = $lang->project->all;
-$lang->project->groupFilter['deadline']['setted']   = 'Configured';
 
 $lang->project->byQuery              = 'Search';
 
