@@ -1602,7 +1602,7 @@ class taskModel extends model
                 break;
             case 'pri':
                 echo "<span class='pri" . zget($this->lang->task->priList, $task->pri, $task->pri) . "'>";
-                echo zget($this->lang->task->priList, $task->pri, $task->pri);
+                echo $task->pri == '0' ? '' : zget($this->lang->task->priList, $task->pri, $task->pri);
                 echo "</span>";
                 break;
             case 'name':

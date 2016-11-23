@@ -23,7 +23,7 @@
         <?php foreach($tasks as $key => $task):?>
         <tr class='text-center'>
           <td class='text-left' title="<?php echo $task->name?>"><?php echo $task->name;?></td>
-          <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
+          <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
           <td><?php echo $lang->task->statusList[$task->status];?></td>
           <td><?php echo zget($users, $task->assignedTo, $task->assignedTo);?></td>
           <td><?php echo $task->estimate;?></td>
