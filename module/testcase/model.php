@@ -93,7 +93,7 @@ class testcaseModel extends model
         $cases       = fixer::input('post')->get();
         $batchNum    = count(reset($cases));
 
-        $result = $this->loadModel('common')->removeDuplicate('case', $cases, "product={$productID} and branch={$branch}");
+        $result = $this->loadModel('common')->removeDuplicate('case', $cases, "product={$productID}");
         $cases  = $result['data'];
 
         for($i = 0; $i < $batchNum; $i++)
@@ -125,7 +125,7 @@ class testcaseModel extends model
             {
                 $data[$i] = new stdclass();
                 $data[$i]->product      = $productID;
-                $data[$i]->branch       = $branch;
+                $data[$i]->branch       = $cases->branch[$i];
                 $data[$i]->module       = $cases->module[$i];
                 $data[$i]->type         = $cases->type[$i];
                 $data[$i]->pri          = $cases->pri[$i];

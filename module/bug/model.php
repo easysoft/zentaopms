@@ -87,7 +87,7 @@ class bugModel extends model
         $data       = fixer::input('post')->get();
         $batchNum   = count(reset($data));
 
-        $result = $this->loadModel('common')->removeDuplicate('bug', $data, "product={$productID} and branch={$branch}");
+        $result = $this->loadModel('common')->removeDuplicate('bug', $data, "product={$productID}");
         $data   = $result['data'];
 
         for($i = 0; $i < $batchNum; $i++)
@@ -132,7 +132,7 @@ class bugModel extends model
             $bug->openedBy    = $this->app->user->account;
             $bug->openedDate  = $now;
             $bug->product     = $productID;
-            $bug->branch      = $branch;
+            $bug->branch      = $data->branches[$i];
             $bug->module      = $data->modules[$i];
             $bug->project     = $data->projects[$i];
             $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
