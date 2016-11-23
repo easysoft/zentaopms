@@ -34,7 +34,8 @@ function downloadFile(fileID)
   {
       if(common::hasPriv('file', 'download'))
       {
-          $fileTitle = "<li class='list-group-item'><i class='icon-file-text text-muted icon'></i> &nbsp;" . $file->title .'.' . $file->extension;
+          $uploadDate = $lang->file->uploadDate . $file->addedDate;
+          $fileTitle  = "<li title={$uploadDate} class='list-group-item'><i class='icon-file-text text-muted icon'></i> &nbsp;" . $file->title .'.' . $file->extension;
           echo html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $fileTitle, '_blank', "onclick='return downloadFile($file->id)'");
 
           /* Show size info. */
