@@ -188,6 +188,25 @@ class gitModel extends model
     }
 
     /**
+     * Get repos.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getRepos()
+    {
+        $repos = array();
+        if(!$this->config->git->repos) return $repos;
+
+        foreach($this->config->git->repos as $repo)
+        {
+            if(empty($repo['path'])) continue;
+            $repos[] = $repo['path'];
+        }
+        return $repos;
+    }
+
+    /**
      * Set repo.
      * 
      * @param  object    $repo 
