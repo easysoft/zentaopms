@@ -380,14 +380,26 @@ class testcase extends control
         $moduleOptionMenu['ditto'] = $this->lang->testcase->ditto;
 
         /* Set custom. */
-        foreach(explode(',', $this->config->testcase->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
+        $product = $this->product->getById($productID);
+        foreach(explode(',', $this->config->testcase->customBatchCreateFields) as $field)
+        {
+            if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
+            $customFields[$field] = $this->lang->testcase->$field;
+        }
+        $showFields = $this->config->testcase->custom->batchCreateFields;
+        if($product->type == 'normal')
+        {
+            str_replace(array(0 => ",branch,", 1 => ",platform,"), '', $showFields);
+            trim($showFields, ',');
+        }
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->testcase->custom->batchCreateFields;
+        $this->view->showFields   = $showFields;
 
         $this->view->title            = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->batchCreate;
         $this->view->position[]       = html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
         $this->view->position[]       = $this->lang->testcase->common;
         $this->view->position[]       = $this->lang->testcase->batchCreate;
+        $this->view->product          = $product;
         $this->view->productID        = $productID;
         $this->view->story            = $story;
         $this->view->storyList        = $storyList;

@@ -43,6 +43,7 @@ foreach(explode(',', $showFields) as $field)
     <thead>
       <tr>
         <th class='w-50px'><?php echo $lang->idAB;?></th> 
+        <th class='w-120px<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
         <th class='w-180px<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->testcase->module;?></th>
         <th class='w-180px<?php echo zget($visibleFields, 'story', ' hidden')?>'> <?php echo $lang->testcase->story;?></th>
         <th><?php echo $lang->testcase->title;?> <span class='required'></span></th>
@@ -65,6 +66,7 @@ foreach(explode(',', $showFields) as $field)
     ?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
+      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'> <?php echo html::select("story[$i]", $storyList, $story ? $story->id : '', 'class="form-control chosen"');?></td>
       <td style='overflow:visible'>
@@ -89,6 +91,7 @@ foreach(explode(',', $showFields) as $field)
   <tbody>
     <tr class='text-center'>
       <td>%s</td>
+      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[%s]", $branches, $branch, "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'> <?php echo html::select("story[%s]", '', '', 'class="form-control"');?></td>
       <td style='overflow:visible'>

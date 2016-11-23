@@ -38,6 +38,7 @@ foreach(explode(',', $showFields) as $field)
     <thead>
       <tr>
         <th class='w-50px'>  <?php echo $lang->idAB;?></th> 
+        <th class='w-120px<?php echo zget($visibleFields, $product->type, ' hidden')?>'> <?php echo $lang->product->branch;?></th>
         <th class='w-120px<?php echo zget($visibleFields, 'module', ' hidden')?>'> <?php echo $lang->bug->module;?></th>
         <th class='w-130px<?php echo zget($visibleFields, 'project', ' hidden')?>'><?php echo $lang->bug->project;?></th>
         <th><?php echo $lang->bug->openedBuild;?> <span class='required'></span></th>
@@ -78,6 +79,7 @@ foreach(explode(',', $showFields) as $field)
       ?>
       <tr class='text-center'>
         <td><?php echo $i+1;?></td>
+        <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branches[$i]", $branches, $branch, "class='form-control'");?></td>
         <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>'  style='overflow:visible'><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
         <td class='text-left<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[$i]", $projects, $projectID, "class='form-control chosen' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
         <td class='text-left' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, 'trunk', "class='form-control chosen' multiple");?></td>
@@ -110,6 +112,7 @@ foreach(explode(',', $showFields) as $field)
       ?>
       <tr class='text-center'>
         <td><?php echo $i+1;?></td>
+        <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branches[$i]", $branches, $branch, "class='form-control'");?></td>
         <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>'  style='overflow:visible'><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
         <td class='text-left<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[$i]", $projects, $projectID, "class='form-control chosen' onchange='loadProjectBuilds($productID, this.value, $i)'");?></td>
         <td class='text-left' style='overflow:visible' id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='form-control chosen' multiple");?></td>
@@ -138,6 +141,7 @@ foreach(explode(',', $showFields) as $field)
   <tbody>
     <tr class='text-center'>
       <td>%s</td>
+      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branches[%s]", $branches, $branch, "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>'  style='overflow:visible'><?php echo html::select("modules[%s]", $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[%s]", $projects, $projectID, "class='form-control' onchange='loadProjectBuilds($productID, this.value, \"%s\")'");?></td>
       <td class='text-left' style='overflow:visible' id='buildBox%s'><?php echo html::select("openedBuilds[%s][]", $builds, '', "class='form-control' multiple");?></td>

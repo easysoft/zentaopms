@@ -395,14 +395,26 @@ class bug extends control
         }
 
         /* Set custom. */
-        foreach(explode(',', $this->config->bug->list->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
+        $product  = $this->product->getById($productID);
+        foreach(explode(',', $this->config->bug->list->customBatchCreateFields) as $field)
+        {
+            if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
+            $customFields[$field] = $this->lang->bug->$field;
+        }
+        $showFields = $this->config->bug->custom->batchCreateFields;
+        if($product->type == 'normal')
+        {
+            $showFields = str_replace(array(0 => ",branch,", 1 => ",platform,"), '', ",$showFields,");
+            $showFields = trim($showFields, ',');
+        }
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->bug->custom->batchCreateFields;
+        $this->view->showFields   = $showFields;
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchCreate;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->batchCreate;
 
+        $this->view->product          = $product;
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;
