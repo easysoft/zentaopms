@@ -90,7 +90,7 @@ $(function()
             }
             else if(item.type === 'story')
             { 
-                $wrapper.append('<span class="tree-item-id tree-story-id">' + item.storyId + ' </span><span class="label label-story"><?php echo $lang->story->common ?></span>').append($('<a>').attr({href: item.url}).text(item.title).css('color', item.color));
+                $wrapper.append('<span class="label label-story"><?php echo $lang->story->common ?> #' + item.storyId + '</span>').append($('<a>').attr({href: item.url}).text(item.title).css('color', item.color));
                 if(item.children && item.children.length)
                 {
                     if(item.tasksCount) $wrapper.append(' <span class="label label-task-count label-badge">' + item.tasksCount + '</span>');

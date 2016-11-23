@@ -1,7 +1,7 @@
  .no-padding {padding: 0!important;}
 
-.label-story {font-size: 12px; background-color: #F5EEFF; border: 1px solid #F5EEFF; color: #8666B8; display: inline-block; padding: 0 2px; line-height: 16px; margin-right: 5px; position: relative; top: -1px}
-.tree-item-id {font-size: 12px; display: inline-block; line-height: 16px; border: 1px solid #aaa; color: #808080; margin-right: 5px; border-radius: 1px; padding: 0 3px; min-width: 20px; text-align: center;}
+.label-story {font-size: 12px; background-color: #8666B8; border: 1px solid #8666B8; color: #fff; display: inline-block; padding: 0 2px; line-height: 14px; position: relative; top: -1px; margin-right: 5px; opacity: .8}
+.tree-item-id {font-size: 12px; display: inline-block; line-height: 14px; border: 1px solid #bbb; color: #808080; margin-right: 5px; border-radius: 1px; padding: 0 3px; min-width: 16px; text-align: center; background-color: #fff;}
 
 #projectTree {margin-bottom: 0}
 #projectTree > .tree-action-item {display: none!important}
