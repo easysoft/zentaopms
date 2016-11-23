@@ -29,7 +29,7 @@
       <tr>
         <th class='w-100px'><?php echo $lang->task->module;?></th>
         <td id='moduleIdBox' class='w-p25-f'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen' onchange='setStories(this.value,$project->id)'");?></td>
-        <td class='w-p25-f'></td><td></td>
+        <td></td><td></td><td></td><td></td>
       </tr>
       <tr>
         <th><?php echo $lang->task->type;?></th>
@@ -45,7 +45,7 @@
       <?php if(strpos(",$showFields,", ',story,') !== false):?>
       <tr>
         <th><?php echo $lang->task->story;?></th>
-        <td colspan='3'>
+        <td colspan='5'>
           <div class='input-group'>
             <?php if(empty($stories)):?>
             <span id='story'><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('project', 'linkStory', "projectID=$project->id"), $lang->project->linkStory, '_blank'), html::a("javascript:loadStories($project->id)", $lang->refresh));?></span>
@@ -59,7 +59,7 @@
       <?php endif;?>
       <tr>
         <th><?php echo $lang->task->name;?></th>
-        <td colspan='3'>
+        <td colspan='5'>
           <div class='row-table'>
             <div class='col-table'>
               <div class="input-group w-p100">
@@ -113,7 +113,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->task->desc;?></th>
-        <td colspan='3'><?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?></td>
+        <td colspan='5'><?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?></td>
       </tr>
       <?php
       $hiddenEstStarted = strpos(",$showFields,", ',estStarted,') === false;
@@ -124,7 +124,7 @@
       <tr>
         <th><?php echo ($hiddenEstStarted and $hiddenDeadline) ? $lang->task->mailto : $lang->task->datePlan;?></th>
         <?php if(!$hiddenEstStarted or !$hiddenDeadline):?>
-        <td>
+        <td colspan='2'>
           <div class='input-group' id='dataPlanGroup'>
             <?php if(!$hiddenEstStarted):?>
             <?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date' placeholder='{$lang->task->estStarted}'");?>
@@ -139,7 +139,7 @@
         </td>
         <?php endif;?>
         <?php if(!$hiddenMailto):?>
-        <?php $colspan = ($hiddenEstStarted and $hiddenDeadline) ? '3' : '2';?>
+        <?php $colspan = ($hiddenEstStarted and $hiddenDeadline) ? '5' : '4';?>
         <td colspan='<?php echo $colspan?>'>
           <div id='mailtoGroup' class='input-group'>
             <?php if(!$hiddenEstStarted or !$hiddenDeadline):?>
@@ -154,15 +154,15 @@
       <?php endif;?>
       <tr>
         <th><?php echo $lang->files;?></th>
-        <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
+        <td colspan='5'><?php echo $this->fetch('file', 'buildform');?></td>
       </tr>
       <tr>
         <th><?php echo $lang->task->afterSubmit;?></th>
-        <td colspan='3'><?php echo html::radio('after', $lang->task->afterChoices, 'continueAdding');?></td>
+        <td colspan='5'><?php echo html::radio('after', $lang->task->afterChoices, 'continueAdding');?></td>
       </tr>
       <tr>
         <td></td>
-        <td colspan='3'><?php echo html::submitButton() . html::backButton();?></td>
+        <td colspan='5'><?php echo html::submitButton() . html::backButton();?></td>
       </tr>
     </table>
     <span id='responser'></span>
