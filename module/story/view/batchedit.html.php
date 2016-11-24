@@ -53,6 +53,7 @@ foreach(explode(',', $showFields) as $field)
     <tbody>
       <?php foreach($storyIDList as $storyID):?>
       <?php
+      if(!isset($stories[$storyID])) continue;
       if(!$productID)
       {
           $product = $this->product->getByID($stories[$storyID]->product);
