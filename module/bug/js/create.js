@@ -103,11 +103,29 @@ $(function()
 
     $('[data-toggle=tooltip]').tooltip();
 
-    // ajust style for file box
+    // adjust size of bug type input group
+    var adjustBugTypeGroup = function()
+    {
+        var $group = $('#bugTypeInputGroup');
+        var width = $group.width(), addonWidth = 0;
+        var $controls = $group.children('.form-control');
+        $group.children('.input-group-addon').each(function()
+        {
+            addonWidth += $(this).outerWidth();
+        });
+        $controls.css('width', Math.floor((width - addonWidth)/$controls.length));
+    };
+    adjustBugTypeGroup();
+
+    // adjust style for file box
     var ajustFilebox = function()
     {
         applyCssStyle('.fileBox > tbody > tr > td:first-child {transition: none; width: ' + ($('#contactListGroup').width() - 2) + 'px}', 'filebox')
     };
     ajustFilebox();
-    $(window).resize(ajustFilebox);
+    $(window).resize(function()
+    {
+        ajustFilebox();
+        adjustBugTypeGroup();
+    });
 });

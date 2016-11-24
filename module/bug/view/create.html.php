@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  * The create view of bug module of ZenTaoPMS.
  *
@@ -89,7 +89,7 @@ js::set('refresh', $lang->refresh);
       <tr>
         <th><?php echo $lang->bug->type;?></th>
         <td>
-          <div class='input-group'>
+          <div class='clearfix' id='bugTypeInputGroup'>
             <?php
             /* Remove the unused types. */
             unset($lang->bug->typeList['designchange']);
