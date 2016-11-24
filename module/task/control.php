@@ -886,9 +886,39 @@ class task extends control
                     $this->sendmail($taskID, $actionID);
                 }
             }
-            if(isset($skipTasks)) echo js::alert(sprintf($this->lang->task->error->skipClose, join(',', $skipTasks)));
+            if(isset($skipTasks))
+            {
+                $skipTasks = join(',', $skipTasks);
+                $confirmURL = $this->createLink('task', 'closeSkipTasks', "skipTasks=$skipTasks");
+                $cancelURL  = $this->server->HTTP_REFERER;
+                die(js::confirm(sprintf($this->lang->task->error->skipClose, $skipTasks), $confirmURL, $cancelURL, 'parent', 'parent'));
+            }
         }
         die(js::reload('parent'));
+    }
+
+    /**
+     * Close skip tasks.
+     *
+     * @param  string $skipTasks
+     * @access public
+     * @return void
+     */
+    public function closeSkipTasks($skipTasks = '')
+    {
+        $this->loadModel('action');
+        $skipTasks = explode(',', $skipTasks);
+        foreach($skipTasks as $taskID)
+        {
+            $changes = $this->task->close($taskID);
+            if($changes)
+            {
+                $actionID = $this->action->create('task', $taskID, 'Closed', '');
+                $this->action->logHistory($actionID, $changes);
+                $this->sendmail($taskID, $actionID);
+            }
+        }
+        die(js::locate($this->session->taskList, 'parent'));
     }
 
     /**

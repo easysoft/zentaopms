@@ -159,7 +159,7 @@ $lang->task->error->consumedSmall    = '"Consumed" must larger than before.';
 $lang->task->error->consumedThisTime = 'Please enter "Man-Hour"';
 $lang->task->error->left             = 'Please enter "Left"';
 $lang->task->error->work             = '"Remark" must be less than 255 characteres.';
-$lang->task->error->skipClose        = 'Task: %s is not“Done”或“Cancelled”. You cannot close it!';
+$lang->task->error->skipClose        = 'Task: %s is not“Done”or “Cancelled”. Confirm to close them?';
 $lang->task->error->consumed         = 'Task: %s man-hour must be more than 0. Ignore changes to this Task.';
 
 /* 统计报表。*/
