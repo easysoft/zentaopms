@@ -10,3 +10,5 @@
 .dropdown-list > li > a:focus {color: #1a4f85;text-decoration: none;background-color: #ddd;}
 
 .pl-5px{padding-left:5px;}
+#treebox{position:fixed;margin-left:20px;}
+.outer.hide-side #treebox{margin-left:0px;}

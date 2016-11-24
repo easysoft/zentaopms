@@ -18,3 +18,6 @@
 .dropdown-list > li > a:focus {color: #1a4f85;text-decoration: none;background-color: #ddd;}
 
 .pl-5px{padding-left:5px;}
+
+#taskTree{position:fixed;margin-left:20px;}
+.outer.hide-side #taskTree{margin-left:0px;}
