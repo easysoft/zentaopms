@@ -350,6 +350,7 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 .panel .table-bordered > thead > tr:first-child th,.panel .table-bordered > tbody > tr:first-child th,.panel .table-bordered > tr:first-child th {border-top: 0;}
 .panel .table-bordered tr > td:first-child,.panel .table-bordered tr > th:first-child {border-left: 0;}
 .panel .table-bordered tr > td:last-child,.panel .table-bordered tr > th:last-child {border-right: 0;}
+.panel .table-bordered tfoot > tr:last-child > td {border-bottom: 0}
 
 /* small panel */
 .panel-sm .panel-heading {padding: 7px 10px}
