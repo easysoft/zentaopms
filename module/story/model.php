@@ -457,11 +457,6 @@ class storyModel extends model
             ->remove('linkStories,childStories,files,labels,comment')
             ->get();
         if(is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
-        if($story->closedReason == 'subdivided' and $oldStory->childStories == '')
-        {
-            dao::$errors[] = $this->lang->story->errorEmptyChildStory;
-            return false;
-        }
 
         $this->dao->update(TABLE_STORY)
             ->data($story)
@@ -469,7 +464,6 @@ class storyModel extends model
             ->checkIF(isset($story->closedBy), 'closedReason', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
-            //->checkIF(isset($story->closedReason) and $story->closedReason == 'subdivided', 'childStories', 'notempty')
             ->where('id')->eq((int)$storyID)->exec();
 
         if(!dao::isError()) return common::createChanges($oldStory, $story);
@@ -563,7 +557,6 @@ class storyModel extends model
                     ->checkIF($story->closedBy, 'closedReason', 'notempty')
                     ->checkIF($story->closedReason == 'done', 'stage', 'notempty')
                     ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
-                    ->checkIF($story->closedReason == 'subdivided', 'childStories', 'notempty')
                     ->where('id')->eq((int)$storyID)
                     ->exec();
                 if($story->title != $oldStory->title)
@@ -634,7 +627,6 @@ class storyModel extends model
             ->batchCheck($this->config->story->review->requiredFields, 'notempty')
             ->checkIF($this->post->result == 'reject', 'closedReason', 'notempty')
             ->checkIF($this->post->result == 'reject' and $this->post->closedReason == 'duplicate',  'duplicateStory', 'notempty')
-            ->checkIF($this->post->result == 'reject' and $this->post->closedReason == 'subdivided', 'childStories',   'notempty')
             ->where('id')->eq($storyID)->exec();
         if($this->post->result == 'revert')
         {
@@ -722,7 +714,6 @@ class storyModel extends model
             ->autoCheck()
             ->batchCheck($this->config->story->close->requiredFields, 'notempty')
             ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
-            ->checkIF($story->closedReason == 'subdivided', 'childStories',   'notempty')
             ->where('id')->eq($storyID)->exec();
         return common::createChanges($oldStory, $story);
     }
@@ -779,7 +770,6 @@ class storyModel extends model
             $this->dao->update(TABLE_STORY)->data($story)
                 ->autoCheck()
                 ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
-                ->checkIF($story->closedReason == 'subdivided', 'childStories',   'notempty')
                 ->where('id')->eq($storyID)->exec();
 
             if(!dao::isError()) 
