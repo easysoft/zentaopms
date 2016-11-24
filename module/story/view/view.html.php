@@ -43,6 +43,14 @@
         echo "<div class='btn-group'>";
         common::printIcon('story', 'change',     "storyID=$story->id", $story);
         common::printIcon('story', 'review',     "storyID=$story->id", $story);
+
+        if($story->status != 'closed')
+        {
+            $misc = common::hasPriv('story', 'batchCreate') ? "class='btn' data-toggle='modal' data-type='iframe' data-width='95%'" : "class='disabled'";
+            $link = common::hasPriv('story', 'batchCreate') ?  $this->createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', true) : '#';
+            echo html::a($link, "<i class='icon icon-node'></i> " . $lang->story->subdivide, '', $misc);
+        }
+
         common::printIcon('story', 'close',      "storyID=$story->id", $story, 'button', '', '', 'iframe text-danger', true);
         common::printIcon('story', 'activate',   "storyID=$story->id", $story, 'button', '', '', 'iframe text-success', true);
 
