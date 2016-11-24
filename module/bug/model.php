@@ -415,7 +415,7 @@ class bugModel extends model
             krsort($moduleIDList);
             if($moduleIDList)
             {
-                $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($moduleIDList)->fetchAll('id');
+                $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($moduleIDList)->andWhere('deleted')->eq(0)->fetchAll('id');
                 foreach($moduleIDList as $moduleID)
                 {
                     if(isset($modules[$moduleID]))

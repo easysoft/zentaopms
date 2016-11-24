@@ -60,6 +60,7 @@ $lang->action->objectTypes['doc']         = 'Document';
 $lang->action->objectTypes['doclib']      = 'Doc Lib';
 $lang->action->objectTypes['todo']        = 'To-Dos';
 $lang->action->objectTypes['branch']      = 'Branch';
+$lang->action->objectTypes['module']      = 'Module';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
