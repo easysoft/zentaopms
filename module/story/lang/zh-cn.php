@@ -17,6 +17,7 @@ $lang->story->review      = '评审';
 $lang->story->batchReview = '批量评审';
 $lang->story->edit        = "编辑";
 $lang->story->batchEdit   = "批量编辑";
+$lang->story->subdivide   = '细分';
 $lang->story->close       = '关闭';
 $lang->story->batchClose  = '批量关闭';
 $lang->story->activate    = '激活';

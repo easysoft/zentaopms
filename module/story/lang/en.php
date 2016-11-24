@@ -17,6 +17,7 @@ $lang->story->review      = 'Review';
 $lang->story->batchReview = 'Batch Review';
 $lang->story->edit        = "Edit";
 $lang->story->batchEdit   = "Batch Edit";
+$lang->story->subdivide   = 'Subdivide';
 $lang->story->close       = 'Close';
 $lang->story->batchClose  = 'Batch Close';
 $lang->story->activate    = 'Activate';

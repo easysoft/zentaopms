@@ -16,7 +16,7 @@
     <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>
     <strong>
       <small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small>
-      <?php echo $lang->story->batchCreate;?>
+      <?php echo $storyID ? $lang->story->subdivide : $lang->story->batchCreate;?>
       <?php if($product->type !== 'normal') echo '<span class="label label-info">' . $branches[$branch] . '</span>';?>
     </strong>
     <div class='actions'>

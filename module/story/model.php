@@ -685,6 +685,40 @@ class storyModel extends model
         return $actions;
     }
 
+    public function subdivide($storyID, $stories)
+    {
+        $now      = helper::now();
+        $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+
+        /* Set childStories. */
+        $childStories = '';
+        foreach($stories as $story) $childStories .= $story->storyID . ',';
+        $childStories = trim($childStories, ',');
+
+        $newStory = new stdClass();
+        $newStory->plan           = 0;
+        $newStory->lastEditedBy   = $this->app->user->account;
+        $newStory->lastEditedDate = $now;
+        $newStory->closedDate     = $now;
+        $newStory->closedBy       = $this->app->user->account;
+        $newStory->assignedTo     = 'closed';
+        $newStory->assignedDate   = $now;
+        $newStory->status         = 'closed';
+        $newStory->closedReason   = 'subdivided';
+        $newStory->childStories   = $childStories;
+
+        /* Subdivide story and close it. */
+        $this->dao->update(TABLE_STORY)->data($newStory)
+            ->autoCheck()
+            ->batchCheck($this->config->story->close->requiredFields, 'notempty')
+            ->where('id')->eq($storyID)->exec();
+        $changes  = common::createChanges($oldStory, $newStory);
+        $actionID = $this->action->create('story', $storyID, 'Closed', '', 'Subdivided');
+        $this->action->logHistory($actionID, $changes);
+
+        return $actionID;
+    }
+
     /**
      * Close a story.
      * 
