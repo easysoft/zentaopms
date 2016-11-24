@@ -11,7 +11,7 @@
  */
 ?>
     <?php include '../../common/view/tablesorter.html.php';?>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='taskList'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='taskList'>
       <thead>
         <tr>
           <th class='w-id {sorter:false}'>    <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
@@ -44,7 +44,7 @@
       <?php foreach($tasks as $task):?>
       <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : ''; ?>
       <tr class='text-center'>
-        <td>
+        <td class='cell-id'>
           <input type='checkbox' name='taskIDList[]'  value='<?php echo $task->id;?>'/> 
           <?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?>
         </td>

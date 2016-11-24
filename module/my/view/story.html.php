@@ -22,7 +22,7 @@
   </nav>
 </div>
 <form method='post' id='myStoryForm'>
-<table class='table table-condensed table-hover table-striped tablesorter table-fixed'>
+<table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable'>
   <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
     <tr class='text-center'>
@@ -46,7 +46,7 @@
     <?php foreach($stories as $key => $story):?>
     <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
     <tr class='text-center'>
-      <td>
+      <td class='cell-id'>
         <?php if($canBatchEdit or $canBatchClose):?>
         <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
         <?php endif;?>

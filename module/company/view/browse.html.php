@@ -33,7 +33,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
 </div>
 <div class='main'>
 <form action='<?php echo $this->createLink('user', 'batchEdit', "deptID=$deptID")?>' method='post' id='userListForm'>
-  <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='userList'>
+  <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='userList'>
     <thead>
     <tr class='colhead'>
       <?php $vars = "param=$param&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
@@ -58,7 +58,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
     ?>
     <?php foreach($users as $user):?>
     <tr class='text-center'>
-      <td>
+      <td class='cell-id'>
         <?php 
         if($canBatchEdit) echo "<input type='checkbox' name='users[]' value='$user->account'> ";
         printf('%03d', $user->id);

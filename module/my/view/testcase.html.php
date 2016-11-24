@@ -23,7 +23,7 @@
   </nav>
 </div>
 <form method='post' id='myCaseForm'>
-  <table class='table table-condensed table-fixed table-hover table-striped tablesorter' id='caseList'>
+  <table class='table table-condensed table-fixed table-hover table-striped tablesorter table-selectable' id='caseList'>
     <?php 
       $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
       $this->app->loadLang('testtask');
@@ -49,7 +49,7 @@
       ?>
       <?php foreach($cases as $case):?>
       <tr class='text-center'>
-        <td>
+        <td class='cell-id'>
           <?php if($canBatchEdit or $canBatchRun):?><input type='checkbox' name='caseIDList[]'  value='<?php echo $case->id;?>'/><?php endif;?>
           <?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?>
         </td>
@@ -90,7 +90,7 @@
           if($canBatchEdit) 
           {
               $actionLink = $this->createLink('testcase', 'batchEdit');
-              echo html::submitButton("<i class='icon-edit'></i> " . $lang->edit, "onclick=setFormAction('$actionLink')");
+              echo html::submitButton("<i class='icon-pencil'></i> " . $lang->edit, "onclick=setFormAction('$actionLink')");
           }
           if($canBatchRun) 
           {

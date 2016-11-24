@@ -22,7 +22,7 @@
   </ul>
 </div>
 <form method='post' action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
-  <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='bugList'>
+  <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='bugList'>
     <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
     <tr class='text-center'>
@@ -42,7 +42,7 @@
     <?php $canBatchEdit  = common::hasPriv('bug', 'batchEdit');?>
     <?php foreach($bugs as $bug):?>
     <tr class='text-center'>
-      <td class='text-left'>
+      <td class='cell-id'>
         <?php if($canBatchEdit):?><input type='checkbox' name='bugIDList[]' value='<?php echo $bug->id;?>' /><?php endif;?>
         <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id), '_blank');?>
       </td>

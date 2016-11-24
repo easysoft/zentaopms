@@ -65,7 +65,7 @@
             <div class='linkBox'></div>
             <?php endif;?>
             <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");?>">
-              <table class='table tablesorter table-condensed table-hover table-striped table-fixed' id='storyList'>
+              <table class='table tablesorter table-condensed table-hover table-striped table-fixed table-selectable' id='storyList'>
                 <?php $vars = "planID={$plan->id}&type=story&orderBy=%s&link=$link&param=$param"; ?>
                 <thead>
                 <tr>
@@ -93,9 +93,9 @@
                   $totalEstimate += $story->estimate;
                   ?>
                   <tr class='text-center'>
-                    <td>
+                    <td class='cell-id'>
                       <?php if($canBatchUnlink or $canBatchChangePlan):?>
-                      <input class='ml-10px' type='checkbox' name='storyIDList[]'  value='<?php echo $story->id;?>'/> 
+                      <input type='checkbox' name='storyIDList[]'  value='<?php echo $story->id;?>'/> 
                       <?php endif;?>
                       <?php echo html::a($viewLink, sprintf("%03d", $story->id));?>
                     </td>
@@ -307,7 +307,7 @@
             <div class='linkBox'></div>
             <?php endif;?>
             <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy");?>">
-              <table class='table tablesorter table-condensed table-hover table-striped table-fixed' id='bugList'>
+              <table class='table tablesorter table-condensed table-hover table-striped table-fixed table-selectable' id='bugList'>
                 <?php $vars = "planID={$plan->id}&type=bug&orderBy=%s&link=$link&param=$param"; ?>
                 <thead>
                 <tr>
@@ -324,9 +324,9 @@
                   <?php $canBatchUnlink = common::hasPriv('productPlan', 'batchUnlinkBug');?>
                   <?php foreach($planBugs as $bug):?>
                   <tr class='text-center'>
-                    <td>
+                    <td class='cell-id'>
                       <?php if($canBatchUnlink):?>
-                      <input class='ml-10px' type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
+                      <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
                       <?php endif;?>
                       <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf("%03d", $bug->id));?>
                     </td>

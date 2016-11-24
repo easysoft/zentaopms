@@ -22,7 +22,7 @@
   </div>
 </div>
 <form method='post' id='projectBugForm'>
-  <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='bugList'>
+  <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='bugList'>
     <thead>
       <tr>
         <?php $vars = "projectID={$project->id}&orderBy=%s&build=$buildID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
@@ -40,7 +40,7 @@
     <tbody>
     <?php foreach($bugs as $bug):?>
     <tr class='text-center'>
-      <td>
+      <td  class='cell-id'>
         <input type='checkbox' name='bugIDList[]'  value='<?php echo $bug->id;?>'/> 
         <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id), '_blank');?>
       </td>
@@ -82,16 +82,17 @@
                   echo '<div class="dropup btn-group">';
                   echo '<button class="btn dropdown-toggle" type="button" data-toggle="dropdown">';
                   echo $lang->bug->assignedTo;
-                  echo '<span class="caret"></span></button>';
-                  echo '<ul class="dropdown-menu assign-menu' . ($withSearch ? ' with-search':'') . '" role="menu">';
+                  echo ' <span class="caret"></span></button>';
+                  echo '<div class="dropdown-menu assign-menu' . ($withSearch ? ' with-search':'') . '" role="menu">';
+                  echo '<ul class="dropdown-list">';
                   foreach ($memberPairs as $key => $value)
                   {
                       if(empty($key)) continue;
                       echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
                   }
-                  if($withSearch) echo "<li class='assign-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
                   echo '</ul>';
-                  echo '</div>';
+                  if($withSearch) echo "<div class='assign-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                  echo '</div></div>';
               }
           }
           ?>

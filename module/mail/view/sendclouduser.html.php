@@ -19,7 +19,7 @@
     <form method='post' target='hiddenwin'>
     <div class='panel'>
       <div class='panel-heading'><strong><?php echo $lang->mail->unsyncUser?></strong></div>
-      <table class='table table-condensed table-bordered active-disabled table-fixed tablesorter'>
+      <table class='table table-condensed table-bordered active-disabled table-fixed tablesorter table-selectable'>
         <thead>
           <tr>
             <th class='w-80px'>  <?php echo $lang->user->account;?></th>
@@ -31,7 +31,7 @@
           <?php foreach($users as $key => $user):?>
           <?php if($user->email and isset($members[$user->email])) continue;?>
           <tr>
-            <td>
+            <td class='cell-id'>
               <input type='checkbox' name='unsyncList[]'  value='<?php echo $user->account;?>'/> 
               <?php echo $user->account?>
             </td>
@@ -62,7 +62,7 @@
     <form method='post' target='hiddenwin'>
     <div class='panel'>
       <div class='panel-heading'><strong><?php echo $lang->mail->syncedUser?></strong></div>
-      <table class='table table-condensed table-bordered active-disabled table-fixed tablesorter'>
+      <table class='table table-condensed table-bordered active-disabled table-fixed tablesorter table-selectable'>
         <thead>
           <tr>
             <th class='w-80px'>  <?php echo $lang->user->account;?></th>
@@ -74,7 +74,7 @@
           <?php foreach($users as $key => $user):?>
           <?php if(empty($user->email) or !isset($members[$user->email])) continue;?>
           <tr>
-            <td>
+            <td class='cell-id'>
               <input type='checkbox' name='syncedList[]'  value='<?php echo $user->account;?>'/> 
               <?php echo $user->account?>
             </td>

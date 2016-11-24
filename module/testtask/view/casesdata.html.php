@@ -11,7 +11,7 @@
  */
 ?>
     <?php $vars = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='caseList'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='caseList'>
       <thead>
         <tr class='colhead'>
           <th class='w-id'><nobr><?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></nobr></th>
@@ -35,7 +35,7 @@
       <tbody>
         <?php foreach($runs as $run):?>
         <tr class='text-center'>
-          <td class='text-left'>
+          <td class='cell-id'>
             <?php if($canBatchEdit or $canBatchAssign or $canBatchRun):?>
             <input type='checkbox' name='caseIDList[]' value='<?php echo $run->case;?>'/> 
             <?php endif;?>

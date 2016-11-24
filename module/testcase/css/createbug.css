@@ -1,0 +1,10 @@
+body {padding: 15px;}
+.table {margin-bottom: 5px;}
+.table > thead > tr > th {border-top: 1px solid #ddd;}
+.table > thead > tr > th:first-child,
+.table > tbody > tr > td:first-child {border-left: 1px solid #ddd}
+.table > thead > tr > th:last-child,
+.table > tbody > tr > td:last-child {border-right: 1px solid #ddd}
+.table tfoot td {border-bottom: none}
+.table-actions {float: none; padding: 10px 0 0 0;}
+.table-actions .checkbox.btn {padding: 6px 11px;}

@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='bugList'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='bugList'>
       <thead>
       <tr>
         <th class='w-id'>       <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
@@ -46,7 +46,7 @@
       <?php foreach($bugs as $bug):?>
       <?php $bugLink = inlink('view', "bugID=$bug->id");?>
       <tr class='text-center'>
-        <td class='bug-<?php echo $bug->status;?> strong text-left'>
+        <td class='cell-id bug-<?php echo $bug->status;?> strong text-left'>
           <input type='checkbox' name='bugIDList[]'  value='<?php echo $bug->id;?>'/> 
           <?php echo html::a($bugLink, sprintf('%03d', $bug->id));?>
         </td>

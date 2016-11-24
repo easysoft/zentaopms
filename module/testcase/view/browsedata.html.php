@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='caseList'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='caseList'>
       <thead>
         <tr>
           <th class='w-id'>    <?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></th>
@@ -35,7 +35,7 @@
       <?php foreach($cases as $case):?>
       <tr class='text-center'>
         <?php $viewLink = inlink('view', "caseID=$case->id");?>
-        <td>
+        <td class='cell-id'>
           <input type='checkbox' name='caseIDList[]'  value='<?php echo $case->id;?>'/> 
           <?php echo html::a($viewLink, sprintf('%03d', $case->id));?>
         </td>

@@ -117,6 +117,7 @@ hr.small {margin: 10px 0}
 
 .table caption {padding: 8px 20px; border: 1px solid #DDD; border-bottom: 0; background: #fafafa;}
 .table.table-condensed caption {padding: 6px 15px;}
+.table td.td-has-control {padding: 2px 4px;}
 
 /* Datepicker */
 .datepicker-wrapper {position: relative; cursor: pointer;}
@@ -161,7 +162,9 @@ i[class^="icon-"],i[class*=" icon-"],.link-icon i[class^="icon-"],.link-icon i[c
 
 /* priority icons. */
 .pri1,.pri0,.pri2,.pri3,.pri4,.pri5,.pri6,.pri{display:inline-block;width: 18px;height: 18px;font-size: 12px;line-height: 14px;font-weight: bold; text-align: center; color: #ccc; -moz-border-radius:50%; -webkit-border-radius:50%; border-radius:50%;border: 2px solid #ccc; font-family: arial, helvetica, clean, sans-serif; background-color: #fff}
-.pri:before, .pri0:before{content: '?'}
+.pri0 {font-size: 0}
+.pri0:before {font-size: 12px}
+.pri:before, .pri0:before{content: '?';}
 .pri1{border-color: #d71319;color: #d71319;}
 .pri2{border-color: #EA644A;color: #EA644A;}
 .pri3{border-color: #BD7B46;color: #BD7B46;}
@@ -546,8 +549,6 @@ body {color:#141414; padding-bottom: 40px;}
 .outer .table thead tr th.text-left {text-align: left;}
 .outer .table tbody td {vertical-align: middle;}
 .outer .table th {vertical-align: middle;}
-.outer .table tr > th:first-child, .outer .table tr > td:first-child {padding-left: 10px}
-.outer .table tr > th:last-child, .outer .table tr > td:last-child {padding-right: 10px}
 .outer .table.table-form tr > th:last-child, .outer .table.table-form tr > td:last-child {padding-right: 5px}
 .outer .table.table-form.table-fixed tr > th:last-child, .outer .table.table-form.table-fixed tr > td:last-child {padding-right: 15px}
 .outer .table tbody > tr:last-child td {border-bottom: 1px solid #e5e5e5;}
@@ -567,10 +568,13 @@ body {color:#141414; padding-bottom: 40px;}
 .outer .table tfoot .chosen-container-single .chosen-single abbr {top: 4px;}
 .table-actions {float: left;}
 .table-actions > .checkbox {float: left; margin: 0}
-.table-actions > .btn-group, .table-actions > .btn, .table-actions > .input-group, .table-actions > .text {float: left; margin-right: 6px;}
+.table-actions > .btn-group, .table-actions > .btn, .table-actions > .input-group, .table-actions > .text {float: left; margin-right: 5px;}
 .table-actions > .text {line-height: 24px; color: #808080}
 .table-actions > .text strong {color: #333}
 .outer .table tfoot .pager {margin: -3px 0;}
+
+.table .cell-id {text-align: left; padding-left: 12px!important;}
+.datatable .table > tbody > tr > td.check-btn, .datatable .table > thead > tr > th.check-btn {padding-left: 12px!important; padding-right: 0; text-align: left;}
 
 /* color of a when visited */
 .outer .table tbody td > a:visited, #crumbs > a:visited, .side > a:visited {color: #551A8B}
@@ -598,7 +602,7 @@ body {color:#141414; padding-bottom: 40px;}
 .outer .main ul.list-unstyled li {padding: 2px 0}
 
 .outer .main .table tr > th:first-child, .outer .main .table tr > td:first-child {padding-left: 0;}
-.outer .main-side > fieldset {padding: 5px 20px 10px 10px;}
+.outer .main-side > fieldset {padding: 5px 0px 10px 10px;}
 .outer .main-side > fieldset > .table {border: none}
 
 .outer .main .tabs {margin-bottom: 15px;}
@@ -612,8 +616,9 @@ body {color:#141414; padding-bottom: 40px;}
 .outer.with-side #featurebar, .outer.with-side #titlebar {margin-bottom: 20px;}
 .outer.with-side .main, .outer.with-side .side + form, .outer.with-side .main, .outer.with-side .side + table {margin-left: 212px; margin-right: 0;}
 .outer.with-side.with-transition .main, .outer.with-side.with-transition .side + form, .outer.with-side.with-transition .main, .outer.with-side.with-transition .side + table {transition: all 0.3s;}
-.outer.with-side .table tr > th:first-child, .outer.with-side .table tr > td:first-child {padding-left: 8px}
-.outer.with-side .table tr > th:last-child, .outer.with-side .table tr > td:last-child {padding-right: 8px}
+.outer.with-side .table tr > th:first-child, .outer.with-side .table tr > td:first-child {padding-left: 5px}
+.outer.with-side .table tr > th:first-child, .outer.with-side .table tr > td:first-child .table-actions {padding-left: 0;}
+.outer.with-side .table tr > th:last-child, .outer.with-side .table tr > td:last-child {padding-right: 5px}
 .outer .side {width: 192px; position: absolute; left: 20px;}
 .outer .side-body {overflow: hidden;}
 .outer .side-body .panel {min-width: 180px;}
@@ -645,7 +650,7 @@ body {color:#141414; padding-bottom: 40px;}
 .pager > .dropdown > a, .pager > i, .pager > a {display: inline-block; position: relative; padding: 5px; min-width: 25px; text-align: center; margin-left: -5px;}
 .pager .dropdown > a:hover, .pager > a:hover {background: #e5e5e5;}
 .pager .dropdown-menu {margin-top: 0; width: 212px; margin-left: -5px; padding: 0;}
-.pager .dropdown-menu > li {display: block; float: left; width: 70px; border-right: 1px dotted #ddd; border-bottom: 1px dotted #ddd}
+.pager .dropdown-menu > li {display: block; float: left; width: 70px; border-right: 1px dotted #ddd; border-bottom: 1px dotted #ddd;}
 #_pageID, #goto {display: none}
 
 /* modal */

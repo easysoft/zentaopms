@@ -13,7 +13,7 @@
 <div id='querybox' class='show'></div>
 <div id='unlinkBugList'>
   <form method='post' id='unlinkedBugsForm' target='hiddenwin' action='<?php echo $this->createLink('build', 'linkBug', "buildID={$build->id}&browseType=$browseType&param=$param");?>'>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed'> 
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable'> 
       <caption class='text-left text-special'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedBugs;?></strong></caption>
       <thead>
       <tr class='colhead'>
@@ -29,8 +29,8 @@
       <?php foreach($allBugs as $bug):?>
       <?php if(strpos(",{$build->bugs},", ",$bug->id,") !== false) continue;?>
       <tr>
-        <td class='text-left'>
-          <input class='ml-10px' type='checkbox' name='bugs[<?php echo $bug->id?>]'  value='<?php echo $bug->id;?>' <?php if($bug->status == 'resolved' or $bug->status == 'closed') echo "checked";?> /> 
+        <td class='cell-id'>
+          <input type='checkbox' name='bugs[<?php echo $bug->id?>]'  value='<?php echo $bug->id;?>' <?php if($bug->status == 'resolved' or $bug->status == 'closed') echo "checked";?> /> 
           <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id);?>
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>

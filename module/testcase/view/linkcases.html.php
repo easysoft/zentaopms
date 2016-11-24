@@ -22,7 +22,7 @@
     <div id='querybox' class='show'></div>
   </div>
   <form method='post' class='form-condensed' target='hiddenwin' id='linkCasesForm'>
-    <table class='table table-condensed table-hover table-striped tablesorter' id='caseList'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-selectable' id='caseList'>
       <?php if($cases2Link):?>
       <thead>
         <tr>
@@ -38,7 +38,7 @@
       <?php $caseCount = 0;?>
       <?php foreach($cases2Link as $case2Link):?>
       <tr class='text-center'>
-        <td class='text-left'>
+        <td class='cell-id'>
           <input type='checkbox' name='cases[]' value='<?php echo $case2Link->id;?>' />
           <?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case2Link->id"), sprintf('%03d', $case2Link->id));?>
         </td>
@@ -53,7 +53,7 @@
       </tbody>
       <tfoot>
       <tr>
-        <td colspan='7'>
+        <td colspan='6'>
           <div class='table-actions clearfix'>
           <?php if($caseCount) echo html::selectButton() . html::submitButton();?>
           </div>

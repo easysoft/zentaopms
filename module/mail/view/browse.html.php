@@ -16,7 +16,7 @@
 </div>
 <form method='post' action='<?php echo inlink('batchDelete')?>' target='hiddenwin' id='mailForm'>
 <div class='panel'>
-  <table class='table table-condensed table-bordered active-disabled table-fixed tablesorter'>
+  <table class='table table-condensed table-bordered active-disabled table-fixed tablesorter table-selectable'>
     <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
     <thead>
       <tr>
@@ -34,7 +34,7 @@
     <tbody class='text-center'>
       <?php foreach($queueList as $queue):?>
       <tr>
-        <td>
+        <td class='cell-id'>
           <input type='checkbox' name='mailIDList[]'  value='<?php echo $queue->id;?>'/> 
           <?php echo $queue->id?>
         </td>

@@ -51,7 +51,7 @@
 </div>
 <div class='main'>
   <form method='post' id='projectStoryForm'>
-    <table class='table tablesorter table-condensed table-fixed' id='storyList'>
+    <table class='table tablesorter table-condensed table-fixed table-selectable' id='storyList'>
       <thead>
         <tr class='colhead'>
         <?php $vars = "projectID={$project->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
@@ -79,7 +79,7 @@
         $totalEstimate += $story->estimate;
         ?>
         <tr class='text-center' id="story<?php echo $story->id?>">
-          <td class='text-left'>
+          <td class='cell-id'>
             <?php if($canBatchEdit or $canBatchClose):?>
             <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
             <?php endif;?>
