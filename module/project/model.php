@@ -2165,7 +2165,22 @@ class projectModel extends model
             foreach($tasks as $task) $taskGroups[$task->module][$task->story][$task->id] = $task;
         }
 
-        if(!empty($node->children)) foreach($node->children as $i => $child) $node->children[$i] = $this->fillTasksInTree($child, $projectID);
+        if(!empty($node->children))
+        {
+            foreach($node->children as $i => $child)
+            {
+                $subNode = $this->fillTasksInTree($child, $projectID);
+                /* Remove no children node. */
+                if($subNode->type != 'story' and $subNode->type != 'task' and empty($subNode->children))
+                {
+                    unset($node->children[$i]);
+                }
+                else
+                {
+                    $node->children[$i] = $subNode;
+                }
+            }
+        }
 
         if(!isset($node->id))$node->id = 0;
         if($node->type == 'story')
@@ -2215,6 +2230,7 @@ class projectModel extends model
         }
 
         $node->actions = false;
+        if(!empty($node->children)) $node->children = array_values($node->children);
         return $node;
     }
 
@@ -2284,7 +2300,15 @@ class projectModel extends model
         {
             $tree = (object)$tree;
             if($tree->type == 'product') array_unshift($tree->children, array('id' => 0, 'name' => '/', 'type' => 'story', 'actions' => false, 'root' => $tree->root));
-            $fullTrees[$i] = $this->fillTasksInTree($tree, $projectID);
+            $fullTree = $this->fillTasksInTree($tree, $projectID);
+            if(empty($fullTree->children))
+            {
+                unset($fullTrees[$i]);
+            }
+            else
+            {
+                $fullTrees[$i] = $fullTree;
+            }
         }
         if(empty($fullTrees[0]->children)) array_shift($fullTrees);
         return $fullTrees;
