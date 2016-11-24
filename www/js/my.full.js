@@ -1714,6 +1714,7 @@ function initHotKey()
 function initHelpLink()
 {
     var zentaoUrl = 'http://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
+    if(config.clientLang == 'en') zentaoUrl = 'http://www.zentao.pm/book/zentaomanual/8.html?fullScreen=zentao';
     var $mainNav = $('#mainmenu > .nav').first();
     var showLoadingError;
     var timeout = 10000;
