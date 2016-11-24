@@ -110,7 +110,15 @@ class searchModel extends model
             }
 
             /* Set filed name. */
-            if($condition) $where .= " $andOr " . '`' . $this->post->$fieldName . '` ' . $condition;
+            if($operator == '=' and preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
+            {
+                $condition  = '`' . $this->post->$fieldName . "` >= '$value' AND `" . $this->post->$fieldName . "` <= '$value 24:00:00'";
+                $where     .= " $andOr ($condition)";
+            }
+            elseif($condition)
+            {
+                $where .= " $andOr " . '`' . $this->post->$fieldName . '` ' . $condition;
+            }
         }
 
         $where .=" ))";
