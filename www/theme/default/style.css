@@ -287,8 +287,9 @@ fieldset > .form-group {margin-bottom: 0;}
 /* chosen container in input group */
 .input-group > .chosen-container {display: table-cell;}
 
-/* chosen up */
+/* chosen */
 .chosen-up.chosen-container .chosen-drop {bottom: 100%; top: inherit; border-radius: 2px 2px 0 0; box-shadow: 0 -3px 5px rgba(0,0,0,.15); margin-top: auto; margin-bottom: -1px;}
+.chosen-container-single .chosen-single abbr {top: 6px!important;}
 
 /* Condensed form */
 .form-condensed .table-form {margin-bottom: 0;}
@@ -305,7 +306,6 @@ fieldset > .form-group {margin-bottom: 0;}
 .form-condensed .table-fixed .form-control {padding: 5px 6px}
 .form-condensed .table-fixed select.form-control {padding: 5px}
 .form-condensed .chosen-container {font-size: 13px}
-.chosen-container-single .chosen-single abbr {top: 6px;}
 .form-condensed .chosen-container-single .chosen-single {padding: 5px 10px}
 .form-condensed .chosen-container-single .chosen-search:before {top: 10px}
 
