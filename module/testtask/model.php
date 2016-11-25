@@ -734,4 +734,78 @@ class testtaskModel extends model
             echo '</td>';
         }
     }
+
+    /**
+     * Send mail.
+     * 
+     * @param  int    $testtaskID 
+     * @param  int    $actionID 
+     * @access public
+     * @return void
+     */
+    public function sendmail($testtaskID, $actionID)
+    {
+        $this->loadModel('mail');
+        $testtask = $this->getByID($testtaskID);
+        $users    = $this->loadModel('user')->getPairs('noletter');
+
+        /* Get action info. */
+        $action          = $this->loadModel('action')->getById($actionID);
+        $history         = $this->action->getHistory($actionID);
+        $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
+
+        /* Get mail content. */
+        $modulePath = $this->app->getModulePath();
+        $oldcwd     = getcwd();
+        $viewFile   = $modulePath . 'view/sendmail.html.php';
+        chdir($modulePath . 'view');
+        if(file_exists($modulePath . 'ext/view/sendmail.html.php'))
+        {
+            $viewFile = $modulePath . 'ext/view/sendmail.html.php';
+            chdir($modulePath . 'ext/view');
+        }
+        ob_start();
+        include $viewFile;
+        foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
+        $mailContent = ob_get_contents();
+        ob_end_clean();
+        chdir($oldcwd);
+
+        /* Set toList and ccList. */
+        $toList   = $testtask->owner;
+        $ccList   = str_replace(' ', '', trim($testtask->mailto, ','));
+        if(empty($toList))
+        {
+            if(empty($ccList)) return;
+            if(strpos($ccList, ',') === false)
+            {
+                $toList = $ccList;
+                $ccList = '';
+            }
+            else
+            {
+                $commaPos = strpos($ccList, ',');
+                $toList   = substr($ccList, 0, $commaPos);
+                $ccList   = substr($ccList, $commaPos + 1);
+            }
+        }
+
+        /* Set email title. */
+        if($action->action == 'opened')
+        {
+            $mailTitle = sprintf($this->lang->testtask->mail->create->title, $this->app->user->realname, $testtaskID, $this->post->name);
+        }
+        elseif($action->action == 'closed')
+        {
+            $mailTitle = sprintf($this->lang->testtask->mail->close->title, $this->app->user->realname, $testtaskID, $testtask->name);
+        }
+        else
+        {
+            $mailTitle = sprintf($this->lang->testtask->mail->edit->title, $this->app->user->realname, $testtaskID, $this->post->name);
+        }
+
+        /* Send mail. */
+        $this->mail->send($toList, $mailTitle, $mailContent, $ccList); 
+        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+    }
 }

@@ -16,6 +16,7 @@ $lang->mail->turnon      = 'Turn On';
 $lang->mail->async       = 'Asynchronous';
 $lang->mail->fromAddress = 'Email Address';
 $lang->mail->fromName    = 'Sender';
+$lang->mail->domain      = 'Domain';
 $lang->mail->host        = 'SMTP Server';
 $lang->mail->port        = 'SMTP Port';
 $lang->mail->auth        = 'Verification Required';
@@ -74,6 +75,7 @@ $lang->mail->sendmailTips   = 'Note: Email author will not receive this email.';
 $lang->mail->needConfigure  = 'Email configuration is not found. Please cinfigure the Email first.';
 $lang->mail->nofsocket      = 'fsocket related function has been deactivated. Mails cannot send out. Please modify allow_url_fopen in php.ini to turn on Onopenssl, and restart Apache.';
 $lang->mail->noOpenssl      = 'Please turn on Onopenssl, and restart Apache.';
+$lang->mail->disableSecure  = 'No openssl, disable ssl and tls.';
 $lang->mail->sendCloudFail  = 'Failed. Reason:';
 $lang->mail->sendCloudHelp  = <<<EOD
 <p>1、Notice SendCloud是SendCloud的Team通知服务。具体可以到<a href="http://notice.sendcloud.net/" target="_blank">notice.sendcloud.net</a>查看</p>

@@ -32,6 +32,10 @@ include '../../common/view/header.html.php';
       </tr>
       <?php endif;?>
       <tr>
+      <tr>
+        <th><?php echo $lang->mail->domain?></th>
+        <td><?php echo html::input('domain', zget($config->mail, 'domain', common::getSysURL()), "class='form-control'")?></td>
+      </tr>
         <th><?php echo $lang->mail->accessKey; ?></th>
         <td>
           <div class='required required-wrapper'></div>

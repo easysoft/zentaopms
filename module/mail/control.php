@@ -68,6 +68,7 @@ class mail extends control
             echo "<script>setTimeout(function(){parent.location.href='" . inlink('edit') . "'}, 10000)</script>";
             $mailConfig = $this->mail->autoDetect($this->post->fromAddress);
             $mailConfig->fromAddress = $this->post->fromAddress;
+            $mailConfig->domain      = common::getSysURL();
             $this->session->set('mailConfig',  $mailConfig);
 
             die(js::locate(inlink('edit'), 'parent'));
@@ -106,12 +107,15 @@ class mail extends control
             $this->locate(inlink('detect'));
         }
 
+        $mailConfig->domain = isset($this->config->mail->domain) ? $this->config->mail->domain : common::getSysURL();
+
         $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->edit;
         $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
         $this->view->position[] = $this->lang->mail->edit;
 
         $this->view->mailExist   = $this->mail->mailExist();
         $this->view->mailConfig  = $mailConfig;
+        $this->view->openssl     = extension_loaded('openssl');
         $this->display();
     }
 
@@ -133,6 +137,7 @@ class mail extends control
             $mailConfig->async          = $this->post->async;
             $mailConfig->fromAddress    = trim($this->post->fromAddress); 
             $mailConfig->fromName       = trim($this->post->fromName);
+            $mailConfig->domain         = trim($this->post->domain);
             $mailConfig->smtp->host     = trim($this->post->host);
             $mailConfig->smtp->port     = trim($this->post->port);
             $mailConfig->smtp->auth     = $this->post->auth;
@@ -195,6 +200,7 @@ class mail extends control
             $mailConfig->async          = $this->post->async;
             $mailConfig->fromAddress    = ''; 
             $mailConfig->fromName       = '';
+            $mailConfig->domain         = trim($this->post->domain);
             $mailConfig->sendcloud->accessKey = trim($this->post->accessKey);
             $mailConfig->sendcloud->secretKey = trim($this->post->secretKey);
 
@@ -207,13 +213,14 @@ class mail extends control
             die(js::reload('parent'));
         }
 
-        $mailConfig = '';
+        $mailConfig = new stdclass();
         if($this->config->mail->turnon)
         {
             $mailConfig = $this->config->mail->sendcloud;
             $mailConfig->fromAddress = $this->config->mail->fromAddress;
             $mailConfig->fromName    = $this->config->mail->fromName;
             $mailConfig->turnon      = $this->config->mail->turnon;
+            $mailConfig->domain      = isset($this->config->mail->domain) ? $this->config->mail->domain : common::getSysURL();
             $mailConfig->async       = isset($this->config->mail->async) ? $this->config->mail->async : 0;
         }
 

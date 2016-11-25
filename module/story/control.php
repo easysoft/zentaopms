@@ -78,7 +78,7 @@ class story extends control
             {
                 $actionID = $this->action->create('story', $storyID, 'Frombug', '', $bugID);
             }
-            $this->sendmail($storyID, $actionID);
+            $this->story->sendmail($storyID, $actionID);
             if($this->post->newStory)
             {
                 $response['message'] = $this->lang->story->successSaved . $this->lang->story->newStory;
@@ -212,7 +212,7 @@ class story extends control
             $mails = $this->story->batchCreate($productID, $branch);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            foreach($mails as $mail) $this->sendmail($mail->storyID, $mail->actionID);
+            foreach($mails as $mail) $this->story->sendmail($mail->storyID, $mail->actionID);
             die(js::locate($this->createLink('product', 'browse', "productID=$productID&branch=$branch"), 'parent'));
         }
 
@@ -341,7 +341,7 @@ class story extends control
                 $action   = !empty($changes) ? 'Edited' : 'Commented';
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->sendmail($storyID, $actionID);
+                $this->story->sendmail($storyID, $actionID);
             }
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
@@ -385,7 +385,7 @@ class story extends control
 
                     $actionID = $this->action->create('story', $storyID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
-                    $this->sendmail($storyID, $actionID);
+                    $this->story->sendmail($storyID, $actionID);
                 }
             }
             die(js::locate($this->session->storyList, 'parent'));
@@ -488,7 +488,7 @@ class story extends control
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
                 $actionID = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->sendmail($storyID, $actionID);
+                $this->story->sendmail($storyID, $actionID);
             }
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
@@ -523,7 +523,7 @@ class story extends control
             $this->story->activate($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
-            $this->sendmail($storyID, $actionID);
+            $this->story->sendmail($storyID, $actionID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
@@ -634,7 +634,7 @@ class story extends control
             if($this->post->closedReason != '' and strpos('done,postponed,subdivided', $this->post->closedReason) !== false) $result = 'pass';
             $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result));
             $this->action->logHistory($actionID, array());
-            $this->sendmail($storyID, $actionID);
+            $this->story->sendmail($storyID, $actionID);
             if($this->post->result == 'reject')
             {
                 $this->action->create('story', $storyID, 'Closed', '', ucfirst($this->post->closedReason));
@@ -687,7 +687,7 @@ class story extends control
         $actions     = $this->story->batchReview($storyIDList, $result, $reason);
 
         if(dao::isError()) die(js::error(dao::getError()));
-        foreach($actions as $storyID => $actionID) $this->sendmail($storyID, $actionID);
+        foreach($actions as $storyID => $actionID) $this->story->sendmail($storyID, $actionID);
         die(js::locate($this->session->storyList, 'parent'));
     }
 
@@ -706,7 +706,7 @@ class story extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : ''));
             $this->action->logHistory($actionID, $changes);
-            $this->sendmail($storyID, $actionID);
+            $this->story->sendmail($storyID, $actionID);
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
@@ -753,7 +753,7 @@ class story extends control
                 {
                     $actionID = $this->action->create('story', $storyID, 'Closed', htmlspecialchars($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : ''));
                     $this->action->logHistory($actionID, $changes);
-                    $this->sendmail($storyID, $actionID);
+                    $this->story->sendmail($storyID, $actionID);
                 }
             }
             die(js::locate($this->session->storyList, 'parent'));
@@ -827,7 +827,7 @@ class story extends control
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            $this->sendmail($storyID, $actionID);
+            $this->story->sendmail($storyID, $actionID);
         }
         die(js::reload('parent'));
     }
@@ -848,7 +848,7 @@ class story extends control
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            $this->sendmail($storyID, $actionID);
+            $this->story->sendmail($storyID, $actionID);
         }
         die(js::reload('parent'));
     }
@@ -869,7 +869,7 @@ class story extends control
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            $this->sendmail($storyID, $actionID);
+            $this->story->sendmail($storyID, $actionID);
         }
         die(js::reload('parent'));
     }
@@ -890,7 +890,7 @@ class story extends control
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            $this->sendmail($storyID, $actionID);
+            $this->story->sendmail($storyID, $actionID);
         }
         die(js::locate($this->session->storyList, 'parent'));
     }
@@ -911,7 +911,7 @@ class story extends control
             {
                 $actionID = $this->action->create('story', $storyID, 'Edited');
                 $this->action->logHistory($actionID, $changes);
-                $this->sendmail($storyID, $actionID);
+                $this->story->sendmail($storyID, $actionID);
             }
         }
         die(js::locate($this->session->storyList));
@@ -1226,76 +1226,6 @@ class story extends control
     }
 
     /**
-     * Send email.
-     * 
-     * @param  int    $storyID 
-     * @param  int    $actionID 
-     * @access public
-     * @return void
-     */
-    public function sendmail($storyID, $actionID)
-    {
-        /* Reset $this->output. */
-        $this->clear();
-
-        $story       = $this->story->getById($storyID);
-        $productName = $this->product->getById($story->product)->name;
-
-        /* Get actions. */
-        $actions         = $this->action->getList('story', $storyID);
-        $action          = zget($actions, $actionID, null);
-        $history         = $this->action->getHistory($actionID);
-        $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
-        if(strtolower($action->action) == 'opened') $action->comment = $story->spec;
-
-        /* Set toList and ccList. */
-        $toList      = $story->assignedTo;
-        $ccList      = str_replace(' ', '', trim($story->mailto, ','));
-
-        /* If the action is changed or reviewed, mail to the project team. */
-        if(strtolower($action->action) == 'changed' or strtolower($action->action) == 'reviewed')
-        {
-            $prjMembers = $this->story->getProjectMembers($storyID);
-            if($prjMembers)
-            {
-                $ccList .= ',' . join(',', $prjMembers);
-                $ccList = ltrim($ccList, ',');
-            }
-        }
-
-        if($toList == '')
-        {
-            if($ccList == '') return;
-            if(strpos($ccList, ',') === false)
-            {
-                $toList = $ccList;
-                $ccList = '';
-            }
-            else
-            {
-                $commaPos = strpos($ccList, ',');
-                $toList   = substr($ccList, 0, $commaPos);
-                $ccList   = substr($ccList, $commaPos + 1);
-            }
-        }
-        elseif($toList == 'closed')
-        {
-            $toList = $story->openedBy;
-        }
-
-        /* Get the mail content. */
-        if($action->action == 'opened') $action->comment = '';
-        $this->view->story  = $story;
-        $this->view->action = $action;
-        $this->view->users  = $this->user->getPairs('noletter');
-
-        $mailContent = $this->parse($this->moduleName, 'sendmail');
-
-        /* Send it. */
-        $this->loadModel('mail')->send($toList, 'STORY #' . $story->id . ' ' . $story->title . ' - ' . $productName, $mailContent, $ccList);
-        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
-    }
-    /**
      * The report page.
      * 
      * @param  int    $productID 
@@ -1349,6 +1279,7 @@ class story extends control
         /* format the fields of every story in order to export data. */
         if($_POST)
         {
+            $this->loadModel('file');
             $storyLang   = $this->lang->story;
             $storyConfig = $this->config->story;
 
@@ -1489,7 +1420,7 @@ class story extends control
                 {
                     foreach($relatedFiles[$story->id] as $file)
                     {
-                        $fileURL = 'http://' . $this->server->http_host . $this->config->webRoot . "data/upload/{$this->app->company->id}/" . $file->pathname;
+                        $fileURL = common::getSysURL() . $this->file->webPath . $file->pathname;
                         $story->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
                     }
                 }
