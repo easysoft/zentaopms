@@ -20,7 +20,7 @@
       <div class='input-group input-group-sm'>
         <span class='input-group-addon'><?php echo $lang->report->bugOpenedDate;?></span>
         <div class='datepicker-wrapper datepicker-date'><?php echo html::input('begin', $begin, "class='w-100px form-control form-date' onchange='changeParams(this)'");?></div>
-        <span class='input-group-addon'><?php echo $lang->report->to;?></span>
+        <span class='input-group-addon fix-border'><?php echo $lang->report->to;?></span>
         <div class='datepicker-wrapper datepicker-date'><?php echo html::input('end', $end, "class='form-control form-date' onchange='changeParams(this)'");?></div>
       </div>
     </div>
@@ -28,7 +28,7 @@
       <div class='input-group w-200px input-group-sm'>
         <span class='input-group-addon'><?php echo $lang->report->product;?></span>
         <?php echo html::select('product', $products, $product, "class='form-control chosen' onchange='changeParams(this)'");?>
-        <span class='input-group-addon'><?php echo $lang->report->project;?></span>
+        <span class='input-group-addon fix-border'><?php echo $lang->report->project;?></span>
         <?php echo html::select('project', $projects, $project, "class='form-control chosen' onchange='changeParams(this)'");?>
       </div>
     </div>
@@ -64,7 +64,7 @@
         <td><?php echo isset($bug['postponed']) ? $bug['postponed'] : 0;?></td>
         <td><?php echo isset($bug['willnotfix']) ? $bug['willnotfix'] : 0;?></td>
         <td><?php echo isset($bug['tostory']) ? $bug['tostory'] : 0;?></td>
-        <td><?php echo round($bug['validRate'] * 100, 2) . '%';?></td>
+        <td title='<?php echo $lang->report->validRateTips;?>'><?php echo round($bug['validRate'] * 100, 2) . '%';?></td>
         <td><?php echo $bug['all'];?></td>
       </tr>
     <?php endforeach;?>
