@@ -38,6 +38,7 @@ js::set('browseType', $browseType);
   </div>
 </div>
 <div class='main'>
+  <script>setTreeBox();</script>
   <form method='post' id='projectTaskForm'>
     <?php
     $datatableId  = $this->moduleName . ucfirst($this->methodName);
@@ -48,7 +49,7 @@ js::set('browseType', $browseType);
     ?>
       <tfoot>
         <tr>
-          <?php $columns = ($this->cookie->windowWidth > $this->config->wideSize ? 14 : 12) - ($project->type == 'sprint' ? 0 : 1);?>
+          <?php $columns = ($this->cookie->windowWidth > $this->config->wideSize ? 16 : 13) - ($project->type == 'sprint' ? 0 : 1);?>
           <td colspan='<?php echo $columns;?>'>
             <div class='table-actions clearfix'>
             <?php 

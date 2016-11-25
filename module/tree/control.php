@@ -338,6 +338,7 @@ class tree extends control
             ->where('root')->eq($rootID)
             ->andWhere('parent')->eq((int)$moduleID)
             ->andWhere('type')->eq($type)
+            ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
         die(json_encode($modules));
     }

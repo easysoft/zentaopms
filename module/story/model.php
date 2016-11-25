@@ -457,11 +457,6 @@ class storyModel extends model
             ->remove('linkStories,childStories,files,labels,comment')
             ->get();
         if(is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
-        if($story->closedReason == 'subdivided' and $oldStory->childStories == '')
-        {
-            dao::$errors[] = $this->lang->story->errorEmptyChildStory;
-            return false;
-        }
 
         $this->dao->update(TABLE_STORY)
             ->data($story)
@@ -469,7 +464,6 @@ class storyModel extends model
             ->checkIF(isset($story->closedBy), 'closedReason', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
-            //->checkIF(isset($story->closedReason) and $story->closedReason == 'subdivided', 'childStories', 'notempty')
             ->where('id')->eq((int)$storyID)->exec();
 
         if(!dao::isError()) return common::createChanges($oldStory, $story);
@@ -563,7 +557,6 @@ class storyModel extends model
                     ->checkIF($story->closedBy, 'closedReason', 'notempty')
                     ->checkIF($story->closedReason == 'done', 'stage', 'notempty')
                     ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
-                    ->checkIF($story->closedReason == 'subdivided', 'childStories', 'notempty')
                     ->where('id')->eq((int)$storyID)
                     ->exec();
                 if($story->title != $oldStory->title)
@@ -634,7 +627,6 @@ class storyModel extends model
             ->batchCheck($this->config->story->review->requiredFields, 'notempty')
             ->checkIF($this->post->result == 'reject', 'closedReason', 'notempty')
             ->checkIF($this->post->result == 'reject' and $this->post->closedReason == 'duplicate',  'duplicateStory', 'notempty')
-            ->checkIF($this->post->result == 'reject' and $this->post->closedReason == 'subdivided', 'childStories',   'notempty')
             ->where('id')->eq($storyID)->exec();
         if($this->post->result == 'revert')
         {
@@ -693,6 +685,40 @@ class storyModel extends model
         return $actions;
     }
 
+    public function subdivide($storyID, $stories)
+    {
+        $now      = helper::now();
+        $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+
+        /* Set childStories. */
+        $childStories = '';
+        foreach($stories as $story) $childStories .= $story->storyID . ',';
+        $childStories = trim($childStories, ',');
+
+        $newStory = new stdClass();
+        $newStory->plan           = 0;
+        $newStory->lastEditedBy   = $this->app->user->account;
+        $newStory->lastEditedDate = $now;
+        $newStory->closedDate     = $now;
+        $newStory->closedBy       = $this->app->user->account;
+        $newStory->assignedTo     = 'closed';
+        $newStory->assignedDate   = $now;
+        $newStory->status         = 'closed';
+        $newStory->closedReason   = 'subdivided';
+        $newStory->childStories   = $childStories;
+
+        /* Subdivide story and close it. */
+        $this->dao->update(TABLE_STORY)->data($newStory)
+            ->autoCheck()
+            ->batchCheck($this->config->story->close->requiredFields, 'notempty')
+            ->where('id')->eq($storyID)->exec();
+        $changes  = common::createChanges($oldStory, $newStory);
+        $actionID = $this->action->create('story', $storyID, 'Closed', '', 'Subdivided');
+        $this->action->logHistory($actionID, $changes);
+
+        return $actionID;
+    }
+
     /**
      * Close a story.
      * 
@@ -722,7 +748,6 @@ class storyModel extends model
             ->autoCheck()
             ->batchCheck($this->config->story->close->requiredFields, 'notempty')
             ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
-            ->checkIF($story->closedReason == 'subdivided', 'childStories',   'notempty')
             ->where('id')->eq($storyID)->exec();
         return common::createChanges($oldStory, $story);
     }
@@ -779,7 +804,6 @@ class storyModel extends model
             $this->dao->update(TABLE_STORY)->data($story)
                 ->autoCheck()
                 ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
-                ->checkIF($story->closedReason == 'subdivided', 'childStories',   'notempty')
                 ->where('id')->eq($storyID)->exec();
 
             if(!dao::isError()) 
@@ -1543,7 +1567,7 @@ class storyModel extends model
         }
         else
         {
-            $modules = ($type == 'byModule' and $param) ? $this->dao->select('*')->from(TABLE_MODULE)->where('path')->like("%,$param,%")->andWhere('type')->eq('story')->fetchPairs('id', 'id') : array();
+            $modules = ($type == 'byModule' and $param) ? $this->dao->select('*')->from(TABLE_MODULE)->where('path')->like("%,$param,%")->andWhere('type')->eq('story')->andWhere('deleted')->eq(0)->fetchPairs('id', 'id') : array();
             $stories = $this->dao->select('distinct t1.*, t2.*,t3.branch as productBranch,t4.type as productType,t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.project = t3.project')

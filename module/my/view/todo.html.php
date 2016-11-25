@@ -45,7 +45,7 @@
   </div>
 </div>
 <form method='post' id='todoform'>
-  <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='todoList'>
+  <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='todoList'>
     <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
       <tr class='text-center'>
@@ -63,7 +63,7 @@
     <tbody>
     <?php foreach($todos as $todo):?>
     <tr class='text-center'>
-      <td class='text-left'>
+      <td class='cell-id'>
         <?php if(common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture)):?>
         <input type='checkbox' name='todoIDList[<?php echo $todo->id;?>]' value='<?php echo $todo->id;?>' />
         <?php endif;?>

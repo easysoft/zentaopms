@@ -14,7 +14,7 @@
 <?php include '../../testcase/view/caseheader.html.php';?>
 <div class='main'>
   <form method='post' id='productStoryForm'>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='storyList'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='storyList'>
       <thead>
       <tr>
         <?php $vars = "productID=$productID&orderBy=%s";?>
@@ -38,7 +38,7 @@
       $canView  = common::hasPriv('story', 'view');
       ?>
       <tr class='text-center'>
-        <td class='text-left'>
+        <td class='cell-id'>
           <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
           <?php if($canView) echo html::a($viewLink, sprintf('%03d', $story->id)); else printf('%03d', $story->id);?>
         </td>
@@ -67,7 +67,7 @@
       <tfoot>
       <tr>
         <td colspan='11'>
-          <div class='table-actions clearfix'>
+          <div class='table-actions clearfix' style='padding-left: 5px'>
             <?php if(count($stories)):?>
             <?php echo html::selectButton();?>
             <?php

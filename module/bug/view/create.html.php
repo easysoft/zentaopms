@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  * The create view of bug module of ZenTaoPMS.
  *
@@ -71,7 +71,7 @@ js::set('refresh', $lang->refresh);
             <?php endif;?>
             <span id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?></span>
             <span class='input-group-addon' id='buildBoxActions'></span>
-            <span class='input-group-btn'><?php echo html::commonButton('<i class="icon icon-filter"></i>', "class='btn btn-default' data-toggle='tooltip' onclick='loadAllBuilds()' title='{$lang->bug->allBuilds}'")?></span>
+            <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn btn-default' data-toggle='tooltip' onclick='loadAllBuilds()'")?></span>
           </div>
         </td>
       </tr>
@@ -80,7 +80,7 @@ js::set('refresh', $lang->refresh);
         <td>
           <div class='input-group'>
             <span id='assignedToBox'><?php echo html::select('assignedTo', $projectMembers, $assignedTo, "class='form-control chosen'");?></span>
-            <span class='input-group-btn'><?php echo html::commonButton('<i class="icon icon-filter"></i>', "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip' title='{$lang->bug->allUsers}'");?></span>
+            <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
           </div>
         </td>
       </tr>
@@ -89,7 +89,7 @@ js::set('refresh', $lang->refresh);
       <tr>
         <th><?php echo $lang->bug->type;?></th>
         <td>
-          <div class='input-group'>
+          <div class='clearfix' id='bugTypeInputGroup'>
             <?php
             /* Remove the unused types. */
             unset($lang->bug->typeList['designchange']);

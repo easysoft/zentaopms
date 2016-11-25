@@ -202,10 +202,11 @@ class story extends control
      * 
      * @param  int    $productID 
      * @param  int    $moduleID 
+     * @param  int    $storyID
      * @access public
      * @return void
      */
-    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0)
+    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0)
     {
         if(!empty($_POST))
         {
@@ -213,6 +214,17 @@ class story extends control
             if(dao::isError()) die(js::error(dao::getError()));
 
             foreach($mails as $mail) $this->story->sendmail($mail->storyID, $mail->actionID);
+
+            /* If storyID not equal zero, subdivide this story to child stories and close it. */
+            if($storyID)
+            {
+                $actionID = $this->story->subdivide($storyID, $mails);
+                if(dao::isError()) die(js::error(dao::getError()));
+                $this->story->sendmail($storyID, $actionID);
+                if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+                die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
+            }
+
             die(js::locate($this->createLink('product', 'browse', "productID=$productID&branch=$branch"), 'parent'));
         }
 
@@ -268,11 +280,12 @@ class story extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
 
-        $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->batchCreate;
+        $this->view->title            = $product->name . $this->lang->colon . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);
         $this->view->productName      = $product->name;
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID&branch=$branch"), $product->name);
         $this->view->position[]       = $this->lang->story->common;
-        $this->view->position[]       = $this->lang->story->batchCreate;
+        $this->view->position[]       = $storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate;
+        $this->view->storyID          = $storyID;
         $this->view->products         = $products;
         $this->view->product          = $product;
         $this->view->moduleID         = $moduleID;

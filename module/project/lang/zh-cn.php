@@ -21,6 +21,7 @@ $lang->project->dateRange     = '起始日期';
 $lang->project->to            = '至';
 $lang->project->days          = '可用工作日';
 $lang->project->day           = '天';
+$lang->project->workHour      = '工时';
 $lang->project->status        = $lang->projectCommon . '状态';
 $lang->project->desc          = $lang->projectCommon . '描述';
 $lang->project->owner         = '负责人';
@@ -45,7 +46,7 @@ $lang->project->createStory   = "新增需求";
 $lang->project->all           = '所有';
 $lang->project->undone        = '未完成';
 $lang->project->unclosed      = '未关闭';
-$lang->project->typeDesc      = "运维{$lang->projectCommon}禁用燃尽图和需求。";
+$lang->project->typeDesc      = "运维{$lang->projectCommon}没有需求、bug、版本、测试功能，同时禁用燃尽图。";
 $lang->project->mine          = '我负责：';
 $lang->project->other         = '其他：';
 $lang->project->deleted       = '已删除';
@@ -254,5 +255,7 @@ $lang->project->featureBar['task']['needconfirm']  = '需求变动';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
 
 $lang->project->treeLevel = array();
+$lang->project->treeLevel['root']    = '全部折叠';
 $lang->project->treeLevel['story']   = '显示需求';
 $lang->project->treeLevel['task']    = '显示任务';
+

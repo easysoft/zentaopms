@@ -36,7 +36,7 @@
 <?php else:?>
 <?php $canOrder = (common::hasPriv('product', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
 <form method='post' action='<?php echo inLink('batchEdit', "productID=$productID");?>' id='productsForm'>
-  <table class='table table-condensed table-hover table-striped tablesorter table-datatable' id='productList'>
+  <table class='table table-condensed table-hover table-striped tablesorter table-datatable table-selectable' id='productList'>
     <?php $vars = "productID=$productID&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
     <thead>
       <tr>
@@ -60,7 +60,7 @@
     <tbody class='sortable' id='productTableList'>
       <?php foreach($productStats as $product):?>
       <tr class='text-center' data-id='<?php echo $product->id ?>' data-order='<?php echo $product->code ?>'>
-        <td>
+        <td class='cell-id'>
           <?php if($canBatchEdit):?>
           <input type='checkbox' name='productIDList[<?php echo $product->id;?>]' value='<?php echo $product->id;?>' /> 
           <?php endif;?>
@@ -92,7 +92,7 @@
             <?php endif;?>
             <?php if(!$canOrder and common::hasPriv('product', 'updateOrder')) echo html::a(inlink('all', "productID=$productID&status=$status&order=order_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->product->updateOrder, '' , "class='btn'");?>
           </div>
-          <div class='text-right'><?php $pager->show();?></div>
+          <?php $pager->show();?>
         </td>
       </tr>
     </tfoot>

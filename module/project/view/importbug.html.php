@@ -12,10 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<script language='Javascript'>
-$(function(){
-     $(".preview").modalTrigger({width:1000, type:'iframe'});
-})
+<script>
+$(function(){$(".preview").modalTrigger({width:1000, type:'iframe'});});
 var browseType = '<?php echo $browseType;?>';
 </script>
 <div id='titlebar'>
@@ -26,7 +24,7 @@ var browseType = '<?php echo $browseType;?>';
   <div id='querybox' class='show'></div>
 </div>
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' id='importBugForm'>
-  <table class='table tablesorter table-fixed'>
+  <table class='table tablesorter table-fixed table-selectable'>
     <thead>
       <tr class='colhead'>
         <th class='w-id'>       <?php echo $lang->idAB;?></th>
@@ -42,7 +40,7 @@ var browseType = '<?php echo $browseType;?>';
     <tbody>
     <?php foreach($bugs as $bug):?>
     <tr class='text-center'>
-      <td>
+      <td class='cell-id'>
         <?php echo html::checkbox("import[$bug->id]", '');?> 
         <?php echo sprintf('%03d', $bug->id) . html::hidden("id[$bug->id]", $bug->id);?>
       </td>
@@ -50,9 +48,9 @@ var browseType = '<?php echo $browseType;?>';
       <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
       <td class='text-left nobr'><?php common::printLink('bug', 'view', "bugID=$bug->id", $bug->title, '', "class='preview'", true, true);?></td>
       <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
-      <td><?php echo html::select("pri[$bug->id]", $lang->task->priList, 3, "class='input-sm form-control'");?></td>
-      <td class='text-left' style='overflow:visible'><?php echo html::select("assignedTo[$bug->id]", $users, zget($users, $bug->assignedTo, '', $bug->assignedTo), "class='input-sm form-control chosen'");?></td>
-      <td><?php echo html::input("estimate[$bug->id]", '', 'size=4 class="input-sm form-control"');?></td>
+      <td class='td-has-control'><?php echo html::select("pri[$bug->id]", $lang->task->priList, 3, "class='input-sm form-control'");?></td>
+      <td class='td-has-control' class='text-left' style='overflow:visible'><?php echo html::select("assignedTo[$bug->id]", $users, zget($users, $bug->assignedTo, '', $bug->assignedTo), "class='input-sm form-control chosen'");?></td>
+      <td class='td-has-control'><?php echo html::input("estimate[$bug->id]", '', 'size=4 class="input-sm form-control"');?></td>
     </tr>
     <?php endforeach;?>
     </tbody>

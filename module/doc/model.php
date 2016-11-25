@@ -545,6 +545,7 @@ class docModel extends model
         return $this->dao->select('*')->from(TABLE_MODULE)->where('root')->eq($libID)
             ->andWhere('type')->eq('doc')
             ->andWhere('parent')->eq($parent)
+            ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->fetchAll('id');
     }

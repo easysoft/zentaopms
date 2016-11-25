@@ -78,7 +78,7 @@
             <div class='linkBox'></div>
             <?php endif;?>
             <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory', "release=$release->id");?>" id='linkedStoriesForm'>
-            <table class='table table-hover table-condensed table-striped tablesorter table-fixed' id='storyList'>
+            <table class='table table-hover table-condensed table-striped tablesorter table-fixed table-selectable' id='storyList'>
               <thead>
                 <tr>
                   <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -95,9 +95,9 @@
               <?php foreach($stories as $storyID => $story):?>
               <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
               <tr class='text-center'>
-                <td>
+                <td class='cell-id'>
                   <?php if($canBatchUnlink):?>
-                  <input class='ml-10px' type='checkbox' name='unlinkStories[]'  value='<?php echo $story->id;?>'/> 
+                  <input type='checkbox' name='unlinkStories[]'  value='<?php echo $story->id;?>'/> 
                   <?php endif;?>
                   <?php echo sprintf('%03d', $story->id);?>
                 </td>
@@ -121,7 +121,7 @@
               <tfoot>
                 <tr>
                   <td colspan='8'>
-                    <div class='table-actions clearfix pdl-8px'>
+                    <div class='table-actions clearfix'>
                       <?php if($countStories and $canBatchUnlink) echo html::selectButton() . html::submitButton($lang->release->batchUnlink);?>
                       <div class='text'><?php echo sprintf($lang->release->finishStories, $countStories);?></div>
                     </div>
@@ -137,7 +137,7 @@
             <div class='linkBox'></div>
             <?php endif;?>
             <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "releaseID=$release->id");?>" id='linkedBugsForm'>
-            <table class='table table-hover table-condensed table-striped tablesorter table-fixed' id='bugList'>
+            <table class='table table-hover table-condensed table-striped tablesorter table-fixed table-selectable' id='bugList'>
               <thead>
                 <tr>
                   <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -154,9 +154,9 @@
               <?php foreach($bugs as $bug):?>
               <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
               <tr class='text-center'>
-                <td>
+                <td class='cell-id'>
                   <?php if($canBatchUnlink):?>
-                  <input class='ml-10px' type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
+                  <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
                   <?php endif;?>
                   <?php echo sprintf('%03d', $bug->id);?>
                 </td>
@@ -180,7 +180,7 @@
               <tfoot>
                 <tr>
                   <td colspan='8'>
-                    <div class='table-actions clearfix pdl-8px'>
+                    <div class='table-actions clearfix'>
                       <?php if($countBugs and $canBatchUnlink) echo html::selectButton() . html::submitButton($lang->release->batchUnlink);?>
                       <div class='text'><?php echo sprintf($lang->release->resolvedBugs, $countBugs);?></div>
                     </div>
@@ -196,7 +196,7 @@
             <div class='linkBox'></div>
             <?php endif;?>
             <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "releaseID=$release->id&type=leftBug");?>" id='linkedBugsForm'>
-            <table class='table table-hover table-condensed table-striped tablesorter table-fixed' id='leftBugList'>
+            <table class='table table-hover table-condensed table-striped tablesorter table-fixed table-selectable' id='leftBugList'>
               <thead>
                 <tr>
                   <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -212,9 +212,9 @@
               <?php foreach($leftBugs as $bug):?>
               <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
               <tr class='text-center'>
-                <td>
+                <td class='cell-id'>
                   <?php if($canBatchUnlink):?>
-                  <input class='ml-10px' type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
+                  <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
                   <?php endif;?>
                   <?php echo sprintf('%03d', $bug->id);?>
                 </td>
@@ -237,7 +237,7 @@
               <tfoot>
                 <tr>
                   <td colspan='7'>
-                    <div class='table-actions clearfix pdl-8px'>
+                    <div class='table-actions clearfix'>
                       <div class='text'>
                         <?php if($countLeftBugs and $canBatchUnlink) echo html::selectButton() . html::submitButton($lang->release->batchUnlink);?>
                         <?php echo sprintf($lang->release->createdBugs, $countLeftBugs);?>
@@ -278,7 +278,7 @@
           </tr>  
           <tr>
             <th><?php echo $lang->release->build;?></th>
-            <td><?php echo $release->buildName;?></td>
+            <td title='<?php echo $release->buildName?>'><?php echo html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank');?></td>
           </tr>  
           <tr>
             <th><?php echo $lang->release->status;?></th>

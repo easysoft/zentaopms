@@ -11,7 +11,7 @@
  */
 ?>
     <?php include '../../common/view/tablesorter.html.php';?>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='storyList'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='storyList'>
       <thead>
       <tr>
         <th class='w-id {sorter:false}'>  <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
@@ -38,7 +38,7 @@
       $canView  = common::hasPriv('story', 'view');
       ?>
       <tr class='text-center'>
-        <td class='text-left'>
+        <td class='cell-id'>
           <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
           <?php echo $canView ? html::a($viewLink, sprintf('%03d', $story->id)): sprintf('%03d', $story->id);?>
         </td>

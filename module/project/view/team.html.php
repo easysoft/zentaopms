@@ -57,9 +57,9 @@
       </td>
       <td><?php echo $member->role;?></td>
       <td><?php echo substr($member->join, 2);?></td>
-      <td><?php echo $member->days;?></td>
-      <td><?php echo $member->hours;?></td>
-      <td><?php echo $memberHours;?></td>
+      <td><?php echo $member->days . $lang->project->day;?></td>
+      <td><?php echo $member->hours . $lang->project->workHour;?></td>
+      <td><?php echo $memberHours . $lang->project->workHour;?></td>
       <td>
         <?php
         if (common::hasPriv('project', 'unlinkMember'))
@@ -75,7 +75,7 @@
     <tfoot>
     <tr>
       <td colspan='7'>
-      <div class='table-actions clearfix'><div class='text'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours</strong>";?></div></div>
+      <div class='table-actions clearfix'><div class='text'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours{$lang->project->workHour}</strong>";?></div></div>
       </td>
     </tr>
     </tfoot>

@@ -66,6 +66,7 @@ var browseType = '<?php echo $browseType;?>';
   </div>
 </div>
 <div class='main'>
+  <script>setTreeBox();</script>
   <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='docList'>
     <thead>
       <tr>

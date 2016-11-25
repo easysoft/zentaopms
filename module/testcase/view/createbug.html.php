@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <form action='<?php echo $this->createLink('bug', 'create', "product=$productID&branch=$branch&extras=$extras")?>' target='_parent' method='post'>
-  <table class='table table-condensed table-hover table-striped tablesorter' style='word-break:break-all'>
+  <table class='table table-condensed table-hover table-striped tablesorter table-selectable' style='word-break:break-all'>
     <thead>
       <tr>
         <th class='w-60px'><?php echo $lang->testcase->stepID;?></th>
@@ -26,7 +26,7 @@
       <?php $i = 1;?>
       <?php foreach($result->stepResults as $stepID => $stepResult):?>
       <tr>
-        <td>
+        <td class='cell-id'>
           <input type='checkbox' name='stepIDList[]'  value='<?php echo $stepID;?>'/>
           <?php echo $i?>
         </td>
@@ -40,9 +40,7 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan='5'>
-          <div class='table-actions clearfix'><?php echo html::selectButton() . html::submitButton();?></div>
-        </td>
+        <td colspan='5' class='pd-0'><div class='table-actions clearfix'><?php echo html::selectButton() . html::submitButton();?></div></td>
       </tr>
     </tfoot>
   </table>

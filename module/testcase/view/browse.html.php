@@ -36,6 +36,7 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
   </div>
 </div>
 <div class='main'>
+  <script>setTreeBox();</script>
   <form id='batchForm' method='post'>
     <?php
     $datatableId  = $this->moduleName . ucfirst($this->methodName);

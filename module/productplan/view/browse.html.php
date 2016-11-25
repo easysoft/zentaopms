@@ -39,7 +39,7 @@
   </div>
 </div>
 <form method='post' id='productplanForm' action='<?php echo inlink('batchEdit', "productID=$product->id&branch=$branch")?>'>
-<table class='table' id="productplan">
+<table class='table table-bordered table-selectable' id="productplan">
   <thead>
   <?php $vars = "productID=$productID&branch=$branch&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <tr class='colhead'>
@@ -57,7 +57,7 @@
   <tbody>
   <?php foreach($plans as $plan):?>
   <tr class='text-center'>
-    <td class='text-left'>
+    <td class='cell-id'>
       <input type='checkbox' name='planIDList[<?php echo $plan->id;?>]' value='<?php echo $plan->id;?>' /> 
       <?php echo $plan->id;?>
     </td>

@@ -50,7 +50,14 @@ $(document).ready(function()
         scrollPos     : 'out',
         tableClass    : 'tablesorter',
         storage       : false,
-        selectable    : {clickBehavior: 'multi'},
+        selectable    : 
+        {
+            clickBehavior: 'multi',
+            startDrag: function(e)
+            {
+                if(!this.multiKey && !$(e.target).closest('td[data-index="0"]').length) return false;
+            }
+        },
         ready: function()
         {
             if(!this.$table) return;
