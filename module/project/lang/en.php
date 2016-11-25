@@ -21,6 +21,7 @@ $lang->project->dateRange     = 'Time Frame';
 $lang->project->to            = 'To';
 $lang->project->days          = 'Work Days';
 $lang->project->day           = 'day';
+$lang->project->workHour      = 'Hour';
 $lang->project->status        = 'Status';
 $lang->project->desc          = 'Desc';
 $lang->project->owner         = 'Owner';
