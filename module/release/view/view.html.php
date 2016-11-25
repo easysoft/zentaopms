@@ -278,7 +278,7 @@
           </tr>  
           <tr>
             <th><?php echo $lang->release->build;?></th>
-            <td><?php echo $release->buildName;?></td>
+            <td title='<?php echo $release->buildName?>'><?php echo html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank');?></td>
           </tr>  
           <tr>
             <th><?php echo $lang->release->status;?></th>

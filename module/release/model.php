@@ -48,7 +48,7 @@ class releaseModel extends model
      */
     public function getList($productID, $branch = 0)
     {
-        return $this->dao->select('t1.*, t2.name as productName, t3.name as buildName')
+        return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName')
             ->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
