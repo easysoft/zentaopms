@@ -48,7 +48,7 @@ js::set('browseType', $browseType);
     ?>
       <tfoot>
         <tr>
-          <?php $columns = ($this->cookie->windowWidth > $this->config->wideSize ? 14 : 12) - ($project->type == 'sprint' ? 0 : 1);?>
+          <?php $columns = ($this->cookie->windowWidth > $this->config->wideSize ? 15 : 12) - ($project->type == 'sprint' ? 0 : 1);?>
           <td colspan='<?php echo $columns;?>'>
             <div class='table-actions clearfix'>
             <?php 
