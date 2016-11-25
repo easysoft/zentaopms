@@ -107,6 +107,7 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
   </div>
 </div>
 <div class='main'>
+  <script>setTreeBox();</script>
   <form method='post' id='bugForm'>
     <?php
     $datatableId  = $this->moduleName . ucfirst($this->methodName);

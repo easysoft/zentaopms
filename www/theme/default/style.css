@@ -353,7 +353,7 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 .panel .table-bordered tfoot > tr:last-child > td {border-bottom: 0}
 
 /* small panel */
-.panel-sm .panel-heading {padding: 7px 10px}
+.panel-sm .panel-heading {padding: 6px 10px}
 
 /* list group */
 .list-group-item {padding: 8px 15px}
@@ -627,6 +627,9 @@ body {color:#141414; padding-bottom: 40px;}
 .outer .side-handle {position: absolute; text-align: center; cursor: pointer; right: 0; top: 0; width: 15px; padding: 0; line-height: 32px; border: 1px solid #d1d1d1; background: #d5d5d5; color: #03c; transition: all 0.3s; z-index: 99}
 .outer .side-handle:hover {background: #c5c5c5; color: #04f}
 .outer.with-transition .side, .outer .side-handle.with-transition {transition: all 0.3s;}
+
+.outer .side, .outer .side + .main {visibility: hidden;}
+.outer.with-side .side, .outer.with-side .side + .main {visibility: visible;}
 
 .outer.hide-side .side{width: 0; border: none;}
 .outer.hide-side .side .side-handle {right: -15px;}

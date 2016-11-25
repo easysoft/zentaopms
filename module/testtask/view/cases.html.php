@@ -31,6 +31,7 @@ var moduleID   = '<?php echo $moduleID;?>';
   </div>
 </div>
 <div class='main'>
+  <script>setTreeBox();</script>
   <form method='post' name='casesform' id='casesForm'>
     <?php
     $vars         = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}";

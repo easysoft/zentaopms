@@ -38,6 +38,7 @@ js::set('browseType', $browseType);
   </div>
 </div>
 <div class='main'>
+  <script>setTreeBox();</script>
   <form method='post' id='projectTaskForm'>
     <?php
     $datatableId  = $this->moduleName . ucfirst($this->methodName);

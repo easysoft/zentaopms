@@ -386,35 +386,6 @@ function showTreeBox(treeType)
 }
 
 /**
- * Toggle tree menu.
-  
- * @access public
- * @return void
- */
-function toggleTreeBox()
-{
-    var treeType = $('.side-handle').data('id');
-    if(typeof treeType == 'undefined' || treeType == null) return;
-    if($.cookie(treeType) == 'hide') hideTreeBox(treeType);
-
-    $('.side-handle').toggle
-    (
-        function()
-        {
-            if($.cookie(treeType) == 'hide') return showTreeBox(treeType);
-            hideTreeBox(treeType);
-        }, 
-        function()
-        {
-            if($.cookie(treeType) == 'show') return hideTreeBox(treeType);
-            showTreeBox(treeType);
-        }
-    );
-
-    setTimeout(function(){$('.outer.with-side').addClass('with-transition')}, 1000);
-}
-
-/**
  * set tree menu.
   
  * @access public
@@ -422,8 +393,32 @@ function toggleTreeBox()
  */
 function setTreeBox()
 {
+    var $handle = $('.side-handle');
+    if($handle.data('setted')) return;
+
+    var treeType = $handle.data('id');
+    if(treeType)
+    {
+        if($.cookie(treeType) == 'hide') hideTreeBox(treeType);
+
+        $handle.toggle
+        (
+            function()
+            {
+                if($.cookie(treeType) == 'hide') return showTreeBox(treeType);
+                hideTreeBox(treeType);
+            }, 
+            function()
+            {
+                if($.cookie(treeType) == 'show') return hideTreeBox(treeType);
+                showTreeBox(treeType);
+            }
+        ).data('setted', true);
+    }
+
     if($('.outer > .side').length) $('.outer').addClass('with-side');
-    toggleTreeBox();
+    setTimeout(function(){$('.outer.with-side').addClass('with-transition')}, 1000);
+    adjustOuterSize();
 }
 
 /**
@@ -479,6 +474,21 @@ function saveWindowSize()
 }
 
 /**
+ * Adjust Outer box's width and height.
+ * 
+ * @access public
+ * @return void
+ */
+function adjustOuterSize()
+{
+    var side   = $('#wrap .outer > .side');
+    var sideH  = side.length ? (side.outerHeight() + $('#featurebar').outerHeight() + 20) : 0;
+    var height = Math.max(sideH, $(window).height() - $('#header').outerHeight() - ($('#footer').outerHeight() || 0) - 20);
+    if(navigator.userAgent.indexOf("MSIE 8.0") >= 0) height -= 40;
+    $('#wrap .outer').css('min-height', height);
+}
+
+/**
  * Set Outer box's width and height.
  * 
  * @access public
@@ -486,20 +496,10 @@ function saveWindowSize()
  */
 function setOuterBox()
 {
-//    if($('.sub-featurebar').length) $('#featurebar').addClass('with-sub');
-
     var side   = $('#wrap .outer > .side');
-    var resetOuterHeight = function()
-    {
-        var sideH  = side.length ? (side.outerHeight() + $('#featurebar').outerHeight() + 20) : 0;
-        var height = Math.max(sideH, $(window).height() - $('#header').outerHeight() - ($('#footer').outerHeight() || 0) - 20);
-        if(navigator.userAgent.indexOf("MSIE 8.0") >= 0) height -= 40;
-        $('#wrap .outer').css('min-height', height);
-    }
-
-    side.resize(resetOuterHeight);
-    $(window).resize(resetOuterHeight);
-    resetOuterHeight();
+    side.resize(adjustOuterSize);
+    $(window).resize(adjustOuterSize);
+    adjustOuterSize();
 }
 
 /**

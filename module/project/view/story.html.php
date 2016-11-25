@@ -50,6 +50,7 @@
   </div>
 </div>
 <div class='main'>
+  <script>setTreeBox();</script>
   <form method='post' id='projectStoryForm'>
     <table class='table tablesorter table-condensed table-fixed table-selectable' id='storyList'>
       <thead>

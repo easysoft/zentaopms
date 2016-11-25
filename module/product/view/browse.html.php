@@ -99,6 +99,7 @@
   </div>
 </div>
 <div class='main'>
+  <script>setTreeBox();</script>
   <form method='post' id='productStoryForm'>
     <?php
     $datatableId  = $this->moduleName . ucfirst($this->methodName);
