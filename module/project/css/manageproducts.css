@@ -1,6 +1,9 @@
 .row {padding: 20px;}
-#productsBox .row > .col-sm-4 {padding: 8px 15px; border:1px solid #ddd;margin-bottom:5px; width:32%; margin-right:8px;}
-#productsBox .row > .col-sm-4 label {display:block; cursor: pointer;}
-#productsBox .row > .col-sm-4:hover {background: #f1f1f1; cursor: pointer;}
-#productsBox .row > .col-sm-4.checked, #productsBox .row > .col-sm-4.checked:hover {background: #E5FFE6; border: 1px solid #229F24;}
-.col-sm-4+.col-sm-4 {margin-left: 0;}
+#productsBox .row > .product {border:1px solid #ddd;margin-bottom:5px; width:32%; margin-right:8px; padding: 0; position: relative;}
+#productsBox .row > .product label {display:block; cursor: pointer; margin: 0; padding: 8px 10px 8px 30px;}
+#productsBox .row > .product:hover {background: #f1f1f1; cursor: pointer;}
+#productsBox .row > .product.checked, #productsBox .row > .product.checked:hover {background: #E5FFE6; border: 1px solid #229F24;}
+.product + .product {margin-left: 0;}
+#productsBox .row > .product.has-branch label {margin-right: 40%;}
+#productsBox .row > .product.has-branch > .form-control,
+#productsBox .row > .product.has-branch > .chosen-container {position: absolute; width: 40%!important; right: 3px; top: 3px;}
