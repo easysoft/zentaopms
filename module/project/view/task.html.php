@@ -141,7 +141,7 @@ if($shortcut.size() > 0)
 statusActive = '<?php echo isset($lang->project->statusSelects[$this->session->taskBrowseType]);?>';
 if(statusActive) $('#statusTab').addClass('active')
 <?php if(isset($this->config->project->homepage) and $this->config->project->homepage != 'browse'):?>
-$('#modulemenu .nav li.right:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"project\", \"browse\")'><i class='icon icon-cog'></i><?php echo $lang->homepage?></a></li>")
+$('#modulemenu .nav li.right:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"project\", \"browse\")'><i class='icon icon-cog'></i> <?php echo $lang->homepage?></a></li>")
 <?php endif;?>
 </script>
 <?php include '../../common/view/footer.html.php';?>

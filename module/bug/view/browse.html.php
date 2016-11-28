@@ -256,7 +256,7 @@ if($shortcut.size() > 0)
 <?php endif;?>
 <?php $this->app->loadConfig('qa', '', false);?>
 <?php if(isset($this->config->qa->homepage) and $this->config->qa->homepage != 'browse'):?>
-$(function(){$('#modulemenu .nav li:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"qa\", \"browse\")'><i class='icon icon-cog'></i><?php echo $lang->homepage?></a></li>")});
+$(function(){$('#modulemenu .nav li:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"qa\", \"browse\")'><i class='icon icon-cog'></i> <?php echo $lang->homepage?></a></li>")});
 <?php endif;?>
 </script>
 <?php include '../../common/view/footer.html.php';?>

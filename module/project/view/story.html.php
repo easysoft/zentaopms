@@ -110,15 +110,15 @@
             if(commonModel::isTutorialMode())
             {
                 $wizardParams = helper::safe64Encode($param);
-                echo html::a($this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams"), "<i class='icon-list-ul'></i>",'', "class='btn-icon btn-task-create' title='{$lang->project->wbs}'");
+                echo html::a($this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams"), "<i class='icon-plus-border'></i>",'', "class='btn-icon btn-task-create' title='{$lang->project->wbs}'");
             }
             else
             {
-                common::printIcon('task', 'create', $param, '', 'list', 'list-ul', '', 'btn-task-create');
+                common::printIcon('task', 'create', $param, '', 'list', 'plus-border', '', 'btn-task-create');
             }
 
             $lang->task->batchCreate = $lang->project->batchWBS;
-            common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list', 'stack');
+            common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list', 'plus-sign');
 
             $lang->testcase->batchCreate = $lang->testcase->create;
             if($productID) common::printIcon('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', 'list', 'sitemap');
