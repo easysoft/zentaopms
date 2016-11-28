@@ -18,3 +18,5 @@
 .dropdown-list > li > a:focus {color: #1a4f85;text-decoration: none;background-color: #ddd;}
 
 .pl-5px{padding-left:5px;}
+
+tbody > tr > td > .btn-icon {margin-right: 2px}
