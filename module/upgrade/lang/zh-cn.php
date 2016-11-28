@@ -27,13 +27,14 @@ $lang->upgrade->warnningContent = <<<EOT
    比如： mysqldump -u root -p zentao >zentao.bak
 </pre>
 EOT;
-$lang->upgrade->setStatusFile = '<h4>升级之前请先执行下面的命令：</h4>
-                                 <ul>
-                                 <li>windows: 打开命令行，执行<strong>echo ok > %s</strong></li>
-                                 <li>linux: <strong>touch %s;</strong></li>
-                                 <li>或者删掉"%s" 这个文件 ，重新创建一个ok.txt文件，不需要内容。</li>
-                                 </ul>
-                                 <strong style="color:red">我已经仔细阅读上面提示且完成上述工作，<a href="upgrade.php">继续更新</a></strong>';
+$lang->upgrade->createFileWinCMD   = '打开命令行，执行<strong>echo > %s</strong>';
+$lang->upgrade->createFileLinuxCMD = '在命令行执行: <strong>touch %s;</strong>';
+$lang->upgrade->setStatusFile      = '<h4>升级之前请先完成下面的操作：</h4>
+                                      <ul style="line-height:1.5;font-size:13px;">
+                                      <li>%s</li>
+                                      <li>或者删掉"%s" 这个文件 ，重新创建一个ok.txt文件，不需要内容。</li>
+                                      </ul>
+                                      <p><strong style="color:red">我已经仔细阅读上面提示且完成上述工作，<a href="upgrade.php">继续更新</a></strong></p>';
 $lang->upgrade->selectVersion = '选择版本';
 $lang->upgrade->continue      = '继续';
 $lang->upgrade->noteVersion   = "务必选择正确的版本，否则会造成数据丢失。";

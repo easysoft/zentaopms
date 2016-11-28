@@ -27,13 +27,14 @@ $lang->upgrade->warnningContent = <<<EOT
    e.g. mysqldump -u root -p zentao >zentao.bak
 </pre>
 EOT;
-$lang->upgrade->setStatusFile = '<h4>Please execute the following command</h4>
-                                 <ul>
-                                 <li>Windows: Open command line and execute<strong>echo ok > %s</strong></li>
-                                 <li>Linux: <strong>touch %s;</strong></li>
-                                 <li>Or delete "%s" and create ok.txt and leave it blank.</li>
-                                 </ul>
-                                 <strong style="color:red">I have read and done as instructed above. <a href="upgrade.php">Continue update.</a></strong>';
+$lang->upgrade->createFileWinCMD   = 'Open command line, execute <strong>echo > %s</strong>';
+$lang->upgrade->createFileLinuxCMD = 'Execute in command line: <strong>touch %s;</strong>';
+$lang->upgrade->setStatusFile      = '<h4>Please finish the following action</h4>
+                                      <ul style="line-height:1.5;font-size:13px;">
+                                      <li>%s</li>
+                                      <li>Or delete "%s" and create ok.txt and leave it blank.</li>
+                                      </ul>
+                                      <p><strong style="color:red">I have read and done as instructed above. <a href="upgrade.php">Continue update.</a></strong></p>';
 $lang->upgrade->selectVersion = 'Select Version';
 $lang->upgrade->continue      = 'Continue';
 $lang->upgrade->noteVersion   = "Select the compatible version, or it might cause data loss.";

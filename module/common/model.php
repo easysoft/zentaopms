@@ -1132,9 +1132,12 @@ class commonModel extends model
         $statusFile = $this->loadModel('upgrade')->checkSafeFile();
         if($statusFile)
         {
+            $cmd = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $this->lang->upgrade->createFileWinCMD : $this->lang->upgrade->createFileLinuxCMD;
+            $cmd = sprintf($cmd, $statusFile);
+
             echo "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>";
-            echo "<table align='center' style='margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td>";
-            printf($this->lang->upgrade->setStatusFile, $statusFile, $statusFile, $statusFile);
+            echo "<table align='center' style='margin-top:100px; border:1px solid gray; font-size:14px;padding:8px;'><tr><td>";
+            printf($this->lang->upgrade->setStatusFile, $cmd, $statusFile);
             die('</td></tr></table></body></html>');
         }
     }

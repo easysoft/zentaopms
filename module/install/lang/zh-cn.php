@@ -66,8 +66,10 @@ $lang->install->tmpRoot      = '临时文件目录';
 $lang->install->dataRoot     = '上传文件目录';
 $lang->install->session      = 'Session存储目录';
 $lang->install->sessionFail  = '修改PHP配置文件，设置session.save_path';
-$lang->install->mkdir        = '<p>需要创建目录%s。<br /> linux下面命令为：<br /> mkdir -p %s</p>';
-$lang->install->chmod        = '需要修改目录 "%s" 的权限。<br />linux下面命令为：<br />chmod o=rwx -R %s';
+$lang->install->mkdirWin     = '<p>需要创建目录%s。命令行下面命令为：<br /> mkdir %s</p>';
+$lang->install->chmodWin     = '需要修改目录 "%s" 的权限。';
+$lang->install->mkdirLinux   = '<p>需要创建目录%s。<br /> 命令行下面命令为：<br /> mkdir -p %s</p>';
+$lang->install->chmodLinux   = '需要修改目录 "%s" 的权限。<br />命令行下面命令为：<br />chmod o=rwx -R %s';
 
 $lang->install->defaultLang    = '默认语言';
 $lang->install->dbHost         = '数据库服务器';

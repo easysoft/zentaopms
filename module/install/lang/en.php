@@ -66,8 +66,10 @@ $lang->install->tmpRoot      = 'Temp File Directory';
 $lang->install->dataRoot     = 'Uploaded File Directory';
 $lang->install->session      = 'Session Save Path';
 $lang->install->sessionFail  = 'Edit the php.ini file to set session.save_path.';
-$lang->install->mkdir        = '<p>%s directory has to be created.<br /> Run <br /> mkdir -p %s</p> in Linux.';
-$lang->install->chmod        = ' "%s" privilege has to be modified.<br /> Run <br />chmod o=rwx -R %s in Linux.';
+$lang->install->mkdirWin     = '<p>%s directory has to be created.<br /> Run <br /> mkdir %s</p> in command line.';
+$lang->install->chmodWin     = ' "%s" privilege has to be modified.';
+$lang->install->mkdirLinux   = '<p>%s directory has to be created.<br /> Run <br /> mkdir -p %s</p> in command line.';
+$lang->install->chmodLinux   = ' "%s" privilege has to be modified.<br /> Run <br />chmod o=rwx -R %s in command line.';
 
 $lang->install->defaultLang    = 'Default Lang';
 $lang->install->dbHost         = 'Database Host';
