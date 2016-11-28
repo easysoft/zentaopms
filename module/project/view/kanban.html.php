@@ -58,7 +58,7 @@
         <?php if($hasStory):?>
         <td class='col-story'>
           <?php if(!empty($story->id)):?>
-          <div class='board board-story stage-<?php echo $story->stage?>' data-id='<?php echo $story->id?>'>
+          <div class='board board-story stage-<?php echo $story->stage?><?php if($story->assignedTo == $this->app->user->account) echo ' inverse';?>' data-id='<?php echo $story->id?>'>
             <div class='board-title'>
               <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', 'class="kanbanFrame" title="' . $story->title . '"');?>
               <div class='board-actions'>
@@ -93,7 +93,7 @@
         <td class='col-droppable col-<?php echo $col?>' data-id='<?php echo $col?>'>
         <?php if(!empty($story->tasks[$col])):?>
           <?php foreach($story->tasks[$col] as $task):?>
-          <div class='board board-task board-task-<?php echo $col ?>' data-id='<?php echo $task->id?>' id='task-<?php echo $task->id?>'>
+          <div class='board board-task board-task-<?php echo $col ?><?php if($task->assignedTo == $this->app->user->account) echo ' inverse';?>' data-id='<?php echo $task->id?>' id='task-<?php echo $task->id?>'>
             <div class='board-title'>
               <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $task->name, '', 'class="kanbanFrame" title="' . $task->name . '"');?>
               <div class='board-actions'>

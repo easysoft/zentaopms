@@ -11,13 +11,14 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form target='hiddenwin' method='post' style='padding:20px 40px'>
+<form target='hiddenwin' method='post' style='padding:20px 20px'>
   <table class='table table-form'>
     <tr>
       <td>
         <div class='input-group'>
           <span class='input-group-addon'><?php echo $project->begin?></span>
           <?php echo html::input('left', $firstBurn, "class='form-control' placeholder='{$lang->project->placeholder->totalLeft}'")?>
+          <span class='input-group-addon fix-border'><?php echo '(' . $lang->project->totalEstimate . $project->totalEstimate . $lang->project->workHour. ')'?></span>
           <span class='input-group-btn'><?php echo html::submitButton();?></span>
         </div>
       </td>
