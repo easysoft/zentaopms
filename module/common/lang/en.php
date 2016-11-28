@@ -409,6 +409,7 @@ $lang->noResultsMatch     = "No results match!";
 $lang->searchMore         = "More results：";
 $lang->chooseUsersToMail  = "Choose users you want send Email to...";
 $lang->browserNotice      = 'Your current browser might not show the best effect. Please use Chrome, Firefox, IE9+, Opera or Safari.';
+$lang->noticePasteImg     = "Can parse image in editor.";
 
 /* 时间格式设置。*/
 define('DT_DATETIME1',  'Y-m-d H:i:s');
@@ -463,7 +464,7 @@ $lang->icons['test']      = 'check';
 $lang->icons['testtask']  = 'check';
 $lang->icons['group']     = 'group';
 $lang->icons['team']      = 'group';
-$lang->icons['company']   = 'building';
+$lang->icons['company']   = 'sitemap';
 $lang->icons['user']      = 'user';
 $lang->icons['dept']      = 'sitemap';
 $lang->icons['tree']      = 'sitemap';
@@ -500,8 +501,8 @@ $lang->icons['assignTo']       = 'hand-right';
 $lang->icons['change']         = 'random';
 $lang->icons['link']           = 'link';
 $lang->icons['close']          = 'off';
-$lang->icons['activate']       = 'off';
-$lang->icons['review']         = 'search';
+$lang->icons['activate']       = 'magic';
+$lang->icons['review']         = 'review';
 $lang->icons['confirm']        = 'search';
 $lang->icons['confirmBug']     = 'search';
 $lang->icons['putoff']         = 'calendar';

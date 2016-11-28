@@ -142,7 +142,7 @@
       </tr>  
       <tr>
         <th><?php echo $lang->story->spec;?></th>
-        <td colspan='2'><?php echo html::textarea('spec', $spec, "rows='9' class='form-control'");?><div class='help-block'><?php echo $lang->story->specTemplate;?></div></td>
+        <td colspan='2'><?php echo html::textarea('spec', $spec, "rows='9' class='form-control disabled-ie-placeholder' placeholder='" . htmlspecialchars($lang->story->specTemplate) . "'");?></td>
       </tr>  
       <?php if(strpos(",$showFields,", ',verify,') !== false):?>
       <tr>

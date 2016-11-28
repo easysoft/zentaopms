@@ -175,7 +175,7 @@ $lang->story->affectedProjects     = 'Affected' . $lang->projectCommon;
 $lang->story->affectedBugs         = 'Affected Bug';
 $lang->story->affectedCases        = 'Affected Case';
 
-$lang->story->specTemplate          = "Please refer to Template. As <<i class='text-important'> User</i>>, I hope that <<i class='text-important'> can accomplish something. </i>>So it will <<i class='text-important'> the value of development</i>>.";
+$lang->story->specTemplate          = "Please refer to Template. As < User>, I hope that < can accomplish something. >So it will < the value of development>.";
 $lang->story->needNotReview         = 'No Review';
 $lang->story->successSaved          = "Story saved!";
 $lang->story->confirmDelete         = "Do you want to delete this Story?";
