@@ -24,11 +24,11 @@ src=$1/
 dest=$2/
 
 # Rsync when the shell load first. 
-rsync -aqP --exclude='*.svn' --exclude="db/" --exclude="doc/" $src $dest
+rsync -aqP --exclude="db/" --exclude="doc/" $src $dest
 echo `date "+%H:%M:%S"` sync $src to $dest succssfully.
 
 # Watch the $src directory, and sync files to destination.
-inotifywait -mrq --event create,modify,delete,move --format '%w %e %f' --exclude=".svn" $src |\
+inotifywait -mrq --event create,modify,delete,move --format '%w %e %f' $src |\
 while read watcher event file ; do
 
   # compute the $path2process.
@@ -56,7 +56,7 @@ while read watcher event file ; do
   else
 
     echo `date "+%H:%M:%S"` $path2process copied.
-    rsync -aqP --exclude='*.svn' --exclude='db/' --exclude='doc/'  $src/ $dest
+    rsync -aqP --exclude='db/' --exclude='doc/'  $src/ $dest
   fi
 
 done

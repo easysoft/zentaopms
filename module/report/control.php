@@ -206,7 +206,10 @@ class report extends control
 
             /* Get email content and title.*/
             $this->view->mail = $mail;
+            $oldViewType = $this->viewType;
+            if($oldViewType == 'json') $this->viewType = 'html';
             $mailContent = $this->parse('report', 'dailyreminder');
+            $this->viewType == $oldViewType;
             
             /* Send email.*/
             echo date('Y-m-d H:i:s') . " sending to $user, ";

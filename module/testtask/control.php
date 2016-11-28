@@ -96,7 +96,7 @@ class testtask extends control
             $taskID = $this->testtask->create();
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->loadModel('action')->create('testtask', $taskID, 'opened');
-            $this->sendmail($taskID, $actionID, 'opened');
+            $this->testtask->sendmail($taskID, $actionID);
             die(js::locate($this->createLink('testtask', 'browse', "productID=$productID"), 'parent'));
         }
 
@@ -365,7 +365,7 @@ class testtask extends control
                 $this->action->logHistory($actionID, $changes);
 
                 /* send mail.*/
-                $this->sendmail($taskID, $actionID, 'edited');
+                $this->testtask->sendmail($taskID, $actionID);
             }
             die(js::locate(inlink('view', "taskID=$taskID"), 'parent'));
         }
@@ -452,7 +452,7 @@ class testtask extends control
             {
                 $actionID = $this->action->create('testtask', $taskID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->sendmail($taskID, $actionID, 'closed');
+                $this->testtask->sendmail($taskID, $actionID);
             }
 
             if(isonlybody()) die(js::reload('parent.parent'));
@@ -821,71 +821,5 @@ class testtask extends control
             ->andWhere('`case`')->in($this->post->caseIDList)
             ->exec();
         die(js::locate($this->session->caseList));
-    }
-
-    /**
-     * Send mail. 
-     * 
-     * @param  int    $testtaskID 
-     * @param  int    $actionID 
-     * @param  string $action 
-     * @access public
-     * @return void
-     */
-    public function sendmail($testtaskID, $actionID, $actionType)
-    {
-        /* Reset $this->output. */
-        $this->clear();
-
-        /* Set toList and ccList. */
-        $testtask = $this->testtask->getByID($testtaskID);
-        $users    = $this->loadModel('user')->getPairs('noletter');
-        $toList   = $testtask->owner;
-        $ccList   = str_replace(' ', '', trim($testtask->mailto, ','));
-        if($toList == '')
-        {
-            if($ccList == '') return;
-            if(strpos($ccList, ',') === false)
-            {
-                $toList = $ccList;
-                $ccList = '';
-            }
-            else
-            {
-                $commaPos = strpos($ccList, ',');
-                $toList   = substr($ccList, 0, $commaPos);
-                $ccList   = substr($ccList, $commaPos + 1);
-            }
-        }
-
-        /* Get action info. */
-        $action          = $this->loadModel('action')->getById($actionID);
-        $history         = $this->action->getHistory($actionID);
-        $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
-
-        /* Create the email content. */
-        $this->view->testtask = $testtask;
-        $this->view->action   = $action;
-        $this->view->users    = $users;
-
-        $mailContent = $this->parse($this->moduleName, 'sendmail');
-
-        /* Set email title. */
-        if($actionType == 'opened')
-        {
-            $mailTitle = sprintf($this->lang->testtask->mail->create->title, $this->app->user->realname, $testtaskID, $this->post->name);
-        }
-        elseif($actionType == 'closed')
-        {
-            $mailTitle = sprintf($this->lang->testtask->mail->close->title, $this->app->user->realname, $testtaskID, $testtask->name);
-        }
-        else
-        {
-            $mailTitle = sprintf($this->lang->testtask->mail->edit->title, $this->app->user->realname, $testtaskID, $this->post->name);
-        }
-
-        /* Send mail. */
-        $this->loadModel('mail')->send($toList, $mailTitle, $mailContent, $ccList); 
-        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
     }
 }

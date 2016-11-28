@@ -295,6 +295,8 @@ class reportModel extends model
      */
     public function getSysURL()
     {
+        if(isset($this->config->mail->domain)) return $this->config->mail->domain;
+
         /* Ger URL when run in shell. */
         if(PHP_SAPI == 'cli')
         {

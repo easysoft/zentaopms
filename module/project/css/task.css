@@ -1,3 +1,5 @@
+.red{color:red;}
+
 .bug, .task {color:gray; font-size:9px}
 .cont-lt1 .side{width:220px}
 #sidebar{position:absolute;left:15px;top:185px;width:20px;height:20px;cursor:pointer;background:url(theme/default/images/main/zt-icons.png) -81px  -161px;}
@@ -18,5 +20,8 @@
 .dropdown-list > li > a:focus {color: #1a4f85;text-decoration: none;background-color: #ddd;}
 
 .pl-5px{padding-left:5px;}
+
+#taskTree{position:fixed;margin-left:20px;}
+.outer.hide-side #taskTree{margin-left:0px;}
 
 tbody > tr > td > .btn-icon {margin-right: 2px}

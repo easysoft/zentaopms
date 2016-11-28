@@ -870,6 +870,7 @@ class commonModel extends model
             if(strtolower($key) == 'assigneddate')   continue;
             if(strtolower($key) == 'editedby')       continue;
             if(strtolower($key) == 'editeddate')     continue;
+            if(strtolower($key) == 'uid')            continue;
 
             if($magicQuote) $value = stripslashes($value);
             if($value != stripslashes($old->$key))

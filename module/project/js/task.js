@@ -20,6 +20,12 @@ $(function()
             $option.toggleClass('hide', $option.text().toString().toLowerCase().indexOf(val) < 0 && $option.data('key').toString().toLowerCase().indexOf(val) < 0);
         });
     });
+
+    var treeMaxHeight = document.documentElement.clientHeight - $('#header').height() - $('#featurebar').height() - $('#footer').height() - $('#taskTree .side-body .panel-heading').height() - 120;
+    if($('#taskTree').height() > $('#taskList').height()) treeMaxHeight -= 20;
+    $('#taskTree .side-body .panel-body').children().each(function(){if(!$(this).hasClass('tree')) treeMaxHeight -= $(this).height()});
+    $('#taskTree .tree').css({'max-height':treeMaxHeight, 'overflow-y': 'auto', 'overflow-x':'hidden'})
+    if(moduleID > 0)$('#taskTree .tree').scrollTop($('#taskTree .tree #module' + moduleID).offset().top - $('#taskTree .tree li[data-id="1"]').offset().top);
 });
 
 $('#module' + moduleID).addClass('active');

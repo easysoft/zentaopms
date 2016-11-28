@@ -1,2 +1,4 @@
 tfoot .table-actions #assignedTo_chosen a.chosen-default{height:26px;line-height:15px}
 tfoot .table-actions .input-group-addon{padding:5px 12px;}
+#casesbox{position:fixed;margin-left:20px;}
+.outer.hide-side #casesbox{margin-left:0px;}

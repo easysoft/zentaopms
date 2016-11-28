@@ -16,6 +16,7 @@ $lang->mail->turnon      = '是否打开';
 $lang->mail->async       = '异步发送';
 $lang->mail->fromAddress = '发信邮箱';
 $lang->mail->fromName    = '发信人';
+$lang->mail->domain      = '发信域名';
 $lang->mail->host        = 'smtp服务器';
 $lang->mail->port        = 'smtp端口号';
 $lang->mail->auth        = '是否需要验证';
@@ -74,6 +75,7 @@ $lang->mail->sendmailTips   = '提示：系统不会为当前操作者发信。'
 $lang->mail->needConfigure  = '无法找到邮件配置信息，请先配置邮件发送参数。';
 $lang->mail->nofsocket      = 'fsocket相关函数被禁用，不能发信！请在php.ini中修改allow_url_fopen为On，打开openssl扩展。 保存并重新启动apache。';
 $lang->mail->noOpenssl      = 'ssl和tls加密，请打开openssl扩展。 保存并重新启动apache。';
+$lang->mail->disableSecure  = '没有openssl扩展，禁用ssl和tls加密';
 $lang->mail->sendCloudFail  = '操作失败，原因：';
 $lang->mail->sendCloudHelp  = <<<EOD
 <p>1、Notice SendCloud是SendCloud的团队通知服务。具体可以到<a href="http://notice.sendcloud.net/" target="_blank">notice.sendcloud.net</a>查看</p>

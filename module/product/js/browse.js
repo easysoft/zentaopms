@@ -23,4 +23,10 @@ $(function()
     $('.popoverStage').mouseout(function(){$(this).popover('hide')});
     setTimeout(function(){fixedTfootAction('#productStoryForm')}, 100);
     setTimeout(function(){fixedTheadOfList('#storyList')}, 100);
+
+    var treeMaxHeight = document.documentElement.clientHeight - $('#header').height() - $('#featurebar').height() - $('#footer').height() - $('#treebox .side-body .panel-heading').height() - 120;
+    if($('#treebox').height() > $('#storyList').height()) treeMaxHeight -= 20;
+    $('#treebox .side-body .panel-body').children().each(function(){if(!$(this).hasClass('tree')) treeMaxHeight -= $(this).height()});
+    $('#treebox .tree').css({'max-height':treeMaxHeight, 'overflow-y': 'auto', 'overflow-x':'hidden'})
+    if(moduleID > 0)$('#treebox .tree').scrollTop($('#treebox .tree #module' + moduleID).offset().top - $('#treebox .tree li[data-id="1"]').offset().top);
 })

@@ -286,6 +286,7 @@
   </form>
 </div>
 <script language='javascript'>
+var moduleID = <?php echo $moduleID?>;
 $('#module<?php echo $moduleID;?>').addClass('active');
 $('#<?php echo ($browseType == 'bymodule' and $this->session->storyBrowseType == 'bysearch') ? 'all' : $this->session->storyBrowseType;?>Tab').addClass('active');
 <?php if($browseType == 'bysearch'):?>
