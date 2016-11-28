@@ -177,6 +177,7 @@ $lang->project->wbs             = "Decompose Task";
 $lang->project->batchWBS        = "Batch Decompose";
 $lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='How to Update the Burndown Chart?' class='btn btn-sm'>Help</a>";
 $lang->project->whyNoStories    = "No Story can be linked. Please check whether there is Story in {$lang->projectCommon} related {$lang->productCommon} and make sure it has been reviewed.";
+$lang->project->productStories  = "The story of {$lang->projectCommon} linked is a subset of $lang->productCommon} story";
 $lang->project->doneProjects    = 'Done';
 $lang->project->selectDept      = 'Select Dept';
 $lang->project->copyTeam        = 'Duplicate Team';

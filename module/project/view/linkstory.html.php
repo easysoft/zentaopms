@@ -64,11 +64,18 @@
     </tbody>
     <tfoot>
       <tr>
-      <td colspan='<?php echo $productType == 'normal' ? '7' :'8';?>' class='text-left'>
+        <td colspan='<?php echo $productType == 'normal' ? '8' :'9';?>' class='text-left'>
           <div class='table-actions clearfix'>
           <?php 
-          if($storyCount) echo html::selectButton() . html::submitButton();
-          else echo "<div class='text'>" . $lang->project->whyNoStories . '</div>';
+          if($storyCount)
+          {
+              echo html::selectButton() . html::submitButton();
+              echo '<span style="display:inline-block; margin-top:5px; padding-left:5px;">' . $lang->project->productStories . '</span>';
+          }
+          else
+          {
+              echo "<div class='text'>" . $lang->project->whyNoStories . '</div>';
+          }
           ?>
           </div>
         </td>

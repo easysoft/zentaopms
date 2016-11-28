@@ -177,6 +177,7 @@ $lang->project->wbs             = "分解任务";
 $lang->project->batchWBS        = "批量分解";
 $lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='如何更新燃尽图？' class='btn btn-sm'>帮助</a>";
 $lang->project->whyNoStories    = "看起来没有需求可以关联。请检查下{$lang->projectCommon}关联的{$lang->productCommon}中有没有需求，而且要确保它们已经审核通过。";
+$lang->project->productStories  = "{$lang->projectCommon}关联的需求是{$lang->productCommon}需求的子集。";
 $lang->project->doneProjects    = '已结束';
 $lang->project->selectDept      = '选择一个部门的成员';
 $lang->project->copyTeam        = '复制团队';
