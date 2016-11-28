@@ -23,7 +23,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
   <a class='side-handle' data-id='companyTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>
     <div class='panel panel-sm'>
-      <div class='panel-heading nobr'><?php echo html::icon($lang->icons['company']);?> <strong><?php echo $lang->dept->common;?></strong></div>
+      <div class='panel-heading nobr'><?php echo html::icon($lang->icons['dept']);?> <strong><?php echo $lang->dept->common;?></strong></div>
       <div class='panel-body'>
         <?php echo $deptTree;?>
         <div class='text-right'><?php common::printLink('dept', 'browse', '', $lang->dept->manage);?></div>
