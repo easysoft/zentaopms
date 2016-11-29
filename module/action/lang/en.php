@@ -108,7 +108,7 @@ $lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> removed
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
 $lang->action->label->created             = 'Created';
-$lang->action->label->opened              = 'Opened';
+$lang->action->label->opened              = 'Open';
 $lang->action->label->changed             = 'Changed';
 $lang->action->label->edited              = 'Edited';
 $lang->action->label->assigned            = 'Assigned';
