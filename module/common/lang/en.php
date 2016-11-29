@@ -88,7 +88,7 @@ $lang->year         = 'Year';
 $lang->workingHour  = 'Man-Hour';
 
 $lang->idAB         = 'ID';
-$lang->priAB        = 'Privilege';
+$lang->priAB        = 'Privil';
 $lang->statusAB     = 'Status';
 $lang->openedByAB   = 'Open';
 $lang->assignedToAB = 'To';
