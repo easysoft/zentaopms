@@ -70,7 +70,7 @@
           if($storyCount)
           {
               echo html::selectButton() . html::submitButton();
-              echo '<span style="display:inline-block; margin-top:5px; padding-left:5px;">' . $lang->project->productStories . '</span>';
+              echo "<div class='text'>" . $lang->project->productStories . '</div>';
           }
           else
           {
