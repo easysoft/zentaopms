@@ -12,6 +12,7 @@
 ?>
 <?php
 include '../../common/view/header.html.php';
+include '../../common/view/chart.html.php';
 include '../../common/view/datepicker.html.php';
 include '../../common/view/datatable.fix.html.php';
 include './taskheader.html.php';
@@ -49,7 +50,7 @@ js::set('browseType', $browseType);
     ?>
       <tfoot>
         <tr>
-          <?php $columns = ($this->cookie->windowWidth > $this->config->wideSize ? 16 : 13) - ($project->type == 'sprint' ? 0 : 1);?>
+          <?php if(!isset($columns)) $columns = ($this->cookie->windowWidth > $this->config->wideSize ? 15 : 13) - ($project->type == 'sprint' ? 0 : 1);?>
           <td colspan='<?php echo $columns;?>'>
             <div class='table-actions clearfix'>
             <?php 
@@ -125,7 +126,7 @@ js::set('browseType', $browseType);
   </form>
 </div>
 <?php js::set('replaceID', 'taskList')?>
-<script language='javascript'>
+<script>
 $('#project<?php echo $projectID;?>').addClass('active')
 $('#listTab').addClass('active')
 $('#<?php echo ($browseType == 'bymodule' and $this->session->taskBrowseType == 'bysearch') ? 'all' : $this->session->taskBrowseType;?>Tab').addClass('active');

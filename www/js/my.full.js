@@ -1128,7 +1128,6 @@ function setModal()
             }
             showModal(options, modal, modalBody, dialog);
         }
-        console.log('iframe modal options', options);
         modal.modal(options);
     }
 
@@ -1311,7 +1310,7 @@ function setModal4List(triggerClass, replaceID, callback, width)
                     if($list.is('.table-selectable:not(.table-datatable)')) checkTable($list);
                     else $list.find('tbody tr:not(.active-disabled) td').click(function(){$(this).closest('tr').toggleClass('active');});
 
-                    if($.isFunction(callback)) callback();
+                    if($.isFunction(callback)) callback($list);
                     $.cookie('selfClose', 0);
                 });
             }

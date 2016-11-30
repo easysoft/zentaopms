@@ -11,6 +11,7 @@
  */
 ?>
     <?php include '../../common/view/tablesorter.html.php';?>
+    <?php $columns = 12; ?>
     <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='taskList'>
       <thead>
         <tr>
@@ -21,6 +22,7 @@
           <th class='w-70px {sorter:false}'>  <?php common::printOrderLink('deadline',     $orderBy, $vars, $lang->task->deadlineAB);?></th>
 
           <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
+          <?php $columns++; ?>
           <th class='w-id {sorter:false}'>    <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->task->openedDateAB);?></th>
           <?php endif;?>
 
@@ -28,6 +30,7 @@
           <th class='w-user {sorter:false}'>  <?php common::printOrderLink('finishedBy',   $orderBy, $vars, $lang->task->finishedByAB);?></th>
 
           <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
+          <?php $columns++; ?>
           <th class='w-50px {sorter:false}'>  <?php common::printOrderLink('finishedDate', $orderBy, $vars, $lang->task->finishedDateAB);?></th>
           <?php endif;?>
 
@@ -35,7 +38,12 @@
           <th class='w-50px {sorter:false}'>  <?php common::printOrderLink('consumed',     $orderBy, $vars, $lang->task->consumedAB);?></th>
           <th class='w-40px nobr {sorter:false}'>  <?php common::printOrderLink('left',    $orderBy, $vars, $lang->task->leftAB);?></th>
           <th class='w-50px'><?php echo $lang->task->progess;?></th>
-          <?php if($project->type == 'sprint') print "<th class='w-100px {sorter:false}'>" and common::printOrderLink('story', $orderBy, $vars, $lang->task->story) and print '</th>';?>
+
+          <?php if($project->type == 'sprint'): ?>
+          <th class='w-100px {sorter:false}'><?php common::printOrderLink('story', $orderBy, $vars, $lang->task->story); ?></th>
+          <?php $columns++; ?>
+          <?php endif;?>
+
           <th class='w-150px {sorter:false}'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -88,7 +96,7 @@
         <td><?php echo $task->estimate;?></td>
         <td><?php echo $task->consumed;?></td>
         <td><?php echo $task->left;?></td>
-        <td><?php echo $task->progess;?>%</td>
+        <td class='has-progress-pie'><div class='progress-pie' title="<?php echo $task->progess?>%" data-value='<?php echo $task->progess;?>'></div></td>
         <?php
         if($project->type == 'sprint')
         {

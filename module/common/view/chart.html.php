@@ -3,6 +3,12 @@
 .table-chart tr > td.chart-color {padding-left: 0!important; text-align: center; padding-right: 0!important; color: #f1f1f1}
 .chart-wrapper {padding: 10px; background-color: #f1f1f1; border: 1px solid #e5e5e5}
 .table-wrapper > .table-bordered > thead > tr:first-child th {border-top: 1px solid #ddd}
+.progress-pie {position: relative;}
+.datatable td .progress-pie {position: relative; top: -2px; height: 19px;}
+.progress-pie-label {position: absolute; top: 0; left: 0; width: 100%; text-align: center; height: 20px; line-height: 20px; font-size: 12px; top: 50%; margin-top: -10px; color: #555;}
+.progress-pie-label .icon {line-height: 20px;}
+.progress-pie[data-value="100"] .progress-pie-label {color: #4CAF50;}
+.table td.has-progress-pie {padding: 3px;}
 </style>
 <!--[if lte IE 8]>
 <?php
@@ -87,9 +93,55 @@ if($config->debug)
         });
     };
 
+    jQuery.fn.progressPie = function(setting)
+    {
+        $(this).each(function()
+        {
+            var $this = $(this);
+            var $canvas = $this.is('canvas') ? $this : $this.find('canvas');
+            if(!$canvas.length) $canvas = $('<canvas>').appendTo($this);
+            var options = $.extend(
+            {
+                value: 0,
+                color: '#4CAF50',
+                backColor: '#ddd',
+                doughnut: true,
+                doughnutSize: 0,
+                width: 24,
+                height: 24,
+                showTip: false,
+                name: '',
+                tipTemplate: "<%=value%>%",
+                animation: false
+            }, setting, $this.data());
+            if($canvas.attr('width') !== undefined) options.width = $canvas.attr('width');
+            else $canvas.attr('width', options.width);
+            if($canvas.attr('height') !== undefined) options.height = $canvas.attr('height');
+            else $canvas.attr('height', options.height);
+
+            options.value = Math.max(0, Math.min(100, options.value));
+
+            var data = 
+            [
+                {value: options.value, label: options.name, color: options.color},
+                {value: 100 - options.value, label: '', color: options.backColor}
+            ];
+
+            $canvas[options.doughnut ? 'doughnutChart' : 'pieChart'](data, $.extend(
+            {
+                segmentShowStroke: false,
+                animation: options.animation,
+                showTooltips: options.showTip,
+                tooltipTemplate: options.tipTemplate,
+                percentageInnerCutout: options.doughnutSize,
+            }, options.chartOptions));
+        });
+    };
+
     $(function()
     {
         $('.table-chart').tableChart();
+        $('.progress-pie').progressPie();
     });
 }());
 </script>

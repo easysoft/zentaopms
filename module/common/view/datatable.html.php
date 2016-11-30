@@ -70,6 +70,7 @@ $(document).ready(function()
             $dropdown.children('.dropdown').append($dropmenu);
             this.$datatable.before($dropdown);
             this.$datatable.find('[data-toggle=modal], a.iframe').modalTrigger();
+            if($.fn.progressPie) this.$datatable.find('.progress-pie').progressPie();
             $("a[data-toggle='showModuleModal']").click(function(){$('#showModuleModal').modal('show')});
 
             $('#customBtn').modalTrigger();

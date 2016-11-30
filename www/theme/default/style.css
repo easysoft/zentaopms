@@ -280,6 +280,7 @@ fieldset > .form-group {margin-bottom: 0;}
 
 /* Table condensed */
 .table-condensed th, .table-condensed td {padding: 6px 5px; line-height: 18px}
+.table-condensed th > a, .table-condensed td > a, .table-condensed td > .btn-icon {vertical-align: middle}
 
  .input-group > select.form-control {float:left; margin-left: -1px;}
  .input-group-addon {background-color: #f5f5f5;}
