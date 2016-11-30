@@ -1025,7 +1025,6 @@ function setModal()
                             title: $e.attr('title') || $e.text(),
                             icon: '?',
                             backdrop: 'static',
-                            keyboard: false,
                             show: true
                         }, setting, $e.data());
 
@@ -1070,7 +1069,6 @@ function setModal()
             waittime:   0,
             center:     true,
             backdrop:   'static',
-            keyboard:   false,
             show:       true
         };
         
