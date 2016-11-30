@@ -5,23 +5,25 @@
     <small class='text-muted'> <?php echo $lang->story->tasks;?></small>
   </div>
 </div>
-<div>
+<div class='tasksList'>
   <form class='form-condensed' target='hiddenwin'>
     <table class='table'>
       <thead>
         <tr class='text-center'>
+          <th class='w-20px'>    <?php echo $lang->idAB;?></th>
           <th class='w-p30'>   <?php echo $lang->task->name;?></th>
           <th class='w-pri'>   <?php echo $lang->priAB;?></th>
           <th class='w-status'><?php echo $lang->statusAB;?></th>
           <th class='w-user'>  <?php echo $lang->task->assignedToAB;?></th>
-          <th class='w-40px'>  <?php echo $lang->task->estimate;?></th>
-          <th class='w-40px'>  <?php echo $lang->task->consumed;?></th>
-          <th class='w-40px'>  <?php echo $lang->task->left;?></th>
+          <th class='w-40px'>  <?php echo $lang->task->estimateAB;?></th>
+          <th class='w-40px'>  <?php echo $lang->task->consumedAB;?></th>
+          <th class='w-40px'>  <?php echo $lang->task->leftAB;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach($tasks as $key => $task):?>
         <tr class='text-center'>
+          <td><?php echo $task->id;?></td>
           <td class='text-left' title="<?php echo $task->name?>"><?php echo $task->name;?></td>
           <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
           <td><?php echo $lang->task->statusList[$task->status];?></td>

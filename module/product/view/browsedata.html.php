@@ -24,9 +24,9 @@
         <th class='w-hour {sorter:false}'><?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
         <th class='w-50px {sorter:false}'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
         <th class='w-70px {sorter:false}'><?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
-        <th class='w-30px'><?php echo $lang->story->taskCountAB;?></th>
-        <th class='w-30px'><?php echo $lang->story->bugCountAB;?></th>
-        <th class='w-30px'><?php echo $lang->story->caseCountAB;?></th>
+        <th title='<?php echo $lang->story->taskCount?>' class='w-30px'><?php echo $lang->story->taskCountAB;?></th>
+        <th title='<?php echo $lang->story->bugCount?>'  class='w-30px'><?php echo $lang->story->bugCountAB;?></th>
+        <th title='<?php echo $lang->story->caseCount?>' class='w-30px'><?php echo $lang->story->caseCountAB;?></th>
         <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
       </tr>
       </thead>
