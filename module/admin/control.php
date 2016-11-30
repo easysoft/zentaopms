@@ -89,7 +89,8 @@ class admin extends control
         if($_POST)
         {
             $response = $this->admin->bindByAPI();
-            if($response == 'success')
+            $response = json_decode($response);
+            if($response->result == 'success')
             {
                 $this->loadModel('setting')->setItem('system.common.global.community', $this->post->account);
                 echo js::alert($this->lang->admin->bind->success);
@@ -97,7 +98,6 @@ class admin extends control
             }
             else
             {
-                $response = json_decode($response);
                 if($response->result == 'fail') die(js::alert($response->message));
             }
         }
