@@ -37,6 +37,9 @@ foreach(explode(',', $showFields) as $field)
 {
     if($field)$visibleFields[$field] = '';
 }
+$colspan     = count($visibleFields) + 3;
+$hiddenStory = (isonlybody() and $story) ? ' hidden' : '';
+if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
 ?>
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table align='center' class='table table-form table-fixed'>
@@ -45,7 +48,7 @@ foreach(explode(',', $showFields) as $field)
         <th class='w-50px'><?php echo $lang->idAB;?></th> 
         <th class='w-120px<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
         <th class='w-180px<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->testcase->module;?></th>
-        <th class='w-180px<?php echo zget($visibleFields, 'story', ' hidden')?>'> <?php echo $lang->testcase->story;?></th>
+        <th class='w-180px<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>'> <?php echo $lang->testcase->story;?></th>
         <th><?php echo $lang->testcase->title;?> <span class='required'></span></th>
         <th class='w-100px'><?php echo $lang->testcase->type;?> <span class='required'></span></th>
         <th class='w-80px<?php echo  zget($visibleFields, 'pri', ' hidden')?>'>         <?php echo $lang->testcase->pri;?></th>
@@ -68,7 +71,7 @@ foreach(explode(',', $showFields) as $field)
       <td><?php echo $i+1;?></td>
       <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
-      <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'> <?php echo html::select("story[$i]", $storyList, $story ? $story->id : '', 'class="form-control chosen"');?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>' style='overflow:visible'> <?php echo html::select("story[$i]", $storyList, $story ? $story->id : '', 'class="form-control chosen"');?></td>
       <td style='overflow:visible'>
         <div class='input-group'>
         <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->testcase->colorTag}' data-update-text='#title\\[{$i}\\]'");?>
@@ -83,7 +86,7 @@ foreach(explode(',', $showFields) as $field)
     </tr>
     <?php endfor;?>
     <tfoot>
-      <tr><td colspan='<?php echo count($visibleFields) + 3?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+      <tr><td colspan='<?php echo $colspan?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
     </tfoot>
   </table>
 </form>
@@ -93,7 +96,7 @@ foreach(explode(',', $showFields) as $field)
       <td>%s</td>
       <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[%s]", $branches, $branch, "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control'");?></td>
-      <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'> <?php echo html::select("story[%s]", '', '', 'class="form-control"');?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>' style='overflow:visible'> <?php echo html::select("story[%s]", '', '', 'class="form-control"');?></td>
       <td style='overflow:visible'>
         <div class='input-group'>
         <?php echo html::hidden("color[%s]", '', "data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->testcase->colorTag}' data-update-text='#title\\[%s\\]'");?>
