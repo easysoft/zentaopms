@@ -3,12 +3,6 @@
 .table-chart tr > td.chart-color {padding-left: 0!important; text-align: center; padding-right: 0!important; color: #f1f1f1}
 .chart-wrapper {padding: 10px; background-color: #f1f1f1; border: 1px solid #e5e5e5}
 .table-wrapper > .table-bordered > thead > tr:first-child th {border-top: 1px solid #ddd}
-.progress-pie {position: relative;}
-.datatable td .progress-pie {position: relative; top: -2px; height: 19px;}
-.progress-pie-label {position: absolute; top: 0; left: 0; width: 100%; text-align: center; height: 20px; line-height: 20px; font-size: 12px; top: 50%; margin-top: -10px; color: #555;}
-.progress-pie-label .icon {line-height: 20px;}
-.progress-pie[data-value="100"] .progress-pie-label {color: #4CAF50;}
-.table td.has-progress-pie {padding: 3px;}
 </style>
 <!--[if lte IE 8]>
 <?php
@@ -107,8 +101,8 @@ if($config->debug)
                 backColor: '#ddd',
                 doughnut: true,
                 doughnutSize: 0,
-                width: 24,
-                height: 24,
+                width: 20,
+                height: 20,
                 showTip: false,
                 name: '',
                 tipTemplate: "<%=value%>%",
