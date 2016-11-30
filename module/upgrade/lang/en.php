@@ -43,7 +43,7 @@ $lang->upgrade->toVersion     = 'Upgrade to Version';
 $lang->upgrade->confirm       = 'Confirm SQL';
 $lang->upgrade->sureExecute   = 'Execute';
 $lang->upgrade->forbiddenExt  = 'Extension is not compatible with the upgraded version. It has been deactivated:';
-$lang->upgrade->updateFile    = 'Need to update the attachment information.';
+$lang->upgrade->updateFile    = 'Attachment information has to be updated.';
 
 $lang->upgrade->fromVersions['0_3beta']   = '0.3 BETA';
 $lang->upgrade->fromVersions['0_4beta']   = '0.4 BETA';

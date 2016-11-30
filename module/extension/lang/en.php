@@ -67,9 +67,9 @@ $lang->extension->executeCommands          = '<h3>Execute command lines below to
 $lang->extension->successDownloadedPackage = 'Extension downloaded!';
 $lang->extension->successCopiedFiles       = 'File copied!';
 $lang->extension->successInstallDB         = 'Database installed!';
-$lang->extension->viewInstalled            = 'View Installed';
-$lang->extension->viewAvailable            = 'View Available';
-$lang->extension->viewDeactivated          = 'View Deactivated';
+$lang->extension->viewInstalled            = 'Installed';
+$lang->extension->viewAvailable            = 'Available';
+$lang->extension->viewDeactivated          = 'Deactivated';
 $lang->extension->backDBFile               = 'Extension related data has been backed up to %s!';
 $lang->extension->noticeOkFile             = '<h5>For security reasons, your Admin account has to be confirmed.</h5>
     <h5>Plese Login your ZenTao server and create %s.</h5>

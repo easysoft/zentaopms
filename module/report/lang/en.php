@@ -14,7 +14,7 @@ $lang->report->index      = 'Home';
 $lang->report->list       = 'List';
 $lang->report->item       = 'Item';
 $lang->report->value      = 'Value';
-$lang->report->percent    = 'Percentage';
+$lang->report->percent    = 'Percent';
 $lang->report->undefined  = 'Undefined';
 
 $lang->report->colors[]   = 'AFD8F8';
@@ -34,18 +34,18 @@ $lang->report->singleColor[] = 'F6BD0F';
 
 $lang->report->projectDeviation = $lang->projectCommon . ' Deviation';
 $lang->report->productSummary   = $lang->productCommon . ' Summary';
-$lang->report->bugCreate        = 'Bug Summary';
+$lang->report->bugCreate        = 'Bugs';
 $lang->report->bugAssign        = 'Bug Assignment';
 $lang->report->workload         = 'Workload';
 $lang->report->workloadAB       = 'Workload';
-$lang->report->bugOpenedDate    = 'Bug Opened Date';
+$lang->report->bugOpenedDate    = 'Bug Open on';
 $lang->report->taskAssignedDate = 'Time Frame';
 $lang->report->beginAndEnd      = 'Date';
 $lang->report->dept             = 'Dept';
 
 $lang->reportList->project->lists[10] = $lang->projectCommon . ' deviation|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . ' summary|report|productsummary';
-$lang->reportList->test->lists[10]    = 'Bug Summary|report|bugcreate';
+$lang->reportList->test->lists[10]    = 'Bugs|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bug Assignment|report|bugassign';
 $lang->reportList->staff->lists[10]   = 'Workload|report|workload';
 
@@ -53,9 +53,9 @@ $lang->report->id            = 'ID';
 $lang->report->project       = $lang->projectCommon;
 $lang->report->product       = $lang->productCommon;
 $lang->report->user          = 'Username';
-$lang->report->bug           = 'Bug';
+$lang->report->bug           = 'Bugs';
 $lang->report->task          = 'Tasks';
-$lang->report->estimate      = 'Estimation';
+$lang->report->estimate      = 'Est.';
 $lang->report->consumed      = 'Consumed';
 $lang->report->remain        = 'Remained';
 $lang->report->deviation     = 'Deviation';
@@ -67,10 +67,10 @@ $lang->report->manhourTotal  = "Total Man-Hour";
 $lang->report->validRate     = "Efficiency";
 $lang->report->validRateTips = "Solution is fixed/postponed or status is resolved/closed.";
 $lang->report->unplanned     = 'Unplanned';
-$lang->report->workday       = 'Man-Hour per Day';
+$lang->report->workday       = 'Man-Hour/Day';
 $lang->report->diffDays      = 'Work Days';
 
-$lang->report->conditions    = 'Conditions:';
+$lang->report->conditions    = 'Filter by:';
 $lang->report->closedProduct = 'Closed ' . $lang->productCommon;
 $lang->report->overduePlan   = 'Overdue Plan';
 

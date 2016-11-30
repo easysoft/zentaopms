@@ -10,14 +10,14 @@
  * @link        http://www.ranzhi.org
  */
 $lang->block = new stdclass();
-$lang->block->common = 'Block';
+$lang->block->common = 'Widget';
 $lang->block->name   = 'Name';
 $lang->block->style  = 'Style';
 $lang->block->grid   = 'Grid';
 $lang->block->color  = 'Color';
 
 $lang->block->lblModule    = 'Module';
-$lang->block->lblBlock     = 'Block';
+$lang->block->lblBlock     = 'Widget';
 $lang->block->lblNum       = 'Number';
 $lang->block->lblHtml      = 'HTML';
 $lang->block->dynamic      = 'Dynamic';
@@ -27,10 +27,10 @@ $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Name';
 $lang->block->params->value = 'Value';
 
-$lang->block->createBlock        = 'Add Block';
-$lang->block->editBlock          = 'Edit Block';
-$lang->block->ordersSaved        = 'Sequence saved.';
-$lang->block->confirmRemoveBlock = 'Do you want to remove Block【{0}】?';
+$lang->block->createBlock        = 'Create Widget';
+$lang->block->editBlock          = 'Edit';
+$lang->block->ordersSaved        = 'Ranking is saved.';
+$lang->block->confirmRemoveBlock = 'Do you want to remove Widget【{0}】?';
 $lang->block->refresh            = 'Refresh';
 $lang->block->hidden             = 'Hide';
 $lang->block->dynamicInfo        = "%s, %s <em>%s</em> %s <a href='%s'>%s</a>.";
@@ -118,21 +118,21 @@ $lang->block->default['my']['9']['source'] = 'qa';
 
 $lang->block->num      = 'Number';
 $lang->block->type     = 'Type';
-$lang->block->orderBy  = 'Sequence';
+$lang->block->orderBy  = 'Ranking';
 
 $lang->block->availableBlocks = new stdclass();
 
 $lang->block->availableBlocks->todo     = 'My To-Dos';
-$lang->block->availableBlocks->task     = 'My Task';
-$lang->block->availableBlocks->bug      = 'My Bug';
-$lang->block->availableBlocks->case     = 'My Case';
-$lang->block->availableBlocks->story    = 'My Story';
+$lang->block->availableBlocks->task     = 'My Tasks';
+$lang->block->availableBlocks->bug      = 'My Bugs';
+$lang->block->availableBlocks->case     = 'My Cases';
+$lang->block->availableBlocks->story    = 'My Stories';
 $lang->block->availableBlocks->product  = $lang->productCommon . 'List';
 $lang->block->availableBlocks->project  = $lang->projectCommon . 'List';
 $lang->block->availableBlocks->plan     = 'Planning List';
 $lang->block->availableBlocks->release  = 'Release List';
-$lang->block->availableBlocks->build    = 'Build List';
-$lang->block->availableBlocks->testtask = 'Test Build List';
+$lang->block->availableBlocks->build    = 'Builds';
+$lang->block->availableBlocks->testtask = 'Test Builds';
 
 $lang->block->moduleList['product'] = $lang->productCommon;
 $lang->block->moduleList['project'] = $lang->projectCommon;
@@ -142,22 +142,22 @@ $lang->block->moduleList['todo']    = 'To-Dos';
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();
 $lang->block->modules['product']->availableBlocks->list    = $lang->productCommon . 'List';
-$lang->block->modules['product']->availableBlocks->story   = 'Story List';
+$lang->block->modules['product']->availableBlocks->story   = 'Stories';
 $lang->block->modules['product']->availableBlocks->plan    = 'Planning List';
 $lang->block->modules['product']->availableBlocks->release = 'Release List';
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
 $lang->block->modules['project']->availableBlocks->list  = $lang->projectCommon . 'List';
-$lang->block->modules['project']->availableBlocks->task  = 'Task List';
-$lang->block->modules['project']->availableBlocks->build = 'Build List';
+$lang->block->modules['project']->availableBlocks->task  = 'Tasks';
+$lang->block->modules['project']->availableBlocks->build = 'Builds';
 $lang->block->modules['qa']      = new stdclass();
 $lang->block->modules['qa']->availableBlocks = new stdclass();
-$lang->block->modules['qa']->availableBlocks->bug      = 'Bug List';
-$lang->block->modules['qa']->availableBlocks->case     = 'Case List';
-$lang->block->modules['qa']->availableBlocks->testtask = 'Test Build List';
+$lang->block->modules['qa']->availableBlocks->bug      = 'Bugs';
+$lang->block->modules['qa']->availableBlocks->case     = 'Cases';
+$lang->block->modules['qa']->availableBlocks->testtask = 'Test Builds';
 $lang->block->modules['todo'] = new stdclass();
 $lang->block->modules['todo']->availableBlocks = new stdclass();
-$lang->block->modules['todo']->availableBlocks->list = 'To-Do List';
+$lang->block->modules['todo']->availableBlocks->list = 'To-Dos';
 
 $lang->block->orderByList = new stdclass();
 
@@ -247,8 +247,8 @@ $lang->block->modules['common']->moreLinkList = new stdclass();
 $lang->block->modules['common']->moreLinkList->dynamic = 'company|dynamic|';
 
 $lang->block->flowchart   = array();
-$lang->block->flowchart[] = array('Admin',   'Manage a Company', 'Add User', 'Maintain Privilege');
-$lang->block->flowchart[] = array('Product Manager', 'Add Product', 'Maintain a Module', 'Maintain Planning', 'Maintain a Story', 'Create Release');
-$lang->block->flowchart[] = array('Project Manager', 'Add Project', 'MaintainTeam', 'Link a Product', 'Link a Story', 'Decompose a Task');
-$lang->block->flowchart[] = array('R&D Team', 'Claim a Task/Bug', 'Update Status', 'Finish a Task/Bug');
-$lang->block->flowchart[] = array('Testing Team', 'Write a Case', 'Implement a Case', 'Submit a Bug', 'Bug', 'Off a Bug');
+$lang->block->flowchart[] = array('Administration',   'Manage a Company', 'Add Users', 'Maintain Privileges');
+$lang->block->flowchart[] = array('Product Manager', 'Add Products', 'Maintain Modules', 'Maintain Planning', 'Maintain Stories', 'Create Release');
+$lang->block->flowchart[] = array('Project Manager', 'Add Projects', 'Maintain Teams', 'Link Products', 'Link Stories', 'Decompose Tasks');
+$lang->block->flowchart[] = array('DEV Team', 'Claim TaskS/BugS', 'Update Status', 'Finish Tasks/Bugs');
+$lang->block->flowchart[] = array('Testing Team', 'Write Cases', 'Implement Cases', 'Submit Bugs', 'Fix Bugs', 'Close Bugs');

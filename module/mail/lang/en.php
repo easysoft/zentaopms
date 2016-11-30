@@ -19,7 +19,7 @@ $lang->mail->fromName    = 'Sender';
 $lang->mail->domain      = 'Domain';
 $lang->mail->host        = 'SMTP Server';
 $lang->mail->port        = 'SMTP Port';
-$lang->mail->auth        = 'Verification Required';
+$lang->mail->auth        = 'Acceptance Required';
 $lang->mail->username    = 'SMTP Account';
 $lang->mail->password    = 'SMTP Password';
 $lang->mail->secure      = 'Secure';
@@ -75,15 +75,15 @@ $lang->mail->sendmailTips   = 'Note: Email author will not receive this email.';
 $lang->mail->needConfigure  = 'Email configuration is not found. Please cinfigure the Email first.';
 $lang->mail->nofsocket      = 'fsocket related function has been deactivated. Mails cannot send out. Please modify allow_url_fopen in php.ini to turn on Onopenssl, and restart Apache.';
 $lang->mail->noOpenssl      = 'Please turn on Onopenssl, and restart Apache.';
-$lang->mail->disableSecure  = 'No openssl, disable ssl and tls.';
+$lang->mail->disableSecure  = 'No openssl. Disable ssl and tls.';
 $lang->mail->sendCloudFail  = 'Failed. Reason:';
 $lang->mail->sendCloudHelp  = <<<EOD
 <p>1、Notice SendCloud是SendCloud的Team通知服务。具体可以到<a href="http://notice.sendcloud.net/" target="_blank">notice.sendcloud.net</a>查看</p>
 <p>2、accessKey和secretKey可以到登陆后的"设置"页面查看。Email人地址和名称也在"设置"页面设置。</p>
 <p>3、Email时，Notice SendCloudContact里面的昵称要跟Email一致，否则无法成功Email。可以到[<a href='%s'>同步Contact</a>]页面，将ZenTaoUser同步到SendCloudContact中</p>
 EOD;
-$lang->mail->sendCloudSuccess = 'Success';
-$lang->mail->closeSendCloud   = 'Close sendcloud';
+$lang->mail->sendCloudSuccess = 'Done';
+$lang->mail->closeSendCloud   = 'Close';
 $lang->mail->addressWhiteList = 'Please add the email to the whilte list on email server to avoid be treated as spam';
 
 $lang->mail->placeholder = new stdclass();

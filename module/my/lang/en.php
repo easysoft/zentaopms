@@ -2,17 +2,17 @@
 $lang->my->common = 'My Zone';
 
 /* Method List。*/
-$lang->my->index          = 'Homepage';
+$lang->my->index          = 'Home';
 $lang->my->todo           = 'My To-Dos';
-$lang->my->task           = 'My Task';
-$lang->my->bug            = 'My Bug';
-$lang->my->testTask       = 'My Version';
-$lang->my->testCase       = 'My Case';
-$lang->my->story          = 'My Story';
-$lang->my->myProject      = "My {$lang->projectCommon}";
+$lang->my->task           = 'My Tasks';
+$lang->my->bug            = 'My Bugs';
+$lang->my->testTask       = 'My Builds';
+$lang->my->testCase       = 'My Cases';
+$lang->my->story          = 'My Stories';
+$lang->my->myProject      = "My {$lang->projectCommon}s";
 $lang->my->profile        = 'My Profile';
 $lang->my->dynamic        = 'My Dynamic';
-$lang->my->editProfile    = 'Edi Profile';
+$lang->my->editProfile    = 'Edit Profile';
 $lang->my->changePassword = 'Edit Password';
 $lang->my->unbind         = 'Unbind Ranger';
 $lang->my->manageContacts = 'Maintain Contact';
@@ -32,7 +32,7 @@ $lang->my->storyMenu->reviewedByMe = 'Reviewed by Me';
 $lang->my->storyMenu->closedByMe   = 'Closed by Me';
 
 $lang->my->home = new stdclass();
-$lang->my->home->latest        = 'Latest Dynamic';
+$lang->my->home->latest        = 'Dynamic';
 $lang->my->home->action        = "%s, %s <em>%s</em> %s <a href='%s'>%s</a>.";
 $lang->my->home->projects      = $lang->projectCommon;
 $lang->my->home->products      = $lang->productCommon;

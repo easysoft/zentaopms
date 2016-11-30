@@ -45,7 +45,7 @@ $lang->admin->safe->password  = 'Password Security';
 $lang->admin->safe->weak      = 'Common Weak Password';
 $lang->admin->safe->reason    = 'Type';
 $lang->admin->safe->checkWeak = 'Weak Password Check';
-$lang->admin->safe->modifyPasswordFirstLogin = 'Modify password in frist login';
+$lang->admin->safe->modifyPasswordFirstLogin = 'Modify password when login for the first time.';
 
 $lang->admin->safe->modeList[0] = 'N/A';
 $lang->admin->safe->modeList[1] = 'Medium';

@@ -33,24 +33,24 @@ $lang->productplan->batchUnlinkBug   = "Batch Remove Bug";
 $lang->productplan->linkedBugs       = 'Linked Bug';
 $lang->productplan->unlinkedBugs     = 'Unlinked Bug';
 
-$lang->productplan->confirmDelete      = "Do you want to delete this Planning?";
+$lang->productplan->confirmDelete      = "Do you want to delete this Plan?";
 $lang->productplan->confirmUnlinkStory = "Do you want to remove this Story?";
 $lang->productplan->confirmUnlinkBug   = "Do you want to remove this Bug?";
 
 $lang->productplan->id      = 'ID';
 $lang->productplan->product = $lang->productCommon;
 $lang->productplan->title   = 'Title';
-$lang->productplan->desc    = 'Desc';
+$lang->productplan->desc    = 'Description';
 $lang->productplan->begin   = 'Begin';
 $lang->productplan->end     = 'End';
 
-$lang->productplan->endList[7]   = 'One Week';
-$lang->productplan->endList[14]  = 'Two Weeks';
-$lang->productplan->endList[31]  = 'One Month';
+$lang->productplan->endList[7]   = '1 Week';
+$lang->productplan->endList[14]  = '1 Weeks';
+$lang->productplan->endList[31]  = '1 Month';
 $lang->productplan->endList[62]  = '2 Months';
 $lang->productplan->endList[93]  = '3 Months';
 $lang->productplan->endList[186] = '6 Months';
-$lang->productplan->endList[365] = 'One Year';
+$lang->productplan->endList[365] = '1 Year';
 
 $lang->productplan->errorNoTitle = 'ID %s title should not be empty.';
 $lang->productplan->errorNoBegin = 'ID %s begin time should not be empty.';

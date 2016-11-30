@@ -1,7 +1,7 @@
 <?php
 $lang->editor->common    = 'Editor';
 $lang->editor->api       = 'API';
-$lang->editor->index     = 'Homepage';
+$lang->editor->index     = 'Home';
 $lang->editor->newMethod = 'New Method';
 $lang->editor->extend    = 'Extension';
 $lang->editor->api       = 'API';
@@ -15,7 +15,7 @@ $lang->editor->edit      = 'Edit Extension';
 $lang->editor->save      = 'Save Page';
 $lang->editor->delete    = 'Delete Page';
 
-$lang->editor->moduleList   = 'Module List';
+$lang->editor->moduleList   = 'Modules';
 $lang->editor->filePath     = "Extension:";
 $lang->editor->sourceFile   = 'Source File:';
 $lang->editor->fileName     = "File Name:";
