@@ -208,7 +208,7 @@
                               foreach($modules as $moduleId => $module)
                               {
                                   $actionLink = $this->createLink('story', 'batchChangeModule', "moduleID=$moduleId");
-                                  echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin', this)\"") . "</li>";
+                                  echo "<li class='option' data-key='$moduleId'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin', this)\"") . "</li>";
                               }
                               echo '</ul>';
                               if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
