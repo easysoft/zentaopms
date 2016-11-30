@@ -42,10 +42,10 @@ jQuery.fn.projectLine = function(setting)
         {
             $e.append('<canvas class="projectline-canvas"></canvas>');
             canvas = $e.children('canvas');
-            if(navigator.userAgent.indexOf("MSIE 8.0")>0) G_vmlCanvasManager.initElement(canvas[0]);
+            if($.zui.browser.ie == 8) G_vmlCanvasManager.initElement(canvas[0]);
         }
         canvas.attr('width', width).attr('height',height);
-        $e.data('projectLineChart',new Chart(canvas[0].getContext("2d")).Line(
+        $e.data('projectLineChart', new Chart(canvas[0].getContext("2d")).Line(
         {
             labels : values,
             datasets: 

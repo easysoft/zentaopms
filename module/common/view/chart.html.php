@@ -93,7 +93,6 @@ if($config->debug)
         {
             var $this = $(this);
             var $canvas = $this.is('canvas') ? $this : $this.find('canvas');
-            if(!$canvas.length) $canvas = $('<canvas>').appendTo($this);
             var options = $.extend(
             {
                 value: 0,
@@ -108,10 +107,14 @@ if($config->debug)
                 tipTemplate: "<%=value%>%",
                 animation: false
             }, setting, $this.data());
+            var hasCanvas = $canvas.length;
+
+            if(!hasCanvas) $canvas = $('<canvas>').appendTo($this);
             if($canvas.attr('width') !== undefined) options.width = $canvas.attr('width');
             else $canvas.attr('width', options.width);
             if($canvas.attr('height') !== undefined) options.height = $canvas.attr('height');
             else $canvas.attr('height', options.height);
+            if(!hasCanvas && $.zui.browser.ie == 8) G_vmlCanvasManager.initElement($canvas[0]);
 
             options.value = Math.max(0, Math.min(100, options.value));
 
