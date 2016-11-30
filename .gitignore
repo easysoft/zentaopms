@@ -11,3 +11,4 @@ tmp/model/*
 tmp/cache/*
 tmp/extension/*
 .gitkeep
+.bak

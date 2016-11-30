@@ -10,10 +10,10 @@
  * @link        http://www.zentao.net
  */
 $lang->product->common      = $lang->productCommon . 'View';
-$lang->product->index       = $lang->productCommon . "Home";
-$lang->product->browse      = "{$lang->productCommon}s";
+$lang->product->index       = $lang->productCommon . "Homepage";
+$lang->product->browse      = "View{$lang->productCommon}";
 $lang->product->dynamic     = "Dynamic";
-$lang->product->view        = "{$lang->productCommon}s";
+$lang->product->view        = "{$lang->productCommon}Overview";
 $lang->product->edit        = "Edit {$lang->productCommon}";
 $lang->product->batchEdit   = "Batch Edit";
 $lang->product->create      = "Create {$lang->productCommon}";
@@ -24,21 +24,21 @@ $lang->product->select      = "Please select {$lang->productCommon}";
 $lang->product->mine        = 'My responsibility:';
 $lang->product->other       = 'Other:';
 $lang->product->closed      = 'Closed';
-$lang->product->updateOrder = 'Ranking';
+$lang->product->updateOrder = 'Sort';
 $lang->product->all         = "All {$lang->productCommon}";
 
 $lang->product->basicInfo = 'Basic Info';
 $lang->product->otherInfo = 'Other Info';
 
-$lang->product->plans    = 'Plans';
-$lang->product->releases = 'Releases';
-$lang->product->docs     = 'Documents';
+$lang->product->plans    = 'Planning Count';
+$lang->product->releases = 'Release Count';
+$lang->product->docs     = 'Document Count';
 $lang->product->bugs     = 'Linked Bug';
-$lang->product->projects = "Linked {$lang->projectCommon}s";
-$lang->product->cases    = 'Cases';
-$lang->product->builds   = 'Builds';
+$lang->product->projects = "Linked {$lang->projectCommon} Count";
+$lang->product->cases    = 'Case Count';
+$lang->product->builds   = 'Build Count';
 $lang->product->roadmap  = 'Roadmap';
-$lang->product->doc      = 'Documents';
+$lang->product->doc      = 'Document List';
 $lang->product->project  = $lang->projectCommon . 'List';
 
 $lang->product->confirmDelete   = " Do you want to delete {$lang->productCommon}?";
@@ -51,11 +51,11 @@ $lang->product->code      = "{$lang->productCommon} Code";
 $lang->product->order     = 'Sort';
 $lang->product->type      = "{$lang->productCommon} Type";
 $lang->product->status    = 'Status';
-$lang->product->desc      = 'Description';
+$lang->product->desc      = 'Desc';
 $lang->product->PO        = "{$lang->productCommon} owner";
-$lang->product->QD        = 'Quality Director';
-$lang->product->RD        = 'Release Director';
-$lang->product->acl       = 'Acceptance';
+$lang->product->QD        = 'Quality director';
+$lang->product->RD        = 'Release director';
+$lang->product->acl       = 'Access limitation';
 $lang->product->whitelist = 'Whitelist';
 $lang->product->branch    = '%s';
 
@@ -71,7 +71,7 @@ $lang->product->willClose    = 'To be Closed';
 $lang->product->closedStory  = 'Closed';
 $lang->product->unclosed     = 'Open';
 
-$lang->product->allStory    = 'All Stories';
+$lang->product->allStory    = 'AllStory';
 $lang->product->allProduct  = 'All' . $lang->productCommon;
 $lang->product->allProductsOfProject = 'All related' . $lang->productCommon;
 
@@ -89,7 +89,7 @@ $lang->product->statusList['normal'] = 'Normal';
 $lang->product->statusList['closed'] = 'Closed';
 
 $lang->product->aclList['open']    = "Default({$lang->productCommon} with View permission can access to it)";
-$lang->product->aclList['private'] = "Private{$lang->productCommon}({$lang->projectCommon}team members only)";
+$lang->product->aclList['private'] = "Private {$lang->productCommon}({$lang->productCommon} of pesponsible person and {$lang->projectCommon} team members only)";
 $lang->product->aclList['custom']  = 'Custom(Team members and Whitelisr members have access to it.)';
 
 $lang->product->storySummary = " <strong>%s</strong> Story in total on this page, <strong>%s</strong> man-hour estimated. Case coverage is <strong>%s</strong>.";

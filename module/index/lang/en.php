@@ -1,3 +1,3 @@
 <?php
-$lang->index->common = 'Homepage';
-$lang->index->index  = 'Homepage';
+$lang->index->common = 'Home';
+$lang->index->index  = 'Home';
