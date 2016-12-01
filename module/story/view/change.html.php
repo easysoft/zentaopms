@@ -26,9 +26,11 @@
         <td>
           <div class="input-group w-p35-f">
             <?php echo html::select('assignedTo', $users, $story->assignedTo, 'class="form-control chosen"');?>
+            <?php if(!$this->story->checkForceReview()):?>
             <span class="input-group-addon">
             <?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview' {$needReview}");?>
             </span>
+            <?php endif;?>
           </div>
         </td>
       </tr>
