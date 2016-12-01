@@ -7,7 +7,7 @@
 </div>
 <div class='casesList'>
   <form class='form-condensed' target='hiddenwin'>
-    <table class='table'>
+    <table class='table table-fixed'>
       <thead>
         <tr class='text-center'>
           <th class='w-20px'>    <?php echo $lang->idAB;?></th>
