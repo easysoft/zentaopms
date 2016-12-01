@@ -10,3 +10,4 @@
 .dropdown-list > li > a:focus {color: #1a4f85;text-decoration: none;background-color: #ddd;}
 
 .pl-5px{padding-left:5px;}
+#createActionMenu .btn{color: #fff!important; text-shadow: 0 -1px 0 rgba(0,0,0,.2)!important; background-color: #d2322d!important; border-color: #bd2d29!important;}

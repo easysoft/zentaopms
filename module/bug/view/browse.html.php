@@ -62,24 +62,25 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
       </div>
     </div>
     <div class='btn-group'>
-      <div class='btn-group btn-bug-create'>
-        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
-          <i class='icon icon-plus'></i> <?php echo $lang->bug->common;?>
-          <span class='caret'></span>
-        </button>
-        <ul class='dropdown-menu' id='createBugActionMenu'>
+      <div class='btn-group' id='createActionMenu'>
         <?php 
         if(commonModel::isTutorialMode())
         {
             $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
-            echo '<li>' . html::a($this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams"), $lang->bug->create) . '</li>';
+            echo html::a($this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams"), "<i class='icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-bug-create'");
         }
         else
         {
-            $misc = common::hasPriv('bug', 'create') ? '' : "class=disabled";
+            $misc = common::hasPriv('bug', 'create') ? "class='btn'" : "class='btn disabled'";
             $link = common::hasPriv('bug', 'create') ?  $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID") : '#';
-            echo "<li>" . html::a($link, $lang->bug->create, '', $misc) . "</li>";
+            echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->bug->create, '', $misc);
         }
+        ?>
+        <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'>
+          <span class='caret'></span>
+        </button>
+        <ul class='dropdown-menu'>
+        <?php
         $misc = common::hasPriv('bug', 'batchCreate') ? '' : "class=disabled";
         $link = common::hasPriv('bug', 'batchCreate') ?  $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID") : '#';
         echo "<li>" . html::a($link, $lang->bug->batchCreate, '', $misc) . "</li>";
