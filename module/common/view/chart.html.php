@@ -87,9 +87,58 @@ if($config->debug)
         });
     };
 
+    jQuery.fn.progressPie = function(setting)
+    {
+        $(this).each(function()
+        {
+            var $this = $(this);
+            var $canvas = $this.is('canvas') ? $this : $this.find('canvas');
+            var options = $.extend(
+            {
+                value: 0,
+                color: '#4CAF50',
+                backColor: '#ddd',
+                doughnut: true,
+                doughnutSize: 0,
+                width: 20,
+                height: 20,
+                showTip: false,
+                name: '',
+                tipTemplate: "<%=value%>%",
+                animation: false
+            }, setting, $this.data());
+            var hasCanvas = $canvas.length;
+
+            if(!hasCanvas) $canvas = $('<canvas>').appendTo($this);
+            if($canvas.attr('width') !== undefined) options.width = $canvas.attr('width');
+            else $canvas.attr('width', options.width);
+            if($canvas.attr('height') !== undefined) options.height = $canvas.attr('height');
+            else $canvas.attr('height', options.height);
+            if(!hasCanvas && $.zui.browser.ie == 8) G_vmlCanvasManager.initElement($canvas[0]);
+
+            options.value = Math.max(0, Math.min(100, options.value));
+
+            var data = 
+            [
+                {value: options.value, label: options.name, color: options.color},
+                {value: 100 - options.value, label: '', color: options.backColor}
+            ];
+
+            $canvas[options.doughnut ? 'doughnutChart' : 'pieChart'](data, $.extend(
+            {
+                segmentShowStroke: false,
+                animation: options.animation,
+                showTooltips: options.showTip,
+                tooltipTemplate: options.tipTemplate,
+                percentageInnerCutout: options.doughnutSize,
+            }, options.chartOptions));
+        });
+    };
+
     $(function()
     {
         $('.table-chart').tableChart();
+        $('.progress-pie').progressPie();
     });
 }());
 </script>
