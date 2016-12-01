@@ -82,15 +82,15 @@ $config->project->search['params']['lastEditedBy']  = array('operator' => '=',  
 
 $config->project->search['params']['mailto']        = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 
-$config->project->search['params']['openedDate']    = array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->project->search['params']['deadline']      = array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->project->search['params']['estStarted']    = array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->project->search['params']['realStarted']   = array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->project->search['params']['assignedDate']  = array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->project->search['params']['finishedDate']  = array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->project->search['params']['closedDate']    = array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->project->search['params']['canceledDate']  = array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->project->search['params']['lastEditedDate']= array('operator' => '>=',      'control' => 'input',  'values' => '', 'class' => 'date');
+$config->project->search['params']['openedDate']    = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
+$config->project->search['params']['deadline']      = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
+$config->project->search['params']['estStarted']    = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
+$config->project->search['params']['realStarted']   = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
+$config->project->search['params']['assignedDate']  = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
+$config->project->search['params']['finishedDate']  = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
+$config->project->search['params']['closedDate']    = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
+$config->project->search['params']['canceledDate']  = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
+$config->project->search['params']['lastEditedDate']= array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 
 $config->printKanban = new stdClass();
 $config->printKanban->col['story']  = 1;
