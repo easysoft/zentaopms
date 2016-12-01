@@ -29,6 +29,9 @@ foreach(explode(',', $showFields) as $field)
 {
     if($field)$visibleFields[$field] = '';
 }
+$colspan     = count($visibleFields) + 3;
+$hiddenStory = (isonlybody() and $storyID) ? ' hidden' : '';
+if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
 ?>
 <form class='form-condensed' method='post' target='hiddenwin'>
   <table class='table table-form table-fixed with-border'>
@@ -36,7 +39,7 @@ foreach(explode(',', $showFields) as $field)
       <tr class='text-center'>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
         <th class='w-150px<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->task->module?></th>
-        <th class='w-200px<?php echo zget($visibleFields, 'story', ' hidden')?>'><?php echo $lang->task->story;?></th>
+        <th class='w-200px<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>'><?php echo $lang->task->story;?></th>
         <th><?php echo $lang->task->name;?> <span class='required'></span></th>
         <th class='w-80px'><?php echo $lang->typeAB;?> <span class='required'></span></th>
         <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'><?php echo $lang->task->assignedTo;?></th>
@@ -72,7 +75,7 @@ foreach(explode(',', $showFields) as $field)
     <tr>
       <td class='text-center'><?php echo $i+1;?></td>
       <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'><?php echo html::select("module[$i]", $modules, $module, "class='form-control chosen' onchange='setStories(this.value, $project->id, $i)'")?></td>
-      <td <?php echo zget($visibleFields, 'story', "class='hidden'")?> style='overflow: visible'>
+      <td <?php echo zget($visibleFields, 'story', "class='hidden'"); echo $hiddenStory;?> style='overflow: visible'>
         <div class='input-group'>
           <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
           <span class='input-group-btn'>
@@ -95,7 +98,7 @@ foreach(explode(',', $showFields) as $field)
       <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pri[$i]", (array)$lang->task->priList, $pri, 'class=form-control');?></td>
     </tr>
     <?php endfor;?>
-    <tr><td colspan='<?php echo count($visibleFields) + 3?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    <tr><td colspan='<?php echo $colspan?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
 <table class='hide' id='trTemp'>
@@ -103,7 +106,7 @@ foreach(explode(',', $showFields) as $field)
     <tr>
       <td class='text-center'>%s</td>
       <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'><?php echo html::select("module[%s]", $modules, $module, "class='form-control' onchange='setStories(this.value, $project->id, \"%s\")'")?></td>
-      <td <?php echo zget($visibleFields, 'story', "class='hidden'")?> style='overflow: visible'>
+      <td <?php echo zget($visibleFields, 'story', "class='hidden'"); echo $hiddenStory;?> style='overflow: visible'>
         <div class='input-group'>
           <?php echo html::select("story[%s]", $stories, $currentStory, "class='form-control' onchange='setStoryRelated(\"%s\")'");?>
           <span class='input-group-btn'>
