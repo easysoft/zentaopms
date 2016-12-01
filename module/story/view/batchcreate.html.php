@@ -30,8 +30,9 @@
 $visibleFields = array();
 foreach(explode(',', $showFields) as $field)
 {
-    if($field)$visibleFields[$field] = '';
+    if($field) $visibleFields[$field] = '';
 }
+if($this->story->checkForceReview()) unset($visibleFields['review']);
 ?>
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table table-form table-fixed with-border'> 

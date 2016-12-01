@@ -91,7 +91,11 @@ function initKindeditor(afterInit)
                         })
                     }, 10);
                 }
-                if(pasted && placeholderText == '') placeholderText = ' <?php echo $this->lang->noticePasteImg?>';
+                if(pasted)
+                {
+                    if(placeholderText) placeholderText += '<br />';
+                    placeholderText += ' <?php echo $this->lang->noticePasteImg?>';
+                }
 
                 /* Paste in chrome.*/
                 /* Code reference from http://www.foliotek.com/devblog/copy-images-from-clipboard-in-javascript/. */

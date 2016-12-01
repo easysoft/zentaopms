@@ -31,8 +31,7 @@
         <th class='w-100px'><?php echo $lang->user->account;?></th>
     	<td>
           <div class="required required-wrapper"></div>
-          <?php echo html::input('account', '', "class='form-control'");?>
-          <div class='help-block'><?php echo $lang->admin->register->lblAccount;?></div>
+          <?php echo html::input('account', '', "class='form-control' placeholder='{$lang->admin->register->lblAccount}'");?>
         </td>
       </tr>
       <tr>
@@ -55,8 +54,7 @@
         <th><?php echo $lang->user->password;?></th>
         <td>
           <div class="required required-wrapper"></div>
-          <?php echo html::password('password1', '', "class='form-control'");?>
-          <div class='help-block'><?php echo $lang->admin->register->lblPasswd;?></div>
+          <?php echo html::password('password1', '', "class='form-control' placeholder='{$lang->admin->register->lblPasswd}'");?>
         </td>
       </tr>  
       <tr>

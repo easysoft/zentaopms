@@ -138,6 +138,7 @@
           <td colspan='10'>
             <div class='table-actions clearfix'>
             <?php
+            $storyInfo = sprintf($lang->project->productStories, inlink('linkStory'));
             if(count($stories))
             {
               if($canBatchEdit or $canBatchClose) echo html::selectButton();
@@ -163,8 +164,9 @@
                     echo '<li>' . html::a('#', $lang->project->unlinkStory, '', $misc) . '</li>';
                 }
                 echo '</ul></div>';
+                $storyInfo = $summary;
             }
-            echo "<div class='text'>" . $summary . '</div>';
+            echo "<div class='text'>{$storyInfo}</div>";
             ?>
             </div>
             <?php echo $pager->show();?>
