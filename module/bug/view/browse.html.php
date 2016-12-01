@@ -67,16 +67,16 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
         if(commonModel::isTutorialMode())
         {
             $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
-            echo html::a($this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams"), "<i class='icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-bug-create'");
+            echo html::a($this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams"), "<i class='icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary btn-bug-create'");
         }
         else
         {
-            $misc = common::hasPriv('bug', 'create') ? "class='btn'" : "class='btn disabled'";
+            $misc = common::hasPriv('bug', 'create') ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
             $link = common::hasPriv('bug', 'create') ?  $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID") : '#';
             echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->bug->create, '', $misc);
         }
         ?>
-        <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'>
+        <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
           <span class='caret'></span>
         </button>
         <ul class='dropdown-menu'>

@@ -60,16 +60,16 @@
       if(commonModel::isTutorialMode())
       {
           $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
-          echo html::a($this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams"), "<i class='con-plus'></i>" . $lang->story->create, '', 'create-story-btn');
+          echo html::a($this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams"), "<i class='con-plus'></i>" . $lang->story->create, '', "class='create-story-btn btn btn-primary'");
       }
       else
       {
-          $misc = common::hasPriv('story', 'create') ? "class='btn'" : "class='btn disabled'";
+          $misc = common::hasPriv('story', 'create') ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
           $link = common::hasPriv('story', 'create') ?  $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID") : '#';
           echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->story->create, '', $misc);
       }
       ?>
-      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
       </button>
       <ul class='dropdown-menu'>
