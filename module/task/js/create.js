@@ -161,7 +161,7 @@ $(document).ready(function()
         // adjust #priRowCol and #estRowCol size
         var $priRowCol = $('#priRowCol'),
             $estRowCol = $('#estRowCol');
-        $priRowCol.css('width', 55 + $priRowCol.find('.input-group-addon').outerWidth());
+        $priRowCol.css('width', 54 + $priRowCol.find('.input-group-addon').outerWidth());
         $estRowCol.css('width', 55 + $estRowCol.find('.input-group-addon').outerWidth());
     };
     ajustFormControls();
