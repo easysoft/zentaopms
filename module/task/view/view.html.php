@@ -88,7 +88,7 @@
       </fieldset>
       <?php endif;?>
 
-      <?php if(isset($task->cases)):?>
+      <?php if(isset($task->cases) and $task->cases):?>
       <fieldset>
         <legend><?php echo $lang->task->case;?></legend>
         <div class='article-content'>
