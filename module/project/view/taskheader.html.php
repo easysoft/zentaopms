@@ -123,11 +123,11 @@
     <div class='btn-group'>
       <div class='btn-group' id='createActionMenu'>
         <?php 
-        $misc = common::hasPriv('task', 'create') ? "class='btn'" : "class='btn disabled'";
+        $misc = common::hasPriv('task', 'create') ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
         $link = common::hasPriv('task', 'create') ?  $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')) : '#';
         echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->task->create, '', $misc);
         ?>
-        <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'>
+        <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
           <span class='caret'></span>
         </button>
         <ul class='dropdown-menu'>
