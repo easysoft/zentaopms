@@ -16,3 +16,5 @@
 
 #treebox{position:fixed;margin-left:20px;}
 .outer.hide-side #treebox{margin-left:0px;}
+
+#createActionMenu .btn{color: #fff!important; text-shadow: 0 -1px 0 rgba(0,0,0,.2)!important; background-color: #d2322d!important; border-color: #bd2d29!important;}
