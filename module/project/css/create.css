@@ -15,3 +15,5 @@
 .modal-dialog {margin-top: 10%!important;}
 
 .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {margin-top: 1px;}
+
+.type-tips {display: none; margin: 5px 0; color: #545454;}
