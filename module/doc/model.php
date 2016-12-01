@@ -54,8 +54,8 @@ class docModel extends model
             {
                 $lib = $libs[$menuLibID];
                 $libName = '';
-                if($lib->product) $libName = isset($products[$lib->product]) ? $products[$lib->product] . '/' : '';
-                if($lib->project) $libName = isset($projects[$lib->project]) ? $projects[$lib->project] . '/' : '';
+                if($lib->product) $libName = isset($products[$lib->product]) ? '[' . $products[$lib->product] . ']' : '';
+                if($lib->project) $libName = isset($projects[$lib->project]) ? '[' . $projects[$lib->project] . ']' : '';
                 $libName .= $lib->name;
                 $customMenu[$i]->link = "{$libName}|doc|browse|libID={$menuLibID}";
             }
