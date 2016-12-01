@@ -653,10 +653,9 @@ class taskModel extends model
             ->setDefault('status', 'done')
             ->setDefault('finishedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('finishedDate, lastEditedDate', $now) 
-            ->remove('comment,files,labels,thisConsume')
+            ->remove('comment,files,labels')
             ->get();
         if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
-        if(!isset($task->consumed)) $task->consumed = $oldTask->consumed + $this->post->thisConsume;
 
         if(!is_numeric($task->consumed)) die(js::error($this->lang->task->error->consumedNumber));
 
@@ -668,7 +667,7 @@ class taskModel extends model
             ->setDefault('task', $taskID) 
             ->setDefault('date', date(DT_DATE1)) 
             ->setDefault('left', 0)
-            ->remove('finishedDate,comment,assignedTo,files,labels,consumed,thisConsume')
+            ->remove('finishedDate,comment,assignedTo,files,labels,consumed')
             ->get();
         $estimate->consumed = $consumed; 
         if($estimate->consumed) $this->addTaskEstimate($estimate);
@@ -813,8 +812,7 @@ class taskModel extends model
         $task->files = $this->loadModel('file')->getByObject('task', $taskID);
 
         /* Get related test cases. */
-        $cases = $this->dao->select('id, title')->from(TABLE_CASE)->where('story')->eq($task->story)->andWhere('storyVersion')->eq($task->storyVersion)->fetchPairs();
-        if($cases) $task->cases = $cases;
+        if($task->story)$this->cases = $this->dao->select('id, title')->from(TABLE_CASE)->where('story')->eq($task->story)->andWhere('storyVersion')->eq($task->storyVersion)->fetchPairs();
 
         return $this->processTask($task);
     }

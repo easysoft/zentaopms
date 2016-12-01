@@ -91,7 +91,6 @@ $lang->task->deleteEstimate    = 'Delete Man-Hour';
 $lang->task->colorTag          = 'Color Tag';
 $lang->task->files             = 'Files';
 $lang->task->hasConsumed       = 'Total Consumed';
-$lang->task->thisConsume       = 'This Consumed';
 
 $lang->task->ditto         = 'Ditto';
 $lang->task->dittoNotice   = "This Task does not belong to the Project as the previous one does!";
