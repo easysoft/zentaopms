@@ -86,7 +86,7 @@ $(function()
             var $wrapper = $li.children('.tree-item-wrapper');
             if(item.type === 'product')
             {
-                $wrapper.addClass('tree-toggle').append($('<span><i class="icon icon-cube text-muted"></i> ' + item.title + '</span>'));
+                $wrapper.addClass('tree-toggle').append($('<span>' + item.title + '</span>'));
             }
             else if(item.type === 'story')
             { 
@@ -133,7 +133,7 @@ $(function()
             }
             else
             {
-                $wrapper.addClass('tree-toggle').append($('<span><i class="icon icon-bookmark-empty text-muted"></i> ' + (item.title || item.name) + '</span>'));
+                $wrapper.addClass('tree-toggle').append($('<span>' + (item.title || item.name) + '</span>'));
             }
         }
     });
