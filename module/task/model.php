@@ -1205,7 +1205,7 @@ class taskModel extends model
         }
         else
         {
-            $task->progess = round($task->consumed / ($task->consumed + $task->left), 3) * 100;
+            $task->progess = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
         }
 
         return $task;

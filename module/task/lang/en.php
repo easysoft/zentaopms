@@ -34,6 +34,7 @@ $lang->task->fromBug            = 'From Bug';
 $lang->task->case               = 'Related Case';
 $lang->task->confirmStoryChange = "Confirm Story Change";
 $lang->task->progess            = 'Progess';
+$lang->task->progessTips        = 'Consumed/(Consumed+Left)';
 
 $lang->task->common            = 'Task';
 $lang->task->id                = 'ID';
