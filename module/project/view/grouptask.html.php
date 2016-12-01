@@ -123,7 +123,7 @@
         <?php echo html::a('###', "<i class='icon-caret-down'></i> " . $groupName, '', "class='expandGroup' data-action='expand' title='$groupName'");?>
         <div class='groupSummary text' style='white-space:normal'>
         <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHours, $users[$task->assignedTo], $members[$task->assignedTo]->totalHours);?>
-        <?php printf($lang->project->groupSummary, $groupSum, $groupWait, $groupDoing, $groupEstimate, $groupConsumed, $groupLeft);?></div>
+        <?php printf($lang->project->groupSummaryAB, $groupSum, $groupWait, $groupDoing, $groupEstimate, $groupConsumed, $groupLeft);?></div>
       </td>
       <?php endif;?>
       <td><?php echo $task->id;?></td>
@@ -150,9 +150,7 @@
       <td class='text-left'>
         <?php echo html::a('###', "<i class='icon-caret-right'></i> " . $groupName, '', "class='collapseGroup' data-action='collapse' title='$groupName'");?>
       </td>
-      <td></td>
-      <td></td>
-      <td colspan='11' class='text-left'>
+      <td colspan='13' class='text-left'>
         <span class='groupdivider' style='margin-left:10px;'>
           <span class='text'>
             <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHours, $users[$task->assignedTo], $members[$task->assignedTo]->totalHours);?>
