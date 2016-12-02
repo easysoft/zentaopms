@@ -34,6 +34,7 @@ $lang->doc->deleted        = '已删除';
 $lang->doc->fileObject     = '所属对象';
 $lang->doc->whiteList      = '白名单';
 $lang->doc->contentType    = '文档格式';
+$lang->doc->separator      = "<i class='icon-angle-right'></i>";
 
 $lang->doc->moduleDoc      = '按模块浏览';
 $lang->doc->searchDoc      = '搜索';
@@ -76,8 +77,8 @@ $lang->doc->libTypeList['product'] = $lang->productCommon . '文档库';
 $lang->doc->libTypeList['project'] = $lang->projectCommon . '文档库';
 $lang->doc->libTypeList['custom']  = '自定义文档库';
 
-$lang->doc->systemLibs['product'] = $lang->productCommon . '文档库';
-$lang->doc->systemLibs['project'] = $lang->projectCommon . '文档库';
+$lang->doc->systemLibs['product'] = $lang->productCommon;
+$lang->doc->systemLibs['project'] = $lang->projectCommon;
 
 $lang->doc->aclList['open']    = '公开';
 $lang->doc->aclList['custom']  = '自定义';
@@ -114,6 +115,8 @@ $lang->doclib->user    = '用户';
 $lang->doclib->files   = '附件库';
 $lang->doclib->all     = '所有文档库';
 $lang->doclib->select  = '选择文档库';
+$lang->doclib->project = $lang->projectCommon . '库';
+$lang->doclib->product = $lang->productCommon . '库';
 
-$lang->doclib->main['product'] = $lang->productCommon . '库';
-$lang->doclib->main['project'] = $lang->projectCommon . '库';
+$lang->doclib->main['product'] = $lang->productCommon . '主库';
+$lang->doclib->main['project'] = $lang->projectCommon . '主库';

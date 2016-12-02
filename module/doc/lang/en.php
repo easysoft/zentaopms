@@ -34,6 +34,7 @@ $lang->doc->deleted        = 'Deleted';
 $lang->doc->fileObject     = 'The Object';
 $lang->doc->whiteList      = 'White List';
 $lang->doc->contentType    = 'Document Format';
+$lang->doc->separator      = "<i class='icon-angle-right'></i>";
 
 $lang->doc->moduleDoc      = 'By Module';
 $lang->doc->searchDoc      = 'By Search';
@@ -114,6 +115,8 @@ $lang->doclib->user    = 'User';
 $lang->doclib->files   = 'Files';
 $lang->doclib->all     = 'All Libraries';
 $lang->doclib->select  = 'Select Library';
+$lang->doclib->project = $lang->projectCommon . ' Library';
+$lang->doclib->product = $lang->productCommon . ' Library';
 
-$lang->doclib->main['product'] = $lang->productCommon . ' Library';
-$lang->doclib->main['project'] = $lang->projectCommon . ' Library';
+$lang->doclib->main['product'] = $lang->productCommon . ' Main Library';
+$lang->doclib->main['project'] = $lang->projectCommon . ' Main Library';
