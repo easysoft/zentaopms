@@ -178,6 +178,7 @@ $lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=
 $lang->project->whyNoStories    = "No Story can be linked. Please check whether there is Story in {$lang->projectCommon} related {$lang->productCommon} and make sure it has been reviewed.";
 $lang->project->doneProjects    = 'Done';
 $lang->project->selectDept      = 'Select Department';
+$lang->project->selectDeptTitle = 'Select Department';
 $lang->project->copyTeam        = 'Duplicate Team';
 $lang->project->copyFromTeam    = "Duplicated from {$lang->projectCommon} Team: <strong>%s</strong>";
 $lang->project->noMatched       = "No $lang->projectCommon including '%s'can be found.";
