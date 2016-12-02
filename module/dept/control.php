@@ -19,9 +19,9 @@ class dept extends control
      * @access public
      * @return void
      */
-    public function __construct()
+    public function __construct($moduleName = '', $methodName = '')
     {
-        parent::__construct();
+        parent::__construct($moduleName, $methodName);
         $this->loadModel('company')->setMenu();
     }
 
