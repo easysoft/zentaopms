@@ -981,9 +981,10 @@ class projectModel extends model
      */
     public function buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, $type = 'projectStory')
     {
-        $branchPairs = array();
-        $productType = 'normal';
-        $productNum  = count($products);
+        $branchPairs  = array();
+        $productType  = 'normal';
+        $productNum   = count($products);
+        $productPairs = array(0 => '');
         foreach($products as $product)
         {
             $productPairs[$product->id] = $product->name;
