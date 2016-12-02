@@ -21,7 +21,7 @@ $lang->block->lblBlock     = 'Widget';
 $lang->block->lblNum       = 'Number';
 $lang->block->lblHtml      = 'HTML';
 $lang->block->dynamic      = 'Dynamic';
-$lang->block->lblFlowchart = 'Flowchart';
+$lang->block->lblFlowchart = 'Workflow';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Name';
