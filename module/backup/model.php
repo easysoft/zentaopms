@@ -40,7 +40,7 @@ class backupModel extends model
         $this->app->loadClass('pclzip', true);
         $zip = new pclzip($backupFile);
         $zip->create($this->app->getAppRoot() . 'www/data/', PCLZIP_OPT_REMOVE_PATH, $this->app->getAppRoot() . 'www/data/');
-        if($zip->errorCode != 0)
+        if($zip->errorCode() != 0)
         {
             $return->result = false;
             $return->error  = $zip->errorInfo();
