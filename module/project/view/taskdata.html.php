@@ -37,7 +37,7 @@
           <th class='w-35px {sorter:false}'>  <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->task->estimateAB);?></th>
           <th class='w-50px {sorter:false}'>  <?php common::printOrderLink('consumed',     $orderBy, $vars, $lang->task->consumedAB);?></th>
           <th class='w-40px nobr {sorter:false}'>  <?php common::printOrderLink('left',    $orderBy, $vars, $lang->task->leftAB);?></th>
-          <th class='w-50px'><?php echo $lang->task->progess;?></th>
+          <th class='w-50px' title='<?php echo $lang->task->progessTips?>'><?php echo $lang->task->progess;?></th>
 
           <?php if($project->type == 'sprint'): ?>
           <th class='w-100px {sorter:false}'><?php common::printOrderLink('story', $orderBy, $vars, $lang->task->story); ?></th>

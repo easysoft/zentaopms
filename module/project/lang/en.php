@@ -51,7 +51,6 @@ $lang->project->mine          = 'My Responsibility: ';
 $lang->project->other         = 'Other:';
 $lang->project->deleted       = 'Deleted';
 $lang->project->delayed       = 'Delayed';
-$lang->project->containDoing  = 'including doing project';
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';
@@ -168,7 +167,7 @@ $lang->project->aboveAllProject = "All the above {$lang->projectCommon}";
 $lang->project->selectProject   = "Select {$lang->projectCommon}";
 $lang->project->beginAndEnd     = 'Time Frame';
 $lang->project->lblStats        = 'Man-Hour Report';
-$lang->project->stats           = 'Available <strong>%s</strong> man-hour <br /> Estimated total <strong>%s</strong> man-hour<br /> Consumed <strong>%s</strong> man-hour<br /> Estimated remained <strong>%s</strong> man-hour';
+$lang->project->stats           = 'Available <strong>%s</strong> man-hour, Estimated total <strong>%s</strong> man-hour, Consumed <strong>%s</strong> man-hour, Estimated remained <strong>%s</strong> man-hour';
 $lang->project->taskSummary     = " <strong>%s</strong> Tasks on this page, Pending <strong>%s</strong> Doing <strong>%s</strong> Total estimated <strong>%s</strong> man-hour Consumed <strong>%s</strong> man-hour remained <strong>%s</strong> man-hour";
 $lang->project->memberHours     = "%s has <strong>%s</strong> man-hour available ";
 $lang->project->groupSummary    = "<strong>%s</strong> Tasks in this group Pending <strong>%s</strong> Doing <strong>%s</strong> Total estimated <strong>%s</strong> man-hour Consumed <strong>%s</strong> man-hour remained <strong>%s</strong> man-hour";
@@ -179,6 +178,7 @@ $lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=
 $lang->project->whyNoStories    = "No Story can be linked. Please check whether there is Story in {$lang->projectCommon} related {$lang->productCommon} and make sure it has been reviewed.";
 $lang->project->doneProjects    = 'Done';
 $lang->project->selectDept      = 'Select Department';
+$lang->project->selectDeptTitle = 'Select Department';
 $lang->project->copyTeam        = 'Duplicate Team';
 $lang->project->copyFromTeam    = "Duplicated from {$lang->projectCommon} Team: <strong>%s</strong>";
 $lang->project->noMatched       = "No $lang->projectCommon including '%s'can be found.";

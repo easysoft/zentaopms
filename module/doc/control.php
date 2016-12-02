@@ -25,7 +25,8 @@ class doc extends control
         $this->loadModel('action');
         $this->loadModel('product');
         $this->loadModel('project');
-        $this->from = $this->cookie->from ? $this->cookie->from : 'doc';
+        $this->from      = $this->cookie->from ? $this->cookie->from : 'doc';
+        $this->productID = $this->cookie->product ? $this->cookie->product : '0';
     }
 
     /**
@@ -36,8 +37,6 @@ class doc extends control
      */
     public function index()
     {
-        $products[] = $this->lang->doc->systemLibs['product'];
-
         $this->doc->setMenu();
 
         $products   = $this->doc->getLimitLibs('product', '9');
@@ -612,18 +611,13 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function allLibs($type, $product = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function allLibs($type, $product = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $libName = isset($this->lang->doc->systemLibs[$type]) ? $this->lang->doc->systemLibs[$type] : $this->lang->doc->custom;
-        $crumb   = html::a(inlink('allLibs', "type=$type&product=$product"), $this->lang->doc->libTypeList[$type]);
-        if($product)
-        {
-            $this->view->product = $this->product->getById($product);
-            $libName = $this->view->product->name;
-            $crumb   = html::a(inlink('allLibs',    "type=product"), $this->lang->productCommon) . $this->lang->arrow;
-            $crumb  .= html::a(inlink('objectLibs', "type=product&objectID=$product"), $this->view->product->name);
-            $crumb  .= $this->lang->arrow . html::a(inlink('allLibs', "type=$type&product=$product"), $this->lang->doclib->main[$type]);
-        }
+        setcookie('product', $product, $this->config->cookieLife, $this->config->webRoot);
+
+        $libName = isset($this->lang->doc->systemLibs[$type]) ? $this->lang->doc->systemLibs[$type] : $this->lang->doc->customAB;
+        $crumb   = html::a(inlink('allLibs', "type=$type&product=$product"), $libName);
+        if($product and $type == 'project') $crumb = $this->doc->getProductCrumb($product);
 
         $this->view->title      = $libName;
         $this->view->position[] = $libName;
@@ -681,8 +675,10 @@ class doc extends control
         }
         else
         {
-            $crumb  = html::a(inlink('allLibs', "type=$type"), $type == 'product' ? $this->lang->productCommon : $this->lang->projectCommon) . $this->lang->arrow;
+            $crumb  = html::a(inlink('allLibs', "type=$type"), $type == 'product' ? $this->lang->productCommon : $this->lang->projectCommon) . $this->lang->doc->separator;
+            if($this->productID and $type == 'project') $crumb = $this->doc->getProductCrumb($this->productID, $objectID);
             $crumb .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID"), $object->name);
+            $crumb .= $this->lang->doc->separator . ' ' . $this->lang->doclib->files;
             $this->doc->setMenu($libID = 0, $moduleID = 0, $crumb);
         }
 
@@ -732,7 +728,8 @@ class doc extends control
         }
         else
         {
-            $crumb  = html::a(inlink('allLibs', "type=$type"), $type == 'product' ? $this->lang->productCommon : $this->lang->projectCommon) . $this->lang->arrow;
+            $crumb  = html::a(inlink('allLibs', "type=$type"), $type == 'product' ? $this->lang->productCommon : $this->lang->projectCommon) . $this->lang->doc->separator;
+            if($this->productID and $type == 'project') $crumb = $this->doc->getProductCrumb($this->productID, $objectID);
             $crumb .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID"), $object->name);
             $this->doc->setMenu($libID = 0, $moduleID = 0, $crumb);
         }

@@ -159,7 +159,7 @@ $lang->user->contacts->or            = ' or ';
 $lang->user->resetFail       = "Reset failed. Please check the account";
 $lang->user->resetSuccess    = "Password reset! Please use your new password to login.";
 $lang->user->noticeResetFile = "<h5>If you are not Administrator, please contact Administrator to reset your password.</h5>
-    <h5>If you are, please login into your Zentao host and create the %s file.</h5>
+    <h5>If you are, please login into your Zentao host and create the <span>%s</span> file.</h5>
     <p>Note:</p>
     <ol>
     <li>Keep the ok.txt empty.</li>

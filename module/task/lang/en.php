@@ -34,6 +34,7 @@ $lang->task->fromBug            = 'From Bug';
 $lang->task->case               = 'Related Case';
 $lang->task->confirmStoryChange = "Confirm Story Change";
 $lang->task->progess            = 'Progess';
+$lang->task->progessTips        = 'Consumed/(Consumed+Left)';
 
 $lang->task->common            = 'Task';
 $lang->task->id                = 'ID';
@@ -91,7 +92,6 @@ $lang->task->deleteEstimate    = 'Delete Man-Hour';
 $lang->task->colorTag          = 'Color Tag';
 $lang->task->files             = 'Files';
 $lang->task->hasConsumed       = 'Total Consumed';
-$lang->task->thisConsume       = 'This Consumed';
 
 $lang->task->ditto         = 'Ditto';
 $lang->task->dittoNotice   = "This Task does not belong to the Project as the previous one does!";

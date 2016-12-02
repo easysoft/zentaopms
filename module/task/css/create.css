@@ -6,6 +6,9 @@
 
 .chosen-container {max-width: 980px}
 
-.minw-80px {min-width: 120px;}
-.minw-60px {min-width: 50px;}
+#priRowCol, #estRowCol {width: 110px;}
+.col-table .input-group {width: 100%}
 
+#taskPlanCol, #mailCol {width: 50%}
+#planAndMailCell.has-mail-col #taskPlanCol {padding-right: 5px;}
+#planAndMailCell.has-mail-col #taskPlanCol + #mailCol {padding-left: 5px;}

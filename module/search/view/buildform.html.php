@@ -153,7 +153,8 @@ function setField(obj, fieldNO, moduleparams)
         var maxNO      = 2 * groupItems;
         var nextNO     = fieldNO > groupItems ? fieldNO - groupItems + 1 : fieldNO + groupItems;
         var nextValue  = $(obj).closest('form').find('#value' + nextNO).val();
-        if(nextNO <= maxNO && fieldNO < maxNO && (nextValue == '' || nextValue == 0))
+        var operator   = $(obj).closest('form').find("#operator" + fieldNO).val();
+        if(nextNO <= maxNO && fieldNO < maxNO && (nextValue == '' || nextValue == 0) && operator == ">=")
         {
             $(obj).closest('form').find('#field' + nextNO).val($(obj).closest('form').find('#field' + fieldNO).val());
             $(obj).closest('form').find('#operator' + nextNO).val('<=');
@@ -270,6 +271,32 @@ function deleteQuery()
         if(data == 'success') $('#queryBox').load(createLink('search', 'ajaxGetQuery', 'module=' + module));
     });
 }
+
+$(function()
+{
+    $('#searchform select[id^="operator"]').change(function()
+    {
+        var value = $(this).val();
+        if(value == '>=' && $(this).closest('tr').find('input[id^="value"]').hasClass('date'))
+        {
+            fieldNO = parseInt($(this).attr('id').replace('operator', ''));
+            var $form      = $(this).closest('form');
+            var groupItems = <?php echo $config->search->groupItems?>;
+            var maxNO      = 2 * groupItems;
+            var nextNO     = fieldNO > groupItems ? fieldNO - groupItems + 1 : fieldNO + groupItems;
+            var nextValue  = $form.find('#value' + nextNO).val();
+            if(nextNO <= maxNO && fieldNO < maxNO && (nextValue == '' || nextValue == 0))
+            {
+                $form.find('#field' + nextNO).val($form.find('#field' + fieldNO).val());
+                $form.find('#operator' + nextNO).val('<=');
+                $form.find('#valueBox' + nextNO).html($form.find('#box' + fieldName).children().clone());
+                $form.find('#valueBox' + nextNO).children().attr({name : 'value' + nextNO, id : 'value' + nextNO});
+                setDateField($form.find("#value" + nextNO), nextNO);
+                $form.find("#value" + nextNO).addClass('date');
+            }
+        }
+    })
+})
 </script>
 
 <form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='searchform' class='form-condensed'>

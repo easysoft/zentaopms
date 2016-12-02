@@ -19,9 +19,9 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function __construct()
+    public function __construct($moduleName = '', $methodName = '')
     {
-        parent::__construct();
+        parent::__construct($moduleName, $methodName);
         $this->loadModel('product');
         $this->view->products = $this->products = $this->product->getPairs('nocode');
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testtask")));

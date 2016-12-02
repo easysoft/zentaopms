@@ -21,7 +21,7 @@ $config->company->dynamic->search['params']['actor']      = array('operator' => 
 $config->company->dynamic->search['params']['objectID']   = array('operator' => '=',  'control' => 'input',  'values' => '');
 $config->company->dynamic->search['params']['project']    = array('operator' => '=',  'control' => 'select', 'values' => '');
 $config->company->dynamic->search['params']['objectType'] = array('operator' => '=',  'control' => 'select', 'values' => $lang->action->search->objectTypeList);
-$config->company->dynamic->search['params']['date']       = array('operator' => '>=', 'control' => 'input',  'values' => '', 'class' => 'date');
+$config->company->dynamic->search['params']['date']       = array('operator' => '=',  'control' => 'input',  'values' => '', 'class' => 'date');
 $config->company->dynamic->search['params']['action']     = array('operator' => '=',  'control' => 'select', 'values' => $lang->action->search->label);
 
 $config->company->browse = new stdClass();
@@ -50,7 +50,7 @@ $config->company->browse->search['params']['dept']     = array('operator' => 'be
 $config->company->browse->search['params']['account']  = array('operator' => 'include',  'control' => 'input',  'values' => '');
 $config->company->browse->search['params']['role']     = array('operator' => '=',        'control' => 'select', 'values' => $lang->user->roleList);
 $config->company->browse->search['params']['phone']    = array('operator' => 'include',  'control' => 'input',  'values' => '');
-$config->company->browse->search['params']['join']     = array('operator' => '>=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->company->browse->search['params']['join']     = array('operator' => '=',        'control' => 'input',  'values' => '', 'class' => 'date');
 $config->company->browse->search['params']['id']       = array('operator' => '=',        'control' => 'input',  'values' => '');
 $config->company->browse->search['params']['commiter'] = array('operator' => 'include',  'control' => 'select', 'values' => '');
 $config->company->browse->search['params']['gender']   = array('operator' => '=',        'control' => 'select', 'values' => $lang->user->genderList);

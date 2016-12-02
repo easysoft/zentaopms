@@ -71,8 +71,8 @@
                 <tr>
                   <th class='w-id {sorter:false}' >   <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
                   <th class='w-pri {sorter:false}'>   <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-                  <th class='{sorter:false}'>         <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
                   <th class='w-80px {sorter:false}'>  <?php common::printOrderLink('module',     $orderBy, $vars, $lang->story->module);?></th>
+                  <th class='{sorter:false}'>         <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
                   <th class='w-user {sorter:false}'>  <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
                   <th class='w-user {sorter:false}'>  <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
                   <th class='w-60px {sorter:false}'>  <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
@@ -100,8 +100,8 @@
                       <?php echo html::a($viewLink, sprintf("%03d", $story->id));?>
                     </td>
                     <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+                    <td class='text-left' title='<?php echo $modules[$story->module]?>'><?php echo $modules[$story->module];?></td>
                     <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($viewLink , $story->title);?></td>
-                    <td class='text-left'><?php echo $modules[$story->module];?></td>
                     <td><?php echo zget($users, $story->openedBy);?></td>
                     <td><?php echo zget($users, $story->assignedTo);?></td>
                     <td><?php echo $story->estimate;?></td>
@@ -208,7 +208,7 @@
                               foreach($modules as $moduleId => $module)
                               {
                                   $actionLink = $this->createLink('story', 'batchChangeModule', "moduleID=$moduleId");
-                                  echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin', this)\"") . "</li>";
+                                  echo "<li class='option' data-key='$moduleId'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin', this)\"") . "</li>";
                               }
                               echo '</ul>';
                               if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";

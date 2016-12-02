@@ -72,11 +72,9 @@
             $hiddenPri = strpos(",$showFields,", ',pri,') === false;
             $hiddenEst = strpos(",$showFields,", ',estimate,') === false;
             ?>
-            <?php if(!$hiddenPri or !$hiddenEst):?>
-            <?php $widthClass = ($hiddenPri or $hiddenEst) ? 'w-120px' : 'w-250px';?>
-            <div class='col-table <?php echo $widthClass?>'>
-              <div class="input-group">
-                <?php if(!$hiddenPri):?>
+            <?php if(!$hiddenPri):?>
+            <div class='col-table' id='priRowCol'>
+              <div class='input-group'>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->task->pri;?></span>
                 <?php
                 $hasCustomPri = false;
@@ -90,7 +88,7 @@
                 }
                 ?>
                 <?php if($hasCustomPri):?>
-                <?php echo html::select('pri', $lang->task->priList, '', "class='form-control minw-80px'");?> 
+                <?php echo html::select('pri', $lang->task->priList, '', "class='form-control'");?> 
                 <?php else: ?>
                 <div class='input-group-btn dropdown-pris'>
                   <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>
@@ -100,14 +98,18 @@
                   <?php echo html::select('pri', $lang->task->priList, '', "class='hide'");?>
                 </div>
                 <?php endif; ?>
-                <?php endif?>
-                <?php if(!$hiddenEst):?>
-                <span class='input-group-addon fix-border br-0'><?php echo $lang->task->estimateAB;?></span>
-                <?php echo html::input('estimate', '', "class='form-control minw-60px' placeholder='{$lang->task->hour}'");?>
-                <?php endif;?>
               </div>
             </div>
-            <?php endif;?>
+            <?php endif; ?>
+
+            <?php if(!$hiddenEst):?>
+            <div class='col-table' id='estRowCol'>
+              <div class='input-group'>
+                <span class='input-group-addon fix-border br-0'><?php echo $lang->task->estimateAB;?></span>
+                <?php echo html::input('estimate', '', "class='form-control' placeholder='{$lang->task->hour}'");?>
+              </div>
+            </div>
+            <?php endif; ?>
           </div>
         </td>
       </tr>
@@ -123,33 +125,36 @@
       <?php if(!$hiddenEstStarted or !$hiddenDeadline or !$hiddenMailto):?>
       <tr>
         <th><?php echo ($hiddenEstStarted and $hiddenDeadline) ? $lang->task->mailto : $lang->task->datePlan;?></th>
-        <?php if(!$hiddenEstStarted or !$hiddenDeadline):?>
-        <td colspan='2'>
-          <div class='input-group' id='dataPlanGroup'>
-            <?php if(!$hiddenEstStarted):?>
-            <?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date' placeholder='{$lang->task->estStarted}'");?>
-            <?php endif;?>
-            <?php if(!$hiddenEstStarted and !$hiddenDeadline):?>
-            <span class='input-group-addon fix-border'>~</span>
-            <?php endif;?>
-            <?php if(!$hiddenDeadline):?>
-            <?php echo html::input('deadline', $task->deadline, "class='form-control form-date' placeholder='{$lang->task->deadline}'");?>
-            <?php endif;?>
-          </div>
+        <td id='planAndMailCell' colspan='5' class='<?php if(!$hiddenMailto) echo 'has-mail-col' ?>'>
+            <div class='row-table'>
+              <?php if(!$hiddenEstStarted or !$hiddenDeadline):?>
+              <div class='col-table' id='taskPlanCol'>
+                <div class='input-group' id='dataPlanGroup'>
+                  <?php if(!$hiddenEstStarted):?>
+                  <?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date' placeholder='{$lang->task->estStarted}'");?>
+                  <?php endif;?>
+                  <?php if(!$hiddenEstStarted and !$hiddenDeadline):?>
+                  <span class='input-group-addon fix-border'>~</span>
+                  <?php endif;?>
+                  <?php if(!$hiddenDeadline):?>
+                  <?php echo html::input('deadline', $task->deadline, "class='form-control form-date' placeholder='{$lang->task->deadline}'");?>
+                  <?php endif;?>
+                </div>
+              </div>
+              <?php endif;?>
+              <?php if(!$hiddenMailto):?>
+              <div class='col-table' id='mailCol'>
+                <div id='mailtoGroup' class='input-group'>
+                  <?php if(!$hiddenEstStarted or !$hiddenDeadline):?>
+                  <span class='input-group-addon'><?php echo $lang->task->mailto;?></span>
+                  <?php endif;?>
+                  <?php echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ', '', $task->mailto), "multiple class='form-control'");?>
+                  <?php echo $this->fetch('my', 'buildContactLists');?>
+                </div>
+              </div>
+              <?php endif;?>
+            </div>
         </td>
-        <?php endif;?>
-        <?php if(!$hiddenMailto):?>
-        <?php $colspan = ($hiddenEstStarted and $hiddenDeadline) ? '5' : '4';?>
-        <td colspan='<?php echo $colspan?>'>
-          <div id='mailtoGroup' class='input-group'>
-            <?php if(!$hiddenEstStarted or !$hiddenDeadline):?>
-            <span class='input-group-addon'><?php echo $lang->task->mailto;?></span>
-            <?php endif;?>
-            <?php echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ', '', $task->mailto), "multiple class='form-control'");?>
-            <?php echo $this->fetch('my', 'buildContactLists');?>
-          </div>
-        </td>
-        <?php endif;?>
       </tr>
       <?php endif;?>
       <tr>

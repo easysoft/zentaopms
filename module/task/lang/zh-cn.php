@@ -34,6 +34,7 @@ $lang->task->fromBug            = '来源Bug';
 $lang->task->case               = '相关用例';
 $lang->task->confirmStoryChange = "确认需求变动";
 $lang->task->progess            = '进度';
+$lang->task->progessTips        = '已消耗/(已消耗+剩余)';
 
 $lang->task->common            = '任务';
 $lang->task->id                = '编号';
@@ -91,7 +92,6 @@ $lang->task->deleteEstimate    = '删除工时';
 $lang->task->colorTag          = '颜色标签';
 $lang->task->files             = '附件';
 $lang->task->hasConsumed       = '已消耗';
-$lang->task->thisConsume       = '本次消耗';
 
 $lang->task->ditto         = '同上';
 $lang->task->dittoNotice   = "该任务与上一任务不属于同一项目！";

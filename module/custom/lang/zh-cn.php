@@ -70,7 +70,7 @@ $lang->custom->confirmRestore = '是否要恢复默认配置？';
 
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole    = '键的长度必须小于20个字符！';
-$lang->custom->notice->canNotAdd   = '该项值已经在禅道中固定，不能添加新值';
+$lang->custom->notice->canNotAdd   = '该项参与运算，不提供自定义添加功能';
 $lang->custom->notice->forceReview = '指定人提交的需求必须评审。';
 $lang->custom->notice->longlife    = 'Bug列表页面的久未处理标签中，列出设置天数之前未处理的Bug。';
 $lang->custom->notice->indexPage['product'] = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
@@ -83,7 +83,7 @@ $lang->custom->reviewList[1] = '开启';
 $lang->custom->reviewList[0] = '关闭';
 
 $lang->custom->workingHours   = '每天可用工时';
-$lang->custom->weekend        = '周休';
+$lang->custom->weekend        = '休息日';
 $lang->custom->weekendList[2] = '双休';
 $lang->custom->weekendList[1] = '单休';
 

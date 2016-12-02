@@ -70,7 +70,6 @@
           if($storyCount)
           {
               echo html::selectButton() . html::submitButton();
-              echo "<div class='text'>" . $lang->project->productStories . '</div>';
           }
           else
           {

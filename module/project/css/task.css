@@ -21,7 +21,4 @@
 
 .pl-5px{padding-left:5px;}
 
-#taskTree{position:fixed;margin-left:20px;}
-.outer.hide-side #taskTree{margin-left:0px;}
-
 tbody > tr > td > .btn-icon {margin-right: 2px}

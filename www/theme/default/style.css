@@ -351,7 +351,7 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 .panel .table-bordered > thead > tr:first-child th,.panel .table-bordered > tbody > tr:first-child th,.panel .table-bordered > tr:first-child th {border-top: 0;}
 .panel .table-bordered tr > td:first-child,.panel .table-bordered tr > th:first-child {border-left: 0;}
 .panel .table-bordered tr > td:last-child,.panel .table-bordered tr > th:last-child {border-right: 0;}
-.panel .table-bordered tfoot > tr:last-child > td {border-bottom: 0}
+.panel .table tr:last-child > td {border-bottom: 0 !important;}
 
 /* small panel */
 .panel-sm .panel-heading {padding: 6px 10px}
@@ -766,7 +766,8 @@ body {color:#141414; padding-bottom: 40px;}
 #helpContent .load-error {padding: 20px; display: none}
 #helpContent.show-error .load-error {display: block}
 
-.m-tutorial-wizard #featurebar .nav{display:none;}
+.m-tutorial-wizard #featurebar .nav li{display:none;}
+.m-tutorial-wizard #featurebar .nav li:nth-of-type(1),.m-tutorial-wizard #featurebar .nav li:nth-of-type(2),.m-tutorial-wizard #featurebar .nav li:nth-of-type(3),.m-tutorial-wizard #featurebar .nav li:nth-of-type(4){display:block;}
 .hl-tutorial {position: relative!important; z-index: 1010!important; box-shadow: 0 0 0 0px #000!important; transition: box-shadow 1s!important;}
 .hl-tutorial.hl-in {box-shadow:  0 0 20px 0 #FFF0D5, 0 0 0 2px #F1A325, 0 0 0 2000px rgba(0,0,0,.2)!important}
 .hl-tutorial.hl-in:hover {box-shadow:  0 0 30px 0 #FFF0D5, 0 0 0 5px #F1A325, 0 0 0 2000px rgba(0,0,0,.3)!important}
@@ -781,3 +782,4 @@ body {color:#141414; padding-bottom: 40px;}
 .icon-plus-border:before{content: '\e663'}
 .icon-review:before{content: '\e9b8'}
 .icon-checked:before{content: '\e642'}
+.icon-file-text:before{content:'\e6d4'}

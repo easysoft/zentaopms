@@ -81,10 +81,10 @@
       <tr>
         <th><?php echo $lang->project->type;?></th>
         <td>
-          <?php echo html::select('type', $lang->project->typeList, '', "class='form-control'");?>
+          <?php echo html::select('type', $lang->project->typeList, '', "class='form-control' onchange='showTypeTips()'");?>
         </td>
         <td>
-          <div class='help-block'><?php echo $lang->project->typeDesc;?></div>
+          <div class='type-tips'><?php echo $lang->project->typeDesc;?></div>
         </td>
       </tr>
       <tr>
