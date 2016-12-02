@@ -82,11 +82,11 @@
       <div class='btn-group' id='createActionMenu'>
         <?php
         $initModule = isset($moduleID) ? (int)$moduleID : 0;
-        $misc = common::hasPriv('testcase', 'create') ? "class='btn'" : "class='btn disabled'";
+        $misc = common::hasPriv('testcase', 'create') ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
         $link = common::hasPriv('testcase', 'create') ?  $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule") : '#';
         echo html::a($link, "<i class='icon-plus'></i>" . $lang->testcase->create, '', $misc);
         ?>
-        <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'>
+        <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
           <span class='caret'></span>
         </button>
         <ul class='dropdown-menu'>

@@ -812,7 +812,7 @@ class taskModel extends model
         $task->files = $this->loadModel('file')->getByObject('task', $taskID);
 
         /* Get related test cases. */
-        if($task->story)$this->cases = $this->dao->select('id, title')->from(TABLE_CASE)->where('story')->eq($task->story)->andWhere('storyVersion')->eq($task->storyVersion)->fetchPairs();
+        if($task->story) $task->cases = $this->dao->select('id, title')->from(TABLE_CASE)->where('story')->eq($task->story)->andWhere('storyVersion')->eq($task->storyVersion)->fetchPairs();
 
         return $this->processTask($task);
     }
@@ -1203,7 +1203,7 @@ class taskModel extends model
         }
         else
         {
-            $task->progess = round($task->consumed / ($task->consumed + $task->left), 3) * 100;
+            $task->progess = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
         }
 
         return $task;
