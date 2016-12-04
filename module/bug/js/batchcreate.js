@@ -80,6 +80,7 @@ function setOpenedBuilds(link, index)
  */
 function loadProjectBuilds(productID, projectID, index)
 {
+    branch = $('#branches' + index).val();
     if(projectID)
     {
         link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + "&varName=openedBuilds&build=&branch=" + branch + "&index=" + index);

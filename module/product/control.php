@@ -513,7 +513,7 @@ class product extends control
         {
             $projectName = "projects[$number]";
             $projects    = empty($projects) ? array('' => '') : $projects;
-            die(html::select($projectName, $projects, '', "class='form-control' onchange='loadProjectRelated(this.value, $productID, $number)'"));
+            die(html::select($projectName, $projects, '', "class='form-control' onchange='loadProjectBuilds($productID, this.value, $number)'"));
         }
     }
 
