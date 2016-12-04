@@ -324,6 +324,25 @@ class tree extends control
     }
 
     /**
+     * AJAX: get modules.
+     *
+     * @param  int    $productID
+     * @param  string $viewType
+     * @param  int    $branchID
+     * @param  int    $number
+     * @access public
+     * @return string the html select string.
+     */
+    public function ajaxGetModules($productID, $viewType = 'story', $branchID, $number)
+    {
+        $modules = $this->tree->getOptionMenu($productID, $viewType, $startModuleID = 0, $branchID);
+
+        $moduleName = $viewType == 'bug' ? "modules[$number]" : "module[$number]";
+        $modules    = empty($modules) ? array('' => '') : $modules;
+        die(html::select($moduleName, $modules, '', 'class=form-control'));
+    }
+
+    /**
      * AJAX: get a module's son modules.
      * 
      * @param  int    $moduleID 

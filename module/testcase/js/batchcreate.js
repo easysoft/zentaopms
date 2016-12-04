@@ -10,6 +10,7 @@ $(document).ready(function()
         {
             index  = id.substring(5);
             module = $('#module' + index).val();
+            branch = $('#branch' + index).val();
             if(module == 'ditto')
             {
                 for(var i = index - 1; i >=0; i--)
@@ -57,3 +58,24 @@ $(document).ready(function()
         }
     });
 });
+
+/**
+ * Set modules.
+ *
+ * @param  int     $branchID
+ * @param  int     $productID
+ * @param  int     $num
+ * @access public
+ * @return void
+ */
+function setModules(branchID, productID, num)
+{
+    moduleLink = createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=story&branch=' + branchID + '&num=' + num);
+    $.get(moduleLink, function(modules)
+    {
+        if(!modules) modules = '<select id="module' + num + '" name="module[' + num + ']" class="form-control"></select>';
+        $('#module' + num).replaceWith(modules);
+        $("#module" + num + "_chosen").remove();
+        $("#module" + num).chosen(defaultChosenOptions);
+    });
+}
