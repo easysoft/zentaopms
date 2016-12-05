@@ -73,20 +73,20 @@
             $hiddenEst = strpos(",$showFields,", ',estimate,') === false;
             ?>
             <?php if(!$hiddenPri):?>
-            <div class='col-table' id='priRowCol'>
+            <?php
+            $hasCustomPri = false;
+            foreach($lang->task->priList as $priKey => $priValue)
+            {
+                if($priKey != $priValue)
+                {
+                    $hasCustomPri = true;
+                    break;
+                }
+            }
+            ?>
+            <div class='col-table<?php if($hasCustomPri) echo ' has-custom-pri';?>' id='priRowCol'>
               <div class='input-group'>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->task->pri;?></span>
-                <?php
-                $hasCustomPri = false;
-                foreach($lang->task->priList as $priKey => $priValue)
-                {
-                    if($priKey != $priValue)
-                    {
-                        $hasCustomPri = true;
-                        break;
-                    }
-                }
-                ?>
                 <?php if($hasCustomPri):?>
                 <?php echo html::select('pri', $lang->task->priList, '', "class='form-control'");?> 
                 <?php else: ?>
