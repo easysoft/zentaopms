@@ -157,13 +157,13 @@ $lang->install->ranzhi->desc = <<<EOD
   <li>Forum/Blog and Dynamic/News</li>
 </ul>
 EOD;
-$lang->install->yidou = new stdclass();
-$lang->install->yidou->name = '亿斗进销存Management运营系统';
-$lang->install->yidou->desc = <<<EOD
+$lang->install->zdoo = new stdclass();
+$lang->install->zdoo->name = 'Integrated Cloud Platform';
+$lang->install->zdoo->desc = <<<EOD
 <ul>
-  <li>销售订单处理，信息及时反馈</li>
-  <li>采销业务状况，时时查询跟进</li>
-  <li>仓储配货送货，轻松便利快捷</li>
-  <li>财务收款付款，简单实用准确</li>
+  <li>Safe, Stable and Effective</li>
+  <li>Data isolation by docker</li>
+  <li>Code level customization</li>
+  <li>An integrated and collaborative platform</li>
 </ul>
 EOD;
