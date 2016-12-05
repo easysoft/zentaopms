@@ -19,15 +19,17 @@
     <strong><?php echo $lang->project->manageMembers;?></strong>
     <i class='icon icon-angle-right text-muted'></i>
   </div>
-  <div id='importTeams'>
+  <div id='importTeams' class='clearfix'>
     <div class='input-group'>
       <span class='input-group-addon'><?php echo $lang->project->selectDept?></span>
       <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->project->selectDeptTitle}'");?>
-      <?php if(count($teams2Import) != 1):?>
-      <span class='input-group-addon fix-border'><?php echo $lang->project->copyTeam?></span>
-      <?php echo html::select('project', $teams2Import, $team2Import, "class='form-control chosen' onchange='choseTeam2Copy(this)' data-placeholder='{$lang->project->copyTeamTitle}'");?>
-      <?php endif;?>
     </div>
+    <?php if(count($teams2Import) != 1):?>
+    <div class='input-group'>
+      <span class='input-group-addon'><?php echo $lang->project->copyTeam?></span>
+      <?php echo html::select('project', $teams2Import, $team2Import, "class='form-control chosen' onchange='choseTeam2Copy(this)' data-placeholder='{$lang->project->copyTeamTitle}'");?>
+    </div>
+    <?php endif;?>
   </div>
 </div>
 <div class='main'>
