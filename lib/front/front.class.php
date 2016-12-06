@@ -113,17 +113,45 @@ class html extends baseHTML
         $string = "<select name='$name' {$id} $attrib>\n";
 
         /* The options. */
-        $pinyin = $app->loadClass('pinyin');
+        static $pinyin = null;
+        if(empty($pinyin))
+        {
+            $app->loadClass('pinyin', false);
+            helper::import(dirname(__DIR__) . '/pinyin/memoryfiledictloader.php');
+            $pinyin = new pinyin(new MemoryFileDictLoader(dirname(__DIR__) . '/pinyin/data/'));
+        }
+
+        $joinOptions = '';
+        $sign        = ' aNd ';
+        foreach($options as $value)
+        {
+            if(!isset($dataKeys[$value])) $joinOptions .= $value . $sign;
+        }
+        $joinOptions = rtrim($joinOptions, $sign);
+        if($joinOptions)
+        {
+            $valuesPinyin = $pinyin->convert($joinOptions);
+
+            $values = explode($sign, $joinOptions);
+            $sign   = trim($sign);
+            foreach($values as $value)
+            {
+                $valuePinyin = array();
+                $valueAbbr   = '';
+                while($wordPinyin = array_shift($valuesPinyin))
+                {
+                    if($wordPinyin == $sign or empty($wordPinyin)) break;
+                    $valuePinyin[] = $wordPinyin;
+                    $valueAbbr    .= $wordPinyin[0];
+                }
+                $dataKeys[$value] = empty($valuePinyin) ? '' : join($valuePinyin) . ' ' . $valueAbbr;
+            }
+        }
+
         if(is_array($selectedItems)) $selectedItems = implode(',', $selectedItems);
         $selectedItems = ",$selectedItems,";
         foreach($options as $key => $value)
         {
-            if(!isset($dataKeys[$value]))
-            {
-                $dataKeys[$value] = '';
-                $permalink = $pinyin->permalink($value, '');
-                if($value != $permalink) $dataKeys[$value] = $permalink . ' ' . $pinyin->abbr($value, '');
-            }
             $key      = str_replace('item', '', $key);
             $selected = strpos($selectedItems, ",$key,") !== false ? " selected='selected'" : '';
             $string  .= "<option value='$key'$selected data-keys='{$dataKeys[$value]}'>$value</option>\n";
