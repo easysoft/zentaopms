@@ -60,6 +60,7 @@ $lang->action->objectTypes['doc']         = '文檔';
 $lang->action->objectTypes['doclib']      = '文檔庫';
 $lang->action->objectTypes['todo']        = '待辦';
 $lang->action->objectTypes['branch']      = '分支';
+$lang->action->objectTypes['module']      = '模組';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();

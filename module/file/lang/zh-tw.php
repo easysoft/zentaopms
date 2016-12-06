@@ -13,6 +13,7 @@ $lang->file = new stdclass();
 $lang->file->common        = '附件';
 $lang->file->uploadImages  = '多圖上傳';
 $lang->file->download      = '下載附件';
+$lang->file->uploadDate    = '上傳時間：';
 $lang->file->edit          = '重命名';
 $lang->file->inputFileName = '請輸入附件名稱';
 $lang->file->delete        = '刪除附件';

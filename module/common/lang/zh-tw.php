@@ -74,6 +74,7 @@ $lang->tutorialConfirm = '檢測到你尚未退出新手教程模式，是否現
 
 $lang->preShortcutKey  = '[快捷鍵:←]';
 $lang->nextShortcutKey = '[快捷鍵:→]';
+$lang->backShortcutKey = '[快捷鍵:Alt+↑]';
 
 $lang->select        = '選擇';
 $lang->selectAll     = '全選';
@@ -274,6 +275,9 @@ $lang->report->menu->prj     = array('link' => $lang->projectCommon . '|report|p
 $lang->report->menu->test    = array('link' => '測試|report|bugcreate', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => '組織|report|workload');
 
+$lang->report->notice = new stdclass();
+$lang->report->notice->help = '註：統計報表的數據，來源於列表頁面的檢索結果，生成統計報表前請先在列表頁面進行檢索。';
+
 /* 組織結構視圖菜單設置。*/
 $lang->company = new stdclass();
 $lang->company->menu = new stdclass();
@@ -300,9 +304,8 @@ $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => '首頁|admin|index');
 $lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
-$lang->admin->menu->custom    = array('link' => '自定義|custom|index', 'subModule' => 'custom');
+$lang->admin->menu->custom    = array('link' => '自定義|custom|set', 'subModule' => 'custom');
 $lang->admin->menu->mail      = array('link' => '發信|mail|index', 'subModule' => 'mail');
-$lang->admin->menu->convert   = array('link' => '導入|convert|index', 'subModule' => 'convert');
 $lang->admin->menu->backup    = array('link' => '備份|backup|index', 'subModule' => 'backup');
 $lang->admin->menu->safe      = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
 $lang->admin->menu->cron      = array('link' => '計劃任務|cron|index', 'subModule' => 'cron');
@@ -406,6 +409,7 @@ $lang->noResultsMatch     = "沒有匹配結果";
 $lang->searchMore         = "搜索此關鍵字的更多結果：";
 $lang->chooseUsersToMail  = "選擇要發信通知的用戶...";
 $lang->browserNotice      = '你目前使用的瀏覽器可能無法得到最佳瀏覽效果，建議使用Chrome、火狐、IE9+、Opera、Safari瀏覽器。';
+$lang->noticePasteImg     = "可以在編輯器直接貼圖。";
 
 /* 時間格式設置。*/
 define('DT_DATETIME1',  'Y-m-d H:i:s');
@@ -460,7 +464,7 @@ $lang->icons['test']      = 'check';
 $lang->icons['testtask']  = 'check';
 $lang->icons['group']     = 'group';
 $lang->icons['team']      = 'group';
-$lang->icons['company']   = 'building';
+$lang->icons['company']   = 'sitemap';
 $lang->icons['user']      = 'user';
 $lang->icons['dept']      = 'sitemap';
 $lang->icons['tree']      = 'sitemap';
@@ -497,8 +501,8 @@ $lang->icons['assignTo']       = 'hand-right';
 $lang->icons['change']         = 'random';
 $lang->icons['link']           = 'link';
 $lang->icons['close']          = 'off';
-$lang->icons['activate']       = 'off';
-$lang->icons['review']         = 'search';
+$lang->icons['activate']       = 'magic';
+$lang->icons['review']         = 'review';
 $lang->icons['confirm']        = 'search';
 $lang->icons['confirmBug']     = 'search';
 $lang->icons['putoff']         = 'calendar';

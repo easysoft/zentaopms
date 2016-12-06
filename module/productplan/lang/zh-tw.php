@@ -56,3 +56,7 @@ $lang->productplan->errorNoTitle = 'ID %s 標題不能為空';
 $lang->productplan->errorNoBegin = 'ID %s 開始時間不能為空';
 $lang->productplan->errorNoEnd   = 'ID %s 結束時間不能為空';
 $lang->productplan->beginGeEnd   = 'ID %s 開始時間不能大於結束時間';
+
+$lang->productplan->featureBar['browse']['unexpired'] = '未過期';
+$lang->productplan->featureBar['browse']['all']       = '全部';
+$lang->productplan->featureBar['browse']['overdue']   = '已過期';

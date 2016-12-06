@@ -155,10 +155,12 @@ $lang->product->methodOrder[70] = 'all';
 /* Branch. */
 $lang->resource->branch = new stdclass();
 $lang->resource->branch->manage = 'manage';
+$lang->resource->branch->sort   = 'sort';
 $lang->resource->branch->delete = 'delete';
 
-$lang->branch->methodOrder[0] = 'manage';
-$lang->branch->methodOrder[5] = 'delete';
+$lang->branch->methodOrder[0]  = 'manage';
+$lang->branch->methodOrder[5]  = 'sort';
+$lang->branch->methodOrder[10] = 'delete';
 
 /* Story. */
 $lang->resource->story = new stdclass();
@@ -178,6 +180,8 @@ $lang->resource->story->close       = 'lblClose';
 $lang->resource->story->batchClose  = 'batchClose';
 $lang->resource->story->activate    = 'lblActivate';
 $lang->resource->story->tasks       = 'tasks';
+$lang->resource->story->bugs        = 'bugs';
+$lang->resource->story->cases       = 'cases';
 $lang->resource->story->zeroCase    = 'zeroCase';
 $lang->resource->story->report      = 'reportChart';
 $lang->resource->story->batchChangePlan   = 'batchChangePlan';
@@ -202,12 +206,14 @@ $lang->story->methodOrder[65]  = 'batchChangeStage';
 $lang->story->methodOrder[70]  = 'batchAssignTo';
 $lang->story->methodOrder[75]  = 'activate';
 $lang->story->methodOrder[80]  = 'tasks';
-$lang->story->methodOrder[85]  = 'zeroCase';
-$lang->story->methodOrder[90]  = 'report';
-$lang->story->methodOrder[95]  = 'linkStory';
-$lang->story->methodOrder[100] = 'unlinkStory';
-$lang->story->methodOrder[105] = 'batchChangeBranch';
-$lang->story->methodOrder[110] = 'batchChangeModule';
+$lang->story->methodOrder[85]  = 'bugs';
+$lang->story->methodOrder[90]  = 'cases';
+$lang->story->methodOrder[95]  = 'zeroCase';
+$lang->story->methodOrder[100] = 'report';
+$lang->story->methodOrder[105] = 'linkStory';
+$lang->story->methodOrder[110] = 'unlinkStory';
+$lang->story->methodOrder[115] = 'batchChangeBranch';
+$lang->story->methodOrder[120] = 'batchChangeModule';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
@@ -1180,3 +1186,7 @@ $lang->changelog['8.2.beta'][] = 'project-tree';
 $lang->changelog['8.3'][] = 'doc-allLibs';
 $lang->changelog['8.3'][] = 'doc-objectLibs';
 $lang->changelog['8.3'][] = 'doc-showFiles';
+
+$lang->changelog['8.4'][] = 'branch-sort';
+$lang->changelog['8.4'][] = 'story-bugs';
+$lang->changelog['8.4'][] = 'story-cases';

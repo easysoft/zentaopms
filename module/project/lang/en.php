@@ -171,11 +171,13 @@ $lang->project->stats           = 'Available <strong>%s</strong> man-hour, Estim
 $lang->project->taskSummary     = " <strong>%s</strong> Tasks on this page, Pending <strong>%s</strong> Doing <strong>%s</strong> Total estimated <strong>%s</strong> man-hour Consumed <strong>%s</strong> man-hour remained <strong>%s</strong> man-hour";
 $lang->project->memberHours     = "%s has <strong>%s</strong> man-hour available ";
 $lang->project->groupSummary    = "<strong>%s</strong> Tasks in this group Pending <strong>%s</strong> Doing <strong>%s</strong> Total estimated <strong>%s</strong> man-hour Consumed <strong>%s</strong> man-hour remained <strong>%s</strong> man-hour";
+$lang->project->groupSummaryAB  = "总任务<strong>%s</strong> ，未开始<strong>%s</strong>，进行中<strong>%s</strong>。<br />总预计<strong>%s</strong>，已消耗<strong>%s</strong>，剩余<strong>%s</strong>。";
 $lang->project->noTimeSummary   = " <strong>%s</strong> Tasks in this group Pending <strong>%s</strong> Doing <strong>%s</strong>";
 $lang->project->wbs             = "Decompose Task";
 $lang->project->batchWBS        = "Batch Decompose";
 $lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='How to Update the Burndown Chart?' class='btn btn-sm'>Help</a>";
 $lang->project->whyNoStories    = "No Story can be linked. Please check whether there is Story in {$lang->projectCommon} related {$lang->productCommon} and make sure it has been reviewed.";
+$lang->project->productStories  = "{$lang->projectCommon}关联的需求是{$lang->productCommon}需求的子集，并且只有评审通过的需求才能关联。请<a href='%s'>关联需求</a>。";
 $lang->project->doneProjects    = 'Done';
 $lang->project->selectDept      = 'Select Department';
 $lang->project->selectDeptTitle = 'Select Department';

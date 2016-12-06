@@ -16,6 +16,7 @@ $lang->mail->turnon      = '是否打開';
 $lang->mail->async       = '非同步發送';
 $lang->mail->fromAddress = '發信郵箱';
 $lang->mail->fromName    = '發信人';
+$lang->mail->domain      = '發信域名';
 $lang->mail->host        = 'smtp伺服器';
 $lang->mail->port        = 'smtp連接埠號';
 $lang->mail->auth        = '是否需要驗證';
@@ -74,6 +75,7 @@ $lang->mail->sendmailTips   = '提示：系統不會為當前操作者發信。'
 $lang->mail->needConfigure  = '無法找到郵件配置信息，請先配置郵件發送參數。';
 $lang->mail->nofsocket      = 'fsocket相關函數被禁用，不能發信！請在php.ini中修改allow_url_fopen為On，打開openssl擴展。 保存並重新啟動apache。';
 $lang->mail->noOpenssl      = 'ssl和tls加密，請打開openssl擴展。 保存並重新啟動apache。';
+$lang->mail->disableSecure  = '沒有openssl擴展，禁用ssl和tls加密';
 $lang->mail->sendCloudFail  = '操作失敗，原因：';
 $lang->mail->sendCloudHelp  = <<<EOD
 <p>1、Notice SendCloud是SendCloud的團隊通知服務。具體可以到<a href="http://notice.sendcloud.net/" target="_blank">notice.sendcloud.net</a>查看</p>
@@ -82,3 +84,7 @@ $lang->mail->sendCloudHelp  = <<<EOD
 EOD;
 $lang->mail->sendCloudSuccess = '操作成功';
 $lang->mail->closeSendCloud   = '關閉SendCloud';
+$lang->mail->addressWhiteList = '為防止郵件被屏蔽，請在郵件伺服器裡面將發信郵箱設為白名單';
+
+$lang->mail->placeholder = new stdclass();
+$lang->mail->placeholder->password = '有些郵箱需要填寫單獨申請的授權碼，具體請到郵箱相關設置查詢。';

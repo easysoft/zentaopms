@@ -66,8 +66,10 @@ $lang->install->tmpRoot      = '臨時檔案目錄';
 $lang->install->dataRoot     = '上傳檔案目錄';
 $lang->install->session      = 'Session存儲目錄';
 $lang->install->sessionFail  = '修改PHP配置檔案，設置session.save_path';
-$lang->install->mkdir        = '<p>需要創建目錄%s。<br /> linux下面命令為：<br /> mkdir -p %s</p>';
-$lang->install->chmod        = '需要修改目錄 "%s" 的權限。<br />linux下面命令為：<br />chmod o=rwx -R %s';
+$lang->install->mkdirWin     = '<p>需要創建目錄%s。命令行下面命令為：<br /> mkdir %s</p>';
+$lang->install->chmodWin     = '需要修改目錄 "%s" 的權限。';
+$lang->install->mkdirLinux   = '<p>需要創建目錄%s。<br /> 命令行下面命令為：<br /> mkdir -p %s</p>';
+$lang->install->chmodLinux   = '需要修改目錄 "%s" 的權限。<br />命令行下面命令為：<br />chmod o=rwx -R %s';
 
 $lang->install->defaultLang    = '預設語言';
 $lang->install->dbHost         = '資料庫伺服器';
@@ -155,13 +157,13 @@ $lang->install->ranzhi->desc = <<<EOD
   <li>論壇博客，動態消息</li>
 </ul>
 EOD;
-$lang->install->yidou = new stdclass();
-$lang->install->yidou->name = '億鬥進銷存管理運營系統';
-$lang->install->yidou->desc = <<<EOD
+$lang->install->zdoo = new stdclass();
+$lang->install->zdoo->name = '可深度定製的雲端一體化協作平台';
+$lang->install->zdoo->desc = <<<EOD
 <ul>
-  <li>銷售訂單處理，信息及時反饋</li>
-  <li>采銷業務狀況，時時查詢跟進</li>
-  <li>倉儲配貨送貨，輕鬆便利快捷</li>
-  <li>財務收款付款，簡單實用準確</li>
+  <li>安全、穩定、高效</li>
+  <li>以容器為交付單位</li>
+  <li>租戶隔離，可深度定製</li>
+  <li>提供一體化管理平台</li>
 </ul>
 EOD;

@@ -31,6 +31,7 @@ $lang->custom->task->fields['priList']    = 'Priority';
 $lang->custom->task->fields['typeList']   = 'Type';
 $lang->custom->task->fields['reasonList'] = 'Reason';
 $lang->custom->task->fields['statusList'] = 'Status';
+$lang->custom->task->fields['hours']      = 'Working hours';
 
 $lang->custom->bug = new stdClass();
 $lang->custom->bug->fields['priList']        = 'Priority';
@@ -40,6 +41,7 @@ $lang->custom->bug->fields['browserList']    = 'Browser';
 $lang->custom->bug->fields['typeList']       = 'Type';
 $lang->custom->bug->fields['resolutionList'] = 'Solution';
 $lang->custom->bug->fields['statusList']     = 'Status';
+$lang->custom->bug->fields['longlife']       = 'Long Life Days';
 
 $lang->custom->testcase = new stdClass();
 $lang->custom->testcase->fields['priList']    = 'Priority';
@@ -67,14 +69,23 @@ $lang->custom->allLang     = 'All Language';
 $lang->custom->confirmRestore = 'Do you want to reset to Default?';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userRole  = 'Key must be no more than 20 characters!';
+$lang->custom->notice->userRole    = 'Key must be no more than 20 characters!';
+$lang->custom->notice->canNotAdd   = '该项参与运算，不提供自定义添加功能';
+$lang->custom->notice->forceReview = '指定人提交的需求必须评审。';
+$lang->custom->notice->longlife    = 'Bug列表页面的久未处理标签中，列出设置天数之前未处理的Bug。';
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage. Do you want to enter Product Homepage?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage. Do you want to enter Project Homepage?";
 $lang->custom->notice->indexPage['qa']      = "ZenTao 8.2+ has Testing Homepage. Do you want to enter Testing Homepage?";
 
 $lang->custom->storyReview   = 'Review';
+$lang->custom->forceReview   = '强制评审';
 $lang->custom->reviewList[1] = 'On';
 $lang->custom->reviewList[0] = 'Off';
+
+$lang->custom->workingHours   = '每天可用工时';
+$lang->custom->weekend        = '休息日';
+$lang->custom->weekendList[2] = '双休';
+$lang->custom->weekendList[1] = '单休';
 
 $lang->custom->productProject = new stdclass();
 $lang->custom->productProject->relation['0_0'] = 'Product - Project';

@@ -30,6 +30,7 @@ $lang->tree->manageCaseChild   = '維護用例子模組';
 $lang->tree->manageTaskChild   = "維護{$lang->projectCommon}子模組";
 $lang->tree->syncFromProduct   = '複製';
 $lang->tree->dragAndSort       = "拖放排序";
+$lang->tree->sort              = "排序";
 $lang->tree->addChild          = "增加子模組";
 
 $lang->tree->confirmDelete = '該模組及其子模組都會被刪除，您確定刪除嗎？';
