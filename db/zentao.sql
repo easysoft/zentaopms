@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS `zt_branch` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `product` mediumint(8) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
+  `order` smallint unsigned NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`),
   KEY `product` (`product`)
@@ -391,6 +392,7 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   `type` char(30) NOT NULL,
   `owner` varchar(30) NOT NULL,
   `short` varchar(30) NOT NULL,
+  `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
   KEY `module` (`root`,`type`,`path`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
