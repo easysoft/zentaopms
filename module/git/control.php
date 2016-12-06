@@ -122,6 +122,7 @@ class git extends control
         $revision = trim($this->post->revision);
         $files    = $this->post->files;
         if(empty($repoUrl)) die();
+        $repoUrl = rtrim($repoUrl, '/') . '/';
 
         $parsedFiles = array();
         foreach($files as $file)
