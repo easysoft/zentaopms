@@ -487,6 +487,7 @@ class mailModel extends model
         }
         $toList = join(',', $toList);
         $ccList = join(',', $ccList);
+        if(empty($toList) or empty($subject)) return true;
         
         $data = new stdclass();
         $data->toList    = $toList;
@@ -495,7 +496,7 @@ class mailModel extends model
         $data->body      = $body;
         $data->addedBy   = $this->app->user->account;
         $data->addedDate = helper::now();
-        $this->dao->insert(TABLE_MAILQUEUE)->data($data)->autocheck()->batchCheck('toList,subject', 'notempty')->exec();
+        $this->dao->insert(TABLE_MAILQUEUE)->data($data)->autocheck()->exec();
     }
 
     /**

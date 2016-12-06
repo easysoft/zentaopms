@@ -857,11 +857,12 @@ class task extends control
      * @access public
      * @return void
      */
-    public function batchClose()
+    public function batchClose($skipTaskIdList = '')
     {
-        if($this->post->taskIDList)
+        if($this->post->taskIDList or $skipTaskIdList)
         {
             $taskIDList = $this->post->taskIDList;
+            if($skipTaskIdList) $taskIDList = $skipTaskIdList;
             unset($_POST['taskIDList']);
             unset($_POST['assignedTo']);
             $this->loadModel('action');
@@ -869,7 +870,7 @@ class task extends control
             $tasks = $this->task->getByList($taskIDList);
             foreach($tasks as $taskID => $task)
             {
-                if($task->status == 'wait' or $task->status == 'doing')
+                if(empty($skipTaskIdList) and ($task->status == 'wait' or $task->status == 'doing'))
                 {
                     $skipTasks[$taskID] = $taskID;
                     continue;
@@ -878,7 +879,6 @@ class task extends control
                 if($task->status == 'closed') continue;
 
                 $changes = $this->task->close($taskID);
-
                 if($changes)
                 {
                     $actionID = $this->action->create('task', $taskID, 'Closed', '');
@@ -886,39 +886,15 @@ class task extends control
                     $this->task->sendmail($taskID, $actionID);
                 }
             }
-            if(isset($skipTasks))
+            if(isset($skipTasks) and empty($skipTaskIdList))
             {
                 $skipTasks = join(',', $skipTasks);
-                $confirmURL = $this->createLink('task', 'closeSkipTasks', "skipTasks=$skipTasks");
+                $confirmURL = $this->createLink('task', 'batchClose', "skipTaskIdList=$skipTasks");
                 $cancelURL  = $this->server->HTTP_REFERER;
-                die(js::confirm(sprintf($this->lang->task->error->skipClose, $skipTasks), $confirmURL, $cancelURL, 'parent', 'parent'));
+                die(js::confirm(sprintf($this->lang->task->error->skipClose, $skipTasks), $confirmURL, $cancelURL, 'self', 'parent'));
             }
         }
         die(js::reload('parent'));
-    }
-
-    /**
-     * Close skip tasks.
-     *
-     * @param  string $skipTasks
-     * @access public
-     * @return void
-     */
-    public function closeSkipTasks($skipTasks = '')
-    {
-        $this->loadModel('action');
-        $skipTasks = explode(',', $skipTasks);
-        foreach($skipTasks as $taskID)
-        {
-            $changes = $this->task->close($taskID);
-            if($changes)
-            {
-                $actionID = $this->action->create('task', $taskID, 'Closed', '');
-                $this->action->logHistory($actionID, $changes);
-                $this->sendmail($taskID, $actionID);
-            }
-        }
-        die(js::locate($this->session->taskList, 'parent'));
     }
 
     /**
