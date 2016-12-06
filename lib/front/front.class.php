@@ -125,9 +125,9 @@ class html extends baseHTML
         $sign        = ' aNd ';
         foreach($options as $value)
         {
-            if(!isset($dataKeys[$value])) $joinOptions .= $value . $sign;
+            if(!isset($dataKeys[$value])) $joinOptions .= str_replace($sign, ' and ', $value) . $sign;
         }
-        $joinOptions = rtrim($joinOptions, $sign);
+
         if($joinOptions)
         {
             $valuesPinyin = $pinyin->convert($joinOptions);
