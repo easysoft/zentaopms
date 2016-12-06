@@ -1643,7 +1643,7 @@ class project extends control
         /* Build the search form. */
         $actionURL    = $this->createLink('project', 'linkStory', "projectID=$projectID&browseType=bySearch&queryID=myQueryID");
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
-        $this->project->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL);
+        $this->project->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory');
 
         if($browseType == 'bySearch')
         {

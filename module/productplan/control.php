@@ -242,13 +242,17 @@ class productplan extends control
      * Ajax: Get product plans. 
      * 
      * @param  int    $productID 
+     * @param  string $number
      * @access public
      * @return void
      */
-    public function ajaxGetProductplans($productID, $branch = 0)
+    public function ajaxGetProductplans($productID, $branch = 0, $number = '')
     {
         $plans = $this->productplan->getPairs($productID, $branch);
-        die(html::select('plan', $plans, '', "class='form-control'"));
+
+         $planName = $number === '' ? 'plan' : "plan[$number]";
+         $plans    = empty($plans) ? array('' => '') : $plans;
+         die(html::select($planName, $plans, '', "class='form-control'"));
     }
 
     /**

@@ -389,8 +389,8 @@ class testcase extends control
         $showFields = $this->config->testcase->custom->batchCreateFields;
         if($product->type == 'normal')
         {
-            str_replace(array(0 => ",branch,", 1 => ",platform,"), '', $showFields);
-            trim($showFields, ',');
+            $showFields = str_replace(array(0 => ",branch,", 1 => ",platform,"), '', ",$showFields,");
+            $showFields = trim($showFields, ',');
         }
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;

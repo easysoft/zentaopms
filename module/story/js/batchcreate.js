@@ -43,3 +43,33 @@ if(navigator.userAgent.indexOf("Firefox") < 0)
         this.style.height = (this.scrollHeight + 2) + "px"; 
     });
 }
+
+/**
+ * Set modules and plans.
+ *
+ * @param  int     $branchID
+ * @param  int     $productID
+ * @param  int     $num
+ * @access public
+ * @return void
+ */
+function setModuleAndPlan(branchID, productID, num)
+{
+    moduleLink = createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=story&branch=' + branchID + '&num=' + num);
+    $.get(moduleLink, function(modules)
+    {
+        if(!modules) modules = '<select id="module' + num + '" name="module[' + num + ']" class="form-control"></select>';
+        $('#module' + num).replaceWith(modules);
+        $("#module" + num + "_chosen").remove();
+        $("#module" + num).chosen(defaultChosenOptions);
+    });
+
+    planLink = createLink('productPlan', 'ajaxGetProductPlans', 'productID=' + productID + '&branch=' + branchID + '&num=' + num);
+    $.get(planLink, function(plans)
+    {
+        if(!plans) plans = '<select id="plan' + num + '" name="plan[' + num + ']" class="form-control"></select>';
+        $('#plan' + num).replaceWith(plans);
+        $("#plan" + num + "_chosen").remove();
+        $("#plan" + num).chosen(defaultChosenOptions);
+    });
+}
