@@ -70,22 +70,22 @@ $lang->custom->confirmRestore = 'Do you want to reset to Default?';
 
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole    = 'Key must be no more than 20 characters!';
-$lang->custom->notice->canNotAdd   = '该项参与运算，不提供自定义添加功能';
-$lang->custom->notice->forceReview = '指定人提交的需求必须评审。';
-$lang->custom->notice->longlife    = 'Bug列表页面的久未处理标签中，列出设置天数之前未处理的Bug。';
+$lang->custom->notice->canNotAdd   = 'This item will be processed, so customized feature is not enabled.';
+$lang->custom->notice->forceReview = 'Review is required for stories submitted by certain assignee.';
+$lang->custom->notice->longlife    = 'List "Undone" bugs that are older than hold days from "Longlife" bugs.';
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage. Do you want to enter Product Homepage?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage. Do you want to enter Project Homepage?";
 $lang->custom->notice->indexPage['qa']      = "ZenTao 8.2+ has Testing Homepage. Do you want to enter Testing Homepage?";
 
 $lang->custom->storyReview   = 'Review';
-$lang->custom->forceReview   = '强制评审';
+$lang->custom->forceReview   = 'Review Required';
 $lang->custom->reviewList[1] = 'On';
 $lang->custom->reviewList[0] = 'Off';
 
-$lang->custom->workingHours   = '每天可用工时';
-$lang->custom->weekend        = '休息日';
-$lang->custom->weekendList[2] = '双休';
-$lang->custom->weekendList[1] = '单休';
+$lang->custom->workingHours   = 'Man-Hour/Day';
+$lang->custom->weekend        = 'Weekend';
+$lang->custom->weekendList[2] = '2-Day Off';
+$lang->custom->weekendList[1] = '1-Day Off';
 
 $lang->custom->productProject = new stdclass();
 $lang->custom->productProject->relation['0_0'] = 'Product - Project';
