@@ -121,17 +121,21 @@ class git extends control
         $message  = trim($this->post->message);
         $revision = trim($this->post->revision);
         $files    = $this->post->files;
-
-        /* Ignore git. */
-        if(strpos($repoUrl, '://') === false) die();
+        if(empty($repoUrl)) die();
 
         $parsedFiles = array();
         foreach($files as $file)
         {
             $file = trim($file);
             if(empty($file)) continue;
+            $action = '';
+            if(preg_match('/^[\w][ \t]/', $file))
+            {
+                $action = $file[0];
+                $file   = trim(substr($file, 2));
+            }
             $path = str_replace($repoRoot,  '', $file);
-            $parsedFiles[''][] = $path;
+            $parsedFiles[$action][] = ltrim($path, '/');
         }
 
         $objects = $this->git->parseComment($message);
