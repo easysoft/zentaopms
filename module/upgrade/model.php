@@ -157,6 +157,7 @@ class upgradeModel extends model
             case '8_3_1':
                 $this->execSQL($this->getUpgradeFile('8.3.1'));
                 $this->renameMainLib();
+                $this->adjustPriv8_4();
         }
 
         $this->deletePatch();
@@ -1450,6 +1451,38 @@ class upgradeModel extends model
         $this->app->loadLang('doc');
         $this->dao->update(TABLE_DOCLIB)->set('name')->eq($this->lang->doclib->main['product'])->where('name')->eq($this->lang->doclib->product)->exec();
         $this->dao->update(TABLE_DOCLIB)->set('name')->eq($this->lang->doclib->main['project'])->where('name')->eq($this->lang->doclib->project)->exec();
+        return true;
+    }
+
+    /**
+     * Adjust priv for 8.4.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv8_4()
+    {
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('branch')->andWhere('method')->eq('manage')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group = $groupID;
+            $data->module = 'branch';
+            $data->method = 'sort';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('story')->andWhere('method')->eq('tasks')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group = $groupID;
+            $data->module = 'story';
+            $data->method = 'bugs';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+
+            $data->method = 'cases';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
         return true;
     }
 
