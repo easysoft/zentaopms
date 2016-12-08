@@ -397,7 +397,7 @@ class userModel extends model
 
         if(isset($_POST['groups']))
         {
-            $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($oldUser->account)->exec();
+            $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->exec();
             foreach($this->post->groups as $groupID)
             {
                 $data          = new stdclass();
