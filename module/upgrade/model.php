@@ -1449,8 +1449,8 @@ class upgradeModel extends model
     public function renameMainLib()
     {
         $this->app->loadLang('doc');
-        $this->dao->update(TABLE_DOCLIB)->set('name')->eq($this->lang->doclib->main['product'])->where('name')->eq($this->lang->doclib->product)->exec();
-        $this->dao->update(TABLE_DOCLIB)->set('name')->eq($this->lang->doclib->main['project'])->where('name')->eq($this->lang->doclib->project)->exec();
+        $this->dao->update(TABLE_DOCLIB)->set('name')->eq($this->lang->doclib->main['product'])->where('product')->gt(0)->andWhere('main')->eq(1)->exec();
+        $this->dao->update(TABLE_DOCLIB)->set('name')->eq($this->lang->doclib->main['project'])->where('project')->gt(0)->andWhere('main')->eq(1)->exec();
         return true;
     }
 
