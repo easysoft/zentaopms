@@ -9,7 +9,7 @@
  * @version     $Id: en.php 4659 2013-04-17 06:45:08Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->productplan->common     = $lang->productCommon . 'Planning';
+$lang->productplan->common     = $lang->productCommon . 'Plan';
 $lang->productplan->browse     = "View";
 $lang->productplan->index      = "List";
 $lang->productplan->create     = "Create";
