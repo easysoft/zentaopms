@@ -45,7 +45,7 @@ $lang->action->dynamic->search     = 'Search';
 
 $lang->action->objectTypes['product']     = $lang->productCommon;
 $lang->action->objectTypes['story']       = 'Story';
-$lang->action->objectTypes['productplan'] = 'Planning';
+$lang->action->objectTypes['productplan'] = 'Plan';
 $lang->action->objectTypes['release']     = 'Release';
 $lang->action->objectTypes['project']     = $lang->projectCommon;
 $lang->action->objectTypes['task']        = 'Task';
@@ -131,8 +131,8 @@ $lang->action->label->frombug             = 'Converted from Bug';
 $lang->action->label->totask              = 'Convert to Task';
 $lang->action->label->svncommited         = 'SVN Commit';
 $lang->action->label->gitcommited         = 'Git Commit';
-$lang->action->label->linked2plan         = 'Link to Planning';
-$lang->action->label->unlinkedfromplan    = 'Unlink from Planning';
+$lang->action->label->linked2plan         = 'Link to Plan';
+$lang->action->label->unlinkedfromplan    = 'Unlink from Plan';
 $lang->action->label->changestatus        = 'Change Status';
 $lang->action->label->marked              = 'Marked';
 $lang->action->label->linked2project      = "Link {$lang->projectCommon}";
@@ -147,7 +147,7 @@ $lang->action->label->subdividestory      = "Decompose Story";
 $lang->action->label->unlinkchildstory    = "Unlink decomposed Story";
 $lang->action->label->started             = 'Initiated';
 $lang->action->label->restarted           = 'Continued';
-$lang->action->label->recordestimate      = 'Historyed Man-Hour';
+$lang->action->label->recordestimate      = 'Recorded Man-Hour';
 $lang->action->label->editestimate        = 'Edited Man-Hour';
 $lang->action->label->canceled            = 'Cancelled';
 $lang->action->label->finished            = 'Finished';
@@ -160,7 +160,7 @@ $lang->action->label->deleteestimate      = "Deleted Man-Hour";
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
-$lang->action->label->productplan = 'Planning|productplan|view|productID=%s';
+$lang->action->label->productplan = 'Plan|productplan|view|productID=%s';
 $lang->action->label->release     = 'Release|release|view|productID=%s';
 $lang->action->label->story       = 'Story|story|view|storyID=%s';
 $lang->action->label->project     = "{$lang->projectCommon}|project|view|projectID=%s";
@@ -192,7 +192,7 @@ $lang->action->search->objectTypeList['doclib']      = 'Doc Lib';
 $lang->action->search->objectTypeList['todo']        = 'To-Dos';
 $lang->action->search->objectTypeList['build']       = 'Build';
 $lang->action->search->objectTypeList['release']     = 'Release';
-$lang->action->search->objectTypeList['productplan'] = 'Planning';
+$lang->action->search->objectTypeList['productplan'] = 'Plan';
 $lang->action->search->objectTypeList['branch']      = 'Branch';
 
 /* 用来在动态显示中显示动作 */
