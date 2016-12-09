@@ -51,9 +51,9 @@ $lang->release->filePath = 'Download : ';
 $lang->release->scmPath  = 'SCM Path : ';
 
 $lang->release->exportTypeList['all']     = 'All';
-$lang->release->exportTypeList['story']   = 'Resolved Story';
-$lang->release->exportTypeList['bug']     = 'Resolved Bug';
-$lang->release->exportTypeList['leftbug'] = 'Generated Bug';
+$lang->release->exportTypeList['story']   = 'Story';
+$lang->release->exportTypeList['bug']     = 'Bug';
+$lang->release->exportTypeList['leftbug'] = 'Unresolved Bug';
 
 $lang->release->statusList['']          = '';
 $lang->release->statusList['normal']    = 'Normal';

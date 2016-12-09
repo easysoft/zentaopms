@@ -65,7 +65,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest         = 'Latest Version';
 $lang->misc->feature->all             = array();
 $lang->misc->feature->all['latest']   = array();
-$lang->misc->feature->all['latest'][] = array('title'=>'Custom Homepage', 'desc' => '<p>You can add blocks to Homepage of My Zone and arrange the layout.</p><p> My Zone, Product, Project, and Testing all support home custom mentioned before. </p>');
+$lang->misc->feature->all['latest'][] = array('title'=>'Custom Homepage', 'desc' => '<p>You can add blocks to Dashboard and arrange the layout.</p><p> My Zone, Product, Project, and Testing all support home custom mentioned before. </p>');
 $lang->misc->feature->all['latest'][] = array('title'=>'Custom Navigation', 'desc' => '<p>You can decide which project show in navigation bar and the order of projects shown in the bar.</p><p> Hover on the navigation bar and a sign will show to its right. Click the sign and a dialog box "Custom Navigation" will show. Drag the block name to switch its order on navigation bar.</p>');
 $lang->misc->feature->all['latest'][] = array('title'=>'Batch Add/Edit Custom', 'desc' => '<p>You can batch add and edit fields on custom pages.</p>');
 $lang->misc->feature->all['latest'][] = array('title'=>'Add Custom Story/Task/Bug/Case', 'desc' => '<p>You can custom fileds when add a Story/Task/Bug/Case.</p>');

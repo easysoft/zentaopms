@@ -22,7 +22,7 @@ $lang->company->phone    = 'Phone';
 $lang->company->fax      = 'Fax';
 $lang->company->address  = 'Mailing Address';
 $lang->company->zipcode  = 'Zip Code';
-$lang->company->website  = 'Official Website';
+$lang->company->website  = 'Website';
 $lang->company->backyard = 'Intranet';
 $lang->company->guest    = 'Guest Login';
 

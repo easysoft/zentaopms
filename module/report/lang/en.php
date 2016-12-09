@@ -14,7 +14,7 @@ $lang->report->index      = 'Home';
 $lang->report->list       = 'List';
 $lang->report->item       = 'Item';
 $lang->report->value      = 'Value';
-$lang->report->percent    = 'Percent';
+$lang->report->percent    = '%';
 $lang->report->undefined  = 'Undefined';
 
 $lang->report->colors[]   = 'AFD8F8';
