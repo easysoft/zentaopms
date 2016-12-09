@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->group->common             = 'Privileges';
-$lang->group->browse             = 'View Group';
+$lang->group->browse             = 'Groups';
 $lang->group->create             = 'Add a Group';
 $lang->group->edit               = 'Edit';
 $lang->group->copy               = 'Copy';
@@ -35,7 +35,7 @@ $lang->group->desc     = 'Description';
 $lang->group->users    = 'Users';
 $lang->group->module   = 'Module';
 $lang->group->method   = 'Method';
-$lang->group->priv     = 'Privilege';
+$lang->group->priv     = 'P';
 $lang->group->option   = 'Option';
 $lang->group->inside   = 'Group Users';
 $lang->group->outside  = 'Other Users';

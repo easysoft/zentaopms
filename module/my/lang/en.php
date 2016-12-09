@@ -1,5 +1,5 @@
 <?php
-$lang->my->common = 'My Zone';
+$lang->my->common = 'Dashboard';
 
 /* Method List。*/
 $lang->my->index          = 'Home';

@@ -23,7 +23,7 @@ $lang->welcome        = "%s PMS";
 $lang->logout         = 'Logout';
 $lang->login          = 'Login';
 $lang->help           = 'Help';
-$lang->aboutZenTao    = 'About ZenTao';
+$lang->aboutZenTao    = 'ZenTao';
 $lang->profile        = 'Profile';
 $lang->changePassword = 'Password';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time %s MS, Memory %s KB, Query %s.  </div></div>";
@@ -88,7 +88,7 @@ $lang->year         = 'Year';
 $lang->workingHour  = 'Man-Hour';
 
 $lang->idAB         = 'ID';
-$lang->priAB        = 'Privil';
+$lang->priAB        = 'P';
 $lang->statusAB     = 'Status';
 $lang->openedByAB   = 'Open';
 $lang->assignedToAB = 'To';
@@ -99,7 +99,7 @@ $lang->common->common = 'Common Module';
 
 /* 主导航菜单。*/
 $lang->menu = new stdclass();
-$lang->menu->my       = '<i class="icon-home"></i><span> My Zone</span>|my|index';
+$lang->menu->my       = '<i class="icon-home"></i><span>Dashboard</span>|my|index';
 $lang->menu->product  = $lang->productCommon . '|product|index';
 $lang->menu->project  = $lang->projectCommon . '|project|index';
 $lang->menu->qa       = 'Testing|qa|index';
