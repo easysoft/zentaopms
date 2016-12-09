@@ -91,7 +91,7 @@ function initKindeditor(afterInit)
                         })
                     }, 10);
                 }
-                if(pasted)
+                if(pasted && placeholderText.indexOf('<?php echo $this->lang->noticePasteImg?>') < 0)
                 {
                     if(placeholderText) placeholderText += '<br />';
                     placeholderText += ' <?php echo $this->lang->noticePasteImg?>';
@@ -144,24 +144,34 @@ function initKindeditor(afterInit)
 
                 /* Add for placeholder. */
                 var frame = this.edit;
-                K('<span class="kindeditor-ph" style="width:100%;color:#888; padding:5px 5px 5px 7px; background-color:transparent; position:absolute;z-index:10;top:2px;border:0;overflow:auto;resize:none; font-size:13px;"></span>').appendTo(frame.iframe[0].contentDocument.firstChild);
-                frame.iframe[0].contentDocument.firstChild.lastChild.innerHTML = placeholderText;
-                frame.iframe[0].contentDocument.firstChild.lastChild.style.pointerEvents = 'none';
-                frame.iframe[0].contentDocument.firstChild.lastChild.onclick = function(){frame.doc.body.focus()};
-                if(K(frame.doc.body).html() != '') frame.iframe[0].contentDocument.firstChild.lastChild.style.display = "none";
+                $(this.edit.doc).find('body').after('<span class="kindeditor-ph" style="width:100%;color:#888; padding:5px 5px 5px 7px; background-color:transparent; position:absolute;z-index:10;top:2px;border:0;overflow:auto;resize:none; font-size:13px;"></span>');
+                $placeholder = $(this.edit.doc).find('.kindeditor-ph');
+                $placeholder.html(placeholderText);
+                $placeholder.css('pointerEvents', 'none');
+                $placeholder.click(function(){frame.doc.body.focus()});
+                if(K(frame.doc.body).html() != '') $placeholder.hide();
             },
             afterFocus: function()
             {
-                this.edit.iframe[0].contentDocument.firstChild.lastChild.style.display = "none";
+                var frame = this.edit;
+                $placeholder = $(frame.doc).find('.kindeditor-ph');
+                if($placeholder.size() == 0)
+                {
+                    setTimeout(function(){$(frame.doc).find('.kindeditor-ph').hide();}, 50);
+                }
+                else
+                {
+                    $placeholder.hide();
+                }
                 $editor.prev('.ke-container').addClass('focus');
-                this.edit.doc.body.focus();
+                frame.doc.body.focus();
             },
             afterBlur: function()
             {
                 this.sync();
                 $editor.prev('.ke-container').removeClass('focus');
                 var frame = this.edit;
-                if(K(frame.doc.body).html() == '') frame.iframe[0].contentDocument.firstChild.lastChild.style.display = "block";
+                if(K(frame.doc.body).html() == '') $(frame.doc).find('.kindeditor-ph').show();
             },
             afterTab: function(id)
             {
