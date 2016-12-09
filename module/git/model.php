@@ -397,7 +397,7 @@ class gitModel extends model
         foreach($encodings as $encoding)
         {
             if($encoding == 'utf-8') continue;
-            $result = @mb_convert_encoding($comment, 'utf-8', $encoding);
+            $result = helper::convertEncoding($comment, $encoding, 'utf-8');
             if($result) return $result;
         }
 
