@@ -488,14 +488,7 @@ class fileModel extends model
         {
             if($uploadFile['folder']) continue;
             $fileName = $uploadFile['filename'];
-            if(function_exists('iconv'))
-            {
-                $fileName = iconv('gbk', 'utf-8//TRANSLIT', $fileName);
-            }
-            elseif(function_exists('mb_convert_encoding'))
-            {
-                $fileName = mb_convert_encoding($fileName, 'utf-8', 'gbk');
-            }
+            $fileName = helper::convertEncoding($fileName, 'gbk', 'utf-8//TRANSLIT');
             if(($pos = strrpos($fileName, '/')) !== false) $fileName = substr($fileName, $pos + 1);
 
             $file = array();

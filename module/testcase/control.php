@@ -1074,18 +1074,7 @@ class testcase extends control
             {
                 $fc     = file_get_contents($fileName);
                 $encode = $this->post->encode != "utf-8" ? $this->post->encode : 'gbk';
-                if(function_exists('mb_convert_encoding'))
-                {
-                    $fc = @mb_convert_encoding($fc, 'utf-8', $encode);
-                }
-                elseif(function_exists('iconv'))
-                {
-                    $fc = @iconv($encode, 'utf-8', $fc);
-                }
-                else
-                {
-                    die(js::alert($this->lang->testcase->noFunction));
-                }
+                $fc     = helper::convertEncoding($fc, $encode, 'utf-8');
                 file_put_contents($fileName, $fc);
 
                 $rows      = $this->file->parseCSV($fileName);
