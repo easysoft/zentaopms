@@ -98,7 +98,7 @@ class html extends baseHTML
     static public function select($name = '', $options = array(), $selectedItems = "", $attrib = "", $append = false)
     {
         global $app;
-        static $dataKeys = array();
+        static $dataKeys;
 
         $options = (array)($options);
         if($append and !isset($options[$selectedItems])) $options[$selectedItems] = $selectedItems;
@@ -113,13 +113,8 @@ class html extends baseHTML
         $string = "<select name='$name' {$id} $attrib>\n";
 
         /* The options. */
-        static $pinyin = null;
-        if(empty($pinyin))
-        {
-            $app->loadClass('pinyin', false);
-            helper::import(dirname(__DIR__) . '/pinyin/memoryfiledictloader.php');
-            $pinyin = new pinyin(new MemoryFileDictLoader(dirname(__DIR__) . '/pinyin/data/'));
-        }
+        static $pinyin;
+        if(empty($pinyin)) $pinyin = $app->loadClass('pinyin');
 
         $joinOptions = '';
         $sign        = ' aNd ';
