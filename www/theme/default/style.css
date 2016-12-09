@@ -732,20 +732,23 @@ body {color:#141414; padding-bottom: 40px;}
 
 #passwordStrength{display:none;}
 
-.fixedTfootAction {position: fixed; bottom: 40px; box-shadow: 0 -3px 4px rgba(0,0,0,0.05)}
-.table > .fixedTfootAction > tr > td {background: #114f8e; border: none; color: #fff}
-.fixedTfootAction .btn {border: 1px solid #fff; border-color: rgba(255,255,255,.5); background-color: #2e6dad!important; text-shadow: none; color: #e5e5e5!important;}
-.fixedTfootAction .btn:hover {background-color: #114f8e!important;}
-.fixedTfootAction .pager,
-.fixedTfootAction .pager > a,
-.fixedTfootAction .pager > .dropdown > a,
-.fixedTfootAction .table-actions > .text {color: #e5e5e5}
-.fixedTfootAction .pager strong,
-.fixedTfootAction .table-actions > .text strong {color: #fff;}
-.fixedTfootAction .pager .dropdown > a:hover, .fixedTfootAction .pager > a:hover {background-color: #2e6dad}
+.fixedTfootAction {background-color: #f5f5f5; position: fixed; bottom: 40px; box-shadow: 0 -3px 4px rgba(0,0,0,0.05);}
+.table > .fixedTfootAction > tr > td {border-bottom: none}
+.table > .fixedTfootAction.scrolled > tr > td {background: #2e6dad; border: none; color: #fff}
+.fixedTfootAction.scrolled .btn {border: 1px solid #fff; border-color: rgba(255,255,255,.5); background-color: #2e6dad!important; text-shadow: none; color: #e5e5e5!important;}
+.fixedTfootAction.scrolled .btn:hover {background-color: #2e6dad!important;}
+.fixedTfootAction.scrolled .pager,
+.fixedTfootAction.scrolled .pager > a,
+.fixedTfootAction.scrolled .pager > .dropdown > a,
+.fixedTfootAction.scrolled .table-actions > .text {color: #e5e5e5}
+.fixedTfootAction.scrolled .pager strong,
+.fixedTfootAction.scrolled .table-actions > .text strong {color: #fff;}
+.fixedTfootAction.scrolled .pager .dropdown > a:hover,
+.fixedTfootAction.scrolled .pager > a:hover {background-color: #2e6dad}
+
 .fixedTheadOfList {position: fixed; top: 0px; z-index:1000;}
 .datatable.head-fixed > .datatable-head .table > thead > tr > th, 
-.fixedTheadOfList > thead > tr > th {background-color: #114f8e; border-bottom-color: #bbb; color: #aaa}
+.fixedTheadOfList > thead > tr > th {background-color: #2e6dad; border-bottom-color: #bbb; color: #dedede}
 .tablesorter.fixedTheadOfList thead tr .headerSortDown a,
 .tablesorter.fixedTheadOfList thead tr .headerSortUp a,
 .tablesorter.fixedTheadOfList thead tr .headerSortUp > a:after,
@@ -753,7 +756,7 @@ body {color:#141414; padding-bottom: 40px;}
 .datatable.head-fixed thead tr .headerSortUp > a:after,
 .datatable.head-fixed thead tr .headerSortDown > a:after,
 .datatable.head-fixed > .datatable-head .table > thead > tr > th a, .fixedTheadOfList > thead > tr > th a {color: #fff}
-.datatable.head-fixed > .datatable-head .table > thead > tr > th .header a, .fixedTheadOfList > thead > tr > th .header a {color: #ccc}
+.datatable.head-fixed > .datatable-head .table > thead > tr > th .header a, .fixedTheadOfList > thead > tr > th .header a {color: inherit}
 
 /* Help tab iframe */
 #helpContent {display: none; position: absolute; left: 0; right: 0; top: 73px; bottom: 40px; background-color: #fff;}
