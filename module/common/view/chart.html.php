@@ -99,7 +99,7 @@ if($config->debug)
                 color: '#4CAF50',
                 backColor: '#ddd',
                 doughnut: true,
-                doughnutSize: 0,
+                doughnutSize: 85,
                 width: 20,
                 height: 20,
                 showTip: false,
