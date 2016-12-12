@@ -44,16 +44,6 @@
       <th class='w-60px'><?php echo $lang->actions;?></th>
     </tr>
   </thead>
-  <?php  
-    $taskSum       = 0;
-    $statusWait    = 0;
-    $statusDone    = 0;
-    $statusDoing   = 0;
-    $statusClosed  = 0;  
-    $totalEstimate = 0.0;
-    $totalConsumed = 0.0;
-    $totalLeft     = 0.0;
-  ?>
   <?php
   if($groupBy == 'finishedBy') unset($tasks['']);
   if($groupBy == 'closedBy') unset($tasks['']);
@@ -74,6 +64,20 @@
     if($groupBy == 'assignedTo' and $groupName == '') $groupName = $this->lang->task->noAssigned;
   ?>
   <tbody>
+  <?php
+  $groupSum = count($groupTasks);
+  foreach($groupTasks as $task)
+  {
+      $groupEstimate  += $task->estimate;
+      $groupConsumed  += $task->consumed;
+      $groupLeft      += ($task->status == 'cancel' ? 0 : $task->left);
+
+      if($task->status == 'wait')   $groupWait++;
+      if($task->status == 'doing')  $groupDoing++;
+      if($task->status == 'done')   $groupDone++;
+      if($task->status == 'closed') $groupClosed++;
+  }
+  ?>
   <?php foreach($groupTasks as $task):?>
   <?php
   if(isset($currentFilter) and $currentFilter != 'all')
@@ -85,45 +89,14 @@
   ?>
   <?php $assignedToClass = $task->assignedTo == $app->user->account ? "style='color:red'" : '';?>
   <?php $taskLink        = $this->createLink('task','view',"taskID=$task->id"); ?>
-  <?php  
-    $totalEstimate  += $task->estimate;
-    $totalConsumed  += $task->consumed;
-    $totalLeft      += ($task->status == 'cancel' ? 0 : $task->left);
-
-    $groupEstimate  += $task->estimate;
-    $groupConsumed  += $task->consumed;
-    $groupLeft      += ($task->status == 'cancel' ? 0 : $task->left);
-
-    if($task->status == 'wait')
-    {
-        $statusWait++;
-        $groupWait++;
-    }
-    elseif($task->status == 'doing')
-    {
-        $statusDoing++;
-        $groupDoing++;
-    }
-    elseif($task->status == 'done')
-    {
-        $statusDone++;
-        $groupDone++;
-    }
-    elseif($task->status == 'closed')
-    {
-        $statusClosed++;
-        $groupClosed++;
-    }
-    $groupSum = count($groupTasks);
-    $taskSum += count($tasks);
-   ?>
     <tr class='text-center'>
       <?php if($i == 0):?>
       <td rowspan='<?php echo count($groupTasks) + 1?>' class='groupby text-left'>
         <?php echo html::a('###', "<i class='icon-caret-down'></i> " . $groupName, '', "class='expandGroup' data-action='expand' title='$groupName'");?>
         <div class='groupSummary text' style='white-space:normal'>
         <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHours, $users[$task->assignedTo], $members[$task->assignedTo]->totalHours);?>
-        <?php printf($lang->project->groupSummaryAB, $groupSum, $groupWait, $groupDoing, $groupEstimate, $groupConsumed, $groupLeft);?></div>
+        <?php printf($lang->project->groupSummaryAB, $groupSum, $groupWait, $groupDoing, $groupEstimate, $groupConsumed, $groupLeft);?>
+        </div>
       </td>
       <?php endif;?>
       <td><?php echo $task->id;?></td>
