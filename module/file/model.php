@@ -366,6 +366,7 @@ class fileModel extends model
             $line = str_replace(',"",', ',,', $line);
             $line = str_replace(',"",', ',,', $line);
             $line = preg_replace_callback('/(\"{2,})(\,+)/U', array($this, 'removeInterference'), $line);
+            $line = str_replace('""', '"', $line);
 
             /* if only one column then line is the data. */
             if(strpos($line, ',') === false and $col == -1)
@@ -404,8 +405,8 @@ class fileModel extends model
                         if($pos === false)
                         {
                             $data[$row][$col] = $line;
-                            /* if end of cell is not '"', then the data of cell is not end. */
-                            if(strlen($line) == 1 or $line{strlen($line) - 1} != '"') continue 2;
+                            /* if line is not empty, then the data of cell is not end. */
+                            if(strlen($line) >= 1) continue 2;
                             $line = '';
                         }
                         else
