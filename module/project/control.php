@@ -86,7 +86,7 @@ class project extends control
         $this->loadModel('product');
 
         /* Get projects and products info. */
-        $projectID     = $this->project->saveState($projectID, array_keys($this->projects));
+        $projectID     = $this->project->saveState($projectID, $this->projects);
         $project       = $this->project->getById($projectID);
         $products      = $this->project->getProducts($project->id);
         $childProjects = $this->project->getChildProjects($project->id);

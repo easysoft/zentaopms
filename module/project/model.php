@@ -196,8 +196,9 @@ class projectModel extends model
     public function saveState($projectID, $projects)
     {
         if($projectID > 0) $this->session->set('project', (int)$projectID);
-        if($projectID == 0 and $this->cookie->lastProject)    $this->session->set('project', (int)$this->cookie->lastProject);
-        if($projectID == 0 and $this->session->project == '') $this->session->set('project', $projects[0]);
+        if($projectID == 0 and $this->cookie->lastProject) $this->session->set('project', (int)$this->cookie->lastProject);
+        if($projectID == 0 and $this->session->project == '') $this->session->set('project', key($projects));
+        if(!isset($projects[$this->session->project])) $this->session->set('project', key($projects));
         return $this->session->project;
     }
 
