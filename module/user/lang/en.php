@@ -108,8 +108,8 @@ $lang->user->roleList['qd']     = 'QA Supervisor';
 $lang->user->roleList['top']    = 'Senior Manager';
 $lang->user->roleList['others'] = 'Other';
 
-$lang->user->genderList['m'] = 'Male';
-$lang->user->genderList['f'] = 'Female';
+$lang->user->genderList['m'] = 'M';
+$lang->user->genderList['f'] = 'F';
 
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>Weak</span>";
 $lang->user->passwordStrengthList[1] = "<span style='color:#000'>Good</span>";
