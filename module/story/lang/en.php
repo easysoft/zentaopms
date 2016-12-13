@@ -163,8 +163,8 @@ $lang->story->legendFromBug        = 'From Bug';
 $lang->story->legendCases          = 'Linked Case';
 $lang->story->legendLinkStories    = 'Linked Story';
 $lang->story->legendChildStories   = 'Subdivide Story';
-$lang->story->legendSpec           = 'Story Description';
-$lang->story->legendVerify         = 'Acceptance Criteria';
+$lang->story->legendSpec           = 'Description';
+$lang->story->legendVerify         = 'Acceptance';
 $lang->story->legendMisc           = 'Misc ';
 
 $lang->story->lblChange            = 'Change';

@@ -95,7 +95,7 @@ $lang->action->desc->deleteestimate = '$date, <strong>$actor</strong> delete man
 $lang->action->desc->canceled       = '$date, cancelled by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->svncommited    = '$date, submitted by <strong>$actor</strong> and the version is <strong>#$extra</strong>.' . "\n";
 $lang->action->desc->gitcommited    = '$date, submitted by <strong>$actor</strong> and the version is <strong>#$extra</strong>.' . "\n";
-$lang->action->desc->finished       = '$date, accomplished by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->finished       = '$date, finished by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->paused         = '$date, paused by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->diff1          = '<strong><i>%s</i></strong> has been modified. Its value was "%s" and the new value is "%s".<br />' . "\n";
 $lang->action->desc->diff2          = '<strong><i>%s</i></strong> has been modified. The difference is ' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
