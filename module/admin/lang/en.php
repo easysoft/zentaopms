@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->admin->common  = 'Administration';
-$lang->admin->index   = 'Admin Homepage';
+$lang->admin->index   = 'Admin Home';
 $lang->admin->checkDB = 'Check Database Library';
 $lang->admin->sso     = 'RangerTeam';
 $lang->admin->safeIndex = 'Security';

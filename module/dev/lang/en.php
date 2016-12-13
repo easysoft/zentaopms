@@ -95,5 +95,5 @@ $lang->dev->groupList['qa']      = 'Testing';
 $lang->dev->groupList['doc']     = 'Document';
 $lang->dev->groupList['report']  = 'Report';
 $lang->dev->groupList['company'] = 'Company';
-$lang->dev->groupList['admin']   = 'Administration';
+$lang->dev->groupList['admin']   = 'Admin';
 $lang->dev->groupList['other']   = 'Others';
