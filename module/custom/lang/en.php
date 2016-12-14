@@ -1,6 +1,6 @@
 <?php
 $lang->custom->common    = 'Custom';
-$lang->custom->index     = 'Homepage';
+$lang->custom->index     = 'Home';
 $lang->custom->set       = 'Customize';
 $lang->custom->restore   = 'Reset to Default';
 $lang->custom->key       = 'Key';

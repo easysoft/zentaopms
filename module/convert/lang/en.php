@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->convert->common  = 'Imported';
-$lang->convert->index   = 'Homepage';
+$lang->convert->index   = 'Home';
 
 $lang->convert->start   = 'Start';
 $lang->convert->desc    = <<<EOT

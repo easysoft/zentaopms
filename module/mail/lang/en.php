@@ -1,6 +1,6 @@
 <?php
 $lang->mail->common = 'Email Settings';
-$lang->mail->index  = 'Homepage';
+$lang->mail->index  = 'Home';
 $lang->mail->detect = 'Testing';
 $lang->mail->edit   = 'Edit Settings';
 $lang->mail->save   = 'Saved';

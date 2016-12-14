@@ -159,7 +159,7 @@ $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
 $lang->my->menu->account        = array('link' => '<span id="myname"><i class="icon-user"></i> %s' . $lang->arrow . '</span>', 'fixed' => true);
-$lang->my->menu->index          = 'Homepage|my|index';
+$lang->my->menu->index          = 'Home|my|index';
 $lang->my->menu->todo           = array('link' => 'To-Do|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task           = array('link' => 'Task|my|task|', 'subModule' => 'task');
 $lang->my->menu->bug            = array('link' => 'Bug|my|bug|',   'subModule' => 'bug');

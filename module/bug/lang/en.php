@@ -57,7 +57,7 @@ $lang->bug->linkBugs         = 'Link Bug';
 $lang->bug->unlinkBug        = 'Unlink Bug';
 $lang->bug->case             = 'Case';
 $lang->bug->files            = 'File';
-$lang->bug->keywords         = 'Keyword';
+$lang->bug->keywords         = 'Keywords';
 $lang->bug->lastEditedByAB   = 'Edited By';
 $lang->bug->lastEditedDateAB = 'Edit Date';
 $lang->bug->lastEditedDate   = 'Edit Date';
@@ -66,9 +66,9 @@ $lang->bug->toCase           = 'To a Case';
 $lang->bug->colorTag         = 'Color Tag';
 
 /* 方法列表。*/
-$lang->bug->index              = 'Homepage';
-$lang->bug->create             = 'Create Bug';
-$lang->bug->batchCreate        = 'Batch Create';
+$lang->bug->index              = 'Home';
+$lang->bug->create             = 'Report Bug';
+$lang->bug->batchCreate        = 'Batch Report';
 $lang->bug->confirmBug         = 'Confirm';
 $lang->bug->batchConfirm       = 'Batch Confirm';
 $lang->bug->edit               = 'Edit';
@@ -87,7 +87,7 @@ $lang->bug->reportChart        = 'Report';
 $lang->bug->export             = 'Export Data';
 $lang->bug->delete             = 'Delete Bug';
 $lang->bug->deleted            = 'Deleted';
-$lang->bug->saveTemplate       = 'Save Template';
+$lang->bug->saveTemplate       = 'Save as Template';
 $lang->bug->setPublic          = 'Set as Public';
 $lang->bug->deleteTemplate     = 'Delete Template';
 $lang->bug->confirmStoryChange = 'Story Change Confirmation';
@@ -113,7 +113,7 @@ $lang->bug->ditto       = 'Ditto';
 $lang->bug->dittoNotice = 'This bug does not affiliate to the same product as the last one!';
 
 /* 页面标签。*/
-$lang->bug->lblAssignedTo               = 'Current Assign';
+$lang->bug->lblAssignedTo               = 'Assignee';
 $lang->bug->lblMailto                   = 'Mail To';
 $lang->bug->lblLastEdited               = 'Last Edited';
 $lang->bug->lblResolved                 = 'Solved By';

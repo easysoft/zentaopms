@@ -1,7 +1,7 @@
 <?php
 $lang->cron->common      = 'Cron';
-$lang->cron->index       = 'Homepage';
-$lang->cron->list        = 'Task List';
+$lang->cron->index       = 'Home';
+$lang->cron->list        = 'Tasks';
 $lang->cron->create      = 'Add';
 $lang->cron->edit        = 'Edit';
 $lang->cron->delete      = 'Delete';

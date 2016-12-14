@@ -44,7 +44,7 @@ $lang->doc->orderByOpen    = 'Recently Added';
 $lang->doc->orderByEdit    = 'Recently Modifie';
 
 /* 方法列表。*/
-$lang->doc->index          = 'Homepage';
+$lang->doc->index          = 'Home';
 $lang->doc->create         = 'Create';
 $lang->doc->edit           = 'Edit';
 $lang->doc->delete         = 'Delete';
