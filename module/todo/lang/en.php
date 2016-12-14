@@ -54,9 +54,9 @@ $lang->todo->typeList['custom'] = 'Custom';
 $lang->todo->typeList['bug']    = 'Bug';
 $lang->todo->typeList['task']   = $lang->projectCommon . 'Task';
 
-$lang->todo->confirmDelete  = "Are you sure to delete this todo?";
-$lang->todo->thisIsPrivate  = 'This is a private todo。:)';
-$lang->todo->lblDisableDate = 'Set time lately';
+$lang->todo->confirmDelete  = "Are you sure to delete this To-Do?";
+$lang->todo->thisIsPrivate  = 'This is a private To-Do:)';
+$lang->todo->lblDisableDate = 'Set later.';
 
 $lang->todo->periods['today']      = 'Today';
 $lang->todo->periods['yesterday']  = 'Yesterday';
@@ -66,7 +66,7 @@ $lang->todo->periods['thisMonth']  = 'This Month';
 $lang->todo->periods['lastmonth']  = 'Last Month';
 $lang->todo->periods['thisSeason'] = 'This Season';
 $lang->todo->periods['thisYear']   = 'This Year';
-$lang->todo->periods['future']     = 'Future';
+$lang->todo->periods['future']     = 'Pending';
 $lang->todo->periods['before']     = 'Undone';
 $lang->todo->periods['all']        = 'All';
 
