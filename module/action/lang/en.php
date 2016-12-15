@@ -102,7 +102,7 @@ $lang->action->desc->diff2          = '<strong><i>%s</i></strong> has been modif
 $lang->action->desc->diff3          = 'File Name %s was changed to %s .' . "\n";
 
 /* 关联用例和移除用例时的历史操作记录。*/
-$lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> linked relevant use case <strong>$extra</strong>.' . "\n";
+$lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> related relevant use case <strong>$extra</strong>.' . "\n";
 $lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> removed relevant use case <strong>$extra</strong>.' . "\n";
 
 /* 用来显示动态信息。*/
@@ -131,20 +131,20 @@ $lang->action->label->frombug             = 'Converted from Bug';
 $lang->action->label->totask              = 'Convert to Task';
 $lang->action->label->svncommited         = 'SVN Commit';
 $lang->action->label->gitcommited         = 'Git Commit';
-$lang->action->label->linked2plan         = 'Link to Plan';
-$lang->action->label->unlinkedfromplan    = 'Unlink from Plan';
+$lang->action->label->linked2plan         = 'Relate to Plan';
+$lang->action->label->unlinkedfromplan    = 'Cancel Relation';
 $lang->action->label->changestatus        = 'Change Status';
 $lang->action->label->marked              = 'Marked';
-$lang->action->label->linked2project      = "Link {$lang->projectCommon}";
+$lang->action->label->linked2project      = "Relate {$lang->projectCommon}";
 $lang->action->label->unlinkedfromproject = "Remove {$lang->projectCommon}";
-$lang->action->label->linkrelatedbug      = "Link to Bug";
-$lang->action->label->unlinkrelatedbug    = "Removed Linked Bug";
-$lang->action->label->linkrelatedcase     = "Link to Case";
-$lang->action->label->unlinkrelatedcase   = "Unlink from Case";
-$lang->action->label->linkrelatedstory    = "Link to Story";
-$lang->action->label->unlinkrelatedstory  = "Unlink from Story";
+$lang->action->label->linkrelatedbug      = "Relate to Bug";
+$lang->action->label->unlinkrelatedbug    = "RCancel Relation";
+$lang->action->label->linkrelatedcase     = "Relate to Case";
+$lang->action->label->unlinkrelatedcase   = "Cancel Relation";
+$lang->action->label->linkrelatedstory    = "Relate to Story";
+$lang->action->label->unlinkrelatedstory  = "Cancel Relation";
 $lang->action->label->subdividestory      = "Decompose Story";
-$lang->action->label->unlinkchildstory    = "Unlink decomposed Story";
+$lang->action->label->unlinkchildstory    = "Cancel Relation";
 $lang->action->label->started             = 'Initiated';
 $lang->action->label->restarted           = 'Continued';
 $lang->action->label->recordestimate      = 'Recorded Man-Hour';

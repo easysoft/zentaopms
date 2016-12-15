@@ -12,16 +12,16 @@
 $lang->release->common    = 'Release';
 $lang->release->create    = "Create";
 $lang->release->edit      = "Edit";
-$lang->release->linkStory = "Link Story";
-$lang->release->linkBug   = "Link Bug";
+$lang->release->linkStory = "Relate Story";
+$lang->release->linkBug   = "Relate Bug";
 $lang->release->delete    = "Delete";
 $lang->release->deleted   = 'Deleted';
 $lang->release->view      = "Info";
 $lang->release->browse    = "Browse";
 $lang->release->changeStatus     = "Change Status";
-$lang->release->batchUnlink      = "Batch Unlink";
-$lang->release->batchUnlinkStory = "Batch Unlink Story";
-$lang->release->batchUnlinkBug   = "Batch unlink Bug";
+$lang->release->batchUnlink      = "Batch Cancel Relation";
+$lang->release->batchUnlinkStory = "Batch Cancel Relation";
+$lang->release->batchUnlinkBug   = "Batch Cancel Relation";
 
 $lang->release->confirmDelete      = "Do you want to delete this Release?";
 $lang->release->confirmUnlinkStory = "Do you want to remove this Story?";
