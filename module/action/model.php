@@ -819,7 +819,7 @@ class actionModel extends model
         /* Revert doclib when undelet product or project. */
         if($action->objectType == 'project' or $action->objectType == 'product')
         {
-            $this->dao->update(TABLE_DOCLIT)->set('deleted')->eq(0)->where($action->objectType)->eq($action->objectID)->exec();
+            $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(0)->where($action->objectType)->eq($action->objectID)->exec();
         }
 
         /* Update action record in action table. */
