@@ -75,6 +75,10 @@ class custom extends control
             {
                 $this->loadModel('setting')->setItems('system.project', fixer::input('post')->get());
             }
+            elseif($module == 'bug' && $field == 'longlife')
+            {
+                $this->loadModel('setting')->setItems('system.bug', fixer::input('post')->get());
+            }
             else
             {
                 $lang = $_POST['lang'];
