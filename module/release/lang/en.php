@@ -19,9 +19,9 @@ $lang->release->deleted   = 'Deleted';
 $lang->release->view      = "Info";
 $lang->release->browse    = "Browse";
 $lang->release->changeStatus     = "Change Status";
-$lang->release->batchUnlink      = "Batch Cancel Relation";
-$lang->release->batchUnlinkStory = "Batch Cancel Relation";
-$lang->release->batchUnlinkBug   = "Batch Cancel Relation";
+$lang->release->batchUnlink      = "Batch Unrelate";
+$lang->release->batchUnlinkStory = "Batch Unrelate";
+$lang->release->batchUnlinkBug   = "Batch Unrelate";
 
 $lang->release->confirmDelete      = "Do you want to delete this Release?";
 $lang->release->confirmUnlinkStory = "Do you want to remove this Story?";

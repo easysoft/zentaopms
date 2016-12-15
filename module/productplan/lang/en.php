@@ -24,14 +24,14 @@ $lang->productplan->batchUnlink      = "Batch Remove";
 $lang->productplan->linkStory        = "Relate Story";
 $lang->productplan->unlinkStory      = "Remove Story";
 $lang->productplan->batchUnlinkStory = "Batch Remove Story";
-$lang->productplan->linkedStories    = 'Relateed Story';
-$lang->productplan->unlinkedStories  = 'Cancel Relation';
+$lang->productplan->linkedStories    = 'Related Story';
+$lang->productplan->unlinkedStories  = 'Unrelated';
 
 $lang->productplan->linkBug          = "Relate Bug";
 $lang->productplan->unlinkBug        = "Remove Bug";
 $lang->productplan->batchUnlinkBug   = "Batch Remove Bug";
-$lang->productplan->linkedBugs       = 'Relateed Bug';
-$lang->productplan->unlinkedBugs     = 'Cancel Relation';
+$lang->productplan->linkedBugs       = 'Related Bug';
+$lang->productplan->unlinkedBugs     = 'Unrelated';
 
 $lang->productplan->confirmDelete      = "Do you want to delete this Plan?";
 $lang->productplan->confirmUnlinkStory = "Do you want to remove this Story?";

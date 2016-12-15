@@ -16,7 +16,7 @@ $lang->testtask->view           = "Info";
 $lang->testtask->edit           = "Edit";
 $lang->testtask->browse         = "Test Tasks";
 $lang->testtask->linkCase       = "Relate Cases";
-$lang->testtask->unlinkCase     = "Cancel Relation";
+$lang->testtask->unlinkCase     = "Unrelate";
 $lang->testtask->batchAssign    = "Batch Assign";
 $lang->testtask->runCase        = "Run";
 $lang->testtask->batchRun       = "Batch Run";
@@ -67,7 +67,7 @@ $lang->testtask->priList[1] = '1';
 $lang->testtask->priList[2] = '2';
 $lang->testtask->priList[4] = '4';
 
-$lang->testtask->unlinkedCases = 'Cancel Relation';
+$lang->testtask->unlinkedCases = 'Unrelated Cases';
 $lang->testtask->linkByStory   = 'Related by Story';
 $lang->testtask->linkByBug     = 'Related by Bug';
 $lang->testtask->passAll       = 'All Pass';
