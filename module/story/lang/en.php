@@ -17,7 +17,7 @@ $lang->story->review      = 'Review';
 $lang->story->batchReview = 'Batch Review';
 $lang->story->edit        = "Edit";
 $lang->story->batchEdit   = "Batch Edit";
-$lang->story->subdivide   = 'Subdivide';
+$lang->story->subdivide   = 'Decompose';
 $lang->story->close       = 'Close';
 $lang->story->batchClose  = 'Batch Close';
 $lang->story->activate    = 'Activate';
@@ -80,7 +80,7 @@ $lang->story->plan           = 'Plan';
 $lang->story->planAB         = 'Plan';
 $lang->story->comment        = 'Comment';
 $lang->story->linkStories    = 'Relate Story';
-$lang->story->childStories   = 'Subdivide Story';
+$lang->story->childStories   = 'Decompose Story';
 $lang->story->duplicateStory = 'Duplicate Story';
 $lang->story->reviewResult   = 'Review Results';
 $lang->story->preVersion     = 'Previous Version';
@@ -114,7 +114,7 @@ $lang->story->stageList['released']   = 'Released';
 
 $lang->story->reasonList['']           = '';
 $lang->story->reasonList['done']       = 'Done';
-$lang->story->reasonList['subdivided'] = 'Subdivided';
+$lang->story->reasonList['subdivided'] = 'Decomposed';
 $lang->story->reasonList['duplicate']  = 'Duplicate';
 $lang->story->reasonList['postponed']  = 'Postponed';
 $lang->story->reasonList['willnotdo']  = "Ignore";
@@ -162,7 +162,7 @@ $lang->story->legendBugs           = 'Related Bug';
 $lang->story->legendFromBug        = 'From Bug';
 $lang->story->legendCases          = 'Related Case';
 $lang->story->legendLinkStories    = 'Related Story';
-$lang->story->legendChildStories   = 'Subdivide Story';
+$lang->story->legendChildStories   = 'Decompose Story';
 $lang->story->legendSpec           = 'Description';
 $lang->story->legendVerify         = 'Acceptance';
 $lang->story->legendMisc           = 'Misc ';
@@ -203,9 +203,9 @@ $lang->story->action->unlinkedfrombuild   = array('main' => '$date, removed by <
 $lang->story->action->linked2release      = array('main' => '$date, related by <strong>$actor</strong> to Release <strong>$extra</strong>');
 $lang->story->action->unlinkedfromrelease = array('main' => '$date, removed by <strong>$actor</strong> from Release <strong>$extra</strong>.');
 $lang->story->action->linkrelatedstory    = array('main' => '$date, related by <strong>$actor</strong> to Story <strong>$extra</strong>.');
-$lang->story->action->subdividestory      = array('main' => '$date, subdivided by <strong>$actor</strong> to Story <strong>$extra</strong>.');
+$lang->story->action->subdividestory      = array('main' => '$date, decomposed by <strong>$actor</strong> to Story <strong>$extra</strong>.');
 $lang->story->action->unlinkrelatedstory  = array('main' => '$date, removed by <strong>$actor</strong> from Story <strong>$extra</strong>.');
-$lang->story->action->unlinkchildstory    = array('main' => '$date, removed by <strong>$actor</strong> Subdivided Story <strong>$extra</strong>.');
+$lang->story->action->unlinkchildstory    = array('main' => '$date, removed by <strong>$actor</strong> Decomposed Story <strong>$extra</strong>.');
 
 /* 统计报表。*/
 $lang->story->report = new stdclass();
