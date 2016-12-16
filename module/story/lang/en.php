@@ -135,14 +135,14 @@ $lang->story->sourceList['']           = '';
 $lang->story->sourceList['customer']   = 'Customer';
 $lang->story->sourceList['user']       = 'User';
 $lang->story->sourceList['po']         = $lang->productCommon . ' Owner';
-$lang->story->sourceList['market']     = 'Market';
+$lang->story->sourceList['market']     = 'Marketing';
 $lang->story->sourceList['service']    = 'Customer service';
 $lang->story->sourceList['operation']  = 'Operations';
 $lang->story->sourceList['support']    = 'Technical support';
 $lang->story->sourceList['competitor'] = 'Competitor';
 $lang->story->sourceList['partner']    = 'Partner';
-$lang->story->sourceList['dev']        = 'Developer';
-$lang->story->sourceList['tester']     = 'Tester';
+$lang->story->sourceList['dev']        = 'Dev Team';
+$lang->story->sourceList['tester']     = 'Testing Team';
 $lang->story->sourceList['bug']        = 'Bug';
 $lang->story->sourceList['other']      = 'Other';
 
