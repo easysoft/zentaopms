@@ -68,9 +68,9 @@ class admin extends control
             $response = json_decode($response);
             if($response->result == 'success')
 			{
-                $user = json_decode($response->data);
+                $user = $response->data;
                 $data['community'] = $user->account;
-                $data['ztPrivateKey'] = $user->privateKey;
+                $data['ztPrivateKey'] = $user->private;
 
 				$this->loadModel('setting');
                 $this->setting->deleteItems('owner=system&module=common&section=global&key=community');
@@ -80,9 +80,13 @@ class admin extends control
 				echo js::alert($this->lang->admin->register->success);
                 if($from == 'admin') die(js::locate(inlink('index'), 'parent'));
                 if($from == 'mail') die(js::locate($this->createLink('mail', 'ztcloud'), 'parent'));
-			}
-			die($response);
-		}
+            }
+
+            $alertMessage = '';
+            foreach($response->message as $item) $alertMessage .= is_array($item) ? join('\n', $item) . '\n' : $item . '\n';
+            $alertMessage = str_replace(array('<strong>', '</strong>'), '', $alertMessage);
+            die(js::alert($alertMessage));
+        }
 
         $this->view->title      = $this->lang->admin->register->caption;
         $this->view->position[] = $this->lang->admin->register->caption;
@@ -108,7 +112,7 @@ class admin extends control
             {
                 $user = $response->data;
                 $data['community'] = $user->account;
-                $data['ztPrivateKey'] = $user->privateKey;
+                $data['ztPrivateKey'] = $user->private;
 
 				$this->loadModel('setting');
                 $this->setting->deleteItems('owner=system&module=common&section=global&key=community');
