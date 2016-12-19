@@ -36,8 +36,8 @@ $lang->todo->status      = 'Status';
 $lang->todo->desc        = 'Description';
 $lang->todo->private     = 'Private';
 
-$lang->todo->confirmBug   = 'This To-Do is linked to Bug #%s. Do you want to edit it?';
-$lang->todo->confirmTask  = 'This To-Do is linked to Task #%s，Do you want to edit it?';
+$lang->todo->confirmBug   = 'This To-Do is related to Bug #%s. Do you want to edit it?';
+$lang->todo->confirmTask  = 'This To-Do is related to Task #%s，Do you want to edit it?';
 
 $lang->todo->statusList['wait']     = 'Wait';
 $lang->todo->statusList['doing']    = 'Doing';

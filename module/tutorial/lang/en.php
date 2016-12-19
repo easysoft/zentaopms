@@ -11,7 +11,7 @@
  */
 $lang->tutorial = new stdclass();
 $lang->tutorial->common           = 'Tutorial';
-$lang->tutorial->desc             = 'Get to know ZenTao through finishing of tasks. It will take about 10 mins, and you can quit it anytime.';
+$lang->tutorial->desc             = 'Get to know ZenTao through finishing tasks. It will take about 10 mins, and you can quit it anytime.';
 $lang->tutorial->start            = "Let's go!";
 $lang->tutorial->exit             = 'Quit';
 $lang->tutorial->congratulation   = 'Congratulations! You have finished all tasks.';
@@ -54,9 +54,9 @@ $lang->tutorial->tasks['manageTeam']         = array('title' => 'Manage Project 
 $lang->tutorial->tasks['manageTeam']['nav']  = array('module' => 'project', 'method' => 'managemembers', 'menu' => 'team', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'account1', 'submit' => '#submit', 'targetPageName' => 'Manage team members');
 $lang->tutorial->tasks['manageTeam']['desc'] = "<p>Manage project team members: </p><ul><li data-target='nav'>Open <span class='task-nav'> Project <i class='icon icon-angle-right'></i> Team <i class='icon icon-angle-right'></i> Manage Team Members</span> Page；</li><li data-target='form'>Choose users for the team.</li><li data-target='submit'>Save</li></ul>";
 
-$lang->tutorial->tasks['linkStory']         = array('title' => 'Link Story');
-$lang->tutorial->tasks['linkStory']['nav']  = array('module' => 'project', 'method' => 'linkStory', 'menu' => 'story', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => 'Link Story');
-$lang->tutorial->tasks['linkStory']['desc'] = "<p>Link Story to Project: </p><ul><li data-target='nav'>Open <span class='task-nav'> Project <i class='icon icon-angle-right'></i> Story <i class='icon icon-angle-right'></i> Link Story;</span></li><li data-target='form'>Select stories from story list to link;</li><li data-target='submit'>Save</li></ul>";
+$lang->tutorial->tasks['linkStory']         = array('title' => 'Relate Story');
+$lang->tutorial->tasks['linkStory']['nav']  = array('module' => 'project', 'method' => 'linkStory', 'menu' => 'story', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => 'Relate Story');
+$lang->tutorial->tasks['linkStory']['desc'] = "<p>Relate Story to Project: </p><ul><li data-target='nav'>Open <span class='task-nav'> Project <i class='icon icon-angle-right'></i> Story <i class='icon icon-angle-right'></i>Relate Story;</span></li><li data-target='form'>Select stories from story list to relate;</li><li data-target='submit'>Save</li></ul>";
 
 $lang->tutorial->tasks['createTask']         = array('title' => 'Subdivide Tasks');
 $lang->tutorial->tasks['createTask']['nav']  = array('module' => 'task', 'method' => 'create', 'menuModule' => 'project', 'menu' => 'story', 'target' => '.btn-task-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => 'Create Task');
