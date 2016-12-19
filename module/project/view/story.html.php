@@ -138,7 +138,7 @@
           <td colspan='10'>
             <div class='table-actions clearfix'>
             <?php
-            $storyInfo = sprintf($lang->project->productStories, inlink('linkStory'));
+            $storyInfo = sprintf($lang->project->productStories, inlink('linkStory', "project={$project->id}"));
             if(count($stories))
             {
               if($canBatchEdit or $canBatchClose) echo html::selectButton();
