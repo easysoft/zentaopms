@@ -125,6 +125,55 @@ class adminModel extends model
 		return $this->postAPI($apiURL, $_POST);
 	}
 
+    public function getSecretKey()
+    {
+		//$apiURL = "http://www.zentao.net/user-secretKey.json";
+		$apiURL = "http://www.zentao.cn/user-secretKey.json";
+        $params['account']   = $this->config->global->community;
+        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $params['signature'] = $this->getSignature($params);
+		$this->agent->cookies['lang'] = $this->cookie->lang;
+    	$this->agent->fetch($apiURL . '?' . http_build_query($params));
+		$result = $this->agent->results;
+		$result = json_decode($result);
+        return $result;
+    }
+
+    public function sendCodeByAPI($type)
+    {
+        $module = $type == 'mobile' ? 'sms' : 'mail';
+//        $apiURL = "http://www.zentao.net/{$module}-apiSendCode.json";
+        $apiURL = "http://www.zentao.cn/{$module}-apiSendCode.json";
+        $params['account']   = $this->config->global->community;
+        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $params['signature'] = $this->getSignature($params);
+
+        $param = http_build_query($params);
+		return $this->postAPI($apiURL . '?' . $param, $_POST);
+    }
+
+    public function certifyByAPI($type)
+    {
+        $module = $type == 'mobile' ? 'sms' : 'mail';
+//        $apiURL = "http://www.zentao.net/{$module}-apiCertify.json";
+        $apiURL = "http://www.zentao.cn/{$module}-apiCertify.json";
+        $params['account']   = $this->config->global->community;
+        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $params['signature'] = $this->getSignature($params);
+
+        $param = http_build_query($params);
+		return $this->postAPI($apiURL . '?' . $param, $_POST);
+    }
+
+    public function getSignature($params)
+    {
+        ksort($params);
+        $data = '';
+        foreach($params as $key => $value) $data .= $key . '=' . $value . '&';
+        $privateKey = $this->config->global->ztPrivateKey;
+        return md5($privateKey . '&' . $data . $privateKey);
+    }
+
 	/**
 	 * Get register information. 
 	 * 

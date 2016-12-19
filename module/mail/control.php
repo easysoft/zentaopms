@@ -40,6 +40,7 @@ class mail extends control
         if($this->config->mail->turnon)
         {
             if($this->config->mail->mta == 'sendcloud') $this->locate(inlink('sendcloud'));
+            if($this->config->mail->mta == 'ztcloud') $this->locate(inlink('ztcloud'));
             if($this->config->mail->mta == 'smtp') $this->locate(inlink('edit'));
         }
         $this->view->title = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->index;
@@ -451,5 +452,80 @@ class mail extends control
         $this->view->members = $this->mta->memberList();
         $this->view->users   = $this->loadModel('user')->getList();
         $this->display();
+    }
+
+    public function ztCloud()
+    {
+        if($_POST)
+        {
+            $mailConfig = new stdclass();
+            $mailConfig->sendcloud = new stdclass();
+
+            $mailConfig->turnon      = $this->post->turnon;
+            $mailConfig->mta         = 'ztcloud';
+            $mailConfig->async       = $this->post->async;
+            $mailConfig->fromAddress = $this->post->fromAddress; 
+            $mailConfig->fromName    = $this->post->fromName;
+            $mailConfig->domain      = trim($this->post->domain);
+
+            if(empty($mailConfig->fromName)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->mail->fromName)));
+
+            $this->loadModel('setting')->setItems('system.mail', $mailConfig);
+            die(js::reload('parent'));
+        }
+
+        $this->view->title      = $this->lang->mail->ztCloud;
+        $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
+        $this->view->position[] = $this->lang->mail->ztCloud;
+        if(!empty($this->config->mail->ztcloud->secretKey))
+        {
+            $mailConfig = new stdclass();
+            $mailConfig->fromAddress = $this->config->mail->fromAddress;
+            $mailConfig->fromName    = $this->config->mail->fromName;
+            $mailConfig->turnon      = $this->config->mail->turnon;
+            $mailConfig->domain      = isset($this->config->mail->domain) ? $this->config->mail->domain : common::getSysURL();
+            $mailConfig->async       = isset($this->config->mail->async) ? $this->config->mail->async : 0;
+
+            $this->view->mailExist  = $this->mail->mailExist();
+            $this->view->mailConfig = $mailConfig;
+            $this->view->step       = 'config';
+            die($this->display());
+        }
+
+        if($this->cookie->ztCloudLicense != 'yes')
+        {
+            $this->view->step = 'license';
+            die($this->display());
+        }
+        if(empty($this->config->global->ztPrivateKey) or $this->config->global->community == 'na' or empty($this->config->global->community))
+        {
+            if(!empty($this->config->global->community) and $this->config->global->community != 'na') die(js::locate($this->createLink('admin', 'bind', 'from=mail')));
+            die(js::locate($this->createLink('admin', 'register', 'from=mail')));
+        }
+        $result = $this->loadModel('admin')->getSecretKey();
+        $data   = $result->data;
+        if($result->result == 'fail' and empty($data->emailCertified))
+        {
+            die(js::locate($this->createLink('admin', 'certifyZtEmail', 'email=' . helper::safe64Encode($data->email))));
+        }
+        if($result->result == 'fail' and (empty($data->mobileCertified) or $data->mobileCertified != $data->mobile))
+        {
+            die(js::locate($this->createLink('admin', 'certifyZtMobile', 'mobile=' . helper::safe64Encode($data->mobile))));
+        }
+        if($result->result == 'success')
+        {
+            $this->loadModel('setting')->setItem('system.mail.ztcloud.secretKey', $data->secretKey);
+            $this->setting->setItem('system.mail.fromAddress', $data->email);
+
+            $mailConfig = new stdclass();
+            $mailConfig->turnon      = true;
+            $mailConfig->fromAddress = $data->email;
+            $mailConfig->fromName    = $this->config->mail->fromName;
+            $mailConfig->domain      = isset($this->config->mail->domain) ? $this->config->mail->domain : common::getSysURL();
+
+            $this->view->mailConfig = $mailConfig;
+            $this->view->step       = 'config';
+            die($this->display());
+        }
     }
 }

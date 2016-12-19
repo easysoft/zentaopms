@@ -21,7 +21,8 @@ class mailModel extends model
     public function __construct()
     {
         parent::__construct();
-        $this->app->loadClass($this->config->mail->mta == 'sendcloud' ? 'sendcloud' : 'phpmailer', $static = true);
+        $mta = $this->config->mail->mta;
+        $this->app->loadClass(($mta == 'sendcloud' or $mta == 'ztcloud') ? $mta : 'phpmailer', $static = true);
         $this->setMTA();
     }
 
@@ -162,7 +163,8 @@ class mailModel extends model
      */
     public function setMTA()
     {
-        $className = $this->config->mail->mta == 'sendcloud' ? 'sendcloud' : 'phpmailer';
+        $mta = $this->config->mail->mta;
+        $className = ($mta == 'sendcloud' or $mta == 'ztcloud') ? $mta : 'phpmailer';
         if(self::$instance == null) self::$instance = new $className(true);
         $this->mta = self::$instance;
         $this->mta->CharSet = $this->config->charset;
@@ -202,6 +204,12 @@ class mailModel extends model
     {
         $this->mta->accessKey = $this->config->mail->sendcloud->accessKey;
         $this->mta->secretKey = $this->config->mail->sendcloud->secretKey;
+    }
+
+    public function setZtcloud()
+    {
+        $this->mta->account   = $this->config->global->community;
+        $this->mta->secretKey = $this->config->mail->ztcloud->secretKey;
     }
 
     /**

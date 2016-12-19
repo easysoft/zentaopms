@@ -8,9 +8,12 @@ $lang->mail->test   = '测试发信';
 $lang->mail->reset  = '重置';
 $lang->mail->browse = '邮件列表';
 $lang->mail->delete = '删除邮件';
-$lang->mail->sendCloud     = 'SendCloud发信';
+$lang->mail->ztCloud       = 'SendCloud发信';
+$lang->mail->sendCloud     = 'Notice发信';
 $lang->mail->batchDelete   = '批量删除';
 $lang->mail->sendcloudUser = '同步联系人';
+$lang->mail->agreeLicense  = '同意';
+$lang->mail->disagree      = '不同意';
 
 $lang->mail->turnon      = '是否打开';
 $lang->mail->async       = '异步发送';
@@ -27,6 +30,7 @@ $lang->mail->debug       = '调试级别';
 $lang->mail->charset     = '编码';
 $lang->mail->accessKey   = 'accessKey';
 $lang->mail->secretKey   = 'secretKey';
+$lang->mail->license     = 'Sendcloud发信须知';
 
 $lang->mail->selectMTA = '请选择发信方式：';
 $lang->mail->smtp      = 'SMTP发信';
@@ -85,6 +89,12 @@ EOD;
 $lang->mail->sendCloudSuccess = '操作成功';
 $lang->mail->closeSendCloud   = '关闭SendCloud';
 $lang->mail->addressWhiteList = '为防止邮件被屏蔽，请在邮件服务器里面将发信邮箱设为白名单';
+$lang->mail->ztCloudNotice    = <<<EOD
+<p>1、用户需到禅道官网做账号绑定，并且认证手机和邮箱。同时填写公司信息以便完成禅道企业认证。绑定完成后，即可发信。但每天只能发50封，而且只能用三天。</p>
+<p>2、禅道对用户提交的认证完成审核，并通过后，即可享受七天，每天200封的发信服务。</p>
+<p>3、我们会将认证通过的用户信息提交到Sendcloud做认证。Sendcloud认证通过之后，即可享受每天定200封的完整服务。</p>
+<p>如果不同意以上条款，就不能该服务。</p>
+EOD;
 
 $lang->mail->placeholder = new stdclass();
 $lang->mail->placeholder->password = '有些邮箱需要填写单独申请的授权码，具体请到邮箱相关设置查询。';
