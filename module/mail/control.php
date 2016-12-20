@@ -307,10 +307,13 @@ class mail extends control
         $log = '';
         foreach($queueList as $queue)
         {
-            $mailStatus = $this->dao->select('*')->from(TABLE_MAILQUEUE)->where('id')->eq($queue->id)->fetch('status');
-            if(empty($mailStatus) or $mailStatus != 'wait') continue;
+            if(!isset($queue->merge) or $queue->merge == false)
+            {
+                $mailStatus = $this->dao->select('*')->from(TABLE_MAILQUEUE)->where('id')->eq($queue->id)->fetch('status');
+                if(empty($mailStatus) or $mailStatus != 'wait') continue;
+            }
 
-            $this->dao->update(TABLE_MAILQUEUE)->set('status')->eq('sending')->where('id')->eq($queue->id)->exec();
+            $this->dao->update(TABLE_MAILQUEUE)->set('status')->eq('sending')->where('id')->in($queue->id)->exec();
             $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList);
 
             $data = new stdclass();
@@ -321,7 +324,7 @@ class mail extends control
                 $data->status = 'fail';
                 $data->failReason = join("\n", $this->mail->getError());
             }
-            $this->dao->update(TABLE_MAILQUEUE)->data($data)->where('id')->eq($queue->id)->exec();
+            $this->dao->update(TABLE_MAILQUEUE)->data($data)->where('id')->in($queue->id)->exec();
 
             $log .= "Send #$queue->id  result is $data->status\n";
             if($data->status == 'fail') $log .= "reason is $data->failReason\n";
