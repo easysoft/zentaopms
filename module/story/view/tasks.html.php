@@ -1,4 +1,7 @@
-<?php include '../../common/view/header.lite.html.php';?>
+<?php
+include '../../common/view/header.lite.html.php';
+include '../../common/view/chart.html.php';
+?>
 <div id='titlebar'>
   <div class='heading'>
     <span><?php echo html::icon($lang->icons['report']);?></span>
@@ -10,7 +13,7 @@
     <table class='table table-fixed'>
       <thead>
         <tr class='text-center'>
-          <th class='w-20px'>    <?php echo $lang->idAB;?></th>
+          <th class='w-40px'>    <?php echo $lang->idAB;?></th>
           <th class='w-p30'>   <?php echo $lang->task->name;?></th>
           <th class='w-pri'>   <?php echo $lang->priAB;?></th>
           <th class='w-status'><?php echo $lang->statusAB;?></th>
@@ -18,6 +21,7 @@
           <th class='w-40px'>  <?php echo $lang->task->estimateAB;?></th>
           <th class='w-40px'>  <?php echo $lang->task->consumedAB;?></th>
           <th class='w-40px'>  <?php echo $lang->task->leftAB;?></th>
+          <th class='w-40px'>  <?php echo $lang->task->progess;?></th>
         </tr>
       </thead>
       <tbody>
@@ -31,6 +35,7 @@
           <td><?php echo $task->estimate;?></td>
           <td><?php echo $task->consumed;?></td>
           <td><?php echo $task->left;?></td>
+          <td><div class='progress-pie' title="<?php echo $task->progess?>%" data-value='<?php echo $task->progess;?>'></div></td>
         </tr>
         <?php endforeach;?>
       </tbody>
