@@ -453,7 +453,8 @@ body {color:#141414; padding-bottom: 40px;}
 #footer {position: relative; width:100%;position:fixed; bottom:0; left:0; margin:0; border-top: 1px solid #ddd; background:#eef4fe;height:40px; line-height:40px;-webkit-box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05); z-index: 10}
 #crumbs a i.icon-home{display: none;}
 #crumbs {float: left;margin-left: 20px;}
-#crumbs .icon-angle-right {margin-left: -4px; position: relative; top: 1px;}
+#crumbs > a {display: inline-block; margin-right: -4px;}
+#crumbs .icon-angle-right {margin: 0; position: relative; top: 1px;}
 #footer #poweredby {float: right; margin-right: 20px;}
 #qrcodePopover.show {display: block; position: fixed; right: 5px; bottom: 40px; left: inherit; top: inherit; max-width: 300px}
 #qrcodePopover.popover.top .arrow {left: inherit; right: 10px}
