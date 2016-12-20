@@ -109,7 +109,7 @@
     ?>
       <tfoot>
       <tr>
-        <td colspan='14'>
+        <td colspan='13'>
           <div class='table-actions clearfix'>
             <?php if(count($stories)):?>
             <?php echo html::selectButton();?>
