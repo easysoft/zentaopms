@@ -19,7 +19,7 @@ include '../../common/view/chosen.html.php';
 #bysearchTab {transition: all .3s cubic-bezier(.175, .885, .32, 1);}
 #bysearchTab.active {background: #fff; padding: 2px 10px 3px; padding-bottom: 2px\0; border: 1px solid #ddd; border-bottom: none}
 #bysearchTab.active:hover {background: #ddd}
-#bysearchTab.active > a:after {font-size: 14px; font-family: ZenIcon; content: ' \e6e2'; color: #808080}
+#bysearchTab.active > a:after {font-size: 14px; font-family: NewZenIcon; content: ' \e6e2'; color: #808080}
 #featurebar .nav {position: relative;}
 #featurebar .nav .dropdown .dropdown-menu{z-index:1010;}
 #querybox form{padding-right: 40px;}

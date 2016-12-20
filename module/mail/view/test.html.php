@@ -32,7 +32,8 @@
         <td class='text-left'>
           <?php 
           echo html::submitButton($lang->mail->test);
-          echo html::linkButton($lang->mail->edit, inLink($config->mail->mta == 'sendcloud' ? 'sendcloud' : 'edit'));
+          $mta = $config->mail->mta;
+          echo html::linkButton($lang->mail->edit, inlink(($mta == 'sendcloud' or $mta == 'ztcloud') ? $mta : 'edit'));
           ?>
         </td>
       </tr>

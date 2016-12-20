@@ -20,14 +20,14 @@
 #task .task-desc > ul > li {position: relative; padding: 2px 0; overflow: hidden; padding-left: 26px; transition: background .5s}
 #task .task-desc > ul > li[data-target].finish {color: #999; text-decoration: line-through;}
 #task .task-desc > ul > li[data-target].finish .task-nav {opacity: .6; text-decoration: line-through;}
-#task .task-desc > ul > li:before {font-family: ZenIcon; font-size: 14px; font-style: normal; font-weight: 400; font-variant: normal; line-height: 1; text-transform: none; speak: none; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; content: '\e6ec'; display: block; width: 26px; height: 20px; line-height: 20px; text-align: center; opacity: .6; color: #808080; position: absolute; top: 2px; left: 0}
+#task .task-desc > ul > li:before {font-family: NewZenIcon; font-size: 14px; font-style: normal; font-weight: 400; font-variant: normal; line-height: 1; text-transform: none; speak: none; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; content: '\e6ec'; display: block; width: 26px; height: 20px; line-height: 20px; text-align: center; opacity: .6; color: #808080; position: absolute; top: 2px; left: 0}
 #task .task-desc > ul > li[data-target]:after {content: ' '; display: block; position: absolute; left: 0; top: -100%; width: 100%; height: 100%; border: 2px solid #F1A325; transition: top .5s}
-#task .task-desc > ul > li[data-target]:before {content: '\e6e8'; color: #333}
+#task .task-desc > ul > li[data-target]:before {font-family: ZenIcon; content: '\e6e8'; color: #333}
 #task .task-desc > ul > li[data-target].finish:after {top: 100%;}
 #task .task-desc > ul > li[data-target].finish:before {content: '\e653'; color: #38B03F}
 #task .task-desc > ul > li[data-target].active {background: #FFF0D5}
 #task .task-desc > ul > li[data-target].active:after {top: 0%}
-#task .task-desc > ul > li[data-target].active:before {color: #EA644A; content: '\f192'}
+#task .task-desc > ul > li[data-target].active:before {font-family: ZenIcon; color: #EA644A; content: '\f192'}
 #openTaskPage {display: block; overflow: hidden; position: relative; height: 36px; background: #f5f5f5}
 #openTaskPage > div {padding: 8px 10px; line-height: 20px; transition: top .4s cubic-bezier(.175,.885,.32,1); position: absolute; left: 0; top: 0; right: 0}
 #openTaskPage > div > .icon {display: inline-block; width: 30px; text-align: center}

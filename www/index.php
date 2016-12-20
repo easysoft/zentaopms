@@ -46,8 +46,8 @@ if(!(!is_numeric($config->version{0}) and $config->version{0} != $config->instal
 if(file_exists('install.php') or file_exists('upgrade.php'))
 {
     $undeleteFiles = array();
-    if(file_exists('install.php') and !unlink('install.php')) $undeleteFiles[] = '<strong style="color:#ed980f">install.php</strong>';
-    if(file_exists('upgrade.php') and !unlink('upgrade.php')) $undeleteFiles[] = '<strong style="color:#ed980f">upgrade.php</strong>';
+    if(file_exists('install.php')) $undeleteFiles[] = '<strong style="color:#ed980f">install.php</strong>';
+    if(file_exists('upgrade.php')) $undeleteFiles[] = '<strong style="color:#ed980f">upgrade.php</strong>';
     $wwwDir = __DIR__;
     if($undeleteFiles)
     {

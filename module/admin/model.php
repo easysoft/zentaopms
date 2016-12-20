@@ -109,7 +109,7 @@ class adminModel extends model
 	 */
 	public function registerByAPI()
 	{
-		$apiURL = 'http://www.zentao.net/user-register.json';
+		$apiURL = 'http://www.zentao.net/user-register.json?bind=yes&HTTP_X_REQUESTED_WITH=XMLHttpRequest';
 		return $this->postAPI($apiURL, $_POST);
 	}
 
@@ -121,9 +121,53 @@ class adminModel extends model
 	 */
 	public function bindByAPI()
 	{
-		$apiURL = 'http://www.zentao.net/user-login.json';
+		$apiURL = 'http://www.zentao.net/user-bindChanzhi.json?HTTP_X_REQUESTED_WITH=XMLHttpRequest';
 		return $this->postAPI($apiURL, $_POST);
 	}
+
+    public function getSecretKey()
+    {
+		$apiURL = "http://www.zentao.net/user-secretKey.json";
+        $params['u']   = $this->config->global->community;
+        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $params['k'] = $this->getSignature($params);
+		$this->agent->cookies['lang'] = $this->cookie->lang;
+    	$this->agent->fetch($apiURL . '?' . http_build_query($params));
+		$result = $this->agent->results;
+		$result = json_decode($result);
+        return $result;
+    }
+
+    public function sendCodeByAPI($type)
+    {
+        $module = $type == 'mobile' ? 'sms' : 'mail';
+        $apiURL = "http://www.zentao.net/{$module}-apiSendCode.json";
+        $params['u']   = $this->config->global->community;
+        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $params['k'] = $this->getSignature($params);
+
+        $param = http_build_query($params);
+		return $this->postAPI($apiURL . '?' . $param, $_POST);
+    }
+
+    public function certifyByAPI($type)
+    {
+        $module = $type == 'mobile' ? 'sms' : 'mail';
+        $apiURL = "http://www.zentao.net/{$module}-apiCertify.json";
+        $params['u']   = $this->config->global->community;
+        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $params['k'] = $this->getSignature($params);
+
+        $param = http_build_query($params);
+		return $this->postAPI($apiURL . '?' . $param, $_POST);
+    }
+
+    public function getSignature($params)
+    {
+        unset($params['u']);
+        $privateKey = $this->config->global->ztPrivateKey;
+        return md5(http_build_query($params) . md5($privateKey));
+    }
 
 	/**
 	 * Get register information. 

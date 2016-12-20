@@ -22,7 +22,11 @@
     <table align='center' class='table table-form'>
       <tr>
         <th class='w-100px'><?php echo $lang->user->account;?></th>
-        <td><?php echo html::input('account', '', "class='form-control'");?></td>
+        <?php
+        $account = zget($config->global, 'community', '');
+        if($account == 'na') $account = '';
+        ?>
+        <td><?php echo html::input('account', $account, "class='form-control'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->user->password;?></th>

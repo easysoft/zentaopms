@@ -19,10 +19,10 @@
     </div>
   </div>
   <div class='alert'>
-    <div class='pull-right'><?php echo html::a(inlink('bind'), $lang->admin->bind->caption, '', "class='btn btn-success'");?></div>
+    <div class='pull-right'><?php echo html::a(inlink('bind', "from=$from"), $lang->admin->bind->caption, '', "class='btn btn-success'");?></div>
     <i class='icon-info-sign'></i>
     <div class='content'>
-      <?php echo sprintf($lang->admin->register->bind, html::a(inlink('bind'), $lang->admin->register->click));?>
+      <?php echo sprintf($lang->admin->register->bind, html::a(inlink('bind', "from=$from"), $lang->admin->register->click));?>
     </div>
   </div>
   <form class='form-condensed mw-600px' method="post" target="hiddenwin">
@@ -43,8 +43,8 @@
         <td><?php echo html::input('company', $register->company, "class='form-control'");?></td>
       </tr>
       <tr>
-        <th><?php echo $lang->user->phone;?></th>
-        <td><?php echo html::input('phone', '', "class='form-control'");?></td>
+        <th><?php echo $lang->user->mobile;?></th>
+        <td><?php echo html::input('mobile', '', "class='form-control'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->user->email;?></th>
