@@ -165,23 +165,23 @@ $lang->task->error->consumed         = 'Task: %s man-hour must be more than 0. I
 /* 统计报表。*/
 $lang->task->report = new stdclass();
 $lang->task->report->common = 'Report';
-$lang->task->report->select = 'Please select the type of the Task';
+$lang->task->report->select = 'Select the type of Task Report';
 $lang->task->report->create = 'Create';
 $lang->task->report->value  = 'Task Count';
 
-$lang->task->report->charts['tasksPerProject']      = $lang->projectCommon . ' Tasks';
-$lang->task->report->charts['tasksPerModule']       = 'Modules';
-$lang->task->report->charts['tasksPerAssignedTo']   = 'Assigned To';
-$lang->task->report->charts['tasksPerType']         = 'Type';
-$lang->task->report->charts['tasksPerPri']          = 'Priority';
-$lang->task->report->charts['tasksPerStatus']       = 'Status';
-$lang->task->report->charts['tasksPerDeadline']     = 'Deadline';
-$lang->task->report->charts['tasksPerEstimate']     = 'Estimation';
-$lang->task->report->charts['tasksPerLeft']         = 'Remained';
-$lang->task->report->charts['tasksPerConsumed']     = 'onsumed';
-$lang->task->report->charts['tasksPerFinishedBy']   = 'Finished By';
-$lang->task->report->charts['tasksPerClosedReason'] = 'Close Reason';
-$lang->task->report->charts['finishedTasksPerDay']  = 'Finished per Day';
+$lang->task->report->charts['tasksPerProject']      = 'per ' . $lang->projectCommon;
+$lang->task->report->charts['tasksPerModule']       = 'per Module';
+$lang->task->report->charts['tasksPerAssignedTo']   = 'per AssignedTo';
+$lang->task->report->charts['tasksPerType']         = 'per Category';
+$lang->task->report->charts['tasksPerPri']          = 'per Priority';
+$lang->task->report->charts['tasksPerStatus']       = 'per Status';
+$lang->task->report->charts['tasksPerDeadline']     = 'per Deadline';
+$lang->task->report->charts['tasksPerEstimate']     = 'per Estimated Man-Hour';
+$lang->task->report->charts['tasksPerLeft']         = 'per Remained Man-Hour';
+$lang->task->report->charts['tasksPerConsumed']     = 'per Consumed Man-Hour';
+$lang->task->report->charts['tasksPerFinishedBy']   = 'per FinishedBy';
+$lang->task->report->charts['tasksPerClosedReason'] = 'per Close Reason';
+$lang->task->report->charts['finishedTasksPerDay']  = 'per Finished/Day';
 
 $lang->task->report->options = new stdclass();
 $lang->task->report->options->graph = new stdclass();

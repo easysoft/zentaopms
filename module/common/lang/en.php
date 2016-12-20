@@ -184,7 +184,7 @@ $lang->product->menu->dynamic = 'Dynamic|product|dynamic|productID=%s';
 $lang->product->menu->plan    = array('link' => 'Plan|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->product->menu->release = array('link' => 'Release|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap = 'Roadmap|product|roadmap|productID=%s';
-$lang->product->menu->doc     = array('link' => 'Document|product|doc|productID=%s', 'subModule' => 'doc');
+$lang->product->menu->doc     = array('link' => 'Document|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
 $lang->product->menu->branch  = '@branch@|branch|manage|productID=%s';
 $lang->product->menu->module  = 'Module|tree|browse|productID=%s&view=story';
 $lang->product->menu->view    = array('link' => 'Overview|product|view|productID=%s', 'alias' => 'edit');
@@ -215,7 +215,7 @@ $lang->project->menu->dynamic   = 'Dynamic|project|dynamic|projectID=%s';
 $lang->project->menu->build     = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->menu->testtask  = 'Testing|project|testtask|projectID=%s';
 $lang->project->menu->team      = array('link' => 'Team|project|team|projectID=%s', 'alias' => 'managemembers');
-$lang->project->menu->doc       = array('link' => 'Document|project|doc|porjectID=%s', 'subModule' => 'doc');
+$lang->project->menu->doc       = array('link' => 'Document|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
 $lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|projectID=%s';
 $lang->project->menu->view      = array('link' => 'Overview|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
 $lang->project->menu->create    = array('link' => "<i class='icon-plus'></i>&nbsp;Add{$lang->projectCommon}|project|create", 'float' => 'right');
@@ -384,7 +384,7 @@ $lang->error->passwordrule    = "Password should meet requirements. It should be
 $lang->error->accessDenied    = 'Access is denied.';
 $lang->error->pasteImg        = 'Paste Image is not allowed in your browser!';
 $lang->error->noData          = 'No Data';
-$lang->error->editedByOther   = 'This record might have been modified. Please refresh and try to edit again!';
+$lang->error->editedByOther   = 'This record might have been changed. Please refresh and try to edit again!';
 $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Please exit tutorial first!';
 
 /* 分页信息。*/

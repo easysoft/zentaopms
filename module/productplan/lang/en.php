@@ -21,15 +21,15 @@ $lang->productplan->basicInfo  = 'Basic Info';
 $lang->productplan->batchEdit  = 'Batch Edit';
 
 $lang->productplan->batchUnlink      = "Batch Remove";
-$lang->productplan->linkStory        = "Relate Story";
+$lang->productplan->linkStory        = "Related Story";
 $lang->productplan->unlinkStory      = "Remove Story";
-$lang->productplan->batchUnlinkStory = "Batch Remove Story";
-$lang->productplan->linkedStories    = 'Related Story';
+$lang->productplan->batchUnlinkStory = "Batch Remove";
+$lang->productplan->linkedStories    = 'Relate Story';
 $lang->productplan->unlinkedStories  = 'Unrelated';
 
 $lang->productplan->linkBug          = "Relate Bug";
 $lang->productplan->unlinkBug        = "Remove Bug";
-$lang->productplan->batchUnlinkBug   = "Batch Remove Bug";
+$lang->productplan->batchUnlinkBug   = "Batch Remove";
 $lang->productplan->linkedBugs       = 'Related Bug';
 $lang->productplan->unlinkedBugs     = 'Unrelated';
 
@@ -57,6 +57,6 @@ $lang->productplan->errorNoBegin = 'ID %s begin time should not be empty.';
 $lang->productplan->errorNoEnd   = 'ID %s end time should not be empty.';
 $lang->productplan->beginGeEnd   = 'ID %s begin time value should not be greater than t.';
 
-$lang->productplan->featureBar['browse']['unexpired'] = 'Unexpired';
+$lang->productplan->featureBar['browse']['unexpired'] = 'On Time';
 $lang->productplan->featureBar['browse']['all']       = 'All';
 $lang->productplan->featureBar['browse']['overdue']   = 'Overdue';

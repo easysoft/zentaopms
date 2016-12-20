@@ -12,7 +12,7 @@
 $lang->story->create      = "Create";
 $lang->story->batchCreate = "Batch Create";
 $lang->story->change      = "Change";
-$lang->story->changed     = 'Changed Story';
+$lang->story->changed     = 'Change';
 $lang->story->review      = 'Review';
 $lang->story->batchReview = 'Batch Review';
 $lang->story->edit        = "Edit";
@@ -32,7 +32,7 @@ $lang->story->caseCount   = 'Test Cases';
 $lang->story->taskCountAB = 'T';
 $lang->story->bugCountAB  = 'B';
 $lang->story->caseCountAB = 'C';
-$lang->story->linkStory   = 'Related Story';
+$lang->story->linkStory   = 'Relate Story';
 $lang->story->unlinkStory = 'Unrelated';
 $lang->story->export      = "Export Data";
 $lang->story->zeroCase    = "Zero Case";
@@ -102,7 +102,7 @@ $lang->story->statusList['closed']    = 'Closed';
 $lang->story->statusList['changed']   = 'Changed';
 
 $lang->story->stageList['']           = '';
-$lang->story->stageList['wait']       = 'Pending';
+$lang->story->stageList['wait']       = 'Wait';
 $lang->story->stageList['planned']    = 'Planned';
 $lang->story->stageList['projected']  = 'Projected';
 $lang->story->stageList['developing'] = 'Developing';
@@ -172,7 +172,7 @@ $lang->story->lblReview            = 'Review';
 $lang->story->lblActivate          = 'Activate';
 $lang->story->lblClose             = 'Close';
 
-$lang->story->checkAffection       = 'Check Impact';
+$lang->story->checkAffection       = 'Impact';
 $lang->story->affectedProjects     = 'Affected' . $lang->projectCommon;
 $lang->story->affectedBugs         = 'Affected Bug';
 $lang->story->affectedCases        = 'Affected Case';
@@ -210,22 +210,22 @@ $lang->story->action->unlinkchildstory    = array('main' => '$date, removed by <
 /* 统计报表。*/
 $lang->story->report = new stdclass();
 $lang->story->report->common = 'Report';
-$lang->story->report->select = 'Please select the type of Report';
+$lang->story->report->select = 'Select the type of Story Report';
 $lang->story->report->create = 'Generate';
 $lang->story->report->value  = 'Story Count';
 
-$lang->story->report->charts['storysPerProduct']        = $lang->productCommon . 'Story Count';
-$lang->story->report->charts['storysPerModule']         = 'Story per Module';
-$lang->story->report->charts['storysPerSource']         = 'Story per Source';
-$lang->story->report->charts['storysPerPlan']           = 'Story per Plan';
-$lang->story->report->charts['storysPerStatus']         = 'Story per Status';
-$lang->story->report->charts['storysPerStage']          = 'Story per Stage';
-$lang->story->report->charts['storysPerPri']            = 'Story per Priority';
-$lang->story->report->charts['storysPerEstimate']       = 'Story per Estimated Man-Hour';
-$lang->story->report->charts['storysPerOpenedBy']       = 'Story per CreatedBy';
-$lang->story->report->charts['storysPerAssignedTo']     = 'Story per AssignedTo';
-$lang->story->report->charts['storysPerClosedReason']   = 'Story per Closed Reason';
-$lang->story->report->charts['storysPerChange']         = 'Story per Change';
+$lang->story->report->charts['storysPerProduct']        = 'per ' . $lang->productCommon;
+$lang->story->report->charts['storysPerModule']         = 'per Module';
+$lang->story->report->charts['storysPerSource']         = 'per Source';
+$lang->story->report->charts['storysPerPlan']           = 'per Plan';
+$lang->story->report->charts['storysPerStatus']         = 'per Status';
+$lang->story->report->charts['storysPerStage']          = 'per Stage';
+$lang->story->report->charts['storysPerPri']            = 'per Priority';
+$lang->story->report->charts['storysPerEstimate']       = 'per Estimated Man-Hour';
+$lang->story->report->charts['storysPerOpenedBy']       = 'per CreatedBy';
+$lang->story->report->charts['storysPerAssignedTo']     = 'per AssignedTo';
+$lang->story->report->charts['storysPerClosedReason']   = 'per Closed Reason';
+$lang->story->report->charts['storysPerChange']         = 'per Change';
 
 $lang->story->report->options = new stdclass();
 $lang->story->report->options->graph   = new stdclass();

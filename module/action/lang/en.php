@@ -68,8 +68,8 @@ $lang->action->desc->common         = '$date, <strong>$action</strong> by <stron
 $lang->action->desc->extra          = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->opened         = '$date, created by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->created        = '$date, created by  <strong>$actor</strong> .' . "\n";
-$lang->action->desc->changed        = '$date, modified by <strong>$actor</strong> .' . "\n";
-$lang->action->desc->edited         = '$date, Edited by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->changed        = '$date, changed by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->edited         = '$date, edited by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->assigned       = '$date, <strong>$actor</strong> assigned to <strong>$extra</strong>.' . "\n";
 $lang->action->desc->closed         = '$date, closed by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->deleted        = '$date, deleted by <strong>$actor</strong> .' . "\n";
@@ -97,8 +97,8 @@ $lang->action->desc->svncommited    = '$date, submitted by <strong>$actor</stron
 $lang->action->desc->gitcommited    = '$date, submitted by <strong>$actor</strong> and the version is <strong>#$extra</strong>.' . "\n";
 $lang->action->desc->finished       = '$date, finished by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->paused         = '$date, paused by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->diff1          = '<strong><i>%s</i></strong> has been modified. Its value was "%s" and the new value is "%s".<br />' . "\n";
-$lang->action->desc->diff2          = '<strong><i>%s</i></strong> has been modified. The difference is ' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
+$lang->action->desc->diff1          = '<strong><i>%s</i></strong> has been changed. Its value was "%s" and the new value is "%s".<br />' . "\n";
+$lang->action->desc->diff2          = '<strong><i>%s</i></strong> has been changed. The difference is ' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
 $lang->action->desc->diff3          = 'File Name %s was changed to %s .' . "\n";
 
 /* 关联用例和移除用例时的历史操作记录。*/
