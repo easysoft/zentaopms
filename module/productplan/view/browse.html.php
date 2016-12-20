@@ -41,7 +41,7 @@
 <form method='post' id='productplanForm' action='<?php echo inlink('batchEdit', "productID=$product->id&branch=$branch")?>'>
 <table class='table table-bordered table-selectable' id="productplan">
   <thead>
-  <?php $vars = "productID=$productID&branch=$branch&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+  <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <tr class='colhead'>
     <th class='w-id'>    <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
     <th>                 <?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
