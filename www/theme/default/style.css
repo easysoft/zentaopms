@@ -117,7 +117,7 @@ hr.small {margin: 10px 0}
 
 .table caption {padding: 8px 20px; border: 1px solid #DDD; border-bottom: 0; background: #fafafa;}
 .table.table-condensed caption {padding: 6px 15px;}
-.table td.td-has-control {padding: 2px 4px;}
+.table td.td-has-control {padding: 2px 4px; background-color: white!important}
 
 /* Datepicker */
 .datepicker-wrapper {position: relative; cursor: pointer;}
