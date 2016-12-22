@@ -53,7 +53,7 @@
         ?>
         </ul>
       </div>
-        <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", '', 'button', 'bar-chart'); ?>
+        <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", '', 'button', 'bar-chart'); ?>
     </div>
     <div class="btn-group" id='createActionMenu'>
       <?php
