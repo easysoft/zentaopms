@@ -28,8 +28,8 @@ $lang->mail->charset     = 'Charset';
 $lang->mail->accessKey   = 'Access Key';
 $lang->mail->secretKey   = 'Secret Key';
 
-$lang->mail->selectMTA = 'Email MTA';
-$lang->mail->smtp      = 'SMTP Email';
+$lang->mail->selectMTA = 'Select MTA';
+$lang->mail->smtp      = 'SMTP';
 
 $lang->mail->syncedUser = 'Synchronized';
 $lang->mail->unsyncUser = 'Not Synchronized';

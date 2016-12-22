@@ -310,7 +310,7 @@ $lang->admin->menu->backup    = array('link' => 'Backup|backup|index', 'subModul
 $lang->admin->menu->safe      = array('link' => 'Security|admin|safe', 'alias' => 'checkweak');
 $lang->admin->menu->cron      = array('link' => 'Cron|cron|index', 'subModule' => 'cron');
 $lang->admin->menu->trashes   = array('link' => 'Recycle|action|trash', 'subModule' => 'action');
-$lang->admin->menu->dev       = array('link' => 'Reproduct|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
+$lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
 $lang->admin->menu->sso       = 'RangerTeam|admin|sso';
 
 $lang->convert   = new stdclass();
