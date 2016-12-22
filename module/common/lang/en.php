@@ -54,7 +54,7 @@ $lang->comment         = 'Note';
 $lang->history         = 'History';
 $lang->attatch         = 'Attachment';
 $lang->reverse         = 'Reverse';
-$lang->switchDisplay   = 'Toggle Show';
+$lang->switchDisplay   = 'Toggle';
 $lang->addFiles        = 'Add';
 $lang->files           = 'File ';
 $lang->pasteText       = 'Paste';
@@ -83,7 +83,7 @@ $lang->loading       = 'Loading...';
 $lang->notFound      = 'Not found!';
 $lang->showAll       = '[[Show All]]';
 
-$lang->future       = 'Coming';
+$lang->future       = 'Pending';
 $lang->year         = 'Year';
 $lang->workingHour  = 'Man-Hour';
 
@@ -119,7 +119,7 @@ $lang->searchObjects['user']        = 'User';
 $lang->searchObjects['build']       = 'Build';
 $lang->searchObjects['release']     = 'Release';
 $lang->searchObjects['productplan'] = $lang->productCommon . 'Plan';
-$lang->searchObjects['testtask']    = 'Testing Build';
+$lang->searchObjects['testtask']    = 'Test Task';
 $lang->searchObjects['doc']         = 'Document';
 $lang->searchTips                   = 'ID (ctrl+g)';
 
@@ -163,7 +163,7 @@ $lang->my->menu->index          = 'Home|my|index';
 $lang->my->menu->todo           = array('link' => 'To-Do|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task           = array('link' => 'Task|my|task|', 'subModule' => 'task');
 $lang->my->menu->bug            = array('link' => 'Bug|my|bug|',   'subModule' => 'bug');
-$lang->my->menu->testtask       = array('link' => 'Testing|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
+$lang->my->menu->testtask       = array('link' => 'Test Task|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
 $lang->my->menu->story          = array('link' => 'Story|my|story|',   'subModule' => 'story');
 $lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = 'Dynamic|my|dynamic|';
@@ -213,7 +213,7 @@ $lang->project->menu->story     = array('link' => 'Story|project|story|projectID
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = 'Dynamic|project|dynamic|projectID=%s';
 $lang->project->menu->build     = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->menu->testtask  = 'Testing|project|testtask|projectID=%s';
+$lang->project->menu->testtask  = 'Test Task|project|testtask|projectID=%s';
 $lang->project->menu->team      = array('link' => 'Team|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => 'Document|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
 $lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|projectID=%s';
@@ -407,7 +407,7 @@ $lang->noticeImport  = "<p style='font-size:14px'>Imported data contains data th
 
 $lang->noResultsMatch     = "No results match!";
 $lang->searchMore         = "More results：";
-$lang->chooseUsersToMail  = "Choose users you want send Email to...";
+$lang->chooseUsersToMail  = "Choose users you want send notification to...";
 $lang->browserNotice      = 'Your current browser might not show the best effect. Please use Chrome, Firefox, IE9+, Opera or Safari.';
 $lang->noticePasteImg     = "Can parse image in editor.";
 
