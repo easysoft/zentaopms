@@ -1240,11 +1240,12 @@ class story extends control
      * 
      * @param  int    $productID 
      * @param  string $browseType 
+     * @param  int    $branchID
      * @param  int    $moduleID 
      * @access public
      * @return void
      */
-    public function report($productID, $browseType, $moduleID)
+    public function report($productID, $browseType, $branchID, $moduleID)
     {
         $this->loadModel('report');
         $this->view->charts   = array();
@@ -1264,7 +1265,7 @@ class story extends control
             }
         }
         $this->products = $this->product->getPairs();
-        $this->product->setMenu($this->products, $productID);
+        $this->product->setMenu($this->products, $productID, $branchID);
 
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->story->reportChart;
         $this->view->position[]    = $this->products[$productID];

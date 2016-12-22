@@ -523,7 +523,7 @@ class mailModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        if($this->config->mail->mta == 'sendcloud') return $mails;
+        if($this->app->methodName == 'browse' or $this->config->mail->mta == 'sendcloud') return $mails;
 
         /* Group mails by toList and ccList. */
         $groupMails = array();
