@@ -69,10 +69,12 @@ $lang->custom->allLang     = '适用所有语言';
 $lang->custom->confirmRestore = '是否要恢复默认配置？';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userRole    = '键的长度必须小于20个字符！';
-$lang->custom->notice->canNotAdd   = '该项参与运算，不提供自定义添加功能';
-$lang->custom->notice->forceReview = '指定人提交的需求必须评审。';
-$lang->custom->notice->longlife    = 'Bug列表页面的久未处理标签中，列出设置天数之前未处理的Bug。';
+$lang->custom->notice->userRole             = '键的长度必须小于20个字符！';
+$lang->custom->notice->canNotAdd            = '该项参与运算，不提供自定义添加功能';
+$lang->custom->notice->forceReview          = '指定人提交的需求必须评审。';
+$lang->custom->notice->longlife             = 'Bug列表页面的久未处理标签中，列出设置天数之前未处理的Bug。';
+$lang->custom->notice->priListKey           = '优先级的键应当为数字！';
+$lang->custom->notice->severityListKey      = 'Bug严重程度的键应当为数字！';
 $lang->custom->notice->indexPage['product'] = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
 $lang->custom->notice->indexPage['project'] = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";
 $lang->custom->notice->indexPage['qa']      = "从8.2版本起增加了测试主页视图，是否默认进入测试主页？";

@@ -88,8 +88,11 @@ class custom extends control
                     $value  = $_POST['values'][$index];
                     $system = $_POST['systems'][$index];
 
-                    //Fix bug #951.
-                    //if(!$system and (!$value or !$key)) continue;
+                    //if(!$system and (!$value or !$key)) continue; //Fix bug #951.
+
+                    /* Fix bug #942. */
+                    if($field == 'priList' and !is_numeric($key)) die(js::alert($this->lang->custom->notice->priListKey));
+                    if($module == 'bug' and $field == 'severityList' and !is_numeric($key)) die(js::alert($this->lang->custom->notice->severityListKey));
 
                     /* the length of role is 20, check it when save. */
                     if($module == 'user' and $field == 'roleList' and strlen($key) > 20) die(js::alert($this->lang->custom->notice->userRole));
