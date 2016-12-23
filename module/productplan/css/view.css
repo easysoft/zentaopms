@@ -22,3 +22,6 @@ input[type=checkbox].ml-10px{margin-left:10px;}
 .dropdown-list > li > a:focus {color: #1a4f85;text-decoration: none;background-color: #ddd;}
 
 .table-actions {padding-left: 5px;}
+
+#planInfo {border-top: 1px solid #ddd;}
+#planInfo > div {padding-top: 15px;}

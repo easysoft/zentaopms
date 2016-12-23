@@ -58,7 +58,7 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
         </ul>
       </div>
       <div class='btn-group'>
-        <?php common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID"); ?>
+        <?php common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID"); ?>
       </div>
     </div>
     <div class='btn-group'>

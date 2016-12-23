@@ -58,6 +58,7 @@ $(document).ready(function()
                 if(!this.multiKey && !$(e.target).closest('td[data-index="0"]').length) return false;
             }
         },
+        fixedHeader: true,
         ready: function()
         {
             if(!this.$table) return;

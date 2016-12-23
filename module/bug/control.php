@@ -151,11 +151,12 @@ class bug extends control
      * 
      * @param  int    $productID 
      * @param  string $browseType 
+     * @param  int    $branchID
      * @param  int    $moduleID 
      * @access public
      * @return void
      */
-    public function report($productID, $browseType, $moduleID)
+    public function report($productID, $browseType, $branchID, $moduleID)
     {
         $this->loadModel('report');
         $this->view->charts   = array();
@@ -174,7 +175,7 @@ class bug extends control
             }
         }
 
-        $this->bug->setMenu($this->products, $productID);
+        $this->bug->setMenu($this->products, $productID, $branchID);
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common . $this->lang->colon . $this->lang->bug->reportChart;
         $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]    = $this->lang->bug->reportChart;

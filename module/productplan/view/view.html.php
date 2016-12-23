@@ -51,16 +51,13 @@
         <ul class='nav nav-tabs'>
           <li class='<?php if($type == 'story') echo 'active'?>'><a href='#stories' data-toggle='tab'><?php echo  html::icon($lang->icons['story']) . ' ' . $lang->productplan->linkedStories;?></a></li>
           <li class='<?php if($type == 'bug') echo 'active'?>'><a href='#bugs' data-toggle='tab'><?php echo  html::icon($lang->icons['bug']) . ' ' . $lang->productplan->linkedBugs;?></a></li>
+          <li><a href='#planInfo' data-toggle='tab'><?php echo  html::icon($lang->icons['plan']) . ' ' . $lang->productplan->view;?></a></li>
         </ul>
         <div class='tab-content'>
           <div id='stories' class='tab-pane <?php if($type == 'story') echo 'active'?>'>
             <?php if(common::hasPriv('productplan', 'linkStory')):?>
             <div class='action'>
             <?php echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-sm btn-primary'");?>
-              <span class='side-handle-btn'>
-              <?php $class = $this->cookie->productPlanSide == 'hide' ? 'icon-collapse-full' : 'icon-expand-full'?>
-              <?php echo html::a('###', "<i class='$class'></i>", '', "class='btn btn-sm'")?>
-              </span>
             </div>
             <div class='linkBox'></div>
             <?php endif;?>
@@ -71,7 +68,6 @@
                 <tr>
                   <th class='w-id {sorter:false}' >   <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
                   <th class='w-pri {sorter:false}'>   <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-                  <th class='w-80px {sorter:false}'>  <?php common::printOrderLink('module',     $orderBy, $vars, $lang->story->module);?></th>
                   <th class='{sorter:false}'>         <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
                   <th class='w-user {sorter:false}'>  <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
                   <th class='w-user {sorter:false}'>  <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
@@ -100,8 +96,10 @@
                       <?php echo html::a($viewLink, sprintf("%03d", $story->id));?>
                     </td>
                     <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-                    <td class='text-left' title='<?php echo $modules[$story->module]?>'><?php echo $modules[$story->module];?></td>
-                    <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($viewLink , $story->title);?></td>
+                    <td class='text-left nobr' title='<?php echo $story->title?>'>
+                      <?php if($modulePairs and $story->module) echo "<span title='{$lang->story->module}' class='label label-info label-badge'>{$modulePairs[$story->module]}</span> "?>
+                      <?php echo html::a($viewLink , $story->title);?>
+                    </td>
                     <td><?php echo zget($users, $story->openedBy);?></td>
                     <td><?php echo zget($users, $story->assignedTo);?></td>
                     <td><?php echo $story->estimate;?></td>
@@ -121,7 +119,7 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                  <td colspan='10'>
+                  <td colspan='9'>
                     <div class='table-actions clearfix'>
                       <?php if(count($planStories)):?>
                       <?php echo html::selectButton();?>
@@ -299,10 +297,6 @@
             <?php if(common::hasPriv('productplan', 'linkBug')):?>
             <div class='action'>
             <?php echo html::a("javascript:showLink($plan->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn btn-sm btn-primary'");?>
-              <span class='side-handle-btn'>
-              <?php $class = $this->cookie->productPlanSide == 'hide' ? 'icon-collapse-full' : 'icon-expand-full'?>
-              <?php echo html::a('###', "<i class='$class'></i>", '', "class='btn btn-sm'")?>
-              </span>
             </div>
             <div class='linkBox'></div>
             <?php endif;?>
@@ -366,40 +360,40 @@
               </table>
             </form>
           </div>
+          <div id='planInfo' class='tab-pane'>
+            <div>
+              <fieldset>
+                <legend><?php echo $lang->productplan->basicInfo?></legend>
+                <table class='table table-data table-condensed table-borderless'>
+                  <tr>
+                    <th class='w-80px strong'><?php echo $lang->productplan->title;?></th> 
+                    <td><?php echo $plan->title;?></td>
+                  </tr>
+                  <?php if($product->type != 'normal'):?>
+                  <tr>
+                    <th><?php echo $lang->product->branch;?></th>
+                    <td><?php echo $branches[$plan->branch];?></td>
+                  </tr>
+                  <?php endif;?>
+                  <tr>
+                    <th><?php echo $lang->productplan->begin;?></th>
+                    <td><?php echo $plan->begin;?></td>
+                  </tr>
+                  <tr>
+                    <th><?php echo $lang->productplan->end;?></th>
+                    <td><?php echo $plan->end;?></td>
+                  </tr>
+                </table>
+              </fieldset>
+              <fieldset>
+                <legend><?php echo $lang->productplan->desc;?></legend>
+                <div class='article-content'><?php echo $plan->desc;?></div>
+              </fieldset>
+              <?php include '../../common/view/action.html.php';?>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  <div class='col-side'>
-    <div class='main main-side'>
-      <fieldset>
-        <legend><?php echo $lang->productplan->desc;?></legend>
-        <div class='article-content'><?php echo $plan->desc;?></div>
-      </fieldset>
-      <fieldset>
-        <legend><?php echo $lang->productplan->basicInfo?></legend>
-        <table class='table table-data table-condensed table-borderless'>
-          <tr>
-            <th class='w-80px strong'><?php echo $lang->productplan->title;?></th> 
-            <td><?php echo $plan->title;?></td>
-          </tr>
-          <?php if($product->type != 'normal'):?>
-          <tr>
-            <th><?php echo $lang->product->branch;?></th>
-            <td><?php echo $branches[$plan->branch];?></td>
-          </tr>
-          <?php endif;?>
-          <tr>
-            <th><?php echo $lang->productplan->begin;?></th>
-            <td><?php echo $plan->begin;?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->productplan->end;?></th>
-            <td><?php echo $plan->end;?></td>
-          </tr>
-        </table>
-      </fieldset>
-      <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
 </div>

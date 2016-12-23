@@ -223,7 +223,7 @@ $lang->project->charts->burn->graph->showValues   = 0;
 
 $lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code      = "{$lang->projectCommon} Code";
-$lang->project->placeholder->totalLeft = 'Total man-hour remain when start Project';
+$lang->project->placeholder->totalLeft = 'Total man-hour remained when start Project';
 
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->done = '(Done)';
@@ -237,7 +237,7 @@ $lang->project->orderList['stage_desc'] = "Stage Desc";
 
 $lang->project->kanban      = "Kanban";
 $lang->project->printKanban = "Print Kanban";
-$lang->project->bugList     = "Bug List";
+$lang->project->bugList     = "Bugs";
 
 $lang->printKanban = new stdclass();
 $lang->printKanban->common  = 'Print Kanban';

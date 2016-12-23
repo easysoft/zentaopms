@@ -1,5 +1,5 @@
 <?php
-$lang->dev->common     = 'Reproduct';
+$lang->dev->common     = 'Develop';
 $lang->dev->api        = 'API';
 $lang->dev->db         = 'Database';
 $lang->dev->editor     = 'Editor';
@@ -64,7 +64,7 @@ $lang->dev->tableList['api']            = 'API';
 $lang->dev->tableList['backup']         = 'Backup';
 $lang->dev->tableList['common']         = 'Common';
 $lang->dev->tableList['convert']        = 'Convert';
-$lang->dev->tableList['dev']            = 'Reproduct';
+$lang->dev->tableList['dev']            = 'Develope';
 $lang->dev->tableList['git']            = 'GIT';
 $lang->dev->tableList['index']          = 'Home';
 $lang->dev->tableList['install']        = 'Install';

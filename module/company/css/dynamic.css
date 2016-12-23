@@ -4,4 +4,4 @@
 #featurebar ul.nav > li.active .chosen-container a.chosen-single{font-weight:bold}
 #featurebar ul.nav > li .chosen-container .chosen-drop {min-width: 300px;!important}
 #featurebar .nav > li > .chosen-container-single{top:-1px!important}
-.chosen-container-single .chosen-single div{padding: 6px 22px!important}
+#featurebar .nav > li > .chosen-container-single .chosen-single div{padding: 6px 22px!important}

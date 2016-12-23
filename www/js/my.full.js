@@ -1434,12 +1434,18 @@ function checkOnlybodyPage()
  */
 function fixedTfootAction(formID)
 {
-    if($(formID).size() == 0) return false;
-    if($(formID).find('table:last').find('tfoot').size() == 0) return false;
+    var $form = $(formID);
+    if(!$form.length) return false;
+    var $table = $form.find('table:last');
+    var $tfoot = $table.find('tfoot');
+    if($table.hasClass('table-datatable'))
+    {
+        $table = $form.find('.datatable-rows');
+        $tfoot = $form.find('.datatable-footer tfoot');
+    }
+    if(!$tfoot.length) return false;
 
-    var $table = $(formID).find('table:last'),
-        $tfoot = $table.find('tfoot'),
-        $tbody = $table.find('tbody'),
+    var $tbody = $table.find('tbody'),
         $inputGroup = $tfoot.find('.table-actions').children('.input-group'),
         pageFooterHeight = $('#footer').height(),
         tableWidth,

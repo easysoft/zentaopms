@@ -53,7 +53,7 @@
         ?>
         </ul>
       </div>
-        <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID", '', 'button', 'bar-chart'); ?>
+        <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", '', 'button', 'bar-chart'); ?>
     </div>
     <div class="btn-group" id='createActionMenu'>
       <?php
@@ -109,7 +109,7 @@
     ?>
       <tfoot>
       <tr>
-        <td colspan='14'>
+        <td colspan='13'>
           <div class='table-actions clearfix'>
             <?php if(count($stories)):?>
             <?php echo html::selectButton();?>

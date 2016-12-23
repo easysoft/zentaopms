@@ -21,7 +21,7 @@ $lang->doc->digest         = 'Summary';
 $lang->doc->comment        = 'Remark';
 $lang->doc->type           = 'Type';
 $lang->doc->content        = 'Text';
-$lang->doc->keywords       = 'Keyword';
+$lang->doc->keywords       = 'Keywords';
 $lang->doc->url            = 'URL';
 $lang->doc->files          = 'File';
 $lang->doc->addedBy        = 'Added By';
@@ -51,21 +51,21 @@ $lang->doc->delete         = 'Delete';
 $lang->doc->browse         = 'List';
 $lang->doc->view           = 'Details';
 $lang->doc->diff           = 'Diff';
-$lang->doc->manageType     = 'Type';
-$lang->doc->editType       = 'Edit Type';
-$lang->doc->deleteType     = 'Delete Type';
-$lang->doc->addType        = 'Add Type';
+$lang->doc->manageType     = 'Manage Category';
+$lang->doc->editType       = 'Edit';
+$lang->doc->deleteType     = 'Delete';
+$lang->doc->addType        = 'Add';
 
-$lang->doc->libName        = 'Library Name';
-$lang->doc->libType        = 'Library Type';
+$lang->doc->libName        = 'Name';
+$lang->doc->libType        = 'Category';
 $lang->doc->custom         = 'Custom Library';
 $lang->doc->customAB       = 'Custom Library';
 $lang->doc->createLib      = 'Create Library';
-$lang->doc->allLibs        = 'Library List';
+$lang->doc->allLibs        = 'Libraries';
 $lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->projectCommon} Library List";
-$lang->doc->showFiles      = 'Files Library';
-$lang->doc->editLib        = 'Edit Library';
-$lang->doc->deleteLib      = 'Delete Library';
+$lang->doc->showFiles      = 'File Library';
+$lang->doc->editLib        = 'Edit';
+$lang->doc->deleteLib      = 'Delete';
 $lang->doc->fixedMenu      = 'Fixed In Menu';
 $lang->doc->removeMenu     = 'Remove From Menu';
 
@@ -84,13 +84,13 @@ $lang->doc->aclList['open']    = 'Public';
 $lang->doc->aclList['custom']  = 'Custom';
 $lang->doc->aclList['private'] = 'Private';
 
-$lang->doc->types['text'] = 'Html';
-$lang->doc->types['url']  = 'Link';
+$lang->doc->types['text'] = 'Text';
+$lang->doc->types['url']  = 'URL';
 
 $lang->doc->contentTypeList['html']     = 'HTML';
 $lang->doc->contentTypeList['markdown'] = 'MarkDown';
 
-$lang->doc->browseType             = 'Browse Type';
+$lang->doc->browseType             = 'Categories';
 $lang->doc->browseTypeList['list'] = 'List';
 $lang->doc->browseTypeList['menu'] = 'Menu';
 $lang->doc->browseTypeList['tree'] = 'Tree';

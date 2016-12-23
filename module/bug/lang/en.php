@@ -29,27 +29,27 @@ $lang->bug->browser          = 'Browser';
 $lang->bug->steps            = 'Repro Steps';
 $lang->bug->status           = 'Status';
 $lang->bug->statusAB         = 'Status';
-$lang->bug->activatedCount   = 'Activated Count';
-$lang->bug->activatedCountAB = 'Activated Count';
+$lang->bug->activatedCount   = 'Active';
+$lang->bug->activatedCountAB = 'Active';
 $lang->bug->confirmed        = 'Confirmed';
 $lang->bug->toTask           = 'Convert to Task';
 $lang->bug->toStory          = 'Convert to Story';
 $lang->bug->mailto           = 'Mail To';
-$lang->bug->openedBy         = 'Opened By';
-$lang->bug->openedDate       = 'Open Date';
-$lang->bug->openedDateAB     = 'Open Date';
+$lang->bug->openedBy         = 'Open By';
+$lang->bug->openedDate       = 'Open On';
+$lang->bug->openedDateAB     = 'Open On';
 $lang->bug->openedBuild      = 'Open Build';
 $lang->bug->assignedTo       = 'Assigned To';
-$lang->bug->assignedDate     = 'Assigned Date';
-$lang->bug->resolvedBy       = 'Solved By';
-$lang->bug->resolvedByAB     = 'Solved';
+$lang->bug->assignedDate     = 'Assigned On';
+$lang->bug->resolvedBy       = 'Resolved By';
+$lang->bug->resolvedByAB     = 'Resolved';
 $lang->bug->resolution       = 'Solution';
 $lang->bug->resolutionAB     = 'Solution';
-$lang->bug->resolvedBuild    = 'Solved Build';
-$lang->bug->resolvedDate     = 'Solved Date';
-$lang->bug->resolvedDateAB   = 'Solved On';
+$lang->bug->resolvedBuild    = 'Resolved Build';
+$lang->bug->resolvedDate     = 'Resolved On';
+$lang->bug->resolvedDateAB   = 'Resolved On';
 $lang->bug->closedBy         = 'Closed By';
-$lang->bug->closedDate       = 'Closed Date';
+$lang->bug->closedDate       = 'Closed On';
 $lang->bug->duplicateBug     = 'Duplicate';
 $lang->bug->lastEditedBy     = 'Last Edited By';
 $lang->bug->linkBug          = 'Related';
@@ -59,8 +59,8 @@ $lang->bug->case             = 'Case';
 $lang->bug->files            = 'File';
 $lang->bug->keywords         = 'Keywords';
 $lang->bug->lastEditedByAB   = 'Edited By';
-$lang->bug->lastEditedDateAB = 'Edit Date';
-$lang->bug->lastEditedDate   = 'Edit Date';
+$lang->bug->lastEditedDateAB = 'Edit On';
+$lang->bug->lastEditedDate   = 'Edit On';
 $lang->bug->fromCase         = 'From a Case';
 $lang->bug->toCase           = 'To a Case';
 $lang->bug->colorTag         = 'Color Tag';
@@ -79,7 +79,7 @@ $lang->bug->assignTo           = 'Assign';
 $lang->bug->batchAssignTo      = 'Batch Assign';
 $lang->bug->browse             = 'Bug List';
 $lang->bug->view               = 'Bug Details';
-$lang->bug->resolve            = 'Solve';
+$lang->bug->resolve            = 'Resolve';
 $lang->bug->batchResolve       = 'Batch Resolve';
 $lang->bug->close              = 'Close';
 $lang->bug->activate           = 'Activate';
@@ -99,7 +99,7 @@ $lang->bug->openedByMe     = 'Created by Me';
 $lang->bug->resolvedByMe   = 'Resolved by Me';
 $lang->bug->closedByMe     = 'Closed by Me';
 $lang->bug->assignToNull   = 'Unassigned';
-$lang->bug->unResolved     = 'Unsolve';
+$lang->bug->unResolved     = 'Unresolve';
 $lang->bug->toClosed       = 'To Be Closed';
 $lang->bug->unclosed       = 'Open';
 $lang->bug->longLifeBugs   = 'Pending';
@@ -116,7 +116,7 @@ $lang->bug->dittoNotice = 'This bug does not affiliate to the same product as th
 $lang->bug->lblAssignedTo               = 'Assignee';
 $lang->bug->lblMailto                   = 'Mail To';
 $lang->bug->lblLastEdited               = 'Last Edited';
-$lang->bug->lblResolved                 = 'Solved By';
+$lang->bug->lblResolved                 = 'Resolved By';
 $lang->bug->allUsers                    = 'All User';
 $lang->bug->allBuilds                   = 'All';
 
@@ -128,7 +128,7 @@ $lang->bug->lblTypeAndSeverity          = 'Type/Priority Level';
 $lang->bug->lblSystemBrowserAndHardware = 'System/Browser';
 $lang->bug->legendSteps                 = 'Repro Steps';
 $lang->bug->legendComment               = 'Note';
-$lang->bug->legendLife                  = 'Bug Lifecycle';
+$lang->bug->legendLife                  = 'Lifecycle';
 $lang->bug->legendMisc                  = 'Miscellaneous';
 
 /* 功能按钮。*/
@@ -139,7 +139,7 @@ $lang->bug->confirmChangeProduct = "Modification on {$lang->productCommon} will 
 $lang->bug->confirmDelete        = 'Do you want to delete this bug?';
 $lang->bug->setTemplateTitle     = 'Please enter the title of template.';
 $lang->bug->remindTask           = 'This Bug has been converted to Task. Do you want to update Status of Task(ID %s)?';
-$lang->bug->skipClose            = 'Bug %s is not solved. You cannot close it.';
+$lang->bug->skipClose            = 'Bug %s is not resolved. You cannot close it.';
 $lang->bug->applyTemplate        = 'Apply Template';
 
 /* 模板。*/
@@ -220,8 +220,8 @@ $lang->bug->typeList['trackthings']  = 'Issue Tracking';
 $lang->bug->typeList['others']       = 'Other';
 
 $lang->bug->statusList['']         = '';
-$lang->bug->statusList['active']   = 'Activate';
-$lang->bug->statusList['resolved'] = 'Solved';
+$lang->bug->statusList['active']   = 'Active';
+$lang->bug->statusList['resolved'] = 'Reolved';
 $lang->bug->statusList['closed']   = 'Closed';
 
 $lang->bug->confirmedList[1] = 'Confirmed';
@@ -229,12 +229,12 @@ $lang->bug->confirmedList[0] = 'Not Confirmed';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = 'Design Issue';
-$lang->bug->resolutionList['duplicate']  = 'Duplicate Bug';
-$lang->bug->resolutionList['external']   = 'External Reasons';
-$lang->bug->resolutionList['fixed']      = 'Solved';
+$lang->bug->resolutionList['duplicate']  = 'Duplicated';
+$lang->bug->resolutionList['external']   = 'External';
+$lang->bug->resolutionList['fixed']      = 'Resolved';
 $lang->bug->resolutionList['notrepro']   = 'Irreproducible';
 $lang->bug->resolutionList['postponed']  = 'Postponed';
-$lang->bug->resolutionList['willnotfix'] = "Not to Solve";
+$lang->bug->resolutionList['willnotfix'] = "Not to Resolve";
 $lang->bug->resolutionList['tostory']    = 'Transfer to Story';
 
 /* 统计报表。*/
@@ -243,21 +243,21 @@ $lang->bug->report->common = 'Report';
 $lang->bug->report->select = 'Select Report Type ';
 $lang->bug->report->create = 'Generate a Report';
 
-$lang->bug->report->charts['bugsPerProject']        = $lang->projectCommon . 'Bug Count';
-$lang->bug->report->charts['bugsPerBuild']          = 'Bug Count Per Build';
-$lang->bug->report->charts['bugsPerModule']         = 'Bug Count Per Module';
-$lang->bug->report->charts['openedBugsPerDay']      = 'Bug Count Per Day';
-$lang->bug->report->charts['resolvedBugsPerDay']    = 'Solved Bug Per Day';
-$lang->bug->report->charts['closedBugsPerDay']      = 'Closed Bug Per Day';
-$lang->bug->report->charts['openedBugsPerUser']     = 'Submitted Bug Per User';
-$lang->bug->report->charts['resolvedBugsPerUser']   = 'Solved Bug Per User';
-$lang->bug->report->charts['closedBugsPerUser']     = 'Closed Bug Per User';
+$lang->bug->report->charts['bugsPerProject']        = $lang->projectCommon . 'Bugs';
+$lang->bug->report->charts['bugsPerBuild']          = 'Bugs Per Build';
+$lang->bug->report->charts['bugsPerModule']         = 'Bugs Per Module';
+$lang->bug->report->charts['openedBugsPerDay']      = 'Reported Bugs Per Day';
+$lang->bug->report->charts['resolvedBugsPerDay']    = 'Resolved Bugs Per Day';
+$lang->bug->report->charts['closedBugsPerDay']      = 'Closed Bugs Per Day';
+$lang->bug->report->charts['openedBugsPerUser']     = 'Reported Bugs Per User';
+$lang->bug->report->charts['resolvedBugsPerUser']   = 'Resolved Bugs Per User';
+$lang->bug->report->charts['closedBugsPerUser']     = 'Closed Bugs Per User';
 $lang->bug->report->charts['bugsPerSeverity']       = 'Bug Priority Report';
 $lang->bug->report->charts['bugsPerResolution']     = 'Bug Solution Report';
 $lang->bug->report->charts['bugsPerStatus']         = 'Bug Status Report';
 $lang->bug->report->charts['bugsPerActivatedCount'] = 'Bug Activation Report';
 $lang->bug->report->charts['bugsPerType']           = 'Bug Type Report';
-$lang->bug->report->charts['bugsPerAssignedTo']     = 'Assignment Report';
+$lang->bug->report->charts['bugsPerAssignedTo']     = 'Bug Assignment Report';
 //$lang->bug->report->charts['bugLiveDays']        = 'Bug Handling Time Report';
 //$lang->bug->report->charts['bugHistories']       = 'Bug Handling Steps Report';
 
@@ -331,7 +331,7 @@ $lang->bug->report->bugHistories->graph->xAxisName          = 'Handling Steps';
 
 /* 操作记录。*/
 $lang->bug->action = new stdclass();
-$lang->bug->action->resolved            = array('main' => '$date, solved by <strong>$actor</strong> and the solution is <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
+$lang->bug->action->resolved            = array('main' => '$date, resolved by <strong>$actor</strong> and the solution is <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
 $lang->bug->action->tostory             = array('main' => '$date, transferred by <strong>$actor</strong> to <strong>Story</strong> with ID <strong>$extra</strong>.');
 $lang->bug->action->totask              = array('main' => '$date, imported by <strong>$actor</strong> as <strong>Task</strong> with ID <strong>$extra</strong>.');
 $lang->bug->action->linked2plan         = array('main' => '$date, related by <strong>$actor</strong> to Plan <strong>$extra</strong>.');

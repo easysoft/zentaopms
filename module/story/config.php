@@ -47,7 +47,7 @@ $config->story->custom->batchCreateFields = 'module,plan,spec,pri,estimate,revie
 $config->story->custom->batchEditFields   = 'module,plan,estimate,pri,source,stage,closedBy,closedReason';
 
 $config->story->datatable = new stdclass();
-$config->story->datatable->defaultField = array('id', 'pri', 'title', 'plan', 'source', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'actions');
+$config->story->datatable->defaultField = array('id', 'pri', 'title', 'plan', 'source', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'taskCount', 'bugCount', 'caseCount', 'actions');
 
 $config->story->datatable->fieldList['id']['title']    = 'idAB';
 $config->story->datatable->fieldList['id']['fixed']    = 'left';

@@ -516,12 +516,88 @@ class mailModel extends model
      */
     public function getQueue($status = '', $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_MAILQUEUE)
+        $mails = $this->dao->select('*')->from(TABLE_MAILQUEUE)
             ->where('1=1')
             ->beginIF($status)->andWhere('status')->eq($status)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
+
+        if($this->app->methodName == 'browse' or $this->config->mail->mta == 'sendcloud') return $mails;
+
+        /* Group mails by toList and ccList. */
+        $groupMails = array();
+        foreach($mails as $mail)
+        {
+            $users = $mail->toList . ',' . $mail->ccList;
+            $groupMails[$users][] = $mail;
+        }
+
+        /* Merge the mails if a group has more than one mail. */
+        $queue = array();
+        foreach($groupMails as $groupMail)
+        {
+            if(count($groupMail) == 1) $queue[] = reset($groupMail);
+            if(count($groupMail) > 1)  $queue[] = $this->mergeMails($groupMail);
+        }
+
+        return $queue;
+    }
+
+    /**
+     * Merge mails.
+     *
+     * @param  array  $mails
+     * @access public
+     * @return object
+     */
+    public function mergeMails($mails = array())
+    {
+        $mail = new stdClass();
+        $mail->id      = '';
+        $mail->status  = 'wait';
+        $mail->merge   = true;
+
+        /* Get first and last mail. */
+        $firstMail = array_shift($mails);
+        $lastMail  = array_pop($mails);
+
+        $mail->id       = $firstMail->id;
+        $mail->toList   = $firstMail->toList;
+        $mail->ccList   = $firstMail->ccList;
+        $mail->subject  = $firstMail->subject;
+
+        /* Remove html tail for first mail. */
+        $endPos     = strripos($firstMail->body, '</td>');
+        $mail->body = trim(substr($firstMail->body, 0, $endPos));
+
+        /* Merge middle mails. */
+        if($mails)
+        {
+            foreach($mails as $middleMail)
+            {
+                $mail->id      .= ',' . $middleMail->id;
+                $mail->subject .= '|' . $middleMail->subject;
+
+                /* Remove html head and tail for middle mails. */
+                $beginPos = strpos($middleMail->body, '</table>');
+                $mailBody = trim(substr($middleMail->body, $beginPos));
+                $endPos   = strripos($mailBody, '</td>');
+                $mailBody = trim(substr($mailBody, 0, $endPos));
+
+                $mail->body .= ltrim($mailBody, '</table>');
+            }
+        }
+
+        $mail->id      .= ',' . $lastMail->id;
+        $mail->subject .= '|' . $lastMail->subject;
+
+        /* Remove html head for last mail. */
+        $beginPos   = strpos($lastMail->body, '</table>');
+        $mailBody   = substr($lastMail->body, $beginPos);
+        $mail->body .= trim(ltrim($mailBody, '</table>'));
+
+        return $mail;
     }
 
     /**

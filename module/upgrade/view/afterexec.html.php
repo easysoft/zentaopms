@@ -34,8 +34,8 @@
             </a>
           </div>
           <div class='col-md-4'>
-            <a class="card ad" href="http://www.yidouio.com" target="_blank">
-              <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/yidou.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/yidou.png'?>" alt=""></div>
+            <a class="card ad" href="http://www.zdoo.com" target="_blank">
+              <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/zdoo.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/zdoo.png'?>" alt=""></div>
             </a>
           </div>
         </div>

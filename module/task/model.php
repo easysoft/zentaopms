@@ -989,12 +989,31 @@ class taskModel extends model
      */
     public function getStoryTasks($storyID, $projectID = 0)
     {
-        return $this->dao->select('id, name, assignedTo, pri, status, estimate, consumed, `left`')
+        $tasks = $this->dao->select('id, name, assignedTo, pri, status, estimate, consumed, `left`')
             ->from(TABLE_TASK)
             ->where('story')->eq((int)$storyID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->fetchAll('id');
+
+        foreach($tasks as $task)
+        {
+            /* Compute task progess. */
+            if($task->consumed == 0 and $task->left == 0)
+            {
+                $task->progess = 0;
+            }
+            elseif($task->consumed != 0 and $task->left == 0)
+            {
+                $task->progess = 100;
+            }
+            else
+            {
+                $task->progess = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+            }
+        }
+
+        return $tasks;
     }
 
     /**

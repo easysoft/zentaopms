@@ -17,8 +17,7 @@
         <th class='w-id {sorter:false}'>  <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
         <th class='w-pri {sorter:false}'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
         <th class='w-p30 {sorter:false}'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
-        <th class='w-70px {sorter:false}'><?php common::printOrderLink('plan',       $orderBy, $vars, $lang->story->planAB);?></th>
-        <th class='w-70px {sorter:false}'><?php common::printOrderLink('source',     $orderBy, $vars, $lang->story->source);?></th>
+        <th class='w-90px {sorter:false}'><?php common::printOrderLink('plan',       $orderBy, $vars, $lang->story->planAB);?></th>
         <th class='w-user {sorter:false}'><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
         <th class='w-user {sorter:false}'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
         <th class='w-hour {sorter:false}'><?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
@@ -49,7 +48,6 @@
         <?php echo html::a($viewLink, $story->title, null, "style='color: $story->color'");?>
         </nobr></td>
         <td title="<?php echo $story->planTitle?>"><?php echo $story->planTitle;?></td>
-        <td><?php echo $lang->story->sourceList[$story->source];?></td>
         <td><?php echo zget($users, $story->openedBy, $story->openedBy);?></td>
         <td><?php echo zget($users, $story->assignedTo, $story->assignedTo);?></td>
         <td><?php echo $story->estimate;?></td>

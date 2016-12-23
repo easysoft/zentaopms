@@ -42,23 +42,3 @@ $(function()
         });
     });
 })
-$(document).ready(function()
-{
-    $('.side-handle-btn').click(function()
-    {   
-        if($(this).parents('.row-table').hasClass('hide-side'))
-        {   
-            $('.row-table').removeClass('hide-side');
-            $('.side-handle-btn i').removeClass('icon-collapse-full');
-            $('.side-handle-btn i').addClass('icon-expand-full');
-            $.cookie('productPlanSide', 'show', {path: config.webRoot});
-        }   
-        else
-        {   
-            $('.side-handle-btn i').removeClass('icon-expand-full');
-            $('.side-handle-btn i').addClass('icon-collapse-full');
-            $('.row-table').addClass('hide-side');
-            $.cookie('productPlanSide', 'hide', {path: config.webRoot});
-        }   
-    });
-});
