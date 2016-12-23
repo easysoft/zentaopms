@@ -10,12 +10,15 @@ $editor['id'] = explode(',', $editor['id']);
 <script type="text/javascript" charset="utf-8" src="<?php echo $jsRoot?>markdown/simplemde.min.js"></script>
 <style>
 .CodeMirror{min-height: 150px; height:150px;}
+.CodeMirror-fullscreen + .editor-preview-side{display:block;}
+.CodeMirror-fullscreen, .editor-preview-side{margin-bottom:40px;}
+.editor-toolbar .fa-html:before{content:"HTML";}
 </style>
 
 <script language='javascript'>
 var markdownEditor = <?php echo json_encode($editor);?>;
 var toolbar    = ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "code", "table", "|", "preview", "side-by-side", "fullscreen", "|", "guide"];
-var withchange = ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "code", "table", "|", "preview", "side-by-side", "fullscreen", "|", "guide", {name: "html", action: function customFunction(editor){toggleEditor("html")}, className:'fa fa-exchange', title:"HTML"}];
+var withchange = ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "code", "table", "|", "preview", "side-by-side", "fullscreen", "|", "guide", {name: "html", action: function customFunction(editor){toggleEditor("html")}, className:'fa fa-html', title:"HTML"}];
 $(document).ready(initMarkdown);
 function initMarkdown(afterInit)
 {
@@ -31,16 +34,10 @@ function initMarkdown(afterInit)
         if(!window.markdownEditor) window.markdownEditor = {};
         markdown = new SimpleMDE(options);
         window.markdownEditor['#'] = window.markdownEditor[markdownEditorID] = markdown;
-        markdown.codemirror.on("focus", function()
-        {
-            window.markdownEditor[markdownEditorID].toggleSideBySide();
-        });
+        markdown.codemirror.on("focus", function(){window.markdownEditor[markdownEditorID].toggleSideBySide();});
         markdown.codemirror.on("change", function()
         {
-            if($('#' + markdownEditorID).parent().find('.editor-preview-active-side').size() == 0)
-            {
-                window.markdownEditor[markdownEditorID].toggleSideBySide();
-            }
+            if($('#' + markdownEditorID).parent().find('.editor-preview-active-side').size() == 0) window.markdownEditor[markdownEditorID].toggleSideBySide();
         });
     });
 

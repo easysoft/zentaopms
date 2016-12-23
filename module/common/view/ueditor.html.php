@@ -40,6 +40,8 @@ function initUeditor(afterInit)
         serverUrl: '<?php echo $this->createLink('file', 'ajaxUeditorUpload', "uid=$uid")?>',
         autoClearinitialContent:false,
         wordCount:false,
+        <?php if($editorLang != 'zh-cn' and $editorLang != 'zh-tw') echo "iframeCssUrl:'',"; //When lang is zh-cn or zh-tw then load ueditor/themes/iframe.css file for font-family and size of editor.?>
+        enableAutoSave:false,
         elementPathEnabled:false
     };
     $.each(editor.id, function(key, editorID)
