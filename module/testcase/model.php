@@ -800,6 +800,7 @@ class testcaseModel extends model
             $caseData->type         = $data->type[$key];
             $caseData->status       = $data->status[$key];
             $caseData->stage        = join(',', $data->stage[$key]);
+            $caseData->keywords     = $data->keywords[$key];
             $caseData->frequency    = 1;
             $caseData->precondition = $data->precondition[$key];
 
