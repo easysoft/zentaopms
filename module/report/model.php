@@ -148,27 +148,54 @@ class reportModel extends model
             ->fetchAll('id');
         foreach($plans as $plan) $products[$plan->product]->plans[$plan->id] = $plan;
 
-        $planStories = $this->dao->select('plan, id, status')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('plan')->in(array_keys($plans))->fetchGroup('plan', 'id');
-        foreach($planStories as $planID => $stories)
+        $planStories      = array();
+        $unplannedStories = array();
+        $stmt = $this->dao->select('id,plan,product,status')->from(TABLE_STORY)->where('deleted')->eq(0)->query();
+        while($story = $stmt->fetch())
         {
-            foreach($stories as $story)
+            if(empty($story->plan))
             {
-                if(!isset($plans[$story->plan])) continue;
-                $plan = $plans[$story->plan];
-                $products[$plan->product]->plans[$story->plan]->status[$story->status] = isset($products[$plan->product]->plans[$story->plan]->status[$story->status]) ? $products[$plan->product]->plans[$story->plan]->status[$story->status] + 1 : 1;
+                $unplannedStories[$story->id] = $story;
+                continue;
+            }
+
+            $storyPlans   = array();
+            $storyPlans[] = $story->plan;
+            if(strpos($story->plan, ',') !== false) $storyPlans = explode(',', trim($story->plan, ','));
+            foreach($storyPlans as $planID)
+            {
+                if(isset($plans[$planID]))
+                {
+                    $planStories[$story->id] = $story;
+                    break;
+                }
             }
         }
-        $unplannedStories = $this->dao->select('product, id, status')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('plan')->eq(0)->andWhere('product')->in(array_keys($products))->fetchGroup('product', 'id');
-        foreach($unplannedStories as $product => $stories)
+
+        foreach($planStories as $story)
         {
-            $products[$product]->plans[0] = new stdClass();
-            $products[$product]->plans[0]->title = $this->lang->report->unplanned;
-            $products[$product]->plans[0]->begin = '';
-            $products[$product]->plans[0]->end   = '';
-            foreach($stories as $story) 
+            $storyPlans = array();
+            $storyPlans[] = $story->plan;
+            if(strpos($story->plan, ',') !== false) $storyPlans = explode(',', trim($story->plan, ','));
+            foreach($storyPlans as $planID)
             {
-                $products[$product]->plans[0]->status[$story->status] = isset($products[$product]->plans[0]->status[$story->status]) ? $products[$product]->plans[0]->status[$story->status] + 1 : 1;
+                if(!isset($plans[$planID])) continue;
+                $plan = $plans[$planID];
+                $products[$plan->product]->plans[$planID]->status[$story->status] = isset($products[$plan->product]->plans[$planID]->status[$story->status]) ? $products[$plan->product]->plans[$planID]->status[$story->status] + 1 : 1;
             }
+        }
+
+        foreach($unplannedStories as $story)
+        {
+            $product = $story->product;
+            if(!isset($products[$product]->plans[0]))
+            {
+                $products[$product]->plans[0] = new stdClass();
+                $products[$product]->plans[0]->title = $this->lang->report->unplanned;
+                $products[$product]->plans[0]->begin = '';
+                $products[$product]->plans[0]->end   = '';
+            }
+            $products[$product]->plans[0]->status[$story->status] = isset($products[$product]->plans[0]->status[$story->status]) ? $products[$product]->plans[0]->status[$story->status] + 1 : 1;
         }
 
         unset($products['']);
