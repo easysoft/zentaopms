@@ -51,14 +51,14 @@
     <td><?php echo html::select("type[$key]", $lang->testcase->typeList, !empty($case->type) ? $case->type : (!empty($case->id) ? $cases[$case->id]->type : ''), "class='form-control'")?></td>
     <td><?php echo html::select("status[$key]", $lang->testcase->statusList, !empty($case->status) ? $case->status : (!empty($case->id) ? $cases[$case->id]->status : 'normal'), "class='form-control'")?></td>
     <td class='text-left' style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : (!empty($case->id) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>
-    <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? $case->precondition : "", "class='form-control'")?></td>
+    <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? htmlspecialchars($case->precondition) : "", "class='form-control'")?></td>
     <td>
       <?php if(isset($stepData[$key]['desc'])):?>
       <table class='w-p100 bd-0'>
       <?php foreach($stepData[$key]['desc'] as $id => $desc):?>
         <tr>
-          <td><?php echo html::textarea("desc[$key][$id]", $desc, "class='form-control'")?></td>
-          <td><?php echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]) ? $stepData[$key]['expect'][$id] : '', "class='form-control'")?></td>
+          <td><?php echo html::textarea("desc[$key][$id]", htmlspecialchars($desc), "class='form-control'")?></td>
+          <td><?php echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]) ? htmlspecialchars($stepData[$key]['expect'][$id]) : '', "class='form-control'")?></td>
         </tr>
       <?php endforeach;?>
       </table>
