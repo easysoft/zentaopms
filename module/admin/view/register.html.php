@@ -64,7 +64,7 @@
       <tr>
         <th></th>
         <td colspan="2">
-          <?php echo html::submitButton($lang->admin->register->submit) . html::hidden('sn', $sn);?>
+          <?php echo html::submitButton($lang->admin->register->submit) . html::hidden('sn', $sn) . html::hidden('bindSite', common::getSysURL());?>
         </td>
       </tr>
     </table>

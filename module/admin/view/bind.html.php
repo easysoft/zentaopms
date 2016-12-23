@@ -33,7 +33,7 @@
         <td><?php echo html::password('password', '', "class='form-control'");?></td>
       </tr>  
       <tr>
-        <th></th><td class="text-center"><?php echo html::submitButton() . html::hidden('sn', $sn);?></td>
+        <th></th><td class="text-center"><?php echo html::submitButton() . html::hidden('sn', $sn) . html::hidden('site', common::getSysURL());?></td>
       </tr>
     </table>
   </form>
