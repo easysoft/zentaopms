@@ -1364,10 +1364,12 @@ class story extends control
                     $story->spec = htmlspecialchars_decode($story->spec);
                     $story->spec = str_replace("<br />", "\n", $story->spec);
                     $story->spec = str_replace('"', '""', $story->spec);
+                    $story->spec = str_replace('&nbsp;', ' ', $story->spec);
 
                     $story->verify = htmlspecialchars_decode($story->verify);
                     $story->verify = str_replace("<br />", "\n", $story->verify);
                     $story->verify = str_replace('"', '""', $story->verify);
+                    $story->verify = str_replace('&nbsp;', ' ', $story->verify);
                 }
                 /* fill some field with useful value. */
                 if(isset($products[$story->product]))              $story->product        = $products[$story->product] . "(#$story->product)";
