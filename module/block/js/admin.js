@@ -60,6 +60,9 @@ function getNotSourceParams(type, blockID)
 function getBlockParams(type, moduleID)
 {
     $('#blockParam').empty();
+
+    if(type == '') return;
+
     $.get(createLink('block', 'set', 'id=' + blockID + '&type=' + type + '&source=' + moduleID), function(data)
     {
         $('#blockParam').html(data);
