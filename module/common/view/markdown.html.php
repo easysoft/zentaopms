@@ -13,6 +13,7 @@ $editor['id'] = explode(',', $editor['id']);
 .CodeMirror-fullscreen + .editor-preview-side{display:block;}
 .CodeMirror-fullscreen, .editor-preview-side{margin-bottom:40px;}
 .editor-toolbar .fa-html:before{content:"HTML";}
+.editor-preview-side table > tbody > tr:last-child td{border:1px solid #e5e5e5 !important}
 </style>
 
 <script language='javascript'>
