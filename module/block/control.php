@@ -90,7 +90,7 @@ class block extends control
         }
 
         $block = $this->block->getByID($id);
-        if($block) $type = $block->block;
+        if($block and empty($type)) $type = $block->block;
 
         if(isset($this->lang->block->moduleList[$source]))
         {
