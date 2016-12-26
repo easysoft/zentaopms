@@ -48,7 +48,7 @@ if(file_exists('install.php') or file_exists('upgrade.php'))
     $undeleteFiles = array();
     if(file_exists('install.php')) $undeleteFiles[] = '<strong style="color:#ed980f">install.php</strong>';
     if(file_exists('upgrade.php')) $undeleteFiles[] = '<strong style="color:#ed980f">upgrade.php</strong>';
-    $wwwDir = __DIR__;
+    $wwwDir = dirname(__FILE__);
     if($undeleteFiles)
     {
         echo "<html><head><meta charset='utf-8'></head>

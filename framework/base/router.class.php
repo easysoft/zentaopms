@@ -1803,8 +1803,22 @@ class baseRouter
         {
             foreach($lang->db->custom[$moduleName] as $section => $fields)
             {
+                if(isset($lang->{$moduleName}->{$section}['']))
+                {
+                    $nullKey   = '';
+                    $nullValue = $lang->{$moduleName}->{$section}[$nullKey]; 
+                }
+                elseif(isset($lang->{$moduleName}->{$section}[0]))
+                {
+                    $nullKey   = 0;
+                    $nullValue = $lang->{$moduleName}->{$section}[0]; 
+                }
                 unset($lang->{$moduleName}->{$section});
+
+                if(isset($nullKey))$lang->{$moduleName}->{$section}[$nullKey] = $nullValue;
                 foreach($fields as $key => $value) $lang->{$moduleName}->{$section}[$key] = $value;
+                unset($nullKey);
+                unset($nullValue);
             }
         }
 

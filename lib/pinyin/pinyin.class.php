@@ -14,8 +14,8 @@ class pinyin
     public function __construct()
     {
         $this->segments = array();
-        $segment = __DIR__ . '/data/words';
-        if(file_exists($segment)) $this->segments = include __DIR__ . '/data/words';
+        $segment = dirname(__FILE__) . '/data/words';
+        if(file_exists($segment)) $this->segments = include dirname(__FILE__) . '/data/words';
     }
 
     /**

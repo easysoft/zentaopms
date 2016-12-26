@@ -27,7 +27,7 @@ include './framework/router.class.php';
 include './framework/control.class.php';
 include './framework/model.class.php';
 include './framework/helper.class.php';
-include './config/config.php';
+helper::import(realpath('./config/config.php'));
 
 /* Set the PATH_INFO variable. */
 if($config->requestType == 'PATH_INFO')

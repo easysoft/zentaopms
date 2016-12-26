@@ -1451,6 +1451,7 @@ function fixedTfootAction(formID)
         tableWidth,
         tableOffset,
         hasFixed;
+    if(!$tbody.length) return false;
     function fixTfoot()
     {
         tableWidth   = $table.width();

@@ -62,9 +62,9 @@ class adminModel extends model
      */
     public function postAPI($url, $formvars = "")
     {
-		$this->agent->cookies['lang'] = $this->cookie->lang;
-    	$this->agent->submit($url, $formvars);
-		return $this->agent->results;
+        $this->agent->cookies['lang'] = $this->cookie->lang;
+        $this->agent->submit($url, $formvars);
+        return $this->agent->results;
     }
 
     /**
@@ -101,65 +101,68 @@ class adminModel extends model
 
     }
 
-	/**
-	 * Register zentao by API. 
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function registerByAPI()
-	{
-		$apiURL = 'http://www.zentao.net/user-register.json?bind=yes&HTTP_X_REQUESTED_WITH=XMLHttpRequest';
-		return $this->postAPI($apiURL, $_POST);
-	}
+    /**
+     * Register zentao by API. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function registerByAPI()
+    {
+        $apiURL = 'http://www.zentao.net/user-register.json?bind=yes&HTTP_X_REQUESTED_WITH=XMLHttpRequest';
+        return $this->postAPI($apiURL, $_POST);
+    }
 
-	/**
-	 * Login zentao by API.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function bindByAPI()
-	{
-		$apiURL = 'http://www.zentao.net/user-bindChanzhi.json?HTTP_X_REQUESTED_WITH=XMLHttpRequest';
-		return $this->postAPI($apiURL, $_POST);
-	}
+    /**
+     * Login zentao by API.
+     * 
+     * @access public
+     * @return void
+     */
+    public function bindByAPI()
+    {
+        $apiURL = 'http://www.zentao.net/user-bindChanzhi.json?HTTP_X_REQUESTED_WITH=XMLHttpRequest';
+        return $this->postAPI($apiURL, $_POST);
+    }
 
     public function getSecretKey()
     {
-		$apiURL = "http://www.zentao.net/user-secretKey.json";
+        //$apiURL = "http://www.zentao.net/user-secretKey.json";
+        $apiURL = "http://www.zentao.cn/user-secretKey.json";
         $params['u']   = $this->config->global->community;
         $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
         $params['k'] = $this->getSignature($params);
-		$this->agent->cookies['lang'] = $this->cookie->lang;
-    	$this->agent->fetch($apiURL . '?' . http_build_query($params));
-		$result = $this->agent->results;
-		$result = json_decode($result);
+        $this->agent->cookies['lang'] = $this->cookie->lang;
+        $this->agent->fetch($apiURL . '?' . http_build_query($params));
+        $result = $this->agent->results;
+        $result = json_decode($result);
         return $result;
     }
 
     public function sendCodeByAPI($type)
     {
         $module = $type == 'mobile' ? 'sms' : 'mail';
-        $apiURL = "http://www.zentao.net/{$module}-apiSendCode.json";
+        //$apiURL = "http://www.zentao.net/{$module}-apiSendCode.json";
+        $apiURL = "http://www.zentao.cn/{$module}-apiSendCode.json";
         $params['u']   = $this->config->global->community;
         $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
         $params['k'] = $this->getSignature($params);
 
         $param = http_build_query($params);
-		return $this->postAPI($apiURL . '?' . $param, $_POST);
+        return $this->postAPI($apiURL . '?' . $param, $_POST);
     }
 
     public function certifyByAPI($type)
     {
         $module = $type == 'mobile' ? 'sms' : 'mail';
-        $apiURL = "http://www.zentao.net/{$module}-apiCertify.json";
+        //$apiURL = "http://www.zentao.net/{$module}-apiCertify.json";
+        $apiURL = "http://www.zentao.cn/{$module}-apiCertify.json";
         $params['u']   = $this->config->global->community;
         $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
         $params['k'] = $this->getSignature($params);
 
         $param = http_build_query($params);
-		return $this->postAPI($apiURL . '?' . $param, $_POST);
+        return $this->postAPI($apiURL . '?' . $param, $_POST);
     }
 
     public function getSignature($params)
@@ -169,17 +172,17 @@ class adminModel extends model
         return md5(http_build_query($params) . md5($privateKey));
     }
 
-	/**
-	 * Get register information. 
-	 * 
-	 * @access public
-	 * @return object
-	 */
-	public function getRegisterInfo()
+    /**
+     * Get register information. 
+     * 
+     * @access public
+     * @return object
+     */
+    public function getRegisterInfo()
     {
         $register = new stdclass();
-		$register->company = $this->app->company->name;
-		$register->email   = $this->app->user->email;
-		return $register;
-	}
+        $register->company = $this->app->company->name;
+        $register->email   = $this->app->user->email;
+        return $register;
+    }
 }

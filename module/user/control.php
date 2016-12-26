@@ -711,7 +711,10 @@ class user extends control
                     {
                         $url   = html_entity_decode($this->post->referer);
                         $param = substr($url, strrpos($url, '?') + 1);
-                        list($module, $method) = explode('&', $param);
+
+                        $module = $this->config->default->module;
+                        $method = $this->config->default->method;
+                        if(strpos($param, '&') !== false) list($module, $method) = explode('&', $param);
                         $module = str_replace('m=', '', $module);
                         $method = str_replace('f=', '', $method);
                     }
