@@ -70,7 +70,7 @@ js::set('refresh', $lang->refresh);
             <span class='input-group-addon'><?php echo $lang->bug->openedBuild?></span>
             <?php endif;?>
             <span id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?></span>
-            <span class='input-group-addon' id='buildBoxActions'></span>
+            <span class='input-group-addon fix-border' id='buildBoxActions'></span>
             <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn btn-default' data-toggle='tooltip' onclick='loadAllBuilds()'")?></span>
           </div>
         </td>
