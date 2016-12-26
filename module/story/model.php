@@ -2349,7 +2349,18 @@ class storyModel extends model
         /* Get actions. */
         $action  = $this->loadModel('action')->getById($actionID);
         $history = $this->action->getHistory($actionID);
-        $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
+        $action->history    = isset($history[$actionID]) ? $history[$actionID] : array();
+        $action->appendLink = '';
+        if(strpos($action->extra, ':')!== false)
+        {
+            list($extra, $id) = explode(':', $action->extra);
+            $action->extra    = $extra;
+            if($id)
+            {
+                $name  = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($id)->fetch('title');
+                if($name) $action->appendLink = html::a(zget($this->config->mail, 'domain', common::getSysURL()) . helper::createLink($action->objectType, 'view', "id=$id"), "#$id " . $name);
+            }
+        }
 
         /* Get mail content. */
         $modulePath = $this->app->getModulePath();

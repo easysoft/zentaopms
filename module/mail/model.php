@@ -298,7 +298,7 @@ class mailModel extends model
         $this->clear();
 
         /* Replace full webPath image for mail. */
-        if(strpos($body, 'src="data/upload')) $body = preg_replace('/<img (.*)src="data\/upload/', '<img $1 src="' . zget($this->config->mail, 'domain', common::getSysURL()) . $this->config->webRoot . 'data/upload', $body);
+        if(preg_match('/src="\/?data\/upload/U', $body)) $body = preg_replace('/<img (.*)src="\/?data\/upload/', '<img $1 src="' . zget($this->config->mail, 'domain', common::getSysURL()) . $this->config->webRoot . 'data/upload', $body);
 
         try 
         {
