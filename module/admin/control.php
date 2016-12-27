@@ -83,7 +83,14 @@ class admin extends control
             }
 
             $alertMessage = '';
-            foreach($response->message as $item) $alertMessage .= is_array($item) ? join('\n', $item) . '\n' : $item . '\n';
+            if(is_string($response->message))
+            {
+                $alertMessage = $response->message;
+            }
+            else
+            {
+                foreach($response->message as $item) $alertMessage .= is_array($item) ? join('\n', $item) . '\n' : $item . '\n';
+            }
             $alertMessage = str_replace(array('<strong>', '</strong>'), '', $alertMessage);
             die(js::alert($alertMessage));
         }
@@ -221,11 +228,20 @@ class admin extends control
         $this->display();
     }
 
+    /**
+     * Certify ztEmail.
+     * 
+     * @param  string $email 
+     * @access public
+     * @return void
+     */
     public function certifyZtEmail($email = '')
     {
         if($_POST)
         {
-            $this->admin->certifyByAPI('mail');
+            $response = $this->admin->certifyByAPI('mail');
+            $response = json_decode($response);
+            if($response->result == 'fail') die(js::alert($response->message));
             die(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
         }
 
@@ -236,11 +252,20 @@ class admin extends control
         $this->display();
     }
 
+    /**
+     * Certify ztMobile 
+     * 
+     * @param  string $mobile 
+     * @access public
+     * @return void
+     */
     public function certifyZtMobile($mobile = '')
     {
         if($_POST)
         {
-            $this->admin->certifyByAPI('mobile');
+            $response = $this->admin->certifyByAPI('mobile');
+            $response = json_decode($response);
+            if($response->result == 'fail') die(js::alert($response->message));
             die(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
         }
 
@@ -251,33 +276,15 @@ class admin extends control
         $this->display();
     }
 
+    /**
+     * Ajax send code.
+     * 
+     * @param  int    $type 
+     * @access public
+     * @return void
+     */
     public function ajaxSendCode($type)
     {
         die($this->admin->sendCodeByAPI($type));
-    }
-
-    public function sendmail()
-    {
-        $url = 'http://api.sendcloud.net/apiv2/mail/send';
-        $params['apiUser'] = 'zentao_chunsheng';
-        $params['apiKey'] = 'I70rz0E5Org4N3jU';
-        $params['from'] = '876333172@qq.com';
-        $params['fromName'] = 'QQ';
-        $params['to'] = 'wyd621@163.com';
-        $params['subject'] = 'test';
-        $params['html'] = 'test';
-
-        $data = http_build_query($params);
-
-        $options['http'] = array(
-                'method' => 'POST',
-                'header' => 'Content-Type: application/x-www-form-urlencoded',
-                'content' => $data
-            );
-        $context  = stream_context_create($options);
-        $result = file_get_contents($url, FILE_TEXT, $context);
-
-        a($result);
-
     }
 }

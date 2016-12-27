@@ -9,5 +9,7 @@ $config->url->extension = 'http://www.zentao.net/extension-browse.html';
 $config->url->donation  = 'http://www.zentao.net/help-donation.html';
 $config->url->service   = 'http://www.cnezsoft.com/article-browse-1078.html';
 
+$config->admin->apiRoot = 'http://www.zentao.net';
+
 if(!isset($config->safe)) $config->safe = new stdclass();
 if(!isset($config->safe->weak)) $config->safe->weak = '123456,password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123';

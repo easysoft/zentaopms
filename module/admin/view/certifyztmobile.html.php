@@ -11,27 +11,27 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='panel' id='checkMobile'>
-  <div class='panel-heading'><strong><?php echo $lang->admin->certifyMobile;?></strong></div>
-  <div class='panel-body'>
-    <form method='post' target='hiddenwin'>
-      <table class='table table-form'>
-        <tr>
-          <th><?php echo $lang->user->mobile;?></th>
-          <td><?php echo html::input('mobile', $mobile, "class='form-control'");?></td>
-          <td><?php echo html::a(inlink('ajaxsendcode', 'type=mobile'), $lang->admin->getCaptcha, '', "id='codeSender' class='btn btn-xs'");?></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->admin->captcha;?></th>
-          <td><?php echo html::input('captcha', '', "class='form-control'");?></td>
-        </tr>
-        <tr>
-          <th></th>
-          <td><?php echo html::submitButton();?></td>
-        </tr>
-      </table>
-    </form>
+<div class='container mw-700px' id='checkMobile'>
+  <div id='titlebar'>
+    <div class='heading'><strong><?php echo $lang->admin->certifyMobile;?></strong></div>
   </div>
+  <form method='post' target='hiddenwin'>
+    <table class='table table-form'>
+      <tr>
+        <th><?php echo $lang->user->mobile;?></th>
+        <td><?php echo html::input('mobile', $mobile, "class='form-control'");?></td>
+        <td><?php echo html::a(inlink('ajaxsendcode', 'type=mobile'), $lang->admin->getCaptcha, '', "id='codeSender' class='btn'");?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->admin->captcha;?></th>
+        <td><?php echo html::input('captcha', '', "class='form-control'");?></td>
+      </tr>
+      <tr>
+        <th></th>
+        <td><?php echo html::submitButton();?></td>
+      </tr>
+    </table>
+  </form>
 </div>
 <script>
 $(function()

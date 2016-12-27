@@ -206,6 +206,12 @@ class mailModel extends model
         $this->mta->secretKey = $this->config->mail->sendcloud->secretKey;
     }
 
+    /**
+     * Set Ztcloud.
+     * 
+     * @access public
+     * @return void
+     */
     public function setZtcloud()
     {
         $this->mta->account   = $this->config->global->community;

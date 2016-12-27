@@ -11,6 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<style>
+.input-group .input-group-btn .popover{font-size:12px;}
+</style>
 <div class='container mw-700px'>
   <div id='titlebar'>
     <div class='heading'>
@@ -44,11 +47,29 @@
       </tr>
       <tr>
         <th><?php echo $lang->user->mobile;?></th>
-        <td><?php echo html::input('mobile', '', "class='form-control'");?></td>
+        <td>
+          <div class="required required-wrapper"></div>
+          <div class='input-group'>
+            <?php echo html::input('mobile', '', "class='form-control'");?>
+            <span class='input-group-btn'><?php echo html::a(inlink('ajaxSendCode', 'type=mobile'), $lang->admin->getCaptcha, '', "id='mobileSender' class='btn'")?></span>
+            <span class='input-group-addon'></span>
+            <span class='input-group-addon'><?php echo $lang->admin->captcha?></span>
+            <?php echo html::input('mobileCode', '', "class='form-control'");?>
+          </div>
+        </td>
       </tr>  
       <tr>
         <th><?php echo $lang->user->email;?></th>
-        <td><div class="required required-wrapper"></div><?php echo html::input('email', $register->email, "class='form-control'");?></td>
+        <td>
+          <div class="required required-wrapper"></div>
+          <div class='input-group'>
+            <?php echo html::input('email', $register->email, "class='form-control'");?>
+            <span class='input-group-btn'><?php echo html::a(inlink('ajaxSendCode', 'type=email'), $lang->admin->getCaptcha, '', "id='mailSender' class='btn'")?></span>
+            <span class='input-group-addon'></span>
+            <span class='input-group-addon'><?php echo $lang->admin->captcha?></span>
+            <?php echo html::input('emailCode', '', "class='form-control'");?>
+          </div>
+        </td>
       </tr>  
       <tr>
         <th><?php echo $lang->user->password;?></th>
@@ -70,4 +91,51 @@
     </table>
   </form>
 </div>
+<script>
+$(function()
+{
+    $('#mobileSender').click(function()
+    {
+        var data = {mobile: $('#mobile').val()};
+        var url  = $(this).attr('href');
+
+        $.post(url, data, function(response)
+        {
+            if(response.result == 'success')
+            {
+                $('#mobileSender').popover({trigger:'manual', content:response.message, placement:'right'}).popover('show');
+                $('#mobileSender').next('.popover').addClass('popover-success');
+                function distroy(){$('#mobileSender').popover('destroy')}
+                setTimeout(distroy,2000);
+            }
+            else
+            {
+                bootbox.alert(response.message);
+            }
+        }, 'json')
+        return false;
+    })
+    $('#mailSender').click(function()
+    {
+        var data = {email: $('#email').val()};
+        var url  = $(this).attr('href');
+
+        $.post(url, data, function(response)
+        {
+            if(response.result == 'success')
+            {
+                $('#mailSender').popover({trigger:'manual', content:response.message, placement:'right'}).popover('show');
+                $('#mailSender').next('.popover').addClass('popover-success');
+                function distroy(){$('#mailSender').popover('destroy')}
+                setTimeout(distroy,2000);
+            }
+            else
+            {
+                bootbox.alert(response.message);
+            }
+        }, 'json')
+        return false;
+    })  
+});
+</script>
 <?php include '../../common/view/footer.html.php';?>
