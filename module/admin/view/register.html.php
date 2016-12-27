@@ -13,6 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <style>
 .input-group .input-group-btn .popover{font-size:12px;}
+.input-group-btn .btn{border-left:0px; border-right:0px;}
+.input-group:last-child .input-group-addon {border-right:0px;}
 </style>
 <div class='container mw-700px'>
   <div id='titlebar'>
