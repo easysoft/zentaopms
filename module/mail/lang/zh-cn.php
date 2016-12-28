@@ -68,6 +68,7 @@ $lang->mail->secureList['']    = '不加密';
 $lang->mail->secureList['ssl'] = 'ssl';
 $lang->mail->secureList['tls'] = 'tls';
 
+$lang->mail->more           = '更多...';
 $lang->mail->inputFromEmail = '请输入发信邮箱：';
 $lang->mail->nextStep       = '下一步';
 $lang->mail->successSaved   = '配置信息已经成功保存。';
