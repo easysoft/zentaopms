@@ -758,7 +758,7 @@ class testtaskModel extends model
         $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
 
         /* Get mail content. */
-        $modulePath = $this->app->getModulePath();
+        $modulePath = $this->app->getModulePath($appName = '', 'testtask');
         $oldcwd     = getcwd();
         $viewFile   = $modulePath . 'view/sendmail.html.php';
         chdir($modulePath . 'view');

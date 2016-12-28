@@ -2363,7 +2363,7 @@ class storyModel extends model
         }
 
         /* Get mail content. */
-        $modulePath = $this->app->getModulePath();
+        $modulePath = $this->app->getModulePath($appName = '', 'story');
         $oldcwd     = getcwd();
         $viewFile   = $modulePath . 'view/sendmail.html.php';
         chdir($modulePath . 'view');

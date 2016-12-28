@@ -2197,7 +2197,7 @@ class bugModel extends model
         }
 
         /* Get mail content. */
-        $modulePath = $this->app->getModulePath();
+        $modulePath = $this->app->getModulePath($appName = '', 'bug');
         $oldcwd     = getcwd();
         $viewFile   = $modulePath . 'view/sendmail.html.php';
         chdir($modulePath . 'view');
