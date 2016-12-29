@@ -15,7 +15,7 @@ class pinyin
     {
         $this->segments = array();
         $segment = dirname(__FILE__) . '/data/words';
-        if(file_exists($segment)) $this->segments = include dirname(__FILE__) . '/data/words';
+        if(file_exists($segment)) $this->segments = include $segment;
     }
 
     /**
@@ -41,7 +41,7 @@ class pinyin
      *
      * @return string
      */
-    protected function prepare($string)
+    public function prepare($string)
     {
         $string = preg_replace_callback('/[a-z0-9_-]+/i', create_function('$matches', 'return "\t" . $matches[0];'), $string);
         return preg_replace("/[^\p{Han}\p{P}\p{Z}\p{M}\p{N}\p{L}\t]/u", '', $string);
@@ -55,7 +55,7 @@ class pinyin
      *
      * @return string
      */
-    protected function romanize($string)
+    public function romanize($string)
     {
         $string = $this->prepare($string);
         $string = strtr($string, $this->segments);

@@ -125,20 +125,31 @@ class html extends baseHTML
 
         if($joinOptions)
         {
-            $valuesPinyin = $pinyin->convert($joinOptions);
-
-            $values = explode($sign, $joinOptions);
-            $sign   = trim($sign);
-            foreach($values as $value)
+            $valuesPinyin = $pinyin->romanize($joinOptions);
+            $signLenth    = strlen($sign);
+            $pinyinSign   = trim($sign);
+            $pySignLenth  = strlen($pinyinSign);
+            while($joinOptions)
             {
-                $valuePinyin = array();
-                $valueAbbr   = '';
-                while($wordPinyin = array_shift($valuesPinyin))
+                $valuePinyin = '';
+                $value       = '';
+
+                $pinyinPos = strpos($valuesPinyin, $pinyinSign);
+                if($pinyinPos !== false)
                 {
-                    if($wordPinyin == $sign or empty($wordPinyin)) break;
-                    $valuePinyin[] = $wordPinyin;
-                    $valueAbbr    .= $wordPinyin[0];
+                    $valuePinyin  = substr($valuesPinyin, 0, $pinyinPos);
+                    $valuesPinyin = substr($valuesPinyin, $pinyinPos + $pySignLenth);
                 }
+
+                $valuePos = strpos($joinOptions, $sign);
+                if($valuePos === false) break;
+                $value       = substr($joinOptions, 0, $valuePos);
+                $joinOptions = substr($joinOptions, $valuePos + $signLenth);
+
+                $valuePinyin = preg_split('/[^a-z]+/iu', trim($valuePinyin));
+                $valueAbbr   = '';
+                foreach($valuePinyin as $wordPinyin) $valueAbbr .= $wordPinyin[0];
+
                 $dataKeys[$value] = empty($valuePinyin) ? '' : join($valuePinyin) . ' ' . $valueAbbr;
             }
         }
