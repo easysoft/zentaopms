@@ -148,7 +148,7 @@ class html extends baseHTML
 
                 $valuePinyin = preg_split('/[^a-z]+/iu', trim($valuePinyin));
                 $valueAbbr   = '';
-                foreach($valuePinyin as $wordPinyin) $valueAbbr .= $wordPinyin[0];
+                foreach($valuePinyin as $wordPinyin) if($wordPinyin) $valueAbbr .= $wordPinyin[0];
 
                 $dataKeys[$value] = empty($valuePinyin) ? '' : join($valuePinyin) . ' ' . $valueAbbr;
             }
