@@ -115,9 +115,8 @@ class ztcloud
     public function getSignature($param)
     {
         ksort($param);
-        $data = '';
-        foreach($param as $key => $value) $data .= $key . '=' . $value . '&';
-        return md5($this->secretKey . '&' . $data . $this->secretKey);
+        $data = http_build_query($param);
+        return md5($this->secretKey . '&' . $data . '&' . $this->secretKey);
     }
 
     /**

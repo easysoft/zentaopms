@@ -30,12 +30,13 @@ $lang->admin->notice->register = "友情提示：您还未在禅道社区(www.ze
 $lang->admin->notice->ignore   = "不再提示";
 
 $lang->admin->register = new stdclass();
+$lang->admin->register->common     = '注册新帐号绑定';
 $lang->admin->register->caption    = '禅道社区登记';
 $lang->admin->register->click      = '点击此处';
 $lang->admin->register->lblAccount = '请设置您的用户名，英文字母和数字的组合，三位以上。';
 $lang->admin->register->lblPasswd  = '请设置您的密码。数字和字母的组合，六位以上。';
 $lang->admin->register->submit     = '登记';
-$lang->admin->register->bind       = "如果您已经拥有社区帐号，%s关联账户";
+$lang->admin->register->bind       = "绑定已有帐号";
 $lang->admin->register->success    = "登记账户成功";
 
 $lang->admin->bind = new stdclass();

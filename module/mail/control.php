@@ -506,15 +506,15 @@ class mail extends control
             die(js::locate($this->createLink('admin', 'register', 'from=mail')));
         }
         $result = $this->loadModel('admin')->getSecretKey();
-        if(empty($result))die(js::alert($this->lang->mail->connectFail) . js::locate('back'));
-        if($result->result == 'fail' and empty($result->data)) die(js::alert($this->lang->mail->centifyFail));
+        if(empty($result))die(js::alert($this->lang->mail->connectFail) . js::locate($this->createLink('admin', 'register', "from=admin")));
+        if($result->result == 'fail' and empty($result->data)) die(js::alert($this->lang->mail->centifyFail) . js::locate($this->createLink('admin', 'register', "from=admin")));
 
         $data = $result->data;
         if($result->result == 'fail' and empty($data->emailCertified))
         {
             die(js::locate($this->createLink('admin', 'certifyZtEmail', 'email=' . helper::safe64Encode($data->email))));
         }
-        if($result->result == 'fail' and (empty($data->mobileCertified) or $data->mobileCertified != $data->mobile))
+        if($result->result == 'fail' and empty($data->mobileCertified))
         {
             die(js::locate($this->createLink('admin', 'certifyZtMobile', 'mobile=' . helper::safe64Encode($data->mobile))));
         }
