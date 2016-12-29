@@ -568,10 +568,20 @@ class mailModel extends model
         $firstMail = array_shift($mails);
         $lastMail  = array_pop($mails);
 
-        $mail->id       = $firstMail->id;
-        $mail->toList   = $firstMail->toList;
-        $mail->ccList   = $firstMail->ccList;
-        $mail->subject  = $firstMail->subject;
+        /* Set mail info.*/
+        $mail->id      = $firstMail->id;
+        $mail->toList  = $firstMail->toList;
+        $mail->ccList  = $firstMail->ccList;
+        $mail->subject = $firstMail->subject;
+        if($mails)
+        {
+            $secondMail = reset($mails);
+            $mail->subject .= '|' . $secondMail->subject . '|' . $this->lang->mail->more;
+        }
+        else
+        {
+            $mail->subject .= '|' . $lastMail->subject;
+        }
 
         /* Remove html tail for first mail. */
         $endPos     = strripos($firstMail->body, '</td>');
@@ -582,8 +592,7 @@ class mailModel extends model
         {
             foreach($mails as $middleMail)
             {
-                $mail->id      .= ',' . $middleMail->id;
-                $mail->subject .= '|' . $middleMail->subject;
+                $mail->id .= ',' . $middleMail->id;
 
                 /* Remove html head and tail for middle mails. */
                 $beginPos = strpos($middleMail->body, '</table>');
@@ -595,12 +604,11 @@ class mailModel extends model
             }
         }
 
-        $mail->id      .= ',' . $lastMail->id;
-        $mail->subject .= '|' . $lastMail->subject;
+        $mail->id .= ',' . $lastMail->id;
 
         /* Remove html head for last mail. */
-        $beginPos   = strpos($lastMail->body, '</table>');
-        $mailBody   = substr($lastMail->body, $beginPos);
+        $beginPos    = strpos($lastMail->body, '</table>');
+        $mailBody    = substr($lastMail->body, $beginPos);
         $mail->body .= trim(ltrim($mailBody, '</table>'));
 
         return $mail;

@@ -386,8 +386,7 @@ class project extends control
             $this->loadModel('task');
             foreach($mails as $mail) $this->task->sendmail($mail->taskID, $mail->actionID);
 
-            /* Locate the browser. */
-            die(js::locate($this->createLink('project', 'task', "projectID=$projectID"), 'parent'));
+            die(js::locate($this->createLink('project', 'importBug', "projectID=$projectID"), 'parent'));
         }
 
         /* Set browseType, productID, moduleID and queryID. */
