@@ -331,10 +331,11 @@ class project extends control
             die(js::locate(inlink('importTask', "toProject=$toProject&fromProject=$fromProject"), 'parent'));
         }
 
-        $project  = $this->commonAction($toProject);
-        $branches = $this->project->getProjectBranches($toProject);
-        $tasks    = $this->project->getTasks2Imported($toProject, $branches);
-        $projects = $this->project->getProjectsToImport(array_keys($tasks));
+        $project   = $this->commonAction($toProject);
+        $toProject = $project->id;
+        $branches  = $this->project->getProjectBranches($toProject);
+        $tasks     = $this->project->getTasks2Imported($toProject, $branches);
+        $projects  = $this->project->getProjectsToImport(array_keys($tasks));
         unset($projects[$toProject]);
         unset($tasks[$toProject]);
 
@@ -543,8 +544,9 @@ class project extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
-        $queryID = ($type == 'bySearch') ? (int)$param : 0;
-        $project = $this->commonAction($projectID);
+        $queryID   = ($type == 'bySearch') ? (int)$param : 0;
+        $project   = $this->commonAction($projectID);
+        $projectID = $project->id;
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -622,6 +624,7 @@ class project extends control
         $this->session->set('bugList', $this->app->getURI(true));
 
         $project   = $this->commonAction($projectID);
+        $projectID = $project->id;
         $products  = $this->project->getProducts($project->id);
         $productID = key($products);    // Get the first product for creating bug.
         $branchID  = isset($products[$productID]) ? $products[$productID]->branch : 0;
@@ -675,7 +678,8 @@ class project extends control
         $this->loadModel('testtask');
         $this->session->set('buildList', $this->app->getURI(true));
 
-        $project = $this->commonAction($projectID);
+        $project   = $this->commonAction($projectID);
+        $projectID = $project->id;
 
         /* Header and position. */
         $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->build;
@@ -706,7 +710,8 @@ class project extends control
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true));
 
-        $project = $this->commonAction($projectID);
+        $project   = $this->commonAction($projectID);
+        $projectID = $project->id;
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -737,7 +742,8 @@ class project extends control
     public function burn($projectID = 0, $type = 'noweekend', $interval = 0)
     {
         $this->loadModel('report');
-        $project = $this->commonAction($projectID);
+        $project   = $this->commonAction($projectID);
+        $projectID = $project->id;
 
         /* Header and position. */
         $title      = $project->name . $this->lang->colon . $this->lang->project->burn;
@@ -827,7 +833,8 @@ class project extends control
      */
     public function team($projectID = 0)
     {
-        $project = $this->commonAction($projectID);
+        $project   = $this->commonAction($projectID);
+        $projectID = $project->id;
 
         $title      = $project->name . $this->lang->colon . $this->lang->project->team;
         $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
@@ -1023,7 +1030,8 @@ class project extends control
      */
     public function start($projectID)
     {
-        $this->commonAction($projectID);
+        $project   = $this->commonAction($projectID);
+        $projectID = $project->id;
 
         if(!empty($_POST))
         {
@@ -1055,7 +1063,8 @@ class project extends control
      */
     public function putoff($projectID)
     {
-        $this->commonAction($projectID);
+        $project   = $this->commonAction($projectID);
+        $projectID = $project->id;
 
         if(!empty($_POST))
         {
@@ -1087,7 +1096,8 @@ class project extends control
      */
     public function suspend($projectID)
     {
-        $this->commonAction($projectID);
+        $project   = $this->commonAction($projectID);
+        $projectID = $project->id;
 
         if(!empty($_POST))
         {
@@ -1119,7 +1129,8 @@ class project extends control
      */
     public function activate($projectID)
     {
-        $this->commonAction($projectID);
+        $project   = $this->commonAction($projectID);
+        $projectID = $project->id;
 
         if(!empty($_POST))
         {
@@ -1151,7 +1162,8 @@ class project extends control
      */
     public function close($projectID)
     {
-        $this->commonAction($projectID);
+        $project   = $this->commonAction($projectID);
+        $projectID = $project->id;
 
         if(!empty($_POST))
         {
@@ -1933,7 +1945,11 @@ class project extends control
      */
     public function all($status = 'undone', $projectID = 0, $orderBy = 'order_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
-        if($this->projects) $this->commonAction($projectID);
+        if($this->projects)
+        {
+            $project   = $this->commonAction($projectID);
+            $projectID = $project->id;
+        }
         $this->session->set('projectList', $this->app->getURI(true));
 
         /* Load pager and get tasks. */
