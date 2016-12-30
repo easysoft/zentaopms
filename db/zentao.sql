@@ -326,7 +326,7 @@ CREATE TABLE IF NOT EXISTS `zt_file` (
   `pathname` char(50) NOT NULL,
   `title` char(90) NOT NULL,
   `extension` char(30) NOT NULL,
-  `size` mediumint(8) unsigned NOT NULL default '0',
+  `size` int(10) unsigned NOT NULL default '0',
   `objectType` char(30) NOT NULL,
   `objectID` mediumint(9) NOT NULL,
   `addedBy` char(30) NOT NULL default '',
