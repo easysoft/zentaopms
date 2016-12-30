@@ -67,6 +67,7 @@ class zfile
      */
     public function removeDir($dir)
     {
+        if(empty($dir)) return true;
         $dir = realpath($dir) . '/';
         if($dir == '/') return false;
 
