@@ -159,6 +159,8 @@ class upgradeModel extends model
                 $this->renameMainLib();
                 $this->adjustPriv8_4();
             case '8_4':
+            case '8_4_1':
+                $this->execSQL($this->getUpgradeFile('8.4.1'));
         }
 
         $this->deletePatch();
@@ -244,6 +246,7 @@ class upgradeModel extends model
         case '8_3':
         case '8_3_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.3.1'));
         case '8_4':
+        case '8_4_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.4.1'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
