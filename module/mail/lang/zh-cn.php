@@ -30,7 +30,7 @@ $lang->mail->debug       = '调试级别';
 $lang->mail->charset     = '编码';
 $lang->mail->accessKey   = 'accessKey';
 $lang->mail->secretKey   = 'secretKey';
-$lang->mail->license     = 'SendCloud发信须知';
+$lang->mail->license     = '禅道云发信使用须知';
 
 $lang->mail->selectMTA = '请选择发信方式：';
 $lang->mail->smtp      = 'SMTP发信';

@@ -9,12 +9,16 @@
  * @version     $Id: en.php 4460 2013-02-26 02:28:02Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->admin->common  = 'Administration';
-$lang->admin->index   = 'Admin Home';
-$lang->admin->checkDB = 'Check Database Library';
-$lang->admin->sso     = 'RangerTeam';
-$lang->admin->safeIndex = 'Security';
-$lang->admin->checkWeak = 'Weak Password Check';
+$lang->admin->common        = 'Administration';
+$lang->admin->index         = 'Admin Home';
+$lang->admin->checkDB       = 'Check Database Library';
+$lang->admin->sso           = 'RangerTeam';
+$lang->admin->safeIndex     = 'Security';
+$lang->admin->checkWeak     = 'Weak Password Check';
+$lang->admin->certifyMobile = '认证手机';
+$lang->admin->certifyEmail  = '认证邮箱';
+$lang->admin->captcha       = '验证码';
+$lang->admin->getCaptcha    = '获取验证码';
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'Current Version is %s,';
@@ -26,6 +30,7 @@ $lang->admin->notice->register = "Note: You haven't registered in ZenTao(www.zen
 $lang->admin->notice->ignore   = "Ignore";
 
 $lang->admin->register = new stdclass();
+$lang->admin->register->common     = '注册新帐号绑定';
 $lang->admin->register->caption    = 'Register';
 $lang->admin->register->click      = 'Click Here';
 $lang->admin->register->lblAccount = 'must be 3 characters combination of letters and numbers at least.';

@@ -113,3 +113,4 @@ $lang->upgrade->fromVersions['8_2_6']     = '8.2.6';
 $lang->upgrade->fromVersions['8_3']       = '8.3';
 $lang->upgrade->fromVersions['8_3_1']     = '8.3.1';
 $lang->upgrade->fromVersions['8_4']       = '8.4';
+$lang->upgrade->fromVersions['8_4_1']     = '8.4.1';

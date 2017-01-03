@@ -9,12 +9,16 @@
  * @version     $Id: zh-tw.php 4767 2013-05-05 06:10:13Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->admin->common  = '後台管理';
-$lang->admin->index   = '後台管理首頁';
-$lang->admin->checkDB = '檢查資料庫';
-$lang->admin->sso     = '然之整合';
-$lang->admin->safeIndex = '安全';
-$lang->admin->checkWeak = '弱口令檢查';
+$lang->admin->common        = '後台管理';
+$lang->admin->index         = '後台管理首頁';
+$lang->admin->checkDB       = '檢查資料庫';
+$lang->admin->sso           = '然之整合';
+$lang->admin->safeIndex     = '安全';
+$lang->admin->checkWeak     = '弱口令檢查';
+$lang->admin->certifyMobile = '認證手機';
+$lang->admin->certifyEmail  = '認證郵箱';
+$lang->admin->captcha       = '驗證碼';
+$lang->admin->getCaptcha    = '獲取驗證碼';
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = '當前系統的版本是%s，';
@@ -26,12 +30,13 @@ $lang->admin->notice->register = "友情提示：您還未在禪道社區(www.ze
 $lang->admin->notice->ignore   = "不再提示";
 
 $lang->admin->register = new stdclass();
+$lang->admin->register->common     = '註冊新帳號綁定';
 $lang->admin->register->caption    = '禪道社區登記';
 $lang->admin->register->click      = '點擊此處';
 $lang->admin->register->lblAccount = '請設置您的用戶名，英文字母和數字的組合，三位以上。';
 $lang->admin->register->lblPasswd  = '請設置您的密碼。數字和字母的組合，六位以上。';
 $lang->admin->register->submit     = '登記';
-$lang->admin->register->bind       = "如果您已經擁有社區帳號，%s關聯賬戶";
+$lang->admin->register->bind       = "綁定已有帳號";
 $lang->admin->register->success    = "登記賬戶成功";
 
 $lang->admin->bind = new stdclass();

@@ -8,9 +8,12 @@ $lang->mail->test   = 'Email Testing';
 $lang->mail->reset  = 'Reset';
 $lang->mail->browse = 'Email List';
 $lang->mail->delete = 'Delete Email';
-$lang->mail->sendCloud     = 'Send Cloud Email';
+$lang->mail->ztCloud       = '禅道云发信';
+$lang->mail->sendCloud     = 'Notice SendCloud';
 $lang->mail->batchDelete   = 'Batch Delete';
 $lang->mail->sendcloudUser = 'Sync Contact';
+$lang->mail->agreeLicense  = '同意';
+$lang->mail->disagree      = '不同意';
 
 $lang->mail->turnon      = 'Turn On';
 $lang->mail->async       = 'Asynchronous';
@@ -27,6 +30,7 @@ $lang->mail->debug       = 'Debug';
 $lang->mail->charset     = 'Charset';
 $lang->mail->accessKey   = 'Access Key';
 $lang->mail->secretKey   = 'Secret Key';
+$lang->mail->license     = '禅道云发信使用须知';
 
 $lang->mail->selectMTA = 'Select MTA';
 $lang->mail->smtp      = 'SMTP';
@@ -64,6 +68,7 @@ $lang->mail->secureList['']    = 'Plain';
 $lang->mail->secureList['ssl'] = 'ssl';
 $lang->mail->secureList['tls'] = 'tls';
 
+$lang->mail->more           = '更多...';
 $lang->mail->inputFromEmail = 'Enter Email Address';
 $lang->mail->nextStep       = 'Next';
 $lang->mail->successSaved   = 'Configuration has been saved.';
@@ -73,18 +78,31 @@ $lang->mail->successSended  = 'Sent!';
 $lang->mail->confirmDelete  = 'Do you want to delete it?';
 $lang->mail->sendmailTips   = 'Note: Email author will not receive this email.';
 $lang->mail->needConfigure  = 'Email configuration is not found. Please cinfigure the Email first.';
+$lang->mail->connectFail    = '无法连接禅道网站。';
+$lang->mail->centifyFail    = '验证失败，可能密钥已经修改。请重新绑定！';
 $lang->mail->nofsocket      = 'fsocket related function has been deactivated. Mails cannot send out. Please modify allow_url_fopen in php.ini to turn on Onopenssl, and restart Apache.';
 $lang->mail->noOpenssl      = 'Please turn on Onopenssl, and restart Apache.';
 $lang->mail->disableSecure  = 'No openssl. Disable ssl and tls.';
 $lang->mail->sendCloudFail  = 'Failed. Reason:';
 $lang->mail->sendCloudHelp  = <<<EOD
-<p>1、Notice SendCloud是SendCloud的Team通知服务。具体可以到<a href="http://notice.sendcloud.net/" target="_blank">notice.sendcloud.net</a>查看</p>
-<p>2、accessKey和secretKey可以到登陆后的"设置"页面查看。Email人地址和名称也在"设置"页面设置。</p>
-<p>3、Email时，Notice SendCloudContact里面的昵称要跟Email一致，否则无法成功Email。可以到[<a href='%s'>同步Contact</a>]页面，将ZenTaoUser同步到SendCloudContact中</p>
+
+
+
 EOD;
 $lang->mail->sendCloudSuccess = 'Done';
 $lang->mail->closeSendCloud   = 'Close';
 $lang->mail->addressWhiteList = 'Please add the email to the whilte list on email server to avoid be treated as spam';
+$lang->mail->ztCloudNotice    = <<<EOD
+
+
+
+
+
+
+
+
+
+EOD;
 
 $lang->mail->placeholder = new stdclass();
 $lang->mail->placeholder->password = 'Some mail needs to fill in the auth code, specific to the mailbox related settings query.';

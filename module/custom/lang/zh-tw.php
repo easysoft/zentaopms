@@ -69,10 +69,12 @@ $lang->custom->allLang     = '適用所有語言';
 $lang->custom->confirmRestore = '是否要恢復預設配置？';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userRole    = '鍵的長度必須小於20個字元！';
-$lang->custom->notice->canNotAdd   = '該項參與運算，不提供自定義添加功能';
-$lang->custom->notice->forceReview = '指定人提交的需求必須評審。';
-$lang->custom->notice->longlife    = 'Bug列表頁面的久未處理標籤中，列出設置天數之前未處理的Bug。';
+$lang->custom->notice->userRole             = '鍵的長度必須小於20個字元！';
+$lang->custom->notice->canNotAdd            = '該項參與運算，不提供自定義添加功能';
+$lang->custom->notice->forceReview          = '指定人提交的需求必須評審。';
+$lang->custom->notice->longlife             = 'Bug列表頁面的久未處理標籤中，列出設置天數之前未處理的Bug。';
+$lang->custom->notice->priListKey           = '優先順序的鍵應當為數字！';
+$lang->custom->notice->severityListKey      = 'Bug嚴重程度的鍵應當為數字！';
 $lang->custom->notice->indexPage['product'] = "從8.2版本起增加了產品主頁視圖，是否預設進入產品主頁？";
 $lang->custom->notice->indexPage['project'] = "從8.2版本起增加了項目主頁視圖，是否預設進入項目主頁？";
 $lang->custom->notice->indexPage['qa']      = "從8.2版本起增加了測試主頁視圖，是否預設進入測試主頁？";
