@@ -121,7 +121,7 @@ EOT;
           <?php $system = isset($dbFields[$key]) ? $dbFields[$key]->system : 1;?>
           <td><?php echo $key === '' ? 'NULL' : $key; echo html::hidden('keys[]', $key) . html::hidden('systems[]', $system);?></td>
           <td>
-            <?php echo html::input("values[]", isset($dbFields[$key]) ? $dbFields[$key]->value : $value, "class='form-control'");?>
+            <?php echo html::input("values[]", isset($dbFields[$key]) ? $dbFields[$key]->value : $value, "class='form-control' " . (empty($key) ? 'readonly' : ''));?>
           </td>
           <?php if($canAdd):?>
           <td class='text-left w-100px'>
