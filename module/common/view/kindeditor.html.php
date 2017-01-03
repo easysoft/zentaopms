@@ -53,6 +53,7 @@ function initKindeditor(afterInit)
         var K = KindEditor, $editor = $('#' + editorID);
         var placeholderText = $editor.attr('placeholder');
         if(placeholderText == undefined) placeholderText = '';
+        var pasted;
         var options = 
         {
             cssPath:[themeRoot + 'zui/css/min.css'],
@@ -147,7 +148,7 @@ function initKindeditor(afterInit)
 
                 /* Add for placeholder. */
                 $(this.edit.doc).find('body').after('<span class="kindeditor-ph" style="width:100%;color:#888; padding:5px 5px 5px 7px; background-color:transparent; position:absolute;z-index:10;top:2px;border:0;overflow:auto;resize:none; font-size:13px;"></span>');
-                $placeholder = $(this.edit.doc).find('.kindeditor-ph');
+                var $placeholder = $(this.edit.doc).find('.kindeditor-ph');
                 $placeholder.html(placeholderText);
                 $placeholder.css('pointerEvents', 'none');
                 $placeholder.click(function(){frame.doc.body.focus()});
@@ -156,7 +157,7 @@ function initKindeditor(afterInit)
             afterFocus: function()
             {
                 var frame = this.edit;
-                $placeholder = $(frame.doc).find('.kindeditor-ph');
+                var $placeholder = $(frame.doc).find('.kindeditor-ph');
                 if($placeholder.size() == 0)
                 {
                     setTimeout(function(){$(frame.doc).find('.kindeditor-ph').hide();}, 50);
@@ -166,7 +167,6 @@ function initKindeditor(afterInit)
                     $placeholder.hide();
                 }
                 $editor.prev('.ke-container').addClass('focus');
-                frame.doc.body.focus();
             },
             afterBlur: function()
             {
