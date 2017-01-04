@@ -8,10 +8,10 @@
 <?php if($onlybody != 'yes'):?>
 </div><?php /* end '#wrap' in 'header.html.php'. */ ?>
 <div id='footer'>
-  <div id="crumbs">
+  <div id='crumbs'>
     <?php commonModel::printBreadMenu($this->moduleName, isset($position) ? $position : ''); ?>
   </div>
-  <div id="poweredby">
+  <div id='poweredby'>
   <a href='http://www.zentao.net' target='_blank' class='text-primary'><i class='icon-zentao'></i> <?php echo $lang->zentaoPMS . $config->version;?></a> &nbsp;
     <?php echo $lang->proVersion;?>
     <?php commonModel::printNotifyLink();?>

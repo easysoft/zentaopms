@@ -70,15 +70,15 @@ $(document).ready(function()
             $dropmenu.append("<li><a href='javascript:;' id='switchToTable'><?php echo $lang->datatable->switchToTable?></a></li>");
             $dropdown.children('.dropdown').append($dropmenu);
             this.$datatable.before($dropdown);
-            this.$datatable.find('[data-toggle=modal], a.iframe').modalTrigger();
+            this.$datatable.find('[data-toggle="modal"], a.iframe').modalTrigger();
             if($.fn.progressPie) this.$datatable.find('.progress-pie').progressPie();
-            $("a[data-toggle='showModuleModal']").click(function(){$('#showModuleModal').modal('show')});
+            $('a[data-toggle="showModuleModal"]').click(function(){$('#showModuleModal').modal('show')});
 
             $('#customBtn').modalTrigger();
 
             $('#switchToTable').click(function()
             {
-                saveDatatableConfig('mode', 'table', true)
+                saveDatatableConfig('mode', 'table', true);
             });
         }
     });
