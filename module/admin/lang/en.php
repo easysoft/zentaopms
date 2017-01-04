@@ -11,14 +11,14 @@
  */
 $lang->admin->common        = 'Administration';
 $lang->admin->index         = 'Admin Home';
-$lang->admin->checkDB       = 'Check Database Library';
+$lang->admin->checkDB       = 'Check Database';
 $lang->admin->sso           = 'RangerTeam';
 $lang->admin->safeIndex     = 'Security';
 $lang->admin->checkWeak     = 'Weak Password Check';
-$lang->admin->certifyMobile = '认证手机';
-$lang->admin->certifyEmail  = '认证邮箱';
-$lang->admin->captcha       = '验证码';
-$lang->admin->getCaptcha    = '获取验证码';
+$lang->admin->certifyMobile = 'Verify your mobilephone';
+$lang->admin->certifyEmail  = 'Verifu your Email';
+$lang->admin->captcha       = 'Verification Code';
+$lang->admin->getCaptcha    = 'Get Verification Code';
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'Current Version is %s,';
@@ -30,7 +30,7 @@ $lang->admin->notice->register = "Note: You haven't registered in ZenTao(www.zen
 $lang->admin->notice->ignore   = "Ignore";
 
 $lang->admin->register = new stdclass();
-$lang->admin->register->common     = '注册新帐号绑定';
+$lang->admin->register->common     = 'Account Binding';
 $lang->admin->register->caption    = 'Register';
 $lang->admin->register->click      = 'Click Here';
 $lang->admin->register->lblAccount = 'must be 3 characters combination of letters and numbers at least.';
@@ -47,7 +47,7 @@ $lang->admin->safe = new stdclass();
 $lang->admin->safe->common    = 'Security';
 $lang->admin->safe->set       = 'Password Security Settings';
 $lang->admin->safe->password  = 'Password Security';
-$lang->admin->safe->weak      = 'Common Weak Password';
+$lang->admin->safe->weak      = 'Weak Password';
 $lang->admin->safe->reason    = 'Type';
 $lang->admin->safe->checkWeak = 'Weak Password Check';
 $lang->admin->safe->modifyPasswordFirstLogin = 'Modify password when login for the first time.';
