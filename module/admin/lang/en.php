@@ -17,6 +17,7 @@ $lang->admin->safeIndex     = 'Security';
 $lang->admin->checkWeak     = 'Weak Password Check';
 $lang->admin->certifyMobile = 'Verify your mobilephone';
 $lang->admin->certifyEmail  = 'Verifu your Email';
+$lang->admin->ztCompany     = 'Verifu your company';
 $lang->admin->captcha       = 'Verification Code';
 $lang->admin->getCaptcha    = 'Get Verification Code';
 

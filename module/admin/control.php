@@ -277,6 +277,27 @@ class admin extends control
     }
 
     /**
+     * Set ztCompany.
+     * 
+     * @access public
+     * @return void
+     */
+    public function ztCompany()
+    {
+        if($_POST)
+        {
+            $response = $this->admin->setCompanyByAPI();
+            $response = json_decode($response);
+            if($response->result == 'fail') die(js::alert($response->message));
+            die(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
+        }
+
+        $this->view->title      = $this->lang->admin->ztCompany;
+        $this->view->position[] = $this->lang->admin->ztCompany;
+        $this->display();
+    }
+
+    /**
      * Ajax send code.
      * 
      * @param  int    $type 

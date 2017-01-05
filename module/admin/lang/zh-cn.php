@@ -17,6 +17,7 @@ $lang->admin->safeIndex     = '安全';
 $lang->admin->checkWeak     = '弱口令检查';
 $lang->admin->certifyMobile = '认证手机';
 $lang->admin->certifyEmail  = '认证邮箱';
+$lang->admin->ztCompany     = '认证公司';
 $lang->admin->captcha       = '验证码';
 $lang->admin->getCaptcha    = '获取验证码';
 

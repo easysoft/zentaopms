@@ -41,7 +41,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->user->company;?></th>
-            <td><?php echo html::input('company', $register->company, "class='form-control'");?></td>
+            <td><div class="required required-wrapper"></div><?php echo html::input('company', $register->company, "class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->user->mobile;?></th>

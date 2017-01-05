@@ -194,6 +194,26 @@ class adminModel extends model
     }
 
     /**
+     * Set company by API.
+     * 
+     * @access public
+     * @return string
+     */
+    public function setCompanyByAPI()
+    {
+        $apiConfig = $this->getApiConfig();
+        $apiURL    = $this->config->admin->apiRoot . "/user-apiSetCompany.json";
+
+        $params['u']   = $this->config->global->community;
+        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $params[$apiConfig->sessionVar]  = $apiConfig->sessionID;
+        $params['k'] = $this->getSignature($params);
+
+        $param = http_build_query($params);
+        return $this->postAPI($apiURL . '?' . $param, $_POST);
+    }
+
+    /**
      * Get signature.
      * 
      * @param  array    $params 
