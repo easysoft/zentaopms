@@ -439,7 +439,7 @@ class actionModel extends model
          * 2. If no defined in the module language, search the common action define.
          * 3. If not found in the lang->action->desc, use the $lang->action->desc->common or $lang->action->desc->extra as the default.
          */
-        if(isset($this->lang->$objectType->action->$actionType))
+        if(isset($this->lang->$objectType) && isset($this->lang->$objectType->action->$actionType))
         {
             $desc = $this->lang->$objectType->action->$actionType;
         }
@@ -755,7 +755,7 @@ class actionModel extends model
         foreach($histories as $history)
         {
             $fieldName = $history->field;
-            $history->fieldLabel = isset($this->lang->$objectType->$fieldName) ? $this->lang->$objectType->$fieldName : $fieldName;
+            $history->fieldLabel = isset($this->lang->$objectType) && isset($this->lang->$objectType->$fieldName) ? $this->lang->$objectType->$fieldName : $fieldName;
             if(($length = strlen($history->fieldLabel)) > $maxLength) $maxLength = $length;
             $history->diff ? $historiesWithDiff[] = $history : $historiesWithoutDiff[] = $history;
         }
