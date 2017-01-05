@@ -1375,7 +1375,7 @@ class upgradeModel extends model
             {
                 $result['type']   = $type;
                 $result['count']  = count($objects);
-                $result['lastID'] = $object->id;
+                $result['lastID'] = $object->$idField;
             }
             return $result;
     }
