@@ -250,6 +250,7 @@ fieldset {margin-bottom: 15px; border: 1px solid #e5e5e5; padding: 10px 15px 15p
 fieldset.fieldset-pure {background: none; padding: 0; border: none; padding-top: 5px;}
 fieldset > legend {width: auto; margin: 0 0 0 -5px; font-size: 13px; font-weight: bold; border-bottom: none; padding: 0 5px}
 fieldset > .form-group {margin-bottom: 0;}
+fieldset > .content table, fieldset > .article-content table{table-layout: initial !important; max-width: 100% !important;} 
 
 /* placeholder */
 .placeholder {color: #999}
@@ -451,7 +452,7 @@ body {color:#141414; padding-bottom: 40px;}
 #wrap .outer {position: relative; text-align:left; background:#fff;border:1px solid #cfcfcf; -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); padding: 20px}
 
 /* Footer. */
-#footer {position: relative; width:100%;position:fixed; bottom:0; left:0; margin:0; border-top: 1px solid #ddd; background:#eef4fe;height:40px; line-height:40px;-webkit-box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05); z-index: 10}
+#footer {width:100%;position:fixed; bottom:0; left:0; margin:0; border-top: 1px solid #ddd; background:#eef4fe;height:40px; line-height:40px;-webkit-box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05); z-index: 10}
 #crumbs a i.icon-home{display: none;}
 #crumbs {float: left;margin-left: 20px;}
 #crumbs > a {display: inline-block; margin-right: -4px;}
