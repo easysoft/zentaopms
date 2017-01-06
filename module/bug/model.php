@@ -691,12 +691,12 @@ class bugModel extends model
         $oldBug = $this->getById($bugID);
         $bug    = fixer::input('post')
             ->add('resolvedBy',     $this->app->user->account)
-            ->add('resolvedDate',   $now)
             ->add('status',         'resolved')
             ->add('confirmed',      1)
             ->add('assignedDate',   $now)
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
+            ->setDefault('resolvedDate', $now)
             ->setDefault('duplicateBug', 0)
             ->setDefault('assignedTo', $oldBug->openedBy)
             ->remove('comment,files,labels')
