@@ -33,7 +33,7 @@ extract($widths);
       <tbody>
         <?php foreach($tasks as $task):?>
         <tr class='text-center' data-id='<?php echo $task->id?>'>
-          <?php foreach ($setting as $key => $value) $this->task->printCell($value, $task, $memberPairs, $browseType, $branchGroups, $modulePairs);?>
+          <?php foreach ($setting as $key => $value) $this->task->printCell($value, $task, $users, $browseType, $branchGroups, $modulePairs);?>
         </tr>
         <?php endforeach;?>
       </tbody>
