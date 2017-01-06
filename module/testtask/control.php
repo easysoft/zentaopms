@@ -654,6 +654,26 @@ class testtask extends control
     }
 
     /**
+     * Batch unlink cases.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
+    public function batchUnlinkCases($taskID)
+    {
+        if(isset($_POST['caseIDList']))
+        {
+            $this->dao->delete()->from(TABLE_TESTRUN)
+                ->where('task')->eq((int)$taskID)
+                ->andWhere('`case`')->in($this->post->caseIDList)
+                ->exec();
+        }
+
+        die(js::locate($this->createLink('testtask', 'cases', "taskID=$taskID")));
+    }
+
+    /**
      * Run case.
      * 
      * @param  int    $runID 
