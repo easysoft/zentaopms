@@ -527,6 +527,12 @@ class actionModel extends model
             if(strpos($this->app->company->admins, ',' . $this->app->user->account . ',') !== false) $condition = 1; 
         }
 
+        $this->loadModel('doc');
+        $docCondition = $this->doc->buildConditionSQL('doc');
+        $libCondition = $this->doc->buildConditionSQL('lib');
+        if($docCondition) $docCondition = $this->dao->select('id')->from(TABLE_DOC)->where($docCondition)->andWhere('deleted')->eq(0)->get();
+        if($libCondition) $libCondition = $this->dao->select('id')->from(TABLE_DOCLIB)->where($libCondition)->andWhere('deleted')->eq(0)->get();
+
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where(1)
@@ -538,6 +544,8 @@ class actionModel extends model
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->fi()
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($projectID == 'all' or $productID == 'all')->andWhere("($condition)")->fi()
+            ->beginIF($docCondition)->andWhere("IF(objectType != 'doc', '1=1', objectID in ($docCondition))")->fi()
+            ->beginIF($libCondition)->andWhere("IF(objectType != 'doclib', '1=1', objectID in ($libCondition))")->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
 
         if(!$actions) return array();
