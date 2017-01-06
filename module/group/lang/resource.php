@@ -533,23 +533,24 @@ $lang->testcase->methodOrder[80] = 'unlinkCase';
 
 /* Test task. */
 $lang->resource->testtask = new stdclass();
-$lang->resource->testtask->index       = 'index';
-$lang->resource->testtask->create      = 'create';
-$lang->resource->testtask->browse      = 'browse';
-$lang->resource->testtask->view        = 'view';
-$lang->resource->testtask->cases       = 'lblCases';
-$lang->resource->testtask->groupCase   = 'groupCase';
-$lang->resource->testtask->edit        = 'edit';
-$lang->resource->testtask->start       = 'start';
-$lang->resource->testtask->close       = 'close';
-$lang->resource->testtask->delete      = 'delete';
-$lang->resource->testtask->batchAssign = 'batchAssign';
-$lang->resource->testtask->linkcase    = 'linkCase';
-$lang->resource->testtask->unlinkcase  = 'lblUnlinkCase';
-$lang->resource->testtask->runcase     = 'lblRunCase';
-$lang->resource->testtask->results     = 'lblResults';
-$lang->resource->testtask->results     = 'lblResults';
-$lang->resource->testtask->batchRun    = 'batchRun';
+$lang->resource->testtask->index            = 'index';
+$lang->resource->testtask->create           = 'create';
+$lang->resource->testtask->browse           = 'browse';
+$lang->resource->testtask->view             = 'view';
+$lang->resource->testtask->cases            = 'lblCases';
+$lang->resource->testtask->groupCase        = 'groupCase';
+$lang->resource->testtask->edit             = 'edit';
+$lang->resource->testtask->start            = 'start';
+$lang->resource->testtask->close            = 'close';
+$lang->resource->testtask->delete           = 'delete';
+$lang->resource->testtask->batchAssign      = 'batchAssign';
+$lang->resource->testtask->linkcase         = 'linkCase';
+$lang->resource->testtask->unlinkcase       = 'lblUnlinkCase';
+$lang->resource->testtask->batchUnlinkCases = 'batchUnlinkCases';
+$lang->resource->testtask->runcase          = 'lblRunCase';
+$lang->resource->testtask->results          = 'lblResults';
+$lang->resource->testtask->results          = 'lblResults';
+$lang->resource->testtask->batchRun         = 'batchRun';
 
 $lang->testtask->methodOrder[0]  = 'index';
 $lang->testtask->methodOrder[5]  = 'create';
@@ -566,6 +567,7 @@ $lang->testtask->methodOrder[55] = 'linkcase';
 $lang->testtask->methodOrder[60] = 'unlinkcase';
 $lang->testtask->methodOrder[65] = 'runcase';
 $lang->testtask->methodOrder[70] = 'results';
+$lang->testtask->methodOrder[75] = 'batchUnlinkCases';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();
