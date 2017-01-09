@@ -15,11 +15,11 @@
 $itemRow = <<<EOT
   <tr class='text-center'>
     <td>
-      <input type='text' class="form-control"  value="" name="keys[]">
+      <input type='text' class="form-control" autocomplete='off' value="" name="keys[]">
       <input type='hidden' value="0" name="systems[]">
     </td>
     <td>
-      <input type='text' class="form-control" value="" name="values[]">
+      <input type='text' class="form-control" autocomplete='off' value="" name="values[]">
     </td>
     <td class='text-left'>
       <a href='javascript:void()' class='btn-icon' onclick='addItem(this)'><i class='icon-plus'></i></a>
@@ -83,7 +83,7 @@ EOT;
       <table class='table table-form mw-600px'>
         <tr>
           <th class='w-150px'><?php echo $lang->custom->workingHours;?></th>
-          <td><?php echo html::input('defaultWorkhours', $workhours, "class='form-control w-80px'");?></td>
+          <td><?php echo html::input('defaultWorkhours', $workhours, "class='form-control w-80px' autocomplete='off'");?></td>
           <td></td>
         </tr>
         <tr>
@@ -101,7 +101,7 @@ EOT;
           <th class='w-100px'><?php echo $lang->custom->bug->fields['longlife'];?></th>
           <td class='w-100px'>
             <div class='input-group'>
-              <?php echo html::input('longlife', $longlife, "class='form-control'");?>
+              <?php echo html::input('longlife', $longlife, "class='form-control' autocomplete='off'");?>
               <span class='input-group-addon'><?php echo $lang->day?></span>
             </div>
           </td>
@@ -121,7 +121,7 @@ EOT;
           <?php $system = isset($dbFields[$key]) ? $dbFields[$key]->system : 1;?>
           <td><?php echo $key === '' ? 'NULL' : $key; echo html::hidden('keys[]', $key) . html::hidden('systems[]', $system);?></td>
           <td>
-            <?php echo html::input("values[]", isset($dbFields[$key]) ? $dbFields[$key]->value : $value, "class='form-control' " . (empty($key) ? 'readonly' : ''));?>
+            <?php echo html::input("values[]", isset($dbFields[$key]) ? $dbFields[$key]->value : $value, "class='form-control' autocomplete='off' " . (empty($key) ? 'readonly' : ''));?>
           </td>
           <?php if($canAdd):?>
           <td class='text-left w-100px'>

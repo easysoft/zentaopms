@@ -307,7 +307,7 @@ foreach($fieldParams as $fieldName => $param)
 {
     echo "<span id='box$fieldName'>";
     if($param['control'] == 'select') echo html::select('field' . $fieldName, $param['values'], '', "class='form-control searchSelect'");
-    if($param['control'] == 'input')  echo html::input('field' . $fieldName, '', "class='form-control searchInput'");
+    if($param['control'] == 'input')  echo html::input('field' . $fieldName, '', "class='form-control searchInput' autocomplete='off'");
     echo '</span>';
 }
 ?>
@@ -357,7 +357,7 @@ foreach($fieldParams as $fieldName => $param)
           {
               $fieldName  = $formSession["field$fieldNO"];
               $extraClass = isset($param['class']) ? $param['class'] : '';
-              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='form-control $extraClass searchInput'");
+              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='form-control $extraClass searchInput' autocomplete='off'");
           }
           echo '</td>';
 
@@ -407,7 +407,7 @@ foreach($fieldParams as $fieldName => $param)
           {
               $fieldName  = $formSession["field$fieldNO"];
               $extraClass = isset($param['class']) ? $param['class'] : '';
-              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='form-control $extraClass searchInput'");
+              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='form-control $extraClass searchInput' autocomplete='off'");
           }
           echo '</td>';
 
