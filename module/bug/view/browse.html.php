@@ -79,7 +79,7 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
         <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
           <span class='caret'></span>
         </button>
-        <ul class='dropdown-menu'>
+        <ul class='dropdown-menu pull-right'>
         <?php
         $misc = common::hasPriv('bug', 'batchCreate') ? '' : "class=disabled";
         $link = common::hasPriv('bug', 'batchCreate') ?  $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID") : '#';

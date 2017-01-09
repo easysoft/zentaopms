@@ -5,6 +5,8 @@
 .confirm1 {color:green; font-size:9px}
 .red{color:red;}
 
+#createActionMenu .dropdown-menu {width:100%;}
+
 .dropdown-menu.with-search {padding: 0; min-width: 150px; overflow: hidden; max-height: 302px;}
 .dropdown-menu > .menu-search .input-group {width:100%;}
 .dropdown-menu > .menu-search .input-group-addon {position: absolute; right: 10px; top: 0; z-index: 10; background: none; border: none; color: #666}
