@@ -1184,7 +1184,7 @@ class storyModel extends model
         if($browseType == 'bySearch')
         {
             $story        = $this->getById($storyID);
-            $stories2Link = $this->getBySearch($story->product, $queryID, 'id', null);
+            $stories2Link = $this->getBySearch($story->product, $queryID, 'id', null, '', $story->branch);
             foreach($stories2Link as $key => $story2Link)
             {
                 if($story2Link->id == $storyID) unset($stories2Link[$key]);
@@ -1473,7 +1473,9 @@ class storyModel extends model
         }
         elseif($branch)
         {
-            $storyQuery .= " AND `branch`" . helper::dbIN("0,$branch"); 
+            $allBranch = "`branch` = 'all'";
+            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` in('0','$branch')";
+            if(strpos($storyQuery, $allBranch) !== false) $storyQuery = str_replace($allBranch, '1', $storyQuery);
         }
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
 

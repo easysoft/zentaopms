@@ -569,12 +569,15 @@ class testtask extends control
 
         /* Get cases. */
         if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
-        $query = str_replace("`product` = 'all'", '1', $this->session->testcaseQuery); // If search all product, replace product = all to 1=1
+        $query = $this->session->testcaseQuery;
+        $allProduct = "`product` = 'all'";
+        if(strpos($query, '`product` =') === false) $query .= " AND `product` = $productID";
+        if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1', $query);
+
         $linkedCases = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs('case');
         if($param == 'all')
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
-                ->andWhere('product')->eq($productID)
                 ->andWhere('id')->notIN($linkedCases)
                 ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
                 ->andWhere('deleted')->eq(0)
