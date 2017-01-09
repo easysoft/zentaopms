@@ -99,7 +99,7 @@ class docModel extends model
      */
     public function getLibByObject($type, $objectID)
     {
-        return $this->dao->select('*')->from(TABLE_DOCLIB)->where($type)->eq($objectID)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_DOCLIB)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->fetchAll('id');
     }
 
     /**
@@ -316,6 +316,8 @@ class docModel extends model
         if(!$this->checkPriv($doc))
         {
             echo(js::alert($this->lang->doc->accessDenied));
+            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
             die(js::locate('back'));
         }
         $version = $version ? $version : $doc->version;
@@ -1173,6 +1175,8 @@ class docModel extends model
         if(!$this->checkPriv($lib)) 
         {
             echo(js::alert($this->lang->doc->accessDenied));
+            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
             die(js::locate('back'));
         }
 

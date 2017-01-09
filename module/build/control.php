@@ -333,7 +333,7 @@ class build extends control
 
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($build->product, $queryID, 'id', null, $build->project);
+            $allStories = $this->story->getBySearch($build->product, $queryID, 'id', null, $build->project, $build->branch);
         }
         else
         {

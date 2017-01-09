@@ -288,7 +288,7 @@ class testcaseModel extends model
         /* By search. */
         elseif($browseType == 'bysearch')
         {
-            $cases = $this->getBySearch($productID, $queryID, $sort, $pager);
+            $cases = $this->getBySearch($productID, $queryID, $sort, $pager, $branch);
         }
 
         return $cases;
@@ -304,7 +304,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $queryID, $orderBy, $pager = null)
+    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $branch = 0)
     {
         if($queryID)
         {
@@ -334,6 +334,10 @@ class testcaseModel extends model
             $caseQuery = $caseQuery . ' AND `product` ' . helper::dbIN($products);
             $queryProductID = 'all';
         }
+
+        $allBranch = "`branch` = 'all'";
+        if($branch and strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND `branch` in('0','$branch')";
+        if(strpos($caseQuery, $allBranch) !== false) $caseQuery = str_replace($allBranch, '1', $caseQuery);
         $caseQuery .= ')';
 
         $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
@@ -539,7 +543,7 @@ class testcaseModel extends model
         if($browseType == 'bySearch')
         {
             $case       = $this->getById($caseID);
-            $cases2Link = $this->getBySearch($case->product, $queryID, 'id', null);
+            $cases2Link = $this->getBySearch($case->product, $queryID, 'id', null, $case->branch);
             foreach($cases2Link as $key => $case2Link)
             {
                 if($case2Link->id == $caseID) unset($cases2Link[$key]);
@@ -966,7 +970,7 @@ class testcaseModel extends model
         else
         {
             $this->config->testcase->search['fields']['branch'] = $this->lang->product->branch;
-            $this->config->testcase->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
+            $this->config->testcase->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty') + array('all' => $this->lang->branch->all);
         }
         $this->config->testcase->search['actionURL'] = $actionURL;
         $this->config->testcase->search['queryID']   = $queryID;

@@ -611,14 +611,31 @@ class treeModel extends model
         /* Add for task #1945. check the module has case or no. */
         if($type == 'case' and !empty($extra))
         {
-            $modules = $this->getAllChildID($module->id);
-            $runs    = $this->dao->select('t1.*')->from(TABLE_TESTRUN)->alias('t1')
-                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
-                ->where('t1.task')->eq((int)$extra)
-                ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
-                ->limit(1)
-                ->fetch();
-            if(empty($runs)) return;
+            static $runs = array();
+            if(empty($runs))
+            {
+                $runs = $this->dao->select('t1.*,t2.module')->from(TABLE_TESTRUN)->alias('t1')
+                    ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+                    ->where('t1.task')->eq((int)$extra)
+                    ->fetchAll('module');
+            }
+            static $modules = array();
+            if(empty($modules)) $modules = $this->dao->select('id,path')->from(TABLE_MODULE)->where('root')->eq($module->root)->andWhere("(type='story' or type='case')")->fetchPairs('id', 'path');
+            $childModules = array();
+            foreach($modules as $moduleID => $modulePath)
+            {
+                if(strpos($modulePath, $module->path) === 0) $childModules[$moduleID] = $moduleID;
+            }
+            $hasRuns = false;
+            foreach($childModules as $moduleID)
+            {
+                if(isset($runs[$moduleID]))
+                {
+                    $hasRuns = true;
+                    break;
+                }
+            }
+            if(!$hasRuns) return;
         }
 
         if(is_array($extra) or empty($extra)) $extra['branchID'] = $branch;
