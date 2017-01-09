@@ -499,6 +499,10 @@ class mailModel extends model
             foreach($toList as $key => $to) if(trim($to) == $account or !trim($to)) unset($toList[$key]);
             foreach($ccList as $key => $cc) if(trim($cc) == $account or !trim($cc)) unset($ccList[$key]);
         }
+
+        if(!$toList and !$ccList) return;
+        if(!$toList and $ccList) $toList = array(array_shift($ccList));
+
         $toList = join(',', $toList);
         $ccList = join(',', $ccList);
         if(empty($toList) or empty($subject)) return true;
