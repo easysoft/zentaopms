@@ -79,6 +79,8 @@ function toggleOrder(obj)
         $(obj).find('.log-desc').attr('class', 'icon- log-asc');
     }
     $("#historyItem li").reverseOrder();
+    window.editor['lastComment'].remove();
+    initKindeditor();
 }
 
 function toggleComment(actionID)

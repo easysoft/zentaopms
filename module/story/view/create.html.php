@@ -134,7 +134,7 @@
                 <?php endif;?>
                 <?php if(!$hiddenEst):?>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->story->estimateAB;?></span>
-                <?php echo html::input('estimate', $estimate, "class='form-control minw-60px'");?>
+                <?php echo html::input('estimate', $estimate, "class='form-control minw-60px' autocomplete='off'");?>
                 <?php endif;?>
               </div>
             </div>

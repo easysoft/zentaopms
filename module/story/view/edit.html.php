@@ -126,7 +126,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->story->estimate;?></th>
-            <td><?php echo html::input('estimate', $story->estimate, "class='form-control'");?></td>
+            <td><?php echo html::input('estimate', $story->estimate, "class='form-control' autocomplete='off'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->story->keywords;?></th>

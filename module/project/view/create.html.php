@@ -31,6 +31,7 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
+<?php js::set('weekend', $config->project->weekend);?>
 <?php js::set('holders', $lang->project->placeholder);?>
 <div class='container mw-1400px'>
   <div id='titlebar'>
@@ -69,7 +70,7 @@
         <th><?php echo $lang->project->days;?></th>
         <td>
           <div class='input-group'>
-          <?php echo html::input('days', '', "class='form-control'");?>
+          <?php echo html::input('days', '', "class='form-control' autocomplete='off'");?>
             <span class='input-group-addon'><?php echo $lang->project->day;?></span>
           </div>
         </td>

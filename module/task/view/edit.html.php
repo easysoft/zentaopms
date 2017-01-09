@@ -114,7 +114,7 @@
           </tr>  
           <tr>
             <th><?php echo $lang->task->estimate;?></th>
-            <td><?php echo html::input('estimate', $task->estimate, "class='form-control'");?></td>
+            <td><?php echo html::input('estimate', $task->estimate, "class='form-control' autocomplete='off'");?></td>
           </tr>  
           <tr>
             <th><?php echo $lang->task->consumed;?></th>
@@ -122,7 +122,7 @@
           </tr>  
           <tr>
             <th><?php echo $lang->task->left;?></th>
-            <td><?php echo html::input('left', $task->left, "class='form-control'");?></td>
+            <td><?php echo html::input('left', $task->left, "class='form-control' autocomplete='off'");?></td>
           </tr>
         </table>
       </fieldset>

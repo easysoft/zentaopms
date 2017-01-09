@@ -34,13 +34,13 @@
       <div class='col-sm-2'>
         <div class='input-group'>
           <span class='input-group-addon'><?php echo $lang->report->diffDays;?></span>
-          <?php echo html::input('days', $days, "class='form-control' style='text-align:center'");?>
+          <?php echo html::input('days', $days, "class='form-control' autocomplete='off' style='text-align:center'");?>
         </div>
       </div>
       <div class='col-sm-2'>
         <div class='input-group'>
           <span class='input-group-addon'><?php echo $lang->report->workday;?></span>
-          <?php echo html::input('workday', $workday, "class='form-control' style='width:50px'");?>
+          <?php echo html::input('workday', $workday, "class='form-control' autocomplete='off' style='width:50px'");?>
         </div>
       </div>
       <div class='col-sm-1'>

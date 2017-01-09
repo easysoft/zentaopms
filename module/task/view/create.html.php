@@ -106,7 +106,7 @@
             <div class='col-table' id='estRowCol'>
               <div class='input-group'>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->task->estimateAB;?></span>
-                <?php echo html::input('estimate', '', "class='form-control' placeholder='{$lang->task->hour}'");?>
+                <?php echo html::input('estimate', '', "class='form-control' placeholder='{$lang->task->hour}' autocomplete='off'");?>
               </div>
             </div>
             <?php endif; ?>
