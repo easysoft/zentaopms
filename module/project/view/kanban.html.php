@@ -95,6 +95,7 @@
           <?php foreach($story->tasks[$col] as $task):?>
           <div class='board board-task board-task-<?php echo $col ?><?php if($task->assignedTo == $this->app->user->account) echo ' inverse';?>' data-id='<?php echo $task->id?>' id='task-<?php echo $task->id?>'>
             <div class='board-title'>
+              <?php if(isset($task->delay)) echo "<span class='label label-badge label-delay'>{$lang->project->delayed}</span>";?>
               <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $task->name, '', 'class="kanbanFrame" title="' . $task->name . '"');?>
               <div class='board-actions'>
                 <button type='button' class='btn btn-mini btn-link btn-info-toggle'><i class='icon-angle-down'></i></button>
