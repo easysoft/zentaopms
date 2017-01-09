@@ -103,8 +103,14 @@ function computeEndDate(delta)
     beginDate = $('#begin').val();
     if(!beginDate) return;
 
-    endDate = convertStringToDate(beginDate).addDays(parseInt(delta));
-    endDate = endDate.toString('yyyy-MM-dd');
+    delta     = parseInt(delta);
+    beginDate = convertStringToDate(beginDate);
+    if((delta == 7 || delta == 14) && (beginDate.getDay() == 1))
+    {
+        delta = (weekend == 2) ? (delta - 2) : (delta - 1);
+    }
+
+    endDate = beginDate.addDays(delta - 1).toString('yyyy-MM-dd');
     $('#end').val(endDate);
     computeWorkDays();
 }

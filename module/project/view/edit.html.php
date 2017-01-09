@@ -37,7 +37,7 @@
         <td>
           <div class='input-group'>
             <?php echo html::input('begin', $project->begin, "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->begin . "'");?>
-            <span class='input-group-addon'><?php echo $lang->project->to;?></span>
+            <span class='input-group-addon fix-border'><?php echo $lang->project->to;?></span>
             <?php echo html::input('end', $project->end, "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->end . "'");?>
             <div class='input-group-btn'>
               <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><?php echo $lang->project->byPeriod;?> <span class='caret'></span></button>
