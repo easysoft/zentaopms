@@ -585,10 +585,10 @@ body {color:#141414; padding-bottom: 40px;}
 .outer .table tbody td > a:visited, #crumbs > a:visited, .side > a:visited {color: #551A8B}
 
 /* Querybox */
-#querybox {margin: 5px -10px -7px; background-color: #fff; height: 0; border-top: 1px solid #ddd; position: relative; z-index: 1000; overflow: visible; display: none; width: 100%; float: left;}
-#querybox form {padding: 10px}
+#querybox {margin: 5px 0 -7px; background-color: #fff; height: 0; position: relative; z-index: 1000; overflow: visible; display: none; float: left; width: 100%;}
+#querybox form {padding: 10px; border-top: 1px solid #ddd; margin: 0 -10px;}
 #querybox.show {display: block; height: auto}
-#titlebar #querybox {margin: 5px -20px -10px}
+#titlebar #querybox {margin: 5px -10px -12px; float: none; width: auto;}
 
 /* Container in outer */
 .outer > .container {margin: 0 auto; padding: 0; border: 1px solid #ddd;}

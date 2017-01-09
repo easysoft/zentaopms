@@ -39,7 +39,7 @@ include '../../common/view/chosen.html.php';
 #selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 4px 0; line-height: 20px; margin-bottom: 5px; font-size: 14px; border-radius: 2px; color: #333; font-size: 12px}
 #selectPeriod li > a {padding: 4px 15px; border-radius: 2px}
 
-#moreOrLite {position: absolute; right: 0; top: 0; bottom: 0}
+#moreOrLite {position: absolute; right: -10px; top: 0; bottom: 0}
 #searchlite, #searchmore {color: #4d90fe; width: 50px; padding: 0 5px; line-height: 60px; text-align: center;}
 #searchlite {line-height: 127px}
 #searchform.showmore #searchmore, #searchform #searchlite {display: none;}
