@@ -1027,9 +1027,8 @@ class projectModel extends model
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
-        if(count($products) == 1) $this->config->product->search['params']['module']['values'] = $modules;
+        $this->config->product->search['params']['module']['values'] = $modules;
         unset($this->lang->story->statusList['draft']);
-        if(count($products) >= 2) unset($this->config->product->search['fields']['module']);
         if($productType == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);
