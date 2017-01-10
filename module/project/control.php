@@ -569,11 +569,16 @@ class project extends control
 
         /* Build the search form. */
         $modules  = array();
+        $projectModules = $this->loadModel('tree')->getTaskTreeModules($projectID, true);
         $products = $this->project->getProducts($projectID);
         foreach($products as $product)
         {
-            $productModules = $this->loadModel('tree')->getOptionMenu($product->id);
-            foreach($productModules as $moduleID => $moduleName) $modules[$moduleID] = $moduleName;
+            $productModules = $this->tree->getOptionMenu($product->id);
+            foreach($productModules as $moduleID => $moduleName)
+            {
+                if($moduleID and !isset($projectModules[$moduleID])) continue;
+                $modules[$moduleID] = ((count($products) >= 2 and $moduleID) ? $product->name : '') . $moduleName;
+            }
         }
         $actionURL    = $this->createLink('project', 'story', "projectID=$projectID&orderBy=$orderBy&type=bySearch&queryID=myQueryID");
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
@@ -1640,10 +1645,11 @@ class project extends control
         $modules     = array();
         $branches    = array();
         $productType = 'normal';
+        $this->loadModel('tree');
         foreach($products as $product)
         {
-            $productModules = $this->loadModel('tree')->getOptionMenu($product->id);
-            foreach($productModules as $moduleID => $moduleName) $modules[$moduleID] = $moduleName;
+            $productModules = $this->tree->getOptionMenu($product->id);
+            foreach($productModules as $moduleID => $moduleName) $modules[$moduleID] = ((count($products) >= 2 and $moduleID != 0) ? $product->name : '') . $moduleName;
             if($product->type != 'normal')
             {
                 $productType = $product->type;
