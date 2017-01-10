@@ -75,13 +75,13 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
       <td style='overflow:visible'>
         <div class='input-group'>
         <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->testcase->colorTag}' data-update-text='#title\\[{$i}\\]'");?>
-        <?php echo html::input("title[$i]", '', "class='form-control'");?>
+        <?php echo html::input("title[$i]", '', "class='form-control' autocomplete='off'");?>
         </div>
       </td>
       <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class=form-control");?></td>
       <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[$i]", $lang->testcase->priList, $pri, "class=form-control");?></td>
       <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[$i]", '', "rows='1' class='form-control autosize'")?></td>
-      <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
+      <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$i]", '', "class='form-control' autocomplete='off'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[$i][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
     </tr>
     <?php endfor;?>
@@ -100,13 +100,13 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
       <td style='overflow:visible'>
         <div class='input-group'>
         <?php echo html::hidden("color[%s]", '', "data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->testcase->colorTag}' data-update-text='#title\\[%s\\]'");?>
-        <?php echo html::input("title[%s]", '', "class='form-control'");?></td>
+        <?php echo html::input("title[%s]", '', "class='form-control' autocomplete='off'");?></td>
         </div>
       </td>
       <td><?php echo html::select("type[%s]", $lang->testcase->typeList, $type, "class=form-control");?></td>
       <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[%s]", $lang->testcase->priList, $pri, "class=form-control");?></td>
       <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[%s]", '', "class='form-control'")?></td>
-      <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[%s]", '', "class='form-control'");?></td>
+      <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[%s]", '', "class='form-control' autocomplete='off'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[%s][]", $lang->testcase->stageList, '', "class='form-control' multiple");?></td>
     </tr>
   </tbody>

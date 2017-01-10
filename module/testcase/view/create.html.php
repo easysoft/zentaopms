@@ -87,7 +87,7 @@
             <div class='col-table w-p100'>
               <div class='input-group w-p100'>
                 <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->testcase->colorTag ?>' data-update-text='#title'>
-                <?php echo html::input('title', $caseTitle, "class='form-control'");?>
+                <?php echo html::input('title', $caseTitle, "class='form-control' autocomplete='off'");?>
               </div>
             </div>
             <?php if(strpos(",$showFields,", ',pri,') !== false):?>
@@ -160,7 +160,7 @@
       <?php if(strpos(",$showFields,", ',keywords,') !== false):?>
       <tr>
         <th><?php echo $lang->testcase->keywords;?></th>
-        <td colspan='2'><?php echo html::input('keywords', $keywords, "class='form-control'");?></td>
+        <td colspan='2'><?php echo html::input('keywords', $keywords, "class='form-control' autocomplete='off'");?></td>
       </tr>  
       <?php endif;?>
        <tr>

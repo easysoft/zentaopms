@@ -30,7 +30,7 @@
   <?php foreach($plans as $plan):?>
     <tr>
       <td><?php echo $plan->id . html::hidden("id[$plan->id]", $plan->id);?></td>
-      <td title='<?php echo $plan->title?>'><?php echo html::input("title[$plan->id]", $plan->title, "class='form-control'")?></td>
+      <td title='<?php echo $plan->title?>'><?php echo html::input("title[$plan->id]", $plan->title, "class='form-control' autocomplete='off'")?></td>
       <td><?php echo html::textarea("desc[$plan->id]", $plan->desc, "class='form-control' rows='1'")?></td>
       <td><?php echo html::input("begin[$plan->id]", $plan->begin, "class='form-control form-date'")?></td>
       <td><?php echo html::input("end[$plan->id]", $plan->end, "class='form-control form-date'")?></td>

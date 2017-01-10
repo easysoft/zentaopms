@@ -23,11 +23,11 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-90px'><?php echo $lang->product->name;?></th>
-        <td class='w-p25-f'><?php echo html::input('name', '', "class='form-control'");?></td><td></td>
+        <td class='w-p25-f'><?php echo html::input('name', '', "class='form-control' autocomplete='off'");?></td><td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->product->code;?></th>
-        <td><?php echo html::input('code', '', "class='form-control'");?></td><td></td>
+        <td><?php echo html::input('code', '', "class='form-control' autocomplete='off'");?></td><td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->product->PO;?></th>

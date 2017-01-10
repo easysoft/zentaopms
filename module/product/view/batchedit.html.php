@@ -45,15 +45,15 @@ foreach(explode(',', $showFields) as $field)
     <?php foreach($productIDList as $productID):?>
     <tr class='text-center'>
       <td><?php echo sprintf('%03d', $productID) . html::hidden("productIDList[$productID]", $productID);?></td>
-      <td title='<?php echo $products[$productID]->name?>'><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control'");?></td>
-      <td><?php echo html::input("codes[$productID]", $products[$productID]->code, "class='form-control'");?></td>
+      <td title='<?php echo $products[$productID]->name?>'><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control' autocomplete='off'");?></td>
+      <td><?php echo html::input("codes[$productID]", $products[$productID]->code, "class='form-control' autocomplete='off'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'PO', ' hidden')?>' style='overflow:visible'><?php echo html::select("POs[$productID]",  $poUsers, $products[$productID]->PO, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'QD', ' hidden')?>' style='overflow:visible'><?php echo html::select("QDs[$productID]",  $qdUsers, $products[$productID]->QD, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'RD', ' hidden')?>' style='overflow:visible'><?php echo html::select("RDs[$productID]",  $rdUsers, $products[$productID]->RD, "class='form-control chosen'");?></td>
       <td class='<?php echo zget($visibleFields, 'type',   'hidden')?>'><?php echo html::select("types[$productID]",    $lang->product->typeList,   $products[$productID]->type,   "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'status', 'hidden')?>'><?php echo html::select("statuses[$productID]", $lang->product->statusList, $products[$productID]->status, "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'desc',   'hidden')?>'><?php echo html::textarea("descs[$productID]", htmlspecialchars($products[$productID]->desc), "rows='1' class='form-control autosize'");?></td>
-      <td><?php echo html::input("orders[$productID]", $products[$productID]->order, "class='form-control'");?></td>
+      <td><?php echo html::input("orders[$productID]", $products[$productID]->order, "class='form-control' autocomplete='off'");?></td>
     </tr>
     <?php endforeach;?>
     <tr><td colspan='<?php echo count($visibleFields) + 4?>' class='text-center'><?php echo html::submitButton();?></td></tr>

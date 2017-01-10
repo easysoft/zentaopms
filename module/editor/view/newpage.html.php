@@ -24,7 +24,7 @@
         <th><?php echo $lang->editor->pageName?></th>
         <td>
         <?php
-        echo html::input('fileName', '', "class=form-control");
+        echo html::input('fileName', '', "class='form-control' autocomplete='off'");
         echo "<div class='help-block'>" . $lang->editor->examplePHP . "</div>";
         ?>
         </td>

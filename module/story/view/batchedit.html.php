@@ -72,7 +72,7 @@ foreach(explode(',', $showFields) as $field)
         <td style='overflow:visible' title='<?php echo $stories[$storyID]->title?>'>
           <div class='input-group'>
           <?php echo html::hidden("colors[$storyID]", $stories[$storyID]->color, "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->story->colorTag}' data-update-text='#titles\\[{$storyID}\\]'");?>
-          <?php echo html::input("titles[$storyID]", $stories[$storyID]->title, 'class=form-control'); ?>
+          <?php echo html::input("titles[$storyID]", $stories[$storyID]->title, "class='form-control' autocomplete='off'"); ?>
           </div>
         </td>
         <td <?php echo zget($visibleFields, 'estimate', "class='hidden'")?>><?php echo html::input("estimates[$storyID]", $stories[$storyID]->estimate, "class='form-control' autocomplete='off'"); ?></td>
@@ -91,10 +91,10 @@ foreach(explode(',', $showFields) as $field)
                 <?php echo html::select("closedReasons[$storyID]", $reasonList, $stories[$storyID]->closedReason, "class=form-control onchange=setDuplicateAndChild(this.value,$storyID) style='min-width: 70px'");?>
               </td>
               <td class='pd-0' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($stories[$storyID]->closedReason != 'duplicate') echo "style='display:none'";?>>
-              <?php echo html::input("duplicateStoryIDList[$storyID]", '', "class=form-control placeholder='{$lang->idAB}'");?>
+              <?php echo html::input("duplicateStoryIDList[$storyID]", '', "class='form-control' placeholder='{$lang->idAB}' autocomplete='off'");?>
               </td>
               <td class='pd-0' id='<?php echo 'childStoryBox' . $storyID;?>' <?php if($stories[$storyID]->closedReason != 'subdivided') echo "style='display:none'";?>>
-              <?php echo html::input("childStoriesIDList[$storyID]", '', "class=form-control placeholder='{$lang->idAB}'");?>
+              <?php echo html::input("childStoriesIDList[$storyID]", '', "class='form-control' placeholder='{$lang->idAB}' autocomplete='off'");?>
               </td>
             </tr>
           </table>
@@ -102,7 +102,7 @@ foreach(explode(',', $showFields) as $field)
         <?php else:?>
         <td <?php echo zget($visibleFields, 'closedReason', "class='hidden'")?>><?php echo html::select("closedReasons[$storyID]", $reasonList, $stories[$storyID]->closedReason, 'class="form-control" disabled="disabled"');?></td>
         <?php endif;?>
-        <td <?php echo zget($visibleFields, 'keywords', "class='hidden'")?>><?php echo html::input("keywords[$storyID]", $stories[$storyID]->keywords, 'class="form-control"');?></td>
+        <td <?php echo zget($visibleFields, 'keywords', "class='hidden'")?>><?php echo html::input("keywords[$storyID]", $stories[$storyID]->keywords, 'class="form-control" autocomplete="off"');?></td>
       </tr>
       <?php endforeach;?>
       <?php if(isset($suhosinInfo)):?>

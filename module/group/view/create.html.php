@@ -22,7 +22,7 @@
     <table align='center' class='table table-form'> 
       <tr>
         <th class='w-80px'><?php echo $lang->group->name;?></th>
-        <td><?php echo html::input('name', '', "class=form-control");?></td>
+        <td><?php echo html::input('name', '', "class='form-control' autocomplete='off'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->group->desc;?></th>

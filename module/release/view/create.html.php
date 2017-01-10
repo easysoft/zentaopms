@@ -29,7 +29,7 @@ js::set('page'      , 'create');
       <tr>
         <th class='w-110px'><?php echo $lang->release->name;?></th>
         <td class='w-p25-f'>
-          <?php echo html::input('name', '', "class='form-control'");?>
+          <?php echo html::input('name', '', "class='form-control' autocomplete='off'");?>
         </td>
         <td>
           <?php if($lastRelease) echo '<span class="help-block"> &nbsp; (' . $lang->release->last . ': ' . $lastRelease->name . ')</span>';?>

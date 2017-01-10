@@ -45,22 +45,22 @@
               <?php echo html::select("closedReasons[$storyID]", $lang->story->reasonList, 'done', "class=form-control onchange=setDuplicateAndChild(this.value,$storyID) style='min-width: 70px'");?>
             </td>
             <td class='pd-0' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($stories[$storyID]->closedReason != 'duplicate') echo "style='display:none'";?>>
-            <?php echo html::input("duplicateStoryIDList[$storyID]", '', "class=form-control placeholder='{$lang->idAB}'");?>
+            <?php echo html::input("duplicateStoryIDList[$storyID]", '', "class='form-control' placeholder='{$lang->idAB}' autocomplete='off'");?>
             </td>
             <td class='pd-0' id='<?php echo 'childStoryBox' . $storyID;?>' <?php if($stories[$storyID]->closedReason != 'subdivided') echo "style='display:none'";?>>
-            <?php echo html::input("childStoriesIDList[$storyID]", '', "class=form-control placeholder='{$lang->idAB}'");?>
+            <?php echo html::input("childStoriesIDList[$storyID]", '', "class='form-control' placeholder='{$lang->idAB}' autocomplete='off'");?>
             </td>
           </tr>
         </table>
       </td>
-      <td><?php echo html::input("comments[$storyID]", '', "class='form-control'");?></td>
+      <td><?php echo html::input("comments[$storyID]", '', "class='form-control' autocomplete='off'");?></td>
       <?php else:?>  
       <td>
         <div class='text-left'>
           <?php echo html::select("closedReasons[$storyID]", $lang->story->reasonList, $stories[$storyID]->closedReason, 'disabled="disabled" class="form-control"');?>
         </div>
       </td>
-      <td><?php echo html::input("comments[$storyID]", '', "class='form-control' disabled='disabled'");?></td>
+      <td><?php echo html::input("comments[$storyID]", '', "class='form-control' disabled='disabled' autocomplete='off'");?></td>
       <?php endif;?>
 
     </tr>  

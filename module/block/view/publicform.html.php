@@ -12,7 +12,7 @@
 ?>
 <tr>
   <th class='w-100px'><?php echo $lang->block->name?></th>
-  <td><?php echo html::input('title', $block ? $block->title : '', "class='form-control'")?></td>
+  <td><?php echo html::input('title', $block ? $block->title : '', "class='form-control' autocomplete='off'")?></td>
 </tr>
 <tr>
   <th><?php echo $lang->block->style;?></th>
