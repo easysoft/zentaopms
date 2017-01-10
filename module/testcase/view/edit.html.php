@@ -32,7 +32,7 @@
       <div class='form-group'>
         <div class='input-group'>
           <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->case->colorTag ?>' value='<?php echo $case->color ?>' data-update-text='#title, .case-title'>
-          <?php echo html::input('title', $case->title, 'class="form-control" placeholder="' . $lang->case->title . '"');?>
+          <?php echo html::input('title', $case->title, 'class="form-control" autocomplete="off" placeholder="' . $lang->case->title . '"');?>
         </div>
       </div>
       <fieldset class='fieldset-pure'>
@@ -141,7 +141,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->testcase->keywords;?></th>
-            <td><?php echo html::input('keywords', $case->keywords, 'class=form-control');?></td>
+            <td><?php echo html::input('keywords', $case->keywords, "class='form-control' autocomplete='off'");?></td>
           </tr>
           <tr class='text-top'>
             <th><?php echo $lang->testcase->linkCase;?></th>

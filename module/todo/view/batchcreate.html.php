@@ -54,8 +54,8 @@
       <td <?php echo zget($visibleFields, 'type', "class='hidden'")?>><?php echo html::select("types[$i]", $lang->todo->typeList, '', "onchange='loadList(this.value, " . ($i + 1) . ")' class='form-control'");?></td>
       <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$i]", $lang->todo->priList, $pri, 'class=form-control');?></td>
       <td class='text-left' style='overflow:visible'>
-        <div id='<?php echo "nameBox" . ($i+1);?>' class='hidden'><?php echo html::input("names[$i]", '', 'class="text-left form-control"');?></div>
-        <div class='<?php echo "nameBox" . ($i+1);?>'><?php echo html::input("names[$i]", '', 'class="text-left form-control"');?></div>
+        <div id='<?php echo "nameBox" . ($i+1);?>' class='hidden'><?php echo html::input("names[$i]", '', 'class="text-left form-control" autocomplete="off"');?></div>
+        <div class='<?php echo "nameBox" . ($i+1);?>'><?php echo html::input("names[$i]", '', 'class="text-left form-control" autocomplete="off"');?></div>
       </td>
       <td <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo html::textarea("descs[$i]", '', "rows='1' class='form-control'");?></td>
       <td <?php echo zget($visibleFields, 'beginAndEnd', "class='hidden'")?>>

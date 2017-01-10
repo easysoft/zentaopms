@@ -53,9 +53,9 @@
                 foreach($sons as $sonDept)
                 {
                     if($sonDept->order > $maxOrder) $maxOrder = $sonDept->order;
-                    echo html::input("depts[id$sonDept->id]", $sonDept->name, "class='form-control'");
+                    echo html::input("depts[id$sonDept->id]", $sonDept->name, "class='form-control' autocomplete='off'");
                 }
-                for($i = 0; $i < DEPT::NEW_CHILD_COUNT ; $i ++) echo html::input("depts[]", '', "class='form-control'");
+                for($i = 0; $i < DEPT::NEW_CHILD_COUNT ; $i ++) echo html::input("depts[]", '', "class='form-control' autocomplete='off'");
                ?>
               </td>
               <td></td>
@@ -83,7 +83,7 @@
       <div class='modal-body'>
         <form method='post' target='hiddenwin' action='<?php echo $this->createLink('dept', 'manageChild');?>' class='form-condensed'>
           <?php
-            for($i = 0; $i < DEPT::NEW_CHILD_COUNT ; $i ++) echo html::input("depts[]", '', "class='form-control'");
+            for($i = 0; $i < DEPT::NEW_CHILD_COUNT ; $i ++) echo html::input("depts[]", '', "class='form-control' autocomplete='off'");
           ?>
           <div class='text-center'>
             <?php echo html::submitButton() . html::commonButton($lang->close, 'data-dismiss="modal"', 'btn')?>

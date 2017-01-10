@@ -67,7 +67,7 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
       <td style='overflow:visible'>
         <div class='input-group'>
         <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->story->colorTag}' data-update-text='#title\\[{$i}\\]'");?>
-        <?php echo html::input("title[$i]", $storyTitle, "class='form-control'") . html::hidden("uploadImage[$i]", $fileName);?>
+        <?php echo html::input("title[$i]", $storyTitle, "class='form-control' autocomplete='off'") . html::hidden("uploadImage[$i]", $fileName);?>
         </div>
       </td>
       <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo html::select("source[$i]", $sourceList, $source, "class='form-control'");?></td>
@@ -96,7 +96,7 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
       <td style='overflow:visible'>
         <div class='input-group'>
         <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->story->colorTag}' data-update-text='#title\\[{$i}\\]'");?>
-        <?php echo html::input("title[$i]", $storyTitle, "class='form-control'");?>
+        <?php echo html::input("title[$i]", $storyTitle, "class='form-control' autocomplete='off'");?>
         </div>
       </td>
       <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo html::select("source[$i]", $sourceList, $source, "class='form-control'");?></td>
@@ -121,7 +121,7 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
       <td style='overflow:visible'>
         <div class='input-group'>
         <?php echo html::hidden("color[%s]", '', "data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->story->colorTag}' data-update-text='#title\\[%s\\]'");?>
-        <?php echo html::input("title[%s]", $storyTitle, "class='form-control'");?>
+        <?php echo html::input("title[%s]", $storyTitle, "class='form-control' autocomplete='off'");?>
         </div>
       </td>
       <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo html::select("source[%s]", $sourceList, $source, "class='form-control'");?></td>

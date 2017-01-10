@@ -125,7 +125,7 @@ $(document).ready(function()
       <td>
         <div class='input-group'>
           <span class='input-group-addon'><?php echo $lang->setFileName;?></span>
-          <?php echo html::input('fileName', '', 'class=form-control');?>
+          <?php echo html::input('fileName', '', "class='form-control' autocomplete='off'");?>
         </div>
       </td>
       <td class='w-60px'>
@@ -174,7 +174,7 @@ $(document).ready(function()
       <div>
         <div class='input-group'>
           <span class='input-group-addon'><?php echo $lang->file->tplTitle;?></span>
-          <?php echo html::input('title', '', "class='form-control'")?>
+          <?php echo html::input('title', '', "class='form-control' autocomplete='off'")?>
           <?php if(common::hasPriv('file', 'setPublic')):?>
           <span class='input-group-addon'><?php echo html::checkbox('public', array(1 => $lang->public));?></span>
           <?php endif?>

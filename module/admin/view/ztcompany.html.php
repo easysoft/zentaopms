@@ -19,7 +19,7 @@
     <table class='table table-form'>
       <tr>
         <th><?php echo $lang->company->name;?></th>
-        <td><?php echo html::input('company', '', "class='form-control'");?></td>
+        <td><?php echo html::input('company', '', "class='form-control' autocomplete='off'");?></td>
       </tr>
       <tr>
         <th></th>

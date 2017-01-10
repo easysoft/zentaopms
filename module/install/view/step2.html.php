@@ -28,29 +28,29 @@
           </tr>
           <tr>
             <th><?php echo $lang->install->dbHost;?></th>
-            <td><?php echo html::input('dbHost', '127.0.0.1', "class='form-control'");?></td>
+            <td><?php echo html::input('dbHost', '127.0.0.1', "class='form-control' autocomplete='off'");?></td>
             <td><?php echo $lang->install->dbHostNote;?></td>
           </tr>
           <tr>
             <th><?php echo $lang->install->dbPort;?></th>
-            <td><?php echo html::input('dbPort', '3306', "class='form-control'");?></td><td></td>
+            <td><?php echo html::input('dbPort', '3306', "class='form-control' autocomplete='off'");?></td><td></td>
           </tr>
           <tr>
             <th><?php echo $lang->install->dbUser;?></th>
-            <td><?php echo html::input('dbUser', 'root', "class='form-control'");?></td><td></td>
+            <td><?php echo html::input('dbUser', 'root', "class='form-control' autocomplete='off'");?></td><td></td>
           </tr>
           <tr>
             <th><?php echo $lang->install->dbPassword;?></th>
-            <td><?php echo html::input('dbPassword', '', "class='form-control'");?></td><td></td>
+            <td><?php echo html::input('dbPassword', '', "class='form-control' autocomplete='off'");?></td><td></td>
           </tr>
           <tr>
             <th><?php echo $lang->install->dbName;?></th>
-            <td><?php echo html::input('dbName', 'zentao', "class='form-control'");?></td><td></td>
+            <td><?php echo html::input('dbName', 'zentao', "class='form-control' autocomplete='off'");?></td><td></td>
           </tr>
           <tr>
             <th><?php echo $lang->install->dbPrefix;?></th>
             <td>
-            <?php echo html::input('dbPrefix', 'zt_', "class='form-control'");?>
+            <?php echo html::input('dbPrefix', 'zt_', "class='form-control' autocomplete='off'");?>
             </td>
             <td><?php echo html::checkBox('clearDB', $lang->install->clearDB);?></td>
           </tr>

@@ -46,7 +46,7 @@
         <td colspan='2'><div id='nameBox'>
           <?php
           $readType = ($todo->type == 'bug' or $todo->type == 'task') ? 'readonly' : '';
-          echo html::input('name', $todo->name, "$readType class=form-control");
+          echo html::input('name', $todo->name, "$readType class='form-control' autocomplete='off'");
           ?>
           </div>
         </td>

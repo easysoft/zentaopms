@@ -35,7 +35,7 @@
       <?php endif;?>
       <tr>
         <th class='w-80px'><?php echo $lang->doc->libName?></th>
-        <td><?php echo html::input('name', $lib->name, "class='form-control'")?></td>
+        <td><?php echo html::input('name', $lib->name, "class='form-control' autocomplete='off'")?></td>
       </tr>
       <tr>
         <th><?php echo $lang->doclib->control;?></th>

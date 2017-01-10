@@ -86,7 +86,7 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
       <td style='overflow:visible'>
         <div class='input-group'>
         <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->task->colorTag}' data-update-text='#name\\[{$i}\\]'");?>
-        <?php echo html::input("name[$i]", '', 'class=form-control');?>
+        <?php echo html::input("name[$i]", '', "class='form-control' autocomplete='off'");?>
         </div>
       </td>
       <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=form-control');?></td>
@@ -117,7 +117,7 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
       <td style='overflow:visible'>
         <div class='input-group'>
         <?php echo html::hidden("color[%s]", '', "data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->task->colorTag}' data-update-text='#name\\[%s\\]'");?>
-        <?php echo html::input("name[%s]", '', 'class=form-control');?>
+        <?php echo html::input("name[%s]", '', "class='form-control' autocomplete='off'");?>
         </div>
       </td>
       <td><?php echo html::select("type[%s]", $lang->task->typeList, $type, 'class=form-control');?></td>

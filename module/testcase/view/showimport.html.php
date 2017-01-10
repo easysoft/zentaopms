@@ -48,7 +48,7 @@
       echo html::hidden("product[$key]", $productID);
       ?>
     </td>
-    <td><?php echo html::input("title[$key]", $case->title, "class='form-control' style='margin-top:2px'")?></td>
+    <td><?php echo html::input("title[$key]", $case->title, "class='form-control' style='margin-top:2px' autocomplete='off'")?></td>
     <?php if($branches):?>
     <td class='text-left' style='overflow:visible'><?php echo html::select("branch[$key]", $branches, (isset($case->branch) and $case->branch !== '') ? $case->branch : (!empty($case->id) ? $cases[$case->id]->branch : $branch), "class='form-control chosen'")?></td>
     <?php endif;?>
@@ -58,7 +58,7 @@
     <td><?php echo html::select("type[$key]", $lang->testcase->typeList, isset($case->type) ? $case->type : (!empty($case->id) ? $cases[$case->id]->type : ''), "class='form-control'")?></td>
     <td><?php echo html::select("status[$key]", $lang->testcase->statusList, isset($case->status) ? $case->status : (!empty($case->id) ? $cases[$case->id]->status : 'normal'), "class='form-control'")?></td>
     <td class='text-left' style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : (!empty($case->id) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>
-    <td><?php echo html::input("keywords[$key]", isset($case->keywords) ? $case->keywords : "", "class='form-control'")?></td>
+    <td><?php echo html::input("keywords[$key]", isset($case->keywords) ? $case->keywords : "", "class='form-control' autocomplete='off'")?></td>
     <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? htmlspecialchars($case->precondition) : "", "class='form-control'")?></td>
     <td>
       <?php if(isset($stepData[$key]['desc'])):?>

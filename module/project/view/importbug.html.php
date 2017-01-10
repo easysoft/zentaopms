@@ -50,7 +50,7 @@ var browseType = '<?php echo $browseType;?>';
       <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
       <td class='td-has-control'><?php echo html::select("pri[$bug->id]", $lang->task->priList, 3, "class='input-sm form-control'");?></td>
       <td class='td-has-control text-left' style='overflow:visible'><?php echo html::select("assignedTo[$bug->id]", $users, zget($users, $bug->assignedTo, '', $bug->assignedTo), "class='input-sm form-control chosen'");?></td>
-      <td class='td-has-control'><?php echo html::input("estimate[$bug->id]", '', 'size=4 class="input-sm form-control"');?></td>
+      <td class='td-has-control'><?php echo html::input("estimate[$bug->id]", '', 'size=4 class="input-sm form-control" autocomplete="off"');?></td>
     </tr>
     <?php endforeach;?>
     </tbody>

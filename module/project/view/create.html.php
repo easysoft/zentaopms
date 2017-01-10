@@ -47,11 +47,11 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-90px'><?php echo $lang->project->name;?></th>
-        <td class='w-p25-f'><?php echo html::input('name', $name, "class='form-control'");?></td><td></td>
+        <td class='w-p25-f'><?php echo html::input('name', $name, "class='form-control' autocomplete='off'");?></td><td></td>
       </tr>
       <tr>
         <th><?php echo $lang->project->code;?></th>
-        <td><?php echo html::input('code', $code, "class='form-control'");?></td>
+        <td><?php echo html::input('code', $code, "class='form-control' autocomplete='off'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->project->dateRange;?></th>
@@ -77,7 +77,7 @@
       </tr>  
       <tr>
         <th><?php echo $lang->project->teamname;?></th>
-        <td><?php echo html::input('team', $team, "class='form-control'");?></td>
+        <td><?php echo html::input('team', $team, "class='form-control' autocomplete='off'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->project->type;?></th>
