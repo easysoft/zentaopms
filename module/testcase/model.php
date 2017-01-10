@@ -797,6 +797,7 @@ class testcaseModel extends model
             $caseData = new stdclass();
 
             $caseData->product      = $product;
+            $caseData->branch       = isset($data->branch[$key]) ? $data->branch[$key] : $branch;
             $caseData->module       = $data->module[$key];
             $caseData->story        = (int)$data->story[$key];
             $caseData->title        = $data->title[$key];
@@ -901,7 +902,7 @@ class testcaseModel extends model
                 $caseData->version    = 1;
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;
-                $caseData->branch     = $branch;
+                $caseData->branch     = isset($data->branch[$key]) ? $data->branch[$key] : $branch;
                 $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
 
                 if(!dao::isError())
@@ -933,8 +934,11 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getImportFields()
+    public function getImportFields($productID = 0)
     {
+        $product    = $this->loadModel('product')->getById($productID);
+        if($product->type != 'normal') $this->lang->testcase->branch = $this->lang->product->branchName[$product->type];
+
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;
         $fields     = explode(',', $caseConfig->exportFields);

@@ -16,7 +16,7 @@ $config->testcase->export   = new stdclass();
 $config->testcase->export->listFields   = array('type', 'stage', 'pri', 'status');
 
 $config->testcase->exportFields = '
-    id, product, module, story,
+    id, product, branch, module, story,
     title, precondition, stepDesc, stepExpect, keywords,
     pri, type, stage, status, lastRunResult, openedBy, openedDate,
     lastEditedBy, lastEditedDate, version,linkCase';
