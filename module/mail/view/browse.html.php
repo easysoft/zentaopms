@@ -58,6 +58,7 @@
             echo "<div class='table-actions'>";
             echo html::selectButton();
             if(common::hasPriv('mail', 'batchDelete')) echo html::submitButton($lang->delete);
+            if(common::hasPriv('mail', 'resend')) echo html::a(inlink('resend'), $lang->mail->resend, 'hiddenwin', "class='btn'");
             echo '</div>';
         }
         $pager->show();

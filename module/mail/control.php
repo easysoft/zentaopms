@@ -337,10 +337,42 @@ class mail extends control
             $unSendNum = $this->dao->select('count(id) as count')->from(TABLE_MAILQUEUE)->where('status')->eq('wait')->fetch('count');
             if($unSendNum == 0) $this->dao->exec('TRUNCATE table ' . TABLE_MAILQUEUE);
         }
-        $this->dao->delete()->from(TABLE_MAILQUEUE)->where('status')->ne('wait')->andWhere('sendTime')->le(date('Y-m-d H:i:s', time() - 2 * 24 * 3600))->exec();
+        $this->dao->delete()->from(TABLE_MAILQUEUE)->where('status')->eq('send')->andWhere('sendTime')->le(date('Y-m-d H:i:s', time() - 2 * 24 * 3600))->exec();
 
         echo $log;
         echo "OK\n";
+    }
+
+    /**
+     * Resend fail mails. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function resend()
+    {
+        $queueList = $this->mail->getQueue('fail', 'id_asc');
+        $now       = helper::now();
+        if(isset($this->config->mail->async)) $this->config->mail->async = 0;
+        $log = '';
+        foreach($queueList as $queue)
+        {
+            $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList);
+
+            $data = new stdclass();
+            $data->sendTime   = $now;
+            $data->status     = 'send';
+            $data->failReason = '';
+            if($this->mail->isError())
+            {
+                $data->status = 'fail';
+                $data->failReason = join("\n", $this->mail->getError());
+            }
+            $this->dao->update(TABLE_MAILQUEUE)->data($data)->where('id')->in($queue->id)->exec();
+        }
+        echo js::alert($this->lang->mail->noticeResend);
+        die(js::reload('parent'));
+
     }
 
     /**
