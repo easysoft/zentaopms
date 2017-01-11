@@ -134,7 +134,7 @@ $lang->testcase->statusList['normal']      = 'Normal';
 $lang->testcase->statusList['blocked']     = 'Blocked';
 $lang->testcase->statusList['investigate'] = 'Investigating';
 
-$lang->testcase->resultList['n/a']     = 'N/A';
+$lang->testcase->resultList['n/a']     = 'Ignore';
 $lang->testcase->resultList['pass']    = 'Pass';
 $lang->testcase->resultList['fail']    = 'Fail';
 $lang->testcase->resultList['blocked'] = 'Blocked';

@@ -137,7 +137,7 @@ $lang->testcase->statusList['normal']      = '正常';
 $lang->testcase->statusList['blocked']     = '被阻塞';
 $lang->testcase->statusList['investigate'] = '研究中';
 
-$lang->testcase->resultList['n/a']     = 'N/A';
+$lang->testcase->resultList['n/a']     = '忽略';
 $lang->testcase->resultList['pass']    = '通过';
 $lang->testcase->resultList['fail']    = '失败';
 $lang->testcase->resultList['blocked'] = '阻塞';

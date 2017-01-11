@@ -409,7 +409,7 @@ $lang->noResultsMatch     = "No results match!";
 $lang->searchMore         = "More results：";
 $lang->chooseUsersToMail  = "Choose users you want send notification to...";
 $lang->browserNotice      = 'Your current browser might not show the best effect. Please use Chrome, Firefox, IE9+, Opera or Safari.';
-$lang->noticePasteImg     = "Can parse image in editor.";
+$lang->noticePasteImg     = "Paste image to editor.";
 
 /* 时间格式设置。*/
 define('DT_DATETIME1',  'Y-m-d H:i:s');
