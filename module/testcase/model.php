@@ -797,6 +797,7 @@ class testcaseModel extends model
             $caseData = new stdclass();
 
             $caseData->product      = $product;
+            $caseData->branch       = isset($data->branch[$key]) ? $data->branch[$key] : $branch;
             $caseData->module       = $data->module[$key];
             $caseData->story        = (int)$data->story[$key];
             $caseData->title        = $data->title[$key];
@@ -901,7 +902,7 @@ class testcaseModel extends model
                 $caseData->version    = 1;
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;
-                $caseData->branch     = $branch;
+                $caseData->branch     = isset($data->branch[$key]) ? $data->branch[$key] : $branch;
                 $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
 
                 if(!dao::isError())
@@ -933,8 +934,11 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getImportFields()
+    public function getImportFields($productID = 0)
     {
+        $product    = $this->loadModel('product')->getById($productID);
+        if($product->type != 'normal') $this->lang->testcase->branch = $this->lang->product->branchName[$product->type];
+
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;
         $fields     = explode(',', $caseConfig->exportFields);
@@ -1048,6 +1052,12 @@ class testcaseModel extends model
             case 'lastRunResult':
                 if($case->lastRunResult) echo $this->lang->testcase->resultList[$case->lastRunResult];
                 break;
+            case 'bugs':
+                echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;
+                break;
+            case 'results':
+                echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a(helper::createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;
+                break;
             case 'actions':
                 common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe');
                 common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', '', '', 'results iframe');
@@ -1065,5 +1075,36 @@ class testcaseModel extends model
             }
             echo '</td>';
         }
+    }
+
+    /**
+     * Append bugs and results.
+     * 
+     * @param  array    $cases 
+     * @access public
+     * @return array
+     */
+    public function appendBugAndResults($cases, $type = 'case')
+    {
+        $caseIdList = array_keys($cases);
+        if($type == 'case')
+        {
+            $caseBugs = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`case`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
+            $results  = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`case`')->in($caseIdList)->groupBy('`case`')->fetchPairs('case', 'count');
+        }
+        else
+        {
+            $caseBugs = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`result`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
+            $results  = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`run`')->in($caseIdList)->groupBy('`run`')->fetchPairs('case', 'count');
+        }
+
+        foreach($cases as $case)
+        {
+            $caseID = $type == 'case' ? $case->id : $case->case;
+            $case->bugs    = isset($caseBugs[$caseID]) ? $caseBugs[$caseID] : 0;
+            $case->results = isset($results[$caseID]) ? $results[$caseID] : 0;
+        }
+
+        return $cases;
     }
 }

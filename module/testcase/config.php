@@ -16,7 +16,7 @@ $config->testcase->export   = new stdclass();
 $config->testcase->export->listFields   = array('type', 'stage', 'pri', 'status');
 
 $config->testcase->exportFields = '
-    id, product, module, story,
+    id, product, branch, module, story,
     title, precondition, stepDesc, stepExpect, keywords,
     pri, type, stage, status, lastRunResult, openedBy, openedDate,
     lastEditedBy, lastEditedDate, version,linkCase';
@@ -66,7 +66,7 @@ $config->testcase->search['params']['openedDate']     = array('operator' => '=',
 $config->testcase->search['params']['lastEditedDate'] = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 
 $config->testcase->datatable = new stdclass();
-$config->testcase->datatable->defaultField = array('id', 'pri', 'title', 'type', 'openedBy', 'lastRunner', 'lastRunDate', 'lastRunResult', 'status', 'actions');
+$config->testcase->datatable->defaultField = array('id', 'pri', 'title', 'type', 'openedBy', 'lastRunner', 'lastRunDate', 'lastRunResult', 'status', 'bugs', 'results', 'actions');
 
 $config->testcase->datatable->fieldList['id']['title']    = 'idAB';
 $config->testcase->datatable->fieldList['id']['fixed']    = 'left';
@@ -132,8 +132,21 @@ $config->testcase->datatable->fieldList['actions']['title']    = 'actions';
 $config->testcase->datatable->fieldList['actions']['fixed']    = 'right';
 $config->testcase->datatable->fieldList['actions']['width']    = '140';
 $config->testcase->datatable->fieldList['actions']['required'] = 'yes';
+$config->testcase->datatable->fieldList['actions']['sort']     = 'no';
 
 $config->testcase->datatable->fieldList['branch']['title']    = 'branch';
 $config->testcase->datatable->fieldList['branch']['fixed']    = 'left';
 $config->testcase->datatable->fieldList['branch']['width']    = '100';
 $config->testcase->datatable->fieldList['branch']['required'] = 'no';
+
+$config->testcase->datatable->fieldList['bugs']['title']    = 'bugs';
+$config->testcase->datatable->fieldList['bugs']['fixed']    = 'no';
+$config->testcase->datatable->fieldList['bugs']['width']    = '80';
+$config->testcase->datatable->fieldList['bugs']['required'] = 'no';
+$config->testcase->datatable->fieldList['bugs']['sort']      = 'no';
+
+$config->testcase->datatable->fieldList['results']['title']    = 'results';
+$config->testcase->datatable->fieldList['results']['fixed']    = 'no';
+$config->testcase->datatable->fieldList['results']['width']    = '80';
+$config->testcase->datatable->fieldList['results']['required'] = 'no';
+$config->testcase->datatable->fieldList['results']['sort']     = 'no';

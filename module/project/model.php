@@ -86,6 +86,8 @@ class projectModel extends model
         if($projects and !isset($projects[$projectID]) and !$this->checkPriv($project))
         {
             echo(js::alert($this->lang->project->accessDenied));
+            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
             die(js::locate('back'));
         }
 
@@ -204,6 +206,8 @@ class projectModel extends model
             if($projectID > 0)
             {
                 echo(js::alert($this->lang->project->accessDenied));
+                $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+                if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
                 die(js::locate('back'));
             }
         }

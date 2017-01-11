@@ -1231,6 +1231,26 @@ class bugModel extends model
     }
 
     /**
+     * Get case bugs.
+     * 
+     * @param  int    $runID 
+     * @param  int    $caseID 
+     * @param  int    $version 
+     * @access public
+     * @return void
+     */
+    public function getCaseBugs($runID, $caseID = 0, $version = 0)
+    {
+        return $this->dao->select('*')->from(TABLE_BUG)
+            ->where('1=1')
+            ->beginIF($runID)->andWhere('`result`')->eq($runID)->fi()
+            ->beginIF($runID == 0 and $caseID)->andWhere('`case`')->eq($caseID)->fi()
+            ->beginIF($version)->andWhere('`caseVersion`')->eq($version)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+    }
+
+    /**
      * Get counts of some stories' bugs.
      *
      * @param  array  $stories

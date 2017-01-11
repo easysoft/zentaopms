@@ -93,6 +93,7 @@ $config->task->datatable->fieldList['progess']['title']    = 'progess';
 $config->task->datatable->fieldList['progess']['fixed']    = 'no';
 $config->task->datatable->fieldList['progess']['width']    = '40';
 $config->task->datatable->fieldList['progess']['required'] = 'no';
+$config->task->datatable->fieldList['progess']['sort']     = 'no';
 
 $config->task->datatable->fieldList['deadline']['title']    = 'deadlineAB';
 $config->task->datatable->fieldList['deadline']['fixed']    = 'no';

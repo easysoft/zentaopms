@@ -68,6 +68,7 @@ class datatableModel extends model
                 $set->width = $fieldList[$id]['width'];
                 $set->fixed = $fieldList[$id]['fixed'];
                 $set->title = $fieldList[$id]['title'];
+                $set->sort  = isset($fieldList[$id]['sort']) ? $fieldList[$id]['sort'] : 'yes';
                 $setting[$key] = $set;
             }
         }
@@ -81,6 +82,7 @@ class datatableModel extends model
                     continue;
                 }
                 $set->title = $fieldList[$set->id]['title'];
+                $set->sort  = isset($fieldList[$set->id]['sort']) ? $fieldList[$set->id]['sort'] : 'yes';
             }
         }
 
@@ -123,15 +125,9 @@ class datatableModel extends model
             {
                 echo $this->lang->actions;
             }
-            elseif($id == 'progess')
+            elseif(isset($col->sort) and $col->sort == 'no')
             {
-                $this->app->loadLang('task');
-                echo $this->lang->task->progess;
-            }
-            elseif($id == 'taskCount' or $id == 'bugCount' or $id == 'caseCount')
-            {
-                $this->app->loadLang('story');
-                echo $this->lang->story->$id;
+                echo $col->title;
             }
             else
             {

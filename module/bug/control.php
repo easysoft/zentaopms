@@ -445,6 +445,8 @@ class bug extends control
         if($bug->project and !$this->loadModel('project')->checkPriv($this->project->getByID($bug->project)))
         {
             echo(js::alert($this->lang->project->accessDenied));
+            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
             die(js::locate('back'));
         }
 
