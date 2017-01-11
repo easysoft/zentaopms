@@ -285,7 +285,7 @@ class testtaskModel extends model
             ->beginIF($moduleID)->andWhere('t2.module')->in($moduleID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
     }
 
     /**
@@ -309,7 +309,7 @@ class testtaskModel extends model
             ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
     }
 
     /**
@@ -374,7 +374,7 @@ class testtaskModel extends model
                 ->beginIF($task->branch)->andWhere('t2.branch')->in("0,{$task->branch}")->fi()
                 ->orderBy(strpos($sort, 'assignedTo') !== false ? ('t1.' . $sort) : ('t2.' . $sort))
                 ->page($pager)
-                ->fetchAll();
+                ->fetchAll('id');
         }
         return $runs;
     }
@@ -573,13 +573,13 @@ class testtaskModel extends model
      */
     public function getResults($runID, $caseID = 0)
     {
-        if($caseID > 0)
-        {  
-            $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('`case`')->eq($caseID)->orderBy('id desc')->fetchAll('id');
+        if($runID > 0)
+        {
+            $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('run')->eq($runID)->orderBy('id desc')->fetchAll('id');
         }
         else
         {
-            $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('run')->eq($runID)->orderBy('id desc')->fetchAll('id');
+            $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('`case`')->eq($caseID)->orderBy('id desc')->fetchAll('id');
         }
 
         if(!$results) return array();
@@ -720,6 +720,12 @@ class testtaskModel extends model
             case 'assignedTo':
                 $assignedTo = zget($users, $run->assignedTo, $run->assignedTo);
                 echo substr($assignedTo, strpos($assignedTo, ':') + 1);
+                break;
+            case 'bugs':
+                echo $run->bugs;
+                break;
+            case 'results':
+                echo $run->results;
                 break;
             case 'actions':
                 common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase iframe');

@@ -188,11 +188,6 @@ class my extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
         $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $sort, 0, $pager);
 
-        /* Save bugIDs session for get the pre and next bug. */
-        $bugIDs = '';
-        foreach($bugs as $bug) $bugIDs .= ',' . $bug->id;
-        $this->session->set('bugIDs', $bugIDs . ',');
-
         /* assign. */
         $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
         $this->view->position[]  = $this->lang->my->bug;

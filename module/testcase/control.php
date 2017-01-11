@@ -101,6 +101,7 @@ class testcase extends control
 
         /* Process case for check story changed. */
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
+        $cases = $this->testcase->appendBugAndResults($cases);
 
         /* Build the search form. */
         $actionURL = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
@@ -1257,6 +1258,23 @@ class testcase extends control
         $this->view->branches  = $this->loadModel('branch')->getPairs($productID);
         $this->view->branch    = $branch;
         $this->view->product   = $this->products[$productID];
+        $this->display();
+    }
+
+    /**
+     * Case bugs.
+     * 
+     * @param  int    $runID 
+     * @param  int    $caseID 
+     * @param  int    $version 
+     * @access public
+     * @return void
+     */
+    public function bugs($runID, $caseID = 0, $version = 0)
+    {
+        $this->view->title = $this->lang->testcase->bugs;
+        $this->view->bugs  = $this->loadModel('bug')->getCaseBugs($runID, $caseID, $version);
+        $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 }

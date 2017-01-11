@@ -934,7 +934,6 @@ class commonModel extends model
      * Get the previous and next object.
      * 
      * @param  string $type story|task|bug|case
-     * @param  string $objectIDs 
      * @param  string $objectID 
      * @access public
      * @return void
@@ -949,7 +948,7 @@ class commonModel extends model
         $existObject = $type . 'PreAndNext';
         if(isset($_SESSION[$existObject]) and $_SESSION[$existObject]['objectID'] == $objectID) return $_SESSION[$existObject]['preAndNextObject'];
 
-        /* Get objectIDs. */
+        /* Get objectIDList. */
         $table             = $this->config->objectTables[$type];
         $queryCondition    = $type . 'QueryCondition';
         $typeOnlyCondition = $type . 'OnlyCondition';

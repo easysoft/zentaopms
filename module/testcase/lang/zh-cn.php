@@ -44,6 +44,9 @@ $lang->testcase->allProduct       = "所有{$lang->productCommon}";
 $lang->testcase->fromBug          = '来源Bug';
 $lang->testcase->toBug            = '生成Bug';
 $lang->testcase->changed          = '用例变更';
+$lang->testcase->bugs             = '产生Bug数';
+$lang->testcase->bugsAB           = 'B';
+$lang->testcase->results          = '执行数';
 $lang->testcase->createBug        = '转Bug';
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 

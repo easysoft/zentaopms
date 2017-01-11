@@ -557,11 +557,6 @@ class project extends control
         $storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
         $users      = $this->user->getPairs('noletter');
 
-        /* Save storyIDs session for get the pre and next story. */
-        $storyIDs = '';
-        foreach($stories as $story) $storyIDs .= ',' . $story->id;
-        $this->session->set('storyIDs', $storyIDs . ',');
-
         /* Get project's product. */
         $productID = 0;
         $productPairs = $this->loadModel('product')->getProductsByProject($projectID);

@@ -239,7 +239,7 @@
           <?php endif;?>
           <?php if($case->toBugs):?>
           <tr>
-            <th valign="top"><?php echo $lang->testcase->toBug;?></th>
+            <th class='w-60px' valign="top"><?php echo $lang->testcase->toBug;?></th>
             <td>
             <?php 
             foreach($case->toBugs as $bugID => $bugTitle) 
