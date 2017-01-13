@@ -608,13 +608,16 @@ class project extends control
      *
      * @param  int    $projectID
      * @param  string $orderBy
+     * @param  int    $build
+     * @param  string $type
+     * @param  int    $param
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function bug($projectID = 0, $orderBy = 'status,id_desc', $build = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug($projectID = 0, $orderBy = 'status,id_desc', $build = 0, $type = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load these two models. */
         $this->loadModel('bug');
@@ -623,6 +626,7 @@ class project extends control
         /* Save session. */
         $this->session->set('bugList', $this->app->getURI(true));
 
+        $queryID   = ($type == 'bySearch') ? (int)$param : 0;
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
         $products  = $this->project->getProducts($project->id);
@@ -638,7 +642,7 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = $this->loadModel('common')->appendOrder($orderBy);
-        $bugs  = $this->bug->getProjectBugs($projectID, $sort, $pager, $build);
+        $bugs  = $this->bug->getProjectBugs($projectID, $build, $type, $param, $sort, $pager);
         $users = $this->user->getPairs('noletter');
 
         /* team member pairs. */
@@ -648,6 +652,10 @@ class project extends control
         {
             $memberPairs[$key] = $member->realname;
         }
+
+        /* Build the search form. */
+        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&orderBy=$orderBy&build=$build&type=bySearch&queryID=myQueryID");
+        $this->project->buildBugSearchForm($products, $queryID, $actionURL);
 
         /* Assign. */
         $this->view->title       = $title;
