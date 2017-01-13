@@ -15,12 +15,20 @@ function deleteFile(fileID)
     hiddenwin.location.href =createLink('file', 'delete', 'fileID=' + fileID);
 }
 /* Download a file, append the mouse to the link. Thus we call decide to open the file in browser no download it. */
-function downloadFile(fileID)
+function downloadFile(fileID, extension)
 {
     if(!fileID) return;
+    var fileTypes     = 'txt,jpg,jpeg,gif,png,bmp';
     var sessionString = '<?php echo $sessionString;?>';
-    var url = createLink('file', 'download', 'fileID=' + fileID + '&mouse=left') + sessionString;
-    window.open(url, '_blank');
+    var url           = createLink('file', 'download', 'fileID=' + fileID + '&mouse=left') + sessionString;
+    if(fileTypes.indexOf(extension) >= 0)
+    {
+        $('<a>').modalTrigger({url: url, type: 'iframe'}).trigger('click');
+    }
+    else
+    {
+        window.open(url, '_blank');
+    }
     return false;
 }
 </script>
@@ -36,7 +44,7 @@ function downloadFile(fileID)
       {
           $uploadDate = $lang->file->uploadDate . $file->addedDate;
           $fileTitle  = "<li title={$uploadDate} class='list-group-item'><i class='icon-file-text text-muted icon'></i> &nbsp;" . $file->title .'.' . $file->extension;
-          echo html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $fileTitle, '_blank', "onclick='return downloadFile($file->id)'");
+          echo html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $fileTitle, '_blank', "onclick=\"return downloadFile($file->id, '$file->extension')\"");
 
           /* Show size info. */
           if($file->size < 1024)

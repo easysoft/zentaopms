@@ -25,6 +25,7 @@ $lang->file->setPublic     = "Set Public Template";
 $lang->file->exportFields  = "Fileds to be Exported";
 $lang->file->defaultTPL    = "Default Template";
 $lang->file->setExportTPL  = "Settings";
+$lang->file->preview       = "Preview";
 
 $lang->file->errorNotExists   = "<span class='red'>'%s' is not found.</span>";
 $lang->file->errorCanNotWrite = "<span class='red'>'%s' is not writable. Please change its permission. Enter sudo chmod -R 777 '%s'</span> in Linux.";
