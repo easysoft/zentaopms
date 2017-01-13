@@ -3,7 +3,8 @@
 <style>
 #imageFile{text-align: center;}
 #imageFile img{margin: 10px auto;}
-#txtFile{overflow-x: auto; padding: 0 7px;}
+#txtFile{padding: 5px 10px;}
+#txtFile div{overflow-x: auto;}
 #titlebar span{float: right; padding-right: 25px;}
 </style>
 <div id='titlebar'>
@@ -21,28 +22,30 @@
 </div>
 <?php else:?>
 <div id='txtFile'>
-<?php
-$fileContent = file_get_contents($file->realPath);
-if($charset != $config->charset)
-{
-    $fileContent = helper::convertEncoding($fileContent, $charset, $config->charset);
-}
-else
-{
-    if(!extension_loaded('mbstring'))
-    {
-        $encoding = mb_detect_encoding($fileContent, array('ASCII','UTF-8','GB2312','GBK','BIG5'));
-        if($encoding != 'UTF-8') $fileContent = helper::convertEncoding($fileContent, $encoding, $config->charset);
-    }
-    else
-    {
-        if($config->default->lang == 'zh-cn') $encoding = 'GBK';
-        if($config->default->lang == 'zh-tw') $encoding = 'BIG5';
-        $fileContent = helper::convertEncoding($fileContent, $encoding, $config->charset);
-    }
-}
-a($fileContent);
-?>
+  <div>
+  <?php
+  $fileContent = file_get_contents($file->realPath);
+  if($charset != $config->charset)
+  {
+      $fileContent = helper::convertEncoding($fileContent, $charset, $config->charset);
+  }
+  else
+  {
+      if(!extension_loaded('mbstring'))
+      {
+          $encoding = mb_detect_encoding($fileContent, array('ASCII','UTF-8','GB2312','GBK','BIG5'));
+          if($encoding != 'UTF-8') $fileContent = helper::convertEncoding($fileContent, $encoding, $config->charset);
+      }
+      else
+      {
+          if($config->default->lang == 'zh-cn') $encoding = 'GBK';
+          if($config->default->lang == 'zh-tw') $encoding = 'BIG5';
+          $fileContent = helper::convertEncoding($fileContent, $encoding, $config->charset);
+      }
+  }
+  a($fileContent);
+  ?>
+  </div>
 </div>
 <?php endif;?>
 <script>
