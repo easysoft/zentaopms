@@ -198,9 +198,9 @@
                 <th><?php echo $lang->story->stage;?></th>
                 <td>
                 <?php
-                if($story->stages)
+                if($story->stages and $branches)
                 {
-                    foreach($story->stages as $branch => $stage) echo $branches[$branch] . ' : ' . $lang->story->stageList[$stage] . '<br />';
+                    foreach($story->stages as $branch => $stage) if(isset($branches[$branch])) echo $branches[$branch] . ' : ' . $lang->story->stageList[$stage] . '<br />';
                 }
                 else
                 {

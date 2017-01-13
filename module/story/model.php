@@ -466,7 +466,24 @@ class storyModel extends model
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
             ->where('id')->eq((int)$storyID)->exec();
 
-        if(!dao::isError()) return common::createChanges($oldStory, $story);
+        if(!dao::isError())
+        {
+            if($story->product != $oldStory->product)
+            {
+                $this->dao->update(TABLE_PROJECTSTORY)->set('product')->eq($story->product)->where('story')->eq($storyID)->exec();
+                $storyProjects  = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->orderBy('project')->fetchPairs('project', 'project');
+                $linkedProjects = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($storyProjects)->andWhere('product')->eq($story->product)->orderBy('project')->fetchPairs('project','project');
+                $unlinkedProjects = array_diff($storyProjects, $linkedProjects);
+                foreach($unlinkedProjects as $projectID)
+                {
+                    $data = new stdclass();
+                    $data->project = $projectID;
+                    $data->product = $story->product;
+                    $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                }
+            }
+            return common::createChanges($oldStory, $story);
+        }
     }
 
     /**
