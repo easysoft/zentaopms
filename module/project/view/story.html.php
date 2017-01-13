@@ -12,6 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php js::set('moduleID', ($type == 'byModule' ? $param : 0));?>
+<?php js::set('productID', ($type == 'byProduct' ? $param : 0));?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
 <div id='titlebar'>
   <div class='heading'><?php echo html::icon($lang->icons['story']);?> <?php echo $lang->project->story;?></div>
