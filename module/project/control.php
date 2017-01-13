@@ -775,20 +775,6 @@ class project extends control
     }
 
     /**
-     * Get data of burndown chart.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function burnData($projectID = 0)
-    {
-        $this->loadModel('report');
-        $sets = $this->project->getBurnData($projectID);
-        die($this->report->createSingleXML($sets, $this->lang->project->charts->burn->graph));
-    }
-
-    /**
      * Compute burndown datas.
      *
      * @param  string $reload
@@ -819,7 +805,7 @@ class project extends control
 
         $project = $this->project->getById($projectID);
 
-        $this->view->firstBurn = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)->andWhere('date')->eq($project->begin)->fetch('left');
+        $this->view->firstBurn = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)->andWhere('date')->eq($project->begin)->fetch();
         $this->view->project   = $project;
         $this->display();
     }

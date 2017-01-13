@@ -1594,7 +1594,7 @@ class projectModel extends model
             ->fetchPairs();
         if(!$projects) return $burns;
 
-        $burns = $this->dao->select("project, '$today' AS date, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")
+        $burns = $this->dao->select("project, '$today' AS date, sum(estimate) AS `estimate`, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")
             ->from(TABLE_TASK)
             ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq('0')
@@ -1620,51 +1620,17 @@ class projectModel extends model
     public function fixFirst($projectID)
     {
         $project = $this->getById($projectID);
-        $burn    = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)
-            ->andWhere('date')->eq($project->begin)
-            ->fetch();
+        $burn    = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)->andWhere('date')->eq($project->begin)->fetch();
 
         $data = fixer::input('post')
             ->add('project', $projectID)
             ->add('date', $project->begin)
+            ->add('left', empty($burn) ? $this->post->estimate : $burn->left)
             ->add('consumed', empty($burn) ? 0 : $burn->consumed)
             ->get();
-        if(!is_numeric($data->left)) return false;
+        if(!is_numeric($data->estimate)) return false;
 
         $this->dao->replace(TABLE_BURN)->data($data)->exec();
-    }
-
-    /**
-     * Get data of burn down chart.
-     * 
-     * @param  int    $projectID 
-     * @param  int    $itemCounts 
-     * @param  string $mode        noempty: skip the dates without burn down data.
-     * @access public
-     * @return array
-     */
-    public function getBurnData($projectID = 0, $itemCounts = 30, $mode = 'noempty')
-    {
-        /* Get project and burn counts. */
-        $project    = $this->getById($projectID);
-        $burnCounts = $this->dao->select('count(*) AS counts')->from(TABLE_BURN)->where('project')->eq($projectID)->fetch('counts');
-
-        /* If the burnCounts > $itemCounts, get the latest $itemCounts records. */
-        $sql = $this->dao->select('date AS name, `left` AS value')->from(TABLE_BURN)->where('project')->eq((int)$projectID);
-        if($burnCounts > $itemCounts)
-        {
-            $sets = $sql->orderBy('date DESC')->limit($itemCounts)->fetchAll('name');
-            $sets = array_reverse($sets);
-        }
-        else
-        {
-            /* The burnCounts < itemCounts, after getting from the db, padding left dates. */
-            $sets = $sql->orderBy('date ASC')->fetchAll('name');
-            $this->processBurnData($sets, $itemCounts, $project->begin, $project->end, $mode);
-        }
-
-        foreach($sets as $set) $set->name = substr($set->name, 5);
-        return $sets;
     }
 
     /**
@@ -1680,7 +1646,7 @@ class projectModel extends model
         $project    = $this->getById($projectID);
 
         /* If the burnCounts > $itemCounts, get the latest $itemCounts records. */
-        $sets = $this->dao->select('date AS name, `left` AS value')->from(TABLE_BURN)->where('project')->eq((int)$projectID)->orderBy('date DESC')->fetchAll('name');
+        $sets = $this->dao->select('date AS name, `left` AS value, estimate')->from(TABLE_BURN)->where('project')->eq((int)$projectID)->orderBy('date DESC')->fetchAll('name');
 
         $count    = 0;
         $burnData = array();
@@ -2125,7 +2091,7 @@ class projectModel extends model
         $baselineJSON  = '[]';
 
         $firstBurn    = empty($sets) ? 0 : reset($sets);
-        $firstTime    = isset($firstBurn->value) ? $firstBurn->value : 0;
+        $firstTime    = !empty($firstBurn->estimate) ? $firstBurn->estimate : (!empty($firstBurn->value) ? $firstBurn->value : 0);
         $days         = count($dateList) - 1;
         $rate         = $firstTime / $days;
         $baselineJSON = '[';
