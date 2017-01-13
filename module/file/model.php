@@ -354,11 +354,15 @@ class fileModel extends model
      */
     public function parseCSV($fileName)
     {
-        $handle = fopen($fileName, 'r');
-        $col    = -1;
-        $row    = 0;
-        $data   = array();
-        while(($line = fgets($handle)) !== false)
+        $content = file_get_contents($fileName);
+        /* Fix bug #890. */
+        $content = str_replace("\x82\x32", "\x10", $content);
+        $lines   = explode("\n", $content);
+
+        $col  = -1;
+        $row  = 0;
+        $data = array();
+        foreach($lines as $line)
         {
             $line    = trim($line);
             $markNum = substr_count($line, '"') - substr_count($line, '\"');
@@ -440,7 +444,6 @@ class fileModel extends model
             $row ++;
             $col = -1;
         }
-        fclose($handle);
 
         return $data;
     }
