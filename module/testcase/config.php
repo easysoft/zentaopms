@@ -47,6 +47,7 @@ $config->testcase->search['fields']['module']         = $lang->testcase->module;
 $config->testcase->search['fields']['pri']            = $lang->testcase->pri;
 
 $config->testcase->search['fields']['lastRunner']     = $lang->testcase->lastRunner;
+$config->testcase->search['fields']['lastRunResult']  = $lang->testcase->lastRunResult;
 $config->testcase->search['fields']['openedDate']     = $lang->testcase->openedDate;
 $config->testcase->search['fields']['lastEditedDate'] = $lang->testcase->lastEditedDateAB;
 $config->testcase->search['fields']['lastRunDate']    = $lang->testcase->lastRunDate;
@@ -65,6 +66,7 @@ $config->testcase->search['params']['branch']       = array('operator' => '=',  
 $config->testcase->search['params']['stage']        = array('operator' => 'include', 'control' => 'select', 'values' => $lang->testcase->stageList);
 
 $config->testcase->search['params']['lastRunner']     = array('operator' => '=', 'control' => 'select', 'values' => 'users');
+$config->testcase->search['params']['lastRunResult']  = array('operator' => '=', 'control' => 'select', 'values' => $lang->testcase->resultList);
 $config->testcase->search['params']['openedDate']     = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 $config->testcase->search['params']['lastEditedDate'] = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 $config->testcase->search['params']['lastRunDate']    = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
