@@ -1469,7 +1469,14 @@ class storyModel extends model
             unset($branches[0]);
             $branches = join(',', $branches);
             if($branches) $storyQuery .= " AND `branch`" . helper::dbIN("0,$branches"); 
-            $storyQuery .= " AND `status` NOT IN ('draft', 'closed')"; 
+            if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
+            {
+                $storyQuery .= " AND `status` NOT IN ('draft')";// Fix bug #990.
+            }
+            else
+            {
+                $storyQuery .= " AND `status` NOT IN ('draft', 'closed')";
+            }
         }
         elseif($branch)
         {
