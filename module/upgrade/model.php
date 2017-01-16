@@ -161,6 +161,9 @@ class upgradeModel extends model
             case '8_4':
             case '8_4_1':
                 $this->execSQL($this->getUpgradeFile('8.4.1'));
+            case '9_0_beta':
+                $this->execSQL($this->getUpgradeFile('9.0.beta'));
+                $this->adjustPriv9_0();
         }
 
         $this->deletePatch();
@@ -247,6 +250,7 @@ class upgradeModel extends model
         case '8_3_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.3.1'));
         case '8_4':
         case '8_4_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.4.1'));
+        case '9_0_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('9.0.beta'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -1486,6 +1490,35 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
 
             $data->method = 'cases';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Adjust priv for 9.0 
+     * 
+     * @access public
+     * @return void
+     */
+    public function adjustPriv9_0()
+    {
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('testtask')->andWhere('method')->eq('results')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group = $groupID;
+            $data->module = 'testcase';
+            $data->method = 'bugs';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('mail')->andWhere('method')->eq('delete')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group = $groupID;
+            $data->module = 'mail';
+            $data->method = 'resend';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
         }
         return true;

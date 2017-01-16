@@ -56,6 +56,7 @@ $whiteList[] = 'admin-win2unix';
 $whiteList[] = 'admin-bind';
 $whiteList[] = 'admin-certifyztemail';
 $whiteList[] = 'admin-certifyztmobile';
+$whiteList[] = 'admin-ztcompany';
 $whiteList[] = 'story-commonaction';
 $whiteList[] = 'story-sendmail';
 $whiteList[] = 'webapp-ajaxaddview';

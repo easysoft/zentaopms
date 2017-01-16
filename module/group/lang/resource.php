@@ -512,6 +512,7 @@ $lang->resource->testcase->showImport         = 'showImport';
 $lang->resource->testcase->confirmChange      = 'confirmChange';
 $lang->resource->testcase->confirmStoryChange = 'confirmStoryChange';
 $lang->resource->testcase->batchChangeModule  = 'batchChangeModule';
+$lang->resource->testcase->bugs               = 'bugs';
 
 $lang->testcase->methodOrder[0]  = 'index';
 $lang->testcase->methodOrder[5]  = 'browse';
@@ -530,6 +531,7 @@ $lang->testcase->methodOrder[65] = 'batchDelete';
 $lang->testcase->methodOrder[70] = 'batchChangeModule';
 $lang->testcase->methodOrder[75] = 'linkCases';
 $lang->testcase->methodOrder[80] = 'unlinkCase';
+$lang->testcase->methodOrder[85] = 'bugs';
 
 /* Test task. */
 $lang->resource->testtask = new stdclass();
@@ -609,6 +611,7 @@ $lang->resource->mail->test   = 'test';
 $lang->resource->mail->reset  = 'reset';
 $lang->resource->mail->browse = 'browse';
 $lang->resource->mail->delete = 'delete';
+$lang->resource->mail->resend = 'resend';
 $lang->resource->mail->batchDelete   = 'batchDelete';
 $lang->resource->mail->sendCloud     = 'sendCloud';
 $lang->resource->mail->sendcloudUser = 'sendcloudUser';
@@ -622,8 +625,9 @@ $lang->mail->methodOrder[30] = 'reset';
 $lang->mail->methodOrder[35] = 'browse';
 $lang->mail->methodOrder[40] = 'delete';
 $lang->mail->methodOrder[45] = 'batchDelete';
-$lang->mail->methodOrder[50] = 'sendCloud';
-$lang->mail->methodOrder[55] = 'sendcloudUser';
+$lang->mail->methodOrder[50] = 'resend';
+$lang->mail->methodOrder[55] = 'sendCloud';
+$lang->mail->methodOrder[60] = 'sendcloudUser';
 
 /* custom. */
 $lang->resource->custom = new stdclass();
@@ -1192,3 +1196,6 @@ $lang->changelog['8.3'][] = 'doc-showFiles';
 $lang->changelog['8.4'][] = 'branch-sort';
 $lang->changelog['8.4'][] = 'story-bugs';
 $lang->changelog['8.4'][] = 'story-cases';
+
+$lang->changelog['9.0'][] = 'testcase-bugs';
+$lang->changelog['9.0'][] = 'mail-resend';
