@@ -57,6 +57,10 @@ $lang->admin->safe->modeList[0] = 'N/A';
 $lang->admin->safe->modeList[1] = 'Medium';
 $lang->admin->safe->modeList[2] = 'Strong';
 
+$lang->admin->safe->modeRuleList[1] = 'Should be contain letters and numbers, at lease six characters.';
+$lang->admin->safe->modeRuleList[2] = 'Should be contain letters, numbers and special characters, at lease 10 characters.';
+
+
 $lang->admin->safe->reasonList['weak']     = 'Common Weak Password';
 $lang->admin->safe->reasonList['account']  = 'Same as your account';
 $lang->admin->safe->reasonList['mobile']   = 'Same as your mobile number';
