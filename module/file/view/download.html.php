@@ -38,6 +38,7 @@
       }
       else
       {
+          $encoding = 'UTF-8';
           if($config->default->lang == 'zh-cn') $encoding = 'GBK';
           if($config->default->lang == 'zh-tw') $encoding = 'BIG5';
           $fileContent = helper::convertEncoding($fileContent, $encoding, $config->charset);

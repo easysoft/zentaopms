@@ -31,7 +31,7 @@
         echo "<div class='btn-group'>";
         common::printIcon('testtask', 'start',    "taskID=$task->id", $task, 'button', '', '', 'iframe', true);
         common::printIcon('testtask', 'close',    "taskID=$task->id", $task, 'button', '', '', 'iframe', true);
-        common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'button', 'smile');
+        common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'button', 'sitemap');
         common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'button', 'link');
         echo '</div>';
 
