@@ -542,7 +542,13 @@ class mail extends control
         if($result->result == 'fail' and empty($result->data)) die(js::alert($this->lang->mail->centifyFail) . js::locate($this->createLink('admin', 'register', "from=mail")));
 
         $data = $result->data;
-        if($result->result == 'fail' and empty($data->company)) die(js::locate($this->createLink('admin', 'ztCompany')));
+        if((isset($data->qq) and empty($data->qq)) or (isset($data->company) and empty($data->company)))
+        {
+            $params = '';
+            if(empty($data->qq))$params .= 'qq,';
+            if(empty($data->company))$params .= 'company,';
+            die(js::locate($this->createLink('admin', 'ztCompany', 'fields=' . trim($params, ','))));
+        }
         if($result->result == 'fail' and empty($data->emailCertified))
         {
             die(js::locate($this->createLink('admin', 'certifyZtEmail', 'email=' . helper::safe64Encode($data->email))));
