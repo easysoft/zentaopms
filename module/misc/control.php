@@ -203,10 +203,29 @@ class misc extends control
      * @access public
      * @return viod
      */
-    public function changeLog($version = 'latest')
+    public function changeLog($version = '')
     {
-        $this->view->version = $version;
+        if(empty($version)) $version  = key($this->lang->misc->feature->all);
+        $this->view->version  = $version;
+        $this->view->features = zget($this->lang->misc->feature->all, $version, '');
 
+        $detailed      = '';
+        $changeLogFile = $this->app->getBasePath() . 'doc' . DS . 'CHANGELOG';
+        if(file_exists($changeLogFile))
+        {
+            $handle = fopen($changeLogFile, 'r');
+            $tag    = false;
+            while($line = fgets($handle))
+            {
+                $line = trim($line);
+                if($tag and empty($line)) break;
+                if($tag) $detailed .= $line . '<br />';
+
+                if(preg_match("/{$version}$/", $line) > 0) $tag = true;
+            }
+            fclose($handle);
+        }
+        $this->view->detailed = $detailed;
         $this->display();
     }
 }
