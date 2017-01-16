@@ -1,0 +1,18 @@
+ *Adjust minor!
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# Changes to be committed:
+#	modified:   action/lang/en.php
+#	modified:   build/lang/en.php
+#	modified:   common/lang/en.php
+#	modified:   datatable/lang/en.php
+#	modified:   doc/lang/en.php
+#	modified:   install/lang/en.php
+#	modified:   productplan/lang/en.php
+#	modified:   release/lang/en.php
+#	modified:   story/lang/en.php
+#	modified:   tree/lang/en.php
+#
