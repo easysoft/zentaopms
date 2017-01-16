@@ -1269,10 +1269,7 @@ class project extends control
         $this->app->session->set('storyList',   $uri);
         $this->app->session->set('projectList', $uri);
 
-        if($type === 'json')
-        {
-            die(json_encode($tree, JSON_HEX_QUOT | JSON_HEX_APOS));
-        }
+        if($type === 'json') die(helper::jsonEncode4Parse($tree, JSON_HEX_QUOT | JSON_HEX_APOS));
 
         $this->view->title      = $this->lang->project->tree;
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);

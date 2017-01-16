@@ -2361,6 +2361,6 @@ class projectModel extends model
             }
         }
         if(empty($fullTrees[0]->children)) array_shift($fullTrees);
-        return $fullTrees;
+        return array_values($fullTrees);
     }
 }
