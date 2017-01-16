@@ -6,6 +6,7 @@ $lang->mail->edit   = 'Edit Settings';
 $lang->mail->save   = 'Saved';
 $lang->mail->test   = 'Email Testing';
 $lang->mail->reset  = 'Reset';
+$lang->mail->resend = '重发失败邮件';
 $lang->mail->browse = 'Email List';
 $lang->mail->delete = 'Delete Email';
 $lang->mail->ztCloud       = 'ZenTao CloudMail';
@@ -69,6 +70,7 @@ $lang->mail->secureList['ssl'] = 'ssl';
 $lang->mail->secureList['tls'] = 'tls';
 
 $lang->mail->more           = 'More';
+$lang->mail->noticeResend   = '已经重新发信！';
 $lang->mail->inputFromEmail = 'Enter Email Address';
 $lang->mail->nextStep       = 'Next';
 $lang->mail->successSaved   = 'Configuration has been saved.';
