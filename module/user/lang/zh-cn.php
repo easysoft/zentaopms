@@ -129,8 +129,8 @@ $lang->user->placeholder->group     = '分组决定用户的权限列表。';
 $lang->user->placeholder->commiter  = '版本控制系统(subversion)中的帐号';
 $lang->user->placeholder->verify    = '需要输入你的密码加以验证';
 
-$lang->user->placeholder->passwordStrength[1] = '强度必须为中，6位以上，包含大小写字母，数字。';
-$lang->user->placeholder->passwordStrength[2] = '强度必须为强，10位以上，包含字母，数字，特殊字符。';
+$lang->user->placeholder->passwordStrength[1] = '6位以上，包含大小写字母，数字。';
+$lang->user->placeholder->passwordStrength[2] = '10位以上，包含大小写字母，数字，特殊字符。';
 
 $lang->user->error = new stdclass();
 $lang->user->error->account       = "ID %s，英文、数字和下划线的组合，三位以上";
