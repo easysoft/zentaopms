@@ -1,3 +1,6 @@
+tbody > tr > td > .btn-icon {margin-right: 3px;}
+tbody > tr > td   .icon-bug {margin-left: -8px;}
+
 tfoot .table-actions #assignedTo_chosen a.chosen-default{height:26px;line-height:15px}
 tfoot .table-actions .input-group-addon{padding:5px 12px;}
 
