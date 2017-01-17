@@ -1858,7 +1858,7 @@ class projectModel extends model
     public function getDateList($begin, $end, $type, $interval = '', $format = 'm/d/Y')
     {
         $begin = strtotime($begin);
-        $end   = strtotime($end) + 24 * 3600;
+        $end   = strtotime($end);
 
         $beginWeekDay = date('w', $begin);
         $days = ($end - $begin) / 3600 / 24;
