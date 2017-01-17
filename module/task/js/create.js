@@ -138,7 +138,6 @@ function setStories(moduleID, projectID)
 $(document).ready(function()
 {
     setPreview();
-    $("#story, #mailto").chosen(defaultChosenOptions);
 
     $('#selectAllUser').on('click', function()
     {
