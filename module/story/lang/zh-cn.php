@@ -290,3 +290,6 @@ $lang->story->placeholder->estimate = $lang->story->hour;
 
 $lang->story->chosen = new stdClass();
 $lang->story->chosen->reviewedBy = '选择评审人...';
+
+$lang->story->notice = new stdClass();
+$lang->story->notice->closed = '您选择的需求已经被关闭了！';

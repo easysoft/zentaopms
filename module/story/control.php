@@ -773,6 +773,11 @@ class story extends control
 
         /* Get edited stories. */
         $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIDList)->fetchAll('id');
+        foreach($stories as $story)
+        {
+            if($story->status == 'closed') unset($stories[$story->id]);
+        }
+        if(empty($stories)) die(js::alert($this->lang->story->notice->closed) . js::locate($this->session->storyList, 'parent'));
 
         /* The stories of a product. */
         if($productID)

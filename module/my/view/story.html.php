@@ -89,7 +89,7 @@
             <?php
             $class = "class='disabled'";
             $actionLink = $this->createLink('story', 'batchClose');
-            $misc = ($canBatchClose and $type != 'closedBy') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : $class;
+            $misc = ($canBatchClose and $type != 'closedBy') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
             if($misc) echo "<li>" . html::a('javascript:;', $lang->close, '', $misc) . "</li>";
 
             if(common::hasPriv('story', 'batchReview'))
