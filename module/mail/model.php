@@ -554,6 +554,11 @@ class mailModel extends model
         return $queue;
     }
 
+    public function getQueueById($queueID)
+    {
+        return $this->dao->select('*')->from(TABLE_MAILQUEUE)->where('id')->eq($queueID)->fetch();
+    }
+
     /**
      * Merge mails.
      *
