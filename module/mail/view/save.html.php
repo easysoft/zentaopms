@@ -19,13 +19,10 @@ include '../../common/view/header.html.php';
       <small class='text-success'> <?php echo $lang->mail->save;?> <?php echo html::icon('ok-sign');?></small>
     </div>
   </div>
-  <div class='alert alert-success alert-block with-icon'>
-    <i class='icon-ok-sign'></i>
+  <div class='alert alert-block with-icon'>
     <div class='content'>
       <?php echo $lang->mail->successSaved;?>
-      <div class='pdt-20'>
-      <?php if($this->post->turnon and $mailExist) echo html::linkButton($lang->mail->test . ' <i class="icon-rocket"></i>', inlink('test'));?>
-      </div>
+      <?php if($this->post->turnon and $mailExist) echo html::a(inlink('test'), $lang->mail->test . ' <i class="icon-rocket"></i>', '', "class='btn btn-primary btn-sm'");?>
     </div>
   </div>
 </div>

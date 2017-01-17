@@ -349,30 +349,32 @@ class mail extends control
      * @access public
      * @return void
      */
-    public function resend()
+    public function resend($queueID)
     {
-        $queueList = $this->mail->getQueue('fail', 'id_asc');
-        $now       = helper::now();
-        if(isset($this->config->mail->async)) $this->config->mail->async = 0;
-        $log = '';
-        foreach($queueList as $queue)
+        $queue = $this->mail->getQueueById($queueID);
+        if($queue and $queue->status == 'send')
         {
-            $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList);
-
-            $data = new stdclass();
-            $data->sendTime   = $now;
-            $data->status     = 'send';
-            $data->failReason = '';
-            if($this->mail->isError())
-            {
-                $data->status = 'fail';
-                $data->failReason = join("\n", $this->mail->getError());
-            }
-            $this->dao->update(TABLE_MAILQUEUE)->data($data)->where('id')->in($queue->id)->exec();
+            echo js::alert($this->lang->mail->noticeResend);
+            die(js::reload('parent'));
         }
+
+        if(isset($this->config->mail->async)) $this->config->mail->async = 0;
+        $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList);
+
+        $data = new stdclass();
+        $data->sendTime   = helper::now();
+        $data->status     = 'send';
+        $data->failReason = '';
+        if($this->mail->isError())
+        {
+            $data->status     = 'fail';
+            $data->failReason = join("\n", $this->mail->getError());
+        }
+        $this->dao->update(TABLE_MAILQUEUE)->data($data)->where('id')->in($queue->id)->exec();
+
+        if($data->status == 'fail') die(js::alert($data->failReason));
         echo js::alert($this->lang->mail->noticeResend);
         die(js::reload('parent'));
-
     }
 
     /**

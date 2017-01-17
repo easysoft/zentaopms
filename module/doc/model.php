@@ -473,6 +473,7 @@ class docModel extends model
             $docContent->title   = $doc->title;
             $docContent->content = $doc->content;
             $docContent->version = $doc->version;
+            $docContent->digest  = $doc->digest;
             $docContent->type    = $oldDocContent->type;
             $docContent->files   = $oldDocContent->files;
             if($files) $docContent->files .= ',' . join(',', array_keys($files));
