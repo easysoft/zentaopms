@@ -25,6 +25,7 @@ $lang->file->setPublic     = "設置公共模板";
 $lang->file->exportFields  = "要導出欄位";
 $lang->file->defaultTPL    = "預設模板";
 $lang->file->setExportTPL  = "設置";
+$lang->file->preview       = "預覽";
 
 $lang->file->errorNotExists   = "<span class='red'>檔案夾 '%s' 不存在</span>";
 $lang->file->errorCanNotWrite = "<span class='red'>檔案夾 '%s' 不可寫,請改變檔案夾的權限。在linux中輸入指令:sudo chmod -R 777 '%s'</span>";

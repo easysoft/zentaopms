@@ -113,6 +113,7 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
 CREATE TABLE IF NOT EXISTS `zt_burn` (
   `project` mediumint(8) unsigned NOT NULL,
   `date` date NOT NULL,
+  `estimate` float NOT NULL,
   `left` float NOT NULL,
   `consumed` float NOT NULL,
   PRIMARY KEY  (`project`,`date`)

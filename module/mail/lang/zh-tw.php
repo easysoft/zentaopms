@@ -6,6 +6,7 @@ $lang->mail->edit   = '編輯配置';
 $lang->mail->save   = '成功保存';
 $lang->mail->test   = '測試發信';
 $lang->mail->reset  = '重置';
+$lang->mail->resend = '重發';
 $lang->mail->browse = '郵件列表';
 $lang->mail->delete = '刪除郵件';
 $lang->mail->ztCloud       = '禪道雲發信';
@@ -30,7 +31,7 @@ $lang->mail->debug       = '調試級別';
 $lang->mail->charset     = '編碼';
 $lang->mail->accessKey   = 'accessKey';
 $lang->mail->secretKey   = 'secretKey';
-$lang->mail->license     = 'SendCloud發信須知';
+$lang->mail->license     = '禪道雲發信使用須知';
 
 $lang->mail->selectMTA = '請選擇發信方式：';
 $lang->mail->smtp      = 'SMTP發信';
@@ -69,6 +70,7 @@ $lang->mail->secureList['ssl'] = 'ssl';
 $lang->mail->secureList['tls'] = 'tls';
 
 $lang->mail->more           = '更多...';
+$lang->mail->noticeResend   = '已經重新發信！';
 $lang->mail->inputFromEmail = '請輸入發信郵箱：';
 $lang->mail->nextStep       = '下一步';
 $lang->mail->successSaved   = '配置信息已經成功保存。';

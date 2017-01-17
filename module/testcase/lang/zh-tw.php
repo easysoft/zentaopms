@@ -44,6 +44,12 @@ $lang->testcase->allProduct       = "所有{$lang->productCommon}";
 $lang->testcase->fromBug          = '來源Bug';
 $lang->testcase->toBug            = '生成Bug';
 $lang->testcase->changed          = '用例變更';
+$lang->testcase->bugs             = '產生Bug數';
+$lang->testcase->bugsAB           = 'B';
+$lang->testcase->results          = '執行結果數';
+$lang->testcase->resultsAB        = 'R';
+$lang->testcase->stepNumber       = '用例步驟數';
+$lang->testcase->stepNumberAB     = 'S';
 $lang->testcase->createBug        = '轉Bug';
 $lang->case = $lang->testcase;  // 用於DAO檢查時使用。因為case是系統關鍵字，所以無法定義該模組為case，只能使用testcase，但表還是使用的case。
 
@@ -134,7 +140,7 @@ $lang->testcase->statusList['normal']      = '正常';
 $lang->testcase->statusList['blocked']     = '被阻塞';
 $lang->testcase->statusList['investigate'] = '研究中';
 
-$lang->testcase->resultList['n/a']     = 'N/A';
+$lang->testcase->resultList['n/a']     = '忽略';
 $lang->testcase->resultList['pass']    = '通過';
 $lang->testcase->resultList['fail']    = '失敗';
 $lang->testcase->resultList['blocked'] = '阻塞';
