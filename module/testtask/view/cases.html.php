@@ -47,7 +47,7 @@ var moduleID   = '<?php echo $moduleID;?>';
     ?>
       <tfoot>
         <tr>
-          <td colspan='12'>
+          <td colspan='13'>
             <?php if($runs):?>
             <div class='table-actions clearfix'>
               <?php if($hasCheckbox) echo html::selectButton();?>

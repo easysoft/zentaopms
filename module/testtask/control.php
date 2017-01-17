@@ -305,7 +305,7 @@ class testtask extends control
     public function groupCase($taskID, $groupBy = 'story')
     {
         /* Save the session. */
-        $this->app->loadLang('testcase');
+        $this->loadModel('testcase');
         $this->session->set('caseList', $this->app->getURI(true));
 
         /* Get task and product info, set menu. */
@@ -317,6 +317,7 @@ class testtask extends control
 
         $runs = $this->testtask->getRuns($taskID, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+        $runs = $this->testcase->appendBugAndResults($runs, 'run');
 
         $groupCases  = array();
         $groupByList = array();

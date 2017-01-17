@@ -25,6 +25,9 @@
       <th class='w-120px'><?php echo $lang->testtask->lastRunTime;?></th>
       <th class='w-80px'> <?php echo $lang->testtask->lastRunResult;?></th>
       <th class='w-80px'> <?php echo $lang->testcase->status;?></th>
+      <th class='w-30px' title='<?php echo $lang->testcase->bugs?>'><?php echo $lang->testcase->bugsAB;?></th>
+      <th class='w-30px' title='<?php echo $lang->testcase->results?>'><?php echo $lang->testcase->resultsAB;?></th>
+      <th class='w-30px' title='<?php echo $lang->testcase->stepNumber?>'><?php echo $lang->testcase->stepNumberAB;?></th>
       <th class='w-60px'> <?php echo $lang->actions;?></th>
     </tr>
   </thead>
@@ -33,7 +36,7 @@
   <?php $groupClass = ($i % 2 == 0) ? 'even' : 'highlight-warning'; $i ++;?>
   <tr id='node-<?php echo $groupKey;?>' class='actie-disabled group-title'>
     <td class='text-right <?php echo $groupClass;?> text-left large strong group-name'><?php echo $groupKey;?></td>
-    <td colspan='8' class='text-left'><?php if($groupByList) echo $groupByList[$groupKey];?></td>
+    <td colspan='11' class='text-left'><?php if($groupByList) echo $groupByList[$groupKey];?></td>
   </tr>
   <?php foreach($groupTasks as $case):?>
   <?php $caseLink = $this->createLink('case','view',"caseID=$case->id"); ?>
@@ -46,6 +49,9 @@
     <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
     <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
     <td class='<?php if(isset($run)) echo $run->status;?>'><?php echo $lang->testcase->statusList[$case->status];?></td>
+    <td><?php echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(inlink('bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;?></td>
+    <td><?php echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a($this->createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;?></td>
+    <td><?php echo $case->stepNumber;?></td>
     <td>
       <?php common::printIcon('testcase', 'edit', "caseID=$case->id", '', 'list');?>
       <?php common::printIcon('testcase', 'delete', "caseID=$case->id", '', 'list', '', 'hiddenwin');?>

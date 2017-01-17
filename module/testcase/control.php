@@ -157,6 +157,7 @@ class testcase extends control
 
         $cases = $this->testcase->getModuleCases($productID, $branch, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+        $cases = $this->testcase->appendBugAndResults($cases);
 
         $groupCases  = array();
         $groupByList = array();

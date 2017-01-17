@@ -47,6 +47,9 @@ $lang->testcase->changed          = 'Changed';
 $lang->testcase->bugs             = 'Bugs Generated';
 $lang->testcase->bugsAB           = 'B';
 $lang->testcase->results          = 'Results';
+$lang->testcase->resultsAB        = 'R';
+$lang->testcase->stepNumber       = 'Number of steps';
+$lang->testcase->stepNumberAB     = 'S';
 $lang->testcase->createBug        = 'Convert to Bug';
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 

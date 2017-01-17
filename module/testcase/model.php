@@ -1058,6 +1058,9 @@ class testcaseModel extends model
             case 'results':
                 echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a(helper::createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;
                 break;
+            case 'stepNumber':
+                echo $case->stepNumber;
+                break;
             case 'actions':
                 common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe');
                 common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', '', '', 'results iframe');
@@ -1089,20 +1092,33 @@ class testcaseModel extends model
         $caseIdList = array_keys($cases);
         if($type == 'case')
         {
-            $caseBugs = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`case`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
-            $results  = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`case`')->in($caseIdList)->groupBy('`case`')->fetchPairs('case', 'count');
+            $caseBugs   = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`case`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
+            $results    = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`case`')->in($caseIdList)->groupBy('`case`')->fetchPairs('case', 'count');
+            $stepNumber = $this->dao->select('count(distinct t1.id) as count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.`case`=t2.`id`')
+                ->where('t1.`case`')->in($caseIdList)
+                ->andWhere('t1.version=t2.version')
+                ->groupBy('t1.`case`')
+                ->fetchPairs('case', 'count');
         }
         else
         {
             $caseBugs = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`result`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
             $results  = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`run`')->in($caseIdList)->groupBy('`run`')->fetchPairs('case', 'count');
+            $stepNumber = $this->dao->select('count(distinct t1.id) as count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
+                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.`case`=t2.`case`')
+                ->where('t2.`id`')->in($caseIdList)
+                ->andWhere('t1.version=t2.version')
+                ->groupBy('t1.`case`')
+                ->fetchPairs('case', 'count');
         }
 
         foreach($cases as $case)
         {
             $caseID = $type == 'case' ? $case->id : $case->case;
-            $case->bugs    = isset($caseBugs[$caseID]) ? $caseBugs[$caseID] : 0;
-            $case->results = isset($results[$caseID]) ? $results[$caseID] : 0;
+            $case->bugs       = isset($caseBugs[$caseID])   ? $caseBugs[$caseID]   : 0;
+            $case->results    = isset($results[$caseID])    ? $results[$caseID]    : 0;
+            $case->stepNumber = isset($stepNumber[$caseID]) ? $stepNumber[$caseID] : 0;
         }
 
         return $cases;

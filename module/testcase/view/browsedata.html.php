@@ -28,7 +28,8 @@
           <th class='w-80px {sorter:false}'>  <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
           <th class='w-100px {sorter:false}'> <?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
           <th class='w-30px' title='<?php echo $lang->testcase->bugs?>'> <?php echo $lang->testcase->bugsAB;?></th>
-          <th class='w-60px'> <?php echo $lang->testcase->results?></th>
+          <th class='w-30px' title='<?php echo $lang->testcase->results?>'> <?php echo $lang->testcase->resultsAB;?></th>
+          <th class='w-30px' title='<?php echo $lang->testcase->stepNumber?>'> <?php echo $lang->testcase->stepNumberAB;?></th>
           <th class='w-150px {sorter:false}'><?php echo $lang->actions;?></th>
           <?php endif;?>
         </tr>
@@ -71,8 +72,9 @@
           }
           ?>
         </td>
-        <td><?php echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(inlink('bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs?></td>
-        <td><?php echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a($this->createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results?></td>
+        <td><?php echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(inlink('bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;?></td>
+        <td><?php echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a($this->createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;?></td>
+        <td><?php echo $case->stepNumber;?></td>
         <td class='text-right'>
           <?php
           common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe');

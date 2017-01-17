@@ -72,7 +72,7 @@ $config->testcase->search['params']['openedDate']     = array('operator' => '=',
 $config->testcase->search['params']['lastEditedDate'] = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 
 $config->testcase->datatable = new stdclass();
-$config->testcase->datatable->defaultField = array('id', 'pri', 'title', 'type', 'openedBy', 'lastRunner', 'lastRunDate', 'lastRunResult', 'status', 'bugs', 'results', 'actions');
+$config->testcase->datatable->defaultField = array('id', 'pri', 'title', 'type', 'openedBy', 'lastRunner', 'lastRunDate', 'lastRunResult', 'status', 'bugs', 'results', 'stepNumber', 'actions');
 
 $config->testcase->datatable->fieldList['id']['title']    = 'idAB';
 $config->testcase->datatable->fieldList['id']['fixed']    = 'left';
@@ -149,10 +149,16 @@ $config->testcase->datatable->fieldList['bugs']['title']    = 'bugs';
 $config->testcase->datatable->fieldList['bugs']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['bugs']['width']    = '80';
 $config->testcase->datatable->fieldList['bugs']['required'] = 'no';
-$config->testcase->datatable->fieldList['bugs']['sort']      = 'no';
+$config->testcase->datatable->fieldList['bugs']['sort']     = 'no';
 
 $config->testcase->datatable->fieldList['results']['title']    = 'results';
 $config->testcase->datatable->fieldList['results']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['results']['width']    = '80';
 $config->testcase->datatable->fieldList['results']['required'] = 'no';
 $config->testcase->datatable->fieldList['results']['sort']     = 'no';
+
+$config->testcase->datatable->fieldList['stepNumber']['title']    = 'stepNumber';
+$config->testcase->datatable->fieldList['stepNumber']['fixed']    = 'no';
+$config->testcase->datatable->fieldList['stepNumber']['width']    = '80';
+$config->testcase->datatable->fieldList['stepNumber']['required'] = 'no';
+$config->testcase->datatable->fieldList['stepNumber']['sort']     = 'no';

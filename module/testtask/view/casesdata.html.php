@@ -25,7 +25,8 @@
           <th class='w-80px {sorter: false}'>    <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
           <th class='w-status {sorter: false}'>  <?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
           <th class='w-30px' title='<?php echo $lang->testcase->bugs?>'> <?php echo $lang->testcase->bugsAB;?></th>
-          <th class='w-60px'> <?php echo $lang->testcase->results?></th>
+          <th class='w-30px' title='<?php echo $lang->testcase->results?>'> <?php echo $lang->testcase->resultsAB;?></th>
+          <th class='w-30px' title='<?php echo $lang->testcase->stepNumber?>'> <?php echo $lang->testcase->stepNumberAB;?></th>
           <th class='w-120px {sorter: false}'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -55,8 +56,9 @@
           <td><?php if(!helper::isZeroDate($run->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($run->lastRunDate));?></td>
           <td class='<?php echo $run->lastRunResult;?>'><?php if($run->lastRunResult) echo $lang->testcase->resultList[$run->lastRunResult];?></td>
           <td class='<?php echo $run->status;?>'><?php echo ($run->version < $run->caseVersion) ? "<span class='warning'>{$lang->testcase->changed}</span>" : $lang->testtask->statusList[$run->status];?></td>
-          <td><?php echo (common::hasPriv('testcase', 'bugs') and $run->bugs) ? html::a($this->createLink('testcase', 'bugs', "runID={$run->id}&caseID={$run->case}"), $run->bugs, '', "class='iframe'") : $run->bugs?></td>
-          <td><?php echo (common::hasPriv('testtask', 'results') and $run->results) ? html::a($this->createLink('testtask', 'results', "runID={$run->id}&caseID={$run->case}"), $run->results, '', "class='iframe'") : $run->results?></td>
+          <td><?php echo (common::hasPriv('testcase', 'bugs') and $run->bugs) ? html::a($this->createLink('testcase', 'bugs', "runID={$run->id}&caseID={$run->case}"), $run->bugs, '', "class='iframe'") : $run->bugs;?></td>
+          <td><?php echo (common::hasPriv('testtask', 'results') and $run->results) ? html::a($this->createLink('testtask', 'results', "runID={$run->id}&caseID={$run->case}"), $run->results, '', "class='iframe'") : $run->results;?></td>
+          <td><?php echo $run->stepNumber;?></td>
           <td class='text-center'>
             <?php
             common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase iframe');

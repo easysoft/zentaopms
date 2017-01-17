@@ -722,10 +722,13 @@ class testtaskModel extends model
                 echo substr($assignedTo, strpos($assignedTo, ':') + 1);
                 break;
             case 'bugs':
-                echo $run->bugs;
+                echo (common::hasPriv('testcase', 'bugs') and $run->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID={$run->id}&caseID={$run->case}"), $run->bugs, '', "class='iframe'") : $run->bugs;
                 break;
             case 'results':
-                echo $run->results;
+                echo (common::hasPriv('testtask', 'results') and $run->results) ? html::a(helper::createLink('testtask', 'results', "runID={$run->id}&caseID={$run->case}"), $run->results, '', "class='iframe'") : $run->results;
+                break;
+            case 'stepNumber':
+                echo $run->stepNumber;
                 break;
             case 'actions':
                 common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase iframe');

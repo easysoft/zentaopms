@@ -46,7 +46,10 @@ $lang->testcase->toBug            = '生成Bug';
 $lang->testcase->changed          = '用例变更';
 $lang->testcase->bugs             = '产生Bug数';
 $lang->testcase->bugsAB           = 'B';
-$lang->testcase->results          = '执行数';
+$lang->testcase->results          = '执行结果数';
+$lang->testcase->resultsAB        = 'R';
+$lang->testcase->stepNumber       = '用例步骤数';
+$lang->testcase->stepNumberAB     = 'S';
 $lang->testcase->createBug        = '转Bug';
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 

@@ -47,7 +47,7 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
     ?>
       <tfoot>
         <tr>
-          <?php $mergeColums = $browseType == 'needconfirm' ? 5 : 12;?>
+          <?php $mergeColums = $browseType == 'needconfirm' ? 5 : 13;?>
           <td colspan='<?php echo $mergeColums?>'>
             <?php if($cases):?>
             <div class='table-actions clearfix'>
