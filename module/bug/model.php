@@ -640,7 +640,8 @@ class bugModel extends model
      */
     public function confirm($bugID)
     {
-        $now = helper::now();
+        $now    = helper::now();
+        $oldBug = $this->getById($bugID);
 
         $bug = fixer::input('post')
             ->setDefault('confirmed', 1)
@@ -651,6 +652,8 @@ class bugModel extends model
             ->get();
 
         $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
+
+        if(!dao::isError()) return common::createChanges($oldBug, $bug);
     }
 
     /**

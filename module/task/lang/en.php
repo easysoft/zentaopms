@@ -17,6 +17,7 @@ $lang->task->batchChangeModule  = "Batch Change Module";
 $lang->task->edit               = "Update";
 $lang->task->delete             = "Delete";
 $lang->task->deleted            = "Deleted";
+$lang->task->delayed            = 'Delayed';
 $lang->task->view               = "Info";
 $lang->task->logEfforts         = "Man-Hour Log";
 $lang->task->record             = "Est.";

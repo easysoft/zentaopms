@@ -44,10 +44,10 @@ $lang->testcase->allProduct       = "All {$lang->productCommon}";
 $lang->testcase->fromBug          = 'From Bug';
 $lang->testcase->toBug            = 'To Bug';
 $lang->testcase->changed          = 'Changed';
-$lang->testcase->bugs             = '产生Bug数';
+$lang->testcase->bugs             = 'Bugs Generated';
 $lang->testcase->bugsAB           = 'B';
-$lang->testcase->results          = '执行数';
-$lang->testcase->createBug        = 'Transfer Bug';
+$lang->testcase->results          = 'Results';
+$lang->testcase->createBug        = 'Convert to Bug';
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
 $lang->testcase->stepID     = 'ID';

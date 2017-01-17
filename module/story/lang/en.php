@@ -290,3 +290,6 @@ $lang->story->placeholder->estimate = $lang->story->hour;
 
 $lang->story->chosen = new stdClass();
 $lang->story->chosen->reviewedBy = 'Choose Reviewer';
+
+$lang->story->notice = new stdClass();
+$lang->story->notice->closed = 'Stories you selected have already been closed!';

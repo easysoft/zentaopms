@@ -86,7 +86,7 @@ foreach(explode(',', $showFields) as $field)
         <td style='overflow:visible'>
           <div class='input-group'>
           <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->bug->colorTag}' data-update-text='#title\\[{$i}\\]'");?>
-          <?php echo html::input("title[$i]", $bugTitle, 'class=form-control') . html::hidden("uploadImage[$i]", $fileName);?>
+          <?php echo html::input("title[$i]", $bugTitle, "class='form-control' autocomplete='off'") . html::hidden("uploadImage[$i]", $fileName);?>
           </div>
         </td>
         <td class='<?php echo zget($visibleFields, 'steps', 'hidden')?>'>   <?php echo html::textarea("stepses[$i]", '', "rows='1' class='form-control autosize'");?></td>
@@ -95,7 +95,7 @@ foreach(explode(',', $showFields) as $field)
         <td class='<?php echo zget($visibleFields, 'severity', 'hidden')?>'><?php echo html::select("severities[$i]", $lang->bug->severityList, '', "class='form-control'");?></td>
         <td class='<?php echo zget($visibleFields, 'os', 'hidden')?>'>      <?php echo html::select("oses[$i]", $lang->bug->osList, $os, "class='form-control'");?></td>
         <td class='<?php echo zget($visibleFields, 'browser', 'hidden')?>'> <?php echo html::select("browsers[$i]", $lang->bug->browserList, $browser, "class='form-control'");?></td>
-        <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input("keywords[$i]", '', 'class=form-control');?></td>
+        <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input("keywords[$i]", '', "class='form-control' autocomplete='off'");?></td>
       </tr>
       <?php $i++;?>
       <?php endforeach;?>
@@ -119,7 +119,7 @@ foreach(explode(',', $showFields) as $field)
         <td style='overflow:visible'>
           <div class='input-group'>
           <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->bug->colorTag}' data-update-text='#title\\[{$i}\\]'");?>
-          <?php echo html::input("title[$i]", '', 'class=form-control');?>
+          <?php echo html::input("title[$i]", '', "class='form-control' autocomplete='off'");?>
           </div>
         </td>
         <td class='<?php echo zget($visibleFields, 'steps', 'hidden')?>'>   <?php echo html::textarea("stepses[$i]", '', "rows='1' class='form-control autosize'");?></td>
@@ -128,7 +128,7 @@ foreach(explode(',', $showFields) as $field)
         <td class='<?php echo zget($visibleFields, 'severity', 'hidden')?>'><?php echo html::select("severities[$i]", $lang->bug->severityList, '', "class='form-control'");?></td>
         <td class='<?php echo zget($visibleFields, 'os', 'hidden')?>'>      <?php echo html::select("oses[$i]", $lang->bug->osList, $os, "class='form-control'");?></td>
         <td class='<?php echo zget($visibleFields, 'browser', 'hidden')?>'> <?php echo html::select("browsers[$i]", $lang->bug->browserList, $browser, "class='form-control'");?></td>
-        <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input("keywords[$i]", '', 'class=form-control');?></td>
+        <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input("keywords[$i]", '', "class='form-control' autocomplete='off'");?></td>
       </tr>
       <?php endfor;?>
     </tbody>
@@ -148,7 +148,7 @@ foreach(explode(',', $showFields) as $field)
       <td style='overflow:visible'>
         <div class='input-group'>
         <?php echo html::hidden("color[%s]", '', "data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->bug->colorTag}' data-update-text='#title\\[%s\\]'");?>
-        <?php echo html::input("title[%s]", '', 'class=form-control');?>
+        <?php echo html::input("title[%s]", '', "class='form-control' autocomplete='off'");?>
         </div>
       </td>
       <td class='<?php echo zget($visibleFields, 'steps', 'hidden')?>'>   <?php echo html::textarea("stepses[%s]", '', "rows='1' class='form-control autosize'");?></td>
@@ -157,7 +157,7 @@ foreach(explode(',', $showFields) as $field)
       <td class='<?php echo zget($visibleFields, 'severity', 'hidden')?>'><?php echo html::select("severities[%s]", $lang->bug->severityList, '', "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'os', 'hidden')?>'>      <?php echo html::select("oses[%s]", $lang->bug->osList, '', "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'browser', 'hidden')?>'> <?php echo html::select("browsers[%s]", $lang->bug->browserList, '', "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input("keywords[%s]", '', 'class=form-control');?></td>
+      <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input("keywords[%s]", '', "class='form-control' autocomplete='off'");?></td>
     </tr>
   </tbody>
 </table>
