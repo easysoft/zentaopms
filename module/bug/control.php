@@ -785,9 +785,10 @@ class bug extends control
     {
         if(!empty($_POST))
         {
-            $this->bug->confirm($bugID);
+            $changes = $this->bug->confirm($bugID);
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('bug', $bugID, 'bugConfirmed', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
             $this->bug->sendmail($bugID, $actionID);
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
