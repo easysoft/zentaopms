@@ -338,7 +338,7 @@ class block extends control
 
                 $sso = base64_decode($this->get->sso);
                 $this->view->sso  = $sso;
-                $this->view->sign = strpos($sso, '&') === false ? '?' : '&';
+                $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
             }
 
             $this->viewType   = (isset($params->viewType) and $params->viewType == 'json') ? 'json' : 'html';
