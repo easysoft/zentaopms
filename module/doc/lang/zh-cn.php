@@ -84,7 +84,7 @@ $lang->doc->aclList['open']    = '公开';
 $lang->doc->aclList['custom']  = '自定义';
 $lang->doc->aclList['private'] = '私有';
 
-$lang->doc->types['text'] = '网页';
+$lang->doc->types['text'] = '文档';
 $lang->doc->types['url']  = '链接';
 
 $lang->doc->contentTypeList['html']     = 'HTML';
