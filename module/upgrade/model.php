@@ -1293,7 +1293,7 @@ class upgradeModel extends model
         if($type == 'comment')
         {
             $comments = $this->dao->select('id,objectType,objectID,comment')->from(TABLE_ACTION)->where('comment')->like('%data/upload/%')->andWhere('id')->gt($lastID)->orderBy('id')->limit($limit)->fetchAll('id');
-            foreach($comments as $comment)
+            foreach($comments as $action)
             {
                 $files = array();
                 preg_match_all('/"data\/upload\/.*1\/([0-9]{6}\/[^"]+)"/', $action->comment, $output);
