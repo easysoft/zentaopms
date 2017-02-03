@@ -155,10 +155,12 @@ $lang->product->methodOrder[70] = 'all';
 /* Branch. */
 $lang->resource->branch = new stdclass();
 $lang->resource->branch->manage = 'manage';
+$lang->resource->branch->sort   = 'sort';
 $lang->resource->branch->delete = 'delete';
 
-$lang->branch->methodOrder[0] = 'manage';
-$lang->branch->methodOrder[5] = 'delete';
+$lang->branch->methodOrder[0]  = 'manage';
+$lang->branch->methodOrder[5]  = 'sort';
+$lang->branch->methodOrder[10] = 'delete';
 
 /* Story. */
 $lang->resource->story = new stdclass();
@@ -178,6 +180,8 @@ $lang->resource->story->close       = 'lblClose';
 $lang->resource->story->batchClose  = 'batchClose';
 $lang->resource->story->activate    = 'lblActivate';
 $lang->resource->story->tasks       = 'tasks';
+$lang->resource->story->bugs        = 'bugs';
+$lang->resource->story->cases       = 'cases';
 $lang->resource->story->zeroCase    = 'zeroCase';
 $lang->resource->story->report      = 'reportChart';
 $lang->resource->story->batchChangePlan   = 'batchChangePlan';
@@ -202,12 +206,14 @@ $lang->story->methodOrder[65]  = 'batchChangeStage';
 $lang->story->methodOrder[70]  = 'batchAssignTo';
 $lang->story->methodOrder[75]  = 'activate';
 $lang->story->methodOrder[80]  = 'tasks';
-$lang->story->methodOrder[85]  = 'zeroCase';
-$lang->story->methodOrder[90]  = 'report';
-$lang->story->methodOrder[95]  = 'linkStory';
-$lang->story->methodOrder[100] = 'unlinkStory';
-$lang->story->methodOrder[105] = 'batchChangeBranch';
-$lang->story->methodOrder[110] = 'batchChangeModule';
+$lang->story->methodOrder[85]  = 'bugs';
+$lang->story->methodOrder[90]  = 'cases';
+$lang->story->methodOrder[95]  = 'zeroCase';
+$lang->story->methodOrder[100] = 'report';
+$lang->story->methodOrder[105] = 'linkStory';
+$lang->story->methodOrder[110] = 'unlinkStory';
+$lang->story->methodOrder[115] = 'batchChangeBranch';
+$lang->story->methodOrder[120] = 'batchChangeModule';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
@@ -506,6 +512,7 @@ $lang->resource->testcase->showImport         = 'showImport';
 $lang->resource->testcase->confirmChange      = 'confirmChange';
 $lang->resource->testcase->confirmStoryChange = 'confirmStoryChange';
 $lang->resource->testcase->batchChangeModule  = 'batchChangeModule';
+$lang->resource->testcase->bugs               = 'bugs';
 
 $lang->testcase->methodOrder[0]  = 'index';
 $lang->testcase->methodOrder[5]  = 'browse';
@@ -524,26 +531,28 @@ $lang->testcase->methodOrder[65] = 'batchDelete';
 $lang->testcase->methodOrder[70] = 'batchChangeModule';
 $lang->testcase->methodOrder[75] = 'linkCases';
 $lang->testcase->methodOrder[80] = 'unlinkCase';
+$lang->testcase->methodOrder[85] = 'bugs';
 
 /* Test task. */
 $lang->resource->testtask = new stdclass();
-$lang->resource->testtask->index       = 'index';
-$lang->resource->testtask->create      = 'create';
-$lang->resource->testtask->browse      = 'browse';
-$lang->resource->testtask->view        = 'view';
-$lang->resource->testtask->cases       = 'lblCases';
-$lang->resource->testtask->groupCase   = 'groupCase';
-$lang->resource->testtask->edit        = 'edit';
-$lang->resource->testtask->start       = 'start';
-$lang->resource->testtask->close       = 'close';
-$lang->resource->testtask->delete      = 'delete';
-$lang->resource->testtask->batchAssign = 'batchAssign';
-$lang->resource->testtask->linkcase    = 'linkCase';
-$lang->resource->testtask->unlinkcase  = 'lblUnlinkCase';
-$lang->resource->testtask->runcase     = 'lblRunCase';
-$lang->resource->testtask->results     = 'lblResults';
-$lang->resource->testtask->results     = 'lblResults';
-$lang->resource->testtask->batchRun    = 'batchRun';
+$lang->resource->testtask->index            = 'index';
+$lang->resource->testtask->create           = 'create';
+$lang->resource->testtask->browse           = 'browse';
+$lang->resource->testtask->view             = 'view';
+$lang->resource->testtask->cases            = 'lblCases';
+$lang->resource->testtask->groupCase        = 'groupCase';
+$lang->resource->testtask->edit             = 'edit';
+$lang->resource->testtask->start            = 'start';
+$lang->resource->testtask->close            = 'close';
+$lang->resource->testtask->delete           = 'delete';
+$lang->resource->testtask->batchAssign      = 'batchAssign';
+$lang->resource->testtask->linkcase         = 'linkCase';
+$lang->resource->testtask->unlinkcase       = 'lblUnlinkCase';
+$lang->resource->testtask->batchUnlinkCases = 'batchUnlinkCases';
+$lang->resource->testtask->runcase          = 'lblRunCase';
+$lang->resource->testtask->results          = 'lblResults';
+$lang->resource->testtask->results          = 'lblResults';
+$lang->resource->testtask->batchRun         = 'batchRun';
 
 $lang->testtask->methodOrder[0]  = 'index';
 $lang->testtask->methodOrder[5]  = 'create';
@@ -560,6 +569,7 @@ $lang->testtask->methodOrder[55] = 'linkcase';
 $lang->testtask->methodOrder[60] = 'unlinkcase';
 $lang->testtask->methodOrder[65] = 'runcase';
 $lang->testtask->methodOrder[70] = 'results';
+$lang->testtask->methodOrder[75] = 'batchUnlinkCases';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();
@@ -601,6 +611,7 @@ $lang->resource->mail->test   = 'test';
 $lang->resource->mail->reset  = 'reset';
 $lang->resource->mail->browse = 'browse';
 $lang->resource->mail->delete = 'delete';
+$lang->resource->mail->resend = 'resend';
 $lang->resource->mail->batchDelete   = 'batchDelete';
 $lang->resource->mail->sendCloud     = 'sendCloud';
 $lang->resource->mail->sendcloudUser = 'sendcloudUser';
@@ -614,8 +625,9 @@ $lang->mail->methodOrder[30] = 'reset';
 $lang->mail->methodOrder[35] = 'browse';
 $lang->mail->methodOrder[40] = 'delete';
 $lang->mail->methodOrder[45] = 'batchDelete';
-$lang->mail->methodOrder[50] = 'sendCloud';
-$lang->mail->methodOrder[55] = 'sendcloudUser';
+$lang->mail->methodOrder[50] = 'resend';
+$lang->mail->methodOrder[55] = 'sendCloud';
+$lang->mail->methodOrder[60] = 'sendcloudUser';
 
 /* custom. */
 $lang->resource->custom = new stdclass();
@@ -1180,3 +1192,10 @@ $lang->changelog['8.2.beta'][] = 'project-tree';
 $lang->changelog['8.3'][] = 'doc-allLibs';
 $lang->changelog['8.3'][] = 'doc-objectLibs';
 $lang->changelog['8.3'][] = 'doc-showFiles';
+
+$lang->changelog['8.4'][] = 'branch-sort';
+$lang->changelog['8.4'][] = 'story-bugs';
+$lang->changelog['8.4'][] = 'story-cases';
+
+$lang->changelog['9.0'][] = 'testcase-bugs';
+$lang->changelog['9.0'][] = 'mail-resend';

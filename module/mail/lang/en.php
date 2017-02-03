@@ -1,24 +1,29 @@
 <?php
 $lang->mail->common = 'Email Settings';
-$lang->mail->index  = 'Homepage';
+$lang->mail->index  = 'Home';
 $lang->mail->detect = 'Testing';
 $lang->mail->edit   = 'Edit Settings';
 $lang->mail->save   = 'Saved';
 $lang->mail->test   = 'Email Testing';
 $lang->mail->reset  = 'Reset';
+$lang->mail->resend = 'Resend';
 $lang->mail->browse = 'Email List';
 $lang->mail->delete = 'Delete Email';
-$lang->mail->sendCloud     = 'Send Cloud Email';
+$lang->mail->ztCloud       = 'ZenTao CloudMail';
+$lang->mail->sendCloud     = 'Notice SendCloud';
 $lang->mail->batchDelete   = 'Batch Delete';
 $lang->mail->sendcloudUser = 'Sync Contact';
+$lang->mail->agreeLicense  = 'Yes';
+$lang->mail->disagree      = 'No';
 
 $lang->mail->turnon      = 'Turn On';
 $lang->mail->async       = 'Asynchronous';
 $lang->mail->fromAddress = 'Email Address';
 $lang->mail->fromName    = 'Sender';
+$lang->mail->domain      = 'Domain';
 $lang->mail->host        = 'SMTP Server';
 $lang->mail->port        = 'SMTP Port';
-$lang->mail->auth        = 'Verification Required';
+$lang->mail->auth        = 'Acceptance Required';
 $lang->mail->username    = 'SMTP Account';
 $lang->mail->password    = 'SMTP Password';
 $lang->mail->secure      = 'Secure';
@@ -26,9 +31,10 @@ $lang->mail->debug       = 'Debug';
 $lang->mail->charset     = 'Charset';
 $lang->mail->accessKey   = 'Access Key';
 $lang->mail->secretKey   = 'Secret Key';
+$lang->mail->license     = 'ZenTao Cloud Notice';
 
-$lang->mail->selectMTA = 'Email MTA';
-$lang->mail->smtp      = 'SMTP Email';
+$lang->mail->selectMTA = 'Select MTA';
+$lang->mail->smtp      = 'SMTP';
 
 $lang->mail->syncedUser = 'Synchronized';
 $lang->mail->unsyncUser = 'Not Synchronized';
@@ -63,6 +69,8 @@ $lang->mail->secureList['']    = 'Plain';
 $lang->mail->secureList['ssl'] = 'ssl';
 $lang->mail->secureList['tls'] = 'tls';
 
+$lang->mail->more           = 'More';
+$lang->mail->noticeResend   = 'Sent it again!';
 $lang->mail->inputFromEmail = 'Enter Email Address';
 $lang->mail->nextStep       = 'Next';
 $lang->mail->successSaved   = 'Configuration has been saved.';
@@ -72,13 +80,31 @@ $lang->mail->successSended  = 'Sent!';
 $lang->mail->confirmDelete  = 'Do you want to delete it?';
 $lang->mail->sendmailTips   = 'Note: Email author will not receive this email.';
 $lang->mail->needConfigure  = 'Email configuration is not found. Please cinfigure the Email first.';
+$lang->mail->connectFail    = 'Connection to ZenTao failed.';
+$lang->mail->centifyFail    = 'Verification failed. Please try to bind again!';
 $lang->mail->nofsocket      = 'fsocket related function has been deactivated. Mails cannot send out. Please modify allow_url_fopen in php.ini to turn on Onopenssl, and restart Apache.';
 $lang->mail->noOpenssl      = 'Please turn on Onopenssl, and restart Apache.';
+$lang->mail->disableSecure  = 'No openssl. Disable ssl and tls.';
 $lang->mail->sendCloudFail  = 'Failed. Reason:';
 $lang->mail->sendCloudHelp  = <<<EOD
-<p>1、Notice SendCloud是SendCloud的Team通知服务。具体可以到<a href="http://notice.sendcloud.net/" target="_blank">notice.sendcloud.net</a>查看</p>
-<p>2、accessKey和secretKey可以到登陆后的"设置"页面查看。Email人地址和名称也在"设置"页面设置。</p>
-<p>3、Email时，Notice SendCloudContact里面的昵称要跟Email一致，否则无法成功Email。可以到[<a href='%s'>同步Contact</a>]页面，将ZenTaoUser同步到SendCloudContact中</p>
+
+
+
 EOD;
-$lang->mail->sendCloudSuccess = '操作成功';
-$lang->mail->closeSendCloud   = '关闭发送';
+$lang->mail->sendCloudSuccess = 'Done';
+$lang->mail->closeSendCloud   = 'Close';
+$lang->mail->addressWhiteList = 'Please add the email to the whilte list on email server to avoid be treated as spam';
+$lang->mail->ztCloudNotice    = <<<EOD
+
+
+
+
+
+
+
+
+
+EOD;
+
+$lang->mail->placeholder = new stdclass();
+$lang->mail->placeholder->password = 'Some mail needs to fill in the auth code, specific to the mailbox related settings query.';

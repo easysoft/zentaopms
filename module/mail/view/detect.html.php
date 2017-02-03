@@ -21,7 +21,7 @@ include '../../common/view/header.html.php';
   </div>
   <form class='form-condensed pdt-20' method='post' target='hiddenwin'>
     <table class='table table-form'>
-      <tr><th class='w-p25'><?php echo $lang->mail->inputFromEmail; ?></th><td class='w-p50'><?php echo html::input('fromAddress', $fromAddress, "class='form-control'");?></td><td><?php echo html::submitButton($lang->mail->nextStep);?></td></tr>
+      <tr><th class='w-p25'><?php echo $lang->mail->inputFromEmail; ?></th><td class='w-p50'><?php echo html::input('fromAddress', $fromAddress, "class='form-control' autocomplete='off'");?></td><td><?php echo html::submitButton($lang->mail->nextStep);?></td></tr>
     </table>
   </form>
 </div>

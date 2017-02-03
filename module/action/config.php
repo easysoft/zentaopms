@@ -15,5 +15,6 @@ $config->action->objectNameFields['doc']         = 'title';
 $config->action->objectNameFields['doclib']      = 'name';
 $config->action->objectNameFields['todo']        = 'name';
 $config->action->objectNameFields['branch']      = 'name';
+$config->action->objectNameFields['module']      = 'name';
 
 $config->action->commonImgSize = 870;

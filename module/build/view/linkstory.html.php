@@ -13,7 +13,7 @@
 <div id='querybox' class='show'></div>
 <div id='unlinkStoryList'>
   <form method='post' id='unlinkedStoriesForm' target='hiddenwin' action='<?php echo $this->createLink('build', 'linkStory', "buildID={$build->id}&browseType=$browseType&param=$param");?>'>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed'> 
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable'> 
     <caption class='text-left text-special'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedStories;?></strong></caption>
       <thead>
         <tr>
@@ -31,8 +31,8 @@
       <?php foreach($allStories as $story):?>
       <?php if(strpos(",{$build->stories},", ",{$story->id},") !== false) continue; ?>
       <tr>
-        <td class='text-left'>
-          <input class='ml-10px' type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' <?php if($story->stage == 'developed' or $story->status == 'closed') echo 'checked';?> /> 
+        <td class='cell-id'>
+          <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' <?php if($story->stage == 'developed' or $story->status == 'closed') echo 'checked';?> /> 
           <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->id);?>
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>

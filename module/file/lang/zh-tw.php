@@ -13,6 +13,7 @@ $lang->file = new stdclass();
 $lang->file->common        = '附件';
 $lang->file->uploadImages  = '多圖上傳';
 $lang->file->download      = '下載附件';
+$lang->file->uploadDate    = '上傳時間：';
 $lang->file->edit          = '重命名';
 $lang->file->inputFileName = '請輸入附件名稱';
 $lang->file->delete        = '刪除附件';
@@ -24,6 +25,7 @@ $lang->file->setPublic     = "設置公共模板";
 $lang->file->exportFields  = "要導出欄位";
 $lang->file->defaultTPL    = "預設模板";
 $lang->file->setExportTPL  = "設置";
+$lang->file->preview       = "預覽";
 
 $lang->file->errorNotExists   = "<span class='red'>檔案夾 '%s' 不存在</span>";
 $lang->file->errorCanNotWrite = "<span class='red'>檔案夾 '%s' 不可寫,請改變檔案夾的權限。在linux中輸入指令:sudo chmod -R 777 '%s'</span>";

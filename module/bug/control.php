@@ -151,11 +151,12 @@ class bug extends control
      * 
      * @param  int    $productID 
      * @param  string $browseType 
+     * @param  int    $branchID
      * @param  int    $moduleID 
      * @access public
      * @return void
      */
-    public function report($productID, $browseType, $moduleID)
+    public function report($productID, $browseType, $branchID, $moduleID)
     {
         $this->loadModel('report');
         $this->view->charts   = array();
@@ -174,7 +175,7 @@ class bug extends control
             }
         }
 
-        $this->bug->setMenu($this->products, $productID);
+        $this->bug->setMenu($this->products, $productID, $branchID);
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common . $this->lang->colon . $this->lang->bug->reportChart;
         $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]    = $this->lang->bug->reportChart;
@@ -221,7 +222,7 @@ class bug extends control
             }
 
             $actionID = $this->action->create('bug', $bugID, 'Opened');
-            $this->sendmail($bugID, $actionID);
+            $this->bug->sendmail($bugID, $actionID);
 
             $location = $this->createLink('bug', 'browse', "productID={$this->post->product}&branch=$branch&type=byModule&param={$this->post->module}");
             $response['locate'] = isset($_SESSION['bugList']) ? $this->session->bugList : $location;
@@ -361,7 +362,7 @@ class bug extends control
         if(!empty($_POST))
         {
             $actions = $this->bug->batchCreate($productID, $branch);
-            foreach($actions as $bugID => $actionID) $this->sendmail($bugID, $actionID);
+            foreach($actions as $bugID => $actionID) $this->bug->sendmail($bugID, $actionID);
             die(js::locate($this->session->bugList, 'parent'));
         }
 
@@ -395,14 +396,26 @@ class bug extends control
         }
 
         /* Set custom. */
-        foreach(explode(',', $this->config->bug->list->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
+        $product  = $this->product->getById($productID);
+        foreach(explode(',', $this->config->bug->list->customBatchCreateFields) as $field)
+        {
+            if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
+            $customFields[$field] = $this->lang->bug->$field;
+        }
+        $showFields = $this->config->bug->custom->batchCreateFields;
+        if($product->type == 'normal')
+        {
+            $showFields = str_replace(array(0 => ",branch,", 1 => ",platform,"), '', ",$showFields,");
+            $showFields = trim($showFields, ',');
+        }
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->bug->custom->batchCreateFields;
+        $this->view->showFields   = $showFields;
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchCreate;
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->batchCreate;
 
+        $this->view->product          = $product;
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;
@@ -432,6 +445,8 @@ class bug extends control
         if($bug->project and !$this->loadModel('project')->checkPriv($this->project->getByID($bug->project)))
         {
             echo(js::alert($this->lang->project->accessDenied));
+            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
             die(js::locate('back'));
         }
 
@@ -490,7 +505,7 @@ class bug extends control
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
                 $actionID = $this->action->create('bug', $bugID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->sendmail($bugID, $actionID);
+                $this->bug->sendmail($bugID, $actionID);
             }
 
             $bug = $this->bug->getById($bugID);
@@ -585,7 +600,7 @@ class bug extends control
 
                 $actionID = $this->action->create('bug', $bugID, 'Edited');
                 $this->action->logHistory($actionID, $changes);
-                $this->sendmail($bugID, $actionID);
+                $this->bug->sendmail($bugID, $actionID);
 
                 $bug = $this->bug->getById($bugID);
                 if($bug->toTask != 0) 
@@ -689,7 +704,7 @@ class bug extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('bug', $bugID, 'Assigned', $this->post->comment, $this->post->assignedTo);
             $this->action->logHistory($actionID, $changes);
-            $this->sendmail($bugID, $actionID);
+            $this->bug->sendmail($bugID, $actionID);
 
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
@@ -725,7 +740,7 @@ class bug extends control
                 $this->loadModel('action');
                 $actionID = $this->action->create('bug', $bugID, 'Edited');
                 $this->action->logHistory($actionID, $changes);
-                $this->sendmail($bugID, $actionID);
+                $this->bug->sendmail($bugID, $actionID);
             }
         }
         die(js::locate($this->session->bugList, 'parent'));
@@ -751,10 +766,11 @@ class bug extends control
                 if(dao::isError()) die(js::error(dao::getError()));
                 $actionID = $this->action->create('bug', $bugID, 'Assigned', $this->post->comment, $this->post->assignedTo);
                 $this->action->logHistory($actionID, $changes);
-                $this->sendmail($bugID, $actionID);
+                $this->bug->sendmail($bugID, $actionID);
             }
         }
         if($type == 'product') die(js::locate($this->createLink('bug', 'browse', "productID=$projectID")));
+        if($type == 'my')      die(js::locate($this->createLink('my', 'bug')));
         die(js::locate($this->createLink('project', 'bug', "projectID=$projectID")));
     }
 
@@ -769,10 +785,11 @@ class bug extends control
     {
         if(!empty($_POST))
         {
-            $this->bug->confirm($bugID);
+            $changes = $this->bug->confirm($bugID);
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('bug', $bugID, 'bugConfirmed', $this->post->comment);
-            $this->sendmail($bugID, $actionID);
+            $this->action->logHistory($actionID, $changes);
+            $this->bug->sendmail($bugID, $actionID);
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
@@ -805,7 +822,7 @@ class bug extends control
         foreach($bugIDList as $bugID)
         {
             $actionID = $this->action->create('bug', $bugID, 'bugConfirmed');
-            $this->sendmail($bugID, $actionID);
+            $this->bug->sendmail($bugID, $actionID);
         }
         die(js::locate($this->session->bugList, 'parent'));
     }
@@ -827,7 +844,7 @@ class bug extends control
 
             $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
             $actionID = $this->action->create('bug', $bugID, 'Resolved', $fileAction . $this->post->comment, $this->post->resolution . ($this->post->duplicateBug ? ':' . (int)$this->post->duplicateBug : ''));
-            $this->sendmail($bugID, $actionID);
+            $this->bug->sendmail($bugID, $actionID);
 
             $bug = $this->bug->getById($bugID);
             if($bug->toTask != 0) 
@@ -883,7 +900,7 @@ class bug extends control
         foreach($bugIDList as $bugID)
         {
             $actionID = $this->action->create('bug', $bugID, 'Resolved', '', $resolution);
-            $this->sendmail($bugID, $actionID);
+            $this->bug->sendmail($bugID, $actionID);
         }
         die(js::locate($this->session->bugList, 'parent'));
     }
@@ -903,7 +920,7 @@ class bug extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $files = $this->loadModel('file')->saveUpload('bug', $bugID);
             $actionID = $this->action->create('bug', $bugID, 'Activated', $this->post->comment);
-            $this->sendmail($bugID, $actionID);
+            $this->bug->sendmail($bugID, $actionID);
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
@@ -938,7 +955,7 @@ class bug extends control
             $this->bug->close($bugID);
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('bug', $bugID, 'Closed', $this->post->comment);
-            $this->sendmail($bugID, $actionID);
+            $this->bug->sendmail($bugID, $actionID);
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
@@ -1070,7 +1087,7 @@ class bug extends control
                 $this->bug->close($bugID);
 
                 $actionID = $this->action->create('bug', $bugID, 'Closed');
-                $this->sendmail($bugID, $actionID);
+                $this->bug->sendmail($bugID, $actionID);
             }
 
             if(isset($skipBugs)) echo js::alert(sprintf($this->lang->bug->skipClose, join(',', $skipBugs)));
@@ -1251,64 +1268,6 @@ class bug extends control
     }
 
     /**
-     * Send email.
-     * 
-     * @param  int    $bugID 
-     * @param  int    $actionID 
-     * @access public
-     * @return void
-     */
-    public function sendmail($bugID, $actionID)
-    {
-        /* Reset $this->output. */
-        $this->clear();
-
-        /* Set toList and ccList. */
-        $bug         = $this->bug->getByID($bugID);
-        $productName = $this->products[$bug->product];
-        $toList      = $bug->assignedTo;
-        $ccList      = trim($bug->mailto, ',');
-        if($toList == '')
-        {
-            if($ccList == '') return;
-            if(strpos($ccList, ',') === false)
-            {
-                $toList = $ccList;
-                $ccList = '';
-            }
-            else
-            {
-                $commaPos = strpos($ccList, ',');
-                $toList = substr($ccList, 0, $commaPos);
-                $ccList = substr($ccList, $commaPos + 1);
-            }
-        }
-        elseif(strtolower($toList) == 'closed')
-        {
-            $toList = $bug->resolvedBy;
-        }
-
-        /* Get action info. */
-        $actions         = $this->action->getList('bug', $bugID);
-        $action          = zget($actions, $actionID, null);
-        $history         = $this->action->getHistory($actionID);
-        $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
-        if(strtolower($action->action) == 'opened') $action->comment = $bug->steps;
-
-        /* Create the mail content. */
-        if($action->action == 'opened') $action->comment = '';
-        $this->view->bug    = $bug;
-        $this->view->action = $action;
-        $this->view->users  = $this->user->getPairs('noletter');
-
-        $mailContent = $this->parse($this->moduleName, 'sendmail');
-
-        /* Send it. */
-        $this->loadModel('mail')->send($toList, 'BUG #'. $bug->id . ' ' . $bug->title . ' - ' . $productName, $mailContent, $ccList);
-        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
-    }
-
-    /**
      * Get data to export 
      * 
      * @param  string $productID 
@@ -1320,6 +1279,7 @@ class bug extends control
     {
         if($_POST)
         {
+            $this->loadModel('file');
             $bugLang   = $this->lang->bug;
             $bugConfig = $this->config->bug;
 
@@ -1456,7 +1416,7 @@ class bug extends control
                 {
                     foreach($relatedFiles[$bug->id] as $file)
                     {
-                        $fileURL = 'http://' . $this->server->http_host . $this->config->webRoot . "data/upload/{$this->app->company->id}/" . $file->pathname;
+                        $fileURL = common::getSysURL() . $this->file->webPath . $file->pathname;
                         $bug->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
                     }
                 }

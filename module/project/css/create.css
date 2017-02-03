@@ -9,9 +9,11 @@
 #copyProjectModal a > i {display: inline-block; margin-right: 5px;}
 #copyProjectModal a:hover {border:1px solid #39B3D7; background-color: #E5F9FF; text-decoration: none}
 #copyProjectModal a.active {border-color: #229F24; color: #229F24; background-color: #E5FFE6}
-#copyProjectModal a.active:after {position: absolute; content: '\e60d'; font-family: ZenIcon; font-size: 20px; right: 25px;}
+#copyProjectModal a.active:after {position: absolute; content: '\e60d'; font-family: NewZenIcon; font-size: 20px; right: 25px;}
 #copyProjectModal a.cancel {color: #D2322D}
 
 .modal-dialog {margin-top: 10%!important;}
 
 .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {margin-top: 1px;}
+
+.type-tips {display: none; margin: 5px 0; color: #545454;}

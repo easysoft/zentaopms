@@ -17,13 +17,14 @@ include '../../common/view/tablesorter.html.php';
 <div id='querybox' class='show'></div>
 <div id='unlinkStoryList'>
   <form method='post' id='unlinkedStoriesForm' target='hiddenwin' action='<?php echo $this->createLink('productplan', 'linkStory', "planID=$plan->id&browseType=$browseType&param=$param&orderBy=$orderBy")?>'>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed'> 
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable'> 
     <caption class='text-left text-special'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedStories;?></strong></caption>
       <thead>
         <tr>
           <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
           <th class='w-pri'>   <?php echo $lang->priAB;?></th>
           <th class='w-200px'> <?php echo $lang->story->plan;?></th>
+          <th class='w-80px'>  <?php echo $lang->story->module;?></th>
           <th>                 <?php echo $lang->story->title;?></th>
           <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
           <th class='w-user'>  <?php echo $lang->assignedToAB;?></th>
@@ -36,12 +37,13 @@ include '../../common/view/tablesorter.html.php';
       <?php foreach($allStories as $story):?>
       <?php if(isset($planStories[$story->id])) continue; ?>
       <tr>
-        <td class='text-left'>
-          <input class='ml-10px' type='checkbox' name='stories[]'  value='<?php echo $story->id;?>'/> 
+        <td class='cell-id'>
+          <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>'/> 
           <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->id);?>
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
         <td><?php echo $story->planTitle;?></td>
+        <td title='<?php echo $modules[$story->module]?>'><?php echo $modules[$story->module];?></td>
         <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
         <td><?php echo zget($users, $story->openedBy);?></td>
         <td><?php echo zget($users, $story->assignedTo);?></td>
@@ -56,7 +58,7 @@ include '../../common/view/tablesorter.html.php';
           <td colspan='9' class='text-left'>
             <?php if(count($allStories))
             {
-                echo "<div class='table-actions clearfix' style='padding-left:8px;'>";
+                echo "<div class='table-actions clearfix'>";
                 echo html::selectButton() . html::submitButton($lang->story->linkStory);
                 echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=$orderBy"), $lang->goback, '', "class='btn'");
                 echo '</div>';

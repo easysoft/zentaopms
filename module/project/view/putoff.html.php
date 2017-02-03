@@ -47,7 +47,7 @@
         <th><?php echo $lang->project->days;?></th>
         <td>
           <div class='input-group'>
-          <?php echo html::input('days', $project->days, "class='form-control'");?>
+          <?php echo html::input('days', $project->days, "class='form-control' autocomplete='off'");?>
             <span class='input-group-addon'><?php echo $lang->project->day;?></span>
           </div>
         </td>
@@ -63,4 +63,5 @@
   </form>
   <div class='main'><?php include '../../common/view/action.html.php';?></div>
 </div>
+<?php js::set('weekend', $config->project->weekend);?>
 <?php include '../../common/view/footer.html.php';?>

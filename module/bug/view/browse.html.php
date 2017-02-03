@@ -58,28 +58,29 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
         </ul>
       </div>
       <div class='btn-group'>
-        <?php common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&moduleID=$moduleID"); ?>
+        <?php common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID"); ?>
       </div>
     </div>
     <div class='btn-group'>
-      <div class='btn-group'>
-        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
-          <i class='icon icon-plus'></i> <?php echo $lang->bug->common;?>
-          <span class='caret'></span>
-        </button>
-        <ul class='dropdown-menu' id='createBugActionMenu'>
+      <div class='btn-group' id='createActionMenu'>
         <?php 
         if(commonModel::isTutorialMode())
         {
             $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
-            echo html::a($this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams"), $lang->bug->create);
+            echo html::a($this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams"), "<i class='icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary btn-bug-create'");
         }
         else
         {
-            $misc = common::hasPriv('bug', 'create') ? '' : "class=disabled";
+            $misc = common::hasPriv('bug', 'create') ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
             $link = common::hasPriv('bug', 'create') ?  $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID") : '#';
-            echo "<li>" . html::a($link, $lang->bug->create, '', $misc) . "</li>";
+            echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->bug->create, '', $misc);
         }
+        ?>
+        <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
+          <span class='caret'></span>
+        </button>
+        <ul class='dropdown-menu pull-right'>
+        <?php
         $misc = common::hasPriv('bug', 'batchCreate') ? '' : "class=disabled";
         $link = common::hasPriv('bug', 'batchCreate') ?  $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID") : '#';
         echo "<li>" . html::a($link, $lang->bug->batchCreate, '', $misc) . "</li>";
@@ -107,6 +108,7 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
   </div>
 </div>
 <div class='main'>
+  <script>setTreeBox();</script>
   <form method='post' id='bugForm'>
     <?php
     $datatableId  = $this->moduleName . ucfirst($this->methodName);
@@ -148,14 +150,16 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
                       $withSearch = count($modules) > 8;
                       echo "<li class='dropdown-submenu'>";
                       echo html::a('javascript:;', $lang->bug->moduleAB, '', "id='moduleItem'");
-                      echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                      echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                      echo '<ul class="dropdown-list">';
                       foreach($modules as $moduleId => $module)
                       {
                           $actionLink = $this->createLink('bug', 'batchChangeModule', "moduleID=$moduleId");
                           echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
                       }
-                      if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
-                      echo '</ul></li>';
+                      echo "</ul>";
+                      if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                      echo '</div></li>';
                   }
                   else
                   {
@@ -178,7 +182,8 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
                               $withSearch = count($builds) > 4;
                               echo "<li class='dropdown-submenu'>";
                               echo html::a('javascript:;', $resolution, '', "id='fixedItem'");
-                              echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                              echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                              echo '<ul class="dropdown-list">';
                               unset($builds['']);
                               foreach($builds as $key => $build)
                               {
@@ -187,8 +192,9 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
                                   echo html::a('javascript:;', $build, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
                                   echo "</li>";
                               }
-                              if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
-                              echo '</ul></li>';
+                              echo "</ul>";
+                              if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                              echo '</div></li>';
                           }
                           else
                           {
@@ -210,15 +216,16 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
                       echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
                       echo "<li class='dropdown-submenu'>";
                       echo html::a('javascript::', $lang->bug->assignedTo, 'id="assignItem"');
-                      echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                      echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                      echo '<ul class="dropdown-list">';
                       foreach ($memberPairs as $key => $value)
                       {
                           if(empty($key)) continue;
                           echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
                       }
-                      if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
                       echo "</ul>";
-                      echo "</li>";
+                      if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                      echo "</div></li>";
                   }
                   else
                   {
@@ -250,7 +257,7 @@ if($shortcut.size() > 0)
 <?php endif;?>
 <?php $this->app->loadConfig('qa', '', false);?>
 <?php if(isset($this->config->qa->homepage) and $this->config->qa->homepage != 'browse'):?>
-$(function(){$('#modulemenu .nav li:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"qa\", \"browse\")'><i class='icon icon-cog'></i><?php echo $lang->homepage?></a></li>")});
+$(function(){$('#modulemenu .nav li:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"qa\", \"browse\")'><i class='icon icon-cog'></i> <?php echo $lang->homepage?></a></li>")});
 <?php endif;?>
 </script>
 <?php include '../../common/view/footer.html.php';?>

@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='bugList'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='bugList'>
       <thead>
       <tr>
         <th class='w-id'>       <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
@@ -46,7 +46,7 @@
       <?php foreach($bugs as $bug):?>
       <?php $bugLink = inlink('view', "bugID=$bug->id");?>
       <tr class='text-center'>
-        <td class='bug-<?php echo $bug->status;?> strong text-left'>
+        <td class='cell-id bug-<?php echo $bug->status;?> strong text-left'>
           <input type='checkbox' name='bugIDList[]'  value='<?php echo $bug->id;?>'/> 
           <?php echo html::a($bugLink, sprintf('%03d', $bug->id));?>
         </td>
@@ -89,7 +89,7 @@
 
         <td <?php if($bug->assignedTo == $this->app->user->account) echo 'class="red"';?>><?php echo zget($users, $bug->assignedTo, $bug->assignedTo);?></td>
         <td><?php echo zget($users, $bug->resolvedBy, $bug->resolvedBy)?></td>
-        <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
+        <td><?php echo zget($lang->bug->resolutionList, $bug->resolution);?></td>
 
         <?php if($this->cookie->windowWidth >= $this->config->wideSize):?>
         <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>

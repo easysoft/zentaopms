@@ -22,7 +22,7 @@
   </nav>
 </div>
 <form method='post' id='myStoryForm'>
-<table class='table table-condensed table-hover table-striped tablesorter table-fixed'>
+<table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable'>
   <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
   <thead>
     <tr class='text-center'>
@@ -46,7 +46,7 @@
     <?php foreach($stories as $key => $story):?>
     <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
     <tr class='text-center'>
-      <td>
+      <td class='cell-id'>
         <?php if($canBatchEdit or $canBatchClose):?>
         <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
         <?php endif;?>
@@ -75,25 +75,90 @@
   <tfoot>
   <tr>
     <td colspan='10'>
+      <?php if(count($stories)):?>
       <div class='table-actions clearfix'>
-      <?php
-      if(count($stories))
-      {
-          if($canBatchEdit or $canBatchRun) echo html::selectButton();
-         
-          if($canBatchEdit)
-          {
-              $actionLink = $this->createLink('story', 'batchEdit');
-              echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
-          }
-          if($canBatchClose and $type != 'closedBy')
-          {
-              $actionLink = $this->createLink('story', 'batchClose');
-              echo html::commonButton($lang->close, "onclick=\"setFormAction('$actionLink')\"");
-          }
-      }
-      ?>
+        <?php echo html::selectButton();?>
+        <div class='btn-group dropup'>
+          <?php
+          $actionLink = $this->createLink('story', 'batchEdit');
+          $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+          echo html::commonButton($lang->edit, $misc);
+          ?>
+          <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+          <ul class='dropdown-menu'>
+            <?php
+            $class = "class='disabled'";
+            $actionLink = $this->createLink('story', 'batchClose');
+            $misc = ($canBatchClose and $type != 'closedBy') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
+            if($misc) echo "<li>" . html::a('javascript:;', $lang->close, '', $misc) . "</li>";
+
+            if(common::hasPriv('story', 'batchReview'))
+            {
+                echo "<li class='dropdown-submenu'>";
+                echo html::a('javascript:;', $lang->story->review, '', "id='reviewItem'");
+                echo "<ul class='dropdown-menu'>";
+                unset($lang->story->reviewResultList['']);
+                unset($lang->story->reviewResultList['revert']);
+                foreach($lang->story->reviewResultList as $key => $result)
+                {
+                    $actionLink = $this->createLink('story', 'batchReview', "result=$key");
+                    if($key == 'reject')
+                    {
+                        echo "<li class='dropdown-submenu'>";
+                        echo html::a('#', $result, '', "id='rejectItem'");
+                        echo "<ul class='dropdown-menu'>";
+                        unset($lang->story->reasonList['']);
+                        unset($lang->story->reasonList['subdivided']);
+                        unset($lang->story->reasonList['duplicate']);
+
+                        foreach($lang->story->reasonList as $key => $reason)
+                        {
+                            $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key");
+                            echo "<li>";
+                            echo html::a('#', $reason, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+                            echo "</li>";
+                        }
+                        echo '</ul></li>';
+                    }
+                    else
+                    {
+                      echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . '</li>';
+                    }
+                }
+                echo '</ul></li>';
+            }
+            else
+            {
+                echo '<li>' . html::a('javascript:;', $lang->story->review,  '', $class) . '</li>';
+            }
+
+            if(common::hasPriv('story', 'batchAssignTo'))
+            {
+                  $withSearch = count($users) > 10;
+                  $actionLink = $this->createLink('story', 'batchAssignTo');
+                  echo html::select('assignedTo', $users, '', 'class="hidden"');
+                  echo "<li class='dropdown-submenu'>";
+                  echo html::a('javascript::', $lang->story->assignedTo, '', 'id="assignItem"');
+                  echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                  echo '<ul class="dropdown-list">';
+                  foreach ($users as $key => $value)
+                  {
+                      if(empty($key) or $key == 'closed') continue;
+                      echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
+                  }
+                  echo "</ul>";
+                  if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                  echo "</div></li>";
+            }
+            else
+            {
+                echo '<li>' . html::a('javascript:;', $lang->story->assignedTo, '', $class) . '</li>';
+            }
+            ?>
+          </ul>
+        </div>
       </div>
+      <?php endif;?>
       <?php $pager->show();?>
     </td>
   </tr>

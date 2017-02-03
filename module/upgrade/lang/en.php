@@ -27,13 +27,14 @@ $lang->upgrade->warnningContent = <<<EOT
    e.g. mysqldump -u root -p zentao >zentao.bak
 </pre>
 EOT;
-$lang->upgrade->setStatusFile = '<h4>Please execute the following command</h4>
-                                 <ul>
-                                 <li>Windows: Open command line and execute<strong>echo ok > %s</strong></li>
-                                 <li>Linux: <strong>touch %s;</strong></li>
-                                 <li>Or delete "%s" and create ok.txt and leave it blank.</li>
-                                 </ul>
-                                 <strong style="color:red">I have read and done as instructed above. <a href="upgrade.php">Continue update.</a></strong>';
+$lang->upgrade->createFileWinCMD   = 'Open command line, execute <strong style="color:#ed980f">echo > %s</strong>';
+$lang->upgrade->createFileLinuxCMD = 'Execute in command line: <strong style="color:#ed980f">touch %s;</strong>';
+$lang->upgrade->setStatusFile      = '<h4>Please finish the following action</h4>
+                                      <ul style="line-height:1.5;font-size:13px;">
+                                      <li>%s</li>
+                                      <li>Or delete "<strong style="color:#ed980f">%s</strong>" and create <strong style="color:#ed980f">ok.txt</strong> and leave it blank.</li>
+                                      </ul>
+                                      <p><strong style="color:red">I have read and done as instructed above. <a href="upgrade.php">Continue update.</a></strong></p>';
 $lang->upgrade->selectVersion = 'Select Version';
 $lang->upgrade->continue      = 'Continue';
 $lang->upgrade->noteVersion   = "Select the compatible version, or it might cause data loss.";
@@ -42,7 +43,7 @@ $lang->upgrade->toVersion     = 'Upgrade to Version';
 $lang->upgrade->confirm       = 'Confirm SQL';
 $lang->upgrade->sureExecute   = 'Execute';
 $lang->upgrade->forbiddenExt  = 'Extension is not compatible with the upgraded version. It has been deactivated:';
-$lang->upgrade->updateFile    = 'Need to update the attachment information.';
+$lang->upgrade->updateFile    = 'Attachment information has to be updated.';
 
 $lang->upgrade->fromVersions['0_3beta']   = '0.3 BETA';
 $lang->upgrade->fromVersions['0_4beta']   = '0.4 BETA';
@@ -110,3 +111,7 @@ $lang->upgrade->fromVersions['8_2_4']     = '8.2.4';
 $lang->upgrade->fromVersions['8_2_5']     = '8.2.5';
 $lang->upgrade->fromVersions['8_2_6']     = '8.2.6';
 $lang->upgrade->fromVersions['8_3']       = '8.3';
+$lang->upgrade->fromVersions['8_3_1']     = '8.3.1';
+$lang->upgrade->fromVersions['8_4']       = '8.4';
+$lang->upgrade->fromVersions['8_4_1']     = '8.4.1';
+$lang->upgrade->fromVersions['9_0_beta']  = '9.0.beta';

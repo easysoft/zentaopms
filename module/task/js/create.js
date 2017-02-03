@@ -94,6 +94,19 @@ function setAfter()
 }
 
 /**
+ * Load stories.
+ * 
+ * @param  int    $projectID 
+ * @access public
+ * @return void
+ */
+function loadStories(projectID)
+{
+    moduleID  = $('#module').val();
+    setStories(moduleID, projectID);
+}
+
+/**
  * load stories of module.
  * 
  * @access public
@@ -125,7 +138,6 @@ function setStories(moduleID, projectID)
 $(document).ready(function()
 {
     setPreview();
-    $("#story, #mailto").chosen(defaultChosenOptions);
 
     $('#selectAllUser').on('click', function()
     {
@@ -139,14 +151,20 @@ $(document).ready(function()
 
     $('[data-toggle=tooltip]').tooltip();
 
-    /* Code for kanban following codes. */
-    // ajust style for file box
-    var ajustFilebox = function()
+    // adjust form controls layout
+    var ajustFormControls = function()
     {
-        applyCssStyle('.fileBox > tbody > tr > td:first-child {transition: none; width: ' + ($('#dataPlanGroup').width() - 2) + 'px}', 'filebox')
+        // adjust style for file box
+        applyCssStyle('.fileBox > tbody > tr > td:first-child {transition: none; width: ' + ($('#dataPlanGroup').width() - 1) + 'px}', 'filebox');
+
+        // adjust #priRowCol and #estRowCol size
+        var $priRowCol = $('#priRowCol'),
+            $estRowCol = $('#estRowCol');
+        $priRowCol.css('width', 54 + $priRowCol.find('.input-group-addon').outerWidth());
+        $estRowCol.css('width', 55 + $estRowCol.find('.input-group-addon').outerWidth());
     };
-    ajustFilebox();
-    $(window).resize(ajustFilebox);
+    ajustFormControls();
+    $(window).resize(ajustFormControls);
 
     /* First unbind ajaxForm for form.*/
     $("form[data-type='ajax']").unbind('submit');

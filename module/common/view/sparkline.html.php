@@ -42,19 +42,22 @@ jQuery.fn.projectLine = function(setting)
         {
             $e.append('<canvas class="projectline-canvas"></canvas>');
             canvas = $e.children('canvas');
-            if(navigator.userAgent.indexOf("MSIE 8.0")>0) G_vmlCanvasManager.initElement(canvas[0]);
+            if($.zui.browser.ie == 8) G_vmlCanvasManager.initElement(canvas[0]);
         }
         canvas.attr('width', width).attr('height',height);
-        $e.data('projectLineChart',new Chart(canvas[0].getContext("2d")).Line({
+        $e.data('projectLineChart', new Chart(canvas[0].getContext("2d")).Line(
+        {
             labels : values,
-            datasets: [{
+            datasets: 
+            [{
                 fillColor : "rgba(0,0,255,0.25)",
                 strokeColor : "rgba(0,0,255,1)",
                 pointColor : "rgba(255,136,0,1)",
                 pointStrokeColor : "#fff",
                 data : values
             }]
-        }, {
+        },
+        {
             animation: !isIE,
             scaleOverride: true,
             scaleStepWidth: Math.ceil(maxValue/10),

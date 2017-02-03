@@ -17,7 +17,7 @@ include '../../common/view/tablesorter.html.php';
 <div id='querybox' class='show'></div>
 <div id='unlinkBugList'>
   <form method='post' id='unlinkedBugsForm' target='hiddenwin' action='<?php echo $this->createLink('productplan', 'linkBug', "planID=$plan->id&browseType=$browseType&param=$param&orderBy=$orderBy")?>'>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed'> 
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable'> 
       <caption class='text-left text-special'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedBugs;?></strong></caption>
       <thead>
       <tr class='colhead'>
@@ -36,8 +36,8 @@ include '../../common/view/tablesorter.html.php';
       if($bug->plan and helper::diffDate($plans[$bug->plan], helper::today()) > 0) continue;
       ?>
       <tr>
-        <td class='text-left'>
-          <input class='ml-10px' type='checkbox' name='bugs[]'  value='<?php echo $bug->id;?>'/> 
+        <td class='cell-id'>
+          <input type='checkbox' name='bugs[]'  value='<?php echo $bug->id;?>'/> 
           <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id);?>
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
@@ -53,7 +53,7 @@ include '../../common/view/tablesorter.html.php';
         <td colspan='6' class='text-left'>
           <?php if(count($allBugs))
           {
-              echo "<div class='table-actions clearfix' style='padding-left:8px;'>";
+              echo "<div class='table-actions clearfix'>";
               echo html::selectButton() . html::submitButton($lang->productplan->linkBug);
               echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=$orderBy"), $lang->goback, '', "class='btn'");
               echo '</div>';

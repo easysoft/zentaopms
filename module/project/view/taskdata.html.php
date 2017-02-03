@@ -11,7 +11,8 @@
  */
 ?>
     <?php include '../../common/view/tablesorter.html.php';?>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='taskList'>
+    <?php $columns = 12; ?>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='taskList'>
       <thead>
         <tr>
           <th class='w-id {sorter:false}'>    <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
@@ -21,6 +22,7 @@
           <th class='w-70px {sorter:false}'>  <?php common::printOrderLink('deadline',     $orderBy, $vars, $lang->task->deadlineAB);?></th>
 
           <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
+          <?php $columns++; ?>
           <th class='w-id {sorter:false}'>    <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->task->openedDateAB);?></th>
           <?php endif;?>
 
@@ -28,14 +30,20 @@
           <th class='w-user {sorter:false}'>  <?php common::printOrderLink('finishedBy',   $orderBy, $vars, $lang->task->finishedByAB);?></th>
 
           <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
+          <?php $columns++; ?>
           <th class='w-50px {sorter:false}'>  <?php common::printOrderLink('finishedDate', $orderBy, $vars, $lang->task->finishedDateAB);?></th>
           <?php endif;?>
 
           <th class='w-35px {sorter:false}'>  <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->task->estimateAB);?></th>
           <th class='w-50px {sorter:false}'>  <?php common::printOrderLink('consumed',     $orderBy, $vars, $lang->task->consumedAB);?></th>
           <th class='w-40px nobr {sorter:false}'>  <?php common::printOrderLink('left',    $orderBy, $vars, $lang->task->leftAB);?></th>
-          <th class='w-50px'><?php echo $lang->task->progess;?></th>
-          <?php if($project->type == 'sprint') print "<th class='w-100px {sorter:false}'>" and common::printOrderLink('story', $orderBy, $vars, $lang->task->story) and print '</th>';?>
+          <th class='w-50px' title='<?php echo $lang->task->progessTips?>'><?php echo $lang->task->progess;?></th>
+
+          <?php if($project->type == 'sprint'): ?>
+          <th class='w-100px {sorter:false}'><?php common::printOrderLink('story', $orderBy, $vars, $lang->task->story); ?></th>
+          <?php $columns++; ?>
+          <?php endif;?>
+
           <th class='w-150px {sorter:false}'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -44,11 +52,11 @@
       <?php foreach($tasks as $task):?>
       <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : ''; ?>
       <tr class='text-center'>
-        <td>
+        <td class='cell-id'>
           <input type='checkbox' name='taskIDList[]'  value='<?php echo $task->id;?>'/> 
           <?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?>
         </td>
-        <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
+        <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
         <td class='text-left' title="<?php echo $task->name?>">
           <?php if(isset($branchGroups[$task->product][$task->branch])) echo "<span title='{$lang->product->branchName[$task->productType]}' class='label label-branch label-badge'>" . $branchGroups[$task->product][$task->branch] . '</span>';?>
           <?php if($modulePairs and $task->module) echo "<span title='{$lang->task->module}' class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span>';?>
@@ -88,7 +96,7 @@
         <td><?php echo $task->estimate;?></td>
         <td><?php echo $task->consumed;?></td>
         <td><?php echo $task->left;?></td>
-        <td><?php echo $task->progess;?>%</td>
+        <td><div class='progress-pie' title="<?php echo $task->progess?>%" data-value='<?php echo $task->progess;?>'></div></td>
         <?php
         if($project->type == 'sprint')
         {

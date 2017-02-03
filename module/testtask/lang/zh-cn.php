@@ -9,28 +9,29 @@
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->testtask->index          = "版本首页";
-$lang->testtask->create         = "提交测试";
-$lang->testtask->delete         = "删除版本";
-$lang->testtask->view           = "概况";
-$lang->testtask->edit           = "编辑版本";
-$lang->testtask->browse         = "版本列表";
-$lang->testtask->linkCase       = "关联用例";
-$lang->testtask->unlinkCase     = "移除";
-$lang->testtask->batchAssign    = "批量指派";
-$lang->testtask->runCase        = "执行";
-$lang->testtask->batchRun       = "批量执行";
-$lang->testtask->results        = "结果";
-$lang->testtask->createBug      = "提Bug";
-$lang->testtask->assign         = '指派';
-$lang->testtask->cases          = '用例';
-$lang->testtask->groupCase      = "分组浏览用例";
-$lang->testtask->pre            = '上一个';
-$lang->testtask->next           = '下一个';
-$lang->testtask->start          = "开始";
-$lang->testtask->close          = "关闭";
-$lang->testtask->wait           = "待测版本";
-$lang->testtask->done           = "已测版本";
+$lang->testtask->index            = "版本首页";
+$lang->testtask->create           = "提交测试";
+$lang->testtask->delete           = "删除版本";
+$lang->testtask->view             = "概况";
+$lang->testtask->edit             = "编辑版本";
+$lang->testtask->browse           = "版本列表";
+$lang->testtask->linkCase         = "关联用例";
+$lang->testtask->unlinkCase       = "移除";
+$lang->testtask->batchUnlinkCases = "批量移除用例";
+$lang->testtask->batchAssign      = "批量指派";
+$lang->testtask->runCase          = "执行";
+$lang->testtask->batchRun         = "批量执行";
+$lang->testtask->results          = "结果";
+$lang->testtask->createBug        = "提Bug";
+$lang->testtask->assign           = '指派';
+$lang->testtask->cases            = '用例';
+$lang->testtask->groupCase        = "分组浏览用例";
+$lang->testtask->pre              = '上一个';
+$lang->testtask->next             = '下一个';
+$lang->testtask->start            = "开始";
+$lang->testtask->close            = "关闭";
+$lang->testtask->wait             = "待测版本";
+$lang->testtask->done             = "已测版本";
 
 $lang->testtask->common         = '测试视图版本';
 $lang->testtask->product        = '所属' . $lang->productCommon;

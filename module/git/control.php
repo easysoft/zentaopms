@@ -107,4 +107,61 @@ class git extends control
             exit;
         }
     }
+
+    /**
+     * Ajax save log.
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveLog()
+    {
+        $repoUrl  = trim($this->post->repoUrl);
+        $repoRoot = str_replace('\\', '/', trim($this->post->repoRoot));
+        $message  = trim($this->post->message);
+        $revision = trim($this->post->revision);
+        $files    = $this->post->files;
+        if(empty($repoUrl)) die();
+        $repoUrl = rtrim($repoUrl, '/') . '/';
+
+        $parsedFiles = array();
+        foreach($files as $file)
+        {
+            $file = trim($file);
+            if(empty($file)) continue;
+            $action = '';
+            if(preg_match('/^[\w][ \t]/', $file))
+            {
+                $action = $file[0];
+                $file   = trim(substr($file, 2));
+            }
+            $path = str_replace($repoRoot,  '', $file);
+            $parsedFiles[$action][] = ltrim($path, '/');
+        }
+
+        $objects = $this->git->parseComment($message);
+        if($objects)
+        {
+            $log = new stdclass();
+            $log->author   = $this->app->user->account;
+            $log->date     = helper::now();
+            $log->msg      = $message;
+            $log->revision = $revision;
+            $log->files    = $parsedFiles;
+            $this->git->saveAction2PMS($objects, $log, $repoUrl);
+        }
+        die();
+    }
+
+    /**
+     * Ajax get repos.
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetRepos()
+    {
+        $repos = $this->git->getRepos();
+        die(json_encode($repos));
+    }
 }

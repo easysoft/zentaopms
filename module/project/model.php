@@ -86,6 +86,8 @@ class projectModel extends model
         if($projects and !isset($projects[$projectID]) and !$this->checkPriv($project))
         {
             echo(js::alert($this->lang->project->accessDenied));
+            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
             die(js::locate('back'));
         }
 
@@ -196,8 +198,19 @@ class projectModel extends model
     public function saveState($projectID, $projects)
     {
         if($projectID > 0) $this->session->set('project', (int)$projectID);
-        if($projectID == 0 and $this->cookie->lastProject)    $this->session->set('project', (int)$this->cookie->lastProject);
-        if($projectID == 0 and $this->session->project == '') $this->session->set('project', $projects[0]);
+        if($projectID == 0 and $this->cookie->lastProject) $this->session->set('project', (int)$this->cookie->lastProject);
+        if($projectID == 0 and $this->session->project == '') $this->session->set('project', key($projects));
+        if(!isset($projects[$this->session->project]))
+        {
+            $this->session->set('project', key($projects));
+            if($projectID > 0)
+            {
+                echo(js::alert($this->lang->project->accessDenied));
+                $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+                if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
+                die(js::locate('back'));
+            }
+        }
         return $this->session->project;
     }
 
@@ -981,9 +994,10 @@ class projectModel extends model
      */
     public function buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, $type = 'projectStory')
     {
-        $branchPairs = array();
-        $productType = 'normal';
-        $productNum  = count($products);
+        $branchPairs  = array();
+        $productType  = 'normal';
+        $productNum   = count($products);
+        $productPairs = array(0 => '');
         foreach($products as $product)
         {
             $productPairs[$product->id] = $product->name;
@@ -1017,9 +1031,8 @@ class projectModel extends model
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
-        if(count($products) == 1) $this->config->product->search['params']['module']['values'] = $modules;
+        $this->config->product->search['params']['module']['values'] = $modules;
         unset($this->lang->story->statusList['draft']);
-        if(count($products) >= 2) unset($this->config->product->search['fields']['module']);
         if($productType == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);
@@ -1042,7 +1055,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getProjectsToImport($projectIds, $containDoing = 'false')
+    public function getProjectsToImport($projectIds)
     {
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('id')->in($projectIds)
@@ -1054,14 +1067,7 @@ class projectModel extends model
         $now   = date('Y-m-d');
         foreach($projects as $id => $project)
         {
-            if($containDoing)
-            {
-                if($this->checkPriv($project) and ($project->status == 'done' or $project->status == 'doing' or $project->end < $now)) $pairs[$id] = ucfirst(substr($project->code, 0, 1)) . ':' . $project->name;
-            }
-            else
-            {
-                if($this->checkPriv($project) and ($project->status == 'done' or $project->end < $now)) $pairs[$id] = ucfirst(substr($project->code, 0, 1)) . ':' . $project->name;
-            }
+            if($this->checkPriv($project)) $pairs[$id] = ucfirst(substr($project->code, 0, 1)) . ':' . $project->name;
         }
         return $pairs;
     }
@@ -1588,7 +1594,7 @@ class projectModel extends model
             ->fetchPairs();
         if(!$projects) return $burns;
 
-        $burns = $this->dao->select("project, '$today' AS date, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")
+        $burns = $this->dao->select("project, '$today' AS date, sum(estimate) AS `estimate`, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")
             ->from(TABLE_TASK)
             ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq('0')
@@ -1614,51 +1620,17 @@ class projectModel extends model
     public function fixFirst($projectID)
     {
         $project = $this->getById($projectID);
-        $burn    = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)
-            ->andWhere('date')->eq($project->begin)
-            ->fetch();
+        $burn    = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)->andWhere('date')->eq($project->begin)->fetch();
 
         $data = fixer::input('post')
             ->add('project', $projectID)
             ->add('date', $project->begin)
+            ->add('left', empty($burn) ? $this->post->estimate : $burn->left)
             ->add('consumed', empty($burn) ? 0 : $burn->consumed)
             ->get();
-        if(!is_numeric($data->left)) return false;
+        if(!is_numeric($data->estimate)) return false;
 
         $this->dao->replace(TABLE_BURN)->data($data)->exec();
-    }
-
-    /**
-     * Get data of burn down chart.
-     * 
-     * @param  int    $projectID 
-     * @param  int    $itemCounts 
-     * @param  string $mode        noempty: skip the dates without burn down data.
-     * @access public
-     * @return array
-     */
-    public function getBurnData($projectID = 0, $itemCounts = 30, $mode = 'noempty')
-    {
-        /* Get project and burn counts. */
-        $project    = $this->getById($projectID);
-        $burnCounts = $this->dao->select('count(*) AS counts')->from(TABLE_BURN)->where('project')->eq($projectID)->fetch('counts');
-
-        /* If the burnCounts > $itemCounts, get the latest $itemCounts records. */
-        $sql = $this->dao->select('date AS name, `left` AS value')->from(TABLE_BURN)->where('project')->eq((int)$projectID);
-        if($burnCounts > $itemCounts)
-        {
-            $sets = $sql->orderBy('date DESC')->limit($itemCounts)->fetchAll('name');
-            $sets = array_reverse($sets);
-        }
-        else
-        {
-            /* The burnCounts < itemCounts, after getting from the db, padding left dates. */
-            $sets = $sql->orderBy('date ASC')->fetchAll('name');
-            $this->processBurnData($sets, $itemCounts, $project->begin, $project->end, $mode);
-        }
-
-        foreach($sets as $set) $set->name = substr($set->name, 5);
-        return $sets;
     }
 
     /**
@@ -1674,7 +1646,7 @@ class projectModel extends model
         $project    = $this->getById($projectID);
 
         /* If the burnCounts > $itemCounts, get the latest $itemCounts records. */
-        $sets = $this->dao->select('date AS name, `left` AS value')->from(TABLE_BURN)->where('project')->eq((int)$projectID)->orderBy('date DESC')->fetchAll('name');
+        $sets = $this->dao->select('date AS name, `left` AS value, estimate')->from(TABLE_BURN)->where('project')->eq((int)$projectID)->orderBy('date DESC')->fetchAll('name');
 
         $count    = 0;
         $burnData = array();
@@ -1888,43 +1860,39 @@ class projectModel extends model
         $begin = strtotime($begin);
         $end   = strtotime($end);
 
+        $beginWeekDay = date('w', $begin);
         $days = ($end - $begin) / 3600 / 24;
         if($type == 'noweekend')
         {
-            $mod   = $days % 7;
-            $days  = $days - floor($days / 7) * 2;
-            $days  = $mod == 6 ? $days - 1 : $days;
+            $allDays = $days;
+            $weekDay = $beginWeekDay;
+            for($i = 0; $i < $allDays; $i++, $weekDay++)
+            {
+                $weekDay = $weekDay % 7;
+                if(($this->config->project->weekend == 2 and $weekDay == 6) or $weekDay == 0) $days--;
+            }
         }
 
         if(!$interval) $interval = floor($days / $this->config->project->maxBurnDay);
 
         $dateList = array();
-        $date     = $begin;
         $spaces   = (int)$interval;
         $counter  = $spaces;
-        while($date <= $end)
+        $weekDay  = $beginWeekDay;
+        for($date = $begin; $date <= $end; $date += 24 * 3600, $weekDay++)
         {
             /* Remove weekend when type is noweekend.*/
             if($type == 'noweekend')
             {
-                $weekDay = date('w', $date);
-                if($weekDay == 6 or $weekDay == 0)
-                {
-                    $date += 24 * 3600;
-                    continue;
-                }
+                $weekDay = $weekDay % 7;
+                if(($this->config->project->weekend == 2 and $weekDay == 6) or $weekDay == 0) continue;
             }
 
             $counter ++;
-            if($counter <= $spaces)
-            {
-                $date += 24 * 3600;
-                continue;
-            }
+            if($counter <= $spaces) continue;
 
             $counter    = 0;
             $dateList[] = date($format, $date);
-            $date += 24 * 3600;
         }
 
         return array($dateList, $interval);
@@ -1982,6 +1950,84 @@ class projectModel extends model
         }
 
         return $productBranchPairs;
+    }
+
+    /**
+     * Build bug search form.
+     *
+     * @param  int    $products
+     * @param  int    $queryID
+     * @param  int    $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildBugSearchForm($products, $queryID, $actionURL)
+    {
+        $modules = array();
+        $builds  = array('' => '', 'trunk' => 'Trunk');
+        foreach($products as $product)
+        {
+            $productModules = $this->loadModel('tree')->getOptionMenu($product->id);
+            $productBuilds  = $this->loadModel('build')->getProductBuildPairs($product->id, 0, $params = 'noempty|notrunk');
+            foreach($productModules as $moduleID => $moduleName)
+            {
+                $modules[$moduleID] = ((count($products) >= 2 and $moduleID) ? $product->name : '') . $moduleName;
+            }
+            foreach($productBuilds as $buildID => $buildName)
+            {
+                $builds[$buildID] = ((count($products) >= 2 and $buildID) ? $product->name . '/' : '') . $buildName;
+            }
+        }
+
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
+        $branchPairs  = array();
+        $productType  = 'normal';
+        $productNum   = count($products);
+        $productPairs = array(0 => '');
+        foreach($products as $product)
+        {
+            $productPairs[$product->id] = $product->name;
+            if($product->type != 'normal')
+            {
+                $productType = $product->type;
+                if($product->branch)
+                {
+                    $branchPairs[$product->branch] = (count($products) > 1 ? $product->name . '/' : '') . $branchGroups[$product->id][$product->branch];
+                }
+                else
+                {
+                    $productBranches = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array(0);
+                    if(count($products) > 1)
+                    {
+                        foreach($productBranches as $branchID => $branchName) $productBranches[$branchID] = $product->name . '/' . $branchName;
+                    }
+                    $branchPairs += $productBranches;
+                }
+            }
+        }
+
+        $this->config->bug->search['module']    = 'projectBug';
+        $this->config->bug->search['actionURL'] = $actionURL;
+        $this->config->bug->search['queryID']   = $queryID;
+        unset($this->config->bug->search['fields']['project']);
+        $this->config->bug->search['params']['product']['values']       = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts($products);
+        $this->config->bug->search['params']['module']['values']        = $modules;
+        $this->config->bug->search['params']['openedBuild']['values']   = $builds;
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+        if($productType == 'normal')
+        {
+            unset($this->config->bug->search['fields']['branch']);
+            unset($this->config->bug->search['params']['branch']);
+        }
+        else
+        {
+            $this->config->bug->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productType]);
+            $this->config->bug->search['params']['branch']['values'] = array('' => '') + $branchPairs;
+        }
+        $this->config->bug->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->bug->statusList);
+
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
     }
 
     /**
@@ -2123,7 +2169,7 @@ class projectModel extends model
         $baselineJSON  = '[]';
 
         $firstBurn    = empty($sets) ? 0 : reset($sets);
-        $firstTime    = isset($firstBurn->value) ? $firstBurn->value : 0;
+        $firstTime    = !empty($firstBurn->estimate) ? $firstBurn->estimate : (!empty($firstBurn->value) ? $firstBurn->value : 0);
         $days         = count($dateList) - 1;
         $rate         = $firstTime / $days;
         $baselineJSON = '[';
@@ -2169,7 +2215,22 @@ class projectModel extends model
             foreach($tasks as $task) $taskGroups[$task->module][$task->story][$task->id] = $task;
         }
 
-        if(!empty($node->children)) foreach($node->children as $i => $child) $node->children[$i] = $this->fillTasksInTree($child, $projectID);
+        if(!empty($node->children))
+        {
+            foreach($node->children as $i => $child)
+            {
+                $subNode = $this->fillTasksInTree($child, $projectID);
+                /* Remove no children node. */
+                if($subNode->type != 'story' and $subNode->type != 'task' and empty($subNode->children))
+                {
+                    unset($node->children[$i]);
+                }
+                else
+                {
+                    $node->children[$i] = $subNode;
+                }
+            }
+        }
 
         if(!isset($node->id))$node->id = 0;
         if($node->type == 'story')
@@ -2219,6 +2280,7 @@ class projectModel extends model
         }
 
         $node->actions = false;
+        if(!empty($node->children)) $node->children = array_values($node->children);
         return $node;
     }
 
@@ -2288,9 +2350,17 @@ class projectModel extends model
         {
             $tree = (object)$tree;
             if($tree->type == 'product') array_unshift($tree->children, array('id' => 0, 'name' => '/', 'type' => 'story', 'actions' => false, 'root' => $tree->root));
-            $fullTrees[$i] = $this->fillTasksInTree($tree, $projectID);
+            $fullTree = $this->fillTasksInTree($tree, $projectID);
+            if(empty($fullTree->children))
+            {
+                unset($fullTrees[$i]);
+            }
+            else
+            {
+                $fullTrees[$i] = $fullTree;
+            }
         }
         if(empty($fullTrees[0]->children)) array_shift($fullTrees);
-        return $fullTrees;
+        return array_values($fullTrees);
     }
 }

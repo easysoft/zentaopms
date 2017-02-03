@@ -28,7 +28,7 @@
       <div class='form-group'>
         <div class='input-group'>
           <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->story->colorTag ?>' value='<?php echo $story->color ?>' data-update-text='#title, .story-title'>
-          <?php echo html::input('title', $story->title, 'class="form-control disabled" disabled="disabled"');?>
+          <?php echo html::input('title', $story->title, 'class="form-control disabled" disabled="disabled" autocomplete="off"');?>
         </div>
       </div>
       <fieldset>
@@ -126,11 +126,11 @@
           </tr>
           <tr>
             <th><?php echo $lang->story->estimate;?></th>
-            <td><?php echo html::input('estimate', $story->estimate, "class='form-control'");?></td>
+            <td><?php echo html::input('estimate', $story->estimate, "class='form-control' autocomplete='off'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->story->keywords;?></th>
-            <td><?php echo html::input('keywords', $story->keywords, 'class=form-control');?></td>
+            <td><?php echo html::input('keywords', $story->keywords, "class='form-control' autocomplete='off'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->story->mailto;?></th>
@@ -174,7 +174,7 @@
           <?php if($story->status == 'closed'):?>
           <tr id='duplicateStoryBox'>
             <th class='w-70px'><?php echo $lang->story->duplicateStory;?></th>
-            <td><?php echo html::input('duplicateStory', $story->duplicateStory, "class='form-control'");?></td>
+            <td><?php echo html::input('duplicateStory', $story->duplicateStory, "class='form-control' autocomplete='off'");?></td>
           </tr>
           <?php endif;?>
           <tr class='text-top'>

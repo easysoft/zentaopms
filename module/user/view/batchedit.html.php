@@ -65,20 +65,20 @@ $minWidth = (count($visibleFields) > 7) ? 'w-120px' : '';
       <td><?php echo $user->id;?></td>
       <td class='text-left<?php echo zget($visibleFields, 'dept', ' hidden')?>' style='overflow:visible'><?php echo html::select("dept[$user->id]", $depts, $dept, "class='form-control chosen'");?></td>
       <td><?php echo html::input("account[$user->id]",  $user->account, "class='form-control' autocomplete='off'");?></td>
-      <td><?php echo html::input("realname[$user->id]", $user->realname, "class='form-control'");?></td>
+      <td><?php echo html::input("realname[$user->id]", $user->realname, "class='form-control' autocomplete='off'");?></td>
       <td><?php echo html::select("role[$user->id]",    $lang->user->roleList, $role, "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'commiter', 'hidden')?>'><?php echo html::input("commiter[$user->id]", $user->commiter, "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'email', 'hidden')?>'>   <?php echo html::input("email[$user->id]",    $user->email, "class='form-control'");?></td>
+      <td class='<?php echo zget($visibleFields, 'commiter', 'hidden')?>'><?php echo html::input("commiter[$user->id]", $user->commiter, "class='form-control' autocomplete='off'");?></td>
+      <td class='<?php echo zget($visibleFields, 'email', 'hidden')?>'>   <?php echo html::input("email[$user->id]",    $user->email, "class='form-control' autocomplete='off'");?></td>
       <td class='<?php echo zget($visibleFields, 'join', 'hidden')?>'>    <?php echo html::input("join[$user->id]",     $user->join, "class='form-control form-date'");?></td>
-      <td class='<?php echo zget($visibleFields, 'skype', 'hidden')?>'>   <?php echo html::input("skype[$user->id]",    $user->skype, "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'qq', 'hidden')?>'>      <?php echo html::input("qq[$user->id]",       $user->qq, "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'yahoo', 'hidden')?>'>   <?php echo html::input("yahoo[$user->id]",    $user->yahoo, "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'gtalk', 'hidden')?>'>   <?php echo html::input("gtalk[$user->id]",    $user->gtalk, "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'wangwang', 'hidden')?>'><?php echo html::input("wangwang[$user->id]", $user->wangwang, "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'mobile', 'hidden')?>'>  <?php echo html::input("mobile[$user->id]",   $user->mobile, "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'phone', 'hidden')?>'>   <?php echo html::input("phone[$user->id]",    $user->phone, "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'address', 'hidden')?>'> <?php echo html::input("address[$user->id]",  $user->address, "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'zipcode', 'hidden')?>'> <?php echo html::input("zipcode[$user->id]",  $user->zipcode, "class='form-control'");?></td>
+      <td class='<?php echo zget($visibleFields, 'skype', 'hidden')?>'>   <?php echo html::input("skype[$user->id]",    $user->skype, "class='form-control' autocomplete='off'");?></td>
+      <td class='<?php echo zget($visibleFields, 'qq', 'hidden')?>'>      <?php echo html::input("qq[$user->id]",       $user->qq, "class='form-control' autocomplete='off'");?></td>
+      <td class='<?php echo zget($visibleFields, 'yahoo', 'hidden')?>'>   <?php echo html::input("yahoo[$user->id]",    $user->yahoo, "class='form-control' autocomplete='off'");?></td>
+      <td class='<?php echo zget($visibleFields, 'gtalk', 'hidden')?>'>   <?php echo html::input("gtalk[$user->id]",    $user->gtalk, "class='form-control' autocomplete='off'");?></td>
+      <td class='<?php echo zget($visibleFields, 'wangwang', 'hidden')?>'><?php echo html::input("wangwang[$user->id]", $user->wangwang, "class='form-control' autocomplete='off'");?></td>
+      <td class='<?php echo zget($visibleFields, 'mobile', 'hidden')?>'>  <?php echo html::input("mobile[$user->id]",   $user->mobile, "class='form-control' autocomplete='off'");?></td>
+      <td class='<?php echo zget($visibleFields, 'phone', 'hidden')?>'>   <?php echo html::input("phone[$user->id]",    $user->phone, "class='form-control' autocomplete='off'");?></td>
+      <td class='<?php echo zget($visibleFields, 'address', 'hidden')?>'> <?php echo html::input("address[$user->id]",  $user->address, "class='form-control' autocomplete='off'");?></td>
+      <td class='<?php echo zget($visibleFields, 'zipcode', 'hidden')?>'> <?php echo html::input("zipcode[$user->id]",  $user->zipcode, "class='form-control' autocomplete='off'");?></td>
     </tr>
     <?php endforeach;?>
     <tr>

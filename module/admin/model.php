@@ -62,9 +62,9 @@ class adminModel extends model
      */
     public function postAPI($url, $formvars = "")
     {
-		$this->agent->cookies['lang'] = $this->cookie->lang;
-    	$this->agent->submit($url, $formvars);
-		return $this->agent->results;
+        $this->agent->cookies['lang'] = $this->cookie->lang;
+        $this->agent->submit($url, $formvars);
+        return $this->agent->results;
     }
 
     /**
@@ -101,41 +101,162 @@ class adminModel extends model
 
     }
 
-	/**
-	 * Register zentao by API. 
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function registerByAPI()
-	{
-		$apiURL = 'http://www.zentao.net/user-register.json';
-		return $this->postAPI($apiURL, $_POST);
-	}
+    /**
+     * Register zentao by API. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function registerByAPI()
+    {
+        $apiConfig = $this->getApiConfig();
+        $apiURL    = $this->config->admin->apiRoot . "/user-apiRegister.json?HTTP_X_REQUESTED_WITH=XMLHttpRequest&{$apiConfig->sessionVar}={$apiConfig->sessionID}";
+        return $this->postAPI($apiURL, $_POST);
+    }
 
-	/**
-	 * Login zentao by API.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function bindByAPI()
-	{
-		$apiURL = 'http://www.zentao.net/user-login.json';
-		return $this->postAPI($apiURL, $_POST);
-	}
+    /**
+     * Login zentao by API.
+     * 
+     * @access public
+     * @return void
+     */
+    public function bindByAPI()
+    {
+        $apiConfig = $this->getApiConfig();
+        $apiURL    = $this->config->admin->apiRoot . "/user-bindChanzhi.json?HTTP_X_REQUESTED_WITH=XMLHttpRequest&{$apiConfig->sessionVar}={$apiConfig->sessionID}";
+        return $this->postAPI($apiURL, $_POST);
+    }
 
-	/**
-	 * Get register information. 
-	 * 
-	 * @access public
-	 * @return object
-	 */
-	public function getRegisterInfo()
+    /**
+     * Get secret key.
+     * 
+     * @access public
+     * @return object
+     */
+    public function getSecretKey()
+    {
+        $apiConfig = $this->getApiConfig();
+        $apiURL    = $this->config->admin->apiRoot . "/user-secretKey.json";
+
+        $params['u']   = $this->config->global->community;
+        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $params[$apiConfig->sessionVar]  = $apiConfig->sessionID;
+        $params['k'] = $this->getSignature($params);
+
+        $this->agent->cookies['lang'] = $this->cookie->lang;
+        $this->agent->fetch($apiURL . '?' . http_build_query($params));
+        $result = $this->agent->results;
+        $result = json_decode($result);
+        return $result;
+    }
+
+    /**
+     * Send code by API.
+     * 
+     * @param  string    $type 
+     * @access public
+     * @return string
+     */
+    public function sendCodeByAPI($type)
+    {
+        $apiConfig = $this->getApiConfig();
+        $module    = $type == 'mobile' ? 'sms' : 'mail';
+        $apiURL    = $this->config->admin->apiRoot . "/{$module}-apiSendCode.json";
+
+        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $params[$apiConfig->sessionVar]  = $apiConfig->sessionID;
+        if(isset($this->config->global->community) and $this->config->global->community != 'na') $this->post->set('account', $this->config->global->community);
+
+        $param = http_build_query($params);
+        return $this->postAPI($apiURL . '?' . $param, $_POST);
+    }
+
+    /**
+     * Certify by API.
+     * 
+     * @param  string    $type 
+     * @access public
+     * @return string
+     */
+    public function certifyByAPI($type)
+    {
+        $apiConfig = $this->getApiConfig();
+        $module    = $type == 'mobile' ? 'sms' : 'mail';
+        $apiURL    = $this->config->admin->apiRoot . "/{$module}-apiCertify.json";
+
+        $params['u']   = $this->config->global->community;
+        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $params[$apiConfig->sessionVar]  = $apiConfig->sessionID;
+        $params['k'] = $this->getSignature($params);
+
+        $param = http_build_query($params);
+        return $this->postAPI($apiURL . '?' . $param, $_POST);
+    }
+
+    /**
+     * Set company by API.
+     * 
+     * @access public
+     * @return string
+     */
+    public function setCompanyByAPI()
+    {
+        $apiConfig = $this->getApiConfig();
+        $apiURL    = $this->config->admin->apiRoot . "/user-apiSetCompany.json";
+
+        $params['u']   = $this->config->global->community;
+        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $params[$apiConfig->sessionVar]  = $apiConfig->sessionID;
+        $params['k'] = $this->getSignature($params);
+
+        $param = http_build_query($params);
+        return $this->postAPI($apiURL . '?' . $param, $_POST);
+    }
+
+    /**
+     * Get signature.
+     * 
+     * @param  array    $params 
+     * @access public
+     * @return string
+     */
+    public function getSignature($params)
+    {
+        unset($params['u']);
+        $privateKey = $this->config->global->ztPrivateKey;
+        return md5(http_build_query($params) . md5($privateKey));
+    }
+
+    /**
+     * Get api config.
+     * 
+     * @access public
+     * @return object
+     */
+    public function getApiConfig()
+    {
+        if(!$this->session->apiConfig or time() - $this->session->apiConfig->serverTime > $this->session->apiConfig->expiredTime)
+        {
+            $config = file_get_contents($this->config->admin->apiRoot . "?mode=getconfig");
+            $config = json_decode($config);
+            if(empty($config) or empty($config->sessionID)) return null;
+            $this->session->set('apiConfig', $config);
+        }
+        return $this->session->apiConfig;
+
+    }
+
+    /**
+     * Get register information. 
+     * 
+     * @access public
+     * @return object
+     */
+    public function getRegisterInfo()
     {
         $register = new stdclass();
-		$register->company = $this->app->company->name;
-		$register->email   = $this->app->user->email;
-		return $register;
-	}
+        $register->company = $this->app->company->name;
+        $register->email   = $this->app->user->email;
+        return $register;
+    }
 }

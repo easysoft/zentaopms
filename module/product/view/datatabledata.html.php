@@ -23,7 +23,7 @@ extract($widths);
       <tbody>
         <?php foreach($stories as $story):?>
         <tr class='text-center' data-id='<?php echo $story->id?>'>
-          <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs);?>
+          <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases);?>
         </tr>
         <?php endforeach;?>
       </tbody>

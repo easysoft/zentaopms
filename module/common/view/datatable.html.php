@@ -50,7 +50,15 @@ $(document).ready(function()
         scrollPos     : 'out',
         tableClass    : 'tablesorter',
         storage       : false,
-        selectable    : {clickBehavior: 'multi'},
+        selectable    : 
+        {
+            clickBehavior: 'multi',
+            startDrag: function(e)
+            {
+                if(!this.multiKey && !$(e.target).closest('td[data-index="0"]').length) return false;
+            }
+        },
+        fixedHeader: true,
         ready: function()
         {
             if(!this.$table) return;
@@ -62,14 +70,15 @@ $(document).ready(function()
             $dropmenu.append("<li><a href='javascript:;' id='switchToTable'><?php echo $lang->datatable->switchToTable?></a></li>");
             $dropdown.children('.dropdown').append($dropmenu);
             this.$datatable.before($dropdown);
-            this.$datatable.find('[data-toggle=modal], a.iframe').modalTrigger();
-            $("a[data-toggle='showModuleModal']").click(function(){$('#showModuleModal').modal('show')});
+            this.$datatable.find('[data-toggle="modal"], a.iframe').modalTrigger();
+            if($.fn.progressPie) this.$datatable.find('.progress-pie').progressPie();
+            $('a[data-toggle="showModuleModal"]').click(function(){$('#showModuleModal').modal('show')});
 
             $('#customBtn').modalTrigger();
 
             $('#switchToTable').click(function()
             {
-                saveDatatableConfig('mode', 'table', true)
+                saveDatatableConfig('mode', 'table', true);
             });
         }
     });

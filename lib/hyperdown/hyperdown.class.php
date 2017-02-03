@@ -605,7 +605,7 @@ class hyperdown
                     break;
 
                 // table
-                case preg_match("/^((?:(?:(?:[ :]*\-[ :]*)+(?:\||\+))|(?:(?:\||\+)(?:[ :]*\-[ :]*)+)|(?:(?:[ :]*\-[ :]*)+(?:\||\+)(?:[ :]*\-[ :]*)+))+)$/", $line, $matches):
+                case preg_match("/^((?:(?:(?:[ :]*\-[ :]*)+(?:\||\+))|(?:(?:\||\+)(?:[ :]*\-[ :]*)+)|(?:(?:[ :]*\-[ :]*)+(?:\||\+)(?:[ :]*\-[ :]*)+))+)\s*$/", $line, $matches):
                     if ($this->isBlock('table')) {
                         $block[3][0][] = $block[3][2];
                         $block[3][2] ++;
@@ -1148,6 +1148,7 @@ class hyperdown
      */
     public function cleanUrl($url)
     {
+        return $url;
         if (preg_match("/^\s*((http|https|ftp|mailto):[x80-xff_a-z0-9-\.\/%#@\?\+=~\|\,&\(\)]+)/i", $url, $matches)) {
             return $matches[1];
         } else if (preg_match("/^\s*([x80-xff_a-z0-9-\.\/%#@\?\+=~\|\,&]+)/i", $url, $matches)) {

@@ -21,6 +21,7 @@ class productplan extends control
     public function commonAction($productID, $branch = 0)
     {
         $this->loadModel('product');
+        $this->app->loadConfig('project');
         $product = $this->product->getById($productID);
         $this->view->product  = $product;
         $this->view->branch   = $branch;
@@ -220,6 +221,11 @@ class productplan extends control
         if(!$plan) die(js::error($this->lang->notFound) . js::locate('back'));
         $this->commonAction($plan->product, $plan->branch);
         $products                = $this->product->getPairs();
+
+        $this->loadModel('datatable');
+        $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
+        $this->view->modulePairs = $showModule ? $this->loadModel('tree')->getModulePairs($plan->product, 'story', $showModule) : array();
+
         $this->view->title       = "PLAN #$plan->id $plan->title/" . $products[$plan->product];
         $this->view->position[]  = $this->lang->productplan->view;
         $this->view->planStories = $this->loadModel('story')->getPlanStories($planID, 'all', $type == 'story' ? $sort : 'id_desc');
@@ -230,7 +236,7 @@ class productplan extends control
         $this->view->actions     = $this->loadModel('action')->getList('productplan', $planID);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->plans       = $this->productplan->getPairs($plan->product, $plan->branch);
-        $this->view->modules     = array('0' => '/') + $this->loadModel('tree')->getModulePairs($plan->product, 'story');
+        $this->view->modules     = $this->loadModel('tree')->getOptionMenu($plan->product);
         $this->view->type        = $type;
         $this->view->orderBy     = $orderBy;
         $this->view->link        = $link;
@@ -242,13 +248,17 @@ class productplan extends control
      * Ajax: Get product plans. 
      * 
      * @param  int    $productID 
+     * @param  string $number
      * @access public
      * @return void
      */
-    public function ajaxGetProductplans($productID, $branch = 0)
+    public function ajaxGetProductplans($productID, $branch = 0, $number = '')
     {
         $plans = $this->productplan->getPairs($productID, $branch);
-        die(html::select('plan', $plans, '', "class='form-control'"));
+
+         $planName = $number === '' ? 'plan' : "plan[$number]";
+         $plans    = empty($plans) ? array('' => '') : $plans;
+         die(html::select($planName, $plans, '', "class='form-control'"));
     }
 
     /**
@@ -320,6 +330,7 @@ class productplan extends control
         $this->view->plans      = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->browseType = $browseType;
+        $this->view->modules    = $this->loadModel('tree')->getOptionMenu($plan->product);
         $this->view->param      = $param;
         $this->view->orderBy    = $orderBy;
         $this->display();

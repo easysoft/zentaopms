@@ -34,7 +34,7 @@
   <div id='querybox' class='show'></div>
 </div>
 <form method='post'>
-<table class='table table-condensed table-hover table-striped tablesorter table-fixed'>
+<table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable'>
   <caption class='text-left text-special'>
     <?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->testtask->unlinkedCases;?></strong> (<?php echo $pager->recTotal;?>)
   </caption>
@@ -52,7 +52,7 @@
   <tbody>
   <?php foreach($cases as $case):?>
   <tr class='text-center'>
-    <td class='text-left'>
+    <td class='cell-id'>
       <input type='checkbox' name='cases[]' value='<?php echo $case->id;?>' />
       <?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?>
     </td>
@@ -78,7 +78,7 @@
   <tr>
     <td colspan='7'>
       <?php if($cases):?>
-        <div class='table-actions clearfix'><?php echo html::selectButton() . html::submitButton();?></div>
+        <div class='table-actions pd-0 clearfix'><?php echo html::selectButton() . html::submitButton();?></div>
       <?php endif;?>
       <div class='text-right'><?php $pager->show();?></div>
     </td>

@@ -73,7 +73,7 @@
             <span class='input-group-addon'><?php echo $lang->story->source?></span>
             <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control'");?>
             <span class='input-group-addon fix-border'><?php echo $lang->comment?></span>
-            <?php echo html::input('sourceNote', $sourceNote, "class='form-control'");?>
+            <?php echo html::input('sourceNote', $sourceNote, "class='form-control' autocomplete='off'");?>
           </div>
         </td>
         <?php endif;?>
@@ -83,7 +83,9 @@
         <td>
           <div class='input-group'>
             <?php echo html::select('assignedTo', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen'");?>
+            <?php if(!$this->story->checkForceReview()):?>
             <span class='input-group-addon'><?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview' {$needReview}");?></span>
+            <?php endif;?>
           </div>
         </td>
       </tr> 
@@ -94,7 +96,7 @@
             <div class='col-table'>
               <div class="input-group w-p100">
                 <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->story->colorTag ?>' data-update-text='#title'>
-                <?php echo html::input('title', $storyTitle, "class='form-control'");?>
+                <?php echo html::input('title', $storyTitle, "class='form-control' autocomplete='off'");?>
               </div>
             </div>
             <?php
@@ -132,7 +134,7 @@
                 <?php endif;?>
                 <?php if(!$hiddenEst):?>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->story->estimateAB;?></span>
-                <?php echo html::input('estimate', $estimate, "class='form-control minw-60px'");?>
+                <?php echo html::input('estimate', $estimate, "class='form-control minw-60px' autocomplete='off'");?>
                 <?php endif;?>
               </div>
             </div>
@@ -142,7 +144,7 @@
       </tr>  
       <tr>
         <th><?php echo $lang->story->spec;?></th>
-        <td colspan='2'><?php echo html::textarea('spec', $spec, "rows='9' class='form-control'");?><div class='help-block'><?php echo $lang->story->specTemplate;?></div></td>
+        <td colspan='2'><?php echo html::textarea('spec', $spec, "rows='9' class='form-control disabled-ie-placeholder' placeholder='" . htmlspecialchars($lang->story->specTemplate) . "'");?></td>
       </tr>  
       <?php if(strpos(",$showFields,", ',verify,') !== false):?>
       <tr>
@@ -174,7 +176,7 @@
             <?php if(!$hiddenMailto):?>
             <span class='input-group-addon'><?php echo $lang->story->keywords;?></span>
             <?php endif;?>
-            <?php echo html::input('keywords', $keywords, 'class="form-control"');?>
+            <?php echo html::input('keywords', $keywords, 'class="form-control" autocomplete="off"');?>
           </div>
         </td>
         <?php endif;?>

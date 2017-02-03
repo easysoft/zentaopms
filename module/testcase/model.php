@@ -93,7 +93,7 @@ class testcaseModel extends model
         $cases       = fixer::input('post')->get();
         $batchNum    = count(reset($cases));
 
-        $result = $this->loadModel('common')->removeDuplicate('case', $cases, "product={$productID} and branch={$branch}");
+        $result = $this->loadModel('common')->removeDuplicate('case', $cases, "product={$productID}");
         $cases  = $result['data'];
 
         for($i = 0; $i < $batchNum; $i++)
@@ -125,7 +125,7 @@ class testcaseModel extends model
             {
                 $data[$i] = new stdclass();
                 $data[$i]->product      = $productID;
-                $data[$i]->branch       = $branch;
+                $data[$i]->branch       = $cases->branch[$i];
                 $data[$i]->module       = $cases->module[$i];
                 $data[$i]->type         = $cases->type[$i];
                 $data[$i]->pri          = $cases->pri[$i];
@@ -288,7 +288,7 @@ class testcaseModel extends model
         /* By search. */
         elseif($browseType == 'bysearch')
         {
-            $cases = $this->getBySearch($productID, $queryID, $sort, $pager);
+            $cases = $this->getBySearch($productID, $queryID, $sort, $pager, $branch);
         }
 
         return $cases;
@@ -304,7 +304,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $queryID, $orderBy, $pager = null)
+    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $branch = 0)
     {
         if($queryID)
         {
@@ -334,6 +334,10 @@ class testcaseModel extends model
             $caseQuery = $caseQuery . ' AND `product` ' . helper::dbIN($products);
             $queryProductID = 'all';
         }
+
+        $allBranch = "`branch` = 'all'";
+        if($branch and strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND `branch` in('0','$branch')";
+        if(strpos($caseQuery, $allBranch) !== false) $caseQuery = str_replace($allBranch, '1', $caseQuery);
         $caseQuery .= ')';
 
         $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
@@ -391,7 +395,7 @@ class testcaseModel extends model
      */
     public function getStoryCases($storyID)
     {
-        return $this->dao->select('id, title, type, status, lastRunner, lastRunDate, lastRunResult')
+        return $this->dao->select('id, title, pri, type, status, lastRunner, lastRunDate, lastRunResult')
             ->from(TABLE_CASE)
             ->where('story')->eq((int)$storyID)
             ->andWhere('deleted')->eq(0)
@@ -539,7 +543,7 @@ class testcaseModel extends model
         if($browseType == 'bySearch')
         {
             $case       = $this->getById($caseID);
-            $cases2Link = $this->getBySearch($case->product, $queryID, 'id', null);
+            $cases2Link = $this->getBySearch($case->product, $queryID, 'id', null, $case->branch);
             foreach($cases2Link as $key => $case2Link)
             {
                 if($case2Link->id == $caseID) unset($cases2Link[$key]);
@@ -793,6 +797,7 @@ class testcaseModel extends model
             $caseData = new stdclass();
 
             $caseData->product      = $product;
+            $caseData->branch       = isset($data->branch[$key]) ? $data->branch[$key] : $branch;
             $caseData->module       = $data->module[$key];
             $caseData->story        = (int)$data->story[$key];
             $caseData->title        = $data->title[$key];
@@ -800,6 +805,7 @@ class testcaseModel extends model
             $caseData->type         = $data->type[$key];
             $caseData->status       = $data->status[$key];
             $caseData->stage        = join(',', $data->stage[$key]);
+            $caseData->keywords     = $data->keywords[$key];
             $caseData->frequency    = 1;
             $caseData->precondition = $data->precondition[$key];
 
@@ -896,7 +902,7 @@ class testcaseModel extends model
                 $caseData->version    = 1;
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;
-                $caseData->branch     = $branch;
+                $caseData->branch     = isset($data->branch[$key]) ? $data->branch[$key] : $branch;
                 $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
 
                 if(!dao::isError())
@@ -928,8 +934,11 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getImportFields()
+    public function getImportFields($productID = 0)
     {
+        $product    = $this->loadModel('product')->getById($productID);
+        if($product->type != 'normal') $this->lang->testcase->branch = $this->lang->product->branchName[$product->type];
+
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;
         $fields     = explode(',', $caseConfig->exportFields);
@@ -965,7 +974,7 @@ class testcaseModel extends model
         else
         {
             $this->config->testcase->search['fields']['branch'] = $this->lang->product->branch;
-            $this->config->testcase->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
+            $this->config->testcase->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty') + array('all' => $this->lang->branch->all);
         }
         $this->config->testcase->search['actionURL'] = $actionURL;
         $this->config->testcase->search['queryID']   = $queryID;
@@ -1043,6 +1052,15 @@ class testcaseModel extends model
             case 'lastRunResult':
                 if($case->lastRunResult) echo $this->lang->testcase->resultList[$case->lastRunResult];
                 break;
+            case 'bugs':
+                echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;
+                break;
+            case 'results':
+                echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a(helper::createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;
+                break;
+            case 'stepNumber':
+                echo $case->stepNumber;
+                break;
             case 'actions':
                 common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe');
                 common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', '', '', 'results iframe');
@@ -1060,5 +1078,49 @@ class testcaseModel extends model
             }
             echo '</td>';
         }
+    }
+
+    /**
+     * Append bugs and results.
+     * 
+     * @param  array    $cases 
+     * @access public
+     * @return array
+     */
+    public function appendBugAndResults($cases, $type = 'case')
+    {
+        $caseIdList = array_keys($cases);
+        if($type == 'case')
+        {
+            $caseBugs   = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`case`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
+            $results    = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`case`')->in($caseIdList)->groupBy('`case`')->fetchPairs('case', 'count');
+            $stepNumber = $this->dao->select('count(distinct t1.id) as count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.`case`=t2.`id`')
+                ->where('t1.`case`')->in($caseIdList)
+                ->andWhere('t1.version=t2.version')
+                ->groupBy('t1.`case`')
+                ->fetchPairs('case', 'count');
+        }
+        else
+        {
+            $caseBugs = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`result`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
+            $results  = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`run`')->in($caseIdList)->groupBy('`run`')->fetchPairs('case', 'count');
+            $stepNumber = $this->dao->select('count(distinct t1.id) as count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
+                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.`case`=t2.`case`')
+                ->where('t2.`id`')->in($caseIdList)
+                ->andWhere('t1.version=t2.version')
+                ->groupBy('t1.`case`')
+                ->fetchPairs('case', 'count');
+        }
+
+        foreach($cases as $case)
+        {
+            $caseID = $type == 'case' ? $case->id : $case->case;
+            $case->bugs       = isset($caseBugs[$caseID])   ? $caseBugs[$caseID]   : 0;
+            $case->results    = isset($results[$caseID])    ? $results[$caseID]    : 0;
+            $case->stepNumber = isset($stepNumber[$caseID]) ? $stepNumber[$caseID] : 0;
+        }
+
+        return $cases;
     }
 }

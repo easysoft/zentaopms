@@ -87,6 +87,18 @@
         <div class='article-content'><?php echo $task->storyVerify;?></div>
       </fieldset>
       <?php endif;?>
+
+      <?php if(isset($task->cases) and $task->cases):?>
+      <fieldset>
+        <legend><?php echo $lang->task->case;?></legend>
+        <div class='article-content'>
+          <ul class='list-unstyled'>
+          <?php foreach($task->cases as $caseID => $case) echo '<li>' . html::a($this->createLink('testcase', 'view', "caseID=$caseID", '', true), "#$caseID " . $case, '', "data-toggle='modal' data-type='iframe' data-width='90%'") . '</li>';?>
+          </ul>
+        </div>
+      </fieldset>
+      <?php endif;?>
+
       <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='actions'> <?php if(!$task->deleted) echo $actionLinks;?></div>
@@ -161,18 +173,6 @@
             <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$task->fromBug"), "#$task->fromBug " . $fromBug->title, '_blank');?></td> 
           </tr>
           <?php endif;?>
-          <?php if(isset($task->cases)):?>
-          <tr>
-            <th><?php echo $lang->task->case;?></th>
-            <td>
-              <ul class='list-unstyled'>
-              <?php
-              foreach($task->cases as $caseID => $case) echo '<li>' . html::a($this->createLink('testcase', 'view', "caseID=$caseID"), "#$caseID " . $case, '_blank') . '</li>';
-              ?>
-              </ul>
-            </td>
-          </tr>
-          <?php endif;?>
           <tr>
             <th><?php echo $lang->task->assignedTo;?></th>
             <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : '';?></td> 
@@ -187,7 +187,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->task->pri;?></th>
-            <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri)?></span></td>
+            <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri);?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri)?></span></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->mailto;?></th>

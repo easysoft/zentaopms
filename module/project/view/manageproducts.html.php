@@ -24,17 +24,14 @@
         <?php foreach($allProducts as $productID => $productName):?>
         <?php if(isset($linkedProducts[$productID])):?>
         <?php $checked = 'checked';?>
-        <div class='col-sm-4 <?php echo $checked?>'>
-          <?php if(isset($branchGroups[$productID])) echo "<div class='col-sm-6' style='padding-left:0px'>"?>
-          <label for='<?php echo 'products'. $productID?>';>
+        <div class='product col-sm-4 <?php echo $checked . (isset($branchGroups[$productID]) ? ' has-branch' : '')?>'>
+          <label class='text-ellipsis checkbox-inline' for='<?php echo 'products'. $productID?>';>
             <?php echo "<input type='checkbox' name='products[$productID]' value='$productID' $checked id='products{$productID}'> $productName";?>
           </label>
           <?php
           if(isset($branchGroups[$productID]))
           {
-              echo "</div><div class='col-sm-6'>";
-              echo html::select("branch[$productID]", $branchGroups[$productID], $linkedProducts[$productID]->branch, "class='from-control chosen'");
-              echo '</div>';
+              echo html::select("branch[$productID]", $branchGroups[$productID], $linkedProducts[$productID]->branch, "class='form-control chosen'");
           }
           ?>
         </div>
@@ -47,17 +44,14 @@
       <legend><?php echo $lang->project->unlinkedProducts;?></legend>
       <div class='row'>
         <?php foreach($allProducts as $productID => $productName):?>
-        <div class='col-sm-4'>
-          <?php if(isset($branchGroups[$productID])) echo "<div class='col-sm-6' style='padding-left:0px'>"?>
-          <label for='<?php echo 'products'. $productID?>';>
+        <div class='col-sm-4 product<?php echo isset($branchGroups[$productID]) ? ' has-branch' : ''?>'>
+          <label class='text-ellipsis checkbox-inline' for='<?php echo 'products'. $productID?>';>
             <?php echo "<input type='checkbox' name='products[$productID]' value='$productID' id='products{$productID}'> $productName";?>
           </label>
           <?php
           if(isset($branchGroups[$productID]))
           {
-              echo "</div><div class='col-sm-6'>";
-              echo html::select("branch[$productID]", $branchGroups[$productID], '', "class='from-control chosen'");
-              echo '</div>';
+              echo html::select("branch[$productID]", $branchGroups[$productID], '', "class='form-control chosen'");
           }
           ?>
         </div>

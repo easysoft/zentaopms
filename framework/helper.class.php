@@ -75,4 +75,40 @@ class helper extends baseHelper
         $replacements = array("\\\\", "\\/", "\\\"", "\'", "\\n", "\\r", "\\t",  "\\f",  "\\b", "\\u");
         return str_replace($escapers, $replacements, $json);
     }
+
+    /**
+     * Convert encoding.
+     * 
+     * @param  string $string 
+     * @param  string $fromEncoding 
+     * @param  string $toEncoding 
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function convertEncoding($string, $fromEncoding, $toEncoding = 'utf-8')
+    {
+        $toEncoding = str_replace('utf8', 'utf-8', $toEncoding);
+        if(function_exists('mb_convert_encoding'))
+        {
+            /* Remove like utf-8//TRANSLIT. */
+            $position = strpos($toEncoding, '//');
+            if($position !== false) $toEncoding = substr($toEncoding, 0, $position);
+
+            /* Check string encoding. */
+            $encoding = strtolower(mb_detect_encoding($string, array('ASCII','UTF-8','GB2312','GBK','BIG5')));
+            if($encoding == $toEncoding) return $string;
+            return mb_convert_encoding($string, $toEncoding, $encoding);
+        }
+        elseif(function_exists('iconv'))
+        {
+            if($fromEncoding == $toEncoding) return $string;
+            $convertString = @iconv($fromEncoding, $toEncoding, $string);
+            /* iconv error then return original. */
+            if(!$convertString) return $string;
+            return $convertString;
+        }
+
+        return $string;
+    }
 }

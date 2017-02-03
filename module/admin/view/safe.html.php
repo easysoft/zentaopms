@@ -21,17 +21,25 @@
   <form method='post' target='hiddenwin'>
     <table class='table table-form'>
       <tr>
-        <th class='w-100px'><?php echo $lang->admin->safe->password?></th>
-        <td><?php echo html::radio('mode', $lang->admin->safe->modeList, isset($config->safe->mode) ? $config->safe->mode : 0)?></td>
+        <th class='w-130px'><?php echo $lang->admin->safe->password?></th>
+        <td><?php echo html::radio('mode', $lang->admin->safe->modeList, isset($config->safe->mode) ? $config->safe->mode : 0, "onclick=showModeRule(this.value)")?></td>
         <td><?php echo $lang->admin->safe->noticeMode?></td>
       </tr>
-      <tr>
+      <tr id='mode1Rule' class='hidden'>
         <th></th>
-        <td colspan='2'><span style='color:#03b8cf;font-weight:bold;'><?php echo $lang->admin->safe->noticeStrong;?></span></td>
+        <td colspan='2'><span style='color:#03b8cf;font-weight:bold;'><?php echo $lang->admin->safe->modeRuleList[1] . $lang->admin->safe->noticeStrong;?></span></td>
+      </tr>
+      <tr id='mode2Rule' class='hidden'>
+        <th></th>
+        <td colspan='2'><span style='color:#03b8cf;font-weight:bold;'><?php echo $lang->admin->safe->modeRuleList[2] . $lang->admin->safe->noticeStrong;?></span></td>
       </tr>
       <tr>
         <th><?php echo $lang->admin->safe->weak?></th>
         <td colspan='2'><?php echo html::textarea('weak', $config->safe->weak, "class='form-control' rows='4'")?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->admin->safe->modifyPasswordFirstLogin?></th>
+        <td colspan='2'><?php echo html::radio('modifyPasswordFirstLogin', $lang->admin->safe->modifyPasswordList, isset($config->safe->modifyPasswordFirstLogin) ? $config->safe->modifyPasswordFirstLogin : 0)?></td>
       </tr>
       <tr>
         <th></th>
@@ -40,4 +48,24 @@
     </table>
   </form>
 </div>
+<script>
+$(function()
+{
+    var mode = $("input[name='mode']:checked").val();
+    showModeRule(mode);
+});
+function showModeRule(mode)
+{
+    if(mode == 0)
+    {
+        $('#mode1Rule').addClass('hidden');
+        $('#mode2Rule').addClass('hidden');
+    }
+    else
+    {
+        mode == 1 ? $('#mode1Rule').removeClass('hidden') : $('#mode1Rule').addClass('hidden');
+        mode == 2 ? $('#mode2Rule').removeClass('hidden') : $('#mode2Rule').addClass('hidden');
+    }
+}
+</script>
 <?php include '../../common/view/footer.html.php';?>

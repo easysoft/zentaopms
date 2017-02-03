@@ -10,19 +10,23 @@
  * @link        http://www.zentao.net
  */
 ?>
+    <?php include '../../common/view/tablesorter.html.php';?>
     <?php $vars = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='caseList'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='caseList'>
       <thead>
         <tr class='colhead'>
-          <th class='w-id'><nobr><?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></nobr></th>
-          <th class='w-pri'>     <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
-          <th>                   <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
-          <th class='w-type'>    <?php common::printOrderLink('type',          $orderBy, $vars, $lang->testcase->type);?></th>
-          <th class='w-user'>    <?php common::printOrderLink('assignedTo',    $orderBy, $vars, $lang->testtask->assignedTo);?></th>
-          <th class='w-user'>    <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
-          <th class='w-100px'>   <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
-          <th class='w-80px'>    <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
-          <th class='w-status'>  <?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='w-id {sorter: false}'><nobr><?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></nobr></th>
+          <th class='w-pri {sorter: false}'>     <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
+          <th class='{sorter: false}'>           <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
+          <th class='w-type {sorter: false}'>    <?php common::printOrderLink('type',          $orderBy, $vars, $lang->testcase->type);?></th>
+          <th class='w-user {sorter: false}'>    <?php common::printOrderLink('assignedTo',    $orderBy, $vars, $lang->testtask->assignedTo);?></th>
+          <th class='w-user {sorter: false}'>    <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
+          <th class='w-100px {sorter: false}'>   <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
+          <th class='w-80px {sorter: false}'>    <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
+          <th class='w-status {sorter: false}'>  <?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='w-30px' title='<?php echo $lang->testcase->bugs?>'> <?php echo $lang->testcase->bugsAB;?></th>
+          <th class='w-30px' title='<?php echo $lang->testcase->results?>'> <?php echo $lang->testcase->resultsAB;?></th>
+          <th class='w-30px' title='<?php echo $lang->testcase->stepNumber?>'> <?php echo $lang->testcase->stepNumberAB;?></th>
           <th class='w-120px {sorter: false}'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -35,7 +39,7 @@
       <tbody>
         <?php foreach($runs as $run):?>
         <tr class='text-center'>
-          <td class='text-left'>
+          <td class='cell-id'>
             <?php if($canBatchEdit or $canBatchAssign or $canBatchRun):?>
             <input type='checkbox' name='caseIDList[]' value='<?php echo $run->case;?>'/> 
             <?php endif;?>
@@ -52,6 +56,9 @@
           <td><?php if(!helper::isZeroDate($run->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($run->lastRunDate));?></td>
           <td class='<?php echo $run->lastRunResult;?>'><?php if($run->lastRunResult) echo $lang->testcase->resultList[$run->lastRunResult];?></td>
           <td class='<?php echo $run->status;?>'><?php echo ($run->version < $run->caseVersion) ? "<span class='warning'>{$lang->testcase->changed}</span>" : $lang->testtask->statusList[$run->status];?></td>
+          <td><?php echo (common::hasPriv('testcase', 'bugs') and $run->bugs) ? html::a($this->createLink('testcase', 'bugs', "runID={$run->id}&caseID={$run->case}"), $run->bugs, '', "class='iframe'") : $run->bugs;?></td>
+          <td><?php echo (common::hasPriv('testtask', 'results') and $run->results) ? html::a($this->createLink('testtask', 'results', "runID={$run->id}&caseID={$run->case}"), $run->results, '', "class='iframe'") : $run->results;?></td>
+          <td><?php echo $run->stepNumber;?></td>
           <td class='text-center'>
             <?php
             common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase iframe');

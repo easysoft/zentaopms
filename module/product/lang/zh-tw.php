@@ -89,7 +89,7 @@ $lang->product->statusList['normal'] = '正常';
 $lang->product->statusList['closed'] = '結束';
 
 $lang->product->aclList['open']    = "預設設置(有{$lang->productCommon}視圖權限，即可訪問)";
-$lang->product->aclList['private'] = "私有{$lang->productCommon}(只有{$lang->projectCommon}團隊成員才能訪問)";
+$lang->product->aclList['private'] = "私有{$lang->productCommon}(只有{$lang->productCommon}相關負責人和{$lang->projectCommon}團隊成員才能訪問)";
 $lang->product->aclList['custom']  = '自定義白名單(團隊成員和白名單的成員可以訪問)';
 
 $lang->product->storySummary = "本頁共 <strong>%s</strong> 個需求，預計 <strong>%s</strong> 個工時，用例覆蓋率<strong>%s</strong>。";

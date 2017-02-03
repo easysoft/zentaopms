@@ -28,6 +28,8 @@ class productModel extends model
         if($products and !isset($products[$productID]) and !$this->checkPriv($this->getById($productID)))
         {
             echo(js::alert($this->lang->product->accessDenied));
+            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
             die(js::locate('back'));
         }
 
@@ -95,7 +97,17 @@ class productModel extends model
         if($productID > 0) $this->session->set('product', (int)$productID);
         if($productID == 0 and $this->cookie->lastProduct)    $this->session->set('product', (int)$this->cookie->lastProduct);
         if($productID == 0 and $this->session->product == '') $this->session->set('product', key($products));
-        if(!isset($products[$this->session->product])) $this->session->set('product', key($products));
+        if(!isset($products[$this->session->product]))
+        {
+            $this->session->set('product', key($products));
+            if($productID > 0)
+            {
+                echo(js::alert($this->lang->product->accessDenied));
+                $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+                if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
+                die(js::locate('back'));
+            }
+        }
         if($this->cookie->preProductID != $productID)
         {
             $this->cookie->set('preBranch', 0);
@@ -464,7 +476,7 @@ class productModel extends model
         else
         {
             $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
-            $this->config->product->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
+            $this->config->product->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty') + array('all' => $this->lang->branch->all);
         }
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);

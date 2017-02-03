@@ -60,6 +60,7 @@ $lang->action->objectTypes['doc']         = '文檔';
 $lang->action->objectTypes['doclib']      = '文檔庫';
 $lang->action->objectTypes['todo']        = '待辦';
 $lang->action->objectTypes['branch']      = '分支';
+$lang->action->objectTypes['module']      = '模組';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();
@@ -136,6 +137,8 @@ $lang->action->label->changestatus        = '修改狀態';
 $lang->action->label->marked              = '編輯了';
 $lang->action->label->linked2project      = "關聯{$lang->projectCommon}";
 $lang->action->label->unlinkedfromproject = "移除{$lang->projectCommon}";
+$lang->action->label->linked2release      = "關聯發佈";
+$lang->action->label->unlinkedfromrelease = "移除發佈";
 $lang->action->label->linkrelatedbug      = "關聯了相關Bug";
 $lang->action->label->unlinkrelatedbug    = "移除了相關Bug";
 $lang->action->label->linkrelatedcase     = "關聯了相關用例";

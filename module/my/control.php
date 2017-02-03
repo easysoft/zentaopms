@@ -188,23 +188,19 @@ class my extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
         $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $sort, 0, $pager);
 
-        /* Save bugIDs session for get the pre and next bug. */
-        $bugIDs = '';
-        foreach($bugs as $bug) $bugIDs .= ',' . $bug->id;
-        $this->session->set('bugIDs', $bugIDs . ',');
-
         /* assign. */
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
-        $this->view->position[] = $this->lang->my->bug;
-        $this->view->bugs       = $bugs;
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->tabID      = 'bug';
-        $this->view->type       = $type;
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
-        $this->view->pageID     = $pageID;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
+        $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
+        $this->view->position[]  = $this->lang->my->bug;
+        $this->view->bugs        = $bugs;
+        $this->view->users       = $this->user->getPairs('noletter');
+        $this->view->memberPairs = $this->user->getPairs('noletter|nodeleted');
+        $this->view->tabID       = 'bug';
+        $this->view->type        = $type;
+        $this->view->recTotal    = $recTotal;
+        $this->view->recPerPage  = $recPerPage;
+        $this->view->pageID      = $pageID;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
 
         $this->display();
     }

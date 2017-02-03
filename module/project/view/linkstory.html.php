@@ -21,7 +21,7 @@
   <div id='querybox' class='show'></div>
 </div>
 <form method='post' class='form-condensed' id='linkStoryForm'>
-  <table class='table tablesorter table-fixed' id='linkStoryList'> 
+  <table class='table tablesorter table-fixed table-selectable' id='linkStoryList'> 
     <thead>
     <tr>
       <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -43,7 +43,7 @@
     <?php if(isset($prjStories[$story->id])) continue;?>
     <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id");?>
     <tr class='text-center'>
-      <td class='text-left'>
+      <td class='cell-id'>
         <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>'/> 
         <?php echo html::hidden("products[$story->id]", $story->product);?>
         <?php echo html::a($storyLink, sprintf('%03d', $story->id));?>
@@ -64,12 +64,17 @@
     </tbody>
     <tfoot>
       <tr>
-      <td colspan='<?php echo $productType == 'normal' ? '7' :'8';?>' class='text-left'>
+        <td colspan='<?php echo $productType == 'normal' ? '8' :'9';?>' class='text-left'>
           <div class='table-actions clearfix'>
-            
           <?php 
-          if($storyCount) echo html::selectButton() . html::submitButton();
-          else echo "<div class='text'>" . $lang->project->whyNoStories . '</div>';
+          if($storyCount)
+          {
+              echo html::selectButton() . html::submitButton();
+          }
+          else
+          {
+              echo "<div class='text'>" . $lang->project->whyNoStories . '</div>';
+          }
           ?>
           </div>
         </td>

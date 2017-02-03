@@ -1,20 +1,33 @@
+<?php
+$extViewFile = $this->app->getModuleRoot() . 'ext/view/' . basename(__FILE__);
+if(file_exists($extViewFile))
+{
+    include $extViewFile;
+    return;
+}
+?>
             <?php if(!empty($action)): ?>
+            <?php if(!empty($action->comment)):?>
+            <tr>
+              <td style="padding:0px 10px 10px 10px; border: none;">
+                <fieldset style="border: 1px solid #e5e5e5">
+                <legend style="color: #114f8e"><?php echo $this->lang->comment?></legend>
+                <div style="padding:5px;"><?php echo $action->comment?></div>
+                </fieldset>
+              </td>
+            </tr>
+            <?php endif;?>
             <tr>
               <td style='padding: 10px; background-color: #FFF0D5'>
-                <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
                 <?php if(isset($users[$action->actor])) $action->actor = $users[$action->actor];?>
                 <?php if(isset($users[$action->extra])) $action->extra = $users[$action->extra];?>
                 <span style='font-size: 16px; color: #F1A325'>●</span> &nbsp;<span><?php $this->action->printAction($action);?></span>
               </td>
             </tr>
-            <?php if(!empty($action->comment) or !empty($action->history)):?>
+            <?php if(!empty($action->history)):?>
             <tr>
               <td style='padding: 10px;'>
                 <div><?php echo $this->action->printChanges($action->objectType, $action->history);?></div>
-                <?php if(!empty($action->comment)): ?>
-                  <p style='padding: 0; padding-left: 10px; margin: 0; margin-top: 8px; border-left: 4px solid #ddd; color: #666'><?php echo $action->comment;?></p>
-                <?php endif;?>
-                </div>
               </td>
             </tr>
             <?php endif;?>

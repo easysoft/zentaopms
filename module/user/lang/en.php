@@ -14,19 +14,19 @@ $lang->user->id          = 'ID';
 $lang->user->company     = 'Company';
 $lang->user->dept        = 'Department';
 $lang->user->account     = 'Account';
-$lang->user->password    = 'Password';
-$lang->user->password2   = 'Repeat password';
+$lang->user->password    = 'New Password';
+$lang->user->password2   = 'Repeat Password';
 $lang->user->role        = 'Role';
 $lang->user->group       = 'Group';
-$lang->user->realname    = 'Real Name';
+$lang->user->realname    = 'Name';
 $lang->user->nickname    = 'Nickname';
-$lang->user->commiter    = 'Commit Account';
+$lang->user->commiter    = 'Commiter';
 $lang->user->birthyear   = 'Birth Year';
 $lang->user->gender      = 'Gender';
 $lang->user->email       = 'Email';
 $lang->user->basicInfo   = 'Basic Info';
 $lang->user->accountInfo = 'Account';
-$lang->user->verify      = 'Verification';
+$lang->user->verify      = 'Acceptance';
 $lang->user->contactInfo = 'Contact';
 $lang->user->skype       = 'Skype';
 $lang->user->qq          = 'QQ';
@@ -58,7 +58,7 @@ $lang->user->delete          = "Delete";
 $lang->user->unbind          = "Unbind Ranger";
 $lang->user->login           = "Login";
 $lang->user->mobileLogin     = "Mobile";
-$lang->user->editProfile     = "Edit Profile";
+$lang->user->editProfile     = "Edit";
 $lang->user->deny            = "Access Denied";
 $lang->user->confirmDelete   = "Are you sure to delete this user?";
 $lang->user->confirmUnlock   = "Are you sure to unlock this user?";
@@ -89,7 +89,7 @@ $lang->user->canceledBy  = 'Cancelled by him';
 
 $lang->user->testTask2Him = 'His Build';
 $lang->user->case2Him     = 'His Case';
-$lang->user->caseByHim    = 'Case Opened by Him';
+$lang->user->caseByHim    = 'Case Open by Him';
 
 $lang->user->errorDeny    = "Sorry, your access to <b>%s</b> Module <b>%s</b> Feature has been denied. Please contact Admin to get permission. Click Back to return.";
 $lang->user->loginFailed  = "Login failed. Please check your account and password.";
@@ -108,8 +108,8 @@ $lang->user->roleList['qd']     = 'QA Supervisor';
 $lang->user->roleList['top']    = 'Senior Manager';
 $lang->user->roleList['others'] = 'Other';
 
-$lang->user->genderList['m'] = 'Male';
-$lang->user->genderList['f'] = 'Female';
+$lang->user->genderList['m'] = 'M';
+$lang->user->genderList['f'] = 'F';
 
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>Weak</span>";
 $lang->user->passwordStrengthList[1] = "<span style='color:#000'>Good</span>";
@@ -147,8 +147,8 @@ $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = 'Contact';
 $lang->user->contacts->listName = 'List Name';
 
-$lang->user->contacts->manage        = 'Manage List';
-$lang->user->contacts->contactsList  = 'List';
+$lang->user->contacts->manage        = 'Manage';
+$lang->user->contacts->contactsList  = 'Contacts';
 $lang->user->contacts->selectedUsers = 'Select User';
 $lang->user->contacts->selectList    = 'Select List';
 $lang->user->contacts->createList    = 'Create a List';
@@ -159,7 +159,7 @@ $lang->user->contacts->or            = ' or ';
 $lang->user->resetFail       = "Reset failed. Please check the account";
 $lang->user->resetSuccess    = "Password reset! Please use your new password to login.";
 $lang->user->noticeResetFile = "<h5>If you are not Administrator, please contact Administrator to reset your password.</h5>
-    <h5>If you are, please login into your Zentao host and create the %s file.</h5>
+    <h5>If you are, please login into your Zentao host and create the <span>%s</span> file.</h5>
     <p>Note:</p>
     <ol>
     <li>Keep the ok.txt empty.</li>

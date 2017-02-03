@@ -22,7 +22,7 @@
   </ul>
 </div>
 <form method='post' action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
-  <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='bugList'>
+  <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='bugList'>
     <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
     <tr class='text-center'>
@@ -42,7 +42,7 @@
     <?php $canBatchEdit  = common::hasPriv('bug', 'batchEdit');?>
     <?php foreach($bugs as $bug):?>
     <tr class='text-center'>
-      <td class='text-left'>
+      <td class='cell-id'>
         <?php if($canBatchEdit):?><input type='checkbox' name='bugIDList[]' value='<?php echo $bug->id;?>' /><?php endif;?>
         <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id), '_blank');?>
       </td>
@@ -70,15 +70,55 @@
     <tfoot>
       <tr>
         <td colspan='10'>
+        <?php if($bugs):?>
         <div class='table-actions clearfix'>
-        <?php
-        if($bugs and $canBatchEdit)
-        {
+          <?php echo html::selectButton();?>
+          <div class='btn-group dropup'>
+            <?php
             $actionLink = $this->createLink('bug', 'batchEdit');
-            echo html::selectButton() . html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
-        }
-        ?>
+            $misc       = common::hasPriv('bug', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+            echo html::commonButton($lang->edit, $misc);
+            ?>
+            <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+            <ul class='dropdown-menu'>
+              <?php
+              $class = "class='disabled'";
+              $actionLink = $this->createLink('bug', 'batchConfirm');
+              $misc = common::hasPriv('bug', 'batchConfirm') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : $class;
+              if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->confirmBug, '', $misc) . "</li>";
+
+              $actionLink = $this->createLink('bug', 'batchClose');
+              $misc = common::hasPriv('bug', 'batchClose') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : $class;
+              if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->close, '', $misc) . "</li>";
+
+              $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
+              if($canBatchAssignTo && count($bugs))
+              {
+                  $withSearch = count($memberPairs) > 10;
+                  $actionLink = $this->createLink('bug', 'batchAssignTo', "productID=0&type=my");
+                  echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
+                  echo "<li class='dropdown-submenu'>";
+                  echo html::a('javascript::', $lang->bug->assignedTo, 'id="assignItem"');
+                  echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                  echo "<ul  class='dropdown-list'>";
+                  foreach ($memberPairs as $key => $value)
+                  {
+                      if(empty($key)) continue;
+                      echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
+                  }
+                  echo "</ul>";
+                  if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                  echo "</div></li>";
+              }
+              else
+              {
+                  echo "<li>" . html::a('javascript:;', $lang->bug->assignedTo,  '', $class);
+              }
+              ?>
+            </ul>
+          </div>
         </div>
+        <?php endif;?>
         <?php $pager->show();?>
         </td>
       </tr>

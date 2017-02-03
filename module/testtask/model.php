@@ -281,10 +281,11 @@ class testtaskModel extends model
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->where('t1.task')->eq((int)$taskID)
+            ->andWhere('t2.deleted')->eq(0)
             ->beginIF($moduleID)->andWhere('t2.module')->in($moduleID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
     }
 
     /**
@@ -304,10 +305,11 @@ class testtaskModel extends model
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq((int)$taskID)
             ->andWhere('t1.assignedTo')->eq($user)
+            ->andWhere('t2.deleted')->eq(0)
             ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
     }
 
     /**
@@ -367,11 +369,12 @@ class testtaskModel extends model
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->where($caseQuery)
                 ->andWhere('t1.task')->eq($task->id)
+                ->andWhere('t2.deleted')->eq(0)
                 ->beginIF($queryProductID != 'all')->andWhere('t2.product')->eq($queryProductID)->fi()
                 ->beginIF($task->branch)->andWhere('t2.branch')->in("0,{$task->branch}")->fi()
                 ->orderBy(strpos($sort, 'assignedTo') !== false ? ('t1.' . $sort) : ('t2.' . $sort))
                 ->page($pager)
-                ->fetchAll();
+                ->fetchAll('id');
         }
         return $runs;
     }
@@ -570,13 +573,13 @@ class testtaskModel extends model
      */
     public function getResults($runID, $caseID = 0)
     {
-        if($caseID > 0)
-        {  
-            $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('`case`')->eq($caseID)->orderBy('id desc')->fetchAll('id');
+        if($runID > 0)
+        {
+            $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('run')->eq($runID)->orderBy('id desc')->fetchAll('id');
         }
         else
         {
-            $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('run')->eq($runID)->orderBy('id desc')->fetchAll('id');
+            $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('`case`')->eq($caseID)->orderBy('id desc')->fetchAll('id');
         }
 
         if(!$results) return array();
@@ -718,6 +721,15 @@ class testtaskModel extends model
                 $assignedTo = zget($users, $run->assignedTo, $run->assignedTo);
                 echo substr($assignedTo, strpos($assignedTo, ':') + 1);
                 break;
+            case 'bugs':
+                echo (common::hasPriv('testcase', 'bugs') and $run->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID={$run->id}&caseID={$run->case}"), $run->bugs, '', "class='iframe'") : $run->bugs;
+                break;
+            case 'results':
+                echo (common::hasPriv('testtask', 'results') and $run->results) ? html::a(helper::createLink('testtask', 'results', "runID={$run->id}&caseID={$run->case}"), $run->results, '', "class='iframe'") : $run->results;
+                break;
+            case 'stepNumber':
+                echo $run->stepNumber;
+                break;
             case 'actions':
                 common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase iframe');
                 common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe');
@@ -733,5 +745,79 @@ class testtaskModel extends model
             }
             echo '</td>';
         }
+    }
+
+    /**
+     * Send mail.
+     * 
+     * @param  int    $testtaskID 
+     * @param  int    $actionID 
+     * @access public
+     * @return void
+     */
+    public function sendmail($testtaskID, $actionID)
+    {
+        $this->loadModel('mail');
+        $testtask = $this->getByID($testtaskID);
+        $users    = $this->loadModel('user')->getPairs('noletter');
+
+        /* Get action info. */
+        $action          = $this->loadModel('action')->getById($actionID);
+        $history         = $this->action->getHistory($actionID);
+        $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
+
+        /* Get mail content. */
+        $modulePath = $this->app->getModulePath($appName = '', 'testtask');
+        $oldcwd     = getcwd();
+        $viewFile   = $modulePath . 'view/sendmail.html.php';
+        chdir($modulePath . 'view');
+        if(file_exists($modulePath . 'ext/view/sendmail.html.php'))
+        {
+            $viewFile = $modulePath . 'ext/view/sendmail.html.php';
+            chdir($modulePath . 'ext/view');
+        }
+        ob_start();
+        include $viewFile;
+        foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
+        $mailContent = ob_get_contents();
+        ob_end_clean();
+        chdir($oldcwd);
+
+        /* Set toList and ccList. */
+        $toList   = $testtask->owner;
+        $ccList   = str_replace(' ', '', trim($testtask->mailto, ','));
+        if(empty($toList))
+        {
+            if(empty($ccList)) return;
+            if(strpos($ccList, ',') === false)
+            {
+                $toList = $ccList;
+                $ccList = '';
+            }
+            else
+            {
+                $commaPos = strpos($ccList, ',');
+                $toList   = substr($ccList, 0, $commaPos);
+                $ccList   = substr($ccList, $commaPos + 1);
+            }
+        }
+
+        /* Set email title. */
+        if($action->action == 'opened')
+        {
+            $mailTitle = sprintf($this->lang->testtask->mail->create->title, $this->app->user->realname, $testtaskID, $this->post->name);
+        }
+        elseif($action->action == 'closed')
+        {
+            $mailTitle = sprintf($this->lang->testtask->mail->close->title, $this->app->user->realname, $testtaskID, $testtask->name);
+        }
+        else
+        {
+            $mailTitle = sprintf($this->lang->testtask->mail->edit->title, $this->app->user->realname, $testtaskID, $this->post->name);
+        }
+
+        /* Send mail. */
+        $this->mail->send($toList, $mailTitle, $mailContent, $ccList); 
+        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
     }
 }

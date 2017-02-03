@@ -34,7 +34,7 @@
       <div class='form-group'>
         <div class='input-group'>
           <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->task->colorTag ?>' value='<?php echo $task->color ?>' data-update-text='.task-title, #name'>
-          <?php echo html::input('name', $task->name, 'class="form-control" placeholder="' . $lang->task->name . '"');?>
+          <?php echo html::input('name', $task->name, 'class="form-control" autocomplete="off" placeholder="' . $lang->task->name . '"');?>
         </div>
       </div>
       <fieldset class='fieldset-pure'>
@@ -114,7 +114,7 @@
           </tr>  
           <tr>
             <th><?php echo $lang->task->estimate;?></th>
-            <td><?php echo html::input('estimate', $task->estimate, "class='form-control'");?></td>
+            <td><?php echo html::input('estimate', $task->estimate, "class='form-control' autocomplete='off'");?></td>
           </tr>  
           <tr>
             <th><?php echo $lang->task->consumed;?></th>
@@ -122,7 +122,7 @@
           </tr>  
           <tr>
             <th><?php echo $lang->task->left;?></th>
-            <td><?php echo html::input('left', $task->left, "class='form-control'");?></td>
+            <td><?php echo html::input('left', $task->left, "class='form-control' autocomplete='off'");?></td>
           </tr>
         </table>
       </fieldset>
@@ -139,7 +139,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->task->finishedDate;?></th>
-            <td><?php echo html::input('finishedDate', $task->finishedDate, 'class="form-control"');?></td>
+            <td><?php echo html::input('finishedDate', $task->finishedDate, 'class="form-control" autocomplete="off"');?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->canceledBy;?></th>
@@ -147,7 +147,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->task->canceledDate;?></th>
-            <td><?php echo html::input('canceledDate', $task->canceledDate, 'class="form-control"');?></td>
+            <td><?php echo html::input('canceledDate', $task->canceledDate, 'class="form-control" autocomplete="off"');?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->closedBy;?></th>
@@ -159,7 +159,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->task->closedDate;?></th>
-            <td><?php echo html::input('closedDate', $task->closedDate, 'class="form-control"');?></td>
+            <td><?php echo html::input('closedDate', $task->closedDate, 'class="form-control" autocomplete="off"');?></td>
           </tr>
         </table>
       </fieldset>

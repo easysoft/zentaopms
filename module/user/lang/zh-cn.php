@@ -129,8 +129,8 @@ $lang->user->placeholder->group     = '分组决定用户的权限列表。';
 $lang->user->placeholder->commiter  = '版本控制系统(subversion)中的帐号';
 $lang->user->placeholder->verify    = '需要输入你的密码加以验证';
 
-$lang->user->placeholder->passwordStrength[1] = '强度必须为中，6位以上，包含大小写字母，数字。';
-$lang->user->placeholder->passwordStrength[2] = '强度必须为强，10位以上，包含字母，数字，特殊字符。';
+$lang->user->placeholder->passwordStrength[1] = '6位以上，包含大小写字母，数字。';
+$lang->user->placeholder->passwordStrength[2] = '10位以上，包含大小写字母，数字，特殊字符。';
 
 $lang->user->error = new stdclass();
 $lang->user->error->account       = "ID %s，英文、数字和下划线的组合，三位以上";
@@ -158,10 +158,10 @@ $lang->user->contacts->or            = ' 或者 ';
 
 $lang->user->resetFail       = "重置密码失败，检查用户名是否存在！";
 $lang->user->resetSuccess    = "重置密码成功，请用新密码登录。";
-$lang->user->noticeResetFile = '<h5>普通用户请联系管理员重置密码</h5>
-    <h5>管理员请登录禅道所在的服务器，创建%s文件。</h5>
+$lang->user->noticeResetFile = "<h5>普通用户请联系管理员重置密码</h5>
+    <h5>管理员请登录禅道所在的服务器，创建<span>%s</span>文件。</h5>
     <p>注意：</p>
     <ol>
     <li>文件内容为空。</li>
     <li>如果之前文件存在，删除之后重新创建。</li>
-    </ol>'; 
+    </ol>"; 

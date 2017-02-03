@@ -47,7 +47,10 @@ class admin extends control
 	 */
 	public function ignore()
 	{
-		$this->loadModel('setting')->setItem('system.common.global.community', 'na');
+		$this->loadModel('setting');
+		$this->setting->deleteItems('owner=system&module=common&section=global&key=community');
+		$this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
+		$this->setting->setItem('system.common.global.community', 'na');
 		die(js::locate(inlink('index'), 'parent'));
 	}
 
@@ -57,24 +60,46 @@ class admin extends control
 	 * @access public
 	 * @return void
 	 */
-	public function register()
+	public function register($from = 'admin')
 	{
 		if($_POST)
 		{
 			$response = $this->admin->registerByAPI();
-			if($response == 'success') 
+            $response = json_decode($response);
+            if($response->result == 'success')
 			{
-				$this->loadModel('setting')->setItem('system.common.global.community', $this->post->account);
+                $user = $response->data;
+                $data['community'] = $user->account;
+                $data['ztPrivateKey'] = $user->private;
+
+				$this->loadModel('setting');
+                $this->setting->deleteItems('owner=system&module=common&section=global&key=community');
+                $this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
+				$this->setting->setItems('system.common.global', $data);
+
 				echo js::alert($this->lang->admin->register->success);
-				die(js::locate(inlink('index'), 'parent'));
-			}
-			die($response);
-		}
+                if($from == 'admin') die(js::locate(inlink('index'), 'parent'));
+                if($from == 'mail') die(js::locate($this->createLink('mail', 'ztcloud'), 'parent'));
+            }
+
+            $alertMessage = '';
+            if(is_string($response->message))
+            {
+                $alertMessage = $response->message;
+            }
+            else
+            {
+                foreach($response->message as $item) $alertMessage .= is_array($item) ? join('\n', $item) . '\n' : $item . '\n';
+            }
+            $alertMessage = str_replace(array('<strong>', '</strong>'), '', $alertMessage);
+            die(js::alert($alertMessage));
+        }
 
         $this->view->title      = $this->lang->admin->register->caption;
         $this->view->position[] = $this->lang->admin->register->caption;
 		$this->view->register   = $this->admin->getRegisterInfo();
 		$this->view->sn         = $this->config->global->sn;
+		$this->view->from       = $from;
 		$this->display();
 	}
 
@@ -84,20 +109,29 @@ class admin extends control
 	 * @access public
 	 * @return void
 	 */
-	public function bind()
+	public function bind($from = 'admin')
 	{
         if($_POST)
         {
             $response = $this->admin->bindByAPI();
-            if($response == 'success')
+            $response = json_decode($response);
+            if($response->result == 'success')
             {
-                $this->loadModel('setting')->setItem('system.common.global.community', $this->post->account);
+                $user = $response->data;
+                $data['community'] = $user->account;
+                $data['ztPrivateKey'] = $user->private;
+
+				$this->loadModel('setting');
+                $this->setting->deleteItems('owner=system&module=common&section=global&key=community');
+                $this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
+				$this->setting->setItems('system.common.global', $data);
+
                 echo js::alert($this->lang->admin->bind->success);
-                die(js::locate(inlink('index'), 'parent'));
+                if($from == 'admin') die(js::locate(inlink('index'), 'parent'));
+                if($from == 'mail') die(js::locate($this->createLink('mail', 'ztcloud'), 'parent'));
             }
             else
             {
-                $response = json_decode($response);
                 if($response->result == 'fail') die(js::alert($response->message));
             }
         }
@@ -105,6 +139,7 @@ class admin extends control
         $this->view->title      = $this->lang->admin->bind->caption;
         $this->view->position[] = $this->lang->admin->bind->caption;
         $this->view->sn         = $this->config->global->sn;
+        $this->view->from       = $from;
         $this->display();
     }
 
@@ -191,5 +226,88 @@ class admin extends control
         $this->view->key    = isset($this->config->sso->key) ? $this->config->sso->key : '';
         $this->view->code   = isset($this->config->sso->code) ? $this->config->sso->code : '';
         $this->display();
+    }
+
+    /**
+     * Certify ztEmail.
+     * 
+     * @param  string $email 
+     * @access public
+     * @return void
+     */
+    public function certifyZtEmail($email = '')
+    {
+        if($_POST)
+        {
+            $response = $this->admin->certifyByAPI('mail');
+            $response = json_decode($response);
+            if($response->result == 'fail') die(js::alert($response->message));
+            die(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
+        }
+
+        $this->view->title      = $this->lang->admin->certifyEmail;
+        $this->view->position[] = $this->lang->admin->certifyEmail;
+
+        $this->view->email = helper::safe64Decode($email);
+        $this->display();
+    }
+
+    /**
+     * Certify ztMobile 
+     * 
+     * @param  string $mobile 
+     * @access public
+     * @return void
+     */
+    public function certifyZtMobile($mobile = '')
+    {
+        if($_POST)
+        {
+            $response = $this->admin->certifyByAPI('mobile');
+            $response = json_decode($response);
+            if($response->result == 'fail') die(js::alert($response->message));
+            die(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
+        }
+
+        $this->view->title      = $this->lang->admin->certifyMobile;
+        $this->view->position[] = $this->lang->admin->certifyMobile;
+
+        $this->view->mobile = helper::safe64Decode($mobile);
+        $this->display();
+    }
+
+    /**
+     * Set ztCompany.
+     * 
+     * @access public
+     * @return void
+     */
+    public function ztCompany($fields = 'company')
+    {
+        if($_POST)
+        {
+            $response = $this->admin->setCompanyByAPI();
+            $response = json_decode($response);
+            if($response->result == 'fail') die(js::alert($response->message));
+            die(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
+        }
+
+        $this->view->title      = $this->lang->admin->ztCompany;
+        $this->view->position[] = $this->lang->admin->ztCompany;
+
+        $this->view->fields = explode(',', $fields);
+        $this->display();
+    }
+
+    /**
+     * Ajax send code.
+     * 
+     * @param  int    $type 
+     * @access public
+     * @return void
+     */
+    public function ajaxSendCode($type)
+    {
+        die($this->admin->sendCodeByAPI($type));
     }
 }

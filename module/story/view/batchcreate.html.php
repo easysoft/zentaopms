@@ -16,7 +16,7 @@
     <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>
     <strong>
       <small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small>
-      <?php echo $lang->story->batchCreate;?>
+      <?php echo $storyID ? $lang->story->subdivide : $lang->story->batchCreate;?>
       <?php if($product->type !== 'normal') echo '<span class="label label-info">' . $branches[$branch] . '</span>';?>
     </strong>
     <div class='actions'>
@@ -30,17 +30,19 @@
 $visibleFields = array();
 foreach(explode(',', $showFields) as $field)
 {
-    if($field)$visibleFields[$field] = '';
+    if($field) $visibleFields[$field] = '';
 }
+if($this->story->checkForceReview()) unset($visibleFields['review']);
 ?>
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table table-form table-fixed with-border'> 
     <thead>
       <tr class='text-center'>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
+        <th class='w-120px<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
         <th class='w-p15<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->story->module;?></th>
         <th class='w-p15<?php echo zget($visibleFields, 'plan', ' hidden')?>'><?php echo $lang->story->plan;?></th>
-        <th><?php echo $lang->story->title;?> <span class='required'></span></th>
+        <th <?php if(count($visibleFields) >= 9) echo "class='w-150px'"?>><?php echo $lang->story->title;?> <span class='required'></span></th>
         <th class='w-80px<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo $lang->story->source;?></th>
         <th class='w-p15<?php echo zget($visibleFields, 'spec', ' hidden')?>'><?php echo $lang->story->spec;?></th>
         <th class='w-p15<?php echo zget($visibleFields, 'verify', ' hidden')?>'><?php echo $lang->story->verify;?></th>
@@ -59,12 +61,13 @@ foreach(explode(',', $showFields) as $field)
     <?php $source   = $i == 0 ? '' : 'ditto';?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
+      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModuleAndPlan(this.value, $productID, $i)'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, $planID, "class='form-control chosen'");?></td>
       <td style='overflow:visible'>
         <div class='input-group'>
         <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->story->colorTag}' data-update-text='#title\\[{$i}\\]'");?>
-        <?php echo html::input("title[$i]", $storyTitle, "class='form-control'") . html::hidden("uploadImage[$i]", $fileName);?>
+        <?php echo html::input("title[$i]", $storyTitle, "class='form-control' autocomplete='off'") . html::hidden("uploadImage[$i]", $fileName);?>
         </div>
       </td>
       <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo html::select("source[$i]", $sourceList, $source, "class='form-control'");?></td>
@@ -87,12 +90,13 @@ foreach(explode(',', $showFields) as $field)
     <?php $source   = $i - $nextStart == 0 ? '' : 'ditto';?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
+      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModuleAndPlan(this.value, $productID, $i)'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, $planID, "class='form-control chosen'");?></td>
       <td style='overflow:visible'>
         <div class='input-group'>
         <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->story->colorTag}' data-update-text='#title\\[{$i}\\]'");?>
-        <?php echo html::input("title[$i]", $storyTitle, "class='form-control'");?>
+        <?php echo html::input("title[$i]", $storyTitle, "class='form-control' autocomplete='off'");?>
         </div>
       </td>
       <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo html::select("source[$i]", $sourceList, $source, "class='form-control'");?></td>
@@ -111,12 +115,13 @@ foreach(explode(',', $showFields) as $field)
   <tbody>
     <tr class='text-center'>
       <td>%s</td>
+      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[%s]", $branch, $branch, "class='form-control' onchange='setModuleAndPlan(this.value, $productID, \"%s\")'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plan[%s]", $plans, $planID, "class='form-control'");?></td>
       <td style='overflow:visible'>
         <div class='input-group'>
         <?php echo html::hidden("color[%s]", '', "data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->story->colorTag}' data-update-text='#title\\[%s\\]'");?>
-        <?php echo html::input("title[%s]", $storyTitle, "class='form-control'");?>
+        <?php echo html::input("title[%s]", $storyTitle, "class='form-control' autocomplete='off'");?>
         </div>
       </td>
       <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo html::select("source[%s]", $sourceList, $source, "class='form-control'");?></td>

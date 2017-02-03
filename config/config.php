@@ -17,7 +17,7 @@ if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* Basic settings. */
 $config = new config();
-$config->version      = '8.3.1';             // The version of zentaopms. Don't change it.
+$config->version      = '9.0';        // The version of zentaopms. Don't change it.
 $config->charset      = 'UTF-8';           // The charset of zentaopms.
 $config->cookieLife   = time() + 2592000;  // The cookie life time.
 $config->timezone     = 'Asia/Shanghai';   // The time zone setting, for more see http://www.php.net/manual/en/timezones.php
@@ -31,7 +31,7 @@ $config->requestFix  = '-';               // The divider in the url when PATH_IN
 $config->moduleVar   = 'm';               // requestType=GET: the module var name.
 $config->methodVar   = 'f';               // requestType=GET: the method var name.
 $config->viewVar     = 't';               // requestType=GET: the view var name.
-$config->sessionVar  = 'sid';             // requestType=GET: the session var name.
+$config->sessionVar  = 'zentaosid';       // requestType=GET: the session var name.
 $config->allowedTags = '<p><span><h1><h2><h3><h4><h5><em><u><strong><br><ol><ul><li><img><a><b><font><hr><pre><div><table><td><th><tr><tbody><embed><style>';
 $config->accountRule = '|^[a-zA-Z0-9_]{1}[a-zA-Z0-9_\.]{1,}[a-zA-Z0-9_]{1}$|';
 
@@ -189,6 +189,7 @@ $config->objectTables['doclib']      = TABLE_DOCLIB;
 $config->objectTables['todo']        = TABLE_TODO;
 $config->objectTables['custom']      = TABLE_LANG;
 $config->objectTables['branch']      = TABLE_BRANCH;
+$config->objectTables['module']      = TABLE_MODULE;
 
 /* Include extension config files. */
 $extConfigFiles = glob($configRoot . 'ext/*.php');

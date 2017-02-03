@@ -34,6 +34,7 @@ $lang->doc->deleted        = '已删除';
 $lang->doc->fileObject     = '所属对象';
 $lang->doc->whiteList      = '白名单';
 $lang->doc->contentType    = '文档格式';
+$lang->doc->separator      = "<i class='icon-angle-right'></i>";
 
 $lang->doc->moduleDoc      = '按模块浏览';
 $lang->doc->searchDoc      = '搜索';
@@ -76,14 +77,14 @@ $lang->doc->libTypeList['product'] = $lang->productCommon . '文档库';
 $lang->doc->libTypeList['project'] = $lang->projectCommon . '文档库';
 $lang->doc->libTypeList['custom']  = '自定义文档库';
 
-$lang->doc->systemLibs['product'] = $lang->productCommon . '文档库';
-$lang->doc->systemLibs['project'] = $lang->projectCommon . '文档库';
+$lang->doc->systemLibs['product'] = $lang->productCommon;
+$lang->doc->systemLibs['project'] = $lang->projectCommon;
 
 $lang->doc->aclList['open']    = '公开';
 $lang->doc->aclList['custom']  = '自定义';
 $lang->doc->aclList['private'] = '私有';
 
-$lang->doc->types['text'] = '网页';
+$lang->doc->types['text'] = '文档';
 $lang->doc->types['url']  = '链接';
 
 $lang->doc->contentTypeList['html']     = 'HTML';
@@ -100,8 +101,7 @@ $lang->doc->errorEditSystemDoc = "系统文档库无需修改。";
 $lang->doc->errorEmptyProduct  = "没有{$lang->productCommon}，无法创建文档";
 $lang->doc->errorEmptyProject  = "没有{$lang->projectCommon}，无法创建文档";
 $lang->doc->errorMainSysLib    = "该系统文档库不能删除！";
-$lang->doc->accessDenied       = "您没有权限访问该文档库！";
-$lang->doc->noMatched          = '找不到包含"%s"的文档库';
+$lang->doc->accessDenied       = "您没有权限访问！";
 $lang->doc->versionNotFount    = '该版本文档不存在';
 
 $lang->doc->placeholder = new stdclass();
@@ -115,6 +115,8 @@ $lang->doclib->user    = '用户';
 $lang->doclib->files   = '附件库';
 $lang->doclib->all     = '所有文档库';
 $lang->doclib->select  = '选择文档库';
+$lang->doclib->project = $lang->projectCommon . '库';
+$lang->doclib->product = $lang->productCommon . '库';
 
-$lang->doclib->main['product'] = $lang->productCommon . '库';
-$lang->doclib->main['project'] = $lang->projectCommon . '库';
+$lang->doclib->main['product'] = $lang->productCommon . '主库';
+$lang->doclib->main['project'] = $lang->projectCommon . '主库';

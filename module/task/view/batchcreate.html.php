@@ -16,6 +16,7 @@
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
     <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->task->batchCreate . $lang->task->common;?></strong>
+    <span><small><a href='javascript:toggleZeroTaskStory();' id='zeroTaskStory'><?php echo $lang->story->zeroTask;?><i class='icon icon-remove'></i></a></small></span>
     <div class='actions'>
       <?php echo html::commonButton($lang->pasteText, "data-toggle='myModal'")?>
       <button type="button" class="btn btn-default" data-toggle="customModal"><i class='icon icon-cog'></i> </button>
@@ -28,6 +29,9 @@ foreach(explode(',', $showFields) as $field)
 {
     if($field)$visibleFields[$field] = '';
 }
+$colspan     = count($visibleFields) + 3;
+$hiddenStory = (isonlybody() and $storyID) ? ' hidden' : '';
+if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
 ?>
 <form class='form-condensed' method='post' target='hiddenwin'>
   <table class='table table-form table-fixed with-border'>
@@ -35,7 +39,7 @@ foreach(explode(',', $showFields) as $field)
       <tr class='text-center'>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
         <th class='w-150px<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->task->module?></th>
-        <th class='w-200px<?php echo zget($visibleFields, 'story', ' hidden')?>'><?php echo $lang->task->story;?></th>
+        <th class='w-200px<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>'><?php echo $lang->task->story;?></th>
         <th><?php echo $lang->task->name;?> <span class='required'></span></th>
         <th class='w-80px'><?php echo $lang->typeAB;?> <span class='required'></span></th>
         <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'><?php echo $lang->task->assignedTo;?></th>
@@ -71,7 +75,7 @@ foreach(explode(',', $showFields) as $field)
     <tr>
       <td class='text-center'><?php echo $i+1;?></td>
       <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'><?php echo html::select("module[$i]", $modules, $module, "class='form-control chosen' onchange='setStories(this.value, $project->id, $i)'")?></td>
-      <td <?php echo zget($visibleFields, 'story', "class='hidden'")?> style='overflow: visible'>
+      <td <?php echo zget($visibleFields, 'story', "class='hidden'"); echo $hiddenStory;?> style='overflow: visible'>
         <div class='input-group'>
           <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
           <span class='input-group-btn'>
@@ -82,7 +86,7 @@ foreach(explode(',', $showFields) as $field)
       <td style='overflow:visible'>
         <div class='input-group'>
         <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->task->colorTag}' data-update-text='#name\\[{$i}\\]'");?>
-        <?php echo html::input("name[$i]", '', 'class=form-control');?>
+        <?php echo html::input("name[$i]", '', "class='form-control' autocomplete='off'");?>
         </div>
       </td>
       <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=form-control');?></td>
@@ -94,7 +98,7 @@ foreach(explode(',', $showFields) as $field)
       <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pri[$i]", (array)$lang->task->priList, $pri, 'class=form-control');?></td>
     </tr>
     <?php endfor;?>
-    <tr><td colspan='<?php echo count($visibleFields) + 3?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+    <tr><td colspan='<?php echo $colspan?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
 <table class='hide' id='trTemp'>
@@ -102,7 +106,7 @@ foreach(explode(',', $showFields) as $field)
     <tr>
       <td class='text-center'>%s</td>
       <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'><?php echo html::select("module[%s]", $modules, $module, "class='form-control' onchange='setStories(this.value, $project->id, \"%s\")'")?></td>
-      <td <?php echo zget($visibleFields, 'story', "class='hidden'")?> style='overflow: visible'>
+      <td <?php echo zget($visibleFields, 'story', "class='hidden'"); echo $hiddenStory;?> style='overflow: visible'>
         <div class='input-group'>
           <?php echo html::select("story[%s]", $stories, $currentStory, "class='form-control' onchange='setStoryRelated(\"%s\")'");?>
           <span class='input-group-btn'>
@@ -113,7 +117,7 @@ foreach(explode(',', $showFields) as $field)
       <td style='overflow:visible'>
         <div class='input-group'>
         <?php echo html::hidden("color[%s]", '', "data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->task->colorTag}' data-update-text='#name\\[%s\\]'");?>
-        <?php echo html::input("name[%s]", '', 'class=form-control');?>
+        <?php echo html::input("name[%s]", '', "class='form-control' autocomplete='off'");?>
         </div>
       </td>
       <td><?php echo html::select("type[%s]", $lang->task->typeList, $type, 'class=form-control');?></td>
@@ -126,6 +130,7 @@ foreach(explode(',', $showFields) as $field)
     </tr>
   </tbody>
 </table>
+<?php js::set('storyTasks', $storyTasks);?>
 <?php js::set('mainField', 'name');?>
 <?php js::set('ditto', $lang->task->ditto);?> 
 <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=task&section=custom&key=batchCreateFields')?>

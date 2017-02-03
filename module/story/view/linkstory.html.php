@@ -21,7 +21,7 @@
     <div id='querybox' class='show'></div>
   </div>
   <form method='post' class='form-condensed' target='hiddenwin' id='linkStoryForm'>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='storyList'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='storyList'>
       <?php if($stories2Link):?>
       <thead>
       <tr>
@@ -39,7 +39,7 @@
       <?php foreach($stories2Link as $story2Link):?>
       <?php $storyLink = $this->createLink('story', 'view', "storyID=$story2Link->id");?>
       <tr class='text-center'>
-        <td class='text-left'>
+        <td class='cell-id'>
           <input type='checkbox' name='stories[]'  value='<?php echo $story2Link->id;?>'/> 
           <?php echo html::a($storyLink, sprintf('%03d', $story2Link->id));?>
         </td>

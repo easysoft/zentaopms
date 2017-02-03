@@ -23,7 +23,7 @@
 </div>
 <div class='main'>
   <form class='form-condensed' id="recordForm" method='post' target='hiddenwin'>
-    <table class='table table-form'>
+    <table class='table table-form table-fixed'>
       <?php if(count($estimates)):?>
       <thead>
         <tr class='text-center'>
@@ -36,7 +36,7 @@
         </tr>
       </thead>
       <?php foreach($estimates as $estimate):?>
-      <tr class="a-center">
+      <tr class="text-center">
         <td><?php echo $estimate->id;?></td>
         <td><?php echo $estimate->date;?></td>
         <td><?php echo $estimate->consumed;?></td>
@@ -62,7 +62,7 @@
           <th class="w-60px"><?php echo $lang->task->consumedThisTime;?></th>
           <th class="w-60px"><?php echo $lang->task->leftThisTime;?></th>
           <th><?php echo $lang->comment;?></th>
-          <th></th>
+          <th class='w-10px'></th>
         </tr>
       </thead>
       <?php for($i = 1; $i <= 5; $i++):?>

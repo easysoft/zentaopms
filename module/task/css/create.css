@@ -2,9 +2,15 @@
 #mailto + .chosen-container-multi .chosen-choices {border-top-left-radius: 0; border-bottom-left-radius: 0}
 
 #mailtoGroup .input-group-btn > .btn {margin-left: -1px!important;}
+#mailtoGroup .chosen-container-single a {border-left-width: 0px;}
 
 .chosen-container {max-width: 980px}
 
-.minw-80px {min-width: 80px;}
-.minw-60px {min-width: 60px;}
+#priRowCol, #estRowCol {width: 110px;}
+#priRowCol .input-group-btn .btn {width: 55px;}
+#priRowCol.has-custom-pri {width: 150px!important}
+.col-table .input-group {width: 100%}
 
+#taskPlanCol, #mailCol {width: 50%}
+#planAndMailCell.has-mail-col #taskPlanCol {padding-right: 5px;}
+#planAndMailCell.has-mail-col #taskPlanCol + #mailCol {padding-left: 5px;}

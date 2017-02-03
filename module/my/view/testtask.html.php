@@ -48,7 +48,7 @@
     <td class='status-<?php echo $task->status?>'><?php echo $lang->testtask->statusList[$task->status];?></td>
     <td class='text-right'>
       <?php
-      common::printIcon('testtask', 'cases',    "taskID=$task->id", 'play', 'list', 'smile');
+      common::printIcon('testtask', 'cases',    "taskID=$task->id", 'play', 'list', 'sitemap');
       common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list', 'link');
       common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
 

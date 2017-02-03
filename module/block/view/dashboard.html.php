@@ -28,7 +28,7 @@ $useGuest = $this->app->user->account == 'guest';
         <div class='panel-heading'>
           <div class='panel-actions'>
             <?php if(!empty($block->moreLink)):?>
-               <?php echo html::a($block->moreLink, $lang->more . " <i class='icon-double-angle-right'></i>", null, "class='panel-action drag-disabled panel-action-more'"); ?>
+               <?php echo html::a($block->moreLink, " <i class='icon icon-more'></i>", null, "class='panel-action drag-disabled panel-action-more'"); ?>
             <?php endif; ?>
             <div class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>

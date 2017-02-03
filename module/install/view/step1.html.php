@@ -53,13 +53,15 @@
             <?php
             $tmpRootInfo['exists']   ? print($lang->install->exists)   : print($lang->install->notExists);
             $tmpRootInfo['writable'] ? print($lang->install->writable) : print($lang->install->notWritable);
+            $mkdir = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $lang->install->mkdirWin : $lang->install->mkdirLinux;
+            $chmod = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $lang->install->chmodWin : $lang->install->chmodLinux;
             ?>
           </td>
           <td class='<?php echo $tmpRootResult;?>'><?php echo $lang->install->$tmpRootResult;?></td>
           <td class='a-left f-12px'>
             <?php 
-            if(!$tmpRootInfo['exists'])   printf($lang->install->mkdir, $tmpRootInfo['path'], $tmpRootInfo['path']);
-            if(!$tmpRootInfo['writable']) printf($lang->install->chmod, $tmpRootInfo['path'], $tmpRootInfo['path']);
+            if(!$tmpRootInfo['exists'])   printf($mkdir, $tmpRootInfo['path'], $tmpRootInfo['path']);
+            if(!$tmpRootInfo['writable']) printf($chmod, $tmpRootInfo['path'], $tmpRootInfo['path']);
             ?>
           </td>
         </tr>
@@ -74,8 +76,8 @@
           <td class='<?php echo $dataRootResult;?>'><?php echo $lang->install->$dataRootResult;?></td>
           <td class='a-left f-12px'>
             <?php 
-            if(!$dataRootInfo['exists'])   printf($lang->install->mkdir, $dataRootInfo['path'], $dataRootInfo['path']);
-            if(!$dataRootInfo['writable']) printf($lang->install->chmod, $dataRootInfo['path'], $dataRootInfo['path']);
+            if(!$dataRootInfo['exists'])   printf($mkdir, $dataRootInfo['path'], $dataRootInfo['path']);
+            if(!$dataRootInfo['writable']) printf($chmod, $dataRootInfo['path'], $dataRootInfo['path']);
             ?>
           </td>
         </tr>
@@ -93,8 +95,8 @@
             <?php 
             if($sessionInfo['path'])
             {
-                if(!$sessionInfo['exists'])   printf($lang->install->mkdir, $sessionInfo['path'], $sessionInfo['path']);
-                if(!$sessionInfo['writable']) printf($lang->install->chmod, $sessionInfo['path'], $sessionInfo['path']);
+                if(!$sessionInfo['exists'])   printf($mkdir, $sessionInfo['path'], $sessionInfo['path']);
+                if(!$sessionInfo['writable']) printf($chmod, $sessionInfo['path'], $sessionInfo['path']);
             }
             else
             {

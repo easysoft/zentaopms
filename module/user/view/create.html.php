@@ -62,11 +62,11 @@
       </tr>
       <tr>
         <th><?php echo $lang->user->email;?></th>
-        <td><?php echo html::input('email', '', "class='form-control'");?></td>
+        <td><?php echo html::input('email', '', "class='form-control' autocomplete='off'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->user->commiter;?></th>
-        <td><?php echo html::input('commiter', '', "class='form-control'");?></td>
+        <td><?php echo html::input('commiter', '', "class='form-control' autocomplete='off'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->user->join;?></th>

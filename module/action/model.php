@@ -231,6 +231,16 @@ class actionModel extends model
                 $title = $this->dao->select('title')->from(TABLE_PRODUCTPLAN)->where('id')->eq($action->extra)->fetch('title');
                 if($title) $action->extra = html::a(helper::createLink('productplan', 'view', "planID=$action->extra"), $title);
             }
+            elseif($actionName == 'linked2build')
+            {
+                $name = $this->dao->select('name')->from(TABLE_BUILD)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = html::a(helper::createLink('build', 'view', "builID=$action->extra&type={$action->objectType}"), $name);
+            }
+            elseif($actionName == 'linked2release')
+            {
+                $name = $this->dao->select('name')->from(TABLE_RELEASE)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = html::a(helper::createLink('release', 'view', "releaseID=$action->extra&type={$action->objectType}"), $name);
+            }
             elseif($actionName == 'moved')
             {
                 $name = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
@@ -244,6 +254,16 @@ class actionModel extends model
             {
                 $name = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = html::a(helper::createLink('project', 'story', "projectID=$action->extra"), "#$action->extra " . $name);
+            }
+            elseif($actionName == 'unlinkedfrombuild')
+            {
+                $name = $this->dao->select('name')->from(TABLE_BUILD)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = html::a(helper::createLink('build', 'view', "builID=$action->extra&type={$action->objectType}"), $name);
+            }
+            elseif($actionName == 'unlinkedfromrelease')
+            {
+                $name = $this->dao->select('name')->from(TABLE_RELEASE)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = html::a(helper::createLink('release', 'view', "releaseID=$action->extra&type={$action->objectType}"), $name);
             }
             elseif($actionName == 'unlinkedfromplan')
             {
@@ -419,7 +439,7 @@ class actionModel extends model
          * 2. If no defined in the module language, search the common action define.
          * 3. If not found in the lang->action->desc, use the $lang->action->desc->common or $lang->action->desc->extra as the default.
          */
-        if(isset($this->lang->$objectType->action->$actionType))
+        if(isset($this->lang->$objectType) && isset($this->lang->$objectType->action->$actionType))
         {
             $desc = $this->lang->$objectType->action->$actionType;
         }
@@ -507,6 +527,12 @@ class actionModel extends model
             if(strpos($this->app->company->admins, ',' . $this->app->user->account . ',') !== false) $condition = 1; 
         }
 
+        $this->loadModel('doc');
+        $docCondition = $this->doc->buildConditionSQL('doc');
+        $libCondition = $this->doc->buildConditionSQL('lib');
+        if($docCondition) $docCondition = $this->dao->select('id')->from(TABLE_DOC)->where($docCondition)->andWhere('deleted')->eq(0)->get();
+        if($libCondition) $libCondition = $this->dao->select('id')->from(TABLE_DOCLIB)->where($libCondition)->andWhere('deleted')->eq(0)->get();
+
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where(1)
@@ -518,6 +544,8 @@ class actionModel extends model
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->fi()
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($projectID == 'all' or $productID == 'all')->andWhere("($condition)")->fi()
+            ->beginIF($docCondition)->andWhere("IF(objectType != 'doc', '1=1', objectID in ($docCondition))")->fi()
+            ->beginIF($libCondition)->andWhere("IF(objectType != 'doclib', '1=1', objectID in ($libCondition))")->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
 
         if(!$actions) return array();
@@ -735,7 +763,7 @@ class actionModel extends model
         foreach($histories as $history)
         {
             $fieldName = $history->field;
-            $history->fieldLabel = isset($this->lang->$objectType->$fieldName) ? $this->lang->$objectType->$fieldName : $fieldName;
+            $history->fieldLabel = (isset($this->lang->$objectType) && isset($this->lang->$objectType->$fieldName)) ? $this->lang->$objectType->$fieldName : $fieldName;
             if(($length = strlen($history->fieldLabel)) > $maxLength) $maxLength = $length;
             $history->diff ? $historiesWithDiff[] = $history : $historiesWithoutDiff[] = $history;
         }
@@ -799,7 +827,7 @@ class actionModel extends model
         /* Revert doclib when undelet product or project. */
         if($action->objectType == 'project' or $action->objectType == 'product')
         {
-            $this->dao->update(TABLE_DOCLIT)->set('deleted')->eq(0)->where($action->objectType)->eq($action->objectID)->exec();
+            $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(0)->where($action->objectType)->eq($action->objectID)->exec();
         }
 
         /* Update action record in action table. */

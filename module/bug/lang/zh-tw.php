@@ -331,13 +331,17 @@ $lang->bug->report->bugHistories->graph->xAxisName          = '處理步驟';
 
 /* 操作記錄。*/
 $lang->bug->action = new stdclass();
-$lang->bug->action->resolved         = array('main' => '$date, 由 <strong>$actor</strong> 解決，方案為 <strong>$extra</strong> $appendLink。', 'extra' => 'resolutionList');
-$lang->bug->action->tostory          = array('main' => '$date, 由 <strong>$actor</strong> 轉為<strong>需求</strong>，編號為 <strong>$extra</strong>。');
-$lang->bug->action->totask           = array('main' => '$date, 由 <strong>$actor</strong> 導入為<strong>任務</strong>，編號為 <strong>$extra</strong>。');
-$lang->bug->action->linked2plan      = array('main' => '$date, 由 <strong>$actor</strong> 關聯到計劃 <strong>$extra</strong>。'); 
-$lang->bug->action->unlinkedfromplan = array('main' => '$date, 由 <strong>$actor</strong> 從計劃 <strong>$extra</strong> 移除。'); 
-$lang->bug->action->linkrelatedbug   = array('main' => '$date, 由 <strong>$actor</strong> 關聯相關Bug <strong>$extra</strong>。');
-$lang->bug->action->unlinkrelatedbug = array('main' => '$date, 由 <strong>$actor</strong> 移除相關Bug <strong>$extra</strong>。');
+$lang->bug->action->resolved          = array('main' => '$date, 由 <strong>$actor</strong> 解決，方案為 <strong>$extra</strong> $appendLink。', 'extra' => 'resolutionList');
+$lang->bug->action->tostory           = array('main' => '$date, 由 <strong>$actor</strong> 轉為<strong>需求</strong>，編號為 <strong>$extra</strong>。');
+$lang->bug->action->totask            = array('main' => '$date, 由 <strong>$actor</strong> 導入為<strong>任務</strong>，編號為 <strong>$extra</strong>。');
+$lang->bug->action->linked2plan         = array('main' => '$date, 由 <strong>$actor</strong> 關聯到計劃 <strong>$extra</strong>。');
+$lang->bug->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 從計劃 <strong>$extra</strong> 移除。');
+$lang->bug->action->linked2build        = array('main' => '$date, 由 <strong>$actor</strong> 關聯到版本 <strong>$extra</strong>。');
+$lang->bug->action->unlinkedfrombuild   = array('main' => '$date, 由 <strong>$actor</strong> 從版本 <strong>$extra</strong> 移除。');
+$lang->bug->action->linked2release      = array('main' => '$date, 由 <strong>$actor</strong> 關聯到發佈 <strong>$extra</strong>。');
+$lang->bug->action->unlinkedfromrelease = array('main' => '$date, 由 <strong>$actor</strong> 從發佈 <strong>$extra</strong> 移除。');
+$lang->bug->action->linkrelatedbug      = array('main' => '$date, 由 <strong>$actor</strong> 關聯相關Bug <strong>$extra</strong>。');
+$lang->bug->action->unlinkrelatedbug    = array('main' => '$date, 由 <strong>$actor</strong> 移除相關Bug <strong>$extra</strong>。');
 
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = '選擇相關版本...';

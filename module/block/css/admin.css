@@ -4,3 +4,5 @@
 .dropdown-menu.buttons {padding: 5px; padding-bottom: 0; padding-right: 0;}
 .dropdown-menu.buttons > li {margin-bottom: 5px; display: block; float: left; width: 33.333333%; padding-right: 5px}
 .table.table-form{margin-bottom:0px;}
+#blockParam{padding-right:100px;}
+#blockParam .table td, #blockParam .table th{border-bottom:0px;}

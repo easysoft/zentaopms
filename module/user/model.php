@@ -397,7 +397,7 @@ class userModel extends model
 
         if(isset($_POST['groups']))
         {
-            $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($oldUser->account)->exec();
+            $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->exec();
             foreach($this->post->groups as $groupID)
             {
                 $data          = new stdclass();
@@ -522,7 +522,8 @@ class userModel extends model
         }
 
         $this->dao->update(TABLE_USER)->data($user)->autoCheck()->where('id')->eq((int)$userID)->exec();
-        $this->app->user->password = $user->password;
+        $this->app->user->password       = $user->password;
+        $this->app->user->modifyPassword = false;;
     }
 
     /**
@@ -611,8 +612,9 @@ class userModel extends model
         {
             $ip   = $this->server->remote_addr;
             $last = $this->server->request_time;
+            $user->last = date(DT_DATETIME1, $last);
+            $user->modifyPassword = ($user->visits == 0 and !empty($this->config->safe->modifyPasswordFirstLogin));
             $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($ip)->set('last')->eq($last)->where('account')->eq($account)->exec();
-            $user->last = date(DT_DATETIME1, $user->last);
         }
         return $user;
     }

@@ -17,3 +17,6 @@ select {border:1px solid #ccc}
 .w-230px{width:230px;}
 
 .colorpicker.input-group-btn > .btn {border-right: none}
+
+#branch {border-left-width: 0px}
+#mailtoGroup .chosen-container-single a {border-left-width: 0px}

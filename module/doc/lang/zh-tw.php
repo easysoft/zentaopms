@@ -34,6 +34,7 @@ $lang->doc->deleted        = '已刪除';
 $lang->doc->fileObject     = '所屬對象';
 $lang->doc->whiteList      = '白名單';
 $lang->doc->contentType    = '文檔格式';
+$lang->doc->separator      = "<i class='icon-angle-right'></i>";
 
 $lang->doc->moduleDoc      = '按模組瀏覽';
 $lang->doc->searchDoc      = '搜索';
@@ -76,8 +77,8 @@ $lang->doc->libTypeList['product'] = $lang->productCommon . '文檔庫';
 $lang->doc->libTypeList['project'] = $lang->projectCommon . '文檔庫';
 $lang->doc->libTypeList['custom']  = '自定義文檔庫';
 
-$lang->doc->systemLibs['product'] = $lang->productCommon . '文檔庫';
-$lang->doc->systemLibs['project'] = $lang->projectCommon . '文檔庫';
+$lang->doc->systemLibs['product'] = $lang->productCommon;
+$lang->doc->systemLibs['project'] = $lang->projectCommon;
 
 $lang->doc->aclList['open']    = '公開';
 $lang->doc->aclList['custom']  = '自定義';
@@ -100,8 +101,7 @@ $lang->doc->errorEditSystemDoc = "系統文檔庫無需修改。";
 $lang->doc->errorEmptyProduct  = "沒有{$lang->productCommon}，無法創建文檔";
 $lang->doc->errorEmptyProject  = "沒有{$lang->projectCommon}，無法創建文檔";
 $lang->doc->errorMainSysLib    = "該系統文檔庫不能刪除！";
-$lang->doc->accessDenied       = "您沒有權限訪問該文檔庫！";
-$lang->doc->noMatched          = '找不到包含"%s"的文檔庫';
+$lang->doc->accessDenied       = "您沒有權限訪問！";
 $lang->doc->versionNotFount    = '該版本文檔不存在';
 
 $lang->doc->placeholder = new stdclass();
@@ -115,6 +115,8 @@ $lang->doclib->user    = '用戶';
 $lang->doclib->files   = '附件庫';
 $lang->doclib->all     = '所有文檔庫';
 $lang->doclib->select  = '選擇文檔庫';
+$lang->doclib->project = $lang->projectCommon . '庫';
+$lang->doclib->product = $lang->productCommon . '庫';
 
-$lang->doclib->main['product'] = $lang->productCommon . '庫';
-$lang->doclib->main['project'] = $lang->projectCommon . '庫';
+$lang->doclib->main['product'] = $lang->productCommon . '主庫';
+$lang->doclib->main['project'] = $lang->projectCommon . '主庫';

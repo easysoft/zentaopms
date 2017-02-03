@@ -17,7 +17,7 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
 ?>
 <div id='<?php echo $type == 'bug' ? 'unlinkBugList' : 'unlinkLeftBugList';?>'>
   <form method='post' target='hiddenwin' id='<?php echo $formID?>' action='<?php echo $this->createLink('release', 'linkBug', "releaseID=$release->id&browseType=$browseType&param=$param&type=$type")?>'>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed'> 
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable'> 
       <caption class='text-left text-special'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedBugs;?></strong></caption>
       <thead>
       <tr class='colhead'>
@@ -33,8 +33,8 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
       <?php foreach($allBugs as $bug):?>
       <?php if(strpos(",{$releaseBugs},", ",$bug->id,") !== false) continue;?>
       <tr>
-        <td class='text-left'>
-          <input class='ml-10px' type='checkbox' name='bugs[<?php echo $bug->id?>]'  value='<?php echo $bug->id;?>' <?php if($type == 'leftBug' or $bug->status == 'resolved' or $bug->status == 'closed') echo "checked";?> /> 
+        <td class='cell-id'>
+          <input type='checkbox' name='bugs[<?php echo $bug->id?>]'  value='<?php echo $bug->id;?>' <?php if($type == 'leftBug' or $bug->status == 'resolved' or $bug->status == 'closed') echo "checked";?> /> 
           <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id);?>
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
@@ -50,7 +50,7 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
         <td colspan='6' class='text-left'>
           <?php if(count($allBugs))
           {
-              echo "<div class='table-actions clearfix pdl-8px'>";
+              echo "<div class='table-actions clearfix'>";
               echo html::selectButton() . html::submitButton($lang->release->linkBug);
               echo html::a(inlink('view', "releaseID=$release->id&type=$type"), $lang->goback, '', "class='btn'");
               echo '</div>';

@@ -148,7 +148,7 @@ class build extends control
         $this->view->title         = "BUILD #$build->id $build->name - " . $projects[$build->project];
         $this->view->position[]    = html::a($this->createLink('project', 'task', "projectID=$build->project"), $projects[$build->project]);
         $this->view->position[]    = $this->lang->build->view;
-        $this->view->generatedBugs = $this->bug->getProjectBugs($build->project, 'status_desc,id_desc', null, $build->id);
+        $this->view->generatedBugs = $this->bug->getProjectBugs($build->project, $build->id, '', 0, 'status_desc,id_desc', null);
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->build         = $build;
         $this->view->stories       = $stories;
@@ -333,7 +333,7 @@ class build extends control
 
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($build->product, $queryID, 'id', null, $build->project);
+            $allStories = $this->story->getBySearch($build->product, $queryID, 'id', null, $build->project, $build->branch);
         }
         else
         {

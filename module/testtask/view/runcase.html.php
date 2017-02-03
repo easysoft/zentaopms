@@ -129,7 +129,7 @@
 <script>
 $(function()
 {
-    $('#resultsContainer').load("<?php echo $this->createLink('testtask', 'results', "runID=0&caseID=$caseID&version=$version");?> #casesResults", function()
+    $('#resultsContainer').load("<?php echo $this->createLink('testtask', 'results', "runID={$runID}&caseID=$caseID&version=$version");?> #casesResults", function()
     {
         $('.result-item').click(function()
         {

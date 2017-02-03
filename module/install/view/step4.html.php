@@ -47,15 +47,15 @@
         <table class='table table-form mw-400px' style='margin: 0 auto'>
           <tr>
             <th class='w-100px'><?php echo $lang->install->company;?></th>
-            <td><?php echo html::input('company', '', "class='form-control'");?></td>
+            <td><?php echo html::input('company', '', "class='form-control' autocomplete='off'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->install->account;?></th>
-            <td><?php echo html::input('account', '', "class='form-control'");?></td>
+            <td><?php echo html::input('account', '', "class='form-control' autocomplete='off'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->install->password;?></th>
-            <td><?php echo html::input('password', '', "class='form-control'");?></td>
+            <td><?php echo html::input('password', '', "class='form-control' autocomplete='off'");?></td>
           </tr>
           <tr>
             <th></th><td><?php echo html::checkBox('importDemoData', $lang->install->importDemoData);?></td>

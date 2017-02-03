@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<?php js::set('containDoing', $containDoing);?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix pull-left'><?php echo html::icon($lang->icons['task']);?></span>
@@ -21,18 +20,11 @@
       <?php $projects = array(0 => $lang->project->allProjects) + $projects;?>
       <span class='input-group-addon'><?php echo $lang->project->selectProject;?></span>
       <?php  echo html::select('fromproject', $projects, $fromProject, "onchange='reload($projectID, this.value)' class='form-control chosen'");?>
-      <span class='input-group-btn'>
-      <?php
-      $toggleClass = $containDoing ? 'icon-toggle-on' : 'icon-toggle-off';
-      $params      = $containDoing ? "toProject=$projectID&fromProject=$fromProject" : "toProject=$projectID&fromProject=$fromProject&containDoing=true";
-      echo html::a($this->createLink('project', 'importTask', $params), "<i class={$toggleClass}></i>" . $lang->project->containDoing, '', "class='btn'");
-      ?>
-      </span>
     </div>
   </div>
 </div>
 <form class='form-condensed' method='post' target='hiddenwin' id='importTaskForm'>
-  <table class='table tablesorter table-fixed'>
+  <table class='table tablesorter table-fixed table-selectable'>
     <thead>
     <tr class='colhead'>
       <th class='w-id'><?php echo $lang->idAB;?></th>
@@ -50,14 +42,12 @@
     <?php foreach($tasks2Imported as $task):?>
     <?php $class = $task->assignedTo == $app->user->account ? 'style=color:red' : '';?>
     <tr class='text-center'>
-
-      <td>
-      <input type='checkbox' name='tasks[]' value='<?php echo $task->id;?>' />
-      <?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?>
+      <td class='cell-id'>
+        <input type='checkbox' name='tasks[]' value='<?php echo $task->id;?>' />
+        <?php if(!common::printLink('task', 'view', "task=$task->id", sprintf('%03d', $task->id))) printf('%03d', $task->id);?>
       </td>
-
       <td><?php echo substr($projects[$task->project], 2);?></td>
-      <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
+      <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
       <td class='text-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
       <td <?php echo $class;?>><?php echo $task->assignedToRealName;?></td>
       <td><?php echo $task->left;?></td>

@@ -148,41 +148,46 @@ class upgrade extends control
      */
     public function checkExtension()
     {
-            $this->loadModel('extension');
-            $extensions = $this->extension->getLocalExtensions('installed');
+        $this->loadModel('extension');
+        $extensions = $this->extension->getLocalExtensions('installed');
+        if(empty($extensions)) $this->locate(inlink('selectVersion'));
 
-            $versions = array();
-            foreach($extensions as $code => $extension) $versions[$code] = $extension->version;
+        /* Check network. */
+        $check = @fopen(dirname($this->config->extension->apiRoot), "r");
+        if(!$check) $this->locate(inlink('selectVersion'));
 
-            $incompatibleExts = $this->extension->checkIncompatible($versions);
-            $extensionsName   = array();
-            if(empty($incompatibleExts)) $this->locate(inlink('selectVersion'));
+        $versions = array();
+        foreach($extensions as $code => $extension) $versions[$code] = $extension->version;
 
-            $removeCommands = array();
-            foreach($incompatibleExts as $extension)
+        $incompatibleExts = $this->extension->checkIncompatible($versions);
+        $extensionsName   = array();
+        if(empty($incompatibleExts)) $this->locate(inlink('selectVersion'));
+
+        $removeCommands = array();
+        foreach($incompatibleExts as $extension)
+        {
+            $this->extension->updateExtension($extension, array('status' => 'deactivated'));
+            $removeCommands[$extension] = $this->extension->removePackage($extension);
+            $extensionsName[$extension] = $extensions[$extension]->name;
+        }
+
+        $data = '';
+        if($extensionsName)
+        {
+            $data .= "<h3>{$this->lang->upgrade->forbiddenExt}</h3>";
+            $data .= '<ul>';
+            foreach($extensionsName as $extension => $extensionName)
             {
-                $this->extension->updateExtension($extension, array('status' => 'deactivated'));
-                $removeCommands[$extension] = $this->extension->removePackage($extension);
-                $extensionsName[$extension] = $extensions[$extension]->name;
+                $data .= "<li>$extensionName";
+                if($removeCommands[$extension]) $data .= '<p>'. $this->lang->extension->unremovedFiles . '</p> <p>' . join('<br />', $removeCommands[$extension]) . '</p>';
+                $data .= '</li>';
             }
+            $data .= '</ul>';
+        }
 
-            $data = '';
-            if($extensionsName)
-            {
-                $data .= "<h3>{$this->lang->upgrade->forbiddenExt}</h3>";
-                $data .= '<ul>';
-                foreach($extensionsName as $extension => $extensionName)
-                {
-                    $data .= "<li>$extensionName";
-                    if($removeCommands[$extension]) $data .= '<p>'. $this->lang->extension->unremovedFiles . '</p> <p>' . join('<br />', $removeCommands[$extension]) . '</p>';
-                    $data .= '</li>';
-                }
-                $data .= '</ul>';
-            }
-
-            $this->view->title = $this->lang->upgrade->checkExtension;
-            $this->view->data  = $data;
-            $this->display();
+        $this->view->title = $this->lang->upgrade->checkExtension;
+        $this->view->data  = $data;
+        $this->display();
     }
 
     /**

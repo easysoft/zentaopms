@@ -1,9 +1,11 @@
 <?php
 $lang->branch->common = '分支';
 $lang->branch->manage = '分支管理';
+$lang->branch->sort   = '排序';
 $lang->branch->delete = '分支删除';
 
 $lang->branch->manageTitle = '%s管理';
 $lang->branch->all         = '所有';
 
-$lang->branch->confirmDelete = '@branch@删除，会影响关联该@branch@的需求、模块、计划、发布、Bug、用例等等，请慎重考虑。是否删除该@branch@';
+$lang->branch->confirmDelete = '是否删除该@branch@？';
+$lang->branch->canNotDelete  = '该@branch@下已经有数据，不能删除！';

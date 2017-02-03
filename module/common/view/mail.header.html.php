@@ -16,7 +16,7 @@ if($onlybody) $_GET['onlybody'] = 'no';
         <td>
           <table align='center' border='0' cellpadding='0' cellspacing='0' width='600' style='border: none; border-collapse: collapse;'>
             <tr>
-              <td style='padding: 10px 0; border: none; vertical-align: middle;'><strong style='font-size: 16px'><?php echo $app->company->name ?></strong></td>
+              <td style='padding: 10px 0; border: none; vertical-align: middle;'><strong style='font-size: 16px'><?php echo $this->app->company->name ?></strong></td>
             </tr>
           </table>
           <table align='center' border='0' cellpadding='0' cellspacing='0' width='600' style='border-collapse: collapse; background-color: #fff; border: 1px solid #cfcfcf; box-shadow: 0 0px 6px rgba(0, 0, 0, 0.1); margin-bottom: 20px; font-size:13px;'>

@@ -3,3 +3,5 @@
 .table-bordered tr > th:last-child, .table-bordered tr > td:last-child {border-right: 1px solid #ddd!important}
 
 .col-side {width: 250px}
+
+.panel-heading > strong > span {float: right; color: #29a8cd;}

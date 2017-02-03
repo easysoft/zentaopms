@@ -193,7 +193,8 @@ class customModel extends model
         /* Merge fileMenu and customMenu. */
         foreach($customMenuMap as $name => $item)
         {
-            if(!isset($allMenu->$name))$allMenu->$name = $item;
+            if(is_object($allMenu) and !isset($allMenu->$name))$allMenu->$name = $item;
+            if(is_array($allMenu)  and !isset($allMenu[$name]))$allMenu[$name] = $item;
         }
 
         foreach($allMenu as $name => $item)

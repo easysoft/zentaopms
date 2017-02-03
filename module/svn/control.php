@@ -118,8 +118,14 @@ class svn extends control
         {
             $file = trim($file);
             if(empty($file)) continue;
+            $action = '';
+            if(preg_match('/^[\w][ \t]/', $file))
+            {
+                $action = $file[0];
+                $file   = trim(substr($file, 2));
+            }
             $path = str_replace($repoRoot,  '', $file);
-            $parsedFiles[''][] = $path;
+            $parsedFiles[$action][] = $path;
         }
 
         $objects = $this->svn->parseComment($message);
@@ -134,5 +140,17 @@ class svn extends control
             $this->svn->saveAction2PMS($objects, $log, $repoUrl);
         }
         die();
+    }
+
+    /**
+     * Ajax get repos.
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetRepos()
+    {
+        $repos = $this->svn->getRepos();
+        die(json_encode($repos));
     }
 }

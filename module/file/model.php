@@ -354,11 +354,15 @@ class fileModel extends model
      */
     public function parseCSV($fileName)
     {
-        $handle = fopen($fileName, 'r');
-        $col    = -1;
-        $row    = 0;
-        $data   = array();
-        while(($line = fgets($handle)) !== false)
+        $content = file_get_contents($fileName);
+        /* Fix bug #890. */
+        $content = str_replace("\x82\x32", "\x10", $content);
+        $lines   = explode("\n", $content);
+
+        $col  = -1;
+        $row  = 0;
+        $data = array();
+        foreach($lines as $line)
         {
             $line    = trim($line);
             $markNum = substr_count($line, '"') - substr_count($line, '\"');
@@ -366,6 +370,7 @@ class fileModel extends model
             $line = str_replace(',"",', ',,', $line);
             $line = str_replace(',"",', ',,', $line);
             $line = preg_replace_callback('/(\"{2,})(\,+)/U', array($this, 'removeInterference'), $line);
+            $line = str_replace('""', '"', $line);
 
             /* if only one column then line is the data. */
             if(strpos($line, ',') === false and $col == -1)
@@ -404,8 +409,8 @@ class fileModel extends model
                         if($pos === false)
                         {
                             $data[$row][$col] = $line;
-                            /* if end of cell is not '"', then the data of cell is not end. */
-                            if(strlen($line) == 1 or $line{strlen($line) - 1} != '"') continue 2;
+                            /* if line is not empty, then the data of cell is not end. */
+                            if(strlen($line) >= 1) continue 2;
                             $line = '';
                         }
                         else
@@ -439,7 +444,6 @@ class fileModel extends model
             $row ++;
             $col = -1;
         }
-        fclose($handle);
 
         return $data;
     }
@@ -488,14 +492,7 @@ class fileModel extends model
         {
             if($uploadFile['folder']) continue;
             $fileName = $uploadFile['filename'];
-            if(function_exists('iconv'))
-            {
-                $fileName = iconv('gbk', 'utf-8//TRANSLIT', $fileName);
-            }
-            elseif(function_exists('mb_convert_encoding'))
-            {
-                $fileName = mb_convert_encoding($fileName, 'utf-8', 'gbk');
-            }
+            $fileName = helper::convertEncoding($fileName, 'gbk', 'utf-8//TRANSLIT');
             if(($pos = strrpos($fileName, '/')) !== false) $fileName = substr($fileName, $pos + 1);
 
             $file = array();

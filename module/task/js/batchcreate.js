@@ -12,8 +12,20 @@ function setStories(moduleID, projectID, num)
         var storyID = $('#story' + num).val();
         if(!stories) stories = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
         $('#story' + num).replaceWith(stories);
-        if(moduleID == 0) $('#story' + num).append("<option value='ditto'>" + ditto + "</option>")
+        if(moduleID == 0) $('#story' + num).append("<option value='ditto'>" + ditto + "</option>");
         $('#story' + num).val(storyID);
+        if($('#zeroTaskStory').hasClass('zeroTask'))
+        {
+            $('#story' + num).find('option').each(function()
+            {
+                value = $(this).attr('value');
+                if(value != 'ditto' && storyTasks[value] > 0)
+                {
+                    $(this).hide();
+                    if(storyID == value) $('#story' + num).val('');
+                }
+            })
+        }
         $("#story" + num + "_chosen").remove();
         $("#story" + num).chosen(defaultChosenOptions);
     });
@@ -42,6 +54,38 @@ function setStoryRelated(num)
             $('#module' + num).trigger("chosen:updated");
         });
     }
+}
+
+/* Toggle zero task story. */
+function toggleZeroTaskStory()
+{
+    if($('#zeroTaskStory').hasClass('zeroTask'))
+    {
+        $('#zeroTaskStory').removeClass('zeroTask');
+        zeroTask = false;
+    }
+    else
+    {
+        $('#zeroTaskStory').addClass('zeroTask');
+        zeroTask = true;
+    }
+    $.cookie('zeroTask', zeroTask, {expires:config.cookieLife, path:config.webRoot});
+    $('select[name^="story"]').each(function()
+    {
+        selectVal = $(this).val();
+        $(this).find('option').each(function()
+        {
+            value = $(this).attr('value');
+            $(this).show();
+            if(value != 'ditto' && storyTasks[value] > 0 && zeroTask)
+            {
+              $(this).hide();
+              if(selectVal == value) selectVal = '';
+            }
+        })
+        $(this).val(selectVal);
+        $(this).trigger("chosen:updated");
+    })
 }
 
 $(document).on('click', '.chosen-with-drop', function()
@@ -94,4 +138,5 @@ $(function()
     /* Adjust width for ie chosen width. */
     $('#module0_chosen').width($('#module1_chosen').width());
     $('#story0_chosen').width($('#story1_chosen').width());
+    if($.cookie('zeroTask') == 'true') toggleZeroTaskStory();
 })

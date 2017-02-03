@@ -54,6 +54,9 @@ $whiteList[] = 'admin-ignore';
 $whiteList[] = 'admin-register';
 $whiteList[] = 'admin-win2unix';
 $whiteList[] = 'admin-bind';
+$whiteList[] = 'admin-certifyztemail';
+$whiteList[] = 'admin-certifyztmobile';
+$whiteList[] = 'admin-ztcompany';
 $whiteList[] = 'story-commonaction';
 $whiteList[] = 'story-sendmail';
 $whiteList[] = 'webapp-ajaxaddview';
@@ -77,6 +80,7 @@ $whiteList[] = 'tutorial-index';
 $whiteList[] = 'tutorial-quit';
 $whiteList[] = 'tutorial-wizard';
 $whiteList[] = 'my-buildcontactlists';
+$whiteList[] = 'mail-ztcloud';
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";
@@ -220,6 +224,7 @@ foreach(glob($moduleRoot . '*') as $modulePath)
     $configFile = $modulePath . '/config.php';
 
     if(!isset($lang->$moduleName)) $lang->$moduleName = new stdclass();
+    if(!isset($config->$moduleName)) $config->$moduleName = new stdclass();
     if(file_exists($cnLangFile)) include $cnLangFile;
     if(file_exists($enLangFile)) include $enLangFile;
     if(file_exists($configFile)) include $configFile;

@@ -14,16 +14,26 @@
 include '../../common/view/datatable.html.php';
 $setting = $this->datatable->getSetting('project');
 $widths  = $this->datatable->setFixedFieldWidth($setting);
+$columns = 0;
 extract($widths);
 ?>
     <table class='table table-condensed table-hover table-striped tablesorter table-fixed datatable' id='taskList' data-checkable='true' data-fixed-left-width='<?php echo $leftWidth?>' data-fixed-right-width='<?php echo $rightWidth?>' data-custom-menu='true' data-checkbox-name='taskIDList[]'>
       <thead>
-        <tr><?php foreach ($setting as $key => $value) $this->datatable->printHead($value, $orderBy, $vars);?></tr>
+        <tr><?php
+        foreach ($setting as $key => $value)
+        {
+            if($value->show)
+            {
+                $this->datatable->printHead($value, $orderBy, $vars);
+                $columns++;
+            }
+        }
+        ?></tr>
       </thead>
       <tbody>
         <?php foreach($tasks as $task):?>
         <tr class='text-center' data-id='<?php echo $task->id?>'>
-          <?php foreach ($setting as $key => $value) $this->task->printCell($value, $task, $memberPairs, $browseType, $branchGroups, $modulePairs);?>
+          <?php foreach ($setting as $key => $value) $this->task->printCell($value, $task, $users, $browseType, $branchGroups, $modulePairs);?>
         </tr>
         <?php endforeach;?>
       </tbody>

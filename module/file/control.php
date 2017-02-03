@@ -133,25 +133,34 @@ class file extends control
         $fileTypes = 'txt|jpg|jpeg|gif|png|bmp|xml|html';
         if(stripos($fileTypes, $file->extension) !== false and $mouse == 'left') $mode = 'open';
 
-        /* If the mode is open, locate directly. */
-        if($mode == 'open')
+        if(file_exists($file->realPath))
         {
-            if(file_exists($file->realPath))$this->locate($file->webPath);
-            $this->app->triggerError("The file you visit $fileID not found.", __FILE__, __LINE__, true);
-        }
-        else
-        {
-            /* Down the file. */
-            if(file_exists($file->realPath))
+            /* If the mode is open, locate directly. */
+            if($mode == 'open')
             {
+                if(stripos('txt|jpg|jpeg|gif|png|bmp', $file->extension) !== false)
+                {
+                    $this->view->file     = $file;
+                    $this->view->charset  = $this->get->charset ? $this->get->charset : $this->config->charset;
+                    $this->view->fileType = ($file->extension == 'txt') ? 'txt' : 'image';
+                    $this->display();
+                }
+                else
+                {
+                    $this->locate($file->webPath);
+                }
+            }
+            else
+            {
+                /* Down the file. */
                 $fileName = $file->title . '.' . $file->extension;
                 $fileData = file_get_contents($file->realPath);
                 $this->sendDownHeader($fileName, $file->extension, $fileData);
             }
-            else
-            {
-                $this->app->triggerError("The file you visit $fileID not found.", __FILE__, __LINE__, true);
-            }
+        }
+        else
+        {
+            $this->app->triggerError("The file you visit $fileID not found.", __FILE__, __LINE__, true);
         }
     }
 
@@ -166,17 +175,7 @@ class file extends control
         $this->view->fields = $this->post->fields;
         $this->view->rows   = $this->post->rows;
         $output = $this->parse('file', 'export2csv');
-        if( $this->post->encode != "utf-8")
-        {
-            if(function_exists('mb_convert_encoding'))
-            {
-                $output = @mb_convert_encoding($output, $this->post->encode, 'utf-8');
-            }
-            elseif(function_exists('iconv'))
-            {
-                $output = @iconv('utf-8', $this->post->encode . '//TRANSLIT', $output);
-            }
-        }
+        if($this->post->encode != "utf-8") $output = helper::convertEncoding($output, 'utf-8', $this->post->encode . '//TRANSLIT');
 
         $this->sendDownHeader($this->post->fileName, 'csv', $output);
     }

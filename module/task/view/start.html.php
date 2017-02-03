@@ -29,11 +29,11 @@
     </tr>  
     <tr>
       <th><?php echo $lang->task->consumed;?></th>
-      <td><div class='input-group'><?php echo html::input('consumed', $task->consumed, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td><td></td>
+      <td><div class='input-group'><?php echo html::input('consumed', $task->consumed, "class='form-control' autocomplete='off'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td><td></td>
     </tr>  
     <tr>
       <th><?php echo $lang->task->left;?></th>
-      <td><div class='input-group'><?php echo html::input('left', $task->left, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td><td></td>
+      <td><div class='input-group'><?php echo html::input('left', $task->left, "class='form-control' autocomplete='off'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td><td></td>
     </tr>
     <tr>
       <th><?php echo $lang->comment;?></th>

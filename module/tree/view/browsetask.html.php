@@ -54,7 +54,7 @@
                 {
                     foreach($products as $product)
                     {
-                        echo '<span>' . html::input("products[id$product->id]", $product->name, 'class=form-control disabled="true"') . '</span>';
+                        echo '<span>' . html::input("products[id$product->id]", $product->name, 'class=form-control disabled="true" autocomplete="off"') . '</span>';
                     }
                 }
                 foreach($sons as $sonModule)
@@ -62,15 +62,15 @@
                     if($sonModule->order > $maxOrder) $maxOrder = $sonModule->order;
                     $disabled = $sonModule->type == 'task' ? '' : 'disabled';
                     echo "<div class='row-table' style='margin-bottom:5px;'>";
-                    echo "<div class='col-table'>" . html::input("modules[id$sonModule->id]", $sonModule->name, "class='form-control' placeholder='{$lang->tree->name}' " . $disabled) . '</div>';
-                    echo "<div class='col-table' style='width:70px'>" . html::input("shorts[id$sonModule->id]", $sonModule->short, "class='form-control' placeholder='{$lang->tree->short}' " . $disabled) . '</div>';
+                    echo "<div class='col-table'>" . html::input("modules[id$sonModule->id]", $sonModule->name, "class='form-control' autocomplete='off' placeholder='{$lang->tree->name}' " . $disabled) . '</div>';
+                    echo "<div class='col-table' style='width:70px'>" . html::input("shorts[id$sonModule->id]", $sonModule->short, "class='form-control' autocomplete='off' placeholder='{$lang->tree->short}' " . $disabled) . '</div>';
                     echo "</div>";
                 }
                 for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++)
                 {
                     echo "<div class='row-table' style='margin-bottom:5px;'>";
-                    echo "<div class='col-table'>" . html::input("modules[]", '', "class='form-control' placeholder='{$lang->tree->name}'") . '</div>';
-                    echo "<div class='col-table' style='width:70px'>" . html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}'") . '</div>';
+                    echo "<div class='col-table'>" . html::input("modules[]", '', "class='form-control' autocomplete='off' placeholder='{$lang->tree->name}'") . '</div>';
+                    echo "<div class='col-table' style='width:70px'>" . html::input("shorts[]", '', "class='form-control' autocomplete='off' placeholder='{$lang->tree->short}'") . '</div>';
                     echo html::hidden('branch[]', empty($module) ? 0 : $module->branch) . '</div>';
                 }
                 ?>

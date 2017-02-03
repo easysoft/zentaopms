@@ -27,11 +27,11 @@
       </tr>
       <tr id='duplicateStoryBox' style='display:none'>
         <th><?php echo $lang->story->duplicateStory;?></th>
-        <td><?php echo html::input('duplicateStory', '', 'class=form-control');?></td><td></td>
+        <td><?php echo html::input('duplicateStory', '', "class='form-control' autocomplete='off'");?></td><td></td>
       </tr>
       <tr id='childStoriesBox' style='display:none'>
         <th><?php echo $lang->story->childStories;?></th>
-        <td><?php echo html::input('childStories', '', 'class=form-control');?></td><td></td>
+        <td><?php echo html::input('childStories', '', "class='form-control' autocomplete='off'");?></td><td></td>
       </tr>
       <tr>
         <th><?php echo $lang->story->comment;?></th>

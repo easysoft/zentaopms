@@ -21,6 +21,7 @@ class tutorialModel extends model
     {
         $account = $this->app->user->account;
         if($account == 'guest') return false;
+        if(!empty($this->app->user->modifyPassword)) return false;
 
         $count = $this->dao->select('count(*) as count')->from(TABLE_ACTION)->where('actor')->eq($account)->fetch('count');
         if($count < 10) return true;

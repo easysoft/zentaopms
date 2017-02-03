@@ -39,6 +39,17 @@ class branch extends control
     }
 
     /**
+     * Sort branch.
+     * 
+     * @access public
+     * @return void
+     */
+    public function sort()
+    {
+        $this->branch->sort();
+    }
+
+    /**
      * Ajax get drop menu.
      * 
      * @param  int    $productID 
@@ -89,10 +100,11 @@ class branch extends control
      */
     public function delete($branchID, $confirm = 'no')
     {
+        $this->app->loadLang('product');
+        $productType = $this->branch->getProductType($branchID);
+        if(!$this->branch->checkBranchData($branchID)) die(js::alert(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->canNotDelete)));
         if($confirm == 'no')
         {
-            $this->app->loadLang('product');
-            $productType = $this->branch->getProductType($branchID);
             die(js::confirm(str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmDelete), inlink('delete', "branchID=$branchID&confirm=yes")));
         }
 

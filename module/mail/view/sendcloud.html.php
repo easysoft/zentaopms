@@ -32,17 +32,21 @@ include '../../common/view/header.html.php';
       </tr>
       <?php endif;?>
       <tr>
+      <tr>
+        <th><?php echo $lang->mail->domain?></th>
+        <td><?php echo html::input('domain', zget($config->mail, 'domain', common::getSysURL()), "class='form-control' autocomplete='off'")?></td>
+      </tr>
         <th><?php echo $lang->mail->accessKey; ?></th>
         <td>
           <div class='required required-wrapper'></div>
-          <?php echo html::input('accessKey', isset($mailConfig->accessKey) ? $mailConfig->accessKey : '', "class='form-control'");?>
+          <?php echo html::input('accessKey', isset($mailConfig->accessKey) ? $mailConfig->accessKey : '', "class='form-control' autocomplete='off'");?>
         </td>
       </tr>
       <tr>
         <th><?php echo $lang->mail->secretKey; ?></th>
         <td>
           <div class='required required-wrapper'></div>
-          <?php echo html::input('secretKey', isset($mailConfig->secretKey) ? $mailConfig->secretKey : '', "class='form-control'");?>
+          <?php echo html::input('secretKey', isset($mailConfig->secretKey) ? $mailConfig->secretKey : '', "class='form-control' autocomplete='off'");?>
         </td>
       </tr>
       <tr>
@@ -58,6 +62,6 @@ include '../../common/view/header.html.php';
        </tr>
     </table>
   </form>
-  <div class='alert alert-info alert-block'><?php printf($lang->mail->sendCloudHelp, common::hasPriv('mail', 'sendcloudUser') ? inlink('sendcloudUser') : '#')?></div>
+  <div class='alert alert-info alert-block' style='border-top:1px solid #ddd'><?php printf($lang->mail->sendCloudHelp, common::hasPriv('mail', 'sendcloudUser') ? inlink('sendcloudUser') : '#')?></div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

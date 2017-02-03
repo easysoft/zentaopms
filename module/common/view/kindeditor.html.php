@@ -42,6 +42,7 @@ var fullTools =
 $(document).ready(initKindeditor);
 function initKindeditor(afterInit)
 {
+    $(':input[type=submit]').next('#uid').remove();
     $(':input[type=submit]').after("<input type='hidden' id='uid' name='uid' value=" + kuid + ">");
     var nextFormControl = 'input:not([type="hidden"]), textarea:not(.ke-edit-textarea), button[type="submit"], select';
     $.each(editor.id, function(key, editorID)
@@ -51,6 +52,9 @@ function initKindeditor(afterInit)
         if(editor.tools == 'fullTools') editorTool = fullTools;
 
         var K = KindEditor, $editor = $('#' + editorID);
+        var placeholderText = $editor.attr('placeholder');
+        if(placeholderText == undefined) placeholderText = '';
+        var pasted;
         var options = 
         {
             cssPath:[themeRoot + 'zui/css/min.css'],
@@ -62,13 +66,13 @@ function initKindeditor(afterInit)
             uploadJson: createLink('file', 'ajaxUpload', 'uid=' + kuid),
             allowFileManager:true,
             langType:'<?php echo $editorLang?>',
-            afterBlur: function(){this.sync();$editor.prev('.ke-container').removeClass('focus');},
-            afterFocus: function(){$editor.prev('.ke-container').addClass('focus');},
             afterChange: function(){$editor.change().hide();},
             afterCreate : function()
             {
-                var doc = this.edit.doc; 
-                var cmd = this.edit.cmd; 
+                var frame = this.edit;
+                var doc   = this.edit.doc; 
+                var cmd   = this.edit.cmd; 
+                pasted    = true;
                 if(!K.WEBKIT && !K.GECKO)
                 {
                     var pasted = false;
@@ -90,6 +94,12 @@ function initKindeditor(afterInit)
                         })
                     }, 10);
                 }
+                if(pasted && placeholderText.indexOf('<?php echo $this->lang->noticePasteImg?>') < 0)
+                {
+                    if(placeholderText) placeholderText += '<br />';
+                    placeholderText += ' <?php echo $this->lang->noticePasteImg?>';
+                }
+
                 /* Paste in chrome.*/
                 /* Code reference from http://www.foliotek.com/devblog/copy-images-from-clipboard-in-javascript/. */
                 if(K.WEBKIT)
@@ -104,7 +114,6 @@ function initKindeditor(afterInit)
                             var reader = new FileReader();
                             reader.onload = function(evt) 
                             {
-                                var result = evt.target.result; 
                                 var result = evt.target.result;
                                 var arr    = result.split(",");
                                 var data   = arr[1]; // raw base64
@@ -127,13 +136,45 @@ function initKindeditor(afterInit)
                             var html = K(doc.body).html();
                             if(html.search(/<img src="data:.+;base64,/) > -1)
                             {
-                                K(doc.body).html(html.replace(/<img src="data:.+;base64,.*".*\/>/, ''));
-                                $.post(createLink('file', 'ajaxPasteImage', 'uid=' + kuid), {editor: html}, function(data){K(doc.body).html(data);});
+                                $.post(createLink('file', 'ajaxPasteImage', 'uid=' + kuid), {editor: html}, function(data)
+                                {
+                                    if(data.indexOf('<img') == 0) data = '<p>' + data + '</p>';
+                                    frame.html(data);
+                                });
                             }
                         }, 80);
                     });
                 }
                 /* End */
+
+                /* Add for placeholder. */
+                $(this.edit.doc).find('body').after('<span class="kindeditor-ph" style="width:100%;color:#888; padding:5px 5px 5px 7px; background-color:transparent; position:absolute;z-index:10;top:2px;border:0;overflow:auto;resize:none; font-size:13px;"></span>');
+                var $placeholder = $(this.edit.doc).find('.kindeditor-ph');
+                $placeholder.html(placeholderText);
+                $placeholder.css('pointerEvents', 'none');
+                $placeholder.click(function(){frame.doc.body.focus()});
+                if(frame.html() != '') $placeholder.hide();
+            },
+            afterFocus: function()
+            {
+                var frame = this.edit;
+                var $placeholder = $(frame.doc).find('.kindeditor-ph');
+                if($placeholder.size() == 0)
+                {
+                    setTimeout(function(){$(frame.doc).find('.kindeditor-ph').hide();}, 50);
+                }
+                else
+                {
+                    $placeholder.hide();
+                }
+                $editor.prev('.ke-container').addClass('focus');
+            },
+            afterBlur: function()
+            {
+                this.sync();
+                $editor.prev('.ke-container').removeClass('focus');
+                var frame = this.edit;
+                if(K(frame.doc.body).html() == '') $(frame.doc).find('.kindeditor-ph').show();
             },
             afterTab: function(id)
             {

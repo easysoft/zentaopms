@@ -45,7 +45,7 @@ $lang->action->dynamic->search     = 'Search';
 
 $lang->action->objectTypes['product']     = $lang->productCommon;
 $lang->action->objectTypes['story']       = 'Story';
-$lang->action->objectTypes['productplan'] = 'Planning';
+$lang->action->objectTypes['productplan'] = 'Plan';
 $lang->action->objectTypes['release']     = 'Release';
 $lang->action->objectTypes['project']     = $lang->projectCommon;
 $lang->action->objectTypes['task']        = 'Task';
@@ -60,6 +60,7 @@ $lang->action->objectTypes['doc']         = 'Document';
 $lang->action->objectTypes['doclib']      = 'Doc Lib';
 $lang->action->objectTypes['todo']        = 'To-Dos';
 $lang->action->objectTypes['branch']      = 'Branch';
+$lang->action->objectTypes['module']      = 'Module';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -67,8 +68,8 @@ $lang->action->desc->common         = '$date, <strong>$action</strong> by <stron
 $lang->action->desc->extra          = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->opened         = '$date, created by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->created        = '$date, created by  <strong>$actor</strong> .' . "\n";
-$lang->action->desc->changed        = '$date, modified by <strong>$actor</strong> .' . "\n";
-$lang->action->desc->edited         = '$date, Edited by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->changed        = '$date, changed by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->edited         = '$date, edited by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->assigned       = '$date, <strong>$actor</strong> assigned to <strong>$extra</strong>.' . "\n";
 $lang->action->desc->closed         = '$date, closed by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->deleted        = '$date, deleted by <strong>$actor</strong> .' . "\n";
@@ -94,20 +95,20 @@ $lang->action->desc->deleteestimate = '$date, <strong>$actor</strong> delete man
 $lang->action->desc->canceled       = '$date, cancelled by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->svncommited    = '$date, submitted by <strong>$actor</strong> and the version is <strong>#$extra</strong>.' . "\n";
 $lang->action->desc->gitcommited    = '$date, submitted by <strong>$actor</strong> and the version is <strong>#$extra</strong>.' . "\n";
-$lang->action->desc->finished       = '$date, accomplished by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->finished       = '$date, finished by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->paused         = '$date, paused by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->diff1          = '<strong><i>%s</i></strong> has been modified. Its value was "%s" and the new value is "%s".<br />' . "\n";
-$lang->action->desc->diff2          = '<strong><i>%s</i></strong> has been modified. The difference is ' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
+$lang->action->desc->diff1          = '<strong><i>%s</i></strong> has been changed. Its value was "%s" and the new value is "%s".<br />' . "\n";
+$lang->action->desc->diff2          = '<strong><i>%s</i></strong> has been changed. The difference is ' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
 $lang->action->desc->diff3          = 'File Name %s was changed to %s .' . "\n";
 
 /* 关联用例和移除用例时的历史操作记录。*/
-$lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> linked relevant use case <strong>$extra</strong>.' . "\n";
+$lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> related relevant use case <strong>$extra</strong>.' . "\n";
 $lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> removed relevant use case <strong>$extra</strong>.' . "\n";
 
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
 $lang->action->label->created             = 'Created';
-$lang->action->label->opened              = 'Opened';
+$lang->action->label->opened              = 'Open';
 $lang->action->label->changed             = 'Changed';
 $lang->action->label->edited              = 'Edited';
 $lang->action->label->assigned            = 'Assigned';
@@ -130,23 +131,25 @@ $lang->action->label->frombug             = 'Converted from Bug';
 $lang->action->label->totask              = 'Convert to Task';
 $lang->action->label->svncommited         = 'SVN Commit';
 $lang->action->label->gitcommited         = 'Git Commit';
-$lang->action->label->linked2plan         = 'Link to Planning';
-$lang->action->label->unlinkedfromplan    = 'Unlink from Planning';
+$lang->action->label->linked2plan         = 'Relate to Plan';
+$lang->action->label->unlinkedfromplan    = 'Unrelate';
 $lang->action->label->changestatus        = 'Change Status';
 $lang->action->label->marked              = 'Marked';
-$lang->action->label->linked2project      = "Link {$lang->projectCommon}";
+$lang->action->label->linked2project      = "Relate {$lang->projectCommon}";
 $lang->action->label->unlinkedfromproject = "Remove {$lang->projectCommon}";
-$lang->action->label->linkrelatedbug      = "Link to Bug";
-$lang->action->label->unlinkrelatedbug    = "Removed Linked Bug";
-$lang->action->label->linkrelatedcase     = "Link to Case";
-$lang->action->label->unlinkrelatedcase   = "Unlink from Case";
-$lang->action->label->linkrelatedstory    = "Link to Story";
-$lang->action->label->unlinkrelatedstory  = "Unlink from Story";
+$lang->action->label->linked2release      = "Relate Release";
+$lang->action->label->unlinkedfromrelease = "Remove Release";
+$lang->action->label->linkrelatedbug      = "Relate to Bug";
+$lang->action->label->unlinkrelatedbug    = "Unrelate";
+$lang->action->label->linkrelatedcase     = "Relate to Case";
+$lang->action->label->unlinkrelatedcase   = "Unrelate";
+$lang->action->label->linkrelatedstory    = "Relate to Story";
+$lang->action->label->unlinkrelatedstory  = "Unrelate";
 $lang->action->label->subdividestory      = "Decompose Story";
-$lang->action->label->unlinkchildstory    = "Unlink decomposed Story";
+$lang->action->label->unlinkchildstory    = "Unrelate";
 $lang->action->label->started             = 'Initiated';
 $lang->action->label->restarted           = 'Continued';
-$lang->action->label->recordestimate      = 'Historyed Man-Hour';
+$lang->action->label->recordestimate      = 'Recorded Man-Hour';
 $lang->action->label->editestimate        = 'Edited Man-Hour';
 $lang->action->label->canceled            = 'Cancelled';
 $lang->action->label->finished            = 'Finished';
@@ -159,7 +162,7 @@ $lang->action->label->deleteestimate      = "Deleted Man-Hour";
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
-$lang->action->label->productplan = 'Planning|productplan|view|productID=%s';
+$lang->action->label->productplan = 'Plan|productplan|view|productID=%s';
 $lang->action->label->release     = 'Release|release|view|productID=%s';
 $lang->action->label->story       = 'Story|story|view|storyID=%s';
 $lang->action->label->project     = "{$lang->projectCommon}|project|view|projectID=%s";
@@ -191,7 +194,7 @@ $lang->action->search->objectTypeList['doclib']      = 'Doc Lib';
 $lang->action->search->objectTypeList['todo']        = 'To-Dos';
 $lang->action->search->objectTypeList['build']       = 'Build';
 $lang->action->search->objectTypeList['release']     = 'Release';
-$lang->action->search->objectTypeList['productplan'] = 'Planning';
+$lang->action->search->objectTypeList['productplan'] = 'Plan';
 $lang->action->search->objectTypeList['branch']      = 'Branch';
 
 /* 用来在动态显示中显示动作 */

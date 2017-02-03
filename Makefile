@@ -22,6 +22,8 @@ pms:
 	cp -fr module zentaopms/
 	cp -fr www zentaopms && rm -fr zentaopms/www/data/ && mkdir -p zentaopms/www/data/upload
 	cp -fr tmp zentaopms
+	mv zentaopms/www/install.php.tmp zentaopms/www/install.php
+	mv zentaopms/www/upgrade.php.tmp zentaopms/www/upgrade.php
 	rm -fr zentaopms/tmp/cache/* 
 	rm -fr zentaopms/tmp/extension/*
 	rm -fr zentaopms/tmp/log/*

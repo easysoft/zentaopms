@@ -10,35 +10,35 @@
  * @link        http://www.zentao.net
  */
 $lang->product->common      = $lang->productCommon . 'View';
-$lang->product->index       = $lang->productCommon . "Homepage";
-$lang->product->browse      = "View{$lang->productCommon}";
+$lang->product->index       = $lang->productCommon . "Home";
+$lang->product->browse      = "{$lang->productCommon}s";
 $lang->product->dynamic     = "Dynamic";
-$lang->product->view        = "{$lang->productCommon}Overview";
+$lang->product->view        = "{$lang->productCommon}s";
 $lang->product->edit        = "Edit {$lang->productCommon}";
 $lang->product->batchEdit   = "Batch Edit";
 $lang->product->create      = "Create {$lang->productCommon}";
 $lang->product->delete      = "Delete {$lang->productCommon}";
 $lang->product->deleted     = "Deleted";
 $lang->product->close       = "Close";
-$lang->product->select      = "Please select {$lang->productCommon}";
+$lang->product->select      = "	Select {$lang->productCommon}";
 $lang->product->mine        = 'My responsibility:';
 $lang->product->other       = 'Other:';
 $lang->product->closed      = 'Closed';
-$lang->product->updateOrder = 'Sort';
+$lang->product->updateOrder = 'Ranking';
 $lang->product->all         = "All {$lang->productCommon}";
 
 $lang->product->basicInfo = 'Basic Info';
 $lang->product->otherInfo = 'Other Info';
 
-$lang->product->plans    = 'Planning Count';
-$lang->product->releases = 'Release Count';
-$lang->product->docs     = 'Document Count';
+$lang->product->plans    = 'Plans';
+$lang->product->releases = 'Releases';
+$lang->product->docs     = 'Documents';
 $lang->product->bugs     = 'Linked Bug';
-$lang->product->projects = "Linked {$lang->projectCommon} Count";
-$lang->product->cases    = 'Case Count';
-$lang->product->builds   = 'Build Count';
+$lang->product->projects = "Linked {$lang->projectCommon}s";
+$lang->product->cases    = 'Cases';
+$lang->product->builds   = 'Builds';
 $lang->product->roadmap  = 'Roadmap';
-$lang->product->doc      = 'Document List';
+$lang->product->doc      = 'Documents';
 $lang->product->project  = $lang->projectCommon . 'List';
 
 $lang->product->confirmDelete   = " Do you want to delete {$lang->productCommon}?";
@@ -51,11 +51,11 @@ $lang->product->code      = "{$lang->productCommon} Code";
 $lang->product->order     = 'Sort';
 $lang->product->type      = "{$lang->productCommon} Type";
 $lang->product->status    = 'Status';
-$lang->product->desc      = 'Desc';
+$lang->product->desc      = 'Description';
 $lang->product->PO        = "{$lang->productCommon} owner";
-$lang->product->QD        = 'Quality director';
-$lang->product->RD        = 'Release director';
-$lang->product->acl       = 'Access limitation';
+$lang->product->QD        = 'Quality Director';
+$lang->product->RD        = 'Release Director';
+$lang->product->acl       = 'Acceptance';
 $lang->product->whitelist = 'Whitelist';
 $lang->product->branch    = '%s';
 
@@ -71,9 +71,9 @@ $lang->product->willClose    = 'To be Closed';
 $lang->product->closedStory  = 'Closed';
 $lang->product->unclosed     = 'Open';
 
-$lang->product->allStory    = 'AllStory';
+$lang->product->allStory    = 'All Stories';
 $lang->product->allProduct  = 'All' . $lang->productCommon;
-$lang->product->allProductsOfProject = 'All related' . $lang->productCommon;
+$lang->product->allProductsOfProject = 'All linked' . $lang->productCommon;
 
 $lang->product->typeList['']         = '';
 $lang->product->typeList['normal']   = 'Normal';
@@ -104,5 +104,5 @@ $lang->product->featureBar['browse']['closedbyme']   = $lang->product->closedByM
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
 $lang->product->featureBar['browse']['activestory']  = $lang->product->activeStory;
 $lang->product->featureBar['browse']['changedstory'] = $lang->product->changedStory;
-$lang->product->featureBar['browse']['willclose']    = $lang->product->willOff;
+$lang->product->featureBar['browse']['willclose']    = $lang->product->willClose;
 $lang->product->featureBar['browse']['closedstory']  = $lang->product->closedStory;

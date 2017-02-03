@@ -35,7 +35,7 @@ $lang->extension->compatible  = 'Compatible';
 $lang->extension->latest      = '<small>Latest:<strong><a href="%s" target="_blank" class="extension">%s</a></strong>，need zentao <a href="http://api.zentao.net/goto.php?item=latest" target="_blank"><strong>%s</strong></small>';
 $lang->extension->author      = 'Author';
 $lang->extension->license     = 'License';
-$lang->extension->site        = 'Official Website';
+$lang->extension->site        = 'Website';
 $lang->extension->downloads   = 'Downloads';
 $lang->extension->compatible  = 'Compatibility';
 $lang->extension->grade       = 'Score';
@@ -67,16 +67,16 @@ $lang->extension->executeCommands          = '<h3>Execute command lines below to
 $lang->extension->successDownloadedPackage = 'Extension downloaded!';
 $lang->extension->successCopiedFiles       = 'File copied!';
 $lang->extension->successInstallDB         = 'Database installed!';
-$lang->extension->viewInstalled            = 'View Installed';
-$lang->extension->viewAvailable            = 'View Available';
-$lang->extension->viewDeactivated          = 'View Deactivated';
+$lang->extension->viewInstalled            = 'Installed';
+$lang->extension->viewAvailable            = 'Available';
+$lang->extension->viewDeactivated          = 'Deactivated';
 $lang->extension->backDBFile               = 'Extension related data has been backed up to %s!';
 $lang->extension->noticeOkFile             = '<h5>For security reasons, your Admin account has to be confirmed.</h5>
     <h5>Plese Login your ZenTao server and create %s.</h5>
-    <p>Note:</p>
+    <p>Note</p>
     <ol>
-    <li>File is blank.</li>
-    <li>If the old file exists, please delete it before create one.</li>
+    <li>The file you will create is empty.</li>
+    <li>If there is one such file exists, delete it first, and then create yours.</li>
     </ol>'; 
 
 $lang->extension->upgradeExt     = 'Upgrade';

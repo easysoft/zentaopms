@@ -33,7 +33,7 @@ $(function()
     }).on('keyup change paste', 'input', function()
     {
         var val = $(this).val().toLowerCase();
-        var $options = $(this).closest('ul.dropdown-menu.with-search').find('.option');
+        var $options = $(this).closest('.dropdown-menu.with-search').find('.option');
         if(val == '') return $options.removeClass('hide');
         $options.each(function()
         {
@@ -42,23 +42,3 @@ $(function()
         });
     });
 })
-$(document).ready(function()
-{
-    $('.side-handle-btn').click(function()
-    {   
-        if($(this).parents('.row-table').hasClass('hide-side'))
-        {   
-            $('.row-table').removeClass('hide-side');
-            $('.side-handle-btn i').removeClass('icon-collapse-full');
-            $('.side-handle-btn i').addClass('icon-expand-full');
-            $.cookie('productPlanSide', 'show', {path: config.webRoot});
-        }   
-        else
-        {   
-            $('.side-handle-btn i').removeClass('icon-expand-full');
-            $('.side-handle-btn i').addClass('icon-collapse-full');
-            $('.row-table').addClass('hide-side');
-            $.cookie('productPlanSide', 'hide', {path: config.webRoot});
-        }   
-    });
-});

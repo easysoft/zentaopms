@@ -12,6 +12,7 @@
 ?>
 <?php
 include '../../common/view/header.html.php';
+include '../../common/view/chart.html.php';
 include '../../common/view/datepicker.html.php';
 include '../../common/view/datatable.fix.html.php';
 include './taskheader.html.php';
@@ -38,6 +39,7 @@ js::set('browseType', $browseType);
   </div>
 </div>
 <div class='main'>
+  <script>setTreeBox();</script>
   <form method='post' id='projectTaskForm'>
     <?php
     $datatableId  = $this->moduleName . ucfirst($this->methodName);
@@ -48,7 +50,7 @@ js::set('browseType', $browseType);
     ?>
       <tfoot>
         <tr>
-          <?php $columns = ($this->cookie->windowWidth > $this->config->wideSize ? 14 : 12) - ($project->type == 'sprint' ? 0 : 1);?>
+          <?php if(!isset($columns)) $columns = ($this->cookie->windowWidth > $this->config->wideSize ? 15 : 13) - ($project->type == 'sprint' ? 0 : 1);?>
           <td colspan='<?php echo $columns;?>'>
             <div class='table-actions clearfix'>
             <?php 
@@ -76,14 +78,16 @@ js::set('browseType', $browseType);
                     $withSearch = count($modules) > 10;
                     echo "<li class='dropdown-submenu'>";
                     echo html::a('javascript:;', $lang->task->moduleAB, '', "id='moduleItem'");
-                    echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                    echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                    echo '<ul class="dropdown-list">';
                     foreach($modules as $moduleId => $module)
                     {
                         $actionLink = $this->createLink('task', 'batchChangeModule', "moduleID=$moduleId");
                         echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
                     }
-                    if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
-                    echo '</ul></li>';
+                    echo '</ul>';
+                    if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                    echo '</div></li>';
                 }
                 else
                 {
@@ -98,15 +102,16 @@ js::set('browseType', $browseType);
                     echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
                     echo "<li class='dropdown-submenu'>";
                     echo html::a('javascript::', $lang->task->assignedTo, 'id="assignItem"');
-                    echo "<ul class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                    echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                    echo '<ul class="dropdown-list">';
                     foreach ($memberPairs as $key => $value)
                     {
                         if(empty($key)) continue;
                         echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
                     }
-                    if($withSearch) echo "<li class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></li>";
                     echo "</ul>";
-                    echo "</li>";
+                    if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                    echo "</div></li>";
                 }
                 echo "</ul></div>";
             }
@@ -121,7 +126,7 @@ js::set('browseType', $browseType);
   </form>
 </div>
 <?php js::set('replaceID', 'taskList')?>
-<script language='javascript'>
+<script>
 $('#project<?php echo $projectID;?>').addClass('active')
 $('#listTab').addClass('active')
 $('#<?php echo ($browseType == 'bymodule' and $this->session->taskBrowseType == 'bysearch') ? 'all' : $this->session->taskBrowseType;?>Tab').addClass('active');
@@ -137,7 +142,7 @@ if($shortcut.size() > 0)
 statusActive = '<?php echo isset($lang->project->statusSelects[$this->session->taskBrowseType]);?>';
 if(statusActive) $('#statusTab').addClass('active')
 <?php if(isset($this->config->project->homepage) and $this->config->project->homepage != 'browse'):?>
-$('#modulemenu .nav li.right:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"project\", \"browse\")'><i class='icon icon-cog'></i><?php echo $lang->homepage?></a></li>")
+$('#modulemenu .nav li.right:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"project\", \"browse\")'><i class='icon icon-cog'></i> <?php echo $lang->homepage?></a></li>")
 <?php endif;?>
 </script>
 <?php include '../../common/view/footer.html.php';?>

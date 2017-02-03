@@ -11,6 +11,13 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<div id='titlebar'>
+  <div class='heading'>
+    <span class='prefix' title='GROUP'><?php echo html::icon($lang->icons['group']);?> <strong><?php echo $group->id;?></strong></span>
+    <strong><?php echo $group->name;?></strong>
+    <small class='text-muted'> <?php echo $lang->group->manageView;?></small>
+  </div>
+</div>
 <form class='form-condensed' method='post' target='hiddenwin'>
   <table class='table table-form'> 
     <tr>
@@ -24,19 +31,19 @@
         <?php $moduleName = strip_tags($moduleName);?>
         <div class='group-item'>
           <label class='priv' for='<?php echo $module?>'>
-            <input type='checkbox' id='<?php echo $module?>' name='actions[views][<?php echo strtolower($module);?>]' value='<?php echo $module;?>' <?php if(isset($group->acl['views'][$module])) echo "checked";?> />
+            <input type='checkbox' id='<?php echo $module?>' name='actions[views][<?php echo strtolower($module);?>]' value='<?php echo $module;?>' <?php if(isset($group->acl['views'][$module]) or empty($group->acl['views'])) echo "checked";?> />
             <?php echo $moduleName;?>
           </label>
         </div>
       <?php endforeach;?>
         <div class='group-item'>
           <label class='priv' for='allchecker'>
-            <input type="checkbox" id='allchecker' name="allchecker[]" onclick="selectAll(this, '', 'checkbox')">
+            <input type="checkbox" id='allchecker' name="allchecker" onclick="selectAll(this, '', 'checkbox')" <?php if(empty($group->acl['views'])) echo "checked";?> />
             <?php echo $lang->selectAll?>
           </label>
         </div>
       </td>
-      <td><?php echo $lang->group->noticeVisit?></td>
+      <td></td>
     </tr>
     <tr id='productBox' style='display:none'>
       <th class='text-right'><?php echo $lang->group->productList?></th>

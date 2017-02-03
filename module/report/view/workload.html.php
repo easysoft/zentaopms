@@ -27,20 +27,20 @@
         <div class='input-group input-group-sm'>
           <span class='input-group-addon'><?php echo $lang->report->taskAssignedDate;?></span>
           <div class='datepicker-wrapper datepicker-date'><?php echo html::input('begin', $begin, "class='w-100px form-control' onchange='changeParams(this)'");?></div>
-          <span class='input-group-addon'><?php echo $lang->report->to;?></span>
+          <span class='input-group-addon fix-border'><?php echo $lang->report->to;?></span>
           <div class='datepicker-wrapper datepicker-date'><?php echo html::input('end', $end, "class='form-control' onchange='changeParams(this)'");?></div>
         </div>
       </div>
       <div class='col-sm-2'>
         <div class='input-group'>
           <span class='input-group-addon'><?php echo $lang->report->diffDays;?></span>
-          <?php echo html::input('days', $days, "class='form-control' style='text-align:center'");?>
+          <?php echo html::input('days', $days, "class='form-control' autocomplete='off' style='text-align:center'");?>
         </div>
       </div>
       <div class='col-sm-2'>
         <div class='input-group'>
           <span class='input-group-addon'><?php echo $lang->report->workday;?></span>
-          <?php echo html::input('workday', $workday, "class='form-control' style='width:50px'");?>
+          <?php echo html::input('workday', $workday, "class='form-control' autocomplete='off' style='width:50px'");?>
         </div>
       </div>
       <div class='col-sm-1'>
@@ -48,7 +48,7 @@
       </div>
     </div>
   </form>
-  <table class='table table-condensed table-striped table-bordered tablesorter table-fixed active-disabled' id="workload">
+  <table class='table table-condensed table-striped table-bordered table-fixed active-disabled' id="workload">
     <thead>
     <tr class='colhead'>
       <th><?php echo $lang->report->user;?></th>

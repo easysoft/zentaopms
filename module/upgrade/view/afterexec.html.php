@@ -34,8 +34,8 @@
             </a>
           </div>
           <div class='col-md-4'>
-            <a class="card ad" href="http://www.yidouio.com" target="_blank">
-              <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/yidou.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/yidou.png'?>" alt=""></div>
+            <a class="card ad" href="http://www.zdoo.com" target="_blank">
+              <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/zdoo.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/zdoo.png'?>" alt=""></div>
             </a>
           </div>
         </div>
@@ -50,7 +50,7 @@ $needUpdateFile   = strpos($config->installedVersion, 'pro') === false ? $config
 if($needUpdateFile):?>
 $(function()
 {
-    $('a#tohome').hide();
+    $('a#tohome').closest('.alert').hide();
     $('.adbox').before("<div id='resultBox' class='alert alert-info'><p><?php echo $lang->upgrade->updateFile;?></p></div>");
     updateFile('<?php echo inlink('ajaxUpdateFile')?>');
 })
@@ -69,7 +69,7 @@ function updateFile(link)
 			$condition = join(' && ', $condition);
 			?>
 			if(<?php echo $condition?>) $.get('<?php echo inlink('afterExec', "fromVersion=$fromVersion&processed=yes")?>');
-            $('a#tohome').show();
+            $('a#tohome').closest('.alert').show();
         }
         else
         {

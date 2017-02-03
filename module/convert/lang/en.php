@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->convert->common  = 'Imported';
-$lang->convert->index   = 'Homepage';
+$lang->convert->index   = 'Home';
 
 $lang->convert->start   = 'Start';
 $lang->convert->desc    = <<<EOT
@@ -82,7 +82,7 @@ $lang->convert->redmine->projects     = $lang->projectCommon;
 $lang->convert->redmine->stories      = 'Story';
 $lang->convert->redmine->tasks        = 'Task';
 $lang->convert->redmine->bugs         = 'Bug';
-$lang->convert->redmine->productPlans = $lang->productCommon . 'Planning';
+$lang->convert->redmine->productPlans = $lang->productCommon . 'Plan';
 $lang->convert->redmine->teams        = 'Team';
 $lang->convert->redmine->releases     = 'Release';
 $lang->convert->redmine->builds       = 'Build';

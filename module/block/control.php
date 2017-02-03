@@ -90,7 +90,7 @@ class block extends control
         }
 
         $block = $this->block->getByID($id);
-        if($block) $type = $block->block;
+        if($block and empty($type)) $type = $block->block;
 
         if(isset($this->lang->block->moduleList[$source]))
         {
@@ -338,7 +338,7 @@ class block extends control
 
                 $sso = base64_decode($this->get->sso);
                 $this->view->sso  = $sso;
-                $this->view->sign = strpos($sso, '&') === false ? '?' : '&';
+                $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
             }
 
             $this->viewType   = (isset($params->viewType) and $params->viewType == 'json') ? 'json' : 'html';

@@ -62,12 +62,12 @@ foreach(explode(',', $showFields) as $field)
         <td style='overflow:visible' title='<?php echo $cases[$caseID]->title?>'>
           <div class='input-group'>
           <?php echo html::hidden("colors[$caseID]", $cases[$caseID]->color, "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->testcase->colorTag}' data-update-text='#titles\\[{$caseID}\\]'");?>
-          <?php echo html::input("titles[$caseID]", $cases[$caseID]->title, 'class=form-control'); echo "<span class='star'>*</span>";?>
+          <?php echo html::input("titles[$caseID]", $cases[$caseID]->title, "class='form-control' autocomplete='off'"); echo "<span class='star'>*</span>";?>
           </div>
         </td>
         <td><?php echo html::select("types[$caseID]", $typeList, $cases[$caseID]->type, 'class=form-control');?></td>
         <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[$caseID]", $cases[$caseID]->precondition, "rows='1' class='form-control autosize'")?></td>
-        <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$caseID]", $cases[$caseID]->keywords, "class='form-control'");?></td>
+        <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$caseID]", $cases[$caseID]->keywords, "class='form-control' autocomplete='off'");?></td>
         <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stages[$caseID][]", $lang->testcase->stageList, $cases[$caseID]->stage, "class='form-control chosen' multiple data-placeholder='{$lang->testcase->stage}'");?></td>
       </tr>
       <?php endforeach;?>

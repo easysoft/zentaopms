@@ -56,7 +56,13 @@
     <div class='main'>
       <fieldset>
         <legend><?php echo $lang->project->desc;?></legend>
-        <div class='content'><?php echo $project->desc;?></div>
+        <div class='content'>
+          <?php echo $project->desc;?>
+          <div>
+            <label><?php echo $lang->project->lblStats?></label>
+            <?php printf($lang->project->stats, $project->totalHours, $project->totalEstimate, $project->totalConsumed, $project->totalLeft, 10)?>
+          </div>
+        </div>
       </fieldset>
       <?php include '../../common/view/action.html.php';?>
       <div class='actions'> <?php if(!$project->deleted) echo $actionLinks;?></div>
@@ -134,6 +140,7 @@
             <th><?php echo $lang->project->acl;?></th>
             <td><?php echo $lang->project->aclList[$project->acl];?></td>
           </tr>  
+          <?php if($project->acl == 'custom'):?>
           <tr>
             <th><?php echo $lang->project->whitelist;?></th>
             <td>
@@ -143,15 +150,7 @@
               ?>
             </td>
           </tr>  
-        </table>
-      </fieldset>
-      <fieldset>
-        <legend><?php echo $lang->project->otherInfo?></legend>
-        <table class='table table-data table-condensed table-borderless'>
-          <tr>
-            <th class='w-80px'><?php echo $lang->project->lblStats;?></th>
-            <td><?php printf($lang->project->stats, $project->totalHours, $project->totalEstimate, $project->totalConsumed, $project->totalLeft, 10)?></td>
-         </tr>
+          <?php endif;?>
         </table>
       </fieldset>
     </div>

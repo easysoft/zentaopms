@@ -12,8 +12,8 @@
 $lang->build->common    = "Build";
 $lang->build->create    = "Create";
 $lang->build->edit      = "Edit";
-$lang->build->linkStory = "Link Story";
-$lang->build->linkBug   = "Link Bug";
+$lang->build->linkStory = "Relate Story";
+$lang->build->linkBug   = "Relate Bug";
 $lang->build->delete    = "Delete Build";
 $lang->build->deleted   = "Deleted";
 $lang->build->view      = "Build Details";
@@ -41,8 +41,8 @@ $lang->build->unlinkStory        = 'Remove Story';
 $lang->build->unlinkBug          = 'Remove Bug';
 $lang->build->stories            = 'Finished Story';
 $lang->build->bugs               = 'Solved Bug';
-$lang->build->generatedBugs      = 'Generated Bug';
-$lang->build->noProduct          = " <span style='color:red'>This {$lang->projectCommon} has not linked to {$lang->productCommon}, so Build cannot be created. Please first <a href='%s'> link {$lang->productCommon}</a></span>";
+$lang->build->generatedBugs      = 'Remained Bug';
+$lang->build->noProduct          = " <span style='color:red'>This {$lang->projectCommon} has not relateed to {$lang->productCommon}, so Build cannot be created. Please first <a href='%s'> relate {$lang->productCommon}</a></span>";
 
 $lang->build->finishStories = '  %s Stories have been finished.';
 $lang->build->resolvedBugs  = '  %s Bugs have been solved.';
@@ -50,7 +50,7 @@ $lang->build->createdBugs   = '  %s Bugs have been created.';
 
 $lang->build->placeholder = new stdclass();
 $lang->build->placeholder->scmPath  = ' Source code repository, e.g. Subversion/Git Library path';
-$lang->build->placeholder->filePath = ' Path of this Build package for download.';
+$lang->build->placeholder->filePath = ' Path of this Build package for downloading.';
 
 $lang->build->action = new stdclass();
 $lang->build->action->buildopened = '$date, created by <strong>$actor</strong>, Build <strong>$extra</strong>.' . "\n";

@@ -24,7 +24,7 @@
   </ul>
 </div>
 <form method='post' id='myTaskForm'>
-  <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='tasktable'>
+  <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='tasktable'>
     <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
     <tr class='text-center'>
@@ -48,7 +48,7 @@
     <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
     <?php foreach($tasks as $task):?>
     <tr class='text-center'>
-      <td class='text-left'>
+      <td class='cell-id'>
         <?php if($canBatchEdit or $canBatchClose):?><input type='checkbox' name='taskIDList[]' value='<?php echo $task->id;?>' /><?php endif;?>
         <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?>
       </td>

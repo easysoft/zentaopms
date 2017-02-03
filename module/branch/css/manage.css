@@ -1,1 +1,5 @@
-#branches .input-group{margin-bottom:5px; width:100%}
+#branches .input-group, #newbranches .input-group{margin-bottom:5px; width:100%}
+#branches .input-group input, #newbranches .input-group input{border-right:0px;}
+#branches .sort-handler{cursor: move}
+#branches .input-group.drag-shadow{z-index:5;}
+#branches .input-group.drag-row{opacity:0;}

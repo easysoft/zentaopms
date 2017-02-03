@@ -154,6 +154,16 @@ class upgradeModel extends model
                 $this->moveDocContent();
                 $this->adjustPriv8_3();
             case '8_3':
+            case '8_3_1':
+                $this->execSQL($this->getUpgradeFile('8.3.1'));
+                $this->renameMainLib();
+                $this->adjustPriv8_4();
+            case '8_4':
+            case '8_4_1':
+                $this->execSQL($this->getUpgradeFile('8.4.1'));
+            case '9_0_beta':
+                $this->execSQL($this->getUpgradeFile('9.0.beta'));
+                $this->adjustPriv9_0();
         }
 
         $this->deletePatch();
@@ -237,6 +247,10 @@ class upgradeModel extends model
         case '8_2_5':
         case '8_2_6':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.2.6'));
         case '8_3':
+        case '8_3_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.3.1'));
+        case '8_4':
+        case '8_4_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.4.1'));
+        case '9_0_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('9.0.beta'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -1279,7 +1293,7 @@ class upgradeModel extends model
         if($type == 'comment')
         {
             $comments = $this->dao->select('id,objectType,objectID,comment')->from(TABLE_ACTION)->where('comment')->like('%data/upload/%')->andWhere('id')->gt($lastID)->orderBy('id')->limit($limit)->fetchAll('id');
-            foreach($comments as $comment)
+            foreach($comments as $action)
             {
                 $files = array();
                 preg_match_all('/"data\/upload\/.*1\/([0-9]{6}\/[^"]+)"/', $action->comment, $output);
@@ -1296,7 +1310,7 @@ class upgradeModel extends model
             {
                 $result['type']   = 'comment';
                 $result['count']  = count($comments);
-                $result['lastID'] = $comment->id;
+                $result['lastID'] = $action->id;
             }
             return $result;
         }
@@ -1365,7 +1379,7 @@ class upgradeModel extends model
             {
                 $result['type']   = $type;
                 $result['count']  = count($objects);
-                $result['lastID'] = $object->id;
+                $result['lastID'] = $object->$idField;
             }
             return $result;
     }
@@ -1430,6 +1444,81 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
 
             $data->method = 'objectLibs';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+        return true;
+    }
+    
+    /**
+     * Rename main lib.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function renameMainLib()
+    {
+        $this->app->loadLang('doc');
+        $this->dao->update(TABLE_DOCLIB)->set('name')->eq($this->lang->doclib->main['product'])->where('product')->gt(0)->andWhere('main')->eq(1)->exec();
+        $this->dao->update(TABLE_DOCLIB)->set('name')->eq($this->lang->doclib->main['project'])->where('project')->gt(0)->andWhere('main')->eq(1)->exec();
+        return true;
+    }
+
+    /**
+     * Adjust priv for 8.4.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv8_4()
+    {
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('branch')->andWhere('method')->eq('manage')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group = $groupID;
+            $data->module = 'branch';
+            $data->method = 'sort';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('story')->andWhere('method')->eq('tasks')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group = $groupID;
+            $data->module = 'story';
+            $data->method = 'bugs';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+
+            $data->method = 'cases';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Adjust priv for 9.0 
+     * 
+     * @access public
+     * @return void
+     */
+    public function adjustPriv9_0()
+    {
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('testtask')->andWhere('method')->eq('results')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group = $groupID;
+            $data->module = 'testcase';
+            $data->method = 'bugs';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('mail')->andWhere('method')->eq('delete')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group = $groupID;
+            $data->module = 'mail';
+            $data->method = 'resend';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
         }
         return true;

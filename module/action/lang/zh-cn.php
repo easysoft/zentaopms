@@ -60,6 +60,7 @@ $lang->action->objectTypes['doc']         = '文档';
 $lang->action->objectTypes['doclib']      = '文档库';
 $lang->action->objectTypes['todo']        = '待办';
 $lang->action->objectTypes['branch']      = '分支';
+$lang->action->objectTypes['module']      = '模块';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -136,6 +137,8 @@ $lang->action->label->changestatus        = '修改状态';
 $lang->action->label->marked              = '编辑了';
 $lang->action->label->linked2project      = "关联{$lang->projectCommon}";
 $lang->action->label->unlinkedfromproject = "移除{$lang->projectCommon}";
+$lang->action->label->linked2release      = "关联发布";
+$lang->action->label->unlinkedfromrelease = "移除发布";
 $lang->action->label->linkrelatedbug      = "关联了相关Bug";
 $lang->action->label->unlinkrelatedbug    = "移除了相关Bug";
 $lang->action->label->linkrelatedcase     = "关联了相关用例";

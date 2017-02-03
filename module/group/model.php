@@ -266,8 +266,7 @@ class groupModel extends model
     public function updateView($groupID)
     {
         $actions = $this->post->actions;
-        if(!isset($actions['views']['product']) and isset($actions['products'])) unset($actions['products']);
-        if(!isset($actions['views']['project']) and isset($actions['projects'])) unset($actions['projects']);
+        if(isset($_POST['allchecker']))$actions['views'] = array();
 
         $actions = empty($actions) ? '' : json_encode($actions);
         $this->dao->update(TABLE_GROUP)->set('acl')->eq($actions)->where('id')->eq($groupID)->exec();

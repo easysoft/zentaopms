@@ -489,10 +489,11 @@ class product extends control
      * 
      * @param  int    $productID 
      * @param  int    $projectID 
+     * @param  string $number
      * @access public
      * @return void
      */
-    public function ajaxGetProjects($productID, $projectID = 0, $branch = 0)
+    public function ajaxGetProjects($productID, $projectID = 0, $branch = 0, $number = '')
     {
         if($productID == 0)
         {
@@ -504,7 +505,16 @@ class product extends control
         }
         if($this->app->getViewType() == 'json') die(json_encode($projects));
         
-        die(html::select('project', $projects, $projectID, 'class=form-control onchange=loadProjectRelated(this.value)'));
+        if($number === '')
+        {
+            die(html::select('project', $projects, $projectID, 'class=form-control onchange=loadProjectRelated(this.value)'));
+        }
+        else
+        {
+            $projectName = "projects[$number]";
+            $projects    = empty($projects) ? array('' => '') : $projects;
+            die(html::select($projectName, $projects, '', "class='form-control' onchange='loadProjectBuilds($productID, this.value, $number)'"));
+        }
     }
 
     /**

@@ -23,7 +23,7 @@ class releaseModel extends model
      */
     public function getByID($releaseID, $setImgSize = false)
     {
-        $release = $this->dao->select('t1.*, t2.id as buildID, t2.filePath, t2.scmPath, t2.name as buildName, t3.name as productName, t3.type as productType')
+        $release = $this->dao->select('t1.*, t2.id as buildID, t2.filePath, t2.scmPath, t2.name as buildName, t2.project, t3.name as productName, t3.type as productType')
             ->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
@@ -48,7 +48,7 @@ class releaseModel extends model
      */
     public function getList($productID, $branch = 0)
     {
-        return $this->dao->select('t1.*, t2.name as productName, t3.name as buildName')
+        return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName')
             ->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
@@ -196,7 +196,11 @@ class releaseModel extends model
         if($release->stories)
         {
             $this->loadModel('story');
-            foreach($this->post->stories as $storyID) $this->story->setStage($storyID);
+            foreach($this->post->stories as $storyID)
+            {
+                $this->story->setStage($storyID);
+                $this->loadModel('action')->create('story', $storyID, 'linked2release', '', $releaseID);
+            }
         }
     }
 
@@ -213,6 +217,7 @@ class releaseModel extends model
         $release = $this->getByID($releaseID);
         $release->stories = trim(str_replace(",$storyID,", ',', ",$release->stories,"), ',');
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
+        $this->loadModel('action')->create('story', $storyID, 'unlinkedfromrelease', '', $releaseID);
     }
 
     /**
@@ -232,6 +237,10 @@ class releaseModel extends model
         foreach($storyList as $storyID) $release->stories = str_replace(",$storyID,", ',', $release->stories);
         $release->stories = trim($release->stories, ',');
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
+        foreach($this->post->unlinkStories as $unlinkStoryID)
+        {
+            $this->loadModel('action')->create('story', $unlinkStoryID, 'unlinkedfromrelease', '', $releaseID);
+        }
     }
 
     /**
@@ -248,6 +257,10 @@ class releaseModel extends model
         $field = $type == 'bug' ? 'bugs' : 'leftBugs';
         $release->$field .= ',' . join(',', $this->post->bugs);
         $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
+        foreach($this->post->bugs as $bugID)
+        {
+            $this->loadModel('action')->create('bug', $bugID, 'linked2release', '', $releaseID);
+        }
     }
 
     /**
@@ -264,6 +277,7 @@ class releaseModel extends model
         $field = $type == 'bug' ? 'bugs' : 'leftBugs';
         $release->{$field} = trim(str_replace(",$bugID,", ',', ",{$release->$field},"), ',');
         $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
+        $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromrelease', '', $releaseID);
     }
 
     /**
@@ -285,6 +299,10 @@ class releaseModel extends model
         foreach($bugList as $bugID) $release->$field = str_replace(",$bugID,", ',', $release->$field);
         $release->$field = trim($release->$field, ',');
         $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq((int)$releaseID)->exec();
+        foreach($this->post->unlinkBugs as $unlinkBugID)
+        {
+            $this->loadModel('action')->create('bug', $unlinkBugID, 'unlinkedfromrelease', '', $releaseID);
+        }
     }
 
     /**

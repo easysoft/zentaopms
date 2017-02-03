@@ -61,7 +61,8 @@ class searchModel extends model
             $valueName    = "value$i";
 
             /* Skip empty values. */
-            if($this->post->$valueName == false and $this->post->$valueName !== '0') continue;
+            if($this->post->$fieldName == 'activatedCount' and $this->post->$valueName == '0') $this->post->$valueName = 'ZERO';
+            if($this->post->$valueName == false) continue;
             if($this->post->$valueName == 'null') $this->post->$valueName = '';  // Null is special, stands to empty.
             if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
 
@@ -110,7 +111,15 @@ class searchModel extends model
             }
 
             /* Set filed name. */
-            if($condition) $where .= " $andOr " . '`' . $this->post->$fieldName . '` ' . $condition;
+            if($operator == '=' and preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
+            {
+                $condition  = '`' . $this->post->$fieldName . "` >= '$value' AND `" . $this->post->$fieldName . "` <= '$value 24:00:00'";
+                $where     .= " $andOr ($condition)";
+            }
+            elseif($condition)
+            {
+                $where .= " $andOr " . '`' . $this->post->$fieldName . '` ' . $condition;
+            }
         }
 
         $where .=" ))";
@@ -184,7 +193,7 @@ class searchModel extends model
 
         if($hasUser)
         {
-            $users        = $this->loadModel('user')->getPairs('realname');
+            $users        = $this->loadModel('user')->getPairs('realname|noclosed');
             $users['$@me'] = $this->lang->search->me;
         }
         if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs();

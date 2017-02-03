@@ -247,6 +247,12 @@ class todo extends control
         $this->session->set('taskList', $this->app->getURI(true));
         $this->session->set('bugList',  $this->app->getURI(true));
 
+        /* Fix bug #936. */
+        if($this->app->user->account != $todo->account and !common::hasPriv('company', 'index'))
+        {
+            $this->locate($this->createLink('user', 'deny', "module=company&method=index"));
+        }
+
         /* Set menus. */
         $this->lang->todo->menu      = $this->lang->user->menu;
         $this->lang->todo->menuOrder = $this->lang->user->menuOrder;

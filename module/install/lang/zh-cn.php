@@ -66,8 +66,10 @@ $lang->install->tmpRoot      = '临时文件目录';
 $lang->install->dataRoot     = '上传文件目录';
 $lang->install->session      = 'Session存储目录';
 $lang->install->sessionFail  = '修改PHP配置文件，设置session.save_path';
-$lang->install->mkdir        = '<p>需要创建目录%s。<br /> linux下面命令为：<br /> mkdir -p %s</p>';
-$lang->install->chmod        = '需要修改目录 "%s" 的权限。<br />linux下面命令为：<br />chmod o=rwx -R %s';
+$lang->install->mkdirWin     = '<p>需要创建目录%s。命令行下面命令为：<br /> mkdir %s</p>';
+$lang->install->chmodWin     = '需要修改目录 "%s" 的权限。';
+$lang->install->mkdirLinux   = '<p>需要创建目录%s。<br /> 命令行下面命令为：<br /> mkdir -p %s</p>';
+$lang->install->chmodLinux   = '需要修改目录 "%s" 的权限。<br />命令行下面命令为：<br />chmod o=rwx -R %s';
 
 $lang->install->defaultLang    = '默认语言';
 $lang->install->dbHost         = '数据库服务器';
@@ -155,13 +157,13 @@ $lang->install->ranzhi->desc = <<<EOD
   <li>论坛博客，动态消息</li>
 </ul>
 EOD;
-$lang->install->yidou = new stdclass();
-$lang->install->yidou->name = '亿斗进销存管理运营系统';
-$lang->install->yidou->desc = <<<EOD
+$lang->install->zdoo = new stdclass();
+$lang->install->zdoo->name = '可深度定制的云端一体化协作平台';
+$lang->install->zdoo->desc = <<<EOD
 <ul>
-  <li>销售订单处理，信息及时反馈</li>
-  <li>采销业务状况，时时查询跟进</li>
-  <li>仓储配货送货，轻松便利快捷</li>
-  <li>财务收款付款，简单实用准确</li>
+  <li>安全、稳定、高效</li>
+  <li>以容器为交付单位</li>
+  <li>租户隔离，可深度定制</li>
+  <li>提供一体化管理平台</li>
 </ul>
 EOD;

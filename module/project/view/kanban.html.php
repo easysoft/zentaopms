@@ -58,7 +58,7 @@
         <?php if($hasStory):?>
         <td class='col-story'>
           <?php if(!empty($story->id)):?>
-          <div class='board board-story stage-<?php echo $story->stage?>' data-id='<?php echo $story->id?>'>
+          <div class='board board-story stage-<?php echo $story->stage?><?php if($story->assignedTo == $this->app->user->account) echo ' inverse';?>' data-id='<?php echo $story->id?>'>
             <div class='board-title'>
               <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', 'class="kanbanFrame" title="' . $story->title . '"');?>
               <div class='board-actions'>
@@ -70,6 +70,7 @@
                   <div class='dropdown-menu pull-right'>
                     <?php
                     echo (common::hasPriv('task', 'create')) ? html::a($this->createLink('task', 'create', "projectID=$story->project&storyID=$story->story&moduleID=$story->module", '', true), $lang->project->wbs, '', "class='kanbanFrame'") : '';
+                    echo (common::hasPriv('task', 'batchCreate')) ? html::a($this->createLink('task', 'batchCreate', "projectID=$story->project&storyID=$story->story&iframe=true", '', true), $lang->project->batchWBS, '', "class='kanbanFrame' data-width='95%'") : '';
                     echo (common::hasPriv('project', 'unlinkStory')) ? html::a($this->createLink('project', 'unlinkStory', "projectID=$story->project&storyID=$story->story&confirm=no", '', true), $lang->project->unlinkStory, 'hiddenwin') : '';
                     echo (common::hasPriv('story', 'activate') and storyModel::isClickable($story, 'activate')) ? html::a($this->createLink('story', 'activate', "storyID=$story->id", '', 'true'), $lang->story->activate, '', "class='kanbanFrame'") : '';
                     echo (common::hasPriv('story', 'close')    and storyModel::isClickable($story, 'close')) ? html::a($this->createLink('story', 'close', "storyID=$story->id", '', 'true'), $lang->story->close, '', "class='kanbanFrame'") : '';
@@ -92,9 +93,16 @@
         <td class='col-droppable col-<?php echo $col?>' data-id='<?php echo $col?>'>
         <?php if(!empty($story->tasks[$col])):?>
           <?php foreach($story->tasks[$col] as $task):?>
-          <div class='board board-task board-task-<?php echo $col ?>' data-id='<?php echo $task->id?>' id='task-<?php echo $task->id?>'>
+          <div class='board board-task board-task-<?php echo $col ?><?php if($task->assignedTo == $this->app->user->account) echo ' inverse';?>' data-id='<?php echo $task->id?>' id='task-<?php echo $task->id?>'>
             <div class='board-title'>
-              <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $task->name, '', 'class="kanbanFrame" title="' . $task->name . '"');?>
+              <?php
+              if(isset($task->delay))
+              {
+                  $labelClass = $task->status == 'doing' ? 'label-delay-doing' : 'label-delay-wait';
+                  echo "<span class='label label-badge {$labelClass}'>{$lang->task->delayed}</span>";
+              }
+              echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $task->name, '', 'class="kanbanFrame" title="' . $task->name . '"');
+              ?>
               <div class='board-actions'>
                 <button type='button' class='btn btn-mini btn-link btn-info-toggle'><i class='icon-angle-down'></i></button>
                 <div class='dropdown'>

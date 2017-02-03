@@ -386,35 +386,6 @@ function showTreeBox(treeType)
 }
 
 /**
- * Toggle tree menu.
-  
- * @access public
- * @return void
- */
-function toggleTreeBox()
-{
-    var treeType = $('.side-handle').data('id');
-    if(typeof treeType == 'undefined' || treeType == null) return;
-    if($.cookie(treeType) == 'hide') hideTreeBox(treeType);
-
-    $('.side-handle').toggle
-    (
-        function()
-        {
-            if($.cookie(treeType) == 'hide') return showTreeBox(treeType);
-            hideTreeBox(treeType);
-        }, 
-        function()
-        {
-            if($.cookie(treeType) == 'show') return hideTreeBox(treeType);
-            showTreeBox(treeType);
-        }
-    );
-
-    setTimeout(function(){$('.outer.with-side').addClass('with-transition')}, 1000);
-}
-
-/**
  * set tree menu.
   
  * @access public
@@ -422,8 +393,32 @@ function toggleTreeBox()
  */
 function setTreeBox()
 {
+    var $handle = $('.side-handle');
+    if($handle.data('setted')) return;
+
+    var treeType = $handle.data('id');
+    if(treeType)
+    {
+        if($.cookie(treeType) == 'hide') hideTreeBox(treeType);
+
+        $handle.toggle
+        (
+            function()
+            {
+                if($.cookie(treeType) == 'hide') return showTreeBox(treeType);
+                hideTreeBox(treeType);
+            }, 
+            function()
+            {
+                if($.cookie(treeType) == 'show') return hideTreeBox(treeType);
+                showTreeBox(treeType);
+            }
+        ).data('setted', true);
+    }
+
     if($('.outer > .side').length) $('.outer').addClass('with-side');
-    toggleTreeBox();
+    setTimeout(function(){$('.outer.with-side').addClass('with-transition')}, 1000);
+    adjustOuterSize();
 }
 
 /**
@@ -479,6 +474,21 @@ function saveWindowSize()
 }
 
 /**
+ * Adjust Outer box's width and height.
+ * 
+ * @access public
+ * @return void
+ */
+function adjustOuterSize()
+{
+    var side   = $('#wrap .outer > .side');
+    var sideH  = side.length ? (side.outerHeight() + $('#featurebar').outerHeight() + 20) : 0;
+    var height = Math.max(sideH, $(window).height() - $('#header').outerHeight() - ($('#footer').outerHeight() || 0) - 20);
+    if(navigator.userAgent.indexOf("MSIE 8.0") >= 0) height -= 40;
+    $('#wrap .outer').css('min-height', height);
+}
+
+/**
  * Set Outer box's width and height.
  * 
  * @access public
@@ -486,20 +496,10 @@ function saveWindowSize()
  */
 function setOuterBox()
 {
-//    if($('.sub-featurebar').length) $('#featurebar').addClass('with-sub');
-
     var side   = $('#wrap .outer > .side');
-    var resetOuterHeight = function()
-    {
-        var sideH  = side.length ? (side.outerHeight() + $('#featurebar').outerHeight() + 20) : 0;
-        var height = Math.max(sideH, $(window).height() - $('#header').outerHeight() - ($('#footer').outerHeight() || 0) - 20);
-        if(navigator.userAgent.indexOf("MSIE 8.0") >= 0) height -= 40;
-        $('#wrap .outer').css('min-height', height);
-    }
-
-    side.resize(resetOuterHeight);
-    $(window).resize(resetOuterHeight);
-    resetOuterHeight();
+    side.resize(adjustOuterSize);
+    $(window).resize(adjustOuterSize);
+    adjustOuterSize();
 }
 
 /**
@@ -655,7 +655,24 @@ function setComment()
  */
 function checkTable($table)
 {
-    $table = $table || $('.tablesorter:not(.table-datatable)');
+    $(document).off('change.checktable').on('change.checktable', '.rows-selector:checkbox', function()
+    {
+        var $checkbox = $(this);
+        var $datatable = $checkbox.closest('.datatable');
+        if($datatable.length) {
+            var $checkAll = $datatable.find('.check-all.check-btn:first').trigger('click');
+            $checkbox.prop('checked', $checkAll.hasClass('checked'))
+            return;
+        }
+        var scope = $checkbox.data('scope');
+        var $target = scope ? $('#' + scope) : $checkbox.closest('.table');
+        var isChecked = $checkbox.prop('checked');
+        $target.find('tbody > tr').toggleClass('active', isChecked).find('td :checkbox').prop('checked', isChecked);
+    });
+
+    $table = $table || $('.table-selectable');
+
+    if(!$table.length) return;
 
     if(!$table.find(':checkbox').length)
     {
@@ -689,6 +706,8 @@ function checkTable($table)
         }
     };
 
+    var isSelectableTable = $table.hasClass('table-selectable');
+
     $table.selectable(
     {
         selector: 'tbody > tr',
@@ -709,6 +728,10 @@ function checkTable($table)
             });
         },
         clickBehavior: 'multi',
+        startDrag: function(e)
+        {
+            if(!this.multiKey && isSelectableTable && !$(e.target).closest('.cell-id').length) return false;
+        },
         select: function(e)
         {
             checkRow.call(e.target, true);
@@ -718,21 +741,6 @@ function checkTable($table)
             checkRow.call(e.target, false);
         }
     }).on('click', 'tbody > tr :checkbox', function(e){checkRow.call(this); e.stopPropagation();}).on('click mousedown mousemove mouseup', 'tbody a,tbody select,tbody input', function(e) {e.stopPropagation();});
-
-    $(document).off('change.checktable').on('change.checktable', '.rows-selector:checkbox', function()
-    {
-        var $checkbox = $(this);
-        var $datatable = $checkbox.closest('.datatable');
-        if($datatable.length) {
-            var $checkAll = $datatable.find('.check-all.check-btn:first').trigger('click');
-            $checkbox.prop('checked', $checkAll.hasClass('checked'))
-            return;
-        }
-        var scope = $checkbox.data('scope');
-        var $target = scope ? $('#' + scope) : $checkbox.closest('.table');
-        var isChecked = $checkbox.prop('checked');
-        $target.find('tbody > tr').toggleClass('active', isChecked).find('td :checkbox').prop('checked', isChecked);
-    });
 }
 
 /**
@@ -1027,7 +1035,6 @@ function setModal()
                             title: $e.attr('title') || $e.text(),
                             icon: '?',
                             backdrop: 'static',
-                            keyboard: false,
                             show: true
                         }, setting, $e.data());
 
@@ -1072,7 +1079,6 @@ function setModal()
             waittime:   0,
             center:     true,
             backdrop:   'static',
-            keyboard:   false,
             show:       true
         };
         
@@ -1130,7 +1136,6 @@ function setModal()
             }
             showModal(options, modal, modalBody, dialog);
         }
-        console.log('iframe modal options', options);
         modal.modal(options);
     }
 
@@ -1310,10 +1315,10 @@ function setModal4List(triggerClass, replaceID, callback, width)
                     }
                     catch(err){}
 
-                    if($list.is('.tablesorter:not(.table-datatable)')) checkTable($list);
+                    if($list.is('.table-selectable:not(.table-datatable)')) checkTable($list);
                     else $list.find('tbody tr:not(.active-disabled) td').click(function(){$(this).closest('tr').toggleClass('active');});
 
-                    if($.isFunction(callback)) callback();
+                    if($.isFunction(callback)) callback($list);
                     $.cookie('selfClose', 0);
                 });
             }
@@ -1330,7 +1335,11 @@ function setModal4List(triggerClass, replaceID, callback, width)
  */
 function setTableBehavior()
 {
-    $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data, .table-form, .table-custom').addClass('table table-condensed table-hover table-striped tablesorter');
+    $('#wrap .outer > .table, #wrap .outer > form > .table, #wrap .outer > .mian > .table, #wrap .outer > .mian > form > .table, #wrap .outer > .container > .table').not('.table-data, .table-form, .table-custom').addClass('table table-condensed table-hover table-striped tablesorter').each(function()
+    {
+        var $tbody = $(this).children('tbody');
+        if(!$tbody.children().length) $tbody.remove();
+    });
 
     $(document).on('click', 'tr[data-url]', function()
     {
@@ -1435,44 +1444,62 @@ function checkOnlybodyPage()
  */
 function fixedTfootAction(formID)
 {
-    if($(formID).size() == 0) return false;
-    if($(formID).find('table:last').find('tfoot').size() == 0) return false;
+    var $form = $(formID);
+    if(!$form.length) return false;
+    var $table = $form.find('table:last');
+    var $tfoot = $table.find('tfoot');
+    if($table.hasClass('table-datatable'))
+    {
+        $table = $form.find('.datatable-rows');
+        $tfoot = $form.find('.datatable-footer tfoot');
+    }
+    if(!$tfoot.length) return false;
 
-    fixTfootInit();
-    $(window).scroll(fixTfoot);//Fix table foot when scrolling.
-    $('.side-handle').click(function(){setTimeout(fixTfootInit, 300);});//Fix table foot if module tree is hidden or displayed.
-
-    var $table, $tfoot, $inputGroup, tableWidth, tableOffset, hasFixed;
+    var $tbody = $table.find('tbody'),
+        $inputGroup = $tfoot.find('.table-actions').children('.input-group'),
+        pageFooterHeight = $('#footer').height(),
+        tableWidth,
+        tableOffset,
+        hasFixed;
+    if(!$tbody.length) return false;
     function fixTfoot()
     {
-        $table       = $(formID).find('table:last');
-        $tfoot       = $table.find('tfoot');
         tableWidth   = $table.width();
         hasFixed     = $tfoot.hasClass('fixedTfootAction');
-        offsetHeight = $(window).height() + $(window).scrollTop();
-        tableOffset  = $table.offset().top + $table.height() - $tfoot.height() / 5;
-        $inputGroup  = $tfoot.find('.table-actions').children('.input-group');
+        offsetHeight = $(window).height() + $(window).scrollTop() - pageFooterHeight/2;
+        tableOffset  = $tbody.offset().top + $tbody.height() + $tfoot.height();
 
         if(!hasFixed && offsetHeight <= tableOffset)
         {
-            $tfoot.addClass('fixedTfootAction');
-            $tfoot.width(tableWidth);
-            $tfoot.find('td').width(tableWidth);
+            $tfoot.addClass('fixedTfootAction')
+                  .width(tableWidth)
+                  .find('td').width(tableWidth);
             if($inputGroup.size() > 0) $inputGroup.width($inputGroup.width());
         }
         if(hasFixed && (offsetHeight > tableOffset || $(document).height() == offsetHeight))
         {
-            $tfoot.removeClass('fixedTfootAction');
-            $tfoot.removeAttr('style');
-            $tfoot.find('td').removeAttr('style');
+            $tfoot.removeClass('fixedTfootAction')
+                  .removeAttr('style')
+                  .find('td').removeAttr('style');
         }
     }
     function fixTfootInit()
     {
-        $tfoot = $(formID).find('table:last').find('tfoot')
         if($tfoot.hasClass('fixedTfootAction')) $tfoot.removeClass('fixedTfootAction');
         fixTfoot();
     }
+
+    fixTfootInit();
+    var scrollCallTask;
+    $(window).scroll(function()
+    {
+        // Fix table foot when scrolling.
+        fixTfoot();
+        $tfoot.addClass('scrolling scrolled');
+        clearTimeout(scrollCallTask);
+        scrollCallTask = setTimeout(function(){$tfoot.removeClass('scrolling');}, 200)
+    }).resize(fixTfoot);
+    $('.side-handle').click(function(){setTimeout(fixTfootInit, 300);}); // Fix table foot if module tree is hidden or displayed.
 }
 
 /**
@@ -1687,28 +1714,28 @@ function removeCookieByKey(cookieKey)
  */
 function initHotKey()
 {
-    $(document).on('keydown', 'Ctrl+g', function(e)
+    $(document).bind('keydown', 'Ctrl+g', function(e)
     {
         /* CTRL+g, auto focus on the search box. */
         $('#searchQuery').val('').focus();
         e.stopPropagation();
         e.preventDefault();
         return false;
-    }).on('keydown', 'Alt+up', function()
+    }).bind('keydown', 'Alt+up', function()
     {
         /* Alt+up, go back to the previous page. */
-        var backLink = $('#back').attr("href");
+        var backLink = $('#back').attr('href');
         if(backLink) location.href = backLink;
-    }).on('keydown', 'left', function()
+    }).bind('keydown', 'left', function()
     {
         /* left, go to pre object. */
-        var preLink = $('#pre').attr("href");
+        var preLink = $('#pre').attr('href');
         if(preLink) location.href = preLink;
-    }).on('keydown', 'right', function()
+    }).bind('keydown', 'right', function()
     {
         /* right, go to next object. */
-        var nextLink = $('#next').attr("href");
-        if(preLink) location.href = nextLink;
+        var nextLink = $('#next').attr('href');
+        if(nextLink) location.href = nextLink;
     });
 }
 
@@ -1720,6 +1747,7 @@ function initHotKey()
 function initHelpLink()
 {
     var zentaoUrl = 'http://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
+    if(config.clientLang == 'en') zentaoUrl = 'http://www.zentao.pm/book/zentaomanual/8.html?fullScreen=zentao';
     var $mainNav = $('#mainmenu > .nav').first();
     var showLoadingError;
     var timeout = 10000;

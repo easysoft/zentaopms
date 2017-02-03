@@ -20,9 +20,9 @@ var browseType = '<?php echo $browseType;?>';
 <?php js::set('libID', $libID);?>
 <?php if(!$fixedMenu and $this->from != 'doc') js::set('type', 'doc');?>
 <?php if($this->cookie->browseType == 'bymenu'):?>
-<?php include __DIR__ . '/browsebymenu.html.php';?>
+<?php include dirname(__FILE__) . '/browsebymenu.html.php';?>
 <?php elseif($this->cookie->browseType == 'bytree'):?>
-<?php include __DIR__ . '/browsebytree.html.php';?>
+<?php include dirname(__FILE__) . '/browsebytree.html.php';?>
 <?php else:?>
 <div id='featurebar'>
   <ul class='nav'>
@@ -66,6 +66,7 @@ var browseType = '<?php echo $browseType;?>';
   </div>
 </div>
 <div class='main'>
+  <script>setTreeBox();</script>
   <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='docList'>
     <thead>
       <tr>

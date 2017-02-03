@@ -14,7 +14,7 @@
 <?php js::set('blockID', $blockID)?>
 <?php if(isset($pageJS)) js::execute($pageJS);?>
 <table class='table table-form'>
-  <tr><th class='w-100px'></th><td></td></tr>
+  <tr><th class='w-100px'></th><td></td><td class='w-100px'></td></tr>
   <?php if(!empty($modules)):?>
   <tr>
     <th class='w-100px'><?php echo $lang->block->lblModule; ?></th>

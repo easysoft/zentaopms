@@ -21,7 +21,7 @@ $lang->doc->digest         = 'Summary';
 $lang->doc->comment        = 'Remark';
 $lang->doc->type           = 'Type';
 $lang->doc->content        = 'Text';
-$lang->doc->keywords       = 'Keyword';
+$lang->doc->keywords       = 'Keywords';
 $lang->doc->url            = 'URL';
 $lang->doc->files          = 'File';
 $lang->doc->addedBy        = 'Added By';
@@ -34,6 +34,7 @@ $lang->doc->deleted        = 'Deleted';
 $lang->doc->fileObject     = 'The Object';
 $lang->doc->whiteList      = 'White List';
 $lang->doc->contentType    = 'Document Format';
+$lang->doc->separator      = "<i class='icon-angle-right'></i>";
 
 $lang->doc->moduleDoc      = 'By Module';
 $lang->doc->searchDoc      = 'By Search';
@@ -43,28 +44,28 @@ $lang->doc->orderByOpen    = 'Recently Added';
 $lang->doc->orderByEdit    = 'Recently Modifie';
 
 /* 方法列表。*/
-$lang->doc->index          = 'Homepage';
+$lang->doc->index          = 'Home';
 $lang->doc->create         = 'Create';
 $lang->doc->edit           = 'Edit';
 $lang->doc->delete         = 'Delete';
 $lang->doc->browse         = 'List';
 $lang->doc->view           = 'Details';
 $lang->doc->diff           = 'Diff';
-$lang->doc->manageType     = 'Type';
-$lang->doc->editType       = 'Edit Type';
-$lang->doc->deleteType     = 'Delete Type';
-$lang->doc->addType        = 'Add Type';
+$lang->doc->manageType     = 'Manage Category';
+$lang->doc->editType       = 'Edit';
+$lang->doc->deleteType     = 'Delete';
+$lang->doc->addType        = 'Add';
 
-$lang->doc->libName        = 'Library Name';
-$lang->doc->libType        = 'Library Type';
+$lang->doc->libName        = 'Name';
+$lang->doc->libType        = 'Category';
 $lang->doc->custom         = 'Custom Library';
 $lang->doc->customAB       = 'Custom Library';
 $lang->doc->createLib      = 'Create Library';
-$lang->doc->allLibs        = 'Library List';
+$lang->doc->allLibs        = 'Libraries';
 $lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->projectCommon} Library List";
-$lang->doc->showFiles      = 'Files Library';
-$lang->doc->editLib        = 'Edit Library';
-$lang->doc->deleteLib      = 'Delete Library';
+$lang->doc->showFiles      = 'File Library';
+$lang->doc->editLib        = 'Edit';
+$lang->doc->deleteLib      = 'Delete';
 $lang->doc->fixedMenu      = 'Fixed In Menu';
 $lang->doc->removeMenu     = 'Remove From Menu';
 
@@ -83,13 +84,13 @@ $lang->doc->aclList['open']    = 'Public';
 $lang->doc->aclList['custom']  = 'Custom';
 $lang->doc->aclList['private'] = 'Private';
 
-$lang->doc->types['text'] = 'Html';
-$lang->doc->types['url']  = 'Link';
+$lang->doc->types['text'] = 'Text';
+$lang->doc->types['url']  = 'URL';
 
 $lang->doc->contentTypeList['html']     = 'HTML';
 $lang->doc->contentTypeList['markdown'] = 'MarkDown';
 
-$lang->doc->browseType             = 'Browse Type';
+$lang->doc->browseType             = 'Categories';
 $lang->doc->browseTypeList['list'] = 'List';
 $lang->doc->browseTypeList['menu'] = 'Menu';
 $lang->doc->browseTypeList['tree'] = 'Tree';
@@ -100,8 +101,7 @@ $lang->doc->errorEditSystemDoc = "System Doc Lib needs no modifications.";
 $lang->doc->errorEmptyProduct  = "No {$lang->productCommon}. Document cannot be created.";
 $lang->doc->errorEmptyProject  = "No {$lang->projectCommon}. Document cannot be created.";
 $lang->doc->errorMainSysLib    = "Can not delete this library.";
-$lang->doc->accessDenied       = "Access to library denied!";
-$lang->doc->noMatched          = "No library including '%s' can be found.";
+$lang->doc->accessDenied       = "Access denied!";
 $lang->doc->versionNotFount    = 'The document is not exist in this version.';
 
 $lang->doc->placeholder = new stdclass();
@@ -115,6 +115,8 @@ $lang->doclib->user    = 'User';
 $lang->doclib->files   = 'Files';
 $lang->doclib->all     = 'All Libraries';
 $lang->doclib->select  = 'Select Library';
+$lang->doclib->project = $lang->projectCommon . ' Library';
+$lang->doclib->product = $lang->productCommon . ' Library';
 
-$lang->doclib->main['product'] = $lang->productCommon . ' Library';
-$lang->doclib->main['project'] = $lang->projectCommon . ' Library';
+$lang->doclib->main['product'] = $lang->productCommon . ' Main Library';
+$lang->doclib->main['project'] = $lang->projectCommon . ' Main Library';

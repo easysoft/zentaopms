@@ -96,7 +96,7 @@ class task extends control
 
                 $taskID   = $taskID['id'];
                 $actionID = $this->action->create('task', $taskID, 'Opened', '');
-                $this->sendmail($taskID, $actionID);
+                $this->task->sendmail($taskID, $actionID);
             }            
 
             /* If link from no head then reload*/
@@ -179,7 +179,7 @@ class task extends control
             $mails = $this->task->batchCreate($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            foreach($mails as $mail) $this->sendmail($mail->taskID, $mail->actionID);
+            foreach($mails as $mail) $this->task->sendmail($mail->taskID, $mail->actionID);
 
             /* Locate the browser. */
             if($iframe) die(js::reload('parent.parent'));
@@ -199,14 +199,15 @@ class task extends control
         $position[] = $this->lang->task->common;
         $position[] = $this->lang->task->batchCreate;
 
-        $this->view->title    = $title;
-        $this->view->position = $position;
-        $this->view->project  = $project;
-        $this->view->stories  = $stories;
-        $this->view->modules  = $modules;
-        $this->view->storyID  = $storyID;
-        $this->view->story    = $this->loadModel('story')->getByID($storyID);
-        $this->view->members  = $members;
+        $this->view->title      = $title;
+        $this->view->position   = $position;
+        $this->view->project    = $project;
+        $this->view->stories    = $stories;
+        $this->view->modules    = $modules;
+        $this->view->storyID    = $storyID;
+        $this->view->story      = $this->story->getByID($storyID);
+        $this->view->storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
+        $this->view->members    = $members;
         $this->display();
     }
 
@@ -259,7 +260,7 @@ class task extends control
                 $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
                 $actionID = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-                $this->sendmail($taskID, $actionID);
+                $this->task->sendmail($taskID, $actionID);
             }
 
             if($task->fromBug != 0)
@@ -281,7 +282,7 @@ class task extends control
         unset($noclosedProjects[$this->view->project->id]);
         $this->view->projects = array($this->view->project->id => $this->view->project->name) + $noclosedProjects;
 
-        if(!isset($members[$this->view->task->assignedTo])) $members[$this->view->task->assignedTo] = $this->view->task->assignedTo;
+        if(!isset($this->view->members[$this->view->task->assignedTo])) $this->view->members[$this->view->task->assignedTo] = $this->view->task->assignedTo;
         $this->view->title      = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
         $this->view->position[] = $this->lang->task->common;
         $this->view->position[] = $this->lang->task->edit;
@@ -312,7 +313,7 @@ class task extends control
 
                     $actionID = $this->loadModel('action')->create('task', $taskID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
-                    $this->sendmail($taskID, $actionID);
+                    $this->task->sendmail($taskID, $actionID);
 
                     $task = $this->task->getById($taskID);
                     if($task->fromBug != 0)
@@ -411,7 +412,7 @@ class task extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
             $this->action->logHistory($actionID, $changes);
-            $this->sendmail($taskID, $actionID);
+            $this->task->sendmail($taskID, $actionID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -444,7 +445,7 @@ class task extends control
                 $this->loadModel('action');
                 $actionID = $this->action->create('task', $taskID, 'Edited');
                 $this->action->logHistory($actionID, $changes);
-                $this->sendmail($taskID, $actionID);
+                $this->task->sendmail($taskID, $actionID);
             }
         }
         die(js::reload('parent'));
@@ -471,7 +472,7 @@ class task extends control
                 if(dao::isError()) die(js::error(dao::getError()));
                 $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
                 $this->action->logHistory($actionID, $changes);
-                $this->sendmail($taskID, $actionID);
+                $this->task->sendmail($taskID, $actionID);
             }
             die(js::locate($this->createLink('project', 'task', "projectID=$project"), 'parent'));
         }
@@ -569,7 +570,7 @@ class task extends control
                 $act = $this->post->left == 0 ? 'Finished' : 'Started';
                 $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->sendmail($taskID, $actionID);
+                $this->task->sendmail($taskID, $actionID);
             }
 
             /* Remind whether to update status of the bug, if task which from that bug has been finished. */
@@ -721,7 +722,7 @@ class task extends control
                 $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
                 $actionID = $this->action->create('task', $taskID, 'Finished', $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->sendmail($taskID, $actionID);
+                $this->task->sendmail($taskID, $actionID);
             }
 
             if($this->task->needUpdateBugStatus($task))
@@ -803,7 +804,7 @@ class task extends control
                 $act = $this->post->left == 0 ? 'Finished' : 'Restarted';
                 $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->sendmail($taskID, $actionID);
+                $this->task->sendmail($taskID, $actionID);
             }
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -836,7 +837,7 @@ class task extends control
             {
                 $actionID = $this->action->create('task', $taskID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->sendmail($taskID, $actionID);
+                $this->task->sendmail($taskID, $actionID);
             }
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -856,11 +857,12 @@ class task extends control
      * @access public
      * @return void
      */
-    public function batchClose()
+    public function batchClose($skipTaskIdList = '')
     {
-        if($this->post->taskIDList)
+        if($this->post->taskIDList or $skipTaskIdList)
         {
             $taskIDList = $this->post->taskIDList;
+            if($skipTaskIdList) $taskIDList = $skipTaskIdList;
             unset($_POST['taskIDList']);
             unset($_POST['assignedTo']);
             $this->loadModel('action');
@@ -868,7 +870,7 @@ class task extends control
             $tasks = $this->task->getByList($taskIDList);
             foreach($tasks as $taskID => $task)
             {
-                if($task->status == 'wait' or $task->status == 'doing')
+                if(empty($skipTaskIdList) and ($task->status == 'wait' or $task->status == 'doing'))
                 {
                     $skipTasks[$taskID] = $taskID;
                     continue;
@@ -877,15 +879,20 @@ class task extends control
                 if($task->status == 'closed') continue;
 
                 $changes = $this->task->close($taskID);
-
                 if($changes)
                 {
                     $actionID = $this->action->create('task', $taskID, 'Closed', '');
                     $this->action->logHistory($actionID, $changes);
-                    $this->sendmail($taskID, $actionID);
+                    $this->task->sendmail($taskID, $actionID);
                 }
             }
-            if(isset($skipTasks)) echo js::alert(sprintf($this->lang->task->error->skipClose, join(',', $skipTasks)));
+            if(isset($skipTasks) and empty($skipTaskIdList))
+            {
+                $skipTasks = join(',', $skipTasks);
+                $confirmURL = $this->createLink('task', 'batchClose', "skipTaskIdList=$skipTasks");
+                $cancelURL  = $this->server->HTTP_REFERER;
+                die(js::confirm(sprintf($this->lang->task->error->skipClose, $skipTasks), $confirmURL, $cancelURL, 'self', 'parent'));
+            }
         }
         die(js::reload('parent'));
     }
@@ -911,7 +918,7 @@ class task extends control
             {
                 $actionID = $this->action->create('task', $taskID, 'Canceled', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->sendmail($taskID, $actionID);
+                $this->task->sendmail($taskID, $actionID);
             }
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -945,7 +952,7 @@ class task extends control
             {
                 $actionID = $this->action->create('task', $taskID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->sendmail($taskID, $actionID);
+                $this->task->sendmail($taskID, $actionID);
             }
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -984,63 +991,6 @@ class task extends control
         }
     }
 
-    /**
-     * Send email.
-     * 
-     * @param  int    $taskID 
-     * @param  int    $actionID 
-     * @access public
-     * @return void
-     */
-    public function sendmail($taskID, $actionID)
-    {
-        /* Reset $this->output. */
-        $this->clear();
-
-        /* Set toList and ccList. */
-        $task        = $this->task->getById($taskID);
-        $projectName = $this->project->getById($task->project)->name;
-        $users       = $this->loadModel('user')->getPairs('noletter');
-        $toList      = $task->assignedTo;
-        $ccList      = trim($task->mailto, ',');
-
-        if($toList == '')
-        {
-            if($ccList == '') return;
-            if(strpos($ccList, ',') === false)
-            {
-                $toList = $ccList;
-                $ccList = '';
-            }
-            else
-            {
-                $commaPos = strpos($ccList, ',');
-                $toList = substr($ccList, 0, $commaPos);
-                $ccList = substr($ccList, $commaPos + 1);
-            }
-        }
-        elseif(strtolower($toList) == 'closed')
-        {
-            $toList = $task->finishedBy;
-        }
-
-        /* Get action info. */
-        $action          = $this->loadModel('action')->getById($actionID);
-        $history         = $this->action->getHistory($actionID);
-        $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
-
-        /* Create the email content. */
-        $this->view->task   = $task;
-        $this->view->action = $action;
-        $this->view->users  = $users;
-
-        $mailContent = $this->parse($this->moduleName, 'sendmail');
-
-        /* Send emails. */
-        $this->loadModel('mail')->send($toList, 'TASK#' . $task->id . ' ' . $task->name . ' - ' . $projectName, $mailContent, $ccList);
-        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
-    }
-    
     /**
      * AJAX: return tasks of a user in html select. 
      * 
@@ -1138,6 +1088,7 @@ class task extends control
     {
         if($_POST)
         {
+            $this->loadModel('file');
             $taskLang   = $this->lang->task;
             $taskConfig = $this->config->task;
 
@@ -1216,7 +1167,7 @@ class task extends control
                     $task->files = '';
                     foreach($relatedFiles[$task->id] as $file)
                     {
-                        $fileURL = 'http://' . $this->server->http_host . $this->config->webRoot . "data/upload/{$this->app->company->id}/" . $file->pathname;
+                        $fileURL = common::getSysURL() . $this->file->webPath . $file->pathname;
                         $task->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
                     }
                 }

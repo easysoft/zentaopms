@@ -168,20 +168,16 @@ class commonModel extends model
         if($module == 'sso' and $method == 'logout') return true;
         if($module == 'sso' and $method == 'bind') return true;
         if($module == 'sso' and $method == 'gettodolist') return true;
-        if($module == 'product' and $method == 'showerrornone') return true;
-        if($module == 'block' and $method == 'printblock') return true;
         if($module == 'block' and $method == 'main') return true;
 
-        if($this->loadModel('user')->isLogon())
+        if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
             if(stripos($method, 'ajax') !== false) return true;
             if(stripos($method, 'downnotify') !== false) return true;
             if($module == 'tutorial') return true;
             if($module == 'block') return true;
+            if($module == 'product' and $method == 'showerrornone') return true;
         }
-
-        if(stripos($method, 'ajaxgetdropmenu') !== false) return true;
-        if(stripos($method, 'ajaxgetmatcheditems') !== false) return true;
         return false;
     }
 
@@ -589,7 +585,7 @@ class commonModel extends model
     {
         global $lang;
         echo html::a('javascript:;', "<i class='icon-qrcode'></i>", '', "class='qrCode $color' id='qrcodeBtn' title='{$lang->user->mobileLogin}'");
-        echo "<div class='popover top' id='qrcodePopover'><div class='arrow'></div><h3 class='popover-title'>{$lang->user->mobileLogin}</h3><div class='popover-content'><img src=\"javascript:;\"></div></div>";
+        echo "<div class='popover top' id='qrcodePopover'><div class='arrow'></div><h3 class='popover-title'>{$lang->user->mobileLogin}</h3><div class='popover-content'><img src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'></div></div>";
         echo '<script>$(function(){$("#qrcodeBtn").click(function(){$("#qrcodePopover").toggleClass("show");}); $("#wrap").click(function(){$("#qrcodePopover").removeClass("show");});});</script>';
         echo '<script>$(function(){$("#qrcodeBtn").hover(function(){$(".popover-content img").attr("src", "' . helper::createLink('misc', 'qrCode') . '");});});</script>';
     }
@@ -870,6 +866,7 @@ class commonModel extends model
             if(strtolower($key) == 'assigneddate')   continue;
             if(strtolower($key) == 'editedby')       continue;
             if(strtolower($key) == 'editeddate')     continue;
+            if(strtolower($key) == 'uid')            continue;
 
             if($magicQuote) $value = stripslashes($value);
             if($value != stripslashes($old->$key))
@@ -937,7 +934,6 @@ class commonModel extends model
      * Get the previous and next object.
      * 
      * @param  string $type story|task|bug|case
-     * @param  string $objectIDs 
      * @param  string $objectID 
      * @access public
      * @return void
@@ -952,7 +948,7 @@ class commonModel extends model
         $existObject = $type . 'PreAndNext';
         if(isset($_SESSION[$existObject]) and $_SESSION[$existObject]['objectID'] == $objectID) return $_SESSION[$existObject]['preAndNextObject'];
 
-        /* Get objectIDs. */
+        /* Get objectIDList. */
         $table             = $this->config->objectTables[$type];
         $queryCondition    = $type . 'QueryCondition';
         $typeOnlyCondition = $type . 'OnlyCondition';
@@ -1015,10 +1011,12 @@ class commonModel extends model
         if($onlyCondition)
         {
             $queryCondition = explode('WHERE', $sql);
-            if(!isset($queryCondition[1])) return true;
-
-            $queryCondition = explode('ORDER', $queryCondition[1]);
-            $queryCondition = str_replace('t1.', '', $queryCondition[0]);
+            $queryCondition = isset($queryCondition[1]) ? $queryCondition[1] : '';
+            if($queryCondition)
+            {
+                $queryCondition = explode('ORDER', $queryCondition);
+                $queryCondition = str_replace('t1.', '', $queryCondition[0]);
+            }
         }
         else
         {
@@ -1033,17 +1031,14 @@ class commonModel extends model
 
         /* Set the query condition session. */
         $orderBy = explode('ORDER BY', $sql);
-        if(isset($orderBy[1]))
+        $orderBy = isset($orderBy[1]) ? $orderBy[1] : '';
+        if($orderBy)
         {
-            $orderBy = explode('limit', $orderBy[1]);
-            $orderBy = str_replace('t1.', '', $orderBy[0]);
-
-            $this->session->set($objectType . 'OrderBy', $orderBy);
+            $orderBy = explode('limit', $orderBy);
+            $orderBy = $orderBy[0];
+            if($onlyCondition) $orderBy = str_replace('t1.', '', $orderBy);
         }
-        else
-        {
-            $this->session->set($objectType . 'OrderBy', '');
-        }
+        $this->session->set($objectType . 'OrderBy', $orderBy);
     }
 
     /**
@@ -1132,9 +1127,12 @@ class commonModel extends model
         $statusFile = $this->loadModel('upgrade')->checkSafeFile();
         if($statusFile)
         {
+            $cmd = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $this->lang->upgrade->createFileWinCMD : $this->lang->upgrade->createFileLinuxCMD;
+            $cmd = sprintf($cmd, $statusFile);
+
             echo "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>";
-            echo "<table align='center' style='margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td>";
-            printf($this->lang->upgrade->setStatusFile, $statusFile, $statusFile, $statusFile);
+            echo "<table align='center' style='margin-top:100px; border:1px solid gray; font-size:14px;padding:8px;'><tr><td>";
+            printf($this->lang->upgrade->setStatusFile, $cmd, $statusFile);
             die('</td></tr></table></body></html>');
         }
     }
@@ -1149,6 +1147,7 @@ class commonModel extends model
     {
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
+        if(isset($this->app->user->modifyPassword) and $this->app->user->modifyPassword and $module != 'my' and $method != 'changepassword') die(js::locate(helper::createLink('my', 'changepassword')));
         if($this->isOpenMethod($module, $method)) return true;
         if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
         if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();

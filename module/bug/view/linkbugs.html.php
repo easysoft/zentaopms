@@ -21,7 +21,7 @@
     <div id='querybox' class='show'></div>
   </div>
   <form method='post' class='form-condensed' target='hiddenwin' id='linkBugsForm'>
-    <table class='table table-condensed table-hover table-striped tablesorter' id='bugList'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-selectable' id='bugList'>
       <?php if($bugs2Link):?>
       <thead>
       <tr>
@@ -39,7 +39,7 @@
       <?php foreach($bugs2Link as $bug2Link):?>
       <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug2Link->id");?>
       <tr class='text-center'>
-        <td class='text-left'>
+        <td class='cell-id'>
           <input type='checkbox' name='bugs[]'  value='<?php echo $bug2Link->id;?>'/> 
           <?php echo html::a($bugLink, sprintf('%03d', $bug2Link->id));?>
         </td>

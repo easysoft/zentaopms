@@ -26,15 +26,15 @@
       </tr>
       <tr>
         <th><?php echo $lang->sso->addr; ?></th>
-        <td><?php echo html::input('addr', $addr, "class='form-control' placeholder='{$lang->sso->addrNotice}'");?></td>
+        <td><?php echo html::input('addr', $addr, "class='form-control' placeholder='{$lang->sso->addrNotice}' autocomplete='off'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->sso->code; ?></th>
-        <td><?php echo html::input('code', $code, "class='form-control'");?></td>
+        <td><?php echo html::input('code', $code, "class='form-control' autocomplete='off'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->sso->key; ?></th>
-        <td><?php echo html::input('key', $key, "class='form-control'");?></td>
+        <td><?php echo html::input('key', $key, "class='form-control' autocomplete='off'");?></td>
       </tr>
       <tr>
          <td colspan='2' class='text-center'>

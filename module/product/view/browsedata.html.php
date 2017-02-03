@@ -11,22 +11,21 @@
  */
 ?>
     <?php include '../../common/view/tablesorter.html.php';?>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed' id='storyList'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='storyList'>
       <thead>
       <tr>
         <th class='w-id {sorter:false}'>  <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
         <th class='w-pri {sorter:false}'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
         <th class='w-p30 {sorter:false}'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
-        <th class='w-70px {sorter:false}'><?php common::printOrderLink('plan',       $orderBy, $vars, $lang->story->planAB);?></th>
-        <th class='w-70px {sorter:false}'><?php common::printOrderLink('source',     $orderBy, $vars, $lang->story->source);?></th>
+        <th class='w-90px {sorter:false}'><?php common::printOrderLink('plan',       $orderBy, $vars, $lang->story->planAB);?></th>
         <th class='w-user {sorter:false}'><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
         <th class='w-user {sorter:false}'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
         <th class='w-hour {sorter:false}'><?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
         <th class='w-50px {sorter:false}'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
         <th class='w-70px {sorter:false}'><?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
-        <th class='w-30px'><?php echo $lang->story->taskCountAB;?></th>
-        <th class='w-30px'><?php echo $lang->story->bugCountAB;?></th>
-        <th class='w-30px'><?php echo $lang->story->caseCountAB;?></th>
+        <th title='<?php echo $lang->story->taskCount?>' class='w-30px'><?php echo $lang->story->taskCountAB;?></th>
+        <th title='<?php echo $lang->story->bugCount?>'  class='w-30px'><?php echo $lang->story->bugCountAB;?></th>
+        <th title='<?php echo $lang->story->caseCount?>' class='w-30px'><?php echo $lang->story->caseCountAB;?></th>
         <th class='w-140px {sorter:false}'><?php echo $lang->actions;?></th>
       </tr>
       </thead>
@@ -38,7 +37,7 @@
       $canView  = common::hasPriv('story', 'view');
       ?>
       <tr class='text-center'>
-        <td class='text-left'>
+        <td class='cell-id'>
           <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
           <?php echo $canView ? html::a($viewLink, sprintf('%03d', $story->id)): sprintf('%03d', $story->id);?>
         </td>
@@ -49,7 +48,6 @@
         <?php echo html::a($viewLink, $story->title, null, "style='color: $story->color'");?>
         </nobr></td>
         <td title="<?php echo $story->planTitle?>"><?php echo $story->planTitle;?></td>
-        <td><?php echo $lang->story->sourceList[$story->source];?></td>
         <td><?php echo zget($users, $story->openedBy, $story->openedBy);?></td>
         <td><?php echo zget($users, $story->assignedTo, $story->assignedTo);?></td>
         <td><?php echo $story->estimate;?></td>
@@ -90,7 +88,7 @@
           <?php 
           $vars = "story={$story->id}";
           common::printIcon('story', 'change',     $vars, $story, 'list', 'random');
-          common::printIcon('story', 'review',     $vars, $story, 'list', 'search');
+          common::printIcon('story', 'review',     $vars, $story, 'list', 'review');
           common::printIcon('story', 'close',      $vars, $story, 'list', 'off', '', 'iframe', true);
           common::printIcon('story', 'edit',       $vars, $story, 'list', 'pencil');
           common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');

@@ -16,7 +16,7 @@
 <?php if($this->config->product->homepage != 'index'):?>
 $(function()
 {
-    $('#modulemenu .nav li.right:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"product\", \"index\")'><i class='icon icon-cog'></i><?php echo $lang->homepage?></a></li>")
+    $('#modulemenu .nav li.right:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"product\", \"index\")'><i class='icon icon-cog'></i> <?php echo $lang->homepage?></a></li>")
 });
 <?php endif;?>
 </script>

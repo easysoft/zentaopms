@@ -1,6 +1,6 @@
 <?php
 $lang->custom->common    = 'Custom';
-$lang->custom->index     = 'Homepage';
+$lang->custom->index     = 'Home';
 $lang->custom->set       = 'Customize';
 $lang->custom->restore   = 'Reset to Default';
 $lang->custom->key       = 'Key';
@@ -31,6 +31,7 @@ $lang->custom->task->fields['priList']    = 'Priority';
 $lang->custom->task->fields['typeList']   = 'Type';
 $lang->custom->task->fields['reasonList'] = 'Reason';
 $lang->custom->task->fields['statusList'] = 'Status';
+$lang->custom->task->fields['hours']      = 'Working hours';
 
 $lang->custom->bug = new stdClass();
 $lang->custom->bug->fields['priList']        = 'Priority';
@@ -40,6 +41,7 @@ $lang->custom->bug->fields['browserList']    = 'Browser';
 $lang->custom->bug->fields['typeList']       = 'Type';
 $lang->custom->bug->fields['resolutionList'] = 'Solution';
 $lang->custom->bug->fields['statusList']     = 'Status';
+$lang->custom->bug->fields['longlife']       = 'Long Life Days';
 
 $lang->custom->testcase = new stdClass();
 $lang->custom->testcase->fields['priList']    = 'Priority';
@@ -67,14 +69,25 @@ $lang->custom->allLang     = 'All Language';
 $lang->custom->confirmRestore = 'Do you want to reset to Default?';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userRole  = 'Key must be no more than 20 characters!';
+$lang->custom->notice->userRole             = 'Key must be no more than 20 characters!';
+$lang->custom->notice->canNotAdd            = 'This item will be processed, so customized feature is not enabled.';
+$lang->custom->notice->forceReview          = 'Review is required for stories submitted by certain assignee.';
+$lang->custom->notice->longlife             = 'List "Undone" bugs that are older than hold days from "Longlife" bugs.';
+$lang->custom->notice->priListKey           = 'Priority list key should be numbers！';
+$lang->custom->notice->severityListKey      = 'Bug severity list key should be numbers.';
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage. Do you want to enter Product Homepage?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage. Do you want to enter Project Homepage?";
 $lang->custom->notice->indexPage['qa']      = "ZenTao 8.2+ has Testing Homepage. Do you want to enter Testing Homepage?";
 
 $lang->custom->storyReview   = 'Review';
+$lang->custom->forceReview   = 'Review Required';
 $lang->custom->reviewList[1] = 'On';
 $lang->custom->reviewList[0] = 'Off';
+
+$lang->custom->workingHours   = 'Man-Hour/Day';
+$lang->custom->weekend        = 'Weekend';
+$lang->custom->weekendList[2] = '2-Day Off';
+$lang->custom->weekendList[1] = '1-Day Off';
 
 $lang->custom->productProject = new stdclass();
 $lang->custom->productProject->relation['0_0'] = 'Product - Project';

@@ -30,39 +30,28 @@
       <th class='w-p40 '> <?php echo $lang->story->comment;?></th>
     </tr>
   </thead>
-    <?php foreach($storyIDList as $storyID):?>
+    <?php foreach($stories as $storyID => $story):?>
     <tr class='text-center'>
       <td><?php echo $storyID . html::hidden("storyIDList[$storyID]", $storyID);?></td>
-      <td class='text-left'><?php echo $stories[$storyID]->title;?></td>
-      <td class='story-<?php echo $stories[$storyID]->status;?>'><?php echo $lang->story->statusList[$stories[$storyID]->status];?></td>
-
-      <?php if($stories[$storyID]->status != 'closed'):?>
+      <td class='text-left'><?php echo $story->title;?></td>
+      <td class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
       <td>
-        <?php if($stories[$storyID]->status == 'draft') unset($this->lang->story->reasonList['cancel']);?>
+        <?php if($story->status == 'draft') unset($this->lang->story->reasonList['cancel']);?>
         <table class='w-p100'>
           <tr>
             <td class='pd-0'>
               <?php echo html::select("closedReasons[$storyID]", $lang->story->reasonList, 'done', "class=form-control onchange=setDuplicateAndChild(this.value,$storyID) style='min-width: 70px'");?>
             </td>
-            <td class='pd-0' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($stories[$storyID]->closedReason != 'duplicate') echo "style='display:none'";?>>
-            <?php echo html::input("duplicateStoryIDList[$storyID]", '', "class=form-control placeholder='{$lang->idAB}'");?>
+            <td class='pd-0' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($story->closedReason != 'duplicate') echo "style='display:none'";?>>
+            <?php echo html::input("duplicateStoryIDList[$storyID]", '', "class='form-control' placeholder='{$lang->idAB}' autocomplete='off'");?>
             </td>
-            <td class='pd-0' id='<?php echo 'childStoryBox' . $storyID;?>' <?php if($stories[$storyID]->closedReason != 'subdivided') echo "style='display:none'";?>>
-            <?php echo html::input("childStoriesIDList[$storyID]", '', "class=form-control placeholder='{$lang->idAB}'");?>
+            <td class='pd-0' id='<?php echo 'childStoryBox' . $storyID;?>' <?php if($story->closedReason != 'subdivided') echo "style='display:none'";?>>
+            <?php echo html::input("childStoriesIDList[$storyID]", '', "class='form-control' placeholder='{$lang->idAB}' autocomplete='off'");?>
             </td>
           </tr>
         </table>
       </td>
-      <td><?php echo html::input("comments[$storyID]", '', "class='form-control'");?></td>
-      <?php else:?>  
-      <td>
-        <div class='text-left'>
-          <?php echo html::select("closedReasons[$storyID]", $lang->story->reasonList, $stories[$storyID]->closedReason, 'disabled="disabled" class="form-control"');?>
-        </div>
-      </td>
-      <td><?php echo html::input("comments[$storyID]", '', "class='form-control' disabled='disabled'");?></td>
-      <?php endif;?>
-
+      <td><?php echo html::input("comments[$storyID]", '', "class='form-control' autocomplete='off'");?></td>
     </tr>  
     <?php endforeach;?>
     <?php if(isset($suhosinInfo)):?>

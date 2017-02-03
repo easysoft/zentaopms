@@ -188,6 +188,25 @@ class gitModel extends model
     }
 
     /**
+     * Get repos.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getRepos()
+    {
+        $repos = array();
+        if(!$this->config->git->repos) return $repos;
+
+        foreach($this->config->git->repos as $repo)
+        {
+            if(empty($repo['path'])) continue;
+            $repos[] = $repo['path'];
+        }
+        return $repos;
+    }
+
+    /**
      * Set repo.
      * 
      * @param  object    $repo 
@@ -378,7 +397,7 @@ class gitModel extends model
         foreach($encodings as $encoding)
         {
             if($encoding == 'utf-8') continue;
-            $result = @iconv($encoding, 'utf-8', $comment);
+            $result = helper::convertEncoding($comment, $encoding, 'utf-8');
             if($result) return $result;
         }
 
@@ -408,7 +427,7 @@ class gitModel extends model
 
         chdir($repo->path);
         $subPath = substr($path, strlen($repo->path) + 1);
-        $subPath = ltrim('/', $subPath);
+        $subPath = ltrim($subPath, '/');
         exec("$this->client rev-list -n 2 $revision -- $subPath", $lists);
         if(count($lists) == 2) list($nowRevision, $preRevision) = $lists;
         $cmd = "$this->client diff $preRevision $nowRevision -- $subPath";
@@ -439,7 +458,7 @@ class gitModel extends model
         $path = str_replace('%5C', '\\', $path);
 
         $subPath = substr($path, strlen($repo->path) + 1);
-        $subPath = ltrim('/', $subPath);
+        $subPath = ltrim($subPath, '/');
         chdir($repo->path);
         $cmd  = "$this->client show $revision:$subPath";
         $code = `$cmd`;

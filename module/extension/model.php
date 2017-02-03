@@ -674,7 +674,7 @@ class extensionModel extends model
 
         /* Remove the extracted files. */
         $extractedDir = realpath("ext/$extension");
-        if($extractedDir != '/' and !$this->classFile->removeDir($extractedDir))
+        if($extractedDir and $extractedDir != '/' and !$this->classFile->removeDir($extractedDir))
         {
             $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $extractedDir" : "rmdir $extractedDir /s";
         }

@@ -113,7 +113,7 @@ class report extends control
      * @access public
      * @return void
      */
-    public function workload($begin = '', $end = '', $days = 0, $workday = 7, $dept = 0)
+    public function workload($begin = '', $end = '', $days = 0, $workday = 0, $dept = 0)
     {
         if($_POST)
         {
@@ -125,13 +125,22 @@ class report extends control
             $workday  = $data->workday;
         }
 
-        $begin = $begin ? date('Y-m-d', strtotime($begin)) : date('Y-m-d', strtotime('now'));
-        $end   = $end   ? date('Y-m-d', strtotime($end))   : date('Y-m-d', strtotime('+1 week'));
+        $this->app->loadConfig('project');
+        $begin = $begin ? strtotime($begin) : time();
+        $end   = $end   ? strtotime($end)   : time() + (7 * 24 * 3600);
+        $end  += 24 * 2600;
+        $beginWeekDay = date('w', $begin);
+        $begin = date('Y-m-d', $begin);
+        $end   = date('Y-m-d', $end);
 
-        if(!$days)
+        if(empty($workday))$workday = $this->config->project->defaultWorkhours;
+        $diffDays = helper::diffDate($end, $begin);
+        $weekDay = $beginWeekDay;
+        $days    = $diffDays;
+        for($i = 0; $i < $diffDays; $i++,$weekDay++)
         {
-            $diffDays = helper::diffDate($end, $begin);
-            $days     = round($diffDays - ($diffDays / 7 * 2));
+            $weekDay = $weekDay % 7;
+            if(($this->config->project->weekend == 2 and $weekDay == 6) or $weekDay == 0) $days --;
         }
 
         $this->view->title      = $this->lang->report->workload;
@@ -197,7 +206,10 @@ class report extends control
 
             /* Get email content and title.*/
             $this->view->mail = $mail;
+            $oldViewType = $this->viewType;
+            if($oldViewType == 'json') $this->viewType = 'html';
             $mailContent = $this->parse('report', 'dailyreminder');
+            $this->viewType == $oldViewType;
             
             /* Send email.*/
             echo date('Y-m-d H:i:s') . " sending to $user, ";
