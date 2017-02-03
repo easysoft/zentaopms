@@ -1310,7 +1310,7 @@ class upgradeModel extends model
             {
                 $result['type']   = 'comment';
                 $result['count']  = count($comments);
-                $result['lastID'] = $comment->id;
+                $result['lastID'] = $action->id;
             }
             return $result;
         }
