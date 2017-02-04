@@ -15,8 +15,8 @@ $lang->testtask->delete           = "Delete";
 $lang->testtask->view             = "Info";
 $lang->testtask->edit             = "Edit";
 $lang->testtask->browse           = "Test Tasks";
-$lang->testtask->linkCase         = "Relate Cases";
-$lang->testtask->unlinkCase       = "Unrelate";
+$lang->testtask->linkCase         = "Link Cases";
+$lang->testtask->unlinkCase       = "Unlink";
 $lang->testtask->batchUnlinkCases = "Batch unlink cases";
 $lang->testtask->batchAssign      = "Batch Assign";
 $lang->testtask->runCase          = "Run";
@@ -68,9 +68,9 @@ $lang->testtask->priList[1] = '1';
 $lang->testtask->priList[2] = '2';
 $lang->testtask->priList[4] = '4';
 
-$lang->testtask->unlinkedCases = 'Unrelated Cases';
-$lang->testtask->linkByStory   = 'Related by Story';
-$lang->testtask->linkByBug     = 'Related by Bug';
+$lang->testtask->unlinkedCases = 'Unlinked Cases';
+$lang->testtask->linkByStory   = 'Linked by Story';
+$lang->testtask->linkByBug     = 'Linked by Bug';
 $lang->testtask->passAll       = 'All Pass';
 $lang->testtask->pass          = 'Pass';
 $lang->testtask->fail          = 'Failed';
@@ -78,13 +78,13 @@ $lang->testtask->showResult    = 'Executed <span class="text-info">%s</span> tim
 $lang->testtask->showFail      = 'Failed <span class="text-danger">%s</span> times';
 
 $lang->testtask->confirmDelete     = 'Do you want to delete this test build?';
-$lang->testtask->confirmUnlinkCase = 'Do you want to remove this Case?';
+$lang->testtask->confirmUnlinkCase = 'Do you want to unlink this Case?';
 
 $lang->testtask->assignedToMe  = 'Assigned to Me';
 $lang->testtask->allCases      = 'All Cases';
 
 $lang->testtask->lblCases      = 'Cases';
-$lang->testtask->lblUnlinkCase = 'Remove Case';
+$lang->testtask->lblUnlinkCase = 'Unlink Case';
 $lang->testtask->lblRunCase    = 'Run Case';
 $lang->testtask->lblResults    = 'Results';
 

@@ -33,8 +33,8 @@ $lang->product->otherInfo = 'Other Info';
 $lang->product->plans    = 'Plans';
 $lang->product->releases = 'Releases';
 $lang->product->docs     = 'Documents';
-$lang->product->bugs     = 'Related Bug';
-$lang->product->projects = "Related {$lang->projectCommon}s";
+$lang->product->bugs     = 'Linked Bug';
+$lang->product->projects = "Linked {$lang->projectCommon}s";
 $lang->product->cases    = 'Cases';
 $lang->product->builds   = 'Builds';
 $lang->product->roadmap  = 'Roadmap';
@@ -73,7 +73,7 @@ $lang->product->unclosed     = 'Open';
 
 $lang->product->allStory    = 'All Stories';
 $lang->product->allProduct  = 'All' . $lang->productCommon;
-$lang->product->allProductsOfProject = 'All related' . $lang->productCommon;
+$lang->product->allProductsOfProject = 'All linked' . $lang->productCommon;
 
 $lang->product->typeList['']         = '';
 $lang->product->typeList['normal']   = 'Normal';

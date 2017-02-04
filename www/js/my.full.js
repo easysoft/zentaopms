@@ -674,6 +674,16 @@ function checkTable($table)
 
     if(!$table.length) return;
 
+    if(!$table.find(':checkbox').length)
+    {
+        $table.on('click', 'tbody > tr', function()
+        {
+            $table.find('tr.active').removeClass('active');
+            $(this).addClass('active');
+        });
+        return;
+    }
+
     var checkRow = function(checked)
     {
         if(document.activeElement.type != 'select-one' && document.activeElement.type != 'text')
