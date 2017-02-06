@@ -20,22 +20,22 @@ $lang->productplan->bugSummary = "<strong>%s</strong> Bugs in total on this page
 $lang->productplan->basicInfo  = 'Basic Info';
 $lang->productplan->batchEdit  = 'Batch Edit';
 
-$lang->productplan->batchUnlink      = "Batch Remove";
-$lang->productplan->linkStory        = "Related Story";
-$lang->productplan->unlinkStory      = "Remove Story";
-$lang->productplan->batchUnlinkStory = "Batch Remove";
-$lang->productplan->linkedStories    = 'Relate Story';
-$lang->productplan->unlinkedStories  = 'Unrelated';
+$lang->productplan->batchUnlink      = "Batch Unlink";
+$lang->productplan->linkStory        = "Linked Story";
+$lang->productplan->unlinkStory      = "Unlink Story";
+$lang->productplan->batchUnlinkStory = "Batch Unlink";
+$lang->productplan->linkedStories    = 'link Story';
+$lang->productplan->unlinkedStories  = 'UnLinkEd';
 
-$lang->productplan->linkBug          = "Relate Bug";
-$lang->productplan->unlinkBug        = "Remove Bug";
-$lang->productplan->batchUnlinkBug   = "Batch Remove";
-$lang->productplan->linkedBugs       = 'Related Bug';
-$lang->productplan->unlinkedBugs     = 'Unrelated';
+$lang->productplan->linkBug          = "Link Bug";
+$lang->productplan->unlinkBug        = "Unlink Bug";
+$lang->productplan->batchUnlinkBug   = "Batch Unlink";
+$lang->productplan->linkedBugs       = 'Linked Bug';
+$lang->productplan->unlinkedBugs     = 'Unlinked';
 
 $lang->productplan->confirmDelete      = "Do you want to delete this Plan?";
-$lang->productplan->confirmUnlinkStory = "Do you want to remove this Story?";
-$lang->productplan->confirmUnlinkBug   = "Do you want to remove this Bug?";
+$lang->productplan->confirmUnlinkStory = "Do you want to unlink this Story?";
+$lang->productplan->confirmUnlinkBug   = "Do you want to unlink this Bug?";
 
 $lang->productplan->id      = 'ID';
 $lang->productplan->product = $lang->productCommon;
