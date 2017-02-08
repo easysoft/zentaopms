@@ -4,6 +4,8 @@ table.fileBox td {padding: 0!important}
 .fileBox .input-control > input[type='file'] {width: 100%; height: 100%; height: 26px; line-height: 26px; border: none; position: relative;}
 .fileBox td .btn {border-radius: 0; border-left: none}
 .file-wrapper.form-control {border-right: 0}
+.file-wrapper.form-control .fileControl {width:100%;}
+@-moz-document url-prefix(){.file-wrapper.form-control .fileControl {margin-top:-3px;}}
 </style>
 <div id='fileform'>
   <?php 

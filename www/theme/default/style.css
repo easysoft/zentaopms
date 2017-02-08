@@ -311,7 +311,11 @@ fieldset > .content table, fieldset > .article-content table{table-layout: initi
 .form-condensed .chosen-container-single .chosen-single {padding: 5px 10px}
 .form-condensed .chosen-container-single .chosen-search:before {top: 10px}
 
-@-moz-document url-prefix(){.form-condensed textarea.form-control {height: 30px;min-height: 30px;}}
+@-moz-document url-prefix()
+{
+.form-condensed textarea.form-control {height: 30px;min-height: 30px;}
+.form-control[type='file']{padding:0px;}
+}
 
 /* chosen container in col-side */
 .col-side .chosen-single {max-width: 218px}
