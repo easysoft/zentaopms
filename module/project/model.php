@@ -1503,7 +1503,8 @@ class projectModel extends model
      */
     public function manageMembers($projectID)
     {
-        extract($_POST);
+        $data = (array)fixer::input('post')->get();
+        extract($data);
 
         $accounts = array_unique($accounts);
         foreach($accounts as $key => $account)
