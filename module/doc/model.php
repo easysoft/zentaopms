@@ -26,13 +26,13 @@ class docModel extends model
     {
         if(isset($this->config->customMenu->doc))
         {
-            $customMenu = json_decode($this->config->customMenu->doc);
+            $customMenu = json_decode($this->config->customMenu->doc, true);
             $menuLibIdList = array();
             foreach($customMenu as $i => $menu)
             {
-                if(strpos($menu->name, 'custom') === 0)
+                if(strpos($menu['name'], 'custom') === 0)
                 {
-                    $menuLibID = (int)substr($menu->name, 6);
+                    $menuLibID = (int)substr($menu['name'], 6);
                     if($menuLibID) $menuLibIdList[$i] = $menuLibID;
                 }
             }
@@ -57,7 +57,7 @@ class docModel extends model
                 if($lib->product) $libName = isset($products[$lib->product]) ? '[' . $products[$lib->product] . ']' : '';
                 if($lib->project) $libName = isset($projects[$lib->project]) ? '[' . $projects[$lib->project] . ']' : '';
                 $libName .= $lib->name;
-                $customMenu[$i]->link = "{$libName}|doc|browse|libID={$menuLibID}";
+                $customMenu[$i]['link'] = "{$libName}|doc|browse|libID={$menuLibID}";
             }
             $this->config->customMenu->doc = json_encode($customMenu);
         }
