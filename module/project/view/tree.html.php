@@ -22,6 +22,7 @@ include './taskheader.html.php';
       <div class='panel-actions pull-right'>
         <div class='btn-group'>
           <?php foreach ($lang->project->treeLevel as $name => $btnLevel):?>
+          <?php if($name == 'all') continue;?>
           <button type='button' class='btn btn-sm tree-view-btn' data-type='<?php echo $name ?>'><?php echo $btnLevel ?></button>
           <?php endforeach; ?>
         </div>
@@ -163,6 +164,7 @@ $(function()
 
     $(document).on('click', '.tree-view-btn', function()
     {
+        var hasActive = $(this).hasClass('active');
         $('.tree-view-btn.active').removeClass('active');
         var level = $(this).addClass('active').data('type');
         if(level === 'task')
@@ -170,7 +172,19 @@ $(function()
             tree.collapse();
             tree.show($('.item-type-tasks, .item-type-task').parent().parent());
         }
-        if(level === 'root') tree.collapse();
+        if(level === 'root')
+        {
+            tree.collapse();
+            $(this).html(treeLevel.all);
+            if(hasActive)
+            {
+                $(this).removeClass('active');
+                $(this).html(treeLevel.root);
+                tree.show($('.item-type-tasks, .item-type-task').parent().parent());
+                tree.show($('.item-type-module').parent().parent());
+                tree.show($('.item-type-story').parent().parent());
+            }
+        }
         else if(level === 'module')
         {
             tree.collapse();
@@ -186,4 +200,5 @@ $(function()
     setModalInTree(tree);
 });
 </script>
+<?php js::set('treeLevel', $lang->project->treeLevel);?>
 <?php include '../../common/view/footer.html.php';?>

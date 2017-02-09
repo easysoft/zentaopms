@@ -2277,7 +2277,7 @@ class projectModel extends model
         elseif($node->type == 'product')
         {
             $node->title = $node->name;
-            if(empty($node->children[0]->children)) array_shift($node->children);
+            if(isset($node->children[0]) and empty($node->children[0]->children)) array_shift($node->children);
         }
 
         $node->actions = false;
@@ -2361,7 +2361,7 @@ class projectModel extends model
                 $fullTrees[$i] = $fullTree;
             }
         }
-        if(empty($fullTrees[0]->children)) array_shift($fullTrees);
+        if(isset($fullTrees[0]) and empty($fullTrees[0]->children)) array_shift($fullTrees);
         return array_values($fullTrees);
     }
 }

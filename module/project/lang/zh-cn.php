@@ -260,4 +260,4 @@ $lang->project->treeLevel = array();
 $lang->project->treeLevel['root']    = '全部折叠';
 $lang->project->treeLevel['story']   = '显示需求';
 $lang->project->treeLevel['task']    = '显示任务';
-
+$lang->project->treeLevel['all']     = '全部展开';
