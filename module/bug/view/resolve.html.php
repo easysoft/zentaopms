@@ -40,7 +40,16 @@ js::set('productID' , $bug->product);
       <td>
         <div class='input-group'>
           <span id='resolvedBuildBox'><?php echo html::select('resolvedBuild', $builds, '', "class='form-control chosen'");?></span>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn btn-default' onclick=loadAllBuilds()");?></span>
+          <?php if(common::hasPriv('build', 'create')):?>
+          <span id='newBuildBox' class='hidden'><?php echo html::input('buildName', '', "class='form-control' placeholder='{$lang->bug->placeholder->newBuildName}'");?></span>
+          <span class='input-group-addon'><label class="checkbox-inline"><input name="createBuild" value="1" id="createBuild" type="checkbox"> <?php echo $lang->bug->createBuild?></label></span>
+          <?php endif;?>
+        </div>
+      </td>
+      <td id='newBuildProjectBox' class='hidden'>
+        <div class='input-group'>
+          <span class='input-group-addon'><?php echo $lang->build->project;?></span>
+          <?php echo html::select('buildProject', $projects, '', "class='form-control chosen'");?>
         </div>
       </td>
     </tr>

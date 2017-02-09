@@ -879,7 +879,8 @@ class bug extends control
         $this->view->bug        = $bug;
         $this->view->users      = $users;
         $this->view->assignedTo = $assignedTo;
-        $this->view->builds     = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, 'noterminate,nodone');
+        $this->view->projects   = $this->loadModel('product')->getProjectPairs($productID, $bug->branch ? "0,{$bug->branch}" : 0, $params = 'nodeleted');
+        $this->view->builds     = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, 'all');
         $this->view->actions    = $this->action->getList('bug', $bugID);
         $this->display();
     }

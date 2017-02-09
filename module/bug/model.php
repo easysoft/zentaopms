@@ -705,6 +705,30 @@ class bugModel extends model
             ->remove('comment,files,labels')
             ->get();
 
+        /* Can create build when resolve bug. */
+        if(isset($bug->createBuild))
+        {
+            if(empty($bug->buildName)) dao::$errors['buildName'][] = sprintf($this->lang->error->notempty, $this->lang->bug->placeholder->newBuildName);
+            if(empty($bug->buildProject)) dao::$errors['buildProject'][] = sprintf($this->lang->error->notempty, $this->lang->bug->project);
+            if(dao::isError()) return false;
+
+            $buildData = new stdclass();
+            $buildData->product = $oldBug->product;
+            $buildData->branch  = $oldBug->branch;
+            $buildData->project = $bug->buildProject;
+            $buildData->name    = $bug->buildName;
+            $buildData->date    = date('Y-m-d');
+            $buildData->builder = $this->app->user->account;
+            $this->dao->insert(TABLE_BUILD)->data($buildData)->autoCheck()
+                ->check('name', 'unique', "product = {$buildData->product} AND branch = {$buildData->branch} AND deleted = '0'")
+                ->exec();
+            if(dao::isError()) return false;
+            $bug->resolvedBuild = $this->dao->lastInsertID();
+        }
+        unset($bug->buildName);
+        unset($bug->createBuild);
+        unset($bug->buildProject);
+
         if($bug->resolvedBuild != 'trunk') $bug->testtask = $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($bug->resolvedBuild)->orderBy('id_desc')->limit(1)->fetch('id');
 
         $this->dao->update(TABLE_BUG)->data($bug)
