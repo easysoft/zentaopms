@@ -723,7 +723,9 @@ class bugModel extends model
                 ->check('name', 'unique', "product = {$buildData->product} AND branch = {$buildData->branch} AND deleted = '0'")
                 ->exec();
             if(dao::isError()) return false;
-            $bug->resolvedBuild = $this->dao->lastInsertID();
+            $buildID = $this->dao->lastInsertID();
+            $this->loadModel('action')->create('build', $buildID, 'opened');
+            $bug->resolvedBuild = $buildID;
         }
         unset($bug->buildName);
         unset($bug->createBuild);
