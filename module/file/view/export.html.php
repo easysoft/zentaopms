@@ -142,7 +142,7 @@ $(document).ready(function()
         <span id='tplBox'><?php echo $this->fetch('file', 'buildExportTPL', 'module=' . $this->moduleName);?></span>
       </td>
       <?php endif?>
-      <td style='width:<?php echo $isCustomExport ? '94px' : '50px'?>'>
+      <td style='width:<?php echo $isCustomExport ? '130px' : '70px'?>'>
         <div class='input-group'>
           <?php echo html::submitButton($lang->export, "onclick='setDownloading();' ");?>
           <?php if($isCustomExport):?>
