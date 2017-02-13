@@ -1525,6 +1525,18 @@ class upgradeModel extends model
     }
 
     /**
+     * Fix projectproduct data.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function fixProjectProductData()
+    {
+        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('product')->eq(0)->exec();
+        return true;
+    }
+
+    /**
      * Judge any error occers.
      * 
      * @access public
