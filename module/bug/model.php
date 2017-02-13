@@ -451,7 +451,7 @@ class bugModel extends model
         $bug = fixer::input('post')
             ->cleanInt('product,module,severity,project,story,task')
             ->stripTags($this->config->bug->editor->edit['id'], $this->config->allowedTags)
-            ->setDefault('project,module,project,story,task,duplicateBug', 0)
+            ->setDefault('project,module,project,story,task,duplicateBug,branch', 0)
             ->setDefault('openedBuild', '')
             ->setDefault('plan', 0)
             ->add('lastEditedBy',   $this->app->user->account)

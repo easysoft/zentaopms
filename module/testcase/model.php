@@ -474,7 +474,7 @@ class testcaseModel extends model
             ->add('lastEditedDate', $now)
             ->add('version', $version)
             ->setIF($this->post->story != false and $this->post->story != $oldCase->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->setDefault('story', 0)
+            ->setDefault('story,branch', 0)
             ->join('stage', ',')
             ->remove('comment,steps,expects,files,labels')
             ->get();
