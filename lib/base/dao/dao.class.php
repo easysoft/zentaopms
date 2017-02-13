@@ -1932,17 +1932,40 @@ class baseSQL
             {
                 $value = trim($value);
                 if(empty($value) or strtolower($value) == 'desc' or strtolower($value) == 'asc') continue;
+                /* Filter for safe. such as updatexml(1,concat(0x3a,(select user())),1)*/
+                if((strpos($value, '(') !== false and strpos($value, ')') === false)
+                    OR
+                    (strpos($value, '(') === false and strpos($value, ')') !== false)
+                )
+                {
+                    unset($orderParse[$key]);
+                    continue;
+                }
+
 
                 $field = $value;
                 /* such as t1.id field. */
                 if(strpos($value, '.') !== false) list($table, $field) = explode('.', $field);
-                /* Ignore order with function e.g. order by length(tag) asc. */
-                if(strpos($field, '(') === false and strpos($field, '`') === false) $field = "`$field`";
+                /* Process order with function e.g. order by length(tag) asc. */
+                if(strpos($field, '(') !== false)
+                {
+                    preg_match_all('/\(([^\(\)]+)\)/U', $field, $out);
+                    foreach($out[0] as $matchKey => $matchVal)
+                    {
+                        $cont = $out[1][$matchKey];
+                        if($cont and !(($cont{0} == "'" and substr($cont, -1) == "'") or ($cont{0} == '"' and substr($cont, -1) == '"'))) $field = str_replace($matchVal, "(`{$cont}`)", $field);
+                    }
+                }
+                elseif(strpos($field, '`') === false)
+                {
+                    $field = "`$field`";
+                }
 
                 $orderParse[$key] = isset($table) ? $table . '.' . $field :  $field;
                 unset($table);
             }
             $orders[$i] = join(' ', $orderParse);
+            if(empty($orders[$i])) unset($orders[$i]);
         }
         $order = join(',', $orders) . ' ' . $limit;
 
@@ -1962,7 +1985,20 @@ class baseSQL
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
         if(empty($limit)) return $this;
-        stripos($limit, 'limit') !== false ? $this->sql .= " $limit " : $this->sql .= ' ' . DAO::LIMIT . " $limit ";
+
+        /* filter limit. */
+        $limit = trim(str_ireplace('limit', '', $limit));
+        if(strpos($limit, ','))
+        {
+            $limits = explode(',', $limit);
+            foreach($limits as $key => $value) $limits[$key] = (int)trim($value);
+            $limit = join(',', $limits);
+        }
+        else
+        {
+            $limit = (int)$limit;
+        }
+        $this->sql .= ' ' . DAO::LIMIT . " $limit ";
         return $this;
     }
 

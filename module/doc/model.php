@@ -99,6 +99,7 @@ class docModel extends model
      */
     public function getLibByObject($type, $objectID)
     {
+        if($type != 'project' and $type != 'product') return true;
         return $this->dao->select('*')->from(TABLE_DOCLIB)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->fetchAll('id');
     }
 
@@ -789,6 +790,7 @@ class docModel extends model
      */
     public function getSubLibGroups($type, $idList)
     {
+        if($type != 'product' and $type != 'project') return false;
         $libGroups   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->in($idList)->orderBy('id')->fetchGroup($type, 'id');
         if($type == 'product')
         {
@@ -823,6 +825,7 @@ class docModel extends model
      */
     public function getLibsByObject($type, $objectID, $mode = '')
     {
+        if($type != 'product' and $type != 'project') return false;
         $objectLibs   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('id')->fetchAll('id');
         if($type == 'product')
         {
@@ -857,6 +860,7 @@ class docModel extends model
      */
     public function getLibFiles($type, $objectID, $pager = null)
     {
+        if($type != 'project' and $type != 'product') return true;
         $this->loadModel('file');
         $docIdList = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->get();
         if($type == 'product')
@@ -1253,7 +1257,6 @@ class docModel extends model
     public function setLibUsers($type, $objectID)
     {
         if($type != 'project' and $type != 'product') return true;
-
         $libs  = $this->dao->select('*')->from(TABLE_DOCLIB)->where($type)->eq($objectID)->fetchAll();
 
         if($type == 'product')

@@ -1544,7 +1544,7 @@ class baseRouter
         {
             if(isset($passedParams[$i]))
             {
-                $defaultParams[$key] = strip_tags(urldecode($passedParams[$i]));
+                $defaultParams[$key] = strip_tags($passedParams[$i]);
             }
             else
             {

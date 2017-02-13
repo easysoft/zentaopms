@@ -955,8 +955,8 @@ class treeModel extends model
             return $this->dao->select('*')->from(TABLE_MODULE)
                 ->where('parent')->eq(0)
                 ->andWhere('deleted')->eq(0)
-                ->andWhere("(root = $rootID and type = 'task'")
-                ->orWhere("root = $productID and type = 'story')")
+                ->andWhere("(root = '" . (int)$rootID . "' and type = 'task'")
+                ->orWhere("root = '" . (int)$productID . "' and type = 'story')")
                 ->orderBy('type,`order`')
                 ->fetchAll();
         }
