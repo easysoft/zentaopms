@@ -248,7 +248,7 @@ $lang->block->modules['common']->moreLinkList->dynamic = 'company|dynamic|';
 
 $lang->block->flowchart   = array();
 $lang->block->flowchart[] = array('Administration',   'Manage a Company', 'Add Users', 'Maintain Privileges');
-$lang->block->flowchart[] = array('Product Manager', 'Add Products', 'Maintain Modules', 'Maintain Plans', 'Maintain Stories', 'Create Release');
-$lang->block->flowchart[] = array('Project Manager', 'Add Projects', 'Maintain Teams', 'Link Products', 'Link Stories', 'Decompose Tasks');
+$lang->block->flowchart[] = array($lang->productCommon . ' Manager', 'Add ' . $lang->productCommon, 'Maintain Modules', 'Maintain Plans', 'Maintain Stories', 'Create Release');
+$lang->block->flowchart[] = array($lang->projectCommon . ' Manager', 'Add ' . $lang->projectCommon, 'Maintain Teams', 'Link ' . $lang->productCommon . 's', 'Link Stories', 'Decompose Tasks');
 $lang->block->flowchart[] = array('DEV Team', 'Claim TaskS/Bugs', 'Update Status', 'Finish Tasks/Bugs');
 $lang->block->flowchart[] = array('Testing Team', 'Write Cases', 'Implement Cases', 'Report Bugs', 'Fix Bugs', 'Close Bugs');
