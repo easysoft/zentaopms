@@ -29,7 +29,8 @@ js::set('productID' , $bug->product);
   <table class='table table-form'>
     <tr>
       <th class='w-80px'><?php echo $lang->bug->resolution;?></th>
-      <td class='w-p35-f'><?php echo html::select('resolution', $lang->bug->resolutionList, '', 'class=form-control onchange=setDuplicate(this.value)');?></td><td></td>
+      <td class='w-p35-f'><?php echo html::select('resolution', $lang->bug->resolutionList, '', 'class=form-control onchange=setDuplicate(this.value)');?></td>
+      <td></td>
     </tr>
     <tr id='duplicateBugBox' class='hide'>
       <th><?php echo $lang->bug->duplicateBug;?></th>
@@ -37,6 +38,12 @@ js::set('productID' , $bug->product);
     </tr>
     <tr>
       <th><?php echo $lang->bug->resolvedBuild;?></th>
+      <td id='newBuildProjectBox' class='hidden'>
+        <div class='input-group'>
+          <span class='input-group-addon'><?php echo $lang->build->project;?></span>
+          <?php echo html::select('buildProject', $projects, '', "class='form-control chosen'");?>
+        </div>
+      </td>
       <td>
         <div class='input-group'>
           <span id='resolvedBuildBox'><?php echo html::select('resolvedBuild', $builds, '', "class='form-control chosen'");?></span>
@@ -44,12 +51,6 @@ js::set('productID' , $bug->product);
           <span id='newBuildBox' class='hidden'><?php echo html::input('buildName', '', "class='form-control' placeholder='{$lang->bug->placeholder->newBuildName}'");?></span>
           <span class='input-group-addon'><label class="checkbox-inline"><input name="createBuild" value="1" id="createBuild" type="checkbox"> <?php echo $lang->bug->createBuild?></label></span>
           <?php endif;?>
-        </div>
-      </td>
-      <td id='newBuildProjectBox' class='hidden'>
-        <div class='input-group'>
-          <span class='input-group-addon'><?php echo $lang->build->project;?></span>
-          <?php echo html::select('buildProject', $projects, '', "class='form-control chosen'");?>
         </div>
       </td>
     </tr>
