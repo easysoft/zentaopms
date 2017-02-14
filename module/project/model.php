@@ -764,8 +764,7 @@ class projectModel extends model
             /* If projectBurns > $itemCounts, split it, else call processBurnData() to pad burns. */
             $begin = $projects[$projectID]->begin;
             $end   = $projects[$projectID]->end;
-            if(count($projectBurns) >= $itemCounts) $projectBurns = array_slice($projectBurns, 0, $itemCounts);
-            if(count($projectBurns) < $itemCounts)  $projectBurns = $this->processBurnData($projectBurns, $itemCounts, $begin, $end);
+            $projectBurns = $this->processBurnData($projectBurns, $itemCounts, $begin, $end);
 
             /* Shorter names.  */
             foreach($projectBurns as $projectBurn)
@@ -1677,9 +1676,6 @@ class projectModel extends model
      */
     public function processBurnData($sets, $itemCounts, $begin, $end, $mode = 'noempty')
     {
-        $burnCounts = count($sets);
-        $current    = helper::today();
-
         if($end != '0000-00-00')
         {
             $period = helper::diffDate($end, $begin) + 1;
@@ -1688,20 +1684,39 @@ class projectModel extends model
         else
         {
             $counts = $itemCounts;
+            $period = $itemCounts;
+            $end    = date(DT_DATE1, strtotime("+$counts days", strtotime($begin)));
         }
 
-        for($i = 0; $i < $counts - $burnCounts; $i ++)
+        $current  = $begin;
+        $endTime  = strtotime($end);
+        $preValue = 0;
+        $todayTag = 0;
+        for($i = 0; $i < $period; $i++)
         {
-            if(helper::diffDate($current, $end) > 0) break;
-            if(!isset($sets[$current]) and $mode != 'noempty')
+            $currentTime = strtotime($current);
+            if($currentTime > $endTime) break;
+            if(isset($sets[$current])) $preValue = $sets[$current]->value;
+            if($currentTime > time())
             {
-                $sets[$current]->name = $current;
-                $sets[$current]->value = '';
+                $preValue = 0;
+                $todayTag = $i + 1;
             }
-            $nextDay = date(DT_DATE1, strtotime('next day', strtotime($current)));
+            if(!isset($sets[$current]) and $mode == 'noempty')
+            {
+                $sets[$current]  = new stdclass();
+                $sets[$current]->name  = $current;
+                $sets[$current]->value = $preValue;
+            }
+            $nextDay = date(DT_DATE1, $currentTime + 24 * 3600);
             $current = $nextDay;
         }
-        return $sets;
+        ksort($sets);
+
+        if(count($sets) <= $counts) return $sets;
+        if($endTime <= time()) return array_slice($sets, -$counts, $counts);
+        if($todayTag <= $counts) return array_slice($sets, 0, $counts);
+        if($todayTag > $counts) return array_slice($sets, $todayTag - $counts, $counts);
     }
 
     /**
