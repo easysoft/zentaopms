@@ -248,7 +248,7 @@ $lang->block->modules['common']->moreLinkList->dynamic = 'company|dynamic|';
 
 $lang->block->flowchart   = array();
 $lang->block->flowchart[] = array('管理員',   '維護公司', '添加用戶', '維護權限');
-$lang->block->flowchart[] = array('產品經理', '創建產品', '維護模組', '維護計劃', '維護需求', '創建發佈');
-$lang->block->flowchart[] = array('項目經理', '創建項目', '維護團隊', '關聯產品', '關聯需求', '分解任務');
+$lang->block->flowchart[] = array($lang->productCommon . '經理', '創建' . $lang->productCommon, '維護模組', '維護計劃', '維護需求', '創建發佈');
+$lang->block->flowchart[] = array($lang->projectCommon . '經理', '創建' . $lang->projectCommon, '維護團隊', '關聯' . $lang->productCommon, '關聯需求', '分解任務');
 $lang->block->flowchart[] = array('研發人員', '領取任務和Bug', '更新狀態', '完成任務和Bug');
 $lang->block->flowchart[] = array('測試人員', '撰寫用例', '執行用例', '提交Bug', '驗證Bug', '關閉Bug');

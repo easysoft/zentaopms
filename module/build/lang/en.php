@@ -29,6 +29,7 @@ $lang->build->basicInfo = 'Basic Info';
 
 $lang->build->id        = 'ID';
 $lang->build->product   = $lang->productCommon;
+$lang->build->project   = $lang->projectCommon;
 $lang->build->name      = 'Name';
 $lang->build->date      = 'Date';
 $lang->build->builder   = 'Builder';

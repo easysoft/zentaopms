@@ -119,6 +119,7 @@ $lang->bug->lblLastEdited               = '最後修改';
 $lang->bug->lblResolved                 = '由誰解決';
 $lang->bug->allUsers                    = '所有用戶';
 $lang->bug->allBuilds                   = '所有';
+$lang->bug->createBuild                 = '新建';
 
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = '基本信息';
@@ -345,6 +346,7 @@ $lang->bug->action->unlinkrelatedbug    = array('main' => '$date, 由 <strong>$a
 
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = '選擇相關版本...';
+$lang->bug->placeholder->newBuildName = '新版本名稱';
 
 $lang->bug->featureBar['browse']['unclosed']      = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['all']           = $lang->bug->allBugs;

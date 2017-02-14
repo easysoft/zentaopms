@@ -260,3 +260,4 @@ $lang->project->treeLevel = array();
 $lang->project->treeLevel['root']    = 'Show Root';
 $lang->project->treeLevel['story']   = 'Show Story';
 $lang->project->treeLevel['task']    = 'Show Task';
+$lang->project->treeLevel['all']     = 'Show All';

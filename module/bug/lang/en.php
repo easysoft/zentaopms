@@ -119,6 +119,7 @@ $lang->bug->lblLastEdited               = 'Last Edited';
 $lang->bug->lblResolved                 = 'Resolved By';
 $lang->bug->allUsers                    = 'All User';
 $lang->bug->allBuilds                   = 'All';
+$lang->bug->createBuild                 = 'New';
 
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = 'Basic Info';
@@ -345,6 +346,7 @@ $lang->bug->action->unlinkrelatedbug    = array('main' => '$date, unlinked by <s
 
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = 'Choose Build...';
+$lang->bug->placeholder->newBuildName = 'The name of new build';
 
 $lang->bug->featureBar['browse']['unclosed']      = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['all']           = $lang->bug->allBugs;
