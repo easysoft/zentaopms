@@ -111,7 +111,7 @@ function computeEndDate(delta)
     }
 
     endDate = beginDate.addDays(delta - 1).toString('yyyy-MM-dd');
-    $('#end').val(endDate);
+    $('#end').val(endDate).datetimepicker('update');
     computeWorkDays();
 }
 

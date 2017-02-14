@@ -145,8 +145,7 @@ class product extends control
         setcookie('productStoryOrder', $orderBy, $this->config->cookieLife, $this->config->webRoot);
 
         /* Append id for secend sort. */
-        /* set rule to number when order by plan. */
-        $sort = $this->loadModel('common')->appendOrder(strpos($orderBy, 'plan') !== false ? str_replace('plan', '`plan`+0', $orderBy) : $orderBy);
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
