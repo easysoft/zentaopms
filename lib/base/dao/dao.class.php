@@ -1917,7 +1917,7 @@ class baseSQL
         if($this->inCondition and !$this->conditionIsTrue) return $this;
 
         $order = str_replace(array('|', '', '_'), ' ', $order);
-        if(!preg_match('/^(`\w+`|\w+)( +(desc|asc))?( *(, *(`\w+`|\w+)( +(desc|asc))?)?)*$/i', $order))die("Order is bad request, The order is $order");
+        if(!preg_match('/^(\w+\.)?(`\w+`|\w+)( +(desc|asc))?( *(, *(\w+\.)?(`\w+`|\w+)( +(desc|asc))?)?)*$/i', $order))die("Order is bad request, The order is $order");
 
         /* Add "`" in order string. */
         /* When order has limit string. */
