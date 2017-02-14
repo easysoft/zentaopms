@@ -42,13 +42,19 @@ class fileModel extends model
      */
     public function getByObject($objectType, $objectID, $extra = '')
     {
-        return $this->dao->select('*')->from(TABLE_FILE)
+        $files = $this->dao->select('*')->from(TABLE_FILE)
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq((int)$objectID)
             ->andWhere('extra')->ne('editor')
             ->beginIF($extra)->andWhere('extra')->eq($extra)
             ->orderBy('id')
             ->fetchAll('id');
+        foreach($files as $file)
+        {
+            $file->webPath  = $this->webPath . $file->pathname;
+            $file->realPath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . $file->pathname;
+        }
+        return $files;
     }
 
     /**

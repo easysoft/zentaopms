@@ -448,6 +448,7 @@ class storyModel extends model
             ->add('lastEditedDate', $now)
             ->setDefault('status', $oldStory->status)
             ->setDefault('product', $oldStory->product)
+            ->setDefault('plan', $oldStory->plan)
             ->setDefault('branch', 0)
             ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->closedBy     != false and $oldStory->closedDate == '', 'closedDate', $now)
@@ -459,6 +460,7 @@ class storyModel extends model
             ->remove('linkStories,childStories,files,labels,comment')
             ->get();
         if(is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
+        if(empty($_POST['product'])) $story->branch = $oldStory->branch;
 
         $this->dao->update(TABLE_STORY)
             ->data($story)

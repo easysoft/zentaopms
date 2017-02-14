@@ -1917,13 +1917,14 @@ class baseSQL
         if($this->inCondition and !$this->conditionIsTrue) return $this;
 
         $order = str_replace(array('|', '', '_'), ' ', $order);
-        if(!preg_match('/^(\w+\.)?(`\w+`|\w+)( +(desc|asc))?( *(, *(\w+\.)?(`\w+`|\w+)( +(desc|asc))?)?)*$/i', $order))die("Order is bad request, The order is $order");
 
         /* Add "`" in order string. */
         /* When order has limit string. */
         $pos    = stripos($order, 'limit');
         $orders = $pos ? substr($order, 0, $pos) : $order;
         $limit  = $pos ? substr($order, $pos) : '';
+        $orders = trim($orders);
+        if(!preg_match('/^(\w+\.)?(`\w+`|\w+)( +(desc|asc))?( *(, *(\w+\.)?(`\w+`|\w+)( +(desc|asc))?)?)*$/i', $orders))die("Order is bad request, The order is $orders");
 
         $orders = explode(',', $orders);
         foreach($orders as $i => $order)
