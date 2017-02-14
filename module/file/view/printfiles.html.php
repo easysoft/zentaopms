@@ -53,12 +53,11 @@ function downloadFile(fileID, extension, imageWidth)
   {
       if(common::hasPriv('file', 'download'))
       {
-          $uploadDate = $lang->file->uploadDate . $file->addedDate;
-          $fileTitle  = "<li title={$uploadDate} class='list-group-item'><i class='icon-file-text text-muted icon'></i> &nbsp;" . $file->title .'.' . $file->extension;
+          $uploadDate = $lang->file->uploadDate . substr($file->addedDate, 0, 10);
+          $fileTitle  = "<li title='{$uploadDate}' class='list-group-item'><i class='icon-file-text text-muted icon'></i> &nbsp;" . $file->title .'.' . $file->extension;
           $imageWidth = 0;
           if(stripos('jpg|jpeg|gif|png|bmp', $file->extension) !== false)
           {
-              $file = $this->file->getById($file->id);
               $imageSize  = getimagesize($file->realPath);
               $imageWidth = $imageSize ? $imageSize[0] : 0;
           }
