@@ -1588,7 +1588,7 @@ class projectModel extends model
         $burns = array();
 
         $projects = $this->dao->select('id, code')->from(TABLE_PROJECT)
-            ->where("end >= '$today'")
+            ->where("end")->ge($today)
             ->andWhere('type')->ne('ops')
             ->andWhere('status')->notin('done,suspended')
             ->fetchPairs();
@@ -2270,24 +2270,34 @@ class projectModel extends model
                 {
                     $taskItems             = $this->formatTasksForTree($storyTasks, $story);
                     $storyItem->tasksCount = count($taskItems);
-                    $storyItem->children   = array();
                     $storyItem->children   = $taskItems;
                 }
 
                 $node->children[] = $storyItem;
             }
+
+            /* Append for task of no story and node is not root. */
+            if($node->id and isset($taskGroups[$node->id][0]))
+            {
+                $taskItems = $this->formatTasksForTree($taskGroups[$node->id][0]);
+                $node->tasksCount = count($taskItems);
+                foreach($taskItems as $taskItem) $node->children[] = $taskItem;
+            }
         }
         elseif($node->type == 'task')
         {
-            $node->type = 'module';
-            $tasks = isset($taskGroups[$node->id][0]) ? $taskGroups[$node->id][0] : array();
-            if(!empty($tasks))
+            $node->type       = 'module';
+            $node->tasksCount = 0;
+            if(isset($taskGroups[$node->id]))
             {
-                $taskItems        = $this->formatTasksForTree($tasks);
-                $node->tasksCount = count($taskItems);
-                $node->children  = $taskItems;
+                foreach($taskGroups[$node->id] as $tasks)
+                {
+                    $taskItems = $this->formatTasksForTree($tasks);
+                    $node->tasksCount += count($taskItems);
+                    foreach($taskItems as $taskItem) $node->children[$taskItem->id] = $taskItem;
+                }
+                $node->children = array_values($node->children);
             }
-
         }
         elseif($node->type == 'product')
         {
