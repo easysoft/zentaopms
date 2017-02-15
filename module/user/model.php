@@ -173,7 +173,7 @@ class userModel extends model
      */
     public function getById($userID, $field = 'account')
     {
-        $user = $this->dao->select('*')->from(TABLE_USER)->where($field)->eq($userID)->fetch();
+        $user = $this->dao->select('*')->from(TABLE_USER)->where("`$field`")->eq($userID)->fetch();
         if(!$user) return false;
         $user->last = date(DT_DATETIME1, $user->last);
         return $user;

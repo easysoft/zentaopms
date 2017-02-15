@@ -945,7 +945,7 @@ class taskModel extends model
             ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftjoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
             ->where('t1.deleted')->eq(0)
-            ->beginIF($type != 'all')->andWhere("t1.$type")->eq($account)->fi()
+            ->beginIF($type != 'all')->andWhere("t1.`$type`")->eq($account)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
