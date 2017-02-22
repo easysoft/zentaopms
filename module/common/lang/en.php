@@ -48,6 +48,7 @@ $lang->more         = 'More';
 $lang->day          = 'Day';
 $lang->customConfig = 'Custom';
 $lang->public       = 'Public';
+$lang->trunk        = 'Trunk';
 
 $lang->actions         = 'Actions';
 $lang->comment         = 'Note';

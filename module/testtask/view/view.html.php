@@ -77,7 +77,7 @@
           </tr>  
           <tr>
             <th><?php echo $lang->testtask->build;?></th>
-            <td><?php $task->build == 'trunk' ? print('Trunk') : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
+            <td><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
           </tr>  
           <tr>
             <th><?php echo $lang->testtask->owner;?></th>

@@ -40,7 +40,7 @@
   <tr class='text-center'>
     <td><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
     <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name);?></td>
-    <td title="<?php echo $task->buildName?>"><?php $task->build == 'trunk' ? print('Trunk') : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
+    <td title="<?php echo $task->buildName?>"><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
     <td><?php echo $users[$task->owner];?></td>
     <td><?php echo $task->begin?></td>
     <td><?php echo $task->end?></td>

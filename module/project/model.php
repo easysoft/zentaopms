@@ -1980,7 +1980,7 @@ class projectModel extends model
     public function buildBugSearchForm($products, $queryID, $actionURL)
     {
         $modules = array();
-        $builds  = array('' => '', 'trunk' => 'Trunk');
+        $builds  = array('' => '', 'trunk' => $this->lang->trunk);
         foreach($products as $product)
         {
             $productModules = $this->loadModel('tree')->getOptionMenu($product->id);

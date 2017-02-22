@@ -126,7 +126,7 @@ class testtask extends control
             $productID = $productID ? $productID : key($products);
             $projects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetchPairs('id');
             $builds    = $this->dao->select('id, name')->from(TABLE_BUILD)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->fetchPairs('id');
-            $builds    = array('trunk' => 'Trunk') + $builds;
+            $builds    = array('trunk' => $this->lang->trunk) + $builds;
         }
 
         /* Create testtask from testtask of test.*/

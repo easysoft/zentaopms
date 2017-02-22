@@ -41,7 +41,7 @@
     <td title="<?php echo $task->projectName . '/' . $task->buildName?>">
       <?php
       echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName) . '/'; 
-      $task->build == 'trunk' ? print('Trunk') : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));;
+      $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));;
       ?>
     </td>
     <td><?php echo zget($users, $task->owner);?></td>
