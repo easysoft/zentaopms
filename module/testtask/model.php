@@ -731,7 +731,7 @@ class testtaskModel extends model
                 echo $run->stepNumber;
                 break;
             case 'actions':
-                common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase iframe');
+                common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase iframe', false, "data-width='95%'");
                 common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe');
 
                 if(common::hasPriv('testtask', 'unlinkCase'))

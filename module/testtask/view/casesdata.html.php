@@ -61,7 +61,7 @@
           <td><?php echo $run->stepNumber;?></td>
           <td class='text-center'>
             <?php
-            common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase iframe');
+            common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase iframe', false, "data-width='95%'");
             common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe');
 
             if(common::hasPriv('testtask', 'unlinkCase'))
