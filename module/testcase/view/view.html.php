@@ -79,28 +79,25 @@
         <legend><?php echo $lang->testcase->precondition;?></legend>
         <?php echo nl2br($case->precondition);?>
       </fieldset>
-      <fieldset>
-        <legend><?php echo $lang->testcase->stepDesc;?></legend>
-        <table class='table table-condensed table-hover table-striped'>
-          <thead>
-            <tr>
-              <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
-              <th class='w-p70'><?php echo $lang->testcase->stepDesc;?></th>
-              <th><?php echo $lang->testcase->stepExpect;?></th>
-            </tr>
-          </thead>
-          <?php
-          foreach($case->steps as $stepID => $step)
-          {
-              $stepID += 1;
-              echo "<tr><th class='w-id text-center strong'>$stepID</th>";
-              echo "<td>" . nl2br($step->desc) . "</td>";
-              echo "<td>" . nl2br($step->expect) . "</td>";
-              echo "</tr>";
-          }
-          ?>
-        </table>
-      </fieldset>
+      <table class='table table-condensed table-hover table-striped'>
+        <thead>
+          <tr>
+            <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
+            <th class='w-p70 text-left'><?php echo $lang->testcase->stepDesc;?></th>
+            <th class='text-left'><?php echo $lang->testcase->stepExpect;?></th>
+          </tr>
+        </thead>
+        <?php
+        foreach($case->steps as $stepID => $step)
+        {
+            $stepID += 1;
+            echo "<tr><th class='w-id text-center strong'>$stepID</th>";
+            echo "<td class='text-left'>" . nl2br($step->desc) . "</td>";
+            echo "<td class='text-left'>" . nl2br($step->expect) . "</td>";
+            echo "</tr>";
+        }
+        ?>
+      </table>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='actions'><?php echo $actionLinks;?></div>

@@ -75,8 +75,22 @@ function setTemplate(templateID)
 function deleteTemplate(templateID)
 {
     if(!templateID) return;
-    hiddenwin.location.href = createLink('bug', 'deleteTemplate', 'templateID=' + templateID);
-    $('#tplBox' + templateID).addClass('hidden');
+	if (confirm("您确认要删除该模板吗?")){
+		hiddenwin.location.href = createLink('bug', 'deleteTemplate', 'templateID=' + templateID);
+		$('#tplBox' + templateID).addClass('hidden');
+	}
+}
+
+/*visbile template x icon*/
+function mouseOver(delTempID)
+{
+    $('#delTemp'+delTempID).removeClass('hidden');
+}
+
+/*hidden template x icon*/
+function mouseOut(delTempID)
+{
+    $('#delTemp'+delTempID).addClass('hidden');
 }
 
 $(function()
