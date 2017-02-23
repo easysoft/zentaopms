@@ -23,24 +23,25 @@
   <thead>
   <?php $vars = "productID=$productID&branch=$branch&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
     <tr>
-      <th class='w-id'>   <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
-      <th class='w-200px'><?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
-      <th>                <?php echo $lang->testtask->project . '/' . $lang->testtask->build;?>
-      <th class='w-user'> <?php common::printOrderLink('owner',   $orderBy, $vars, $lang->testtask->owner);?></th>
-      <th class='w-100px'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
-      <th class='w-100px'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
-      <th class='w-80px'> <?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
-      <th class='w-120px {sorter:false}'><?php echo $lang->actions;?></th>
+      <th class='w-id text-left'>   <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
+      <th class='w-200px text-left'><?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
+      <th class='text-left'>        <?php echo $lang->testtask->project . '/' . $lang->testtask->build;?>
+      <th class='w-user text-left'> <?php common::printOrderLink('owner',   $orderBy, $vars, $lang->testtask->owner);?></th>
+      <th class='w-100px text-left'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
+      <th class='w-100px text-left'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
+      <th class='w-80px text-left'> <?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
+      <th class='w-120px {sorter:false} text-left'><?php echo $lang->actions;?></th>
     </tr>
   </thead>
   <tbody>
   <?php foreach($tasks as $task):?>
-  <tr class='text-center'>
+  <tr class='text-left'>
     <td><?php echo html::a(inlink('view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
     <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a(inlink('cases', "taskID=$task->id"), $task->name);?></td>
     <td title="<?php echo $task->projectName . '/' . $task->buildName?>">
       <?php
-      echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName) . '/'; 
+      echo $task->projectName . '/'; 
+      //echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName) . '/'; 
       $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));;
       ?>
     </td>
