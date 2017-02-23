@@ -424,18 +424,11 @@ class testtaskModel extends model
         }
 
         /* Create result of every step. */
-        if(isset($postData->steps) and $postData->steps)
+        foreach($postData->steps as $stepID =>$stepResult)
         {
-            foreach($postData->steps as $stepID =>$stepResult)
-            {
-                $step['result'] = $stepResult;
-                $step['real']   = $postData->reals[$stepID];
-                $stepResults[$stepID] = $step;
-            }
-        }
-        else
-        {
-            $stepResults = array();
+            $step['result'] = $stepResult;
+            $step['real']   = $postData->reals[$stepID];
+            $stepResults[$stepID] = $step;
         }
 
         /* Insert into testResult table. */
@@ -462,14 +455,7 @@ class testtaskModel extends model
         if(!dao::isError())
         {
             $resultID = $this->dao->lastInsertID();
-            if(!empty($stepResults))
-            {
-                foreach($stepResults as $stepID => $stepResult) $this->loadModel('file')->saveUpload('stepResult', $resultID, $stepID, "files{$stepID}", "labels{$stepID}");
-            }
-            else
-            {
-                $this->loadModel('file')->saveUpload('caseResult', $resultID);
-            }
+            foreach($stepResults as $stepID => $stepResult) $this->loadModel('file')->saveUpload('stepResult', $resultID, $stepID, "files{$stepID}", "labels{$stepID}");
         }
         $this->dao->update(TABLE_CASE)->set('lastRunner')->eq($this->app->user->account)->set('lastRunDate')->eq($now)->set('lastRunResult')->eq($caseResult)->where('id')->eq($postData->case)->exec();
 
@@ -488,6 +474,7 @@ class testtaskModel extends model
                     ->exec();
             }
         }
+        return $caseResult;
     }
 
     /**
@@ -520,18 +507,28 @@ class testtaskModel extends model
         foreach($postData->results as $caseID => $result)
         {
             $runID       = isset($runs[$caseID]) ? $runs[$caseID] : 0;
-            $dbSteps     = $stepGroups[$caseID];
-            $postSteps   = $postData->steps[$caseID];
+            $dbSteps     = isset($stepGroups[$caseID]) ? $stepGroups[$caseID] : array();
+            $postSteps   = isset($postData->steps[$caseID]) ? $postData->steps[$caseID] : array();
             $postReals   = $postData->reals[$caseID];
 
             $caseResult  = $result ? $result : 'pass';
             $stepResults = array();
-            foreach($dbSteps as $stepID => $step)
+            if($dbSteps)
+            {
+                foreach($dbSteps as $stepID => $step)
+                {
+                    $step           = array();
+                    $step['result'] = $caseResult == 'pass' ? $caseResult : $postSteps[$stepID];
+                    $step['real']   = $caseResult == 'pass' ? '' : $postReals[$stepID];
+                    $stepResults[$stepID] = $step;
+                }
+            }
+            else
             {
                 $step           = array();
-                $step['result'] = $caseResult == 'pass' ? $caseResult : $postSteps[$stepID];
-                $step['real']   = $caseResult == 'pass' ? '' : $postReals[$stepID];
-                $stepResults[$stepID] = $step;
+                $step['result'] = $caseResult;
+                $step['real']   = $caseResult == 'pass' ? '' : $postReals[0];
+                $stepResults[] = $step;
             }
 
             $result              = new stdClass();

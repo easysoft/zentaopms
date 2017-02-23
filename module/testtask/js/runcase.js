@@ -20,10 +20,9 @@ function deleteFile(fileID)
 }
 
 /* Download a file, append the mouse to the link. Thus we call decide to open the file in browser no download it. */
-function downloadFile(fileID)
+function downloadFile(fileID, extension, imageWidth)
 {
     if(!fileID) return;
-    var sessionString = '<?php echo $sessionString;?>';
     var url = createLink('file', 'download', 'fileID=' + fileID + '&mouse=left') + sessionString;
     window.open(url, '_blank');
     return false;

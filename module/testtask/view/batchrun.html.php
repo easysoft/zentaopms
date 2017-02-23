@@ -53,7 +53,9 @@
           <?php $i++?>
           <?php endforeach?>
         </table>
-        <?php endif?>
+        <?php else:?>
+        <span class='hidden action<?php echo $caseID?>'><?php echo html::input("reals[$caseID][]", '', "class='form-control'");?></span>
+        <?php endif;?>
       </td>
     </tr>  
     <?php endforeach;?>
