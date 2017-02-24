@@ -258,6 +258,7 @@ $lang->bug->report->charts['bugsPerSeverity']       = 'Bug严重程度统计';
 $lang->bug->report->charts['bugsPerResolution']     = 'Bug解决方案统计';
 $lang->bug->report->charts['bugsPerStatus']         = 'Bug状态统计';
 $lang->bug->report->charts['bugsPerActivatedCount'] = 'Bug激活次数统计';
+$lang->bug->report->charts['bugsPerPri']            = 'Bug优先级统计';
 $lang->bug->report->charts['bugsPerType']           = 'Bug类型统计';
 $lang->bug->report->charts['bugsPerAssignedTo']     = '指派给统计';
 //$lang->bug->report->charts['bugLiveDays']        = 'Bug处理时间统计';
