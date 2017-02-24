@@ -302,7 +302,7 @@ class testcase extends control
 
         /* Get the status of stories are not closed. */
         $storyStatus = $this->lang->story->statusList;
-        unset($storyStatus['closed']);
+        //unset($storyStatus['closed']);
         $modules = array();
         if($currentModuleID)
         {

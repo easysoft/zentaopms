@@ -1623,6 +1623,20 @@ class bugModel extends model
     }
 
     /**
+     * Get report data of bugs per pri
+     * 
+     * @access public
+     * @return array
+     */
+    public function getDataOfBugsPerPri()
+    {
+        $datas = $this->dao->select('pri AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+        foreach($datas as $status => $data) if(isset($this->lang->bug->statusList[$status])) $data->name = $this->lang->bug->statusList[$status];
+        return $datas;
+    }
+
+    /**
      * Get report data of bugs per status.
      * 
      * @access public
