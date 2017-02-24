@@ -142,6 +142,7 @@ $lang->bug->setTemplateTitle     = '请输入bug模板标题';
 $lang->bug->remindTask           = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
 $lang->bug->skipClose            = 'Bug %s 不是已解决状态，不能关闭。';
 $lang->bug->applyTemplate        = '应用模板';
+$lang->bug->TemplateDelete       = '您确认要删除该模板吗？';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步骤]</p>\n";

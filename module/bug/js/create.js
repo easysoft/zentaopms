@@ -75,7 +75,7 @@ function setTemplate(templateID)
 function deleteTemplate(templateID)
 {
     if(!templateID) return;
-	if (confirm("您确认要删除该模板吗?")){
+	if (confirm(TemplateDelete)){
 		hiddenwin.location.href = createLink('bug', 'deleteTemplate', 'templateID=' + templateID);
 		$('#tplBox' + templateID).addClass('hidden');
 	}
