@@ -232,32 +232,37 @@ $lang->build->menu = $lang->project->menu;
 $lang->qa = new stdclass();
 $lang->qa->menu = new stdclass();
 
-$lang->qa->menu->product  = array('link' => '%s', 'fixed' => true);
-$lang->qa->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->qa->menu->testcase = array('link' => '用例|testcase|browse|productID=%s');
-$lang->qa->menu->testtask = array('link' => '版本|testtask|browse|productID=%s');
-$lang->qa->menu->index    = array('link' => "<i class='icon-home'></i>测试主页|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->qa->menu->product   = array('link' => '%s', 'fixed' => true);
+$lang->qa->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
+$lang->qa->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
+$lang->qa->menu->testtask  = array('link' => '版本|testtask|browse|productID=%s');
+$lang->qa->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
+$lang->qa->menu->index     = array('link' => "<i class='icon-home'></i>测试主页|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
 
-$lang->bug->menu->product  = array('link' => '%s', 'fixed' => true);
-$lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
-$lang->bug->menu->testcase = array('link' => '用例|testcase|browse|productID=%s');
-$lang->bug->menu->testtask = array('link' => '版本|testtask|browse|productID=%s');
-$lang->bug->menu->index    = array('link' => "<i class='icon-home'></i>测试主页|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->bug->menu->product   = array('link' => '%s', 'fixed' => true);
+$lang->bug->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
+$lang->bug->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
+$lang->bug->menu->testtask  = array('link' => '版本|testtask|browse|productID=%s');
+$lang->bug->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
+$lang->bug->menu->index     = array('link' => "<i class='icon-home'></i>测试主页|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
 
-$lang->testcase->menu->product  = array('link' => '%s', 'fixed' => true);
-$lang->testcase->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testcase->menu->testcase = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase', 'subModule' => 'tree');
-$lang->testcase->menu->testtask = array('link' => '版本|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase');
-$lang->testcase->menu->index    = array('link' => "<i class='icon-home'></i>测试主页|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->testcase->menu->product   = array('link' => '%s', 'fixed' => true);
+$lang->testcase->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
+$lang->testcase->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase', 'subModule' => 'tree');
+$lang->testcase->menu->testtask  = array('link' => '版本|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase');
+$lang->testcase->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases');
+$lang->testcase->menu->index     = array('link' => "<i class='icon-home'></i>测试主页|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->testtask = new stdclass();
 $lang->testtask->menu = $lang->testcase->menu;
+$lang->testsuite = new stdclass();
+$lang->testsuite->menu = $lang->testcase->menu;
 
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();

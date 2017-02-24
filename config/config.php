@@ -170,6 +170,8 @@ define('TABLE_CRON',          '`' . $config->db->prefix . 'cron`');
 define('TABLE_MAILQUEUE',     '`' . $config->db->prefix . 'mailqueue`');
 define('TABLE_BLOCK',         '`' . $config->db->prefix . 'block`');
 define('TABLE_DOCCONTENT',    '`' . $config->db->prefix . 'doccontent`');
+define('TABLE_TESTSUITE',     '`' . $config->db->prefix . 'testsuite`');
+define('TABLE_SUITECASE',     '`' . $config->db->prefix . 'suitecase`');
 if(!defined('TABLE_LANG')) define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
 
 $config->objectTables['product']     = TABLE_PRODUCT;
@@ -183,6 +185,7 @@ $config->objectTables['bug']         = TABLE_BUG;
 $config->objectTables['case']        = TABLE_CASE;
 $config->objectTables['testcase']    = TABLE_CASE;
 $config->objectTables['testtask']    = TABLE_TESTTASK;
+$config->objectTables['testsuite']   = TABLE_TESTSUITE;
 $config->objectTables['user']        = TABLE_USER;
 $config->objectTables['doc']         = TABLE_DOC;
 $config->objectTables['doclib']      = TABLE_DOCLIB;
