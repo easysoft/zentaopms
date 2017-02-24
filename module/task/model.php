@@ -42,8 +42,6 @@ class taskModel extends model
 
         foreach($this->post->assignedTo as $assignedTo)
         {
-            if($this->post->type == 'affair' and empty($assignedTo)) continue;
-
             $task->assignedTo = $assignedTo;
             if($assignedTo) $task->assignedDate = helper::now();
 
