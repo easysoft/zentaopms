@@ -52,9 +52,9 @@
     <td class='text-center'>
       <?php
       common::printIcon('testtask', 'cases',    "taskID=$task->id", 'play', 'list', 'sitemap');
-      common::printIcon('testtask', 'view',     "taskID=$task->id", '', 'list', 'file');
+      common::printIcon('testtask', 'view',     "taskID=$task->id", '', 'list', 'file','','iframe',true);
       common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list', 'link');
-      common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
+      common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list','','','iframe',true);
 
       if(common::hasPriv('testtask', 'delete'))
       {
