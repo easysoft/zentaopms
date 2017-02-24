@@ -1924,7 +1924,8 @@ class baseSQL
         $orders = $pos ? substr($order, 0, $pos) : $order;
         $limit  = $pos ? substr($order, $pos) : '';
         $orders = trim($orders);
-        if(!preg_match('/^(\w+\.)?(`\w+`|\w+)( +(desc|asc))?( *(, *(\w+\.)?(`\w+`|\w+)( +(desc|asc))?)?)*$/i', $orders))die("Order is bad request, The order is $orders");
+        if(empty($orders)) return $this;
+        if(!preg_match('/^(\w+\.)?(`\w+`|\w+)( +(desc|asc))?( *(, *(\w+\.)?(`\w+`|\w+)( +(desc|asc))?)?)*$/i', $orders)) die("Order is bad request, The order is $orders");
 
         $orders = explode(',', $orders);
         foreach($orders as $i => $order)
