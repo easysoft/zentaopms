@@ -66,7 +66,9 @@
           <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
           <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
           <th class='w-70px {sorter:false}'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
-          <th class='w-70px'>                  <?php echo $lang->story->taskCount;?></th>
+          <th class='w-30px'>                  <?php echo $lang->story->taskCountAB;?></th>
+          <th class='w-30px'>                  <?php echo $lang->story->bugCountAB;?></th>
+          <th class='w-30px'>                  <?php echo $lang->story->caseCountAB;?></th>
           <th class='w-110px {sorter:false}'>  <?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -103,6 +105,17 @@
             $tasksLink = $this->createLink('story', 'tasks', "storyID=$story->id&projectID=$project->id");
             $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
             ?> 
+          <td>
+              <?php 
+              $bugsLink = $this->createLink('story', 'bugs', "storyID=$story->id&projectID=$project->id");
+              $storyBugs[$story->id] > 0 ? print(html::a($bugsLink, $storyBugs[$story->id], '', 'class="iframe"')) : print(0);
+              ?>
+          </td>
+          <td>
+              <?php 
+              $casesLink = $this->createLink('story', 'cases', "storyID=$story->id&projectID=$project->id");
+              $storyCases[$story->id] > 0 ? print(html::a($casesLink, $storyCases[$story->id], '', 'class="iframe"')) : print(0);
+              ?>
           </td>
           <td>
             <?php 
