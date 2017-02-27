@@ -68,6 +68,7 @@ $lang->testcase->batchEdit          = "批量编辑 ";
 $lang->testcase->batchChangeModule  = "批量修改模块";
 $lang->testcase->delete             = "删除";
 $lang->testcase->batchDelete        = "批量删除 ";
+$lang->testcase->batchStoryChange   = "确认变更";
 $lang->testcase->browse             = "用例列表";
 $lang->testcase->groupCase          = "分组浏览用例";
 $lang->testcase->import             = "导入";

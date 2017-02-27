@@ -136,7 +136,6 @@ class testcase extends control
         $this->view->suiteID       = $suiteID;
         $this->view->setShowModule = true;
 
-
         $this->display();
     }
 
@@ -717,6 +716,21 @@ class testcase extends control
     }
 
     /**
+     * Batch ctory change cases.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function batchStoryChange($productID = 0)
+    {
+        $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList));
+
+        foreach($caseIDList as $caseID) $this->confirmStoryChange($caseID,false);
+        die(js::locate($this->session->caseList));
+    }
+
+    /**
      * Link related cases.
      *
      * @param  int    $caseID
@@ -823,12 +837,12 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function confirmStoryChange($caseID)
+    public function confirmStoryChange($caseID,$reload=true)
     {
         $case = $this->testcase->getById($caseID);
         $this->dao->update(TABLE_CASE)->set('storyVersion')->eq($case->latestStoryVersion)->where('id')->eq($caseID)->exec();
         $this->loadModel('action')->create('case', $caseID, 'confirmed', '', $case->latestStoryVersion);
-        die(js::reload('parent'));
+        if($reload) die(js::reload('parent'));
     }
 
     /**
