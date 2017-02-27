@@ -1962,4 +1962,16 @@ class project extends control
 
         $this->display();
     }
+
+    /**
+     * Doc for compatible.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function doc($projectID)
+    {
+        $this->locate($this->createLink('doc', 'objectLibs', "type=project&objectID=$projectID&from=project"));
+    }
 }
