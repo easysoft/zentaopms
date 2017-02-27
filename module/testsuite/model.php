@@ -91,7 +91,7 @@ class testsuiteModel extends model
             ->andWhere("(`type` = 'public' OR (`type` = 'private' and addedBy = '{$this->app->user->account}'))")
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
     }
 
     /**

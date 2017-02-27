@@ -198,6 +198,31 @@ class testcaseModel extends model
     }
 
     /**
+     * Get by suite.
+     * 
+     * @param  int    $productID 
+     * @param  int    $branch 
+     * @param  int    $suiteID 
+     * @param  array  $moduleIdList 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return void
+     */
+    public function getBySuite($productID, $branch = 0, $suiteID, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null)
+    {
+        return $this->dao->select('t1.*, t2.title as storyTitle, t3.version as version')->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->leftJoin(TABLE_SUITECASE)->alias('t3')->on('t1.id=t3.case')
+            ->where('t1.product')->eq((int)$productID)
+            ->andWhere('t3.suite')->eq((int)$suiteID)
+            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
+            ->andWhere('t1.deleted')->eq('0')
+            ->orderBy($orderBy)->page($pager)->fetchAll('id');
+    }
+
+    /**
      * Get case info by ID.
      * 
      * @param  int    $caseID 
@@ -284,6 +309,10 @@ class testcaseModel extends model
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll();
+        }
+        elseif($browseType == 'bysuite')
+        {
+            $cases = $this->getBySuite($productID, $branch, $queryID, $modules, $sort, $pager);
         }
         /* By search. */
         elseif($browseType == 'bysearch')
@@ -992,9 +1021,9 @@ class testcaseModel extends model
      * @access public
      * @return void
      */
-    public function printCell($col, $case, $users, $branches, $modulePairs = array())
+    public function printCell($col, $case, $users, $branches, $modulePairs = array(), $browseType = '')
     {
-        $caseLink = helper::createLink('testcase', 'view', "caseID=$case->id");
+        $caseLink = helper::createLink('testcase', 'view', "caseID=$case->id&version=$case->version");
         $account  = $this->app->user->account;
         $id = $col->id;
         if($col->show)
@@ -1030,7 +1059,16 @@ class testcaseModel extends model
                 foreach(explode(',', trim($case->stage, ',')) as $stage) echo $this->lang->testcase->stageList[$stage] . '<br />';
                 break;
             case 'status':
-                echo $this->lang->testcase->statusList[$case->status];
+                if($case->needconfirm)
+                {
+                    echo "(<span class='warning'>{$this->lang->story->changed}</span> ";
+                    echo html::a(helper::createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $this->lang->confirm, 'hiddenwin');
+                    echo ")";
+                }
+                else
+                {
+                    echo $this->lang->testcase->statusList[$case->status];
+                }
                 break;
             case 'story':
                 static $stories = array();

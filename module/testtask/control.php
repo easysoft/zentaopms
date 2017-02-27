@@ -521,7 +521,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function linkCase($taskID, $param = 'all', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function linkCase($taskID, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if(!empty($_POST))
         {
@@ -575,7 +575,7 @@ class testtask extends control
         if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1', $query);
 
         $linkedCases = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs('case');
-        if($param == 'all')
+        if($type == 'all')
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
                 ->andWhere('id')->notIN($linkedCases)
@@ -585,7 +585,7 @@ class testtask extends control
                 ->page($pager)
                 ->fetchAll();
         }
-        if($param == 'bystory')
+        elseif($type == 'bystory')
         {
             $stories = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('stories');
             $cases   = array();
@@ -602,13 +602,13 @@ class testtask extends control
                     ->fetchAll();
             }
         }
-        if($param == 'bybug')
+        elseif($type == 'bybug')
         {
             $bugs  = $this->dao->select('bugs')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('bugs');
             $cases = array();
             if($bugs)
             {
-                $cases = empty($bugs) ? array() : $this->dao->select('*')->from(TABLE_CASE)->where($query)
+                $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
                     ->andWhere('product')->eq($productID)
                     ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
                     ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
@@ -619,11 +619,26 @@ class testtask extends control
                     ->fetchAll();
             }
         }
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
-        $this->view->cases   = $cases;
-        $this->view->taskID  = $taskID;
-        $this->view->pager   = $pager;
-        $this->view->task    = $task;
+        if($type == 'bysuite')
+        {
+            $cases =  $this->dao->select('t1.*,t2.version as version')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
+                ->where($query)
+                ->andWhere('t2.suite')->eq((int)$param)
+                ->andWhere('t1.product')->eq($productID)
+                ->beginIF($linkedCases)->andWhere('t1.id')->notIN($linkedCases)->fi()
+                ->beginIF($task->branch)->andWhere('t1.branch')->in("0,$task->branch")->fi()
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id_desc')
+                ->page($pager)
+                ->fetchAll();
+        }
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->view->cases     = $cases;
+        $this->view->taskID    = $taskID;
+        $this->view->pager     = $pager;
+        $this->view->task      = $task;
+        $this->view->suiteList = $this->loadModel('testsuite')->getSuites($task->product);
 
         $this->display();
     }

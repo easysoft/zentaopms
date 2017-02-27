@@ -38,7 +38,7 @@
       <tbody>
       <?php foreach($cases as $case):?>
       <tr class='text-center'>
-        <?php $viewLink = inlink('view', "caseID=$case->id");?>
+        <?php $viewLink = inlink('view', "caseID=$case->id&version=$case->version");?>
         <td class='cell-id'>
           <input type='checkbox' name='caseIDList[]'  value='<?php echo $case->id;?>'/> 
           <?php echo html::a($viewLink, sprintf('%03d', $case->id));?>

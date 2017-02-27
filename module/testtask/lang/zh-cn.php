@@ -71,6 +71,7 @@ $lang->testtask->priList[4] = '4';
 $lang->testtask->unlinkedCases = '未关联';
 $lang->testtask->linkByStory   = '按需求关联';
 $lang->testtask->linkByBug     = '按Bug关联';
+$lang->testtask->linkBySuite   = '按套件关联';
 $lang->testtask->passAll       = '全部通过';
 $lang->testtask->pass          = '通过';
 $lang->testtask->fail          = '失败';

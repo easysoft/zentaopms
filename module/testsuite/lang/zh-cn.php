@@ -23,7 +23,7 @@ $lang->testsuite->cases            = '用例';
 $lang->testsuite->pre              = '上一个';
 $lang->testsuite->next             = '下一个';
 
-$lang->testsuite->common         = '测试视图套件';
+$lang->testsuite->common         = '套件';
 $lang->testsuite->product        = '所属' . $lang->productCommon;
 $lang->testsuite->name           = '名称';
 $lang->testsuite->desc           = '描述';

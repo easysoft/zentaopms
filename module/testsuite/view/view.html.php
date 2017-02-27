@@ -92,12 +92,12 @@
               <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
               <td class='text-left nobr'>
                 <?php if($case->branch) echo "<span class='label label-info label-badge'>{$branches[$case->branch]}</span>"?>
-                <?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id&version=$case->caseVersion&from=testsuite"), $case->title, '_blank');?>
+                <?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id&version=$case->caseVersion"), $case->title, '_blank');?>
               </td>
               <td><?php echo $lang->testcase->typeList[$case->type];?></td>
               <td class='<?php echo $case->status;?>'><?php echo ($case->version < $case->caseVersion) ? "<span class='warning'>{$lang->testcase->changed}</span>" : $lang->testcase->statusList[$case->status];?></td>
-              <td><?php echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a($this->createLink('testcase', 'bugs', "case={$case->id}&caseID={$case->case}"), $case->bugs, '', "class='iframe'") : $case->bugs;?></td>
-              <td><?php echo (common::hasPriv('testsuite', 'results') and $case->results) ? html::a($this->createLink('testsuite', 'results', "caseID={$case->id}&caseID={$case->case}"), $case->results, '', "class='iframe'") : $case->results;?></td>
+              <td><?php echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a($this->createLink('testcase', 'bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;?></td>
+              <td><?php echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a($this->createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;?></td>
               <td><?php echo $case->stepNumber;?></td>
               <td class='text-center'>
                 <?php

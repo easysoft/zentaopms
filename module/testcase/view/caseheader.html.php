@@ -31,6 +31,23 @@
     {
         echo "<li id='{$menyType}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=$menyType"), $menuItem->text) . "</li>";
     }
+    elseif($hasBrowsePriv and $menyType == 'suite')
+    {
+        echo "<li id='bysuiteTab' class='dropdown'>";
+        $currentSuiteID = isset($suiteID) ? (int)$suiteID : 0;
+        $currentSuite   = zget($suiteList, $currentSuiteID, '');
+        $currentName    = empty($currentSuite) ? $lang->testsuite->common : $currentSuite->name;
+        echo html::a('javascript:;', $currentName . " <span class='caret'></span>", '', "data-toggle='dropdown'");
+        echo "<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto'>";
+        foreach ($suiteList as $suiteID => $suite)
+        {
+            echo '<li' . ($suiteID == (int)$currentSuiteID ? " class='active'" : '') . '>';
+            $suiteName = $suite->name;
+            if($suite->type == 'public') $suiteName .= " <span class='label label-info'>{$lang->testsuite->authorList[$suite->type]}</span>";
+            echo html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=$suiteID"), $suiteName);
+        }
+        echo '</ul></li>';
+    }
     elseif($hasGroupPriv and $menyType == 'group')
     {
         echo "<li id='groupTab' class='dropdown'>";

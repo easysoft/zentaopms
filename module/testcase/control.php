@@ -72,9 +72,11 @@ class testcase extends control
             setcookie('caseModule', 0, $this->config->cookieLife, $this->config->webRoot);
         }
         if($browseType == 'bymodule') setcookie('caseModule', (int)$param, $this->config->cookieLife, $this->config->webRoot);
+        if($browseType == 'bysuite')  setcookie('caseSuite', (int)$param, $this->config->cookieLife, $this->config->webRoot);
         if($browseType != 'bymodule') $this->session->set('caseBrowseType', $browseType);
 
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->caseModule ? $this->cookie->caseModule : 0));
+        $suiteID    = ($browseType == 'bysuite') ? (int)$param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? $this->cookie->caseSuite : 0) : 0);
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu, save session. */
@@ -94,7 +96,7 @@ class testcase extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Get test cases. */
-        $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager);
+        $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $sort, $pager);
 
         /* save session .*/
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $browseType != 'bysearch' ? false : true);
@@ -130,6 +132,8 @@ class testcase extends control
         $this->view->cases         = $cases;
         $this->view->branch        = $branch;
         $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
+        $this->view->suiteList     = $this->loadModel('testsuite')->getSuites($productID);
+        $this->view->suiteID       = $suiteID;
         $this->view->setShowModule = true;
 
 
