@@ -531,7 +531,6 @@ class project extends control
         /* Load these models. */
         $this->loadModel('story');
         $this->loadModel('user');
-        $this->loadModel('task');
         $this->app->loadLang('testcase');
 
         /* Save session. */
@@ -554,7 +553,6 @@ class project extends control
 
         $stories = $this->story->getProjectStories($projectID, $sort, $type, $param, $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
-        $storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
         $users      = $this->user->getPairs('noletter');
 
         /* Get project's product. */
@@ -584,6 +582,13 @@ class project extends control
         $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $position[] = $this->lang->project->story;
 
+        /* Count T B C */
+        $storyIdList = array();
+        foreach($stories as $story) $storyIdList[$story->id] = $story->id;
+        $storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
+        $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
+        $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
+
         /* Assign. */
         $this->view->title        = $title;
         $this->view->position     = $position;
@@ -593,9 +598,11 @@ class project extends control
         $this->view->orderBy      = $orderBy;
         $this->view->type         = $type;
         $this->view->param        = $param;
-        $this->view->storyTasks   = $storyTasks;
         $this->view->moduleTree   = $this->loadModel('tree')->getProjectStoryTreeMenu($projectID, $startModuleID = 0, array('treeModel', 'createProjectStoryLink'));
         $this->view->tabID        = 'story';
+        $this->view->storyTasks   = $storyTasks;
+        $this->view->storyBugs    = $storyBugs;
+        $this->view->storyCases   = $storyCases;
         $this->view->users        = $users;
         $this->view->pager        = $pager;
         $this->view->branchGroups = $branchGroups;
