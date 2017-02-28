@@ -886,6 +886,12 @@ class treeModel extends model
         return $linkHtml;
     }
 
+    public function createTestlibLink($type, $module)
+    {
+        $linkHtml = html::a(helper::createLink('testsuite', 'library', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return $linkHtml;
+    }
+
     public function createBranchLink($type, $rootID, $branchID, $branch)
     {
         if($type == 'story') return html::a(helper::createLink('product', 'browse', "productID={$rootID}&branch=$branchID"), $branch, '_self', "id='branch{$branchID}'");

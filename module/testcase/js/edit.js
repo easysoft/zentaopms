@@ -48,3 +48,13 @@ function loadLinkCases(caseID)
     caseLink = createLink('testcase', 'ajaxGetLinkCases', 'caseID=' + caseID);
     $('#linkCaseBox').load(caseLink);
 }
+
+function loadLibModules(libID)
+{
+    link = createLink('tree', 'ajaxGetOptionMenu', 'libID=' + libID + '&viewtype=testlib&branch=0&rootModuleID=0&returnType=html&needManage=true');
+    $('#moduleIdBox').load(link, function()
+    {
+        $(this).find('select').chosen(defaultChosenOptions)
+        if(typeof(caseModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon'>" + caseModule + "</span>")
+    });
+}

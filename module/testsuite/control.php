@@ -14,20 +14,6 @@ class testsuite extends control
     public $products = array();
 
     /**
-     * Construct function, load product module, assign products to view auto.
-     * 
-     * @access public
-     * @return void
-     */
-    public function __construct($moduleName = '', $methodName = '')
-    {
-        parent::__construct($moduleName, $methodName);
-        $this->loadModel('product');
-        $this->view->products = $this->products = $this->product->getPairs('nocode');
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testsuite")));
-    }
-
-    /**
      * Index page, header to browse.
      * 
      * @access public
@@ -56,6 +42,7 @@ class testsuite extends control
         $this->session->set('testsuiteList', $this->app->getURI(true));
 
         /* Set menu. */
+        $this->view->products = $this->products = $this->loadModel('product')->getPairs('nocode');
         $productID = $this->product->saveState($productID, $this->products);
         $this->testsuite->setMenu($this->products, $productID);
 
@@ -69,6 +56,7 @@ class testsuite extends control
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->common;
         $this->view->position[]  = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]  = $this->lang->testsuite->common;
+
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
         $this->view->orderBy     = $orderBy;
@@ -97,6 +85,7 @@ class testsuite extends control
         }
 
         /* Set menu. */
+        $this->view->products = $this->products = $this->loadModel('product')->getPairs('nocode');
         $productID  = $this->product->saveState($productID, $this->products);
         $this->testsuite->setMenu($this->products, $productID);
 
@@ -123,7 +112,11 @@ class testsuite extends control
         if(!$suite) die(js::error($this->lang->notFound) . js::locate('back'));
         $productID = $suite->product;
 
+        $this->view->products = $this->products = $this->loadModel('product')->getPairs('nocode');
         $this->testsuite->setMenu($this->products, $productID);
+
+        /* Save session. */
+        $this->session->set('caseList', $this->app->getURI(true));
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
@@ -158,28 +151,46 @@ class testsuite extends control
      */
     public function edit($suiteID)
     {
+        $suite = $this->testsuite->getById($suiteID);
         if(!empty($_POST))
         {
             $changes = $this->testsuite->update($suiteID);
             if(dao::isError()) die(js::error(dao::getError()));
             if($changes)
             {
-                $actionID = $this->loadModel('action')->create('testsuite', $suiteID, 'edited');
+                $objectType = $suite->type == 'library' ? 'testlib' : 'testsuite';
+                $actionID = $this->loadModel('action')->create($objectType, $suiteID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate(inlink('view', "suiteID=$suiteID"), 'parent'));
+            $method = $suite->type == 'library' ? 'libView' : 'view';
+            die(js::locate(inlink($method, "suiteID=$suiteID"), 'parent'));
         }
 
-        /* Get suite info. */
-        $suite      = $this->testsuite->getById($suiteID);
-        $productID = $this->product->saveState($suite->product, $this->products);
+        if($suite->type == 'library')
+        {
+            /* Set lib menu. */
+            $libraries = $this->testsuite->getLibraries();
+            $suiteID   = $this->testsuite->saveLibState($suiteID, $libraries);
+            $this->testsuite->setLibMenu($libraries, $suiteID);
 
-        /* Set menu. */
-        $this->testsuite->setMenu($this->products, $productID);
+            $this->view->title      = $libraries[$suiteID] . $this->lang->colon . $this->lang->testsuite->edit;
+            $this->view->position[] = html::a($this->createLink('testsuite', 'library', "libID=$suiteID"), $libraries[$suiteID]);
+            $this->view->position[] = $this->lang->testlib->common;
+        }
+        else
+        {
+            /* Get suite info. */
+            $this->view->products = $this->products = $this->loadModel('product')->getPairs('nocode');
+            $productID = $this->product->saveState($suite->product, $this->products);
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->edit;
-        $this->view->position[] = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[] = $this->lang->testsuite->common;
+            /* Set menu. */
+            $this->testsuite->setMenu($this->products, $productID);
+
+            $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->edit;
+            $this->view->position[] = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $this->products[$productID]);
+            $this->view->position[] = $this->lang->testsuite->common;
+        }
+
         $this->view->position[] = $this->lang->testsuite->edit;
 
         $this->view->suite = $suite;
@@ -242,6 +253,7 @@ class testsuite extends control
         $this->session->set('caseList', $this->app->getURI(true));
 
         /* Get suite and product id. */
+        $this->view->products = $this->products = $this->loadModel('product')->getPairs('nocode');
         $suite      = $this->testsuite->getById($suiteID);
         $productID = $this->product->saveState($suite->product, $this->products);
 
@@ -256,6 +268,7 @@ class testsuite extends control
         $this->loadModel('testcase');
         $this->config->testcase->search['params']['product']['values']= array('' => '', $productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
+        $this->config->testcase->search['module']    = 'testsuite';
         $this->config->testcase->search['actionURL'] = inlink('linkCase', "suiteID=$suiteID&param=myQueryID");
         if($this->session->currentProductType == 'normal')
         {
@@ -330,5 +343,188 @@ class testsuite extends control
         }
 
         die(js::locate($this->createLink('testsuite', 'view', "suiteID=$suiteID")));
+    }
+
+    public function library($libID = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Set browse type. */
+        $browseType = strtolower($browseType);
+
+        $libraries = $this->testsuite->getLibraries();
+        if(empty($libraries)) $this->locate(inlink('createLib'));
+
+        /* Save session. */
+        $this->session->set('caseList', $this->app->getURI(true));
+
+        /* Set menu. */
+        $libID = $this->testsuite->saveLibState($libID, $libraries);
+        setcookie('preTestLibID', $libID, $this->config->cookieLife, $this->config->webRoot);
+        if($this->cookie->preTestLibID != $libID)
+        {
+            $_COOKIE['libCaseModule'] = 0;
+            setcookie('libCaseModule', 0, $this->config->cookieLife, $this->config->webRoot);
+        }
+
+        if($browseType == 'bymodule') setcookie('libCaseModule', (int)$param, $this->config->cookieLife, $this->config->webRoot);
+        if($browseType != 'bymodule') $this->session->set('libBrowseType', $browseType);
+        $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->libCaseModule ? $this->cookie->libCaseModule : 0));
+        $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
+
+        /* Set lib menu. */
+        $this->testsuite->setLibMenu($libraries, $libID);
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        /* Build the search form. */
+        $this->loadModel('testcase');
+        $actionURL = $this->createLink('testsuite', 'library', "libID=$libID&browseType=bySearch&queryID=myQueryID");
+        $this->testsuite->buildSearchForm($libID, $libraries, $queryID, $actionURL);
+
+        /* Append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
+        /* save session .*/
+        $cases = $this->testsuite->getLibCases($libID, $browseType, $queryID, $moduleID, $sort, $pager);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', true);
+
+        $this->loadModel('datatable');
+        $this->loadModel('tree');
+        $showModule = !empty($this->config->datatable->testsuiteLibrary->showModule) ? $this->config->datatable->testsuiteLibrary->showModule : '';
+        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($libID, 'testlib', $showModule) : array();
+
+
+        $this->view->title      = $this->lang->testlib->common . $this->lang->colon . $libraries[$libID];
+        $this->view->position[] = html::a($this->createLink('testsuite', 'library', "libID=$libID"), $libraries[$libID]);
+
+        $this->view->libID         = $libID;
+        $this->view->libName       = $libraries[$libID];
+        $this->view->cases         = $cases;
+        $this->view->orderBy       = $orderBy;
+        $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->moduleTree    = $this->tree->getTreeMenu($libID, $viewType = 'testlib', $startModuleID = 0, array('treeModel', 'createTestLibLink'), '');
+        $this->view->pager         = $pager;
+        $this->view->browseType    = $browseType;
+        $this->view->moduleID      = $moduleID;
+        $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
+        $this->view->param         = $param;
+        $this->view->setShowModule = true;
+
+        $this->display();
+    }
+
+    public function createLib()
+    {
+        if(!empty($_POST))
+        {
+            $libID = $this->testsuite->createLib();
+            if(dao::isError()) die(js::error(dao::getError()));
+            $this->loadModel('action')->create('testlib', $libID, 'opened');
+            die(js::locate($this->createLink('testsuite', 'library', "libID=$libID"), 'parent'));
+        }
+
+        /* Set menu. */
+        $libraries = $this->testsuite->getLibraries();
+        $libID     = $this->testsuite->saveLibState(0, $libraries);
+        $this->testsuite->setLibMenu($libraries, $libID);
+
+        $this->view->title      = $this->lang->testlib->common . $this->lang->colon . $this->lang->testlib->create;
+        $this->view->position[] = $this->lang->testlib->common;
+        $this->view->position[] = $this->lang->testlib->create;
+        $this->display();
+    }
+
+    public function createCase($libID, $moduleID = 0)
+    {
+        if(!empty($_POST))
+        {
+            $caseResult = $this->loadModel('testcase')->create($bugID = 0);
+            if(!$caseResult or dao::isError()) die(js::error(dao::getError()));
+
+            $caseID = $caseResult['id'];
+            if($caseResult['status'] == 'exists')
+            {
+                echo js::alert(sprintf($this->lang->duplicate, $this->lang->testcase->common));
+                die(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
+            }
+
+            $this->loadModel('action')->create('case', $caseID, 'Opened');
+
+            /* If link from no head then reload. */
+            if(isonlybody()) die(js::reload('parent'));
+            die(js::locate($this->createLink('testsuite', 'library', "libID={$libID}&browseType=byModule&param={$_POST['module']}"), 'parent'));
+        }
+        /* Set lib menu. */
+        $libraries = $this->testsuite->getLibraries();
+        $libID     = $this->testsuite->saveLibState($libID, $libraries);
+        $this->testsuite->setLibMenu($libraries, $libID);
+
+        $this->loadModel('testcase');
+        $step = new stdclass();
+        $step->desc   = '';
+        $step->expect = '';
+        for($i = 1; $i <= $this->config->testcase->defaultSteps; $i ++) $steps[] = $step;
+
+        $this->view->title      = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->create;
+        $this->view->position[] = html::a($this->createLink('testsuite', 'library', "libID=$libID"), $libraries[$libID]);
+        $this->view->position[] = $this->lang->testsuite->common;
+        $this->view->position[] = $this->lang->testcase->create;
+
+        $this->view->libraries        = $libraries;
+        $this->view->libID            = $libID;
+        $this->view->currentModuleID  = (int)$moduleID;
+        $this->view->steps            = $steps;
+        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'testlib', $startModuleID = 0);
+        $this->display();
+    }
+
+    public function libView($libID)
+    {
+        $lib = $this->testsuite->getById($libID);
+
+        /* Set lib menu. */
+        $libraries = $this->testsuite->getLibraries();
+        $this->testsuite->setLibMenu($libraries, $libID);
+
+        $this->loadModel('testcase');
+        $this->view->title      = $lib->name . $this->lang->colon . $this->lang->testsuite->view;
+        $this->view->position[] = html::a($this->createLink('testsuite', 'library', "libID=$libID"), $lib->name);
+        $this->view->position[] = $this->lang->testsuite->common;
+        $this->view->position[] = $this->lang->testsuite->view;
+
+        $this->view->lib      = $lib;
+        $this->view->actions  = $this->loadModel('action')->getList('testlib', $libID);
+        $this->display();
+    }
+
+    public function ajaxGetDropMenu($libID, $module, $method, $extra)
+    {
+        $this->view->link      = $this->testsuite->getLibLink($module, $method, $extra);
+        $this->view->libID     = $libID;
+        $this->view->module    = $module;
+        $this->view->method    = $method;
+        $this->view->extra     = $extra;
+        $this->view->libraries = $this->testsuite->getLibraries();
+        $this->display();
+    }
+
+    /**
+     * The results page of search.
+     * 
+     * @param  string  $keywords 
+     * @param  string  $module 
+     * @param  string  $method 
+     * @param  mix     $extra 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
+    {
+        $libraries = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('deleted')->eq(0)->andWhere('name')->like("%$keywords%")->andWhere('type')->eq('library')->orderBy('`id` desc')->fetchAll();
+        $this->view->link      = $this->testsuite->getLibLink($module, $method, $extra);
+        $this->view->libraries = $libraries;
+        $this->view->keywords  = $keywords;
+        $this->display();
     }
 }

@@ -45,15 +45,6 @@ foreach(explode(',', $showFields) as $field)
     </thead>
     <tbody>
       <?php foreach($caseIDList as $caseID):?>
-      <?php
-      if(!$productID)
-      {
-          $product = $this->product->getByID($cases[$caseID]->product);
-          $modules = $this->tree->getOptionMenu($cases[$caseID]->product, $viewType = 'case', $startModuleID = 0);
-          foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $product->name . $moduleName;
-          $modules = array('ditto' => $this->lang->testcase->ditto) + $modules;
-      }
-      ?>
       <tr class='text-center'>
         <td><?php echo $caseID . html::hidden("caseIDList[$caseID]", $caseID);?></td>
         <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>   <?php echo html::select("pris[$caseID]",     $priList, $cases[$caseID]->pri, 'class=form-control');?></td>

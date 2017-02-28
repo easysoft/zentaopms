@@ -43,7 +43,40 @@ class testsuiteModel extends model
         setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot);
         $currentProduct = $this->product->getById($productID);
         $output = "<a id='currentItem' href=\"javascript:showDropMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+        if($currentProduct->type != 'normal')
+        {
+            $this->app->loadLang('branch');
+            $branchName = $this->lang->branch->all . $this->lang->product->branchName[$currentProduct->type];
+            $output .= '</li><li>';
+            $output .= "<a id='currentBranch'>{$branchName} <i class='icon icon-caret-right'></i></a> ";
+        }
         return $output;
+    }
+
+    public function setLibMenu($libraries, $libID)
+    {
+        $currentLibName = zget($libraries, $libID, '');
+        $selectHtml = empty($libraries) ? '' : "<a id='currentItem' href=\"javascript:showDropMenu('testsuite', '$libID', 'testsuite', 'library', '')\">{$currentLibName} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+        setCookie("lastTestLib", $libID, $this->config->cookieLife, $this->config->webRoot);
+        foreach($this->lang->testlib->menu as $key => $value)
+        {
+            $replace = ($key == 'lib') ? $selectHtml : '';
+            common::setMenuVars($this->lang->testlib->menu, $key, $replace);
+        }
+        $this->lang->testsuite->menu = $this->lang->testlib->menu;
+    }
+
+    public function saveLibState($libID = 0, $libraries = array())
+    {
+        if($libID > 0) $this->session->set('testLib', (int)$libID);
+        if($libID == 0 and $this->cookie->lastTestLib) $this->session->set('testLib', $this->cookie->lastTestLib);
+        if($libID == 0 and $this->session->testLib == '') $this->session->set('testLib', key($libraries));
+        if(!isset($libraries[$this->session->testLib]))
+        {
+            $this->session->set('testLib', key($libraries));
+            $libID = $this->session->testLib;
+        }
+        return $this->session->testLib;
     }
 
     /**
@@ -53,7 +86,7 @@ class testsuiteModel extends model
      * @access public
      * @return void
      */
-    function create($productID)
+    public function create($productID)
     {
         $suite = fixer::input('post')
             ->stripTags($this->config->testsuite->editor->create['id'], $this->config->allowedTags)
@@ -78,6 +111,7 @@ class testsuiteModel extends model
      * Get test suites of a product.
      * 
      * @param  int    $productID 
+     * r
      * @param  string $orderBy 
      * @param  object $pager 
      * @access public
@@ -171,31 +205,33 @@ class testsuiteModel extends model
             ->page($pager)
             ->fetchAll('id');
         if(!$append) return $cases;
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         return $this->loadModel('testcase')->appendBugAndResults($cases);
     }
 
     public function getUnlinkedCases($suite, $param = 0, $pager = null)
     {
-        if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
+        if($this->session->testsuiteQuery == false) $this->session->set('testsuiteQuery', ' 1 = 1');
         $queryID = (int)$param;
         if($queryID)
         {
             $query = $this->loadModel('search')->getQuery($queryID);
             if($query)
             {
-                $this->session->set('testcaseQuery', $query->sql);
-                $this->session->set('testcaseForm', $query->form);
+                $this->session->set('testsuiteQuery', $query->sql);
+                $this->session->set('testsuiteForm', $query->form);
             }
         }
 
-        $query = $this->session->testcaseQuery;
+        $query = $this->session->testsuiteQuery;
         $allProduct = "`product` = 'all'";
         if(strpos($query, '`product` =') === false) $query .= " AND `product` = {$suite->product}";
         if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1', $query);
 
         $linkedCases = $this->getLinkedCases($suite->id, 'id_desc', null, $append = false);
         $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
-            ->andWhere('id')->notIN($linkedCases)
+            ->andWhere('id')->notIN(array_keys($linkedCases))
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->page($pager)
@@ -205,8 +241,148 @@ class testsuiteModel extends model
 
     public function delete($suiteID, $table = '')
     {
+        $suite = $this->getById($suiteID);
         parent::delete(TABLE_TESTSUITE, $suiteID);
-        $this->dao->delete()->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->exec();
+        if($suite->type == 'library')
+        {
+            $this->dao->update(TABLE_ACTION)->set('objectType')->eq('testlib')->where('objectID')->eq($suiteID)->andWhere('objectType')->eq('testsuite')->exec();
+        }
+        else
+        {
+            $this->dao->delete()->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->exec();
+        }
         return true;
+    }
+
+    public function getLibraries()
+    {
+        return $this->dao->select("id,name")->from(TABLE_TESTSUITE)
+            ->where('product')->eq(0)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('type')->eq('library')
+            ->orderBy('id_desc')
+            ->fetchPairs('id', 'name');
+    }
+
+    public function createLib()
+    {
+        $lib = fixer::input('post')
+            ->stripTags($this->config->testsuite->editor->create['id'], $this->config->allowedTags)
+            ->setForce('type', 'library')
+            ->add('addedBy', $this->app->user->account)
+            ->add('addedDate', helper::now())
+            ->remove('uid')
+            ->get();
+        $lib = $this->loadModel('file')->processEditor($lib, $this->config->testsuite->editor->create['id'], $this->post->uid);
+        $this->dao->insert(TABLE_TESTSUITE)->data($lib)
+            ->batchcheck($this->config->testsuite->createlib->requiredFields, 'notempty')
+            ->exec();
+        if(!dao::isError())
+        {
+            $libID = $this->dao->lastInsertID();
+            $this->file->updateObjectID($this->post->uid, $libID, 'testlib');
+            return $libID;
+        }
+    }
+
+    public function getLibCases($libID, $browseType, $queryID = 0, $moduleID = 0, $sort = 'id_desc', $pager = null)
+    {
+        $moduleIdList = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
+        $browseType   = ($browseType == 'bymodule' and $this->session->libBrowseType and $this->session->libBrowseType != 'bysearch') ? $this->session->libBrowseType : $browseType;
+
+        $cases = array();
+        if($browseType == 'bymodule' or $browseType == 'all')
+        {
+            $cases = $this->dao->select('*')->from(TABLE_CASE)
+                ->where('lib')->eq((int)$libID)
+                ->beginIF($moduleIdList)->andWhere('module')->in($moduleIdList)->fi()
+                ->andWhere('deleted')->eq('0')
+                ->orderBy($sort)->page($pager)->fetchAll('id');
+        }
+        /* By search. */
+        elseif($browseType == 'bysearch')
+        {
+            if($queryID)
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+                $this->session->set('testlibQuery', ' 1 = 1');
+                if($query)
+                {
+                    $this->session->set('testlibQuery', $query->sql);
+                    $this->session->set('testlibForm', $query->form);
+                }
+            }
+            else
+            {
+                if($this->session->testlibQuery == false) $this->session->set('testlibQuery', ' 1 = 1');
+            }
+
+            $queryLibID = $libID;
+            $allLib     = "`lib` = 'all'";
+            $caseQuery  = '(' . $this->session->testlibQuery;
+            if(strpos($this->session->testlibQuery, $allLib) !== false)
+            {
+                $caseQuery = str_replace($allLib, '1', $caseQuery);
+                $queryLibID = 'all';
+            }
+            $caseQuery .= ')';
+
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
+                ->beginIF($queryLibID != 'all')->andWhere('lib')->eq((int)$libID)->fi()
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($sort)->page($pager)->fetchAll();
+
+        }
+        return $cases;
+    }
+
+    public function buildSearchForm($libID, $libraries, $queryID, $actionURL)
+    {
+        $this->config->testcase->search['fields']['lib']              = $this->lang->testcase->lib;
+        $this->config->testcase->search['params']['lib']['values']    = array('' => '', $libID => $libraries[$libID], 'all' => $this->lang->testlib->all);
+        $this->config->testcase->search['params']['lib']['operator']  = '=';
+        $this->config->testcase->search['params']['lib']['control']   = 'select';
+        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'testlib');
+        unset($this->config->testcase->search['fields']['product']);
+        unset($this->config->testcase->search['params']['product']);
+        unset($this->config->testcase->search['fields']['branch']);
+        unset($this->config->testcase->search['params']['branch']);
+        unset($this->config->testcase->search['fields']['lastRunner']);
+        unset($this->config->testcase->search['params']['lastRunner']);
+        unset($this->config->testcase->search['fields']['lastRunResult']);
+        unset($this->config->testcase->search['params']['lastRunResult']);
+        unset($this->config->testcase->search['fields']['lastRunDate']);
+        unset($this->config->testcase->search['params']['lastRunDate']);
+
+        $this->config->testcase->search['module']    = 'testlib';
+        $this->config->testcase->search['actionURL'] = $actionURL;
+        $this->config->testcase->search['queryID']   = $queryID;
+
+        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
+    }
+
+    public function getLibLink($module, $method, $extra)
+    {
+        $link = '';
+        if($module == 'testsuite')
+        {
+            if($module == 'testsuite' && ($method == 'createlib'))
+            {
+                $link = helper::createLink($module, 'library', "libID=%s");
+            }
+            else
+            {
+                $link = helper::createLink($module, $method, "libID=%s");
+            }
+        }
+        else if($module == 'tree')
+        {
+            $link = helper::createLink($module, $method, "libID=%s&type=testlib&currentModuleID=0");
+        }
+        else
+        {
+            $link = helper::createLink('testsuite', 'library', "libID=%s");
+        }
+        return $link;
     }
 }

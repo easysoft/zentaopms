@@ -62,6 +62,7 @@ $lang->action->objectTypes['todo']        = '待办';
 $lang->action->objectTypes['branch']      = '分支';
 $lang->action->objectTypes['module']      = '模块';
 $lang->action->objectTypes['testsuite']   = '套件';
+$lang->action->objectTypes['testlib']     = '公共库';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -198,6 +199,7 @@ $lang->action->search->objectTypeList['release']     = '发布';
 $lang->action->search->objectTypeList['productplan'] = '计划';
 $lang->action->search->objectTypeList['branch']      = '分支';
 $lang->action->search->objectTypeList['testsuite']   = '套件';
+$lang->action->search->objectTypeList['testlib']     = '公共库';
 
 /* 用来在动态显示中显示动作 */
 $lang->action->search->label['']                    = '';

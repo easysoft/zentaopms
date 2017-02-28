@@ -18,3 +18,5 @@ CREATE TABLE `zt_suitecase` (
   `version` smallint(5) unsigned NOT NULL,
   UNIQUE KEY `suitecase` (`suite`,`case`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+ALTER TABLE `zt_case` ADD `lib` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `branch`;
+ALTER TABLE `zt_case` ADD `fromLib` mediumint(8) unsigned NOT NULL AFTER `fromBug`;

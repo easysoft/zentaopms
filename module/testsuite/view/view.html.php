@@ -1,17 +1,16 @@
 <?php
 /**
- * The view file of case module of ZenTaoPMS.
+ * The view file of testsuite module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     case
+ * @author      Yidong Wang <yidong@cnezsoft.com>
+ * @package     testsuite
  * @version     $Id: view.html.php 4141 2013-01-18 06:15:13Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmUnlink', $lang->testsuite->confirmUnlinkCase)?>
 <div id='titlebar'>
@@ -53,12 +52,12 @@
 <div class='row-table'>
   <div class='col-main'>
     <div class='main'>
+      <form method='post' name='casesform' id='casesForm'>
       <div class='panel'>
         <div class='panel-heading'>
-          <strong><?php echo $lang->testsuite->cases?></strong>
+          <strong><?php echo $lang->testcase->common?></strong>
           <div class='panel-actions pull-right'><?php common::printIcon('testsuite', 'linkCase', "suiteID=$suite->id", $suite, 'button', 'link');?></div>
         </div>
-        <form method='post' name='casesform' id='casesForm'>
         <?php $vars = "suiteID=$suite->id&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
         <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='caseList'>
           <thead>
@@ -112,36 +111,36 @@
             <?php endforeach;?>
           </tbody>
           <?php endif;?>
-      <tfoot>
-        <tr>
-          <td colspan='9'>
-            <?php if($cases):?>
-            <div class='table-actions clearfix'>
-              <?php if($hasCheckbox) echo html::selectButton();?>
-              <div class='btn-group dropup'>
-                <?php
-                $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID");
-                $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
-                echo html::commonButton($lang->edit, $misc);
-                ?>
-                <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
-                <ul class='dropdown-menu'>
-                  <?php
-                  $actionLink = $this->createLink('testsuite', 'batchUnlinkCases', "suiteID=$suite->id");
-                  $misc       = common::hasPriv('testsuite', 'batchUnlinkCases') ? "onclick=\"setFormAction('$actionLink')\"" : "class='disabled'";
-                  echo "<li>" . html::a('javascript:;', $lang->testsuite->unlinkCase, '', $misc) . "</li>";
-                  ?>
-                </ul>
-              </div>
-            </div>
-            <?php endif;?>
-            <?php echo $pager->show();?>
-          </td>
-        </tr>
-      </tfoot>
+          <tfoot>
+            <tr>
+              <td colspan='9' style='padding-left:5px;'>
+                <?php if($cases):?>
+                <div class='table-actions clearfix'>
+                  <?php if($hasCheckbox) echo html::selectButton();?>
+                  <div class='btn-group dropup'>
+                    <?php
+                    $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID");
+                    $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+                    echo html::commonButton($lang->edit, $misc);
+                    ?>
+                    <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+                    <ul class='dropdown-menu'>
+                      <?php
+                      $actionLink = $this->createLink('testsuite', 'batchUnlinkCases', "suiteID=$suite->id");
+                      $misc       = common::hasPriv('testsuite', 'batchUnlinkCases') ? "onclick=\"setFormAction('$actionLink')\"" : "class='disabled'";
+                      echo "<li>" . html::a('javascript:;', $lang->testsuite->unlinkCase, '', $misc) . "</li>";
+                      ?>
+                    </ul>
+                  </div>
+                </div>
+                <?php endif;?>
+                <?php echo $pager->show();?>
+              </td>
+            </tr>
+          </tfoot>
         </table>
-        </form>
       </div>
+      </form>
     </div>
   </div>
   <div class='col-side'>

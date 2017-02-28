@@ -81,7 +81,7 @@
       <div class='text-center mgb-20'>
         <?php echo html::hidden('lastEditedDate', $case->lastEditedDate);?>
         <?php echo html::submitButton();?>
-        <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='btn' onclick='location.href="<?php echo $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
+        <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='btn' onclick='location.href="<?php echo $isLibCase ? $this->createLink('testsuite', 'library', "libID=$libID") : $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
       </div>
       <?php include '../../common/view/action.html.php';?>
     </div>
@@ -91,6 +91,16 @@
       <fieldset>
         <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>
         <table class='table table-form' cellpadding='0' cellspacing='0'>
+          <?php if($isLibCase):?>
+          <tr>
+            <th class='w-80px'><?php echo $lang->testcase->lib;?></th>
+            <td>
+              <div class='input-group'>
+                <?php echo html::select('lib', $libraries, $libID , "onchange='loadLibModules(this.value)' class='form-control chosen'");?>
+              </div>
+            </td>
+          </tr>
+          <?php else:?>
           <tr>
             <th class='w-80px'><?php echo $lang->testcase->product;?></th>
             <td>
@@ -100,6 +110,7 @@
               </div>
             </td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->testcase->module;?></th>
             <td>
@@ -118,11 +129,13 @@
               </div>
             </td>
           </tr>
+          <?php if(!$isLibCase):?>
           <tr>
             <th><?php echo $lang->testcase->story;?></th>
             <td class='text-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=form-control chosen');?></div>
             </td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->testcase->type;?></th>
             <td><?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, 'class=form-control');?></td>
@@ -143,6 +156,7 @@
             <th><?php echo $lang->testcase->keywords;?></th>
             <td><?php echo html::input('keywords', $case->keywords, "class='form-control' autocomplete='off'");?></td>
           </tr>
+          <?php if(!$isLibCase):?>
           <tr class='text-top'>
             <th><?php echo $lang->testcase->linkCase;?></th>
             <td>
@@ -163,6 +177,7 @@
               </ul>
             </td>
           </tr>
+          <?php endif;?>
         </table>
       </fieldset>
       <fieldset>

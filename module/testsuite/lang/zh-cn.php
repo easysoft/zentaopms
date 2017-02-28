@@ -19,7 +19,7 @@ $lang->testsuite->linkCase         = "关联用例";
 $lang->testsuite->linkVersion      = "版本";
 $lang->testsuite->unlinkCase       = "移除";
 $lang->testsuite->batchUnlinkCases = "批量移除用例";
-$lang->testsuite->cases            = '用例';
+$lang->testsuite->deleted          = '已删除';
 $lang->testsuite->pre              = '上一个';
 $lang->testsuite->next             = '下一个';
 
@@ -31,8 +31,7 @@ $lang->testsuite->author         = '访问权限';
 $lang->testsuite->addedBy        = '由谁创建';
 $lang->testsuite->addedDate      = '创建时间';
 
-$lang->testsuite->legendDesc      = '版本描述';
-$lang->testsuite->legendReport    = '测试总结';
+$lang->testsuite->legendDesc      = '描述';
 $lang->testsuite->legendBasicInfo = '基本信息';
 
 $lang->testsuite->unlinkedCases = '未关联';
@@ -45,3 +44,8 @@ $lang->testsuite->lblUnlinkCase = '移除用例';
 
 $lang->testsuite->authorList['private'] = '私有';
 $lang->testsuite->authorList['public']  = '公开';
+
+$lang->testlib->common = '公共用例库';
+$lang->testlib->create = '创建库';
+$lang->testlib->edit   = '编辑';
+$lang->testlib->all    = '所有公共库';

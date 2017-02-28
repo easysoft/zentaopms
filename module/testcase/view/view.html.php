@@ -42,17 +42,20 @@
     {
         ob_start();
 
-        echo "<div class='btn-group'>";
-        common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", '', 'button', '', '', 'runCase');
-        common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", '', 'button', '', '', 'results');
+        if(!$isLibCase)
+        {
+            echo "<div class='btn-group'>";
+            common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", '', 'button', '', '', 'runCase');
+            common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", '', 'button', '', '', 'results');
 
-        if($case->lastRunResult == 'fail') common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", '', 'button', 'bug', '', 'iframe');
-        echo '</div>';
+            if($case->lastRunResult == 'fail') common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", '', 'button', 'bug', '', 'iframe');
+            echo '</div>';
+        }
 
         echo "<div class='btn-group'>";
         common::printIcon('testcase', 'edit',"caseID=$case->id");
-        common::printCommentIcon('testcase');
-        common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", '', 'button', 'copy');
+        if(!$isLibCase) common::printCommentIcon('testcase');
+        if(!$isLibCase) common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", '', 'button', 'copy');
         common::printIcon('testcase', 'delete', "caseID=$case->id", '', 'button', '', 'hiddenwin');
         echo '</div>';
         
@@ -115,6 +118,12 @@
       <fieldset>
         <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>
         <table class='table table-data table-condensed table-borderless table-fixed'>
+        <?php if($isLibCase):?>
+          <tr>
+            <th class='w-60px'><?php echo $lang->testcase->lib;?></th>
+            <td><?php if(!common::printLink('testsuite', 'library', "libID=$case->lib", $libName)) echo $libName;?></td>
+          </tr>
+        <?php else:?>
           <tr>
             <th class='w-60px'><?php echo $lang->testcase->product;?></th>
             <td><?php if(!common::printLink('testcase', 'browse', "productID=$case->product", $productName)) echo $productName;?></td>
@@ -124,6 +133,7 @@
             <th><?php echo $lang->product->branch;?></th>
             <td><?php if(!common::printLink('testcase', 'browse', "productID=$case->product&branch=$case->branch", $branchName)) echo $branchName;?></td>
           </tr>
+          <?php endif;?>
           <?php endif;?>
           <tr>
             <th><?php echo $lang->testcase->module;?></th>
@@ -144,6 +154,7 @@
               ?>
             </td>
           </tr>
+          <?php if(!$isLibCase):?>
           <tr class='nofixed'>
             <th><?php echo $lang->testcase->story;?></th>
             <td>
@@ -158,6 +169,7 @@
               ?>
             </td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->testcase->type;?></th>
             <td><?php echo $lang->testcase->typeList[$case->type];?></td>
@@ -171,6 +183,7 @@
                   $stags = explode(',', $case->stage);
                   foreach($stags as $stage)
                   {
+                      if(empty($stage)) continue;
                       isset($lang->testcase->stageList[$stage]) ? print($lang->testcase->stageList[$stage]) : print($stage);
                       echo "<br />";
                   }
@@ -196,6 +209,7 @@
               ?>
             </td>
           </tr>
+          <?php if(!$isLibCase):?>
            <tr>
             <th><?php echo $this->app->loadLang('testtask')->testtask->lastRunTime;?></th>
             <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo $case->lastRunDate;?></td>
@@ -204,10 +218,12 @@
             <th><?php echo $this->app->loadLang('testtask')->testtask->lastRunResult;?></th>
             <td><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->testcase->keywords;?></th>
             <td><?php echo $case->keywords;?></td>
           </tr>
+          <?php if(!$isLibCase):?>
           <tr>
             <th><?php echo $lang->testcase->linkCase;?></th>
             <td>
@@ -222,9 +238,11 @@
               ?>
             </td>
           </tr>
+          <?php endif;?>
         </table>
       </fieldset>
 
+      <?php if(!$isLibCase):?>
       <fieldset>
         <legend><?php echo $lang->testcase->legendLinkBugs;?></legend>
         <table class='table table-data table-condensed table-borderless'>
@@ -249,6 +267,7 @@
           <?php endif;?>
         </table>
       </fieldset>
+      <?php endif;?>
 
       <fieldset>
         <legend><?php echo $lang->testcase->legendOpenAndEdit;?></legend>

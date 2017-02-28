@@ -54,7 +54,10 @@ class testcaseModel extends model
             ->join('stage', ',')
             ->get();
 
-        $result = $this->loadModel('common')->removeDuplicate('case', $case, "product={$case->product}");
+        $param = '';
+        if(!empty($case->lib))$param = "lib={$case->lib}";
+        if(!empty($case->product))$param = "product={$case->product}";
+        $result = $this->loadModel('common')->removeDuplicate('case', $case, $param);
         if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
         /* value of story may be showmore. */

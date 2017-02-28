@@ -17,5 +17,6 @@ $config->action->objectNameFields['todo']        = 'name';
 $config->action->objectNameFields['branch']      = 'name';
 $config->action->objectNameFields['module']      = 'name';
 $config->action->objectNameFields['testsuite']   = 'name';
+$config->action->objectNameFields['testlib']     = 'name';
 
 $config->action->commonImgSize = 870;

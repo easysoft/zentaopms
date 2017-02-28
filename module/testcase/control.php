@@ -320,7 +320,6 @@ class testcase extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->testcase->custom->createFields;
 
-        $this->view->title            = $title;
         $this->view->caseTitle        = $caseTitle;
         $this->view->position         = $position;
         $this->view->productID        = $productID;
@@ -470,11 +469,29 @@ class testcase extends control
         if(!$case) die(js::error($this->lang->notFound) . js::locate('back'));
         if($from == 'testtask') $run = $this->loadModel('testtask')->getRunByCase($taskID, $caseID);
 
-        $productID = $case->product;
-        $this->testcase->setMenu($this->products, $productID, $case->branch);
+        $isLibCase = ($case->lib and empty($case->product));
+        if($isLibCase)
+        {
+            $libraries = $this->loadModel('testsuite')->getLibraries();
+            $this->testsuite->setLibMenu($libraries, $case->lib);
+            $this->lang->testcase->menu = $this->lang->testsuite->menu;
 
-        $this->view->title      = "CASE #$case->id $case->title - " . $this->products[$productID];
-        $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+            $this->view->title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
+            $this->view->position[] = html::a($this->createLink('testsuite', 'library', "libID=$case->lib"), $libraries[$case->lib]);
+
+            $this->view->libName = $libraries[$case->lib];
+        }
+        else
+        {
+            $productID = $case->product;
+            $this->testcase->setMenu($this->products, $productID, $case->branch);
+
+            $this->view->title      = "CASE #$case->id $case->title - " . $this->products[$productID];
+            $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+
+            $this->view->productName = $this->products[$productID];
+            $this->view->branchName  = $this->session->currentProductType == 'normal' ? '' : $this->loadModel('branch')->getById($case->branch);
+        }
         $this->view->position[] = $this->lang->testcase->common;
         $this->view->position[] = $this->lang->testcase->view;
 
@@ -482,13 +499,12 @@ class testcase extends control
         $this->view->from           = $from;
         $this->view->taskID         = $taskID;
         $this->view->version        = $version ? $version : $case->version;
-        $this->view->productName    = $this->products[$productID];
-        $this->view->branchName     = $this->session->currentProductType == 'normal' ? '' : $this->loadModel('branch')->getById($case->branch);
         $this->view->modulePath     = $this->tree->getParents($case->module);
         $this->view->users          = $this->user->getPairs('noletter');
         $this->view->actions        = $this->loadModel('action')->getList('case', $caseID);
         $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
         $this->view->runID          = $from == 'testcase' ? 0 : $run->id;
+        $this->view->isLibCase      = $isLibCase;
 
         $this->display();
     }
@@ -534,27 +550,47 @@ class testcase extends control
             $step->expect = '';
             $case->steps[] = $step;
         }
-        $productID       = $case->product;
-        $currentModuleID = $case->module;
-        $title           = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->edit;
-        $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+
+        $isLibCase = ($case->lib and empty($case->product));        
+        if($isLibCase)
+        {
+            $libraries = $this->loadModel('testsuite')->getLibraries();
+            $this->testsuite->setLibMenu($libraries, $case->lib);
+            $this->lang->testcase->menu = $this->lang->testsuite->menu;
+
+            $title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
+            $position[] = html::a($this->createLink('testsuite', 'library', "libID=$case->lib"), $libraries[$case->lib]);
+
+            $this->view->libID     = $case->lib;
+            $this->view->libName   = $libraries[$case->lib];
+            $this->view->libraries = $libraries;
+            $this->view->moduleOptionMenu = $this->tree->getOptionMenu($case->lib, $viewType = 'testlib', $startModuleID = 0);
+        }
+        else
+        {
+            $productID       = $case->product;
+            $title           = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->edit;
+            $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+
+            /* Set menu. */
+            $this->testcase->setMenu($this->products, $productID, $case->branch);
+
+            $this->view->productID        = $productID;
+            $this->view->branches         = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
+            $this->view->productName      = $this->products[$productID];
+            $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $case->branch);
+            $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch);
+        }
         $position[]      = $this->lang->testcase->common;
         $position[]      = $this->lang->testcase->edit;
 
-        /* Set menu. */
-        $this->testcase->setMenu($this->products, $productID, $case->branch);
-
         $this->view->title            = $title;
         $this->view->position         = $position;
-        $this->view->productID        = $productID;
-        $this->view->branches         = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
-        $this->view->productName      = $this->products[$productID];
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $case->branch);
-        $this->view->currentModuleID  = $currentModuleID;
+        $this->view->currentModuleID  = $case->module;
         $this->view->users            = $this->user->getPairs('noletter');
-        $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch);
         $this->view->case             = $case;
         $this->view->actions          = $this->loadModel('action')->getList('case', $caseID);
+        $this->view->isLibCase        = $isLibCase;
 
         $this->display();
     }
@@ -566,7 +602,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function batchEdit($productID = 0, $branch = 0)
+    public function batchEdit($productID = 0, $branch = 0, $type = 'case')
     {
         if($this->post->titles)
         {
@@ -593,16 +629,34 @@ class testcase extends control
         /* The cases of a product. */
         if($productID)
         {
-            $product = $this->product->getByID($productID);
-            $this->testcase->setMenu($this->products, $productID, $branch);
+            if($type == 'lib')
+            {
+                $libID     = $productID;
+                $libraries = $this->loadModel('testsuite')->getLibraries();
+                $this->testsuite->setLibMenu($libraries, $libID);
+                $this->lang->testcase->menu = $this->lang->testsuite->menu;
 
-            /* Set modules. */
-            $modules = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
-            $modules = array('ditto' => $this->lang->testcase->ditto) + $modules;
+                /* Set modules. */
+                $modules = $this->tree->getOptionMenu($libID, $viewType = 'testlib', $startModuleID = 0, $branch);
+                $modules = array('ditto' => $this->lang->testcase->ditto) + $modules;
 
-            $this->view->modules    = $modules;
-            $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
-            $this->view->title      = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
+                $this->view->modules    = $modules;
+                $this->view->title      = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchEdit;
+                $this->view->position[] = html::a($this->createLink('testsuite', 'library', "libID=$libID"), $libraries[$libID]);
+            }
+            else
+            {
+                $product = $this->product->getByID($productID);
+                $this->testcase->setMenu($this->products, $productID, $branch);
+
+                /* Set modules. */
+                $modules = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
+                $modules = array('ditto' => $this->lang->testcase->ditto) + $modules;
+
+                $this->view->modules    = $modules;
+                $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+                $this->view->title      = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
+            }
         }
         /* The cases of my. */
         else
