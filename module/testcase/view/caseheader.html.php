@@ -94,6 +94,7 @@
         </ul>
       </div>
       <?php common::printIcon('testcase', 'import', "productID=$productID&branch=$branch", '', 'button', '', '', 'export cboxElement iframe');?>
+      <?php common::printIcon('testcase', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID"); ?>
     </div>
     <div class='btn-group'>
       <div class='btn-group' id='createActionMenu'>

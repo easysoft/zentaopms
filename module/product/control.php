@@ -201,6 +201,7 @@ class product extends control
         $this->view->storyBugs     = $storyBugs;
         $this->view->storyCases    = $storyCases;
         $this->view->param         = $param;
+        $this->view->products      = $this->products;
         $this->display();
     }
 
@@ -573,9 +574,22 @@ class product extends control
      */
     public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
     {
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->andWhere('name')->like("%$keywords%")->orderBy('`order` desc')->fetchAll();
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->orderBy('`order` desc')->fetchAll();
+        $toPinyin = $this->product->toPinyin($products);
+
+        foreach($toPinyin as $key => $value) {
+            if(!strstr($value ,$keywords) && !strstr($key,$keywords)) {
+                unset($toPinyin[$key]);
+            }
+        }
+
         foreach($products as $key => $product)
         {
+            if(!isset($toPinyin[$product->name])) {
+                unset($products[$key]);
+                continue;
+            }
+
             if(!$this->product->checkPriv($product)) unset($products[$key]);
         }
 
