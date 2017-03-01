@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<table class='table table-data table-hover table-fixed table-striped block-product'>
+<table class='table tablesorter table-data table-hover table-fixed table-striped block-product'>
   <thead>
     <tr class='text-center'>
       <th class='text-left'><?php echo $lang->product->name;?></th>

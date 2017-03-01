@@ -16,6 +16,7 @@ $themeRoot = $webRoot . "theme/";
 if(isset($pageCSS)) css::internal($pageCSS);
 $useGuest = $this->app->user->account == 'guest';
 ?>
+<?php include '../../common/view/tablesorter.html.php';?>
 <div class='dashboard' id='dashboard' data-confirm-remove-block='<?php  echo $lang->block->confirmRemoveBlock;?>'>
   <div class='dashboard-actions'><a href='<?php echo $this->createLink("block", "admin", "id=0&module=$module"); ?>' data-toggle='modal' data-type='ajax' data-width='700' data-title='<?php echo $lang->block->createBlock?>'><i class='icon icon-plus' title='<?php echo $lang->block->createBlock?>' data-toggle='tooltip' data-placement='left'></i></a></div>
   <div class='dashboard-empty-message hide'>
@@ -51,7 +52,6 @@ $useGuest = $this->app->user->account == 'guest';
     </div>
     <?php endforeach;?>
   </div>
-
 </div>
 <script>
 config.ordersSaved = '<?php echo $lang->block->ordersSaved; ?>';

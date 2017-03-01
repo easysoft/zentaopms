@@ -10,7 +10,7 @@
  * @link        http://www.ranzhi.org
  */
 ?>
-<table class='table table-data table-hover block-todo table-fixed'>
+<table class='table tablesorter table-data table-hover block-todo table-fixed'>
   <thead>
   <tr>
     <th width='90'><?php echo $lang->todo->date?></th>

@@ -10,7 +10,7 @@
  * @link        http://www.ranzhi.org
  */
 ?>
-<table class='table table-data table-hover block-testtask table-fixed'>
+<table class='table tablesorter table-data table-hover block-testtask table-fixed'>
   <thead>
   <tr>
     <th width='50'><?php echo $lang->idAB?></th>
