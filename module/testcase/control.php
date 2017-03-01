@@ -187,6 +187,47 @@ class testcase extends control
     }
 
     /**
+     * The report page.
+     * 
+     * @param  int    $productID 
+     * @param  string $browseType 
+     * @param  int    $branchID
+     * @param  int    $moduleID 
+     * @access public
+     * @return void
+     */
+    public function report($productID, $browseType, $branchID, $moduleID)
+    {    
+        $this->loadModel('report');
+        $this->view->charts   = array();
+
+        if(!empty($_POST))
+        {    
+            foreach($this->post->charts as $chart)
+            {    
+                $chartFunc   = 'getDataOf' . $chart;
+                $chartData   = $this->testcase->$chartFunc();
+                $chartOption = $this->lang->testcase->report->$chart;
+                $this->testcase->mergeChartOption($chart);
+
+                $this->view->charts[$chart] = $chartOption;
+                $this->view->datas[$chart]  = $this->report->computePercent($chartData);
+            }    
+        }    
+
+        $this->testcase->setMenu($this->products, $productID, $branchID);
+        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->reportChart;
+        $this->view->position[]    = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[]    = $this->lang->testcase->reportChart;
+        $this->view->productID     = $productID;
+        $this->view->browseType    = $browseType;
+        $this->view->moduleID      = $moduleID;
+        $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
+
+        $this->display();
+    }    
+
+    /**
      * Create a test case.
      * 
      * @param  int    $productID 

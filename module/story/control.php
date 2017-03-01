@@ -1331,11 +1331,13 @@ class story extends control
             $relatedModuleIdList = array();
             $relatedStoryIdList  = array();
             $relatedPlanIdList   = array();
+            $relatedBranchIdList = array();
 
             foreach($stories as $story)
             {
                 $relatedModuleIdList[$story->module] = $story->module;
                 $relatedPlanIdList[$story->plan]     = $story->plan;
+                $relatedBranchIdList[$story->branch] = $story->branch;
 
                 /* Process related stories. */
                 $relatedStories = $story->childStories . ',' . $story->linkStories . ',' . $story->duplicateStory;
@@ -1352,6 +1354,7 @@ class story extends control
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in(@array_keys($stories))->fetchGroup('objectID');
             $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in(@array_keys($stories))->orderBy('version desc')->fetchGroup('story');
+            $relatedBranch  = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
 
             foreach($stories as $story)
             {
@@ -1378,8 +1381,9 @@ class story extends control
                     $story->verify = str_replace('&nbsp;', ' ', $story->verify);
                 }
                 /* fill some field with useful value. */
-                if(isset($products[$story->product]))              $story->product        = $products[$story->product] . "(#$story->product)";
-                if(isset($relatedModules[$story->module]))         $story->module         = $relatedModules[$story->module] . "(#$story->module)";
+                if(isset($products[$story->product]))       $story->product = $products[$story->product] . "(#$story->product)";
+                if(isset($relatedModules[$story->module]))  $story->module  = $relatedModules[$story->module] . "(#$story->module)";
+                if(isset($relatedBranch[$story->branch]))   $story->branch  = $relatedBranch[$story->branch] . "(#$story->branch)";
                 if(isset($story->plan))
                 {
                     $plans = '';
@@ -1407,7 +1411,6 @@ class story extends control
                 $story->assignedDate   = substr($story->assignedDate, 0, 10);
                 $story->lastEditedDate = substr($story->lastEditedDate, 0, 10);
                 $story->closedDate     = substr($story->closedDate, 0, 10);
-
 
                 if($story->linkStories)
                 {

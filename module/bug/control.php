@@ -1310,6 +1310,7 @@ class bug extends control
             $relatedBugIdList    = array();
             $relatedCaseIdList   = array();
             $relatedBuildIdList  = array();
+            $relatedBranchIdList = array();
 
             foreach($bugs as $bug)
             {
@@ -1318,6 +1319,7 @@ class bug extends control
                 $relatedTaskIdList[$bug->task]        = $bug->task;
                 $relatedCaseIdList[$bug->case]        = $bug->case;
                 $relatedBugIdList[$bug->duplicateBug] = $bug->duplicateBug;
+                $relatedBranchIdList[$bug->branch]    = $bug->branch;
 
                 /* Process link bugs. */
                 $linkBugs = explode(',', $bug->linkBug);
@@ -1341,6 +1343,7 @@ class bug extends control
             $relatedTasks   = $this->dao->select('id, name')->from(TABLE_TASK)->where('id')->in($relatedTaskIdList)->fetchPairs();
             $relatedBugs    = $this->dao->select('id, title')->from(TABLE_BUG)->where('id')->in($relatedBugIdList)->fetchPairs();
             $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
+            $relatedBranch  = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
             $relatedBuilds  = array('trunk' => $this->lang->trunk) + $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->in($relatedBuildIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->in(@array_keys($bugs))->fetchGroup('objectID');
 
@@ -1364,6 +1367,7 @@ class bug extends control
                 if(isset($relatedBugs[$bug->duplicateBug]))    $bug->duplicateBug  = $relatedBugs[$bug->duplicateBug] . "($bug->duplicateBug)";
                 if(isset($relatedCases[$bug->case]))           $bug->case          = $relatedCases[$bug->case] . "($bug->case)";
                 if(isset($relatedBuilds[$bug->resolvedBuild])) $bug->resolvedBuild = $relatedBuilds[$bug->resolvedBuild] . "(#$bug->resolvedBuild)";
+                if(isset($relatedBranch[$bug->branch]))        $bug->branch        = $relatedBranch[$bug->branch] . "(#$bug->branch)";
 
                 if(isset($bugLang->priList[$bug->pri]))               $bug->pri        = $bugLang->priList[$bug->pri];
                 if(isset($bugLang->typeList[$bug->type]))             $bug->type       = $bugLang->typeList[$bug->type];
