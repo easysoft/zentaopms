@@ -77,6 +77,7 @@ $lang->testcase->export             = "Export Data";
 $lang->testcase->confirmChange      = 'Confirm Case Change';
 $lang->testcase->confirmStoryChange = 'Confirm Story Change';
 $lang->testcase->copy               = 'Duplicate Case';
+$lang->testcase->group              = 'Group';
 
 $lang->testcase->new = 'New';
 
