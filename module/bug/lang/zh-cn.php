@@ -13,6 +13,7 @@
 $lang->bug->common           = 'Bug';
 $lang->bug->id               = 'Bug编号';
 $lang->bug->product          = '所属' . $lang->productCommon;
+$lang->bug->branch           = '分支/平台';
 $lang->bug->productplan      = '所属计划';
 $lang->bug->module           = '所属模块';
 $lang->bug->moduleAB         = '模块';
