@@ -86,7 +86,11 @@ function initTableHeader()
 
         $panel.toggleClass('with-fixed-header', isFixed);
         var $header = $panel.children('.table-header-fixed').toggle(isFixed);
-        if(!isFixed) return;
+        if(!isFixed)
+        {
+            $table.find('thead').css('visibility', 'visible');
+            return;
+        }
         var tableWidth = $table.width();
         if(!$header.length)
         {
