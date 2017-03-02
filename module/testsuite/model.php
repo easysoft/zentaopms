@@ -32,6 +32,17 @@ class testsuiteModel extends model
         }
     }
 
+    /**
+     * Build select string.
+     * 
+     * @param  array  $products 
+     * @param  int    $productID 
+     * @param  string $currentModule 
+     * @param  string $currentMethod 
+     * @param  string $extra 
+     * @access public
+     * @return string
+     */
     public function select($products, $productID, $currentModule, $currentMethod, $extra = '')
     {
         if(!$productID)
@@ -53,6 +64,14 @@ class testsuiteModel extends model
         return $output;
     }
 
+    /**
+     * Set library menu.
+     * 
+     * @param  array  $libraries 
+     * @param  int    $libID 
+     * @access public
+     * @return void
+     */
     public function setLibMenu($libraries, $libID)
     {
         $currentLibName = zget($libraries, $libID, '');
@@ -84,7 +103,7 @@ class testsuiteModel extends model
      * 
      * @param  int   $productID 
      * @access public
-     * @return void
+     * @return bool|int
      */
     public function create($productID)
     {
@@ -105,13 +124,13 @@ class testsuiteModel extends model
             $this->file->updateObjectID($this->post->uid, $suiteID, 'testsuite');
             return $suiteID;
         }
+        return false;
     }
 
     /**
      * Get test suites of a product.
      * 
      * @param  int    $productID 
-     * r
      * @param  string $orderBy 
      * @param  object $pager 
      * @access public
@@ -134,7 +153,7 @@ class testsuiteModel extends model
      * @param  int   $suiteID 
      * @param  bool  $setImgSize
      * @access public
-     * @return void
+     * @return object
      */
     public function getById($suiteID, $setImgSize = false)
     {
@@ -148,7 +167,7 @@ class testsuiteModel extends model
      * 
      * @param  int   $suiteID 
      * @access public
-     * @return void
+     * @return bool|array
      */
     public function update($suiteID)
     {
@@ -170,6 +189,7 @@ class testsuiteModel extends model
             $this->file->updateObjectID($this->post->uid, $suiteID, 'testsuite');
             return common::createChanges($oldSuite, $suite);
         }
+        return false;
     }
 
     /**
@@ -193,6 +213,16 @@ class testsuiteModel extends model
         }
     }
 
+    /**
+     * Get linked cases for suite.
+     * 
+     * @param  int    $suiteID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @param  bool   $append 
+     * @access public
+     * @return array
+     */
     public function getLinkedCases($suiteID, $orderBy = 'id_desc', $pager = null, $append = true)
     {
         $suite = $this->getById($suiteID);
@@ -210,6 +240,15 @@ class testsuiteModel extends model
         return $this->loadModel('testcase')->appendBugAndResults($cases);
     }
 
+    /**
+     * Get unlinked cases for suite.
+     * 
+     * @param  object $suite 
+     * @param  int    $param 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
     public function getUnlinkedCases($suite, $param = 0, $pager = null)
     {
         if($this->session->testsuiteQuery == false) $this->session->set('testsuiteQuery', ' 1 = 1');
@@ -239,6 +278,14 @@ class testsuiteModel extends model
         return $cases;
     }
 
+    /**
+     * Delete suite and library. 
+     * 
+     * @param  int    $suiteID 
+     * @param  string $table 
+     * @access public
+     * @return bool
+     */
     public function delete($suiteID, $table = '')
     {
         $suite = $this->getById($suiteID);
@@ -251,9 +298,15 @@ class testsuiteModel extends model
         {
             $this->dao->delete()->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->exec();
         }
-        return true;
+        return !dao::isError();
     }
 
+    /**
+     * Get libraries.
+     * 
+     * @access public
+     * @return array
+     */
     public function getLibraries()
     {
         return $this->dao->select("id,name")->from(TABLE_TESTSUITE)
@@ -264,6 +317,12 @@ class testsuiteModel extends model
             ->fetchPairs('id', 'name');
     }
 
+    /**
+     * Create lib.
+     * 
+     * @access public
+     * @return int
+     */
     public function createLib()
     {
         $lib = fixer::input('post')
@@ -283,8 +342,21 @@ class testsuiteModel extends model
             $this->file->updateObjectID($this->post->uid, $libID, 'testlib');
             return $libID;
         }
+        return false;
     }
 
+    /**
+     * Get lib cases.
+     * 
+     * @param  int    $libID 
+     * @param  string $browseType 
+     * @param  int    $queryID 
+     * @param  int    $moduleID 
+     * @param  string $sort 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
     public function getLibCases($libID, $browseType, $queryID = 0, $moduleID = 0, $sort = 'id_desc', $pager = null)
     {
         $moduleIdList = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
@@ -295,6 +367,7 @@ class testsuiteModel extends model
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)
                 ->where('lib')->eq((int)$libID)
+                ->andWhere('product')->eq(0)
                 ->beginIF($moduleIdList)->andWhere('module')->in($moduleIdList)->fi()
                 ->andWhere('deleted')->eq('0')
                 ->orderBy($sort)->page($pager)->fetchAll('id');
@@ -329,6 +402,7 @@ class testsuiteModel extends model
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
                 ->beginIF($queryLibID != 'all')->andWhere('lib')->eq((int)$libID)->fi()
+                ->andWhere('product')->eq(0)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($sort)->page($pager)->fetchAll();
 
@@ -336,6 +410,44 @@ class testsuiteModel extends model
         return $cases;
     }
 
+    /**
+     * Get not imported cases.
+     * 
+     * @param  int    $productID 
+     * @param  int    $libID 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getNotImportedCases($productID, $libID, $orderBy = 'id_desc', $pager = null)
+    {
+        $importedCases = $this->dao->select('fromLib')->from(TABLE_CASE)
+            ->where('product')->eq($productID)
+            ->andWhere('lib')->eq($libID)
+            ->andWhere('fromLib')->ne('')
+            ->andWhere('deleted')->eq(0)
+            ->fetchPairs('fromLib', 'fromLib');
+        return $this->dao->select('*')->from(TABLE_CASE)
+            ->where('lib')->eq($libID)
+            ->andWhere('product')->eq(0)
+            ->andWhere('id')->notIN($importedCases)
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
+     * Build search form.
+     * 
+     * @param  int    $libID 
+     * @param  array  $libraries 
+     * @param  int    $queryID 
+     * @param  string $actionURL 
+     * @access public
+     * @return void
+     */
     public function buildSearchForm($libID, $libraries, $queryID, $actionURL)
     {
         $this->config->testcase->search['fields']['lib']              = $this->lang->testcase->lib;
@@ -361,6 +473,15 @@ class testsuiteModel extends model
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
 
+    /**
+     * Get lib link.
+     * 
+     * @param  string $module 
+     * @param  string $method 
+     * @param  string $extra 
+     * @access public
+     * @return string
+     */
     public function getLibLink($module, $method, $extra)
     {
         $link = '';

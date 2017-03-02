@@ -110,8 +110,17 @@ class testcase extends control
         $this->config->testcase->search['onMenuBar'] = 'yes';
         $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL);
 
-        $showModule = !empty($this->config->datatable->testcaseBrowse->showModule) ? $this->config->datatable->testcaseBrowse->showModule : '';
-        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
+        $linkedLibs = array();
+        foreach($cases as $case)
+        {
+            if($case->lib and $case->fromLib) $linkedLibs[$case->lib] = $case->lib;
+        }
+        $showModule  = !empty($this->config->datatable->testcaseBrowse->showModule) ? $this->config->datatable->testcaseBrowse->showModule : '';
+        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule, $linkedLibs) : array();
+
+        $moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), '', $branch);
+        $libModuleTree = $this->tree->getTestLibTreeInCase('case', $productID, array('treeModel', 'createCaseLink'));
+        if($libModuleTree) $moduleTree = substr($moduleTree, 0, strrpos($moduleTree, '</ul>')) . $libModuleTree . '</ul>';
 
         /* Assign. */
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
@@ -121,7 +130,7 @@ class testcase extends control
         $this->view->product       = $this->product->getById($productID);
         $this->view->productName   = $this->products[$productID];
         $this->view->modules       = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
-        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), '', $branch);
+        $this->view->moduleTree    = $moduleTree;
         $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->moduleID      = $moduleID;
         $this->view->pager         = $pager;
@@ -360,18 +369,18 @@ class testcase extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->testcase->custom->createFields;
 
-        $this->view->caseTitle        = $caseTitle;
+        $this->view->title            = $title;
         $this->view->position         = $position;
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
         $this->view->currentModuleID  = $currentModuleID ? $currentModuleID : (isset($story->module) ? $story->module : 0);
         $this->view->stories          = $stories;
+        $this->view->caseTitle        = $caseTitle;
         $this->view->type             = $type;
         $this->view->stage            = $stage;
         $this->view->pri              = $pri;
         $this->view->storyID          = $storyID;
-        $this->view->title            = $title;
         $this->view->precondition     = $precondition;
         $this->view->keywords         = $keywords;
         $this->view->steps            = $steps;
@@ -615,10 +624,22 @@ class testcase extends control
             /* Set menu. */
             $this->testcase->setMenu($this->products, $productID, $case->branch);
 
+            $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $case->branch);
+            if($case->lib and $case->fromLib)
+            {
+                $libName    = $this->loadModel('testsuite')->getById($case->lib)->name;
+                $libModules = $this->tree->getOptionMenu($case->lib, 'testlib');
+                foreach($libModules as $moduleID => $moduleName)
+                {
+                    if($moduleID == 0) continue;
+                    $moduleOptionMenu[$moduleID] = $libName . $moduleName;
+                }
+            }
+
             $this->view->productID        = $productID;
             $this->view->branches         = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
             $this->view->productName      = $this->products[$productID];
-            $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $case->branch);
+            $this->view->moduleOptionMenu = $moduleOptionMenu;
             $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch);
         }
         $position[]      = $this->lang->testcase->common;
@@ -690,7 +711,15 @@ class testcase extends control
                 $this->testcase->setMenu($this->products, $productID, $branch);
 
                 /* Set modules. */
+                $libs = array();
+                $existModules = array();
+                foreach($cases as $case)
+                {
+                    if($case->lib and $case->fromLib) $libs[$case->lib] = $case->lib;
+                    $existModules[$case->module] = $case->module;
+                }
                 $modules = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
+                if($libs) $modules += $this->tree->getExistLibModules($libs, $existModules);
                 $modules = array('ditto' => $this->lang->testcase->ditto) + $modules;
 
                 $this->view->modules    = $modules;
@@ -1389,6 +1418,66 @@ class testcase extends control
         $this->view->title = $this->lang->testcase->bugs;
         $this->view->bugs  = $this->loadModel('bug')->getCaseBugs($runID, $caseID, $version);
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
+    }
+
+    /**
+     * Import case from lib.
+     * 
+     * @param  int    $productID 
+     * @param  int    $branch 
+     * @param  int    $libID 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
+    public function importLib($productID, $branch = 0, $libID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        if($_POST)
+        {
+            $this->testcase->importLib($productID);
+            die(js::reload('parent'));
+        }
+
+        $this->testcase->setMenu($this->products, $productID, $branch);
+
+        $libraries = $this->loadModel('testsuite')->getLibraries();
+        if(empty($libraries))
+        {
+            echo js::alert($this->lang->testcase->noLibrary);
+            die(js::locate(inlink('browse')));
+        }
+        if(empty($libID) or !isset($libraries[$libID])) $libID = key($libraries);
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
+        $libName    = $libraries[$libID];
+        $libModules = $this->tree->getOptionMenu($libID, 'testlib');
+        foreach($libModules as $moduleID => $moduleName)
+        {
+            if($moduleID == 0) continue;
+            $modules[$moduleID] = $libName . $moduleName;
+        }
+
+        $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->importFromLib;
+        $this->view->position[] = $this->lang->testcase->importFromLib;
+
+        $this->view->libraries = $libraries;
+        $this->view->libID     = $libID;
+        $this->view->productID = $productID;
+        $this->view->branch    = $branch;
+        $this->view->cases     = $this->testsuite->getNotImportedCases($productID, $libID, $orderBy, $pager);
+        $this->view->modules   = $modules;
+        $this->view->pager     = $pager;
+        $this->view->orderBy   = $orderBy;
+        $this->view->branches  = $this->loadModel('branch')->getPairs($productID);
+
         $this->display();
     }
 }

@@ -130,7 +130,7 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getModulePairs($rootID, $viewType = 'story', $showModule = 'end')
+    public function getModulePairs($rootID, $viewType = 'story', $showModule = 'end', $extra = '')
     {
         if($viewType == 'task')
         {
@@ -151,8 +151,14 @@ class treeModel extends model
         }
         else
         {
+            /* When case with libIdList then append lib modules. */
+            $modules = array();
+            if($viewType == 'case' and $extra)
+            {
+                $modules += $this->dao->select('id,name,path,short')->from(TABLE_MODULE)->where('root')->in($extra)->andWhere('type')->eq('testlib')->andWhere('deleted')->eq(0)->fetchAll('id');
+            }
             if($this->isMergeModule($rootID, $viewType)) $viewType .= ',story';
-            $modules = $this->dao->select('id,name,path,short')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->andWhere('deleted')->eq(0)->fetchAll('id');
+            $modules += $this->dao->select('id,name,path,short')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->andWhere('deleted')->eq(0)->fetchAll('id');
         }
 
         $modulePairs = array();
@@ -649,14 +655,8 @@ class treeModel extends model
         }
         else
         {
-            if(isset($treeMenu[$module->parent]) and !empty($treeMenu[$module->parent]))
-            {
-                $treeMenu[$module->parent] .= "<li>$linkHtml\n";  
-            }
-            else
-            {
-                $treeMenu[$module->parent] = "<li>$linkHtml\n";  
-            }
+            if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = "";
+            $treeMenu[$module->parent] .= "<li>$linkHtml\n";  
         }
         $treeMenu[$module->parent] .= "</li>\n"; 
     }
@@ -1495,5 +1495,101 @@ class treeModel extends model
             }
         }
         return $tree;
+    }
+
+    /**
+     * Get testlib tree in case view.
+     * 
+     * @param  string $objectType 
+     * @param  int    $objectID 
+     * @param  array  $userFunc 
+     * @access public
+     * @return string
+     */
+    public function getTestLibTreeInCase($objectType, $objectID, $userFunc)
+    {
+        if($objectType == 'case')
+        {
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->where('product')->eq($objectID)->andWhere('deleted')->eq(0)->fetchAll();
+        }
+        elseif($objectType == 'testtask')
+        {
+            $cases = $this->dao->select('t2.*')->from(TABLE_TESTRUN)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+                ->where('t1.task')->eq($objectID)
+                ->andWhere('t2.deleted')->eq(0)
+                ->fetchAll();
+        }
+        $existModules = array();
+        $libs         = array();
+        foreach($cases as $case)
+        {
+            $existModules[$case->module] = $case->module;
+            if($case->lib and $case->fromLib) $libs[$case->lib] = $case->lib;
+        }
+        if(empty($libs)) return null;
+
+        $libs        = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('type')->eq('library')->andWhere('id')->in($libs)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $moduleGroup = $this->dao->select('*')->from(TABLE_MODULE)->where('root')->in(array_keys($libs))->andWhere('type')->eq('testlib')->andWhere('deleted')->eq(0)->orderBy('grade desc, `order`')->fetchGroup('root');
+        $lastMenu    = '';
+        $keepModules = array();
+        foreach($libs as $lib)
+        {
+            if(!isset($moduleGroup[$lib->id])) continue;
+            $modules  = $moduleGroup[$lib->id];
+            $treeMenu = array();
+            foreach($modules as $module)
+            {
+                $module->root = $objectID;
+                if(!isset($existModules[$module->id]) and !isset($keepModules[$module->id])) continue;
+                $keepModules[$module->parent] = true;
+
+                $linkHtml = call_user_func($userFunc, 'case', $module, $objectType == 'testtask' ? $objectID : '');
+                if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id]))
+                {
+                    if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = '';
+                    $treeMenu[$module->parent] .= "<li class='closed'>$linkHtml";  
+                    $treeMenu[$module->parent] .= "<ul>" . $treeMenu[$module->id] . "</ul>\n";
+                }
+                else
+                {
+                    if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = "";
+                    $treeMenu[$module->parent] .= "<li>$linkHtml\n";  
+                }
+                $treeMenu[$module->parent] .= "</li>\n";
+            }
+            if(empty($treeMenu)) continue;
+            ksort($treeMenu);
+            $lastMenu .= "<li>{$lib->name}<ul>" . @array_shift($treeMenu) . "</ul></li>\n";
+        }
+        return $lastMenu;
+    }
+
+    /**
+     * Get exist lib modules 
+     * 
+     * @param  array  $libs 
+     * @param  array  $modules 
+     * @access public
+     * @return array
+     */
+    public function getExistLibModules($libs, $modules)
+    {
+        $libs = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('type')->eq('library')->andWhere('id')->in($libs)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $libModules  = $this->dao->select('*')->from(TABLE_MODULE)->where('root')->in(array_keys($libs))->andWhere('type')->eq('testlib')->andWhere('deleted')->eq(0)->andWhere('id')->in($modules)->orderBy('grade,`order`')->fetchAll();
+        $modulePath  = array();
+        foreach($libModules as $module)
+        {
+            foreach(explode(',', trim($module->path, ',')) as $moduleID)$modulePath[$moduleID] = $moduleID;
+        }
+        $allModules = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($modulePath)->fetchPairs('id', 'name');
+        $modulePairs = array();
+        foreach($libModules as $module)
+        {
+            $moduleName = $libs[$module->root]->name;
+            foreach(explode(',', trim($module->path, ',')) as $moduleID) $moduleName .= '/' . $allModules[$moduleID];
+            $modulePairs[$module->id] = $moduleName;
+        }
+        return $modulePairs;
     }
 }

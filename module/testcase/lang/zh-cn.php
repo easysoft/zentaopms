@@ -74,6 +74,8 @@ $lang->testcase->batchStoryChange   = "确认变更";
 $lang->testcase->browse             = "用例列表";
 $lang->testcase->groupCase          = "分组浏览用例";
 $lang->testcase->import             = "导入";
+$lang->testcase->importCSV          = "导入CSV";
+$lang->testcase->importFromLib      = "从库中导入";
 $lang->testcase->showImport         = "显示导入内容";
 $lang->testcase->exportTemplet      = "导出模板";
 $lang->testcase->export             = "导出数据";
@@ -156,8 +158,13 @@ $lang->testcase->buttonToList = '返回';
 $lang->testcase->errorEncode = '无数据，请选择正确的编码重新上传！';
 $lang->testcase->noFunction  = '不存在iconv和mb_convert_encoding转码方法，不能将数据转成想要的编码！';
 $lang->testcase->noRequire   = "%s行的“%s”是必填字段，不能为空";
+$lang->testcase->noLibrary   = "现在还没有公共库，请先创建！";
 
 $lang->testcase->searchStories = '键入来搜索需求';
+$lang->testcase->selectLib     = '请选择库';
+
+$lang->testcase->action = new stdclass();
+$lang->testcase->action->fromlib = array('main' => '$date, 由 <strong>$actor</strong> 从公共库 <strong>$extra</strong>导入。');
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
