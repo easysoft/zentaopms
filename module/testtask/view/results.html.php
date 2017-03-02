@@ -53,11 +53,12 @@
               <thead>
                 <tr>
                   <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
-                  <th class='w-p30'><?php echo $lang->testcase->stepDesc;?></th>
-                  <th class='w-p25'><?php echo $lang->testcase->stepExpect;?></th>
+                  <th class='w-p30 text-left'><?php echo $lang->testcase->stepDesc;?></th>
+                  <th class='w-p25 text-left'><?php echo $lang->testcase->stepExpect;?></th>
+                  <th class='w-p10 text-left'><?php echo $lang->testcase->stepVersion;?></th>
                   <th class='text-center'><?php echo $lang->testcase->result;?></th>
-                  <th class='w-p20'><?php echo $lang->testcase->real;?></th>
-                  <th class='w-60px'></th>
+                  <th class='w-p20 text-left'><?php echo $lang->testcase->real;?></th>
+                  <th class='w-50px'></th>
                 </tr>
               </thead>
               <?php 
@@ -72,6 +73,7 @@
                 <td class='w-30px text-center'><?php echo $i;?></td>
                 <td><?php if(isset($stepResult['desc'])) echo nl2br($stepResult['desc']);?></td>
                 <td><?php if(isset($stepResult['expect'])) echo nl2br($stepResult['expect']);?></td>
+                <td><?php if(isset($result->version)) echo nl2br($result->version);?></td>
                 <?php if(!empty($stepResult['result'])):?>
                 <td class='<?php echo $stepResult['result'];?> text-center'><?php echo $lang->testcase->resultList[$stepResult['result']];?></td>
                 <td><?php echo $stepResult['real'];?></td>

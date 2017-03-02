@@ -78,7 +78,7 @@
         <td class='text-right'>
           <?php
           common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
-          common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', 'list-alt', '', 'results iframe');
+          common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', 'list-alt', '', 'results iframe', false, "data-width='95%'");
           common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
           common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
 
