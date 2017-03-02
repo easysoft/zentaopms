@@ -103,65 +103,106 @@ function setStories()
 }
 
 /**
- * Delete a step row.
+ * Init testcase steps in form
  * 
- * @param  int    $rowID 
+ * @param  string selector
  * @access public
  * @return void
  */
-function deleteRow(rowID)
+function initSteps(selector)
 {
-    if($('.stepID').size() == 1) return;
-    $('#row' + rowID).remove();
-    updateStepID();
-}
-
-/**
- * Insert before the step.
- * 
- * @param  int    $rowID 
- * @access public
- * @return void
- */
-function preInsert(rowID)
-{
-    $('#row' + rowID).before(createRow());
-    updateStepID();
-}
-
-/**
- * Insert after the step.
- * 
- * @param  int    $rowID 
- * @access public
- * @return void
- */
-function postInsert(rowID)
-{
-    $('#row' + rowID).after(createRow());
-    updateStepID();
-}
-
-/**
- * Create a step row.
- * 
- * @access public
- * @return void
- */
-function createRow()
-{
-    if(newRowID == 0) newRowID = $('.stepID').size();
-    newRowID ++;
-    var newRow = "<tr class='text-center' id='row" + newRowID + "'>";
-    newRow += "<td class='stepID strong'></td>";
-    newRow += "<td><textarea name='steps[]' rows=3 class='form-control'></textarea></td>";
-    newRow += "<td><textarea name='expects[]' rows=3 class='form-control'></textarea></td>";
-    newRow += "<td class='text-left'>";
-    newRow += "<button type='button' tabindex='-1' class='addbutton btn' title='" + lblBefore + "' onclick='preInsert("  + newRowID + ")' ><i class='icon icon-double-angle-up'></i></button>";
-    newRow += "<button type='button' tabindex='-1' class='addbutton btn' title='" + lblAfter  + "' onclick='postInsert(" + newRowID + ")' ><i class='icon icon-double-angle-down'></i></button>";
-    newRow += "<button type='button' tabindex='-1' class='delbutton btn' title='" + lblDelete + "' onclick='deleteRow("  + newRowID + ")' ><i class='icon icon-remove'></i></button>";
-    newRow += "</td>";
-    return newRow;
+    if(navigator.userAgent.indexOf("Firefox") < 0)
+    {
+        $(document).on('input keyup paste change', 'textarea.autosize', function()
+        {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight + 2) + "px"; 
+        });
+    }
+    var $steps = $(selector || '#steps');
+    var $stepTemplate = $('#stepTemplate').detach().removeClass('template').attr('id', null);
+    var initSortableCallTask = null;
+    var groupNameText = $steps.data('groupName');
+    var insertStepRow = function($row, count)
+    {
+        if(count === undefined) count = 1;
+        for(var i = 0; i < count; ++i)
+        {
+            var $step = $stepTemplate.clone();
+            if($row) $row.after($step);
+            else $steps.append($step);
+            $step.addClass('step-new');
+        }
+    };
+    var toggleStepRowType = function($row, toggleisGroup)
+    {
+        if(toggleisGroup === undefined) targetIsGroup = $row.find('.step-type').is(':checked');
+        $row.toggleClass('step-group', targetIsGroup);
+        $row.find('.step-steps').toggleClass('autosize', !targetIsGroup).attr('placeholder', targetIsGroup ? groupNameText : null).focus();
+    };
+    var refreshStepsID = function()
+    {
+        var parentId = 1, childId = 0;
+        $steps.children('.step:not(.drag-shadow)').each(function(idx)
+        {
+            var $step = $(this);
+            var isGroup = $step.find('.step-type').is(':checked');
+            var stepID;
+            if(isGroup || !childId)
+            {
+                $step.removeClass('step-child');
+                stepID = parentId++;
+                $step.find('.step-id').text(stepID);
+                if(isGroup) childId = 1;
+            }
+            else
+            {
+                stepID = (parentId - 1) + '.' + (childId++);
+                $step.addClass('step-child').find('.step-child-id').text(stepID);
+            }
+            $step.find('.step-id-control').val(stepID);
+        });
+    };
+    var initSortable = function()
+    {
+        clearTimeout(initSortableCallTask);
+        initSortableCallTask = setTimeout(function()
+        {
+            var $oldSteps = $steps.children('.step');
+            var $newSteps = $oldSteps.clone();
+            $oldSteps.remove();
+            $steps.append($newSteps);
+            $steps.sortable(
+            {
+                selector: 'tr.step',
+                dragCssClass: 'drag-row',
+                trigger: '.btn-step-move',
+                finish: function(e)
+                {
+                    e.element.addClass('drop-success');
+                    setTimeout(function(){$steps.find('.drop-success').removeClass('drop-success');}, 800);
+                    refreshStepsID();
+                }
+            });
+            $steps.children('.step-new').removeClass('step-new').last().find('textarea:first').focus();
+        }, 100);
+    }
+    $steps.on('click', '.btn-step-add', function()
+    {
+        insertStepRow($(this).closest('.step'));
+        initSortable();
+        refreshStepsID();
+    }).on('click', '.btn-step-delete', function()
+    {
+        $(this).closest('.step').remove();
+        refreshStepsID();
+    }).on('change', '.step-type', function()
+    {
+        toggleStepRowType($(this).closest('.step'));
+        refreshStepsID();
+    });
+    initSortable();
+    refreshStepsID();
 }
 
 /**

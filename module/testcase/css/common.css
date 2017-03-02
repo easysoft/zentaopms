@@ -1,1 +1,21 @@
 .table-form > tbody > tr > td .btn-group-vertical > .btn {margin-left: 0!important; padding: 2px 8px}
+
+#steps .step-id {text-align: right}
+#steps .step-child-id {background-color: transparent; border: none; display: none; width: 30px; padding-left: 0; padding-right: 0; text-align: right; padding-right: 8px}
+#steps .checkbox-inline input[type="checkbox"] {top: -2px}
+#steps .btn-group .btn {padding-left: 0; padding-right: 0; min-width: 30px;}
+#steps .step-actions {width: 98px;}
+#steps .active td {transition: background-color .5s;}
+#steps .step-group .step-steps {resize: none; max-height: 30px;}
+#steps .step-group .step-expects {display: none;}
+#steps .step-child .step-child-id {display: table-cell;}
+#steps .step-child .step-id {color: transparent}
+
+#steps .btn-step-move {cursor: move}
+#steps.sortable > tr.drag-shadow {display: none}
+#steps.sortable-sorting > tr {transition: all .2s; position: relative; z-index: 5; opacity: .3;}
+#steps.sortable-sorting {cursor: move;}
+#steps.sortable-sorting > tr.drag-row {opacity: 1; z-index: 10; box-shadow: 0 2px 4px red}
+#steps.sortable-sorting > tr.drag-row + tr > td {box-shadow: inset 0 4px 2px rgba(0,0,0,.2)}
+#steps.sortable-sorting > tr.drag-row > td {background-color: #edf3fe!important}
+#steps.sortable > tr.drop-success > td {background-color: #cfe0ff; transition: background-color 2s;}

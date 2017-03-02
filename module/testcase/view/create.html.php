@@ -132,7 +132,7 @@
           <table class='table table-form mg-0' style='border: 1px solid #ddd'>
             <thead>
               <tr>
-                <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
+                <th class='w-40px text-right'><?php echo $lang->testcase->stepID;?></th>
                 <th width="45%"><?php echo $lang->testcase->stepDesc;?></th>
                 <th><?php echo $lang->testcase->stepExpect;?></th>
                 <th class='w-100px'><?php echo $lang->actions;?></th>

@@ -16,6 +16,8 @@ function getList()
 $(document).ready(function()
 {
     $("#story").chosen(defaultChosenOptions);
+    
+    initSteps();
 });
 
 
