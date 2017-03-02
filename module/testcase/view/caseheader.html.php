@@ -93,7 +93,23 @@
         ?>
         </ul>
       </div>
-      <?php common::printIcon('testcase', 'import', "productID=$productID&branch=$branch", '', 'button', '', '', 'export cboxElement iframe');?>
+      <div class='btn-group'>
+        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' id='importAction'>
+            <i class='icon-upload-alt'></i> <?php echo $lang->import ?>
+            <span class='caret'></span>
+        </button>
+        <ul class='dropdown-menu' id='importActionMenu'>
+        <?php 
+        $misc = common::hasPriv('testcase', 'import') ? "class='export'" : "class=disabled";
+        $link = common::hasPriv('testcase', 'import') ?  $this->createLink('testcase', 'import', "productID=$productID&branch=$branch") : '#';
+        echo "<li>" . html::a($link, $lang->testcase->importFile, '', $misc) . "</li>";
+
+        $misc = common::hasPriv('testcase', 'importLib') ? '' : "class=disabled";
+        $link = common::hasPriv('testcase', 'importLib') ?  $this->createLink('testcase', 'importLib', "productID=$productID&branch=$branch") : '#';
+        echo "<li>" . html::a($link, $lang->testcase->importFromLib, '', $misc) . "</li>";
+        ?>
+        </ul>
+      </div>
       <?php common::printIcon('testcase', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID"); ?>
     </div>
     <div class='btn-group'>

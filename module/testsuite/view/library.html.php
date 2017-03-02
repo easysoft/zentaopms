@@ -173,6 +173,6 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
 </div>
 <script>
 $('#module' + moduleID).addClass('active'); 
-$('#<?php echo $browseType?>Tab').addClass('active');
+$('#<?php echo $this->session->libBrowseType?>Tab').addClass('active');
 </script>
 <?php include '../../common/view/footer.html.php';?>

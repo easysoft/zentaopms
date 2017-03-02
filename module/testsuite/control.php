@@ -28,7 +28,6 @@ class testsuite extends control
      * Browse test suites. 
      * 
      * @param  int    $productID 
-     * @param  string $type 
      * @param  string $orderBy 
      * @param  int    $recTotal 
      * @param  int    $recPerPage 
@@ -102,6 +101,10 @@ class testsuite extends control
      * View a test suite.
      * 
      * @param  int    $suiteID 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
@@ -238,6 +241,10 @@ class testsuite extends control
      * Link cases to a test suite.
      * 
      * @param  int    $suiteID 
+     * @param  int    $param 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
@@ -300,7 +307,9 @@ class testsuite extends control
     /**
      * Remove a case from test suite.
      * 
+     * @param  int    $suiteID 
      * @param  int    $rowID 
+     * @param  string $confirm 
      * @access public
      * @return void
      */
@@ -345,6 +354,19 @@ class testsuite extends control
         die(js::locate($this->createLink('testsuite', 'view', "suiteID=$suiteID")));
     }
 
+    /**
+     * Show library case.
+     * 
+     * @param  int    $libID 
+     * @param  string $browseType 
+     * @param  int    $param 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
     public function library($libID = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set browse type. */
@@ -394,7 +416,6 @@ class testsuite extends control
         $showModule = !empty($this->config->datatable->testsuiteLibrary->showModule) ? $this->config->datatable->testsuiteLibrary->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($libID, 'testlib', $showModule) : array();
 
-
         $this->view->title      = $this->lang->testlib->common . $this->lang->colon . $libraries[$libID];
         $this->view->position[] = html::a($this->createLink('testsuite', 'library', "libID=$libID"), $libraries[$libID]);
 
@@ -403,6 +424,7 @@ class testsuite extends control
         $this->view->cases         = $cases;
         $this->view->orderBy       = $orderBy;
         $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->modules       = $this->tree->getOptionMenu($libID, $viewType = 'testlib', $startModuleID = 0);
         $this->view->moduleTree    = $this->tree->getTreeMenu($libID, $viewType = 'testlib', $startModuleID = 0, array('treeModel', 'createTestLibLink'), '');
         $this->view->pager         = $pager;
         $this->view->browseType    = $browseType;
@@ -414,6 +436,12 @@ class testsuite extends control
         $this->display();
     }
 
+    /**
+     * Create lib 
+     * 
+     * @access public
+     * @return void
+     */
     public function createLib()
     {
         if(!empty($_POST))
@@ -435,7 +463,15 @@ class testsuite extends control
         $this->display();
     }
 
-    public function createCase($libID, $moduleID = 0)
+    /**
+     * Create case for library.
+     * 
+     * @param  int    $libID 
+     * @param  int    $moduleID 
+     * @access public
+     * @return void
+     */
+    public function createCase($libID, $moduleID = 0, $param = 0)
     {
         if(!empty($_POST))
         {
@@ -460,11 +496,36 @@ class testsuite extends control
         $libID     = $this->testsuite->saveLibState($libID, $libraries);
         $this->testsuite->setLibMenu($libraries, $libID);
 
+        $type         = 'feature';
+        $stage        = '';
+        $pri          = 3;
+        $caseTitle    = '';
+        $precondition = '';
+        $keywords     = '';
+        $steps        = array();
+
         $this->loadModel('testcase');
-        $step = new stdclass();
-        $step->desc   = '';
-        $step->expect = '';
-        for($i = 1; $i <= $this->config->testcase->defaultSteps; $i ++) $steps[] = $step;
+        if($param)
+        {
+            $testcase     = $this->testcase->getById((int)$param);
+            $type         = $testcase->type ? $testcase->type : 'feature';
+            $stage        = $testcase->stage;
+            $pri          = $testcase->pri;
+            $storyID      = $testcase->story;
+            $caseTitle    = $testcase->title;
+            $precondition = $testcase->precondition;
+            $keywords     = $testcase->keywords;
+            $steps        = $testcase->steps;
+        }
+
+        if(count($steps) < $this->config->testcase->defaultSteps)
+        {
+            $paddingCount = $this->config->testcase->defaultSteps - count($steps);
+            $step = new stdclass();
+            $step->desc   = '';
+            $step->expect = '';
+            for($i = 1; $i <= $paddingCount; $i ++) $steps[] = $step;
+        }
 
         $this->view->title      = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->create;
         $this->view->position[] = html::a($this->createLink('testsuite', 'library', "libID=$libID"), $libraries[$libID]);
@@ -474,11 +535,24 @@ class testsuite extends control
         $this->view->libraries        = $libraries;
         $this->view->libID            = $libID;
         $this->view->currentModuleID  = (int)$moduleID;
+        $this->view->caseTitle        = $caseTitle;
+        $this->view->type             = $type;
+        $this->view->stage            = $stage;
+        $this->view->pri              = $pri;
+        $this->view->precondition     = $precondition;
+        $this->view->keywords         = $keywords;
         $this->view->steps            = $steps;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'testlib', $startModuleID = 0);
         $this->display();
     }
 
+    /**
+     * View library
+     * 
+     * @param  int    $libID 
+     * @access public
+     * @return void
+     */
     public function libView($libID)
     {
         $lib = $this->testsuite->getById($libID);
@@ -498,6 +572,16 @@ class testsuite extends control
         $this->display();
     }
 
+    /**
+     * Ajax get drop menu.
+     * 
+     * @param  int    $libID 
+     * @param  string $module 
+     * @param  string $method 
+     * @param  string $extra 
+     * @access public
+     * @return void
+     */
     public function ajaxGetDropMenu($libID, $module, $method, $extra)
     {
         $this->view->link      = $this->testsuite->getLibLink($module, $method, $extra);

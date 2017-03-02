@@ -50,11 +50,11 @@
       </tr>
       <tr>
         <th><?php echo $lang->testcase->type;?></th>
-        <td><?php echo html::select('type', $lang->testcase->typeList, '', "class='form-control chosen'");?></td>
+        <td><?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
         <td style='padding-left:15px'>
           <div class='input-group'>
             <span class='input-group-addon'><?php echo $lang->testcase->stage?></span>
-            <?php echo html::select('stage[]', $lang->testcase->stageList, '', "class='form-control chosen' multiple='multiple'");?>
+            <?php echo html::select('stage[]', $lang->testcase->stageList, $stage, "class='form-control chosen' multiple='multiple'");?>
           </div>
         </td>
       </tr>
@@ -65,7 +65,7 @@
             <div class='col-table w-p100'>
               <div class='input-group w-p100'>
                 <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->testcase->colorTag ?>' data-update-text='#title'>
-                <?php echo html::input('title', '', "class='form-control' autocomplete='off'");?>
+                <?php echo html::input('title', $caseTitle, "class='form-control' autocomplete='off'");?>
               </div>
             </div>
             <div class='col-table'>
@@ -83,14 +83,14 @@
                 }
                 ?>
                 <?php if($hasCustomPri):?>
-                <?php echo html::select('pri', (array)$lang->testcase->priList, '', "class='form-control minw-80px'");?> 
+                <?php echo html::select('pri', (array)$lang->testcase->priList, $pri, "class='form-control minw-80px'");?> 
                 <?php else: ?>
                 <div class='input-group-btn dropdown-pris'>
                   <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>
                     <span class='pri-text'></span> &nbsp;<span class='caret'></span>
                   </button>
                   <ul class='dropdown-menu pull-right'></ul>
-                  <?php echo html::select('pri', (array)$lang->testcase->priList, '', "class='hide'");?>
+                  <?php echo html::select('pri', (array)$lang->testcase->priList, $pri, "class='hide'");?>
                 </div>
                 <?php endif; ?>
               </div>
@@ -100,7 +100,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->testcase->precondition;?></th>
-        <td colspan='2'><?php echo html::textarea('precondition', '', " rows='2' class='form-control'");?></td>
+        <td colspan='2'><?php echo html::textarea('precondition', $precondition, " rows='2' class='form-control'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->testcase->steps;?></th>
