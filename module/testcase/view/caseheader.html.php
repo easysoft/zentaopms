@@ -102,7 +102,7 @@
         <?php 
         $misc = common::hasPriv('testcase', 'import') ? "class='export'" : "class=disabled";
         $link = common::hasPriv('testcase', 'import') ?  $this->createLink('testcase', 'import', "productID=$productID&branch=$branch") : '#';
-        echo "<li>" . html::a($link, $lang->testcase->importCSV, '', $misc) . "</li>";
+        echo "<li>" . html::a($link, $lang->testcase->importFile, '', $misc) . "</li>";
 
         $misc = common::hasPriv('testcase', 'importLib') ? '' : "class=disabled";
         $link = common::hasPriv('testcase', 'importLib') ?  $this->createLink('testcase', 'importLib', "productID=$productID&branch=$branch") : '#';
