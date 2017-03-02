@@ -82,7 +82,7 @@
         <legend><?php echo $lang->testcase->precondition;?></legend>
         <?php echo nl2br($case->precondition);?>
       </fieldset>
-      <table class='table table-condensed table-hover table-striped'>
+      <table class='table table-condensed table-hover table-striped' id='steps'>
         <thead>
           <tr>
             <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
