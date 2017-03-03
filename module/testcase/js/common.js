@@ -132,6 +132,8 @@ function initSteps(selector)
             if($row) $row.after($step);
             else $steps.append($step);
             $step.addClass('step-new');
+            setTimeout(function(){$step.find('.step-steps').focus();}, 10);
+
         }
     };
     var toggleStepRowType = function($row, toggleisGroup)

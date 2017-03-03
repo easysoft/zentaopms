@@ -129,13 +129,13 @@
       <tr>
         <th><?php echo $lang->testcase->steps;?></th>
         <td colspan='2'>
-          <table class='table table-form mg-0' style='border: 1px solid #ddd'>
+          <table class='table table-form mg-0 table-bordered' style='border: 1px solid #ddd'>
             <thead>
               <tr>
                 <th class='w-40px text-right'><?php echo $lang->testcase->stepID;?></th>
                 <th width="45%"><?php echo $lang->testcase->stepDesc;?></th>
                 <th><?php echo $lang->testcase->stepExpect;?></th>
-                <th class='w-100px'><?php echo $lang->actions;?></th>
+                <th class='step-actions'><?php echo $lang->actions;?></th>
               </tr>
             </thead>
             <tbody id='steps' class='sortable' data-group-name='<?php echo $lang->testcase->groupName ?>'>
@@ -155,7 +155,7 @@
                 <td>
                   <textarea rows='1' class='form-control autosize step-expects' name='expects[]'></textarea>
                 </td>
-                <td>
+                <td class='step-actions'>
                   <div class='btn-group'>
                     <button type='button' class='btn btn-step-add'><i class='icon icon-plus'></i></button>
                     <button type='button' class='btn btn-step-move'><i class='icon icon-move'></i></button>
@@ -180,7 +180,7 @@
                 <td>
                   <?php echo html::textarea('expects[]', $step->expect, "rows='1' class='form-control autosize step-expects'") ?>
                 </td>
-                <td>
+                <td class='step-actions'>
                   <div class='btn-group'>
                     <button type='button' class='btn btn-step-add'><i class='icon icon-plus'></i></button>
                     <button type='button' class='btn btn-step-move'><i class='icon icon-move'></i></button>
