@@ -456,11 +456,7 @@ class testsuiteModel extends model
         $this->config->testcase->search['params']['lib']['operator']  = '=';
         $this->config->testcase->search['params']['lib']['control']   = 'select';
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'testlib');
-        if(!$this->config->testcase->needReview)
-        {
-            unset($this->lang->testcase->statusList['wait']);
-            $this->config->testcase->search['params']['status']['values'] = $this->lang->testcase->statusList;
-        }
+        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         unset($this->config->testcase->search['fields']['product']);
         unset($this->config->testcase->search['params']['product']);
         unset($this->config->testcase->search['fields']['branch']);

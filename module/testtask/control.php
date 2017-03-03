@@ -261,11 +261,7 @@ class testtask extends control
         $this->config->testcase->search['params']['product']['values'] = array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['actionURL'] = inlink('cases', "taskID=$taskID&browseType=bySearch&queryID=myQueryID");
-        if(!$this->config->testcase->needReview)
-        {
-            unset($this->lang->testcase->statusList['wait']);
-            $this->config->testcase->search['params']['status']['values'] = $this->lang->testcase->statusList;
-        }
+        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         unset($this->config->testcase->search['fields']['branch']);
         unset($this->config->testcase->search['params']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
@@ -569,11 +565,7 @@ class testtask extends control
             if($task->branch) $branches = array('' => '', $task->branch => $branches[$task->branch]);
             $this->config->testcase->search['params']['branch']['values'] = $branches;
         }
-        if(!$this->config->testcase->needReview)
-        {
-            unset($this->lang->testcase->statusList['wait']);
-            $this->config->testcase->search['params']['status']['values'] = $this->lang->testcase->statusList;
-        }
+        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
         $this->view->title      = $task->name . $this->lang->colon . $this->lang->testtask->linkCase;

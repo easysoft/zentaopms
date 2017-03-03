@@ -288,11 +288,7 @@ class testsuite extends control
             $branches = array('' => '') + $this->loadModel('branch')->getPairs($suite->product, 'noempty');
             $this->config->testcase->search['params']['branch']['values'] = $branches;
         }
-        if(!$this->config->testcase->needReview)
-        {
-            unset($this->lang->testcase->statusList['wait']);
-            $this->config->testcase->search['params']['status']['values'] = $this->lang->testcase->statusList;
-        }
+        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
         $this->view->title      = $suite->name . $this->lang->colon . $this->lang->testsuite->linkCase;

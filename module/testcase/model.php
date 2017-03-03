@@ -1113,11 +1113,7 @@ class testcaseModel extends model
             $this->config->testcase->search['fields']['branch'] = $this->lang->product->branch;
             $this->config->testcase->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty') + array('all' => $this->lang->branch->all);
         }
-        if(!$this->config->testcase->needReview)
-        {
-            unset($this->lang->testcase->statusList['wait']);
-            $this->config->testcase->search['params']['status']['values'] = $this->lang->testcase->statusList;
-        }
+        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         $this->config->testcase->search['actionURL'] = $actionURL;
         $this->config->testcase->search['queryID']   = $queryID;
 
