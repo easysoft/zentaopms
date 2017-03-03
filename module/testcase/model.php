@@ -45,7 +45,7 @@ class testcaseModel extends model
         $case = fixer::input('post')
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', $now)
-            ->add('status', 'normal')
+            ->add('status', $this->isForceReview() ? 'wait' : 'normal')
             ->add('version', 1)
             ->add('fromBug', $bugID)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
@@ -122,6 +122,7 @@ class testcaseModel extends model
 
         $this->loadModel('story');
         $storyVersions = array();
+        $isForceReview = $this->isForceReview();
         for($i = 0; $i < $batchNum; $i++)
         {
             if($cases->type[$i] != '' and $cases->title[$i] != '')
@@ -140,7 +141,7 @@ class testcaseModel extends model
                 $data[$i]->keywords     = $cases->keywords[$i];
                 $data[$i]->openedBy     = $this->app->user->account;
                 $data[$i]->openedDate   = $now;
-                $data[$i]->status       = 'normal';
+                $data[$i]->status       = $isForceReview ? 'wait' : 'normal';
                 $data[$i]->version      = 1;
 
                 $caseStory = $data[$i]->story;
@@ -189,13 +190,14 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getModuleCases($productID, $branch = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null)
+    public function getModuleCases($productID, $branch = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $browseType = '')
     {
         return $this->dao->select('t1.*, t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->where('t1.product')->eq((int)$productID)
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
+            ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
@@ -295,9 +297,9 @@ class testcaseModel extends model
 
         /* By module or all cases. */
         $cases = array();
-        if($browseType == 'bymodule' or $browseType == 'all')
+        if($browseType == 'bymodule' or $browseType == 'all' or $browseType == 'wait')
         {
-            $cases = $this->getModuleCases($productID, $branch, $modules, $sort, $pager);
+            $cases = $this->getModuleCases($productID, $branch, $modules, $sort, $pager, $browseType);
         }
         /* Cases need confirmed. */
         elseif($browseType == 'needconfirm')
@@ -510,6 +512,7 @@ class testcaseModel extends model
             ->join('stage', ',')
             ->remove('comment,steps,expects,files,labels')
             ->get();
+        if($this->isForceReview() and $stepChanged) $case->status = 'wait';
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
         {
@@ -539,6 +542,64 @@ class testcaseModel extends model
             }
             return common::createChanges($oldCase, $case);
         }
+    }
+
+    /**
+     * Review case 
+     * 
+     * @param  int    $caseID 
+     * @access public
+     * @return bool
+     */
+    public function review($caseID)
+    {
+        if($this->post->result == false)   die(js::alert($this->lang->testcase->mustChooseResult));
+
+        $oldCase = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
+        $now     = helper::now();
+        $case    = fixer::input('post')
+            ->remove('result,comment')
+            ->setDefault('reviewedDate', substr($now, 0, 10))
+            ->add('lastEditedBy', $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->setIF($this->post->result == 'pass',   'status', 'normal')
+            ->join('reviewedBy', ',')
+            ->get();
+
+        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq($caseID)->exec();
+        return true;
+    }
+
+    /**
+     * Batch review cases.
+     * 
+     * @param  array   $caseIDList 
+     * @access public
+     * @return array
+     */
+    public function batchReview($caseIdList, $result)
+    {
+        $now     = helper::now();
+        $actions = array();
+        $this->loadModel('action');
+
+        $oldCases = $this->getByList($caseIdList);
+        foreach($caseIdList as $caseID)
+        {
+            $oldCase = $oldCases[$caseID];
+            if($oldCase->status != 'wait') continue;
+
+            $case = new stdClass();
+            $case->reviewedBy     = $this->app->user->account;
+            $case->reviewedDate   = substr($now, 0, 10);
+            $case->lastEditedBy   = $this->app->user->account;
+            $case->lastEditedDate = $now;
+            if($result == 'pass') $case->status = 'normal';
+            $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq($caseID)->exec();
+            $actions[$caseID] = $this->action->create('case', $caseID, 'Reviewed', '', ucfirst($result));
+        }
+
+        return $actions;
     }
 
     /**
@@ -791,6 +852,7 @@ class testcaseModel extends model
         $action = strtolower($action);
 
         if($action == 'createbug') return $case->lastRunResult == 'fail';
+        if($action == 'review') return $case->status == 'wait';
 
         return true;
     }
@@ -854,6 +916,7 @@ class testcaseModel extends model
             $cases[$key] =$caseData;
         }
 
+        $isForceReview = $this->isForceReview();
         foreach($cases as $key => $caseData)
         {
             if(!empty($_POST['id'][$key]) and empty($_POST['insert']))
@@ -907,6 +970,7 @@ class testcaseModel extends model
                 {
                     $caseData->lastEditedBy   = $this->app->user->account;
                     $caseData->lastEditedDate = $now;
+                    if($stepChanged and $isForceReview) $caseData->status = 'wait';
                     $this->dao->update(TABLE_CASE)->data($caseData)->where('id')->eq($caseID)->autoCheck()->exec();
                     if($stepChanged)
                     {
@@ -935,6 +999,7 @@ class testcaseModel extends model
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;
                 $caseData->branch     = isset($data->branch[$key]) ? $data->branch[$key] : $branch;
+                if($isForceReview) $caseData->status = 'wait';
                 $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
 
                 if(!dao::isError())
@@ -1048,6 +1113,11 @@ class testcaseModel extends model
             $this->config->testcase->search['fields']['branch'] = $this->lang->product->branch;
             $this->config->testcase->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty') + array('all' => $this->lang->branch->all);
         }
+        if(!$this->config->testcase->needReview)
+        {
+            unset($this->lang->testcase->statusList['wait']);
+            $this->config->testcase->search['params']['status']['values'] = $this->lang->testcase->statusList;
+        }
         $this->config->testcase->search['actionURL'] = $actionURL;
         $this->config->testcase->search['queryID']   = $queryID;
 
@@ -1145,6 +1215,7 @@ class testcaseModel extends model
             case 'actions':
                 common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
                 common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', '', '', 'results iframe');
+                if($config->testcase->needReview) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'review', '', 'iframe');
                 common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
                 common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
 
@@ -1282,5 +1353,19 @@ class testcaseModel extends model
 
         /* 合并配置。*/
         foreach($commonOption->graph as $key => $value) if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
+    }
+
+    /**
+     * Check whether force review 
+     * 
+     * @access public
+     * @return void
+     */
+    public function isForceReview()
+    {
+        if(!$this->config->testcase->needReview) return false;
+        if(empty($this->config->testcase->forceReview)) return true;
+        if(strpos(",{$this->config->testcase->forceReview},", ",{$this->app->user->account},") !== false) return true;
+        return false;
     }
 }

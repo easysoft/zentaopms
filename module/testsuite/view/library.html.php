@@ -16,7 +16,7 @@ include '../../common/view/datatable.fix.html.php';
 js::set('browseType',    $browseType);
 js::set('moduleID',      $moduleID);
 js::set('confirmDelete', $lang->testsuite->confirmDelete);
-js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
+js::set('batchDelete',   $lang->testcase->confirmBatchDelete);
 ?>
 <div id='featurebar'>
   <div class='heading'>
@@ -38,7 +38,8 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
     </li>
     <?php $hasCasesPriv = common::hasPriv('testsuite', 'library'); ?>
     <?php
-    if($hasCasesPriv) echo "<li id='allTab'>" . html::a($this->inlink('library', "libID=$libID&browseType=all&param=0"), $lang->testcase->allCases) . "</li>";
+    if($hasCasesPriv) echo "<li id='allTab'>" . html::a($this->inlink('library', "libID=$libID&browseType=all"), $lang->testcase->allCases) . "</li>";
+    if($hasCasesPriv and $config->testcase->needReview) echo "<li id='waitTab'>" . html::a($this->inlink('library', "libID=$libID&browseType=wait"), $lang->testcase->statusList['wait']) . "</li>";
     echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";
     if(common::hasPriv('testsuite', 'libView')) echo '<li>' . html::a(inlink('libView', "libID=$libID"), $lang->testsuite->view) . '</li>';
     ?>
@@ -106,6 +107,7 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
         </td>
         <td>
           <?php
+          if($config->testcase->needReview) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'review', '', 'iframe');
           common::printIcon('testcase',  'edit',    "caseID=$case->id", $case, 'list');
           if(common::hasPriv('testcase', 'delete'))
           {
@@ -138,6 +140,24 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
                   $actionLink = $this->createLink('testcase', 'batchDelete', "libID=$libID");
                   $misc = common::hasPriv('testcase', 'batchDelete') ? "onclick=\"confirmBatchDelete('$actionLink')\"" : $class;
                   echo "<li>" . html::a('#', $lang->delete, '', $misc) . "</li>";
+
+                  if(common::hasPriv('testcase', 'batchReview') and $config->testcase->needReview)
+                  {
+                      echo "<li class='dropdown-submenu'>";
+                      echo html::a('javascript:;', $lang->testcase->review, '', "id='reviewItem'");
+                      echo "<ul class='dropdown-menu'>";
+                      unset($lang->testcase->reviewResultList['']);
+                      foreach($lang->testcase->reviewResultList as $key => $result)
+                      {
+                          $actionLink = $this->createLink('testcase', 'batchReview', "result=$key");
+                          echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . '</li>';
+                      }
+                      echo '</ul></li>';
+                  }
+                  elseif($config->testcase->needReview)
+                  {
+                      echo '<li>' . html::a('javascript:;', $lang->testcase->review,  '', $class) . '</li>';
+                  }
 
                   if(common::hasPriv('testcase', 'batchChangeModule'))
                   {

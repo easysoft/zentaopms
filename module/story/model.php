@@ -706,6 +706,14 @@ class storyModel extends model
         return $actions;
     }
 
+    /**
+     * Subdivide story 
+     * 
+     * @param  int    $storyID 
+     * @param  array  $stories 
+     * @access public
+     * @return int
+     */
     public function subdivide($storyID, $stories)
     {
         $now      = helper::now();

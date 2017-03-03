@@ -42,15 +42,15 @@
     {
         ob_start();
 
+        echo "<div class='btn-group'>";
         if(!$isLibCase)
         {
-            echo "<div class='btn-group'>";
             common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", '', 'button', '', '', 'runCase', false, "data-width='95%'");
             common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", '', 'button', '', '', 'results', false, "data-width='95%'");
-
-            if($case->lastRunResult == 'fail') common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", '', 'button', 'bug', '', 'iframe');
-            echo '</div>';
+            common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", $case, 'button', 'bug', '', 'iframe');
         }
+        if($config->testcase->needReview) common::printIcon('testcase', 'review', "caseID=$case->id", $case, 'button', 'review', '', 'iframe');
+        echo '</div>';
 
         echo "<div class='btn-group'>";
         common::printIcon('testcase', 'edit',"caseID=$case->id");
@@ -277,6 +277,16 @@
             <th class='w-60px'><?php echo $lang->testcase->openedBy;?></th>
             <td><?php echo $users[$case->openedBy] . $lang->at . $case->openedDate;?></td>
           </tr>
+          <?php if($config->testcase->needReview):?>
+          <tr>
+            <th><?php echo $lang->testcase->reviewedBy;?></th>
+            <td><?php $reviewedBy = explode(',', $case->reviewedBy); foreach($reviewedBy as $account) echo ' ' . $users[trim($account)]; ?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->testcase->reviewedDate;?></th>
+            <td><?php if($case->reviewedBy) echo $case->reviewedDate;?></td>
+          </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->testcase->lblLastEdited;?></th>
             <td><?php if($case->lastEditedBy) echo $users[$case->lastEditedBy] . $lang->at . $case->lastEditedDate;?></td>

@@ -62,7 +62,7 @@ EOT;
       <div class='panel-heading'>
         <strong><?php echo $lang->custom->object[$module] . $lang->arrow . $lang->custom->$module->fields[$field]?></strong>
       </div>
-      <?php if($module == 'story' and $field == 'review'):?>
+      <?php if(($module == 'story' ||$module == 'testcase') and $field == 'review'):?>
       <table class='table table-form mw-800px'>
         <tr>
           <th class='w-80px'><?php echo $lang->custom->storyReview;?></th>

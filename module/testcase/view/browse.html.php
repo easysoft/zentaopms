@@ -67,6 +67,24 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
                   $misc = common::hasPriv('testcase', 'batchDelete') ? "onclick=\"confirmBatchDelete('$actionLink')\"" : $class;
                   echo "<li>" . html::a('#', $lang->delete, '', $misc) . "</li>";
 
+                  if(common::hasPriv('testcase', 'batchReview') and $config->testcase->needReview)
+                  {
+                      echo "<li class='dropdown-submenu'>";
+                      echo html::a('javascript:;', $lang->testcase->review, '', "id='reviewItem'");
+                      echo "<ul class='dropdown-menu'>";
+                      unset($lang->testcase->reviewResultList['']);
+                      foreach($lang->testcase->reviewResultList as $key => $result)
+                      {
+                          $actionLink = $this->createLink('testcase', 'batchReview', "result=$key");
+                          echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . '</li>';
+                      }
+                      echo '</ul></li>';
+                  }
+                  elseif($config->testcase->needReview)
+                  {
+                      echo '<li>' . html::a('javascript:;', $lang->testcase->review,  '', $class) . '</li>';
+                  }
+
                   $actionLink = $this->createLink('testcase', 'batchStoryChange', "productID=$productID");
                   $misc = common::hasPriv('testcase', 'batchStoryChange') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
                   echo "<li>" . html::a('#', $lang->testcase->batchStoryChange, '', $misc) . "</li>";

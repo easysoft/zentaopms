@@ -363,12 +363,13 @@ class testsuiteModel extends model
         $browseType   = ($browseType == 'bymodule' and $this->session->libBrowseType and $this->session->libBrowseType != 'bysearch') ? $this->session->libBrowseType : $browseType;
 
         $cases = array();
-        if($browseType == 'bymodule' or $browseType == 'all')
+        if($browseType == 'bymodule' or $browseType == 'all' or $browseType == 'wait')
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)
                 ->where('lib')->eq((int)$libID)
                 ->andWhere('product')->eq(0)
                 ->beginIF($moduleIdList)->andWhere('module')->in($moduleIdList)->fi()
+                ->beginIF($browseType == 'wait')->andWhere('status')->eq($browseType)->fi()
                 ->andWhere('deleted')->eq('0')
                 ->orderBy($sort)->page($pager)->fetchAll('id');
         }
@@ -455,6 +456,11 @@ class testsuiteModel extends model
         $this->config->testcase->search['params']['lib']['operator']  = '=';
         $this->config->testcase->search['params']['lib']['control']   = 'select';
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'testlib');
+        if(!$this->config->testcase->needReview)
+        {
+            unset($this->lang->testcase->statusList['wait']);
+            $this->config->testcase->search['params']['status']['values'] = $this->lang->testcase->statusList;
+        }
         unset($this->config->testcase->search['fields']['product']);
         unset($this->config->testcase->search['params']['product']);
         unset($this->config->testcase->search['fields']['branch']);

@@ -823,7 +823,7 @@ class productModel extends model
     public function getProductLink($module, $method, $extra, $branch = false)
     {
         $link = '';
-        if(strpos('product,roadmap,bug,testcase,testtask,story,qa', $module) !== false)
+        if(strpos('product,roadmap,bug,testcase,testtask,story,qa,testsuite', $module) !== false)
         {
             if($module == 'product' && $method == 'project')
             {

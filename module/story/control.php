@@ -691,7 +691,7 @@ class story extends control
      * @access public
      * @return void
      */
-    function batchReview($result, $reason = '')
+    public function batchReview($result, $reason = '')
     {
         $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
         $actions     = $this->story->batchReview($storyIDList, $result, $reason);

@@ -45,12 +45,12 @@ class custom extends control
             unset($fieldList['newfeature']);
             unset($fieldList['trackthings']);
         }
-        if($module == 'story' && $field == 'review')
+        if(($module == 'story' || $module == 'testcase') && $field == 'review')
         {
-            $this->app->loadConfig('story');
+            $this->app->loadConfig($module);
             $this->view->users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-            $this->view->needReview   = zget($this->config->story, 'needReview', 1);
-            $this->view->forceReview  = zget($this->config->story, 'forceReview', '');
+            $this->view->needReview   = zget($this->config->$module, 'needReview', 1);
+            $this->view->forceReview  = zget($this->config->$module, 'forceReview', '');
         }
         if($module == 'task' && $field == 'hours')
         {
@@ -66,10 +66,10 @@ class custom extends control
 
         if(!empty($_POST))
         {
-            if($module == 'story' && $field == 'review')
+            if(($module == 'story' || $module == 'testcase') && $field == 'review')
             {
                 $data = fixer::input('post')->join('forceReview', ',')->get();
-                $this->loadModel('setting')->setItems('system.story', $data);
+                $this->loadModel('setting')->setItems("system.$module", $data);
             }
             elseif($module == 'task' && $field == 'hours')
             {

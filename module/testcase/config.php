@@ -2,6 +2,7 @@
 $config->testcase = new stdclass();
 $config->testcase->defaultSteps = 3;
 $config->testcase->batchCreate  = 10;
+$config->testcase->needReview   = 0;
 
 $config->testcase->create = new stdclass();
 $config->testcase->edit   = new stdclass();
@@ -9,8 +10,9 @@ $config->testcase->create->requiredFields = 'title,type';
 $config->testcase->edit->requiredFields   = 'title,type';
 
 $config->testcase->editor = new stdclass();
-$config->testcase->editor->edit = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->testcase->editor->view = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
+$config->testcase->editor->edit   = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->testcase->editor->view   = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
+$config->testcase->editor->review = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->testcase->export   = new stdclass();
 $config->testcase->export->listFields   = array('type', 'stage', 'pri', 'status');

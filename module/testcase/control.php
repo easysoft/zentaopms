@@ -384,6 +384,7 @@ class testcase extends control
         $this->view->precondition     = $precondition;
         $this->view->keywords         = $keywords;
         $this->view->steps            = $steps;
+        $this->view->users            = $this->user->getPairs('noletter|nodeleted|noclosed');
         $this->view->branch           = $branch;
         $this->view->branches         = $this->session->currentProductType != 'normal' ? $this->loadModel('branch')->getPairs($productID) : array();
 
@@ -642,6 +643,7 @@ class testcase extends control
             $this->view->moduleOptionMenu = $moduleOptionMenu;
             $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch);
         }
+        if(!$this->config->testcase->needReview) unset($this->lang->testcase->statusList['wait']);
         $position[]      = $this->lang->testcase->common;
         $position[]      = $this->lang->testcase->edit;
 
@@ -738,6 +740,7 @@ class testcase extends control
             $this->view->title      = $this->lang->testcase->batchEdit;
         }
         
+        if(!$this->config->testcase->needReview) unset($this->lang->testcase->statusList['wait']);
         /* Judge whether the editedTasks is too large and set session. */
         $showSuhosinInfo = false;
         $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($cases), count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
@@ -760,6 +763,46 @@ class testcase extends control
 
         $this->display();
    }
+
+    /**
+     * Review case.
+     * 
+     * @param  int    $caseID 
+     * @access public
+     * @return void
+     */
+    public function review($caseID)
+    {
+        if($_POST)
+        {
+            $this->testcase->review($caseID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            $result   = $this->post->result;
+            $this->loadModel('action')->create('case', $caseID, 'Reviewed', $this->post->comment, ucfirst($result));
+            die(js::locate(inlink('view', "caseID=$caseID"), 'parent.parent'));
+        }
+
+        $this->view->users   = $this->user->getPairs('noletter|nodeleted|noclosed');
+        $this->view->case    = $this->testcase->getById($caseID);
+        $this->view->actions = $this->loadModel('action')->getList('case', $caseID);
+        $this->display();
+    }
+
+    /**
+     * Batch review case.
+     * 
+     * @param  string    $result 
+     * @access public
+     * @return void
+     */
+    public function batchReview($result)
+    {
+        $caseIdList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList, 'parent'));
+        $actions    = $this->testcase->batchReview($caseIdList, $result);
+
+        if(dao::isError()) die(js::error(dao::getError()));
+        die(js::locate($this->session->caseList, 'parent'));
+    }
 
     /**
      * Delete a test case
@@ -1141,6 +1184,7 @@ class testcase extends control
     {
         if($_POST)
         {
+            if(!$this->config->testcase->needReview) unset($this->lang->testcase->statusList['wait']);
             $product = $this->loadModel('product')->getById($productID);
 
             if($product->type != 'normal') $fields['branch'] = $this->lang->product->branchName[$product->type];
@@ -1388,6 +1432,7 @@ class testcase extends control
             echo js::alert($this->lang->error->noData);
             die(js::locate($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch")));
         }
+        if(!$this->config->testcase->needReview) unset($this->lang->testcase->statusList['wait']);
 
         $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->showImport;
         $this->view->position[] = $this->lang->testcase->showImport;

@@ -32,6 +32,9 @@ $lang->testcase->linkCase         = '相关用例';
 $lang->testcase->linkCases        = '关联相关用例';
 $lang->testcase->unlinkCase       = '移除相关用例';
 $lang->testcase->stage            = '适用阶段';
+$lang->testcase->reviewedBy       = '由谁评审';
+$lang->testcase->reviewedDate     = '评审时间';
+$lang->testcase->reviewResult     = '评审结果';
 $lang->testcase->lastEditedByAB   = '修改者';
 $lang->testcase->lastEditedDateAB = '修改日期';
 $lang->testcase->lastEditedDate   = '修改日期';
@@ -65,6 +68,7 @@ $lang->testcase->create             = "建用例";
 $lang->testcase->batchCreate        = "批量添加";
 $lang->testcase->delete             = "删除用例";
 $lang->testcase->view               = "用例详情";
+$lang->testcase->review             = "评审";
 $lang->testcase->edit               = "编辑";
 $lang->testcase->batchEdit          = "批量编辑 ";
 $lang->testcase->batchChangeModule  = "批量修改模块";
@@ -140,10 +144,15 @@ $lang->testcase->stageList['system']     = '系统测试阶段';
 $lang->testcase->stageList['smoke']      = '冒烟测试阶段';
 $lang->testcase->stageList['bvt']        = '版本验证阶段';
 
+$lang->testcase->reviewResultList['']        = '';
+$lang->testcase->reviewResultList['pass']    = '确认通过';
+$lang->testcase->reviewResultList['clarify'] = '有待明确';
+
 $lang->testcase->groups['']      = '分组查看';
 $lang->testcase->groups['story'] = '需求分组';
 
 $lang->testcase->statusList['']            = '';
+$lang->testcase->statusList['wait']        = '待评审';
 $lang->testcase->statusList['normal']      = '正常';
 $lang->testcase->statusList['blocked']     = '被阻塞';
 $lang->testcase->statusList['investigate'] = '研究中';
@@ -155,19 +164,23 @@ $lang->testcase->resultList['blocked'] = '阻塞';
 
 $lang->testcase->buttonToList = '返回';
 
-$lang->testcase->errorEncode = '无数据，请选择正确的编码重新上传！';
-$lang->testcase->noFunction  = '不存在iconv和mb_convert_encoding转码方法，不能将数据转成想要的编码！';
-$lang->testcase->noRequire   = "%s行的“%s”是必填字段，不能为空";
-$lang->testcase->noLibrary   = "现在还没有公共库，请先创建！";
+$lang->testcase->errorEncode      = '无数据，请选择正确的编码重新上传！';
+$lang->testcase->noFunction       = '不存在iconv和mb_convert_encoding转码方法，不能将数据转成想要的编码！';
+$lang->testcase->noRequire        = "%s行的“%s”是必填字段，不能为空";
+$lang->testcase->noLibrary        = "现在还没有公共库，请先创建！";
+$lang->testcase->mustChooseResult = '必须选择评审结果';
 
 $lang->testcase->searchStories = '键入来搜索需求';
 $lang->testcase->selectLib     = '请选择库';
 
 $lang->testcase->action = new stdclass();
-$lang->testcase->action->fromlib = array('main' => '$date, 由 <strong>$actor</strong> 从公共库 <strong>$extra</strong>导入。');
+$lang->testcase->action->fromlib  = array('main' => '$date, 由 <strong>$actor</strong> 从公共库 <strong>$extra</strong>导入。');
+$lang->testcase->action->reviewed = array('main' => '$date, 由 <strong>$actor</strong> 记录评审结果，结果为 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
+
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
+$lang->testcase->featureBar['browse']['wait']        = '待评审';
 $lang->testcase->featureBar['browse']['group']       = '分组查看';
 $lang->testcase->featureBar['browse']['zerocase']    = '零用例需求';
 $lang->testcase->featureBar['browse']['suite']       = '套件';

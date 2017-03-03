@@ -49,6 +49,7 @@ $lang->custom->testcase->fields['typeList']   = '类型';
 $lang->custom->testcase->fields['stageList']  = '阶段';
 $lang->custom->testcase->fields['resultList'] = '执行结果';
 $lang->custom->testcase->fields['statusList'] = '状态';
+$lang->custom->testcase->fields['review']     = '评审流程';
 
 $lang->custom->testtask = new stdClass();
 $lang->custom->testtask->fields['priList']    = '优先级';

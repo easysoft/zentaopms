@@ -26,9 +26,10 @@
     echo "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
     foreach($suiteList as $suiteID => $suite)
     {
+        $active = ($type == 'bysuite' and (int)$param == $suiteID) ? "class='active'" : '';
         $suiteName = $suite->name;
         if($suite->type == 'public') $suiteName .= " <span class='label label-info'>{$lang->testsuite->authorList[$suite->type]}</span>";
-        echo "<li>" . html::a(inlink('linkCase', "taskID=$taskID&type=bysuite&param=$suiteID"), $suiteName) . "</li>";
+        echo "<li $active>" . html::a(inlink('linkCase', "taskID=$taskID&type=bysuite&param=$suiteID"), $suiteName) . "</li>";
     }
     echo "</ul></span>";
     $lang->testtask->linkCase = $lang->testtask->linkByStory;
