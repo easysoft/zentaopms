@@ -165,32 +165,46 @@ function initSteps(selector)
     };
     var initSortable = function()
     {
-        clearTimeout(initSortableCallTask);
-        initSortableCallTask = setTimeout(function()
+        var isMouseDown = false;
+        var $moveStep = null, moveOrder = 0;
+        $steps.on('mousedown', '.btn-step-move', function()
         {
-            var $oldSteps = $steps.children('.step');
-            var $newSteps = $oldSteps.clone();
-            $oldSteps.remove();
-            $steps.append($newSteps);
-            $steps.sortable(
+            isMouseDown = true;
+            $moveStep = $(this).closest('.step').addClass('drag-row');
+            
+            $(document).off('.sortable').one('mouseup.sortable', function()
             {
-                selector: 'tr.step',
-                dragCssClass: 'drag-row',
-                trigger: '.btn-step-move',
-                finish: function(e)
-                {
-                    e.element.addClass('drop-success');
-                    setTimeout(function(){$steps.find('.drop-success').removeClass('drop-success');}, 800);
-                    refreshStepsID();
-                }
+                isMouseDown = false;
+                $moveStep.removeClass('drag-row');
+                $steps.removeClass('sortable-sorting');
+                $moveStep = null;
             });
-            $steps.children('.step-new').removeClass('step-new').last().find('textarea:first').focus();
-        }, 100);
+            $steps.addClass('sortable-sorting');
+        }).on('mouseenter', '.step:not(.drag-row)', function()
+        {
+            if(!isMouseDown) return;
+            var $targetStep = $(this);
+            $steps.children('.step').each(function(idx)
+            {
+                $(this).data('order', idx);
+            });
+            moveOrder = $moveStep.data('order');
+            var targetOrder = $targetStep.data('order');
+            if(moveOrder === targetOrder) return;
+            else if(targetOrder > moveOrder)
+            {
+                $targetStep.after($moveStep);
+            }
+            else if(targetOrder < moveOrder)
+            {
+                $targetStep.before($moveStep);
+            }
+            refreshStepsID();
+        });
     }
     $steps.on('click', '.btn-step-add', function()
     {
         insertStepRow($(this).closest('.step'));
-        initSortable();
         refreshStepsID();
     }).on('click', '.btn-step-delete', function()
     {
