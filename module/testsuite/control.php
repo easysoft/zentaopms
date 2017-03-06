@@ -523,6 +523,7 @@ class testsuite extends control
         {
             $paddingCount = $this->config->testcase->defaultSteps - count($steps);
             $step = new stdclass();
+            $step->type   = 'item';
             $step->desc   = '';
             $step->expect = '';
             for($i = 1; $i <= $paddingCount; $i ++) $steps[] = $step;

@@ -49,7 +49,7 @@
         </tr>
         <tr class='result-detail hide'>
           <td colspan='7' class='pd-0'>
-            <table class='table table-condensed borderless mg-0'>
+            <table class='table table-condensed borderless mg-0 resultSteps'>
               <thead>
                 <tr>
                   <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
@@ -58,32 +58,46 @@
                   <th class='w-p10 text-left'><?php echo $lang->testcase->stepVersion;?></th>
                   <th class='text-center'><?php echo $lang->testcase->result;?></th>
                   <th class='w-p20 text-left'><?php echo $lang->testcase->real;?></th>
-                  <th class='w-50px'></th>
+                  <th class='w-80px'></th>
                 </tr>
               </thead>
               <?php 
-              $i = 1;
+              $stepId = $childId = 0;
               foreach($result->stepResults as $key => $stepResult):
               ?>
               <?php
+              if(empty($stepResult['type']))   $stepResult['type']   = 'item';
+              if(empty($stepResult['parent'])) $stepResult['parent'] = 0;
+              $stepClass = "step-{$stepResult['type']}";
+              if($stepResult['type'] == 'group' or ($stepResult['type'] == 'item' and $stepResult['parent'] == 0))
+              {
+                  $stepId++;
+                  $childId = 0;
+              }
+              if($stepResult['type'] == 'item' and $stepResult['parent'] == 0) $stepClass = 'step-group';
               $modalID   = $result->id . '-' . $key;
               $fileCount = '(' . count($stepResult['files']) . ')';
               ?>
-              <tr>
-                <td class='w-30px text-center'><?php echo $i;?></td>
-                <td><?php if(isset($stepResult['desc'])) echo nl2br($stepResult['desc']);?></td>
-                <td><?php if(isset($stepResult['expect'])) echo nl2br($stepResult['expect']);?></td>
+              <tr class='step <?php echo $stepClass?>'>
+                <td class='step-id'><?php echo $stepId;?></td>
+                <td class='text-left' <?php if($stepResult['type'] == 'group') echo "colspan='6'"?>>
+                  <div class='input-group'>
+                  <?php if($stepResult['type'] == 'item' and $stepResult['parent'] != 0) echo "<span class='step-item-id'>{$stepId}.{$childId}</span>";?>
+                  <?php if(isset($stepResult['desc'])) echo nl2br($stepResult['desc']);?>
+                  </div>
+                </td>
+                <?php if($stepResult['type'] != 'group'):?>
+                <td class='text-left'><?php if(isset($stepResult['expect'])) echo nl2br($stepResult['expect']);?></td>
                 <td><?php if(isset($result->version)) echo nl2br($result->version);?></td>
                 <?php if(!empty($stepResult['result'])):?>
                 <td class='<?php echo $stepResult['result'];?> text-center'><?php echo $lang->testcase->resultList[$stepResult['result']];?></td>
                 <td><?php echo $stepResult['real'];?></td>
                 <td class='text-center'><?php if(!empty($stepResult['files'])) echo html::a("#stepResult{$modalID}", $lang->files . $fileCount, '', "data-toggle='modal' data-type='iframe'")?></td>
-              </tr>
                 <?php else:?>
                 <td></td>
                 <td></td>
+                <?php endif; endif; $childId++;?>
               </tr>
-                <?php endif; $i++;?>
               <?php endforeach;?>
             </table>
           </td>

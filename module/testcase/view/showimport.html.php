@@ -64,9 +64,10 @@
       <?php if(isset($stepData[$key]['desc'])):?>
       <table class='w-p100 bd-0'>
       <?php foreach($stepData[$key]['desc'] as $id => $desc):?>
-        <tr>
-          <td><?php echo html::textarea("desc[$key][$id]", htmlspecialchars($desc), "class='form-control'")?></td>
-          <td><?php echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]) ? htmlspecialchars($stepData[$key]['expect'][$id]) : '', "class='form-control'")?></td>
+        <tr class='step'>
+          <td><?php echo $id . html::hidden("stepType[$key][$id]", $desc['type'])?></td>
+          <td><?php echo html::textarea("desc[$key][$id]", htmlspecialchars($desc['content']), "class='form-control'")?></td>
+          <td><?php if($desc['type'] == 'item') echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]['content']) ? htmlspecialchars($stepData[$key]['expect'][$id]['content']) : '', "class='form-control'")?></td>
         </tr>
       <?php endforeach;?>
       </table>

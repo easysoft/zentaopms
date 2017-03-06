@@ -152,7 +152,7 @@ function initSteps(selector)
             var stepID;
             if(isGroup || !childId)
             {
-                $step.removeClass('step-child');
+                $step.removeClass('step-item');
                 stepID = parentId++;
                 $step.find('.step-id').text(stepID);
                 if(isGroup) childId = 1;
@@ -160,9 +160,11 @@ function initSteps(selector)
             else
             {
                 stepID = (parentId - 1) + '.' + (childId++);
-                $step.addClass('step-child').find('.step-child-id').text(stepID);
+                $step.addClass('step-item').find('.step-item-id').text(stepID);
             }
-            $step.find('.step-id-control').val(stepID);
+            $step.find('[name^="steps["]').attr('name', "steps[" +stepID + ']');
+            $step.find('[name^="stepType["]').attr('name', "stepType[" +stepID + ']');
+            $step.find('[name^="expects["]').attr('name', "expects[" +stepID + ']');
         });
     };
     var initSortable = function()
@@ -210,6 +212,7 @@ function initSteps(selector)
         refreshStepsID();
     }).on('click', '.btn-step-delete', function()
     {
+        if($('tbody#steps tr.step').size() == 1) return false;
         $(this).closest('.step').remove();
         refreshStepsID();
     }).on('change', '.step-type', function()

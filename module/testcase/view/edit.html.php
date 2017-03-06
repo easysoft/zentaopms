@@ -53,10 +53,10 @@
             </thead>
             <tbody id='steps' class='sortable' data-group-name='<?php echo $lang->testcase->groupName ?>'>
               <tr class='template step' id='stepTemplate'>
-                <td class='step-id'><input type='hidden' name='stepID[]' class='step-id-control'></td>
+                <td class='step-id'></td>
                 <td>
                   <div class='input-group'>
-                    <span class='input-group-addon step-child-id'></span>
+                    <span class='input-group-addon step-item-id'></span>
                     <textarea rows='1' class='form-control autosize step-steps' name='steps[]'></textarea>
                     <span class="input-group-addon">
                       <label class="checkbox-inline">
@@ -65,9 +65,7 @@
                     </span>
                   </div>
                 </td>
-                <td>
-                  <textarea rows='1' class='form-control autosize step-expects' name='expects[]'></textarea>
-                </td>
+                <td><textarea rows='1' class='form-control autosize step-expects' name='expects[]'></textarea></td>
                 <td class='step-actions'>
                   <div class='btn-group'>
                     <button type='button' class='btn btn-step-add'><i class='icon icon-plus'></i></button>
@@ -78,21 +76,19 @@
               </tr>
               <?php foreach($case->steps as $stepID => $step):?>
               <tr class='step'>
-                <td class='step-id'><input type='hidden' name='stepID[]' class='step-id-control'></td>
+                <td class='step-id'></td>
                 <td>
                   <div class='input-group'>
-                    <span class='input-group-addon step-child-id'></span>
+                    <span class='input-group-addon step-item-id'></span>
                     <?php echo html::textarea('steps[]', $step->desc, "rows='1' class='form-control autosize step-steps'") ?>
                     <span class="input-group-addon">
                       <label class="checkbox-inline">
-                        <input type='checkbox' name='stepType[]' value='parent' class='step-type'> <?php echo $lang->testcase->group ?>
+                        <input type='checkbox' name='stepType[]' value='parent' class='step-type' <?php if($step->type == 'group') echo 'checked'?>> <?php echo $lang->testcase->group ?>
                       </label>
                     </span>
                   </div>
                 </td>
-                <td>
-                  <?php echo html::textarea('expects[]', $step->expect, "rows='1' class='form-control autosize step-expects'") ?>
-                </td>
+                <td><?php echo html::textarea('expects[]', $step->expect, "rows='1' class='form-control autosize step-expects'") ?></td>
                 <td class='step-actions'>
                   <div class='btn-group'>
                     <button type='button' class='btn btn-step-add'><i class='icon icon-plus'></i></button>

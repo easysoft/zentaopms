@@ -111,7 +111,7 @@
         ?>
         </ul>
       </div>
-      <?php common::printIcon('testcase', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID"); ?>
+      <?php if(!($this->moduleName == 'story' and $this->methodName == 'zerocase')) common::printIcon('testcase', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID"); ?>
     </div>
     <div class='btn-group'>
       <div class='btn-group' id='createActionMenu'>

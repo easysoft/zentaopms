@@ -20,7 +20,7 @@
 </div>
 <div class='main'>
   <form class='form-condensed' method='post' enctype='multipart/form-data'>
-    <table class='table table-bordered table-form' style='word-break:break-all'>
+    <table class='table table-bordered table-form' style='word-break:break-all' id='steps'>
       <thead>
         <tr>
           <td colspan='5' style='word-break: break-all;'><strong><?php echo $lang->testcase->precondition;?></strong> <?php echo $run->case->precondition;?></td>
@@ -38,17 +38,35 @@
       {
           $step = new stdclass();
           $step->id     = 0;
+          $step->parent = 0;
           $step->case   = $run->case->id;
+          $step->type   = 'item';
           $step->desc   = '';
           $step->expect = '';
           $run->case->steps[] = $step;
       }
+      $stepId = $childId = 0;
       ?>
       <?php foreach($run->case->steps as $key => $step):?>
-      <tr>
-        <th><?php echo $key + 1;?></th>
-        <td><?php echo nl2br($step->desc);?></td>
-        <td><?php echo nl2br($step->expect);?></td>
+      <?php
+      $stepClass = "step-{$step->type}";
+      if($step->type == 'group' or ($step->type == 'item' and $step->parent == 0))
+      {
+          $stepId++;
+          $childId = 0;
+      }
+      if($step->type == 'item' and $step->parent == 0) $stepClass = 'step-group';
+      ?>
+      <tr class='step <?php echo $stepClass?>'>
+        <th class='step-id'><?php echo $stepId;?></th>
+        <td class='text-left' <?php if($step->type == 'group') echo "colspan='4'"?>>
+          <div class='input-group'>
+          <?php if($step->type == 'item' and $step->parent != 0) echo "<span class='step-item-id'>{$stepId}.{$childId}</span>";?>
+          <?php echo nl2br($step->desc);?>
+          </div>
+        </td>
+        <?php if($step->type != 'group'):?>
+        <td class='text-left'><?php echo nl2br($step->expect);?></td>
         <td class='text-center'><?php echo html::select("steps[$step->id]", $lang->testcase->resultList, 'pass', "class='form-control'");?></td>
         <td>
           <table class='w-p100 fix-border fix-position'>
@@ -58,7 +76,9 @@
             </tr>
           </table>
         </td>
+        <?php endif;?>
       </tr>
+      <?php $childId ++;?>
       <?php endforeach;?>
       <tr class='text-center'>
         <td colspan='5'>

@@ -1,19 +1,4 @@
 var newRowID = 0;
-function createRow()
-{
-    if(newRowID == 0) newRowID = $('.stepID').size();
-    newRowID ++;
-    var newRow = "<tr class='text-center' id='row" + newRowID + "'>";
-    newRow += "<td class='stepID strong'></td>";
-    newRow += "<td><textarea name='steps[]' rows=1 class='form-control'></textarea></td>";
-    newRow += "<td><textarea name='expects[]' rows=1 class='form-control'></textarea></td>";
-    newRow += "<td class='text-left text-top'>";
-    newRow += "<button type='button' tabindex='-1' class='addbutton btn' title='" + lblBefore + "' onclick='preInsert("  + newRowID + ")' ><i class='icon icon-double-angle-up'></i></button>";
-    newRow += "<button type='button' tabindex='-1' class='addbutton btn' title='" + lblAfter  + "' onclick='postInsert(" + newRowID + ")' ><i class='icon icon-double-angle-down'></i></button>";
-    newRow += "<button type='button' tabindex='-1' class='delbutton btn' title='" + lblDelete + "' onclick='deleteRow("  + newRowID + ")' ><i class='icon icon-remove'></i></button>";
-    newRow += "</td>";
-    return newRow;
-}
 
 function loadLibModules(libID)
 {
@@ -26,43 +11,125 @@ function loadLibModules(libID)
 }
 
 /**
- * Delete a step row.
+ * Init testcase steps in form
  * 
- * @param  int    $rowID 
+ * @param  string selector
  * @access public
  * @return void
  */
-function deleteRow(rowID)
+function initSteps(selector)
 {
-    if($('.stepID').size() == 1) return;
-    $('#row' + rowID).remove();
-    updateStepID();
-}
+    if(navigator.userAgent.indexOf("Firefox") < 0)
+    {
+        $(document).on('input keyup paste change', 'textarea.autosize', function()
+        {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight + 2) + "px"; 
+        });
+    }
+    var $steps = $(selector || '#steps');
+    var $stepTemplate = $('#stepTemplate').detach().removeClass('template').attr('id', null);
+    var initSortableCallTask = null;
+    var groupNameText = $steps.data('groupName');
+    var insertStepRow = function($row, count)
+    {
+        if(count === undefined) count = 1;
+        for(var i = 0; i < count; ++i)
+        {
+            var $step = $stepTemplate.clone();
+            if($row) $row.after($step);
+            else $steps.append($step);
+            $step.addClass('step-new');
+            setTimeout(function(){$step.find('.step-steps').focus();}, 10);
 
-/**
- * Insert before the step.
- * 
- * @param  int    $rowID 
- * @access public
- * @return void
- */
-function preInsert(rowID)
-{
-    $('#row' + rowID).before(createRow());
-    updateStepID();
-}
-
-/**
- * Insert after the step.
- * 
- * @param  int    $rowID 
- * @access public
- * @return void
- */
-function postInsert(rowID)
-{
-    $('#row' + rowID).after(createRow());
-    updateStepID();
+        }
+    };
+    var toggleStepRowType = function($row, toggleisGroup)
+    {
+        if(toggleisGroup === undefined) targetIsGroup = $row.find('.step-type').is(':checked');
+        $row.toggleClass('step-group', targetIsGroup);
+        $row.find('.step-steps').toggleClass('autosize', !targetIsGroup).attr('placeholder', targetIsGroup ? groupNameText : null).focus();
+    };
+    var refreshStepsID = function()
+    {
+        var parentId = 1, childId = 0;
+        $steps.children('.step:not(.drag-shadow)').each(function(idx)
+        {
+            var $step = $(this);
+            var isGroup = $step.find('.step-type').is(':checked');
+            var stepID;
+            if(isGroup || !childId)
+            {
+                $step.removeClass('step-item');
+                stepID = parentId++;
+                $step.find('.step-id').text(stepID);
+                if(isGroup) childId = 1;
+            }
+            else
+            {
+                stepID = (parentId - 1) + '.' + (childId++);
+                $step.addClass('step-item').find('.step-item-id').text(stepID);
+            }
+            $step.find('[name^="steps["]').attr('name', "steps[" +stepID + ']');
+            $step.find('[name^="stepType["]').attr('name', "stepType[" +stepID + ']');
+            $step.find('[name^="expects["]').attr('name', "expects[" +stepID + ']');
+        });
+    };
+    var initSortable = function()
+    {
+        var isMouseDown = false;
+        var $moveStep = null, moveOrder = 0;
+        $steps.on('mousedown', '.btn-step-move', function()
+        {
+            isMouseDown = true;
+            $moveStep = $(this).closest('.step').addClass('drag-row');
+            
+            $(document).off('.sortable').one('mouseup.sortable', function()
+            {
+                isMouseDown = false;
+                $moveStep.removeClass('drag-row');
+                $steps.removeClass('sortable-sorting');
+                $moveStep = null;
+            });
+            $steps.addClass('sortable-sorting');
+        }).on('mouseenter', '.step:not(.drag-row)', function()
+        {
+            if(!isMouseDown) return;
+            var $targetStep = $(this);
+            $steps.children('.step').each(function(idx)
+            {
+                $(this).data('order', idx);
+            });
+            moveOrder = $moveStep.data('order');
+            var targetOrder = $targetStep.data('order');
+            if(moveOrder === targetOrder) return;
+            else if(targetOrder > moveOrder)
+            {
+                $targetStep.after($moveStep);
+            }
+            else if(targetOrder < moveOrder)
+            {
+                $targetStep.before($moveStep);
+            }
+            refreshStepsID();
+        });
+    }
+    $steps.on('click', '.btn-step-add', function()
+    {
+        insertStepRow($(this).closest('.step'));
+        refreshStepsID();
+    }).on('click', '.btn-step-delete', function()
+    {
+        if($('tbody#steps tr.step').size() == 1) return false;
+        $(this).closest('.step').remove();
+        refreshStepsID();
+    }).on('change', '.step-type', function()
+    {
+        toggleStepRowType($(this).closest('.step'));
+        refreshStepsID();
+    });
+    initSortable();
+    refreshStepsID();
 }
 
 /**
@@ -80,4 +147,5 @@ function updateStepID()
 $(function()
 {
     $('[data-toggle=tooltip]').tooltip();
+    initSteps();
 })

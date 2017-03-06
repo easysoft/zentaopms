@@ -192,6 +192,9 @@ class testcase extends control
         $this->view->groupBy       = $groupBy;
         $this->view->groupByList   = $groupByList;
         $this->view->cases         = $groupCases;
+        $this->view->suiteList     = $this->loadModel('testsuite')->getSuites($productID);
+        $this->view->suiteID       = 0;
+        $this->view->moduleID      = 0;
         $this->display();
     }
 
@@ -343,6 +346,7 @@ class testcase extends control
         {
             $paddingCount = $this->config->testcase->defaultSteps - count($steps);
             $step = new stdclass();
+            $step->type   = 'item';
             $step->desc   = '';
             $step->expect = '';
             for($i = 1; $i <= $paddingCount; $i ++) $steps[] = $step;
@@ -596,6 +600,7 @@ class testcase extends control
         if(empty($case->steps))
         {
             $step = new stdclass();
+            $step->type   = 'item';
             $step->desc   = '';
             $step->expect = '';
             $case->steps[] = $step;
@@ -1103,7 +1108,7 @@ class testcase extends control
             $relatedModules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($relatedModuleIdList)->fetchPairs();
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
-            $relatedSteps   = $this->dao->select('`case`, version, `desc`, expect')->from(TABLE_CASESTEP)->where('`case`')->in(@array_keys($cases))->orderBy('version desc,id')->fetchGroup('case');
+            $relatedSteps   = $this->dao->select('parent,`case`,version,type,`desc`,expect')->from(TABLE_CASESTEP)->where('`case`')->in(@array_keys($cases))->orderBy('version desc,id')->fetchGroup('case');
             $relatedModules = array('0' => '/') + $relatedModules;
 
             foreach($cases as $case)
@@ -1112,14 +1117,25 @@ class testcase extends control
                 $case->stepExpect = '';
                 if(isset($relatedSteps[$case->id]))
                 {
-                    $i = 1;
+                    $i = $childId = 0;
                     foreach($relatedSteps[$case->id] as $step)
                     {
+                        $stepId = 0;
+                        if($step->type == 'group' or ($step->type == 'item' and $step->parent == 0))
+                        {
+                            $i++;
+                            $childId = 0;
+                            $stepId  = $i;
+                        }
+                        else
+                        {
+                            $stepId = $i . '.' . $childId;
+                        }
                         if($step->version != $case->version) continue;
                         $sign = (in_array($this->post->fileType, array('html', 'xml'))) ? '<br />' : "\n";
-                        $case->stepDesc   .= $i . ". " . htmlspecialchars_decode($step->desc) . $sign;
-                        $case->stepExpect .= $i . ". " . htmlspecialchars_decode($step->expect) . $sign;
-                        $i ++;
+                        $case->stepDesc   .= $stepId . ". " . htmlspecialchars_decode($step->desc) . $sign;
+                        $case->stepExpect .= $stepId . ". " . htmlspecialchars_decode($step->expect) . $sign;
+                        $childId ++;
                     }
                 }
 
@@ -1390,30 +1406,43 @@ class testcase extends control
                     {
                         $step = trim($step);
                         if(empty($step)) continue;
-                        if(preg_match('/^([0-9]+)([.、]{1})/U', $step, $out))
+                        if(preg_match('/^(([0-9]+)\.[0-9]+)([.、]{1})/U', $step, $out))
+                        {
+                            $num     = $out[1];
+                            $parent  = $out[2];
+                            $sign    = $out[3];
+                            $signbit = $sign == '.' ? 1 : 3;
+                            $step    = trim(substr($step, strlen($num) + $signbit));
+                            if(!empty($step)) $caseStep[$num]['content'] = $step;
+                            $caseStep[$num]['type']    = 'item';
+                            $caseStep[$parent]['type'] = 'group';
+                        }
+                        elseif(preg_match('/^([0-9]+)([.、]{1})/U', $step, $out))
                         {
                             $num     = $out[1];
                             $sign    = $out[2];
                             $signbit = $sign == '.' ? 1 : 3;
-                            $step    = trim(substr($step, strpos($step, $sign) + $signbit));
-                            if(!empty($step)) $caseStep[$num] = $step;
+                            $step    = trim(substr($step, strlen($num) + $signbit));
+                            if(!empty($step)) $caseStep[$num]['content'] = $step;
+                            $caseStep[$num]['type'] = 'item';
                         }
                         elseif(isset($num))
                         {
-                            $caseStep[$num] .= "\n" . $step;
+                            $caseStep[$num]['content'] .= "\n" . $step;
                         }
                         else
                         {
                             if($field == 'stepDesc')
                             {
                                 $num = 1;
-                                $caseStep[$num] = $step;
+                                $caseStep[$num]['content'] = $step;
+                                $caseStep[$num]['type']    = 'item';
                             }
                             if($field == 'stepExpect' and isset($stepData[$row]['desc']))
                             {
                                 end($stepData[$row]['desc']);
                                 $num = key($stepData[$row]['desc']);
-                                $caseStep[$num] = $step;
+                                $caseStep[$num]['content'] = $step;
                             }
                         }
                     }
