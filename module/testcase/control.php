@@ -753,6 +753,9 @@ class testcase extends control
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
 
+        $this->loadModel('story');
+        $this->view->stories = $this->story->getProductStoryPairs($productID, $case->branch);
+
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customBatchEditFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
         $this->view->customFields = $customFields;

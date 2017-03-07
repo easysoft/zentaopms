@@ -36,11 +36,12 @@ foreach(explode(',', $showFields) as $field)
         <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden')?>'>    <?php echo $lang->priAB;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden')?>'><?php echo $lang->statusAB;?></th>
         <th class='w-150px<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->testcase->module;?></th>
+        <th><?php echo $lang->testcase->story;?></th>
         <th><?php echo $lang->testcase->title;?></th>
         <th class='w-120px'><?php echo $lang->testcase->type;?></th>
         <th class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'>    <?php echo $lang->testcase->precondition;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'><?php echo $lang->testcase->keywords;?></th>
-        <th class='w-340px<?php echo zget($visibleFields, 'stage', ' hidden')?>'>   <?php echo $lang->testcase->stage;?></th>
+        <th class='w-300px<?php echo zget($visibleFields, 'stage', ' hidden')?>'>   <?php echo $lang->testcase->stage;?></th>
       </tr>
     </thead>
     <tbody>
@@ -50,6 +51,7 @@ foreach(explode(',', $showFields) as $field)
         <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>   <?php echo html::select("pris[$caseID]",     $priList, $cases[$caseID]->pri, 'class=form-control');?></td>
         <td class='<?php echo zget($visibleFields, 'status', 'hidden')?>'><?php echo html::select("statuses[$caseID]", (array)$lang->testcase->statusList, $cases[$caseID]->status, 'class=form-control');?></td>
         <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]",  $modules,   $cases[$caseID]->module, "class='form-control chosen'");?></td>
+        <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'><?php echo html::select("stories[$caseID]",  $stories,   $cases[$caseID]->story, "class='form-control chosen'");?></td>
         <td style='overflow:visible' title='<?php echo $cases[$caseID]->title?>'>
           <div class='input-group'>
           <?php echo html::hidden("colors[$caseID]", $cases[$caseID]->color, "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->testcase->colorTag}' data-update-text='#titles\\[{$caseID}\\]'");?>
