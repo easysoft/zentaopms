@@ -1359,6 +1359,7 @@ class bugModel extends model
         {
             $run = $this->loadModel('testtask')->getRunById($result->run);
         }
+
         $title       = $run->case->title;
         $caseSteps   = $run->case->steps;
         $stepResults = unserialize($result->stepResults);
