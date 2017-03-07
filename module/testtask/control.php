@@ -723,22 +723,39 @@ class testtask extends control
         $preAndNext = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
         if(!empty($_POST))
         {
-            $this->testtask->createResult($runID);
+            $caseResult = $this->testtask->createResult($runID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            /* set cookie for ajax load caselist when close colorbox. */
-            setcookie('selfClose', 1);
+            if('pass' == $caseResult) 
+            {
+                /* set cookie for ajax load caselist when close colorbox. */
+                setcookie('selfClose', 1);
+ 
+                if($preAndNext->next)
+                {
+                    $nextRunID   = $runID ? $preAndNext->next->id : 0;
+                    $nextCaseID  = $runID ? $preAndNext->next->case : $preAndNext->next->id;
+                    $nextVersion = $preAndNext->next->version;
 
-            if($preAndNext->next)
-            {
-                $nextRunID   = $runID ? $preAndNext->next->id : 0;
-                $nextCaseID  = $runID ? $preAndNext->next->case : $preAndNext->next->id;
-                $nextVersion = $preAndNext->next->version;
-                die(js::locate(inlink('runCase', "runID=$nextRunID&caseID=$nextCaseID&version=$nextVersion")));
-            }
-            else
-            {
-                die(js::closeModal('parent'));
+                    $response['result'] = 'success';
+                    $response['next']   = 'success';
+                    $response['locate'] = inlink('runCase', "runID=$nextRunID&caseID=$nextCaseID&version=$nextVersion");
+                    die($this->send($response));
+
+                    die(js::locate(inlink('runCase', "runID=$nextRunID&caseID=$nextCaseID&version=$nextVersion")));
+                }
+                else
+                {
+                    $response['result'] = 'success';
+                    $response['locate'] = 'reload';
+                    $response['target'] = 'parent';
+                    die($this->send($response));
+                }
+            } else if('fail' == $caseResult) { 
+
+                $response['result']  = 'success';
+                $response['locate']  = $this->createLink('testtask', 'results',"runID=$runID&caseID=$caseID&version=$version");
+                die($this->send($response));
             }
         }
 

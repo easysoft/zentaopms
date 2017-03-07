@@ -41,7 +41,6 @@
     <td title="<?php echo $task->projectName . '/' . $task->buildName?>">
       <?php
       echo $task->projectName . '/'; 
-      //echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName) . '/'; 
       $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));;
       ?>
     </td>

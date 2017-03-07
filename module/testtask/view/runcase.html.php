@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
+<?php include '../../common/view/form.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['usecase']);?> <strong><?php echo $run->case->id;?></strong></span>
@@ -19,7 +20,7 @@
   </div>
 </div>
 <div class='main'>
-  <form class='form-condensed' method='post' enctype='multipart/form-data'>
+  <form class='form-condensed' method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
     <table class='table table-bordered table-form' style='word-break:break-all' id='steps'>
       <thead>
         <tr>

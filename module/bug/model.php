@@ -1359,53 +1359,47 @@ class bugModel extends model
         {
             $run = $this->loadModel('testtask')->getRunById($result->run);
         }
-        if($result and $result->caseResult == 'fail')
+        $title       = $run->case->title;
+        $caseSteps   = $run->case->steps;
+        $stepResults = unserialize($result->stepResults);
+        if($run->case->precondition != '')
         {
-            $title       = $run->case->title;
-            $caseSteps   = $run->case->steps;
-            $stepResults = unserialize($result->stepResults);
-            if($run->case->precondition != '')
-            {
-                $bugSteps = "<p>[" . $this->lang->testcase->precondition . "]</p>" . "\n" . $run->case->precondition;
-            }
-            $bugSteps .= $this->lang->bug->tplStep;
-            if(!empty($stepResults))
-            {
-                $i = 0;
-                foreach($caseSteps as $key => $step)
-                {
-                    if(!in_array($step->id, $steps)) continue;
-                    $i++;
-                    $bugSteps .= $i . '. '  . $step->desc . "<br />";
-                }
-
-                $bugSteps .= $this->lang->bug->tplResult;
-                $i = 0;
-                foreach($caseSteps as $key => $step)
-                {
-                    if(!in_array($step->id, $steps)) continue;
-                    $i++;
-                    if(empty($stepResults[$step->id]['real'])) continue;
-                    $bugSteps .= $i . '. ' . $stepResults[$step->id]['real'] . "<br />";
-                }
-
-                $bugSteps .= $this->lang->bug->tplExpect;
-                $i = 0;
-                foreach($caseSteps as $key => $step)
-                {
-                    if(!in_array($step->id, $steps)) continue;
-                    $i++;
-                    if(!$step->expect) continue;
-                    $bugSteps .= $i . '. ' . $step->expect . "<br />";
-                }
-
-            }
-            else
-            {
-                $bugSteps .= $this->lang->bug->tplResult;
-                $bugSteps .= $this->lang->bug->tplExpect;
-            }
+            $bugSteps = "<p>[" . $this->lang->testcase->precondition . "]</p>" . "\n" . $run->case->precondition;
         }
+
+        $bugSteps .= $this->lang->bug->tplStep;
+        if(!empty($stepResults))
+        {
+            $i = 0;
+            foreach($caseSteps as $key => $step)
+            {
+                if(!in_array($step->id, $steps)) continue;
+                $i++;
+                $bugSteps .= $i . '. '  . $step->desc . "<br />";
+            }
+
+            $bugSteps .= $this->lang->bug->tplResult;
+            $i = 0;
+            foreach($caseSteps as $key => $step)
+            {
+                if(!in_array($step->id, $steps)) continue;
+                $i++;
+                if(empty($stepResults[$step->id]['real'])) continue;
+                $bugSteps .= $i . '. ' . $stepResults[$step->id]['real'] . "<br />";
+            }
+
+            $bugSteps .= $this->lang->bug->tplExpect;
+            $i = 0;
+            foreach($caseSteps as $key => $step)
+            {
+                if(!in_array($step->id, $steps)) continue;
+                $i++;
+                if(!$step->expect) continue;
+                $bugSteps .= $i . '. ' . $step->expect . "<br />";
+            }
+
+        }
+            
         return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version);
     }
 

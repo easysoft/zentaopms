@@ -861,7 +861,7 @@ class testcaseModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'createbug') return $case->lastRunResult == 'fail';
+        if($action == 'createbug') return $case->caseFailCount > 0;
         if($action == 'review') return $case->status == 'wait';
 
         return true;
@@ -1263,6 +1263,7 @@ class testcaseModel extends model
         {
             $caseBugs   = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`case`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
             $results    = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`case`')->in($caseIdList)->groupBy('`case`')->fetchPairs('case', 'count');
+            $caseFailCount = $this->dao->select('`case` AS name, COUNT(*) AS value')->from(TABLE_TESTRESULT)->where('caseResult')->eq('fail')->andwhere('`case`')->in($caseIdList)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
             $stepNumber = $this->dao->select('count(distinct t1.id) as count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.`case`=t2.`id`')
                 ->where('t1.`case`')->in($caseIdList)
@@ -1285,9 +1286,10 @@ class testcaseModel extends model
         foreach($cases as $case)
         {
             $caseID = $type == 'case' ? $case->id : $case->case;
-            $case->bugs       = isset($caseBugs[$caseID])   ? $caseBugs[$caseID]   : 0;
-            $case->results    = isset($results[$caseID])    ? $results[$caseID]    : 0;
-            $case->stepNumber = isset($stepNumber[$caseID]) ? $stepNumber[$caseID] : 0;
+            $case->bugs          = isset($caseBugs[$caseID])   ? $caseBugs[$caseID]             : 0;
+            $case->results       = isset($results[$caseID])    ? $results[$caseID]              : 0;
+            $case->caseFailCount = isset($results[$caseID])    ? $caseFailCount[$caseID]->value : 0;
+            $case->stepNumber    = isset($stepNumber[$caseID]) ? $stepNumber[$caseID]           : 0;
         }
 
         return $cases;

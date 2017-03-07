@@ -42,3 +42,46 @@ function loadFilesName()
         if(fileName) $('#filesName').append("<li>" + fileName + '</li>');//Show file name.
     })
 }
+
+$(document).ready(function()
+{
+    /* First unbind ajaxForm for form.*/
+    $("form[data-type='ajax']").unbind('submit');
+    setForm();
+    
+    /* Bind ajaxForm for form again. */
+    $.ajaxForm("form[data-type='ajax']", function(response)
+    {   
+        console.info(response);
+        if(response.locate)
+        {
+            if(response.locate == 'reload' && response.target == 'parent')
+            {
+                parent.$.cookie('selfClose', 1);
+                parent.$.closeModal(null, 'this');
+            } else if(response.next) {
+                location.href = response.locate;
+            } else {
+                $('#resultsContainer').load(response.locate + " #casesResults", function()
+                {
+                    $('#tr-detail_1').show();
+                    $('.result-item').click(function()
+                    {
+                        var $this = $(this);
+                        $this.toggleClass('show-detail');
+                        var show = $this.hasClass('show-detail');
+                        $this.next('.result-detail').toggleClass('hide', !show);
+                        $this.find('.collapse-handle').toggleClass('icon-chevron-down', !show).toggleClass('icon-chevron-up', show);
+                    });
+                   
+                   $('#casesResults table caption .result-tip').html($('#resultTip').html());
+
+                   $("#submit").text('保存');
+                   $("#submit").attr({"disabled":"disabled"});
+                });   
+            }   
+        }
+    
+        return false;
+    }); 
+});
