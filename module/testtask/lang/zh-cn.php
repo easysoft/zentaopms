@@ -31,6 +31,10 @@ $lang->testtask->next             = '下一个';
 $lang->testtask->start            = "开始";
 $lang->testtask->close            = "关闭";
 $lang->testtask->wait             = "待测版本";
+$lang->testtask->blocked          = "阻塞";
+$lang->testtask->doing            = "激活";
+$lang->testtask->doingA           = "进行中版本";
+$lang->testtask->blockedA         = "被阻塞版本";
 $lang->testtask->done             = "已测版本";
 
 $lang->testtask->common         = '测试视图版本';

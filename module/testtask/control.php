@@ -438,6 +438,47 @@ class testtask extends control
     }
 
     /**
+     * doing testtask.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
+    public function doing($taskID)
+    {
+        $actions  = $this->loadModel('action')->getList('testtask', $taskID);
+
+        if(!empty($_POST))
+        {
+            $changes = $this->testtask->doing($taskID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('testtask', $taskID, 'Doinged', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            if(isonlybody()) die(js::reload('parent.parent'));
+            die(js::locate($this->createLink('testtask', 'view', "taskID=$taskID"), 'parent'));
+        }
+
+        /* Get task info. */
+        $testtask  = $this->testtask->getById($taskID);
+        $productID = $this->product->saveState($testtask->product, $this->products);
+
+        /* Set menu. */
+        $this->testtask->setMenu($this->products, $productID, $testtask->branch);
+
+        $this->view->testtask   = $testtask;
+        $this->view->title      = $testtask->name . $this->lang->colon . $this->lang->testtask->start;
+        $this->view->position[] = $this->lang->testtask->common;
+        $this->view->position[] = $this->lang->testtask->doing;
+        $this->view->actions    = $actions;
+        $this->display();
+    }
+
+    /**
      * Close testtask.
      * 
      * @param  int    $taskID 
@@ -478,6 +519,47 @@ class testtask extends control
         $this->view->actions      = $actions;
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed|nodeleted|qdfirst');
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
+        $this->display();
+    }
+
+    /**
+     * Close testtask.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
+    public function blocked($taskID)
+    {
+        $actions  = $this->loadModel('action')->getList('testtask', $taskID);
+
+        if(!empty($_POST))
+        {
+            $changes = $this->testtask->blocked($taskID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if($this->post->comment != '' or !empty($changes))
+            {
+                $actionID = $this->action->create('testtask', $taskID, 'Blocked', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            if(isonlybody()) die(js::reload('parent.parent'));
+            die(js::locate($this->createLink('testtask', 'view', "taskID=$taskID"), 'parent'));
+        }
+
+        /* Get task info. */
+        $testtask  = $this->testtask->getById($taskID);
+        $productID = $this->product->saveState($testtask->product, $this->products);
+
+        /* Set menu. */
+        $this->testtask->setMenu($this->products, $productID, $testtask->branch);
+
+        $this->view->testtask   = $testtask;
+        $this->view->title      = $testtask->name . $this->lang->colon . $this->lang->testtask->start;
+        $this->view->position[] = $this->lang->testtask->common;
+        $this->view->position[] = $this->lang->testtask->blocked;
+        $this->view->actions    = $actions;
         $this->display();
     }
 

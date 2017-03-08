@@ -226,9 +226,11 @@ $lang->block->typeList->project['undone']  = '未完成';
 $lang->block->typeList->project['isdoing'] = '进行中';
 $lang->block->typeList->project['all']     = '全部';
 
-$lang->block->typeList->testtask['wait'] = '待测版本';
-$lang->block->typeList->testtask['done'] = '已测版本';
-$lang->block->typeList->testtask['all']  = '全部';
+$lang->block->typeList->testtask['wait']    = '待测版本';
+$lang->block->typeList->testtask['doing']   = '进行中版本';
+$lang->block->typeList->testtask['blocked'] = '阻塞版本';
+$lang->block->typeList->testtask['done']    = '已测版本';
+$lang->block->typeList->testtask['all']     = '全部';
 
 $lang->block->modules['product']->moreLinkList = new stdclass();
 $lang->block->modules['product']->moreLinkList->list    = 'product|all|product=&status=%s';
