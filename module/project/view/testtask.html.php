@@ -18,7 +18,10 @@
     <?php echo html::icon($lang->icons['test']);?> <?php echo $lang->testtask->browse;?>
   </div>
   <div class='actions'>
-    <?php common::printIcon('testtask', 'create', "product=0&project=$projectID");?>
+    <?php
+    common::printIcon('testreport', 'create', "objectID=$projectID&objectType=project", '', 'button','flag');
+    common::printIcon('testtask', 'create', "product=0&project=$projectID");
+    ?>
   </div>
 </div>
 
@@ -32,7 +35,7 @@
     <th class='w-100px'><?php echo $lang->testtask->begin;?></th>
     <th class='w-100px'><?php echo $lang->testtask->end;?></th>
     <th class='w-80px'><?php echo $lang->statusAB;?></th>
-    <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
+    <th class='w-120px'><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -50,6 +53,7 @@
       common::printIcon('testtask', 'cases',    "taskID=$task->id", '', 'list', 'sitemap');
       common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list', 'link');
       common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
+      common::printIcon('testreport', 'create', "objectID=$task->id&objectType=testtask", '', 'list','flag');
 
       if(common::hasPriv('testtask', 'delete'))
       {

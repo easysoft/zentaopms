@@ -32,7 +32,7 @@
       <th class='w-100px text-left'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
       <th class='w-100px text-left'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
       <th class='w-80px text-left'> <?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
-      <th class='w-120px {sorter:false} text-left'><?php echo $lang->actions;?></th>
+      <th class='w-130px text-left'><?php echo $lang->actions;?></th>
     </tr>
   </thead>
   <tbody>
@@ -56,6 +56,7 @@
       common::printIcon('testtask', 'view',     "taskID=$task->id", '', 'list', 'file','','iframe',true);
       common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list', 'link');
       common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list','','','iframe',true);
+      common::printIcon('testreport', 'create', "objectID=$task->id&objectType=testtask", '', 'list','flag');
 
       if(common::hasPriv('testtask', 'delete'))
       {

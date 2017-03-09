@@ -37,6 +37,18 @@ class buildModel extends model
     }
 
     /**
+     * Get by ID list.
+     * 
+     * @param  array $idList 
+     * @access public
+     * @return array
+     */
+    public function getByList($idList)
+    {
+        return $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($idList)->fetchAll('id');
+    }
+
+    /**
      * Get builds of a project.
      * 
      * @param  int    $projectID 

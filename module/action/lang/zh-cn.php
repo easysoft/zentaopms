@@ -63,6 +63,7 @@ $lang->action->objectTypes['branch']      = '分支';
 $lang->action->objectTypes['module']      = '模块';
 $lang->action->objectTypes['testsuite']   = '套件';
 $lang->action->objectTypes['testlib']     = '公共库';
+$lang->action->objectTypes['testreport']  = '总结报告';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();

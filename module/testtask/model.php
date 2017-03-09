@@ -107,6 +107,18 @@ class testtaskModel extends model
     }
 
     /**
+     * Get task by idList.
+     * 
+     * @param  array    $idList 
+     * @access public
+     * @return array
+     */
+    public function getByList($idList)
+    {
+        return $this->dao->select("*")->from(TABLE_TESTTASK)->where('id')->in($idList)->fetchAll('id');
+    }
+
+    /**
      * Get test task info by id.
      * 
      * @param  int   $taskID 
@@ -127,6 +139,18 @@ class testtaskModel extends model
             ->fetch();
         if($setImgSize) $task->desc = $this->loadModel('file')->setImgSize($task->desc);
         return $task;
+    }
+
+    /**
+     * Bet tasks by project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
+    public function getByProject($projectID)
+    {
+        return $this->dao->select('*')->from(TABLE_TESTTASK)->where('project')->eq((int)$projectID)->andWhere('deleted')->eq(0)->fetchAll('id');
     }
 
     /**

@@ -476,14 +476,14 @@ class storyModel extends model
             {
                 $this->dao->update(TABLE_PROJECTSTORY)->set('product')->eq($story->product)->where('story')->eq($storyID)->exec();
                 $storyProjects  = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->orderBy('project')->fetchPairs('project', 'project');
-                $linkedProjects = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($storyProjects)->andWhere('product')->eq($story->product)->orderBy('project')->fetchPairs('project','project');
+                $linkedProjects = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('project')->in($storyProjects)->andWhere('product')->eq($story->product)->orderBy('project')->fetchPairs('project','project');
                 $unlinkedProjects = array_diff($storyProjects, $linkedProjects);
                 foreach($unlinkedProjects as $projectID)
                 {
                     $data = new stdclass();
                     $data->project = $projectID;
                     $data->product = $story->product;
-                    $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                    $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
                 }
             }
             return common::createChanges($oldStory, $story);
