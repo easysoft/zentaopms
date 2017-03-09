@@ -497,14 +497,11 @@ class testcase extends control
         }
 
         if(!$case) die(js::error($this->lang->notFound) . js::locate('back', 'parent'));
-        if(empty($case->steps)) die(js::locate($this->createLink('bug', 'create', "product=$productID&branch=$branch&extras=$extras"), 'parent'));
 
         $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->createBug;
-        $this->view->case      = $case;
-        $this->view->result    = reset($results);
-        $this->view->extras    = $extras;
-        $this->view->productID = $productID;
-        $this->view->branch    = $branch;
+        $this->view->runID     = $runID;
+        $this->view->caseID    = $caseID;
+        $this->view->version   = $version;
         $this->display();
     }
 
@@ -546,6 +543,9 @@ class testcase extends control
             $this->view->productName = $this->products[$productID];
             $this->view->branchName  = $this->session->currentProductType == 'normal' ? '' : $this->loadModel('branch')->getById($case->branch);
         }
+
+        $caseFailCount = $this->dao->select('`case` AS name, COUNT(*) AS value')->from(TABLE_TESTRESULT)->where('caseResult')->eq('fail')->andwhere('`case`')->eq($caseID)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+
         $this->view->position[] = $this->lang->testcase->common;
         $this->view->position[] = $this->lang->testcase->view;
 
@@ -559,6 +559,7 @@ class testcase extends control
         $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
         $this->view->runID          = $from == 'testcase' ? 0 : $run->id;
         $this->view->isLibCase      = $isLibCase;
+        $this->view->caseFailCount  = $caseFailCount ? $caseFailCount : 0;
 
         $this->display();
     }
@@ -751,6 +752,9 @@ class testcase extends control
         $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($cases), count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
         if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+
+        $this->loadModel('story');
+        $this->view->stories = $this->story->getProductStoryPairs($productID, $case->branch);
 
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customBatchEditFields) as $field) $customFields[$field] = $this->lang->testcase->$field;

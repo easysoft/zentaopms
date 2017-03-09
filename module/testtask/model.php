@@ -78,8 +78,7 @@ class testtaskModel extends model
             ->where('t1.product')->eq((int)$productID)
             ->andWhere('t5.product = t1.product')
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($type == 'wait')->andWhere('t1.status')->ne('done')->fi()
-            ->beginIF($type == 'done')->andWhere('t1.status')->eq('done')->fi()
+            ->andWhere('t1.status')->eq($type)
             ->beginIF($branch)->andWhere("if(t4.branch, t4.branch, t5.branch) = '$branch'")->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -239,6 +238,50 @@ class testtaskModel extends model
             $this->file->updateObjectID($this->post->uid, $taskID, 'testtask');
             return common::createChanges($oldTesttask, $testtask);
         }
+    }
+
+    /**
+     * blocked testtask.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
+    public function blocked($taskID)
+    {
+        $oldTesttask = $this->getById($taskID);
+        $testtask = fixer::input('post')
+            ->setDefault('status', 'blocked')
+            ->remove('comment')->get();
+
+        $this->dao->update(TABLE_TESTTASK)->data($testtask)
+            ->autoCheck()
+            ->where('id')->eq((int)$taskID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldTesttask, $testtask);
+    }
+
+    /**
+     * doing testtask.
+     * 
+     * @param  int    $taskID 
+     * @access public
+     * @return void
+     */
+    public function doing($taskID)
+    {
+        $oldTesttask = $this->getById($taskID);
+        $testtask = fixer::input('post')
+            ->setDefault('status', 'doing')
+            ->remove('comment')->get();
+
+        $this->dao->update(TABLE_TESTTASK)->data($testtask)
+            ->autoCheck()
+            ->where('id')->eq((int)$taskID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldTesttask, $testtask);
     }
 
     /**
@@ -661,8 +704,10 @@ class testtaskModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'start') return $testtask->status == 'wait';
-        if($action == 'close') return $testtask->status != 'done';
+        if($action == 'start')   return $testtask->status  == 'wait';
+        if($action == 'blocked') return ($testtask->status == 'doing'   || $testtask->status == 'wait');
+        if($action == 'doing')   return ($testtask->status == 'blocked' || $testtask->status == 'done');
+        if($action == 'close')   return $testtask->status != 'done';
 
         return true;
     }

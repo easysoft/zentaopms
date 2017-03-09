@@ -15,6 +15,8 @@
 <div id="featurebar">
   <ul class="nav">
     <li id='waitTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=wait"), $lang->testtask->wait);?></li>
+    <li id='doingTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=doing"), $lang->testtask->doingA);?></li>
+    <li id='blockedTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=blocked"), $lang->testtask->blockedA);?></li>
     <li id='doneTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=done"), $lang->testtask->done);?></li>
   </ul>
   <div class="actions"><?php common::printIcon('testtask', 'create', "product=$productID");?></div>
@@ -41,7 +43,6 @@
     <td title="<?php echo $task->projectName . '/' . $task->buildName?>">
       <?php
       echo $task->projectName . '/'; 
-      //echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName) . '/'; 
       $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));;
       ?>
     </td>

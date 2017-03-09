@@ -30,7 +30,7 @@ $config->testcase->customBatchEditFields   = 'module,stage,precondition,status,p
 $config->testcase->custom = new stdclass();
 $config->testcase->custom->createFields      = $config->testcase->customCreateFields;
 $config->testcase->custom->batchCreateFields = 'module,story';
-$config->testcase->custom->batchEditFields   = 'module,stage,status,pri';
+$config->testcase->custom->batchEditFields   = 'module,stage,status,pri,story';
 
 global $lang;
 $config->testcase->search['module']                   = 'testcase';
