@@ -12,6 +12,7 @@
 ?>
 <?php
 include '../../common/view/header.html.php';
+include '../../common/view/datepicker.html.php';
 include '../../common/view/kindeditor.html.php';
 js::set('page'                   , 'edit');
 js::set('changeProductConfirmed' , false);
@@ -195,6 +196,10 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                 <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn btn-default' onclick='loadAllBuilds(this)'")?></span>
               </div>
             </td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->bug->deadline;?></th>
+            <td><?php echo html::input('deadline', $bug->deadline, "class='form-control form-date'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->bug->resolvedBy;?></th>

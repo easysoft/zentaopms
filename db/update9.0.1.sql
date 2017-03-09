@@ -46,3 +46,4 @@ CREATE TABLE `zt_testreport` (
   `deleted` enum('0','1') NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+ALTER TABLE `zt_bug` ADD `deadline` date NOT NULL; 
