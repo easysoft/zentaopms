@@ -244,6 +244,17 @@ class bugModel extends model
         elseif($browseType == 'postponedbugs') $bugs = $this->getByPostponedbugs($productID, $branch, $modules, $projects, $sort, $pager);
         elseif($browseType == 'needconfirm')   $bugs = $this->getByNeedconfirm($productID, $branch, $modules, $projects, $sort, $pager);
         elseif($browseType == 'bysearch')      $bugs = $this->getBySearch($productID, $queryID, $sort, $pager, $branch);
+        elseif($browseType == 'overduebugs')   $bugs = $this->getByOverdueBugs($productID, $branch, $modules, $projects, $sort, $pager);
+
+        /* Delayed or not?. */
+        foreach ($bugs as $bug)
+        {    
+            if($bug->deadline != '0000-00-00')
+            {    
+                $delay = helper::diffDate(helper::today(), $bug->deadline);
+                if($delay > 0) $bug->delay = $delay;     
+            }    
+        }
 
         return $bugs;
     }
@@ -1893,6 +1904,33 @@ class bugModel extends model
             ->andWhere('product')->eq($productID)
             ->andWhere('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+    }
+
+    /**
+     * Get bugs the overdueBugs is active or unclosed. 
+     * 
+     * @param  int    $productID 
+     * @param  int    $branch
+     * @param  array  $modules
+     * @param  array  $projects 
+     * @param  string $status 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getByOverdueBugs($productID,$branch,$modules, $projects, $orderBy, $pager)
+    {
+        return $this->dao->select('*')->from(TABLE_BUG)
+            ->where('project')->in(array_keys($projects))
+            ->andWhere('product')->eq($productID)
+            ->andWhere('status')->ne('closed')
+            ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
+            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('deadline')->ne('0000-00-00')
+            ->andWhere('deadline')->lt(helper::today())
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 

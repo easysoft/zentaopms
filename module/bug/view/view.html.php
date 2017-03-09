@@ -251,6 +251,10 @@
                 </td>
               </tr>
               <tr>
+                <th><?php echo $lang->bug->deadline;?></th>
+                <td><?php if($bug->deadline) echo  $bug->deadline;?></td>
+              </tr>
+              <tr>
                 <th><?php echo $lang->bug->lblResolved;?></th>
                 <td><?php if($bug->resolvedBy) echo $users[$bug->resolvedBy] . $lang->at . $bug->resolvedDate;?></td>
               </tr>
