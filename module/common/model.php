@@ -412,7 +412,7 @@ class commonModel extends model
             echo "<li $active data-id='$menuItem->name'><a href='$link' $active>$menuItem->text</a></li>\n";
         }
         $customLink = helper::createLink('custom', 'ajaxMenu', "module={$app->getModuleName()}&method={$app->getMethodName()}", '', true);
-        if(!commonModel::isTutorialMode() and $app->viewType != 'mhtml') echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' title='$lang->customMenu' data-icon='cog' data-width='80%'><i class='icon icon-cog'></i></a></li>";
+        if(!commonModel::isTutorialMode() and $app->viewType != 'mhtml' and $app->user->account != 'guest') echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' title='$lang->customMenu' data-icon='cog' data-width='80%'><i class='icon icon-cog'></i></a></li>";
         echo "</ul>\n";
     }
 
