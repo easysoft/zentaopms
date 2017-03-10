@@ -232,32 +232,56 @@ $lang->build->menu = $lang->project->menu;
 $lang->qa = new stdclass();
 $lang->qa->menu = new stdclass();
 
-$lang->qa->menu->product  = array('link' => '%s', 'fixed' => true);
-$lang->qa->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->qa->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s');
-$lang->qa->menu->testtask = array('link' => 'Build|testtask|browse|productID=%s');
-$lang->qa->menu->index    = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->qa->menu->product   = array('link' => '%s', 'fixed' => true);
+$lang->qa->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
+$lang->qa->menu->testcase  = array('link' => 'Case|testcase|browse|productID=%s');
+$lang->qa->menu->testtask  = array('link' => 'Build|testtask|browse|productID=%s');
+$lang->qa->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
+$lang->qa->menu->report    = array('link' => '总结报告|testreport|browse|productID=%s');
+$lang->qa->menu->testlib   = array('link' => '公共库|testsuite|library');
+$lang->qa->menu->index     = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
 
-$lang->bug->menu->product  = array('link' => '%s', 'fixed' => true);
-$lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
-$lang->bug->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s');
-$lang->bug->menu->testtask = array('link' => 'Build|testtask|browse|productID=%s');
-$lang->bug->menu->index    = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->bug->menu->product   = array('link' => '%s', 'fixed' => true);
+$lang->bug->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
+$lang->bug->menu->testcase  = array('link' => 'Case|testcase|browse|productID=%s');
+$lang->bug->menu->testtask  = array('link' => 'Build|testtask|browse|productID=%s');
+$lang->bug->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
+$lang->bug->menu->report    = array('link' => '总结报告|testreport|browse|productID=%s');
+$lang->bug->menu->testlib   = array('link' => '公共库|testsuite|library');
+$lang->bug->menu->index     = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
 
-$lang->testcase->menu->product  = array('link' => '%s', 'fixed' => true);
-$lang->testcase->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testcase->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase', 'subModule' => 'tree');
-$lang->testcase->menu->testtask = array('link' => 'Build|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase');
-$lang->testcase->menu->index    = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->testcase->menu->product   = array('link' => '%s', 'fixed' => true);
+$lang->testcase->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
+$lang->testcase->menu->testcase  = array('link' => 'Case|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase', 'subModule' => 'tree');
+$lang->testcase->menu->testtask  = array('link' => 'Build|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase');
+$lang->testcase->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
+$lang->testcase->menu->report    = array('link' => '总结报告|testreport|browse|productID=%s', 'alias' => 'view,create');
+$lang->testcase->menu->testlib   = array('link' => '公共库|testsuite|library');
+$lang->testcase->menu->index     = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->testtask = new stdclass();
 $lang->testtask->menu = $lang->testcase->menu;
+$lang->testsuite = new stdclass();
+$lang->testsuite->menu = $lang->testcase->menu;
+$lang->testreport = new stdclass();
+$lang->testreport->menu = $lang->testcase->menu;
+
+$lang->testlib = new stdclass();
+$lang->testlib->menu = new stdclass();
+$lang->testlib->menu->lib       = array('link' => '%s', 'fixed' => true);
+$lang->testlib->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
+$lang->testlib->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
+$lang->testlib->menu->testtask  = array('link' => '版本|testtask|browse|productID=%s');
+$lang->testlib->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
+$lang->testlib->menu->testlib   = array('link' => '公共库|testsuite|library', 'alias' => 'createlib,createcase,libview,edit', 'subModule' => 'tree,testcase');
+$lang->testlib->menu->create    = array('link' => "<i class='icon-plus'></i>创建库|testsuite|createLib|", 'float' => 'right');
+$lang->testlib->menu->index     = array('link' => "<i class='icon-home'></i>测试主页|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();
@@ -352,6 +376,8 @@ $lang->menugroup->group       = 'company';
 $lang->menugroup->bug         = 'qa';
 $lang->menugroup->testcase    = 'qa';
 $lang->menugroup->testtask    = 'qa';
+$lang->menugroup->testsuite   = 'qa';
+$lang->menugroup->testreport  = 'qa';
 $lang->menugroup->people      = 'company';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
@@ -403,6 +429,7 @@ $lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion
 $lang->downNotify     = "Download Desktop Notification";
 
 $lang->suhosinInfo   = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger value) in php.ini, then save and restart Apache, or some data will not be saved.";
+$lang->maxVarsInfo   = "Warning! Data is reaching the limit. Please change <font color=red>max_input_vars</font> (set larger value) in php.ini, then save and restart Apache, or some data will not be saved.";
 $lang->pasteTextInfo = "Paste text into text field. Each line will be a header of each data record. ";
 $lang->noticeImport  = "<p style='font-size:14px'>Imported data contains data that has already existed in system. Please confirm you actions on the date </p><p><a href='javascript:submitForm(\"cover\")' class='btn btn-mini'>Override</a> <a href='javascript:submitForm(\"insert\")' class='btn btn-mini'>New Insertion</a></p>";
 

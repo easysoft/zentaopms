@@ -12,6 +12,8 @@
 $lang->testcase->id               = 'ID';
 $lang->testcase->product          = $lang->productCommon;
 $lang->testcase->module           = 'Module';
+$lang->testcase->lib              = "Library";
+$lang->testcase->branch           = "Branch/Platform";
 $lang->testcase->moduleAB         = 'Module';
 $lang->testcase->story            = 'Story';
 $lang->testcase->title            = 'Title';
@@ -31,6 +33,9 @@ $lang->testcase->linkCase         = 'Linked Cases';
 $lang->testcase->linkCases        = 'Linked Cases';
 $lang->testcase->unlinkCase       = 'Unlinked';
 $lang->testcase->stage            = 'Stage';
+$lang->testcase->reviewedBy       = 'Reviewed By';
+$lang->testcase->reviewedDate     = 'Reviewed Date';
+$lang->testcase->reviewResult     = 'Review Result';
 $lang->testcase->lastEditedByAB   = 'Last Edited By';
 $lang->testcase->lastEditedDateAB = 'Last Edited on';
 $lang->testcase->lastEditedDate   = 'Last Edited on';
@@ -53,9 +58,10 @@ $lang->testcase->stepNumberAB     = 'S';
 $lang->testcase->createBug        = 'Convert to Bug';
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
-$lang->testcase->stepID     = 'ID';
-$lang->testcase->stepDesc   = 'Step';
-$lang->testcase->stepExpect = 'Expect';
+$lang->testcase->stepID      = 'ID';
+$lang->testcase->stepDesc    = 'Step';
+$lang->testcase->stepExpect  = 'Expect';
+$lang->testcase->stepVersion = 'Version';
 
 $lang->testcase->common             = 'Case';
 $lang->testcase->index              = "Home";
@@ -63,21 +69,27 @@ $lang->testcase->create             = "Create Case";
 $lang->testcase->batchCreate        = "Batch Create";
 $lang->testcase->delete             = "Delete";
 $lang->testcase->view               = "Info";
+$lang->testcase->review             = "Review";
 $lang->testcase->edit               = "Edit";
 $lang->testcase->batchEdit          = "Batch Edit ";
 $lang->testcase->batchChangeModule  = "Batch Change Module";
 $lang->testcase->delete             = "Delete";
 $lang->testcase->batchDelete        = "Batch Delete ";
+$lang->testcase->batchStoryChange   = "Confirm";
 $lang->testcase->browse             = "Cases";
 $lang->testcase->groupCase          = "View By";
 $lang->testcase->import             = "Import";
+$lang->testcase->importFile         = "Import CSV";
+$lang->testcase->importFromLib      = "Import From Library";
 $lang->testcase->showImport         = "Show Import";
 $lang->testcase->exportTemplet      = "Export Template";
 $lang->testcase->export             = "Export Data";
+$lang->testcase->reportChart        = 'Report Chart';
 $lang->testcase->confirmChange      = 'Confirm Case Change';
 $lang->testcase->confirmStoryChange = 'Confirm Story Change';
 $lang->testcase->copy               = 'Duplicate Case';
 $lang->testcase->group              = 'Group';
+$lang->testcase->groupName          = 'Group Name';
 
 $lang->testcase->new = 'New';
 
@@ -133,10 +145,15 @@ $lang->testcase->stageList['system']      = 'System Testing';
 $lang->testcase->stageList['smoke']       = 'Smoking Testing';
 $lang->testcase->stageList['bvt']         = 'BVT Testing';
 
+$lang->testcase->reviewResultList['']        = '';
+$lang->testcase->reviewResultList['pass']    = 'Pass';
+$lang->testcase->reviewResultList['clarify'] = 'Clarify';
+
 $lang->testcase->groups['']      = 'Group ';
 $lang->testcase->groups['story'] = 'Story Group';
 
 $lang->testcase->statusList['']            = '';
+$lang->testcase->statusList['wait']        = 'Wait';
 $lang->testcase->statusList['normal']      = 'Normal';
 $lang->testcase->statusList['blocked']     = 'Blocked';
 $lang->testcase->statusList['investigate'] = 'Investigating';
@@ -148,14 +165,47 @@ $lang->testcase->resultList['blocked'] = 'Blocked';
 
 $lang->testcase->buttonToList = 'Back';
 
-$lang->testcase->errorEncode = 'No Data. Please select right encoding and upload again!';
-$lang->testcase->noFunction  = 'Iconv and mb_convert_encoding is not found. You cannot convert the data into the desired one!';
-$lang->testcase->noRequire   = "Row %s has“%s”which is a required field and it should not be blank.";
+$lang->testcase->errorEncode      = 'No Data. Please select right encoding and upload again!';
+$lang->testcase->noFunction       = 'Iconv and mb_convert_encoding is not found. You cannot convert the data into the desired one!';
+$lang->testcase->noRequire        = "Row %s has“%s”which is a required field and it should not be blank.";
+$lang->testcase->noLibrary        = "现在还没有公共库，请先创建！";
+$lang->testcase->mustChooseResult = '必须选择评审结果';
 
 $lang->testcase->searchStories = 'Enter to searcu Story';
+$lang->testcase->selectLib     = '请选择库';
+
+$lang->testcase->action = new stdclass();
+$lang->testcase->action->fromlib  = array('main' => '$date, 由 <strong>$actor</strong> 从公共库 <strong>$extra</strong>导入。');
+$lang->testcase->action->reviewed = array('main' => '$date, 由 <strong>$actor</strong> 记录评审结果，结果为 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
+$lang->testcase->featureBar['browse']['wait']        = 'Wait';
 $lang->testcase->featureBar['browse']['group']       = '';
 $lang->testcase->featureBar['browse']['zerocase']    = '';
+$lang->testcase->featureBar['browse']['suite']       = '套件';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];
+
+/* 统计报表。*/
+$lang->testcase->report = new stdclass();
+$lang->testcase->report->common = '报表';
+$lang->testcase->report->select = '请选择报表类型';
+$lang->testcase->report->create = '生成报表';
+       
+$lang->testcase->report->charts['testCasePerRunResult'] = '测试用例结果统计';
+$lang->testcase->report->charts['testCasePerStatus']    = '测试用例状态统计';
+$lang->testcase->report->charts['testCasePerType']      = '测试用例类型统计';
+
+$lang->testcase->report->options = new stdclass();
+$lang->testcase->report->options->graph  = new stdclass();
+$lang->testcase->report->options->type   = 'pie';
+$lang->testcase->report->options->width  = 500;
+$lang->testcase->report->options->height = 140;
+
+$lang->testcase->report->testCasePerRunResult = new stdclass();
+$lang->testcase->report->testCasePerStatus    = new stdclass();
+$lang->testcase->report->testCasePerType      = new stdclass();
+
+$lang->testcase->report->testCasePerRunResult->graph = new stdclass();
+$lang->testcase->report->testCasePerStatus->graph    = new stdclass();
+$lang->testcase->report->testCasePerType->graph      = new stdclass();

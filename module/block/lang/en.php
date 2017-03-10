@@ -31,6 +31,9 @@ $lang->block->createBlock        = 'Create Widget';
 $lang->block->editBlock          = 'Edit';
 $lang->block->ordersSaved        = 'Ranking is saved.';
 $lang->block->confirmRemoveBlock = 'Do you want to remove Widget【{0}】?';
+$lang->block->foreverClose       = '永久关闭';
+$lang->block->confirmClose       = '确定永久关闭该区块吗？关闭后，所有人将都不会显示该区块';
+$lang->block->remove             = '移除';
 $lang->block->refresh            = 'Refresh';
 $lang->block->hidden             = 'Hide';
 $lang->block->dynamicInfo        = "%s, %s <em>%s</em> %s <a href='%s'>%s</a>.";
@@ -226,9 +229,11 @@ $lang->block->typeList->project['undone']  = 'Undone';
 $lang->block->typeList->project['isdoing'] = 'Doing';
 $lang->block->typeList->project['all']     = 'All';
 
-$lang->block->typeList->testtask['wait'] = 'Testing Pending';
-$lang->block->typeList->testtask['done'] = 'Tested';
-$lang->block->typeList->testtask['all']  = 'All';
+$lang->block->typeList->testtask['wait']    = 'Testing Pending';
+$lang->block->typeList->testtask['doing']   = 'Testing';
+$lang->block->typeList->testtask['blocked'] = 'Blocked';
+$lang->block->typeList->testtask['done']    = 'Tested';
+$lang->block->typeList->testtask['all']     = 'All';
 
 $lang->block->modules['product']->moreLinkList = new stdclass();
 $lang->block->modules['product']->moreLinkList->list    = 'product|all|product=&status=%s';

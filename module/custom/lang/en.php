@@ -49,6 +49,7 @@ $lang->custom->testcase->fields['typeList']   = 'Type';
 $lang->custom->testcase->fields['stageList']  = 'Stage';
 $lang->custom->testcase->fields['resultList'] = 'Result';
 $lang->custom->testcase->fields['statusList'] = 'Status';
+$lang->custom->testcase->fields['review']     = 'Review';
 
 $lang->custom->testtask = new stdClass();
 $lang->custom->testtask->fields['priList']    = 'Priority';
@@ -60,8 +61,9 @@ $lang->custom->todo->fields['typeList']   = 'Type';
 $lang->custom->todo->fields['statusList'] = 'Status';
 
 $lang->custom->user = new stdClass();
-$lang->custom->user->fields['roleList']   = 'Role';
-$lang->custom->user->fields['statusList'] = 'Status';
+$lang->custom->user->fields['roleList']    = 'Role';
+$lang->custom->user->fields['statusList']  = 'Status';
+$lang->custom->user->fields['closedBlock'] = 'Closed block';
 
 $lang->custom->currentLang = 'Current Language';
 $lang->custom->allLang     = 'All Language';

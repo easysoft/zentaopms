@@ -57,6 +57,7 @@ $lang->todo->typeList['task']   = $lang->projectCommon . 'Task';
 $lang->todo->confirmDelete  = "Are you sure to delete this To-Do?";
 $lang->todo->thisIsPrivate  = 'This is a private To-Do:)';
 $lang->todo->lblDisableDate = 'Set later.';
+$lang->todo->noTodo         = '该类型没有待办事务';
 
 $lang->todo->periods['today']      = 'Today';
 $lang->todo->periods['yesterday']  = 'Yesterday';
