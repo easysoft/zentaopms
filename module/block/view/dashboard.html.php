@@ -18,10 +18,12 @@ $useGuest = $this->app->user->account == 'guest';
 ?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <div class='dashboard' id='dashboard' data-confirm-remove-block='<?php  echo $lang->block->confirmRemoveBlock;?>'>
+  <?php if($this->loadModel('user')->isLogon()):?>
   <div class='dashboard-actions'><a href='<?php echo $this->createLink("block", "admin", "id=0&module=$module"); ?>' data-toggle='modal' data-type='ajax' data-width='700' data-title='<?php echo $lang->block->createBlock?>'><i class='icon icon-plus' title='<?php echo $lang->block->createBlock?>' data-toggle='tooltip' data-placement='left'></i></a></div>
   <div class='dashboard-empty-message hide'>
     <a href='<?php echo $this->createLink("block", "admin", "id=0&module=$module"); ?>' data-toggle='modal' data-type='ajax' data-width='700' class='btn btn-primary'><i class='icon icon-plus'></i> <?php echo $lang->block->createBlock?></a>
   </div>
+  <?php endif;?>
   <div class='row'>
     <?php foreach($blocks as $index => $block):?>
     <div class='col-sm-6 col-md-<?php echo $block->grid;?>'>
