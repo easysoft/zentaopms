@@ -31,7 +31,10 @@
       ?> 
     </div>
   </div>
-  <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
+  <div class='main'>
+    <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
+    <fieldset>
+      <legend><?php echo $lang->testreport->legendBasic?></legend>
     <table class='table table-form'>
       <tr>
         <th class='w-80px'><?php echo $lang->testreport->startEnd?></th>
@@ -65,25 +68,40 @@
         <th><?php echo $lang->testreport->goal?></th>
         <td colspan='2'><?php echo $project->desc?></td>
       </tr>
+      </table>
+    </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->testreport->legendStoryAndBug?></legend>
+      <table class='table table-form'>
       <?php include './blockstories.html.php'?>
       <?php include './blockbugs.html.php'?>
+      </table>
+    </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->testreport->legendBuild?></legend>
       <?php include './blockbuilds.html.php'?>
+    </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->testreport->legendCase?></legend>
       <?php include './blockcases.html.php'?>
+    </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->testreport->legendBug?></legend>
+      <table class='table table-form'>
       <?php include './blocklegacybugs.html.php'?>
       <?php include './blockbuginfo.html.php'?>
-      <tr>
-        <th><?php echo $lang->testreport->report?></th>
-        <td colspan='2'><?php echo html::textarea('report', '', "class='form-control'")?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->files?></th>
-        <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
-      </tr>
-      <tr>
-        <th></th>
-        <td colspan='2'><?php echo html::submitButton() . html::backButton();?></td>
-      </tr>
-    </table>
+      </table>
+    </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->testreport->report?></legend>
+      <?php echo html::textarea('report', '', "class='form-control'")?>
+    </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->files?></legend>
+      <?php echo $this->fetch('file', 'buildform');?>
+    </fieldset>
+    <div><?php echo html::submitButton() . html::backButton();?></div>
   </form>
+  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

@@ -41,41 +41,59 @@
     </div>
   </div>
   <?php endif;?>
-  <table class='table table-form'>
-    <tr>
-      <th class='w-100px'><?php echo $lang->testreport->startEnd?></th>
-      <td class='w-p50'> <?php echo $report->begin . ' ~ ' . $report->end;?></td>
-      <td></td>
-    </tr>
-    <tr>
-      <th><?php echo $lang->testreport->owner?></th>
-      <td><?php echo zget($users, $report->owner);?></td>
-    </tr>
-    <tr>
-      <th><?php echo $lang->testreport->member?></th>
-      <td colspan='2'><?php foreach(explode(',', $report->members) as $member)echo zget($users, $member) . ' &nbsp; ';?></td>
-    </tr>
-    <tr>
-      <th><?php echo $lang->testreport->goal?></th>
-      <td colspan='2'><?php echo $project->desc?></td>
-    </tr>
-    <?php include './blockstories.html.php'?>
-    <?php include './blockbugs.html.php'?>
-    <?php include './blockbuilds.html.php'?>
-    <?php include './blockcases.html.php'?>
-    <?php include './blocklegacybugs.html.php'?>
-    <?php include './blockbuginfo.html.php'?>
-    <tr>
-      <th><?php echo $lang->testreport->report?></th>
-      <td colspan='2'><?php echo $report->report;?></td>
-    </tr>
+  <div class='main'>
+    <fieldset>
+      <legend><?php echo $lang->testreport->legendBasic?></legend>
+      <table class='table table-form'>
+        <tr>
+          <th class='w-100px'><?php echo $lang->testreport->startEnd?></th>
+          <td class='w-p50'> <?php echo $report->begin . ' ~ ' . $report->end;?></td>
+          <td></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->testreport->owner?></th>
+          <td><?php echo zget($users, $report->owner);?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->testreport->member?></th>
+          <td colspan='2'><?php foreach(explode(',', $report->members) as $member)echo zget($users, $member) . ' &nbsp; ';?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->testreport->goal?></th>
+          <td colspan='2'><?php echo $project->desc?></td>
+        </tr>
+      </table>
+    </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->testreport->legendStoryAndBug?></legend>
+      <table class='table table-form'>
+        <?php include './blockstories.html.php'?>
+        <?php include './blockbugs.html.php'?>
+      </table>
+    </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->testreport->legendBuild?></legend>
+      <?php include './blockbuilds.html.php'?>
+    </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->testreport->legendCase?></legend>
+      <?php include './blockcases.html.php'?>
+    </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->testreport->legendBug?></legend>
+      <table class='table table-form'>
+        <?php include './blocklegacybugs.html.php'?>
+        <?php include './blockbuginfo.html.php'?>
+      </table>
+    </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->testreport->report?></legend>
+      <div><?php echo $report->report;?></div>
+    </fieldset>
     <?php if(!$this->session->notHead):?>
-    <tr>
-      <th><?php echo $lang->files?></th>
-      <td colspan='2'><?php echo $this->fetch('file', 'printFiles', array('files' => $report->files, 'fieldset' => 'false'));?></td>
-    </tr>
+    <?php echo $this->fetch('file', 'printFiles', array('files' => $report->files, 'fieldset' => 'true'));?>
     <?php endif;?>
-  </table>
+  </div>
 <?php if(!$this->session->notHead):?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

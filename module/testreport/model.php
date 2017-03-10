@@ -112,9 +112,9 @@ class testreportModel extends model
      */
     public function getBugInfo($tasks, $productIdList, $begin, $end, $builds)
     {
-        $bugsByTask = $this->dao->select('*')->from(TABLE_BUG)->where('testtask')->in(array_keys($tasks))->andWhere('deleted')->eq(0)->fetchAll();
+        $bugsByTask     = $this->dao->select('*')->from(TABLE_BUG)->where('testtask')->in(array_keys($tasks))->andWhere('deleted')->eq(0)->fetchAll();
         $severityGroups = $statusGroups = $openedByGroups = $resolvedByGroups = $resolutionGroups = $moduleGroups = array();
-        $confirmedNum = 0;
+        $confirmedNum   = 0;
         foreach($bugsByTask as $bug)
         {
             $severityGroups[$bug->severity] = isset($severityGroups[$bug->severity])     ? $severityGroups[$bug->severity]     + 1 : 1;
@@ -126,15 +126,9 @@ class testreportModel extends model
             if($bug->confirmed) $confirmedNum ++;
         }
 
-        $newBugs = $this->dao->select('*')->from(TABLE_BUG)
-            ->where('product')->in($productIdList)
-            ->andWhere('openedDate')->ge($begin)
-            ->andWhere('openedDate')->le("$end 23:59:59")
-            ->andWhere('deleted')->eq(0)
-            ->fetchAll();
-
-        $legacyBugs = array();
-        $byCaseNum  = 0;
+        $newBugs     = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('openedDate')->ge($begin)->andWhere('openedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
+        $legacyBugs  = array();
+        $byCaseNum   = 0;
         $buildIdList = array_keys($builds) + array('trunk' => 'trunk');
         foreach($newBugs as $bug)
         {

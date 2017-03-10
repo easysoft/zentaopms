@@ -1,5 +1,5 @@
 <tr>
-  <th class='text-top'><?php echo $lang->testreport->stories?></th>
+  <th class='text-top w-80px'><?php echo $lang->testreport->stories?></th>
   <td colspan='2'>
     <?php if($stories):?>
     <table class='table' id='stories'>
