@@ -109,6 +109,17 @@ EOT;
         </tr>
       </table>
       <div class='alert alert-info alert-block'><?php echo $lang->custom->notice->longlife;?></div>
+      <?php elseif($module == 'user' and $field == 'closedBlock'):?>
+      <table class='table table-form mw-600px'>
+        <tr>
+          <th class='w-100px'><?php echo $lang->custom->user->fields['closedBlock'];?></th>
+          <td><?php echo html::select('closed[]', $blockPairs, $closedBlock, "class='form-control chosen' multiple");?></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><?php echo html::submitButton();?></td>
+        </tr>
+      </table>
       <?php else:?>
       <table class='table table-form active-disabled table-condensed mw-600px'>
         <tr class='text-center'>

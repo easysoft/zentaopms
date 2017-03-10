@@ -173,8 +173,16 @@ class blockModel extends model
      */
     public function getAvailableBlocks($module = '')
     {
-        if($module and isset($this->lang->block->modules[$module]))return json_encode($this->lang->block->modules[$module]->availableBlocks);
-        return json_encode($this->lang->block->availableBlocks);
+        $blocks = $this->lang->block->availableBlocks;
+        if($module and isset($this->lang->block->modules[$module])) $blocks = $this->lang->block->modules[$module]->availableBlocks;
+        if(isset($this->config->block->closed))
+        {
+            foreach($blocks as $blockKey => $blockName)
+            {
+                if(strpos(",{$this->config->block->closed},", ",{$module}|{$blockKey},") !== false) unset($blocks->$blockKey);
+            }
+        }
+        return json_encode($blocks);
     }
 
     /**

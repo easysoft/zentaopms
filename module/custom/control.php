@@ -63,6 +63,30 @@ class custom extends control
             $this->app->loadConfig('bug');
             $this->view->longlife  = $this->config->bug->longlife;
         }
+        if($module == 'user' && $field == 'closedBlock')
+        {
+            $this->loadModel('block');
+            $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
+            $blockPairs  = array();
+            foreach(explode(',', $closedBlock) as $block)
+            {
+                $block = trim($block);
+                if(empty($block)) continue;
+                list($moduleName, $blockKey) = explode('|', $block);
+                if(empty($moduleName))
+                {
+                    if($blockKey == 'html')      $blockPairs[$block] = 'HTML';
+                    if($blockKey == 'flowchart') $blockPairs[$block] = $this->lang->block->lblFlowchart;
+                    if($blockKey == 'dynamic')   $blockPairs[$block] = $this->lang->block->dynamic;
+                }
+                else
+                {
+                    $blockPairs[$block] = "{$this->lang->block->moduleList[$moduleName]}|{$this->lang->block->modules[$moduleName]->availableBlocks->$blockKey}";
+                }
+            }
+            $this->view->closedBlock = $closedBlock;
+            $this->view->blockPairs  = $blockPairs;
+        }
 
         if(!empty($_POST))
         {
@@ -78,6 +102,10 @@ class custom extends control
             elseif($module == 'bug' && $field == 'longlife')
             {
                 $this->loadModel('setting')->setItems('system.bug', fixer::input('post')->get());
+            }
+            elseif($module == 'user' && $field == 'closedBlock')
+            {
+                $this->loadModel('setting')->setItems('system.block', fixer::input('post')->join('closed', ',')->get());
             }
             else
             {

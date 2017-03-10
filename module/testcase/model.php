@@ -845,7 +845,7 @@ class testcaseModel extends model
         foreach($caseSteps as $key => $caseStep)
         {
             $expect = $key + 1 == $stepCount ? $caseExpect : '';
-            $caseSteps[$key] = (object)array('desc' => trim($caseStep), 'expect' => $expect);
+            $caseSteps[$key] = (object)array('desc' => trim($caseStep), 'expect' => $expect, 'type' => 'item');
         }
         return $caseSteps;
     }

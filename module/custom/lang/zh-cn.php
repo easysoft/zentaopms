@@ -61,8 +61,9 @@ $lang->custom->todo->fields['typeList']   = '类型';
 $lang->custom->todo->fields['statusList'] = '状态';
 
 $lang->custom->user = new stdClass();
-$lang->custom->user->fields['roleList']   = '职位';
-$lang->custom->user->fields['statusList'] = '状态';
+$lang->custom->user->fields['roleList']    = '职位';
+$lang->custom->user->fields['statusList']  = '状态';
+$lang->custom->user->fields['closedBlock'] = '关闭的区块';
 
 $lang->custom->currentLang = '适用当前语言';
 $lang->custom->allLang     = '适用所有语言';

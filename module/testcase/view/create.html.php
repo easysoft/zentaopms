@@ -170,6 +170,7 @@
                     <?php echo html::textarea('steps[]', $step->desc, "rows='1' class='form-control autosize step-steps'") ?>
                     <span class="input-group-addon">
                       <label class="checkbox-inline">
+                        <?php if(!isset($step->type)) $step->type = 'item';?>
                         <input type='checkbox' name='stepType[]' value='parent' class='step-type' <?php if($step->type == 'group') echo 'checked'?>> <?php echo $lang->testcase->group ?>
                       </label>
                     </span>
