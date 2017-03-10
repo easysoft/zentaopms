@@ -751,7 +751,7 @@ class testcase extends control
         $showSuhosinInfo = false;
         $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($cases), count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
-        if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? $this->lang->suhosinInfo : $this->lang->maxVarsInfo;
 
         $this->loadModel('story');
         $this->view->stories = $this->story->getProductStoryPairs($productID, $case->branch);

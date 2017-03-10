@@ -653,7 +653,7 @@ class bug extends control
         $showSuhosinInfo = false;
         $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($bugs), count(explode(',', $this->config->bug->custom->batchEditFields)) + 2);
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
-        if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? $this->lang->suhosinInfo : $this->lang->maxVarsInfo;
 
         /* Set Custom*/
         foreach(explode(',', $this->config->bug->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->bug->$field;

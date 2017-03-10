@@ -926,6 +926,11 @@ class commonModel extends model
             $maxRequestVars = ini_get('suhosin.request.max_vars');
             if($numberOfItems * $columns > $maxPostVars or $numberOfItems * $columns > $maxRequestVars) return true;
         }
+        else
+        {
+            $maxInputVars = ini_get('max_input_vars');
+            if($maxInputVars and $numberOfItems * $columns > (int)$maxInputVars) return true;
+        }
 
         return false;
     }

@@ -203,7 +203,7 @@ class todo extends control
             $position[] = $this->lang->todo->common;
             $position[] = $this->lang->todo->batchEdit;
 
-            if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+            if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? $this->lang->suhosinInfo : $this->lang->maxVarsInfo;
             $this->view->bugs        = $bugs;
             $this->view->tasks       = $tasks;
             $this->view->editedTodos = $editedTodos;

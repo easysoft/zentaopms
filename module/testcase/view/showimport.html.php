@@ -30,7 +30,7 @@
     </tr>
   </thead>
   <tbody>
-  <?php $insert = true;?>
+  <?php $insert = true; $inputVars = 0;?>
   <?php foreach($caseData as $key => $case):?>
   <?php if(empty($case->title)) continue;?>
   <tr valign='top' align='center'>
@@ -69,11 +69,13 @@
           <td><?php echo html::textarea("desc[$key][$id]", htmlspecialchars($desc['content']), "class='form-control'")?></td>
           <td><?php if($desc['type'] == 'item') echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]['content']) ? htmlspecialchars($stepData[$key]['expect'][$id]['content']) : '', "class='form-control'")?></td>
         </tr>
+        <?php $inputVars += $desc['type'] == 'item' ? 3 : 2;?>
       <?php endforeach;?>
       </table>
       <?php endif;?>
     </td>
   </tr>
+  <?php $inputVars += 12;?>
   <?php endforeach;?>
   </tbody>
   <tfoot>
@@ -97,6 +99,12 @@
 </table>
 </form>
 <script>
+<?php
+$maxInputVars = ini_get('max_input_vars');
+if($maxInputVars and (int)$maxInputVars < $inputVars):
+?>
+$(function(){$('.outer form table:first').before("<div class='alert alert-warning'><?php echo $lang->maxVarsInfo . " ($inputVars)"?></div>")})
+<?php endif;?>
 $(function(){affix('thead')})
 function affix(obj)
 {

@@ -460,7 +460,7 @@ class story extends control
         $showSuhosinInfo = false;
         $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($stories), count(explode(',', $this->config->story->custom->batchEditFields)) + 3);
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
-        if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? $this->lang->suhosinInfo : $this->lang->maxVarsInfo;
 
         $this->view->position[]        = $this->lang->story->common;
         $this->view->position[]        = $this->lang->story->batchEdit;
@@ -813,7 +813,7 @@ class story extends control
         $showSuhosinInfo = false;
         $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($stories), $this->config->story->batchClose->columns);
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
-        if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? $this->lang->suhosinInfo : $this->lang->maxVarsInfo;
 
         $this->view->position[]       = $this->lang->story->common;
         $this->view->position[]       = $this->lang->story->batchClose;

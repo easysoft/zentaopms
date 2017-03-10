@@ -373,7 +373,7 @@ class task extends control
         $showSuhosinInfo = false;
         $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($tasks), count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
         $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
-        if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? $this->lang->suhosinInfo : $this->lang->maxVarsInfo;
 
         /* Set Custom*/
         foreach(explode(',', $this->config->task->customBatchEditFields) as $field) $customFields[$field] = $this->lang->task->$field;
