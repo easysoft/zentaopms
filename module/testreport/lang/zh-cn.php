@@ -13,7 +13,6 @@ $lang->testreport->stories     = '测试的需求';
 $lang->testreport->bugs        = '测试的Bug';
 $lang->testreport->builds      = '版本信息';
 $lang->testreport->goal        = '项目目标';
-$lang->testreport->coverage    = '需求覆盖率';
 $lang->testreport->cases       = '用例';
 $lang->testreport->bugInfo     = '缺陷分布';
 $lang->testreport->report      = '总结';

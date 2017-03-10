@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     testsuite
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        http://www.zentao.net
@@ -20,8 +20,6 @@ $lang->testsuite->linkVersion      = "版本";
 $lang->testsuite->unlinkCase       = "移除";
 $lang->testsuite->batchUnlinkCases = "批量移除用例";
 $lang->testsuite->deleted          = '已删除';
-$lang->testsuite->pre              = '上一个';
-$lang->testsuite->next             = '下一个';
 
 $lang->testsuite->common         = '套件';
 $lang->testsuite->product        = '所属' . $lang->productCommon;
