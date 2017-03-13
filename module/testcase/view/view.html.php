@@ -127,6 +127,7 @@
     </div>
   </div>
   <div class='col-side'>
+    <a class='side-handle' data-id='caseSide'><i class='icon-caret-left'></i></a>
     <div class='main main-side'>
       <fieldset>
         <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>
