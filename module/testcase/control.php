@@ -190,6 +190,7 @@ class testcase extends control
         $this->view->users         = $this->user->getPairs('noletter');
         $this->view->browseType    = 'group';
         $this->view->groupBy       = $groupBy;
+        $this->view->orderBy       = $groupBy;
         $this->view->groupByList   = $groupByList;
         $this->view->cases         = $groupCases;
         $this->view->suiteList     = $this->loadModel('testsuite')->getSuites($productID);
