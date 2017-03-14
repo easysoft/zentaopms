@@ -332,6 +332,174 @@ class testtaskModel extends model
     }
 
     /**
+     * Get all cases.
+     * 
+     * @param  string   $query 
+     * @param  array  $linkedCases
+     * @param  object $pager
+     * @access public
+     * @return void
+     */
+    public function getAllCases($query,$linkedCases,$pager)
+    {
+        return $this->dao->select('*')->from(TABLE_CASE)->where($query)
+                ->andWhere('id')->notIN($linkedCases)
+                ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id desc')
+                ->page($pager)
+                ->fetchAll();
+    }
+
+    /**
+     * Get cases by story.
+     * 
+     * @param  array  $task
+     * @param  int    $productID 
+     * @param  string $query
+     * @param  array  $linkedCases
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getCasesByStory($task,$productID,$query,$linkedCases,$pager)
+    {
+        $stories = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('stories');
+        $cases   = array();
+        if($stories)
+        {
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
+                ->andWhere('product')->eq($productID)
+                ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
+                ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
+                ->andWhere('story')->in(trim($stories, ','))
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id desc')
+                ->page($pager)
+                ->fetchAll();
+        }
+
+        return $cases;
+    }
+
+    /**
+     * Get cases by bug.
+     * 
+     * @param  array  $task
+     * @param  int    $productID 
+     * @param  string $query
+     * @param  array  $linkedCases
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getCasesByBug($task,$productID,$query,$linkedCases,$pager)
+    {
+        $bugs = $this->dao->select('bugs')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('bugs');
+        $cases = array();
+        if($bugs)
+        {
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
+                ->andWhere('product')->eq($productID)
+                ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
+                ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
+                ->andWhere('fromBug')->in(trim($bugs, ','))
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id desc')
+                ->page($pager)
+                ->fetchAll();
+        }
+
+        return $cases;
+    }
+
+    /**
+     * Get cases by suite.
+     * 
+     * @param  int    $productID 
+     * @param  string $query
+     * @param  array  $linkedCases
+     * @param  string $param
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getCasesBySuite($productID,$query,$linkedCases,$pager,$param)
+    {
+        return $this->dao->select('t1.*,t2.version as version')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
+                ->where($query)
+                ->andWhere('t2.suite')->eq((int)$param)
+                ->andWhere('t1.product')->eq($productID)
+                ->beginIF($linkedCases)->andWhere('t1.id')->notIN($linkedCases)->fi()
+                ->beginIF($task->branch)->andWhere('t1.branch')->in("0,$task->branch")->fi()
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id desc')
+                ->page($pager)
+                ->fetchAll();
+    }
+
+    /**
+     * Get cases by version.
+     * 
+     * @param  string $param
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getCasesByVersion($pager, $param)
+    {
+        $runListValue = array();
+        $runList  = $this->dao->select("`case`")->from(TABLE_TESTRUN)->where("task = '$param'")->fetchPairs('case');
+        
+        $caseList = $this->dao->select("*")->from(TABLE_CASE)->where('id')->in($runList)->page($pager)->fetchAll();
+        return $caseList;
+    }
+
+    /**
+     * Get cases.
+     * 
+     * @param  int    $productID 
+     * @param  array  $task
+     * @param  int    $taskID 
+     * @param  string $type
+     * @param  string $param
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getCases($productID, $task, $taskID, $type, $param, $pager)
+    {
+        if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
+        $query = $this->session->testcaseQuery;
+        $allProduct = "`product` = 'all'";
+        if(strpos($query, '`product` =') === false && $type != 'bysuite') $query .= " AND `product` = $productID";
+        if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1', $query);
+
+        $linkedCases = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs('case');
+        if($type == 'all')            $cases = $this->getAllCases($query,$linkedCases,$pager);
+        else if($type == 'bystory')   $cases = $this->getCasesByStory($task,$productID,$query,$linkedCases,$pager);
+        else if($type == 'bybug')     $cases = $this->getCasesByBug($task,$productID,$query,$linkedCases,$pager);
+        else if($type == 'bysuite')   $cases = $this->getCasesBySuite($productID,$query,$linkedCases,$pager,$param);
+        else if($type == 'byversion') $cases = $this->getCasesByVersion($pager,$param);
+
+        return $cases;
+    }
+
+    /**
+     * Get test tasks.
+     * 
+     * @param  int    $productID 
+     * @param  int    $taskID 
+     * @access public
+     * @return array
+     */
+    public function getTestTask($productID,$taskID)
+    {
+        return $this->dao->select('id,name')->from(TABLE_TESTTASK)->where("product = '$productID'")->orderBy('id desc')->fetchPairs('id', 'name');
+    }
+
+    /**
      * Get test runs of a test task.
      * 
      * @param  int    $taskID 
