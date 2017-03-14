@@ -1188,6 +1188,7 @@ class bugModel extends model
             $bugs = $this->dao->select('*')->from(TABLE_BUG)
                 ->where($bugQuery)
                 ->andWhere('project')->eq((int)$projectID)
+                ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
