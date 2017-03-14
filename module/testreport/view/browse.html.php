@@ -34,7 +34,7 @@
       <?php foreach($reports as $report):?>
       <tr>
         <td><?php echo $report->id?></td>
-        <td class='text-left' title='<?php $report->title?>'><?php echo html::a(inlink('view', "reportID=$report->id"), $report->title)?></td>
+        <td class='text-left' title='<?php $report->title?>'><?php echo html::a(inlink('view', "reportID=$report->id&from=$objectType"), $report->title)?></td>
         <td><?php echo zget($users, $report->createdBy);?></td>
         <td><?php echo substr($report->createdDate, 2);?></td>
         <?php

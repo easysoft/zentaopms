@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../common/view/chart.html.php';?>
 <div class='container mw-1400px'>
   <div id='titlebar'>
     <div class='heading'>
@@ -35,47 +36,56 @@
     <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
     <fieldset>
       <legend><?php echo $lang->testreport->legendBasic?></legend>
-    <table class='table table-form'>
-      <tr>
-        <th class='w-80px'><?php echo $lang->testreport->startEnd?></th>
-        <td class='w-p50'>
-          <div class='input-group'>
-            <?php echo html::input('begin', $begin, "class='form-control form-date'")?>
-            <span class='input-group-addon'> ~ </span>
-            <?php echo html::input('end', $end, "class='form-control form-date'")?>
-            <?php
-            echo html::hidden('product', $productIdList) . html::hidden('project', $project->id) . html::hidden('tasks', $tasks);
-            echo html::hidden('objectID', $objectID) . html::hidden('objectType', $objectType);
-            ?>
-          </div>
-        </td>
-        <td>
-          <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->testreport->owner?></span>
-            <?php echo html::select('owner', $users, $owner, "class='form-control chosen'")?>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->testreport->member?></th>
-        <td colspan='2'><?php echo html::select('members', $users, $members, "class='form-control chosen' multiple")?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->testreport->title?></th>
-        <td colspan='2'><?php echo html::input('title', $reportTitle, "class='form-control'")?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->testreport->goal?></th>
-        <td colspan='2'><?php echo $project->desc?></td>
-      </tr>
+      <table class='table table-form'>
+        <tr>
+          <th class='w-80px'><?php echo $lang->testreport->startEnd?></th>
+          <td class='w-p50'>
+            <div class='input-group'>
+              <?php echo html::input('begin', $begin, "class='form-control form-date'")?>
+              <span class='input-group-addon'> ~ </span>
+              <?php echo html::input('end', $end, "class='form-control form-date'")?>
+              <?php
+              echo html::hidden('product', $productIdList) . html::hidden('project', $project->id) . html::hidden('tasks', $tasks);
+              echo html::hidden('objectID', $objectID) . html::hidden('objectType', $objectType);
+              ?>
+            </div>
+          </td>
+          <td>
+            <div class='input-group'>
+              <span class='input-group-addon'><?php echo $lang->testreport->owner?></span>
+              <?php echo html::select('owner', $users, $owner, "class='form-control chosen'")?>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->testreport->member?></th>
+          <td colspan='2'><?php echo html::select('members', $users, $members, "class='form-control chosen' multiple")?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->testreport->title?></th>
+          <td colspan='2'><?php echo html::input('title', $reportTitle, "class='form-control'")?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->testreport->goal?></th>
+          <td colspan='2'><?php echo $project->desc?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->testreport->profile?></th>
+          <td colspan='2'>
+          <?php
+          echo '<p>' . $storySummary . '</p>';
+          echo '<p>' . $caseSummary . '</p>';
+          echo '<p>' . sprintf($lang->testreport->bugSummary, $bugInfo['countBugByTask'], $bugInfo['bugConfirmedRate'] . '%', $bugInfo['bugCreateByCaseRate'] . '%') . '</p>';
+          unset($bugInfo['countBugByTask']); unset($bugInfo['bugConfirmedRate']); unset($bugInfo['bugCreateByCaseRate']);
+          ?>
+          </td>
+        </tr>
       </table>
     </fieldset>
     <fieldset>
       <legend><?php echo $lang->testreport->legendStoryAndBug?></legend>
-      <table class='table table-form'>
       <?php include './blockstories.html.php'?>
       <?php include './blockbugs.html.php'?>
-      </table>
     </fieldset>
     <fieldset>
       <legend><?php echo $lang->testreport->legendBuild?></legend>
@@ -86,11 +96,12 @@
       <?php include './blockcases.html.php'?>
     </fieldset>
     <fieldset>
-      <legend><?php echo $lang->testreport->legendBug?></legend>
-      <table class='table table-form'>
+      <legend><?php echo $lang->testreport->legendLegacyBugs?></legend>
       <?php include './blocklegacybugs.html.php'?>
-      <?php include './blockbuginfo.html.php'?>
-      </table>
+    </fieldset>
+    <fieldset>
+      <legend><?php echo $lang->testreport->legendReport?></legend>
+      <?php include './blockbugreport.html.php'?>
     </fieldset>
     <fieldset>
       <legend><?php echo $lang->testreport->report?></legend>

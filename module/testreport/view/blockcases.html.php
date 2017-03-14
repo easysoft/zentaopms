@@ -1,4 +1,3 @@
-<?php if($cases):?>
 <table class='table' id='cases'>
   <thead>
     <tr>
@@ -13,6 +12,7 @@
       <th class='w-status'><?php echo $lang->statusAB;?></th>
     </tr>
   </thead>
+  <?php if($cases):?>
   <tbody class='text-center'>
     <?php foreach($cases as $case):?>
     <tr>
@@ -28,8 +28,7 @@
     </tr>
     <?php endforeach;?>
   </tbody>
-  <tfoot><tr><td colspan='9'><?php echo $caseSummary;?></td></tr></tfoot>
+  <?php else:?>
+  <tr><td class='none-data'><?php echo $lang->testreport->none;?></td></tr>
+  <?php endif;?>
 </table>
-<?php else:?>
-<?php echo $lang->testreport->none;?>
-<?php endif;?>

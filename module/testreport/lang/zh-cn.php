@@ -19,15 +19,18 @@ $lang->testreport->report      = '总结';
 $lang->testreport->legacyBugs  = '遗留的Bug';
 $lang->testreport->createdDate = '创建时间';
 $lang->testreport->objectID    = '所属对象';
+$lang->testreport->profile     = '概况';
 $lang->testreport->value       = '值';
 $lang->testreport->none        = '无';
 $lang->testreport->all         = '所有报告';
 
 $lang->testreport->legendBasic       = '基本信息';
-$lang->testreport->legendStoryAndBug = '测试的需求和Bug';
-$lang->testreport->legendBuild       = '版本信息';
-$lang->testreport->legendCase        = '执行的用例的信息';
-$lang->testreport->legendBug         = '缺陷信息';
+$lang->testreport->legendStoryAndBug = '测试范围';
+$lang->testreport->legendBuild       = '测试轮次';
+$lang->testreport->legendCase        = '执行的用例';
+$lang->testreport->legendLegacyBugs  = '遗留的Bug';
+$lang->testreport->legendReport      = '报表';
+$lang->testreport->legendMore        = '更多功能';
 
 $lang->testreport->bugSeverityGroups   = '产生Bug严重级别分布';
 $lang->testreport->bugStatusGroups     = '产生Bug状态分布';
@@ -39,5 +42,6 @@ $lang->testreport->legacyBugs          = '遗留的Bug';
 $lang->testreport->bugConfirmedRate    = '有效Bug率 (确认的Bug / 测试创建的Bug)';
 $lang->testreport->bugCreateByCaseRate = '用例发现Bug率 (用例创建的Bug / 时间区间中新增的Bug)';
 
-$lang->testreport->caseSummary   = '共有%s个用例，共执行%s个用例，产生了%s个结果，失败的用例有%s个';
+$lang->testreport->caseSummary   = '共有<strong>%s</strong>个用例，共执行<strong>%s</strong>个用例，产生了<strong>%s</strong>个结果，失败的用例有<strong>%s</strong>个。';
+$lang->testreport->bugSummary    = '共产生<strong>%s</strong>个Bug，有效Bug率（确认的Bug / 产生的Bug）：<strong>%s</strong>，用例发现Bug率（用例创建的Bug / 时间区间中新增的Bug）：<strong>%s</strong>';
 $lang->testreport->confirmDelete = '是否删除该报告？';

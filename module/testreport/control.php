@@ -31,6 +31,7 @@ class testreport extends control
         $this->loadModel('testcase');
         $this->loadModel('testtask');
         $this->loadModel('user');
+        $this->app->loadLang('report');
     }
 
     /**
@@ -190,15 +191,9 @@ class testreport extends control
         $this->view->cases       = $cases;
         $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases);
 
-        $this->view->legacyBugs          = $bugInfo['legacyBugs'];
-        $this->view->bugSeverityGroups   = $bugInfo['bugSeverityGroups'];
-        $this->view->bugStatusGroups     = $bugInfo['bugStatusGroups'];
-        $this->view->bugOpenedByGroups   = $bugInfo['bugOpenedByGroups'];
-        $this->view->bugResolvedByGroups = $bugInfo['bugResolvedByGroups'];
-        $this->view->bugResolutionGroups = $bugInfo['bugResolutionGroups'];
-        $this->view->bugModuleGroups     = $bugInfo['bugModuleGroups'];
-        $this->view->bugConfirmedRate    = $bugInfo['bugConfirmedRate'];
-        $this->view->bugCreateByCaseRate = $bugInfo['bugCreateByCaseRate'];
+        $this->view->legacyBugs = $bugInfo['legacyBugs'];
+        unset($bugInfo['legacyBugs']);
+        $this->view->bugInfo = $bugInfo;
 
         $this->view->objectID   = $objectID;
         $this->view->objectType = $objectType;
@@ -212,22 +207,22 @@ class testreport extends control
      * @access public
      * @return void
      */
-    public function view($reportID)
+    public function view($reportID, $from = 'product')
     {
         $report  = $this->testreport->getById($reportID);
         $project = $this->project->getById($report->project);
-        if($report->objectType == 'testtask')
+        if($from == 'product' and is_numeric($report->product))
         {
-            $task      = $this->testtask->getById($report->objectID);
-            $productID = $this->commonAction($task->product, 'product');
-            if($productID != $task->product) die('deny access');
+            $product   = $this->product->getById($report->product);
+            $productID = $this->commonAction($report->product, 'product');
+            if($productID != $report->product) die('deny access');
 
-            $browseLink = inlink('browse', "objectID=$productID&objectType=product&extra={$report->objectID}");
-            $this->view->position[] = html::a($browseLink, $task->name);
+            $browseLink = inlink('browse', "objectID=$productID&objectType=product");
+            $this->view->position[] = html::a($browseLink, $product->name);
         }
-        elseif($report->objectType == 'project')
+        else
         {
-            $projectID = $this->commonAction($report->objectID, 'project');
+            $projectID = $this->commonAction($report->project, 'project');
             if($projectID != $report->objectID) die('deny access');
 
             $browseLink = inlink('browse', "objectID=$projectID&objectType=project");
@@ -268,15 +263,9 @@ class testreport extends control
         $this->view->storySummary = $this->product->summary($stories);
         $this->view->caseSummary  = $this->testreport->getResultSummary($tasks, $cases);
 
-        $this->view->legacyBugs          = $bugInfo['legacyBugs'];
-        $this->view->bugSeverityGroups   = $bugInfo['bugSeverityGroups'];
-        $this->view->bugStatusGroups     = $bugInfo['bugStatusGroups'];
-        $this->view->bugOpenedByGroups   = $bugInfo['bugOpenedByGroups'];
-        $this->view->bugResolvedByGroups = $bugInfo['bugResolvedByGroups'];
-        $this->view->bugResolutionGroups = $bugInfo['bugResolutionGroups'];
-        $this->view->bugModuleGroups     = $bugInfo['bugModuleGroups'];
-        $this->view->bugConfirmedRate    = $bugInfo['bugConfirmedRate'];
-        $this->view->bugCreateByCaseRate = $bugInfo['bugCreateByCaseRate'];
+        $this->view->legacyBugs = $bugInfo['legacyBugs'];
+        unset($bugInfo['legacyBugs']);
+        $this->view->bugInfo    = $bugInfo;
         $this->display();
     }
 
@@ -318,23 +307,9 @@ class testreport extends control
             $this->session->set('notHead', true);
             $output = $this->fetch('testreport', 'view', array('reportID' =>$reportID));
             $this->session->set('notHead', false);
-            $style   = <<<EOD
-<style>
-body{font-size:14px}h1{font-size:16px;text-align:center}
-.w-100px{width:100px}.w-p50{width:50%}.w-id{width:70px}.w-pri{width:40px}.w-user{width:80px}.w-80px{width:80px}.w-70px{width:70px}.w-hour[width:57px].w-status{width:60px}.w-130px{width:130px;}.w-type{width:80px}.w-150px{width:150px;}
-.text-center{text-align:center}.text-top{vertical-align:top;}.text-left{text-align:left}.text-right{text-align:right;}
-.table{width:100%;margin-bottom:5px;border:1px solid #ddd;border-collapse:collapse;border-spacing:0;}
-.table caption{padding:8px 20px;border:1px solid #DDD;border-bottom:0;background:#fafafa;text-align:left}.table td, .table th{border-bottom:1px solid #ddd;padding:5px;}
-.table>thead>tr>th{text-align:center;vertical-align:middle;background-color:#f1f1f1;border-bottom:1px solid #ddd;}
-.table-form{border: none;}.table-form>tbody>tr>th,.table-form>tbody>tr>td{border-bottom:none;}.table-form>tbody>tr>th{text-align:right;}
-.input-group{width:100%;}.input-group{position:relative;display:table;border-collapse:separate;}
-.input-group-addon:first-child {border-right:0;}
-.input-group-addon{background-color:#f5f5f5;padding:6px 12px;font-size:13px;font-weight:400;line-height:1;color:#222;text-align:center;background-color:#e5e5e5;border:1px solid #ccc;border-radius:0;display:table-cell;}
-.input-group-addon:first-child{border-top-right-radius:0;border-bottom-right-radius:0;}
-fieldset{margin-bottom:15px;border:1px solid #e5e5e5;padding:10px 15px 15px;}fieldset>legend{width:auto;margin:0 0 0 -5px;font-weight:bold;border-bottom:none;padding:0 5px;display:block;}
-</style>
-EOD;
-            $content = "<!DOCTYPE html>\n<html lang='zh-cn'>\n<head>\n<meta charset='utf-8'>\n<title>{$report->title}</title>\n$style</head>\n<body>\n<h1>{$report->title}</h1>\n$output</body></html>";
+            $css = '<style>' . $this->getCSS('testreport', 'export') . '</style>';
+            $js  = '<script>' . $this->getJS('testreport', 'export') . '</script>';
+            $content = "<!DOCTYPE html>\n<html lang='zh-cn'>\n<head>\n<meta charset='utf-8'>\n<title>{$report->title}</title>\n$css\n$js\n</head>\n<body onload='tab()'>\n<h1>{$report->title}</h1>\n$output</body></html>";
             $this->fetch('file',  'sendDownHeader', array('fileName' => $data->fileName, 'fileType' => $data->fileType, 'content' =>$content));
         }
         $this->view->customExport = false;

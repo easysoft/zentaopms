@@ -93,7 +93,7 @@ class testreportModel extends model
         return $this->dao->select('*')->from(TABLE_TESTREPORT)->where('deleted')->eq(0)
             ->beginIF($objectType == 'project')->andWhere('objectID')->eq($objectID)->andWhere('objectType')->eq('project')->fi()
             ->beginIF($objectType == 'product' and $extra)->andWhere('objectID')->eq((int)$extra)->andWhere('objectType')->eq('testtask')->fi()
-            ->beginIF($objectType == 'product' and empty($extra))->andWhere("CONCAT(',', product, ',') like '%,$objectID,%'")->fi()
+            ->beginIF($objectType == 'product' and empty($extra))->andWhere('product')->eq($objectID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -136,12 +136,13 @@ class testreportModel extends model
             if($bug->case) $byCaseNum ++;
         }
         $bugInfo['legacyBugs']          = $legacyBugs;
+        $bugInfo['countBugByTask']      = count($bugsByTask);
         $bugInfo['bugSeverityGroups']   = $severityGroups;
         $bugInfo['bugStatusGroups']     = $statusGroups;
-        $bugInfo['bugOpenedByGroups']   = $openedByGroups;
-        $bugInfo['bugResolvedByGroups'] = $resolvedByGroups;
         $bugInfo['bugResolutionGroups'] = $resolutionGroups;
+        $bugInfo['bugOpenedByGroups']   = $openedByGroups;
         $bugInfo['bugModuleGroups']     = $moduleGroups;
+        $bugInfo['bugResolvedByGroups'] = $resolvedByGroups;
         $bugInfo['bugConfirmedRate']    = round($confirmedNum / count($bugsByTask) * 100, 2);
         $bugInfo['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($newBugs) * 100, 2);
         return $bugInfo;
