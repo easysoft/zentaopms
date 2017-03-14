@@ -3,21 +3,26 @@
 <?php foreach($bugInfo as $infoKey => $infoValue):?>
   <?php if(($row % 1) == 0) echo '<tr>';?>
   <?php $row++;?>
-    <td class='text-top' width='33%'>
+    <td class='text-top'>
       <?php $sum = array_sum($infoValue);?>
-      <table class='table table-condensed' id='bugSeverityGroups'>
-        <caption><?php echo $lang->testreport->$infoKey?></caption>
+      <table class='table table-condensed table-report' id='bugSeverityGroups'>
         <?php if($sum == 0):?>
-        <tr><td class='none-data'><?php echo $lang->testreport->none;?></td></tr>
+        <tr>
+          <td class='none-data'>
+            <h5><?php echo $lang->testreport->$infoKey?></h5>
+            <?php echo $lang->testreport->none;?>
+          </td>
+        </tr>
         <?php else:?>
         <tr class='text-top'>
-          <td class='w-p60'>
+          <td class='w-p70'>
             <div class='chart-wrapper text-center'>
+              <h5><?php echo $lang->testreport->$infoKey?></h5>
               <div class='chart-canvas'>
                 <?php if(isset($_POST["chart-{$infoKey}"])):?>
                 <img src='<?php echo $_POST["chart-{$infoKey}"]?>' />
                 <?php else:?>
-                <canvas id='chart-<?php echo $infoKey?>' width='100' height='20' data-responsive='true'></canvas>
+                <canvas id='chart-<?php echo $infoKey?>' width='100' height='14' data-responsive='true'></canvas>
                 <?php endif;?>
               </div>
             </div>

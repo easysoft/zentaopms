@@ -32,16 +32,18 @@ $lang->testreport->legendLegacyBugs  = '遗留的Bug';
 $lang->testreport->legendReport      = '报表';
 $lang->testreport->legendMore        = '更多功能';
 
-$lang->testreport->bugSeverityGroups   = '产生Bug严重级别分布';
-$lang->testreport->bugStatusGroups     = '产生Bug状态分布';
-$lang->testreport->bugOpenedByGroups   = '产生Bug创建者分布';
-$lang->testreport->bugResolvedByGroups = '产生Bug解决者分布';
-$lang->testreport->bugResolutionGroups = '产生Bug解决方案分布';
-$lang->testreport->bugModuleGroups     = '产生Bug模块分布';
+$lang->testreport->bugSeverityGroups   = 'Bug严重级别分布';
+$lang->testreport->bugStatusGroups     = 'Bug状态分布';
+$lang->testreport->bugOpenedByGroups   = 'Bug创建者分布';
+$lang->testreport->bugResolvedByGroups = 'Bug解决者分布';
+$lang->testreport->bugResolutionGroups = 'Bug解决方案分布';
+$lang->testreport->bugModuleGroups     = 'Bug模块分布';
 $lang->testreport->legacyBugs          = '遗留的Bug';
 $lang->testreport->bugConfirmedRate    = '有效Bug率 (确认的Bug / 测试创建的Bug)';
 $lang->testreport->bugCreateByCaseRate = '用例发现Bug率 (用例创建的Bug / 时间区间中新增的Bug)';
 
 $lang->testreport->caseSummary   = '共有<strong>%s</strong>个用例，共执行<strong>%s</strong>个用例，产生了<strong>%s</strong>个结果，失败的用例有<strong>%s</strong>个。';
-$lang->testreport->bugSummary    = '共产生<strong>%s</strong>个Bug，有效Bug率（确认的Bug / 产生的Bug）：<strong>%s</strong>，用例发现Bug率（用例创建的Bug / 时间区间中新增的Bug）：<strong>%s</strong>';
+$lang->testreport->buildSummary  = '共测试了<strong>%s</strong>个版本。';
+$lang->testreport->bugSummary    = '共产生<strong>%s</strong>个Bug，遗留<strong>%s</strong>个Bug。有效Bug率（确认的Bug / 产生的Bug）：<strong>%s</strong>，用例发现Bug率（用例创建的Bug / 时间区间中新增的Bug）：<strong>%s</strong>';
 $lang->testreport->confirmDelete = '是否删除该报告？';
+$lang->testreport->exportNotice  = "由<a href='http://www.zentao.net' target='_blank' style='color:grey'>禅道项目管理软件</a>导出";

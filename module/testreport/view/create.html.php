@@ -74,11 +74,19 @@
           <td colspan='2'>
           <?php
           echo '<p>' . $storySummary . '</p>';
-          echo '<p>' . $caseSummary . '</p>';
-          echo '<p>' . sprintf($lang->testreport->bugSummary, $bugInfo['countBugByTask'], $bugInfo['bugConfirmedRate'] . '%', $bugInfo['bugCreateByCaseRate'] . '%') . '</p>';
+          echo '<p>' . sprintf($lang->testreport->buildSummary, empty($builds) ? 1 : count($builds)) . $caseSummary . '</p>';
+          echo '<p>' . sprintf($lang->testreport->bugSummary, $bugInfo['countBugByTask'], count($legacyBugs), $bugInfo['bugConfirmedRate'] . '%', $bugInfo['bugCreateByCaseRate'] . '%') . '</p>';
           unset($bugInfo['countBugByTask']); unset($bugInfo['bugConfirmedRate']); unset($bugInfo['bugCreateByCaseRate']);
           ?>
           </td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->testreport->report?></th>
+          <td colspan='2'><?php echo html::textarea('report', '', "class='form-control'")?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->files?></th>
+          <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
         </tr>
       </table>
     </fieldset>
@@ -102,14 +110,6 @@
     <fieldset>
       <legend><?php echo $lang->testreport->legendReport?></legend>
       <?php include './blockbugreport.html.php'?>
-    </fieldset>
-    <fieldset>
-      <legend><?php echo $lang->testreport->report?></legend>
-      <?php echo html::textarea('report', '', "class='form-control'")?>
-    </fieldset>
-    <fieldset>
-      <legend><?php echo $lang->files?></legend>
-      <?php echo $this->fetch('file', 'buildform');?>
     </fieldset>
     <div><?php echo html::submitButton() . html::backButton();?></div>
   </form>

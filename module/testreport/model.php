@@ -176,15 +176,19 @@ class testreportModel extends model
      */
     public function getResultSummary($tasks, $cases)
     {
-        $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('run')->in(array_keys($tasks))->andWhere('`case`')->in(array_keys($cases))->fetchAll();
+        $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
+            ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
+            ->where('t2.task')->in(array_keys($tasks))
+            ->andWhere('t1.`case`')->in(array_keys($cases))
+            ->fetchAll();
         $failResults = array();
         $runCasesNum = array();
         foreach($results as $result)
         {
-            $runCases[$result->case] = $result->case;
+            $runCasesNum[$result->case] = $result->case;
             if($result->caseResult == 'fail') $failResults[$result->case] = $result->case;
         }
-        return sprintf($this->lang->testreport->caseSummary, count($cases), count($results), count($runCasesNum), count($failResults));
+        return sprintf($this->lang->testreport->caseSummary, count($cases), count($runCasesNum), count($results), count($failResults));
     }
 
     /**

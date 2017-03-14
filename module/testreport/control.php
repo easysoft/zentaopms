@@ -309,7 +309,8 @@ class testreport extends control
             $this->session->set('notHead', false);
             $css = '<style>' . $this->getCSS('testreport', 'export') . '</style>';
             $js  = '<script>' . $this->getJS('testreport', 'export') . '</script>';
-            $content = "<!DOCTYPE html>\n<html lang='zh-cn'>\n<head>\n<meta charset='utf-8'>\n<title>{$report->title}</title>\n$css\n$js\n</head>\n<body onload='tab()'>\n<h1>{$report->title}</h1>\n$output</body></html>";
+            $exportNotice  = "<p style='text-align:right;color:grey'>" . $this->lang->testreport->exportNotice . '</p>';
+            $content = "<!DOCTYPE html>\n<html lang='zh-cn'>\n<head>\n<meta charset='utf-8'>\n<title>{$report->title}</title>\n$css\n$js\n</head>\n<body onload='tab()'>\n<h1>{$report->title}</h1>\n$output\n$exportNotice</body></html>";
             $this->fetch('file',  'sendDownHeader', array('fileName' => $data->fileName, 'fileType' => $data->fileType, 'content' =>$content));
         }
         $this->view->customExport = false;

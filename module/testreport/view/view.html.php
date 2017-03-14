@@ -79,8 +79,8 @@
             <td colspan='2'>
             <?php
             echo '<p>' . $storySummary . '</p>';
-            echo '<p>' . $caseSummary . '</p>';
-            echo '<p>' . sprintf($lang->testreport->bugSummary, $bugInfo['countBugByTask'], $bugInfo['bugConfirmedRate'] . '%', $bugInfo['bugCreateByCaseRate'] . '%') . '</p>';
+            echo '<p>' . sprintf($lang->testreport->buildSummary, empty($builds) ? 1 : count($builds)) . $caseSummary . '</p>';
+            echo '<p>' . sprintf($lang->testreport->bugSummary, $bugInfo['countBugByTask'], count($legacyBugs), $bugInfo['bugConfirmedRate'] . '%', $bugInfo['bugCreateByCaseRate'] . '%') . '</p>';
             unset($bugInfo['countBugByTask']); unset($bugInfo['bugConfirmedRate']); unset($bugInfo['bugCreateByCaseRate']);
             ?>
             </td>
