@@ -36,7 +36,7 @@ foreach(explode(',', $showFields) as $field)
         <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden')?>'>    <?php echo $lang->priAB;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden')?>'><?php echo $lang->statusAB;?></th>
         <th class='w-150px<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->testcase->module;?></th>
-        <th><?php echo $lang->testcase->story;?></th>
+        <th class='<?php echo zget($visibleFields, 'story', ' hidden')?>'><?php echo $lang->testcase->story;?></th>
         <th><?php echo $lang->testcase->title;?></th>
         <th class='w-120px'><?php echo $lang->testcase->type;?></th>
         <th class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'>    <?php echo $lang->testcase->precondition;?></th>
