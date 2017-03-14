@@ -382,7 +382,7 @@ class testcaseModel extends model
         $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
             ->beginIF($queryProductID != 'all')->andWhere('product')->eq($productID)->fi()
             ->andWhere('deleted')->eq(0)
-            ->orderBy($orderBy)->page($pager)->fetchAll();
+            ->orderBy($orderBy)->page($pager)->fetchAll('id');
 
         return $cases;
     }
@@ -1284,7 +1284,7 @@ class testcaseModel extends model
                 ->fetchPairs('case', 'count');
         }
 
-        foreach($cases as $case)
+        foreach($cases as $key => $case)
         {
             $caseID = $type == 'case' ? $case->id : $case->case;
             $case->bugs          = isset($caseBugs[$caseID])   ? $caseBugs[$caseID]             : 0;
