@@ -16,6 +16,7 @@ $lang->testtask->view             = "概况";
 $lang->testtask->edit             = "编辑版本";
 $lang->testtask->browse           = "版本列表";
 $lang->testtask->linkCase         = "关联用例";
+$lang->testtask->selectVersion    = "选择版本";
 $lang->testtask->unlinkCase       = "移除";
 $lang->testtask->batchUnlinkCases = "批量移除用例";
 $lang->testtask->batchAssign      = "批量指派";
@@ -73,6 +74,7 @@ $lang->testtask->priList[2] = '2';
 $lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = '未关联';
+$lang->testtask->linkByVersion = '按版本关联';
 $lang->testtask->linkByStory   = '按需求关联';
 $lang->testtask->linkByBug     = '按Bug关联';
 $lang->testtask->linkBySuite   = '按套件关联';

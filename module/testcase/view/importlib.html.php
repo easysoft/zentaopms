@@ -17,7 +17,7 @@
     <strong class='pull-left'><small class='text-muted'><?php echo html::icon($lang->icons['import']);?></small> <?php echo $lang->testcase->importFromLib;?></strong>
     <div class='input-group pull-left' style='font-weight:normal;'>
       <span class='input-group-addon'><?php echo $lang->testcase->selectLib;?></span>
-      <?php  echo html::select('fromlib', $libraries, $libID, "onchange='reload(this.value)' class='form-control chosen'");?>
+      <?php echo html::select('fromlib', $libraries, $libID, "onchange='reload(this.value)' class='form-control chosen'");?>
     </div>
   </div>
 </div>
