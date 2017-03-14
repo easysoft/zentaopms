@@ -85,7 +85,7 @@ $lang->block->default['qa']['2']['params']['num']     = 15;
 $lang->block->default['qa']['2']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['2']['params']['type']    = 'assigntome';
 
-$lang->block->default['qa']['3']['title'] = 'Pending Versions';
+$lang->block->default['qa']['3']['title'] = 'Pending Builds';
 $lang->block->default['qa']['3']['block'] = 'testtask';
 $lang->block->default['qa']['3']['grid']  = 4;
 
@@ -255,5 +255,5 @@ $lang->block->flowchart   = array();
 $lang->block->flowchart[] = array('Administration',   'Manage a Company', 'Add Users', 'Maintain Privileges');
 $lang->block->flowchart[] = array($lang->productCommon . ' Manager', 'Add ' . $lang->productCommon, 'Maintain Modules', 'Maintain Plans', 'Maintain Stories', 'Create Release');
 $lang->block->flowchart[] = array($lang->projectCommon . ' Manager', 'Add ' . $lang->projectCommon, 'Maintain Teams', 'Link ' . $lang->productCommon . 's', 'Link Stories', 'Decompose Tasks');
-$lang->block->flowchart[] = array('DEV Team', 'Claim TaskS/Bugs', 'Update Status', 'Finish Tasks/Bugs');
+$lang->block->flowchart[] = array('DEV Team', 'Claim Tasks/Bugs', 'Update Status', 'Finish Tasks/Bugs');
 $lang->block->flowchart[] = array('Testing Team', 'Write Cases', 'Implement Cases', 'Report Bugs', 'Fix Bugs', 'Close Bugs');
