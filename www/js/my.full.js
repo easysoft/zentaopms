@@ -659,7 +659,8 @@ function checkTable($table)
     {
         var $checkbox = $(this);
         var $datatable = $checkbox.closest('.datatable');
-        if($datatable.length) {
+        if($datatable.length)
+        {
             var $checkAll = $datatable.find('.check-all.check-btn:first').trigger('click');
             $checkbox.prop('checked', $checkAll.hasClass('checked'))
             return;
