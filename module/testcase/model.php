@@ -401,7 +401,7 @@ class testcaseModel extends model
         return $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
-            ->Where('t1.assignedTo')->eq($account)
+            ->where('t1.assignedTo')->eq($account)
             ->andWhere('t1.status')->ne('done')
             ->andWhere('t3.status')->ne('done')
             ->andWhere('t3.deleted')->eq(0)
@@ -421,6 +421,7 @@ class testcaseModel extends model
     public function getByOpenedBy($account, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->findByOpenedBy($account)->from(TABLE_CASE)
+            ->andWhere('product')->ne(0)
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }

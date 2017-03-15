@@ -694,7 +694,7 @@ class testcase extends control
         $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList));
 
         /* Get the edited cases. */
-        $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
+        $cases = $this->testcase->getByList($caseIDList);
 
         /* The cases of a product. */
         if($productID)
@@ -745,8 +745,29 @@ class testcase extends control
             $this->loadModel('my')->setMenu();
             $this->view->position[] = html::a($this->server->http_referer, $this->lang->my->testCase);
             $this->view->title      = $this->lang->testcase->batchEdit;
+
+            /* Set modules. */
+            $productIdList = array();
+            $libs          = array();
+            $existModules  = array();
+            foreach($cases as $case)
+            {
+                if($case->lib and $case->fromLib) $libs[$case->lib] = $case->lib;
+                $productIdList[$case->product] = $case->product;
+                $existModules[$case->module]   = $case->module;
+            }
+
+            $products = $this->product->getByIdList($productIdList);
+            $modules  = array();
+            foreach($products as $product)
+            {
+                $productModules = $this->tree->getOptionMenu($product->id, $viewType = 'case', $startModuleID = 0);
+                foreach($productModules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $product->name . $moduleName;
+            }
+            if($libs) $modules  += $this->tree->getExistLibModules($libs, $existModules);
+            $this->view->modules = array('ditto' => $this->lang->testcase->ditto) + $modules;
         }
-        
+
         if(!$this->config->testcase->needReview) unset($this->lang->testcase->statusList['wait']);
         /* Judge whether the editedTasks is too large and set session. */
         $showSuhosinInfo = false;
@@ -755,7 +776,7 @@ class testcase extends control
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? $this->lang->suhosinInfo : $this->lang->maxVarsInfo;
 
         $this->loadModel('story');
-        $this->view->stories = $this->story->getProductStoryPairs($productID, $case->branch);
+        $this->view->stories = $this->story->getProductStoryPairs($productID, $branch);
 
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customBatchEditFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
