@@ -367,5 +367,5 @@ $lang->bug->featureBar['browse']['unresolved']    = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['toclosed']      = $lang->bug->toClosed;
 $lang->bug->featureBar['browse']['longlifebugs']  = $lang->bug->longLifeBugs;
 $lang->bug->featureBar['browse']['postponedbugs'] = $lang->bug->postponedBugs;
-$lang->bug->featureBar['browse']['overdueBugs']   = $lang->bug->overdueBugs;
+$lang->bug->featureBar['browse']['overduebugs']   = $lang->bug->overdueBugs;
 $lang->bug->featureBar['browse']['needconfirm']   = $lang->bug->needConfirm;
