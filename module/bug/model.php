@@ -1334,15 +1334,17 @@ class bugModel extends model
      * Get counts of some stories' bugs.
      *
      * @param  array  $stories
+     * @param  int    $projectID 
      * @access public
      * @return int
      */
-    public function getStoryBugCounts($stories)
+    public function getStoryBugCounts($stories, $projectID = 0)
     {
         $bugCounts = $this->dao->select('story, COUNT(*) AS bugs')
             ->from(TABLE_BUG)
             ->where('story')->in($stories)
             ->andWhere('deleted')->eq(0)
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->groupBy('story')
             ->fetchPairs();
         foreach($stories as $storyID) if(!isset($bugCounts[$storyID])) $bugCounts[$storyID] = 0;

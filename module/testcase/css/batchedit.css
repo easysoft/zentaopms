@@ -1,3 +1,4 @@
 .w-340px {width:340px}
 .chosen  {z-index:99}
 .chosen-container[id^="module"] .chosen-drop {min-width: 400px; border-top: 1px solid #ddd!important}
+.chosen-container[id^="stories"] .chosen-drop {min-width: 400px; border-top: 1px solid #ddd!important}

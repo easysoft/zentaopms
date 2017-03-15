@@ -27,8 +27,8 @@
     echo "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
     foreach($testTask as $tmpID => $tmpTitle)
     {
-        $active = ($type == 'byversion' and (int)$param == $tmpID) ? "class='active'" : '';
-        echo "<li $active>" . html::a(inlink('linkCase', "taskID=$taskID&type=byversion&param=$tmpID"), $tmpTitle) . "</li>";
+        $active = ($type == 'bybuild' and (int)$param == $tmpID) ? "class='active'" : '';
+        echo "<li $active>" . html::a(inlink('linkCase', "taskID=$taskID&type=bybuild&param=$tmpID"), $tmpTitle) . "</li>";
     }
     echo "</ul></span>";
 

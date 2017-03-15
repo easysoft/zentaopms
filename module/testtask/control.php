@@ -438,19 +438,19 @@ class testtask extends control
     }
 
     /**
-     * doing testtask.
+     * activate testtask.
      * 
      * @param  int    $taskID 
      * @access public
      * @return void
      */
-    public function doing($taskID)
+    public function activate($taskID)
     {
         $actions  = $this->loadModel('action')->getList('testtask', $taskID);
 
         if(!empty($_POST))
         {
-            $changes = $this->testtask->doing($taskID);
+            $changes = $this->testtask->activate($taskID);
             if(dao::isError()) die(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
@@ -473,7 +473,7 @@ class testtask extends control
         $this->view->testtask   = $testtask;
         $this->view->title      = $testtask->name . $this->lang->colon . $this->lang->testtask->start;
         $this->view->position[] = $this->lang->testtask->common;
-        $this->view->position[] = $this->lang->testtask->doing;
+        $this->view->position[] = $this->lang->testtask->activate;
         $this->view->actions    = $actions;
         $this->display();
     }
@@ -655,10 +655,10 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->linkCase;
 
-        $testTask = $this->testtask->getTestTask($productID,$taskID);
+        $testTask = $this->testtask->getRelatedTestTasks($productID,$taskID);
 
         /* Get cases. */
-        $cases = $this->testtask->getCases($productID, $task, $taskID, $type, $param, $pager);
+        $cases = $this->testtask->getLinkableCases($productID, $task, $taskID, $type, $param, $pager);
 
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->view->cases     = $cases;
