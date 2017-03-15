@@ -43,7 +43,7 @@ $lang->testsuite->lblUnlinkCase = 'Unlink Case';
 $lang->testsuite->authorList['private'] = 'Private';
 $lang->testsuite->authorList['public']  = 'Public';
 
-$lang->testlib->common = 'Test Library';
-$lang->testlib->create = 'Create';
-$lang->testlib->edit   = 'Edit';
-$lang->testlib->all    = 'All';
+$lang->caselib->common = 'Test Library';
+$lang->caselib->create = 'Create';
+$lang->caselib->edit   = 'Edit';
+$lang->caselib->all    = 'All';

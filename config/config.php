@@ -195,7 +195,7 @@ $config->objectTables['todo']        = TABLE_TODO;
 $config->objectTables['custom']      = TABLE_LANG;
 $config->objectTables['branch']      = TABLE_BRANCH;
 $config->objectTables['module']      = TABLE_MODULE;
-$config->objectTables['testlib']     = TABLE_TESTSUITE;
+$config->objectTables['caselib']     = TABLE_TESTSUITE;
 
 /* Include extension config files. */
 $extConfigFiles = glob($configRoot . 'ext/*.php');

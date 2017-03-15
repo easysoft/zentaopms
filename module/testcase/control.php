@@ -119,7 +119,7 @@ class testcase extends control
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule, $linkedLibs) : array();
 
         $moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), '', $branch);
-        $libModuleTree = $this->tree->getTestLibTreeInCase('case', $productID, array('treeModel', 'createCaseLink'));
+        $libModuleTree = $this->tree->getCaseLibTreeInCase('case', $productID, array('treeModel', 'createCaseLink'));
         if($libModuleTree) $moduleTree = substr($moduleTree, 0, strrpos($moduleTree, '</ul>')) . $libModuleTree . '</ul>';
 
         /* Assign. */
@@ -621,7 +621,7 @@ class testcase extends control
             $this->view->libID     = $case->lib;
             $this->view->libName   = $libraries[$case->lib];
             $this->view->libraries = $libraries;
-            $this->view->moduleOptionMenu = $this->tree->getOptionMenu($case->lib, $viewType = 'testlib', $startModuleID = 0);
+            $this->view->moduleOptionMenu = $this->tree->getOptionMenu($case->lib, $viewType = 'caselib', $startModuleID = 0);
         }
         else
         {
@@ -636,7 +636,7 @@ class testcase extends control
             if($case->lib and $case->fromLib)
             {
                 $libName    = $this->loadModel('testsuite')->getById($case->lib)->name;
-                $libModules = $this->tree->getOptionMenu($case->lib, 'testlib');
+                $libModules = $this->tree->getOptionMenu($case->lib, 'caselib');
                 foreach($libModules as $moduleID => $moduleName)
                 {
                     if($moduleID == 0) continue;
@@ -707,7 +707,7 @@ class testcase extends control
                 $this->lang->testcase->menu = $this->lang->testsuite->menu;
 
                 /* Set modules. */
-                $modules = $this->tree->getOptionMenu($libID, $viewType = 'testlib', $startModuleID = 0, $branch);
+                $modules = $this->tree->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0, $branch);
                 $modules = array('ditto' => $this->lang->testcase->ditto) + $modules;
 
                 $this->view->modules    = $modules;
@@ -1537,7 +1537,7 @@ class testcase extends control
 
         $modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
         $libName    = $libraries[$libID];
-        $libModules = $this->tree->getOptionMenu($libID, 'testlib');
+        $libModules = $this->tree->getOptionMenu($libID, 'caselib');
         foreach($libModules as $moduleID => $moduleName)
         {
             if($moduleID == 0) continue;

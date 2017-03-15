@@ -62,7 +62,7 @@ $lang->action->objectTypes['todo']        = 'To-Dos';
 $lang->action->objectTypes['branch']      = 'Branch';
 $lang->action->objectTypes['module']      = 'Module';
 $lang->action->objectTypes['testsuite']   = 'Suite';
-$lang->action->objectTypes['testlib']     = 'Library';
+$lang->action->objectTypes['caselib']     = 'Library';
 $lang->action->objectTypes['testreport']  = 'Report';
 
 /* 用来描述操作历史记录。*/
@@ -200,7 +200,7 @@ $lang->action->search->objectTypeList['release']     = 'Release';
 $lang->action->search->objectTypeList['productplan'] = 'Plan';
 $lang->action->search->objectTypeList['branch']      = 'Branch';
 $lang->action->search->objectTypeList['testsuite']   = 'Suite';
-$lang->action->search->objectTypeList['testlib']     = 'Library';
+$lang->action->search->objectTypeList['caselib']     = 'Library';
 
 /* 用来在动态显示中显示动作 */
 $lang->action->search->label['']                    = '';

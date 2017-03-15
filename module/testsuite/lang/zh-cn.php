@@ -43,7 +43,7 @@ $lang->testsuite->lblUnlinkCase = '移除用例';
 $lang->testsuite->authorList['private'] = '私有';
 $lang->testsuite->authorList['public']  = '公开';
 
-$lang->testlib->common = '公共用例库';
-$lang->testlib->create = '创建库';
-$lang->testlib->edit   = '编辑';
-$lang->testlib->all    = '所有公共库';
+$lang->caselib->common = '公共用例库';
+$lang->caselib->create = '创建库';
+$lang->caselib->edit   = '编辑';
+$lang->caselib->all    = '所有公共库';

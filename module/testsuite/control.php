@@ -161,7 +161,7 @@ class testsuite extends control
             if(dao::isError()) die(js::error(dao::getError()));
             if($changes)
             {
-                $objectType = $suite->type == 'library' ? 'testlib' : 'testsuite';
+                $objectType = $suite->type == 'library' ? 'caselib' : 'testsuite';
                 $actionID = $this->loadModel('action')->create($objectType, $suiteID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
@@ -178,7 +178,7 @@ class testsuite extends control
 
             $this->view->title      = $libraries[$suiteID] . $this->lang->colon . $this->lang->testsuite->edit;
             $this->view->position[] = html::a($this->createLink('testsuite', 'library', "libID=$suiteID"), $libraries[$suiteID]);
-            $this->view->position[] = $this->lang->testlib->common;
+            $this->view->position[] = $this->lang->caselib->common;
         }
         else
         {
@@ -381,8 +381,8 @@ class testsuite extends control
 
         /* Set menu. */
         $libID = $this->testsuite->saveLibState($libID, $libraries);
-        setcookie('preTestLibID', $libID, $this->config->cookieLife, $this->config->webRoot);
-        if($this->cookie->preTestLibID != $libID)
+        setcookie('preCaseLibID', $libID, $this->config->cookieLife, $this->config->webRoot);
+        if($this->cookie->preCaseLibID != $libID)
         {
             $_COOKIE['libCaseModule'] = 0;
             setcookie('libCaseModule', 0, $this->config->cookieLife, $this->config->webRoot);
@@ -415,9 +415,9 @@ class testsuite extends control
         $this->loadModel('datatable');
         $this->loadModel('tree');
         $showModule = !empty($this->config->datatable->testsuiteLibrary->showModule) ? $this->config->datatable->testsuiteLibrary->showModule : '';
-        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($libID, 'testlib', $showModule) : array();
+        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($libID, 'caselib', $showModule) : array();
 
-        $this->view->title      = $this->lang->testlib->common . $this->lang->colon . $libraries[$libID];
+        $this->view->title      = $this->lang->caselib->common . $this->lang->colon . $libraries[$libID];
         $this->view->position[] = html::a($this->createLink('testsuite', 'library', "libID=$libID"), $libraries[$libID]);
 
         $this->view->libID         = $libID;
@@ -425,8 +425,8 @@ class testsuite extends control
         $this->view->cases         = $cases;
         $this->view->orderBy       = $orderBy;
         $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->modules       = $this->tree->getOptionMenu($libID, $viewType = 'testlib', $startModuleID = 0);
-        $this->view->moduleTree    = $this->tree->getTreeMenu($libID, $viewType = 'testlib', $startModuleID = 0, array('treeModel', 'createTestLibLink'), '');
+        $this->view->modules       = $this->tree->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
+        $this->view->moduleTree    = $this->tree->getTreeMenu($libID, $viewType = 'caselib', $startModuleID = 0, array('treeModel', 'createCaseLibLink'), '');
         $this->view->pager         = $pager;
         $this->view->browseType    = $browseType;
         $this->view->moduleID      = $moduleID;
@@ -449,7 +449,7 @@ class testsuite extends control
         {
             $libID = $this->testsuite->createLib();
             if(dao::isError()) die(js::error(dao::getError()));
-            $this->loadModel('action')->create('testlib', $libID, 'opened');
+            $this->loadModel('action')->create('caselib', $libID, 'opened');
             die(js::locate($this->createLink('testsuite', 'library', "libID=$libID"), 'parent'));
         }
 
@@ -458,9 +458,9 @@ class testsuite extends control
         $libID     = $this->testsuite->saveLibState(0, $libraries);
         $this->testsuite->setLibMenu($libraries, $libID);
 
-        $this->view->title      = $this->lang->testlib->common . $this->lang->colon . $this->lang->testlib->create;
-        $this->view->position[] = $this->lang->testlib->common;
-        $this->view->position[] = $this->lang->testlib->create;
+        $this->view->title      = $this->lang->caselib->common . $this->lang->colon . $this->lang->caselib->create;
+        $this->view->position[] = $this->lang->caselib->common;
+        $this->view->position[] = $this->lang->caselib->create;
         $this->display();
     }
 
@@ -544,7 +544,7 @@ class testsuite extends control
         $this->view->precondition     = $precondition;
         $this->view->keywords         = $keywords;
         $this->view->steps            = $steps;
-        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'testlib', $startModuleID = 0);
+        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
         $this->display();
     }
 
@@ -570,7 +570,7 @@ class testsuite extends control
         $this->view->position[] = $this->lang->testsuite->view;
 
         $this->view->lib      = $lib;
-        $this->view->actions  = $this->loadModel('action')->getList('testlib', $libID);
+        $this->view->actions  = $this->loadModel('action')->getList('caselib', $libID);
         $this->display();
     }
 

@@ -270,7 +270,7 @@ class testtask extends control
         $runs = $this->testcase->appendBugAndResults($runs, 'run');
 
         $moduleTree    = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID);
-        $libModuleTree = $this->tree->getTestLibTreeInCase('testtask', $taskID, array('treeModel', 'createTestTaskLink'));
+        $libModuleTree = $this->tree->getCaseLibTreeInCase('testtask', $taskID, array('treeModel', 'createTestTaskLink'));
         if($libModuleTree) $moduleTree = substr($moduleTree, 0, strrpos($moduleTree, '</ul>')) . $libModuleTree . '</ul>';
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;

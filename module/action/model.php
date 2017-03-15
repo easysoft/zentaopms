@@ -373,7 +373,7 @@ class actionModel extends model
             ->andWhere('extra')->eq($extra)
             ->orderBy($orderBy)->page($pager)->fetchAll();
         if(!$trashes) return array();
-        
+
         /* Group trashes by objectType, and get there name field. */
         foreach($trashes as $object) 
         {
@@ -627,7 +627,7 @@ class actionModel extends model
      */
     public function getBySQL($sql, $orderBy, $pager = null)
     {
-         return $actions = $this->dao->select('*')->from(TABLE_ACTION)
+        return $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where($sql)
             ->orderBy($orderBy)
             ->page($pager)
@@ -669,11 +669,11 @@ class actionModel extends model
                     if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
                     if($todo->private == 1 and $todo->account != $this->app->user->account) 
                     {
-                       $objectNames[$objectType][$id] = $this->lang->todo->thisIsPrivate;
+                        $objectNames[$objectType][$id] = $this->lang->todo->thisIsPrivate;
                     }
                     else
                     {
-                       $objectNames[$objectType][$id] = $todo->name;
+                        $objectNames[$objectType][$id] = $todo->name;
                     }
                 }
             } 
