@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('dittoNotice', $this->lang->bug->dittoNotice);?>
 <div id='titlebar'>
   <div class='heading'>
@@ -40,6 +41,7 @@ $columns = count($visibleFields) + 2;
         <th <?php if(count($visibleFields) >= 10) echo "class='w-150px'"?>><?php echo $lang->bug->title;?> <span class='required'></span></th>
         <th class='w-150px<?php echo zget($visibleFields, 'productplan', ' hidden')?>'><?php echo $lang->bug->productplan;?></th>
         <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'><?php echo $lang->bug->assignedTo;?></th>
+        <th class='w-100px<?php echo zget($visibleFields, 'deadline', ' hidden')?>'><?php echo $lang->bug->deadline;?></th>
         <th class='w-90px<?php echo zget($visibleFields, 'status', ' hidden')?>'><?php echo $lang->bug->status;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'os', ' hidden')?>'><?php echo $lang->bug->os;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'browser', ' hidden')?>'><?php echo $lang->bug->browser;?></th>
@@ -77,6 +79,7 @@ $columns = count($visibleFields) + 2;
         </td>
         <td class='text-left<?php echo zget($visibleFields, 'productplan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plans[$bugID]", $plans, $bugs[$bugID]->plan, "class='form-control chosen'");?></td>
         <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $users, $bugs[$bugID]->assignedTo, "class='form-control chosen'");?></td>
+        <td class='<?php echo zget($visibleFields, 'deadline', ' hidden')?>' style='overflow:visible'><?php echo html::input("deadlines[$bugID]", $bugs[$bugID]->deadline, "class='form-control form-date'");?></td>
         <td <?php echo zget($visibleFields, 'status', "class='hidden'")?>><?php echo html::select("statuses[$bugID]", $statusList, $bugs[$bugID]->status, 'class=form-control');?></td>
         <td <?php echo zget($visibleFields, 'os', "class='hidden'")?>><?php echo html::select("os[$bugID]", $osList, $bugs[$bugID]->os, 'class=form-control');?></td>
         <td <?php echo zget($visibleFields, 'browser', "class='hidden'")?>><?php echo html::select("browsers[$bugID]", $browserList, $bugs[$bugID]->browser, 'class=form-control');?></td>

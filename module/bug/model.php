@@ -46,6 +46,7 @@ class bugModel extends model
             ->add('openedDate', $now)
             ->setDefault('project,story,task', 0)
             ->setDefault('openedBuild', '')
+            ->setDefault('deadline', '0000-00-00')
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->stripTags($this->config->bug->editor->create['id'], $this->config->allowedTags)
@@ -465,6 +466,7 @@ class bugModel extends model
             ->setDefault('project,module,project,story,task,duplicateBug,branch', 0)
             ->setDefault('openedBuild', '')
             ->setDefault('plan', 0)
+            ->setDefault('deadline', '0000-00-00')
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->join('openedBuild', ',')
@@ -563,6 +565,7 @@ class bugModel extends model
                 $bug->title          = $data->titles[$bugID];
                 $bug->plan           = empty($data->plans[$bugID]) ? 0 : $data->plans[$bugID];
                 $bug->assignedTo     = $data->assignedTos[$bugID];
+                $bug->deadline       = $data->deadlines[$bugID];
                 $bug->resolvedBy     = $data->resolvedBys[$bugID];
                 $bug->keywords       = $data->keywords[$bugID];
                 $bug->os             = $data->os[$bugID];
@@ -2265,6 +2268,8 @@ class bugModel extends model
             case 'assignedDate':
                 echo substr($bug->assignedDate, 5, 11);
                 break;
+            case 'deadline':
+                echo $bug->deadline;
             case 'resolvedBy':
                 echo zget($users, $bug->resolvedBy, $bug->resolvedBy);
                 break;
