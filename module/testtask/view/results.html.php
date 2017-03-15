@@ -82,7 +82,8 @@
               <tr class='step <?php echo $stepClass?>'>
                 <td class='step-id'>
                   <?php if($result->caseResult == 'fail'):?>
-                  <input type='checkbox' name='stepIDList[]'  value='<?php echo $key;?>'/>
+                  <?php $inputName = $stepClass == 'step-item' ? 'stepIDList[]' : 'stepGroup[]';?>
+                  <input type='checkbox' name='<?php echo $inputName;?>'  value='<?php echo $key;?>'/>
                   <?php endif;?>
                   <?php echo $stepId;?>
                 </td>
