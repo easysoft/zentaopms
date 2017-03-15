@@ -128,7 +128,7 @@ class sso extends control
      */
     public function ajaxSetConfig()
     {
-        if(strpos($this->app->company->admins, $this->app->user->account) === false) die('deny');
+        if(!$this->app->user->admin) die('deny');
 
         if($_POST)
         {

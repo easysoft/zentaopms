@@ -26,8 +26,7 @@ class projectModel extends model
     public function checkPriv($project)
     {
         /* If is admin, return true. */
-        $account = ',' . $this->app->user->account . ',';
-        if(strpos($this->app->company->admins, $account) !== false) return true; 
+        if($this->app->user->admin) return true; 
 
         $acls = $this->app->user->rights['acls'];
         if(!empty($acls['projects']) and !in_array($project->id, $acls['projects'])) return false;

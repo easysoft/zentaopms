@@ -529,7 +529,7 @@ class actionModel extends model
             $condition = "(product =',0,' AND project = '0')";
             if($projectCondition) $condition .= ' OR ' . $projectCondition;
             if($productCondition) $condition .= ' OR ' . $productCondition;
-            if(strpos($this->app->company->admins, ',' . $this->app->user->account . ',') !== false) $condition = 1; 
+            if($this->app->user->admin) $condition = 1; 
         }
 
         $this->loadModel('doc');

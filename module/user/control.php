@@ -537,7 +537,7 @@ class user extends control
     public function delete($userID)
     {
         $user = $this->user->getByID($userID, 'id');
-        if(strpos($this->app->company->admins, ",{$this->app->user->account},") !== false and $this->app->user->account == $user->account) return;
+        if($this->app->user->admin and $this->app->user->account == $user->account) return;
         if($_POST)
         {
             if(md5($this->post->verifyPassword) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPassword));

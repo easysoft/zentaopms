@@ -128,7 +128,7 @@ class productModel extends model
     {
         /* Is admin? */
         $account = ',' . $this->app->user->account . ',';
-        if(strpos($this->app->company->admins, $account) !== false) return true; 
+        if($this->app->user->admin) return true; 
 
         $acls = $this->app->user->rights['acls'];
         if(!empty($acls['products']) and !in_array($product->id, $acls['products'])) return false;
@@ -746,8 +746,8 @@ class productModel extends model
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
                 ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.project = t3.project')
                 ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t2.project = t4.id')
-                ->beginIF(strpos($this->app->company->admins, $account) !== false)->where('t1.deleted')->eq(0)->fi()
-                ->beginIF(strpos($this->app->company->admins, $account) === false)
+                ->beginIF($this->app->user->admin)->where('t1.deleted')->eq(0)->fi()
+                ->beginIF(!$this->app->user->admin)
                 ->where('t1.acl')->eq('open')
                 ->orWhere("(t1.acl = 'custom' AND $groupSql)")
                 ->orWhere('t1.PO')->eq($this->app->user->account)
