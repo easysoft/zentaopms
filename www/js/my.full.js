@@ -368,7 +368,8 @@ function hideTreeBox(treeType)
 {
     $.cookie(treeType, 'hide', {expires:config.cookieLife, path:config.webRoot});
     $('.outer').addClass('hide-side');
-    $('.side-handle .icon-caret-left').removeClass('icon-caret-left').addClass('icon-caret-right');
+    if($('.side-handle .icon-caret-left').size() > 0)$('.side-handle .icon-caret-left').removeClass('icon-caret-left').addClass('icon-caret-right');
+    if($('.side-handle .icon-caret-right').size() > 0)$('.side-handle .icon-caret-right').removeClass('icon-caret-right').addClass('icon-caret-left');
 }
 
 /**
@@ -382,7 +383,8 @@ function showTreeBox(treeType)
 {
     $.cookie(treeType, 'show', {expires:config.cookieLife, path:config.webRoot});
     $('.outer').removeClass('hide-side');
-    $('.side-handle .icon-caret-right').removeClass('icon-caret-right').addClass('icon-caret-left');
+    if($('.side-handle .icon-caret-right').size() > 0) $('.side-handle .icon-caret-right').removeClass('icon-caret-right').addClass('icon-caret-left');
+    if($('.side-handle .icon-caret-left').size() > 0) $('.side-handle .icon-caret-left').removeClass('icon-caret-left').addClass('icon-caret-right');
 }
 
 /**

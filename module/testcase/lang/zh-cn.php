@@ -147,7 +147,7 @@ $lang->testcase->stageList['bvt']        = '版本验证阶段';
 
 $lang->testcase->reviewResultList['']        = '';
 $lang->testcase->reviewResultList['pass']    = '确认通过';
-$lang->testcase->reviewResultList['clarify'] = '有待明确';
+$lang->testcase->reviewResultList['clarify'] = '继续完善';
 
 $lang->testcase->groups['']      = '分组查看';
 $lang->testcase->groups['story'] = '需求分组';
