@@ -21,6 +21,17 @@
   <div class='actions'>
     <?php
     echo "<div class='btn-group'>";
+
+    echo "<span class='dropdown'>";
+    echo "<button class='btn' type='button' data-toggle='dropdown'><i class='icon icon-link'></i> {$lang->testtask->linkByVersion} <span class='caret'></span></button>";
+    echo "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
+    foreach($testTask as $tmpID => $tmpTitle)
+    {
+        $active = ($type == 'bybuild' and (int)$param == $tmpID) ? "class='active'" : '';
+        echo "<li $active>" . html::a(inlink('linkCase', "taskID=$taskID&type=bybuild&param=$tmpID"), $tmpTitle) . "</li>";
+    }
+    echo "</ul></span>";
+
     echo "<span class='dropdown'>";
     echo "<button class='btn' type='button' data-toggle='dropdown'><i class='icon icon-link'></i> {$lang->testtask->linkBySuite} <span class='caret'></span></button>";
     echo "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
@@ -32,10 +43,14 @@
         echo "<li $active>" . html::a(inlink('linkCase', "taskID=$taskID&type=bysuite&param=$suiteID"), $suiteName) . "</li>";
     }
     echo "</ul></span>";
+
     $lang->testtask->linkCase = $lang->testtask->linkByStory;
     common::printIcon('testtask', 'linkCase', "taskID=$taskID&type=bystory", '', 'button', 'link');
+
+    //Temporary hiding, add 'hidden'. 暂时隐藏
     $lang->testtask->linkCase = $lang->testtask->linkByBug;
-    common::printIcon('testtask', 'linkCase', "taskID=$taskID&type=bybug", '', 'button', 'link');
+    common::printIcon('testtask', 'linkCase', "taskID=$taskID&type=bybug", '', 'button', 'link', '', 'hidden');
+
     echo '</div>';
     echo "<div class='btn-group'>";
     common::printRPN($this->session->testtaskList);
@@ -57,6 +72,9 @@
       <th><?php echo $lang->testcase->title;?></th>
       <th class='w-type'><?php echo $lang->testcase->type;?></th>
       <th class='w-user'><?php echo $lang->openedByAB;?></th>
+      <th class='w-80px'><?php echo $lang->testtask->lastRunAccount;?></th>
+      <th class='w-120px'><?php echo $lang->testtask->lastRunTime;?></th>
+      <th class='w-80px'><?php echo $lang->testtask->lastRunResult;?></th>
       <th class='w-status'><?php echo $lang->statusAB;?></th>
     </tr>
   </thead>
@@ -81,13 +99,16 @@
     </td>
     <td><?php echo $lang->testcase->typeList[$case->type];?></td>
     <td><?php echo $users[$case->openedBy];?></td>
+    <td><?php echo $case->lastRunner;?></td>
+    <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
+    <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
     <td class='case-<?php echo $case->status?>'><?php echo $lang->testcase->statusList[$case->status];?></td>
   </tr>
   <?php endforeach;?>
   </tbody>
   <tfoot> 
   <tr>
-    <td colspan='7'>
+    <td colspan='10'>
       <?php if($cases):?>
         <div class='table-actions pd-0 clearfix'><?php echo html::selectButton() . html::submitButton();?></div>
       <?php endif;?>

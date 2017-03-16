@@ -250,6 +250,7 @@ class bug extends control
         $os         = '';
         $browser    = '';
         $assignedTo = '';
+        $deadline   = '';
         $mailto     = '';
         $keywords   = '';
         $severity   = 3;
@@ -283,6 +284,7 @@ class bug extends control
             $severity   = $bug->severity;
             $type       = $bug->type;
             $assignedTo = $bug->assignedTo;
+            $deadline   = $bug->deadline;
         }
 
         /* If projectID is setted, get builds and stories of this project. */
@@ -338,6 +340,7 @@ class bug extends control
         $this->view->browser          = $browser;
         $this->view->projectMembers   = $projectMembers;
         $this->view->assignedTo       = $assignedTo;
+        $this->view->deadline         = $deadline;
         $this->view->mailto           = $mailto;
         $this->view->keywords         = $keywords;
         $this->view->severity         = $severity;

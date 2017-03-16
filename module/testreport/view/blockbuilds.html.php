@@ -1,4 +1,3 @@
-<?php if($builds):?>
 <table class='table' id='builds'>
   <thead>
     <tr>
@@ -8,6 +7,7 @@
       <th class='w-date'><?php echo $lang->build->date;?></th>
     </tr>
   </thead>
+  <?php if($builds):?>
   <tbody class='text-center'>
     <?php foreach($builds as $build):?>
     <tr>
@@ -18,7 +18,7 @@
     </tr>
     <?php endforeach;?>
   </tbody>
+  <?php else:?>
+  <tr><td class='none-data'><?php echo 'Trunk'?></td></tr>
+  <?php endif;?>
 </table>
-<?php else:?>
-<?php echo 'Trunk'?>
-<?php endif;?>

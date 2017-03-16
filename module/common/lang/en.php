@@ -238,7 +238,7 @@ $lang->qa->menu->testcase  = array('link' => 'Case|testcase|browse|productID=%s'
 $lang->qa->menu->testtask  = array('link' => 'Build|testtask|browse|productID=%s');
 $lang->qa->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
 $lang->qa->menu->report    = array('link' => '总结报告|testreport|browse|productID=%s');
-$lang->qa->menu->testlib   = array('link' => '公共库|testsuite|library');
+$lang->qa->menu->caselib   = array('link' => '公共库|testsuite|library');
 $lang->qa->menu->index     = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->bug = new stdclass();
@@ -250,7 +250,7 @@ $lang->bug->menu->testcase  = array('link' => 'Case|testcase|browse|productID=%s
 $lang->bug->menu->testtask  = array('link' => 'Build|testtask|browse|productID=%s');
 $lang->bug->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
 $lang->bug->menu->report    = array('link' => '总结报告|testreport|browse|productID=%s');
-$lang->bug->menu->testlib   = array('link' => '公共库|testsuite|library');
+$lang->bug->menu->caselib   = array('link' => '公共库|testsuite|library');
 $lang->bug->menu->index     = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->testcase = new stdclass();
@@ -262,7 +262,7 @@ $lang->testcase->menu->testcase  = array('link' => 'Case|testcase|browse|product
 $lang->testcase->menu->testtask  = array('link' => 'Build|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase');
 $lang->testcase->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
 $lang->testcase->menu->report    = array('link' => '总结报告|testreport|browse|productID=%s', 'alias' => 'view,create');
-$lang->testcase->menu->testlib   = array('link' => '公共库|testsuite|library');
+$lang->testcase->menu->caselib   = array('link' => '公共库|testsuite|library');
 $lang->testcase->menu->index     = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->testtask = new stdclass();
@@ -272,16 +272,16 @@ $lang->testsuite->menu = $lang->testcase->menu;
 $lang->testreport = new stdclass();
 $lang->testreport->menu = $lang->testcase->menu;
 
-$lang->testlib = new stdclass();
-$lang->testlib->menu = new stdclass();
-$lang->testlib->menu->lib       = array('link' => '%s', 'fixed' => true);
-$lang->testlib->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testlib->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
-$lang->testlib->menu->testtask  = array('link' => '版本|testtask|browse|productID=%s');
-$lang->testlib->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
-$lang->testlib->menu->testlib   = array('link' => '公共库|testsuite|library', 'alias' => 'createlib,createcase,libview,edit', 'subModule' => 'tree,testcase');
-$lang->testlib->menu->create    = array('link' => "<i class='icon-plus'></i>创建库|testsuite|createLib|", 'float' => 'right');
-$lang->testlib->menu->index     = array('link' => "<i class='icon-home'></i>测试主页|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->caselib = new stdclass();
+$lang->caselib->menu = new stdclass();
+$lang->caselib->menu->lib       = array('link' => '%s', 'fixed' => true);
+$lang->caselib->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
+$lang->caselib->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
+$lang->caselib->menu->testtask  = array('link' => '版本|testtask|browse|productID=%s');
+$lang->caselib->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
+$lang->caselib->menu->caselib   = array('link' => '公共库|testsuite|library', 'alias' => 'createlib,createcase,libview,edit', 'subModule' => 'tree,testcase');
+$lang->caselib->menu->create    = array('link' => "<i class='icon-plus'></i>创建库|testsuite|createLib|", 'float' => 'right');
+$lang->caselib->menu->index     = array('link' => "<i class='icon-home'></i>测试主页|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();

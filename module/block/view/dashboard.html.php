@@ -45,8 +45,8 @@ $useGuest = $this->app->user->account == 'guest';
                 <?php endif;?>
                 <li><a href='javascript:;' class='remove-panel'><i class='icon-remove'></i> <?php echo $lang->block->remove; ?></a></li>
                 <?php endif;?>
-                <?php if(strpos($this->app->company->admins, ",{$this->app->user->account},") !== false):?>
-                <li><?php echo html::a($this->createLink('block', 'close', "blockID={$block->id}"), "<i class='icon-eye-close'></i> {$lang->block->foreverClose}", 'hiddenwin', "class='close-block' onclick=\"return confirm('{$lang->block->confirmClose}')\"")?>
+                <?php if($this->app->user->admin):?>
+                <li><?php echo html::a($this->createLink('block', 'close', "blockID={$block->id}"), "<i class='icon-eye-close'></i> {$lang->block->closeForever}", 'hiddenwin', "class='close-block' onclick=\"return confirm('{$lang->block->confirmClose}')\"")?>
                 <?php endif;?>
               </ul>
             </div>

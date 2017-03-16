@@ -48,7 +48,7 @@
             common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", '', 'button', '', '', 'runCase', false, "data-width='95%'");
             common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", '', 'button', '', '', 'results', false, "data-width='95%'");
 
-            if($caseFailCount > 0) common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", '', 'button', 'bug', '', 'iframe');
+            if($caseFailCount > 0) common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", '', 'button', 'bug', '', 'iframe', '', "data-width='90%'");
         }
         if($config->testcase->needReview) common::printIcon('testcase', 'review', "caseID=$case->id", $case, 'button', 'review', '', 'iframe');
         echo '</div>';
@@ -127,6 +127,7 @@
     </div>
   </div>
   <div class='col-side'>
+    <a class='side-handle' data-id='caseSide'><i class='icon-caret-right'></i></a>
     <div class='main main-side'>
       <fieldset>
         <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>

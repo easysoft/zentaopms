@@ -75,7 +75,7 @@ function setTemplate(templateID)
 function deleteTemplate(templateID)
 {
     if(!templateID) return;
-	if (confirm(TemplateDelete)){
+	if (confirm(templateDelete)){
 		hiddenwin.location.href = createLink('bug', 'deleteTemplate', 'templateID=' + templateID);
 		$('#tplBox' + templateID).addClass('hidden');
 	}

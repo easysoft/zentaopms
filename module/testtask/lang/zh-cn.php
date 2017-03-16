@@ -16,6 +16,7 @@ $lang->testtask->view             = "概况";
 $lang->testtask->edit             = "编辑版本";
 $lang->testtask->browse           = "版本列表";
 $lang->testtask->linkCase         = "关联用例";
+$lang->testtask->selectVersion    = "选择版本";
 $lang->testtask->unlinkCase       = "移除";
 $lang->testtask->batchUnlinkCases = "批量移除用例";
 $lang->testtask->batchAssign      = "批量指派";
@@ -32,8 +33,8 @@ $lang->testtask->start            = "开始";
 $lang->testtask->close            = "关闭";
 $lang->testtask->wait             = "待测版本";
 $lang->testtask->blocked          = "阻塞";
-$lang->testtask->doing            = "激活";
-$lang->testtask->doingA           = "进行中版本";
+$lang->testtask->activate         = "激活";
+$lang->testtask->testing          = "测试中版本";
 $lang->testtask->blockedA         = "被阻塞版本";
 $lang->testtask->done             = "已测版本";
 
@@ -73,6 +74,7 @@ $lang->testtask->priList[2] = '2';
 $lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = '未关联';
+$lang->testtask->linkByVersion = '按版本复制';
 $lang->testtask->linkByStory   = '按需求关联';
 $lang->testtask->linkByBug     = '按Bug关联';
 $lang->testtask->linkBySuite   = '按套件关联';

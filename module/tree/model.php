@@ -155,7 +155,7 @@ class treeModel extends model
             $modules = array();
             if($viewType == 'case' and $extra)
             {
-                $modules += $this->dao->select('id,name,path,short')->from(TABLE_MODULE)->where('root')->in($extra)->andWhere('type')->eq('testlib')->andWhere('deleted')->eq(0)->fetchAll('id');
+                $modules += $this->dao->select('id,name,path,short')->from(TABLE_MODULE)->where('root')->in($extra)->andWhere('type')->eq('caselib')->andWhere('deleted')->eq(0)->fetchAll('id');
             }
             if($this->isMergeModule($rootID, $viewType)) $viewType .= ',story';
             $modules += $this->dao->select('id,name,path,short')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->andWhere('deleted')->eq(0)->fetchAll('id');
@@ -886,12 +886,30 @@ class treeModel extends model
         return $linkHtml;
     }
 
-    public function createTestlibLink($type, $module)
+    /**
+     * Create case lib link 
+     * 
+     * @param  string $type 
+     * @param  string $module 
+     * @access public
+     * @return string
+     */
+    public function createCaseLibLink($type, $module)
     {
         $linkHtml = html::a(helper::createLink('testsuite', 'library', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
         return $linkHtml;
     }
 
+    /**
+     * Create branch link 
+     * 
+     * @param  string $type 
+     * @param  int    $rootID 
+     * @param  int    $branchID 
+     * @param  string $branch 
+     * @access public
+     * @return string
+     */
     public function createBranchLink($type, $rootID, $branchID, $branch)
     {
         if($type == 'story') return html::a(helper::createLink('product', 'browse', "productID={$rootID}&branch=$branchID"), $branch, '_self', "id='branch{$branchID}'");
@@ -1498,7 +1516,7 @@ class treeModel extends model
     }
 
     /**
-     * Get testlib tree in case view.
+     * Get caselib tree in case view.
      * 
      * @param  string $objectType 
      * @param  int    $objectID 
@@ -1506,7 +1524,7 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function getTestLibTreeInCase($objectType, $objectID, $userFunc)
+    public function getCaseLibTreeInCase($objectType, $objectID, $userFunc)
     {
         if($objectType == 'case')
         {
@@ -1530,7 +1548,7 @@ class treeModel extends model
         if(empty($libs)) return null;
 
         $libs        = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('type')->eq('library')->andWhere('id')->in($libs)->andWhere('deleted')->eq(0)->fetchAll('id');
-        $moduleGroup = $this->dao->select('*')->from(TABLE_MODULE)->where('root')->in(array_keys($libs))->andWhere('type')->eq('testlib')->andWhere('deleted')->eq(0)->orderBy('grade desc, `order`')->fetchGroup('root');
+        $moduleGroup = $this->dao->select('*')->from(TABLE_MODULE)->where('root')->in(array_keys($libs))->andWhere('type')->eq('caselib')->andWhere('deleted')->eq(0)->orderBy('grade desc, `order`')->fetchGroup('root');
         $lastMenu    = '';
         $keepModules = array();
         foreach($libs as $lib)
@@ -1576,7 +1594,7 @@ class treeModel extends model
     public function getExistLibModules($libs, $modules)
     {
         $libs = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('type')->eq('library')->andWhere('id')->in($libs)->andWhere('deleted')->eq(0)->fetchAll('id');
-        $libModules  = $this->dao->select('*')->from(TABLE_MODULE)->where('root')->in(array_keys($libs))->andWhere('type')->eq('testlib')->andWhere('deleted')->eq(0)->andWhere('id')->in($modules)->orderBy('grade,`order`')->fetchAll();
+        $libModules  = $this->dao->select('*')->from(TABLE_MODULE)->where('root')->in(array_keys($libs))->andWhere('type')->eq('caselib')->andWhere('deleted')->eq(0)->andWhere('id')->in($modules)->orderBy('grade,`order`')->fetchAll();
         $modulePath  = array();
         foreach($libModules as $module)
         {

@@ -142,31 +142,6 @@ class testtaskModel extends model
     }
 
     /**
-     * Bet tasks by project.
-     * 
-     * @param  int    $projectID 
-     * @access public
-     * @return array
-     */
-    public function getByProject($projectID)
-    {
-        return $this->dao->select('*')->from(TABLE_TESTTASK)->where('project')->eq((int)$projectID)->andWhere('deleted')->eq(0)->fetchAll('id');
-    }
-
-    /**
-     * Get taskrun by case id.
-     * 
-     * @param  int    $taskID 
-     * @param  int    $caseID 
-     * @access public
-     * @return void
-     */
-    public function getRunByCase($taskID, $caseID)
-    {
-        return $this->dao->select('*')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('`case`')->eq($caseID)->fetch();
-    }
-
-    /**
      * Get test tasks by user.
      * 
      * @param   string $account 
@@ -186,6 +161,198 @@ class testtaskModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+    }
+
+
+
+    /**
+     * Get taskrun by case id.
+     * 
+     * @param  int    $taskID 
+     * @param  int    $caseID 
+     * @access public
+     * @return void
+     */
+    public function getRunByCase($taskID, $caseID)
+    {
+        return $this->dao->select('*')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('`case`')->eq($caseID)->fetch();
+    }
+
+    /**
+     * Get linkable casses.
+     * 
+     * @param  int    $productID 
+     * @param  object $task
+     * @param  int    $taskID 
+     * @param  string $type
+     * @param  string $param
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getLinkableCases($productID, $task, $taskID, $type, $param, $pager)
+    {
+        if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
+        $query = $this->session->testcaseQuery;
+        $allProduct = "`product` = 'all'";
+        if(strpos($query, '`product` =') === false && $type != 'bysuite') $query .= " AND `product` = $productID";
+        if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1', $query);
+
+        $cases = array();
+        $linkedCases = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs('case');
+        if($type == 'all')     $cases = $this->getAllLinkableCases($task, $query, $linkedCases, $pager);
+        if($type == 'bystory') $cases = $this->getLinkableCasesByStory($productID, $task, $query, $linkedCases, $pager);
+        if($type == 'bybug')   $cases = $this->getLinkableCasesByBug($productID, $task, $query, $linkedCases, $pager);
+        if($type == 'bysuite') $cases = $this->getLinkableCasesBySuite($productID, $query, $param, $linkedCases, $pager);
+        if($type == 'bybuild') $cases = $this->getLinkableCasesByTestTask($param, $linkedCases, $pager);
+
+        return $cases;
+    }
+
+    /**
+     * Get all linkable  cases.
+     * 
+     * @param  object $task
+     * @param  string $query 
+     * @param  array  $linkedCases
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getAllLinkableCases($task, $query, $linkedCases, $pager)
+    {
+        return $this->dao->select('*')->from(TABLE_CASE)->where($query)
+                ->andWhere('id')->notIN($linkedCases)
+                ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id desc')
+                ->page($pager)
+                ->fetchAll();
+    }
+
+    /**
+     * Get linkable cases by story.
+     * 
+     * @param  int    $productID 
+     * @param  object $task
+     * @param  string $query
+     * @param  array  $linkedCases
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getLinkableCasesByStory($productID, $task, $query, $linkedCases, $pager)
+    {
+        $stories = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('stories');
+        $cases   = array();
+        if($stories)
+        {
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
+                ->andWhere('product')->eq($productID)
+                ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
+                ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
+                ->andWhere('story')->in(trim($stories, ','))
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id desc')
+                ->page($pager)
+                ->fetchAll();
+        }
+
+        return $cases;
+    }
+
+    /**
+     * Get linkable cases by bug.
+     * 
+     * @param  int    $productID 
+     * @param  object $task
+     * @param  string $query
+     * @param  array  $linkedCases
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getLinkableCasesByBug($productID, $task, $query, $linkedCases, $pager)
+    {
+        $bugs = $this->dao->select('bugs')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('bugs');
+        $cases = array();
+        if($bugs)
+        {
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
+                ->andWhere('product')->eq($productID)
+                ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
+                ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
+                ->andWhere('fromBug')->in(trim($bugs, ','))
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id desc')
+                ->page($pager)
+                ->fetchAll();
+        }
+
+        return $cases;
+    }
+
+    /**
+     * Get linkable cases by suite.
+     * 
+     * @param  int    $productID 
+     * @param  string $query
+     * @param  string $suite
+     * @param  array  $linkedCases
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getLinkableCasesBySuite($productID, $query, $suite, $linkedCases, $pager)
+    {
+        return $this->dao->select('t1.*,t2.version as version')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
+                ->where($query)
+                ->andWhere('t2.suite')->eq((int)$suite)
+                ->andWhere('t1.product')->eq($productID)
+                ->beginIF($linkedCases)->andWhere('t1.id')->notIN($linkedCases)->fi()
+                ->beginIF($task->branch)->andWhere('t1.branch')->in("0,$task->branch")->fi()
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id desc')
+                ->page($pager)
+                ->fetchAll();
+    }
+
+    /**
+     * Get linkeable cases by test task.
+     * 
+     * @param  string $testTask
+     * @param  array  $linkedCases
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getLinkableCasesByTestTask($testTask, $linkedCases, $pager)
+    {
+        $caseList  = $this->dao->select("`case`")->from(TABLE_TESTRUN)->where('task')->eq($testTask)->andWhere('id')->notin($linkedCases)->fetchPairs('case');
+        
+        return $this->dao->select("*")->from(TABLE_CASE)->where('id')->in($caseList)->page($pager)->fetchAll();
+    }
+
+    /**
+     * Get related test tasks.
+     * 
+     * @param  int    $productID 
+     * @param  int    $taskID 
+     * @access public
+     * @return array
+     */
+    public function getRelatedTestTasks($productID, $testTaskID)
+    {
+        $beginDate = $this->dao->select('begin')->from(TABLE_TESTTASK)->where('id')->eq($testTaskID)->fetch('begin');
+
+        return $this->dao->select('id, name')->from(TABLE_TESTTASK)
+            ->where('product')->eq($productID)
+            ->beginIF($beginDate)->andWhere('begin')->le($beginDate)->fi()
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('id')->notin($testTaskID)
+            ->orderBy('begin desc')
+            ->fetchPairs('id', 'name');
     }
 
     /**
@@ -265,13 +432,13 @@ class testtaskModel extends model
     }
 
     /**
-     * blocked testtask.
+     * update block testtask.
      * 
      * @param  int    $taskID 
-     * @access public
+     * @access public 
      * @return void
      */
-    public function blocked($taskID)
+    public function block($taskID)
     {
         $oldTesttask = $this->getById($taskID);
         $testtask = fixer::input('post')
@@ -287,13 +454,13 @@ class testtaskModel extends model
     }
 
     /**
-     * doing testtask.
+     * update activate testtask.
      * 
      * @param  int    $taskID 
      * @access public
      * @return void
      */
-    public function doing($taskID)
+    public function activate($taskID)
     {
         $oldTesttask = $this->getById($taskID);
         $testtask = fixer::input('post')
@@ -560,7 +727,7 @@ class testtaskModel extends model
         {
             $runs = $this->dao->select('id, `case`')->from(TABLE_TESTRUN)
                 ->where('`case`')->in($caseIdList)
-                ->beginIF($taskID)->andWhere('task')->eq($taskID)
+                ->beginIF($taskID)->andWhere('task')->eq($taskID)->fi()
                 ->fetchPairs('case', 'id');
         }
 

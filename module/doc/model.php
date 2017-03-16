@@ -604,7 +604,7 @@ class docModel extends model
 
         $account = ',' . $this->app->user->account . ',';
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
-        if(strpos($this->app->company->admins, $account) !== false) return true;
+        if($this->app->user->admin) return true;
         if($object->acl == 'private' and strpos(",$object->users,", $account) !== false) return true;
         if($object->acl == 'custom')
         {
@@ -915,7 +915,7 @@ class docModel extends model
         if($table) $table .= '.';
         $condition = '';
         $account   = ',' . $this->app->user->account . ',';
-        if(strpos($this->app->company->admins, $account) === false)
+        if(!$this->app->user->admin)
         {
             $condition .= "{$table}acl='open'";
             if($type == 'doc') $condition .= " OR {$table}addedBy = '{$this->app->user->account}'";

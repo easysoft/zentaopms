@@ -93,7 +93,7 @@ class testreportModel extends model
         return $this->dao->select('*')->from(TABLE_TESTREPORT)->where('deleted')->eq(0)
             ->beginIF($objectType == 'project')->andWhere('objectID')->eq($objectID)->andWhere('objectType')->eq('project')->fi()
             ->beginIF($objectType == 'product' and $extra)->andWhere('objectID')->eq((int)$extra)->andWhere('objectType')->eq('testtask')->fi()
-            ->beginIF($objectType == 'product' and empty($extra))->andWhere("CONCAT(',', product, ',') like '%,$objectID,%'")->fi()
+            ->beginIF($objectType == 'product' and empty($extra))->andWhere('product')->eq($objectID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -136,12 +136,13 @@ class testreportModel extends model
             if($bug->case) $byCaseNum ++;
         }
         $bugInfo['legacyBugs']          = $legacyBugs;
+        $bugInfo['countBugByTask']      = count($bugsByTask);
         $bugInfo['bugSeverityGroups']   = $severityGroups;
         $bugInfo['bugStatusGroups']     = $statusGroups;
-        $bugInfo['bugOpenedByGroups']   = $openedByGroups;
-        $bugInfo['bugResolvedByGroups'] = $resolvedByGroups;
         $bugInfo['bugResolutionGroups'] = $resolutionGroups;
+        $bugInfo['bugOpenedByGroups']   = $openedByGroups;
         $bugInfo['bugModuleGroups']     = $moduleGroups;
+        $bugInfo['bugResolvedByGroups'] = $resolvedByGroups;
         $bugInfo['bugConfirmedRate']    = round($confirmedNum / count($bugsByTask) * 100, 2);
         $bugInfo['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($newBugs) * 100, 2);
         return $bugInfo;
@@ -175,15 +176,19 @@ class testreportModel extends model
      */
     public function getResultSummary($tasks, $cases)
     {
-        $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('run')->in(array_keys($tasks))->andWhere('`case`')->in(array_keys($cases))->fetchAll();
+        $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
+            ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
+            ->where('t2.task')->in(array_keys($tasks))
+            ->andWhere('t1.`case`')->in(array_keys($cases))
+            ->fetchAll();
         $failResults = array();
         $runCasesNum = array();
         foreach($results as $result)
         {
-            $runCases[$result->case] = $result->case;
+            $runCasesNum[$result->case] = $result->case;
             if($result->caseResult == 'fail') $failResults[$result->case] = $result->case;
         }
-        return sprintf($this->lang->testreport->caseSummary, count($cases), count($results), count($runCasesNum), count($failResults));
+        return sprintf($this->lang->testreport->caseSummary, count($cases), count($runCasesNum), count($results), count($failResults));
     }
 
     /**

@@ -53,7 +53,7 @@ function loadLinkCases(caseID)
 
 function loadLibModules(libID)
 {
-    link = createLink('tree', 'ajaxGetOptionMenu', 'libID=' + libID + '&viewtype=testlib&branch=0&rootModuleID=0&returnType=html&needManage=true');
+    link = createLink('tree', 'ajaxGetOptionMenu', 'libID=' + libID + '&viewtype=caselib&branch=0&rootModuleID=0&returnType=html&needManage=true');
     $('#moduleIdBox').load(link, function()
     {
         $(this).find('select').chosen(defaultChosenOptions)

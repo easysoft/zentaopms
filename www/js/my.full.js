@@ -368,7 +368,8 @@ function hideTreeBox(treeType)
 {
     $.cookie(treeType, 'hide', {expires:config.cookieLife, path:config.webRoot});
     $('.outer').addClass('hide-side');
-    $('.side-handle .icon-caret-left').removeClass('icon-caret-left').addClass('icon-caret-right');
+    var direction = $('.side-handle .icon-caret-left').size() > 0 ? 'left' : 'right';
+    $('.side-handle .icon-caret-' + direction).removeClass('icon-caret-' + direction).addClass('icon-caret-' + (direction == 'left' ? 'right' : 'left'));
 }
 
 /**
@@ -382,7 +383,8 @@ function showTreeBox(treeType)
 {
     $.cookie(treeType, 'show', {expires:config.cookieLife, path:config.webRoot});
     $('.outer').removeClass('hide-side');
-    $('.side-handle .icon-caret-right').removeClass('icon-caret-right').addClass('icon-caret-left');
+    var direction = $('.side-handle .icon-caret-left').size() > 0 ? 'left' : 'right';
+    $('.side-handle .icon-caret-' + direction).removeClass('icon-caret-' + direction).addClass('icon-caret-' + (direction == 'left' ? 'right' : 'left'));
 }
 
 /**
@@ -659,7 +661,8 @@ function checkTable($table)
     {
         var $checkbox = $(this);
         var $datatable = $checkbox.closest('.datatable');
-        if($datatable.length) {
+        if($datatable.length)
+        {
             var $checkAll = $datatable.find('.check-all.check-btn:first').trigger('click');
             $checkbox.prop('checked', $checkAll.hasClass('checked'))
             return;

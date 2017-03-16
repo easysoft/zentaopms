@@ -144,6 +144,10 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
             <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='form-control chosen'");?></td>
           </tr>
           <tr>
+            <th><?php echo $lang->bug->deadline;?></th>
+            <td><?php echo html::input('deadline', $bug->deadline, "class='form-control form-date'");?></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->bug->os;?></th>
             <td><?php echo html::select('os', $lang->bug->osList, $bug->os, "class='form-control'");?></td>
           </tr>

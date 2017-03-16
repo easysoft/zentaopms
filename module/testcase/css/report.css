@@ -1,0 +1,3 @@
+.table-bordered caption {border: 1px solid #ddd;}
+.table-bordered tr > th:first-child, .table-bordered tr > td:first-child {border-left: 1px solid #ddd!important}
+.table-bordered tr > th:last-child, .table-bordered tr > td:last-child {border-right: 1px solid #ddd!important}
