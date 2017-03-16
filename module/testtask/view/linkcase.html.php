@@ -17,39 +17,54 @@
     <span class='prefix'><?php echo html::icon($lang->icons['testtask']);?> <strong><?php echo $task->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('testtask', 'view', 'taskID=' . $task->id), $task->name, '_blank');?></strong>
     <small class='text-muted'> <?php echo $lang->testtask->linkCase;?> <?php echo html::icon($lang->icons['link']);?></small>
+    <div class='heading-actions'>
+      <?php
+      $lang->testtask->linkCase = $lang->testtask->linkByStory;
+      common::printIcon('testtask', 'linkCase', "taskID=$taskID&type=bystory", '', 'button', '', '', 'btn-primary btn-sm');
+
+      echo "<span class='dropdown'>";
+      echo "<button class='btn btn-primary btn-sm' type='button' data-toggle='dropdown'>{$lang->testtask->linkByVersion} <span class='caret'></span></button>";
+      echo "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
+      if($testTask)
+      {
+          foreach($testTask as $tmpID => $tmpTitle)
+          {
+              $active = ($type == 'bybuild' and (int)$param == $tmpID) ? "class='active'" : '';
+              echo "<li $active>" . html::a(inlink('linkCase', "taskID=$taskID&type=bybuild&param=$tmpID"), $tmpTitle) . "</li>";
+          }
+      }
+      else
+      {
+          echo "<li>" . html::a('###', $lang->testtask->noticeNoOther) . "</li>";
+      }
+      echo "</ul></span>";
+
+      echo "<span class='dropdown'>";
+      echo "<button class='btn btn-primary btn-sm' type='button' data-toggle='dropdown'>{$lang->testtask->linkBySuite} <span class='caret'></span></button>";
+      echo "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
+      if($suiteList)
+      {
+          foreach($suiteList as $suiteID => $suite)
+          {
+              $active = ($type == 'bysuite' and (int)$param == $suiteID) ? "class='active'" : '';
+              $suiteName = $suite->name;
+              if($suite->type == 'public') $suiteName .= " <span class='label label-info'>{$lang->testsuite->authorList[$suite->type]}</span>";
+              echo "<li $active>" . html::a(inlink('linkCase', "taskID=$taskID&type=bysuite&param=$suiteID"), $suiteName) . "</li>";
+          }
+      }
+      else
+      {
+          echo "<li>" . html::a('###', $lang->testsuite->noticeNone) . "</li>";
+      }
+      echo "</ul></span>";
+
+      //$lang->testtask->linkCase = $lang->testtask->linkByBug;
+      //common::printIcon('testtask', 'linkCase', "taskID=$taskID&type=bybug", '', 'button', 'link');
+      ?>
+    </div>
   </div>
   <div class='actions'>
     <?php
-    echo "<div class='btn-group'>";
-
-    echo "<span class='dropdown'>";
-    echo "<button class='btn' type='button' data-toggle='dropdown'><i class='icon icon-link'></i> {$lang->testtask->linkByVersion} <span class='caret'></span></button>";
-    echo "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
-    foreach($testTask as $tmpID => $tmpTitle)
-    {
-        $active = ($type == 'bybuild' and (int)$param == $tmpID) ? "class='active'" : '';
-        echo "<li $active>" . html::a(inlink('linkCase', "taskID=$taskID&type=bybuild&param=$tmpID"), $tmpTitle) . "</li>";
-    }
-    echo "</ul></span>";
-
-    echo "<span class='dropdown'>";
-    echo "<button class='btn' type='button' data-toggle='dropdown'><i class='icon icon-link'></i> {$lang->testtask->linkBySuite} <span class='caret'></span></button>";
-    echo "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
-    foreach($suiteList as $suiteID => $suite)
-    {
-        $active = ($type == 'bysuite' and (int)$param == $suiteID) ? "class='active'" : '';
-        $suiteName = $suite->name;
-        if($suite->type == 'public') $suiteName .= " <span class='label label-info'>{$lang->testsuite->authorList[$suite->type]}</span>";
-        echo "<li $active>" . html::a(inlink('linkCase', "taskID=$taskID&type=bysuite&param=$suiteID"), $suiteName) . "</li>";
-    }
-    echo "</ul></span>";
-
-    $lang->testtask->linkCase = $lang->testtask->linkByStory;
-    common::printIcon('testtask', 'linkCase', "taskID=$taskID&type=bystory", '', 'button', 'link');
-    $lang->testtask->linkCase = $lang->testtask->linkByBug;
-    common::printIcon('testtask', 'linkCase', "taskID=$taskID&type=bybug", '', 'button', 'link');
-
-    echo '</div>';
     echo "<div class='btn-group'>";
     common::printRPN($this->session->testtaskList);
     echo '</div>';
