@@ -101,7 +101,7 @@ $lang->bug->openedByMe     = 'Created by Me';
 $lang->bug->resolvedByMe   = 'Resolved by Me';
 $lang->bug->closedByMe     = 'Closed by Me';
 $lang->bug->assignToNull   = 'Unassigned';
-$lang->bug->unResolved     = 'Unresolve';
+$lang->bug->unResolved     = 'Unresolved';
 $lang->bug->toClosed       = 'To Be Closed';
 $lang->bug->unclosed       = 'Open';
 $lang->bug->longLifeBugs   = 'Pending';
@@ -133,7 +133,7 @@ $lang->bug->lblSystemBrowserAndHardware = 'System/Browser';
 $lang->bug->legendSteps                 = 'Repro Steps';
 $lang->bug->legendComment               = 'Note';
 $lang->bug->legendLife                  = 'Lifecycle';
-$lang->bug->legendMisc                  = 'Miscellaneous';
+$lang->bug->legendMisc                  = 'Misc';
 
 /* 功能按钮。*/
 $lang->bug->buttonConfirm        = 'Confirm';
@@ -145,7 +145,7 @@ $lang->bug->setTemplateTitle     = 'Please enter the title of template.';
 $lang->bug->remindTask           = 'This Bug has been converted to Task. Do you want to update Status of Task(ID %s)?';
 $lang->bug->skipClose            = 'Bug %s is not resolved. You cannot close it.';
 $lang->bug->applyTemplate        = 'Apply Template';
-$lang->bug->templateDelete       = '您确认要删除该模板吗？';
+$lang->bug->templateDelete       = 'Do you want to delete this template?';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[Steps]</p>\n";
