@@ -749,7 +749,7 @@ class commonModel extends model
         /* set the class. */
         if(!$icon)
         {
-            $icon = $lang->icons[$method] ? $lang->icons[$method] : $method;
+            $icon = isset($lang->icons[$method]) ? $lang->icons[$method] : $method;
         }
         if(strpos(',edit,copy,report,export,delete,', ",$method,") !== false) $module = 'common';
         $class = "icon-$module-$method";

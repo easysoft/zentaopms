@@ -36,6 +36,7 @@ $lang->testsuite->unlinkedCases = '未关联';
 
 $lang->testsuite->confirmDelete     = '您确认要删除该套件吗？';
 $lang->testsuite->confirmUnlinkCase = '您确认要移除该用例吗？';
+$lang->testsuite->noticeNone        = '您还没有创建套件';
 
 $lang->testsuite->lblCases      = '用例列表';
 $lang->testsuite->lblUnlinkCase = '移除用例';
