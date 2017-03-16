@@ -74,7 +74,7 @@ $lang->testtask->priList[2] = '2';
 $lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = '未关联';
-$lang->testtask->linkByVersion = '按版本复制';
+$lang->testtask->linkByVersion = '复制版本';
 $lang->testtask->linkByStory   = '按需求关联';
 $lang->testtask->linkByBug     = '按Bug关联';
 $lang->testtask->linkBySuite   = '按套件关联';

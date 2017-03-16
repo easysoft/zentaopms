@@ -203,7 +203,7 @@ class testtaskModel extends model
         if($type == 'all')     $cases = $this->getAllLinkableCases($task, $query, $linkedCases, $pager);
         if($type == 'bystory') $cases = $this->getLinkableCasesByStory($productID, $task, $query, $linkedCases, $pager);
         if($type == 'bybug')   $cases = $this->getLinkableCasesByBug($productID, $task, $query, $linkedCases, $pager);
-        if($type == 'bysuite') $cases = $this->getLinkableCasesBySuite($productID, $query, $param, $linkedCases, $pager);
+        if($type == 'bysuite') $cases = $this->getLinkableCasesBySuite($productID, $task, $query, $param, $linkedCases, $pager);
         if($type == 'bybuild') $cases = $this->getLinkableCasesByTestTask($param, $linkedCases, $pager);
 
         return $cases;
@@ -296,6 +296,7 @@ class testtaskModel extends model
      * Get linkable cases by suite.
      * 
      * @param  int    $productID 
+     * @param  object $task
      * @param  string $query
      * @param  string $suite
      * @param  array  $linkedCases
@@ -303,7 +304,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getLinkableCasesBySuite($productID, $query, $suite, $linkedCases, $pager)
+    public function getLinkableCasesBySuite($productID, $task, $query, $suite, $linkedCases, $pager)
     {
         return $this->dao->select('t1.*,t2.version as version')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
