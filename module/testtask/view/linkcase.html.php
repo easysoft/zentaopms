@@ -46,8 +46,10 @@
 
     $lang->testtask->linkCase = $lang->testtask->linkByStory;
     common::printIcon('testtask', 'linkCase', "taskID=$taskID&type=bystory", '', 'button', 'link');
+
+    //Temporary hiding, add 'hidden'. 暂时隐藏
     $lang->testtask->linkCase = $lang->testtask->linkByBug;
-    common::printIcon('testtask', 'linkCase', "taskID=$taskID&type=bybug", '', 'button', 'link');
+    common::printIcon('testtask', 'linkCase', "taskID=$taskID&type=bybug", '', 'button', 'link', '', 'hidden');
 
     echo '</div>';
     echo "<div class='btn-group'>";

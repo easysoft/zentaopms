@@ -322,16 +322,16 @@ class testtaskModel extends model
      * Get linkeable cases by test task.
      * 
      * @param  string $testTask
+     * @param  array  $linkedCases
      * @param  object $pager 
      * @access public
      * @return array
      */
     public function getLinkableCasesByTestTask($testTask, $linkedCases, $pager)
     {
-        $runList  = $this->dao->select("`case`")->from(TABLE_TESTRUN)->where('task')->eq($testTask)->andWhere('id')->notIN($linkedCases)->fetchPairs('case');
+        $caseList  = $this->dao->select("`case`")->from(TABLE_TESTRUN)->where('task')->eq($testTask)->andWhere('id')->notin($linkedCases)->fetchPairs('case');
         
-        $caseList = $this->dao->select("*")->from(TABLE_CASE)->where('id')->in($runList)->page($pager)->fetchAll();
-        return $caseList;
+        return $this->dao->select("*")->from(TABLE_CASE)->where('id')->in($caseList)->page($pager)->fetchAll();
     }
 
     /**
@@ -342,9 +342,17 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getRelatedTestTasks($productID,$taskID)
+    public function getRelatedTestTasks($productID, $testTaskID)
     {
-        return $this->dao->select('id, name')->from(TABLE_TESTTASK)->where("product = '$productID'")->orderBy('id desc')->fetchPairs('id', 'name');
+        $beginDate = $this->dao->select('begin')->from(TABLE_TESTTASK)->where('id')->eq($testTaskID)->fetch('begin');
+
+        return $this->dao->select('id, name')->from(TABLE_TESTTASK)
+            ->where('product')->eq($productID)
+            ->beginIF($beginDate)->andWhere('begin')->le($beginDate)->fi()
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('id')->notin($testTaskID)
+            ->orderBy('begin desc')
+            ->fetchPairs('id', 'name');
     }
 
     /**
@@ -719,7 +727,7 @@ class testtaskModel extends model
         {
             $runs = $this->dao->select('id, `case`')->from(TABLE_TESTRUN)
                 ->where('`case`')->in($caseIdList)
-                ->beginIF($taskID)->andWhere('task')->eq($taskID)
+                ->beginIF($taskID)->andWhere('task')->eq($taskID)->fi()
                 ->fetchPairs('case', 'id');
         }
 

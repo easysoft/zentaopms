@@ -15,7 +15,7 @@
 <div id="featurebar">
   <ul class="nav">
     <li id='waitTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=wait"), $lang->testtask->wait);?></li>
-    <li id='testingTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=activate"), $lang->testtask->testing);?></li>
+    <li id='doingTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=doing"), $lang->testtask->testing);?></li>
     <li id='blockedTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=blocked"), $lang->testtask->blockedA);?></li>
     <li id='doneTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=done"), $lang->testtask->done);?></li>
   </ul>
