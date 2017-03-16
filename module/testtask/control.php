@@ -655,7 +655,7 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->linkCase;
 
-        $testTask = $this->testtask->getRelatedTestTasks($productID,$taskID);
+        $testTask = $this->testtask->getRelatedTestTasks($productID, $param);
 
         /* Get cases. */
         $cases = $this->testtask->getLinkableCases($productID, $task, $taskID, $type, $param, $pager);
