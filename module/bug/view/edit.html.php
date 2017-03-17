@@ -202,10 +202,6 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->bug->deadline;?></th>
-            <td><?php echo html::input('deadline', $bug->deadline, "class='form-control form-date'");?></td>
-          </tr>
-          <tr>
             <th><?php echo $lang->bug->resolvedBy;?></th>
             <td><?php echo html::select('resolvedBy', $users, $bug->resolvedBy, "class='form-control chosen'");?></td>
           </tr>
