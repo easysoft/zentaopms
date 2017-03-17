@@ -51,6 +51,13 @@ function loadLinkCases(caseID)
     $('#linkCaseBox').load(caseLink);
 }
 
+/**
+ * Load lib modules.
+ * 
+ * @param  int $libID 
+ * @access public
+ * @return void
+ */
 function loadLibModules(libID)
 {
     link = createLink('tree', 'ajaxGetOptionMenu', 'libID=' + libID + '&viewtype=caselib&branch=0&rootModuleID=0&returnType=html&needManage=true');

@@ -34,6 +34,7 @@ class custom extends control
     public function set($module = 'story', $field = 'priList', $lang = 'zh_cn')
     {
         if($module == 'user' and $field == 'priList') $field = 'roleList';
+        if($module == 'block' and $field == 'priList')$field = 'closed';
         $currentLang = $this->app->getClientLang();
 
         $this->app->loadLang($module);
@@ -45,65 +46,49 @@ class custom extends control
             unset($fieldList['newfeature']);
             unset($fieldList['trackthings']);
         }
-        if(($module == 'story' || $module == 'testcase') && $field == 'review')
+        if(($module == 'story' or $module == 'testcase') and $field == 'review')
         {
             $this->app->loadConfig($module);
             $this->view->users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
             $this->view->needReview   = zget($this->config->$module, 'needReview', 1);
             $this->view->forceReview  = zget($this->config->$module, 'forceReview', '');
         }
-        if($module == 'task' && $field == 'hours')
+        if($module == 'task' and $field == 'hours')
         {
             $this->app->loadConfig('project');
             $this->view->weekend   = $this->config->project->weekend;
             $this->view->workhours = $this->config->project->defaultWorkhours;
         }
-        if($module == 'bug' && $field == 'longlife')
+        if($module == 'bug' and $field == 'longlife')
         {
             $this->app->loadConfig('bug');
             $this->view->longlife  = $this->config->bug->longlife;
         }
-        if($module == 'user' && $field == 'closedBlock')
+        if($module == 'block' and $field == 'closed')
         {
             $this->loadModel('block');
             $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
-            $blockPairs  = array();
-            foreach(explode(',', $closedBlock) as $block)
-            {
-                $block = trim($block);
-                if(empty($block)) continue;
-                list($moduleName, $blockKey) = explode('|', $block);
-                if(empty($moduleName))
-                {
-                    if($blockKey == 'html')      $blockPairs[$block] = 'HTML';
-                    if($blockKey == 'flowchart') $blockPairs[$block] = $this->lang->block->lblFlowchart;
-                    if($blockKey == 'dynamic')   $blockPairs[$block] = $this->lang->block->dynamic;
-                }
-                else
-                {
-                    $blockPairs[$block] = "{$this->lang->block->moduleList[$moduleName]}|{$this->lang->block->modules[$moduleName]->availableBlocks->$blockKey}";
-                }
-            }
+
+            $this->view->blockPairs  = $this->block->getClosedBlockPairs($closedBlock);
             $this->view->closedBlock = $closedBlock;
-            $this->view->blockPairs  = $blockPairs;
         }
 
         if(!empty($_POST))
         {
-            if(($module == 'story' || $module == 'testcase') && $field == 'review')
+            if(($module == 'story' or $module == 'testcase') and $field == 'review')
             {
                 $data = fixer::input('post')->join('forceReview', ',')->get();
                 $this->loadModel('setting')->setItems("system.$module", $data);
             }
-            elseif($module == 'task' && $field == 'hours')
+            elseif($module == 'task' and $field == 'hours')
             {
                 $this->loadModel('setting')->setItems('system.project', fixer::input('post')->get());
             }
-            elseif($module == 'bug' && $field == 'longlife')
+            elseif($module == 'bug' and $field == 'longlife')
             {
                 $this->loadModel('setting')->setItems('system.bug', fixer::input('post')->get());
             }
-            elseif($module == 'user' && $field == 'closedBlock')
+            elseif($module == 'block' and $field == 'closed')
             {
                 $this->loadModel('setting')->setItems('system.block', fixer::input('post')->join('closed', ',')->get());
             }

@@ -1585,7 +1585,7 @@ class storyModel extends model
                 }
             }
 
-            $allProduct        = "`product` = 'all'";
+            $allProduct = "`product` = 'all'";
             $storyQuery = $this->session->projectStoryQuery;
             if(strpos($this->session->projectStoryQuery, $allProduct) !== false)
             {

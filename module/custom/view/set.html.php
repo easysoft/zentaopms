@@ -62,7 +62,7 @@ EOT;
       <div class='panel-heading'>
         <strong><?php echo $lang->custom->object[$module] . $lang->arrow . $lang->custom->$module->fields[$field]?></strong>
       </div>
-      <?php if(($module == 'story' ||$module == 'testcase') and $field == 'review'):?>
+      <?php if(($module == 'story' or $module == 'testcase') and $field == 'review'):?>
       <table class='table table-form mw-800px'>
         <tr>
           <th class='w-80px'><?php echo $lang->custom->storyReview;?></th>
@@ -72,7 +72,7 @@ EOT;
         <tr>
           <th><?php echo $lang->custom->forceReview;?></th>
           <td><?php echo html::select('forceReview[]', $users, $forceReview, "class='form-control chosen' multiple");?></td>
-          <td class='w-180px'><?php echo $lang->custom->notice->forceReview;?></td>
+          <td class='w-180px'><?php printf($lang->custom->notice->forceReview, $lang->$module->common);?></td>
         </tr>
         <tr>
           <td></td>
@@ -109,10 +109,10 @@ EOT;
         </tr>
       </table>
       <div class='alert alert-info alert-block'><?php echo $lang->custom->notice->longlife;?></div>
-      <?php elseif($module == 'user' and $field == 'closedBlock'):?>
+      <?php elseif($module == 'block' and $field == 'closed'):?>
       <table class='table table-form mw-600px'>
         <tr>
-          <th class='w-100px'><?php echo $lang->custom->user->fields['closedBlock'];?></th>
+          <th class='w-100px'><?php echo $lang->custom->block->fields['closed'];?></th>
           <td><?php echo html::select('closed[]', $blockPairs, $closedBlock, "class='form-control chosen' multiple");?></td>
         </tr>
         <tr>

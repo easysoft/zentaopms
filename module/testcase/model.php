@@ -45,7 +45,7 @@ class testcaseModel extends model
         $case = fixer::input('post')
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', $now)
-            ->add('status', $this->isForceReview() ? 'wait' : 'normal')
+            ->add('status', $this->forceReview() ? 'wait' : 'normal')
             ->add('version', 1)
             ->add('fromBug', $bugID)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
@@ -127,7 +127,7 @@ class testcaseModel extends model
 
         $this->loadModel('story');
         $storyVersions = array();
-        $isForceReview = $this->isForceReview();
+        $forceReview   = $this->forceReview();
         for($i = 0; $i < $batchNum; $i++)
         {
             if($cases->type[$i] != '' and $cases->title[$i] != '')
@@ -146,7 +146,7 @@ class testcaseModel extends model
                 $data[$i]->keywords     = $cases->keywords[$i];
                 $data[$i]->openedBy     = $this->app->user->account;
                 $data[$i]->openedDate   = $now;
-                $data[$i]->status       = $isForceReview ? 'wait' : 'normal';
+                $data[$i]->status       = $forceReview ? 'wait' : 'normal';
                 $data[$i]->version      = 1;
 
                 $caseStory = $data[$i]->story;
@@ -518,7 +518,7 @@ class testcaseModel extends model
             ->join('stage', ',')
             ->remove('comment,steps,expects,files,labels,stepType')
             ->get();
-        if($this->isForceReview() and $stepChanged) $case->status = 'wait';
+        if($this->forceReview() and $stepChanged) $case->status = 'wait';
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
         {
@@ -721,7 +721,7 @@ class testcaseModel extends model
             if($data->pris[$caseID]    == 'ditto') $data->pris[$caseID]    = isset($prev['pri'])    ? $prev['pri']    : 3;
             if($data->modules[$caseID] == 'ditto') $data->modules[$caseID] = isset($prev['module']) ? $prev['module'] : 0;
             if($data->types[$caseID]   == 'ditto') $data->types[$caseID]   = isset($prev['type'])   ? $prev['type']   : '';
-            if($data->stories[$caseID] == '') $data->stories[$caseID]      = 0;
+            if($data->stories[$caseID] == '')      $data->stories[$caseID] = 0;
 
             $prev['pri']    = $data->pris[$caseID];
             $prev['module'] = $data->modules[$caseID];
@@ -929,7 +929,7 @@ class testcaseModel extends model
             $cases[$key] =$caseData;
         }
 
-        $isForceReview = $this->isForceReview();
+        $forceReview = $this->forceReview();
         foreach($cases as $key => $caseData)
         {
             if(!empty($_POST['id'][$key]) and empty($_POST['insert']))
@@ -984,7 +984,7 @@ class testcaseModel extends model
                 {
                     $caseData->lastEditedBy   = $this->app->user->account;
                     $caseData->lastEditedDate = $now;
-                    if($stepChanged and $isForceReview) $caseData->status = 'wait';
+                    if($stepChanged and $forceReview) $caseData->status = 'wait';
                     $this->dao->update(TABLE_CASE)->data($caseData)->where('id')->eq($caseID)->autoCheck()->exec();
                     if($stepChanged)
                     {
@@ -1018,7 +1018,7 @@ class testcaseModel extends model
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;
                 $caseData->branch     = isset($data->branch[$key]) ? $data->branch[$key] : $branch;
-                if($isForceReview) $caseData->status = 'wait';
+                if($forceReview) $caseData->status = 'wait';
                 $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
 
                 if(!dao::isError())
@@ -1383,7 +1383,7 @@ class testcaseModel extends model
      * @access public
      * @return void
      */
-    public function isForceReview()
+    public function forceReview()
     {
         if(!$this->config->testcase->needReview) return false;
         if(empty($this->config->testcase->forceReview)) return true;

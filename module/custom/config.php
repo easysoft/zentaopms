@@ -7,3 +7,4 @@ $config->custom->canAdd['testcase'] = 'priList,typeList,stageList,resultList,sta
 $config->custom->canAdd['testtask'] = 'priList';
 $config->custom->canAdd['todo']     = 'priList,typeList';
 $config->custom->canAdd['user']     = 'roleList';
+$config->custom->canAdd['block']    = '';

@@ -398,6 +398,39 @@ class blockModel extends model
     }
 
     /**
+     * Get closed block pairs. 
+     * 
+     * @param  string $closedBlock 
+     * @access public
+     * @return array
+     */
+    public function getClosedBlockPairs($closedBlock)
+    {
+        $blockPairs = array();
+        if(empty($closedBlock)) return $blockPairs;
+
+        foreach(explode(',', $closedBlock) as $block)
+        {
+            $block = trim($block);
+            if(empty($block)) continue;
+
+            list($moduleName, $blockKey) = explode('|', $block);
+            if(empty($moduleName))
+            {
+                if($blockKey == 'html')      $blockPairs[$block] = 'HTML';
+                if($blockKey == 'flowchart') $blockPairs[$block] = $this->lang->block->lblFlowchart;
+                if($blockKey == 'dynamic')   $blockPairs[$block] = $this->lang->block->dynamic;
+            }
+            else
+            {
+                $blockPairs[$block] = "{$this->lang->block->moduleList[$moduleName]}|{$this->lang->block->modules[$moduleName]->availableBlocks->$blockKey}";
+            }
+        }
+
+        return $blockPairs;
+    }
+
+    /**
      * Build number params.
      * 
      * @param  string $module 
