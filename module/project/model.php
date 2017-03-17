@@ -1696,7 +1696,7 @@ class projectModel extends model
             $currentTime = strtotime($current);
             if($currentTime > $endTime) break;
             if(isset($sets[$current])) $preValue = $sets[$current]->value;
-            if($currentTime > time())
+            if($currentTime > time() and !$todayTag)
             {
                 $todayTag = $i + 1;
                 break;

@@ -131,6 +131,7 @@ $lang->action->label->confirmed           = '确认了需求，';
 $lang->action->label->bugconfirmed        = '确认了';
 $lang->action->label->tostory             = '转需求';
 $lang->action->label->frombug             = '转需求';
+$lang->action->label->fromlib             = '从用例库导入';
 $lang->action->label->totask              = '转任务';
 $lang->action->label->svncommited         = '提交代码';
 $lang->action->label->gitcommited         = '提交代码';

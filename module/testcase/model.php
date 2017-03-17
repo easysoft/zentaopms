@@ -1272,6 +1272,7 @@ class testcaseModel extends model
             $stepNumber = $this->dao->select('count(distinct t1.id) as count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.`case`=t2.`id`')
                 ->where('t1.`case`')->in($caseIdList)
+                ->andWhere('t1.type')->eq('item')
                 ->andWhere('t1.version=t2.version')
                 ->groupBy('t1.`case`')
                 ->fetchPairs('case', 'count');
@@ -1283,6 +1284,7 @@ class testcaseModel extends model
             $stepNumber = $this->dao->select('count(distinct t1.id) as count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.`case`=t2.`case`')
                 ->where('t2.`id`')->in($caseIdList)
+                ->andWhere('t1.type')->eq('item')
                 ->andWhere('t1.version=t2.version')
                 ->groupBy('t1.`case`')
                 ->fetchPairs('case', 'count');

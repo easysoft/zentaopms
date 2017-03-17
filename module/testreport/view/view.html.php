@@ -53,6 +53,7 @@
       <li><?php echo html::a('###', $lang->testreport->legendCase, '', "data-toggle='tab' data-target='#tabCase'")?></li>
       <li><?php echo html::a('###', $lang->testreport->legendLegacyBugs, '', "data-toggle='tab' data-target='#tabLegacyBugs'")?></li>
       <li><?php echo html::a('###', $lang->testreport->legendReport, '', "data-toggle='tab' data-target='#tabReport'")?></li>
+      <li><?php echo html::a('###', $lang->testreport->legendComment, '', "data-toggle='tab' data-target='#tabComment'")?></li>
     </ul>
     <div class='tab-content'>
       <div class='tab-pane' id='basic'>
@@ -85,10 +86,6 @@
             ?>
             </td>
           </tr>
-          <tr>
-            <th><?php echo $lang->testreport->report?></th>
-            <td><?php echo $report->report;?></td>
-          </tr>
           <?php if(!$this->session->notHead):?>
           <tr>
             <th><?php echo $lang->files?></th>
@@ -105,6 +102,7 @@
       <div class='tab-pane' id='tabCase'><?php include './blockcases.html.php'?></div>
       <div class='tab-pane' id='tabLegacyBugs'><?php include './blocklegacybugs.html.php'?></div>
       <div class='tab-pane active' id='tabReport'><?php include './blockbugreport.html.php'?></div>
+      <div class='tab-pane' id='tabComment'><div class='article-content'><?php echo empty($report->report) ? $lang->testreport->none : $report->report;?></div></div>
     </div>
   </div>
 <?php if(!$this->session->notHead):?>
