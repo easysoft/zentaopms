@@ -25,7 +25,9 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-80px'><?php echo $lang->testtask->project;?></th>
-        <td class='w-p25-f'><?php echo html::select('project', $projects, $task->project, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></td>
+        <td class='w-p35-f'>
+          <?php echo html::select('project', $projects, $task->project, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?>
+        </td>
         <td><?php echo html::hidden('product', $task->product)?></td>
       </tr>
       <tr>
@@ -34,19 +36,23 @@
       </tr>
       <tr>
         <th><?php echo $lang->testtask->owner;?></th>
-        <td><?php echo html::select('owner', $users, $task->owner, "class='form-control chosen'");?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->testtask->pri;?></th>
-        <td><?php echo html::select('pri', $lang->testtask->priList, $task->pri, "class='form-control'");?></td>
+        <td>
+          <div id='ownerAndPriBox' class='input-group'>
+            <?php echo html::select('owner', $users, $task->owner, "class='form-control chosen'");?>
+            <span class='input-group-addon fix-border'><?php echo $lang->testtask->pri;?></span>
+            <?php echo html::select('pri', $lang->testtask->priList, $task->pri, "class='form-control'");?>
+          </div>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->testtask->begin;?></th>
-        <td><?php echo html::input('begin', $task->begin, "class='form-control form-date'");?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->testtask->end;?></th>
-        <td><?php echo html::input('end', $task->end, "class='form-control form-date'");?></td>
+        <td>
+          <div class='input-group'>
+            <?php echo html::input('begin', $task->begin, "class='form-control form-date'");?>
+            <span class='input-group-addon fix-border'><?php echo $lang->testtask->end;?></span>
+            <?php echo html::input('end', $task->end, "class='form-control form-date'");?>
+          </div>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->testtask->status;?></th>
@@ -59,10 +65,6 @@
       <tr>
         <th><?php echo $lang->testtask->desc;?></th>
         <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($task->desc), "rows=10 class='form-control'");?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->testtask->report;?></th>
-        <td colspan='2'><?php echo html::textarea('report', htmlspecialchars($task->report), "rows=10 class='form-control'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->testtask->mailto;?></th>
