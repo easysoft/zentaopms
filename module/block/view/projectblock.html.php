@@ -64,7 +64,7 @@ $(function()
     $sparks = $sparks.not('.sparked');
     var rowHeight = $sparks.first().closest('tr').outerHeight() - ($.zui.browser.ie === 8 ? 0.3 : 0);
 
-    var scrollFn = false, scrollStart, i, id, $spark;
+    var scrollFn = false, scrollStart = 6, i, id, $spark;
     $projectbox.parent().on('scroll.spark', function(e)
     {
         if(!$sparks.length)
@@ -76,8 +76,7 @@ $(function()
 
         scrollFn = setTimeout(function()
         {
-            scrollStart = Math.floor(($projectbox.scrollTop() - 30) / (rowHeight)) + 1;
-            for(i = scrollStart; i <= scrollStart + 7; i++)
+            for(i = scrollStart; i <= scrollStart + 10; i++)
             {
                 id = '#spark-' + i;
                 $spark = $(id);
@@ -85,6 +84,7 @@ $(function()
                 $spark.addClass('sparked').projectLine();
                 $sparks = $sparks.not(id);
             }
+            scrollStart += 10;
         },100);
     });
 });
