@@ -40,7 +40,7 @@ $lang->cron->introduction  = <<<EOD
 <p>This function need to be improved, so it is turned off by default.</p>
 EOD;
 $lang->cron->confirmOpen = <<<EOD
-<p>Do you want to turn it on?<a href="%s" target='hiddenwin'><i class="icon icon-toggle-on"></i><strong>Turn On Planned Task<strong></a></p>
+<p>Do you want to turn it on?<a href="%s" target='hiddenwin'><strong>Turn On Planned Task<strong></a></p>
 EOD;
 
 $lang->cron->notice = new stdclass();
