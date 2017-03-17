@@ -104,6 +104,7 @@ class commonModel extends model
             $user->account    = 'guest';
             $user->realname   = 'guest';
             $user->role       = 'guest';
+            $user->admin      = false;
             $user->rights     = $this->loadModel('user')->authorize('guest');
             $user->groups     = array('group');
             $this->session->set('user', $user);

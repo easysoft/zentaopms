@@ -47,12 +47,13 @@ class testreport extends control
      * @access public
      * @return void
      */
-    public function browse($objectID, $objectType = 'product', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($objectID = 0, $objectType = 'product', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if($objectType != 'product' and $objectType != 'project') die('Type Error!');
-        if($objectID != $this->commonAction($objectID, $objectType)) die(js::reload());
         $this->session->set('reportList', $this->app->getURI(true));
-        $object  = $this->$objectType->getById($objectID);
+
+        $objectID = $this->commonAction($objectID, $objectType);
+        $object   = $this->$objectType->getById($objectID);
         if($extra) $task = $this->testtask->getById($extra);
         $name = $extra ? $task->name : $object->name;
 
@@ -145,7 +146,7 @@ class testreport extends control
             if($projectID != $objectID) die('deny access');
 
             $project = $this->project->getById($projectID);
-            $tasks   = $this->testtask->getByProject($projectID);
+            $tasks   = $this->testtask->getProjectTasks($projectID);
             $productIdList = array();
             foreach($tasks as $task)
             {
