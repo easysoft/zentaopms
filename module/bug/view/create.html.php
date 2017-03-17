@@ -20,7 +20,7 @@ js::set('page', 'create');
 js::set('createRelease', $lang->release->create);
 js::set('createBuild', $lang->build->create);
 js::set('refresh', $lang->refresh);
-js::set('templateDelete',$lang->bug->templateDelete);
+js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
 ?>
 <div class='container mw-1400px'>
   <div id='titlebar'>
