@@ -60,10 +60,6 @@
         <legend><?php echo $lang->testtask->legendDesc;?></legend>
         <div class='article-content'><?php echo $task->desc;?></div>
       </fieldset>
-      <fieldset>
-        <legend><?php echo $lang->testtask->legendReport;?></legend>
-        <div class='article-content'><?php echo $task->report;?></div>
-      </fieldset>
       <?php include '../../common/view/action.html.php';?>
       <div class='actions'><?php echo $actionLinks;?></div>
     </div>
