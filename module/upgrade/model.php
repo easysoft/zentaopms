@@ -166,6 +166,8 @@ class upgradeModel extends model
                 $this->adjustPriv9_0();
             case '9_0':
                 $this->fixProjectProductData();
+            case '9_0_1':
+                $this->addBugDeadlineToCustomFields();
         }
 
         $this->deletePatch();
@@ -1586,5 +1588,32 @@ class upgradeModel extends model
 		$needProcess = array();
         if(strpos($fromVersion, 'pro') === false ? $fromVersion < '8.3' : $fromVersion < 'pro5.4') $needProcess['updateFile'] = true;
 		return $needProcess;
+    }
+
+    public function addBugDeadlineToCustomFields()
+    {
+        $createFieldsItems = $this->dao->select('id, value')->from(TABLE_CONFIG)
+            ->where('module')->eq('bug')
+            ->andWhere('section')->eq('custom')
+            ->andWhere('`key`')->eq('createFields')
+            ->fetchAll();
+        $batchEditFieldsItems = $this->dao->select('id, value')->from(TABLE_CONFIG)
+            ->where('module')->eq('bug')
+            ->andWhere('section')->eq('custom')
+            ->andWhere('`key`')->eq('batchEditFields')
+            ->fetchAll();
+
+        foreach($createFieldsItems as $createFieldsItem)
+        {
+            $value = empty($createFieldsItem->value) ? 'deadline' : $createFieldsItem->value . ",deadline";
+            $this->dao->update(TABLE_CONFIG)->set('value')->eq($value)->where('id')->eq($createFieldsItem->id)->exec();
+        }
+        foreach($batchEditFieldsItems as $batchEditFieldsItem)
+        {
+            $value = empty($batchEditFieldsItem->value) ? 'deadline' : $batchEditFieldsItem->value . ",deadline";
+            $this->dao->update(TABLE_CONFIG)->set('value')->eq($value)->where('id')->eq($batchEditFieldsItem->id)->exec();
+        }
+
+        return true;
     }
 }
