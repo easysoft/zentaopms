@@ -32,7 +32,7 @@ $lang->testtask->next             = '下一个';
 $lang->testtask->start            = "开始";
 $lang->testtask->close            = "关闭";
 $lang->testtask->wait             = "待测版本";
-$lang->testtask->blocked          = "阻塞";
+$lang->testtask->block            = "阻塞";
 $lang->testtask->activate         = "激活";
 $lang->testtask->testing          = "测试中版本";
 $lang->testtask->blockedA         = "被阻塞版本";
@@ -74,7 +74,7 @@ $lang->testtask->priList[2] = '2';
 $lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = '未关联';
-$lang->testtask->linkByVersion = '按版本复制';
+$lang->testtask->linkByVersion = '复制版本';
 $lang->testtask->linkByStory   = '按需求关联';
 $lang->testtask->linkByBug     = '按Bug关联';
 $lang->testtask->linkBySuite   = '按套件关联';

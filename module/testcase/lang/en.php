@@ -168,33 +168,33 @@ $lang->testcase->buttonToList = 'Back';
 $lang->testcase->errorEncode      = 'No Data. Please select right encoding and upload again!';
 $lang->testcase->noFunction       = 'Iconv and mb_convert_encoding is not found. You cannot convert the data into the desired one!';
 $lang->testcase->noRequire        = "Row %s has“%s”which is a required field and it should not be blank.";
-$lang->testcase->noLibrary        = "现在还没有公共库，请先创建！";
-$lang->testcase->mustChooseResult = '必须选择评审结果';
+$lang->testcase->noLibrary        = "No library exists. Create one first！";
+$lang->testcase->mustChooseResult = 'Review result is required.';
 
 $lang->testcase->searchStories = 'Enter to searcu Story';
-$lang->testcase->selectLib     = '请选择库';
+$lang->testcase->selectLib     = 'Select Library';
 
 $lang->testcase->action = new stdclass();
-$lang->testcase->action->fromlib  = array('main' => '$date, 由 <strong>$actor</strong> 从公共库 <strong>$extra</strong>导入。');
-$lang->testcase->action->reviewed = array('main' => '$date, 由 <strong>$actor</strong> 记录评审结果，结果为 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
+$lang->testcase->action->fromlib  = array('main' => '$date, imported by <strong>$actor</strong> from Library <strong>$extra</strong>.');
+$lang->testcase->action->reviewed = array('main' => '$date, recorded by <strong>$actor</strong> and the review result is <strong>$extra</strong>.', 'extra' => 'reviewResultList');
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['wait']        = 'Wait';
 $lang->testcase->featureBar['browse']['group']       = '';
 $lang->testcase->featureBar['browse']['zerocase']    = '';
-$lang->testcase->featureBar['browse']['suite']       = '套件';
+$lang->testcase->featureBar['browse']['suite']       = 'Suite';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];
 
 /* 统计报表。*/
 $lang->testcase->report = new stdclass();
-$lang->testcase->report->common = '报表';
-$lang->testcase->report->select = '请选择报表类型';
-$lang->testcase->report->create = '生成报表';
+$lang->testcase->report->common = 'Report';
+$lang->testcase->report->select = 'Select report type';
+$lang->testcase->report->create = 'Generate';
        
-$lang->testcase->report->charts['testCasePerRunResult'] = '测试用例结果统计';
-$lang->testcase->report->charts['testCasePerStatus']    = '测试用例状态统计';
-$lang->testcase->report->charts['testCasePerType']      = '测试用例类型统计';
+$lang->testcase->report->charts['testCasePerRunResult'] = 'Result Report';
+$lang->testcase->report->charts['testCasePerStatus']    = 'Status Report';
+$lang->testcase->report->charts['testCasePerType']      = 'Type Report';
 
 $lang->testcase->report->options = new stdclass();
 $lang->testcase->report->options->graph  = new stdclass();

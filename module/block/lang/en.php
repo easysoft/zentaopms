@@ -31,9 +31,9 @@ $lang->block->createBlock        = 'Create Widget';
 $lang->block->editBlock          = 'Edit';
 $lang->block->ordersSaved        = 'Ranking is saved.';
 $lang->block->confirmRemoveBlock = 'Do you want to remove Widget【{0}】?';
-$lang->block->closeForever       = '永久关闭';
-$lang->block->confirmClose       = '确定永久关闭该区块吗？闭后所有人都将无法使用该区块，可以在后台自定义中打开';
-$lang->block->remove             = '移除';
+$lang->block->closeForever       = 'Permanent Close';
+$lang->block->confirmClose       = 'Do you want to permanently close this block? Once done, it is not available to anyone. It can be switched on at Admin->Custom.';
+$lang->block->remove             = 'Remove';
 $lang->block->refresh            = 'Refresh';
 $lang->block->hidden             = 'Hide';
 $lang->block->dynamicInfo        = "%s, %s <em>%s</em> %s <a href='%s'>%s</a>.";
@@ -85,7 +85,7 @@ $lang->block->default['qa']['2']['params']['num']     = 15;
 $lang->block->default['qa']['2']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['2']['params']['type']    = 'assigntome';
 
-$lang->block->default['qa']['3']['title'] = 'Pending Versions';
+$lang->block->default['qa']['3']['title'] = 'Pending Builds';
 $lang->block->default['qa']['3']['block'] = 'testtask';
 $lang->block->default['qa']['3']['grid']  = 4;
 
@@ -255,5 +255,5 @@ $lang->block->flowchart   = array();
 $lang->block->flowchart[] = array('Administration',   'Manage a Company', 'Add Users', 'Maintain Privileges');
 $lang->block->flowchart[] = array($lang->productCommon . ' Manager', 'Add ' . $lang->productCommon, 'Maintain Modules', 'Maintain Plans', 'Maintain Stories', 'Create Release');
 $lang->block->flowchart[] = array($lang->projectCommon . ' Manager', 'Add ' . $lang->projectCommon, 'Maintain Teams', 'Link ' . $lang->productCommon . 's', 'Link Stories', 'Decompose Tasks');
-$lang->block->flowchart[] = array('DEV Team', 'Claim TaskS/Bugs', 'Update Status', 'Finish Tasks/Bugs');
+$lang->block->flowchart[] = array('DEV Team', 'Claim Tasks/Bugs', 'Update Status', 'Finish Tasks/Bugs');
 $lang->block->flowchart[] = array('Testing Team', 'Write Cases', 'Implement Cases', 'Report Bugs', 'Fix Bugs', 'Close Bugs');

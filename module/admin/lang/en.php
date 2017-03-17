@@ -22,7 +22,7 @@ $lang->admin->captcha       = 'Verification Code';
 $lang->admin->getCaptcha    = 'Get Verification Code';
 
 $lang->admin->info = new stdclass();
-$lang->admin->info->version = 'Current Version is %s,';
+$lang->admin->info->version = 'Current Version is %s. ';
 $lang->admin->info->links   = 'You can visit ';
 $lang->admin->info->account = "Your ZenTao account is %s.";
 

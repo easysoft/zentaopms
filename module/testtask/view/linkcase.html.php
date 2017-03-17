@@ -23,23 +23,6 @@
       common::printIcon('testtask', 'linkCase', "taskID=$taskID&type=bystory", '', 'button', '', '', 'btn-primary btn-sm');
 
       echo "<span class='dropdown'>";
-      echo "<button class='btn btn-primary btn-sm' type='button' data-toggle='dropdown'>{$lang->testtask->linkByVersion} <span class='caret'></span></button>";
-      echo "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
-      if($testTask)
-      {
-          foreach($testTask as $tmpID => $tmpTitle)
-          {
-              $active = ($type == 'bybuild' and (int)$param == $tmpID) ? "class='active'" : '';
-              echo "<li $active>" . html::a(inlink('linkCase', "taskID=$taskID&type=bybuild&param=$tmpID"), $tmpTitle) . "</li>";
-          }
-      }
-      else
-      {
-          echo "<li>" . html::a('###', $lang->testtask->noticeNoOther) . "</li>";
-      }
-      echo "</ul></span>";
-
-      echo "<span class='dropdown'>";
       echo "<button class='btn btn-primary btn-sm' type='button' data-toggle='dropdown'>{$lang->testtask->linkBySuite} <span class='caret'></span></button>";
       echo "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
       if($suiteList)
@@ -58,6 +41,22 @@
       }
       echo "</ul></span>";
 
+      echo "<span class='dropdown'>";
+      echo "<button class='btn btn-primary btn-sm' type='button' data-toggle='dropdown'>{$lang->testtask->linkByVersion} <span class='caret'></span></button>";
+      echo "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
+      if($testTask)
+      {
+          foreach($testTask as $tmpID => $tmpTitle)
+          {
+              $active = ($type == 'bybuild' and (int)$param == $tmpID) ? "class='active'" : '';
+              echo "<li $active>" . html::a(inlink('linkCase', "taskID=$taskID&type=bybuild&param=$tmpID"), $tmpTitle) . "</li>";
+          }
+      }
+      else
+      {
+          echo "<li>" . html::a('###', $lang->testtask->noticeNoOther) . "</li>";
+      }
+      echo "</ul></span>";
       //$lang->testtask->linkCase = $lang->testtask->linkByBug;
       //common::printIcon('testtask', 'linkCase', "taskID=$taskID&type=bybug", '', 'button', 'link');
       ?>
