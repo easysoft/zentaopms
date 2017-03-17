@@ -1,22 +1,20 @@
 <?php
 /**
- * The importlib view file of testcase module of ZenTaoPMS.
+ * The importfromlib view file of testcase module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     testcase
- * @version     $Id: importlib.html.php 4669 2013-04-23 02:28:08Z chencongzhi520@gmail.com $
+ * @version     $Id
  * @link        http://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix pull-left'><?php echo html::icon($lang->icons['testcase']);?></span>
-    <strong class='pull-left'><small class='text-muted'><?php echo html::icon($lang->icons['import']);?></small> <?php echo $lang->testcase->importFromLib;?></strong>
     <div class='input-group pull-left' style='font-weight:normal;'>
-      <span class='input-group-addon'><?php echo $lang->testcase->selectLib;?></span>
+      <span class='input-group-addon'><strong style='font-size:15px'><?php echo $lang->testcase->selectLib;?></strong></span>
       <?php echo html::select('fromlib', $libraries, $libID, "onchange='reload(this.value)' class='form-control chosen'");?>
     </div>
   </div>
@@ -32,6 +30,7 @@
       <?php endif;?>
       <th class='w-pri'>  <?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
       <th>                <?php common::printOrderLink('title', $orderBy, $vars, $lang->testcase->title);?></th>
+      <th class='w-200px'><?php echo $lang->testcase->fromModule ?></th>
       <th class='w-200px'><?php echo $lang->testcase->module ?></th>
       <th class='w-100px'><?php common::printOrderLink('type',  $orderBy, $vars, $lang->testcase->type)?></th>
     </tr>
@@ -48,7 +47,8 @@
       <?php endif;?>
       <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo $case->pri == '0' ? '' : zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
       <td class='text-left nobr'><?php if(!common::printLink('testcase', 'view', "caseID=$case->id", $case->title)) echo $case->title;?></td>
-      <td class='text-left' style='overflow:visible'><?php echo html::select("module[{$case->id}]", $modules, $case->module, "class='from-control chosen'");?></th>
+      <td class='text-left'><?php echo zget($libModules, $case->module, '');?></th>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("module[{$case->id}]", $modules, 0, "class='from-control chosen'");?></th>
       <td><?php echo zget($lang->testcase->typeList, $case->type);?></th>
     </tr>
     <?php endforeach;?>

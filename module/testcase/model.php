@@ -1080,7 +1080,7 @@ class testcaseModel extends model
      * @access public
      * @return void
      */
-    public function importLib($productID)
+    public function importFromLib($productID)
     {
         $data = fixer::input('post')->get();
         $libCases = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($data->caseIdList)->fetchAll('id');
@@ -1092,10 +1092,12 @@ class testcaseModel extends model
             if(isset($data->module[$case->id])) $case->module = $data->module[$case->id];
             if(isset($data->branch[$case->id])) $case->branch = $data->branch[$case->id];
             unset($case->id);
+
             $this->dao->insert(TABLE_CASE)->data($case)
                 ->autoCheck()
                 ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
                 ->exec();
+
             if(!dao::isError())
             {
                 $caseID = $this->dao->lastInsertID();

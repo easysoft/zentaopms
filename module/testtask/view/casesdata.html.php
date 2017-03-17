@@ -48,7 +48,7 @@
           <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $run->pri, $run->pri)?>'><?php echo zget($lang->testcase->priList, $run->pri, $run->pri)?></span></td>
           <td class='text-left nobr'>
             <?php if($run->branch) echo "<span class='label label-info label-badge'>{$branches[$run->branch]}</span>"?>
-            <?php echo html::a($this->createLink('testcase', 'view', "caseID=$run->case&version=$run->version&from=testtask&taskID=$run->task"), $run->title, '_blank');?>
+            <?php echo html::a($this->createLink('testcase', 'view', "caseID=$run->case&version=$run->version&from=testtask&taskID=$run->task"), $run->title);?>
           </td>
           <td><?php echo $lang->testcase->typeList[$run->type];?></td>
           <td><?php $assignedTo = $users[$run->assignedTo]; echo substr($assignedTo, strpos($assignedTo, ':') + 1);?></td>
