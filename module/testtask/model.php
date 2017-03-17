@@ -896,10 +896,10 @@ class testtaskModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'start')   return $testtask->status  == 'wait';
-        if($action == 'blocked') return ($testtask->status == 'doing'   || $testtask->status == 'wait');
-        if($action == 'doing')   return ($testtask->status == 'blocked' || $testtask->status == 'done');
-        if($action == 'close')   return $testtask->status != 'done';
+        if($action == 'start')    return $testtask->status  == 'wait';
+        if($action == 'block')    return ($testtask->status == 'doing'   || $testtask->status == 'wait');
+        if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
+        if($action == 'close')    return $testtask->status != 'done';
 
         return true;
     }
