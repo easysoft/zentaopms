@@ -377,6 +377,7 @@ $lang->menugroup->bug         = 'qa';
 $lang->menugroup->testcase    = 'qa';
 $lang->menugroup->testtask    = 'qa';
 $lang->menugroup->testsuite   = 'qa';
+$lang->menugroup->caselib     = 'qa';
 $lang->menugroup->testreport  = 'qa';
 $lang->menugroup->people      = 'company';
 $lang->menugroup->dept        = 'company';
