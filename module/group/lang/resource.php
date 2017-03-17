@@ -520,7 +520,7 @@ $lang->resource->testcase->report             = 'reportChart';
 $lang->resource->testcase->review             = 'review';
 $lang->resource->testcase->batchReview        = 'batchReview';
 $lang->resource->testcase->batchStoryChange   = 'batchStoryChange';
-$lang->resource->testcase->importLib          = 'importLib';
+$lang->resource->testcase->importFromLib      = 'importFromLib';
 
 $lang->testcase->methodOrder[0]   = 'index';
 $lang->testcase->methodOrder[5]   = 'browse';
@@ -544,7 +544,7 @@ $lang->testcase->methodOrder[90]  = 'report';
 $lang->testcase->methodOrder[95]  = 'review';
 $lang->testcase->methodOrder[100] = 'batchReview';
 $lang->testcase->methodOrder[105] = 'batchStoryChange';
-$lang->testcase->methodOrder[110] = 'importLib';
+$lang->testcase->methodOrder[110] = 'importFromLib';
 
 /* Test task. */
 $lang->resource->testtask = new stdclass();
@@ -1266,7 +1266,7 @@ $lang->changelog['9.1'][] = 'testcase-report';
 $lang->changelog['9.1'][] = 'testcase-review';
 $lang->changelog['9.1'][] = 'testcase-batchReview';
 $lang->changelog['9.1'][] = 'testcase-batchStoryChange';
-$lang->changelog['9.1'][] = 'testcase-importLib';
+$lang->changelog['9.1'][] = 'testcase-importFromLib';
 $lang->changelog['9.1'][] = 'testreport-browse';
 $lang->changelog['9.1'][] = 'testreport-create';
 $lang->changelog['9.1'][] = 'testreport-view';

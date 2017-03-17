@@ -423,12 +423,12 @@ class testsuiteModel extends model
      */
     public function getNotImportedCases($productID, $libID, $orderBy = 'id_desc', $pager = null)
     {
-        $importedCases = $this->dao->select('fromLib')->from(TABLE_CASE)
+        $importedCases = $this->dao->select('fromCaseID')->from(TABLE_CASE)
             ->where('product')->eq($productID)
             ->andWhere('lib')->eq($libID)
-            ->andWhere('fromLib')->ne('')
+            ->andWhere('fromCaseID')->ne('')
             ->andWhere('deleted')->eq(0)
-            ->fetchPairs('fromLib', 'fromLib');
+            ->fetchPairs('fromCaseID', 'fromCaseID');
         return $this->dao->select('*')->from(TABLE_CASE)
             ->where('lib')->eq($libID)
             ->andWhere('product')->eq(0)

@@ -56,6 +56,7 @@ $lang->testcase->resultsAB        = 'R';
 $lang->testcase->stepNumber       = '用例步骤数';
 $lang->testcase->stepNumberAB     = 'S';
 $lang->testcase->createBug        = '转Bug';
+$lang->testcase->fromModule       = '来源模块';
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
 $lang->testcase->stepID      = '编号';
@@ -70,7 +71,6 @@ $lang->testcase->batchCreate        = "批量添加";
 $lang->testcase->delete             = "删除用例";
 $lang->testcase->view               = "用例详情";
 $lang->testcase->review             = "评审";
-$lang->testcase->importLib          = "从库导入";
 $lang->testcase->edit               = "编辑";
 $lang->testcase->batchEdit          = "批量编辑 ";
 $lang->testcase->batchChangeModule  = "批量修改模块";
@@ -82,7 +82,7 @@ $lang->testcase->browse             = "用例列表";
 $lang->testcase->groupCase          = "分组浏览用例";
 $lang->testcase->import             = "导入";
 $lang->testcase->importFile         = "导入CSV";
-$lang->testcase->importFromLib      = "从库中导入";
+$lang->testcase->importFromLib      = "从用例库中导入";
 $lang->testcase->showImport         = "显示导入内容";
 $lang->testcase->exportTemplet      = "导出模板";
 $lang->testcase->export             = "导出数据";
@@ -181,11 +181,11 @@ $lang->testcase->action->fromlib  = array('main' => '$date, 由 <strong>$actor</
 $lang->testcase->action->reviewed = array('main' => '$date, 由 <strong>$actor</strong> 记录评审结果，结果为 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
-$lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['wait']        = '待评审';
+$lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = '分组查看';
-$lang->testcase->featureBar['browse']['zerocase']    = '零用例需求';
 $lang->testcase->featureBar['browse']['suite']       = '套件';
+$lang->testcase->featureBar['browse']['zerocase']    = '零用例需求';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];
 
 /* 统计报表。*/

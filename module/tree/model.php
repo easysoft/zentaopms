@@ -1543,7 +1543,7 @@ class treeModel extends model
         foreach($cases as $case)
         {
             $existModules[$case->module] = $case->module;
-            if($case->lib and $case->fromLib) $libs[$case->lib] = $case->lib;
+            if($case->lib and $case->fromCaseID) $libs[$case->lib] = $case->lib;
         }
         if(empty($libs)) return null;
 
