@@ -19,7 +19,7 @@ CREATE TABLE `zt_suitecase` (
   UNIQUE KEY `suitecase` (`suite`,`case`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 ALTER TABLE `zt_case` ADD `lib` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `branch`;
-ALTER TABLE `zt_case` ADD `fromLib` mediumint(8) unsigned NOT NULL AFTER `fromBug`;
+ALTER TABLE `zt_case` ADD `fromCaseID` mediumint(8) unsigned NOT NULL AFTER `fromBug`;
 ALTER TABLE `zt_case` ADD `reviewedBy` varchar(255) NOT NULL AFTER `openedDate`;
 ALTER TABLE `zt_case` ADD `reviewedDate` date NOT NULL AFTER `reviewedBy`;
 ALTER TABLE `zt_casestep` ADD `parent` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;

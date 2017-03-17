@@ -258,7 +258,7 @@ class testcaseModel extends model
         $toBugs       = $this->dao->select('id, title')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
         foreach($toBugs as $toBug) $case->toBugs[$toBug->id] = $toBug->title;
 
-        if($case->linkCase or $case->fromLib) $case->linkCaseTitles = $this->dao->select('id,title')->from(TABLE_CASE)->where('id')->in($case->linkCase)->orWhere('id')->eq($case->fromLib)->fetchPairs();
+        if($case->linkCase or $case->fromCaseID) $case->linkCaseTitles = $this->dao->select('id,title')->from(TABLE_CASE)->where('id')->in($case->linkCase)->orWhere('id')->eq($case->fromCaseID)->fetchPairs();
         if($version == 0) $version = $case->version;
         $case->steps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->orderBy('id')->fetchAll();
         $case->files = $this->loadModel('file')->getByObject('testcase', $caseID);
@@ -1087,8 +1087,8 @@ class testcaseModel extends model
         $libSteps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in($data->caseIdList)->orderBy('id')->fetchGroup('case');
         foreach($libCases as $libCaseID => $case)
         {
-            $case->fromLib = $case->id;
-            $case->product = $productID;
+            $case->fromCaseID = $case->id;
+            $case->product    = $productID;
             if(isset($data->module[$case->id])) $case->module = $data->module[$case->id];
             if(isset($data->branch[$case->id])) $case->branch = $data->branch[$case->id];
             unset($case->id);

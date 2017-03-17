@@ -113,7 +113,7 @@ class testcase extends control
         $linkedLibs = array();
         foreach($cases as $case)
         {
-            if($case->lib and $case->fromLib) $linkedLibs[$case->lib] = $case->lib;
+            if($case->lib and $case->fromCaseID) $linkedLibs[$case->lib] = $case->lib;
         }
         $showModule  = !empty($this->config->datatable->testcaseBrowse->showModule) ? $this->config->datatable->testcaseBrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule, $linkedLibs) : array();
@@ -633,7 +633,7 @@ class testcase extends control
             $this->testcase->setMenu($this->products, $productID, $case->branch);
 
             $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $case->branch);
-            if($case->lib and $case->fromLib)
+            if($case->lib and $case->fromCaseID)
             {
                 $libName    = $this->loadModel('testsuite')->getById($case->lib)->name;
                 $libModules = $this->tree->getOptionMenu($case->lib, 'caselib');
@@ -724,7 +724,7 @@ class testcase extends control
                 $existModules = array();
                 foreach($cases as $case)
                 {
-                    if($case->lib and $case->fromLib) $libs[$case->lib] = $case->lib;
+                    if($case->lib and $case->fromCaseID) $libs[$case->lib] = $case->lib;
                     $existModules[$case->module] = $case->module;
                 }
                 $modules = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
@@ -752,7 +752,7 @@ class testcase extends control
             $existModules  = array();
             foreach($cases as $case)
             {
-                if($case->lib and $case->fromLib) $libs[$case->lib] = $case->lib;
+                if($case->lib and $case->fromCaseID) $libs[$case->lib] = $case->lib;
                 $productIdList[$case->product] = $case->product;
                 $existModules[$case->module]   = $case->module;
             }
