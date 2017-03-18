@@ -570,15 +570,17 @@ class product extends control
      * @param  string  $method 
      * @param  mix     $extra 
      * @access public
-     * @return void
+     * @return void 
      */
     public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
     {
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->orderBy('`order` desc')->fetchAll();
         $toPinyin = $this->product->toPinyin($products);
 
-        foreach($toPinyin as $key => $value) {
-            if(!strstr($value ,$keywords) && !strstr($key,$keywords)) {
+        foreach($toPinyin as $key => $value)
+        {
+            if(!strstr($value ,$keywords) && !strstr($key,$keywords))
+            {
                 unset($toPinyin[$key]);
             }
         }
