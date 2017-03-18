@@ -1696,11 +1696,12 @@ class projectModel extends model
             $currentTime = strtotime($current);
             if($currentTime > $endTime) break;
             if(isset($sets[$current])) $preValue = $sets[$current]->value;
-            if($currentTime > time())
+            if($currentTime > time() and !$todayTag)
             {
-                $preValue = 0;
                 $todayTag = $i + 1;
+                break;
             }
+
             if(!isset($sets[$current]) and $mode == 'noempty')
             {
                 $sets[$current]  = new stdclass();

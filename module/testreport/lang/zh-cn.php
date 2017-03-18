@@ -32,6 +32,7 @@ $lang->testreport->legendBuild       = '测试轮次';
 $lang->testreport->legendCase        = '执行的用例';
 $lang->testreport->legendLegacyBugs  = '遗留的Bug';
 $lang->testreport->legendReport      = '报表';
+$lang->testreport->legendComment     = '总结';
 $lang->testreport->legendMore        = '更多功能';
 
 $lang->testreport->bugSeverityGroups   = 'Bug严重级别分布';
