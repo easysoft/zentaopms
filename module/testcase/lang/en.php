@@ -90,6 +90,8 @@ $lang->testcase->confirmStoryChange = 'Confirm Story Change';
 $lang->testcase->copy               = 'Duplicate Case';
 $lang->testcase->group              = 'Group';
 $lang->testcase->groupName          = 'Group Name';
+$lang->testcase->step               = 'Step';
+$lang->testcase->stepChild          = 'Child';
 
 $lang->testcase->new = 'New';
 

@@ -92,6 +92,8 @@ $lang->testcase->confirmStoryChange = '确认需求变动';
 $lang->testcase->copy               = '复制用例';
 $lang->testcase->group              = '分组';
 $lang->testcase->groupName          = '分组名称';
+$lang->testcase->step               = '步骤';
+$lang->testcase->stepChild          = '子步骤';
 
 $lang->testcase->new = '新增';
 
