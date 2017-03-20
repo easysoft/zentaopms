@@ -21,4 +21,7 @@ $(function()
     });
 
     $('#casesResults table caption .result-tip').html($('#resultTip').html());
+
+    $('tr:first').addClass("show-detail");
+    $('#tr-detail_1').removeClass("hide");
 });
