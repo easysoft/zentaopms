@@ -575,7 +575,10 @@ class product extends control
     public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
     {
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->orderBy('`order` desc')->fetchAll();
-        $toPinyin = $this->product->toPinyin($products);
+
+        $productPairs = array();
+        foreach($products as $product) $productPairs[$product->id] = $product->name;
+        $toPinyin = common::convert2Pinyin($productPairs);
 
         foreach($toPinyin as $key => $value)
         {

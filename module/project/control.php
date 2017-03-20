@@ -1896,17 +1896,20 @@ class project extends control
     public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
     {
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->orderBy('order desc')->fetchAll();
-        $toPinyin = $this->project->toPinyin($projects);
 
-        foreach($toPinyin as $key => $value) {
-            if(!strstr($value ,$keywords) && !strstr($key,$keywords)) {
-                unset($toPinyin[$key]);
-            }   
+        $projectPairs = array();
+        foreach($projects as $project) $projectPairs[$project->id] = $project->name;
+        $toPinyin = common::convert2Pinyin($projectPairs);
+
+        foreach($toPinyin as $key => $value)
+        {
+            if(!strstr($value ,$keywords) && !strstr($key,$keywords)) unset($toPinyin[$key]);
         }   
 
         foreach($projects as $key => $project)
         {
-            if(!isset($toPinyin[$project->name])) {
+            if(!isset($toPinyin[$project->name]))
+            {
                 unset($projects[$key]);
                 continue;
             }
