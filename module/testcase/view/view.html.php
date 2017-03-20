@@ -97,16 +97,16 @@
         foreach($case->steps as $stepID => $step)
         {
             $stepClass = "step-{$step->type}";
-            if($step->type == 'group' or ($step->type == 'item' and $step->parent == 0))
+            if($step->type == 'group' or $step->type == 'step')
             {
                 $stepId++;
                 $childId = 0;
             }
-            if($step->type == 'item' and $step->parent == 0) $stepClass = 'step-group';
+            if($step->type == 'step') $stepClass = 'step-group';
             echo "<tr class='step {$stepClass}'>";
             echo "<th class='step-id'>$stepId</th>";
             echo "<td class='text-left'><div class='input-group'>";
-            if($step->type == 'item' and $step->parent != 0) echo "<span class='step-item-id'>{$stepId}.{$childId}</span>";
+            if($step->type == 'item') echo "<span class='step-item-id'>{$stepId}.{$childId}</span>";
             echo nl2br($step->desc) . "</td>";
             echo "<td class='text-left'>" . nl2br($step->expect) . "</div></td>";
             echo "</tr>";
