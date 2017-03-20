@@ -200,7 +200,6 @@ class bug extends control
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
         $this->app->loadLang('release');
 
-        a($_POST);exit;
         if(!empty($_POST) and !isset($_POST['stepIDList']))
         {
             $response['result']  = 'success';
