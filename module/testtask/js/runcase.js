@@ -65,7 +65,9 @@ $(document).ready(function()
                 // Get cases result
                 $('#resultsContainer').load(response.locate + " #casesResults", function()
                 {
-                    $('#tr-detail_1').show();
+                    $('tr:first').addClass("show-detail");
+                    $('#tr-detail_1').removeClass("hide");
+
                     $('.result-item').click(function()
                     {
                         var $this = $(this);

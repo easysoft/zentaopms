@@ -43,6 +43,8 @@ $(function()
         $('#casesResults table caption .result-tip').html($('#resultTip').html());
 
         $('tr').remove('#result-success');
+        $('tr:first').addClass("show-detail");
+        $('#tr-detail_1').removeClass("hide");
     });
 });
 <?php
