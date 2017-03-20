@@ -103,7 +103,7 @@ class testcase extends control
 
         /* Process case for check story changed. */
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
-        $cases = $this->testcase->appendBugAndResults($cases);
+        $cases = $this->testcase->appendData($cases);
 
         /* Build the search form. */
         $actionURL = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
@@ -169,7 +169,7 @@ class testcase extends control
 
         $cases = $this->testcase->getModuleCases($productID, $branch, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
-        $cases = $this->testcase->appendBugAndResults($cases);
+        $cases = $this->testcase->appendData($cases);
 
         $groupCases  = array();
         $groupByList = array();
@@ -360,7 +360,6 @@ class testcase extends control
 
         /* Get the status of stories are not closed. */
         $storyStatus = $this->lang->story->statusList;
-        //unset($storyStatus['closed']);
         $modules = array();
         if($currentModuleID)
         {
@@ -501,6 +500,7 @@ class testcase extends control
 
         $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->createBug;
         $this->view->runID     = $runID;
+        $this->view->case      = $case;
         $this->view->caseID    = $caseID;
         $this->view->version   = $version;
         $this->display();
@@ -545,22 +545,22 @@ class testcase extends control
             $this->view->branchName  = $this->session->currentProductType == 'normal' ? '' : $this->loadModel('branch')->getById($case->branch);
         }
 
-        $caseFailCount = $this->dao->select('`case` AS name, COUNT(*) AS value')->from(TABLE_TESTRESULT)->where('caseResult')->eq('fail')->andwhere('`case`')->eq($caseID)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        $caseFails = $this->dao->select('`case` AS name, COUNT(*) AS value')->from(TABLE_TESTRESULT)->where('caseResult')->eq('fail')->andwhere('`case`')->eq($caseID)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
 
         $this->view->position[] = $this->lang->testcase->common;
         $this->view->position[] = $this->lang->testcase->view;
 
-        $this->view->case           = $case;
-        $this->view->from           = $from;
-        $this->view->taskID         = $taskID;
-        $this->view->version        = $version ? $version : $case->version;
-        $this->view->modulePath     = $this->tree->getParents($case->module);
-        $this->view->users          = $this->user->getPairs('noletter');
-        $this->view->actions        = $this->loadModel('action')->getList('case', $caseID);
-        $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
-        $this->view->runID          = $from == 'testcase' ? 0 : $run->id;
-        $this->view->isLibCase      = $isLibCase;
-        $this->view->caseFailCount  = $caseFailCount ? $caseFailCount : 0;
+        $this->view->case       = $case;
+        $this->view->from       = $from;
+        $this->view->taskID     = $taskID;
+        $this->view->version    = $version ? $version : $case->version;
+        $this->view->modulePath = $this->tree->getParents($case->module);
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->actions    = $this->loadModel('action')->getList('case', $caseID);
+        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
+        $this->view->runID      = $from == 'testcase' ? 0 : $run->id;
+        $this->view->isLibCase  = $isLibCase;
+        $this->view->caseFails  = $caseFails ? $caseFails : 0;
 
         $this->display();
     }
@@ -914,21 +914,6 @@ class testcase extends control
     }
 
     /**
-     * Batch ctory change cases.
-     * 
-     * @param  int    $productID 
-     * @access public
-     * @return void
-     */
-    public function batchStoryChange($productID = 0)
-    {
-        $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList));
-
-        foreach($caseIDList as $caseID) $this->confirmStoryChange($caseID,false);
-        die(js::locate($this->session->caseList));
-    }
-
-    /**
      * Link related cases.
      *
      * @param  int    $caseID
@@ -1041,6 +1026,21 @@ class testcase extends control
         $this->dao->update(TABLE_CASE)->set('storyVersion')->eq($case->latestStoryVersion)->where('id')->eq($caseID)->exec();
         $this->loadModel('action')->create('case', $caseID, 'confirmed', '', $case->latestStoryVersion);
         if($reload) die(js::reload('parent'));
+    }
+
+    /**
+     * Batch ctory change cases.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function batchConfirmStoryChange($productID = 0)
+    {
+        $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList));
+
+        foreach($caseIDList as $caseID) $this->confirmStoryChange($caseID,false);
+        die(js::locate($this->session->caseList));
     }
 
     /**

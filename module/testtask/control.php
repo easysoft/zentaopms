@@ -50,10 +50,14 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $type = 'wait', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $branch = '', $type = 'local,wait', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true));
+
+        $scopeAndStatus = explode(',',$type);
+        $this->session->set('testTaskVersionScope', $scopeAndStatus[0]);
+        $this->session->set('testTaskVersionStatus', $scopeAndStatus[1]);
 
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
@@ -73,10 +77,10 @@ class testtask extends control
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
         $this->view->orderBy     = $orderBy;
-        $this->view->tasks       = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $type);
+        $this->view->tasks       = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
-        $this->view->type        = $type;
+        $this->view->type        = $scopeAndStatus[1];
         $this->view->branch      = $branch;
 
         $this->display();
@@ -267,7 +271,7 @@ class testtask extends control
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
         /* Append bugs and results. */
-        $runs = $this->testcase->appendBugAndResults($runs, 'run');
+        $runs = $this->testcase->appendData($runs, 'run');
 
         $moduleTree    = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID);
         $libModuleTree = $this->tree->getCaseLibTreeInCase('testtask', $taskID, array('treeModel', 'createTestTaskLink'));
@@ -322,7 +326,7 @@ class testtask extends control
 
         $runs = $this->testtask->getRuns($taskID, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
-        $runs = $this->testcase->appendBugAndResults($runs, 'run');
+        $runs = $this->testcase->appendData($runs, 'run');
 
         $groupCases  = array();
         $groupByList = array();

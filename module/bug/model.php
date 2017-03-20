@@ -245,16 +245,28 @@ class bugModel extends model
         elseif($browseType == 'postponedbugs') $bugs = $this->getByPostponedbugs($productID, $branch, $modules, $projects, $sort, $pager);
         elseif($browseType == 'needconfirm')   $bugs = $this->getByNeedconfirm($productID, $branch, $modules, $projects, $sort, $pager);
         elseif($browseType == 'bysearch')      $bugs = $this->getBySearch($productID, $queryID, $sort, $pager, $branch);
-        elseif($browseType == 'overduebugs')   $bugs = $this->getByOverdueBugs($productID, $branch, $modules, $projects, $sort, $pager);
+        elseif($browseType == 'overduebugs')   $bugs = $this->getOverdueBugs($productID, $branch, $modules, $projects, $sort, $pager);
 
-        /* Delayed or not?. */
+        return $this->checkDelayBugs($bugs);
+    }
+
+    /**
+     * Check delay bug.
+     * 
+     * @param  array  $bugs
+     * @access public
+     * @return array
+     */
+    public function checkDelayBugs($bugs)
+    {
         foreach ($bugs as $bug)
         {    
-            if($bug->deadline != '0000-00-00')
-            {    
+            // Delayed or not?.
+            if($bug->status == 'active' && $bug->deadline != '0000-00-00')
+            {
                 $delay = helper::diffDate(helper::today(), $bug->deadline);
-                if($delay > 0) $bug->delay = $delay;     
-            }    
+                if($delay > 0) $bug->delay = $delay;
+            }
         }
 
         return $bugs;
@@ -1926,14 +1938,14 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getByOverdueBugs($productID,$branch,$modules, $projects, $orderBy, $pager)
+    public function getOverdueBugs($productID, $branch, $modules, $projects, $orderBy, $pager)
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('project')->in(array_keys($projects))
             ->andWhere('product')->eq($productID)
-            ->andWhere('status')->ne('closed')
             ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
+            ->andWhere('status')->eq('active')
             ->andWhere('deleted')->eq(0)
             ->andWhere('deadline')->ne('0000-00-00')
             ->andWhere('deadline')->lt(helper::today())

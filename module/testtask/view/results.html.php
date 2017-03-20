@@ -49,7 +49,7 @@
         </tr>
         <tr class='result-detail hide' id='tr-detail_<?php echo $trCount++; ?>'>
           <td colspan='7' class='pd-0'>
-            <form action='<?php echo $this->createLink('bug', 'create', "product=$case->product&branch=$case->branch&extras=caseID=$case->id,version=$case->version,runID=")?>' target='_parent' method='post'>
+            <form action='<?php echo $this->createLink('bug', 'create', "product=$case->product&branch=$case->branch&extras=caseID=$case->id,version=$case->version,runID=")?>' target='_blank' method='post'>
             <table class='table table-condensed borderless mg-0 resultSteps'>
               <thead>
                 <tr>
@@ -69,27 +69,26 @@
               <?php
               if(empty($stepResult['type']))   $stepResult['type']   = 'item';
               if(empty($stepResult['parent'])) $stepResult['parent'] = 0;
-              $stepClass = "step-{$stepResult['type']}";
-              if($stepResult['type'] == 'group' or ($stepResult['type'] == 'item' and $stepResult['parent'] == 0))
+              if($stepResult['type'] == 'group' or $stepResult['type'] == 'step')
               {
                   $stepId++;
                   $childId = 0;
               }
-              if($stepResult['type'] == 'item' and $stepResult['parent'] == 0) $stepClass = 'step-group';
+              $stepClass = $stepResult['type'] == 'item' ? 'step-item' : 'step-group';
               $modalID   = $result->id . '-' . $key;
               $fileCount = '(' . count($stepResult['files']) . ')';
               ?>
               <tr class='step <?php echo $stepClass?>'>
                 <td class='step-id'>
                   <?php if($result->caseResult == 'fail'):?>
-                  <?php $inputName = $stepClass == 'step-item' ? 'stepIDList[]' : 'stepGroup[]';?>
+                  <?php $inputName = $stepResult['type'] != 'group' ? 'stepIDList[]' : '';?>
                   <input type='checkbox' name='<?php echo $inputName;?>'  value='<?php echo $key;?>'/>
                   <?php endif;?>
                   <?php echo $stepId;?>
                 </td>
                 <td class='text-left' <?php if($stepResult['type'] == 'group') echo "colspan='6'"?>>
                   <div class='input-group'>
-                  <?php if($stepResult['type'] == 'item' and $stepResult['parent'] != 0) echo "<span class='step-item-id'>{$stepId}.{$childId}</span>";?>
+                  <?php if($stepResult['type'] == 'item') echo "<span class='step-item-id'>{$stepId}.{$childId}</span>";?>
                   <?php if(isset($stepResult['desc'])) echo nl2br($stepResult['desc']);?>
                   </div>
                 </td>

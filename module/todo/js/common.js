@@ -36,12 +36,10 @@ function loadList(type, id)
 
     if(type == 'bug' || type == 'task')
     {
-        //获取要待办的任务
         $.get(link,function(data,status) {
             if(data) { 
                 $(divClass).html(data);
             } else {
-                //没有指派给自己的任务进行提醒，并重置.
                 alert(noTodo);
                 $("#type").val("custom");
                 $(divClass).html($(divID).html());

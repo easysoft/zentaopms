@@ -71,16 +71,17 @@ class testcaseModel extends model
             foreach($this->post->steps as $stepID => $stepDesc)
             {
                 if(empty($stepDesc)) continue;
-                $isGroup       = isset($_POST['stepType'][$stepID]);
+                $stepType      = $this->post->stepType;
                 $step          = new stdClass();
-                $step->parent  = $isGroup ? 0 : $parentStepID;
+                $step->type    = ($stepType[$stepID] == 'item' and $parentStepID == 0) ? 'step' : $stepType[$stepID];
+                $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
                 $step->case    = $caseID;
                 $step->version = 1;
-                $step->type    = $isGroup ? 'group' : 'item';
                 $step->desc    = htmlspecialchars($stepDesc);
                 $step->expect  = htmlspecialchars($this->post->expects[$stepID]);
                 $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
-                if($isGroup) $parentStepID = $this->dao->lastInsertID();
+                if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
+                if($step->type == 'step')  $parentStepID = 0;
             }
             return array('status' => 'created', 'id' => $caseID);
         }
@@ -528,16 +529,17 @@ class testcaseModel extends model
                 foreach($this->post->steps as $stepID => $stepDesc)
                 {
                     if(empty($stepDesc)) continue;
-                    $isGroup       = isset($_POST['stepType'][$stepID]);
+                    $stepType = $this->post->stepType;
                     $step = new stdclass();
-                    $step->parent  = $isGroup ? 0 : $parentStepID;
+                    $step->type    = ($stepType[$stepID] == 'item' and $parentStepID == 0) ? 'step' : $stepType[$stepID];
+                    $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
                     $step->case    = $caseID;
                     $step->version = $version;
-                    $step->type    = $isGroup ? 'group' : 'item';
                     $step->desc    = htmlspecialchars($stepDesc);
                     $step->expect  = htmlspecialchars($this->post->expects[$stepID]);
                     $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
-                    if($isGroup) $parentStepID = $this->dao->lastInsertID();
+                    if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
+                    if($step->type == 'step')  $parentStepID = 0;
                 }
             }
 
@@ -864,7 +866,7 @@ class testcaseModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'createbug') return $case->caseFailCount > 0;
+        if($action == 'createbug') return $case->caseFails > 0;
         if($action == 'review') return $case->status == 'wait';
 
         return true;
@@ -1258,18 +1260,25 @@ class testcaseModel extends model
      * Append bugs and results.
      * 
      * @param  array    $cases 
+     * @param  string   $type
      * @access public
      * @return array
      */
-    public function appendBugAndResults($cases, $type = 'case')
+    public function appendData($cases, $type = 'case')
     {
         $caseIdList = array_keys($cases);
         if($type == 'case')
         {
             $caseBugs   = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`case`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
             $results    = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`case`')->in($caseIdList)->groupBy('`case`')->fetchPairs('case', 'count');
-            $caseFailCount = $this->dao->select('`case` AS name, COUNT(*) AS value')->from(TABLE_TESTRESULT)->where('caseResult')->eq('fail')->andwhere('`case`')->in($caseIdList)->groupBy('name')->orderBy('value DESC')->fetchPairs('name','value');
-            $stepNumber = $this->dao->select('count(distinct t1.id) as count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
+
+            $caseFails = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)
+                ->where('caseResult')->eq('fail')
+                ->andwhere('`case`')->in($caseIdList)
+                ->groupBy('`case`')
+                ->fetchPairs('case','count');
+
+            $steps = $this->dao->select('count(distinct t1.id) as count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.`case`=t2.`id`')
                 ->where('t1.`case`')->in($caseIdList)
                 ->andWhere('t1.type')->eq('item')
@@ -1281,7 +1290,14 @@ class testcaseModel extends model
         {
             $caseBugs = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`result`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
             $results  = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)->where('`run`')->in($caseIdList)->groupBy('`run`')->fetchPairs('case', 'count');
-            $stepNumber = $this->dao->select('count(distinct t1.id) as count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
+
+            $caseFails = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)
+                ->where('caseResult')->eq('fail')
+                ->andwhere('`case`')->in($caseIdList)
+                ->groupBy('`case`')
+                ->fetchPairs('case','count');
+
+            $steps = $this->dao->select('count(distinct t1.id) as count, t1.`case`')->from(TABLE_CASESTEP)->alias('t1')
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.`case`=t2.`case`')
                 ->where('t2.`id`')->in($caseIdList)
                 ->andWhere('t1.type')->eq('item')
@@ -1293,10 +1309,10 @@ class testcaseModel extends model
         foreach($cases as $key => $case)
         {
             $caseID = $type == 'case' ? $case->id : $case->case;
-            $case->bugs          = isset($caseBugs[$caseID])     ? $caseBugs[$caseID]      : 0;
-            $case->results       = isset($results[$caseID])      ? $results[$caseID]       : 0;
-            $case->caseFailCount = isset($caseFailCount[$caseID])? $caseFailCount[$caseID] : 0;
-            $case->stepNumber    = isset($stepNumber[$caseID])   ? $stepNumber[$caseID]    : 0;
+            $case->bugs       = isset($caseBugs[$caseID])   ? $caseBugs[$caseID]   : 0;
+            $case->results    = isset($results[$caseID])    ? $results[$caseID]    : 0;
+            $case->caseFails  = isset($caseFails[$caseID])  ? $caseFails[$caseID]  : 0;
+            $case->stepNumber = isset($stepNumber[$caseID]) ? $stepNumber[$caseID] : 0;
         }
 
         return $cases;

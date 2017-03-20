@@ -67,7 +67,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getProductTasks($productID, $branch = 0, $orderBy = 'id_desc', $pager = null, $type = '')
+    public function getProductTasks($productID, $branch = 0, $orderBy = 'id_desc', $pager = null, $scopeAndStatus = array())
     {
         return $this->dao->select("t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName, if(t4.name != '', t4.branch, t5.branch) AS branch")
             ->from(TABLE_TESTTASK)->alias('t1')
@@ -75,10 +75,11 @@ class testtaskModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project')
-            ->where('t1.product')->eq((int)$productID)
+            ->where('t1.deleted')->eq(0)
+            ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
             ->andWhere('t5.product = t1.product')
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.status')->eq($type)
+            ->beginIF($scopeAndStatus[1] == 'totalStatus')->andWhere('t1.status')->in(array('blocked','doing','wait','done'))->fi()
+            ->beginIF($scopeAndStatus[1] != 'totalStatus')->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
             ->beginIF($branch)->andWhere("if(t4.branch, t4.branch, t5.branch) = '$branch'")->fi()
             ->orderBy($orderBy)
             ->page($pager)
