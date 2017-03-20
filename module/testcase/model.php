@@ -71,16 +71,17 @@ class testcaseModel extends model
             foreach($this->post->steps as $stepID => $stepDesc)
             {
                 if(empty($stepDesc)) continue;
-                $isGroup       = isset($_POST['stepType'][$stepID]);
+                $stepType      = $this->post->stepType;
                 $step          = new stdClass();
-                $step->parent  = $isGroup ? 0 : $parentStepID;
+                $step->type    = ($stepType[$stepID] == 'item' and $parentStepID == 0) ? 'step' : $stepType[$stepID];
+                $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
                 $step->case    = $caseID;
                 $step->version = 1;
-                $step->type    = $isGroup ? 'group' : 'item';
                 $step->desc    = htmlspecialchars($stepDesc);
                 $step->expect  = htmlspecialchars($this->post->expects[$stepID]);
                 $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
-                if($isGroup) $parentStepID = $this->dao->lastInsertID();
+                if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
+                if($step->type == 'step')  $parentStepID = 0;
             }
             return array('status' => 'created', 'id' => $caseID);
         }
@@ -528,16 +529,17 @@ class testcaseModel extends model
                 foreach($this->post->steps as $stepID => $stepDesc)
                 {
                     if(empty($stepDesc)) continue;
-                    $isGroup       = isset($_POST['stepType'][$stepID]);
+                    $stepType = $this->post->stepType;
                     $step = new stdclass();
-                    $step->parent  = $isGroup ? 0 : $parentStepID;
+                    $step->type    = ($stepType[$stepID] == 'item' and $parentStepID == 0) ? 'step' : $stepType[$stepID];
+                    $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
                     $step->case    = $caseID;
                     $step->version = $version;
-                    $step->type    = $isGroup ? 'group' : 'item';
                     $step->desc    = htmlspecialchars($stepDesc);
                     $step->expect  = htmlspecialchars($this->post->expects[$stepID]);
                     $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
-                    if($isGroup) $parentStepID = $this->dao->lastInsertID();
+                    if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
+                    if($step->type == 'step')  $parentStepID = 0;
                 }
             }
 

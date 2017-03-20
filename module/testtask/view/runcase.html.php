@@ -52,7 +52,7 @@
       <?php foreach($run->case->steps as $key => $step):?>
       <?php
       $stepClass = "step-{$step->type}";
-      if($step->type == 'group' or ($step->type == 'item' and $step->parent == 0))
+      if($step->type == 'group' or $step->type == 'step')
       {
           $stepId++;
           $childId = 0;
@@ -63,7 +63,7 @@
         <th class='step-id'><?php echo $stepId;?></th>
         <td class='text-left' <?php if($step->type == 'group') echo "colspan='4'"?>>
           <div class='input-group'>
-          <?php if($step->type == 'item' and $step->parent != 0) echo "<span class='step-item-id'>{$stepId}.{$childId}</span>";?>
+          <?php if($step->type == 'item') echo "<span class='step-item-id'>{$stepId}.{$childId}</span>";?>
           <?php echo nl2br($step->desc);?>
           </div>
         </td>
