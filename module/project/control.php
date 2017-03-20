@@ -583,8 +583,7 @@ class project extends control
         $position[] = $this->lang->project->story;
 
         /* Count T B C */
-        $storyIdList = array();
-        foreach($stories as $story) $storyIdList[$story->id] = $story->id;
+        $storyIdList = array_keys($stories);;
         $storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList,$projectID);
         $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList,$projectID);
         $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);

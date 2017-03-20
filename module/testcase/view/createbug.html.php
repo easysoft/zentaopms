@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form target='_parent' method='post'>
+<form action='<?php echo $this->createLink('bug', 'create', "product=$case->product&branch=$case->branch&extras=caseID=$case->id,version=$case->version,runID=")?>' target='_parent' method='post'>
 <div class='main' id='resultsContainer'>
 </div>
 </form>

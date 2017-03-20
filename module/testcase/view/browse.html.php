@@ -85,9 +85,9 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
                       echo '<li>' . html::a('javascript:;', $lang->testcase->review,  '', $class) . '</li>';
                   }
 
-                  $actionLink = $this->createLink('testcase', 'batchStoryChange', "productID=$productID");
-                  $misc = common::hasPriv('testcase', 'batchStoryChange') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
-                  echo "<li>" . html::a('#', $lang->testcase->batchStoryChange, '', $misc) . "</li>";
+                  $actionLink = $this->createLink('testcase', 'batchConfirmStoryChange', "productID=$productID");
+                  $misc = common::hasPriv('testcase', 'batchConfirmStoryChange') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
+                  echo "<li>" . html::a('#', $lang->testcase->batchConfirmStoryChange, '', $misc) . "</li>";
 
                   $actionLink = $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy");
                   $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=\"setFormAction('$actionLink')\"" : $class;

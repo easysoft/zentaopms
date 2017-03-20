@@ -12,13 +12,35 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->testtask->confirmDelete)?>
+
 <div id="featurebar">
   <ul class="nav">
-    <li id='waitTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=wait"), $lang->testtask->wait);?></li>
-    <li id='doingTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=doing"), $lang->testtask->testing);?></li>
-    <li id='blockedTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=blocked"), $lang->testtask->blockedA);?></li>
-    <li id='doneTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=done"), $lang->testtask->done);?></li>
+    <li>
+      <span class='dropdown'>
+
+        <?php 
+        $scope = $this->session->testTaskVersionScope;
+        $status = $this->session->testTaskVersionStatus;
+        $viewName = $scope == 'local'? $productName : $lang->testtask->all;
+        ?>
+
+        <button class='btn btn-primary btn-sm' type='button' data-toggle='dropdown'><?php echo $viewName?><span class='caret'></span></button>
+        <ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>
+          <?php 
+            echo "<li>" . html::a(inlink('browse', "productID=$productID&branch=$branch&type=all,$status"), $lang->testtask->all) . "</li>";
+            echo "<li>" . html::a(inlink('browse', "productID=$productID&branch=$branch&type=local,$status"), $productName) . "</li>";
+          ?>
+        </ul>
+      </span>
+    </li>
+
+    <li id='waitTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,wait"), $lang->testtask->wait);?></li>
+    <li id='doingTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,doing"), $lang->testtask->testing);?></li>
+    <li id='blockedTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,blocked"), $lang->testtask->blocked);?></li>
+    <li id='doneTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,done"), $lang->testtask->done);?></li>
+    <li id='totalStatusTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,totalStatus"), $lang->testtask->totalStatus);?></li>
   </ul>
+
   <div class="actions"><?php common::printIcon('testtask', 'create', "product=$productID");?></div>
 </div>
 <table class='table tablesorter table-fixed' id='taskList'>
@@ -27,7 +49,9 @@
     <tr>
       <th class='w-id text-left'>   <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
       <th class='w-200px text-left'><?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
-      <th class='text-left'>        <?php echo $lang->testtask->project . '/' . $lang->testtask->build;?>
+      <th class='text-left'>        <?php common::printOrderLink('product', $orderBy, $vars, $lang->testtask->product);?></th>
+      <th class='text-left'>        <?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->project);?></th>
+      <th class='text-left'>        <?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
       <th class='w-user text-left'> <?php common::printOrderLink('owner',   $orderBy, $vars, $lang->testtask->owner);?></th>
       <th class='w-100px text-left'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
       <th class='w-100px text-left'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
@@ -38,14 +62,11 @@
   <tbody>
   <?php foreach($tasks as $task):?>
   <tr class='text-left'>
-    <td><?php echo html::a(inlink('view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
+    <td><?php echo html::a(inlink('cases', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
     <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a(inlink('cases', "taskID=$task->id"), $task->name);?></td>
-    <td title="<?php echo $task->projectName . '/' . $task->buildName?>">
-      <?php
-      echo $task->projectName . '/'; 
-      $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));;
-      ?>
-    </td>
+    <td title="<?php echo $task->productName?>"><?php echo $task->productName?></td>
+    <td title="<?php echo $task->projectName?>"><?php echo $task->projectName?></td>
+    <td><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName, '','class="iframe"'));?></td>
     <td><?php echo zget($users, $task->owner);?></td>
     <td><?php echo $task->begin?></td>
     <td><?php echo $task->end?></td>
@@ -68,7 +89,7 @@
   </tr>
   <?php endforeach;?>
   </tbody>
-  <tfoot><tr><td colspan='8'><?php $pager->show();?></td></tr></tfoot>
+  <tfoot><tr><td colspan='10'><?php $pager->show();?></td></tr></tfoot>
 </table>
 <script>$(function(){$('#<?php echo $type?>Tab').addClass('active')})</script>
 <?php include '../../common/view/footer.html.php';?>
