@@ -23,12 +23,13 @@
 #steps.sortable > tr.drop-success > td {background-color: #cfe0ff; transition: background-color 2s;}
 #steps .step-type-toggle {padding: 0}
 #steps .step-type-menu-box {position: relative;}
-#steps .step-type-menu {position: absolute; top: 0; right: 0; z-index: 10; box-shadow: 0 6px 12px rgba(0,0,0,.175); background-color: #fff; display: none; border: 1px solid #ddd; min-width: 60px;}
+#steps .step-type-menu {position: absolute; top: 25px; right: 0; z-index: 10; box-shadow: 0 6px 12px rgba(0,0,0,.175); background-color: #fff; display: none; border: 1px solid #bbb; min-width: 60px;}
 #steps .step-step[data-type="item"] .step-type-menu > a[data-value="item"] {display: none}
 #steps .step-type-current {display: block; padding: 5px 10px; position: relative; line-height: 20px;}
+#steps .step-type-toggle:hover .step-type-current {background-color: #edf3fe; color: #03c}
 #steps .step-type-menu:hover,
-#steps .step-type-toggle:hover .step-type-menu {display: block}
-#steps .step-type-menu > a {display: block; padding: 8px 10px; color: #666;}
+#steps .step-type-toggle:hover .step-type-menu {display: table; padding: 2px}
+#steps .step-type-menu > a {display: table-cell; padding: 8px 10px; color: #666;}
 #steps .step-type-menu > a:hover {color: #333; background-color: #e5e5e5;}
 #steps .step-type-menu > a.active {color: #fff; background-color: #1a4f85;}
 

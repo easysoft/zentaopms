@@ -45,14 +45,13 @@ function loadFilesName()
 
 $(document).ready(function()
 {
-    /* First unbind ajaxForm for form.*/
+    // First unbind ajaxForm for form.
     $("form[data-type='ajax']").unbind('submit');
     setForm();
     
-    /* Bind ajaxForm for form again. */
+    // Bind ajaxForm for form again.
     $.ajaxForm("form[data-type='ajax']", function(response)
     {   
-        console.info(response);
         if(response.locate)
         {
             if(response.locate == 'reload' && response.target == 'parent')
@@ -62,6 +61,8 @@ $(document).ready(function()
             } else if(response.next) {
                 location.href = response.locate;
             } else {
+
+                // Get cases result
                 $('#resultsContainer').load(response.locate + " #casesResults", function()
                 {
                     $('#tr-detail_1').show();
@@ -76,7 +77,7 @@ $(document).ready(function()
                    
                    $('#casesResults table caption .result-tip').html($('#resultTip').html());
 
-                   $("#submit").text('保存');
+                   $("#submit").text(caseResultSave);
                    $("#submit").attr({"disabled":"disabled"});
                 });   
             }   

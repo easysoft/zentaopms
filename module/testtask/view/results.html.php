@@ -49,7 +49,7 @@
         </tr>
         <tr class='result-detail hide' id='tr-detail_<?php echo $trCount++; ?>'>
           <td colspan='7' class='pd-0'>
-            <form action='<?php echo $this->createLink('bug', 'create', "product=$case->product&branch=$case->branch&extras=caseID=$case->id,version=$case->version,runID=")?>' target='_parent' method='post'>
+            <form action='<?php echo $this->createLink('bug', 'create', "product=$case->product&branch=$case->branch&extras=caseID=$case->id,version=$case->version,runID=")?>' target='_blank' method='post'>
             <table class='table table-condensed borderless mg-0 resultSteps'>
               <thead>
                 <tr>
