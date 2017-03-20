@@ -23,7 +23,7 @@ ALTER TABLE `zt_case` ADD `fromCaseID` mediumint(8) unsigned NOT NULL AFTER `fro
 ALTER TABLE `zt_case` ADD `reviewedBy` varchar(255) NOT NULL AFTER `openedDate`;
 ALTER TABLE `zt_case` ADD `reviewedDate` date NOT NULL AFTER `reviewedBy`;
 ALTER TABLE `zt_casestep` ADD `parent` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
-ALTER TABLE `zt_casestep` ADD `type` varchar(10) NOT NULL DEFAULT 'item' AFTER `version`;
+ALTER TABLE `zt_casestep` ADD `type` varchar(10) NOT NULL DEFAULT 'step' AFTER `version`;
 CREATE TABLE `zt_testreport` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `product` mediumint(8) unsigned NOT NULL,
