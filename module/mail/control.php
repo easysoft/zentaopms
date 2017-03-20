@@ -314,7 +314,7 @@ class mail extends control
             }
 
             $this->dao->update(TABLE_MAILQUEUE)->set('status')->eq('sending')->where('id')->in($queue->id)->exec();
-            $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList);
+            $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList, $includeMe = true);
 
             $data = new stdclass();
             $data->sendTime = $now;
@@ -491,6 +491,12 @@ class mail extends control
         $this->display();
     }
 
+    /**
+     * zentao cloud.
+     * 
+     * @access public
+     * @return void
+     */
     public function ztCloud()
     {
         if($_POST)

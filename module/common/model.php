@@ -1312,6 +1312,49 @@ class commonModel extends model
     {
         return (isset($_SESSION['tutorialMode']) and $_SESSION['tutorialMode']);
     }
+
+    /**
+     * Convert items to Pinyin.
+     * 
+     * @param  array    $items 
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function convert2Pinyin($items)
+    {
+        global $app;
+        static $allConverted = array();
+        static $pinyin;
+        if(empty($pinyin)) $pinyin = $app->loadClass('pinyin');
+
+        $sign = ' aNdAnD ';
+        $notConvertedItems = array_diff($items, array_keys($allConverted));
+
+        if($notConvertedItems)
+        {
+            $convertedPinYin = $pinyin->romanize(join($sign, $notConvertedItems));
+            $itemsPinYin     = explode(trim($sign), $convertedPinYin);
+            foreach($notConvertedItems as $item)
+            {
+                $itemPinYin  = array_shift($itemsPinYin);
+                $wordsPinYin = explode("\t", trim($itemPinYin));
+
+                $abbr = '';
+                foreach($wordsPinYin as $i => $wordPinyin)
+                {
+                    if($wordPinyin) $abbr .= $wordPinyin[0];
+                }
+
+                $allConverted[$item] = join($wordsPinYin) . ' ' . $abbr;
+            }
+        }
+
+        $convertedItems = array();
+        foreach($items as $item) $convertedItems[$item] = zget($allConverted, $item, null);
+
+        return $convertedItems;
+    }
 }
 
 class common extends commonModel
