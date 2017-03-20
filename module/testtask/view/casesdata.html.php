@@ -62,7 +62,7 @@
           <td class='text-center'>
             <?php
             common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase iframe', false, "data-width='95%'");
-            common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe');
+            common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe', '', "data-width='90%'");
 
             if(common::hasPriv('testtask', 'unlinkCase'))
             {
@@ -70,7 +70,7 @@
                 echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"caseList\",confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$lang->testtask->unlinkCase}' class='btn-icon'");
             }
 
-            common::printIcon('testcase', 'createBug', "product=$productID&branch=$task->branch&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$taskID", $run, 'list', 'bug', '', 'iframe');
+            common::printIcon('testcase', 'createBug', "product=$productID&branch=$task->branch&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$taskID", $run, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
             ?>
           </td>
         </tr>

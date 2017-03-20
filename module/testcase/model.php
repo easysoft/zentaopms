@@ -1238,7 +1238,7 @@ class testcaseModel extends model
                 break;
             case 'actions':
                 common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
-                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', '', '', 'results iframe');
+                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', '', '', 'results iframe', '', "data-width='90%'");
                 if($config->testcase->needReview) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'review', '', 'iframe');
                 common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
                 common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
@@ -1249,7 +1249,7 @@ class testcaseModel extends model
                     echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"batchForm\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$this->lang->testcase->delete}' class='btn-icon'");
                 }
 
-                common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'bug', '', 'iframe');
+                common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
                 break;
             }
             echo '</td>';
@@ -1293,7 +1293,7 @@ class testcaseModel extends model
 
             $caseFails = $this->dao->select('count(*) as count, `case`')->from(TABLE_TESTRESULT)
                 ->where('caseResult')->eq('fail')
-                ->andwhere('`case`')->in($caseIdList)
+                ->andwhere('`run`')->in($caseIdList)
                 ->groupBy('`case`')
                 ->fetchPairs('case','count');
 
