@@ -2,12 +2,15 @@
 $lang->testreport->common   = '测试报告';
 $lang->testreport->browse   = '报告列表';
 $lang->testreport->create   = '创建报告';
+$lang->testreport->edit     = '编辑报告';
 $lang->testreport->delete   = '删除报告';
 $lang->testreport->export   = '导出报告';
 $lang->testreport->view     = '报告详情';
 $lang->testreport->recreate = '重新生成报告';
 
 $lang->testreport->title       = '标题';
+$lang->testreport->project     = '所属项目';
+$lang->testreport->testtask    = '测试版本';
 $lang->testreport->startEnd    = '起止时间';
 $lang->testreport->owner       = '负责人';
 $lang->testreport->member      = '参与人员';
@@ -42,11 +45,13 @@ $lang->testreport->bugResolvedByGroups = 'Bug解决者分布';
 $lang->testreport->bugResolutionGroups = 'Bug解决方案分布';
 $lang->testreport->bugModuleGroups     = 'Bug模块分布';
 $lang->testreport->legacyBugs          = '遗留的Bug';
-$lang->testreport->bugConfirmedRate    = '有效Bug率 (确认的Bug / 测试创建的Bug)';
+$lang->testreport->bugConfirmedRate    = '有效Bug率 (方案为已解决或延期 / 状态为已解决或已关闭)';
 $lang->testreport->bugCreateByCaseRate = '用例发现Bug率 (用例创建的Bug / 时间区间中新增的Bug)';
 
 $lang->testreport->caseSummary   = '共有<strong>%s</strong>个用例，共执行<strong>%s</strong>个用例，产生了<strong>%s</strong>个结果，失败的用例有<strong>%s</strong>个。';
 $lang->testreport->buildSummary  = '共测试了<strong>%s</strong>个版本。';
-$lang->testreport->bugSummary    = '共产生<strong>%s</strong>个Bug，遗留<strong>%s</strong>个Bug。有效Bug率（确认的Bug / 产生的Bug）：<strong>%s</strong>，用例发现Bug率（用例创建的Bug / 时间区间中新增的Bug）：<strong>%s</strong>';
+$lang->testreport->bugSummary    = '共产生<strong>%s</strong>个Bug，遗留<strong>%s</strong>个Bug。有效Bug率（方案为已解决或延期 / 状态为已解决或已关闭）：<strong>%s</strong>，用例发现Bug率（用例创建的Bug / 时间区间中新增的Bug）：<strong>%s</strong>';
 $lang->testreport->confirmDelete = '是否删除该报告？';
+$lang->testreport->moreNotice    = '更多功能可以参考禅道扩展机制进行扩展，也可以联系我们进行定制。';
 $lang->testreport->exportNotice  = "由<a href='http://www.zentao.net' target='_blank' style='color:grey'>禅道项目管理软件</a>导出";
+$lang->testreport->noReport      = "报表还没有生成，请稍候查看。";

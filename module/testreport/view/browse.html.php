@@ -25,7 +25,8 @@
         <th>                <?php common::printOrderLink('title',       $orderBy, $vars, $lang->testreport->title);?></th>
         <th class='w-user'> <?php common::printOrderLink('createdBy',   $orderBy, $vars, $lang->openedByAB);?></th>
         <th class='w-120px'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->testreport->createdDate);?></th>
-        <th class='w-250px'><?php common::printOrderLink('objectID',    $orderBy, $vars, $lang->testreport->objectID);?></th>
+        <th class='w-250px'><?php common::printOrderLink('project',     $orderBy, $vars, $lang->testreport->project);?></th>
+        <th class='w-250px'><?php echo $lang->testreport->testtask;?></th>
         <th class='w-50px'> <?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -37,18 +38,26 @@
         <td class='text-left' title='<?php $report->title?>'><?php echo html::a(inlink('view', "reportID=$report->id&from=$objectType"), $report->title)?></td>
         <td><?php echo zget($users, $report->createdBy);?></td>
         <td><?php echo substr($report->createdDate, 2);?></td>
+        <?php $projectName = '#' . $report->project . $projects[$report->project];?>
+        <td class='text-left' title='<?php echo $projectName?>'><?php echo $projectName;?></td>
         <?php
-        $objectName = '';
-        if($report->objectType == 'testtask' and isset($tasks[$report->objectID]))   $objectName = 'TESTTAST #' . $report->objectID . $tasks[$report->objectID];
-        if($report->objectType == 'project' and isset($projects[$report->objectID])) $objectName = 'PROJECT #' . $report->objectID . $projects[$report->objectID];
+        $taskName = '';
+        foreach(explode(',', $report->tasks) as $taskID) $taskName .= '#' . $taskID . $tasks[$taskID] . ' ';
         ?>
-        <td class='text-left' title='<?php echo $objectName?>'><?php echo $objectName;?></td>
-        <td><?php common::printIcon('testreport', 'delete', "id=$report->id", '', 'list', 'remove', 'hiddenwin');?></td>
+        <td class='text-left' title='<?php echo $taskName?>'><?php echo $taskName;?></td>
+        <td>
+          <?php
+          common::printIcon('testreport', 'edit', "id=$report->id", '', 'list');
+          common::printIcon('testreport', 'delete', "id=$report->id", '', 'list', 'remove', 'hiddenwin');
+          ?>
+        </td>
       </tr>
       <?php endforeach;?>
     </tbody>
+    <tfoot><tr><td colspan='7'><?php $pager->show();?></td></tr></tfoot>
+    <?php else:?>
+    <tbody><tr><td colspan='7'><?php echo $lang->testreport->noReport;?></td></tr></tbody>
     <?php endif;?>
-    <tfoot><tr><td colspan='6'><?php $pager->show();?></td></tr></tfoot>
   </table>
 </div>
 <?php include '../../common/view/footer.html.php';?>

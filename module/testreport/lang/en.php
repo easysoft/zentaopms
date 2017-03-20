@@ -36,7 +36,7 @@ $lang->testreport->bugResolvedByGroups = 'Bug ResolvedBy Distribution';
 $lang->testreport->bugResolutionGroups = 'Bug Resolution Distribution';
 $lang->testreport->bugModuleGroups     = 'Bug Module Distribution';
 $lang->testreport->legacyBugs          = 'Legacy Bugs';
-$lang->testreport->bugConfirmedRate    = 'Confirmed Bug Rate (Confirmed Bugs / Bugs created in tests)';
+$lang->testreport->bugConfirmedRate    = 'Confirmed Bug Rate (Solution is fixed or postponed / status is resolved or closed)';
 $lang->testreport->bugCreateByCaseRate = 'Bug Created in Case Rate (Bugs created in cases / Newly added bugs)';
 
 $lang->testreport->caseSummary   = '  %s cases in total, %s cases performed, %s results generated, %s cases failed.';

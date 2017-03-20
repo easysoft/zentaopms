@@ -19,7 +19,7 @@
   </div>
   <div class='actions'>
     <?php
-    common::printIcon('testreport', 'create', "objectID=$projectID&objectType=project", '', 'button','flag');
+    common::printIcon('testreport', 'browse', "objectID=$projectID&objectType=project", '', 'button','flag');
     common::printIcon('testtask', 'create', "product=0&project=$projectID");
     ?>
   </div>

@@ -63,13 +63,20 @@ class testreport extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $reports = $this->testreport->getList($objectID, $objectType, $extra, $orderBy, $pager);
+        if(empty($reports) and common::hasPriv('testreport', 'create'))
+        {
+            $param = '';
+            if($objectType == 'product' and $extra) $param = "objectID=$extra&objectType=testtask"; 
+            if($objectType == 'project') $param = "objectID=$objectID&objectType=project"; 
+            if($param) $this->locate($this->createLink('testreport', 'create', $param));
+        }
 
         $projects = array();
         $tasks    = array();
         foreach($reports as $report)
         {
-            if($report->objectType == 'project')  $projects[$report->objectID] = $report->objectID;
-            if($report->objectType == 'testtask') $tasks[$report->objectID]    = $report->objectID;
+            $projects[$report->project] = $report->project;
+            foreach(explode(',', $report->tasks) as $taskID) $tasks[$taskID] = $taskID;
         }
         if($projects) $projects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchPairs('id', 'name');
         if($tasks)    $tasks    = $this->dao->select('id,name')->from(TABLE_TESTTASK)->where('id')->in($tasks)->fetchPairs('id', 'name');
@@ -104,6 +111,7 @@ class testreport extends control
         {
             $reportID = $this->testreport->create();
             if(dao::isError()) die(js::error(dao::getError()));
+            $this->loadModel('action')->create('testreport', $reportID, 'Opened');
             die(js::locate(inlink('view', "reportID=$reportID"), 'parent'));
         }
 
@@ -125,7 +133,7 @@ class testreport extends control
             }
             else
             {
-                $build = $this->build->getById($task->build);
+                $build   = $this->build->getById($task->build);
                 $stories = $this->story->getByList($build->stories);
 
                 $builds[$build->id] = $build;
@@ -147,6 +155,7 @@ class testreport extends control
 
             $project = $this->project->getById($projectID);
             $tasks   = $this->testtask->getProjectTasks($projectID);
+            $owners  = array();
             $productIdList = array();
             foreach($tasks as $task)
             {
@@ -198,6 +207,112 @@ class testreport extends control
 
         $this->view->objectID   = $objectID;
         $this->view->objectType = $objectType;
+        $this->display();
+    }
+
+    /**
+     * Edit report 
+     * 
+     * @param  int    $reportID 
+     * @param  string $from 
+     * @access public
+     * @return void
+     */
+    public function edit($reportID, $from = 'product')
+    {
+        if($_POST)
+        {
+            $changes = $this->testreport->update($reportID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $files      = $this->loadModel('file')->saveUpload('testreport', $reportID);
+            $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
+            $actionID   = $this->loadModel('action')->create('testreport', $reportID, 'Edited', $fileAction);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+
+            die(js::locate(inlink('view', "reportID=$reportID&from=$from"), 'parent'));
+        }
+
+        $report  = $this->testreport->getById($reportID);
+        $project = $this->project->getById($report->project);
+        if($from == 'product' and is_numeric($report->product))
+        {
+            $product   = $this->product->getById($report->product);
+            $productID = $this->commonAction($report->product, 'product');
+            if($productID != $report->product) die('deny access');
+
+            $browseLink = inlink('browse', "objectID=$productID&objectType=product");
+            $this->view->position[] = html::a($browseLink, $product->name);
+            $this->view->position[] = $this->lang->testreport->edit;
+        }
+        else
+        {
+            $projectID = $this->commonAction($report->project, 'project');
+            if($projectID != $report->objectID) die('deny access');
+
+            $browseLink = inlink('browse', "objectID=$projectID&objectType=project");
+            $this->view->position[] = html::a($browseLink, $project->name);
+            $this->view->position[] = $this->lang->testreport->edit;
+        }
+
+        if($report->objectType == 'testtask')
+        {
+            $productIdList[$report->product] = $report->product;
+
+            $task    = $this->testtask->getById($report->objectID);
+            $builds  = array();
+            if($task->build == 'trunk')
+            {
+                $stories = $this->story->getProjectStories($project->id);
+                $bugs    = $this->testreport->getBugs4Test('trunk', $report->product, $report->begin, $report->end);
+            }
+            else
+            {
+                $build   = $this->build->getById($task->build);
+                $stories = $this->story->getByList($build->stories);
+
+                $builds[$build->id] = $build;
+                $bugs = $this->testreport->getBugs4Test($builds, $report->product, $report->begin, $report->end);
+            }
+            $tasks = array($task->id => $task);
+        }
+        else
+        {
+            $tasks = $this->testtask->getProjectTasks($report->project);
+            $productIdList = array();
+            foreach($tasks as $task) $productIdList[$task->product] = $task->product;
+
+            $stories = $this->story->getProjectStories($project->id);
+            $builds  = $this->build->getProjectBuilds($project->id);
+            $bugs    = $this->testreport->getBugs4Test($builds, $productIdList, $report->begin, $report->end, 'project');
+        }
+
+        $cases   = $this->testreport->getTaskCases($tasks);
+        $bugInfo = $this->testreport->getBugInfo($tasks, $productIdList, $report->begin, $report->end, $builds);
+        $modules = array();
+        foreach($productIdList as $productID) $modules += $this->tree->getOptionMenu($productID, $viewType = 'bug');
+
+        $this->view->title = $report->title . $this->lang->testreport->edit;
+
+        $this->view->report        = $report;
+        $this->view->stories       = $stories;
+        $this->view->bugs          = $bugs;
+        $this->view->project       = $project;
+        $this->view->productIdList = join(',', array_keys($productIdList));
+        $this->view->tasks         = join(',', array_keys($tasks));
+        $this->view->storySummary  = $this->product->summary($stories);
+
+        $this->view->builds  = $builds;
+        $this->view->users   = $this->user->getPairs('noletter|nodeleted|noclosed');
+        $this->view->modules = $modules;
+
+        $this->view->cases       = $cases;
+        $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases);
+
+        $this->view->legacyBugs = $bugInfo['legacyBugs'];
+        unset($bugInfo['legacyBugs']);
+        $this->view->bugInfo = $bugInfo;
+
         $this->display();
     }
 
@@ -260,6 +375,7 @@ class testreport extends control
         $this->view->cases   = $cases;
         $this->view->users   = $this->user->getPairs('noletter|nodeleted|noclosed');
         $this->view->modules = $modules;
+        $this->view->actions = $this->loadModel('action')->getList('testreport', $reportID);
 
         $this->view->storySummary = $this->product->summary($stories);
         $this->view->caseSummary  = $this->testreport->getResultSummary($tasks, $cases);
@@ -289,33 +405,6 @@ class testreport extends control
             $this->testreport->delete(TABLE_TESTREPORT, $reportID);
             die(js::locate($this->session->reportList, 'parent'));
         }
-    }
-
-    /**
-     * Export report. 
-     * 
-     * @param  int    $reportID 
-     * @access public
-     * @return void
-     */
-    public function export($reportID)
-    {
-        if($_POST)
-        {
-            $report = $this->testreport->getById($reportID);
-            $data   = fixer::input('post')->get();
-
-            $this->session->set('notHead', true);
-            $output = $this->fetch('testreport', 'view', array('reportID' =>$reportID));
-            $this->session->set('notHead', false);
-            $css = '<style>' . $this->getCSS('testreport', 'export') . '</style>';
-            $js  = '<script>' . $this->getJS('testreport', 'export') . '</script>';
-            $exportNotice  = "<p style='text-align:right;color:grey'>" . $this->lang->testreport->exportNotice . '</p>';
-            $content = "<!DOCTYPE html>\n<html lang='zh-cn'>\n<head>\n<meta charset='utf-8'>\n<title>{$report->title}</title>\n$css\n$js\n</head>\n<body onload='tab()'>\n<h1>{$report->title}</h1>\n$output\n$exportNotice</body></html>";
-            $this->fetch('file',  'sendDownHeader', array('fileName' => $data->fileName, 'fileType' => $data->fileType, 'content' =>$content));
-        }
-        $this->view->customExport = false;
-        $this->display();
     }
 
     /**

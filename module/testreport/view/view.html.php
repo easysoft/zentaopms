@@ -26,11 +26,8 @@
       ob_start();
 
       echo "<div class='btn-group'>";
-      common::printIcon('testreport', 'export', "reportID=$report->id", '', 'button', 'download-alt', '', 'iframe');
-      echo '</div>';
-
-      echo "<div class='btn-group'>";
       if(common::hasPriv('testreport', 'create')) echo html::a(inLink('create', "objectID=$report->objectID&objectType=$report->objectType"),  "<i class='icon-refresh'></i>", '', "class='btn' title='{$lang->testreport->recreate}'");
+      common::printIcon('testreport', 'edit', "reportID=$report->id", '', 'button');
       common::printIcon('testreport', 'delete', "reportID=$report->id", '', 'button', '', 'hiddenwin');
       echo '</div>';
 
@@ -54,6 +51,12 @@
       <li><?php echo html::a('###', $lang->testreport->legendLegacyBugs, '', "data-toggle='tab' data-target='#tabLegacyBugs'")?></li>
       <li><?php echo html::a('###', $lang->testreport->legendReport, '', "data-toggle='tab' data-target='#tabReport'")?></li>
       <li><?php echo html::a('###', $lang->testreport->legendComment, '', "data-toggle='tab' data-target='#tabComment'")?></li>
+      <?php if(!$this->session->notHead):?>
+      <li><?php echo html::a('###', $lang->history, '', "data-toggle='tab' data-target='#tabHistory'")?></li>
+      <?php if($this->app->user->admin):?>
+      <li><?php echo html::a('###', $lang->testreport->legendMore, '', "data-toggle='tab' data-target='#tabMore'")?></li>
+      <?php endif;?>
+      <?php endif;?>
     </ul>
     <div class='tab-content'>
       <div class='tab-pane' id='basic'>
@@ -103,6 +106,12 @@
       <div class='tab-pane' id='tabLegacyBugs'><?php include './blocklegacybugs.html.php'?></div>
       <div class='tab-pane active' id='tabReport'><?php include './blockbugreport.html.php'?></div>
       <div class='tab-pane' id='tabComment'><div class='article-content'><?php echo empty($report->report) ? $lang->testreport->none : $report->report;?></div></div>
+      <?php if(!$this->session->notHead):?>
+      <div class='tab-pane' id='tabHistory'><?php include '../../common/view/action.html.php';?></div>
+      <?php if($this->app->user->admin):?>
+      <div class='tab-pane' id='tabMore'><div class='article-content'><?php echo $lang->testreport->moreNotice;?></div></div>
+      <?php endif;?>
+      <?php endif;?>
     </div>
   </div>
 <?php if(!$this->session->notHead):?>

@@ -55,7 +55,7 @@
                   <td class='chart-color w-20px'><i class='chart-color-dot icon-circle'></i></td>
                   <td class='chart-label'><?php echo $label;?></td>
                   <td class='chart-value'><?php echo $data;?></td>
-                  <td><?php echo ($data / $sum * 100) . '%';?></td>
+                  <td><?php echo round($data / $sum * 100, 2) . '%';?></td>
                 </tr>
                 <?php endforeach?>
               </table>

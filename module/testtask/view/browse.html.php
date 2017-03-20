@@ -56,7 +56,7 @@
       common::printIcon('testtask', 'view',     "taskID=$task->id", '', 'list', 'file','','iframe',true);
       common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list', 'link');
       common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list','','','iframe',true);
-      common::printIcon('testreport', 'create', "objectID=$task->id&objectType=testtask", '', 'list','flag');
+      common::printIcon('testreport', 'browse', "objectID=$task->product&objectType=product&extra=$task->id", '', 'list','flag');
 
       if(common::hasPriv('testtask', 'delete'))
       {

@@ -63,6 +63,37 @@ class testreportModel extends model
     }
 
     /**
+     * Update report. 
+     * 
+     * @param  int    $reportID 
+     * @access public
+     * @return array
+     */
+    public function update($reportID)
+    {
+        $report = $this->getById($reportID);
+        $data   = fixer::input('post')
+            ->stripTags($this->config->testreport->editor->edit['id'], $this->config->allowedTags)
+            ->join('stories', ',')
+            ->join('builds', ',')
+            ->join('bugs', ',')
+            ->join('cases', ',')
+            ->join('members', ',')
+            ->remove('files,labels,uid')
+            ->get();
+        $this->dao->update(TABLE_TESTREPORT)->data($data)->autocheck()
+             ->batchCheck($this->config->testreport->edit->requiredFields, 'notempty')
+             ->batchCheck('start,end', 'notempty')
+             ->check('end', 'ge', $data->start)
+             ->where('id')->eq($reportID)
+             ->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('file')->updateObjectID($this->post->uid, $reportID, 'testreport');
+        return common::createChanges($report, $data);
+    }
+
+    /**
      * Get report by id.
      * 
      * @param  int    $reportID 
@@ -112,9 +143,9 @@ class testreportModel extends model
      */
     public function getBugInfo($tasks, $productIdList, $begin, $end, $builds)
     {
-        $bugsByTask     = $this->dao->select('*')->from(TABLE_BUG)->where('testtask')->in(array_keys($tasks))->andWhere('deleted')->eq(0)->fetchAll();
+        $bugsByTask     = $this->dao->select('*')->from(TABLE_BUG)->where('testtask')->in(array_keys($tasks))->andWhere('testtask')->ne(0)->andWhere('deleted')->eq(0)->fetchAll('id');
         $severityGroups = $statusGroups = $openedByGroups = $resolvedByGroups = $resolutionGroups = $moduleGroups = array();
-        $confirmedNum   = 0;
+        $resolvedBugs   = 0;
         foreach($bugsByTask as $bug)
         {
             $severityGroups[$bug->severity] = isset($severityGroups[$bug->severity])     ? $severityGroups[$bug->severity]     + 1 : 1;
@@ -123,7 +154,7 @@ class testreportModel extends model
             $moduleGroups[$bug->module]     = isset($moduleGroups[$bug->module])         ? $moduleGroups[$bug->module]         + 1 : 1;
             if($bug->resolvedBy)$resolvedByGroups[$bug->resolvedBy] = isset($resolvedByGroups[$bug->resolvedBy]) ? $resolvedByGroups[$bug->resolvedBy] + 1 : 1;
             if($bug->resolution)$resolutionGroups[$bug->resolution] = isset($resolutionGroups[$bug->resolution]) ? $resolutionGroups[$bug->resolution] + 1 : 1;
-            if($bug->confirmed) $confirmedNum ++;
+            if($bug->status == 'resolved' or $bug->status == 'closed') $resolvedBugs ++;
         }
 
         $newBugs     = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('openedDate')->ge($begin)->andWhere('openedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
@@ -143,7 +174,7 @@ class testreportModel extends model
         $bugInfo['bugOpenedByGroups']   = $openedByGroups;
         $bugInfo['bugModuleGroups']     = $moduleGroups;
         $bugInfo['bugResolvedByGroups'] = $resolvedByGroups;
-        $bugInfo['bugConfirmedRate']    = round($confirmedNum / count($bugsByTask) * 100, 2);
+        $bugInfo['bugConfirmedRate']    = empty($resolvedBugs) ? 0 : round((count(zget($resolutionGroups, 'fixed', array())) + count(zget($resolutionGroups, 'postponed', array()))) / $resolvedBugs * 100, 2);
         $bugInfo['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($newBugs) * 100, 2);
         return $bugInfo;
     }

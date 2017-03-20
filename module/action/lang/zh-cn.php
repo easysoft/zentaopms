@@ -63,7 +63,7 @@ $lang->action->objectTypes['branch']      = '分支';
 $lang->action->objectTypes['module']      = '模块';
 $lang->action->objectTypes['testsuite']   = '套件';
 $lang->action->objectTypes['caselib']     = '用例库';
-$lang->action->objectTypes['testreport']  = '测试报告';
+$lang->action->objectTypes['testreport']  = '报告';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -177,10 +177,13 @@ $lang->action->label->build       = 'Build|build|view|buildID=%s';
 $lang->action->label->bug         = 'Bug|bug|view|bugID=%s';
 $lang->action->label->case        = '用例|testcase|view|caseID=%s';
 $lang->action->label->testtask    = '测试任务|testtask|view|caseID=%s';
+$lang->action->label->testsuite   = '测试套件|testsuite|view|suiteID=%s';
+$lang->action->label->caselib     = '测试库|testsuite|libview|libID=%s';
 $lang->action->label->todo        = 'todo|todo|view|todoID=%s';
 $lang->action->label->doclib      = '文档库|doc|browse|libID=%s';
 $lang->action->label->doc         = '文档|doc|view|docID=%s';
 $lang->action->label->user        = '用户|user|view|account=%s';
+$lang->action->label->testreport  = '报告|testreport|view|report=%s';
 $lang->action->label->space       = ' ';
 
 /* Object type. */
@@ -204,6 +207,7 @@ $lang->action->search->objectTypeList['productplan'] = '计划';
 $lang->action->search->objectTypeList['branch']      = '分支';
 $lang->action->search->objectTypeList['testsuite']   = '套件';
 $lang->action->search->objectTypeList['caselib']     = '公共库';
+$lang->action->search->objectTypeList['testreport']  = '报告';
 
 /* 用来在动态显示中显示动作 */
 $lang->action->search->label['']                    = '';
