@@ -591,7 +591,12 @@ class testsuite extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
-        $this->view->libraries = $this->testsuite->getLibraries();
+
+        $libraries = $this->testsuite->getLibraries();
+        $toPinyin  = common::convert2Pinyin($libraries);
+        $this->view->libraries = $libraries;
+        $this->view->toPinyin  = $toPinyin;
+
         $this->display();
     }
 
