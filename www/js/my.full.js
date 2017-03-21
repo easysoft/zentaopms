@@ -186,6 +186,8 @@ function showSearchMenu(objectType, objectID, module, method, extra)
             });
         });
         $menu.data('initData', true);
+        $(document).on('click', function(){$toggle.removeClass('show');});
+        $toggle.on('click', function(e){e.stopPropagation();});
     }
     else
     {
