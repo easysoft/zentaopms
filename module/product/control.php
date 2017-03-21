@@ -562,57 +562,10 @@ class product extends control
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('`order` desc')->fetchAll();
         $productPairs = array();
         foreach($products as $product) $productPairs[$product->id] = $product->name;
-        $toPinyin = common::convert2Pinyin($productPairs);
+        $productsPinyin = common::convert2Pinyin($productPairs);
 
-        foreach($products as $key => $product)
-        {
-            $product->key = $toPinyin[$product->name];
-        }
+        foreach($products as $key => $product) $product->key = $productsPinyin[$product->name];
         $this->view->products  = $products;
-        $this->display();
-    }
-
-    /**
-     * The results page of search.
-     * 
-     * @param  string  $keywords 
-     * @param  string  $module 
-     * @param  string  $method 
-     * @param  mix     $extra 
-     * @access public
-     * @return void 
-     */
-    public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
-    {
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->orderBy('`order` desc')->fetchAll();
-
-        $productPairs = array();
-        foreach($products as $product) $productPairs[$product->id] = $product->name;
-        $toPinyin = common::convert2Pinyin($productPairs);
-
-        foreach($toPinyin as $key => $value)
-        {
-            if(!strstr($value ,$keywords) && !strstr($key,$keywords))
-            {
-                unset($toPinyin[$key]);
-            }
-        }
-
-        foreach($products as $key => $product)
-        {
-            if(!isset($toPinyin[$product->name])) {
-                unset($products[$key]);
-                continue;
-            }
-
-            if(!$this->product->checkPriv($product)) unset($products[$key]);
-        }
-
-        $this->view->link     = $this->product->getProductLink($module, $method, $extra);
-        $this->view->products = $products;
-        $this->view->keywords = $keywords;
-        $this->view->toPinyin = $toPinyin;
-        $this->view->productPairs = $productPairs;
         $this->display();
     }
 

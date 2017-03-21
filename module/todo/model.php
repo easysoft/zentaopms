@@ -152,9 +152,6 @@ class todoModel extends model
         $data       = fixer::input('post')->get();
         $todoIDList = $this->post->todoIDList ? $this->post->todoIDList : array();
 
-        /* Adjust whether the post data is complete, if not, remove the last element of $todoIDList. */
-        if($this->session->showSuhosinInfo) array_pop($taskIDList);
-
         if(!empty($todoIDList))
         {
             /* Initialize todos from the post data. */

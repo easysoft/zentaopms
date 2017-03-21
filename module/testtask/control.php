@@ -273,10 +273,6 @@ class testtask extends control
         /* Append bugs and results. */
         $runs = $this->testcase->appendData($runs, 'run');
 
-        $moduleTree    = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID);
-        $libModuleTree = $this->tree->getCaseLibTreeInCase('testtask', $taskID, array('treeModel', 'createTestTaskLink'));
-        if($libModuleTree) $moduleTree = substr($moduleTree, 0, strrpos($moduleTree, '</ul>')) . $libModuleTree . '</ul>';
-
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->testtask->common;
@@ -288,7 +284,7 @@ class testtask extends control
         $this->view->runs          = $runs;
         $this->view->users         = $this->loadModel('user')->getPairs('noclosed,qafirst');
         $this->view->assignedTos   = $this->loadModel('user')->getPairs('noclosed,nodeleted,qafirst');
-        $this->view->moduleTree    = $moduleTree;
+        $this->view->moduleTree    = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID);
         $this->view->browseType    = $browseType;
         $this->view->param         = $param;
         $this->view->orderBy       = $orderBy;

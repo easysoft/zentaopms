@@ -75,7 +75,7 @@ class testsuiteModel extends model
     public function setLibMenu($libraries, $libID)
     {
         $currentLibName = zget($libraries, $libID, '');
-        $selectHtml = empty($libraries) ? '' : "<a id='currentItem' href=\"javascript:showDropMenu('testsuite', '$libID', 'testsuite', 'library', '')\">{$currentLibName} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+        $selectHtml = empty($libraries) ? '' : "<a id='currentItem' href=\"javascript:showSearchMenu('testsuite', '$libID', 'testsuite', 'library', '')\">{$currentLibName} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
         setCookie("lastCaseLib", $libID, $this->config->cookieLife, $this->config->webRoot);
         foreach($this->lang->caselib->menu as $key => $value)
         {

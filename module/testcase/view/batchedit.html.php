@@ -21,6 +21,9 @@
     </div>
   </div>
 </div>
+<?php if(isset($suhosinInfo)):?>
+<div class='alert alert-info'><?php echo $suhosinInfo;?></div>
+<?php else:?>
 <?php
 $visibleFields = array();
 foreach(explode(',', $showFields) as $field)
@@ -64,15 +67,13 @@ foreach(explode(',', $showFields) as $field)
         <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stages[$caseID][]", $lang->testcase->stageList, $cases[$caseID]->stage, "class='form-control chosen' multiple data-placeholder='{$lang->testcase->stage}'");?></td>
       </tr>
       <?php endforeach;?>
-      <?php if(isset($suhosinInfo)):?>
-      <tr><td colspan='<?php echo count($visibleFields) + 3;?>'><div class='alert alert-info'><?php echo $suhosinInfo;?></div></td></tr>
-      <?php endif;?>
     </tbody>
     <tfoot>
       <tr><td colspan='<?php echo count($visibleFields) + 3;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
     </tfoot>
   </table>
 </form>
+<?php endif;?>
 <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=testcase&section=custom&key=batchEditFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

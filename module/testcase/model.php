@@ -714,9 +714,6 @@ class testcaseModel extends model
         $data       = fixer::input('post')->get();
         $caseIDList = $this->post->caseIDList;
 
-        /* Adjust whether the post data is complete, if not, remove the last element of $caseIDList. */
-        if($this->session->showSuhosinInfo) array_pop($caseIDList);
-
         /* Process data if the value is 'ditto'. */
         foreach($caseIDList as $caseID)
         {
@@ -995,16 +992,16 @@ class testcaseModel extends model
                         {
                             $step = (array)$step;
                             if(empty($step['desc'])) continue;
-                            $isGroup  = $step['type'] == 'group';
                             $stepData = new stdclass();
-                            $stepData->parent  = $isGroup ? 0 : $parentStepID;
+                            $stepData->type    = ($step['type'] == 'item' and $parentStepID == 0) ? 'step' : $step['type'];
+                            $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
                             $stepData->case    = $caseID;
                             $stepData->version = $version;
-                            $stepData->type    = $step['type'];
                             $stepData->desc    = htmlspecialchars($step['desc']);
                             $stepData->expect  = htmlspecialchars($step['expect']);
                             $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
-                            if($isGroup) $parentStepID = $this->dao->lastInsertID();
+                            if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
+                            if($stepData->type == 'step')  $parentStepID = 0;
                         }
                     }
                     $oldCase->steps  = $this->joinStep($oldStep);
@@ -1031,16 +1028,16 @@ class testcaseModel extends model
                     {
                         $desc = trim($desc);
                         if(empty($desc)) continue;
-                        $isGroup  = $data->stepType[$key][$id] == 'group';
                         $stepData = new stdclass();
-                        $stepData->parent  = $isGroup ? 0 : $parentStepID;
+                        $stepData->type    = ($data->stepType[$key][$id] == 'item' and $parentStepID == 0) ? 'step' : $data->stepType[$key][$id];
+                        $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
                         $stepData->case    = $caseID;
                         $stepData->version = 1;
-                        $stepData->type    = $isGroup ? 'group' : 'item';
                         $stepData->desc    = htmlspecialchars($desc);
                         $stepData->expect  = htmlspecialchars($data->expect[$key][$id]);
                         $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
-                        if($isGroup) $parentStepID = $this->dao->lastInsertID();
+                        if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
+                        if($stepData->type == 'step')  $parentStepID = 0;
                     }
                     $this->action->create('case', $caseID, 'Opened');
                 }

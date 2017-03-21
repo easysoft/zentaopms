@@ -314,7 +314,7 @@ class mail extends control
             }
 
             $this->dao->update(TABLE_MAILQUEUE)->set('status')->eq('sending')->where('id')->in($queue->id)->exec();
-            $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList, $includeMe = true);
+            $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList, true);
 
             $data = new stdclass();
             $data->sendTime = $now;

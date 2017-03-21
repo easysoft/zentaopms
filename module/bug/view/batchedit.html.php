@@ -22,6 +22,9 @@
     </div>
   </div>
 </div>
+<?php if(isset($suhosinInfo)):?>
+<div class='alert alert-info'><?php echo $suhosinInfo;?></div>
+<?php else:?>
 <?php
 $visibleFields = array();
 foreach(explode(',', $showFields) as $field)
@@ -99,15 +102,13 @@ $columns = count($visibleFields) + 2;
         </td>
       </tr>
       <?php endforeach;?>
-      <?php if(isset($suhosinInfo)):?>
-      <tr><td colspan='<?php echo $columns;?>'><div class='alert alert-info'><?php echo $suhosinInfo;?></div></td></tr>
-      <?php endif;?>
     </tbody>
     <tfoot>
       <tr><td colspan='<?php echo $columns;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
     </tfoot>
   </table>
 </form>
+<?php endif;?>
 <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=bug&section=custom&key=batchEditFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

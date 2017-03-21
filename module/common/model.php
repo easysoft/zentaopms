@@ -914,23 +914,22 @@ class commonModel extends model
     /**
      * Judge Suhosin Setting whether the actual size of post data is large than the setting size.
      * 
-     * @param  int    $numberOfItems 
-     * @param  int    $columns 
+     * @param  int    $countInputVars 
      * @access public
-     * @return void
+     * @return bool
      */
-    public function judgeSuhosinSetting($numberOfItems, $columns)
+    public function judgeSuhosinSetting($countInputVars)
     {
         if(extension_loaded('suhosin'))
         {
             $maxPostVars    = ini_get('suhosin.post.max_vars');
             $maxRequestVars = ini_get('suhosin.request.max_vars');
-            if($numberOfItems * $columns > $maxPostVars or $numberOfItems * $columns > $maxRequestVars) return true;
+            if($countInputVars > $maxPostVars or $countInputVars > $maxRequestVars) return true;
         }
         else
         {
             $maxInputVars = ini_get('max_input_vars');
-            if($maxInputVars and $numberOfItems * $columns > (int)$maxInputVars) return true;
+            if($maxInputVars and $countInputVars > (int)$maxInputVars) return true;
         }
 
         return false;
@@ -1346,7 +1345,7 @@ class commonModel extends model
                     if($wordPinyin) $abbr .= $wordPinyin[0];
                 }
 
-                $allConverted[$item] = join($wordsPinYin) . ' ' . $abbr;
+                $allConverted[$item] = strtolower(join($wordsPinYin) . ' ' . $abbr);
             }
         }
 

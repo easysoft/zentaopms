@@ -287,9 +287,6 @@ class taskModel extends model
         $data       = fixer::input('post')->get();
         $taskIDList = $this->post->taskIDList;
 
-        /* Adjust whether the post data is complete, if not, remove the last element of $taskIDList. */
-        if($this->session->showSuhosinInfo) array_pop($taskIDList);
-
         /* Process data if the value is 'ditto'. */
         foreach($taskIDList as $taskID)
         {

@@ -57,7 +57,6 @@
           $stepId++;
           $childId = 0;
       }
-      if($step->type == 'item' and $step->parent == 0) $stepClass = 'step-group';
       ?>
       <tr class='step <?php echo $stepClass?>'>
         <th class='step-id'><?php echo $stepId;?></th>

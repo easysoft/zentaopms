@@ -18,7 +18,9 @@
     <small class='text-danger'><?php echo html::icon($lang->icons['batchClose']);?></small>
   </div>
 </div>
-
+<?php if(isset($suhosinInfo)):?>
+<div class='alert alert-info'><?php echo $suhosinInfo;?></div>
+<?php else:?>
 <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchClose', "from=storyBatchClose")?>">
   <table class='table table-fixed table-form with-border'>
   <thead>
@@ -54,10 +56,8 @@
       <td><?php echo html::input("comments[$storyID]", '', "class='form-control' autocomplete='off'");?></td>
     </tr>  
     <?php endforeach;?>
-    <?php if(isset($suhosinInfo)):?>
-    <tr><td colspan='5'><div class='text-left blue'><?php echo $suhosinInfo;?></div></td></tr>
-    <?php endif;?>
     <tr><td colspan='5' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

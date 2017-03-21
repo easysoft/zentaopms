@@ -505,9 +505,6 @@ class storyModel extends model
         $data        = fixer::input('post')->get();
         $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : array();
 
-        /* Adjust whether the post data is complete, if not, remove the last element of $taskIDList. */
-        if($this->session->showSuhosinInfo) array_pop($storyIDList);
-
         /* Init $stories. */
         if(!empty($storyIDList))
         {
@@ -796,8 +793,6 @@ class storyModel extends model
         $data        = fixer::input('post')->get();
         $storyIDList = $data->storyIDList ? $data->storyIDList : array();
 
-        /* Adjust whether the post data is complete, if not, remove the last element of $storyIDList. */
-        if($this->session->showSuhosinInfo) array_pop($storyIDList);
         $oldStories = $this->getByList($storyIDList);
         foreach($storyIDList as $storyID)
         {

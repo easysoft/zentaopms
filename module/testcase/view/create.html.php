@@ -175,8 +175,8 @@
                     <span class='input-group-addon step-item-id'></span>
                     <?php echo html::textarea('steps[]', $step->desc, "rows='1' class='form-control autosize step-steps'") ?>
                     <span class='input-group-addon step-type-toggle'>
-                      <?php if(!isset($step->type)) $step->type = 'item';?>
-                      <input type='hidden' name='stepType[]' value='<?php echo $step->type ?>' class='step-type'>
+                      <?php if(!isset($step->type)) $step->type = 'step';?>
+                      <input type='hidden' name='stepType[]' value='<?php echo $step->type;?>' class='step-type'>
                       <div class='step-type-menu-box'>
                         <div class='step-type-current'><span></span> <i class='caret'></i></div>
                         <div class='step-type-menu'>

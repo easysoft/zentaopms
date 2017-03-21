@@ -532,9 +532,6 @@ class bugModel extends model
         $data       = fixer::input('post')->get();
         $bugIDList  = $this->post->bugIDList ? $this->post->bugIDList : array();
 
-        /* Adjust whether the post data is complete, if not, remove the last element of $bugIDList. */
-        if($this->session->showSuhosinInfo) array_pop($bugIDList);
-
         if(!empty($bugIDList))
         {
             /* Process the data if the value is 'ditto'. */

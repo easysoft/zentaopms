@@ -66,27 +66,10 @@ class branch extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
-        $this->view->branches  = $this->branch->getPairs($productID);
-        $this->display();
-    }
 
-    /**
-     * Ajax get matched items 
-     * 
-     * @param  string $keywords 
-     * @param  string $module 
-     * @param  string $method 
-     * @param  string $extra 
-     * @param  int    $objectID 
-     * @access public
-     * @return void
-     */
-    public function ajaxGetMatchedItems($keywords, $module, $method, $extra, $objectID)
-    {
-        $this->view->link      = $this->loadModel('product')->getProductLink($module, $method, $extra, true);
-        $this->view->branches  = $this->dao->select('*')->from(TABLE_BRANCH)->where('deleted')->eq(0)->andWhere('product')->eq($objectID)->andWhere('name')->like("%$keywords%")->orderBy('id desc')->fetchPairs('id', 'name');
-        $this->view->productID = $objectID;
-        $this->view->keywords  = $keywords;
+        $branches = $this->branch->getPairs($productID);
+        $this->view->branches       = $branches;
+        $this->view->branchesPinyin = common::convert2Pinyin($branches);
         $this->display();
     }
 

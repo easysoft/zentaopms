@@ -5,7 +5,7 @@
     <?php
     foreach($libraries as $libID => $libName)
     {
-        echo "<li>" . html::a(sprintf($link, $libID), "<i class='icon-cube'></i> " . $libName). "</li>";
+        echo "<li data-key='{$librariesPinyin[$libName]}'>" . html::a(sprintf($link, $libID), "<i class='icon-cube'></i> " . $libName). "</li>";
     }
     ?>
     </ul>

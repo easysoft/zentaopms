@@ -110,17 +110,8 @@ class testcase extends control
         $this->config->testcase->search['onMenuBar'] = 'yes';
         $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL);
 
-        $linkedLibs = array();
-        foreach($cases as $case)
-        {
-            if($case->lib and $case->fromCaseID) $linkedLibs[$case->lib] = $case->lib;
-        }
         $showModule  = !empty($this->config->datatable->testcaseBrowse->showModule) ? $this->config->datatable->testcaseBrowse->showModule : '';
-        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule, $linkedLibs) : array();
-
-        $moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), '', $branch);
-        $libModuleTree = $this->tree->getCaseLibTreeInCase('case', $productID, array('treeModel', 'createCaseLink'));
-        if($libModuleTree) $moduleTree = substr($moduleTree, 0, strrpos($moduleTree, '</ul>')) . $libModuleTree . '</ul>';
+        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
 
         /* Assign. */
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
@@ -130,7 +121,7 @@ class testcase extends control
         $this->view->product       = $this->product->getById($productID);
         $this->view->productName   = $this->products[$productID];
         $this->view->modules       = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
-        $this->view->moduleTree    = $moduleTree;
+        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), '', $branch);
         $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->moduleID      = $moduleID;
         $this->view->pager         = $pager;
@@ -602,7 +593,7 @@ class testcase extends control
         if(empty($case->steps))
         {
             $step = new stdclass();
-            $step->type   = 'item';
+            $step->type   = 'step';
             $step->desc   = '';
             $step->expect = '';
             $case->steps[] = $step;
@@ -720,15 +711,7 @@ class testcase extends control
                 $this->testcase->setMenu($this->products, $productID, $branch);
 
                 /* Set modules. */
-                $libs = array();
-                $existModules = array();
-                foreach($cases as $case)
-                {
-                    if($case->lib and $case->fromCaseID) $libs[$case->lib] = $case->lib;
-                    $existModules[$case->module] = $case->module;
-                }
                 $modules = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
-                if($libs) $modules += $this->tree->getExistLibModules($libs, $existModules);
                 $modules = array('ditto' => $this->lang->testcase->ditto) + $modules;
 
                 $this->view->modules    = $modules;
@@ -748,14 +731,7 @@ class testcase extends control
 
             /* Set modules. */
             $productIdList = array();
-            $libs          = array();
-            $existModules  = array();
-            foreach($cases as $case)
-            {
-                if($case->lib and $case->fromCaseID) $libs[$case->lib] = $case->lib;
-                $productIdList[$case->product] = $case->product;
-                $existModules[$case->module]   = $case->module;
-            }
+            foreach($cases as $case) $productIdList[$case->product] = $case->product;
 
             $products = $this->product->getByIdList($productIdList);
             $modules  = array();
@@ -764,16 +740,15 @@ class testcase extends control
                 $productModules = $this->tree->getOptionMenu($product->id, $viewType = 'case', $startModuleID = 0);
                 foreach($productModules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $product->name . $moduleName;
             }
-            if($libs) $modules  += $this->tree->getExistLibModules($libs, $existModules);
             $this->view->modules = array('ditto' => $this->lang->testcase->ditto) + $modules;
         }
 
         if(!$this->config->testcase->needReview) unset($this->lang->testcase->statusList['wait']);
+
         /* Judge whether the editedTasks is too large and set session. */
-        $showSuhosinInfo = false;
-        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($cases), count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
-        $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
-        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? $this->lang->suhosinInfo : $this->lang->maxVarsInfo;
+        $countInputVars = count($cases) * (count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
+        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting($countInputVars);
+        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         $this->loadModel('story');
         $this->view->stories = $this->story->getProductStoryPairs($productID, $branch);
@@ -810,7 +785,7 @@ class testcase extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $result   = $this->post->result;
             $this->loadModel('action')->create('case', $caseID, 'Reviewed', $this->post->comment, ucfirst($result));
-            die(js::locate(inlink('view', "caseID=$caseID"), 'parent.parent'));
+            die(js::reload('parent.parent'));
         }
 
         $this->view->users   = $this->user->getPairs('noletter|nodeleted|noclosed');
@@ -1147,7 +1122,7 @@ class testcase extends control
                     foreach($relatedSteps[$case->id] as $step)
                     {
                         $stepId = 0;
-                        if($step->type == 'group' or ($step->type == 'item' and $step->parent == 0))
+                        if($step->type == 'group' or $step->type == 'step')
                         {
                             $i++;
                             $childId = 0;
@@ -1441,6 +1416,7 @@ class testcase extends control
         $endField = end($fields);
         $caseData = array();
         $stepData = array();
+        $stepVars = 0;
         foreach($rows as $row => $data)
         {
             $case = new stdclass();
@@ -1502,7 +1478,7 @@ class testcase extends control
                             $signbit = $sign == '.' ? 1 : 3;
                             $step    = trim(substr($step, strlen($num) + $signbit));
                             if(!empty($step)) $caseStep[$num]['content'] = $step;
-                            $caseStep[$num]['type'] = 'item';
+                            $caseStep[$num]['type'] = 'step';
                         }
                         elseif(isset($num))
                         {
@@ -1514,7 +1490,7 @@ class testcase extends control
                             {
                                 $num = 1;
                                 $caseStep[$num]['content'] = $step;
-                                $caseStep[$num]['type']    = 'item';
+                                $caseStep[$num]['type']    = 'step';
                             }
                             if($field == 'stepExpect' and isset($stepData[$row]['desc']))
                             {
@@ -1526,6 +1502,7 @@ class testcase extends control
                     }
                     unset($num);
                     unset($sign);
+                    $stepVars += count($caseStep, COUNT_RECURSIVE) - count($caseStep);
                     $stepData[$row][$stepKey] = $caseStep;
                 }
             }
@@ -1540,6 +1517,11 @@ class testcase extends control
             die(js::locate($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch")));
         }
         if(!$this->config->testcase->needReview) unset($this->lang->testcase->statusList['wait']);
+
+        /* Judge whether the editedTasks is too large and set session. */
+        $countInputVars  = count($caseData) * 12 + $stepVars;
+        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting($countInputVars);
+        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->showImport;
         $this->view->position[] = $this->lang->testcase->showImport;

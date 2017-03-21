@@ -67,7 +67,7 @@
               foreach($result->stepResults as $key => $stepResult):
               ?>
               <?php
-              if(empty($stepResult['type']))   $stepResult['type']   = 'item';
+              if(empty($stepResult['type']))   $stepResult['type']   = 'step';
               if(empty($stepResult['parent'])) $stepResult['parent'] = 0;
               if($stepResult['type'] == 'group' or $stepResult['type'] == 'step')
               {
