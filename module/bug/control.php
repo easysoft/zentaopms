@@ -260,15 +260,8 @@ class bug extends control
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras);
 
-        /* If set runID, get the result info by resultID as the template. Else get the result info by resultID and case info. */
-        if($runID)
-        {
-            extract($this->bug->getBugInfoFromResult($resultID));
-        }
-        else
-        {
-            extract($this->bug->getBugInfoFromResult($resultID, $caseID, $version));
-        }
+        if($runID and $resultID) extract($this->bug->getBugInfoFromResult($resultID));// If set runID and resultID, get the result info by resultID as template.
+        if(!$runID and $caseID)  extract($this->bug->getBugInfoFromResult($resultID, $caseID, $version));// If not set runID but set caseID, get the result info by resultID and case info.
 
         /* If bugID setted, use this bug as template. */
         if(isset($bugID)) 
