@@ -76,15 +76,26 @@ $(document).ready(function()
                         $this.next('.result-detail').toggleClass('hide', !show);
                         $this.find('.collapse-handle').toggleClass('icon-chevron-down', !show).toggleClass('icon-chevron-up', show);
                     });
-                   
-                   $('#casesResults table caption .result-tip').html($('#resultTip').html());
 
-                   $("#submit").text(caseResultSave);
-                   $("#submit").attr({"disabled":"disabled"});
+                    $('#casesResults table caption .result-tip').html($('#resultTip').html());
+
+                    $("#submit").text(caseResultSave);
+                    $("#submit").attr({"disabled":"disabled"});
                 });   
             }   
         }
     
         return false;
     }); 
+
+    $(document).on('click', ".step-group input[type='checkbox']", function()
+    {
+        var $next  = $(this).closest('tr').next();
+        while($next.length && $next.hasClass('step-item'))
+        {
+            var isChecked = $(this).prop('checked');
+            $next.find("input[type='checkbox']").prop('checked', isChecked);
+            $next = $next.next();
+        }
+    });
 });

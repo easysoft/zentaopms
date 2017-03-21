@@ -42,7 +42,7 @@
           $step->id     = 0;
           $step->parent = 0;
           $step->case   = $run->case->id;
-          $step->type   = 'item';
+          $step->type   = 'step';
           $step->desc   = '';
           $step->expect = '';
           $run->case->steps[] = $step;

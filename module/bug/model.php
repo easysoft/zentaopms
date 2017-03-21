@@ -1397,34 +1397,35 @@ class bugModel extends model
         $bugSteps .= $this->lang->bug->tplStep;
         if(!empty($stepResults))
         {
-            $i = 0;
-            foreach($caseSteps as $key => $step)
+            $i = 1;
+            foreach($steps as $stepId)
             {
-                if(!in_array($step->id, $steps)) continue;
-                $i++;
+                if(!isset($caseSteps[$stepId])) continue;
+
+                $step = $caseSteps[$stepId];
                 $bugSteps .= $i . '. '  . $step->desc . "<br />";
+                $i++;
             }
 
             $bugSteps .= $this->lang->bug->tplResult;
-            $i = 0;
-            foreach($caseSteps as $key => $step)
+            $i = 1;
+            foreach($steps as $stepId)
             {
-                if(!in_array($step->id, $steps)) continue;
+                if(!isset($stepResults[$stepId]) or empty($stepResults[$stepId]['real'])) continue;
+                $bugSteps .= $i . '. ' . $stepResults[$stepId]['real'] . "<br />";
                 $i++;
-                if(empty($stepResults[$step->id]['real'])) continue;
-                $bugSteps .= $i . '. ' . $stepResults[$step->id]['real'] . "<br />";
             }
 
             $bugSteps .= $this->lang->bug->tplExpect;
-            $i = 0;
-            foreach($caseSteps as $key => $step)
+            $i = 1;
+            foreach($steps as $stepId)
             {
-                if(!in_array($step->id, $steps)) continue;
-                $i++;
-                if(!$step->expect) continue;
-                $bugSteps .= $i . '. ' . $step->expect . "<br />";
-            }
+                if(!isset($caseSteps[$stepId])) continue;
 
+                $step = $caseSteps[$stepId];
+                if($step->expect) $bugSteps .= $i . '. ' . $step->expect . "<br />";
+                $i++;
+            }
         }
             
         return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version);

@@ -875,7 +875,9 @@ class testtask extends control
 
             $testtaskID = $this->dao->select('task')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch('task');
             $testtask   = $this->dao->select('build, product')->from(TABLE_TESTTASK)->where('id')->eq($testtaskID)->fetch();
-            $this->view->build = isset($builds[$testtask->build]) ? $builds[$testtask->build] : '';
+
+            $this->view->build      = isset($builds[$testtask->build]) ? $builds[$testtask->build] : '';
+            $this->view->testtaskID = $testtaskID;
         }
         else
         {
