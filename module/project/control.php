@@ -1879,7 +1879,18 @@ class project extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
-        $this->view->projects  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in(array_keys($this->projects))->orderBy('order desc')->fetchAll();
+
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in(array_keys($this->projects))->orderBy('order desc')->fetchAll();
+        $productPairs = array();
+        foreach($projects as $project) $projectPairs[$project->id] = $project->name;
+        $toPinyin = common::convert2Pinyin($projectPairs);
+
+        foreach($projects as $key => $project)
+        {
+            $project->key = $toPinyin[$project->name];
+        }
+        $this->view->projects  = $projects;
+
         $this->display();
     }
 

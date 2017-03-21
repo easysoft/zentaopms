@@ -558,7 +558,17 @@ class product extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
-        $this->view->products  = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('`order` desc')->fetchAll();
+
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('`order` desc')->fetchAll();
+        $productPairs = array();
+        foreach($products as $product) $productPairs[$product->id] = $product->name;
+        $toPinyin = common::convert2Pinyin($productPairs);
+
+        foreach($products as $key => $product)
+        {
+            $product->key = $toPinyin[$product->name];
+        }
+        $this->view->products  = $products;
         $this->display();
     }
 
@@ -601,6 +611,8 @@ class product extends control
         $this->view->link     = $this->product->getProductLink($module, $method, $extra);
         $this->view->products = $products;
         $this->view->keywords = $keywords;
+        $this->view->toPinyin = $toPinyin;
+        $this->view->productPairs = $productPairs;
         $this->display();
     }
 

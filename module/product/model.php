@@ -70,7 +70,7 @@ class productModel extends model
         setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot);
         $currentProduct = $this->getById($productID);
         $this->session->set('currentProductType', $currentProduct->type);
-        $output  = "<a id='currentItem' href=\"javascript:showDropMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+        $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
         if($currentProduct->type == 'normal') unset($this->lang->product->menu->branch);
         if($currentProduct->type != 'normal')
         {
@@ -79,7 +79,7 @@ class productModel extends model
             $branches   = $this->loadModel('branch')->getPairs($productID);
             $branchName = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
             $output    .= '</li><li>';
-            $output    .= "<a id='currentBranch' href=\"javascript:showDropMenu('branch', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+            $output    .= "<a id='currentBranch' href=\"javascript:showSearchMenu('branch', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
         }
         return $output;
     }

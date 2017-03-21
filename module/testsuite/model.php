@@ -53,7 +53,7 @@ class testsuiteModel extends model
 
         setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot);
         $currentProduct = $this->product->getById($productID);
-        $output = "<a id='currentItem' href=\"javascript:showDropMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+        $output = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
         if($currentProduct->type != 'normal')
         {
             $this->app->loadLang('branch');
