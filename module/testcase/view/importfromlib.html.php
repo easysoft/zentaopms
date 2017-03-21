@@ -54,7 +54,7 @@
     <?php endforeach;?>
     <tfoot>
       <tr>
-        <td colspan='<?php echo empty($branches) ? 5 : 6?>'>
+        <td colspan='<?php echo empty($branches) ? 6 : 7?>'>
           <div class='table-actions clearfix'>
             <?php echo html::selectButton();?>
             <?php echo html::submitButton($lang->testcase->import);?>
