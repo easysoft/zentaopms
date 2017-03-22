@@ -9,7 +9,7 @@
             $list .= '|';
             list($label, $module, $method, $params) = explode('|', $list);
             $class = $label == $title ? ' active' : '';
-            echo html::a($this->createLink($module, $method, $params), $label, '', "class='list-group-item $class'");
+            if(common::hasPriv($module, $method)) echo html::a($this->createLink($module, $method, $params), $label, '', "class='list-group-item $class'");
         }
     ?>
     </ul>
