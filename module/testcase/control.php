@@ -727,7 +727,7 @@ class testcase extends control
         $this->view->cases      = $cases;
 
         $this->display();
-   }
+    }
 
     /**
      * Review case.
@@ -807,6 +807,21 @@ class testcase extends control
     }
 
     /**
+     * Batch delete cases.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function batchDelete($productID = 0)
+    {
+        $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList));
+
+        foreach($caseIDList as $caseID) $this->testcase->delete(TABLE_CASE, $caseID);
+        die(js::locate($this->session->caseList));
+    }
+
+    /**
      * Batch change the module of case.
      *
      * @param  int    $moduleID
@@ -833,18 +848,19 @@ class testcase extends control
     }
 
     /**
-     * Batch delete cases.
+     * Batch review case.
      * 
-     * @param  int    $productID 
+     * @param  string    $result 
      * @access public
      * @return void
      */
-    public function batchDelete($productID = 0)
+    public function batchCaseTypeChange($result)
     {
-        $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList));
+        $caseIdList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList, 'parent'));
+        $this->testcase->batchCaseTypeChange($caseIdList, $result);
 
-        foreach($caseIDList as $caseID) $this->testcase->delete(TABLE_CASE, $caseID);
-        die(js::locate($this->session->caseList));
+        if(dao::isError()) die(js::error(dao::getError()));
+        die(js::locate($this->session->caseList, 'parent'));
     }
 
     /**
