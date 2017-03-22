@@ -73,7 +73,7 @@ class custom extends control
             $this->view->closedBlock = $closedBlock;
         }
 
-        if(!empty($_POST))
+        if(strtolower($_SERVER['REQUEST_METHOD']) == "post")
         {
             if(($module == 'story' or $module == 'testcase') and $field == 'review')
             {
@@ -90,7 +90,8 @@ class custom extends control
             }
             elseif($module == 'block' and $field == 'closed')
             {
-                $this->loadModel('setting')->setItems('system.block', fixer::input('post')->join('closed', ',')->get());
+                $data = fixer::input('post')->join('closed', ',')->get();
+                $this->loadModel('setting')->setItem('system.block.closed', zget($data, 'closed', ''));
             }
             else
             {
