@@ -584,11 +584,12 @@ class testtaskModel extends model
     /**
      * Link cases.
      * 
-     * @param  int   $taskID 
+     * @param  int    $taskID 
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function linkCase($taskID)
+    public function linkCase($taskID, $type)
     {
         if($this->post->cases == false) return;
         $postData = fixer::input('post')->get();
@@ -600,6 +601,13 @@ class testtaskModel extends model
             $row->version    = $postData->versions[$caseID];
             $row->assignedTo = '';
             $row->status     = 'wait';
+
+            if($type == 'bybuild')
+            {
+                $assignedTo = $this->dao->select('assignedTo')->from(TABLE_TESTRUN)->where('`case`')->eq($caseID)->fetch();
+                $row->assignedTo = $assignedTo->assignedTo;
+            }
+
             $this->dao->replace(TABLE_TESTRUN)->data($row)->exec();
         }
     }

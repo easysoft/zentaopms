@@ -654,7 +654,7 @@ class testtask extends control
     {
         if(!empty($_POST))
         {
-            $this->testtask->linkCase($taskID);
+            $this->testtask->linkCase($taskID, $type);
             $this->locate(inlink('cases', "taskID=$taskID"));
         }
 

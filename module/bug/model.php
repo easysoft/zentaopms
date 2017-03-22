@@ -260,12 +260,20 @@ class bugModel extends model
     public function checkDelayBugs($bugs)
     {
         foreach ($bugs as $bug)
-        {    
+        {
             // Delayed or not?.
-            if($bug->status == 'active' && $bug->deadline != '0000-00-00')
+            if($bug->deadline != '0000-00-00')
             {
-                $delay = helper::diffDate(helper::today(), $bug->deadline);
-                if($delay > 0) $bug->delay = $delay;
+                if(substr($bug->resolvedDate, 0, 10) != '0000-00-00')
+                {
+                    $delay = helper::diffDate(substr($bug->resolvedDate, 0, 10), $bug->deadline);
+                }
+                elseif($bug->status == 'active')
+                {
+                    $delay = helper::diffDate(helper::today(), $bug->deadline);
+                }
+
+                if(isset($delay) and $delay > 0) $bug->delay = $delay;
             }
         }
 
@@ -2229,6 +2237,7 @@ class bugModel extends model
             if($id == 'status') $class .= ' bug-' . $bug->status;
             if($id == 'title') $class .= ' text-left';
             if($id == 'assignedTo' && $bug->assignedTo == $account) $class .= ' red';
+            if($id == 'deadline' && isset($bug->delay)) $class .= ' delayed';
 
             echo "<td class='" . $class . "'" . ($id=='title' ? " title='{$bug->title}'" : '') . ">";
             switch ($id)
@@ -2282,6 +2291,7 @@ class bugModel extends model
                 break;
             case 'deadline':
                 echo $bug->deadline;
+                break;
             case 'resolvedBy':
                 echo zget($users, $bug->resolvedBy, $bug->resolvedBy);
                 break;
