@@ -706,7 +706,7 @@ class testcase extends control
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars = count($cases) * (count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
-        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting($countInputVars);
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         $this->loadModel('story');
@@ -1479,7 +1479,7 @@ class testcase extends control
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars  = count($caseData) * 12 + $stepVars;
-        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting($countInputVars);
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->showImport;

@@ -915,10 +915,11 @@ class commonModel extends model
      * Judge Suhosin Setting whether the actual size of post data is large than the setting size.
      * 
      * @param  int    $countInputVars 
+     * @static
      * @access public
      * @return bool
      */
-    public function judgeSuhosinSetting($countInputVars)
+    public static function judgeSuhosinSetting($countInputVars)
     {
         if(extension_loaded('suhosin'))
         {

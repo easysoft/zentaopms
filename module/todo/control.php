@@ -187,7 +187,7 @@ class todo extends control
 
             /* Judge whether the edited todos is too large. */
             $countInputVars  = count($editedTodos) * $columns;
-            $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting($countInputVars);
+            $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
 
             /* Set Custom*/
             foreach(explode(',', $this->config->todo->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->todo->$field;

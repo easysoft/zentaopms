@@ -646,7 +646,7 @@ class bug extends control
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars  = count($bugs) * (count(explode(',', $this->config->bug->custom->batchEditFields)) + 2);
-        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting($countInputVars);
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         /* Set Custom*/
