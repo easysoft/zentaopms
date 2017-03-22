@@ -11,6 +11,7 @@
  */
 $lang->testtask->index            = "版本首页";
 $lang->testtask->create           = "提交测试";
+$lang->testtask->reportChart      = '报表统计';
 $lang->testtask->delete           = "删除版本";
 $lang->testtask->view             = "概况";
 $lang->testtask->edit             = "编辑版本";
@@ -115,3 +116,46 @@ $lang->testtask->action = new stdclass();
 $lang->testtask->action->testtaskopened  = '$date, 由 <strong>$actor</strong> 创建版本 <strong>$extra</strong>。' . "\n";
 $lang->testtask->action->testtaskstarted = '$date, 由 <strong>$actor</strong> 启动版本 <strong>$extra</strong>。' . "\n";
 $lang->testtask->action->testtaskclosed  = '$date, 由 <strong>$actor</strong> 完成版本 <strong>$extra</strong>。' . "\n";
+
+$lang->testtask->resultList['n/a']     = '忽略';
+$lang->testtask->resultList['pass']    = '通过';
+$lang->testtask->resultList['fail']    = '失败';
+$lang->testtask->resultList['blocked'] = '阻塞';
+$lang->testtask->unexecuted            = '未执行';
+
+/* Define the types. */
+$lang->testtask->typeList['']            = '';
+$lang->testtask->typeList['feature']     = '功能测试';
+$lang->testtask->typeList['performance'] = '性能测试';
+$lang->testtask->typeList['config']      = '配置相关';
+$lang->testtask->typeList['install']     = '安装部署';
+$lang->testtask->typeList['security']    = '安全相关';
+$lang->testtask->typeList['interface']   = '接口测试';
+$lang->testtask->typeList['other']       = '其他';
+
+/* 统计报表。*/
+$lang->testtask->report = new stdclass();
+$lang->testtask->report->common = '报表';
+$lang->testtask->report->select = '请选择报表类型';
+$lang->testtask->report->create = '生成报表';
+    
+$lang->testtask->report->charts['testTaskPerRunResult'] = '用例结果统计';
+$lang->testtask->report->charts['testTaskPerType']      = '用例类型统计';
+$lang->testtask->report->charts['testTaskPerModule']    = '用例模块统计';
+$lang->testtask->report->charts['testTaskPerRunner']    = '用例执行人统计';
+
+$lang->testtask->report->options = new stdclass();
+$lang->testtask->report->options->graph  = new stdclass();
+$lang->testtask->report->options->type   = 'pie';
+$lang->testtask->report->options->width  = 500;
+$lang->testtask->report->options->height = 140;
+
+$lang->testtask->report->testTaskPerRunResult = new stdclass();
+$lang->testtask->report->testTaskPerType      = new stdclass();
+$lang->testtask->report->testTaskPerModule    = new stdclass();
+$lang->testtask->report->testTaskPerRunner    = new stdclass();
+
+$lang->testtask->report->testTaskPerRunResult->graph = new stdclass();
+$lang->testtask->report->testTaskPerType->graph      = new stdclass();
+$lang->testtask->report->testTaskPerModule->graph    = new stdclass();
+$lang->testtask->report->testTaskPerRunner->graph    = new stdclass();

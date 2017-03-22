@@ -80,7 +80,6 @@ class testtask extends control
         $this->view->tasks       = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
-        $this->view->type        = $scopeAndStatus[1];
         $this->view->branch      = $branch;
 
         $this->display();
@@ -295,6 +294,48 @@ class testtask extends control
         $this->view->pager         = $pager;
         $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
         $this->view->setShowModule = false;
+
+        $this->display();
+    }
+
+    /**
+     * The report page.
+     * 
+     * @param  int    $productID 
+     * @param  string $browseType 
+     * @param  int    $branchID
+     * @param  int    $moduleID 
+     * @access public
+     * @return void
+     */
+    public function report($productID, $taskID, $browseType, $branchID, $moduleID)
+    {
+        $this->loadModel('report');
+        $this->view->charts   = array();
+
+        if(!empty($_POST))
+        {
+            foreach($this->post->charts as $chart)
+            {
+                $chartFunc   = 'getDataOf' . $chart;
+                $chartData   = $this->testtask->$chartFunc($taskID);
+                $chartOption = $this->lang->testtask->report->$chart;
+                $this->testtask->mergeChartOption($chart);
+
+                $this->view->charts[$chart] = $chartOption;
+                $this->view->datas[$chart]  = $this->report->computePercent($chartData);
+            }
+        }
+
+        $this->testtask->setMenu($this->products, $productID, $branchID);
+        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common . $this->lang->colon . $this->lang->testtask->reportChart;
+        $this->view->position[]    = html::a($this->createLink('testtask', 'cases', "taskID=$taskID"), $this->products[$productID]);
+        $this->view->position[]    = $this->lang->testtask->reportChart;
+        $this->view->productID     = $productID;
+        $this->view->taskID        = $taskID;
+        $this->view->browseType    = $browseType;
+        $this->view->moduleID      = $moduleID;
+        $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
 
         $this->display();
     }
@@ -747,8 +788,14 @@ class testtask extends control
         {
             $caseResult = $this->testtask->createResult($runID);
             if(dao::isError()) die(js::error(dao::getError()));
+            
+            if('fail' == $caseResult) { 
 
-            if('pass' == $caseResult) 
+                $response['result']  = 'success';
+                $response['locate']  = $this->createLink('testtask', 'results',"runID=$runID&caseID=$caseID&version=$version");
+                die($this->send($response));
+            } 
+            else 
             {
                 /* set cookie for ajax load caselist when close colorbox. */
                 setcookie('selfClose', 1);
@@ -763,8 +810,6 @@ class testtask extends control
                     $response['next']   = 'success';
                     $response['locate'] = inlink('runCase', "runID=$nextRunID&caseID=$nextCaseID&version=$nextVersion");
                     die($this->send($response));
-
-                    die(js::locate(inlink('runCase', "runID=$nextRunID&caseID=$nextCaseID&version=$nextVersion")));
                 }
                 else
                 {
@@ -773,12 +818,7 @@ class testtask extends control
                     $response['target'] = 'parent';
                     die($this->send($response));
                 }
-            } else if('fail' == $caseResult) { 
-
-                $response['result']  = 'success';
-                $response['locate']  = $this->createLink('testtask', 'results',"runID=$runID&caseID=$caseID&version=$version");
-                die($this->send($response));
-            }
+            } 
         }
 
         $preCase  = '';
@@ -804,7 +844,7 @@ class testtask extends control
         $this->view->version  = $version;
         $this->view->runID    = $runID;
 
-        die($this->display());
+        $this->display();
     }
 
     /**
@@ -886,7 +926,6 @@ class testtask extends control
         }
 
         $this->view->case    = $case;
-        $this->view->runID   = $runID;
         $this->view->results = $results;
         $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($case->product, $branch = 0, $params = '');
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed, noletter');

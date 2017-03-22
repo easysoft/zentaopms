@@ -45,7 +45,7 @@
 </div>
 <table class='table tablesorter table-fixed' id='taskList'>
   <thead>
-  <?php $vars = "productID=$productID&branch=$branch&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+  <?php $vars = "productID=$productID&branch=$branch&type=$scope,$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
     <tr>
       <th class='w-id text-left'>   <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
       <th class='w-200px text-left'><?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
@@ -66,7 +66,7 @@
     <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a(inlink('cases', "taskID=$task->id"), $task->name);?></td>
     <td title="<?php echo $task->productName?>"><?php echo $task->productName?></td>
     <td title="<?php echo $task->projectName?>"><?php echo $task->projectName?></td>
-    <td><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName, '','class="iframe"'));?></td>
+    <td><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build",'',true), $task->buildName, '','class="iframe"'));?></td>
     <td><?php echo zget($users, $task->owner);?></td>
     <td><?php echo $task->begin?></td>
     <td><?php echo $task->end?></td>
@@ -91,5 +91,5 @@
   </tbody>
   <tfoot><tr><td colspan='10'><?php $pager->show();?></td></tr></tfoot>
 </table>
-<script>$(function(){$('#<?php echo $type?>Tab').addClass('active')})</script>
+<script>$(function(){$('#<?php echo $status?>Tab').addClass('active')})</script>
 <?php include '../../common/view/footer.html.php';?>

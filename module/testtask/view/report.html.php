@@ -1,11 +1,11 @@
 <?php
 /**
- * The report view file of testcase module of ZenTaoPMS.
+ * The report view file of testtask module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     testcase
+ * @package     testtask
  * @version     $Id: report.html.php 4657 2013-04-17 02:01:26Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
@@ -14,24 +14,24 @@
 <?php include '../../common/view/chart.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['testcase']);?></span>
-    <strong><small class='text-muted'><?php echo html::icon($lang->icons['report']);?></small> <?php echo $lang->testcase->report->common;?></strong>
+    <span class='prefix'><?php echo html::icon($lang->icons['testtask']);?></span>
+    <strong><small class='text-muted'><?php echo html::icon($lang->icons['report']);?></small> <?php echo $lang->testtask->report->common;?></strong>
   </div>
   <div class='actions'>
-    <?php echo html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=0&browseType=$browseType&moduleID=$moduleID"), $lang->goback, '', "class='btn'");?>
+    <?php echo html::a($this->createLink('testtask', 'cases', "taskID=$taskID&browseType=$browseType"), $lang->goback, '', "class='btn'");?>
   </div>
 </div>
 <div class='row-table row-table-side-left'>
   <div class='col-side'>
     <div class='panel panel-sm'>
       <div class='panel-heading'>
-        <strong><?php echo $lang->testcase->report->select;?></strong>
+        <strong><?php echo $lang->testtask->report->select;?></strong>
       </div>
       <div class='panel-body' style='padding-top:0'>
         <form method='post'>
-          <?php echo html::checkBox('charts', $lang->testcase->report->charts, $checkedCharts, '', 'block');?>
+          <?php echo html::checkBox('charts', $lang->testtask->report->charts, $checkedCharts, '', 'block');?>
           <?php echo html::selectAll('', "button", false, 'btn-sm')?>
-          <?php echo html::submitButton($lang->testcase->report->create, '', "btn btn-primary btn-sm");?>
+          <?php echo html::submitButton($lang->testtask->report->create, '', "btn btn-primary btn-sm");?>
         </form>
       </div>
     </div>
@@ -40,7 +40,7 @@
     <div class='panel panel-sm'>
       <div class='panel-heading'>
         <strong>
-        <?php echo $lang->testcase->report->common;?>
+        <?php echo $lang->testtask->report->common;?>
         <span><?php echo $lang->report->notice->help?></span>
         </strong>
       </div>
@@ -49,12 +49,12 @@
         <tr class='text-top'>
           <td>
             <div class='chart-wrapper text-center'>
-              <h5><?php echo $lang->testcase->report->charts[$chartType];?></h5>
+              <h5><?php echo $lang->testtask->report->charts[$chartType];?></h5>
               <div class='chart-canvas'><canvas id='chart-<?php echo $chartType ?>' width='<?php echo $chartOption->width;?>' height='<?php echo $chartOption->height;?>' data-responsive='true'></canvas></div>
             </div>
           </td>
           <td style='width: 320px'>
-            <?php $height = zget($lang->testcase->report->$chartType, 'height', $lang->testcase->report->options->height) . 'px'; ?>
+            <?php $height = zget($lang->testtask->report->$chartType, 'height', $lang->testtask->report->options->height) . 'px'; ?>
             <div style="overflow:auto" class='table-wrapper'>
               <table class='table table-condensed table-hover table-striped table-bordered table-chart' data-chart='<?php echo $chartOption->type; ?>' data-target='#chart-<?php echo $chartType ?>' data-animation='false'>
                 <thead>

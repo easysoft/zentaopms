@@ -189,26 +189,3 @@ $lang->testcase->featureBar['browse']['suite']       = '套件';
 $lang->testcase->featureBar['browse']['zerocase']    = '零用例需求';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];
 
-/* 统计报表。*/
-$lang->testcase->report = new stdclass();
-$lang->testcase->report->common = '报表';
-$lang->testcase->report->select = '请选择报表类型';
-$lang->testcase->report->create = '生成报表';
-       
-$lang->testcase->report->charts['testCasePerRunResult'] = '测试用例结果统计';
-$lang->testcase->report->charts['testCasePerStatus']    = '测试用例状态统计';
-$lang->testcase->report->charts['testCasePerType']      = '测试用例类型统计';
-
-$lang->testcase->report->options = new stdclass();
-$lang->testcase->report->options->graph  = new stdclass();
-$lang->testcase->report->options->type   = 'pie';
-$lang->testcase->report->options->width  = 500;
-$lang->testcase->report->options->height = 140;
-
-$lang->testcase->report->testCasePerRunResult = new stdclass();
-$lang->testcase->report->testCasePerStatus    = new stdclass();
-$lang->testcase->report->testCasePerType      = new stdclass();
-
-$lang->testcase->report->testCasePerRunResult->graph = new stdclass();
-$lang->testcase->report->testCasePerStatus->graph    = new stdclass();
-$lang->testcase->report->testCasePerType->graph      = new stdclass();

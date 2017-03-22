@@ -340,7 +340,7 @@ class testtaskModel extends model
      * Get related test tasks.
      * 
      * @param  int    $productID 
-     * @param  int    $taskID 
+     * @param  int    $testtaskID 
      * @access public
      * @return array
      */
@@ -355,6 +355,108 @@ class testtaskModel extends model
             ->andWhere('id')->notin($testTaskID)
             ->orderBy('begin desc')
             ->fetchPairs('id', 'name');
+    }
+
+    /**  
+     * Get report data of test task per run result.
+     * 
+     * @param  int     $taskID 
+     * @access public
+     * @return array
+     */
+    public function getDataOfTestTaskPerRunResult($taskID)
+    {    
+        $datas = $this->dao->select('lastRunResult AS name, COUNT(*) AS value')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+
+        foreach($datas as $result => $data) $data->name = isset($this->lang->testtask->resultList[$result])? $this->lang->testtask->resultList[$result] : $this->lang->testtask->unexecuted;
+
+        return $datas;
+    }    
+
+    /**  
+     * Get report data of test task per Type.
+     * 
+     * @param  int     $taskID 
+     * @access public
+     * @return array
+     */
+    public function getDataOfTestTaskPerType($taskID)
+    { 
+        $datas = $this->dao->select('t2.type as name,count(*) as value')->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->where('t1.task')->eq($taskID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('name')
+            ->orderBy('value desc')
+            ->fetchAll('name');
+        if(!$datas) return array();
+
+        foreach($datas as $result => $data) if(isset($this->lang->testtask->typeList[$result])) $data->name = $this->lang->testtask->typeList[$result];
+
+        return $datas;
+    }
+
+    /**  
+     * Get report data of test task per module 
+     * 
+     * @param  int     $taskID 
+     * @access public
+     * @return array
+     */
+    public function getDataOfTestTaskPerModule($taskID)
+    {    
+        $datas = $this->dao->select('t2.module as name,count(*) as value')->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->where('t1.task')->eq($taskID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('name')
+            ->orderBy('value desc')
+            ->fetchAll('name');
+        if(!$datas) return array();
+
+        $modules = $this->loadModel('tree')->getModulesName(array_keys($datas));
+        foreach($datas as $moduleID => $data) $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/'; 
+
+        return $datas;
+    }    
+
+    /**  
+     * Get report data of test task per runner
+     * 
+     * @param  int     $taskID 
+     * @access public
+     * @return array
+     */
+    public function getDataOfTestTaskPerRunner($taskID)
+    {    
+        $datas = $this->dao->select('lastRunner AS name, COUNT(*) AS value')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+
+        foreach($datas as $result => $data) $data->name = $result ? $result : $this->lang->testtask->unexecuted;
+
+        return $datas;
+    }
+
+     /**
+     * Merge the default chart settings and the settings of current chart.
+     * 
+     * @param  string    $chartType 
+     * @access public
+     * @return void
+     */
+    public function mergeChartOption($chartType)
+    {
+        $chartOption  = $this->lang->testtask->report->$chartType;
+        $commonOption = $this->lang->testtask->report->options;
+
+        $chartOption->graph->caption = $this->lang->testtask->report->charts[$chartType];
+        if(!isset($chartOption->type))    $chartOption->type  = $commonOption->type;
+        if(!isset($chartOption->width))  $chartOption->width  = $commonOption->width;
+        if(!isset($chartOption->height)) $chartOption->height = $commonOption->height;
+
+        /* 合并配置。*/
+        foreach($commonOption->graph as $key => $value) if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
     }
 
     /**
@@ -612,6 +714,7 @@ class testtaskModel extends model
                 ->page($pager)
                 ->fetchAll('id');
         }
+
         return $runs;
     }
 
@@ -710,6 +813,7 @@ class testtaskModel extends model
                     ->exec();
             }
         }
+
         return $caseResult;
     }
 
