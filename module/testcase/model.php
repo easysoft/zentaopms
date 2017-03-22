@@ -798,7 +798,34 @@ class testcaseModel extends model
             $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq((int)$caseID)->exec();
             if(!dao::isError()) $allChanges[$caseID] = common::createChanges($oldCase, $case);
         }
+
         return $allChanges;
+    }
+
+    /**
+     * Batch case type change.
+     * 
+     * @param  array   $caseIDList 
+     * @param  string  $result
+     * @access public
+     * @return array
+     */
+    public function batchCaseTypeChange($caseIdList, $result)
+    {
+        $now     = helper::now();
+        $actions = array();
+        $this->loadModel('action');
+
+        foreach($caseIdList as $caseID)
+        {
+            $case = new stdClass();
+            $case->lastEditedBy   = $this->app->user->account;
+            $case->lastEditedDate = $now;
+            $case->type           = $result;
+            
+            $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq($caseID)->exec();
+            $this->action->create('case', $caseID, 'Edited', '', ucfirst($result));
+        }
     }
 
     /**

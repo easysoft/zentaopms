@@ -85,9 +85,17 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
                       echo '<li>' . html::a('javascript:;', $lang->testcase->review,  '', $class) . '</li>';
                   }
 
-                  $actionLink = $this->createLink('testcase', 'batchConfirmStoryChange', "productID=$productID");
-                  $misc = common::hasPriv('testcase', 'batchConfirmStoryChange') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
-                  echo "<li>" . html::a('#', $lang->testcase->batchConfirmStoryChange, '', $misc) . "</li>";
+                  if(common::hasPriv('testcase', 'batchConfirmStoryChange'))
+                  {
+                      $actionLink = $this->createLink('testcase', 'batchConfirmStoryChange', "productID=$productID");
+                      $misc = common::hasPriv('testcase', 'batchConfirmStoryChange') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
+                      echo "<li>" . html::a('#', $lang->testcase->batchConfirmStoryChange, '', $misc) . "</li>";
+                  }
+                  else
+                  {
+                      echo '<li>' . html::a('javascript:;', $lang->testcase->batchConfirmStoryChange,  '', $class) . '</li>';
+                  }
+
 
                   $actionLink = $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy");
                   $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
@@ -113,6 +121,25 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
                   {
                       echo '<li>' . html::a('javascript:;', $lang->testcase->moduleAB, '', $class) . '</li>';
                   }
+
+                  if(common::hasPriv('testcase', 'batchCaseTypeChange'))
+                  {
+                      echo "<li class='dropdown-submenu'>";
+                      echo html::a('javascript:;', $lang->testcase->batchCaseTypeChange, '', "id='typeChangeItem'");
+                      echo "<ul class='dropdown-menu'>";
+                      unset($lang->testcase->typeList['']);
+                      foreach($lang->testcase->typeList as $key => $result)
+                      {
+                          $actionLink = $this->createLink('testcase', 'batchCaseTypeChange', "result=$key");
+                          echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . '</li>';
+                      }
+                      echo '</ul></li>';
+                  }
+                  else
+                  {
+                      echo '<li>' . html::a('javascript:;', $lang->testcase->batchCaseTypeChange,  '', $class) . '</li>';
+                  }
+
                   ?>
                 </ul>
               </div>
