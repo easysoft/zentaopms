@@ -923,6 +923,7 @@ class testcaseModel extends model
                 ->fetchGroup('case');
             $oldCases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($_POST['id'])->fetchAll('id');
         }
+        $storyVersionPairs = $this->dao->select('id,version')->from(TABLE_STORY)->where('id')->in($data->story)->fetchPairs('id', 'version');
 
         $cases = array();
         foreach($data->product as $key => $product)
@@ -1003,7 +1004,8 @@ class testcaseModel extends model
 
                 $version           = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
                 $caseData->version = $version;
-                $changes           = common::createChanges($oldCase, $caseData); 
+                $changes           = common::createChanges($oldCase, $caseData);
+                if($caseData->story != $oldCase->story) $caseData->storyVersion = zget($storyVersionPairs, $caseData->story, 1);
                 if(!$changes and !$stepChanged) continue;
 
                 if($changes or $stepChanged)
@@ -1044,6 +1046,7 @@ class testcaseModel extends model
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;
                 $caseData->branch     = isset($data->branch[$key]) ? $data->branch[$key] : $branch;
+                if($caseData->story) $caseData->storyVersion = zget($storyVersionPairs, $caseData->story, 1);
                 if($forceReview) $caseData->status = 'wait';
                 $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
 
