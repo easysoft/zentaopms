@@ -54,7 +54,7 @@
             </div>
           </td>
           <td style='width: 320px'>
-            <?php $height = zget($lang->testtask->report->$chartType, 'height', $lang->testtask->report->options->height) . 'px'; ?>
+            <?php $height = $chartOption->height . 'px'; ?>
             <div style="overflow:auto" class='table-wrapper'>
               <table class='table table-condensed table-hover table-striped table-bordered table-chart' data-chart='<?php echo $chartOption->type; ?>' data-target='#chart-<?php echo $chartType ?>' data-animation='false'>
                 <thead>

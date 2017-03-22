@@ -19,6 +19,6 @@
     <?php endforeach;?>
   </tbody>
   <?php else:?>
-  <tr><td class='none-data'><?php echo 'Trunk'?></td></tr>
+  <tr><td class='none-data' colspan='4'><?php echo 'Trunk'?></td></tr>
   <?php endif;?>
 </table>

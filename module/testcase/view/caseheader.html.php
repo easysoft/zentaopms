@@ -4,7 +4,7 @@
     <li>
       <div class='label-angle<?php if(!empty($moduleID)) echo ' with-close';?>'>
         <?php
-        echo isset($moduleID) ? $moduleName : $this->lang->tree->all;
+        echo !empty($moduleID) ? $moduleName : $this->lang->tree->all;
         if(!empty($moduleID))
         {
             $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';

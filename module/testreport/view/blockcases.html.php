@@ -29,6 +29,6 @@
     <?php endforeach;?>
   </tbody>
   <?php else:?>
-  <tr><td class='none-data'><?php echo $lang->testreport->none;?></td></tr>
+  <tr><td class='none-data' colspan='9'><?php echo $lang->testreport->none;?></td></tr>
   <?php endif;?>
 </table>

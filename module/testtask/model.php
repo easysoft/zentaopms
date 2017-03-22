@@ -447,9 +447,10 @@ class testtaskModel extends model
      */
     public function mergeChartOption($chartType)
     {
-        $chartOption  = $this->lang->testtask->report->$chartType;
+        $chartOption  = isset($this->lang->testtask->report->$chartType) ? $this->lang->testtask->report->$chartType : new stdclass();
         $commonOption = $this->lang->testtask->report->options;
 
+        if(!isset($chartOption->graph)) $chartOption->graph = new stdclass();
         $chartOption->graph->caption = $this->lang->testtask->report->charts[$chartType];
         if(!isset($chartOption->type))    $chartOption->type  = $commonOption->type;
         if(!isset($chartOption->width))  $chartOption->width  = $commonOption->width;
@@ -457,6 +458,7 @@ class testtaskModel extends model
 
         /* 合并配置。*/
         foreach($commonOption->graph as $key => $value) if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
+        return $chartOption;
     }
 
     /**

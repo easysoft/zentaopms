@@ -5,7 +5,7 @@
       <th class='w-pri'>  <?php echo $lang->priAB;?></th>
       <th>                <?php echo $lang->bug->title;?></th>
       <th class='w-user'> <?php echo $lang->openedByAB;?></th>
-      <th class='w-user'><?php echo $lang->bug->resolvedBy;?></th>
+      <th class='w-user'> <?php echo $lang->bug->resolvedBy;?></th>
       <th class='w-130px'><?php echo $lang->bug->resolvedDate;?></th>
       <th class='w-80px'> <?php echo $lang->statusAB;?></th>
     </tr>
@@ -25,6 +25,6 @@
     <?php endforeach;?>
   </tbody>
   <?php else:?>
-  <tr><td class='none-data'><?php echo $lang->testreport->none;?></td></tr>
+  <tr><td class='none-data' colspan='7'><?php echo $lang->testreport->none;?></td></tr>
   <?php endif?>
 </table>

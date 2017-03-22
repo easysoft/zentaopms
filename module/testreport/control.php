@@ -178,8 +178,6 @@ class testreport extends control
         }
         $cases   = $this->testreport->getTaskCases($tasks);
         $bugInfo = $this->testreport->getBugInfo($tasks, $productIdList, $begin, $end, $builds);
-        $modules = array();
-        foreach($productIdList as $productID) $modules += $this->tree->getOptionMenu($productID, $viewType = 'bug');
 
 
         $this->view->begin   = $begin;
@@ -196,7 +194,6 @@ class testreport extends control
 
         $this->view->builds  = $builds;
         $this->view->users   = $this->user->getPairs('noletter|nodeleted|noclosed');
-        $this->view->modules = $modules;
 
         $this->view->cases       = $cases;
         $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases);
@@ -289,8 +286,6 @@ class testreport extends control
 
         $cases   = $this->testreport->getTaskCases($tasks);
         $bugInfo = $this->testreport->getBugInfo($tasks, $productIdList, $report->begin, $report->end, $builds);
-        $modules = array();
-        foreach($productIdList as $productID) $modules += $this->tree->getOptionMenu($productID, $viewType = 'bug');
 
         $this->view->title = $report->title . $this->lang->testreport->edit;
 
@@ -304,7 +299,6 @@ class testreport extends control
 
         $this->view->builds  = $builds;
         $this->view->users   = $this->user->getPairs('noletter|nodeleted|noclosed');
-        $this->view->modules = $modules;
 
         $this->view->cases       = $cases;
         $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases);
@@ -343,7 +337,6 @@ class testreport extends control
 
             $browseLink = inlink('browse', "objectID=$projectID&objectType=project");
             $this->view->position[] = html::a($browseLink, $project->name);
-
         }
 
         $stories = $report->stories ? $this->story->getByList($report->stories) : array();
@@ -360,8 +353,6 @@ class testreport extends control
         $builds  = $report->builds ? $this->build->getByList($report->builds) : array();
         $cases   = $this->testreport->getTaskCases($tasks, $report->cases);
         $bugInfo = $this->testreport->getBugInfo($tasks, $report->product, $report->begin, $report->end, $builds);
-        $modules = array();
-        foreach(explode(',', $report->product) as $productID) $modules += $this->tree->getOptionMenu($productID, $viewType = 'bug');
 
         $this->view->title      = $report->title;
         $this->view->browseLink = $browseLink;
@@ -374,7 +365,6 @@ class testreport extends control
         $this->view->builds  = $builds;
         $this->view->cases   = $cases;
         $this->view->users   = $this->user->getPairs('noletter|nodeleted|noclosed');
-        $this->view->modules = $modules;
         $this->view->actions = $this->loadModel('action')->getList('testreport', $reportID);
 
         $this->view->storySummary = $this->product->summary($stories);

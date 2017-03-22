@@ -59,7 +59,7 @@ $lang->testtask->linkVersion    = '版本';
 $lang->testtask->lastRunAccount = '执行人';
 $lang->testtask->lastRunTime    = '执行时间';
 $lang->testtask->lastRunResult  = '结果';
-$lang->testtask->report         = '测试总结';
+$lang->testtask->reportField    = '测试总结';
 $lang->testtask->files          = '上传附件';
 
 $lang->testtask->legendDesc      = '版本描述';
@@ -143,19 +143,15 @@ $lang->testtask->report->charts['testTaskPerRunResult'] = '用例结果统计';
 $lang->testtask->report->charts['testTaskPerType']      = '用例类型统计';
 $lang->testtask->report->charts['testTaskPerModule']    = '用例模块统计';
 $lang->testtask->report->charts['testTaskPerRunner']    = '用例执行人统计';
+$lang->testtask->report->charts['bugSeverityGroups']    = 'Bug严重级别分布';
+$lang->testtask->report->charts['bugStatusGroups']      = 'Bug状态分布';
+$lang->testtask->report->charts['bugOpenedByGroups']    = 'Bug创建者分布';
+$lang->testtask->report->charts['bugResolvedByGroups']  = 'Bug解决者分布';
+$lang->testtask->report->charts['bugResolutionGroups']  = 'Bug解决方案分布';
+$lang->testtask->report->charts['bugModuleGroups']      = 'Bug模块分布';
 
 $lang->testtask->report->options = new stdclass();
 $lang->testtask->report->options->graph  = new stdclass();
 $lang->testtask->report->options->type   = 'pie';
 $lang->testtask->report->options->width  = 500;
 $lang->testtask->report->options->height = 140;
-
-$lang->testtask->report->testTaskPerRunResult = new stdclass();
-$lang->testtask->report->testTaskPerType      = new stdclass();
-$lang->testtask->report->testTaskPerModule    = new stdclass();
-$lang->testtask->report->testTaskPerRunner    = new stdclass();
-
-$lang->testtask->report->testTaskPerRunResult->graph = new stdclass();
-$lang->testtask->report->testTaskPerType->graph      = new stdclass();
-$lang->testtask->report->testTaskPerModule->graph    = new stdclass();
-$lang->testtask->report->testTaskPerRunner->graph    = new stdclass();

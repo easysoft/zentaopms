@@ -43,7 +43,7 @@
 
     if($this->methodName == 'cases') echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";
     if(common::hasPriv('testtask', 'view')) echo '<li>' . html::a(inlink('view', "taskID=$taskID"), $lang->testtask->view) . '</li>';
-    if(common::hasPriv('testreport', 'browse')) echo '<li>' . html::a($this->createLink('testreport', 'browse', "objectID=$productID&objectType=product&extra=$taskID"), $lang->testtask->report) . '</li>';
+    if(common::hasPriv('testreport', 'browse')) echo '<li>' . html::a($this->createLink('testreport', 'browse', "objectID=$productID&objectType=product&extra=$taskID"), $lang->testtask->reportField) . '</li>';
     ?>
   </div>
   <div class='actions'>

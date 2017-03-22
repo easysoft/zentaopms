@@ -311,16 +311,17 @@ class testtask extends control
     public function report($productID, $taskID, $browseType, $branchID, $moduleID)
     {
         $this->loadModel('report');
-        $this->view->charts   = array();
+        $this->view->charts = array();
 
         if(!empty($_POST))
         {
+            $task    = $this->testtask->getById($taskID);
+            $bugInfo = $this->loadModel('testreport')->getBugInfo(array($taskID => $taskID), array($productID => $productID), $task->begin, $task->end, array($task->build => $task->build));
             foreach($this->post->charts as $chart)
             {
                 $chartFunc   = 'getDataOf' . $chart;
-                $chartData   = $this->testtask->$chartFunc($taskID);
-                $chartOption = $this->lang->testtask->report->$chart;
-                $this->testtask->mergeChartOption($chart);
+                $chartData   = isset($bugInfo[$chart]) ? $bugInfo[$chart] : $this->testtask->$chartFunc($taskID);
+                $chartOption = $this->testtask->mergeChartOption($chart);
 
                 $this->view->charts[$chart] = $chartOption;
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);

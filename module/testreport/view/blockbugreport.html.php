@@ -4,9 +4,8 @@
   <?php if(($row % 1) == 0) echo '<tr>';?>
   <?php $row++;?>
     <td class='text-top'>
-      <?php $sum = array_sum($infoValue);?>
       <table class='table table-condensed table-report' id='bugSeverityGroups'>
-        <?php if($sum == 0):?>
+        <?php if(empty($infoValue)):?>
         <tr>
           <td class='none-data'>
             <h5><?php echo $lang->testreport->$infoKey?></h5>
@@ -14,6 +13,7 @@
           </td>
         </tr>
         <?php else:?>
+        <?php $sum = 0; foreach($infoValue as $value) $sum += $value->value;?>
         <tr class='text-top'>
           <td class='w-p70'>
             <div class='chart-wrapper text-center'>
@@ -46,10 +46,12 @@
                 <?php foreach($list as $listKey => $listValue):?>
                 <?php
                 $label = $listValue;
-                if($infoKey == 'bugOpenedByGroups' or $infoKey == 'bugResolvedByGroups') $label = zget($users, $listKey);
-                if($infoKey == 'bugModuleGroups') $label = zget($modules, $listKey);
-                if(empty($label)) continue;
-                $data = zget($infoValue, $listKey, 0);
+                $data  = 0;
+                if(isset($infoValue[$listKey]))
+                {
+                    $label = $infoValue[$listKey]->name;
+                    $data  = $infoValue[$listKey]->value;
+                }
                 ?>
                 <tr class='text-center'>
                   <td class='chart-color w-20px'><i class='chart-color-dot icon-circle'></i></td>
