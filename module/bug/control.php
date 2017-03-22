@@ -1275,6 +1275,7 @@ class bug extends control
         if($_POST)
         {
             $this->loadModel('file');
+            $this->loadModel('branch');
             $bugLang   = $this->lang->bug;
             $bugConfig = $this->config->bug;
 
@@ -1298,16 +1299,18 @@ class bug extends control
             $projects = $this->loadModel('project')->getPairs('all|nocode');
 
             /* Get related objects id lists. */
-            $relatedModuleIdList = array();
-            $relatedStoryIdList  = array();
-            $relatedTaskIdList   = array();
-            $relatedBugIdList    = array();
-            $relatedCaseIdList   = array();
-            $relatedBuildIdList  = array();
-            $relatedBranchIdList = array();
+            $relatedProductIdList = array();
+            $relatedModuleIdList  = array();
+            $relatedStoryIdList   = array();
+            $relatedTaskIdList    = array();
+            $relatedBugIdList     = array();
+            $relatedCaseIdList    = array();
+            $relatedBuildIdList   = array();
+            $relatedBranchIdList  = array();
 
             foreach($bugs as $bug)
             {
+                $relatedProductIdList[$bug->product]  = $bug->product;
                 $relatedModuleIdList[$bug->module]    = $bug->module;
                 $relatedStoryIdList[$bug->story]      = $bug->story;
                 $relatedTaskIdList[$bug->task]        = $bug->task;
@@ -1332,12 +1335,13 @@ class bug extends control
             }
 
             /* Get related objects title or names. */
+            $productsType   = $this->dao->select('id, type')->from(TABLE_PRODUCT)->where('id')->in($relatedProductIdList)->fetchPairs();
             $relatedModules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($relatedModuleIdList)->fetchPairs();
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedTasks   = $this->dao->select('id, name')->from(TABLE_TASK)->where('id')->in($relatedTaskIdList)->fetchPairs();
             $relatedBugs    = $this->dao->select('id, title')->from(TABLE_BUG)->where('id')->in($relatedBugIdList)->fetchPairs();
             $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
-            $relatedBranch  = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
+            $relatedBranch  = array('0' => $this->lang->branch->all) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
             $relatedBuilds  = array('trunk' => $this->lang->trunk) + $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->in($relatedBuildIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->in(@array_keys($bugs))->fetchGroup('objectID');
 
@@ -1433,6 +1437,8 @@ class bug extends control
                 unset($bug->result);
                 unset($bug->deleted);
             }
+
+            if(!(in_array('platform', $productsType) or in_array('branch', $productsType))) unset($fields['branch']);// If products's type are normal, unset branch field.
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $bugs);

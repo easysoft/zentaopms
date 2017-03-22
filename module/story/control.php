@@ -1295,6 +1295,7 @@ class story extends control
         if($_POST)
         {
             $this->loadModel('file');
+            $this->loadModel('branch');
             $storyLang   = $this->lang->story;
             $storyConfig = $this->config->story;
 
@@ -1326,16 +1327,18 @@ class story extends control
             $products = $this->loadModel('product')->getPairs('nocode');
 
             /* Get related objects id lists. */
-            $relatedModuleIdList = array();
-            $relatedStoryIdList  = array();
-            $relatedPlanIdList   = array();
-            $relatedBranchIdList = array();
+            $relatedProductIdList = array();
+            $relatedModuleIdList  = array();
+            $relatedStoryIdList   = array();
+            $relatedPlanIdList    = array();
+            $relatedBranchIdList  = array();
 
             foreach($stories as $story)
             {
-                $relatedModuleIdList[$story->module] = $story->module;
-                $relatedPlanIdList[$story->plan]     = $story->plan;
-                $relatedBranchIdList[$story->branch] = $story->branch;
+                $relatedProductIdList[$story->product] = $story->product;
+                $relatedModuleIdList[$story->module]   = $story->module;
+                $relatedPlanIdList[$story->plan]       = $story->plan;
+                $relatedBranchIdList[$story->branch]   = $story->branch;
 
                 /* Process related stories. */
                 $relatedStories = $story->childStories . ',' . $story->linkStories . ',' . $story->duplicateStory;
@@ -1347,12 +1350,13 @@ class story extends control
             }
 
             /* Get related objects title or names. */
+            $productsType   = $this->dao->select('id, type')->from(TABLE_PRODUCT)->where('id')->in($relatedProductIdList)->fetchPairs();
             $relatedModules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($relatedModuleIdList)->fetchPairs();
             $relatedPlans   = $this->dao->select('id, title')->from(TABLE_PRODUCTPLAN)->where('id')->in(join(',', $relatedPlanIdList))->fetchPairs();
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in(@array_keys($stories))->fetchGroup('objectID');
             $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in(@array_keys($stories))->orderBy('version desc')->fetchGroup('story');
-            $relatedBranch  = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
+            $relatedBranch  = array('0' => $this->lang->branch->all) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
 
             foreach($stories as $story)
             {
@@ -1464,6 +1468,8 @@ class story extends control
                 }
 
             }
+
+            if(!(in_array('platform', $productsType) or in_array('branch', $productsType))) unset($fields['branch']);// If products's type are normal, unset branch field.
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $stories);
