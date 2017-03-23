@@ -331,7 +331,7 @@ class testtaskModel extends model
      */
     public function getLinkableCasesByTestTask($testTask, $linkedCases, $pager)
     {
-        $caseList  = $this->dao->select("`case`")->from(TABLE_TESTRUN)->where('task')->eq($testTask)->andWhere('id')->notin($linkedCases)->fetchPairs('case');
+        $caseList  = $this->dao->select("`case`")->from(TABLE_TESTRUN)->where('task')->eq($testTask)->andWhere('`case`')->notin($linkedCases)->fetchPairs('case');
         
         return $this->dao->select("*")->from(TABLE_CASE)->where('id')->in($caseList)->page($pager)->fetchAll();
     }
