@@ -458,9 +458,9 @@ class testsuite extends control
         $libID     = $this->testsuite->saveLibState(0, $libraries);
         $this->testsuite->setLibMenu($libraries, $libID);
 
-        $this->view->title      = $this->lang->caselib->common . $this->lang->colon . $this->lang->caselib->create;
+        $this->view->title      = $this->lang->caselib->common . $this->lang->colon . $this->lang->testsuite->createLib;
         $this->view->position[] = $this->lang->caselib->common;
-        $this->view->position[] = $this->lang->caselib->create;
+        $this->view->position[] = $this->lang->testsuite->createLib;
         $this->display();
     }
 

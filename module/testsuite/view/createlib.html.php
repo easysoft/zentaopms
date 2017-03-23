@@ -16,7 +16,7 @@
 <div class='container mw-1400px'>
   <div id='titlebar'>
     <div class='heading'>
-      <strong><small class='text-muted'><?php echo html::icon($lang->icons['create']);?></small> <?php echo $lang->caselib->create;?></strong>
+      <strong><small class='text-muted'><?php echo html::icon($lang->icons['create']);?></small> <?php echo $lang->testsuite->createLib;?></strong>
     </div>
   </div>
   <form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
