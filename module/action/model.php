@@ -418,6 +418,7 @@ class actionModel extends model
      */
     public function logHistory($actionID, $changes)
     {
+        if(empty($actionID)) return false;
         foreach($changes as $change) 
         {
             $change['action'] = $actionID;
@@ -434,6 +435,8 @@ class actionModel extends model
      */
     public function printAction($action)
     {
+        if(!isset($action->objectType) or !isset($action->action)) return false;
+
         $objectType = $action->objectType;
         $actionType = strtolower($action->action);
 

@@ -36,6 +36,7 @@ $lang->testsuite->unlinkedCases = 'Unlinked Cases';
 
 $lang->testsuite->confirmDelete     = 'Do you want to delete this suite?';
 $lang->testsuite->confirmUnlinkCase = 'Do you want to unlink this Case?';
+$lang->testsuite->noticeNone        = 'You have not created a suite yet.';
 
 $lang->testsuite->lblCases      = 'Cases';
 $lang->testsuite->lblUnlinkCase = 'Unlink Case';
@@ -44,6 +45,10 @@ $lang->testsuite->authorList['private'] = 'Private';
 $lang->testsuite->authorList['public']  = 'Public';
 
 $lang->caselib->common = 'Test Library';
-$lang->caselib->create = 'Create';
-$lang->caselib->edit   = 'Edit';
 $lang->caselib->all    = 'All';
+
+$lang->testsuite->createLib  = 'Create';
+$lang->testsuite->editLib    = 'Edit';
+$lang->testsuite->library    = 'Browse case';
+$lang->testsuite->createCase = 'Create case';
+$lang->testsuite->libView    = 'View';

@@ -56,6 +56,7 @@ $lang->testcase->resultsAB        = 'R';
 $lang->testcase->stepNumber       = 'Number of steps';
 $lang->testcase->stepNumberAB     = 'S';
 $lang->testcase->createBug        = 'Convert to Bug';
+$lang->testcase->fromModule       = 'Source Module';
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
 $lang->testcase->stepID      = 'ID';
@@ -63,35 +64,37 @@ $lang->testcase->stepDesc    = 'Step';
 $lang->testcase->stepExpect  = 'Expect';
 $lang->testcase->stepVersion = 'Version';
 
-$lang->testcase->common             = 'Case';
-$lang->testcase->index              = "Home";
-$lang->testcase->create             = "Create Case";
-$lang->testcase->batchCreate        = "Batch Create";
-$lang->testcase->delete             = "Delete";
-$lang->testcase->view               = "Info";
-$lang->testcase->review             = "Review";
-$lang->testcase->edit               = "Edit";
-$lang->testcase->batchEdit          = "Batch Edit ";
-$lang->testcase->batchChangeModule  = "Batch Change Module";
-$lang->testcase->delete             = "Delete";
-$lang->testcase->batchDelete        = "Batch Delete ";
-$lang->testcase->batchStoryChange   = "Confirm";
-$lang->testcase->browse             = "Cases";
-$lang->testcase->groupCase          = "View By";
-$lang->testcase->import             = "Import";
-$lang->testcase->importFile         = "Import CSV";
-$lang->testcase->importFromLib      = "Import From Library";
-$lang->testcase->showImport         = "Show Import";
-$lang->testcase->exportTemplet      = "Export Template";
-$lang->testcase->export             = "Export Data";
-$lang->testcase->reportChart        = 'Report Chart';
-$lang->testcase->confirmChange      = 'Confirm Case Change';
-$lang->testcase->confirmStoryChange = 'Confirm Story Change';
-$lang->testcase->copy               = 'Duplicate Case';
-$lang->testcase->group              = 'Group';
-$lang->testcase->groupName          = 'Group Name';
-$lang->testcase->step               = 'Step';
-$lang->testcase->stepChild          = 'Child';
+$lang->testcase->common                  = 'Case';
+$lang->testcase->index                   = "Home";
+$lang->testcase->create                  = "Create Case";
+$lang->testcase->batchCreate             = "Batch Create";
+$lang->testcase->delete                  = "Delete";
+$lang->testcase->view                    = "Info";
+$lang->testcase->review                  = "Review";
+$lang->testcase->batchReview             = "Batch Review";
+$lang->testcase->edit                    = "Edit";
+$lang->testcase->batchEdit               = "Batch Edit ";
+$lang->testcase->batchChangeModule       = "Batch Change Module";
+$lang->testcase->delete                  = "Delete";
+$lang->testcase->batchDelete             = "Batch Delete ";
+$lang->testcase->batchConfirmStoryChange = "Batch Confirm Story Change";
+$lang->testcase->batchCaseTypeChange     = "Batch Change type";
+$lang->testcase->browse                  = "Cases";
+$lang->testcase->groupCase               = "View By";
+$lang->testcase->import                  = "Import";
+$lang->testcase->importFile              = "Import CSV";
+$lang->testcase->importFromLib           = "Import From Library";
+$lang->testcase->showImport              = "Show Import";
+$lang->testcase->exportTemplet           = "Export Template";
+$lang->testcase->export                  = "Export Data";
+$lang->testcase->reportChart             = 'Report Chart';
+$lang->testcase->confirmChange           = 'Confirm Case Change';
+$lang->testcase->confirmStoryChange      = 'Confirm Story Change';
+$lang->testcase->copy                    = 'Duplicate Case';
+$lang->testcase->group                   = 'Group';
+$lang->testcase->groupName               = 'Group Name';
+$lang->testcase->step                    = 'Step';
+$lang->testcase->stepChild               = 'Child';
 
 $lang->testcase->new = 'New';
 
@@ -181,33 +184,9 @@ $lang->testcase->action->fromlib  = array('main' => '$date, imported by <strong>
 $lang->testcase->action->reviewed = array('main' => '$date, recorded by <strong>$actor</strong> and the review result is <strong>$extra</strong>.', 'extra' => 'reviewResultList');
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
-$lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['wait']        = 'Wait';
+$lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = '';
-$lang->testcase->featureBar['browse']['zerocase']    = '';
 $lang->testcase->featureBar['browse']['suite']       = 'Suite';
+$lang->testcase->featureBar['browse']['zerocase']    = '';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];
-
-/* 统计报表。*/
-$lang->testcase->report = new stdclass();
-$lang->testcase->report->common = 'Report';
-$lang->testcase->report->select = 'Select report type';
-$lang->testcase->report->create = 'Generate';
-       
-$lang->testcase->report->charts['testCasePerRunResult'] = 'Result Report';
-$lang->testcase->report->charts['testCasePerStatus']    = 'Status Report';
-$lang->testcase->report->charts['testCasePerType']      = 'Type Report';
-
-$lang->testcase->report->options = new stdclass();
-$lang->testcase->report->options->graph  = new stdclass();
-$lang->testcase->report->options->type   = 'pie';
-$lang->testcase->report->options->width  = 500;
-$lang->testcase->report->options->height = 140;
-
-$lang->testcase->report->testCasePerRunResult = new stdclass();
-$lang->testcase->report->testCasePerStatus    = new stdclass();
-$lang->testcase->report->testCasePerType      = new stdclass();
-
-$lang->testcase->report->testCasePerRunResult->graph = new stdclass();
-$lang->testcase->report->testCasePerStatus->graph    = new stdclass();
-$lang->testcase->report->testCasePerType->graph      = new stdclass();

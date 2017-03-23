@@ -205,6 +205,7 @@ class group extends control
             foreach($this->lang->resource as $module => $moduleActions)
             {
                 $modules[$module] = $this->lang->$module->common;
+                if($module == 'caselib') $module = 'testsuite';
                 foreach($moduleActions as $action)
                 {
                     $actions[$module][$action] = $this->lang->$module->$action;

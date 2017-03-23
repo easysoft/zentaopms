@@ -1,4 +1,4 @@
-CREATE TABLE `zt_testsuite` (
+CREATE TABLE IF NOT EXISTS `zt_testsuite` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `product` mediumint(8) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE `zt_testsuite` (
   `deleted` enum('0','1') NOT NULL,
   PRIMARY KEY (`id`) 
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-CREATE TABLE `zt_suitecase` (
+CREATE TABLE IF NOT EXISTS `zt_suitecase` (
   `suite` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `case` mediumint(8) unsigned NOT NULL,
@@ -24,7 +24,7 @@ ALTER TABLE `zt_case` ADD `reviewedBy` varchar(255) NOT NULL AFTER `openedDate`;
 ALTER TABLE `zt_case` ADD `reviewedDate` date NOT NULL AFTER `reviewedBy`;
 ALTER TABLE `zt_casestep` ADD `parent` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
 ALTER TABLE `zt_casestep` ADD `type` varchar(10) NOT NULL DEFAULT 'step' AFTER `version`;
-CREATE TABLE `zt_testreport` (
+CREATE TABLE IF NOT EXISTS `zt_testreport` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `product` mediumint(8) unsigned NOT NULL,
   `project` mediumint(8) unsigned NOT NULL,

@@ -923,7 +923,7 @@ class testcaseModel extends model
                 ->fetchGroup('case');
             $oldCases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($_POST['id'])->fetchAll('id');
         }
-        $storyVersionPairs = $this->dao->select('id,version')->from(TABLE_STORY)->where('id')->in($data->story)->fetchPairs('id', 'version');
+        $storyVersionPairs = $this->story->getVersions($data->story);
 
         $cases = array();
         foreach($data->product as $key => $product)

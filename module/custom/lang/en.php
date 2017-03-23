@@ -16,6 +16,7 @@ $lang->custom->object['testcase'] = 'Case';
 $lang->custom->object['testtask'] = 'Build';
 $lang->custom->object['todo']     = 'To-Dos';
 $lang->custom->object['user']     = 'User';
+$lang->custom->object['block']    = 'Block';
 
 $lang->custom->story = new stdClass();
 $lang->custom->story->fields['priList']          = 'Priority';
@@ -63,7 +64,8 @@ $lang->custom->todo->fields['statusList'] = 'Status';
 $lang->custom->user = new stdClass();
 $lang->custom->user->fields['roleList']    = 'Role';
 $lang->custom->user->fields['statusList']  = 'Status';
-$lang->custom->user->fields['closedBlock'] = 'Closed block';
+
+$lang->custom->block->fields['closed'] = 'Closed Block';
 
 $lang->custom->currentLang = 'Current Language';
 $lang->custom->allLang     = 'All Language';

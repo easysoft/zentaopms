@@ -89,7 +89,7 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
                   {
                       $actionLink = $this->createLink('testcase', 'batchConfirmStoryChange', "productID=$productID");
                       $misc = common::hasPriv('testcase', 'batchConfirmStoryChange') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
-                      echo "<li>" . html::a('#', $lang->testcase->batchConfirmStoryChange, '', $misc) . "</li>";
+                      echo "<li>" . html::a('#', $lang->testcase->confirmStoryChange, '', $misc) . "</li>";
                   }
                   else
                   {
@@ -125,7 +125,7 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
                   if(common::hasPriv('testcase', 'batchCaseTypeChange'))
                   {
                       echo "<li class='dropdown-submenu'>";
-                      echo html::a('javascript:;', $lang->testcase->batchCaseTypeChange, '', "id='typeChangeItem'");
+                      echo html::a('javascript:;', $lang->testcase->type, '', "id='typeChangeItem'");
                       echo "<ul class='dropdown-menu'>";
                       unset($lang->testcase->typeList['']);
                       foreach($lang->testcase->typeList as $key => $result)
@@ -137,7 +137,7 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
                   }
                   else
                   {
-                      echo '<li>' . html::a('javascript:;', $lang->testcase->batchCaseTypeChange,  '', $class) . '</li>';
+                      echo '<li>' . html::a('javascript:;', $lang->testcase->type,  '', $class) . '</li>';
                   }
 
                   ?>

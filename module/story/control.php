@@ -70,31 +70,21 @@ class story extends control
                 $this->send($response);
             }
 
-            if($bugID == 0)
-            {
-                $actionID = $this->action->create('story', $storyID, 'Opened', '');
-            }
-            else
-            {
-                $actionID = $this->action->create('story', $storyID, 'Frombug', '', $bugID);
-            }
+            $action   = $bugID == 0 ? 'Opened' : 'Frombug';
+            $extra    = $bugID == 0 ? '' : $bugID;
+            $actionID = $this->action->create('story', $storyID, $action, '', $extra);
             $this->story->sendmail($storyID, $actionID);
+
             if($this->post->newStory)
             {
                 $response['message'] = $this->lang->story->successSaved . $this->lang->story->newStory;
                 $response['locate']  = $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&story=0&projectID=$projectID&bugID=$bugID");
                 $this->send($response);
             }
-            if($projectID == 0)
-            {
-                $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
-                $this->send($response);
-            }
-            else
-            {
-                $response['locate'] = $this->createLink('project', 'story', "projectID=$projectID");
-                $this->send($response);
-            }
+
+            $response['locate'] = $this->createLink('project', 'story', "projectID=$projectID");
+            if($projectID == 0) $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
+            $this->send($response);
         }
 
         /* Set products, users and module. */
@@ -212,7 +202,10 @@ class story extends control
             $mails = $this->story->batchCreate($productID, $branch);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            foreach($mails as $mail) $this->story->sendmail($mail->storyID, $mail->actionID);
+            foreach($mails as $mail)
+            {
+                if($mail->actionID) $this->story->sendmail($mail->storyID, $mail->actionID);
+            }
 
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
             if($storyID)
@@ -642,7 +635,6 @@ class story extends control
             $result = $this->post->result;
             if($this->post->closedReason != '' and strpos('done,postponed,subdivided', $this->post->closedReason) !== false) $result = 'pass';
             $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result));
-            $this->action->logHistory($actionID, array());
             $this->story->sendmail($storyID, $actionID);
             if($this->post->result == 'reject')
             {

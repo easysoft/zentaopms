@@ -133,6 +133,7 @@ $lang->action->label->confirmed           = 'Confirm a Story, ';
 $lang->action->label->bugconfirmed        = 'Confirmed';
 $lang->action->label->tostory             = 'Convert to Story';
 $lang->action->label->frombug             = 'Converted from Bug';
+$lang->action->label->fromlib             = 'Import from library';
 $lang->action->label->totask              = 'Convert to Task';
 $lang->action->label->svncommited         = 'SVN Commit';
 $lang->action->label->gitcommited         = 'Git Commit';
@@ -176,10 +177,13 @@ $lang->action->label->build       = 'Build|build|view|buildID=%s';
 $lang->action->label->bug         = 'Bug|bug|view|bugID=%s';
 $lang->action->label->case        = 'Case|testcase|view|caseID=%s';
 $lang->action->label->testtask    = 'Test Task|testtask|view|caseID=%s';
+$lang->action->label->testsuite   = 'Test Suite|testsuite|view|suiteID=%s';
+$lang->action->label->caselib     = 'Case Library|testsuite|libview|libID=%s';
 $lang->action->label->todo        = 'To-Dos|todo|view|todoID=%s';
 $lang->action->label->doclib      = 'Doc Lib|doc|browse|libID=%s';
 $lang->action->label->doc         = 'Document|doc|view|docID=%s';
 $lang->action->label->user        = 'User|user|view|account=%s';
+$lang->action->label->testreport  = 'Report|testreport|view|report=%s';
 $lang->action->label->space       = ' ';
 
 /* Object type. */
@@ -203,6 +207,7 @@ $lang->action->search->objectTypeList['productplan'] = 'Plan';
 $lang->action->search->objectTypeList['branch']      = 'Branch';
 $lang->action->search->objectTypeList['testsuite']   = 'Suite';
 $lang->action->search->objectTypeList['caselib']     = 'Library';
+$lang->action->search->objectTypeList['testreport']  = 'Report';
 
 /* 用来在动态显示中显示动作 */
 $lang->action->search->label['']                    = '';

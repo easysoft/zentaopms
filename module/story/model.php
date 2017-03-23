@@ -239,6 +239,7 @@ class storyModel extends model
      */
     public function batchCreate($productID = 0, $branch = 0)
     {
+        $this->loadModel('action');
         $branch   = (int)$branch;
         $now      = helper::now();
         $mails    = array();
@@ -338,7 +339,6 @@ class storyModel extends model
 
                 $this->dao->insert(TABLE_STORYSPEC)->data($specData)->exec();
 
-                $this->loadModel('action');
                 $actionID = $this->action->create('story', $storyID, 'Opened', '');
                 $mails[$i] = new stdclass();
                 $mails[$i]->storyID  = $storyID;
@@ -697,7 +697,6 @@ class storyModel extends model
 
             if($reason and strpos('done,postponed', $reason) !== false) $result = 'pass';
             $actions[$storyID] = $this->action->create('story', $storyID, 'Reviewed', '', ucfirst($result));
-            $this->action->logHistory($actions[$storyID], array());
         }
 
         return $actions;

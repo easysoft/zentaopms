@@ -315,6 +315,7 @@ class testtask extends control
 
         if(!empty($_POST))
         {
+            $this->app->loadLang('testcase');
             $task    = $this->testtask->getById($taskID);
             $bugInfo = $this->loadModel('testreport')->getBugInfo(array($taskID => $taskID), array($productID => $productID), $task->begin, $task->end, array($task->build => $task->build));
             foreach($this->post->charts as $chart)

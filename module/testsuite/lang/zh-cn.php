@@ -45,9 +45,10 @@ $lang->testsuite->authorList['private'] = '私有';
 $lang->testsuite->authorList['public']  = '公开';
 
 $lang->caselib->common = '公共用例库';
-$lang->caselib->create = '创建库';
 $lang->caselib->all    = '所有公共库';
 
-$lang->caselib->library    = '浏览库用例';
-$lang->caselib->createCase = '创建用例';
-$lang->caselib->libView    = '查看库概况';
+$lang->testsuite->createLib  = '创建库';
+$lang->testsuite->editLib    = '编辑库';
+$lang->testsuite->library    = '浏览库用例';
+$lang->testsuite->createCase = '创建用例';
+$lang->testsuite->libView    = '查看库概况';

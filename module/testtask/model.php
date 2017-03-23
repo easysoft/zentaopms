@@ -369,7 +369,7 @@ class testtaskModel extends model
         $datas = $this->dao->select('lastRunResult AS name, COUNT(*) AS value')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
 
-        foreach($datas as $result => $data) $data->name = isset($this->lang->testtask->resultList[$result])? $this->lang->testtask->resultList[$result] : $this->lang->testtask->unexecuted;
+        foreach($datas as $result => $data) $data->name = isset($this->lang->testcase->resultList[$result])? $this->lang->testcase->resultList[$result] : $this->lang->testtask->unexecuted;
 
         return $datas;
     }    
@@ -392,7 +392,7 @@ class testtaskModel extends model
             ->fetchAll('name');
         if(!$datas) return array();
 
-        foreach($datas as $result => $data) if(isset($this->lang->testtask->typeList[$result])) $data->name = $this->lang->testtask->typeList[$result];
+        foreach($datas as $result => $data) if(isset($this->lang->testcase->typeList[$result])) $data->name = $this->lang->testcase->typeList[$result];
 
         return $datas;
     }
@@ -593,6 +593,8 @@ class testtaskModel extends model
     {
         if($this->post->cases == false) return;
         $postData = fixer::input('post')->get();
+
+        if($type == 'bybuild') $assignedToPairs = $this->dao->select('`case`, assignedTo')->from(TABLE_TESTRUN)->where('`case`')->in($postData)->fetchPairs('case', 'assignedTo');
         foreach($postData->cases as $caseID)
         {
             $row = new stdclass();
@@ -601,12 +603,7 @@ class testtaskModel extends model
             $row->version    = $postData->versions[$caseID];
             $row->assignedTo = '';
             $row->status     = 'wait';
-
-            if($type == 'bybuild')
-            {
-                $assignedTo = $this->dao->select('assignedTo')->from(TABLE_TESTRUN)->where('`case`')->eq($caseID)->fetch();
-                $row->assignedTo = $assignedTo->assignedTo;
-            }
+            if($type == 'bybuild') $row->assignedTo = zget($assignedToPairs, $caseID, '');
 
             $this->dao->replace(TABLE_TESTRUN)->data($row)->exec();
         }

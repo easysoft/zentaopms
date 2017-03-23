@@ -112,12 +112,13 @@ class html extends baseHTML
         /* The options. */
         if(is_array($selectedItems)) $selectedItems = implode(',', $selectedItems);
         $selectedItems   = ",$selectedItems,";
-        $convertedPinYin = common::convert2Pinyin($options);
+        $convertedPinYin = class_exists('common') ? common::convert2Pinyin($options) : array();
         foreach($options as $key => $value)
         {
+            $optionPinyin = zget($convertedPinYin, $value, '');
             $key      = str_replace('item', '', $key);
             $selected = strpos($selectedItems, ",$key,") !== false ? " selected='selected'" : '';
-            $string  .= "<option value='$key'$selected data-keys='{$convertedPinYin[$value]}'>$value</option>\n";
+            $string  .= "<option value='$key'$selected data-keys='{$optionPinyin}'>$value</option>\n";
         }
 
         /* End. */

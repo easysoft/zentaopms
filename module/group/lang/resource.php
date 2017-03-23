@@ -516,11 +516,11 @@ $lang->resource->testcase->confirmChange      = 'confirmChange';
 $lang->resource->testcase->confirmStoryChange = 'confirmStoryChange';
 $lang->resource->testcase->batchChangeModule  = 'batchChangeModule';
 $lang->resource->testcase->bugs               = 'bugs';
-$lang->resource->testcase->report             = 'reportChart';
 $lang->resource->testcase->review             = 'review';
 $lang->resource->testcase->batchReview        = 'batchReview';
-$lang->resource->testcase->batchStoryChange   = 'batchStoryChange';
 $lang->resource->testcase->importFromLib      = 'importFromLib';
+$lang->resource->testcase->batchCaseTypeChange = 'batchCaseTypeChange';
+$lang->resource->testcase->batchConfirmStoryChange = 'batchConfirmStoryChange';
 
 $lang->testcase->methodOrder[0]   = 'index';
 $lang->testcase->methodOrder[5]   = 'browse';
@@ -540,11 +540,11 @@ $lang->testcase->methodOrder[70]  = 'batchChangeModule';
 $lang->testcase->methodOrder[75]  = 'linkCases';
 $lang->testcase->methodOrder[80]  = 'unlinkCase';
 $lang->testcase->methodOrder[85]  = 'bugs';
-$lang->testcase->methodOrder[90]  = 'report';
 $lang->testcase->methodOrder[95]  = 'review';
 $lang->testcase->methodOrder[100] = 'batchReview';
-$lang->testcase->methodOrder[105] = 'batchStoryChange';
+$lang->testcase->methodOrder[105] = 'batchConfirmStoryChange';
 $lang->testcase->methodOrder[110] = 'importFromLib';
+$lang->testcase->methodOrder[115] = 'batchCaseTypeChange';
 
 /* Test task. */
 $lang->resource->testtask = new stdclass();
@@ -567,7 +567,8 @@ $lang->resource->testtask->results          = 'lblResults';
 $lang->resource->testtask->results          = 'lblResults';
 $lang->resource->testtask->batchRun         = 'batchRun';
 $lang->resource->testtask->activate         = 'activate';
-$lang->resource->testtask->blocked          = 'blocked';
+$lang->resource->testtask->block            = 'block';
+$lang->resource->testtask->report           = 'reportChart';
 
 $lang->testtask->methodOrder[0]  = 'index';
 $lang->testtask->methodOrder[5]  = 'create';
@@ -578,7 +579,7 @@ $lang->testtask->methodOrder[25] = 'groupCase';
 $lang->testtask->methodOrder[30] = 'edit';
 $lang->testtask->methodOrder[35] = 'start';
 $lang->testtask->methodOrder[40] = 'activate';
-$lang->testtask->methodOrder[45] = 'blocked';
+$lang->testtask->methodOrder[45] = 'block';
 $lang->testtask->methodOrder[50] = 'close';
 $lang->testtask->methodOrder[55] = 'delete';
 $lang->testtask->methodOrder[60] = 'batchAssign';
@@ -587,19 +588,20 @@ $lang->testtask->methodOrder[70] = 'unlinkcase';
 $lang->testtask->methodOrder[75] = 'runcase';
 $lang->testtask->methodOrder[80] = 'results';
 $lang->testtask->methodOrder[85] = 'batchUnlinkCases';
+$lang->testtask->methodOrder[90] = 'report';
 
 $lang->resource->testreport = new stdclass();
 $lang->resource->testreport->browse = 'browse';
 $lang->resource->testreport->create = 'create';
 $lang->resource->testreport->view   = 'view';
 $lang->resource->testreport->delete = 'delete';
-$lang->resource->testreport->export = 'export';
+$lang->resource->testreport->edit   = 'edit';
 
 $lang->testreport->methodOrder[0]  = 'browse';
 $lang->testreport->methodOrder[5]  = 'create';
 $lang->testreport->methodOrder[10] = 'view';
 $lang->testreport->methodOrder[15] = 'delete';
-$lang->testreport->methodOrder[20] = 'export';
+$lang->testreport->methodOrder[20] = 'edit';
 
 $lang->resource->testsuite = new stdclass();
 $lang->resource->testsuite->index            = 'index';
@@ -624,14 +626,16 @@ $lang->testsuite->methodOrder[40] = 'batchUnlinkCases';
 
 $lang->resource->caselib = new stdclass();
 $lang->resource->caselib->library    = 'library';
-$lang->resource->caselib->createLib  = 'create';
+$lang->resource->caselib->createLib  = 'createLib';
+$lang->resource->caselib->edit       = 'editLib';
 $lang->resource->caselib->createCase = 'createCase';
 $lang->resource->caselib->libView    = 'libView';
 
 $lang->caselib->methodOrder[0]  = 'library';
 $lang->caselib->methodOrder[5]  = 'createLib';
-$lang->caselib->methodOrder[10] = 'createCase';
-$lang->caselib->methodOrder[15] = 'libView';
+$lang->caselib->methodOrder[10] = 'edit';
+$lang->caselib->methodOrder[15] = 'createCase';
+$lang->caselib->methodOrder[20] = 'libView';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();
@@ -1262,16 +1266,16 @@ $lang->changelog['8.4'][] = 'story-cases';
 $lang->changelog['9.0'][] = 'testcase-bugs';
 $lang->changelog['9.0'][] = 'mail-resend';
 
-$lang->changelog['9.1'][] = 'testcase-report';
 $lang->changelog['9.1'][] = 'testcase-review';
 $lang->changelog['9.1'][] = 'testcase-batchReview';
-$lang->changelog['9.1'][] = 'testcase-batchStoryChange';
 $lang->changelog['9.1'][] = 'testcase-importFromLib';
+$lang->changelog['9.1'][] = 'testcase-batchCaseTypeChange';
+$lang->changelog['9.1'][] = 'testcase-batchConfirmStoryChange';
 $lang->changelog['9.1'][] = 'testreport-browse';
 $lang->changelog['9.1'][] = 'testreport-create';
 $lang->changelog['9.1'][] = 'testreport-view';
 $lang->changelog['9.1'][] = 'testreport-delete';
-$lang->changelog['9.1'][] = 'testreport-export';
+$lang->changelog['9.1'][] = 'testreport-edit';
 $lang->changelog['9.1'][] = 'testsuite-index';
 $lang->changelog['9.1'][] = 'testsuite-browse';
 $lang->changelog['9.1'][] = 'testsuite-create';
@@ -1285,5 +1289,11 @@ $lang->changelog['9.1'][] = 'testsuite-library';
 $lang->changelog['9.1'][] = 'testsuite-createLib';
 $lang->changelog['9.1'][] = 'testsuite-createCase';
 $lang->changelog['9.1'][] = 'testsuite-libView';
+$lang->changelog['9.1'][] = 'caselib-library';
+$lang->changelog['9.1'][] = 'caselib-createLib';
+$lang->changelog['9.1'][] = 'caselib-edit';
+$lang->changelog['9.1'][] = 'caselib-createCase';
+$lang->changelog['9.1'][] = 'caselib-libView';
 $lang->changelog['9.1'][] = 'testtask-activate';
-$lang->changelog['9.1'][] = 'testtask-blocked';
+$lang->changelog['9.1'][] = 'testtask-block';
+$lang->changelog['9.1'][] = 'testtask-report';

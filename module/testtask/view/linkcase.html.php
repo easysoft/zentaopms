@@ -42,7 +42,7 @@
       echo "</ul></span>";
 
       echo "<span class='dropdown'>";
-      echo "<button class='btn btn-primary btn-sm' type='button' data-toggle='dropdown'>{$lang->testtask->linkByVersion} <span class='caret'></span></button>";
+      echo "<button class='btn btn-primary btn-sm' type='button' data-toggle='dropdown'>{$lang->testtask->linkByBuild} <span class='caret'></span></button>";
       echo "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
       if($testTask)
       {

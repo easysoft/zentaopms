@@ -40,7 +40,6 @@ $lang->testtask->blocked          = "被阻塞版本";
 $lang->testtask->done             = "已测版本";
 $lang->testtask->totalStatus      = "全部";
 $lang->testtask->all              = "全部产品";
-$lang->testtask->caseResultSave   = "保存";
 
 $lang->testtask->common         = '测试视图版本';
 $lang->testtask->product        = '所属' . $lang->productCommon;
@@ -78,7 +77,7 @@ $lang->testtask->priList[2] = '2';
 $lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = '未关联';
-$lang->testtask->linkByVersion = '复制版本';
+$lang->testtask->linkByBuild   = '复制版本';
 $lang->testtask->linkByStory   = '按需求关联';
 $lang->testtask->linkByBug     = '按Bug关联';
 $lang->testtask->linkBySuite   = '按套件关联';
@@ -117,21 +116,7 @@ $lang->testtask->action->testtaskopened  = '$date, 由 <strong>$actor</strong> �
 $lang->testtask->action->testtaskstarted = '$date, 由 <strong>$actor</strong> 启动版本 <strong>$extra</strong>。' . "\n";
 $lang->testtask->action->testtaskclosed  = '$date, 由 <strong>$actor</strong> 完成版本 <strong>$extra</strong>。' . "\n";
 
-$lang->testtask->resultList['n/a']     = '忽略';
-$lang->testtask->resultList['pass']    = '通过';
-$lang->testtask->resultList['fail']    = '失败';
-$lang->testtask->resultList['blocked'] = '阻塞';
-$lang->testtask->unexecuted            = '未执行';
-
-/* Define the types. */
-$lang->testtask->typeList['']            = '';
-$lang->testtask->typeList['feature']     = '功能测试';
-$lang->testtask->typeList['performance'] = '性能测试';
-$lang->testtask->typeList['config']      = '配置相关';
-$lang->testtask->typeList['install']     = '安装部署';
-$lang->testtask->typeList['security']    = '安全相关';
-$lang->testtask->typeList['interface']   = '接口测试';
-$lang->testtask->typeList['other']       = '其他';
+$lang->testtask->unexecuted = '未执行';
 
 /* 统计报表。*/
 $lang->testtask->report = new stdclass();
