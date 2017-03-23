@@ -16,6 +16,7 @@ $lang->custom->object['testcase'] = '用例';
 $lang->custom->object['testtask'] = '版本';
 $lang->custom->object['todo']     = '待辦';
 $lang->custom->object['user']     = '用戶';
+$lang->custom->object['block']    = '區塊';
 
 $lang->custom->story = new stdClass();
 $lang->custom->story->fields['priList']          = '優先順序';
@@ -49,6 +50,7 @@ $lang->custom->testcase->fields['typeList']   = '類型';
 $lang->custom->testcase->fields['stageList']  = '階段';
 $lang->custom->testcase->fields['resultList'] = '執行結果';
 $lang->custom->testcase->fields['statusList'] = '狀態';
+$lang->custom->testcase->fields['review']     = '評審流程';
 
 $lang->custom->testtask = new stdClass();
 $lang->custom->testtask->fields['priList']    = '優先順序';
@@ -63,6 +65,8 @@ $lang->custom->user = new stdClass();
 $lang->custom->user->fields['roleList']   = '職位';
 $lang->custom->user->fields['statusList'] = '狀態';
 
+$lang->custom->block->fields['closed'] = '關閉的區塊';
+
 $lang->custom->currentLang = '適用當前語言';
 $lang->custom->allLang     = '適用所有語言';
 
@@ -71,7 +75,7 @@ $lang->custom->confirmRestore = '是否要恢復預設配置？';
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole             = '鍵的長度必須小於20個字元！';
 $lang->custom->notice->canNotAdd            = '該項參與運算，不提供自定義添加功能';
-$lang->custom->notice->forceReview          = '指定人提交的需求必須評審。';
+$lang->custom->notice->forceReview          = "指定人提交的%s必須評審。";
 $lang->custom->notice->longlife             = 'Bug列表頁面的久未處理標籤中，列出設置天數之前未處理的Bug。';
 $lang->custom->notice->priListKey           = '優先順序的鍵應當為數字！';
 $lang->custom->notice->severityListKey      = 'Bug嚴重程度的鍵應當為數字！';

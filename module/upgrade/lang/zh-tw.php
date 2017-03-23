@@ -116,3 +116,4 @@ $lang->upgrade->fromVersions['8_4']       = '8.4';
 $lang->upgrade->fromVersions['8_4_1']     = '8.4.1';
 $lang->upgrade->fromVersions['9_0_beta']  = '9.0.beta';
 $lang->upgrade->fromVersions['9_0']       = '9.0';
+$lang->upgrade->fromVersions['9_0_1']     = '9.0.1';
