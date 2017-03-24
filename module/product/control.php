@@ -229,6 +229,8 @@ class product extends control
         $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst|noclosed');
         $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst|noclosed');
         $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst|noclosed');
+
+        unset($this->lang->product->typeList['']);
         $this->display();
     }
 
@@ -272,6 +274,7 @@ class product extends control
         $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst',  $product->QD);
         $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst', $product->RD);
 
+        unset($this->lang->product->typeList['']);
         $this->display();
     }
 
@@ -316,6 +319,8 @@ class product extends control
         $this->view->poUsers       = $this->loadModel('user')->getPairs('nodeleted|pofirst');
         $this->view->qdUsers       = $this->loadModel('user')->getPairs('nodeleted|qdfirst');
         $this->view->rdUsers       = $this->loadModel('user')->getPairs('nodeleted|devfirst');
+
+        unset($this->lang->product->typeList['']);
         $this->display();
     }
 
