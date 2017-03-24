@@ -13,8 +13,8 @@ $editorLang   = isset($editorLangs[$app->getClientLang()]) ? $editorLangs[$app->
 $uid = uniqid('');
 js::set('kuid', $uid);
 ?>
-<script type="text/javascript" charset="utf-8" src="<?php echo $jsRoot?>ueditor/ueditor.config.js"></script>
-<script type="text/javascript" charset="utf-8" src="<?php echo $jsRoot?>ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $this->app->getWebRoot() . "js/"?>ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo $this->app->getWebRoot() . "js/"?>ueditor/ueditor.all.min.js"> </script>
 <script language='javascript'>
 var editor = <?php echo json_encode($editor);?>;
 
