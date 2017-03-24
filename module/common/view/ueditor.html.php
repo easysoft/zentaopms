@@ -22,7 +22,7 @@ var toolbars = [[
     'paragraph', 'fontfamily', 'fontsize', '|',
     'forecolor', 'backcolor', 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'blockquote', 'pasteplain', '|',
     'insertorderedlist', 'insertunorderedlist', 'justifyleft', 'justifycenter', 'justifyright', '|',
-    'simpleupload', 'insertvideo', 'insertcode', '|',
+    'simpleupload', 'insertcode', '|',
     'link', 'unlink', '|',
     'inserttable', '|',
     'fullscreen', 'source', '|',
