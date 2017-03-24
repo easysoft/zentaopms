@@ -68,6 +68,7 @@ class sso extends control
                 $user->rights = $this->user->authorize($user->account);
                 $user->groups = $this->user->getGroups($user->account);
                 $user->last   = date(DT_DATETIME1, $last);
+                $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
                 $user->modifyPassword = ($user->visits == 0 and !empty($this->config->safe->modifyPasswordFirstLogin));
                 $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($userIP)->set('last')->eq($last)->where('account')->eq($user->account)->exec();
 
