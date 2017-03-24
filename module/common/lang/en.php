@@ -122,6 +122,8 @@ $lang->searchObjects['release']     = 'Release';
 $lang->searchObjects['productplan'] = $lang->productCommon . 'Plan';
 $lang->searchObjects['testtask']    = 'Test Task';
 $lang->searchObjects['doc']         = 'Document';
+$lang->searchObjects['caselib']     = 'Case Library';
+$lang->searchObjects['testreport']  = 'Test Report';
 $lang->searchTips                   = 'ID (ctrl+g)';
 
 /* 导入支持的编码格式。*/

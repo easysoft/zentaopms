@@ -122,6 +122,8 @@ $lang->searchObjects['release']     = '發佈';
 $lang->searchObjects['productplan'] = $lang->productCommon . '計劃';
 $lang->searchObjects['testtask']    = '測試版本';
 $lang->searchObjects['doc']         = '文檔';
+$lang->searchObjects['caselib']     = '用例庫';
+$lang->searchObjects['testreport']  = '測試報告';
 $lang->searchTips                   = '編號(ctrl+g)';
 
 /* 導入支持的編碼格式。*/

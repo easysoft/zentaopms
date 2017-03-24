@@ -113,6 +113,7 @@ class testsuite extends control
         /* Get test suite, and set menu. */
         $suite = $this->testsuite->getById($suiteID, true);
         if(!$suite) die(js::error($this->lang->notFound) . js::locate('back'));
+        if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
         $productID = $suite->product;
 
         $this->view->products = $this->products = $this->loadModel('product')->getPairs('nocode');
@@ -182,6 +183,8 @@ class testsuite extends control
         }
         else
         {
+            if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+
             /* Get suite info. */
             $this->view->products = $this->products = $this->loadModel('product')->getPairs('nocode');
             $productID = $this->product->saveState($suite->product, $this->products);
@@ -216,6 +219,8 @@ class testsuite extends control
         }
         else
         {
+            if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+
             $this->testsuite->delete($suiteID);
 
             /* if ajax request, send result. */

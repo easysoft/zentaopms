@@ -119,7 +119,7 @@ class testreport extends control
         {
             $task      = $this->testtask->getById($objectID);
             $productID = $this->commonAction($task->product, 'product');
-            if($productID != $task->product) die('deny access');
+            if($productID != $task->product) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
             $productIdList[$productID] = $productID;
 
             $begin   = $task->begin;
@@ -151,7 +151,7 @@ class testreport extends control
         elseif($objectType == 'project')
         {
             $projectID = $this->commonAction($objectID, 'project');
-            if($projectID != $objectID) die('deny access');
+            if($projectID != $objectID) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
             $project = $this->project->getById($projectID);
             $tasks   = $this->testtask->getProjectTasks($projectID);
@@ -236,7 +236,7 @@ class testreport extends control
         {
             $product   = $this->product->getById($report->product);
             $productID = $this->commonAction($report->product, 'product');
-            if($productID != $report->product) die('deny access');
+            if($productID != $report->product) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
             $browseLink = inlink('browse', "objectID=$productID&objectType=product");
             $this->view->position[] = html::a($browseLink, $product->name);
@@ -245,7 +245,7 @@ class testreport extends control
         else
         {
             $projectID = $this->commonAction($report->project, 'project');
-            if($projectID != $report->objectID) die('deny access');
+            if($projectID != $report->objectID) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
             $browseLink = inlink('browse', "objectID=$projectID&objectType=project");
             $this->view->position[] = html::a($browseLink, $project->name);
@@ -325,7 +325,7 @@ class testreport extends control
         {
             $product   = $this->product->getById($report->product);
             $productID = $this->commonAction($report->product, 'product');
-            if($productID != $report->product) die('deny access');
+            if($productID != $report->product) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
             $browseLink = inlink('browse', "objectID=$productID&objectType=product");
             $this->view->position[] = html::a($browseLink, $product->name);
@@ -333,7 +333,7 @@ class testreport extends control
         else
         {
             $projectID = $this->commonAction($report->project, 'project');
-            if($projectID != $report->objectID) die('deny access');
+            if($projectID != $report->objectID) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
             $browseLink = inlink('browse', "objectID=$projectID&objectType=project");
             $this->view->position[] = html::a($browseLink, $project->name);
