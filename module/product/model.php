@@ -343,7 +343,7 @@ class productModel extends model
             $products[$productID]->RD     = $data->RDs[$productID];
             $products[$productID]->type   = $data->types[$productID];
             $products[$productID]->status = $data->statuses[$productID];
-            $products[$productID]->desc   = $data->descs[$productID];
+            $products[$productID]->desc   = strip_tags($this->post->descs[$productID], $this->config->allowedTags);
             $products[$productID]->order  = $data->orders[$productID];
         }
 
