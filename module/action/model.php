@@ -52,8 +52,11 @@ class actionModel extends model
         $action->project    = $productAndProject['project'];
 
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
+        $actionID = $this->dbh->lastInsertID();
+
         $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
-        return $this->dbh->lastInsertID();
+
+        return $actionID;
     }
 
     /**
