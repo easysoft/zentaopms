@@ -286,7 +286,7 @@ class user extends control
         {
             $cases = $this->loadModel('testcase')->getByOpenedBy($account, $sort, $pager);
         }
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'assigntome' ? false : true);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'case2Him' ? false : true);
         
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testCase;

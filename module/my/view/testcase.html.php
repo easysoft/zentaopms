@@ -48,13 +48,17 @@
       $canBatchRun  = common::hasPriv('testtask', 'batchRun');
       ?>
       <?php foreach($cases as $case):?>
+      <?php
+      $caseID = $type == 'assigntome' ? $case->case : $case->id;
+      $runID  = $type == 'assigntome' ? $case->id   : 0;
+      ?>
       <tr class='text-center'>
         <td class='cell-id'>
-          <?php if($canBatchEdit or $canBatchRun):?><input type='checkbox' name='caseIDList[]'  value='<?php echo $case->id;?>'/><?php endif;?>
-          <?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), sprintf('%03d', $case->id));?>
+          <?php if($canBatchEdit or $canBatchRun):?><input type='checkbox' name='caseIDList[]'  value='<?php echo $caseID;?>'/><?php endif;?>
+          <?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version"), sprintf('%03d', $caseID));?>
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span</td>
-        <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$case->id"), $case->title, null, "style='color: $case->color'");?></td>
+        <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version"), $case->title, null, "style='color: $case->color'");?></td>
         <td><?php echo $lang->testcase->typeList[$case->type];?></td>
         <td><?php echo $users[$case->openedBy];?></td>
         <td><?php echo $users[$case->lastRunner];?></td>
@@ -63,18 +67,18 @@
         <td class='<?php if(isset($run)) echo $run->status;?>'><?php echo $lang->testcase->statusList[$case->status];?></td>
         <td class='text-right'>
         <?php
-        common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'iframe');
-        common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', 'list-alt', '', 'iframe');
-        common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list', 'pencil');
-        common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
+        common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', 'iframe', '', "data-width='95%'");
+        common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', '', "data-width='95%'");
+        common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'pencil');
+        common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$caseID", $case, 'list', 'copy');
 
         if(common::hasPriv('testcase', 'delete'))
         {
-            $deleteURL = $this->createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
+            $deleteURL = $this->createLink('testcase', 'delete', "caseID=$caseID&confirm=yes");
             echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='btn-icon' title='{$lang->testcase->delete}'");
         }
 
-        common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'bug');
+        common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug');
         ?>
         </td>
       </tr>
@@ -92,7 +96,7 @@
               $actionLink = $this->createLink('testcase', 'batchEdit');
               echo html::submitButton("<i class='icon-pencil'></i> " . $lang->edit, "onclick=setFormAction('$actionLink')");
           }
-          if($canBatchRun) 
+          if($canBatchRun and $type != 'assigntome') 
           {
               $actionLink = $this->createLink('testtask', 'batchRun', "productID=0&orderBy=$orderBy&from=testcase");
               echo html::submitButton("<i class='icon-play'></i> " . $lang->testtask->runCase,  "onclick=setFormAction('$actionLink')");
