@@ -336,8 +336,10 @@ class user extends control
      * @access public
      * @return void
      */
-    public function profile($account)
+    public function profile($account = '')
     {
+        if(empty($account)) $account = $this->app->user->account;
+
         /* Set menu. */
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted'), $account);
 
