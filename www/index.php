@@ -59,6 +59,9 @@ if(file_exists('install.php') or file_exists('upgrade.php'))
     }
 }
 
+/* If client device is mobile and version is pro, set the default view as mthml. */
+if($app->clientDevice == 'mobile' and strpos($config->installedVersion, 'pro') === 0 and $config->default->view == 'html') $config->default->view = 'mhtml'; 
+
 $app->parseRequest();
 $common->checkPriv();
 $app->loadModule();
