@@ -420,14 +420,17 @@ $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Pleas
 
 /* 分页信息。*/
 $lang->pager = new stdclass();
-$lang->pager->noRecord  = "No History";
-$lang->pager->digest    = " <strong>%s</strong> in total. %s <strong>%s/%s</strong> &nbsp; ";
-$lang->pager->recPerPage= " <strong>%s</strong> per page";
-$lang->pager->first     = "<i class='icon-step-backward' title='Homepage'></i>";
-$lang->pager->pre       = "<i class='icon-play icon-rotate-180' title='Previous Page'></i>";
-$lang->pager->next      = "<i class='icon-play' title='Next Page'></i>";
-$lang->pager->last      = "<i class='icon-step-forward' title='Last Page'></i>";
-$lang->pager->locate    = "GO!";
+$lang->pager->noRecord     = "No History";
+$lang->pager->digest       = " <strong>%s</strong> in total. %s <strong>%s/%s</strong> &nbsp; ";
+$lang->pager->recPerPage   = " <strong>%s</strong> per page";
+$lang->pager->first        = "<i class='icon-step-backward' title='Homepage'></i>";
+$lang->pager->pre          = "<i class='icon-play icon-rotate-180' title='Previous Page'></i>";
+$lang->pager->next         = "<i class='icon-play' title='Next Page'></i>";
+$lang->pager->last         = "<i class='icon-step-forward' title='Last Page'></i>";
+$lang->pager->locate       = "GO!";
+$lang->pager->previousPage = "Previous";
+$lang->pager->nextPage     = "Next";
+$lang->pager->summery      = "<strong>%s-%s</strong> of <strong>%s</strong>.";
 
 $lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>ZenTao Pro <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "Download Desktop Notification";
