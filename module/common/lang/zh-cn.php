@@ -49,6 +49,7 @@ $lang->day          = '天';
 $lang->customConfig = '自定义';
 $lang->public       = '公共';
 $lang->trunk        = '主干';
+$lang->sort         = '排序';
 
 $lang->actions         = '操作';
 $lang->comment         = '备注';
@@ -420,14 +421,17 @@ $lang->error->tutorialData    = '新手模式下不会插入数据，请退出�
 
 /* 分页信息。*/
 $lang->pager = new stdclass();
-$lang->pager->noRecord  = "暂时没有记录";
-$lang->pager->digest    = "共 <strong>%s</strong> 条记录，%s <strong>%s/%s</strong> &nbsp; ";
-$lang->pager->recPerPage= "每页 <strong>%s</strong> 条";
-$lang->pager->first     = "<i class='icon-step-backward' title='首页'></i>";
-$lang->pager->pre       = "<i class='icon-play icon-rotate-180' title='上一页'></i>";
-$lang->pager->next      = "<i class='icon-play' title='下一页'></i>";
-$lang->pager->last      = "<i class='icon-step-forward' title='末页'></i>";
-$lang->pager->locate    = "GO!";
+$lang->pager->noRecord     = "暂时没有记录";
+$lang->pager->digest       = "共 <strong>%s</strong> 条记录，%s <strong>%s/%s</strong> &nbsp; ";
+$lang->pager->recPerPage   = "每页 <strong>%s</strong> 条";
+$lang->pager->first        = "<i class='icon-step-backward' title='首页'></i>";
+$lang->pager->pre          = "<i class='icon-play icon-rotate-180' title='上一页'></i>";
+$lang->pager->next         = "<i class='icon-play' title='下一页'></i>";
+$lang->pager->last         = "<i class='icon-step-forward' title='末页'></i>";
+$lang->pager->locate       = "GO!";
+$lang->pager->previousPage = "上一页";
+$lang->pager->nextPage     = "下一页";
+$lang->pager->summery      = "第 <strong>%s-%s</strong> 项，共 <strong>%s</strong> 项";
 
 $lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>专业版 <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "下载桌面提醒";
