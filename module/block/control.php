@@ -289,7 +289,7 @@ class block extends control
     {
         if(!$this->selfCall)
         {
-            $lang = $this->get->lang;
+            $lang = str_replace('_', '-', $this->get->lang);
             $this->app->setClientLang($lang);
             $this->app->loadLang('common');
             $this->app->loadLang('block');
@@ -586,8 +586,9 @@ class block extends control
     {
         $this->app->loadClass('pager', $static = true);
         $num   = isset($this->params->num) ? $this->params->num : 0;
+        $type  = isset($this->params->type) ? $this->params->type : '';
         $pager = pager::init(0, $num , 1);
-        $this->view->productStats = $this->loadModel('product')->getStats('order_desc', $this->viewType != 'json' ? $pager : '', $this->params->type);
+        $this->view->productStats = $this->loadModel('product')->getStats('order_desc', $this->viewType != 'json' ? $pager : '', $type);
     }
 
     /**
