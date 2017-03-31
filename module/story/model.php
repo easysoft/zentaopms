@@ -239,6 +239,7 @@ class storyModel extends model
      */
     public function batchCreate($productID = 0, $branch = 0)
     {
+        $this->loadModel('action');
         $branch   = (int)$branch;
         $now      = helper::now();
         $mails    = array();
@@ -338,7 +339,6 @@ class storyModel extends model
 
                 $this->dao->insert(TABLE_STORYSPEC)->data($specData)->exec();
 
-                $this->loadModel('action');
                 $actionID = $this->action->create('story', $storyID, 'Opened', '');
                 $mails[$i] = new stdclass();
                 $mails[$i]->storyID  = $storyID;
@@ -447,6 +447,9 @@ class storyModel extends model
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->setDefault('status', $oldStory->status)
+            ->setDefault('product', $oldStory->product)
+            ->setDefault('plan', $oldStory->plan)
+            ->setDefault('branch', 0)
             ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->closedBy     != false and $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedReason != false and $oldStory->closedDate == '', 'closedDate', $now)
@@ -457,6 +460,7 @@ class storyModel extends model
             ->remove('linkStories,childStories,files,labels,comment')
             ->get();
         if(is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
+        if(empty($_POST['product'])) $story->branch = $oldStory->branch;
 
         $this->dao->update(TABLE_STORY)
             ->data($story)
@@ -466,7 +470,24 @@ class storyModel extends model
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
             ->where('id')->eq((int)$storyID)->exec();
 
-        if(!dao::isError()) return common::createChanges($oldStory, $story);
+        if(!dao::isError())
+        {
+            if($story->product != $oldStory->product)
+            {
+                $this->dao->update(TABLE_PROJECTSTORY)->set('product')->eq($story->product)->where('story')->eq($storyID)->exec();
+                $storyProjects  = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->orderBy('project')->fetchPairs('project', 'project');
+                $linkedProjects = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('project')->in($storyProjects)->andWhere('product')->eq($story->product)->orderBy('project')->fetchPairs('project','project');
+                $unlinkedProjects = array_diff($storyProjects, $linkedProjects);
+                foreach($unlinkedProjects as $projectID)
+                {
+                    $data = new stdclass();
+                    $data->project = $projectID;
+                    $data->product = $story->product;
+                    $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                }
+            }
+            return common::createChanges($oldStory, $story);
+        }
     }
 
     /**
@@ -483,9 +504,6 @@ class storyModel extends model
         $now         = helper::now();
         $data        = fixer::input('post')->get();
         $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : array();
-
-        /* Adjust whether the post data is complete, if not, remove the last element of $taskIDList. */
-        if($this->session->showSuhosinInfo) array_pop($storyIDList);
 
         /* Init $stories. */
         if(!empty($storyIDList))
@@ -679,12 +697,19 @@ class storyModel extends model
 
             if($reason and strpos('done,postponed', $reason) !== false) $result = 'pass';
             $actions[$storyID] = $this->action->create('story', $storyID, 'Reviewed', '', ucfirst($result));
-            $this->action->logHistory($actions[$storyID], array());
         }
 
         return $actions;
     }
 
+    /**
+     * Subdivide story 
+     * 
+     * @param  int    $storyID 
+     * @param  array  $stories 
+     * @access public
+     * @return int
+     */
     public function subdivide($storyID, $stories)
     {
         $now      = helper::now();
@@ -767,8 +792,6 @@ class storyModel extends model
         $data        = fixer::input('post')->get();
         $storyIDList = $data->storyIDList ? $data->storyIDList : array();
 
-        /* Adjust whether the post data is complete, if not, remove the last element of $storyIDList. */
-        if($this->session->showSuhosinInfo) array_pop($storyIDList);
         $oldStories = $this->getByList($storyIDList);
         foreach($storyIDList as $storyID)
         {
@@ -1184,7 +1207,7 @@ class storyModel extends model
         if($browseType == 'bySearch')
         {
             $story        = $this->getById($storyID);
-            $stories2Link = $this->getBySearch($story->product, $queryID, 'id', null);
+            $stories2Link = $this->getBySearch($story->product, $queryID, 'id', null, '', $story->branch);
             foreach($stories2Link as $key => $story2Link)
             {
                 if($story2Link->id == $storyID) unset($stories2Link[$key]);
@@ -1469,11 +1492,20 @@ class storyModel extends model
             unset($branches[0]);
             $branches = join(',', $branches);
             if($branches) $storyQuery .= " AND `branch`" . helper::dbIN("0,$branches"); 
-            $storyQuery .= " AND `status` NOT IN ('draft', 'closed')"; 
+            if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
+            {
+                $storyQuery .= " AND `status` NOT IN ('draft')";// Fix bug #990.
+            }
+            else
+            {
+                $storyQuery .= " AND `status` NOT IN ('draft', 'closed')";
+            }
         }
         elseif($branch)
         {
-            $storyQuery .= " AND `branch`" . helper::dbIN("0,$branch"); 
+            $allBranch = "`branch` = 'all'";
+            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` in('0','$branch')";
+            if(strpos($storyQuery, $allBranch) !== false) $storyQuery = str_replace($allBranch, '1', $storyQuery);
         }
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
 
@@ -1547,7 +1579,7 @@ class storyModel extends model
                 }
             }
 
-            $allProduct        = "`product` = 'all'";
+            $allProduct = "`product` = 'all'";
             $storyQuery = $this->session->projectStoryQuery;
             if(strpos($this->session->projectStoryQuery, $allProduct) !== false)
             {

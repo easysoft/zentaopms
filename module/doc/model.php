@@ -26,13 +26,13 @@ class docModel extends model
     {
         if(isset($this->config->customMenu->doc))
         {
-            $customMenu = json_decode($this->config->customMenu->doc);
+            $customMenu = json_decode($this->config->customMenu->doc, true);
             $menuLibIdList = array();
             foreach($customMenu as $i => $menu)
             {
-                if(strpos($menu->name, 'custom') === 0)
+                if(strpos($menu['name'], 'custom') === 0)
                 {
-                    $menuLibID = (int)substr($menu->name, 6);
+                    $menuLibID = (int)substr($menu['name'], 6);
                     if($menuLibID) $menuLibIdList[$i] = $menuLibID;
                 }
             }
@@ -57,7 +57,7 @@ class docModel extends model
                 if($lib->product) $libName = isset($products[$lib->product]) ? '[' . $products[$lib->product] . ']' : '';
                 if($lib->project) $libName = isset($projects[$lib->project]) ? '[' . $projects[$lib->project] . ']' : '';
                 $libName .= $lib->name;
-                $customMenu[$i]->link = "{$libName}|doc|browse|libID={$menuLibID}";
+                $customMenu[$i]['link'] = "{$libName}|doc|browse|libID={$menuLibID}";
             }
             $this->config->customMenu->doc = json_encode($customMenu);
         }
@@ -99,7 +99,8 @@ class docModel extends model
      */
     public function getLibByObject($type, $objectID)
     {
-        return $this->dao->select('*')->from(TABLE_DOCLIB)->where($type)->eq($objectID)->fetchAll('id');
+        if($type != 'project' and $type != 'product') return true;
+        return $this->dao->select('*')->from(TABLE_DOCLIB)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->fetchAll('id');
     }
 
     /**
@@ -316,6 +317,8 @@ class docModel extends model
         if(!$this->checkPriv($doc))
         {
             echo(js::alert($this->lang->doc->accessDenied));
+            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
             die(js::locate('back'));
         }
         $version = $version ? $version : $doc->version;
@@ -471,6 +474,7 @@ class docModel extends model
             $docContent->title   = $doc->title;
             $docContent->content = $doc->content;
             $docContent->version = $doc->version;
+            $docContent->digest  = $doc->digest;
             $docContent->type    = $oldDocContent->type;
             $docContent->files   = $oldDocContent->files;
             if($files) $docContent->files .= ',' . join(',', array_keys($files));
@@ -511,7 +515,7 @@ class docModel extends model
         $this->config->doc->search['params']['lib']['values']     = array(''=>'', $libID => $libs[$libID], 'all' => $this->lang->doclib->all);
 
         /* Get the modules. */
-        $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID . 'doc', $startModuleID = 0);
+        $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->config->doc->search['params']['module']['values'] = $moduleOptionMenu;
 
         $this->loadModel('search')->setSearchParams($this->config->doc->search);
@@ -600,7 +604,7 @@ class docModel extends model
 
         $account = ',' . $this->app->user->account . ',';
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
-        if(strpos($this->app->company->admins, $account) !== false) return true;
+        if($this->app->user->admin) return true;
         if($object->acl == 'private' and strpos(",$object->users,", $account) !== false) return true;
         if($object->acl == 'custom')
         {
@@ -786,6 +790,7 @@ class docModel extends model
      */
     public function getSubLibGroups($type, $idList)
     {
+        if($type != 'product' and $type != 'project') return false;
         $libGroups   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->in($idList)->orderBy('id')->fetchGroup($type, 'id');
         if($type == 'product')
         {
@@ -820,6 +825,7 @@ class docModel extends model
      */
     public function getLibsByObject($type, $objectID, $mode = '')
     {
+        if($type != 'product' and $type != 'project') return false;
         $objectLibs   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('id')->fetchAll('id');
         if($type == 'product')
         {
@@ -854,6 +860,7 @@ class docModel extends model
      */
     public function getLibFiles($type, $objectID, $pager = null)
     {
+        if($type != 'project' and $type != 'product') return true;
         $this->loadModel('file');
         $docIdList = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->get();
         if($type == 'product')
@@ -908,7 +915,7 @@ class docModel extends model
         if($table) $table .= '.';
         $condition = '';
         $account   = ',' . $this->app->user->account . ',';
-        if(strpos($this->app->company->admins, $account) === false)
+        if(!$this->app->user->admin)
         {
             $condition .= "{$table}acl='open'";
             if($type == 'doc') $condition .= " OR {$table}addedBy = '{$this->app->user->account}'";
@@ -1173,6 +1180,8 @@ class docModel extends model
         if(!$this->checkPriv($lib)) 
         {
             echo(js::alert($this->lang->doc->accessDenied));
+            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
             die(js::locate('back'));
         }
 
@@ -1248,7 +1257,6 @@ class docModel extends model
     public function setLibUsers($type, $objectID)
     {
         if($type != 'project' and $type != 'product') return true;
-
         $libs  = $this->dao->select('*')->from(TABLE_DOCLIB)->where($type)->eq($objectID)->fetchAll();
 
         if($type == 'product')

@@ -35,27 +35,27 @@ include '../../common/view/header.html.php';
       <?php endif;?>
       <tr>
         <th><?php echo $lang->mail->fromAddress; ?></th>
-        <td><?php echo html::input('fromAddress', $mailConfig->fromAddress, "class='form-control'");?></td>
+        <td><?php echo html::input('fromAddress', $mailConfig->fromAddress, "class='form-control' autocomplete='off'");?></td>
         <td colspan='2'><?php echo $lang->mail->addressWhiteList?></td>
       </tr>
       <tr>
         <th><?php echo $lang->mail->fromName; ?></th>
         <td colspan='3'>
           <div class='required required-wrapper'></div>
-          <?php echo html::input('fromName', $mailConfig->fromName, "class='form-control'");?>
+          <?php echo html::input('fromName', $mailConfig->fromName, "class='form-control' autocomplete='off'");?>
         </td>
       </tr>
       <tr>
         <th><?php echo $lang->mail->domain; ?></th>
-        <td colspan='3'><?php echo html::input('domain', $mailConfig->domain, "class='form-control'");?></td>
+        <td colspan='3'><?php echo html::input('domain', $mailConfig->domain, "class='form-control' autocomplete='off'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->mail->host; ?></th>
-        <td colspan='3'><?php echo html::input('host', $mailConfig->host, "class='form-control'");?></td>
+        <td colspan='3'><?php echo html::input('host', $mailConfig->host, "class='form-control' autocomplete='off'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->mail->port; ?></th>
-        <td><?php echo html::input('port', $mailConfig->port, "class='form-control'");?></td>
+        <td><?php echo html::input('port', $mailConfig->port, "class='form-control' autocomplete='off'");?></td>
         <th class='w-70px'><?php echo $lang->mail->secure; ?></th>
         <td>
         <?php

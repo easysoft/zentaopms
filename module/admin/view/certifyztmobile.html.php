@@ -19,12 +19,12 @@
     <table class='table table-form'>
       <tr>
         <th><?php echo $lang->user->mobile;?></th>
-        <td><?php echo html::input('mobile', $mobile, "class='form-control'");?></td>
+        <td><?php echo html::input('mobile', $mobile, "class='form-control' autocomplete='off'");?></td>
         <td><?php echo html::a(inlink('ajaxsendcode', 'type=mobile'), $lang->admin->getCaptcha, '', "id='codeSender' class='btn'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->admin->captcha;?></th>
-        <td><?php echo html::input('captcha', '', "class='form-control'");?></td>
+        <td><?php echo html::input('captcha', '', "class='form-control' autocomplete='off'");?></td>
       </tr>
       <tr>
         <th></th>

@@ -31,14 +31,14 @@
         <caption class='text-left'>
           <strong><?php echo $lang->testcase->result?> &nbsp;<span> <?php printf($lang->testtask->showResult, $count)?></span> <span class='result-tip'></span></strong>
         </caption>
-        <?php $failCount = 0; ?>
+        <?php $failCount = 0; $trCount=1?>
         <?php foreach($results as $result):?>
         <?php
         $class = ($result->caseResult == 'pass' ? 'success' : ($result->caseResult == 'fail' ? 'danger' : ($result->caseResult == 'blocked' ? 'warning' : '')));
         if($class != 'success') $failCount++;
         $fileCount = '(' . count($result->files) . ')';
         ?>
-        <tr class='result-item' style='cursor: pointer'>
+        <tr class='result-item' id='result-<?php echo $class?>' style='cursor: pointer'>
           <td class='w-120px'> &nbsp; #<?php echo $result->id?></td>
           <td class='w-180px'><?php echo $result->date;?></td>
           <td><?php echo $users[$result->lastRunner] . ' ' . $lang->testtask->runCase;?></td>
@@ -47,43 +47,73 @@
           <td class='w-60px'><?php if(!empty($result->files)) echo html::a("#caseResult{$result->id}", $lang->files . $fileCount, '', "data-toggle='modal' data-type='iframe'")?></td>
           <td class='w-50px text-center'><i class='collapse-handle icon-chevron-down text-muted'></i></td>
         </tr>
-        <tr class='result-detail hide'>
+        <tr class='result-detail hide' id='tr-detail_<?php echo $trCount++; ?>'>
           <td colspan='7' class='pd-0'>
-            <table class='table table-condensed borderless mg-0'>
+            <form action='<?php echo $this->createLink('bug', 'create', "product=$case->product&branch=$case->branch&extras=caseID=$case->id,version=$case->version,resultID=$result->id,runID=$runID" . (isset($testtaskID) ? ",testtask=$testtaskID" : ''))?>' target='_blank' method='post'>
+            <table class='table table-condensed borderless mg-0 resultSteps'>
               <thead>
                 <tr>
                   <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
-                  <th class='w-p30'><?php echo $lang->testcase->stepDesc;?></th>
-                  <th class='w-p25'><?php echo $lang->testcase->stepExpect;?></th>
+                  <th class='w-p30 text-left'><?php echo $lang->testcase->stepDesc;?></th>
+                  <th class='w-p25 text-left'><?php echo $lang->testcase->stepExpect;?></th>
+                  <th class='w-p5 text-left'><?php echo $lang->testcase->stepVersion;?></th>
                   <th class='text-center'><?php echo $lang->testcase->result;?></th>
-                  <th class='w-p20'><?php echo $lang->testcase->real;?></th>
-                  <th class='w-60px'></th>
+                  <th class='w-p20 text-left'><?php echo $lang->testcase->real;?></th>
+                  <th class='w-80px'></th>
                 </tr>
               </thead>
               <?php 
-              $i = 1;
+              $stepId = $childId = 0;
               foreach($result->stepResults as $key => $stepResult):
               ?>
               <?php
+              if(empty($stepResult['type']))   $stepResult['type']   = 'step';
+              if(empty($stepResult['parent'])) $stepResult['parent'] = 0;
+              if($stepResult['type'] == 'group' or $stepResult['type'] == 'step')
+              {
+                  $stepId++;
+                  $childId = 0;
+              }
+              $stepClass = $stepResult['type'] == 'item' ? 'step-item' : 'step-group';
               $modalID   = $result->id . '-' . $key;
               $fileCount = '(' . count($stepResult['files']) . ')';
               ?>
-              <tr>
-                <td class='w-30px text-center'><?php echo $i;?></td>
-                <td><?php if(isset($stepResult['desc'])) echo nl2br($stepResult['desc']);?></td>
-                <td><?php if(isset($stepResult['expect'])) echo nl2br($stepResult['expect']);?></td>
+              <tr class='step <?php echo $stepClass?>'>
+                <td class='step-id'>
+                  <?php if($result->caseResult == 'fail'):?>
+                  <?php $inputName = $stepResult['type'] != 'group' ? 'stepIDList[]' : '';?>
+                  <input type='checkbox' name='<?php echo $inputName;?>'  value='<?php echo $key;?>'/>
+                  <?php endif;?>
+                  <?php echo $stepId;?>
+                </td>
+                <td class='text-left' <?php if($stepResult['type'] == 'group') echo "colspan='6'"?>>
+                  <div class='input-group'>
+                  <?php if($stepResult['type'] == 'item') echo "<span class='step-item-id'>{$stepId}.{$childId}</span>";?>
+                  <?php if(isset($stepResult['desc'])) echo nl2br($stepResult['desc']);?>
+                  </div>
+                </td>
+                <?php if($stepResult['type'] != 'group'):?>
+                <td class='text-left'><?php if(isset($stepResult['expect'])) echo nl2br($stepResult['expect']);?></td>
+                <td><?php if(isset($result->version)) echo nl2br($result->version);?></td>
                 <?php if(!empty($stepResult['result'])):?>
                 <td class='<?php echo $stepResult['result'];?> text-center'><?php echo $lang->testcase->resultList[$stepResult['result']];?></td>
                 <td><?php echo $stepResult['real'];?></td>
                 <td class='text-center'><?php if(!empty($stepResult['files'])) echo html::a("#stepResult{$modalID}", $lang->files . $fileCount, '', "data-toggle='modal' data-type='iframe'")?></td>
-              </tr>
                 <?php else:?>
                 <td></td>
                 <td></td>
+                <?php endif; endif; $childId++;?>
               </tr>
-                <?php endif; $i++;?>
               <?php endforeach;?>
+              <?php if($result->caseResult == 'fail'):?>
+                <tr><td></td><td></td><td></td><td></td><td></td><td></td>
+                  <td>
+                    <?php echo html::submitButton($lang->testcase->createBug);?>
+                  </td>
+                </tr>
+              <?php endif;?>
             </table>
+            </form>
           </td>
         </tr>
         <?php endforeach;?>

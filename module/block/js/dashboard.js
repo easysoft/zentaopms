@@ -86,15 +86,41 @@ function initTableHeader()
 
         $panel.toggleClass('with-fixed-header', isFixed);
         var $header = $panel.children('.table-header-fixed').toggle(isFixed);
-        if(!isFixed) return;
+        if(!isFixed)
+        {
+            $table.find('thead').css('visibility', 'visible');
+            return;
+        }
         var tableWidth = $table.width();
         if(!$header.length)
         {
             $header = $('<div class="table-header-fixed" style="position: absolute; left: 0; top: 0; right: 0;"><table class="table table-fixed"></table></div>').css('right', $panel.width() - tableWidth).css('min-width', tableWidth);
-            $header.find('.table').addClass($table.attr('class')).append($table.find('thead').css('visibility', 'hidden').clone().css('visibility', 'visible'));
+            var $oldTableHead = $table.find('thead');
+            $oldTableHead.find('th').each(function(idx)
+            {
+                $(this).attr('data-idx', idx);
+            });
+            $header.find('.table').addClass($table.attr('class')).append($oldTableHead.css('visibility', 'hidden').clone().css('visibility', 'visible'));
             $panel.addClass('with-fixed-header').append($header);
             var $heading = $panel.children('.panel-heading');
             if($heading.length) $header.css('top', $heading.outerHeight());
+            if($table.hasClass('tablesorter'))
+            {
+                $header.on('mousedown mouseup', 'th[data-idx]', function(e)
+                {
+                    var $th = $(this);
+                    var $targetTh = $oldTableHead.find('th[data-idx="' + $th.data('idx') + '"]').trigger(e);
+                    if(e.type === 'mouseup')
+                    {
+                        var updateTh = function()
+                        {
+                            $header.find('thead').empty().append($oldTableHead.find('tr').clone());
+                        };
+                        setTimeout(updateTh, 10);
+                        setTimeout(updateTh, 200);
+                    }
+                });
+            }
         }
         else
         {
@@ -152,7 +178,12 @@ $(function()
         panelRemovingTip  : config.confirmRemoveBlock,
         resizable         : !useGuest,
         onResize          : resizeBlock,
-        afterRefresh      : initTableHeader
+        afterRefresh      : function(e)
+        {
+            var $sortTable = e.$panel.find('.tablesorter');
+            if($sortTable.length) $sortTable.sortTable();
+            initTableHeader();
+        }
     });
 
     // $dashboard.find('ul.dashboard-actions').addClass('hide').children('li').addClass('right').appendTo($('#modulemenu > .nav'));

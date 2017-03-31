@@ -17,7 +17,7 @@
       <td>
         <div class='input-group'>
           <span class='input-group-addon'><?php echo $project->begin?></span>
-          <?php echo html::input('left', $firstBurn, "class='form-control' placeholder='{$lang->project->placeholder->totalLeft}'")?>
+          <?php echo html::input('estimate', !empty($firstBurn->estimate) ? $firstBurn->estimate : (!empty($firstBurn->left) ? $firstBurn->left : ''), "class='form-control' placeholder='{$lang->project->placeholder->totalLeft}' autocomplete='off'")?>
           <span class='input-group-addon fix-border'><?php echo '(' . $lang->project->totalEstimate . $project->totalEstimate . $lang->project->workHour. ')'?></span>
           <span class='input-group-btn'><?php echo html::submitButton();?></span>
         </div>

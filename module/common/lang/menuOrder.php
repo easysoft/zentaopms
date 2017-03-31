@@ -66,14 +66,18 @@ $lang->task->menuOrder        = $lang->project->menuOrder;
 $lang->build->menuOrder       = $lang->project->menuOrder;
 
 /* qa menu order. */
-$lang->qa->menuOrder[5]    = 'product';
-$lang->qa->menuOrder[10]   = 'index';
-$lang->qa->menuOrder[15]   = 'bug';
-$lang->qa->menuOrder[20]   = 'testcase';
-$lang->qa->menuOrder[25]   = 'testtask';
-$lang->bug->menuOrder      = $lang->qa->menuOrder;
-$lang->testcase->menuOrder = $lang->bug->menuOrder;
-$lang->testtask->menuOrder = $lang->testcase->menuOrder;
+$lang->qa->menuOrder[5]      = 'product';
+$lang->qa->menuOrder[10]     = 'index';
+$lang->qa->menuOrder[15]     = 'bug';
+$lang->qa->menuOrder[20]     = 'testcase';
+$lang->qa->menuOrder[25]     = 'testtask';
+$lang->qa->menuOrder[30]     = 'testsuite';
+$lang->qa->menuOrder[35]     = 'testreport';
+$lang->bug->menuOrder        = $lang->qa->menuOrder;
+$lang->testcase->menuOrder   = $lang->bug->menuOrder;
+$lang->testtask->menuOrder   = $lang->testcase->menuOrder;
+$lang->testsuite->menuOrder  = $lang->testcase->menuOrder;
+$lang->testreport->menuOrder = $lang->testcase->menuOrder;
 
 /* doc menu order. */
 $lang->doc->menuOrder[5]  = 'list';

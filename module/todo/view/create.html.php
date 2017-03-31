@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('noTodo', $lang->todo->noTodo);?>
 <div class='container mw-1400px'>
   <div id='titlebar'>
     <div class='heading'>
@@ -42,7 +43,7 @@
         <th><?php echo $lang->todo->name;?></th>
         <td colspan='2'>
           <div id='nameBox' class='hidden'><?php echo html::input('name', '', 'class=form-control');?></div>
-          <div class='nameBox'><?php echo html::input('name', '', 'class=form-control');?></div>
+          <div class='nameBox'><?php echo html::input('name', '', "class='form-control' autocomplete='off'");?></div>
           </td>
       </tr>  
       <tr>

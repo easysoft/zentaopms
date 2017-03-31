@@ -51,7 +51,7 @@
     </tr>
     <tr class='params add hide'>
       <th><?php echo $lang->user->realname?></th>
-      <td><?php echo html::input('realname', $data->realname, "class='form-control'")?></td>
+      <td><?php echo html::input('realname', $data->realname, "class='form-control' autocomplete='off'")?></td>
     </tr>
     <tr class='params add hide'>
       <th><?php echo $lang->user->gender?></th>
@@ -59,7 +59,7 @@
     </tr>
     <tr class='params add hide'>
       <th><?php echo $lang->user->email?></th>
-      <td><?php echo html::input('email', $data->email, "class='form-control'")?></td>
+      <td><?php echo html::input('email', $data->email, "class='form-control' autocomplete='off'")?></td>
     </tr>
     <tr class='params add hide'>
       <th></th>

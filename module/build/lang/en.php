@@ -12,23 +12,24 @@
 $lang->build->common    = "Build";
 $lang->build->create    = "Create";
 $lang->build->edit      = "Edit";
-$lang->build->linkStory = "Relate Story";
-$lang->build->linkBug   = "Relate Bug";
+$lang->build->linkStory = "Link Story";
+$lang->build->linkBug   = "Link Bug";
 $lang->build->delete    = "Delete Build";
 $lang->build->deleted   = "Deleted";
 $lang->build->view      = "Build Details";
-$lang->build->batchUnlink          = 'Batch Removal';
-$lang->build->batchUnlinkStory     = 'Batch Story Removal';
-$lang->build->batchUnlinkBug       = 'Batch Bug Removal';
+$lang->build->batchUnlink          = 'Batch Unlink';
+$lang->build->batchUnlinkStory     = 'Batch Story Unlink';
+$lang->build->batchUnlinkBug       = 'Batch Bug Unlink';
 
 $lang->build->confirmDelete      = "Do you want to delete this Build?";
-$lang->build->confirmUnlinkStory = "Do you want to remove this Story?";
-$lang->build->confirmUnlinkBug   = "Do you want to remove this Bug?";
+$lang->build->confirmUnlinkStory = "Do you want to unlink this Story?";
+$lang->build->confirmUnlinkBug   = "Do you want to unlink this Bug?";
 
 $lang->build->basicInfo = 'Basic Info';
 
 $lang->build->id        = 'ID';
 $lang->build->product   = $lang->productCommon;
+$lang->build->project   = $lang->projectCommon;
 $lang->build->name      = 'Name';
 $lang->build->date      = 'Date';
 $lang->build->builder   = 'Builder';
@@ -37,12 +38,12 @@ $lang->build->filePath  = 'File Path';
 $lang->build->desc      = 'Description';
 $lang->build->files     = 'Upload Files';
 $lang->build->last      = 'Last Build';
-$lang->build->unlinkStory        = 'Remove Story';
-$lang->build->unlinkBug          = 'Remove Bug';
+$lang->build->unlinkStory        = 'Unlink Story';
+$lang->build->unlinkBug          = 'Unlink Bug';
 $lang->build->stories            = 'Finished Story';
 $lang->build->bugs               = 'Solved Bug';
 $lang->build->generatedBugs      = 'Remained Bug';
-$lang->build->noProduct          = " <span style='color:red'>This {$lang->projectCommon} has not relateed to {$lang->productCommon}, so Build cannot be created. Please first <a href='%s'> relate {$lang->productCommon}</a></span>";
+$lang->build->noProduct          = " <span style='color:red'>This {$lang->projectCommon} has not linked to {$lang->productCommon}, so Build cannot be created. Please first <a href='%s'> link {$lang->productCommon}</a></span>";
 
 $lang->build->finishStories = '  %s Stories have been finished.';
 $lang->build->resolvedBugs  = '  %s Bugs have been solved.';

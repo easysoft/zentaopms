@@ -45,7 +45,7 @@
       <tr>
         <th><?php echo $lang->build->name;?></th>
         <td class='w-p25-f'>
-          <?php echo html::input('name', '', "class='form-control'");?>
+          <?php echo html::input('name', '', "class='form-control' autocomplete='off'");?>
         </td>
         <td>
           <?php if($lastBuild):?>
@@ -63,11 +63,11 @@
       </tr>  
       <tr>
         <th><?php echo $lang->build->scmPath;?></th>
-        <td colspan='2'><?php echo html::input('scmPath', '', "class='form-control' placeholder='{$lang->build->placeholder->scmPath}'");?></td>
+        <td colspan='2'><?php echo html::input('scmPath', '', "class='form-control' placeholder='{$lang->build->placeholder->scmPath}' autocomplete='off'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->build->filePath;?></th>
-        <td colspan='2'><?php echo html::input('filePath', '', "class='form-control' placeholder='{$lang->build->placeholder->filePath}'");?></td>
+        <td colspan='2'><?php echo html::input('filePath', '', "class='form-control' placeholder='{$lang->build->placeholder->filePath}' autocomplete='off'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->build->files;?></th>

@@ -1,7 +1,7 @@
 #versionMenu {margin: 20px;}
-#versionMenu .dropdown-menu {min-width: 120px}
+#versionMenu .dropdown-menu {min-width: 130px; max-height:180px;overflow-y:auto;}
 
-#featureList {padding: 0 20px 20px;}
+#featureList {padding: 0 20px 20px; min-height:200px;}
 #featureList > .item {padding: 0 0 10px 0;}
 #featureList > .item > h3 {color: #114f8e; font-size: 16px; margin: 0; padding: 10px 0}
 #featureList > .item > .desc {color: #666; padding-left: 18px;}

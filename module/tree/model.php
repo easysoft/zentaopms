@@ -130,7 +130,7 @@ class treeModel extends model
      * @access public
      * @return array
      */
-    public function getModulePairs($rootID, $viewType = 'story', $showModule = 'end')
+    public function getModulePairs($rootID, $viewType = 'story', $showModule = 'end', $extra = '')
     {
         if($viewType == 'task')
         {
@@ -142,7 +142,7 @@ class treeModel extends model
             else
             {
                 $modules = $this->dao->select('id,name,path,short')->from(TABLE_MODULE)
-                    ->where("((root = $rootID and type = 'task')")
+                    ->where("((root = '" . (int)$rootID . "' and type = 'task')")
                     ->orWhere('(root')->in($products)->andWhere('type')->eq('story')
                     ->markRight(2)
                     ->andWhere('deleted')->eq(0)
@@ -151,8 +151,10 @@ class treeModel extends model
         }
         else
         {
+            /* When case with libIdList then append lib modules. */
+            $modules = array();
             if($this->isMergeModule($rootID, $viewType)) $viewType .= ',story';
-            $modules = $this->dao->select('id,name,path,short')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->andWhere('deleted')->eq(0)->fetchAll('id');
+            $modules += $this->dao->select('id,name,path,short')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->andWhere('deleted')->eq(0)->fetchAll('id');
         }
 
         $modulePairs = array();
@@ -198,7 +200,7 @@ class treeModel extends model
         $treeMenu   = array();
         $lastMenu[] = '/';
         $projectModules   = $this->getTaskTreeModules($rootID, false, false);
-        $noProductModules = $this->dao->select('*')->from(TABLE_MODULE)->where("root = $rootID and type = 'task' and parent = 0")->andWhere('deleted')->eq(0)->fetchPairs('id', 'name');
+        $noProductModules = $this->dao->select('*')->from(TABLE_MODULE)->where("root = '" . (int)$rootID . "' and type = 'task' and parent = 0")->andWhere('deleted')->eq(0)->fetchPairs('id', 'name');
 
         /* Fix for not in product modules. */
         $productNum = count($products);
@@ -208,7 +210,7 @@ class treeModel extends model
             {
                 if($type == 'product')
                 {
-                    $modules = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = $rootID and type = 'task') OR (root = $id and type = 'story'))")
+                    $modules = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = '" . (int)$rootID . "' and type = 'task') OR (root = $id and type = 'story'))")
                         ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                         ->andWhere('deleted')->eq(0)
                         ->orderBy('grade desc, branch, type, `order`')
@@ -216,7 +218,7 @@ class treeModel extends model
                 }
                 else
                 {
-                    $modules = $this->dao->select('*')->from(TABLE_MODULE)->where("root = $rootID and type = 'task' and path like '%,$id,%'")
+                    $modules = $this->dao->select('*')->from(TABLE_MODULE)->where("root = '" . (int)$rootID . "' and type = 'task' and path like '%,$id,%'")
                         ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                         ->andWhere('deleted')->eq(0)
                         ->orderBy('grade desc, type, `order`')
@@ -413,7 +415,7 @@ class treeModel extends model
             foreach($branchGroups[$id] as $branch => $branchName)
             {
                 $treeMenu = array();
-                $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = $rootID and type = 'task' and parent != 0) OR (root = $id and type = 'story' and branch ='$branch'))")
+                $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = '" . (int)$rootID . "' and type = 'task' and parent != 0) OR (root = $id and type = 'story' and branch ='$branch'))")
                     ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                     ->andWhere('deleted')->eq(0)
                     ->orderBy('grade desc, type, `order`')
@@ -438,7 +440,7 @@ class treeModel extends model
         {
             /* tree menu. */
             $treeMenu = array();
-            $query = $this->dao->select('*')->from(TABLE_MODULE)->where("root = $rootID and type = 'task'")->andWhere('deleted')->eq(0)->orderBy('grade desc, type, `order`')->get();
+            $query = $this->dao->select('*')->from(TABLE_MODULE)->where("root = '" . (int)$rootID . "' and type = 'task'")->andWhere('deleted')->eq(0)->orderBy('grade desc, type, `order`')->get();
             $stmt  = $this->dbh->query($query);
             while($module = $stmt->fetch())
             {
@@ -491,7 +493,7 @@ class treeModel extends model
             if(empty($branchGroups[$id])) $branchGroups[$id]['0'] = '';
             foreach($branchGroups[$id] as $branch => $branchName)
             {
-                $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = $rootID and type = 'task' and parent != 0) OR (root = $id and type = 'story' and branch ='$branch'))")
+                $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = '" . (int)$rootID . "' and type = 'task' and parent != 0) OR (root = $id and type = 'story' and branch ='$branch'))")
                     ->andWhere('deleted')->eq(0)
                     ->orderBy('grade desc, type, `order`')
                     ->get();
@@ -508,7 +510,7 @@ class treeModel extends model
         }
 
         /* Get project module. */
-        $query      = $this->dao->select('*')->from(TABLE_MODULE)->where("root = $rootID and type = 'task'")->andWhere('deleted')->eq(0)->orderBy('grade desc, type, `order`')->get();
+        $query      = $this->dao->select('*')->from(TABLE_MODULE)->where("root = '" . (int)$rootID . "' and type = 'task'")->andWhere('deleted')->eq(0)->orderBy('grade desc, type, `order`')->get();
         $stmt       = $this->dbh->query($query);
         $taskTrees  = $this->getDataStructure($stmt, 'task', $projectModules);
         foreach($taskTrees as $taskModule) $fullTrees[] = $taskModule;
@@ -611,14 +613,31 @@ class treeModel extends model
         /* Add for task #1945. check the module has case or no. */
         if($type == 'case' and !empty($extra))
         {
-            $modules = $this->getAllChildID($module->id);
-            $runs    = $this->dao->select('t1.*')->from(TABLE_TESTRUN)->alias('t1')
-                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
-                ->where('t1.task')->eq((int)$extra)
-                ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
-                ->limit(1)
-                ->fetch();
-            if(empty($runs)) return;
+            static $runs = array();
+            if(empty($runs))
+            {
+                $runs = $this->dao->select('t1.*,t2.module')->from(TABLE_TESTRUN)->alias('t1')
+                    ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+                    ->where('t1.task')->eq((int)$extra)
+                    ->fetchAll('module');
+            }
+            static $modules = array();
+            if(empty($modules)) $modules = $this->dao->select('id,path')->from(TABLE_MODULE)->where('root')->eq($module->root)->andWhere("(type='story' or type='case')")->fetchPairs('id', 'path');
+            $childModules = array();
+            foreach($modules as $moduleID => $modulePath)
+            {
+                if(strpos($modulePath, $module->path) === 0) $childModules[$moduleID] = $moduleID;
+            }
+            $hasRuns = false;
+            foreach($childModules as $moduleID)
+            {
+                if(isset($runs[$moduleID]))
+                {
+                    $hasRuns = true;
+                    break;
+                }
+            }
+            if(!$hasRuns) return;
         }
 
         if(is_array($extra) or empty($extra)) $extra['branchID'] = $branch;
@@ -632,14 +651,8 @@ class treeModel extends model
         }
         else
         {
-            if(isset($treeMenu[$module->parent]) and !empty($treeMenu[$module->parent]))
-            {
-                $treeMenu[$module->parent] .= "<li>$linkHtml\n";  
-            }
-            else
-            {
-                $treeMenu[$module->parent] = "<li>$linkHtml\n";  
-            }
+            if(!isset($treeMenu[$module->parent])) $treeMenu[$module->parent] = "";
+            $treeMenu[$module->parent] .= "<li>$linkHtml\n";  
         }
         $treeMenu[$module->parent] .= "</li>\n"; 
     }
@@ -869,6 +882,30 @@ class treeModel extends model
         return $linkHtml;
     }
 
+    /**
+     * Create case lib link 
+     * 
+     * @param  string $type 
+     * @param  string $module 
+     * @access public
+     * @return string
+     */
+    public function createCaseLibLink($type, $module)
+    {
+        $linkHtml = html::a(helper::createLink('testsuite', 'library', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return $linkHtml;
+    }
+
+    /**
+     * Create branch link 
+     * 
+     * @param  string $type 
+     * @param  int    $rootID 
+     * @param  int    $branchID 
+     * @param  string $branch 
+     * @access public
+     * @return string
+     */
     public function createBranchLink($type, $rootID, $branchID, $branch)
     {
         if($type == 'story') return html::a(helper::createLink('product', 'browse', "productID={$rootID}&branch=$branchID"), $branch, '_self', "id='branch{$branchID}'");
@@ -938,8 +975,8 @@ class treeModel extends model
             return $this->dao->select('*')->from(TABLE_MODULE)
                 ->where('parent')->eq(0)
                 ->andWhere('deleted')->eq(0)
-                ->andWhere("(root = $rootID and type = 'task'")
-                ->orWhere("root = $productID and type = 'story')")
+                ->andWhere("(root = '" . (int)$rootID . "' and type = 'task'")
+                ->orWhere("root = '" . (int)$productID . "' and type = 'story')")
                 ->orderBy('type,`order`')
                 ->fetchAll();
         }

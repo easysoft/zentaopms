@@ -2,14 +2,20 @@
 <style>
 .affix {position:fixed; top:0px; width:95.6%;z-index:10000;}
 </style>
+<?php if(isset($suhosinInfo)):?>
+<div class='alert alert-info'><?php echo $suhosinInfo?></div>
+<?php else:?>
 <form target='hiddenwin' method='post' class='form-condensed'>
 <table class='table table-fixed active-disabled table-custom'>
   <thead>
     <tr>
-      <th class='w-80px'><?php echo $lang->testcase->id?></th>
+      <th class='w-70px'><?php echo $lang->testcase->id?></th>
       <th><?php echo $lang->testcase->title?></th>
-      <th class='w-90px'><?php echo $lang->testcase->module?></th>
-      <th class='w-100px'><?php echo $lang->testcase->story?></th>
+      <?php if($branches):?>
+      <th class='w-100px'><?php echo $lang->testcase->branch?></th>
+      <?php endif;?>
+      <th class='w-100px'><?php echo $lang->testcase->module?></th>
+      <th class='w-120px'><?php echo $lang->testcase->story?></th>
       <th class='w-70px'><?php echo $lang->testcase->pri?></th>
       <th class='w-100px'><?php echo $lang->testcase->type?></th>
       <th class='w-100px'><?php echo $lang->testcase->status?></th>
@@ -45,22 +51,26 @@
       echo html::hidden("product[$key]", $productID);
       ?>
     </td>
-    <td><?php echo html::input("title[$key]", $case->title, "class='form-control' style='margin-top:2px'")?></td>
-    <td class='text-left' style='overflow:visible'><?php echo html::select("module[$key]", $modules, !empty($case->module) ? $case->module : (!empty($case->id) ? $cases[$case->id]->module : ''), "class='form-control chosen'")?></td>
-    <td class='text-left' style='overflow:visible'><?php echo html::select("story[$key]", $stories, !empty($case->story) ? $case->story : (!empty($case->id) ? $cases[$case->id]->story : ''), "class='form-control chosen'")?></td>
-    <td><?php echo html::select("pri[$key]", $lang->testcase->priList, !empty($case->pri) ? $case->pri : (!empty($case->id) ? $cases[$case->id]->pri : ''), "class='form-control'")?></td>
-    <td><?php echo html::select("type[$key]", $lang->testcase->typeList, !empty($case->type) ? $case->type : (!empty($case->id) ? $cases[$case->id]->type : ''), "class='form-control'")?></td>
-    <td><?php echo html::select("status[$key]", $lang->testcase->statusList, !empty($case->status) ? $case->status : (!empty($case->id) ? $cases[$case->id]->status : 'normal'), "class='form-control'")?></td>
+    <td><?php echo html::input("title[$key]", $case->title, "class='form-control' style='margin-top:2px' autocomplete='off'")?></td>
+    <?php if($branches):?>
+    <td class='text-left' style='overflow:visible'><?php echo html::select("branch[$key]", $branches, (isset($case->branch) and $case->branch !== '') ? $case->branch : (!empty($case->id) ? $cases[$case->id]->branch : $branch), "class='form-control chosen'")?></td>
+    <?php endif;?>
+    <td class='text-left' style='overflow:visible'><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : (!empty($case->id) ? $cases[$case->id]->module : ''), "class='form-control chosen'")?></td>
+    <td class='text-left' style='overflow:visible'><?php echo html::select("story[$key]", $stories, isset($case->story) ? $case->story : (!empty($case->id) ? $cases[$case->id]->story : ''), "class='form-control chosen'")?></td>
+    <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : (!empty($case->id) ? $cases[$case->id]->pri : ''), "class='form-control'")?></td>
+    <td><?php echo html::select("type[$key]", $lang->testcase->typeList, isset($case->type) ? $case->type : (!empty($case->id) ? $cases[$case->id]->type : ''), "class='form-control'")?></td>
+    <td><?php echo html::select("status[$key]", $lang->testcase->statusList, isset($case->status) ? $case->status : (!empty($case->id) ? $cases[$case->id]->status : 'normal'), "class='form-control'")?></td>
     <td class='text-left' style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : (!empty($case->id) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>
-    <td><?php echo html::input("keywords[$key]", isset($case->keywords) ? $case->keywords : "", "class='form-control'")?></td>
+    <td><?php echo html::input("keywords[$key]", isset($case->keywords) ? $case->keywords : "", "class='form-control' autocomplete='off'")?></td>
     <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? htmlspecialchars($case->precondition) : "", "class='form-control'")?></td>
     <td>
       <?php if(isset($stepData[$key]['desc'])):?>
       <table class='w-p100 bd-0'>
       <?php foreach($stepData[$key]['desc'] as $id => $desc):?>
-        <tr>
-          <td><?php echo html::textarea("desc[$key][$id]", htmlspecialchars($desc), "class='form-control'")?></td>
-          <td><?php echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]) ? htmlspecialchars($stepData[$key]['expect'][$id]) : '', "class='form-control'")?></td>
+        <tr class='step'>
+          <td><?php echo $id . html::hidden("stepType[$key][$id]", $desc['type'])?></td>
+          <td><?php echo html::textarea("desc[$key][$id]", htmlspecialchars($desc['content']), "class='form-control'")?></td>
+          <td><?php if($desc['type'] != 'group') echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]['content']) ? htmlspecialchars($stepData[$key]['expect'][$id]['content']) : '', "class='form-control'")?></td>
         </tr>
       <?php endforeach;?>
       </table>
@@ -89,6 +99,7 @@
   </tfoot>
 </table>
 </form>
+<?php endif;?>
 <script>
 $(function(){affix('thead')})
 function affix(obj)

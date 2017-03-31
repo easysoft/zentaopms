@@ -7,3 +7,25 @@
 
 #filesName {float: right;}
 .nav > li {margin-right: 5px; display: inline-block; margin-top: 5px;}
+
+#steps .step-id {text-align: right}
+#steps .step-item-id {background-color: transparent; border: none; display: none; width: 30px; padding-left: 0; padding-right: 0; text-align: right; padding-right: 8px}
+#steps .checkbox-inline input[type="checkbox"] {top: -2px}
+#steps .btn-group .btn {padding-left: 0; padding-right: 0; min-width: 30px;}
+#steps .step-actions {width: 98px;}
+#steps .active td {transition: background-color .5s;}
+#steps .step-group .step-steps {resize: none; max-height: 30px;}
+#steps .step-group .step-expects {display: none;}
+#steps .step-item .step-item-id {display: table-cell;}
+#steps .step-item .step-id {color: transparent}
+
+.resultSteps .step-id {text-align: right}
+.resultSteps .step-item-id {background-color: transparent; border: none; display: none; width: 30px; padding-left: 0; padding-right: 0; text-align: right; padding-right: 8px}
+.resultSteps .checkbox-inline input[type="checkbox"] {top: -2px}
+.resultSteps .btn-group .btn {padding-left: 0; padding-right: 0; min-width: 30px;}
+.resultSteps .step-actions {width: 98px;}
+.resultSteps .active td {transition: background-color .5s;}
+.resultSteps .step-group .step-steps {resize: none; max-height: 30px;}
+.resultSteps .step-group .step-expects {display: none;}
+.resultSteps .step-item .step-item-id {display: table-cell;}
+.resultSteps .step-item .step-id {color: transparent}

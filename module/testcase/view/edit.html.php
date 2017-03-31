@@ -32,7 +32,7 @@
       <div class='form-group'>
         <div class='input-group'>
           <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->case->colorTag ?>' value='<?php echo $case->color ?>' data-update-text='#title, .case-title'>
-          <?php echo html::input('title', $case->title, 'class="form-control" placeholder="' . $lang->case->title . '"');?>
+          <?php echo html::input('title', $case->title, 'class="form-control" autocomplete="off" placeholder="' . $lang->case->title . '"');?>
         </div>
       </div>
       <fieldset class='fieldset-pure'>
@@ -42,31 +42,76 @@
       <fieldset class='fieldset-pure'>
         <legend><?php echo $lang->testcase->steps;?></legend>
         <div class='form-group'>
-          <table class='table table-form'>
+          <table class='table table-form table-bordered'>
             <thead>
               <tr>
                 <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
                 <th width="45%"><?php echo $lang->testcase->stepDesc;?></th>
                 <th><?php echo $lang->testcase->stepExpect;?></th>
-                <th class='w-60px'><?php echo $lang->actions;?></th>
+                <th class='step-actions'><?php echo $lang->actions;?></th>
               </tr>
             </thead>
-            <?php
-            foreach($case->steps as $stepID => $step)
-            {
-                $stepID += 1;
-                echo "<tr id='row$stepID' class='text-center'>";
-                echo "<td class='stepID strong'>$stepID</td>";
-                echo '<td>' . html::textarea('steps[]', $step->desc, "rows='3' class='form-control'") . '</td>';
-                echo '<td>' . html::textarea('expects[]', $step->expect, "rows='3' class='form-control'") . '</td>';
-                echo "<td class='text-left'>";
-                echo "<button type='button' tabindex='-1' class='addbutton btn' onclick='preInsert($stepID)'  title='{$lang->testcase->insertBefore}'><i class='icon icon-double-angle-up'></i></button>";
-                echo "<button type='button' tabindex='-1' class='addbutton btn' onclick='postInsert($stepID)' title='{$lang->testcase->insertAfter}' ><i class='icon icon-double-angle-down'></i></button>";
-                echo "<button type='button' tabindex='-1' class='delbutton btn' onclick='deleteRow($stepID)'  title='{$lang->testcase->deleteStep}'  ><i class='icon icon-remove'></i></button>";
-                echo "</td>";
-                echo '</tr>';
-            }
-            ?>
+            <tbody id='steps' class='sortable' data-group-name='<?php echo $lang->testcase->groupName ?>'>
+              <tr class='template step' id='stepTemplate'>
+                <td class='step-id'></td>
+                <td>
+                  <div class='input-group'>
+                    <span class='input-group-addon step-item-id'></span>
+                    <textarea rows='1' class='form-control autosize step-steps' name='steps[]'></textarea>
+                    <span class="input-group-addon step-type-toggle">
+                      <input type='hidden' name='stepType[]' value='item' class='step-type'>
+                      <div class='step-type-menu-box'>
+                        <div class='step-type-current'><span></span> <i class='caret'></i></div>
+                        <div class='step-type-menu'>
+                          <a href='javascript:;' href='step-type-option' data-value='step'><?php echo $lang->testcase->step ?></a>
+                          <a href='javascript:;' href='step-type-option' data-value='group'><?php echo $lang->testcase->group ?></a>
+                          <a href='javascript:;' href='step-type-option' data-value='item'><?php echo $lang->testcase->stepChild ?></a>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+                </td>
+                <td><textarea rows='1' class='form-control autosize step-expects' name='expects[]'></textarea></td>
+                <td class='step-actions'>
+                  <div class='btn-group'>
+                    <button type='button' class='btn btn-step-add'><i class='icon icon-plus'></i></button>
+                    <button type='button' class='btn btn-step-move'><i class='icon icon-move'></i></button>
+                    <button type='button' class='btn btn-step-delete'><i class='icon icon-remove'></i></button>
+                  </div>
+                </td>
+              </tr>
+              <?php foreach($case->steps as $stepID => $step):?>
+              <tr class='step'>
+                <td class='step-id'></td>
+                <td>
+                  <div class='input-group'>
+                    <span class='input-group-addon step-item-id'></span>
+                    <?php echo html::textarea('steps[]', $step->desc, "rows='1' class='form-control autosize step-steps'") ?>
+                    <span class='input-group-addon step-type-toggle'>
+                      <?php if(!isset($step->type)) $step->type = 'step';?>
+                      <input type='hidden' name='stepType[]' value='<?php echo $step->type ?>' class='step-type'>
+                      <div class='step-type-menu-box'>
+                        <div class='step-type-current'><span></span> <i class='caret'></i></div>
+                        <div class='step-type-menu'>
+                          <a href='javascript:;' href='step-type-option' data-value='step'><?php echo $lang->testcase->step ?></a>
+                          <a href='javascript:;' href='step-type-option' data-value='group'><?php echo $lang->testcase->group ?></a>
+                          <a href='javascript:;' href='step-type-option' data-value='item'><?php echo $lang->testcase->stepChild ?></a>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+                </td>
+                <td><?php echo html::textarea('expects[]', $step->expect, "rows='1' class='form-control autosize step-expects'") ?></td>
+                <td class='step-actions'>
+                  <div class='btn-group'>
+                    <button type='button' class='btn btn-step-add'><i class='icon icon-plus'></i></button>
+                    <button type='button' class='btn btn-step-move'><i class='icon icon-move'></i></button>
+                    <button type='button' class='btn btn-step-delete'><i class='icon icon-remove'></i></button>
+                  </div>
+                </td>
+              </tr>
+              <?php endforeach; ?>
+            </tbody>
           </table>
         </div>
       </fieldset>
@@ -81,7 +126,7 @@
       <div class='text-center mgb-20'>
         <?php echo html::hidden('lastEditedDate', $case->lastEditedDate);?>
         <?php echo html::submitButton();?>
-        <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='btn' onclick='location.href="<?php echo $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
+        <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='btn' onclick='location.href="<?php echo $isLibCase ? $this->createLink('testsuite', 'library', "libID=$libID") : $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
       </div>
       <?php include '../../common/view/action.html.php';?>
     </div>
@@ -91,6 +136,16 @@
       <fieldset>
         <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>
         <table class='table table-form' cellpadding='0' cellspacing='0'>
+          <?php if($isLibCase):?>
+          <tr>
+            <th class='w-80px'><?php echo $lang->testcase->lib;?></th>
+            <td>
+              <div class='input-group'>
+                <?php echo html::select('lib', $libraries, $libID , "onchange='loadLibModules(this.value)' class='form-control chosen'");?>
+              </div>
+            </td>
+          </tr>
+          <?php else:?>
           <tr>
             <th class='w-80px'><?php echo $lang->testcase->product;?></th>
             <td>
@@ -100,6 +155,7 @@
               </div>
             </td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->testcase->module;?></th>
             <td>
@@ -118,11 +174,13 @@
               </div>
             </td>
           </tr>
+          <?php if(!$isLibCase):?>
           <tr>
             <th><?php echo $lang->testcase->story;?></th>
             <td class='text-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class=form-control chosen');?></div>
             </td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->testcase->type;?></th>
             <td><?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, 'class=form-control');?></td>
@@ -141,8 +199,9 @@
           </tr>
           <tr>
             <th><?php echo $lang->testcase->keywords;?></th>
-            <td><?php echo html::input('keywords', $case->keywords, 'class=form-control');?></td>
+            <td><?php echo html::input('keywords', $case->keywords, "class='form-control' autocomplete='off'");?></td>
           </tr>
+          <?php if(!$isLibCase):?>
           <tr class='text-top'>
             <th><?php echo $lang->testcase->linkCase;?></th>
             <td>
@@ -163,6 +222,7 @@
               </ul>
             </td>
           </tr>
+          <?php endif;?>
         </table>
       </fieldset>
       <fieldset>

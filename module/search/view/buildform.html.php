@@ -39,7 +39,7 @@ include '../../common/view/chosen.html.php';
 #selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 4px 0; line-height: 20px; margin-bottom: 5px; font-size: 14px; border-radius: 2px; color: #333; font-size: 12px}
 #selectPeriod li > a {padding: 4px 15px; border-radius: 2px}
 
-#moreOrLite {position: absolute; right: 0; top: 0; bottom: 0}
+#moreOrLite {position: absolute; right: -10px; top: 0; bottom: 0}
 #searchlite, #searchmore {color: #4d90fe; width: 50px; padding: 0 5px; line-height: 60px; text-align: center;}
 #searchlite {line-height: 127px}
 #searchform.showmore #searchmore, #searchform #searchlite {display: none;}
@@ -279,7 +279,8 @@ $(function()
         var value = $(this).val();
         if(value == '>=' && $(this).closest('tr').find('input[id^="value"]').hasClass('date'))
         {
-            fieldNO = parseInt($(this).attr('id').replace('operator', ''));
+            fieldNO   = parseInt($(this).attr('id').replace('operator', ''));
+            fieldName = $(this).closest('tr').find("select[id^='field']").val();
             var $form      = $(this).closest('form');
             var groupItems = <?php echo $config->search->groupItems?>;
             var maxNO      = 2 * groupItems;
@@ -307,7 +308,7 @@ foreach($fieldParams as $fieldName => $param)
 {
     echo "<span id='box$fieldName'>";
     if($param['control'] == 'select') echo html::select('field' . $fieldName, $param['values'], '', "class='form-control searchSelect'");
-    if($param['control'] == 'input')  echo html::input('field' . $fieldName, '', "class='form-control searchInput'");
+    if($param['control'] == 'input')  echo html::input('field' . $fieldName, '', "class='form-control searchInput' autocomplete='off'");
     echo '</span>';
 }
 ?>
@@ -357,7 +358,7 @@ foreach($fieldParams as $fieldName => $param)
           {
               $fieldName  = $formSession["field$fieldNO"];
               $extraClass = isset($param['class']) ? $param['class'] : '';
-              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='form-control $extraClass searchInput'");
+              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='form-control $extraClass searchInput' autocomplete='off'");
           }
           echo '</td>';
 
@@ -407,7 +408,7 @@ foreach($fieldParams as $fieldName => $param)
           {
               $fieldName  = $formSession["field$fieldNO"];
               $extraClass = isset($param['class']) ? $param['class'] : '';
-              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='form-control $extraClass searchInput'");
+              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='form-control $extraClass searchInput' autocomplete='off'");
           }
           echo '</td>';
 

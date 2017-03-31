@@ -84,7 +84,7 @@ $lang->doc->aclList['open']    = '公開';
 $lang->doc->aclList['custom']  = '自定義';
 $lang->doc->aclList['private'] = '私有';
 
-$lang->doc->types['text'] = '網頁';
+$lang->doc->types['text'] = '文檔';
 $lang->doc->types['url']  = '連結';
 
 $lang->doc->contentTypeList['html']     = 'HTML';

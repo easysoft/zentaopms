@@ -73,10 +73,10 @@ $lang->extension->viewDeactivated          = 'Deactivated';
 $lang->extension->backDBFile               = 'Extension related data has been backed up to %s!';
 $lang->extension->noticeOkFile             = '<h5>For security reasons, your Admin account has to be confirmed.</h5>
     <h5>Plese Login your ZenTao server and create %s.</h5>
-    <p>Note:</p>
+    <p>Note</p>
     <ol>
-    <li>File is blank.</li>
-    <li>If the old file exists, please delete it before create one.</li>
+    <li>The file you will create is empty.</li>
+    <li>If there is one such file exists, delete it first, and then create yours.</li>
     </ol>'; 
 
 $lang->extension->upgradeExt     = 'Upgrade';

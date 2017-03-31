@@ -6,6 +6,7 @@ $lang->mail->edit   = '编辑配置';
 $lang->mail->save   = '成功保存';
 $lang->mail->test   = '测试发信';
 $lang->mail->reset  = '重置';
+$lang->mail->resend = '重发';
 $lang->mail->browse = '邮件列表';
 $lang->mail->delete = '删除邮件';
 $lang->mail->ztCloud       = '禅道云发信';
@@ -69,6 +70,7 @@ $lang->mail->secureList['ssl'] = 'ssl';
 $lang->mail->secureList['tls'] = 'tls';
 
 $lang->mail->more           = '更多...';
+$lang->mail->noticeResend   = '已经重新发信！';
 $lang->mail->inputFromEmail = '请输入发信邮箱：';
 $lang->mail->nextStep       = '下一步';
 $lang->mail->successSaved   = '配置信息已经成功保存。';

@@ -17,10 +17,12 @@
   </div>
   <form method='post' target='hiddenwin'>
     <table class='table table-form'>
+      <?php foreach($fields as $field):?>
       <tr>
-        <th><?php echo $lang->company->name;?></th>
-        <td><?php echo html::input('company', '', "class='form-control'");?></td>
+        <th><?php echo $field == 'company' ? $lang->company->name : $lang->user->$field;?></th>
+        <td><?php echo html::input($field, '', "class='form-control' autocomplete='off'");?></td>
       </tr>
+      <?php endforeach;?>
       <tr>
         <th></th>
         <td><?php echo html::submitButton();?></td>

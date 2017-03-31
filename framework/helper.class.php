@@ -89,7 +89,6 @@ class helper extends baseHelper
     static public function convertEncoding($string, $fromEncoding, $toEncoding = 'utf-8')
     {
         $toEncoding = str_replace('utf8', 'utf-8', $toEncoding);
-        if($fromEncoding == $toEncoding) return $string;
         if(function_exists('mb_convert_encoding'))
         {
             /* Remove like utf-8//TRANSLIT. */
@@ -99,10 +98,11 @@ class helper extends baseHelper
             /* Check string encoding. */
             $encoding = strtolower(mb_detect_encoding($string, array('ASCII','UTF-8','GB2312','GBK','BIG5')));
             if($encoding == $toEncoding) return $string;
-            return mb_convert_encoding($string, $toEncoding, $fromEncoding);
+            return mb_convert_encoding($string, $toEncoding, $encoding);
         }
         elseif(function_exists('iconv'))
         {
+            if($fromEncoding == $toEncoding) return $string;
             $convertString = @iconv($fromEncoding, $toEncoding, $string);
             /* iconv error then return original. */
             if(!$convertString) return $string;

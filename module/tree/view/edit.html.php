@@ -36,7 +36,7 @@ $jsRoot  = $webRoot . "js/";
         </tr>
         <tr <?php if($hidden) echo "style='display:none'";?>>
           <th class='w-80px'><?php echo $lang->tree->name;?></th>
-          <td><?php echo html::input('name', $module->name, "class='form-control'");?></td>
+          <td><?php echo html::input('name', $module->name, "class='form-control' autocomplete='off'");?></td>
         </tr>
         <?php if($type == 'bug'):?>
         <tr>
@@ -46,7 +46,7 @@ $jsRoot  = $webRoot . "js/";
         <?php endif;?>
         <tr>
           <th><?php echo $lang->tree->short;?></th>
-          <td><?php echo html::input('short', $module->short, "class='form-control'");?></td>
+          <td><?php echo html::input('short', $module->short, "class='form-control' autocomplete='off'");?></td>
         </tr>  
         <tr>
           <td colspan='2' class='text-center'>

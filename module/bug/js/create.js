@@ -75,8 +75,23 @@ function setTemplate(templateID)
 function deleteTemplate(templateID)
 {
     if(!templateID) return;
-    hiddenwin.location.href = createLink('bug', 'deleteTemplate', 'templateID=' + templateID);
-    $('#tplBox' + templateID).addClass('hidden');
+	if(confirm(confirmDeleteTemplate))
+    {
+		hiddenwin.location.href = createLink('bug', 'deleteTemplate', 'templateID=' + templateID);
+		$('#tplBox' + templateID).addClass('hidden');
+	}
+}
+
+/* Display template x icon. */
+function displayXIcon(templateID)
+{
+    $('#templateID' + templateID).removeClass('hidden');
+}
+
+/* Hide template x icon. */
+function hideXIcon(templateID)
+{
+    $('#templateID' + templateID).addClass('hidden');
 }
 
 $(function()

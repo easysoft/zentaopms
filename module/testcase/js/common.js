@@ -103,65 +103,147 @@ function setStories()
 }
 
 /**
- * Delete a step row.
+ * Init testcase steps in form
  * 
- * @param  int    $rowID 
+ * @param  string selector
  * @access public
  * @return void
  */
-function deleteRow(rowID)
+function initSteps(selector)
 {
-    if($('.stepID').size() == 1) return;
-    $('#row' + rowID).remove();
-    updateStepID();
-}
+    if(navigator.userAgent.indexOf("Firefox") < 0)
+    {
+        $(document).on('input keyup paste change', 'textarea.autosize', function()
+        {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight + 2) + "px"; 
+        });
+    }
+    var $steps = $(selector || '#steps');
+    var $stepTemplate = $('#stepTemplate').detach().removeClass('template').attr('id', null);
+    var initSortableCallTask = null;
+    var groupNameText = $steps.data('groupName');
+    var insertStepRow = function($row, count, type)
+    {
+        if(count === undefined) count = 1;
+        for(var i = 0; i < count; ++i)
+        {
+            var $step = $stepTemplate.clone();
+            if($row) $row.after($step);
+            else $steps.append($step);
+            $step.addClass('step-new');
+            setTimeout(function(){$step.find('.step-steps').focus();}, 10);
+        }
+    };
+    var updateStepType = function($step, type)
+    {
+        var targetIsGroup = type =='group';
+        $step.attr('data-type', type).find('.step-steps').toggleClass('autosize', !targetIsGroup).attr('placeholder', targetIsGroup ? groupNameText : null).focus();
 
-/**
- * Insert before the step.
- * 
- * @param  int    $rowID 
- * @access public
- * @return void
- */
-function preInsert(rowID)
-{
-    $('#row' + rowID).before(createRow());
-    updateStepID();
-}
+        var displayType = (type =='item' && $step.hasClass('step-step')) ? 'step' : type;
 
-/**
- * Insert after the step.
- * 
- * @param  int    $rowID 
- * @access public
- * @return void
- */
-function postInsert(rowID)
-{
-    $('#row' + rowID).after(createRow());
-    updateStepID();
-}
+        var activeTypeText = $step.find('.step-type-menu > a').removeClass('active').filter('[data-value="' + displayType + '"]').addClass('active').text();
+        $step.find('.step-type-current > span').text(activeTypeText);
+    };
+    var refreshSteps = function()
+    {
+        var parentId = 1, childId = 0;
+        $steps.children('.step:not(.drag-shadow)').each(function(idx)
+        {
+            var $step = $(this);
+            var type = $step.find('.step-type').val();
+            var stepID;
+            if(type == 'group')
+            {
+                $step.removeClass('step-item step-step').addClass('step-group');
+                stepID = parentId++;
+                $step.find('.step-id').text(stepID);
+                childId = 1;
+            }
+            else if(type == 'step')
+            {
+                $step.removeClass('step-item step-group').addClass('step-step');
+                stepID = parentId++;
+                $step.find('.step-id').text(stepID);
+                childId = 0;
+            }
+            else
+            {
+                if(childId) // as child
+                {
+                    stepID = (parentId - 1) + '.' + (childId++);
+                    $step.removeClass('step-step step-group').addClass('step-item').find('.step-item-id').text(stepID);
+                }
+                else
+                {
+                    $step.removeClass('step-item step-group').addClass('step-step');
+                    stepID = parentId++;
+                    $step.find('.step-id').text(stepID);
+                }
+            }
+            $step.find('[name^="steps["]').attr('name', "steps[" +stepID + ']');
+            $step.find('[name^="stepType["]').attr('name', "stepType[" +stepID + ']');
+            $step.find('[name^="expects["]').attr('name', "expects[" +stepID + ']');
 
-/**
- * Create a step row.
- * 
- * @access public
- * @return void
- */
-function createRow()
-{
-    if(newRowID == 0) newRowID = $('.stepID').size();
-    newRowID ++;
-    var newRow = "<tr class='text-center' id='row" + newRowID + "'>";
-    newRow += "<td class='stepID strong'></td>";
-    newRow += "<td><textarea name='steps[]' rows=3 class='form-control'></textarea></td>";
-    newRow += "<td><textarea name='expects[]' rows=3 class='form-control'></textarea></td>";
-    newRow += "<td class='text-left'>";
-    newRow += "<button type='button' tabindex='-1' class='addbutton btn' title='" + lblBefore + "' onclick='preInsert("  + newRowID + ")' ><i class='icon icon-double-angle-up'></i></button>";
-    newRow += "<button type='button' tabindex='-1' class='addbutton btn' title='" + lblAfter  + "' onclick='postInsert(" + newRowID + ")' ><i class='icon icon-double-angle-down'></i></button>";
-    newRow += "<button type='button' tabindex='-1' class='delbutton btn' title='" + lblDelete + "' onclick='deleteRow("  + newRowID + ")' ><i class='icon icon-remove'></i></button>";
-    newRow += "</td>";
-    return newRow;
+            updateStepType($step, type);
+        });
+    };
+    var initSortable = function()
+    {
+        var isMouseDown = false;
+        var $moveStep = null, moveOrder = 0;
+        $steps.on('mousedown', '.btn-step-move', function()
+        {
+            isMouseDown = true;
+            $moveStep = $(this).closest('.step').addClass('drag-row');
+            
+            $(document).off('.sortable').one('mouseup.sortable', function()
+            {
+                isMouseDown = false;
+                $moveStep.removeClass('drag-row');
+                $steps.removeClass('sortable-sorting');
+                $moveStep = null;
+                refreshSteps();
+            });
+            $steps.addClass('sortable-sorting');
+        }).on('mouseenter', '.step:not(.drag-row)', function()
+        {
+            if(!isMouseDown) return;
+            var $targetStep = $(this);
+            $steps.children('.step').each(function(idx)
+            {
+                $(this).data('order', idx);
+            });
+            moveOrder = $moveStep.data('order');
+            var targetOrder = $targetStep.data('order');
+            if(moveOrder === targetOrder) return;
+            else if(targetOrder > moveOrder)
+            {
+                $targetStep.after($moveStep);
+            }
+            else if(targetOrder < moveOrder)
+            {
+                $targetStep.before($moveStep);
+            }
+        });
+    }
+    $steps.on('click', '.btn-step-add', function()
+    {
+        insertStepRow($(this).closest('.step'));
+        refreshSteps();
+    }).on('click', '.btn-step-delete', function()
+    {
+        if($('tbody#steps tr.step').size() == 1) return false;
+        $(this).closest('.step').remove();
+        refreshSteps();
+    }).on('click', '.step-type-menu a', function()
+    {
+        var $a = $(this);
+        $a.closest('.step').find('.step-type').val($a.data('value'));
+        refreshSteps();
+    });
+    initSortable();
+    refreshSteps();
 }
 
 /**

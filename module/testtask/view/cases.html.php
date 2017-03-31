@@ -47,32 +47,41 @@ var moduleID   = '<?php echo $moduleID;?>';
     ?>
       <tfoot>
         <tr>
-          <td colspan='10'>
+          <td colspan='13'>
             <?php if($runs):?>
             <div class='table-actions clearfix'>
-            <?php 
-            if($hasCheckbox) echo html::selectButton();
-            if($canBatchEdit)
-            {
+              <?php if($hasCheckbox) echo html::selectButton();?>
+              <div class='btn-group dropup'>
+                <?php
                 $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID");
-                echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
-            }
-            if($canBatchAssign)
-            {
-                $actionLink = inLink('batchAssign', "taskID=$task->id");
-                echo "<div class='input-group w-200px'>";
-                echo html::select('assignedTo', $assignedTos, '', 'class="form-control chosen"');
-                echo "<span class='input-group-addon'>";
-                echo html::a("javascript:setFormAction(\"$actionLink\")", $lang->testtask->assign);
-                echo '</span></div>';
-            }
-            if($canBatchRun)
-            {
-                $actionLink = inLink('batchRun', "productID=$productID&orderBy=id_desc&from=testtask&taskID=$taskID");
-                echo html::commonButton($lang->testtask->runCase, "onclick=\"setFormAction('$actionLink')\"");
-            }
-            ?>
-
+                $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+                echo html::commonButton($lang->edit, $misc);
+                ?>
+                <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+                <ul class='dropdown-menu'>
+                  <?php
+                  $actionLink = $this->createLink('testtask', 'batchUnlinkCases', "taskID=$task->id");
+                  $misc       = common::hasPriv('testtask', 'batchUnlinkCases') ? "onclick=\"setFormAction('$actionLink')\"" : "class='disabled'";
+                  echo "<li>" . html::a('javascript:;', $lang->testtask->unlinkCase, '', $misc) . "</li>";
+                  ?>
+                </ul>
+              </div>
+              <?php
+              if($canBatchAssign)
+              {
+                  $actionLink = inLink('batchAssign', "taskID=$task->id");
+                  echo "<div class='input-group w-200px'>";
+                  echo html::select('assignedTo', $assignedTos, '', 'class="form-control chosen"');
+                  echo "<span class='input-group-addon'>";
+                  echo html::a("javascript:setFormAction(\"$actionLink\")", $lang->testtask->assign);
+                  echo '</span></div>';
+              }
+              if($canBatchRun)
+              {
+                  $actionLink = inLink('batchRun', "productID=$productID&orderBy=id_desc&from=testtask&taskID=$taskID");
+                  echo html::commonButton($lang->testtask->runCase, "onclick=\"setFormAction('$actionLink')\"");
+              }
+              ?>
             </div>
             <?php endif;?>
             <?php echo $pager->show();?>

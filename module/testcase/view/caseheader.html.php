@@ -4,7 +4,7 @@
     <li>
       <div class='label-angle<?php if(!empty($moduleID)) echo ' with-close';?>'>
         <?php
-        echo isset($moduleID) ? $moduleName : $this->lang->tree->all;
+        echo !empty($moduleID) ? $moduleName : $this->lang->tree->all;
         if(!empty($moduleID))
         {
             $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
@@ -21,33 +21,58 @@
     <?php foreach(customModel::getFeatureMenu('testcase', 'browse') as $menuItem):?>
     <?php
     if(isset($menuItem->hidden)) continue;
-    $menyType = $menuItem->name;
-    if($hasBrowsePriv and strpos($menyType, 'QUERY') === 0)
+    $menuType = $menuItem->name;
+    if(!$config->testcase->needReview and $menuType == 'wait') continue;
+    if($hasBrowsePriv and strpos($menuType, 'QUERY') === 0)
     {
-        $queryID = (int)substr($menyType, 5);
-        echo "<li id='{$menyType}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $menuItem->text) . "</li>";
+        $queryID = (int)substr($menuType, 5);
+        echo "<li id='{$menuType}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $menuItem->text) . "</li>";
     }
-    elseif($hasBrowsePriv and ($menyType == 'all' or $menyType == 'needconfirm'))
+    elseif($hasBrowsePriv and ($menuType == 'all' or $menuType == 'needconfirm' or $menuType == 'wait'))
     {
-        echo "<li id='{$menyType}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=$menyType"), $menuItem->text) . "</li>";
+        echo "<li id='{$menuType}Tab'>" . html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=$menuType"), $menuItem->text) . "</li>";
     }
-    elseif($hasGroupPriv and $menyType == 'group')
+    elseif($hasBrowsePriv and $menuType == 'suite')
     {
-        echo "<li id='groupTab' class='dropdown'>";
+        $currentSuiteID = isset($suiteID) ? (int)$suiteID : 0;
+        $currentSuite   = zget($suiteList, $currentSuiteID, '');
+        $currentLable   = empty($currentSuite) ? $lang->testsuite->common : $currentSuite->name;
+
+        echo "<li id='bysuiteTab' class='dropdown'>";
+        echo html::a('javascript:;', $currentLable . " <span class='caret'></span>", '', "data-toggle='dropdown'");
+        echo "<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto'>";
+
+        foreach ($suiteList as $suiteID => $suite)
+        {
+            $suiteName = $suite->name;
+            if($suite->type == 'public') $suiteName .= " <span class='label label-info'>{$lang->testsuite->authorList[$suite->type]}</span>";
+
+            echo '<li' . ($suiteID == (int)$currentSuiteID ? " class='active'" : '') . '>';
+            echo html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=$suiteID"), $suiteName);
+        }
+
+        echo '</ul></li>';
+    }
+    elseif($hasGroupPriv and $menuType == 'group')
+    {
         $groupBy  = isset($groupBy) ? $groupBy : '';
         $current  = zget($lang->testcase->groups, isset($groupBy) ? $groupBy : '', '');
         if(empty($current)) $current = $lang->testcase->groups[''];
+
+        echo "<li id='groupTab' class='dropdown'>";
         echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
         echo "<ul class='dropdown-menu'>";
+
         foreach ($lang->testcase->groups as $key => $value)
         {
             if($key == '') continue;
             echo '<li' . ($key == $groupBy ? " class='active'" : '') . '>';
             echo html::a($this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=$key"), $value);
         }
+
         echo '</ul></li>';
     }
-    elseif($hasZeroPriv and $menyType == 'zerocase')
+    elseif($hasZeroPriv and $menuType == 'zerocase')
     {
         echo "<li id='zerocaseTab'>" . html::a($this->createLink('story', 'zeroCase', "productID=$productID"), $lang->story->zeroCase) . '</li>';
     }
@@ -76,7 +101,20 @@
         ?>
         </ul>
       </div>
-      <?php common::printIcon('testcase', 'import', "productID=$productID&branch=$branch", '', 'button', '', '', 'export cboxElement iframe');?>
+      <div class='btn-group'>
+        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon-upload-alt'></i> <?php echo $lang->import ?><span class='caret'></span></button>
+        <ul class='dropdown-menu' id='importActionMenu'>
+        <?php 
+        $misc = common::hasPriv('testcase', 'import') ? "class='export'" : "class=disabled";
+        $link = common::hasPriv('testcase', 'import') ?  $this->createLink('testcase', 'import', "productID=$productID&branch=$branch") : '#';
+        echo "<li>" . html::a($link, $lang->testcase->importFile, '', $misc) . "</li>";
+
+        $misc = common::hasPriv('testcase', 'importFromLib') ? '' : "class=disabled";
+        $link = common::hasPriv('testcase', 'importFromLib') ?  $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch") : '#';
+        echo "<li>" . html::a($link, $lang->testcase->importFromLib, '', $misc) . "</li>";
+        ?>
+        </ul>
+      </div>
     </div>
     <div class='btn-group'>
       <div class='btn-group' id='createActionMenu'>
@@ -89,7 +127,7 @@
         <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
           <span class='caret'></span>
         </button>
-        <ul class='dropdown-menu'>
+        <ul class='dropdown-menu pull-right'>
         <?php 
         $misc = common::hasPriv('testcase', 'batchCreate') ? '' : "class=disabled";
         $link = common::hasPriv('testcase', 'batchCreate') ?  $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule") : '#';

@@ -42,18 +42,31 @@
       <td>
         <?php if(!empty($steps[$caseID])):?>
         <table class='table table-fixed'>
-          <?php $i = 1;?>
+          <?php $stepId = $childId = 0;?>
           <?php foreach($steps[$caseID] as $stepID => $step):?>
+          <?php
+          if($step->type == 'group' or $step->type == 'step')
+          {
+              $stepId ++;
+              $childId = 0;
+          }
+          $ID = $step->type == 'item' ? "{$stepId}.{$childId}" : $stepId;
+          $stepClass = $step->type == 'item' ? 'step-item' : 'step-group';
+          ?>
           <tr>
-            <td class='text-left w-p30'><?php echo "<span title='$step->desc'>" . $i . "、" . $step->desc . '</span>'?></td>
+            <td class='text-left w-p30' <?php if($step->type == 'group') echo "colspan='2'"?>><?php echo "<span title='$step->desc' class='$stepClass'>" . $ID . "、" . $step->desc . '</span>'?></td>
+            <?php if($step->type != 'group'):?>
             <td class='text-left w-p30'><?php echo "<span title='$step->expect'>" . $lang->testcase->stepExpect . "：" . $step->expect . '</span>'?></td>
             <td class='w-80px hidden action<?php echo $caseID?>'><?php echo html::select("steps[$caseID][$stepID]", $lang->testcase->resultList, 'pass', "class='form-control'")?></td>
             <td class='hidden action<?php echo $caseID?>'><?php echo html::input("reals[$caseID][$stepID]", '', "class='form-control'");?></td>
+            <?php endif;?>
           </tr>
-          <?php $i++?>
+          <?php $childId ++;?>
           <?php endforeach?>
         </table>
-        <?php endif?>
+        <?php else:?>
+        <span class='hidden action<?php echo $caseID?>'><?php echo html::input("reals[$caseID][]", '', "class='form-control'");?></span>
+        <?php endif;?>
       </td>
     </tr>  
     <?php endforeach;?>
@@ -66,10 +79,18 @@ function showAction(value, obj)
     if(value == 'pass')
     {
         $(obj).addClass('hidden');
+        $(obj).closest('tbody').children('tr').each(function(){
+            var $td = $(this).children('td:first');
+            if($td.attr('colspan') != undefined) $td.attr('colspan', 2);
+        });
     }
     else
     {
         $(obj).removeClass('hidden');
+        $(obj).closest('tbody').children('tr').each(function(){
+            var $td = $(this).children('td:first');
+            if($td.attr('colspan') != undefined) $td.attr('colspan', 4);
+        });
     }
 }
 </script>

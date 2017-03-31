@@ -68,12 +68,12 @@
                     if($lists) echo $lang->user->contacts->or;
                     echo $lang->user->contacts->createList;
                     echo '</span>';
-                    echo html::input('newList', '', "class='form-control'");
+                    echo html::input('newList', '', "class='form-control' autocomplete='off'");
                     echo '</div>';
                 }
                 else
                 {
-                    echo html::input('listName', $list->listName, "class='form-control'");
+                    echo html::input('listName', $list->listName, "class='form-control' autocomplete='off'");
                     echo html::hidden('listID',  $list->id);
                 }
                 ?>

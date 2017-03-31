@@ -282,7 +282,7 @@ class admin extends control
      * @access public
      * @return void
      */
-    public function ztCompany()
+    public function ztCompany($fields = 'company')
     {
         if($_POST)
         {
@@ -294,6 +294,8 @@ class admin extends control
 
         $this->view->title      = $this->lang->admin->ztCompany;
         $this->view->position[] = $this->lang->admin->ztCompany;
+
+        $this->view->fields = explode(',', $fields);
         $this->display();
     }
 

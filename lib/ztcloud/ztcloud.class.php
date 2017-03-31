@@ -75,11 +75,19 @@ class ztcloud
         $param['body']      = $this->body;
 
         $result = $this->queryZtcloud($this->url, $param);
+        if(!isset($result->result))
+        {
+            throw new Exception($result);
+            return false;
+        }
+
         if($result->result == 'fail')
         {
             throw new Exception($result->message . "(code:{$result->code})");
             return false;
         }
+
+        return true;
     }
 
     /**
@@ -102,7 +110,9 @@ class ztcloud
         );
         $context = stream_context_create($options);
         $result  = file_get_contents($url, FILE_TEXT, $context);
-        return json_decode($result);
+
+        $parsedResult = json_decode($result);
+        return empty($parsedResult) ? $result : $parsedResult;
     }
 
     /**

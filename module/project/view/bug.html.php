@@ -20,6 +20,7 @@
     <?php common::printIcon('bug', 'export', "productID=$productID&orderBy=$orderBy", '', 'button', '', '', "export iframe");?>
     <?php common::printIcon('bug', 'create', "productID=$productID&branch=$branchID&extra=projectID=$project->id");?>
   </div>
+  <div id='querybox' class='show'></div>
 </div>
 <form method='post' id='projectBugForm'>
   <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='bugList'>

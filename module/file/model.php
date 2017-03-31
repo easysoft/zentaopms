@@ -42,13 +42,19 @@ class fileModel extends model
      */
     public function getByObject($objectType, $objectID, $extra = '')
     {
-        return $this->dao->select('*')->from(TABLE_FILE)
+        $files = $this->dao->select('*')->from(TABLE_FILE)
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq((int)$objectID)
             ->andWhere('extra')->ne('editor')
             ->beginIF($extra)->andWhere('extra')->eq($extra)
             ->orderBy('id')
             ->fetchAll('id');
+        foreach($files as $file)
+        {
+            $file->webPath  = $this->webPath . $file->pathname;
+            $file->realPath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . $file->pathname;
+        }
+        return $files;
     }
 
     /**
@@ -354,11 +360,15 @@ class fileModel extends model
      */
     public function parseCSV($fileName)
     {
-        $handle = fopen($fileName, 'r');
-        $col    = -1;
-        $row    = 0;
-        $data   = array();
-        while(($line = fgets($handle)) !== false)
+        $content = file_get_contents($fileName);
+        /* Fix bug #890. */
+        $content = str_replace("\x82\x32", "\x10", $content);
+        $lines   = explode("\n", $content);
+
+        $col  = -1;
+        $row  = 0;
+        $data = array();
+        foreach($lines as $line)
         {
             $line    = trim($line);
             $markNum = substr_count($line, '"') - substr_count($line, '\"');
@@ -440,7 +450,6 @@ class fileModel extends model
             $row ++;
             $col = -1;
         }
-        fclose($handle);
 
         return $data;
     }

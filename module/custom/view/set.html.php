@@ -15,11 +15,11 @@
 $itemRow = <<<EOT
   <tr class='text-center'>
     <td>
-      <input type='text' class="form-control"  value="" name="keys[]">
+      <input type='text' class="form-control" autocomplete='off' value="" name="keys[]">
       <input type='hidden' value="0" name="systems[]">
     </td>
     <td>
-      <input type='text' class="form-control" value="" name="values[]">
+      <input type='text' class="form-control" autocomplete='off' value="" name="values[]">
     </td>
     <td class='text-left'>
       <a href='javascript:void()' class='btn-icon' onclick='addItem(this)'><i class='icon-plus'></i></a>
@@ -62,7 +62,7 @@ EOT;
       <div class='panel-heading'>
         <strong><?php echo $lang->custom->object[$module] . $lang->arrow . $lang->custom->$module->fields[$field]?></strong>
       </div>
-      <?php if($module == 'story' and $field == 'review'):?>
+      <?php if(($module == 'story' or $module == 'testcase') and $field == 'review'):?>
       <table class='table table-form mw-800px'>
         <tr>
           <th class='w-80px'><?php echo $lang->custom->storyReview;?></th>
@@ -72,7 +72,7 @@ EOT;
         <tr>
           <th><?php echo $lang->custom->forceReview;?></th>
           <td><?php echo html::select('forceReview[]', $users, $forceReview, "class='form-control chosen' multiple");?></td>
-          <td class='w-180px'><?php echo $lang->custom->notice->forceReview;?></td>
+          <td class='w-180px'><?php printf($lang->custom->notice->forceReview, $lang->$module->common);?></td>
         </tr>
         <tr>
           <td></td>
@@ -83,7 +83,7 @@ EOT;
       <table class='table table-form mw-600px'>
         <tr>
           <th class='w-150px'><?php echo $lang->custom->workingHours;?></th>
-          <td><?php echo html::input('defaultWorkhours', $workhours, "class='form-control w-80px'");?></td>
+          <td><?php echo html::input('defaultWorkhours', $workhours, "class='form-control w-80px' autocomplete='off'");?></td>
           <td></td>
         </tr>
         <tr>
@@ -101,7 +101,7 @@ EOT;
           <th class='w-100px'><?php echo $lang->custom->bug->fields['longlife'];?></th>
           <td class='w-100px'>
             <div class='input-group'>
-              <?php echo html::input('longlife', $longlife, "class='form-control'");?>
+              <?php echo html::input('longlife', $longlife, "class='form-control' autocomplete='off'");?>
               <span class='input-group-addon'><?php echo $lang->day?></span>
             </div>
           </td>
@@ -109,6 +109,17 @@ EOT;
         </tr>
       </table>
       <div class='alert alert-info alert-block'><?php echo $lang->custom->notice->longlife;?></div>
+      <?php elseif($module == 'block' and $field == 'closed'):?>
+      <table class='table table-form mw-600px'>
+        <tr>
+          <th class='w-100px'><?php echo $lang->custom->block->fields['closed'];?></th>
+          <td><?php echo html::select('closed[]', $blockPairs, $closedBlock, "class='form-control chosen' multiple");?></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><?php echo html::submitButton();?></td>
+        </tr>
+      </table>
       <?php else:?>
       <table class='table table-form active-disabled table-condensed mw-600px'>
         <tr class='text-center'>
@@ -121,7 +132,7 @@ EOT;
           <?php $system = isset($dbFields[$key]) ? $dbFields[$key]->system : 1;?>
           <td><?php echo $key === '' ? 'NULL' : $key; echo html::hidden('keys[]', $key) . html::hidden('systems[]', $system);?></td>
           <td>
-            <?php echo html::input("values[]", isset($dbFields[$key]) ? $dbFields[$key]->value : $value, "class='form-control' " . (empty($key) ? 'readonly' : ''));?>
+            <?php echo html::input("values[]", isset($dbFields[$key]) ? $dbFields[$key]->value : $value, "class='form-control' autocomplete='off' " . (empty($key) ? 'readonly' : ''));?>
           </td>
           <?php if($canAdd):?>
           <td class='text-left w-100px'>

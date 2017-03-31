@@ -73,7 +73,7 @@ class groupModel extends model
         foreach($privs as $priv)
         {
             $priv->group = $toGroup;
-            $this->dao->insert(TABLE_GROUPPRIV)->data($priv)->exec();
+            $this->dao->replace(TABLE_GROUPPRIV)->data($priv)->exec();
         }
     }
 
@@ -249,7 +249,7 @@ class groupModel extends model
                     $data->group  = $groupID;
                     $data->module = $moduleName;
                     $data->method = $actionName;
-                    $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
+                    $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
                 }
             }
         }

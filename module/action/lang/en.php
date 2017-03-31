@@ -61,6 +61,9 @@ $lang->action->objectTypes['doclib']      = 'Doc Lib';
 $lang->action->objectTypes['todo']        = 'To-Dos';
 $lang->action->objectTypes['branch']      = 'Branch';
 $lang->action->objectTypes['module']      = 'Module';
+$lang->action->objectTypes['testsuite']   = 'Suite';
+$lang->action->objectTypes['caselib']     = 'Library';
+$lang->action->objectTypes['testreport']  = 'Report';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -80,6 +83,7 @@ $lang->action->desc->undeleted      = '$date, restored by <strong>$actor</strong
 $lang->action->desc->hidden         = '$date, hidden by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->commented      = '$date, added by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->activated      = '$date, activated by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->blocked        = '$date, blocked by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->moved          = '$date, moved by <strong>$actor</strong> , which was "$extra".' . "\n";
 $lang->action->desc->confirmed      = '$date, <strong>$actor</strong> confirmed the change of Story. The latest version is <strong>#$extra</strong>.' . "\n";
 $lang->action->desc->caseconfirmed  = '$date, <strong>$actor</strong> confirmed the change of Case. The latest version is <strong>#$extra</strong>' . "\n";
@@ -102,8 +106,8 @@ $lang->action->desc->diff2          = '<strong><i>%s</i></strong> has been chang
 $lang->action->desc->diff3          = 'File Name %s was changed to %s .' . "\n";
 
 /* 关联用例和移除用例时的历史操作记录。*/
-$lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> related relevant use case <strong>$extra</strong>.' . "\n";
-$lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> removed relevant use case <strong>$extra</strong>.' . "\n";
+$lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> linked relevant use case <strong>$extra</strong>.' . "\n";
+$lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> unlinked relevant use case <strong>$extra</strong>.' . "\n";
 
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
@@ -121,6 +125,7 @@ $lang->action->label->undeleted           = 'Restored';
 $lang->action->label->hidden              = 'Hidden';
 $lang->action->label->commented           = 'Commented';
 $lang->action->label->activated           = 'Activated';
+$lang->action->label->blocked             = 'Blocked';
 $lang->action->label->resolved            = 'Resolved';
 $lang->action->label->reviewed            = 'Reviewed';
 $lang->action->label->moved               = 'Moved';
@@ -128,23 +133,26 @@ $lang->action->label->confirmed           = 'Confirm a Story, ';
 $lang->action->label->bugconfirmed        = 'Confirmed';
 $lang->action->label->tostory             = 'Convert to Story';
 $lang->action->label->frombug             = 'Converted from Bug';
+$lang->action->label->fromlib             = 'Import from library';
 $lang->action->label->totask              = 'Convert to Task';
 $lang->action->label->svncommited         = 'SVN Commit';
 $lang->action->label->gitcommited         = 'Git Commit';
-$lang->action->label->linked2plan         = 'Relate to Plan';
-$lang->action->label->unlinkedfromplan    = 'Unrelate';
+$lang->action->label->linked2plan         = 'Link to Plan';
+$lang->action->label->unlinkedfromplan    = 'Unlink';
 $lang->action->label->changestatus        = 'Change Status';
 $lang->action->label->marked              = 'Marked';
-$lang->action->label->linked2project      = "Relate {$lang->projectCommon}";
-$lang->action->label->unlinkedfromproject = "Remove {$lang->projectCommon}";
-$lang->action->label->linkrelatedbug      = "Relate to Bug";
-$lang->action->label->unlinkrelatedbug    = "Unrelate";
-$lang->action->label->linkrelatedcase     = "Relate to Case";
-$lang->action->label->unlinkrelatedcase   = "Unrelate";
-$lang->action->label->linkrelatedstory    = "Relate to Story";
-$lang->action->label->unlinkrelatedstory  = "Unrelate";
+$lang->action->label->linked2project      = "Link {$lang->projectCommon}";
+$lang->action->label->unlinkedfromproject = "Unlink {$lang->projectCommon}";
+$lang->action->label->linked2release      = "Link Release";
+$lang->action->label->unlinkedfromrelease = "Unlink Release";
+$lang->action->label->linkrelatedbug      = "Link to Bug";
+$lang->action->label->unlinkrelatedbug    = "Unlink";
+$lang->action->label->linkrelatedcase     = "Link to Case";
+$lang->action->label->unlinkrelatedcase   = "Unlink";
+$lang->action->label->linkrelatedstory    = "Link to Story";
+$lang->action->label->unlinkrelatedstory  = "Unlink";
 $lang->action->label->subdividestory      = "Decompose Story";
-$lang->action->label->unlinkchildstory    = "Unrelate";
+$lang->action->label->unlinkchildstory    = "Unlink";
 $lang->action->label->started             = 'Initiated';
 $lang->action->label->restarted           = 'Continued';
 $lang->action->label->recordestimate      = 'Recorded Man-Hour';
@@ -169,10 +177,13 @@ $lang->action->label->build       = 'Build|build|view|buildID=%s';
 $lang->action->label->bug         = 'Bug|bug|view|bugID=%s';
 $lang->action->label->case        = 'Case|testcase|view|caseID=%s';
 $lang->action->label->testtask    = 'Test Task|testtask|view|caseID=%s';
+$lang->action->label->testsuite   = 'Test Suite|testsuite|view|suiteID=%s';
+$lang->action->label->caselib     = 'Case Library|testsuite|libview|libID=%s';
 $lang->action->label->todo        = 'To-Dos|todo|view|todoID=%s';
 $lang->action->label->doclib      = 'Doc Lib|doc|browse|libID=%s';
 $lang->action->label->doc         = 'Document|doc|view|docID=%s';
 $lang->action->label->user        = 'User|user|view|account=%s';
+$lang->action->label->testreport  = 'Report|testreport|view|report=%s';
 $lang->action->label->space       = ' ';
 
 /* Object type. */
@@ -194,6 +205,9 @@ $lang->action->search->objectTypeList['build']       = 'Build';
 $lang->action->search->objectTypeList['release']     = 'Release';
 $lang->action->search->objectTypeList['productplan'] = 'Plan';
 $lang->action->search->objectTypeList['branch']      = 'Branch';
+$lang->action->search->objectTypeList['testsuite']   = 'Suite';
+$lang->action->search->objectTypeList['caselib']     = 'Library';
+$lang->action->search->objectTypeList['testreport']  = 'Report';
 
 /* 用来在动态显示中显示动作 */
 $lang->action->search->label['']                    = '';
@@ -211,6 +225,7 @@ $lang->action->search->label['undeleted']           = $lang->action->label->unde
 $lang->action->search->label['hidden']              = $lang->action->label->hidden;
 $lang->action->search->label['commented']           = $lang->action->label->commented;
 $lang->action->search->label['activated']           = $lang->action->label->activated;
+$lang->action->search->label['blocked']             = $lang->action->label->blocked;
 $lang->action->search->label['resolved']            = $lang->action->label->resolved;
 $lang->action->search->label['reviewed']            = $lang->action->label->reviewed;
 $lang->action->search->label['moved']               = $lang->action->label->moved;

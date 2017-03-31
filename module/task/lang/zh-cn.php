@@ -17,6 +17,7 @@ $lang->task->batchChangeModule  = "批量修改模块";
 $lang->task->edit               = "编辑";
 $lang->task->delete             = "删除";
 $lang->task->deleted            = "已删除";
+$lang->task->delayed            = '延期';
 $lang->task->view               = "查看任务";
 $lang->task->logEfforts         = "记录工时";
 $lang->task->record             = "工时";
@@ -35,6 +36,7 @@ $lang->task->case               = '相关用例';
 $lang->task->confirmStoryChange = "确认需求变动";
 $lang->task->progess            = '进度';
 $lang->task->progessTips        = '已消耗/(已消耗+剩余)';
+$lang->task->copy               = '复制任务';
 
 $lang->task->common            = '任务';
 $lang->task->id                = '编号';

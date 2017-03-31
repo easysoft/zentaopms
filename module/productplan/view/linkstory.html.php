@@ -24,7 +24,7 @@ include '../../common/view/tablesorter.html.php';
           <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
           <th class='w-pri'>   <?php echo $lang->priAB;?></th>
           <th class='w-200px'> <?php echo $lang->story->plan;?></th>
-          <th class='w-80px'>  <?php echo $lang->story->module;?></th>
+          <th class='w-150px'> <?php echo $lang->story->module;?></th>
           <th>                 <?php echo $lang->story->title;?></th>
           <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
           <th class='w-user'>  <?php echo $lang->assignedToAB;?></th>

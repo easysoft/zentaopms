@@ -42,8 +42,6 @@ class taskModel extends model
 
         foreach($this->post->assignedTo as $assignedTo)
         {
-            if($this->post->type == 'affair' and empty($assignedTo)) continue;
-
             $task->assignedTo = $assignedTo;
             if($assignedTo) $task->assignedDate = helper::now();
 
@@ -288,9 +286,6 @@ class taskModel extends model
         $today      = date(DT_DATE1);
         $data       = fixer::input('post')->get();
         $taskIDList = $this->post->taskIDList;
-
-        /* Adjust whether the post data is complete, if not, remove the last element of $taskIDList. */
-        if($this->session->showSuhosinInfo) array_pop($taskIDList);
 
         /* Process data if the value is 'ditto'. */
         foreach($taskIDList as $taskID)
@@ -632,7 +627,7 @@ class taskModel extends model
         $newTask->status   = $task->status;
 
         $changes = common::createChanges($oldTask, $newTask);
-        $this->action->logHistory($actionID, $changes);
+        if(!empty($actionID)) $this->action->logHistory($actionID, $changes);
         if($task->story) $this->loadModel('story')->setStage($task->story);
 
         return $changes;
@@ -945,7 +940,7 @@ class taskModel extends model
             ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftjoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
             ->where('t1.deleted')->eq(0)
-            ->beginIF($type != 'all')->andWhere("t1.$type")->eq($account)->fi()
+            ->beginIF($type != 'all')->andWhere("t1.`$type`")->eq($account)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)

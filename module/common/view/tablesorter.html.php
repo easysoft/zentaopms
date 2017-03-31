@@ -9,38 +9,33 @@ table.tablesorter tr.tablesorter-headerRow .header.headerSortUp .tablesorter-hea
 table.tablesorter tr.tablesorter-headerRow .header.headerSortDown .tablesorter-header-inner:after{font-family: NewZenIcon; font-weight: normal; content: "\e6b8"; font-size: 14px; color: #03C;}
 table.tablesorter tr.tablesorter-headerRow .header.sorter-false .tablesorter-header-inner:after{content:"";}
 </style>
-<script language='javascript'>
-
-/* sort table after page load. */
-$(function(){sortTable('.tablesorter');});
-
-function sortTable(obj)
+<script>
+function sortTable(selector, options)
 {
-    if(typeof(obj) == 'undefined') obj = '.tablesorter';
-    $(obj).tablesorter(
+    var $table = $(selector);
+    $table.tablesorter($.extend(
     {
         saveSort: true,
         widgets: ['zebra', 'saveSort'], 
         widgetZebra: {css: ['odd', 'even'] }
+    }, $table.data(), options)).on('mouseenter', 'tbody tr', function()
+    {
+        $(this).addClass('hoover');
+    }).on('mouseleave', 'tbody tr', function()
+    {
+        $(this).removeClass('hoover');
+    }).on('click', 'tbody tr', function()
+    {
+        $(this).toggleClass('clicked');
     });
-
-    $(obj + ' tbody tr').hover(
-        function(){$(this).addClass('hoover')},
-        function(){$(this).removeClass('hoover')}
-    );
-
-    $(obj + ' tbody tr').click(
-        function()
-        {
-            if($(this).attr('class').indexOf('clicked') > 0)
-            {
-                $(this).removeClass('clicked');
-            }
-            else
-            {
-                $(this).addClass('clicked');
-            }
-        }
-    );
 }
+$.fn.sortTable = function(options)
+{
+    return this.each(function()
+    {
+        sortTable(this, options);
+    });
+};
+/* sort table after page load. */
+$(function(){$('.tablesorter').sortTable();});
 </script>

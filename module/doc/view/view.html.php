@@ -90,14 +90,22 @@
           }
           echo $content;
           ?>
+          <div class='list-group files-list'>
           <?php foreach($doc->files as $file):?>
           <?php if(in_array($file->extension, $config->file->imageExtensions)):?>
-          <a href="<?php echo $file->webPath?>" target="_blank">
-            <img onload="setImageSize(this,0)" src="<?php echo $file->webPath?>" alt="<?php echo $file->title?>" title="<?php echo $file->title?>">
-          </a>
+          <?php $uploadDate = $lang->file->uploadDate . substr($file->addedDate, 0, 10);?>
+          <li class='list-group-item' title='<?php echo $uploadDate?>' style='position:relative;'>
+            <a href="<?php echo $file->webPath?>" target="_blank">
+              <img onload="setImageSize(this,0)" src="<?php echo $file->webPath?>" alt="<?php echo $file->title?>">
+            </a>
+            <span class='right-icon' style='position:absolute;right:-18px;top:0px;'>
+              <?php if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon-remove'></i>", '', "class='btn-icon' onclick='deleteFile($file->id)' title='$lang->delete'");?>
+            </span>
+          </li>
           <?php unset($doc->files[$file->id]);?>
           <?php endif;?>
           <?php endforeach;?>
+          </div>
 
           <?php if($doc->files):?>
           <div class='file-content'><?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'false'));?></div>

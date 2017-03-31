@@ -61,6 +61,9 @@ $lang->action->objectTypes['doclib']      = '文档库';
 $lang->action->objectTypes['todo']        = '待办';
 $lang->action->objectTypes['branch']      = '分支';
 $lang->action->objectTypes['module']      = '模块';
+$lang->action->objectTypes['testsuite']   = '套件';
+$lang->action->objectTypes['caselib']     = '用例库';
+$lang->action->objectTypes['testreport']  = '报告';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -80,6 +83,7 @@ $lang->action->desc->undeleted      = '$date, 由 <strong>$actor</strong> 还原
 $lang->action->desc->hidden         = '$date, 由 <strong>$actor</strong> 隐藏。' . "\n";
 $lang->action->desc->commented      = '$date, 由 <strong>$actor</strong> 添加备注。' . "\n";
 $lang->action->desc->activated      = '$date, 由 <strong>$actor</strong> 激活。' . "\n";
+$lang->action->desc->blocked        = '$date, 由 <strong>$actor</strong> 阻塞。' . "\n";
 $lang->action->desc->moved          = '$date, 由 <strong>$actor</strong> 移动，之前为 "$extra"。' . "\n";
 $lang->action->desc->confirmed      = '$date, 由 <strong>$actor</strong> 确认需求变动，最新版本为<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->caseconfirmed  = '$date, 由 <strong>$actor</strong> 确认用例变动，最新版本为<strong>#$extra</strong>。' . "\n";
@@ -121,6 +125,7 @@ $lang->action->label->undeleted           = '还原了';
 $lang->action->label->hidden              = '隐藏了';
 $lang->action->label->commented           = '评论了';
 $lang->action->label->activated           = '激活了';
+$lang->action->label->blocked             = '阻塞了';
 $lang->action->label->resolved            = '解决了';
 $lang->action->label->reviewed            = '评审了';
 $lang->action->label->moved               = '移动了';
@@ -128,6 +133,7 @@ $lang->action->label->confirmed           = '确认了需求，';
 $lang->action->label->bugconfirmed        = '确认了';
 $lang->action->label->tostory             = '转需求';
 $lang->action->label->frombug             = '转需求';
+$lang->action->label->fromlib             = '从用例库导入';
 $lang->action->label->totask              = '转任务';
 $lang->action->label->svncommited         = '提交代码';
 $lang->action->label->gitcommited         = '提交代码';
@@ -137,6 +143,8 @@ $lang->action->label->changestatus        = '修改状态';
 $lang->action->label->marked              = '编辑了';
 $lang->action->label->linked2project      = "关联{$lang->projectCommon}";
 $lang->action->label->unlinkedfromproject = "移除{$lang->projectCommon}";
+$lang->action->label->linked2release      = "关联发布";
+$lang->action->label->unlinkedfromrelease = "移除发布";
 $lang->action->label->linkrelatedbug      = "关联了相关Bug";
 $lang->action->label->unlinkrelatedbug    = "移除了相关Bug";
 $lang->action->label->linkrelatedcase     = "关联了相关用例";
@@ -169,10 +177,13 @@ $lang->action->label->build       = 'Build|build|view|buildID=%s';
 $lang->action->label->bug         = 'Bug|bug|view|bugID=%s';
 $lang->action->label->case        = '用例|testcase|view|caseID=%s';
 $lang->action->label->testtask    = '测试任务|testtask|view|caseID=%s';
+$lang->action->label->testsuite   = '测试套件|testsuite|view|suiteID=%s';
+$lang->action->label->caselib     = '测试库|testsuite|libview|libID=%s';
 $lang->action->label->todo        = 'todo|todo|view|todoID=%s';
 $lang->action->label->doclib      = '文档库|doc|browse|libID=%s';
 $lang->action->label->doc         = '文档|doc|view|docID=%s';
 $lang->action->label->user        = '用户|user|view|account=%s';
+$lang->action->label->testreport  = '报告|testreport|view|report=%s';
 $lang->action->label->space       = ' ';
 
 /* Object type. */
@@ -194,6 +205,9 @@ $lang->action->search->objectTypeList['build']       = 'Build';
 $lang->action->search->objectTypeList['release']     = '发布';
 $lang->action->search->objectTypeList['productplan'] = '计划';
 $lang->action->search->objectTypeList['branch']      = '分支';
+$lang->action->search->objectTypeList['testsuite']   = '套件';
+$lang->action->search->objectTypeList['caselib']     = '公共库';
+$lang->action->search->objectTypeList['testreport']  = '报告';
 
 /* 用来在动态显示中显示动作 */
 $lang->action->search->label['']                    = '';
@@ -211,6 +225,7 @@ $lang->action->search->label['undeleted']           = $lang->action->label->unde
 $lang->action->search->label['hidden']              = $lang->action->label->hidden;
 $lang->action->search->label['commented']           = $lang->action->label->commented;
 $lang->action->search->label['activated']           = $lang->action->label->activated;
+$lang->action->search->label['blocked']             = $lang->action->label->blocked;
 $lang->action->search->label['resolved']            = $lang->action->label->resolved;
 $lang->action->search->label['reviewed']            = $lang->action->label->reviewed;
 $lang->action->search->label['moved']               = $lang->action->label->moved;

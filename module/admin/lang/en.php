@@ -22,7 +22,7 @@ $lang->admin->captcha       = 'Verification Code';
 $lang->admin->getCaptcha    = 'Get Verification Code';
 
 $lang->admin->info = new stdclass();
-$lang->admin->info->version = 'Current Version is %s,';
+$lang->admin->info->version = 'Current Version is %s. ';
 $lang->admin->info->links   = 'You can visit ';
 $lang->admin->info->account = "Your ZenTao account is %s.";
 
@@ -56,6 +56,9 @@ $lang->admin->safe->modifyPasswordFirstLogin = 'Modify password when login for t
 $lang->admin->safe->modeList[0] = 'N/A';
 $lang->admin->safe->modeList[1] = 'Medium';
 $lang->admin->safe->modeList[2] = 'Strong';
+
+$lang->admin->safe->modeRuleList[1] = 'Should be contain letters and numbers, at lease six characters.';
+$lang->admin->safe->modeRuleList[2] = 'Should be contain letters, numbers and special characters, at lease 10 characters.';
 
 $lang->admin->safe->reasonList['weak']     = 'Common Weak Password';
 $lang->admin->safe->reasonList['account']  = 'Same as your account';

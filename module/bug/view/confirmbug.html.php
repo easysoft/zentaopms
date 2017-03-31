@@ -32,6 +32,10 @@ js::set('page', 'confirmbug');
       <td></td>
     </tr>  
     <tr>
+      <th><?php echo $lang->bug->type;?></th>
+      <td><?php echo html::select('type', $lang->bug->typeList, $bug->type, 'class=form-control');?></td>
+    </tr>
+    <tr>
       <th><?php echo $lang->bug->pri;?></th>
       <td><?php echo html::select('pri', $lang->bug->priList, $bug->pri, 'class=form-control');?></td>
     </tr>  

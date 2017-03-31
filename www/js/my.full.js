@@ -75,7 +75,7 @@ function shortcut()
 }
 
 /**
- * Show drop menu. 
+ * Show search drop menu. 
  * 
  * @param  string $objectType product|project
  * @param  int    $objectID 
@@ -85,142 +85,113 @@ function shortcut()
  * @access public
  * @return void
  */
-function showDropMenu(objectType, objectID, module, method, extra)
+function showSearchMenu(objectType, objectID, module, method, extra)
 {
-    var itemID = objectType == 'branch' ? '#currentBranch' : '#currentItem';
-    var li = $(itemID).closest('li');
-    if(li.hasClass('show')) {li.removeClass('show'); return;}
-
-    var $dropMenu = li.find('#dropMenu');
-    if(!li.data('showagain'))
+    var $toggle = $(objectType == 'branch' ? '#currentBranch' : '#currentItem').closest('li').toggleClass('show');
+    if(!$toggle.hasClass('show')) return;
+    var $menu = $toggle.find('#dropMenu');
+    var uuid = $.zui.uuid();
+    if(!$menu.data('initData'))
     {
-        li.data('showagain', true);
-        $(document).click(function() {li.removeClass('show');});
-        li.click(function(e){e.stopPropagation();});
-
-        $dropMenu.on('keydown', '#search', function(e)
+        var remoteUrl = createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra);
+        $.get(remoteUrl, function(data)
         {
-            var code = e.which;
-            var $this = $dropMenu.find('#searchResult > .search-list > ul > li.active');
-            if(code === 38) // up
+            var $search = $menu.html(data).find('#search').focus();
+            var $items = $menu.find('#searchResult ul > li:not(.heading)');
+            var items = [];
+            $items.each(function()
             {
-                $this.removeClass('active');
-                if($this.length)
+                var $item = $(this).removeClass('active');
+                var item = $item.data();
+                item.uuid = 'searchItem-' + (uuid++);
+                item.key = (item.key || '') + $item.text();
+                item.tag = (item.tag || '') + '#' + item.id;
+                $item.attr('id', item.uuid);
+                items.push(item);
+            });
+
+            var searchItems = function()
+            {
+                var searchText = $.trim($search.val());
+                if(searchText !== null && searchText.length)
                 {
-                    var $prev = $this.prev('li');
-                    while($prev.length && $prev.hasClass('heading'))
+                    $items.removeClass('show-search');
+                    $menu.addClass('searching');
+                    var isTag = searchText.length > 1 && (searchText[0] === ':' || searchText[0] === '@' || searchText[0] === '#');
+                    $.each(items, function(idx, item)
                     {
-                        $prev = $prev.prev('li');
-                    }
-                    if($prev.length)
+                        if((isTag && item.tag.indexOf(searchText) > -1) || item.key.indexOf(searchText) > -1)
+                        {
+                            $('#' + item.uuid).addClass('show-search');
+                        }
+                    });
+                    var $resultItems = $items.filter('.show-search');
+                    if(!$resultItems.filter('.active').length)
                     {
-                        $prev.addClass('active');
-                        return;
+                        $resultItems.first().addClass('active');
                     }
                 }
-                $dropMenu.find('#searchResult > .search-list > ul > li:not(.heading):last').addClass('active');
-            }
-            else if(code === 40) // down
-            {
-                $this.removeClass('active');
-                if($this.length)
+                else
                 {
-                    var $next = $this.next('li');
-                    while($next.length && $next.hasClass('heading'))
-                    {
-                        $next = $next.next('li');
-                    }
-                    if($next.length)
-                    {
-                        $next.addClass('active');
-                        return;
-                    }
+                    $menu.removeClass('searching');
                 }
-                $dropMenu.find('#searchResult > .search-list > ul > li:not(.heading):first').addClass('active');
-            }
-            else if(code === 13) // enter
+            };
+            var searchCallTask = null;
+            $search.on('change keyup paste input propertychange', function()
             {
-                if($this.length) window.location.href = $this.children('a').attr('href');
-            }
-        }).on('change keyup paste input propertychange', '#search', function()
-        {
-            var $search = $(this);
-            var searchKey = $search.val();
-            if(searchKey === $dropMenu.data('lastSearchKey')) return;
-
-            clearTimeout($dropMenu.data('lastSearch'));
-            $dropMenu.data('lastSearch', setTimeout(function()
+                clearTimeout(searchCallTask);
+                searchCallTask = setTimeout(searchItems, 200);
+            }).on('keydown', function(e)
             {
-                $dropMenu.data('lastSearchKey', searchKey);
-                searchItems(searchKey, objectType, objectID, module, method, extra);
-            }, 200));
-        }).on('mouseenter', '#searchResult .search-list > ul > li', function(){
-            $dropMenu.find('#searchResult > .search-list > ul > li.active').removeClass('active');
-            $(this).addClass('active');
+                var code = e.which;
+                var isSearching = $menu.hasClass('searching');
+                var $resultItems = isSearching ? $items.filter('.show-search') : $items;
+                var resultLength = $resultItems.length;
+                if(!resultLength) return;
+                var $this = $resultItems.filter('.active:first');
+                var getIndex = function()
+                {
+                    var thisIdx = -1;
+                    $resultItems.each(function(idx)
+                    {
+                        if($(this).is($this))
+                        {
+                            thisIdx = idx;
+                            return false;
+                        }
+                    });
+                    return thisIdx;
+                };
+                if(code === 38) // up
+                {
+                    $items.removeClass('active');
+                    if($this.length) $resultItems.eq((getIndex() - 1)%resultLength).addClass('active');
+                    else $resultItems.last().addClass('active');
+                }
+                else if(code === 40) // down
+                {
+                    $items.removeClass('active');
+                    if($this.length) $resultItems.eq((getIndex() + 1)%resultLength).addClass('active');
+                    else $resultItems.first().addClass('active');
+                }
+                else if(code === 13) // enter
+                {
+                    if($this.length) window.location.href = $this.children('a').attr('href');
+                }
+            });
+            $menu.on('mouseenter', ' ul > li:not(.heading)', function()
+            {
+                $items.filter('.active').removeClass('active');
+                $(this).addClass('active');
+            });
         });
-    }
-    $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data)
-    {
-        $dropMenu.html(data).find('#search').focus();
-        $dropMenu.find('#searchResult > .search-list > ul > li:not(.heading)').removeClass('active').first().addClass('active');
-    });
-
-    li.addClass('show');
-}
-
-/**
- * Show drop result. 
- * 
- * @param  objectType $objectType 
- * @param  objectID $objectID 
- * @param  module $module 
- * @param  method $method 
- * @param  extra $extra 
- * @access public
- * @return void
- */
-function showDropResult(objectType, objectID, module, method, extra)
-{
-    var itemID = objectType == 'branch' ? '#currentBranch' : '#currentItem';
-    var li     = $(itemID).closest('li');
-    var $dropMenu = li.find('#dropMenu');
-    $.get(createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra), function(data)
-    {
-        $dropMenu.html(data);
-        setTimeout(function(){$dropMenu.find("#search").focus();}, 200);
-        $dropMenu.find('#searchResult > .search-list > ul > li:not(.heading)').removeClass('active').first().addClass('active');
-    });
-}
-
-/**
- * Search items. 
- * 
- * @param  string $keywords 
- * @param  string $objectType 
- * @param  int    $objectID 
- * @param  string $module 
- * @param  string $method 
- * @param  string $extra 
- * @access public
- * @return void
- */
-function searchItems(keywords, objectType, objectID, module, method, extra)
-{
-    if(keywords == '')
-    {
-        showMenu = 0;
-        showDropResult(objectType, objectID, module, method, extra);
+        $menu.data('initData', true);
+        $(document).on('click', function(){$toggle.removeClass('show');});
+        $toggle.on('click', function(e){e.stopPropagation();});
     }
     else
     {
-        var itemID = objectType == 'branch' ? '#currentBranch' : '#currentItem';
-        var li     = $(itemID).closest('li');
-        var $dropMenu = li.find('#dropMenu');
-        keywords = encodeURI(keywords);
-        if(keywords != '-') $.get(createLink(objectType, 'ajaxGetMatchedItems', "keywords=" + keywords + "&module=" + module + "&method=" + method + "&extra=" + extra + "&objectID=" + objectID), function(data)
-        {
-            $dropMenu.find('#searchResult').html(data).find('.search-list > ul > li:not(.heading)').removeClass('active').first().addClass('active');
-        });
+        $menu.find('#search').focus();
     }
 }
 
@@ -368,7 +339,8 @@ function hideTreeBox(treeType)
 {
     $.cookie(treeType, 'hide', {expires:config.cookieLife, path:config.webRoot});
     $('.outer').addClass('hide-side');
-    $('.side-handle .icon-caret-left').removeClass('icon-caret-left').addClass('icon-caret-right');
+    var direction = $('.side-handle .icon-caret-left').size() > 0 ? 'left' : 'right';
+    $('.side-handle .icon-caret-' + direction).removeClass('icon-caret-' + direction).addClass('icon-caret-' + (direction == 'left' ? 'right' : 'left'));
 }
 
 /**
@@ -382,7 +354,8 @@ function showTreeBox(treeType)
 {
     $.cookie(treeType, 'show', {expires:config.cookieLife, path:config.webRoot});
     $('.outer').removeClass('hide-side');
-    $('.side-handle .icon-caret-right').removeClass('icon-caret-right').addClass('icon-caret-left');
+    var direction = $('.side-handle .icon-caret-left').size() > 0 ? 'left' : 'right';
+    $('.side-handle .icon-caret-' + direction).removeClass('icon-caret-' + direction).addClass('icon-caret-' + (direction == 'left' ? 'right' : 'left'));
 }
 
 /**
@@ -659,7 +632,8 @@ function checkTable($table)
     {
         var $checkbox = $(this);
         var $datatable = $checkbox.closest('.datatable');
-        if($datatable.length) {
+        if($datatable.length)
+        {
             var $checkAll = $datatable.find('.check-all.check-btn:first').trigger('click');
             $checkbox.prop('checked', $checkAll.hasClass('checked'))
             return;
@@ -673,6 +647,16 @@ function checkTable($table)
     $table = $table || $('.table-selectable');
 
     if(!$table.length) return;
+
+    if(!$table.find(':checkbox').length)
+    {
+        $table.on('click', 'tbody > tr', function()
+        {
+            $table.find('tr.active').removeClass('active');
+            $(this).addClass('active');
+        });
+        return;
+    }
 
     var checkRow = function(checked)
     {

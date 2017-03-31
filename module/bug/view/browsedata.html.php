@@ -18,6 +18,7 @@
         <th class='w-pri'>      <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
         <th>                    <?php common::printOrderLink('title',       $orderBy, $vars, $lang->bug->title);?></th>
         <th class='w-100px'>    <?php common::printOrderLink('status',      $orderBy, $vars, $lang->bug->statusAB);?></th>
+        <th class='w-80px'>     <?php common::printOrderLink('deadline',    $orderBy, $vars, $lang->bug->deadline);?></th>
 
         <?php if($browseType == 'needconfirm'):?>
         <th class='w-200px'><?php common::printOrderLink('story',           $orderBy, $vars, $lang->bug->story);?></th>
@@ -76,7 +77,7 @@
           }
           ?>
         </td>
-
+        <td class="<?php if(isset($bug->delay)) echo 'delayed';?>"><?php if(substr($bug->deadline, 0, 4) > 0) echo substr($bug->deadline, 5, 6)?></td>
         <?php if($browseType == 'needconfirm'):?>
         <td class='text-left' title="<?php echo $bug->storyTitle?>"><?php echo html::a($this->createLink('story', 'view', "stoyID=$bug->story"), $bug->storyTitle, '_blank');?></td>
         <td><?php $lang->bug->confirmStoryChange = $lang->confirm; common::printIcon('bug', 'confirmStoryChange', "bugID=$bug->id", '', 'list', '', 'hiddenwin')?></td>

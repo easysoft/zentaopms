@@ -14,7 +14,7 @@ $lang->user->id          = 'ID';
 $lang->user->company     = 'Company';
 $lang->user->dept        = 'Department';
 $lang->user->account     = 'Account';
-$lang->user->password    = 'New Password';
+$lang->user->password    = 'Password';
 $lang->user->password2   = 'Repeat Password';
 $lang->user->role        = 'Role';
 $lang->user->group       = 'Group';
@@ -32,7 +32,7 @@ $lang->user->skype       = 'Skype';
 $lang->user->qq          = 'QQ';
 $lang->user->yahoo       = 'Yahoo!';
 $lang->user->gtalk       = 'GTalk';
-$lang->user->wangwang    = '旺旺';
+$lang->user->wangwang    = 'Wangwang';
 $lang->user->mobile      = 'Mobile';
 $lang->user->phone       = 'Phone';
 $lang->user->address     = 'Address';
@@ -156,8 +156,8 @@ $lang->user->contacts->noListYet     = 'No contacts list exist. Please create a 
 $lang->user->contacts->confirmDelete = 'Do you want to delete this list?';
 $lang->user->contacts->or            = ' or ';
 
-$lang->user->resetFail       = "Reset failed. Please check the account";
-$lang->user->resetSuccess    = "Password reset! Please use your new password to login.";
+$lang->user->resetFail       = "Failed. Please check the account";
+$lang->user->resetSuccess    = "Reset! Please use your new password to login.";
 $lang->user->noticeResetFile = "<h5>If you are not Administrator, please contact Administrator to reset your password.</h5>
     <h5>If you are, please login into your Zentao host and create the <span>%s</span> file.</h5>
     <p>Note:</p>

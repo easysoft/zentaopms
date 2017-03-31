@@ -75,9 +75,6 @@ class searchModel extends model
             $operator = $this->post->$operatorName;
             if(!isset($this->lang->search->operators[$operator])) $operator = '=';
 
-            /* Escape char. */
-            $value = str_replace(array('\\', '%', '_'), array('\\\\', '\\%', '\\_'), $value);
-
             /* Set condition. */
             $condition = '';
             if($operator == "include")
@@ -113,7 +110,7 @@ class searchModel extends model
             /* Set filed name. */
             if($operator == '=' and preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
             {
-                $condition  = '`' . $this->post->$fieldName . "` >= '$value' AND `" . $this->post->$fieldName . "` <= '$value 24:00:00'";
+                $condition  = '`' . $this->post->$fieldName . "` >= '$value' AND `" . $this->post->$fieldName . "` <= '$value 23:59:59'";
                 $where     .= " $andOr ($condition)";
             }
             elseif($condition)

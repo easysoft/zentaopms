@@ -34,6 +34,7 @@ class custom extends control
     public function set($module = 'story', $field = 'priList', $lang = 'zh_cn')
     {
         if($module == 'user' and $field == 'priList') $field = 'roleList';
+        if($module == 'block' and $field == 'priList')$field = 'closed';
         $currentLang = $this->app->getClientLang();
 
         $this->app->loadLang($module);
@@ -45,39 +46,52 @@ class custom extends control
             unset($fieldList['newfeature']);
             unset($fieldList['trackthings']);
         }
-        if($module == 'story' && $field == 'review')
+        if(($module == 'story' or $module == 'testcase') and $field == 'review')
         {
-            $this->app->loadConfig('story');
+            $this->app->loadConfig($module);
             $this->view->users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-            $this->view->needReview   = zget($this->config->story, 'needReview', 1);
-            $this->view->forceReview  = zget($this->config->story, 'forceReview', '');
+            $this->view->needReview   = zget($this->config->$module, 'needReview', 1);
+            $this->view->forceReview  = zget($this->config->$module, 'forceReview', '');
         }
-        if($module == 'task' && $field == 'hours')
+        if($module == 'task' and $field == 'hours')
         {
             $this->app->loadConfig('project');
             $this->view->weekend   = $this->config->project->weekend;
             $this->view->workhours = $this->config->project->defaultWorkhours;
         }
-        if($module == 'bug' && $field == 'longlife')
+        if($module == 'bug' and $field == 'longlife')
         {
             $this->app->loadConfig('bug');
             $this->view->longlife  = $this->config->bug->longlife;
         }
-
-        if(!empty($_POST))
+        if($module == 'block' and $field == 'closed')
         {
-            if($module == 'story' && $field == 'review')
+            $this->loadModel('block');
+            $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
+
+            $this->view->blockPairs  = $this->block->getClosedBlockPairs($closedBlock);
+            $this->view->closedBlock = $closedBlock;
+        }
+
+        if(strtolower($_SERVER['REQUEST_METHOD']) == "post")
+        {
+            if(($module == 'story' or $module == 'testcase') and $field == 'review')
             {
                 $data = fixer::input('post')->join('forceReview', ',')->get();
-                $this->loadModel('setting')->setItems('system.story', $data);
+                $this->loadModel('setting')->setItems("system.$module", $data);
             }
-            elseif($module == 'task' && $field == 'hours')
+            elseif($module == 'task' and $field == 'hours')
             {
                 $this->loadModel('setting')->setItems('system.project', fixer::input('post')->get());
             }
-            elseif($module == 'bug' && $field == 'longlife')
+            elseif($module == 'bug' and $field == 'longlife')
             {
                 $this->loadModel('setting')->setItems('system.bug', fixer::input('post')->get());
+            }
+            elseif($module == 'block' and $field == 'closed')
+            {
+                $data = fixer::input('post')->join('closed', ',')->get();
+                $this->loadModel('setting')->setItem('system.block.closed', zget($data, 'closed', ''));
             }
             else
             {

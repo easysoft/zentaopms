@@ -24,7 +24,7 @@ $config->bug->list->allFields = 'id, module, project, story, task,
     lastEditedDate';
 $config->bug->list->defaultFields = 'id,severity,pri,title,openedBy,assignedTo,resolvedBy,resolution';
 
-$config->bug->list->exportFields = 'id, product, module, project, story, task, 
+$config->bug->list->exportFields = 'id, product, branch, module, project, story, task, 
     title, keywords, severity, pri, type, os, browser,
     steps, status, activatedCount, confirmed, mailto,
     openedBy, openedDate, openedBuild, 
@@ -36,14 +36,14 @@ $config->bug->list->exportFields = 'id, product, module, project, story, task,
     lastEditedBy,
     lastEditedDate, files';
 
-$config->bug->list->customCreateFields      = 'project,story,task,pri,severity,os,browser,mailto,keywords';
+$config->bug->list->customCreateFields      = 'project,story,task,pri,severity,os,browser,deadline,mailto,keywords';
 $config->bug->list->customBatchCreateFields = 'module,project,steps,type,pri,severity,os,browser,keywords';
-$config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,assignedTo,status,resolvedBy,resolution,os,browser,keywords';
+$config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,assignedTo,deadline,status,resolvedBy,resolution,os,browser,keywords';
 
 $config->bug->custom = new stdclass();
 $config->bug->custom->createFields      = $config->bug->list->customCreateFields;
 $config->bug->custom->batchCreateFields = 'module,project,steps,type,severity,os,browser';
-$config->bug->custom->batchEditFields   = 'type,severity,pri,assignedTo,status,resolvedBy,resolution';
+$config->bug->custom->batchEditFields   = 'type,severity,pri,assignedTo,deadline,status,resolvedBy,resolution';
 
 $config->bug->editor = new stdclass();
 $config->bug->editor->create     = array('id' => 'steps', 'tools' => 'bugTools');
@@ -99,6 +99,7 @@ $config->bug->search['fields']['assignedDate']   = $lang->bug->assignedDate;
 $config->bug->search['fields']['resolvedDate']   = $lang->bug->resolvedDate;
 $config->bug->search['fields']['closedDate']     = $lang->bug->closedDate;
 $config->bug->search['fields']['lastEditedDate'] = $lang->bug->lastEditedDateAB;
+$config->bug->search['fields']['deadline']       = $lang->bug->deadline;
 
 $config->bug->search['params']['title']         = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->bug->search['params']['keywords']      = array('operator' => 'include', 'control' => 'input',  'values' => '');
@@ -141,6 +142,7 @@ $config->bug->search['params']['assignedDate']  = array('operator' => '=',      
 $config->bug->search['params']['resolvedDate']  = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->bug->search['params']['closedDate']    = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->bug->search['params']['lastEditedDate']= array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
+$config->bug->search['params']['deadline']      = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 
 $config->bug->datatable = new stdclass();
 $config->bug->datatable->defaultField = array('id', 'severity', 'pri', 'title', 'status', 'openedBy', 'openedDate', 'assignedTo', 'resolvedBy', 'resolution', 'resolvedDate', 'actions');
@@ -204,6 +206,11 @@ $config->bug->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
 $config->bug->datatable->fieldList['assignedDate']['fixed']    = 'no';
 $config->bug->datatable->fieldList['assignedDate']['width']    = '90';
 $config->bug->datatable->fieldList['assignedDate']['required'] = 'no';
+
+$config->bug->datatable->fieldList['deadline']['title']    = 'deadline';
+$config->bug->datatable->fieldList['deadline']['fixed']    = 'no';
+$config->bug->datatable->fieldList['deadline']['width']    = '90';
+$config->bug->datatable->fieldList['deadline']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolvedBy']['title']    = 'resolvedByAB';
 $config->bug->datatable->fieldList['resolvedBy']['fixed']    = 'no';

@@ -70,31 +70,21 @@ class story extends control
                 $this->send($response);
             }
 
-            if($bugID == 0)
-            {
-                $actionID = $this->action->create('story', $storyID, 'Opened', '');
-            }
-            else
-            {
-                $actionID = $this->action->create('story', $storyID, 'Frombug', '', $bugID);
-            }
+            $action   = $bugID == 0 ? 'Opened' : 'Frombug';
+            $extra    = $bugID == 0 ? '' : $bugID;
+            $actionID = $this->action->create('story', $storyID, $action, '', $extra);
             $this->story->sendmail($storyID, $actionID);
+
             if($this->post->newStory)
             {
                 $response['message'] = $this->lang->story->successSaved . $this->lang->story->newStory;
                 $response['locate']  = $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&story=0&projectID=$projectID&bugID=$bugID");
                 $this->send($response);
             }
-            if($projectID == 0)
-            {
-                $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
-                $this->send($response);
-            }
-            else
-            {
-                $response['locate'] = $this->createLink('project', 'story', "projectID=$projectID");
-                $this->send($response);
-            }
+
+            $response['locate'] = $this->createLink('project', 'story', "projectID=$projectID");
+            if($projectID == 0) $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
+            $this->send($response);
         }
 
         /* Set products, users and module. */
@@ -212,7 +202,10 @@ class story extends control
             $mails = $this->story->batchCreate($productID, $branch);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            foreach($mails as $mail) $this->story->sendmail($mail->storyID, $mail->actionID);
+            foreach($mails as $mail)
+            {
+                if($mail->actionID) $this->story->sendmail($mail->storyID, $mail->actionID);
+            }
 
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
             if($storyID)
@@ -457,10 +450,9 @@ class story extends control
         $this->view->showFields   = $this->config->story->custom->batchEditFields;
 
         /* Judge whether the editedStories is too large and set session. */
-        $showSuhosinInfo = false;
-        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($stories), count(explode(',', $this->config->story->custom->batchEditFields)) + 3);
-        $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
-        if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+        $countInputVars  = count($stories) * (count(explode(',', $this->config->story->custom->batchEditFields)) + 3);
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
+        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         $this->view->position[]        = $this->lang->story->common;
         $this->view->position[]        = $this->lang->story->batchEdit;
@@ -643,7 +635,6 @@ class story extends control
             $result = $this->post->result;
             if($this->post->closedReason != '' and strpos('done,postponed,subdivided', $this->post->closedReason) !== false) $result = 'pass';
             $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result));
-            $this->action->logHistory($actionID, array());
             $this->story->sendmail($storyID, $actionID);
             if($this->post->result == 'reject')
             {
@@ -691,7 +682,7 @@ class story extends control
      * @access public
      * @return void
      */
-    function batchReview($result, $reason = '')
+    public function batchReview($result, $reason = '')
     {
         $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
         $actions     = $this->story->batchReview($storyIDList, $result, $reason);
@@ -773,6 +764,11 @@ class story extends control
 
         /* Get edited stories. */
         $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIDList)->fetchAll('id');
+        foreach($stories as $story)
+        {
+            if($story->status == 'closed') unset($stories[$story->id]);
+        }
+        if(empty($stories)) die(js::alert($this->lang->story->notice->closed) . js::locate($this->session->storyList, 'parent'));
 
         /* The stories of a product. */
         if($productID)
@@ -805,10 +801,9 @@ class story extends control
         }
 
         /* Judge whether the editedStories is too large and set session. */
-        $showSuhosinInfo = false;
-        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($stories), $this->config->story->batchClose->columns);
-        $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
-        if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+        $countInputVars  = count($stories) * $this->config->story->batchClose->columns;
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
+        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         $this->view->position[]       = $this->lang->story->common;
         $this->view->position[]       = $this->lang->story->batchClose;
@@ -1004,6 +999,7 @@ class story extends control
         $this->view->users     = $this->user->getPairs('noletter');
         $this->view->productID = $productID;
         $this->view->orderBy   = $orderBy;
+        $this->view->suiteList = $this->loadModel('testsuite')->getSuites($productID);
         $this->display();
     }
 
@@ -1291,6 +1287,7 @@ class story extends control
         if($_POST)
         {
             $this->loadModel('file');
+            $this->loadModel('branch');
             $storyLang   = $this->lang->story;
             $storyConfig = $this->config->story;
 
@@ -1322,14 +1319,18 @@ class story extends control
             $products = $this->loadModel('product')->getPairs('nocode');
 
             /* Get related objects id lists. */
-            $relatedModuleIdList = array();
-            $relatedStoryIdList  = array();
-            $relatedPlanIdList   = array();
+            $relatedProductIdList = array();
+            $relatedModuleIdList  = array();
+            $relatedStoryIdList   = array();
+            $relatedPlanIdList    = array();
+            $relatedBranchIdList  = array();
 
             foreach($stories as $story)
             {
-                $relatedModuleIdList[$story->module] = $story->module;
-                $relatedPlanIdList[$story->plan]     = $story->plan;
+                $relatedProductIdList[$story->product] = $story->product;
+                $relatedModuleIdList[$story->module]   = $story->module;
+                $relatedPlanIdList[$story->plan]       = $story->plan;
+                $relatedBranchIdList[$story->branch]   = $story->branch;
 
                 /* Process related stories. */
                 $relatedStories = $story->childStories . ',' . $story->linkStories . ',' . $story->duplicateStory;
@@ -1341,11 +1342,13 @@ class story extends control
             }
 
             /* Get related objects title or names. */
+            $productsType   = $this->dao->select('id, type')->from(TABLE_PRODUCT)->where('id')->in($relatedProductIdList)->fetchPairs();
             $relatedModules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($relatedModuleIdList)->fetchPairs();
             $relatedPlans   = $this->dao->select('id, title')->from(TABLE_PRODUCTPLAN)->where('id')->in(join(',', $relatedPlanIdList))->fetchPairs();
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in(@array_keys($stories))->fetchGroup('objectID');
             $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in(@array_keys($stories))->orderBy('version desc')->fetchGroup('story');
+            $relatedBranch  = array('0' => $this->lang->branch->all) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
 
             foreach($stories as $story)
             {
@@ -1372,8 +1375,9 @@ class story extends control
                     $story->verify = str_replace('&nbsp;', ' ', $story->verify);
                 }
                 /* fill some field with useful value. */
-                if(isset($products[$story->product]))              $story->product        = $products[$story->product] . "(#$story->product)";
-                if(isset($relatedModules[$story->module]))         $story->module         = $relatedModules[$story->module] . "(#$story->module)";
+                if(isset($products[$story->product]))       $story->product = $products[$story->product] . "(#$story->product)";
+                if(isset($relatedModules[$story->module]))  $story->module  = $relatedModules[$story->module] . "(#$story->module)";
+                if(isset($relatedBranch[$story->branch]))   $story->branch  = $relatedBranch[$story->branch] . "(#$story->branch)";
                 if(isset($story->plan))
                 {
                     $plans = '';
@@ -1401,7 +1405,6 @@ class story extends control
                 $story->assignedDate   = substr($story->assignedDate, 0, 10);
                 $story->lastEditedDate = substr($story->lastEditedDate, 0, 10);
                 $story->closedDate     = substr($story->closedDate, 0, 10);
-
 
                 if($story->linkStories)
                 {
@@ -1457,6 +1460,8 @@ class story extends control
                 }
 
             }
+
+            if(!(in_array('platform', $productsType) or in_array('branch', $productsType))) unset($fields['branch']);// If products's type are normal, unset branch field.
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $stories);

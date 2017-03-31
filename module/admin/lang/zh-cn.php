@@ -57,6 +57,9 @@ $lang->admin->safe->modeList[0] = '不检查';
 $lang->admin->safe->modeList[1] = '中';
 $lang->admin->safe->modeList[2] = '强';
 
+$lang->admin->safe->modeRuleList[1] = '6位以上，包含大小写字母，数字。';
+$lang->admin->safe->modeRuleList[2] = '10位以上，包含字母，数字，特殊字符。';
+
 $lang->admin->safe->reasonList['weak']     = '常用弱口令';
 $lang->admin->safe->reasonList['account']  = '与帐号相同';
 $lang->admin->safe->reasonList['mobile']   = '与手机相同';
@@ -67,4 +70,4 @@ $lang->admin->safe->modifyPasswordList[1] = '必须修改';
 $lang->admin->safe->modifyPasswordList[0] = '不强制';
 
 $lang->admin->safe->noticeMode   = '系统会在登录、创建和修改用户、修改密码的时候检查用户口令。';
-$lang->admin->safe->noticeStrong = '密码长度越长，含有大写字母或数字或特殊符合越多，密码字母越不重复，安全度越强！';
+$lang->admin->safe->noticeStrong = '密码长度越长，含有大写字母或数字或特殊符号越多，密码字母越不重复，安全度越强！';

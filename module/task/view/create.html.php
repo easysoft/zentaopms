@@ -64,7 +64,7 @@
             <div class='col-table'>
               <div class="input-group w-p100">
                 <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->task->colorTag ?>' data-update-text='#name'>
-                <?php echo html::input('name', $task->name, "class='form-control'");?>
+                <?php echo html::input('name', $task->name, "class='form-control' autocomplete='off'");?>
                 <span class='input-group-btn'><a href='javascript:copyStoryTitle();' id='copyButton' class='btn'><?php echo $lang->task->copyStoryTitle;?></a></span>
               </div>
             </div>
@@ -106,7 +106,7 @@
             <div class='col-table' id='estRowCol'>
               <div class='input-group'>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->task->estimateAB;?></span>
-                <?php echo html::input('estimate', '', "class='form-control' placeholder='{$lang->task->hour}'");?>
+                <?php echo html::input('estimate', '', "class='form-control' placeholder='{$lang->task->hour}' autocomplete='off'");?>
               </div>
             </div>
             <?php endif; ?>

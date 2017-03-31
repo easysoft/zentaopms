@@ -16,13 +16,17 @@ $themeRoot = $webRoot . "theme/";
 if(isset($pageCSS)) css::internal($pageCSS);
 $useGuest = $this->app->user->account == 'guest';
 ?>
+<?php include '../../common/view/tablesorter.html.php';?>
 <div class='dashboard' id='dashboard' data-confirm-remove-block='<?php  echo $lang->block->confirmRemoveBlock;?>'>
+  <?php if(!$useGuest):?>
   <div class='dashboard-actions'><a href='<?php echo $this->createLink("block", "admin", "id=0&module=$module"); ?>' data-toggle='modal' data-type='ajax' data-width='700' data-title='<?php echo $lang->block->createBlock?>'><i class='icon icon-plus' title='<?php echo $lang->block->createBlock?>' data-toggle='tooltip' data-placement='left'></i></a></div>
   <div class='dashboard-empty-message hide'>
     <a href='<?php echo $this->createLink("block", "admin", "id=0&module=$module"); ?>' data-toggle='modal' data-type='ajax' data-width='700' class='btn btn-primary'><i class='icon icon-plus'></i> <?php echo $lang->block->createBlock?></a>
   </div>
+  <?php endif;?>
   <div class='row'>
     <?php foreach($blocks as $index => $block):?>
+    <?php if(isset($config->block->closed) and strpos(",{$config->block->closed},", ",{$block->source}|{$block->block},") !== false) continue;?>
     <div class='col-sm-6 col-md-<?php echo $block->grid;?>'>
       <div class='panel panel-block <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>' data-url='<?php echo $block->blockLink?>'>
         <div class='panel-heading'>
@@ -39,7 +43,10 @@ $useGuest = $this->app->user->account == 'guest';
                 <?php if(!$block->source and $block->block == 'html'):?>
                 <li><a href="javascript:hiddenBlock(<?php echo $index;?>)" class="hidden-panel"><i class='icon-eye-close'></i><?php echo $lang->block->hidden; ?></a></li>
                 <?php endif;?>
-                <li><a href='javascript:;' class='remove-panel'><i class='icon-remove'></i> <?php echo $lang->delete; ?></a></li>
+                <li><a href='javascript:;' class='remove-panel'><i class='icon-remove'></i> <?php echo $lang->block->remove; ?></a></li>
+                <?php endif;?>
+                <?php if($this->app->user->admin):?>
+                <li><?php echo html::a($this->createLink('block', 'close', "blockID={$block->id}"), "<i class='icon-eye-close'></i> {$lang->block->closeForever}", 'hiddenwin', "class='close-block' onclick=\"return confirm('{$lang->block->confirmClose}')\"")?>
                 <?php endif;?>
               </ul>
             </div>
@@ -51,7 +58,6 @@ $useGuest = $this->app->user->account == 'guest';
     </div>
     <?php endforeach;?>
   </div>
-
 </div>
 <script>
 config.ordersSaved = '<?php echo $lang->block->ordersSaved; ?>';

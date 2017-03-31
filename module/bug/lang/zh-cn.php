@@ -13,6 +13,7 @@
 $lang->bug->common           = 'Bug';
 $lang->bug->id               = 'Bug编号';
 $lang->bug->product          = '所属' . $lang->productCommon;
+$lang->bug->branch           = '分支/平台';
 $lang->bug->productplan      = '所属计划';
 $lang->bug->module           = '所属模块';
 $lang->bug->moduleAB         = '模块';
@@ -48,6 +49,7 @@ $lang->bug->resolutionAB     = '方案';
 $lang->bug->resolvedBuild    = '解决版本';
 $lang->bug->resolvedDate     = '解决日期';
 $lang->bug->resolvedDateAB   = '解决日期';
+$lang->bug->deadline         = '截止日期';
 $lang->bug->closedBy         = '由谁关闭';
 $lang->bug->closedDate       = '关闭日期';
 $lang->bug->duplicateBug     = '重复ID';
@@ -104,6 +106,7 @@ $lang->bug->toClosed       = '待关闭';
 $lang->bug->unclosed       = '未关闭';
 $lang->bug->longLifeBugs   = '久未处理';
 $lang->bug->postponedBugs  = '被延期';
+$lang->bug->overdueBugs    = '过期Bug';
 $lang->bug->allBugs        = '所有';
 $lang->bug->byQuery        = '搜索';
 $lang->bug->needConfirm    = '需求变动';
@@ -119,6 +122,7 @@ $lang->bug->lblLastEdited               = '最后修改';
 $lang->bug->lblResolved                 = '由谁解决';
 $lang->bug->allUsers                    = '所有用户';
 $lang->bug->allBuilds                   = '所有';
+$lang->bug->createBuild                 = '新建';
 
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = '基本信息';
@@ -135,12 +139,13 @@ $lang->bug->legendMisc                  = '其他相关';
 $lang->bug->buttonConfirm        = '确认';
 
 /* 交互提示。*/
-$lang->bug->confirmChangeProduct = "修改{$lang->productCommon}会导致相应的{$lang->projectCommon}、需求和任务发生变化，确定吗？";
-$lang->bug->confirmDelete        = '您确认要删除该Bug吗？';
-$lang->bug->setTemplateTitle     = '请输入bug模板标题';
-$lang->bug->remindTask           = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
-$lang->bug->skipClose            = 'Bug %s 不是已解决状态，不能关闭。';
-$lang->bug->applyTemplate        = '应用模板';
+$lang->bug->confirmChangeProduct  = "修改{$lang->productCommon}会导致相应的{$lang->projectCommon}、需求和任务发生变化，确定吗？";
+$lang->bug->confirmDelete         = '您确认要删除该Bug吗？';
+$lang->bug->setTemplateTitle      = '请输入bug模板标题';
+$lang->bug->remindTask            = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
+$lang->bug->skipClose             = 'Bug %s 不是已解决状态，不能关闭。';
+$lang->bug->applyTemplate         = '应用模板';
+$lang->bug->confirmDeleteTemplate = '您确认要删除该模板吗？';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步骤]</p>\n";
@@ -256,6 +261,7 @@ $lang->bug->report->charts['bugsPerSeverity']       = 'Bug严重程度统计';
 $lang->bug->report->charts['bugsPerResolution']     = 'Bug解决方案统计';
 $lang->bug->report->charts['bugsPerStatus']         = 'Bug状态统计';
 $lang->bug->report->charts['bugsPerActivatedCount'] = 'Bug激活次数统计';
+$lang->bug->report->charts['bugsPerPri']            = 'Bug优先级统计';
 $lang->bug->report->charts['bugsPerType']           = 'Bug类型统计';
 $lang->bug->report->charts['bugsPerAssignedTo']     = '指派给统计';
 //$lang->bug->report->charts['bugLiveDays']        = 'Bug处理时间统计';
@@ -281,6 +287,7 @@ $lang->bug->report->bugsPerResolution     = new stdclass();
 $lang->bug->report->bugsPerStatus         = new stdclass();
 $lang->bug->report->bugsPerActivatedCount = new stdclass();
 $lang->bug->report->bugsPerType           = new stdclass();
+$lang->bug->report->bugsPerPri            = new stdclass();
 $lang->bug->report->bugsPerAssignedTo     = new stdclass();
 $lang->bug->report->bugLiveDays           = new stdclass();
 $lang->bug->report->bugHistories          = new stdclass();
@@ -299,6 +306,7 @@ $lang->bug->report->bugsPerResolution->graph     = new stdclass();
 $lang->bug->report->bugsPerStatus->graph         = new stdclass();
 $lang->bug->report->bugsPerActivatedCount->graph = new stdclass();
 $lang->bug->report->bugsPerType->graph           = new stdclass();
+$lang->bug->report->bugsPerPri->graph           = new stdclass();
 $lang->bug->report->bugsPerAssignedTo->graph     = new stdclass();
 $lang->bug->report->bugLiveDays->graph           = new stdclass();
 $lang->bug->report->bugHistories->graph          = new stdclass();
@@ -324,6 +332,7 @@ $lang->bug->report->bugsPerSeverity->graph->xAxisName       = '严重程度';
 $lang->bug->report->bugsPerResolution->graph->xAxisName     = '解决方案';
 $lang->bug->report->bugsPerStatus->graph->xAxisName         = '状态';
 $lang->bug->report->bugsPerActivatedCount->graph->xAxisName = '激活次数';
+$lang->bug->report->bugsPerPri->graph->xAxisName            = '优先级';
 $lang->bug->report->bugsPerType->graph->xAxisName           = '类型';
 $lang->bug->report->bugsPerAssignedTo->graph->xAxisName     = '指派给';
 $lang->bug->report->bugLiveDays->graph->xAxisName           = '处理时间';
@@ -345,6 +354,7 @@ $lang->bug->action->unlinkrelatedbug    = array('main' => '$date, 由 <strong>$a
 
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = '选择相关版本...';
+$lang->bug->placeholder->newBuildName = '新版本名称';
 
 $lang->bug->featureBar['browse']['unclosed']      = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['all']           = $lang->bug->allBugs;
@@ -357,4 +367,5 @@ $lang->bug->featureBar['browse']['unresolved']    = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['toclosed']      = $lang->bug->toClosed;
 $lang->bug->featureBar['browse']['longlifebugs']  = $lang->bug->longLifeBugs;
 $lang->bug->featureBar['browse']['postponedbugs'] = $lang->bug->postponedBugs;
+$lang->bug->featureBar['browse']['overduebugs']   = $lang->bug->overdueBugs;
 $lang->bug->featureBar['browse']['needconfirm']   = $lang->bug->needConfirm;

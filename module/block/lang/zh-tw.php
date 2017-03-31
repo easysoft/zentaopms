@@ -31,6 +31,9 @@ $lang->block->createBlock        = '添加區塊';
 $lang->block->editBlock          = '編輯區塊';
 $lang->block->ordersSaved        = '排序已保存';
 $lang->block->confirmRemoveBlock = '確定移除區塊【{0}】嗎？';
+$lang->block->closeForever       = '永久關閉';
+$lang->block->confirmClose       = '確定永久關閉該區塊嗎？閉後所有人都將無法使用該區塊，可以在後台自定義中打開';
+$lang->block->remove             = '移除';
 $lang->block->refresh            = '刷新';
 $lang->block->hidden             = '隱藏';
 $lang->block->dynamicInfo        = "%s, %s <em>%s</em> %s <a href='%s'>%s</a>。";
@@ -226,9 +229,11 @@ $lang->block->typeList->project['undone']  = '未完成';
 $lang->block->typeList->project['isdoing'] = '進行中';
 $lang->block->typeList->project['all']     = '全部';
 
-$lang->block->typeList->testtask['wait'] = '待測版本';
-$lang->block->typeList->testtask['done'] = '已測版本';
-$lang->block->typeList->testtask['all']  = '全部';
+$lang->block->typeList->testtask['wait']    = '待測版本';
+$lang->block->typeList->testtask['doing']   = '測試中版本';
+$lang->block->typeList->testtask['blocked'] = '阻塞版本';
+$lang->block->typeList->testtask['done']    = '已測版本';
+$lang->block->typeList->testtask['all']     = '全部';
 
 $lang->block->modules['product']->moreLinkList = new stdclass();
 $lang->block->modules['product']->moreLinkList->list    = 'product|all|product=&status=%s';
@@ -248,7 +253,7 @@ $lang->block->modules['common']->moreLinkList->dynamic = 'company|dynamic|';
 
 $lang->block->flowchart   = array();
 $lang->block->flowchart[] = array('管理員',   '維護公司', '添加用戶', '維護權限');
-$lang->block->flowchart[] = array('產品經理', '創建產品', '維護模組', '維護計劃', '維護需求', '創建發佈');
-$lang->block->flowchart[] = array('項目經理', '創建項目', '維護團隊', '關聯產品', '關聯需求', '分解任務');
+$lang->block->flowchart[] = array($lang->productCommon . '經理', '創建' . $lang->productCommon, '維護模組', '維護計劃', '維護需求', '創建發佈');
+$lang->block->flowchart[] = array($lang->projectCommon . '經理', '創建' . $lang->projectCommon, '維護團隊', '關聯' . $lang->productCommon, '關聯需求', '分解任務');
 $lang->block->flowchart[] = array('研發人員', '領取任務和Bug', '更新狀態', '完成任務和Bug');
 $lang->block->flowchart[] = array('測試人員', '撰寫用例', '執行用例', '提交Bug', '驗證Bug', '關閉Bug');

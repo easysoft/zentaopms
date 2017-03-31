@@ -136,6 +136,11 @@
                           <?php
                           $class = "class='disabled'";
 
+                          $canBatchClose = common::hasPriv('story', 'batchClose');
+                          $actionLink    = $this->createLink('story', 'batchClose', "productID=$plan->product");
+                          $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink', '', this)\"" : $class;
+                          echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
+
                           $canBatchEdit = common::hasPriv('story', 'batchEdit');
                           $actionLink   = $this->createLink('story', 'batchEdit', "productID=$plan->product&projectID=0&branch=$branch");
                           $misc = $canBatchEdit ? "onclick=\"setFormAction('$actionLink', '', this)\"" : $class;

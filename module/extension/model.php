@@ -264,8 +264,12 @@ class extensionModel extends model
         $info = (object)spyc_load(file_get_contents($infoFile));
         if(isset($info->releases))
         {
-            krsort($info->releases);
             $info->version = key($info->releases);
+            foreach(array_keys($info->releases) as $version)
+            {
+                if(version_compare($info->version, $version, '<')) $info->version = $version;
+            }
+
             foreach($info->releases[$info->version] as $key => $value) $info->$key = $value;
         }
         return $info;

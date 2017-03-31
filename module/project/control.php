@@ -531,7 +531,6 @@ class project extends control
         /* Load these models. */
         $this->loadModel('story');
         $this->loadModel('user');
-        $this->loadModel('task');
         $this->app->loadLang('testcase');
 
         /* Save session. */
@@ -554,13 +553,7 @@ class project extends control
 
         $stories = $this->story->getProjectStories($projectID, $sort, $type, $param, $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
-        $storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
         $users      = $this->user->getPairs('noletter');
-
-        /* Save storyIDs session for get the pre and next story. */
-        $storyIDs = '';
-        foreach($stories as $story) $storyIDs .= ',' . $story->id;
-        $this->session->set('storyIDs', $storyIDs . ',');
 
         /* Get project's product. */
         $productID = 0;
@@ -569,11 +562,16 @@ class project extends control
 
         /* Build the search form. */
         $modules  = array();
+        $projectModules = $this->loadModel('tree')->getTaskTreeModules($projectID, true);
         $products = $this->project->getProducts($projectID);
         foreach($products as $product)
         {
-            $productModules = $this->loadModel('tree')->getOptionMenu($product->id);
-            foreach($productModules as $moduleID => $moduleName) $modules[$moduleID] = $moduleName;
+            $productModules = $this->tree->getOptionMenu($product->id);
+            foreach($productModules as $moduleID => $moduleName)
+            {
+                if($moduleID and !isset($projectModules[$moduleID])) continue;
+                $modules[$moduleID] = ((count($products) >= 2 and $moduleID) ? $product->name : '') . $moduleName;
+            }
         }
         $actionURL    = $this->createLink('project', 'story', "projectID=$projectID&orderBy=$orderBy&type=bySearch&queryID=myQueryID");
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
@@ -584,6 +582,12 @@ class project extends control
         $position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $position[] = $this->lang->project->story;
 
+        /* Count T B C */
+        $storyIdList = array_keys($stories);;
+        $storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList,$projectID);
+        $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList,$projectID);
+        $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
+
         /* Assign. */
         $this->view->title        = $title;
         $this->view->position     = $position;
@@ -593,9 +597,11 @@ class project extends control
         $this->view->orderBy      = $orderBy;
         $this->view->type         = $type;
         $this->view->param        = $param;
-        $this->view->storyTasks   = $storyTasks;
         $this->view->moduleTree   = $this->loadModel('tree')->getProjectStoryTreeMenu($projectID, $startModuleID = 0, array('treeModel', 'createProjectStoryLink'));
         $this->view->tabID        = 'story';
+        $this->view->storyTasks   = $storyTasks;
+        $this->view->storyBugs    = $storyBugs;
+        $this->view->storyCases   = $storyCases;
         $this->view->users        = $users;
         $this->view->pager        = $pager;
         $this->view->branchGroups = $branchGroups;
@@ -608,13 +614,16 @@ class project extends control
      *
      * @param  int    $projectID
      * @param  string $orderBy
+     * @param  int    $build
+     * @param  string $type
+     * @param  int    $param
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function bug($projectID = 0, $orderBy = 'status,id_desc', $build = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug($projectID = 0, $orderBy = 'status,id_desc', $build = 0, $type = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load these two models. */
         $this->loadModel('bug');
@@ -623,6 +632,7 @@ class project extends control
         /* Save session. */
         $this->session->set('bugList', $this->app->getURI(true));
 
+        $queryID   = ($type == 'bySearch') ? (int)$param : 0;
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
         $products  = $this->project->getProducts($project->id);
@@ -638,7 +648,7 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = $this->loadModel('common')->appendOrder($orderBy);
-        $bugs  = $this->bug->getProjectBugs($projectID, $sort, $pager, $build);
+        $bugs  = $this->bug->getProjectBugs($projectID, $build, $type, $param, $sort, $pager);
         $users = $this->user->getPairs('noletter');
 
         /* team member pairs. */
@@ -648,6 +658,10 @@ class project extends control
         {
             $memberPairs[$key] = $member->realname;
         }
+
+        /* Build the search form. */
+        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&orderBy=$orderBy&build=$build&type=bySearch&queryID=myQueryID");
+        $this->project->buildBugSearchForm($products, $queryID, $actionURL);
 
         /* Assign. */
         $this->view->title       = $title;
@@ -775,20 +789,6 @@ class project extends control
     }
 
     /**
-     * Get data of burndown chart.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function burnData($projectID = 0)
-    {
-        $this->loadModel('report');
-        $sets = $this->project->getBurnData($projectID);
-        die($this->report->createSingleXML($sets, $this->lang->project->charts->burn->graph));
-    }
-
-    /**
      * Compute burndown datas.
      *
      * @param  string $reload
@@ -819,7 +819,7 @@ class project extends control
 
         $project = $this->project->getById($projectID);
 
-        $this->view->firstBurn = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)->andWhere('date')->eq($project->begin)->fetch('left');
+        $this->view->firstBurn = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)->andWhere('date')->eq($project->begin)->fetch();
         $this->view->project   = $project;
         $this->display();
     }
@@ -1275,10 +1275,7 @@ class project extends control
         $this->app->session->set('storyList',   $uri);
         $this->app->session->set('projectList', $uri);
 
-        if($type === 'json')
-        {
-            die(json_encode($tree, JSON_HEX_QUOT | JSON_HEX_APOS));
-        }
+        if($type === 'json') die(helper::jsonEncode4Parse($tree, JSON_HEX_QUOT | JSON_HEX_APOS));
 
         $this->view->title      = $this->lang->project->tree;
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
@@ -1640,10 +1637,11 @@ class project extends control
         $modules     = array();
         $branches    = array();
         $productType = 'normal';
+        $this->loadModel('tree');
         foreach($products as $product)
         {
-            $productModules = $this->loadModel('tree')->getOptionMenu($product->id);
-            foreach($productModules as $moduleID => $moduleName) $modules[$moduleID] = $moduleName;
+            $productModules = $this->tree->getOptionMenu($product->id);
+            foreach($productModules as $moduleID => $moduleName) $modules[$moduleID] = ((count($products) >= 2 and $moduleID != 0) ? $product->name : '') . $moduleName;
             if($product->type != 'normal')
             {
                 $productType = $product->type;
@@ -1881,31 +1879,14 @@ class project extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
-        $this->view->projects  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in(array_keys($this->projects))->orderBy('order desc')->fetchAll();
-        $this->display();
-    }
 
-    /**
-     * The results page of search.
-     *
-     * @param  string  $keywords
-     * @param  string  $module
-     * @param  string  $method
-     * @param  mix     $extra
-     * @access public
-     * @return void
-     */
-    public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
-    {
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('name')->like("%$keywords%")->orderBy('order desc')->fetchAll();
-        foreach($projects as $key => $project)
-        {
-            if(!$this->project->checkPriv($project)) unset($projects[$key]);
-        }
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in(array_keys($this->projects))->orderBy('order desc')->fetchAll();
+        $projectPairs = array();
+        foreach($projects as $project) $projectPairs[$project->id] = $project->name;
+        $projectsPinyin = common::convert2Pinyin($projectPairs);
+        foreach($projects as $key => $project) $project->key = $projectsPinyin[$project->name];
 
-        $this->view->link     = $this->project->getProjectLink($module, $method, $extra);
         $this->view->projects = $projects;
-        $this->view->keywords = $keywords;
         $this->display();
     }
 
@@ -1969,5 +1950,17 @@ class project extends control
         $this->view->status        = $status;
 
         $this->display();
+    }
+
+    /**
+     * Doc for compatible.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function doc($projectID)
+    {
+        $this->locate($this->createLink('doc', 'objectLibs', "type=project&objectID=$projectID&from=project"));
     }
 }

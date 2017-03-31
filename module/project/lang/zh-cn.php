@@ -56,7 +56,7 @@ $lang->project->start    = '开始';
 $lang->project->activate = '激活';
 $lang->project->putoff   = '延期';
 $lang->project->suspend  = '挂起';
-$lang->project->close    = '结束';
+$lang->project->close    = '关闭';
 
 $lang->project->typeList['sprint']    = "短期$lang->projectCommon";
 $lang->project->typeList['waterfall'] = "长期$lang->projectCommon";
@@ -260,4 +260,4 @@ $lang->project->treeLevel = array();
 $lang->project->treeLevel['root']    = '全部折叠';
 $lang->project->treeLevel['story']   = '显示需求';
 $lang->project->treeLevel['task']    = '显示任务';
-
+$lang->project->treeLevel['all']     = '全部展开';

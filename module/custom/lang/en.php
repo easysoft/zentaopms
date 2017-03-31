@@ -16,6 +16,7 @@ $lang->custom->object['testcase'] = 'Case';
 $lang->custom->object['testtask'] = 'Build';
 $lang->custom->object['todo']     = 'To-Dos';
 $lang->custom->object['user']     = 'User';
+$lang->custom->object['block']    = 'Block';
 
 $lang->custom->story = new stdClass();
 $lang->custom->story->fields['priList']          = 'Priority';
@@ -49,6 +50,7 @@ $lang->custom->testcase->fields['typeList']   = 'Type';
 $lang->custom->testcase->fields['stageList']  = 'Stage';
 $lang->custom->testcase->fields['resultList'] = 'Result';
 $lang->custom->testcase->fields['statusList'] = 'Status';
+$lang->custom->testcase->fields['review']     = 'Review';
 
 $lang->custom->testtask = new stdClass();
 $lang->custom->testtask->fields['priList']    = 'Priority';
@@ -60,8 +62,10 @@ $lang->custom->todo->fields['typeList']   = 'Type';
 $lang->custom->todo->fields['statusList'] = 'Status';
 
 $lang->custom->user = new stdClass();
-$lang->custom->user->fields['roleList']   = 'Role';
-$lang->custom->user->fields['statusList'] = 'Status';
+$lang->custom->user->fields['roleList']    = 'Role';
+$lang->custom->user->fields['statusList']  = 'Status';
+
+$lang->custom->block->fields['closed'] = 'Closed Block';
 
 $lang->custom->currentLang = 'Current Language';
 $lang->custom->allLang     = 'All Language';
@@ -71,7 +75,7 @@ $lang->custom->confirmRestore = 'Do you want to reset to Default?';
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole             = 'Key must be no more than 20 characters!';
 $lang->custom->notice->canNotAdd            = 'This item will be processed, so customized feature is not enabled.';
-$lang->custom->notice->forceReview          = 'Review is required for stories submitted by certain assignee.';
+$lang->custom->notice->forceReview          = 'Review is required for %s submitted by certain assignee.';
 $lang->custom->notice->longlife             = 'List "Undone" bugs that are older than hold days from "Longlife" bugs.';
 $lang->custom->notice->priListKey           = 'Priority list key should be numbers！';
 $lang->custom->notice->severityListKey      = 'Bug severity list key should be numbers.';

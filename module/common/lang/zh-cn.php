@@ -48,6 +48,9 @@ $lang->more         = '更多';
 $lang->day          = '天';
 $lang->customConfig = '自定义';
 $lang->public       = '公共';
+$lang->trunk        = '主干';
+$lang->sort         = '排序';
+$lang->required     = '必填';
 
 $lang->actions         = '操作';
 $lang->comment         = '备注';
@@ -121,6 +124,8 @@ $lang->searchObjects['release']     = '发布';
 $lang->searchObjects['productplan'] = $lang->productCommon . '计划';
 $lang->searchObjects['testtask']    = '测试版本';
 $lang->searchObjects['doc']         = '文档';
+$lang->searchObjects['caselib']     = '用例库';
+$lang->searchObjects['testreport']  = '测试报告';
 $lang->searchTips                   = '编号(ctrl+g)';
 
 /* 导入支持的编码格式。*/
@@ -213,7 +218,7 @@ $lang->project->menu->story     = array('link' => '需求|project|story|projectI
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = '动态|project|dynamic|projectID=%s';
 $lang->project->menu->build     = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->menu->testtask  = '测试|project|testtask|projectID=%s';
+$lang->project->menu->testtask  = array('link' => '测试|project|testtask|projectID=%s');
 $lang->project->menu->team      = array('link' => '团队|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => '文档|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
 $lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|projectID=%s';
@@ -231,32 +236,57 @@ $lang->build->menu = $lang->project->menu;
 $lang->qa = new stdclass();
 $lang->qa->menu = new stdclass();
 
-$lang->qa->menu->product  = array('link' => '%s', 'fixed' => true);
-$lang->qa->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->qa->menu->testcase = array('link' => '用例|testcase|browse|productID=%s');
-$lang->qa->menu->testtask = array('link' => '版本|testtask|browse|productID=%s');
-$lang->qa->menu->index    = array('link' => "<i class='icon-home'></i>测试主页|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->qa->menu->product   = array('link' => '%s', 'fixed' => true);
+$lang->qa->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
+$lang->qa->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
+$lang->qa->menu->testtask  = array('link' => '版本|testtask|browse|productID=%s');
+$lang->qa->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
+$lang->qa->menu->report    = array('link' => '报告|testreport|browse|productID=%s');
+$lang->qa->menu->caselib   = array('link' => '用例库|testsuite|library');
+$lang->qa->menu->index     = array('link' => "<i class='icon-home'></i>测试主页|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
 
-$lang->bug->menu->product  = array('link' => '%s', 'fixed' => true);
-$lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
-$lang->bug->menu->testcase = array('link' => '用例|testcase|browse|productID=%s');
-$lang->bug->menu->testtask = array('link' => '版本|testtask|browse|productID=%s');
-$lang->bug->menu->index    = array('link' => "<i class='icon-home'></i>测试主页|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->bug->menu->product   = array('link' => '%s', 'fixed' => true);
+$lang->bug->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
+$lang->bug->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
+$lang->bug->menu->testtask  = array('link' => '版本|testtask|browse|productID=%s');
+$lang->bug->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
+$lang->bug->menu->report    = array('link' => '报告|testreport|browse|productID=%s');
+$lang->bug->menu->caselib   = array('link' => '用例库|testsuite|library');
+$lang->bug->menu->index     = array('link' => "<i class='icon-home'></i>测试主页|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
 
-$lang->testcase->menu->product  = array('link' => '%s', 'fixed' => true);
-$lang->testcase->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testcase->menu->testcase = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase', 'subModule' => 'tree');
-$lang->testcase->menu->testtask = array('link' => '版本|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase');
-$lang->testcase->menu->index    = array('link' => "<i class='icon-home'></i>测试主页|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->testcase->menu->product   = array('link' => '%s', 'fixed' => true);
+$lang->testcase->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
+$lang->testcase->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree');
+$lang->testcase->menu->testtask  = array('link' => '版本|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
+$lang->testcase->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
+$lang->testcase->menu->report    = array('link' => '报告|testreport|browse|productID=%s', 'alias' => 'view,create,edit');
+$lang->testcase->menu->caselib   = array('link' => '用例库|testsuite|library');
+$lang->testcase->menu->index     = array('link' => "<i class='icon-home'></i>测试主页|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->testtask = new stdclass();
 $lang->testtask->menu = $lang->testcase->menu;
+$lang->testsuite = new stdclass();
+$lang->testsuite->menu = $lang->testcase->menu;
+$lang->testreport = new stdclass();
+$lang->testreport->menu = $lang->testcase->menu;
+
+$lang->caselib = new stdclass();
+$lang->caselib->menu = new stdclass();
+$lang->caselib->menu->lib       = array('link' => '%s', 'fixed' => true);
+$lang->caselib->menu->bug       = array('link' => 'Bug|bug|browse|');
+$lang->caselib->menu->testcase  = array('link' => '用例|testcase|browse|');
+$lang->caselib->menu->testtask  = array('link' => '版本|testtask|browse|');
+$lang->caselib->menu->testsuite = array('link' => '套件|testsuite|browse|');
+$lang->caselib->menu->report    = array('link' => '报告|testreport|browse|');
+$lang->caselib->menu->caselib   = array('link' => '用例库|testsuite|library', 'alias' => 'createlib,createcase,libview,edit', 'subModule' => 'tree,testcase');
+$lang->caselib->menu->create    = array('link' => "<i class='icon-plus'></i>创建库|testsuite|createLib|", 'float' => 'right');
+$lang->caselib->menu->index     = array('link' => "<i class='icon-home'></i>测试主页|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();
@@ -302,7 +332,7 @@ $lang->user->menu  = $lang->company->menu;
 /* 后台管理菜单设置。*/
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
-$lang->admin->menu->index     = array('link' => '首页|admin|index');
+$lang->admin->menu->index     = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->custom    = array('link' => '自定义|custom|set', 'subModule' => 'custom');
 $lang->admin->menu->mail      = array('link' => '发信|mail|index', 'subModule' => 'mail');
@@ -351,6 +381,9 @@ $lang->menugroup->group       = 'company';
 $lang->menugroup->bug         = 'qa';
 $lang->menugroup->testcase    = 'qa';
 $lang->menugroup->testtask    = 'qa';
+$lang->menugroup->testsuite   = 'qa';
+$lang->menugroup->caselib     = 'qa';
+$lang->menugroup->testreport  = 'qa';
 $lang->menugroup->people      = 'company';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
@@ -389,19 +422,23 @@ $lang->error->tutorialData    = '新手模式下不会插入数据，请退出�
 
 /* 分页信息。*/
 $lang->pager = new stdclass();
-$lang->pager->noRecord  = "暂时没有记录";
-$lang->pager->digest    = "共 <strong>%s</strong> 条记录，%s <strong>%s/%s</strong> &nbsp; ";
-$lang->pager->recPerPage= "每页 <strong>%s</strong> 条";
-$lang->pager->first     = "<i class='icon-step-backward' title='首页'></i>";
-$lang->pager->pre       = "<i class='icon-play icon-rotate-180' title='上一页'></i>";
-$lang->pager->next      = "<i class='icon-play' title='下一页'></i>";
-$lang->pager->last      = "<i class='icon-step-forward' title='末页'></i>";
-$lang->pager->locate    = "GO!";
+$lang->pager->noRecord     = "暂时没有记录";
+$lang->pager->digest       = "共 <strong>%s</strong> 条记录，%s <strong>%s/%s</strong> &nbsp; ";
+$lang->pager->recPerPage   = "每页 <strong>%s</strong> 条";
+$lang->pager->first        = "<i class='icon-step-backward' title='首页'></i>";
+$lang->pager->pre          = "<i class='icon-play icon-rotate-180' title='上一页'></i>";
+$lang->pager->next         = "<i class='icon-play' title='下一页'></i>";
+$lang->pager->last         = "<i class='icon-step-forward' title='末页'></i>";
+$lang->pager->locate       = "GO!";
+$lang->pager->previousPage = "上一页";
+$lang->pager->nextPage     = "下一页";
+$lang->pager->summery      = "第 <strong>%s-%s</strong> 项，共 <strong>%s</strong> 项";
 
 $lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>专业版 <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "下载桌面提醒";
 
-$lang->suhosinInfo   = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（设置更大的数）。 保存并重新启动apache，否则会造成部分数据无法保存。";
+$lang->suhosinInfo   = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（大于%s的数）。 保存并重新启动apache或php-fpm，否则会造成部分数据无法保存。";
+$lang->maxVarsInfo   = "警告：数据太多，请在php.ini中修改<font color=red>max_input_vars</font>（大于%s的数）。 保存并重新启动apache或php-fpm，否则会造成部分数据无法保存。";
 $lang->pasteTextInfo = "粘贴文本到文本域中，每行文字作为一条数据的标题。";
 $lang->noticeImport  = "<p style='font-size:14px'>导入数据中，含有已经存在系统的数据，请确认这些数据要覆盖或者全新插入</p><p><a href='javascript:submitForm(\"cover\")' class='btn btn-mini'>覆盖</a> <a href='javascript:submitForm(\"insert\")' class='btn btn-mini'>全新插入</a></p>";
 
@@ -469,7 +506,7 @@ $lang->icons['user']      = 'user';
 $lang->icons['dept']      = 'sitemap';
 $lang->icons['tree']      = 'sitemap';
 $lang->icons['usecase']   = 'sitemap';
-$lang->icons['testcase']  = 'smile';
+$lang->icons['testcase']  = 'sitemap';
 $lang->icons['result']    = 'list-alt';
 $lang->icons['mail']      = 'envelope';
 $lang->icons['trash']     = 'trash';

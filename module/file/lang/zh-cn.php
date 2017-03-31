@@ -25,6 +25,7 @@ $lang->file->setPublic     = "设置公共模板";
 $lang->file->exportFields  = "要导出字段";
 $lang->file->defaultTPL    = "默认模板";
 $lang->file->setExportTPL  = "设置";
+$lang->file->preview       = "预览";
 
 $lang->file->errorNotExists   = "<span class='red'>文件夹 '%s' 不存在</span>";
 $lang->file->errorCanNotWrite = "<span class='red'>文件夹 '%s' 不可写,请改变文件夹的权限。在linux中输入指令:sudo chmod -R 777 '%s'</span>";

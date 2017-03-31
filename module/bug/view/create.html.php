@@ -14,11 +14,13 @@
 include '../../common/view/header.html.php';
 include '../../common/view/form.html.php';
 include '../../common/view/kindeditor.html.php';
+include '../../common/view/datepicker.html.php';
 js::set('holders', $lang->bug->placeholder);
 js::set('page', 'create');
 js::set('createRelease', $lang->release->create);
 js::set('createBuild', $lang->build->create);
 js::set('refresh', $lang->refresh);
+js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
 ?>
 <div class='container mw-1400px'>
   <div id='titlebar'>
@@ -83,6 +85,15 @@ js::set('refresh', $lang->refresh);
             <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
           </div>
         </td>
+        <?php $showDeadline = strpos(",$showFields,", ',deadline,') !== false;?>
+        <?php if($showDeadline):?>
+        <td>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->bug->deadline?></span>
+            <span><?php echo html::input('deadline', $deadline, "class='form-control form-date'");?></span>
+          </div>
+        </td>
+        <?php endif;?>
       </tr>
       <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
       <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>

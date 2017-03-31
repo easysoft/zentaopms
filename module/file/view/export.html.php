@@ -125,7 +125,7 @@ $(document).ready(function()
       <td>
         <div class='input-group'>
           <span class='input-group-addon'><?php echo $lang->setFileName;?></span>
-          <?php echo html::input('fileName', '', 'class=form-control');?>
+          <?php echo html::input('fileName', '', "class='form-control' autocomplete='off'");?>
         </div>
       </td>
       <td class='w-60px'>
@@ -142,7 +142,7 @@ $(document).ready(function()
         <span id='tplBox'><?php echo $this->fetch('file', 'buildExportTPL', 'module=' . $this->moduleName);?></span>
       </td>
       <?php endif?>
-      <td style='width:<?php echo $isCustomExport ? '94px' : '50px'?>'>
+      <td style='width:<?php echo $isCustomExport ? '130px' : '70px'?>'>
         <div class='input-group'>
           <?php echo html::submitButton($lang->export, "onclick='setDownloading();' ");?>
           <?php if($isCustomExport):?>
@@ -174,7 +174,7 @@ $(document).ready(function()
       <div>
         <div class='input-group'>
           <span class='input-group-addon'><?php echo $lang->file->tplTitle;?></span>
-          <?php echo html::input('title', '', "class='form-control'")?>
+          <?php echo html::input('title', '', "class='form-control' autocomplete='off'")?>
           <?php if(common::hasPriv('file', 'setPublic')):?>
           <span class='input-group-addon'><?php echo html::checkbox('public', array(1 => $lang->public));?></span>
           <?php endif?>

@@ -16,6 +16,8 @@ function getList()
 $(document).ready(function()
 {
     $("#story").chosen(defaultChosenOptions);
+    
+    initSteps();
 });
 
 
@@ -47,4 +49,21 @@ function loadLinkCases(caseID)
 {
     caseLink = createLink('testcase', 'ajaxGetLinkCases', 'caseID=' + caseID);
     $('#linkCaseBox').load(caseLink);
+}
+
+/**
+ * Load lib modules.
+ * 
+ * @param  int $libID 
+ * @access public
+ * @return void
+ */
+function loadLibModules(libID)
+{
+    link = createLink('tree', 'ajaxGetOptionMenu', 'libID=' + libID + '&viewtype=caselib&branch=0&rootModuleID=0&returnType=html&needManage=true');
+    $('#moduleIdBox').load(link, function()
+    {
+        $(this).find('select').chosen(defaultChosenOptions)
+        if(typeof(caseModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon'>" + caseModule + "</span>")
+    });
 }

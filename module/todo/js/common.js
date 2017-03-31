@@ -36,7 +36,15 @@ function loadList(type, id)
 
     if(type == 'bug' || type == 'task')
     {
-        $(divClass).load(link, function(){$(divClass).find('select').chosen(defaultChosenOptions)});
+        $.get(link,function(data,status) {
+            if(data) { 
+                $(divClass).html(data);
+            } else {
+                alert(noTodo);
+                $("#type").val("custom");
+                $(divClass).html($(divID).html());
+            }
+        });
     }
     else if(type == 'custom')
     {

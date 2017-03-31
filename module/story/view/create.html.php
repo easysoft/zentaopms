@@ -73,7 +73,7 @@
             <span class='input-group-addon'><?php echo $lang->story->source?></span>
             <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control'");?>
             <span class='input-group-addon fix-border'><?php echo $lang->comment?></span>
-            <?php echo html::input('sourceNote', $sourceNote, "class='form-control'");?>
+            <?php echo html::input('sourceNote', $sourceNote, "class='form-control' autocomplete='off'");?>
           </div>
         </td>
         <?php endif;?>
@@ -96,7 +96,7 @@
             <div class='col-table'>
               <div class="input-group w-p100">
                 <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->story->colorTag ?>' data-update-text='#title'>
-                <?php echo html::input('title', $storyTitle, "class='form-control'");?>
+                <?php echo html::input('title', $storyTitle, "class='form-control' autocomplete='off'");?>
               </div>
             </div>
             <?php
@@ -134,7 +134,7 @@
                 <?php endif;?>
                 <?php if(!$hiddenEst):?>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->story->estimateAB;?></span>
-                <?php echo html::input('estimate', $estimate, "class='form-control minw-60px'");?>
+                <?php echo html::input('estimate', $estimate, "class='form-control minw-60px' autocomplete='off'");?>
                 <?php endif;?>
               </div>
             </div>
@@ -176,7 +176,7 @@
             <?php if(!$hiddenMailto):?>
             <span class='input-group-addon'><?php echo $lang->story->keywords;?></span>
             <?php endif;?>
-            <?php echo html::input('keywords', $keywords, 'class="form-control"');?>
+            <?php echo html::input('keywords', $keywords, 'class="form-control" autocomplete="off"');?>
           </div>
         </td>
         <?php endif;?>

@@ -13,6 +13,17 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->build->confirmUnlinkStory)?>
 <?php js::set('confirmUnlinkBug', $lang->build->confirmUnlinkBug)?>
+<?php if(isonlybody()):?>
+<style>
+#stories .action{display:none;}
+#bugs .action{display:none;}
+tbody tr td:last-child a{display:none;}
+tbody tr td:first-child input{display:none;}
+tfoot tr td .table-actions .btn{display:none;}
+#titlebar .actions{display:none}
+.row-table .col-side{display:none;}
+</style>
+<?php endif;?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['build']);?> <strong><?php echo $build->id;?></strong></span>

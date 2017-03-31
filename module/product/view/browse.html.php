@@ -72,7 +72,7 @@
       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
       </button>
-      <ul class='dropdown-menu'>
+      <ul class='dropdown-menu pull-right'>
       <?php
       $misc = common::hasPriv('story', 'batchCreate') ? '' : "class=disabled";
       $link = common::hasPriv('story', 'batchCreate') ?  $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID") : '#';

@@ -427,6 +427,13 @@ class extension extends control
      */
     public function upload()
     {
+        $statusFile = $this->loadModel('upgrade')->checkSafeFile();
+        if($statusFile)
+        {
+            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile);
+            die($this->display());
+        }
+
         if($_FILES)
         {
             $tmpName   = $_FILES['file']['tmp_name'];

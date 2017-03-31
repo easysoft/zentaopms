@@ -21,6 +21,7 @@ class productplan extends control
     public function commonAction($productID, $branch = 0)
     {
         $this->loadModel('product');
+        $this->app->loadConfig('project');
         $product = $this->product->getById($productID);
         $this->view->product  = $product;
         $this->view->branch   = $branch;

@@ -52,8 +52,8 @@ $minWidth = (count($visibleFields) > 5) ? 'w-150px' : '';
   <?php foreach($projectIDList as $projectID):?>
   <tr class='text-center'>
     <td><?php echo sprintf('%03d', $projectID) . html::hidden("projectIDList[$projectID]", $projectID);?></td>
-    <td title='<?php echo $projects[$projectID]->name?>'><?php echo html::input("names[$projectID]", $projects[$projectID]->name, "class='form-control'");?></td>
-    <td><?php echo html::input("codes[$projectID]",     $projects[$projectID]->code, "class='form-control'");?></td>
+    <td title='<?php echo $projects[$projectID]->name?>'><?php echo html::input("names[$projectID]", $projects[$projectID]->name, "class='form-control' autocomplete='off'");?></td>
+    <td><?php echo html::input("codes[$projectID]",     $projects[$projectID]->code, "class='form-control' autocomplete='off'");?></td>
     <td class='text-left<?php echo zget($visibleFields, 'PM', ' hidden')?>' style='overflow:visible'><?php echo html::select("PMs[$projectID]", $pmUsers, $projects[$projectID]->PM, "class='form-control chosen'");?></td>
     <td class='text-left<?php echo zget($visibleFields, 'PO', ' hidden')?>' style='overflow:visible'><?php echo html::select("POs[$projectID]", $poUsers, $projects[$projectID]->PO, "class='form-control chosen'");?></td>
     <td class='text-left<?php echo zget($visibleFields, 'QD', ' hidden')?>' style='overflow:visible'><?php echo html::select("QDs[$projectID]", $qdUsers, $projects[$projectID]->QD, "class='form-control chosen'");?></td>
@@ -63,7 +63,7 @@ $minWidth = (count($visibleFields) > 5) ? 'w-150px' : '';
     <td><?php echo html::input("begins[$projectID]", $projects[$projectID]->begin, "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
     <td><?php echo html::input("ends[$projectID]",   $projects[$projectID]->end,   "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
     <td class='<?php echo zget($visibleFields, 'desc', 'hidden')?>'>    <?php echo html::textarea("descs[$projectID]",  htmlspecialchars($projects[$projectID]->desc),  "rows='1' class='form-control autosize'");?></td>
-    <td class='<?php echo zget($visibleFields, 'teamname', 'hidden')?>'><?php echo html::input("teams[$projectID]",  $projects[$projectID]->team,  "class='form-control'");?></td>
+    <td class='<?php echo zget($visibleFields, 'teamname', 'hidden')?>'><?php echo html::input("teams[$projectID]",  $projects[$projectID]->team,  "class='form-control' autocomplete='off'");?></td>
     <td class='<?php echo zget($visibleFields, 'days',     'hidden')?>'>
       <div class='input-group'>
         <?php echo html::input("dayses[$projectID]",    $projects[$projectID]->days, "class='form-control' autocomplete='off'");?>

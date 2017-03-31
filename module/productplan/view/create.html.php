@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('weekend', $config->project->weekend);?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <div class='container mw-1400px'>
   <div id='titlebar'>
@@ -35,7 +36,7 @@
       <?php endif;?>
       <tr>
         <th><?php echo $lang->productplan->title;?></th>
-        <td><?php echo html::input('title', '', "class='form-control'");?></td>
+        <td><?php echo html::input('title', '', "class='form-control' autocomplete='off'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->productplan->begin;?></th>

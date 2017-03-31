@@ -286,7 +286,7 @@ class user extends control
         {
             $cases = $this->loadModel('testcase')->getByOpenedBy($account, $sort, $pager);
         }
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'assigntome' ? false : true);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'case2Him' ? false : true);
         
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testCase;
@@ -336,8 +336,10 @@ class user extends control
      * @access public
      * @return void
      */
-    public function profile($account)
+    public function profile($account = '')
     {
+        if(empty($account)) $account = $this->app->user->account;
+
         /* Set menu. */
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted'), $account);
 
@@ -537,7 +539,7 @@ class user extends control
     public function delete($userID)
     {
         $user = $this->user->getByID($userID, 'id');
-        if(strpos($this->app->company->admins, ",{$this->app->user->account},") !== false and $this->app->user->account == $user->account) return;
+        if($this->app->user->admin and $this->app->user->account == $user->account) return;
         if($_POST)
         {
             if(md5($this->post->verifyPassword) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPassword));

@@ -30,7 +30,7 @@
       <th><?php echo $lang->task->left;?></th>
       <td>
         <div class='input-group'>
-          <?php echo html::input('left', '', "class='form-control'");?>
+          <?php echo html::input('left', '', "class='form-control' autocomplete='off'");?>
           <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
         </div>
       </td>

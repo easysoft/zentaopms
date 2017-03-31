@@ -42,6 +42,7 @@ var fullTools =
 $(document).ready(initKindeditor);
 function initKindeditor(afterInit)
 {
+    $(':input[type=submit]').next('#uid').remove();
     $(':input[type=submit]').after("<input type='hidden' id='uid' name='uid' value=" + kuid + ">");
     var nextFormControl = 'input:not([type="hidden"]), textarea:not(.ke-edit-textarea), button[type="submit"], select';
     $.each(editor.id, function(key, editorID)

@@ -9,28 +9,37 @@
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->testtask->index          = "版本首页";
-$lang->testtask->create         = "提交测试";
-$lang->testtask->delete         = "删除版本";
-$lang->testtask->view           = "概况";
-$lang->testtask->edit           = "编辑版本";
-$lang->testtask->browse         = "版本列表";
-$lang->testtask->linkCase       = "关联用例";
-$lang->testtask->unlinkCase     = "移除";
-$lang->testtask->batchAssign    = "批量指派";
-$lang->testtask->runCase        = "执行";
-$lang->testtask->batchRun       = "批量执行";
-$lang->testtask->results        = "结果";
-$lang->testtask->createBug      = "提Bug";
-$lang->testtask->assign         = '指派';
-$lang->testtask->cases          = '用例';
-$lang->testtask->groupCase      = "分组浏览用例";
-$lang->testtask->pre            = '上一个';
-$lang->testtask->next           = '下一个';
-$lang->testtask->start          = "开始";
-$lang->testtask->close          = "关闭";
-$lang->testtask->wait           = "待测版本";
-$lang->testtask->done           = "已测版本";
+$lang->testtask->index            = "版本首页";
+$lang->testtask->create           = "提交测试";
+$lang->testtask->reportChart      = '报表统计';
+$lang->testtask->delete           = "删除版本";
+$lang->testtask->view             = "概况";
+$lang->testtask->edit             = "编辑版本";
+$lang->testtask->browse           = "版本列表";
+$lang->testtask->linkCase         = "关联用例";
+$lang->testtask->selectVersion    = "选择版本";
+$lang->testtask->unlinkCase       = "移除";
+$lang->testtask->batchUnlinkCases = "批量移除用例";
+$lang->testtask->batchAssign      = "批量指派";
+$lang->testtask->runCase          = "执行";
+$lang->testtask->batchRun         = "批量执行";
+$lang->testtask->results          = "结果";
+$lang->testtask->createBug        = "提Bug";
+$lang->testtask->assign           = '指派';
+$lang->testtask->cases            = '用例';
+$lang->testtask->groupCase        = "分组浏览用例";
+$lang->testtask->pre              = '上一个';
+$lang->testtask->next             = '下一个';
+$lang->testtask->start            = "开始";
+$lang->testtask->close            = "关闭";
+$lang->testtask->wait             = "待测版本";
+$lang->testtask->block            = "阻塞";
+$lang->testtask->activate         = "激活";
+$lang->testtask->testing          = "测试中版本";
+$lang->testtask->blocked          = "被阻塞版本";
+$lang->testtask->done             = "已测版本";
+$lang->testtask->totalStatus      = "全部";
+$lang->testtask->all              = "全部产品";
 
 $lang->testtask->common         = '测试视图版本';
 $lang->testtask->product        = '所属' . $lang->productCommon;
@@ -49,7 +58,7 @@ $lang->testtask->linkVersion    = '版本';
 $lang->testtask->lastRunAccount = '执行人';
 $lang->testtask->lastRunTime    = '执行时间';
 $lang->testtask->lastRunResult  = '结果';
-$lang->testtask->report         = '测试总结';
+$lang->testtask->reportField    = '测试总结';
 $lang->testtask->files          = '上传附件';
 
 $lang->testtask->legendDesc      = '版本描述';
@@ -68,8 +77,10 @@ $lang->testtask->priList[2] = '2';
 $lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = '未关联';
+$lang->testtask->linkByBuild   = '复制版本';
 $lang->testtask->linkByStory   = '按需求关联';
 $lang->testtask->linkByBug     = '按Bug关联';
+$lang->testtask->linkBySuite   = '按套件关联';
 $lang->testtask->passAll       = '全部通过';
 $lang->testtask->pass          = '通过';
 $lang->testtask->fail          = '失败';
@@ -78,6 +89,7 @@ $lang->testtask->showFail      = '失败<span class="text-danger">%s</span>次';
 
 $lang->testtask->confirmDelete     = '您确认要删除该版本吗？';
 $lang->testtask->confirmUnlinkCase = '您确认要移除该用例吗？';
+$lang->testtask->noticeNoOther     = '该产品还没有其他测试版本';
 
 $lang->testtask->assignedToMe  = '指派给我';
 $lang->testtask->allCases      = '所有用例';
@@ -103,3 +115,28 @@ $lang->testtask->action = new stdclass();
 $lang->testtask->action->testtaskopened  = '$date, 由 <strong>$actor</strong> 创建版本 <strong>$extra</strong>。' . "\n";
 $lang->testtask->action->testtaskstarted = '$date, 由 <strong>$actor</strong> 启动版本 <strong>$extra</strong>。' . "\n";
 $lang->testtask->action->testtaskclosed  = '$date, 由 <strong>$actor</strong> 完成版本 <strong>$extra</strong>。' . "\n";
+
+$lang->testtask->unexecuted = '未执行';
+
+/* 统计报表。*/
+$lang->testtask->report = new stdclass();
+$lang->testtask->report->common = '报表';
+$lang->testtask->report->select = '请选择报表类型';
+$lang->testtask->report->create = '生成报表';
+    
+$lang->testtask->report->charts['testTaskPerRunResult'] = '用例结果统计';
+$lang->testtask->report->charts['testTaskPerType']      = '用例类型统计';
+$lang->testtask->report->charts['testTaskPerModule']    = '用例模块统计';
+$lang->testtask->report->charts['testTaskPerRunner']    = '用例执行人统计';
+$lang->testtask->report->charts['bugSeverityGroups']    = 'Bug严重级别分布';
+$lang->testtask->report->charts['bugStatusGroups']      = 'Bug状态分布';
+$lang->testtask->report->charts['bugOpenedByGroups']    = 'Bug创建者分布';
+$lang->testtask->report->charts['bugResolvedByGroups']  = 'Bug解决者分布';
+$lang->testtask->report->charts['bugResolutionGroups']  = 'Bug解决方案分布';
+$lang->testtask->report->charts['bugModuleGroups']      = 'Bug模块分布';
+
+$lang->testtask->report->options = new stdclass();
+$lang->testtask->report->options->graph  = new stdclass();
+$lang->testtask->report->options->type   = 'pie';
+$lang->testtask->report->options->width  = 500;
+$lang->testtask->report->options->height = 140;

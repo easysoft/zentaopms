@@ -30,7 +30,7 @@ js::set('oldReleasedBuild' , $release->build);
     <table class='table table-form'> 
       <tr>
         <th class='w-90px'><?php echo $lang->release->name;?></th>
-        <td class='w-p25-f'><?php echo html::input('name', $release->name, "class='form-control'");?></td><td></td>
+        <td class='w-p25-f'><?php echo html::input('name', $release->name, "class='form-control' autocomplete='off'");?></td><td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->release->build;?></th>

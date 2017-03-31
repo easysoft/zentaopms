@@ -29,6 +29,7 @@ $lang->build->basicInfo = '基本信息';
 
 $lang->build->id        = 'ID';
 $lang->build->product   = $lang->productCommon;
+$lang->build->project   = '所屬' . $lang->projectCommon;
 $lang->build->name      = '名稱編號';
 $lang->build->date      = '打包日期';
 $lang->build->builder   = '構建者';

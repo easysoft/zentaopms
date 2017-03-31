@@ -23,7 +23,7 @@ extract($widths);
       <tbody>
         <?php foreach($cases as $case):?>
         <tr class='text-center' data-id='<?php echo $case->id?>'>
-          <?php foreach($setting as $key => $value) $this->testcase->printCell($value, $case, $users, $branches, $modulePairs);?>
+          <?php foreach($setting as $key => $value) $this->testcase->printCell($value, $case, $users, $branches, $modulePairs, $browseType);?>
         </tr>
         <?php endforeach;?>
       </tbody>

@@ -79,7 +79,7 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
         <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
           <span class='caret'></span>
         </button>
-        <ul class='dropdown-menu'>
+        <ul class='dropdown-menu pull-right'>
         <?php
         $misc = common::hasPriv('bug', 'batchCreate') ? '' : "class=disabled";
         $link = common::hasPriv('bug', 'batchCreate') ?  $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID") : '#';
@@ -120,8 +120,8 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
       <tfoot>
         <tr>
           <?php
-          $columns = $this->cookie->windowWidth >= $this->config->wideSize ? 12 : 10;
-          if($browseType == 'needconfirm') $columns = 7;
+          $columns = $this->cookie->windowWidth >= $this->config->wideSize ? 13 : 11;
+          if($browseType == 'needconfirm') $columns = 8;
           ?>
           <td colspan='<?php echo $columns;?>'>
             <?php if(!empty($bugs)):?>

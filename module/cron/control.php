@@ -219,7 +219,7 @@ class cron extends control
             }
 
             /* Sleep some seconds. */
-            $sleepTime = 60 - ((time() - $now->getTimestamp()) % 60);
+            $sleepTime = 60 - ((time() - strtotime($now->format('Y-m-d H:i:s'))) % 60);
             sleep($sleepTime);
 
             /* Break while. */

@@ -56,6 +56,7 @@ $whiteList[] = 'admin-win2unix';
 $whiteList[] = 'admin-bind';
 $whiteList[] = 'admin-certifyztemail';
 $whiteList[] = 'admin-certifyztmobile';
+$whiteList[] = 'admin-ztcompany';
 $whiteList[] = 'story-commonaction';
 $whiteList[] = 'story-sendmail';
 $whiteList[] = 'webapp-ajaxaddview';
@@ -80,6 +81,13 @@ $whiteList[] = 'tutorial-quit';
 $whiteList[] = 'tutorial-wizard';
 $whiteList[] = 'my-buildcontactlists';
 $whiteList[] = 'mail-ztcloud';
+$whiteList[] = 'doc-diff';
+$whiteList[] = 'testreport-commonaction';
+$whiteList[] = 'testsuite-library';
+$whiteList[] = 'testsuite-createlib';
+$whiteList[] = 'testsuite-createcase';
+$whiteList[] = 'testsuite-libview';
+
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";

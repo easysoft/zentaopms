@@ -173,7 +173,7 @@ class userModel extends model
      */
     public function getById($userID, $field = 'account')
     {
-        $user = $this->dao->select('*')->from(TABLE_USER)->where($field)->eq($userID)->fetch();
+        $user = $this->dao->select('*')->from(TABLE_USER)->where("`$field`")->eq($userID)->fetch();
         if(!$user) return false;
         $user->last = date(DT_DATETIME1, $user->last);
         return $user;
@@ -612,8 +612,10 @@ class userModel extends model
         {
             $ip   = $this->server->remote_addr;
             $last = $this->server->request_time;
-            $user->last = date(DT_DATETIME1, $last);
+            $user->last  = date(DT_DATETIME1, $last);
+            $user->admin = strpos($this->app->company->admins, ",{$user->account},") !== false;
             $user->modifyPassword = ($user->visits == 0 and !empty($this->config->safe->modifyPasswordFirstLogin));
+
             $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($ip)->set('last')->eq($last)->where('account')->eq($account)->exec();
         }
         return $user;

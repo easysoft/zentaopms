@@ -1,0 +1,5 @@
+#steps {margin-bottom: 15px}
+.outer .col-side{transition: all 0.1s;position: relative;}
+.outer.hide-side .col-side{width:0px;}
+.outer .col-side .side-handle{right:0px;top:10px;}
+.outer.hide-side .main-side{display:none;}

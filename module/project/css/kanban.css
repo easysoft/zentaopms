@@ -98,3 +98,6 @@ table th.col-closed {width:15%}
 #kanbanHeader.affix .dropdown > a {color: #fff;}
 #kanbanHeader.affix .actions .btn {background: #114f8e; color: #f1f1f1;}
 #kanbanHeader.affix th {border-color: rgba(255,255,255,.2)}
+
+.label-delay-doing {background-color: #000; margin-bottom: 2px;}
+.label-delay-wait  {background-color: #d2322d; margin-bottom: 2px;}

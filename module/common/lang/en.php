@@ -34,7 +34,7 @@ $lang->refresh      = 'Refresh';
 $lang->edit         = 'Edit';
 $lang->delete       = 'Delete';
 $lang->close        = 'Close';
-$lang->unlink       = 'Unrelate';
+$lang->unlink       = 'Unlink';
 $lang->import       = 'Import';
 $lang->export       = 'Export';
 $lang->setFileName  = 'File Name';
@@ -48,6 +48,9 @@ $lang->more         = 'More';
 $lang->day          = 'Day';
 $lang->customConfig = 'Custom';
 $lang->public       = 'Public';
+$lang->trunk        = 'Trunk';
+$lang->sort         = 'Ranking';
+$lang->required     = 'Required';
 
 $lang->actions         = 'Actions';
 $lang->comment         = 'Note';
@@ -121,6 +124,8 @@ $lang->searchObjects['release']     = 'Release';
 $lang->searchObjects['productplan'] = $lang->productCommon . 'Plan';
 $lang->searchObjects['testtask']    = 'Test Task';
 $lang->searchObjects['doc']         = 'Document';
+$lang->searchObjects['caselib']     = 'Case Library';
+$lang->searchObjects['testreport']  = 'Test Report';
 $lang->searchTips                   = 'ID (ctrl+g)';
 
 /* 导入支持的编码格式。*/
@@ -213,7 +218,7 @@ $lang->project->menu->story     = array('link' => 'Story|project|story|projectID
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = 'Dynamic|project|dynamic|projectID=%s';
 $lang->project->menu->build     = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->menu->testtask  = 'Test Task|project|testtask|projectID=%s';
+$lang->project->menu->testtask  = array('link' => 'Test Task|project|testtask|projectID=%s');
 $lang->project->menu->team      = array('link' => 'Team|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => 'Document|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
 $lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|projectID=%s';
@@ -231,32 +236,57 @@ $lang->build->menu = $lang->project->menu;
 $lang->qa = new stdclass();
 $lang->qa->menu = new stdclass();
 
-$lang->qa->menu->product  = array('link' => '%s', 'fixed' => true);
-$lang->qa->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->qa->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s');
-$lang->qa->menu->testtask = array('link' => 'Build|testtask|browse|productID=%s');
-$lang->qa->menu->index    = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->qa->menu->product   = array('link' => '%s', 'fixed' => true);
+$lang->qa->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
+$lang->qa->menu->testcase  = array('link' => 'Case|testcase|browse|productID=%s');
+$lang->qa->menu->testtask  = array('link' => 'Build|testtask|browse|productID=%s');
+$lang->qa->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s');
+$lang->qa->menu->report    = array('link' => 'Report|testreport|browse|productID=%s');
+$lang->qa->menu->caselib   = array('link' => 'Library|testsuite|library');
+$lang->qa->menu->index     = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
 
-$lang->bug->menu->product  = array('link' => '%s', 'fixed' => true);
-$lang->bug->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
-$lang->bug->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s');
-$lang->bug->menu->testtask = array('link' => 'Build|testtask|browse|productID=%s');
-$lang->bug->menu->index    = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->bug->menu->product   = array('link' => '%s', 'fixed' => true);
+$lang->bug->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
+$lang->bug->menu->testcase  = array('link' => 'Case|testcase|browse|productID=%s');
+$lang->bug->menu->testtask  = array('link' => 'Build|testtask|browse|productID=%s');
+$lang->bug->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s');
+$lang->bug->menu->report    = array('link' => 'Report|testreport|browse|productID=%s');
+$lang->bug->menu->caselib   = array('link' => 'Library|testsuite|library');
+$lang->bug->menu->index     = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
 
-$lang->testcase->menu->product  = array('link' => '%s', 'fixed' => true);
-$lang->testcase->menu->bug      = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testcase->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase', 'subModule' => 'tree');
-$lang->testcase->menu->testtask = array('link' => 'Build|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase');
-$lang->testcase->menu->index    = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->testcase->menu->product   = array('link' => '%s', 'fixed' => true);
+$lang->testcase->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
+$lang->testcase->menu->testcase  = array('link' => 'Case|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree');
+$lang->testcase->menu->testtask  = array('link' => 'Build|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
+$lang->testcase->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
+$lang->testcase->menu->report    = array('link' => 'Report|testreport|browse|productID=%s', 'alias' => 'view,create,edit');
+$lang->testcase->menu->caselib   = array('link' => 'Library|testsuite|library');
+$lang->testcase->menu->index     = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->testtask = new stdclass();
 $lang->testtask->menu = $lang->testcase->menu;
+$lang->testsuite = new stdclass();
+$lang->testsuite->menu = $lang->testcase->menu;
+$lang->testreport = new stdclass();
+$lang->testreport->menu = $lang->testcase->menu;
+
+$lang->caselib = new stdclass();
+$lang->caselib->menu = new stdclass();
+$lang->caselib->menu->lib       = array('link' => '%s', 'fixed' => true);
+$lang->caselib->menu->bug       = array('link' => 'Bug|bug|browse|');
+$lang->caselib->menu->testcase  = array('link' => 'Case|testcase|browse|');
+$lang->caselib->menu->testtask  = array('link' => 'Build|testtask|browse|');
+$lang->caselib->menu->testsuite = array('link' => 'Suite|testsuite|browse|');
+$lang->caselib->menu->report    = array('link' => 'Report|testreport|browse|');
+$lang->caselib->menu->caselib   = array('link' => 'Library|testsuite|library', 'alias' => 'createlib,createcase,libview,edit', 'subModule' => 'tree,testcase');
+$lang->caselib->menu->create    = array('link' => "<i class='icon-plus'></i>Create a Library|testsuite|createLib|", 'float' => 'right');
+$lang->caselib->menu->index     = array('link' => "<i class='icon-home'></i>Test Home|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();
@@ -302,7 +332,7 @@ $lang->user->menu  = $lang->company->menu;
 /* 后台管理菜单设置。*/
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
-$lang->admin->menu->index     = array('link' => 'Homepage|admin|index');
+$lang->admin->menu->index     = array('link' => 'Homepage|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
 $lang->admin->menu->mail      = array('link' => 'Email|mail|index', 'subModule' => 'mail');
@@ -351,6 +381,9 @@ $lang->menugroup->group       = 'company';
 $lang->menugroup->bug         = 'qa';
 $lang->menugroup->testcase    = 'qa';
 $lang->menugroup->testtask    = 'qa';
+$lang->menugroup->testsuite   = 'qa';
+$lang->menugroup->caselib     = 'qa';
+$lang->menugroup->testreport  = 'qa';
 $lang->menugroup->people      = 'company';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
@@ -389,27 +422,31 @@ $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Pleas
 
 /* 分页信息。*/
 $lang->pager = new stdclass();
-$lang->pager->noRecord  = "No History";
-$lang->pager->digest    = " <strong>%s</strong> in total. %s <strong>%s/%s</strong> &nbsp; ";
-$lang->pager->recPerPage= " <strong>%s</strong> per page";
-$lang->pager->first     = "<i class='icon-step-backward' title='Homepage'></i>";
-$lang->pager->pre       = "<i class='icon-play icon-rotate-180' title='Previous Page'></i>";
-$lang->pager->next      = "<i class='icon-play' title='Next Page'></i>";
-$lang->pager->last      = "<i class='icon-step-forward' title='Last Page'></i>";
-$lang->pager->locate    = "GO!";
+$lang->pager->noRecord     = "No History";
+$lang->pager->digest       = " <strong>%s</strong> in total. %s <strong>%s/%s</strong> &nbsp; ";
+$lang->pager->recPerPage   = " <strong>%s</strong> per page";
+$lang->pager->first        = "<i class='icon-step-backward' title='Homepage'></i>";
+$lang->pager->pre          = "<i class='icon-play icon-rotate-180' title='Previous Page'></i>";
+$lang->pager->next         = "<i class='icon-play' title='Next Page'></i>";
+$lang->pager->last         = "<i class='icon-step-forward' title='Last Page'></i>";
+$lang->pager->locate       = "GO!";
+$lang->pager->previousPage = "Previous";
+$lang->pager->nextPage     = "Next";
+$lang->pager->summery      = "<strong>%s-%s</strong> of <strong>%s</strong>.";
 
 $lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>ZenTao Pro <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "Download Desktop Notification";
 
-$lang->suhosinInfo   = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger value) in php.ini, then save and restart Apache, or some data will not be saved.";
+$lang->suhosinInfo   = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
+$lang->maxVarsInfo   = "Warning! Data is reaching the limit. Please change <font color=red>max_input_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
 $lang->pasteTextInfo = "Paste text into text field. Each line will be a header of each data record. ";
 $lang->noticeImport  = "<p style='font-size:14px'>Imported data contains data that has already existed in system. Please confirm you actions on the date </p><p><a href='javascript:submitForm(\"cover\")' class='btn btn-mini'>Override</a> <a href='javascript:submitForm(\"insert\")' class='btn btn-mini'>New Insertion</a></p>";
 
 $lang->noResultsMatch     = "No results match!";
 $lang->searchMore         = "More results：";
-$lang->chooseUsersToMail  = "Choose users you want send notification to...";
+$lang->chooseUsersToMail  = "Choose users you will send notifications to...";
 $lang->browserNotice      = 'Your current browser might not show the best effect. Please use Chrome, Firefox, IE9+, Opera or Safari.';
-$lang->noticePasteImg     = "Can parse image in editor.";
+$lang->noticePasteImg     = "Paste image to editor.";
 
 /* 时间格式设置。*/
 define('DT_DATETIME1',  'Y-m-d H:i:s');
@@ -469,7 +506,7 @@ $lang->icons['user']      = 'user';
 $lang->icons['dept']      = 'sitemap';
 $lang->icons['tree']      = 'sitemap';
 $lang->icons['usecase']   = 'sitemap';
-$lang->icons['testcase']  = 'smile';
+$lang->icons['testcase']  = 'sitemap';
 $lang->icons['result']    = 'list-alt';
 $lang->icons['mail']      = 'envelope';
 $lang->icons['trash']     = 'trash';

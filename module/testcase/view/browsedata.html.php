@@ -10,23 +10,27 @@
  * @link        http://www.zentao.net
  */
 ?>
+    <?php include '../../common/view/tablesorter.html.php';?>
     <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='caseList'>
       <thead>
         <tr>
-          <th class='w-id'>    <?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></th>
-          <th class='w-pri'>   <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
-          <th>                 <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
+          <th class='w-id {sorter:false}'>    <?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></th>
+          <th class='w-pri {sorter:false}'>   <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
+          <th class='{sorter:false}'>         <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
           <?php if($browseType == 'needconfirm'):?>
-          <th>                 <?php common::printOrderLink('story',         $orderBy, $vars, $lang->testcase->story);?></th>
-          <th class='w-50px'><?php echo $lang->actions;?></th>
+          <th class='{sorter:false}'>         <?php common::printOrderLink('story',         $orderBy, $vars, $lang->testcase->story);?></th>
+          <th class='w-50px {sorter:false}'>  <?php echo $lang->actions;?></th>
           <?php else:?>
-          <th class='w-type'>  <?php common::printOrderLink('type',          $orderBy, $vars, $lang->typeAB);?></th>
-          <th class='w-user'>  <?php common::printOrderLink('openedBy',      $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='w-80px'>  <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
-          <th class='w-120px'> <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
-          <th class='w-80px'>  <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
-          <th class='w-100px'> <?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='w-150px {sorter:false}'><?php echo $lang->actions;?></th>
+          <th class='w-type {sorter:false}'>  <?php common::printOrderLink('type',          $orderBy, $vars, $lang->typeAB);?></th>
+          <th class='w-user {sorter:false}'>  <?php common::printOrderLink('openedBy',      $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='w-80px {sorter:false}'>  <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
+          <th class='w-120px {sorter:false}'> <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
+          <th class='w-80px {sorter:false}'>  <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
+          <th class='w-100px {sorter:false}'> <?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='w-30px' title='<?php echo $lang->testcase->bugs?>'> <?php echo $lang->testcase->bugsAB;?></th>
+          <th class='w-30px' title='<?php echo $lang->testcase->results?>'> <?php echo $lang->testcase->resultsAB;?></th>
+          <th class='w-30px' title='<?php echo $lang->testcase->stepNumber?>'> <?php echo $lang->testcase->stepNumberAB;?></th>
+          <th class='<?php echo $config->testcase->needReview ? 'w-170px' : 'w-150px'?> {sorter:false}'><?php echo $lang->actions;?></th>
           <?php endif;?>
         </tr>
       </thead>
@@ -34,7 +38,7 @@
       <tbody>
       <?php foreach($cases as $case):?>
       <tr class='text-center'>
-        <?php $viewLink = inlink('view', "caseID=$case->id");?>
+        <?php $viewLink = inlink('view', "caseID=$case->id&version=$case->version");?>
         <td class='cell-id'>
           <input type='checkbox' name='caseIDList[]'  value='<?php echo $case->id;?>'/> 
           <?php echo html::a($viewLink, sprintf('%03d', $case->id));?>
@@ -68,10 +72,14 @@
           }
           ?>
         </td>
+        <td><?php echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(inlink('bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;?></td>
+        <td><?php echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a($this->createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;?></td>
+        <td><?php echo $case->stepNumber;?></td>
         <td class='text-right'>
           <?php
-          common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe');
-          common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', 'list-alt', '', 'results iframe');
+          common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
+          common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', 'list-alt', '', 'results iframe', false, "data-width='95%'");
+          if($config->testcase->needReview) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'review', '', 'iframe');
           common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
           common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
 
@@ -81,7 +89,7 @@
               echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$lang->testcase->delete}' class='btn-icon'");
           }
 
-          common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'bug', '', 'iframe');
+          common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'bug', '', 'iframe',false,"data-width='95%'");
           ?>
         </td>
         <?php endif;?>

@@ -37,6 +37,18 @@ class buildModel extends model
     }
 
     /**
+     * Get by ID list.
+     * 
+     * @param  array $idList 
+     * @access public
+     * @return array
+     */
+    public function getByList($idList)
+    {
+        return $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($idList)->fetchAll('id');
+    }
+
+    /**
      * Get builds of a project.
      * 
      * @param  int    $projectID 
@@ -69,7 +81,7 @@ class buildModel extends model
     {
         $sysBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
-        if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => 'Trunk');
+        if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => $this->lang->trunk);
 
         $projectBuilds = $this->dao->select('t1.id, t1.name, t1.project, t2.status as projectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName')->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -114,7 +126,7 @@ class buildModel extends model
     {
         $sysBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
-        if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => 'Trunk');
+        if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => $this->lang->trunk);
 
         $productBuilds = $this->dao->select('t1.id, t1.name, t1.project, t2.status as projectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName')->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')

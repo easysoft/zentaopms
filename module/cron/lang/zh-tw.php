@@ -40,7 +40,7 @@ $lang->cron->introduction  = <<<EOD
 <p>該功能還有待完善，所以預設關閉該功能</p>
 EOD;
 $lang->cron->confirmOpen = <<<EOD
-<p>是否開啟該功能？<a href="%s" target='hiddenwin'>打開計劃任務</a></p>
+<p>是否開啟該功能？<a href="%s" target='hiddenwin'><strong>打開計劃任務</strong></a></p>
 EOD;
 
 $lang->cron->notice = new stdclass();

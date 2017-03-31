@@ -22,6 +22,7 @@ include './taskheader.html.php';
       <div class='panel-actions pull-right'>
         <div class='btn-group'>
           <?php foreach ($lang->project->treeLevel as $name => $btnLevel):?>
+          <?php if($name == 'all') continue;?>
           <button type='button' class='btn btn-sm tree-view-btn' data-type='<?php echo $name ?>'><?php echo $btnLevel ?></button>
           <?php endforeach; ?>
         </div>
@@ -78,33 +79,36 @@ $(function()
         action: function(event)
         {
             var action = event.action, $target = $(event.target), item = event.item;
-            if(action.type === 'add') window.open(item.taskCreateUrl);
+            if(action.type === 'add')
+            {
+                window.open(item.taskCreateUrl);
+            }
         },
         itemCreator: function($li, item)
         {
             $li.toggleClass('tree-toggle', item.type !== 'task' && item.type !== 'story').closest('li').addClass('item-type-' + item.type);
-            var $wrapper = $li.children('.tree-item-wrapper');
+            var $liWrapper = $li.find('.tree-item-wrapper');
             if(item.type === 'product')
             {
-                $wrapper.addClass('tree-toggle').append($('<span>' + item.title + '</span>'));
+                $liWrapper.append($('<span><i class="icon icon-cube text-muted"></i> ' + item.title + '</span>'));
             }
             else if(item.type === 'story')
-            { 
-                $wrapper.append('<span class="label label-story"><?php echo $lang->story->common ?> #' + item.storyId + '</span>').append($('<a>').attr({href: item.url}).text(item.title).css('color', item.color));
+            {
+                $liWrapper.append('<span class="tree-item-id">' + item.storyId + ' </span><span class="label label-story"><?php echo $lang->story->common ?></span>').append($('<a>').attr({href: item.url}).text(item.title).css('color', item.color));
                 if(item.children && item.children.length)
                 {
-                    if(item.tasksCount) $wrapper.append(' <span class="label label-task-count label-badge">' + item.tasksCount + '</span>');
+                    if(item.tasksCount) $liWrapper.append(' <span class="label label-task-count label-badge">' + item.tasksCount + '</span>');
                 }
             }
             else if(item.type === 'task')
             {
-                $wrapper.append('<span class="tree-item-id">' + item.id + ' </span>').append($('<a>').attr({href: item.url}).text(item.title).css('color', item.color));
-                if(item.assignedTo) $wrapper.append($('<span class="task-assignto"/>').html(item.assignedTo ? ('<i class="icon icon-user text-muted"></i> ' + item.assignedTo) : ''));
+                $liWrapper.append('<span class="tree-item-id">' + item.id + ' </span>').append($('<a>').attr({href: item.url}).text(item.title).css('color', item.color));
+                if(item.assignedTo) $liWrapper.append($('<span class="task-assignto"/>').html(item.assignedTo ? ('<i class="icon icon-user text-muted"></i> ' + item.assignedTo) : ''));
                 var $info = $('<div class="task-info clearfix"/>');
                 $info.append($('<div/>').addClass('status-' + item.status).text(statusMap[item.status]));
                 $info.append($('<div/>').text(hoursFormat.replace('%s', item.estimate).replace('%s', item.consumed).replace('%s', item.left)));
                 $info.append($('<div class="buttons"/>').html(item.buttons));
-                $wrapper.append($info);
+                $liWrapper.append($info);
             }
             else if(item.type === 'tasks')
             {
@@ -123,18 +127,26 @@ $(function()
                         $tr.append($('<td class="td-extra" width="150"/>').html(task.buttons));
                         $tbody.append($tr);
                     });
-                    $wrapper.append($table);
+                    $liWrapper.append($table);
                 }
             }
             else if(item.type === 'unlinkStory')
             {
-                $wrapper.append($('<span class="tree-item-title"><i class="icon icon-tasks text-muted"></i> ' + item.title + '</span>'));
-                if(item.tasksCount) $wrapper.append(' <span class="label label-task-count label-badge">' + item.tasksCount + '</span>');
+                $li.append($('<span class="tree-item-title"><i class="icon icon-tasks text-muted"></i> ' + item.title + '</span>'));
+                if(item.tasksCount) $li.append(' <span class="label label-task-count label-badge">' + item.tasksCount + '</span>');
             }
             else
             {
-                $wrapper.addClass('tree-toggle').append($('<span>' + (item.title || item.name) + '</span>'));
+                if(item.type === 'module' && (!item.children || !item.children.length))
+                {
+                    $li.remove();
+                }
+                else
+                {
+                    $li.append($('<span class="tree-toggle"><i class="icon icon-bookmark-empty text-muted"></i> ' + (item.title || item.name) + '</span>'));
+                }
             }
+            return true;
         }
     });
 
@@ -152,6 +164,7 @@ $(function()
 
     $(document).on('click', '.tree-view-btn', function()
     {
+        var hasActive = $(this).hasClass('active');
         $('.tree-view-btn.active').removeClass('active');
         var level = $(this).addClass('active').data('type');
         if(level === 'task')
@@ -159,7 +172,19 @@ $(function()
             tree.collapse();
             tree.show($('.item-type-tasks, .item-type-task').parent().parent());
         }
-        if(level === 'product' || level === 'root') tree.collapse();
+        if(level === 'root')
+        {
+            tree.collapse();
+            $(this).html(treeLevel.all);
+            if(hasActive)
+            {
+                $(this).removeClass('active');
+                $(this).html(treeLevel.root);
+                tree.show($('.item-type-tasks, .item-type-task').parent().parent());
+                tree.show($('.item-type-module').parent().parent());
+                tree.show($('.item-type-story').parent().parent());
+            }
+        }
         else if(level === 'module')
         {
             tree.collapse();
@@ -175,4 +200,5 @@ $(function()
     setModalInTree(tree);
 });
 </script>
+<?php js::set('treeLevel', $lang->project->treeLevel);?>
 <?php include '../../common/view/footer.html.php';?>

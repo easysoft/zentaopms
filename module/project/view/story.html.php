@@ -12,6 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php js::set('moduleID', ($type == 'byModule' ? $param : 0));?>
+<?php js::set('productID', ($type == 'byProduct' ? $param : 0));?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
 <div id='titlebar'>
   <div class='heading'><?php echo html::icon($lang->icons['story']);?> <?php echo $lang->project->story;?></div>
@@ -64,7 +66,9 @@
           <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
           <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
           <th class='w-70px {sorter:false}'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
-          <th class='w-70px'>                  <?php echo $lang->story->taskCount;?></th>
+          <th class='w-30px'>                  <?php echo $lang->story->taskCountAB;?></th>
+          <th class='w-30px'>                  <?php echo $lang->story->bugCountAB;?></th>
+          <th class='w-30px'>                  <?php echo $lang->story->caseCountAB;?></th>
           <th class='w-110px {sorter:false}'>  <?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -94,13 +98,24 @@
           <td><?php echo $users[$story->openedBy];?></td>
           <td><?php echo $users[$story->assignedTo];?></td>
           <td><?php echo $story->estimate;?></td>
-          <td class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
+          <td class='story-<?php echo $story->status;?>'><?php echo zget($lang->story->statusList, $story->status);?></td>
           <td><?php echo $lang->story->stageList[$story->stage];?></td>
           <td class='linkbox'>
             <?php
             $tasksLink = $this->createLink('story', 'tasks', "storyID=$story->id&projectID=$project->id");
             $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
             ?> 
+          <td>
+            <?php 
+            $bugsLink = $this->createLink('story', 'bugs', "storyID=$story->id&projectID=$project->id");
+            $storyBugs[$story->id] > 0 ? print(html::a($bugsLink, $storyBugs[$story->id], '', 'class="iframe"')) : print(0);
+            ?>
+          </td>
+          <td>
+            <?php 
+            $casesLink = $this->createLink('story', 'cases', "storyID=$story->id&projectID=$project->id");
+            $storyCases[$story->id] > 0 ? print(html::a($casesLink, $storyCases[$story->id], '', 'class="iframe"')) : print(0);
+            ?>
           </td>
           <td>
             <?php 
@@ -135,7 +150,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan='10'>
+          <td colspan='12'>
             <div class='table-actions clearfix'>
             <?php
             $storyInfo = sprintf($lang->project->productStories, inlink('linkStory', "project={$project->id}"));

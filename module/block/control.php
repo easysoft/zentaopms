@@ -49,9 +49,10 @@ class block extends control
                 if(!common::hasPriv($moduleKey, 'index')) unset($modules[$moduleKey]);
             }
 
-            $modules['dynamic']   = $this->lang->block->dynamic;
-            $modules['flowchart'] = $this->lang->block->lblFlowchart;
-            $modules['html']      = 'HTML';
+            $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
+            if(strpos(",$closedBlock,", ",|dynamic,") === false)   $modules['dynamic']   = $this->lang->block->dynamic;
+            if(strpos(",$closedBlock,", ",|flowchart,") === false) $modules['flowchart'] = $this->lang->block->lblFlowchart;
+            if(strpos(",$closedBlock,", ",|html,") === false)      $modules['html']      = 'HTML';
             $modules = array('' => '') + $modules;
 
             $hiddenBlocks = $this->block->getHiddenBlocks();
@@ -338,7 +339,7 @@ class block extends control
 
                 $sso = base64_decode($this->get->sso);
                 $this->view->sso  = $sso;
-                $this->view->sign = strpos($sso, '&') === false ? '?' : '&';
+                $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
             }
 
             $this->viewType   = (isset($params->viewType) and $params->viewType == 'json') ? 'json' : 'html';
@@ -614,5 +615,21 @@ class block extends control
     public function flowchart()
     {
         $this->display();
+    }
+
+    /**
+     * Close block forever. 
+     * 
+     * @param  int    $blockID 
+     * @access public
+     * @return void
+     */
+    public function close($blockID)
+    {
+        $block = $this->block->getByID($blockID);
+        $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
+        $this->dao->delete()->from(TABLE_BLOCK)->where('source')->eq($block->source)->andWhere('block')->eq($block->block)->exec();
+        $this->loadModel('setting')->setItem('system.block.closed', $closedBlock . ",{$block->source}|{$block->block}");
+        die(js::reload('parent'));
     }
 }

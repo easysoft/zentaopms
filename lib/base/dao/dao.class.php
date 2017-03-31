@@ -1923,6 +1923,9 @@ class baseSQL
         $pos    = stripos($order, 'limit');
         $orders = $pos ? substr($order, 0, $pos) : $order;
         $limit  = $pos ? substr($order, $pos) : '';
+        $orders = trim($orders);
+        if(empty($orders)) return $this;
+        if(!preg_match('/^(\w+\.)?(`\w+`|\w+)( +(desc|asc))?( *(, *(\w+\.)?(`\w+`|\w+)( +(desc|asc))?)?)*$/i', $orders)) die("Order is bad request, The order is $orders");
 
         $orders = explode(',', $orders);
         foreach($orders as $i => $order)
@@ -1936,13 +1939,13 @@ class baseSQL
                 $field = $value;
                 /* such as t1.id field. */
                 if(strpos($value, '.') !== false) list($table, $field) = explode('.', $field);
-                /* Ignore order with function e.g. order by length(tag) asc. */
-                if(strpos($field, '(') === false and strpos($field, '`') === false) $field = "`$field`";
+                if(strpos($field, '`') === false) $field = "`$field`";
 
                 $orderParse[$key] = isset($table) ? $table . '.' . $field :  $field;
                 unset($table);
             }
             $orders[$i] = join(' ', $orderParse);
+            if(empty($orders[$i])) unset($orders[$i]);
         }
         $order = join(',', $orders) . ' ' . $limit;
 
@@ -1962,7 +1965,11 @@ class baseSQL
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
         if(empty($limit)) return $this;
-        stripos($limit, 'limit') !== false ? $this->sql .= " $limit " : $this->sql .= ' ' . DAO::LIMIT . " $limit ";
+
+        /* filter limit. */
+        $limit = trim(str_ireplace('limit', '', $limit));
+        if(!preg_match('/^[0-9]+ *(, *[0-9]+)?$/', $limit)) die("Limit is bad query, The limit is $limit");
+        $this->sql .= ' ' . DAO::LIMIT . " $limit ";
         return $this;
     }
 

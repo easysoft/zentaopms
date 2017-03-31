@@ -17,6 +17,7 @@ $lang->admin->safeIndex     = '安全';
 $lang->admin->checkWeak     = '弱口令檢查';
 $lang->admin->certifyMobile = '認證手機';
 $lang->admin->certifyEmail  = '認證郵箱';
+$lang->admin->ztCompany     = '認證公司';
 $lang->admin->captcha       = '驗證碼';
 $lang->admin->getCaptcha    = '獲取驗證碼';
 
@@ -56,6 +57,9 @@ $lang->admin->safe->modeList[0] = '不檢查';
 $lang->admin->safe->modeList[1] = '中';
 $lang->admin->safe->modeList[2] = '強';
 
+$lang->admin->safe->modeRuleList[1] = '6位以上，包含大小寫字母，數字。';
+$lang->admin->safe->modeRuleList[2] = '10位以上，包含字母，數字，特殊字元。';
+
 $lang->admin->safe->reasonList['weak']     = '常用弱口令';
 $lang->admin->safe->reasonList['account']  = '與帳號相同';
 $lang->admin->safe->reasonList['mobile']   = '與手機相同';
@@ -66,4 +70,4 @@ $lang->admin->safe->modifyPasswordList[1] = '必須修改';
 $lang->admin->safe->modifyPasswordList[0] = '不強制';
 
 $lang->admin->safe->noticeMode   = '系統會在登錄、創建和修改用戶、修改密碼的時候檢查用戶口令。';
-$lang->admin->safe->noticeStrong = '密碼長度越長，含有大寫字母或數字或特殊符合越多，密碼字母越不重複，安全度越強！';
+$lang->admin->safe->noticeStrong = '密碼長度越長，含有大寫字母或數字或特殊符號越多，密碼字母越不重複，安全度越強！';

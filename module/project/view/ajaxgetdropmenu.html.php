@@ -23,7 +23,7 @@
     {
         if($project->status != 'done' and $project->PM == $this->app->user->account)
         {
-            echo "<li>" . html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name). "</li>";
+            echo "<li data-id='{$project->id}' data-tag=':{$project->status} @{$project->PM} @mine' data-key='{$project->key}'>" . html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name). "</li>";
         }
     }
  
@@ -33,7 +33,7 @@
     {
         if($project->status != 'done' and !($project->PM == $this->app->user->account))
         {
-            echo "<li>" . html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "$class"). "</li>";
+            echo "<li data-id='{$project->id}' data-tag=':{$project->status} @{$project->PM}' data-key='{$project->key}'>" . html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "$class"). "</li>";
         }
     }
     ?>
@@ -51,7 +51,7 @@
     <?php
       foreach($projects as $project)
       {
-        if($project->status == 'done') echo "<li>" . html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "class='done'"). "</li>";
+        if($project->status == 'done') echo "<li data-id='{$project->id}' data-tag=':{$project->status} @{$project->PM}' data-key='{$project->key}'>" . html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "class='done'"). "</li>";
       }
     ?>
     </ul>

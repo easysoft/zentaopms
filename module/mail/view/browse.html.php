@@ -45,7 +45,12 @@
         <td><?php echo $queue->sendTime?></td>
         <td><?php echo zget($lang->mail->statusList, $queue->status, '')?></td>
         <td class='text-left'><?php echo $queue->failReason?></td>
-        <td><?php if(common::hasPriv('mail', 'delete')) echo html::a(inlink('delete', "id=$queue->id"), $lang->delete, 'hiddenwin');?></td>
+        <td class='text-left'>
+          <?php
+          if(common::hasPriv('mail', 'delete')) echo html::a(inlink('delete', "id=$queue->id"), $lang->delete, 'hiddenwin');
+          if(common::hasPriv('mail', 'resend') and $queue->status == 'fail') echo html::a(inlink('resend', "id=$queue->id"), $lang->mail->resend, 'hiddenwin');
+          ?>
+        </td>
       </tr>
       <?php endforeach;?>
     </tbody>

@@ -49,6 +49,12 @@ class tree extends control
             $lib = $this->doc->getLibById($rootID);
             $this->view->root = $lib;
         }
+        elseif(strpos($viewType, 'caselib') !== false)
+        {
+            $this->loadModel('testsuite');
+            $lib = $this->testsuite->getById($rootID);
+            $this->view->root = $lib;
+        }
 
         if($viewType == 'story')
         {
@@ -90,6 +96,17 @@ class tree extends control
             $title      = $product->name . $this->lang->colon . $this->lang->tree->manageCase;
             $position[] = html::a($this->createLink('testcase', 'browse', "product=$rootID"), $product->name);
             $position[] = $this->lang->tree->manageCase;
+        }
+        elseif($viewType == 'caselib')
+        {
+            $this->testsuite->setLibMenu($this->testsuite->getLibraries(), $rootID);
+            $this->lang->tree->menu      = $this->lang->testsuite->menu;
+            $this->lang->tree->menuOrder = $this->lang->testsuite->menuOrder;
+            $this->lang->set('menugroup.tree', 'qa');
+
+            $title      = $lib->name . $this->lang->colon . $this->lang->tree->manageCaseLib;
+            $position[] = html::a($this->createLink('testsuite', 'library', "libID=$rootID"), $lib->name);
+            $position[] = $this->lang->tree->manageCaseLib;
         }
         elseif(strpos($viewType, 'doc') !== false)
         {

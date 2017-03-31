@@ -2,6 +2,7 @@
 $config->testcase = new stdclass();
 $config->testcase->defaultSteps = 3;
 $config->testcase->batchCreate  = 10;
+$config->testcase->needReview   = 0;
 
 $config->testcase->create = new stdclass();
 $config->testcase->edit   = new stdclass();
@@ -9,26 +10,27 @@ $config->testcase->create->requiredFields = 'title,type';
 $config->testcase->edit->requiredFields   = 'title,type';
 
 $config->testcase->editor = new stdclass();
-$config->testcase->editor->edit = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->testcase->editor->view = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
+$config->testcase->editor->edit   = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->testcase->editor->view   = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
+$config->testcase->editor->review = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->testcase->export   = new stdclass();
 $config->testcase->export->listFields   = array('type', 'stage', 'pri', 'status');
 
 $config->testcase->exportFields = '
-    id, product, module, story,
+    id, product, branch, module, story,
     title, precondition, stepDesc, stepExpect, keywords,
     pri, type, stage, status, lastRunResult, openedBy, openedDate,
     lastEditedBy, lastEditedDate, version,linkCase';
 
 $config->testcase->customCreateFields      = 'story,stage,pri,keywords';
 $config->testcase->customBatchCreateFields = 'module,stage,story,pri,precondition,keywords';
-$config->testcase->customBatchEditFields   = 'module,stage,precondition,status,pri,keywords';
+$config->testcase->customBatchEditFields   = 'module,story,stage,precondition,status,pri,keywords';
 
 $config->testcase->custom = new stdclass();
 $config->testcase->custom->createFields      = $config->testcase->customCreateFields;
 $config->testcase->custom->batchCreateFields = 'module,story';
-$config->testcase->custom->batchEditFields   = 'module,stage,status,pri';
+$config->testcase->custom->batchEditFields   = 'module,stage,status,pri,story';
 
 global $lang;
 $config->testcase->search['module']                   = 'testcase';
@@ -46,6 +48,9 @@ $config->testcase->search['fields']['stage']          = $lang->testcase->stage;
 $config->testcase->search['fields']['module']         = $lang->testcase->module;
 $config->testcase->search['fields']['pri']            = $lang->testcase->pri;
 
+$config->testcase->search['fields']['lastRunner']     = $lang->testcase->lastRunner;
+$config->testcase->search['fields']['lastRunResult']  = $lang->testcase->lastRunResult;
+$config->testcase->search['fields']['lastRunDate']    = $lang->testcase->lastRunDate;
 $config->testcase->search['fields']['openedDate']     = $lang->testcase->openedDate;
 $config->testcase->search['fields']['lastEditedDate'] = $lang->testcase->lastEditedDateAB;
 
@@ -62,11 +67,14 @@ $config->testcase->search['params']['product']      = array('operator' => '=',  
 $config->testcase->search['params']['branch']       = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->testcase->search['params']['stage']        = array('operator' => 'include', 'control' => 'select', 'values' => $lang->testcase->stageList);
 
+$config->testcase->search['params']['lastRunner']     = array('operator' => '=', 'control' => 'select', 'values' => 'users');
+$config->testcase->search['params']['lastRunResult']  = array('operator' => '=', 'control' => 'select', 'values' => $lang->testcase->resultList);
+$config->testcase->search['params']['lastRunDate']    = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 $config->testcase->search['params']['openedDate']     = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 $config->testcase->search['params']['lastEditedDate'] = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 
 $config->testcase->datatable = new stdclass();
-$config->testcase->datatable->defaultField = array('id', 'pri', 'title', 'type', 'openedBy', 'lastRunner', 'lastRunDate', 'lastRunResult', 'status', 'actions');
+$config->testcase->datatable->defaultField = array('id', 'pri', 'title', 'type', 'openedBy', 'lastRunner', 'lastRunDate', 'lastRunResult', 'status', 'bugs', 'results', 'stepNumber', 'actions');
 
 $config->testcase->datatable->fieldList['id']['title']    = 'idAB';
 $config->testcase->datatable->fieldList['id']['fixed']    = 'left';
@@ -132,8 +140,27 @@ $config->testcase->datatable->fieldList['actions']['title']    = 'actions';
 $config->testcase->datatable->fieldList['actions']['fixed']    = 'right';
 $config->testcase->datatable->fieldList['actions']['width']    = '140';
 $config->testcase->datatable->fieldList['actions']['required'] = 'yes';
+$config->testcase->datatable->fieldList['actions']['sort']     = 'no';
 
 $config->testcase->datatable->fieldList['branch']['title']    = 'branch';
 $config->testcase->datatable->fieldList['branch']['fixed']    = 'left';
 $config->testcase->datatable->fieldList['branch']['width']    = '100';
 $config->testcase->datatable->fieldList['branch']['required'] = 'no';
+
+$config->testcase->datatable->fieldList['bugs']['title']    = 'bugs';
+$config->testcase->datatable->fieldList['bugs']['fixed']    = 'no';
+$config->testcase->datatable->fieldList['bugs']['width']    = '80';
+$config->testcase->datatable->fieldList['bugs']['required'] = 'no';
+$config->testcase->datatable->fieldList['bugs']['sort']     = 'no';
+
+$config->testcase->datatable->fieldList['results']['title']    = 'results';
+$config->testcase->datatable->fieldList['results']['fixed']    = 'no';
+$config->testcase->datatable->fieldList['results']['width']    = '80';
+$config->testcase->datatable->fieldList['results']['required'] = 'no';
+$config->testcase->datatable->fieldList['results']['sort']     = 'no';
+
+$config->testcase->datatable->fieldList['stepNumber']['title']    = 'stepNumber';
+$config->testcase->datatable->fieldList['stepNumber']['fixed']    = 'no';
+$config->testcase->datatable->fieldList['stepNumber']['width']    = '80';
+$config->testcase->datatable->fieldList['stepNumber']['required'] = 'no';
+$config->testcase->datatable->fieldList['stepNumber']['sort']     = 'no';

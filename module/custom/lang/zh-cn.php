@@ -16,6 +16,7 @@ $lang->custom->object['testcase'] = '用例';
 $lang->custom->object['testtask'] = '版本';
 $lang->custom->object['todo']     = '待办';
 $lang->custom->object['user']     = '用户';
+$lang->custom->object['block']    = '区块';
 
 $lang->custom->story = new stdClass();
 $lang->custom->story->fields['priList']          = '优先级';
@@ -49,6 +50,7 @@ $lang->custom->testcase->fields['typeList']   = '类型';
 $lang->custom->testcase->fields['stageList']  = '阶段';
 $lang->custom->testcase->fields['resultList'] = '执行结果';
 $lang->custom->testcase->fields['statusList'] = '状态';
+$lang->custom->testcase->fields['review']     = '评审流程';
 
 $lang->custom->testtask = new stdClass();
 $lang->custom->testtask->fields['priList']    = '优先级';
@@ -63,6 +65,8 @@ $lang->custom->user = new stdClass();
 $lang->custom->user->fields['roleList']   = '职位';
 $lang->custom->user->fields['statusList'] = '状态';
 
+$lang->custom->block->fields['closed'] = '关闭的区块';
+
 $lang->custom->currentLang = '适用当前语言';
 $lang->custom->allLang     = '适用所有语言';
 
@@ -71,7 +75,7 @@ $lang->custom->confirmRestore = '是否要恢复默认配置？';
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole             = '键的长度必须小于20个字符！';
 $lang->custom->notice->canNotAdd            = '该项参与运算，不提供自定义添加功能';
-$lang->custom->notice->forceReview          = '指定人提交的需求必须评审。';
+$lang->custom->notice->forceReview          = "指定人提交的%s必须评审。";
 $lang->custom->notice->longlife             = 'Bug列表页面的久未处理标签中，列出设置天数之前未处理的Bug。';
 $lang->custom->notice->priListKey           = '优先级的键应当为数字！';
 $lang->custom->notice->severityListKey      = 'Bug严重程度的键应当为数字！';

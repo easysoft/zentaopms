@@ -1216,7 +1216,7 @@ class baseRouter
      */
     public function setModuleName($moduleName = '')
     {
-        $moduleName = strip_tags(urldecode(strtolower($moduleName)));
+        $moduleName = strip_tags(strtolower($moduleName));
         if(!preg_match('/^[a-zA-Z0-9]+$/', $moduleName)) $this->triggerError("The modulename '$moduleName' illegal. ", __FILE__, __LINE__, $exit = true);
         $this->moduleName = $moduleName;
     }
@@ -1251,7 +1251,7 @@ class baseRouter
      */
     public function setMethodName($methodName = '')
     {
-        $methodName = strip_tags(urldecode(strtolower($methodName)));
+        $methodName = strip_tags(strtolower($methodName));
         if(!preg_match('/^[a-zA-Z0-9]+$/', $methodName)) $this->triggerError("The methodname '$methodName' illegal. ", __FILE__, __LINE__, $exit = true);
         $this->methodName = $methodName;
     }
@@ -1544,7 +1544,7 @@ class baseRouter
         {
             if(isset($passedParams[$i]))
             {
-                $defaultParams[$key] = strip_tags(urldecode($passedParams[$i]));
+                $defaultParams[$key] = strip_tags($passedParams[$i]);
             }
             else
             {

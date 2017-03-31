@@ -277,7 +277,7 @@ class mail extends control
         $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->test;
         $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
         $this->view->position[] = $this->lang->mail->test;
-        $this->view->users      = $this->dao->select('account,  CONCAT(realname, " ", email) AS email' )->from(TABLE_USER)->where('email')->ne('')->orderBy('account')->fetchPairs();
+        $this->view->users      = $this->dao->select('account,  CONCAT(realname, " ", email) AS email' )->from(TABLE_USER)->where('email')->ne('')->andWhere('deleted')->eq(0)->orderBy('account')->fetchPairs();
         $this->display();
     }
 
@@ -314,7 +314,7 @@ class mail extends control
             }
 
             $this->dao->update(TABLE_MAILQUEUE)->set('status')->eq('sending')->where('id')->in($queue->id)->exec();
-            $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList);
+            $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList, true);
 
             $data = new stdclass();
             $data->sendTime = $now;
@@ -337,10 +337,44 @@ class mail extends control
             $unSendNum = $this->dao->select('count(id) as count')->from(TABLE_MAILQUEUE)->where('status')->eq('wait')->fetch('count');
             if($unSendNum == 0) $this->dao->exec('TRUNCATE table ' . TABLE_MAILQUEUE);
         }
-        $this->dao->delete()->from(TABLE_MAILQUEUE)->where('status')->ne('wait')->andWhere('sendTime')->le(date('Y-m-d H:i:s', time() - 2 * 24 * 3600))->exec();
+        $this->dao->delete()->from(TABLE_MAILQUEUE)->where('status')->eq('send')->andWhere('sendTime')->le(date('Y-m-d H:i:s', time() - 2 * 24 * 3600))->exec();
 
         echo $log;
         echo "OK\n";
+    }
+
+    /**
+     * Resend fail mails. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function resend($queueID)
+    {
+        $queue = $this->mail->getQueueById($queueID);
+        if($queue and $queue->status == 'send')
+        {
+            echo js::alert($this->lang->mail->noticeResend);
+            die(js::reload('parent'));
+        }
+
+        if(isset($this->config->mail->async)) $this->config->mail->async = 0;
+        $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList);
+
+        $data = new stdclass();
+        $data->sendTime   = helper::now();
+        $data->status     = 'send';
+        $data->failReason = '';
+        if($this->mail->isError())
+        {
+            $data->status     = 'fail';
+            $data->failReason = join("\n", $this->mail->getError());
+        }
+        $this->dao->update(TABLE_MAILQUEUE)->data($data)->where('id')->in($queue->id)->exec();
+
+        if($data->status == 'fail') die(js::alert($data->failReason));
+        echo js::alert($this->lang->mail->noticeResend);
+        die(js::reload('parent'));
     }
 
     /**
@@ -457,6 +491,12 @@ class mail extends control
         $this->display();
     }
 
+    /**
+     * zentao cloud.
+     * 
+     * @access public
+     * @return void
+     */
     public function ztCloud()
     {
         if($_POST)
@@ -480,7 +520,7 @@ class mail extends control
         $this->view->title      = $this->lang->mail->ztCloud;
         $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
         $this->view->position[] = $this->lang->mail->ztCloud;
-        if(!empty($this->config->mail->ztcloud->secretKey))
+        if(!empty($this->config->mail->ztcloud->secretKey) and !empty($this->config->global->community))
         {
             $mailConfig = new stdclass();
             $mailConfig->fromAddress = $this->config->mail->fromAddress;
@@ -495,22 +535,30 @@ class mail extends control
             die($this->display());
         }
 
-        if($this->cookie->ztCloudLicense != 'yes')
-        {
-            $this->view->step = 'license';
-            die($this->display());
-        }
         if(empty($this->config->global->ztPrivateKey) or $this->config->global->community == 'na' or empty($this->config->global->community))
         {
             if(!empty($this->config->global->community) and $this->config->global->community != 'na') die(js::locate($this->createLink('admin', 'bind', 'from=mail')));
             die(js::locate($this->createLink('admin', 'register', 'from=mail')));
         }
+
+        if($this->cookie->ztCloudLicense != 'yes')
+        {
+            $this->view->step = 'license';
+            die($this->display());
+        }
+
         $result = $this->loadModel('admin')->getSecretKey();
         if(empty($result))die(js::alert($this->lang->mail->connectFail) . js::locate($this->createLink('admin', 'register', "from=mail")));
         if($result->result == 'fail' and empty($result->data)) die(js::alert($this->lang->mail->centifyFail) . js::locate($this->createLink('admin', 'register', "from=mail")));
 
         $data = $result->data;
-        if($result->result == 'fail' and empty($data->company)) die(js::locate($this->createLink('admin', 'ztCompany')));
+        if((isset($data->qq) and empty($data->qq)) or (isset($data->company) and empty($data->company)))
+        {
+            $params = '';
+            if(empty($data->qq))$params .= 'qq,';
+            if(empty($data->company))$params .= 'company,';
+            die(js::locate($this->createLink('admin', 'ztCompany', 'fields=' . trim($params, ','))));
+        }
         if($result->result == 'fail' and empty($data->emailCertified))
         {
             die(js::locate($this->createLink('admin', 'certifyZtEmail', 'email=' . helper::safe64Encode($data->email))));
