@@ -42,6 +42,9 @@ class taskModel extends model
 
         foreach($this->post->assignedTo as $assignedTo)
         {
+            /* When type is affair and has assigned then ignore none. */
+            if($task->type == 'affair' and count($this->post->assignedTo) > 1 and empty($assignedTo)) continue;
+
             $task->assignedTo = $assignedTo;
             if($assignedTo) $task->assignedDate = helper::now();
 
