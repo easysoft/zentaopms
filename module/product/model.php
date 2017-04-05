@@ -66,11 +66,13 @@ class productModel extends model
             unset($this->lang->product->menu->branch);
             return;
         }
+        $isMobile = $this->app->viewType == 'mhtml';
 
         setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot);
         $currentProduct = $this->getById($productID);
         $this->session->set('currentProductType', $currentProduct->type);
         $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+        if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
         if($currentProduct->type == 'normal') unset($this->lang->product->menu->branch);
         if($currentProduct->type != 'normal')
         {
@@ -78,8 +80,15 @@ class productModel extends model
             $this->lang->product->menu->branch = str_replace('@branch@', $this->lang->product->branchName[$currentProduct->type], $this->lang->product->menu->branch);
             $branches   = $this->loadModel('branch')->getPairs($productID);
             $branchName = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
-            $output    .= '</li><li>';
-            $output    .= "<a id='currentBranch' href=\"javascript:showSearchMenu('branch', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+            if(!$isMobile)
+            {
+                $output .= '</li><li>';
+                $output .= "<a id='currentBranch' href=\"javascript:showSearchMenu('branch', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+            }
+            else
+            {
+                $output .= "<a id='currentBranch' href=\"javascript:showSearchMenu('branch', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+            }
         }
         return $output;
     }

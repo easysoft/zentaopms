@@ -564,7 +564,7 @@ class product extends control
         $this->view->method    = $method;
         $this->view->extra     = $extra;
 
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('`order` desc')->fetchAll();
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('`order` desc')->fetchAll('id');
         $productPairs = array();
         foreach($products as $product) $productPairs[$product->id] = $product->name;
         $productsPinyin = common::convert2Pinyin($productPairs);
@@ -629,7 +629,7 @@ class product extends control
     {
         $this->session->set('productList', $this->app->getURI(true));
         $productID = $this->product->saveState($productID, $this->products);
-        if($this->app->getViewType() != 'mhtml') $this->product->setMenu($this->products, $productID);
+        $this->product->setMenu($this->products, $productID);
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);

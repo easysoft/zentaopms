@@ -440,6 +440,7 @@ class commonModel extends model
         foreach($menu as $menuItem)
         {
             if(isset($menuItem->hidden) && $menuItem->hidden) continue;
+            if($isMobile and empty($menuItem->link)) continue;
 
             /* Init the these vars. */
             if($menuItem->link)
@@ -565,6 +566,7 @@ class commonModel extends model
         if(empty($module)) $module = $app->getModuleName();
         if(empty($method)) $method = $app->getMethodName();
         $className = 'header';
+        $isMobile  = $app->viewType === 'mhtml';
 
         $order = explode('_', $orderBy);
         $order[0] = trim($order[0], '`');
@@ -573,12 +575,12 @@ class commonModel extends model
             if(isset($order[1]) and $order[1] == 'asc')
             {
                 $orderBy   = "{$order[0]}_desc";
-                $className = 'headerSortDown';
+                $className = $isMobile ? 'SortDown' : 'headerSortDown';
             }
             else
             {
                 $orderBy = "{$order[0]}_asc";
-                $className = 'headerSortUp';
+                $className = $isMobile ? 'SortUp' : 'headerSortUp';
             }
         }
         else
@@ -587,7 +589,7 @@ class commonModel extends model
             $className = 'header';
         }
         $link = helper::createLink($module, $method, sprintf($vars, $orderBy));
-        echo "<div class='$className'>" . html::a($link, $label) . '</div>';
+        echo $isMobile ? html::a($link, $label, '', "class='$className'") : "<div class='$className'>" . html::a($link, $label) . '</div>';
     }
 
     /**
@@ -715,7 +717,7 @@ class commonModel extends model
         {
             if($app->getViewType() == 'mhtml')
             {
-                return html::a($link, $title, $target, "class='$extraClass' data-role='button' data-mini='true' data-inline='true' data-theme='b'", true);
+                return "<a data-remote='$link' class='$extraClass' $misc>$title</a>";
             }
             if($type == 'button')
             {
