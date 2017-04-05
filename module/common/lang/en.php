@@ -50,6 +50,7 @@ $lang->customConfig = 'Custom';
 $lang->public       = 'Public';
 $lang->trunk        = 'Trunk';
 $lang->sort         = 'Ranking';
+$lang->required     = 'Required';
 
 $lang->actions         = 'Actions';
 $lang->comment         = 'Note';

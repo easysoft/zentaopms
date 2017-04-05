@@ -50,6 +50,7 @@ $lang->customConfig = '自定义';
 $lang->public       = '公共';
 $lang->trunk        = '主干';
 $lang->sort         = '排序';
+$lang->required     = '必填';
 
 $lang->actions         = '操作';
 $lang->comment         = '备注';
