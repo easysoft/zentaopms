@@ -41,7 +41,7 @@
       <?php
       $methodName = $module == 'caselib' ? 'libview' : 'view';
       $params     = $action->objectType == 'user' ? "account={$action->objectName}" : "id={$action->objectID}";
-      echo html::a($this->createLink($module, $moduleName, $params), $action->objectName);
+      echo html::a($this->createLink($module, $methodName, $params), $action->objectName);
       ?>
     </td>
     <td><?php echo $users[$action->actor];?></td>
