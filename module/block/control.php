@@ -262,6 +262,7 @@ class block extends control
         elseif($block->source != '')
         {
             $this->get->set('mode', 'getblockdata');
+            $this->get->set('blockTitle', $block->title);
             $this->get->set('module', $block->module);
             $this->get->set('source', $block->source);
             $this->get->set('blockid', $block->block);
@@ -342,9 +343,10 @@ class block extends control
                 $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
             }
 
-            $this->viewType   = (isset($params->viewType) and $params->viewType == 'json') ? 'json' : 'html';
-            $this->params     = $params;
-            $this->view->code = $this->get->blockid;
+            $this->viewType    = (isset($params->viewType) and $params->viewType == 'json') ? 'json' : 'html';
+            $this->params      = $params;
+            $this->view->code  = $this->get->blockid;
+            $this->view->title = $this->get->blockTitle;
 
             $func = 'print' . ucfirst($code) . 'Block';
             if(method_exists('block', $func))
