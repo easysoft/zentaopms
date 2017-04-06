@@ -122,9 +122,12 @@ class projectModel extends model
     {
         if(!$projectID) return;
 
+        $isMobile = $this->app->viewType == 'mhtml';
+
         setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot);
         $currentProject = $this->getById($projectID);
         $output = "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+        if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
         return $output;
     }
 

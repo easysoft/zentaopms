@@ -41,6 +41,7 @@ $lang->testtask->done             = "已测版本";
 $lang->testtask->totalStatus      = "全部";
 $lang->testtask->all              = "全部产品";
 
+$lang->testtask->id             = '编号';
 $lang->testtask->common         = '测试视图版本';
 $lang->testtask->product        = '所属' . $lang->productCommon;
 $lang->testtask->project        = '所属' . $lang->projectCommon;

@@ -24,8 +24,11 @@ $lang->todo->import2Today = "Import to Today";
 $lang->todo->import       = "Import";
 $lang->todo->legendBasic  = "Basic Info";
 
+$lang->todo->id          = 'ID';
 $lang->todo->account     = 'Owner';
 $lang->todo->date        = 'Date';
+$lang->todo->begin       = 'Begin';
+$lang->todo->end         = 'End';
 $lang->todo->beginAB     = 'Begin';
 $lang->todo->endAB       = 'End';
 $lang->todo->beginAndEnd = 'Time Frame';

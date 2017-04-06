@@ -41,6 +41,7 @@ $lang->testtask->done             = "Tested Build";
 $lang->testtask->totalStatus      = "All";
 $lang->testtask->all              = "All Product";
 
+$lang->testtask->id             = 'ID';
 $lang->testtask->common         = 'Test build';
 $lang->testtask->product        = $lang->productCommon;
 $lang->testtask->project        = $lang->projectCommon;
