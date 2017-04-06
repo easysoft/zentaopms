@@ -9,7 +9,7 @@
     <?php
     foreach($branches as $branchID => $branch)
     {
-        echo "<li>" . html::a(sprintf($link, $productID, $branchID), "<i class='icon-cube'></i> " . $branch, '', "class='text-important'"). "</li>";
+        echo "<li data-id='{$branchID}' data-key='{$branchesPinyin[$branch]}'>" . html::a(sprintf($link, $productID, $branchID), "<i class='icon-cube'></i> " . $branch, '', "class='text-important'"). "</li>";
     }
     ?>
     </ul>

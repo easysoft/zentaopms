@@ -12,6 +12,8 @@
 $lang->testcase->id               = '用例編號';
 $lang->testcase->product          = "所屬{$lang->productCommon}";
 $lang->testcase->module           = '所屬模組';
+$lang->testcase->lib              = "所屬庫";
+$lang->testcase->branch           = "分支/平台";
 $lang->testcase->moduleAB         = '模組';
 $lang->testcase->story            = '相關需求';
 $lang->testcase->title            = '用例標題';
@@ -31,6 +33,9 @@ $lang->testcase->linkCase         = '相關用例';
 $lang->testcase->linkCases        = '關聯相關用例';
 $lang->testcase->unlinkCase       = '移除相關用例';
 $lang->testcase->stage            = '適用階段';
+$lang->testcase->reviewedBy       = '由誰評審';
+$lang->testcase->reviewedDate     = '評審時間';
+$lang->testcase->reviewResult     = '評審結果';
 $lang->testcase->lastEditedByAB   = '修改者';
 $lang->testcase->lastEditedDateAB = '修改日期';
 $lang->testcase->lastEditedDate   = '修改日期';
@@ -51,36 +56,49 @@ $lang->testcase->resultsAB        = 'R';
 $lang->testcase->stepNumber       = '用例步驟數';
 $lang->testcase->stepNumberAB     = 'S';
 $lang->testcase->createBug        = '轉Bug';
+$lang->testcase->fromModule       = '來源模組';
 $lang->case = $lang->testcase;  // 用於DAO檢查時使用。因為case是系統關鍵字，所以無法定義該模組為case，只能使用testcase，但表還是使用的case。
 
-$lang->testcase->stepID     = '編號';
-$lang->testcase->stepDesc   = '步驟';
-$lang->testcase->stepExpect = '預期';
+$lang->testcase->stepID      = '編號';
+$lang->testcase->stepDesc    = '步驟';
+$lang->testcase->stepExpect  = '預期';
+$lang->testcase->stepVersion = '版本';
 
-$lang->testcase->common             = '用例';
-$lang->testcase->index              = "用例管理首頁";
-$lang->testcase->create             = "建用例";
-$lang->testcase->batchCreate        = "批量添加";
-$lang->testcase->delete             = "刪除用例";
-$lang->testcase->view               = "用例詳情";
-$lang->testcase->edit               = "編輯";
-$lang->testcase->batchEdit          = "批量編輯 ";
-$lang->testcase->batchChangeModule  = "批量修改模組";
-$lang->testcase->delete             = "刪除";
-$lang->testcase->batchDelete        = "批量刪除 ";
-$lang->testcase->browse             = "用例列表";
-$lang->testcase->groupCase          = "分組瀏覽用例";
-$lang->testcase->import             = "導入";
-$lang->testcase->showImport         = "顯示導入內容";
-$lang->testcase->exportTemplet      = "導出模板";
-$lang->testcase->export             = "導出數據";
-$lang->testcase->confirmChange      = '確認用例變動';
-$lang->testcase->confirmStoryChange = '確認需求變動';
-$lang->testcase->copy               = '複製用例';
+$lang->testcase->common                  = '用例';
+$lang->testcase->index                   = "用例管理首頁";
+$lang->testcase->create                  = "建用例";
+$lang->testcase->batchCreate             = "批量添加";
+$lang->testcase->delete                  = "刪除用例";
+$lang->testcase->view                    = "用例詳情";
+$lang->testcase->review                  = "評審";
+$lang->testcase->batchReview             = "批量評審";
+$lang->testcase->edit                    = "編輯";
+$lang->testcase->batchEdit               = "批量編輯 ";
+$lang->testcase->batchChangeModule       = "批量修改模組";
+$lang->testcase->delete                  = "刪除";
+$lang->testcase->batchDelete             = "批量刪除 ";
+$lang->testcase->batchConfirmStoryChange = "批量確認變更";
+$lang->testcase->batchCaseTypeChange     = "批量修改類型";
+$lang->testcase->browse                  = "用例列表";
+$lang->testcase->groupCase               = "分組瀏覽用例";
+$lang->testcase->import                  = "導入";
+$lang->testcase->importFile              = "導入CSV";
+$lang->testcase->importFromLib           = "從用例庫中導入";
+$lang->testcase->showImport              = "顯示導入內容";
+$lang->testcase->exportTemplet           = "導出模板";
+$lang->testcase->export                  = "導出數據";
+$lang->testcase->reportChart             = '報表統計';
+$lang->testcase->confirmChange           = '確認用例變動';
+$lang->testcase->confirmStoryChange      = '確認需求變動';
+$lang->testcase->copy                    = '複製用例';
+$lang->testcase->group                   = '分組';
+$lang->testcase->groupName               = '分組名稱';
+$lang->testcase->step                    = '步驟';
+$lang->testcase->stepChild               = '子步驟';
 
 $lang->testcase->new = '新增';
 
-$lang->testcase->num    = '用例記錄數：';
+$lang->testcase->num = '用例記錄數：';
 
 $lang->testcase->deleteStep   = '刪除';
 $lang->testcase->insertBefore = '之前添加';
@@ -132,10 +150,15 @@ $lang->testcase->stageList['system']     = '系統測試階段';
 $lang->testcase->stageList['smoke']      = '冒煙測試階段';
 $lang->testcase->stageList['bvt']        = '版本驗證階段';
 
+$lang->testcase->reviewResultList['']        = '';
+$lang->testcase->reviewResultList['pass']    = '確認通過';
+$lang->testcase->reviewResultList['clarify'] = '繼續完善';
+
 $lang->testcase->groups['']      = '分組查看';
 $lang->testcase->groups['story'] = '需求分組';
 
 $lang->testcase->statusList['']            = '';
+$lang->testcase->statusList['wait']        = '待評審';
 $lang->testcase->statusList['normal']      = '正常';
 $lang->testcase->statusList['blocked']     = '被阻塞';
 $lang->testcase->statusList['investigate'] = '研究中';
@@ -147,14 +170,24 @@ $lang->testcase->resultList['blocked'] = '阻塞';
 
 $lang->testcase->buttonToList = '返回';
 
-$lang->testcase->errorEncode = '無數據，請選擇正確的編碼重新上傳！';
-$lang->testcase->noFunction  = '不存在iconv和mb_convert_encoding轉碼方法，不能將數據轉成想要的編碼！';
-$lang->testcase->noRequire   = "%s行的“%s”是必填欄位，不能為空";
+$lang->testcase->errorEncode      = '無數據，請選擇正確的編碼重新上傳！';
+$lang->testcase->noFunction       = '不存在iconv和mb_convert_encoding轉碼方法，不能將數據轉成想要的編碼！';
+$lang->testcase->noRequire        = "%s行的“%s”是必填欄位，不能為空";
+$lang->testcase->noLibrary        = "現在還沒有公共庫，請先創建！";
+$lang->testcase->mustChooseResult = '必須選擇評審結果';
 
 $lang->testcase->searchStories = '鍵入來搜索需求';
+$lang->testcase->selectLib     = '請選擇庫';
+
+$lang->testcase->action = new stdclass();
+$lang->testcase->action->fromlib  = array('main' => '$date, 由 <strong>$actor</strong> 從用例庫 <strong>$extra</strong>導入。');
+$lang->testcase->action->reviewed = array('main' => '$date, 由 <strong>$actor</strong> 記錄評審結果，結果為 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
+$lang->testcase->featureBar['browse']['wait']        = '待評審';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = '分組查看';
+$lang->testcase->featureBar['browse']['suite']       = '套件';
 $lang->testcase->featureBar['browse']['zerocase']    = '零用例需求';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];
+

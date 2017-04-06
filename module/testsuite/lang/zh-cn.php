@@ -4,7 +4,7 @@
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     testsuite
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        http://www.zentao.net
@@ -20,8 +20,6 @@ $lang->testsuite->linkVersion      = "版本";
 $lang->testsuite->unlinkCase       = "移除";
 $lang->testsuite->batchUnlinkCases = "批量移除用例";
 $lang->testsuite->deleted          = '已删除';
-$lang->testsuite->pre              = '上一个';
-$lang->testsuite->next             = '下一个';
 
 $lang->testsuite->common         = '套件';
 $lang->testsuite->product        = '所属' . $lang->productCommon;
@@ -38,6 +36,7 @@ $lang->testsuite->unlinkedCases = '未关联';
 
 $lang->testsuite->confirmDelete     = '您确认要删除该套件吗？';
 $lang->testsuite->confirmUnlinkCase = '您确认要移除该用例吗？';
+$lang->testsuite->noticeNone        = '您还没有创建套件';
 
 $lang->testsuite->lblCases      = '用例列表';
 $lang->testsuite->lblUnlinkCase = '移除用例';
@@ -45,7 +44,11 @@ $lang->testsuite->lblUnlinkCase = '移除用例';
 $lang->testsuite->authorList['private'] = '私有';
 $lang->testsuite->authorList['public']  = '公开';
 
-$lang->testlib->common = '公共用例库';
-$lang->testlib->create = '创建库';
-$lang->testlib->edit   = '编辑';
-$lang->testlib->all    = '所有公共库';
+$lang->caselib->common = '公共用例库';
+$lang->caselib->all    = '所有公共库';
+
+$lang->testsuite->createLib  = '创建库';
+$lang->testsuite->editLib    = '编辑库';
+$lang->testsuite->library    = '浏览库用例';
+$lang->testsuite->createCase = '创建用例';
+$lang->testsuite->libView    = '查看库概况';

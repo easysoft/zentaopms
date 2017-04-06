@@ -177,6 +177,10 @@
                 <td><?php if($bug->assignedTo) echo $users[$bug->assignedTo] . $lang->at . $bug->assignedDate;?></td>
               </tr>
               <tr>
+                <th><?php echo $lang->bug->deadline;?></th>
+                <td><?php if($bug->deadline) echo  $bug->deadline;?></td>
+              </tr>
+              <tr>
                 <th><?php echo $lang->bug->os;?></th>
                 <td><?php echo $lang->bug->osList[$bug->os];?></td>
               </tr>

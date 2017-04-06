@@ -17,7 +17,7 @@ if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* Basic settings. */
 $config = new config();
-$config->version      = '9.0.1';        // The version of zentaopms. Don't change it.
+$config->version      = '9.1';        // The version of zentaopms. Don't change it.
 $config->charset      = 'UTF-8';           // The charset of zentaopms.
 $config->cookieLife   = time() + 2592000;  // The cookie life time.
 $config->timezone     = 'Asia/Shanghai';   // The time zone setting, for more see http://www.php.net/manual/en/timezones.php
@@ -172,6 +172,7 @@ define('TABLE_BLOCK',         '`' . $config->db->prefix . 'block`');
 define('TABLE_DOCCONTENT',    '`' . $config->db->prefix . 'doccontent`');
 define('TABLE_TESTSUITE',     '`' . $config->db->prefix . 'testsuite`');
 define('TABLE_SUITECASE',     '`' . $config->db->prefix . 'suitecase`');
+define('TABLE_TESTREPORT',    '`' . $config->db->prefix . 'testreport`');
 if(!defined('TABLE_LANG')) define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
 
 $config->objectTables['product']     = TABLE_PRODUCT;
@@ -186,6 +187,7 @@ $config->objectTables['case']        = TABLE_CASE;
 $config->objectTables['testcase']    = TABLE_CASE;
 $config->objectTables['testtask']    = TABLE_TESTTASK;
 $config->objectTables['testsuite']   = TABLE_TESTSUITE;
+$config->objectTables['testreport']  = TABLE_TESTREPORT;
 $config->objectTables['user']        = TABLE_USER;
 $config->objectTables['doc']         = TABLE_DOC;
 $config->objectTables['doclib']      = TABLE_DOCLIB;
@@ -193,7 +195,7 @@ $config->objectTables['todo']        = TABLE_TODO;
 $config->objectTables['custom']      = TABLE_LANG;
 $config->objectTables['branch']      = TABLE_BRANCH;
 $config->objectTables['module']      = TABLE_MODULE;
-$config->objectTables['testlib']     = TABLE_TESTSUITE;
+$config->objectTables['caselib']     = TABLE_TESTSUITE;
 
 /* Include extension config files. */
 $extConfigFiles = glob($configRoot . 'ext/*.php');

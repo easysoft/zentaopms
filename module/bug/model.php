@@ -46,6 +46,7 @@ class bugModel extends model
             ->add('openedDate', $now)
             ->setDefault('project,story,task', 0)
             ->setDefault('openedBuild', '')
+            ->setDefault('deadline', '0000-00-00')
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->stripTags($this->config->bug->editor->create['id'], $this->config->allowedTags)
@@ -244,6 +245,37 @@ class bugModel extends model
         elseif($browseType == 'postponedbugs') $bugs = $this->getByPostponedbugs($productID, $branch, $modules, $projects, $sort, $pager);
         elseif($browseType == 'needconfirm')   $bugs = $this->getByNeedconfirm($productID, $branch, $modules, $projects, $sort, $pager);
         elseif($browseType == 'bysearch')      $bugs = $this->getBySearch($productID, $queryID, $sort, $pager, $branch);
+        elseif($browseType == 'overduebugs')   $bugs = $this->getOverdueBugs($productID, $branch, $modules, $projects, $sort, $pager);
+
+        return $this->checkDelayBugs($bugs);
+    }
+
+    /**
+     * Check delay bug.
+     * 
+     * @param  array  $bugs
+     * @access public
+     * @return array
+     */
+    public function checkDelayBugs($bugs)
+    {
+        foreach ($bugs as $bug)
+        {
+            // Delayed or not?.
+            if($bug->deadline != '0000-00-00')
+            {
+                if(substr($bug->resolvedDate, 0, 10) != '0000-00-00')
+                {
+                    $delay = helper::diffDate(substr($bug->resolvedDate, 0, 10), $bug->deadline);
+                }
+                elseif($bug->status == 'active')
+                {
+                    $delay = helper::diffDate(helper::today(), $bug->deadline);
+                }
+
+                if(isset($delay) and $delay > 0) $bug->delay = $delay;
+            }
+        }
 
         return $bugs;
     }
@@ -454,6 +486,7 @@ class bugModel extends model
             ->setDefault('project,module,project,story,task,duplicateBug,branch', 0)
             ->setDefault('openedBuild', '')
             ->setDefault('plan', 0)
+            ->setDefault('deadline', '0000-00-00')
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->join('openedBuild', ',')
@@ -507,9 +540,6 @@ class bugModel extends model
         $data       = fixer::input('post')->get();
         $bugIDList  = $this->post->bugIDList ? $this->post->bugIDList : array();
 
-        /* Adjust whether the post data is complete, if not, remove the last element of $bugIDList. */
-        if($this->session->showSuhosinInfo) array_pop($bugIDList);
-
         if(!empty($bugIDList))
         {
             /* Process the data if the value is 'ditto'. */
@@ -552,6 +582,7 @@ class bugModel extends model
                 $bug->title          = $data->titles[$bugID];
                 $bug->plan           = empty($data->plans[$bugID]) ? 0 : $data->plans[$bugID];
                 $bug->assignedTo     = $data->assignedTos[$bugID];
+                $bug->deadline       = $data->deadlines[$bugID];
                 $bug->resolvedBy     = $data->resolvedBys[$bugID];
                 $bug->keywords       = $data->keywords[$bugID];
                 $bug->os             = $data->os[$bugID];
@@ -1177,6 +1208,7 @@ class bugModel extends model
             $bugs = $this->dao->select('*')->from(TABLE_BUG)
                 ->where($bugQuery)
                 ->andWhere('project')->eq((int)$projectID)
+                ->andWhere('deleted')->eq(0)
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
@@ -1319,15 +1351,17 @@ class bugModel extends model
      * Get counts of some stories' bugs.
      *
      * @param  array  $stories
+     * @param  int    $projectID 
      * @access public
      * @return int
      */
-    public function getStoryBugCounts($stories)
+    public function getStoryBugCounts($stories, $projectID = 0)
     {
         $bugCounts = $this->dao->select('story, COUNT(*) AS bugs')
             ->from(TABLE_BUG)
             ->where('story')->in($stories)
             ->andWhere('deleted')->eq(0)
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->groupBy('story')
             ->fetchPairs();
         foreach($stories as $storyID) if(!isset($bugCounts[$storyID])) $bugCounts[$storyID] = 0;
@@ -1371,34 +1405,35 @@ class bugModel extends model
         $bugSteps .= $this->lang->bug->tplStep;
         if(!empty($stepResults))
         {
-            $i = 0;
-            foreach($caseSteps as $key => $step)
+            $i = 1;
+            foreach($steps as $stepId)
             {
-                if(!in_array($step->id, $steps)) continue;
-                $i++;
+                if(!isset($caseSteps[$stepId])) continue;
+
+                $step = $caseSteps[$stepId];
                 $bugSteps .= $i . '. '  . $step->desc . "<br />";
+                $i++;
             }
 
             $bugSteps .= $this->lang->bug->tplResult;
-            $i = 0;
-            foreach($caseSteps as $key => $step)
+            $i = 1;
+            foreach($steps as $stepId)
             {
-                if(!in_array($step->id, $steps)) continue;
+                if(!isset($stepResults[$stepId]) or empty($stepResults[$stepId]['real'])) continue;
+                $bugSteps .= $i . '. ' . $stepResults[$stepId]['real'] . "<br />";
                 $i++;
-                if(empty($stepResults[$step->id]['real'])) continue;
-                $bugSteps .= $i . '. ' . $stepResults[$step->id]['real'] . "<br />";
             }
 
             $bugSteps .= $this->lang->bug->tplExpect;
-            $i = 0;
-            foreach($caseSteps as $key => $step)
+            $i = 1;
+            foreach($steps as $stepId)
             {
-                if(!in_array($step->id, $steps)) continue;
-                $i++;
-                if(!$step->expect) continue;
-                $bugSteps .= $i . '. ' . $step->expect . "<br />";
-            }
+                if(!isset($caseSteps[$stepId])) continue;
 
+                $step = $caseSteps[$stepId];
+                if($step->expect) $bugSteps .= $i . '. ' . $step->expect . "<br />";
+                $i++;
+            }
         }
             
         return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version);
@@ -1897,6 +1932,33 @@ class bugModel extends model
     }
 
     /**
+     * Get bugs the overdueBugs is active or unclosed. 
+     * 
+     * @param  int    $productID 
+     * @param  int    $branch
+     * @param  array  $modules
+     * @param  array  $projects 
+     * @param  string $status 
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getOverdueBugs($productID, $branch, $modules, $projects, $orderBy, $pager)
+    {
+        return $this->dao->select('*')->from(TABLE_BUG)
+            ->where('project')->in(array_keys($projects))
+            ->andWhere('product')->eq($productID)
+            ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
+            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
+            ->andWhere('status')->eq('active')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('deadline')->ne('0000-00-00')
+            ->andWhere('deadline')->lt(helper::today())
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+    }
+
+    /**
      * Get bugs the status is active or unclosed. 
      * 
      * @param  int    $productID 
@@ -2175,6 +2237,7 @@ class bugModel extends model
             if($id == 'status') $class .= ' bug-' . $bug->status;
             if($id == 'title') $class .= ' text-left';
             if($id == 'assignedTo' && $bug->assignedTo == $account) $class .= ' red';
+            if($id == 'deadline' && isset($bug->delay)) $class .= ' delayed';
 
             echo "<td class='" . $class . "'" . ($id=='title' ? " title='{$bug->title}'" : '') . ">";
             switch ($id)
@@ -2225,6 +2288,9 @@ class bugModel extends model
                 break;
             case 'assignedDate':
                 echo substr($bug->assignedDate, 5, 11);
+                break;
+            case 'deadline':
+                echo $bug->deadline;
                 break;
             case 'resolvedBy':
                 echo zget($users, $bug->resolvedBy, $bug->resolvedBy);

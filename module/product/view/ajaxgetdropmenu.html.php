@@ -22,7 +22,7 @@
     {
         if($product->status == 'normal' and $product->PO == $this->app->user->account) 
         {
-            echo "<li>" . html::a(sprintf($link, $product->id), "<i class='icon-cube'></i> " . $product->name, '', "class='mine text-important'"). "</li>";
+            echo "<li data-id='{$product->id}' data-tag=':{$product->status} @{$product->PO} @mine' data-key='{$product->key}'>" . html::a(sprintf($link, $product->id), "<i class='icon-cube'></i> " . $product->name, '', "class='mine text-important'"). "</li>";
         }
     }
  
@@ -32,7 +32,7 @@
     {
         if($product->status == 'normal' and !($product->PO == $this->app->user->account))
         {
-            echo "<li>" . html::a(sprintf($link, $product->id), "<i class='icon-cube'></i> " . $product->name, '', "$class"). "</li>";
+            echo "<li data-id='{$product->id}' data-tag=':{$product->status} @{$product->PO}' data-key='{$product->key}'>" . html::a(sprintf($link, $product->id), "<i class='icon-cube'></i> " . $product->name, '', "$class"). "</li>";
         }
     }
     ?>
@@ -45,13 +45,12 @@
       <?php endif;?>
     </div>
   </div>
- 
   <div id='moreMenu'>
     <ul>
     <?php
       foreach($products as $product)
       {
-        if($product->status == 'closed') echo "<li>" . html::a(sprintf($link, $product->id), "<i class='icon-cube'></i> " . $product->name, '', "class='closed'"). "</li>";
+        if($product->status == 'closed') echo "<li data-id='{$product->id}' data-tag=':{$product->status} @{$product->PO}' data-key='{$product->key}'>" . html::a(sprintf($link, $product->id), "<i class='icon-cube'></i> " . $product->name, '', "class='closed'"). "</li>";
       }
     ?>
     </ul>

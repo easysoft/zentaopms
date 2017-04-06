@@ -46,6 +46,9 @@ $lang->group->copyOptions['copyPriv'] = 'Copy Privilege';
 $lang->group->copyOptions['copyUser'] = 'Copy User';
 
 $lang->group->versions['']          = 'History';
+$lang->group->versions['9_1']       = 'ZenTao9.1';
+$lang->group->versions['9_0']       = 'ZenTao9.0';
+$lang->group->versions['8_4']       = 'ZenTao8.4';
 $lang->group->versions['8_3']       = 'ZenTao8.3';
 $lang->group->versions['8_2_beta']  = 'ZenTao8.2.beta';
 $lang->group->versions['8_0_1']     = 'ZenTao8.0.1';

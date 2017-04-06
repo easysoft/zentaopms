@@ -56,6 +56,7 @@ $lang->testcase->resultsAB        = 'R';
 $lang->testcase->stepNumber       = '用例步骤数';
 $lang->testcase->stepNumberAB     = 'S';
 $lang->testcase->createBug        = '转Bug';
+$lang->testcase->fromModule       = '来源模块';
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
 $lang->testcase->stepID      = '编号';
@@ -63,37 +64,41 @@ $lang->testcase->stepDesc    = '步骤';
 $lang->testcase->stepExpect  = '预期';
 $lang->testcase->stepVersion = '版本';
 
-$lang->testcase->common             = '用例';
-$lang->testcase->index              = "用例管理首页";
-$lang->testcase->create             = "建用例";
-$lang->testcase->batchCreate        = "批量添加";
-$lang->testcase->delete             = "删除用例";
-$lang->testcase->view               = "用例详情";
-$lang->testcase->review             = "评审";
-$lang->testcase->edit               = "编辑";
-$lang->testcase->batchEdit          = "批量编辑 ";
-$lang->testcase->batchChangeModule  = "批量修改模块";
-$lang->testcase->delete             = "删除";
-$lang->testcase->batchDelete        = "批量删除 ";
-$lang->testcase->batchStoryChange   = "确认变更";
-$lang->testcase->browse             = "用例列表";
-$lang->testcase->groupCase          = "分组浏览用例";
-$lang->testcase->import             = "导入";
-$lang->testcase->importFile         = "导入CSV";
-$lang->testcase->importFromLib      = "从库中导入";
-$lang->testcase->showImport         = "显示导入内容";
-$lang->testcase->exportTemplet      = "导出模板";
-$lang->testcase->export             = "导出数据";
-$lang->testcase->reportChart        = '报表统计';
-$lang->testcase->confirmChange      = '确认用例变动';
-$lang->testcase->confirmStoryChange = '确认需求变动';
-$lang->testcase->copy               = '复制用例';
-$lang->testcase->group              = '分组';
-$lang->testcase->groupName          = '分组名称';
+$lang->testcase->common                  = '用例';
+$lang->testcase->index                   = "用例管理首页";
+$lang->testcase->create                  = "建用例";
+$lang->testcase->batchCreate             = "批量添加";
+$lang->testcase->delete                  = "删除用例";
+$lang->testcase->view                    = "用例详情";
+$lang->testcase->review                  = "评审";
+$lang->testcase->batchReview             = "批量评审";
+$lang->testcase->edit                    = "编辑";
+$lang->testcase->batchEdit               = "批量编辑 ";
+$lang->testcase->batchChangeModule       = "批量修改模块";
+$lang->testcase->delete                  = "删除";
+$lang->testcase->batchDelete             = "批量删除 ";
+$lang->testcase->batchConfirmStoryChange = "批量确认变更";
+$lang->testcase->batchCaseTypeChange     = "批量修改类型";
+$lang->testcase->browse                  = "用例列表";
+$lang->testcase->groupCase               = "分组浏览用例";
+$lang->testcase->import                  = "导入";
+$lang->testcase->importFile              = "导入CSV";
+$lang->testcase->importFromLib           = "从用例库中导入";
+$lang->testcase->showImport              = "显示导入内容";
+$lang->testcase->exportTemplet           = "导出模板";
+$lang->testcase->export                  = "导出数据";
+$lang->testcase->reportChart             = '报表统计';
+$lang->testcase->confirmChange           = '确认用例变动';
+$lang->testcase->confirmStoryChange      = '确认需求变动';
+$lang->testcase->copy                    = '复制用例';
+$lang->testcase->group                   = '分组';
+$lang->testcase->groupName               = '分组名称';
+$lang->testcase->step                    = '步骤';
+$lang->testcase->stepChild               = '子步骤';
 
 $lang->testcase->new = '新增';
 
-$lang->testcase->num    = '用例记录数：';
+$lang->testcase->num = '用例记录数：';
 
 $lang->testcase->deleteStep   = '删除';
 $lang->testcase->insertBefore = '之前添加';
@@ -147,7 +152,7 @@ $lang->testcase->stageList['bvt']        = '版本验证阶段';
 
 $lang->testcase->reviewResultList['']        = '';
 $lang->testcase->reviewResultList['pass']    = '确认通过';
-$lang->testcase->reviewResultList['clarify'] = '有待明确';
+$lang->testcase->reviewResultList['clarify'] = '继续完善';
 
 $lang->testcase->groups['']      = '分组查看';
 $lang->testcase->groups['story'] = '需求分组';
@@ -175,39 +180,14 @@ $lang->testcase->searchStories = '键入来搜索需求';
 $lang->testcase->selectLib     = '请选择库';
 
 $lang->testcase->action = new stdclass();
-$lang->testcase->action->fromlib  = array('main' => '$date, 由 <strong>$actor</strong> 从公共库 <strong>$extra</strong>导入。');
+$lang->testcase->action->fromlib  = array('main' => '$date, 由 <strong>$actor</strong> 从用例库 <strong>$extra</strong>导入。');
 $lang->testcase->action->reviewed = array('main' => '$date, 由 <strong>$actor</strong> 记录评审结果，结果为 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
 
-
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
-$lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['wait']        = '待评审';
+$lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = '分组查看';
-$lang->testcase->featureBar['browse']['zerocase']    = '零用例需求';
 $lang->testcase->featureBar['browse']['suite']       = '套件';
+$lang->testcase->featureBar['browse']['zerocase']    = '零用例需求';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];
-
-/* 统计报表。*/
-$lang->testcase->report = new stdclass();
-$lang->testcase->report->common = '报表';
-$lang->testcase->report->select = '请选择报表类型';
-$lang->testcase->report->create = '生成报表';
-       
-$lang->testcase->report->charts['testCasePerRunResult'] = '测试用例结果统计';
-$lang->testcase->report->charts['testCasePerStatus']    = '测试用例状态统计';
-$lang->testcase->report->charts['testCasePerType']      = '测试用例类型统计';
-
-$lang->testcase->report->options = new stdclass();
-$lang->testcase->report->options->graph  = new stdclass();
-$lang->testcase->report->options->type   = 'pie';
-$lang->testcase->report->options->width  = 500;
-$lang->testcase->report->options->height = 140;
-
-$lang->testcase->report->testCasePerRunResult = new stdclass();
-$lang->testcase->report->testCasePerStatus    = new stdclass();
-$lang->testcase->report->testCasePerType      = new stdclass();
-
-$lang->testcase->report->testCasePerRunResult->graph = new stdclass();
-$lang->testcase->report->testCasePerStatus->graph    = new stdclass();
-$lang->testcase->report->testCasePerType->graph      = new stdclass();
 

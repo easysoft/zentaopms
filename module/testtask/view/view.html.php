@@ -31,6 +31,8 @@
         echo "<div class='btn-group'>";
         common::printIcon('testtask', 'start',    "taskID=$task->id", $task, 'button', '', '', 'iframe', true);
         common::printIcon('testtask', 'close',    "taskID=$task->id", $task, 'button', '', '', 'iframe', true);
+        common::printIcon('testtask', 'block',    "taskID=$task->id", $task, 'button', 'pause', '', 'iframe', true);
+        common::printIcon('testtask', 'activate', "taskID=$task->id", $task, 'button', 'magic', '', 'iframe', true);
         common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'button', 'sitemap');
         common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'button', 'link');
         echo '</div>';
@@ -57,10 +59,6 @@
       <fieldset>
         <legend><?php echo $lang->testtask->legendDesc;?></legend>
         <div class='article-content'><?php echo $task->desc;?></div>
-      </fieldset>
-      <fieldset>
-        <legend><?php echo $lang->testtask->legendReport;?></legend>
-        <div class='article-content'><?php echo $task->report;?></div>
       </fieldset>
       <?php include '../../common/view/action.html.php';?>
       <div class='actions'><?php echo $actionLinks;?></div>

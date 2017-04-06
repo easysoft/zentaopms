@@ -26,8 +26,7 @@ class projectModel extends model
     public function checkPriv($project)
     {
         /* If is admin, return true. */
-        $account = ',' . $this->app->user->account . ',';
-        if(strpos($this->app->company->admins, $account) !== false) return true; 
+        if($this->app->user->admin) return true; 
 
         $acls = $this->app->user->rights['acls'];
         if(!empty($acls['projects']) and !in_array($project->id, $acls['projects'])) return false;
@@ -125,7 +124,7 @@ class projectModel extends model
 
         setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot);
         $currentProject = $this->getById($projectID);
-        $output = "<a id='currentItem' href=\"javascript:showDropMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+        $output = "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
         return $output;
     }
 
@@ -1697,11 +1696,12 @@ class projectModel extends model
             $currentTime = strtotime($current);
             if($currentTime > $endTime) break;
             if(isset($sets[$current])) $preValue = $sets[$current]->value;
-            if($currentTime > time())
+            if($currentTime > time() and !$todayTag)
             {
-                $preValue = 0;
                 $todayTag = $i + 1;
+                break;
             }
+
             if(!isset($sets[$current]) and $mode == 'noempty')
             {
                 $sets[$current]  = new stdclass();
@@ -2388,53 +2388,5 @@ class projectModel extends model
         }
         if(isset($fullTrees[0]) and empty($fullTrees[0]->children)) array_shift($fullTrees);
         return array_values($fullTrees);
-    }
-
-    public function toPinyin($products)
-    {   
-        global $app;
-        static $pinyin;
-        static $dataKeys;
-        if(empty($pinyin)) $pinyin = $app->loadClass('pinyin');
-
-        $joinOptions = ''; 
-        $sign        = ' aNd ';
-        foreach($products as $value)
-        {   
-            if(!isset($dataKeys[$value->name])) $joinOptions .= str_replace($sign, ' and ', $value->name) . $sign;
-        }   
-
-        if($joinOptions)
-        {   
-            $valuesPinyin = $pinyin->romanize($joinOptions);
-            $signLenth    = strlen($sign);
-            $pinyinSign   = trim($sign);
-            $pySignLenth  = strlen($pinyinSign);
-            while($joinOptions)
-            {   
-                $valuePinyin = ''; 
-                $value       = ''; 
-
-                $pinyinPos = strpos($valuesPinyin, $pinyinSign);
-                if($pinyinPos !== false)
-                {   
-                    $valuePinyin  = substr($valuesPinyin, 0, $pinyinPos);
-                    $valuesPinyin = substr($valuesPinyin, $pinyinPos + $pySignLenth);
-                }   
-
-                $valuePos = strpos($joinOptions, $sign);
-                if($valuePos === false) break;
-                $value       = substr($joinOptions, 0, $valuePos);
-                $joinOptions = substr($joinOptions, $valuePos + $signLenth);
-
-                $valuePinyin = preg_split('/[^a-z]+/iu', trim($valuePinyin));
-                $valueAbbr   = ''; 
-                foreach($valuePinyin as $wordPinyin) if($wordPinyin) $valueAbbr .= $wordPinyin[0];
-
-                $dataKeys[$value] = empty($valuePinyin) ? '' : join($valuePinyin) . ' ' . $valueAbbr;
-            }   
-        }   
-
-        return $dataKeys;
     }
 }

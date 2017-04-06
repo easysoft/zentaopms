@@ -24,6 +24,9 @@
     </div>
   </div>
 </div>
+<?php if(isset($suhosinInfo)):?>
+<div id='suhosinInfo' class='alert alert-info'><?php echo $suhosinInfo;?></div>
+<?php else:?>
 <?php
 $visibleFields = array();
 foreach(explode(',', $showFields) as $field)
@@ -105,15 +108,13 @@ foreach(explode(',', $showFields) as $field)
         <td <?php echo zget($visibleFields, 'keywords', "class='hidden'")?>><?php echo html::input("keywords[$storyID]", $stories[$storyID]->keywords, 'class="form-control" autocomplete="off"');?></td>
       </tr>
       <?php endforeach;?>
-      <?php if(isset($suhosinInfo)):?>
-      <tr><td colspan='<?php echo count($visibleFields) + 3;?>'><div id='suhosinInfo' class='alert alert-info'><?php echo $suhosinInfo;?></div></td></tr>
-      <?php endif;?>
     </tbody>
     <tfoot>
       <tr><td colspan='<?php echo count($visibleFields) + 3;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
     </tfoot>
   </table>
 </form>
+<?php endif;?>
 <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=batchEditFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

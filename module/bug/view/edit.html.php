@@ -12,6 +12,7 @@
 ?>
 <?php
 include '../../common/view/header.html.php';
+include '../../common/view/datepicker.html.php';
 include '../../common/view/kindeditor.html.php';
 js::set('page'                   , 'edit');
 js::set('changeProductConfirmed' , false);
@@ -141,6 +142,10 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           <tr>
             <th><?php echo $lang->bug->assignedTo;?></th>
             <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='form-control chosen'");?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->bug->deadline;?></th>
+            <td><?php echo html::input('deadline', $bug->deadline, "class='form-control form-date'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->bug->os;?></th>

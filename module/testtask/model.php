@@ -67,7 +67,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getProductTasks($productID, $branch = 0, $orderBy = 'id_desc', $pager = null, $type = '')
+    public function getProductTasks($productID, $branch = 0, $orderBy = 'id_desc', $pager = null, $scopeAndStatus = array())
     {
         return $this->dao->select("t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName, if(t4.name != '', t4.branch, t5.branch) AS branch")
             ->from(TABLE_TESTTASK)->alias('t1')
@@ -75,15 +75,15 @@ class testtaskModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project')
-            ->where('t1.product')->eq((int)$productID)
+            ->where('t1.deleted')->eq(0)
+            ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
             ->andWhere('t5.product = t1.product')
-            ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($type == 'wait')->andWhere('t1.status')->ne('done')->fi()
-            ->beginIF($type == 'done')->andWhere('t1.status')->eq('done')->fi()
+            ->beginIF($scopeAndStatus[1] == 'totalStatus')->andWhere('t1.status')->in(array('blocked','doing','wait','done'))->fi()
+            ->beginIF($scopeAndStatus[1] != 'totalStatus')->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
             ->beginIF($branch)->andWhere("if(t4.branch, t4.branch, t5.branch) = '$branch'")->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
     }
 
     /**
@@ -104,7 +104,19 @@ class testtaskModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get task by idList.
+     * 
+     * @param  array    $idList 
+     * @access public
+     * @return array
+     */
+    public function getByList($idList)
+    {
+        return $this->dao->select("*")->from(TABLE_TESTTASK)->where('id')->in($idList)->fetchAll('id');
     }
 
     /**
@@ -131,19 +143,6 @@ class testtaskModel extends model
     }
 
     /**
-     * Get taskrun by case id.
-     * 
-     * @param  int    $taskID 
-     * @param  int    $caseID 
-     * @access public
-     * @return void
-     */
-    public function getRunByCase($taskID, $caseID)
-    {
-        return $this->dao->select('*')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('`case`')->eq($caseID)->fetch();
-    }
-
-    /**
      * Get test tasks by user.
      * 
      * @param   string $account 
@@ -163,6 +162,303 @@ class testtaskModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+    }
+
+
+
+    /**
+     * Get taskrun by case id.
+     * 
+     * @param  int    $taskID 
+     * @param  int    $caseID 
+     * @access public
+     * @return void
+     */
+    public function getRunByCase($taskID, $caseID)
+    {
+        return $this->dao->select('*')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('`case`')->eq($caseID)->fetch();
+    }
+
+    /**
+     * Get linkable casses.
+     * 
+     * @param  int    $productID 
+     * @param  object $task
+     * @param  int    $taskID 
+     * @param  string $type
+     * @param  string $param
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getLinkableCases($productID, $task, $taskID, $type, $param, $pager)
+    {
+        if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
+        $query = $this->session->testcaseQuery;
+        $allProduct = "`product` = 'all'";
+        if(strpos($query, '`product` =') === false && $type != 'bysuite') $query .= " AND `product` = $productID";
+        if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1', $query);
+
+        $cases = array();
+        $linkedCases = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs('case');
+        if($type == 'all')     $cases = $this->getAllLinkableCases($task, $query, $linkedCases, $pager);
+        if($type == 'bystory') $cases = $this->getLinkableCasesByStory($productID, $task, $query, $linkedCases, $pager);
+        if($type == 'bybug')   $cases = $this->getLinkableCasesByBug($productID, $task, $query, $linkedCases, $pager);
+        if($type == 'bysuite') $cases = $this->getLinkableCasesBySuite($productID, $task, $query, $param, $linkedCases, $pager);
+        if($type == 'bybuild') $cases = $this->getLinkableCasesByTestTask($param, $linkedCases, $pager);
+
+        return $cases;
+    }
+
+    /**
+     * Get all linkable  cases.
+     * 
+     * @param  object $task
+     * @param  string $query 
+     * @param  array  $linkedCases
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getAllLinkableCases($task, $query, $linkedCases, $pager)
+    {
+        return $this->dao->select('*')->from(TABLE_CASE)->where($query)
+                ->andWhere('id')->notIN($linkedCases)
+                ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id desc')
+                ->page($pager)
+                ->fetchAll();
+    }
+
+    /**
+     * Get linkable cases by story.
+     * 
+     * @param  int    $productID 
+     * @param  object $task
+     * @param  string $query
+     * @param  array  $linkedCases
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getLinkableCasesByStory($productID, $task, $query, $linkedCases, $pager)
+    {
+        $stories = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('stories');
+        $cases   = array();
+        if($stories)
+        {
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
+                ->andWhere('product')->eq($productID)
+                ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
+                ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
+                ->andWhere('story')->in(trim($stories, ','))
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id desc')
+                ->page($pager)
+                ->fetchAll();
+        }
+
+        return $cases;
+    }
+
+    /**
+     * Get linkable cases by bug.
+     * 
+     * @param  int    $productID 
+     * @param  object $task
+     * @param  string $query
+     * @param  array  $linkedCases
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getLinkableCasesByBug($productID, $task, $query, $linkedCases, $pager)
+    {
+        $bugs = $this->dao->select('bugs')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('bugs');
+        $cases = array();
+        if($bugs)
+        {
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
+                ->andWhere('product')->eq($productID)
+                ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
+                ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
+                ->andWhere('fromBug')->in(trim($bugs, ','))
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id desc')
+                ->page($pager)
+                ->fetchAll();
+        }
+
+        return $cases;
+    }
+
+    /**
+     * Get linkable cases by suite.
+     * 
+     * @param  int    $productID 
+     * @param  object $task
+     * @param  string $query
+     * @param  string $suite
+     * @param  array  $linkedCases
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getLinkableCasesBySuite($productID, $task, $query, $suite, $linkedCases, $pager)
+    {
+        return $this->dao->select('t1.*,t2.version as version')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
+                ->where($query)
+                ->andWhere('t2.suite')->eq((int)$suite)
+                ->andWhere('t1.product')->eq($productID)
+                ->beginIF($linkedCases)->andWhere('t1.id')->notIN($linkedCases)->fi()
+                ->beginIF($task->branch)->andWhere('t1.branch')->in("0,$task->branch")->fi()
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id desc')
+                ->page($pager)
+                ->fetchAll();
+    }
+
+    /**
+     * Get linkeable cases by test task.
+     * 
+     * @param  string $testTask
+     * @param  array  $linkedCases
+     * @param  object $pager 
+     * @access public
+     * @return array
+     */
+    public function getLinkableCasesByTestTask($testTask, $linkedCases, $pager)
+    {
+        $caseList  = $this->dao->select("`case`")->from(TABLE_TESTRUN)->where('task')->eq($testTask)->andWhere('`case`')->notin($linkedCases)->fetchPairs('case');
+        
+        return $this->dao->select("*")->from(TABLE_CASE)->where('id')->in($caseList)->page($pager)->fetchAll();
+    }
+
+    /**
+     * Get related test tasks.
+     * 
+     * @param  int    $productID 
+     * @param  int    $testtaskID 
+     * @access public
+     * @return array
+     */
+    public function getRelatedTestTasks($productID, $testTaskID)
+    {
+        $beginDate = $this->dao->select('begin')->from(TABLE_TESTTASK)->where('id')->eq($testTaskID)->fetch('begin');
+
+        return $this->dao->select('id, name')->from(TABLE_TESTTASK)
+            ->where('product')->eq($productID)
+            ->beginIF($beginDate)->andWhere('begin')->le($beginDate)->fi()
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('id')->notin($testTaskID)
+            ->orderBy('begin desc')
+            ->fetchPairs('id', 'name');
+    }
+
+    /**  
+     * Get report data of test task per run result.
+     * 
+     * @param  int     $taskID 
+     * @access public
+     * @return array
+     */
+    public function getDataOfTestTaskPerRunResult($taskID)
+    {    
+        $datas = $this->dao->select('lastRunResult AS name, COUNT(*) AS value')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+
+        foreach($datas as $result => $data) $data->name = isset($this->lang->testcase->resultList[$result])? $this->lang->testcase->resultList[$result] : $this->lang->testtask->unexecuted;
+
+        return $datas;
+    }    
+
+    /**  
+     * Get report data of test task per Type.
+     * 
+     * @param  int     $taskID 
+     * @access public
+     * @return array
+     */
+    public function getDataOfTestTaskPerType($taskID)
+    { 
+        $datas = $this->dao->select('t2.type as name,count(*) as value')->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->where('t1.task')->eq($taskID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('name')
+            ->orderBy('value desc')
+            ->fetchAll('name');
+        if(!$datas) return array();
+
+        foreach($datas as $result => $data) if(isset($this->lang->testcase->typeList[$result])) $data->name = $this->lang->testcase->typeList[$result];
+
+        return $datas;
+    }
+
+    /**  
+     * Get report data of test task per module 
+     * 
+     * @param  int     $taskID 
+     * @access public
+     * @return array
+     */
+    public function getDataOfTestTaskPerModule($taskID)
+    {    
+        $datas = $this->dao->select('t2.module as name,count(*) as value')->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->where('t1.task')->eq($taskID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('name')
+            ->orderBy('value desc')
+            ->fetchAll('name');
+        if(!$datas) return array();
+
+        $modules = $this->loadModel('tree')->getModulesName(array_keys($datas));
+        foreach($datas as $moduleID => $data) $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/'; 
+
+        return $datas;
+    }    
+
+    /**  
+     * Get report data of test task per runner
+     * 
+     * @param  int     $taskID 
+     * @access public
+     * @return array
+     */
+    public function getDataOfTestTaskPerRunner($taskID)
+    {    
+        $datas = $this->dao->select('lastRunner AS name, COUNT(*) AS value')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        if(!$datas) return array();
+
+        foreach($datas as $result => $data) $data->name = $result ? $result : $this->lang->testtask->unexecuted;
+
+        return $datas;
+    }
+
+     /**
+     * Merge the default chart settings and the settings of current chart.
+     * 
+     * @param  string    $chartType 
+     * @access public
+     * @return void
+     */
+    public function mergeChartOption($chartType)
+    {
+        $chartOption  = isset($this->lang->testtask->report->$chartType) ? $this->lang->testtask->report->$chartType : new stdclass();
+        $commonOption = $this->lang->testtask->report->options;
+
+        if(!isset($chartOption->graph)) $chartOption->graph = new stdclass();
+        $chartOption->graph->caption = $this->lang->testtask->report->charts[$chartType];
+        if(!isset($chartOption->type))    $chartOption->type  = $commonOption->type;
+        if(!isset($chartOption->width))  $chartOption->width  = $commonOption->width;
+        if(!isset($chartOption->height)) $chartOption->height = $commonOption->height;
+
+        /* 合并配置。*/
+        foreach($commonOption->graph as $key => $value) if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
+        return $chartOption;
     }
 
     /**
@@ -242,16 +538,63 @@ class testtaskModel extends model
     }
 
     /**
-     * Link cases.
+     * update block testtask.
      * 
-     * @param  int   $taskID 
+     * @param  int    $taskID 
+     * @access public 
+     * @return void
+     */
+    public function block($taskID)
+    {
+        $oldTesttask = $this->getById($taskID);
+        $testtask = fixer::input('post')
+            ->setDefault('status', 'blocked')
+            ->remove('comment')->get();
+
+        $this->dao->update(TABLE_TESTTASK)->data($testtask)
+            ->autoCheck()
+            ->where('id')->eq((int)$taskID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldTesttask, $testtask);
+    }
+
+    /**
+     * update activate testtask.
+     * 
+     * @param  int    $taskID 
      * @access public
      * @return void
      */
-    public function linkCase($taskID)
+    public function activate($taskID)
+    {
+        $oldTesttask = $this->getById($taskID);
+        $testtask = fixer::input('post')
+            ->setDefault('status', 'doing')
+            ->remove('comment')->get();
+
+        $this->dao->update(TABLE_TESTTASK)->data($testtask)
+            ->autoCheck()
+            ->where('id')->eq((int)$taskID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldTesttask, $testtask);
+    }
+
+    /**
+     * Link cases.
+     * 
+     * @param  int    $taskID 
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function linkCase($taskID, $type)
     {
         if($this->post->cases == false) return;
         $postData = fixer::input('post')->get();
+
+        if($type == 'bybuild') $assignedToPairs = $this->dao->select('`case`, assignedTo')->from(TABLE_TESTRUN)->where('`case`')->in($postData)->fetchPairs('case', 'assignedTo');
         foreach($postData->cases as $caseID)
         {
             $row = new stdclass();
@@ -260,6 +603,8 @@ class testtaskModel extends model
             $row->version    = $postData->versions[$caseID];
             $row->assignedTo = '';
             $row->status     = 'wait';
+            if($type == 'bybuild') $row->assignedTo = zget($assignedToPairs, $caseID, '');
+
             $this->dao->replace(TABLE_TESTRUN)->data($row)->exec();
         }
     }
@@ -376,6 +721,7 @@ class testtaskModel extends model
                 ->page($pager)
                 ->fetchAll('id');
         }
+
         return $runs;
     }
 
@@ -474,6 +820,7 @@ class testtaskModel extends model
                     ->exec();
             }
         }
+
         return $caseResult;
     }
 
@@ -493,7 +840,7 @@ class testtaskModel extends model
         {
             $runs = $this->dao->select('id, `case`')->from(TABLE_TESTRUN)
                 ->where('`case`')->in($caseIdList)
-                ->beginIF($taskID)->andWhere('task')->eq($taskID)
+                ->beginIF($taskID)->andWhere('task')->eq($taskID)->fi()
                 ->fetchPairs('case', 'id');
         }
 
@@ -661,8 +1008,10 @@ class testtaskModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'start') return $testtask->status == 'wait';
-        if($action == 'close') return $testtask->status != 'done';
+        if($action == 'start')    return $testtask->status  == 'wait';
+        if($action == 'block')    return ($testtask->status == 'doing'   || $testtask->status == 'wait');
+        if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
+        if($action == 'close')    return $testtask->status != 'done';
 
         return true;
     }
@@ -753,7 +1102,7 @@ class testtaskModel extends model
                 break;
             case 'actions':
                 common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase iframe', false, "data-width='95%'");
-                common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe');
+                common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe', '', "data-width='90%'");
 
                 if(common::hasPriv('testtask', 'unlinkCase'))
                 {
@@ -761,7 +1110,7 @@ class testtaskModel extends model
                     echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"casesForm\",confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$this->lang->testtask->unlinkCase}' class='btn-icon'");
                 }
 
-                common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$task->id", $run, 'list', 'bug', '', 'iframe');
+                common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$task->id", $run, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
                 break;
             }
             echo '</td>';

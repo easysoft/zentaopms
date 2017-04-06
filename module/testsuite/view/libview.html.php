@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='titlebar'>
   <div class='heading'>
-    <span class='prefix' title='TESTLIB'> <strong><?php echo $lib->id;?></strong></span>
+    <span class='prefix' title='CASELIB'> <strong><?php echo $lib->id;?></strong></span>
     <strong><?php echo $lib->name;?></strong>
     <?php if($lib->deleted):?>
     <span class='label label-danger'><?php echo $lang->testsuite->deleted;?></span>

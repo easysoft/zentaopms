@@ -250,6 +250,7 @@ class bug extends control
         $os         = '';
         $browser    = '';
         $assignedTo = '';
+        $deadline   = '';
         $mailto     = '';
         $keywords   = '';
         $severity   = 3;
@@ -259,16 +260,8 @@ class bug extends control
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras);
 
-        /* If set runID, get the last result info as the template. */
-        if(!empty($runID)) $resultID = $this->dao->select('id')->from(TABLE_TESTRESULT)->where('run')->eq($runID)->orderBy('id desc')->limit(1)->fetch('id');
-        if(isset($resultID) and $resultID > 0) extract($this->bug->getBugInfoFromResult($resultID));
-
-        /* If set caseID and runID='', get the last result info as the template. */
-        if($caseID && empty($runID))
-        { 
-            $resultID = $this->dao->select('id')->from(TABLE_TESTRESULT)->where('`case`')->eq($caseID)->orderBy('date desc')->limit(1)->fetch('id'); 
-            if(isset($resultID) and $resultID > 0) extract($this->bug->getBugInfoFromResult($resultID, $caseID, $version));
-        }
+        if($runID and $resultID) extract($this->bug->getBugInfoFromResult($resultID));// If set runID and resultID, get the result info by resultID as template.
+        if(!$runID and $caseID)  extract($this->bug->getBugInfoFromResult($resultID, $caseID, $version));// If not set runID but set caseID, get the result info by resultID and case info.
 
         /* If bugID setted, use this bug as template. */
         if(isset($bugID)) 
@@ -283,6 +276,7 @@ class bug extends control
             $severity   = $bug->severity;
             $type       = $bug->type;
             $assignedTo = $bug->assignedTo;
+            $deadline   = $bug->deadline;
         }
 
         /* If projectID is setted, get builds and stories of this project. */
@@ -338,6 +332,7 @@ class bug extends control
         $this->view->browser          = $browser;
         $this->view->projectMembers   = $projectMembers;
         $this->view->assignedTo       = $assignedTo;
+        $this->view->deadline         = $deadline;
         $this->view->mailto           = $mailto;
         $this->view->keywords         = $keywords;
         $this->view->severity         = $severity;
@@ -650,10 +645,9 @@ class bug extends control
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
 
         /* Judge whether the editedTasks is too large and set session. */
-        $showSuhosinInfo = false;
-        $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($bugs), count(explode(',', $this->config->bug->custom->batchEditFields)) + 2);
-        $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
-        if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+        $countInputVars  = count($bugs) * (count(explode(',', $this->config->bug->custom->batchEditFields)) + 2);
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
+        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         /* Set Custom*/
         foreach(explode(',', $this->config->bug->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->bug->$field;
@@ -1281,6 +1275,7 @@ class bug extends control
         if($_POST)
         {
             $this->loadModel('file');
+            $this->loadModel('branch');
             $bugLang   = $this->lang->bug;
             $bugConfig = $this->config->bug;
 
@@ -1304,16 +1299,18 @@ class bug extends control
             $projects = $this->loadModel('project')->getPairs('all|nocode');
 
             /* Get related objects id lists. */
-            $relatedModuleIdList = array();
-            $relatedStoryIdList  = array();
-            $relatedTaskIdList   = array();
-            $relatedBugIdList    = array();
-            $relatedCaseIdList   = array();
-            $relatedBuildIdList  = array();
-            $relatedBranchIdList = array();
+            $relatedProductIdList = array();
+            $relatedModuleIdList  = array();
+            $relatedStoryIdList   = array();
+            $relatedTaskIdList    = array();
+            $relatedBugIdList     = array();
+            $relatedCaseIdList    = array();
+            $relatedBuildIdList   = array();
+            $relatedBranchIdList  = array();
 
             foreach($bugs as $bug)
             {
+                $relatedProductIdList[$bug->product]  = $bug->product;
                 $relatedModuleIdList[$bug->module]    = $bug->module;
                 $relatedStoryIdList[$bug->story]      = $bug->story;
                 $relatedTaskIdList[$bug->task]        = $bug->task;
@@ -1338,12 +1335,13 @@ class bug extends control
             }
 
             /* Get related objects title or names. */
+            $productsType   = $this->dao->select('id, type')->from(TABLE_PRODUCT)->where('id')->in($relatedProductIdList)->fetchPairs();
             $relatedModules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($relatedModuleIdList)->fetchPairs();
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedTasks   = $this->dao->select('id, name')->from(TABLE_TASK)->where('id')->in($relatedTaskIdList)->fetchPairs();
             $relatedBugs    = $this->dao->select('id, title')->from(TABLE_BUG)->where('id')->in($relatedBugIdList)->fetchPairs();
             $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
-            $relatedBranch  = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
+            $relatedBranch  = array('0' => $this->lang->branch->all) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
             $relatedBuilds  = array('trunk' => $this->lang->trunk) + $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->in($relatedBuildIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->in(@array_keys($bugs))->fetchGroup('objectID');
 
@@ -1439,6 +1437,8 @@ class bug extends control
                 unset($bug->result);
                 unset($bug->deleted);
             }
+
+            if(!(in_array('platform', $productsType) or in_array('branch', $productsType))) unset($fields['branch']);// If products's type are normal, unset branch field.
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $bugs);

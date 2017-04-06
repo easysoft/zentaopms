@@ -446,8 +446,15 @@ body {color:#141414; padding-bottom: 40px;}
 #defaultMenu > .actions > a > i, #searchResult ul > li > a > i {font-size: 14px; display: inline-block; margin-right: 5px;}
 /*#searchResult > ul {display: block; position: relative; padding: 0; min-width: 218px}*/
 #searchResult ul > li > a.closed, #searchResult ul > li > a.done{color:#808080}
-
 #defaultMenu > div {padding-top: 6px;}
+
+#dropMenu.searching #searchResult,
+#dropMenu.searching #defaultMenu,
+#dropMenu.searching #moreMenu {display: block;}
+#dropMenu.searching #defaultMenu > div,
+#dropMenu.searching ul > li {display: none}
+#dropMenu.searching ul > li.show-search {display: block}
+#dropMenu.searching #moreMenu > ul {margin-left: -15px;}
 
 #projectID {background:#e5e5e5; border:1px solid #e5e5e5}
 

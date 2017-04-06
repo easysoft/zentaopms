@@ -134,6 +134,7 @@ class customModel extends model
     {
         global $app, $lang, $config;
         $menu            = array();
+        $menuModuleName  = $module;
         $order           = 1;
         $customMenuMap   = array();
         $isTutorialMode  = commonModel::isTutorialMode();
@@ -254,6 +255,9 @@ class customModel extends model
                 if($hidden) $menuItem->hidden  = $hidden;
                 if($isTutorialMode) $menuItem->tutorial = true;
 
+                /* Hidden menu by config in mobile. */
+                if($app->viewType == 'mhtml' and isset($config->custom->moblieHidden[$menuModuleName]) and in_array($name, $config->custom->moblieHidden[$menuModuleName])) $menuItem->hidden = 1;
+
                 while(isset($menu[$menuItem->order])) $menuItem->order++;
                 $menu[$menuItem->order] = $menuItem;
             }
@@ -283,7 +287,6 @@ class customModel extends model
         $customMenu = isset($config->customMenu->$module) ? $config->customMenu->$module : array();
         if(commonModel::isTutorialMode() && $module === 'main')$customMenu = 'my,product,project,qa,company';
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
-        if($app->viewType == 'mhtml') $customMenu = array();
 
         $menu = self::setMenuByConfig($allMenu, $customMenu, $module);
 

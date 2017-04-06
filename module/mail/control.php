@@ -277,7 +277,7 @@ class mail extends control
         $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->test;
         $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
         $this->view->position[] = $this->lang->mail->test;
-        $this->view->users      = $this->dao->select('account,  CONCAT(realname, " ", email) AS email' )->from(TABLE_USER)->where('email')->ne('')->orderBy('account')->fetchPairs();
+        $this->view->users      = $this->dao->select('account,  CONCAT(realname, " ", email) AS email' )->from(TABLE_USER)->where('email')->ne('')->andWhere('deleted')->eq(0)->orderBy('account')->fetchPairs();
         $this->display();
     }
 
@@ -314,7 +314,7 @@ class mail extends control
             }
 
             $this->dao->update(TABLE_MAILQUEUE)->set('status')->eq('sending')->where('id')->in($queue->id)->exec();
-            $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList);
+            $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList, true);
 
             $data = new stdclass();
             $data->sendTime = $now;
@@ -491,6 +491,12 @@ class mail extends control
         $this->display();
     }
 
+    /**
+     * zentao cloud.
+     * 
+     * @access public
+     * @return void
+     */
     public function ztCloud()
     {
         if($_POST)
@@ -514,7 +520,7 @@ class mail extends control
         $this->view->title      = $this->lang->mail->ztCloud;
         $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
         $this->view->position[] = $this->lang->mail->ztCloud;
-        if(!empty($this->config->mail->ztcloud->secretKey))
+        if(!empty($this->config->mail->ztcloud->secretKey) and !empty($this->config->global->community))
         {
             $mailConfig = new stdclass();
             $mailConfig->fromAddress = $this->config->mail->fromAddress;
@@ -529,16 +535,18 @@ class mail extends control
             die($this->display());
         }
 
-        if($this->cookie->ztCloudLicense != 'yes')
-        {
-            $this->view->step = 'license';
-            die($this->display());
-        }
         if(empty($this->config->global->ztPrivateKey) or $this->config->global->community == 'na' or empty($this->config->global->community))
         {
             if(!empty($this->config->global->community) and $this->config->global->community != 'na') die(js::locate($this->createLink('admin', 'bind', 'from=mail')));
             die(js::locate($this->createLink('admin', 'register', 'from=mail')));
         }
+
+        if($this->cookie->ztCloudLicense != 'yes')
+        {
+            $this->view->step = 'license';
+            die($this->display());
+        }
+
         $result = $this->loadModel('admin')->getSecretKey();
         if(empty($result))die(js::alert($this->lang->mail->connectFail) . js::locate($this->createLink('admin', 'register', "from=mail")));
         if($result->result == 'fail' and empty($result->data)) die(js::alert($this->lang->mail->centifyFail) . js::locate($this->createLink('admin', 'register', "from=mail")));

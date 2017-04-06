@@ -275,6 +275,8 @@ class my extends control
         }
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'assigntome' ? false : true);
         
+        $cases = $this->testcase->appendData($cases, $type == 'assigntome' ? 'run' : 'case');
+
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->testCase;
         $this->view->position[] = $this->lang->my->testCase;

@@ -41,7 +41,6 @@
   </thead>
   <tbody>
   <?php foreach($actions as $action):?>
-  <?php $module = $action->objectType == 'case' ? 'testcase' : $action->objectType;?>
   <tr class='text-center'>
     <td><?php echo $action->date;?></td>
     <td><?php isset($users[$action->actor]) ? print($users[$action->actor]) : print($action->actor);?></td>

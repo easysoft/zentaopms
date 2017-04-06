@@ -229,6 +229,8 @@ class product extends control
         $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst|noclosed');
         $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst|noclosed');
         $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst|noclosed');
+
+        unset($this->lang->product->typeList['']);
         $this->display();
     }
 
@@ -272,6 +274,7 @@ class product extends control
         $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst',  $product->QD);
         $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst', $product->RD);
 
+        unset($this->lang->product->typeList['']);
         $this->display();
     }
 
@@ -316,6 +319,8 @@ class product extends control
         $this->view->poUsers       = $this->loadModel('user')->getPairs('nodeleted|pofirst');
         $this->view->qdUsers       = $this->loadModel('user')->getPairs('nodeleted|qdfirst');
         $this->view->rdUsers       = $this->loadModel('user')->getPairs('nodeleted|devfirst');
+
+        unset($this->lang->product->typeList['']);
         $this->display();
     }
 
@@ -558,44 +563,14 @@ class product extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
-        $this->view->products  = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('`order` desc')->fetchAll();
-        $this->display();
-    }
 
-    /**
-     * The results page of search.
-     * 
-     * @param  string  $keywords 
-     * @param  string  $module 
-     * @param  string  $method 
-     * @param  mix     $extra 
-     * @access public
-     * @return void
-     */
-    public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
-    {
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->orderBy('`order` desc')->fetchAll();
-        $toPinyin = $this->product->toPinyin($products);
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('`order` desc')->fetchAll('id');
+        $productPairs = array();
+        foreach($products as $product) $productPairs[$product->id] = $product->name;
+        $productsPinyin = common::convert2Pinyin($productPairs);
 
-        foreach($toPinyin as $key => $value) {
-            if(!strstr($value ,$keywords) && !strstr($key,$keywords)) {
-                unset($toPinyin[$key]);
-            }
-        }
-
-        foreach($products as $key => $product)
-        {
-            if(!isset($toPinyin[$product->name])) {
-                unset($products[$key]);
-                continue;
-            }
-
-            if(!$this->product->checkPriv($product)) unset($products[$key]);
-        }
-
-        $this->view->link     = $this->product->getProductLink($module, $method, $extra);
-        $this->view->products = $products;
-        $this->view->keywords = $keywords;
+        foreach($products as $key => $product) $product->key = $productsPinyin[$product->name];
+        $this->view->products  = $products;
         $this->display();
     }
 
@@ -654,7 +629,7 @@ class product extends control
     {
         $this->session->set('productList', $this->app->getURI(true));
         $productID = $this->product->saveState($productID, $this->products);
-        if($this->app->getViewType() != 'mhtml') $this->product->setMenu($this->products, $productID);
+        $this->product->setMenu($this->products, $productID);
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);

@@ -162,7 +162,6 @@ class todo extends control
             $editedTodos = array();
             $todoIDList  = array();
             $columns     = 7;
-            $showSuhosinInfo = false;
 
             if($account == '') $account = $this->app->user->account;
             $bugs       = $this->bug->getUserBugPairs($account);
@@ -187,10 +186,8 @@ class todo extends control
             }
 
             /* Judge whether the edited todos is too large. */
-            $showSuhosinInfo = $this->loadModel('common')->judgeSuhosinSetting(count($editedTodos), $columns);
-
-            /* Set the sessions. */
-            $this->app->session->set('showSuhosinInfo', $showSuhosinInfo);
+            $countInputVars  = count($editedTodos) * $columns;
+            $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
 
             /* Set Custom*/
             foreach(explode(',', $this->config->todo->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->todo->$field;
@@ -203,7 +200,7 @@ class todo extends control
             $position[] = $this->lang->todo->common;
             $position[] = $this->lang->todo->batchEdit;
 
-            if($showSuhosinInfo) $this->view->suhosinInfo = $this->lang->suhosinInfo;
+            if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
             $this->view->bugs        = $bugs;
             $this->view->tasks       = $tasks;
             $this->view->editedTodos = $editedTodos;

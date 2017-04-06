@@ -53,7 +53,7 @@
       echo $case->title . ' ( ';
       for($i = $case->version; $i >= 1; $i --)
       {
-          echo html::a($this->createLink('testcase', 'view', "caseID=$case->id&version=$i"), "#$i", '_blank');
+          echo html::a($this->createLink('testcase', 'view', "caseID=$case->id&version=$i", '', true), "#$i", '', "class='iframe' data-width='95%'");
       }
       echo ')';
       ?>

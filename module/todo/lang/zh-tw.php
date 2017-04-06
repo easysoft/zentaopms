@@ -57,6 +57,7 @@ $lang->todo->typeList['task']   = $lang->projectCommon . '任務';
 $lang->todo->confirmDelete  = "您確定要刪除這條待辦嗎？";
 $lang->todo->thisIsPrivate  = '這是一條私人事務。:)';
 $lang->todo->lblDisableDate = '暫時不設定時間';
+$lang->todo->noTodo         = '該類型沒有待辦事務';
 
 $lang->todo->periods['today']      = '今日';
 $lang->todo->periods['yesterday']  = '昨日';

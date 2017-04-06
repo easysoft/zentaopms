@@ -279,7 +279,8 @@ $(function()
         var value = $(this).val();
         if(value == '>=' && $(this).closest('tr').find('input[id^="value"]').hasClass('date'))
         {
-            fieldNO = parseInt($(this).attr('id').replace('operator', ''));
+            fieldNO   = parseInt($(this).attr('id').replace('operator', ''));
+            fieldName = $(this).closest('tr').find("select[id^='field']").val();
             var $form      = $(this).closest('form');
             var groupItems = <?php echo $config->search->groupItems?>;
             var maxNO      = 2 * groupItems;

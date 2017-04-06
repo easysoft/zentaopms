@@ -22,6 +22,9 @@
     </div>
   </div>
 </div>
+<?php if(isset($suhosinInfo)):?>
+<div class='alert alert-info'><?php echo $suhosinInfo;?></div>
+<?php else:?>
 <?php
 $visibleFields = array();
 foreach(explode(',', $showFields) as $field)
@@ -89,17 +92,13 @@ foreach(explode(',', $showFields) as $field)
         <td <?php echo zget($visibleFields, 'closedReason', "class='hidden'")?>><?php echo html::select("closedReasons[$taskID]", $lang->task->reasonList, $tasks[$taskID]->closedReason, 'class=form-control');?></td>
       </tr>
       <?php endforeach;?>
-
-      <?php $columns = count($visibleFields) + 3?>
-      <?php if(isset($suhosinInfo)):?>
-      <tr><td colspan='<?php echo $columns;?>'><div class='f-left blue'><?php echo $suhosinInfo;?></div></td></tr>
-      <?php endif;?>
     </tbody>
     <tfoot>
-      <tr><td colspan='<?php echo $columns;?>'><?php echo html::submitButton();?></td></tr>
+      <tr><td colspan='<?php echo count($visibleFields) + 3;?>'><?php echo html::submitButton();?></td></tr>
     </tfoot>
   </table>
 </form>
+<?php endif;?>
 <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=task&section=custom&key=batchEditFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

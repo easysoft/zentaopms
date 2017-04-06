@@ -2,6 +2,9 @@
 <style>
 .affix {position:fixed; top:0px; width:95.6%;z-index:10000;}
 </style>
+<?php if(isset($suhosinInfo)):?>
+<div class='alert alert-info'><?php echo $suhosinInfo?></div>
+<?php else:?>
 <form target='hiddenwin' method='post' class='form-condensed'>
 <table class='table table-fixed active-disabled table-custom'>
   <thead>
@@ -67,7 +70,7 @@
         <tr class='step'>
           <td><?php echo $id . html::hidden("stepType[$key][$id]", $desc['type'])?></td>
           <td><?php echo html::textarea("desc[$key][$id]", htmlspecialchars($desc['content']), "class='form-control'")?></td>
-          <td><?php if($desc['type'] == 'item') echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]['content']) ? htmlspecialchars($stepData[$key]['expect'][$id]['content']) : '', "class='form-control'")?></td>
+          <td><?php if($desc['type'] != 'group') echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]['content']) ? htmlspecialchars($stepData[$key]['expect'][$id]['content']) : '', "class='form-control'")?></td>
         </tr>
       <?php endforeach;?>
       </table>
@@ -96,6 +99,7 @@
   </tfoot>
 </table>
 </form>
+<?php endif;?>
 <script>
 $(function(){affix('thead')})
 function affix(obj)

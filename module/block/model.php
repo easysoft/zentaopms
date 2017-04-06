@@ -173,8 +173,16 @@ class blockModel extends model
      */
     public function getAvailableBlocks($module = '')
     {
-        if($module and isset($this->lang->block->modules[$module]))return json_encode($this->lang->block->modules[$module]->availableBlocks);
-        return json_encode($this->lang->block->availableBlocks);
+        $blocks = $this->lang->block->availableBlocks;
+        if($module and isset($this->lang->block->modules[$module])) $blocks = $this->lang->block->modules[$module]->availableBlocks;
+        if(isset($this->config->block->closed))
+        {
+            foreach($blocks as $blockKey => $blockName)
+            {
+                if(strpos(",{$this->config->block->closed},", ",{$module}|{$blockKey},") !== false) unset($blocks->$blockKey);
+            }
+        }
+        return json_encode($blocks);
     }
 
     /**
@@ -187,14 +195,6 @@ class blockModel extends model
     public function getListParams($module = '')
     {
         $params = new stdclass();
-
-        if($module == 'project' or $module == 'product')
-        {
-            $params->type['name']    = $this->lang->block->type;
-            $params->type['options'] = $this->lang->block->typeList->$module;
-            $params->type['control'] = 'select';
-        }
-
         $params = $this->onlyNumParams($module, $params);
         return json_encode($params);
     }
@@ -375,7 +375,11 @@ class blockModel extends model
      */
     public function getProductParams($module = '')
     {
-        return $this->getListParams($module);
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->block->typeList->product;
+        $params->type['control'] = 'select';
+
+        return json_encode($this->onlyNumParams($module, $params));
     }
 
     /**
@@ -386,7 +390,44 @@ class blockModel extends model
      */
     public function getProjectParams($module = '')
     {
-        return $this->getListParams($module);
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->block->typeList->project;
+        $params->type['control'] = 'select';
+
+        return json_encode($this->onlyNumParams($module, $params));
+    }
+
+    /**
+     * Get closed block pairs. 
+     * 
+     * @param  string $closedBlock 
+     * @access public
+     * @return array
+     */
+    public function getClosedBlockPairs($closedBlock)
+    {
+        $blockPairs = array();
+        if(empty($closedBlock)) return $blockPairs;
+
+        foreach(explode(',', $closedBlock) as $block)
+        {
+            $block = trim($block);
+            if(empty($block)) continue;
+
+            list($moduleName, $blockKey) = explode('|', $block);
+            if(empty($moduleName))
+            {
+                if($blockKey == 'html')      $blockPairs[$block] = 'HTML';
+                if($blockKey == 'flowchart') $blockPairs[$block] = $this->lang->block->lblFlowchart;
+                if($blockKey == 'dynamic')   $blockPairs[$block] = $this->lang->block->dynamic;
+            }
+            else
+            {
+                $blockPairs[$block] = "{$this->lang->block->moduleList[$moduleName]}|{$this->lang->block->modules[$moduleName]->availableBlocks->$blockKey}";
+            }
+        }
+
+        return $blockPairs;
     }
 
     /**

@@ -106,16 +106,16 @@
             $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
             ?> 
           <td>
-              <?php 
-              $bugsLink = $this->createLink('story', 'bugs', "storyID=$story->id&projectID=$project->id");
-              $storyBugs[$story->id] > 0 ? print(html::a($bugsLink, $storyBugs[$story->id], '', 'class="iframe"')) : print(0);
-              ?>
+            <?php 
+            $bugsLink = $this->createLink('story', 'bugs', "storyID=$story->id&projectID=$project->id");
+            $storyBugs[$story->id] > 0 ? print(html::a($bugsLink, $storyBugs[$story->id], '', 'class="iframe"')) : print(0);
+            ?>
           </td>
           <td>
-              <?php 
-              $casesLink = $this->createLink('story', 'cases', "storyID=$story->id&projectID=$project->id");
-              $storyCases[$story->id] > 0 ? print(html::a($casesLink, $storyCases[$story->id], '', 'class="iframe"')) : print(0);
-              ?>
+            <?php 
+            $casesLink = $this->createLink('story', 'cases', "storyID=$story->id&projectID=$project->id");
+            $storyCases[$story->id] > 0 ? print(html::a($casesLink, $storyCases[$story->id], '', 'class="iframe"')) : print(0);
+            ?>
           </td>
           <td>
             <?php 
@@ -150,7 +150,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan='10'>
+          <td colspan='12'>
             <div class='table-actions clearfix'>
             <?php
             $storyInfo = sprintf($lang->project->productStories, inlink('linkStory', "project={$project->id}"));

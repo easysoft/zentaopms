@@ -2,7 +2,7 @@ var newRowID = 0;
 
 function loadLibModules(libID)
 {
-    link = createLink('tree', 'ajaxGetOptionMenu', 'libID=' + libID + '&viewtype=testlib&branch=0&rootModuleID=0&returnType=html&needManage=true');
+    link = createLink('tree', 'ajaxGetOptionMenu', 'libID=' + libID + '&viewtype=caselib&branch=0&rootModuleID=0&returnType=html&needManage=true');
     $('#moduleIdBox').load(link, function()
     {
         $(this).find('select').chosen(defaultChosenOptions)
@@ -31,7 +31,7 @@ function initSteps(selector)
     var $stepTemplate = $('#stepTemplate').detach().removeClass('template').attr('id', null);
     var initSortableCallTask = null;
     var groupNameText = $steps.data('groupName');
-    var insertStepRow = function($row, count)
+    var insertStepRow = function($row, count, type)
     {
         if(count === undefined) count = 1;
         for(var i = 0; i < count; ++i)
@@ -41,38 +41,59 @@ function initSteps(selector)
             else $steps.append($step);
             $step.addClass('step-new');
             setTimeout(function(){$step.find('.step-steps').focus();}, 10);
-
         }
     };
-    var toggleStepRowType = function($row, toggleisGroup)
+    var updateStepType = function($step, type)
     {
-        if(toggleisGroup === undefined) targetIsGroup = $row.find('.step-type').is(':checked');
-        $row.toggleClass('step-group', targetIsGroup);
-        $row.find('.step-steps').toggleClass('autosize', !targetIsGroup).attr('placeholder', targetIsGroup ? groupNameText : null).focus();
+        var targetIsGroup = type =='group';
+        $step.attr('data-type', type).find('.step-steps').toggleClass('autosize', !targetIsGroup).attr('placeholder', targetIsGroup ? groupNameText : null).focus();
+
+        var displayType = (type =='item' && $step.hasClass('step-step')) ? 'step' : type;
+
+        var activeTypeText = $step.find('.step-type-menu > a').removeClass('active').filter('[data-value="' + displayType + '"]').addClass('active').text();
+        $step.find('.step-type-current > span').text(activeTypeText);
     };
-    var refreshStepsID = function()
+    var refreshSteps = function()
     {
         var parentId = 1, childId = 0;
         $steps.children('.step:not(.drag-shadow)').each(function(idx)
         {
             var $step = $(this);
-            var isGroup = $step.find('.step-type').is(':checked');
+            var type = $step.find('.step-type').val();
             var stepID;
-            if(isGroup || !childId)
+            if(type == 'group')
             {
-                $step.removeClass('step-item');
+                $step.removeClass('step-item step-step').addClass('step-group');
                 stepID = parentId++;
                 $step.find('.step-id').text(stepID);
-                if(isGroup) childId = 1;
+                childId = 1;
+            }
+            else if(type == 'step')
+            {
+                $step.removeClass('step-item step-group').addClass('step-step');
+                stepID = parentId++;
+                $step.find('.step-id').text(stepID);
+                childId = 0;
             }
             else
             {
-                stepID = (parentId - 1) + '.' + (childId++);
-                $step.addClass('step-item').find('.step-item-id').text(stepID);
+                if(childId) // as child
+                {
+                    stepID = (parentId - 1) + '.' + (childId++);
+                    $step.removeClass('step-step step-group').addClass('step-item').find('.step-item-id').text(stepID);
+                }
+                else
+                {
+                    $step.removeClass('step-item step-group').addClass('step-step');
+                    stepID = parentId++;
+                    $step.find('.step-id').text(stepID);
+                }
             }
             $step.find('[name^="steps["]').attr('name', "steps[" +stepID + ']');
             $step.find('[name^="stepType["]').attr('name', "stepType[" +stepID + ']');
             $step.find('[name^="expects["]').attr('name', "expects[" +stepID + ']');
+
+            updateStepType($step, type);
         });
     };
     var initSortable = function()
@@ -90,6 +111,7 @@ function initSteps(selector)
                 $moveStep.removeClass('drag-row');
                 $steps.removeClass('sortable-sorting');
                 $moveStep = null;
+                refreshSteps();
             });
             $steps.addClass('sortable-sorting');
         }).on('mouseenter', '.step:not(.drag-row)', function()
@@ -111,25 +133,25 @@ function initSteps(selector)
             {
                 $targetStep.before($moveStep);
             }
-            refreshStepsID();
         });
     }
     $steps.on('click', '.btn-step-add', function()
     {
         insertStepRow($(this).closest('.step'));
-        refreshStepsID();
+        refreshSteps();
     }).on('click', '.btn-step-delete', function()
     {
         if($('tbody#steps tr.step').size() == 1) return false;
         $(this).closest('.step').remove();
-        refreshStepsID();
-    }).on('change', '.step-type', function()
+        refreshSteps();
+    }).on('click', '.step-type-menu a', function()
     {
-        toggleStepRowType($(this).closest('.step'));
-        refreshStepsID();
+        var $a = $(this);
+        $a.closest('.step').find('.step-type').val($a.data('value'));
+        refreshSteps();
     });
     initSortable();
-    refreshStepsID();
+    refreshSteps();
 }
 
 /**

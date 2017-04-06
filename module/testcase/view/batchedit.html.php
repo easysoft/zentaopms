@@ -21,6 +21,9 @@
     </div>
   </div>
 </div>
+<?php if(isset($suhosinInfo)):?>
+<div class='alert alert-info'><?php echo $suhosinInfo;?></div>
+<?php else:?>
 <?php
 $visibleFields = array();
 foreach(explode(',', $showFields) as $field)
@@ -36,7 +39,7 @@ foreach(explode(',', $showFields) as $field)
         <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden')?>'>    <?php echo $lang->priAB;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden')?>'><?php echo $lang->statusAB;?></th>
         <th class='w-150px<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->testcase->module;?></th>
-        <th><?php echo $lang->testcase->story;?></th>
+        <th class='w-150px<?php echo zget($visibleFields, 'story', ' hidden')?>'><?php echo $lang->testcase->story;?></th>
         <th><?php echo $lang->testcase->title;?></th>
         <th class='w-120px'><?php echo $lang->testcase->type;?></th>
         <th class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'>    <?php echo $lang->testcase->precondition;?></th>
@@ -64,15 +67,13 @@ foreach(explode(',', $showFields) as $field)
         <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stages[$caseID][]", $lang->testcase->stageList, $cases[$caseID]->stage, "class='form-control chosen' multiple data-placeholder='{$lang->testcase->stage}'");?></td>
       </tr>
       <?php endforeach;?>
-      <?php if(isset($suhosinInfo)):?>
-      <tr><td colspan='<?php echo count($visibleFields) + 3;?>'><div class='alert alert-info'><?php echo $suhosinInfo;?></div></td></tr>
-      <?php endif;?>
     </tbody>
     <tfoot>
       <tr><td colspan='<?php echo count($visibleFields) + 3;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
     </tfoot>
   </table>
 </form>
+<?php endif;?>
 <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=testcase&section=custom&key=batchEditFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

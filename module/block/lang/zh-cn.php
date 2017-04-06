@@ -31,6 +31,9 @@ $lang->block->createBlock        = '添加区块';
 $lang->block->editBlock          = '编辑区块';
 $lang->block->ordersSaved        = '排序已保存';
 $lang->block->confirmRemoveBlock = '确定移除区块【{0}】吗？';
+$lang->block->closeForever       = '永久关闭';
+$lang->block->confirmClose       = '确定永久关闭该区块吗？闭后所有人都将无法使用该区块，可以在后台自定义中打开';
+$lang->block->remove             = '移除';
 $lang->block->refresh            = '刷新';
 $lang->block->hidden             = '隐藏';
 $lang->block->dynamicInfo        = "%s, %s <em>%s</em> %s <a href='%s'>%s</a>。";
@@ -226,9 +229,11 @@ $lang->block->typeList->project['undone']  = '未完成';
 $lang->block->typeList->project['isdoing'] = '进行中';
 $lang->block->typeList->project['all']     = '全部';
 
-$lang->block->typeList->testtask['wait'] = '待测版本';
-$lang->block->typeList->testtask['done'] = '已测版本';
-$lang->block->typeList->testtask['all']  = '全部';
+$lang->block->typeList->testtask['wait']    = '待测版本';
+$lang->block->typeList->testtask['doing']   = '测试中版本';
+$lang->block->typeList->testtask['blocked'] = '阻塞版本';
+$lang->block->typeList->testtask['done']    = '已测版本';
+$lang->block->typeList->testtask['all']     = '全部';
 
 $lang->block->modules['product']->moreLinkList = new stdclass();
 $lang->block->modules['product']->moreLinkList->list    = 'product|all|product=&status=%s';

@@ -6,7 +6,7 @@ if(file_exists($extViewFile))
     return;
 }
 ?>
-            <?php if(!empty($action)): ?>
+            <?php if(isset($action->objectType) and isset($action->action)):?>
             <?php if(!empty($action->comment)):?>
             <tr>
               <td style="padding:0px 10px 10px 10px; border: none;">

@@ -21,6 +21,9 @@
     </div>
   </div>
 </div>
+<?php if(isset($suhosinInfo)):?>
+<div class='alert alert-info'><?php echo $suhosinInfo;?></div>
+<?php else:?>
 <?php
 $visibleFields = array();
 foreach(explode(',', $showFields) as $field)
@@ -43,6 +46,7 @@ $columns = count($visibleFields) + 3;
         <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden')?>'>   <?php echo $lang->todo->status;?></th>
       </tr>
     </thead>
+    <tbody>
     <?php foreach($editedTodos as $todo):?>
     <tr class='text-center'>
       <td><?php echo $todo->id . html::hidden("todoIDList[$todo->id]", $todo->id);?></td>
@@ -77,14 +81,13 @@ $columns = count($visibleFields) + 3;
       <td <?php echo zget($visibleFields, 'status', "class='hidden'")?>><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='form-control'");?></td>
     </tr>  
     <?php endforeach;?>
-    <?php if(isset($suhosinInfo)):?>
-    <tr><td colspan='7'><div class='text-left text-info'><?php echo $suhosinInfo;?>fdsafsdf</div></td></tr>
-    <?php endif;?>
+    </tbody>
     <tfoot>
       <tr><td colspan='<?php echo $columns?>'><?php echo html::submitButton();?></td></tr>
     </tfoot>
   </table>
 </form>
+<?php endif;?>
 <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=todo&section=custom&key=batchEditFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include './footer.html.php';?>

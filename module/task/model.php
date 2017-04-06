@@ -42,6 +42,9 @@ class taskModel extends model
 
         foreach($this->post->assignedTo as $assignedTo)
         {
+            /* When type is affair and has assigned then ignore none. */
+            if($task->type == 'affair' and count($this->post->assignedTo) > 1 and empty($assignedTo)) continue;
+
             $task->assignedTo = $assignedTo;
             if($assignedTo) $task->assignedDate = helper::now();
 
@@ -286,9 +289,6 @@ class taskModel extends model
         $today      = date(DT_DATE1);
         $data       = fixer::input('post')->get();
         $taskIDList = $this->post->taskIDList;
-
-        /* Adjust whether the post data is complete, if not, remove the last element of $taskIDList. */
-        if($this->session->showSuhosinInfo) array_pop($taskIDList);
 
         /* Process data if the value is 'ditto'. */
         foreach($taskIDList as $taskID)
@@ -630,7 +630,7 @@ class taskModel extends model
         $newTask->status   = $task->status;
 
         $changes = common::createChanges($oldTask, $newTask);
-        $this->action->logHistory($actionID, $changes);
+        if(!empty($actionID)) $this->action->logHistory($actionID, $changes);
         if($task->story) $this->loadModel('story')->setStage($task->story);
 
         return $changes;

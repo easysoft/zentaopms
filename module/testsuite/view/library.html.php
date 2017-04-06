@@ -65,7 +65,7 @@ js::set('batchDelete',   $lang->testcase->confirmBatchDelete);
       <div class='panel-body'>
         <?php echo $moduleTree;?>
         <div class='text-right'>
-          <?php common::printLink('tree', 'browse', "libID=$libID&view=testlib", $lang->tree->manage);?>
+          <?php common::printLink('tree', 'browse', "libID=$libID&view=caselib", $lang->tree->manage);?>
         </div>
       </div>
     </div>

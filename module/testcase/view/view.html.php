@@ -48,7 +48,7 @@
             common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", '', 'button', '', '', 'runCase', false, "data-width='95%'");
             common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", '', 'button', '', '', 'results', false, "data-width='95%'");
 
-            if($caseFailCount > 0) common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", '', 'button', 'bug', '', 'iframe');
+            if($caseFails > 0) common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", '', 'button', 'bug', '', 'iframe', '', "data-width='90%'");
         }
         if($config->testcase->needReview) common::printIcon('testcase', 'review', "caseID=$case->id", $case, 'button', 'review', '', 'iframe');
         echo '</div>';
@@ -97,16 +97,16 @@
         foreach($case->steps as $stepID => $step)
         {
             $stepClass = "step-{$step->type}";
-            if($step->type == 'group' or ($step->type == 'item' and $step->parent == 0))
+            if($step->type == 'group' or $step->type == 'step')
             {
                 $stepId++;
                 $childId = 0;
             }
-            if($step->type == 'item' and $step->parent == 0) $stepClass = 'step-group';
+            if($step->type == 'step') $stepClass = 'step-group';
             echo "<tr class='step {$stepClass}'>";
             echo "<th class='step-id'>$stepId</th>";
             echo "<td class='text-left'><div class='input-group'>";
-            if($step->type == 'item' and $step->parent != 0) echo "<span class='step-item-id'>{$stepId}.{$childId}</span>";
+            if($step->type == 'item') echo "<span class='step-item-id'>{$stepId}.{$childId}</span>";
             echo nl2br($step->desc) . "</td>";
             echo "<td class='text-left'>" . nl2br($step->expect) . "</div></td>";
             echo "</tr>";
@@ -127,6 +127,7 @@
     </div>
   </div>
   <div class='col-side'>
+    <a class='side-handle' data-id='caseSide'><i class='icon-caret-right'></i></a>
     <div class='main main-side'>
       <fieldset>
         <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>

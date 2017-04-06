@@ -49,6 +49,7 @@ $lang->bug->resolutionAB     = '方案';
 $lang->bug->resolvedBuild    = '解决版本';
 $lang->bug->resolvedDate     = '解决日期';
 $lang->bug->resolvedDateAB   = '解决日期';
+$lang->bug->deadline         = '截止日期';
 $lang->bug->closedBy         = '由谁关闭';
 $lang->bug->closedDate       = '关闭日期';
 $lang->bug->duplicateBug     = '重复ID';
@@ -105,6 +106,7 @@ $lang->bug->toClosed       = '待关闭';
 $lang->bug->unclosed       = '未关闭';
 $lang->bug->longLifeBugs   = '久未处理';
 $lang->bug->postponedBugs  = '被延期';
+$lang->bug->overdueBugs    = '过期Bug';
 $lang->bug->allBugs        = '所有';
 $lang->bug->byQuery        = '搜索';
 $lang->bug->needConfirm    = '需求变动';
@@ -137,13 +139,13 @@ $lang->bug->legendMisc                  = '其他相关';
 $lang->bug->buttonConfirm        = '确认';
 
 /* 交互提示。*/
-$lang->bug->confirmChangeProduct = "修改{$lang->productCommon}会导致相应的{$lang->projectCommon}、需求和任务发生变化，确定吗？";
-$lang->bug->confirmDelete        = '您确认要删除该Bug吗？';
-$lang->bug->setTemplateTitle     = '请输入bug模板标题';
-$lang->bug->remindTask           = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
-$lang->bug->skipClose            = 'Bug %s 不是已解决状态，不能关闭。';
-$lang->bug->applyTemplate        = '应用模板';
-$lang->bug->TemplateDelete       = '您确认要删除该模板吗？';
+$lang->bug->confirmChangeProduct  = "修改{$lang->productCommon}会导致相应的{$lang->projectCommon}、需求和任务发生变化，确定吗？";
+$lang->bug->confirmDelete         = '您确认要删除该Bug吗？';
+$lang->bug->setTemplateTitle      = '请输入bug模板标题';
+$lang->bug->remindTask            = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
+$lang->bug->skipClose             = 'Bug %s 不是已解决状态，不能关闭。';
+$lang->bug->applyTemplate         = '应用模板';
+$lang->bug->confirmDeleteTemplate = '您确认要删除该模板吗？';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步骤]</p>\n";
@@ -365,4 +367,5 @@ $lang->bug->featureBar['browse']['unresolved']    = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['toclosed']      = $lang->bug->toClosed;
 $lang->bug->featureBar['browse']['longlifebugs']  = $lang->bug->longLifeBugs;
 $lang->bug->featureBar['browse']['postponedbugs'] = $lang->bug->postponedBugs;
+$lang->bug->featureBar['browse']['overduebugs']   = $lang->bug->overdueBugs;
 $lang->bug->featureBar['browse']['needconfirm']   = $lang->bug->needConfirm;

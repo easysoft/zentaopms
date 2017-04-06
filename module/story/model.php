@@ -239,6 +239,7 @@ class storyModel extends model
      */
     public function batchCreate($productID = 0, $branch = 0)
     {
+        $this->loadModel('action');
         $branch   = (int)$branch;
         $now      = helper::now();
         $mails    = array();
@@ -338,7 +339,6 @@ class storyModel extends model
 
                 $this->dao->insert(TABLE_STORYSPEC)->data($specData)->exec();
 
-                $this->loadModel('action');
                 $actionID = $this->action->create('story', $storyID, 'Opened', '');
                 $mails[$i] = new stdclass();
                 $mails[$i]->storyID  = $storyID;
@@ -476,14 +476,14 @@ class storyModel extends model
             {
                 $this->dao->update(TABLE_PROJECTSTORY)->set('product')->eq($story->product)->where('story')->eq($storyID)->exec();
                 $storyProjects  = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->orderBy('project')->fetchPairs('project', 'project');
-                $linkedProjects = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($storyProjects)->andWhere('product')->eq($story->product)->orderBy('project')->fetchPairs('project','project');
+                $linkedProjects = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('project')->in($storyProjects)->andWhere('product')->eq($story->product)->orderBy('project')->fetchPairs('project','project');
                 $unlinkedProjects = array_diff($storyProjects, $linkedProjects);
                 foreach($unlinkedProjects as $projectID)
                 {
                     $data = new stdclass();
                     $data->project = $projectID;
                     $data->product = $story->product;
-                    $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                    $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
                 }
             }
             return common::createChanges($oldStory, $story);
@@ -504,9 +504,6 @@ class storyModel extends model
         $now         = helper::now();
         $data        = fixer::input('post')->get();
         $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : array();
-
-        /* Adjust whether the post data is complete, if not, remove the last element of $taskIDList. */
-        if($this->session->showSuhosinInfo) array_pop($storyIDList);
 
         /* Init $stories. */
         if(!empty($storyIDList))
@@ -700,7 +697,6 @@ class storyModel extends model
 
             if($reason and strpos('done,postponed', $reason) !== false) $result = 'pass';
             $actions[$storyID] = $this->action->create('story', $storyID, 'Reviewed', '', ucfirst($result));
-            $this->action->logHistory($actions[$storyID], array());
         }
 
         return $actions;
@@ -796,8 +792,6 @@ class storyModel extends model
         $data        = fixer::input('post')->get();
         $storyIDList = $data->storyIDList ? $data->storyIDList : array();
 
-        /* Adjust whether the post data is complete, if not, remove the last element of $storyIDList. */
-        if($this->session->showSuhosinInfo) array_pop($storyIDList);
         $oldStories = $this->getByList($storyIDList);
         foreach($storyIDList as $storyID)
         {
@@ -1585,7 +1579,7 @@ class storyModel extends model
                 }
             }
 
-            $allProduct        = "`product` = 'all'";
+            $allProduct = "`product` = 'all'";
             $storyQuery = $this->session->projectStoryQuery;
             if(strpos($this->session->projectStoryQuery, $allProduct) !== false)
             {

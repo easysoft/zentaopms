@@ -47,6 +47,7 @@ $lang->story->batchChangeModule = "批量修改模組";
 $lang->story->common         = '需求';
 $lang->story->id             = '編號';
 $lang->story->product        = "所屬{$lang->productCommon}";
+$lang->story->branch         = "分支/平台";
 $lang->story->module         = '所屬模組';
 $lang->story->moduleAB       = '模組';
 $lang->story->source         = '需求來源';

@@ -61,6 +61,9 @@ $lang->action->objectTypes['doclib']      = '文檔庫';
 $lang->action->objectTypes['todo']        = '待辦';
 $lang->action->objectTypes['branch']      = '分支';
 $lang->action->objectTypes['module']      = '模組';
+$lang->action->objectTypes['testsuite']   = '套件';
+$lang->action->objectTypes['caselib']     = '用例庫';
+$lang->action->objectTypes['testreport']  = '報告';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();
@@ -80,6 +83,7 @@ $lang->action->desc->undeleted      = '$date, 由 <strong>$actor</strong> 還原
 $lang->action->desc->hidden         = '$date, 由 <strong>$actor</strong> 隱藏。' . "\n";
 $lang->action->desc->commented      = '$date, 由 <strong>$actor</strong> 添加備註。' . "\n";
 $lang->action->desc->activated      = '$date, 由 <strong>$actor</strong> 激活。' . "\n";
+$lang->action->desc->blocked        = '$date, 由 <strong>$actor</strong> 阻塞。' . "\n";
 $lang->action->desc->moved          = '$date, 由 <strong>$actor</strong> 移動，之前為 "$extra"。' . "\n";
 $lang->action->desc->confirmed      = '$date, 由 <strong>$actor</strong> 確認需求變動，最新版本為<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->caseconfirmed  = '$date, 由 <strong>$actor</strong> 確認用例變動，最新版本為<strong>#$extra</strong>。' . "\n";
@@ -121,6 +125,7 @@ $lang->action->label->undeleted           = '還原了';
 $lang->action->label->hidden              = '隱藏了';
 $lang->action->label->commented           = '評論了';
 $lang->action->label->activated           = '激活了';
+$lang->action->label->blocked             = '阻塞了';
 $lang->action->label->resolved            = '解決了';
 $lang->action->label->reviewed            = '評審了';
 $lang->action->label->moved               = '移動了';
@@ -128,6 +133,7 @@ $lang->action->label->confirmed           = '確認了需求，';
 $lang->action->label->bugconfirmed        = '確認了';
 $lang->action->label->tostory             = '轉需求';
 $lang->action->label->frombug             = '轉需求';
+$lang->action->label->fromlib             = '從用例庫導入';
 $lang->action->label->totask              = '轉任務';
 $lang->action->label->svncommited         = '提交代碼';
 $lang->action->label->gitcommited         = '提交代碼';
@@ -171,10 +177,13 @@ $lang->action->label->build       = 'Build|build|view|buildID=%s';
 $lang->action->label->bug         = 'Bug|bug|view|bugID=%s';
 $lang->action->label->case        = '用例|testcase|view|caseID=%s';
 $lang->action->label->testtask    = '測試任務|testtask|view|caseID=%s';
+$lang->action->label->testsuite   = '測試套件|testsuite|view|suiteID=%s';
+$lang->action->label->caselib     = '測試庫|testsuite|libview|libID=%s';
 $lang->action->label->todo        = 'todo|todo|view|todoID=%s';
 $lang->action->label->doclib      = '文檔庫|doc|browse|libID=%s';
 $lang->action->label->doc         = '文檔|doc|view|docID=%s';
 $lang->action->label->user        = '用戶|user|view|account=%s';
+$lang->action->label->testreport  = '報告|testreport|view|report=%s';
 $lang->action->label->space       = ' ';
 
 /* Object type. */
@@ -196,6 +205,9 @@ $lang->action->search->objectTypeList['build']       = 'Build';
 $lang->action->search->objectTypeList['release']     = '發佈';
 $lang->action->search->objectTypeList['productplan'] = '計劃';
 $lang->action->search->objectTypeList['branch']      = '分支';
+$lang->action->search->objectTypeList['testsuite']   = '套件';
+$lang->action->search->objectTypeList['caselib']     = '公共庫';
+$lang->action->search->objectTypeList['testreport']  = '報告';
 
 /* 用來在動態顯示中顯示動作 */
 $lang->action->search->label['']                    = '';
@@ -213,6 +225,7 @@ $lang->action->search->label['undeleted']           = $lang->action->label->unde
 $lang->action->search->label['hidden']              = $lang->action->label->hidden;
 $lang->action->search->label['commented']           = $lang->action->label->commented;
 $lang->action->search->label['activated']           = $lang->action->label->activated;
+$lang->action->search->label['blocked']             = $lang->action->label->blocked;
 $lang->action->search->label['resolved']            = $lang->action->label->resolved;
 $lang->action->search->label['reviewed']            = $lang->action->label->reviewed;
 $lang->action->search->label['moved']               = $lang->action->label->moved;

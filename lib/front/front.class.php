@@ -97,9 +97,6 @@ class html extends baseHTML
      */
     static public function select($name = '', $options = array(), $selectedItems = "", $attrib = "", $append = false)
     {
-        global $app;
-        static $dataKeys;
-
         $options = (array)($options);
         if($append and !isset($options[$selectedItems])) $options[$selectedItems] = $selectedItems;
         if(!is_array($options) or empty($options)) return false;
@@ -113,54 +110,15 @@ class html extends baseHTML
         $string = "<select name='$name' {$id} $attrib>\n";
 
         /* The options. */
-        static $pinyin;
-        if(empty($pinyin)) $pinyin = $app->loadClass('pinyin');
-
-        $joinOptions = '';
-        $sign        = ' aNd ';
-        foreach($options as $value)
-        {
-            if(!isset($dataKeys[$value])) $joinOptions .= str_replace($sign, ' and ', $value) . $sign;
-        }
-
-        if($joinOptions)
-        {
-            $valuesPinyin = $pinyin->romanize($joinOptions);
-            $signLenth    = strlen($sign);
-            $pinyinSign   = trim($sign);
-            $pySignLenth  = strlen($pinyinSign);
-            while($joinOptions)
-            {
-                $valuePinyin = '';
-                $value       = '';
-
-                $pinyinPos = strpos($valuesPinyin, $pinyinSign);
-                if($pinyinPos !== false)
-                {
-                    $valuePinyin  = substr($valuesPinyin, 0, $pinyinPos);
-                    $valuesPinyin = substr($valuesPinyin, $pinyinPos + $pySignLenth);
-                }
-
-                $valuePos = strpos($joinOptions, $sign);
-                if($valuePos === false) break;
-                $value       = substr($joinOptions, 0, $valuePos);
-                $joinOptions = substr($joinOptions, $valuePos + $signLenth);
-
-                $valuePinyin = preg_split('/[^a-z]+/iu', trim($valuePinyin));
-                $valueAbbr   = '';
-                foreach($valuePinyin as $wordPinyin) if($wordPinyin) $valueAbbr .= $wordPinyin[0];
-
-                $dataKeys[$value] = empty($valuePinyin) ? '' : join($valuePinyin) . ' ' . $valueAbbr;
-            }
-        }
-
         if(is_array($selectedItems)) $selectedItems = implode(',', $selectedItems);
-        $selectedItems = ",$selectedItems,";
+        $selectedItems   = ",$selectedItems,";
+        $convertedPinYin = class_exists('common') ? common::convert2Pinyin($options) : array();
         foreach($options as $key => $value)
         {
+            $optionPinyin = zget($convertedPinYin, $value, '');
             $key      = str_replace('item', '', $key);
             $selected = strpos($selectedItems, ",$key,") !== false ? " selected='selected'" : '';
-            $string  .= "<option value='$key'$selected data-keys='{$dataKeys[$value]}'>$value</option>\n";
+            $string  .= "<option value='$key'$selected data-keys='{$optionPinyin}'>$value</option>\n";
         }
 
         /* End. */

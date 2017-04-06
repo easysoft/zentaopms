@@ -81,6 +81,13 @@ $whiteList[] = 'tutorial-quit';
 $whiteList[] = 'tutorial-wizard';
 $whiteList[] = 'my-buildcontactlists';
 $whiteList[] = 'mail-ztcloud';
+$whiteList[] = 'doc-diff';
+$whiteList[] = 'testreport-commonaction';
+$whiteList[] = 'testsuite-library';
+$whiteList[] = 'testsuite-createlib';
+$whiteList[] = 'testsuite-createcase';
+$whiteList[] = 'testsuite-libview';
+
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";

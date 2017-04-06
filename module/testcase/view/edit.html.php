@@ -58,10 +58,16 @@
                   <div class='input-group'>
                     <span class='input-group-addon step-item-id'></span>
                     <textarea rows='1' class='form-control autosize step-steps' name='steps[]'></textarea>
-                    <span class="input-group-addon">
-                      <label class="checkbox-inline">
-                        <input type='checkbox' name='stepType[]' value='parent' class='step-type'> <?php echo $lang->testcase->group ?>
-                      </label>
+                    <span class="input-group-addon step-type-toggle">
+                      <input type='hidden' name='stepType[]' value='item' class='step-type'>
+                      <div class='step-type-menu-box'>
+                        <div class='step-type-current'><span></span> <i class='caret'></i></div>
+                        <div class='step-type-menu'>
+                          <a href='javascript:;' href='step-type-option' data-value='step'><?php echo $lang->testcase->step ?></a>
+                          <a href='javascript:;' href='step-type-option' data-value='group'><?php echo $lang->testcase->group ?></a>
+                          <a href='javascript:;' href='step-type-option' data-value='item'><?php echo $lang->testcase->stepChild ?></a>
+                        </div>
+                      </div>
                     </span>
                   </div>
                 </td>
@@ -81,10 +87,17 @@
                   <div class='input-group'>
                     <span class='input-group-addon step-item-id'></span>
                     <?php echo html::textarea('steps[]', $step->desc, "rows='1' class='form-control autosize step-steps'") ?>
-                    <span class="input-group-addon">
-                      <label class="checkbox-inline">
-                        <input type='checkbox' name='stepType[]' value='parent' class='step-type' <?php if($step->type == 'group') echo 'checked'?>> <?php echo $lang->testcase->group ?>
-                      </label>
+                    <span class='input-group-addon step-type-toggle'>
+                      <?php if(!isset($step->type)) $step->type = 'step';?>
+                      <input type='hidden' name='stepType[]' value='<?php echo $step->type ?>' class='step-type'>
+                      <div class='step-type-menu-box'>
+                        <div class='step-type-current'><span></span> <i class='caret'></i></div>
+                        <div class='step-type-menu'>
+                          <a href='javascript:;' href='step-type-option' data-value='step'><?php echo $lang->testcase->step ?></a>
+                          <a href='javascript:;' href='step-type-option' data-value='group'><?php echo $lang->testcase->group ?></a>
+                          <a href='javascript:;' href='step-type-option' data-value='item'><?php echo $lang->testcase->stepChild ?></a>
+                        </div>
+                      </div>
                     </span>
                   </div>
                 </td>

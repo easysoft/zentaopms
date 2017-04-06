@@ -62,6 +62,7 @@
       <th class='text-right w-150px'><?php echo $this->lang->$moduleName->common;?><?php echo html::selectAll($moduleName, 'checkbox')?></th>
       <td id='<?php echo $moduleName;?>' class='pv-10px'>
         <?php $i = 1;?>
+        <?php if($moduleName == 'caselib') $moduleName = 'testsuite';?>
         <?php foreach($moduleActions as $action => $actionLabel):?>
         <?php if(!empty($version) and strpos($changelogs, ",$moduleName-$actionLabel,") === false) continue;?>
         <div class='group-item'>

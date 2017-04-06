@@ -30,7 +30,6 @@ class commonModel extends model
             $this->loadConfigFromDB();
             $this->loadCustomFromDB();
             if(!$this->checkIP()) die($this->lang->ipLimited);
-            if($this->app->getViewType() == 'mhtml') $this->setMobileMenu();
             $this->app->loadLang('company');
         }
     }
@@ -104,6 +103,7 @@ class commonModel extends model
             $user->account    = 'guest';
             $user->realname   = 'guest';
             $user->role       = 'guest';
+            $user->admin      = false;
             $user->rights     = $this->loadModel('user')->authorize('guest');
             $user->groups     = array('group');
             $this->session->set('user', $user);
@@ -306,49 +306,6 @@ class commonModel extends model
     }
 
     /**
-     * Set mobile menu.
-     * 
-     * @access public
-     * @return void
-     */
-    public function setMobileMenu()
-    {
-        $menu = new stdclass();
-
-        $role = isset($this->app->user->role) ? $this->app->user->role : '';
-
-        $this->config->locate = new stdclass();
-        $this->config->locate->module = 'my';
-        $this->config->locate->method = 'todo';
-        $this->config->locate->params = '';
-
-        $todo    = $this->lang->my->menu->todo['link'];
-        $task    = $this->lang->my->menu->task['link'];
-        $story   = $this->lang->my->menu->story['link'];
-        $bug     = $this->lang->my->menu->bug['link'];
-        $project = $this->lang->projectCommon . '|project|all|status=isdoing';
-        $product = $this->lang->productCommon . '|product|all';
-        $menu    = array('todo' => $todo, 'task' => $task, 'bug' => $bug, 'project' => $project, 'product' => $product);
-
-        if($role and strpos('dev,td,pm', $role) !== false) $menu = array('todo' => $todo, 'task' => $task, 'bug' => $bug, 'product' => $product, 'project' => $project);
-        if($role and strpos('pd,po',     $role) !== false) $menu = array('todo' => $todo, 'story' => $story, 'bug' => $bug, 'product' => $product, 'project' => $project);
-        if($role and strpos('qa,qd',     $role) !== false) $menu = array('todo' => $todo, 'bug' => $bug, 'project' => $project, 'product' => $product);
-        if($role and strpos('top',       $role) !== false) $menu = array('project' => $project, 'product' => $product, 'todo' => $todo);
-
-        if($role == 'top')
-        {
-            $this->config->locate->module = 'project';
-            $this->config->locate->method = 'all';
-            $this->config->locate->params = 'status=isdoing';
-        }
-
-        unset($this->lang->menuOrder);
-        unset($this->lang->menugroup);
-        $this->lang->menu = new stdclass();
-        $this->lang->menu = $menu;
-    }
-
-    /**
      * Create menu item link
      * 
      * @param  object   $menuItemLink
@@ -390,18 +347,10 @@ class commonModel extends model
         /* Set the main main menu. */
         $mainMenu = $moduleName;
         if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
-        if($app->getViewType() == 'mhtml')
-        {
-            if($moduleName == 'my')   $mainMenu = $methodName;
-            if($moduleName == 'todo') $mainMenu = $moduleName;
-            if($moduleName == 'story' and !isset($lang->menu->story)) $mainMenu = 'product';
-            if($moduleName == 'bug'   and !isset($lang->menu->bug))   $mainMenu = 'product';
-            if($moduleName == 'task'  and !isset($lang->menu->task))  $mainMenu = 'project';
-        }
 
         /* Print all main menus. */
-        $menu           = customModel::getMainMenu();
-        $activeName     = $app->getViewType() == 'mhtml' ? 'ui-btn-active' : 'active';
+        $menu       = customModel::getMainMenu();
+        $activeName = 'active';
 
         echo "<ul class='nav'>\n";
         foreach($menu as $menuItem)
@@ -412,7 +361,7 @@ class commonModel extends model
             echo "<li $active data-id='$menuItem->name'><a href='$link' $active>$menuItem->text</a></li>\n";
         }
         $customLink = helper::createLink('custom', 'ajaxMenu', "module={$app->getModuleName()}&method={$app->getMethodName()}", '', true);
-        if(!commonModel::isTutorialMode() and $app->viewType != 'mhtml') echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' title='$lang->customMenu' data-icon='cog' data-width='80%'><i class='icon icon-cog'></i></a></li>";
+        if(!commonModel::isTutorialMode() and $app->viewType != 'mhtml' and $app->user->account != 'guest') echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' title='$lang->customMenu' data-icon='cog' data-width='80%'><i class='icon icon-cog'></i></a></li>";
         echo "</ul>\n";
     }
 
@@ -482,14 +431,16 @@ class commonModel extends model
         $currentModule  = ($isTutorialMode and defined('WIZARD_MODULE')) ? WIZARD_MODULE : $app->getModuleName();
         $currentMethod  = ($isTutorialMode and defined('WIZARD_METHOD')) ? WIZARD_METHOD : $app->getMethodName();
         $menu           = customModel::getModuleMenu($moduleName);
+        $isMobile       = $app->viewType === 'mhtml';
 
         /* The beginning of the menu. */
-        echo "<ul class='nav'>\n";
+        echo $isMobile ? '' : "<ul class='nav'>\n";
 
         /* Cycling to print every sub menus. */
         foreach($menu as $menuItem)
         {
             if(isset($menuItem->hidden) && $menuItem->hidden) continue;
+            if($isMobile and empty($menuItem->link)) continue;
 
             /* Init the these vars. */
             if($menuItem->link)
@@ -514,14 +465,17 @@ class commonModel extends model
                     if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
                 }
                 if($float != 'right' and $module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false)) $active = 'active';
-                echo "<li class='$float $active' data-id='$menuItem->name'>" . html::a($link, $menuItem->text, $target) . "</li>\n";
+
+                $menuItemHtml = "<li class='$float $active' data-id='$menuItem->name'>" . html::a($link, $menuItem->text, $target) . "</li>\n";
+                if($isMobile) $menuItemHtml = html::a($link, $menuItem->text, $target, "class='$active'") . "\n";
+                echo $menuItemHtml;
             }
             else
             {
-                echo "<li data-id='$menuItem->name'>$menuItem->text</li>\n";
+                echo $isMobile ? $menuItem->text : "<li data-id='$menuItem->name'>$menuItem->text</li>\n";
             }
         }
-        echo "</ul>\n";
+        echo $isMobile ? '' : "</ul>\n";
     }
 
     /**
@@ -612,6 +566,7 @@ class commonModel extends model
         if(empty($module)) $module = $app->getModuleName();
         if(empty($method)) $method = $app->getMethodName();
         $className = 'header';
+        $isMobile  = $app->viewType === 'mhtml';
 
         $order = explode('_', $orderBy);
         $order[0] = trim($order[0], '`');
@@ -620,12 +575,12 @@ class commonModel extends model
             if(isset($order[1]) and $order[1] == 'asc')
             {
                 $orderBy   = "{$order[0]}_desc";
-                $className = 'headerSortDown';
+                $className = $isMobile ? 'SortDown' : 'headerSortDown';
             }
             else
             {
                 $orderBy = "{$order[0]}_asc";
-                $className = 'headerSortUp';
+                $className = $isMobile ? 'SortUp' : 'headerSortUp';
             }
         }
         else
@@ -634,7 +589,7 @@ class commonModel extends model
             $className = 'header';
         }
         $link = helper::createLink($module, $method, sprintf($vars, $orderBy));
-        echo "<div class='$className'>" . html::a($link, $label) . '</div>';
+        echo $isMobile ? html::a($link, $label, '', "class='$className'") : "<div class='$className'>" . html::a($link, $label) . '</div>';
     }
 
     /**
@@ -749,7 +704,7 @@ class commonModel extends model
         /* set the class. */
         if(!$icon)
         {
-            $icon = $lang->icons[$method] ? $lang->icons[$method] : $method;
+            $icon = isset($lang->icons[$method]) ? $lang->icons[$method] : $method;
         }
         if(strpos(',edit,copy,report,export,delete,', ",$method,") !== false) $module = 'common';
         $class = "icon-$module-$method";
@@ -762,7 +717,7 @@ class commonModel extends model
         {
             if($app->getViewType() == 'mhtml')
             {
-                return html::a($link, $title, $target, "class='$extraClass' data-role='button' data-mini='true' data-inline='true' data-theme='b'", true);
+                return "<a data-remote='$link' class='$extraClass' $misc>$title</a>";
             }
             if($type == 'button')
             {
@@ -913,18 +868,23 @@ class commonModel extends model
     /**
      * Judge Suhosin Setting whether the actual size of post data is large than the setting size.
      * 
-     * @param  int    $numberOfItems 
-     * @param  int    $columns 
+     * @param  int    $countInputVars 
+     * @static
      * @access public
-     * @return void
+     * @return bool
      */
-    public function judgeSuhosinSetting($numberOfItems, $columns)
+    public static function judgeSuhosinSetting($countInputVars)
     {
         if(extension_loaded('suhosin'))
         {
             $maxPostVars    = ini_get('suhosin.post.max_vars');
             $maxRequestVars = ini_get('suhosin.request.max_vars');
-            if($numberOfItems * $columns > $maxPostVars or $numberOfItems * $columns > $maxRequestVars) return true;
+            if($countInputVars > $maxPostVars or $countInputVars > $maxRequestVars) return true;
+        }
+        else
+        {
+            $maxInputVars = ini_get('max_input_vars');
+            if($maxInputVars and $countInputVars > (int)$maxInputVars) return true;
         }
 
         return false;
@@ -1177,8 +1137,7 @@ class commonModel extends model
         global $app, $lang;
 
         /* Check is the super admin or not. */
-        $account = ',' . $app->user->account . ',';
-        if(strpos($app->company->admins, $account) !== false) return true; 
+        if($app->user->admin) return true; 
 
         /* If not super admin, check the rights. */
         $rights  = $app->user->rights['rights'];
@@ -1306,6 +1265,49 @@ class commonModel extends model
     public static function isTutorialMode()
     {
         return (isset($_SESSION['tutorialMode']) and $_SESSION['tutorialMode']);
+    }
+
+    /**
+     * Convert items to Pinyin.
+     * 
+     * @param  array    $items 
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function convert2Pinyin($items)
+    {
+        global $app;
+        static $allConverted = array();
+        static $pinyin;
+        if(empty($pinyin)) $pinyin = $app->loadClass('pinyin');
+
+        $sign = ' aNdAnD ';
+        $notConvertedItems = array_diff($items, array_keys($allConverted));
+
+        if($notConvertedItems)
+        {
+            $convertedPinYin = $pinyin->romanize(join($sign, $notConvertedItems));
+            $itemsPinYin     = explode(trim($sign), $convertedPinYin);
+            foreach($notConvertedItems as $item)
+            {
+                $itemPinYin  = array_shift($itemsPinYin);
+                $wordsPinYin = explode("\t", trim($itemPinYin));
+
+                $abbr = '';
+                foreach($wordsPinYin as $i => $wordPinyin)
+                {
+                    if($wordPinyin) $abbr .= $wordPinyin[0];
+                }
+
+                $allConverted[$item] = strtolower(join($wordsPinYin) . ' ' . $abbr);
+            }
+        }
+
+        $convertedItems = array();
+        foreach($items as $item) $convertedItems[$item] = zget($allConverted, $item, null);
+
+        return $convertedItems;
     }
 }
 

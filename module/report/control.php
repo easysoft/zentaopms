@@ -128,7 +128,7 @@ class report extends control
         $this->app->loadConfig('project');
         $begin = $begin ? strtotime($begin) : time();
         $end   = $end   ? strtotime($end)   : time() + (7 * 24 * 3600);
-        $end  += 24 * 2600;
+        $end  += 24 * 3600;
         $beginWeekDay = date('w', $begin);
         $begin = date('Y-m-d', $begin);
         $end   = date('Y-m-d', $end);

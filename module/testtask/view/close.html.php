@@ -24,10 +24,6 @@
   <form class='form-condensed' method='post' target='hiddenwin'>
     <table class='table table-form'>
       <tr>
-        <th><?php echo $lang->testtask->report;?></th>
-        <td><?php echo html::textarea('report', '', "rows='6' class='form-control'");?></td>
-      </tr>
-      <tr>
         <th><?php echo $lang->comment;?></th>
         <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
       </tr>

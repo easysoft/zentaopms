@@ -1,0 +1,4 @@
+.main{padding:0px !important;}
+.main .nav-tabs{padding-left:20px; padding-top:10px;}
+.main .tab-content{border:0px;}
+.tab-content #builds tr:last-child td, .tab-content #cases tr:last-child td,.tab-content #bugs tr:last-child td,.tab-content #legacyBugs tr:last-child td{border-bottom:0px;}

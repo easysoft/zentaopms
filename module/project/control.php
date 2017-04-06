@@ -583,10 +583,9 @@ class project extends control
         $position[] = $this->lang->project->story;
 
         /* Count T B C */
-        $storyIdList = array();
-        foreach($stories as $story) $storyIdList[$story->id] = $story->id;
-        $storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
-        $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
+        $storyIdList = array_keys($stories);;
+        $storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList,$projectID);
+        $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList,$projectID);
         $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
         /* Assign. */
@@ -1880,44 +1879,14 @@ class project extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->extra     = $extra;
-        $this->view->projects  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in(array_keys($this->projects))->orderBy('order desc')->fetchAll();
-        $this->display();
-    }
 
-    /**
-     * The results page of search.
-     *
-     * @param  string  $keywords
-     * @param  string  $module
-     * @param  string  $method
-     * @param  mix     $extra
-     * @access public
-     * @return void
-     */
-    public function ajaxGetMatchedItems($keywords, $module, $method, $extra)
-    {
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(0)->orderBy('order desc')->fetchAll();
-        $toPinyin = $this->project->toPinyin($projects);
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in(array_keys($this->projects))->orderBy('order desc')->fetchAll();
+        $projectPairs = array();
+        foreach($projects as $project) $projectPairs[$project->id] = $project->name;
+        $projectsPinyin = common::convert2Pinyin($projectPairs);
+        foreach($projects as $key => $project) $project->key = $projectsPinyin[$project->name];
 
-        foreach($toPinyin as $key => $value) {
-            if(!strstr($value ,$keywords) && !strstr($key,$keywords)) {
-                unset($toPinyin[$key]);
-            }   
-        }   
-
-        foreach($projects as $key => $project)
-        {
-            if(!isset($toPinyin[$project->name])) {
-                unset($projects[$key]);
-                continue;
-            }
-
-            if(!$this->project->checkPriv($project)) unset($projects[$key]);
-        }
-
-        $this->view->link     = $this->project->getProjectLink($module, $method, $extra);
         $this->view->projects = $projects;
-        $this->view->keywords = $keywords;
         $this->display();
     }
 
