@@ -28,6 +28,7 @@
       <tbody>
       <?php foreach($allBugs as $bug):?>
       <?php if(strpos(",{$build->bugs},", ",$bug->id,") !== false) continue;?>
+      <?php if($build->product != $bug->product) continue; ?>
       <tr>
         <td class='cell-id'>
           <input type='checkbox' name='bugs[<?php echo $bug->id?>]'  value='<?php echo $bug->id;?>' <?php if($bug->status == 'resolved' or $bug->status == 'closed') echo "checked";?> /> 
