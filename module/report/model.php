@@ -188,14 +188,17 @@ class reportModel extends model
         foreach($unplannedStories as $story)
         {
             $product = $story->product;
-            if(!isset($products[$product]->plans[0]))
+            if(isset($products[$product]))
             {
-                $products[$product]->plans[0] = new stdClass();
-                $products[$product]->plans[0]->title = $this->lang->report->unplanned;
-                $products[$product]->plans[0]->begin = '';
-                $products[$product]->plans[0]->end   = '';
+                if(!isset($products[$product]->plans[0]))
+                {
+                    $products[$product]->plans[0] = new stdClass();
+                    $products[$product]->plans[0]->title = $this->lang->report->unplanned;
+                    $products[$product]->plans[0]->begin = '';
+                    $products[$product]->plans[0]->end   = '';
+                }
+                $products[$product]->plans[0]->status[$story->status] = isset($products[$product]->plans[0]->status[$story->status]) ? $products[$product]->plans[0]->status[$story->status] + 1 : 1;
             }
-            $products[$product]->plans[0]->status[$story->status] = isset($products[$product]->plans[0]->status[$story->status]) ? $products[$product]->plans[0]->status[$story->status] + 1 : 1;
         }
 
         unset($products['']);

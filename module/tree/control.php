@@ -337,6 +337,13 @@ class tree extends control
             }
             die($output);
         }
+        if($returnType == 'mhtml')
+        {
+            $changeFunc = '';
+            if($viewType == 'task' or $viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
+            $output = html::select("module", $optionMenu, '', "class='input' $changeFunc");
+            die($output);
+        }
         if($returnType == 'json') die(json_encode($optionMenu));
     }
 

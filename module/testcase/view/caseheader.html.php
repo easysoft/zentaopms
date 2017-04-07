@@ -49,6 +49,7 @@
 
             echo '<li' . ($suiteID == (int)$currentSuiteID ? " class='active'" : '') . '>';
             echo html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=$suiteID"), $suiteName);
+            echo "</li>";
         }
 
         echo '</ul></li>';
@@ -68,6 +69,7 @@
             if($key == '') continue;
             echo '<li' . ($key == $groupBy ? " class='active'" : '') . '>';
             echo html::a($this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=$key"), $value);
+            echo "</li>";
         }
 
         echo '</ul></li>';

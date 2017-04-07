@@ -263,6 +263,9 @@ class testtask extends control
         $this->config->testcase->search['module']                      = 'testtask';
         $this->config->testcase->search['params']['product']['values'] = array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
+
+        $this->config->testcase->search['fields']['assignedTo'] = $this->lang->testtask->assignedTo;
+        $this->config->testcase->search['params']['assignedTo'] = array('operator' => '=', 'control' => 'select', 'values' => 'users');
         $this->config->testcase->search['actionURL'] = inlink('cases', "taskID=$taskID&browseType=bySearch&queryID=myQueryID");
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         unset($this->config->testcase->search['fields']['branch']);

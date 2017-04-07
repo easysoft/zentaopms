@@ -35,7 +35,7 @@ class qa extends control
         if($homepage == 'browse' and $locate == 'auto') $locate = 'yes';
         if($locate == 'yes') $this->locate($this->createLink('bug', 'browse'));
 
-        unset($this->lang->qa->menu->index);
+        if($this->app->viewType != 'mhtml') unset($this->lang->qa->menu->index);
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = (int)$this->cookie->preBranch;
         $this->qa->setMenu($this->products, $productID, $branch);
