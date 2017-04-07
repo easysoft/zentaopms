@@ -91,7 +91,7 @@ js::set('browseType', $browseType);
                 }
                 else
                 {
-                    echo '<li>' . html::a('javascript:;', $lang->task->moduleAB, '', $class) . '</li>';
+                    echo '<li>' . html::a('javascript:;', $lang->task->moduleAB, '', $misc) . '</li>';
                 }
 
                 /* Batch assign. */

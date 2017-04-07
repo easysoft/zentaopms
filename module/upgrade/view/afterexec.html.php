@@ -60,16 +60,19 @@ function updateFile(link)
     {
         if(response.result == 'finished')
         {
-			$('#resultBox li span.' + response.type + '-num').html(num + response.count);
-			updateFileFinish = true;
+            $('#resultBox li span.' + response.type + '-num').html(num + response.count);
+            updateFileFinish = true;
             $('#resultBox').append("<li class='text-success'>" + response.message + "</li>");
-			<?php
-			$condition = array();
-			foreach($needProcess as $processKey => $value) $condition[] = $processKey . 'Finish == true';
-			$condition = join(' && ', $condition);
-			?>
-			if(<?php echo $condition?>) $.get('<?php echo inlink('afterExec', "fromVersion=$fromVersion&processed=yes")?>');
-            $('a#tohome').closest('.alert').show();
+            <?php
+            $condition = array();
+            foreach($needProcess as $processKey => $value) $condition[] = $processKey . 'Finish == true';
+            $condition = join(' && ', $condition);
+            ?>
+            if(<?php echo $condition?>)
+            {
+                $.get('<?php echo inlink('afterExec', "fromVersion=$fromVersion&processed=yes")?>');
+                $('a#tohome').closest('.alert').show();
+            }
         }
         else
         {

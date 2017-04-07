@@ -134,7 +134,7 @@ class testreport extends control
             else
             {
                 $build   = $this->build->getById($task->build);
-                $stories = $this->story->getByList($build->stories);
+                $stories = empty($build->stories) ? array() : $this->story->getByList($build->stories);
 
                 $builds[$build->id] = $build;
                 $bugs = $this->testreport->getBugs4Test($builds, $productID, $begin, $end);
@@ -266,7 +266,7 @@ class testreport extends control
             else
             {
                 $build   = $this->build->getById($task->build);
-                $stories = $this->story->getByList($build->stories);
+                $stories = empty($build->stories) ? array() : $this->story->getByList($build->stories);
 
                 $builds[$build->id] = $build;
                 $bugs = $this->testreport->getBugs4Test($builds, $report->product, $report->begin, $report->end);

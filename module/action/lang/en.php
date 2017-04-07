@@ -144,6 +144,7 @@ $lang->action->label->changestatus        = 'Change Status';
 $lang->action->label->marked              = 'Marked';
 $lang->action->label->linked2project      = "Link {$lang->projectCommon}";
 $lang->action->label->unlinkedfromproject = "Unlink {$lang->projectCommon}";
+$lang->action->label->unlinkedfrombuild   = "Unlink Build";
 $lang->action->label->linked2release      = "Link Release";
 $lang->action->label->unlinkedfromrelease = "Unlink Release";
 $lang->action->label->linkrelatedbug      = "Link to Bug";
