@@ -1113,6 +1113,10 @@ class story extends control
         {
             die(json_encode($stories));
         }
+        elseif($this->app->getViewType() == 'mhtml')
+        {
+            die(html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, 'onchange=setStoryRelated()'));
+        }
         else
         {
             $storyName = $number === '' ? 'story' : "story[$number]";
