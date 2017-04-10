@@ -24,8 +24,11 @@ $lang->todo->import2Today = "導入到今天";
 $lang->todo->import       = "導入";
 $lang->todo->legendBasic  = "基本信息";
 
+$lang->todo->id          = '編號';
 $lang->todo->account     = '所有者';
 $lang->todo->date        = '日期';
+$lang->todo->begin       = '開始';
+$lang->todo->end         = '結束';
 $lang->todo->beginAB     = '開始';
 $lang->todo->endAB       = '結束';
 $lang->todo->beginAndEnd = '起止時間';
