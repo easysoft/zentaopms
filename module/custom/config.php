@@ -12,4 +12,5 @@ $config->custom->canAdd['block']    = '';
 $config->custom->moblieHidden['main']    = array('repo');
 $config->custom->moblieHidden['product'] = array('branch', 'module', 'create');
 $config->custom->moblieHidden['project'] = array('create', 'effort', 'product');
-$config->custom->moblieHidden['my']      = array('effort', 'changePassword', 'manageContacts');
+$config->custom->moblieHidden['my']      = array('effort', 'changePassword', 'manageContacts', 'profile');
+$config->custom->moblieHidden['company'] = array('dept', 'todo', 'effort', 'browseGroup', 'addGroup', 'batchAddUser', 'addUser');
