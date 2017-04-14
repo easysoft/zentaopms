@@ -39,8 +39,7 @@
     <td colspan='11' class='text-left'><?php if($groupByList) echo $groupByList[$groupKey];?></td>
   </tr>
   <?php foreach($groupTasks as $case):?>
-  <?php $caseLink = $this->createLink('case','view',"caseID=$case->id"); ?>
-  <tr id='<?php echo $case->id;?>' class='a-center child-of-node-<?php echo $groupKey;?>'>
+  <tr id='<?php echo $case->id;?>' class='text-center child-of-node-<?php echo $groupKey;?>'>
     <td class='<?php echo $groupClass;?>'></td>
     <td class='text-left'>&nbsp;<?php echo $case->id . $lang->colon; if(!common::printLink('testcase', 'view', "case=$case->id", $case->title)) echo $case->title;?></td>
     <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>

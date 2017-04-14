@@ -52,7 +52,7 @@ class project extends control
         if($homepage == 'browse' and $locate == 'auto') $locate = 'yes';
         if($locate == 'yes') $this->locate($this->createLink('project', 'task'));
 
-        unset($this->lang->project->menu->index);
+        if($this->app->viewType != 'mhtml') unset($this->lang->project->menu->index);
         $this->commonAction($projectID);
         //$this->project->setMenu($this->projects, key($this->projects));
 

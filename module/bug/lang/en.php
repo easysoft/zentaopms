@@ -134,6 +134,7 @@ $lang->bug->legendSteps                 = 'Repro Steps';
 $lang->bug->legendComment               = 'Note';
 $lang->bug->legendLife                  = 'Lifecycle';
 $lang->bug->legendMisc                  = 'Misc';
+$lang->bug->legendRelated               = 'Related Info';
 
 /* 功能按钮。*/
 $lang->bug->buttonConfirm        = 'Confirm';
