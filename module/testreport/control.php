@@ -129,7 +129,11 @@ class testreport extends control
             if($task->build == 'trunk')
             {
                 $stories = $this->story->getProjectStories($project->id);
-                $bugs    = $this->testreport->getBugs4Test('trunk', $productID, $begin, $end);
+                $bugs    = $this->testreport->getBugs4Test('trunk', $productID, $project->begin, date('Y-m-d', strtotime($task->begin) - 24 * 3600));
+                foreach($stories as $id => $story)
+                {
+                    if($story->product != $task->product) unset($stories[$id]);
+                }
             }
             else
             {
@@ -257,11 +261,16 @@ class testreport extends control
             $productIdList[$report->product] = $report->product;
 
             $task    = $this->testtask->getById($report->objectID);
+            $project = $this->project->getById($task->project);
             $builds  = array();
             if($task->build == 'trunk')
             {
                 $stories = $this->story->getProjectStories($project->id);
-                $bugs    = $this->testreport->getBugs4Test('trunk', $report->product, $report->begin, $report->end);
+                $bugs    = $this->testreport->getBugs4Test('trunk', $report->product, $project->begin, date('Y-m-d', strtotime($task->begin) - 24 * 3600));
+                foreach($stories as $id => $story)
+                {
+                    if($story->product != $task->product) unset($stories[$id]);
+                }
             }
             else
             {
