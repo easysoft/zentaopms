@@ -46,5 +46,8 @@
   </div>
 <?php endif;?>
 </div>
-<?php include '../../common/view/footer.lite.html.php';?>
-
+<script laguage='Javascript'>
+<?php if(isset($pageJS)) echo $pageJS;?>
+</script>
+</body>
+</html>
