@@ -1025,8 +1025,11 @@ class projectModel extends model
         if($type == 'projectStory')
         {
             $this->config->product->search['module'] = 'projectStory';
-            unset($this->config->product->search['fields']['stage']);
-            unset($this->config->product->search['params']['stage']);
+            if($productType != 'normal')
+            {
+                unset($this->config->product->search['fields']['stage']);
+                unset($this->config->product->search['params']['stage']);
+            }
         }
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
