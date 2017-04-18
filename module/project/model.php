@@ -1022,15 +1022,7 @@ class projectModel extends model
         }
 
         /* Build search form. */
-        if($type == 'projectStory')
-        {
-            $this->config->product->search['module'] = 'projectStory';
-            if($productType != 'normal')
-            {
-                unset($this->config->product->search['fields']['stage']);
-                unset($this->config->product->search['params']['stage']);
-            }
-        }
+        if($type == 'projectStory') $this->config->product->search['module'] = 'projectStory';
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
@@ -1046,6 +1038,8 @@ class projectModel extends model
         {
             $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productType]);
             $this->config->product->search['params']['branch']['values'] = array('' => '') + $branchPairs;
+            unset($this->config->product->search['fields']['stage']);
+            unset($this->config->product->search['params']['stage']);
         }
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
 
