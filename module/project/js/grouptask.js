@@ -5,32 +5,28 @@ $(function()
     {
         $('.expandAll').addClass('hidden');
         $('.collapseAll').removeClass('hidden');
-        $('table#groupTable').find('tbody').each(function()
-        {
-            $(this).find('tr').addClass('hidden');
-            $(this).find('tr.group-collapse').removeClass('hidden');
-        })
+        $('table#groupTable').find('tbody').find('tr').addClass('hidden');
+        $('table#groupTable').find('tbody').find('tr.group-collapse').removeClass('hidden');
     });
     $(document).on('click', '.collapseAll', function()
     {
         $('.collapseAll').addClass('hidden');
         $('.expandAll').removeClass('hidden');
-        $('table#groupTable').find('tbody').each(function()
-        {
-            $(this).find('tr').removeClass('hidden');
-            $(this).find('tr.group-collapse').addClass('hidden');
-        })
+        $('table#groupTable').find('tbody').find('tr').removeClass('hidden');
+        $('table#groupTable').find('tbody').find('tr.group-collapse').addClass('hidden');
     });
     $('.expandGroup').closest('.groupby').click(function()
     {
         $tbody = $(this).closest('tbody');
-        $tbody.find('tr').addClass('hidden');
-        $tbody.find('tr.group-collapse').removeClass('hidden');
+        dataID = $(this).closest('tr').data('id');
+        $tbody.find("tr[data-id='" + dataID + "']").addClass('hidden');
+        $tbody.find("tr.group-collapse[data-id='" + dataID + "']").removeClass('hidden');
     });
-    $('.collapseGroup').click(function()
+    $('.collapseGroup').closest('td').click(function()
     {
         $tbody = $(this).closest('tbody');
-        $tbody.find('tr').removeClass('hidden');
-        $tbody.find('tr.group-collapse').addClass('hidden');
+        dataID = $(this).closest('tr').data('id');
+        $tbody.find("tr[data-id='" + dataID + "']").removeClass('hidden');
+        $tbody.find("tr.group-collapse[data-id='" + dataID + "']").addClass('hidden');
     });
 })

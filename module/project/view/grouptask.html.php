@@ -25,7 +25,7 @@
 <table class='table active-disabled table-condensed table-fixed' id='groupTable'>
   <thead>
     <tr>
-      <th class='w-200px text-left'>
+      <th class='text-left' style='width:210px'>
         <?php echo html::a('###', "<i class='icon-caret-down'></i> " . $lang->task->$groupBy, '', "class='expandAll' data-action='expand'")?>
         <?php echo html::a('###', "<i class='icon-caret-right'></i> " . $lang->task->$groupBy, '', "class='collapseAll hidden' data-action='collapse'")?>
       </th>
@@ -44,10 +44,12 @@
       <th class='w-60px'><?php echo $lang->actions;?></th>
     </tr>
   </thead>
+  <tbody>
   <?php
   if($groupBy == 'finishedBy') unset($tasks['']);
   if($groupBy == 'closedBy') unset($tasks['']);
   ?>
+  <?php $groupIndex = 0;?>
   <?php foreach($tasks as $groupKey => $groupTasks):?>
   <?php $i = 0;?>
   <?php
@@ -63,7 +65,6 @@
     if($groupBy == 'story') $groupName = empty($groupName) ? $this->lang->task->noStory : zget($groupByList, $groupKey);
     if($groupBy == 'assignedTo' and $groupName == '') $groupName = $this->lang->task->noAssigned;
   ?>
-  <tbody>
   <?php
   $groupSum = count($groupTasks);
   foreach($groupTasks as $task)
@@ -89,9 +90,9 @@
   ?>
   <?php $assignedToClass = $task->assignedTo == $app->user->account ? "style='color:red'" : '';?>
   <?php $taskLink        = $this->createLink('task','view',"taskID=$task->id"); ?>
-    <tr class='text-center'>
+    <tr class='text-center' data-id='<?php echo $groupIndex?>'>
       <?php if($i == 0):?>
-      <td rowspan='<?php echo count($groupTasks) + 1?>' class='groupby text-left'>
+      <td rowspan='<?php echo count($groupTasks)?>' class='groupby text-left'>
         <?php echo html::a('###', "<i class='icon-caret-down'></i> " . $groupName, '', "class='expandGroup' data-action='expand' title='$groupName'");?>
         <div class='groupSummary text' style='white-space:normal'>
         <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHours, $users[$task->assignedTo], $members[$task->assignedTo]->totalHours);?>
@@ -102,8 +103,8 @@
       <td><?php echo $task->id;?></td>
       <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
       <td class='text-left'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
-      <td class=<?php echo $task->status;?> ><?php echo $lang->task->statusList[$task->status];?></td>
-      <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
+      <td class='task-<?php echo $task->status;?>'><?php echo $lang->task->statusList[$task->status];?></td>
+      <td class='<?php if(isset($task->delay)) echo 'delayed';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
       <td <?php echo $assignedToClass;?>><?php echo $task->assignedToRealName;?></td>
       <td><?php echo $users[$task->finishedBy];?></td>
       <td><?php echo $task->estimate;?></td>
@@ -119,7 +120,7 @@
     <?php $i++;?>
     <?php endforeach;?>
     <?php if($i != 0):?>
-    <tr class='actie-disabled group-collapse hidden text-center group-title'>
+    <tr class='actie-disabled group-collapse hidden text-center group-title' data-id='<?php echo $groupIndex?>'>
       <td class='text-left'>
         <?php echo html::a('###', "<i class='icon-caret-right'></i> " . $groupName, '', "class='collapseGroup' data-action='collapse' title='$groupName'");?>
       </td>
@@ -133,8 +134,9 @@
       </td>
     </tr>
     <?php endif;?>
-  </tbody>
+    <?php $groupIndex ++;?>
   <?php endforeach;?>
+  </tbody>
 </table>
 <script language='Javascript'>$('#<?php echo $browseType;?>Tab').addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>

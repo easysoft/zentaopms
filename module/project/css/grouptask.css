@@ -4,6 +4,7 @@ tr.groupdivider td {background: #fff!important;}
 .groupdivider  .text {color: #808080}
 .groupdivider  .text strong {color: #333}
 .groupby{border-right:1px solid #ddd;cursor: pointer;}
+.group-collapse{cursor: pointer;}
 #groupTable tr > th:first-child, #groupTable tr > td:first-child{padding:6px 5px;} 
 
 .sub-featurebar {margin: -20px -20px -1px; padding: 5px 20px 0; border-bottom: none}
