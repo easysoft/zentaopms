@@ -575,12 +575,12 @@ class commonModel extends model
             if(isset($order[1]) and $order[1] == 'asc')
             {
                 $orderBy   = "{$order[0]}_desc";
-                $className = $isMobile ? 'SortDown' : 'headerSortDown';
+                $className = $isMobile ? 'SortUp' : 'headerSortDown';
             }
             else
             {
                 $orderBy = "{$order[0]}_asc";
-                $className = $isMobile ? 'SortUp' : 'headerSortUp';
+                $className = $isMobile ? 'SortDown' : 'headerSortUp';
             }
         }
         else
