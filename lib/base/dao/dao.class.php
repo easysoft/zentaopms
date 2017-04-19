@@ -1311,7 +1311,7 @@ class baseDAO
         if(strpos($this->repairCode, "|$errorCode|") !== false or ($errorCode == '1016' and strpos($errorMsg, 'errno: 145') !== false) or strpos($message, 'repair') !== false)
         {
             global $config;
-            if(isset($config->framework->autoRepairTable) and $config->framework->autoRepairTable) die(js::locate(helper::createLink('misc', 'checkTable'), 'top'));
+            if(isset($config->framework->autoRepairTable) and $config->framework->autoRepairTable) die(js::locate($config->webRoot . 'checktable.php', 'top'));
             $message .=  ' ' . $this->lang->repairTable;
         }
         $sql = $this->sqlobj->get();
