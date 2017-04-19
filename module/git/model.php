@@ -282,11 +282,11 @@ class gitModel extends model
         chdir($this->repoRoot);
         if($fromRevision)
         {
-            $cmd = "$this->client log --stat $fromRevision..HEAD --pretty=format:%an*_*%cd*_*%H*_*%s";
+            $cmd = "$this->client log --stat=1024 $fromRevision..HEAD --pretty=format:%an*_*%cd*_*%H*_*%s";
         }
         else
         {
-            $cmd = "$this->client log  --stat --pretty=format:%an*_*%cd*_*%H*_*%s";
+            $cmd = "$this->client log  --stat=1024 --pretty=format:%an*_*%cd*_*%H*_*%s";
         }
         exec($cmd, $list, $return);
 
