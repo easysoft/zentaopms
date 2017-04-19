@@ -134,6 +134,7 @@ $lang->bug->legendSteps                 = '重現步驟';
 $lang->bug->legendComment               = '備註';
 $lang->bug->legendLife                  = 'BUG的一生';
 $lang->bug->legendMisc                  = '其他相關';
+$lang->bug->legendRelated               = '其他信息';
 
 /* 功能按鈕。*/
 $lang->bug->buttonConfirm        = '確認';

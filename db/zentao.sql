@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `zt_block` (
   `params` text NOT NULL,
   `order` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `grid` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `height` smallint(5) unsigned NOT NULL DEFAULT '0',
   `hidden` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `accountModuleOrder` (`account`,`module`,`order`),

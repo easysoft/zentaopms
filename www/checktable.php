@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL);
+error_reporting(0);
 
 include '../framework/helper.class.php';
 include '../config/config.php';
@@ -69,7 +69,14 @@ else
 <div class='container mw-700px'>
 <?php if($status == 'createFile'):?>
   <div class='panel-body'>
-    <?php printf($lang->user->noticeResetFile, $_SESSION['checkFileName']);?>
+    <?php
+    $checkFileName = $_SESSION['checkFileName'];
+    if(!($_SERVER['SERVER_ADDR'] == '127.0.0.1' or filter_var($_SERVER['SERVER_ADDR'], FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) === false))
+    {
+        $checkFileName = str_replace(dirname(dirname(__FILE__)) . DS, '', $checkFileName);
+    }
+    printf($lang->user->noticeResetFile, $checkFileName);
+    ?>
   </div>
   <p><a href='<?php echo $config->webRoot . 'checktable.php';?>' class='btn'><i class='icon-refresh'></i></a></p>
 <?php elseif($status == 'check'):?>
