@@ -28,7 +28,7 @@ $useGuest = $this->app->user->account == 'guest';
     <?php foreach($blocks as $index => $block):?>
     <?php if(isset($config->block->closed) and strpos(",{$config->block->closed},", ",{$block->source}|{$block->block},") !== false) continue;?>
     <div class='col-sm-6 col-md-<?php echo $block->grid;?>'>
-      <div class='panel panel-block <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>' data-url='<?php echo $block->blockLink?>'>
+      <div class='panel panel-block <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>' data-url='<?php echo $block->blockLink?>' <?php if($block->height) echo "data-height='$block->height'";?>>
         <div class='panel-heading'>
           <div class='panel-actions'>
             <?php if(!empty($block->moreLink)):?>

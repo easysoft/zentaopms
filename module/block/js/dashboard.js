@@ -62,7 +62,8 @@ function checkEmpty()
 function resizeBlock(event)
 {
     var blockID = event.element.find('.panel').data('id');
-    $.getJSON(createLink('block', 'resize', 'id=' + blockID + '&grid=' + event.grid), function(data)
+    var data = event.type == 'vertical' ? event.height : event.grid;
+    $.getJSON(createLink('block', 'resize', 'id=' + blockID + '&type=' + event.type + '&data=' + data), function(data)
     {
         if(data.result !== 'success') event.revert();
     });

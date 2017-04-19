@@ -162,12 +162,17 @@ class block extends control
      * @access public
      * @return void
      */
-    public function resize($id, $grid = 4)
+    public function resize($id, $type, $data)
     {
         $block = $this->block->getByID($id);
         if($block)
         {
-            $block->grid = $grid;
+            $field = '';
+            if($type == 'vertical') $field = 'height';
+            if($type == 'horizontal') $field = 'grid';
+            if(empty($field)) $this->send(array('result' => 'fail', 'code' => 400));
+
+            $block->$field = $data;
             $block->params = helper::jsonEncode($block->params);
             $this->dao->replace(TABLE_BLOCK)->data($block)->exec();
             if(dao::isError()) $this->send(array('result' => 'fail', 'code' => 500));
