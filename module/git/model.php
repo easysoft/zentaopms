@@ -280,13 +280,14 @@ class gitModel extends model
 
         /* The git log command. */
         chdir($this->repoRoot);
+        exec("{$this->client} config core.quotepath false");
         if($fromRevision)
         {
-            $cmd = "$this->client log --stat $fromRevision..HEAD --pretty=format:%an*_*%cd*_*%H*_*%s";
+            $cmd = "$this->client log --stat=1024 $fromRevision..HEAD --pretty=format:%an*_*%cd*_*%H*_*%s";
         }
         else
         {
-            $cmd = "$this->client log  --stat --pretty=format:%an*_*%cd*_*%H*_*%s";
+            $cmd = "$this->client log --stat=1024 --pretty=format:%an*_*%cd*_*%H*_*%s";
         }
         exec($cmd, $list, $return);
 
@@ -421,13 +422,10 @@ class gitModel extends model
         if(empty($this->client)) return false;
         putenv('LC_CTYPE=en_US.UTF-8');
 
-        $path = str_replace('%2F', '/', urlencode($path));
-        $path = str_replace('%3A', ':', $path);
-        $path = str_replace('%5C', '\\', $path);
-
         chdir($repo->path);
-        $subPath = substr($path, strlen($repo->path) + 1);
-        $subPath = ltrim($subPath, '/');
+        exec("{$this->client} config core.quotepath false");
+        $subPath = substr($path, strlen($repo->path));
+        if($subPath{0} == '/' or $subPath{0} == '\\') $subPath = substr($subPath, 1);
         exec("$this->client rev-list -n 2 $revision -- $subPath", $lists);
         if(count($lists) == 2) list($nowRevision, $preRevision) = $lists;
         $cmd = "$this->client diff $preRevision $nowRevision -- $subPath";
@@ -453,13 +451,10 @@ class gitModel extends model
 
         putenv('LC_CTYPE=en_US.UTF-8');
 
-        $path = str_replace('%2F', '/', urlencode($path));
-        $path = str_replace('%3A', ':', $path);
-        $path = str_replace('%5C', '\\', $path);
-
-        $subPath = substr($path, strlen($repo->path) + 1);
-        $subPath = ltrim($subPath, '/');
+        $subPath = substr($path, strlen($repo->path));
+        if($subPath{0} == '/' or $subPath{0} == '\\') $subPath = substr($subPath, 1);
         chdir($repo->path);
+        exec("{$this->client} config core.quotepath false");
         $cmd  = "$this->client show $revision:$subPath";
         $code = `$cmd`;
         return $code;
