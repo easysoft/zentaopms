@@ -190,8 +190,8 @@ class userModel extends model
     public function getByQuery($query, $pager = null, $orderBy = 'id')
     {
         return $this->dao->select('*')->from(TABLE_USER)
-            ->where($query)
-            ->andWhere('deleted')->eq(0)
+            ->where('deleted')->eq(0)
+            ->beginIF($query)->andWhere($query)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
