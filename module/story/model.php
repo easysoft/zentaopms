@@ -1012,7 +1012,6 @@ class storyModel extends model
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->add('assignedDate', $now)
-            ->add('status', 'active') 
             ->add('closedBy', '')
             ->add('closedReason', '')
             ->add('closedDate', '0000-00-00')

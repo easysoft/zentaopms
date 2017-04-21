@@ -25,6 +25,16 @@
       <td class='w-p45'><?php echo html::select('assignedTo', $users, $story->closedBy, 'class="form-control chosen"');?></td><td></td>
     </tr>
     <tr>
+      <th><?php echo $lang->story->status;?></th>
+      <td>
+        <?php
+        unset($lang->story->statusList['']);
+        unset($lang->story->statusList['closed']);
+        echo html::select('status', $lang->story->statusList, 'active', 'class="form-control chosen"');
+        ?>
+      </td>
+    </tr>
+    <tr>
       <th><?php echo $lang->story->comment;?></th>
       <td colspan='2'><?php echo html::textarea('comment', '', 'rows=5 class="area-1"');?></td>
     </tr>
