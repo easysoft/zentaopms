@@ -100,7 +100,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
       <tr>
         <th><?php echo $lang->bug->type;?></th>
         <td>
-          <div class='clearfix' id='bugTypeInputGroup'>
+          <div class='input-group' id='bugTypeInputGroup'>
             <?php
             /* Remove the unused types. */
             unset($lang->bug->typeList['designchange']);

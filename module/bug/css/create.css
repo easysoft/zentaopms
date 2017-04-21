@@ -37,7 +37,3 @@
 .colorpicker.input-group-btn > .btn {border-right: none}
 
 #branch {border-left-width: 0px;}
-
-#bugTypeInputGroup {max-height: 30px; overflow: hidden}
-#bugTypeInputGroup .form-control, #bugTypeInputGroup .input-group-addon {float: left; width: auto;}
-#bugTypeInputGroup .input-group-addon {padding: 5px 10px; line-height: 18px;}
