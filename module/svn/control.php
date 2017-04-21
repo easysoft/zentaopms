@@ -129,6 +129,7 @@ class svn extends control
         }
 
         $objects = $this->svn->parseComment($message);
+        file_put_contents('/tmp/log.txt', json_encode($objects));
         if($objects)
         {
             $log = new stdclass();
