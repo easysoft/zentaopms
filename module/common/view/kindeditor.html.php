@@ -126,7 +126,7 @@ function initKindeditor(afterInit)
                         }
                     });
                 }
-                /* Paste in firfox and other firfox.*/
+                /* Paste in firefox and other firefox.*/
                 else
                 {
                     K(doc.body).bind('paste', function(ev)
