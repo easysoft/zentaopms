@@ -67,6 +67,7 @@ $config->charsets['zh-cn']['gbk']   = 'GBK';
 $config->charsets['zh-tw']['utf-8'] = 'UTF-8';
 $config->charsets['zh-tw']['big5']  = 'BIG5';
 $config->charsets['en']['utf-8']    = 'UTF-8';
+$config->charsets['en']['GBK']      = 'GBK';
 
 /* Default settings. */
 $config->default = new stdclass();
