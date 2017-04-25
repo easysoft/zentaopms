@@ -17,7 +17,7 @@
     <tr>
       <td><?php echo $story->id . html::hidden('stories[]', $story->id)?></td>
       <td><span class='pri<?php echo $story->pri?>'><?php echo zget($lang->story->priList, $story->pri);?></span></td>
-      <td class='text-left' title='<?php echo $story->title?>'><?php echo $story->title?></td>
+      <td class='text-left' title='<?php echo $story->title?>'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
       <td><?php echo zget($users, $story->openedBy);?></td>
       <td><?php echo zget($users, $story->assignedTo);?></td>
       <td><?php echo $story->estimate?></td>

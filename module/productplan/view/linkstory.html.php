@@ -44,7 +44,7 @@ include '../../common/view/tablesorter.html.php';
         <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
         <td><?php echo $story->planTitle;?></td>
         <td title='<?php echo $modules[$story->module]?>'><?php echo $modules[$story->module];?></td>
-        <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></td>
+        <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
         <td><?php echo zget($users, $story->openedBy);?></td>
         <td><?php echo zget($users, $story->assignedTo);?></td>
         <td><?php echo $story->estimate;?></td>
@@ -70,4 +70,9 @@ include '../../common/view/tablesorter.html.php';
     </table>
   </form>
 </div>
-<script>$(function(){ajaxGetSearchForm('#stories .linkBox #querybox');})</script>
+<script>
+$(function(){
+    ajaxGetSearchForm('#stories .linkBox #querybox');
+    setModal();
+})
+</script>

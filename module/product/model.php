@@ -37,7 +37,11 @@ class productModel extends model
         $currentMethod = $this->app->getMethodName();
 
         /* init currentModule and currentMethod for report and story. */
-        if($currentModule == 'story' and $currentMethod != 'create' and $currentMethod != 'batchcreate') $currentModule = 'product';
+        if($currentModule == 'story')
+        {
+            if($currentMethod != 'create' and $currentMethod != 'batchcreate') $currentModule = 'product';
+            if($currentMethod == 'view') $currentMethod = 'browse';
+        }
         if($currentMethod == 'report') $currentMethod = 'browse';
 
         $selectHtml = $this->select($products, $productID, $currentModule, $currentMethod, $extra, $branch);
