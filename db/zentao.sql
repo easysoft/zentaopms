@@ -289,6 +289,7 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `groups` varchar(255) NOT NULL,
   `users` text NOT NULL,
   `main` enum('0','1') NOT NULL default '0',
+  `order` tinyint(5) unsigned NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

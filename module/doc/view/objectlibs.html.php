@@ -25,7 +25,8 @@
     if($libID == 'project') $libLink = inlink('allLibs', "type=project&product=$object->id");
     if($libID == 'files')   $libLink = inlink('showFiles', "type=$type&objectID=$object->id");
     ?>
-    <a class='lib' title='<?php echo $libName?>' href='<?php echo $libLink?>'>
+    <a class='lib <?php echo $libID == 'files' ? 'files' : '';?>' title='<?php echo $libName?>' href='<?php echo $libLink?>' data-id='<?php echo $libID;?>'>
+      <?php if($libID != 'files'):?><i class='icon icon-move'></i><?php endif;?>
       <img src='<?php echo $config->webRoot . 'theme/default/images/main/doc-lib.png'?>' class='file-icon' />
       <div class='lib-name' title='<?php echo $libName?>'><?php echo $libName?></div>
     </a>
