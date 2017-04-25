@@ -30,6 +30,7 @@
       <th><?php echo $lang->story->module;?></th>
       <th><?php echo $lang->story->title;?></th>
       <th><?php echo $lang->story->plan;?></th>
+      <th class='w-80px'><?php echo $lang->story->stage;?></th>
       <?php if($productType != 'normal'):?>
       <th><?php echo $lang->product->branchName[$productType];?></th>
       <?php endif;?>
@@ -56,6 +57,7 @@
       <?php if($productType != 'normal'):?>
       <td><?php if(isset($branchGroups[$story->product][$story->branch])) echo $branchGroups[$story->product][$story->branch];?></td>
       <?php endif;?>
+      <td><?php echo zget($lang->story->stageList, $story->stage);?></td>
       <td><?php echo $users[$story->openedBy];?></td>
       <td><?php echo $story->estimate;?></td>
     </tr>
