@@ -1083,7 +1083,7 @@ class projectModel extends model
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->exec();
         if(!isset($_POST['products'])) return;
         $products = $_POST['products'];
-        $branches = $_POST['branch'];
+        $branches = isset($_POST['branch']) ? $_POST['branch'] : array();
 
         $existedProducts = array();
         $addedProducts   = array();
