@@ -43,7 +43,13 @@
       </tr>  
       <tr>
         <th><?php echo $lang->product->type;?></th>
-        <td><?php echo html::select('type', $lang->product->typeList, 'normal', "class='form-control'");?></td><td></td>
+        <td>
+          <?php
+          $proudctTypeList = array();
+          foreach($lang->product->typeList as $key => $type) $productTypeList[$key] = $type . zget($lang->product->typeTips, $key, '');
+          ?>
+          <?php echo html::select('type', $productTypeList, 'normal', "class='form-control'");?>
+        </td><td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->product->desc;?></th>

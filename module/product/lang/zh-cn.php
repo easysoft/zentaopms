@@ -80,6 +80,10 @@ $lang->product->typeList['normal']   = '正常';
 $lang->product->typeList['branch']   = '多分支';
 $lang->product->typeList['platform'] = '多平台';
 
+$lang->product->typeTips = array();
+$lang->product->typeTips['branch']   = '(一般用于划分不同用户的定制内容)';
+$lang->product->typeTips['platform'] = '(一般用于划分ios、安卓、pc端、服务器端等)';
+
 $lang->product->branchName['normal']   = '';
 $lang->product->branchName['branch']   = '分支';
 $lang->product->branchName['platform'] = '平台';
