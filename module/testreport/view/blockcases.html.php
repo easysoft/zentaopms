@@ -18,7 +18,7 @@
     <tr>
       <td><?php echo $case->id . html::hidden('cases[]', $case->id)?></td>
       <td><span class='pri<?php echo $case->pri?>'><?php echo zget($lang->testcase->priList, $case->pri);?></span></td>
-      <td class='text-left' title='<?php echo $case->title?>'><?php echo $case->title?></td>
+      <td class='text-left' title='<?php echo $case->title?>'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id", '', true), $case->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
       <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
       <td><?php echo zget($users, $case->assignedTo);?></td>
       <td><?php echo zget($users, $case->lastRunner);?></td>
