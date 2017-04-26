@@ -64,13 +64,15 @@
             <tr class='colhead'>
               <th class='w-id {sorter: false}'><nobr><?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></nobr></th>
               <th class='w-pri {sorter: false}'>     <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
+              <th class='w-150px {sorter: false}'>   <?php common::printOrderLink('module',        $orderBy, $vars, $lang->testcase->module);?></th>
               <th class='{sorter: false}'>           <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
               <th class='w-type {sorter: false}'>    <?php common::printOrderLink('type',          $orderBy, $vars, $lang->testcase->type);?></th>
               <th class='w-status {sorter: false}'>  <?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
+              <th class='w-80px {sorter:false}'>     <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testcase->lastRunResult);?></th>
               <th class='w-30px' title='<?php echo $lang->testcase->bugs?>'> <?php echo $lang->testcase->bugsAB;?></th>
               <th class='w-30px' title='<?php echo $lang->testcase->results?>'> <?php echo $lang->testcase->resultsAB;?></th>
               <th class='w-30px' title='<?php echo $lang->testcase->stepNumber?>'> <?php echo $lang->testcase->stepNumberAB;?></th>
-              <th class='w-50px {sorter: false}'><?php echo $lang->actions;?></th>
+              <th class='w-100px {sorter: false}'><?php echo $lang->actions;?></th>
             </tr>
           </thead>
           <?php
@@ -89,12 +91,14 @@
                 <?php printf('%03d', $case->id);?>
               </td>
               <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
+              <td class='text-left' title='<?php echo $modules[$case->module]?>'><?php echo $modules[$case->module];?></td>
               <td class='text-left nobr'>
                 <?php if($case->branch) echo "<span class='label label-info label-badge'>{$branches[$case->branch]}</span>"?>
                 <?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id&version=$case->caseVersion"), $case->title);?>
               </td>
               <td><?php echo $lang->testcase->typeList[$case->type];?></td>
               <td class='<?php echo $case->status;?>'><?php echo ($case->version < $case->caseVersion) ? "<span class='warning'>{$lang->testcase->changed}</span>" : $lang->testcase->statusList[$case->status];?></td>
+              <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
               <td><?php echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a($this->createLink('testcase', 'bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;?></td>
               <td><?php echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a($this->createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;?></td>
               <td><?php echo $case->stepNumber;?></td>
@@ -105,6 +109,8 @@
                     $unlinkURL = $this->createLink('testsuite', 'unlinkCase', "suiteID=$suite->id&caseID=$case->id&confirm=yes");
                     echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"caseList\",confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$lang->testsuite->unlinkCase}' class='btn-icon'");
                 }
+                common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
+                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', 'list-alt', '', 'results iframe', false, "data-width='95%'");
                 ?>
               </td>
             </tr>
@@ -113,7 +119,7 @@
           <?php endif;?>
           <tfoot>
             <tr>
-              <td colspan='9' style='padding-left:5px;'>
+              <td colspan='11' style='padding-left:5px;'>
                 <?php if($cases):?>
                 <div class='table-actions clearfix'>
                   <?php if($hasCheckbox) echo html::selectButton();?>
@@ -129,6 +135,10 @@
                       $actionLink = $this->createLink('testsuite', 'batchUnlinkCases', "suiteID=$suite->id");
                       $misc       = common::hasPriv('testsuite', 'batchUnlinkCases') ? "onclick=\"setFormAction('$actionLink')\"" : "class='disabled'";
                       echo "<li>" . html::a('javascript:;', $lang->testsuite->unlinkCase, '', $misc) . "</li>";
+
+                      $actionLink = $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy");
+                      $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
+                      echo "<li>" . html::a('#', $lang->testtask->runCase, '', $misc) . "</li>";
                       ?>
                     </ul>
                   </div>
