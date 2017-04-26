@@ -862,7 +862,8 @@ class docModel extends model
     {
         if($type != 'project' and $type != 'product') return true;
         $this->loadModel('file');
-        $docIdList = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->get();
+        $docIdList   = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->get();
+        $searchTitle = $this->get->title;
         if($type == 'product')
         {
             $storyIdList   = $this->dao->select('id')->from(TABLE_STORY)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->get();
@@ -870,13 +871,15 @@ class docModel extends model
             $releaseIdList = $this->dao->select('id')->from(TABLE_RELEASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->get();
             $planIdList    = $this->dao->select('id')->from(TABLE_PRODUCTPLAN)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->get();
             $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
-                ->where("(objectType = 'product' and objectID = $objectID)")
+                ->where('size')->gt('0')
+                ->andWhere("(objectType = 'product' and objectID = $objectID)", true)
                 ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
                 ->orWhere("(objectType = 'story' and objectID in ($storyIdList))")
                 ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")
                 ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
                 ->orWhere("(objectType = 'productplan' and objectID in ($planIdList))")
-                ->andWhere('size')->gt('0')
+                ->markRight(1)
+                ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
                 ->page($pager)
                 ->fetchAll('id');
         }
@@ -885,11 +888,13 @@ class docModel extends model
             $taskIdList  = $this->dao->select('id')->from(TABLE_TASK)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->get();
             $buildIdList = $this->dao->select('id')->from(TABLE_BUILD)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->get();
             $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
-                ->where("(objectType = 'project' and objectID = $objectID)")
+                ->where('size')->gt('0')
+                ->andWhere("(objectType = 'project' and objectID = $objectID)", true)
                 ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
                 ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
                 ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
-                ->andWhere('size')->gt('0')
+                ->markRight(1)
+                ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
                 ->page($pager)
                 ->fetchAll('id');
         }
