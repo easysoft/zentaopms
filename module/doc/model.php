@@ -149,16 +149,13 @@ class docModel extends model
             ->join('users', ',')
             ->remove('libType')
             ->get();
+
         if($lib->acl == 'private') $lib->users = $this->app->user->account;
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
             ->batchCheck('name', 'notempty')
             ->exec();
-        $libID = $this->dao->lastInsertID();
 
-        $libType = $this->post->libType;
-        if($lib->acl != 'private' and ($libType == 'project' or $libType == 'product')) $this->setLibUsers($libType, $lib->$libType);
-
-        return $libID;
+        return $this->dao->lastInsertID();
     }
 
     /**
@@ -616,6 +613,19 @@ class docModel extends model
                 if(strpos(",$object->groups,", ",$groupID,") !== false) return true;
             }
         }
+
+        if($object->product)
+        {
+            $product = $this->dao->findById($object->product)->from(TABLE_PRODUCT)->fetch();
+            return $this->loadModel('product')->checkPriv($product);
+        }
+
+        if($object->project)
+        {
+            $project = $this->dao->findById($object->project)->from(TABLE_PROJECT)->fetch();
+            return $this->loadModel('project')->checkPriv($project);
+        }
+
         return false;
     }
 
