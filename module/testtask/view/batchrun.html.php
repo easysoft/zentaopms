@@ -79,18 +79,24 @@ function showAction(value, obj)
     if(value == 'pass')
     {
         $(obj).addClass('hidden');
-        $(obj).closest('tbody').children('tr').each(function(){
-            var $td = $(this).children('td:first');
-            if($td.attr('colspan') != undefined) $td.attr('colspan', 2);
-        });
+        if($(obj).parent().prop('tagName') == 'TR')
+        {
+            $(obj).closest('tbody').children('tr').each(function(){
+                var $td = $(this).children('td:first');
+                if($td.attr('colspan') != undefined) $td.attr('colspan', 2);
+            });
+        }
     }
     else
     {
         $(obj).removeClass('hidden');
-        $(obj).closest('tbody').children('tr').each(function(){
-            var $td = $(this).children('td:first');
-            if($td.attr('colspan') != undefined) $td.attr('colspan', 4);
-        });
+        if($(obj).parent().prop('tagName') == 'TR')
+        {
+            $(obj).closest('tbody').children('tr').each(function(){
+                var $td = $(this).children('td:first');
+                if($td.attr('colspan') != undefined) $td.attr('colspan', 4);
+            });
+        }
     }
 }
 </script>
