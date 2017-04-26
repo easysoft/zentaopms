@@ -141,6 +141,7 @@ class testsuite extends control
         $this->view->cases     = $this->testsuite->getLinkedCases($suiteID, $sort, $pager);
         $this->view->orderBy   = $orderBy;
         $this->view->pager     = $pager;
+        $this->view->modules   = $this->loadModel('tree')->getOptionMenu($suite->product, 'case');
         $this->view->branches  = $this->loadModel('branch')->getPairs($suite->product, 'noempty');
 
         $this->display();
