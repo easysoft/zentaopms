@@ -531,10 +531,11 @@ class product extends control
      * @access public
      * @return void
      */
-    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $needCreate = false)
+    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false)
     {
         $plans = $this->loadModel('productplan')->getPairs($productID, $branch);
-        $output = html::select('plan', $plans, $planID, "class='form-control chosen'");
+        $field = $fieldID ? "plans[$fieldID]" : 'plan';
+        $output = html::select($field, $plans, $planID, "class='form-control chosen'");
         if(count($plans) == 1 and $needCreate) 
         {
             $output .= "<span class='input-group-addon'>";
