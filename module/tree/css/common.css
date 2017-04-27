@@ -3,7 +3,7 @@
 
 .outer .row .col-md-8 .table-form {max-width: 600px}
 
-#sonModule {max-width: 400px}
+#sonModule, #moduleBox > span > input, #moduleBox > table{max-width: 500px}
 #sonModule  .row-table .input-group input {border-right: none}
 #moduleBox span > .form-control {margin-bottom: 5px;}
 

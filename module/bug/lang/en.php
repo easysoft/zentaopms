@@ -79,21 +79,21 @@ $lang->bug->batchChangeModule  = 'Batch Modify';
 $lang->bug->batchClose         = 'Batch Close';
 $lang->bug->assignTo           = 'Assign';
 $lang->bug->batchAssignTo      = 'Batch Assign';
-$lang->bug->browse             = 'Bug List';
+$lang->bug->browse             = 'Bugs';
 $lang->bug->view               = 'Bug Details';
 $lang->bug->resolve            = 'Resolve';
 $lang->bug->batchResolve       = 'Batch Resolve';
 $lang->bug->close              = 'Close';
 $lang->bug->activate           = 'Activate';
 $lang->bug->reportChart        = 'Report';
-$lang->bug->export             = 'Export Data';
-$lang->bug->delete             = 'Delete Bug';
+$lang->bug->export             = 'Export';
+$lang->bug->delete             = 'Delete';
 $lang->bug->deleted            = 'Deleted';
 $lang->bug->saveTemplate       = 'Save as Template';
 $lang->bug->setPublic          = 'Set as Public';
 $lang->bug->deleteTemplate     = 'Delete Template';
 $lang->bug->confirmStoryChange = 'Story Change Confirmation';
-$lang->bug->copy               = 'Duplicate a Bug';
+$lang->bug->copy               = 'Duplicate';
 
 /* 查询条件列表。*/
 $lang->bug->assignToMe     = 'Assigned to Me';
@@ -113,7 +113,7 @@ $lang->bug->needConfirm    = 'Story Change';
 $lang->bug->allProduct     = 'All' . $lang->productCommon;
 
 $lang->bug->ditto       = 'Ditto';
-$lang->bug->dittoNotice = 'This bug does not affiliate to the same product as the last one!';
+$lang->bug->dittoNotice = 'This bug does not relate to the same product as the last one!';
 
 /* 页面标签。*/
 $lang->bug->lblAssignedTo               = 'Assignee';
@@ -140,7 +140,7 @@ $lang->bug->legendRelated               = 'Related Info';
 $lang->bug->buttonConfirm        = 'Confirm';
 
 /* 交互提示。*/
-$lang->bug->confirmChangeProduct = "Modification on {$lang->productCommon} will cause linked {$lang->projectCommon},Story and Task change. Do you want to do this?";
+$lang->bug->confirmChangeProduct = "Change {$lang->productCommon} will cause linked {$lang->projectCommon},Story and Task change. Do you want to do this?";
 $lang->bug->confirmDelete         = 'Do you want to delete this bug?';
 $lang->bug->setTemplateTitle      = 'Please enter the title of template.';
 $lang->bug->remindTask            = 'This Bug has been converted to Task. Do you want to update Status of Task(ID %s)?';
