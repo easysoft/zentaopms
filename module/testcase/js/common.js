@@ -79,6 +79,25 @@ function loadProductModules(productID, branch)
 }
 
 /**
+ * Load module.
+ * 
+ * @param  int    $libID 
+ * @access public
+ * @return void
+ */
+function loadLibModules(libID, branch)
+{
+    if(typeof(branch) == 'undefined') branch = 0;
+    if(!branch) branch = 0;
+    link = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + libID + '&viewtype=caselib&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
+    $('#moduleIdBox').load(link, function()
+    {
+        $(this).find('select').chosen(defaultChosenOptions)
+        if(typeof(caseModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon'>" + caseModule + "</span>")
+    });
+}
+
+/**
  * Set story field.
  * 
  * @access public
