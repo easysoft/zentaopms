@@ -73,3 +73,10 @@ function setModuleAndPlan(branchID, productID, num)
         $("#plan" + num).chosen(defaultChosenOptions);
     });
 }
+
+/* Copy story title as story spec. */
+function copyTitle(num)
+{
+    var title = $('#title\\[' + num + '\\]').val();
+    $('#spec\\[' + num + '\\]').val(title);
+}

@@ -38,6 +38,7 @@ $lang->story->export      = "Export Data";
 $lang->story->zeroCase    = "Zero Case";
 $lang->story->zeroTask    = "Zero Task";
 $lang->story->reportChart = "Report";
+$lang->story->copyTitle   = "Copy Title";
 $lang->story->batchChangePlan   = "Batch Change Plans";
 $lang->story->batchChangeBranch = "Batch Change Branches";
 $lang->story->batchChangeStage  = "Batch Change Stages";
