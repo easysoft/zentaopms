@@ -851,6 +851,40 @@ class task extends control
     }
 
     /**
+     * Batch cancel tasks.
+     * 
+     * @param  string $skipTaskIdList 
+     * @access public
+     * @return void
+     */
+    public function batchCancel()
+    {
+        if($this->post->taskIDList)
+        {
+            $taskIDList = $this->post->taskIDList;
+            unset($_POST['taskIDList']);
+            unset($_POST['assignedTo']);
+            $this->loadModel('action');
+
+            $tasks = $this->task->getByList($taskIDList);
+            foreach($tasks as $taskID => $task)
+            {
+                if($task->status == 'done' or $task->status == 'closed' or $task->status == 'cancel') continue;
+
+                $changes = $this->task->cancel($taskID);
+                if($changes)
+                {
+                    $actionID = $this->action->create('task', $taskID, 'Canceled', '');
+                    $this->action->logHistory($actionID, $changes);
+                    $this->task->sendmail($taskID, $actionID);
+                }
+            }
+        }
+
+        die(js::reload('parent'));
+    }
+
+    /**
      * Batch close tasks.
      * 
      * @access public
