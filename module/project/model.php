@@ -1219,6 +1219,7 @@ class projectModel extends model
             $task->name         = $bug->title;
             $task->type         = 'devel';
             $task->pri          = $bugToTasks->pri[$key];
+            $task->deadline     = $bugToTasks->deadline[$key];
             $task->consumed     = 0;
             $task->status       = 'wait';
             $task->openedDate   = $now;

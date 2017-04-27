@@ -514,6 +514,7 @@ class project extends control
         $this->view->browseType = $browseType;
         $this->view->param      = $param;
         $this->view->users      = $users;
+        $this->view->project    = $this->project->getByID($projectID);
         $this->view->projectID  = $projectID;
         $this->display();
     }
