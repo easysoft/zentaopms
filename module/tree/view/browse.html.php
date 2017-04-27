@@ -72,22 +72,34 @@
                     echo "<div class='row-table' style='margin-bottom:5px'>";
                     echo "<div class='col-table'>" . html::input("modules[id$sonModule->id]", $sonModule->name, 'class="form-control" autocomplete="off"' . $disabled) . '</div>';
                     if($hasBranch) echo "<div class='col-table'>" . html::select("branch[id$sonModule->id]", $branches, $sonModule->branch, 'class="form-control" disabled') . '</div>';
-                    echo "<div class='col-table' style='width:70px'>" . html::input("shorts[id$sonModule->id]", $sonModule->short, "class='form-control' placeholder='{$lang->tree->short}' $disabled autocomplete='off'") . '</div>';
+                    echo "<div class='col-table' style='width:120px'><div class='input-group'>" . html::input("shorts[id$sonModule->id]", $sonModule->short, "class='form-control' placeholder='{$lang->tree->short}' $disabled autocomplete='off'") . html::hidden("order[id$sonModule->id]", $sonModule->order);
+                    echo "<span class='input-group-btn' style='border-left:1px solid'><a href='javascript:;' onclick='insertItem(this)' class='btn btn-block'><i class='icon icon-plus'></i></a></span>";
+                    echo '</div></div>';
                     echo '</div>';
                 }
                 for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++)
                 {
-                    echo "<div class='row-table' style='margin-bottom:5px'>";
+                    echo "<div class='row-table addedItem' style='margin-bottom:5px'>";
                     echo "<div class='col-table'>" . html::input("modules[]", '', "class='form-control' placeholder='{$lang->tree->name}' autocomplete='off'") . '</div>';
                     if($hasBranch) echo '<div class="col-table">' . html::select("branch[]", $branches, $branch, 'class="form-control"') . '</div>';
                     echo "<div class='col-table' style='width:120px'><div class='input-group'>" . html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}' autocomplete='off'");
-                    echo "<span class='input-group-btn'><a href='javascript:;' onclick='addItem(this)' class='btn btn-block'><i class='icon-plus'></i></a></span>";
-                    echo "<span class='input-group-btn'><a href='javascript:;' onclick='deleteItem(this)' class='btn btn-block'><i class='icon-remove'></i></a></span>";
+                    echo "<span class='input-group-btn'><a href='javascript:;' onclick='addItem(this)' class='btn btn-block'><i class='icon icon-plus'></i></a></span>";
+                    echo "<span class='input-group-btn'><a href='javascript:;' onclick='deleteItem(this)' class='btn btn-block'><i class='icon icon-remove'></i></a></span>";
                     echo '</div></div>';
                     echo '</div>';
                 }
+
+                echo "<div id='insertItemBox' class='hidden'>";
+                echo "<div class='row-table' style='margin-bottom:5px'>";
+                echo "<div class='col-table'>" . html::input("modules[]", '', "class='form-control' placeholder='{$lang->tree->name}' autocomplete='off'") . '</div>';
+                if($hasBranch) echo '<div class="col-table">' . html::select("branch[]", $branches, $branch, 'class="form-control" disabled') . '</div>';
+                echo "<div class='col-table' style='width:120px'><div class='input-group'>" . html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}' autocomplete='off'") . html::hidden("order[]");
+                echo "<span class='input-group-btn' style='border-left:1px solid'><a href='javascript:;' onclick='deleteItem(this)' class='btn btn-block'><i class='icon icon-remove'></i></a></span>";
+                echo '</div></div>';
+                echo '</div></div>';
+
+                echo '</div>';
                 ?>
-                </div>
               </td>
             </tr>
             <tr>
