@@ -38,6 +38,9 @@ foreach(explode(',', $showFields) as $field)
         <th class='w-50px'><?php  echo $lang->idAB;?></th> 
         <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden')?>'>    <?php echo $lang->priAB;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden')?>'><?php echo $lang->statusAB;?></th>
+        <?php if($branchProduct):?>
+        <th class='w-150px<?php echo zget($visibleFields, 'branch', ' hidden')?>'><?php echo $lang->testcase->branch;?></th>
+        <?php endif;?>
         <th class='w-150px<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->testcase->module;?></th>
         <th class='w-150px<?php echo zget($visibleFields, 'story', ' hidden')?>'><?php echo $lang->testcase->story;?></th>
         <th><?php echo $lang->testcase->title;?></th>
@@ -49,10 +52,34 @@ foreach(explode(',', $showFields) as $field)
     </thead>
     <tbody>
       <?php foreach($caseIDList as $caseID):?>
+      <?php
+      if(!isset($cases[$caseID])) continue;
+      if(!$productID and $branchProduct)
+      {
+          $product = $this->product->getByID($cases[$caseID]->product);
+
+          $branches = $product->type == 'normal' ? array('' => '') : $this->loadModel('branch')->getPairs($product->id);
+          if($product->type != 'normal')
+          {
+              foreach($branches as $branchID => $branchName) $branches[$branchID] = '/' . $product->name . '/' . $branchName;
+              $branches = array('ditto' => $this->lang->story->ditto) + $branches;
+          }
+
+          $modules = $this->tree->getOptionMenu($cases[$caseID]->product, $viewType = 'case', 0, $cases[$caseID]->branch);
+          $modules = array('ditto' => $this->lang->story->ditto) + $modules;
+      }
+      ?>
       <tr class='text-center'>
         <td><?php echo $caseID . html::hidden("caseIDList[$caseID]", $caseID);?></td>
         <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>   <?php echo html::select("pris[$caseID]",     $priList, $cases[$caseID]->pri, 'class=form-control');?></td>
         <td class='<?php echo zget($visibleFields, 'status', 'hidden')?>'><?php echo html::select("statuses[$caseID]", (array)$lang->testcase->statusList, $cases[$caseID]->status, 'class=form-control');?></td>
+        <?php if($branchProduct):?>
+        <td class='text-left<?php echo zget($visibleFields, 'branch', ' hidden')?>' style='overflow:visible'>
+          <?php $branchProductID = $productID ? $productID : $product->id;?>
+          <?php $disabled        = (isset($product) and $product->type == 'normal') ? "disabled='disabled'" : '';?>
+          <?php echo html::select("branches[$caseID]",  $branches,   $cases[$caseID]->branch, "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID)', $disabled");?>
+        </td>
+        <?php endif;?>
         <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]",  $modules,   $cases[$caseID]->module, "class='form-control chosen'");?></td>
         <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'><?php echo html::select("stories[$caseID]",  $stories,   $cases[$caseID]->story, "class='form-control chosen'");?></td>
         <td style='overflow:visible' title='<?php echo $cases[$caseID]->title?>'>
@@ -69,7 +96,7 @@ foreach(explode(',', $showFields) as $field)
       <?php endforeach;?>
     </tbody>
     <tfoot>
-      <tr><td colspan='<?php echo count($visibleFields) + 3;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
+      <tr><td colspan='<?php echo $branchProduct ? (count($visibleFields) + 3) : (count($visibleFields) + 2);?>' class='text-center'><?php echo html::submitButton();?></td></tr>
     </tfoot>
   </table>
 </form>

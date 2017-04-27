@@ -717,12 +717,14 @@ class testcaseModel extends model
         /* Process data if the value is 'ditto'. */
         foreach($caseIDList as $caseID)
         {
-            if($data->pris[$caseID]    == 'ditto') $data->pris[$caseID]    = isset($prev['pri'])    ? $prev['pri']    : 3;
-            if($data->modules[$caseID] == 'ditto') $data->modules[$caseID] = isset($prev['module']) ? $prev['module'] : 0;
-            if($data->types[$caseID]   == 'ditto') $data->types[$caseID]   = isset($prev['type'])   ? $prev['type']   : '';
-            if($data->stories[$caseID] == '')      $data->stories[$caseID] = 0;
+            if($data->pris[$caseID]     == 'ditto') $data->pris[$caseID]     = isset($prev['pri'])    ? $prev['pri']    : 3;
+            if($data->branches[$caseID] == 'ditto') $data->branches[$caseID] = isset($prev['branch']) ? $prev['branch'] : 0;
+            if($data->modules[$caseID]  == 'ditto') $data->modules[$caseID]  = isset($prev['module']) ? $prev['module'] : 0;
+            if($data->types[$caseID]    == 'ditto') $data->types[$caseID]    = isset($prev['type'])   ? $prev['type']   : '';
+            if($data->stories[$caseID]  == '')      $data->stories[$caseID]  = 0;
 
             $prev['pri']    = $data->pris[$caseID];
+            $prev['branch'] = $data->branches[$caseID];
             $prev['module'] = $data->modules[$caseID];
             $prev['type']   = $data->types[$caseID];
         }
@@ -735,6 +737,7 @@ class testcaseModel extends model
             $case->lastEditedDate = $now;
             $case->pri            = $data->pris[$caseID];
             $case->status         = $data->statuses[$caseID];
+            $case->branch         = $data->branches[$caseID];
             $case->module         = $data->modules[$caseID];
             $case->story          = $data->stories[$caseID];
             $case->color          = $data->colors[$caseID];
