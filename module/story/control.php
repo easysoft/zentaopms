@@ -454,10 +454,12 @@ class story extends control
             $this->loadModel('my')->setMenu();
 
             $branchProduct = false;
-            $linkedProducts = $this->product->getProductsByStory(array_keys($stories));
-            foreach($linkedProducts as $linkedProduct)
+            $productIdList = array();
+            foreach($stories as $story) $productIdList[$story->product] = $story->product;
+            $products = $this->product->getByIdList($productIdList);
+            foreach($products as $storyProduct)
             {
-                if($linkedProduct->type != 'normal')
+                if($storyProduct->type != 'normal')
                 {
                     $branchProduct = true;
                     break;

@@ -242,23 +242,6 @@ class productModel extends model
     }
 
     /**
-     * Get products by story id list.
-     * 
-     * @param  array    $storyIDList 
-     * @access public
-     * @return array
-     */
-    public function getProductsByStory($storyIDList)
-    {
-        return $this->dao->select('distinct t1.product, t1.id, t2.name, t2.type')
-            ->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')
-            ->on('t1.product = t2.id')
-            ->where('t1.id')->in($storyIDList)
-            ->fetchAll('product');
-    }
-
-    /**
      * Get grouped products.
      * 
      * @access public
