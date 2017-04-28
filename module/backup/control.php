@@ -56,6 +56,10 @@ class backup extends control
                     {
                         $backupFile->files[$this->backupPath . $backupFile->name . '.file.zip.php'] = abs(filesize($this->backupPath . $backupFile->name . '.file.zip.php'));
                     }
+                    if(file_exists($this->backupPath . $backupFile->name . '.code.zip.php'))
+                    {
+                        $backupFile->files[$this->backupPath . $backupFile->name . '.code.zip.php'] = abs(filesize($this->backupPath . $backupFile->name . '.code.zip.php'));
+                    }
 
                     $backups[$backupFile->name] = $backupFile;
                 }
@@ -110,6 +114,21 @@ class backup extends control
                 }
             }
             $this->backup->addFileHeader($this->backupPath . $fileName . '.file.zip.php');
+
+            $result = $this->backup->backCode($this->backupPath . $fileName . '.code.zip.php');
+            if(!$result->result)
+            {
+                if($reload == 'yes')
+                {
+                    echo js::alert(sprintf($this->lang->backup->error->backupCode, $result->error));
+                    die(js::reload('parent'));
+                }
+                else
+                {
+                    printf($this->lang->backup->error->backupCode, $result->error);
+                }
+            }
+            $this->backup->addFileHeader($this->backupPath . $fileName . '.code.zip.php');
         }
 
         /* Delete expired backup. */
@@ -199,6 +218,12 @@ class backup extends control
         if(file_exists($this->backupPath . $fileName . '.file.zip.php') and !unlink($this->backupPath . $fileName . '.file.zip.php'))
         {
             die(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.file.zip.php')));
+        }
+
+        /* Delete code file. */
+        if(file_exists($this->backupPath . $fileName . '.code.zip.php') and !unlink($this->backupPath . $fileName . '.code.zip.php'))
+        {
+            die(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.code.zip.php')));
         }
 
         die(js::reload('parent'));

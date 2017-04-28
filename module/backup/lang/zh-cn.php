@@ -27,3 +27,4 @@ $lang->backup->error->noDelete    = "文件 %s 无法删除，修改权限或手
 $lang->backup->error->restoreSQL  = "数据库还原失败，错误：%s";
 $lang->backup->error->restoreFile = "附件还原失败，错误：%s";
 $lang->backup->error->backupFile  = "附件备份失败，错误：%s";
+$lang->backup->error->backupCode  = "代码备份失败，错误：%s";

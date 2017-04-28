@@ -50,6 +50,44 @@ class backupModel extends model
     }
 
     /**
+     * Backup code.
+     * 
+     * @param  string    $backupFile 
+     * @access public
+     * @return object
+     */
+    public function backCode($backupFile)
+    {
+        $return = new stdclass();
+        $return->result = true;
+        $return->error  = '';
+
+        $appRoot     = $this->app->getAppRoot();
+        $fileList    = glob($appRoot . '*');
+        $wwwFileList = glob($appRoot . 'www/*');
+
+        $tmpFile  = array_search($appRoot . 'tmp', $fileList);
+        $wwwFile  = array_search($appRoot . 'www', $fileList);
+        $dataFile = array_search($appRoot . 'www/data', $wwwFileList);
+        unset($fileList[$tmpFile]);
+        unset($fileList[$wwwFile]);
+        unset($wwwFileList[$dataFile]);
+
+        $fileList = array_merge($fileList, $wwwFileList);
+
+        $this->app->loadClass('pclzip', true);
+        $zip = new pclzip($backupFile);
+        $zip->create($fileList, PCLZIP_OPT_REMOVE_PATH, $appRoot);
+        if($zip->errorCode() != 0)
+        {
+            $return->result = false;
+            $return->error  = $zip->errorInfo();
+        }
+
+        return $return;
+    }
+
+    /**
      * Restore SQL 
      * 
      * @param  string    $backupFile 
