@@ -16,6 +16,7 @@ $lang->backup->waitting       = '<span id="backupType"></span>正在进行中，
 $lang->backup->confirmDelete  = '是否删除备份？';
 $lang->backup->confirmRestore = '是否还原该备份？';
 $lang->backup->holdDays       = '备份保留最近 %s 天';
+$lang->backup->restoreTip     = '还原功能只还原附件和数据库，如果需要还原代码，可以手动还原。';
 
 $lang->backup->success = new stdclass();
 $lang->backup->success->backup  = '备份成功！';
