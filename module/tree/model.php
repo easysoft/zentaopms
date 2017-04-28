@@ -312,13 +312,23 @@ class treeModel extends model
      */
     public function getTreeMenu($rootID, $type = 'root', $startModule = 0, $userFunc, $extra = '', $branch = 0)
     {
-        $branches = array($branch => '');
+        if($branch)
+        {
+            $branchName = $this->loadModel('branch')->getById($branch);
+            $branches   = array($branch => $branchName);
+        }
+        else
+        {
+            $branches = array($branch => '');
+        }
+
         $manage   = $userFunc[1] == 'createManageLink' ? true : false;
         $product  = $this->loadModel('product')->getById($rootID);
         if(strpos('story|bug|case', $type) !== false and empty($branch))
         {
-            if($product->type != 'normal') $branches = array('null' => '') + $this->loadModel('branch')->getPairs($rootID, 'noempty');
+            if($product->type != 'normal') $branches = $this->loadModel('branch')->getPairs($rootID, 'noempty');
         }
+        $branches = array('null' => '') + $branches;
 
         /* Add for task #1945. check the module has case or no. */
         if($type == 'case' and !empty($extra)) $this->loadModel('testtask');
