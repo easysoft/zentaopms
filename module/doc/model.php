@@ -118,12 +118,12 @@ class docModel extends model
                 ->leftJoin($table)->alias('t2')->on("t1.$type=t2.id")
                 ->where("t1.$type")->ne(0)
                 ->andWhere('t1.deleted')->eq(0)
-                ->orderBy("t2.order desc, t1.id")
+                ->orderBy("t2.order desc, t1.order, t1.id")
                 ->query();
         }
         else
         {
-            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('product')->eq('0')->andWhere('project')->eq(0)->orderBy('id desc')->query();
+            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('product')->eq('0')->andWhere('project')->eq(0)->orderBy('`order`, id desc')->query();
         }
 
         $libPairs = array();
@@ -149,16 +149,13 @@ class docModel extends model
             ->join('users', ',')
             ->remove('libType')
             ->get();
+
         if($lib->acl == 'private') $lib->users = $this->app->user->account;
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
             ->batchCheck('name', 'notempty')
             ->exec();
-        $libID = $this->dao->lastInsertID();
 
-        $libType = $this->post->libType;
-        if($lib->acl != 'private' and ($libType == 'project' or $libType == 'product')) $this->setLibUsers($libType, $lib->$libType);
-
-        return $libID;
+        return $this->dao->lastInsertID();
     }
 
     /**
@@ -616,6 +613,19 @@ class docModel extends model
                 if(strpos(",$object->groups,", ",$groupID,") !== false) return true;
             }
         }
+
+        if($object->product)
+        {
+            $product = $this->dao->findById($object->product)->from(TABLE_PRODUCT)->fetch();
+            return $this->loadModel('product')->checkPriv($product);
+        }
+
+        if($object->project)
+        {
+            $project = $this->dao->findById($object->project)->from(TABLE_PROJECT)->fetch();
+            return $this->loadModel('project')->checkPriv($project);
+        }
+
         return false;
     }
 
@@ -654,7 +664,7 @@ class docModel extends model
         }
         else
         {
-            $libs = $this->dao->select('id,name')->from(TABLE_DOCLIB)->where('id')->in($idList)->orderBy('id desc')->fetchAll('id');
+            $libs = $this->dao->select('id,name')->from(TABLE_DOCLIB)->where('id')->in($idList)->orderBy('`order`, id desc')->fetchAll('id');
         }
 
         return $libs;
@@ -672,7 +682,7 @@ class docModel extends model
         $stmt = $this->dao->select("id,product,project,name")->from(TABLE_DOCLIB)
             ->where('deleted')->eq(0)
             ->beginIF($condition)->andWhere("($condition)")->fi()
-            ->orderBy("product desc,project desc, id asc")
+            ->orderBy("product desc,project desc, `order` asc, id asc")
             ->query();
 
         $customLibs  = array();
@@ -753,12 +763,12 @@ class docModel extends model
             $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
                 ->leftJoin($table)->alias('t2')->on("t1.$type=t2.id")
                 ->where('t1.deleted')->eq(0)->andWhere("t1.$type")->ne(0)
-                ->orderBy("t2.`order` desc, id desc")
+                ->orderBy("t2.`order` desc, t1.`order` asc, id desc")
                 ->query();
         }
         else
         {
-            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('project')->eq(0)->andWhere('product')->eq(0)->orderBy('id desc')->query();
+            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('project')->eq(0)->andWhere('product')->eq(0)->orderBy('`order`, id desc')->query();
         }
 
         $i    = 1;
@@ -791,7 +801,7 @@ class docModel extends model
     public function getSubLibGroups($type, $idList)
     {
         if($type != 'product' and $type != 'project') return false;
-        $libGroups   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->in($idList)->orderBy('id')->fetchGroup($type, 'id');
+        $libGroups   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->in($idList)->orderBy('`order`, id')->fetchGroup($type, 'id');
         if($type == 'product')
         {
             $hasProject  = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -826,7 +836,7 @@ class docModel extends model
     public function getLibsByObject($type, $objectID, $mode = '')
     {
         if($type != 'product' and $type != 'project') return false;
-        $objectLibs   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('id')->fetchAll('id');
+        $objectLibs   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
         if($type == 'product')
         {
             $hasProject  = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -862,7 +872,8 @@ class docModel extends model
     {
         if($type != 'project' and $type != 'product') return true;
         $this->loadModel('file');
-        $docIdList = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->get();
+        $docIdList   = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->get();
+        $searchTitle = $this->get->title;
         if($type == 'product')
         {
             $storyIdList   = $this->dao->select('id')->from(TABLE_STORY)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->get();
@@ -870,13 +881,15 @@ class docModel extends model
             $releaseIdList = $this->dao->select('id')->from(TABLE_RELEASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->get();
             $planIdList    = $this->dao->select('id')->from(TABLE_PRODUCTPLAN)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->get();
             $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
-                ->where("(objectType = 'product' and objectID = $objectID)")
+                ->where('size')->gt('0')
+                ->andWhere("(objectType = 'product' and objectID = $objectID)", true)
                 ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
                 ->orWhere("(objectType = 'story' and objectID in ($storyIdList))")
                 ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")
                 ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
                 ->orWhere("(objectType = 'productplan' and objectID in ($planIdList))")
-                ->andWhere('size')->gt('0')
+                ->markRight(1)
+                ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
                 ->page($pager)
                 ->fetchAll('id');
         }
@@ -885,11 +898,13 @@ class docModel extends model
             $taskIdList  = $this->dao->select('id')->from(TABLE_TASK)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->get();
             $buildIdList = $this->dao->select('id')->from(TABLE_BUILD)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->get();
             $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
-                ->where("(objectType = 'project' and objectID = $objectID)")
+                ->where('size')->gt('0')
+                ->andWhere("(objectType = 'project' and objectID = $objectID)", true)
                 ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
                 ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
                 ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
-                ->andWhere('size')->gt('0')
+                ->markRight(1)
+                ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
                 ->page($pager)
                 ->fetchAll('id');
         }

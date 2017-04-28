@@ -225,4 +225,34 @@ $(document).ready(function()
     $('[data-id="create"] a').modalTrigger({type: 'iframe', width: 800});
     $('#modulemenu .nav li').removeClass('active');
     if(typeof(type) != 'undefined') $('#modulemenu .nav li[data-id="' + type + '"]').addClass('active');
+
+    $('.libs-group').sortable(
+    {
+        trigger:  '.icon-move',
+        selector: '.lib',
+        finish:   function() 
+        {
+            var orders = {};
+            var orderNext = 1;
+
+            $('.libs-group .lib').not('.files').not('.addbtn').each(function()
+            {
+                orders[$(this).data('id')] = orderNext ++;
+            })
+
+            $.post(createLink('doc', 'sort'), orders, function(data)
+            {
+                if(data.result == 'success')
+                {
+                    return location.reload();
+                }
+                else
+                {
+                    alert(data.message);
+                    return location.reload();
+                }
+            }, 'json');
+        }
+
+    });
 });

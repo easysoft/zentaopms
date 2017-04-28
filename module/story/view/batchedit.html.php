@@ -39,6 +39,9 @@ foreach(explode(',', $showFields) as $field)
     <thead>
       <tr class='text-center'>
         <th class='w-40px'> <?php echo $lang->idAB;?></th> 
+        <?php if($branchProduct):?>
+        <th class='w-150px<?php echo zget($visibleFields, 'branch', ' hidden')?>'><?php echo $lang->story->branch;?></th>
+        <?php endif;?>
         <th class='w-150px<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->story->module;?></th>
         <th class='w-150px<?php echo zget($visibleFields, 'plan', ' hidden')?>'><?php echo $lang->story->planAB;?></th>
         <th> <?php echo $lang->story->title;?> <span class='required'></span></th>
@@ -60,7 +63,15 @@ foreach(explode(',', $showFields) as $field)
       if(!$productID)
       {
           $product = $this->product->getByID($stories[$storyID]->product);
-          $modules = $this->tree->getOptionMenu($stories[$storyID]->product, $viewType = 'story', 0, $branch);
+
+          $branches = $product->type == 'normal' ? array('' => '') : $this->loadModel('branch')->getPairs($product->id);
+          if($product->type != 'normal')
+          {
+              foreach($branches as $branchID => $branchName) $branches[$branchID] = '/' . $product->name . '/' . $branchName;
+              $branches = array('ditto' => $this->lang->story->ditto) + $branches;
+          }
+
+          $modules = $this->tree->getOptionMenu($stories[$storyID]->product, $viewType = 'story', 0, $stories[$storyID]->branch);
           foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $product->name . $moduleName;
           $modules = array('ditto' => $this->lang->story->ditto) + $modules;
 
@@ -70,6 +81,13 @@ foreach(explode(',', $showFields) as $field)
       ?>
       <tr class='text-center'>
         <td><?php echo $storyID . html::hidden("storyIDList[$storyID]", $storyID);?></td>
+        <?php if($branchProduct):?>
+        <td class='text-left<?php echo zget($visibleFields, 'branch', ' hidden')?>' style='overflow:visible'>
+          <?php $branchProductID = $productID ? $productID : $product->id;?>
+          <?php $disabled        = (isset($product) and $product->type == 'normal') ? "disabled='disabled'" : '';?>
+          <?php echo html::select("branches[$storyID]", $branches, $stories[$storyID]->branch, "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $storyID);' $disabled");?>
+        </td>
+        <?php endif;?>
         <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'>    <?php echo html::select("modules[$storyID]", $modules, $stories[$storyID]->module, "class='form-control chosen'");?></td>
         <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'>    <?php echo html::select("plans[$storyID]",   $productPlans, $stories[$storyID]->plan, "class='form-control chosen'");?></td>
         <td style='overflow:visible' title='<?php echo $stories[$storyID]->title?>'>

@@ -76,6 +76,10 @@
           <th><?php echo $lang->files?></th>
           <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
         </tr>
+        <tr>
+          <th></th>
+          <td><?php echo html::submitButton() . html::backButton();?></td>
+        </tr>
       </table>
     </fieldset>
     <fieldset>
@@ -99,7 +103,6 @@
       <legend><?php echo $lang->testreport->legendReport?></legend>
       <?php include './blockbugreport.html.php'?>
     </fieldset>
-    <div><?php echo html::submitButton() . html::backButton();?></div>
   </form>
   </div>
 </div>

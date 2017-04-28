@@ -37,7 +37,11 @@ class productModel extends model
         $currentMethod = $this->app->getMethodName();
 
         /* init currentModule and currentMethod for report and story. */
-        if($currentModule == 'story' and $currentMethod != 'create' and $currentMethod != 'batchcreate') $currentModule = 'product';
+        if($currentModule == 'story')
+        {
+            if($currentMethod != 'create' and $currentMethod != 'batchcreate') $currentModule = 'product';
+            if($currentMethod == 'view') $currentMethod = 'browse';
+        }
         if($currentMethod == 'report') $currentMethod = 'browse';
 
         $selectHtml = $this->select($products, $productID, $currentModule, $currentMethod, $extra, $branch);
@@ -283,9 +287,7 @@ class productModel extends model
         $lib->product = $productID;
         $lib->name    = $this->lang->doclib->main['product'];
         $lib->main    = '1';
-        $lib->acl     = $product->acl == 'open' ? 'open' : 'custom';
-        $lib->users   = $this->app->user->account;
-        if($product->acl == 'custom') $lib->groups = $product->whitelist;
+        $lib->acl     = 'private';
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
         return $productID;
@@ -317,14 +319,6 @@ class productModel extends model
             ->exec();
         if(!dao::isError())
         {
-            if($product->acl != $oldProduct->acl)
-            {
-                $this->dao->update(TABLE_DOCLIB)->set('acl')->eq($product->acl == 'open' ? 'open' : 'custom')->where('product')->eq($productID)->exec();
-                if($product->acl == 'open')    $this->dao->update(TABLE_DOCLIB)->set('groups')->eq('')->where('product')->eq($productID)->exec();
-                if($product->acl == 'custom')  $this->dao->update(TABLE_DOCLIB)->set('groups')->eq($product->whitelist)->where('product')->eq($productID)->exec();
-                if($product->acl == 'private') $this->dao->update(TABLE_DOCLIB)->set('groups')->eq('')->where('product')->eq($productID)->exec();
-                if($product->acl != 'open')    $this->loadModel('doc')->setLibUsers('product', $productID);
-            }
             $this->file->updateObjectID($this->post->uid, $productID, 'product');
             return common::createChanges($oldProduct, $product);
         }

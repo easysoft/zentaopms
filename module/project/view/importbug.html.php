@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <script>
 $(function(){$(".preview").modalTrigger({width:1000, type:'iframe'});});
@@ -35,6 +36,7 @@ var browseType = '<?php echo $browseType;?>';
         <th class='w-80px'><?php echo $lang->task->pri;?></th>
         <th class='w-150px'><?php echo $lang->task->assignedTo;?></th>
         <th class='w-80px nobr {sorter:false}'><?php echo $lang->task->estimate;?></th>
+        <th class='w-120px {sorter:false}'><?php echo $lang->task->deadline;?></th>
       </tr>
     </thead>
     <tbody>
@@ -51,12 +53,14 @@ var browseType = '<?php echo $browseType;?>';
       <td class='td-has-control'><?php echo html::select("pri[$bug->id]", $lang->task->priList, 3, "class='input-sm form-control'");?></td>
       <td class='td-has-control text-left' style='overflow:visible'><?php echo html::select("assignedTo[$bug->id]", $users, zget($users, $bug->assignedTo, '', $bug->assignedTo), "class='input-sm form-control chosen'");?></td>
       <td class='td-has-control'><?php echo html::input("estimate[$bug->id]", '', 'size=4 class="input-sm form-control" autocomplete="off"');?></td>
+      <?php $deadline = ($bug->deadline > helper::today() and $bug->deadline > $project->begin) ? $bug->deadline : '0000-00-00';?>
+      <td class='td-has-control'><?php echo html::input("deadline[$bug->id]", $deadline, 'size=4 class="input-sm form-control form-date" autocomplete="off"');?></td>
     </tr>
     <?php endforeach;?>
     </tbody>
     <tfoot>
       <tr>
-        <td colspan='8'>
+        <td colspan='9'>
           <div class='table-actions clearfix'><?php echo html::selectButton() . html::submitButton($lang->import) . html::backButton();?>
           </div>
           <?php $pager->show();?>

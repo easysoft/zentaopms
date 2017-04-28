@@ -448,7 +448,7 @@ class storyModel extends model
             ->add('lastEditedDate', $now)
             ->setDefault('status', $oldStory->status)
             ->setDefault('product', $oldStory->product)
-            ->setDefault('plan', $oldStory->plan)
+            ->setDefault('plan', 0)
             ->setDefault('branch', 0)
             ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->closedBy     != false and $oldStory->closedDate == '', 'closedDate', $now)
@@ -503,6 +503,7 @@ class storyModel extends model
         $allChanges  = array();
         $now         = helper::now();
         $data        = fixer::input('post')->get();
+        a($data);exit;
         $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : array();
 
         /* Init $stories. */
@@ -513,15 +514,17 @@ class storyModel extends model
             /* Process the data if the value is 'ditto'. */
             foreach($storyIDList as $storyID)
             {
-                if($data->pris[$storyID]    == 'ditto') $data->pris[$storyID]    = isset($prev['pri'])    ? $prev['pri']    : 0;
-                if($data->modules[$storyID] == 'ditto') $data->modules[$storyID] = isset($prev['module']) ? $prev['module'] : 0;
-                if($data->plans[$storyID]   == 'ditto') $data->plans[$storyID]   = isset($prev['plan'])   ? $prev['plan']   : 0;
-                if($data->sources[$storyID] == 'ditto') $data->sources[$storyID] = isset($prev['source']) ? $prev['source'] : '';
+                if($data->pris[$storyID]     == 'ditto') $data->pris[$storyID]     = isset($prev['pri'])    ? $prev['pri']    : 0;
+                if($data->branches[$storyID] == 'ditto') $data->branches[$storyID] = isset($prev['branch']) ? $prev['branch'] : 0;
+                if($data->modules[$storyID]  == 'ditto') $data->modules[$storyID]  = isset($prev['module']) ? $prev['module'] : 0;
+                if($data->plans[$storyID]    == 'ditto') $data->plans[$storyID]    = isset($prev['plan'])   ? $prev['plan']   : 0;
+                if($data->sources[$storyID]  == 'ditto') $data->sources[$storyID]  = isset($prev['source']) ? $prev['source'] : '';
                 if(isset($data->stages[$storyID])        and ($data->stages[$storyID]        == 'ditto')) $data->stages[$storyID]        = isset($prev['stage'])        ? $prev['stage']        : ''; 
                 if(isset($data->closedBys[$storyID])     and ($data->closedBys[$storyID]     == 'ditto')) $data->closedBys[$storyID]     = isset($prev['closedBy'])     ? $prev['closedBy']     : ''; 
                 if(isset($data->closedReasons[$storyID]) and ($data->closedReasons[$storyID] == 'ditto')) $data->closedReasons[$storyID] = isset($prev['closedReason']) ? $prev['closedReason'] : ''; 
 
                 $prev['pri']    = $data->pris[$storyID];
+                $prev['branch'] = isset($data->branches[$storyID]) ? $data->branches[$storyID] : 0;
                 $prev['module'] = $data->modules[$storyID];
                 $prev['plan']   = $data->plans[$storyID];
                 $prev['source'] = $data->sources[$storyID];
@@ -544,6 +547,7 @@ class storyModel extends model
                 $story->pri            = $data->pris[$storyID];
                 $story->assignedTo     = $data->assignedTo[$storyID];
                 $story->assignedDate   = $oldStory == $data->assignedTo[$storyID] ? $oldStory->assignedDate : $now;
+                $story->branch         = isset($data->branches[$storyID]) ? $data->branches[$storyID] : 0;
                 $story->module         = $data->modules[$storyID];
                 $story->plan           = $data->plans[$storyID];
                 $story->source         = $data->sources[$storyID];

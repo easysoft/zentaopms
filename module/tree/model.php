@@ -312,13 +312,23 @@ class treeModel extends model
      */
     public function getTreeMenu($rootID, $type = 'root', $startModule = 0, $userFunc, $extra = '', $branch = 0)
     {
-        $branches = array($branch => '');
+        if($branch)
+        {
+            $branchName = $this->loadModel('branch')->getById($branch);
+            $branches   = array($branch => $branchName);
+        }
+        else
+        {
+            $branches = array($branch => '');
+        }
+
         $manage   = $userFunc[1] == 'createManageLink' ? true : false;
         $product  = $this->loadModel('product')->getById($rootID);
         if(strpos('story|bug|case', $type) !== false and empty($branch))
         {
-            if($product->type != 'normal') $branches = array('null' => '') + $this->loadModel('branch')->getPairs($rootID, 'noempty');
+            if($product->type != 'normal') $branches = $this->loadModel('branch')->getPairs($rootID, 'noempty');
         }
+        $branches = array('null' => '') + $branches;
 
         /* Add for task #1945. check the module has case or no. */
         if($type == 'case' and !empty($extra)) $this->loadModel('testtask');
@@ -1155,6 +1165,7 @@ class treeModel extends model
 
         $data     = fixer::input('post')->get();
         $branches = isset($data->branch) ? $data->branch : array();
+        $orders   = isset($data->order)  ? $data->order  : array();
         $shorts   = $data->shorts;
         if($parentModule)
         {
@@ -1174,6 +1185,16 @@ class treeModel extends model
             /* The new modules. */
             if(is_numeric($moduleID))
             {
+                if(isset($orders[$moduleID]) and !empty($orders[$moduleID]))
+                {
+                    $order = $orders[$moduleID];
+                }
+                else
+                {
+                    $order = $this->post->maxOrder + $i * 10;
+                    $i ++;
+                }
+
                 $module          = new stdClass();
                 $module->root    = $rootID;
                 $module->name    = strip_tags(trim($moduleName));
@@ -1182,18 +1203,18 @@ class treeModel extends model
                 $module->short   = $shorts[$moduleID];
                 $module->grade   = $grade;
                 $module->type    = $type;
-                $module->order   = $this->post->maxOrder + $i * 10;
+                $module->order   = $order;
                 $this->dao->insert(TABLE_MODULE)->data($module)->exec();
                 $moduleID  = $this->dao->lastInsertID();
                 $childPath = $parentPath . "$moduleID,";
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($childPath)->where('id')->eq($moduleID)->limit(1)->exec();
-                $i ++;
             }
             else
             {
                 $short    = $shorts[$moduleID];
+                $order    = $orders[$moduleID];
                 $moduleID = str_replace('id', '', $moduleID);
-                $this->dao->update(TABLE_MODULE)->set('name')->eq(strip_tags(trim($moduleName)))->set('short')->eq($short)->where('id')->eq($moduleID)->limit(1)->exec();
+                $this->dao->update(TABLE_MODULE)->set('name')->eq(strip_tags(trim($moduleName)))->set('short')->eq($short)->set('order')->eq($order)->where('id')->eq($moduleID)->limit(1)->exec();
             }
         }
     }

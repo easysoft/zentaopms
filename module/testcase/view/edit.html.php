@@ -145,6 +145,24 @@
               </div>
             </td>
           </tr>
+          <tr>
+            <th><?php echo $lang->testcase->module;?></th>
+            <td>
+              <div class='input-group' id='moduleIdBox'>
+              <?php 
+              echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control chosen'");
+              if(count($moduleOptionMenu) == 1)
+              {
+                  echo "<span class='input-group-addon'>";
+                  echo html::a($this->createLink('tree', 'browse', "rootID=$libID&view=caselib&currentModuleID=0&branch=$case->branch"), $lang->tree->manage, '_blank');
+                  echo '&nbsp; ';
+                  echo html::a("javascript:loadLibModules($libID)", $lang->refresh);
+                  echo '</span>';
+              }
+              ?>
+              </div>
+            </td>
+          </tr>
           <?php else:?>
           <tr>
             <th class='w-80px'><?php echo $lang->testcase->product;?></th>
@@ -155,7 +173,6 @@
               </div>
             </td>
           </tr>
-          <?php endif;?>
           <tr>
             <th><?php echo $lang->testcase->module;?></th>
             <td>
@@ -174,6 +191,7 @@
               </div>
             </td>
           </tr>
+          <?php endif;?>
           <?php if(!$isLibCase):?>
           <tr>
             <th><?php echo $lang->testcase->story;?></th>

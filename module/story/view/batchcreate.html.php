@@ -43,8 +43,8 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
         <th class='w-p15<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->story->module;?></th>
         <th class='w-p15<?php echo zget($visibleFields, 'plan', ' hidden')?>'><?php echo $lang->story->plan;?></th>
         <th <?php if(count($visibleFields) >= 9) echo "class='w-150px'"?>><?php echo $lang->story->title;?> <span class='required'></span></th>
-        <th class='w-80px<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo $lang->story->source;?></th>
         <th class='w-p15<?php echo zget($visibleFields, 'spec', ' hidden')?>'><?php echo $lang->story->spec;?></th>
+        <th class='w-80px<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo $lang->story->source;?></th>
         <th class='w-p15<?php echo zget($visibleFields, 'verify', ' hidden')?>'><?php echo $lang->story->verify;?></th>
         <th class='w-80px<?php echo zget($visibleFields, 'pri', ' hidden')?>'><?php echo $lang->story->pri;?></th>
         <th class='w-80px<?php echo zget($visibleFields, 'estimate', ' hidden')?>'><?php echo $lang->story->estimate;?></th>
@@ -66,12 +66,19 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
       <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, $planID, "class='form-control chosen'");?></td>
       <td style='overflow:visible'>
         <div class='input-group'>
-        <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->story->colorTag}' data-update-text='#title\\[{$i}\\]'");?>
-        <?php echo html::input("title[$i]", $storyTitle, "class='form-control' autocomplete='off'") . html::hidden("uploadImage[$i]", $fileName);?>
+          <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->story->colorTag}' data-update-text='#title\\[{$i}\\]'");?>
+          <?php echo html::input("title[$i]", $storyTitle, "class='form-control' autocomplete='off'") . html::hidden("uploadImage[$i]", $fileName);?>
+        </div>
+      </td>
+      <td class='<?php echo zget($visibleFields, 'spec', 'hidden')?>'>
+        <div class='input-group'>
+          <span class='input-group-btn'>
+            <a href='javascript:copyTitle(<?php echo $i;?>)' class='btn' title='<?php echo $lang->story->copyTitle; ?>'><i class='icon-angle-right'></i></a>
+          </span>
+          <?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control autosize'");?>
         </div>
       </td>
       <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo html::select("source[$i]", $sourceList, $source, "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'spec', 'hidden')?>'><?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control autosize'");?></td>
       <td class='<?php echo zget($visibleFields, 'verify', 'hidden')?>'><?php echo html::textarea("verify[$i]", '', "rows='1' class='form-control autosize'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'pri', ' hidden')?>' style='overflow:visible'><?php echo html::select("pri[$i]", $priList, $pri, "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'estimate', 'hidden')?>'><?php echo html::input("estimate[$i]", $estimate, "class='form-control' autocomplete='off'");?></td>
@@ -95,12 +102,19 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
       <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, $planID, "class='form-control chosen'");?></td>
       <td style='overflow:visible'>
         <div class='input-group'>
-        <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->story->colorTag}' data-update-text='#title\\[{$i}\\]'");?>
-        <?php echo html::input("title[$i]", $storyTitle, "class='form-control' autocomplete='off'");?>
+          <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->story->colorTag}' data-update-text='#title\\[{$i}\\]'");?>
+          <?php echo html::input("title[$i]", $storyTitle, "class='form-control' autocomplete='off'");?>
+        </div>
+      </td>
+      <td class='<?php echo zget($visibleFields, 'spec', 'hidden')?>'>
+        <div class='input-group'>
+          <span class='input-group-btn'>
+            <a href='javascript:copyTitle(<?php echo $i;?>)' class='btn' title='<?php echo $lang->story->copyTitle; ?>'><i class='icon-angle-right'></i></a>
+          </span>
+          <?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control autosize'");?>
         </div>
       </td>
       <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo html::select("source[$i]", $sourceList, $source, "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'spec', 'hidden')?>'><?php echo html::textarea("spec[$i]", $spec, "rows='1' class='form-control autosize'");?></td>
       <td class='<?php echo zget($visibleFields, 'verify', 'hidden')?>'><?php echo html::textarea("verify[$i]", '', "rows='1' class='form-control autosize'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'pri', ' hidden')?>' style='overflow:visible'><?php echo html::select("pri[$i]", $priList, $pri, "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'estimate', 'hidden')?>'><?php echo html::input("estimate[$i]", $estimate, "class='form-control' autocomplete='off'");?></td>
@@ -124,8 +138,14 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
         <?php echo html::input("title[%s]", $storyTitle, "class='form-control' autocomplete='off'");?>
         </div>
       </td>
+      <td class='<?php echo zget($visibleFields, 'spec', ' hidden')?>'>
+        <div class='input-group'>
+          <span class='input-group-btn'>
+            <a href='javascript:copyTitle(%s)' class='btn' title='<?php echo $lang->story->copyTitle; ?>'><i class='icon-angle-right'></i></a>
+          </span>
+          <?php echo html::textarea("spec[%s]", $spec, "rows='1' class='form-control autosize'");?>
+        </div>
       <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo html::select("source[%s]", $sourceList, $source, "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'spec', ' hidden')?>'><?php echo html::textarea("spec[%s]", $spec, "rows='1' class='form-control autosize'");?></td>
       <td class='<?php echo zget($visibleFields, 'verify', ' hidden')?>'><?php echo html::textarea("verify[%s]", '', "rows='1' class='form-control autosize'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'pri', ' hidden')?>' style='overflow:visible'><?php echo html::select("pri[%s]", $priList, $pri, "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'estimate', ' hidden')?>'><?php echo html::input("estimate[%s]", $estimate, "class='form-control autocomplete='off''");?></td>

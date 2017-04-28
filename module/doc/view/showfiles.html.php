@@ -13,7 +13,29 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='featurebar'>
   <strong><?php echo $lang->doclib->files?></strong>
-  <div class='actions'><?php echo html::backButton();?></div>
+  <div class='actions'>
+    <form class='pull-left' method='get'>
+      <?php
+      if($this->config->requestType == 'GET')
+      {
+          echo html::hidden('m',          'doc');
+          echo html::hidden('f',          'showFiles');
+          echo html::hidden('type',       $type);
+          echo html::hidden('objectID',   $object->id);
+          echo html::hidden('recTotal',   isset($this->get->recTotal) ? $this->get->recTotal : 0);
+          echo html::hidden('recPerPage', isset($this->get->recPerPage) ? $this->get->recPerPage : 0);
+          echo html::hidden('pageID',     isset($this->get->pageID) ? $this->get->pageID : 0);
+      }
+      ?>
+      <div class='input-group input-group-sm'>
+        <?php echo html::input('title', $this->get->title, "class='form-control search-query' placeholder='{$lang->doc->fileTitle}'");?>
+        <span class='input-group-btn'>
+          <?php echo html::submitButton($lang->doc->search);?>
+        </span>
+      </div>
+    </form>
+    <?php echo html::backButton();?>
+  </div>
 </div>
 <div class='lib-files cards'>
   <?php foreach($files as $file):?>

@@ -42,6 +42,9 @@ $columns = count($visibleFields) + 2;
         <th class='w-70px<?php echo zget($visibleFields, 'severity', ' hidden')?>'><?php echo $lang->bug->severityAB;?></th>
         <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden')?>'><?php echo $lang->bug->pri;?></th>
         <th <?php if(count($visibleFields) >= 10) echo "class='w-150px'"?>><?php echo $lang->bug->title;?> <span class='required'></span></th>
+        <?php if($branchProduct):?>
+        <th class='w-150px<?php echo zget($visibleFields, 'branch', ' hidden')?>'><?php echo $lang->bug->branch;?></th>
+        <?php endif;?>
         <th class='w-150px<?php echo zget($visibleFields, 'productplan', ' hidden')?>'><?php echo $lang->bug->productplan;?></th>
         <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'><?php echo $lang->bug->assignedTo;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'deadline', ' hidden')?>'><?php echo $lang->bug->deadline;?></th>
@@ -49,8 +52,8 @@ $columns = count($visibleFields) + 2;
         <th class='w-100px<?php echo zget($visibleFields, 'os', ' hidden')?>'><?php echo $lang->bug->os;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'browser', ' hidden')?>'><?php echo $lang->bug->browser;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'><?php echo $lang->bug->keywords;?></th>
-        <th class='w-150px<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>'><?php echo $lang->bug->resolvedByAB;?></th>
-        <th class='w-180px<?php echo zget($visibleFields, 'resolution', ' hidden')?>'><?php echo $lang->bug->resolutionAB;?></th>
+        <th class='w-120px<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>'><?php echo $lang->bug->resolvedByAB;?></th>
+        <th class='w-120px<?php echo zget($visibleFields, 'resolution', ' hidden')?>'><?php echo $lang->bug->resolutionAB;?></th>
       </tr>
     </thead>
     <tbody>
@@ -58,8 +61,17 @@ $columns = count($visibleFields) + 2;
       <?php
       if(!$productID)
       {
+          $product = $this->product->getByID($bugs[$bugID]->product);
+
           $plans = $this->loadModel('productplan')->getPairs($bugs[$bugID]->product, $branch);
           $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
+
+          $branches = $product->type == 'normal' ? array('' => '') : $this->loadModel('branch')->getPairs($product->id);
+          if($product->type != 'normal')
+          {
+              foreach($branches as $branchID => $branchName) $branches[$branchID] = '/' . $product->name . '/' . $branchName;
+              $branches = array('ditto' => $this->lang->story->ditto) + $branches;
+          }
       }
       /**
        * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task.
@@ -80,6 +92,13 @@ $columns = count($visibleFields) + 2;
           <?php echo html::input("titles[$bugID]", $bugs[$bugID]->title, 'class=form-control');?>
           <div>
         </td>
+        <?php if($branchProduct):?>
+        <td class='text-left<?php echo zget($visibleFields, 'branch', ' hidden')?>' style='overflow:visible'>
+          <?php $branchProductID = $productID ? $productID : $product->id;?>
+          <?php $disabled        = (isset($product) and $product->type == 'normal') ? "disabled='disabled'" : '';?>
+          <?php echo html::select("branches[$bugID]", $branches, $bugs[$bugID]->branch, "class='form-control chosen' $disabled");?>
+        </td>
+        <?php endif;?>
         <td class='text-left<?php echo zget($visibleFields, 'productplan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plans[$bugID]", $plans, $bugs[$bugID]->plan, "class='form-control chosen'");?></td>
         <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $users, $bugs[$bugID]->assignedTo, "class='form-control chosen'");?></td>
         <td class='<?php echo zget($visibleFields, 'deadline', ' hidden')?>' style='overflow:visible'><?php echo html::input("deadlines[$bugID]", $bugs[$bugID]->deadline, "class='form-control form-date'");?></td>
@@ -104,7 +123,7 @@ $columns = count($visibleFields) + 2;
       <?php endforeach;?>
     </tbody>
     <tfoot>
-      <tr><td colspan='<?php echo $columns;?>' class='text-center'><?php echo html::submitButton();?></td></tr>
+      <tr><td colspan='<?php echo $branchProduct ? $columns : ($columns - 1);?>' class='text-center'><?php echo html::submitButton();?></td></tr>
     </tfoot>
   </table>
 </form>

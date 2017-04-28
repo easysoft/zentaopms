@@ -56,6 +56,7 @@ js::set('browseType', $browseType);
             <?php 
             $canBatchEdit         = common::hasPriv('task', 'batchEdit');
             $canBatchClose        = (common::hasPriv('task', 'batchClose') && strtolower($browseType) != 'closedBy');
+            $canBatchCancel       = common::hasPriv('task', 'batchCancel');
             $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule');
             $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo');
             if(count($tasks))
@@ -69,9 +70,14 @@ js::set('browseType', $browseType);
                 echo html::commonButton($lang->edit, $misc);
                 echo "<button id='moreAction' type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
                 echo "<ul class='dropdown-menu' id='moreActionMenu'>";
+
                 $actionLink = $this->createLink('task', 'batchClose');
                 $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "class='disabled'";
                 echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
+
+                $actionLink = $this->createLink('task', 'batchCancel');
+                $misc = $canBatchCancel ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "class='disabled'";
+                echo "<li>" . html::a('#', $lang->task->cancel, '', $misc) . "</li>";
 
                 if($canBatchChangeModule)
                 {

@@ -5,6 +5,8 @@
 .lib .file-icon{margin-bottom:5px;}
 .lib .lib-name{overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
 .lib:hover, .lib:focus, .lib:active {border-color: #2e6dad; background-color: #EBF2F9; color: #2e6dad}
+.lib .icon-move{display: none; position: relative; top: -10px; right : -70px;}
+.lib:hover .icon-move{display: inline-block; cursor: move;}
 .w-lib-p100{width:100%;}
 .w-lib-p50{width:45%;}
 .w-lib-p33{width:30%;}

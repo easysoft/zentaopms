@@ -35,6 +35,7 @@ $lang->doc->fileObject     = '所属对象';
 $lang->doc->whiteList      = '白名单';
 $lang->doc->contentType    = '文档格式';
 $lang->doc->separator      = "<i class='icon-angle-right'></i>";
+$lang->doc->fileTitle      = '附件名';
 
 $lang->doc->moduleDoc      = '按模块浏览';
 $lang->doc->searchDoc      = '搜索';
@@ -68,6 +69,7 @@ $lang->doc->editLib        = '编辑文档库';
 $lang->doc->deleteLib      = '删除文档库';
 $lang->doc->fixedMenu      = '固定到菜单栏';
 $lang->doc->removeMenu     = '从菜单栏移除';
+$lang->doc->search         = '搜索';
 
 /* 查询条件列表 */
 $lang->doc->allProduct     = '所有' . $lang->productCommon;

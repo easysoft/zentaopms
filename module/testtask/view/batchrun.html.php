@@ -26,7 +26,8 @@
         <th class='w-id'>   <?php  echo $lang->idAB;?></th> 
         <th class='w-pri'>  <?php  echo $lang->priAB;?></th>
         <th class='w-100px'><?php echo $lang->testcase->module;?></th> 
-        <th width='300'>    <?php echo $lang->testcase->title;?></th>
+        <th width='200'>    <?php echo $lang->testcase->title;?></th>
+        <th width='200'>    <?php echo $lang->testcase->precondition;?></th>
         <th width='180'>    <?php echo $lang->testcase->result?></th>
         <th>                <?php echo $lang->testcase->stepDesc . '/' . $lang->testcase->stepExpect?></th>
       </tr>
@@ -38,6 +39,7 @@
       <td><?php echo $lang->testcase->priList[$cases[$caseID]->pri]?></td>
       <td class='text-left'><?php echo "<span title='" . $moduleOptionMenu[$cases[$caseID]->module] . "'>" . $moduleOptionMenu[$cases[$caseID]->module] . "</span>"?></td>
       <td class='text-left'><?php echo "<span title='{$cases[$caseID]->title}'>{$cases[$caseID]->title}</span>"?></td>
+      <td class='text-left'><?php echo "<span title='{$cases[$caseID]->precondition}'>{$cases[$caseID]->precondition}</span>"?></td>
       <td><?php echo html::radio("results[$caseID]", $this->lang->testcase->resultList, 'pass', "onclick='showAction(this.value,\".action$caseID\")'")?></td>
       <td>
         <?php if(!empty($steps[$caseID])):?>
@@ -70,7 +72,7 @@
       </td>
     </tr>  
     <?php endforeach;?>
-    <tr><td colspan='6' class='text-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='7' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <script type='text/javascript'>
@@ -79,18 +81,24 @@ function showAction(value, obj)
     if(value == 'pass')
     {
         $(obj).addClass('hidden');
-        $(obj).closest('tbody').children('tr').each(function(){
-            var $td = $(this).children('td:first');
-            if($td.attr('colspan') != undefined) $td.attr('colspan', 2);
-        });
+        if($(obj).parent().prop('tagName') == 'TR')
+        {
+            $(obj).closest('tbody').children('tr').each(function(){
+                var $td = $(this).children('td:first');
+                if($td.attr('colspan') != undefined) $td.attr('colspan', 2);
+            });
+        }
     }
     else
     {
         $(obj).removeClass('hidden');
-        $(obj).closest('tbody').children('tr').each(function(){
-            var $td = $(this).children('td:first');
-            if($td.attr('colspan') != undefined) $td.attr('colspan', 4);
-        });
+        if($(obj).parent().prop('tagName') == 'TR')
+        {
+            $(obj).closest('tbody').children('tr').each(function(){
+                var $td = $(this).children('td:first');
+                if($td.attr('colspan') != undefined) $td.attr('colspan', 4);
+            });
+        }
     }
 }
 </script>

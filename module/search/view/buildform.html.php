@@ -53,6 +53,10 @@ include '../../common/view/chosen.html.php';
 #groupAndOr {display: inline-block;}
 
 .outer > #querybox {margin: -20px -20px 20px; border-top: none; border-bottom: 1px solid #ddd}
+
+#searchform input.date::-webkit-input-placeholder{color: #000000; opacity: 1;}
+#searchform input.date::-moz-placeholder{color: #000000; opacity: 1;} 
+#searchform input.date:-ms-input-placeholder{color: #000000; opacity: 1;}
 </style>
 <script language='Javascript'>
 var dtOptions = 
@@ -107,7 +111,16 @@ function setDateField(query, fieldNO)
             var target = $(query).closest('form').find('#' + $period.data('target'));
             if(target.length)
             {
-                target.val($(this).attr('href').replace('#', '$'));
+                if(target.next('input[type=hidden]').length)
+                {
+                    target.next('input[type=hidden]').val($(this).attr('href').replace('#', '$'));
+                    target.attr('placeholder', $(this).attr('href').replace('#', '$'));
+                }
+                else
+                {
+                    target.val($(this).attr('href').replace('#', '$'));
+                }
+
                 $(query).closest('form').find('#operator' + $period.data('fieldNO')).val('between');
                 $period.hide();
             }
@@ -120,10 +133,25 @@ function setDateField(query, fieldNO)
         var $e = $(e.target);
         var ePos = $e.offset();
         $period.css({'left': ePos.left + 175, 'top': ePos.top + 29, 'min-height': $('.datetimepicker').outerHeight()}).show().data('target', $e.attr('id')).data('fieldNO', fieldNO).find('li.active').removeClass('active');
-        $period.find("li > a[href='" + $e.val().replace('$', '#') + "']").closest('li').addClass('active');
+        if($e.attr('placeholder'))
+        {
+            $period.find("li > a[href='" + $e.attr('placeholder').replace('$', '#') + "']").closest('li').addClass('active');
+        }
+        else
+        {
+            $period.find("li > a[href='" + $e.val().replace('$', '#') + "']").closest('li').addClass('active');
+        }
     }).on('changeDate', function()
     {
         var opt = $(query).closest('form').find('#operator' + $period.data('fieldNO'));
+        var target = $('#' + $period.data('target'));
+        if(target.length)
+        {
+            if(target.next('input[type=hidden]').length)
+            {
+                target.next('input[type=hidden]').val(target.val());
+            }
+        }
         if(opt.val() == 'between') opt.val('<=');
         $period.hide();
     }).on('hide', function(){setTimeout(function(){$period.hide();}, 200);});
@@ -357,8 +385,18 @@ foreach($fieldParams as $fieldName => $param)
           if($param['control'] == 'input') 
           {
               $fieldName  = $formSession["field$fieldNO"];
+              $fieldValue = $formSession["value$fieldNO"];
               $extraClass = isset($param['class']) ? $param['class'] : '';
-              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='form-control $extraClass searchInput' autocomplete='off'");
+
+              if($fieldValue && strpos('$lastWeek,$thisWeek,$today,$yesterday,$thisMonth,$lastMonth',$fieldValue) !== false)
+              {
+                  echo html::input("dateValue$fieldNO", '', "class='form-control $extraClass searchInput' placeholder='{$fieldValue}'");
+                  echo html::hidden("value$fieldNO", $fieldValue);
+              }
+              else
+              {
+                  echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' autocomplete='off'");
+              }
           }
           echo '</td>';
 
@@ -407,8 +445,18 @@ foreach($fieldParams as $fieldName => $param)
           if($param['control'] == 'input')
           {
               $fieldName  = $formSession["field$fieldNO"];
+              $fieldValue = $formSession["value$fieldNO"];
               $extraClass = isset($param['class']) ? $param['class'] : '';
-              echo html::input("value$fieldNO",  $formSession["value$fieldNO"], "class='form-control $extraClass searchInput' autocomplete='off'");
+
+              if($fieldValue && strpos('$lastWeek,$thisWeek,$today,$yesterday,$thisMonth,$lastMonth',$fieldValue) !== false)
+              {
+                  echo html::input("dateValue$fieldNO", '', "class='form-control $extraClass searchInput' placeholder='{$fieldValue}'");
+                  echo html::hidden("value$fieldNO", $fieldValue);
+              }
+              else
+              {
+                  echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' autocomplete='off'");
+              }
           }
           echo '</td>';
 

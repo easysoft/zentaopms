@@ -335,6 +335,7 @@ class testsuiteModel extends model
         $lib = $this->loadModel('file')->processEditor($lib, $this->config->testsuite->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TESTSUITE)->data($lib)
             ->batchcheck($this->config->testsuite->createlib->requiredFields, 'notempty')
+            ->check('name', 'unique', "deleted = '0'")
             ->exec();
         if(!dao::isError())
         {

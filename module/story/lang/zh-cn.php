@@ -38,6 +38,7 @@ $lang->story->export      = "导出数据";
 $lang->story->zeroCase    = "零用例需求";
 $lang->story->zeroTask    = "只列零任务需求";
 $lang->story->reportChart = "统计报表";
+$lang->story->copyTitle   = "同需求名称";
 $lang->story->batchChangePlan   = "批量修改计划";
 $lang->story->batchChangeBranch = "批量修改分支";
 $lang->story->batchChangeStage  = "批量修改阶段";

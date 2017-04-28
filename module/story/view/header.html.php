@@ -33,7 +33,7 @@ function loadProductModules(productID, branch)
 {
     if(typeof(branch) == 'undefined') branch = 0;
     if(!branch) branch = 0;
-    moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&needManage=true');
+    moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
     $('#moduleIdBox').load(moduleLink, function()
     {
         $('#moduleIdBox #module').chosen(defaultChosenOptions);
@@ -45,7 +45,7 @@ function loadProductPlans(productID, branch)
 {
     if(typeof(branch) == 'undefined') branch = 0;
     if(!branch) branch = 0;
-    planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&needCreate=true');
+    planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=&needCreate=true');
     $('#planIdBox').load(planLink, function(){$('#planIdBox #plan').chosen(defaultChosenOptions);});
 }
 

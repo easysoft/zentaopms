@@ -535,6 +535,25 @@ class doc extends control
     }
 
     /**
+     * Sort doc lib.
+     * 
+     * @access public
+     * @return void
+     */
+    public function sort()
+    {
+        if($_POST)
+        {
+            foreach($_POST as $id => $order)
+            {
+                $this->dao->update(TABLE_DOCLIB)->set('order')->eq($order)->where('id')->eq($id)->exec();
+            }
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->send(array('result' => 'success'));
+        }
+    }
+
+    /**
      * Ajax get modules by libID.
      * 
      * @param  int    $libID 

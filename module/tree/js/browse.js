@@ -58,18 +58,6 @@ function toggleCopy()
    $copy.toggle();
 }
 
-function addItem(obj)
-{
-    var $inputgroup = $(obj).closest('.row-table');
-    $inputgroup.after($inputgroup.clone()).next('.row-table').find('input').val('');
-}
-
-function deleteItem(obj)
-{
-    if($(obj).closest('.row-table').parent().find('i.icon-remove').size() <= 1) return;
-    $(obj).closest('.row-table').remove();
-}
-
 $(document).ready(function()
 {
     toggleCopy();
