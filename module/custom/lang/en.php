@@ -101,10 +101,10 @@ $lang->custom->productProject->relation['1_1'] = 'Project - Sprint';
 
 $lang->custom->productProject->notice = 'Please select according to your team.';
 
-$lang->custom->workingList['complete'] = 'Complete';
-$lang->custom->workingList['test']     = 'Test';
-$lang->custom->workingList['story']    = 'Story';
-$lang->custom->workingList['task']     = 'Task';
+$lang->custom->workingList['full']      = 'Full';
+$lang->custom->workingList['onlyTest']  = 'Test';
+$lang->custom->workingList['onlyStory'] = 'Story';
+$lang->custom->workingList['onlyTask']  = 'Task';
 
 $lang->custom->menuTip  = 'Click to show/hide navigation bar. Drag to swtich display order.';
 $lang->custom->saveFail = 'Failed to save!';

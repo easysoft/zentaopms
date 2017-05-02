@@ -189,7 +189,7 @@ class custom extends control
     {
         if($_POST)
         {
-            $this->loadModel('setting')->setItem('system.custom.working', $this->post->working);
+            $this->loadModel('setting')->setItem('system.common.global.flow', $this->post->flow);
             die(js::reload('parent'));
         }
 
