@@ -27,3 +27,4 @@ $lang->backup->error->noDelete    = "%s cannot be deleted. Please modify the per
 $lang->backup->error->restoreSQL  = "Database library restoring failed. Error %s.";
 $lang->backup->error->restoreFile = "File restoring failed. Error %s.";
 $lang->backup->error->backupFile  = "File backup failed. Error %s.";
+$lang->backup->error->backupCode  = "Code backup failed. Error %s.";

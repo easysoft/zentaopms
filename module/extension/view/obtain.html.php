@@ -16,7 +16,7 @@
     <div class="input-group">
       <?php echo html::input('key', $this->post->key, "class='form-control' placeholder='{$lang->extension->bySearch}' autocomplete='off'");?>
       <span class="input-group-btn">
-        <?php echo html::submitButton('<i class="icon-search"></i>', '', ''); ?>
+        <?php echo html::submitButton('<i class="icon-search"></i>', '', 'btn'); ?>
       </span>
     </div>
   </form>

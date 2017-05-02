@@ -23,7 +23,9 @@
 </div>
 
 <div class='panel'>
-  <div class='panel-heading'><strong><?php echo $lang->backup->history?></strong></div>
+  <div class='panel-heading'>
+    <strong><?php echo $lang->backup->history?></strong>
+  </div>
   <table class='table table-condensed table-bordered active-disabled table-fixed'>
     <thead>
       <tr>
@@ -67,6 +69,7 @@
     </tfoot>
   </table>
 </div>
+<div class='alert alert-info'><?php echo $lang->backup->restoreTip;?></div>
 <div class="modal fade" id="waitting" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog w-300px">
     <div class="modal-content">
@@ -75,5 +78,6 @@
   </div>
 </div>
 <?php js::set('backup', $lang->backup->backup);?>
+<?php js::set('confirmRestore', $lang->backup->confirmRestore);?>
 <?php js::set('restore', $lang->backup->restore);?>
 <?php include '../../common/view/footer.html.php';?>
