@@ -21,17 +21,7 @@
 #steps.sortable-sorting > tr.drag-row + tr > td {box-shadow: inset 0 4px 2px rgba(0,0,0,.2)}
 #steps.sortable-sorting > tr.drag-row > td {background-color: #edf3fe!important}
 #steps.sortable > tr.drop-success > td {background-color: #cfe0ff; transition: background-color 2s;}
-#steps .step-type-toggle {padding: 0}
-#steps .step-type-menu-box {position: relative;}
-#steps .step-type-menu {position: absolute; top: 25px; right: 0; z-index: 10; box-shadow: 0 6px 12px rgba(0,0,0,.175); background-color: #fff; display: none; border: 1px solid #bbb; min-width: 60px;}
-#steps .step-step[data-type="item"] .step-type-menu > a[data-value="item"] {display: none}
-#steps .step-type-current {display: block; padding: 5px 10px; position: relative; line-height: 20px;}
-#steps .step-type-toggle:hover .step-type-current {background-color: #edf3fe; color: #03c}
-#steps .step-type-menu:hover,
-#steps .step-type-toggle:hover .step-type-menu {display: table; padding: 2px}
-#steps .step-type-menu > a {display: table-cell; padding: 8px 10px; color: #666;}
-#steps .step-type-menu > a:hover {color: #333; background-color: #e5e5e5;}
-#steps .step-type-menu > a.active {color: #fff; background-color: #1a4f85;}
+#steps .step-type-toggle {padding: 5px 11px 5px 7px;}
 
 .table-bordered .step-actions {width: 98px;}
 .table-bordered > #steps > tr > td {padding: 0; background-color: #fafafa; border: 1px solid #ddd!important; border-left-style: dotted!important; border-right-style: dotted!important;}
