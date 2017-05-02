@@ -262,9 +262,20 @@ function setRequiredFields()
         requiredFields = config.requiredFields.split(',');
         for(i = 0; i < requiredFields.length; i++)
         {
-            $('#' + requiredFields[i]).closest('td,th').prepend("<div class='required required-wrapper'></div>");
-            var colEle = $('#' + requiredFields[i]).closest('[class*="col-"]');
-            if(colEle.parent().hasClass('form-group')) colEle.addClass('required');
+            var $ctlEle = $('#' + requiredFields[i]);
+            if($ctlEle.is('input')) $ctlEle.attr('required', 'required');
+            if($ctlEle.parent().hasClass('input-group'))
+            {
+                var $requiredDiv = $('<div class="input-group-required"><div class="required"></div></div>');
+                $ctlEle.after($requiredDiv);
+                $requiredDiv.find('.required').append($ctlEle);
+            }
+            else
+            {
+                $ctlEle.closest('td,th').prepend("<div class='required required-wrapper'></div>");
+                var $colEle = $ctlEle.closest('[class*="col-"]');
+                if($colEle.parent().hasClass('form-group')) $colEle.addClass('required');
+            }
         }
     }
     $('.required').closest('td,th').next().css('padding-left', '15px');
