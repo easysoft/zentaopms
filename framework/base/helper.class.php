@@ -226,7 +226,10 @@ class baseHelper
         $extModelClass    = 'ext' . $modelClass;
         $extTmpModelClass = 'tmpExt' . $modelClass;
         $modelLines       = "<?php\n";
-        $modelLines      .= "helper::import('$mainModelFile');\n";
+        $modelLines      .= "global \$app;\n";
+        $modelLines      .= "helper::cd(\$app->getBasePath());\n";
+        $modelLines      .= "helper::import('" . str_replace($app->getBasePath(), '.' . DS, $mainModelFile) . "');\n";
+        $modelLines      .= "helper::cd();\n";
         $modelLines      .= "class $extTmpModelClass extends $modelClass \n{\n";
 
         /* Cycle all the extension files. */

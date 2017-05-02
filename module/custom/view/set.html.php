@@ -71,7 +71,7 @@ EOT;
           <td><?php echo html::radio('needReview', $lang->custom->reviewList, $needReview);?></td>
           <td></td>
         </tr>
-        <tr>
+        <tr <?php if($needReview and $module == 'testcase') echo "class='hidden'"?>>
           <th><?php echo $lang->custom->forceReview;?></th>
           <td><?php echo html::select('forceReview[]', $users, $forceReview, "class='form-control chosen' multiple");?></td>
           <td class='w-180px'><?php printf($lang->custom->notice->forceReview, $lang->$module->common);?></td>
@@ -162,4 +162,22 @@ EOT;
     </div>
   </form>
 </div>
+<?php if($module == 'testcase' and $field == 'review'):?>
+<script>
+$(function()
+{
+    $("input[name='needReview']").change(function()
+    {
+        if($(this).val() == 0)
+        {
+            $('#forceReview').closest('tr').removeClass('hidden');
+        }
+        else
+        {
+            $('#forceReview').closest('tr').addClass('hidden');
+        }
+    })
+})
+</script>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
