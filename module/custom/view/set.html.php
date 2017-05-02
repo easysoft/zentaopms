@@ -42,6 +42,8 @@ EOT;
   }
   echo '<li>'; 
   common::printLink('custom', 'flow', "",  $lang->custom->flow); 
+  echo '</li><li>'; 
+  common::printLink('custom', 'working', '',  $lang->custom->working); 
   echo '</li>';
   ?>
   </ul>

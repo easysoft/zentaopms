@@ -6,6 +6,7 @@ $lang->custom->restore   = 'Reset to Default';
 $lang->custom->key       = 'Key';
 $lang->custom->value     = 'Value';
 $lang->custom->flow      = 'Process';
+$lang->custom->working   = 'Working';
 $lang->custom->select    = 'Select Process';
 $lang->custom->branch    = 'Multi Branch';
 
@@ -99,6 +100,11 @@ $lang->custom->productProject->relation['0_1'] = 'Product - Sprint';
 $lang->custom->productProject->relation['1_1'] = 'Project - Sprint';
 
 $lang->custom->productProject->notice = 'Please select according to your team.';
+
+$lang->custom->workingList['complete'] = 'Complete';
+$lang->custom->workingList['test']     = 'Test';
+$lang->custom->workingList['story']    = 'Story';
+$lang->custom->workingList['task']     = 'Task';
 
 $lang->custom->menuTip  = 'Click to show/hide navigation bar. Drag to swtich display order.';
 $lang->custom->saveFail = 'Failed to save!';
