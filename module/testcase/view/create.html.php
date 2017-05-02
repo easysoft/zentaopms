@@ -147,16 +147,16 @@
                     <textarea rows='1' class='form-control autosize step-steps' name='steps[]'></textarea>
                     <span class="input-group-addon step-type-toggle">
                       <input type='hidden' name='stepType[]' value='item' class='step-type'>
-                      <label class="checkbox-inline"><input type="checkbox" class='step-group-toggle'> <?php echo $lang->testcase->group ?></label>
+                      <label class="checkbox-inline"><input tabindex='-1' type="checkbox" class='step-group-toggle'> <?php echo $lang->testcase->group ?></label>
                     </span>
                   </div>
                 </td>
                 <td><textarea rows='1' class='form-control autosize step-expects' name='expects[]'></textarea></td>
                 <td class='step-actions'>
                   <div class='btn-group'>
-                    <button type='button' class='btn btn-step-add'><i class='icon icon-plus'></i></button>
-                    <button type='button' class='btn btn-step-move'><i class='icon icon-move'></i></button>
-                    <button type='button' class='btn btn-step-delete'><i class='icon icon-remove'></i></button>
+                    <button type='button' class='btn btn-step-add' tabindex='-1'><i class='icon icon-plus'></i></button>
+                    <button type='button' class='btn btn-step-move' tabindex='-1'><i class='icon icon-move'></i></button>
+                    <button type='button' class='btn btn-step-delete' tabindex='-1'><i class='icon icon-remove'></i></button>
                   </div>
                 </td>
               </tr>
@@ -170,16 +170,16 @@
                     <span class='input-group-addon step-type-toggle'>
                       <?php if(!isset($step->type)) $step->type = 'step';?>
                       <input type='hidden' name='stepType[]' value='<?php echo $step->type;?>' class='step-type'>
-                      <label class="checkbox-inline"><input type="checkbox" class='step-group-toggle'<?php if($step->type === 'group') echo ' checked' ?>> <?php echo $lang->testcase->group ?></label>
+                      <label class="checkbox-inline"><input tabindex='-1' type="checkbox" class='step-group-toggle'<?php if($step->type === 'group') echo ' checked' ?>> <?php echo $lang->testcase->group ?></label>
                     </span>
                   </div>
                 </td>
                 <td><?php echo html::textarea('expects[]', $step->expect, "rows='1' class='form-control autosize step-expects'") ?></td>
                 <td class='step-actions'>
                   <div class='btn-group'>
-                    <button type='button' class='btn btn-step-add'><i class='icon icon-plus'></i></button>
-                    <button type='button' class='btn btn-step-move'><i class='icon icon-move'></i></button>
-                    <button type='button' class='btn btn-step-delete'><i class='icon icon-remove'></i></button>
+                    <button type='button' class='btn btn-step-add' tabindex='-1'><i class='icon icon-plus'></i></button>
+                    <button type='button' class='btn btn-step-move' tabindex='-1'><i class='icon icon-move'></i></button>
+                    <button type='button' class='btn btn-step-delete' tabindex='-1'><i class='icon icon-remove'></i></button>
                   </div>
                 </td>
               </tr>

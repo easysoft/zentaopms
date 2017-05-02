@@ -145,20 +145,21 @@ function initSteps(selector)
     var insertStepRow = function($row, count, type, notFocus)
     {
         if(count === undefined) count = 1;
+        var $step;
         for(var i = 0; i < count; ++i)
         {
-            var $step = $stepTemplate.clone();
+            $step = $stepTemplate.clone();
             if($row) $row.after($step);
             else $steps.append($step);
             $step.addClass('step-new');
-            if(type) $step.find('step-type').val(type);
-            if(!notFocus) setTimeout(function(){$step.find('.step-steps').focus();}, 10);
+            if(type) $step.find('.step-type').val(type);
         }
+        if(!notFocus && $step) setTimeout(function(){$step.find('.step-steps').focus();}, 10);
     };
     var updateStepType = function($step, type)
     {
         var targetIsGroup = type =='group';
-        $step.attr('data-type', type).find('.step-steps').toggleClass('autosize', !targetIsGroup).attr('placeholder', targetIsGroup ? groupNameText : null).focus();
+        $step.attr('data-type', type).find('.step-steps').toggleClass('autosize', !targetIsGroup).attr('placeholder', targetIsGroup ? groupNameText : null);
     };
     var getStepsElements = function()
     {
@@ -277,7 +278,8 @@ function initSteps(selector)
             var $step = $control.closest('.step');
             if($step.data('index') === getStepsElements().length)
             {
-                insertStepRow($step, 1, 'step', false);
+                insertStepRow($step, 1, 'step', true);
+                if($step.is('.step-item,.step-group')) insertStepRow($step, 1, 'item', true);
                 refreshSteps();
             }
         }
