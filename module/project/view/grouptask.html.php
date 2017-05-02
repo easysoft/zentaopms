@@ -51,7 +51,6 @@
   ?>
   <?php $groupIndex = 0;?>
   <?php foreach($tasks as $groupKey => $groupTasks):?>
-  <?php $i = 0;?>
   <?php
     $groupWait     = 0;
     $groupDone     = 0;
@@ -66,9 +65,27 @@
     if($groupBy == 'assignedTo' and $groupName == '') $groupName = $this->lang->task->noAssigned;
   ?>
   <?php
-  $groupSum = count($groupTasks);
-  foreach($groupTasks as $task)
+  foreach($groupTasks as $taskKey => $task)
   {
+      if(isset($currentFilter) and $currentFilter != 'all')
+      {
+          if($groupBy == 'story' and $currentFilter == 'linked' and empty($task->story))
+          {
+              unset($groupTasks[$taskKey]);
+              continue;
+          }
+          if($groupBy == 'pri' and $currentFilter == 'noset'  and !empty($task->pri))
+          {
+              unset($groupTasks[$taskKey]);
+              continue;
+          }
+          if($groupBy == 'assignedTo' and $currentFilter == 'undone' and $task->status != 'wait' and $task->status != 'doing')
+          {
+              unset($groupTasks[$taskKey]);
+              continue;
+          }
+      }
+
       $groupEstimate  += $task->estimate;
       $groupConsumed  += $task->consumed;
       $groupLeft      += ($task->status == 'cancel' ? 0 : $task->left);
@@ -78,16 +95,10 @@
       if($task->status == 'done')   $groupDone++;
       if($task->status == 'closed') $groupClosed++;
   }
+  $groupSum = count($groupTasks);
   ?>
+  <?php $i = 0;?>
   <?php foreach($groupTasks as $task):?>
-  <?php
-  if(isset($currentFilter) and $currentFilter != 'all')
-  {
-      if($groupBy == 'story'      and $currentFilter == 'linked' and empty($task->story)) continue;
-      if($groupBy == 'pri'        and $currentFilter == 'noset'  and !empty($task->pri)) continue;
-      if($groupBy == 'assignedTo' and $currentFilter == 'undone' and $task->status != 'wait' and $task->status != 'doing') continue;
-  }
-  ?>
   <?php $assignedToClass = $task->assignedTo == $app->user->account ? "style='color:red'" : '';?>
   <?php $taskLink        = $this->createLink('task','view',"taskID=$task->id"); ?>
     <tr class='text-center' data-id='<?php echo $groupIndex?>'>

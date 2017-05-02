@@ -156,7 +156,7 @@ class admin extends control
         {
             $tableName = current($table);
             $result = $this->dbh->query("REPAIR TABLE $tableName")->fetch();
-            echo "Repairing TABLE: " . $result->Table . "\t" . $result->Msg_type . ":" . $result->Msg_text . "\n";
+            echo "Repairing TABLE: " . $result->Table . (defined('IN_SHELL') ? "\t" : "&nbsp;&nbsp;&nbsp;&nbsp;") . $result->Msg_type . ":" . $result->Msg_text . (defined('IN_SHELL') ? "\n" : "<br />\n");
         }
     }
 

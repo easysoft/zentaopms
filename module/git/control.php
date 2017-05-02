@@ -125,6 +125,7 @@ class git extends control
         $repoUrl = rtrim($repoUrl, '/') . '/';
 
         $parsedFiles = array();
+        $repoDirs    = explode('/', trim($repoUrl, '/'));
         foreach($files as $file)
         {
             $file = trim($file);
@@ -135,7 +136,15 @@ class git extends control
                 $action = $file[0];
                 $file   = trim(substr($file, 2));
             }
-            $path = str_replace($repoRoot,  '', $file);
+            $fileDirs = explode('/', trim($file, '/'));
+            $diffDirs = array_diff($fileDirs, $repoDirs);
+
+            foreach($fileDirs as $i => $dir)
+            {
+                if(isset($diffDirs[$i])) break;
+                if(!isset($diffDirs[$i])) unset($fileDirs[$i]);
+            }
+            $path = '/' . join('/', $fileDirs);
             $parsedFiles[$action][] = ltrim($path, '/');
         }
 
