@@ -47,9 +47,10 @@
           <td class='w-60px'><?php if(!empty($result->files)) echo html::a("#caseResult{$result->id}", $lang->files . $fileCount, '', "data-toggle='modal' data-type='iframe'")?></td>
           <td class='w-50px text-center'><i class='collapse-handle icon-chevron-down text-muted'></i></td>
         </tr>
+        <?php $params = isset($testtask) ? "testtask=$testtask->id,projectID=$testtask->project,buildID=$testtask->build" : '';?>
         <tr class='result-detail hide' id='tr-detail_<?php echo $trCount++; ?>'>
           <td colspan='7' class='pd-0'>
-            <form action='<?php echo $this->createLink('bug', 'create', "product=$case->product&branch=$case->branch&extras=caseID=$case->id,version=$case->version,resultID=$result->id,runID=$runID" . (isset($testtaskID) ? ",testtask=$testtaskID" : ''))?>' target='_blank' method='post'>
+            <form action='<?php echo $this->createLink('bug', 'create', "product=$case->product&branch=$case->branch&extras=caseID=$case->id,version=$case->version,resultID=$result->id,runID=$runID" . $params)?>' target='_blank' method='post'>
             <table class='table table-condensed borderless mg-0 resultSteps'>
               <thead>
                 <tr>
