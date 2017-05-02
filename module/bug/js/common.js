@@ -9,7 +9,7 @@ $(function()
         moduleID   = $('#module').val();
         assignedto = $('#assignedTo').val();
         changeProductConfirmed = true;
-        oldStoryID             = 0;
+        oldStoryID             = $('#story').val() || 0;
         oldProjectID           = 0;
         oldOpenedBuild         = '';
         oldTaskID              = 0;

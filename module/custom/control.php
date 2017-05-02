@@ -185,6 +185,19 @@ class custom extends control
         $this->display();
     }
 
+    public function working()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.custom.working', $this->post->working);
+            die(js::reload('parent'));
+        }
+
+        $this->view->title      = $this->lang->custom->working;
+        $this->view->position[] = $this->lang->custom->working;
+        $this->display();
+    }
+
     /**
      * Ajax save custom fields.
      * 
