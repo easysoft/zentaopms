@@ -33,7 +33,7 @@
     <table class='table table-form'>
       <tr>
         <th class='w-100px text-top'><?php echo $lang->custom->working;?></th>
-        <td><?php echo html::radio('working', $lang->custom->workingList, isset($config->custom->working) ? $config->custom->working : 'complete', '', 'block');?></td>
+        <td><?php echo html::radio('flow', $lang->custom->workingList, isset($config->global->flow) ? $config->global->flow : 'full', '', 'block');?></td>
       </tr>
       <tr><td></td><td><?php echo html::submitButton()?></td></tr>
     </table>
