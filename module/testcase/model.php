@@ -1352,12 +1352,11 @@ class testcaseModel extends model
      * Check whether force review 
      * 
      * @access public
-     * @return void
+     * @return bool
      */
     public function forceReview()
     {
-        if(!$this->config->testcase->needReview) return false;
-        if(empty($this->config->testcase->forceReview)) return true;
+        if($this->config->testcase->needReview) return true;
         if(strpos(",{$this->config->testcase->forceReview},", ",{$this->app->user->account},") !== false) return true;
         return false;
     }
