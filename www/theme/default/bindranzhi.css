@@ -1,0 +1,6 @@
+body{padding-bottom:0px;}
+#header{padding-top:0px;}
+#mainmenu{margin-top:0px;margin-left:-20px;}
+#mainmenu .nav li a{height:40px; line-height:25px;}
+#searchbox{top:8px;}
+#footer{display:none;}

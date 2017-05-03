@@ -17,23 +17,33 @@
     <?php commonModel::printNotifyLink();?>
   </div>
 </div>
-<?php endif;?>
 
-<?php if(!isset($config->global->browserNotice)):?>
 <script>
+<?php if(!isset($config->global->browserNotice)):?>
 browserNotice = '<?php echo $lang->browserNotice?>'
 function ajaxIgnoreBrowser(){$.get(createLink('misc', 'ajaxIgnoreBrowser'));}
 $(function(){showBrowserNotice()});
-</script>
 <?php endif;?>
+
 <?php if(!isset($config->global->novice) and $this->loadModel('tutorial')->checkNovice()):?>
-<script>
 novice = confirm('<?php echo $lang->tutorial->novice?>');
 $.get(createLink('tutorial', 'ajaxSaveNovice', 'novice=' + (novice ? 'true' : 'false')), function()
 {
     if(novice) location.href=createLink('tutorial', 'index');
 });
+<?php endif;?>
+
+<?php if(!empty($this->config->sso->turnon)):?>
+<?php
+$ranzhiAddr = $this->config->sso->addr;
+$ranzhiURL  = substr($ranzhiAddr, 0, strrpos($ranzhiAddr, '/sys/'));
+?>
+<?php if(!empty($ranzhiURL)):?>
+$(function(){ redirect('<?php echo $ranzhiURL?>', '<?php echo $this->config->sso->code?>'); });
+<?php endif;?>
+<?php endif;?>
 </script>
+
 <?php endif;?>
 
 <script>config.onlybody = '<?php echo $onlybody?>';</script>
