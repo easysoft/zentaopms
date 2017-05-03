@@ -42,7 +42,7 @@
           <button type='button' class='btn btn-link<?php echo $task->type == 'affair' ? '' : ' hidden'?>' id='selectAllUser'><?php echo $lang->task->selectAllUser ?></button>
         </td>
       </tr>
-      <?php if(strpos(",$showFields,", ',story,') !== false):?>
+      <?php if(strpos(",$showFields,", ',story,') !== false and $this->config->global->flow != 'onlyTask'):?>
       <tr>
         <th><?php echo $lang->task->story;?></th>
         <td colspan='5'>
@@ -65,7 +65,9 @@
               <div class="input-group w-p100">
                 <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->task->colorTag ?>' data-update-text='#name'>
                 <?php echo html::input('name', $task->name, "class='form-control' autocomplete='off'");?>
+                <?php if($this->config->global->flow != 'onlyTask'):?>
                 <span class='input-group-btn'><a href='javascript:copyStoryTitle();' id='copyButton' class='btn'><?php echo $lang->task->copyStoryTitle;?></a></span>
+                <?php endif;?>
               </div>
             </div>
             <?php
@@ -161,9 +163,9 @@
         <th><?php echo $lang->files;?></th>
         <td colspan='5'><?php echo $this->fetch('file', 'buildform');?></td>
       </tr>
-      <tr>
+      <tr <?php echo $this->config->global->flow == 'onlyTask' ? "class='hidden'" : '';?>>
         <th><?php echo $lang->task->afterSubmit;?></th>
-        <td colspan='5'><?php echo html::radio('after', $lang->task->afterChoices, 'continueAdding');?></td>
+        <td colspan='5'><?php echo html::radio('after', $lang->task->afterChoices, $this->config->global->flow == 'onlyTask' ? 'toTaskList' : 'continueAdding');?></td>
       </tr>
       <tr>
         <td></td>

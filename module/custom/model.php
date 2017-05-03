@@ -280,11 +280,70 @@ class customModel extends model
 
         global $app, $lang, $config;
 
+        if($config->global->flow == 'onlyStory')
+        {
+            /* Remove project, report and qa module. */
+            unset($lang->menu->project);
+            unset($lang->menu->report);
+            unset($lang->menu->qa);
+
+            unset($lang->menuOrder[15]);
+            unset($lang->menuOrder[20]);
+            unset($lang->menuOrder[30]);
+
+            /* Adjust sub menu of my dashboard. */
+            unset($lang->my->menu->bug);
+            unset($lang->my->menu->todo);
+            unset($lang->my->menu->testtask);
+            unset($lang->my->menu->task);
+            unset($lang->my->menu->myProject);
+
+            /* Adjust sub menu of product module. */
+            unset($lang->product->menu->project);
+            
+            /* Rename product module. */
+            $clientLang = $app->getClientLang();
+            $lang->menu->product = $config->productCommonList[$clientLang][0] . '|product|index';
+        }
+        elseif($config->global->flow == 'onlyTask')
+        {
+            /* Remove product, report and qa module. */
+            unset($lang->menu->product);
+            unset($lang->menu->report);
+            unset($lang->menu->qa);
+
+            unset($lang->menuOrder[10]);
+            unset($lang->menuOrder[20]);
+            unset($lang->menuOrder[30]);
+
+            /* Adjust sub menu of my dashboard. */
+            unset($lang->my->menu->bug);
+            unset($lang->my->menu->todo);
+            unset($lang->my->menu->testtask);
+            unset($lang->my->menu->story);
+
+            /* Adjust sub menu of project  module. */
+            unset($lang->project->menu->story);
+            unset($lang->project->menu->build);
+            unset($lang->project->menu->bug);
+            unset($lang->project->menu->testtask);
+            unset($lang->project->menu->product);
+
+            /* Remove sub menu of product module. */
+            unset($lang->product->menu);
+            unset($lang->product->menuOrder);
+
+            $lang->project->menu->task['subModule'] = 'task';
+            $lang->project->menu->task['alias']     = 'grouptask,importtask';
+        }
+
+
         $allMenu = $module == 'main' ? $lang->menu : (isset($lang->$module->menu) ? $lang->$module->menu : $lang->my->menu);
         if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
 
         if($module != 'main' and isset($lang->menugroup->$module)) $module = $lang->menugroup->$module;
-        $customMenu = isset($config->customMenu->$module) ? $config->customMenu->$module : array();
+        $flowModule = $config->global->flow . '_' . $module;
+        $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
         if(commonModel::isTutorialMode() && $module === 'main')$customMenu = 'my,product,project,qa,company';
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
 
@@ -317,7 +376,7 @@ class customModel extends model
         $app->loadLang($module);
         customModel::mergeFeatureBar($module, $method);
 
-        $configKey  = 'feature_' . $module . '_' . $method;
+        $configKey  = $config->global->flow . '_feature_' . $module . '_' . $method;
         $allMenu    = isset($lang->$module->featureBar[$method]) ? $lang->$module->featureBar[$method] : null;
         $customMenu = '';
         if(!commonModel::isTutorialMode() && isset($config->customMenu->$configKey)) $customMenu = $config->customMenu->$configKey;
@@ -361,13 +420,14 @@ class customModel extends model
 
         if(!is_string($menu)) $menu = json_encode($menu);
 
+        $flow = $this->config->global->flow;
         if(empty($method))
         {
-            $settingKey = "$account.common.customMenu.$module";
+            $settingKey = "$account.common.customMenu.{$flow}_{$module}";
         }
         else
         {
-            $settingKey = "$account.common.customMenu.feature_{$module}_{$method}";
+            $settingKey = "$account.common.customMenu.{$flow}_feature_{$module}_{$method}";
         }
 
         $this->loadModel('setting')->setItem($settingKey, $menu);

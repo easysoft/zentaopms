@@ -36,6 +36,9 @@ class user extends control
      */
     public function view($account)
     {
+        if($this->config->global->flow == 'onlyStory') $this->locate($this->createLink('user', 'dynamic', "period=today&account=$account"));
+        if($this->config->global->flow == 'onlyTask')  $this->locate($this->createLink('user', 'task', "account=$account"));
+        if($this->config->global->flow == 'onlyTest')  $this->locate($this->createLink('user', 'bug', "account=$account"));
         $this->locate($this->createLink('user', 'todo', "account=$account"));
     }
 

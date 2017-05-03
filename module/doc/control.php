@@ -40,7 +40,7 @@ class doc extends control
         $this->doc->setMenu();
 
         $products   = $this->doc->getLimitLibs('product', '9');
-        $projects   = $this->doc->getLimitLibs('project', '9');
+        $projects   = $this->config->global->flow == 'onlyStory' ? array() : $this->doc->getLimitLibs('project', '9');
         $customLibs = $this->doc->getLimitLibs('custom', '9');
         $subLibs['product'] = $this->doc->getSubLibGroups('product', array_keys($products));
         $subLibs['project'] = $this->doc->getSubLibGroups('project', array_keys($projects));

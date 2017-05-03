@@ -81,6 +81,8 @@ $lang->doc->libTypeList['custom']  = '自定义文档库';
 
 $lang->doc->systemLibs['product'] = $lang->productCommon;
 $lang->doc->systemLibs['project'] = $lang->projectCommon;
+global $config;
+if($config->global->flow == 'onlyStory') unset($lang->doc->systemLibs['project']);
 
 $lang->doc->aclList['open']    = '公开';
 $lang->doc->aclList['custom']  = '自定义';

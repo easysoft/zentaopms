@@ -35,7 +35,7 @@
             echo html::a(inlink('changeStatus', "releaseID=$release->id&type=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ' . $lang->release->changeStatusList[$changedStatus], 'hiddenwin', "class='btn'");
         }
         if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn'");
-        if(common::hasPriv('release', 'linkBug'))   echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"),   '<i class="icon-bug"></i> '  . $lang->release->linkBug,   '', "class='btn'");
+        if(common::hasPriv('release', 'linkBug') and $this->config->global->flow != 'onlyStory') echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"),   '<i class="icon-bug"></i> '  . $lang->release->linkBug,   '', "class='btn'");
         echo '</div>';
 
         echo "<div class='btn-group'>";
@@ -65,9 +65,11 @@
         <?php $countStories = count($stories); $countBugs = count($bugs); $countLeftBugs = count($leftBugs);?>
         <ul class='nav nav-tabs'>
           <li <?php if($type == 'story')   echo "class='active'"?>><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story'], 'green') . ' ' . $lang->release->stories;?></a></li>
+          <?php if($this->config->global->flow != 'onlyStory'):?>
           <li <?php if($type == 'bug')     echo "class='active'"?>><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'green') . ' ' . $lang->release->bugs;?></a></li>
           <li <?php if($type == 'leftBug') echo "class='active'"?>><a href='#leftBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'red') . ' ' . $lang->release->generatedBugs;?></a></li>
-          <?php if($countStories or $countBugs or $countLeftBugs):?>
+          <?php endif;?>
+          <?php if($countStories or ($this->config->global->flow != 'onlyStory' and ($countBugs or $countLeftBugs))):?>
           <li class='pull-right'><div><?php common::printIcon('release', 'export', '', '', 'button', '', '', "export btn-sm");?></div></li>
           <?php endif;?>
         </ul>

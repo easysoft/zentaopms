@@ -52,7 +52,7 @@
       <td class='text-center'>
         <?php
         if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ', '', "class='btn-icon' title='{$lang->release->linkStory}'");
-        if(common::hasPriv('release', 'linkBug'))   echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"),   '<i class="icon-bug"></i> ',  '', "class='btn-icon' title='{$lang->release->linkBug}'");
+        if(common::hasPriv('release', 'linkBug') and $this->config->global->flow != 'onlyStory') echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"),   '<i class="icon-bug"></i> ',  '', "class='btn-icon' title='{$lang->release->linkBug}'");
         if(common::hasPriv('release', 'changeStatus'))
         {
             $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';

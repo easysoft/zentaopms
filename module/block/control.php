@@ -49,9 +49,17 @@ class block extends control
                 if(!common::hasPriv($moduleKey, 'index')) unset($modules[$moduleKey]);
             }
 
+            if($this->config->global->flow != 'full')
+            {
+                unset($modules['todo']);
+                unset($modules['qa']);
+            }
+            if($this->config->global->flow == 'onlyStory') unset($modules['project']);
+            if($this->config->global->flow == 'onlyTask') unset($modules['product']);
+
             $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
             if(strpos(",$closedBlock,", ",|dynamic,") === false)   $modules['dynamic']   = $this->lang->block->dynamic;
-            if(strpos(",$closedBlock,", ",|flowchart,") === false) $modules['flowchart'] = $this->lang->block->lblFlowchart;
+            if(strpos(",$closedBlock,", ",|flowchart,") === false and $this->config->global->flow == 'full') $modules['flowchart'] = $this->lang->block->lblFlowchart;
             if(strpos(",$closedBlock,", ",|html,") === false)      $modules['html']      = 'HTML';
             $modules = array('' => '') + $modules;
 
@@ -203,8 +211,11 @@ class block extends control
             if($this->block->initBlock($module)) die(js::reload());
         }
 
-        foreach($blocks as $block)
+        foreach($blocks as $key => $block)
         {
+            if($this->config->global->flow == 'onlyStory' and strpos(',product,story,', ',' . $block->source . ',') === false and $block->block != 'dynamic') unset($blocks[$key]);
+            if($this->config->global->flow == 'onlyTask' and strpos(',project,task,', ',' . $block->source . ',') === false and $block->block != 'dynamic') unset($blocks[$key]);
+
             $block->params  = json_decode($block->params);
             $blockID = $block->block;
             $source  = empty($block->source) ? 'common' : $block->source;

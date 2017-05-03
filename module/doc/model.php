@@ -70,7 +70,7 @@ class docModel extends model
         $selectHtml .= "<div id='libMenuHeading'><input id='searchLib' type='search' placeholder='{$this->lang->doc->searchDoc}' class='form-control'></div>";
         $selectHtml .= "<div id='libMenuGroups' class='clearfix'>";
         $selectHtml .= "<div class='lib-menu-group' id='libMenuProductGroup'><div class='lib-menu-list-heading' data-type='product'>{$this->lang->doc->libTypeList['product']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
-        $selectHtml .= "<div class='lib-menu-group' id='libMenuProjectGroup'><div class='lib-menu-list-heading' data-type='project'>{$this->lang->doc->libTypeList['project']}<i class='icon icon-remove'></i></div><div class='lib-menu-project-done'>{$this->lang->project->statusList['done']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
+        if($this->config->global->flow != 'onlyStory') $selectHtml .= "<div class='lib-menu-group' id='libMenuProjectGroup'><div class='lib-menu-list-heading' data-type='project'>{$this->lang->doc->libTypeList['project']}<i class='icon icon-remove'></i></div><div class='lib-menu-project-done'>{$this->lang->project->statusList['done']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
         $selectHtml .= "<div class='lib-menu-group' id='libMenuCustomGroup'><div class='lib-menu-list-heading' data-type='custom'>{$this->lang->doc->libTypeList['custom']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
         $selectHtml .= "</div></div></div>";
         common::setMenuVars($this->lang->doc->menu, 'list', $selectHtml);
@@ -705,11 +705,18 @@ class docModel extends model
         }
         $productIdList = array_keys($productLibs);
         $products      = $this->dao->select('id,name,status')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->andWhere('deleted')->eq('0')->orderBy('`order`_desc')->fetchAll();
-        $hasProject    = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-            ->where('t1.product')->in($productIdList)
-            ->andWhere('t2.deleted')->eq(0)
-            ->fetchPairs('product', 'product');
+        if($this->config->global->flow == 'onlyStory')
+        {
+            $hasProject = array();
+        }
+        else
+        {
+            $hasProject = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->in($productIdList)
+                ->andWhere('t2.deleted')->eq(0)
+                ->fetchPairs('product', 'product');
+        }
 
         $hasLibsPriv  = common::hasPriv('doc', 'allLibs');
         $hasFilesPriv = common::hasPriv('doc', 'showFiles');
@@ -804,11 +811,18 @@ class docModel extends model
         $libGroups   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->in($idList)->orderBy('`order`, id')->fetchGroup($type, 'id');
         if($type == 'product')
         {
-            $hasProject  = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                ->where('t1.product')->in($idList)
-                ->andWhere('t2.deleted')->eq(0)
-                ->fetchPairs('product', 'product');
+            if($this->config->global->flow == 'onlyStory')
+            {
+                $hasProject = array();
+            }
+            else
+            {
+                $hasProject = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                    ->where('t1.product')->in($idList)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->fetchPairs('product', 'product');
+            }
         }
         $buildGroups = array();
         foreach($libGroups as $objectID => $libs)
@@ -839,11 +853,18 @@ class docModel extends model
         $objectLibs   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
         if($type == 'product')
         {
-            $hasProject  = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                ->where('t1.product')->eq($objectID)
-                ->andWhere('t2.deleted')->eq(0)
-                ->fetchPairs('product', 'product');
+            if($this->config->global->flow == 'onlyStory')
+            {
+                $hasProject = array();
+            }
+            else
+            {
+                $hasProject  = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                    ->where('t1.product')->eq($objectID)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->fetchPairs('product', 'product');
+            }
         }
         $libs = array();
         foreach($objectLibs as $lib)
