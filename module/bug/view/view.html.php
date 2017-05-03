@@ -146,7 +146,7 @@
               </tr>
               <tr valign='middle'>
                 <th><?php echo $lang->bug->productplan;?></th>
-                <td><?php if(!$bug->plan or !common::printLink('productplan', 'linkBug', "planID=$bug->plan", $bug->planName)) echo $bug->planName;?></td>
+                <td><?php if(!$bug->plan or !common::printLink('productplan', 'view', "planID=$bug->plan&type=bug", $bug->planName)) echo $bug->planName;?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->bug->type;?></th>
