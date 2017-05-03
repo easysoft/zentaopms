@@ -67,6 +67,7 @@
       <?php if(isset($stepData[$key]['desc'])):?>
       <table class='w-p100 bd-0'>
       <?php foreach($stepData[$key]['desc'] as $id => $desc):?>
+      <?php if(empty($desc['content'])) continue;?>
         <tr class='step'>
           <td><?php echo $id . html::hidden("stepType[$key][$id]", $desc['type'])?></td>
           <td><?php echo html::textarea("desc[$key][$id]", htmlspecialchars($desc['content']), "class='form-control'")?></td>
