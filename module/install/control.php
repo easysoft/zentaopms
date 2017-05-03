@@ -150,7 +150,7 @@ class install extends control
             if(dao::isError()) echo js::alert($this->lang->install->errorImportDemoData);
 
             $this->loadModel('setting')->updateVersion($this->config->version);
-            $this->loadModel('setting')->setItem('system.common.global.flow', 'full');
+            $this->loadModel('setting')->setItem('system.common.global.flow', $this->post->flow);
             $this->loadModel('setting')->setItem('system.common.global.cron', 1);
             die(js::locate(inlink('step5'), 'parent'));
         }

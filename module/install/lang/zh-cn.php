@@ -81,9 +81,15 @@ $lang->install->dbName         = 'PMS使用的库';
 $lang->install->dbPrefix       = '建表使用的前缀';
 $lang->install->clearDB        = '清空现有数据';
 $lang->install->importDemoData = '导入demo数据';
+$lang->install->working        = '工作方式';
 
 $lang->install->requestTypes['GET']       = '普通方式';
 $lang->install->requestTypes['PATH_INFO'] = '静态友好方式';
+
+$lang->install->workingList['full']      = '完整研发管理工具';
+$lang->install->workingList['onlyTest']  = '测试管理工具';
+$lang->install->workingList['onlyStory'] = '需求管理工具';
+$lang->install->workingList['onlyTask']  = '任务管理工具';
 
 $lang->install->errorConnectDB      = '数据库连接失败 ';
 $lang->install->errorDBName         = '数据库名不能含有 “.” ';

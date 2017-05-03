@@ -50,6 +50,10 @@
             <td><?php echo html::input('company', '', "class='form-control' autocomplete='off'");?></td>
           </tr>
           <tr>
+            <th><?php echo $lang->install->working;?></th>
+            <td><?php echo html::select('flow', $lang->install->workingList, 'full', "class='form-control chosen'");?></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->install->account;?></th>
             <td><?php echo html::input('account', '', "class='form-control' autocomplete='off'");?></td>
           </tr>
