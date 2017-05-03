@@ -432,7 +432,7 @@ class testsuite extends control
         $this->view->orderBy       = $orderBy;
         $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->modules       = $this->tree->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
-        $this->view->moduleTree    = $this->tree->getTreeMenu($libID, $viewType = 'caselib', $startModuleID = 0, array('treeModel', 'createCaseLibLink'), '');
+        $this->view->moduleTree    = $this->tree->getTreeMenu($libID, $viewType = 'caselib', $startModuleID = 0, array('treeModel', 'createCaseLibLink'));
         $this->view->pager         = $pager;
         $this->view->browseType    = $browseType;
         $this->view->moduleID      = $moduleID;
@@ -555,6 +555,47 @@ class testsuite extends control
     }
 
     /**
+     * Batch create case.
+     * 
+     * @param  int    $libID 
+     * @param  int    $moduleID 
+     * @access public
+     * @return void
+     */
+    public function batchCreateCase($libID, $moduleID = 0)
+    {
+        $this->loadModel('testcase');
+        if(!empty($_POST))
+        {
+            $caseID = $this->testsuite->batchCreateCase($libID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            die(js::locate($this->createLink('testsuite', 'library', "libID=$libID&browseType=byModule&param=$moduleID"), 'parent'));
+        }
+
+        $libraries = $this->testsuite->getLibraries();
+        if(empty($libraries)) $this->locate(inlink('createLib'));
+
+        /* Set lib menu. */
+        $this->testsuite->setLibMenu($libraries, $libID);
+
+        $currentModuleID = (int)$moduleID;
+
+        /* Set module option menu. */
+        $moduleOptionMenu          = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
+        $moduleOptionMenu['ditto'] = $this->lang->testcase->ditto;
+
+        $this->view->title            = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchCreate;
+        $this->view->position[]       = html::a($this->createLink('testsuite', 'library', "libID=$libID"), $libraries[$libID]);
+        $this->view->position[]       = $this->lang->testcase->batchCreate;
+        $this->view->libID            = $libID;
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
+        $this->view->currentModuleID  = $currentModuleID;
+
+        $this->display();
+    }
+
+    /**
      * View library
      * 
      * @param  int    $libID 
@@ -621,6 +662,303 @@ class testsuite extends control
         $this->view->link      = $this->testsuite->getLibLink($module, $method, $extra);
         $this->view->libraries = $libraries;
         $this->view->keywords  = $keywords;
+        $this->display();
+    }
+
+    /**
+     * Export templet.
+     * 
+     * @param  int    $libID 
+     * @access public
+     * @return void
+     */
+    public function exportTemplet($libID)
+    {
+        $this->loadModel('testcase');
+        if($_POST)
+        {
+            if(!$this->config->testcase->needReview) unset($this->lang->testcase->statusList['wait']);
+
+            $fields['module']       = $this->lang->testcase->module;
+            $fields['title']        = $this->lang->testcase->title;
+            $fields['stepDesc']     = $this->lang->testcase->stepDesc;
+            $fields['stepExpect']   = $this->lang->testcase->stepExpect;
+            $fields['keywords']     = $this->lang->testcase->keywords;
+            $fields['type']         = $this->lang->testcase->type;
+            $fields['pri']          = $this->lang->testcase->pri;
+            $fields['status']       = $this->lang->testcase->status;
+            $fields['stage']        = $this->lang->testcase->stage;
+            $fields['precondition'] = $this->lang->testcase->precondition;
+
+            $fields[''] = '';
+            $fields['typeValue']   = $this->lang->testcase->lblTypeValue;
+            $fields['stageValue']  = $this->lang->testcase->lblStageValue;
+            $fields['statusValue'] = $this->lang->testcase->lblStatusValue;
+
+            $modules = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
+            $rows    = array();
+            foreach($modules as $moduleID => $module)
+            {
+                $row = new stdclass();
+                $row->module     = $module . "(#$moduleID)";
+                $row->stepDesc   = "1. \n2. \n3.";
+                $row->stepExpect = "1. \n2. \n3.";
+
+                if(empty($rows))
+                {
+                    $row->typeValue   = join("\n", $this->lang->testcase->typeList);
+                    $row->stageValue  = join("\n", $this->lang->testcase->stageList);
+                    $row->statusValue = join("\n", $this->lang->testcase->statusList);
+                }
+                $rows[] = $row;
+            }
+
+            $this->post->set('fields', $fields);
+            $this->post->set('kind', 'testcase');
+            $this->post->set('rows', $rows);
+            $this->post->set('extraNum',   $this->post->num);
+            $this->post->set('fileName', 'templet');
+            $this->fetch('file', 'export2csv', $_POST);
+        }
+
+        $this->display();
+    }
+
+    /**
+     * Import case csv file.
+     * 
+     * @param  int    $libID 
+     * @access public
+     * @return void
+     */
+    public function import($libID)
+    {
+        $this->loadModel('testcase');
+        if($_FILES)
+        {
+            $file = $this->loadModel('file')->getUpload('file');
+            $file = $file[0];
+
+            move_uploaded_file($file['tmpname'], $this->file->savePath . $file['pathname']);
+
+            $fileName = $this->file->savePath . $file['pathname'];
+            $rows     = $this->file->parseCSV($fileName);
+            $fields   = $this->testcase->getImportFields($productID);
+            $fields   = array_flip($fields);
+            $header   = array();
+            foreach($rows[0] as $i => $rowValue)
+            {
+                if(empty($rowValue)) break;
+                $header[$i] = $rowValue;
+            }
+            unset($rows[0]);
+
+            $columnKey = array();
+            foreach($header as $title)
+            {
+                if(!isset($fields[$title])) continue;
+                $columnKey[] = $fields[$title];
+            }
+
+            if(count($columnKey) != count($header) or $this->post->encode != 'utf-8')
+            {
+                $fc     = file_get_contents($fileName);
+                $encode = $this->post->encode != "utf-8" ? $this->post->encode : 'gbk';
+                $fc     = helper::convertEncoding($fc, $encode, 'utf-8');
+                file_put_contents($fileName, $fc);
+
+                $rows      = $this->file->parseCSV($fileName);
+                $columnKey = array();
+                $header   = array();
+                foreach($rows[0] as $i => $rowValue)
+                {
+                    if(empty($rowValue)) break;
+                    $header[$i] = $rowValue;
+                }
+                unset($rows[0]);
+                foreach($header as $title)
+                {
+                    if(!isset($fields[$title])) continue;
+                    $columnKey[] = $fields[$title];
+                }
+                if(count($columnKey) != count($header)) die(js::alert($this->lang->testcase->errorEncode));
+            }
+
+            $this->session->set('importFile', $fileName);
+
+            die(js::locate(inlink('showImport', "libID=$libID"), 'parent.parent'));
+        }
+        $this->display();
+    }
+
+    /**
+     * Show import case.
+     * 
+     * @param  int    $libID 
+     * @access public
+     * @return void
+     */
+    public function showImport($libID)
+    {
+        $this->loadModel('testcase');
+        if($_POST)
+        {
+            $this->testsuite->createFromImport($libID);
+            die(js::locate(inlink('library', "libID=$libID"), 'parent'));
+        }
+
+        $libraries = $this->testsuite->getLibraries();
+        if(empty($libraries)) $this->locate(inlink('createLib'));
+
+        $this->testsuite->setMenu($libraries, $libID);
+
+        $file       = $this->session->importFile;
+        $caseLang   = $this->lang->testcase;
+        $caseConfig = $this->config->testcase;
+        $modules    = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
+
+        $fields = explode(',', $caseConfig->exportFields);
+        foreach($fields as $key => $fieldName)
+        {
+            $fieldName = trim($fieldName);
+            $fields[$fieldName] = isset($caseLang->$fieldName) ? $caseLang->$fieldName : $fieldName;
+            unset($fields[$key]);
+        }
+
+        $fields = array_flip($fields);
+        $rows   = $this->loadModel('file')->parseCSV($file);
+        $header = array();
+        foreach($rows[0] as $i => $rowValue)
+        {
+            if(empty($rowValue)) break;
+            $header[$i] = $rowValue;
+        }
+        unset($rows[0]);
+
+        foreach($header as $title)
+        {
+            if(!isset($fields[$title])) continue;
+            $columnKey[] = $fields[$title];
+        }
+
+        $endField = end($fields);
+        $caseData = array();
+        $stepData = array();
+        $stepVars = 0;
+        foreach($rows as $row => $data)
+        {
+            $case = new stdclass();
+            foreach($columnKey as $key => $field)
+            {
+                if(!isset($data[$key])) continue;
+                $cellValue = $data[$key];
+                if($field == 'module')
+                {
+                    $case->$field = 0;
+                    if(strrpos($cellValue, '(#') !== false)
+                    {
+                        $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
+                        $case->$field = $id;
+                    }   
+                }
+                elseif(in_array($field, $caseConfig->export->listFields))
+                {
+                    if($field == 'stage')
+                    {
+                        $stages = explode("\n", $cellValue);
+                        foreach($stages as $stage) $case->stage[] = array_search($stage, $caseLang->{$field . 'List'});
+                        $case->stage = join(',', $case->stage);
+                    }
+                    else
+                    {
+                        $case->$field = array_search($cellValue, $caseLang->{$field . 'List'});
+                    }
+                }
+                elseif($field != 'stepDesc' and $field != 'stepExpect')
+                {
+                    $case->$field = $cellValue;
+                }
+                else
+                {
+                    $steps    = explode("\n", $cellValue);
+                    $stepKey  = str_replace('step', '', strtolower($field));
+                    $caseStep = array();
+
+                    foreach($steps as $step)
+                    {
+                        $step = trim($step);
+                        if(empty($step)) continue;
+                        if(preg_match('/^(([0-9]+)\.[0-9]+)([.、]{1})/U', $step, $out))
+                        {
+                            $num     = $out[1];
+                            $parent  = $out[2];
+                            $sign    = $out[3];
+                            $signbit = $sign == '.' ? 1 : 3;
+                            $step    = trim(substr($step, strlen($num) + $signbit));
+                            if(!empty($step)) $caseStep[$num]['content'] = $step;
+                            $caseStep[$num]['type']    = 'item';
+                            $caseStep[$parent]['type'] = 'group';
+                        }
+                        elseif(preg_match('/^([0-9]+)([.、]{1})/U', $step, $out))
+                        {
+                            $num     = $out[1];
+                            $sign    = $out[2];
+                            $signbit = $sign == '.' ? 1 : 3;
+                            $step    = trim(substr($step, strlen($num) + $signbit));
+                            if(!empty($step)) $caseStep[$num]['content'] = $step;
+                            $caseStep[$num]['type'] = 'step';
+                        }
+                        elseif(isset($num))
+                        {
+                            $caseStep[$num]['content'] .= "\n" . $step;
+                        }
+                        else
+                        {
+                            if($field == 'stepDesc')
+                            {
+                                $num = 1;
+                                $caseStep[$num]['content'] = $step;
+                                $caseStep[$num]['type']    = 'step';
+                            }
+                            if($field == 'stepExpect' and isset($stepData[$row]['desc']))
+                            {
+                                end($stepData[$row]['desc']);
+                                $num = key($stepData[$row]['desc']);
+                                $caseStep[$num]['content'] = $step;
+                            }
+                        }
+                    }
+                    unset($num);
+                    unset($sign);
+                    $stepVars += count($caseStep, COUNT_RECURSIVE) - count($caseStep);
+                    $stepData[$row][$stepKey] = $caseStep;
+                }
+            }
+
+            $caseData[$row] = $case;
+            unset($case);
+        }
+
+        if(empty($caseData))
+        {
+            echo js::alert($this->lang->error->noData);
+            die(js::locate($this->createLink('testsuite', 'library', "libID=$libID")));
+        }
+        if(!$this->config->testcase->needReview) unset($this->lang->testcase->statusList['wait']);
+
+        /* Judge whether the editedTasks is too large and set session. */
+        $countInputVars  = count($caseData) * 9 + $stepVars;
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
+        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
+
+        $this->view->title      = $this->lang->caselib->common . $this->lang->colon . $this->lang->testcase->showImport;
+        $this->view->position[] = $this->lang->testcase->showImport;
+
+        $this->view->modules   = $modules;
+        $this->view->cases     = $this->dao->select('id,module,stage,status,pri,type')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->andWhere('product')->eq(0)->fetchAll('id');
+        $this->view->caseData  = $caseData;
+        $this->view->stepData  = $stepData;
+        $this->view->libID     = $libID;
         $this->display();
     }
 }
