@@ -284,7 +284,7 @@ $lang->caselib->menu->testcase  = array('link' => '用例|testcase|browse|');
 $lang->caselib->menu->testtask  = array('link' => '版本|testtask|browse|');
 $lang->caselib->menu->testsuite = array('link' => '套件|testsuite|browse|');
 $lang->caselib->menu->report    = array('link' => '报告|testreport|browse|');
-$lang->caselib->menu->caselib   = array('link' => '用例库|testsuite|library', 'alias' => 'createlib,createcase,libview,edit', 'subModule' => 'tree,testcase');
+$lang->caselib->menu->caselib   = array('link' => '用例库|testsuite|library', 'alias' => 'createlib,createcase,libview,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
 $lang->caselib->menu->create    = array('link' => "<i class='icon-plus'></i>创建库|testsuite|createLib|", 'float' => 'right');
 $lang->caselib->menu->index     = array('link' => "<i class='icon-home'></i>测试主页|qa|index|locate=no&productID=%s", 'float' => 'right');
 
