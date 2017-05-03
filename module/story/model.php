@@ -503,7 +503,6 @@ class storyModel extends model
         $allChanges  = array();
         $now         = helper::now();
         $data        = fixer::input('post')->get();
-        a($data);exit;
         $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : array();
 
         /* Init $stories. */
@@ -575,7 +574,6 @@ class storyModel extends model
 
                 $this->dao->update(TABLE_STORY)->data($story)
                     ->autoCheck()
-                    ->batchCheck($this->config->story->edit->requiredFields, 'notempty')
                     ->checkIF($story->closedBy, 'closedReason', 'notempty')
                     ->checkIF($story->closedReason == 'done', 'stage', 'notempty')
                     ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
