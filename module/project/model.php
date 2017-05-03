@@ -1553,7 +1553,7 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function fixFirst($projectID)
+    public function fixFirst($projectID, $withLeft = false)
     {
         $project = $this->getById($projectID);
         $burn    = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)->andWhere('date')->eq($project->begin)->fetch();
@@ -1561,7 +1561,7 @@ class projectModel extends model
         $data = fixer::input('post')
             ->add('project', $projectID)
             ->add('date', $project->begin)
-            ->add('left', empty($burn) ? $this->post->estimate : $burn->left)
+            ->add('left', (empty($burn) or $withLeft) ? $this->post->estimate : $burn->left)
             ->add('consumed', empty($burn) ? 0 : $burn->consumed)
             ->get();
         if(!is_numeric($data->estimate)) return false;
