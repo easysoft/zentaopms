@@ -20,3 +20,8 @@ function setOuterBox()
     $(window).resize(resetOuterHeight);
     resetOuterHeight();
 }
+
+$(function()
+{
+    $('#searchbox').css('right', $('#topnav').width() - 20);
+})

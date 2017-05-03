@@ -2,5 +2,8 @@ body{padding-bottom:0px;}
 #header{padding-top:0px;}
 #mainmenu{margin-top:0px;margin-left:-20px;}
 #mainmenu .nav li a{height:40px; line-height:25px;}
-#searchbox{top:8px;}
+#searchbox{top:8px;right:10px}
+#topnav{position: absolute; top:6px;right: -35px}
+#topnav > a.about {display:none;}
+#topnav > .dropdown:last-of-type{display:none;}
 #footer{display:none;}

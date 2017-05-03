@@ -24,6 +24,9 @@ if(!empty($this->config->sso->turnon))
 ?>
   <nav id='mainmenu'>
     <?php commonModel::printMainmenu($this->moduleName); commonModel::printSearchBox();?>
+    <?php if(!empty($this->config->sso->turnon)):?>
+    <div class='pull-right' id='topnav'><?php commonModel::printTopBar();?></div>
+    <?php endif;?>
   </nav>
   <nav id="modulemenu">
     <?php commonModel::printModuleMenu($this->moduleName);?>
