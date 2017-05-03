@@ -39,7 +39,7 @@ $lang->testtask->testing          = "Testing Build";
 $lang->testtask->blocked          = "Blocked Build";
 $lang->testtask->done             = "Tested Build";
 $lang->testtask->totalStatus      = "All";
-$lang->testtask->all              = "All Product";
+$lang->testtask->all              = "All " . $lang->productCommon;
 
 $lang->testtask->id             = 'ID';
 $lang->testtask->common         = 'Test build';

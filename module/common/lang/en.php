@@ -284,7 +284,7 @@ $lang->caselib->menu->testcase  = array('link' => 'Case|testcase|browse|');
 $lang->caselib->menu->testtask  = array('link' => 'Build|testtask|browse|');
 $lang->caselib->menu->testsuite = array('link' => 'Suite|testsuite|browse|');
 $lang->caselib->menu->report    = array('link' => 'Report|testreport|browse|');
-$lang->caselib->menu->caselib   = array('link' => 'Library|testsuite|library', 'alias' => 'createlib,createcase,libview,edit', 'subModule' => 'tree,testcase');
+$lang->caselib->menu->caselib   = array('link' => 'Library|testsuite|library', 'alias' => 'createlib,createcase,libview,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
 $lang->caselib->menu->create    = array('link' => "<i class='icon-plus'></i>Create a Library|testsuite|createLib|", 'float' => 'right');
 $lang->caselib->menu->index     = array('link' => "<i class='icon-home'></i>Test Home|qa|index|locate=no&productID=%s", 'float' => 'right');
 

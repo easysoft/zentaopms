@@ -11,11 +11,7 @@
     <tr>
       <th class='w-70px'><?php echo $lang->testcase->id?></th>
       <th><?php echo $lang->testcase->title?></th>
-      <?php if($branches):?>
-      <th class='w-100px'><?php echo $lang->testcase->branch?></th>
-      <?php endif;?>
       <th class='w-100px'><?php echo $lang->testcase->module?></th>
-      <th class='w-120px'><?php echo $lang->testcase->story?></th>
       <th class='w-70px'><?php echo $lang->testcase->pri?></th>
       <th class='w-100px'><?php echo $lang->testcase->type?></th>
       <th class='w-100px'><?php echo $lang->testcase->status?></th>
@@ -36,6 +32,7 @@
   <?php $insert = true;?>
   <?php foreach($caseData as $key => $case):?>
   <?php if(empty($case->title)) continue;?>
+  <?php if(!empty($case->id) and !isset($cases[$case->id])) $case->id = 0;?>
   <tr valign='top' align='center'>
     <td>
       <?php
@@ -48,15 +45,11 @@
       {
           echo $key . " <sub class='gray' style='vertical-align:sub;'>{$lang->testcase->new}</sub>";
       }
-      echo html::hidden("product[$key]", $productID);
+      echo html::hidden("lib[$key]", $libID);
       ?>
     </td>
     <td><?php echo html::input("title[$key]", $case->title, "class='form-control' style='margin-top:2px' autocomplete='off'")?></td>
-    <?php if($branches):?>
-    <td class='text-left' style='overflow:visible'><?php echo html::select("branch[$key]", $branches, (isset($case->branch) and $case->branch !== '') ? $case->branch : (!empty($case->id) ? $cases[$case->id]->branch : $branch), "class='form-control chosen'")?></td>
-    <?php endif;?>
     <td class='text-left' style='overflow:visible'><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : (!empty($case->id) ? $cases[$case->id]->module : ''), "class='form-control chosen'")?></td>
-    <td class='text-left' style='overflow:visible'><?php echo html::select("story[$key]", $stories, isset($case->story) ? $case->story : (!empty($case->id) ? $cases[$case->id]->story : ''), "class='form-control chosen'")?></td>
     <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : (!empty($case->id) ? $cases[$case->id]->pri : ''), "class='form-control'")?></td>
     <td><?php echo html::select("type[$key]", $lang->testcase->typeList, isset($case->type) ? $case->type : (!empty($case->id) ? $cases[$case->id]->type : ''), "class='form-control'")?></td>
     <td><?php echo html::select("status[$key]", $lang->testcase->statusList, isset($case->status) ? $case->status : (!empty($case->id) ? $cases[$case->id]->status : 'normal'), "class='form-control'")?></td>

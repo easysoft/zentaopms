@@ -25,4 +25,16 @@
     </tr>
   </table>
 </form>
+<script>
+$(function()
+{
+    $('#submit').click(function()
+    {
+        if(confirm('<?php echo $lang->project->fixFirstWithLeft?>'))
+        {
+            $(this).closest('form').attr('action', '<?php echo inlink('fixFirst', "projectID={$project->id}&withLeft=1")?>');
+        }
+    })
+})
+</script>
 <?php include '../../common/view/footer.lite.html.php';?>

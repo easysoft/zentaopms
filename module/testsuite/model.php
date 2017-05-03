@@ -509,4 +509,253 @@ class testsuiteModel extends model
         }
         return $link;
     }
+
+    /**
+     * Create from import.
+     * 
+     * @param  int    $libID 
+     * @access public
+     * @return void
+     */
+    public function createFromImport($libID)
+    {
+        $this->loadModel('action');
+        $this->loadModel('testcase');
+        $this->loadModel('file');
+        $now    = helper::now();
+        $data   = fixer::input('post')->get();
+
+        if(!empty($_POST['id']))
+        {
+            $oldSteps = $this->dao->select('t2.*')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_CASESTEP)->alias('t2')->on('t1.id = t2.case')
+                ->where('t1.id')->in(($_POST['id']))
+                ->andWhere('t1.version=t2.version')
+                ->orderBy('t2.id')
+                ->fetchGroup('case');
+            $oldCases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($_POST['id'])->fetchAll('id');
+        }
+
+        $cases = array();
+        foreach($data->lib as $key => $lib)
+        {
+            $caseData = new stdclass();
+
+            $caseData->lib          = $lib;
+            $caseData->module       = $data->module[$key];
+            $caseData->title        = $data->title[$key];
+            $caseData->pri          = (int)$data->pri[$key];
+            $caseData->type         = $data->type[$key];
+            $caseData->status       = $data->status[$key];
+            $caseData->stage        = join(',', $data->stage[$key]);
+            $caseData->keywords     = $data->keywords[$key];
+            $caseData->frequency    = 1;
+            $caseData->precondition = $data->precondition[$key];
+
+            if(isset($this->config->testcase->create->requiredFields))
+            {
+                $requiredFields = explode(',', $this->config->testcase->create->requiredFields);
+                foreach($requiredFields as $requiredField)
+                {
+                    $requiredField = trim($requiredField);
+                    if(empty($caseData->$requiredField)) die(js::alert(sprintf($this->lang->testcase->noRequire, $key, $this->lang->testcase->$requiredField)));
+                }
+            }
+
+            $cases[$key] = $caseData;
+        }
+
+        $forceReview = $this->testcase->forceReview();
+        foreach($cases as $key => $caseData)
+        {
+            if(!empty($_POST['id'][$key]) and empty($_POST['insert']))
+            {
+                $caseID      = $data->id[$key];
+                $stepChanged = false;
+                $steps       = array();
+                $oldStep     = isset($oldSteps[$caseID]) ? $oldSteps[$caseID] : array();
+                $oldCase     = $oldCases[$caseID];
+
+                /* Remove the empty setps in post. */
+                $steps = array();
+                if(isset($_POST['desc'][$key]))
+                {
+                    foreach($data->desc[$key] as $id => $desc)
+                    {
+                        $desc = trim($desc);
+                        if(empty($desc))continue;
+                        $step = new stdclass();
+                        $step->type   = $data->stepType[$key][$id];
+                        $step->desc   = $desc;
+                        $step->expect = trim($data->expect[$key][$id]);
+
+                        $steps[] = $step;
+                    }
+                }
+
+                /* If step count changed, case changed. */
+                if((!$oldStep != !$steps) or (count($oldStep) != count($steps)))
+                {
+                    $stepChanged = true;
+                }
+                else
+                {
+                    /* Compare every step. */
+                    foreach($oldStep as $id => $oldStep)
+                    {
+                        if(trim($oldStep->desc) != trim($steps[$id]->desc) or trim($oldStep->expect) != $steps[$id]->expect)
+                        {
+                            $stepChanged = true;
+                            break;
+                        }
+                    }
+                }
+
+                $version           = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
+                $caseData->version = $version;
+                $changes           = common::createChanges($oldCase, $caseData);
+                if(!$changes and !$stepChanged) continue;
+
+                if($changes or $stepChanged)
+                {
+                    $caseData->lastEditedBy   = $this->app->user->account;
+                    $caseData->lastEditedDate = $now;
+                    if($stepChanged and $forceReview) $caseData->status = 'wait';
+                    $this->dao->update(TABLE_CASE)->data($caseData)->where('id')->eq($caseID)->autoCheck()->exec();
+                    if($stepChanged)
+                    {
+                        $parentStepID = 0;
+                        foreach($steps as $id => $step)
+                        {
+                            $step = (array)$step;
+                            if(empty($step['desc'])) continue;
+                            $stepData = new stdclass();
+                            $stepData->type    = ($step['type'] == 'item' and $parentStepID == 0) ? 'step' : $step['type'];
+                            $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
+                            $stepData->case    = $caseID;
+                            $stepData->version = $version;
+                            $stepData->desc    = htmlspecialchars($step['desc']);
+                            $stepData->expect  = htmlspecialchars($step['expect']);
+                            $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
+                            if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
+                            if($stepData->type == 'step')  $parentStepID = 0;
+                        }
+                    }
+                    $oldCase->steps  = $this->joinStep($oldStep);
+                    $caseData->steps = $this->joinStep($steps);
+                    $changes = common::createChanges($oldCase, $caseData);
+                    $actionID = $this->action->create('case', $caseID, 'Edited');
+                    $this->action->logHistory($actionID, $changes);
+                }
+            }
+            else
+            {
+                $caseData->version    = 1;
+                $caseData->openedBy   = $this->app->user->account;
+                $caseData->openedDate = $now;
+                $caseData->branch     = isset($data->branch[$key]) ? $data->branch[$key] : $branch;
+                if($forceReview) $caseData->status = 'wait';
+                $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
+
+                if(!dao::isError())
+                {
+                    $caseID       = $this->dao->lastInsertID();
+                    $parentStepID = 0;
+                    foreach($data->desc[$key] as $id => $desc)
+                    {
+                        $desc = trim($desc);
+                        if(empty($desc)) continue;
+                        $stepData = new stdclass();
+                        $stepData->type    = ($data->stepType[$key][$id] == 'item' and $parentStepID == 0) ? 'step' : $data->stepType[$key][$id];
+                        $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
+                        $stepData->case    = $caseID;
+                        $stepData->version = 1;
+                        $stepData->desc    = htmlspecialchars($desc);
+                        $stepData->expect  = htmlspecialchars($data->expect[$key][$id]);
+                        $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
+                        if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
+                        if($stepData->type == 'step')  $parentStepID = 0;
+                    }
+                    $this->action->create('case', $caseID, 'Opened');
+                }
+            }
+        }
+
+        unlink($this->session->importFile);
+        unset($_SESSION['importFile']);
+    }
+
+    /**
+     * Batch create case for lib.
+     * 
+     * @param  int    $libID 
+     * @access public
+     * @return void
+     */
+    public function batchCreateCase($libID)
+    {
+        $this->loadModel('testcase');
+        $this->loadModel('action');
+
+        $now      = helper::now();
+        $cases    = fixer::input('post')->get();
+        $batchNum = count(reset($cases));
+
+        $result = $this->loadModel('common')->removeDuplicate('case', $cases, "lib={$libID}");
+        $cases  = $result['data'];
+
+        for($i = 0; $i < $batchNum; $i++)
+        {
+            if(!empty($cases->title[$i]) and empty($cases->type[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->type)));
+        }
+
+        $module = 0;
+        $type   = '';
+        $pri    = 3;
+        for($i = 0; $i < $batchNum; $i++)
+        {
+            $module = $cases->module[$i] == 'ditto' ? $module : $cases->module[$i];
+            $type   = $cases->type[$i] == 'ditto'   ? $type   : $cases->type[$i];
+            $pri    = $cases->pri[$i] == 'ditto'    ?  $pri   : $cases->pri[$i];
+            $cases->module[$i] = (int)$module;
+            $cases->type[$i]   = $type;
+            $cases->pri[$i]    = $pri;
+        }
+
+        $forceReview = $this->testcase->forceReview();
+        for($i = 0; $i < $batchNum; $i++)
+        {
+            if($cases->type[$i] != '' and $cases->title[$i] != '')
+            {
+                $data[$i] = new stdclass();
+                $data[$i]->lib          = $libID;
+                $data[$i]->module       = $cases->module[$i];
+                $data[$i]->type         = $cases->type[$i];
+                $data[$i]->pri          = $cases->pri[$i];
+                $data[$i]->stage        = empty($cases->stage[$i]) ? '' : implode(',', $cases->stage[$i]);
+                $data[$i]->color        = $cases->color[$i];
+                $data[$i]->title        = $cases->title[$i];
+                $data[$i]->precondition = $cases->precondition[$i];
+                $data[$i]->keywords     = $cases->keywords[$i];
+                $data[$i]->openedBy     = $this->app->user->account;
+                $data[$i]->openedDate   = $now;
+                $data[$i]->status       = $forceReview ? 'wait' : 'normal';
+                $data[$i]->version      = 1;
+
+                $this->dao->insert(TABLE_CASE)->data($data[$i])
+                    ->autoCheck()
+                    ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
+                    ->exec();
+
+                if(dao::isError()) 
+                {
+                    echo js::error(dao::getError());
+                    die(js::reload('parent'));
+                }
+
+                $caseID   = $this->dao->lastInsertID();
+                $actionID = $this->action->create('case', $caseID, 'Opened');
+            }
+        }
+    }
 }

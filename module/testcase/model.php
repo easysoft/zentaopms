@@ -1339,10 +1339,10 @@ class testcaseModel extends model
         foreach($cases as $key => $case)
         {
             $caseID = $type == 'case' ? $case->id : $case->case;
-            $case->bugs       = isset($caseBugs[$caseID])   ? $caseBugs[$caseID]   : 0;
-            $case->results    = isset($results[$caseID])    ? $results[$caseID]    : 0;
-            $case->caseFails  = isset($caseFails[$caseID])  ? $caseFails[$caseID]  : 0;
-            $case->stepNumber = isset($stepNumber[$caseID]) ? $stepNumber[$caseID] : 0;
+            $case->bugs       = isset($caseBugs[$caseID])  ? $caseBugs[$caseID]   : 0;
+            $case->results    = isset($results[$caseID])   ? $results[$caseID]    : 0;
+            $case->caseFails  = isset($caseFails[$caseID]) ? $caseFails[$caseID]  : 0;
+            $case->stepNumber = isset($steps[$caseID])     ? $steps[$caseID]      : 0;
         }
 
         return $cases;
