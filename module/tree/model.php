@@ -319,7 +319,7 @@ class treeModel extends model
         }
         else
         {
-            $branches = array($branch => '');
+            $branches = array();
         }
 
         $manage   = $userFunc[1] == 'createManageLink' ? true : false;
