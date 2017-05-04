@@ -11,13 +11,42 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form class='form-condensed' enctype='multipart/form-data' method='post' target='hiddenwin' style='padding: 20px 5% 50px'>
-  <table class='table table-form'>
-    <tr>
-      <td class='w-p70'><input type='file' name='file' class='form-control'/></td>
-      <td><?php echo html::submitButton();?></td>
-    </tr>
-    <tr><td colspan='2'><div class='alert'><?php echo $lang->file->uploadImagesExplain?></div></td></tr>
-  </table>
-</form>
+<?php
+js::import($jsRoot . 'uploader/min.js');
+css::import($jsRoot . 'uploader/min.css');
+?>
+<style>
+#uploader{padding: 20px;}
+#uploader > span{display:block; margin-bottom:10px; color: #29a8cd;}
+</style>
+<div class='uploader' id='uploader' data-url='<?php echo inlink('uploadImages', "module=$module&params=$params&uid=$uid");?>'>
+  <div class='uploader-message text-center'>
+    <div class='content'></div>
+    <button type='button' class='close'>×</button>
+  </div>
+  <div class='file-list file-list-lg' data-drag-placeholder="<?php echo $lang->file->dragFile;?>"></div>
+  <span><?php echo $this->lang->file->uploadImagesExplain?></span>
+  <div class='uploader-footer'>
+    <div class='uploader-status pull-right text-muted'></div>
+    <button type='button' class='btn btn-primary uploader-btn-browse'><i class='icon icon-plus'></i><?php echo $lang->file->addFile;?></button>
+    <button type='button' class='btn btn-success uploader-btn-start'><i class='icon icon-cloud-upload'></i><?php echo $lang->file->beginUpload;?></button>
+    <?php echo html::a(inlink('uploadImages', "module=$module&params=$params&uid=$uid&locate=true"), $lang->save, '', "class='btn'");?>
+  </div>
+</div>
+<script>
+$('#uploader').uploader({
+    onBeforeUpload: function(file)
+    {
+        this.plupload.setOption(
+        {
+            'multipart_params':
+            {
+              label: file.ext ? file.name.substr(0, file.name.length - file.ext.length - 1) : file.name,
+              uuid: file.id,
+              size: file.size
+            }
+        });
+    }
+});
+</script>
 <?php include '../../common/view/footer.lite.html.php';?>

@@ -26,17 +26,19 @@ $lang->file->exportFields  = "要导出字段";
 $lang->file->defaultTPL    = "默认模板";
 $lang->file->setExportTPL  = "设置";
 $lang->file->preview       = "预览";
+$lang->file->addFile       = '添加文件';
+$lang->file->beginUpload   = '开始上传';
+$lang->file->uploadSuccess = '上传成功';
 
+$lang->file->dragFile         = '请拖拽文件到此处';
 $lang->file->errorNotExists   = "<span class='red'>文件夹 '%s' 不存在</span>";
 $lang->file->errorCanNotWrite = "<span class='red'>文件夹 '%s' 不可写,请改变文件夹的权限。在linux中输入指令:sudo chmod -R 777 '%s'</span>";
 $lang->file->confirmDelete    = " 您确定删除该附件吗？";
 $lang->file->errorFileSize    = " 文件大小已经超过限制，可能不能成功上传！";
 $lang->file->errorFileUpload  = " 文件上传失败，文件大小可能超出限制";
+$lang->file->errorFileFormate = " 文件上传失败，文件格式不在规定范围内";
+$lang->file->errorFileMove    = " 文件上传失败，移动文件时出错";
 $lang->file->dangerFile       = " 您选择的文件存在安全风险，系统将不予上传。";
 $lang->file->errorSuffix      = '压缩包格式错误，只能上传zip压缩包！';
 $lang->file->errorExtract     = '解压缩失败！可能文件已经损坏，或压缩包里含有非法上传文件。';
-$lang->file->uploadImagesExplain = <<<EOD
-<p>1、上传文件为包含图片的zip压缩包，程序会以文件名作为标题，以图片作为内容。</p>
-<p>2、如果文件名开头含有 数字+下划线，以方便排序，程序会将他们忽略。</p>
-<p>3、图片格式：jpg|jpeg|gif|png。</p>
-EOD;
+$lang->file->uploadImagesExplain = '注：请上传"jpg|jpeg|gif|png"格式的图片，程序会以文件名作为标题，以图片作为内容。';
