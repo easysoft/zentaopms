@@ -69,7 +69,7 @@ class docModel extends model
         $selectHtml .= "<div id='libMenu'>";
         $selectHtml .= "<div id='libMenuHeading'><input id='searchLib' type='search' placeholder='{$this->lang->doc->searchDoc}' class='form-control'></div>";
         $selectHtml .= "<div id='libMenuGroups' class='clearfix'>";
-        $selectHtml .= "<div class='lib-menu-group' id='libMenuProductGroup'><div class='lib-menu-list-heading' data-type='product'>{$this->lang->doc->libTypeList['product']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
+        if($this->config->global->flow != 'onlyTask')  $selectHtml .= "<div class='lib-menu-group' id='libMenuProductGroup'><div class='lib-menu-list-heading' data-type='product'>{$this->lang->doc->libTypeList['product']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
         if($this->config->global->flow != 'onlyStory') $selectHtml .= "<div class='lib-menu-group' id='libMenuProjectGroup'><div class='lib-menu-list-heading' data-type='project'>{$this->lang->doc->libTypeList['project']}<i class='icon icon-remove'></i></div><div class='lib-menu-project-done'>{$this->lang->project->statusList['done']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
         $selectHtml .= "<div class='lib-menu-group' id='libMenuCustomGroup'><div class='lib-menu-list-heading' data-type='custom'>{$this->lang->doc->libTypeList['custom']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
         $selectHtml .= "</div></div></div>";
@@ -764,6 +764,9 @@ class docModel extends model
      */
     public function getLimitLibs($type, $limit = 4)
     {
+        if($type == 'project' and $this->config->global->flow == 'onlyStory') return array();
+        if($type == 'product' and $this->config->global->flow == 'onlyTask')  return array();
+
         if($type == 'product' or $type == 'project')
         {
             $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
@@ -1229,7 +1232,7 @@ class docModel extends model
 
         $crumb     = '';
         $productID = $this->cookie->product ? $this->cookie->product : '0';
-        if($productID and $type == 'project')
+        if($productID and $type == 'project' and $this->config->global->flow != 'onlyTask')
         {
             $crumb .= $this->getProductCrumb($productID, $lib->project);
         }

@@ -233,6 +233,8 @@ class productModel extends model
      */
     public function getProductsByProject($projectID)
     {
+        if($this->config->global->flow == 'onlyTask') return array();
+
         return $this->dao->select('t1.product, t2.name')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
