@@ -26,13 +26,13 @@
     <tr>
       <th class='w-id'><?php echo $lang->idAB;?></th>
       <th class='w-pri'><?php echo $lang->priAB;?></th>
-      <th><?php echo $lang->story->product;?></th>
-      <th><?php echo $lang->story->module;?></th>
+      <th class='w-150px'><?php echo $lang->story->product;?></th>
+      <th class='w-150px'><?php echo $lang->story->module;?></th>
       <th><?php echo $lang->story->title;?></th>
-      <th><?php echo $lang->story->plan;?></th>
+      <th class='w-120px'><?php echo $lang->story->plan;?></th>
       <th class='w-80px'><?php echo $lang->story->stage;?></th>
       <?php if($productType != 'normal'):?>
-      <th><?php echo $lang->product->branchName[$productType];?></th>
+      <th class='w-80px'><?php echo $lang->product->branchName[$productType];?></th>
       <?php endif;?>
       <th class='w-user'><?php echo $lang->openedByAB;?></th>
       <th class='w-80px'><?php echo $lang->story->estimateAB;?></th>
@@ -50,14 +50,14 @@
         <?php echo html::a($storyLink, sprintf('%03d', $story->id));?>
       </td>
       <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-      <td class='text-left'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name, '_blank');?></td>
-      <td class='text-left'><?php echo zget($modules, $story->module, '')?></td>
+      <td class='text-left' title='<?php echo $products[$story->product]->name?>'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name, '_blank');?></td>
+      <td class='text-left' title='<?php echo zget($modules, $story->module, '')?>'><?php echo zget($modules, $story->module, '')?></td>
       <td class='text-left nobr' title="<?php echo $story->title?>"><?php echo html::a($storyLink, $story->title);?></td>
-      <td><?php echo $story->planTitle;?></td>
+      <td title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
+      <td><?php echo zget($lang->story->stageList, $story->stage);?></td>
       <?php if($productType != 'normal'):?>
       <td><?php if(isset($branchGroups[$story->product][$story->branch])) echo $branchGroups[$story->product][$story->branch];?></td>
       <?php endif;?>
-      <td><?php echo zget($lang->story->stageList, $story->stage);?></td>
       <td><?php echo $users[$story->openedBy];?></td>
       <td><?php echo $story->estimate;?></td>
     </tr>
