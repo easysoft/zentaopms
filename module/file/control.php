@@ -126,6 +126,15 @@ class file extends control
      */
     public function download($fileID, $mouse = '')
     {
+        /* When get sid then change session id. */
+        if(isset($_GET[$this->config->sessionVar]))
+        {
+            $sessionID = isset($_COOKIE[$this->config->sessionVar]) ? $_COOKIE[$this->config->sessionVar] : sha1(mt_rand());
+            session_write_close();
+            session_id($sessionID);
+            session_start();
+        }
+
         $file = $this->file->getById($fileID);
 
         /* Judge the mode, down or open. */
