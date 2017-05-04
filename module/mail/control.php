@@ -301,6 +301,8 @@ class mail extends control
      */
     public function asyncSend()
     {
+        /* Reload mail config. */
+        $this->app->loadConfig('mail');
         $queueList = $this->mail->getQueue('wait', 'id_asc');
         $now       = helper::now();
         if(isset($this->config->mail->async))$this->config->mail->async = 0;

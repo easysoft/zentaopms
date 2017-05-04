@@ -1373,9 +1373,10 @@ function fixStyle()
  * @access public
  * @return void
  */
-function startCron()
+function startCron(restart)
 {
-    $.ajax({type:"GET", timeout:100, url:createLink('cron', 'ajaxExec')});
+    if(typeof(restart) == 'undefined') restart = 0;
+    $.ajax({type:"GET", timeout:100, url:createLink('cron', 'ajaxExec', 'restart=' + restart)});
 }
 
 function computePasswordStrength(password)

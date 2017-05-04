@@ -14,7 +14,7 @@
 <script>
 $(function()
 {
-    startCron();
+    startCron(1);
     setTimeout(function(){parent.location.href = parent.location.href}, 300);
 });
 </script>
