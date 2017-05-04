@@ -364,29 +364,48 @@ class file extends control
      * @access public
      * @return void
      */
-    public function uploadImages($module, $params)
+    public function uploadImages($module, $params, $uid = '', $locate = false)
     {
+        if($locate)
+        {
+            $sessionName = $uid . 'ImagesFile';
+            $imageFiles  = $this->session->$sessionName;
+            $this->session->set($module . 'ImagesFile', $imageFiles);
+            unset($_SESSION[$sessionName]);
+            die(js::locate($this->createLink($module, 'batchCreate', helper::safe64Decode($params)), 'parent.parent'));
+        }
+
         if($_FILES)
         {
-            $file = $this->file->getUpload('file');
-            $file = $file[0];
-
-            if(!$file) die(js::alert($this->lang->error->noData));
-            if($file['extension'] != 'zip') die(js::alert($this->lang->file->errorSuffix));
-            if($file['size'] == 0) die(js::alert($this->lang->file->errorFileUpload));
-
-            if(@move_uploaded_file($file['tmpname'], $this->file->savePath . $file['pathname']))
+            $file = $this->file->getUploadImageFile('file');
+            if(!$file) die(json_encode(array('result' => 'fail', 'message' => $this->lang->error->noData)));
+            if(empty($file['extension']) or !in_array($file['extension'], $this->config->file->imageExtensions))
             {
-                $zipFile = $this->file->savePath . $file['pathname'];
-                $files   = $this->file->extractZip($zipFile);
+                die(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormate)));
+            }
 
-                unlink($zipFile);
-                if(!$files) die(js::alert($this->lang->file->errorExtract));
-
-                $this->session->set($module . 'ImagesFile', $files);
-                die(js::locate($this->createLink($module, 'batchCreate', helper::safe64Decode($params)), 'parent.parent'));
+            $imageFile = $this->file->saveUploadImageFile($file, $uid);
+            if($imageFile === false)
+            {
+                die(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileMove)));
+            }
+            else
+            {
+                if(!empty($imageFile))
+                {
+                    $sessionName = $uid . 'ImagesFile';
+                    $imageFiles  = $this->session->$sessionName;
+                    $fileName    = basename($imageFile['pathname']);
+                    $imageFiles[$fileName] = $imageFile;
+                    $this->session->set($sessionName, $imageFiles);
+                }
+                die(json_encode(array('result' => 'success', 'file' => $file, 'message' => $this->lang->file->uploadSuccess)));
             }
         }
+
+        $this->view->uid    = empty($uid) ? uniqid() : $uid;
+        $this->view->module = $module;
+        $this->view->params = $params;
 
         $this->display();
     }
