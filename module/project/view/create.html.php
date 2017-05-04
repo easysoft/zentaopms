@@ -88,7 +88,8 @@
           <div class='type-tips'><?php echo $lang->project->typeDesc;?></div>
         </td>
       </tr>
-      <tr>
+      <?php if($this->config->global->flow != '')?>
+      <tr <?php if($this->config->global->flow != 'onlyTask') echo "class='hidden'";?>>
         <th><?php echo $lang->project->manageProducts;?></th>
         <td class='text-left' id='productsBox' colspan="2">
           <div class='row'>

@@ -125,6 +125,20 @@ class commonModel extends model
         $this->config->system   = isset($config['system']) ? $config['system'] : array();
         $this->config->personal = isset($config[$account]) ? $config[$account] : array();
 
+        foreach($this->config->system as $module => $records)
+        {
+            /* Overide the items defined in config/config.php and config/my.php. */
+            if(!isset($this->config->$module)) $this->config->$module = new stdclass();
+            if(isset($this->config->system->$module)) helper::mergeConfig($this->config->system->$module, $module);
+        }
+
+        foreach($this->config->personal as $module => $records)
+        {
+            /* Overide the items defined in config/config.php and config/my.php. */
+            if(!isset($this->config->$module)) $this->config->$module = new stdclass();
+            if(isset($this->config->personal->$module)) helper::mergeConfig($this->config->personal->$module, $module);
+        }
+
         /* Overide the items defined in config/config.php and config/my.php. */
         if(isset($this->config->system->common)) helper::mergeConfig($this->config->system->common, 'common');
         if(isset($this->config->personal->common)) helper::mergeConfig($this->config->personal->common, 'common');
@@ -374,10 +388,32 @@ class commonModel extends model
      */
     public static function printSearchBox()
     {
-        global $app, $lang;
+        global $app, $config, $lang;
         $moduleName  = $app->getModuleName();
         $methodName  = $app->getMethodName();
         $searchObject = $moduleName;
+
+        if($config->global->flow == 'onlyStory')
+        {
+            /* Adjust search items. */
+            unset($lang->searchObjects['bug']);
+            unset($lang->searchObjects['task']);
+            unset($lang->searchObjects['testcase']);
+            unset($lang->searchObjects['project']);
+            unset($lang->searchObjects['build']);
+            unset($lang->searchObjects['testtask']);
+        }
+        elseif($config->global->flow == 'onlyTask')
+        {
+            unset($lang->searchObjects['bug']);
+            unset($lang->searchObjects['story']);
+            unset($lang->searchObjects['product']);
+            unset($lang->searchObjects['testcase']);
+            unset($lang->searchObjects['build']);
+            unset($lang->searchObjects['release']);
+            unset($lang->searchObjects['productplan']);
+            unset($lang->searchObjects['testtask']);
+        }
 
         if($moduleName == 'product')
         {
@@ -391,7 +427,12 @@ class commonModel extends model
         {
             $searchObject = $methodName;
         }
-        if(empty($lang->searchObjects[$searchObject])) $searchObject = 'bug';
+        if(empty($lang->searchObjects[$searchObject]))
+        {   
+            $searchObject = 'bug';
+            if($config->global->flow == 'onlyStory') $searchObject = 'story';
+            if($config->global->flow == 'onlyTask')  $searchObject = 'task';
+        }
 
         echo "<div class='input-group input-group-sm' id='searchbox'>"; 
         echo "<div class='input-group-btn' id='typeSelector'>";

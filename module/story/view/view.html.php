@@ -54,7 +54,7 @@
         common::printIcon('story', 'close',      "storyID=$story->id", $story, 'button', '', '', 'iframe text-danger', true);
         common::printIcon('story', 'activate',   "storyID=$story->id", $story, 'button', '', '', 'iframe text-success', true);
 
-        if(!isonlybody() and (common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'batchCreate')))
+        if($this->config->global->flow != 'onlyStory' and !isonlybody() and (common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'batchCreate')))
         {
             $this->app->loadLang('testcase');
             echo "<div class='btn-group'>";
@@ -272,10 +272,15 @@
       </div>
       <div class='tabs'>
         <ul class='nav nav-tabs'>
+          <?php if($config->global->flow == 'onlyStory'):?>
+          <li class='active'><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
+          <?php else:?>
           <li class='active'><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
           <li><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
+          <?php endif;?>
         </ul>
         <div class='tab-content'>
+          <?php if($config->global->flow != 'onlyStory'):?>
           <div class='tab-pane active' id='legendProjectAndTask'>
             <ul class='list-unstyled'>
             <?php
@@ -299,8 +304,10 @@
             ?>
             </ul>
           </div>
-          <div class='tab-pane' id='legendRelated'>
+          <?php endif;?>
+          <div class="tab-pane <?php if($config->global->flow == 'onlyStory') echo 'active';?>" id='legendRelated'>
             <table class='table table-data table-condensed table-borderless'>
+            <?php if($config->global->flow != 'onlyStory'):?>
             <?php if(!empty($fromBug)):?>
               <tr class='text-top'>
                 <th class='w-70px'><?php echo $lang->story->legendFromBug;?></th>
@@ -337,8 +344,9 @@
                   </ul>
                 </td>
               </tr>
+              <?php endif;?>
               <tr class='text-top'>
-                <th><?php echo $lang->story->legendLinkStories;?></th>
+                <th class='w-80px'><?php echo $lang->story->legendLinkStories;?></th>
                 <td class='pd-0'>
                   <ul class='list-unstyled'>
                     <?php

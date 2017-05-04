@@ -30,7 +30,7 @@ foreach(explode(',', $showFields) as $field)
     if($field)$visibleFields[$field] = '';
 }
 $colspan     = count($visibleFields) + 3;
-$hiddenStory = (isonlybody() and $storyID) ? ' hidden' : '';
+$hiddenStory = ((isonlybody() and $storyID) || $this->config->global->flow == 'onlyTask') ? ' hidden' : '';
 if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
 ?>
 <form class='form-condensed' method='post' target='hiddenwin'>

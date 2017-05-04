@@ -32,7 +32,7 @@
       echo "<div class='btn-group'>";
       common::printIcon('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=0&bugID=0&planID=$plan->id", '', 'button', 'plus');
       if(common::hasPriv('productplan', 'linkStory')) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn'");
-      if(common::hasPriv('productplan', 'linkBug'))   echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn'");
+      if(common::hasPriv('productplan', 'linkBug') and $config->global->flow != 'onlyStory') echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn'");
       echo '</div>';
       echo "<div class='btn-group'>";
       common::printIcon('productplan', 'edit',     "planID=$plan->id");
@@ -52,7 +52,9 @@
       <div class='tabs'>
         <ul class='nav nav-tabs'>
           <li class='<?php if($type == 'story') echo 'active'?>'><a href='#stories' data-toggle='tab'><?php echo  html::icon($lang->icons['story']) . ' ' . $lang->productplan->linkedStories;?></a></li>
+          <?php if($config->global->flow != 'onlyStory'):?>
           <li class='<?php if($type == 'bug') echo 'active'?>'><a href='#bugs' data-toggle='tab'><?php echo  html::icon($lang->icons['bug']) . ' ' . $lang->productplan->linkedBugs;?></a></li>
+          <?php endif;?>
           <li><a href='#planInfo' data-toggle='tab'><?php echo  html::icon($lang->icons['plan']) . ' ' . $lang->productplan->view;?></a></li>
         </ul>
         <div class='tab-content'>
