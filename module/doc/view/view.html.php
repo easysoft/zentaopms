@@ -107,9 +107,7 @@
           <?php endforeach;?>
           </div>
 
-          <?php if($doc->files):?>
           <div class='file-content'><?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'false'));?></div>
-          <?php endif;?>
         </div>
       </fieldset>
       <div class='actions'><?php if(!$doc->deleted) echo $actionLinks;?></div>

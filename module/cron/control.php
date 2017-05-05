@@ -128,16 +128,21 @@ class cron extends control
     /**
      * Ajax exec cron.
      * 
+     * @param  bool    $restart 
      * @access public
      * @return void
      */
-    public function ajaxExec()
+    public function ajaxExec($restart = false)
     {
         ignore_user_abort(true);
         set_time_limit(0);
         session_write_close();
         /* Check cron turnon. */
         if(empty($this->config->global->cron)) die();
+
+        /* Create restart tag file. */
+        $restartTag = $this->app->getCacheRoot() . 'restartcron';
+        if($restart) touch($restartTag);
 
         /* make cron status to running. */
         $configID = $this->cron->getConfigID();
@@ -158,11 +163,16 @@ class cron extends control
             if(empty($parsedCrons)) break;
             if(!$this->cron->getTurnon()) break;
 
+            /* Die old process when restart. */
+            if(file_exists($restartTag) and !$restart) die(unlink($restartTag));
+            $restart = false;
+
             /* Run crons. */
             $now = new datetime('now');
             $this->common->loadConfigFromDB();
             foreach($parsedCrons as $id => $cron)
             {
+
                 $cronInfo = $this->cron->getById($id);
                 /* Skip empty and stop cron.*/
                 if(empty($cronInfo) or $cronInfo->status == 'stop') continue;

@@ -24,6 +24,15 @@ class testreportModel extends model
     {
         $this->loadModel('product')->setMenu($products, $productID, $branch);
         $selectHtml = $this->product->select($products, $productID, 'testreport', 'browse', '', $branch);
+
+        /* Remove branch. */
+        if(strpos($selectHtml, 'currentBranch') !== false)
+        {
+            $selectHtml = substr($selectHtml, 0, strpos($selectHtml, 'currentBranch'));
+            $selectHtml = substr($selectHtml, 0, strrpos($selectHtml, '<'));
+            if(strpos($selectHtml, '</li>') !== false) $selectHtml = substr($selectHtml, 0, strrpos($selectHtml, '</li>'));
+        }
+
         foreach($this->lang->testtask->menu as $key => $value)
         {
             $replace = ($key == 'product') ? $selectHtml : $productID;
