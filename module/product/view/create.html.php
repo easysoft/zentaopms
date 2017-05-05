@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('onlyStory', $config->global->flow == 'onlyStory' ? true : false);?>
+<?php js::set('noProject', ($config->global->flow == 'onlyStory' or $config->global->flow == 'onlyTest') ? true : false);?>
 <div class='container mw-1400px'>
   <div id='titlebar'>
     <div class='heading'>

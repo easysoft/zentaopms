@@ -63,7 +63,7 @@
         </td>
         <?php endif;?>
       </tr>
-      <?php if(strpos(",$showFields,", ',story,') !== false):?>
+      <?php if(strpos(",$showFields,", ',story,') !== false and $this->config->global->flow != 'onlyTest'):?>
       <tr>
         <th><?php echo $lang->testcase->lblStory;?></th>
         <td colspan='2'>

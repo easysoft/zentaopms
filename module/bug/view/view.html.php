@@ -36,7 +36,7 @@
         common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
         common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
 
-        common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
+        if($this->config->global->flow != 'onlyTest') common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
         common::printIcon('bug', 'createCase', $convertParams, '', 'button', 'sitemap');
         echo '</div>';
 
@@ -316,6 +316,7 @@
                 </td>
               </tr>
               <?php endif;?>
+              <?php if($this->config->global->flow != 'onlyTest'):?>
               <?php if($bug->toStory != 0):?>
               <tr>
                 <th><?php echo $lang->bug->toStory;?></th>
@@ -327,6 +328,7 @@
                 <th><?php echo $lang->bug->toTask;?></th>
                 <td><?php echo html::a($this->createLink('task', 'view', "taskID=$bug->toTask"), "#$bug->toTask $bug->toTaskTitle", '_blank');?></td>
               </tr>
+              <?php endif;?>
               <?php endif;?>
             </table>
           </div>

@@ -553,3 +553,177 @@ $lang->icons['unlock']         = 'unlock-alt';
 $lang->icons['confirmStoryChange'] = 'search';
 
 include (dirname(__FILE__) . '/menuOrder.php');
+
+global $config;
+if($config->global->flow == 'onlyStory')
+{
+    /* Remove project, report and qa module. */
+    unset($lang->menu->project);
+    unset($lang->menu->report);
+    unset($lang->menu->qa);
+
+    unset($lang->menuOrder[15]);
+    unset($lang->menuOrder[20]);
+    unset($lang->menuOrder[30]);
+
+    /* Adjust sub menu of my dashboard. */
+    unset($lang->my->menu->bug);
+    unset($lang->my->menu->todo);
+    unset($lang->my->menu->testtask);
+    unset($lang->my->menu->task);
+    unset($lang->my->menu->myProject);
+
+    /* Adjust sub menu of product module. */
+    unset($lang->product->menu->project);
+    
+    /* Rename product module. */
+    $lang->menu->product = '产品|product|index';
+
+    /* Adjust search items. */
+    unset($lang->searchObjects['bug']);
+    unset($lang->searchObjects['task']);
+    unset($lang->searchObjects['testcase']);
+    unset($lang->searchObjects['project']);
+    unset($lang->searchObjects['build']);
+    unset($lang->searchObjects['testtask']);
+}
+
+if($config->global->flow == 'onlyTask')
+{
+    /* Remove product, report and qa module. */
+    unset($lang->menu->product);
+    unset($lang->menu->report);
+    unset($lang->menu->qa);
+
+    unset($lang->menuOrder[10]);
+    unset($lang->menuOrder[20]);
+    unset($lang->menuOrder[30]);
+
+    /* Adjust sub menu of my dashboard. */
+    unset($lang->my->menu->bug);
+    unset($lang->my->menu->todo);
+    unset($lang->my->menu->testtask);
+    unset($lang->my->menu->story);
+
+    /* Adjust sub menu of project  module. */
+    unset($lang->project->menu->story);
+    unset($lang->project->menu->build);
+    unset($lang->project->menu->bug);
+    unset($lang->project->menu->testtask);
+    unset($lang->project->menu->product);
+
+    /* Remove sub menu of product module. */
+    unset($lang->product->menu);
+    unset($lang->product->menuOrder);
+
+    $lang->project->menu->task['subModule'] = 'task';
+    $lang->project->menu->task['alias']     = 'grouptask,importtask';
+
+    unset($lang->searchObjects['bug']);
+    unset($lang->searchObjects['story']);
+    unset($lang->searchObjects['product']);
+    unset($lang->searchObjects['testcase']);
+    unset($lang->searchObjects['build']);
+    unset($lang->searchObjects['release']);
+    unset($lang->searchObjects['productplan']);
+    unset($lang->searchObjects['testtask']);
+}
+
+if($config->global->flow == 'onlyTest')
+{
+    /* Remove project and test module. */
+    unset($lang->menu->project);
+    unset($lang->menu->qa);
+    unset($lang->menu->report);
+
+    unset($lang->menuOrder[15]);
+    unset($lang->menuOrder[20]);
+    unset($lang->menuOrder[30]);
+
+    /* Rename product module. */
+    $lang->menu->product = '产品|product|index';
+
+    /* Adjust sub menu of my dashboard. */
+    unset($lang->my->menu->task);
+    unset($lang->my->menu->myProject);
+    unset($lang->my->menu->story);
+    unset($lang->my->menu->todo);
+
+    /* Remove sub menu of project module. */
+    unset($lang->project->menu);
+    unset($lang->project->menuOrder);
+
+    /* 增加缺陷管理、用例管理和测试任务视图 */
+    $lang->menu->bug      = 'Bug|bug|index';
+    $lang->menu->testcase = '用例|testcase|index';
+    $lang->menu->testtask = '测试|testtask|index';
+
+    $lang->menuOrder[6] = 'bug';
+    $lang->menuOrder[7] = 'testcase';
+    $lang->menuOrder[8] = 'testtask';
+
+    /* 调整缺陷管理的二级菜单 */
+    $lang->bug->menu      = new stdclass();
+
+    $lang->bug->menu->product  = '%s';
+    $lang->bug->menu->browse   = array('link' => '浏览Bug|bug|browse|productID=%s', 'alias' => 'viewedit,resolve,close,activate,report', 'subModule' => 'tree');
+    $lang->bug->menu->create   = array('link' => '提Bug|bug|create|productID=%s');
+
+    $lang->bug->menuOrder[5]  = 'product';
+    $lang->bug->menuOrder[10] = 'browse';
+    $lang->bug->menuOrder[15] = 'create';
+
+    /* 调整用例管理的二级菜单 */
+    $lang->testcase->menu      = new stdclass();
+
+    $lang->testcase->menu->product  = '%s';
+    $lang->testcase->menu->browse   = array('link' => '浏览用例|testcase|browse|productID=%s', 'alias' => 'viewedit,resolve,close,activate,report', 'subModule' => 'tree');
+    $lang->testcase->menu->create   = array('link' => '创建用例|testcase|create|productID=%s');
+
+    $lang->testcase->menuOrder[5]  = 'product';
+    $lang->testcase->menuOrder[10] = 'browse';
+    $lang->testcase->menuOrder[15] = 'create';
+
+    /* 调整测试任务的二级菜单 */
+    $lang->testtask->menu      = new stdclass();
+
+    $lang->testtask->menu->product  = '%s';
+    $lang->testtask->menu->browse   = array('link' => '浏览版本|testtask|browse|productID=%s', 'alias' => 'viewedit,resolve,close,activate,report', 'subModule' => 'tree');
+    $lang->testtask->menu->create   = array('link' => '提交测试|testtask|create|productID=%s');
+
+    $lang->testtask->menuOrder[5]  = 'product';
+    $lang->testtask->menuOrder[10] = 'browse';
+    $lang->testtask->menuOrder[15] = 'create';
+
+    /* 调整产品视图的二级菜单 */
+    unset($lang->product->menu->story);
+    unset($lang->product->menu->project);
+    unset($lang->product->menu->release);
+    unset($lang->product->menu->dynamic);
+    unset($lang->product->menu->plan);
+    unset($lang->product->menu->roadmap);
+    unset($lang->product->menu->doc);
+    unset($lang->product->menu->module);
+
+    $lang->product->menu->build = array('link' => '版本|product|build', 'subModule' => 'build');
+
+    $lang->product->menuOrder[5]  = 'build';
+    $lang->product->menuOrder[10] = 'view';
+    $lang->product->menuOrder[15] = 'order';
+
+    $lang->build->menu      = $lang->product->menu;
+    $lang->build->menuOrder = $lang->product->menuOrder;
+    
+    /* 调整菜单分组 */
+    $lang->menugroup->bug      = 'bug';
+    $lang->menugroup->testcase = 'testcase';
+    $lang->menugroup->testtask = 'testtask';
+    
+    /* 调整搜索项 */ 
+    unset($lang->searchObjects['story']);
+    unset($lang->searchObjects['task']);
+    unset($lang->searchObjects['release']);
+    unset($lang->searchObjects['productplan']);
+
+    $lang->zentaoPMS = '禅道测试管理';
+}

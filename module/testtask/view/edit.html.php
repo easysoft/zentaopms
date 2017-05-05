@@ -23,16 +23,19 @@
   </div>
   <form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
     <table class='table table-form'> 
+      <?php if($this->config->global->flow != 'onlyTest'):?>
       <tr>
         <th class='w-80px'><?php echo $lang->testtask->project;?></th>
         <td class='w-p35-f'>
           <?php echo html::select('project', $projects, $task->project, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?>
         </td>
-        <td><?php echo html::hidden('product', $task->product)?></td>
+        <td></td>
       </tr>
+      <?php endif;?>
       <tr>
-        <th><?php echo $lang->testtask->build;?></th>
-        <td><span id='buildBox'><?php echo html::select('build', $builds, $task->build, "class='form-control chosen'");?></span></td>
+        <th class='w-80px'><?php echo $lang->testtask->build;?></th>
+        <td class='w-p35-f'><span id='buildBox'><?php echo html::select('build', $builds, $task->build, "class='form-control chosen'");?></span></td>
+        <td></td>
       </tr>
       <tr>
         <th><?php echo $lang->testtask->owner;?></th>
@@ -76,7 +79,7 @@
         </td>
       </tr>
       <tr>
-        <td></td><td colspan='2'><?php echo html::submitButton() . html::backButton();?> </td>
+        <td></td><td colspan='2'><?php echo html::submitButton() . html::backButton() . html::hidden('product', $task->product);?></td>
       </tr>
     </table>
   </form>

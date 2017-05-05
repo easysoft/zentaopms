@@ -279,65 +279,6 @@ class customModel extends model
         if(empty($module)) $module = 'main';
 
         global $app, $lang, $config;
-
-        if($config->global->flow == 'onlyStory')
-        {
-            /* Remove project, report and qa module. */
-            unset($lang->menu->project);
-            unset($lang->menu->report);
-            unset($lang->menu->qa);
-
-            unset($lang->menuOrder[15]);
-            unset($lang->menuOrder[20]);
-            unset($lang->menuOrder[30]);
-
-            /* Adjust sub menu of my dashboard. */
-            unset($lang->my->menu->bug);
-            unset($lang->my->menu->todo);
-            unset($lang->my->menu->testtask);
-            unset($lang->my->menu->task);
-            unset($lang->my->menu->myProject);
-
-            /* Adjust sub menu of product module. */
-            unset($lang->product->menu->project);
-            
-            /* Rename product module. */
-            $clientLang = $app->getClientLang();
-            $lang->menu->product = $config->productCommonList[$clientLang][0] . '|product|index';
-        }
-        elseif($config->global->flow == 'onlyTask')
-        {
-            /* Remove product, report and qa module. */
-            unset($lang->menu->product);
-            unset($lang->menu->report);
-            unset($lang->menu->qa);
-
-            unset($lang->menuOrder[10]);
-            unset($lang->menuOrder[20]);
-            unset($lang->menuOrder[30]);
-
-            /* Adjust sub menu of my dashboard. */
-            unset($lang->my->menu->bug);
-            unset($lang->my->menu->todo);
-            unset($lang->my->menu->testtask);
-            unset($lang->my->menu->story);
-
-            /* Adjust sub menu of project  module. */
-            unset($lang->project->menu->story);
-            unset($lang->project->menu->build);
-            unset($lang->project->menu->bug);
-            unset($lang->project->menu->testtask);
-            unset($lang->project->menu->product);
-
-            /* Remove sub menu of product module. */
-            unset($lang->product->menu);
-            unset($lang->product->menuOrder);
-
-            $lang->project->menu->task['subModule'] = 'task';
-            $lang->project->menu->task['alias']     = 'grouptask,importtask';
-        }
-
-
         $allMenu = $module == 'main' ? $lang->menu : (isset($lang->$module->menu) ? $lang->$module->menu : $lang->my->menu);
         if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
 

@@ -31,32 +31,50 @@ class build extends control
         /* Load these models. */
         $this->loadModel('project');
         $this->loadModel('user');
+        
+        if($this->config->global->flow == 'onlyTest')
+        {
+            $product  = $this->loadModel('product')->getByID($projectID);
+            $products = $this->product->getPairs();
+            $this->product->setMenu($products, $projectID);
 
-        /* Set menu. */
-        $this->project->setMenu($this->project->getPairs(), $projectID);
+            $productGroups   = array();
+            $product->branch = 0;
+            foreach($products as $productID => $name) $productGroups[$productID]['branch'] = 0;
 
-        /* Get stories and bugs. */
-        $orderBy  = 'status_asc, stage_asc, id_desc';
+            $this->view->title    = $this->lang->build->create;
+            $this->view->product  = $product;
+            $this->view->branches = ($product and $product->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($projectID);
+        }
+        else
+        {
+            /* Set menu. */
+            $this->project->setMenu($this->project->getPairs(), $projectID);
 
-        /* Assign. */
-        $project = $this->loadModel('project')->getById($projectID);
+            /* Get stories and bugs. */
+            $orderBy  = 'status_asc, stage_asc, id_desc';
 
-        $productGroups = $this->project->getProducts($projectID);
-        $productID     = key($productGroups);
-        $products      = array();
-        foreach($productGroups as $product) $products[$product->id] = $product->name;
+            /* Assign. */
+            $project = $this->loadModel('project')->getById($projectID);
 
-        $this->view->title         = $project->name . $this->lang->colon . $this->lang->build->create;
-        $this->view->position[]    = html::a($this->createLink('project', 'task', "projectID=$projectID"), $project->name);
-        $this->view->position[]    = $this->lang->build->create;
-        $this->view->productGroups = $productGroups;
+            $productGroups = $this->project->getProducts($projectID);
+            $productID     = key($productGroups);
+            $products      = array();
+            foreach($productGroups as $product) $products[$product->id] = $product->name;
+
+            $this->view->title         = $project->name . $this->lang->colon . $this->lang->build->create;
+            $this->view->position[]    = html::a($this->createLink('project', 'task', "projectID=$projectID"), $project->name);
+            $this->view->position[]    = $this->lang->build->create;
+            $this->view->product       = isset($productGroups[$productID]) ? $productGroups[$productID] : '';
+            $this->view->branches      = (isset($productGroups[$productID]) and $productGroups[$productID]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
+            $this->view->projectID     = $projectID;
+            $this->view->orderBy       = $orderBy;
+        }
+
         $this->view->products      = $products;
-        $this->view->product       = isset($productGroups[$productID]) ? $productGroups[$productID] : '';
-        $this->view->branches      = (isset($productGroups[$productID]) and $productGroups[$productID]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
-        $this->view->projectID     = $projectID;
         $this->view->lastBuild     = $this->build->getLast($projectID);
+        $this->view->productGroups = $productGroups;
         $this->view->users         = $this->user->getPairs('nodeleted');
-        $this->view->orderBy       = $orderBy;
         $this->display();
     }
 
@@ -85,43 +103,64 @@ class build extends control
             die(js::locate(inlink('view', "buildID=$buildID"), 'parent'));
         }
 
-        $this->loadModel('project');
-
-        /* Set menu. */
         $build = $this->build->getById((int)$buildID);
-        $this->project->setMenu($this->project->getPairs(), $build->project);
 
-        /* Get stories and bugs. */
-        $orderBy = 'status_asc, stage_asc, id_desc';
-
-        /* Assign. */
-        $project = $this->loadModel('project')->getById($build->project);
-        if(empty($project))
+        if($this->config->global->flow == 'onlyTest')
         {
-            $project = new stdclass();
-            $project->name = '';
+            $product  = $this->loadModel('product')->getById($build->product);
+            $products = $this->product->getPairs();
+            $this->product->setMenu($products, $build->product);
+
+            $productGroups   = array();
+            $product->branch = 0;
+            foreach($products as $productID => $name) $productGroups[$productID]['branch'] = 0;
+
+            $this->view->title      = $this->lang->build->edit;
+            $this->view->position[] = $this->lang->build->edit;
+            $this->view->product    = $product;
+            $this->view->branches   = ($product and $product->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($build->product);
+        }
+        else
+        {
+            $this->loadModel('project');
+
+            /* Set menu. */
+            $this->project->setMenu($this->project->getPairs(), $build->project);
+
+            /* Get stories and bugs. */
+            $orderBy = 'status_asc, stage_asc, id_desc';
+
+            /* Assign. */
+            $project = $this->loadModel('project')->getById($build->project);
+            if(empty($project))
+            {
+                $project = new stdclass();
+                $project->name = '';
+            }
+
+            $productGroups = $this->project->getProducts($build->project);
+
+            $products      = array();
+            foreach($productGroups as $product) $products[$product->id] = $product->name;
+            if(empty($productGroups) and $build->product)
+            {
+                $product = $this->loadModel('product')->getById($build->product);
+                $products[$product->id] = $product->name;
+            }
+
+            $this->view->title      = $project->name . $this->lang->colon . $this->lang->build->edit;
+            $this->view->position[] = html::a($this->createLink('project', 'task', "projectID=$build->project"), $project->name);
+            $this->view->position[] = $this->lang->build->edit;
+            $this->view->product    = isset($productGroups[$build->product]) ? $productGroups[$build->product] : '';
+            $this->view->branches   = (isset($productGroups[$build->product]) and $productGroups[$build->product]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($build->product);
+            $this->view->orderBy    = $orderBy;
+            $this->display();
         }
 
-        $productGroups = $this->project->getProducts($build->project);
-
-        $products      = array();
-        foreach($productGroups as $product) $products[$product->id] = $product->name;
-        if(empty($productGroups) and $build->product)
-        {
-            $product = $this->loadModel('product')->getById($build->product);
-            $products[$product->id] = $product->name;
-        }
-
-        $this->view->title         = $project->name . $this->lang->colon . $this->lang->build->edit;
-        $this->view->position[]    = html::a($this->createLink('project', 'task', "projectID=$build->project"), $project->name);
-        $this->view->position[]    = $this->lang->build->edit;
         $this->view->productGroups = $productGroups;
         $this->view->products      = $products;
-        $this->view->product       = isset($productGroups[$build->product]) ? $productGroups[$build->product] : '';
-        $this->view->branches      = (isset($productGroups[$build->product]) and $productGroups[$build->product]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($build->product);
+        $this->view->users         = $this->loadModel('user')->getPairs();
         $this->view->build         = $build;
-        $this->view->users         = $this->loadModel('user')->getPairs('nodeleted', $build->builder);
-        $this->view->orderBy       = $orderBy;
         $this->display();
     }
                                                           
@@ -147,25 +186,39 @@ class build extends control
         $product = $this->loadModel('product')->getById($build->product);
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
-        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($build->stories)->andWhere('deleted')->eq(0)->fetchAll('id');
-        $stages  = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($build->stories)->andWhere('branch')->eq($build->branch)->fetchPairs('story', 'stage');
-        foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->andWhere('deleted')->eq(0)->fetchAll();
 
-        $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
+        if($this->config->global->flow == 'onlyTest')
+        {
+            $products = $this->loadModel('product')->getPairs();
+            $this->product->setMenu($products, $build->product);
+
+            $this->view->title      = "BUILD #$build->id $build->name - " . $build->productName;
+            $this->view->position[] = html::a($this->createLink('product', 'build', "productID=$build->product"), $build->productName);
+            $this->view->position[] = $this->lang->build->view;
+        }
+        else
+        {
+            $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($build->stories)->andWhere('deleted')->eq(0)->fetchAll('id');
+            $stages  = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($build->stories)->andWhere('branch')->eq($build->branch)->fetchPairs('story', 'stage');
+            foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
+
+            $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
+            $projects = $this->project->getPairs('empty');
+
+            $this->view->title         = "BUILD #$build->id $build->name - " . $projects[$build->project];
+            $this->view->position[]    = html::a($this->createLink('project', 'task', "projectID=$build->project"), $projects[$build->project]);
+            $this->view->position[]    = $this->lang->build->view;
+            $this->view->stories       = $stories;
+            $this->view->generatedBugs = $this->bug->getProjectBugs($build->project, $build->id, '', 0, 'status_desc,id_desc', null);
+            $this->view->bugs          = $bugs;
+            $this->view->type          = $type;
+        }
 
         /* Assign. */
-        $projects = $this->project->getPairs('empty');
-        $this->view->title         = "BUILD #$build->id $build->name - " . $projects[$build->project];
-        $this->view->position[]    = html::a($this->createLink('project', 'task', "projectID=$build->project"), $projects[$build->project]);
-        $this->view->position[]    = $this->lang->build->view;
-        $this->view->generatedBugs = $this->bug->getProjectBugs($build->project, $build->id, '', 0, 'status_desc,id_desc', null);
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->build         = $build;
-        $this->view->stories       = $stories;
-        $this->view->bugs          = $bugs;
         $this->view->actions       = $this->loadModel('action')->getList('build', $buildID);
-        $this->view->type          = $type;
         $this->view->link          = $link;
         $this->view->param         = $param;
         $this->view->branchName    = $build->productType == 'normal' ? '' : $this->loadModel('branch')->getById($build->branch);
@@ -206,6 +259,8 @@ class build extends control
                 }
                 $this->send($response);
             }
+
+            if($this->config->global->flow == 'onlyTest') die(js::locate($this->createLink('project', 'build', "productID=$build->product"), 'parent'));
             die(js::locate($this->createLink('project', 'build', "projectID=$build->project"), 'parent'));
         }
     }

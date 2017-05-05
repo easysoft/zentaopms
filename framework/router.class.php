@@ -40,6 +40,11 @@ class router extends baseRouter
             $productProject = false;
             if($this->dbh and !empty($this->config->db->name))
             {
+                global $config;
+                if(!isset($config->global)) $config->global = new stdclass();
+                $flow = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='common' AND `key`='flow'")->fetch();
+                $config->global->flow = $flow->value;
+
                 try
                 {
                     $productProject = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productProject'")->fetch();
@@ -53,7 +58,6 @@ class router extends baseRouter
                     $message   = $exception->getMessage();
                     if(strpos($repairCode, "|$errorCode|") !== false or ($errorCode == '1016' and strpos($errorMsg, 'errno: 145') !== false) or strpos($message, 'repair') !== false)
                     {
-                        global $config;
                         if(isset($config->framework->autoRepairTable) and $config->framework->autoRepairTable)
                         {
                             header("location: " . $config->webRoot . 'checktable.php');

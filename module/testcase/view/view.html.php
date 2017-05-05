@@ -168,7 +168,7 @@
               ?>
             </td>
           </tr>
-          <?php if(!$isLibCase):?>
+          <?php if(!$isLibCase and $this->config->global->flow != 'onlyTest'):?>
           <tr class='nofixed'>
             <th><?php echo $lang->testcase->story;?></th>
             <td>

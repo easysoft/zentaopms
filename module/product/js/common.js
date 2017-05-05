@@ -5,5 +5,5 @@ function setWhite(acl)
 
 $(document).ready(function()
 {
-    if(onlyStory) $('#aclprivate').parents('.radio').remove();
+    if(noProject) $('#aclprivate').parents('.radio').remove();
 })

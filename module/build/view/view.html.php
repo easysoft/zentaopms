@@ -37,10 +37,13 @@ tfoot tr td .table-actions .btn{display:none;}
   $browseLink = $this->session->buildList ? $this->session->buildList : $this->createLink('project', 'build', "projectID=$build->project");
   if(!$build->deleted)
   {
-      echo "<div class='btn-group'>";
-      if(common::hasPriv('build', 'linkStory')) echo html::a(inlink('view', "buildID=$build->id&type=story&link=true"), '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn'");
-      if(common::hasPriv('build', 'linkBug'))   echo html::a(inlink('view', "buildID=$build->id&type=bug&link=true"), '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn'");
-      echo '</div>';
+      if($this->config->global->flow != 'onlyTest')
+      {
+          echo "<div class='btn-group'>";
+          if(common::hasPriv('build', 'linkStory')) echo html::a(inlink('view', "buildID=$build->id&type=story&link=true"), '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn'");
+          if(common::hasPriv('build', 'linkBug'))   echo html::a(inlink('view', "buildID=$build->id&type=bug&link=true"), '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn'");
+          echo '</div>';
+      }
       echo "<div class='btn-group'>";
       common::printIcon('build', 'edit',   "buildID=$build->id");
       common::printIcon('build', 'delete', "buildID=$build->id", '', 'button', '', 'hiddenwin');
@@ -53,6 +56,25 @@ tfoot tr td .table-actions .btn{display:none;}
 <div class='row-table'>
   <div class='col-main'>
     <div class='main'>
+      <?php if($this->config->global->flow == 'onlyTest'):?>
+      <fieldset>
+        <legend><?php echo $lang->build->desc;?></legend>
+        <div class='article-content'><?php echo $build->desc;?></div>
+      </fieldset>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $build->files, 'fieldset' => 'true'));?>
+      <?php include '../../common/view/action.html.php';?>
+      <div class='actions'>
+        <?php
+        $browseLink = $this->session->buildList ? $this->session->buildList : $this->createLink('product', 'build', "productID=$build->product");
+        if(!$build->deleted)
+        { 
+          common::printIcon('build', 'edit',   "buildID=$build->id");
+          common::printIcon('build', 'delete', "buildID=$build->id", '', 'button', '', 'hiddenwin');
+        }
+        echo common::printRPN($browseLink);
+        ?>
+      </div>
+      <?php else:?>
       <div class='tabs'>
       <?php $countStories = count($stories); $countBugs = count($bugs); $countNewBugs = count($generatedBugs);?>
         <ul class='nav nav-tabs'>
@@ -218,14 +240,17 @@ tfoot tr td .table-actions .btn{display:none;}
           </div>
         </div>
       </div>
+      <?php endif;?>
     </div>
   </div>
   <div class='col-side'>
     <div class='main-side main'>
+      <?php if($this->config->global->flow != 'onlyTest'):?>
       <fieldset>
         <legend><?php echo $lang->build->desc;?></legend>
         <div class='article-content'><?php echo $build->desc;?></div>
       </fieldset>
+      <?php endif;?>
       <fieldset>
         <legend><?php echo $lang->build->basicInfo?></legend>
         <table class='table table-data table-condensed table-borderless table-fixed'>
@@ -261,13 +286,17 @@ tfoot tr td .table-actions .btn{display:none;}
           </tr>
         </table>
       </fieldset>
+      <?php if($this->config->global->flow != 'onlyTest'):?>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $build->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
+      <?php endif;?>
     </div>
   </div>
 </div>
+<?php if($this->config->global->flow != 'onlyTest'):?>
 <?php js::set('param', helper::safe64Decode($param))?>
 <?php js::set('link', $link)?>
 <?php js::set('buildID', $build->id)?>
 <?php js::set('type', $type)?>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

@@ -40,6 +40,7 @@ $lang->product->builds   = 'BUILD数';
 $lang->product->roadmap  = '路线图';
 $lang->product->doc      = '文档列表';
 $lang->product->project  = $lang->projectCommon . '列表';
+$lang->product->build    = '版本列表';
 
 $lang->product->confirmDelete   = " 您确定删除该{$lang->productCommon}吗？";
 

@@ -22,6 +22,8 @@ $config->bug->list->allFields = 'id, module, project, story, task,
     case,
     lastEditedBy,
     lastEditedDate';
+
+if($config->global->flow == 'onlyTest') $config->bug->list->allFields = str_replace(array('project, ', 'task,'), '', $config->bug->list->allFields);
 $config->bug->list->defaultFields = 'id,severity,pri,title,openedBy,assignedTo,resolvedBy,resolution';
 
 $config->bug->list->exportFields = 'id, product, branch, module, project, story, task, 
@@ -71,7 +73,7 @@ $config->bug->search['fields']['product']        = $lang->bug->product;
 $config->bug->search['fields']['branch']         = '';
 $config->bug->search['fields']['plan']           = $lang->bug->productplan;
 $config->bug->search['fields']['module']         = $lang->bug->module;
-$config->bug->search['fields']['project']        = $lang->bug->project;
+if($config->global->flow != 'onlyTest') $config->bug->search['fields']['project'] = $lang->bug->project;
 
 $config->bug->search['fields']['severity']       = $lang->bug->severity;
 $config->bug->search['fields']['pri']            = $lang->bug->pri;
@@ -82,8 +84,11 @@ $config->bug->search['fields']['resolution']     = $lang->bug->resolution;
 
 $config->bug->search['fields']['activatedCount'] = $lang->bug->activatedCount;
 
-$config->bug->search['fields']['toTask']         = $lang->bug->toTask;
-$config->bug->search['fields']['toStory']        = $lang->bug->toStory;
+if($config->global->flow != 'onlyTest') 
+{
+    $config->bug->search['fields']['toTask']  = $lang->bug->toTask;
+    $config->bug->search['fields']['toStory'] = $lang->bug->toStory;
+}
 
 $config->bug->search['fields']['openedBy']       = $lang->bug->openedBy;
 $config->bug->search['fields']['closedBy']       = $lang->bug->closedBy;

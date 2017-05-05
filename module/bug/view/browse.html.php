@@ -33,6 +33,7 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
     </li>
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php if(isset($menuItem->hidden)) continue;?>
+    <?php if($this->config->global->flow == 'onlyTest' and $menuItem->name == 'needconfirm') continue;?>
     <?php if(strpos($menuItem->name, 'QUERY') === 0):?>
     <?php $queryID = (int)substr($menuItem->name, 5);?>
     <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $menuItem->text)?></li>

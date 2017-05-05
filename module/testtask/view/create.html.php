@@ -34,13 +34,16 @@
         <td class='w-p25-f'><?php echo html::input('product', $productID, "class='form-control'");?></td><td></td>
       </tr>  
       <?php endif;?>
+      <?php if($this->config->global->flow != 'onlyTest'):?>
       <tr>
         <th class='w-90px'><?php echo $lang->testtask->project;?></th>
         <td class='w-p25-f'><?php echo html::select('project', $projects, '', "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></td><td></td>
       </tr>  
+      <?php endif;?>
       <tr>
-        <th><?php echo $lang->testtask->build;?></th>
-        <td><span id='buildBox'><?php echo html::select('build', $builds, '', "class='form-control chosen'");?></span></td>
+        <th class='w-90px'><?php echo $lang->testtask->build;?></th>
+        <td class='w-p25-f'><span id='buildBox'><?php echo html::select('build', $builds, '', "class='form-control chosen'");?></span></td>
+        <td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->testtask->owner;?></th>

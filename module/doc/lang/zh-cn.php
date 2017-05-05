@@ -83,8 +83,8 @@ $lang->doc->systemLibs['product'] = $lang->productCommon;
 $lang->doc->systemLibs['project'] = $lang->projectCommon;
 
 global $config;
-if($config->global->flow == 'onlyStory') unset($lang->doc->systemLibs['project']);
-if($config->global->flow == 'onlyStory') unset($lang->doc->libTypeList['project']);
+if($config->global->flow == 'onlyStory' or $config->global->flow == 'onlyTest') unset($lang->doc->systemLibs['project']);
+if($config->global->flow == 'onlyStory' or $config->global->flow == 'onlyTest') unset($lang->doc->libTypeList['project']);
 if($config->global->flow == 'onlyTask')  unset($lang->doc->systemLibs['product']);
 if($config->global->flow == 'onlyTask')  unset($lang->doc->libTypeList['product']);
 

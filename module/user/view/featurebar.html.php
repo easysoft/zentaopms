@@ -12,7 +12,7 @@
         echo "<li id='todoTab'>"; common::printLink('user', 'todo',     "account=$account", $lang->user->todo); echo '</li>';
     }
 
-    if($config->global->flow != 'onlyTask')
+    if($config->global->flow != 'onlyTask' and $config->global->flow != 'onlyTest')
     {
         echo "<li id='storyTab'>";   common::printLink('user', 'story',    "account=$account", $lang->user->story); echo '</li>';
     }

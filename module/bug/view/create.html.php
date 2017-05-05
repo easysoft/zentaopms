@@ -60,6 +60,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
         </td>
         <td></td>
       </tr>
+      <?php if($this->config->global->flow != 'onlyTest'):?>
       <?php $showProject = strpos(",$showFields,", ',project,') !== false;?>
       <tr>
         <th><?php echo ($showProject) ? $lang->bug->project : $lang->bug->openedBuild;?></th>
@@ -77,6 +78,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
           </div>
         </td>
       </tr>
+      <?php endif;?>
       <tr>
         <th><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
         <td>
@@ -212,7 +214,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
       $showStory = strpos(",$showFields,", ',story,') !== false;
       $showTask  = strpos(",$showFields,", ',task,')  !== false;
       ?>
-      <?php if($showStory or $showTask):?>
+      <?php if(($showStory or $showTask) and $this->config->global->flow != 'onlyTest'):?>
       <tr>
         <th><?php echo ($showStory) ? $lang->bug->story : $lang->bug->task;?></th>
         <?php if($showStory):?>

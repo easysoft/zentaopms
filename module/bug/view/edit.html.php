@@ -102,12 +102,14 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
               </div>
             </td>
           </tr>
+          <?php if($this->config->global->flow != 'onlyTest'):?>
           <tr>
             <th><?php echo $lang->bug->productplan;?></th>
             <td>
               <span id="planIdBox"><?php echo html::select('plan', $plans, $bug->plan, "class='form-control chosen'");?></span>
             </td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->bug->type;?></th>
             <td>
@@ -166,6 +168,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         </table>
       </fieldset>
 
+      <?php if($this->config->global->flow != 'onlyTest'):?>
       <fieldset>
         <legend><?php echo $lang->bug->legendPrjStoryTask;?></legend>
         <table class='table table-form'>
@@ -184,6 +187,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
         </table>
       </fieldset>
+      <?php endif;?>
 
       <fieldset>
         <legend><?php echo $lang->bug->legendLife;?></legend>

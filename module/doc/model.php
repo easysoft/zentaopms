@@ -70,7 +70,7 @@ class docModel extends model
         $selectHtml .= "<div id='libMenuHeading'><input id='searchLib' type='search' placeholder='{$this->lang->doc->searchDoc}' class='form-control'></div>";
         $selectHtml .= "<div id='libMenuGroups' class='clearfix'>";
         if($this->config->global->flow != 'onlyTask')  $selectHtml .= "<div class='lib-menu-group' id='libMenuProductGroup'><div class='lib-menu-list-heading' data-type='product'>{$this->lang->doc->libTypeList['product']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
-        if($this->config->global->flow != 'onlyStory') $selectHtml .= "<div class='lib-menu-group' id='libMenuProjectGroup'><div class='lib-menu-list-heading' data-type='project'>{$this->lang->doc->libTypeList['project']}<i class='icon icon-remove'></i></div><div class='lib-menu-project-done'>{$this->lang->project->statusList['done']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
+        if($this->config->global->flow != 'onlyStory' and $this->config->global->flow != 'onlyTest') $selectHtml .= "<div class='lib-menu-group' id='libMenuProjectGroup'><div class='lib-menu-list-heading' data-type='project'>{$this->lang->doc->libTypeList['project']}<i class='icon icon-remove'></i></div><div class='lib-menu-project-done'>{$this->lang->project->statusList['done']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
         $selectHtml .= "<div class='lib-menu-group' id='libMenuCustomGroup'><div class='lib-menu-list-heading' data-type='custom'>{$this->lang->doc->libTypeList['custom']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
         $selectHtml .= "</div></div></div>";
         common::setMenuVars($this->lang->doc->menu, 'list', $selectHtml);
@@ -705,7 +705,7 @@ class docModel extends model
         }
         $productIdList = array_keys($productLibs);
         $products      = $this->dao->select('id,name,status')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->andWhere('deleted')->eq('0')->orderBy('`order`_desc')->fetchAll();
-        if($this->config->global->flow == 'onlyStory')
+        if($this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest')
         {
             $hasProject = array();
         }
@@ -764,7 +764,7 @@ class docModel extends model
      */
     public function getLimitLibs($type, $limit = 4)
     {
-        if($type == 'project' and $this->config->global->flow == 'onlyStory') return array();
+        if($type == 'project' and ($this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest')) return array();
         if($type == 'product' and $this->config->global->flow == 'onlyTask')  return array();
 
         if($type == 'product' or $type == 'project')
@@ -814,7 +814,7 @@ class docModel extends model
         $libGroups   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->in($idList)->orderBy('`order`, id')->fetchGroup($type, 'id');
         if($type == 'product')
         {
-            if($this->config->global->flow == 'onlyStory')
+            if($this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest')
             {
                 $hasProject = array();
             }
@@ -856,7 +856,7 @@ class docModel extends model
         $objectLibs   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
         if($type == 'product')
         {
-            if($this->config->global->flow == 'onlyStory')
+            if($this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest')
             {
                 $hasProject = array();
             }

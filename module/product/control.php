@@ -61,7 +61,8 @@ class product extends control
         $homepage = $this->config->product->homepage;
         if($homepage == 'browse' and $locate == 'auto') $locate = 'yes';
 
-        if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
+        if($locate == 'yes' and $this->config->global->flow == 'onlyTest') $this->locate($this->createLink($this->moduleName, 'build'));
+        if($locate == 'yes' and $this->config->global->flow != 'onlyTest') $this->locate($this->createLink($this->moduleName, 'browse'));
 
         if($this->app->getViewType() != 'mhtml') unset($this->lang->product->menu->index);
         $productID = $this->product->saveState($productID, $this->products);
@@ -659,5 +660,32 @@ class product extends control
     public function doc($productID)
     {
         $this->locate($this->createLink('doc', 'objectLibs', "type=product&objectID=$productID&from=product"));
+    }
+
+    public function build($productID = 0)
+    {
+        $this->app->loadLang('build');
+        $this->session->set('productList', $this->app->getURI(true));
+
+        /* Get all product list. Locate to the create product page if there is no product. */
+        $this->products = $this->product->getPairs();
+        if(empty($this->products) and strpos('create|view', $this->methodName) === false) $this->locate($this->createLink('product', 'create'));
+
+        /* Get current product. */
+        $productID = $this->product->saveState($productID, $this->products);
+        $product   = $this->product->getById($productID);
+        $this->product->setMenu($this->products, $productID);
+
+        /* Set menu.*/
+        $this->session->set('buildList', $this->app->getURI(true));
+
+        $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->build;
+        $this->view->position[] = $this->lang->product->build;
+        $this->view->products   = $this->products;
+        $this->view->product    = $product;
+        $this->view->builds     = $this->dao->select('*')->from(TABLE_BUILD)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetchAll();
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+
+        $this->display();
     }
 }

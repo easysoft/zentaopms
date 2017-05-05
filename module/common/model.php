@@ -393,28 +393,6 @@ class commonModel extends model
         $methodName  = $app->getMethodName();
         $searchObject = $moduleName;
 
-        if($config->global->flow == 'onlyStory')
-        {
-            /* Adjust search items. */
-            unset($lang->searchObjects['bug']);
-            unset($lang->searchObjects['task']);
-            unset($lang->searchObjects['testcase']);
-            unset($lang->searchObjects['project']);
-            unset($lang->searchObjects['build']);
-            unset($lang->searchObjects['testtask']);
-        }
-        elseif($config->global->flow == 'onlyTask')
-        {
-            unset($lang->searchObjects['bug']);
-            unset($lang->searchObjects['story']);
-            unset($lang->searchObjects['product']);
-            unset($lang->searchObjects['testcase']);
-            unset($lang->searchObjects['build']);
-            unset($lang->searchObjects['release']);
-            unset($lang->searchObjects['productplan']);
-            unset($lang->searchObjects['testtask']);
-        }
-
         if($moduleName == 'product')
         {
             if($methodName == 'browse') $searchObject = 'story';

@@ -114,6 +114,7 @@
           <?php endif;?>
         </table>
       </fieldset>
+      <?php if($this->config->global->flow != 'onlyTest'):?>
       <fieldset>
         <legend><?php echo $lang->product->otherInfo?></legend>
         <table class='table table-data table-condensed table-borderless'>
@@ -163,6 +164,7 @@
           </tr>
         </table>
       </fieldset>
+      <?php endif;?>
     </div>
   </div>
 </div>
