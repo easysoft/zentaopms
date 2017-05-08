@@ -1436,7 +1436,7 @@ function computePasswordStrength(password)
  */
 function checkOnlybodyPage()
 {
-    if(location.href == top.location.href)
+    if(self == parent)
     {
         href = location.href.replace('?onlybody=yes', '');
         location.href = href.replace('&onlybody=yes', '');
