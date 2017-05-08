@@ -61,19 +61,13 @@
       <tr id='whiteListBox' class='hidden'>
         <th><?php echo $lang->doc->whiteList;?></th>
         <td colspan='2'>
-          <div class='row-table'>
-            <div class='col-table w-p50'>
-              <div class='input-group w-p100'>
-                <span class='input-group-addon'><?php echo $lang->doclib->group?></span>
-                <?php echo html::select('groups[]', $groups, $doc->groups, "class='form-control chosen' multiple")?>
-              </div>
-            </div>
-            <div class='col-table'>
-              <div class='input-group w-p100'>
-                <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
-                <?php echo html::select('users[]', $users, $doc->users, "class='form-control chosen' multiple")?>
-              </div>
-            </div>
+          <div class='input-group w-p100'>
+            <span class='input-group-addon groups-addon'><?php echo $lang->doclib->group?></span>
+            <?php echo html::select('groups[]', $groups, $doc->groups, "class='form-control chosen' multiple")?>
+          </div>
+          <div class='input-group w-p100'>
+            <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
+            <?php echo html::select('users[]', $users, $doc->users, "class='form-control chosen' multiple")?>
           </div>
         </td>
       </tr>

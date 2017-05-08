@@ -13,7 +13,8 @@
 #titlebar > .heading > strong > i{display:inline;} 
 #modulemenu .nav > li > a{display: inline-block;}
 
-#groups_chosen .chosen-choices {border-right:0px;}
+#groups_chosen .chosen-choices {border-bottom:0px;}
+.groups-addon {border-bottom:0px;}
 
 #dropMenu.loading > #libMenu,
 #dropMenu > .icon {display: none}
