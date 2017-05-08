@@ -88,7 +88,7 @@
           <div class='type-tips'><?php echo $lang->project->typeDesc;?></div>
         </td>
       </tr>
-      <?php if($this->config->global->flow != '')?>
+      <?php if($this->config->global->flow != 'onlyTask'):?>
       <tr <?php if($this->config->global->flow != 'onlyTask') echo "class='hidden'";?>>
         <th><?php echo $lang->project->manageProducts;?></th>
         <td class='text-left' id='productsBox' colspan="2">
@@ -113,6 +113,7 @@
           </div>
         </td>
       </tr>
+      <?php endif;?>
       <tr>
         <th><?php echo $lang->project->desc;?></th>
         <td colspan='2'><?php echo html::textarea('desc', '', "rows='6' class='form-control'");?></td>
