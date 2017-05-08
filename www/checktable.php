@@ -1,10 +1,45 @@
 <?php
-error_reporting(0);
+error_reporting(E_ALL);
+date_default_timezone_set('Asia/Shanghai');
 
 include '../framework/helper.class.php';
 include '../config/config.php';
 define('DS', DIRECTORY_SEPARATOR);
 session_start();
+
+/* Set Client lang. */
+if(isset($_SESSION['lang']))
+{
+    $clientLang = $_SESSION['lang'];
+}
+elseif(isset($_COOKIE['lang']))
+{
+    $clientLang = $_COOKIE['lang'];
+}
+elseif(isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
+{
+    if(strpos($_SERVER['HTTP_ACCEPT_LANGUAGE'], ',') === false)
+    {
+        $clientLang = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+    }
+    else
+    {
+        $clientLang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, strpos($_SERVER['HTTP_ACCEPT_LANGUAGE'], ','));
+    }
+
+    /* Fix clientLang for ie >= 10. https://www.drupal.org/node/365615. */
+    if(stripos($clientLang, 'hans')) $clientLang = 'zh-cn';
+    if(stripos($clientLang, 'hant')) $clientLang = 'zh-tw';
+}
+if(!empty($clientLang))
+{
+    $clientLang = strtolower($clientLang);
+    if(!isset($config->langs[$clientLang])) $clientLang = $config->default->lang;
+}
+else
+{
+    $clientLang = $config->default->lang;
+}
 ?>
 <?php
 $webRoot   = $config->webRoot;
@@ -25,12 +60,12 @@ if(!file_exists($checkFileName) or (time() - filemtime($checkFileName)) > 60 * 1
 
 $lang = new stdclass();
 $lang->misc = new stdclass();
-include '../module/misc/lang/zh-cn.php';
+include "../module/misc/lang/{$clientLang}.php";
 if($status == 'createFile')
 {
     $lang->user = new stdclass();
     $lang->projectCommon = '';
-    include '../module/user/lang/zh-cn.php';
+    include "../module/user/lang/{$clientLang}.php";
 }
 else
 {
@@ -96,7 +131,7 @@ else
         <tr>
           <td><?php echo $tableName;?></td>
           <td><span style='color:<?php echo $tableStatus == 'ok' ? 'green' : 'red'?>'><?php echo $tableStatus;?></span></td>
-          <td><?php if($type == 'repair' and $tableStatus != 'ok') echo "修复失败，请到该数据库的数据目录下，尝试执行<code>myisamchk -r -f {$tableName}.MYI</code>进行修复。"?></td>
+          <td><?php if($type == 'repair' and $tableStatus != 'ok') printf($lang->misc->repairFail, $tableName)?></td>
         </tr>
       </tbody>
       <?php endforeach;?>
