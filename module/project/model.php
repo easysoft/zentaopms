@@ -1563,7 +1563,7 @@ class projectModel extends model
         $data = fixer::input('post')
             ->add('project', $projectID)
             ->add('date', $project->begin)
-            ->add('left', (empty($burn) or $withLeft) ? $this->post->estimate : $burn->left)
+            ->add('left', $withLeft ? $this->post->estimate : $burn->left)
             ->add('consumed', empty($burn) ? 0 : $burn->consumed)
             ->get();
         if(!is_numeric($data->estimate)) return false;
