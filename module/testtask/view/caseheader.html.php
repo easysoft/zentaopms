@@ -24,7 +24,7 @@
     if($hasCasesPriv) echo "<li id='allTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=all&param=0"), $lang->testtask->allCases) . "</li>";
     if($hasCasesPriv) echo "<li id='assignedtomeTab'>" . html::a($this->inlink('cases', "taskID=$taskID&browseType=assignedtome&param=0"), $lang->testtask->assignedToMe) . "</li>";
 
-    if($hasGroupPriv)
+    if($hasGroupPriv and $this->config->global->flow != 'onlyTest')
     {
         echo "<li id='groupTab' class='dropdown'>";
         $groupBy  = isset($groupBy) ? $groupBy : '';

@@ -1235,6 +1235,8 @@ class commonModel extends model
      */
     public static function setMenuVars($menu, $key, $params)
     {
+        if(!isset($menu->$key)) return false;
+
         if(is_array($params))
         {
             if(is_array($menu->$key))

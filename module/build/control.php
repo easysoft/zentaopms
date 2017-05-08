@@ -154,7 +154,6 @@ class build extends control
             $this->view->product    = isset($productGroups[$build->product]) ? $productGroups[$build->product] : '';
             $this->view->branches   = (isset($productGroups[$build->product]) and $productGroups[$build->product]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($build->product);
             $this->view->orderBy    = $orderBy;
-            $this->display();
         }
 
         $this->view->productGroups = $productGroups;

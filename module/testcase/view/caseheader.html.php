@@ -23,7 +23,7 @@
     if(isset($menuItem->hidden)) continue;
     $menuType = $menuItem->name;
     if(!$config->testcase->needReview and $menuType == 'wait') continue;
-    if($this->config->global->flow == 'onlyTest' and $menuType == 'needconfirm') continue;
+    if($this->config->global->flow == 'onlyTest' and (strpos(',needconfirm,group,zerocase,', ',' . $menuType . ',') !== false)) continue;
     if($hasBrowsePriv and strpos($menuType, 'QUERY') === 0)
     {
         $queryID = (int)substr($menuType, 5);
