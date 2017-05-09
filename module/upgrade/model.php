@@ -174,6 +174,9 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('9.1'));
             case '9_1_1':
                 $this->execSQL($this->getUpgradeFile('9.1.1'));
+            case '9_1_2':
+                $this->execSQL($this->getUpgradeFile('9.1.2'));
+                $this->processCustomMenus();
         }
 
         $this->deletePatch();
@@ -265,6 +268,7 @@ class upgradeModel extends model
         case '9_0_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.0.1'));
         case '9_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.1'));
         case '9_1_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.1.1'));
+        case '9_1_2':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.1.2'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -1690,5 +1694,23 @@ class upgradeModel extends model
 		$needProcess = array();
         if(strpos($fromVersion, 'pro') === false ? $fromVersion < '8.3' : $fromVersion < 'pro5.4') $needProcess['updateFile'] = true;
 		return $needProcess;
+    }
+
+    /**
+     * Process customMenus for different working. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function processCustomMenus()
+    {
+        $customMenus = $this->dao->select('*')->from(TABLE_CONFIG)->where('section')->eq('customMenu')->fetchAll();
+
+        foreach($customMenus as $customMenu)
+        {
+            $this->dao->update(TABLE_CONFIG)->set('`key`')->eq("full_{$customMenu->key}")->where('id')->eq($customMenu->id)->exec();
+        }
+
+        return !dao::isError();
     }
 }
