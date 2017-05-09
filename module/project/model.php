@@ -289,7 +289,7 @@ class projectModel extends model
             $lib->project = $projectID;
             $lib->name    = $this->lang->doclib->main['project'];
             $lib->main    = '1';
-            $lib->acl     = 'private';
+            $lib->acl     = $project->acl == 'open' ? 'open' : 'private';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             return $projectID;
@@ -348,6 +348,8 @@ class projectModel extends model
         }
         if(!dao::isError())
         {
+            if($project->acl != $oldProject->acl) $this->dao->update(TABLE_DOCLIB)->set('acl')->eq($project->acl == 'open' ? 'open' : 'private')->where('project')->eq($projectID)->exec();
+
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
             return common::createChanges($oldProject, $project);
         }

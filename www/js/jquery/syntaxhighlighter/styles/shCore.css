@@ -224,3 +224,4 @@
 .syntaxhighlighter.printing .break, .syntaxhighlighter.printing .break a {
   color: black !important;
 }
+.syntaxhighlighter .container::before{content:none;}
