@@ -35,7 +35,7 @@
           <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id);?>
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
-        <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
+        <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
         <td><?php echo $users[$bug->openedBy];?></td>
         <td style='overflow:visible;padding-top:1px;padding-bottom:1px;'><?php echo ($bug->status == 'resolved' or $bug->status == 'closed') ? $users[$bug->resolvedBy] : html::select("resolvedBy[{$bug->id}]", $users, $this->app->user->account, "class='form-control chosen'");?></td>
         <td class='text-center bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
@@ -59,4 +59,10 @@
     </table>
   </form>
 </div>
-<script>$(function(){ajaxGetSearchForm('#bugs .linkBox #querybox')})</script>
+<script>
+$(function()
+{
+    ajaxGetSearchForm('#bugs .linkBox #querybox');
+    setModal();
+})
+</script>
