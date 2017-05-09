@@ -568,7 +568,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyStory')
 
     /* Adjust sub menu of my dashboard. */
     unset($lang->my->menu->bug);
-    unset($lang->my->menu->todo);
     unset($lang->my->menu->testtask);
     unset($lang->my->menu->task);
     unset($lang->my->menu->myProject);
@@ -601,7 +600,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
 
     /* Adjust sub menu of my dashboard. */
     unset($lang->my->menu->bug);
-    unset($lang->my->menu->todo);
     unset($lang->my->menu->testtask);
     unset($lang->my->menu->story);
 
@@ -647,7 +645,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     unset($lang->my->menu->task);
     unset($lang->my->menu->myProject);
     unset($lang->my->menu->story);
-    unset($lang->my->menu->todo);
 
     /* Remove sub menu of project module. */
     unset($lang->project->menu);
