@@ -24,7 +24,7 @@
     <table class='table table-form'> 
       <tr>
         <th class='w-110px'><?php echo $lang->build->product;?></th>
-        <?php if($products or $this->config->global->flow == 'onlyTest'):?>
+        <?php if($products):?>
         <td>
           <div class='input-group'>
             <?php echo html::select('product', $products, $product->id, "onchange='loadBranches(this.value);' class='form-control chosen'");?>
@@ -32,7 +32,7 @@
             if($product->type != 'normal')
             {
                 if($product->branch) $branches = array($product->branch => $branches[$product->branch]);
-                echo html::select('branch', $branches, $product->branch, "class='form-control' style='width:100px; display:inline-block;'");
+                echo "<span class='input-group-addon fix-padding fix-border'></span>" . html::select('branch', $branches, $product->branch, "class='form-control' style='width:100px; display:inline-block;'");
             }
             ?>
           </div>

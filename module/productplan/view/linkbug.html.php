@@ -41,7 +41,7 @@ include '../../common/view/tablesorter.html.php';
           <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id);?>
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
-        <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
+        <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
         <td><?php echo $users[$bug->openedBy];?></td>
         <td><?php echo $users[$bug->assignedTo];?></td>
         <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
@@ -65,4 +65,10 @@ include '../../common/view/tablesorter.html.php';
     </table>
   </form>
 </div>
-<script>$(function(){ajaxGetSearchForm('#bugs .linkBox #querybox');})</script>
+<script>
+$(function()
+{
+    ajaxGetSearchForm('#bugs .linkBox #querybox');
+    setModal();
+})
+</script>

@@ -75,12 +75,14 @@
       <fieldset>
         <legend><?php echo $lang->testtask->legendBasicInfo;?></legend>
         <table class='table table-data table-condensed table-borderless table-fixed'>
+          <?php if($this->config->global->flow != 'onlyTest'):?>
           <tr>
             <th class='w-60px'><?php echo $lang->testtask->project;?></th>
             <td><?php echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName);?></td>
           </tr>  
+          <?php endif;?>
           <tr>
-            <th><?php echo $lang->testtask->build;?></th>
+            <th class='w-60px'><?php echo $lang->testtask->build;?></th>
             <td><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
           </tr>  
           <tr>

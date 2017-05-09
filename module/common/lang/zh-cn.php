@@ -555,7 +555,7 @@ $lang->icons['confirmStoryChange'] = 'search';
 include (dirname(__FILE__) . '/menuOrder.php');
 
 global $config;
-if($config->global->flow == 'onlyStory')
+if(isset($config->global->flow) and $config->global->flow == 'onlyStory')
 {
     /* Remove project, report and qa module. */
     unset($lang->menu->project);
@@ -588,7 +588,7 @@ if($config->global->flow == 'onlyStory')
     unset($lang->searchObjects['testtask']);
 }
 
-if($config->global->flow == 'onlyTask')
+if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
 {
     /* Remove product, report and qa module. */
     unset($lang->menu->product);
@@ -629,7 +629,7 @@ if($config->global->flow == 'onlyTask')
     unset($lang->searchObjects['testtask']);
 }
 
-if($config->global->flow == 'onlyTest')
+if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 {
     /* Remove project and test module. */
     unset($lang->menu->project);
@@ -653,18 +653,22 @@ if($config->global->flow == 'onlyTest')
     unset($lang->project->menu);
     unset($lang->project->menuOrder);
 
-    /* 增加缺陷管理、用例管理和测试任务视图 */
-    $lang->menu->bug      = 'Bug|bug|index';
-    $lang->menu->testcase = '用例|testcase|index';
-    $lang->menu->testtask = '测试|testtask|index';
+    /* Add bug, testcase and testtask module. */
+    $lang->menu->bug        = 'Bug|bug|index';
+    $lang->menu->testcase   = '用例|testcase|index';
+    $lang->menu->testtask   = '测试|testtask|index';
+    $lang->menu->testsuite  = '套件|testsuite|index';
+    $lang->menu->testreport = '报告|testreport|browse';
 
-    $lang->menuOrder[6] = 'bug';
-    $lang->menuOrder[7] = 'testcase';
-    $lang->menuOrder[8] = 'testtask';
+    $lang->menuOrder[6]  = 'bug';
+    $lang->menuOrder[7]  = 'testcase';
+    $lang->menuOrder[8]  = 'testtask';
+    $lang->menuOrder[9]  = 'testsuite';
+    $lang->menuOrder[10] = 'testreport';
+    $lang->menuOrder[11] = 'product';
 
-    /* 调整缺陷管理的二级菜单 */
-    $lang->bug->menu      = new stdclass();
-
+    /* Adjust sub menu of bug module. */
+    $lang->bug->menu = new stdclass();
     $lang->bug->menu->product  = '%s';
     $lang->bug->menu->browse   = array('link' => '浏览Bug|bug|browse|productID=%s', 'alias' => 'viewedit,resolve,close,activate,report', 'subModule' => 'tree');
     $lang->bug->menu->create   = array('link' => '提Bug|bug|create|productID=%s');
@@ -673,9 +677,8 @@ if($config->global->flow == 'onlyTest')
     $lang->bug->menuOrder[10] = 'browse';
     $lang->bug->menuOrder[15] = 'create';
 
-    /* 调整用例管理的二级菜单 */
-    $lang->testcase->menu      = new stdclass();
-
+    /* Adjust sub menu of testcase. */
+    $lang->testcase->menu = new stdclass();
     $lang->testcase->menu->product  = '%s';
     $lang->testcase->menu->browse   = array('link' => '浏览用例|testcase|browse|productID=%s', 'alias' => 'viewedit,resolve,close,activate,report', 'subModule' => 'tree');
     $lang->testcase->menu->create   = array('link' => '创建用例|testcase|create|productID=%s');
@@ -684,9 +687,8 @@ if($config->global->flow == 'onlyTest')
     $lang->testcase->menuOrder[10] = 'browse';
     $lang->testcase->menuOrder[15] = 'create';
 
-    /* 调整测试任务的二级菜单 */
-    $lang->testtask->menu      = new stdclass();
-
+    /* Adjust sub menu of testtask. */
+    $lang->testtask->menu = new stdclass();
     $lang->testtask->menu->product  = '%s';
     $lang->testtask->menu->browse   = array('link' => '浏览版本|testtask|browse|productID=%s', 'alias' => 'viewedit,resolve,close,activate,report', 'subModule' => 'tree');
     $lang->testtask->menu->create   = array('link' => '提交测试|testtask|create|productID=%s');
@@ -695,7 +697,29 @@ if($config->global->flow == 'onlyTest')
     $lang->testtask->menuOrder[10] = 'browse';
     $lang->testtask->menuOrder[15] = 'create';
 
-    /* 调整产品视图的二级菜单 */
+    /* Adjust sub menu of bug module. */
+    $lang->testsuite->menu = new stdclass();
+    $lang->testsuite->menu->product = '%s';
+    $lang->testsuite->menu->browse  = array('link' => '浏览套件|testsuite|browse|productID=%s', 'alias' => 'linkcase,edit,view');
+    $lang->testsuite->menu->caselib = array('link' => '用例库|testsuite|library', 'alias' => 'createcase,libview,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
+
+    $lang->testsuite->menuOrder[5]  = 'product';
+    $lang->testsuite->menuOrder[10] = 'browse';
+    $lang->testsuite->menuOrder[15] = 'create';
+
+    /* Adjust sub menu of caselib module. */
+    $lang->caselib->menu = new stdclass();
+    $lang->caselib->menu->lib       = array('link' => '%s', 'fixed' => true);
+    $lang->caselib->menu->testsuite = array('link' => '浏览套件|testsuite|browse|productID=%s', 'alias' => 'linkcase,edit,view');
+    $lang->caselib->menu->caselib   = array('link' => '用例库|testsuite|library', 'alias' => 'createlib,createcase,libview,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
+    $lang->caselib->menu->createlib = array('link' => "<i class='icon-plus'></i>创建库|testsuite|createLib|", 'float' => 'right');
+
+    /* Adjust sub menu of report module. */
+    $lang->testreport->menu = new stdclass();
+    $lang->testreport->menu->product = '%s';
+    $lang->testreport->menu->browse  = array('link' => '浏览报告|testreport|browse|productID=%s', 'alias' => 'create,edit,view');
+
+    /* Adjust sub menu of product module. */
     unset($lang->product->menu->story);
     unset($lang->product->menu->project);
     unset($lang->product->menu->release);
@@ -714,12 +738,15 @@ if($config->global->flow == 'onlyTest')
     $lang->build->menu      = $lang->product->menu;
     $lang->build->menuOrder = $lang->product->menuOrder;
     
-    /* 调整菜单分组 */
-    $lang->menugroup->bug      = 'bug';
-    $lang->menugroup->testcase = 'testcase';
-    $lang->menugroup->testtask = 'testtask';
+    /* Adjust menu group. */
+    $lang->menugroup->bug        = 'bug';
+    $lang->menugroup->testcase   = 'testcase';
+    $lang->menugroup->testtask   = 'testtask';
+    $lang->menugroup->testsuite  = 'testsuite';
+    $lang->menugroup->testreport = 'testreport';
+    $lang->menugroup->build      = 'product';
     
-    /* 调整搜索项 */ 
+    /* Adjust search objects. */ 
     unset($lang->searchObjects['story']);
     unset($lang->searchObjects['task']);
     unset($lang->searchObjects['release']);

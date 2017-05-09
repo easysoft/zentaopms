@@ -4,3 +4,5 @@
 .green {color:green}
 input[type=checkbox].ml-10px{margin-left:10px;}
 .pdl-8px{padding-left:8px;}
+
+.input-group > .input-group-addon.fix-padding{padding: 0;}

@@ -38,7 +38,7 @@ $config->story->list->exportFields      = '
     childStories, linkStories, duplicateStory, files';
 
 $config->story->list->customCreateFields      = 'source,verify,pri,estimate,mailto,keywords';
-$config->story->list->customBatchCreateFields = 'module,plan,source,spec,verify,pri,estimate,review,keywords';
+$config->story->list->customBatchCreateFields = 'module,plan,spec,source,verify,pri,estimate,review,keywords';
 $config->story->list->customBatchEditFields   = 'module,plan,estimate,pri,assignedTo,source,stage,closedBy,closedReason,keywords';
 
 $config->story->custom = new stdclass();

@@ -662,6 +662,13 @@ class product extends control
         $this->locate($this->createLink('doc', 'objectLibs', "type=product&objectID=$productID&from=product"));
     }
 
+    /**
+     * Build of product.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
     public function build($productID = 0)
     {
         $this->app->loadLang('build');
