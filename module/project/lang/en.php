@@ -262,3 +262,10 @@ $lang->project->treeLevel['root']    = 'Show Root';
 $lang->project->treeLevel['story']   = 'Show Story';
 $lang->project->treeLevel['task']    = 'Show Task';
 $lang->project->treeLevel['all']     = 'Show All';
+
+global $config;
+if($config->global->flow == 'onlyTask')
+{
+    unset($lang->project->groups['story']);
+    unset($lang->project->featureBar['task']['needconfirm']);
+}
