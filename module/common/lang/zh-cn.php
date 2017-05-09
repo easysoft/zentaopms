@@ -555,7 +555,7 @@ $lang->icons['confirmStoryChange'] = 'search';
 include (dirname(__FILE__) . '/menuOrder.php');
 
 global $config;
-if($config->global->flow == 'onlyStory')
+if(isset($config->global->flow) and $config->global->flow == 'onlyStory')
 {
     /* Remove project, report and qa module. */
     unset($lang->menu->project);
@@ -588,7 +588,7 @@ if($config->global->flow == 'onlyStory')
     unset($lang->searchObjects['testtask']);
 }
 
-if($config->global->flow == 'onlyTask')
+if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
 {
     /* Remove product, report and qa module. */
     unset($lang->menu->product);
@@ -629,7 +629,7 @@ if($config->global->flow == 'onlyTask')
     unset($lang->searchObjects['testtask']);
 }
 
-if($config->global->flow == 'onlyTest')
+if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 {
     /* Remove project and test module. */
     unset($lang->menu->project);
