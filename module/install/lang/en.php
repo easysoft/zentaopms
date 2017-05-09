@@ -81,9 +81,15 @@ $lang->install->dbName         = 'Database Library';
 $lang->install->dbPrefix       = 'Database Table Prefix';
 $lang->install->clearDB        = 'Clear Database';
 $lang->install->importDemoData = 'Import Demo Data';
+$lang->install->working        = 'Working way';
 
 $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
+
+$lang->install->workingList['full']      = 'Full';
+$lang->install->workingList['onlyTest']  = 'Only Test';
+$lang->install->workingList['onlyStory'] = 'Only Story';
+$lang->install->workingList['onlyTask']  = 'Only Task';
 
 $lang->install->errorConnectDB      = 'Connection to database Failed. ';
 $lang->install->errorDBName         = 'Database name should exclude “.” ';

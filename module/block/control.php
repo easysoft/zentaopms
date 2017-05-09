@@ -49,7 +49,6 @@ class block extends control
                 if(!common::hasPriv($moduleKey, 'index')) unset($modules[$moduleKey]);
             }
 
-            if($this->config->global->flow != 'full') unset($modules['todo']);
             if($this->config->global->flow == 'onlyTask' or $this->config->global->flow == 'onlyStory') unset($modules['qa']);
             if($this->config->global->flow == 'onlyTask' or $this->config->global->flow == 'onlyTest')  unset($modules['product']);
             if($this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest') unset($modules['project']);

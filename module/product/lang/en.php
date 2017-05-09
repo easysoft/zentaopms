@@ -40,6 +40,7 @@ $lang->product->builds   = 'Builds';
 $lang->product->roadmap  = 'Roadmap';
 $lang->product->doc      = 'Documents';
 $lang->product->project  = $lang->projectCommon . 'List';
+$lang->product->build    = 'Build List';
 
 $lang->product->confirmDelete   = " Do you want to delete {$lang->productCommon}?";
 

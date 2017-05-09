@@ -323,6 +323,10 @@ class todoModel extends model
 
         while($todo = $stmt->fetch())
         {
+            if($this->config->global->flow == 'onlyTest' and $todo->type == 'task') continue;
+            if($this->config->global->flow == 'onlyTask' and $todo->type == 'bug') continue;
+            if($this->config->global->flow == 'onlyStory' and $todo->type != 'custom') continue;
+
             if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
             if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
             $todo->begin = date::formatTime($todo->begin);
@@ -330,6 +334,7 @@ class todoModel extends model
 
             /* If is private, change the title to private. */
             if($todo->private and $this->app->user->account != $todo->account) $todo->name = $this->lang->todo->thisIsPrivate;
+
             $todos[] = $todo;
         }
         return $todos;
@@ -352,6 +357,3 @@ class todoModel extends model
         return true;
     }
 }
-
-
-

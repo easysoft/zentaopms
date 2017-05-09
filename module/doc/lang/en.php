@@ -82,6 +82,12 @@ $lang->doc->libTypeList['custom']  = 'Custom Library';
 $lang->doc->systemLibs['product'] = $lang->productCommon . 'DocumentLibrary';
 $lang->doc->systemLibs['project'] = $lang->projectCommon . 'DocumentLibrary';
 
+global $config;
+if($config->global->flow == 'onlyStory' or $config->global->flow == 'onlyTest') unset($lang->doc->systemLibs['project']);
+if($config->global->flow == 'onlyStory' or $config->global->flow == 'onlyTest') unset($lang->doc->libTypeList['project']);
+if($config->global->flow == 'onlyTask')  unset($lang->doc->systemLibs['product']);
+if($config->global->flow == 'onlyTask')  unset($lang->doc->libTypeList['product']);
+
 $lang->doc->aclList['open']    = 'Public';
 $lang->doc->aclList['custom']  = 'Custom';
 $lang->doc->aclList['private'] = 'Private';

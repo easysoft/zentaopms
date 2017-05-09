@@ -88,7 +88,6 @@ if($config->global->flow == 'onlyStory' or $config->global->flow == 'onlyTest') 
 if($config->global->flow == 'onlyTask')  unset($lang->doc->systemLibs['product']);
 if($config->global->flow == 'onlyTask')  unset($lang->doc->libTypeList['product']);
 
-
 $lang->doc->aclList['open']    = '公开';
 $lang->doc->aclList['custom']  = '自定义';
 $lang->doc->aclList['private'] = '私有';
