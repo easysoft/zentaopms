@@ -2,7 +2,7 @@
 <?php if(!empty($lang->datatable)):?>
 <style>
 .table-datatable tbody > tr td,
-.table-datatable thead > tr th {max-height: 34px; line-height: 21px;}
+.table-datatable thead > tr th {height: 34px; line-height: 20px;}
 .table-datatable tbody > tr td .btn-icon > i {line-height: 19px;}
 .hide-side .table-datatable thead > tr > th.check-btn i {visibility: hidden;}
 .hide-side .side-handle {line-height: 33px}
@@ -50,6 +50,7 @@ $(document).ready(function()
         scrollPos     : 'out',
         tableClass    : 'tablesorter',
         storage       : false,
+        fixCellHeight : false,
         selectable    : 
         {
             clickBehavior: 'multi',
