@@ -138,7 +138,9 @@ if($config->debug)
     $(function()
     {
         $('.table-chart').tableChart();
-        $('.progress-pie').progressPie();
+        var $pies = $('.progress-pie');
+        if($pies.length > 100)  setTimeout(function(){$pies.progressPie();}, 1000);
+        else $pies.progressPie();
     });
 }());
 </script>

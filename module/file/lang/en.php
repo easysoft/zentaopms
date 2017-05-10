@@ -26,12 +26,18 @@ $lang->file->exportFields  = "Fileds to be Exported";
 $lang->file->defaultTPL    = "Default Template";
 $lang->file->setExportTPL  = "Settings";
 $lang->file->preview       = "Preview";
+$lang->file->addFile       = 'Add File';
+$lang->file->beginUpload   = 'Start uploading';
+$lang->file->uploadSuccess = 'uploaded Successfully';
 
+$lang->file->dragFile         = 'Please drag here.';
 $lang->file->errorNotExists   = "<span class='red'>'%s' is not found.</span>";
 $lang->file->errorCanNotWrite = "<span class='red'>'%s' is not writable. Please change its permission. Enter sudo chmod -R 777 '%s'</span> in Linux.";
 $lang->file->confirmDelete    = " Do you want to delete it?";
 $lang->file->errorFileSize    = " File size exceeds the limit. It cannot be uploaded!";
 $lang->file->errorFileUpload  = " Uploading failed. File size might exceeds the limit.";
+$lang->file->errorFileFormate = " Uploading failed, file format is limited.";
+$lang->file->errorFileMove    = " Uploading failed, there was an error when moving file.";
 $lang->file->dangerFile       = " File has been rejected to upload for security issues.";
 $lang->file->errorSuffix      = 'Format is incorrect. .zip files ONLY!';
 $lang->file->errorExtract     = 'Extracting file failed. File might be damaged or invalid files in the zip package.';

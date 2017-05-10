@@ -16,6 +16,7 @@ $lang->backup->waitting       = '<span id="backupType"></span>In Progree. Please
 $lang->backup->confirmDelete  = 'Do you want to delete the backup？';
 $lang->backup->confirmRestore = 'Do you want to restore the backup？';
 $lang->backup->holdDays       = 'Backup the latest %s days.';
+$lang->backup->restoreTip     = 'Only attachments and databases will be restored when you click restore button, if you need to restore the code, you can restore manually.';
 
 $lang->backup->success = new stdclass();
 $lang->backup->success->backup  = 'Backed up!';

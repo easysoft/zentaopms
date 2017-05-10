@@ -18,3 +18,6 @@ body{background-color: #036}
 .popover {max-width: 500px}
 .popover-content {padding: 0; width: 297px}
 .btn-submit {min-width: 70px}
+
+.body-modal #container {margin: 0;}
+.body-modal {padding: 40px 0 25px;}

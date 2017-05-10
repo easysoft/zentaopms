@@ -20,6 +20,8 @@ $lang->testsuite->linkVersion      = "Version";
 $lang->testsuite->unlinkCase       = "Unlink";
 $lang->testsuite->batchUnlinkCases = "Batch unlink cases";
 $lang->testsuite->deleted          = 'deleted';
+$lang->testsuite->exportTemplet    = 'Export template';
+$lang->testsuite->importFile       = 'Import CSV';
 
 $lang->testsuite->common         = 'Test Suite';
 $lang->testsuite->product        = $lang->productCommon;

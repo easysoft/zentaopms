@@ -49,7 +49,6 @@ class block extends control
                 if(!common::hasPriv($moduleKey, 'index')) unset($modules[$moduleKey]);
             }
 
-            if($this->config->global->flow != 'full') unset($modules['todo']);
             if($this->config->global->flow == 'onlyTask' or $this->config->global->flow == 'onlyStory') unset($modules['qa']);
             if($this->config->global->flow == 'onlyTask' or $this->config->global->flow == 'onlyTest')  unset($modules['product']);
             if($this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest') unset($modules['project']);
@@ -210,9 +209,9 @@ class block extends control
 
         foreach($blocks as $key => $block)
         {
-            if($this->config->global->flow == 'onlyStory' and $block->source != 'product' and $block->block != 'dynamic') unset($blocks[$key]);
-            if($this->config->global->flow == 'onlyTask' and $block->source != 'project' and $block->block != 'dynamic') unset($blocks[$key]);
-            if($this->config->global->flow == 'onlyTest' and $block->source != 'qa' and $block->block != 'dynamic') unset($blocks[$key]);
+            if($this->config->global->flow == 'onlyStory' and $block->source != 'product' and $block->source != 'todo' and $block->block != 'dynamic') unset($blocks[$key]);
+            if($this->config->global->flow == 'onlyTask' and $block->source != 'project' and $block->source != 'todo' and $block->block != 'dynamic') unset($blocks[$key]);
+            if($this->config->global->flow == 'onlyTest' and $block->source != 'qa' and $block->source != 'todo' and $block->block != 'dynamic') unset($blocks[$key]);
 
             $block->params  = json_decode($block->params);
             $blockID = $block->block;
