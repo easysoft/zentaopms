@@ -96,7 +96,7 @@
         <td><?php echo $task->estimate;?></td>
         <td><?php echo $task->consumed;?></td>
         <td><?php echo $task->left;?></td>
-        <td><div class='progress-pie' title="<?php echo $task->progess?>%" data-value='<?php echo $task->progess;?>'></div></td>
+        <td><?php echo $task->progess?>%</td>
         <?php
         if($project->type == 'sprint')
         {
