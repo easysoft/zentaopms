@@ -23,7 +23,7 @@ $config->bug->list->allFields = 'id, module, project, story, task,
     lastEditedBy,
     lastEditedDate';
 
-if($config->global->flow == 'onlyTest') $config->bug->list->allFields = str_replace(array('project, ', 'task,'), '', $config->bug->list->allFields);
+if($config->global->flow == 'onlyTest') $config->bug->list->allFields = str_replace(array('project, ', 'story, ', 'task,'), '', $config->bug->list->allFields);
 $config->bug->list->defaultFields = 'id,severity,pri,title,openedBy,assignedTo,resolvedBy,resolution';
 
 $config->bug->list->exportFields = 'id, product, branch, module, project, story, task, 
@@ -37,6 +37,7 @@ $config->bug->list->exportFields = 'id, product, branch, module, project, story,
     case,
     lastEditedBy,
     lastEditedDate, files';
+if($config->global->flow == 'onlyTest') $config->bug->list->exportFields = str_replace(array('project, ', 'story, ', 'task,'), '', $config->bug->list->exportFields);
 
 $config->bug->list->customCreateFields      = 'project,story,task,pri,severity,os,browser,deadline,mailto,keywords';
 $config->bug->list->customBatchCreateFields = 'module,project,steps,type,pri,severity,os,browser,keywords';
@@ -46,6 +47,13 @@ $config->bug->custom = new stdclass();
 $config->bug->custom->createFields      = $config->bug->list->customCreateFields;
 $config->bug->custom->batchCreateFields = 'module,project,steps,type,severity,os,browser';
 $config->bug->custom->batchEditFields   = 'type,severity,pri,branch,assignedTo,deadline,status,resolvedBy,resolution';
+
+if($config->global->flow == 'onlyTest')
+{
+    $config->bug->list->customCreateFields      = str_replace(array('project,', 'story,', 'task,'), '', $config->bug->list->customCreateFields);
+    $config->bug->list->customBatchCreateFields = str_replace('project,', '', $config->bug->list->customBatchCreateFields);
+    $config->bug->custom->batchCreateFields     = str_replace('project,', '', $config->bug->custom->batchCreateFields);
+}
 
 $config->bug->editor = new stdclass();
 $config->bug->editor->create     = array('id' => 'steps', 'tools' => 'bugTools');
