@@ -269,6 +269,7 @@ function setRequiredFields()
                 var $requiredDiv = $('<div class="input-group-required"><div class="required"></div></div>');
                 $ctlEle.after($requiredDiv);
                 $requiredDiv.find('.required').append($ctlEle);
+                if($ctlEle.is('select')) $requiredDiv.addClass('fix-pd-right');
             }
             else
             {

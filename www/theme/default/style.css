@@ -329,9 +329,10 @@ form .star {display: none;}/* hide star */
 [class*="col-"].required {position: relative;}
 [class*="col-"].required:after {position: absolute; top: 6px; right: 2px}
 .control-label.required:after{right: -10px}
-.input-group-required {display: table-cell; width: 100%; float: left; z-index: 2; position: relative;}
+.input-group-required {display: table-cell; width: 100%; float: left; position: relative;}
 .input-group-required > .required:after {z-index: 3; right: 6px; top: 2px;}
 .input-group-required .form-control {float: none; display: block;}
+.fix-pd-right.input-group-required > .required:after {right: 20px;}
 
 .required-wrapper{position: relative;width: 100%; height: 0;overflow: visible;}
 .required-wrapper.required:after{right: -13px;top: 4px}

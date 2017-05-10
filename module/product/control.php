@@ -61,8 +61,8 @@ class product extends control
         $homepage = $this->config->product->homepage;
         if($homepage == 'browse' and $locate == 'auto') $locate = 'yes';
 
-        if($locate == 'yes' and $this->config->global->flow == 'onlyTest') $this->locate($this->createLink($this->moduleName, 'build'));
-        if($locate == 'yes' and $this->config->global->flow != 'onlyTest') $this->locate($this->createLink($this->moduleName, 'browse'));
+        if($this->config->global->flow == 'onlyTest') $this->locate($this->createLink($this->moduleName, 'build'));
+        if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
 
         if($this->app->getViewType() != 'mhtml') unset($this->lang->product->menu->index);
         $productID = $this->product->saveState($productID, $this->products);
