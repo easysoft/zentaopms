@@ -50,6 +50,7 @@ $(document).ready(function()
         scrollPos     : 'out',
         tableClass    : 'tablesorter',
         storage       : false,
+        fixCellHeight : false,
         selectable    : 
         {
             clickBehavior: 'multi',
