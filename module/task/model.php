@@ -1646,7 +1646,7 @@ class taskModel extends model
                 echo round($task->left, 1);
                 break;
             case 'progess':
-                echo "<div class='progress-pie' title='{$task->progess}%' data-value='{$task->progess}'></div>";
+                echo "{$task->progess}%";
                 break;
             case 'deadline':
                 if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);
