@@ -23,7 +23,6 @@ $config->bug->list->allFields = 'id, module, project, story, task,
     lastEditedBy,
     lastEditedDate';
 
-if($config->global->flow == 'onlyTest') $config->bug->list->allFields = str_replace(array('project, ', 'story, ', 'task,'), '', $config->bug->list->allFields);
 $config->bug->list->defaultFields = 'id,severity,pri,title,openedBy,assignedTo,resolvedBy,resolution';
 
 $config->bug->list->exportFields = 'id, product, branch, module, project, story, task, 
@@ -37,7 +36,6 @@ $config->bug->list->exportFields = 'id, product, branch, module, project, story,
     case,
     lastEditedBy,
     lastEditedDate, files';
-if($config->global->flow == 'onlyTest') $config->bug->list->exportFields = str_replace(array('project, ', 'story, ', 'task,'), '', $config->bug->list->exportFields);
 
 $config->bug->list->customCreateFields      = 'project,story,task,pri,severity,os,browser,deadline,mailto,keywords';
 $config->bug->list->customBatchCreateFields = 'module,project,steps,type,pri,severity,os,browser,keywords';
@@ -50,9 +48,13 @@ $config->bug->custom->batchEditFields   = 'type,severity,pri,branch,assignedTo,d
 
 if($config->global->flow == 'onlyTest')
 {
+    $config->bug->list->allFields    = str_replace(array('project, ', 'story, ', 'task,'), '', $config->bug->list->allFields);
+    $config->bug->list->exportFields = str_replace(array('project, ', 'story, ', 'task,'), '', $config->bug->list->exportFields);
+
     $config->bug->list->customCreateFields      = str_replace(array('project,', 'story,', 'task,'), '', $config->bug->list->customCreateFields);
     $config->bug->list->customBatchCreateFields = str_replace('project,', '', $config->bug->list->customBatchCreateFields);
-    $config->bug->custom->batchCreateFields     = str_replace('project,', '', $config->bug->custom->batchCreateFields);
+
+    $config->bug->custom->batchCreateFields = str_replace('project,', '', $config->bug->custom->batchCreateFields);
 }
 
 $config->bug->editor = new stdclass();
@@ -79,9 +81,9 @@ $config->bug->search['fields']['confirmed']      = $lang->bug->confirmed;
 
 $config->bug->search['fields']['product']        = $lang->bug->product;
 $config->bug->search['fields']['branch']         = '';
-$config->bug->search['fields']['plan']           = $lang->bug->productplan;
+ $config->bug->search['fields']['plan']          = $lang->bug->productplan;
 $config->bug->search['fields']['module']         = $lang->bug->module;
-if($config->global->flow != 'onlyTest') $config->bug->search['fields']['project'] = $lang->bug->project;
+$config->bug->search['fields']['project']        = $lang->bug->project;
 
 $config->bug->search['fields']['severity']       = $lang->bug->severity;
 $config->bug->search['fields']['pri']            = $lang->bug->pri;
@@ -92,11 +94,8 @@ $config->bug->search['fields']['resolution']     = $lang->bug->resolution;
 
 $config->bug->search['fields']['activatedCount'] = $lang->bug->activatedCount;
 
-if($config->global->flow != 'onlyTest') 
-{
-    $config->bug->search['fields']['toTask']  = $lang->bug->toTask;
-    $config->bug->search['fields']['toStory'] = $lang->bug->toStory;
-}
+$config->bug->search['fields']['toTask']         = $lang->bug->toTask;
+$config->bug->search['fields']['toStory']        = $lang->bug->toStory;
 
 $config->bug->search['fields']['openedBy']       = $lang->bug->openedBy;
 $config->bug->search['fields']['closedBy']       = $lang->bug->closedBy;
@@ -113,6 +112,14 @@ $config->bug->search['fields']['resolvedDate']   = $lang->bug->resolvedDate;
 $config->bug->search['fields']['closedDate']     = $lang->bug->closedDate;
 $config->bug->search['fields']['lastEditedDate'] = $lang->bug->lastEditedDateAB;
 $config->bug->search['fields']['deadline']       = $lang->bug->deadline;
+
+if($config->global->flow != 'onlyTest')
+{
+    unset($config->bug->search['fields']['project']);
+    unset($config->bug->search['fields']['plan']);
+    unset($config->bug->search['fields']['toTask']);
+    unset($config->bug->search['fields']['toStory']);
+}
 
 $config->bug->search['params']['title']         = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->bug->search['params']['keywords']      = array('operator' => 'include', 'control' => 'input',  'values' => '');
