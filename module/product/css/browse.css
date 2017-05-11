@@ -10,6 +10,8 @@
 .dropdown-list > li > a:focus {color: #1a4f85;text-decoration: none;background-color: #ddd;}
 
 .pl-5px{padding-left:5px;}
+.popoverStage{position:relative;}
+.popoverStage .icon-caret-down{position:absolute;}
 a.removeModule{color:#ddd}
 a.removeModule:hover{color:red}
 
