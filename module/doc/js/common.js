@@ -228,7 +228,7 @@ $(document).ready(function()
 
     $('.libs-group').sortable(
     {
-        trigger:  '.icon-move',
+        trigger:  '.lib',
         selector: '.lib',
         finish:   function() 
         {
