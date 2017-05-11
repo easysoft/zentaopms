@@ -22,7 +22,7 @@ class productModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($products, $productID, $branch = 0, $extra = '')
+    public function setMenu($products, $productID, $branch = 0, $module = 0, $moduleType = '', $extra = '')
     {
         /* Has access privilege?. */
         if($products and !isset($products[$productID]) and !$this->checkPriv($this->getById($productID)))
@@ -44,7 +44,7 @@ class productModel extends model
         }
         if($currentMethod == 'report') $currentMethod = 'browse';
 
-        $selectHtml = $this->select($products, $productID, $currentModule, $currentMethod, $extra, $branch);
+        $selectHtml = $this->select($products, $productID, $currentModule, $currentMethod, $extra, $branch, $module, $moduleType);
         foreach($this->lang->product->menu as $key => $menu)
         {
             $replace = $key == 'list' ? $selectHtml : $productID;
@@ -63,7 +63,7 @@ class productModel extends model
      * @access public
      * @return string
      */
-    public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = 0)
+    public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = 0, $module = 0, $moduleType = '')
     {
         if(!$productID)
         {
@@ -94,6 +94,22 @@ class productModel extends model
                 $output .= "<a id='currentBranch' href=\"javascript:showSearchMenu('branch', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
             }
         }
+
+        if($this->config->global->flow == 'onlyTest' and $moduleType)
+        {
+            $modules    = $this->loadModel('tree')->getModulePairs($productID, $moduleType);
+            $moduleName = ($module && isset($modules[$module])) ? $modules[$module] : $this->lang->tree->all;
+            if(!$isMobile)
+            {
+                $output .= '</li><li>';
+                $output .= "<a id='currentModule' href=\"javascript:showSearchMenu('tree', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$moduleName} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+            }
+            else
+            {
+                $output .= "<a id='currentModule' href=\"javascript:showSearchMenu('tree', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$moduleName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+            }
+        }
+
         return $output;
     }
 
