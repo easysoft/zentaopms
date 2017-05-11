@@ -43,6 +43,12 @@
         <td><?php echo html::submitButton() . html::backButton();?></td>
       </tr>
     </table>
+    <?php if(!empty($this->app->user->modifyPasswordReason)):?>
+    <?php $this->app->loadLang('admin');?>
+    <div class='alert alert-info'>
+      <?php echo $this->app->user->modifyPasswordReason == 'weak' ? $lang->admin->safe->changeWeak : $lang->admin->safe->modifyPasswordFirstLogin;?>
+    </div>
+    <?php endif;?>
   </form>  
 </div>
 
