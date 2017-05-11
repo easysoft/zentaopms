@@ -83,7 +83,7 @@ $lang->product->typeList['platform'] = 'Multi Platform';
 
 $lang->product->typeTips = array();
 $lang->product->typeTips['branch']   = '(Generally used to divide the custom content of different users)';
-$lang->product->typeTips['platform'] = '(Generally used to divide ios, Andrews, pc side, server and so on)';
+$lang->product->typeTips['platform'] = '(Generally used to divide ios, Andrews, pc and so on)';
 
 $lang->product->branchName['normal']   = '';
 $lang->product->branchName['branch']   = 'Branch';
