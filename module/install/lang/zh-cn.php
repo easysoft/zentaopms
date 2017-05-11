@@ -133,6 +133,14 @@ $lang->install->groupList['TOP']['desc']    = '高层管理';
 $lang->install->groupList['OTHERS']['name'] = '其他';
 $lang->install->groupList['OTHERS']['desc'] = '其他';
 
+$lang->install->cronList[''] = '监控定时任务';
+$lang->install->cronList['moduleName=project&methodName=computeburn'] = '更新燃尽图';
+$lang->install->cronList['moduleName=report&methodName=remind']       = '每日任务提醒';
+$lang->install->cronList['moduleName=svn&methodName=run']             = '同步SVN';
+$lang->install->cronList['moduleName=git&methodName=run']             = '同步GIT';
+$lang->install->cronList['moduleName=backup&methodName=backup']       = '备份数据和附件';
+$lang->install->cronList['moduleName=mail&methodName=asyncSend']      = '异步发信';
+
 $lang->install->success  = "安装成功";
 $lang->install->login    = '登录禅道管理系统';
 $lang->install->register = '禅道社区注册';
