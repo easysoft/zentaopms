@@ -1557,16 +1557,18 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function fixFirst($projectID, $withLeft = false)
+    public function fixFirst($projectID)
     {
-        $project = $this->getById($projectID);
-        $burn    = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)->andWhere('date')->eq($project->begin)->fetch();
+        $project  = $this->getById($projectID);
+        $burn     = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)->andWhere('date')->eq($project->begin)->fetch();
+        $withLeft = $this->post->withLeft ? $this->post->withLeft : 0;
 
         $data = fixer::input('post')
             ->add('project', $projectID)
             ->add('date', $project->begin)
             ->add('left', $withLeft ? $this->post->estimate : $burn->left)
             ->add('consumed', empty($burn) ? 0 : $burn->consumed)
+            ->remove('withLeft')
             ->get();
         if(!is_numeric($data->estimate)) return false;
 
