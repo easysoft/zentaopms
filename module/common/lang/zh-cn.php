@@ -574,6 +574,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyStory')
 
     /* Adjust sub menu of product module. */
     unset($lang->product->menu->project);
+    unset($lang->product->menu->doc);
     
     /* Rename product module. */
     $lang->menu->product = '产品|product|index';
@@ -609,6 +610,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
     unset($lang->project->menu->bug);
     unset($lang->project->menu->testtask);
     unset($lang->project->menu->product);
+    unset($lang->project->menu->doc);
 
     /* Remove sub menu of product module. */
     unset($lang->product->menu);
