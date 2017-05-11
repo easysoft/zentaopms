@@ -14,7 +14,7 @@ php_flag  file_uploads On
 php_value upload_max_filesize 50M
 php_value display_errors 1
 # for post vars limit.
-php_value max_input_vars 3000 
+php_value max_input_vars 100000
 
 # yslow settings.
 <IfModule mod_expires.c>
