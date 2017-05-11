@@ -4,18 +4,23 @@ function reload(libID)
     location.href = link;
 }
 
-function setModule(moduleID, obj)
+function setModule(obj)
 {
-    var index = $(obj).closest('tr').index() + 1;
-    var $tr   = $(obj).closest('tbody').find('tr');
+    var moduleID  = $(obj).val();
+    var libModule = $(obj).closest('td').data('module');
 
-    while($tr.eq(index).length > 0)
+    var index = $(obj).closest('tr').index();
+
+      console.log(moduleID);
+      console.log(libModule);
+      console.log(index);
+    $(obj).closest('tbody').find('tr').each(function(i)
     {
-        $module = $tr.eq(index).find(obj).find("select[name*='module']");
-        $module.val(moduleID);
-        $module.trigger("chosen:updated");
-        index ++;
-    }
+        if(i > index)
+        {
+            $(this).find("[data-module='" + libModule + "']").find("select[id^='module']").val(moduleID).trigger("chosen:updated");
+        }
+    })
 }
 
 $(function()

@@ -366,7 +366,7 @@ class file extends control
     }
 
     /**
-     * Upload zip of Images.
+     * Upload Images.
      * 
      * @param  string    $module 
      * @param  string    $params 
@@ -386,14 +386,14 @@ class file extends control
 
         if($_FILES)
         {
-            $file = $this->file->getUploadImageFile('file');
+            $file = $this->file->getUploadFile('file');
             if(!$file) die(json_encode(array('result' => 'fail', 'message' => $this->lang->error->noData)));
             if(empty($file['extension']) or !in_array($file['extension'], $this->config->file->imageExtensions))
             {
                 die(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormate)));
             }
 
-            $imageFile = $this->file->saveUploadImageFile($file, $uid);
+            $imageFile = $this->file->saveUploadFile($file, $uid);
             if($imageFile === false)
             {
                 die(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileMove)));

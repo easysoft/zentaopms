@@ -151,6 +151,8 @@ class install extends control
 
             $this->loadModel('setting')->updateVersion($this->config->version);
             $this->loadModel('setting')->setItem('system.common.global.flow', $this->post->flow);
+            $this->loadModel('setting')->setItem('system.common.safe.mode', '1');
+            $this->loadModel('setting')->setItem('system.common.safe.changeWeak', '1');
             $this->loadModel('setting')->setItem('system.common.global.cron', 1);
             die(js::locate(inlink('step5'), 'parent'));
         }

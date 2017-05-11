@@ -18,23 +18,12 @@
         <div class='input-group'>
           <span class='input-group-addon'><?php echo $project->begin?></span>
           <?php echo html::input('estimate', !empty($firstBurn->estimate) ? $firstBurn->estimate : (!empty($firstBurn->left) ? $firstBurn->left : ''), "class='form-control' placeholder='{$lang->project->placeholder->totalLeft}' autocomplete='off'")?>
-          <span class='input-group-addon fix-border'><?php echo '(' . $lang->project->totalEstimate . $project->totalEstimate . $lang->project->workHour. ')'?></span>
+          <span class='input-group-addon fix-border'><input id='withLeft' type='checkbox' checked name='withLeft' value='1' /> <label for='withLeft'><?php echo $lang->project->fixFirstWithLeft?></label></span>
           <span class='input-group-btn'><?php echo html::submitButton();?></span>
         </div>
+        <div class='alert alert-info'><?php echo $lang->project->totalEstimate . $project->totalEstimate . $lang->project->workHour;?></div>
       </td>
     </tr>
   </table>
 </form>
-<script>
-$(function()
-{
-    $('#submit').click(function()
-    {
-        if(confirm('<?php echo $lang->project->fixFirstWithLeft?>'))
-        {
-            $(this).closest('form').attr('action', '<?php echo inlink('fixFirst', "projectID={$project->id}&withLeft=1")?>');
-        }
-    })
-})
-</script>
 <?php include '../../common/view/footer.lite.html.php';?>

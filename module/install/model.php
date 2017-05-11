@@ -414,6 +414,12 @@ class installModel extends model
                 $data = zget($this->lang->install->groupList, $group->name, '');
                 if($data) $this->dao->update(TABLE_GROUP)->data($data)->where('id')->eq($group->id)->exec();
             }
+
+            /* Update cron remark by lang. */
+            foreach($this->lang->install->cronList as $command => $remark)
+            {
+                $this->dao->update(TABLE_GROUP)->set('remark')->eq($remark)->where('command')->eq($command)->exec();
+            }
         }
     }
 

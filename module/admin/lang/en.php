@@ -45,13 +45,14 @@ $lang->admin->bind->caption = 'Link an Account';
 $lang->admin->bind->success = "Account has been linked!";
 
 $lang->admin->safe = new stdclass();
-$lang->admin->safe->common    = 'Security';
-$lang->admin->safe->set       = 'Password Security Settings';
-$lang->admin->safe->password  = 'Password Security';
-$lang->admin->safe->weak      = 'Weak Password';
-$lang->admin->safe->reason    = 'Type';
-$lang->admin->safe->checkWeak = 'Weak Password Check';
-$lang->admin->safe->modifyPasswordFirstLogin = 'Modify password when login for the first time.';
+$lang->admin->safe->common     = 'Security';
+$lang->admin->safe->set        = 'Password Security Settings';
+$lang->admin->safe->password   = 'Password Security';
+$lang->admin->safe->weak       = 'Weak Password';
+$lang->admin->safe->reason     = 'Type';
+$lang->admin->safe->checkWeak  = 'Weak Password Check';
+$lang->admin->safe->changeWeak = 'Modify weak password';
+$lang->admin->safe->modifyPasswordFirstLogin = 'Modify password when first login';
 
 $lang->admin->safe->modeList[0] = 'N/A';
 $lang->admin->safe->modeList[1] = 'Medium';

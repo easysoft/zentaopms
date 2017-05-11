@@ -45,12 +45,13 @@ $lang->admin->bind->caption = '关联社区帐号';
 $lang->admin->bind->success = "关联账户成功";
 
 $lang->admin->safe = new stdclass();
-$lang->admin->safe->common    = '安全';
-$lang->admin->safe->set       = '密码安全设置';
-$lang->admin->safe->password  = '密码安全';
-$lang->admin->safe->weak      = '常用弱口令';
-$lang->admin->safe->reason    = '类型';
-$lang->admin->safe->checkWeak = '弱口令扫描';
+$lang->admin->safe->common     = '安全';
+$lang->admin->safe->set        = '密码安全设置';
+$lang->admin->safe->password   = '密码安全';
+$lang->admin->safe->weak       = '常用弱口令';
+$lang->admin->safe->reason     = '类型';
+$lang->admin->safe->checkWeak  = '弱口令扫描';
+$lang->admin->safe->changeWeak = '修改弱口令秘密';
 $lang->admin->safe->modifyPasswordFirstLogin = '首次登陆修改密码';
 
 $lang->admin->safe->modeList[0] = '不检查';

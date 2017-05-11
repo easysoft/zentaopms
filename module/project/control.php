@@ -812,11 +812,11 @@ class project extends control
      * @access public
      * @return void
      */
-    public function fixFirst($projectID, $withLeft = false)
+    public function fixFirst($projectID)
     {
         if($_POST)
         {
-            $this->project->fixFirst($projectID, $withLeft);
+            $this->project->fixFirst($projectID);
             die(js::reload('parent.parent'));
         }
 

@@ -305,7 +305,7 @@ class productModel extends model
         $lib->product = $productID;
         $lib->name    = $this->lang->doclib->main['product'];
         $lib->main    = '1';
-        $lib->acl     = 'private';
+        $lib->acl     = $product->acl == 'open' ? 'open' : 'private';
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
         return $productID;
@@ -337,6 +337,8 @@ class productModel extends model
             ->exec();
         if(!dao::isError())
         {
+            if($product->acl != $oldProduct->acl) $this->dao->update(TABLE_DOCLIB)->set('acl')->eq($product->acl == 'open' ? 'open' : 'private')->where('product')->eq($productID)->exec();
+
             $this->file->updateObjectID($this->post->uid, $productID, 'product');
             return common::createChanges($oldProduct, $product);
         }

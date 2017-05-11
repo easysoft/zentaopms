@@ -207,7 +207,7 @@ $lang->project->goback                = "Go Back";
 $lang->project->noweekend             = 'Without Weekend';
 $lang->project->withweekend           = 'With Weekend';
 $lang->project->interval              = 'Intervals';
-$lang->project->fixFirstWithLeft      = 'Do you want to set the left of the day to this value?';
+$lang->project->fixFirstWithLeft      = 'Modify the left time';
 
 /* 统计。*/
 $lang->project->charts = new stdclass();

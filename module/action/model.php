@@ -539,10 +539,8 @@ class actionModel extends model
         }
 
         $this->loadModel('doc');
-        $docCondition = $this->doc->buildConditionSQL('doc');
-        $libCondition = $this->doc->buildConditionSQL('lib');
-        if($docCondition) $docCondition = $this->dao->select('id')->from(TABLE_DOC)->where($docCondition)->andWhere('deleted')->eq(0)->get();
-        if($libCondition) $libCondition = $this->dao->select('id')->from(TABLE_DOCLIB)->where($libCondition)->andWhere('deleted')->eq(0)->get();
+        $libs = $this->doc->getLibs('all');
+        $docs = $this->doc->getPrivDocs(array_keys($libs));
 
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
@@ -554,9 +552,9 @@ class actionModel extends model
             ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->fi()
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
-            ->beginIF($projectID == 'all' or $productID == 'all')->andWhere("($condition)")->fi()
-            ->beginIF($docCondition)->andWhere("IF(objectType != 'doc', '1=1', objectID in ($docCondition))")->fi()
-            ->beginIF($libCondition)->andWhere("IF(objectType != 'doclib', '1=1', objectID in ($libCondition))")->fi()
+            ->beginIF($projectID == 'all' or $productID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
+            ->beginIF($docs)->andWhere("IF(objectType != 'doc', '1=1', objectID " . helper::dbIN($docs) . ")")->fi()
+            ->beginIF($libs)->andWhere("IF(objectType != 'doclib', '1=1', objectID " . helper::dbIN(array_keys($libs)) . ') ')->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
 
         if(!$actions) return array();

@@ -70,6 +70,13 @@ class sso extends control
                 $user->last   = date(DT_DATETIME1, $last);
                 $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
                 $user->modifyPassword = ($user->visits == 0 and !empty($this->config->safe->modifyPasswordFirstLogin));
+                if($user->modifyPassword) $user->modifyPasswordReason = 'modifyPasswordFirstLogin';
+                if(!$user->modifyPassword and !empty($this->config->safe->changeWeak))
+                {
+                    $user->modifyPassword = $this->loadModel('admin')->checkWeak($user);
+                    if($user->modifyPassword) $user->modifyPasswordReason = 'weak';
+                }
+
                 $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($userIP)->set('last')->eq($last)->where('account')->eq($user->account)->exec();
 
                 $this->session->set('user', $user);
