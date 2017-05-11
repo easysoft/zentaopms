@@ -71,7 +71,7 @@ class sso extends control
                 $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
                 $user->modifyPassword = ($user->visits == 0 and !empty($this->config->safe->modifyPasswordFirstLogin));
                 if($user->modifyPassword) $user->modifyPasswordReason = 'modifyPasswordFirstLogin';
-                if(!$user->modifyPassword)
+                if(!$user->modifyPassword and !empty($this->config->safe->changeWeak))
                 {
                     $user->modifyPassword = $this->loadModel('admin')->checkWeak($user);
                     if($user->modifyPassword) $user->modifyPasswordReason = 'weak';
