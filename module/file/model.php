@@ -172,13 +172,13 @@ class fileModel extends model
     }
 
     /**
-     * get uploaded image file from zui.uploader.
+     * get uploaded file from zui.uploader.
      *
      * @param  string $htmlTagName
      * @access public
      * @return array
      */
-    public function getUploadImageFile($htmlTagName = 'file')
+    public function getUploadFile($htmlTagName = 'file')
     {
         if(!isset($_FILES[$htmlTagName]) || empty($_FILES[$htmlTagName]['name'])) return;
 
@@ -208,70 +208,70 @@ class fileModel extends model
     }
 
     /**
-     * Save uploaded image file.
+     * Save uploaded file from zui.uploader.
      *
      * @param  int    $file
      * @param  int    $uid
      * @access public
      * @return array|bool
      */
-    public function saveUploadImageFile($file, $uid)
+    public function saveUploadFile($file, $uid)
     {
-        $imageFile = array();
+        $uploadFile = array();
 
-        $cachePath = $this->app->getCacheRoot() . 'uploadimages/';
-        if(!is_dir($cachePath)) mkdir($cachePath, 0777, true);
+        $tmpFilePath = $this->app->getTmpRoot() . 'uploadfiles/';
+        if(!is_dir($tmpFilePath)) mkdir($tmpFilePath, 0777, true);
 
-        $imageFilePath = $cachePath . $uid . '/';
-        if(!is_dir($imageFilePath)) mkdir($imageFilePath);
+        $tmpFileSavePath = $tmpFilePath . $uid . '/';
+        if(!is_dir($tmpFileSavePath)) mkdir($tmpFileSavePath);
 
         $fileName = basename($file['pathname']);
-        $file['realpath'] = $imageFilePath . $fileName;
+        $file['realpath'] = $tmpFileSavePath . $fileName;
 
         if($file['chunks'] > 1)
         {
-            $fileSavePath = $cachePath . $file['chunkpath'];
-            if(!file_exists($fileSavePath)) mkdir(dirname($fileSavePath));
+            $tmpFileChunkPath = $tmpFilePath . $file['chunkpath'];
+            if(!file_exists($tmpFileChunkPath)) mkdir(dirname($tmpFileChunkPath));
 
             if($file['chunk'] > 0)
             {
-                $uploadFile   = fopen($fileSavePath, 'a+b');
+                $fileChunk    = fopen($tmpFileChunkPath, 'a+b');
                 $tmpChunkFile = fopen($file['tmpname'], 'rb');
                 while($buff = fread($tmpChunkFile, 4069))
                 {
-                    fwrite($uploadFile, $buff);
+                    fwrite($fileChunk, $buff);
                 }
-                fclose($uploadFile);
+                fclose($fileChunk);
                 fclose($tmpChunkFile);
             }
             else
             {
-                if(!move_uploaded_file($file['tmpname'], $fileSavePath)) return false;
+                if(!move_uploaded_file($file['tmpname'], $tmpFileChunkPath)) return false;
             }
 
             if($file['chunk'] == ($file['chunks'] - 1))
             {
-                rename($fileSavePath, $file['realpath']);
+                rename($tmpFileChunkPath, $file['realpath']);
 
-                $imageFile['extension'] = $file['extension'];
-                $imageFile['pathname']  = $file['pathname'];
-                $imageFile['title']     = $file['title'];
-                $imageFile['realpath']  = $file['realpath'];
-                $imageFile['size']      = $file['size'];
+                $uploadFile['extension'] = $file['extension'];
+                $uploadFile['pathname']  = $file['pathname'];
+                $uploadFile['title']     = $file['title'];
+                $uploadFile['realpath']  = $file['realpath'];
+                $uploadFile['size']      = $file['size'];
             }
         }
         else
         {
             if(!move_uploaded_file($file['tmpname'], $file['realpath'])) return false;
 
-            $imageFile['extension'] = $file['extension'];
-            $imageFile['pathname']  = $file['pathname'];
-            $imageFile['title']     = $file['title'];
-            $imageFile['realpath']  = $file['realpath'];
-            $imageFile['size']      = $file['size'];
+            $uploadFile['extension'] = $file['extension'];
+            $uploadFile['pathname']  = $file['pathname'];
+            $uploadFile['title']     = $file['title'];
+            $uploadFile['realpath']  = $file['realpath'];
+            $uploadFile['size']      = $file['size'];
         }
 
-        return $imageFile;
+        return $uploadFile;
     }
 
     /**
@@ -567,59 +567,6 @@ class fileModel extends model
     private function removeInterference($matchs)
     {
         return str_replace('""', '"', $matchs[1]) . str_replace(',', '&comma;', $matchs[2]);
-    }
-
-    /**
-     * Extract zip.
-     * 
-     * @param  string    $zipFile 
-     * @access public
-     * @return string
-     */
-    public function extractZip($zipFile)
-    {
-        $classFile  = $this->app->loadClass('zfile');
-        $parentPath = $this->app->getCacheRoot() . 'uploadimages/';
-        if(!is_dir($parentPath)) mkdir($parentPath, 0777, true);
-
-        $filePath = $parentPath . str_replace('.zip', '', basename($zipFile)) . '/';
-        if(is_dir($filePath)) $classFile->removeDir($filePath);
-        mkdir($filePath);
-
-        $this->app->loadClass('pclzip', true);
-        $zip   = new pclzip($zipFile);
-        $files = $zip->listContent();
-        foreach($files as $i => $uploadFile)
-        {
-            if($uploadFile['folder']) continue;
-            $extension = strtolower(substr(strrchr($uploadFile['filename'], '.'), 1));
-            if(empty($extension) or !in_array($extension, $this->config->file->imageExtensions)) return false;
-        }
-
-        $extractedFiles = array();
-        foreach($files as $i => $uploadFile)
-        {
-            if($uploadFile['folder']) continue;
-            $fileName = $uploadFile['filename'];
-            $fileName = helper::convertEncoding($fileName, 'gbk', 'utf-8//TRANSLIT');
-            if(($pos = strrpos($fileName, '/')) !== false) $fileName = substr($fileName, $pos + 1);
-
-            $file = array();
-            $file['extension'] = $this->getExtension($fileName);
-            $file['pathname']  = $this->setPathName($i, $file['extension']);
-            $file['title']     = str_replace(".{$file['extension']}", '', $fileName);
-            $file['size']      = $uploadFile['size'];
-
-            $fileName = basename($file['pathname']);
-            $file['realpath']  = $filePath . $fileName;
-            $list = $zip->extract(PCLZIP_OPT_BY_INDEX, $i, PCLZIP_OPT_EXTRACT_AS_STRING);
-            if($list)
-            {
-                file_put_contents($file['realpath'], $list[0]['content']);
-                $extractedFiles[$fileName] = $file;
-            }
-        }
-        return $extractedFiles;
     }
 
     /**
