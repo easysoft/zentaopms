@@ -67,7 +67,7 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
                   $misc = common::hasPriv('testcase', 'batchDelete') ? "onclick=\"confirmBatchDelete('$actionLink')\"" : $class;
                   echo "<li>" . html::a('#', $lang->delete, '', $misc) . "</li>";
 
-                  if(common::hasPriv('testcase', 'batchReview') and $config->testcase->needReview)
+                  if(common::hasPriv('testcase', 'batchReview') and ($config->testcase->needReview or !empty($config->testcase->forceReview)))
                   {
                       echo "<li class='dropdown-submenu'>";
                       echo html::a('javascript:;', $lang->testcase->review, '', "id='reviewItem'");
@@ -80,7 +80,7 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
                       }
                       echo '</ul></li>';
                   }
-                  elseif($config->testcase->needReview)
+                  elseif($config->testcase->needReview or !empty($config->testcase->forceReview))
                   {
                       echo '<li>' . html::a('javascript:;', $lang->testcase->review,  '', $class) . '</li>';
                   }

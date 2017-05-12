@@ -22,7 +22,7 @@
                 <?php if(isset($_POST["chart-{$infoKey}"])):?>
                 <img src='<?php echo $_POST["chart-{$infoKey}"]?>' />
                 <?php else:?>
-                <canvas id='chart-<?php echo $infoKey?>' width='100' height='14' data-responsive='true'></canvas>
+                <canvas id='chart-<?php echo $infoKey?>' width='90' height='20' data-responsive='true'></canvas>
                 <?php endif;?>
               </div>
             </div>
@@ -52,6 +52,7 @@
                     $label = $infoValue[$listKey]->name;
                     $data  = $infoValue[$listKey]->value;
                 }
+                if(empty($label) and empty($data)) continue;
                 ?>
                 <tr class='text-center'>
                   <td class='chart-color w-20px'><i class='chart-color-dot icon-circle'></i></td>

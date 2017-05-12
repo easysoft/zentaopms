@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-    if(onlyTest)
+    if(typeof(onlyTest) != 'undefined' && onlyTest)
     {
         toggleSearch();
     }

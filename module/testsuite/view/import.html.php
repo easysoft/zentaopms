@@ -1,9 +1,9 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <div class='container mw-600px'>
-  <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
+  <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' style="padding:30px">
   <table class='table table-form'>
     <tr>
-      <td align='center' style="padding:30px">
+      <td align='center'>
         <input type='file' name='file' class='form-control'/>
       </td>
       <td>

@@ -678,8 +678,6 @@ class testsuite extends control
         $this->loadModel('testcase');
         if($_POST)
         {
-            if(!$this->config->testcase->needReview) unset($this->lang->testcase->statusList['wait']);
-
             $fields['module']       = $this->lang->testcase->module;
             $fields['title']        = $this->lang->testcase->title;
             $fields['stepDesc']     = $this->lang->testcase->stepDesc;
@@ -687,14 +685,12 @@ class testsuite extends control
             $fields['keywords']     = $this->lang->testcase->keywords;
             $fields['type']         = $this->lang->testcase->type;
             $fields['pri']          = $this->lang->testcase->pri;
-            $fields['status']       = $this->lang->testcase->status;
             $fields['stage']        = $this->lang->testcase->stage;
             $fields['precondition'] = $this->lang->testcase->precondition;
 
             $fields[''] = '';
             $fields['typeValue']   = $this->lang->testcase->lblTypeValue;
             $fields['stageValue']  = $this->lang->testcase->lblStageValue;
-            $fields['statusValue'] = $this->lang->testcase->lblStatusValue;
 
             $modules = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
             $rows    = array();
@@ -709,7 +705,6 @@ class testsuite extends control
                 {
                     $row->typeValue   = join("\n", $this->lang->testcase->typeList);
                     $row->stageValue  = join("\n", $this->lang->testcase->stageList);
-                    $row->statusValue = join("\n", $this->lang->testcase->statusList);
                 }
                 $rows[] = $row;
             }
@@ -942,10 +937,11 @@ class testsuite extends control
 
         if(empty($caseData))
         {
+            unlink($this->session->importFile);
+            unset($_SESSION['importFile']);
             echo js::alert($this->lang->error->noData);
             die(js::locate($this->createLink('testsuite', 'library', "libID=$libID")));
         }
-        if(!$this->config->testcase->needReview) unset($this->lang->testcase->statusList['wait']);
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars  = count($caseData) * 9 + $stepVars;

@@ -980,7 +980,6 @@ class testcaseModel extends model
             $caseData->title        = $data->title[$key];
             $caseData->pri          = (int)$data->pri[$key];
             $caseData->type         = $data->type[$key];
-            $caseData->status       = $data->status[$key];
             $caseData->stage        = join(',', $data->stage[$key]);
             $caseData->keywords     = $data->keywords[$key];
             $caseData->frequency    = 1;
@@ -1002,9 +1001,15 @@ class testcaseModel extends model
         $forceReview = $this->forceReview();
         foreach($cases as $key => $caseData)
         {
+            $caseID = 0;
             if(!empty($_POST['id'][$key]) and empty($_POST['insert']))
             {
-                $caseID      = $data->id[$key];
+                $caseID = $data->id[$key];
+                if(!isset($oldCases[$caseID])) $caseID = 0;
+            }
+
+            if($caseID)
+            {
                 $stepChanged = false;
                 $steps       = array();
                 $oldStep     = isset($oldSteps[$caseID]) ? $oldSteps[$caseID] : array();
@@ -1090,7 +1095,7 @@ class testcaseModel extends model
                 $caseData->openedDate = $now;
                 $caseData->branch     = isset($data->branch[$key]) ? $data->branch[$key] : $branch;
                 if($caseData->story) $caseData->storyVersion = zget($storyVersionPairs, $caseData->story, 1);
-                if($forceReview) $caseData->status = 'wait';
+                $caseData->status = $forceReview ? 'wait' : 'normal';
                 $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
 
                 if(!dao::isError())
@@ -1309,7 +1314,7 @@ class testcaseModel extends model
             case 'actions':
                 common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
                 common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', '', '', 'results iframe', '', "data-width='90%'");
-                if($config->testcase->needReview) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'review', '', 'iframe');
+                if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'review', '', 'iframe');
                 common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
                 common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
 

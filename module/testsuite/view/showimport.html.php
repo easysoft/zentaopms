@@ -14,7 +14,6 @@
       <th class='w-100px'><?php echo $lang->testcase->module?></th>
       <th class='w-70px'><?php echo $lang->testcase->pri?></th>
       <th class='w-100px'><?php echo $lang->testcase->type?></th>
-      <th class='w-100px'><?php echo $lang->testcase->status?></th>
       <th><?php echo $lang->testcase->stage?></th>
       <th class='w-80px'><?php echo $lang->testcase->keywords?></th>
       <th><?php echo $lang->testcase->precondition?></th>
@@ -52,7 +51,6 @@
     <td class='text-left' style='overflow:visible'><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : (!empty($case->id) ? $cases[$case->id]->module : ''), "class='form-control chosen'")?></td>
     <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : (!empty($case->id) ? $cases[$case->id]->pri : ''), "class='form-control'")?></td>
     <td><?php echo html::select("type[$key]", $lang->testcase->typeList, isset($case->type) ? $case->type : (!empty($case->id) ? $cases[$case->id]->type : ''), "class='form-control'")?></td>
-    <td><?php echo html::select("status[$key]", $lang->testcase->statusList, isset($case->status) ? $case->status : (!empty($case->id) ? $cases[$case->id]->status : 'normal'), "class='form-control'")?></td>
     <td class='text-left' style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : (!empty($case->id) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>
     <td><?php echo html::input("keywords[$key]", isset($case->keywords) ? $case->keywords : "", "class='form-control' autocomplete='off'")?></td>
     <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? htmlspecialchars($case->precondition) : "", "class='form-control'")?></td>
@@ -75,7 +73,7 @@
   </tbody>
   <tfoot>
     <tr>
-      <td colspan='10' class='text-center'>
+      <td colspan='9' class='text-center'>
         <?php
         if(!$insert)
         {

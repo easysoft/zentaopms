@@ -672,8 +672,7 @@ class testsuiteModel extends model
                 $caseData->version    = 1;
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;
-                $caseData->branch     = isset($data->branch[$key]) ? $data->branch[$key] : $branch;
-                if($forceReview) $caseData->status = 'wait';
+                $caseData->status     = $forceReview ? 'wait' : 'normal';
                 $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
 
                 if(!dao::isError())
