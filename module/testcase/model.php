@@ -48,7 +48,6 @@ class testcaseModel extends model
                       $replace .= html::a('javascript:;', $currentLable . " <span class='caret'></span>", '', "data-toggle='dropdown'");
                       $replace .="<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto'>";
 
-                      $replace .= '<li>' . html::a(helper::createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=0"), $this->lang->testcase->featureBar['browse']['suite']) . '</li>';
                       foreach ($suiteList as $suiteID => $suite)
                       {
                           $suiteName = $suite->name;

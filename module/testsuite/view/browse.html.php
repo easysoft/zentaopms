@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->testsuite->confirmDelete)?>
-<?php js::set('onlyTest', $config->global->flow == 'onlyTest')?>
+<?php js::set('flow', $this->config->global->flow);?>
 <?php if($this->config->global->flow != 'onlyTest'):?>
 <div id="titlebar">
   <div class="heading"> <?php echo $lang->testsuite->browse?> </div>

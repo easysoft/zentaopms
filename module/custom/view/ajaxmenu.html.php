@@ -25,9 +25,11 @@
       <nav id='modulemenu'>
         <ul></ul>
       </nav>
+      <?php if($this->config->global->flow != 'onlyTest'):?>
       <nav id='featurebar'>
         <ul></ul>
       </nav>
+      <?php endif;?>
     </div>
     <div class='text-left'>
       <button id='saveMenuBtn' type='button' class='btn btn-primary'><?php echo $lang->save ?></button> &nbsp;
