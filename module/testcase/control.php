@@ -601,7 +601,7 @@ class testcase extends control
             $this->view->moduleOptionMenu = $moduleOptionMenu;
             $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch);
         }
-        if(!$this->config->testcase->needReview) unset($this->lang->testcase->statusList['wait']);
+        if(!$this->testcase->forceReview()) unset($this->lang->testcase->statusList['wait']);
         $position[]      = $this->lang->testcase->common;
         $position[]      = $this->lang->testcase->edit;
 
@@ -709,7 +709,7 @@ class testcase extends control
             }
         }
 
-        if(!$this->config->testcase->needReview) unset($this->lang->testcase->statusList['wait']);
+        if(!$this->testcase->forceReview()) unset($this->lang->testcase->statusList['wait']);
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars = count($cases) * (count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
@@ -1184,7 +1184,6 @@ class testcase extends control
     {
         if($_POST)
         {
-            if(!$this->config->testcase->needReview) unset($this->lang->testcase->statusList['wait']);
             $product = $this->loadModel('product')->getById($productID);
 
             if($product->type != 'normal') $fields['branch'] = $this->lang->product->branchName[$product->type];
@@ -1195,14 +1194,12 @@ class testcase extends control
             $fields['keywords']     = $this->lang->testcase->keywords;
             $fields['type']         = $this->lang->testcase->type;
             $fields['pri']          = $this->lang->testcase->pri;
-            $fields['status']       = $this->lang->testcase->status;
             $fields['stage']        = $this->lang->testcase->stage;
             $fields['precondition'] = $this->lang->testcase->precondition;
 
             $fields[''] = '';
             $fields['typeValue']   = $this->lang->testcase->lblTypeValue;
             $fields['stageValue']  = $this->lang->testcase->lblStageValue;
-            $fields['statusValue'] = $this->lang->testcase->lblStatusValue;
             if($product->type != 'normal') $fields['branchValue'] = $this->lang->product->branchName[$product->type];
 
             $branches = $this->loadModel('branch')->getPairs($productID);
@@ -1221,7 +1218,6 @@ class testcase extends control
                 {
                     $row->typeValue   = join("\n", $this->lang->testcase->typeList);
                     $row->stageValue  = join("\n", $this->lang->testcase->stageList);
-                    $row->statusValue = join("\n", $this->lang->testcase->statusList);
                     if($product->type != 'normal') $row->branchValue = join("\n", $branches);
                 }
                 $rows[] = $row;
@@ -1499,7 +1495,6 @@ class testcase extends control
             echo js::alert($this->lang->error->noData);
             die(js::locate($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch")));
         }
-        if(!$this->config->testcase->needReview) unset($this->lang->testcase->statusList['wait']);
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars  = count($caseData) * 12 + $stepVars;

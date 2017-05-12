@@ -39,7 +39,7 @@ js::set('batchDelete',   $lang->testcase->confirmBatchDelete);
     <?php $hasCasesPriv = common::hasPriv('testsuite', 'library'); ?>
     <?php
     if($hasCasesPriv) echo "<li id='allTab'>" . html::a($this->inlink('library', "libID=$libID&browseType=all"), $lang->testcase->allCases) . "</li>";
-    if($hasCasesPriv and $config->testcase->needReview) echo "<li id='waitTab'>" . html::a($this->inlink('library', "libID=$libID&browseType=wait"), $lang->testcase->statusList['wait']) . "</li>";
+    if($hasCasesPriv and ($config->testcase->needReview or !empty($config->testcase->forceReview))) echo "<li id='waitTab'>" . html::a($this->inlink('library', "libID=$libID&browseType=wait"), $lang->testcase->statusList['wait']) . "</li>";
     echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";
     if(common::hasPriv('testsuite', 'libView')) echo '<li>' . html::a(inlink('libView', "libID=$libID"), $lang->testsuite->view) . '</li>';
     ?>
@@ -51,7 +51,7 @@ js::set('batchDelete',   $lang->testcase->confirmBatchDelete);
      if(common::hasPriv('testsuite', 'exportTemplet')) echo html::a($link, "<i class='icon-download-alt'></i> " . $lang->testsuite->exportTemplet, '', "class='btn export'");
 
      $link = common::hasPriv('testsuite', 'import') ?  $this->createLink('testsuite', 'import', "libID=$libID") : '#';
-     if(common::hasPriv('testsuite', 'import')) echo html::a($link, "<i class='icon-upload-alt'></i> " . $lang->testsuite->importFile, '', "class='btn export'");
+     if(common::hasPriv('testsuite', 'import')) echo html::a($link, "<i class='icon-upload-alt'></i> " . $lang->testcase->importFile, '', "class='btn export'");
      ?>
     </div>
     <div class='btn-group'>
@@ -126,7 +126,7 @@ js::set('batchDelete',   $lang->testcase->confirmBatchDelete);
         </td>
         <td>
           <?php
-          if($config->testcase->needReview) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'review', '', 'iframe');
+          if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'review', '', 'iframe');
           common::printIcon('testcase',  'edit',    "caseID=$case->id", $case, 'list');
           if(common::hasPriv('testcase', 'delete'))
           {
@@ -160,7 +160,7 @@ js::set('batchDelete',   $lang->testcase->confirmBatchDelete);
                   $misc = common::hasPriv('testcase', 'batchDelete') ? "onclick=\"confirmBatchDelete('$actionLink')\"" : $class;
                   echo "<li>" . html::a('#', $lang->delete, '', $misc) . "</li>";
 
-                  if(common::hasPriv('testcase', 'batchReview') and $config->testcase->needReview)
+                  if(common::hasPriv('testcase', 'batchReview') and ($config->testcase->needReview or !empty($config->testcase->forceReview)))
                   {
                       echo "<li class='dropdown-submenu'>";
                       echo html::a('javascript:;', $lang->testcase->review, '', "id='reviewItem'");
@@ -173,7 +173,7 @@ js::set('batchDelete',   $lang->testcase->confirmBatchDelete);
                       }
                       echo '</ul></li>';
                   }
-                  elseif($config->testcase->needReview)
+                  elseif($config->testcase->needReview or !empty($config->testcase->forceReview))
                   {
                       echo '<li>' . html::a('javascript:;', $lang->testcase->review,  '', $class) . '</li>';
                   }

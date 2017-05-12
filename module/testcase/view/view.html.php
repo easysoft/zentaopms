@@ -50,7 +50,7 @@
 
             if($caseFails > 0) common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", '', 'button', 'bug', '', 'iframe', '', "data-width='90%'");
         }
-        if($config->testcase->needReview) common::printIcon('testcase', 'review', "caseID=$case->id", $case, 'button', 'review', '', 'iframe');
+        if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review', "caseID=$case->id", $case, 'button', 'review', '', 'iframe');
         echo '</div>';
 
         echo "<div class='btn-group'>";
@@ -290,7 +290,7 @@
             <th class='w-60px'><?php echo $lang->testcase->openedBy;?></th>
             <td><?php echo $users[$case->openedBy] . $lang->at . $case->openedDate;?></td>
           </tr>
-          <?php if($config->testcase->needReview):?>
+          <?php if($config->testcase->needReview or !empty($config->testcase->forceReview)):?>
           <tr>
             <th><?php echo $lang->testcase->reviewedBy;?></th>
             <td><?php $reviewedBy = explode(',', $case->reviewedBy); foreach($reviewedBy as $account) echo ' ' . $users[trim($account)]; ?></td>

@@ -30,7 +30,7 @@
           <th class='w-30px' title='<?php echo $lang->testcase->bugs?>'> <?php echo $lang->testcase->bugsAB;?></th>
           <th class='w-30px' title='<?php echo $lang->testcase->results?>'> <?php echo $lang->testcase->resultsAB;?></th>
           <th class='w-30px' title='<?php echo $lang->testcase->stepNumber?>'> <?php echo $lang->testcase->stepNumberAB;?></th>
-          <th class='<?php echo $config->testcase->needReview ? 'w-170px' : 'w-150px'?> {sorter:false}'><?php echo $lang->actions;?></th>
+          <th class='<?php echo ($config->testcase->needReview or !empty($config->testcase->forceReview)) ? 'w-170px' : 'w-150px'?> {sorter:false}'><?php echo $lang->actions;?></th>
           <?php endif;?>
         </tr>
       </thead>
@@ -79,7 +79,7 @@
           <?php
           common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
           common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', 'list-alt', '', 'results iframe', false, "data-width='95%'");
-          if($config->testcase->needReview) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'review', '', 'iframe');
+          if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'review', '', 'iframe');
           common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
           common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
 

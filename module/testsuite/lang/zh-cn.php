@@ -21,7 +21,7 @@ $lang->testsuite->unlinkCase       = "移除";
 $lang->testsuite->batchUnlinkCases = "批量移除用例";
 $lang->testsuite->deleted          = '已删除';
 $lang->testsuite->exportTemplet    = '导出模板';
-$lang->testsuite->importFile       = '导入CSV';
+$lang->testsuite->importFile       = '导入';
 
 $lang->testsuite->common         = '套件';
 $lang->testsuite->product        = '所属' . $lang->productCommon;
