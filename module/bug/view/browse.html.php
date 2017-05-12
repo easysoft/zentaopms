@@ -16,7 +16,57 @@ include '../../common/view/datatable.fix.html.php';
 js::set('browseType',    $browseType);
 js::set('moduleID',      $moduleID);
 js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrowseType == 'bysearch') ? 'all' : $this->session->bugBrowseType);
+js::set('flow', $this->config->global->flow);
 ?>
+<?php if($this->config->global->flow == 'onlyTest'):?>
+<div id='featurebar' class='hidden'>
+  <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->bug->byQuery;?></a></li>
+  <li class='pull-right'>
+    <div class='btn-group' id='createActionMenu'>
+      <?php 
+      if(commonModel::isTutorialMode())
+      {
+          $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
+          echo html::a($this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams"), "<i class='icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary btn-bug-create'");
+      }
+      else
+      {
+          $misc = common::hasPriv('bug', 'create') ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
+          $link = common::hasPriv('bug', 'create') ?  $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID") : '#';
+          echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->bug->create, '', $misc);
+      }
+      ?>
+      <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
+        <span class='caret'></span>
+      </button>
+      <ul class='dropdown-menu pull-right'>
+      <?php
+      $misc = common::hasPriv('bug', 'batchCreate') ? '' : "class=disabled";
+      $link = common::hasPriv('bug', 'batchCreate') ?  $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID") : '#';
+      echo "<li>" . html::a($link, $lang->bug->batchCreate, '', $misc) . "</li>";
+      ?>
+      </ul>
+    </div>
+  </li>
+  <li class='pull-right'>
+    <?php common::printLink('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", "<i class='icon-common-report icon-bar-chart'></i> " . $lang->bug->report->common); ?>
+  </li>
+  <li class='pull-right'>
+      <a class='dropdown-toggle' data-toggle='dropdown'>
+        <i class='icon-download-alt'></i> <?php echo $lang->export ?>
+        <span class='caret'></span>
+      </a>
+      <ul class='dropdown-menu' id='exportActionMenu'>
+        <?php 
+        $misc = common::hasPriv('bug', 'export') ? "class='export'" : "class=disabled";
+        $link = common::hasPriv('bug', 'export') ?  $this->createLink('bug', 'export', "productID=$productID&orderBy=$orderBy") : '#';
+        echo "<li>" . html::a($link, $lang->bug->export, '', $misc) . "</li>";
+        ?>
+      </ul>
+    </li>
+  <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
+</div>
+<?php else:?>
 <div id='featurebar'>
   <ul class='nav'>
     <li>
@@ -92,6 +142,7 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
   </div>
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
+<?php endif;?>
 <div class='side' id='treebox'>
   <a class='side-handle' data-id='bugTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>

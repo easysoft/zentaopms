@@ -19,4 +19,15 @@ $(document).ready(function()
     });
     setTimeout(function(){fixedTfootAction('#bugForm')}, 100);
     setTimeout(function(){fixedTheadOfList('#bugList')}, 100);
+
+    if(flow == 'onlyTest')
+    {
+        $('#modulemenu > .nav').append($('#featurebar').html());
+        toggleSearch();
+
+        $(".export").modalTrigger({width:650, type:'iframe'});
+
+        $('#modulemenu > .nav > li').removeClass('active');
+        $('#modulemenu > .nav > li[data-id=' + browseType + ']').addClass('active');
+    }
 });

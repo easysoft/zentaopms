@@ -401,7 +401,7 @@ class testsuite extends control
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set lib menu. */
-        $this->testsuite->setLibMenu($libraries, $libID);
+        $this->testsuite->setLibMenu($libraries, $libID, $moduleID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);

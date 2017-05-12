@@ -87,7 +87,7 @@ function shortcut()
  */
 function showSearchMenu(objectType, objectID, module, method, extra)
 {
-    var $toggle = $(objectType == 'branch' ? '#currentBranch' : '#currentItem').closest('li').toggleClass('show');
+    var $toggle = $(objectType == 'branch' ? '#currentBranch' : (objectType == 'tree' ? '#currentModule' : '#currentItem')).closest('li').toggleClass('show');
     if(!$toggle.hasClass('show')) return;
     var $menu = $toggle.find('#dropMenu');
     var uuid = $.zui.uuid();

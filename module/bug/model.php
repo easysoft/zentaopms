@@ -21,13 +21,31 @@ class bugModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($products, $productID, $branch = 0)
+    public function setMenu($products, $productID, $branch = 0, $moduleID = 0)
     {
-        $this->loadModel('product')->setMenu($products, $productID, $branch);
-        $selectHtml = $this->product->select($products, $productID, 'bug', 'browse', '', $branch);
+        $this->loadModel('product')->setMenu($products, $productID, $branch, $moduleID, 'bug');
+        $selectHtml = $this->product->select($products, $productID, 'bug', 'browse', '', $branch, $moduleID, 'bug');
+
         foreach($this->lang->bug->menu as $key => $menu)
         {
-            $replace = ($key == 'product') ? $selectHtml : $productID;
+            if($this->config->global->flow != 'onlyTest')
+            {
+                $replace = ($key == 'product') ? $selectHtml : $productID;
+            }
+            else
+            {
+                if($key == 'product')
+                {
+                    $replace = $selectHtml;
+                }
+                else
+                {
+                    $replace = array();
+                    $replace['productID'] = $productID;
+                    $replace['branch']    = $branch;
+                    $replace['param']     = $moduleID;
+                }
+            }
             common::setMenuVars($this->lang->bug->menu, $key, $replace);
         }
     }

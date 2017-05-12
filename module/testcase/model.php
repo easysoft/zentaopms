@@ -21,13 +21,53 @@ class testcaseModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($products, $productID, $branch = 0)
+    public function setMenu($products, $productID, $branch = 0, $moduleID = 0, $suiteID = 0)
     {
-        $this->loadModel('product')->setMenu($products, $productID, $branch);
-        $selectHtml = $this->product->select($products, $productID, 'testcase', 'browse', '', $branch);
+        $this->loadModel('product')->setMenu($products, $productID, $branch, $moduleID, 'case');
+        $selectHtml = $this->product->select($products, $productID, 'testcase', 'browse', '', $branch, $moduleID, 'case');
         foreach($this->lang->testcase->menu as $key => $menu)
         {
-            $replace = ($key == 'product') ? $selectHtml : $productID;
+            if($this->config->global->flow != 'onlyTest')
+            {
+                $replace = ($key == 'product') ? $selectHtml : $productID;
+            }
+            else
+            {
+                if($key == 'product')
+                {
+                    $replace = $selectHtml;
+                }
+                elseif($key == 'suite' and common::hasPriv('testcase', 'browse'))
+                {
+                      $suiteList      = $this->loadModel('testsuite')->getSuites($productID);
+                      $currentSuiteID = isset($suiteID) ? (int)$suiteID : 0;
+                      $currentSuite   = zget($suiteList, $currentSuiteID, '');
+                      $currentLable   = empty($currentSuite) ? $this->lang->testsuite->common : $currentSuite->name;
+
+                      $replace  = "<li id='bysuiteTab' class='dropdown'>";
+                      $replace .= html::a('javascript:;', $currentLable . " <span class='caret'></span>", '', "data-toggle='dropdown'");
+                      $replace .="<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto'>";
+
+                      $replace .= '<li>' . html::a(helper::createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=0"), $this->lang->testcase->featureBar['browse']['suite']) . '</li>';
+                      foreach ($suiteList as $suiteID => $suite)
+                      {
+                          $suiteName = $suite->name;
+                          if($suite->type == 'public') $suiteName .= " <span class='label label-info'>{$this->lang->testsuite->authorList[$suite->type]}</span>";
+
+                          $replace .= '<li' . ($suiteID == (int)$currentSuiteID ? " class='active'" : '') . '>';
+                          $replace .= html::a(helper::createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=$suiteID"), $suiteName);
+                          $replace .= "</li>";
+                      }
+
+                      $replace .= '</ul></li>';
+                }
+                else
+                {
+                    $replace = array();
+                    $replace['productID'] = $productID;
+                    $replace['branch']    = $branch;
+                }
+            }
             common::setMenuVars($this->lang->testcase->menu, $key, $replace);
         }
     }
