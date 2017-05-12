@@ -179,7 +179,7 @@ class testreportModel extends model
 
         $bugInfo['legacyBugs']          = $legacyBugs;
         $bugInfo['countBugByTask']      = count($bugsByTask);
-        $bugInfo['bugConfirmedRate']    = empty($resolvedBugs) ? 0 : round((count(zget($resolutionGroups, 'fixed', array())) + count(zget($resolutionGroups, 'postponed', array()))) / $resolvedBugs * 100, 2);
+        $bugInfo['bugConfirmedRate']    = empty($resolvedBugs) ? 0 : round((zget($resolutionGroups, 'fixed', 0) + zget($resolutionGroups, 'postponed', 0)) / $resolvedBugs * 100, 2);
         $bugInfo['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($newBugs) * 100, 2);
 
         $this->app->loadLang('bug');
