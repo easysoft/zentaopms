@@ -27,7 +27,7 @@
         <th class='w-pri'>  <?php  echo $lang->priAB;?></th>
         <th class='w-100px'><?php echo $lang->testcase->module;?></th> 
         <th width='200'>    <?php echo $lang->testcase->title;?></th>
-        <th width='200'>    <?php echo $lang->testcase->precondition;?></th>
+        <th class='precondition' width='60'><?php echo $lang->testcase->precondition;?></th>
         <th width='180'>    <?php echo $lang->testcase->result?></th>
         <th>                <?php echo $lang->testcase->stepDesc . '/' . $lang->testcase->stepExpect?></th>
       </tr>
@@ -39,7 +39,7 @@
       <td><?php echo $lang->testcase->priList[$cases[$caseID]->pri]?></td>
       <td class='text-left'><?php echo "<span title='" . $moduleOptionMenu[$cases[$caseID]->module] . "'>" . $moduleOptionMenu[$cases[$caseID]->module] . "</span>"?></td>
       <td class='text-left'><?php echo "<span title='{$cases[$caseID]->title}'>{$cases[$caseID]->title}</span>"?></td>
-      <td class='text-left'><?php echo "<span title='{$cases[$caseID]->precondition}'>{$cases[$caseID]->precondition}</span>"?></td>
+      <td class='text-left precondition'><?php echo "<span title='{$cases[$caseID]->precondition}'>{$cases[$caseID]->precondition}</span>"?></td>
       <td><?php echo html::radio("results[$caseID]", $this->lang->testcase->resultList, 'pass', "onclick='showAction(this.value,\".action$caseID\")'")?></td>
       <td>
         <?php if(!empty($steps[$caseID])):?>
@@ -101,5 +101,20 @@ function showAction(value, obj)
         }
     }
 }
+$(function()
+{
+    /* Readjust precondition width by cases precondition. */
+    preconditionWidth = $('th.precondition').width();
+    $('tbody td.precondition').each(function()
+    {
+        width = $(this).find('span:first').width();
+        if(width > preconditionWidth)
+        {
+            preconditionWidth = width;
+            if(preconditionWidth > 200) preconditionWidth = 200;
+            $('th.precondition').width(preconditionWidth);
+        }
+    });
+})
 </script>
 <?php include '../../common/view/footer.html.php';?>
