@@ -312,23 +312,20 @@ class treeModel extends model
      */
     public function getTreeMenu($rootID, $type = 'root', $startModule = 0, $userFunc, $extra = '', $branch = 0)
     {
+        $branches = array($branch => '');
         if($branch)
         {
             $branchName = $this->loadModel('branch')->getById($branch);
-            $branches   = array($branch => $branchName);
-        }
-        else
-        {
-            $branches = array();
+            $branches   = array('null' => '', $branch => $branchName);
+            $extra      = array('rootID' => $rootID, 'branch' => $branch);
         }
 
         $manage   = $userFunc[1] == 'createManageLink' ? true : false;
         $product  = $this->loadModel('product')->getById($rootID);
         if(strpos('story|bug|case', $type) !== false and empty($branch))
         {
-            if($product->type != 'normal') $branches = $this->loadModel('branch')->getPairs($rootID, 'noempty');
+            if($product->type != 'normal') $branches = array('null' => '') + $this->loadModel('branch')->getPairs($rootID, 'noempty');
         }
-        $branches = array('null' => '') + $branches;
 
         /* Add for task #1945. check the module has case or no. */
         if($type == 'case' and !empty($extra)) $this->loadModel('testtask');
@@ -339,7 +336,7 @@ class treeModel extends model
             $treeMenu = array();
             $stmt = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule, $branchID));
             while($module = $stmt->fetch()) $this->buildTree($treeMenu, $module, $type, $userFunc, $extra, $branchID);
-            if($type == 'case' and !empty($extra) and empty($treeMenu)) continue;
+            if(!empty($extra) and empty($treeMenu)) continue;
             ksort($treeMenu);
             if(!empty($branchID) and $branch and $branchID != 'null')
             {
@@ -621,33 +618,46 @@ class treeModel extends model
     public function buildTree(& $treeMenu, $module, $type, $userFunc, $extra, $branch = 0)
     {
         /* Add for task #1945. check the module has case or no. */
-        if($type == 'case' and !empty($extra))
+        if((isset($extra['rootID']) and isset($extra['branch']) and $branch == 'null') or ($type == 'case' and is_numeric($extra)))
         {
-            static $runs = array();
-            if(empty($runs))
+            static $objects = array();
+            if(empty($objects))
             {
-                $runs = $this->dao->select('t1.*,t2.module')->from(TABLE_TESTRUN)->alias('t1')
-                    ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
-                    ->where('t1.task')->eq((int)$extra)
-                    ->fetchAll('module');
+                if(is_array($extra))
+                {
+                    $table   = $this->config->objectTables[$type];
+                    $objects = $this->dao->select('module')->from($table)->where('product')->eq((int)$extra['rootID'])->andWhere('branch')->eq((int)$extra['branch'])->fetchAll('module');
+                }
+                else
+                {
+                    $objects = $this->dao->select('t1.*,t2.module')->from(TABLE_TESTRUN)->alias('t1')
+                        ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+                        ->where('t1.task')->eq((int)$extra)
+                        ->fetchAll('module');
+                }
             }
             static $modules = array();
-            if(empty($modules)) $modules = $this->dao->select('id,path')->from(TABLE_MODULE)->where('root')->eq($module->root)->andWhere("(type='story' or type='case')")->fetchPairs('id', 'path');
+            if(empty($modules))
+            {
+                $typeCondition = "type='story'";
+                if($type != 'story') $typeCondition .= " or type='{$type}'";
+                $modules = $this->dao->select('id,path')->from(TABLE_MODULE)->where('root')->eq($module->root)->andWhere("({$typeCondition})")->fetchPairs('id', 'path');
+            }
             $childModules = array();
             foreach($modules as $moduleID => $modulePath)
             {
                 if(strpos($modulePath, $module->path) === 0) $childModules[$moduleID] = $moduleID;
             }
-            $hasRuns = false;
+            $hasObjects = false;
             foreach($childModules as $moduleID)
             {
-                if(isset($runs[$moduleID]))
+                if(isset($objects[$moduleID]))
                 {
-                    $hasRuns = true;
+                    $hasObjects = true;
                     break;
                 }
             }
-            if(!$hasRuns) return;
+            if(!$hasObjects) return;
         }
 
         if(is_array($extra) or empty($extra)) $extra['branchID'] = $branch;

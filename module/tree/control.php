@@ -59,7 +59,7 @@ class tree extends control
         if($viewType == 'story')
         {
             $this->lang->set('menugroup.tree', 'product');
-            $this->product->setMenu($this->product->getPairs(), $rootID, $branch, 'story');
+            $this->product->setMenu($this->product->getPairs(), $rootID, $branch, 'story', '', 'story');
             $this->lang->tree->menu      = $this->lang->product->menu;
             $this->lang->tree->menuOrder = $this->lang->product->menuOrder;
 
