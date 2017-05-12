@@ -8,7 +8,7 @@ $(function()
 
     $('.restore').click(function()
     {
-        url = $(this).attr('href') + '&confirm=yes';
+        url = $(this).attr('href');
         bootbox.confirm(confirmRestore, function(result)
         {
             if(result)

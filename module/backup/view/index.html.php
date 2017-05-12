@@ -49,7 +49,7 @@
         <?php if($i == 0):?>
         <td <?php if($rowspan > 1) echo "rowspan='$rowspan'"?>>
           <?php
-          if(common::hasPriv('backup', 'restore')) echo html::a(inlink('restore', "file=$backupFile->name"), $lang->backup->restore, 'hiddenwin', "class='restore'");
+          if(common::hasPriv('backup', 'restore')) echo html::a(inlink('restore', "file={$backupFile->name}&confirm=yes"), $lang->backup->restore, 'hiddenwin', "class='restore'");
           if(common::hasPriv('backup', 'delete')) echo html::a(inlink('delete', "file=$backupFile->name"), $lang->delete, 'hiddenwin');
           ?>
         </td>
