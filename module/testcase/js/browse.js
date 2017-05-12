@@ -44,4 +44,14 @@ $(document).ready(function()
     });
 
     setModal4List('runCase', 'caseList');
+
+    if(flow == 'onlyTest')
+    {
+        $('#modulemenu > .nav').append($('#featurebar').html());
+        toggleSearch();
+        $('.export').modalTrigger({width:650, type:'iframe'});
+
+        $('#modulemenu > .nav > li').removeClass('active');
+        $('#modulemenu > .nav > li[data-id=' + browseType + ']').addClass('active');
+    }
 });

@@ -12,19 +12,19 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->testtask->confirmDelete)?>
-
+<?php js::set('flow', $this->config->global->flow);?>
+<?php 
+$scope = $this->session->testTaskVersionScope;
+$status = $this->session->testTaskVersionStatus;
+?>
+<?php js::set('status', $status);?>
+<?php if($this->config->global->flow != 'onlyTest'):?>
 <div id="featurebar">
   <ul class="nav">
     <li>
       <span class='dropdown'>
-
-        <?php 
-        $scope = $this->session->testTaskVersionScope;
-        $status = $this->session->testTaskVersionStatus;
-        $viewName = $scope == 'local'? $productName : $lang->testtask->all;
-        ?>
-
-        <button class='btn btn-primary btn-sm' type='button' data-toggle='dropdown'><?php echo $viewName?><span class='caret'></span></button>
+        <?php $viewName = $scope == 'local'? $productName : $lang->testtask->all;?>
+        <button class='btn btn-primary btn-sm' type='button' data-toggle='dropdown'><?php echo $viewName;?> <span class='caret'></span></button>
         <ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>
           <?php 
             echo "<li>" . html::a(inlink('browse', "productID=$productID&branch=$branch&type=all,$status"), $lang->testtask->all) . "</li>";
@@ -43,6 +43,7 @@
 
   <div class="actions"><?php common::printIcon('testtask', 'create', "product=$productID");?></div>
 </div>
+<?php endif;?>
 <table class='table tablesorter table-fixed' id='taskList'>
   <thead>
   <?php $vars = "productID=$productID&branch=$branch&type=$scope,$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>

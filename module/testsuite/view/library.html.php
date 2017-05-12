@@ -17,7 +17,14 @@ js::set('browseType',    $browseType);
 js::set('moduleID',      $moduleID);
 js::set('confirmDelete', $lang->testsuite->confirmDelete);
 js::set('batchDelete',   $lang->testcase->confirmBatchDelete);
+js::set('flow',   $this->config->global->flow);
 ?>
+<?php if($this->config->global->flow == 'onlyTest'):?>
+<div id='featurebar' class='hidden'>
+  <?php echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";?>
+  <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
+</div>
+<?php else:?>
 <div id='featurebar'>
   <div class='heading'>
     <?php echo "<span class='prefix'>" . html::icon($lang->icons['usecase']) . '</span><strong>' . $libName . '</strong>';?>
@@ -76,6 +83,7 @@ js::set('batchDelete',   $lang->testcase->confirmBatchDelete);
   </div>
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
+<?php endif;?>
 <div class='side' id='treebox'>
   <a class='side-handle' data-id='testcaseTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>
@@ -213,5 +221,13 @@ js::set('batchDelete',   $lang->testcase->confirmBatchDelete);
 <script>
 $('#module' + moduleID).addClass('active'); 
 $('#<?php echo $this->session->libBrowseType?>Tab').addClass('active');
+if(flow == 'onlyTest')
+{
+    $('#modulemenu > .nav').append($('#featurebar').html());
+    toggleSearch();
+
+    $('#modulemenu > .nav > li').removeClass('active');
+    $('#modulemenu > .nav > li[data-id=' + browseType + ']').addClass('active');
+}
 </script>
 <?php include '../../common/view/footer.html.php';?>

@@ -353,6 +353,37 @@ class tree extends control
     }
 
     /**
+     * Ajax get drop menu.
+     * 
+     * @param  int    $rootID 
+     * @param  string $module 
+     * @param  string $method 
+     * @param  string $extra 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDropMenu($rootID, $module, $method, $extra)
+    {
+        $this->view->productID = $rootID;
+        $this->view->module    = $module;
+        $this->view->method    = $method;
+        $this->view->extra     = $extra;
+
+        if($module == 'bug') $viewType = 'bug';
+        if($module == 'testcase')  $viewType = 'case';
+        if($module == 'testsuite') $viewType = 'caselib';
+
+        $modules = $this->tree->getOptionMenu($rootID, $viewType);
+        $modulesPinyin = common::convert2Pinyin($modules);
+
+        $this->view->link          = $viewType == 'caselib' ? helper::createLink($module, $method, "rootID=%s&type=byModule&param=%s") : helper::createLink($module, $method, "rootID=%s&branch=&type=byModule&param=%s");
+        $this->view->viewType      = $viewType;
+        $this->view->modules       = $modules;
+        $this->view->modulesPinyin = $modulesPinyin;
+        $this->display();
+    }
+
+    /**
      * AJAX: get modules.
      *
      * @param  int    $productID

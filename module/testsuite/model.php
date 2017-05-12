@@ -72,14 +72,33 @@ class testsuiteModel extends model
      * @access public
      * @return void
      */
-    public function setLibMenu($libraries, $libID)
+    public function setLibMenu($libraries, $libID, $moduleID = 0)
     {
         $currentLibName = zget($libraries, $libID, '');
         $selectHtml = empty($libraries) ? '' : "<a id='currentItem' href=\"javascript:showSearchMenu('testsuite', '$libID', 'testsuite', 'library', '')\">{$currentLibName} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+
+        if($this->config->global->flow == 'onlyTest')
+        {
+            $isMobile   = $this->app->viewType == 'mhtml';
+            $modules    = $this->loadModel('tree')->getModulePairs($libID, 'caselib');
+            $moduleName = ($moduleID && isset($modules[$moduleID])) ? $modules[$moduleID] : $this->lang->tree->all;
+
+            if(!$isMobile)
+            {
+                $selectHtml .= '</li><li>';
+                $selectHtml .= "<a id='currentModule' href=\"javascript:showSearchMenu('tree', '$libID', 'testsuite', 'library', '')\">{$moduleName} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+            }
+            else
+            {
+                $selectHtml .= "<a id='currentModule' href=\"javascript:showSearchMenu('tree', '$libID', 'testsuite', 'library', '')\">{$moduleName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+            }
+        }
+
         setCookie("lastCaseLib", $libID, $this->config->cookieLife, $this->config->webRoot);
         foreach($this->lang->caselib->menu as $key => $value)
         {
             $replace = ($key == 'lib') ? $selectHtml : '';
+            if($this->config->global->flow == 'onlyTest') $replace = ($key == 'lib') ? $selectHtml : $libID;
             common::setMenuVars($this->lang->caselib->menu, $key, $replace);
         }
         $this->lang->testsuite->menu = $this->lang->caselib->menu;
