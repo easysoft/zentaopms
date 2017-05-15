@@ -62,13 +62,37 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
       </tr>
       <?php $showProject = (strpos(",$showFields,", ',project,') !== false && $this->config->global->flow != 'onlyTest');?>
       <tr>
-        <th><?php echo ($showProject) ? $lang->bug->project : $lang->bug->openedBuild;?></th>
+        <th><?php echo ($showProject) ? $lang->bug->project : (($this->config->global->flow == 'onlyTest') ? $lang->bug->type : $lang->bug->openedBuild);?></th>
+
+        <?php if(!$showProject):?>
+        <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
+        <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
+        <td>
+          <div class='input-group' id='bugTypeInputGroup'>
+            <?php
+            /* Remove the unused types. */
+            unset($lang->bug->typeList['designchange']);
+            unset($lang->bug->typeList['newfeature']);
+            unset($lang->bug->typeList['trackthings']);
+            echo html::select('type', $lang->bug->typeList, $type, "class='form-control'");
+            ?>
+            <?php if($showOS):?>
+            <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
+            <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control'");?>
+            <?php endif;?>
+            <?php if($showBrowser):?>
+            <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
+            <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control'");?>
+            <?php endif;?>
+          </div>
+        </td>
+        <?php endif;?>
         <?php if($showProject):?>
         <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProjectRelated(this.value)' autocomplete='off'");?></span></td>
         <?php endif;?>
         <td>
           <div class='input-group'>
-            <?php if($showProject):?>
+            <?php if($showProject or $this->config->global->flow == 'onlyTest'):?>
             <span class='input-group-addon'><?php echo $lang->bug->openedBuild?></span>
             <?php endif;?>
             <span id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?></span>
@@ -95,6 +119,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
         </td>
         <?php endif;?>
       </tr>
+      <?php if($this->config->global->flow != 'onlyTest'):?>
       <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
       <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
       <tr>
@@ -119,6 +144,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
           </div>
         </td>
       </tr>
+      <?php endif;?>
       <tr>
         <th><?php echo $lang->bug->title;?></th>
         <td colspan='2'>
