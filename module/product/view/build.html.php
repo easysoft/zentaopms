@@ -42,7 +42,6 @@
       <td class='text-right'>
         <?php 
         common::printIcon('testtask', 'create', "product=0&product=$product->id&build=$build->id", '', 'list', 'check');
-        common::printIcon('project', 'bug',  "productID=$product->id&orderBy=status&build=$build->id", '', 'list');
         common::printIcon('build', 'edit',   "buildID=$build->id", '', 'list');
         if(common::hasPriv('build', 'delete'))
         {
