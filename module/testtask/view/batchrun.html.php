@@ -105,16 +105,19 @@ $(function()
 {
     /* Readjust precondition width by cases precondition. */
     preconditionWidth = $('th.precondition').width();
-    $('tbody td.precondition').each(function()
+    $precondition     = $('tbody td.precondition');
+    length = $precondition.length;
+    for(i = 0; i < length; i++)
     {
-        width = $(this).find('span:first').width();
+        width = $precondition.eq(i).find('span:first').width();
         if(width > preconditionWidth)
         {
             preconditionWidth = width;
             if(preconditionWidth > 200) preconditionWidth = 200;
             $('th.precondition').width(preconditionWidth);
         }
-    });
+    }
+    $('tbody td.precondition').addClass('wordwrap');
 })
 </script>
 <?php include '../../common/view/footer.html.php';?>

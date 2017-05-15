@@ -3,4 +3,5 @@
 .table-form > tbody > tr > th, .table-form > tbody > tr > td {border-bottom: 1px solid #ddd}
 .outer .table.table-form tbody > tr:last-child td{border:1px solid #ddd;}
 
+.wordwrap{word-wrap:break-word; white-space:normal !important;}
 .step-item{padding-left: 20px;}
