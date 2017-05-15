@@ -24,17 +24,9 @@ js::set('flow', $this->config->global->flow);
   <li class='pull-right'>
     <div class='btn-group' id='createActionMenu'>
       <?php 
-      if(commonModel::isTutorialMode())
-      {
-          $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
-          echo html::a($this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams"), "<i class='icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary btn-bug-create'");
-      }
-      else
-      {
-          $misc = common::hasPriv('bug', 'create') ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
-          $link = common::hasPriv('bug', 'create') ?  $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID") : '#';
-          echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->bug->create, '', $misc);
-      }
+      $misc = common::hasPriv('bug', 'create') ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
+      $link = common::hasPriv('bug', 'create') ?  $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID") : '#';
+      echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->bug->create, '', $misc);
       ?>
       <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
         <span class='caret'></span>
@@ -308,7 +300,7 @@ if($shortcut.size() > 0)
 }
 <?php endif;?>
 <?php $this->app->loadConfig('qa', '', false);?>
-<?php if(isset($this->config->qa->homepage) and $this->config->qa->homepage != 'browse'):?>
+<?php if(isset($config->qa->homepage) and $config->qa->homepage != 'browse' and $config->global->flow == 'full'):?>
 $(function(){$('#modulemenu .nav li:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"qa\", \"browse\")'><i class='icon icon-cog'></i> <?php echo $lang->homepage?></a></li>")});
 <?php endif;?>
 </script>
