@@ -45,7 +45,7 @@ $lang->admin->bind->caption = 'Link an Account';
 $lang->admin->bind->success = "Account has been linked!";
 
 $lang->admin->safe = new stdclass();
-$lang->admin->safe->common     = 'Security';
+$lang->admin->safe->common     = 'Security Policy';
 $lang->admin->safe->set        = 'Password Security Settings';
 $lang->admin->safe->password   = 'Password Security';
 $lang->admin->safe->weak       = 'Weak Password';

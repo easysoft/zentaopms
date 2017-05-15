@@ -276,6 +276,11 @@ class adminModel extends model
             $weaks[$weak] = $weak;
         }
 
-        return isset($weaks[$user->password]);
+        if(isset($weaks[$user->password])) return true;
+        if($user->password == md5($user->account)) return true;
+        if($user->phone and $user->password == md5($user->phone)) return true;
+        if($user->mobile and $user->password == md5($user->mobile)) return true;
+        if($user->birthday and $user->password == md5($user->birthday)) return true;
+        return false;
     }
 }
