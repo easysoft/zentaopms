@@ -30,6 +30,7 @@
       <tbody>
       <?php foreach($allStories as $story):?>
       <?php if(strpos(",{$release->stories},", ",{$story->id},") !== false) continue; ?>
+      <?php if($release->product != $story->product) continue; ?>
       <tr>
         <td class='cell-id'>
           <input class='ml-10px' type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' <?php if($story->stage == 'developed' or $story->status == 'closed') echo 'checked';?> /> 
