@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('onlyTest', $config->global->flow == 'onlyTest')?>
+<?php js::set('flow', $config->global->flow);?>
 <div class='container mw-1400px'>
   <div id='titlebar'>
     <div class='heading'>

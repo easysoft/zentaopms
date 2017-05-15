@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<?php js::set('onlyTest', $config->global->flow == 'onlyTest')?>
+<?php js::set('flow', $this->config->global->flow);?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'> <strong><?php echo $suite->id;?></strong></span>
