@@ -25,6 +25,7 @@
 <div class='panel'>
   <div class='panel-heading'>
     <strong><?php echo $lang->backup->history?></strong>
+    <span class='label label-info'><?php echo $lang->backup->restoreTip;?></span>
   </div>
   <table class='table table-condensed table-bordered active-disabled table-fixed'>
     <thead>
@@ -69,7 +70,6 @@
     </tfoot>
   </table>
 </div>
-<div class='alert alert-info'><?php echo $lang->backup->restoreTip;?></div>
 <div class="modal fade" id="waitting" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog w-300px">
     <div class="modal-content">
