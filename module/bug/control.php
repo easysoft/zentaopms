@@ -29,6 +29,15 @@ class bug extends control
         $this->loadModel('story');
         $this->loadModel('task');
         $this->view->products = $this->products = $this->product->getPairs('nocode');
+
+        if($this->config->global->flow == 'onlyTest')
+        {
+            $this->config->bug->list->customCreateFields      = str_replace(array('project,', 'story,', 'task,'), '', $this->config->bug->list->customCreateFields);
+            $this->config->bug->list->customBatchCreateFields = str_replace('project,', '', $this->config->bug->list->customBatchCreateFields);
+
+            $this->config->bug->custom->batchCreateFields = str_replace('project,', '', $this->config->bug->custom->batchCreateFields);
+        }
+
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=bug")));
     }
 

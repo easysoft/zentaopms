@@ -23,6 +23,13 @@ class task extends control
         $this->loadModel('project');
         $this->loadModel('story');
         $this->loadModel('tree');
+
+        if($this->config->global->flow == 'onlyTask')
+        {
+            $this->config->task->customCreateFields        = str_replace(array('story,'), '', $this->config->task->customCreateFields);
+            $this->config->task->customBatchCreateFields   = str_replace(array('story,'), '', $this->config->task->customBatchCreateFields);
+            $this->config->task->custom->batchCreateFields = str_replace(array('story,'), '', $this->config->task->custom->batchCreateFields);
+        }
     }
 
     /**
