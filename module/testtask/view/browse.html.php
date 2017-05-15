@@ -51,7 +51,9 @@ $status = $this->session->testTaskVersionStatus;
       <th class='w-id text-left'>   <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
       <th class='w-200px text-left'><?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
       <th class='text-left'>        <?php common::printOrderLink('product', $orderBy, $vars, $lang->testtask->product);?></th>
+      <?php if($this->config->global->flow != 'onlyTest'):?>
       <th class='text-left'>        <?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->project);?></th>
+      <?php endif;?>
       <th class='text-left'>        <?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
       <th class='w-user text-left'> <?php common::printOrderLink('owner',   $orderBy, $vars, $lang->testtask->owner);?></th>
       <th class='w-100px text-left'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
@@ -66,7 +68,9 @@ $status = $this->session->testTaskVersionStatus;
     <td><?php echo html::a(inlink('cases', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
     <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a(inlink('cases', "taskID=$task->id"), $task->name);?></td>
     <td title="<?php echo $task->productName?>"><?php echo $task->productName?></td>
+    <?php if($this->config->global->flow != 'onlyTest'):?>
     <td title="<?php echo $task->projectName?>"><?php echo $task->projectName?></td>
+    <?php endif;?>
     <td><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build",'',true), $task->buildName, '','class="iframe"'));?></td>
     <td><?php echo zget($users, $task->owner);?></td>
     <td><?php echo $task->begin?></td>
@@ -90,7 +94,7 @@ $status = $this->session->testTaskVersionStatus;
   </tr>
   <?php endforeach;?>
   </tbody>
-  <tfoot><tr><td colspan='10'><?php $pager->show();?></td></tr></tfoot>
+  <tfoot><tr><td colspan='<?php echo $config->global->flow == 'onlyTest' ? 9 : 10;?>'><?php $pager->show();?></td></tr></tfoot>
 </table>
 <script>$(function(){$('#<?php echo $status?>Tab').addClass('active')})</script>
 <?php include '../../common/view/footer.html.php';?>
