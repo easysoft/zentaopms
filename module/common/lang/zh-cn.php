@@ -738,32 +738,8 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->testtask->menuOrder[40]  = 'report';
     $lang->testtask->menuOrder[45]  = 'create';
 
-    /* Adjust sub menu of report module. */
-<<<<<<< HEAD
-    $lang->testreport->menu = new stdclass();
-    $lang->testreport->menu->product     = array('link' => '%s', 'fixed' => true);
-    $lang->testreport->menu->scope       = array('link' => '%s', 'fixed' => true);
-    $lang->testreport->menu->wait        = '待测版本|testtask|browse|productID=%s&branch=%s&type=%s,wait';
-    $lang->testreport->menu->doing       = '测试中版本|testtask|browse|productID=%s&branch=%s&type=%s,doing';
-    $lang->testreport->menu->blocked     = '被阻塞版本|testtask|browse|productID=%s&branch=%s&type=%s,blocked';
-    $lang->testreport->menu->done        = '已测版本|testtask|browse|productID=%s&branch=%s&type=%s,done';
-    $lang->testreport->menu->totalStatus = '全部|testtask|browse|productID=%s&branch=%s&type=%s,totalStatus';
-    $lang->testreport->menu->report      = array('link' => '报告|testreport|browse');
-    $lang->testreport->menu->testtask    = array('link' => "<i class='icon-plus'></i> 提交测试|testtask|create|productID=%s", 'float' => 'right');
-
-    $lang->testreport->menuOrder[5]   = 'product';
-    $lang->testreport->menuOrder[10]  = 'scope';
-    $lang->testreport->menuOrder[15]  = 'wait';
-    $lang->testreport->menuOrder[20]  = 'doing';
-    $lang->testreport->menuOrder[25]  = 'blocked';
-    $lang->testreport->menuOrder[30]  = 'done';
-    $lang->testreport->menuOrder[35]  = 'totalStatus';
-    $lang->testreport->menuOrder[40]  = 'report';
-    $lang->testreport->menuOrder[45]  = 'testtask';
-=======
     $lang->testreport->menu      = $lang->testtask->menu;
     $lang->testreport->menuOrder = $lang->testtask->menuOrder;
->>>>>>> 12c288a4e7a20122e9feaae8a11662d295ab2e6c
 
     /* Adjust sub menu of caselib module. */
     $lang->caselib->menu = new stdclass();
