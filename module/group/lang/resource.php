@@ -1325,14 +1325,11 @@ $lang->changelog['9.2'][] = 'testsuite-showImport';
 global $config;
 if($config->global->flow != 'full')
 {
-    unset($lang->resource->todo);
     unset($lang->moduleOrder[10]);
     unset($lang->resource->qa);
     unset($lang->moduleOrder[50]);
     unset($lang->resource->report);
     unset($lang->moduleOrder[90]);
-
-    unset($lang->resource->my->todo);
 }
 
 if($config->global->flow == 'onlyStory' || $config->global->flow == 'onlyTask')
