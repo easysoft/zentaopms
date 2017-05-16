@@ -47,7 +47,8 @@ $(document).ready(function()
 
     if(flow == 'onlyTest')
     {
-        $('#modulemenu > .nav').append($('#featurebar').html());
+        $('#modulemenu > .nav').append($('#featurebar > .submenu').html());
+
         toggleSearch();
         $('.export').modalTrigger({width:650, type:'iframe'});
 

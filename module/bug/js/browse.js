@@ -22,12 +22,35 @@ $(document).ready(function()
 
     if(flow == 'onlyTest')
     {
-        $('#modulemenu > .nav').append($('#featurebar').html());
+        $('#modulemenu > .nav').append($('#featurebar > .submenu').html());
         toggleSearch();
 
         $(".export").modalTrigger({width:650, type:'iframe'});
 
         $('#modulemenu > .nav > li').removeClass('active');
         $('#modulemenu > .nav > li[data-id=' + browseType + ']').addClass('active');
+
+        var navWidth = $('#modulemenu > .nav').width();
+        var leftWidth  = 0;
+        var rightWidth = 0;
+        $('#modulemenu > .nav > li.right').each(function(){rightWidth += $(this).width();})
+
+        var maxWidth = navWidth - $('#modulemenu > .nav > #bysearchTab').width() - rightWidth - 80;
+
+        $('#modulemenu > .nav > li:not(.right)').each(function()
+        {
+            if(leftWidth > maxWidth)
+            {
+                if($(this).attr('id') != 'moreMenus' && $(this).attr('id') != 'bysearchTab')
+                {
+                    $('#moreMenus').removeClass('hidden');
+                    $('#moreMenus > ul').append($(this)[0]);
+                }
+            }
+            else
+            {
+                leftWidth += $(this).width();
+            }
+        })
     }
 });
