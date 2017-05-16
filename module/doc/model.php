@@ -24,9 +24,10 @@ class docModel extends model
      */
     public function setMenu($libID = 0, $moduleID = 0, $crumb = '')
     {
-        if(isset($this->config->customMenu->doc))
+        $customMenuKey = $this->config->global->flow . '_doc';
+        if(isset($this->config->customMenu->{$customMenuKey}))
         {
-            $customMenu = json_decode($this->config->customMenu->doc, true);
+            $customMenu = json_decode($this->config->customMenu->{$customMenuKey}, true);
             $menuLibIdList = array();
             foreach($customMenu as $i => $menu)
             {
@@ -59,7 +60,7 @@ class docModel extends model
                 $libName .= $lib->name;
                 $customMenu[$i]['link'] = "{$libName}|doc|browse|libID={$menuLibID}";
             }
-            $this->config->customMenu->doc = json_encode($customMenu);
+            $this->config->customMenu->{$customMenuKey} = json_encode($customMenu);
         }
 
         $this->app->loadLang('project');
