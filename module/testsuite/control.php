@@ -174,6 +174,8 @@ class testsuite extends control
 
         if($suite->type == 'library')
         {
+            $this->lang->menugroup->testsuite  = 'caselib';
+
             /* Set lib menu. */
             $libraries = $this->testsuite->getLibraries();
             $suiteID   = $this->testsuite->saveLibState($suiteID, $libraries);
@@ -377,6 +379,8 @@ class testsuite extends control
      */
     public function library($libID = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->lang->menugroup->testsuite  = 'caselib';
+
         /* Set browse type. */
         $browseType = strtolower($browseType);
 
@@ -452,6 +456,8 @@ class testsuite extends control
      */
     public function createLib()
     {
+        $this->lang->menugroup->testsuite  = 'caselib';
+
         if(!empty($_POST))
         {
             $libID = $this->testsuite->createLib();
@@ -481,6 +487,8 @@ class testsuite extends control
      */
     public function createCase($libID, $moduleID = 0, $param = 0)
     {
+        $this->lang->menugroup->testsuite = 'caselib';
+
         if(!empty($_POST))
         {
             $caseResult = $this->loadModel('testcase')->create($bugID = 0);
@@ -565,6 +573,7 @@ class testsuite extends control
      */
     public function batchCreateCase($libID, $moduleID = 0)
     {
+        $this->lang->menugroup->testsuite = 'caselib';
         $this->loadModel('testcase');
         if(!empty($_POST))
         {
@@ -605,6 +614,8 @@ class testsuite extends control
      */
     public function libView($libID)
     {
+        $this->lang->menugroup->testsuite  = 'caselib';
+
         $lib = $this->testsuite->getById($libID);
 
         /* Set lib menu. */

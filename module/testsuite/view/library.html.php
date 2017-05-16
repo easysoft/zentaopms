@@ -22,6 +22,41 @@ js::set('flow',   $this->config->global->flow);
 <?php if($this->config->global->flow == 'onlyTest'):?>
 <div id='featurebar' class='hidden'>
   <?php echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";?>
+
+  <li class='right'>
+    <div class='btn-group' id='createActionMenu'>
+      <?php
+      $misc = common::hasPriv('testsuite', 'createCase') ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
+      $link = common::hasPriv('testsuite', 'createCase') ?  $this->createLink('testsuite', 'createCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)) : '#';
+      echo html::a($link, "<i class='icon-plus'></i>" . $lang->testcase->create, '', $misc);
+      ?>
+      <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
+        <span class='caret'></span>
+      </button>
+      <ul class='dropdown-menu pull-right'>
+      <?php 
+      $misc = common::hasPriv('testsuite', 'batchCreateCase') ? '' : "class=disabled";
+      $link = common::hasPriv('testsuite', 'batchCreateCase') ?  $this->createLink('testsuite', 'batchCreateCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)) : '#';
+      echo "<li>" . html::a($link, $lang->testcase->batchCreate, '', $misc) . "</li>";
+      ?>
+      </ul>
+    </div>
+  </li>
+
+  <li class='right'>
+    <?php
+    $link = common::hasPriv('testsuite', 'import') ?  $this->createLink('testsuite', 'import', "libID=$libID") : '#';
+    if(common::hasPriv('testsuite', 'import')) echo html::a($link, "<i class='icon-upload-alt'></i> " . $lang->testcase->importFile, '', "class='export'");
+    ?>
+  </li>
+
+  <li class='right'>
+    <?php
+    $link = common::hasPriv('testsuite', 'exportTemplet') ?  $this->createLink('testsuite', 'exportTemplet', "libID=$libID") : '#';
+    if(common::hasPriv('testsuite', 'exportTemplet')) echo html::a($link, "<i class='icon-download-alt'></i> " . $lang->testsuite->exportTemplet, '', "class='export'");
+    ?>
+  </li>
+
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
 <?php else:?>
@@ -223,7 +258,7 @@ $('#module' + moduleID).addClass('active');
 $('#<?php echo $this->session->libBrowseType?>Tab').addClass('active');
 if(flow == 'onlyTest')
 {
-    $('#modulemenu > .nav').append($('#featurebar').html());
+    $('#modulemenu > .nav > li.right').before($('#featurebar').html());
     toggleSearch();
 
     $('#modulemenu > .nav > li').removeClass('active');

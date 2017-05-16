@@ -797,7 +797,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->menugroup->bug        = 'bug';
     $lang->menugroup->testcase   = 'testcase';
     $lang->menugroup->testtask   = 'testtask';
-    $lang->menugroup->testsuite  = 'caselib';
+    $lang->menugroup->testsuite  = 'testsuite';
     $lang->menugroup->testreport = 'testtask';
     $lang->menugroup->build      = 'product';
     
