@@ -15,5 +15,3 @@
 .dropdown-list > li > a {display: block; padding: 3px 20px; clear: both; font-weight: normal; line-height: 1.53846154; color: #141414; white-space: nowrap;}
 .dropdown-list > li > a:hover,
 .dropdown-list > li > a:focus {color: #1a4f85;text-decoration: none;background-color: #ddd;}
-
-.nav > li > .btn-group > a, .nav > li > .btn-group > a:hover, .nav > li > .btn-group > a:focus{background: #1a4f85; border-color: #164270;}
