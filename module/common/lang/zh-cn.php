@@ -758,7 +758,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->testreport->menuOrder[30]  = 'done';
     $lang->testreport->menuOrder[35]  = 'totalStatus';
     $lang->testreport->menuOrder[40]  = 'report';
-    $lang->testreport->menuOrder[45]  = 'create';
+    $lang->testreport->menuOrder[45]  = 'testtask';
 
     /* Adjust sub menu of caselib module. */
     $lang->caselib->menu = new stdclass();

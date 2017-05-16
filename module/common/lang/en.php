@@ -574,6 +574,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyStory')
 
     /* Adjust sub menu of product module. */
     unset($lang->product->menu->project);
+    unset($lang->product->menu->doc);
     
     /* Rename product module. */
     $lang->menu->product = 'Product|product|index';
@@ -609,6 +610,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
     unset($lang->project->menu->bug);
     unset($lang->project->menu->testtask);
     unset($lang->project->menu->product);
+    unset($lang->project->menu->doc);
 
     /* Remove sub menu of product module. */
     unset($lang->product->menu);
@@ -651,75 +653,125 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     unset($lang->project->menuOrder);
 
     /* Add bug, testcase and testtask module. */
-    $lang->menu->bug      = 'Bug|bug|index';
-    $lang->menu->testcase = 'Case|testcase|index';
-    $lang->menu->testtask = 'Testing|testtask|index';
-    $lang->menu->caselib  = 'Library|testsuite|library';
+    $lang->menu->bug       = 'Bug|bug|index';
+    $lang->menu->testcase  = 'Case|testcase|index';
+    $lang->menu->testsuite = 'Suite|testsuite|index';
+    $lang->menu->testtask  = 'Testing|testtask|index';
+    $lang->menu->caselib   = 'Library|testsuite|library';
 
-    $lang->menuOrder[6] = 'bug';
-    $lang->menuOrder[7] = 'testcase';
-    $lang->menuOrder[8] = 'testtask';
-    $lang->menuOrder[9] = 'caselib';
+    $lang->menuOrder[6]  = 'bug';
+    $lang->menuOrder[7]  = 'testcase';
+    $lang->menuOrder[8]  = 'testsuite';
+    $lang->menuOrder[9]  = 'testtask';
+    $lang->menuOrder[10] = 'caselib';
+    $lang->menuOrder[11] = 'product';
 
     /* Adjust sub menu of bug module. */
     $lang->bug->menu = new stdclass();
-    $lang->bug->menu->product  = '%s';
-    $lang->bug->menu->browse   = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'viewedit,resolve,close,activate,report', 'subModule' => 'tree');
-    $lang->bug->menu->create   = array('link' => 'Create Bug|bug|create|productID=%s');
+    $lang->bug->menu->product       = array('link' => '%s', 'fixed' => true);
+    $lang->bug->menu->unclosed      = 'Open|bug|browse|productID=%s&branch=%s&browseType=unclosed&param=%s';
+    $lang->bug->menu->all           = 'All|bug|browse|productID=%s&branch=%s&browseType=all&param=%s';
+    $lang->bug->menu->assigntome    = 'Assigned To Me|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
+    $lang->bug->menu->openedbyme    = 'Created By Me|bug|browse|productID=%s&branch=%s&browseType=openedbyme&param=%s';
+    $lang->bug->menu->resolvedbyme  = 'Resolved By Me|bug|browse|productID=%s&branch=%s&browseType=resolvedbyme&param=%s';
+    $lang->bug->menu->unconfirmed   = 'Not Confirmed|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s';
+    $lang->bug->menu->assigntonull  = 'Unassigned|bug|browse|productID=%s&branch=%s&browseType=assigntonull&param=%s';
+    $lang->bug->menu->unresolved    = 'Unresolved|bug|browse|productID=%s&branch=%s&browseType=unresolved&param=%s';
+    $lang->bug->menu->toclosed      = 'To Be Closed|bug|browse|productID=%s&branch=%s&browseType=toclosed&param=%s';
+    $lang->bug->menu->longlifebugs  = 'Pending|bug|browse|productID=%s&branch=%s&browseType=longlifebugs&param=%s';
+    $lang->bug->menu->postponedbugs = 'PostPoned|bug|browse|productID=%s&branch=%s&browseType=postponedbugs&param=%s';
+    $lang->bug->menu->overduebugs   = 'Overdue|bug|browse|productID=%s&branch=%s&browseType=overduebugs&param=%s';
 
     $lang->bug->menuOrder[5]  = 'product';
-    $lang->bug->menuOrder[10] = 'browse';
-    $lang->bug->menuOrder[15] = 'create';
+    $lang->bug->menuOrder[10] = 'unclosed';
+    $lang->bug->menuOrder[15] = 'all';
+    $lang->bug->menuOrder[20] = 'assigntome';
+    $lang->bug->menuOrder[25] = 'openedbyme';
+    $lang->bug->menuOrder[30] = 'resolvedbyme';
+    $lang->bug->menuOrder[35] = 'unresolved';
+    $lang->bug->menuOrder[40] = 'assigntonull';
+    $lang->bug->menuOrder[45] = 'unresolved';
+    $lang->bug->menuOrder[50] = 'toclosed';
+    $lang->bug->menuOrder[55] = 'longlifebugs';
+    $lang->bug->menuOrder[60] = 'postponedbugs';
+    $lang->bug->menuOrder[65] = 'overduebugs';
 
     /* Adjust sub menu of testcase. */
     $lang->testcase->menu = new stdclass();
-    $lang->testcase->menu->product   = '%s';
-    $lang->testcase->menu->browse    = array('link' => 'Case|testcase|browse|productID=%s', 'alias' => 'viewedit,resolve,close,activate,report', 'subModule' => 'tree');
-    $lang->testcase->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s', 'alias' => 'linkcase,create,edit,view');
+    $lang->testcase->menu->product = array('link' => '%s', 'fixed' => true);
+    $lang->testcase->menu->all     = 'All|testcase|browse|productID=%s&branch=%s&browseType=all';
+    $lang->testcase->menu->wait    = 'Wait|testcase|browse|productID=%s&branch=%s&browseType=wait';
+    $lang->testcase->menu->suite   = array('link' => '%s', 'fixed' => true);
 
     $lang->testcase->menuOrder[5]  = 'product';
-    $lang->testcase->menuOrder[10] = 'browse';
-    $lang->testcase->menuOrder[15] = 'testsuite';
+    $lang->testcase->menuOrder[10] = 'all';
+    $lang->testcase->menuOrder[15] = 'wait';
+    $lang->testcase->menuOrder[20] = 'suite';
 
     /* Adjust sub menu of bug module. */
     $lang->testsuite->menu = new stdclass();
-    $lang->testsuite->menu->product  = '%s';
-    $lang->testsuite->menu->testcase = array('link' => 'Case|testcase|browse|productID=%s', 'alias' => 'viewedit,resolve,close,activate,report', 'subModule' => 'tree');
-    $lang->testsuite->menu->browse   = array('link' => 'Suite|testsuite|browse|productID=%s', 'alias' => 'linkcase,create,edit,view');
+    $lang->testsuite->menu->product = array('link' => '%s', 'fixed' => true);
+    $lang->testsuite->menu->create  = array('link' => "<i class='icon-plus'></i> Create Suite|testsuite|create|productID=%s", 'float' => 'right');
 
     $lang->testsuite->menuOrder[5]  = 'product';
-    $lang->testsuite->menuOrder[10] = 'testcase';
-    $lang->testsuite->menuOrder[15] = 'browse';
+    $lang->testsuite->menuOrder[10] = 'create';
 
     /* Adjust sub menu of testtask. */
     $lang->testtask->menu = new stdclass();
-    $lang->testtask->menu->product  = '%s';
-    $lang->testtask->menu->browse   = array('link' => 'Build|testtask|browse|productID=%s', 'alias' => 'viewedit,resolve,close,activate,report', 'subModule' => 'tree');
-    $lang->testtask->menu->create   = array('link' => 'Create Test|testtask|create|productID=%s');
-    $lang->testtask->menu->report   = array('link' => 'Report|testreport|browse');
+    $lang->testtask->menu->product     = array('link' => '%s', 'fixed' => true);
+    $lang->testtask->menu->scope       = array('link' => '%s', 'fixed' => true);
+    $lang->testtask->menu->wait        = 'Build to be Tested|testtask|browse|productID=%s&branch=%s&type=%s,wait';
+    $lang->testtask->menu->doing       = 'Testing Build|testtask|browse|productID=%s&branch=%s&type=%s,doing';
+    $lang->testtask->menu->blocked     = 'Blocked Build|testtask|browse|productID=%s&branch=%s&type=%s,blocked';
+    $lang->testtask->menu->done        = 'Tested Build|testtask|browse|productID=%s&branch=%s&type=%s,done';
+    $lang->testtask->menu->totalStatus = 'All|testtask|browse|productID=%s&branch=%s&type=%s,totalStatus';
+    $lang->testtask->menu->report      = array('link' => 'Report|testreport|browse');
+    $lang->testtask->menu->create      = array('link' => "<i class='icon-plus'></i> Create|testtask|create|productID=%s", 'float' => 'right');
 
-    $lang->testtask->menuOrder[5]  = 'product';
-    $lang->testtask->menuOrder[10] = 'browse';
-    $lang->testtask->menuOrder[15] = 'create';
-    $lang->testtask->menuOrder[20] = 'report';
-
-    /* Adjust sub menu of caselib module. */
-    $lang->caselib->menu = new stdclass();
-    $lang->caselib->menu->lib       = array('link' => '%s', 'fixed' => true);
-    $lang->caselib->menu->caselib   = array('link' => 'Library|testsuite|library', 'alias' => 'createlib,createcase,libview,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
-    $lang->caselib->menu->createlib = array('link' => "<i class='icon-plus'></i>Create Library|testsuite|createLib|", 'float' => 'right');
+    $lang->testtask->menuOrder[5]   = 'product';
+    $lang->testtask->menuOrder[10]  = 'scope';
+    $lang->testtask->menuOrder[15]  = 'wait';
+    $lang->testtask->menuOrder[20]  = 'doing';
+    $lang->testtask->menuOrder[25]  = 'blocked';
+    $lang->testtask->menuOrder[30]  = 'done';
+    $lang->testtask->menuOrder[35]  = 'totalStatus';
+    $lang->testtask->menuOrder[40]  = 'report';
+    $lang->testtask->menuOrder[45]  = 'create';
 
     /* Adjust sub menu of report module. */
     $lang->testreport->menu = new stdclass();
-    $lang->testreport->menu->product = '%s';
-    $lang->testreport->menu->browse  = array('link' => 'Build|testtask|browse|productID=%s', 'alias' => 'viewedit,resolve,close,activate,report', 'subModule' => 'tree');
-    $lang->testreport->menu->create  = array('link' => 'Create Test|testtask|create|productID=%s');
-    $lang->testreport->menu->report  = array('link' => 'Report|testreport|browse');
+    $lang->testreport->menu->product     = array('link' => '%s', 'fixed' => true);
+    $lang->testreport->menu->scope       = array('link' => '%s', 'fixed' => true);
+    $lang->testreport->menu->wait        = 'Build to be Tested|testtask|browse|productID=%s&branch=%s&type=%s,wait';
+    $lang->testreport->menu->doing       = 'Testing Build|testtask|browse|productID=%s&branch=%s&type=%s,doing';
+    $lang->testreport->menu->blocked     = 'Blocked Build|testtask|browse|productID=%s&branch=%s&type=%s,blocked';
+    $lang->testreport->menu->done        = 'Tested Build|testtask|browse|productID=%s&branch=%s&type=%s,done';
+    $lang->testreport->menu->totalStatus = 'All|testtask|browse|productID=%s&branch=%s&type=%s,totalStatus';
+    $lang->testreport->menu->report      = array('link' => 'Report|testreport|browse');
+    $lang->testreport->menu->testtask    = array('link' => "<i class='icon-plus'></i> Create|testtask|create|productID=%s", 'float' => 'right');
 
-    $lang->testreport->menuOrder[5]  = 'product';
-    $lang->testreport->menuOrder[10] = 'browse';
-    $lang->testreport->menuOrder[15] = 'create';
-    $lang->testreport->menuOrder[20] = 'report';
+    $lang->testreport->menuOrder[5]   = 'product';
+    $lang->testreport->menuOrder[10]  = 'scope';
+    $lang->testreport->menuOrder[15]  = 'wait';
+    $lang->testreport->menuOrder[20]  = 'doing';
+    $lang->testreport->menuOrder[25]  = 'blocked';
+    $lang->testreport->menuOrder[30]  = 'done';
+    $lang->testreport->menuOrder[35]  = 'totalStatus';
+    $lang->testreport->menuOrder[40]  = 'report';
+    $lang->testreport->menuOrder[45]  = 'testtask';
+
+    /* Adjust sub menu of caselib module. */
+    $lang->caselib->menu = new stdclass();
+    $lang->caselib->menu->lib    = array('link' => '%s', 'fixed' => true);
+    $lang->caselib->menu->all    = 'All|testsuite|library|libID=%s&browseType=all';
+    $lang->caselib->menu->wait   = 'Wait|testsuite|library|libID=%s&browseType=wait';
+    $lang->caselib->menu->view   = 'View|testsuite|libview|libID=%s';
+    $lang->caselib->menu->create = array('link' => "<i class='icon-plus'></i> Create Library|testsuite|createLib", 'float' => 'right');
+
+    $lang->caselib->menuOrder[5]  = 'lib';
+    $lang->caselib->menuOrder[10] = 'all';
+    $lang->caselib->menuOrder[15] = 'wait';
+    $lang->caselib->menuOrder[20] = 'view';
 
     /* Adjust sub menu of product module. */
     unset($lang->product->menu->story);
@@ -745,7 +797,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->menugroup->bug        = 'bug';
     $lang->menugroup->testcase   = 'testcase';
     $lang->menugroup->testtask   = 'testtask';
-    $lang->menugroup->testsuite  = 'caselib';
+    $lang->menugroup->testsuite  = 'testsuite';
     $lang->menugroup->testreport = 'testtask';
     $lang->menugroup->build      = 'product';
     
@@ -754,6 +806,4 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     unset($lang->searchObjects['task']);
     unset($lang->searchObjects['release']);
     unset($lang->searchObjects['productplan']);
-
-    $lang->zentaoPMS = 'zentao test';
 }
