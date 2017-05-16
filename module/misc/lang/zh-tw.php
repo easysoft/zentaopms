@@ -57,6 +57,7 @@ $lang->misc->copyright   = "&copy; 2009 - 2016 <a href='http://www.cnezsoft.com'
 $lang->misc->checkTable  = "檢查修復數據表";
 $lang->misc->needRepair  = "修復表";
 $lang->misc->repairTable = "資料庫表可以因為斷電原因損壞，需要檢查修復！！";
+$lang->misc->repairFail  = "修復失敗，請到該資料庫的數據目錄下，嘗試執行<code>myisamchk -r -f %s.MYI</code>進行修復。";
 $lang->misc->tableName   = "表名";
 $lang->misc->tableStatus = "狀態";
 $lang->misc->novice      = "您可能初次使用禪道，是否進入新手模式？";

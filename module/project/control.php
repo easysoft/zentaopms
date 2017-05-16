@@ -42,7 +42,7 @@ class project extends control
         if($this->app->user->account == 'guest' or commonModel::isTutorialMode()) $this->config->project->homepage = 'index';
         if(!isset($this->config->project->homepage))
         { 
-            if($this->projects) die($this->fetch('custom', 'ajaxSetHomepage', "module=project"));
+            if($this->projects and $this->app->viewType != 'mhtml') die($this->fetch('custom', 'ajaxSetHomepage', "module=project"));
 
             $this->config->project->homepage = 'index';
             $this->fetch('custom', 'ajaxSetHomepage', "module=project&page=index");

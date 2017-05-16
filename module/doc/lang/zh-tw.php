@@ -35,6 +35,7 @@ $lang->doc->fileObject     = '所屬對象';
 $lang->doc->whiteList      = '白名單';
 $lang->doc->contentType    = '文檔格式';
 $lang->doc->separator      = "<i class='icon-angle-right'></i>";
+$lang->doc->fileTitle      = '附件名';
 
 $lang->doc->moduleDoc      = '按模組瀏覽';
 $lang->doc->searchDoc      = '搜索';
@@ -51,6 +52,7 @@ $lang->doc->delete         = '刪除文檔';
 $lang->doc->browse         = '文檔列表';
 $lang->doc->view           = '文檔詳情';
 $lang->doc->diff           = '對比';
+$lang->doc->sort           = '排序';
 $lang->doc->manageType     = '維護分類';
 $lang->doc->editType       = '編輯分類';
 $lang->doc->deleteType     = '刪除分類';
@@ -68,6 +70,7 @@ $lang->doc->editLib        = '編輯文檔庫';
 $lang->doc->deleteLib      = '刪除文檔庫';
 $lang->doc->fixedMenu      = '固定到菜單欄';
 $lang->doc->removeMenu     = '從菜單欄移除';
+$lang->doc->search         = '搜索';
 
 /* 查詢條件列表 */
 $lang->doc->allProduct     = '所有' . $lang->productCommon;
@@ -79,6 +82,12 @@ $lang->doc->libTypeList['custom']  = '自定義文檔庫';
 
 $lang->doc->systemLibs['product'] = $lang->productCommon;
 $lang->doc->systemLibs['project'] = $lang->projectCommon;
+
+global $config;
+if($config->global->flow == 'onlyStory' or $config->global->flow == 'onlyTest') unset($lang->doc->systemLibs['project']);
+if($config->global->flow == 'onlyStory' or $config->global->flow == 'onlyTest') unset($lang->doc->libTypeList['project']);
+if($config->global->flow == 'onlyTask')  unset($lang->doc->systemLibs['product']);
+if($config->global->flow == 'onlyTask')  unset($lang->doc->libTypeList['product']);
 
 $lang->doc->aclList['open']    = '公開';
 $lang->doc->aclList['custom']  = '自定義';

@@ -6,6 +6,7 @@ $lang->custom->restore   = '恢復預設';
 $lang->custom->key       = '鍵';
 $lang->custom->value     = '值';
 $lang->custom->flow      = '流程';
+$lang->custom->working   = '工作方式';
 $lang->custom->select    = '請選擇流程：';
 $lang->custom->branch    = '多分支';
 
@@ -99,6 +100,11 @@ $lang->custom->productProject->relation['0_1'] = '產品 - 迭代';
 $lang->custom->productProject->relation['1_1'] = '項目 - 迭代';
 
 $lang->custom->productProject->notice = '請根據實際情況選擇適合自己團隊的概念。';
+
+$lang->custom->workingList['full']      = '完整研發管理工具';
+$lang->custom->workingList['onlyTest']  = '測試管理工具';
+$lang->custom->workingList['onlyStory'] = '需求管理工具';
+$lang->custom->workingList['onlyTask']  = '任務管理工具';
 
 $lang->custom->menuTip  = '點擊顯示或隱藏導航條目，拖拽來更改顯示順序。';
 $lang->custom->saveFail = '保存失敗！';

@@ -668,6 +668,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of bug module. */
     $lang->bug->menu = new stdclass();
+<<<<<<< HEAD
     $lang->bug->menu->product       = array('link' => '%s', 'fixed' => true);
     $lang->bug->menu->unclosed      = 'Open|bug|browse|productID=%s&branch=%s&browseType=unclosed&param=%s';
     $lang->bug->menu->all           = 'All|bug|browse|productID=%s&branch=%s&browseType=all&param=%s';
@@ -681,6 +682,21 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->bug->menu->longlifebugs  = 'Pending|bug|browse|productID=%s&branch=%s&browseType=longlifebugs&param=%s';
     $lang->bug->menu->postponedbugs = 'PostPoned|bug|browse|productID=%s&branch=%s&browseType=postponedbugs&param=%s';
     $lang->bug->menu->overduebugs   = 'Overdue|bug|browse|productID=%s&branch=%s&browseType=overduebugs&param=%s';
+=======
+    $lang->bug->menu->product  = array('link' => '%s', 'fixed' => true);
+    $lang->bug->menu->unclosed      = 'Unclosed|bug|browse|productID=%s&branch=%s&browseType=unclosed&param=%s';
+    $lang->bug->menu->all           = 'All|bug|browse|productID=%s&branch=%s&browseType=all&param=%s';
+    $lang->bug->menu->assigntome    = 'Assign to me|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
+    $lang->bug->menu->openedbyme    = 'Opened by me|bug|browse|productID=%s&branch=%s&browseType=openedbyme&param=%s';
+    $lang->bug->menu->resolvedbyme  = 'Resolved by me|bug|browse|productID=%s&branch=%s&browseType=resolvedbyme&param=%s';
+    $lang->bug->menu->unconfirmed   = 'Unconfirmed|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s';
+    $lang->bug->menu->assigntonull  = 'Unassigned|bug|browse|productID=%s&branch=%s&browseType=assigntonull&param=%s';
+    $lang->bug->menu->unresolved    = 'Unresolved|bug|browse|productID=%s&branch=%s&browseType=unresolved&param=%s';
+    $lang->bug->menu->toclosed      = 'To closed|bug|browse|productID=%s&branch=%s&browseType=toclosed&param=%s';
+    $lang->bug->menu->longlifebugs  = 'Long life bugs|bug|browse|productID=%s&branch=%s&browseType=longlifebugs&param=%s';
+    $lang->bug->menu->postponedbugs = 'Postponed bugs|bug|browse|productID=%s&branch=%s&browseType=postponedbugs&param=%s';
+    $lang->bug->menu->overduebugs   = 'Overdue Bug|bug|browse|productID=%s&branch=%s&browseType=overduebugs&param=%s';
+>>>>>>> 12c288a4e7a20122e9feaae8a11662d295ab2e6c
 
     $lang->bug->menuOrder[5]  = 'product';
     $lang->bug->menuOrder[10] = 'unclosed';
@@ -698,10 +714,17 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of testcase. */
     $lang->testcase->menu = new stdclass();
+<<<<<<< HEAD
     $lang->testcase->menu->product = array('link' => '%s', 'fixed' => true);
     $lang->testcase->menu->all     = 'All|testcase|browse|productID=%s&branch=%s&browseType=all';
     $lang->testcase->menu->wait    = 'Wait|testcase|browse|productID=%s&branch=%s&browseType=wait';
     $lang->testcase->menu->suite   = array('link' => '%s', 'fixed' => true);
+=======
+    $lang->testcase->menu->product   = array('link' => '%s', 'fixed' => true);
+    $lang->testcase->menu->all     = '所有|testcase|browse|productID=%s&branch=%s&browseType=all';
+    $lang->testcase->menu->wait    = '待评审|testcase|browse|productID=%s&branch=%s&browseType=wait';
+    $lang->testcase->menu->suite   = '%s';
+>>>>>>> 12c288a4e7a20122e9feaae8a11662d295ab2e6c
 
     $lang->testcase->menuOrder[5]  = 'product';
     $lang->testcase->menuOrder[10] = 'all';
@@ -710,14 +733,20 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of bug module. */
     $lang->testsuite->menu = new stdclass();
+<<<<<<< HEAD
     $lang->testsuite->menu->product = array('link' => '%s', 'fixed' => true);
     $lang->testsuite->menu->create  = array('link' => "<i class='icon-plus'></i> Create Suite|testsuite|create|productID=%s", 'float' => 'right');
+=======
+    $lang->testsuite->menu->product  = array('link' => '%s', 'fixed' => true);
+    $lang->testsuite->menu->create  = array('link' => "<i class='icon-plus'></i> 建套件|testsuite|create|productID=%s", 'float' => 'right');
+>>>>>>> 12c288a4e7a20122e9feaae8a11662d295ab2e6c
 
     $lang->testsuite->menuOrder[5]  = 'product';
     $lang->testsuite->menuOrder[10] = 'create';
 
     /* Adjust sub menu of testtask. */
     $lang->testtask->menu = new stdclass();
+<<<<<<< HEAD
     $lang->testtask->menu->product     = array('link' => '%s', 'fixed' => true);
     $lang->testtask->menu->scope       = array('link' => '%s', 'fixed' => true);
     $lang->testtask->menu->wait        = 'Build to be Tested|testtask|browse|productID=%s&branch=%s&type=%s,wait';
@@ -727,6 +756,17 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->testtask->menu->totalStatus = 'All|testtask|browse|productID=%s&branch=%s&type=%s,totalStatus';
     $lang->testtask->menu->report      = array('link' => 'Report|testreport|browse');
     $lang->testtask->menu->create      = array('link' => "<i class='icon-plus'></i> Create|testtask|create|productID=%s", 'float' => 'right');
+=======
+    $lang->testtask->menu->product  = array('link' => '%s', 'fixed' => true);
+    $lang->testtask->menu->scope       = '%s';
+    $lang->testtask->menu->wait        = 'Wait|testtask|browse|productID=%s&branch=%s&type=%s,wait';
+    $lang->testtask->menu->doing       = 'Doing|testtask|browse|productID=%s&branch=%s&type=%s,doing';
+    $lang->testtask->menu->blocked     = 'Blocked|testtask|browse|productID=%s&branch=%s&type=%s,blocked';
+    $lang->testtask->menu->done        = 'Done|testtask|browse|productID=%s&branch=%s&type=%s,done';
+    $lang->testtask->menu->totalStatus = 'All|testtask|browse|productID=%s&branch=%s&type=%s,totalStatus';
+    $lang->testtask->menu->report      = array('link' => 'Report|testreport|browse', 'alias' => 'view,create,edit');
+    $lang->testtask->menu->create      = array('link' => "<i class='icon-plus'></i> Test|testtask|create|productID=%s", 'float' => 'right');
+>>>>>>> 12c288a4e7a20122e9feaae8a11662d295ab2e6c
 
     $lang->testtask->menuOrder[5]   = 'product';
     $lang->testtask->menuOrder[10]  = 'scope';
@@ -739,6 +779,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->testtask->menuOrder[45]  = 'create';
 
     /* Adjust sub menu of report module. */
+<<<<<<< HEAD
     $lang->testreport->menu = new stdclass();
     $lang->testreport->menu->product     = array('link' => '%s', 'fixed' => true);
     $lang->testreport->menu->scope       = array('link' => '%s', 'fixed' => true);
@@ -767,6 +808,18 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->caselib->menu->wait   = 'Wait|testsuite|library|libID=%s&browseType=wait';
     $lang->caselib->menu->view   = 'View|testsuite|libview|libID=%s';
     $lang->caselib->menu->create = array('link' => "<i class='icon-plus'></i> Create Library|testsuite|createLib", 'float' => 'right');
+=======
+    $lang->testreport->menu      = $lang->testtask->menu;
+    $lang->testreport->menuOrder = $lang->testtask->menuOrder;
+
+    /* Adjust sub menu of caselib module. */
+    $lang->caselib->menu = new stdclass();
+    $lang->caselib->menu->lib       = array('link' => '%s', 'fixed' => true);
+    $lang->caselib->menu->all    = 'All|testsuite|library|libID=%s&browseType=all';
+    $lang->caselib->menu->wait   = 'Wait|testsuite|library|libID=%s&browseType=wait';
+    $lang->caselib->menu->view   = 'View|testsuite|libview|libID=%s';
+    $lang->caselib->menu->create = array('link' => "<i class='icon-plus'></i> Create Lib|testsuite|createLib", 'float' => 'right');
+>>>>>>> 12c288a4e7a20122e9feaae8a11662d295ab2e6c
 
     $lang->caselib->menuOrder[5]  = 'lib';
     $lang->caselib->menuOrder[10] = 'all';

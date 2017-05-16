@@ -177,6 +177,7 @@ class upgradeModel extends model
             case '9_1_2':
                 $this->execSQL($this->getUpgradeFile('9.1.2'));
                 $this->processCustomMenus();
+                $this->adjustPriv9_2();
         }
 
         $this->deletePatch();
@@ -1647,6 +1648,50 @@ class upgradeModel extends model
     }
 
     /**
+     * Adjust priv for 9.2.
+     * 
+     * @access public
+     * @return void
+     */
+    public function adjustPriv9_2()
+    {
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('testsuite')->andWhere('method')->eq('createCase')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group  = $groupID;
+            $data->module = 'testsuite';
+            $newMethods   = array('batchCreateCase', 'exportTemplet', 'import', 'showImport');
+            foreach($newMethods as $method)
+            {
+                $data->method = $method;
+                $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+            }
+        }
+
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('product')->andWhere('method')->eq('index')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group  = $groupID;
+            $data->module = 'product';
+            $data->method = 'build';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('custom')->andWhere('method')->eq('flow')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group  = $groupID;
+            $data->module = 'custom';
+            $data->method = 'working';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+        return true;
+    }
+
+    /**
      * Judge any error occers.
      * 
      * @access public
@@ -1704,6 +1749,7 @@ class upgradeModel extends model
      */
     public function processCustomMenus()
     {
+        $this->loadModel('setting')->setItem('system.common.global.flow', 'full');
         $customMenus = $this->dao->select('*')->from(TABLE_CONFIG)->where('section')->eq('customMenu')->fetchAll();
 
         foreach($customMenus as $customMenu)

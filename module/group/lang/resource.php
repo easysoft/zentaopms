@@ -139,6 +139,7 @@ $lang->resource->product->project     = 'project';
 $lang->resource->product->close       = 'close';
 $lang->resource->product->updateOrder = 'updateOrder';
 $lang->resource->product->all         = 'all';
+$lang->resource->product->build       = 'build';
 
 $lang->product->methodOrder[0]  = 'index';
 $lang->product->methodOrder[5]  = 'browse';
@@ -154,6 +155,7 @@ $lang->product->methodOrder[55] = 'project';
 $lang->product->methodOrder[60] = 'close';
 $lang->product->methodOrder[65] = 'updateOrder';
 $lang->product->methodOrder[70] = 'all';
+$lang->product->methodOrder[75] = 'build';
 
 /* Branch. */
 $lang->resource->branch = new stdclass();
@@ -614,6 +616,10 @@ $lang->resource->testsuite->delete           = 'delete';
 $lang->resource->testsuite->linkCase         = 'linkCase';
 $lang->resource->testsuite->unlinkCase       = 'unlinkCase';
 $lang->resource->testsuite->batchUnlinkCases = 'batchUnlinkCases';
+$lang->resource->testsuite->batchCreateCase  = 'batchCreateCase';
+$lang->resource->testsuite->exportTemplet    = 'exportTemplet';
+$lang->resource->testsuite->import           = 'import';
+$lang->resource->testsuite->showImport       = 'showImport';
 
 $lang->testsuite->methodOrder[0]  = 'index';
 $lang->testsuite->methodOrder[5]  = 'browse';
@@ -624,6 +630,10 @@ $lang->testsuite->methodOrder[25] = 'delete';
 $lang->testsuite->methodOrder[30] = 'linkCase';
 $lang->testsuite->methodOrder[35] = 'unlinkCase';
 $lang->testsuite->methodOrder[40] = 'batchUnlinkCases';
+$lang->testsuite->methodOrder[45] = 'batchCreateCase';
+$lang->testsuite->methodOrder[50] = 'exportTemplet';
+$lang->testsuite->methodOrder[55] = 'import';
+$lang->testsuite->methodOrder[60] = 'showImport';
 
 $lang->resource->caselib = new stdclass();
 $lang->resource->caselib->library    = 'library';
@@ -1303,6 +1313,14 @@ $lang->changelog['9.1'][] = 'caselib-libView';
 $lang->changelog['9.1'][] = 'testtask-activate';
 $lang->changelog['9.1'][] = 'testtask-block';
 $lang->changelog['9.1'][] = 'testtask-report';
+
+$lang->changelog['9.2'][] = 'custom-working';
+$lang->changelog['9.2'][] = 'doc-sort';
+$lang->changelog['9.2'][] = 'product-build';
+$lang->changelog['9.2'][] = 'testsuite-batchCreateCase';
+$lang->changelog['9.2'][] = 'testsuite-exportTemplet';
+$lang->changelog['9.2'][] = 'testsuite-import';
+$lang->changelog['9.2'][] = 'testsuite-showImport';
 
 global $config;
 if($config->global->flow != 'full')

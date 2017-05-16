@@ -16,6 +16,7 @@ $lang->backup->waitting       = '<span id="backupType"></span>正在進行中，
 $lang->backup->confirmDelete  = '是否刪除備份？';
 $lang->backup->confirmRestore = '是否還原該備份？';
 $lang->backup->holdDays       = '備份保留最近 %s 天';
+$lang->backup->restoreTip     = '還原功能只還原附件和資料庫，如果需要還原代碼，可以手動還原。';
 
 $lang->backup->success = new stdclass();
 $lang->backup->success->backup  = '備份成功！';
@@ -27,3 +28,4 @@ $lang->backup->error->noDelete    = "檔案 %s 無法刪除，修改權限或手
 $lang->backup->error->restoreSQL  = "資料庫還原失敗，錯誤：%s";
 $lang->backup->error->restoreFile = "附件還原失敗，錯誤：%s";
 $lang->backup->error->backupFile  = "附件備份失敗，錯誤：%s";
+$lang->backup->error->backupCode  = "代碼備份失敗，錯誤：%s";

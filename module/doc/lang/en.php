@@ -52,6 +52,7 @@ $lang->doc->delete         = 'Delete';
 $lang->doc->browse         = 'List';
 $lang->doc->view           = 'Details';
 $lang->doc->diff           = 'Diff';
+$lang->doc->sort           = 'Sort';
 $lang->doc->manageType     = 'Manage Category';
 $lang->doc->editType       = 'Edit';
 $lang->doc->deleteType     = 'Delete';

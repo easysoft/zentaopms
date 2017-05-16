@@ -9,7 +9,7 @@
       <?php
       foreach($modules as $moduleID => $module)
       {
-          echo "<li data-id='{$moduleID}' data-key='{$modulesPinyin[$module]}'>" . html::a(sprintf($link, $productID, $moduleID), "<i class='icon-cube'></i> " . $module, '', "class='text-important'"). "</li>";
+          echo "<li data-id='{$moduleID}' data-key='{$modulesPinyin[$module]}'>" . html::a(sprintf($link, $productID, $moduleID), $module, '', "class='text-important'") . "</li>";
       }
       ?>
     </ul>

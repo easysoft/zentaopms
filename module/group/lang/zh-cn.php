@@ -46,6 +46,7 @@ $lang->group->copyOptions['copyPriv'] = '复制权限';
 $lang->group->copyOptions['copyUser'] = '复制用户';
 
 $lang->group->versions['']          = '修改历史';
+$lang->group->versions['9_2']       = '禅道9.2';
 $lang->group->versions['9_1']       = '禅道9.1';
 $lang->group->versions['9_0']       = '禅道9.0';
 $lang->group->versions['8_4']       = '禅道8.4';
