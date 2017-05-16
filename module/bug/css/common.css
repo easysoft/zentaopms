@@ -1,2 +1,3 @@
 .ke-toolbar .ke-outline[data-name='savetemplate'] {display: none}
 #modulemenu .nav #dropMenu #searchResult .closed{text-decoration:none;}
+.nav #moreMenus{cursor: pointer;}
