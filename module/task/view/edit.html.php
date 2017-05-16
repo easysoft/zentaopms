@@ -71,7 +71,7 @@
             <th><?php echo $lang->task->module;?></th>
             <td id="moduleIdBox"><?php echo html::select('module', $modules, $task->module, 'class="form-control chosen" onchange="loadModuleRelated()"');?></td>
           </tr>
-          <?php if($config->global->flow != 'onlyTask')?>
+          <?php if($config->global->flow != 'onlyTask'):?>
           <tr>
             <th><?php echo $lang->task->story;?></th>
             <td><span id="storyIdBox"><?php echo html::select('story', $stories, $task->story, "class='form-control chosen'");?></span></td>
