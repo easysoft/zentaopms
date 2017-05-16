@@ -652,6 +652,7 @@ $lang->resource->doc->delete     = 'delete';
 $lang->resource->doc->allLibs    = 'allLibs';
 $lang->resource->doc->objectLibs = 'objectLibs';
 $lang->resource->doc->showFiles  = 'showFiles';
+$lang->resource->doc->sort       = 'sort';
 //$lang->resource->doc->diff       = 'diff';
 
 $lang->doc->methodOrder[0]  = 'index';
@@ -666,6 +667,7 @@ $lang->doc->methodOrder[40] = 'delete';
 $lang->doc->methodOrder[45] = 'allLibs';
 $lang->doc->methodOrder[50] = 'showFiles';
 $lang->doc->methodOrder[55] = 'objectLibs';
+$lang->doc->methodOrder[60] = 'sort';
 //$lang->doc->methodOrder[55] = 'diff';
 
 /* mail. */
@@ -702,10 +704,13 @@ $lang->resource->custom->index   = 'index';
 $lang->resource->custom->set     = 'set';
 $lang->resource->custom->restore = 'restore';
 $lang->resource->custom->flow    = 'flow';
+$lang->resource->custom->working = 'working';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
 $lang->custom->methodOrder[15] = 'restore';
+$lang->custom->methodOrder[20] = 'flow';
+$lang->custom->methodOrder[25] = 'working';
 
 /* Subversion. */
 $lang->resource->svn = new stdclass();
