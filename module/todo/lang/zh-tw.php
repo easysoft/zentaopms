@@ -57,6 +57,10 @@ $lang->todo->typeList['custom'] = '自定義';
 $lang->todo->typeList['bug']    = 'Bug';
 $lang->todo->typeList['task']   = $lang->projectCommon . '任務';
 
+global $config;
+if($config->global->flow == 'onlyTest' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['task']);
+if($config->global->flow == 'onlyTask' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['bug']);
+
 $lang->todo->confirmDelete  = "您確定要刪除這條待辦嗎？";
 $lang->todo->thisIsPrivate  = '這是一條私人事務。:)';
 $lang->todo->lblDisableDate = '暫時不設定時間';

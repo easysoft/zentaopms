@@ -52,6 +52,7 @@ $lang->doc->delete         = '删除文档';
 $lang->doc->browse         = '文档列表';
 $lang->doc->view           = '文档详情';
 $lang->doc->diff           = '对比';
+$lang->doc->sort           = '排序';
 $lang->doc->manageType     = '维护分类';
 $lang->doc->editType       = '编辑分类';
 $lang->doc->deleteType     = '删除分类';

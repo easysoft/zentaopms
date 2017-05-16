@@ -47,7 +47,6 @@ pms:
 	chmod 777 zentaopms/www
 	chmod a+rx zentaopms/bin/*
 	find zentaopms/ -name ext |xargs chmod -R 777
-	echo full > zentaopms/.flow
 	zip -r -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	rm -fr zentaopms
 deb:

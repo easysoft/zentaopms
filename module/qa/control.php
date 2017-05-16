@@ -23,7 +23,7 @@ class qa extends control
         if($this->app->user->account == 'guest' or commonModel::isTutorialMode()) $this->config->qa->homepage = 'index';
         if(!isset($this->config->qa->homepage))
         {
-            if($this->products) die($this->fetch('custom', 'ajaxSetHomepage', "module=qa"));
+            if($this->products and $this->app->viewType != 'mhtml') die($this->fetch('custom', 'ajaxSetHomepage', "module=qa"));
 
             $this->config->qa->homepage = 'index';
             $this->fetch('custom', 'ajaxSetHomepage', "module=qa&page=index");

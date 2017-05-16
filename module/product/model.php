@@ -97,8 +97,8 @@ class productModel extends model
 
         if($this->config->global->flow == 'onlyTest' and $moduleType)
         {
-            $modules    = $this->loadModel('tree')->getModulePairs($productID, $moduleType);
-            $moduleName = ($module && isset($modules[$module])) ? $modules[$module] : $this->lang->tree->all;
+            if($module) $module = $this->loadModel('tree')->getById($module);
+            $moduleName = $module ? $module->name : $this->lang->tree->all;
             if(!$isMobile)
             {
                 $output .= '</li><li>';

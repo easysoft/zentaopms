@@ -4,6 +4,9 @@
  */
 /* Define an emtpty control class as the base class of every module. */
 class control {}
+$config = new stdclass();
+$config->global = new stdclass();
+$config->global->flow = 'full';
 
 /* set module root path and included the resource of group module. */
 $moduleRoot = '../module/';
@@ -174,9 +177,12 @@ foreach(glob($moduleRoot . '*') as $modulePath)
             }
             else
             {
-                list($mainKey, $mainValue) = explode('=', $line);
-                list($key, $value) = explode('=', $lines[$lineNO]);
-                if(trim($mainKey) != trim($key))
+                if(strpos($line, '=') !== false)
+                {
+                    list($mainKey, $mainValue) = explode('=', $line);
+                    list($key, $value) = explode('=', $lines[$lineNO]);
+                }
+                if((strpos($line, '=') === false and $line != $lines[$lineNO]) or trim($mainKey) != trim($key))
                 {
                     $key = trim($key);
                     $lineNO = $lineNO + 1;

@@ -49,10 +49,12 @@ class product extends control
      */
     public function index($locate = 'auto', $productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
+        if($this->config->global->flow == 'onlyTest') $this->locate($this->createLink($this->moduleName, 'build'));
+
         if($this->app->user->account == 'guest' or commonModel::isTutorialMode()) $this->config->product->homepage = 'index';
         if(!isset($this->config->product->homepage))
         {
-            if($this->products) die($this->fetch('custom', 'ajaxSetHomepage', "module=product"));
+            if($this->products and $this->app->getViewType() != 'mhtml') die($this->fetch('custom', 'ajaxSetHomepage', "module=product"));
 
             $this->config->product->homepage = 'index';
             $this->fetch('custom', 'ajaxSetHomepage', "module=product&page=index");
@@ -61,7 +63,6 @@ class product extends control
         $homepage = $this->config->product->homepage;
         if($homepage == 'browse' and $locate == 'auto') $locate = 'yes';
 
-        if($this->config->global->flow == 'onlyTest') $this->locate($this->createLink($this->moduleName, 'build'));
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
 
         if($this->app->getViewType() != 'mhtml') unset($this->lang->product->menu->index);

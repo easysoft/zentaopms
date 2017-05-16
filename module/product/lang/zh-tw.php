@@ -40,6 +40,7 @@ $lang->product->builds   = 'BUILD數';
 $lang->product->roadmap  = '路線圖';
 $lang->product->doc      = '文檔列表';
 $lang->product->project  = $lang->projectCommon . '列表';
+$lang->product->build    = '版本列表';
 
 $lang->product->confirmDelete   = " 您確定刪除該{$lang->productCommon}嗎？";
 
@@ -79,6 +80,10 @@ $lang->product->typeList['']         = '';
 $lang->product->typeList['normal']   = '正常';
 $lang->product->typeList['branch']   = '多分支';
 $lang->product->typeList['platform'] = '多平台';
+
+$lang->product->typeTips = array();
+$lang->product->typeTips['branch']   = '(適用於客戶定製場景)';
+$lang->product->typeTips['platform'] = '(適用於跨平台應用開發，比如ios、安卓、pc端等)';
 
 $lang->product->branchName['normal']   = '';
 $lang->product->branchName['branch']   = '分支';

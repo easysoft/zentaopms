@@ -43,7 +43,7 @@ class router extends baseRouter
                 global $config;
                 if(!isset($config->global)) $config->global = new stdclass();
                 $flow = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='common' AND `key`='flow'")->fetch();
-                if($flow) $config->global->flow = $flow->value;
+                $config->global->flow = $flow ? $flow->value : 'full';
 
                 try
                 {

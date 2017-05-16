@@ -21,7 +21,9 @@ $lang->testsuite->unlinkCase       = "Unlink";
 $lang->testsuite->batchUnlinkCases = "Batch unlink cases";
 $lang->testsuite->deleted          = 'deleted';
 $lang->testsuite->exportTemplet    = 'Export template';
-$lang->testsuite->importFile       = 'Import';
+$lang->testsuite->batchCreateCase  = 'Batch create case';
+$lang->testsuite->import           = 'Import';
+$lang->testsuite->showImport       = 'Show import data';
 
 $lang->testsuite->common         = 'Test Suite';
 $lang->testsuite->product        = $lang->productCommon;

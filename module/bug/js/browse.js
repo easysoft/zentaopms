@@ -33,9 +33,12 @@ $(document).ready(function()
         var navWidth = $('#modulemenu > .nav').width();
         var leftWidth  = 0;
         var rightWidth = 0;
-        $('#modulemenu > .nav > li.right').each(function(){rightWidth += $(this).width();})
 
-        var maxWidth = navWidth - $('#modulemenu > .nav > #bysearchTab').width() - rightWidth - 80;
+        $rightNav = $('#modulemenu > .nav > li.right');
+        rightLength = $rightNav.length;
+        for(i = 0; i < rightLength; i++) rightWidth += $rightNav.eq(i).width();
+
+        var maxWidth = navWidth - $('#modulemenu > .nav > #bysearchTab').width() - rightWidth - 100;
 
         $('#modulemenu > .nav > li:not(.right)').each(function()
         {

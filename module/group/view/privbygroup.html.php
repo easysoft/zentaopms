@@ -20,6 +20,7 @@
       </li>
 
       <?php foreach($lang->menu as $module => $title):?>
+      <?php if(!is_string($title)) continue;?>
       <li <?php echo $menu == $module ? "class='active'" : ""?>>
         <?php echo html::a(inlink('managePriv', sprintf($params, $module)), substr($title, 0, strpos($title, '|')))?>
       </li>

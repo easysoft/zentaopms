@@ -45,12 +45,13 @@ $lang->admin->bind->caption = '關聯社區帳號';
 $lang->admin->bind->success = "關聯賬戶成功";
 
 $lang->admin->safe = new stdclass();
-$lang->admin->safe->common    = '安全';
-$lang->admin->safe->set       = '密碼安全設置';
-$lang->admin->safe->password  = '密碼安全';
-$lang->admin->safe->weak      = '常用弱口令';
-$lang->admin->safe->reason    = '類型';
-$lang->admin->safe->checkWeak = '弱口令掃瞄';
+$lang->admin->safe->common     = '安全策略';
+$lang->admin->safe->set        = '密碼安全設置';
+$lang->admin->safe->password   = '密碼安全';
+$lang->admin->safe->weak       = '常用弱口令';
+$lang->admin->safe->reason     = '類型';
+$lang->admin->safe->checkWeak  = '弱口令掃瞄';
+$lang->admin->safe->changeWeak = '修改弱口令密碼';
 $lang->admin->safe->modifyPasswordFirstLogin = '首次登陸修改密碼';
 
 $lang->admin->safe->modeList[0] = '不檢查';
