@@ -418,7 +418,7 @@ class installModel extends model
             /* Update cron remark by lang. */
             foreach($this->lang->install->cronList as $command => $remark)
             {
-                $this->dao->update(TABLE_GROUP)->set('remark')->eq($remark)->where('command')->eq($command)->exec();
+                $this->dao->update(TABLE_CRON)->set('remark')->eq($remark)->where('command')->eq($command)->exec();
             }
         }
     }
