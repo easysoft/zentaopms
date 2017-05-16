@@ -668,7 +668,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of bug module. */
     $lang->bug->menu = new stdclass();
-    $lang->bug->menu->product       = '%s';
+    $lang->bug->menu->product       = array('link' => '%s', 'fixed' => true);
     $lang->bug->menu->unclosed      = '未关闭|bug|browse|productID=%s&branch=%s&browseType=unclosed&param=%s';
     $lang->bug->menu->all           = '所有|bug|browse|productID=%s&branch=%s&browseType=all&param=%s';
     $lang->bug->menu->assigntome    = '指派给我|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
@@ -698,10 +698,10 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of testcase. */
     $lang->testcase->menu = new stdclass();
-    $lang->testcase->menu->product = '%s';
+    $lang->testcase->menu->product = array('link' => '%s', 'fixed' => true);
     $lang->testcase->menu->all     = '所有|testcase|browse|productID=%s&branch=%s&browseType=all';
     $lang->testcase->menu->wait    = '待评审|testcase|browse|productID=%s&branch=%s&browseType=wait';
-    $lang->testcase->menu->suite   = '%s';
+    $lang->testcase->menu->suite   = array('link' => '%s', 'fixed' => true);
 
     $lang->testcase->menuOrder[5]  = 'product';
     $lang->testcase->menuOrder[10] = 'all';
@@ -710,7 +710,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of bug module. */
     $lang->testsuite->menu = new stdclass();
-    $lang->testsuite->menu->product = '%s';
+    $lang->testsuite->menu->product = array('link' => '%s', 'fixed' => true);
     $lang->testsuite->menu->create  = array('link' => "<i class='icon-plus'></i> 建套件|testsuite|create|productID=%s", 'float' => 'right');
 
     $lang->testsuite->menuOrder[5]  = 'product';
@@ -718,8 +718,8 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of testtask. */
     $lang->testtask->menu = new stdclass();
-    $lang->testtask->menu->product     = '%s';
-    $lang->testtask->menu->scope       = '%s';
+    $lang->testtask->menu->product     = array('link' => '%s', 'fixed' => true);
+    $lang->testtask->menu->scope       = array('link' => '%s', 'fixed' => true);
     $lang->testtask->menu->wait        = '待测版本|testtask|browse|productID=%s&branch=%s&type=%s,wait';
     $lang->testtask->menu->doing       = '测试中版本|testtask|browse|productID=%s&branch=%s&type=%s,doing';
     $lang->testtask->menu->blocked     = '被阻塞版本|testtask|browse|productID=%s&branch=%s&type=%s,blocked';
@@ -740,8 +740,8 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of report module. */
     $lang->testreport->menu = new stdclass();
-    $lang->testreport->menu->product     = '%s';
-    $lang->testreport->menu->scope       = '%s';
+    $lang->testreport->menu->product     = array('link' => '%s', 'fixed' => true);
+    $lang->testreport->menu->scope       = array('link' => '%s', 'fixed' => true);
     $lang->testreport->menu->wait        = '待测版本|testtask|browse|productID=%s&branch=%s&type=%s,wait';
     $lang->testreport->menu->doing       = '测试中版本|testtask|browse|productID=%s&branch=%s&type=%s,doing';
     $lang->testreport->menu->blocked     = '被阻塞版本|testtask|browse|productID=%s&branch=%s&type=%s,blocked';
