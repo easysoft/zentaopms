@@ -264,7 +264,8 @@ function setRequiredFields()
         {
             var $ctlEle = $('#' + requiredFields[i]);
             if($ctlEle.is('input')) $ctlEle.attr('required', 'required');
-            if($ctlEle.parent().hasClass('input-group'))
+            var $ctlParent = $ctlEle.parent();
+            if($ctlParent.hasClass('input-group') && $ctlParent.find('input').length > 1)
             {
                 var $requiredDiv = $('<div class="input-group-required"><div class="required"></div></div>');
                 $ctlEle.after($requiredDiv);
