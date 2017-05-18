@@ -214,9 +214,8 @@ $(function()
             tipClass: 'tooltip-warning tooltip-max'
         }, options);
         $e = $e.first();
-        if(!$e.data('zui.tooltip')) $e.addClass('tooltip-tutorial').attr('data-toggle', 'tooltip').tooltip(options)
+        if(!$e.data('zui.tooltip')) $e.addClass('tooltip-tutorial').attr('data-toggle', 'tooltip').tooltip(options);
         $e.tooltip('show');
-        console.log('show tooltip', $e, text, options);
     };
 
     var tryCheckTask = function()
