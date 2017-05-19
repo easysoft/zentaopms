@@ -166,6 +166,7 @@ class storyModel extends model
         if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
         if($this->checkForceReview()) $story->status = 'draft';
+        if($story->status == 'draft') $story->stage   = $this->post->plan > 0 ? 'planned' : 'wait';
         $story = $this->loadModel('file')->processEditor($story, $this->config->story->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
@@ -182,7 +183,7 @@ class storyModel extends model
             $data->verify  = $story->verify;
             $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
 
-            if($projectID != 0) 
+            if($projectID != 0 and $story->status != 'draft') 
             {
                 $this->dao->insert(TABLE_PROJECTSTORY)
                     ->set('project')->eq($projectID)
