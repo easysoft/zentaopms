@@ -41,7 +41,7 @@
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
         <th class='w-120px<?php echo zget($visibleFields, 'type', ' hidden')?>'><?php echo $lang->todo->type;?></th>
         <th class='w-80px<?php echo zget($visibleFields, 'pri', ' hidden')?>'><?php echo $lang->todo->pri;?></th>
-        <th class='w-p25 red'><?php echo $lang->todo->name;?></th>
+        <th class='w-p25'><?php echo $lang->todo->name;?><span class='required'></span></th>
         <th <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo $lang->todo->desc;?></th>
         <th class='w-230px<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
       </tr>

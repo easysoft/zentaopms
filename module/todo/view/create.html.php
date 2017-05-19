@@ -28,8 +28,9 @@
         <td class='w-p25-f'>
           <div class='input-group'>
             <?php echo html::input('date', $date, "class='form-control form-date'");?>
-            <span class='input-group-addon'><input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></td><td></td></span>
+            <span class='input-group-addon'><input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></span>
           </div>
+        </td><td></td>
       </tr>
       <tr>
         <th><?php echo $lang->todo->type;?></th>
@@ -42,9 +43,9 @@
       <tr>
         <th><?php echo $lang->todo->name;?></th>
         <td colspan='2'>
-          <div id='nameBox' class='hidden'><?php echo html::input('name', '', 'class=form-control');?></div>
+          <div id='nameBox' class='hidden'><?php echo html::input('name', '', "class='form-control' autocomplete='off'");?></div>
           <div class='nameBox'><?php echo html::input('name', '', "class='form-control' autocomplete='off'");?></div>
-          </td>
+        </td>
       </tr>  
       <tr>
         <th><?php echo $lang->todo->desc;?></th>
