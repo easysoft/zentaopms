@@ -124,6 +124,7 @@ $(function()
     var iWindow = window.frames['iframePage'];
     var iframe  = $('#iframePage').get(0);
     var checkTaskId = null, modalShowTaskId;
+    var showToolTipTask = null;
 
     var showModal = function(showAll)
     {
@@ -202,7 +203,7 @@ $(function()
 
     var showToolTip = function($e, text, options)
     {
-        $e.closest('body').find('[data-toggle=tooltip]').tooltip('hide');
+        $e.closest('body').find('[data-toggle=tooltip]').tooltip('destroy');
         if(!$e.length) return;
         options = $.extend(
         {
@@ -213,7 +214,7 @@ $(function()
             tipClass: 'tooltip-warning tooltip-max'
         }, options);
         $e = $e.first();
-        if(!$e.data('zui.tooltip')) $e.addClass('tooltip-tutorial').attr('data-toggle', 'tooltip').tooltip(options)
+        if(!$e.data('zui.tooltip')) $e.addClass('tooltip-tutorial').attr('data-toggle', 'tooltip').tooltip(options);
         $e.tooltip('show');
     };
 
@@ -298,8 +299,11 @@ $(function()
                         {
                             var feildName = status.waitFeild.closest('td').prev('th').text();
                             if(feildName) showToolTip(status.waitFeild, lang.requiredTip.replace('%s', feildName));
-                            highlight(status.waitFeild, function() {
-                                setTimeout(function() {
+                            highlight(status.waitFeild, function()
+                            {
+                                clearTimeout(showToolTipTask);
+                                showToolTipTask = setTimeout(function()
+                                {
                                     showToolTip($formWrapper, $formTarget.text());
                                     highlight($formWrapper);
                                 }, 2000);

@@ -273,7 +273,7 @@ fieldset > .content table, fieldset > .article-content table{table-layout: initi
 .table-form > tbody > tr > td > .radio:last-child {margin-bottom: 0;}
 .table-form > tbody > tr > td .btn + .btn {margin-left: 8px;}
 .table-form > tbody > tr > td .btn-group .btn + .btn {margin-left: -1px;}
-.table-form  tr > td > .input-group {width: 100%}
+.table-form  tr > td > .input-group {width: 100%;}
 
 /* Table data */
 .table-data th, .table-data td {padding: 5px;}
