@@ -531,6 +531,8 @@ class actionModel extends model
         {
             $projectCondition = $projectID == 'all' ? "project " . helper::dbIN(array_keys($projects)) : '';
             $productCondition = $productID == 'all' ? "INSTR('," . join(',', array_keys($products)) . ",', product) > 0" : '';
+            if(is_numeric($productID)) $productCondition = "product like'%,$productID,%' or product='$productID'";
+            if(is_numeric($projectID)) $projectCondition = "project='$projectID'";
 
             $condition = "(product =',0,' AND project = '0')";
             if($projectCondition) $condition .= ' OR ' . $projectCondition;
@@ -550,7 +552,7 @@ class actionModel extends model
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
             ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->fi()
+            ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($projectID == 'all' or $productID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
             ->beginIF($docs)->andWhere("IF(objectType != 'doc', '1=1', objectID " . helper::dbIN($docs) . ")")->fi()
