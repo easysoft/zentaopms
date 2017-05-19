@@ -71,6 +71,12 @@
         <th><?php echo $lang->project->status;?></th>
         <td><?php echo html::select('status', $lang->project->statusList, $project->status, "class='form-control'");?></td>
       </tr>
+      <?php if($this->config->global->flow == 'onlyTask'):?>
+      <tr>
+        <th><?php echo $lang->project->owner;?></th>
+        <td><?php echo html::select('PM', $pmUsers, $project->PM, "class='form-control chosen'");?></td>
+      </tr>
+      <?php else:?>
       <tr>
         <th rowspan='2'><?php echo $lang->project->owner;?></th>
         <td>
@@ -100,7 +106,8 @@
           </div>
         </td>
       </tr>
-      <tr>
+      <?php endif;?>
+      <tr <?php if($this->config->global->flow == 'onlyTask') echo "class='hidden'";?>>
         <th><?php echo $lang->project->manageProducts;?></th>
         <td class='text-left' id='productsBox' colspan="2">
           <div class='row'>

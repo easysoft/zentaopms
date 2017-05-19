@@ -105,6 +105,7 @@
             <th><?php echo $lang->project->PM;?></th>
             <td><?php echo zget($users, $project->PM, $project->PM);?></td>
           </tr>
+          <?php if($this->config->global->flow != 'onlyTask'):?>
           <tr>
             <th><?php echo $lang->project->PO;?></th>
             <td><?php echo zget($users, $project->PO, $project->PO);?></td>
@@ -136,6 +137,7 @@
             ?>
             </td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->project->acl;?></th>
             <td><?php echo $lang->project->aclList[$project->acl];?></td>
