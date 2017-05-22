@@ -725,7 +725,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->testtask->menu->blocked     = '被阻塞版本|testtask|browse|productID=%s&branch=%s&type=%s,blocked';
     $lang->testtask->menu->done        = '已測版本|testtask|browse|productID=%s&branch=%s&type=%s,done';
     $lang->testtask->menu->totalStatus = '全部|testtask|browse|productID=%s&branch=%s&type=%s,totalStatus';
-    $lang->testtask->menu->report      = array('link' => '報告|testreport|browse');
+    $lang->testtask->menu->report      = array('link' => '報告|testreport|browse', 'alias' => 'view,create,edit');
     $lang->testtask->menu->create      = array('link' => "<i class='icon-plus'></i> 提交測試|testtask|create|productID=%s", 'float' => 'right');
 
     $lang->testtask->menuOrder[5]   = 'product';
@@ -738,7 +738,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->testtask->menuOrder[40]  = 'report';
     $lang->testtask->menuOrder[45]  = 'create';
 
-    /* Adjust sub menu of report module. */
     $lang->testreport->menu      = $lang->testtask->menu;
     $lang->testreport->menuOrder = $lang->testtask->menuOrder;
 
