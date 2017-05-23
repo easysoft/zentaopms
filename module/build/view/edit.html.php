@@ -66,7 +66,7 @@
         <th><?php echo $lang->build->desc;?></th>
         <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($build->desc), "rows='10' class='form-control'");?></td>
       </tr>
-      <tr><td></td><td colspan='2'><?php echo html::submitButton() . html::backButton() . $this->config->global->flow != 'onlyTest' ? html::hidden('project', $build->project) : '';?></td></tr>
+      <tr><td></td><td colspan='2'><?php echo html::submitButton() . html::backButton() . ($this->config->global->flow != 'onlyTest' ? html::hidden('project', $build->project) : '');?></td></tr>
     </table>
   </form>
 </div>
