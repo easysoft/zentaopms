@@ -1978,7 +1978,7 @@ class baseRouter
          * 为了安全起见，对公网环境隐藏脚本路径。
          * If the ip is pulic, hidden the full path of scripts.
          */
-        if(!defined('IN_SHELL') and !($this->server->server_addr == '127.0.0.1' or filter_var($this->server->server_addr, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) === false))
+        if(!defined('IN_SHELL') and !($this->server->remote_addr == '127.0.0.1' or filter_var($this->server->remote_addr, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) === false))
         {
             $errorLog  = str_replace($this->getBasePath(), '', $errorLog);
         }
