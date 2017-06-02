@@ -135,12 +135,16 @@ class report extends control
 
         if(empty($workday))$workday = $this->config->project->defaultWorkhours;
         $diffDays = helper::diffDate($end, $begin);
-        $weekDay = $beginWeekDay;
-        $days    = $diffDays;
-        for($i = 0; $i < $diffDays; $i++,$weekDay++)
+        if($days > $diffDays) $days = $diffDays;
+        if(empty($days))
         {
-            $weekDay = $weekDay % 7;
-            if(($this->config->project->weekend == 2 and $weekDay == 6) or $weekDay == 0) $days --;
+            $weekDay = $beginWeekDay;
+            $days    = $diffDays;
+            for($i = 0; $i < $diffDays; $i++,$weekDay++)
+            {
+                $weekDay = $weekDay % 7;
+                if(($this->config->project->weekend == 2 and $weekDay == 6) or $weekDay == 0) $days --;
+            }
         }
 
         $this->view->title      = $this->lang->report->workload;
@@ -150,7 +154,7 @@ class report extends control
         $this->view->users    = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
         $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
         $this->view->begin    = $begin;
-        $this->view->end      = $end;
+        $this->view->end      = date('Y-m-d', strtotime($end) - 24 * 3600);
         $this->view->days     = $days;
         $this->view->workday  = $workday;
         $this->view->dept     = $dept;
