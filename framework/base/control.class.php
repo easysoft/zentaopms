@@ -1,7 +1,8 @@
-<?php
-/**
+<?php /**
  * ZenTaoPHP的baseControl类。
  * The baseControl class file of ZenTaoPHP framework.
+ *
+ * @package framework
  *
  * The author disclaims copyright to this source code.  In place of
  * a legal notice, here is a blessing:
@@ -9,13 +10,6 @@
  *  May you do good and not evil.
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
- */
-
-/**
- * baseControl基类.
- * The base class of control.
- *
- * @package framework
  */
 class baseControl
 {
@@ -254,8 +248,8 @@ class baseControl
     }
 
     /**
-     * set the method name.
      * 设置方法名。
+     * Set the method name.
      * 
      * @param   string  $methodName   方法名，如果为空，则从$app中获取。The method name, if empty, get it from $app.   
      * @access  public
@@ -279,7 +273,7 @@ class baseControl
     {
         if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($appName))    $appName    = $this->appName;
-        $modelFile = helper::setModelFile($moduleName, $appName);
+        $modelFile = $this->app->setModelFile($moduleName, $appName);
 
         /**
          * 如果没有model文件，尝试加载config配置信息。
@@ -287,7 +281,7 @@ class baseControl
          */
         if(!helper::import($modelFile)) 
         {
-            $this->app->loadConfig($moduleName, $appName, false);
+            $this->app->loadModuleConfig($moduleName, $appName, false);
             $this->app->loadLang($moduleName, $appName);
             $this->dao = new dao();
             return false;
@@ -308,7 +302,10 @@ class baseControl
          * 初始化model对象，在control对象中可以通过$this->$moduleName来引用。同时将dao对象赋为control对象的成员变量，方便引用。
          * Init the model object thus you can try $this->$moduleName to access it. Also assign the $dao object as a member of control object.
          */
-        $this->$moduleName = new $modelClass($appName);
+        static $singleModule = array();
+        if(!isset($singleModule["$moduleName"])) $singleModule["$moduleName"] = new $modelClass($appName);
+
+        $this->$moduleName = $singleModule["$moduleName"];
         $this->dao = $this->$moduleName->dao;
         return $this->$moduleName;
     }
@@ -327,7 +324,6 @@ class baseControl
         $this->server  = $this->app->server;
         $this->session = $this->app->session;
         $this->cookie  = $this->app->cookie;
-        $this->global  = $this->app->global;
     }
 
     /**
@@ -372,19 +368,24 @@ class baseControl
 
         $modulePath  = $this->app->getModulePath($this->appName, $moduleName);
         $viewExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, 'view');
-        $viewType    = $this->viewType == 'mhtml' ? 'html' : $this->viewType;
 
-        $mainViewFile      = $modulePath . 'view' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
-        $commonExtViewFile = $viewExtPath['common'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
-        $siteExtViewFile   = empty($viewExtPath['site']) ? '' : $viewExtPath['site'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
+        $viewType     = $this->viewType == 'mhtml' ? 'html' : $this->viewType;
+        $mainViewFile = $modulePath . 'view' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
+        $viewFile     = $mainViewFile;
 
-        $viewFile = file_exists($commonExtViewFile) ? $commonExtViewFile : $mainViewFile;
-        $viewFile = (!empty($siteExtViewFile) and file_exists($siteExtViewFile)) ? $siteExtViewFile : $viewFile;
-        if(!is_file($viewFile)) $this->app->triggerError("the view file $viewFile not found", __FILE__, __LINE__, $exit = true);
+        if(!empty($viewExtPath))
+        {
+            $commonExtViewFile = $viewExtPath['common'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
+            $siteExtViewFile   = empty($viewExtPath['site']) ? '' : $viewExtPath['site'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
 
-        $commonExtHookFiles = glob($viewExtPath['common'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
-        $siteExtHookFiles   = empty($viewExtPath['site']) ? '' : glob($viewExtPath['site'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
-        $extHookFiles       = array_merge((array) $commonExtHookFiles, (array) $siteExtHookFiles);
+            $viewFile = file_exists($commonExtViewFile) ? $commonExtViewFile : $mainViewFile;
+            $viewFile = (!empty($siteExtViewFile) and file_exists($siteExtViewFile)) ? $siteExtViewFile : $viewFile;
+            if(!is_file($viewFile)) $this->app->triggerError("the view file $viewFile not found", __FILE__, __LINE__, $exit = true);
+
+            $commonExtHookFiles = glob($viewExtPath['common'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+            $siteExtHookFiles   = empty($viewExtPath['site']) ? '' : glob($viewExtPath['site'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+            $extHookFiles       = array_merge((array) $commonExtHookFiles, (array) $siteExtHookFiles);
+        }
 
         if(!empty($extHookFiles)) return array('viewFile' => $viewFile, 'hookFiles' => $extHookFiles);
         return $viewFile;
@@ -404,9 +405,9 @@ class baseControl
          * 首先找sitecode下的扩展文件，如果没有，再找ext下的扩展文件。 
          * Find extViewFile in ext/_$siteCode/view first, then try ext/view/.
          */
-        if($this->config->site->code)
+        if($this->app->siteCode)
         {
-            $extPath     = dirname(dirname(realpath($viewFile))) . "/ext/_{$this->config->site->code}/view";
+            $extPath     = dirname(dirname(realpath($viewFile))) . "/ext/_{$this->app->siteCode}/view";
             $extViewFile = $extPath . basename($viewFile);
 
             if(file_exists($extViewFile))
@@ -442,8 +443,6 @@ class baseControl
 
         $modulePath   = $this->app->getModulePath($this->appName, $moduleName);
         $cssExtPath   = $this->app->getModuleExtPath($this->appName, $moduleName, 'css') ;
-        $cssMethodExt = $cssExtPath['common'] . $methodName . DS;
-        $cssCommonExt = $cssExtPath['common'] . 'common' . DS;
 
         $css = '';
         $mainCssFile   = $modulePath . 'css' . DS . $this->devicePrefix . 'common.css';
@@ -451,21 +450,27 @@ class baseControl
         if(file_exists($mainCssFile)) $css .= file_get_contents($mainCssFile);
         if(is_file($methodCssFile))   $css .= file_get_contents($methodCssFile);
 
-        $cssExtFiles = glob($cssCommonExt . $this->devicePrefix . '*.css');
-        if(!empty($cssExtFiles) and is_array($cssExtFiles)) foreach($cssExtFiles as $cssFile) $css .= file_get_contents($cssFile);
-
-        $cssExtFiles = glob($cssMethodExt . $this->devicePrefix . '*.css');
-        if(!empty($cssExtFiles) and is_array($cssExtFiles)) foreach($cssExtFiles as $cssFile) $css .= file_get_contents($cssFile);
-
-        if(!empty($cssExtPath['site']))
+        if(!empty($cssExtPath))
         {
-            $cssMethodExt = $cssExtPath['site'] . $methodName . DS;
-            $cssCommonExt = $cssExtPath['site'] . 'common' . DS;
+            $cssMethodExt = $cssExtPath['common'] . $methodName . DS;
+            $cssCommonExt = $cssExtPath['common'] . 'common' . DS;
+
             $cssExtFiles = glob($cssCommonExt . $this->devicePrefix . '*.css');
             if(!empty($cssExtFiles) and is_array($cssExtFiles)) foreach($cssExtFiles as $cssFile) $css .= file_get_contents($cssFile);
 
             $cssExtFiles = glob($cssMethodExt . $this->devicePrefix . '*.css');
             if(!empty($cssExtFiles) and is_array($cssExtFiles)) foreach($cssExtFiles as $cssFile) $css .= file_get_contents($cssFile);
+
+            if(!empty($cssExtPath['site']))
+            {
+                $cssMethodExt = $cssExtPath['site'] . $methodName . DS;
+                $cssCommonExt = $cssExtPath['site'] . 'common' . DS;
+                $cssExtFiles = glob($cssCommonExt . $this->devicePrefix . '*.css');
+                if(!empty($cssExtFiles) and is_array($cssExtFiles)) foreach($cssExtFiles as $cssFile) $css .= file_get_contents($cssFile);
+
+                $cssExtFiles = glob($cssMethodExt . $this->devicePrefix . '*.css');
+                if(!empty($cssExtFiles) and is_array($cssExtFiles)) foreach($cssExtFiles as $cssFile) $css .= file_get_contents($cssFile);
+            }
         }
 
         return $css;
@@ -487,8 +492,6 @@ class baseControl
 
         $modulePath  = $this->app->getModulePath($this->appName, $moduleName);
         $jsExtPath   = $this->app->getModuleExtPath($this->appName, $moduleName, 'js');
-        $jsMethodExt = $jsExtPath['common'] . $methodName . DS;
-        $jsCommonExt = $jsExtPath['common'] . 'common' . DS;
 
         $js = '';
         $mainJsFile   = $modulePath . 'js' . DS . $this->devicePrefix . 'common.js';
@@ -496,24 +499,30 @@ class baseControl
         if(file_exists($mainJsFile))   $js .= file_get_contents($mainJsFile);
         if(is_file($methodJsFile))     $js .= file_get_contents($methodJsFile);
 
-        $jsExtFiles = glob($jsCommonExt . $this->devicePrefix . '*.js');
-        if(!empty($jsExtFiles) and is_array($jsExtFiles)) foreach($jsExtFiles as $jsFile) $js .= file_get_contents($jsFile);
-
-        $jsExtFiles = glob($jsMethodExt . $this->devicePrefix . '*.js');
-        if(!empty($jsExtFiles) and is_array($jsExtFiles)) foreach($jsExtFiles as $jsFile) $js .= file_get_contents($jsFile);
-
-        if(!empty($jsExtPath['site']))
+        if(!empty($jsExtPath))
         {
-            $jsMethodExt = $jsExtPath['site'] . $methodName . DS;
-            $jsCommonExt = $jsExtPath['site'] . 'common' . DS;
+            $jsMethodExt = $jsExtPath['common'] . $methodName . DS;
+            $jsCommonExt = $jsExtPath['common'] . 'common' . DS;
 
             $jsExtFiles = glob($jsCommonExt . $this->devicePrefix . '*.js');
             if(!empty($jsExtFiles) and is_array($jsExtFiles)) foreach($jsExtFiles as $jsFile) $js .= file_get_contents($jsFile);
 
             $jsExtFiles = glob($jsMethodExt . $this->devicePrefix . '*.js');
             if(!empty($jsExtFiles) and is_array($jsExtFiles)) foreach($jsExtFiles as $jsFile) $js .= file_get_contents($jsFile);
-        }
 
+            if(!empty($jsExtPath['site']))
+            {
+                $jsMethodExt = $jsExtPath['site'] . $methodName . DS;
+                $jsCommonExt = $jsExtPath['site'] . 'common' . DS;
+
+                $jsExtFiles = glob($jsCommonExt . $this->devicePrefix . '*.js');
+                if(!empty($jsExtFiles) and is_array($jsExtFiles)) foreach($jsExtFiles as $jsFile) $js .= file_get_contents($jsFile);
+
+                $jsExtFiles = glob($jsMethodExt . $this->devicePrefix . '*.js');
+                if(!empty($jsExtFiles) and is_array($jsExtFiles)) foreach($jsExtFiles as $jsFile) $js .= file_get_contents($jsFile);
+            }
+        }
+        
         return $js;
     }
 
@@ -588,7 +597,7 @@ class baseControl
         $output['data']   = json_encode($this->view);
         $output['md5']    = md5(json_encode($this->view));
 
-        $this->output     = json_encode($output);
+        $this->output = json_encode($output);
     }
 
     /**
@@ -659,6 +668,10 @@ class baseControl
      */
     public function fetch($moduleName = '', $methodName = '', $params = array(), $appName = '')
     {
+        /**
+         * 如果模块名为空，则调用该模块、该方法。
+         * If the module name is empty, then use the current module and method.
+         */
         if($moduleName == '') $moduleName = $this->moduleName;
         if($methodName == '') $methodName = $this->methodName;
         if($appName == '')    $appName    = $this->appName;
@@ -668,20 +681,47 @@ class baseControl
             return $this->output;
         }
 
+        $currentModuleName = $this->moduleName;
+        $currentMethodName = $this->methodName;
+        $currentAppName    = $this->appName;
+
+        /**
+         * 设置调用指定模块的指定方法。
+         * chang the dir to the previous.
+         */
+        $this->app->setModuleName($moduleName);
+        $this->app->setMethodName($methodName);
+
+        if(!is_array($params)) parse_str($params, $params);
+        $currentPWD = getcwd();
+
         /**
          * 设置引用的文件和路径。
          * Set the pathes and files to included.
-         **/
+         */
         $modulePath        = $this->app->getModulePath($appName, $moduleName);
         $moduleControlFile = $modulePath . 'control.php';
         $actionExtPath     = $this->app->getModuleExtPath($appName, $moduleName, 'control');
+        $file2Included     = $moduleControlFile;
 
-        $commonActionExtFile = $actionExtPath['common'] . strtolower($methodName) . '.php';
-        $file2Included       = file_exists($commonActionExtFile) ? $commonActionExtFile : $moduleControlFile;
-        if(!empty($actionExtPath['site']))
+        if(!empty($actionExtPath))
         {
-            $siteActionExtFile = $actionExtPath['site'] . strtolower($methodName) . '.php';
-            $file2Included     = file_exists($siteActionExtFile) ? $siteActionExtFile : $file2Included;
+            /**
+             * 设置公共扩展。
+             * set common extension.
+             */
+            $commonActionExtFile = $actionExtPath['common'] . strtolower($methodName) . '.php';
+            $file2Included       = file_exists($commonActionExtFile) ? $commonActionExtFile : $moduleControlFile;
+
+            if(!empty($actionExtPath['site']))
+            {
+                /**
+                 * 设置站点扩展。
+                 * every site has it's extension.
+                 */
+                $siteActionExtFile = $actionExtPath['site'] . strtolower($methodName) . '.php';
+                $file2Included     = file_exists($siteActionExtFile) ? $siteActionExtFile : $file2Included;
+            }
         }
 
         /**
@@ -689,7 +729,6 @@ class baseControl
          * Load the control file. 
          */
         if(!is_file($file2Included)) $this->app->triggerError("The control file $file2Included not found", __FILE__, __LINE__, $exit = true);
-        $currentPWD = getcwd();
         chdir(dirname($file2Included));
         if($moduleName != $this->moduleName) helper::import($file2Included);
 
@@ -704,7 +743,6 @@ class baseControl
          * 解析参数，创建模块control对象。
          * Parse the params, create the $module control object. 
          */
-        if(!is_array($params)) parse_str($params, $params);
         $module = new $className($moduleName, $methodName, $appName);
 
         /**
@@ -715,13 +753,70 @@ class baseControl
         call_user_func_array(array($module, $methodName), $params);
         $output = ob_get_contents();
         ob_end_clean();
+        
+        unset($module);
+
+        /**
+         * 切换回之前的模块和方法。
+         * Chang the module、method to the previous.
+         */
+        $this->app->setModuleName($currentModuleName);
+        $this->app->setMethodName($currentMethodName);
+
+        $currentClassName = class_exists("my$currentModuleName") ? "my$currentModuleName" : $currentModuleName;
+        if(!class_exists($currentClassName)) $this->app->triggerError(" The class $currentClassName not found", __FILE__, __LINE__, $exit = true);
+
+        /* include default value for module*/
+        $defaultValueFiles = glob($this->app->getTmpRoot() . "defaultvalue/*.php");
+        if($defaultValueFiles) foreach($defaultValueFiles as $file) include $file;
+
+        /* 
+         * 使用反射机制获取函数参数的默认值。
+         * Get the default settings of the method to be called using the reflecting. 
+         *
+         * */
+        $defaultParams = array();
+        $methodReflect = new reflectionMethod($currentClassName, $currentMethodName);
+        foreach($methodReflect->getParameters() as $param)
+        {
+            $name = $param->getName();
+
+            $default = '_NOT_SET';
+            if(isset($paramDefaultValue[$currentAppName][$currentClassName][$currentMethodName][$name]))
+            {
+                $default = $paramDefaultValue[$currentAppName][$currentClassName][$currentMethodName][$name];
+            }
+            elseif(isset($paramDefaultValue[$currentClassName][$currentMethodName][$name]))
+            {
+                $default = $paramDefaultValue[$currentClassName][$currentMethodName][$name];
+            }
+            elseif($param->isDefaultValueAvailable())
+            {
+                $default = $param->getDefaultValue();
+            }
+
+            $defaultParams[$name] = $default;
+        }
+
+        /** 
+         * 根据PATH_INFO或者GET方式设置请求的参数。
+         * Set params according PATH_INFO or GET.
+         */
+        if($this->config->requestType != 'GET')
+        {
+            $this->app->setParamsByPathInfo($defaultParams);
+        }
+        else
+        {
+            $this->app->setParamsByGET($defaultParams);
+        }
+
+        chdir($currentPWD);
 
         /**
          * 返回内容。
          * Return the content. 
          */
-        unset($module);
-        chdir($currentPWD);
         return $output;
     }
 
@@ -754,7 +849,7 @@ class baseControl
         if($type != 'json') die();
 
         $data = (array) $data;
-        if(helper::isAjaxRequest()) print(json_encode($data)) and die(helper::removeUTF8Bom(ob_get_clean()));
+        if(helper::isAjaxRequest() or $this->viewType == 'json') print(json_encode($data)) and die(helper::removeUTF8Bom(ob_get_clean()));
 
         /**
          * 响应非ajax的请求。

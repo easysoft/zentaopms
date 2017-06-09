@@ -112,3 +112,15 @@ class helper extends baseHelper
         return $string;
     }
 }
+
+/**
+ * 检查是否是onlybody模式。
+ * Check exist onlybody param.
+ * 
+ * @access public
+ * @return void
+ */
+function isonlybody()
+{
+    return helper::inOnlyBodyMode();
+}

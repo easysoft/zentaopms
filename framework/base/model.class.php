@@ -3,19 +3,14 @@
  * ZenTaoPHP的baseModel类。
  * The baseModel class file of ZenTaoPHP framework.
  *
+ * @package framework
+ *
  * The author disclaims copyright to this source code.  In place of
  * a legal notice, here is a blessing:
  * 
  *  May you do good and not evil.
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
- */
-
-/**
- * baseModel基类。
- * The base class of model.
- * 
- * @package framework
  */
 class baseModel
 {
@@ -150,8 +145,8 @@ class baseModel
         $this->appName = empty($appName) ? $this->app->getAppName() : $appName;
 
         $moduleName = $this->getModuleName();
-        $this->app->loadLang($moduleName, $this->appName);
-        $this->app->loadConfig($moduleName, $this->appName, $exitIfNone = false);
+        if($this->config->framework->multiLanguage) $this->app->loadLang($moduleName, $this->appName);
+        if($moduleName != 'common') $this->app->loadModuleConfig($moduleName, $this->appName, $exitIfNone = false);
 
         $this->loadDAO();
         $this->setSuperVars();
@@ -196,7 +191,6 @@ class baseModel
         $this->server  = $this->app->server;
         $this->cookie  = $this->app->cookie;
         $this->session = $this->app->session;
-        $this->global  = $this->app->global;
     }
 
     /**
@@ -213,7 +207,7 @@ class baseModel
     {
         if(empty($moduleName)) return false;
         if(empty($appName)) $appName = $this->appName;
-        $modelFile = helper::setModelFile($moduleName, $appName);
+        $modelFile = $this->app->setModelFile($moduleName, $appName);
 
         if(!helper::import($modelFile)) return false;
         $modelClass = class_exists('ext' . $appName . $moduleName. 'model') ? 'ext' . $appName . $moduleName . 'model' : $appName . $moduleName . 'model';
@@ -228,8 +222,17 @@ class baseModel
     }
 
     /**
-     * 加载model的class扩展。
-     * Load extension class of a model. Saved to $moduleName/ext/model/class/$extensionName.class.php.
+     * 加载model的class扩展，主要是为了开发加密代码使用。
+     * 可以将主要的逻辑存放到$moduleName/ext/model/class/$extensionName.class.php中。
+     * 然后在ext/model/$extension.php的扩展里面使用$this->loadExtension()来调用相应的方法。
+     * ext/model/class/*.class.php代码可以加密。而ext/model/*.php可以不用加密。
+     * 因为框架对model的扩展是采取合并文件的方式，ext/model/*.php文件不能加密。
+     *
+     * Load extension class of a model thus user can encrypt the code.
+     * You can put the main extension logic codes in $moduleName/ext/model/class/$extensionName.class.php.
+     * And call them by the ext/model/$extension.php like this: $this->loadExtension('myextension')->method().
+     * You can encrypt the code in ext/model/class/*.class.php.
+     * Because the framework will merge the extension files in ext/model/*.php to the module/model.php.
      * 
      * @param  string $extensionName 
      * @param  string $moduleName 
@@ -240,22 +243,22 @@ class baseModel
     {
         if(empty($extensionName)) return false;
 
-        /* Set extenson name and extension file. */
+        /* 设置扩展的名字和相应的文件。Set extenson name and extension file. */
         $extensionName = strtolower($extensionName);
         $moduleName    = $moduleName ? $moduleName : $this->getModuleName();
         $moduleExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, 'model');
-        if(!empty($moduleExtPath['site']))$extensionFile = $moduleExtPath['site'] . 'class/' . $extensionName . '.class.php';
+        if(!empty($moduleExtPath['site'])) $extensionFile = $moduleExtPath['site'] . 'class/' . $extensionName . '.class.php';
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['common'] . 'class/' . $extensionName . '.class.php';
 
-        /* Try to import parent model file auto and then import the extension file. */
+        /* 载入父类。Try to import parent model file auto and then import the extension file. */
         if(!class_exists($moduleName . 'Model')) helper::import($this->app->getModulePath($this->appName, $moduleName) . 'model.php');
         if(!helper::import($extensionFile)) return false;
 
-        /* Set the extension class name. */
+        /* 设置扩展类的名字。Set the extension class name. */
         $extensionClass = $extensionName . ucfirst($moduleName);
         if(!class_exists($extensionClass)) return false;
 
-        /* Create an instance of the extension class and return it. */
+        /* 实例化扩展类。Create an instance of the extension class and return it. */
         $extensionObject = new $extensionClass;
         $extensionClass  = str_replace('Model', '', $extensionClass);
         $this->$extensionClass = $extensionObject;
@@ -275,7 +278,7 @@ class baseModel
     }
 
     /**
-     * 删除记录
+     * 删除记录。
      * Delete one record.
      * 
      * @param  string    $table  the table name
