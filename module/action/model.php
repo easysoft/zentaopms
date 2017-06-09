@@ -43,8 +43,11 @@ class actionModel extends model
         $action->actor      = $actor;
         $action->action     = $actionType;
         $action->date       = helper::now();
-        $action->comment    = $this->loadModel('file')->pasteImage(trim(strip_tags($comment, $this->config->allowedTags)), $this->post->uid);
+        $action->comment    = trim(strip_tags($comment, $this->config->allowedTags));
         $action->extra      = $extra;
+
+        /* Process action. */
+        $action = $this->loadModel('file')->processEditor($action, 'comment', $this->post->uid);
 
         /* Get product and project for this object. */
         $productAndProject  = $this->getProductAndProject($action->objectType, $objectID);
@@ -886,11 +889,15 @@ class actionModel extends model
      */
     public function updateComment($actionID)
     {
-        $comment = $this->loadModel('file')->pasteImage(trim(strip_tags($this->post->lastComment, $this->config->allowedTags)), $this->post->uid);
         $action = $this->getById($actionID);
+        $action->comment = trim(strip_tags($this->post->lastComment, $this->config->allowedTags));
+
+        /* Process action. */
+        $action = $this->loadModel('file')->processEditor($action, 'comment', $this->post->uid);
+
         $this->dao->update(TABLE_ACTION)
             ->set('date')->eq(helper::now())
-            ->set('comment')->eq($comment)
+            ->set('comment')->eq($action->comment)
             ->where('id')->eq($actionID)
             ->exec();
         $this->file->updateObjectID($this->post->uid, $action->objectID, $action->objectType);

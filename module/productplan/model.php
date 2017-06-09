@@ -24,7 +24,8 @@ class productplanModel extends model
     public function getByID($planID, $setImgSize = false)
     {
         $plan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
-        if($setImgSize) $plan->desc = $this->loadModel('file')->setImgSize($plan->desc);
+        $plan = $this->loadModel('file')->revertRealSRC($plan, 'desc');
+        if($setImgSize) $plan->desc = $this->file->setImgSize($plan->desc);
         return $plan;
     }
 
@@ -161,7 +162,7 @@ class productplanModel extends model
      */
     public function update($planID)
     {
-        $oldPlan = $this->getById($planID);
+        $oldPlan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)->remove('delta,uid')->get();
         $plan = $this->loadModel('file')->processEditor($plan, $this->config->plan->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCTPLAN)

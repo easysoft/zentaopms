@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  * The model file of story module of ZenTaoPMS.
  *
@@ -33,7 +33,8 @@ class storyModel extends model
         $story->spec   = isset($spec->spec)   ? $spec->spec   : '';
         $story->verify = isset($spec->verify) ? $spec->verify : '';
 
-        if($setImgSize) $story->spec   = $this->loadModel('file')->setImgSize($story->spec);
+        $story = $this->loadModel('file')->revertRealSRC($story, 'spec,verify');
+        if($setImgSize) $story->spec   = $this->file->setImgSize($story->spec);
         if($setImgSize) $story->verify = $this->file->setImgSize($story->verify);
 
         $story->projects = $this->dao->select('t1.project, t2.name, t2.status')->from(TABLE_PROJECTSTORY)->alias('t1')
@@ -326,8 +327,8 @@ class storyModel extends model
                         {
                             $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
-                            $url = $this->file->webPath . $file['pathname'];
-                            $specData->spec .= '<img src="' . $url . '" alt="" />';
+                            $fileID = $this->dao->lastInsertID();
+                            $specData->spec .= '<img src="{' . $fileID . '}" alt="" />';
                         }
                         else
                         {
@@ -370,8 +371,8 @@ class storyModel extends model
     public function change($storyID)
     {
         $specChanged = false;
-        $oldStory    = $this->getById($storyID);
-        if(isset($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate)
+        $oldStory    = $this->dao->findById((int)$storyID)->from(TABLE_STORY)->fetch();
+        if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
             return false;
@@ -435,8 +436,8 @@ class storyModel extends model
     public function update($storyID)
     {
         $now      = helper::now();
-        $oldStory = $this->getById($storyID);
-        if(isset($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate)
+        $oldStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+        if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
             return false;

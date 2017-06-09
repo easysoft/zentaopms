@@ -305,7 +305,7 @@ class projectModel extends model
      */
     public function update($projectID)
     {
-        $oldProject = $this->getById($projectID);
+        $oldProject = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
         $team = $this->getTeamMemberPairs($projectID);
         $this->lang->project->team = $this->lang->project->teamname;
         $projectID = (int)$projectID;
@@ -903,7 +903,8 @@ class projectModel extends model
         $project->totalConsumed = round($total->totalConsumed, 1);
         $project->totalLeft     = round($total->totalLeft, 1);
 
-        if($setImgSize) $project->desc = $this->loadModel('file')->setImgSize($project->desc);
+        $project = $this->loadModel('file')->revertRealSRC($project, 'desc');
+        if($setImgSize) $project->desc = $this->file->setImgSize($project->desc);
 
         return $project;
     }

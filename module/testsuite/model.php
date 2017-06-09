@@ -177,7 +177,8 @@ class testsuiteModel extends model
     public function getById($suiteID, $setImgSize = false)
     {
         $suite = $this->dao->select("*")->from(TABLE_TESTSUITE)->where('id')->eq((int)$suiteID)->fetch();
-        if($setImgSize) $suite->desc = $this->loadModel('file')->setImgSize($suite->desc);
+        $suite = $this->loadModel('file')->revertRealSRC($suite, 'desc');
+        if($setImgSize) $suite->desc = $this->file->setImgSize($suite->desc);
         return $suite;
     }
 
@@ -190,7 +191,7 @@ class testsuiteModel extends model
      */
     public function update($suiteID)
     {
-        $oldSuite = $this->getById($suiteID);
+        $oldSuite = $this->dao->select("*")->from(TABLE_TESTSUITE)->where('id')->eq((int)$suiteID)->fetch();
         $suite    = fixer::input('post')
             ->stripTags($this->config->testsuite->editor->edit['id'], $this->config->allowedTags)
             ->add('lastEditedBy', $this->app->user->account)

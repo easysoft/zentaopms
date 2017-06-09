@@ -194,8 +194,8 @@ class taskModel extends model
      */
     public function update($taskID)
     {
-        $oldTask = $this->getById($taskID);
-        if(isset($_POST['lastEditedDate']) and $oldTask->lastEditedDate != $this->post->lastEditedDate)
+        $oldTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq((int)$taskID)->fetch();
+        if(!empty($_POST['lastEditedDate']) and $oldTask->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
             return false;
@@ -313,9 +313,10 @@ class taskModel extends model
         }
 
         /* Initialize tasks from the post data.*/
+        $oldTasks = $taskIDList ? $this->getByList($taskIDList) : array();
         foreach($taskIDList as $taskID)
         {
-            $oldTask = $this->getById($taskID);
+            $oldTask = $oldTasks[$taskID];
 
             $task = new stdclass();
             $task->color          = $data->colors[$taskID];
@@ -807,13 +808,15 @@ class taskModel extends model
             ->where('t1.id')->eq((int)$taskID)
             ->fetch();
         if(!$task) return false;
-        if($setImgSize) $task->desc = $this->loadModel('file')->setImgSize($task->desc);
+
+        $task = $this->loadModel('file')->revertRealSRC($task, 'desc');
+        if($setImgSize) $task->desc = $this->file->setImgSize($task->desc);
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
         foreach($task as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $task->$key = '';
         $task->files = $this->loadModel('file')->getByObject('task', $taskID);
 
         /* Get related test cases. */
-        if($task->story) $task->cases = $this->dao->select('id, title')->from(TABLE_CASE)->where('story')->eq($task->story)->andWhere('storyVersion')->eq($task->storyVersion)->fetchPairs();
+        if($task->story) $task->cases = $this->dao->select('id, title')->from(TABLE_CASE)->where('story')->eq($task->story)->andWhere('storyVersion')->eq($task->storyVersion)->andWhere('deleted')->eq('0')->fetchPairs();
 
         return $this->processTask($task);
     }

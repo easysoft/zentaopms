@@ -23,7 +23,6 @@ class commonModel extends model
         if(!defined('FIRST_RUN'))
         {
             define('FIRST_RUN', true);
-            $this->startSession();
             $this->sendHeader();
             $this->setCompany();
             $this->setUser();
@@ -32,19 +31,6 @@ class commonModel extends model
             if(!$this->checkIP()) die($this->lang->ipLimited);
             $this->app->loadLang('company');
         }
-    }
-
-    /**
-     * Start the session.
-     * 
-     * @access public
-     * @return void
-     */
-    public function startSession()
-    {
-        session_name($this->config->sessionVar);
-        if(isset($_GET[$this->config->sessionVar])) session_id($_GET[$this->config->sessionVar]);
-        session_start();
     }
 
     /**
@@ -126,8 +112,8 @@ class commonModel extends model
         $this->config->personal = isset($config[$account]) ? $config[$account] : array();
 
         /* Overide the items defined in config/config.php and config/my.php. */
-        if(isset($this->config->system->common)) helper::mergeConfig($this->config->system->common, 'common');
-        if(isset($this->config->personal->common)) helper::mergeConfig($this->config->personal->common, 'common');
+        if(isset($this->config->system->common)) $this->app->mergeConfig($this->config->system->common, 'common');
+        if(isset($this->config->personal->common)) $this->app->mergeConfig($this->config->personal->common, 'common');
     }
 
     /**
@@ -169,6 +155,7 @@ class commonModel extends model
         if($module == 'sso' and $method == 'bind') return true;
         if($module == 'sso' and $method == 'gettodolist') return true;
         if($module == 'block' and $method == 'main') return true;
+        if($module == 'file' and $method == 'read') return true;
 
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {

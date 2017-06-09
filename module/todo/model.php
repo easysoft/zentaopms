@@ -114,7 +114,7 @@ class todoModel extends model
      */
     public function update($todoID)
     {
-        $oldTodo = $this->getById($todoID);
+        $oldTodo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
         if($oldTodo->type == 'bug' or $oldTodo->type == 'task') $oldTodo->name = '';
         $todo = fixer::input('post')
             ->cleanInt('date, pri, begin, end, private')
@@ -171,9 +171,10 @@ class todoModel extends model
                 $todos[$todoID] = $todo;
             }
 
+            $oldTodos = $this->dao->select('*')->from(TABLE_TODO)->where('id')->in(array_keys($todos))->fetchAll('id');
             foreach($todos as $todoID => $todo)
             {
-                $oldTodo = $this->getById($todoID);
+                $oldTodo = $oldTodos[$todoID];
                 if($oldTodo->type == 'bug' or $oldTodo->type == 'task') $oldTodo->name = '';
                 $this->dao->update(TABLE_TODO)->data($todo)
                     ->autoCheck()
@@ -226,7 +227,8 @@ class todoModel extends model
     {
         $todo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
         if(!$todo) return false;
-        if($setImgSize) $todo->desc = $this->loadModel('file')->setImgSize($todo->desc);
+        $todo = $this->loadModel('file')->revertRealSRC($todo, 'desc');
+        if($setImgSize) $todo->desc = $this->file->setImgSize($todo->desc);
         if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
         if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
         $todo->date = str_replace('-', '', $todo->date);

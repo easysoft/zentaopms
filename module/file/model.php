@@ -68,7 +68,7 @@ class fileModel extends model
     {
         $file = $this->dao->findById($fileID)->from(TABLE_FILE)->fetch();
         $file->webPath  = $this->webPath . $file->pathname;
-        $file->realPath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . $file->pathname;
+        $file->realPath = $this->savePath . $file->pathname;
         return $file;
     }
 
@@ -92,7 +92,8 @@ class fileModel extends model
         foreach($files as $id => $file)
         {
             if($file['size'] == 0) continue;
-            move_uploaded_file($file['tmpname'], $this->savePath . $file['pathname']);
+            if(!move_uploaded_file($file['tmpname'], $this->savePath . $file['pathname'])) return false;
+
             $file = $this->compressImage($file);
 
             $file['objectType'] = $objectType;
@@ -144,6 +145,7 @@ class fileModel extends model
             {
                 if(empty($filename)) continue;
                 if(!validater::checkFileName($filename)) continue;
+
                 $title             = isset($_POST[$labelsName][$id]) ? $_POST[$labelsName][$id] : '';
                 $file['extension'] = $this->getExtension($filename);
                 $file['pathname']  = $this->setPathName($id, $file['extension']);
@@ -151,7 +153,13 @@ class fileModel extends model
                 $file['title']     = $purifier->purify($file['title']);
                 $file['size']      = $size[$id];
                 $file['tmpname']   = $tmp_name[$id];
-                $files[]           = $file;
+
+                if(stripos($this->config->file->allowed, ',' . $file['extension'] . ',') === false)
+                {
+                    $file['pathname'] = $file['pathname'] . '.notAllowed';
+                }
+
+                $files[] = $file;
             }
         }
         else
@@ -166,6 +174,12 @@ class fileModel extends model
             $file['title']     = $purifier->purify($file['title']);
             $file['size']      = $size;
             $file['tmpname']   = $tmp_name;
+
+            if(stripos($this->config->file->allowed, ',' . $file['extension'] . ',') === false)
+            {
+                $file['pathname'] = $file['pathname'] . '.notAllowed';
+            }
+
             return array($file);
         }
         return $files;
@@ -203,6 +217,11 @@ class fileModel extends model
         $file['chunkpath'] = 'chunks' . DS .'f_' . $file['uuid'] . '.' . $file['extension'] . '.part';
         $file['chunks']    = isset($_POST['chunks']) ? intval($_POST['chunks']) : 0;
         $file['chunk']     = isset($_POST['chunk'])  ? intval($_POST['chunk'])  : 0;
+
+        if(stripos($this->config->file->allowed, ',' . $file['extension'] . ',') === false)
+        {
+            $file['pathname'] = $file['pathname'] . '.notAllowed';
+        }
 
         return $file;
     }
@@ -284,7 +303,7 @@ class fileModel extends model
     public function getExtension($filename)
     {
         $extension = trim(strtolower(pathinfo($filename, PATHINFO_EXTENSION)));
-        if(empty($extension) or strpos(",{$this->config->file->dangers},", ",{$extension},") !== false) return 'txt';
+        if(empty($extension) or stripos(",{$this->config->file->dangers},", ",{$extension},") !== false) return 'txt';
         if($extension == 'php') return 'txt';
         return $extension;
     }
@@ -339,7 +358,7 @@ class fileModel extends model
     {
         $sessionID  = session_id();
         $randString = substr($sessionID, mt_rand(0, strlen($sessionID) - 5), 3);
-        return date('Ym/dHis', $this->now) . $fileID . mt_rand(0, 10000) . $randString . '.' . $extension;
+        return date('Ym/dHis', $this->now) . $fileID . mt_rand(0, 10000) . $randString;
     }
 
     /**
@@ -380,7 +399,13 @@ class fileModel extends model
      */
     public function setImgSize($content, $maxSize = 0)
     {
-        return str_replace('src="data/upload', 'onload="setImageSize(this,' . $maxSize . ')" src="data/upload', $content);
+        if(empty($content)) return $content;
+
+        $readLinkReg = htmlspecialchars(str_replace(array('%fileID%', '/', '?'), array('[0-9]+', '\/', '\?'), helper::createLink('file', 'read', 'fileID=(%fileID%)')));
+
+        $content = preg_replace('/ src="(' . $readLinkReg . ')" /', ' onload="setImageSize(this,' . $maxSize . ')" src="$1" ', $content);
+        $content = preg_replace('/ src="{([0-9]+)}" /', ' onload="setImageSize(this,' . $maxSize . ')" src="' . helper::createLink('file', 'read', "fileID=$1")  . '" ', $content);
+        return str_replace(' src="data/upload', ' onload="setImageSize(this,' . $maxSize . ')" src="data/upload', $content);
     }
 
     /**
@@ -446,9 +471,10 @@ class fileModel extends model
 
             file_put_contents($this->savePath . $file['pathname'], $imageData);
             $this->dao->insert(TABLE_FILE)->data($file)->exec();
-            if($uid) $_SESSION['album'][$uid][] = $this->dao->lastInsertID();
+            $fileID = $this->dao->lastInsertID();
+            if($uid) $_SESSION['album'][$uid][] = $fileID;
 
-            $data = str_replace($out[1][$key], $this->webPath . $file['pathname'], $data);
+            $data = str_replace($out[1][$key], helper::createLink('file', 'read', "fileID=$fileID"), $data);
         }
 
         return $data;
@@ -579,11 +605,13 @@ class fileModel extends model
      */
     public function processEditor($data, $editorList, $uid = '')
     {
-        foreach(explode(',', $editorList) as $editorID)
+        if(is_string($editorList)) $editorList = explode(',', str_replace(' ', '', $editorList));
+        $readLinkReg = htmlspecialchars(str_replace(array('%fileID%', $this->app->getWebRoot(), '/', '?'), array('[0-9]+', '', '\/', '\?'), helper::createLink('file', 'read', 'fileID=(%fileID%)')));
+        foreach($editorList as $editorID)
         {
-            $editorID = trim($editorID);
-            if(empty($editorID) or !isset($data->$editorID)) continue;
+            if(empty($editorID) or empty($data->$editorID)) continue;
             $data->$editorID = $this->pasteImage($data->$editorID, $uid);
+            $data->$editorID = preg_replace("/ src=\"$readLinkReg\" /", ' src="{$1}" ', $data->$editorID);
         }
         return $data;
     }
@@ -706,5 +734,25 @@ class fileModel extends model
             unset($_SESSION['album'][$uid]);
             return !dao::isError();
         }
+    }
+
+    /**
+     * Revert real src. 
+     * 
+     * @param  object    $data 
+     * @param  string    $fields 
+     * @access public
+     * @return object
+     */
+    public function revertRealSRC($data, $fields)
+    {
+        if(is_string($fields)) $fields = explode(',', str_replace(' ', '', $fields));
+        foreach($fields as $field)
+        {
+            if(empty($field) or empty($data->$field)) continue;
+            $data->$field = preg_replace('/ src="{([0-9]+)}" /', ' src="' . helper::createLink('file', 'read', "fileID=$1")  . '" ', $data->$field);
+        }
+        return $data;
+
     }
 }

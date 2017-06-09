@@ -26,6 +26,7 @@ class blockModel extends model
         $block = $id ? $this->getByID($id) : null;
         $data = fixer::input('post')
             ->add('account', $this->app->user->account)
+            ->stripTags('html', $this->config->allowedTags)
             ->setIF($id, 'id', $id)
             ->add('order', $block ? $block->order : ($this->getLastKey($module) + 1))
             ->add('module', $module)
@@ -39,8 +40,11 @@ class blockModel extends model
 
         if($type == 'html')
         {
+            $uid  = $this->post->uid;
+            $data = $this->loadModel('file')->processEditor($data, 'html', $uid);
             $data->params['html'] = $data->html;
             unset($data->html);
+            unset($_SESSION['album'][$uid]);
         }
 
         $data->params = helper::jsonEncode($data->params);
@@ -63,6 +67,7 @@ class blockModel extends model
 
         $block->params = json_decode($block->params);
         if(empty($block->params)) $block->params = new stdclass();
+        if($block->block == 'html') $block->params->html = $this->loadModel('file')->setImgSize($block->params->html);
         return $block;
     }
 

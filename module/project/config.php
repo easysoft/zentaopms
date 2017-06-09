@@ -98,3 +98,15 @@ $config->printKanban->col['wait']   = 2;
 $config->printKanban->col['doing']  = 3;
 $config->printKanban->col['done']   = 4;
 $config->printKanban->col['closed'] = 5;
+
+$config->filterParam->cookie['project']['common']['hold'] = 'lastProject,projectMode';
+$config->filterParam->cookie['project']['task']['hold']   = 'windowWidth,preProjectID,moduleBrowseParam,productBrowseParam,projectTaskOrder';
+$config->filterParam->cookie['project']['story']['hold']  = 'projectStoryOrder';
+$config->filterParam->cookie['project']['common']['params']['lastProject']['int']      = '';
+$config->filterParam->cookie['project']['common']['params']['projectMode']['code']     = '';
+$config->filterParam->cookie['project']['task']['params']['windowWidth']['int']        = '';
+$config->filterParam->cookie['project']['task']['params']['preProjectID']['int']       = '';
+$config->filterParam->cookie['project']['task']['params']['moduleBrowseParam']['int']  = '';
+$config->filterParam->cookie['project']['task']['params']['productBrowseParam']['int'] = '';
+$config->filterParam->cookie['project']['task']['params']['projectTaskOrder']['reg']   = '/^[a-zA-Z0-9_]+$/';
+$config->filterParam->cookie['project']['story']['params']['projectStoryOrder']['reg'] = '/^[a-zA-Z0-9_]+$/';

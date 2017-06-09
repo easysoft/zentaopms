@@ -47,3 +47,9 @@ $config->mail->provider['googlemail.com']       = $config->mail->provider['gmail
 
 $config->mail->provider['263.net']['host']      = 'smtp.263.net';
 $config->mail->provider['263xmail.com']['host'] = 'smtp.263xmail.com';
+
+$config->filterParam->get['mail']['batchdelete']['hold'] = 'idList';
+$config->filterParam->get['mail']['batchdelete']['params']['idList']['reg'] = '/^[0-9\|]+$/';
+
+$config->filterParam->cookie['mail']['ztcloud']['hold'] = 'ztCloudLicense';
+$config->filterParam->cookie['mail']['ztcloud']['params']['ztCloudLicense']['equal'] = 'yes';

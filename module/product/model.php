@@ -180,7 +180,8 @@ class productModel extends model
     public function getById($productID)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProduct();
-        return $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+        $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+        return $this->loadModel('file')->revertRealSRC($product, 'desc');
     }
 
     /**
@@ -225,7 +226,6 @@ class productModel extends model
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 
         $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
-        $mode    .= $this->cookie->productMode;
         $products = $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
             ->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
@@ -321,7 +321,7 @@ class productModel extends model
     public function update($productID)
     {
         $productID  = (int)$productID;
-        $oldProduct = $this->getById($productID);
+        $oldProduct = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         $product = fixer::input('post')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->join('whitelist', ',')

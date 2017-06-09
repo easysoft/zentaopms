@@ -64,8 +64,9 @@ class file extends control
                 unset($file['tmpname']);
                 $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
-                $url = $this->file->webPath . $file['pathname'];
-                if($uid) $_SESSION['album'][$uid][] = $this->dao->lastInsertID();
+                $fileID = $this->dao->lastInsertID();
+                $url    = $this->createLink('file', 'read', "fileID=$fileID");
+                if($uid) $_SESSION['album'][$uid][] = $fileID;
                 die(json_encode(array('error' => 0, 'url' => $url)));
             }
             else
@@ -104,8 +105,9 @@ class file extends control
                 unset($file['tmpname']);
                 $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
-                $url = $this->file->webPath . $file['pathname'];
-                if($uid) $_SESSION['album'][$uid][] = $this->dao->lastInsertID();
+                $fileID = $this->dao->lastInsertID();
+                $url    = $this->createLink('file', 'read', "fileID=$fileID");
+                if($uid) $_SESSION['album'][$uid][] = $fileID;
                 die(json_encode(array('state' => 'SUCCESS', 'url' => $url)));
             }
             else
@@ -468,5 +470,28 @@ class file extends control
     {
         $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)->andWhere('account')->eq($this->app->user->account)->exec();
         die();
+    }
+
+    /**
+     * Read file. 
+     * 
+     * @param  int    $fileID 
+     * @access public
+     * @return void
+     */
+    public function read($fileID)
+    {
+        $file = $this->file->getById($fileID);
+        if(empty($file) or !file_exists($file->realPath)) return false;
+
+        $mime = in_array($file->extension, $this->config->file->imageExtensions) ? "image/{$file->extension}" : $this->config->file->mimes['default'];
+        header("Content-type: $mime");
+
+        $handle = fopen($file->realPath, "r");
+        if($handle)
+        {
+            while(!feof($handle)) echo fgets($handle);
+            fclose($handle);
+        }
     }
 }

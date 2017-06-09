@@ -212,7 +212,7 @@ class searchModel extends model
                 }
                 else
                 {
-                    $params[$fieldName]['values']  = $params[$fieldName]['values'] + array('null' => $this->lang->search->null);
+                    $params[$fieldName]['values'] = $params[$fieldName]['values'] + array('null' => $this->lang->search->null);
                 }
             }
         }

@@ -510,8 +510,8 @@ class testcaseModel extends model
      */
     public function update($caseID)
     {
-        $oldCase     = $this->getById($caseID);
-        if(isset($_POST['lastEditedDate']) and $oldCase->lastEditedDate != $this->post->lastEditedDate)
+        $oldCase = $this->getById($caseID);
+        if(!empty($_POST['lastEditedDate']) and $oldCase->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
             return false;

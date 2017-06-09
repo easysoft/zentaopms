@@ -180,8 +180,8 @@ class bugModel extends model
                         $file['addedDate']  = $now;
                         $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
-                        $url = $this->file->webPath . $file['pathname'];
-                        $bug->steps .= '<img src="' . $url . '" alt="" />';
+                        $fileID = $this->dao->lastInsertID;
+                        $bug->steps .= '<img src="{' . $fileID . '}" alt="" />';
                         unset($file);
                     }
                 }
@@ -361,7 +361,8 @@ class bugModel extends model
             ->where('t1.id')->eq((int)$bugID)->fetch();
         if(!$bug) return false;
 
-        if($setImgSize) $bug->steps = $this->loadModel('file')->setImgSize($bug->steps);
+        $bug = $this->loadModel('file')->revertRealSRC($bug, 'steps');
+        if($setImgSize) $bug->steps = $this->file->setImgSize($bug->steps);
         foreach($bug as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $bug->$key = '';
 
         if($bug->duplicateBug) $bug->duplicateBugTitle = $this->dao->findById($bug->duplicateBug)->from(TABLE_BUG)->fields('title')->fetch('title');
@@ -490,8 +491,8 @@ class bugModel extends model
      */
     public function update($bugID)
     {
-        $oldBug = $this->getById($bugID);
-        if(isset($_POST['lastEditedDate']) and $oldBug->lastEditedDate != $this->post->lastEditedDate)
+        $oldBug = $this->dao->select('*')->from(TABLE_BUG)->where('id')->eq((int)$bugID)->fetch();
+        if(!empty($_POST['lastEditedDate']) and $oldBug->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
             return false;
@@ -587,9 +588,10 @@ class bugModel extends model
             }
 
             /* Initialize bugs from the post data.*/
+            $oldBugs = $bugIDList ? $this->getList($bugIDList) : array();
             foreach($bugIDList as $bugID)
             {
-                $oldBug = $this->getByID($bugID);
+                $oldBug = $oldBugs[$bugID];
 
                 $bug = new stdclass();
                 $bug->lastEditedBy   = $this->app->user->account;
@@ -632,7 +634,7 @@ class bugModel extends model
             /* Update bugs. */
             foreach($bugs as $bugID => $bug)
             {
-                $oldBug = $this->getByID($bugID);
+                $oldBug = $oldBugs[$bugID];
 
                 $this->dao->update(TABLE_BUG)->data($bug)
                     ->autoCheck()

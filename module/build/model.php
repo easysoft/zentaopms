@@ -31,7 +31,8 @@ class buildModel extends model
             ->fetch();
         if(!$build) return false;
 
-        $build->files = $this->loadModel('file')->getByObject('build', $buildID);
+        $build = $this->loadModel('file')->revertRealSRC($build, 'desc');
+        $build->files = $this->file->getByObject('build', $buildID);
         if($setImgSize) $build->desc = $this->file->setImgSize($build->desc);
         return $build;
     }
@@ -224,8 +225,8 @@ class buildModel extends model
      */
     public function update($buildID)
     {
-        $oldBuild = $this->getByID($buildID);
-        $build = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
+        $oldBuild = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq((int)$buildID)->fetch();
+        $build    = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
             ->remove('allchecker,resolvedBy,files,labels,uid')
             ->get();
         if(!isset($build->branch)) $build->branch = $oldBuild->branch;

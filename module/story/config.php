@@ -161,3 +161,6 @@ $config->story->datatable->fieldList['branch']['title']    = 'branch';
 $config->story->datatable->fieldList['branch']['fixed']    = 'left';
 $config->story->datatable->fieldList['branch']['width']    = '100';
 $config->story->datatable->fieldList['branch']['required'] = 'no';
+
+$config->filterParam->cookie['story']['export']['hold'] = 'checkedItem';
+$config->filterParam->cookie['story']['export']['params']['checkedItem']['reg'] = '/^[0-9,]+$/';

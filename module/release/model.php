@@ -33,6 +33,7 @@ class releaseModel extends model
         if(!$release) return false;
 
         $this->loadModel('file');
+        $release = $this->file->revertRealSRC($release, 'desc');
         $release->files = $this->file->getByObject('release', $releaseID);
         if(empty($release->files))$release->files = $this->file->getByObject('build', $release->buildID);
         if($setImgSize) $release->desc = $this->file->setImgSize($release->desc);
@@ -159,7 +160,7 @@ class releaseModel extends model
      */
     public function update($releaseID)
     {
-        $oldRelease = $this->getByID($releaseID);
+        $oldRelease = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq((int)$releaseID)->fetch();
         $branch     = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq($this->post->build)->fetch('branch');
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)

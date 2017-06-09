@@ -164,3 +164,15 @@ $config->testcase->datatable->fieldList['stepNumber']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['stepNumber']['width']    = '80';
 $config->testcase->datatable->fieldList['stepNumber']['required'] = 'no';
 $config->testcase->datatable->fieldList['stepNumber']['sort']     = 'no';
+
+$config->filterParam->cookie['testcase']['common']['hold']    = 'lastProduct,preProductID';
+$config->filterParam->cookie['testcase']['browse']['hold']    = 'preBranch,caseModule,caseSuite';
+$config->filterParam->cookie['testcase']['groupcase']['hold'] = 'preBranch';
+$config->filterParam->cookie['testcase']['export']['hold']    = 'checkedItem';
+$config->filterParam->cookie['testcase']['common']['params']['lastProduct']['int']  = '';
+$config->filterParam->cookie['testcase']['common']['params']['preProductID']['int'] = '';
+$config->filterParam->cookie['testcase']['browse']['params']['preBranch']['int']    = '';
+$config->filterParam->cookie['testcase']['browse']['params']['caseModule']['int']   = '';
+$config->filterParam->cookie['testcase']['browse']['params']['caseSuite']['int']    = '';
+$config->filterParam->cookie['testcase']['groupcase']['params']['preBranch']['int'] = '';
+$config->filterParam->cookie['testcase']['export']['params']['checkedItem']['reg']  = '/^[0-9,]+$/';

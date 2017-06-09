@@ -351,7 +351,9 @@ class docModel extends model
         $doc->digest      = isset($docContent->digest)  ? $docContent->digest  : '';
         $doc->content     = isset($docContent->content) ? $docContent->content : '';
         $doc->contentType = isset($docContent->type)    ? $docContent->type : '';
-        if($setImgSize) $doc->content = $this->loadModel('file')->setImgSize($doc->content);
+
+        $doc = $this->loadModel('file')->revertRealSRC($doc, 'content');
+        if($setImgSize) $doc->content = $this->file->setImgSize($doc->content);
         $doc->files = $docFiles;
 
         $doc->productName = '';
@@ -437,7 +439,7 @@ class docModel extends model
      */
     public function update($docID)
     {
-        $oldDoc = $this->getById($docID);
+        $oldDoc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$docID)->fetch();
         $now = helper::now();
         $doc = fixer::input('post')->setDefault('module', 0)
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)

@@ -46,7 +46,7 @@
   ?>
   </div>
 </div>
-<div class='row-table <?php echo $this->cookie->productPlanSide == 'hide' ? 'hide-side' : ''?>'>
+<div class='row-table'>
   <div class='col-main'>
     <div class='main'>
       <div class='tabs'>
