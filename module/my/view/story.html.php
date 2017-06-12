@@ -64,7 +64,7 @@
         <?php
         common::printIcon('story', 'change',     "storyID=$story->id", $story, 'list', 'random');
         common::printIcon('story', 'review',     "storyID=$story->id", $story, 'list', 'search');
-        common::printIcon('story', 'close',      "storyID=$story->id", $story, 'list', 'off', '', 'text-danger');
+        common::printIcon('story', 'close',      "storyID=$story->id", $story, 'list', 'off', '', 'iframe', true);
         common::printIcon('story', 'edit',       "storyID=$story->id", $story, 'list', 'pencil');
         common::printIcon('story', 'createCase', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", '', 'list', 'sitemap');
         ?>

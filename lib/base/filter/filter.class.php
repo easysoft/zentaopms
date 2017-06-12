@@ -681,7 +681,12 @@ class baseValidater
         if(isset($filterConfig['common']['hold'])) $holdVars .= $filterConfig['common']['hold'] . ',';
         if(isset($filterConfig[$moduleName]['common']['hold'])) $holdVars .= $filterConfig[$moduleName]['common']['hold'] . ',';
         if(isset($filterConfig[$moduleName][$methodName]['hold'])) $holdVars .= $filterConfig[$moduleName][$methodName]['hold'] . ',';
-        if($type == 'cookie') $holdVars .= 'pager' . ucfirst($moduleName) . ucfirst($methodName) . ',';
+        if($type == 'cookie')
+        {
+            $pagerCookie = 'pager' . ucfirst($moduleName) . ucfirst($methodName);
+            $holdVars   .= $pagerCookie . ',';
+            $filterConfig['common']['params'][$pagerCookie]['int'] = '';
+        }
         foreach($var as $key => $value)
         {
             if($config->requestType == 'GET' and $type == 'get' and isset($params[$key])) continue;

@@ -155,10 +155,10 @@ class baseHelper
      * @access public
      * @return string
      */
-    public static function processOnlyBodyParam($link, $onlyBody = true)
+    public static function processOnlyBodyParam($link, $onlyBody = false)
     {
         global $config;
-        if($onlyBody == false or !self::inOnlyBodyMode()) return $link;
+        if(!$onlyBody and !self::inOnlyBodyMode()) return $link;
         $onlybodyString = $config->requestType != 'GET' ? "?onlybody=yes" : "&onlybody=yes";
         return $link . $onlybodyString;
     }
