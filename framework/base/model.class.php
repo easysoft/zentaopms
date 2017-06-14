@@ -207,6 +207,14 @@ class baseModel
     {
         if(empty($moduleName)) return false;
         if(empty($appName)) $appName = $this->appName;
+
+        global $singleModule;
+        if(isset($singleModule[$appName][$moduleName]))
+        {
+            $this->$moduleName = $singleModule[$appName][$moduleName];
+            return $this->$moduleName;
+        }
+
         $modelFile = $this->app->setModelFile($moduleName, $appName);
 
         if(!helper::import($modelFile)) return false;
@@ -217,7 +225,8 @@ class baseModel
             if(!class_exists($modelClass)) $this->app->triggerError(" The model $modelClass not found", __FILE__, __LINE__, $exit = true);
         }
 
-        $this->$moduleName = new $modelClass($appName);
+        $singleModule[$appName][$moduleName] = new $modelClass($appName);
+        $this->$moduleName = $singleModule[$appName][$moduleName];
         return $this->$moduleName;
     }
 

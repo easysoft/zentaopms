@@ -1064,6 +1064,8 @@ class baseRouter
         elseif(isset($_SERVER['REQUEST_URI']))
         {
             $value = $_SERVER['REQUEST_URI'];
+            $subpath = '/' . str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname($_SERVER['SCRIPT_FILENAME']));
+            if($subpath != '' and $subpath != '/' and strpos($value, $subpath) === 0) $value = substr($value, strlen($subpath));
         }
         else
         {
@@ -1071,8 +1073,6 @@ class baseRouter
             if(empty($value)) $value = @getenv('ORIG_PATH_INFO');
         }
 
-        $subpath = str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname($_SERVER['SCRIPT_FILENAME']));
-        if($subpath != '' and $subpath != '/' and strpos($value, $subpath) === 0) $value = substr($value, strlen($subpath));
         if(defined('RUN_MODE') and RUN_MODE == 'front' and strpos($value, $_SERVER['SCRIPT_NAME']) !== false) $value = str_replace($_SERVER['SCRIPT_NAME'], '', $value);
 
         if(strpos($value, '?') === false) return trim($value, '/');
@@ -1680,26 +1680,30 @@ class baseRouter
      * 设置请求的参数(PATH_INFO 方式)。
      * Set the params by PATH_INFO.
      * 
-     * @param   array $defaultParams the default settings of the params.
+     * @param   array  $defaultParams the default settings of the params.
+     * @param   string $type
      * @access  public
      * @return  void
      */
-    public function setParamsByPathInfo($defaultParams = array())
+    public function setParamsByPathInfo($defaultParams = array(), $type = '')
     {
-        /* 分割URI。 Spit the URI. */
-        $items     = explode($this->config->requestFix, $this->URI);
-        $itemCount = count($items);
-        $params    = array();
-
-        /** 
-         * 前两项为模块名和方法名，参数从下标2开始。
-         * The first two item is moduleName and methodName. So the params should begin at 2.
-         **/
-        for($i = 2; $i < $itemCount; $i ++)
+        $params = array();
+        if($type != 'fetch')
         {
-            $key = key($defaultParams);     // Get key from the $defaultParams.
-            $params[$key] = str_replace('.', '-', $items[$i]);
-            next($defaultParams);
+            /* 分割URI。 Spit the URI. */
+            $items     = explode($this->config->requestFix, $this->URI);
+            $itemCount = count($items);
+
+            /** 
+             * 前两项为模块名和方法名，参数从下标2开始。
+             * The first two item is moduleName and methodName. So the params should begin at 2.
+             **/
+            for($i = 2; $i < $itemCount; $i ++)
+            {
+                $key = key($defaultParams);     // Get key from the $defaultParams.
+                $params[$key] = str_replace('.', '-', $items[$i]);
+                next($defaultParams);
+            }
         }
 
         $this->params = $this->mergeParams($defaultParams, $params);
@@ -1709,7 +1713,8 @@ class baseRouter
      * 设置请求的参数(GET 方式)。
      * Set the params by GET.
      * 
-     * @param   array $defaultParams the default settings of the params.
+     * @param   array  $defaultParams the default settings of the params.
+     * @param   string $type
      * @access  public
      * @return  void
      */

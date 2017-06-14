@@ -46,14 +46,11 @@ $config->doc->search['params']['editedBy']      = array('operator' => '=',      
 $config->doc->search['params']['editedDate']    = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
 $config->doc->search['params']['version']       = array('operator' => '=',       'control' => 'input',  'values' => '');
 
-$config->filterParam->get['doc']['showfiles']['hold'] = 'recTotal,recPerPage,pageID,title';
-$config->filterParam->get['doc']['showfiles']['params']['recTotal']['reg']   = '/^[0-9_]+$/';
-$config->filterParam->get['doc']['showfiles']['params']['recPerPage']['reg'] = '/^[0-9]+$/';
-$config->filterParam->get['doc']['showfiles']['params']['pageID']['reg']     = '/^[0-9]+$/';
-$config->filterParam->get['doc']['showfiles']['params']['title']['reg']      = '/./';
+$config->filterParam->get['doc']['showfiles']['recTotal']['reg']   = '/^[0-9_]+$/';
+$config->filterParam->get['doc']['showfiles']['recPerPage']['reg'] = '/^[0-9]+$/';
+$config->filterParam->get['doc']['showfiles']['pageID']['reg']     = '/^[0-9]+$/';
+$config->filterParam->get['doc']['showfiles']['title']['reg']      = '/./';
 
-$config->filterParam->cookie['doc']['common']['hold'] = 'product,from';
-$config->filterParam->cookie['doc']['browse']['hold'] = 'browseType';
-$config->filterParam->cookie['doc']['common']['params']['product']['int']    = '';
-$config->filterParam->cookie['doc']['common']['params']['from']['code']      = '';
-$config->filterParam->cookie['doc']['browse']['params']['browseType']['reg'] = '/^by[a-z]+$/';
+$config->filterParam->cookie['doc']['common']['product']['int']    = '';
+$config->filterParam->cookie['doc']['common']['from']['code']      = '';
+$config->filterParam->cookie['doc']['browse']['browseType']['reg'] = '/^by[a-z]+$/';

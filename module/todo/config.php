@@ -26,5 +26,4 @@ $config->todo->custom = new stdclass();
 $config->todo->custom->batchCreateFields = 'type,pri,desc,beginAndEnd';
 $config->todo->custom->batchEditFields   = 'type,pri,beginAndEnd,status';
 
-$config->filterParam->cookie['todo']['export']['hold'] = 'checkedItem';
-$config->filterParam->cookie['todo']['export']['params']['checkedItem']['reg'] = '/^[0-9,]+$/';
+$config->filterParam->cookie['todo']['export']['checkedItem']['reg'] = '/^[0-9,]+$/';

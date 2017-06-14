@@ -138,17 +138,15 @@ $config->filterParam->method['common']['reg'] = '/^[a-zA-Z0-9]+$/';
 $config->filterParam->param['common']['name']['reg']  = '/^[a-zA-Z0-9_\.]+$/';
 $config->filterParam->param['common']['value']['reg'] = '/^[a-zA-Z0-9=_,`#+\^\/\.%\|\x7f-\xff]+$/';
 
-$config->filterParam->get['common']['hold'] = 'onlybody,HTTP_X_REQUESTED_WITH,' . $config->sessionVar;
-$config->filterParam->get['common']['params']['onlybody']['reg']                = '/^yes$|^no$/';
-$config->filterParam->get['common']['params']['HTTP_X_REQUESTED_WITH']['equal'] = 'XMLHttpRequest';
-$config->filterParam->get['common']['params'][$config->sessionVar]['reg']       = '/^[a-zA-Z0-9]+$/';
+$config->filterParam->get['common']['onlybody']['reg']                = '/^yes$|^no$/';
+$config->filterParam->get['common']['HTTP_X_REQUESTED_WITH']['equal'] = 'XMLHttpRequest';
+$config->filterParam->get['common'][$config->sessionVar]['reg']       = '/^[a-zA-Z0-9]+$/';
 
-$config->filterParam->cookie['common']['hold'] = 'lang,theme,device,za,zp';
-$config->filterParam->cookie['common']['params']['lang']['reg']   = '/^[a-zA-Z\-_]+$/';
-$config->filterParam->cookie['common']['params']['theme']['reg']  = '/^[a-zA-Z0-9_]+$/';
-$config->filterParam->cookie['common']['params']['device']['reg'] = '/^[a-zA-Z0-9_]+$/';
-$config->filterParam->cookie['common']['params']['za']['account'] = '';
-$config->filterParam->cookie['common']['params']['zp']['reg']     = '/^[a-f0-9]{40}$/';
+$config->filterParam->cookie['common']['lang']['reg']   = '/^[a-zA-Z\-_]+$/';
+$config->filterParam->cookie['common']['theme']['reg']  = '/^[a-zA-Z0-9_]+$/';
+$config->filterParam->cookie['common']['device']['reg'] = '/^[a-zA-Z0-9_]+$/';
+$config->filterParam->cookie['common']['za']['account'] = '';
+$config->filterParam->cookie['common']['zp']['reg']     = '/^[a-f0-9]{40}$/';
 
 /* Set default table prefix. */
 if(!isset($config->db->prefix)) $config->db->prefix = 'zt_';

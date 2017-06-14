@@ -677,39 +677,30 @@ class baseValidater
         $params       = $app->getParams();
         $filterConfig = $config->filterParam->$type;
 
-        $holdVars = '';
-        if(isset($filterConfig['common']['hold'])) $holdVars .= $filterConfig['common']['hold'] . ',';
-        if(isset($filterConfig[$moduleName]['common']['hold'])) $holdVars .= $filterConfig[$moduleName]['common']['hold'] . ',';
-        if(isset($filterConfig[$moduleName][$methodName]['hold'])) $holdVars .= $filterConfig[$moduleName][$methodName]['hold'] . ',';
         if($type == 'cookie')
         {
             $pagerCookie = 'pager' . ucfirst($moduleName) . ucfirst($methodName);
-            $holdVars   .= $pagerCookie . ',';
-            $filterConfig['common']['params'][$pagerCookie]['int'] = '';
+            $filterConfig['common'][$pagerCookie]['int'] = '';
         }
         foreach($var as $key => $value)
         {
             if($config->requestType == 'GET' and $type == 'get' and isset($params[$key])) continue;
-            if(strpos(",$holdVars", ",$key,") === false)
-            {
-                unset($var[$key]);
-                continue;
-            }
 
             $rules = '';
-            if(isset($filterConfig[$moduleName][$methodName]['params'][$key]))
+            if(isset($filterConfig[$moduleName][$methodName][$key]))
             {
-                $rules = $filterConfig[$moduleName][$methodName]['params'][$key];
+                $rules = $filterConfig[$moduleName][$methodName][$key];
             }
-            elseif(isset($filterConfig[$moduleName]['common']['params'][$key]))
+            elseif(isset($filterConfig[$moduleName]['common'][$key]))
             {
-                $rules = $filterConfig[$moduleName]['common']['params'][$key];
+                $rules = $filterConfig[$moduleName]['common'][$key];
             }
-            elseif(isset($filterConfig['common']['params'][$key]))
+            elseif(isset($filterConfig['common'][$key]))
             {
-                $rules = $filterConfig['common']['params'][$key];
+                $rules = $filterConfig['common'][$key];
             }
-            if(!self::checkByRules($value, $rules)) unset($var[$key]);
+
+            if(empty($rules) or !self::checkByRules($value, $rules)) unset($var[$key]);
         }
         return $var;
     }

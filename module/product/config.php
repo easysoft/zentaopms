@@ -85,13 +85,10 @@ $config->product->editor->create = array('id' => 'desc', 'tools' => 'simpleTools
 $config->product->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->product->editor->close  = array('id' => 'comment', 'tools' => 'simpleTools');
 
-$config->filterParam->cookie['product']['common']['hold'] = 'lastProduct,preProductID';
-$config->filterParam->cookie['product']['index']['hold']  = 'preBranch';
-$config->filterParam->cookie['product']['browse']['hold'] = 'preBranch,preProductID,storyModule,productStoryOrder';
-$config->filterParam->cookie['product']['common']['params']['lastProduct']['int']       = '';
-$config->filterParam->cookie['product']['common']['params']['preProductID']['int']      = '';
-$config->filterParam->cookie['product']['index']['params']['preBranch']['int']          = '';
-$config->filterParam->cookie['product']['browse']['params']['preBranch']['int']         = '';
-$config->filterParam->cookie['product']['browse']['params']['preProductID']['int']      = '';
-$config->filterParam->cookie['product']['browse']['params']['storyModule']['int']       = '';
-$config->filterParam->cookie['product']['browse']['params']['productStoryOrder']['reg'] = '/^[a-zA-Z0-9_]+$/';
+$config->filterParam->cookie['product']['common']['lastProduct']['int']       = '';
+$config->filterParam->cookie['product']['common']['preProductID']['int']      = '';
+$config->filterParam->cookie['product']['index']['preBranch']['int']          = '';
+$config->filterParam->cookie['product']['browse']['preBranch']['int']         = '';
+$config->filterParam->cookie['product']['browse']['preProductID']['int']      = '';
+$config->filterParam->cookie['product']['browse']['storyModule']['int']       = '';
+$config->filterParam->cookie['product']['browse']['productStoryOrder']['reg'] = '/^[a-zA-Z0-9_]+$/';

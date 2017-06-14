@@ -17,10 +17,8 @@ $config->user->failTimes   = 6;
 $config->user->lockMinutes = 10;
 $config->user->batchCreate = 10;
 
-$config->filterParam->get['user']['login']['hold']  = 'account,password,lang';
-$config->filterParam->get['user']['login']['params']['account']['account'] = '';
-$config->filterParam->get['user']['login']['params']['password']['reg']    = '/./';
-$config->filterParam->get['user']['login']['params']['lang']['reg']        = '/^[a-zA-Z\-_]+$/';
+$config->filterParam->get['user']['login']['account']['account'] = '';
+$config->filterParam->get['user']['login']['password']['reg']    = '/./';
+$config->filterParam->get['user']['login']['lang']['reg']        = '/^[a-zA-Z\-_]+$/';
 
-$config->filterParam->cookie['user']['login']['hold'] = 'keepLogin';
-$config->filterParam->cookie['user']['login']['params']['keepLogin']['equal'] = 'on';
+$config->filterParam->cookie['user']['login']['keepLogin']['equal'] = 'on';

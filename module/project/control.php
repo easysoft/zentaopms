@@ -1641,6 +1641,7 @@ class project extends control
         $branches    = array();
         $productType = 'normal';
         $this->loadModel('tree');
+        $this->loadModel('branch');
         foreach($products as $product)
         {
             $productModules = $this->tree->getOptionMenu($product->id);
@@ -1649,6 +1650,10 @@ class project extends control
             {
                 $productType = $product->type;
                 $branches[$product->branch] = $product->branch;
+                if($product->branch == 0)
+                {
+                    foreach($this->branch->getPairs($product->id, 'noempty') as $branchID => $branchName) $branches[$branchID] = $branchID;
+                }
             }
         }
 

@@ -184,5 +184,4 @@ $config->task->datatable->fieldList['actions']['fixed']    = 'right';
 $config->task->datatable->fieldList['actions']['width']    = '140';
 $config->task->datatable->fieldList['actions']['required'] = 'yes';
 
-$config->filterParam->cookie['task']['export']['hold'] = 'checkedItem';
-$config->filterParam->cookie['task']['export']['params']['checkedItem']['reg'] = '/^[0-9,]+$/';
+$config->filterParam->cookie['task']['export']['checkedItem']['reg'] = '/^[0-9,]+$/';

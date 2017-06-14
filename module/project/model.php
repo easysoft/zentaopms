@@ -797,11 +797,6 @@ class projectModel extends model
 
         /* Set modules and $browseType. */
         $modules = array();
-        if($productID)
-        {
-            $modules = $this->loadModel('tree')->getProjectModule($projectID, $productID);
-            $modules[0] = 0;
-        }
         if($moduleID) $modules = $this->loadModel('tree')->getAllChildID($moduleID);
         if($browseType == 'bymodule' or $browseType == 'byproduct')
         {
@@ -810,15 +805,7 @@ class projectModel extends model
 
         /* Get tasks. */
         $tasks = array();
-        if($browseType == 'byproduct')
-        {
-            $tasks = $this->task->getTasksByModule($projectID, $modules, $sort, $pager);
-        }
-        elseif($browseType == 'bymodule')
-        {
-            $tasks = $this->task->getTasksByModule($projectID, $modules, $sort, $pager);
-        }
-        elseif($browseType != "bysearch")
+        if($browseType != "bysearch")
         {
             $queryStatus = $browseType == 'byproject' ? 'all' : $browseType;
             if($queryStatus == 'unclosed')
@@ -827,7 +814,7 @@ class projectModel extends model
                 unset($queryStatus['closed']);
                 $queryStatus = array_keys($queryStatus);
             }
-            $tasks = $this->task->getProjectTasks($projectID, 0, $queryStatus, $modules, $sort, $pager);
+            $tasks = $this->task->getProjectTasks($projectID, $productID, $queryStatus, $modules, $sort, $pager);
         }
         else
         {

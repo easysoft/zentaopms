@@ -31,10 +31,7 @@ $config->file->ueditor["videoAllowFiles"] = array(".flv", ".swf", ".mkv", ".avi"
 $config->file->ueditor["videoUrlPrefix"]  = "";
 $config->file->ueditor["videoPathFormat"] = "";
 
-$config->filterParam->get['file']['ajaxueditorupload']['hold'] = 'action';
-$config->filterParam->get['file']['download']['hold']          = 'charset';
-$config->filterParam->get['file']['ajaxueditorupload']['params']['action']['equal'] = 'config';
-$config->filterParam->get['file']['download']['params']['charset']['reg']           = '/^[a-zA-Z0-9\-_]+$/';
+$config->filterParam->get['file']['ajaxueditorupload']['action']['equal'] = 'config';
+$config->filterParam->get['file']['download']['charset']['reg']           = '/^[a-zA-Z0-9\-_]+$/';
 
-$config->filterParam->cookie['file']['download']['hold'] = $config->sessionVar;
-$config->filterParam->cookie['file']['download']['params'][$config->sessionVar]['reg'] = '/^[a-zA-Z0-9]+$/';
+$config->filterParam->cookie['file']['download'][$config->sessionVar]['reg'] = '/^[a-zA-Z0-9]+$/';

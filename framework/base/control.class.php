@@ -273,6 +273,15 @@ class baseControl
     {
         if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($appName))    $appName    = $this->appName;
+
+        global $singleModule;
+        if(isset($singleModule[$appName][$moduleName]))
+        {
+            $this->$moduleName = $singleModule[$appName][$moduleName];
+            $this->dao = $this->$moduleName->dao;
+            return $this->$moduleName;
+        }
+
         $modelFile = $this->app->setModelFile($moduleName, $appName);
 
         /**
@@ -302,10 +311,8 @@ class baseControl
          * 初始化model对象，在control对象中可以通过$this->$moduleName来引用。同时将dao对象赋为control对象的成员变量，方便引用。
          * Init the model object thus you can try $this->$moduleName to access it. Also assign the $dao object as a member of control object.
          */
-        static $singleModule = array();
-        if(!isset($singleModule["$moduleName"])) $singleModule["$moduleName"] = new $modelClass($appName);
-
-        $this->$moduleName = $singleModule["$moduleName"];
+        $singleModule[$appName][$moduleName] = new $modelClass($appName);
+        $this->$moduleName = $singleModule[$appName][$moduleName];
         $this->dao = $this->$moduleName->dao;
         return $this->$moduleName;
     }
@@ -693,6 +700,15 @@ class baseControl
         $this->app->setMethodName($methodName);
 
         if(!is_array($params)) parse_str($params, $params);
+        if($this->config->requestType != 'GET')
+        {
+            $this->app->setParamsByPathInfo($params, $type = 'fetch');
+        }
+        else
+        {
+            $this->app->setParamsByGET($params, $type = 'fetch');
+        }
+
         $currentPWD = getcwd();
 
         /**
