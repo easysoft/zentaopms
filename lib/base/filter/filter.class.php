@@ -700,7 +700,7 @@ class baseValidater
                 $rules = $filterConfig['common'][$key];
             }
 
-            if(empty($rules) or !self::checkByRules($value, $rules)) unset($var[$key]);
+            if(!self::checkByRules($value, $rules)) unset($var[$key]);
         }
         return $var;
     }
