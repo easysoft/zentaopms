@@ -90,7 +90,7 @@ $config->db->persistant     = false;     // Pconnect or not.
 $config->db->driver         = 'mysql';   // Must be MySQL. Don't support other database server yet.
 $config->db->encoding       = 'UTF8';    // Encoding of database.
 $config->db->strictMode     = false;     // Turn off the strict mode of MySQL.
-$config->db->prefix          = '';        // 数据库表名前缀。       The prefix of the table name.
+$config->db->prefix         = 'zt_';     // 数据库表名前缀。       The prefix of the table name.
 $config->slaveDB->persistant = false;      
 $config->slaveDB->driver     = 'mysql';    
 $config->slaveDB->encoding   = 'UTF8';     
@@ -147,9 +147,6 @@ $config->filterParam->cookie['common']['theme']['reg']  = '/^[a-zA-Z0-9_]+$/';
 $config->filterParam->cookie['common']['device']['reg'] = '/^[a-zA-Z0-9_]+$/';
 $config->filterParam->cookie['common']['za']['account'] = '';
 $config->filterParam->cookie['common']['zp']['reg']     = '/^[a-f0-9]{40}$/';
-
-/* Set default table prefix. */
-if(!isset($config->db->prefix)) $config->db->prefix = 'zt_';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');

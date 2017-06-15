@@ -153,12 +153,6 @@ class fileModel extends model
                 $file['title']     = $purifier->purify($file['title']);
                 $file['size']      = $size[$id];
                 $file['tmpname']   = $tmp_name[$id];
-
-                if(stripos($this->config->file->allowed, ',' . $file['extension'] . ',') === false)
-                {
-                    $file['pathname'] = $file['pathname'] . '.notAllowed';
-                }
-
                 $files[] = $file;
             }
         }
@@ -174,12 +168,6 @@ class fileModel extends model
             $file['title']     = $purifier->purify($file['title']);
             $file['size']      = $size;
             $file['tmpname']   = $tmp_name;
-
-            if(stripos($this->config->file->allowed, ',' . $file['extension'] . ',') === false)
-            {
-                $file['pathname'] = $file['pathname'] . '.notAllowed';
-            }
-
             return array($file);
         }
         return $files;
@@ -304,6 +292,7 @@ class fileModel extends model
     {
         $extension = trim(strtolower(pathinfo($filename, PATHINFO_EXTENSION)));
         if(empty($extension) or stripos(",{$this->config->file->dangers},", ",{$extension},") !== false) return 'txt';
+        if(empty($extension) or stripos(",{$this->config->file->allowed},", ",{$extension},") === false) return 'txt';
         if($extension == 'php') return 'txt';
         return $extension;
     }
