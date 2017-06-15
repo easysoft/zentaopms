@@ -1066,7 +1066,8 @@ class baseRouter
         elseif(isset($_SERVER['REQUEST_URI']))
         {
             $value = $_SERVER['REQUEST_URI'];
-            $subpath = '/' . str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname($_SERVER['SCRIPT_FILENAME']));
+            $subpath = str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname($_SERVER['SCRIPT_FILENAME']));
+            if($subpath != '/') $subpath = '/' . $subpath;
             if($subpath != '' and $subpath != '/' and strpos($value, $subpath) === 0) $value = substr($value, strlen($subpath));
         }
         else
@@ -2011,10 +2012,6 @@ class baseRouter
         $view->expiredTime = ini_get('session.gc_maxlifetime');
         $view->serverTime  = time();
 
-        $ip         = gethostbyname($_SERVER['HTTP_HOST']);
-        $view->ip   = strpos($ip, ':') === false ? $ip : substr($ip, 0, strpos($ip, ':'));
-        $view->name = isset($this->config->socket->name) ? $this->config->socket->name : '';
-        $view->port        = isset($this->config->socket->port) ? $this->config->socket->port : '';
         echo json_encode($view);
     }
 
