@@ -929,6 +929,8 @@ class baseRouter
 
         setcookie('device', $this->clientDevice, $this->config->cookieLife, $this->config->webRoot);
         if(!isset($_COOKIE['device'])) $_COOKIE['device'] = $this->clientDevice;
+
+        return $this->clientDevice;
     }
 
     /**
