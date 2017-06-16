@@ -16,9 +16,3 @@ $config->testsuite->editor->createlib = array('id' => 'desc', 'tools' => 'simple
 
 $config->testsuite->datatable = new stdclass();
 $config->testsuite->datatable->defaultField = array('id', 'pri', 'title', 'type', 'assignedTo', 'lastRunner', 'lastRunDate', 'lastRunResult', 'status', 'bugs', 'results', 'actions');
-
-$config->filterParam->cookie['testsuite']['common']['lastCaseLib']['int']    = '';
-$config->filterParam->cookie['testsuite']['common']['lastProduct']['int']    = '';
-$config->filterParam->cookie['testsuite']['common']['preProductID']['int']   = '';
-$config->filterParam->cookie['testsuite']['library']['preCaseLibID']['int']  = '';
-$config->filterParam->cookie['testsuite']['library']['libCaseModule']['int'] = '';

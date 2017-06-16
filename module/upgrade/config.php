@@ -16,5 +16,3 @@ $config->upgrade->lowerTables[$config->db->prefix . 'userContact']    = $config-
 $config->upgrade->lowerTables[$config->db->prefix . 'userGroup']      = $config->db->prefix . 'usergroup';
 $config->upgrade->lowerTables[$config->db->prefix . 'userQuery']      = $config->db->prefix . 'userquery';
 $config->upgrade->lowerTables[$config->db->prefix . 'userTPL']        = $config->db->prefix . 'usertpl';
-
-$config->filterParam->get['upgrade']['license']['agree']['equal'] = 'true';

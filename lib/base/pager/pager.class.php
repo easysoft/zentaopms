@@ -342,7 +342,7 @@ class basePager
         $pager = '';
 
         $pager .= "<li class='previous" . ($this->pageID == 1 ? ' disabled' : '') . "'>";
-        $this->params['pageID'] = min(1, $this->pageID - 1);
+        $this->params['pageID'] = 1;
         $pager .= $this->createLink('« ' . $this->lang->pager->previousPage) . '</li>';
 
         $pager .= "<li class='caption'>";

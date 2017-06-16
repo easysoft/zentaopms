@@ -45,12 +45,3 @@ $config->doc->search['params']['addedDate']     = array('operator' => '=',      
 $config->doc->search['params']['editedBy']      = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->doc->search['params']['editedDate']    = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
 $config->doc->search['params']['version']       = array('operator' => '=',       'control' => 'input',  'values' => '');
-
-$config->filterParam->get['doc']['showfiles']['recTotal']['reg']   = '/^[0-9_]+$/';
-$config->filterParam->get['doc']['showfiles']['recPerPage']['reg'] = '/^[0-9]+$/';
-$config->filterParam->get['doc']['showfiles']['pageID']['reg']     = '/^[0-9]+$/';
-$config->filterParam->get['doc']['showfiles']['title']['reg']      = '/./';
-
-$config->filterParam->cookie['doc']['common']['product']['int']    = '';
-$config->filterParam->cookie['doc']['common']['from']['code']      = '';
-$config->filterParam->cookie['doc']['browse']['browseType']['reg'] = '/^by[a-z]+$/';

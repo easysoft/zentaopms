@@ -668,70 +668,93 @@ class baseValidater
      */
     public static function filterParam($var, $type)
     {
-        global $config, $app;
-
-        if(!isset($config->filterParam->$type)) return array();
+        global $config, $filter, $app;
 
         $moduleName   = $app->getModuleName();
         $methodName   = $app->getMethodName();
         $params       = $app->getParams();
-        $filterConfig = $config->filterParam->$type;
 
         if($type == 'cookie')
         {
             $pagerCookie = 'pager' . ucfirst($moduleName) . ucfirst($methodName);
-            $filterConfig['common'][$pagerCookie]['int'] = '';
+            $filter->default->cookie[$pagerCookie] = 'int';
         }
         foreach($var as $key => $value)
         {
             if($config->requestType == 'GET' and $type == 'get' and isset($params[$key])) continue;
 
             $rules = '';
-            if(isset($filterConfig[$moduleName][$methodName][$key]))
+            if(isset($filter->{$moduleName}->{$methodName}->$type[$key]))
             {
-                $rules = $filterConfig[$moduleName][$methodName][$key];
+                $rules = $filter->{$moduleName}->{$methodName}->$type[$key];
             }
-            elseif(isset($filterConfig[$moduleName]['common'][$key]))
+            elseif(isset($filter->{$moduleName}->default->$type[$key]))
             {
-                $rules = $filterConfig[$moduleName]['common'][$key];
+                $rules = $filter->{$moduleName}->default->$type[$key];
             }
-            elseif(isset($filterConfig['common'][$key]))
+            elseif(isset($filter->default->$type[$key]))
             {
-                $rules = $filterConfig['common'][$key];
+                $rules = $filter->default->$type[$key];
             }
 
-            if(!self::checkByRules($value, $rules)) unset($var[$key]);
+            if(!self::checkByRule($value, $rules)) unset($var[$key]);
         }
         return $var;
     }
 
     /**
-     * Check by rules.
+     * Check by rule.
      * 
      * @param  string   $var 
-     * @param  array    $rules 
+     * @param  string   $rule   like: int account reg::md5 reg::/^[a-zA-Z0-9]+$/.
      * @static
      * @access public
      * @return bool
      */
-    public static function checkByRules($var, $rules)
+    public static function checkByRule($var, $rule)
     {
-        if(empty($rules)) return false;
-        foreach($rules as $type => $rule)
+        if(empty($rule)) return false;
+
+        /* Parse rule to operator and param. */
+        list($operator, $param) = baseValidater::parseRuleString($rule);
+
+        /* check by operator. */
+        $checkMethod = 'check' . $operator;
+        if(method_exists('baseValidater', $checkMethod))
         {
-            $checkMethod = 'check' . $type;
-            if(method_exists('baseValidater', $checkMethod))
-            {
-                if(empty($rule)  and self::$checkMethod($var) === false) return false;
-                if(!empty($rule) and self::$checkMethod($var, $rule) === false) return false;
-            }
-            elseif(function_exists('is_' . $type))
-            {
-                $checkFunction = 'is_' . $type;
-                if(!$checkFunction($var)) return false;
-            }
+            if(empty($param)  and self::$checkMethod($var) === false) return false;
+            if(!empty($param) and self::$checkMethod($var, $param) === false) return false;
         }
+        elseif(function_exists('is_' . $operator))
+        {
+            $checkFunction = 'is_' . $operator;
+            if(!$checkFunction($var)) return false;
+        }
+        else
+        {
+            return false;
+        }
+
         return true;
+    }
+
+    /**
+     * Parse rule string.
+     * 
+     * @param  string $rule   like: int account reg::md5 reg::/^[a-zA-Z0-9]+$/.
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function parseRuleString($rule)
+    {
+        global $filter;
+
+        if(strpos($rule, '::') !== false) list($operator, $param) = explode('::', $rule);
+        if(strpos($rule,'::') === false) list($operator, $param) = array($rule, '');
+        if($operator == 'reg' and isset($filter->rules->$param)) $param = $filter->rules->$param;
+
+        return array($operator, $param);
     }
 
     /**

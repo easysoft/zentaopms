@@ -1,28 +1,28 @@
 <?php
 /**
- * The config file of ZenTaoPMS.
+ * ZenTaoPHP的config文件。如果更改配置，不要直接修改该文件，复制到my.php修改相应的值。
+ * The config file of zentaophp.  Don't modify this file directly, copy the item to my.php and change it.
  *
- * Don't modify this file directly, copy the item to my.php and change it.
- *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     config
- * @version     $Id: config.php 5068 2013-07-08 02:41:22Z wyd621@gmail.com $
- * @link        http://www.zentao.net
+ * The author disclaims copyright to this source code.  In place of
+ * a legal notice, here is a blessing:
+ * 
+ *  May you do good and not evil.
+ *  May you find forgiveness for yourself and forgive others.
+ *  May you share freely, never taking more than you give.
  */
-/* Judge class config and function getWebRoot exists or not, make sure php shells can work. */
+
+/* 保证在命令行环境也能运行。Make sure to run in ztcli env. */
 if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
-/* Basic settings. */
+/* 基本设置。Basic settings. */
 $config->version      = '9.2.1';        // The version of zentaopms. Don't change it.
 $config->charset      = 'UTF-8';           // The charset of zentaopms.
 $config->cookieLife   = time() + 2592000;  // The cookie life time.
 $config->timezone     = 'Asia/Shanghai';   // The time zone setting, for more see http://www.php.net/manual/en/timezones.php
 $config->webRoot      = '';                // The root path of the pms.
 
-/* The request settings. */
+/* 框架路由相关设置。Routing settings. */
 $config->requestType = 'PATH_INFO';       // The request type: PATH_INFO|GET, if PATH_INFO, must use url rewrite.
 $config->requestFix  = '-';               // The divider in the url when PATH_INFO.
 $config->moduleVar   = 'm';               // requestType=GET: the module var name.
@@ -37,6 +37,78 @@ $config->langs['zh-cn'] = '简体';
 $config->langs['en']    = 'English';
 $config->langs['zh-tw'] = '繁體';
 
+/* 设备类型视图文件前缀。The prefix for view file for different device. */ 
+$config->devicePrefix['mhtml'] = 'm.';
+
+/* 默认值设置。Default settings. */
+$config->default = new stdclass();
+$config->default->view   = 'html';        // Default view.
+$config->default->lang   = 'en';          // Default language.
+$config->default->theme  = 'default';     // Default theme.
+$config->default->module = 'index';       // Default module.
+$config->default->method = 'index';       // Default method.
+
+/* 数据库设置。Database settings. */
+$config->db = new stdclass();
+$config->slaveDB = new stdclass();
+$config->db->persistant     = false;     // Pconnect or not.
+$config->db->driver         = 'mysql';   // Must be MySQL. Don't support other database server yet.
+$config->db->encoding       = 'UTF8';    // Encoding of database.
+$config->db->strictMode     = false;     // Turn off the strict mode of MySQL.
+$config->db->prefix         = 'zt_';     // 数据库表名前缀。       The prefix of the table name.
+$config->slaveDB->persistant = false;
+$config->slaveDB->driver     = 'mysql';
+$config->slaveDB->encoding   = 'UTF8';
+$config->slaveDB->strictMode = false;
+
+/* 可用域名后缀列表。Domain postfix lists. */
+$config->domainPostfix  = "|com|com.cn|com.hk|com.tw|com.vc|edu.cn|es|";
+$config->domainPostfix .= "|eu|fm|gov.cn|gs|hk|im|in|info|jp|kr|la|me|";
+$config->domainPostfix .= "|mobi|my|name|net|net.cn|org|org.cn|pk|pro|";
+$config->domainPostfix .= "|sg|so|tel|tk|to|travel|tv|tw|uk|us|ws|";
+$config->domainPostfix .= "|ac.cn|bj.cn|sh.cn|tj.cn|cq.cn|he.cn|sn.cn|";
+$config->domainPostfix .= "|sx.cn|nm.cn|ln.cn|jl.cn|hl.cn|js.cn|zj.cn|";
+$config->domainPostfix .= "|ah.cn|fj.cn|jx.cn|sd.cn|ha.cn|hb.cn|hn.cn|";
+$config->domainPostfix .= "|gd.cn|gx.cn|hi.cn|sc.cn|gz.cn|yn.cn|gs.cn|pub|pw|";
+$config->domainPostfix .= "|qh.cn|nx.cn|xj.cn|tw.cn|hk.cn|mo.cn|xz.cn|xyz|wang|";
+$config->domainPostfix .= "|ae|asia|biz|cc|cd|cm|cn|co|co.jp|co.kr|co.uk|";
+$config->domainPostfix .= "|top|ren|club|space|tm|website|cool|company|city|email|";
+$config->domainPostfix .= "|market|software|ninja|bike|today|life|co.il|io|";
+$config->domainPostfix .= "|mn|ph|ps|tl|uz|vn|co.nz|cz|gg|gl|gr|je|md|me.uk|org.uk|pl|si|sx|vg|ag|";
+$config->domainPostfix .= "|bz|cl|ec|gd|gy|ht|lc|ms|mx|pe|tc|vc|ac|bi|mg|mu|sc|as|com.sb|cx|ki|nf|sh|";
+$config->domainPostfix .= "|rocks|social|co.com|bio|reviews|link|sexy|us.com|consulting|moda|desi|";
+$config->domainPostfix .= "|menu|info|events|webcam|dating|vacations|flights|cruises|global|ca|guru|";
+$config->domainPostfix .= "|futbol|rentals|dance|lawyer|attorney|democrat|republican|actor|condos|immobilien|";
+$config->domainPostfix .= "|villas|foundation|expert|works|tools|watch|zone|bargains|agency|best|solar|";
+$config->domainPostfix .= "|farm|pics|photo|marketing|holiday|gift|buzz|guitars|trade|construction|"; 
+$config->domainPostfix .= "|international|house|coffee|florist|rich|ceo|camp|education|repair|win|site|";
+
+/* 系统框架配置。Framework settings. */
+$config->framework = new stdclass();
+$config->framework->autoConnectDB   = true;  // 是否自动连接数据库。              Whether auto connect database or not.
+$config->framework->multiLanguage   = true; // 是否启用多语言功能。              Whether enable multi lanuage or not.
+$config->framework->multiTheme      = true; // 是否启用多风格功能。              Whether enable multi theme or not.
+$config->framework->multiSite       = false; // 是否启用多站点模式。              Whether enable multi site mode or not.
+$config->framework->extensionLevel  = 1;     // 0=>无扩展,1=>公共扩展,2=>站点扩展 0=>no extension, 1=> common extension, 2=> every site has it's extension.
+$config->framework->jsWithPrefix    = false;  // js::set()输出的时候是否增加前缀。 When us js::set(), add prefix or not.
+$config->framework->filterBadKeys   = true;  // 是否过滤不合要求的键值。          Whether filter bad keys or not.
+$config->framework->filterTrojan    = true;  // 是否过滤木马攻击代码。            Whether strip trojan code or not.
+$config->framework->filterXSS       = true;  // 是否过滤XSS攻击代码。             Whether strip xss code or not.
+$config->framework->filterParam     = 2;     // 1=>默认过滤，2=>开启过滤参数功能。0=>default filter 2=>Whether strip param.
+$config->framework->purifier        = true;  // 是否对数据做purifier处理。        Whether purifier data or not.
+$config->framework->logDays         = 14;    // 日志文件保存的天数。              The days to save log files.
+$config->framework->autoRepairTable = true;
+$config->framework->autoLang        = false;
+
+$config->framework->detectDevice['zh-cn'] = true; // 在zh-cn语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
+$config->framework->detectDevice['zh-tw'] = true; // 在zh-tw语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
+$config->framework->detectDevice['en']    = true; // 在en语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
+
+/* 文件上传设置。 Upload settings. */
+$config->file = new stdclass();    
+$config->file->dangers = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,aspx,ashx,asa,cer,cdx,aspl,shtm,shtml,html,htm';
+$config->file->allowed = 'txt,doc,docx,dot,wps,wri,pdf,ppt,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz';
+
 $config->allowedTags = '<p><span><h1><h2><h3><h4><h5><em><u><strong><br><ol><ul><li><img><a><b><font><hr><pre><div><table><td><th><tr><tbody><embed><style>';
 $config->accountRule = '|^[a-zA-Z0-9_]{1}[a-zA-Z0-9_\.]{1,}[a-zA-Z0-9_]{1}$|';
 $config->checkVersion = true;              // Auto check for new version or not.
@@ -45,7 +117,6 @@ $config->checkVersion = true;              // Auto check for new version or not.
 $config->wideSize      = 1400;
 $config->timeout       = 30000;
 $config->duplicateTime = 60;
-
 
 $config->productCommonList['en'][0]    = 'Product';
 $config->productCommonList['en'][1]    = 'Project';
@@ -71,82 +142,14 @@ $config->charsets['en']['GBK']      = 'GBK';
 /* IP white list settings.*/
 $config->ipWhiteList = '*';
 
-/* 设备类型视图文件前缀。The prefix for view file for different device. */ 
-$config->devicePrefix['mhtml'] = 'm.';
+/* 配置参数过滤。Filter param settings. */
+$filterConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'filter.php';
+if(file_exists($filterConfig)) include $filterConfig;
 
-/* Default settings. */
-$config->default = new stdclass();
-$config->default->view   = 'html';        // Default view.
-$config->default->lang   = 'en';          // Default language.
-$config->default->theme  = 'default';     // Default theme.
-$config->default->module = 'index';       // Default module.
-$config->default->method = 'index';       // Default method.
-
-
-/* Master database settings. */
-$config->db = new stdclass();
-$config->slaveDB = new stdclass();
-$config->db->persistant     = false;     // Pconnect or not.
-$config->db->driver         = 'mysql';   // Must be MySQL. Don't support other database server yet.
-$config->db->encoding       = 'UTF8';    // Encoding of database.
-$config->db->strictMode     = false;     // Turn off the strict mode of MySQL.
-$config->db->prefix         = 'zt_';     // 数据库表名前缀。       The prefix of the table name.
-$config->slaveDB->persistant = false;      
-$config->slaveDB->driver     = 'mysql';    
-$config->slaveDB->encoding   = 'UTF8';     
-$config->slaveDB->strictMode = false;      
-
-/* Framework config. */
-$config->framework = new stdclass();
-$config->framework->autoConnectDB   = true;  // 是否自动连接数据库。              Whether auto connect database or not.
-$config->framework->multiLanguage   = true; // 是否启用多语言功能。              Whether enable multi lanuage or not.
-$config->framework->multiTheme      = true; // 是否启用多风格功能。              Whether enable multi theme or not.
-$config->framework->multiSite       = false; // 是否启用多站点模式。              Whether enable multi site mode or not.
-$config->framework->extensionLevel  = 1;     // 0=>无扩展,1=>公共扩展,2=>站点扩展 0=>no extension, 1=> common extension, 2=> every site has it's extension.
-$config->framework->jsWithPrefix    = false;  // js::set()输出的时候是否增加前缀。 When us js::set(), add prefix or not.
-$config->framework->filterBadKeys   = true;  // 是否过滤不合要求的键值。          Whether filter bad keys or not.
-$config->framework->filterTrojan    = true;  // 是否过滤木马攻击代码。            Whether strip trojan code or not.
-$config->framework->filterXSS       = true;  // 是否过滤XSS攻击代码。             Whether strip xss code or not.
-$config->framework->filterParam     = 2;     // 是否开启过滤参数功能。            Whether strip param or not.
-$config->framework->purifier        = true;  // 是否对数据做purifier处理。        Whether purifier data or not.
-$config->framework->logDays         = 14;    // 日志文件保存的天数。              The days to save log files.
-$config->framework->autoRepairTable = true;
-$config->framework->autoLang        = false;
-
-$config->framework->detectDevice['zh-cn'] = true; // 在zh-cn语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
-$config->framework->detectDevice['zh-tw'] = true; // 在zh-tw语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
-$config->framework->detectDevice['en']    = true; // 在en语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
-
-/* Include the custom config file. */
+/* 引用自定义的配置。 Include the custom config file. */
 $configRoot = dirname(__FILE__) . DIRECTORY_SEPARATOR;
 $myConfig   = $configRoot . 'my.php';
 if(file_exists($myConfig)) include $myConfig;
-
-/* 文件上传设置。 Upload settings. */
-$config->file = new stdclass();    
-// 危险文件类型。 Dangerous file types.
-$config->file->dangers = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,aspx,ashx,asa,cer,cdx,aspl,shtm,shtml,html,htm';
-// 允许上传的文件类型。 Allowed file types.
-$config->file->allowed = 'txt,doc,docx,dot,wps,wri,pdf,ppt,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz';
-
-/* 配置参数过滤。Filter param settings. */
-/* Like $config->filterParam->param[moduleName][methodname][ruleType] = rule. */
-$config->filterParam          = new stdclass();
-$config->filterParam->badKeys = '[^a-zA-Z0-9_\.]'; 
-$config->filterParam->module['reg'] = '/^[a-zA-Z0-9]+$/';
-$config->filterParam->method['common']['reg'] = '/^[a-zA-Z0-9]+$/';
-$config->filterParam->param['common']['name']['reg']  = '/^[a-zA-Z0-9_\.]+$/';
-$config->filterParam->param['common']['value']['reg'] = '/^[a-zA-Z0-9=_,`#+\^\/\.%\|\x7f-\xff]+$/';
-
-$config->filterParam->get['common']['onlybody']['reg']                = '/^yes$|^no$/';
-$config->filterParam->get['common']['HTTP_X_REQUESTED_WITH']['equal'] = 'XMLHttpRequest';
-$config->filterParam->get['common'][$config->sessionVar]['reg']       = '/^[a-zA-Z0-9]+$/';
-
-$config->filterParam->cookie['common']['lang']['reg']   = '/^[a-zA-Z\-_]+$/';
-$config->filterParam->cookie['common']['theme']['reg']  = '/^[a-zA-Z0-9_]+$/';
-$config->filterParam->cookie['common']['device']['reg'] = '/^[a-zA-Z0-9_]+$/';
-$config->filterParam->cookie['common']['za']['account'] = '';
-$config->filterParam->cookie['common']['zp']['reg']     = '/^[a-f0-9]{40}$/';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');

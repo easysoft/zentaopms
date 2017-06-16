@@ -146,7 +146,7 @@ class baseModel
 
         $moduleName = $this->getModuleName();
         if($this->config->framework->multiLanguage) $this->app->loadLang($moduleName, $this->appName);
-        if($moduleName != 'common') $this->app->loadModuleConfig($moduleName, $this->appName, $exitIfNone = false);
+        if($moduleName != 'common') $this->app->loadModuleConfig($moduleName, $this->appName);
 
         $this->loadDAO();
         $this->setSuperVars();
@@ -208,10 +208,10 @@ class baseModel
         if(empty($moduleName)) return false;
         if(empty($appName)) $appName = $this->appName;
 
-        global $singleModule;
-        if(isset($singleModule[$appName][$moduleName]))
+        global $loadedModels;
+        if(isset($loadedModels[$appName][$moduleName]))
         {
-            $this->$moduleName = $singleModule[$appName][$moduleName];
+            $this->$moduleName = $loadedModels[$appName][$moduleName];
             return $this->$moduleName;
         }
 
@@ -225,8 +225,8 @@ class baseModel
             if(!class_exists($modelClass)) $this->app->triggerError(" The model $modelClass not found", __FILE__, __LINE__, $exit = true);
         }
 
-        $singleModule[$appName][$moduleName] = new $modelClass($appName);
-        $this->$moduleName = $singleModule[$appName][$moduleName];
+        $loadedModels[$appName][$moduleName] = new $modelClass($appName);
+        $this->$moduleName = $loadedModels[$appName][$moduleName];
         return $this->$moduleName;
     }
 

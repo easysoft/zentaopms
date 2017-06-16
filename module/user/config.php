@@ -16,9 +16,3 @@ $config->user->custom->batchEditFields   = 'dept,join,email,commiter';
 $config->user->failTimes   = 6;
 $config->user->lockMinutes = 10;
 $config->user->batchCreate = 10;
-
-$config->filterParam->get['user']['login']['account']['account'] = '';
-$config->filterParam->get['user']['login']['password']['reg']    = '/./';
-$config->filterParam->get['user']['login']['lang']['reg']        = '/^[a-zA-Z\-_]+$/';
-
-$config->filterParam->cookie['user']['login']['keepLogin']['equal'] = 'on';

@@ -84,11 +84,3 @@ $config->product->editor = new stdclass();
 $config->product->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->product->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->product->editor->close  = array('id' => 'comment', 'tools' => 'simpleTools');
-
-$config->filterParam->cookie['product']['common']['lastProduct']['int']       = '';
-$config->filterParam->cookie['product']['common']['preProductID']['int']      = '';
-$config->filterParam->cookie['product']['index']['preBranch']['int']          = '';
-$config->filterParam->cookie['product']['browse']['preBranch']['int']         = '';
-$config->filterParam->cookie['product']['browse']['preProductID']['int']      = '';
-$config->filterParam->cookie['product']['browse']['storyModule']['int']       = '';
-$config->filterParam->cookie['product']['browse']['productStoryOrder']['reg'] = '/^[a-zA-Z0-9_]+$/';

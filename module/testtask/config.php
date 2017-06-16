@@ -16,9 +16,3 @@ $config->testtask->editor->activate= array('id' => 'comment', 'tools' => 'simple
 
 $config->testtask->datatable = new stdclass();
 $config->testtask->datatable->defaultField = array('id', 'pri', 'title', 'type', 'assignedTo', 'lastRunner', 'lastRunDate', 'lastRunResult', 'status', 'bugs', 'results', 'actions');
-
-$config->filterParam->cookie['testtask']['common']['lastProduct']['int']   = '';
-$config->filterParam->cookie['testtask']['common']['preProductID']['int']  = '';
-$config->filterParam->cookie['testtask']['browse']['preBranch']['int']     = '';
-$config->filterParam->cookie['testtask']['cases']['preProductID']['int']   = '';
-$config->filterParam->cookie['testtask']['cases']['taskCaseModule']['int'] = '';

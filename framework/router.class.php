@@ -125,8 +125,35 @@ class router extends baseRouter
         parent::saveError($level, $message, $file, $line);
     }
 
+    /**
+     * Alias load  module config.
+     * 
+     * @param  string $moduleName 
+     * @param  string $appName 
+     * @access public
+     * @return void
+     */
     public function loadConfig($moduleName, $appName = '')
     {
         return parent::loadModuleConfig($moduleName, $appName);
+    }
+
+    /**
+     * Export config.
+     * 
+     * @access public
+     * @return void
+     */
+    public function exportConfig()
+    {
+        ob_start();
+        parent::exportConfig();
+        $view = ob_get_contents();
+        ob_end_clean();
+
+        $view = json_decode($view);
+        $view->rand = $this->session->random;
+        $this->session->set('rand', $this->session->random);
+        echo json_encode($view);
     }
 }

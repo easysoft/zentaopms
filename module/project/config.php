@@ -98,12 +98,3 @@ $config->printKanban->col['wait']   = 2;
 $config->printKanban->col['doing']  = 3;
 $config->printKanban->col['done']   = 4;
 $config->printKanban->col['closed'] = 5;
-
-$config->filterParam->cookie['project']['common']['lastProject']['int']      = '';
-$config->filterParam->cookie['project']['common']['projectMode']['code']     = '';
-$config->filterParam->cookie['project']['task']['windowWidth']['int']        = '';
-$config->filterParam->cookie['project']['task']['preProjectID']['int']       = '';
-$config->filterParam->cookie['project']['task']['moduleBrowseParam']['int']  = '';
-$config->filterParam->cookie['project']['task']['productBrowseParam']['int'] = '';
-$config->filterParam->cookie['project']['task']['projectTaskOrder']['reg']   = '/^[a-zA-Z0-9_]+$/';
-$config->filterParam->cookie['project']['story']['projectStoryOrder']['reg'] = '/^[a-zA-Z0-9_]+$/';

@@ -164,11 +164,3 @@ $config->testcase->datatable->fieldList['stepNumber']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['stepNumber']['width']    = '80';
 $config->testcase->datatable->fieldList['stepNumber']['required'] = 'no';
 $config->testcase->datatable->fieldList['stepNumber']['sort']     = 'no';
-
-$config->filterParam->cookie['testcase']['common']['lastProduct']['int']  = '';
-$config->filterParam->cookie['testcase']['common']['preProductID']['int'] = '';
-$config->filterParam->cookie['testcase']['browse']['preBranch']['int']    = '';
-$config->filterParam->cookie['testcase']['browse']['caseModule']['int']   = '';
-$config->filterParam->cookie['testcase']['browse']['caseSuite']['int']    = '';
-$config->filterParam->cookie['testcase']['groupcase']['preBranch']['int'] = '';
-$config->filterParam->cookie['testcase']['export']['checkedItem']['reg']  = '/^[0-9,]+$/';

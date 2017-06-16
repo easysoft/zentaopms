@@ -276,13 +276,3 @@ $config->bug->datatable->fieldList['branch']['title']    = 'branch';
 $config->bug->datatable->fieldList['branch']['fixed']    = 'left';
 $config->bug->datatable->fieldList['branch']['width']    = '100';
 $config->bug->datatable->fieldList['branch']['required'] = 'no';
-
-$config->filterParam->cookie['bug']['common']['lastProduct']['int']    = '';
-$config->filterParam->cookie['bug']['common']['preProductID']['int']   = '';
-$config->filterParam->cookie['bug']['browse']['preBranch']['int']      = '';
-$config->filterParam->cookie['bug']['browse']['bugModule']['int']      = '';
-$config->filterParam->cookie['bug']['browse']['qaBugOrder']['reg']     = '/^[a-zA-Z0-9_]+$/';
-$config->filterParam->cookie['bug']['browse']['windowWidth']['int']    = '';
-$config->filterParam->cookie['bug']['create']['preBranch']['int']      = '';
-$config->filterParam->cookie['bug']['batchcreate']['preBranch']['int'] = '';
-$config->filterParam->cookie['bug']['export']['checkedItem']['reg']    = '/^[0-9,]+$/';

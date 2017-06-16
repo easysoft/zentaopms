@@ -364,15 +364,14 @@ class baseRouter
         $this->setTimezone();
         $this->startSession();
 
-        if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
         if($this->config->framework->autoConnectDB) $this->connectDB();
-        if($this->config->framework->multiLanguage) $this->setClientLang();
+        if($this->config->framework->multiLanguage) $this->setClientLang() && $this->loadLang('common');
 
-        $isDetectDevice     = zget($this->config->framework->detectDevice, $this->clientLang, false);
-        $this->clientDevice = $isDetectDevice ? $this->setClientDevice() : 'desktop';
+        $needDetectDevice   = zget($this->config->framework->detectDevice, $this->clientLang, false);
+        $this->clientDevice = $needDetectDevice ? $this->setClientDevice() : 'desktop';
 
-        if($this->config->framework->multiLanguage) $this->loadLang('common');
-        if($this->config->framework->multiTheme)    $this->setClientTheme();
+        if($this->config->framework->multiTheme) $this->setClientTheme();
+        if($this->config->framework->multiSite)  $this->setSiteCode() && $this->loadExtraConfig();
     }
 
     /**
@@ -518,25 +517,6 @@ class baseRouter
     {
         $this->configRoot = $this->basePath . 'config' . DS;
     }
-
-    /**
-     * Start the session.
-     *
-     * @access public
-     * @return void
-     */
-    public function startSession()
-    {
-        if(!defined('SESSION_STARTED'))
-        {
-            $sessionName = $this->config->sessionVar;
-            session_name($sessionName);
-            if(isset($_GET[$this->config->sessionVar])) session_id($_GET[$this->config->sessionVar]);
-            session_start();
-            define('SESSION_STARTED', true);
-        }
-    }
-
 
     /**
      * 设置模块的根目录。
@@ -820,6 +800,25 @@ class baseRouter
     }
 
     /**
+     * 开启 session
+     * Start the session.
+     *
+     * @access public
+     * @return void
+     */
+    public function startSession()
+    {
+        if(!defined('SESSION_STARTED'))
+        {
+            $sessionName = $this->config->sessionVar;
+            session_name($sessionName);
+            if(isset($_GET[$this->config->sessionVar])) session_id($_GET[$this->config->sessionVar]);
+            session_start();
+            define('SESSION_STARTED', true);
+        }
+    }
+
+    /**
      * 根据用户浏览器的语言设置和服务器配置，选择显示的语言。
      * 优先级：$lang参数 > session > cookie > 浏览器 > 配置文件。
      *
@@ -1018,7 +1017,6 @@ class baseRouter
     public function parsePathInfo()
     {
         $pathInfo = $this->getPathInfo();
-        if(trim($pathInfo, '/') == trim($this->config->webRoot, '/')) $pathInfo = '';
         if(!empty($pathInfo))
         {
             $dotPos = strrpos($pathInfo, '.');
@@ -1065,7 +1063,7 @@ class baseRouter
         }
         elseif(isset($_SERVER['REQUEST_URI']))
         {
-            $value = $_SERVER['REQUEST_URI'];
+            $value = htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES);
             $subpath = str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname($_SERVER['SCRIPT_FILENAME']));
             if($subpath != '/') $subpath = '/' . $subpath;
             if($subpath != '' and $subpath != '/' and strpos($value, $subpath) === 0) $value = substr($value, strlen($subpath));
@@ -1076,12 +1074,14 @@ class baseRouter
             if(empty($value)) $value = @getenv('ORIG_PATH_INFO');
         }
 
-        if(defined('RUN_MODE') and RUN_MODE == 'front' and strpos($value, $_SERVER['SCRIPT_NAME']) !== false) $value = str_replace($_SERVER['SCRIPT_NAME'], '', $value);
-
+        if(strpos($value, $_SERVER['SCRIPT_NAME']) !== false) $value = str_replace($_SERVER['SCRIPT_NAME'], '', $value);
         if(strpos($value, '?') === false) return trim($value, '/');
 
-        $value = parse_url($value);
-        return trim(zget($value, 'path', ''), '/');
+        $value    = parse_url($value);
+        $pathInfo = trim(zget($value, 'path', ''), '/');
+        if(trim($pathInfo, '/') == trim($this->config->webRoot, '/')) $pathInfo = '';
+
+        return $pathInfo;
     }
 
     /**
@@ -1161,6 +1161,7 @@ class baseRouter
 
         helper::import($commonModelFile);
 
+        if($this->config->framework->extensionLevel == 0 and class_exists('commonModel'))    return new commonModel();
         if($this->config->framework->extensionLevel > 0  and class_exists('extCommonModel')) return new extCommonModel();
 
         if(class_exists('commonModel')) return new commonModel();
@@ -1177,7 +1178,7 @@ class baseRouter
      */
     public function setModuleName($moduleName = '')
     {
-        if($this->checkAlnum($moduleName, 'module')) $this->moduleName = strtolower($moduleName);
+        if($this->checkModuleName($moduleName)) $this->moduleName = strtolower($moduleName);
     }
 
     /**
@@ -1206,7 +1207,7 @@ class baseRouter
      */
     public function setMethodName($methodName = '')
     {
-        if($this->checkAlnum($methodName, 'method')) $this->methodName = strtolower($methodName);
+        if($this->checkMethodName($methodName)) $this->methodName = strtolower($methodName);
     }
 
     /**
@@ -1222,7 +1223,7 @@ class baseRouter
     {
         if($moduleName == '') $moduleName = $this->moduleName;
 
-        if($this->checkAlnum($moduleName, 'module'))
+        if($this->checkModuleName($moduleName))
         {
             $modulePath = $this->getModuleRoot($appName) . strtolower($moduleName) . DS;
             return $modulePath;
@@ -1245,7 +1246,7 @@ class baseRouter
     public function getModuleExtPath($appName, $moduleName, $ext)
     {
         /* 检查失败或者extensionLevel为0，直接返回空。If check failed or extensionLevel == 0, return empty array. */
-        if(!$this->checkAlnum($moduleName, 'module') or $this->config->framework->extensionLevel == 0) return array();
+        if(!$this->checkModuleName($moduleName) or $this->config->framework->extensionLevel == 0) return array();
 
         /* When extensionLevel == 1. */
         $modulePath = $this->getModulePath($appName, $moduleName);
@@ -1259,24 +1260,34 @@ class baseRouter
     }
 
     /**
-     * 检查某一个变量必须为英文字母和数字组合。Check a variable must be ascii.
+     * 检查模块中某一个变量必须为英文字母和数字组合。Check module a variable must be ascii.
      * 
      * @param  string    $var 
-     * @param  string    $type 
      * @access public
-     * @return void
+     * @return bool
      */
-    public function checkAlnum($var, $type)
+    public function checkModuleName($var)
     {
-        $filterConfig = $this->config->filterParam;
-        $rules = $filterConfig->module;
-        if($type == 'method')
-        {
-            $rules  = $filterConfig->method['common'];
-            if($this->config->framework->filterParam == 2) $rules = zget($filterConfig->method, $this->moduleName, $rules);
-        }
+        global $filter;
+        $rule = $filter->default->moduleName;
+        if(validater::checkByRule($var, $rule)) return true;
+        $this->triggerError("'$var' illegal. ", __FILE__, __LINE__, $exit = true);
+    }
 
-        if(validater::checkByRules($var, $rules)) return true;
+    /**
+     * 检查方法中某一个变量必须为英文字母和数字组合。Check method a variable must be ascii.
+     * 
+     * @param  string    $var 
+     * @access public
+     * @return bool
+     */
+    public function checkMethodName($var)
+    {
+        global $filter;
+        $rule = $filter->default->methodName;
+        if($this->config->framework->filterParam == 2 and isset($filter->{$this->moduleName}->methodName)) $rule = $filter->{$this->moduleName}->methodName;
+
+        if(validater::checkByRule($var, $rule)) return true;
         $this->triggerError("'$var' illegal. ", __FILE__, __LINE__, $exit = true);
     }
 
@@ -1749,17 +1760,23 @@ class baseRouter
      */
     public function mergeParams($defaultParams, $passedParams)
     {
+        global $filter;
+
         /* Remove these two params. */
         unset($passedParams['onlybody']);
         unset($passedParams['HTTP_X_REQUESTED_WITH']);
 
         /* Check params from URL. */
-        $nameRules  = isset($this->config->filterParam->param[$this->moduleName][$this->methodName]['name'])  ? $this->config->filterParam->param[$this->moduleName][$this->methodName]['name']  : $this->config->filterParam->param['common']['name'];
-        $valueRules = isset($this->config->filterParam->param[$this->moduleName][$this->methodName]['value']) ? $this->config->filterParam->param[$this->moduleName][$this->methodName]['value'] : $this->config->filterParam->param['common']['value'];
+        $nameRule = isset($filter->{$this->moduleName}->{$this->methodName}->paramName)  ? $filter->{$this->moduleName}->{$this->methodName}->paramName  : $filter->default->paramName;
         foreach($passedParams as $param => $value)
         {
-            if(!validater::checkByRules($param, $nameRules)) die('Bad Request!');
-            if($value and !validater::checkByRules($value, $valueRules)) die('Bad Request!');
+            if(!validater::checkByRule($param, $nameRule)) die('Bad Request!');
+            $valueRule = $filter->default->paramValue;
+            if(isset($filter->{$this->moduleName}->{$this->methodName}->paramValue[$param]))
+            {
+                $valueRule = $filter->{$this->moduleName}->{$this->methodName}->paramValue[$param];
+            }
+            if($value and !validater::checkByRule($value, $valueRule)) die('Bad Request!');
         }
 
         $passedParams = array_values($passedParams);
@@ -1870,7 +1887,7 @@ class baseRouter
     public function loadMainConfig()
     {
         /* 初始化$config对象。Init the $config object. */
-        global $config;
+        global $config, $filter;
         if(!is_object($config)) $config = new config();
         $this->config = $config;
 
@@ -2003,11 +2020,9 @@ class baseRouter
         $view->viewVar     = $this->config->viewVar;
         $view->sessionVar  = $this->config->sessionVar;
 
-        $this->session->set('rand', mt_rand(0, 10000));
-        $this->session->set('random', $this->session->rand);
+        $this->session->set('random', mt_rand(0, 10000));
         $view->sessionName = session_name();
         $view->sessionID   = session_id();
-        $view->rand        = $this->session->rand;
         $view->random      = $this->session->random;
         $view->expiredTime = ini_get('session.gc_maxlifetime');
         $view->serverTime  = time();
