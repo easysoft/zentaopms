@@ -394,7 +394,7 @@ class fileModel extends model
 
         $content = preg_replace('/ src="(' . $readLinkReg . ')" /', ' onload="setImageSize(this,' . $maxSize . ')" src="$1" ', $content);
         preg_match_all('/ src="{([0-9]+)}" /', $content, $matchs);
-        if($matchs[1])
+        if(!empty($matchs[1]))
         {
             $files = $this->dao->select('id,extension')->from(TABLE_FILE)->where('id')->in($matchs[1])->fetchPairs('id', 'extension');
             foreach($matchs[0] as $i => $match)
@@ -751,7 +751,7 @@ class fileModel extends model
         {
             if(empty($field) or empty($data->$field)) continue;
             preg_match_all('/ src="{([0-9]+)}" /', $data->$field, $matchs);
-            if($matchs[1])
+            if(!empty($matchs[1]))
             {
                 $files = $this->dao->select('id,extension')->from(TABLE_FILE)->where('id')->in($matchs[1])->fetchPairs('id', 'extension');
                 foreach($matchs[0] as $i => $match)
