@@ -684,17 +684,17 @@ class baseValidater
             if($config->requestType == 'GET' and $type == 'get' and isset($params[$key])) continue;
 
             $rules = '';
-            if(isset($filter->{$moduleName}->{$methodName}->$type[$key]))
+            if(isset($filter->{$moduleName}->{$methodName}->{$type}[$key]))
             {
-                $rules = $filter->{$moduleName}->{$methodName}->$type[$key];
+                $rules = $filter->{$moduleName}->{$methodName}->{$type}[$key];
             }
-            elseif(isset($filter->{$moduleName}->default->$type[$key]))
+            elseif(isset($filter->{$moduleName}->default->{$type}[$key]))
             {
-                $rules = $filter->{$moduleName}->default->$type[$key];
+                $rules = $filter->{$moduleName}->default->{$type}[$key];
             }
-            elseif(isset($filter->default->$type[$key]))
+            elseif(isset($filter->default->{$type}[$key]))
             {
-                $rules = $filter->default->$type[$key];
+                $rules = $filter->default->{$type}[$key];
             }
 
             if(!self::checkByRule($value, $rules)) unset($var[$key]);
