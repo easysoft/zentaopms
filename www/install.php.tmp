@@ -10,7 +10,6 @@
  * @link        http://www.zentao.net
  */
 error_reporting(0);
-session_start();
 define('IN_INSTALL', true);
 
 /* Load the framework. */

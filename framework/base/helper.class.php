@@ -713,10 +713,9 @@ function getWebRoot($full = false)
         return $http . $_SERVER['HTTP_HOST'] . substr($path, 0, (strrpos($path, '/') + 1));
     }
 
-    $path = dirname(dirname($path));
+    $path = substr($path, 0, (strrpos($path, '/') + 1));
     $path = str_replace('\\', '/', $path);
-    if($path == '/') return '/';
-    return $path . '/';
+    return $path;
 }
 
 /**
