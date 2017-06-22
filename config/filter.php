@@ -197,3 +197,4 @@ $filter->upgrade->license->get['agree'] = 'equal::true';
 $filter->user->login->get['account']  = 'account';
 $filter->user->login->get['lang']     = 'reg::lang';
 $filter->user->login->get['password'] = 'reg::any';
+$filter->user->edit->get['from']      = 'reg::word';

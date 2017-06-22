@@ -1715,6 +1715,8 @@ class baseRouter
             for($i = 2; $i < $itemCount; $i ++)
             {
                 $key = key($defaultParams);     // Get key from the $defaultParams.
+                if(empty($key)) continue;
+
                 $params[$key] = str_replace('.', '-', $items[$i]);
                 next($defaultParams);
             }
@@ -1776,6 +1778,7 @@ class baseRouter
             {
                 $valueRule = $filter->{$this->moduleName}->{$this->methodName}->paramValue[$param];
             }
+
             if($value and !validater::checkByRule($value, $valueRule)) die('Bad Request!');
         }
 
