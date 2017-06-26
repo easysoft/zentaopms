@@ -1444,7 +1444,7 @@ class bug extends control
                 {
                     foreach($relatedFiles[$bug->id] as $file)
                     {
-                        $fileURL = common::getSysURL() . $this->file->webPath . $file->pathname;
+                        $fileURL = common::getSysURL() . $this->file->webPath . $this->file->getRealPathName($file->pathname);
                         $bug->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
                     }
                 }

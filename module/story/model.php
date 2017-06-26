@@ -33,7 +33,7 @@ class storyModel extends model
         $story->spec   = isset($spec->spec)   ? $spec->spec   : '';
         $story->verify = isset($spec->verify) ? $spec->verify : '';
 
-        $story = $this->loadModel('file')->revertRealSRC($story, 'spec,verify');
+        $story = $this->loadModel('file')->replaceImgURL($story, 'spec,verify');
         if($setImgSize) $story->spec   = $this->file->setImgSize($story->spec);
         if($setImgSize) $story->verify = $this->file->setImgSize($story->verify);
 
@@ -168,7 +168,7 @@ class storyModel extends model
 
         if($this->checkForceReview()) $story->status = 'draft';
         if($story->status == 'draft') $story->stage   = $this->post->plan > 0 ? 'planned' : 'wait';
-        $story = $this->loadModel('file')->processEditor($story, $this->config->story->editor->create['id'], $this->post->uid);
+        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
@@ -319,7 +319,7 @@ class storyModel extends model
                     $realPath = $file['realpath'];
                     unset($file['realpath']);
 
-                    if(rename($realPath, $this->file->savePath . $file['pathname']))
+                    if(rename($realPath, $this->file->savePath . $this->file->getSaveName($file['pathname'])))
                     {
                         $file['addedBy']    = $this->app->user->account;    
                         $file['addedDate']  = $now;     
@@ -328,7 +328,7 @@ class storyModel extends model
                             $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
                             $fileID = $this->dao->lastInsertID();
-                            $specData->spec .= '<img src="{' . $fileID . '}" alt="" />';
+                            $specData->spec .= '<img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
                         }
                         else
                         {
@@ -399,7 +399,7 @@ class storyModel extends model
             ->remove('files,labels,comment,needNotReview,uid')
             ->get();
         if($this->checkForceReview()) $story->status = 'changed';
-        $story = $this->loadModel('file')->processEditor($story, $this->config->story->editor->change['id'], $this->post->uid);
+        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify')
             ->autoCheck()
             ->batchCheck($this->config->story->change->requiredFields, 'notempty')

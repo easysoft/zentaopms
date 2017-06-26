@@ -78,7 +78,7 @@ class bugModel extends model
         $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
         if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
-        $bug = $this->loadModel('file')->processEditor($bug, $this->config->bug->editor->create['id'], $this->post->uid);
+        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
@@ -172,7 +172,7 @@ class bugModel extends model
 
                 $realPath = $file['realpath'];
                 unset($file['realpath']);
-                if(rename($realPath, $this->file->savePath . $file['pathname']))
+                if(rename($realPath, $this->file->savePath . $this->file->getSaveName($file['pathname'])))
                 {
                     if(in_array($file['extension'], $this->config->file->imageExtensions))
                     {
@@ -181,7 +181,7 @@ class bugModel extends model
                         $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
                         $fileID = $this->dao->lastInsertID;
-                        $bug->steps .= '<img src="{' . $fileID . '}" alt="" />';
+                        $bug->steps .= '<img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
                         unset($file);
                     }
                 }
@@ -361,7 +361,7 @@ class bugModel extends model
             ->where('t1.id')->eq((int)$bugID)->fetch();
         if(!$bug) return false;
 
-        $bug = $this->loadModel('file')->revertRealSRC($bug, 'steps');
+        $bug = $this->loadModel('file')->replaceImgURL($bug, 'steps');
         if($setImgSize) $bug->steps = $this->file->setImgSize($bug->steps);
         foreach($bug as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $bug->$key = '';
 
@@ -528,7 +528,7 @@ class bugModel extends model
             ->remove('comment,files,labels,uid')
             ->get();
 
-        $bug = $this->loadModel('file')->processEditor($bug, $this->config->bug->editor->edit['id'], $this->post->uid);
+        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_BUG)->data($bug)
             ->autoCheck()
             ->batchCheck($this->config->bug->edit->requiredFields, 'notempty')

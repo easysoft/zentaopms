@@ -33,7 +33,7 @@ class releaseModel extends model
         if(!$release) return false;
 
         $this->loadModel('file');
-        $release = $this->file->revertRealSRC($release, 'desc');
+        $release = $this->file->replaceImgURL($release, 'desc');
         $release->files = $this->file->getByObject('release', $releaseID);
         if(empty($release->files))$release->files = $this->file->getByObject('build', $release->buildID);
         if($setImgSize) $release->desc = $this->file->setImgSize($release->desc);
@@ -113,7 +113,7 @@ class releaseModel extends model
                 ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
                 ->remove('build,files,labels,uid')
                 ->get();
-            $build = $this->loadModel('file')->processEditor($build, $this->config->release->editor->create['id']);
+            $build = $this->loadModel('file')->processImgURL($build, $this->config->release->editor->create['id']);
             $this->dao->insert(TABLE_BUILD)->data($build)
                 ->autoCheck()
                 ->check('name', 'unique', "product = {$build->product} AND branch = $branch AND deleted = '0'")
@@ -133,7 +133,7 @@ class releaseModel extends model
             ->remove('allchecker,files,labels,uid')
             ->get();
 
-        $release = $this->loadModel('file')->processEditor($release, $this->config->release->editor->create['id'], $this->post->uid);
+        $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->create->requiredFields, 'notempty')
@@ -167,7 +167,7 @@ class releaseModel extends model
             ->add('branch',  (int)$branch)
             ->remove('files,labels,allchecker,uid')
             ->get();
-        $release = $this->loadModel('file')->processEditor($release, $this->config->release->editor->edit['id'], $this->post->uid);
+        $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')

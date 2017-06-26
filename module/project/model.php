@@ -234,7 +234,7 @@ class projectModel extends model
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->remove('products, workDays, delta, branch,uid')
             ->get();
-        $project = $this->loadModel('file')->processEditor($project, $this->config->project->editor->create['id'], $this->post->uid);
+        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->project->create->requiredFields, 'notempty')
@@ -318,7 +318,7 @@ class projectModel extends model
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
             ->remove('products,branch,uid')
             ->get();
-        $project = $this->loadModel('file')->processEditor($project, $this->config->project->editor->edit['id'], $this->post->uid);
+        $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->project->edit->requiredFields, 'notempty')
@@ -890,7 +890,7 @@ class projectModel extends model
         $project->totalConsumed = round($total->totalConsumed, 1);
         $project->totalLeft     = round($total->totalLeft, 1);
 
-        $project = $this->loadModel('file')->revertRealSRC($project, 'desc');
+        $project = $this->loadModel('file')->replaceImgURL($project, 'desc');
         if($setImgSize) $project->desc = $this->file->setImgSize($project->desc);
 
         return $project;

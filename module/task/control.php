@@ -1207,7 +1207,7 @@ class task extends control
                     $task->files = '';
                     foreach($relatedFiles[$task->id] as $file)
                     {
-                        $fileURL = common::getSysURL() . $this->file->webPath . $file->pathname;
+                        $fileURL = common::getSysURL() . $this->file->webPath . $this->file->getRealPathName($file->pathname);
                         $task->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
                     }
                 }

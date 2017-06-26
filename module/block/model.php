@@ -41,7 +41,7 @@ class blockModel extends model
         if($type == 'html')
         {
             $uid  = $this->post->uid;
-            $data = $this->loadModel('file')->processEditor($data, 'html', $uid);
+            $data = $this->loadModel('file')->processImgURL($data, 'html', $uid);
             $data->params['html'] = $data->html;
             unset($data->html);
             unset($_SESSION['album'][$uid]);

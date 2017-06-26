@@ -47,7 +47,7 @@ class actionModel extends model
         $action->extra      = $extra;
 
         /* Process action. */
-        $action = $this->loadModel('file')->processEditor($action, 'comment', $this->post->uid);
+        $action = $this->loadModel('file')->processImgURL($action, 'comment', $this->post->uid);
 
         /* Get product and project for this object. */
         $productAndProject  = $this->getProductAndProject($action->objectType, $objectID);
@@ -893,7 +893,7 @@ class actionModel extends model
         $action->comment = trim(strip_tags($this->post->lastComment, $this->config->allowedTags));
 
         /* Process action. */
-        $action = $this->loadModel('file')->processEditor($action, 'comment', $this->post->uid);
+        $action = $this->loadModel('file')->processImgURL($action, 'comment', $this->post->uid);
 
         $this->dao->update(TABLE_ACTION)
             ->set('date')->eq(helper::now())

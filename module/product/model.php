@@ -181,7 +181,7 @@ class productModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProduct();
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-        return $this->loadModel('file')->revertRealSRC($product, 'desc');
+        return $this->loadModel('file')->replaceImgURL($product, 'desc');
     }
 
     /**
@@ -288,7 +288,7 @@ class productModel extends model
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
             ->remove('uid')
             ->get();
-        $product = $this->loadModel('file')->processEditor($product, $this->config->product->editor->create['id'], $this->post->uid);
+        $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck('name,code', 'notempty')
             ->check('name', 'unique', "deleted = '0'")
@@ -328,7 +328,7 @@ class productModel extends model
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid')
             ->get();
-        $product = $this->loadModel('file')->processEditor($product, $this->config->product->editor->edit['id'], $this->post->uid);
+        $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck('name,code', 'notempty')
             ->check('name', 'unique', "id != $productID and deleted = '0'")

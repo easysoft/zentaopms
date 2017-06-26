@@ -31,7 +31,7 @@ class buildModel extends model
             ->fetch();
         if(!$build) return false;
 
-        $build = $this->loadModel('file')->revertRealSRC($build, 'desc');
+        $build = $this->loadModel('file')->replaceImgURL($build, 'desc');
         $build->files = $this->file->getByObject('build', $buildID);
         if($setImgSize) $build->desc = $this->file->setImgSize($build->desc);
         return $build;
@@ -201,7 +201,7 @@ class buildModel extends model
             ->remove('resolvedBy,allchecker,files,labels,uid')
             ->get();
 
-        $build = $this->loadModel('file')->processEditor($build, $this->config->build->editor->create['id'], $this->post->uid);
+        $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_BUILD)->data($build)
             ->autoCheck()
             ->batchCheck($this->config->build->create->requiredFields, 'notempty')
@@ -231,7 +231,7 @@ class buildModel extends model
             ->get();
         if(!isset($build->branch)) $build->branch = $oldBuild->branch;
 
-        $build = $this->loadModel('file')->processEditor($build, $this->config->build->editor->edit['id'], $this->post->uid);
+        $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_BUILD)->data($build)
             ->autoCheck()
             ->batchCheck($this->config->build->edit->requiredFields, 'notempty')

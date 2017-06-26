@@ -331,8 +331,9 @@ class docModel extends model
         $docFiles = array();
         foreach($files as $file)
         {
-            $file->webPath  = $this->file->webPath . $file->pathname;
-            $file->realPath = $this->file->savePath . $file->pathname;
+            $pathName = $this->file->getRealPathName($file->pathname);
+            $file->webPath  = $this->file->webPath . $pathName;
+            $file->realPath = $this->file->savePath . $pathName;
             if(strpos(",{$docContent->files},", ",{$file->id},") !== false) $docFiles[$file->id] = $file;
         }
 
@@ -352,7 +353,7 @@ class docModel extends model
         $doc->content     = isset($docContent->content) ? $docContent->content : '';
         $doc->contentType = isset($docContent->type)    ? $docContent->type : '';
 
-        $doc = $this->loadModel('file')->revertRealSRC($doc, 'content');
+        $doc = $this->loadModel('file')->replaceImgURL($doc, 'content');
         if($setImgSize) $doc->content = $this->file->setImgSize($doc->content);
         $doc->files = $docFiles;
 
@@ -393,7 +394,7 @@ class docModel extends model
         if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
         $lib = $this->getLibByID($doc->lib);
-        $doc = $this->loadModel('file')->processEditor($doc, $this->config->doc->editor->create['id'], $this->post->uid);
+        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], $this->post->uid);
         $doc->product = $lib->product;
         $doc->project = $lib->project;
         if($doc->type == 'url')
@@ -454,7 +455,7 @@ class docModel extends model
         if($oldDoc->contentType == 'markdown') $doc->content = str_replace('&gt;', '>', $doc->content);
 
         $lib = $this->getLibByID($doc->lib);
-        $doc = $this->loadModel('file')->processEditor($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
+        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
         $doc->product = $lib->product;
         $doc->project = $lib->project;
         if($doc->type == 'url') $doc->content = $doc->url;
@@ -952,8 +953,9 @@ class docModel extends model
 
         foreach($files as $fileID => $file)
         {
-            $file->realPath = $this->file->savePath . $file->pathname;
-            $file->webPath  = $this->file->webPath . $file->pathname;
+            $pathName = $this->file->getRealPathName($file->pathname);
+            $file->realPath = $this->file->savePath . $pathName;
+            $file->webPath  = $this->file->webPath . $pathName;
         }
 
         return $files;

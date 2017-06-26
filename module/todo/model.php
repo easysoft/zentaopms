@@ -35,7 +35,7 @@ class todoModel extends model
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
             ->remove('bug, task,uid')
             ->get();
-        $todo = $this->loadModel('file')->processEditor($todo, $this->config->todo->editor->create['id'], $this->post->uid);
+        $todo = $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TODO)->data($todo)
             ->autoCheck()
             ->checkIF($todo->type == 'custom', $this->config->todo->create->requiredFields, 'notempty')
@@ -126,7 +126,7 @@ class todoModel extends model
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid')
             ->get();
-        $todo = $this->loadModel('file')->processEditor($todo, $this->config->todo->editor->edit['id'], $this->post->uid);
+        $todo = $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TODO)->data($todo)
             ->autoCheck()
             ->checkIF($todo->type == 'custom', $this->config->todo->edit->requiredFields, 'notempty')
@@ -227,7 +227,7 @@ class todoModel extends model
     {
         $todo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
         if(!$todo) return false;
-        $todo = $this->loadModel('file')->revertRealSRC($todo, 'desc');
+        $todo = $this->loadModel('file')->replaceImgURL($todo, 'desc');
         if($setImgSize) $todo->desc = $this->file->setImgSize($todo->desc);
         if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
         if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');

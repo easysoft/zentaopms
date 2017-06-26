@@ -133,7 +133,7 @@ class testsuiteModel extends model
             ->add('addedDate', helper::now())
             ->remove('uid')
             ->get();
-        $suite = $this->loadModel('file')->processEditor($suite, $this->config->testsuite->editor->create['id'], $this->post->uid);
+        $suite = $this->loadModel('file')->processImgURL($suite, $this->config->testsuite->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TESTSUITE)->data($suite)
             ->batchcheck($this->config->testsuite->create->requiredFields, 'notempty')
             ->exec();
@@ -177,7 +177,7 @@ class testsuiteModel extends model
     public function getById($suiteID, $setImgSize = false)
     {
         $suite = $this->dao->select("*")->from(TABLE_TESTSUITE)->where('id')->eq((int)$suiteID)->fetch();
-        $suite = $this->loadModel('file')->revertRealSRC($suite, 'desc');
+        $suite = $this->loadModel('file')->replaceImgURL($suite, 'desc');
         if($setImgSize) $suite->desc = $this->file->setImgSize($suite->desc);
         return $suite;
     }
@@ -198,7 +198,7 @@ class testsuiteModel extends model
             ->add('lastEditedDate', helper::now())
             ->remove('uid')
             ->get();
-        $suite = $this->loadModel('file')->processEditor($suite, $this->config->testsuite->editor->edit['id'], $this->post->uid);
+        $suite = $this->loadModel('file')->processImgURL($suite, $this->config->testsuite->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTSUITE)->data($suite)
             ->autoCheck()
             ->batchcheck($this->config->testsuite->edit->requiredFields, 'notempty')
@@ -352,7 +352,7 @@ class testsuiteModel extends model
             ->add('addedDate', helper::now())
             ->remove('uid')
             ->get();
-        $lib = $this->loadModel('file')->processEditor($lib, $this->config->testsuite->editor->create['id'], $this->post->uid);
+        $lib = $this->loadModel('file')->processImgURL($lib, $this->config->testsuite->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TESTSUITE)->data($lib)
             ->batchcheck($this->config->testsuite->createlib->requiredFields, 'notempty')
             ->check('name', 'unique', "deleted = '0'")

@@ -59,7 +59,7 @@ class taskModel extends model
                 }
             }
 
-            $task = $this->file->processEditor($task, $this->config->task->editor->create['id'], $this->post->uid);
+            $task = $this->file->processImgURL($task, $this->config->task->editor->create['id'], $this->post->uid);
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
                 ->batchCheck($this->config->task->create->requiredFields, 'notempty')
@@ -246,7 +246,7 @@ class taskModel extends model
             $this->addTaskEstimate($estimate);
         }
 
-        $task = $this->loadModel('file')->processEditor($task, $this->config->task->editor->edit['id'], $this->post->uid);
+        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $this->config->task->edit->requiredFields, 'notempty')
@@ -809,7 +809,7 @@ class taskModel extends model
             ->fetch();
         if(!$task) return false;
 
-        $task = $this->loadModel('file')->revertRealSRC($task, 'desc');
+        $task = $this->loadModel('file')->replaceImgURL($task, 'desc');
         if($setImgSize) $task->desc = $this->file->setImgSize($task->desc);
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
         foreach($task as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $task->$key = '';

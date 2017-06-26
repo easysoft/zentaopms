@@ -72,7 +72,7 @@ class testtaskModel extends model
     function create()
     {
         $task = fixer::input('post')->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)->join('mailto', ',')->remove('uid')->get();
-        $task = $this->loadModel('file')->processEditor($task, $this->config->testtask->editor->create['id'], $this->post->uid);
+        $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TESTTASK)->data($task)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->testtask->create->requiredFields, 'notempty')
@@ -186,7 +186,7 @@ class testtaskModel extends model
             ->where('t1.id')->eq((int)$taskID)
             ->andWhere('t5.product = t1.product')
             ->fetch();
-        $task = $this->loadModel('file')->revertRealSRC($task, 'desc');
+        $task = $this->loadModel('file')->replaceImgURL($task, 'desc');
         if($setImgSize) $task->desc = $this->loadModel('file')->setImgSize($task->desc);
         return $task;
     }
@@ -521,7 +521,7 @@ class testtaskModel extends model
     {
         $oldTask = $this->dao->select("*")->from(TABLE_TESTTASK)->where('id')->eq((int)$taskID)->fetch();
         $task = fixer::input('post')->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)->join('mailto', ',')->remove('uid')->get();
-        $task = $this->loadModel('file')->processEditor($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
+        $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTTASK)->data($task)
             ->autoCheck()
             ->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')
@@ -573,7 +573,7 @@ class testtaskModel extends model
             ->remove('comment,uid')
             ->get();
 
-        $testtask = $this->loadModel('file')->processEditor($testtask, $this->config->testtask->editor->close['id'], $this->post->uid);
+        $testtask = $this->loadModel('file')->processImgURL($testtask, $this->config->testtask->editor->close['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTTASK)->data($testtask)
             ->autoCheck()
             ->where('id')->eq((int)$taskID)
@@ -1009,8 +1009,9 @@ class testtaskModel extends model
         $stepFiles   = array();
         foreach($files as $file)
         {
-            $file->webPath  = $this->file->webPath . $file->pathname;
-            $file->realPath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . $file->pathname;
+            $pathName = $this->file->getRealPathName($file->pathname);
+            $file->webPath  = $this->file->webPath . $pathName;
+            $file->realPath = $this->file->savePath . $pathName;
             if($file->objectType == 'caseResult')
             {
                 $resultFiles[$file->objectID][$file->id] = $file;
