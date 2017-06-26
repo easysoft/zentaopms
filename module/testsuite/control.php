@@ -746,9 +746,9 @@ class testsuite extends control
             $file = $this->loadModel('file')->getUpload('file');
             $file = $file[0];
 
-            move_uploaded_file($file['tmpname'], $this->file->savePath . $file['pathname']);
+            $fileName = $this->file->savePath . $this->file->getSaveName($file['pathname']);
+            move_uploaded_file($file['tmpname'], $fileName);
 
-            $fileName = $this->file->savePath . $file['pathname'];
             $rows     = $this->file->parseCSV($fileName);
             $fields   = $this->testcase->getImportFields($productID);
             $fields   = array_flip($fields);
