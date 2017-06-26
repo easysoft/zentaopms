@@ -36,6 +36,7 @@ $whiteList[] = 'file-export2html';
 $whiteList[] = 'file-export2excel';
 $whiteList[] = 'file-export2word';
 $whiteList[] = 'file-senddownheader';
+$whiteList[] = 'file-read';
 $whiteList[] = 'help-field';
 $whiteList[] = 'index-testext';
 $whiteList[] = 'productplan-commonaction';
