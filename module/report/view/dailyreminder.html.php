@@ -6,7 +6,7 @@
     <table cellpadding='0' cellspacing='0' style='width: 100%; border: none; border-collapse: collapse;'>
       <tr>
         <td style='padding: 10px; background-color: #F8FAFE; border: none; font-size: 14px; font-weight: 500; border-bottom: 1px solid #e5e5e5;'><?php echo date('Y-m-d') ?></td>
-        <td style='width: 40px; text-align: right; background-color: #F8FAFE; border: none; vertical-align: top; padding: 10px; border-bottom: 1px solid #e5e5e5;'><?php echo html::a($url, $url, 'target="_blank"');?></td>
+        <td style='width: 40px; text-align: right; background-color: #F8FAFE; border: none; vertical-align: top; padding: 10px; border-bottom: 1px solid #e5e5e5;'><?php echo html::a($url . $config->webRoot, $url . $config->webRoot, 'target="_blank"');?></td>
       </tr>
     </table>
   </td>

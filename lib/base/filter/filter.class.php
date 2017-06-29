@@ -751,7 +751,7 @@ class baseValidater
         global $filter;
 
         if(strpos($rule, '::') !== false) list($operator, $param) = explode('::', $rule);
-        if(strpos($rule,'::') === false) list($operator, $param) = array($rule, '');
+        if(strpos($rule, '::') === false) list($operator, $param) = array($rule, '');
         if($operator == 'reg' and isset($filter->rules->$param)) $param = $filter->rules->$param;
 
         return array($operator, $param);

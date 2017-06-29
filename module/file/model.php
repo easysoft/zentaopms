@@ -627,7 +627,8 @@ class fileModel extends model
     public function processImgURL($data, $editorList, $uid = '')
     {
         if(is_string($editorList)) $editorList = explode(',', str_replace(' ', '', $editorList));
-        $readLinkReg = basename(helper::createLink('file', 'read', 'fileID=(%fileID%)', '(\w+)'));
+        $readLinkReg = helper::createLink('file', 'read', 'fileID=(%fileID%)', '(\w+)');
+        $readLinkReg = str_replace($this->config->webRoot, '', $readLinkReg);
         $readLinkReg = str_replace(array('%fileID%', '?'), array('[0-9]+', '\?'), $readLinkReg);
         foreach($editorList as $editorID)
         {
