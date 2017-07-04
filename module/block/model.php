@@ -38,6 +38,7 @@ class blockModel extends model
             ->remove('uid')
             ->get();
 
+        if($block) $data->height = $block->height;
         if($type == 'html')
         {
             $uid  = $this->post->uid;

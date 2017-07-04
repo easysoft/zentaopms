@@ -90,7 +90,7 @@ class testreportModel extends model
             ->remove('files,labels,uid')
             ->get();
 
-        $data = $this->loadModel('file')->processImgURL($date, $this->config->testreport->editor->create['id'], $this->post->uid);
+        $data = $this->loadModel('file')->processImgURL($data, $this->config->testreport->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TESTREPORT)->data($data)->autocheck()
              ->batchCheck($this->config->testreport->create->requiredFields, 'notempty')
              ->batchCheck('start,end', 'notempty')
@@ -122,7 +122,7 @@ class testreportModel extends model
             ->join('members', ',')
             ->remove('files,labels,uid')
             ->get();
-        $data = $this->loadModel('file')->processImgURL($date, $this->config->testreport->editor->edit['id'], $this->post->uid);
+        $data = $this->loadModel('file')->processImgURL($data, $this->config->testreport->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTREPORT)->data($data)->autocheck()
              ->batchCheck($this->config->testreport->edit->requiredFields, 'notempty')
              ->batchCheck('start,end', 'notempty')

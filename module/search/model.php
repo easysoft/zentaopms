@@ -354,12 +354,12 @@ class searchModel extends model
         if($module == 'story')
         {
             $pairs = 'id,title';
-            $table = 'zt_story';
+            $table = TABLE_STORY;
         }
         else if($module == 'task')
         {
             $pairs = 'id,name';
-            $table = 'zt_task';
+            $table = TABLE_TASK;
         }
         $query    = '`' . $conditions['field1'] . '`';
         $operator = $conditions['operator1'];
