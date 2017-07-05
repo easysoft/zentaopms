@@ -62,7 +62,7 @@ function initKindeditor(afterInit)
             items:editorTool,
             filterMode: true, 
             bodyClass:'article-content',
-            urlType:'relative', 
+            urlType:'absolute', 
             uploadJson: createLink('file', 'ajaxUpload', 'uid=' + kuid),
             allowFileManager:true,
             langType:'<?php echo $editorLang?>',

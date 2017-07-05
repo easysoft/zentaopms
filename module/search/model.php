@@ -425,16 +425,16 @@ class searchModel extends model
         $lastMonth = date::getLastMonth();
         $thisMonth = date::getThisMonth();
         $yesterday = date::yesterday();
-        $today     = date::today();
+        $today     = date(DT_DATE1);
         if(strpos($query, '$') !== false)
         {
             $query = str_replace('$@me', $this->app->user->account, $query);
-            $query = str_replace("'\$lastMonth'", "'" . $lastMonth['begin'] . "' and '" . $lastMonth['end'] . "'", $query);
-            $query = str_replace("'\$thisMonth'", "'" . $thisMonth['begin'] . "' and '" . $thisMonth['end'] . "'", $query);
-            $query = str_replace("'\$lastWeek'",  "'" . $lastWeek['begin']  . "' and '" . $lastWeek['end']  . "'", $query);
-            $query = str_replace("'\$thisWeek'",  "'" . $thisWeek['begin']  . "' and '" . $thisWeek['end']  . "'", $query);
-            $query = str_replace("'\$yesterday'", "'" . $yesterday          . "' and '" . $yesterday        . "'", $query);
-            $query = str_replace("'\$today'",     "'" . $today              . "' and '" . $today            . "'", $query);
+            $query = str_replace("'\$lastMonth'", "'" . $lastMonth['begin']      . "' and '" . $lastMonth['end']        . "'", $query);
+            $query = str_replace("'\$thisMonth'", "'" . $thisMonth['begin']      . "' and '" . $thisMonth['end']        . "'", $query);
+            $query = str_replace("'\$lastWeek'",  "'" . $lastWeek['begin']       . "' and '" . $lastWeek['end']         . "'", $query);
+            $query = str_replace("'\$thisWeek'",  "'" . $thisWeek['begin']       . "' and '" . $thisWeek['end']         . "'", $query);
+            $query = str_replace("'\$yesterday'", "'" . $yesterday . ' 00:00:00' . "' and '" . $yesterday . ' 23:59:59' . "'", $query);
+            $query = str_replace("'\$today'",     "'" . $today     . ' 00:00:00' . "' and '" . $today     . ' 23:59:59' . "'", $query);
         }
         return $query;
     }
