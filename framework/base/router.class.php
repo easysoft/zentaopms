@@ -1718,7 +1718,7 @@ class baseRouter
                 $key = key($defaultParams);     // Get key from the $defaultParams.
                 if(empty($key)) continue;
 
-                $params[$key] = str_replace('.', '-', $items[$i]);
+                $params[$key] = $items[$i];
                 next($defaultParams);
             }
         }
