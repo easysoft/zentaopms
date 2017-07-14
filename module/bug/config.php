@@ -27,7 +27,7 @@ $config->bug->list->defaultFields = 'id,severity,pri,title,openedBy,assignedTo,r
 
 $config->bug->list->exportFields = 'id, product, branch, module, project, story, task, 
     title, keywords, severity, pri, type, os, browser,
-    steps, status, activatedCount, confirmed, mailto,
+    steps, status, deadline, activatedCount, confirmed, mailto,
     openedBy, openedDate, openedBuild, 
     assignedTo, assignedDate,
     resolvedBy, resolution, resolvedBuild, resolvedDate,
