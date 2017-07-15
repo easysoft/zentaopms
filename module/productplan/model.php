@@ -48,12 +48,14 @@ class productplanModel extends model
      * @access public
      * @return void
      */
-    public function getLast($productID)
+    public function getLast($productID, $branch = 0)
     {
         return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
             ->andWhere('product')->eq($productID)
+            ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
             ->orderBy('end desc')
+            ->limit(1)
             ->fetch();
     }
 
