@@ -56,11 +56,19 @@ $lang->misc->noGDLib     = "請用手機瀏覽器訪問：<strong>%s</strong>";
 $lang->misc->copyright   = "&copy; 2009 - 2016 <a href='http://www.cnezsoft.com' target='_blank'>青島易軟天創網絡科技有限公司</a> 電話：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
 $lang->misc->checkTable  = "檢查修復數據表";
 $lang->misc->needRepair  = "修復表";
-$lang->misc->repairTable = "資料庫表可以因為斷電原因損壞，需要檢查修復！！";
+$lang->misc->repairTable = "資料庫表可能因為斷電原因損壞，需要檢查修復！！";
 $lang->misc->repairFail  = "修復失敗，請到該資料庫的數據目錄下，嘗試執行<code>myisamchk -r -f %s.MYI</code>進行修復。";
 $lang->misc->tableName   = "表名";
 $lang->misc->tableStatus = "狀態";
 $lang->misc->novice      = "您可能初次使用禪道，是否進入新手模式？";
+
+$lang->user->noticeResetFile = "<h5>普通用戶請聯繫管理員進行修復</h5>
+    <h5>管理員請登錄禪道所在的伺服器，創建<span>%s</span>檔案。</h5>
+    <p>注意：</p>
+    <ol>
+    <li>檔案內容為空。</li>
+    <li>如果之前檔案存在，刪除之後重新創建。</li>
+    </ol>";
 
 $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';

@@ -110,7 +110,7 @@ else
     {
         $checkFileName = str_replace(dirname(dirname(__FILE__)) . DS, '', $checkFileName);
     }
-    printf($lang->user->noticeResetFile, $checkFileName);
+    printf($lang->misc->noticeRepair, $checkFileName);
     ?>
   </div>
   <p><a href='<?php echo $config->webRoot . 'checktable.php';?>' class='btn'><i class='icon-refresh'></i></a></p>

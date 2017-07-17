@@ -15,7 +15,7 @@
 <div class='container mw-700px'>
 <?php if($status == 'createFile'):?>
   <div class='panel-body'>
-    <?php printf($lang->user->noticeResetFile, $this->session->checkFileName);?>
+    <?php printf($lang->misc->noticeRepair, $this->session->checkFileName);?>
   </div>
   <p><?php echo html::a(inlink('checkTable'), $this->lang->refresh, '', "class='btn'")?></p>
 <?php elseif($status == 'check'):?>
