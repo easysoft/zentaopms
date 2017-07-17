@@ -588,7 +588,7 @@ class bugModel extends model
             }
 
             /* Initialize bugs from the post data.*/
-            $oldBugs = $bugIDList ? $this->getList($bugIDList) : array();
+            $oldBugs = $bugIDList ? $this->getByList($bugIDList) : array();
             foreach($bugIDList as $bugID)
             {
                 $oldBug = $oldBugs[$bugID];

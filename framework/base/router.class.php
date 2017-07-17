@@ -2236,7 +2236,7 @@ class baseRouter
          * Set the error info.
          **/
         $errorLog  = "\n" . date('H:i:s') . " $message in <strong>$file</strong> on line <strong>$line</strong> ";
-        $errorLog .= "when visiting <strong>" . $this->getURI() . "</strong>\n";
+        $errorLog .= "when visiting <strong>" . htmlspecialchars($this->getURI()) . "</strong>\n";
 
         /* 
          * 为了安全起见，对公网环境隐藏脚本路径。
