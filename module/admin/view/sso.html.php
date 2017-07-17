@@ -25,6 +25,10 @@
         <td><?php echo html::radio('turnon', $lang->sso->turnonList, $turnon);?></td>
       </tr>
       <tr>
+        <th class='rowhead w-120px'><?php echo $lang->sso->redirect; ?></th>
+        <td><?php echo html::radio('redirect', $lang->sso->turnonList, $redirect);?></td>
+      </tr>
+      <tr>
         <th><?php echo $lang->sso->addr; ?></th>
         <td><?php echo html::input('addr', $addr, "class='form-control' placeholder='{$lang->sso->addrNotice}' autocomplete='off'");?></td>
       </tr>

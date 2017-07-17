@@ -273,6 +273,7 @@ class testtaskModel extends model
     {
         return $this->dao->select('*')->from(TABLE_CASE)->where($query)
                 ->andWhere('id')->notIN($linkedCases)
+                ->andWhere('status')->ne('wait')
                 ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('id desc')
@@ -299,6 +300,7 @@ class testtaskModel extends model
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
                 ->andWhere('product')->eq($productID)
+                ->andWhere('status')->ne('wait')
                 ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
                 ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
                 ->andWhere('story')->in(trim($stories, ','))
@@ -330,6 +332,7 @@ class testtaskModel extends model
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($query)
                 ->andWhere('product')->eq($productID)
+                ->andWhere('status')->ne('wait')
                 ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
                 ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
                 ->andWhere('fromBug')->in(trim($bugs, ','))
@@ -361,6 +364,7 @@ class testtaskModel extends model
                 ->where($query)
                 ->andWhere('t2.suite')->eq((int)$suite)
                 ->andWhere('t1.product')->eq($productID)
+                ->andWhere('status')->ne('wait')
                 ->beginIF($linkedCases)->andWhere('t1.id')->notIN($linkedCases)->fi()
                 ->beginIF($task->branch)->andWhere('t1.branch')->in("0,$task->branch")->fi()
                 ->andWhere('deleted')->eq(0)
@@ -382,7 +386,7 @@ class testtaskModel extends model
     {
         $caseList  = $this->dao->select("`case`")->from(TABLE_TESTRUN)->where('task')->eq($testTask)->andWhere('`case`')->notin($linkedCases)->fetchPairs('case');
         
-        return $this->dao->select("*")->from(TABLE_CASE)->where('id')->in($caseList)->page($pager)->fetchAll();
+        return $this->dao->select("*")->from(TABLE_CASE)->where('id')->in($caseList)->andWhere('status')->ne('wait')->page($pager)->fetchAll();
     }
 
     /**

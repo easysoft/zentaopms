@@ -37,6 +37,9 @@
       <tr>
         <th><?php echo $lang->productplan->title;?></th>
         <td><?php echo html::input('title', '', "class='form-control' autocomplete='off'");?></td>
+        <td>
+          <?php if($lastPlan) echo '<span class="help-block"> &nbsp; (' . $lang->productplan->last . ': ' . $lastPlan->title . ')</span>';?>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->productplan->begin;?></th>

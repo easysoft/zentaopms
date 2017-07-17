@@ -33,7 +33,7 @@ $.get(createLink('tutorial', 'ajaxSaveNovice', 'novice=' + (novice ? 'true' : 'f
 });
 <?php endif;?>
 
-<?php if(!empty($this->config->sso->turnon)):?>
+<?php if(!empty($this->config->sso->redirect)):?>
 <?php
 $ranzhiAddr = $this->config->sso->addr;
 $ranzhiURL  = substr($ranzhiAddr, 0, strrpos($ranzhiAddr, '/sys/'));

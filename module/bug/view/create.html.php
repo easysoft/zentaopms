@@ -231,7 +231,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
               </div>
             </div>
           </div>
-          <?php echo html::textarea('steps', $steps, "rows='5' class='form-control'");?>
+          <?php echo html::textarea('steps', $steps, "rows='12' class='form-control'");?>
         </td>
       </tr>
       <?php

@@ -205,10 +205,11 @@ class admin extends control
         if(!empty($_POST))
         {
             $ssoConfig = new stdclass();
-            $ssoConfig->turnon = $this->post->turnon;
-            $ssoConfig->addr   = $this->post->addr;
-            $ssoConfig->code   = trim($this->post->code);
-            $ssoConfig->key    = trim($this->post->key);
+            $ssoConfig->turnon   = $this->post->turnon;
+            $ssoConfig->redirect = $this->post->redirect;
+            $ssoConfig->addr     = $this->post->addr;
+            $ssoConfig->code     = trim($this->post->code);
+            $ssoConfig->key      = trim($this->post->key);
 
             $this->loadModel('setting')->setItems('system.sso', $ssoConfig);
             if(dao::isError()) die(js::error(dao::getError()));
@@ -221,10 +222,11 @@ class admin extends control
         $this->view->title      = $this->lang->admin->sso;
         $this->view->position[] = $this->lang->admin->sso;
 
-        $this->view->turnon = isset($this->config->sso->turnon) ? $this->config->sso->turnon : 1;
-        $this->view->addr   = isset($this->config->sso->addr) ? $this->config->sso->addr : '';
-        $this->view->key    = isset($this->config->sso->key) ? $this->config->sso->key : '';
-        $this->view->code   = isset($this->config->sso->code) ? $this->config->sso->code : '';
+        $this->view->turnon   = isset($this->config->sso->turnon) ? $this->config->sso->turnon : 1;
+        $this->view->redirect = isset($this->config->sso->redirect) ? $this->config->sso->redirect : 0;
+        $this->view->addr     = isset($this->config->sso->addr) ? $this->config->sso->addr : '';
+        $this->view->key      = isset($this->config->sso->key) ? $this->config->sso->key : '';
+        $this->view->code     = isset($this->config->sso->code) ? $this->config->sso->code : '';
         $this->display();
     }
 
