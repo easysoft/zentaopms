@@ -12,6 +12,7 @@
 $lang->sso = new stdclass();
 $lang->sso->settings = 'Settings';
 $lang->sso->turnon   = 'On';
+$lang->sso->redirect = 'Redirect ranzhi';
 $lang->sso->code     = 'Alias';
 $lang->sso->key      = 'Key';
 $lang->sso->addr     = 'Address';

@@ -7,7 +7,7 @@ include 'chosen.html.php';
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
 <header id='header'>
-<?php if(empty($this->config->sso->turnon)):?>
+<?php if(empty($this->config->sso->redirect)):?>
   <div id='topbar'>
     <div class='pull-right' id='topnav'><?php commonModel::printTopBar();?></div>
     <h5 id='companyname'>
@@ -16,7 +16,7 @@ include 'chosen.html.php';
   </div>
 <?php endif;?>
 <?php
-if(!empty($this->config->sso->turnon))
+if(!empty($this->config->sso->redirect))
 {
     css::import($defaultTheme . 'bindranzhi.css');
     js::import($jsRoot . 'bindranzhi.js');
@@ -24,7 +24,7 @@ if(!empty($this->config->sso->turnon))
 ?>
   <nav id='mainmenu'>
     <?php commonModel::printMainmenu($this->moduleName); commonModel::printSearchBox();?>
-    <?php if(!empty($this->config->sso->turnon)):?>
+    <?php if(!empty($this->config->sso->redirect)):?>
     <div class='pull-right' id='topnav'><?php commonModel::printTopBar();?></div>
     <?php endif;?>
   </nav>
