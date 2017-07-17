@@ -112,7 +112,6 @@ class baseHTML
 
         if(empty($title)) $title = $href;
         $newline = $newline ? "\n" : '';
-        $href = helper::processOnlyBodyParam($href);
       
         return "<a href='$href' $misc>$title</a>$newline";
     }
