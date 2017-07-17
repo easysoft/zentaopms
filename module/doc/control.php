@@ -699,6 +699,19 @@ class doc extends control
             if($this->productID and $type == 'project') $crumb = $this->doc->getProductCrumb($this->productID, $objectID);
             $crumb .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID"), $object->name);
             $crumb .= $this->lang->doc->separator . ' ' . $this->lang->doclib->files;
+
+            if($type == 'product')
+            {
+                $lib = $this->product->getById($objectID);
+                if(!$this->product->checkPriv($lib)) $this->accessDenied();
+            }
+
+            if($type == 'project')
+            {
+                $lib = $this->project->getById($objectID);
+                if(!$this->project->checkPriv($lib)) $this->accessDenied();
+            }
+            
             $this->doc->setMenu($libID = 0, $moduleID = 0, $crumb);
         }
 
@@ -714,6 +727,22 @@ class doc extends control
         $this->view->files  = $this->doc->getLibFiles($type, $objectID, $pager);
         $this->view->pager  = $pager;
         $this->display();
+    }
+
+    /**
+     * Show libs for product or project
+     * 
+     * @access private
+     * @return void
+     */
+    private function accessDenied()
+    {
+        echo(js::alert($this->lang->doc->accessDenied));
+
+        $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+
+       if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
+       die(js::locate('back'));
     }
 
     /**
