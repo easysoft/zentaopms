@@ -36,10 +36,14 @@ function loadList(type, id)
 
     if(type == 'bug' || type == 'task')
     {
-        $.get(link,function(data,status) {
-            if(data) { 
+        $.get(link, function(data, status)
+        {
+            if(data)
+            {
                 $(divClass).html(data);
-            } else {
+            }
+            else
+            {
                 alert(noTodo);
                 $("#type").val("custom");
                 $(divClass).html($(divID).html());

@@ -704,6 +704,7 @@ class userModel extends model
             $projectAllow = false;
             foreach($groups as $group)
             {
+                $acl = json_decode($group->acl, true);
                 if(empty($group->acl))
                 {
                     $productAllow = true;
@@ -711,9 +712,9 @@ class userModel extends model
                     $viewAllow    = true;
                     break;
                 }
-                $acl = json_decode($group->acl, true);
                 if(empty($acl['products'])) $productAllow = true;
                 if(empty($acl['projects'])) $projectAllow = true;
+                if(empty($acl['views']))    $viewAllow    = true;
                 if(empty($acls) and !empty($acl))
                 {
                     $acls = $acl;
@@ -727,7 +728,7 @@ class userModel extends model
 
             if($productAllow) $acls['products'] = array();
             if($projectAllow) $acls['projects'] = array();
-            if($viewAllow)    $acls = array();
+            if($viewAllow)    $acls['views']    = array();
 
             $sql = $this->dao->select('module, method')->from(TABLE_USERGROUP)->alias('t1')->leftJoin(TABLE_GROUPPRIV)->alias('t2')
                 ->on('t1.group = t2.group')
