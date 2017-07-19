@@ -212,8 +212,8 @@ class productplan extends control
      */
     public function view($planID = 0, $type = 'story', $orderBy = 'id_desc', $link = 'false', $param = '')
     {
-        if($type == 'story')$this->session->set('storyList', $this->app->getURI(true));
-        if($type == 'bug')  $this->session->set('bugList', $this->app->getURI(true));
+        $this->session->set('storyList', $this->app->getURI(true) . '&type=' . 'story');
+        $this->session->set('bugList', $this->app->getURI(true) . '&type=' . 'bug');
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
