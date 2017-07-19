@@ -59,6 +59,7 @@ function initKindeditor(afterInit)
         {
             cssPath:[themeRoot + 'zui/css/min.css'],
             width:'100%',
+            height:'200px',
             items:editorTool,
             filterMode: true, 
             bodyClass:'article-content',
