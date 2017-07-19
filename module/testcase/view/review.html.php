@@ -43,7 +43,6 @@
         <td></td>
         <td colspan='2'>
         <?php echo html::submitButton();?>
-        <?php echo html::linkButton($lang->goback, $app->session->caseList ? $app->session->caseList : inlink('view', "caseID=$case->id"));?>
         </td>
       </tr>
     </table>
