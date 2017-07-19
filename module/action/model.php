@@ -711,6 +711,7 @@ class actionModel extends model
             {
                 list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
                 $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
+                if($action->objectType == 'user') $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->actor));
                 $action->objectLabel = $objectLabel;
             }
             else
