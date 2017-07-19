@@ -21,13 +21,6 @@
     </div>
     <div class='actions'>
       <?php
-      if(common::hasPriv('testreport', 'browse'))
-      {
-          $param = '';
-          if($objectType == 'project') $param = "objectID=$objectID&objectType=$objectType";
-          if($objectType == 'testtask') $param = "objectID=$productIdList&objectType=product&extra=$objectID";
-          echo html::a(inlink('browse', $param), $lang->testreport->all, '', "class='btn'");
-      }
       echo html::backButton();
       ?> 
     </div>
