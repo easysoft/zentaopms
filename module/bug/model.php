@@ -854,7 +854,11 @@ class bugModel extends model
         foreach($bugIDList as $i => $bugID)
         {
             $oldBug = $bugs[$bugID];
-            if($oldBug->resolution == 'fixed' and $oldBug->resolvedBuild != $resolvedBuild) unset($bugIDList[$i]);
+            if($oldBug->resolution == 'fixed')
+            {
+                unset($bugIDList[$i]); 
+                continue;
+            }
             if($oldBug->status != 'active') continue;
 
             $assignedTo = $oldBug->openedBy;
@@ -891,6 +895,8 @@ class bugModel extends model
 
         /* Link bug to build and release. */
         $this->linkBugToBuild($bugIDList, $resolvedBuild);
+
+        return $bugIDList;
     }
 
     /**
