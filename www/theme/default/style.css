@@ -578,7 +578,7 @@ body {color:#141414; padding-bottom: 40px;}
 .outer .table.table-data.table-borderless tbody > tr:last-child td, .outer .table.table-form tbody > tr:last-child td {border: none}
 .outer .table tfoot td {border-top: 1px solid #ddd}
 .outer .table tfoot .form-control {padding: 1px 8px; height: 30px}
-.outer .table tfoot .btn {padding: 2px 6px; font-size: 13px; line-height: 20px; }
+.outer .table tfoot .btn {padding: 2px 6px; font-size: 13px; line-height: 20px; border: none; }
 .outer .table tfoot .btn:not(.btn-primary) {background-color: #FAFAFA; color: #036}
 .outer .table tfoot .btn > i {display: inline-block; margin-right: 1px; opacity: 0.8}
 .outer .table tfoot .datepicker-wrapper:before {top: 5px}

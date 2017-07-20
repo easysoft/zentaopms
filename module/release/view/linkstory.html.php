@@ -20,11 +20,11 @@
           <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
           <th class='w-pri'>   <?php echo $lang->priAB;?></th>
           <th>                 <?php echo $lang->story->title;?></th>
-          <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
-          <th class='w-user'>  <?php echo $lang->assignedToAB;?></th>
-          <th class='w-30px'>  <?php echo $lang->story->estimateAB;?></th>
-          <th class='w-status'><?php echo $lang->statusAB;?></th>
-          <th class='w-60px'>  <?php echo $lang->story->stageAB;?></th>
+          <th class='w-user text-left'>  <?php echo $lang->openedByAB;?></th>
+          <th class='w-user text-left'>  <?php echo $lang->assignedToAB;?></th>
+          <th class='w-50px text-left'>  <?php echo $lang->story->estimateAB;?></th>
+          <th class='w-status text-left'><?php echo $lang->statusAB;?></th>
+          <th class='w-80px text-center'>  <?php echo $lang->story->stageAB;?></th>
         </tr>
       </thead>
       <tbody>
@@ -42,7 +42,7 @@
         <td><?php echo $users[$story->assignedTo];?></td>
         <td><?php echo $story->estimate;?></td>
         <td class='story-<?php echo $story->status?>'><?php echo $lang->story->statusList[$story->status];?></td>
-        <td><?php echo $lang->story->stageList[$story->stage];?></td>
+        <td class='text-center'><?php echo $lang->story->stageList[$story->stage];?></td>
       </tr>
       <?php endforeach;?>
       </tbody>

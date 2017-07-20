@@ -914,8 +914,8 @@ class bug extends control
      */
     public function batchResolve($resolution, $resolvedBuild = '')
     {
-        $bugIDList  = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
-        $this->bug->batchResolve($bugIDList, $resolution, $resolvedBuild);
+        $bugIDList = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
+        $bugIDList = $this->bug->batchResolve($bugIDList, $resolution, $resolvedBuild);
         if(dao::isError()) die(js::error(dao::getError()));
         foreach($bugIDList as $bugID)
         {

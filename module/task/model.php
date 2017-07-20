@@ -522,7 +522,7 @@ class taskModel extends model
         $estimate = fixer::input('post')
             ->setDefault('account', $this->app->user->account) 
             ->setDefault('task', $taskID) 
-            ->setDefault('date', date(DT_DATE1)) 
+            ->setDefault('date', $task->realStarted) 
             ->remove('realStarted,comment')->get();
         $estimate->consumed = $estimate->consumed - $oldTask->consumed; 
         $this->addTaskEstimate($estimate);
@@ -549,8 +549,18 @@ class taskModel extends model
         $estimates = array();
         $task      = $this->getById($taskID);
         $oldStatus = $task->status;
+        $earliestTime = '';
         foreach(array_keys($record->id) as $id)
         {
+            if($earliestTime == '')
+            {
+                $earliestTime = $record->dates[$id];
+            }
+            elseif(!empty($record->dates[$id]) && (strtotime($earliestTime) > strtotime($record->dates[$id])))
+            {
+                $earliestTime = $record->dates[$id];
+            }
+
             if($record->dates[$id])
             {
                 if(!$record->consumed[$id]) die(js::alert($this->lang->task->error->consumedThisTime));
@@ -609,7 +619,7 @@ class taskModel extends model
             $data->status       = $task->status;
             $data->assignedTo   = $this->app->user->account;
             $data->assignedDate = $now;
-            $data->realStarted  = date('Y-m-d');
+            $data->realStarted  = $earliestTime;
         }
         else if($task->status == 'pause')
         {

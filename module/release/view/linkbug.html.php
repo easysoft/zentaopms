@@ -24,7 +24,7 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
         <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
         <th class='w-pri'>   <?php echo $lang->priAB;?></th>
         <th>                 <?php echo $lang->bug->title;?></th>
-        <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
+        <th class='w-user text-left'>  <?php echo $lang->openedByAB;?></th>
         <th class='w-user'> <?php echo $lang->bug->resolvedBy;?></th>
         <th class='w-80px'>  <?php echo $lang->statusAB;?></th>
       </tr>
