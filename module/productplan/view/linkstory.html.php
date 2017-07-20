@@ -55,7 +55,7 @@ include '../../common/view/tablesorter.html.php';
       </tbody>
       <tfoot>
         <tr>
-          <td colspan='9' class='text-left'>
+          <td colspan='10' class='text-left'>
             <?php if(count($allStories))
             {
                 echo "<div class='table-actions clearfix'>";
