@@ -9,14 +9,15 @@
  * @version     $Id: zh-tw.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->build->common    = "版本";
-$lang->build->create    = "創建版本";
-$lang->build->edit      = "編輯版本";
-$lang->build->linkStory = "關聯需求";
-$lang->build->linkBug   = "關聯Bug";
-$lang->build->delete    = "刪除版本";
-$lang->build->deleted   = "已刪除";
-$lang->build->view      = "版本詳情";
+$lang->build->common       = "版本";
+$lang->build->create       = "創建版本";
+$lang->build->edit         = "編輯版本";
+$lang->build->linkStory    = "關聯需求";
+$lang->build->linked2build = "关联關聯版本";
+$lang->build->linkBug      = "關聯Bug";
+$lang->build->delete       = "刪除版本";
+$lang->build->deleted      = "已刪除";
+$lang->build->view         = "版本詳情";
 $lang->build->batchUnlink          = '批量移除';
 $lang->build->batchUnlinkStory     = '批量移除需求';
 $lang->build->batchUnlinkBug       = '批量移除Bug';

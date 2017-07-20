@@ -9,14 +9,15 @@
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->build->common    = "Build";
-$lang->build->create    = "Create";
-$lang->build->edit      = "Edit";
-$lang->build->linkStory = "Link Story";
-$lang->build->linkBug   = "Link Bug";
-$lang->build->delete    = "Delete Build";
-$lang->build->deleted   = "Deleted";
-$lang->build->view      = "Build Details";
+$lang->build->common       = "Build";
+$lang->build->create       = "Create";
+$lang->build->edit         = "Edit";
+$lang->build->linkStory    = "Link Story";
+$lang->build->linked2build = "Link build";
+$lang->build->linkBug      = "Link Bug";
+$lang->build->delete       = "Delete Build";
+$lang->build->deleted      = "Deleted";
+$lang->build->view         = "Build Details";
 $lang->build->batchUnlink          = 'Batch Unlink';
 $lang->build->batchUnlinkStory     = 'Batch Story Unlink';
 $lang->build->batchUnlinkBug       = 'Batch Bug Unlink';

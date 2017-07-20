@@ -304,7 +304,7 @@ class buildModel extends model
         $this->dao->update(TABLE_BUILD)->set('stories')->eq($build->stories)->where('id')->eq((int)$buildID)->exec();
         foreach($this->post->stories as $storyID)
         {
-            $this->loadModel('action')->create('story', $storyID, 'linked2build', '', $buildID);
+            $this->loadModel('action')->create('story', $storyID, $this->lang->build->linked2build, '', $buildID);
         }
     }
 
@@ -363,7 +363,7 @@ class buildModel extends model
         $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$buildID)->exec();
         foreach($this->post->bugs as $bugID)
         {
-            $this->loadModel('action')->create('bug', $bugID, 'linked2build', '', $buildID);
+            $this->loadModel('action')->create('bug', $bugID, $this->lang->build->linkBug, '', $buildID);
         }
     }
 
