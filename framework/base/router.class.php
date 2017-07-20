@@ -1482,6 +1482,7 @@ class baseRouter
         foreach($hookedMethods as $method)
         {
             /* 通过反射获得hook脚本对应的方法所在的文件和起止行数。Reflection the hooked method to get it's defined position. */
+            if(!method_exists($tmpModelClass, $method)) continue;
             $methodRelfection = new reflectionMethod($tmpModelClass, $method);
             $definedFile = $methodRelfection->getFileName();
             $startLine   = $methodRelfection->getStartLine() . ' ';
