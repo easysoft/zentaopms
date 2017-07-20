@@ -221,7 +221,7 @@ $lang->project->menu->build     = array('link' => 'Build|project|build|projectID
 $lang->project->menu->testtask  = array('link' => 'Test Task|project|testtask|projectID=%s');
 $lang->project->menu->team      = array('link' => 'Team|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => 'Document|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
-$lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|projectID=%s';
+$lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|module=project&method=browse&projectID=%s';
 $lang->project->menu->view      = array('link' => 'Overview|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
 $lang->project->menu->create    = array('link' => "<i class='icon-plus'></i>&nbsp;Add{$lang->projectCommon}|project|create", 'float' => 'right');
 $lang->project->menu->all       = array('link' => "<i class='icon-th-large'></i>&nbsp;All{$lang->projectCommon}|project|all|status=undone&projectID=%s", 'float' => 'right');

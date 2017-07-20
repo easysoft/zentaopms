@@ -38,15 +38,14 @@ function loadList(type, id)
     {
         $.get(link, function(data, status)
         {
-            if(data)
+            if(data != ' ')
             {
                 $(divClass).html(data);
             }
             else
             {
-                alert(noTodo);
                 $("#type").val("custom");
-                $(divClass).html($(divID).html());
+                $(divClass).html("<select id='bugs' class='form-control'></select>");
             }
         });
     }
