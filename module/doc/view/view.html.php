@@ -21,14 +21,39 @@
     <span class='label label-danger'><?php echo $lang->doc->deleted;?></span>
     <?php endif; ?>
     <?php if($doc->version > 1):?>
-    <small class='dropdown'>
+    <?php
+    $versions = array();
+    $i = 1;
+    foreach($actions as $action)
+    {
+        if($action->action == 'created')
+        {
+            $versions[$i] =  "#$i " . zget($users, $action->actor) . ' ' . substr($action->date, 2, 14);
+            $i++;
+        }
+        if($action->action == 'edited')
+        {
+            foreach($action->history as $history)
+            {
+                if($history->field == 'contentType')
+                {
+                    $versions[$i] = "#$i " . zget($users, $action->actor) . ' ' . substr($action->date, 2, 14);
+                    $i++;
+                    break;
+                }
+            }
+        }
+    }
+    krsort($versions);
+    ?>
+    <small class='dropdown versions'>
       <a href='#' data-toggle='dropdown' class='text-muted'><?php echo '#' . $version;?> <span class='caret'></span></a>
         <ul class='dropdown-menu'>
         <?php
-        for($i = $doc->version; $i >= 1; $i --)
+        foreach($versions as $i => $versionTitle)
         {
             $class = $i == $version ? " class='active'" : '';
-            echo '<li' . $class .'>' . html::a(inlink('view', "docID=$doc->id&version=$i"), '#' . $i) . '</li>';
+            echo '<li' . $class .'>' . html::a(inlink('view', "docID=$doc->id&version=$i"), $versionTitle) . '</li>';
         }
         ?>
       </ul>
@@ -42,19 +67,6 @@
     if(!$doc->deleted)
     {
         ob_start();
-        //if($doc->version > 1 and common::hasPriv('doc', 'diff'))
-        //{
-        //    echo "<div class='btn-group'>";
-        //    echo "<button data-toggle='dropdown' type='button' class='btn dropdown-toggle'>{$lang->doc->diff} <span class='caret'></span></button>";
-        //    echo "<ul class='dropdown-menu'>";
-        //    for($i = $doc->version; $i >= 1; $i --)
-        //    {
-        //        if($i == $version) continue;
-        //        echo '<li>' . html::a(inlink('diff', "docID=$doc->id&newVersion=$version&version=$i"), '#' . $i) . '</li>';
-        //    }
-        //    echo "</ul>";
-        //    echo "</div>";
-        //}
         echo "<div class='btn-group'>";
         common::printCommentIcon('doc');
         common::printIcon('doc', 'edit', $params);
