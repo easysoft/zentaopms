@@ -1430,12 +1430,12 @@ class project extends control
      * @access public
      * @return void
      */
-    public function manageProducts($projectID)
+    public function manageProducts($module,$method,$projectID)
     {
         /* use first project if projectID does not exist. */
         if(!isset($this->projects[$projectID])) $projectID = key($this->projects);
 
-        $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
+        $browseProjectLink = $this->createLink($module, $method, "projectID=$projectID");
         if(!empty($_POST))
         {
             $this->project->updateProducts($projectID);
@@ -1625,7 +1625,8 @@ class project extends control
         if(empty($products))
         {
             echo js::alert($this->lang->project->errorNoLinkedProducts);
-            die(js::locate($this->createLink('project', 'manageproducts', "projectID=$projectID")));
+
+            die(js::locate($this->createLink('project', 'manageproducts', "module=project&method=browse&projectID=$projectID")));
         }
 
         if(!empty($_POST))
