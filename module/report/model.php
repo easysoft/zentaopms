@@ -263,6 +263,7 @@ class reportModel extends model
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.status')->notin('cancel, closed, done')
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.status')->notin('cancel, closed, done')
             ->beginIF($dept)->andWhere('t3.dept')->in($depts)->fi()
             ->fetchGroup('assignedTo');
         $workload = array();
