@@ -39,6 +39,7 @@ $lang->testsuite->legendBasicInfo = '基本信息';
 $lang->testsuite->unlinkedCases = '未關聯';
 
 $lang->testsuite->confirmDelete     = '您確認要刪除該套件嗎？';
+$lang->testsuite->libraryDelete     = '您確認要刪除該用例庫嗎？';
 $lang->testsuite->confirmUnlinkCase = '您確認要移除該用例嗎？';
 $lang->testsuite->noticeNone        = '您還沒有創建套件';
 

@@ -219,7 +219,7 @@ class testsuite extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->testsuite->confirmDelete, inlink('delete', "suiteID=$suiteID&confirm=yes")));
+            die(js::confirm($this->lang->testsuite->libraryDelete, inlink('delete', "suiteID=$suiteID&confirm=yes")));
         }
         else
         {

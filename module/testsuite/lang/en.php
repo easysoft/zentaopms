@@ -39,6 +39,7 @@ $lang->testsuite->legendBasicInfo = 'Base Info';
 $lang->testsuite->unlinkedCases = 'Unlinked Cases';
 
 $lang->testsuite->confirmDelete     = 'Do you want to delete this suite?';
+$lang->testsuite->libraryDelete     = 'Do you want to delete this library？';
 $lang->testsuite->confirmUnlinkCase = 'Do you want to unlink this Case?';
 $lang->testsuite->noticeNone        = 'You have not created a suite yet.';
 
