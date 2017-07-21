@@ -31,6 +31,7 @@ $lang->action->textDiff       = 'Text Format';
 $lang->action->original       = 'Original Format';
 $lang->action->confirmHideAll = 'Do you want to hide all the records?';
 $lang->action->needEdit       = '%s you want to restore has already existed. Please edit it.';
+$lang->action->historyEdit    = 'The history editor cannot be empty.';
 
 $lang->action->dynamic = new stdclass();
 $lang->action->dynamic->today      = 'Today';

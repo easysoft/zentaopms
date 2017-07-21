@@ -31,6 +31,7 @@ $lang->action->textDiff       = '文本格式';
 $lang->action->original       = '原始格式';
 $lang->action->confirmHideAll = '您確定要全部隱藏這些記錄嗎？';
 $lang->action->needEdit       = '要還原%s的名稱或代號已經存在，請編輯更改。';
+$lang->action->historyEdit    = '歷史記錄編輯不能為空。';
 
 $lang->action->dynamic = new stdclass();
 $lang->action->dynamic->today      = '今天';

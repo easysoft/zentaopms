@@ -113,7 +113,16 @@ class action extends control
      */
     public function editComment($actionID)
     {
-        if(trim(strip_tags($this->post->lastComment, '<img>'))) $this->action->updateComment($actionID);
+        if(trim(strip_tags($this->post->lastComment, '<img>')))
+        {
+            $this->action->updateComment($actionID);
+        }
+        else
+        {
+            dao::$errors['submit'][] = $this->lang->action->historyEdit;
+            $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        }
+
         die(js::locate($this->server->http_referer, 'parent'));
     }
 }
