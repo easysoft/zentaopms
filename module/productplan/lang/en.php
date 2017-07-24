@@ -43,7 +43,7 @@ $lang->productplan->title   = 'Title';
 $lang->productplan->desc    = 'Description';
 $lang->productplan->begin   = 'Begin';
 $lang->productplan->end     = 'End';
-$lang->productplan->last    = 'Last Release';
+$lang->productplan->last    = 'Last plan';
 
 $lang->productplan->endList[7]   = '1 Week';
 $lang->productplan->endList[14]  = '1 Weeks';

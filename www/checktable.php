@@ -1,6 +1,7 @@
 <?php
 error_reporting(E_ALL);
 date_default_timezone_set('Asia/Shanghai');
+$config = new stdclass();
 
 include '../framework/helper.class.php';
 include '../config/config.php';
@@ -103,7 +104,7 @@ else
 <div class='alert alert-info'><strong><?php echo $lang->misc->repairTable;?></strong></div>
 <div class='container mw-700px'>
 <?php if($status == 'createFile'):?>
-  <div class='panel-body'>
+  <div class='panel-body' style='margin-left:25%;'>
     <?php
     $checkFileName = $_SESSION['checkFileName'];
     if(!($_SERVER['SERVER_ADDR'] == '127.0.0.1' or filter_var($_SERVER['SERVER_ADDR'], FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) === false))
@@ -112,8 +113,8 @@ else
     }
     printf($lang->misc->noticeRepair, $checkFileName);
     ?>
-  </div>
   <p><a href='<?php echo $config->webRoot . 'checktable.php';?>' class='btn'><i class='icon-refresh'></i></a></p>
+  </div>
 <?php elseif($status == 'check'):?>
   <div class='panel'>
     <table class='table table-form'>

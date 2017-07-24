@@ -43,7 +43,7 @@ $lang->productplan->title   = '名稱';
 $lang->productplan->desc    = '描述';
 $lang->productplan->begin   = '開始日期';
 $lang->productplan->end     = '結束日期';
-$lang->productplan->last    = '上次發佈';
+$lang->productplan->last    = '上次計劃';
 
 $lang->productplan->endList[7]   = '一星期';
 $lang->productplan->endList[14]  = '兩星期';

@@ -12,7 +12,7 @@
 $lang->sso = new stdclass();
 $lang->sso->settings = '配置';
 $lang->sso->turnon   = '是否打開';
-$lang->sso->redirect = '自動跳轉然之';
+$lang->sso->redirect = '自動跳回然之';
 $lang->sso->code     = '代號';
 $lang->sso->key      = '密鑰';
 $lang->sso->addr     = '介面地址';
