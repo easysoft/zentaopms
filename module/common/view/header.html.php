@@ -6,6 +6,9 @@ include 'chosen.html.php';
 ?>
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
+<?php 
+    if(!empty($this->config->sso->redirect)) js::set('ssoRedirect', $this->config->sso->redirect);
+?>
 <header id='header'>
 <?php if(empty($this->config->sso->redirect)):?>
   <div id='topbar'>
@@ -33,6 +36,6 @@ if(!empty($this->config->sso->redirect))
   </nav>
 </header>
 
-<div id='wrap'>
+<div id='wrap' <?php if(!empty($this->config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >
 <?php endif;?>
   <div class='outer'>

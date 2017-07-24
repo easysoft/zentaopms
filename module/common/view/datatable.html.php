@@ -121,10 +121,12 @@ function fixScroll()
     if($('div.datatable.head-fixed').size() == 0) scrollOffset -= '34';
     var windowH = $(window).height();
     var bottom  = $tfoot.hasClass('fixedTfootAction') ? 53 + $tfoot.height() : 53;
+    if(typeof(ssoRedirect) != "undefined") bottom = 53;
     if(scrollOffset > windowH + $(window).scrollTop()) $scrollwrapper.css({'position': 'fixed', 'bottom': bottom + 'px'});
     $(window).scroll(function()
     {
-        newBottom = $tfoot.hasClass('fixedTfootAction') ? 53 + $tfoot.height() : 53;
+       newBottom = $tfoot.hasClass('fixedTfootAction') ? 53 + $tfoot.height() : 53;
+       if(typeof(ssoRedirect) != "undefined") newBottom = 53;
        if(scrollOffset <= windowH + $(window).scrollTop()) 
        {    
            $scrollwrapper.css({'position':'relative', 'bottom': '0px'});

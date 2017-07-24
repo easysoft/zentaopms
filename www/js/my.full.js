@@ -1471,6 +1471,7 @@ function fixedTfootAction(formID)
         tableOffset,
         hasFixed;
     if(!$tbody.length) return false;
+    if(typeof(ssoRedirect) != "undefined") pageFooterHeight = 0;
     function fixTfoot()
     {
         tableWidth   = $table.width();
