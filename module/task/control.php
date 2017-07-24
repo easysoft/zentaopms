@@ -641,6 +641,7 @@ class task extends control
         }
 
         $this->session->set('estimateList', $this->app->getURI(true));
+        if(isonlybody() && $this->config->requestType != 'GET') $this->session->set('estimateList', $this->app->getURI(true) . '?onlybody=yes');
 
         $this->view->task      = $this->task->getById($taskID);
         $this->view->estimates = $this->task->getTaskEstimate($taskID);
