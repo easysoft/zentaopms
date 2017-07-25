@@ -42,9 +42,9 @@ include '../../common/view/tablesorter.html.php';
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
         <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
-        <td><?php echo $users[$bug->openedBy];?></td>
-        <td><?php echo $users[$bug->assignedTo];?></td>
-        <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
+        <td class='text-center'><?php echo $users[$bug->openedBy];?></td>
+        <td class='text-center'><?php echo $users[$bug->assignedTo];?></td>
+        <td class='text-center bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
       </tr>
       <?php endforeach;?>
       </tbody>

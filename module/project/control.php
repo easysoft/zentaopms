@@ -1430,14 +1430,16 @@ class project extends control
      * @access public
      * @return void
      */
-    public function manageProducts($module,$method,$projectID)
+    public function manageProducts($projectID, $from='')
     {
         /* use first project if projectID does not exist. */
         if(!isset($this->projects[$projectID])) $projectID = key($this->projects);
 
-        $browseProjectLink = $this->createLink($module, $method, "projectID=$projectID");
+        $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
         if(!empty($_POST))
         {
+            if($from == 'buildCreate' && $this->session->buildCreate) $browseProjectLink = $this->session->buildCreate;
+
             $this->project->updateProducts($projectID);
             if(dao::isError()) dis(js::error(dao::getError()));
             die(js::locate($browseProjectLink));
@@ -1625,8 +1627,7 @@ class project extends control
         if(empty($products))
         {
             echo js::alert($this->lang->project->errorNoLinkedProducts);
-
-            die(js::locate($this->createLink('project', 'manageproducts', "module=project&method=browse&projectID=$projectID")));
+            die(js::locate($this->createLink('project', 'manageproducts', "projectID=$projectID")));
         }
 
         if(!empty($_POST))

@@ -28,6 +28,8 @@ class build extends control
             die(js::locate($this->createLink('build', 'view', "buildID=$buildID"), 'parent'));
         }
 
+        $this->session->set('buildCreate', $this->app->getURI(true));
+
         /* Load these models. */
         $this->loadModel('project');
         $this->loadModel('user');

@@ -13,7 +13,6 @@ $lang->build->common       = "版本";
 $lang->build->create       = "创建版本";
 $lang->build->edit         = "编辑版本";
 $lang->build->linkStory    = "关联需求";
-$lang->build->linked2build = "关联版本";
 $lang->build->linkBug      = "关联Bug";
 $lang->build->delete       = "删除版本";
 $lang->build->deleted      = "已删除";

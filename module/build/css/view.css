@@ -9,3 +9,6 @@
 .tabs .tab-content .tab-pane #querybox form {padding-left:0px;}
 
 .table-actions {padding-left: 5px;}
+
+#querybox form {margin: 0px !important;}
+#moreOrLite {right: 0px !important;}

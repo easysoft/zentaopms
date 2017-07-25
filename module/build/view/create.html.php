@@ -39,7 +39,7 @@
         </td>
         <td></td>
         <?php else:?>
-        <td colspan='2'><?php if(empty($products)) printf($lang->build->noProduct, $this->createLink('project', 'manageproducts', "module=build&method=create&projectID=$projectID"));?></td>
+        <td colspan='2'><?php if(empty($products)) printf($lang->build->noProduct, $this->createLink('project', 'manageproducts', "projectID=$projectID&from=buildCreate"));?></td>
         <?php endif;?>
       </tr>
       <tr>

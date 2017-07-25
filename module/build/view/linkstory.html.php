@@ -38,11 +38,11 @@
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
         <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
-        <td><?php echo $users[$story->openedBy];?></td>
-        <td><?php echo $users[$story->assignedTo];?></td>
-        <td><?php echo $story->estimate;?></td>
-        <td class='story-<?php echo $story->status?>'><?php echo $lang->story->statusList[$story->status];?></td>
-        <td><?php echo $lang->story->stageList[$story->stage];?></td>
+        <td class='text-center'><?php echo $users[$story->openedBy];?></td>
+        <td class='text-center'><?php echo $users[$story->assignedTo];?></td>
+        <td class='text-center'><?php echo $story->estimate;?></td>
+        <td class='text-center story-<?php echo $story->status?>'><?php echo $lang->story->statusList[$story->status];?></td>
+        <td class='text-center'><?php echo $lang->story->stageList[$story->stage];?></td>
       </tr>
       <?php endforeach;?>
       </tbody>

@@ -168,6 +168,8 @@ $lang->action->label->suspended           = '挂起';
 $lang->action->label->login               = '登录系统';
 $lang->action->label->logout              = "退出登录";
 $lang->action->label->deleteestimate      = "删除了工时";
+$lang->action->label->linked2build        = "关联版本";
+$lang->action->label->linked2bug          = "关联BUG";
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';

@@ -211,6 +211,7 @@ class admin extends control
             $ssoConfig->code     = trim($this->post->code);
             $ssoConfig->key      = trim($this->post->key);
 
+            if(!$ssoConfig->turnon) $ssoConfig->redirect = $ssoConfig->turnon;
             $this->loadModel('setting')->setItems('system.sso', $ssoConfig);
             if(dao::isError()) die(js::error(dao::getError()));
             die($this->locate(inlink('sso')));
