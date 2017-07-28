@@ -1428,7 +1428,7 @@ class baseRouter
         $modelLines  = "<?php\n";
         $modelLines .= "global \$app;\n";
         $modelLines .= "helper::cd(\$app->getBasePath());\n";
-        $modelLines .= "helper::import('$mainModelFile');\n";
+        $modelLines .= "helper::import('" . str_replace($this->getBasePath(), '', $mainModelFile) . "');\n";
         $modelLines .= "helper::cd();\n";
         $modelLines .= "class $tmpModelClass extends $modelClass \n{\n";
 
