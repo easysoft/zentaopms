@@ -62,7 +62,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
       </tr>
       <?php $showProject = (strpos(",$showFields,", ',project,') !== false && $this->config->global->flow != 'onlyTest');?>
       <tr>
-        <th><?php echo ($showProject) ? $lang->bug->project : (($this->config->global->flow == 'onlyTest') ? $lang->bug->type : $lang->bug->openedBuild);?></th>
+        <th><?php echo ($showProject) ? $lang->bug->project : $lang->bug->type;?></th>
 
         <?php if(!$showProject):?>
         <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
@@ -92,9 +92,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
         <?php endif;?>
         <td>
           <div class='input-group'>
-            <?php if($showProject or $this->config->global->flow == 'onlyTest'):?>
             <span class='input-group-addon'><?php echo $lang->bug->openedBuild?></span>
-            <?php endif;?>
             <span id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?></span>
             <span class='input-group-addon fix-border' id='buildBoxActions'></span>
             <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn btn-default' data-toggle='tooltip' onclick='loadAllBuilds()'")?></span>
@@ -119,7 +117,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
         </td>
         <?php endif;?>
       </tr>
-      <?php if($this->config->global->flow != 'onlyTest'):?>
+      <?php if($this->config->global->flow != 'onlyTest' && $showProject):?>
       <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
       <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
       <tr>
