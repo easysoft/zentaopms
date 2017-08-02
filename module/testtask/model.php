@@ -177,15 +177,28 @@ class testtaskModel extends model
      */
     public function getById($taskID, $setImgSize = false)
     {
-        $task = $this->dao->select("t1.*, t2.name AS productName, t2.type AS productType, t3.name AS projectName, t4.name AS buildName, if(t4.name != '', t4.branch, t5.branch) AS branch")
-            ->from(TABLE_TESTTASK)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
-            ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project')
-            ->where('t1.id')->eq((int)$taskID)
-            ->andWhere('t5.product = t1.product')
-            ->fetch();
+        if($this->config->global->flow == 'onlyTest')
+        {
+            $task = $this->dao->select("t1.*, t2.name AS productName, t2.type AS productType, t3.name AS buildName, t3.branch AS branch")
+                ->from(TABLE_TESTTASK)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+                ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
+                ->where('t1.id')->eq((int)$taskID)
+                ->fetch();
+        }
+        else
+        {
+            $task = $this->dao->select("t1.*, t2.name AS productName, t2.type AS productType, t3.name AS projectName, t4.name AS buildName, if(t4.name != '', t4.branch, t5.branch) AS branch")
+                ->from(TABLE_TESTTASK)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
+                ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project')
+                ->where('t1.id')->eq((int)$taskID)
+                ->andWhere('t5.product = t1.product')
+                ->fetch();
+        }
+
         $task = $this->loadModel('file')->replaceImgURL($task, 'desc');
         if($setImgSize) $task->desc = $this->loadModel('file')->setImgSize($task->desc);
         return $task;
