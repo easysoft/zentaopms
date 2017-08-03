@@ -986,7 +986,7 @@ class commonModel extends model
         $orderBy = isset($orderBy[1]) ? $orderBy[1] : '';
         if($orderBy)
         {
-            $orderBy = explode('limit', $orderBy);
+            $orderBy = explode('LIMIT', $orderBy);
             $orderBy = $orderBy[0];
             if($onlyCondition) $orderBy = str_replace('t1.', '', $orderBy);
         }
