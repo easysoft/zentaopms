@@ -152,11 +152,11 @@ foreach(explode(',', $showFields) as $field)
         </div>
       </td>
       <td class='<?php echo zget($visibleFields, 'steps', 'hidden')?>'>   <?php echo html::textarea("stepses[%s]", '', "rows='1' class='form-control autosize'");?></td>
-      <td class='<?php echo zget($visibleFields, 'type', 'hidden')?>'>    <?php echo html::select("types[%s]", $lang->bug->typeList, '', "class='form-control'");?></td>
+      <td class='<?php echo zget($visibleFields, 'type', 'hidden')?>'>    <?php echo html::select("types[%s]", $lang->bug->typeList, $type, "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>     <?php echo html::select("pris[%s]", $lang->bug->priList, '', "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'severity', 'hidden')?>'><?php echo html::select("severities[%s]", $lang->bug->severityList, '', "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'os', 'hidden')?>'>      <?php echo html::select("oses[%s]", $lang->bug->osList, '', "class='form-control'");?></td>
-      <td class='<?php echo zget($visibleFields, 'browser', 'hidden')?>'> <?php echo html::select("browsers[%s]", $lang->bug->browserList, '', "class='form-control'");?></td>
+      <td class='<?php echo zget($visibleFields, 'os', 'hidden')?>'>      <?php echo html::select("oses[%s]", $lang->bug->osList, $os, "class='form-control'");?></td>
+      <td class='<?php echo zget($visibleFields, 'browser', 'hidden')?>'> <?php echo html::select("browsers[%s]", $lang->bug->browserList, $browser, "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input("keywords[%s]", '', "class='form-control' autocomplete='off'");?></td>
     </tr>
   </tbody>
