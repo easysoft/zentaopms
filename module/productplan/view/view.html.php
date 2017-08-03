@@ -280,7 +280,7 @@
                                 foreach ($users as $key => $value)
                                 {
                                     if(empty($key) or $key == 'closed') continue;
-                                    echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
+                                    echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", false, \"#storyList\")", $value, '', '') . '</li>';
                                 }
                                 echo "</ul>";
                                 if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
