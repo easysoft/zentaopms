@@ -241,10 +241,8 @@
                 <tr>
                   <td colspan='7'>
                     <div class='table-actions clearfix'>
-                      <div class='text'>
-                        <?php if($countLeftBugs and $canBatchUnlink) echo html::selectButton() . html::submitButton($lang->release->batchUnlink);?>
-                        <?php echo sprintf($lang->release->createdBugs, $countLeftBugs);?>
-                      </div>
+                      <?php if($countLeftBugs and $canBatchUnlink) echo html::selectButton() . html::submitButton($lang->release->batchUnlink);?>
+                      <div class='text'><?php echo sprintf($lang->release->createdBugs, $countLeftBugs);?></div>
                     </div>
                   </td>
                 </tr>
