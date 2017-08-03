@@ -10,7 +10,7 @@
     <table class='table table-fixed'>
       <thead>
         <tr class='text-center'>
-          <th class='w-20px'>    <?php echo $lang->idAB;?></th>
+          <th class='w-40px'>    <?php echo $lang->idAB;?></th>
           <th class='w-p30'>   <?php echo $lang->bug->title;?></th>
           <th class='w-pri'>   <?php echo $lang->priAB;?></th>
           <th class='w-type'>  <?php echo $lang->bug->type;?></th>
