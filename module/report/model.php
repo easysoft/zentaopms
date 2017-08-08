@@ -261,7 +261,7 @@ class reportModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.status')->notin('cancel, closed, done')
+            ->andWhere('t1.status')->notin('cancel, closed, done, pause')
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.status')->notin('cancel, closed, done')
             ->beginIF($dept)->andWhere('t3.dept')->in($depts)->fi()
