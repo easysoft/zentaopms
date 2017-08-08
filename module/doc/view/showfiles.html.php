@@ -49,8 +49,13 @@
           $imageSize  = getimagesize($file->realPath);
           $imageWidth = $imageSize ? $imageSize[0] : 0;
       }
+
+      $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';                                                                                                                                                             
+      $sessionString .= session_name() . '=' . session_id();                                                                                                                                                                         
+      $fileID         = $file->id;                                                                                                                                                                                                   
+      $url            = helper::createLink('file', 'download', 'fileID=' . $fileID) . $sessionString ;   
       ?>
-      <a class='media-wrapper' href='###' title='<?php echo $file->title  . '.' . $file->extension?>' target='_blank' onclick="return downloadFile(<?php echo $file->id?>, '<?php echo $file->extension?>', <?php echo $imageWidth?>)">
+      <a class='media-wrapper' href='<?php echo $url;?>' title='<?php echo $file->title  . '.' . $file->extension?>' target='_blank' onclick="return downloadFile(<?php echo $file->id?>, '<?php echo $file->extension?>', <?php echo $imageWidth?>)">
         <?php
         $downloadLink = $this->createLink('file', 'download', "fileID=$file->id&mouse=left");
         if(in_array($file->extension, $config->file->imageExtensions))
