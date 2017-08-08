@@ -269,7 +269,7 @@ class searchModel extends model
             if($this->post->onMenuBar)
             {
                 $queryModule      = $query->module == 'task' ? 'project' : ($query->module == 'story' ? 'product' : $query->module);
-                $featureBarConfig = $this->dao->select('*')->from(TABLE_CONFIG)->where('owner')->eq($this->app->user->account)->andWhere('module')->eq('common')->andWhere('section')->eq('customMenu')->andWhere('`key`')->like("feature_{$queryModule}_%")->fetch();
+                $featureBarConfig = $this->dao->select('*')->from(TABLE_CONFIG)->where('owner')->eq($this->app->user->account)->andWhere('module')->eq('common')->andWhere('section')->eq('customMenu')->andWhere('`key`')->like($this->config->global->flow ."_feature_{$queryModule}_%")->fetch();
 
                 $this->app->loadLang($queryModule);
                 if(!isset($this->lang->$queryModule->featureBar)) return $queryID;
@@ -299,7 +299,7 @@ class searchModel extends model
                 $featureBarConfig->owner   = $this->app->user->account;
                 $featureBarConfig->module  = 'common';
                 $featureBarConfig->section = 'customMenu';
-                $featureBarConfig->key     = "feature_{$queryModule}_{$method}";
+                $featureBarConfig->key     = $this->config->global->flow . "_feature_{$queryModule}_{$method}";
                 $featureBarConfig->value   = json_encode($newConfig);
                 $this->dao->replace(TABLE_CONFIG)->data($featureBarConfig)->exec();
             }
