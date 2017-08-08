@@ -1,3 +1,4 @@
 #libs .libs-group-heading{border:1px solid #ddd;overflow:hidden}
 #libs .libs-group{border:1px solid #ddd; border-top:0px;overflow:hidden; margin-bottom:20px;}
+#libs .libs-group.libs-custom{border-top:1px solid #ddd;overflow:hidden; margin-bottom:20px;}
 #libs .lib-custom{width:130px; margin-bottom:10px;}

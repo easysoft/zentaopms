@@ -16,7 +16,7 @@
   <div class='actions'><?php echo html::backButton();?></div>
 </div>
 <div id='libs'>
-  <div class='libs-group clearfix'>
+  <div class='libs-group clearfix <?php if(common::hasPriv('doc', 'sort')) echo 'sort'?>'>
     <?php foreach($libs as $libID => $libName):?>
     <?php
     if($libID == 'project' and $from != 'doc') continue;
@@ -26,7 +26,7 @@
     if($libID == 'files')   $libLink = inlink('showFiles', "type=$type&objectID=$object->id");
     ?>
     <a class='lib <?php echo $libID == 'files' ? 'files' : '';?>' title='<?php echo $libName?>' href='<?php echo $libLink?>' data-id='<?php echo $libID;?>'>
-      <?php if($libID != 'files' and $libID != 'project'):?><i class='icon icon-move'></i><?php endif;?>
+      <?php if($libID != 'files' and $libID != 'project' and common::hasPriv('doc', 'sort')):?><i class='icon icon-move'></i><?php endif;?>
       <img src='<?php echo $config->webRoot . 'theme/default/images/main/doc-lib.png'?>' class='file-icon' />
       <div class='lib-name' title='<?php echo $libName?>'><?php echo $libName?></div>
     </a>

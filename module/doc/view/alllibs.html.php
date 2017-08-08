@@ -52,10 +52,12 @@
     <?php endforeach; ?>
   </div>
   <?php else: ?>
-  <div class='clearfix libs-group'>
+  <div class='clearfix libs-group libs-custom <?php if(common::hasPriv('doc', 'sort')) echo 'sort'?>'>
     <?php foreach($libs as $lib):?>
     <a class='lib lib-custom' title='<?php echo $lib->name?>' href='<?php echo inlink('browse', "libID=$lib->id") ?>' data-id='<?php echo $lib->id;?>'>
+      <?php if(common::hasPriv('doc', 'sort')):?>
       <i class='icon icon-move'></i>
+      <?php endif;?>
       <img src='<?php echo $config->webRoot . 'theme/default/images/main/doc-lib.png'?>' class='file-icon' />
       <div class='lib-name' title='<?php echo $lib->name?>'><?php echo $lib->name?></div>
     </a>

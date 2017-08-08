@@ -226,7 +226,7 @@ $(document).ready(function()
     $('#modulemenu .nav li').removeClass('active');
     if(typeof(type) != 'undefined') $('#modulemenu .nav li[data-id="' + type + '"]').addClass('active');
 
-    $('.libs-group').sortable(
+    $('.libs-group.sort').sortable(
     {
         trigger:  '.lib',
         selector: '.lib',

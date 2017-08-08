@@ -4,6 +4,13 @@ include 'header.lite.html.php';
 include 'chosen.html.php';
 //include 'validation.html.php';
 ?>
+<?php
+/* Load hook files for current page. */
+$extPath      = $this->app->getModuleRoot() . '/common/ext/view/';
+$extHookRule  = $extPath . 'header.*.hook.php';
+$extHookFiles = glob($extHookRule);
+if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
+?>
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
 <?php 
