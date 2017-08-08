@@ -2,3 +2,4 @@
 .addbtn{padding-top:22px;height:63px; border:1px dashed #ddd; width:60px;}
 .addbtn .icon-plus {font-size: 18px; display: block; opacity: 0.5; transition: opacity .2s; text-shadow: 1px 1px 3px rgba(0,0,0,.2);}
 .addbtn:hover .icon-plus {opacity: .9; animation: flash-icon 1s linear alternate infinite}
+#dropMenu{min-width:250px;padding:10px 15px;box-sizing:inhert;}
