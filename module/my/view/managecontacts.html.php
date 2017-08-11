@@ -41,23 +41,25 @@
           <table class='table table-form'> 
             <tr>
               <th class='w-80px'><?php echo $lang->user->contacts->listName;?></th>
-              <td>
+              <td class='w-300px'>
+              <div class='required required-wrapper'></div>
               <?php
               if($mode == 'new')
               {
-                  echo html::input('newList', '', "class='form-control w-300px'");
+                  echo html::input('newList', '', "class='form-control'");
               }
               else
               {
-                  echo html::input('listName', $list->listName, "class='form-control w-300px'");
+                  echo html::input('listName', $list->listName, "class='form-control'");
                   echo html::hidden('listID',  $list->id);
               }
               ?>
               </td>
+              <td></td>
             </tr>
             <tr>
               <th><?php echo $lang->user->contacts->selectedUsers;?></th>
-              <td>
+              <td colspan='2'>
               <?php
               if($mode == 'new')
               {
