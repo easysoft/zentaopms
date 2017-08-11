@@ -117,6 +117,13 @@
         echo html::a('javascript:;', $currentLable . " <span class='caret'></span>", '', "data-toggle='dropdown'");
         echo "<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto'>";
 
+        if(empty($suiteList)) 
+        {
+            echo '<li>';
+            echo html::a($this->createLink('testsuite', 'create', "productID=$productID"), "<i class='icon-plus'></i>" . '建套件');
+            echo '</li>';
+        }
+
         foreach ($suiteList as $suiteID => $suite)
         {
             $suiteName = $suite->name;
