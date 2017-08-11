@@ -120,7 +120,7 @@
         if(empty($suiteList)) 
         {
             echo '<li>';
-            echo html::a($this->createLink('testsuite', 'create', "productID=$productID"), "<i class='icon-plus'></i>" . '建套件');
+            echo html::a($this->createLink('testsuite', 'create', "productID=$productID"), "<i class='icon-plus'></i>" . $lang->testsuite->create);
             echo '</li>';
         }
 
@@ -128,6 +128,7 @@
         {
             $suiteName = $suite->name;
             if($suite->type == 'public') $suiteName .= " <span class='label label-info'>{$lang->testsuite->authorList[$suite->type]}</span>";
+            if($suite->type == 'private') $suiteName .= " <span class='label label-warning'>{$lang->testsuite->authorList[$suite->type]}</span>";
 
             echo '<li' . ($suiteID == (int)$currentSuiteID ? " class='active'" : '') . '>';
             echo html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=$suiteID"), $suiteName);
