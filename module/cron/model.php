@@ -219,7 +219,7 @@ class cronModel extends model
         if($cron->h === '' or preg_match('/[^0-9\*\-\/]/', $cron->h))    return sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->h);
         if($cron->dom === '' or preg_match('/[^0-9\*\-\/]/', $cron->dom))return sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->dom);
         if($cron->mon === '' or preg_match('/[^0-9\*\-\/]/', $cron->mon))return sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->mon);
-        if($cron->dow === '' or preg_match('/[^0-9\*\-\/]/', $cron->dow))return sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->dow);
+        if($cron->dow === '' or preg_match('/[^0-9\*\-|,\/]/', $cron->dow))return sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->dow);
         if(empty($cron->command))return sprintf($this->lang->error->notempty, $this->lang->cron->command);
         return null;
     }
