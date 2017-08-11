@@ -442,7 +442,7 @@ class testsuiteModel extends model
      * @access public
      * @return array
      */
-    public function getNotImportedCases($productID, $libID, $orderBy = 'id_desc', $pager = null)
+    public function getNotImportedCases($productID, $libID, $orderBy = 'id_desc', $pager = null, $browseType = '', $queryID = 0)
     {
         $importedCases = $this->dao->select('fromCaseID')->from(TABLE_CASE)
             ->where('product')->eq($productID)
@@ -450,11 +450,37 @@ class testsuiteModel extends model
             ->andWhere('fromCaseID')->ne('')
             ->andWhere('deleted')->eq(0)
             ->fetchPairs('fromCaseID', 'fromCaseID');
-        return $this->dao->select('*')->from(TABLE_CASE)
-            ->where('lib')->eq($libID)
+
+        $query = '';
+        if($browseType == 'bysearch')
+        {
+            if($queryID)
+            {
+                $this->session->set('testsuiteQuery', ' 1 = 1');
+                $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('testsuiteQuery', $query->sql);
+                    $this->session->set('testsuiteForm', $query->form);
+                }
+            }
+            else
+            {
+                if($this->session->testsuiteQuery == false) $this->session->set('testsuiteQuery', ' 1 = 1');
+            }
+
+            $query  = $this->session->testsuiteQuery;
+            $allLib = "`lib` = 'all'";
+            $withAllLib = strpos($query, $allLib) !== false;
+            if($withAllLib)  $query  = str_replace($allLib, 1, $query);
+            if(!$withAllLib) $query .= " AND `lib` = '$libID'";
+        }
+        
+        return $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)
+            ->beginIF($browseType != 'bysearch')->andWhere('lib')->eq($libID)->fi()
+            ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
             ->andWhere('product')->eq(0)
             ->andWhere('id')->notIN($importedCases)
-            ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

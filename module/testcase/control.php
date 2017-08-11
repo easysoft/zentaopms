@@ -1313,8 +1313,11 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function importFromLib($productID, $branch = 0, $libID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function importFromLib($productID, $branch = 0, $libID = 0, $orderBy = 'id_desc', $browseType = '', $queryID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $browseType = strtolower($browseType);
+        $queryID    = (int)$queryID;
+
         if($_POST)
         {
             $this->testcase->importFromLib($productID);
@@ -1331,6 +1334,20 @@ class testcase extends control
         }
         if(empty($libID) or !isset($libraries[$libID])) $libID = key($libraries);
 
+        /* Build the search form. */
+        $actionURL = $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=$libID&browseType=bySearch&queryID=myQueryID");
+        $this->config->testcase->search['module']    = 'testsuite';
+        $this->config->testcase->search['onMenuBar'] = 'no';
+        $this->config->testcase->search['actionURL'] = $actionURL;
+        $this->config->testcase->search['queryID']   = $queryID;
+        $this->config->testcase->search['fields']['lib'] = $this->lang->testcase->lib;
+        $this->config->testcase->search['params']['lib'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '', $libID => $libraries[$libID], 'all' => $this->lang->caselib->all));
+        $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
+        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
+        unset($this->config->testcase->search['fields']['product']);
+        unset($this->config->testcase->search['fields']['branch']);
+        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
@@ -1342,12 +1359,14 @@ class testcase extends control
         $this->view->libID      = $libID;
         $this->view->productID  = $productID;
         $this->view->branch     = $branch;
-        $this->view->cases      = $this->testsuite->getNotImportedCases($productID, $libID, $orderBy, $pager);
+        $this->view->cases      = $this->testsuite->getNotImportedCases($productID, $libID, $orderBy, $pager, $browseType, $queryID);
         $this->view->modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
         $this->view->libModules = $this->tree->getOptionMenu($libID, 'caselib');
         $this->view->pager      = $pager;
         $this->view->orderBy    = $orderBy;
         $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
+        $this->view->browseType = $browseType;
+        $this->view->queryID    = $queryID;
 
         $this->display();
     }

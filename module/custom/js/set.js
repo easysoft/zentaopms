@@ -13,4 +13,3 @@ $(function()
     $('#' + module + 'Tab').addClass('active');
     $('#' + field + 'Tab').addClass('active');
 })
-

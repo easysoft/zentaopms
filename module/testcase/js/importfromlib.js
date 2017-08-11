@@ -25,5 +25,6 @@ function setModule(obj)
 
 $(function()
 {
+    ajaxGetSearchForm('#querybox');
     setTimeout(function(){fixedTfootAction('#importFromLib')}, 500);
 });

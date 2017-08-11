@@ -19,10 +19,11 @@
     </div>
   </div>
 </div>
+<div id='querybox' class='show'></div>
 <form class='form-condensed' method='post' target='hiddenwin' id='importFromLib'>
   <table class='table tablesorter table-fixed table-selectable'>
     <thead>
-    <?php $vars = "productID=$productID&branch=$branch&libID=$libID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+    <?php $vars = "productID=$productID&branch=$branch&libID=$libID&orderBy=%s&browseType=$browseType&queryID=$queryID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
     <tr class='colhead'>
       <th class='w-id'>   <?php common::printOrderLink('id',  $orderBy, $vars, $lang->idAB);?></th>
       <?php if($branches):?>
