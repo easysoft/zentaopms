@@ -936,7 +936,17 @@ class userModel extends model
         $data->userList = join(',', $userList);
         $data->account  = $this->app->user->account;
 
-        $this->dao->insert(TABLE_USERCONTACT)->data($data)->exec();
+        if(empty($data->listName))
+        {
+            dao::$errors['listName'][] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
+            die(js::error(dao::getError()));
+        }
+
+        $this->dao->insert(TABLE_USERCONTACT)->data($data)
+            ->autoCheck()
+            ->exec();
+        if(dao::isError()) die(js::error(dao::getError()));
+
         return $this->dao->lastInsertID();
     }
 
@@ -955,7 +965,16 @@ class userModel extends model
         $data->listName = $listName;
         $data->userList = join(',', $userList);
 
-        $this->dao->update(TABLE_USERCONTACT)->data($data)->where('id')->eq($listID)->exec();
+        if(empty($data->listName))
+        {
+            dao::$errors['listName'][] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
+            die(js::error(dao::getError()));
+        }
+
+        $this->dao->update(TABLE_USERCONTACT)->data($data)
+            ->where('id')->eq($listID)
+            ->exec();
+        if(dao::isError()) die(js::error(dao::getError()));
     }
 
     /**
