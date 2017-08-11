@@ -602,22 +602,6 @@ EOT;
      */
     public function createLink($title)
     {
-        global $config; 
-        if($config->requestType != 'GET' && method_exists('uri', 'create' . $this->moduleName . $this->methodName)) 
-        {
-            $link = strip_tags(urldecode($_SERVER['REQUEST_URI']));
-            $link = htmlspecialchars($link,ENT_QUOTES);
-
-            if($this->params['pageID'] == 1) return html::a(preg_replace('/\/p\d+\./', '.', $link), $title);
-
-            if(preg_match('/\/p\d+/', $link)) return html::a(preg_replace('/\/p\d+\./', '/p' . $this->params['pageID'] . '.', $link), $title);
-
-            if($config->requestType == 'PATH_INFO2') $link = str_replace('index.php/', 'index_php/', $link);
-            if(strpos($link, '.') !== false) $link = str_replace('.', "/p{$this->params['pageID']}.", $link);
-            if(strpos($link, '.') === false) $link .= "/p{$this->params['pageID']}.html";
-            if($config->requestType == 'PATH_INFO2') $link =  str_replace('index_php/', 'index.php/', $link);
-            return html::a($link, $title);
-        }
         return html::a(helper::createLink($this->moduleName, $this->methodName, $this->params), $title);
     }
 }
