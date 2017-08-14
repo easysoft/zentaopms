@@ -148,4 +148,5 @@
   </form>
 </div>
 <?php js::set('weekend', $config->project->weekend);?>
+<?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
 <?php include '../../common/view/footer.html.php';?>
