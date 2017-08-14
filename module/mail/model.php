@@ -517,7 +517,7 @@ class mailModel extends model
         $data->ccList    = $ccList;
         $data->subject   = $subject;
         $data->body      = $body;
-        $data->addedBy   = $this->app->user->account;
+        $data->addedBy   = $this->config->mail->fromName;
         $data->addedDate = helper::now();
         $this->dao->insert(TABLE_MAILQUEUE)->data($data)->autocheck()->exec();
     }
