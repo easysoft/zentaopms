@@ -1359,6 +1359,7 @@ class story extends control
             $relatedStoryIdList   = array();
             $relatedPlanIdList    = array();
             $relatedBranchIdList  = array();
+            $relatedStoryIDs      = array();
 
             foreach($stories as $story)
             {
@@ -1366,6 +1367,7 @@ class story extends control
                 $relatedModuleIdList[$story->module]   = $story->module;
                 $relatedPlanIdList[$story->plan]       = $story->plan;
                 $relatedBranchIdList[$story->branch]   = $story->branch;
+                $relatedStoryIDs[$story->id]           = $story->id;
 
                 /* Process related stories. */
                 $relatedStories = $story->childStories . ',' . $story->linkStories . ',' . $story->duplicateStory;
@@ -1375,6 +1377,10 @@ class story extends control
                     if($storyID) $relatedStoryIdList[$storyID] = trim($storyID);
                 }
             }
+
+            $storyTasks = $this->loadModel('task')->getStoryTaskCounts($relatedStoryIDs);
+            $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($relatedStoryIDs);
+            $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($relatedStoryIDs);
 
             /* Get related objects title or names. */
             $productsType   = $this->dao->select('id, type')->from(TABLE_PRODUCT)->where('id')->in($relatedProductIdList)->fetchPairs();
@@ -1435,6 +1441,10 @@ class story extends control
                 if(isset($users[$story->assignedTo]))   $story->assignedTo   = $users[$story->assignedTo];
                 if(isset($users[$story->lastEditedBy])) $story->lastEditedBy = $users[$story->lastEditedBy];
                 if(isset($users[$story->closedBy]))     $story->closedBy     = $users[$story->closedBy]; 
+
+                if(isset($storyTasks[$story->id]))     $story->taskCountAB = $storyTasks[$story->id]; 
+                if(isset($storyBugs[$story->id]))      $story->bugCountAB  = $storyBugs[$story->id]; 
+                if(isset($storyCases[$story->id]))     $story->caseCountAB = $storyCases[$story->id]; 
 
                 $story->openedDate     = substr($story->openedDate, 0, 10);
                 $story->assignedDate   = substr($story->assignedDate, 0, 10);

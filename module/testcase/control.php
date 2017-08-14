@@ -1095,6 +1095,7 @@ class testcase extends control
             $relatedSteps   = $this->dao->select('parent,`case`,version,type,`desc`,expect')->from(TABLE_CASESTEP)->where('`case`')->in(@array_keys($cases))->orderBy('version desc,id')->fetchGroup('case');
             $relatedModules = array('0' => '/') + $relatedModules;
 
+            $cases = $this->testcase->appendData($cases);
             foreach($cases as $case)
             {
                 $case->stepDesc   = '';
@@ -1141,6 +1142,11 @@ class testcase extends control
                 if(isset($users[$case->openedBy]))                     $case->openedBy      = $users[$case->openedBy];
                 if(isset($users[$case->lastEditedBy]))                 $case->lastEditedBy  = $users[$case->lastEditedBy];
                 if(isset($caseLang->resultList[$case->lastRunResult])) $case->lastRunResult = $caseLang->resultList[$case->lastRunResult];
+
+                $case->bugsAB       = $case->bugs;       unset($case->bugs);
+                $case->resultsAB    = $case->results;    unset($case->results);
+                $case->stepNumberAB = $case->stepNumber; unset($case->stepNumber);
+                unset($case->caseFails);
 
                 $case->stage = explode(',', $case->stage);
                 foreach($case->stage as $key => $stage) $case->stage[$key] = isset($caseLang->stageList[$stage]) ? $caseLang->stageList[$stage] : $stage;
