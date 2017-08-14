@@ -82,7 +82,7 @@ class report extends control
         $this->view->begin      = $begin;
         $this->view->end        = $end;
         $this->view->bugs       = $this->report->getBugs($begin, $end, $product, $project);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->projects   = array('' => '') + $this->loadModel('project')->getPairs();
         $this->view->products   = array('' => '') + $this->loadModel('product')->getPairs();
         $this->view->project    = $project;
@@ -103,7 +103,7 @@ class report extends control
         $this->view->position[] = $this->lang->report->bugAssign;
         $this->view->submenu    = 'test';
         $this->view->assigns    = $this->report->getBugAssign();
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->display(); 
     }
 
@@ -151,7 +151,7 @@ class report extends control
         $this->view->position[] = $this->lang->report->workload;
 
         $this->view->workload = $this->report->getWorkload($dept);
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
         $this->view->begin    = $begin;
         $this->view->end      = date('Y-m-d', strtotime($end) - 24 * 3600);

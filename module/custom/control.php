@@ -49,7 +49,7 @@ class custom extends control
         if(($module == 'story' or $module == 'testcase') and $field == 'review')
         {
             $this->app->loadConfig($module);
-            $this->view->users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+            $this->view->users = $this->loadModel('user')->getPairs('noclosed');
             $this->view->needReview   = zget($this->config->$module, 'needReview', 1);
             $this->view->forceReview  = zget($this->config->$module, 'forceReview', '');
         }

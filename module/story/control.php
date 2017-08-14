@@ -100,7 +100,7 @@ class story extends control
             if(!isset($products[$product->id])) $products[$product->id] = $product->name;
         }
 
-        $users = $this->user->getPairs('nodeleted|pdfirst|noclosed');
+        $users = $this->user->getPairs('pdfirst|noclosed');
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
 
         /* Set menu. */
@@ -358,7 +358,7 @@ class story extends control
         $this->view->title      = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[] = $this->lang->story->edit;
         $this->view->story      = $story;
-        $this->view->users      = $this->user->getPairs('nodeleted|pofirst', "$story->assignedTo,$story->openedBy,$story->closedBy");
+        $this->view->users      = $this->user->getPairs('pofirst', "$story->assignedTo,$story->openedBy,$story->closedBy");
         $this->view->product    = $product;
         $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
         $this->display();
@@ -471,7 +471,7 @@ class story extends control
         }
 
         /* Set ditto option for users. */
-        $users          = $this->loadModel('user')->getPairs('nodeleted');
+        $users          = $this->loadModel('user')->getPairs();
         $users = array('' => '', 'ditto' => $this->lang->story->ditto) + $users;
 
         /* Set Custom*/
@@ -536,7 +536,7 @@ class story extends control
 
         /* Assign. */
         $this->view->title      = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
-        $this->view->users      = $this->user->getPairs('nodeleted|pofirst', $this->view->story->assignedTo);
+        $this->view->users      = $this->user->getPairs('pofirst', $this->view->story->assignedTo);
         $this->view->position[] = $this->lang->story->change;
         $this->view->needReview = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0) ? "checked='checked'" : "";
         $this->display();
@@ -566,7 +566,7 @@ class story extends control
 
         /* Assign. */
         $this->view->title      = $this->lang->story->activate . "STORY" . $this->lang->colon . $this->view->story->title;
-        $this->view->users      = $this->user->getPairs('nodeleted|pofirst', $this->view->story->closedBy);
+        $this->view->users      = $this->user->getPairs('pofirst', $this->view->story->closedBy);
         $this->view->position[] = $this->lang->story->activate;
         $this->display();
     }
@@ -693,7 +693,7 @@ class story extends control
         $this->view->product = $product;
         $this->view->story   = $story;
         $this->view->actions = $this->action->getList('story', $storyID);
-        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted', "$story->lastEditedBy,$story->openedBy");
+        $this->view->users   = $this->loadModel('user')->getPairs('', "$story->lastEditedBy,$story->openedBy");
 
         /* Get the affcected things. */
         $this->story->getAffectedScope($this->view->story);

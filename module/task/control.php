@@ -138,7 +138,7 @@ class task extends control
             }
         }
 
-        $users            = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $users            = $this->loadModel('user')->getPairs('noclosed');
         $stories          = $this->story->getProjectStoryPairs($projectID);
         $members          = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID);
@@ -294,7 +294,7 @@ class task extends control
         $this->view->position[] = $this->lang->task->common;
         $this->view->position[] = $this->lang->task->edit;
         $this->view->stories    = $this->story->getProjectStoryPairs($this->view->project->id);
-        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}"); 
+        $this->view->users      = $this->loadModel('user')->getPairs('', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}"); 
         $this->view->modules    = $this->tree->getTaskOptionMenu($this->view->task->project);
         $this->display();
     }
@@ -351,7 +351,7 @@ class task extends control
             /* Set modules and members. */
             $modules = $this->tree->getTaskOptionMenu($projectID);
             $modules = array('ditto' => $this->lang->task->ditto) + $modules;
-            $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+            $members = $this->project->getTeamMemberPairs($projectID);
             $members = array('' => '', 'ditto' => $this->lang->task->ditto) + $members;
             $members['closed'] = 'Closed';
 
@@ -427,7 +427,7 @@ class task extends control
         $this->view->title      = $this->view->project->name . $this->lang->colon . $this->lang->task->assign;
         $this->view->position[] = $this->lang->task->assign;
 
-        $this->view->users = $this->project->getTeamMemberPairs($projectID);
+        $this->view->users = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $this->display();
     }
 

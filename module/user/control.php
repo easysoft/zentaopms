@@ -78,7 +78,7 @@ class user extends control
 
         /* set menus. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->todo;
         $this->view->position[] = $this->lang->user->todo;
@@ -117,7 +117,7 @@ class user extends control
 
         /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
 
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->story;
@@ -153,7 +153,7 @@ class user extends control
 
         /* Set the menu. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
 
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
@@ -191,7 +191,7 @@ class user extends control
 
         /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
 
         /* Load the lang of bug module. */
         $this->app->loadLang('bug');
@@ -228,7 +228,7 @@ class user extends control
 
         /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
 
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true));
@@ -278,7 +278,7 @@ class user extends control
 
          /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
        
         $cases = array();
         if($type == 'case2Him')
@@ -320,7 +320,7 @@ class user extends control
         /* Set the menus. */
         $this->loadModel('project');
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclose'), $account);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->project;
         $this->view->position[] = $this->lang->user->project;
@@ -344,7 +344,7 @@ class user extends control
         if(empty($account)) $account = $this->app->user->account;
 
         /* Set menu. */
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclose'), $account);
 
         $user = $this->user->getById($account);
        
@@ -763,7 +763,7 @@ class user extends control
         { 
             if(!empty($this->config->global->showDemoUsers))
             {
-                $demoUsers = $this->user->getPairs('nodeleted, noletter, noempty, noclosed');
+                $demoUsers = $this->user->getPairs('noletter,noempty,noclosed');
                 $this->view->demoUsers = $demoUsers;
             }
 
@@ -873,7 +873,7 @@ class user extends control
     {
         /* set menus. */
         $this->lang->set('menugroup.user', 'company');
-        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
+        $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed'), $account);
 
         /* Save session. */
         $uri   = $this->app->getURI(true);
@@ -899,7 +899,7 @@ class user extends control
 
         /* Assign. */
         $this->view->period  = $period;
-        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter');
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->account = $account;
         $this->view->user    = $this->user->getById($account);
         $this->view->actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager);
@@ -933,7 +933,7 @@ class user extends control
      */
     public function ajaxGetContactUsers($contactListID)
     {
-        $users = $this->user->getPairs('nodeleted,devfirst');
+        $users = $this->user->getPairs('devfirst');
         if(!$contactListID) return print(html::select('mailto[]', $users, '', "class='form-control' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
         $list = $this->user->getContactListByID($contactListID);
         return print(html::select('mailto[]', $users, $list->userList, "class='form-control' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));

@@ -217,7 +217,7 @@ class testreportModel extends model
         $bugInfo['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($newBugs) * 100, 2);
 
         $this->app->loadLang('bug');
-        $users = $this->loadModel('user')->getPairs('noclosed|nodeleted|noletter');
+        $users = $this->loadModel('user')->getPairs('noclosed|noletter');
         $data  = array();
         foreach($severityGroups as $severity => $count)
         {

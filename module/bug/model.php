@@ -455,7 +455,7 @@ class bugModel extends model
      */
     public function getModuleOwner($moduleID, $productID)
     {
-        $users = $this->loadModel('user')->getPairs('nodeleted');
+        $users = $this->loadModel('user')->getPairs();
 
         if($moduleID)
         {
@@ -845,7 +845,7 @@ class bugModel extends model
 
         $bug       = reset($bugs);
         $productID = $bug->product;
-        $users     = $this->loadModel('user')->getPairs('nodeleted');
+        $users     = $this->loadModel('user')->getPairs();
         $product   = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
         $stmt      = $this->dao->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug'));
         $modules   = array();
@@ -921,6 +921,8 @@ class bugModel extends model
             ->add('closedBy', '')
             ->add('closedDate', '0000-00-00')
             ->add('duplicateBug', 0)
+            ->add('toTask', 0)
+            ->add('toStory', 0)
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->join('openedBuild', ',')

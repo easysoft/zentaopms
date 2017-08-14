@@ -229,7 +229,7 @@ class doc extends control
         if(!empty($lib->project)) $this->view->project = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($lib->project)->fetch();
         $this->view->lib     = $lib;
         $this->view->groups  = $this->loadModel('group')->getPairs();
-        $this->view->users   = $this->user->getPairs('nocode');
+        $this->view->users   = $this->user->getPairs('noletter', $lib->users);
         $this->view->libID   = $libID;
         
         die($this->display());
@@ -376,7 +376,7 @@ class doc extends control
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->view->type             = $type;
         $this->view->groups           = $this->loadModel('group')->getPairs();
-        $this->view->users            = $this->user->getPairs('nocode');
+        $this->view->users            = $this->user->getPairs('noletter', $doc->users);
         $this->display();
     }
 

@@ -194,7 +194,7 @@ class my extends control
         $this->view->position[]  = $this->lang->my->bug;
         $this->view->bugs        = $bugs;
         $this->view->users       = $this->user->getPairs('noletter');
-        $this->view->memberPairs = $this->user->getPairs('noletter|nodeleted');
+        $this->view->memberPairs = $this->user->getPairs('noletter');
         $this->view->tabID       = 'bug';
         $this->view->type        = $type;
         $this->view->recTotal    = $recTotal;
@@ -404,7 +404,7 @@ class my extends control
         $this->view->mode   = $mode;
         $this->view->lists  = $lists;
         $this->view->listID = $listID;
-        $this->view->users  = $this->user->getPairs('noletter|nodeleted|noempty|noclosed');
+        $this->view->users  = $this->user->getPairs('noletter|noempty|noclosed');
         $this->display();
     }
 

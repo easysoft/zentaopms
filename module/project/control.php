@@ -967,10 +967,10 @@ class project extends control
         $this->view->position       = $position;
         $this->view->projects       = $projects;
         $this->view->project        = $project;
-        $this->view->poUsers        = $this->loadModel('user')->getPairs('noclosed,nodeleted,pofirst', $project->PO);
-        $this->view->pmUsers        = $this->user->getPairs('noclosed,nodeleted,pmfirst',  $project->PM);
-        $this->view->qdUsers        = $this->user->getPairs('noclosed,nodeleted,qdfirst',  $project->QD);
-        $this->view->rdUsers        = $this->user->getPairs('noclosed,nodeleted,devfirst', $project->RD);
+        $this->view->poUsers        = $this->loadModel('user')->getPairs('noclosed,pofirst', $project->PO);
+        $this->view->pmUsers        = $this->user->getPairs('noclosed,pmfirst',  $project->PM);
+        $this->view->qdUsers        = $this->user->getPairs('noclosed,qdfirst',  $project->QD);
+        $this->view->rdUsers        = $this->user->getPairs('noclosed,devfirst', $project->RD);
         $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->allProducts    = $allProducts;
         $this->view->linkedProducts = $linkedProducts;
@@ -1007,6 +1007,16 @@ class project extends control
         $this->project->setMenu($this->projects, $projectID);
 
         $projectIDList = $this->post->projectIDList ? $this->post->projectIDList : die(js::locate($this->session->projectList, 'parent'));
+        $projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIDList)->fetchAll('id');
+
+        $appendPoUsers = $appendPmUsers = $appendQdUsers = $appendRdUsers = array();
+        foreach($projects as $project)
+        {
+            $appendPoUsers[$project->PO] = $project->PO;
+            $appendPmUsers[$project->PM] = $project->PM;
+            $appendQdUsers[$project->QD] = $project->QD;
+            $appendRdUsers[$project->RD] = $project->RD;
+        }
 
         /* Set custom. */
         foreach(explode(',', $this->config->project->customBatchEditFields) as $field) $customFields[$field] = $this->lang->project->$field;
@@ -1016,11 +1026,11 @@ class project extends control
         $this->view->title         = $this->lang->project->batchEdit;
         $this->view->position[]    = $this->lang->project->batchEdit;
         $this->view->projectIDList = $projectIDList;
-        $this->view->projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIDList)->fetchAll('id');
-        $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed,nodeleted,pmfirst');
-        $this->view->poUsers       = $this->user->getPairs('noclosed,nodeleted,pofirst');
-        $this->view->qdUsers       = $this->user->getPairs('noclosed,nodeleted,qdfirst');
-        $this->view->rdUsers       = $this->user->getPairs('noclosed,nodeleted,devfirst');
+        $this->view->projects      = $projects;
+        $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed,pmfirst', $appendPmUsers);
+        $this->view->poUsers       = $this->user->getPairs('noclosed,pofirst', $appendPoUsers);
+        $this->view->qdUsers       = $this->user->getPairs('noclosed,qdfirst', $appendQdUsers);
+        $this->view->rdUsers       = $this->user->getPairs('noclosed,devfirst', $appendRdUsers);
         $this->display();
     }
 
@@ -1536,7 +1546,7 @@ class project extends control
         $this->loadModel('dept');
 
         $project        = $this->project->getById($projectID);
-        $users          = $this->user->getPairs('noclosed, nodeleted, devfirst');
+        $users          = $this->user->getPairs('noclosed,devfirst');
         $roles          = $this->user->getUserRoles(array_keys($users));
         $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
         $currentMembers = $this->project->getTeamMembers($projectID);
@@ -1815,7 +1825,7 @@ class project extends control
         /* Assign. */
         $this->view->projectID = $projectID;
         $this->view->type      = $type;
-        $this->view->users     = $this->loadModel('user')->getPairs('nodeleted|noletter');
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->view->account   = $account;
         $this->view->orderBy   = $orderBy;
         $this->view->pager     = $pager;

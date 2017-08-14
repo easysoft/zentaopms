@@ -76,7 +76,7 @@ class build extends control
         $this->view->products      = $products;
         $this->view->lastBuild     = $this->build->getLast($projectID);
         $this->view->productGroups = $productGroups;
-        $this->view->users         = $this->user->getPairs('nodeleted');
+        $this->view->users         = $this->user->getPairs();
         $this->display();
     }
 
@@ -160,7 +160,7 @@ class build extends control
 
         $this->view->productGroups = $productGroups;
         $this->view->products      = $products;
-        $this->view->users         = $this->loadModel('user')->getPairs();
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter', $build->builder);
         $this->view->build         = $build;
         $this->display();
     }

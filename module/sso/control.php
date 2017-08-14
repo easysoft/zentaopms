@@ -187,7 +187,7 @@ class sso extends control
             die(js::locate(helper::safe64Decode($referer), 'parent'));
         }
         $this->view->title = $this->lang->sso->bind;
-        $this->view->users = $this->user->getPairs('nodeleted|noclosed');
+        $this->view->users = $this->user->getPairs('noclosed');
         $this->view->data  = $ssoData;
         $this->display();
     }
@@ -201,7 +201,7 @@ class sso extends control
     public function getUserPairs()
     {
         if(!$this->sso->checkKey()) return false;
-        $users = $this->loadModel('user')->getPairs('noclosed,nodeleted');
+        $users = $this->loadModel('user')->getPairs('noclosed');
         die(json_encode($users));
     }
 

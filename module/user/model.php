@@ -64,7 +64,7 @@ class userModel extends model
     /**
      * Get the account=>realname pairs.
      * 
-     * @param  string $params   noletter|noempty|noclosed|nodeleted|withguest|pofirst|devfirst|qafirst|pmfirst|realname, can be sets of theme
+     * @param  string $params   noletter|noempty|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname, can be sets of theme
      * @param  string $usersToAppended  account1,account2 
      * @access public
      * @return array
@@ -88,7 +88,7 @@ class userModel extends model
 
         /* Get raw records. */
         $users = $this->dao->select($fields)->from(TABLE_USER)
-            ->beginIF(strpos($params, 'nodeleted') !== false)->where('deleted')->eq(0)->fi()
+            ->where('deleted')->eq(0)
             ->orderBy($orderBy)
             ->fetchAll('account');
         if($usersToAppended) $users += $this->dao->select($fields)->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll('account');

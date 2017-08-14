@@ -189,7 +189,7 @@ class product extends control
         $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'story', $startModuleID = 0, array('treeModel', 'createStoryLink'), '', $branch);
         $this->view->parentModules = $this->tree->getParents($moduleID);
         $this->view->pager         = $pager;
-        $this->view->users         = $this->user->getPairs('nodeleted|noletter|pofirst');
+        $this->view->users         = $this->user->getPairs('noletter|pofirst');
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $browseType;
         $this->view->modules       = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
@@ -228,9 +228,9 @@ class product extends control
         $this->view->title      = $this->lang->product->create;
         $this->view->position[] = $this->view->title;
         $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst|noclosed');
-        $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst|noclosed');
-        $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst|noclosed');
+        $this->view->poUsers    = $this->loadModel('user')->getPairs('pofirst|noclosed');
+        $this->view->qdUsers    = $this->loadModel('user')->getPairs('qdfirst|noclosed');
+        $this->view->rdUsers    = $this->loadModel('user')->getPairs('devfirst|noclosed');
 
         unset($this->lang->product->typeList['']);
         $this->display();
@@ -272,9 +272,9 @@ class product extends control
         $this->view->position[] = $this->lang->product->edit;
         $this->view->product    = $product;
         $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst',  $product->PO);
-        $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst',  $product->QD);
-        $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst', $product->RD);
+        $this->view->poUsers    = $this->loadModel('user')->getPairs('pofirst',  $product->PO);
+        $this->view->qdUsers    = $this->loadModel('user')->getPairs('qdfirst',  $product->QD);
+        $this->view->rdUsers    = $this->loadModel('user')->getPairs('devfirst', $product->RD);
 
         unset($this->lang->product->typeList['']);
         $this->display();
@@ -314,13 +314,22 @@ class product extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->product->custom->batchEditFields;
 
+        $products      = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIDList)->fetchAll('id');
+        $appendPoUsers = $appendQdUsers = $appendRdUsers = array();
+        foreach($products as $product)
+        {
+            $appendPoUsers[$product->PO] = $product->PO;
+            $appendQdUsers[$product->QD] = $product->QD;
+            $appendRdUsers[$product->RD] = $product->RD;
+        }
+
         $this->view->title         = $this->lang->product->batchEdit;
         $this->view->position[]    = $this->lang->product->batchEdit;
         $this->view->productIDList = $productIDList;
-        $this->view->products      = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIDList)->fetchAll('id');
-        $this->view->poUsers       = $this->loadModel('user')->getPairs('nodeleted|pofirst');
-        $this->view->qdUsers       = $this->loadModel('user')->getPairs('nodeleted|qdfirst');
-        $this->view->rdUsers       = $this->loadModel('user')->getPairs('nodeleted|devfirst');
+        $this->view->products      = $products;
+        $this->view->poUsers       = $this->loadModel('user')->getPairs('pofirst', $appendPoUsers);
+        $this->view->qdUsers       = $this->loadModel('user')->getPairs('qdfirst', $appendQdUsers);
+        $this->view->rdUsers       = $this->loadModel('user')->getPairs('devfirst', $appendRdUsers);
 
         unset($this->lang->product->typeList['']);
         $this->display();
@@ -482,7 +491,7 @@ class product extends control
         /* Assign. */
         $this->view->productID = $productID;
         $this->view->type      = $type;
-        $this->view->users     = $this->loadModel('user')->getPairs('nodeleted|noletter');
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->view->account   = $account;
         $this->view->orderBy   = $orderBy;
         $this->view->pager     = $pager;
