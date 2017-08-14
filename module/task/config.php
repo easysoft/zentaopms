@@ -14,6 +14,8 @@ $config->task->start->requiredFields       = 'estimate';
 $config->task->finish->requiredFields      = 'consumed';
 $config->task->activate->requiredFields    = 'left';
 
+$config->task->workLimitLength = 1024;
+
 $config->task->editor = new stdclass();
 $config->task->editor->create   = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->task->editor->edit     = array('id' => 'desc,comment', 'tools' => 'simpleTools');

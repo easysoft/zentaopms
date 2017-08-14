@@ -565,7 +565,7 @@ class taskModel extends model
             {
                 if(!$record->consumed[$id]) die(js::alert($this->lang->task->error->consumedThisTime));
                 if($record->left[$id] === '') die(js::alert($this->lang->task->error->left));
-                if(strlen($record->work[$id]) > 255) die(js::alert($this->lang->task->error->work));
+                if(strlen($record->work[$id]) > $this->config->task->workLimitLength) die(js::alert(sprintf($this->lang->task->error->work, $this->config->task->workLimitLength)));
                 $estimates[$id] = new stdclass();
                 $estimates[$id]->date     = $record->dates[$id];
                 $estimates[$id]->task     = $taskID;
