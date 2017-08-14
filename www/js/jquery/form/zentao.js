@@ -69,8 +69,6 @@ $.extend(
                 if($.type(response.message) == 'object')
                 {
                     var triggered = new Array();
-                    var errorMSG  = '';
-                    var firstOBJ  = '';
                     $.each(response.message, function(key, value)
                     {
                         /* Define the id of the error objecjt and it's label. */
@@ -79,13 +77,46 @@ $.extend(
                         var i          = triggered.push(false);
 
                         /* Create the error message. */
-                        errorMSG += '<div id="'  + errorLabel + '" class="text-danger red">';
+                        var errorMSG = '<div id="'  + errorLabel + '" class="text-danger red">';
                         errorMSG += $.type(value) == 'string' ? value : value.join(';');
                         errorMSG += '</div>';
 
-                        if(i == 1)firstOBJ = errorOBJ;
+                        /* Append error message, set style and set the focus events. */
+                        $('#' + errorLabel).remove(); 
+                        var isInputGroup = $(errorOBJ).closest('.input-group').size();
+                        var $showOBJ     = isInputGroup ? $(errorOBJ).closest('.input-group').parent() : $(errorOBJ).parent();
+                        $showOBJ.append(errorMSG);
+                        $(errorOBJ).css('margin-bottom', 0);
+                        $(errorOBJ).css('border-color','#D2322D');
+
+                        if($(errorOBJ + '_chosen').size() > 0)
+                        {
+                            $(errorOBJ + '_chosen .chosen-single').css('border-color','#D2322D');
+                            $(errorOBJ + '_chosen .chosen-single').bind('keydown mousedown', function()
+                            {
+                                if(!triggered[i])
+                                {
+                                    $(this).removeAttr('style')
+                                    $('#' + errorLabel).remove(); 
+                                    triggered[i] = true;
+                                }
+                            });
+                        }
+
+                        $(errorOBJ).bind('keydown mousedown', function()
+                        {
+                            if(!triggered[i])
+                            {
+                                $(this).removeAttr('style')
+                                $('#' + errorLabel).remove(); 
+                                triggered[i] = true;
+                            }
+                        });
+
+                        if(i == 1)$(errorOBJ).focus();
+
+                        setTimeout(function(){$('#' + errorLabel).remove();}, 5000);
                     })
-                    if(errorMSG)bootbox.alert(errorMSG, function(){setTimeout(function(){$('body').click();if(firstOBJ)$(firstOBJ).focus();}, 100)});
                 }
             },
 
