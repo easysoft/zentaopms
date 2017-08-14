@@ -37,6 +37,7 @@
     <td><?php echo sprintf('%03d', $suite->id);?></td>
     <td class='text-left' title="<?php echo $suite->name?>">
       <?php if($suite->type == 'public') echo "<span class='label label-info'>{$lang->testsuite->authorList['public']}</span> ";?>
+      <?php if($suite->type == 'private') echo "<span class='label label-warning'>{$lang->testsuite->authorList['private']}</span> ";?>
       <?php echo html::a(inlink('view', "suiteID=$suite->id"), $suite->name);?>
     </td>
     <td><?php echo $suite->desc;?></td>
