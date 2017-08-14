@@ -20,9 +20,9 @@
         <th class='text-left'><?php echo $lang->project->name;?></th>
         <th width='80'><?php echo $lang->project->end;?></th>
         <th width='50'><?php echo $lang->statusAB;?></th>
-        <th width='45'><?php echo $lang->project->totalEstimate;?></th>
-        <th width='45'><?php echo $lang->project->totalConsumed;?></th>
-        <th width='45'><?php echo $lang->project->totalLeft;?></th>
+        <th width='60'><?php echo $lang->project->totalEstimate;?></th>
+        <th width='60'><?php echo $lang->project->totalConsumed;?></th>
+        <th width='60'><?php echo $lang->project->totalLeft;?></th>
         <th width='115'><?php echo $lang->project->progess;?></th>
         <th width='100' class='{sorter: false}'><?php echo $lang->project->burn;?></th>
       </tr>
