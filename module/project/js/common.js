@@ -124,6 +124,18 @@ function computeEndDate(delta)
  */
 function loadBranches(product)
 {
+    $('#productsBox select').each(function()
+    {
+        var $product = $(product);
+        if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id'))
+        {
+            bootbox.alert(errorSameProducts);
+            $product.val(0);
+            $product.trigger("chosen:updated");
+            return false;
+        }
+    })
+
     if($('#productsBox .input-group:last select:first').val() != 0)
     {
         var length = $('#productsBox .input-group').size();
