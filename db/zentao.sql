@@ -616,7 +616,7 @@ CREATE TABLE IF NOT EXISTS `zt_taskestimate` (
   `left` float unsigned NOT NULL default '0',
   `consumed` float unsigned NOT NULL,
   `account` char(30) NOT NULL default '',
-  `work` varchar(255) NOT NULL,
+  `work` text,
   PRIMARY KEY  (`id`),
   KEY `task` (`task`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
