@@ -214,6 +214,18 @@ class tutorialModel extends model
     }
 
     /**
+     * Get team members pairs. 
+     * 
+     * @access public
+     * @return array
+     */
+    public function getTeamMembersPairs()
+    {
+        $account = $this->app->user->account;
+        return array('' => '', $account => $this->app->user->realname);
+    }
+
+    /**
      * Get tutorial user pairs.
      * 
      * @access public
