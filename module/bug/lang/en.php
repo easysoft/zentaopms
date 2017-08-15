@@ -85,6 +85,7 @@ $lang->bug->resolve            = 'Resolve';
 $lang->bug->batchResolve       = 'Batch Resolve';
 $lang->bug->close              = 'Close';
 $lang->bug->activate           = 'Activate';
+$lang->bug->batchActivate      = 'batchActivate';
 $lang->bug->reportChart        = 'Report';
 $lang->bug->export             = 'Export';
 $lang->bug->delete             = 'Delete';

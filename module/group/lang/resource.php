@@ -459,6 +459,7 @@ $lang->resource->bug->batchAssignTo      = 'batchAssignTo';
 $lang->resource->bug->resolve            = 'resolve';
 $lang->resource->bug->batchResolve       = 'batchResolve';
 $lang->resource->bug->activate           = 'activate';
+$lang->resource->bug->batchActivate      = 'batchActivate';
 $lang->resource->bug->close              = 'close';
 $lang->resource->bug->report             = 'reportChart';
 $lang->resource->bug->export             = 'export';
@@ -483,6 +484,7 @@ $lang->bug->methodOrder[50]  = 'batchAssignTo';
 $lang->bug->methodOrder[55]  = 'resolve';
 $lang->bug->methodOrder[60]  = 'batchResolve';
 $lang->bug->methodOrder[65]  = 'batchClose';
+$lang->bug->methodOrder[67]  = 'batchActivate';
 $lang->bug->methodOrder[70]  = 'activate';
 $lang->bug->methodOrder[75]  = 'close';
 $lang->bug->methodOrder[80]  = 'report';
@@ -1321,6 +1323,7 @@ $lang->changelog['9.2'][] = 'testsuite-batchCreateCase';
 $lang->changelog['9.2'][] = 'testsuite-exportTemplet';
 $lang->changelog['9.2'][] = 'testsuite-import';
 $lang->changelog['9.2'][] = 'testsuite-showImport';
+$lang->changelog['9.5'][] = 'bug-batchActivate';
 
 global $config;
 if($config->global->flow != 'full')
