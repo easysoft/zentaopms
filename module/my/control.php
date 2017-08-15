@@ -323,6 +323,7 @@ class my extends control
         if($this->app->user->account == 'guest') die(js::alert('guest') . js::locate('back'));
         if(!empty($_POST))
         {
+            $_POST['account'] = $this->app->user->account;
             $this->user->update($this->app->user->id);
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate($this->createLink('my', 'profile'), 'parent'));

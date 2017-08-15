@@ -1122,6 +1122,39 @@ class bug extends control
     }
 
     /**
+     * Batch activate bugs. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function batchActivate()
+    {
+        if($this->post->bugIDList)
+        {
+            $bugIDList = $this->post->bugIDList;
+
+            /* Reset $_POST. Do not unset that because the function of close need that in model. */
+            $_POST = array();
+
+            $bugs = $this->bug->getByList($bugIDList);
+            foreach($bugs as $bugID => $bug)
+            {
+                if($bug->status == 'active')
+                {
+                    continue;
+                }
+
+                $this->bug->activate($bugID);
+
+                $actionID = $this->action->create('bug', $bugID, 'Activated');
+                $this->bug->sendmail($bugID, $actionID);
+            }
+        }
+
+        die(js::reload('parent'));
+    }
+
+    /**
      * Confirm story change.
      * 
      * @param  int    $bugID 

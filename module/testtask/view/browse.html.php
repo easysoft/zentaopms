@@ -27,7 +27,7 @@ $status = $this->session->testTaskVersionStatus;
         <button class='btn btn-primary btn-sm' type='button' data-toggle='dropdown'><?php echo $viewName;?> <span class='caret'></span></button>
         <ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>
           <?php 
-            echo "<li>" . html::a(inlink('browse', "productID=$productID&branch=$branch&type=all,$status"), $lang->testtask->all) . "</li>";
+            echo "<li>" . html::a(inlink('browse', "productID=$productID&branch=0&type=all,$status"), $lang->testtask->all) . "</li>";
             echo "<li>" . html::a(inlink('browse', "productID=$productID&branch=$branch&type=local,$status"), $productName) . "</li>";
           ?>
         </ul>

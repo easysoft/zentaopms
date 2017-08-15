@@ -85,6 +85,7 @@ $lang->bug->resolve            = '解決';
 $lang->bug->batchResolve       = '批量解決';
 $lang->bug->close              = '關閉';
 $lang->bug->activate           = '激活';
+$lang->bug->batchActivate      = '批量激活';
 $lang->bug->reportChart        = '報表統計';
 $lang->bug->export             = '導出數據';
 $lang->bug->delete             = '刪除';
