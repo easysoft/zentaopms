@@ -13,7 +13,7 @@ function syncModule(rootID, type)
         {
             $('.row-table').each(function()
             {
-               moduleName = $(this).find('input[id^=modules]').val();
+                moduleName = $(this).find('input[id^=modules]').val();
                 if(moduleName == module.name) modules[key] = null;
                 if(!moduleName) $(this).closest('.row-table').remove();
             })
@@ -23,9 +23,19 @@ function syncModule(rootID, type)
         {
             if(module)
             {
-                $('#sonModule').append($inputgroup);
-                $('#sonModule .row-table:last input[id^=modules]').val(module.name);
-                $('#sonModule .row-table:last input[id^=shorts]').val(module.short);
+                /* Duplicate removal for mdoule name. */
+                var unique = true;
+                $('#sonModule > .row-table').each(function()
+                {
+                    if($(this).find('.col-table:first').find(':input').val() == module.name) unique = false;
+                })
+
+                if(unique)
+                {
+                    $('#sonModule').append($inputgroup);
+                    $('#sonModule .row-table:last input[id^=modules]').val(module.name);
+                    $('#sonModule .row-table:last input[id^=shorts]').val(module.short);
+                }
             }
         })
         $('#sonModule').append($inputgroup);
