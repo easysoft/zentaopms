@@ -177,6 +177,24 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.custom.productProject', $this->post->productProject);
+
+            /* Change block title. */
+            $oldConfig = isset($this->config->custom->productProject) ? $this->config->custom->productProject : '0_0';
+            $newConfig = $this->post->productProject;
+
+            list($oldProductIndex, $oldProjectIndex) = explode('_', $oldConfig);
+            list($newProductIndex, $newProjectIndex) = explode('_', $newConfig);
+
+            foreach($this->config->productCommonList as $clientLang => $productCommonList)
+            {
+                $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$productCommonList[$oldProductIndex]}', '{$productCommonList[$newProductIndex]}')")->where('source')->eq('product')->exec();
+            }
+
+            foreach($this->config->projectCommonList as $clientLang => $projectCommonList)
+            {
+                $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$projectCommonList[$oldProjectIndex]}', '{$projectCommonList[$newProjectIndex]}')")->where('source')->eq('project')->exec();
+            }
+
             die(js::reload('parent'));
         }
 
