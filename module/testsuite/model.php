@@ -25,6 +25,7 @@ class testsuiteModel extends model
     {
         $this->loadModel('product')->setMenu($products, $productID);
         $selectHtml = $this->select($products, $productID, 'testsuite', 'browse');
+        if(strpos($selectHtml, 'currentBranch') !== false) $selectHtml = substr($selectHtml, 0, strrpos($selectHtml, '<li>'));
         foreach($this->lang->testsuite->menu as $key => $value)
         {
             $replace = ($key == 'product') ? $selectHtml : $productID;
