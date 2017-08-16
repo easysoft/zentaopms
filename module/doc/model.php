@@ -914,7 +914,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getLibFiles($type, $objectID, $pager = null)
+    public function getLibFiles($type, $objectID, $orderBy, $pager = null)
     {
         if($type != 'project' and $type != 'product') return true;
         $this->loadModel('file');
@@ -936,7 +936,7 @@ class docModel extends model
                 ->orWhere("(objectType = 'productplan' and objectID in ($planIdList))")
                 ->markRight(1)
                 ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
-                ->orderBy('t1.id desc')
+                ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
         }
@@ -952,7 +952,7 @@ class docModel extends model
                 ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
                 ->markRight(1)
                 ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
-                ->orderBy('t1.id desc')
+                ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
         }

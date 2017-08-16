@@ -36,6 +36,10 @@ $lang->doc->whiteList      = '白名單';
 $lang->doc->contentType    = '文檔格式';
 $lang->doc->separator      = "<i class='icon-angle-right'></i>";
 $lang->doc->fileTitle      = '附件名';
+$lang->doc->filePath       = '地址';
+$lang->doc->extension      = '類型';
+$lang->doc->size           = '大小';
+$lang->doc->download       = '下載';
 
 $lang->doc->moduleDoc      = '按模組瀏覽';
 $lang->doc->searchDoc      = '搜索';

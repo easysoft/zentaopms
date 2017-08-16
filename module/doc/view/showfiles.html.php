@@ -14,7 +14,7 @@
 <div id='featurebar'>
   <strong><?php echo $lang->doclib->files?></strong>
   <div class='actions'>
-    <form class='pull-left' method='get'>
+  <form class='pull-left' method='get'>
       <?php
       if($this->config->requestType == 'GET')
       {
@@ -22,6 +22,7 @@
           echo html::hidden('f',          'showFiles');
           echo html::hidden('type',       $type);
           echo html::hidden('objectID',   $object->id);
+          echo html::hidden('viewType',   ($viewType == 'list' ? 'list' : 'card'));
           echo html::hidden('recTotal',   isset($this->get->recTotal) ? $this->get->recTotal : 0);
           echo html::hidden('recPerPage', isset($this->get->recPerPage) ? $this->get->recPerPage : 0);
           echo html::hidden('pageID',     isset($this->get->pageID) ? $this->get->pageID : 0);
@@ -35,8 +36,65 @@
       </div>
     </form>
     <?php echo html::backButton();?>
+    <div class='text-right pull-right'>
+    <?php
+        $changeType = "type=$type&objectID=$objectID&viewType=" . ($viewType == 'list' ? 'card' : 'list');
+        echo html::a(inLink('showFiles', $changeType), "<i class='icon icon-th-list icon-4x'></i> 切换界面布局");
+    ?>
+    </div>
   </div>
 </div>
+
+<?php if($viewType == 'list'):?>
+<form method='post' id='ajaxForm'>
+  <table class='table table-hover table-striped tablesorter table-fixed' id='orderList'>
+    <thead>
+      <?php $vars = "type=$type&objectID=$objectID&viewType=list&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";?>
+      <tr class='text-center'>
+        <th class='w-80px'>  <?php common::printOrderLink('t1.id',     $orderBy, $vars, $lang->doc->id);?>        </th>
+        <th> <?php common::printOrderLink('title',    $orderBy, $vars, $lang->doc->fileTitle);?> </th>
+        <th> <?php common::printOrderLink('pathname', $orderBy, $vars, $lang->doc->filePath);?>  </th>
+        <th class='w-60px'>  <?php common::printOrderLink('extension', $orderBy, $vars, $lang->doc->extension);?> </th>
+        <th class='w-80px'>  <?php common::printOrderLink('size',      $orderBy, $vars, $lang->doc->size);?>      </th>
+        <th class='w-100px'> <?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->doc->addedBy);?>   </th>
+        <th class='w-160px'> <?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?> </th>
+        <th class='w-80px'>  <?php echo $lang->actions;?></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach($files as $file):?>
+      <?php if(empty($file->pathname)) continue;?>
+        <tr class='text-center text-middle'>
+          <td>
+            <?php echo $file->id;?>
+          </td>
+          <td class='text-left'>
+            <?php echo $file->title;?>
+          </td>
+          <td class='text-left'> <?php echo $file->pathname;?> </td>
+          <td><?php echo $file->extension;?></td>
+          <td><?php echo number_format($file->size / 1024 , 1) . 'K';?></td>
+          <td><?php echo isset($file->addedBy) ? $file->addedBy : '';?></td>
+          <td><?php echo isset($file->addedDate) ? substr($file->addedDate, 0, 10) : '';?></td>
+          <td class='text-center'>
+            <?php
+            commonModel::printLink('file', 'download', "fileID=$file->id", $lang->doc->download, "data-toggle='modal'");
+            commonModel::printLink('file', 'delete',   "fileID=$file->id", $lang->delete, "class='deleter'");
+            ?>
+          </td>
+        </tr>
+      <?php endforeach;?>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan='8'>
+          <?php $pager->show();?>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</form>
+<?php else:?>
 <div class='lib-files cards'>
   <?php foreach($files as $file):?>
   <?php if(empty($file->pathname)) continue;?>
@@ -88,6 +146,8 @@
   <?php endforeach;?>
 </div>
 <div class='clearfix pager-wrapper'><?php $pager->show();?></div>
+<?php endif?>
+
 <?php js::set('type', 'doc');?>
 <script>
 <?php

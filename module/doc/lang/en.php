@@ -36,6 +36,10 @@ $lang->doc->whiteList      = 'White List';
 $lang->doc->contentType    = 'Document Format';
 $lang->doc->separator      = "<i class='icon-angle-right'></i>";
 $lang->doc->fileTitle      = 'File Title';
+$lang->doc->filePath       = 'File Path';
+$lang->doc->extension      = 'Extension';
+$lang->doc->size           = 'Size';
+$lang->doc->download       = 'Download';
 
 $lang->doc->moduleDoc      = 'By Module';
 $lang->doc->searchDoc      = 'By Search';
