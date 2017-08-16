@@ -1,1 +1,8 @@
 .versions .dropdown-menu{max-height:260px; overflow-y:auto;}
+
+fieldset > .content table tr.firstRow th{border-top-width: 2px;}
+fieldset > .content table tr th { border-top: 1px solid #BBB;
+  border-top-width: 1px;
+  background-color: #F7F7F7;
+}
+fieldset > .content table tr th, fieldset > .content table tr td{ padding: 5px 10px; }
