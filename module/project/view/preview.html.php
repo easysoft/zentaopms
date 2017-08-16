@@ -128,7 +128,7 @@ $dataType = '';
             </tr>
             <tr>
               <td align='center'><?php echo $lang->task->leftThisTime?></td>
-              <td></td>
+              <td align='center'><?php if($content->left) echo $content->left?></td>
               <td></td>
               <td></td>
               <td></td>
