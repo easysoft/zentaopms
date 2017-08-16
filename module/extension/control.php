@@ -441,7 +441,7 @@ class extension extends control
             move_uploaded_file($tmpName, $this->app->getTmpRoot() . "/extension/$fileName");
             $extension = basename($fileName, '.zip');
             $return    = $this->extension->extractPackage($extension);
-            if($return->result != 'ok') die(js::alert(sprintf($this->lang->extension->errorExtracted, $fileName, $return->error)));
+            if($return->result != 'ok') die(js::alert(str_replace("'", "\'", sprintf($this->lang->extension->errorExtracted, $fileName, $return->error))));
 
             $info = $this->extension->parseExtensionCFG($extension);
             if(isset($info->code) and $info->code != $extension)
@@ -455,7 +455,7 @@ class extension extends control
             $info = $this->extension->getInfoFromDB($extension);
             $type = $info->status == 'installed' ? 'upgrade' : 'install';
             $link = $type == 'install' ? inlink('install', "extension=$extension") : inlink('upgrade', "extension=$extension");
-            $this->locate($link);
+            die(js::locate($link, 'parent'));
         }
         $this->display();
     }

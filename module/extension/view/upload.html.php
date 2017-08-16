@@ -26,12 +26,11 @@
   <?php echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href');?>
 </div>
 <?php else:?>
-<form method='post' enctype='multipart/form-data' style='padding: 5% 20%'>
+<form method='post' target='hiddenwin' enctype='multipart/form-data' style='padding: 5% 20%'>
   <div class='input-group'>
     <input type='file' name='file' class='form-control' />
     <span class='input-group-btn'><?php echo html::submitButton($lang->extension->install);?></span>
   </div>
 </form>
 <?php endif;?>
-</body>
-</html>
+<?php include '../../common/view/footer.lite.html.php';?>
