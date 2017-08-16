@@ -251,6 +251,7 @@ fieldset.fieldset-pure {background: none; padding: 0; border: none; padding-top:
 fieldset > legend {width: auto; margin: 0 0 0 -5px; font-size: 13px; font-weight: bold; border-bottom: none; padding: 0 5px}
 fieldset > .form-group {margin-bottom: 0;}
 fieldset > .content table, fieldset > .article-content table{table-layout: initial !important; max-width: 100% !important;} 
+fieldset > .content table th, fieldset > .content table td, fieldset > .article-content table th, fieldset > .article-content table td {border:1px solid #ddd;}
 
 /* placeholder */
 .placeholder {color: #999}

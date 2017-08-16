@@ -118,7 +118,7 @@
         <table class='table table-data table-condensed table-borderless'> 
           <tr>
             <th class='w-80px'><?php echo $lang->task->project;?></th>
-            <td><?php if(!common::printLink('project', 'task', "projectID=$task->project", $project->name)) echo $project->name;?></td>
+            <td><?php if(!common::printLink('project', 'view', "projectID=$task->project", $project->name)) echo $project->name;?></td>
           </tr>  
           <tr>
             <th><?php echo $lang->task->module;?></th>
