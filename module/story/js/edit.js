@@ -35,3 +35,8 @@ function loadLinkedStories(storyID, linkType)
     if(linkType == 'linkStories')  $('#linkStoriesBox').load(storyLink);
     if(linkType == 'childStories') $('#childStoriesBox').load(storyLink);
 }
+
+$(function()
+{
+    $('.main-side #branch').closest('td').find('#product_chosen .chosen-single').css('width', '153px');
+})
