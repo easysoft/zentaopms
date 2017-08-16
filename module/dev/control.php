@@ -46,7 +46,6 @@ class dev extends control
         $this->view->position[]    = $this->lang->dev->db;
 
         $this->view->tables        = $this->dev->getTables();
-        $this->view->tab           = 'db';
         $this->view->selectedTable = $table;
         $this->view->tab           = 'db';
         $this->view->fields        = $table ? $this->dev->getFields($table) : array();
