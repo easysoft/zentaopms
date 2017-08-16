@@ -20,6 +20,8 @@ js::set('caseBrowseType', ($browseType == 'bymodule' and $this->session->caseBro
 js::set('moduleID'  ,     $moduleID);
 js::set('confirmDelete',  $lang->testcase->confirmDelete);
 js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
+js::set('productID',      $productID);
+js::set('branch',         $branch);
 ?>
 <div class='side' id='treebox'>
   <a class='side-handle' data-id='testcaseTree'><i class='icon-caret-left'></i></a>

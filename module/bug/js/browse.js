@@ -57,3 +57,8 @@ $(document).ready(function()
         })
     }
 });
+
+function setQueryBar(queryID, title)
+{
+    $('#bysearchTab').before("<li id='QUERY" + queryID + "Tab' class='active'><a href='" + createLink('bug', 'browse', "productID=" + productID + "&branch=" + branch + "&browseType=bysearch&param=" + queryID) + "'>" + title + "</a></li>");
+}

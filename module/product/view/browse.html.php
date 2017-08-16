@@ -13,6 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datatable.fix.html.php';?>
 <?php js::set('browseType', $browseType);?>
+<?php js::set('productID', $productID);?>
+<?php js::set('branch', $branch);?>
 <div id='featurebar'>
   <ul class='nav'>
     <li>

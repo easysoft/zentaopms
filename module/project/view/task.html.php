@@ -18,6 +18,7 @@ include '../../common/view/datatable.fix.html.php';
 include './taskheader.html.php';
 js::set('moduleID', $moduleID);
 js::set('productID', $productID);
+js::set('projectID', $projectID);
 js::set('browseType', $browseType);
 ?>
 <div class='side' id='taskTree'>

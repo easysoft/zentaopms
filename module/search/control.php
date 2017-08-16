@@ -69,7 +69,10 @@ class search extends control
         {
             $queryID = $this->search->saveQuery();
             if(!$queryID) die(js::error(dao::getError()));
-            die(js::closeModal('parent.parent', '', "function(){parent.parent.loadQueries($queryID)}"));
+
+            $onMenuBarFunc = '';
+            if($this->post->onMenuBar) $onMenuBarFunc = "if(typeof parent.parent.setQueryBar === 'function') parent.parent.setQueryBar($queryID, '{$this->post->title}')";
+            die(js::closeModal('parent.parent', '', "function(){parent.parent.loadQueries($queryID);$onMenuBarFunc}"));
         }
         $this->view->module    = $module;
         $this->view->onMenuBar = $onMenuBar;

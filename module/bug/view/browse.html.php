@@ -17,6 +17,8 @@ js::set('browseType',    $browseType);
 js::set('moduleID',      $moduleID);
 js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrowseType == 'bysearch') ? 'all' : $this->session->bugBrowseType);
 js::set('flow', $this->config->global->flow);
+js::set('productID', $productID);
+js::set('branch', $branch);
 ?>
 <?php if($this->config->global->flow == 'onlyTest'):?>
 <div id='featurebar'>
