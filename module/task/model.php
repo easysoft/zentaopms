@@ -370,7 +370,10 @@ class taskModel extends model
                     if(!$task->finishedBy)   $task->finishedBy = $this->app->user->account;
                     if($task->closedReason)  $task->closedDate = $now;
                     $task->finishedDate = $oldTask->status == 'done' ?  $oldTask->finishedDate : $now;
-                    }
+
+                    $task->canceledBy   = '';
+                    $task->canceledDate = '';
+                }
                 break;
                 case 'cancel':
                 {
@@ -379,6 +382,9 @@ class taskModel extends model
 
                     if(!$task->canceledBy)   $task->canceledBy   = $this->app->user->account;
                     if(!$task->canceledDate) $task->canceledDate = $now;
+
+                    $task->finishedBy   = '';
+                    $task->finishedDate = '';
                 }
                 break;
                 case 'closed':
@@ -391,7 +397,24 @@ class taskModel extends model
                 {
                     if($task->consumed > 0 and $task->left > 0) $task->status = 'doing';
                     if($task->left == $oldTask->left and $task->consumed == 0) $task->left = $task->estimate;
+
+                    $task->canceledDate = '';
+                    $task->finishedDate = '';
+                    $task->closedDate   = '';
                 }
+                break;
+                case 'doing':
+                {
+                    $task->canceledDate = '';
+                    $task->finishedDate = '';
+                    $task->closedDate   = '';
+                }
+                break;
+                case 'pause':
+                {
+                    $task->finishedDate = ''; 
+                }
+
                 default:break;
             }
             if($task->assignedTo) $task->assignedDate = $now;
@@ -403,7 +426,7 @@ class taskModel extends model
                 ->checkIF($task->estimate != false, 'estimate', 'float')
                 ->checkIF($task->consumed != false, 'consumed', 'float')
                 ->checkIF($task->left     != false, 'left',     'float')
-                ->checkIF($task->left == 0 and $task->status != 'cancel' and $task->status != 'closed' and $task->consumed != 0, 'status', 'equal', 'done')
+                ->checkIF($task->left == 0 and $task->status != 'cancel' and $task->status != 'closed' and $task->status != 'wait' and $task->consumed != 0, 'status', 'equal', 'done')
 
                 ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
 

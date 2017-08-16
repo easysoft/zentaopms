@@ -137,23 +137,23 @@
           </tr>
           <tr>
             <th><?php echo $lang->task->finishedBy;?></th>
-            <td><?php echo html::select('finishedBy', $members, $task->finishedBy, "class='form-control chosen'");?></td>
+            <td><?php echo html::select('finishedBy', $members, $task->finishedBy, "class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->finishedDate;?></th>
-            <td><?php echo html::input('finishedDate', $task->finishedDate, 'class="form-control" autocomplete="off"');?></td>
+            <td><?php echo html::input('finishedDate', $task->finishedDate, 'class="form-control form-date"');?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->canceledBy;?></th>
-            <td><?php echo html::select('canceledBy', $users, $task->canceledBy, 'class="form-control chosen"');?></td>
+            <td><?php echo html::select('canceledBy', $users, $task->canceledBy, 'class="form-control"');?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->canceledDate;?></th>
-            <td><?php echo html::input('canceledDate', $task->canceledDate, 'class="form-control" autocomplete="off"');?></td>
+            <td><?php echo html::input('canceledDate', $task->canceledDate, 'class="form-control form-date"');?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->closedBy;?></th>
-            <td><?php echo html::select('closedBy', $users, $task->closedBy, 'class="form-control chosen"');?></td>
+            <td><?php echo html::select('closedBy', $users, $task->closedBy, 'class="form-control"');?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->closedReason;?></th>
@@ -161,7 +161,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->task->closedDate;?></th>
-            <td><?php echo html::input('closedDate', $task->closedDate, 'class="form-control" autocomplete="off"');?></td>
+            <td><?php echo html::input('closedDate', $task->closedDate, 'class="form-control form-date"');?></td>
           </tr>
         </table>
       </fieldset>
