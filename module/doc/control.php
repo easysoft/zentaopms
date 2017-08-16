@@ -594,7 +594,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function showFiles($type, $objectID, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function showFiles($type, $objectID, $viewType='card', $orderBy='t1.id_desc', $recTotal=0, $recPerPage=20, $pageID=1)
     {
         $uri = $this->app->getURI(true);
         $this->app->session->set('taskList',  $uri);
@@ -648,10 +648,16 @@ class doc extends control
         $this->view->title      = $object->name;
         $this->view->position[] = $object->name;
 
-        $this->view->type   = $type;
-        $this->view->object = $object;
-        $this->view->files  = $this->doc->getLibFiles($type, $objectID, $pager);
-        $this->view->pager  = $pager;
+        $this->view->type       = $type;
+        $this->view->object     = $object;
+        $this->view->files      = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
+        $this->view->pager      = $pager;
+        $this->view->viewType   = $viewType;
+        $this->view->orderBy    = $orderBy;
+        $this->view->objectID   = $objectID;
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+
         $this->display();
     }
 
