@@ -44,6 +44,7 @@ include '../../common/view/chosen.html.php';
 #searchlite {line-height: 127px}
 #searchform.showmore #searchmore, #searchform #searchlite {display: none;}
 #searchform.showmore #searchlite, #searchform #searchmore {display: inline-block;}
+#searchform .chosen-container .chosen-single{width: 170px;}
 #searchform .chosen-container .chosen-drop{min-width: 400px;}
 #searchform .chosen-container .chosen-drop ul.chosen-results li{white-space:normal}
 #searchmore > i, #searchlite > i {font-size: 28px;}
