@@ -41,8 +41,4 @@ $lang->file->errorFileMove    = " Uploading failed, there was an error when movi
 $lang->file->dangerFile       = " File has been rejected to upload for security issues.";
 $lang->file->errorSuffix      = 'Format is incorrect. .zip files ONLY!';
 $lang->file->errorExtract     = 'Extracting file failed. File might be damaged or invalid files in the zip package.';
-$lang->file->uploadImagesExplain = <<<EOD
-<p>1. If the uploaded file is image zip package, the file name will be the label and images will be the content.</p>
-<p>2. If the file name containing numbers/underlines, they will be omitted.</p>
-<p>3. Image formate: jpg, jpeg, gif, png.</p>
-EOD;
+$lang->file->uploadImagesExplain = 'Note: please upload "jpg, jpeg, gif, png" format of the picture, the program will use the file name as the title, the picture as content.';
