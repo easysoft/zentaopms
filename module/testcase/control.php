@@ -1456,7 +1456,16 @@ class testcase extends control
                 }
                 else
                 {
-                    $steps    = explode("\n", $cellValue);
+                    $steps = $cellValue;
+                    if(strpos($cellValue, "\n"))
+                    {
+                        $steps = explode("\n", $cellValue);
+                    }
+                    elseif(strpos($cellValue, "\r"))
+                    {
+                        $steps = explode("\r", $cellValue);
+                    }
+
                     $stepKey  = str_replace('step', '', strtolower($field));
                     $caseStep = array();
 
