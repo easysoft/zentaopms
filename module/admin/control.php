@@ -32,52 +32,52 @@ class admin extends control
             $this->view->ignore  = false;
         }
 
-		$this->app->loadLang('misc');
+        $this->app->loadLang('misc');
 
         $this->view->title      = $this->lang->admin->common;
         $this->view->position[] = $this->lang->admin->index;
-		$this->display();
+        $this->display();
     }
 
-	/**
-	 * Ignore notice of register and bind.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function ignore()
-	{
-		$this->loadModel('setting');
-		$this->setting->deleteItems('owner=system&module=common&section=global&key=community');
-		$this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
-		$this->setting->setItem('system.common.global.community', 'na');
-		die(js::locate(inlink('index'), 'parent'));
-	}
+    /**
+     * Ignore notice of register and bind.
+     *
+     * @access public
+     * @return void
+     */
+    public function ignore()
+    {
+        $this->loadModel('setting');
+        $this->setting->deleteItems('owner=system&module=common&section=global&key=community');
+        $this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
+        $this->setting->setItem('system.common.global.community', 'na');
+        die(js::locate(inlink('index'), 'parent'));
+    }
 
-	/**
-	 * Register zentao.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function register($from = 'admin')
-	{
-		if($_POST)
-		{
-			$response = $this->admin->registerByAPI();
+    /**
+     * Register zentao.
+     * 
+     * @access public
+     * @return void
+     */
+    public function register($from = 'admin')
+    {
+        if($_POST)
+        {
+            $response = $this->admin->registerByAPI();
             $response = json_decode($response);
             if($response->result == 'success')
-			{
+            {
                 $user = $response->data;
                 $data['community'] = $user->account;
                 $data['ztPrivateKey'] = $user->private;
 
-				$this->loadModel('setting');
+                $this->loadModel('setting');
                 $this->setting->deleteItems('owner=system&module=common&section=global&key=community');
                 $this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
-				$this->setting->setItems('system.common.global', $data);
+                $this->setting->setItems('system.common.global', $data);
 
-				echo js::alert($this->lang->admin->register->success);
+                echo js::alert($this->lang->admin->register->success);
                 if($from == 'admin') die(js::locate(inlink('index'), 'parent'));
                 if($from == 'mail') die(js::locate($this->createLink('mail', 'ztcloud'), 'parent'));
             }
@@ -97,20 +97,20 @@ class admin extends control
 
         $this->view->title      = $this->lang->admin->register->caption;
         $this->view->position[] = $this->lang->admin->register->caption;
-		$this->view->register   = $this->admin->getRegisterInfo();
-		$this->view->sn         = $this->config->global->sn;
-		$this->view->from       = $from;
-		$this->display();
-	}
+        $this->view->register   = $this->admin->getRegisterInfo();
+        $this->view->sn         = $this->config->global->sn;
+        $this->view->from       = $from;
+        $this->display();
+    }
 
-	/**
-	 * Bind zentao.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function bind($from = 'admin')
-	{
+    /**
+     * Bind zentao.
+     * 
+     * @access public
+     * @return void
+     */
+    public function bind($from = 'admin')
+    {
         if($_POST)
         {
             $response = $this->admin->bindByAPI();
@@ -121,10 +121,10 @@ class admin extends control
                 $data['community'] = $user->account;
                 $data['ztPrivateKey'] = $user->private;
 
-				$this->loadModel('setting');
+                $this->loadModel('setting');
                 $this->setting->deleteItems('owner=system&module=common&section=global&key=community');
                 $this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
-				$this->setting->setItems('system.common.global', $data);
+                $this->setting->setItems('system.common.global', $data);
 
                 echo js::alert($this->lang->admin->bind->success);
                 if($from == 'admin') die(js::locate(inlink('index'), 'parent'));

@@ -75,11 +75,11 @@ function setTemplate(templateID)
 function deleteTemplate(templateID)
 {
     if(!templateID) return;
-	if(confirm(confirmDeleteTemplate))
+    if(confirm(confirmDeleteTemplate))
     {
-		hiddenwin.location.href = createLink('bug', 'deleteTemplate', 'templateID=' + templateID);
-		$('#tplBox' + templateID).addClass('hidden');
-	}
+        hiddenwin.location.href = createLink('bug', 'deleteTemplate', 'templateID=' + templateID);
+        $('#tplBox' + templateID).addClass('hidden');
+    }
 }
 
 /* Display template x icon. */

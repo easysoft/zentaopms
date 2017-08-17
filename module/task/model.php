@@ -1231,9 +1231,9 @@ class taskModel extends model
             {
                 $delay = helper::diffDate($today, $task->deadline);
                 if($delay > 0) $task->delay = $delay;            
-	        } 
-	    }
-	    
+            } 
+        }
+        
         /* Story changed or not. */
         $task->needConfirm = false;
         if($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion) $task->needConfirm = true;
