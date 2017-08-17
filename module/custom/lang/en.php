@@ -79,6 +79,7 @@ $lang->custom->notice->canNotAdd            = 'This item will be processed, so c
 $lang->custom->notice->forceReview          = 'Review is required for %s submitted by certain assignee.';
 $lang->custom->notice->longlife             = 'List "Undone" bugs that are older than hold days from "Longlife" bugs.';
 $lang->custom->notice->priListKey           = 'Priority list key should be numbers！';
+$lang->custom->notice->resolutionList       = 'Solution list key should be English or digital!';
 $lang->custom->notice->severityListKey      = 'Bug severity list key should be numbers.';
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage. Do you want to enter Product Homepage?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage. Do you want to enter Project Homepage?";
