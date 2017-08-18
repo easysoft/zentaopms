@@ -24,7 +24,7 @@ js::set('branch', $branch);
 <div id='featurebar'>
   <ul class='submenu hidden'>
     <li id='moreMenus' class='hidden'>
-      <a class='dropdown-toggle' data-toggle='dropdown'>
+      <a href='###' class='dropdown-toggle' data-toggle='dropdown'>
         <?php echo $lang->more;?> <span class='caret'></span>
       </a>
       <ul class='dropdown-menu right'>
@@ -54,7 +54,7 @@ js::set('branch', $branch);
       <?php common::printLink('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", "<i class='icon-common-report icon-bar-chart'></i> " . $lang->bug->report->common); ?>
     </li>
     <li class='right'>
-      <a class='dropdown-toggle' data-toggle='dropdown'>
+      <a href='###' class='dropdown-toggle' data-toggle='dropdown'>
         <i class='icon-download-alt'></i> <?php echo $lang->export ?>
         <span class='caret'></span>
       </a>

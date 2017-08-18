@@ -38,7 +38,7 @@
     </li>
 
     <li class='pull-right'>
-      <a class='dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon-upload-alt'></i> <?php echo $lang->import ?><span class='caret'></span></a>
+      <a href='###' class='dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon-upload-alt'></i> <?php echo $lang->import ?><span class='caret'></span></a>
       <ul class='dropdown-menu' id='importActionMenu'>
       <?php 
       $misc = common::hasPriv('testcase', 'import') ? "class='export'" : "class=disabled";
@@ -53,7 +53,7 @@
     </li>
 
     <li class='pull-right'>
-      <a class='dropdown-toggle' data-toggle='dropdown'>
+      <a href='###' class='dropdown-toggle' data-toggle='dropdown'>
         <i class='icon-download-alt'></i> <?php echo $lang->export ?>
         <span class='caret'></span>
       </a>
