@@ -17,9 +17,7 @@
   </div>
 </div>
 <?php if($fileType == 'image'):?>
-<div id='imageFile'>
-<?php echo html::image($file->webPath);?>
-</div>
+<div id='imageFile'><?php echo html::image($this->createLink('file', 'read', "fileID=$file->id"));?></div>
 <?php else:?>
 <div id='txtFile'>
   <div>
