@@ -618,10 +618,6 @@ $lang->resource->testsuite->delete           = 'delete';
 $lang->resource->testsuite->linkCase         = 'linkCase';
 $lang->resource->testsuite->unlinkCase       = 'unlinkCase';
 $lang->resource->testsuite->batchUnlinkCases = 'batchUnlinkCases';
-$lang->resource->testsuite->batchCreateCase  = 'batchCreateCase';
-$lang->resource->testsuite->exportTemplet    = 'exportTemplet';
-$lang->resource->testsuite->import           = 'import';
-$lang->resource->testsuite->showImport       = 'showImport';
 
 $lang->testsuite->methodOrder[0]  = 'index';
 $lang->testsuite->methodOrder[5]  = 'browse';
@@ -632,23 +628,27 @@ $lang->testsuite->methodOrder[25] = 'delete';
 $lang->testsuite->methodOrder[30] = 'linkCase';
 $lang->testsuite->methodOrder[35] = 'unlinkCase';
 $lang->testsuite->methodOrder[40] = 'batchUnlinkCases';
-$lang->testsuite->methodOrder[45] = 'batchCreateCase';
-$lang->testsuite->methodOrder[50] = 'exportTemplet';
-$lang->testsuite->methodOrder[55] = 'import';
-$lang->testsuite->methodOrder[60] = 'showImport';
 
 $lang->resource->caselib = new stdclass();
-$lang->resource->caselib->library    = 'library';
-$lang->resource->caselib->createLib  = 'createLib';
-$lang->resource->caselib->edit       = 'editLib';
-$lang->resource->caselib->createCase = 'createCase';
-$lang->resource->caselib->libView    = 'libView';
+$lang->resource->caselib->library          = 'library';
+$lang->resource->caselib->createLib        = 'createLib';
+$lang->resource->caselib->edit             = 'editLib';
+$lang->resource->caselib->createCase       = 'createCase';
+$lang->resource->caselib->libView          = 'libView';
+$lang->resource->caselib->batchCreateCase  = 'batchCreateCase';
+$lang->resource->caselib->exportTemplet    = 'exportTemplet';
+$lang->resource->caselib->import           = 'import';
+$lang->resource->caselib->showImport       = 'showImport';
 
 $lang->caselib->methodOrder[0]  = 'library';
 $lang->caselib->methodOrder[5]  = 'createLib';
 $lang->caselib->methodOrder[10] = 'edit';
 $lang->caselib->methodOrder[15] = 'createCase';
-$lang->caselib->methodOrder[20] = 'libView';
+$lang->caselib->methodOrder[20] = 'batchCreateCase';
+$lang->caselib->methodOrder[25] = 'libView';
+$lang->caselib->methodOrder[30] = 'exportTemplet';
+$lang->caselib->methodOrder[35] = 'import';
+$lang->caselib->methodOrder[40] = 'showImport';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();
