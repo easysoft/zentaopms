@@ -263,13 +263,13 @@ class docModel extends model
 
     /**
      * Get docs.
-     * 
-     * @param  int|string   $libID 
-     * @param  int          $productID 
-     * @param  int          $projectID 
-     * @param  int          $module 
-     * @param  string       $orderBy 
-     * @param  object       $pager 
+     *
+     * @param  int|string   $libID
+     * @param  int          $productID
+     * @param  int          $projectID
+     * @param  int          $module
+     * @param  string       $orderBy
+     * @param  object       $pager
      * @access public
      * @return void
      */
@@ -286,9 +286,9 @@ class docModel extends model
 
     /**
      * Get priv docs.
-     * 
-     * @param  int    $libID 
-     * @param  int    $module 
+     *
+     * @param  int    $libID
+     * @param  int    $module
      * @access public
      * @return void
      */
@@ -298,6 +298,7 @@ class docModel extends model
             ->where('deleted')->eq(0)
             ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
             ->beginIF($module)->andWhere('module')->in($module)->fi()
+            ->beginIF($this->cookie->browseType == 'bymenu')->andWhere('module')->in($module)->fi()
             ->query();
 
         $docIdList = array();
@@ -310,9 +311,9 @@ class docModel extends model
 
     /**
      * Get doc info by id.
-     * 
-     * @param  int    $docID 
-     * @param  bool   $setImgSize 
+     *
+     * @param  int    $docID
+     * @param  bool   $setImgSize
      * @access public
      * @return void
      */
@@ -908,9 +909,9 @@ class docModel extends model
 
     /**
      * Get lib files.
-     * 
-     * @param  string $type 
-     * @param  int    $objectID 
+     *
+     * @param  string $type
+     * @param  int    $objectID
      * @access public
      * @return array
      */
