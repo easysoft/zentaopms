@@ -78,8 +78,8 @@
           <td><?php echo isset($file->addedDate) ? substr($file->addedDate, 0, 10) : '';?></td>
           <td class='text-center'>
             <?php
-            commonModel::printLink('file', 'download', "fileID=$file->id", $lang->doc->download, "data-toggle='modal'");
-            commonModel::printLink('file', 'delete',   "fileID=$file->id", $lang->delete, "class='deleter'");
+            common::printLink('file', 'download', "fileID=$file->id", $lang->doc->download, "data-toggle='modal'");
+            common::printLink('file', 'delete',   "fileID=$file->id", $lang->delete, 'hiddenwin');
             ?>
           </td>
         </tr>
