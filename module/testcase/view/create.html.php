@@ -26,7 +26,7 @@
     </div>
   </div>
   <form class='form-condensed' method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
-    <table class='table table-form'> 
+    <table class='table table-form'>
       <tr>
         <th class='w-80px'><?php echo $lang->testcase->product;?></th>
         <td class='w-p45-f'>
@@ -78,7 +78,7 @@
             </span>
           </div>
         </td>
-      </tr>  
+      </tr>
       <?php endif;?>
       <tr>
         <th><?php echo $lang->testcase->title;?></th>

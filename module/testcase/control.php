@@ -193,9 +193,9 @@ class testcase extends control
 
     /**
      * Create a test case.
-     * 
-     * @param  int    $productID 
-     * @param  int    $moduleID 
+     *
+     * @param  int    $productID
+     * @param  int    $moduleID
      * @param  string $from
      * @param  int    $param
      * @access public
@@ -205,7 +205,7 @@ class testcase extends control
     {
         $testcaseID = $from == 'testcase' ? $param : 0;
         $bugID      = $from == 'bug' ? $param : 0;
-        
+
         $this->loadModel('story');
         if(!empty($_POST))
         {
