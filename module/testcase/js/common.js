@@ -15,7 +15,7 @@ function loadAll(productID)
 
 /**
  * Load by branch.
- * 
+ *
  * @access public
  * @return void
  */
@@ -29,7 +29,7 @@ function loadBranch()
 
 /**
  * Load product branches.
- * 
+ *
  * @param  int $productID 
  * @access public
  * @return void
@@ -49,7 +49,7 @@ function loadProductBranches(productID)
 
 /**
  * Load stories of module. 
- * 
+ *
  * @access public
  * @return void
  */
@@ -60,7 +60,7 @@ function loadModuleRelated()
 
 /**
  * Load module.
- * 
+ *
  * @param  int    $productID 
  * @access public
  * @return void
@@ -109,7 +109,7 @@ function setStories()
     productID = $('#product').val();
     branch    = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50');
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=''&limit=50');
     $.get(link, function(stories)
     {
         var value = $('#story').val();

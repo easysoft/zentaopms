@@ -351,7 +351,7 @@ class story extends control
         }
 
         $this->commonAction($storyID);
-  
+
         /* Assign. */
         $story   = $this->story->getById($storyID, 0, true);
         $product = $this->loadModel('product')->getById($story->product);
@@ -366,9 +366,9 @@ class story extends control
 
     /**
      * Batch edit story.
-     * 
-     * @param  int    $productID 
-     * @param  int    $projectID 
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1157,13 +1157,13 @@ class story extends control
 
     /**
      * AJAX: get stories of a product in html select.
-     * 
-     * @param  int    $productID 
-     * @param  int    $moduleID 
-     * @param  int    $storyID 
-     * @param  string $onlyOption 
-     * @param  string $status 
-     * @param  int    $limit 
+     *
+     * @param  int    $productID
+     * @param  int    $moduleID
+     * @param  int    $storyID
+     * @param  string $onlyOption
+     * @param  string $status
+     * @param  int    $limit
      * @access public
      * @return void
      */
