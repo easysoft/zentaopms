@@ -1156,8 +1156,8 @@ class bug extends control
 
     /**
      * Confirm story change.
-     * 
-     * @param  int    $bugID 
+     *
+     * @param  int    $bugID
      * @access public
      * @return void
      */
@@ -1171,8 +1171,8 @@ class bug extends control
 
     /**
      * Delete a bug.
-     * 
-     * @param  int    $bugID 
+     *
+     * @param  int    $bugID
      * @param  string $confirm  yes|no
      * @access public
      * @return void

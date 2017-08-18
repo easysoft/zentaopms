@@ -746,9 +746,9 @@ class userModel extends model
 
     /**
      * Keep the user in login state.
-     * 
-     * @param  string    $account 
-     * @param  string    $password 
+     *
+     * @param  string    $account
+     * @param  string    $password
      * @access public
      * @return void
      */

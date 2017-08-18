@@ -56,15 +56,15 @@ class doc extends control
 
     /**
      * Browse docs.
-     * 
+     *
      * @param  string|int $libID    product|project or the int id of custom library
-     * @param  int    $moduleID 
-     * @param  int    $productID 
-     * @param  int    $projectID 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * @param  int    $moduleID
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -75,7 +75,7 @@ class doc extends control
 
         $this->loadModel('search');
 
-        /* Set browseType.*/ 
+        /* Set browseType.*/
         $browseType = strtolower($browseType);
         if(($this->cookie->browseType == 'bymenu' or $this->cookie->browseType == 'bytree') and $browseType != 'bysearch') $browseType = $this->cookie->browseType;
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
@@ -128,10 +128,10 @@ class doc extends control
         /* Append id for secend sort. */
         if($browseType == 'bymenu' and strtolower($orderBy) != 'editeddate_desc' and strtolower($orderBy) != 'addeddate_desc') $orderBy = 'title_asc';
         $sort = $this->loadModel('common')->appendOrder($orderBy);
- 
+
         /* Get docs by browse type. */
         $docs = $this->doc->getDocsByBrowseType($libID, $browseType, $queryID, $moduleID, $sort, $pager);
-       
+
         /* Build the search form. */
         $actionURL = $this->createLink('doc', 'browse', "lib=$libID&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&from=$from");
         $this->doc->buildSearchForm($libID, $this->libs, $queryID, $actionURL, $type);
@@ -637,7 +637,7 @@ class doc extends control
                 $lib = $this->project->getById($objectID);
                 if(!$this->project->checkPriv($lib)) $this->accessDenied();
             }
-            
+
             $this->doc->setMenu($libID = 0, $moduleID = 0, $crumb);
         }
 

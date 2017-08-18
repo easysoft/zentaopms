@@ -92,7 +92,7 @@ var browseType = '<?php echo $browseType;?>';
         <td><?php echo substr($doc->addedDate, 5, 11);?></td>
         <td><?php echo substr($doc->editedDate, 5, 11);?></td>
         <td>
-          <?php 
+          <?php
           common::printIcon('doc', 'edit', "doc={$doc->id}", '', 'list');
           if(common::hasPriv('doc', 'delete'))
           {

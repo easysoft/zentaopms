@@ -108,10 +108,10 @@
           $imageWidth = $imageSize ? $imageSize[0] : 0;
       }
 
-      $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';                                                                                                                                                             
-      $sessionString .= session_name() . '=' . session_id();                                                                                                                                                                         
-      $fileID         = $file->id;                                                                                                                                                                                                   
-      $url            = helper::createLink('file', 'download', 'fileID=' . $fileID) . $sessionString ;   
+      $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
+      $sessionString .= session_name() . '=' . session_id();
+      $fileID         = $file->id;
+      $url            = helper::createLink('file', 'download', 'fileID=' . $fileID) . $sessionString ;
       ?>
       <a class='media-wrapper' href='<?php echo $url;?>' title='<?php echo $file->title  . '.' . $file->extension?>' target='_blank' onclick="return downloadFile(<?php echo $file->id?>, '<?php echo $file->extension?>', <?php echo $imageWidth?>)">
         <?php
@@ -139,7 +139,9 @@
       </a>
       <div class='card-heading'>
         <a href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID");?>'><?php echo $file->title . '.' . $file->extension . ' [' . strtoupper($file->objectType) . ' #' . $file->objectID . ']';?></a>
+        <?php if(common::hasPriv('file', 'delete')): ?>
         <a href='<?php echo $this->createLink('file', 'delete', "fileID=$file->id"); ?>' target='hiddenwin' title='<?php echo $lang->delete?>' class='delete pull-right'><i class='icon icon-remove'></i></a>
+        <?php endif?>
       </div>
     </div>
   </div>
