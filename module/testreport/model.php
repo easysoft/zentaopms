@@ -210,7 +210,6 @@ class testreportModel extends model
             if($bug->case) $byCaseNum ++;
         }
 
-
         $bugInfo['legacyBugs']          = $legacyBugs;
         $bugInfo['countBugByTask']      = count($bugsByTask);
         $bugInfo['bugConfirmedRate']    = empty($resolvedBugs) ? 0 : round((zget($resolutionGroups, 'fixed', 0) + zget($resolutionGroups, 'postponed', 0)) / $resolvedBugs * 100, 2);

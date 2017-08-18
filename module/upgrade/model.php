@@ -1329,7 +1329,7 @@ class upgradeModel extends model
             {
                 $result['type']   = 'doc';
                 $result['count']  = count($comments);
-				$result['lastID'] = 0;
+                $result['lastID'] = 0;
             }
             else
             {
@@ -1397,7 +1397,7 @@ class upgradeModel extends model
                     }
                 }
                 $result['type']   = empty($nextType) ? 'finish' : $nextType;
-				$result['count']  = count($objects);
+                $result['count']  = count($objects);
                 $result['lastID'] = 0;
             }
             else
@@ -1742,10 +1742,10 @@ class upgradeModel extends model
      */
     public function checkProcess()
     {
-		$fromVersion = $this->config->installedVersion;
-		$needProcess = array();
+        $fromVersion = $this->config->installedVersion;
+        $needProcess = array();
         if(strpos($fromVersion, 'pro') === false ? $fromVersion < '8.3' : $fromVersion < 'pro5.4') $needProcess['updateFile'] = true;
-		return $needProcess;
+        return $needProcess;
     }
 
     /**

@@ -4,9 +4,9 @@
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author	  Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package	 ZenTaoPMS
- * @version	 $Id: step3.html.php 4297 2013-01-27 07:51:45Z wwccss $
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     ZenTaoPMS
+ * @version     $Id: step3.html.php 4297 2013-01-27 07:51:45Z wwccss $
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>

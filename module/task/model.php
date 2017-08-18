@@ -1231,9 +1231,9 @@ class taskModel extends model
             {
                 $delay = helper::diffDate($today, $task->deadline);
                 if($delay > 0) $task->delay = $delay;            
-	        } 
-	    }
-	    
+            } 
+        }
+        
         /* Story changed or not. */
         $task->needConfirm = false;
         if($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion) $task->needConfirm = true;
@@ -1408,12 +1408,19 @@ class taskModel extends model
      */
     public function getDataOftasksPerPri()
     {
-        return $this->dao->select('pri AS name, COUNT(*) AS value')
+        $priList = $this->dao->select('pri AS name, COUNT(*) AS value')
             ->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
             ->groupBy('pri')
             ->orderBy('value DESC')
             ->fetchAll('name');
+
+        foreach($priList as $index => $pri)
+        {
+            $priList[$index]->name = $this->lang->task->priList[$pri->name];
+        }
+
+        return $priList;
     }
    
     /**

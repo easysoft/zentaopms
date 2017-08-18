@@ -205,8 +205,8 @@ class upgrade extends control
         if($result['type'] == 'finish')
         {
             $response['result']  = 'finished';
-			$response['type']     = $type;
-			$response['count']    = $result['count'];
+            $response['type']     = $type;
+            $response['count']    = $result['count'];
             $response['message'] = 'Finished';
         }
         else
