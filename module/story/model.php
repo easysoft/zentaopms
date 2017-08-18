@@ -1598,7 +1598,7 @@ class storyModel extends model
                 ->where($storyQuery)
                 ->andWhere('t1.project')->eq((int)$projectID)
                 ->orderBy($orderBy)
-                ->page($pager)
+                ->page($pager, 't2.id')
                 ->fetchAll('id');
         }
         else
