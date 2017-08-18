@@ -588,14 +588,14 @@ class commonModel extends model
      * Print link to an modules' methd.
      *
      * Before printing, check the privilege first. If no privilege, return fasle. Else, print the link, return true.
-     * 
+     *
      * @param  string $module   the module name
      * @param  string $method   the method
      * @param  string $vars     vars to be passed
      * @param  string $label    the label of the link
      * @param  string $target   the target of the link
      * @param  string $misc     others
-     * @param  bool   $newline 
+     * @param  bool   $newline
      * @static
      * @access public
      * @return bool
@@ -1129,7 +1129,7 @@ class commonModel extends model
         global $app, $lang;
 
         /* Check is the super admin or not. */
-        if($app->user->admin) return true; 
+        if($app->user->admin) return true;
 
         /* If not super admin, check the rights. */
         $rights  = $app->user->rights['rights'];
