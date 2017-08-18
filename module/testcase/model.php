@@ -1018,14 +1018,14 @@ class testcaseModel extends model
                 $steps = array();
                 if(isset($_POST['desc'][$key]))
                 {
-                    foreach($data->desc[$key] as $id => $desc)
+                    foreach($this->post->desc[$key] as $id => $desc)
                     {
                         $desc = trim($desc);
                         if(empty($desc))continue;
                         $step = new stdclass();
                         $step->type   = $data->stepType[$key][$id];
                         $step->desc   = $desc;
-                        $step->expect = trim($data->expect[$key][$id]);
+                        $step->expect = trim($this->post->expect[$key][$id]);
 
                         $steps[] = $step;
                     }
@@ -1101,7 +1101,7 @@ class testcaseModel extends model
                 {
                     $caseID       = $this->dao->lastInsertID();
                     $parentStepID = 0;
-                    foreach($data->desc[$key] as $id => $desc)
+                    foreach($this->post->desc[$key] as $id => $desc)
                     {
                         $desc = trim($desc);
                         if(empty($desc)) continue;
@@ -1111,7 +1111,7 @@ class testcaseModel extends model
                         $stepData->case    = $caseID;
                         $stepData->version = 1;
                         $stepData->desc    = htmlspecialchars($desc);
-                        $stepData->expect  = htmlspecialchars($data->expect[$key][$id]);
+                        $stepData->expect  = htmlspecialchars($this->post->expect[$key][$id]);
                         $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
                         if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
                         if($stepData->type == 'step')  $parentStepID = 0;
