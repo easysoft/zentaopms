@@ -50,7 +50,7 @@ function setStoryRelated(num)
         var link = createLink('story', 'ajaxGetModule', 'storyID=' + storyID);
         $.get(link, function(moduleID)
         {
-            $('#module' + num).val(moduleID);
+            $('#module' + num).val(parseInt(moduleID));
             $('#module' + num).trigger("chosen:updated");
         });
     }
