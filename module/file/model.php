@@ -629,15 +629,37 @@ class fileModel extends model
         if(is_string($editorList)) $editorList = explode(',', str_replace(' ', '', $editorList));
         $readLinkReg = helper::createLink('file', 'read', 'fileID=(%fileID%)', '(%viewType%)');
         $readLinkReg = str_replace(array('%fileID%', '%viewType%', '?', '/'), array('[0-9]+', '\w+', '\?', '\/'), $readLinkReg);
+        $imageIdList = array();
         foreach($editorList as $editorID)
         {
             if(empty($editorID) or empty($data->$editorID)) continue;
 
             $imgURL = $this->config->requestType == 'GET' ? '{$2.$1}' : '{$1.$2}';
 
-            $data->$editorID = $this->pasteImage($data->$editorID, $uid);
+            $content = $this->pasteImage($data->$editorID, $uid);
+            if($content) $data->$editorID = $content;
             $data->$editorID = preg_replace("/ src=\"$readLinkReg\" /", ' src="' . $imgURL . '" ', $data->$editorID);
             $data->$editorID = preg_replace("/ src=\"" . htmlspecialchars($readLinkReg) . "\" /", ' src="' . $imgURL . '" ', $data->$editorID);
+
+            preg_match_all('/ src="{([0-9]+)\.\w+}"/', $data->$editorID, $matchs);
+            if($matchs[1])
+            {
+                foreach($matchs[1] as $imageID) $imageIdList[$imageID] = $imageID;
+            }
+        }
+
+        if(!empty($_SESSION['album'][$uid]))
+        {
+            foreach($_SESSION['album'][$uid] as $i => $imageID)
+            {
+                if(!isset($imageIdList[$imageID]))
+                {
+                    $file = $this->getById($imageID);
+                    $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($imageID)->exec();
+                    @unlink($file->realPath);
+                    unset($_SESSION['album'][$uid][$i]);
+                }
+            }
         }
         return $data;
     }
