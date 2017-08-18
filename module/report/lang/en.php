@@ -80,6 +80,7 @@ $lang->report->bugTitle     = 'Bug Title';
 $lang->report->taskName     = 'Task Name';
 $lang->report->todoName     = 'To-Do Name';
 $lang->report->testTaskName = 'Test Task Name';
+$lang->report->deadline     = 'Deadline';
 
 $lang->report->mailTitle           = new stdclass();
 $lang->report->mailTitle->begin    = 'Notice: You have';

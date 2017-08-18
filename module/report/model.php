@@ -350,7 +350,7 @@ class reportModel extends model
      */
     public function getUserBugs()
     {
-        $bugs = $this->dao->select('t1.id, t1.title, t2.account as user')
+        $bugs = $this->dao->select('t1.id, t1.title, t2.account as user, t1.deadline')
             ->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')
             ->on('t1.assignedTo = t2.account')
@@ -370,7 +370,7 @@ class reportModel extends model
      */
     public function getUserTasks()
     {
-        $tasks = $this->dao->select('t1.id, t1.name, t2.account as user')->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('t1.id, t1.name, t2.account as user, t1.deadline')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.assignedTo = t2.account')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->where('t1.assignedTo')->ne('')
