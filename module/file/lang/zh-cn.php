@@ -32,7 +32,7 @@ $lang->file->uploadSuccess = '上传成功';
 
 $lang->file->dragFile         = '请拖拽文件到此处';
 $lang->file->errorNotExists   = "<span class='red'>文件夹 '%s' 不存在</span>";
-$lang->file->errorCanNotWrite = "<span class='red'>文件夹 '%s' 不可写,请改变文件夹的权限。在linux中输入指令:sudo chmod -R 777 '%s'</span>";
+$lang->file->errorCanNotWrite = "<span class='red'>文件夹 '%s' 不可写,请改变文件夹的权限。在linux中输入指令:sudo chmod -R 777 %s</span>";
 $lang->file->confirmDelete    = " 您确定删除该附件吗？";
 $lang->file->errorFileSize    = " 文件大小已经超过限制，可能不能成功上传！";
 $lang->file->errorFileUpload  = " 文件上传失败，文件大小可能超出限制";
