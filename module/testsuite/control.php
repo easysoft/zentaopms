@@ -175,6 +175,7 @@ class testsuite extends control
         if($suite->type == 'library')
         {
             /* Set lib menu. */
+            if($this->config->global->flow == 'onlyTest') $this->lang->menugroup->testsuite = 'caselib';
             $libraries = $this->testsuite->getLibraries();
             $suiteID   = $this->testsuite->saveLibState($suiteID, $libraries);
             $this->testsuite->setLibMenu($libraries, $suiteID);
@@ -402,6 +403,7 @@ class testsuite extends control
 
         /* Set lib menu. */
         $this->testsuite->setLibMenu($libraries, $libID, $moduleID);
+        if($this->config->global->flow == 'onlyTest') $this->lang->menugroup->testsuite = 'caselib';
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -464,6 +466,7 @@ class testsuite extends control
         $libraries = $this->testsuite->getLibraries();
         $libID     = $this->testsuite->saveLibState(0, $libraries);
         $this->testsuite->setLibMenu($libraries, $libID);
+        if($this->config->global->flow == 'onlyTest') $this->lang->menugroup->testsuite = 'caselib';
 
         $this->view->title      = $this->lang->caselib->common . $this->lang->colon . $this->lang->testsuite->createLib;
         $this->view->position[] = $this->lang->caselib->common;
@@ -503,6 +506,7 @@ class testsuite extends control
         $libraries = $this->testsuite->getLibraries();
         $libID     = $this->testsuite->saveLibState($libID, $libraries);
         $this->testsuite->setLibMenu($libraries, $libID);
+        if($this->config->global->flow == 'onlyTest') $this->lang->menugroup->testsuite = 'caselib';
 
         $type         = 'feature';
         $stage        = '';
@@ -579,6 +583,7 @@ class testsuite extends control
 
         /* Set lib menu. */
         $this->testsuite->setLibMenu($libraries, $libID);
+        if($this->config->global->flow == 'onlyTest') $this->lang->menugroup->testsuite = 'caselib';
 
         $currentModuleID = (int)$moduleID;
 
@@ -610,6 +615,7 @@ class testsuite extends control
         /* Set lib menu. */
         $libraries = $this->testsuite->getLibraries();
         $this->testsuite->setLibMenu($libraries, $libID);
+        if($this->config->global->flow == 'onlyTest') $this->lang->menugroup->testsuite = 'caselib';
 
         $this->loadModel('testcase');
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->testsuite->view;

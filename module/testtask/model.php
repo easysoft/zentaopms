@@ -44,7 +44,7 @@ class testtaskModel extends model
                     $viewName = $scope == 'local'? $products[$productID] : $this->lang->testtask->all;
 
                     $replace  = '<li>';
-                    $replace .= "<a data-toggle='dropdown'>{$viewName} <span class='caret'></span></a>";
+                    $replace .= "<a href='###' data-toggle='dropdown'>{$viewName} <span class='caret'></span></a>";
                     $replace .= "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
                     $replace .= "<li>" . html::a(helper::createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=all,$status"), $this->lang->testtask->all) . "</li>";
                     $replace .= "<li>" . html::a(helper::createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=local,$status"), $products[$productID]) . "</li>";
