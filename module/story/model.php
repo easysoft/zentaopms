@@ -193,7 +193,7 @@ class storyModel extends model
                     ->set('version')->eq(1)
                     ->exec();
             }
-            
+
             if($bugID > 0)
             {
                 $bug = new stdclass();
@@ -1959,7 +1959,7 @@ class storyModel extends model
 
     /**
      * Get report data of storys per product 
-     * 
+     *
      * @access public
      * @return array
      */
@@ -1975,25 +1975,46 @@ class storyModel extends model
     }
 
     /**
-     * Get report data of storys per module 
-     * 
+     * Get report data of storys per module
+     *
      * @access public
      * @return array
      */
     public function getDataOfStorysPerModule()
     {
-        $datas = $this->dao->select('module as name, count(module) as value')->from(TABLE_STORY)
+        $datas = $this->dao->select('module as name, count(module) as value, product, branch')->from(TABLE_STORY)
             ->where($this->reportCondition())
             ->groupBy('module')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
+
+        $branchIDList = array();
+        foreach($datas as $key => $project)
+        {
+            if(!$project->branch) continue;
+            $branchIDList[] = $project->branch;
+        }
+
+        $branchIDList = array_unique($branchIDList);
+        $branchs  = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($branchIDList)->andWhere('deleted')->eq(0)->fetchALL('id');
         $modules = $this->loadModel('tree')->getModulesName(array_keys($datas));
-        foreach($datas as $moduleID => $data) $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/';
+
+        foreach($datas as $moduleID => $data)
+        {
+            $branch = '';
+            if(isset($branchs[$data->branch]->name))
+            {
+                $branch = '/' . $branchs[$data->branch]->name;
+            }
+
+            $data->name = $branch . (isset($modules[$moduleID]) ? $modules[$moduleID] : '/');
+        }
+
         return $datas;
     }
 
     /**
      * Get report data of storys per source 
-     * 
+     *
      * @access public
      * @return array
      */

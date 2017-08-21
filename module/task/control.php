@@ -139,7 +139,8 @@ class task extends control
         }
 
         $users            = $this->loadModel('user')->getPairs('noclosed');
-        $stories          = $this->story->getProjectStoryPairs($projectID);
+        $moduleIdList     = $this->tree->getAllChildID($moduleID);
+        $stories          = $this->story->getProjectStoryPairs($projectID, 0, 0, $moduleIdList);
         $members          = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID);
 
@@ -1087,7 +1088,7 @@ class task extends control
      */
     public function report($projectID, $browseType = 'all')
     {
-        
+
         $this->loadModel('report');
         $this->view->charts   = array();
 
