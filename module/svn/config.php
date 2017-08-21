@@ -21,6 +21,7 @@ $config->svn->client    = '';
 
 $i = 1;
 $config->svn->repos[$i]['path']     = '';
+$config->svn->repos[$i]['encoding'] = 'utf-8';
 $config->svn->repos[$i]['username'] = '';
 $config->svn->repos[$i]['password'] = '';
 
