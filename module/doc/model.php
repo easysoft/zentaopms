@@ -610,6 +610,10 @@ class docModel extends model
      */
     public function checkPriv($object, $type = 'lib')
     {
+        $acls = $this->app->user->rights['acls'];
+        if(!empty($object->product) and !empty($acls['products']) and !in_array($object->product, $acls['products'])) return false;
+        if(!empty($object->project) and !empty($acls['projects']) and !in_array($object->project, $acls['projects'])) return false;
+
         if($object->acl == 'open') return true;
 
         $account = ',' . $this->app->user->account . ',';
