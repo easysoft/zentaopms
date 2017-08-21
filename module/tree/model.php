@@ -1103,18 +1103,21 @@ class treeModel extends model
 
     /**
      * Get modules name.
-     * 
-     * @param  array  $moduleIdList 
-     * @param  bool   $allPath 
+     *
+     * @param  array  $moduleIdList
+     * @param  bool   $allPath
+     * @param  bool   $branchPath
      * @access public
      * @return array
      */
-    public function getModulesName($moduleIdList, $allPath = true)
+    public function getModulesName($moduleIdList, $allPath = true, $branchPath = false)
     {
         if(!$allPath) return $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($moduleIdList)->andWhere('deleted')->eq(0)->fetchPairs('id', 'name');
 
-        $modules     = $this->dao->select('id, name, path')->from(TABLE_MODULE)->where('id')->in($moduleIdList)->andWhere('deleted')->eq(0)->fetchAll('path');
+        $modules     = $this->dao->select('id, name, path, branch')->from(TABLE_MODULE)->where('id')->in($moduleIdList)->andWhere('deleted')->eq(0)->fetchAll('path');
         $allModules  = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in(join(array_keys($modules)))->andWhere('deleted')->eq(0)->fetchPairs('id', 'name');
+
+        $branchIDList = array();
         $modulePairs = array();
         foreach($modules as $module)
         {
@@ -1122,7 +1125,19 @@ class treeModel extends model
             $moduleName = '';
             foreach($paths as $path) $moduleName .= '/' . $allModules[$path];
             $modulePairs[$module->id] = $moduleName;
+
+            if($module->branch) $branchIDList[] = $module->branch;
         }
+
+        if(!$branchPath) return $modulePairs;
+
+        $branchIDList = array_unique($branchIDList);
+        $branchs  = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($branchIDList)->andWhere('deleted')->eq(0)->fetchALL('id');
+        foreach($modules as $module)
+        {
+            if(isset($modulePairs[$module->id])) $modulePairs[$module->id] = '/' . $branchs[$module->branch]->name . $modulePairs[$module->id];
+        }
+
         return $modulePairs;
     }
 

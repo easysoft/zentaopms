@@ -430,6 +430,10 @@ class gitModel extends model
         if(count($lists) == 2) list($nowRevision, $preRevision) = $lists;
         $cmd = "$this->client diff $preRevision $nowRevision -- $subPath";
         $diff = `$cmd`;
+
+        $encodings = isset($repo->encodings) ? $repo->encodings : $this->config->svn->encodings;
+        if($encodings or $encodings != 'utf-8') $diff = helper::convertEncoding($diff, $encodings);
+
         return $diff;
     }
 
@@ -457,6 +461,10 @@ class gitModel extends model
         exec("{$this->client} config core.quotepath false");
         $cmd  = "$this->client show $revision:$subPath";
         $code = `$cmd`;
+
+        $encodings = isset($repo->encodings) ? $repo->encodings : $this->config->git->encodings;
+        if($encodings or $encodings != 'utf-8') $code = helper::convertEncoding($code, $encodings);
+
         return $code;
     }
 

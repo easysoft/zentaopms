@@ -4,7 +4,7 @@
  * client: svn客户端执行文件的路径，windows下面考虑安装Slik-Subversion，然后找到svn.exe的路径。linux下面比如/usr/bin/svn
  * repos可以是多个，需要设定某一个库的访问路径，以及用户名和密码。
  *
- * encodeings: the encoding of the comment，can be a list.
+ * encodings: the encoding of the comment，can be a list.
  * client: the svn client binary path. You can install Slik-Subversion unser windows, then find the path of svn.exe. under linux, try /usr/bin/svn
  * Can set multi repos, ervery one should set the path, username and password.
  *

@@ -419,6 +419,10 @@ class svnModel extends model
 
         $cmd = $this->client . " diff -r $oldRevision:$revision $url";
         $diff = `$cmd`;
+
+        $encodings = isset($repo->encodings) ? $repo->encodings : $this->config->svn->encodings;
+        if($encodings or $encodings != 'utf-8') $diff = helper::convertEncoding($diff, $encodings);
+
         return $diff;
     }
 
@@ -445,6 +449,10 @@ class svnModel extends model
 
         $cmd  = $this->client . " cat $url@$revision";
         $code = `$cmd`;
+
+        $encodings = isset($repo->encodings) ? $repo->encodings : $this->config->svn->encodings;
+        if($encodings or $encodings != 'utf-8') $code = helper::convertEncoding($code, $encodings);
+
         return $code;
     }
 

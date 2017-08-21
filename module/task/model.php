@@ -1356,7 +1356,8 @@ class taskModel extends model
             ->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
-        $modules = $this->loadModel('tree')->getModulesName(array_keys($datas));
+
+        $modules = $this->loadModel('tree')->getModulesName(array_keys($datas),true,true);
         foreach($datas as $moduleID => $data) $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/';
         return $datas;
     }
@@ -1422,7 +1423,7 @@ class taskModel extends model
 
         return $priList;
     }
-   
+
     /**
      * Get report data of tasks per deadline 
      * 

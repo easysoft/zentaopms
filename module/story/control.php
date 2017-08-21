@@ -1268,11 +1268,11 @@ class story extends control
 
     /**
      * The report page.
-     * 
-     * @param  int    $productID 
-     * @param  string $browseType 
+     *
+     * @param  int    $productID
+     * @param  string $browseType
      * @param  int    $branchID
-     * @param  int    $moduleID 
+     * @param  int    $moduleID
      * @access public
      * @return void
      */
@@ -1307,12 +1307,12 @@ class story extends control
         $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
         $this->display();
     }
- 
+
     /**
      * get data to export
-     * 
-     * @param  int $productID 
-     * @param  string $orderBy 
+     *
+     * @param  int $productID
+     * @param  string $orderBy
      * @access public
      * @return void
      */

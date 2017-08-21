@@ -1467,7 +1467,7 @@ class bugModel extends model
                 $i++;
             }
         }
-            
+
         return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version);
     }
 
@@ -1538,7 +1538,7 @@ class bugModel extends model
     {
         $datas = $this->dao->select('module as name, count(module) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('module')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        $modules = $this->loadModel('tree')->getModulesName(array_keys($datas));
+        $modules = $this->loadModel('tree')->getModulesName(array_keys($datas),true,true);
         foreach($datas as $moduleID => $data) $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/';
         return $datas;
     }
