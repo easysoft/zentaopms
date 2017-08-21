@@ -1153,45 +1153,49 @@ function setModal()
         try
         {
             var frame$ = window.frames[options.name].$;
-            if(frame$('#titlebar').length)
+            frame$(function()
             {
-                modal.addClass('with-titlebar');
-                if(options.size == 'fullscreen')
+                if(frame$('#titlebar').length)
                 {
-                    modalBody.css('height', options.height);
-                }
-            }
-            if(options.height == 'auto')
-            {
-                var $framebody = frame$('body');
-                setTimeout(function()
-                {
-                    modal.removeClass('fade');
-                    var fbH = $framebody.addClass('body-modal').outerHeight();
-                    frame$('#titlebar > .heading a').each(function()
+                    modal.addClass('with-titlebar');
+                    if(options.size == 'fullscreen')
                     {
-                        var $a = frame$(this);
-                        $a.replaceWith("<strong class='heading-title'>" + $a.text() + "</strong>");
-                    });
-                    if(typeof fbH == 'object') fbH = $framebody.height();
-                    modalBody.css('height', fbH);
-                    ajustModalPosition();
-                    if(modal.data('first')) modal.data('first', false);
-                    modal.removeClass('modal-loading').addClass('fade');
-                }, 100);
+                        modalBody.css('height', options.height);
+                    }
+                }
 
-                $framebody.resize(function()
+                if(options.height == 'auto')
                 {
-                    var fbH = $framebody.outerHeight();
-                    if(typeof fbH == 'object') fbH = $framebody.height();
-                    modalBody.css('height', fbH);
-                    ajustModalPosition();
-                });
-            }
-            else
-            {
-                modal.removeClass('modal-loading');
-            }
+                    var $framebody = frame$('body');
+                    setTimeout(function()
+                    {
+                        modal.removeClass('fade');
+                        var fbH = $framebody.addClass('body-modal').outerHeight();
+                        frame$('#titlebar > .heading a').each(function()
+                        {
+                            var $a = frame$(this);
+                            $a.replaceWith("<strong class='heading-title'>" + $a.text() + "</strong>");
+                        });
+                        if(typeof fbH == 'object') fbH = $framebody.height();
+                        modalBody.css('height', fbH);
+                        ajustModalPosition();
+                        if(modal.data('first')) modal.data('first', false);
+                        modal.removeClass('modal-loading').addClass('fade');
+                    }, 100);
+
+                    $framebody.resize(function()
+                    {
+                        var fbH = $framebody.outerHeight();
+                        if(typeof fbH == 'object') fbH = $framebody.height();
+                        modalBody.css('height', fbH);
+                        ajustModalPosition();
+                    });
+                }
+                else
+                {
+                    modal.removeClass('modal-loading');
+                }
+            })
 
             if(frame$)
             {
