@@ -1087,7 +1087,7 @@ class task extends control
      */
     public function report($projectID, $browseType = 'all')
     {
-        
+
         $this->loadModel('report');
         $this->view->charts   = array();
 
