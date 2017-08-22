@@ -939,7 +939,7 @@ class taskModel extends model
 
     /**
      * Get project tasks pairs.
-     * 
+     *
      * @param  int    $projectID 
      * @param  string $status
      * @param  string $orderBy 
