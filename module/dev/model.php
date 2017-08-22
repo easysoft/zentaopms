@@ -226,18 +226,18 @@ class devModel extends model
 
     /**
      * Get all modules.
-     * 
+     *
      * @access public
      * @return void
      */
     public function getModules()
-    {   
+    {
         $moduleList = glob($this->app->getModuleRoot() . '*');
         $modules = array();
         foreach($moduleList as $module)
         {
             $module = basename($module);
-            if($module == 'editor' or $module == 'help' or $module == 'setting') continue;
+            if($module == 'editor' or $module == 'help' or $module == 'setting' or $module == 'common') continue;
             $group  = zget($this->config->dev->group, $module, 'other');
             $modules[$group][] = $module;
         }
