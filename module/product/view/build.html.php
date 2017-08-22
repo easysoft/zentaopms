@@ -41,7 +41,7 @@
       <td><?php echo $users[$build->builder]?></td>
       <td class='text-right'>
         <?php 
-        common::printIcon('testtask', 'create', "product=0&product=$product->id&build=$build->id", '', 'list', 'check');
+        common::printIcon('testtask', 'create', "product=$product->id&project=0&build=$build->id", '', 'list', 'check');
         common::printIcon('build', 'edit',   "buildID=$build->id", '', 'list');
         if(common::hasPriv('build', 'delete'))
         {
