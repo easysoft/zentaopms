@@ -19,7 +19,7 @@ function loadProjectRelated(projectID)
  */
 function loadProjectBuilds(projectID)
 {
-    selectedBuild = $('#openedBuild').val();
+    selectedBuild = $('#build').val();
     if(!selectedBuild) selectedBuild = 0;
     link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&varName=testTaskBuild&build=' + selectedBuild);
     $('#buildBox').load(link, function(){$('#build').chosen(defaultChosenOptions);});
