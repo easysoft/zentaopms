@@ -30,7 +30,6 @@ function updateItemOrder()
 
 function deleteItem(obj)
 {
-    console.log($(obj).closest('.row-table').siblings('.row-table').find('i.icon-remove').size());
     if($(obj).closest('.row-table').siblings('.row-table.addedItem').find('i.icon-remove').size() <= 0) return;
     $(obj).closest('.row-table').remove();
 }
