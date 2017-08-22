@@ -1175,11 +1175,11 @@ class treeModel extends model
 
     /**
      * Manage childs of a module.
-     * 
-     * @param  int    $rootID 
-     * @param  string $type 
-     * @param  int    $parentModuleID 
-     * @param  array  $childs 
+     *
+     * @param  int    $rootID
+     * @param  string $type
+     * @param  int    $parentModuleID
+     * @param  array  $childs
      * @access public
      * @return void
      */
@@ -1246,7 +1246,7 @@ class treeModel extends model
 
     /**
      * Update a module.
-     * 
+     *
      * @param  int    $moduleID 
      * @access public
      * @return void

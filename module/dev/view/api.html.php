@@ -5,7 +5,7 @@
     <?php foreach($lang->dev->groupList as $group => $groupName):?>
     <div class='modulegroup'><?php echo $groupName?></div>
     <?php foreach($modules[$group] as $module):?>
-    <?php 
+    <?php
     $active     = ($module == $selectedModule) ? 'active' : '';
     $moduleName = zget($lang->dev->tableList, $module, $module);
     ?>
@@ -18,7 +18,7 @@
   <?php if($selectedModule):?>
     <?php foreach($apis as $api):?>
     <table class='table table-condensed table-striped table-bordered tablesorter table-fixed active-disabled' id="api">
-      <?php 
+      <?php
       $params = array();
       if(isset($api['param']))
       {
@@ -28,7 +28,7 @@
       ?>
       <tr>
         <th colspan="3">
-        <?php 
+        <?php
         echo $api['post'] ? 'GET/POST' : 'GET';
         echo '&nbsp;&nbsp;' . $this->createLink($selectedModule, $api['name'], $params, 'json');
         ?>

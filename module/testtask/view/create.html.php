@@ -42,7 +42,7 @@
       <?php endif;?>
       <tr>
         <th class='w-90px'><?php echo $lang->testtask->build;?></th>
-        <td class='w-p25-f'><span id='buildBox'><?php echo html::select('build', $builds, '', "class='form-control chosen'");?></span></td>
+        <td class='w-p25-f'><span id='buildBox'><?php echo html::select('build', $builds, $build, "class='form-control chosen'");?></span></td>
         <td></td>
       </tr>  
       <tr>

@@ -605,7 +605,7 @@ class block extends control
     public function printProductBlock()
     {
         $this->app->loadClass('pager', $static = true);
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $num   = isset($this->params->num) ? (int)$this->params->num : 0;
         $type  = isset($this->params->type) ? $this->params->type : '';
         $pager = pager::init(0, $num , 1);
@@ -621,7 +621,7 @@ class block extends control
     public function printProjectBlock()
     {
         $this->app->loadClass('pager', $static = true);
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $num   = isset($this->params->num) ? (int)$this->params->num : 0;
         $type  = isset($this->params->type) ? $this->params->type : 'all';
         $pager = pager::init(0, $num, 1);

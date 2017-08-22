@@ -1129,7 +1129,7 @@ class commonModel extends model
         global $app, $lang;
 
         /* Check is the super admin or not. */
-        if($app->user->admin) return true;
+        if(!empty($app->user->admin)) return true;
 
         /* If not super admin, check the rights. */
         $rights  = $app->user->rights['rights'];

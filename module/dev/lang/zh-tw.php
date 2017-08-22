@@ -95,7 +95,6 @@ $lang->dev->groupList['product'] = $lang->productCommon;
 $lang->dev->groupList['project'] = $lang->projectCommon;
 $lang->dev->groupList['qa']      = '測試';
 $lang->dev->groupList['doc']     = '文檔';
-$lang->dev->groupList['report']  = '統計';
 $lang->dev->groupList['company'] = '組織';
 $lang->dev->groupList['admin']   = '後台';
 $lang->dev->groupList['other']   = '其他模組';

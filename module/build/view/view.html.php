@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->build->confirmUnlinkStory)?>
 <?php js::set('confirmUnlinkBug', $lang->build->confirmUnlinkBug)?>
+<?php js::set('flow', $this->config->global->flow)?>
 <?php if(isonlybody()):?>
 <style>
 #stories .action{display:none;}
