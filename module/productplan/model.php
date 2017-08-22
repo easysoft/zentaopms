@@ -140,7 +140,7 @@ class productplanModel extends model
     public function create()
     {
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->create['id'], $this->config->allowedTags)->remove('delta,uid')->get();
-        $plan = $this->loadModel('file')->processImgURL($plan, $this->config->plan->editor->create['id'], $this->post->uid);
+        $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCTPLAN)
             ->data($plan)
             ->autoCheck()
@@ -166,7 +166,7 @@ class productplanModel extends model
     {
         $oldPlan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)->remove('delta,uid')->get();
-        $plan = $this->loadModel('file')->processImgURL($plan, $this->config->plan->editor->edit['id'], $this->post->uid);
+        $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCTPLAN)
             ->data($plan)
             ->autoCheck()
