@@ -1996,10 +1996,9 @@ class storyModel extends model
         foreach($datas as $key => $project)
         {
             if(!$project->branch) continue;
-            $branchIDList[] = $project->branch;
+            $branchIDList[$project->branch] = $project->branch;
         }
 
-        $branchIDList = array_unique($branchIDList);
         $branchs  = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($branchIDList)->andWhere('deleted')->eq(0)->fetchALL('id');
         $modules = $this->loadModel('tree')->getModulesName(array_keys($datas));
 

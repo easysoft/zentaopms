@@ -1,2 +1,5 @@
 .col-side .chosen-container .chosen-drop {width: 216px!important}
 .col-side .chosen-container {width: 218px!important}
+#finishedDate.form-control.form-date {width: 218px!important}
+#canceledDate.form-control.form-date {width: 218px!important}
+#closedDate.form-control.form-date {width: 218px!important}

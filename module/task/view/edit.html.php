@@ -80,7 +80,7 @@
           <tr>
             <th><?php echo $lang->task->assignedTo;?></th>
             <td><span id="assignedToIdBox"><?php echo html::select('assignedTo', $members, $task->assignedTo, "class='form-control chosen'");?></span></td> 
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->task->type;?></th>
             <td><?php echo html::select('type', $lang->task->typeList, $task->type, 'class=form-control');?></td>
@@ -88,7 +88,7 @@
           <tr>
             <th><?php echo $lang->task->status;?></th>
             <td><?php echo html::select('status', (array)$lang->task->statusList, $task->status, 'class=form-control');?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->task->pri;?></th>
             <td><?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=form-control');?> </td>
@@ -101,27 +101,27 @@
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->task->legendEffort;?></legend>
-        <table class='table table-form'> 
+        <table class='table table-form'>
           <tr>
             <th class='w-70px'><?php echo $lang->task->estStarted;?></th>
             <td><?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date'");?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->task->realStarted;?></th>
             <td><?php echo html::input('realStarted', $task->realStarted, "class='form-control form-date'");?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->task->deadline;?></th>
             <td><?php echo html::input('deadline', $task->deadline, "class='form-control form-date'");?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->task->estimate;?></th>
             <td><?php echo html::input('estimate', $task->estimate, "class='form-control' autocomplete='off'");?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->task->consumed;?></th>
             <td><?php echo $task->consumed . ' '; common::printIcon('task', 'recordEstimate',   "taskID=$task->id", $task, 'list', '', '', 'iframe', true);?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->task->left;?></th>
             <td><?php echo html::input('left', $task->left, "class='form-control' autocomplete='off'");?></td>
@@ -130,14 +130,14 @@
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->task->legendLife;?></legend>
-        <table class='table table-form'> 
+        <table class='table table-form'>
           <tr>
             <th class='w-70px'><?php echo $lang->task->openedBy;?></th>
             <td><?php echo $users[$task->openedBy];?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->finishedBy;?></th>
-            <td><?php echo html::select('finishedBy', $members, $task->finishedBy, "class='form-control'");?></td>
+            <td><?php echo html::select('finishedBy', $members, $task->finishedBy, "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->finishedDate;?></th>
@@ -145,7 +145,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->task->canceledBy;?></th>
-            <td><?php echo html::select('canceledBy', $users, $task->canceledBy, 'class="form-control"');?></td>
+            <td><?php echo html::select('canceledBy', $users, $task->canceledBy, 'class="form-control chosen"');?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->canceledDate;?></th>
@@ -153,11 +153,11 @@
           </tr>
           <tr>
             <th><?php echo $lang->task->closedBy;?></th>
-            <td><?php echo html::select('closedBy', $users, $task->closedBy, 'class="form-control"');?></td>
+            <td><?php echo html::select('closedBy', $users, $task->closedBy, 'class="form-control chosen"');?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->closedReason;?></th>
-            <td><?php echo html::select('closedReason', $lang->task->reasonList, $task->closedReason, 'class="form-control"');?></td>
+            <td><?php echo html::select('closedReason', $lang->task->reasonList, $task->closedReason, 'class="form-control chosen"');?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->closedDate;?></th>
