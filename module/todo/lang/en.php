@@ -32,6 +32,7 @@ $lang->todo->end         = 'End';
 $lang->todo->beginAB     = 'Begin';
 $lang->todo->endAB       = 'End';
 $lang->todo->beginAndEnd = 'Time Frame';
+$lang->todo->idvalue     = 'Linded ID';
 $lang->todo->type        = 'Type';
 $lang->todo->pri         = 'Priority';
 $lang->todo->name        = 'Name';

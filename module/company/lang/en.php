@@ -25,6 +25,7 @@ $lang->company->zipcode  = 'Zip Code';
 $lang->company->website  = 'Website';
 $lang->company->backyard = 'Intranet';
 $lang->company->guest    = 'Guest Login';
+$lang->company->admins   = 'Administrators';
 
 $lang->company->product = $lang->productCommon;
 $lang->company->project = $lang->projectCommon;

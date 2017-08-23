@@ -30,6 +30,15 @@ $lang->file->addFile       = 'Add File';
 $lang->file->beginUpload   = 'Start uploading';
 $lang->file->uploadSuccess = 'uploaded Successfully';
 
+$lang->file->pathname  = 'Path Name';
+$lang->file->title     = 'Title';
+$lang->file->extension = 'Extension';
+$lang->file->size      = 'Size';
+$lang->file->addedBy   = 'Added By';
+$lang->file->addedDate = 'Added Date';
+$lang->file->downloads = 'Downloads';
+$lang->file->extra     = 'Extra';
+
 $lang->file->dragFile         = 'Please drag here.';
 $lang->file->errorNotExists   = "<span class='red'>'%s' is not found.</span>";
 $lang->file->errorCanNotWrite = "<span class='red'>'%s' is not writable. Please change its permission. Enter sudo chmod -R 777 '%s'</span> in Linux.";

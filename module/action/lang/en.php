@@ -33,6 +33,13 @@ $lang->action->confirmHideAll = 'Do you want to hide all the records?';
 $lang->action->needEdit       = '%s you want to restore has already existed. Please edit it.';
 $lang->action->historyEdit    = 'The history editor cannot be empty.';
 
+$lang->action->history = new stdclass();
+$lang->action->history->action = 'Bound action';
+$lang->action->history->field  = 'Field';
+$lang->action->history->old    = 'Old value';
+$lang->action->history->new    = 'New value';
+$lang->action->history->diff   = 'Diff';
+
 $lang->action->dynamic = new stdclass();
 $lang->action->dynamic->today      = 'Today';
 $lang->action->dynamic->yesterday  = 'Yesterday';
@@ -168,6 +175,8 @@ $lang->action->label->suspended           = 'Suspended';
 $lang->action->label->login               = 'Login';
 $lang->action->label->logout              = "Logout";
 $lang->action->label->deleteestimate      = "Deleted Man-Hour";
+$lang->action->label->linked2build        = "Linked Build";
+$lang->action->label->linked2bug          = "Linked Bug";
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';

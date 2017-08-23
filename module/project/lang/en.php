@@ -51,6 +51,7 @@ $lang->project->mine          = 'My Responsibility: ';
 $lang->project->other         = 'Other:';
 $lang->project->deleted       = 'Deleted';
 $lang->project->delayed       = 'Delayed';
+$lang->project->product       = $lang->project->products;
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';
@@ -197,6 +198,7 @@ $lang->project->confirmDelete         = "Do you want to delete {$lang->projectCo
 $lang->project->confirmUnlinkMember   = "Do you want to unlink this User from {$lang->projectCommon}?";
 $lang->project->confirmUnlinkStory    = "Do you want to unlink this Story from {$lang->projectCommon}?";
 $lang->project->errorNoLinkedProducts = "No linked {$lang->productCommon} found in {$lang->projectCommon}. You will be directed to {$lang->productCommon}linked page.";
+$lang->project->errorSameProducts     = "{$lang->projectCommon} cannot be associated with multiple identical {$lang->productCommon}。";
 $lang->project->accessDenied          = "Access to {$lang->projectCommon} denied!";
 $lang->project->tips                  = 'Note';
 $lang->project->afterInfo             = "{$lang->projectCommon} is created. Next you can ";

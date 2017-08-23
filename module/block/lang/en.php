@@ -16,6 +16,14 @@ $lang->block->style  = 'Style';
 $lang->block->grid   = 'Grid';
 $lang->block->color  = 'Color';
 
+$lang->block->account  = 'Account';
+$lang->block->module   = 'Module';
+$lang->block->title    = 'Title';
+$lang->block->source   = 'Source module';
+$lang->block->block    = 'Source block';
+$lang->block->order    = 'Order';
+$lang->block->height   = 'Height';
+
 $lang->block->lblModule    = 'Module';
 $lang->block->lblBlock     = 'Widget';
 $lang->block->lblNum       = 'Number';

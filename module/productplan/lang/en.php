@@ -39,6 +39,7 @@ $lang->productplan->confirmUnlinkBug   = "Do you want to unlink this Bug?";
 
 $lang->productplan->id      = 'ID';
 $lang->productplan->product = $lang->productCommon;
+$lang->productplan->branch  = 'Platform/Branch';
 $lang->productplan->title   = 'Title';
 $lang->productplan->desc    = 'Description';
 $lang->productplan->begin   = 'Begin';

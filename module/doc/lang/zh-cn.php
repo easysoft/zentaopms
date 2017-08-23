@@ -40,6 +40,9 @@ $lang->doc->filePath       = '地址';
 $lang->doc->extension      = '类型';
 $lang->doc->size           = '大小';
 $lang->doc->download       = '下载';
+$lang->doc->acl            = '权限';
+$lang->doc->groups         = '分组';
+$lang->doc->users          = '用户';
 
 $lang->doc->moduleDoc      = '按模块浏览';
 $lang->doc->searchDoc      = '搜索';

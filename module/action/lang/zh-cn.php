@@ -33,6 +33,13 @@ $lang->action->confirmHideAll = '您确定要全部隐藏这些记录吗？';
 $lang->action->needEdit       = '要还原%s的名称或代号已经存在，请编辑更改。';
 $lang->action->historyEdit    = '历史记录编辑不能为空。';
 
+$lang->action->history = new stdclass();
+$lang->action->history->action = '关联日志';
+$lang->action->history->field  = '字段';
+$lang->action->history->old    = '旧值';
+$lang->action->history->new    = '新值';
+$lang->action->history->diff   = '不同';
+
 $lang->action->dynamic = new stdclass();
 $lang->action->dynamic->today      = '今天';
 $lang->action->dynamic->yesterday  = '昨天';

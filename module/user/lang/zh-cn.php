@@ -121,6 +121,12 @@ $lang->user->statusList['delete'] = '删除';
 $lang->user->keepLogin['on']      = '保持登录';
 $lang->user->loginWithDemoUser    = '使用demo帐号登录：';
 
+$lang->user->tpl = new stdclass();
+$lang->user->tpl->type    = '类型';
+$lang->user->tpl->title   = '模板名';
+$lang->user->tpl->content = '内容';
+$lang->user->tpl->public  = '是否公开';
+
 $lang->user->placeholder = new stdclass();
 $lang->user->placeholder->account   = '英文、数字和下划线的组合，三位以上';
 $lang->user->placeholder->password1 = '六位以上';
@@ -146,6 +152,7 @@ $lang->user->error->originalPassword = "原密码不正确";
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = '联系人';
 $lang->user->contacts->listName = '列表名称';
+$lang->user->contacts->userList = '用户列表';
 
 $lang->user->contacts->manage        = '维护列表';
 $lang->user->contacts->contactsList  = '已有列表';

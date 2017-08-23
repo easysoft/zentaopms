@@ -9,6 +9,10 @@ $lang->custom->flow      = 'Process';
 $lang->custom->working   = 'Working';
 $lang->custom->select    = 'Select Process';
 $lang->custom->branch    = 'Multi Branch';
+$lang->custom->owner     = 'Owner';
+$lang->custom->module    = 'Module';
+$lang->custom->section   = 'Section';
+$lang->custom->lang      = 'Language';
 
 $lang->custom->object['story']    = 'Story';
 $lang->custom->object['task']     = 'Task';
