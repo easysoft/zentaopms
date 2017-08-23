@@ -28,20 +28,21 @@
           echo html::hidden('pageID',     isset($this->get->pageID) ? $this->get->pageID : 0);
       }
       ?>
-      <div class='input-group input-group-sm'>
+      <div class='input-group input-group-sm w-200px'>
         <?php echo html::input('title', $this->get->title, "class='form-control search-query' placeholder='{$lang->doc->fileTitle}'");?>
         <span class='input-group-btn'>
           <?php echo html::submitButton($lang->doc->search);?>
         </span>
       </div>
     </form>
-    <?php echo html::backButton();?>
-    <div class='text-right pull-right'>
-    <?php
-        $changeType = "type=$type&objectID=$objectID&viewType=" . ($viewType == 'list' ? 'card' : 'list');
-        echo html::a(inLink('showFiles', $changeType), "<i class='icon icon-th-list icon-4x'></i> 切换界面布局");
-    ?>
+    <div class="btn-group">
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class='icon <?php echo $viewType == 'list' ? 'icon-list' : 'icon-th'?>'></i> <?php echo $lang->doc->browseTypeList[$viewType]?> <span class="caret"></span></button>
+      <ul class="dropdown-menu" role="menu">
+        <li><?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card"), "<i class='icon icon-th'></i> {$lang->doc->browseTypeList['card']}");?></li>
+        <li><?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list"), "<i class='icon icon-list'></i> {$lang->doc->browseTypeList['list']}");?></li>
+      </ul>
     </div>
+    <?php echo html::backButton();?>
   </div>
 </div>
 
@@ -65,11 +66,9 @@
       <?php foreach($files as $file):?>
       <?php if(empty($file->pathname)) continue;?>
         <tr class='text-center text-middle'>
-          <td>
-            <?php echo $file->id;?>
-          </td>
+          <td><?php echo $file->id;?></td>
           <td class='text-left'>
-            <?php echo $file->title;?>
+            <a href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID");?>'><?php echo $file->title . '.' . $file->extension . ' [' . strtoupper($file->objectType) . ' #' . $file->objectID . ']';?></a>
           </td>
           <td class='text-left'> <?php echo $file->pathname;?> </td>
           <td><?php echo $file->extension;?></td>

@@ -107,6 +107,7 @@ $lang->doc->browseType             = '浏览方式';
 $lang->doc->browseTypeList['list'] = '列表';
 $lang->doc->browseTypeList['menu'] = '目录';
 $lang->doc->browseTypeList['tree'] = '树状图';
+$lang->doc->browseTypeList['card'] = '卡片';
 
 $lang->doc->confirmDelete      = "您确定删除该文档吗？";
 $lang->doc->confirmDeleteLib   = "您确定删除该文档库吗？";
