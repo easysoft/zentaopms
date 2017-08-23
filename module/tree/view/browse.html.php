@@ -135,6 +135,14 @@ $(function()
         name: 'tree-<?php echo $viewType ?>-edit',
         initialState: 'preserve',
         data: data,
+        sortable: {
+            lazy: true,
+            nested: true,
+            canMoveHere: function($ele, $target)
+            {
+                if($ele && $target && $ele.parent().closest('li').attr('data-id') !== $target.parent().closest('li').attr('data-id')) return false;
+            }
+        },
         itemCreator: function($li, item)
         {
             var link = item.id !== undefined ? ('<a href="' + createLink('tree', 'browse', 'rootID=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}&branch={1}'.format(item.id, item.branch)) + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
