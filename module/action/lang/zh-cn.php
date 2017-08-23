@@ -113,6 +113,7 @@ $lang->action->desc->paused         = '$date, 由 <strong>$actor</strong> 暂停
 $lang->action->desc->diff1          = '修改了 <strong><i>%s</i></strong>，旧值为 "%s"，新值为 "%s"。<br />' . "\n";
 $lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，区别为：' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
 $lang->action->desc->diff3          = '将文件名 %s 改为 %s 。' . "\n";
+$lang->action->desc->linked2bug     = '$date 由 <strong>$actor</strong> 关联到版本 <strong>$extra</strong>';
 
 /* 关联用例和移除用例时的历史操作记录。*/
 $lang->action->desc->linkrelatedcase   = '$date, 由 <strong>$actor</strong> 关联相关用例 <strong>$extra</strong>。' . "\n";
@@ -175,8 +176,8 @@ $lang->action->label->suspended           = '挂起';
 $lang->action->label->login               = '登录系统';
 $lang->action->label->logout              = "退出登录";
 $lang->action->label->deleteestimate      = "删除了工时";
-$lang->action->label->linked2build        = "关联版本";
-$lang->action->label->linked2bug          = "关联BUG";
+$lang->action->label->linked2build        = "关联了";
+$lang->action->label->linked2bug          = "关联了";
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
