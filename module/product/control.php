@@ -138,7 +138,6 @@ class product extends control
 
         $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->storyModule ? $this->cookie->storyModule : 0));
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
-        if($browseType == 'unclosed') $moduleID = 0;
 
         /* Set menu. */
         $this->product->setMenu($this->products, $productID, $branch);

@@ -1506,7 +1506,7 @@ class bugModel extends model
             {
                 foreach($openBuildIDList as $buildID)
                 {
-                    if(isset($datas[$buildID])) 
+                    if(isset($datas[$buildID]))
                     {
                         $datas[$buildID]->value += $data->value;
                     }
@@ -1538,7 +1538,7 @@ class bugModel extends model
     {
         $datas = $this->dao->select('module as name, count(module) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('module')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        $modules = $this->loadModel('tree')->getModulesName(array_keys($datas),true,true);
+        $modules = $this->loadModel('tree')->getModulesName(array_keys($datas), true, true);
         foreach($datas as $moduleID => $data) $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/';
         return $datas;
     }

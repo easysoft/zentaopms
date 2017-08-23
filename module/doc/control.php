@@ -655,8 +655,6 @@ class doc extends control
         $this->view->viewType   = $viewType;
         $this->view->orderBy    = $orderBy;
         $this->view->objectID   = $objectID;
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
 
         $this->display();
     }
