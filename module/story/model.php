@@ -1,4 +1,4 @@
- <?php
+<?php
 /**
  * The model file of story module of ZenTaoPMS.
  *
