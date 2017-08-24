@@ -59,6 +59,6 @@ $lang->productplan->errorNoBegin = 'ID %s begin time should not be empty.';
 $lang->productplan->errorNoEnd   = 'ID %s end time should not be empty.';
 $lang->productplan->beginGeEnd   = 'ID %s begin time value should not be greater than t.';
 
-$lang->productplan->featureBar['browse']['unexpired'] = 'On Time';
 $lang->productplan->featureBar['browse']['all']       = 'All';
+$lang->productplan->featureBar['browse']['unexpired'] = 'On Time';
 $lang->productplan->featureBar['browse']['overdue']   = 'Overdue';

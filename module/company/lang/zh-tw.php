@@ -25,6 +25,7 @@ $lang->company->zipcode  = '郵政編碼';
 $lang->company->website  = '官網';
 $lang->company->backyard = '內網';
 $lang->company->guest    = '匿名登錄';
+$lang->company->admins   = '管理員';
 
 $lang->company->product = $lang->productCommon;
 $lang->company->project = $lang->projectCommon;

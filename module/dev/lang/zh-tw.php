@@ -89,6 +89,7 @@ $lang->dev->tableList['branch']         = '平台/分支';
 $lang->dev->tableList['doccontent']     = '文檔內容';
 $lang->dev->tableList['storystage']     = '需求階段';
 $lang->dev->tableList['tutorial']       = '新手教程';
+$lang->dev->tableList['suitecase']      = '套件用例';
 
 $lang->dev->groupList['my']      = '我的地盤';
 $lang->dev->groupList['product'] = $lang->productCommon;

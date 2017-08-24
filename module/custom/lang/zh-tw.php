@@ -9,6 +9,10 @@ $lang->custom->flow      = '流程';
 $lang->custom->working   = '工作方式';
 $lang->custom->select    = '請選擇流程：';
 $lang->custom->branch    = '多分支';
+$lang->custom->owner     = '所有者';
+$lang->custom->module    = '模組';
+$lang->custom->section   = '附加部分';
+$lang->custom->lang      = '所屬語言';
 
 $lang->custom->object['story']    = '需求';
 $lang->custom->object['task']     = '任務';
