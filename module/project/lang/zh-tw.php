@@ -51,6 +51,7 @@ $lang->project->mine          = '我負責：';
 $lang->project->other         = '其他：';
 $lang->project->deleted       = '已刪除';
 $lang->project->delayed       = '已延期';
+$lang->project->product       = $lang->project->products;
 
 $lang->project->start    = '開始';
 $lang->project->activate = '激活';
@@ -197,6 +198,7 @@ $lang->project->confirmDelete         = "您確定刪除{$lang->projectCommon}[%
 $lang->project->confirmUnlinkMember   = "您確定從該{$lang->projectCommon}中移除該用戶嗎？";
 $lang->project->confirmUnlinkStory    = "您確定從該{$lang->projectCommon}中移除該需求嗎？";
 $lang->project->errorNoLinkedProducts = "該{$lang->projectCommon}沒有關聯的{$lang->productCommon}，系統將轉到{$lang->productCommon}關聯頁面";
+$lang->project->errorSameProducts     = "{$lang->projectCommon}不能關聯多個相同的{$lang->productCommon}。";
 $lang->project->accessDenied          = "您無權訪問該{$lang->projectCommon}！";
 $lang->project->tips                  = '提示';
 $lang->project->afterInfo             = "{$lang->projectCommon}添加成功，您現在可以進行以下操作：";

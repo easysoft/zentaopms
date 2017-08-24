@@ -16,6 +16,14 @@ $lang->block->style  = '外觀';
 $lang->block->grid   = '寬度';
 $lang->block->color  = '顏色';
 
+$lang->block->account  = '所屬用戶';
+$lang->block->module   = '所屬模組';
+$lang->block->title    = '區塊名稱';
+$lang->block->source   = '來源模組';
+$lang->block->block    = '來源區塊';
+$lang->block->order    = '排序';
+$lang->block->height   = '高度';
+
 $lang->block->lblModule    = '模組';
 $lang->block->lblBlock     = '區塊';
 $lang->block->lblNum       = '條數';

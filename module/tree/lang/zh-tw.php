@@ -42,6 +42,10 @@ $lang->tree->successFixed  = '成功修正數據！';
 $lang->tree->repeatName    = '模組名“%s”已經存在！';
 
 $lang->tree->name       = '模組名稱';
+$lang->tree->root       = '所屬根';
+$lang->tree->branch     = '平台/分支';
+$lang->tree->path       = '路徑';
+$lang->tree->type       = '類型';
 $lang->tree->parent     = '上級模組';
 $lang->tree->child      = '子模組';
 $lang->tree->owner      = '負責人';
