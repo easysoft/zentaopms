@@ -37,7 +37,7 @@
     <tr>
       <th><?php echo $lang->bug->files;?></th>
       <td colspan='2' class='text-left'><?php echo $this->fetch('file', 'buildform');?></td>
-    </tr>  
+    </tr>
     <tr>
       <th></th><td colspan='2'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList);?></td>
     </tr>

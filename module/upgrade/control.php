@@ -13,7 +13,7 @@ class upgrade extends control
 {
     /**
      * The index page.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -29,18 +29,18 @@ class upgrade extends control
 
     /**
      * Check agree license.
-     * 
+     *
      * @access public
      * @return void
      */
     public function license()
-    {   
+    {
         if($this->get->agree == true) $this->locate(inlink('backup'));
 
         $this->view->title   = $this->lang->upgrade->common;
         $this->view->license = file_get_contents($this->app->getBasePath() . 'doc/LICENSE');
         $this->display();
-    }   
+    }
 
     /**
      * Backup.

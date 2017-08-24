@@ -200,8 +200,8 @@ js::set('branch', $branch);
                   $misc = common::hasPriv('bug', 'batchClose') ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : $class;
                   if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->close, '', $misc) . "</li>";
 
-                  $actionLink = $this->createLink('bug', 'batchActivate');
-                  $misc = common::hasPriv('bug', 'batchActivate') ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : $class;
+                  $actionLink = $this->createLink('bug', 'batchActivate', "productID=$productID&branch=$branch");
+                  $misc = common::hasPriv('bug', 'batchActivate') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
                   if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->activate, '', $misc) . "</li>";
 
                   if(common::hasPriv('bug', 'batchChangeModule'))
