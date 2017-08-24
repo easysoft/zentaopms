@@ -23,8 +23,8 @@ class upgradeModel extends model
 
     /**
      * The execute method. According to the $fromVersion call related methods.
-     * 
-     * @param  string $fromVersion 
+     *
+     * @param  string $fromVersion
      * @access public
      * @return void
      */
@@ -182,6 +182,9 @@ class upgradeModel extends model
             case '9_2_1':
             case '9_3_beta':
                 $this->execSQL($this->getUpgradeFile('9.3.beta'));
+            case '9_4':
+                $this->execSQL($this->getUpgradeFile('9.4'));
+                $this->adjustPriv9_4();
         }
 
         $this->deletePatch();
@@ -277,6 +280,7 @@ class upgradeModel extends model
         case '9_2':
         case '9_2_1':
         case '9_3_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('9.3.beta'));
+        case '9_4':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.4'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -322,7 +326,7 @@ class upgradeModel extends model
 
         $bugs = $this->dao->select('id, steps')->from(TABLE_BUG)->fetchAll();
         $userTemplates = $this->dao->select('id, content')->from($this->config->db->prefix . 'userTPL')->fetchAll();
-            
+
         foreach($bugs as $id => $bug)
         {
             $bug->steps = ubb::parseUBB($bug->steps);
@@ -337,7 +341,7 @@ class upgradeModel extends model
 
     /**
      * Update nl to br from 1.2 version.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -996,7 +1000,7 @@ class upgradeModel extends model
         foreach($tables2Rename as $oldTable => $newTable)
         {
             if(!isset($tablesExists[$oldTable])) continue;
-            
+
             $upgradebak = $newTable . '_othertablebak';
             if(isset($tablesExists[$upgradebak])) $this->dbh->query("DROP TABLE `$upgradebak`");
             if(isset($tablesExists[$newTable])) $this->dbh->query("RENAME TABLE `$newTable` TO `$upgradebak`");
@@ -1656,7 +1660,7 @@ class upgradeModel extends model
 
     /**
      * Adjust priv for 9.2.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1699,8 +1703,26 @@ class upgradeModel extends model
     }
 
     /**
+     * Adjust priv for 9.4.
+     *
+     * @access public
+     * @return void
+     */
+    public function adjustPriv9_4()
+    {
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('bug')->andWhere('method')->eq('activate')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group  = $groupID;
+            $data->module = 'bug';
+            $data->method = 'batchActivate';
+        }
+    }
+
+    /**
      * Judge any error occers.
-     * 
+     *
      * @access public
      * @return bool
      */
