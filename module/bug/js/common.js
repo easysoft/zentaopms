@@ -1,4 +1,4 @@
-$(function() 
+$(function()
 {
     setModal4List('iframe', 'bugList');
 

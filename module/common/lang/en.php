@@ -249,7 +249,7 @@ $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
 
 $lang->bug->menu->product   = array('link' => '%s', 'fixed' => true);
-$lang->bug->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
+$lang->bug->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirmbug,assignto', 'subModule' => 'tree');
 $lang->bug->menu->testcase  = array('link' => 'Case|testcase|browse|productID=%s');
 $lang->bug->menu->testtask  = array('link' => 'Build|testtask|browse|productID=%s');
 $lang->bug->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s');
