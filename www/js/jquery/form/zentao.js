@@ -28,7 +28,7 @@ $.extend(
                 {
                     if(ajaxFormUrl == '')ajaxFormUrl = options.url;
                     if(options.url != ajaxFormUrl) options.url = ajaxFormUrl;
-                    options.url = options.url.indexOf('&') >= 0 ? options.url + '&HTTP_X_REQUESTED_WITH=true' : options.url + '?HTTP_X_REQUESTED_WITH=true';
+                    options.url = options.url.indexOf('&') >= 0 ? options.url + '&HTTP_X_REQUESTED_WITH=XMLHttpRequest' : options.url + '?HTTP_X_REQUESTED_WITH=XMLHttpRequest';
                 }
             },
 

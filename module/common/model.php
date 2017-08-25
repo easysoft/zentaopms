@@ -249,9 +249,7 @@ class commonModel extends model
                 echo "<li class='divider'></li>";
             }
 
-            $isLeft = ($app->company->website and $app->company->backyard) ? '' : ' left';
-
-            echo "<li class='dropdown-submenu{$isLeft}'>";
+            echo "<li class='dropdown-submenu left'>";
             echo "<a href='javascript:;'>" . $lang->theme . "</a><ul class='dropdown-menu'>";
             foreach ($app->lang->themes as $key => $value)
             {
@@ -259,7 +257,7 @@ class commonModel extends model
             }
             echo '</ul></li>';
 
-            echo "<li class='dropdown-submenu{$isLeft}'>";
+            echo "<li class='dropdown-submenu left'>";
             echo "<a href='javascript:;'>" . $lang->lang . "</a><ul class='dropdown-menu'>";
             foreach ($app->config->langs as $key => $value)
             {
