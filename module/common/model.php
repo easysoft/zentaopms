@@ -814,6 +814,9 @@ class commonModel extends model
             if(strtolower($key) == 'editedby')       continue;
             if(strtolower($key) == 'editeddate')     continue;
             if(strtolower($key) == 'uid')            continue;
+            if(strtolower($key) == 'finisheddate' && $value == '')  continue;
+            if(strtolower($key) == 'canceleddate' && $value == '')  continue;
+            if(strtolower($key) == 'closeddate'   && $value == '')  continue;
 
             if($magicQuote) $value = stripslashes($value);
             if($value != stripslashes($old->$key))
