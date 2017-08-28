@@ -375,16 +375,17 @@ class groupModel extends model
     }
 
     /**
-     * Check menu have module 
-     * 
-     * @param  string    $menu 
-     * @param  string    $moduleName 
+     * Check menu have module
+     *
+     * @param  string    $menu
+     * @param  string    $moduleName
      * @access public
      * @return void
      */
     public function checkMenuModule($menu, $moduleName)
     {
         if(empty($menu)) return true;
+        if($menu == 'caselib' and $moduleName == 'testsuite') return true;
         if($menu == 'other' and (isset($this->lang->menugroup->$moduleName) or isset($this->lang->menu->$moduleName))) return false;
         if($menu != 'other' and !($moduleName == $menu or (isset($this->lang->menugroup->$moduleName) and $this->lang->menugroup->$moduleName == $menu))) return false;
         return true;
@@ -392,8 +393,8 @@ class groupModel extends model
 
     /**
      * Get modules in menu
-     * 
-     * @param  string    $menu 
+     *
+     * @param  string    $menu
      * @access public
      * @return void
      */

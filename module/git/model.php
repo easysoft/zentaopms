@@ -426,13 +426,23 @@ class gitModel extends model
         exec("{$this->client} config core.quotepath false");
         $subPath = substr($path, strlen($repo->path));
         if($subPath{0} == '/' or $subPath{0} == '\\') $subPath = substr($subPath, 1);
+
+        $encodings = explode(',', $this->config->git->encodings);
+        foreach($encodings as $encoding)
+        {
+            $encoding = trim($encoding);
+            if($encoding == 'utf-8') continue;
+            $subPath = helper::convertEncoding($subPath, 'utf-8', $encoding);
+            if($subPath) break;
+        }
+
         exec("$this->client rev-list -n 2 $revision -- $subPath", $lists);
         if(count($lists) == 2) list($nowRevision, $preRevision) = $lists;
-        $cmd = "$this->client diff $preRevision $nowRevision -- $subPath";
+        $cmd = "$this->client diff $preRevision $nowRevision -- $subPath 2>&1";
         $diff = `$cmd`;
 
-        $encodings = isset($repo->encodings) ? $repo->encodings : $this->config->svn->encodings;
-        if($encodings or $encodings != 'utf-8') $diff = helper::convertEncoding($diff, $encodings);
+        $encoding = isset($repo->encoding) ? $repo->encoding : 'utf-8';
+        if($encoding and $encoding != 'utf-8') $diff = helper::convertEncoding($diff, $encoding);
 
         return $diff;
     }
@@ -457,13 +467,23 @@ class gitModel extends model
 
         $subPath = substr($path, strlen($repo->path));
         if($subPath{0} == '/' or $subPath{0} == '\\') $subPath = substr($subPath, 1);
+
+        $encodings = explode(',', $this->config->git->encodings);
+        foreach($encodings as $encoding)
+        {
+            $encoding = trim($encoding);
+            if($encoding == 'utf-8') continue;
+            $subPath = helper::convertEncoding($subPath, 'utf-8', $encoding);
+            if($subPath) break;
+        }
+
         chdir($repo->path);
         exec("{$this->client} config core.quotepath false");
-        $cmd  = "$this->client show $revision:$subPath";
+        $cmd  = "$this->client show $revision:$subPath 2>&1";
         $code = `$cmd`;
 
-        $encodings = isset($repo->encodings) ? $repo->encodings : $this->config->git->encodings;
-        if($encodings or $encodings != 'utf-8') $code = helper::convertEncoding($code, $encodings);
+        $encoding = isset($repo->encoding) ? $repo->encoding : 'utf-8';
+        if($encoding and $encoding != 'utf-8') $code = helper::convertEncoding($code, $encoding);
 
         return $code;
     }

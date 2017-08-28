@@ -546,27 +546,20 @@ function setFormAction(actionLink, hiddenwin, obj)
 
     $form.attr('action', actionLink);
 
-    // Check safari is for bug #1000, see http://pms.zentao.net/bug-view-1000.html
+    // Check safari for bug #1000, see http://pms.zentao.net/bug-view-1000.html
     var isSafari = navigator.userAgent.indexOf('AppleWebKit') > -1;
     if(isSafari)
     {
         var idPreffix = 'checkbox-fix-' + $.zui.uuid();
-        $form.find('input[type="checkbox"]').each(function()
+        $form.find('[data-fix-checkbox]').remove();
+        $form.find('input[type="checkbox"]:not(.rows-selector)').each(function()
         {
             var $checkbox = $(this);
             var checkboxId = idPreffix + $checkbox.val();
-            $checkbox.attr('data-fix-checkbox', checkboxId).after('<div id="' + checkboxId + '"/>').appendTo($form);
+            $checkbox.clone().attr('data-fix-checkbox', checkboxId).css('display', 'none').after('<div id="' + checkboxId + '"/>').appendTo($form);
         });
     }
     $form.submit();
-    if(isSafari)
-    {
-        $form.find('[data-fix-checkbox]').each(function()
-        {
-            var $checkbox = $(this);
-            $('#' + $checkbox.data('fixCheckbox')).after($checkbox).remove();
-        });
-    }
 }
 
 /**

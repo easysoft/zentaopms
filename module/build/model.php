@@ -66,7 +66,7 @@ class buildModel extends model
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date DESC, t1.id desc')
-            ->fetchAll();
+            ->fetchAll('id');
     }
 
     /**
@@ -200,6 +200,7 @@ class buildModel extends model
             ->stripTags($this->config->build->editor->create['id'], $this->config->allowedTags)
             ->remove('resolvedBy,allchecker,files,labels,uid')
             ->get();
+        if($this->config->global->flow == 'onlyTest') $build->project = 0;
 
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_BUILD)->data($build)

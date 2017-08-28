@@ -21,7 +21,7 @@ class block extends control
     {
         parent::__construct($moduleName, $methodName);
         /* Mark the call from zentao or ranzhi. */
-        $this->selfCall = strpos($this->server->http_referer, common::getSysURL()) === 0 || $this->session->blockModule;
+        $this->selfCall = strpos($this->server->http_referer, common::getSysURL() . $this->config->webRoot) === 0 || $this->session->blockModule;
         if($this->methodName != 'admin' and $this->methodName != 'dashboard' and !$this->selfCall and !$this->loadModel('sso')->checkKey()) die('');
     }
 
@@ -197,7 +197,7 @@ class block extends control
      */
     public function dashboard($module)
     {
-        $this->session->set('blockModule', $module);
+        if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
         $blocks = $this->block->getBlockList($module);
         $inited = empty($this->config->$module->common->blockInited) ? '' : $this->config->$module->common->blockInited;
 
@@ -605,7 +605,7 @@ class block extends control
     public function printProductBlock()
     {
         $this->app->loadClass('pager', $static = true);
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $num   = isset($this->params->num) ? (int)$this->params->num : 0;
         $type  = isset($this->params->type) ? $this->params->type : '';
         $pager = pager::init(0, $num , 1);
@@ -621,7 +621,7 @@ class block extends control
     public function printProjectBlock()
     {
         $this->app->loadClass('pager', $static = true);
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $num   = isset($this->params->num) ? (int)$this->params->num : 0;
         $type  = isset($this->params->type) ? $this->params->type : 'all';
         $pager = pager::init(0, $num, 1);

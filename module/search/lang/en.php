@@ -25,6 +25,13 @@ $lang->search->me            = 'Me';
 $lang->search->noQuery       = 'No query saved!';
 $lang->search->onMenuBar     = 'Show in Menu';
 
+$lang->search->account  = 'Account';
+$lang->search->module   = 'Module';
+$lang->search->title    = 'Title';
+$lang->search->form     = 'Form Field';
+$lang->search->sql      = 'SQL Condition';
+$lang->search->shortcut = $lang->search->onMenuBar;
+
 $lang->search->operators['=']          = '=';
 $lang->search->operators['!=']         = '!=';
 $lang->search->operators['>']          = '>';

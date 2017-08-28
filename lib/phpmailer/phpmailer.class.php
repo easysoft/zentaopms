@@ -1724,16 +1724,16 @@ class PHPMailer {
 
     switch (strtolower($position)) {
       case 'phrase':
-        $encoded = preg_replace("/([^A-Za-z0-9!*+\/ -])/e", "'='.sprintf('%02X', ord('\\1'))", $encoded);
+        $encoded = preg_replace_callback("/([^A-Za-z0-9!*+\/ -])/", array(&$this, 'ordChar'), $encoded);
         break;
       case 'comment':
-        $encoded = preg_replace("/([\(\)\"])/e", "'='.sprintf('%02X', ord('\\1'))", $encoded);
+        $encoded = preg_replace_callback("/([\(\)\"])/", array(&$this, 'ordChar'), $encoded);
       case 'text':
       default:
         // Replace every high ascii, control =, ? and _ characters
         //TODO using /e (equivalent to eval()) is probably not a good idea
-        $encoded = preg_replace('/([\000-\011\013\014\016-\037\075\077\137\177-\377])/e',
-              "'='.sprintf('%02X', ord('\\1'))", $encoded);
+        $encoded = preg_replace_callback('/([\000-\011\013\014\016-\037\075\077\137\177-\377])/',
+              array(&$this, 'ordChar'), $encoded);
         break;
     }
 
@@ -2308,6 +2308,11 @@ class PHPMailer {
       $params = array($isSent,$to,$cc,$bcc,$subject,$body);
       call_user_func_array($this->action_function,$params);
     }
+  }
+
+  public function ordChar($match)
+  {
+      return '=' . sprintf('%02X', ord($match[1]));
   }
 }
 

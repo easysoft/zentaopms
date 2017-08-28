@@ -33,6 +33,13 @@ $lang->action->confirmHideAll = 'Do you want to hide all the records?';
 $lang->action->needEdit       = '%s you want to restore has already existed. Please edit it.';
 $lang->action->historyEdit    = 'The history editor cannot be empty.';
 
+$lang->action->history = new stdclass();
+$lang->action->history->action = 'Bound action';
+$lang->action->history->field  = 'Field';
+$lang->action->history->old    = 'Old value';
+$lang->action->history->new    = 'New value';
+$lang->action->history->diff   = 'Diff';
+
 $lang->action->dynamic = new stdclass();
 $lang->action->dynamic->today      = 'Today';
 $lang->action->dynamic->yesterday  = 'Yesterday';
@@ -106,6 +113,7 @@ $lang->action->desc->paused         = '$date, paused by <strong>$actor</strong>.
 $lang->action->desc->diff1          = '<strong><i>%s</i></strong> has been changed. Its value was "%s" and the new value is "%s".<br />' . "\n";
 $lang->action->desc->diff2          = '<strong><i>%s</i></strong> has been changed. The difference is ' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
 $lang->action->desc->diff3          = 'File Name %s was changed to %s .' . "\n";
+$lang->action->desc->linked2bug     = '$date Link to build <strong>$extra</strong> by <strong>$actor</strong>';
 
 /* 关联用例和移除用例时的历史操作记录。*/
 $lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> linked relevant use case <strong>$extra</strong>.' . "\n";
@@ -168,6 +176,8 @@ $lang->action->label->suspended           = 'Suspended';
 $lang->action->label->login               = 'Login';
 $lang->action->label->logout              = "Logout";
 $lang->action->label->deleteestimate      = "Deleted Man-Hour";
+$lang->action->label->linked2build        = "Linked";
+$lang->action->label->linked2bug          = "Linked";
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';

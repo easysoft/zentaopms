@@ -16,20 +16,20 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version    = '9.4';                // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it. 
-$config->charset    = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.                 
-$config->cookieLife = time() + 2592000;     // Cookie的生存时间。The cookie life time.                      
+$config->version    = '9.5';                // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->charset    = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
+$config->cookieLife = time() + 2592000;     // Cookie的生存时间。The cookie life time.
 $config->timezone   = 'Asia/Shanghai';      // 时区设置。        The time zone setting, for more see http://www.php.net/manual/en/timezones.php.
 $config->webRoot    = '';                   // URL根目录。       The root path of the url.
 
 /* 框架路由相关设置。Routing settings. */
 $config->requestType = 'PATH_INFO';         // 请求类型：PATH_INFO|PATHINFO2|GET。    The request type: PATH_INFO|PATH_INFO2|GET.
-$config->requestFix  = '-';                 // PATH_INFO和PATH_INFO2模式的分隔符。    The divider in the url when PATH_INFO|PATH_INFO2.              
-$config->moduleVar   = 'm';                 // 请求类型为GET：模块变量名。            requestType=GET: the module var name.               
-$config->methodVar   = 'f';                 // 请求类型为GET：模块变量名。            requestType=GET: the method var name.               
-$config->viewVar     = 't';                 // 请求类型为GET：视图变量名。            requestType=GET: the view var name.                 
-$config->sessionVar  = 'zentaosid';         // 请求类型为GET：session变量名。         requestType=GET: the session var name.              
-$config->views       = ',html,json,mhtml,'; // 支持的视图类型。                       Supported view formats. 
+$config->requestFix  = '-';                 // PATH_INFO和PATH_INFO2模式的分隔符。    The divider in the url when PATH_INFO|PATH_INFO2.
+$config->moduleVar   = 'm';                 // 请求类型为GET：模块变量名。            requestType=GET: the module var name.
+$config->methodVar   = 'f';                 // 请求类型为GET：模块变量名。            requestType=GET: the method var name.
+$config->viewVar     = 't';                 // 请求类型为GET：视图变量名。            requestType=GET: the view var name.
+$config->sessionVar  = 'zentaosid';         // 请求类型为GET：session变量名。         requestType=GET: the session var name.
+$config->views       = ',html,json,mhtml,'; // 支持的视图类型。                       Supported view formats.
 
 /* 支持的主题和语言。Supported thems and languages. */
 $config->themes['default'] = 'default'; 

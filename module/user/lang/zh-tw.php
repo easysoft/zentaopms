@@ -121,6 +121,12 @@ $lang->user->statusList['delete'] = '刪除';
 $lang->user->keepLogin['on']      = '保持登錄';
 $lang->user->loginWithDemoUser    = '使用demo帳號登錄：';
 
+$lang->user->tpl = new stdclass();
+$lang->user->tpl->type    = '類型';
+$lang->user->tpl->title   = '模板名';
+$lang->user->tpl->content = '內容';
+$lang->user->tpl->public  = '是否公開';
+
 $lang->user->placeholder = new stdclass();
 $lang->user->placeholder->account   = '英文、數字和下劃線的組合，三位以上';
 $lang->user->placeholder->password1 = '六位以上';
@@ -146,6 +152,7 @@ $lang->user->error->originalPassword = "原密碼不正確";
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = '聯繫人';
 $lang->user->contacts->listName = '列表名稱';
+$lang->user->contacts->userList = '用戶列表';
 
 $lang->user->contacts->manage        = '維護列表';
 $lang->user->contacts->contactsList  = '已有列表';

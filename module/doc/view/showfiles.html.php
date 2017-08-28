@@ -28,72 +28,67 @@
           echo html::hidden('pageID',     isset($this->get->pageID) ? $this->get->pageID : 0);
       }
       ?>
-      <div class='input-group input-group-sm'>
+      <div class='input-group input-group-sm w-200px'>
         <?php echo html::input('title', $this->get->title, "class='form-control search-query' placeholder='{$lang->doc->fileTitle}'");?>
         <span class='input-group-btn'>
           <?php echo html::submitButton($lang->doc->search);?>
         </span>
       </div>
     </form>
-    <?php echo html::backButton();?>
-    <div class='text-right pull-right'>
-    <?php
-        $changeType = "type=$type&objectID=$objectID&viewType=" . ($viewType == 'list' ? 'card' : 'list');
-        echo html::a(inLink('showFiles', $changeType), "<i class='icon icon-th-list icon-4x'></i> 切换界面布局");
-    ?>
+    <div class="btn-group">
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class='icon <?php echo $viewType == 'list' ? 'icon-list' : 'icon-th'?>'></i> <?php echo $lang->doc->browseTypeList[$viewType]?> <span class="caret"></span></button>
+      <ul class="dropdown-menu" role="menu">
+        <li><?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card"), "<i class='icon icon-th'></i> {$lang->doc->browseTypeList['card']}");?></li>
+        <li><?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list"), "<i class='icon icon-list'></i> {$lang->doc->browseTypeList['list']}");?></li>
+      </ul>
     </div>
+    <?php echo html::backButton();?>
   </div>
 </div>
 
 <?php if($viewType == 'list'):?>
-<form method='post' id='ajaxForm'>
-  <table class='table table-hover table-striped tablesorter table-fixed' id='orderList'>
-    <thead>
-      <?php $vars = "type=$type&objectID=$objectID&viewType=list&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";?>
-      <tr class='text-center'>
-        <th class='w-80px'>  <?php common::printOrderLink('t1.id',     $orderBy, $vars, $lang->doc->id);?>        </th>
-        <th> <?php common::printOrderLink('title',    $orderBy, $vars, $lang->doc->fileTitle);?> </th>
-        <th> <?php common::printOrderLink('pathname', $orderBy, $vars, $lang->doc->filePath);?>  </th>
-        <th class='w-60px'>  <?php common::printOrderLink('extension', $orderBy, $vars, $lang->doc->extension);?> </th>
-        <th class='w-80px'>  <?php common::printOrderLink('size',      $orderBy, $vars, $lang->doc->size);?>      </th>
-        <th class='w-100px'> <?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->doc->addedBy);?>   </th>
-        <th class='w-160px'> <?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?> </th>
-        <th class='w-80px'>  <?php echo $lang->actions;?></th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php foreach($files as $file):?>
-      <?php if(empty($file->pathname)) continue;?>
-        <tr class='text-center text-middle'>
-          <td>
-            <?php echo $file->id;?>
-          </td>
-          <td class='text-left'>
-            <?php echo $file->title;?>
-          </td>
-          <td class='text-left'> <?php echo $file->pathname;?> </td>
-          <td><?php echo $file->extension;?></td>
-          <td><?php echo number_format($file->size / 1024 , 1) . 'K';?></td>
-          <td><?php echo isset($file->addedBy) ? $file->addedBy : '';?></td>
-          <td><?php echo isset($file->addedDate) ? substr($file->addedDate, 0, 10) : '';?></td>
-          <td class='text-center'>
-            <?php
-            common::printLink('file', 'download', "fileID=$file->id", $lang->doc->download, "data-toggle='modal'");
-            common::printLink('file', 'delete',   "fileID=$file->id", $lang->delete, 'hiddenwin');
-            ?>
-          </td>
-        </tr>
-      <?php endforeach;?>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td colspan='8'>
-          <?php $pager->show();?>
+<table class='table table-hover table-striped tablesorter table-fixed' id='orderList'>
+  <thead>
+    <?php $vars = "type=$type&objectID=$objectID&viewType=list&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage";?>
+    <tr class='text-center'>
+      <th class='w-80px'>  <?php common::printOrderLink('t1.id',     $orderBy, $vars, $lang->doc->id);?>        </th>
+      <th> <?php common::printOrderLink('title',    $orderBy, $vars, $lang->doc->fileTitle);?> </th>
+      <th> <?php common::printOrderLink('pathname', $orderBy, $vars, $lang->doc->filePath);?>  </th>
+      <th class='w-60px'>  <?php common::printOrderLink('extension', $orderBy, $vars, $lang->doc->extension);?> </th>
+      <th class='w-80px'>  <?php common::printOrderLink('size',      $orderBy, $vars, $lang->doc->size);?>      </th>
+      <th class='w-100px'> <?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->doc->addedBy);?>   </th>
+      <th class='w-160px'> <?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?> </th>
+      <th class='w-80px'>  <?php echo $lang->actions;?></th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php foreach($files as $file):?>
+    <?php if(empty($file->pathname)) continue;?>
+      <tr class='text-center text-middle'>
+        <td><?php echo $file->id;?></td>
+        <td class='text-left'>
+          <a href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID");?>'><?php echo $file->title . '.' . $file->extension . ' [' . strtoupper($file->objectType) . ' #' . $file->objectID . ']';?></a>
+        </td>
+        <td class='text-left'> <?php echo $file->pathname;?> </td>
+        <td><?php echo $file->extension;?></td>
+        <td><?php echo number_format($file->size / 1024 , 1) . 'K';?></td>
+        <td><?php echo isset($file->addedBy) ? $file->addedBy : '';?></td>
+        <td><?php echo isset($file->addedDate) ? substr($file->addedDate, 0, 10) : '';?></td>
+        <td class='text-center'>
+          <?php
+          common::printLink('file', 'download', "fileID=$file->id", $lang->doc->download, "data-toggle='modal'");
+          common::printLink('file', 'delete',   "fileID=$file->id", $lang->delete, 'hiddenwin');
+          ?>
         </td>
       </tr>
-    </tfoot>
-  </table>
-</form>
+    <?php endforeach;?>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan='8'> <?php $pager->show();?> </td>
+    </tr>
+  </tfoot>
+</table>
 <?php else:?>
 <div class='lib-files cards'>
   <?php foreach($files as $file):?>

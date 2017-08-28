@@ -1,4 +1,4 @@
- <?php
+<?php
 /**
  * The model file of story module of ZenTaoPMS.
  *
@@ -372,6 +372,11 @@ class storyModel extends model
     {
         $specChanged = false;
         $oldStory    = $this->dao->findById((int)$storyID)->from(TABLE_STORY)->fetch();
+        $oldSpec     = $this->dao->select('title,spec,verify')->from(TABLE_STORYSPEC)->where('story')->eq((int)$storyID)->andWhere('version')->eq($oldStory->version)->fetch();
+        $oldStory->title  = isset($oldSpec->title)  ? $oldSpec->title  : '';
+        $oldStory->spec   = isset($oldSpec->spec)   ? $oldSpec->spec   : '';
+        $oldStory->verify = isset($oldSpec->verify) ? $oldSpec->verify : '';
+
         if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
@@ -1991,10 +1996,9 @@ class storyModel extends model
         foreach($datas as $key => $project)
         {
             if(!$project->branch) continue;
-            $branchIDList[] = $project->branch;
+            $branchIDList[$project->branch] = $project->branch;
         }
 
-        $branchIDList = array_unique($branchIDList);
         $branchs  = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($branchIDList)->andWhere('deleted')->eq(0)->fetchALL('id');
         $modules = $this->loadModel('tree')->getModulesName(array_keys($datas));
 

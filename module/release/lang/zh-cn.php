@@ -31,6 +31,7 @@ $lang->release->basicInfo = '基本信息';
 
 $lang->release->id                    = 'ID';
 $lang->release->product               = $lang->productCommon;
+$lang->release->branch                = '平台/分支';
 $lang->release->build                 = '版本';
 $lang->release->name                  = '发布名称';
 $lang->release->date                  = '发布日期';
@@ -41,6 +42,7 @@ $lang->release->unlinkStory           = '移除需求';
 $lang->release->unlinkBug             = '移除Bug';
 $lang->release->stories               = '完成的需求';
 $lang->release->bugs                  = '解决的Bug';
+$lang->release->leftBugs              = '遗留的Bug';
 $lang->release->generatedBugs         = '遗留的Bug';
 $lang->release->finishStories         = '本次共完成 %s 个需求';
 $lang->release->resolvedBugs          = '本次共解决 %s 个Bug';

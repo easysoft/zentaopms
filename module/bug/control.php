@@ -513,18 +513,18 @@ class bug extends control
             }
 
             $bug = $this->bug->getById($bugID);
-            if($bug->toTask != 0) 
+            if($bug->toTask != 0)
             {
                 foreach($changes as $change)
                 {
-                    if($change['field'] == 'status') 
+                    if($change['field'] == 'status')
                     {
                         $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
                         $cancelURL  = $this->server->HTTP_REFERER;
                         die(js::confirm(sprintf($this->lang->bug->remindTask, $bug->Task), $confirmURL, $cancelURL, 'parent', 'parent'));
                     }
                 }
-            } 
+            }
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
@@ -587,8 +587,8 @@ class bug extends control
 
     /**
      * Batch edit bug.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -618,7 +618,7 @@ class bug extends control
                             die(js::confirm(sprintf($this->lang->bug->remindTask, $bug->task), $confirmURL, $cancelURL, 'parent', 'parent'));
                         }
                     }
-                } 
+                }
             }
             die(js::locate($this->session->bugList, 'parent'));
         }
@@ -933,8 +933,8 @@ class bug extends control
 
     /**
      * Activate a bug.
-     * 
-     * @param  int    $bugID 
+     *
+     * @param  int    $bugID
      * @access public
      * @return void
      */
@@ -1122,36 +1122,39 @@ class bug extends control
     }
 
     /**
-     * Batch activate bugs. 
-     * 
+     * Batch activate bugs.
+     *
      * @access public
      * @return void
      */
-    public function batchActivate()
+    public function batchActivate($productID, $branch = 0)
     {
-        if($this->post->bugIDList)
+        if($this->post->statusList)
         {
-            $bugIDList = $this->post->bugIDList;
-
-            /* Reset $_POST. Do not unset that because the function of close need that in model. */
-            $_POST = array();
-
-            $bugs = $this->bug->getByList($bugIDList);
-            foreach($bugs as $bugID => $bug)
+            $activateBugs = $this->bug->batchActivate();
+            foreach($activateBugs as $bugID => $bug)
             {
-                if($bug->status == 'active')
-                {
-                    continue;
-                }
-
-                $this->bug->activate($bugID);
-
-                $actionID = $this->action->create('bug', $bugID, 'Activated');
+                $actionID = $this->action->create('bug', $bugID, 'Activated', $bug['comment']);
                 $this->bug->sendmail($bugID, $actionID);
             }
+
+            die(js::locate($this->session->bugList, 'parent'));
         }
 
-        die(js::reload('parent'));
+        $bugIDList = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
+        $bugs = $this->dao->select('id, title, status, resolvedBy, openedBuild')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
+
+        $this->bug->setMenu($this->products, $productID, $branch);
+
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchActivate;
+        $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->bug->batchActivate;
+
+        $this->view->bugs    = $bugs;
+        $this->view->users   = $this->user->getPairs();
+        $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID, $branch, 'noempty');
+
+        $this->display();
     }
 
     /**

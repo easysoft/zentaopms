@@ -25,6 +25,7 @@ $lang->company->zipcode  = '邮政编码';
 $lang->company->website  = '官网';
 $lang->company->backyard = '内网';
 $lang->company->guest    = '匿名登录';
+$lang->company->admins   = '管理员';
 
 $lang->company->product = $lang->productCommon;
 $lang->company->project = $lang->projectCommon;

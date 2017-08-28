@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
- <?php include '../../common/view/datepicker.html.php';?>
+<?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <div class='container mw-700px'>
   <div id='titlebar'>

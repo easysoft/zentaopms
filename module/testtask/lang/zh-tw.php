@@ -61,6 +61,13 @@ $lang->testtask->lastRunTime    = '執行時間';
 $lang->testtask->lastRunResult  = '結果';
 $lang->testtask->reportField    = '測試總結';
 $lang->testtask->files          = '上傳附件';
+$lang->testtask->case           = '用例';
+$lang->testtask->version        = '版本';
+$lang->testtask->caseResult     = '測試結果';
+$lang->testtask->stepResults    = '步驟結果';
+$lang->testtask->lastRunner     = '最後執行人';
+$lang->testtask->lastRunDate    = '最後執行時間';
+$lang->testtask->date           = '測試時間';
 
 $lang->testtask->legendDesc      = '版本描述';
 $lang->testtask->legendReport    = '測試總結';

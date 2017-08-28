@@ -18,7 +18,7 @@ table th.col-closed {width:15%}
 #kanbanWrapper tbody tr.dragging td.col-droppable.drop-to .board-task + .board-shadow {margin-top: 6px;}
 #kanbanWrapper tbody tr.dragging td.col-droppable.drop-to .board-shadow {height: 28px; background: #999; background: rgba(0,0,0,0.35); opacity: 1;}
 #kanbanWrapper tbody tr.dragging td.col-droppable.drop-to.drag-from .board-shadow {display: none}
-#kanbanWrapper .board.drag-from {opacity: 0.8}
+#kanbanWrapper .board.drag-from.dragging {opacity: 0.8;}
 
 #kanban.dragging, .drag-shadow {cursor: move!important;}
 
@@ -34,10 +34,11 @@ table th.col-closed {width:15%}
 .board-actions .btn:active, .board-actions .btn:focus, .board-actions .btn:hover {background: #999; color: inherit; background: rgba(255,255,255,.2);}
 .ie-8 .board-actions .btn {min-width: 10px}
 .board-actions > .dropdown {display: inline-block; margin-left: -5px;}
-.dropdown .caret {border-top-color: #999}
-.dropdown-menu > a {display: block; padding: 3px 15px; color: #333; font-size: 12px}
-.dropdown-menu > a:hover {background: #f1f1f1; color: #1a53ff; text-decoration: none}
-.dropdown-menu > a.disabled, .dropdown-menu > a.disabled:hover, .dropdown-menu > a.active {color: #aaa; background: none}
+.board .dropdown-menu {min-width: 60px;}
+.board .dropdown .caret {border-top-color: #999}
+.board .dropdown-menu > a {display: block; padding: 3px 15px; color: #333; font-size: 12px}
+.board .dropdown-menu > a:hover {background: #f1f1f1; color: #1a53ff; text-decoration: none}
+.board .dropdown-menu > a.disabled, .board .dropdown-menu > a.disabled:hover, .board .dropdown-menu > a.active {color: #aaa; background: none}
 .board .board-footer {display: none; opacity: 0.9}
 .board.show-info .board-footer {display: block; margin: 0 -6px -3px -6px; padding: 5px; background: rgba(0,0,0,0.07);}
 .board-footer .board-id {display: inline-block; border: 1px solid #aaa; font-weight: normal; padding: 0px 4px; text-align: center; min-width: 20px; line-height: 16px; height: 17px; margin-right: 10px; font-size: 12px;}

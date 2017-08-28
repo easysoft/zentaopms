@@ -42,6 +42,10 @@ $lang->tree->successFixed  = '成功修正数据！';
 $lang->tree->repeatName    = '模块名“%s”已经存在！';
 
 $lang->tree->name       = '模块名称';
+$lang->tree->root       = '所属根';
+$lang->tree->branch     = '平台/分支';
+$lang->tree->path       = '路径';
+$lang->tree->type       = '类型';
 $lang->tree->parent     = '上级模块';
 $lang->tree->child      = '子模块';
 $lang->tree->owner      = '负责人';

@@ -60,7 +60,7 @@
     }
     ?>
     <tr class='<?php echo cycle('even, bg-gray');?>'>
-      <th class='text-right w-150px'><?php echo $this->lang->$moduleName->common;?><?php echo html::selectAll($moduleName, 'checkbox')?></th>
+      <th class='text-right w-150px'><?php echo $lang->$moduleName->common;?><?php echo html::selectAll($moduleName, 'checkbox')?></th>
       <td id='<?php echo $moduleName;?>' class='pv-10px'>
         <?php $i = 1;?>
         <?php if($moduleName == 'caselib') $moduleName = 'testsuite';?>
@@ -77,7 +77,7 @@
     <tr>
       <th class='text-right'><?php echo $lang->selectAll . html::selectAll('', 'checkbox')?></th>
       <td>
-        <?php 
+        <?php
         echo html::submitButton($lang->save, "onclick='setNoChecked()'");
         echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
         echo html::hidden('foo'); // Just a hidden var, to make sure $_POST is not empty.

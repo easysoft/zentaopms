@@ -89,13 +89,13 @@ $lang->dev->tableList['branch']         = 'Branch';
 $lang->dev->tableList['doccontent']     = 'Doc Content';
 $lang->dev->tableList['storystage']     = 'Story Stage';
 $lang->dev->tableList['tutorial']       = 'Tutorial';
+$lang->dev->tableList['suitecase']      = 'Suite Case';
 
 $lang->dev->groupList['my']      = 'Dashboard';
 $lang->dev->groupList['product'] = $lang->productCommon;
 $lang->dev->groupList['project'] = $lang->projectCommon;
 $lang->dev->groupList['qa']      = 'Testing';
 $lang->dev->groupList['doc']     = 'Document';
-$lang->dev->groupList['report']  = 'Report';
 $lang->dev->groupList['company'] = 'Company';
 $lang->dev->groupList['admin']   = 'Admin';
 $lang->dev->groupList['other']   = 'Others';

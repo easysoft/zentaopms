@@ -30,6 +30,15 @@ $lang->file->addFile       = '添加文件';
 $lang->file->beginUpload   = '开始上传';
 $lang->file->uploadSuccess = '上传成功';
 
+$lang->file->pathname  = '路径';
+$lang->file->title     = '标题';
+$lang->file->extension = '扩展名';
+$lang->file->size      = '大小';
+$lang->file->addedBy   = '由谁添加';
+$lang->file->addedDate = '添加时间';
+$lang->file->downloads = '下载次数';
+$lang->file->extra     = '备注';
+
 $lang->file->dragFile         = '请拖拽文件到此处';
 $lang->file->errorNotExists   = "<span class='red'>文件夹 '%s' 不存在</span>";
 $lang->file->errorCanNotWrite = "<span class='red'>文件夹 '%s' 不可写,请改变文件夹的权限。在linux中输入指令:sudo chmod -R 777 %s</span>";

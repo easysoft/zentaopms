@@ -22,7 +22,7 @@
       <tr>
         <th class='w-id'>    <?php common::printOrderLink('id',        $orderBy, $vars, $lang->idAB);?></th>
         <th class='w-80px'>  <?php common::printOrderLink('toList',    $orderBy, $vars, $lang->mail->toList);?></th>
-        <th class='w-150px'> <?php common::printOrderLink('subject',   $orderBy, $vars, $lang->mail->subjectName);?></th>
+        <th class='w-150px'> <?php common::printOrderLink('subject',   $orderBy, $vars, $lang->mail->subject);?></th>
         <th class='w-80px'>  <?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->mail->addedBy);?></th>
         <th class='w-150px'> <?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->mail->addedDate);?></th>
         <th class='w-150px'> <?php common::printOrderLink('sendTime',  $orderBy, $vars, $lang->mail->sendTime);?></th>

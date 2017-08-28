@@ -80,6 +80,7 @@ $lang->report->bugTitle     = 'Bug標題';
 $lang->report->taskName     = '任務名稱';
 $lang->report->todoName     = '待辦名稱';
 $lang->report->testTaskName = '版本名稱';
+$lang->report->deadline     = '截止日期';
 
 $lang->report->mailTitle           = new stdclass();
 $lang->report->mailTitle->begin    = '提醒：您有';

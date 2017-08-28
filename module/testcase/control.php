@@ -1342,7 +1342,7 @@ class testcase extends control
         if(empty($libID) or !isset($libraries[$libID])) $libID = key($libraries);
 
         /* Build the search form. */
-        $actionURL = $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=$libID&browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=$libID&orderBy=$orderBy&browseType=bySearch&queryID=myQueryID");
         $this->config->testcase->search['module']    = 'testsuite';
         $this->config->testcase->search['onMenuBar'] = 'no';
         $this->config->testcase->search['actionURL'] = $actionURL;

@@ -89,13 +89,13 @@ $lang->dev->tableList['branch']         = '平台/分支';
 $lang->dev->tableList['doccontent']     = '文档内容';
 $lang->dev->tableList['storystage']     = '需求阶段';
 $lang->dev->tableList['tutorial']       = '新手教程';
+$lang->dev->tableList['suitecase']      = '套件用例';
 
 $lang->dev->groupList['my']      = '我的地盘';
 $lang->dev->groupList['product'] = $lang->productCommon;
 $lang->dev->groupList['project'] = $lang->projectCommon;
 $lang->dev->groupList['qa']      = '测试';
 $lang->dev->groupList['doc']     = '文档';
-$lang->dev->groupList['report']  = '统计';
 $lang->dev->groupList['company'] = '组织';
 $lang->dev->groupList['admin']   = '后台';
 $lang->dev->groupList['other']   = '其他模块';

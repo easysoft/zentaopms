@@ -193,15 +193,15 @@ js::set('branch', $branch);
                   <?php
                   $class = "class='disabled'";
                   $actionLink = $this->createLink('bug', 'batchConfirm');
-                  $misc = common::hasPriv('bug', 'batchConfirm') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : $class;
+                  $misc = common::hasPriv('bug', 'batchConfirm') ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : $class;
                   if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->confirmBug, '', $misc) . "</li>";
 
                   $actionLink = $this->createLink('bug', 'batchClose');
-                  $misc = common::hasPriv('bug', 'batchClose') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : $class;
+                  $misc = common::hasPriv('bug', 'batchClose') ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : $class;
                   if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->close, '', $misc) . "</li>";
 
-                  $actionLink = $this->createLink('bug', 'batchActivate');
-                  $misc = common::hasPriv('bug', 'batchActivate') ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : $class;
+                  $actionLink = $this->createLink('bug', 'batchActivate', "productID=$productID&branch=$branch");
+                  $misc = common::hasPriv('bug', 'batchActivate') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
                   if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->activate, '', $misc) . "</li>";
 
                   if(common::hasPriv('bug', 'batchChangeModule'))

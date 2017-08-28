@@ -39,6 +39,7 @@ $lang->productplan->confirmUnlinkBug   = "您確認移除該Bug嗎？";
 
 $lang->productplan->id      = '編號';
 $lang->productplan->product = $lang->productCommon;
+$lang->productplan->branch  = '平台/分支';
 $lang->productplan->title   = '名稱';
 $lang->productplan->desc    = '描述';
 $lang->productplan->begin   = '開始日期';
@@ -58,6 +59,6 @@ $lang->productplan->errorNoBegin = 'ID %s 開始時間不能為空';
 $lang->productplan->errorNoEnd   = 'ID %s 結束時間不能為空';
 $lang->productplan->beginGeEnd   = 'ID %s 開始時間不能大於結束時間';
 
-$lang->productplan->featureBar['browse']['unexpired'] = '未過期';
 $lang->productplan->featureBar['browse']['all']       = '全部';
+$lang->productplan->featureBar['browse']['unexpired'] = '未過期';
 $lang->productplan->featureBar['browse']['overdue']   = '已過期';

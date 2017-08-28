@@ -25,6 +25,13 @@ $lang->search->me            = '自己';
 $lang->search->noQuery       = '還沒有保存查詢！';
 $lang->search->onMenuBar     = '顯示在菜單欄';
 
+$lang->search->account  = '用戶名';
+$lang->search->module   = '模組';
+$lang->search->title    = '名稱';
+$lang->search->form     = '表單欄位';
+$lang->search->sql      = 'SQL條件';
+$lang->search->shortcut = $lang->search->onMenuBar;
+
 $lang->search->operators['=']          = '=';
 $lang->search->operators['!=']         = '!=';
 $lang->search->operators['>']          = '>';

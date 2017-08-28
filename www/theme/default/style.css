@@ -81,7 +81,7 @@ a,a:focus,a:active {text-decoration: none; outline:none;}
 .dropdown-menu > .active > a:before {content: '\e60d'; font-family: NewZenIcon; font-size: 14px; position: absolute; right: 8px; top: 4px; display: block; color: #808080; font-weight: normal;}
 .dropdown-submenu > a {min-width: 80px;}
 .dropdown-menu .divider {margin: 4px 0;}
-.dropdown-submenu.left > .dropdown-menu{left: -100%;}
+.dropdown-submenu.left > .dropdown-menu{left: -110px;}
 
 /* hr */
 hr.small {margin: 10px 0}

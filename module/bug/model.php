@@ -659,6 +659,57 @@ class bugModel extends model
     }
 
     /**
+     * Batch active bugs.
+     *
+     * @access public
+     * @return array
+     */
+    public function batchActivate()
+    {
+        $now  = helper::now();
+        $data = fixer::input('post')->get();
+
+        $activateBugs = array();
+        $bugIDList    = $data->bugIDList ? $data->bugIDList : array();
+
+        if(empty($bugIDList)) return $activateBugs;
+
+        foreach($bugIDList as $bugID)
+        {
+            if($data->statusList[$bugID] == 'active') continue;
+
+            $activateBugs[$bugID]['assignedTo']  = $data->assignedToList[$bugID];
+            $activateBugs[$bugID]['openedBuild'] = $data->openedBuildList[$bugID];
+            $activateBugs[$bugID]['comment']     = $data->commentList[$bugID];
+
+            $activateBugs[$bugID]['assignedDate']   = $now;
+            $activateBugs[$bugID]['resolution']     = '';
+            $activateBugs[$bugID]['status']         = 'active';
+            $activateBugs[$bugID]['resolvedDate']   = '0000-00-00';
+            $activateBugs[$bugID]['resolvedBy']     = '';
+            $activateBugs[$bugID]['resolvedBuild']  = '';
+            $activateBugs[$bugID]['closedBy']       = '';
+            $activateBugs[$bugID]['closedDate']     = '0000-00-00';
+            $activateBugs[$bugID]['duplicateBug']   = 0;
+            $activateBugs[$bugID]['toTask']         = 0;
+            $activateBugs[$bugID]['toStory']        = 0;
+            $activateBugs[$bugID]['lastEditedBy']   = $this->app->user->account;
+            $activateBugs[$bugID]['lastEditedDate'] = $now;
+        }
+
+        /* Update bugs. */
+        foreach($activateBugs as $bugID => $bug)
+        {
+            $this->dao->update(TABLE_BUG)->data($bug, $skipFields = 'comment')->autoCheck()->where('id')->eq((int)$bugID)->exec();
+            if(dao::isError()) die(js::error('bug#' . $bugID . dao::getError(true)));
+
+            $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
+        }
+
+        return $activateBugs;
+    }
+
+    /**
      * Assign a bug to a user again.
      * 
      * @param  int    $bugID 
@@ -1506,7 +1557,7 @@ class bugModel extends model
             {
                 foreach($openBuildIDList as $buildID)
                 {
-                    if(isset($datas[$buildID])) 
+                    if(isset($datas[$buildID]))
                     {
                         $datas[$buildID]->value += $data->value;
                     }
@@ -1538,7 +1589,7 @@ class bugModel extends model
     {
         $datas = $this->dao->select('module as name, count(module) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('module')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        $modules = $this->loadModel('tree')->getModulesName(array_keys($datas),true,true);
+        $modules = $this->loadModel('tree')->getModulesName(array_keys($datas), true, true);
         foreach($datas as $moduleID => $data) $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/';
         return $datas;
     }

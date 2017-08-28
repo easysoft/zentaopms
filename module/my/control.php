@@ -53,9 +53,12 @@ class my extends control
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
-        $this->session->set('todoList', $uri);
-        $this->session->set('bugList',  $uri);
-        $this->session->set('taskList', $uri);
+        if($this->app->viewType != 'json')
+        {
+            $this->session->set('todoList', $uri);
+            $this->session->set('bugList',  $uri);
+            $this->session->set('taskList', $uri);
+        }
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -98,7 +101,7 @@ class my extends control
     public function story($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        $this->session->set('storyList', $this->app->getURI(true));
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true));
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -136,8 +139,11 @@ class my extends control
     public function task($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        $this->session->set('taskList',  $this->app->getURI(true));
-        $this->session->set('storyList', $this->app->getURI(true));
+        if($this->app->viewType != 'json')
+        {
+            $this->session->set('taskList',  $this->app->getURI(true));
+            $this->session->set('storyList', $this->app->getURI(true));
+        }
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -176,7 +182,7 @@ class my extends control
     public function bug($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. load Lang. */
-        $this->session->set('bugList', $this->app->getURI(true));
+        if($this->app->viewType != 'json') $this->session->set('bugList', $this->app->getURI(true));
         $this->app->loadLang('bug');
  
         /* Load pager. */
@@ -219,7 +225,7 @@ class my extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Save session. */
-        $this->session->set('testtaskList', $this->app->getURI(true));
+        if($this->app->viewType != 'json') $this->session->set('testtaskList', $this->app->getURI(true));
 
         $this->app->loadLang('testcase');
 
@@ -254,7 +260,7 @@ class my extends control
     public function testcase($type = 'assigntome', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load lang. */
-        $this->session->set('caseList', $this->app->getURI(true));
+        if($this->app->viewType != 'json') $this->session->set('caseList', $this->app->getURI(true));
         $this->app->loadLang('testcase');
         $this->app->loadLang('testtask');
         

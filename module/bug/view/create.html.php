@@ -1,4 +1,4 @@
- <?php
+<?php
 /**
  * The create view of bug module of ZenTaoPMS.
  *

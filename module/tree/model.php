@@ -295,16 +295,16 @@ class treeModel extends model
             else
             {
                 $treeMenu[$module->parent] = $moduleName;
-            }    
+            }
         }
     }
 
     /**
      * Get the tree menu in html.
-     * 
-     * @param  int    $rootID 
-     * @param  string $type 
-     * @param  int    $startModule 
+     *
+     * @param  int    $rootID
+     * @param  string $type
+     * @param  int    $startModule
      * @param  string $userFunc     the function used to create link
      * @param  string $extra        extra params
      * @access public
@@ -342,6 +342,7 @@ class treeModel extends model
             {
                 $linkHtml = ($type == 'case' and !empty($extra)) ? $branch : $this->createBranchLink($type, $rootID, $branchID, $branch);
                 $linkHtml = $manage ? html::a(inlink('browse', "root=$rootID&viewType=$type&currentModuleID=0&branch=$branchID"), $branch) : $linkHtml;
+                if($type == 'story' || $type == 'bug') $linkHtml = $branch;
                 if($firstBranch and $product->type != 'normal')
                 {
                     $linkHtml = $this->lang->product->branchName[$product->type] . '<ul><li>' . $linkHtml;
@@ -357,17 +358,17 @@ class treeModel extends model
 
         if(!$firstBranch) $lastMenu .= '</li></ul>';
         $lastMenu = "<ul class='tree tree-lines'>$lastMenu</ul>\n";
-        return $lastMenu; 
+        return $lastMenu;
     }
 
     /**
      * Get the tree menu of task in html.
-     * 
-     * @param  int    $rootID 
-     * @param  int    $productID 
-     * @param  int    $startModule 
-     * @param  int    $userFunc 
-     * @param  string $extra 
+     *
+     * @param  int    $rootID
+     * @param  int    $productID
+     * @param  int    $startModule
+     * @param  int    $userFunc
+     * @param  string $extra
      * @access public
      * @return void
      */
@@ -1126,12 +1127,11 @@ class treeModel extends model
             foreach($paths as $path) $moduleName .= '/' . $allModules[$path];
             $modulePairs[$module->id] = $moduleName;
 
-            if($module->branch) $branchIDList[] = $module->branch;
+            if($module->branch) $branchIDList[$module->branch] = $module->branch;
         }
 
         if(!$branchPath) return $modulePairs;
 
-        $branchIDList = array_unique($branchIDList);
         $branchs  = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($branchIDList)->andWhere('deleted')->eq(0)->fetchALL('id');
         foreach($modules as $module)
         {
@@ -1175,11 +1175,11 @@ class treeModel extends model
 
     /**
      * Manage childs of a module.
-     * 
-     * @param  int    $rootID 
-     * @param  string $type 
-     * @param  int    $parentModuleID 
-     * @param  array  $childs 
+     *
+     * @param  int    $rootID
+     * @param  string $type
+     * @param  int    $parentModuleID
+     * @param  array  $childs
      * @access public
      * @return void
      */
@@ -1246,7 +1246,7 @@ class treeModel extends model
 
     /**
      * Update a module.
-     * 
+     *
      * @param  int    $moduleID 
      * @access public
      * @return void
