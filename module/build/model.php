@@ -66,7 +66,7 @@ class buildModel extends model
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date DESC, t1.id desc')
-            ->fetchAll();
+            ->fetchAll('id');
     }
 
     /**
