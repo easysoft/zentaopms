@@ -48,7 +48,7 @@
       <?php $bugLink = inlink('view', "bugID=$bug->id");?>
       <tr class='text-center'>
         <td class='cell-id bug-<?php echo $bug->status;?> strong text-left'>
-          <input type='checkbox' name='bugIDList[]'  value='<?php echo $bug->id;?>'/> 
+          <input type='checkbox' name='bugIDList[<?php echo $bug->id ?>]'  value='<?php echo $bug->id;?>'/> 
           <?php echo html::a($bugLink, sprintf('%03d', $bug->id));?>
         </td>
         <td><span class='<?php echo 'severity' . zget($lang->bug->severityList, $bug->severity, $bug->severity);?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span></td>
