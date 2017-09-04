@@ -967,10 +967,10 @@ class project extends control
         $this->view->position       = $position;
         $this->view->projects       = $projects;
         $this->view->project        = $project;
-        $this->view->poUsers        = $this->loadModel('user')->getPairs('noclosed,pofirst', $project->PO);
-        $this->view->pmUsers        = $this->user->getPairs('noclosed,pmfirst',  $project->PM);
-        $this->view->qdUsers        = $this->user->getPairs('noclosed,qdfirst',  $project->QD);
-        $this->view->rdUsers        = $this->user->getPairs('noclosed,devfirst', $project->RD);
+        $this->view->poUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pofirst', $project->PO);
+        $this->view->pmUsers        = $this->user->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
+        $this->view->qdUsers        = $this->user->getPairs('noclosed|nodeleted|qdfirst',  $project->QD);
+        $this->view->rdUsers        = $this->user->getPairs('noclosed|nodeleted|devfirst', $project->RD);
         $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->allProducts    = $allProducts;
         $this->view->linkedProducts = $linkedProducts;
@@ -1027,10 +1027,10 @@ class project extends control
         $this->view->position[]    = $this->lang->project->batchEdit;
         $this->view->projectIDList = $projectIDList;
         $this->view->projects      = $projects;
-        $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed,pmfirst', $appendPmUsers);
-        $this->view->poUsers       = $this->user->getPairs('noclosed,pofirst', $appendPoUsers);
-        $this->view->qdUsers       = $this->user->getPairs('noclosed,qdfirst', $appendQdUsers);
-        $this->view->rdUsers       = $this->user->getPairs('noclosed,devfirst', $appendRdUsers);
+        $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst', $appendPmUsers);
+        $this->view->poUsers       = $this->user->getPairs('noclosed|nodeleted|pofirst', $appendPoUsers);
+        $this->view->qdUsers       = $this->user->getPairs('noclosed|nodeleted|qdfirst', $appendQdUsers);
+        $this->view->rdUsers       = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendRdUsers);
         $this->display();
     }
 
@@ -1546,7 +1546,7 @@ class project extends control
         $this->loadModel('dept');
 
         $project        = $this->project->getById($projectID);
-        $users          = $this->user->getPairs('noclosed,devfirst');
+        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst');
         $roles          = $this->user->getUserRoles(array_keys($users));
         $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
         $currentMembers = $this->project->getTeamMembers($projectID);
@@ -1825,7 +1825,7 @@ class project extends control
         /* Assign. */
         $this->view->projectID = $projectID;
         $this->view->type      = $type;
-        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->account   = $account;
         $this->view->orderBy   = $orderBy;
         $this->view->pager     = $pager;

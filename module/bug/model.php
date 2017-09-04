@@ -455,7 +455,7 @@ class bugModel extends model
      */
     public function getModuleOwner($moduleID, $productID)
     {
-        $users = $this->loadModel('user')->getPairs();
+        $users = $this->loadModel('user')->getPairs('nodeleted');
 
         if($moduleID)
         {

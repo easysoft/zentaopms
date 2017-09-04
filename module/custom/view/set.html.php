@@ -122,6 +122,17 @@ EOT;
           <td><?php echo html::submitButton();?></td>
         </tr>
       </table>
+      <?php elseif($module == 'user' and $field == 'deleted'):?>
+      <table class='table table-form mw-600px'>
+        <tr>
+          <th class='w-100px'><?php echo $lang->custom->user->fields['deleted'];?></th>
+          <td><?php echo html::radio('showDeleted', $lang->custom->deletedList, $showDeleted);?></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><?php echo html::submitButton();?></td>
+        </tr>
+      </table>
       <?php else:?>
       <table class='table table-form active-disabled table-condensed mw-600px'>
         <tr class='text-center'>

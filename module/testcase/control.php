@@ -339,7 +339,7 @@ class testcase extends control
         $this->view->precondition     = $precondition;
         $this->view->keywords         = $keywords;
         $this->view->steps            = $steps;
-        $this->view->users            = $this->user->getPairs('noletter|noclosed');
+        $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->branch           = $branch;
         $this->view->branches         = $this->session->currentProductType != 'normal' ? $this->loadModel('branch')->getPairs($productID) : array();
 
@@ -756,7 +756,7 @@ class testcase extends control
             die(js::reload('parent.parent'));
         }
 
-        $this->view->users   = $this->user->getPairs('noletter|noclosed');
+        $this->view->users   = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->case    = $this->testcase->getById($caseID);
         $this->view->actions = $this->loadModel('action')->getList('case', $caseID);
         $this->display();

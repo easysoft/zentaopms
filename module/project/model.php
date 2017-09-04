@@ -1399,7 +1399,7 @@ class projectModel extends model
         $users = $this->dao->select('t1.account, t2.realname')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.project')->eq((int)$projectID)
-            ->beginIF($params == 'nodeleted')
+            ->beginIF($params == 'nodeleted' or empty($this->config->user->showDeleted))
             ->andWhere('t2.deleted')->eq(0)
             ->fi()
             ->fetchPairs();
@@ -1623,6 +1623,12 @@ class projectModel extends model
         $endTime  = strtotime($end);
         $preValue = 0;
         $todayTag = 0;
+
+        foreach($sets as $date => $set)
+        {
+            if($begin > $date) unset($sets[$date]);
+        }
+
         for($i = 0; $i < $period; $i++)
         {
             $currentTime = strtotime($current);

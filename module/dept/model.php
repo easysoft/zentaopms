@@ -423,7 +423,7 @@ class deptModel extends model
     public function getDataStructure($rootDeptID = 0) 
     {
         $tree = array_values($this->getSons($rootDeptID));
-        $users = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $users = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
         if(count($tree))
         {
             foreach ($tree as $node)

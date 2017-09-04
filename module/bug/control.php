@@ -147,7 +147,7 @@ class bug extends control
         $this->view->param         = $param;
         $this->view->orderBy       = $orderBy;
         $this->view->moduleID      = $moduleID;
-        $this->view->memberPairs   = $this->user->getPairs('noletter');
+        $this->view->memberPairs   = $this->user->getPairs('noletter|nodeleted');
         $this->view->branch        = $branch;
         $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
         $this->view->setShowModule = true;
@@ -205,7 +205,7 @@ class bug extends control
      */
     public function create($productID, $branch = '', $extras = '')
     {
-        $this->view->users = $this->user->getPairs('devfirst|noclosed');
+        $this->view->users = $this->user->getPairs('devfirst|noclosed|nodeleted');
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
         $this->app->loadLang('release');
 
@@ -423,7 +423,7 @@ class bug extends control
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;
-        $this->view->users            = $this->user->getPairs('devfirst');
+        $this->view->users            = $this->user->getPairs('devfirst|nodeleted');
         $this->view->projects         = $this->product->getProjectPairs($productID, $branch ? "0,$branch" : 0, $params = 'nodeleted');
         $this->view->projectID        = $projectID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
@@ -576,7 +576,7 @@ class bug extends control
         $this->view->stories          = $bug->project ? $this->story->getProjectStoryPairs($bug->project) : $this->story->getProductStoryPairs($bug->product, $bug->branch);
         $this->view->branches         = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
         $this->view->tasks            = $this->task->getProjectTaskPairs($bug->project);
-        $this->view->users            = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
+        $this->view->users            = $this->user->getPairs('nodeleted', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->openedBuilds     = $openedBuilds;
         $this->view->resolvedBuilds   = array('' => '') + $openedBuilds + $oldResolvedBuild;
         $this->view->actions          = $this->action->getList('bug', $bugID);
@@ -685,7 +685,7 @@ class bug extends control
             $appendUsers[$bug->assignedTo] = $bug->assignedTo;
             $appendUsers[$bug->resolvedBy] = $bug->resolvedBy;
         }
-        $users = $this->user->getPairs('devfirst', $appendUsers);
+        $users = $this->user->getPairs('devfirst|nodeleted', $appendUsers);
         $users = array('' => '', 'ditto' => $this->lang->bug->ditto) + $users;
 
         /* Assign. */
@@ -738,7 +738,7 @@ class bug extends control
         $this->view->title      = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
         $this->view->position[] = $this->lang->bug->assignedTo;
 
-        $this->view->users   = $this->user->getPairs('', $bug->assignedTo);
+        $this->view->users   = $this->user->getPairs('nodeleted', $bug->assignedTo);
         $this->view->bug     = $bug;
         $this->view->bugID   = $bugID;
         $this->view->actions = $this->action->getList('bug', $bugID);
@@ -828,7 +828,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->confirmBug;
 
         $this->view->bug     = $bug;
-        $this->view->users   = $this->user->getPairs('', $bug->assignedTo);
+        $this->view->users   = $this->user->getPairs('nodeleted', $bug->assignedTo);
         $this->view->actions = $this->action->getList('bug', $bugID);
         $this->display();
     }
@@ -960,7 +960,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->activate;
 
         $this->view->bug     = $bug;
-        $this->view->users   = $this->user->getPairs('', $bug->resolvedBy);
+        $this->view->users   = $this->user->getPairs('nodeleted', $bug->resolvedBy);
         $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($productID, $bug->branch, 'noempty');
         $this->view->actions = $this->action->getList('bug', $bugID);
 
@@ -1283,6 +1283,7 @@ class bug extends control
      * AJAX: get team members of the latest project of a product as assignedTo list.
      * 
      * @param  int    $productID 
+     * x
      * @param  string $selectedUser 
      * @access public
      * @return string
@@ -1296,7 +1297,7 @@ class bug extends control
         }
         else
         {
-            $projectMembers = $this->loadModel('user')->getPairs('devfirst|noclosed');
+            $projectMembers = $this->loadModel('user')->getPairs('devfirst|noclosed|nodeleted');
         }
 
         die(html::select('assignedTo', $projectMembers, $selectedUser, 'class="form-control"'));

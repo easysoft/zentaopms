@@ -157,7 +157,7 @@ class testtask extends control
         $this->view->productID    = $productID;
         $this->view->builds       = $builds;
         $this->view->build        = $build;
-        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|qdfirst');
+        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|qdfirst|nodeleted');
 
         $this->display();
     }
@@ -286,8 +286,8 @@ class testtask extends control
         $this->view->productName   = $this->products[$productID];
         $this->view->task          = $task;
         $this->view->runs          = $runs;
-        $this->view->users         = $this->loadModel('user')->getPairs('noclosed,qafirst');
-        $this->view->assignedTos   = $this->loadModel('user')->getPairs('noclosed,qafirst');
+        $this->view->users         = $this->loadModel('user')->getPairs('noclosed|qafirst');
+        $this->view->assignedTos   = $this->loadModel('user')->getPairs('noclosed|nodeleted|qafirst');
         $this->view->moduleTree    = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID);
         $this->view->browseType    = $browseType;
         $this->view->param         = $param;
@@ -438,7 +438,7 @@ class testtask extends control
         $this->view->task         = $task;
         $this->view->projects     = $this->product->getProjectPairs($productID);
         $this->view->builds       = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = '');
-        $this->view->users        = $this->loadModel('user')->getPairs('', $task->owner);
+        $this->view->users        = $this->loadModel('user')->getPairs('nodeleted', $task->owner);
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
 
         $this->display();
@@ -565,7 +565,7 @@ class testtask extends control
         $this->view->position[]   = $this->lang->testtask->common;
         $this->view->position[]   = $this->lang->close;
         $this->view->actions      = $actions;
-        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|qdfirst');
+        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|nodeleted|qdfirst');
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
         $this->display();
     }

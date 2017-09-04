@@ -91,7 +91,7 @@ class testreport extends control
         $this->view->objectType = $objectType;
         $this->view->extra      = $extra;
         $this->view->pager      = $pager;
-        $this->view->users      = $this->user->getPairs('noletter|noclosed');
+        $this->view->users      = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->tasks      = $tasks;
         $this->view->projects   = $projects;
         $this->display();
@@ -197,7 +197,7 @@ class testreport extends control
         $this->view->storySummary  = $this->product->summary($stories);
 
         $this->view->builds  = $builds;
-        $this->view->users   = $this->user->getPairs('noletter|noclosed');
+        $this->view->users   = $this->user->getPairs('noletter|noclosed|nodeleted');
 
         $this->view->cases       = $cases;
         $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases);
@@ -307,7 +307,7 @@ class testreport extends control
         $this->view->storySummary  = $this->product->summary($stories);
 
         $this->view->builds  = $builds;
-        $this->view->users   = $this->user->getPairs('noletter|noclosed');
+        $this->view->users   = $this->user->getPairs('noletter|noclosed|nodeleted');
 
         $this->view->cases       = $cases;
         $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases);
@@ -373,7 +373,7 @@ class testreport extends control
         $this->view->bugs    = $report->bugs ? $this->bug->getByList($report->bugs) : array();
         $this->view->builds  = $builds;
         $this->view->cases   = $cases;
-        $this->view->users   = $this->user->getPairs('noletter|noclosed');
+        $this->view->users   = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->actions = $this->loadModel('action')->getList('testreport', $reportID);
 
         $this->view->storySummary = $this->product->summary($stories);

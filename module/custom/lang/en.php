@@ -67,8 +67,9 @@ $lang->custom->todo->fields['typeList']   = 'Type';
 $lang->custom->todo->fields['statusList'] = 'Status';
 
 $lang->custom->user = new stdClass();
-$lang->custom->user->fields['roleList']    = 'Role';
-$lang->custom->user->fields['statusList']  = 'Status';
+$lang->custom->user->fields['roleList']   = 'Role';
+$lang->custom->user->fields['statusList'] = 'Status';
+$lang->custom->user->fields['deleted']    = 'Show deleted user';
 
 $lang->custom->block->fields['closed'] = 'Closed Block';
 
@@ -93,6 +94,9 @@ $lang->custom->storyReview   = 'Review';
 $lang->custom->forceReview   = 'Review Required';
 $lang->custom->reviewList[1] = 'On';
 $lang->custom->reviewList[0] = 'Off';
+
+$lang->custom->deletedList[1] = 'Show';
+$lang->custom->deletedList[0] = 'Not Show';
 
 $lang->custom->workingHours   = 'Man-Hour/Day';
 $lang->custom->weekend        = 'Weekend';

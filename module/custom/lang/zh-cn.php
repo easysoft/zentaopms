@@ -69,6 +69,7 @@ $lang->custom->todo->fields['statusList'] = '状态';
 $lang->custom->user = new stdClass();
 $lang->custom->user->fields['roleList']   = '职位';
 $lang->custom->user->fields['statusList'] = '状态';
+$lang->custom->user->fields['deleted']    = '列出已删除用户';
 
 $lang->custom->block->fields['closed'] = '关闭的区块';
 
@@ -93,6 +94,9 @@ $lang->custom->storyReview   = '评审流程';
 $lang->custom->forceReview   = '强制评审';
 $lang->custom->reviewList[1] = '开启';
 $lang->custom->reviewList[0] = '关闭';
+
+$lang->custom->deletedList[1] = '列出';
+$lang->custom->deletedList[0] = '不列出';
 
 $lang->custom->workingHours   = '每天可用工时';
 $lang->custom->weekend        = '休息日';

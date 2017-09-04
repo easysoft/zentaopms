@@ -49,7 +49,7 @@ class custom extends control
         if(($module == 'story' or $module == 'testcase') and $field == 'review')
         {
             $this->app->loadConfig($module);
-            $this->view->users = $this->loadModel('user')->getPairs('noclosed');
+            $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted');
             $this->view->needReview   = zget($this->config->$module, 'needReview', 1);
             $this->view->forceReview  = zget($this->config->$module, 'forceReview', '');
         }
@@ -72,6 +72,11 @@ class custom extends control
             $this->view->blockPairs  = $this->block->getClosedBlockPairs($closedBlock);
             $this->view->closedBlock = $closedBlock;
         }
+        if($module == 'user' and $field == 'deleted')
+        {
+            $this->loadModel('user');
+            $this->view->showDeleted = isset($this->config->user->showDeleted) ? $this->config->user->showDeleted : '0';
+        }
 
         if(strtolower($_SERVER['REQUEST_METHOD']) == "post")
         {
@@ -92,6 +97,11 @@ class custom extends control
             {
                 $data = fixer::input('post')->join('closed', ',')->get();
                 $this->loadModel('setting')->setItem('system.block.closed', zget($data, 'closed', ''));
+            }
+            elseif($module == 'user' and $field == 'deleted')
+            {
+                $data = fixer::input('post')->get();
+                $this->loadModel('setting')->setItem('system.user.showDeleted', $data->showDeleted);
             }
             else
             {
