@@ -478,7 +478,7 @@ $lang->datepicker->dpText->TEXT_CLOSE       = 'Close';
 $lang->datepicker->dpText->TEXT_DATE        = 'Choose Time';
 $lang->datepicker->dpText->TEXT_CHOOSE_DATE = 'Choose Date';
 
-$lang->datepicker->dayNames     = array('Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat');
+$lang->datepicker->dayNames     = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 $lang->datepicker->abbrDayNames = array('Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat');
 $lang->datepicker->monthNames   = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
 

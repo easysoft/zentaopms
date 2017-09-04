@@ -703,7 +703,13 @@ class actionModel extends model
             $objectType = strtolower($action->objectType);
             $action->date        = date(DT_MONTHTIME2, strtotime($action->date));
             $action->actionLabel = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->action;
-            $action->objectLabel = isset($this->lang->action->label->$objectType) ? $this->lang->action->label->$objectType : $objectType;
+            $action->objectLabel = $objectType;
+            if(isset($this->lang->action->label->$objectType))
+            {
+                $objectLabel = $this->lang->action->label->$objectType;
+                if(!is_array($objectLabel)) $action->objectLabel = $objectLabel;
+                if(is_array($objectLabel) and isset($objectLabel[$actionType])) $action->objectLabel = $objectLabel[$actionType];
+            }
 
             /* If action type is login or logout, needn't link. */
             if($actionType == 'svncommited')
@@ -715,8 +721,12 @@ class actionModel extends model
             if(strpos($action->objectLabel, '|') !== false)
             {
                 list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
-                $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
-                if($action->objectType == 'user') $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->actor));
+                $action->objectLink = '';
+                if(common::hasPriv($moduleName, $methodName))
+                {
+                    $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
+                    if($action->objectType == 'user') $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->actor));
+                }
                 $action->objectLabel = $objectLabel;
             }
             else
