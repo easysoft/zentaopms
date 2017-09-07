@@ -771,7 +771,7 @@ class testtaskModel extends model
             {
                 $products  = array_keys($this->loadModel('product')->getPrivProducts());
                 $caseQuery = str_replace($allProduct, '1', $this->session->testtaskQuery);
-                $caseQuery = $caseQuery . ' AND `product `' . helper::dbIN(array_keys($products));
+                $caseQuery = $caseQuery . ' AND `product` ' . helper::dbIN(array_keys($products));
                 $queryProductID = 'all';
             }
 
