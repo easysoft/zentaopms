@@ -51,7 +51,7 @@ class apiModel extends model
      */
     public function request($moduleName, $methodName, $action)
     {
-        $host  = common::getSysURL() . $this->config->webRoot;
+        $host  = common::getSysURL();
         $param = '';
         if($action == 'extendModel')
         {

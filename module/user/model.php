@@ -999,6 +999,7 @@ class userModel extends model
      */
     public function getDataInJSON($user)
     {
+        $user = json_decode(json_encode($user));
         unset($user->password);
         unset($user->deleted);
         $user->company = $this->app->company->name;
