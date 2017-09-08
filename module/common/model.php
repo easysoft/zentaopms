@@ -1137,6 +1137,7 @@ class commonModel extends model
         $acls    = $app->user->rights['acls'];
         $module  = strtolower($module);
         $method  = strtolower($method);
+
         if(isset($rights[$module][$method]))
         {
             if(empty($acls['views'])) return true;

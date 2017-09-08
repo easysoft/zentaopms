@@ -429,10 +429,10 @@ class testcaseModel extends model
 
     /**
      * Get cases by assignedTo.
-     * 
-     * @param  string $account 
-     * @param  string $orderBy 
-     * @param  object $pager 
+     *
+     * @param  string $account
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */

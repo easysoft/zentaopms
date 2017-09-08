@@ -19,7 +19,7 @@
     </div>
     <div class='panel-body'>
       <div class='alert alert-info'>
-      <?php printf($lang->user->noticeResetFile, $this->session->resetFileName);?>
+      <?php printf($lang->user->noticeResetFile, $resetFileName);?>
       </div>
       <p><?php echo html::a(inlink('reset'), $this->lang->refresh, '', "class='btn'")?></p>
     </div>

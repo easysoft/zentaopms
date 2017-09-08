@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php js::import($jsRoot . 'md5.js');?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['user']);?></span>
@@ -93,6 +94,7 @@ $minWidth = (count($visibleFields) > 7) ? 'w-120px' : '';
     <tr><td colspan='<?php echo count($visibleFields) + 4?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
+<?php echo html::hidden('verifyRand', $rand);?>
 <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=user&section=custom&key=batchEditFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

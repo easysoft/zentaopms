@@ -414,6 +414,7 @@ class user extends control
         $this->view->groupList = $groupList;
         $this->view->roleGroup = $roleGroup;
         $this->view->deptID    = $deptID;
+        $this->view->rand      = $this->user->updateSessionRandom();
 
         $this->display();
     }
@@ -460,6 +461,7 @@ class user extends control
         $this->view->deptID    = $deptID;
         $this->view->groupList = $groupList;
         $this->view->roleGroup = $roleGroup;
+        $this->view->rand      = $this->user->updateSessionRandom();
 
         $this->display();
     }
@@ -494,7 +496,8 @@ class user extends control
         $this->view->depts      = $this->dept->getOptionMenu();
         $this->view->userGroups = implode(',', array_keys($userGroups));
         $this->view->groups     = $this->loadModel('group')->getPairs();
- 
+
+        $this->view->rand = $this->user->updateSessionRandom();
         $this->display();
     }
 
@@ -528,6 +531,8 @@ class user extends control
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchEdit;
         $this->view->position[] = $this->lang->user->batchEdit;
         $this->view->depts      = $this->dept->getOptionMenu();
+        $this->view->rand       = $this->user->updateSessionRandom();
+
         $this->display();
     }
 
@@ -545,7 +550,7 @@ class user extends control
         if($this->app->user->admin and $this->app->user->account == $user->account) return;
         if($_POST)
         {
-            if(md5($this->post->verifyPassword) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPassword));
+            if($this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) die(js::alert($this->lang->user->error->verifyPassword));
             $this->user->delete(TABLE_USER, $userID);
             if(!dao::isError())
             {
@@ -571,6 +576,7 @@ class user extends control
             die(js::locate($this->session->userList, 'parent.parent'));
         }
 
+        $this->view->rand = $this->user->updateSessionRandom();
         $this->display();
     }
 
@@ -760,7 +766,7 @@ class user extends control
             }
         }
         else
-        { 
+        {
             if(!empty($this->config->global->showDemoUsers))
             {
                 $demoUsers = $this->user->getPairs('noletter|noempty|noclosed|nodeleted');
@@ -773,6 +779,7 @@ class user extends control
             $this->view->referer   = $this->referer;
             $this->view->s         = zget($this->config->global, 'sn', '');
             $this->view->keepLogin = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
+            $this->view->rand      = $this->user->updateSessionRandom();
             $this->display();
         }
     }
@@ -833,7 +840,6 @@ class user extends control
         }
 
         $resetFileName = $this->session->resetFileName;
-        $this->view->title = $this->lang->user->resetPassword;
 
         $needCreateFile = false;
         if(!file_exists($resetFileName) or (time() - filemtime($resetFileName)) > 60 * 2) $needCreateFile = true;
@@ -852,11 +858,16 @@ class user extends control
             die(js::locate(inlink('logout', $referer), 'parent'));
         }
 
+        $pathPos = strrpos($this->app->getBasePath(), DIRECTORY_SEPARATOR, -2);
+
+        $this->view->title          = $this->lang->user->resetPassword;
         $this->view->status         = 'reset';
         $this->view->needCreateFile = $needCreateFile;
+        $this->view->resetFileName  = substr($resetFileName, $pathPos+1);
+
         $this->display();
     }
-    
+
     /**
      * User dynamic.
      * 

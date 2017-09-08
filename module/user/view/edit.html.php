@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php js::import($jsRoot . 'md5.js');?>
 <div class='container mw-800px'>
   <div id='titlebar'>
     <div class='heading'>
@@ -115,6 +116,7 @@
       <tr><td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
     </table>
   </form>
+  <?php echo html::hidden('verifyRand', $rand);?>
 </div>
 <?php js::set('passwordStrengthList', $lang->user->passwordStrengthList)?>
 <?php include '../../common/view/footer.html.php';?>

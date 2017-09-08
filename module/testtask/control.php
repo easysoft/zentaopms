@@ -771,8 +771,8 @@ class testtask extends control
 
     /**
      * Run case.
-     * 
-     * @param  int    $runID 
+     *
+     * @param  int    $runID
      * @param  String $extras   others params, forexample, caseID=10, version=3
      * @access public
      * @return void
@@ -795,7 +795,7 @@ class testtask extends control
         {
             $caseResult = $this->testtask->createResult($runID);
             if(dao::isError()) die(js::error(dao::getError()));
-            
+
             if('fail' == $caseResult) { 
 
                 $response['result']  = 'success';
