@@ -248,12 +248,12 @@ class my extends control
 
     /**
      * My test case.
-     * 
-     * @param  string $type 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -263,7 +263,7 @@ class my extends control
         if($this->app->viewType != 'json') $this->session->set('caseList', $this->app->getURI(true));
         $this->app->loadLang('testcase');
         $this->app->loadLang('testtask');
-        
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
@@ -281,7 +281,7 @@ class my extends control
             $cases = $this->loadModel('testcase')->getByOpenedBy($this->app->user->account, $sort, $pager);
         }
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'assigntome' ? false : true);
-        
+
         $cases = $this->testcase->appendData($cases, $type == 'assigntome' ? 'run' : 'case');
 
         /* Assign. */
@@ -296,7 +296,7 @@ class my extends control
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        
+
         $this->display();
     }
 

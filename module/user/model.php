@@ -250,9 +250,9 @@ class userModel extends model
     }
 
     /**
-     * Batch create users. 
-     * 
-     * @param  int    $users 
+     * Batch create users.
+     *
+     * @param  int    $users
      * @access public
      * @return void
      */
@@ -260,12 +260,12 @@ class userModel extends model
     {
         if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) die(js::alert($this->lang->user->error->verifyPassword));
 
-        $users    = fixer::input('post')->get(); 
+        $users    = fixer::input('post')->get();
         $data     = array();
         $accounts = array();
         for($i = 0; $i < $this->config->user->batchCreate; $i++)
         {
-            if($users->account[$i] != '')  
+            if($users->account[$i] != '')
             {
                 $account = $this->dao->select('account')->from(TABLE_USER)->where('account')->eq($users->account[$i])->fetch();
                 if($account) die(js::error(sprintf($this->lang->user->error->accountDupl, $i+1)));

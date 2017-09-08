@@ -840,7 +840,6 @@ class user extends control
         }
 
         $resetFileName = $this->session->resetFileName;
-        $this->view->title = $this->lang->user->resetPassword;
 
         $needCreateFile = false;
         if(!file_exists($resetFileName) or (time() - filemtime($resetFileName)) > 60 * 2) $needCreateFile = true;
@@ -859,11 +858,16 @@ class user extends control
             die(js::locate(inlink('logout', $referer), 'parent'));
         }
 
+        $pathPos = strrpos($this->app->getBasePath(), DIRECTORY_SEPARATOR, -2);
+
+        $this->view->title          = $this->lang->user->resetPassword;
         $this->view->status         = 'reset';
         $this->view->needCreateFile = $needCreateFile;
+        $this->view->resetFileName  = substr($resetFileName, $pathPos+1);
+
         $this->display();
     }
-    
+
     /**
      * User dynamic.
      * 
