@@ -338,6 +338,7 @@ class my extends control
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->editProfile;
         $this->view->position[] = $this->lang->my->editProfile;
         $this->view->user       = $this->user->getById($this->app->user->account);
+        $this->view->rand       = $this->user->updateSessionRandom();
 
         $this->display();
     }

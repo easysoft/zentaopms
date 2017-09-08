@@ -221,7 +221,7 @@ class userModel extends model
             return false;
         }
 
-        if(empty($_POST['verifyPassword']) or md5($this->post->verifyPassword) != $this->app->user->password)
+        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
         {
             dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
             return false;
@@ -258,7 +258,7 @@ class userModel extends model
      */
     public function batchCreate()
     {
-        if(empty($_POST['verifyPassword']) or md5($this->post->verifyPassword) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPassword));
+        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) die(js::alert($this->lang->user->error->verifyPassword));
 
         $users    = fixer::input('post')->get(); 
         $data     = array();
@@ -369,7 +369,7 @@ class userModel extends model
             return false;
         }
 
-        if(empty($_POST['verifyPassword']) or md5($this->post->verifyPassword) != $this->app->user->password)
+        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
         {
             dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
             return false;
@@ -421,15 +421,29 @@ class userModel extends model
     }
 
     /**
+     * update session random.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateSessionRandom()
+    {
+        $random = mt_rand();
+        $this->session->set('rand', $random);
+
+        return $random;
+    }
+
+    /**
      * Batch edit user.
-     * 
+     *
      * @access public
      * @return void
      */
     public function batchEdit()
     {
         $data = fixer::input('post')->get();
-        if(empty($_POST['verifyPassword']) or md5($this->post->verifyPassword) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPassword));
+        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) die(js::alert($this->lang->user->error->verifyPassword));
 
         $oldUsers     = $this->dao->select('id, account, email')->from(TABLE_USER)->where('id')->in(array_keys($data->account))->fetchAll('id');
         $accountGroup = $this->dao->select('id, account')->from(TABLE_USER)->where('account')->in($data->account)->fetchGroup('account', 'id');
