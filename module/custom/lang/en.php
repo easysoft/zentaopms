@@ -82,6 +82,7 @@ $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole             = 'Key must be no more than 20 characters!';
 $lang->custom->notice->canNotAdd            = 'This item will be processed, so customized feature is not enabled.';
 $lang->custom->notice->forceReview          = 'Review is required for %s submitted by certain assignee.';
+$lang->custom->notice->forceNotReview       = "Not review is required for %s submitted by certain assignee.";
 $lang->custom->notice->longlife             = 'List "Undone" bugs that are older than hold days from "Longlife" bugs.';
 $lang->custom->notice->priListKey           = 'Priority list key should be numbers！';
 $lang->custom->notice->keyList              = 'key should be English or digital!';

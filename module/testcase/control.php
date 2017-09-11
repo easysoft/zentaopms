@@ -346,12 +346,12 @@ class testcase extends control
         $this->display();
     }
 
-   
+
     /**
      * Create a batch test case.
-     * 
-     * @param  int   $productID 
-     * @param  int   $moduleID 
+     *
+     * @param  int   $productID
+     * @param  int   $moduleID
      * @param  int   $storyID
      * @access public
      * @return void
@@ -418,6 +418,7 @@ class testcase extends control
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->branch           = $branch;
         $this->view->branches         = $this->loadModel('branch')->getPairs($productID);
+        $this->view->needReview       = $this->testcase->forceNotReview() == true ? 0 : 1;
 
         $this->display();
     }
@@ -559,7 +560,7 @@ class testcase extends control
             $case->steps[] = $step;
         }
 
-        $isLibCase = ($case->lib and empty($case->product));        
+        $isLibCase = ($case->lib and empty($case->product));
         if($isLibCase)
         {
             $libraries = $this->loadModel('testsuite')->getLibraries();
@@ -602,7 +603,7 @@ class testcase extends control
             $this->view->moduleOptionMenu = $moduleOptionMenu;
             $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch);
         }
-        if(!$this->testcase->forceReview()) unset($this->lang->testcase->statusList['wait']);
+        if($this->testcase->forceNotReview()) unset($this->lang->testcase->statusList['wait']);
         $position[]      = $this->lang->testcase->common;
         $position[]      = $this->lang->testcase->edit;
 
@@ -710,7 +711,7 @@ class testcase extends control
             }
         }
 
-        if(!$this->testcase->forceReview()) unset($this->lang->testcase->statusList['wait']);
+        if(!$this->testcase->forceNotReview()) unset($this->lang->testcase->statusList['wait']);
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars = count($cases) * (count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);

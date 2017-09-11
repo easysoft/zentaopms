@@ -36,6 +36,7 @@ $lang->testcase->stage            = '適用階段';
 $lang->testcase->reviewedBy       = '由誰評審';
 $lang->testcase->reviewedDate     = '評審時間';
 $lang->testcase->reviewResult     = '評審結果';
+$lang->testcase->forceNotReview   = '不需要評審';
 $lang->testcase->lastEditedByAB   = '修改者';
 $lang->testcase->lastEditedDateAB = '修改日期';
 $lang->testcase->lastEditedDate   = '修改日期';
@@ -128,6 +129,9 @@ $lang->testcase->confirmDelete      = '您確認要刪除該測試用例嗎？';
 $lang->testcase->confirmBatchDelete = '您確認要批量刪除這些測試用例嗎？';
 $lang->testcase->ditto              = '同上';
 $lang->testcase->dittoNotice        = '該用例與上一用例不屬於同一產品！';
+
+$lang->testcase->reviewList[0] = '否';
+$lang->testcase->reviewList[1] = '是';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;
