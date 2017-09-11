@@ -222,10 +222,12 @@ class actionModel extends model
             if($actionName == 'svncommited' and isset($commiters[$action->actor]))
             {
                 $action->actor = $commiters[$action->actor];
+                if($this->config->requestType == 'GET') $action->comment = str_replace('+', '%2B', $action->comment);
             }
             elseif($actionName == 'gitcommited' and isset($commiters[$action->actor]))
             {
                 $action->actor = $commiters[$action->actor];
+                if($this->config->requestType == 'GET') $action->comment = str_replace('+', '%2B', $action->comment);
             }
             elseif($actionName == 'linked2project')
             {

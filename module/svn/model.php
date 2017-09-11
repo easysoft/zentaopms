@@ -388,7 +388,7 @@ class svnModel extends model
         foreach($encodings as $encoding)
         {
             if($encoding == 'utf-8') continue;
-            $result = helper::convertEncoding($comment, $encoding)
+            $result = helper::convertEncoding($comment, $encoding);
             if($result) return $result;
         }
 
