@@ -91,7 +91,7 @@ class dept extends control
         }
 
         $dept  = $this->dept->getById($deptID);
-        $users = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
+        $users = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted|all');
 
         $this->view->optionMenu = $this->dept->getOptionMenu();
 

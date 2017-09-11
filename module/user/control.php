@@ -495,7 +495,7 @@ class user extends control
         $this->view->user       = $user;
         $this->view->depts      = $this->dept->getOptionMenu();
         $this->view->userGroups = implode(',', array_keys($userGroups));
-        $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->groups     = $this->dao->select('id, name')->from(TABLE_GROUP)->fetchPairs('id', 'name');
 
         $this->view->rand = $this->user->updateSessionRandom();
         $this->display();

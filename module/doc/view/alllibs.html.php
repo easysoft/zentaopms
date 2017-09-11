@@ -51,7 +51,7 @@
     <?php endif; ?>
     <?php endforeach; ?>
   </div>
-  <?php else: ?>
+  <?php elseif($libs): ?>
   <div class='clearfix libs-group libs-custom <?php if(common::hasPriv('doc', 'sort')) echo 'sort'?>'>
     <?php foreach($libs as $lib):?>
     <a class='lib lib-custom' title='<?php echo $lib->name?>' href='<?php echo inlink('browse', "libID=$lib->id") ?>' data-id='<?php echo $lib->id;?>'>
