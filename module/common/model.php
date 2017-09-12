@@ -13,7 +13,7 @@ class commonModel extends model
 {
     /**
      * The construc method, to do some auto things.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -35,7 +35,7 @@ class commonModel extends model
 
     /**
      * Set the header info.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -54,7 +54,7 @@ class commonModel extends model
      * @return void
      */
     public function setCompany()
-    {        
+    {
         $httpHost = $this->server->http_host;
 
         if($this->session->company)
@@ -118,7 +118,7 @@ class commonModel extends model
 
     /**
      * Load custom lang from db.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -134,9 +134,9 @@ class commonModel extends model
 
     /**
      * Juage a method of one module is open or not?
-     * 
-     * @param  string $module 
-     * @param  string $method 
+     *
+     * @param  string $module
+     * @param  string $method
      * @access public
      * @return bool
      */
@@ -292,7 +292,7 @@ class commonModel extends model
 
     /**
      * Create menu item link
-     * 
+     *
      * @param  object   $menuItemLink
      * @param  boolean  $isTutorialMode
      * @access public
@@ -319,8 +319,8 @@ class commonModel extends model
 
     /**
      * Print the main menu.
-     * 
-     * @param  string $moduleName 
+     *
+     * @param  string $moduleName
      * @static
      * @access public
      * @return void
@@ -352,7 +352,7 @@ class commonModel extends model
 
     /**
      * Print the search box.
-     * 
+     *
      * @static
      * @access public
      * @return void
@@ -377,7 +377,7 @@ class commonModel extends model
             $searchObject = $methodName;
         }
         if(empty($lang->searchObjects[$searchObject]))
-        {   
+        {
             $searchObject = 'bug';
             if($config->global->flow == 'onlyStory') $searchObject = 'story';
             if($config->global->flow == 'onlyTask')  $searchObject = 'task';
@@ -1118,9 +1118,9 @@ class commonModel extends model
 
     /**
      * Check the user has permisson of one method of one module.
-     * 
-     * @param  string $module 
-     * @param  string $method 
+     *
+     * @param  string $module
+     * @param  string $method
      * @static
      * @access public
      * @return bool

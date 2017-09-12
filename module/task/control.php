@@ -104,7 +104,7 @@ class task extends control
                 $taskID   = $taskID['id'];
                 $actionID = $this->action->create('task', $taskID, 'Opened', '');
                 $this->task->sendmail($taskID, $actionID);
-            }            
+            }
 
             /* If link from no head then reload*/
             if(isonlybody())
@@ -487,8 +487,8 @@ class task extends control
 
     /**
      * View a task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
