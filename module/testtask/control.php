@@ -349,9 +349,9 @@ class testtask extends control
 
     /**
      * Group case.
-     * 
-     * @param  int    $taskID 
-     * @param  string $groupBy 
+     *
+     * @param  int    $taskID
+     * @param  string $groupBy
      * @access public
      * @return void
      */
@@ -401,8 +401,8 @@ class testtask extends control
 
     /**
      * Edit a test task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
