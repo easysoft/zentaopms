@@ -29,12 +29,12 @@ $config->story->editor->activate = array('id' => 'comment', 'tools' => 'simpleTo
 
 $config->story->list = new stdclass();
 $config->story->list->exportFields      = '
-    id, product, branch, module, plan, source, title, spec, verify, keywords, 
+    id, product, branch, module, plan, source, sourceNote, title, spec, verify, keywords,
     pri, estimate, status, stage, taskCountAB, bugCountAB, caseCountAB,
-    openedBy, openedDate, assignedTo, assignedDate, mailto, 
-    reviewedBy, reviewedDate, 
+    openedBy, openedDate, assignedTo, assignedDate, mailto,
+    reviewedBy, reviewedDate,
     closedBy, closedDate, closedReason,
-    lastEditedBy, lastEditedDate, 
+    lastEditedBy, lastEditedDate,
     childStories, linkStories, duplicateStory, files';
 
 $config->story->list->customCreateFields      = 'source,verify,pri,estimate,mailto,keywords';
