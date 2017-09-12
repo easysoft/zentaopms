@@ -188,7 +188,11 @@
               </tr>
               <tr>
                 <th><?php echo $lang->story->source;?></th>
-                <td id='source'><?php echo $lang->story->sourceList[$story->source] . ' ' . $story->sourceNote;?></td>
+                <td id='source'><?php echo $lang->story->sourceList[$story->source];?></td>
+              </tr>
+              <tr>
+                <th><?php echo $lang->story->sourceNote;?></th>
+                <td><?php echo $story->sourceNote;?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->story->status;?></th>

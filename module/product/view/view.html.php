@@ -64,31 +64,31 @@
           <tr>
             <th class='strong w-80px'><?php echo $lang->product->name;?></th>
             <td <?php if($product->deleted) echo "class='deleted text-danger'";?>><strong><?php echo $product->name;?></strong></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->code;?></th>
             <td><?php echo $product->code;?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->PO;?></th>
             <td><?php echo zget($users, $product->PO);?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->QD;?></th>
             <td><?php echo zget($users, $product->QD);?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->RD;?></th>
             <td><?php echo zget($users, $product->RD);?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->type;?></th>
             <td><?php echo $lang->product->typeList[$product->type];?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->product->status;?></th>
             <td class='product-<?php echo $product->status?>'><?php echo $lang->product->statusList[$product->status];?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->story->openedBy?></th>
             <td><?php echo zget($users, $product->createdBy);?></td>
