@@ -30,7 +30,7 @@ $config->task->editor->cancel   = array('id' => 'comment', 'tools' => 'simpleToo
 $config->task->editor->pause    = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->task->exportFields = '
-    id, project, module, story,
+    id, project, module, progess, story,
     name, desc,
     type, pri,estStarted, realStarted, deadline, status,estimate, consumed, left,
     mailto,

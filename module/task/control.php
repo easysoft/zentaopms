@@ -1150,6 +1150,27 @@ class task extends control
                 $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskQueryCondition)
                     ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
                     ->orderBy($orderBy)->fetchAll('id');
+
+                foreach($tasks as $key => $task)
+                {
+                    /* Compute task progess. */
+                    if($task->consumed == 0 and $task->left == 0)
+                    {
+                        $task->progess = 0;
+                    }
+                    elseif($task->consumed != 0 and $task->left == 0)
+                    {
+                        $task->progess = 100;
+                    }
+                    else
+                    {
+                        $task->progess = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                    }
+
+                    $task->progess .= '%';
+
+                    $tasks[$key] = $task;
+                }
             }
             else
             {
