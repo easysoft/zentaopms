@@ -627,13 +627,13 @@ class product extends control
 
     /**
      * All product.
-     * 
-     * @param  int    $productID 
-     * @param  string $status 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $productID
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -662,8 +662,8 @@ class product extends control
 
     /**
      * Doc for compatible.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */

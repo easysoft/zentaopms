@@ -241,9 +241,9 @@ class productModel extends model
     }
 
     /**
-     * Get products by project. 
-     * 
-     * @param  int    $projectID 
+     * Get products by project.
+     *
+     * @param  int    $projectID
      * @access public
      * @return array
      */
@@ -256,6 +256,7 @@ class productModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')
             ->where('t1.project')->eq($projectID)
+            ->orderBy('t2.order desc')
             ->fetchPairs();
     }
 
