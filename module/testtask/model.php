@@ -90,10 +90,10 @@ class testtaskModel extends model
 
     /**
      * Get test tasks of a product.
-     * 
-     * @param  int    $productID 
-     * @param  string $orderBy 
-     * @param  object $pager 
+     *
+     * @param  int    $productID
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -116,7 +116,7 @@ class testtaskModel extends model
         }
         else
         {
-            return $this->dao->select("t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName, if(t4.name != '', t4.branch, t5.branch) AS branch")
+            $testTask = $this->dao->select("t1.*, t2.name AS productName, t3.name AS projectName, t3.acl, t3.whitelist, t4.name AS buildName, if(t4.name != '', t4.branch, t5.branch) AS branch")
                 ->from(TABLE_TESTTASK)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
@@ -131,14 +131,35 @@ class testtaskModel extends model
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
+
+            $projectTeam = $this->dao->select('project, account')->from(TABLE_TEAM)->where('account')->eq($this->app->user->account)->fetchAll('project');
+
+            foreach($testTask as $id => $task)
+            {
+                if($this->app->user->admin) break;
+                if($task->acl == 'open')    continue;
+                if($task->acl == 'private' && array_key_exists($task->project, $projectTeam)) continue;
+                if($task->acl == 'custom')
+                {
+                    $whiteListArray = array();
+                    if(!empty($task->whitelist)) $whiteListArray = explode(',', $task->whitelist);
+
+                    $intersect = array_intersect($whiteListArray, $this->app->user->groups);
+                    if(!empty($intersect)) continue;
+                }
+
+                unset($testTask[$id]);
+            }
+
+            return $testTask;
         }
     }
 
     /**
      * Get test tasks of a project.
-     * 
-     * @param  int    $projectID 
-     * @param  string $orderBy 
+     *
+     * @param  int    $projectID
+     * @param  string $orderBy
      * @param  object $pager 
      * @access public
      * @return array
