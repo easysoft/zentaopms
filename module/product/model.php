@@ -655,11 +655,11 @@ class productModel extends model
 
     /**
      * Get product stats.
-     * 
-     * @param  string $orderBy 
-     * @param  int    $pager 
+     *
+     * @param  string $orderBy
+     * @param  int    $pager
      * @access public
-     * @return array 
+     * @return array
      */
     public function getStats($orderBy = 'order_desc', $pager = null, $status = 'noclosed')
     {

@@ -2234,12 +2234,12 @@ class storyModel extends model
 
     /**
      * Print cell data
-     * 
-     * @param  object $col 
-     * @param  object $story 
-     * @param  array  $users 
-     * @param  array  $branches 
-     * @param  array  $storyStages 
+     *
+     * @param  object $col
+     * @param  object $story
+     * @param  array  $users
+     * @param  array  $branches
+     * @param  array  $storyStages
      * @param  array  $modulePairs
      * @param  array  $storyTasks
      * @param  array  $storyBugs
@@ -2259,7 +2259,7 @@ class storyModel extends model
             if($id == 'title') $class .= ' text-left';
             if($id == 'assignedTo' && $story->assignedTo == $account) $class .= ' red';
 
-            $title = ''; 
+            $title = '';
             if($id == 'title') $title = $story->title;
             if($id == 'plan')  $title = $story->planTitle;
 
@@ -2287,6 +2287,9 @@ class storyModel extends model
                 break;
             case 'source':
                 echo zget($this->lang->story->sourceList, $story->source, $story->source);
+                break;
+            case 'sourceNote':
+                echo $story->sourceNote;
                 break;
             case 'status':
                 echo $this->lang->story->statusList[$story->status];

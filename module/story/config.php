@@ -74,6 +74,11 @@ $config->story->datatable->fieldList['source']['fixed']    = 'no';
 $config->story->datatable->fieldList['source']['width']    = '90';
 $config->story->datatable->fieldList['source']['required'] = 'no';
 
+$config->story->datatable->fieldList['sourceNote']['title']    = 'sourceNote';
+$config->story->datatable->fieldList['sourceNote']['fixed']    = 'no';
+$config->story->datatable->fieldList['sourceNote']['width']    = '90';
+$config->story->datatable->fieldList['sourceNote']['required'] = 'no';
+
 $config->story->datatable->fieldList['status']['title']    = 'statusAB';
 $config->story->datatable->fieldList['status']['fixed']    = 'no';
 $config->story->datatable->fieldList['status']['width']    = '80';
