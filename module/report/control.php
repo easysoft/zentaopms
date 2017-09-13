@@ -21,10 +21,10 @@ class report extends control
     {
         $this->locate(inlink('productSummary')); 
     }
-    
+
     /**
      * Project deviation report.
-     * 
+     *
      * @access public
      * @return void
      */
