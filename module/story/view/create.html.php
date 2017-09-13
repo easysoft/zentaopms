@@ -30,7 +30,7 @@
         <td class='w-p45-f'>
           <div class='input-group'>
             <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control chosen'");?>
-            <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control' style='width:120px'");?>
+            <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control chosen' style='width:120px'");?>
           </div>
         </td>
         <td>
