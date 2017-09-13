@@ -88,7 +88,7 @@ function setAfter()
     }
     else
     {
-        $('input[value="continueAdding"]').attr('checked', 'checked');
+        if(!toTaskList) $('input[value="continueAdding"]').attr('checked', 'checked');
         $('input[value="continueAdding"]').attr('disabled', false);
     }
 }

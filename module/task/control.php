@@ -56,6 +56,7 @@ class task extends control
         $task->estStarted  = '';
         $task->deadline    = '';
         $task->mailto      = '';
+        $task->color       = '';
         if($taskID > 0)
         {
             $task      = $this->task->getByID($taskID);

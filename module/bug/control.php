@@ -264,6 +264,8 @@ class bug extends control
         $keywords   = '';
         $severity   = 3;
         $type       = 'codeerror';
+        $pri        = '';
+        $color      = '';
 
         /* Parse the extras. */
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
@@ -273,7 +275,7 @@ class bug extends control
         if(!$runID and $caseID)  extract($this->bug->getBugInfoFromResult($resultID, $caseID, $version));// If not set runID but set caseID, get the result info by resultID and case info.
 
         /* If bugID setted, use this bug as template. */
-        if(isset($bugID)) 
+        if(isset($bugID))
         {
             $bug = $this->bug->getById($bugID);
             extract((array)$bug);
@@ -286,6 +288,7 @@ class bug extends control
             $type       = $bug->type;
             $assignedTo = $bug->assignedTo;
             $deadline   = $bug->deadline;
+            $color      = $bug->color;
         }
 
         /* If projectID is setted, get builds and stories of this project. */
@@ -302,13 +305,13 @@ class bug extends control
 
         /* Set team members of the latest project as assignedTo list. */
         $latestProject = $this->product->getLatestProject($productID);
-        if(!empty($latestProject)) 
+        if(!empty($latestProject))
         {
             $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProject->id, 'nodeleted');
         }
         else
         {
-            $projectMembers = $this->view->users; 
+            $projectMembers = $this->view->users;
         }
 
         /* Set custom. */
@@ -336,6 +339,7 @@ class bug extends control
         $this->view->version          = $version;
         $this->view->testtask         = $testtask;
         $this->view->bugTitle         = $title;
+        $this->view->pri              = $pri;
         $this->view->steps            = htmlspecialchars($steps);
         $this->view->os               = $os;
         $this->view->browser          = $browser;
@@ -348,6 +352,7 @@ class bug extends control
         $this->view->type             = $type;
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
+        $this->view->color            = $color;
 
         $this->display();
     }
@@ -1443,7 +1448,7 @@ class bug extends control
                 if(isset($bugLang->statusList[$bug->status]))         $bug->status     = $bugLang->statusList[$bug->status];
                 if(isset($bugLang->confirmedList[$bug->confirmed]))   $bug->confirmed  = $bugLang->confirmedList[$bug->confirmed];
                 if(isset($bugLang->resolutionList[$bug->resolution])) $bug->resolution = $bugLang->resolutionList[$bug->resolution];
-                
+
                 if(isset($users[$bug->openedBy]))     $bug->openedBy     = $users[$bug->openedBy];
                 if(isset($users[$bug->assignedTo]))   $bug->assignedTo   = $users[$bug->assignedTo];
                 if(isset($users[$bug->resolvedBy]))   $bug->resolvedBy   = $users[$bug->resolvedBy];

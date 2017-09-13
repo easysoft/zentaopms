@@ -116,12 +116,15 @@ class story extends control
         $verify     = '';
         $keywords   = '';
         $mailto     = '';
+        $color      = '';
 
         if($storyID > 0)
         {
             $story      = $this->story->getByID($storyID);
             $planID     = $story->plan;
             $source     = $story->source;
+            $sourceNote = $story->sourceNote;
+            $color      = $story->color;
             $pri        = $story->pri;
             $productID  = $story->product;
             $moduleID   = $story->module;
@@ -169,6 +172,7 @@ class story extends control
         $this->view->planID           = $planID;
         $this->view->source           = $source;
         $this->view->sourceNote       = $sourceNote;
+        $this->view->color            = $color;
         $this->view->pri              = $pri;
         $this->view->branch           = $branch;
         $this->view->branches         = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID) : array();
@@ -185,7 +189,7 @@ class story extends control
 
         $this->display();
     }
-    
+
     /**
      * Create a batch stories.
      * 
