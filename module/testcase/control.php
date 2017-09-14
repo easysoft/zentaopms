@@ -265,6 +265,7 @@ class testcase extends control
         $precondition = '';
         $keywords     = '';
         $steps        = array();
+        $color        = '';
 
         /* If testcaseID large than 0, use this testcase as template. */
         if($testcaseID > 0)
@@ -279,8 +280,9 @@ class testcase extends control
             $precondition = $testcase->precondition;
             $keywords     = $testcase->keywords;
             $steps        = $testcase->steps;
+            $color        = $testcase->color;
         }
-               
+
         /* If bugID large than 0, use this bug as template. */
         if($bugID > 0)
         {
@@ -292,7 +294,7 @@ class testcase extends control
             $keywords = $bug->keywords;
             $steps    = $this->testcase->createStepsFromBug($bug->steps);
         }
-       
+
         /* Padding the steps to the default steps count. */
         if(count($steps) < $this->config->testcase->defaultSteps)
         {
@@ -332,6 +334,7 @@ class testcase extends control
         $this->view->currentModuleID  = $currentModuleID ? $currentModuleID : (isset($story->module) ? $story->module : 0);
         $this->view->stories          = $stories;
         $this->view->caseTitle        = $caseTitle;
+        $this->view->color            = $color;
         $this->view->type             = $type;
         $this->view->stage            = $stage;
         $this->view->pri              = $pri;

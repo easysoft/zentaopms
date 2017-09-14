@@ -98,8 +98,8 @@ class taskModel extends model
 
     /**
      * Create a batch task.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -131,7 +131,7 @@ class taskModel extends model
         for($i = 0; $i < $batchNum; $i++)
         {
             $story      = $tasks->story[$i]      == 'ditto' ? $story     : $tasks->story[$i];
-            $module     = $tasks->module[$i]     == 'ditto' ? $module    : $tasks->module[$i];    
+            $module     = $tasks->module[$i]     == 'ditto' ? $module    : $tasks->module[$i];
             $type       = $tasks->type[$i]       == 'ditto' ? $type      : $tasks->type[$i];
             $assignedTo = $tasks->assignedTo[$i] == 'ditto' ? $assignedTo: $tasks->assignedTo[$i];
 
@@ -176,7 +176,7 @@ class taskModel extends model
             $taskID = $this->dao->lastInsertID();
             if($tasks->story[$i] != false) $this->story->setStage($tasks->story[$i]);
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
-            
+
             $mails[$i]           = new stdclass();
             $mails[$i]->taskID   = $taskID;
             $mails[$i]->actionID = $actionID;

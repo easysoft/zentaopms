@@ -29,14 +29,14 @@ class story extends control
 
     /**
      * Create a story.
-     * 
-     * @param  int    $productID 
-     * @param  int    $branch 
-     * @param  int    $moduleID 
-     * @param  int    $storyID 
-     * @param  int    $projectID 
-     * @param  int    $bugID 
-     * @param  int    $planID 
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleID
+     * @param  int    $storyID
+     * @param  int    $projectID
+     * @param  int    $bugID
+     * @param  int    $planID
      * @access public
      * @return void
      */
@@ -1259,15 +1259,20 @@ class story extends control
 
     /**
      * AJAX: get module of a story.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @access public
-     * @return string 
+     * @return string
      */
-    public function ajaxGetModule($storyID)
+    public function ajaxGetInfo($storyID)
     {
-        $story = $this->story->getByID($storyID); 
-        echo $story->module;
+        $story = $this->story->getByID($storyID);
+
+        $storyInfo['moduleID'] = $story->module;
+        $storyInfo['estimate'] = $story->estimate;
+        $storyInfo['pri']      = $story->pri;
+        $storyInfo['spec']     = $story->spec;
+        echo json_encode($storyInfo);
     }
 
     /**

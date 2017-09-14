@@ -73,7 +73,7 @@ class testcaseModel extends model
 
     /**
      * Create a case.
-     * 
+     *
      * @param int $bugID
      * @access public
      * @return void
@@ -1224,11 +1224,11 @@ class testcaseModel extends model
 
     /**
      * Print cell data
-     * 
-     * @param  object $col 
-     * @param  object $case 
-     * @param  array  $users 
-     * @param  array  $branches 
+     *
+     * @param  object $col
+     * @param  object $case
+     * @param  array  $users
+     * @param  array  $branches
      * @access public
      * @return void
      */

@@ -168,9 +168,9 @@ class task extends control
 
     /**
      * Batch create task.
-     * 
-     * @param  int    $projectID 
-     * @param  int    $storyID 
+     *
+     * @param  int    $projectID
+     * @param  int    $storyID
      * @access public
      * @return void
      */

@@ -141,11 +141,11 @@
             <?php endif;?>
           </div>
         </td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->story->spec;?></th>
         <td colspan='2'><?php echo html::textarea('spec', $spec, "rows='9' class='form-control disabled-ie-placeholder' placeholder='" . htmlspecialchars($lang->story->specTemplate) . "'");?></td>
-      </tr>  
+      </tr>
       <?php if(strpos(",$showFields,", ',verify,') !== false):?>
       <tr>
         <th><?php echo $lang->story->verify;?></th>
