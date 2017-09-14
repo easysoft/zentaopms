@@ -55,6 +55,9 @@ $lang->extension->publicList[1] = '直接下载';
 $lang->extension->compatibleList[0] = '未知';
 $lang->extension->compatibleList[1] = '兼容';
 
+$lang->extension->obtainOfficial[0] = '第三方';
+$lang->extension->obtainOfficial[1] = '官方';
+
 $lang->extension->byDownloads   = '最多下载';
 $lang->extension->byAddedTime   = '最新添加';
 $lang->extension->byUpdatedTime = '最近更新';
