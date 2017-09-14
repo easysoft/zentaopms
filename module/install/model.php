@@ -90,13 +90,90 @@ class installModel extends model
 
     /**
      * Check json extension.
-     * 
+     *
      * @access public
      * @return string   ok|fail
      */
     public function checkJSON()
     {
         return $result = extension_loaded('json') ? 'ok' : 'fail';
+    }
+
+    /**
+     * Check openssl extension.
+     *
+     * @access public
+     * @return string   ok|fail
+     */
+    public function checkOpenssl()
+    {
+        return $result = extension_loaded('openssl') ? 'ok' : 'fail';
+    }
+
+    /**
+     * Check mbstring extension.
+     *
+     * @access public
+     * @return string   ok|fail
+     */
+    public function checkMbstring()
+    {
+        return $result = extension_loaded('mbstring') ? 'ok' : 'fail';
+    }
+
+    /**
+     * Check zlib extension.
+     *
+     * @access public
+     * @return string   ok|fail
+     */
+    public function checkZlib()
+    {
+        return $result = extension_loaded('zlib') ? 'ok' : 'fail';
+    }
+
+    /**
+     * Check curl extension.
+     *
+     * @access public
+     * @return string   ok|fail
+     */
+    public function checkCurl()
+    {
+        return $result = extension_loaded('curl') ? 'ok' : 'fail';
+    }
+
+    /**
+     * Check filter extension.
+     *
+     * @access public
+     * @return string   ok|fail
+     */
+    public function checkFilter()
+    {
+        return $result = extension_loaded('filter') ? 'ok' : 'fail';
+    }
+
+    /**
+     * Check gd extension.
+     *
+     * @access public
+     * @return string   ok|fail
+     */
+    public function checkGD()
+    {
+        return $result = extension_loaded('gd') ? 'ok' : 'fail';
+    }
+
+    /**
+     * Check iconv extension.
+     *
+     * @access public
+     * @return string   ok|fail
+     */
+    public function checkIconv()
+    {
+        return $result = extension_loaded('iconv') ? 'ok' : 'fail';
     }
 
     /**
