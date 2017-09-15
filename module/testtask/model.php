@@ -97,7 +97,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getProductTasks($productID, $branch = 0, $orderBy = 'id_desc', $pager = null, $scopeAndStatus = array())
+    public function getProductTasks($productID, $branch = 0, $orderBy = 'id_desc', $pager = null, $scopeAndStatus = array(), $beginTime = 0, $endTime = 0)
     {
         if($this->config->global->flow == 'onlyTest')
         {
@@ -128,6 +128,8 @@ class testtaskModel extends model
                 ->beginIF($scopeAndStatus[1] == 'totalStatus')->andWhere('t1.status')->in(array('blocked','doing','wait','done'))->fi()
                 ->beginIF($scopeAndStatus[1] != 'totalStatus')->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
                 ->beginIF($branch)->andWhere("if(t4.branch, t4.branch, t5.branch) = '$branch'")->fi()
+                ->beginIF($beginTime)->andWhere('t1.begin')->ge($beginTime)->fi()
+                ->beginIF($endTime)->andWhere('t1.end')->le($endTime)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');

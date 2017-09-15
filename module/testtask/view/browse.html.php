@@ -11,10 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('confirmDelete', $lang->testtask->confirmDelete)?>
 <?php js::set('flow', $this->config->global->flow);?>
-<?php 
-$scope = $this->session->testTaskVersionScope;
+<?php
+$scope  = $this->session->testTaskVersionScope;
 $status = $this->session->testTaskVersionStatus;
 ?>
 <?php js::set('status', $status);?>
@@ -26,21 +27,28 @@ $status = $this->session->testTaskVersionStatus;
         <?php $viewName = $scope == 'local'? $productName : $lang->testtask->all;?>
         <button class='btn btn-primary btn-sm' type='button' data-toggle='dropdown'><?php echo $viewName;?> <span class='caret'></span></button>
         <ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>
-          <?php 
+          <?php
             echo "<li>" . html::a(inlink('browse', "productID=$productID&branch=0&type=all,$status"), $lang->testtask->all) . "</li>";
             echo "<li>" . html::a(inlink('browse', "productID=$productID&branch=$branch&type=local,$status"), $productName) . "</li>";
           ?>
         </ul>
       </span>
     </li>
-
     <li id='waitTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,wait"), $lang->testtask->wait);?></li>
     <li id='doingTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,doing"), $lang->testtask->testing);?></li>
     <li id='blockedTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,blocked"), $lang->testtask->blocked);?></li>
     <li id='doneTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,done"), $lang->testtask->done);?></li>
     <li id='totalStatusTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,totalStatus"), $lang->testtask->totalStatus);?></li>
+    <li style='margin-left: 20px;'>
+    <?php $condition = "productID=$productID&branch=$branch&type=$scope,$status&orderBy=$orderBy&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID"?>
+    <div class='input-group w-400px input-group-sm'>
+      <span class='input-group-addon'><?php echo $lang->testtask->beginAndEnd;?></span>
+      <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $beginTime, "class='w-100px form-control form-date' onchange='changeDate(this.value, \"$endTime\", \"$condition\")'");?></div>
+      <span class='input-group-addon'><?php echo $lang->testtask->to;?></span>
+      <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $endTime, "class='form-control form-date' onchange='changeDate(\"$beginTime\", this.value, \"$condition\")'");?></div>
+    </div>
+    </li>
   </ul>
-
   <div class="actions"><?php common::printIcon('testtask', 'create', "product=$productID");?></div>
 </div>
 <?php endif;?>
