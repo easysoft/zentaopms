@@ -830,6 +830,8 @@ class productModel extends model
     {
         $action = strtolower($action);
 
+        if(!common::limitedUser($product)) return false;
+
         if($action == 'close') return $product->status != 'closed';
 
         return true;

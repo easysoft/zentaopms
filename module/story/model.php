@@ -1456,19 +1456,19 @@ class storyModel extends model
 
     /**
      * Get stories through search.
-     * 
+     *
      * @access public
-     * @param  int    $productID 
-     * @param  int    $queryID 
-     * @param  string $orderBy 
-     * @param  object $pager 
-     * @param  string $projectID 
+     * @param  int    $productID
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  string $projectID
      * @access public
      * @return array
      */
     public function getBySearch($productID, $queryID, $orderBy, $pager = null, $projectID = '', $branch = 0)
     {
-        if($projectID != '') 
+        if($projectID != '')
         {
             $products = $this->loadModel('project')->getProducts($projectID); 
         }
@@ -1668,11 +1668,11 @@ class storyModel extends model
 
     /**
      * Get stories list of a plan.
-     * 
-     * @param  int    $planID 
-     * @param  string $status 
-     * @param  string $orderBy 
-     * @param  object $pager 
+     *
+     * @param  int    $planID
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -1683,19 +1683,19 @@ class storyModel extends model
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
-        
+
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
-        
+
         return $stories;
     }
 
     /**
      * Get stories pairs of a plan.
-     * 
-     * @param  int    $planID 
-     * @param  string $status 
-     * @param  string $orderBy 
-     * @param  object $pager 
+     *
+     * @param  int    $planID
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -2185,6 +2185,8 @@ class storyModel extends model
     public static function isClickable($story, $action)
     {
         $action = strtolower($action);
+
+        if(!common::limitedUser($story)) return false;
 
         if($action == 'change')   return $story->status != 'closed';
         if($action == 'review')   return $story->status == 'draft' or $story->status == 'changed';

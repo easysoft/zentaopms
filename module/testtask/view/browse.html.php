@@ -86,13 +86,13 @@ $status = $this->session->testTaskVersionStatus;
     <td class='status-<?php echo $task->status?>'><?php echo $lang->testtask->statusList[$task->status];?></td>
     <td class='text-center'>
       <?php
-      common::printIcon('testtask', 'cases',    "taskID=$task->id", 'play', 'list', 'sitemap');
+      common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
       common::printIcon('testtask', 'view',     "taskID=$task->id", '', 'list', 'file','','iframe',true);
-      common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list', 'link');
-      common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list','','','iframe',true);
-      common::printIcon('testreport', 'browse', "objectID=$task->product&objectType=product&extra=$task->id", '', 'list','flag');
+      common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'list', 'link');
+      common::printIcon('testtask', 'edit',     "taskID=$task->id", $task, 'list','','','iframe',true);
+      common::printIcon('testreport', 'browse', "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
 
-      if(common::hasPriv('testtask', 'delete'))
+      if(common::hasPriv('testtask', 'delete', $task))
       {
           $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
           echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$lang->testtask->delete}' class='btn-icon'");

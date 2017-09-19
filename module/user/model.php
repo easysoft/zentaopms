@@ -200,7 +200,7 @@ class userModel extends model
 
     /**
      * Create a user.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -297,6 +297,8 @@ class userModel extends model
                 $data[$i]->phone    = $users->phone[$i];
                 $data[$i]->address  = $users->address[$i];
                 $data[$i]->zipcode  = $users->zipcode[$i];
+
+                $data[$i]->limitedUser  = $users->limitedUser[$i];
 
                 /* Change for append field, such as feedback.*/
                 if(!empty($this->config->user->batchAppendFields))
@@ -465,6 +467,7 @@ class userModel extends model
             $users[$id]['phone']    = $data->phone[$id];
             $users[$id]['address']  = $data->address[$id];
             $users[$id]['zipcode']  = $data->zipcode[$id];
+            $users[$id]['limitedUser']  = $data->limitedUser[$id];
             $users[$id]['dept']     = $data->dept[$id] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $data->dept[$id];
             $users[$id]['role']     = $data->role[$id] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : 0) : $data->role[$id];
 
@@ -518,7 +521,7 @@ class userModel extends model
     public function updatePassword($userID)
     {
         if(!$this->checkPassword()) return;
-        
+
         $user = fixer::input('post')
             ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
             ->remove('account, password1, password2, originalPassword')
@@ -581,7 +584,7 @@ class userModel extends model
         }
         return !dao::isError();
     }
-    
+
     /**
      * Identify a user.
      * 
@@ -593,7 +596,7 @@ class userModel extends model
     public function identify($account, $password)
     {
         if(!$account or !$password) return false;
-  
+
         /* Get the user first. If $password length is 32, don't add the password condition.  */
         $record = $this->dao->select('*')->from(TABLE_USER)
             ->where('account')->eq($account)

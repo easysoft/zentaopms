@@ -1158,4 +1158,19 @@ class docModel extends model
 
         return $teams;
     }
+
+    /**
+     * Judge an action is clickable or not.
+     *-
+     * @param  object $product-
+     * @param  string $action-
+     * @access public
+     * @return void
+     */
+    public static function isClickable($doc, $action)
+    {
+        if(!common::limitedUser($doc)) return false;
+
+        return true;
+    }
 }

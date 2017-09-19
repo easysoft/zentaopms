@@ -203,10 +203,10 @@ class productplan extends control
 
     /**
      * View plan.
-     * 
-     * @param  int    $planID 
-     * @param  string $type 
-     * @param  string $orderBy 
+     *
+     * @param  int    $planID
+     * @param  string $type
+     * @param  string $orderBy
      * @access public
      * @return void
      */
@@ -264,8 +264,8 @@ class productplan extends control
 
     /**
      * Link stories.
-     * 
-     * @param  int    $planID 
+     *
+     * @param  int    $planID
      * @access public
      * @return void
      */

@@ -29,8 +29,8 @@
         common::printIcon('product', 'close', "productID=$product->id", $product, 'button', '', '', 'iframe text-danger', true);
 
         echo "<div class='btn-group'>";
-        common::printIcon('product', 'edit', $params);
-        common::printIcon('product', 'delete', $params, '', 'button', '', 'hiddenwin');
+        common::printIcon('product', 'edit', $params, $product);
+        common::printIcon('product', 'delete', $params, $product, 'button', '', 'hiddenwin');
         echo '</div>';
         common::printRPN($browseLink);
 

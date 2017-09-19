@@ -76,8 +76,8 @@
         <td><?php echo isset($file->addedDate) ? substr($file->addedDate, 0, 10) : '';?></td>
         <td class='text-center'>
           <?php
-          common::printLink('file', 'download', "fileID=$file->id", $lang->doc->download, "data-toggle='modal'");
-          common::printLink('file', 'delete',   "fileID=$file->id", $lang->delete, 'hiddenwin');
+          common::printLink('file', 'download', "fileID=$file->id", $lang->doc->download, "data-toggle='modal'", '', true, false, $file);
+          common::printLink('file', 'delete',   "fileID=$file->id", $lang->delete, 'hiddenwin', '', true, false, $file);
           ?>
         </td>
       </tr>

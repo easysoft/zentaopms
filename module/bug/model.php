@@ -2243,6 +2243,8 @@ class bugModel extends model
     {
         $action = strtolower($action);
 
+        if(!common::limitedUser($object)) return false;
+
         if($action == 'confirmbug') return $object->status == 'active' and $object->confirmed == 0;
         if($action == 'resolve')    return $object->status == 'active';
         if($action == 'close')      return $object->status == 'resolved';

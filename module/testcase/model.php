@@ -932,6 +932,8 @@ class testcaseModel extends model
     {
         $action = strtolower($action);
 
+        if(!common::limitedUser($case)) return false;
+
         if($action == 'createbug') return $case->caseFails > 0;
         if($action == 'review') return $case->status == 'wait';
 

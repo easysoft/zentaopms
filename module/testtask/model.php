@@ -1099,6 +1099,8 @@ class testtaskModel extends model
     {
         $action = strtolower($action);
 
+        if(!common::limitedUser($testtask)) return false;
+
         if($action == 'start')    return $testtask->status  == 'wait';
         if($action == 'block')    return ($testtask->status == 'doing'   || $testtask->status == 'wait');
         if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');

@@ -45,10 +45,10 @@
     <td><?php echo $suite->addedDate;?></td>
     <td class='text-center'>
       <?php
-      common::printIcon('testsuite', 'linkCase', "suiteID=$suite->id", '', 'list', 'link');
-      common::printIcon('testsuite', 'edit',     "suiteID=$suite->id", '', 'list');
+      common::printIcon('testsuite', 'linkCase', "suiteID=$suite->id", $suite, 'list', 'link');
+      common::printIcon('testsuite', 'edit',     "suiteID=$suite->id", $suite, 'list');
 
-      if(common::hasPriv('testsuite', 'delete'))
+      if(common::hasPriv('testsuite', 'delete', $suite))
       {
           $deleteURL = $this->createLink('testsuite', 'delete', "suiteID=$suite->id&confirm=yes");
           echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"suiteList\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$lang->testsuite->delete}' class='btn-icon'");

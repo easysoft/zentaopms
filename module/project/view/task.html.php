@@ -55,11 +55,11 @@ js::set('browseType', $browseType);
           <td colspan='<?php echo $columns;?>'>
             <div class='table-actions clearfix'>
             <?php 
-            $canBatchEdit         = common::hasPriv('task', 'batchEdit');
-            $canBatchClose        = (common::hasPriv('task', 'batchClose') && strtolower($browseType) != 'closedBy');
-            $canBatchCancel       = common::hasPriv('task', 'batchCancel');
-            $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule');
-            $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo');
+            $canBatchEdit         = common::hasPriv('task', 'batchEdit', $task);
+            $canBatchClose        = (common::hasPriv('task', 'batchClose', $task) && strtolower($browseType) != 'closedBy');
+            $canBatchCancel       = common::hasPriv('task', 'batchCancel', $task);
+            $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', $task);
+            $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', $task);
             if(count($tasks))
             {
                 echo html::selectButton();

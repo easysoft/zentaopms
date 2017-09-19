@@ -41,8 +41,8 @@
         ob_start();
 
         echo "<div class='btn-group'>";
-        common::printIcon('story', 'change',     "storyID=$story->id", $story);
-        common::printIcon('story', 'review',     "storyID=$story->id", $story);
+        common::printIcon('story', 'change', "storyID=$story->id", $story);
+        common::printIcon('story', 'review', "storyID=$story->id", $story);
 
         if($story->status != 'closed' and !isonlybody())
         {
@@ -51,8 +51,8 @@
             if(common::hasPriv('story', 'batchCreate')) echo html::a($link, "<i class='icon icon-branch'></i> " . $lang->story->subdivide, '', $misc);
         }
 
-        common::printIcon('story', 'close',      "storyID=$story->id", $story, 'button', '', '', 'iframe text-danger', true);
-        common::printIcon('story', 'activate',   "storyID=$story->id", $story, 'button', '', '', 'iframe text-success', true);
+        common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe text-danger', true);
+        common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe text-success', true);
 
         if($this->config->global->flow != 'onlyStory' and !isonlybody() and (common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'batchCreate')))
         {
@@ -64,7 +64,7 @@
             echo "<ul class='dropdown-menu' id='createCaseActionMenu'>";
             $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
             $link = $this->createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&storyID=$story->id", '', true);
-            if(common::hasPriv('testcase', 'create')) echo "<li>" . html::a($link, $lang->testcase->create, '', $misc) . "</li>";
+            if(common::hasPriv('testcase', 'create', $story)) echo "<li>" . html::a($link, $lang->testcase->create, '', $misc) . "</li>";
             $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
             $link = $this->createLink('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&storyID=$story->id", '', true);
             if(common::hasPriv('testcase', 'batchCreate')) echo "<li>" . html::a($link, $lang->testcase->batchCreate, '', $misc) . "</li>";
@@ -72,14 +72,14 @@
             echo "</div>";
         }
 
-        if($from == 'project') common::printIcon('task', 'create', "project=$param&storyID=$story->id&moduleID=$story->module", '', 'button', 'smile');
+        if($from == 'project') common::printIcon('task', 'create', "project=$param&storyID=$story->id&moduleID=$story->module", $story, 'button', 'smile');
         echo '</div>';
 
         echo "<div class='btn-group'>";
-        common::printIcon('story', 'edit', "storyID=$story->id");
-        common::printCommentIcon('story');
-        common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', 'button', 'copy');
-        common::printIcon('story', 'delete', "storyID=$story->id", '', 'button', '', 'hiddenwin');
+        common::printIcon('story', 'edit', "storyID=$story->id", $story);
+        common::printCommentIcon('story', $story);
+        common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", $story, 'button', 'copy');
+        common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', '', 'hiddenwin');
         echo '</div>';
 
         echo "<div class='btn-group'>";
@@ -354,7 +354,7 @@
                 <td class='pd-0'>
                   <ul class='list-unstyled'>
                     <?php
-                    $linkStories = explode(',', $story->linkStories) ;    
+                    $linkStories = explode(',', $story->linkStories) ;
                     foreach($linkStories as $linkStoryID)
                     {
                         if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]) . '</li>';
@@ -368,7 +368,7 @@
                 <td class='pd-0'>
                   <ul class='list-unstyled'>
                     <?php
-                    $childStories = explode(',', $story->childStories) ;    
+                    $childStories = explode(',', $story->childStories) ;
                     foreach($childStories as $childStoryID)
                     {
                       if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$childStoryID"), "#$childStoryID " . $story->extraStories[$childStoryID]) . '</li>';

@@ -51,6 +51,7 @@ $minWidth = (count($visibleFields) > 7) ? 'w-120px' : '';
         <th class='w-120px<?php echo zget($visibleFields, 'phone', ' hidden')?>'>        <?php echo $lang->user->phone;?></th>
         <th class='w-120px<?php echo zget($visibleFields, 'address', ' hidden')?>'>      <?php echo $lang->user->address;?></th>
         <th class='w-120px<?php echo zget($visibleFields, 'zipcode', ' hidden')?>'>      <?php echo $lang->user->zipcode;?></th>
+        <th class='w-90px <?php echo zget($visibleFields, 'limitedUser', ' hidden')?>'>  <?php echo $lang->user->limitedUser;?></th>
       </tr>
     </thead>
     <?php $depts = array('ditto' => $lang->user->ditto) + $depts;?>
@@ -80,6 +81,7 @@ $minWidth = (count($visibleFields) > 7) ? 'w-120px' : '';
       <td class='<?php echo zget($visibleFields, 'phone', 'hidden')?>'>   <?php echo html::input("phone[$user->id]",    $user->phone, "class='form-control' autocomplete='off'");?></td>
       <td class='<?php echo zget($visibleFields, 'address', 'hidden')?>'> <?php echo html::input("address[$user->id]",  $user->address, "class='form-control' autocomplete='off'");?></td>
       <td class='<?php echo zget($visibleFields, 'zipcode', 'hidden')?>'> <?php echo html::input("zipcode[$user->id]",  $user->zipcode, "class='form-control' autocomplete='off'");?></td>
+      <td <?php echo zget($visibleFields, 'limitedUser', "class='hidden'")?>>  <?php echo html::radio("limitedUser[$user->id]", $lang->user->limitedUserList, $user->limitedUser);?></td>
     </tr>
     <?php endforeach;?>
     <tr>

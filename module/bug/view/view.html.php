@@ -31,20 +31,20 @@
         ob_start();
         echo "<div class='btn-group'>";
         common::printIcon('bug', 'confirmBug', $params, $bug, 'button', 'search', '', 'iframe', true);
-        common::printIcon('bug', 'assignTo',   $params, '',   'button', '', '', 'iframe', true);
+        common::printIcon('bug', 'assignTo',   $params, $bug, 'button', '', '', 'iframe', true);
         common::printIcon('bug', 'resolve',    $params, $bug, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
         common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
 
         if($this->config->global->flow != 'onlyTest') common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
-        common::printIcon('bug', 'createCase', $convertParams, '', 'button', 'sitemap');
+        common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
         echo '</div>';
 
         echo "<div class='btn-group'>";
-        common::printIcon('bug', 'edit', $params);
-        common::printCommentIcon('bug');
-        common::printIcon('bug', 'create', $copyParams, '', 'button', 'copy');
-        common::printIcon('bug', 'delete', $params, '', 'button', '', 'hiddenwin');
+        common::printIcon('bug', 'edit', $params, $bug);
+        common::printCommentIcon('bug', $bug);
+        common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy');
+        common::printIcon('bug', 'delete', $params, $bug, 'button', '', 'hiddenwin');
         echo '</div>';
 
         echo "<div class='btn-group'>";

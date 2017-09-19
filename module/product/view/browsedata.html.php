@@ -85,7 +85,7 @@
           ?>
         </td>
         <td class='text-right'>
-          <?php 
+          <?php
           $vars = "story={$story->id}";
           common::printIcon('story', 'change',     $vars, $story, 'list', 'random');
           common::printIcon('story', 'review',     $vars, $story, 'list', 'review');

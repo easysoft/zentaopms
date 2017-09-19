@@ -1593,6 +1593,8 @@ class taskModel extends model
     {
         $action = strtolower($action);
 
+        if(!common::limitedUser($task, 'task')) return false;
+
         if($action == 'assignto') return $task->status != 'closed' and $task->status != 'cancel';
         if($action == 'start')    return $task->status == 'wait';
         if($action == 'restart')  return $task->status == 'pause';

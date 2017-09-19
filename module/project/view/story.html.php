@@ -104,21 +104,21 @@
             <?php
             $tasksLink = $this->createLink('story', 'tasks', "storyID=$story->id&projectID=$project->id");
             $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
-            ?> 
+            ?>
           <td>
-            <?php 
+            <?php
             $bugsLink = $this->createLink('story', 'bugs', "storyID=$story->id&projectID=$project->id");
             $storyBugs[$story->id] > 0 ? print(html::a($bugsLink, $storyBugs[$story->id], '', 'class="iframe"')) : print(0);
             ?>
           </td>
           <td>
-            <?php 
+            <?php
             $casesLink = $this->createLink('story', 'cases', "storyID=$story->id&projectID=$project->id");
             $storyCases[$story->id] > 0 ? print(html::a($casesLink, $storyCases[$story->id], '', 'class="iframe"')) : print(0);
             ?>
           </td>
           <td>
-            <?php 
+            <?php
             $param = "projectID={$project->id}&story={$story->id}&moduleID={$story->module}";
 
             $lang->task->create = $lang->project->wbs;
@@ -129,16 +129,16 @@
             }
             else
             {
-                common::printIcon('task', 'create', $param, '', 'list', 'plus-border', '', 'btn-task-create');
+                if(!$limitedUser) common::printIcon('task', 'create', $param, $story, 'list', 'plus-border', '', 'btn-task-create');
             }
 
             $lang->task->batchCreate = $lang->project->batchWBS;
-            common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list', 'plus-sign');
+            if(!$limitedUser) common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", $story, 'list', 'plus-sign');
 
             $lang->testcase->batchCreate = $lang->testcase->create;
-            if($productID) common::printIcon('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', 'list', 'sitemap');
+            if($productID && !$limitedUser) common::printIcon('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", $story, 'list', 'sitemap');
 
-            if(common::hasPriv('project', 'unlinkStory'))
+            if(common::hasPriv('project', 'unlinkStory') && !$limitedUser)
             {
                 $unlinkURL = $this->createLink('project', 'unlinkStory', "projectID=$project->id&storyID=$story->id&confirm=yes");
                 echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn-icon' title='{$lang->project->unlinkStory}'");

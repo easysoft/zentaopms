@@ -90,6 +90,7 @@ $lang->story->keywords       = '关键词';
 $lang->story->newStory       = '继续添加需求';
 $lang->story->colorTag       = '颜色标签';
 $lang->story->files          = '附件';
+$lang->story->copy           = "复制需求";
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = '该需求与上一需求不属于同一产品！';

@@ -50,12 +50,12 @@
     <td class='status-<?php echo $task->status?>'><?php echo $lang->testtask->statusList[$task->status];?></td>
     <td>
       <?php
-      common::printIcon('testtask', 'cases',    "taskID=$task->id", '', 'list', 'sitemap');
-      common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list', 'link');
-      common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
-      common::printIcon('testreport', 'create', "objectID=$task->id&objectType=testtask", '', 'list','flag');
+      common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
+      common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'list', 'link');
+      common::printIcon('testtask', 'edit',     "taskID=$task->id", $task, 'list');
+      common::printIcon('testreport', 'create', "objectID=$task->id&objectType=testtask", $task, 'list','flag');
 
-      if(common::hasPriv('testtask', 'delete'))
+      if(common::hasPriv('testtask', 'delete', $task))
       {
           $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
           echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='btn-icon' title='{$lang->testtask->delete}'");

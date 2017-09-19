@@ -126,6 +126,8 @@ class project extends control
         $this->loadModel('task');
         $this->loadModel('datatable');
 
+        $this->project->getLimitedProject();
+
         /* Set browse type. */
         $browseType = strtolower($status);
         if($this->config->global->flow == 'onlyTask' and $browseType == 'byproduct') $param = 0;
@@ -608,6 +610,7 @@ class project extends control
         $this->view->users        = $users;
         $this->view->pager        = $pager;
         $this->view->branchGroups = $branchGroups;
+        $this->view->limitedUser  = $this->app->user->limitedUser == 'yes' ? true : false;
 
         $this->display();
     }
@@ -1932,15 +1935,15 @@ class project extends control
     }
 
     /**
-     * All project. 
-     * 
-     * @param  string $status 
-     * @param  int    $projectID 
-     * @param  string $orderBy 
-     * @param  int    $productID 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * All project.
+     *
+     * @param  string $status
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  int    $productID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -1974,8 +1977,8 @@ class project extends control
 
     /**
      * Doc for compatible.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */

@@ -97,6 +97,10 @@ $lang->user->lockWarning  = "您还有%s次尝试机会。";
 $lang->user->loginLocked  = "密码尝试次数太多，请联系管理员解锁，或%s分钟后重试。";
 $lang->user->weakPassword = "您的密码强度小于系统设定。";
 
+$lang->user->limitedUser = '受限用户';
+$lang->user->limitedUserList['no']  = '否';
+$lang->user->limitedUserList['yes'] = '是';
+
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = '研发';
 $lang->user->roleList['qa']     = '测试';
@@ -128,12 +132,13 @@ $lang->user->tpl->content = '内容';
 $lang->user->tpl->public  = '是否公开';
 
 $lang->user->placeholder = new stdclass();
-$lang->user->placeholder->account   = '英文、数字和下划线的组合，三位以上';
-$lang->user->placeholder->password1 = '六位以上';
-$lang->user->placeholder->role      = '职位影响内容和用户列表的顺序。';
-$lang->user->placeholder->group     = '分组决定用户的权限列表。';
-$lang->user->placeholder->commiter  = '版本控制系统(subversion)中的帐号';
-$lang->user->placeholder->verify    = '需要输入你的密码加以验证';
+$lang->user->placeholder->account     = '英文、数字和下划线的组合，三位以上';
+$lang->user->placeholder->password1   = '六位以上';
+$lang->user->placeholder->role        = '职位影响内容和用户列表的顺序。';
+$lang->user->placeholder->group       = '分组决定用户的权限列表。';
+$lang->user->placeholder->commiter    = '版本控制系统(subversion)中的帐号';
+$lang->user->placeholder->verify      = '需要输入你的密码加以验证';
+$lang->user->placeholder->limitedUser = '只能编辑与自己相关的内容。';
 
 $lang->user->placeholder->passwordStrength[1] = '6位以上，包含大小写字母，数字。';
 $lang->user->placeholder->passwordStrength[2] = '10位以上，包含大小写字母，数字，特殊字符。';
