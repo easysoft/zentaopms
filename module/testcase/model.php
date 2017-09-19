@@ -84,7 +84,7 @@ class testcaseModel extends model
         $case = fixer::input('post')
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', $now)
-            ->add('status', $this->forceNotReview() || ($this->config->testcase->needReview && $this->post->forceNotReview) ? 'normal' : 'wait')
+            ->add('status', $this->forceNotReview() || $this->post->forceNotReview ? 'normal' : 'wait')
             ->add('version', 1)
             ->add('fromBug', $bugID)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
@@ -186,7 +186,7 @@ class testcaseModel extends model
                 $data[$i]->keywords     = $cases->keywords[$i];
                 $data[$i]->openedBy     = $this->app->user->account;
                 $data[$i]->openedDate   = $now;
-                $data[$i]->status       = $forceNotReview || ($this->config->testcase->needReview && $cases->needReview[$i]) ? 'normal' : 'wait';
+                $data[$i]->status       = $forceNotReview || $cases->needReview[$i] == 0 ? 'normal' : 'wait';
                 $data[$i]->version      = 1;
 
                 $caseStory = $data[$i]->story;
