@@ -12,11 +12,12 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php js::import($jsRoot . 'md5.js');?>
 <div class='container mw-800px'>
   <div id='titlebar'>
     <div class='heading'><i class='icon-pencil'></i> <?php echo $lang->my->editProfile;?></div>
   </div>
-  <form method='post' target='hiddenwin' class='form-condensed'>
+  <form method='post' target='hiddenwin' class='form-condensed' id='dataform'>
     <fieldset>
       <legend><?php echo $lang->my->form->lblBasic;?></legend>
       <table class='table table-form'> 
@@ -113,6 +114,7 @@
     </fieldset>
     <div class='text-center'><?php echo html::submitButton() . ' &nbsp; ' . html::backButton();?></div>
   </form>
+  <?php echo html::hidden('verifyRand', $rand);?>
 </div>
 <?php js::set('passwordStrengthList', $lang->user->passwordStrengthList)?>
 <script>

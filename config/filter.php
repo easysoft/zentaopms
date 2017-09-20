@@ -158,7 +158,6 @@ $filter->todo->export->cookie['checkedItem'] = 'reg::checked';
 
 $filter->user->login->cookie['keepLogin'] = 'equal::on';
 
-
 $filter->block->default->get['hash']    = 'reg::md5';
 $filter->block->main->get['blockid']    = 'code';
 $filter->block->main->get['blockTitle'] = 'reg::any';

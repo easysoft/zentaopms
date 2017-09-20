@@ -18,5 +18,6 @@ select {border:1px solid #ccc}
 
 .colorpicker.input-group-btn > .btn {border-right: none}
 
+#branch_chosen.chosen-container .chosen-drop {min-width: 280px; border-top: 1px solid #ddd!important}
 #branch {border-left-width: 0px}
 #mailtoGroup .chosen-container-single a {border-left-width: 0px}

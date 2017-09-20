@@ -33,6 +33,13 @@ $lang->action->confirmHideAll = '您確定要全部隱藏這些記錄嗎？';
 $lang->action->needEdit       = '要還原%s的名稱或代號已經存在，請編輯更改。';
 $lang->action->historyEdit    = '歷史記錄編輯不能為空。';
 
+$lang->action->history = new stdclass();
+$lang->action->history->action = '關聯日誌';
+$lang->action->history->field  = '欄位';
+$lang->action->history->old    = '舊值';
+$lang->action->history->new    = '新值';
+$lang->action->history->diff   = '不同';
+
 $lang->action->dynamic = new stdclass();
 $lang->action->dynamic->today      = '今天';
 $lang->action->dynamic->yesterday  = '昨天';
@@ -106,6 +113,7 @@ $lang->action->desc->paused         = '$date, 由 <strong>$actor</strong> 暫停
 $lang->action->desc->diff1          = '修改了 <strong><i>%s</i></strong>，舊值為 "%s"，新值為 "%s"。<br />' . "\n";
 $lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，區別為：' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
 $lang->action->desc->diff3          = '將檔案名 %s 改為 %s 。' . "\n";
+$lang->action->desc->linked2bug     = '$date 由 <strong>$actor</strong> 關聯到版本 <strong>$extra</strong>';
 
 /* 關聯用例和移除用例時的歷史操作記錄。*/
 $lang->action->desc->linkrelatedcase   = '$date, 由 <strong>$actor</strong> 關聯相關用例 <strong>$extra</strong>。' . "\n";
@@ -168,6 +176,8 @@ $lang->action->label->suspended           = '掛起';
 $lang->action->label->login               = '登錄系統';
 $lang->action->label->logout              = "退出登錄";
 $lang->action->label->deleteestimate      = "刪除了工時";
+$lang->action->label->linked2build        = "關聯了";
+$lang->action->label->linked2bug          = "關聯了";
 
 /* 用來生成相應對象的連結。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';

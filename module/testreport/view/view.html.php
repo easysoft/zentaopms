@@ -71,7 +71,7 @@
             <td><?php echo zget($users, $report->owner);?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->testreport->member?></th>
+            <th><?php echo $lang->testreport->members?></th>
             <td colspan='2'><?php foreach(explode(',', $report->members) as $member)echo zget($users, $member) . ' &nbsp; ';?></td>
           </tr>
           <tr>

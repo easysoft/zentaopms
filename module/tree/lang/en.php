@@ -42,6 +42,10 @@ $lang->tree->successFixed  = 'Fixed.';
 $lang->tree->repeatName    = 'The name "%s" has existed!';
 
 $lang->tree->name       = 'Name';
+$lang->tree->root       = 'Root';
+$lang->tree->branch     = 'Platform/Branch';
+$lang->tree->path       = 'Path';
+$lang->tree->type       = 'Type';
 $lang->tree->parent     = 'Parent';
 $lang->tree->child      = 'Child';
 $lang->tree->owner      = 'Owner';

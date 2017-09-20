@@ -58,7 +58,7 @@
       <?php if($productType != 'normal'):?>
       <td><?php if(isset($branchGroups[$story->product][$story->branch])) echo $branchGroups[$story->product][$story->branch];?></td>
       <?php endif;?>
-      <td><?php echo $users[$story->openedBy];?></td>
+      <td><?php echo zget($users, $story->openedBy, $story->openedBy);?></td>
       <td><?php echo $story->estimate;?></td>
     </tr>
     <?php $storyCount ++;?>

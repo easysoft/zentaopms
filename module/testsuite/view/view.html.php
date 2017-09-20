@@ -105,13 +105,13 @@
               <td><?php echo $case->stepNumber;?></td>
               <td class='text-center'>
                 <?php
-                if(common::hasPriv('testsuite', 'unlinkCase'))
+                if(common::hasPriv('testsuite', 'unlinkCase', $suite))
                 {
                     $unlinkURL = $this->createLink('testsuite', 'unlinkCase', "suiteID=$suite->id&caseID=$case->id&confirm=yes");
                     echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"caseList\",confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$lang->testsuite->unlinkCase}' class='btn-icon'");
                 }
-                common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
-                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', 'list-alt', '', 'results iframe', false, "data-width='95%'");
+                common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $suite, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
+                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $suite, 'list', 'list-alt', '', 'results iframe', false, "data-width='95%'");
                 ?>
               </td>
             </tr>

@@ -222,84 +222,91 @@ class actionModel extends model
             if($actionName == 'svncommited' and isset($commiters[$action->actor]))
             {
                 $action->actor = $commiters[$action->actor];
+                if($this->config->requestType == 'GET') $action->comment = str_replace('+', '%2B', $action->comment);
             }
             elseif($actionName == 'gitcommited' and isset($commiters[$action->actor]))
             {
                 $action->actor = $commiters[$action->actor];
+                if($this->config->requestType == 'GET') $action->comment = str_replace('+', '%2B', $action->comment);
             }
             elseif($actionName == 'linked2project')
             {
                 $name = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
-                if($name) $action->extra = html::a(helper::createLink('project', 'story', "projectID=$action->extra"), $name);
+                if($name) $action->extra = common::hasPriv('project', 'story') ? html::a(helper::createLink('project', 'story', "projectID=$action->extra"), $name) : $name;
             }
             elseif($actionName == 'linked2plan')
             {
                 $title = $this->dao->select('title')->from(TABLE_PRODUCTPLAN)->where('id')->eq($action->extra)->fetch('title');
-                if($title) $action->extra = html::a(helper::createLink('productplan', 'view', "planID=$action->extra"), $title);
+                if($title) $action->extra = common::hasPriv('productplan', 'view') ? html::a(helper::createLink('productplan', 'view', "planID=$action->extra"), $title) : $title;
             }
             elseif($actionName == 'linked2build')
             {
                 $name = $this->dao->select('name')->from(TABLE_BUILD)->where('id')->eq($action->extra)->fetch('name');
-                if($name) $action->extra = html::a(helper::createLink('build', 'view', "builID=$action->extra&type={$action->objectType}"), $name);
+                if($name) $action->extra = common::hasPriv('build', 'view') ? html::a(helper::createLink('build', 'view', "builID=$action->extra&type={$action->objectType}"), $name) : $name;
+            }
+            elseif($actionName == 'linked2bug')
+            {
+                $name = $this->dao->select('name')->from(TABLE_BUILD)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = common::hasPriv('build', 'view') ? html::a(helper::createLink('build', 'view', "builID=$action->extra&type={$action->objectType}"), $name) : $name;
             }
             elseif($actionName == 'linked2release')
             {
                 $name = $this->dao->select('name')->from(TABLE_RELEASE)->where('id')->eq($action->extra)->fetch('name');
-                if($name) $action->extra = html::a(helper::createLink('release', 'view', "releaseID=$action->extra&type={$action->objectType}"), $name);
+                if($name) $action->extra = common::hasPriv('release', 'view') ? html::a(helper::createLink('release', 'view', "releaseID=$action->extra&type={$action->objectType}"), $name) : $name;
             }
             elseif($actionName == 'moved')
             {
                 $name = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
-                if($name) $action->extra = html::a(helper::createLink('project', 'task', "projectID=$action->extra"), "#$action->extra " . $name);
+                if($name) $action->extra = common::hasPriv('project', 'task') ? html::a(helper::createLink('project', 'task', "projectID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
             }
-            elseif($actionName == 'frombug')
+            elseif($actionName == 'frombug' and common::hasPriv('bug', 'view'))
             {
                 $action->extra = html::a(helper::createLink('bug', 'view', "bugID=$action->extra"), $action->extra);
             }
             elseif($actionName == 'unlinkedfromproject')
             {
                 $name = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
-                if($name) $action->extra = html::a(helper::createLink('project', 'story', "projectID=$action->extra"), "#$action->extra " . $name);
+                if($name) $action->extra = common::hasPriv('project', 'story') ? html::a(helper::createLink('project', 'story', "projectID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
             }
             elseif($actionName == 'unlinkedfrombuild')
             {
                 $name = $this->dao->select('name')->from(TABLE_BUILD)->where('id')->eq($action->extra)->fetch('name');
-                if($name) $action->extra = html::a(helper::createLink('build', 'view', "builID=$action->extra&type={$action->objectType}"), $name);
+                if($name) $action->extra = common::hasPriv('build', 'view') ? html::a(helper::createLink('build', 'view', "builID=$action->extra&type={$action->objectType}"), $name) : $name;
             }
             elseif($actionName == 'unlinkedfromrelease')
             {
                 $name = $this->dao->select('name')->from(TABLE_RELEASE)->where('id')->eq($action->extra)->fetch('name');
-                if($name) $action->extra = html::a(helper::createLink('release', 'view', "releaseID=$action->extra&type={$action->objectType}"), $name);
+                if($name) $action->extra = common::hasPriv('release', 'view') ? html::a(helper::createLink('release', 'view', "releaseID=$action->extra&type={$action->objectType}"), $name) : $name;
             }
             elseif($actionName == 'unlinkedfromplan')
             {
                 $title = $this->dao->select('title')->from(TABLE_PRODUCTPLAN)->where('id')->eq($action->extra)->fetch('title');
-                if($title) $action->extra = html::a(helper::createLink('productplan', 'view', "planID=$action->extra"), "#$action->extra " . $title);
+                if($title) $action->extra = common::hasPriv('productplan', 'view') ? html::a(helper::createLink('productplan', 'view', "planID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
             }
             elseif($actionName == 'tostory')
             {
                 $title = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
-                if($title) $action->extra = html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $title);
+                if($title) $action->extra = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
             }
             elseif($actionName == 'totask')
             {
                 $name = $this->dao->select('name')->from(TABLE_TASK)->where('id')->eq($action->extra)->fetch('name');
-                if($name) $action->extra = html::a(helper::createLink('task', 'view', "taskID=$action->extra"), "#$action->extra " . $name);
+                if($name) $action->extra = common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
             }
             elseif($actionName == 'buildopened')
             {
                 $name = $this->dao->select('name')->from(TABLE_BUILD)->where('id')->eq($action->objectID)->fetch('name');
-                if($name) $action->extra = html::a(helper::createLink('build', 'view', "buildID=$action->objectID"), "#$action->objectID " . $name);
+                if($name) $action->extra = common::hasPriv('build', 'view') ? html::a(helper::createLink('build', 'view', "buildID=$action->objectID"), "#$action->objectID " . $name) : "#$action->objectID " . $name;
             }
             elseif($actionName == 'testtaskopened' or $actionName == 'testtaskstarted' or $actionName == 'testtaskclosed')
             {
                 $name = $this->dao->select('name')->from(TABLE_TESTTASK)->where('id')->eq($action->objectID)->fetch('name');
-                if($name) $action->extra = html::a(helper::createLink('testtask', 'view', "testtaskID=$action->objectID"), "#$action->objectID " . $name);
+                if($name) $action->extra = common::hasPriv('testtask', 'view') ? html::a(helper::createLink('testtask', 'view', "testtaskID=$action->objectID"), "#$action->objectID " . $name) : "#$action->objectID " . $name;
             }
             elseif($actionName == 'fromlib' and $action->objectType == 'case')
             {
                 $name = $this->dao->select('name')->from(TABLE_TESTSUITE)->where('id')->eq($action->extra)->fetch('name');
-                if($name) $action->extra = html::a(helper::createLink('testsuite', 'library', "libID=$action->extra"), $name);
+                if($name) $action->extra = common::hasPriv('testsuite', 'library') ? html::a(helper::createLink('testsuite', 'library', "libID=$action->extra"), $name) : $name;
             }
             elseif(($actionName == 'closed' and $action->objectType == 'story') or ($actionName == 'resolved' and $action->objectType == 'bug'))
             {
@@ -698,7 +705,13 @@ class actionModel extends model
             $objectType = strtolower($action->objectType);
             $action->date        = date(DT_MONTHTIME2, strtotime($action->date));
             $action->actionLabel = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->action;
-            $action->objectLabel = isset($this->lang->action->label->$objectType) ? $this->lang->action->label->$objectType : $objectType;
+            $action->objectLabel = $objectType;
+            if(isset($this->lang->action->label->$objectType))
+            {
+                $objectLabel = $this->lang->action->label->$objectType;
+                if(!is_array($objectLabel)) $action->objectLabel = $objectLabel;
+                if(is_array($objectLabel) and isset($objectLabel[$actionType])) $action->objectLabel = $objectLabel[$actionType];
+            }
 
             /* If action type is login or logout, needn't link. */
             if($actionType == 'svncommited')
@@ -710,8 +723,12 @@ class actionModel extends model
             if(strpos($action->objectLabel, '|') !== false)
             {
                 list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
-                $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
-                if($action->objectType == 'user') $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->actor));
+                $action->objectLink = '';
+                if(common::hasPriv($moduleName, $methodName))
+                {
+                    $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
+                    if($action->objectType == 'user') $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->actor));
+                }
                 $action->objectLabel = $objectLabel;
             }
             else

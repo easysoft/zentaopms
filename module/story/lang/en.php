@@ -90,6 +90,7 @@ $lang->story->keywords       = 'Keywords';
 $lang->story->newStory       = 'Continue adding Story.';
 $lang->story->colorTag       = 'Color Tag';
 $lang->story->files          = 'Files';
+$lang->story->copy           = "Duplicate a Story";
 
 $lang->story->ditto       = 'Ditto';
 $lang->story->dittoNotice = 'This Story does not belong to the same Product as the last Story does!';

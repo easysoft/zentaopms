@@ -50,7 +50,7 @@ $lang->testsuite->authorList['private'] = '私有';
 $lang->testsuite->authorList['public']  = '公開';
 
 $lang->caselib->common = '公共用例庫';
-$lang->caselib->all    = '所有公共庫';
+$lang->caselib->all    = '所有用例庫';
 
 $lang->testsuite->createLib  = '創建庫';
 $lang->testsuite->editLib    = '編輯庫';

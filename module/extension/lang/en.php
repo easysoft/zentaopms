@@ -30,8 +30,14 @@ $lang->extension->installed   = 'Installed';
 $lang->extension->deactivated = 'Deactivated';
 $lang->extension->available   = 'Downloaded';
 
+$lang->extension->name        = 'Extension Name';
+$lang->extension->code        = 'Code';
+$lang->extension->desc        = 'Describe';
+$lang->extension->type        = 'Type';
+$lang->extension->dirs        = 'Directories';
+$lang->extension->files       = 'Files';
+$lang->extension->status      = 'Status';
 $lang->extension->version     = 'Version';
-$lang->extension->compatible  = 'Compatible';
 $lang->extension->latest      = '<small>Latest:<strong><a href="%s" target="_blank" class="extension">%s</a></strong>，need zentao <a href="http://api.zentao.net/goto.php?item=latest" target="_blank"><strong>%s</strong></small>';
 $lang->extension->author      = 'Author';
 $lang->extension->license     = 'License';
@@ -40,12 +46,17 @@ $lang->extension->downloads   = 'Downloads';
 $lang->extension->compatible  = 'Compatibility';
 $lang->extension->grade       = 'Score';
 $lang->extension->depends     = 'Dependent';
+$lang->extension->zentaoCompatible  = 'Compatible Version';
+$lang->extension->installedTime     = 'Installed Time';
 
 $lang->extension->publicList[0] = 'Manually';
 $lang->extension->publicList[1] = 'Auto';
 
 $lang->extension->compatibleList[0] = 'Unknown';
 $lang->extension->compatibleList[1] = 'Compatible';
+
+$lang->extension->obtainOfficial[0] = 'Third party';
+$lang->extension->obtainOfficial[1] = 'Official';
 
 $lang->extension->byDownloads   = 'Downloads';
 $lang->extension->byAddedTime   = 'Latest Added';

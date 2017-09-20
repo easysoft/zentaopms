@@ -1,4 +1,4 @@
-$(function() 
+$(function()
 {
     setModal4List('iframe', 'bugList');
 
@@ -12,7 +12,7 @@ $(function()
         oldStoryID             = $('#story').val() || 0;
         oldProjectID           = 0;
         oldOpenedBuild         = '';
-        oldTaskID              = 0;
+        oldTaskID              = $('#oldTaskID').val() || 0;
         if(!assignedto) setAssignedTo(moduleID, productID);
         notice();
     }

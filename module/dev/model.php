@@ -35,11 +35,13 @@ class devModel extends model
      */
     public function getFields($table)
     {
-        $module = substr($table, strpos($table, '_') + 1);
+        $module      = substr($table, strpos($table, '_') + 1);
+        $aliasModule = $subLang = '';
         try
         {
-            if($module == 'case') $module = 'testcase';
-            $this->app->loadLang($module);
+            if(isset($this->config->dev->tableMap[$module])) $aliasModule = $this->config->dev->tableMap[$module];
+            if(strpos($aliasModule, '-') !== false) list($aliasModule, $subLang) = explode('-', $aliasModule);
+            $this->app->loadLang($aliasModule ? $aliasModule : $module);
         }
         catch(PDOException $e)
         {
@@ -57,6 +59,7 @@ class devModel extends model
         {
             $this->sqlError($e);
         }
+
         foreach($rawFields as $rawField)
         {
             $firstPOS = strpos($rawField->type, '(');
@@ -64,6 +67,9 @@ class devModel extends model
             $type     = str_replace(array('big', 'small', 'medium', 'tiny'), '', $type);
             $field    = array();
             $field['name'] = isset($this->lang->$module->{$rawField->field}) ? $this->lang->$module->{$rawField->field} : '';
+            if(empty($field['name']) and $aliasModule) $field['name'] = isset($this->lang->$aliasModule->{$rawField->field}) ? $this->lang->$aliasModule->{$rawField->field} : '';
+            if($subLang) $field['name'] = isset($this->lang->$aliasModule->$subLang->{$rawField->field}) ? $this->lang->$aliasModule->$subLang->{$rawField->field} : $field['name'];
+            if(!is_string($field['name'])) $field['name'] = '';
             $field['null'] = $rawField->null;
 
             if($type == 'enum' or $type == 'set')

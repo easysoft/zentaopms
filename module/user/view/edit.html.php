@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php js::import($jsRoot . 'md5.js');?>
 <div class='container mw-800px'>
   <div id='titlebar'>
     <div class='heading'>
@@ -70,6 +71,8 @@
       <tr>
         <th><?php echo $lang->user->commiter;?></th>
         <td><?php echo html::input('commiter', $user->commiter, "class='form-control' autocomplete='off'");?></td>
+        <th><?php echo $lang->user->limitedUser;?></th>
+        <td><?php echo html::radio('limitedUser', $lang->user->limitedUserList, $user->limitedUser);?></td>
       </tr>
     </table>
     <table align='center' class='table table-form'>
@@ -79,13 +82,13 @@
         <td class='w-p40'><?php echo html::input('skype', $user->skype, "class='form-control' autocomplete='off'");?></td>
         <th class='w-90px'><?php echo $lang->user->qq;?></th>
         <td><?php echo html::input('qq', $user->qq, "class='form-control' autocomplete='off'");?></td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->user->yahoo;?></th>
         <td><?php echo html::input('yahoo', $user->yahoo, "class='form-control' autocomplete='off'");?></td>
         <th><?php echo $lang->user->gtalk;?></th>
         <td><?php echo html::input('gtalk', $user->gtalk, "class='form-control' autocomplete='off'");?></td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->user->wangwang;?></th>
         <td><?php echo html::input('wangwang', $user->wangwang, "class='form-control' autocomplete='off'");?></td>
@@ -115,6 +118,7 @@
       <tr><td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
     </table>
   </form>
+  <?php echo html::hidden('verifyRand', $rand);?>
 </div>
 <?php js::set('passwordStrengthList', $lang->user->passwordStrengthList)?>
 <?php include '../../common/view/footer.html.php';?>

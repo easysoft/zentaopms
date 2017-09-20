@@ -40,8 +40,8 @@ class datatableModel extends model
 
     /**
      * Get save setting field.
-     * 
-     * @param  string $module 
+     *
+     * @param  string $module
      * @access public
      * @return object
      */

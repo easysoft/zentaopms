@@ -97,6 +97,10 @@ $lang->user->lockWarning  = "您还有%s次尝试机会。";
 $lang->user->loginLocked  = "密码尝试次数太多，请联系管理员解锁，或%s分钟后重试。";
 $lang->user->weakPassword = "您的密码强度小于系统设定。";
 
+$lang->user->limitedUser = '受限用户';
+$lang->user->limitedUserList['no']  = '否';
+$lang->user->limitedUserList['yes'] = '是';
+
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = '研发';
 $lang->user->roleList['qa']     = '测试';
@@ -121,13 +125,20 @@ $lang->user->statusList['delete'] = '删除';
 $lang->user->keepLogin['on']      = '保持登录';
 $lang->user->loginWithDemoUser    = '使用demo帐号登录：';
 
+$lang->user->tpl = new stdclass();
+$lang->user->tpl->type    = '类型';
+$lang->user->tpl->title   = '模板名';
+$lang->user->tpl->content = '内容';
+$lang->user->tpl->public  = '是否公开';
+
 $lang->user->placeholder = new stdclass();
-$lang->user->placeholder->account   = '英文、数字和下划线的组合，三位以上';
-$lang->user->placeholder->password1 = '六位以上';
-$lang->user->placeholder->role      = '职位影响内容和用户列表的顺序。';
-$lang->user->placeholder->group     = '分组决定用户的权限列表。';
-$lang->user->placeholder->commiter  = '版本控制系统(subversion)中的帐号';
-$lang->user->placeholder->verify    = '需要输入你的密码加以验证';
+$lang->user->placeholder->account     = '英文、数字和下划线的组合，三位以上';
+$lang->user->placeholder->password1   = '六位以上';
+$lang->user->placeholder->role        = '职位影响内容和用户列表的顺序。';
+$lang->user->placeholder->group       = '分组决定用户的权限列表。';
+$lang->user->placeholder->commiter    = '版本控制系统(subversion)中的帐号';
+$lang->user->placeholder->verify      = '需要输入你的密码加以验证';
+$lang->user->placeholder->limitedUser = '只能编辑与自己相关的内容。';
 
 $lang->user->placeholder->passwordStrength[1] = '6位以上，包含大小写字母，数字。';
 $lang->user->placeholder->passwordStrength[2] = '10位以上，包含大小写字母，数字，特殊字符。';
@@ -146,6 +157,7 @@ $lang->user->error->originalPassword = "原密码不正确";
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = '联系人';
 $lang->user->contacts->listName = '列表名称';
+$lang->user->contacts->userList = '用户列表';
 
 $lang->user->contacts->manage        = '维护列表';
 $lang->user->contacts->contactsList  = '已有列表';
@@ -159,7 +171,7 @@ $lang->user->contacts->or            = ' 或者 ';
 $lang->user->resetFail       = "重置密码失败，检查用户名是否存在！";
 $lang->user->resetSuccess    = "重置密码成功，请用新密码登录。";
 $lang->user->noticeResetFile = "<h5>普通用户请联系管理员重置密码</h5>
-    <h5>管理员请登录禅道所在的服务器，创建<span>%s</span>文件。</h5>
+    <h5>管理员请登录禅道所在的服务器，创建<span> '%s' </span>文件。</h5>
     <p>注意：</p>
     <ol>
     <li>文件内容为空。</li>

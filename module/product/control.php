@@ -138,7 +138,6 @@ class product extends control
 
         $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->storyModule ? $this->cookie->storyModule : 0));
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
-        if($browseType == 'unclosed') $moduleID = 0;
 
         /* Set menu. */
         $this->product->setMenu($this->products, $productID, $branch);
@@ -190,7 +189,7 @@ class product extends control
         $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'story', $startModuleID = 0, array('treeModel', 'createStoryLink'), '', $branch);
         $this->view->parentModules = $this->tree->getParents($moduleID);
         $this->view->pager         = $pager;
-        $this->view->users         = $this->user->getPairs('noletter|pofirst');
+        $this->view->users         = $this->user->getPairs('noletter|pofirst|nodeleted');
         $this->view->orderBy       = $orderBy;
         $this->view->browseType    = $browseType;
         $this->view->modules       = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
@@ -229,9 +228,9 @@ class product extends control
         $this->view->title      = $this->lang->product->create;
         $this->view->position[] = $this->view->title;
         $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->poUsers    = $this->loadModel('user')->getPairs('pofirst|noclosed');
-        $this->view->qdUsers    = $this->loadModel('user')->getPairs('qdfirst|noclosed');
-        $this->view->rdUsers    = $this->loadModel('user')->getPairs('devfirst|noclosed');
+        $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst|noclosed');
+        $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst|noclosed');
+        $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst|noclosed');
 
         unset($this->lang->product->typeList['']);
         $this->display();
@@ -273,9 +272,9 @@ class product extends control
         $this->view->position[] = $this->lang->product->edit;
         $this->view->product    = $product;
         $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->poUsers    = $this->loadModel('user')->getPairs('pofirst',  $product->PO);
-        $this->view->qdUsers    = $this->loadModel('user')->getPairs('qdfirst',  $product->QD);
-        $this->view->rdUsers    = $this->loadModel('user')->getPairs('devfirst', $product->RD);
+        $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst',  $product->PO);
+        $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst',  $product->QD);
+        $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst', $product->RD);
 
         unset($this->lang->product->typeList['']);
         $this->display();
@@ -328,9 +327,9 @@ class product extends control
         $this->view->position[]    = $this->lang->product->batchEdit;
         $this->view->productIDList = $productIDList;
         $this->view->products      = $products;
-        $this->view->poUsers       = $this->loadModel('user')->getPairs('pofirst', $appendPoUsers);
-        $this->view->qdUsers       = $this->loadModel('user')->getPairs('qdfirst', $appendQdUsers);
-        $this->view->rdUsers       = $this->loadModel('user')->getPairs('devfirst', $appendRdUsers);
+        $this->view->poUsers       = $this->loadModel('user')->getPairs('nodeleted|pofirst', $appendPoUsers);
+        $this->view->qdUsers       = $this->loadModel('user')->getPairs('nodeleted|qdfirst', $appendQdUsers);
+        $this->view->rdUsers       = $this->loadModel('user')->getPairs('nodeleted|devfirst', $appendRdUsers);
 
         unset($this->lang->product->typeList['']);
         $this->display();
@@ -492,7 +491,7 @@ class product extends control
         /* Assign. */
         $this->view->productID = $productID;
         $this->view->type      = $type;
-        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->account   = $account;
         $this->view->orderBy   = $orderBy;
         $this->view->pager     = $pager;
@@ -628,13 +627,13 @@ class product extends control
 
     /**
      * All product.
-     * 
-     * @param  int    $productID 
-     * @param  string $status 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $productID
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -663,8 +662,8 @@ class product extends control
 
     /**
      * Doc for compatible.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */

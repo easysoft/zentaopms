@@ -74,6 +74,7 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
     <?php if($config->checkVersion):?>
     <iframe id='updater' class='hidden' frameborder='0' width='100%' scrolling='no' allowtransparency='true' src="http://api.zentao.net/updater-isLatest-<?php echo $config->version;?>-<?php echo $s;?>.html?lang=<?php echo str_replace('-', '_', $this->app->getClientLang())?>"></iframe>
     <?php endif;?>
+    <?php echo html::hidden('verifyRand', $rand);?>
   </div>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>

@@ -72,9 +72,9 @@
       <?php
       if(common::hasPriv('productplan', 'linkStory')) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i>', '', "class='btn-icon' title='{$lang->productplan->linkStory}'");
       if(common::hasPriv('productplan', 'linkBug') and $config->global->flow != 'onlyStory') echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i>', '', "class='btn-icon' title='{$lang->productplan->linkBug}'");
-      common::printIcon('productplan', 'edit', "planID=$plan->id", '', 'list');
+      common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');
 
-      if(common::hasPriv('productplan', 'delete'))
+      if(common::hasPriv('productplan', 'delete', $plan))
       {
           $deleteURL = $this->createLink('productplan', 'delete', "planID=$plan->id&confirm=yes");
           echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"productplan\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='btn-icon' title='{$lang->productplan->delete}'");

@@ -63,9 +63,9 @@ class userModel extends model
 
     /**
      * Get the account=>realname pairs.
-     * 
-     * @param  string $params   noletter|noempty|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname, can be sets of theme
-     * @param  string $usersToAppended  account1,account2 
+     *
+     * @param  string $params   noletter|noempty|nodeleted|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname, can be sets of theme
+     * @param  string $usersToAppended  account1,account2
      * @access public
      * @return array
      */
@@ -88,7 +88,8 @@ class userModel extends model
 
         /* Get raw records. */
         $users = $this->dao->select($fields)->from(TABLE_USER)
-            ->where('deleted')->eq(0)
+            ->where('1')
+            ->beginIF(strpos($params, 'nodeleted') !== false or empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
             ->orderBy($orderBy)
             ->fetchAll('account');
         if($usersToAppended) $users += $this->dao->select($fields)->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll('account');
@@ -199,7 +200,7 @@ class userModel extends model
 
     /**
      * Create a user.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -220,7 +221,7 @@ class userModel extends model
             return false;
         }
 
-        if(empty($_POST['verifyPassword']) or md5($this->post->verifyPassword) != $this->app->user->password)
+        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
         {
             dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
             return false;
@@ -249,22 +250,22 @@ class userModel extends model
     }
 
     /**
-     * Batch create users. 
-     * 
-     * @param  int    $users 
+     * Batch create users.
+     *
+     * @param  int    $users
      * @access public
      * @return void
      */
     public function batchCreate()
     {
-        if(empty($_POST['verifyPassword']) or md5($this->post->verifyPassword) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPassword));
+        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) die(js::alert($this->lang->user->error->verifyPassword));
 
-        $users    = fixer::input('post')->get(); 
+        $users    = fixer::input('post')->get();
         $data     = array();
         $accounts = array();
         for($i = 0; $i < $this->config->user->batchCreate; $i++)
         {
-            if($users->account[$i] != '')  
+            if($users->account[$i] != '')
             {
                 $account = $this->dao->select('account')->from(TABLE_USER)->where('account')->eq($users->account[$i])->fetch();
                 if($account) die(js::error(sprintf($this->lang->user->error->accountDupl, $i+1)));
@@ -296,6 +297,8 @@ class userModel extends model
                 $data[$i]->phone    = $users->phone[$i];
                 $data[$i]->address  = $users->address[$i];
                 $data[$i]->zipcode  = $users->zipcode[$i];
+
+                $data[$i]->limitedUser  = $users->limitedUser[$i];
 
                 /* Change for append field, such as feedback.*/
                 if(!empty($this->config->user->batchAppendFields))
@@ -368,7 +371,7 @@ class userModel extends model
             return false;
         }
 
-        if(empty($_POST['verifyPassword']) or md5($this->post->verifyPassword) != $this->app->user->password)
+        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
         {
             dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
             return false;
@@ -420,15 +423,29 @@ class userModel extends model
     }
 
     /**
+     * update session random.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateSessionRandom()
+    {
+        $random = mt_rand();
+        $this->session->set('rand', $random);
+
+        return $random;
+    }
+
+    /**
      * Batch edit user.
-     * 
+     *
      * @access public
      * @return void
      */
     public function batchEdit()
     {
         $data = fixer::input('post')->get();
-        if(empty($_POST['verifyPassword']) or md5($this->post->verifyPassword) != $this->app->user->password) die(js::alert($this->lang->user->error->verifyPassword));
+        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) die(js::alert($this->lang->user->error->verifyPassword));
 
         $oldUsers     = $this->dao->select('id, account, email')->from(TABLE_USER)->where('id')->in(array_keys($data->account))->fetchAll('id');
         $accountGroup = $this->dao->select('id, account')->from(TABLE_USER)->where('account')->in($data->account)->fetchGroup('account', 'id');
@@ -450,6 +467,7 @@ class userModel extends model
             $users[$id]['phone']    = $data->phone[$id];
             $users[$id]['address']  = $data->address[$id];
             $users[$id]['zipcode']  = $data->zipcode[$id];
+            $users[$id]['limitedUser']  = $data->limitedUser[$id];
             $users[$id]['dept']     = $data->dept[$id] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $data->dept[$id];
             $users[$id]['role']     = $data->role[$id] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : 0) : $data->role[$id];
 
@@ -503,7 +521,7 @@ class userModel extends model
     public function updatePassword($userID)
     {
         if(!$this->checkPassword()) return;
-        
+
         $user = fixer::input('post')
             ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
             ->remove('account, password1, password2, originalPassword')
@@ -566,7 +584,7 @@ class userModel extends model
         }
         return !dao::isError();
     }
-    
+
     /**
      * Identify a user.
      * 
@@ -578,7 +596,7 @@ class userModel extends model
     public function identify($account, $password)
     {
         if(!$account or !$password) return false;
-  
+
         /* Get the user first. If $password length is 32, don't add the password condition.  */
         $record = $this->dao->select('*')->from(TABLE_USER)
             ->where('account')->eq($account)
@@ -998,10 +1016,12 @@ class userModel extends model
      */
     public function getDataInJSON($user)
     {
-        unset($user->password);
-        unset($user->deleted);
-        $user->company = $this->app->company->name;
-        return array('user' => $user);
+        $newUser = new stdclass();
+        foreach($user as $key => $value)$newUser->$key = $value;
+        unset($newUser->password);
+        unset($newUser->deleted);
+        $newUser->company = $this->app->company->name;
+        return array('user' => $newUser);
     }
 
     /**

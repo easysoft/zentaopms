@@ -112,7 +112,7 @@ class baseHTML
 
         if(empty($title)) $title = $href;
         $newline = $newline ? "\n" : '';
-      
+
         return "<a href='$href' $misc>$title</a>$newline";
     }
 

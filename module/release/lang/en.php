@@ -31,6 +31,7 @@ $lang->release->basicInfo = 'Basic Info';
 
 $lang->release->id                    = 'ID';
 $lang->release->product               = $lang->productCommon;
+$lang->release->branch                = 'Platform/Branch';
 $lang->release->build                 = 'Build';
 $lang->release->name                  = 'Name';
 $lang->release->date                  = 'Date';
@@ -41,6 +42,7 @@ $lang->release->unlinkStory           = 'Unlink Story';
 $lang->release->unlinkBug             = 'Unlink Bug';
 $lang->release->stories               = 'Finished Story';
 $lang->release->bugs                  = 'Solved Bug';
+$lang->release->leftBugs              = 'Remained Bug';
 $lang->release->generatedBugs         = 'Remained Bug';
 $lang->release->finishStories         = 'Finished %s Story';
 $lang->release->resolvedBugs          = 'Solved %s Bug';

@@ -14,6 +14,7 @@
 <?php include '../../common/view/form.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('toTaskList',$this->config->global->flow == 'onlyTask' || !empty($task->id));?>
 <div class='container mw-1400px'>
   <div id='titlebar'>
     <div class='heading'>
@@ -63,7 +64,7 @@
           <div class='row-table'>
             <div class='col-table'>
               <div class="input-group w-p100">
-                <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->task->colorTag ?>' data-update-text='#name'>
+                <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->task->colorTag ?>' data-update-text='#name' value='<?php echo $task->color;?>'>
                 <?php echo html::input('name', $task->name, "class='form-control' autocomplete='off'");?>
                 <?php if($this->config->global->flow != 'onlyTask'):?>
                 <span class='input-group-btn'><a href='javascript:copyStoryTitle();' id='copyButton' class='btn'><?php echo $lang->task->copyStoryTitle;?></a></span>
@@ -90,14 +91,14 @@
               <div class='input-group'>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->task->pri;?></span>
                 <?php if($hasCustomPri):?>
-                <?php echo html::select('pri', $lang->task->priList, '', "class='form-control'");?> 
+                <?php echo html::select('pri', $lang->task->priList, $task->pri, "class='form-control'");?> 
                 <?php else: ?>
                 <div class='input-group-btn dropdown-pris'>
                   <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>
                     <span class='pri-text'></span> &nbsp;<span class='caret'></span>
                   </button>
                   <ul class='dropdown-menu pull-right'></ul>
-                  <?php echo html::select('pri', $lang->task->priList, '', "class='hide'");?>
+                  <?php echo html::select('pri', $lang->task->priList, $task->pri, "class='hide'");?>
                 </div>
                 <?php endif; ?>
               </div>
@@ -108,7 +109,7 @@
             <div class='col-table' id='estRowCol'>
               <div class='input-group'>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->task->estimateAB;?></span>
-                <?php echo html::input('estimate', '', "class='form-control' placeholder='{$lang->task->hour}' autocomplete='off'");?>
+                <?php echo html::input('estimate', $task->estimate, "class='form-control' placeholder='{$lang->task->hour}' autocomplete='off'");?>
               </div>
             </div>
             <?php endif; ?>
@@ -165,7 +166,7 @@
       </tr>
       <tr <?php echo $this->config->global->flow == 'onlyTask' ? "class='hidden'" : '';?>>
         <th><?php echo $lang->task->afterSubmit;?></th>
-        <td colspan='5'><?php echo html::radio('after', $lang->task->afterChoices, $this->config->global->flow == 'onlyTask' ? 'toTaskList' : 'continueAdding');?></td>
+        <td colspan='5'><?php echo html::radio('after', $lang->task->afterChoices, $this->config->global->flow == 'onlyTask' || !empty($task->id) ? 'toTaskList' : 'continueAdding');?></td>
       </tr>
       <tr>
         <td></td>

@@ -108,17 +108,12 @@
           </tr>
           <tr>
             <th><?php echo $lang->story->source;?></th>
-            <td>
-              <div class='row-table'>
-                <div class='col-table w-90px'><?php echo html::select('source', $lang->story->sourceList, $story->source, 'class=form-control');?></div>
-                <div class='col-table'>
-                  <div class='input-group'>
-                    <span class='input-group-addon fix-border'><?php echo $lang->comment?></span>
-                    <?php echo html::input('sourceNote', $story->sourceNote, "class='form-control' autocomplete='off'");?>
-                  </div>
-                </div>
-              </div>
-            </td>
+            <td><?php echo html::select('source', $lang->story->sourceList, $story->source, 'class=form-control');?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->story->sourceNote;?></th>
+            <td><?php echo html::input('sourceNote', $story->sourceNote, "class='form-control' autocomplete='off'");?>
+          </td>
           </tr>
           <tr>
             <th><?php echo $lang->story->status;?></th>

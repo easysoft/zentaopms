@@ -1,3 +1,8 @@
+$(document).ready(function()
+{
+    setTimeout(function(){fixedTheadOfList('#projectList')}, 100);
+});
+
 function changeDate(begin, end)
 {
     if(begin.indexOf('-') != -1)

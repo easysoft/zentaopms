@@ -36,6 +36,7 @@ $lang->testcase->stage            = 'Stage';
 $lang->testcase->reviewedBy       = 'Reviewed By';
 $lang->testcase->reviewedDate     = 'Reviewed Date';
 $lang->testcase->reviewResult     = 'Review Result';
+$lang->testcase->forceNotReview   = 'No Review';
 $lang->testcase->lastEditedByAB   = 'Last Edited By';
 $lang->testcase->lastEditedDateAB = 'Last Edited on';
 $lang->testcase->lastEditedDate   = 'Last Edited on';
@@ -45,6 +46,8 @@ $lang->testcase->lastRunDate      = 'Run Date';
 $lang->testcase->assignedTo       = 'Assigned To';
 $lang->testcase->colorTag         = 'Color Tag';
 $lang->testcase->lastRunResult    = 'Result';
+$lang->testcase->desc             = 'Step';
+$lang->testcase->expect           = 'Expect';
 $lang->testcase->allProduct       = "All {$lang->productCommon}";
 $lang->testcase->fromBug          = 'From Bug';
 $lang->testcase->toBug            = 'To Bug';
@@ -126,6 +129,9 @@ $lang->testcase->confirmDelete      = 'Do you want to delete this Test Case?';
 $lang->testcase->confirmBatchDelete = 'Do you want to batch delete thess Test Cases?';
 $lang->testcase->ditto              = 'Ditto';
 $lang->testcase->dittoNotice        = 'This Case does not belong to the Product as the previous one!';
+
+$lang->testcase->reviewList[0] = 'NO';
+$lang->testcase->reviewList[1] = 'YES';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;

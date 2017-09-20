@@ -13,7 +13,7 @@ class doc extends control
 {
     /**
      * Construct function, load user, tree, action auto.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -223,7 +223,7 @@ class doc extends control
             }
             die(js::locate($this->createLink($this->moduleName, 'browse', "libID=$libID"), 'parent.parent'));
         }
-        
+
         $lib = $this->doc->getLibByID($libID);
         if(!empty($lib->product)) $this->view->product = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->eq($lib->product)->fetch();
         if(!empty($lib->project)) $this->view->project = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->eq($lib->project)->fetch();
@@ -259,7 +259,7 @@ class doc extends control
             die(js::locate($this->createLink('doc', 'browse'), 'parent'));
         }
     }
-    
+
     /**
      * Create a doc.
      * 
@@ -382,8 +382,8 @@ class doc extends control
 
     /**
      * View a doc.
-     * 
-     * @param  int    $docID 
+     *
+     * @param  int    $docID
      * @access public
      * @return void
      */
@@ -655,8 +655,6 @@ class doc extends control
         $this->view->viewType   = $viewType;
         $this->view->orderBy    = $orderBy;
         $this->view->objectID   = $objectID;
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
 
         $this->display();
     }

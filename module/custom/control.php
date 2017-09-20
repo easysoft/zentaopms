@@ -12,8 +12,8 @@
 class custom extends control
 {
     /**
-     * Index 
-     * 
+     * Index
+     *
      * @access public
      * @return void
      */
@@ -23,11 +23,11 @@ class custom extends control
     }
 
     /**
-     * Custom 
-     * 
-     * @param  string $module 
-     * @param  string $field 
-     * @param  string $lang 
+     * Custom
+     *
+     * @param  string $module
+     * @param  string $field
+     * @param  string $lang
      * @access public
      * @return void
      */
@@ -49,9 +49,10 @@ class custom extends control
         if(($module == 'story' or $module == 'testcase') and $field == 'review')
         {
             $this->app->loadConfig($module);
-            $this->view->users = $this->loadModel('user')->getPairs('noclosed');
-            $this->view->needReview   = zget($this->config->$module, 'needReview', 1);
-            $this->view->forceReview  = zget($this->config->$module, 'forceReview', '');
+            $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+            $this->view->needReview      = zget($this->config->$module, 'needReview', 1);
+            $this->view->forceReview     = zget($this->config->$module, 'forceReview', '');
+            $this->view->forceNotReview  = zget($this->config->$module, 'forceNotReview', '');
         }
         if($module == 'task' and $field == 'hours')
         {
@@ -72,12 +73,19 @@ class custom extends control
             $this->view->blockPairs  = $this->block->getClosedBlockPairs($closedBlock);
             $this->view->closedBlock = $closedBlock;
         }
+        if($module == 'user' and $field == 'deleted')
+        {
+            $this->loadModel('user');
+            $this->view->showDeleted = isset($this->config->user->showDeleted) ? $this->config->user->showDeleted : '0';
+        }
 
         if(strtolower($_SERVER['REQUEST_METHOD']) == "post")
         {
             if(($module == 'story' or $module == 'testcase') and $field == 'review')
             {
-                $data = fixer::input('post')->join('forceReview', ',')->get();
+                $review = fixer::input('post')->get();
+                if($review->needReview) $data = fixer::input('post')->join('forceNotReview', ',')->remove('forceReview')->get();
+                if(!$review->needReview) $data = fixer::input('post')->join('forceReview', ',')->remove('forceNotReview')->get();
                 $this->loadModel('setting')->setItems("system.$module", $data);
             }
             elseif($module == 'task' and $field == 'hours')
@@ -93,6 +101,11 @@ class custom extends control
                 $data = fixer::input('post')->join('closed', ',')->get();
                 $this->loadModel('setting')->setItem('system.block.closed', zget($data, 'closed', ''));
             }
+            elseif($module == 'user' and $field == 'deleted')
+            {
+                $data = fixer::input('post')->get();
+                $this->loadModel('setting')->setItem('system.user.showDeleted', $data->showDeleted);
+            }
             else
             {
                 $lang = $_POST['lang'];
@@ -107,7 +120,7 @@ class custom extends control
                     /* Fix bug #942. */
                     if($field == 'priList' and !is_numeric($key)) die(js::alert($this->lang->custom->notice->priListKey));
                     if($module == 'bug' and $field == 'severityList' and !is_numeric($key)) die(js::alert($this->lang->custom->notice->severityListKey));
-                    if($module == 'bug' and $field == 'resolutionList' and !empty($key) and !validater::checkCode($key)) die(js::alert($this->lang->custom->notice->resolutionList));
+                    if(!empty($key) and $key != 'n/a' and !validater::checkCode($key)) die(js::alert($this->lang->custom->notice->keyList));
 
                     /* the length of role is 20, check it when save. */
                     if($module == 'user' and $field == 'roleList' and strlen($key) > 20) die(js::alert($this->lang->custom->notice->userRole));

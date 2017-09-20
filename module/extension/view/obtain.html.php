@@ -38,7 +38,7 @@
   <?php if($extensions):?>
   <div class='cards pd-0 mg-0'>
   <?php foreach($extensions as $extension):?>
-    <?php 
+    <?php
     $currentRelease = $extension->currentRelease;
     $latestRelease  = isset($extension->latestRelease) ? $extension->latestRelease : '';
     ?>
@@ -51,7 +51,10 @@
               printf($lang->extension->latest, $latestRelease->viewLink, $latestRelease->releaseVersion, $latestRelease->zentaoCompatible);
           }?>
         </small>
-        <h5 class='mg-0'><?php echo $extension->name . "($currentRelease->releaseVersion)";?></h5>
+        <h5 class='mg-0'>
+          <?php echo $extension->name . "($currentRelease->releaseVersion)";?>
+          <small class='label <?php echo $extension->offcial ? 'label-info' : 'label-warning';?>'><?php echo $lang->extension->obtainOfficial[$extension->offcial];?></small>
+        </h5>
       </div>
       <div class='card-content text-muted'>
         <?php echo $extension->abstract;?>
@@ -62,7 +65,7 @@
           echo "{$lang->extension->author}:     {$extension->author} ";
           echo "{$lang->extension->downloads}:  {$extension->downloads} ";
           echo "{$lang->extension->compatible}: {$lang->extension->compatibleList[$currentRelease->compatible]} ";
-          
+
           echo " {$lang->extension->depends}: ";
           if(!empty($currentRelease->depends))
           {

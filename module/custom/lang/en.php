@@ -9,6 +9,10 @@ $lang->custom->flow      = 'Process';
 $lang->custom->working   = 'Working';
 $lang->custom->select    = 'Select Process';
 $lang->custom->branch    = 'Multi Branch';
+$lang->custom->owner     = 'Owner';
+$lang->custom->module    = 'Module';
+$lang->custom->section   = 'Section';
+$lang->custom->lang      = 'Language';
 
 $lang->custom->object['story']    = 'Story';
 $lang->custom->object['task']     = 'Task';
@@ -63,8 +67,9 @@ $lang->custom->todo->fields['typeList']   = 'Type';
 $lang->custom->todo->fields['statusList'] = 'Status';
 
 $lang->custom->user = new stdClass();
-$lang->custom->user->fields['roleList']    = 'Role';
-$lang->custom->user->fields['statusList']  = 'Status';
+$lang->custom->user->fields['roleList']   = 'Role';
+$lang->custom->user->fields['statusList'] = 'Status';
+$lang->custom->user->fields['deleted']    = 'Show deleted user';
 
 $lang->custom->block->fields['closed'] = 'Closed Block';
 
@@ -77,9 +82,10 @@ $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole             = 'Key must be no more than 20 characters!';
 $lang->custom->notice->canNotAdd            = 'This item will be processed, so customized feature is not enabled.';
 $lang->custom->notice->forceReview          = 'Review is required for %s submitted by certain assignee.';
+$lang->custom->notice->forceNotReview       = "Not review is required for %s submitted by certain assignee.";
 $lang->custom->notice->longlife             = 'List "Undone" bugs that are older than hold days from "Longlife" bugs.';
 $lang->custom->notice->priListKey           = 'Priority list key should be numbers！';
-$lang->custom->notice->resolutionList       = 'Solution list key should be English or digital!';
+$lang->custom->notice->keyList              = 'key should be English or digital!';
 $lang->custom->notice->severityListKey      = 'Bug severity list key should be numbers.';
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage. Do you want to enter Product Homepage?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage. Do you want to enter Project Homepage?";
@@ -89,6 +95,9 @@ $lang->custom->storyReview   = 'Review';
 $lang->custom->forceReview   = 'Review Required';
 $lang->custom->reviewList[1] = 'On';
 $lang->custom->reviewList[0] = 'Off';
+
+$lang->custom->deletedList[1] = 'Show';
+$lang->custom->deletedList[0] = 'Not Show';
 
 $lang->custom->workingHours   = 'Man-Hour/Day';
 $lang->custom->weekend        = 'Weekend';

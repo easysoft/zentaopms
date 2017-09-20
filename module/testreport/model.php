@@ -187,14 +187,15 @@ class testreportModel extends model
     public function getBugInfo($tasks, $productIdList, $begin, $end, $builds)
     {
         $bugsByTask     = $this->dao->select('*')->from(TABLE_BUG)->where('testtask')->in(array_keys($tasks))->andWhere('testtask')->ne(0)->andWhere('deleted')->eq(0)->fetchAll('id');
-        $severityGroups = $statusGroups = $openedByGroups = $resolvedByGroups = $resolutionGroups = $moduleGroups = array();
+        $severityGroups = $statusGroups = $openedByGroups = $resolvedByGroups = $resolutionGroups = $moduleGroups = $typeGroups = array();
         $resolvedBugs   = 0;
         foreach($bugsByTask as $bug)
         {
-            $severityGroups[$bug->severity] = isset($severityGroups[$bug->severity])     ? $severityGroups[$bug->severity]     + 1 : 1;
-            $statusGroups[$bug->status]     = isset($statusGroups[$bug->status])         ? $statusGroups[$bug->status]         + 1 : 1;
-            $openedByGroups[$bug->openedBy] = isset($openedByGroups[$bug->openedBy])     ? $openedByGroups[$bug->openedBy]     + 1 : 1;
-            $moduleGroups[$bug->module]     = isset($moduleGroups[$bug->module])         ? $moduleGroups[$bug->module]         + 1 : 1;
+            $severityGroups[$bug->severity] = isset($severityGroups[$bug->severity]) ? $severityGroups[$bug->severity] + 1 : 1;
+            $typeGroups[$bug->type]         = isset($typeGroups[$bug->type])         ? $typeGroups[$bug->type]         + 1 : 1;
+            $statusGroups[$bug->status]     = isset($statusGroups[$bug->status])     ? $statusGroups[$bug->status]     + 1 : 1;
+            $openedByGroups[$bug->openedBy] = isset($openedByGroups[$bug->openedBy]) ? $openedByGroups[$bug->openedBy] + 1 : 1;
+            $moduleGroups[$bug->module]     = isset($moduleGroups[$bug->module])     ? $moduleGroups[$bug->module]     + 1 : 1;
             if($bug->resolvedBy) $resolvedByGroups[$bug->resolvedBy] = isset($resolvedByGroups[$bug->resolvedBy]) ? $resolvedByGroups[$bug->resolvedBy] + 1 : 1;
             if($bug->resolution) $resolutionGroups[$bug->resolution] = isset($resolutionGroups[$bug->resolution]) ? $resolutionGroups[$bug->resolution] + 1 : 1;
             if($bug->status == 'resolved' or $bug->status == 'closed') $resolvedBugs ++;
@@ -216,7 +217,7 @@ class testreportModel extends model
         $bugInfo['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($newBugs) * 100, 2);
 
         $this->app->loadLang('bug');
-        $users = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $users = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted');
         $data  = array();
         foreach($severityGroups as $severity => $count)
         {
@@ -225,6 +226,15 @@ class testreportModel extends model
             $data[$severity]->value = $count;
         }
         $bugInfo['bugSeverityGroups'] = $data;
+
+        $data  = array();
+        foreach($typeGroups as $type => $count)
+        {
+            $data[$type] = new stdclass();
+            $data[$type]->name  = zget($this->lang->bug->typeList, $type);
+            $data[$type]->value = $count;
+        }
+        $bugInfo['bugTypeGroups'] = $data;
 
         $data  = array();
         foreach($statusGroups as $status => $count)

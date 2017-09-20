@@ -124,7 +124,7 @@ $lang->searchObjects['release']     = '發佈';
 $lang->searchObjects['productplan'] = $lang->productCommon . '計劃';
 $lang->searchObjects['testtask']    = '測試版本';
 $lang->searchObjects['doc']         = '文檔';
-$lang->searchObjects['caselib']     = '用例庫';
+$lang->searchObjects['testcase']   = '用例庫';
 $lang->searchObjects['testreport']  = '測試報告';
 $lang->searchTips                   = '編號(ctrl+g)';
 
@@ -249,7 +249,7 @@ $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
 
 $lang->bug->menu->product   = array('link' => '%s', 'fixed' => true);
-$lang->bug->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,confirmbug,assignto', 'subModule' => 'tree');
+$lang->bug->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirmbug,assignto', 'subModule' => 'tree');
 $lang->bug->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
 $lang->bug->menu->testtask  = array('link' => '版本|testtask|browse|productID=%s');
 $lang->bug->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
@@ -449,16 +449,16 @@ $lang->browserNotice      = '你目前使用的瀏覽器可能無法得到最佳
 $lang->noticePasteImg     = "可以在編輯器直接貼圖。";
 
 /* 時間格式設置。*/
-define('DT_DATETIME1',  'Y-m-d H:i:s');
-define('DT_DATETIME2',  'y-m-d H:i');
-define('DT_MONTHTIME1', 'n/d H:i');
-define('DT_MONTHTIME2', 'n月d日 H:i');
-define('DT_DATE1',     'Y-m-d');
-define('DT_DATE2',     'Ymd');
-define('DT_DATE3',     'Y年m月d日');
-define('DT_DATE4',     'n月j日');
-define('DT_TIME1',     'H:i:s');
-define('DT_TIME2',     'H:i');
+if(!defined('DT_DATETIME1')) define('DT_DATETIME1',  'Y-m-d H:i:s');
+if(!defined('DT_DATETIME2')) define('DT_DATETIME2',  'y-m-d H:i');
+if(!defined('DT_MONTHTIME1'))define('DT_MONTHTIME1', 'n/d H:i');
+if(!defined('DT_MONTHTIME2'))define('DT_MONTHTIME2', 'n月d日 H:i');
+if(!defined('DT_DATE1'))     define('DT_DATE1',     'Y-m-d');
+if(!defined('DT_DATE2'))     define('DT_DATE2',     'Ymd');
+if(!defined('DT_DATE3'))     define('DT_DATE3',     'Y年m月d日');
+if(!defined('DT_DATE4'))     define('DT_DATE4',     'n月j日');
+if(!defined('DT_TIME1'))     define('DT_TIME1',     'H:i:s');
+if(!defined('DT_TIME2'))     define('DT_TIME2',     'H:i');
 
 /* datepicker 時間*/
 $lang->datepicker = new stdclass();

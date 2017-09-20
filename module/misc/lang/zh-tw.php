@@ -62,13 +62,13 @@ $lang->misc->tableName   = "表名";
 $lang->misc->tableStatus = "狀態";
 $lang->misc->novice      = "您可能初次使用禪道，是否進入新手模式？";
 
-$lang->user->noticeResetFile = "<h5>普通用戶請聯繫管理員進行修復</h5>
+$lang->misc->noticeRepair = "<h5>普通用戶請聯繫管理員進行修復</h5>
     <h5>管理員請登錄禪道所在的伺服器，創建<span>%s</span>檔案。</h5>
     <p>注意：</p>
     <ol>
     <li>檔案內容為空。</li>
     <li>如果之前檔案存在，刪除之後重新創建。</li>
-    </ol>";
+    </ol>"; 
 
 $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';

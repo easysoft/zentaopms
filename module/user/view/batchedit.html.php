@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php js::import($jsRoot . 'md5.js');?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['user']);?></span>
@@ -50,6 +51,7 @@ $minWidth = (count($visibleFields) > 7) ? 'w-120px' : '';
         <th class='w-120px<?php echo zget($visibleFields, 'phone', ' hidden')?>'>        <?php echo $lang->user->phone;?></th>
         <th class='w-120px<?php echo zget($visibleFields, 'address', ' hidden')?>'>      <?php echo $lang->user->address;?></th>
         <th class='w-120px<?php echo zget($visibleFields, 'zipcode', ' hidden')?>'>      <?php echo $lang->user->zipcode;?></th>
+        <th class='w-90px <?php echo zget($visibleFields, 'limitedUser', ' hidden')?>'>  <?php echo $lang->user->limitedUser;?></th>
       </tr>
     </thead>
     <?php $depts = array('ditto' => $lang->user->ditto) + $depts;?>
@@ -79,6 +81,7 @@ $minWidth = (count($visibleFields) > 7) ? 'w-120px' : '';
       <td class='<?php echo zget($visibleFields, 'phone', 'hidden')?>'>   <?php echo html::input("phone[$user->id]",    $user->phone, "class='form-control' autocomplete='off'");?></td>
       <td class='<?php echo zget($visibleFields, 'address', 'hidden')?>'> <?php echo html::input("address[$user->id]",  $user->address, "class='form-control' autocomplete='off'");?></td>
       <td class='<?php echo zget($visibleFields, 'zipcode', 'hidden')?>'> <?php echo html::input("zipcode[$user->id]",  $user->zipcode, "class='form-control' autocomplete='off'");?></td>
+      <td <?php echo zget($visibleFields, 'limitedUser', "class='hidden'")?>>  <?php echo html::radio("limitedUser[$user->id]", $lang->user->limitedUserList, $user->limitedUser);?></td>
     </tr>
     <?php endforeach;?>
     <tr>
@@ -93,6 +96,7 @@ $minWidth = (count($visibleFields) > 7) ? 'w-120px' : '';
     <tr><td colspan='<?php echo count($visibleFields) + 4?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
   </table>
 </form>
+<?php echo html::hidden('verifyRand', $rand);?>
 <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=user&section=custom&key=batchEditFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

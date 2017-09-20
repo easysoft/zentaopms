@@ -574,6 +574,7 @@ class projectModel extends model
             $firstProject = $projects[0];
             $pairs[$firstProject->id] = $firstProject->name;
         }
+
         return $pairs;
     }
 
@@ -1399,7 +1400,7 @@ class projectModel extends model
         $users = $this->dao->select('t1.account, t2.realname')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.project')->eq((int)$projectID)
-            ->beginIF($params == 'nodeleted')
+            ->beginIF($params == 'nodeleted' or empty($this->config->user->showDeleted))
             ->andWhere('t2.deleted')->eq(0)
             ->fi()
             ->fetchPairs();
@@ -1453,8 +1454,8 @@ class projectModel extends model
 
     /**
      * Manage team members.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1469,9 +1470,10 @@ class projectModel extends model
             if(empty($account)) continue;
 
             $member = new stdclass();
-            $member->role  = $roles[$key];
-            $member->days  = $days[$key];
-            $member->hours = $hours[$key];
+            $member->role        = $roles[$key];
+            $member->days        = $days[$key];
+            $member->hours       = $hours[$key];
+            $member->limitedUser = $limitedUser[$key];
 
             $mode = $modes[$key];
             if($mode == 'update')
@@ -1623,6 +1625,12 @@ class projectModel extends model
         $endTime  = strtotime($end);
         $preValue = 0;
         $todayTag = 0;
+
+        foreach($sets as $date => $set)
+        {
+            if($begin > $date) unset($sets[$date]);
+        }
+
         for($i = 0; $i < $period; $i++)
         {
             $currentTime = strtotime($current);
@@ -1743,6 +1751,8 @@ class projectModel extends model
     {
         $action = strtolower($action);
 
+        if(!common::limitedUser($project, 'project')) return false;
+
         if($action == 'start')    return $project->status == 'wait';
         if($action == 'close')    return $project->status != 'done';
         if($action == 'suspend')  return $project->status == 'wait' or $project->status == 'doing';
@@ -1765,7 +1775,7 @@ class projectModel extends model
     {
         $link = '';
         if($module == 'task' and ($method == 'view' || $method == 'edit' || $method == 'batchedit'))
-        {   
+        {
             $module = 'project';
             $method = 'task';
         }   
@@ -1860,8 +1870,28 @@ class projectModel extends model
     }
 
     /**
+     * Check the privilege.
+     *
+     * @param  object    $project
+     * @access public
+     * @return bool
+     */
+    public function getLimitedProject()
+    {
+        /* If is admin, return true. */
+        if($this->app->user->admin) return true;
+
+        /* Get all teams of all projects and group by projects, save it as static. */
+        $teams = $this->dao->select('project, limitedUser')->from(TABLE_TEAM)->where('account')->eq($this->app->user->account)->fetchAll('project');
+        foreach($teams as $projectID => $object)
+        {
+            if($object->limitedUser == 'yes') $this->session->set($this->app->user->account . 'project' . $object->project, $object->project);
+        }
+    }
+
+    /**
      * Fix order.
-     * 
+     *
      * @access public
      * @return void
      */

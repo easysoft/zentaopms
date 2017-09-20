@@ -29,14 +29,14 @@ class story extends control
 
     /**
      * Create a story.
-     * 
-     * @param  int    $productID 
-     * @param  int    $branch 
-     * @param  int    $moduleID 
-     * @param  int    $storyID 
-     * @param  int    $projectID 
-     * @param  int    $bugID 
-     * @param  int    $planID 
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleID
+     * @param  int    $storyID
+     * @param  int    $projectID
+     * @param  int    $bugID
+     * @param  int    $planID
      * @access public
      * @return void
      */
@@ -100,7 +100,7 @@ class story extends control
             if(!isset($products[$product->id])) $products[$product->id] = $product->name;
         }
 
-        $users = $this->user->getPairs('pdfirst|noclosed');
+        $users = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
 
         /* Set menu. */
@@ -116,12 +116,15 @@ class story extends control
         $verify     = '';
         $keywords   = '';
         $mailto     = '';
+        $color      = '';
 
         if($storyID > 0)
         {
             $story      = $this->story->getByID($storyID);
             $planID     = $story->plan;
             $source     = $story->source;
+            $sourceNote = $story->sourceNote;
+            $color      = $story->color;
             $pri        = $story->pri;
             $productID  = $story->product;
             $moduleID   = $story->module;
@@ -169,6 +172,7 @@ class story extends control
         $this->view->planID           = $planID;
         $this->view->source           = $source;
         $this->view->sourceNote       = $sourceNote;
+        $this->view->color            = $color;
         $this->view->pri              = $pri;
         $this->view->branch           = $branch;
         $this->view->branches         = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID) : array();
@@ -185,7 +189,7 @@ class story extends control
 
         $this->display();
     }
-    
+
     /**
      * Create a batch stories.
      * 
@@ -358,7 +362,7 @@ class story extends control
         $this->view->title      = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[] = $this->lang->story->edit;
         $this->view->story      = $story;
-        $this->view->users      = $this->user->getPairs('pofirst', "$story->assignedTo,$story->openedBy,$story->closedBy");
+        $this->view->users      = $this->user->getPairs('pofirst|nodeleted', "$story->assignedTo,$story->openedBy,$story->closedBy");
         $this->view->product    = $product;
         $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
         $this->display();
@@ -471,7 +475,7 @@ class story extends control
         }
 
         /* Set ditto option for users. */
-        $users          = $this->loadModel('user')->getPairs();
+        $users          = $this->loadModel('user')->getPairs('nodeleted');
         $users = array('' => '', 'ditto' => $this->lang->story->ditto) + $users;
 
         /* Set Custom*/
@@ -536,7 +540,7 @@ class story extends control
 
         /* Assign. */
         $this->view->title      = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
-        $this->view->users      = $this->user->getPairs('pofirst', $this->view->story->assignedTo);
+        $this->view->users      = $this->user->getPairs('pofirst|nodeleted', $this->view->story->assignedTo);
         $this->view->position[] = $this->lang->story->change;
         $this->view->needReview = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0) ? "checked='checked'" : "";
         $this->display();
@@ -566,7 +570,7 @@ class story extends control
 
         /* Assign. */
         $this->view->title      = $this->lang->story->activate . "STORY" . $this->lang->colon . $this->view->story->title;
-        $this->view->users      = $this->user->getPairs('pofirst', $this->view->story->closedBy);
+        $this->view->users      = $this->user->getPairs('pofirst|nodeleted', $this->view->story->closedBy);
         $this->view->position[] = $this->lang->story->activate;
         $this->display();
     }
@@ -693,7 +697,7 @@ class story extends control
         $this->view->product = $product;
         $this->view->story   = $story;
         $this->view->actions = $this->action->getList('story', $storyID);
-        $this->view->users   = $this->loadModel('user')->getPairs('', "$story->lastEditedBy,$story->openedBy");
+        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted', "$story->lastEditedBy,$story->openedBy");
 
         /* Get the affcected things. */
         $this->story->getAffectedScope($this->view->story);
@@ -1255,15 +1259,20 @@ class story extends control
 
     /**
      * AJAX: get module of a story.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @access public
-     * @return string 
+     * @return string
      */
-    public function ajaxGetModule($storyID)
+    public function ajaxGetInfo($storyID)
     {
-        $story = $this->story->getByID($storyID); 
-        echo $story->module;
+        $story = $this->story->getByID($storyID);
+
+        $storyInfo['moduleID'] = $story->module;
+        $storyInfo['estimate'] = $story->estimate;
+        $storyInfo['pri']      = $story->pri;
+        $storyInfo['spec']     = $story->spec;
+        echo json_encode($storyInfo);
     }
 
     /**
@@ -1436,6 +1445,7 @@ class story extends control
                 if(isset($storyLang->stageList[$story->stage]))         $story->stage        = $storyLang->stageList[$story->stage];
                 if(isset($storyLang->reasonList[$story->closedReason])) $story->closedReason = $storyLang->reasonList[$story->closedReason];
                 if(isset($storyLang->sourceList[$story->source]))       $story->source       = $storyLang->sourceList[$story->source];
+                if(isset($storyLang->sourceList[$story->sourceNote]))   $story->sourceNote   = $storyLang->sourceList[$story->sourceNote];
 
                 if(isset($users[$story->openedBy]))     $story->openedBy     = $users[$story->openedBy];
                 if(isset($users[$story->assignedTo]))   $story->assignedTo   = $users[$story->assignedTo];

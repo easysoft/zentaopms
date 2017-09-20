@@ -1,3 +1,8 @@
+$(document).ready(function()
+{
+    setTimeout(function(){fixedTheadOfList('#bug')}, 100);
+});
+
 function changeParams(obj)
 {
     var begin = $('.main .row').find('#begin').val();

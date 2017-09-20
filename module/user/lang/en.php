@@ -121,6 +121,12 @@ $lang->user->statusList['delete'] = 'Deleted';
 $lang->user->keepLogin['on']      = 'Keep login';
 $lang->user->loginWithDemoUser    = 'Login as Demo User:';
 
+$lang->user->tpl = new stdclass();
+$lang->user->tpl->type    = 'Type';
+$lang->user->tpl->title   = 'TPL Title';
+$lang->user->tpl->content = 'Content';
+$lang->user->tpl->public  = 'Public';
+
 $lang->user->placeholder = new stdclass();
 $lang->user->placeholder->account   = 'must be contain letters, underline, and numbers,at lease three characters';
 $lang->user->placeholder->password1 = 'must be at lease six characters';
@@ -146,6 +152,7 @@ $lang->user->error->originalPassword = "Old password is incorrect.";
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = 'Contact';
 $lang->user->contacts->listName = 'List Name';
+$lang->user->contacts->userList = 'User List';
 
 $lang->user->contacts->manage        = 'Manage';
 $lang->user->contacts->contactsList  = 'Contacts';
@@ -159,7 +166,7 @@ $lang->user->contacts->or            = ' or ';
 $lang->user->resetFail       = "Failed. Please check the account";
 $lang->user->resetSuccess    = "Reset! Please use your new password to login.";
 $lang->user->noticeResetFile = "<h5>If you are not Administrator, please contact Administrator to reset your password.</h5>
-    <h5>If you are, please login into your Zentao host and create the <span>%s</span> file.</h5>
+    <h5>If you are, please login into your Zentao host and create the <span> '%s' </span> file.</h5>
     <p>Note:</p>
     <ol>
     <li>Keep the ok.txt empty.</li>

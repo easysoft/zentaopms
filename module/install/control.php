@@ -70,6 +70,13 @@ class install extends control
         $this->view->pdoResult      = $this->install->checkPDO();
         $this->view->pdoMySQLResult = $this->install->checkPDOMySQL();
         $this->view->jsonResult     = $this->install->checkJSON();
+        $this->view->opensslResult  = $this->install->checkOpenssl();
+        $this->view->mbstringResult = $this->install->checkMbstring();
+        $this->view->zlibResult     = $this->install->checkZlib();
+        $this->view->curlResult     = $this->install->checkCurl();
+        $this->view->filterResult   = $this->install->checkFilter();
+        $this->view->gdResult       = $this->install->checkGD();
+        $this->view->iconvResult    = $this->install->checkIconv();
         $this->view->tmpRootInfo    = $this->install->getTmpRoot();
         $this->view->tmpRootResult  = $this->install->checkTmpRoot();
         $this->view->dataRootInfo   = $this->install->getDataRoot();

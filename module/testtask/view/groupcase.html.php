@@ -29,7 +29,7 @@
       <th class='w-30px' title='<?php echo $lang->testcase->bugs?>'><?php echo $lang->testcase->bugsAB;?></th>
       <th class='w-30px' title='<?php echo $lang->testcase->results?>'><?php echo $lang->testcase->resultsAB;?></th>
       <th class='w-30px' title='<?php echo $lang->testcase->stepNumber?>'><?php echo $lang->testcase->stepNumberAB;?></th>
-      <th class='w-60px'> <?php echo $lang->actions;?></th>
+      <th class='w-80px'> <?php echo $lang->actions;?></th>
     </tr>
   </thead>
   <?php $i = 0;?>
@@ -54,6 +54,7 @@
     <td><?php echo (common::hasPriv('testtask', 'results') and $run->results) ? html::a($this->createLink('testtask', 'results', "runID={$run->id}&caseID={$run->case}"), $run->results, '', "class='iframe'") : $run->results;?></td>
     <td><?php echo $run->stepNumber;?></td>
     <td>
+      <?php common::printIcon('testtask', 'runCase', "runID=$run->id&caseID=$run->case&version=$run->caseVersion", '', 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");?>
       <?php common::printIcon('testcase', 'edit', "caseID=$run->case", '', 'list');?>
       <?php common::printIcon('testcase', 'delete', "caseID=$run->case", '', 'list', '', 'hiddenwin');?>
     </td>

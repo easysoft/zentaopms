@@ -38,8 +38,8 @@
         echo '</div>';
 
         echo "<div class='btn-group'>";
-        common::printIcon('testtask', 'edit',     "taskID=$task->id");
-        common::printIcon('testtask', 'delete',   "taskID=$task->id", '', 'button', '', 'hiddenwin');
+        common::printIcon('testtask', 'edit',     "taskID=$task->id", $task);
+        common::printIcon('testtask', 'delete',   "taskID=$task->id", $task, 'button', '', 'hiddenwin');
         echo '</div>';
 
         echo "<div class='btn-group'>";

@@ -51,6 +51,7 @@ $lang->project->mine          = '我负责：';
 $lang->project->other         = '其他：';
 $lang->project->deleted       = '已删除';
 $lang->project->delayed       = '已延期';
+$lang->project->product       = $lang->project->products;
 
 $lang->project->start    = '开始';
 $lang->project->activate = '激活';
@@ -77,7 +78,11 @@ $lang->team->join       = '加盟日';
 $lang->team->hours      = '可用工时/天';
 $lang->team->days       = '可用工日';
 $lang->team->totalHours = '总计';
- 
+
+$lang->team->limitedUser            = '受限用户';
+$lang->team->limitedUserList['no']  = '否';
+$lang->team->limitedUserList['yes'] = '是';
+
 $lang->project->basicInfo = '基本信息';
 $lang->project->otherInfo = '其他信息';
 

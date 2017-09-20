@@ -66,7 +66,7 @@ class buildModel extends model
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date DESC, t1.id desc')
-            ->fetchAll();
+            ->fetchAll('id');
     }
 
     /**
@@ -406,5 +406,20 @@ class buildModel extends model
         {
             $this->loadModel('action')->create('bug', $unlinkBugID, 'unlinkedfrombuild', '', $buildID);
         }
+    }
+
+    /**
+     * Judge an action is clickable or not.
+     * 
+     * @param  object    $project
+     * @param  string    $action 
+     * @access public
+     * @return bool
+     */
+    public static function isClickable($build, $action)
+    {
+        if(!common::limitedUser($build)) return false;
+
+        return true;
     }
 }

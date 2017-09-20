@@ -30,8 +30,14 @@ $lang->extension->installed   = '已安装';
 $lang->extension->deactivated = '被禁用';
 $lang->extension->available   = '已下载';
 
+$lang->extension->name        = '插件名称';
+$lang->extension->code        = '代号';
+$lang->extension->desc        = '描述';
+$lang->extension->type        = '类型';
+$lang->extension->dirs        = '安装目录';
+$lang->extension->files       = '安装文件';
+$lang->extension->status      = '状态';
 $lang->extension->version     = '版本';
-$lang->extension->compatible  = '适用版本';
 $lang->extension->latest      = '<small>最新版本<strong><a href="%s" target="_blank" class="extension">%s</a></strong>，兼容禅道<a href="http://api.zentao.net/goto.php?item=latest" target="_blank" class="alert-link"><strong>%s</strong></a></small>';
 $lang->extension->author      = '作者';
 $lang->extension->license     = '授权';
@@ -40,12 +46,17 @@ $lang->extension->downloads   = '下载量';
 $lang->extension->compatible  = '兼容性';
 $lang->extension->grade       = '评分';
 $lang->extension->depends     = '依赖';
+$lang->extension->zentaoCompatible  = '适用版本';
+$lang->extension->installedTime     = '安装时间';
 
 $lang->extension->publicList[0] = '手工下载';
 $lang->extension->publicList[1] = '直接下载';
 
 $lang->extension->compatibleList[0] = '未知';
 $lang->extension->compatibleList[1] = '兼容';
+
+$lang->extension->obtainOfficial[0] = '第三方';
+$lang->extension->obtainOfficial[1] = '官方';
 
 $lang->extension->byDownloads   = '最多下载';
 $lang->extension->byAddedTime   = '最新添加';

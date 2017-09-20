@@ -61,6 +61,16 @@ $lang->testtask->lastRunTime    = 'Time';
 $lang->testtask->lastRunResult  = 'Result';
 $lang->testtask->reportField    = 'Report';
 $lang->testtask->files          = 'Upload';
+$lang->testtask->case           = 'Case';
+$lang->testtask->version        = 'Version';
+$lang->testtask->caseResult     = 'Case Result';
+$lang->testtask->stepResults    = 'Step Results';
+$lang->testtask->lastRunner     = 'Last Runner';
+$lang->testtask->lastRunDate    = 'Last RunDate';
+$lang->testtask->date           = 'Date';
+
+$lang->testtask->beginAndEnd    = 'Date';
+$lang->testtask->to             = 'To';
 
 $lang->testtask->legendDesc      = 'Desc';
 $lang->testtask->legendReport    = 'Report';

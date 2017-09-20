@@ -61,10 +61,10 @@
           <td><?php echo $run->stepNumber;?></td>
           <td class='text-center'>
             <?php
-            common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase iframe', false, "data-width='95%'");
-            common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe', '', "data-width='90%'");
+            common::printIcon('testtask', 'runCase',    "id=$run->id", $run, 'list', '', '', 'runCase iframe', false, "data-width='95%'");
+            common::printIcon('testtask', 'results',    "id=$run->id", $run, 'list', '', '', 'iframe', '', "data-width='90%'");
 
-            if(common::hasPriv('testtask', 'unlinkCase'))
+            if(common::hasPriv('testtask', 'unlinkCase', $run))
             {
                 $unlinkURL = $this->createLink('testtask', 'unlinkCase', "caseID=$run->id&confirm=yes");
                 echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"caseList\",confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$lang->testtask->unlinkCase}' class='btn-icon'");

@@ -22,7 +22,6 @@ class sso extends control
     {
         $referer = empty($_GET['referer']) ? '' : $this->get->referer;
         $locate  = empty($referer) ? getWebRoot() : base64_decode($referer);
-        if($this->loadModel('user')->isLogon()) die($this->locate($locate));
 
         $this->app->loadConfig('sso');
         if(!$this->config->sso->turnon) die($this->locate($locate));
@@ -40,9 +39,9 @@ class sso extends control
             if(strpos($location, '&') !== false)
             {
                 $location = rtrim($location, '&') . "&token=$token&auth=$auth&userIP=$userIP&callback=$callback&referer=$referer";
-            }   
+            }
             else
-            {   
+            {
                 $location = rtrim($location, '?') . "?token=$token&auth=$auth&userIP=$userIP&callback=$callback&referer=$referer";
             }
             $this->locate($location);
@@ -61,6 +60,11 @@ class sso extends control
                 {
                     $this->session->set('ssoData', $data);
                     $this->locate($this->createLink('sso', 'bind', "referer=" . helper::safe64Encode($locate)));
+                }
+
+                if($this->loadModel('user')->isLogon())
+                {
+                    if($this->session->user && $this->session->user->account == $user->account) die($this->locate($locate));
                 }
 
                 $this->user->cleanLocked($user->account);
@@ -187,7 +191,7 @@ class sso extends control
             die(js::locate(helper::safe64Decode($referer), 'parent'));
         }
         $this->view->title = $this->lang->sso->bind;
-        $this->view->users = $this->user->getPairs('noclosed');
+        $this->view->users = $this->user->getPairs('noclosed|nodeleted');
         $this->view->data  = $ssoData;
         $this->display();
     }
@@ -201,7 +205,7 @@ class sso extends control
     public function getUserPairs()
     {
         if(!$this->sso->checkKey()) return false;
-        $users = $this->loadModel('user')->getPairs('noclosed');
+        $users = $this->loadModel('user')->getPairs('noclosed|nodeleted');
         die(json_encode($users));
     }
 

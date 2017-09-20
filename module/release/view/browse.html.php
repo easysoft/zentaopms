@@ -53,13 +53,13 @@
         <?php
         if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ', '', "class='btn-icon' title='{$lang->release->linkStory}'");
         if(common::hasPriv('release', 'linkBug') and $this->config->global->flow != 'onlyStory') echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"),   '<i class="icon-bug"></i> ',  '', "class='btn-icon' title='{$lang->release->linkBug}'");
-        if(common::hasPriv('release', 'changeStatus'))
+        if(common::hasPriv('release', 'changeStatus', $release))
         {
             $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
             echo html::a(inlink('changeStatus', "releaseID=$release->id&status=$changedStatus"),   '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ',  'hiddenwin', "class='btn-icon' title='{$lang->release->changeStatusList[$changedStatus]}'");
         }
-        common::printIcon('release', 'edit',   "release=$release->id", '', 'list');
-        if(common::hasPriv('release', 'delete'))
+        common::printIcon('release', 'edit',   "release=$release->id", $release, 'list');
+        if(common::hasPriv('release', 'delete', $release))
         {
             $deleteURL = $this->createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
             echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"releaseList\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='btn-icon' title='{$lang->release->delete}'");

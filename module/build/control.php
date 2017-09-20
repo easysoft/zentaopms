@@ -77,7 +77,7 @@ class build extends control
         $this->view->products      = $products;
         $this->view->lastBuild     = $this->build->getLast($projectID);
         $this->view->productGroups = $productGroups;
-        $this->view->users         = $this->user->getPairs();
+        $this->view->users         = $this->user->getPairs('nodeleted');
         $this->display();
     }
 

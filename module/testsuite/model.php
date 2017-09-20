@@ -804,4 +804,19 @@ class testsuiteModel extends model
             }
         }
     }
+
+    /**
+     * Judge an action is clickable or not.
+     *-
+     * @param  object $product-
+     * @param  string $action-
+     * @access public
+     * @return void
+     */
+    public static function isClickable($testsuite, $action)
+    {
+        if(!common::limitedUser($testsuite)) return false;
+
+        return true;
+    }
 }

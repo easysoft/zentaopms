@@ -36,6 +36,7 @@ $lang->testcase->stage            = '适用阶段';
 $lang->testcase->reviewedBy       = '由谁评审';
 $lang->testcase->reviewedDate     = '评审时间';
 $lang->testcase->reviewResult     = '评审结果';
+$lang->testcase->forceNotReview   = '不需要评审';
 $lang->testcase->lastEditedByAB   = '修改者';
 $lang->testcase->lastEditedDateAB = '修改日期';
 $lang->testcase->lastEditedDate   = '修改日期';
@@ -45,6 +46,8 @@ $lang->testcase->lastRunDate      = '执行时间';
 $lang->testcase->assignedTo       = '指派给';
 $lang->testcase->colorTag         = '颜色标签';
 $lang->testcase->lastRunResult    = '结果';
+$lang->testcase->desc             = '步骤';
+$lang->testcase->expect           = '预期';
 $lang->testcase->allProduct       = "所有{$lang->productCommon}";
 $lang->testcase->fromBug          = '来源Bug';
 $lang->testcase->toBug            = '生成Bug';
@@ -110,11 +113,11 @@ $lang->testcase->allCases      = '所有';
 $lang->testcase->needConfirm   = '需求变动';
 $lang->testcase->bySearch      = '搜索';
 
-$lang->testcase->lblStory                    = '相关需求';
-$lang->testcase->lblLastEdited               = '最后编辑';
-$lang->testcase->lblTypeValue                = '类型可选值列表';
-$lang->testcase->lblStageValue               = '阶段可选值列表';
-$lang->testcase->lblStatusValue              = '状态可选值列表';
+$lang->testcase->lblStory           = '相关需求';
+$lang->testcase->lblLastEdited      = '最后编辑';
+$lang->testcase->lblTypeValue       = '类型可选值列表';
+$lang->testcase->lblStageValue      = '阶段可选值列表';
+$lang->testcase->lblStatusValue     = '状态可选值列表';
 
 $lang->testcase->legendBasicInfo    = '基本信息';
 $lang->testcase->legendAttatch      = '附件';
@@ -126,6 +129,9 @@ $lang->testcase->confirmDelete      = '您确认要删除该测试用例吗？';
 $lang->testcase->confirmBatchDelete = '您确认要批量删除这些测试用例吗？';
 $lang->testcase->ditto              = '同上';
 $lang->testcase->dittoNotice        = '该用例与上一用例不属于同一产品！';
+
+$lang->testcase->reviewList[0] = '否';
+$lang->testcase->reviewList[1] = '是';
 
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;

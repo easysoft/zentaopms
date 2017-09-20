@@ -29,7 +29,7 @@
         ob_start();
 
         echo "<div class='btn-group'>";
-        if(common::hasPriv('release', 'changeStatus'))
+        if(common::hasPriv('release', 'changeStatus', $release))
         {
             $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
             echo html::a(inlink('changeStatus', "releaseID=$release->id&type=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ' . $lang->release->changeStatusList[$changedStatus], 'hiddenwin', "class='btn'");
@@ -39,8 +39,8 @@
         echo '</div>';
 
         echo "<div class='btn-group'>";
-        common::printIcon('release', 'edit',   "releaseID=$release->id");
-        common::printIcon('release', 'delete', "releaseID=$release->id", '', 'button', '', 'hiddenwin');
+        common::printIcon('release', 'edit',   "releaseID=$release->id", $release);
+        common::printIcon('release', 'delete', "releaseID=$release->id", $release, 'button', '', 'hiddenwin');
         echo '</div>';
 
         echo "<div class='btn-group'>";

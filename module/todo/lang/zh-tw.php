@@ -32,6 +32,7 @@ $lang->todo->end         = '結束';
 $lang->todo->beginAB     = '開始';
 $lang->todo->endAB       = '結束';
 $lang->todo->beginAndEnd = '起止時間';
+$lang->todo->idvalue     = '關聯編號';
 $lang->todo->type        = '類型';
 $lang->todo->pri         = '優先順序';
 $lang->todo->name        = '名稱';

@@ -39,18 +39,18 @@ class testtask extends control
     }
 
     /**
-     * Browse test tasks. 
-     * 
-     * @param  int    $productID 
-     * @param  string $type 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * Browse test tasks.
+     *
+     * @param  int    $productID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $type = 'local,wait', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $branch = '', $type = 'local,wait', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $beginTime = 0, $endTime = 0)
     {
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true));
@@ -58,6 +58,9 @@ class testtask extends control
         $scopeAndStatus = explode(',',$type);
         $this->session->set('testTaskVersionScope', $scopeAndStatus[0]);
         $this->session->set('testTaskVersionStatus', $scopeAndStatus[1]);
+
+        $beginTime = $beginTime ? date('Y-m-d', strtotime($beginTime)) : '';
+        $endTime   = $endTime   ? date('Y-m-d', strtotime($endTime))   : '';
 
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
@@ -77,10 +80,12 @@ class testtask extends control
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
         $this->view->orderBy     = $orderBy;
-        $this->view->tasks       = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus);
+        $this->view->tasks       = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus, $beginTime, $endTime);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
         $this->view->branch      = $branch;
+        $this->view->beginTime   = $beginTime;
+        $this->view->endTime     = $endTime;
 
         $this->display();
     }
@@ -157,7 +162,7 @@ class testtask extends control
         $this->view->productID    = $productID;
         $this->view->builds       = $builds;
         $this->view->build        = $build;
-        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|qdfirst');
+        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|qdfirst|nodeleted');
 
         $this->display();
     }
@@ -286,8 +291,8 @@ class testtask extends control
         $this->view->productName   = $this->products[$productID];
         $this->view->task          = $task;
         $this->view->runs          = $runs;
-        $this->view->users         = $this->loadModel('user')->getPairs('noclosed,qafirst');
-        $this->view->assignedTos   = $this->loadModel('user')->getPairs('noclosed,qafirst');
+        $this->view->users         = $this->loadModel('user')->getPairs('noclosed|qafirst');
+        $this->view->assignedTos   = $this->loadModel('user')->getPairs('noclosed|nodeleted|qafirst');
         $this->view->moduleTree    = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID);
         $this->view->browseType    = $browseType;
         $this->view->param         = $param;
@@ -349,9 +354,9 @@ class testtask extends control
 
     /**
      * Group case.
-     * 
-     * @param  int    $taskID 
-     * @param  string $groupBy 
+     *
+     * @param  int    $taskID
+     * @param  string $groupBy
      * @access public
      * @return void
      */
@@ -401,8 +406,8 @@ class testtask extends control
 
     /**
      * Edit a test task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -438,7 +443,7 @@ class testtask extends control
         $this->view->task         = $task;
         $this->view->projects     = $this->product->getProjectPairs($productID);
         $this->view->builds       = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = '');
-        $this->view->users        = $this->loadModel('user')->getPairs('', $task->owner);
+        $this->view->users        = $this->loadModel('user')->getPairs('nodeleted', $task->owner);
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
 
         $this->display();
@@ -565,7 +570,7 @@ class testtask extends control
         $this->view->position[]   = $this->lang->testtask->common;
         $this->view->position[]   = $this->lang->close;
         $this->view->actions      = $actions;
-        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|qdfirst');
+        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|nodeleted|qdfirst');
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
         $this->display();
     }
@@ -771,8 +776,8 @@ class testtask extends control
 
     /**
      * Run case.
-     * 
-     * @param  int    $runID 
+     *
+     * @param  int    $runID
      * @param  String $extras   others params, forexample, caseID=10, version=3
      * @access public
      * @return void
@@ -795,7 +800,7 @@ class testtask extends control
         {
             $caseResult = $this->testtask->createResult($runID);
             if(dao::isError()) die(js::error(dao::getError()));
-            
+
             if('fail' == $caseResult) { 
 
                 $response['result']  = 'success';

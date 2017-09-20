@@ -56,6 +56,7 @@ class task extends control
         $task->estStarted  = '';
         $task->deadline    = '';
         $task->mailto      = '';
+        $task->color       = '';
         if($taskID > 0)
         {
             $task      = $this->task->getByID($taskID);
@@ -104,7 +105,7 @@ class task extends control
                 $taskID   = $taskID['id'];
                 $actionID = $this->action->create('task', $taskID, 'Opened', '');
                 $this->task->sendmail($taskID, $actionID);
-            }            
+            }
 
             /* If link from no head then reload*/
             if(isonlybody())
@@ -138,7 +139,7 @@ class task extends control
             }
         }
 
-        $users            = $this->loadModel('user')->getPairs('noclosed');
+        $users            = $this->loadModel('user')->getPairs('noclosed|nodeleted');
         $moduleIdList     = $this->tree->getAllChildID($moduleID);
         $stories          = $this->story->getProjectStoryPairs($projectID, 0, 0, $moduleIdList);
         $members          = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
@@ -167,9 +168,9 @@ class task extends control
 
     /**
      * Batch create task.
-     * 
-     * @param  int    $projectID 
-     * @param  int    $storyID 
+     *
+     * @param  int    $projectID
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -295,7 +296,7 @@ class task extends control
         $this->view->position[] = $this->lang->task->common;
         $this->view->position[] = $this->lang->task->edit;
         $this->view->stories    = $this->story->getProjectStoryPairs($this->view->project->id);
-        $this->view->users      = $this->loadModel('user')->getPairs('', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}"); 
+        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}"); 
         $this->view->modules    = $this->tree->getTaskOptionMenu($this->view->task->project);
         $this->display();
     }
@@ -352,7 +353,7 @@ class task extends control
             /* Set modules and members. */
             $modules = $this->tree->getTaskOptionMenu($projectID);
             $modules = array('ditto' => $this->lang->task->ditto) + $modules;
-            $members = $this->project->getTeamMemberPairs($projectID);
+            $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
             $members = array('' => '', 'ditto' => $this->lang->task->ditto) + $members;
             $members['closed'] = 'Closed';
 
@@ -487,8 +488,8 @@ class task extends control
 
     /**
      * View a task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -1150,6 +1151,27 @@ class task extends control
                 $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskQueryCondition)
                     ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
                     ->orderBy($orderBy)->fetchAll('id');
+
+                foreach($tasks as $key => $task)
+                {
+                    /* Compute task progess. */
+                    if($task->consumed == 0 and $task->left == 0)
+                    {
+                        $task->progess = 0;
+                    }
+                    elseif($task->consumed != 0 and $task->left == 0)
+                    {
+                        $task->progess = 100;
+                    }
+                    else
+                    {
+                        $task->progess = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                    }
+
+                    $task->progess .= '%';
+
+                    $tasks[$key] = $task;
+                }
             }
             else
             {

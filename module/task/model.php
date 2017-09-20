@@ -51,7 +51,7 @@ class taskModel extends model
             /* Check duplicate task. */
             if($task->type != 'affair')
             {
-                $result = $this->loadModel('common')->removeDuplicate('task', $task, "project=$projectID");
+                $result = $this->loadModel('common')->removeDuplicate('task', $task, "project=$projectID and story=$task->story");
                 if($result['stop'])
                 {
                     $tasksID[$assignedTo] = array('status' => 'exists', 'id' => $result['duplicate']);
@@ -98,8 +98,8 @@ class taskModel extends model
 
     /**
      * Create a batch task.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -131,7 +131,7 @@ class taskModel extends model
         for($i = 0; $i < $batchNum; $i++)
         {
             $story      = $tasks->story[$i]      == 'ditto' ? $story     : $tasks->story[$i];
-            $module     = $tasks->module[$i]     == 'ditto' ? $module    : $tasks->module[$i];    
+            $module     = $tasks->module[$i]     == 'ditto' ? $module    : $tasks->module[$i];
             $type       = $tasks->type[$i]       == 'ditto' ? $type      : $tasks->type[$i];
             $assignedTo = $tasks->assignedTo[$i] == 'ditto' ? $assignedTo: $tasks->assignedTo[$i];
 
@@ -176,7 +176,7 @@ class taskModel extends model
             $taskID = $this->dao->lastInsertID();
             if($tasks->story[$i] != false) $this->story->setStage($tasks->story[$i]);
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
-            
+
             $mails[$i]           = new stdclass();
             $mails[$i]->taskID   = $taskID;
             $mails[$i]->actionID = $actionID;
@@ -1215,25 +1215,25 @@ class taskModel extends model
 
     /**
      * Process a task, judge it's status.
-     * 
-     * @param  object    $task 
+     *
+     * @param  object    $task
      * @access private
      * @return object
      */
     public function processTask($task)
     {
         $today = helper::today();
-       
+
         /* Delayed or not?. */
         if($task->status !== 'done' and $task->status !== 'cancel' and $task->status != 'closed')
         {
             if($task->deadline != '0000-00-00')
             {
                 $delay = helper::diffDate($today, $task->deadline);
-                if($delay > 0) $task->delay = $delay;            
-            } 
+                if($delay > 0) $task->delay = $delay;
+            }
         }
-        
+
         /* Story changed or not. */
         $task->needConfirm = false;
         if($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion) $task->needConfirm = true;
@@ -1592,6 +1592,8 @@ class taskModel extends model
     public static function isClickable($task, $action)
     {
         $action = strtolower($action);
+
+        if(!common::limitedUser($task, 'task')) return false;
 
         if($action == 'assignto') return $task->status != 'closed' and $task->status != 'cancel';
         if($action == 'start')    return $task->status == 'wait';

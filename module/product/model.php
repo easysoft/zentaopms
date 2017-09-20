@@ -241,9 +241,9 @@ class productModel extends model
     }
 
     /**
-     * Get products by project. 
-     * 
-     * @param  int    $projectID 
+     * Get products by project.
+     *
+     * @param  int    $projectID
      * @access public
      * @return array
      */
@@ -256,6 +256,7 @@ class productModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')
             ->where('t1.project')->eq($projectID)
+            ->orderBy('t2.order desc')
             ->fetchPairs();
     }
 
@@ -654,11 +655,11 @@ class productModel extends model
 
     /**
      * Get product stats.
-     * 
-     * @param  string $orderBy 
-     * @param  int    $pager 
+     *
+     * @param  string $orderBy
+     * @param  int    $pager
      * @access public
-     * @return array 
+     * @return array
      */
     public function getStats($orderBy = 'order_desc', $pager = null, $status = 'noclosed')
     {
@@ -828,6 +829,8 @@ class productModel extends model
     public static function isClickable($product, $action)
     {
         $action = strtolower($action);
+
+        if(!common::limitedUser($product)) return false;
 
         if($action == 'close') return $product->status != 'closed';
 

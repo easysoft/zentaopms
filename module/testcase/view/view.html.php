@@ -45,22 +45,22 @@
         echo "<div class='btn-group'>";
         if(!$isLibCase)
         {
-            common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", '', 'button', '', '', 'runCase', false, "data-width='95%'");
-            common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", '', 'button', '', '', 'results', false, "data-width='95%'");
+            common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", $case, 'button', '', '', 'runCase', false, "data-width='95%'");
+            common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", $case, 'button', '', '', 'results', false, "data-width='95%'");
 
-            if($caseFails > 0) common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", '', 'button', 'bug', '', 'iframe', '', "data-width='90%'");
+            if($caseFails > 0) common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", $case, 'button', 'bug', '', 'iframe', '', "data-width='90%'");
         }
         if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review', "caseID=$case->id", $case, 'button', 'review', '', 'iframe');
         echo '</div>';
 
         echo "<div class='btn-group'>";
-        common::printIcon('testcase', 'edit',"caseID=$case->id");
-        common::printCommentIcon('testcase');
-        if(!$isLibCase) common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", '', 'button', 'copy');
-        if($isLibCase and common::hasPriv('testsuite', 'createCase')) echo html::a($this->createLink('testsuite', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id"), "<i class='icon-copy'></i>", '', "class='btn' title='{$lang->testcase->copy}'");
-        common::printIcon('testcase', 'delete', "caseID=$case->id", '', 'button', '', 'hiddenwin');
+        common::printIcon('testcase', 'edit',"caseID=$case->id", $case);
+        common::printCommentIcon('testcase', $case);
+        if(!$isLibCase) common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'button', 'copy');
+        if($isLibCase and common::hasPriv('testsuite', 'createCase')) echo html::a($this->createLink('testsuite', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id", $case), "<i class='icon-copy'></i>", '', "class='btn' title='{$lang->testcase->copy}'");
+        common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'button', '', 'hiddenwin');
         echo '</div>';
-        
+
         echo "<div class='btn-group'>";
         common::printRPN($browseLink, $preAndNext, inlink('view', "caseID=%s&version=0&testtask=$from&taskID=$taskID"));
         echo '</div>';

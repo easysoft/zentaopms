@@ -265,7 +265,7 @@ class mail extends control
                 }
             }
 
-            $this->mail->send($this->post->to, $this->lang->mail->subject, $this->lang->mail->content, "", true);
+            $this->mail->send($this->post->to, $this->lang->mail->testSubject, $this->lang->mail->testContent, "", true);
             if($this->mail->isError())
             {
                 $this->view->error = $this->mail->getError();

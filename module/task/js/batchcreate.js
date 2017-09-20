@@ -38,7 +38,14 @@ function copyStoryTitle(num)
     startPosition  = storyTitle.indexOf(':') + 1;
     endPosition    = storyTitle.lastIndexOf('[');
     storyTitle     = storyTitle.substr(startPosition, endPosition - startPosition);
+
     $('#name\\[' + num + '\\]').val(storyTitle);
+    $('#estimate\\[' + num + '\\]').val($('#storyEstimate' + num).val());
+    $('#desc\\[' + num + '\\]').val($('#storyDesc' + num).val());
+
+    var storyPri = $('#storyPri' + num).val();
+    if(storyPri == 0) $('#pri' + num ).val('3');
+    if(storyPri != 0) $('#pri' + num ).val(storyPri);
 }
 
 /* Set the story module. */
@@ -47,11 +54,15 @@ function setStoryRelated(num)
     var storyID = $('#story' + num).val();
     if(storyID)
     {
-        var link = createLink('story', 'ajaxGetModule', 'storyID=' + storyID);
-        $.get(link, function(moduleID)
+        var link = createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
+        $.getJSON(link, function(storyInfo)
         {
-            $('#module' + num).val(parseInt(moduleID));
+            $('#module' + num).val(parseInt(storyInfo.moduleID));
             $('#module' + num).trigger("chosen:updated");
+
+            $('#storyEstimate' + num).val(storyInfo.estimate);
+            $('#storyPri'      + num).val(storyInfo.pri);
+            $('#storyDesc'     + num).val(storyInfo.spec);
         });
     }
 }
