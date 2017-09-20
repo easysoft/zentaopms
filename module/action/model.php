@@ -222,12 +222,10 @@ class actionModel extends model
             if($actionName == 'svncommited' and isset($commiters[$action->actor]))
             {
                 $action->actor = $commiters[$action->actor];
-                if($this->config->requestType == 'GET') $action->comment = str_replace('+', '%2B', $action->comment);
             }
             elseif($actionName == 'gitcommited' and isset($commiters[$action->actor]))
             {
                 $action->actor = $commiters[$action->actor];
-                if($this->config->requestType == 'GET') $action->comment = str_replace('+', '%2B', $action->comment);
             }
             elseif($actionName == 'linked2project')
             {
@@ -324,6 +322,23 @@ class actionModel extends model
                 }
             }
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
+
+            $actionName = strtolower($action->action);
+            if($actionName == 'svncommited')
+            {
+                foreach($action->history as $history)
+                {
+                    if($history->field == 'subversion') $history->diff = str_replace('+', '%2B', $history->diff);
+                }
+            }
+            elseif($actionName == 'gitcommited')
+            {
+                foreach($action->history as $history)
+                {
+                    if($history->field == 'git') $history->diff = str_replace('+', '%2B', $history->diff);
+                }
+            }
+
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
             $actions[$actionID] = $action;
         }
