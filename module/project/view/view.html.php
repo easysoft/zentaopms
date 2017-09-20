@@ -35,8 +35,8 @@
         echo '</div>';
 
         echo "<div class='btn-group'>";
-        common::printIcon('project', 'edit', $params);
-        common::printIcon('project', 'delete', $params, '', 'button', '', 'hiddenwin');
+        common::printIcon('project', 'edit', $params, $project);
+        common::printIcon('project', 'delete', $params, $project, 'button', '', 'hiddenwin');
         echo '</div>';
         common::printRPN($browseLink);
 

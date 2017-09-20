@@ -202,6 +202,11 @@ $config->bug->datatable->fieldList['activatedCount']['fixed']    = 'no';
 $config->bug->datatable->fieldList['activatedCount']['width']    = '80';
 $config->bug->datatable->fieldList['activatedCount']['required'] = 'no';
 
+$config->bug->datatable->fieldList['activatedDate']['title']    = 'activatedDate';
+$config->bug->datatable->fieldList['activatedDate']['fixed']    = 'no';
+$config->bug->datatable->fieldList['activatedDate']['width']    = '90';
+$config->bug->datatable->fieldList['activatedDate']['required'] = 'no';
+
 $config->bug->datatable->fieldList['openedBy']['title']    = 'openedByAB';
 $config->bug->datatable->fieldList['openedBy']['fixed']    = 'no';
 $config->bug->datatable->fieldList['openedBy']['width']    = '80';

@@ -27,7 +27,7 @@
       }
       else
       {
-          common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
+          if($app->user->limitedUser === 'no') common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
       }
       ?>
     </div>
@@ -41,6 +41,7 @@
         <th><?php echo $lang->team->days;?></th>
         <th><?php echo $lang->team->hours;?></th>
         <th><?php echo $lang->team->totalHours;?></th>
+        <th><?php echo $lang->team->limitedUser;?></th>
         <th><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -60,9 +61,10 @@
       <td><?php echo $member->days . $lang->project->day;?></td>
       <td><?php echo $member->hours . $lang->project->workHour;?></td>
       <td><?php echo $memberHours . $lang->project->workHour;?></td>
+      <td><?php echo $lang->team->limitedUserList[$member->limitedUser];?></td>
       <td>
         <?php
-        if (common::hasPriv('project', 'unlinkMember'))
+        if (common::hasPriv('project', 'unlinkMember', $member))
         {
             $unlinkURL = $this->createLink('project', 'unlinkMember', "projectID=$project->id&account=$member->account&confirm=yes");
             echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"memberList\",confirmUnlinkMember)", '<i class="icon-green-project-unlinkMember icon-remove"></i>', '', "class='btn-icon' title='{$lang->project->unlinkMember}'");
@@ -74,7 +76,7 @@
     </tbody>
     <tfoot>
     <tr>
-      <td colspan='7'>
+      <td colspan='8'>
       <div class='table-actions clearfix'><div class='text'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours{$lang->project->workHour}</strong>";?></div></div>
       </td>
     </tr>

@@ -976,6 +976,7 @@ class bugModel extends model
             ->add('toStory', 0)
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
+            ->add('activatedDate', $now)
             ->join('openedBuild', ',')
             ->remove('comment,files,labels')
             ->get();
@@ -2242,6 +2243,8 @@ class bugModel extends model
     {
         $action = strtolower($action);
 
+        if(!common::limitedUser($object)) return false;
+
         if($action == 'confirmbug') return $object->status == 'active' and $object->confirmed == 0;
         if($action == 'resolve')    return $object->status == 'active';
         if($action == 'close')      return $object->status == 'resolved';
@@ -2300,12 +2303,12 @@ class bugModel extends model
 
     /**
      * Print cell data.
-     * 
-     * @param  object $col 
-     * @param  object $bug 
-     * @param  array  $users 
-     * @param  array  $builds 
-     * @param  array  $branches 
+     *
+     * @param  object $col
+     * @param  object $bug
+     * @param  array  $users
+     * @param  array  $builds
+     * @param  array  $branches
      * @access public
      * @return void
      */
@@ -2356,6 +2359,9 @@ class bugModel extends model
                 break;
             case 'activatedCount':
                 echo $bug->activatedCount;
+                break;
+            case 'activatedDate':
+                echo substr($bug->activatedDate, 5, 11);
                 break;
             case 'openedBy':
                 echo zget($users, $bug->openedBy);

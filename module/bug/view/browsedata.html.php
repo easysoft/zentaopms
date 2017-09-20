@@ -100,7 +100,7 @@
           <?php
           $params = "bugID=$bug->id";
           common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'search', '', 'iframe', true);
-          common::printIcon('bug', 'assignTo',   $params, '',   'list', '', '', 'iframe', true);
+          common::printIcon('bug', 'assignTo',   $params, $bug, 'list', '', '', 'iframe', true);
           common::printIcon('bug', 'resolve',    $params, $bug, 'list', '', '', 'iframe', true);
           common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
           common::printIcon('bug', 'edit',       $params, $bug, 'list');

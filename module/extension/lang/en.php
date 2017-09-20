@@ -55,6 +55,9 @@ $lang->extension->publicList[1] = 'Auto';
 $lang->extension->compatibleList[0] = 'Unknown';
 $lang->extension->compatibleList[1] = 'Compatible';
 
+$lang->extension->obtainOfficial[0] = 'Third party';
+$lang->extension->obtainOfficial[1] = 'Official';
+
 $lang->extension->byDownloads   = 'Downloads';
 $lang->extension->byAddedTime   = 'Latest Added';
 $lang->extension->byUpdatedTime = 'Latest Update';

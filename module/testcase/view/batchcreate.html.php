@@ -55,6 +55,7 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
         <th class='w-150px<?php echo zget($visibleFields, 'precondition', ' hidden')?>'><?php echo $lang->testcase->precondition;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'>    <?php echo $lang->testcase->keywords;?></th>
         <th class='w-200px<?php echo zget($visibleFields, 'stage', ' hidden')?>'>       <?php echo $lang->testcase->stage;?></th>
+        <th class='w-70px<?php echo zget($visibleFields, 'review', ' hidden')?>'>      <?php echo $lang->testcase->review;?></th>
       </tr>
     </thead>
 
@@ -83,6 +84,7 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
       <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[$i]", '', "rows='1' class='form-control autosize'")?></td>
       <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$i]", '', "class='form-control' autocomplete='off'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[$i][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
+      <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[$i]", $lang->testcase->reviewList, $needReview, "class='form-control'");?></td>
     </tr>
     <?php endfor;?>
     <tfoot>

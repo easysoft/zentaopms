@@ -30,7 +30,7 @@
         <td class='w-p45-f'>
           <div class='input-group'>
             <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control chosen'");?>
-            <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control' style='width:120px'");?>
+            <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control chosen' style='width:120px'");?>
           </div>
         </td>
         <td>
@@ -72,7 +72,7 @@
           <div class='input-group'>
             <span class='input-group-addon'><?php echo $lang->story->source?></span>
             <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control'");?>
-            <span class='input-group-addon fix-border'><?php echo $lang->comment?></span>
+            <span class='input-group-addon fix-border'><?php echo $lang->story->sourceNote?></span>
             <?php echo html::input('sourceNote', $sourceNote, "class='form-control' autocomplete='off'");?>
           </div>
         </td>
@@ -95,7 +95,7 @@
           <div class='row-table'>
             <div class='col-table'>
               <div class="input-group w-p100">
-                <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->story->colorTag ?>' data-update-text='#title'>
+                <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->story->colorTag ?>' data-update-text='#title' value='<?php echo $color;?>'>
                 <?php echo html::input('title', $storyTitle, "class='form-control' autocomplete='off'");?>
               </div>
             </div>
@@ -141,11 +141,11 @@
             <?php endif;?>
           </div>
         </td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->story->spec;?></th>
         <td colspan='2'><?php echo html::textarea('spec', $spec, "rows='9' class='form-control disabled-ie-placeholder' placeholder='" . htmlspecialchars($lang->story->specTemplate) . "'");?></td>
-      </tr>  
+      </tr>
       <?php if(strpos(",$showFields,", ',verify,') !== false):?>
       <tr>
         <th><?php echo $lang->story->verify;?></th>

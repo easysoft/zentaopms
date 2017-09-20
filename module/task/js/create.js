@@ -40,10 +40,10 @@ function setStoryModule()
     var storyID = $('#story').val();
     if(storyID)
     {
-        var link = createLink('story', 'ajaxGetModule', 'storyID=' + storyID);
-        $.get(link, function(moduleID)
+        var link = createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
+        $.getJSON(link, function(storyInfo)
         {
-            $('#module').val(moduleID);
+            $('#module').val(storyInfo.moduleID);
             $("#module").trigger("chosen:updated");
         });
     }
@@ -88,7 +88,7 @@ function setAfter()
     }
     else
     {
-        $('input[value="continueAdding"]').attr('checked', 'checked');
+        if(!toTaskList) $('input[value="continueAdding"]').attr('checked', 'checked');
         $('input[value="continueAdding"]').attr('disabled', false);
     }
 }

@@ -46,8 +46,8 @@ tfoot tr td .table-actions .btn{display:none;}
           echo '</div>';
       }
       echo "<div class='btn-group'>";
-      common::printIcon('build', 'edit',   "buildID=$build->id");
-      common::printIcon('build', 'delete', "buildID=$build->id", '', 'button', '', 'hiddenwin');
+      common::printIcon('build', 'edit',   "buildID=$build->id", $build);
+      common::printIcon('build', 'delete', "buildID=$build->id", $build, 'button', '', 'hiddenwin');
       echo '</div>';
   }
   echo common::printRPN($browseLink);
@@ -69,8 +69,8 @@ tfoot tr td .table-actions .btn{display:none;}
         $browseLink = $this->session->buildList ? $this->session->buildList : $this->createLink('product', 'build', "productID=$build->product");
         if(!$build->deleted)
         { 
-          common::printIcon('build', 'edit',   "buildID=$build->id");
-          common::printIcon('build', 'delete', "buildID=$build->id", '', 'button', '', 'hiddenwin');
+          common::printIcon('build', 'edit',   "buildID=$build->id", $build);
+          common::printIcon('build', 'delete', "buildID=$build->id", $build, 'button', '', 'hiddenwin');
         }
         echo common::printRPN($browseLink);
         ?>

@@ -56,6 +56,7 @@ class task extends control
         $task->estStarted  = '';
         $task->deadline    = '';
         $task->mailto      = '';
+        $task->color       = '';
         if($taskID > 0)
         {
             $task      = $this->task->getByID($taskID);
@@ -104,7 +105,7 @@ class task extends control
                 $taskID   = $taskID['id'];
                 $actionID = $this->action->create('task', $taskID, 'Opened', '');
                 $this->task->sendmail($taskID, $actionID);
-            }            
+            }
 
             /* If link from no head then reload*/
             if(isonlybody())
@@ -167,9 +168,9 @@ class task extends control
 
     /**
      * Batch create task.
-     * 
-     * @param  int    $projectID 
-     * @param  int    $storyID 
+     *
+     * @param  int    $projectID
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -487,8 +488,8 @@ class task extends control
 
     /**
      * View a task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -1150,6 +1151,27 @@ class task extends control
                 $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskQueryCondition)
                     ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
                     ->orderBy($orderBy)->fetchAll('id');
+
+                foreach($tasks as $key => $task)
+                {
+                    /* Compute task progess. */
+                    if($task->consumed == 0 and $task->left == 0)
+                    {
+                        $task->progess = 0;
+                    }
+                    elseif($task->consumed != 0 and $task->left == 0)
+                    {
+                        $task->progess = 100;
+                    }
+                    else
+                    {
+                        $task->progess = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                    }
+
+                    $task->progess .= '%';
+
+                    $tasks[$key] = $task;
+                }
             }
             else
             {

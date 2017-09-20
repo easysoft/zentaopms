@@ -21,7 +21,7 @@
     <span class='input-group-addon'><?php echo $lang->report->to;?></span>
     <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $end, "class='form-control form-date' onchange='changeDate(\"$begin\", this.value)'");?></div>
   </div>
-  <table class='table table-condensed table-striped table-bordered tablesorter table-fixed active-disabled'>
+  <table class='table table-condensed table-striped table-bordered tablesorter table-fixed active-disabled' id='projectList'>
     <thead>
         <tr class='colhead'>
           <th class='w-id'><?php echo $lang->report->id;?></th>

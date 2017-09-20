@@ -68,6 +68,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `color` char(7) NOT NULL,
   `confirmed` tinyint(1) NOT NULL default '0',
   `activatedCount` smallint(6) NOT NULL,
+  `activatedDate` datetime NOT NULL,
   `mailto` text,
   `openedBy` varchar(30) NOT NULL default '',
   `openedDate` datetime NOT NULL,

@@ -43,10 +43,10 @@
         echo '</div>';
 
         echo "<div class='btn-group'>";
-        common::printIcon('task', 'edit',  "taskID=$task->id");
-        common::printCommentIcon('task');
-        common::printIcon('task', 'create', "productID=0&storyID=0&moduleID=0&taskID=$task->id", '', 'button', 'copy');
-        common::printIcon('task', 'delete', "projectID=$task->project&taskID=$task->id", '', 'button', '', 'hiddenwin');
+        common::printIcon('task', 'edit',  "taskID=$task->id", $task);
+        common::printCommentIcon('task', $task);
+        common::printIcon('task', 'create', "productID=0&storyID=0&moduleID=0&taskID=$task->id", $task, 'button', 'copy');
+        common::printIcon('task', 'delete', "projectID=$task->project&taskID=$task->id", $task, 'button', '', 'hiddenwin');
         echo '</div>';
 
         echo "<div class='btn-group'>";

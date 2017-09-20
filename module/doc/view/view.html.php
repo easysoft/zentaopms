@@ -68,9 +68,9 @@
     {
         ob_start();
         echo "<div class='btn-group'>";
-        common::printCommentIcon('doc');
-        common::printIcon('doc', 'edit', $params);
-        common::printIcon('doc', 'delete', $params, '', 'button', '', 'hiddenwin');
+        common::printCommentIcon('doc', $doc);
+        common::printIcon('doc', 'edit', $params, $doc);
+        common::printIcon('doc', 'delete', $params, $doc, 'button', '', 'hiddenwin');
         echo '</div>';
         echo "<div class='btn-group'>";
         common::printRPN($browseLink, $preAndNext);

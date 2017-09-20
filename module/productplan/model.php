@@ -292,9 +292,9 @@ class productplanModel extends model
     }
 
     /**
-     * Unlink bug. 
-     * 
-     * @param  int    $bugID 
+     * Unlink bug.
+     *
+     * @param  int    $bugID
      * @access public
      * @return void
      */
@@ -303,5 +303,20 @@ class productplanModel extends model
         $planID = $this->dao->findByID($bugID)->from(TABLE_BUG)->fetch('plan');
         $this->dao->update(TABLE_BUG)->set('plan')->eq(0)->where('id')->eq((int)$bugID)->exec();
         $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromplan', '', $planID);
+    }
+
+    /**
+     * Judge an action is clickable or not.
+     *-
+     * @param  object $product-
+     * @param  string $action-
+     * @access public
+     * @return void
+     */
+    public static function isClickable($productPlan, $action)
+    {
+        if(!common::limitedUser($productPlan)) return false;
+
+        return true;
     }
 }

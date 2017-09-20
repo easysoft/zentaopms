@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php 
+<?php
 $itemRow = <<<EOT
   <tr class='text-center'>
     <td>
@@ -76,6 +76,13 @@ EOT;
           <td><?php echo html::select('forceReview[]', $users, $forceReview, "class='form-control chosen' multiple");?></td>
           <td class='w-180px'><?php printf($lang->custom->notice->forceReview, $lang->$module->common);?></td>
         </tr>
+        <?php if($module == 'testcase'):?>
+        <tr <?php if(!$needReview) echo "class='hidden'"?>>
+          <th><?php echo $lang->custom->forceNotReview;?></th>
+          <td><?php echo html::select('forceNotReview[]', $users, $forceNotReview, "class='form-control chosen' multiple");?></td>
+          <td class='w-180px'><?php printf($lang->custom->notice->forceNotReview, $lang->$module->common);?></td>
+        </tr>
+        <?php endif;?>
         <tr>
           <td></td>
           <td><?php echo html::submitButton();?></td>
@@ -182,10 +189,12 @@ $(function()
         if($(this).val() == 0)
         {
             $('#forceReview').closest('tr').removeClass('hidden');
+            $('#forceNotReview').closest('tr').addClass('hidden');
         }
         else
         {
             $('#forceReview').closest('tr').addClass('hidden');
+            $('#forceNotReview').closest('tr').removeClass('hidden');
         }
     })
 })

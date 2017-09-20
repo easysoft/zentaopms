@@ -55,6 +55,10 @@
       <td><?php foreach($groups as $group) echo $group->name . ' '; ?></td>
     </tr>
     <tr>
+      <th><?php echo $lang->user->limitedUser;?></th>
+      <td><?php  echo $lang->user->limitedUserList[$user->limitedUser];?></td>
+    </tr>
+    <tr>
       <th><?php echo $lang->user->commiter;?></th>
       <td><?php echo $user->commiter;?></td>
     </tr>

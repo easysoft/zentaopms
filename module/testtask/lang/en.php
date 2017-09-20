@@ -69,6 +69,9 @@ $lang->testtask->lastRunner     = 'Last Runner';
 $lang->testtask->lastRunDate    = 'Last RunDate';
 $lang->testtask->date           = 'Date';
 
+$lang->testtask->beginAndEnd    = 'Date';
+$lang->testtask->to             = 'To';
+
 $lang->testtask->legendDesc      = 'Desc';
 $lang->testtask->legendReport    = 'Report';
 $lang->testtask->legendBasicInfo = 'Basic Info';

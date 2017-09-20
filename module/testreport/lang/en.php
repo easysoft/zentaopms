@@ -42,6 +42,7 @@ $lang->testreport->legendComment     = 'Sum up';
 $lang->testreport->legendMore        = 'More';
 
 $lang->testreport->bugSeverityGroups   = 'Bug Severity Distribution';
+$lang->testreport->bugTypeGroups       = 'Bug Type Distribution';
 $lang->testreport->bugStatusGroups     = 'Bug Status Distribution';
 $lang->testreport->bugOpenedByGroups   = 'Bug CreatedBy Distribution';
 $lang->testreport->bugResolvedByGroups = 'Bug ResolvedBy Distribution';

@@ -73,7 +73,7 @@ class testcaseModel extends model
 
     /**
      * Create a case.
-     * 
+     *
      * @param int $bugID
      * @access public
      * @return void
@@ -84,11 +84,11 @@ class testcaseModel extends model
         $case = fixer::input('post')
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', $now)
-            ->add('status', $this->forceReview() ? 'wait' : 'normal')
+            ->add('status', $this->forceNotReview() || $this->post->forceNotReview ? 'normal' : 'wait')
             ->add('version', 1)
             ->add('fromBug', $bugID)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
-            ->remove('steps,expects,files,labels,stepType')
+            ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
             ->join('stage', ',')
             ->get();
@@ -125,12 +125,12 @@ class testcaseModel extends model
             return array('status' => 'created', 'id' => $caseID);
         }
     }
-    
+
     /**
      * Batch create cases.
-     * 
-     * @param  int    $productID 
-     * @param  int    $storyID 
+     *
+     * @param  int    $productID
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -160,14 +160,14 @@ class testcaseModel extends model
             $type   = $cases->type[$i] == 'ditto'   ? $type   : $cases->type[$i];
             $pri    = $cases->pri[$i] == 'ditto'    ?  $pri   : $cases->pri[$i];
             $cases->module[$i] = (int)$module;
-            $cases->story[$i]  = (int)$story;        
+            $cases->story[$i]  = (int)$story;
             $cases->type[$i]   = $type;
             $cases->pri[$i]    = $pri;
         }
 
         $this->loadModel('story');
         $storyVersions = array();
-        $forceReview   = $this->forceReview();
+        $forceNotReview   = $this->forceNotReview();
         for($i = 0; $i < $batchNum; $i++)
         {
             if($cases->type[$i] != '' and $cases->title[$i] != '')
@@ -186,7 +186,7 @@ class testcaseModel extends model
                 $data[$i]->keywords     = $cases->keywords[$i];
                 $data[$i]->openedBy     = $this->app->user->account;
                 $data[$i]->openedDate   = $now;
-                $data[$i]->status       = $forceReview ? 'wait' : 'normal';
+                $data[$i]->status       = $forceNotReview || $cases->needReview[$i] == 0 ? 'normal' : 'wait';
                 $data[$i]->version      = 1;
 
                 $caseStory = $data[$i]->story;
@@ -522,7 +522,7 @@ class testcaseModel extends model
         $steps       = array();
 
         //---------------- Judge steps changed or not.-------------------- */
-        
+
         /* Remove the empty setps in post. */
         foreach($this->post->steps as $key => $desc)
         {
@@ -558,7 +558,7 @@ class testcaseModel extends model
             ->join('stage', ',')
             ->remove('comment,steps,expects,files,labels,stepType')
             ->get();
-        if($this->forceReview() and $stepChanged) $case->status = 'wait';
+        if(!$this->forceNotReview() and $stepChanged) $case->status = 'wait';
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
         {
@@ -932,6 +932,8 @@ class testcaseModel extends model
     {
         $action = strtolower($action);
 
+        if(!common::limitedUser($case)) return false;
+
         if($action == 'createbug') return $case->caseFails > 0;
         if($action == 'review') return $case->status == 'wait';
 
@@ -997,7 +999,7 @@ class testcaseModel extends model
             $cases[$key] =$caseData;
         }
 
-        $forceReview = $this->forceReview();
+        $forceNotReview = $this->forceNotReview();
         foreach($cases as $key => $caseData)
         {
             $caseID = 0;
@@ -1059,7 +1061,7 @@ class testcaseModel extends model
                 {
                     $caseData->lastEditedBy   = $this->app->user->account;
                     $caseData->lastEditedDate = $now;
-                    if($stepChanged and $forceReview) $caseData->status = 'wait';
+                    if($stepChanged and !$forceNotReview) $caseData->status = 'wait';
                     $this->dao->update(TABLE_CASE)->data($caseData)->where('id')->eq($caseID)->autoCheck()->exec();
                     if($stepChanged)
                     {
@@ -1094,7 +1096,7 @@ class testcaseModel extends model
                 $caseData->openedDate = $now;
                 $caseData->branch     = isset($data->branch[$key]) ? $data->branch[$key] : $branch;
                 if($caseData->story) $caseData->storyVersion = zget($storyVersionPairs, $caseData->story, 1);
-                $caseData->status = $forceReview ? 'wait' : 'normal';
+                $caseData->status = !$forceNotReview ? 'wait' : 'normal';
                 $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
 
                 if(!dao::isError())
@@ -1224,11 +1226,11 @@ class testcaseModel extends model
 
     /**
      * Print cell data
-     * 
-     * @param  object $col 
-     * @param  object $case 
-     * @param  array  $users 
-     * @param  array  $branches 
+     *
+     * @param  object $col
+     * @param  object $case
+     * @param  array  $users
+     * @param  array  $branches
      * @access public
      * @return void
      */
@@ -1393,15 +1395,16 @@ class testcaseModel extends model
     }
 
     /**
-     * Check whether force review 
-     * 
+     * Check whether force not review
+     *
      * @access public
      * @return bool
      */
-    public function forceReview()
+    public function forceNotReview()
     {
-        if($this->config->testcase->needReview) return true;
-        if(strpos(",{$this->config->testcase->forceReview},", ",{$this->app->user->account},") !== false) return true;
+        if(!$this->config->testcase->needReview && strpos(",{$this->config->testcase->forceReview},", ",{$this->app->user->account},") === false) return true;
+        if($this->config->testcase->needReview  && strpos(",{$this->config->testcase->forceNotReview},", ",{$this->app->user->account},")) return true;
+
         return false;
     }
 }

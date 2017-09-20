@@ -50,8 +50,9 @@ class custom extends control
         {
             $this->app->loadConfig($module);
             $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted');
-            $this->view->needReview   = zget($this->config->$module, 'needReview', 1);
-            $this->view->forceReview  = zget($this->config->$module, 'forceReview', '');
+            $this->view->needReview      = zget($this->config->$module, 'needReview', 1);
+            $this->view->forceReview     = zget($this->config->$module, 'forceReview', '');
+            $this->view->forceNotReview  = zget($this->config->$module, 'forceNotReview', '');
         }
         if($module == 'task' and $field == 'hours')
         {
@@ -82,7 +83,9 @@ class custom extends control
         {
             if(($module == 'story' or $module == 'testcase') and $field == 'review')
             {
-                $data = fixer::input('post')->join('forceReview', ',')->get();
+                $review = fixer::input('post')->get();
+                if($review->needReview) $data = fixer::input('post')->join('forceNotReview', ',')->remove('forceReview')->get();
+                if(!$review->needReview) $data = fixer::input('post')->join('forceReview', ',')->remove('forceNotReview')->get();
                 $this->loadModel('setting')->setItems("system.$module", $data);
             }
             elseif($module == 'task' and $field == 'hours')
@@ -117,7 +120,7 @@ class custom extends control
                     /* Fix bug #942. */
                     if($field == 'priList' and !is_numeric($key)) die(js::alert($this->lang->custom->notice->priListKey));
                     if($module == 'bug' and $field == 'severityList' and !is_numeric($key)) die(js::alert($this->lang->custom->notice->severityListKey));
-                    if(!empty($key) and !validater::checkCode($key)) die(js::alert($this->lang->custom->notice->keyList));
+                    if(!empty($key) and $key != 'n/a' and !validater::checkCode($key)) die(js::alert($this->lang->custom->notice->keyList));
 
                     /* the length of role is 20, check it when save. */
                     if($module == 'user' and $field == 'roleList' and strlen($key) > 20) die(js::alert($this->lang->custom->notice->userRole));

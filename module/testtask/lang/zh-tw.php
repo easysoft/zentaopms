@@ -69,6 +69,9 @@ $lang->testtask->lastRunner     = '最後執行人';
 $lang->testtask->lastRunDate    = '最後執行時間';
 $lang->testtask->date           = '測試時間';
 
+$lang->testtask->beginAndEnd    = '起止時間';
+$lang->testtask->to             = '至';
+
 $lang->testtask->legendDesc      = '版本描述';
 $lang->testtask->legendReport    = '測試總結';
 $lang->testtask->legendBasicInfo = '基本信息';

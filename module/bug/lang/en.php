@@ -32,6 +32,7 @@ $lang->bug->status           = 'Status';
 $lang->bug->statusAB         = 'Status';
 $lang->bug->activatedCount   = 'Active';
 $lang->bug->activatedCountAB = 'Active';
+$lang->bug->activatedDate    = 'Active On';
 $lang->bug->confirmed        = 'Confirmed';
 $lang->bug->toTask           = 'Convert to Task';
 $lang->bug->toStory          = 'Convert to Story';

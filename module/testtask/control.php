@@ -39,18 +39,18 @@ class testtask extends control
     }
 
     /**
-     * Browse test tasks. 
-     * 
-     * @param  int    $productID 
-     * @param  string $type 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * Browse test tasks.
+     *
+     * @param  int    $productID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $type = 'local,wait', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $branch = '', $type = 'local,wait', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $beginTime = 0, $endTime = 0)
     {
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true));
@@ -58,6 +58,9 @@ class testtask extends control
         $scopeAndStatus = explode(',',$type);
         $this->session->set('testTaskVersionScope', $scopeAndStatus[0]);
         $this->session->set('testTaskVersionStatus', $scopeAndStatus[1]);
+
+        $beginTime = $beginTime ? date('Y-m-d', strtotime($beginTime)) : '';
+        $endTime   = $endTime   ? date('Y-m-d', strtotime($endTime))   : '';
 
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
@@ -77,10 +80,12 @@ class testtask extends control
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
         $this->view->orderBy     = $orderBy;
-        $this->view->tasks       = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus);
+        $this->view->tasks       = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus, $beginTime, $endTime);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->pager       = $pager;
         $this->view->branch      = $branch;
+        $this->view->beginTime   = $beginTime;
+        $this->view->endTime     = $endTime;
 
         $this->display();
     }
@@ -349,9 +354,9 @@ class testtask extends control
 
     /**
      * Group case.
-     * 
-     * @param  int    $taskID 
-     * @param  string $groupBy 
+     *
+     * @param  int    $taskID
+     * @param  string $groupBy
      * @access public
      * @return void
      */
@@ -401,8 +406,8 @@ class testtask extends control
 
     /**
      * Edit a test task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */

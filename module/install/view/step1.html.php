@@ -48,6 +48,48 @@
           <td class='text-left f-12px'><?php if($jsonResult == 'fail') echo $lang->install->jsonFail;?></td>
         </tr>
         <tr>
+          <th><?php echo $lang->install->openssl;?></th>
+          <td><?php $opensslResult == 'ok' ? printf($lang->install->loaded) : printf($lang->install->unloaded);?></td>
+          <td class='<?php echo $opensslResult;?>'><?php echo $lang->install->$opensslResult;?></td>
+          <td class='text-left f-12px'><?php if($opensslResult == 'fail') echo $lang->install->opensslFail;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->install->mbstring;?></th>
+          <td><?php $mbstringResult == 'ok' ? printf($lang->install->loaded) : printf($lang->install->unloaded);?></td>
+          <td class='<?php echo $mbstringResult;?>'><?php echo $lang->install->$mbstringResult;?></td>
+          <td class='text-left f-12px'><?php if($mbstringResult == 'fail') echo $lang->install->mbstringFail;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->install->zlib;?></th>
+          <td><?php $zlibResult == 'ok' ? printf($lang->install->loaded) : printf($lang->install->unloaded);?></td>
+          <td class='<?php echo $zlibResult;?>'><?php echo $lang->install->$zlibResult;?></td>
+          <td class='text-left f-12px'><?php if($zlibResult == 'fail') echo $lang->install->zlibFail;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->install->curl;?></th>
+          <td><?php $curlResult == 'ok' ? printf($lang->install->loaded) : printf($lang->install->unloaded);?></td>
+          <td class='<?php echo $curlResult;?>'><?php echo $lang->install->$curlResult;?></td>
+          <td class='text-left f-12px'><?php if($curlResult == 'fail') echo $lang->install->curlFail;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->install->filter;?></th>
+          <td><?php $filterResult == 'ok' ? printf($lang->install->loaded) : printf($lang->install->unloaded);?></td>
+          <td class='<?php echo $filterResult;?>'><?php echo $lang->install->$filterResult;?></td>
+          <td class='text-left f-12px'><?php if($filterResult == 'fail') echo $lang->install->filterFail;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->install->gd;?></th>
+          <td><?php $gdResult == 'ok' ? printf($lang->install->loaded) : printf($lang->install->unloaded);?></td>
+          <td class='<?php echo $gdResult;?>'><?php echo $lang->install->$gdResult;?></td>
+          <td class='text-left f-12px'><?php if($gdResult == 'fail') echo $lang->install->gdFail;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->install->iconv;?></th>
+          <td><?php $iconvResult == 'ok' ? printf($lang->install->loaded) : printf($lang->install->unloaded);?></td>
+          <td class='<?php echo $iconvResult;?>'><?php echo $lang->install->$iconvResult;?></td>
+          <td class='text-left f-12px'><?php if($iconvResult == 'fail') echo $lang->install->iconvFail;?></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->install->tmpRoot;?></th>
           <td>
             <?php
@@ -110,7 +152,20 @@
     </div>
     <div class='modal-footer'>
       <?php
-      if($phpResult == 'ok' and $pdoResult == 'ok' and $pdoMySQLResult == 'ok' and $tmpRootResult == 'ok' and $dataRootResult == 'ok' and $sessionResult == 'ok')
+      if($phpResult      == 'ok' and
+         $pdoResult      == 'ok' and
+         $pdoMySQLResult == 'ok' and
+         $tmpRootResult  == 'ok' and
+         $dataRootResult == 'ok' and
+         $sessionResult  == 'ok' and
+         $jsonResult     == 'ok' and
+         $opensslResult  == 'ok' and
+         $mbstringResult == 'ok' and
+         $zlibResult     == 'ok' and
+         $curlResult     == 'ok' and
+         $filterResult   == 'ok' and
+         $gdResult       == 'ok' and
+         $iconvResult    == 'ok')
       {
           echo html::a($this->createLink('install', 'step2'), $lang->install->next, '', "class='btn btn-primary'");
       }
@@ -122,7 +177,7 @@
             echo '<div class="panel panel-sm text-left"><div class="panel-heading strong">' . $lang->install->phpINI . '</div><div class="panel-body">' . nl2br($this->install->getIniInfo()) . '</div></div>';
           }
       }
-      ?>      
+      ?>
     </div>
   </div>
 </div>

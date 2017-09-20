@@ -1,3 +1,8 @@
+$(document).ready(function()
+{
+    setTimeout(function(){fixedTheadOfList('#product')}, 100);
+});
+
 $('#conditions input:checkbox').change(function()
 {
     var conditions = '';

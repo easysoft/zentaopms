@@ -407,4 +407,19 @@ class buildModel extends model
             $this->loadModel('action')->create('bug', $unlinkBugID, 'unlinkedfrombuild', '', $buildID);
         }
     }
+
+    /**
+     * Judge an action is clickable or not.
+     * 
+     * @param  object    $project
+     * @param  string    $action 
+     * @access public
+     * @return bool
+     */
+    public static function isClickable($build, $action)
+    {
+        if(!common::limitedUser($build)) return false;
+
+        return true;
+    }
 }

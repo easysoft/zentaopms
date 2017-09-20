@@ -79,6 +79,10 @@ $lang->team->hours      = 'Hour/Day';
 $lang->team->days       = 'Workdays';
 $lang->team->totalHours = 'Total';
 
+$lang->team->limitedUser            = 'limited User';
+$lang->team->limitedUserList['no']  = 'No';
+$lang->team->limitedUserList['yes'] = 'Yes';
+
 $lang->project->basicInfo = 'Basic Info';
 $lang->project->otherInfo = 'Other Info';
 

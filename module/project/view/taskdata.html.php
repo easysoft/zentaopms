@@ -121,7 +121,7 @@
         }
         common::printIcon('task', 'finish',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
         common::printIcon('task', 'close',   "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-        common::printIcon('task', 'edit',    "taskID=$task->id", '', 'list');
+        common::printIcon('task', 'edit',    "taskID=$task->id", $task, 'list');
         ?>
         </td>
       </tr>

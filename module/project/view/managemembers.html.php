@@ -41,11 +41,12 @@
           <th><?php echo $lang->team->role;?></th>
           <th class='w-100px'><?php echo $lang->team->days;?></th>
           <th class='w-100px'><?php echo $lang->team->hours;?></th>
+          <th class='w-100px'><?php echo $lang->team->limitedUser;?></th>
           <th class="w-40px"> <?php echo $lang->actions;?></th>
           <th class="w-40px"> <?php echo $lang->delete;?></th>
         </tr>
       </thead>
-      <?php $i = 1; $memberCount = 0;?>
+      <?php $i = 0; $memberCount = 0;?>
       <?php foreach($currentMembers as $member):?>
       <?php if(!isset($users[$member->account])) continue;?>
       <?php unset($users[$member->account]);?>
@@ -58,6 +59,7 @@
           <input type='hidden' name='modes[]' value='update' />
           <input type='hidden' name='accounts[]' value='<?php echo $member->account;?>' />
         </td>
+        <td><?php echo html::radio("limitedUser[$i]", $lang->team->limitedUserList, $member->limitedUser);?></td>
         <td><a href='javascript:;' onclick='addItem()' class='btn btn-block'><i class='icon-plus'></i></a></td>
         <td><a href='javascript:;' onclick='deleteItem()' class='disabled btn btn-block'><i class='icon icon-remove'></i></a></td>
       </tr>
@@ -73,6 +75,7 @@
           <input type='text'   name='hours[]' id='hours<?php echo $i;?>' class='form-control' value='<?php echo $member2Import->hours;?>' />
           <input type='hidden' name='modes[]' value='create' />
         </td>
+        <td><?php echo html::radio("limitedUser[$i]", $lang->team->limitedUserList, 'no');?></td>
         <td><a href='javascript:;' onclick='addItem()' class='btn btn-block'><i class='icon-plus'></i></a></td>
         <td><a href='javascript:;' onclick='deleteItem(this)' class='btn btn-block'><i class='icon icon-remove'></i></a></td>
       </tr>
@@ -89,6 +92,7 @@
           <input type='text'   name='hours[]' id='hours<?php echo $i;?>' class='form-control' value='<?php echo $config->project->defaultWorkhours?>' />
           <input type='hidden' name='modes[]' value='create' />
         </td>
+        <td><?php echo html::radio("limitedUser[$i]", $lang->team->limitedUserList, 'no');?></td>
         <td><a href='javascript:;' onclick='addItem()' class='btn btn-block'><i class='icon-plus'></i></a></td>
         <td><a href='javascript:;' onclick='deleteItem(this)' class='btn btn-block'><i class='icon icon-remove'></i></a></td>
       </tr>
@@ -105,6 +109,7 @@
           <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='form-control' value='<?php echo $config->project->defaultWorkhours?>' />
           <input type='hidden' name='modes[]' value='create' />
         </td>
+        <td><?php echo html::radio("limitedUser[$i]", $lang->team->limitedUserList, 'no');?></td>
         <td><a href='javascript:;' onclick='addItem()' class='btn btn-block'><i class='icon-plus'></i></a></td>
         <td><a href='javascript:;' onclick='deleteItem(this)' class='btn btn-block'><i class='icon icon-remove'></i></a></td>
       </tr>
@@ -113,7 +118,7 @@
       <?php js::set('i', $i);?>
 
       <tr id='submit'>
-        <td colspan='6' class='text-center'>
+        <td colspan='7' class='text-center'>
           <?php echo html::submitButton() ?>
         </td>
       </tr>
@@ -131,6 +136,7 @@
         <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='form-control' value='<?php echo $config->project->defaultWorkhours?>' />
         <input type='hidden' name='modes[]' value='create' />
       </td>
+      <td><?php echo html::radio("limitedUser[$i]", $lang->team->limitedUserList, $member->realname ? $member->limitedUser : 'no');?></td>
       <td><a href='javascript:;' onclick='addItem()' class='btn btn-block'><i class='icon-plus'></i></a></td>
       <td><a href='javascript:;' onclick='deleteItem(this)' class='btn btn-block'><i class='icon icon-remove'></i></a></td>
     </tr>

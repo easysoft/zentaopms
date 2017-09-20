@@ -42,14 +42,14 @@ class testcase extends control
 
     /**
      * Browse cases.
-     * 
-     * @param  int    $productID 
-     * @param  string $browseType 
-     * @param  int    $param 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $productID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -265,6 +265,7 @@ class testcase extends control
         $precondition = '';
         $keywords     = '';
         $steps        = array();
+        $color        = '';
 
         /* If testcaseID large than 0, use this testcase as template. */
         if($testcaseID > 0)
@@ -279,8 +280,9 @@ class testcase extends control
             $precondition = $testcase->precondition;
             $keywords     = $testcase->keywords;
             $steps        = $testcase->steps;
+            $color        = $testcase->color;
         }
-               
+
         /* If bugID large than 0, use this bug as template. */
         if($bugID > 0)
         {
@@ -292,7 +294,7 @@ class testcase extends control
             $keywords = $bug->keywords;
             $steps    = $this->testcase->createStepsFromBug($bug->steps);
         }
-       
+
         /* Padding the steps to the default steps count. */
         if(count($steps) < $this->config->testcase->defaultSteps)
         {
@@ -332,6 +334,7 @@ class testcase extends control
         $this->view->currentModuleID  = $currentModuleID ? $currentModuleID : (isset($story->module) ? $story->module : 0);
         $this->view->stories          = $stories;
         $this->view->caseTitle        = $caseTitle;
+        $this->view->color            = $color;
         $this->view->type             = $type;
         $this->view->stage            = $stage;
         $this->view->pri              = $pri;
@@ -346,12 +349,12 @@ class testcase extends control
         $this->display();
     }
 
-   
+
     /**
      * Create a batch test case.
-     * 
-     * @param  int   $productID 
-     * @param  int   $moduleID 
+     *
+     * @param  int   $productID
+     * @param  int   $moduleID
      * @param  int   $storyID
      * @access public
      * @return void
@@ -418,6 +421,7 @@ class testcase extends control
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->branch           = $branch;
         $this->view->branches         = $this->loadModel('branch')->getPairs($productID);
+        $this->view->needReview       = $this->testcase->forceNotReview() == true ? 0 : 1;
 
         $this->display();
     }
@@ -559,7 +563,7 @@ class testcase extends control
             $case->steps[] = $step;
         }
 
-        $isLibCase = ($case->lib and empty($case->product));        
+        $isLibCase = ($case->lib and empty($case->product));
         if($isLibCase)
         {
             $libraries = $this->loadModel('testsuite')->getLibraries();
@@ -602,7 +606,7 @@ class testcase extends control
             $this->view->moduleOptionMenu = $moduleOptionMenu;
             $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch);
         }
-        if(!$this->testcase->forceReview()) unset($this->lang->testcase->statusList['wait']);
+        if($this->testcase->forceNotReview()) unset($this->lang->testcase->statusList['wait']);
         $position[]      = $this->lang->testcase->common;
         $position[]      = $this->lang->testcase->edit;
 
@@ -710,7 +714,7 @@ class testcase extends control
             }
         }
 
-        if(!$this->testcase->forceReview()) unset($this->lang->testcase->statusList['wait']);
+        if(!$this->testcase->forceNotReview()) unset($this->lang->testcase->statusList['wait']);
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars = count($cases) * (count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);

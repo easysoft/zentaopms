@@ -82,6 +82,7 @@ $lang->custom->notice->userRole             = '鍵的長度必須小於20個字�
 $lang->custom->notice->canNotAdd            = '該項參與運算，不提供自定義添加功能';
 $lang->custom->notice->forceReview          = "指定人提交的%s必須評審。";
 $lang->custom->notice->longlife             = 'Bug列表頁面的久未處理標籤中，列出設置天數之前未處理的Bug。';
+$lang->custom->notice->forceNotReview       = "指定人提交的%s不需要評審。";
 $lang->custom->notice->priListKey           = '優先順序的鍵應當為數字！';
 $lang->custom->notice->keyList              = '鍵值應當為英文或數字';
 $lang->custom->notice->severityListKey      = 'Bug嚴重程度的鍵應當為數字！';
