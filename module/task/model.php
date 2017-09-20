@@ -37,7 +37,7 @@ class taskModel extends model
             ->setDefault('openedDate', helper::now())
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->remove('after,files,labels,assignedTo,uid')
+            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri')
             ->get();
 
         foreach($this->post->assignedTo as $assignedTo)
@@ -1583,9 +1583,9 @@ class taskModel extends model
 
     /**
      * Judge an action is clickable or not.
-     * 
-     * @param  object    $task 
-     * @param  string    $action 
+     *
+     * @param  object    $task
+     * @param  string    $action
      * @access public
      * @return bool
      */

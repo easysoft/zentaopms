@@ -68,6 +68,7 @@
                 <?php echo html::input('name', $task->name, "class='form-control' autocomplete='off'");?>
                 <?php if($this->config->global->flow != 'onlyTask'):?>
                 <span class='input-group-btn'><a href='javascript:copyStoryTitle();' id='copyButton' class='btn'><?php echo $lang->task->copyStoryTitle;?></a></span>
+                <?php echo html::hidden("storyEstimate") . html::hidden("storyDesc") . html::hidden("storyPri");?>
                 <?php endif;?>
               </div>
             </div>

@@ -34,10 +34,10 @@ class task extends control
 
     /**
      * Create a task.
-     * 
-     * @param  int    $projectID 
-     * @param  int    $storyID 
-     * @param  int    $moduleID 
+     *
+     * @param  int    $projectID
+     * @param  int    $storyID
+     * @param  int    $moduleID
      * @param  int    $taskID
      * @access public
      * @return void
@@ -855,7 +855,7 @@ class task extends control
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
         $this->view->position[] = $this->lang->task->finish;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter'); 
-        
+
         $this->display();
 
     }

@@ -1272,6 +1272,7 @@ class story extends control
         $storyInfo['estimate'] = $story->estimate;
         $storyInfo['pri']      = $story->pri;
         $storyInfo['spec']     = $story->spec;
+
         echo json_encode($storyInfo);
     }
 

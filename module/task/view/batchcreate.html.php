@@ -133,7 +133,8 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
 </table>
 <?php js::set('storyTasks', $storyTasks);?>
 <?php js::set('mainField', 'name');?>
-<?php js::set('ditto', $lang->task->ditto);?> 
+<?php js::set('ditto', $lang->task->ditto);?>
+<?php js::set('storyID', $storyID);?>
 <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=task&section=custom&key=batchCreateFields')?>
 <?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/pastetext.html.php';?>

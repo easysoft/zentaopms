@@ -5,7 +5,16 @@ function copyStoryTitle()
     startPosition = storyTitle.indexOf(':') + 1;
     endPosition   = storyTitle.lastIndexOf('(');
     storyTitle = storyTitle.substr(startPosition, endPosition - startPosition);
+
     $('#name').attr('value', storyTitle);
+    $('#estimate').val($('#storyEstimate').val());
+    $('#desc').val($('#storyDesc').val());
+
+    $('.pri-text span:first').removeClass().addClass('pri' + $('#storyPri').val()).text($('#storyPri').val());
+    $('select#pri').val($('#storyPri').val());
+
+    $(window.editor.desc.edit.doc).find('span.kindeditor-ph').remove();
+    window.editor.desc.html($('#storyDesc').val());
 }
 
 /* Set the assignedTos field. */
@@ -31,7 +40,7 @@ function setOwners(result)
 function setStoryRelated()
 {
     setPreview();
-    if($('#module').val() == 0) setStoryModule();
+    setStoryModule();
 }
 
 /* Set the story module. */
@@ -45,6 +54,10 @@ function setStoryModule()
         {
             $('#module').val(storyInfo.moduleID);
             $("#module").trigger("chosen:updated");
+
+            $('#storyEstimate').val(storyInfo.estimate);
+            $('#storyPri'     ).val(storyInfo.pri);
+            $('#storyDesc'    ).val(storyInfo.spec);
         });
     }
 }
@@ -137,7 +150,7 @@ function setStories(moduleID, projectID)
 
 $(document).ready(function()
 {
-    setPreview();
+    setStoryRelated();
 
     $('#selectAllUser').on('click', function()
     {

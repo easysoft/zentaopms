@@ -86,7 +86,7 @@
         <td><?php echo substr($task->openedDate, 5, 6);?></td>
         <?php endif;?>
 
-        <td <?php echo $class;?>><?php echo $task->assignedTo == 'closed' ? 'Closed' : $users[$task->assignedTo];?></td>
+        <td <?php echo $class;?>><?php echo $task->assignedTo == 'closed' ? 'Closed' : zget($users, $task->assignedTo, $task->assignedTo);?></td>
         <td><?php echo zget($users, $task->finishedBy, $task->finishedBy);?></td>
 
         <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
