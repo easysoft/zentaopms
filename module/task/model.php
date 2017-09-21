@@ -111,7 +111,27 @@ class taskModel extends model
         $tasks    = fixer::input('post')->get();
         $batchNum = count(reset($tasks));
 
-        $result = $this->loadModel('common')->removeDuplicate('task', $tasks, "project=$projectID");
+        $storyIDs   = array();
+        $taskNames = array();
+        foreach($tasks->story as $key => $storyID)
+        {
+            if(empty($tasks->name[$key])) continue;
+
+            $inNames = in_array($tasks->name[$key], $taskNames);
+            if(!$inNames || $inNames && !in_array($storyID, $storyIDs))
+            {
+                $storyIDs[]   = $storyID;
+                $taskNames[] = $tasks->name[$key];
+            }
+            else
+            {
+                dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common);
+                echo js::error(dao::getError());
+                exit;
+            }
+        }
+
+        $result = $this->loadModel('common')->removeDuplicate('task', $tasks, "project=$projectID and story " . helper::dbIN($storyIDs));
         $tasks  = $result['data'];
 
         /* check estimate. */

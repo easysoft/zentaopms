@@ -858,12 +858,14 @@ class user extends control
             die(js::locate(inlink('logout', $referer), 'parent'));
         }
 
-        $pathPos = strrpos($this->app->getBasePath(), DIRECTORY_SEPARATOR, -2);
+        /* Remove the real path for security reason. */
+        $pathPos       = strrpos($this->app->getBasePath(), DIRECTORY_SEPARATOR, -2);
+        $resetFileName = substr($resetFileName, $pathPos+1);
 
         $this->view->title          = $this->lang->user->resetPassword;
         $this->view->status         = 'reset';
         $this->view->needCreateFile = $needCreateFile;
-        $this->view->resetFileName  = substr($resetFileName, $pathPos+1);
+        $this->view->resetFileName  = $resetFileName;
 
         $this->display();
     }
