@@ -195,8 +195,8 @@ class groupModel extends model
 
     /**
      * Update privilege of a group.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @access public
      * @return bool
      */
@@ -258,8 +258,8 @@ class groupModel extends model
 
     /**
      * Update view priv
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @access public
      * @return bool
      */

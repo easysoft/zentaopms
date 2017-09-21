@@ -49,18 +49,19 @@ js::set('confirmDelete', $lang->user->confirmDelete);
         <th><?php common::printOrderLink('join',     $orderBy, $vars, $lang->user->join);?></th>
         <th><?php common::printOrderLink('last',     $orderBy, $vars, $lang->user->last);?></th>
         <th><?php common::printOrderLink('visits',   $orderBy, $vars, $lang->user->visits);?></th>
+        <th><?php common::printOrderLink('limitedUser', $orderBy, $vars, $lang->user->limitedUser);?></th>
         <th class='w-90px'><?php echo $lang->actions;?></th>
       </tr>
       </thead>
       <tbody>
-      
-      <?php 
+
+      <?php
       $canBatchEdit = common::hasPriv('user', 'batchEdit');
       ?>
       <?php foreach($users as $user):?>
       <tr class='text-center'>
         <td class='cell-id'>
-          <?php 
+          <?php
           if($canBatchEdit) echo "<input type='checkbox' name='users[]' value='$user->account'> ";
           printf('%03d', $user->id);
           ?>
@@ -75,8 +76,9 @@ js::set('confirmDelete', $lang->user->confirmDelete);
         <td><?php echo $user->join;?></td>
         <td><?php if($user->last) echo date('Y-m-d', $user->last);?></td>
         <td><?php echo $user->visits;?></td>
+        <td><?php echo $lang->user->limitedUserList[$user->limitedUser];?></td>
         <td class='text-left'>
-          <?php 
+          <?php
           common::printIcon('user', 'edit', "userID=$user->id&from=company", '', 'list');
           if(strpos($this->app->company->admins, ",{$user->account},") === false and common::hasPriv('user', 'delete'))
           {
