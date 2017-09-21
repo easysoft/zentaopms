@@ -195,3 +195,13 @@ $lang->install->zdoo->desc = <<<EOD
   <li>提供一体化管理平台</li>
 </ul>
 EOD;
+$lang->install->xuanxuan = new stdclass();
+$lang->install->xuanxuan->name = '喧喧即时聊天软件';
+$lang->install->xuanxuan->desc = <<<EOD
+<ul>
+  <li>轻：轻量级架构，容易部署</li>
+  <li>跨：真正完整跨平台解决方案</li>
+  <li>美：基于Html5开发，界面美观</li>
+  <li>开：开放架构，方便二开集成</li>
+</ul>
+EOD;

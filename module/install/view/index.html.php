@@ -59,12 +59,13 @@
                 </a>
               </div>
               <div class='col-md-4'>
-                <a class="card ad" href="http://www.zdoo.com" target="_blank">
-                  <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/zdoo.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/zdoo.png'?>" alt=""></div>
+                <a class="card ad" href="http://www.xuan.im" target="_blank">
+                  <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/xuanxuan.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/xuanxuan.png'?>" alt=""></div>
                   <div class="card-reveal">
-                    <h5 class="card-heading"><?php echo $lang->install->zdoo->name?></h5>
-                    <div class="card-content"><?php echo $lang->install->zdoo->desc?></div>
+                    <h5 class="card-heading"><?php echo $lang->install->xuanxuan->name?></h5>
+                    <div class="card-content"><?php echo $lang->install->xuanxuan->desc?></div>
                   </div>
+
                 </a>
               </div>
             </div>
