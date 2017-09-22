@@ -155,17 +155,6 @@ class installModel extends model
     }
 
     /**
-     * Check gd extension.
-     *
-     * @access public
-     * @return string   ok|fail
-     */
-    public function checkGD()
-    {
-        return $result = extension_loaded('gd') ? 'ok' : 'fail';
-    }
-
-    /**
      * Check iconv extension.
      *
      * @access public

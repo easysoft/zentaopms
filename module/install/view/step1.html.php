@@ -78,12 +78,6 @@
           <td class='text-left f-12px'><?php if($filterResult == 'fail') echo $lang->install->filterFail;?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->install->gd;?></th>
-          <td><?php $gdResult == 'ok' ? printf($lang->install->loaded) : printf($lang->install->unloaded);?></td>
-          <td class='<?php echo $gdResult;?>'><?php echo $lang->install->$gdResult;?></td>
-          <td class='text-left f-12px'><?php if($gdResult == 'fail') echo $lang->install->gdFail;?></td>
-        </tr>
-        <tr>
           <th><?php echo $lang->install->iconv;?></th>
           <td><?php $iconvResult == 'ok' ? printf($lang->install->loaded) : printf($lang->install->unloaded);?></td>
           <td class='<?php echo $iconvResult;?>'><?php echo $lang->install->$iconvResult;?></td>
@@ -164,7 +158,6 @@
          $zlibResult     == 'ok' and
          $curlResult     == 'ok' and
          $filterResult   == 'ok' and
-         $gdResult       == 'ok' and
          $iconvResult    == 'ok')
       {
           echo html::a($this->createLink('install', 'step2'), $lang->install->next, '', "class='btn btn-primary'");
