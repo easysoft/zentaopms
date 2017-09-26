@@ -70,16 +70,15 @@
           $link = common::hasPriv('story', 'create') ?  $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID") : '#';
           echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->story->create, '', $misc);
       }
+
+      $misc = common::hasPriv('story', 'batchCreate') ? '' : "disabled";
+      $link = common::hasPriv('story', 'batchCreate') ?  $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID") : '#';
       ?>
-      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+      <button type="button" class="btn btn-primary dropdown-toggle <?php echo $misc?>" data-toggle="dropdown">
         <span class="caret"></span>
       </button>
       <ul class='dropdown-menu pull-right'>
-      <?php
-      $misc = common::hasPriv('story', 'batchCreate') ? '' : "class=disabled";
-      $link = common::hasPriv('story', 'batchCreate') ?  $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID") : '#';
-      echo "<li>" . html::a($link, $lang->story->batchCreate, '', $misc) . "</li>";
-      ?>
+      <?php echo "<li>" . html::a($link, $lang->story->batchCreate, '', "class='$misc'") . "</li>";?>
       </ul>
     </div>
   </div>

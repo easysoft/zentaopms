@@ -1613,8 +1613,6 @@ class taskModel extends model
     {
         $action = strtolower($action);
 
-        if(!common::limitedUser($task, 'task')) return false;
-
         if($action == 'assignto') return $task->status != 'closed' and $task->status != 'cancel';
         if($action == 'start')    return $task->status == 'wait';
         if($action == 'restart')  return $task->status == 'pause';
@@ -1774,7 +1772,7 @@ class taskModel extends model
                 }
                 common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
                 common::printIcon('task', 'close',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                common::printIcon('task', 'edit',"taskID=$task->id", '', 'list');
+                common::printIcon('task', 'edit',"taskID=$task->id", $task, 'list');
                 break;
             }
             echo '</td>';

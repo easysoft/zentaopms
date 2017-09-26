@@ -2243,8 +2243,6 @@ class bugModel extends model
     {
         $action = strtolower($action);
 
-        if(!common::limitedUser($object)) return false;
-
         if($action == 'confirmbug') return $object->status == 'active' and $object->confirmed == 0;
         if($action == 'resolve')    return $object->status == 'active';
         if($action == 'close')      return $object->status == 'resolved';
@@ -2405,7 +2403,7 @@ class bugModel extends model
             case 'actions':
                 $params = "bugID=$bug->id";
                 common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'search', '', 'iframe', true);
-                common::printIcon('bug', 'assignTo',   $params, '',   'list', '', '', 'iframe', true);
+                common::printIcon('bug', 'assignTo',   $params, $bug, 'list', '', '', 'iframe', true);
                 common::printIcon('bug', 'resolve',    $params, $bug, 'list', '', '', 'iframe', true);
                 common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
                 common::printIcon('bug', 'edit',       $params, $bug, 'list');

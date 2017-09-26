@@ -298,8 +298,6 @@ class userModel extends model
                 $data[$i]->address  = $users->address[$i];
                 $data[$i]->zipcode  = $users->zipcode[$i];
 
-                $data[$i]->limitedUser  = $users->limitedUser[$i];
-
                 /* Change for append field, such as feedback.*/
                 if(!empty($this->config->user->batchAppendFields))
                 {
@@ -467,7 +465,6 @@ class userModel extends model
             $users[$id]['phone']    = $data->phone[$id];
             $users[$id]['address']  = $data->address[$id];
             $users[$id]['zipcode']  = $data->zipcode[$id];
-            $users[$id]['limitedUser']  = $data->limitedUser[$id];
             $users[$id]['dept']     = $data->dept[$id] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $data->dept[$id];
             $users[$id]['role']     = $data->role[$id] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : 0) : $data->role[$id];
 

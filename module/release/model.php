@@ -319,19 +319,4 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->set('status')->eq($status)->where('id')->eq($releaseID)->exec();
         return dao::isError();
     }
-
-    /**
-     * Judge an action is clickable or not.
-     *-
-     * @param  object $product-
-     * @param  string $action-
-     * @access public
-     * @return void
-     */
-    public static function isClickable($release, $action)
-    {
-        if(!common::limitedUser($release)) return false;
-
-        return true;
-    }
 }

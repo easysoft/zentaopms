@@ -71,8 +71,6 @@
       <tr>
         <th><?php echo $lang->user->commiter;?></th>
         <td><?php echo html::input('commiter', $user->commiter, "class='form-control' autocomplete='off'");?></td>
-        <th><?php echo $lang->user->limitedUser;?></th>
-        <td><?php echo html::radio('limitedUser', $lang->user->limitedUserList, $user->limitedUser);?></td>
       </tr>
     </table>
     <table align='center' class='table table-form'>

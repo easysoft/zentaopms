@@ -240,7 +240,7 @@
             <table class='table table-data table-condensed table-borderless table-fixed'>
               <tr>
                 <th class='w-60px'><?php echo $lang->bug->openedBy;?></th>
-                <td> <?php echo $users[$bug->openedBy] . $lang->at . $bug->openedDate;?></td>
+                <td> <?php echo zget($users, $bug->openedBy) . $lang->at . $bug->openedDate;?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->bug->openedBuild;?></th>
@@ -260,7 +260,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->bug->lblResolved;?></th>
-                <td><?php if($bug->resolvedBy) echo $users[$bug->resolvedBy] . $lang->at . $bug->resolvedDate;?></td>
+                <td><?php if($bug->resolvedBy) echo zget($users, $bug->resolvedBy) . $lang->at . $bug->resolvedDate;?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->bug->resolvedBuild;?></th>
@@ -277,7 +277,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->bug->closedBy;?></th>
-                <td><?php if($bug->closedBy) echo $users[$bug->closedBy] . $lang->at . $bug->closedDate;?></td>
+                <td><?php if($bug->closedBy) echo zget($users, $bug->closedBy) . $lang->at . $bug->closedDate;?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->bug->lblLastEdited;?></th>

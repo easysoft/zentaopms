@@ -126,16 +126,15 @@
         $misc = common::hasPriv('task', 'create', $project) ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
         $link = common::hasPriv('task', 'create', $project) ?  $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')) : '#';
         echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->task->create, '', $misc);
+
+        $misc = common::hasPriv('task', 'batchCreate', $project) ? '' : "disabled";
+        $link = common::hasPriv('task', 'batchCreate', $project) ?  $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')) : '#';
         ?>
-        <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
+        <button type='button' class='btn btn-primary dropdown-toggle <?php echo $misc?>' data-toggle='dropdown'>
           <span class='caret'></span>
         </button>
         <ul class='dropdown-menu pull-right'>
-        <?php
-        $misc = common::hasPriv('task', 'batchCreate', $project) ? '' : "class=disabled";
-        $link = common::hasPriv('task', 'batchCreate', $project) ?  $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')) : '#';
-        echo "<li>" . html::a($link, $lang->task->batchCreate, '', $misc) . "</li>";
-        ?>
+        <?php echo "<li>" . html::a($link, $lang->task->batchCreate, '', "class='$misc'") . "</li>";?>
         </ul>
       </div>
     </div>

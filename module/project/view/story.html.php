@@ -119,6 +119,7 @@
           </td>
           <td>
             <?php
+            $hasDBPriv = common::hasDBPriv($project, 'project');
             $param = "projectID={$project->id}&story={$story->id}&moduleID={$story->module}";
 
             $lang->task->create = $lang->project->wbs;
@@ -129,16 +130,16 @@
             }
             else
             {
-                if(!$limitedUser) common::printIcon('task', 'create', $param, $story, 'list', 'plus-border', '', 'btn-task-create');
+                if($hasDBPriv) common::printIcon('task', 'create', $param, '', 'list', 'plus-border', '', 'btn-task-create');
             }
 
             $lang->task->batchCreate = $lang->project->batchWBS;
-            if(!$limitedUser) common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", $story, 'list', 'plus-sign');
+            if($hasDBPriv) common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list', 'plus-sign');
 
             $lang->testcase->batchCreate = $lang->testcase->create;
-            if($productID && !$limitedUser) common::printIcon('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", $story, 'list', 'sitemap');
+            if($productID && $hasDBPriv) common::printIcon('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', 'list', 'sitemap');
 
-            if(common::hasPriv('project', 'unlinkStory') && !$limitedUser)
+            if(common::hasPriv('project', 'unlinkStory', $project))
             {
                 $unlinkURL = $this->createLink('project', 'unlinkStory', "projectID=$project->id&storyID=$story->id&confirm=yes");
                 echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn-icon' title='{$lang->project->unlinkStory}'");

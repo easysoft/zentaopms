@@ -102,7 +102,6 @@ class project extends control
         $this->view->childProjects = $childProjects;
         $this->view->products      = $products;
         $this->view->teamMembers   = $teamMembers;
-        $this->view->actions       = $actions;
 
         return $project;
     }
@@ -538,6 +537,8 @@ class project extends control
         $this->loadModel('user');
         $this->app->loadLang('testcase');
 
+        $this->project->getLimitedProject();
+
         /* Save session. */
         $this->app->session->set('storyList', $this->app->getURI(true));
 
@@ -597,6 +598,7 @@ class project extends control
         $this->view->title        = $title;
         $this->view->position     = $position;
         $this->view->productID    = $productID;
+        $this->view->project      = $project;
         $this->view->stories      = $stories;
         $this->view->summary      = $this->product->summary($stories);
         $this->view->orderBy      = $orderBy;
@@ -610,7 +612,6 @@ class project extends control
         $this->view->users        = $users;
         $this->view->pager        = $pager;
         $this->view->branchGroups = $branchGroups;
-        $this->view->limitedUser  = $this->app->user->limitedUser == 'yes' ? true : false;
 
         $this->display();
     }

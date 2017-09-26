@@ -674,7 +674,7 @@ class commonModel extends model
         if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
-        if(!commonModel::hasPriv($module, $method)) return false;
+        if(!commonModel::hasPriv($module, $method, $object)) return false;
         $link = helper::createLink($module, $method, $vars, '', $onlyBody);
 
         /* Set the icon title, try search the $method defination in $module's lang or $common's lang. */
@@ -1140,7 +1140,7 @@ class commonModel extends model
 
         if(isset($rights[$module][$method]))
         {
-            if(!commonModel::limitedUser($object, $module, $method)) return false;
+            if(!commonModel::hasDBPriv($object, $module, $method)) return false;
 
             if(empty($acls['views'])) return true;
             $menu = isset($lang->menugroup->$module) ? $lang->menugroup->$module : $module;
@@ -1157,29 +1157,26 @@ class commonModel extends model
         return false;
     }
 
-    public static function limitedUser($object, $module = null, $method = null)
+    public static function hasDBPriv($object, $module = null, $method = null)
     {
         global $app;
 
-        if(!empty($app->user->admin) || $app->user->account == 'guest') return true;
+        if(!empty($app->user->admin)) return true;
 
         // limited project
         $limitedProject = false;
-        if(!empty($module) && $module == 'task' && !empty($object->project) ||
-           !empty($module) && $module == 'task' && !empty($object->id))
+        if(!empty($module) && $module == 'task' && !empty($object->project) or
+           !empty($module) && $module == 'project' && !empty($object->id))
         {
             $objectID = '';
-            if(!empty($object->id))                             $objectID = $object->id;
+            if(!empty($object->id)) $objectID = $object->id;
             if(!empty($object->id) && !empty($object->project)) $objectID = $object->project;
 
-            $sessionKey = $app->user->account . 'project' . $objectID;
-            if(!empty($_SESSION[$sessionKey]) && $_SESSION[$sessionKey] == $objectID)
-            {
-                $limitedProject = true;
-            }
+            $limitedProjects = !empty($_SESSION['limitedProjects']) ? $_SESSION['limitedProjects'] : '';
+            if(strpos(",{$limitedProjects},", ",$objectID,") !== false) $limitedProject = true;
         }
 
-        if(!empty($app->user->limitedUser) && $app->user->limitedUser === 'no' && !$limitedProject) return true;
+        if(empty($app->user->rights['rights']['my']['limited']) && !$limitedProject) return true;
 
         if(!is_null($method) && strpos($method, 'batch')  === 0) return false;
         if(!is_null($method) && strpos($method, 'link')   === 0) return false;
@@ -1188,12 +1185,12 @@ class commonModel extends model
 
         if(is_null($object)) return true;
 
-        if(!empty($object->openedBy)     && $object->openedBy     == $app->user->account ||
-           !empty($object->addedBy)      && $object->addedBy      == $app->user->account ||
-           !empty($object->assignedTo)   && $object->assignedTo   == $app->user->account ||
-           !empty($object->finishedBy)   && $object->finishedBy   == $app->user->account ||
-           !empty($object->canceledBy)   && $object->canceledBy   == $app->user->account ||
-           !empty($object->closedBy)     && $object->closedBy     == $app->user->account ||
+        if(!empty($object->openedBy)     && $object->openedBy     == $app->user->account or
+           !empty($object->addedBy)      && $object->addedBy      == $app->user->account or
+           !empty($object->assignedTo)   && $object->assignedTo   == $app->user->account or
+           !empty($object->finishedBy)   && $object->finishedBy   == $app->user->account or
+           !empty($object->canceledBy)   && $object->canceledBy   == $app->user->account or
+           !empty($object->closedBy)     && $object->closedBy     == $app->user->account or
            !empty($object->lastEditedBy) && $object->lastEditedBy == $app->user->account)
         {
            return true;

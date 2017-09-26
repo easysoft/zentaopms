@@ -1751,8 +1751,6 @@ class projectModel extends model
     {
         $action = strtolower($action);
 
-        if(!common::limitedUser($project, 'project')) return false;
-
         if($action == 'start')    return $project->status == 'wait';
         if($action == 'close')    return $project->status != 'done';
         if($action == 'suspend')  return $project->status == 'wait' or $project->status == 'doing';
@@ -1882,11 +1880,8 @@ class projectModel extends model
         if($this->app->user->admin) return true;
 
         /* Get all teams of all projects and group by projects, save it as static. */
-        $teams = $this->dao->select('project, limitedUser')->from(TABLE_TEAM)->where('account')->eq($this->app->user->account)->fetchAll('project');
-        foreach($teams as $projectID => $object)
-        {
-            if($object->limitedUser == 'yes') $this->session->set($this->app->user->account . 'project' . $object->project, $object->project);
-        }
+        $projects = $this->dao->select('project, limitedUser')->from(TABLE_TEAM)->where('account')->eq($this->app->user->account)->andWhere('limitedUser')->eq('yes')->orderBy('project asc')->fetchPairs('project', 'project');
+        $_SESSION['limitedProjects'] = join(',', $projects);
     }
 
     /**

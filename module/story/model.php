@@ -2186,8 +2186,6 @@ class storyModel extends model
     {
         $action = strtolower($action);
 
-        if(!common::limitedUser($story)) return false;
-
         if($action == 'change')   return $story->status != 'closed';
         if($action == 'review')   return $story->status == 'draft' or $story->status == 'changed';
         if($action == 'close')    return $story->status != 'closed';

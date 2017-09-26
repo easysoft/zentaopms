@@ -27,7 +27,7 @@
       }
       else
       {
-          if($app->user->limitedUser === 'no') common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
+          if(!empty($app->user->admin) or empty($app->user->rights['rights']['my']['limited'])) common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
       }
       ?>
     </div>

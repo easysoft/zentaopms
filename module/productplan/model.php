@@ -304,19 +304,4 @@ class productplanModel extends model
         $this->dao->update(TABLE_BUG)->set('plan')->eq(0)->where('id')->eq((int)$bugID)->exec();
         $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromplan', '', $planID);
     }
-
-    /**
-     * Judge an action is clickable or not.
-     *-
-     * @param  object $product-
-     * @param  string $action-
-     * @access public
-     * @return void
-     */
-    public static function isClickable($productPlan, $action)
-    {
-        if(!common::limitedUser($productPlan)) return false;
-
-        return true;
-    }
 }

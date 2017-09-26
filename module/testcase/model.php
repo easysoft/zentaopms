@@ -932,8 +932,6 @@ class testcaseModel extends model
     {
         $action = strtolower($action);
 
-        if(!common::limitedUser($case)) return false;
-
         if($action == 'createbug') return $case->caseFails > 0;
         if($action == 'review') return $case->status == 'wait';
 
@@ -1313,13 +1311,13 @@ class testcaseModel extends model
                 echo $case->stepNumber;
                 break;
             case 'actions':
-                common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", '', 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
-                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", '', 'list', '', '', 'results iframe', '', "data-width='90%'");
+                common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $case, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
+                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $case, 'list', '', '', 'results iframe', '', "data-width='90%'");
                 if($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'review', '', 'iframe');
                 common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
                 common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
 
-                if(common::hasPriv('testcase', 'delete'))
+                if(common::hasPriv('testcase', 'delete', $case))
                 {
                     $deleteURL = helper::createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
                     echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"batchForm\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$this->lang->testcase->delete}' class='btn-icon'");

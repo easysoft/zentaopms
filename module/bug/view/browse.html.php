@@ -37,16 +37,15 @@ js::set('branch', $branch);
         $misc = common::hasPriv('bug', 'create') ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
         $link = common::hasPriv('bug', 'create') ?  $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID") : '#';
         echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->bug->create, '', $misc);
+
+        $misc = common::hasPriv('bug', 'batchCreate') ? '' : "disabled";
+        $link = common::hasPriv('bug', 'batchCreate') ?  $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID") : '#';
         ?>
-        <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
+        <button type='button' class='btn btn-primary dropdown-toggle <?php echo $misc?>' data-toggle='dropdown'>
           <span class='caret'></span>
         </button>
         <ul class='dropdown-menu right'>
-        <?php
-        $misc = common::hasPriv('bug', 'batchCreate') ? '' : "class=disabled";
-        $link = common::hasPriv('bug', 'batchCreate') ?  $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID") : '#';
-        echo "<li>" . html::a($link, $lang->bug->batchCreate, '', $misc) . "</li>";
-        ?>
+        <?php echo "<li>" . html::a($link, $lang->bug->batchCreate, '', "class='$misc'") . "</li>";?>
         </ul>
       </div>
     </li>
@@ -129,15 +128,16 @@ js::set('branch', $branch);
             $link = common::hasPriv('bug', 'create') ?  $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID") : '#';
             echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->bug->create, '', $misc);
         }
+
+        $misc = common::hasPriv('bug', 'batchCreate') ? '' : "disabled";
+        $link = common::hasPriv('bug', 'batchCreate') ?  $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID") : '#';
         ?>
-        <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
+        <button type='button' class='btn btn-primary dropdown-toggle <?php echo $misc?>' data-toggle='dropdown'>
           <span class='caret'></span>
         </button>
         <ul class='dropdown-menu pull-right'>
         <?php
-        $misc = common::hasPriv('bug', 'batchCreate') ? '' : "class=disabled";
-        $link = common::hasPriv('bug', 'batchCreate') ?  $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID") : '#';
-        echo "<li>" . html::a($link, $lang->bug->batchCreate, '', $misc) . "</li>";
+        echo "<li>" . html::a($link, $lang->bug->batchCreate, '', "class='$misc'") . "</li>";
         ?>
         </ul>
       </div>

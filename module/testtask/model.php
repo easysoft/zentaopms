@@ -1099,8 +1099,6 @@ class testtaskModel extends model
     {
         $action = strtolower($action);
 
-        if(!common::limitedUser($testtask)) return false;
-
         if($action == 'start')    return $testtask->status  == 'wait';
         if($action == 'block')    return ($testtask->status == 'doing'   || $testtask->status == 'wait');
         if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
@@ -1194,10 +1192,10 @@ class testtaskModel extends model
                 echo $run->stepNumber;
                 break;
             case 'actions':
-                common::printIcon('testtask', 'runCase',    "id=$run->id", '', 'list', '', '', 'runCase iframe', false, "data-width='95%'");
-                common::printIcon('testtask', 'results',    "id=$run->id", '', 'list', '', '', 'iframe', '', "data-width='90%'");
+                common::printIcon('testtask', 'runCase',    "id=$run->id", $run, 'list', '', '', 'runCase iframe', false, "data-width='95%'");
+                common::printIcon('testtask', 'results',    "id=$run->id", $run, 'list', '', '', 'iframe', '', "data-width='90%'");
 
-                if(common::hasPriv('testtask', 'unlinkCase'))
+                if(common::hasPriv('testtask', 'unlinkCase', $run))
                 {
                     $unlinkURL = helper::createLink('testtask', 'unlinkCase', "caseID=$run->id&confirm=yes");
                     echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"casesForm\",confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$this->lang->testtask->unlinkCase}' class='btn-icon'");
