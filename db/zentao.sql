@@ -626,6 +626,7 @@ CREATE TABLE IF NOT EXISTS `zt_team` (
   `project` mediumint(8) unsigned NOT NULL default '0',
   `account` char(30) NOT NULL default '',
   `role` char(30) NOT NULL default '',
+  `limitedUser` char(8) NOT NULL default 'no',
   `join` date NOT NULL default '0000-00-00',
   `days` smallint(5) unsigned NOT NULL,
   `hours` float(2,1) unsigned NOT NULL default '0',
