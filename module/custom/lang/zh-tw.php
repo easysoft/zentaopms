@@ -69,6 +69,7 @@ $lang->custom->todo->fields['statusList'] = '狀態';
 $lang->custom->user = new stdClass();
 $lang->custom->user->fields['roleList']   = '職位';
 $lang->custom->user->fields['statusList'] = '狀態';
+$lang->custom->user->fields['deleted']    = '列出已刪除用戶';
 
 $lang->custom->block->fields['closed'] = '關閉的區塊';
 
@@ -81,8 +82,8 @@ $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole             = '鍵的長度必須小於20個字元！';
 $lang->custom->notice->canNotAdd            = '該項參與運算，不提供自定義添加功能';
 $lang->custom->notice->forceReview          = "指定人提交的%s必須評審。";
-$lang->custom->notice->longlife             = 'Bug列表頁面的久未處理標籤中，列出設置天數之前未處理的Bug。';
 $lang->custom->notice->forceNotReview       = "指定人提交的%s不需要評審。";
+$lang->custom->notice->longlife             = 'Bug列表頁面的久未處理標籤中，列出設置天數之前未處理的Bug。';
 $lang->custom->notice->priListKey           = '優先順序的鍵應當為數字！';
 $lang->custom->notice->keyList              = '鍵值應當為英文或數字';
 $lang->custom->notice->severityListKey      = 'Bug嚴重程度的鍵應當為數字！';
@@ -90,10 +91,14 @@ $lang->custom->notice->indexPage['product'] = "從8.2版本起增加了產品主
 $lang->custom->notice->indexPage['project'] = "從8.2版本起增加了項目主頁視圖，是否預設進入項目主頁？";
 $lang->custom->notice->indexPage['qa']      = "從8.2版本起增加了測試主頁視圖，是否預設進入測試主頁？";
 
-$lang->custom->storyReview   = '評審流程';
-$lang->custom->forceReview   = '強制評審';
-$lang->custom->reviewList[1] = '開啟';
-$lang->custom->reviewList[0] = '關閉';
+$lang->custom->storyReview    = '評審流程';
+$lang->custom->forceReview    = '強制評審';
+$lang->custom->forceNotReview = '不需要評審';
+$lang->custom->reviewList[1]  = '開啟';
+$lang->custom->reviewList[0]  = '關閉';
+
+$lang->custom->deletedList[1] = '列出';
+$lang->custom->deletedList[0] = '不列出';
 
 $lang->custom->workingHours   = '每天可用工時';
 $lang->custom->weekend        = '休息日';

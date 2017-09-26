@@ -195,3 +195,13 @@ $lang->install->zdoo->desc = <<<EOD
   <li>An integrated and collaborative platform</li>
 </ul>
 EOD;
+$lang->install->xuanxuan = new stdclass();
+$lang->install->xuanxuan->name = 'Xuanxuan IM';
+$lang->install->xuanxuan->desc = <<<EOD
+<ul>
+  <li>lightweight and easy to deploy</li>
+  <li>truly complete cross platform solutions</li>
+  <li>Based on Html5, the beautiful</li>
+  <li>Open architecture</li>
+</ul>
+EOD;

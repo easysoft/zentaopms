@@ -113,11 +113,11 @@ $lang->testcase->allCases      = '所有';
 $lang->testcase->needConfirm   = '需求變動';
 $lang->testcase->bySearch      = '搜索';
 
-$lang->testcase->lblStory                    = '相關需求';
-$lang->testcase->lblLastEdited               = '最後編輯';
-$lang->testcase->lblTypeValue                = '類型可選值列表';
-$lang->testcase->lblStageValue               = '階段可選值列表';
-$lang->testcase->lblStatusValue              = '狀態可選值列表';
+$lang->testcase->lblStory           = '相關需求';
+$lang->testcase->lblLastEdited      = '最後編輯';
+$lang->testcase->lblTypeValue       = '類型可選值列表';
+$lang->testcase->lblStageValue      = '階段可選值列表';
+$lang->testcase->lblStatusValue     = '狀態可選值列表';
 
 $lang->testcase->legendBasicInfo    = '基本信息';
 $lang->testcase->legendAttatch      = '附件';

@@ -185,6 +185,8 @@ class upgradeModel extends model
             case '9_4':
                 $this->execSQL($this->getUpgradeFile('9.4'));
                 $this->adjustPriv9_4();
+            case '9_5':
+                $this->execSQL($this->getUpgradeFile('9.4'));
         }
 
         $this->deletePatch();
@@ -281,6 +283,7 @@ class upgradeModel extends model
         case '9_2_1':
         case '9_3_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('9.3.beta'));
         case '9_4':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.4'));
+        case '9_5':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.5'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

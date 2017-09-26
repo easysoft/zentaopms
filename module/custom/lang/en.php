@@ -91,10 +91,11 @@ $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage.
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage. Do you want to enter Project Homepage?";
 $lang->custom->notice->indexPage['qa']      = "ZenTao 8.2+ has Testing Homepage. Do you want to enter Testing Homepage?";
 
-$lang->custom->storyReview   = 'Review';
-$lang->custom->forceReview   = 'Review Required';
-$lang->custom->reviewList[1] = 'On';
-$lang->custom->reviewList[0] = 'Off';
+$lang->custom->storyReview    = 'Review';
+$lang->custom->forceReview    = 'Review Required';
+$lang->custom->forceNotReview = 'Need not review';
+$lang->custom->reviewList[1]  = 'On';
+$lang->custom->reviewList[0]  = 'Off';
 
 $lang->custom->deletedList[1] = 'Show';
 $lang->custom->deletedList[0] = 'Not Show';

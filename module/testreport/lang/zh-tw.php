@@ -42,7 +42,7 @@ $lang->testreport->legendComment     = '總結';
 $lang->testreport->legendMore        = '更多功能';
 
 $lang->testreport->bugSeverityGroups   = 'Bug嚴重級別分佈';
-$lang->testreport->bugTypeGroups       = 'Bug類型別分布';
+$lang->testreport->bugTypeGroups       = 'Bug類型別分佈';
 $lang->testreport->bugStatusGroups     = 'Bug狀態分佈';
 $lang->testreport->bugOpenedByGroups   = 'Bug創建者分佈';
 $lang->testreport->bugResolvedByGroups = 'Bug解決者分佈';
