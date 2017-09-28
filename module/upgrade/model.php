@@ -186,7 +186,7 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('9.4'));
                 $this->adjustPriv9_4();
             case '9_5':
-                $this->execSQL($this->getUpgradeFile('9.4'));
+                $this->execSQL($this->getUpgradeFile('9.5'));
         }
 
         $this->deletePatch();
