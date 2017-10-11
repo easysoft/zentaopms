@@ -547,7 +547,8 @@ function setFormAction(actionLink, hiddenwin, obj)
     $form.attr('action', actionLink);
 
     // Check safari for bug #1000, see http://pms.zentao.net/bug-view-1000.html
-    var isSafari = navigator.userAgent.indexOf('AppleWebKit') > -1;
+    var userAgent = navigator.userAgent;
+    var isSafari = userAgent.indexOf('AppleWebKit') > -1 && userAgent.indexOf('Safari') > -1 && userAgent.indexOf('Chrome') < 0;
     if(isSafari)
     {
         var idPreffix = 'checkbox-fix-' + $.zui.uuid();

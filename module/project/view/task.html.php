@@ -65,7 +65,7 @@ js::set('browseType', $browseType);
                 echo html::selectButton();
 
                 $actionLink = $this->createLink('task', 'batchEdit', "projectID=$projectID");
-                $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+                $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink', '', '#projectTaskForm')\"" : "disabled='disabled'";
 
                 echo "<div class='btn-group dropup'>";
                 echo html::commonButton($lang->edit, $misc);
@@ -73,11 +73,11 @@ js::set('browseType', $browseType);
                 echo "<ul class='dropdown-menu' id='moreActionMenu'>";
 
                 $actionLink = $this->createLink('task', 'batchClose');
-                $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "class='disabled'";
+                $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink','hiddenwin', '#projectTaskForm')\"" : "class='disabled'";
                 echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
 
                 $actionLink = $this->createLink('task', 'batchCancel');
-                $misc = $canBatchCancel ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "class='disabled'";
+                $misc = $canBatchCancel ? "onclick=\"setFormAction('$actionLink','hiddenwin', '#projectTaskForm')\"" : "class='disabled'";
                 echo "<li>" . html::a('#', $lang->task->cancel, '', $misc) . "</li>";
 
                 if($canBatchChangeModule)
@@ -90,7 +90,7 @@ js::set('browseType', $browseType);
                     foreach($modules as $moduleId => $module)
                     {
                         $actionLink = $this->createLink('task', 'batchChangeModule', "moduleID=$moduleId");
-                        echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
+                        echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin', '#projectTaskForm')\"") . "</li>";
                     }
                     echo '</ul>';
                     if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
@@ -114,7 +114,7 @@ js::set('browseType', $browseType);
                     foreach ($memberPairs as $key => $value)
                     {
                         if(empty($key)) continue;
-                        echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
+                        echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", null, \"#projectTaskForm\")", $value, '', '') . '</li>';
                     }
                     echo "</ul>";
                     if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
