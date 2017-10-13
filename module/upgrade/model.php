@@ -1721,6 +1721,7 @@ class upgradeModel extends model
             $data->module = 'bug';
             $data->method = 'batchActivate';
         }
+        return true;
     }
 
     /**

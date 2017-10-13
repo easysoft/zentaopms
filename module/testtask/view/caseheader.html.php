@@ -51,7 +51,7 @@
     echo "<div class='btn-group'>";
     common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'button', 'link');
     common::printIcon('testcase', 'export', "productID=$productID&orderBy=`case`_desc&taskID=$task->id", '', 'button', '', '', 'iframe export');
-    common::printIcon('testtask', 'report', "productID=$productID&taskID=$task->id&browseType=$browseType&branchID=$task->branch&moduleID=" + empty($moduleID) ? '' : $moduleID);
+    common::printIcon('testtask', 'report', "productID=$productID&taskID=$task->id&browseType=$browseType&branchID=$task->branch&moduleID=" . (empty($moduleID) ? '' : $moduleID));
     echo '</div>';
     echo "<div class='btn-group'>";
     common::printRPN($this->session->testtaskList, '');
