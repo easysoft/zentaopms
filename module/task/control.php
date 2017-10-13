@@ -473,6 +473,7 @@ class task extends control
             $taskIDList = $this->post->taskIDList;
             unset($_POST['taskIDList']);
             if(!is_array($taskIDList)) die(js::locate($this->createLink('project', 'task', "projectID=$project"), 'parent'));
+            $taskIDList = array_unique($taskIDList);
             foreach($taskIDList as $taskID)
             {
                 $this->loadModel('action');
@@ -482,7 +483,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
                 $this->task->sendmail($taskID, $actionID);
             }
-            die(js::locate($this->createLink('project', 'task', "projectID=$project"), 'parent'));
+            die(js::reload('parent'));
         }
     }
 

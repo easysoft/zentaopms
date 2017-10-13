@@ -519,7 +519,7 @@ class taskModel extends model
             ->cleanFloat('left')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
-            ->remove('comment')
+            ->remove('comment,showModule')
             ->setDefault('assignedDate', $now)
             ->get();
 
