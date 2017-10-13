@@ -686,7 +686,6 @@ class baseDAO
         {
             $sql = $this->processSQL();
         }
-        $key = md5($sql);
 
         try
         {
@@ -695,21 +694,10 @@ class baseDAO
 
             if($this->slaveDBH and $method == 'select')
             {
-                if(isset(dao::$cache[$key])) return dao::$cache[$key];
-                $result = $this->slaveDBH->query($sql);
-                dao::$cache[$key] = $result;
-                return $result;
+                return $this->slaveDBH->query($sql);
             }
             else
             {
-                if($this->method == 'select')
-                {
-                    if(isset(dao::$cache[$key])) return dao::$cache[$key];
-                    $result = $this->slaveDBH->query($sql);
-                    dao::$cache[$key] = $result;
-                    return $result;
-                }
-
                 return $this->dbh->query($sql);
             }
         }
@@ -791,10 +779,27 @@ class baseDAO
      */
     public function fetch($field = '')
     {
-        if(empty($field)) return $this->query()->fetch();
+        $sql = $this->processSQL();
+        $key = md5($sql);
+        if(isset(dao::$cache['fetch'][$key]))
+        {
+            if(empty($field)) return $this->getRow(dao::$cache['fetch'][$key]);
+
+            $result = dao::$cache['fetch'][$key];
+            return $result ? $result->$field : '';
+        }
+
+        if(empty($field))
+        {
+            $data = $this->query()->fetch();
+            dao::$cache['fetch'][$key] = $data;
+            return $this->getRow($data);
+        }
+
         $this->setFields($field);
         $result = $this->query()->fetch(PDO::FETCH_OBJ);
-        if($result) return $result->$field;
+        dao::$cache['fetch'][$key] = $result;
+        return $result ? $result->$field : '';
     }
 
     /**
@@ -808,10 +813,29 @@ class baseDAO
      */
     public function fetchAll($keyField = '')
     {
+        $sql = $this->processSQL();
+        $key = md5($sql . $keyField);
+        if(isset(dao::$cache['fetchAll'][$key]))
+        {
+            $rows   = dao::$cache['fetchAll'][$key];
+            $result = array();
+            foreach($rows as $i => $row) $result[$i] = $this->getRow($row);
+            return $result;
+        }
+
         $stmt = $this->query();
-        if(empty($keyField)) return $stmt->fetchAll();
+        if(empty($keyField))
+        {
+            $rows   = $stmt->fetchAll();
+            $result = array();
+            dao::$cache['fetchAll'][$key] = $rows;
+            foreach($rows as $i => $row) $result[$i] = $this->getRow($row);
+            return $result;
+        }
+
         $rows = array();
-        while($row = $stmt->fetch()) $rows[$row->$keyField] = $row;
+        while($row = $stmt->fetch()) $rows[$row->$keyField] = $this->getRow($row);
+        dao::$cache['fetchAll'][$key] = $rows;
         return $rows;
     }
 
@@ -826,12 +850,26 @@ class baseDAO
      */
     public function fetchGroup($groupField, $keyField = '')
     {
+        $sql = $this->processSQL();
+        $key = md5($sql . $groupField . $keyField);
+        if(isset(dao::$cache['fetchGroup'][$key]))
+        {
+            $result    = array();
+            $groupRows = dao::$cache['fetchGroup'][$key];
+            foreach($groupRows as $groupField => $rows)
+            {
+                foreach($rows as $keyField => $row) $result[$groupField][$keyField] = $this->getRow($row);
+            }
+            return $result;
+        }
+
         $stmt = $this->query();
         $rows = array();
         while($row = $stmt->fetch())
         {
-            empty($keyField) ?  $rows[$row->$groupField][] = $row : $rows[$row->$groupField][$row->$keyField] = $row;
+            empty($keyField) ?  $rows[$row->$groupField][] = $row : $rows[$row->$groupField][$row->$keyField] = $this->getRow($row);
         }
+        dao::$cache['fetchGroup'][$key] = $rows;
         return $rows;
     }
 
@@ -852,6 +890,10 @@ class baseDAO
         $keyField   = trim($keyField, '`');
         $valueField = trim($valueField, '`');
 
+        $sql = $this->processSQL();
+        $key = md5($sql . $keyField . $valueField);
+        if(isset(dao::$cache["fetchPairs"][$key])) return dao::$cache['fetchPairs'][$key];
+
         $pairs = array();
         $ready = false;
         $stmt  = $this->query();
@@ -870,6 +912,8 @@ class baseDAO
 
             $pairs[$row[$keyField]] = $row[$valueField];
         }
+
+        dao::$cache['fetchPairs'][$key] = $pairs;
         return $pairs;
     }
 
@@ -883,6 +927,20 @@ class baseDAO
     public function lastInsertID()
     {
         return $this->dbh->lastInsertID();
+    }
+
+    /**
+     * 重新生成数据。
+     * Get row by data. 
+     * 
+     * @param  array/object    $data 
+     * @access public
+     * @return array/object
+     */
+    public function getRow($data)
+    {
+        if(!is_object($data)) return $data;
+        return json_decode(json_encode($data));
     }
 
     //-------------------- 魔术方法(Magic methods) --------------------//
