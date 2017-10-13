@@ -65,7 +65,7 @@ js::set('browseType', $browseType);
                 echo html::selectButton();
 
                 $actionLink = $this->createLink('task', 'batchEdit', "projectID=$projectID");
-                $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+                $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink', '', '#projectTaskForm')\"" : "disabled='disabled'";
 
                 echo "<div class='btn-group dropup'>";
                 echo html::commonButton($lang->edit, $misc);
