@@ -48,6 +48,7 @@ class actionModel extends model
 
         /* Process action. */
         $action = $this->loadModel('file')->processImgURL($action, 'comment', $this->post->uid);
+        $this->file->autoDelete($this->post->uid);
 
         /* Get product and project for this object. */
         $productAndProject  = $this->getProductAndProject($action->objectType, $objectID);
