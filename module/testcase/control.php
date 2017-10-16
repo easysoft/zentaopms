@@ -500,7 +500,9 @@ class testcase extends control
             $this->view->branchName  = $this->session->currentProductType == 'normal' ? '' : $this->loadModel('branch')->getById($case->branch);
         }
 
-        $caseFails = $this->dao->select('`case` AS name, COUNT(*) AS value')->from(TABLE_TESTRESULT)->where('caseResult')->eq('fail')->andwhere('`case`')->eq($caseID)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        $caseFails = $this->dao->select('COUNT(*) AS count')->from(TABLE_TESTRESULT)->where('caseResult')->eq('fail')->andwhere('`case`')->eq($caseID)
+            ->beginIF($from == 'testtask')->andwhere('`run`')->eq($taskID)->fi()
+            ->fetch('count');
 
         $this->view->position[] = $this->lang->testcase->common;
         $this->view->position[] = $this->lang->testcase->view;
@@ -515,7 +517,7 @@ class testcase extends control
         $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
         $this->view->runID      = $from == 'testcase' ? 0 : $run->id;
         $this->view->isLibCase  = $isLibCase;
-        $this->view->caseFails  = $caseFails ? $caseFails : 0;
+        $this->view->caseFails  = $caseFails;
 
         $this->display();
     }

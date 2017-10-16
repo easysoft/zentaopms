@@ -181,6 +181,21 @@ $config->task->datatable->fieldList['story']['fixed']    = 'no';
 $config->task->datatable->fieldList['story']['width']    = '80';
 $config->task->datatable->fieldList['story']['required'] = 'no';
 
+$config->task->datatable->fieldList['mailto']['title']    = 'mailto';
+$config->task->datatable->fieldList['mailto']['fixed']    = 'no';
+$config->task->datatable->fieldList['mailto']['width']    = '100';
+$config->task->datatable->fieldList['mailto']['required'] = 'no';
+
+$config->task->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
+$config->task->datatable->fieldList['lastEditedBy']['fixed']    = 'no';
+$config->task->datatable->fieldList['lastEditedBy']['width']    = '80';
+$config->task->datatable->fieldList['lastEditedBy']['required'] = 'no';
+
+$config->task->datatable->fieldList['lastEditedDate']['title']    = 'lastEditedDate';
+$config->task->datatable->fieldList['lastEditedDate']['fixed']    = 'no';
+$config->task->datatable->fieldList['lastEditedDate']['width']    = '90';
+$config->task->datatable->fieldList['lastEditedDate']['required'] = 'no';
+
 $config->task->datatable->fieldList['actions']['title']    = 'actions';
 $config->task->datatable->fieldList['actions']['fixed']    = 'right';
 $config->task->datatable->fieldList['actions']['width']    = '140';

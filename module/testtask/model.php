@@ -1158,12 +1158,33 @@ class testtaskModel extends model
             case 'status':
                 echo ($run->version < $run->caseVersion) ? "<span class='warning'>{$this->lang->testcase->changed}</span>" : $this->lang->testtask->statusList[$run->status];
                 break;
+            case 'precondition':
+                echo $run->precondition;
+                break;
+            case 'keywords':
+                echo $run->keywords;
+                break;
+            case 'version':
+                echo $run->version;
+                break;
             case 'openedBy':
                 $openedBy = zget($users, $run->openedBy, $run->openedBy);
                 echo substr($openedBy, strpos($openedBy, ':') + 1);
                 break;
             case 'openedDate':
                 echo substr($run->openedDate, 5, 11);
+                break;
+            case 'reviewedBy':
+                echo zget($users, $run->reviewedBy, $run->reviewedBy);
+                break;
+            case 'reviewedDate':
+                echo substr($run->reviewedDate, 5, 11);
+                break;
+            case 'lastEditedBy':
+                echo zget($users, $run->lastEditedBy, $run->lastEditedBy);
+                break;
+            case 'lastEditedDate':
+                echo substr($run->lastEditedDate, 5, 11);
                 break;
             case 'lastRunner':
                 $lastRunner = zget($users, $run->lastRunner, $run->lastRunner);

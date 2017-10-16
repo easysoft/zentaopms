@@ -51,6 +51,7 @@ $lang->bug->resolvedBuild    = 'Resolved Build';
 $lang->bug->resolvedDate     = 'Resolved On';
 $lang->bug->resolvedDateAB   = 'Resolved On';
 $lang->bug->deadline         = 'Deadline';
+$lang->bug->plan             = 'Plan';
 $lang->bug->closedBy         = 'Closed By';
 $lang->bug->closedDate       = 'Closed On';
 $lang->bug->duplicateBug     = 'Duplicate';

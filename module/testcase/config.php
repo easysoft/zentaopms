@@ -106,6 +106,16 @@ $config->testcase->datatable->fieldList['status']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['status']['width']    = '80';
 $config->testcase->datatable->fieldList['status']['required'] = 'no';
 
+$config->testcase->datatable->fieldList['precondition']['title']    = 'precondition';
+$config->testcase->datatable->fieldList['precondition']['fixed']    = 'no';
+$config->testcase->datatable->fieldList['precondition']['width']    = '120';
+$config->testcase->datatable->fieldList['precondition']['required'] = 'no';
+
+$config->testcase->datatable->fieldList['keywords']['title']    = 'keywords';
+$config->testcase->datatable->fieldList['keywords']['fixed']    = 'no';
+$config->testcase->datatable->fieldList['keywords']['width']    = '100';
+$config->testcase->datatable->fieldList['keywords']['required'] = 'no';
+
 $config->testcase->datatable->fieldList['openedBy']['title']    = 'openedByAB';
 $config->testcase->datatable->fieldList['openedBy']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['openedBy']['width']    = '80';
@@ -115,6 +125,16 @@ $config->testcase->datatable->fieldList['openedDate']['title']    = 'openedDate'
 $config->testcase->datatable->fieldList['openedDate']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['openedDate']['width']    = '90';
 $config->testcase->datatable->fieldList['openedDate']['required'] = 'no';
+
+$config->testcase->datatable->fieldList['reviewedBy']['title']    = 'reviewedBy';
+$config->testcase->datatable->fieldList['reviewedBy']['fixed']    = 'no';
+$config->testcase->datatable->fieldList['reviewedBy']['width']    = '80';
+$config->testcase->datatable->fieldList['reviewedBy']['required'] = 'no';
+
+$config->testcase->datatable->fieldList['reviewedDate']['title']    = 'reviewedDate';
+$config->testcase->datatable->fieldList['reviewedDate']['fixed']    = 'no';
+$config->testcase->datatable->fieldList['reviewedDate']['width']    = '90';
+$config->testcase->datatable->fieldList['reviewedDate']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastRunner']['title']    = 'lastRunner';
 $config->testcase->datatable->fieldList['lastRunner']['fixed']    = 'no';
@@ -130,6 +150,21 @@ $config->testcase->datatable->fieldList['lastRunResult']['title']    = 'lastRunR
 $config->testcase->datatable->fieldList['lastRunResult']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['lastRunResult']['width']    = '80';
 $config->testcase->datatable->fieldList['lastRunResult']['required'] = 'no';
+
+$config->testcase->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
+$config->testcase->datatable->fieldList['lastEditedBy']['fixed']    = 'no';
+$config->testcase->datatable->fieldList['lastEditedBy']['width']    = '80';
+$config->testcase->datatable->fieldList['lastEditedBy']['required'] = 'no';
+
+$config->testcase->datatable->fieldList['lastEditedDate']['title']    = 'lastEditedDate';
+$config->testcase->datatable->fieldList['lastEditedDate']['fixed']    = 'no';
+$config->testcase->datatable->fieldList['lastEditedDate']['width']    = '90';
+$config->testcase->datatable->fieldList['lastEditedDate']['required'] = 'no';
+
+$config->testcase->datatable->fieldList['version']['title']    = 'version';
+$config->testcase->datatable->fieldList['version']['fixed']    = 'no';
+$config->testcase->datatable->fieldList['version']['width']    = '60';
+$config->testcase->datatable->fieldList['version']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['story']['title']    = 'story';
 $config->testcase->datatable->fieldList['story']['fixed']    = 'no';

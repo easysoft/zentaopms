@@ -2285,6 +2285,9 @@ class storyModel extends model
             case 'branch':
                 echo $branches[$story->branch];
                 break;
+            case 'keywords':
+                echo $story->keywords;
+                break;
             case 'source':
                 echo zget($this->lang->story->sourceList, $story->source, $story->source);
                 break;
@@ -2347,6 +2350,24 @@ class storyModel extends model
                 break;
             case 'closedReason':
                 echo zget($this->lang->story->reasonList, $story->closedReason, $story->closedReason);
+                break;
+            case 'lastEditedBy':
+                echo zget($users, $story->lastEditedBy, $story->lastEditedBy);
+                break;
+            case 'lastEditedDate':
+                echo substr($story->lastEditedDate, 5, 11);
+                break;
+            case 'mailto':
+                $mailto = explode(',', $story->mailto);
+                foreach($mailto as $account)
+                {
+                    $account = trim($account);
+                    if(empty($account)) continue;
+                    echo zget($users, $account) . ' &nbsp;';
+                }
+                break;
+            case 'version':
+                echo $story->version;
                 break;
             case 'actions':
                 $vars = "story={$story->id}";

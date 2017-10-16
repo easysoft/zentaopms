@@ -64,6 +64,16 @@ $config->story->datatable->fieldList['title']['fixed']    = 'left';
 $config->story->datatable->fieldList['title']['width']    = 'auto';
 $config->story->datatable->fieldList['title']['required'] = 'yes';
 
+$config->story->datatable->fieldList['branch']['title']    = 'branch';
+$config->story->datatable->fieldList['branch']['fixed']    = 'no';
+$config->story->datatable->fieldList['branch']['width']    = '100';
+$config->story->datatable->fieldList['branch']['required'] = 'no';
+
+$config->story->datatable->fieldList['keywords']['title']    = 'keywords';
+$config->story->datatable->fieldList['keywords']['fixed']    = 'no';
+$config->story->datatable->fieldList['keywords']['width']    = '100';
+$config->story->datatable->fieldList['keywords']['required'] = 'no';
+
 $config->story->datatable->fieldList['plan']['title']    = 'planAB';
 $config->story->datatable->fieldList['plan']['fixed']    = 'no';
 $config->story->datatable->fieldList['plan']['width']    = '90';
@@ -157,12 +167,27 @@ $config->story->datatable->fieldList['closedReason']['fixed']    = 'no';
 $config->story->datatable->fieldList['closedReason']['width']    = '90';
 $config->story->datatable->fieldList['closedReason']['required'] = 'no';
 
+$config->story->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
+$config->story->datatable->fieldList['lastEditedBy']['fixed']    = 'no';
+$config->story->datatable->fieldList['lastEditedBy']['width']    = '80';
+$config->story->datatable->fieldList['lastEditedBy']['required'] = 'no';
+
+$config->story->datatable->fieldList['lastEditedDate']['title']    = 'lastEditedDate';
+$config->story->datatable->fieldList['lastEditedDate']['fixed']    = 'no';
+$config->story->datatable->fieldList['lastEditedDate']['width']    = '90';
+$config->story->datatable->fieldList['lastEditedDate']['required'] = 'no';
+
+$config->story->datatable->fieldList['mailto']['title']    = 'mailto';
+$config->story->datatable->fieldList['mailto']['fixed']    = 'no';
+$config->story->datatable->fieldList['mailto']['width']    = '100';
+$config->story->datatable->fieldList['mailto']['required'] = 'no';
+
+$config->story->datatable->fieldList['version']['title']    = 'version';
+$config->story->datatable->fieldList['version']['fixed']    = 'no';
+$config->story->datatable->fieldList['version']['width']    = '60';
+$config->story->datatable->fieldList['version']['required'] = 'no';
+
 $config->story->datatable->fieldList['actions']['title']    = 'actions';
 $config->story->datatable->fieldList['actions']['fixed']    = 'right';
 $config->story->datatable->fieldList['actions']['width']    = '140';
 $config->story->datatable->fieldList['actions']['required'] = 'yes';
-
-$config->story->datatable->fieldList['branch']['title']    = 'branch';
-$config->story->datatable->fieldList['branch']['fixed']    = 'left';
-$config->story->datatable->fieldList['branch']['width']    = '100';
-$config->story->datatable->fieldList['branch']['required'] = 'no';

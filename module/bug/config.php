@@ -187,10 +187,25 @@ $config->bug->datatable->fieldList['title']['fixed']    = 'left';
 $config->bug->datatable->fieldList['title']['width']    = 'auto';
 $config->bug->datatable->fieldList['title']['required'] = 'yes';
 
+$config->bug->datatable->fieldList['branch']['title']    = 'branch';
+$config->bug->datatable->fieldList['branch']['fixed']    = 'left';
+$config->bug->datatable->fieldList['branch']['width']    = '100';
+$config->bug->datatable->fieldList['branch']['required'] = 'no';
+
 $config->bug->datatable->fieldList['type']['title']    = 'type';
 $config->bug->datatable->fieldList['type']['fixed']    = 'no';
 $config->bug->datatable->fieldList['type']['width']    = '90';
 $config->bug->datatable->fieldList['type']['required'] = 'no';
+
+$config->bug->datatable->fieldList['project']['title']    = 'project';
+$config->bug->datatable->fieldList['project']['fixed']    = 'no';
+$config->bug->datatable->fieldList['project']['width']    = '120';
+$config->bug->datatable->fieldList['project']['required'] = 'no';
+
+$config->bug->datatable->fieldList['plan']['title']    = 'plan';
+$config->bug->datatable->fieldList['plan']['fixed']    = 'no';
+$config->bug->datatable->fieldList['plan']['width']    = '120';
+$config->bug->datatable->fieldList['plan']['required'] = 'no';
 
 $config->bug->datatable->fieldList['status']['title']    = 'statusAB';
 $config->bug->datatable->fieldList['status']['fixed']    = 'no';
@@ -206,6 +221,41 @@ $config->bug->datatable->fieldList['activatedDate']['title']    = 'activatedDate
 $config->bug->datatable->fieldList['activatedDate']['fixed']    = 'no';
 $config->bug->datatable->fieldList['activatedDate']['width']    = '90';
 $config->bug->datatable->fieldList['activatedDate']['required'] = 'no';
+
+$config->bug->datatable->fieldList['story']['title']    = 'story';
+$config->bug->datatable->fieldList['story']['fixed']    = 'no';
+$config->bug->datatable->fieldList['story']['width']    = '120';
+$config->bug->datatable->fieldList['story']['required'] = 'no';
+
+$config->bug->datatable->fieldList['task']['title']    = 'task';
+$config->bug->datatable->fieldList['task']['fixed']    = 'no';
+$config->bug->datatable->fieldList['task']['width']    = '120';
+$config->bug->datatable->fieldList['task']['required'] = 'no';
+
+$config->bug->datatable->fieldList['keywords']['title']    = 'keywords';
+$config->bug->datatable->fieldList['keywords']['fixed']    = 'no';
+$config->bug->datatable->fieldList['keywords']['width']    = '100';
+$config->bug->datatable->fieldList['keywords']['required'] = 'no';
+
+$config->bug->datatable->fieldList['os']['title']    = 'os';
+$config->bug->datatable->fieldList['os']['fixed']    = 'no';
+$config->bug->datatable->fieldList['os']['width']    = '80';
+$config->bug->datatable->fieldList['os']['required'] = 'no';
+
+$config->bug->datatable->fieldList['browser']['title']    = 'browser';
+$config->bug->datatable->fieldList['browser']['fixed']    = 'no';
+$config->bug->datatable->fieldList['browser']['width']    = '80';
+$config->bug->datatable->fieldList['browser']['required'] = 'no';
+
+$config->bug->datatable->fieldList['found']['title']    = 'found';
+$config->bug->datatable->fieldList['found']['fixed']    = 'no';
+$config->bug->datatable->fieldList['found']['width']    = '80';
+$config->bug->datatable->fieldList['found']['required'] = 'no';
+
+$config->bug->datatable->fieldList['mailto']['title']    = 'mailto';
+$config->bug->datatable->fieldList['mailto']['fixed']    = 'no';
+$config->bug->datatable->fieldList['mailto']['width']    = '100';
+$config->bug->datatable->fieldList['mailto']['required'] = 'no';
 
 $config->bug->datatable->fieldList['openedBy']['title']    = 'openedByAB';
 $config->bug->datatable->fieldList['openedBy']['fixed']    = 'no';
@@ -267,6 +317,11 @@ $config->bug->datatable->fieldList['closedDate']['fixed']    = 'no';
 $config->bug->datatable->fieldList['closedDate']['width']    = '90';
 $config->bug->datatable->fieldList['closedDate']['required'] = 'no';
 
+$config->bug->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
+$config->bug->datatable->fieldList['lastEditedBy']['fixed']    = 'no';
+$config->bug->datatable->fieldList['lastEditedBy']['width']    = '80';
+$config->bug->datatable->fieldList['lastEditedBy']['required'] = 'no';
+
 $config->bug->datatable->fieldList['lastEditedDate']['title']    = 'lastEditedDateAB';
 $config->bug->datatable->fieldList['lastEditedDate']['fixed']    = 'no';
 $config->bug->datatable->fieldList['lastEditedDate']['width']    = '90';
@@ -276,8 +331,3 @@ $config->bug->datatable->fieldList['actions']['title']    = 'actions';
 $config->bug->datatable->fieldList['actions']['fixed']    = 'right';
 $config->bug->datatable->fieldList['actions']['width']    = '140';
 $config->bug->datatable->fieldList['actions']['required'] = 'yes';
-
-$config->bug->datatable->fieldList['branch']['title']    = 'branch';
-$config->bug->datatable->fieldList['branch']['fixed']    = 'left';
-$config->bug->datatable->fieldList['branch']['width']    = '100';
-$config->bug->datatable->fieldList['branch']['required'] = 'no';

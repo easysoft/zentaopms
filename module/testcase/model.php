@@ -1286,11 +1286,32 @@ class testcaseModel extends model
                 if(empty($stories)) $stories = $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq('0')->andWhere('product')->eq($case->product)->fetchPairs('id', 'title');
                 if($case->story and isset($stories[$case->story])) echo html::a(helper::createLink('story', 'view', "storyID=$case->story"), $stories[$case->story]);
                 break;
+            case 'precondition':
+                echo $case->precondition;
+                break;
+            case 'keywords':
+                echo $case->keywords;
+                break;
+            case 'version':
+                echo $case->version;
+                break;
             case 'openedBy':
                 echo zget($users, $case->openedBy, $case->openedBy);
                 break;
             case 'openedDate':
                 echo substr($case->openedDate, 5, 11);
+                break;
+            case 'reviewedBy':
+                echo zget($users, $case->reviewedBy, $case->reviewedBy);
+                break;
+            case 'reviewedDate':
+                echo substr($case->reviewedDate, 5, 11);
+                break;
+            case 'lastEditedBy':
+                echo zget($users, $case->lastEditedBy, $case->lastEditedBy);
+                break;
+            case 'lastEditedDate':
+                echo substr($case->lastEditedDate, 5, 11);
                 break;
             case 'lastRunner':
                 echo zget($users, $case->lastRunner, $case->lastRunner);
