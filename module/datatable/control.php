@@ -53,7 +53,11 @@ class datatable extends control
     public function ajaxCustom($module, $method)
     {
         $account = $this->app->user->account;
-        $name = 'owner=' . $account . '&module=datatable&section=' . $module . ucfirst($method) . '&key=cols';
+        $target  = $module . ucfirst($method);
+        $mode    = isset($this->config->datatable->$target->mode) ? $this->config->datatable->$target->mode : 'table';
+        $key     = $mode == 'datatable' ? 'cols' : 'tablecols';
+        $name    = "owner=$account&module=datatable&section=$target&key=$key";
+
         if($module == 'testtask')
         {
             $this->loadModel('testcase');
@@ -66,11 +70,36 @@ class datatable extends control
             $this->config->testcase->datatable->fieldList['actions']['width']       = '100';
         }
 
+        $this->view->module = $module;
+        $this->view->method = $method;
+
         $module = zget($this->config->datatable->moduleAlias, $module, $module);
         $this->view->cols    = $this->datatable->getFieldList($module);
         $this->view->setting = $this->loadModel('setting')->getItem($name);
         if(empty($this->view->setting)) $this->view->setting = json_encode($this->config->$module->datatable->defaultField);
 
         $this->display();
+    }
+
+    /**
+     * Ajax reset cols
+     * 
+     * @param  string $module 
+     * @param  string $method 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function ajaxReset($module, $method, $confirm = 'no')
+    {
+        if($confirm == 'no') die(js::confirm($this->lang->datatable->confirmReset, inlink('ajaxReset', "module=$module&method=$method&confirm=yes")));
+
+        $account = $this->app->user->account;
+        $target  = $module . ucfirst($method);
+        $mode    = isset($this->config->datatable->$target->mode) ? $this->config->datatable->$target->mode : 'table';
+        $key     = $mode == 'datatable' ? 'cols' : 'tablecols';
+
+        $this->loadModel('setting')->deleteItems("owner=$account&module=datatable&section=$target&key=$key");
+        die(js::reload('parent'));
     }
 }

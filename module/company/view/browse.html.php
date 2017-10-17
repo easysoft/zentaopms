@@ -94,7 +94,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
       </tbody>
       <tfoot>
       <tr>
-        <td colspan='11'>
+        <td colspan='12'>
         <div class='table-actions clearfix'>
         <?php
         if($canBatchEdit) echo html::selectButton();

@@ -71,6 +71,7 @@
       <div class='actions text-center'>
         <button type='button' class='btn btn-primary btn-save' id='btnSaveCustom'><?php echo $lang->save ?></button> &nbsp; 
         <button type='button' class='btn btn-default' data-dismiss='modal'><?php echo $lang->close ?></button>
+        <?php echo html::a(inlink('ajaxReset', "module=$module&method=$method"), $lang->datatable->reset, 'hiddenwin', "class='btn btn-default'");?>
       </div>
     </div>
   </div>
