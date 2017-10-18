@@ -49,9 +49,12 @@ class datatableModel extends model
     {
         $datatableId = $module . ucfirst($this->app->getMethodName());
 
+        $mode = isset($this->config->datatable->$datatableId->mode) ? $this->config->datatable->$datatableId->mode : 'table';
+        $key  = $mode == 'datatable' ? 'cols' : 'tablecols';
+
         $module = zget($this->config->datatable->moduleAlias, $module, $module);
         if(!isset($this->config->$module)) $this->loadModel($module);
-        if(isset($this->config->datatable->$datatableId->cols)) $setting = json_decode($this->config->datatable->$datatableId->cols);
+        if(isset($this->config->datatable->$datatableId->$key)) $setting = json_decode($this->config->datatable->$datatableId->$key);
 
         $fieldList = $this->getFieldList($module);
         if(empty($setting))
@@ -120,7 +123,7 @@ class datatableModel extends model
         $id = $col->id;
         if($col->show)
         {
-            echo "<th data-flex='" . ($col->fixed == 'no' ? 'true': 'false') . "' data-width='{$col->width}' class='w-$id'>";
+            echo "<th data-flex='" . ($col->fixed == 'no' ? 'true': 'false') . "' data-width='{$col->width}' style='width:" . (is_numeric($col->width) ? "{$col->width}px" : $col->width) . "' class='w-$id'>";
             if($id == 'actions')
             {
                 echo $this->lang->actions;
