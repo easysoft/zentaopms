@@ -58,7 +58,7 @@ if($config->global->flow == 'onlyTask')
 }
 
 $config->task->datatable = new stdclass();
-$config->task->datatable->defaultField = array('id', 'pri', 'name', 'status', 'deadline', 'openedDate', 'assignedTo', 'finishedBy', 'finishedDate', 'estimate', 'consumed', 'left', 'story', 'actions');
+$config->task->datatable->defaultField = array('id', 'pri', 'name', 'status', 'deadline', 'openedDate', 'assignedTo', 'finishedBy', 'estimate', 'consumed', 'left', 'story', 'actions');
 
 $config->task->datatable->fieldList['id']['title']    = 'idAB';
 $config->task->datatable->fieldList['id']['fixed']    = 'left';

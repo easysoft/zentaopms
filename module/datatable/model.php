@@ -72,6 +72,7 @@ class datatableModel extends model
                 $set->fixed = $fieldList[$id]['fixed'];
                 $set->title = $fieldList[$id]['title'];
                 $set->sort  = isset($fieldList[$id]['sort']) ? $fieldList[$id]['sort'] : 'yes';
+                $set->name  = isset($fieldList[$id]['name']) ? $fieldList[$id]['name'] : '';
                 $setting[$key] = $set;
             }
         }
@@ -123,7 +124,12 @@ class datatableModel extends model
         $id = $col->id;
         if($col->show)
         {
-            echo "<th data-flex='" . ($col->fixed == 'no' ? 'true': 'false') . "' data-width='{$col->width}' style='width:" . (is_numeric($col->width) ? "{$col->width}px" : $col->width) . "' class='w-$id'>";
+            $fixed  = $col->fixed == 'no' ? 'true': 'false';
+            $width  = is_numeric($col->width) ? "{$col->width}px" : $col->width;
+            $sorter = (isset($col->sort) and $col->sort == 'no') ? '' : '{sorter:false}';
+            $title  = isset($col->name) ? "title='$col->name'" : '';
+
+            echo "<th data-flex='$fixed' data-width='$width' style='width:$width' class='w-$id $sorter' $title>";
             if($id == 'actions')
             {
                 echo $this->lang->actions;

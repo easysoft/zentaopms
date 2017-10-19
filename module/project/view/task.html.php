@@ -45,10 +45,33 @@ js::set('browseType', $browseType);
     <?php
     $datatableId  = $this->moduleName . ucfirst($this->methodName);
     $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
-    $file2Include = $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(__FILE__) . '/taskdata.html.php';
     $vars         = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";
-    include $file2Include;
+
+    if($useDatatable) include '../../common/view/datatable.html.php';
+    $setting = $this->datatable->getSetting('project');
+    $widths  = $this->datatable->setFixedFieldWidth($setting);
+    $columns = 0;
     ?>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed datatable' id='taskList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='taskIDList[]'>
+      <thead>
+        <tr><?php
+        foreach ($setting as $key => $value)
+        {
+            if($value->show)
+            {
+                $this->datatable->printHead($value, $orderBy, $vars);
+                $columns++;
+            }
+        }
+        ?></tr>
+      </thead>
+      <tbody>
+        <?php foreach($tasks as $task):?>
+        <tr class='text-center' data-id='<?php echo $task->id?>'>
+          <?php foreach ($setting as $key => $value) $this->task->printCell($value, $task, $users, $browseType, $branchGroups, $modulePairs);?>
+        </tr>
+        <?php endforeach;?>
+      </tbody>
       <tfoot>
         <tr>
           <?php if(!isset($columns)) $columns = ($this->cookie->windowWidth > $this->config->wideSize ? 15 : 13) - ($project->type == 'sprint' ? 0 : 1);?>
