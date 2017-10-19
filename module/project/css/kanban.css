@@ -1,4 +1,4 @@
-table th.col-closed {width:15%}
+table th.col-closed {width:12%}
 #kanbanHeader th{border: 1px solid #ddd; padding:8px;}
 #kanbanHeader .dropdown {display: inline-block; margin-left: 10px;}
 #kanbanHeader .dropdown > a {color: #036}
@@ -63,6 +63,7 @@ table th.col-closed {width:15%}
 .board {background: #ddd; color: #444; outline: 1px solid rgba(0,0,0,.1); outline-offset: -1px;}
 .board-bug-wait,.board-task-wait {color: #2b529c; background-color: #E8EAF6}
 .board-bug-doing,.board-task-doing {color: #D2322D; background-color: #FFEBEE;}
+.board-task-pause {color: #fff; background-color: #E48600;}
 .board-bug-done,.board-task-done {color: #229F24; background-color: #E8F5E9;}
 .board-bug-closed,.board-task-closed {color: #666; background-color: #ccc;}
 .board:hover {outline: 1px solid rgba(0,0,0,.3);}
@@ -79,6 +80,7 @@ table th.col-closed {width:15%}
 .board.inverse:hover {color: #fff;}
 .board-bug-cancel.inverse, .board-task-cancel.inverse {background: #333;}
 .board-bug-wait.inverse, .board-task-wait.inverse {background: #2b529c}
+.board-task-pause.inverse {background: #E48600}
 .board-bug-doing.inverse, .board-task-doing.inverse {background: #D2322D}
 .board-bug-done.inverse, .board-task-done.inverse {background: #229F24}
 .board-bug-closed.inverse, .board-task-closed.inverse {background: #777;}

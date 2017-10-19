@@ -10,7 +10,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include './taskheader.html.php';?> 
-<?php $taskCols = array('wait', 'doing', 'done', 'cancel', 'closed'); ?>
+<?php $taskCols = array('wait', 'doing', 'pause', 'done', 'cancel', 'closed'); ?>
 <div id='kanban'>
   <table class='boards-layout table' id='kanbanHeader'>
     <thead>
@@ -47,7 +47,7 @@
         <?php if($hasStory):?>
         <th class='w-p15 col-story'> </th>
         <?php endif;?>
-        <?php foreach ($taskCols as $col):?><th class='col-<?php echo $col?>'></th><?php endforeach;?>
+        <?php foreach($taskCols as $col):?><th class='col-<?php echo $col?>'></th><?php endforeach;?>
       </tr>
     </thead>
     <tbody>
