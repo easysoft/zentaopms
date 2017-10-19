@@ -359,6 +359,8 @@ class customModel extends model
         $account    = $this->app->user->account;
         $settingKey = '';
 
+        $setPublic = $this->post->setPublic;
+        if($setPublic) $account = 'system';
         if(!is_string($menu)) $menu = json_encode($menu);
 
         $flow = $this->config->global->flow;

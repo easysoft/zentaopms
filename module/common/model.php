@@ -817,7 +817,7 @@ class commonModel extends model
             if(strtolower($key) == 'closeddate'   && $value == '')  continue;
 
             if($magicQuote) $value = stripslashes($value);
-            if($value != stripslashes($old->$key))
+            if(isset($old->$key) and $value != stripslashes($old->$key))
             { 
                 $diff = '';
                 if(substr_count($value, "\n") > 1     or 

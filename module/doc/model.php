@@ -457,8 +457,17 @@ class docModel extends model
             ->remove('comment,files,labels,uid')
             ->get();
         if($doc->acl == 'private') $doc->users = $oldDoc->addedBy;
+
         $oldDocContent = $this->dao->select('files,type')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($oldDoc->version)->fetch();
-        if($oldDocContent->type == 'markdown') $doc->content = str_replace('&gt;', '>', $doc->content);
+        if($oldDocContent)
+        {
+            $oldDoc->title       = $oldDocContent->title;
+            $oldDoc->digest      = $oldDocContent->digest;
+            $oldDoc->content     = $oldDocContent->content;
+            $oldDoc->contentType = $oldDocContent->type;
+
+            if($oldDocContent->type == 'markdown') $doc->content = str_replace('&gt;', '>', $doc->content);
+        }
 
         $lib = $this->getLibByID($doc->lib);
         $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
@@ -484,9 +493,9 @@ class docModel extends model
             $docContent->title   = $doc->title;
             $docContent->content = $doc->content;
             $docContent->version = $doc->version;
-            $docContent->digest  = $doc->digest;
             $docContent->type    = $oldDocContent->type;
             $docContent->files   = $oldDocContent->files;
+            if(isset($doc->digest)) $docContent->digest  = $doc->digest;
             if($files) $docContent->files .= ',' . join(',', array_keys($files));
             $docContent->files   = trim($docContent->files, ',');
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();

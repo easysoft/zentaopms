@@ -714,17 +714,24 @@ $lang->mail->methodOrder[60] = 'sendcloudUser';
 
 /* custom. */
 $lang->resource->custom = new stdclass();
-$lang->resource->custom->index   = 'index';
-$lang->resource->custom->set     = 'set';
-$lang->resource->custom->restore = 'restore';
-$lang->resource->custom->flow    = 'flow';
-$lang->resource->custom->working = 'working';
+$lang->resource->custom->index     = 'index';
+$lang->resource->custom->set       = 'set';
+$lang->resource->custom->restore   = 'restore';
+$lang->resource->custom->flow      = 'flow';
+$lang->resource->custom->working   = 'working';
+$lang->resource->custom->setPublic = 'setPublic';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
 $lang->custom->methodOrder[15] = 'restore';
 $lang->custom->methodOrder[20] = 'flow';
 $lang->custom->methodOrder[25] = 'working';
+$lang->custom->methodOrder[30] = 'setPublic';
+
+$lang->resource->datatable = new stdclass();
+$lang->resource->datatable->setGlobal = 'setGlobal';
+
+$lang->datatable->methodOrder[5]  = 'setGlobal';
 
 /* Subversion. */
 $lang->resource->svn = new stdclass();
@@ -1326,6 +1333,9 @@ $lang->changelog['9.2'][] = 'testsuite-exportTemplet';
 $lang->changelog['9.2'][] = 'testsuite-import';
 $lang->changelog['9.2'][] = 'testsuite-showImport';
 $lang->changelog['9.5'][] = 'bug-batchActivate';
+
+$lang->changelog['9.6'][] = 'custom-setPublic';
+$lang->changelog['9.6'][] = 'datatable-setGlobal';
 
 global $config;
 if($config->global->flow != 'full')
