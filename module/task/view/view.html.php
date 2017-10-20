@@ -115,7 +115,13 @@
             <?php foreach($task->children as $child):?>
               <tr class='text-center'>
                 <td><?php echo $child->id;?></td>
-                <td><span class='active pri pri-<?php echo $child->pri; ?>'><?php echo $lang->task->priList[$child->pri];?></span></td>
+                <td>
+                  <?php
+                  echo "<span class='pri" . zget($this->lang->task->priList, $child->pri, $child->pri) . "'>";
+                  echo $child->pri == '0' ? '' : zget($this->lang->task->priList, $child->pri, $child->pri);
+                  echo "</span>";
+                  ?>
+                </td>
                 <td class='text-left'><a href="<?php echo $this->createLink('task', 'view', "taskID=$child->id"); ?>"><?php echo $child->name;?></a></td>
                 <td><?php echo $child->deadline;?></td>
                 <td><?php if(isset($users[$child->assignedTo])) echo $users[$child->assignedTo];?></td>
