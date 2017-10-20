@@ -27,3 +27,15 @@ CREATE TABLE IF NOT EXISTS `zt_webhook` (
   `editedDate` datetime NOT NULL,
   PRIMARY KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+ALTER TABLE `zt_task` ADD `parent` INT(11)  NULL  DEFAULT '0'  AFTER `deleted`;
+ALTER TABLE `zt_team` ADD `task` INT(11)  NULL  DEFAULT '0'  AFTER `project`;
+ALTER TABLE `zt_team` ADD `estimate` DECIMAL(12,2)  UNSIGNED  NOT NULL  DEFAULT '0';
+ALTER TABLE `zt_team` ADD `consumed` DECIMAL(12,2)  UNSIGNED  NOT NULL  DEFAULT '0'  AFTER `estimate`;
+ALTER TABLE `zt_team` ADD `left` DECIMAL(12,2)  UNSIGNED  NOT NULL  DEFAULT '0'  AFTER `consumed`;
+ALTER TABLE `zt_team` ADD `order` TINYINT(3)  NOT NULL  DEFAULT '0' AFTER `left`;
+ALTER TABLE `zt_team` CHANGE `days` `days` SMALLINT(5)  UNSIGNED  NOT NULL  DEFAULT '0';
+
+
+ALTER TABLE `zt_team` DROP PRIMARY KEY;
+ALTER TABLE `zt_team` ADD PRIMARY KEY (`project`, `task`, `account`);
