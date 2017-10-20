@@ -1836,6 +1836,7 @@ class taskModel extends model
                 if($modulePairs and $task->module) echo "<span class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span> ';
                 echo html::a($taskLink, $task->name, null, "style='color: $task->color'");
                 if($task->fromBug) echo html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '_blank', "class='bug'");
+                if($task->children) echo '<span class="task-toggle" data-id="'.$task->id.'">&nbsp;&nbsp;<i class="icon icon-minus"></i>&nbsp;&nbsp;</span>';
                 break;
             case 'type':
                 echo $this->lang->task->typeList[$task->type];
