@@ -141,11 +141,3 @@ function formatTime($time, $format = '')
     if($format) return date($format, strtotime($time));
     return trim($time);
 }
-
-function b($val)
-{
-    echo '<pre>';
-    print_r($val);
-    echo '</pre>';
-    exit;
-}

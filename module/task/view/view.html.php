@@ -87,7 +87,6 @@
         <div class='article-content'><?php echo $task->storyVerify;?></div>
       </fieldset>
       <?php endif;?>
-
       <?php if(isset($task->cases) and $task->cases):?>
       <fieldset>
         <legend><?php echo $lang->task->case;?></legend>
@@ -98,7 +97,52 @@
         </div>
       </fieldset>
       <?php endif;?>
-
+        <?php if(!empty($task->children)):?>
+      <fieldset>
+        <legend><?php echo $this->lang->task->children;?></legend>
+        <table class='table table-hover table-data table-fixed'>
+          <tr class='text-center'>
+            <th class='w-60px'> <?php echo$lang->task->id;?></th>
+            <th class='w-40px'> <?php echo$lang->task->lblPri;?></th>
+            <th>                <?php echo$lang->task->name;?></th>
+            <th class='w-100px'><?php echo$lang->task->deadline;?></th>
+            <th class='w-80px'> <?php echo$lang->task->assignedTo;?></th>
+            <th class='w-90px'> <?php echo$lang->task->status;?></th>
+            <th class='w-50px visible-lg'> <?php echo $lang->task->consumedAB . $lang->task->lblHour;?></th>
+            <th class='w-50px visible-lg'><?php echo $lang->task->leftAB . $lang->task->lblHour;?></th>
+            <th class='w-150px'><?php echo $lang->actions;?></th>
+          </tr>
+            <?php foreach($task->children as $child):?>
+              <tr class='text-center'>
+                <td><?php echo $child->id;?></td>
+                <td>
+                  <?php
+                  echo "<span class='pri" . zget($this->lang->task->priList, $child->pri, $child->pri) . "'>";
+                  echo $child->pri == '0' ? '' : zget($this->lang->task->priList, $child->pri, $child->pri);
+                  echo "</span>";
+                  ?>
+                </td>
+                <td class='text-left'><a href="<?php echo $this->createLink('task', 'view', "taskID=$child->id"); ?>"><?php echo $child->name;?></a></td>
+                <td><?php echo $child->deadline;?></td>
+                <td><?php if(isset($users[$child->assignedTo])) echo $users[$child->assignedTo];?></td>
+                <td><?php echo zget($lang->task->statusList, $child->status);?></td>
+                <td class='visible-lg'><?php echo $child->consumed;?></td>
+                <td class='visible-lg'><?php echo $child->left;?></td>
+                <td>
+                    <?php
+                    common::printIcon('task', 'assignTo', "projectID=$child->project&taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                    common::printIcon('task', 'start',    "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                    common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true);
+                    common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                    common::printIcon('task', 'close',    "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                    common::printIcon('task', 'edit',"taskID=$child->id", $child, 'list');
+                    ?>
+                </td>
+              </tr>
+            <?php endforeach;?>
+        </table>
+      </fieldset>
+        <?php endif;?>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='actions'> <?php if(!$task->deleted) echo $actionLinks;?></div>
