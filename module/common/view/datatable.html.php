@@ -84,16 +84,17 @@ $(document).ready(function()
         }
     });
 
-    window.saveDatatableConfig = function(name, value, reload)
+    window.saveDatatableConfig = function(name, value, reload, global)
     {
+        if('<?php echo $this->app->user->account?>' == 'guest') return;
         var datatableId = '<?php echo $datatableId;?>';
         if(typeof value === 'object') value = JSON.stringify(value);
-        if('<?php echo $this->app->user->account?>' == 'guest') return;
+        if(typeof global === 'undefined') global = 0;
         $.ajax(
         {
             type: "POST",
             dataType: 'json',
-            data: {target: datatableId, name: name, value: value},
+            data: {target: datatableId, name: name, value: value, global: global},
             success:function(e){if(reload) window.location.reload();},
             url: '<?php echo $this->createLink('datatable', 'ajaxSave')?>'
         });

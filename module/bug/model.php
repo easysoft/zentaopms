@@ -2310,7 +2310,7 @@ class bugModel extends model
      * @access public
      * @return void
      */
-    public function printCell($col, $bug, $users, $builds, $branches, $modulePairs)
+    public function printCell($col, $bug, $users, $builds, $branches, $modulePairs, $projects = array(), $plans = array(), $stories = array(), $tasks = array())
     {
         $bugLink = inlink('view', "bugID=$bug->id");
         $account = $this->app->user->account;
@@ -2349,6 +2349,18 @@ class bugModel extends model
             case 'branch':
                 echo $branches[$bug->branch];
                 break;
+            case 'project':
+                echo zget($projects, $bug->project, '');
+                break;
+            case 'plan':
+                echo zget($plans, $bug->plan, '');
+                break;
+            case 'story':
+                echo zget($stories, $bug->story, '');
+                break;
+            case 'task':
+                echo zget($tasks, $bug->task, '');
+                break;
             case 'type':
                 echo zget($this->lang->bug->typeList, $bug->type);
                 break;
@@ -2360,6 +2372,27 @@ class bugModel extends model
                 break;
             case 'activatedDate':
                 echo substr($bug->activatedDate, 5, 11);
+                break;
+            case 'keywords':
+                echo $bug->keywords;
+                break;
+            case 'os':
+                echo zget($this->lang->bug->osList, $bug->os);
+                break;
+            case 'browser':
+                echo zget($this->lang->bug->browserList, $bug->browser);
+                break;
+            case 'mailto':
+                $mailto = explode(',', $bug->mailto);
+                foreach($mailto as $account)
+                {
+                    $account = trim($account);
+                    if(empty($account)) continue;
+                    echo zget($users, $account) . " &nbsp;";
+                }
+                break;
+            case 'found':
+                echo zget($users, $bug->found);
                 break;
             case 'openedBy':
                 echo zget($users, $bug->openedBy);
@@ -2394,11 +2427,14 @@ class bugModel extends model
             case 'closedBy':
                 echo zget($users, $bug->closedBy);
                 break;
-            case 'lastEditedDate':
-                echo substr($bug->lastEditedDate, 5, 11);
-                break;
             case 'closedDate':
                 echo substr($bug->closedDate, 5, 11);
+                break;
+            case 'lastEditedBy':
+                echo zget($users, $bug->lastEditedBy);
+                break;
+            case 'lastEditedDate':
+                echo substr($bug->lastEditedDate, 5, 11);
                 break;
             case 'actions':
                 $params = "bugID=$bug->id";

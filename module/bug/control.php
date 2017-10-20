@@ -121,6 +121,16 @@ class bug extends control
         /* Process the openedBuild and resolvedBuild fields. */
         $bugs = $this->bug->processBuildForBugs($bugs);
 
+        /* Get story and task id list. */
+        $storyIdList = $taskIdList = array();
+        foreach($bugs as $bug)
+        {
+            if($bug->story) $storyIdList[$bug->story] = $bug->story;
+            if($bug->task)  $taskIdList[$bug->task]   = $bug->task;
+        }
+        $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
+        $taskList  = $taskIdList  ? $this->loadModel('task')->getByList($taskIdList)   : array();
+
         /* Build the search form. */
         $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->bug->search['onMenuBar'] = 'yes';
@@ -150,6 +160,10 @@ class bug extends control
         $this->view->memberPairs   = $this->user->getPairs('noletter|nodeleted');
         $this->view->branch        = $branch;
         $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
+        $this->view->projects      = $projects;
+        $this->view->plans         = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->stories       = $storyList;
+        $this->view->tasks         = $taskList;
         $this->view->setShowModule = true;
 
         $this->display();

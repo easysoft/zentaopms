@@ -310,7 +310,7 @@ class custom extends control
 
         if(is_array($menus))
         {
-            foreach ($menus as $menu)
+            foreach($menus as $menu)
             {
                 $menu = json_decode($menu);
                 $this->custom->saveCustomMenu($menu->value, $menu->module, isset($menu->method) ? $menu->method : '');
@@ -374,11 +374,13 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function ajaxRestoreMenu($confirm = 'no')
+    public function ajaxRestoreMenu($setPublic = 0, $confirm = 'no')
     {
-        if($confirm == 'no') die(js::confirm($this->lang->custom->confirmRestore, inlink('ajaxRestoreMenu', "confirm=yes")));
+        if($confirm == 'no') die(js::confirm($this->lang->custom->confirmRestore, inlink('ajaxRestoreMenu', "setPublic=$setPublic&confirm=yes")));
 
-        $this->loadModel('setting')->deleteItems("owner={$this->app->user->account}&module=common&section=customMenu");
+        $account = $this->app->user->account;
+        if($setPublic) $account = 'system';
+        $this->loadModel('setting')->deleteItems("owner={$account}&module=common&section=customMenu");
         die(js::reload('parent.parent'));
     }
 }

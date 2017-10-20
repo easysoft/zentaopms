@@ -1904,6 +1904,21 @@ class taskModel extends model
                     if(!common::printLink('story', 'view', "storyid=$task->storyID", $task->storyTitle)) print $task->storyTitle;
                 }
                 break;
+            case 'mailto':
+                $mailto = explode(',', $task->mailto);
+                foreach($mailto as $account)
+                {
+                    $account = trim($account);
+                    if(empty($account)) continue;
+                    echo zget($users, $account) . ' &nbsp;';
+                }
+                break;
+            case 'lastEditedBy':
+                echo zget($users, $task->lastEditedBy, $task->lastEditedBy);
+                break;
+            case 'lastEditedDate':
+                echo substr($task->lastEditedDate, 5, 11);
+                break;
             case 'actions':
                 common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
                 common::printIcon('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);

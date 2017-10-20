@@ -168,16 +168,37 @@ js::set('branch', $branch);
     <?php
     $datatableId  = $this->moduleName . ucfirst($this->methodName);
     $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
-    $file2Include = $useDatatable ?  dirname(__FILE__) . '/datatabledata.html.php' : dirname(__FILE__) . '/browsedata.html.php';
     $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
-    include $file2Include;
+    if($useDatatable) include '../../common/view/datatable.html.php';
+
+    $setting = $this->datatable->getSetting('bug');
+    $widths  = $this->datatable->setFixedFieldWidth($setting);
+    $columns = 0;
     ?>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed datatable' id='bugList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='bugIDList[]'>
+      <thead>
+        <tr>
+        <?php
+        foreach($setting as $key => $value)
+        {
+            if($value->show)
+            {
+                $this->datatable->printHead($value, $orderBy, $vars);
+                $columns ++;
+            }
+        }
+        ?>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach($bugs as $bug):?>
+        <tr class='text-center' data-id='<?php echo $bug->id?>'>
+          <?php foreach ($setting as $key => $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $projects, $plans, $stories, $tasks);?>
+        </tr>
+        <?php endforeach;?>
+      </tbody>
       <tfoot>
         <tr>
-          <?php
-          $columns = $this->cookie->windowWidth >= $this->config->wideSize ? 13 : 11;
-          if($browseType == 'needconfirm') $columns = 8;
-          ?>
           <td colspan='<?php echo $columns;?>'>
             <?php if(!empty($bugs)):?>
             <div class='table-actions clearfix'>

@@ -33,6 +33,7 @@ class datatable extends control
         if(!empty($_POST))
         {
             $account = $this->app->user->account;
+            if($this->post->global) $account = 'system';
             if($account == 'guest') $this->send(array('result' => 'fail', 'target' => $target, 'message' => 'guest.'));
 
             $name = $account . '.datatable.' . $this->post->target . '.' . $this->post->name;
@@ -52,25 +53,61 @@ class datatable extends control
      */
     public function ajaxCustom($module, $method)
     {
-        $account = $this->app->user->account;
-        $name = 'owner=' . $account . '&module=datatable&section=' . $module . ucfirst($method) . '&key=cols';
+        $target = $module . ucfirst($method);
+        $mode   = isset($this->config->datatable->$target->mode) ? $this->config->datatable->$target->mode : 'table';
+        $key    = $mode == 'datatable' ? 'cols' : 'tablecols';
+
         if($module == 'testtask')
         {
             $this->loadModel('testcase');
             $this->app->loadConfig('testtask');
             $this->config->testcase->datatable->defaultField = $this->config->testtask->datatable->defaultField;
-            $this->config->testcase->datatable->fieldList['assignedTo']['title']    = 'assignedTo';
-            $this->config->testcase->datatable->fieldList['assignedTo']['fixed']    = 'no';
-            $this->config->testcase->datatable->fieldList['assignedTo']['width']    = '80';
-            $this->config->testcase->datatable->fieldList['assignedTo']['required'] = 'no';
-            $this->config->testcase->datatable->fieldList['actions']['width']       = '100';
+            $this->config->testcase->datatable->fieldList['actions']['width'] = '100';
+        }
+        if($module == 'testcase')
+        {
+            $this->loadModel('testcase');
+            unset($this->config->testcase->datatable->fieldList['assignedTo']);
         }
 
-        $module = zget($this->config->datatable->moduleAlias, $module, $module);
-        $this->view->cols    = $this->datatable->getFieldList($module);
-        $this->view->setting = $this->loadModel('setting')->getItem($name);
-        if(empty($this->view->setting)) $this->view->setting = json_encode($this->config->$module->datatable->defaultField);
+        $this->view->module = $module;
+        $this->view->method = $method;
+        $this->view->mode   = $mode;
 
+        $module  = zget($this->config->datatable->moduleAlias, $module, $module);
+        $setting = '';
+        if(isset($this->config->datatable->$target->$key)) $setting = $this->config->datatable->$target->$key;
+        if(empty($setting))
+        {
+            $this->loadModel($module);
+            $setting = json_encode($this->config->$module->datatable->defaultField);
+        }
+
+        $this->view->cols    = $this->datatable->getFieldList($module);
+        $this->view->setting = $setting;
         $this->display();
+    }
+
+    /**
+     * Ajax reset cols
+     * 
+     * @param  string $module 
+     * @param  string $method 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function ajaxReset($module, $method, $system = 0, $confirm = 'no')
+    {
+        if($confirm == 'no') die(js::confirm($this->lang->datatable->confirmReset, inlink('ajaxReset', "module=$module&method=$method&system=$system&confirm=yes")));
+
+        $account = $this->app->user->account;
+        $target  = $module . ucfirst($method);
+        $mode    = isset($this->config->datatable->$target->mode) ? $this->config->datatable->$target->mode : 'table';
+        $key     = $mode == 'datatable' ? 'cols' : 'tablecols';
+        if($system) $account = 'system';
+
+        $this->loadModel('setting')->deleteItems("owner=$account&module=datatable&section=$target&key=$key");
+        die(js::reload('parent'));
     }
 }

@@ -12,7 +12,7 @@
 ?>
 <style>
 .cols-list {margin-bottom: 10px;}
-.cols-list .col {border: 1px solid #ddd; height: 30px; line-height: 29px; padding: 0 10px; border-bottom: none; background: #fff}
+.cols-list .col {border: 1px solid #ddd; height: 30px; line-height: 29px; padding: 0 10px; border-bottom: none; background: #fff; float:none}
 .cols-list .col.drag-shadow {border: 1px solid #ddd;}
 .cols-list {border-bottom: 1px solid #ddd}
 .cols-list .col:hover {background: #edf3fe}
@@ -62,19 +62,26 @@
         <div class='clearfix col<?php echo ($required ? ' require' : '') . (' fixed-' . $fixed) ?>' data-key='<?php echo $key?>' data-fixed='<?php echo $fixed?>' data-width='<?php echo $col['width']?>'>
         <i class='icon-ok'></i> &nbsp;<span class='title'><span class='title-bar'><strong><?php echo $col['title']?></strong><i class='icon-move'></i></span></span> <?php if($required) echo "<span class='text-muted'>({$lang->datatable->required})</span>"?>
           <div class='actions pull-right'>
-            <span><span class='text-muted'><?php echo $lang->datatable->width?></span> <input type='text' class='form-control' <?php echo $autoWidth ? "disabled='disabled'" : '' ?>value='<?php echo $col['width']?>'><?php echo $autoWidth ? '&nbsp;' : 'px' ?></span>
+            <?php if(isset($col['name'])) echo html::hidden('name', $col['name'])?>
+            <span><span class='text-muted'><?php echo $lang->datatable->width?></span> <input type='text' id='width' class='form-control' value='<?php echo $col['width']?>'><?php echo $autoWidth ? '&nbsp;' : 'px' ?></span>
             <button type='button' class='btn btn-link show-hide<?php echo $required ? ' disabled' : '' ?>'><span class='label-show'><?php echo $lang->datatable->show?></span><span class='text-muted'>/</span><span class='label-hide'><?php echo $lang->datatable->hide?></span></button>
           </div>
         </div>
         <?php endforeach;?>
       </div>
-      <div class='actions text-center'>
-        <button type='button' class='btn btn-primary btn-save' id='btnSaveCustom'><?php echo $lang->save ?></button> &nbsp; 
+      <div class='actions text-left'>
+        <?php if(common::hasPriv('datatable', 'setGlobal')) echo html::checkbox('global', array(1 => $lang->datatable->setGlobal));?>
+        <button type='button' class='btn btn-primary btn-save' id='btnSaveCustom'><?php echo $lang->save ?></button>
         <button type='button' class='btn btn-default' data-dismiss='modal'><?php echo $lang->close ?></button>
+        <button type='button' class='btn btn-default' id='resetBtn'><?php echo $lang->datatable->reset ?></button>
       </div>
     </div>
   </div>
 </div>
+<?php
+js::set('resetText', $lang->datatable->reset);
+js::set('resetGlobalText', $lang->datatable->resetGlobal);
+?>
 <script>
 $(function()
 {
@@ -132,7 +139,6 @@ $(function()
         if($cols.length < 2)
         {
             $list.addClass('sort-disabled');
-            $cols.find('input').val('auto').attr('disabled', 'disabled');
         }
         else
         {
@@ -174,12 +180,27 @@ $(function()
         var setting = $('.col').map(function(index)
         {
             var $col = $(this);
-            var sets = {id: $col.data('key'), order: index + 1, show: !$col.hasClass('disabled'), width: $col.find('input').val(), fixed: $col.data('fixed')};
+            var sets = {id: $col.data('key'), order: index + 1, show: !$col.hasClass('disabled'), width: $col.find('input#width').val(), fixed: $col.data('fixed')};
             if(sets.width !== 'auto') sets.width += 'px';
+            if($col.find('#name').size() > 0) sets.name = $col.find('#name').val();
             return sets;
         }).get();
 
-        window.saveDatatableConfig('cols', setting, true);
+        window.saveDatatableConfig('<?php echo $mode == 'table' ? 'tablecols' : 'cols';?>', setting, true, $('#global1').prop('checked') ? 1 : 0);
     });
+
+    $('#resetBtn').on("click", function()
+    {
+        var system = $('#global1').prop('checked') ? 1 : 0;
+        var param  = "<?php echo "module=$module&method=$method"?>&system=" + system;
+        hiddenwin.location.href = createLink('datatable', 'ajaxReset', param);
+    })
+
+    $('#global1').change(function()
+    {
+        if($(this).prop('checked'))$('#resetBtn').text(resetGlobalText);
+        if(!$(this).prop('checked'))$('#resetBtn').text(resetText);
+    })
+
 });
 </script>
