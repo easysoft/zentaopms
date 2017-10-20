@@ -99,3 +99,11 @@ $config->printKanban->col['wait']   = 2;
 $config->printKanban->col['doing']  = 3;
 $config->printKanban->col['done']   = 4;
 $config->printKanban->col['closed'] = 5;
+
+$config->project->kanbanSetting = new stdclass();
+$config->project->kanbanSetting->colorList['wait']   = '#2b529c';
+$config->project->kanbanSetting->colorList['doing']  = '#d2323d';
+$config->project->kanbanSetting->colorList['pause']  = '#e48600';
+$config->project->kanbanSetting->colorList['done']   = '#229f24';
+$config->project->kanbanSetting->colorList['cancel'] = '#333';
+$config->project->kanbanSetting->colorList['closed'] = '#777';

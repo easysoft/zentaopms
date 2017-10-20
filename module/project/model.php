@@ -2125,6 +2125,39 @@ class projectModel extends model
     }
 
     /**
+     * Get kanban setting.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return object
+     */
+    public function getKanbanSetting($projectID)
+    {
+        $allCols    = '1';
+        $showOption = '0';
+        if(isset($this->config->project->kanbanSetting->allCols))
+        {
+            $allColPairs = json_decode($this->config->project->kanbanSetting->allCols, true);
+            if(isset($allColPairs[$projectID])) $allCols = $allColPairs[$projectID];
+        }
+
+        if(isset($this->config->project->kanbanSetting->showOption))
+        {
+            $showOption = $this->config->project->kanbanSetting->showOption;
+        }
+
+        $colorList = $this->config->project->kanbanSetting->colorList;
+        if(!is_array($colorList)) $colorList = json_decode($colorList, true);
+
+        $kanbanSetting = new stdclass();
+        $kanbanSetting->allCols    = $allCols;
+        $kanbanSetting->showOption = $showOption;
+        $kanbanSetting->colorList  = $colorList;
+
+        return $kanbanSetting;
+    }
+
+    /**
      * Build burn data.
      * 
      * @param  int    $projectID 

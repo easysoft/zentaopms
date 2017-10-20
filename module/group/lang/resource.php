@@ -321,6 +321,8 @@ $lang->resource->project->kanban           = 'kanban';
 $lang->resource->project->printKanban      = 'printKanban';
 $lang->resource->project->tree             = 'tree';
 $lang->resource->project->all              = 'all';
+$lang->resource->project->kanbanHideCols   = 'kanbanHideCols';
+$lang->resource->project->kanbanColsColor  = 'kanbanColsColor';
 
 $lang->project->methodOrder[0]   = 'index';
 $lang->project->methodOrder[5]   = 'view';
@@ -360,6 +362,8 @@ $lang->project->methodOrder[175] = 'kanban';
 $lang->project->methodOrder[180] = 'printKanban';
 $lang->project->methodOrder[185] = 'tree';
 $lang->project->methodOrder[190] = 'all';
+$lang->project->methodOrder[195] = 'kanbanHideCols';
+$lang->project->methodOrder[200] = 'kanbanColsColor';
 
 /* Task. */
 $lang->resource->task = new stdclass();

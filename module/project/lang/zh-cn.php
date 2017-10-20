@@ -242,9 +242,20 @@ $lang->project->orderList['id_desc']    = "需求ID倒序";
 $lang->project->orderList['stage_asc']  = "需求阶段正序";
 $lang->project->orderList['stage_desc'] = "需求阶段倒序";
 
-$lang->project->kanban      = "看板";
-$lang->project->printKanban = "打印看板";
-$lang->project->bugList     = "Bug列表";
+$lang->project->kanban        = "看板";
+$lang->project->kanbanSetting = "看板设置";
+$lang->project->resetKanban   = "恢复默认";
+$lang->project->printKanban   = "打印看板";
+$lang->project->bugList       = "Bug列表";
+
+$lang->project->kanbanHideCols   = '看板隐藏已关闭、已取消列';
+$lang->project->kanbanShowOption = '显示折叠信息';
+$lang->project->kanbanColsColor  = '看板列自定义颜色';
+
+$lang->kanbanSetting = new stdclass();
+$lang->kanbanSetting->noticeReset     = '是否恢复看板默认设置？';
+$lang->kanbanSetting->optionList['0'] = '隐藏';
+$lang->kanbanSetting->optionList['1'] = '显示';
 
 $lang->printKanban = new stdclass();
 $lang->printKanban->common  = '看板打印';

@@ -1362,9 +1362,9 @@ class taskModel extends model
         foreach($tasks as $task)
         {
             $task = $this->processTask($task);
-            if($task->children) foreach($task->children as $child)
+            if(isset($task->children))
             {
-                $task = $this->processTask($child);
+                foreach($task->children as $child) $task = $this->processTask($child);
             }
         }
         return $tasks;
