@@ -31,7 +31,7 @@
     {
         ob_start();
         echo "<div class='btn-group'>";
-        common::printIcon('task', 'assignTo',       "projectID=$task->project&taskID=$task->id", $task, 'button', '', '', 'iframe', true);
+        common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'button', '', '', 'iframe', true);
         common::printIcon('task', 'start',          "taskID=$task->id", $task, 'button', '', '', 'iframe', true);
         common::printIcon('task', 'restart',        "taskID=$task->id", $task, 'button', '', '', 'iframe', true);
         common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'button', '', '', 'iframe', true);
@@ -175,7 +175,7 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->task->assignedTo;?></th>
-            <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : '';?></td> 
+            <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : '';?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->type;?></th>
@@ -195,6 +195,29 @@
           </tr>
         </table>
       </fieldset>
+      <?php if(!empty($task->team)) :?>
+      <fieldset>
+        <legend><?php echo $lang->task->team;?></legend>
+        <table class='table table-data table-condensed table-borderless'>
+          <thead>
+          <tr>
+            <th><?php echo $lang->task->team?></th>
+            <th class='text-center'><?php echo $lang->task->estimate?></th>
+            <th class='text-center'><?php echo $lang->task->consumed?></th>
+            <th class='text-center'><?php echo $lang->task->left?></th>
+          </tr>
+          </thead>
+            <?php foreach($task->team as $member):?>
+              <tr class='text-center'>
+                <td class='text-left'><?php echo zget($users, $member->account)?></td>
+                <td><?php echo $member->estimate?></td>
+                <td><?php echo $member->consumed?></td>
+                <td><?php echo $member->left?></td>
+              </tr>
+            <?php endforeach;?>
+        </table>
+      </fieldset>
+      <?php endif;?>
       <fieldset>
         <legend><?php echo $lang->task->legendEffort;?></legend>
         <table class='table table-data table-condensed table-borderless'> 

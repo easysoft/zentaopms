@@ -73,7 +73,7 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
     ?>
     <?php $pri = 3;?>
     <tr>
-      <td class='text-center'><?php echo $i+1;?></td>
+      <td class='text-center'><?php echo $i+1;?><?php echo html::hidden("parent[]",$parent);?></td>
       <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'><?php echo html::select("module[$i]", $modules, $module, "class='form-control chosen' onchange='setStories(this.value, $project->id, $i)'")?></td>
       <td <?php echo zget($visibleFields, 'story', "class='hidden'"); echo $hiddenStory;?> style='overflow: visible'>
         <div class='input-group'>

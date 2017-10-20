@@ -13,3 +13,7 @@ tmp/cache/*
 tmp/extension/*
 .gitkeep
 .bak
+.idea
+.gitignore
+_log
+framework/

@@ -38,9 +38,26 @@
       </tr>
       <tr>
         <th><?php echo $lang->task->assignedTo;?></th>
-        <td><?php echo html::select('assignedTo[]', $members, $task->assignedTo, "class='form-control chosen'");?></td>
         <td>
-          <button type='button' class='btn btn-link<?php echo $task->type == 'affair' ? '' : ' hidden'?>' id='selectAllUser'><?php echo $lang->task->selectAllUser ?></button>
+          <div class='row-table'>
+            <div class='col-table'>
+                <?php echo html::select('assignedTo[]', $members, $task->assignedTo, "class='form-control chosen'");?>
+            </div>
+              <?php if($project->type == 'ops') :?>
+                <div class='col-table'>
+                    <?php echo html::input('teamMember', '', "class='form-control team-group hidden' readonly='readonly'");?>
+                </div>
+                <div class='col-table btn team-group hidden' data-toggle='modalTeam'><?php echo $lang->task->team;?></div>
+                <div class='col-table btn w-70px'>
+                  <label class='checkbox-inline'><input type='checkBox' name='multiple' value='1'/><?php echo $lang->task->multipleAB;?></label>
+                </div>
+              <?php endif;?>
+          </div>
+        </td>
+        <td>
+          <?php if($project->type != 'ops') :?>
+            <button type='button' class='btn btn-link<?php echo $task->type == 'affair' ? '' : ' hidden'?>' id='selectAllUser'><?php echo $lang->task->selectAllUser ?></button>
+          <?php endif;?>
         </td>
       </tr>
       <?php if(strpos(",$showFields,", ',story,') !== false and $this->config->global->flow != 'onlyTask'):?>
@@ -175,6 +192,37 @@
       </tr>
     </table>
     <span id='responser'></span>
+    <div class='modal fade modal-team' id='modalTeam'>
+      <div class='modal-dialog'>
+        <div class='modal-header'>
+          <button type='button' class='close' data-dismiss='modal'>
+            <span aria-hidden='true'>×</span><span class='sr-only'>关闭</span></button>
+          <h4 class='modal-title'><?php echo $lang->task->team ?></h4>
+        </div>
+        <div class='modal-content'>
+          <table class="table table-form">
+              <?php for($i = 0; $i < 6; $i++): ?>
+                <tr>
+                  <td class='w-150px'><?php echo html::select("team[]", $members, '', "class='form-control chosen'") ?></td>
+                  <td>
+                    <div class='input-group'>
+                        <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
+                      <span class='input-group-addon'><?php echo $lang->task->hour ?></span>
+                    </div>
+                  </td>
+                  <td class='w-90px'>
+                    <a href='javascript:;' class='btn btn-move-up btn-sm'><i class='icon-arrow-up'></i></a>
+                    <a href='javascript:;' class='btn btn-move-down btn-sm'><i class='icon-arrow-down'></i></a>
+                  </td>
+                </tr>
+              <?php endfor; ?>
+            <tr>
+              <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '',"class='btn btn-primary' data-dismiss='modal'") ?></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
   </form>
 </div>
 <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=task&section=custom&key=createFields')?>
