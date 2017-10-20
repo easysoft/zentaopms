@@ -1082,7 +1082,7 @@ class taskModel extends model
 
         $taskList = array_keys($tasks);
         $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($taskList)->orderBy('id_desc')->fetchGroup('parent');
-        if($children) foreach($children as $key => $child) $tasks[$key]->children = $child;
+        if(!empty($children)) foreach($children as $key => $child) $tasks[$key]->children = $child;
         $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->in($taskList)->fetchGroup('task');
         if($teams) foreach($teams as $key => $team) if(!empty($team)) $tasks[$key]->team = $team;
 
@@ -1362,7 +1362,7 @@ class taskModel extends model
         foreach($tasks as $task)
         {
             $task = $this->processTask($task);
-            if($task->children) foreach($task->children as $child)
+            if(!empty($task->children)) foreach($task->children as $child)
             {
                 $task = $this->processTask($child);
             }
@@ -1393,7 +1393,7 @@ class taskModel extends model
 
         /* Story changed or not. */
         $task->needConfirm = false;
-        if($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion) $task->needConfirm = true;
+        if(!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion) $task->needConfirm = true;
 
         /* Set product type for task. */
         if(isset($task->product))
@@ -1832,17 +1832,17 @@ class taskModel extends model
                 echo "</span>";
                 break;
             case 'name':
-                if(isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
+                if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
                 if($modulePairs and $task->module) echo "<span class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span> ';
                 echo html::a($taskLink, $task->name, null, "style='color: $task->color'");
                 if($task->fromBug) echo html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '_blank', "class='bug'");
-                if($task->children) echo '<span class="task-toggle" data-id="'.$task->id.'">&nbsp;&nbsp;<i class="icon icon-minus"></i>&nbsp;&nbsp;</span>';
+                if(!empty($task->children)) echo '<span class="task-toggle" data-id="'.$task->id.'">&nbsp;&nbsp;<i class="icon icon-minus"></i>&nbsp;&nbsp;</span>';
                 break;
             case 'type':
                 echo $this->lang->task->typeList[$task->type];
                 break;
             case 'status':
-                $storyChanged = ($task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion);
+                $storyChanged = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion);
                 $storyChanged ? print("<span class='warning'>{$this->lang->story->changed}</span> ") : print($this->lang->task->statusList[$task->status]);
                 break;
             case 'estimate':
@@ -1900,7 +1900,7 @@ class taskModel extends model
                 echo $this->lang->task->reasonList[$task->closedReason];
                 break;
             case 'story':
-                if($task->storyID)
+                if(!empty($task->storyID))
                 {
                     if(!common::printLink('story', 'view', "storyid=$task->storyID", $task->storyTitle)) print $task->storyTitle;
                 }
@@ -1933,7 +1933,7 @@ class taskModel extends model
                 common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
                 common::printIcon('task', 'close',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
                 common::printIcon('task', 'edit',"taskID=$task->id", $task, 'list');
-                if(!$task->team or !$task->children) common::printIcon('task', 'batchCreate',    "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'list','plus','','','','',$this->lang->task->children);
+                if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate',    "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'list','plus','','','','',$this->lang->task->children);
                 break;
             }
             echo '</td>';
