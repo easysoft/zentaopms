@@ -1232,8 +1232,9 @@ class testcaseModel extends model
      * @access public
      * @return void
      */
-    public function printCell($col, $case, $users, $branches, $modulePairs = array(), $browseType = '')
+    public function printCell($col, $case, $users, $branches, $modulePairs = array(), $browseType = '', $mode = 'datatable')
     {
+        $canView  = common::hasPriv('testcase', 'view');
         $caseLink = helper::createLink('testcase', 'view', "caseID=$case->id&version=$case->version");
         $account  = $this->app->user->account;
         $id = $col->id;
@@ -1241,14 +1242,16 @@ class testcaseModel extends model
         {
             $class = '';
             if($id == 'status') $class .= $case->status;
-            if($id == 'title') $class .= ' text-left';
+            if($id == 'title')  $class .= ' text-left';
+            if($id == 'id')     $class .= ' cell-id';
             if($id == 'lastRunResult') $class .= $case->lastRunResult;
 
             echo "<td class='" . $class . "'" . ($id=='title' ? " title='{$case->title}'":'') . ">";
-            switch ($id)
+            switch($id)
             {
             case 'id':
-                echo html::a($caseLink, sprintf('%03d', $case->id));
+                if($mode == 'table') echo "<input type='checkbox' name='caseIDList[]'  value='{$case->id}'/> ";
+                echo $canView ? html::a($caseLink, sprintf('%03d', $case->id)) : sprintf('%03d', $case->id);
                 break;
             case 'pri':
                 echo "<span class='pri" . zget($this->lang->testcase->priList, $case->pri, $case->pri) . "'>";
@@ -1258,7 +1261,7 @@ class testcaseModel extends model
             case 'title':
                 if($case->branch) echo "<span class='label label-info label-badge'>{$branches[$case->branch]}</span> ";
                 if($modulePairs and $case->module) echo "<span class='label label-info label-badge'>{$modulePairs[$case->module]}</span> ";
-                echo html::a($caseLink, $case->title, null, "style='color: $case->color'");
+                echo $canView ? html::a($caseLink, $case->title, null, "style='color: $case->color'") : "<span style='color: $case->color'>$case->title</span>";
                 break;
             case 'branch':
                 echo $branches[$case->branch];

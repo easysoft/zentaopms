@@ -2247,8 +2247,9 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks, $storyBugs, $storyCases)
+    public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable')
     {
+        $canView   = common::hasPriv('story', 'view');
         $storyLink = helper::createLink('story', 'view', "storyID=$story->id");
         $account   = $this->app->user->account;
         $id        = $col->id;
@@ -2256,7 +2257,8 @@ class storyModel extends model
         {
             $class = '';
             if($id == 'status') $class .= ' story-' . $story->status;
-            if($id == 'title') $class .= ' text-left';
+            if($id == 'title')  $class .= ' text-left';
+            if($id == 'id')     $class .= ' cell-id';
             if($id == 'assignedTo' && $story->assignedTo == $account) $class .= ' red';
 
             $title = '';
@@ -2264,10 +2266,11 @@ class storyModel extends model
             if($id == 'plan')  $title = $story->planTitle;
 
             echo "<td class='" . $class . "' title='$title'>";
-            switch ($id)
+            switch($id)
             {
             case 'id':
-                echo html::a($storyLink, sprintf('%03d', $story->id));
+                if($mode == 'table') echo "<input type='checkbox' name='storyIDList[{$story->id}]' value='{$story->id}' /> ";
+                echo $canView ? html::a($storyLink, sprintf('%03d', $story->id)) : sprintf('%03d', $story->id);
                 break;
             case 'pri':
                 echo "<span class='pri" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>";
@@ -2277,7 +2280,7 @@ class storyModel extends model
             case 'title':
                 if($story->branch) echo "<span class='label label-info label-badge'>{$branches[$story->branch]}</span> ";
                 if($modulePairs and $story->module) echo "<span class='label label-info label-badge'>{$modulePairs[$story->module]}</span> ";
-                echo html::a($storyLink, $story->title, null, "style='color: $story->color'");
+                echo $canView ? html::a($storyLink, $story->title, '', "style='color: $story->color'") : "<span style='color: $story->color'>{$story->title}</span>";
                 break;
             case 'plan':
                 echo $story->planTitle;

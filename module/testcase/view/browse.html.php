@@ -69,7 +69,7 @@ js::set('branch',         $branch);
       <tbody>
         <?php foreach($cases as $case):?>
         <tr class='text-center' data-id='<?php echo $case->id?>'>
-          <?php foreach($setting as $key => $value) $this->testcase->printCell($value, $case, $users, $branches, $modulePairs, $browseType);?>
+          <?php foreach($setting as $key => $value) $this->testcase->printCell($value, $case, $users, $branches, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
         </tr>
         <?php endforeach;?>
       </tbody>
