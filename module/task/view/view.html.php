@@ -43,6 +43,7 @@
         echo '</div>';
 
         echo "<div class='btn-group'>";
+        if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate',    "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button','plus','','','','',' ');
         common::printIcon('task', 'edit',  "taskID=$task->id", $task);
         common::printCommentIcon('task', $task);
         common::printIcon('task', 'create', "productID=0&storyID=0&moduleID=0&taskID=$task->id", $task, 'button', 'copy');
