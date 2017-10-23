@@ -249,10 +249,10 @@ class taskModel extends model
      *
      * @param $taskID
      *
-     * @access public
+     * @access private
      * @return void
      */
-    public function countTime($taskID)
+    private function countTime($taskID)
     {
         if(!$taskID) return true;
 
@@ -287,7 +287,7 @@ class taskModel extends model
      * @access private
      * @return bool
      */
-    private function parentStatus($parentID,$status='done')
+    private function parentStatus($parentID, $status = 'done')
     {
         if(!$parentID) return true;
         $data     = new stdClass();
@@ -296,9 +296,7 @@ class taskModel extends model
         if(count($values) == 1 && $values[0] == $status)
         {
             $data->status = $status;
-            $this->dao->update(TABLE_TASK)->data($data)
-                ->autoCheck()
-                ->where('id')->eq($parentID)->exec();
+            $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('id')->eq($parentID)->exec();
         }
     }
 
