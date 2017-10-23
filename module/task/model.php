@@ -74,10 +74,11 @@ class taskModel extends model
 
                 if(!empty($teams))
                 {
-                    $firstMember      = reset($teams);
-                    $task->assignedTo = $firstMember->account;
-                    $task->estimate   = $estimate;
-                    $task->left       = $left;
+                    $firstMember        = reset($teams);
+                    $task->assignedTo   = $firstMember->account;
+                    $task->assignedDate = helper::today();
+                    $task->estimate     = $estimate;
+                    $task->left         = $left;
                 }
             }
 
