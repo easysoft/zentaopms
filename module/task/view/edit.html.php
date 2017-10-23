@@ -97,10 +97,12 @@
             <th><?php echo $lang->task->type;?></th>
             <td><?php echo html::select('type', $lang->task->typeList, $task->type, 'class=form-control');?></td>
           </tr>
+          <?php if(empty($task->children)):?>
           <tr>
             <th><?php echo $lang->task->status;?></th>
             <td><?php echo html::select('status', (array)$lang->task->statusList, $task->status, 'class=form-control');?></td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->task->pri;?></th>
             <td><?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=form-control');?> </td>

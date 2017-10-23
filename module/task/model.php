@@ -279,6 +279,31 @@ class taskModel extends model
     }
 
     /**
+     * Check that all child status
+     *
+     * @param $parentID
+     * @param $status
+     *
+     * @access private
+     * @return bool
+     */
+    private function parentStatus($parentID,$status='done')
+    {
+        if(!$parentID) return true;
+        $data     = new stdClass();
+        $children = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->fetchPairs('id', 'status');
+        $values   = array_values(array_unique($children));
+        if(count($values) == 1 && $values[0] == $status)
+        {
+            $data->status = $status;
+            $this->dao->update(TABLE_TASK)->data($data)
+                ->autoCheck()
+                ->where('id')->eq($parentID)->exec();
+        }
+    }
+
+
+    /**
      * Update a task.
      *
      * @param  int    $taskID
@@ -690,6 +715,23 @@ class taskModel extends model
             ->check('consumed,left', 'float')
             ->where('id')->eq((int)$taskID)->exec();
 
+        if($oldTask->parent)
+        {
+            switch($task->status)
+            {
+                case 'doing':
+                    $status         = new stdClass();
+                    $status->status = 'doing';
+                    $this->dao->update(TABLE_TASK)->data($status)->autoCheck()->where('id')->eq((int)$oldTask->parent)->exec();
+                    break;
+                case 'done':
+                    $this->parentStatus($oldTask->parent,'done');
+                    break;
+            }
+        }
+
+        $this->countTime($oldTask->parent);
+
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
@@ -802,6 +844,7 @@ class taskModel extends model
         if(!empty($actionID)) $this->action->logHistory($actionID, $changes);
         if($task->story) $this->loadModel('story')->setStage($task->story);
 
+        if($task->status=='done') $this->parentStatus($task->parent,'done');
         $this->countTime($task->parent);
 
         return $changes;
@@ -848,6 +891,9 @@ class taskModel extends model
             ->autoCheck()
             ->check('consumed', 'notempty')
             ->where('id')->eq((int)$taskID)->exec();
+
+        if($task->status=='done') $this->parentStatus($oldTask->parent,'done');
+        $this->countTime($oldTask->parent);
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
@@ -898,6 +944,12 @@ class taskModel extends model
             ->remove('comment')->get();
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
+        $this->parentStatus($oldTask->parent,'closed');
+        $this->countTime($oldTask->parent);
+
+        $data         = new stdClass();
+        $data->status = 'closed';
+        $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('parent')->eq($taskID)->exec();
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
@@ -953,6 +1005,13 @@ class taskModel extends model
             ->autoCheck()
             ->check('left', 'notempty')
             ->where('id')->eq((int)$taskID)->exec();
+
+        $this->countTime($oldTask->parent);
+
+        $data         = new stdClass();
+        $data->status = 'doing';
+        $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('parent')->eq($taskID)->exec();
+        if($oldTask->parent)  $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('id')->eq((int)$oldTask->parent)->exec();
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
@@ -1756,6 +1815,9 @@ class taskModel extends model
 
         if($action == 'start' and !empty($task->children)) return false;
         if($action == 'recordestimate' and !empty($task->children)) return false;
+        if($action == 'finish' and !empty($task->children)) return false;
+        if($action == 'cancel' and !empty($task->children)) return false;
+        if($action == 'pause' and !empty($task->children)) return false;
         if($action == 'batchcreate' and !empty($task->team)) return false;
         if($action == 'batchcreate' and $task->parent) return false;
 
