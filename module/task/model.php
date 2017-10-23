@@ -1804,14 +1804,19 @@ class taskModel extends model
     /**
      * Print cell data.
      *
-     * @param  object  $col
-     * @param  object  $task
-     * @param  array   $users
-     * @param  string  $browseType
+     * @param        $col
+     * @param        $task
+     * @param        $users
+     * @param        $browseType
+     * @param        $branchGroups
+     * @param array  $modulePairs
+     * @param string $mode
+     * @param bool   $child
+     *
      * @access public
      * @return void
      */
-    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array(), $mode = 'datatable')
+    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array(), $mode = 'datatable', $child = false)
     {
         $canView  = common::hasPriv('task', 'view');
         $taskLink = helper::createLink('task', 'view', "taskID=$task->id");
@@ -1830,7 +1835,8 @@ class taskModel extends model
             switch($id)
             {
             case 'id':
-                if($mode == 'table') echo "<input type='checkbox' name='taskIDList[{$task->id}]' value='{$task->id}'/> ";
+                if($mode == 'table' && $child == false) echo "<input type='checkbox' name='taskIDList[{$task->id}]' value='{$task->id}'/> ";
+                if($child) echo '&nbsp;&nbsp;&nbsp;&nbsp;';
                 echo $canView ? html::a($taskLink, sprintf('%03d', $task->id)) : sprintf('%03d', $task->id);
                 break;
             case 'pri':
@@ -1841,6 +1847,7 @@ class taskModel extends model
             case 'name':
                 if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
                 if($modulePairs and $task->module) echo "<span class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span> ';
+                if($child) echo '<span class="label">'.$this->lang->task->childrenAB.'</span> ';
                 echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color'") : "<span style='color: $task->color'>$task->name</span>";
                 if($task->fromBug) echo html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '_blank', "class='bug'");
                 if(!empty($task->children)) echo '<span class="task-toggle" data-id="'.$task->id.'">&nbsp;&nbsp;<i class="icon icon-minus"></i>&nbsp;&nbsp;</span>';
