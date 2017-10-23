@@ -1,7 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lvtao
- * Date: 2017/10/23
- * Time: 上午10:57
- */
+$lang->score->common = '积分';
+$lang->score->record = '积分记录';
+$lang->score->reset  = '重置积分';
+$lang->score->reset  = '重置积分';

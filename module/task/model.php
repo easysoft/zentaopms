@@ -63,12 +63,12 @@ class taskModel extends model
                     $member->account  = $account;
                     $member->role     = $assignedTo;
                     $member->join     = helper::today();
-                    $member->estimate = $this->post->teamEstimate[$row] ? $this->post->teamEstimate[$row] : 0;
+                    $member->estimate = $this->post->teamEstimate[$row] ? (float)$this->post->teamEstimate[$row] : 0;
                     $member->left     = $member->estimate;
                     $member->order    = $row;
 
                     $teams[$account] = $member;
-                    $estimate        += (float)$member->eatimate;
+                    $estimate        += (float)$member->estimate;
                     $left            += (float)$member->left;
                 }
 
