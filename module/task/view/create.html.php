@@ -39,25 +39,17 @@
       <tr>
         <th><?php echo $lang->task->assignedTo;?></th>
         <td>
-          <div class='row-table'>
-            <div class='col-table'>
-                <?php echo html::select('assignedTo[]', $members, $task->assignedTo, "class='form-control chosen'");?>
-            </div>
+          <div class="input-group" id="dataPlanGroup">
+            <?php echo html::select('assignedTo[]', $members, $task->assignedTo, "class='form-control chosen'");?>
               <?php if($project->type == 'ops') :?>
-                <div class='col-table'>
-                    <?php echo html::input('teamMember', '', "class='form-control team-group hidden' readonly='readonly'");?>
-                </div>
-                <div class='col-table btn team-group hidden' data-toggle='modalTeam'><?php echo $lang->task->team;?></div>
-                <div class='col-table btn w-70px'>
-                  <label class='checkbox-inline'><input type='checkBox' name='multiple' value='1'/><?php echo $lang->task->multipleAB;?></label>
-                </div>
+                <?php echo html::input('teamMember', '', "class='form-control team-group fix-border hidden' readonly='readonly'");?>
+                <span class="input-group-addon team-group hidden" data-toggle='modalTeam'><?php echo $lang->task->team;?></span>
+                <label class='input-group-addon affair'><input type='checkBox' name='multiple' id="multipleBox" value='1'/><?php echo $lang->task->multipleAB;?></label>
               <?php endif;?>
           </div>
         </td>
         <td>
-          <?php if($project->type != 'ops') :?>
-            <button type='button' class='btn btn-link<?php echo $task->type == 'affair' ? '' : ' hidden'?>' id='selectAllUser'><?php echo $lang->task->selectAllUser ?></button>
-          <?php endif;?>
+          <button type='button' class='btn btn-link<?php echo $task->type == 'affair' ? '' : ' hidden'?>' id='selectAllUser'><?php echo $lang->task->selectAllUser ?></button>
         </td>
       </tr>
       <?php if(strpos(",$showFields,", ',story,') !== false and $this->config->global->flow != 'onlyTask'):?>

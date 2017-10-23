@@ -16,9 +16,15 @@ class score extends control
      * @access public
      * @return mixed
      */
-    public function browse()
+    public function browse($recTotal = 0, $recPerPage = 100)
     {
-        $this->view->title = $this->lang->score->common;
+        $this->app->loadClass('pager', $static = true);
+        $pager  = new pager($recTotal, $recPerPage);
+        $scores = $this->score->getScores($pager);
+
+        $this->view->title  = $this->lang->score->common;
+        $this->view->pager  = $pager;
+        $this->view->scores = $scores;
         $this->display();
     }
 }
