@@ -104,6 +104,8 @@ $lang->task->children          = '子任務';
 $lang->task->childrenAB        = '子';
 $lang->task->parent            = '父任務';
 $lang->task->unfinished        = '未完成';
+$lang->task->lblPri            = 'P';
+$lang->task->lblHour           = '(h)';
 
 $lang->task->ditto         = '同上';
 $lang->task->dittoNotice   = "該任務與上一任務不屬於同一項目！";
