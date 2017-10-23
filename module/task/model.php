@@ -63,12 +63,12 @@ class taskModel extends model
                     $member->account  = $account;
                     $member->role     = $assignedTo;
                     $member->join     = helper::today();
-                    $member->estimate = $this->post->teamEstimate[$row] ? $this->post->teamEstimate[$row] : 0;
+                    $member->estimate = $this->post->teamEstimate[$row] ? (float)$this->post->teamEstimate[$row] : 0;
                     $member->left     = $member->estimate;
                     $member->order    = $row;
 
                     $teams[$account] = $member;
-                    $estimate        += (float)$member->eatimate;
+                    $estimate        += (float)$member->estimate;
                     $left            += (float)$member->left;
                 }
 
@@ -1081,10 +1081,13 @@ class taskModel extends model
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID or $type == 'needconfirm') ? false : true);
 
         $taskList = array_keys($tasks);
-        $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($taskList)->orderBy('id_desc')->fetchGroup('parent');
-        if(!empty($children)) foreach($children as $key => $child) $tasks[$key]->children = $child;
-        $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->in($taskList)->fetchGroup('task');
-        if($teams) foreach($teams as $key => $team) if(!empty($team)) $tasks[$key]->team = $team;
+        if(!empty($taskList))
+        {
+            $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($taskList)->orderBy('id_desc')->fetchGroup('parent');
+            if(!empty($children)) foreach($children as $key => $child) $tasks[$key]->children = $child;
+            $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->in($taskList)->fetchGroup('task');
+            if($teams) foreach($teams as $key => $team) if(!empty($team)) $tasks[$key]->team = $team;
+        }
 
         if($tasks) return $this->processTasks($tasks);
         return array();

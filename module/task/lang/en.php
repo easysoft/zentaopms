@@ -104,6 +104,8 @@ $lang->task->children          = 'Child';
 $lang->task->childrenAB        = 'Child';
 $lang->task->parent            = 'Parent Task';
 $lang->task->unfinished        = 'Unfinished';
+$lang->task->lblPri            = 'P';
+$lang->task->lblHour           = '(h)';
 
 $lang->task->ditto         = 'Ditto';
 $lang->task->dittoNotice   = "This Task does not belong to the Project as the previous one does!";
