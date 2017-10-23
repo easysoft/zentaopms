@@ -15,5 +15,5 @@ tmp/extension/*
 .bak
 .idea
 .gitignore
-_log
+.DS_Store
 framework/
