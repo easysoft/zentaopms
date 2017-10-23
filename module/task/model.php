@@ -1807,8 +1807,9 @@ class taskModel extends model
      * @access public
      * @return void
      */
-    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array())
+    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array(), $mode = 'datatable')
     {
+        $canView  = common::hasPriv('task', 'view');
         $taskLink = helper::createLink('task', 'view', "taskID=$task->id");
         $account  = $this->app->user->account;
         $id = $col->id;
@@ -1816,15 +1817,17 @@ class taskModel extends model
         {
             $class = '';
             if($id == 'status') $class .= ' task-' . $task->status;
+            if($id == 'id')     $class .= ' cell-id';
             if($id == 'name' or $id == 'story') $class .= ' text-left';
             if($id == 'deadline' and isset($task->delay)) $class .= ' delayed';
             if($id == 'assignedTo' && $task->assignedTo == $account) $class .= ' red';
 
             echo "<td class='" . $class . "'" . ($id=='name' ? " title='{$task->name}'":'') . ">";
-            switch ($id)
+            switch($id)
             {
             case 'id':
-                echo html::a($taskLink, sprintf('%03d', $task->id));
+                if($mode == 'table') echo "<input type='checkbox' name='taskIDList[{$task->id}]' value='{$task->id}'/> ";
+                echo $canView ? html::a($taskLink, sprintf('%03d', $task->id)) : sprintf('%03d', $task->id);
                 break;
             case 'pri':
                 echo "<span class='pri" . zget($this->lang->task->priList, $task->pri, $task->pri) . "'>";
@@ -1834,7 +1837,7 @@ class taskModel extends model
             case 'name':
                 if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
                 if($modulePairs and $task->module) echo "<span class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span> ';
-                echo html::a($taskLink, $task->name, null, "style='color: $task->color'");
+                echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color'") : "<span style='color: $task->color'>$task->name</span>";
                 if($task->fromBug) echo html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '_blank', "class='bug'");
                 if(!empty($task->children)) echo '<span class="task-toggle" data-id="'.$task->id.'">&nbsp;&nbsp;<i class="icon icon-minus"></i>&nbsp;&nbsp;</span>';
                 break;

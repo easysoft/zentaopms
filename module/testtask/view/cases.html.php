@@ -71,7 +71,7 @@ var moduleID   = '<?php echo $moduleID;?>';
       <tbody>
         <?php foreach($runs as $run):?>
         <tr class='text-center' data-id='<?php echo $run->case?>'>
-          <?php foreach($setting as $key => $value) $this->testtask->printCell($value, $run, $users, $task, $branches);?>
+          <?php foreach($setting as $key => $value) $this->testtask->printCell($value, $run, $users, $task, $branches, $useDatatable ? 'datatable' : 'table');?>
         </tr>
         <?php endforeach;?>
       </tbody>

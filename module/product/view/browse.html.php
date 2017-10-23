@@ -130,7 +130,7 @@
       <tbody>
         <?php foreach($stories as $story):?>
         <tr class='text-center' data-id='<?php echo $story->id?>'>
-          <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases);?>
+          <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
         </tr>
         <?php endforeach;?>
       </tbody>
