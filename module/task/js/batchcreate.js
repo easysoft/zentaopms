@@ -153,3 +153,11 @@ $(function()
 
     if(storyID != 0) setStoryRelated(0);
 })
+
+// if(projectType == 'ops')
+// {
+//     $("#tableBody th").eq(2).addClass('hidden');
+//     $("#tableBody tr").each(function() {
+//         $(this).find('td').eq(2).addClass('hidden');
+//     });
+// }

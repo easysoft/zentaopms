@@ -20,11 +20,16 @@ function copyStoryTitle()
 /* Set the assignedTos field. */
 function setOwners(result)
 {
+    $("#multipleBox").removeAttr("checked");
+    $('.team-group').addClass('hidden');
+    $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
     if(result == 'affair')
     {
         $('#assignedTo').attr('multiple', 'multiple');
         $('#assignedTo').chosen('destroy');
         $('#assignedTo').chosen(defaultChosenOptions);
+        $('.affair').hide();
+        $('.team-group').addClass('hidden');
         $('#selectAllUser').removeClass('hidden');
     }
     else if($('#assignedTo').attr('multiple') == 'multiple')
@@ -32,6 +37,7 @@ function setOwners(result)
         $('#assignedTo').removeAttr('multiple');
         $('#assignedTo').chosen('destroy');
         $('#assignedTo').chosen(defaultChosenOptions);
+        $('.affair').show();
         $('#selectAllUser').addClass('hidden');
     }
 }
@@ -219,8 +225,8 @@ $('[name^=multiple]').change(function()
         $('#estimate').attr('readonly', false);
     }
 });
-
-$(".btn[data-toggle='modalTeam']").click(function()
+$(".team-group[data-toggle='modalTeam']").css('cursor', 'pointer');
+$(".team-group[data-toggle='modalTeam']").click(function()
 {
     $('#modalTeam').modal('show');
     adjustSortBtn();
