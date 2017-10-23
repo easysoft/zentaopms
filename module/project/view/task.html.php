@@ -70,13 +70,18 @@ js::set('browseType', $browseType);
         <tr class='text-center' data-id='<?php echo $task->id?>'>
           <?php foreach ($setting as $key => $value) $this->task->printCell($value, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
         </tr>
-          <?php if(!empty($task->children)):?>
-            <?php foreach($task->children as $child):?>
-            <tr class='text-center table-children parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>'>
+          <?php
+            if(!empty($task->children))
+            {
+              $childrenNum = count($task->children);
+              foreach($task->children as $key=>$child)
+              {
+          ?>
+            <tr class='text-center table-children<?php if($key==0) echo ' table-child-top';?><?php if(($key+1) == $childrenNum) echo ' table-child-bottom';?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>'>
               <?php foreach ($setting as $key => $value) $this->task->printCell($value, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
             </tr>
-            <?php endforeach;?>
-          <?php endif;?>
+            <?php }?>
+          <?php }?>
         <?php endforeach;?>
       </tbody>
       <tfoot>
