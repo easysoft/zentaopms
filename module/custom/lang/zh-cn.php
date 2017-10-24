@@ -14,6 +14,7 @@ $lang->custom->module    = '模块';
 $lang->custom->section   = '附加部分';
 $lang->custom->lang      = '所属语言';
 $lang->custom->setPublic = '设为公共';
+$lang->custom->required  = '必填项';
 
 $lang->custom->object['story']    = '需求';
 $lang->custom->object['task']     = '任务';

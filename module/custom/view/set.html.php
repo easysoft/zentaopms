@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
+<?php include 'header.html.php';?>
 <?php
 $itemRow = <<<EOT
   <tr class='text-center'>
@@ -31,23 +31,6 @@ EOT;
 <?php js::set('itemRow', $itemRow)?>
 <?php js::set('module',  $module)?>
 <?php js::set('field',   $field)?>
-<div id='featurebar'>
-  <ul class='nav'>
-  <?php
-  foreach($lang->custom->object as $object => $name)
-  {
-      echo "<li id='{$object}Tab'>"; 
-      common::printLink('custom', 'set', "module=$object",  $name); 
-      echo '</li>';
-  }
-  echo '<li>'; 
-  common::printLink('custom', 'flow', "",  $lang->custom->flow); 
-  echo '</li><li>'; 
-  common::printLink('custom', 'working', '',  $lang->custom->working); 
-  echo '</li>';
-  ?>
-  </ul>
-</div>
 <div class='side'>
   <div class='list-group'>
     <?php 

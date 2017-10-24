@@ -10,24 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
-<div id='featurebar'>
-  <ul class='nav'>
-  <?php
-  foreach($lang->custom->object as $object => $name)
-  {
-      echo "<li id='{$object}Tab'>"; 
-      common::printLink('custom', 'set', "module=$object",  $name); 
-      echo '</li>';
-  }
-  echo "<li class='active'>"; 
-  common::printLink('custom', 'flow', "",  $lang->custom->flow); 
-  echo '</li><li>'; 
-  common::printLink('custom', 'working', '',  $lang->custom->working); 
-  echo '</li>';
-  ?>
-  </ul>
-</div>
+<?php include 'header.html.php';?>
 <div class='main'>
   <form method='post' class='form-condensed' target='hiddenwin'>
     <table class='table table-form'>
@@ -49,4 +32,10 @@
     </table>
   </form>
 </div>
+<script>
+$(function()
+{
+    $('#featurebar #flowTab').addClass('active');
+})
+</script>
 <?php include '../../common/view/footer.html.php';?>
