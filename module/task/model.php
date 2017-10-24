@@ -1888,7 +1888,7 @@ class taskModel extends model
             {
             case 'id':
                 if($mode == 'table' && $child == false) echo "<input type='checkbox' name='taskIDList[{$task->id}]' value='{$task->id}'/> ";
-                if($child) echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+                if($mode == 'table' && $child) echo '&nbsp;&nbsp;&nbsp;&nbsp;';
                 echo $canView ? html::a($taskLink, sprintf('%03d', $task->id)) : sprintf('%03d', $task->id);
                 break;
             case 'pri':
