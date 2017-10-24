@@ -233,7 +233,6 @@ class taskModel extends model
         }
 
         $this->countTime($tasks->parent[0]);
-exit('wwewrewr');
         return $mails;
     }
 
