@@ -175,7 +175,7 @@ js::set('branch', $branch);
     $widths  = $this->datatable->setFixedFieldWidth($setting);
     $columns = 0;
     ?>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed datatable' id='bugList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='bugIDList[]'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed <?php echo $useDatatable ? 'datatable' : ''?>' id='bugList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='bugIDList[]'>
       <thead>
         <tr>
         <?php
@@ -193,7 +193,7 @@ js::set('branch', $branch);
       <tbody>
         <?php foreach($bugs as $bug):?>
         <tr class='text-center' data-id='<?php echo $bug->id?>'>
-          <?php foreach ($setting as $key => $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $projects, $plans, $stories, $tasks);?>
+          <?php foreach ($setting as $key => $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $projects, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');?>
         </tr>
         <?php endforeach;?>
       </tbody>

@@ -74,10 +74,11 @@ class taskModel extends model
 
                 if(!empty($teams))
                 {
-                    $firstMember      = reset($teams);
-                    $task->assignedTo = $firstMember->account;
-                    $task->estimate   = $estimate;
-                    $task->left       = $left;
+                    $firstMember        = reset($teams);
+                    $task->assignedTo   = $firstMember->account;
+                    $task->assignedDate = helper::today();
+                    $task->estimate     = $estimate;
+                    $task->left         = $left;
                 }
             }
 
@@ -248,10 +249,10 @@ class taskModel extends model
      *
      * @param $taskID
      *
-     * @access public
+     * @access private
      * @return void
      */
-    public function countTime($taskID)
+    private function countTime($taskID)
     {
         if(!$taskID) return true;
 
@@ -276,6 +277,29 @@ class taskModel extends model
 
         $this->dao->update(TABLE_TASK)->data($newTask)->autoCheck()->where('id')->eq($taskID)->exec();
     }
+
+    /**
+     * Check that all child status
+     *
+     * @param $parentID
+     * @param $status
+     *
+     * @access private
+     * @return bool
+     */
+    private function parentStatus($parentID, $status = 'done')
+    {
+        if(!$parentID) return true;
+        $data     = new stdClass();
+        $children = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->fetchPairs('id', 'status');
+        $values   = array_values(array_unique($children));
+        if((count($values) == 1 && $values[0] == $status) || (count($values) == 2 && in_array('closed', $values) && $status == 'done'))
+        {
+            $data->status = $status;
+            $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('id')->eq($parentID)->exec();
+        }
+    }
+
 
     /**
      * Update a task.
@@ -689,6 +713,23 @@ class taskModel extends model
             ->check('consumed,left', 'float')
             ->where('id')->eq((int)$taskID)->exec();
 
+        if($oldTask->parent)
+        {
+            switch($task->status)
+            {
+                case 'doing':
+                    $status         = new stdClass();
+                    $status->status = 'doing';
+                    $this->dao->update(TABLE_TASK)->data($status)->autoCheck()->where('id')->eq((int)$oldTask->parent)->exec();
+                    break;
+                case 'done':
+                    $this->parentStatus($oldTask->parent,'done');
+                    break;
+            }
+        }
+
+        $this->countTime($oldTask->parent);
+
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
@@ -801,6 +842,7 @@ class taskModel extends model
         if(!empty($actionID)) $this->action->logHistory($actionID, $changes);
         if($task->story) $this->loadModel('story')->setStage($task->story);
 
+        if($task->status == 'done') $this->parentStatus($task->parent, 'done');
         $this->countTime($task->parent);
 
         return $changes;
@@ -847,6 +889,9 @@ class taskModel extends model
             ->autoCheck()
             ->check('consumed', 'notempty')
             ->where('id')->eq((int)$taskID)->exec();
+
+        if($task->status == 'done') $this->parentStatus($oldTask->parent, 'done');
+        $this->countTime($oldTask->parent);
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
@@ -897,6 +942,12 @@ class taskModel extends model
             ->remove('comment')->get();
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
+        $this->parentStatus($oldTask->parent,'closed');
+        $this->countTime($oldTask->parent);
+
+        $data         = new stdClass();
+        $data->status = 'closed';
+        $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('parent')->eq($taskID)->exec();
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
@@ -952,6 +1003,13 @@ class taskModel extends model
             ->autoCheck()
             ->check('left', 'notempty')
             ->where('id')->eq((int)$taskID)->exec();
+
+        $this->countTime($oldTask->parent);
+
+        $data         = new stdClass();
+        $data->status = 'doing';
+        $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('parent')->eq($taskID)->exec();
+        if($oldTask->parent)  $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('id')->eq((int)$oldTask->parent)->exec();
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
@@ -1755,6 +1813,9 @@ class taskModel extends model
 
         if($action == 'start' and !empty($task->children)) return false;
         if($action == 'recordestimate' and !empty($task->children)) return false;
+        if($action == 'finish' and !empty($task->children)) return false;
+        if($action == 'cancel' and !empty($task->children)) return false;
+        if($action == 'pause' and !empty($task->children)) return false;
         if($action == 'batchcreate' and !empty($task->team)) return false;
         if($action == 'batchcreate' and $task->parent) return false;
 
@@ -1803,15 +1864,21 @@ class taskModel extends model
     /**
      * Print cell data.
      *
-     * @param  object  $col
-     * @param  object  $task
-     * @param  array   $users
-     * @param  string  $browseType
+     * @param        $col
+     * @param        $task
+     * @param        $users
+     * @param        $browseType
+     * @param        $branchGroups
+     * @param array  $modulePairs
+     * @param string $mode
+     * @param bool   $child
+     *
      * @access public
      * @return void
      */
-    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array())
+    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array(), $mode = 'datatable', $child = false)
     {
+        $canView  = common::hasPriv('task', 'view');
         $taskLink = helper::createLink('task', 'view', "taskID=$task->id");
         $account  = $this->app->user->account;
         $id = $col->id;
@@ -1819,15 +1886,18 @@ class taskModel extends model
         {
             $class = '';
             if($id == 'status') $class .= ' task-' . $task->status;
+            if($id == 'id')     $class .= ' cell-id';
             if($id == 'name' or $id == 'story') $class .= ' text-left';
             if($id == 'deadline' and isset($task->delay)) $class .= ' delayed';
             if($id == 'assignedTo' && $task->assignedTo == $account) $class .= ' red';
 
             echo "<td class='" . $class . "'" . ($id=='name' ? " title='{$task->name}'":'') . ">";
-            switch ($id)
+            switch($id)
             {
             case 'id':
-                echo html::a($taskLink, sprintf('%03d', $task->id));
+                if($mode == 'table' && $child == false) echo "<input type='checkbox' name='taskIDList[{$task->id}]' value='{$task->id}'/> ";
+                if($child) echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+                echo $canView ? html::a($taskLink, sprintf('%03d', $task->id)) : sprintf('%03d', $task->id);
                 break;
             case 'pri':
                 echo "<span class='pri" . zget($this->lang->task->priList, $task->pri, $task->pri) . "'>";
@@ -1837,7 +1907,9 @@ class taskModel extends model
             case 'name':
                 if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
                 if($modulePairs and $task->module) echo "<span class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span> ';
-                echo html::a($taskLink, $task->name, null, "style='color: $task->color'");
+                if($child) echo '<span class="label">'.$this->lang->task->childrenAB.'</span> ';
+                if(!empty($task->team)) echo '<span class="label">'.$this->lang->task->multipleAB.'</span> ';
+                echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color'") : "<span style='color: $task->color'>$task->name</span>";
                 if($task->fromBug) echo html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '_blank', "class='bug'");
                 if(!empty($task->children)) echo '<span class="task-toggle" data-id="'.$task->id.'">&nbsp;&nbsp;<i class="icon icon-minus"></i>&nbsp;&nbsp;</span>';
                 break;

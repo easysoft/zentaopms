@@ -51,7 +51,7 @@ js::set('branch',         $branch);
     $widths  = $this->datatable->setFixedFieldWidth($setting);
     $columns = 0;
     ?>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed datatable' id='caseList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='caseIDList[]'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed <?php echo $useDatatable ? 'datatable' : ''?>' id='caseList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='caseIDList[]'>
       <thead>
         <tr>
         <?php
@@ -69,7 +69,7 @@ js::set('branch',         $branch);
       <tbody>
         <?php foreach($cases as $case):?>
         <tr class='text-center' data-id='<?php echo $case->id?>'>
-          <?php foreach($setting as $key => $value) $this->testcase->printCell($value, $case, $users, $branches, $modulePairs, $browseType);?>
+          <?php foreach($setting as $key => $value) $this->testcase->printCell($value, $case, $users, $branches, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
         </tr>
         <?php endforeach;?>
       </tbody>

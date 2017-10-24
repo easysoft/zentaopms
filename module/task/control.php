@@ -233,7 +233,8 @@ class task extends control
      */
     public function commonAction($taskID)
     {
-        $this->view->task    = $this->loadModel('task')->getByID($taskID);
+        $task=$this->loadModel('task')->getByID($taskID);
+        $this->view->task    = $task;
         $this->view->project = $this->project->getById($this->view->task->project);
         $this->view->members = $this->project->getTeamMemberPairs($this->view->project->id ,'nodeleted');
         $this->view->actions = $this->loadModel('action')->getList('task', $taskID);

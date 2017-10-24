@@ -52,7 +52,7 @@ js::set('browseType', $browseType);
     $widths  = $this->datatable->setFixedFieldWidth($setting);
     $columns = 0;
     ?>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed datatable' id='taskList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='taskIDList[]'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed <?php echo $useDatatable ? 'datatable' : ''?>' id='taskList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='taskIDList[]'>
       <thead>
         <tr><?php
         foreach ($setting as $key => $value)
@@ -68,15 +68,20 @@ js::set('browseType', $browseType);
       <tbody>
         <?php foreach($tasks as $task):?>
         <tr class='text-center' data-id='<?php echo $task->id?>'>
-          <?php foreach ($setting as $key => $value) $this->task->printCell($value, $task, $users, $browseType, $branchGroups, $modulePairs);?>
+          <?php foreach ($setting as $key => $value) $this->task->printCell($value, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
         </tr>
-          <?php if(!empty($task->children)):?>
-            <?php foreach($task->children as $child):?>
-            <tr class='text-center table-children parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>'>
-              <?php foreach ($setting as $key => $value) $this->task->printCell($value, $child, $users, $browseType, $branchGroups, $modulePairs);?>
+          <?php
+            if(!empty($task->children))
+            {
+              $childrenNum = count($task->children);
+              foreach($task->children as $key=>$child)
+              {
+          ?>
+            <tr class='text-center table-children<?php if($key==0) echo ' table-child-top';?><?php if(($key+1) == $childrenNum) echo ' table-child-bottom';?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>'>
+              <?php foreach ($setting as $key => $value) $this->task->printCell($value, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);?>
             </tr>
-            <?php endforeach;?>
-          <?php endif;?>
+            <?php }?>
+          <?php }?>
         <?php endforeach;?>
       </tbody>
       <tfoot>

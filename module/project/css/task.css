@@ -24,4 +24,7 @@
 .pl-5px{padding-left:5px;}
 
 tbody > tr > td > .btn-icon {margin-right: 2px}
-.table-children td{background-color:#fff0f5!important;}
+.table-children{border-left:2px solid #ccc;border-right:2px solid #ccc;}
+.table-children.table-child-top{border-top:2px solid #ccc;}
+.table-children.table-child-bottom{border-bottom:2px solid #ccc;}
+.table-children td{background-color:#fff!important;}

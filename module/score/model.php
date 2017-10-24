@@ -10,5 +10,9 @@
  */
 class scoreModel extends model
 {
+    public function getScores($pager)
+    {
+
+    }
 
 }

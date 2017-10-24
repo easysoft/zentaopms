@@ -1118,8 +1118,9 @@ class testtaskModel extends model
      * @access public
      * @return void
      */
-    public function printCell($col, $run, $users, $task, $branches)
+    public function printCell($col, $run, $users, $task, $branches, $mode = 'datatable')
     {
+        $canView  = common::hasPriv('testcase', 'view');
         $caseLink = helper::createLink('testcase', 'view', "caseID=$run->case&version=$run->version&from=testtask&taskID=$run->task");
         $account  = $this->app->user->account;
         $id = $col->id;
@@ -1127,7 +1128,8 @@ class testtaskModel extends model
         {
             $class = '';
             if($id == 'status') $class .= $run->status;
-            if($id == 'title') $class .= ' text-left';
+            if($id == 'title')  $class .= ' text-left';
+            if($id == 'id')     $class .= ' cell-id';
             if($id == 'lastRunResult') $class .= " $run->lastRunResult";
             if($id == 'assignedTo' && $run->assignedTo == $account) $class .= ' red';
 
@@ -1135,7 +1137,8 @@ class testtaskModel extends model
             switch ($id)
             {
             case 'id':
-                echo html::a($caseLink, sprintf('%03d', $run->case));
+                if($mode == 'table') echo "<input type='checkbox' name='caseIDList[]' value='{$run->case}'/> ";
+                echo $canView ? html::a($caseLink, sprintf('%03d', $run->case)) : sprintf('%03d', $run->case);
                 break;
             case 'pri':
                 echo "<span class='pri" . zget($this->lang->testcase->priList, $run->pri, $run->pri) . "'>";
@@ -1144,7 +1147,7 @@ class testtaskModel extends model
                 break;
             case 'title':
                 if($run->branch) echo "<span class='label label-info label-badge'>{$branches[$run->branch]}</span>";
-                echo html::a($caseLink, $run->title);
+                echo $canView ? html::a($caseLink, $run->title) : $run->title;
                 break;
             case 'branch':
                 echo $branches[$run->branch];
