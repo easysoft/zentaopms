@@ -132,16 +132,17 @@ class webhook extends control
         $snoopy = $this->app->loadClass('snoopy');
         foreach($dataList as $data)
         {
-            $webhook = zget($webhooks, $data->webhook, '');
+            $webhook  = zget($webhooks, $data->webhook, '');
+            $httpCode = 0;
             if($webhook)
             {
-                $snoopy->_submit_type = zget($this->config->webhook->contentTypes, $webhook->contentType, 'application/json');
-                $snoopy->submit($webhook->url, $data->data);
+                $contentType = zget($this->config->webhook->contentTypes, $webhook->contentType, 'application/json');
+                $httpCode    = $this->webhook->fetchHook($contentType, $webhook->url, $data->data);
 
-                $this->saveLog($data->webhook, $data->action, $webhook->url, $snoopy->_submit_type, $postData, $snoopy->status, $snoopy->error);
+                $this->saveLog($data->webhook, $data->action, $webhook->url, $contentType, $data->data, $httpCode);
             }
             
-            if($snoopy->status == 200) $this->dao->update(TABLE_WEBHOOKDATA)->set('status')->eq('sended')->where('id')->eq($data->id)->exec();
+            if($httpCode == 200) $this->dao->update(TABLE_WEBHOOKDATA)->set('status')->eq('sended')->where('id')->eq($data->id)->exec();
         }
 
         $this->dao->delete()->from(TABLE_WEBHOOKDATA)->where('status')->eq('sended')->exec();

@@ -198,9 +198,9 @@ class webhookModel extends model
             }
             
             $contentType = zget($this->config->webhook->contentTypes, $webhook->contentType, 'application/json');
-            $result      = $this->fetchHook($contentType, $webhook->url, $postData);
+            $httpCode    = $this->fetchHook($contentType, $webhook->url, $postData);
 
-            $this->saveLog($id, $actionID, $webhook->url, $contentType, $postData, $result);
+            $this->saveLog($id, $actionID, $webhook->url, $contentType, $postData, $httpCode);
         }
         return !dao::isError();
     }
@@ -330,11 +330,10 @@ class webhookModel extends model
      * @param  string $contentType 
      * @param  string $data 
      * @param  int    $status 
-     * @param  string $error
      * @access public
      * @return bool 
      */
-    public function saveLog($webhookID, $actionID, $url, $contentType, $data, $status, $error = '')
+    public function saveLog($webhookID, $actionID, $url, $contentType, $data, $status)
     {
         $log = new stdclass();
         $log->objectType  = 'webhook';
@@ -345,7 +344,6 @@ class webhookModel extends model
         $log->contentType = $contentType;
         $log->data        = $data;
         $log->status      = $status;
-        $log->error       = $error;
 
         $this->dao->insert(TABLE_LOG)->data($log)->exec();
         return !dao::isError();
