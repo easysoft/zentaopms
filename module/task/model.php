@@ -293,7 +293,7 @@ class taskModel extends model
         $data     = new stdClass();
         $children = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->fetchPairs('id', 'status');
         $values   = array_values(array_unique($children));
-        if(count($values) == 1 && $values[0] == $status)
+        if((count($values) == 1 && $values[0] == $status) || (count($values) == 2 && in_array('closed', $values) && $status == 'done'))
         {
             $data->status = $status;
             $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('id')->eq($parentID)->exec();
@@ -842,7 +842,7 @@ class taskModel extends model
         if(!empty($actionID)) $this->action->logHistory($actionID, $changes);
         if($task->story) $this->loadModel('story')->setStage($task->story);
 
-        if($task->status=='done') $this->parentStatus($task->parent,'done');
+        if($task->status == 'done') $this->parentStatus($task->parent, 'done');
         $this->countTime($task->parent);
 
         return $changes;
@@ -890,7 +890,7 @@ class taskModel extends model
             ->check('consumed', 'notempty')
             ->where('id')->eq((int)$taskID)->exec();
 
-        if($task->status=='done') $this->parentStatus($oldTask->parent,'done');
+        if($task->status == 'done') $this->parentStatus($oldTask->parent, 'done');
         $this->countTime($oldTask->parent);
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
