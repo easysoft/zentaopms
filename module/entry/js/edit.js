@@ -16,16 +16,19 @@ function createKey()
     return false;
 }
 
-$('#allIP').change(function()
+$(function()
 {
-    if($(this).prop('checked'))
+    $('#allIP').change(function()
     {
-        $('#ip').attr('disabled', 'disabled');
-    }
-    else
-    {
-        $('#ip').removeAttr('disabled');
-    }
-})
-
-$('#name').focus();
+        if($(this).prop('checked'))
+        {
+            $('#ip').attr('disabled', 'disabled');
+        }
+        else
+        {
+            $('#ip').removeAttr('disabled');
+        }
+    })
+    
+    $('#name').focus();
+});

@@ -60,6 +60,8 @@ class actionModel extends model
 
         $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
 
+        $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID);
+
         return $actionID;
     }
 

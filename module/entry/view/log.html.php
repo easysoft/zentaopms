@@ -15,8 +15,18 @@
   <thead>
     <tr>
       <th class='w-120px'><?php echo $lang->action->date;?></th>
-      <th></th>
+      <th class='w-100px'><?php echo $lang->action->actor;?></th>
+      <th><?php echo $lang->entry->desc;?></th>
     </tr>
   </thead>
+  <tbody>
+    <?php foreach($actions as $action);?>
+    <tr>
+      <td><?php echo $action->date;?></td>
+      <td><?php echo zget($users, $action->actor);?></td>
+      <td><?php echo $action->extra;?></td>
+    </tr>
+    <?php endforeach;?>
+  </tbody>
 </table>
 <?php include '../../common/view/footer.html.php';?>

@@ -27,7 +27,7 @@ class entryModel extends model
      * Get entry list. 
      * 
      * @param  string $orderBy
-     * @param  obejct $pager
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -54,6 +54,7 @@ class entryModel extends model
 
         $this->dao->insert(TABLE_ENTRY)->data($entry)
             ->batchCheck($this->config->entry->create->requiredFields, 'notempty')
+            ->check('code', 'code')
             ->check('code', 'unique')
             ->autoCheck()
             ->exec();
@@ -83,6 +84,7 @@ class entryModel extends model
 
         $this->dao->update(TABLE_ENTRY)->data($entry)
             ->batchCheck($this->config->entry->edit->requiredFields, 'notempty')
+            ->check('code', 'code')
             ->check('code', 'unique', "id!=$entryID")
             ->autoCheck()
             ->where('id')->eq($entryID)

@@ -12,29 +12,25 @@
 class webhook extends control
 {
     /**
-     * Browse entries. 
+     * Browse webhooks. 
      * 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $pager = $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title   = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->list;
-        $this->view->entries = $this->webhook->getList($orderBy, $pager);
-        $this->view->orderBy = $orderBy;
-        $this->view->pager   = $pager;
+        $this->view->title    = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->list;
+        $this->view->webhooks = $this->webhook->getList($orderBy, $pager);
+        $this->view->orderBy  = $orderBy;
+        $this->view->pager    = $pager;
         $this->display();
     }
 
     /**
-     * Create an webhook. 
+     * Create a webhook. 
      * 
      * @access public
      * @return void
@@ -43,85 +39,112 @@ class webhook extends control
     {
         if($_POST)
         {
-            $webhookID = $this->webhook->create();
+            $this->webhook->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $this->loadModel('action')->create('webhook', $webhookID, 'created');
             $this->send(array('result' => 'success', 'message' => $this->lang->webhook->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->title = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->create;
+        $this->app->loadLang('action');
+        $this->view->title         = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->create;
+        $this->view->objectTypes   = $this->webhook->getObjectTypes();
+        $this->view->objectActions = $this->webhook->getObjectActions();
         $this->display();
     }
 
     /**
-     * Edit an webhook. 
+     * Edit a webhook. 
      * 
-     * @param  int    $webhookID 
+     * @param  int    $id 
      * @access public
      * @return void
      */
-    public function edit($webhookID)
+    public function edit($id)
     {
         if($_POST)
         {
-            $changes = $this->webhook->update($webhookID);
+            $this->webhook->update($id);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if($changes)
-            {
-                $actionID = $this->loadModel('action')->create('webhook', $webhookID, 'edited');
-                $this->action->logHistory($actionID, $changes);
-            }
             $this->send(array('result' => 'success', 'message' => $this->lang->webhook->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $webhook = $this->webhook->getById($webhookID);
-        $this->view->title   = $this->lang->webhook->edit . $this->lang->colon . $webhook->name;
-        $this->view->webhook = $webhook;
+        $this->app->loadLang('action');
+        $webhook = $this->webhook->getByID($id);
+        $this->view->title         = $this->lang->webhook->edit . $this->lang->colon . $webhook->name;
+        $this->view->objectTypes   = $this->webhook->getObjectTypes();
+        $this->view->objectActions = $this->webhook->getObjectActions();
+        $this->view->webhook       = $webhook;
         $this->display();
     }
 
     /**
-     * Delete an webhook. 
+     * Delete a webhook. 
      * 
-     * @param  int    $webhookID 
+     * @param  int    $id
      * @access public
      * @return void
      */
-    public function delete($webhookID)
+    public function delete($id)
     {
-        $this->webhook->delete($webhookID);
+        $this->webhook->delete($id);
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success'));
     }
 
-    public function log($webhookID)
+    /**
+     * Browse logs of a webhook. 
+     * 
+     * @param  int    $id 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
+    public function log($id, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $webhook = $this->webhook->getById($webhookID);
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $webhook = $this->webhook->getByID($id);
         $this->view->title   = $this->lang->webhook->log . $this->lang->colon . $webhook->name;
-        $this->view->actions = $this->loadModel('action')->getList('webhook', $webhookID);
+        $this->view->logs    = $this->webhook->getLogList($id, $orderBy, $pager);
+        $this->view->webhook = $webhook;
+        $this->view->orderBy = $orderBy;
+        $this->view->pager   = $pager;
         $this->display();
     }
 
-    public function actions($webhookID)
+    /**
+     * Send data by async. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function asyncSend()
     {
-        if($_POST)
-        {
-            $this->webhook->saveActions($webhookID);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        $webhooks = $this->webhook->getList();
+        if(empty($hooks)) return false;
+        $dataList = $this->webhook->getDataList();
+        if(empty($dataList)) return true;
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->webhook->saveSuccess, 'locate' => inlink('browse')));
+        $snoopy = $this->app->loadClass('snoopy');
+        foreach($dataList as $data)
+        {
+            $webhook = zget($webhooks, $data->webhook, '');
+            if($webhook)
+            {
+                $snoopy->_submit_type = zget($this->config->webhook->contentTypes, $webhook->contentType, 'application/json');
+                $snoopy->submit($webhook->url, $data->data);
+
+                $this->saveLog($data->webhook, $data->action, $webhook->url, $snoopy->_submit_type, $postData, $snoopy->status, $snoopy->error);
+            }
+            
+            if($snoopy->status == 200) $this->dao->update(TABLE_WEBHOOKDATA)->set('status')->eq('sended')->where('id')->eq($data->id)->exec();
         }
 
-        $webhook = $this->webhook->getById($webhookID);
-        $this->view->title   = $this->lang->webhook->actions . $this->lang->colon . $webhook->name;
-        $this->view->actions = $this->webhook->getActions($webhookID);
-        $this->display();
-    }
-
-    public function ajaxGetActions($module)
-    {
+        $this->dao->delete()->from(TABLE_WEBHOOKDATA)->where('status')->eq('sended')->exec();
+        return true;
     }
 }

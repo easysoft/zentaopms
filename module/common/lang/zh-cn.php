@@ -418,6 +418,7 @@ $lang->error->int             = array("『%s』应当是数字。", "『%s』应
 $lang->error->float           = "『%s』应当是数字，可以是小数。";
 $lang->error->email           = "『%s』应当为合法的EMAIL。";
 $lang->error->date            = "『%s』应当为合法的日期。";
+$lang->error->code            = "『%s』应当为字母或数字的组合。";
 $lang->error->account         = "『%s』应当为合法的用户名。";
 $lang->error->passwordsame    = "两次密码应当相等。";
 $lang->error->passwordrule    = "密码应该符合规则，长度至少为六位。";
