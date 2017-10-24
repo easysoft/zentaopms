@@ -78,7 +78,7 @@ js::set('browseType', $browseType);
               {
           ?>
             <tr class='text-center table-children<?php if($key==0) echo ' table-child-top';?><?php if(($key+1) == $childrenNum) echo ' table-child-bottom';?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>'>
-              <?php foreach ($setting as $key => $value) $this->task->printCell($value, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
+              <?php foreach ($setting as $key => $value) $this->task->printCell($value, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);?>
             </tr>
             <?php }?>
           <?php }?>

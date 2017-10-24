@@ -24,7 +24,11 @@
 .pl-5px{padding-left:5px;}
 
 tbody > tr > td > .btn-icon {margin-right: 2px}
-.table-children{border-left:2px solid #ccc;border-right:2px solid #ccc;}
+.table-children > td:first-child{border-left:2px solid #ccc}
+.table-children > td:last-child{;border-right:2px solid #ccc;}
+.fixed-left .table-children > td{border-right:none;}
+.flexarea .table-children > td{border-left:none;border-right:none;}
+.fixed-right .table-children > td{border-left:none;}
 .table-children.table-child-top{border-top:2px solid #ccc;}
 .table-children.table-child-bottom{border-bottom:2px solid #ccc;}
-.table-children td{background-color:#f0f8ff!important;}
+.table-children td{background-color:#fff!important;}
