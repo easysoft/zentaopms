@@ -184,28 +184,21 @@ class taskModel extends model
         $module     = 0;
         $type       = '';
         $assignedTo = '';
-        for($i = 0; $i < $batchNum; $i++)
-        {
-            $story      = $tasks->story[$i]      == 'ditto' ? $story     : $tasks->story[$i];
-            $module     = $tasks->module[$i]     == 'ditto' ? $module    : $tasks->module[$i];
-            $type       = $tasks->type[$i]       == 'ditto' ? $type      : $tasks->type[$i];
-            $assignedTo = $tasks->assignedTo[$i] == 'ditto' ? $assignedTo: $tasks->assignedTo[$i];
-
-            $tasks->story[$i]      = (int)$story;
-            $tasks->module[$i]     = (int)$module;
-            $tasks->type[$i]       = $type;
-            $tasks->assignedTo[$i] = $assignedTo;
-        }
 
         for($i = 0; $i < $batchNum; $i++)
         {
+            $story      = !isset($tasks->story[$i]) || $tasks->story[$i]           == 'ditto' ? $story     : $tasks->story[$i];
+            $module     = !isset($tasks->module[$i]) || $tasks->module[$i]         == 'ditto' ? $module    : $tasks->module[$i];
+            $type       = !isset($tasks->type[$i]) || $tasks->type[$i]             == 'ditto' ? $type      : $tasks->type[$i];
+            $assignedTo = !isset($tasks->assignedTo[$i]) || $tasks->assignedTo[$i] == 'ditto' ? $assignedTo: $tasks->assignedTo[$i];
+
             if(empty($tasks->name[$i])) continue;
 
             $data[$i]             = new stdclass();
-            $data[$i]->story      = $tasks->story[$i];
-            $data[$i]->type       = $tasks->type[$i];
-            $data[$i]->module     = $tasks->module[$i];
-            $data[$i]->assignedTo = $tasks->assignedTo[$i];
+            $data[$i]->story      = (int)$story;
+            $data[$i]->type       = $type;
+            $data[$i]->module     = (int)$module;
+            $data[$i]->assignedTo = $assignedTo;
             $data[$i]->color      = $tasks->color[$i];
             $data[$i]->name       = $tasks->name[$i];
             $data[$i]->desc       = nl2br($tasks->desc[$i]);
@@ -240,7 +233,7 @@ class taskModel extends model
         }
 
         $this->countTime($tasks->parent[0]);
-
+exit('wwewrewr');
         return $mails;
     }
 
