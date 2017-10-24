@@ -1135,7 +1135,11 @@ class treeModel extends model
         $branchs  = $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($branchIDList)->andWhere('deleted')->eq(0)->fetchALL('id');
         foreach($modules as $module)
         {
-            if(isset($modulePairs[$module->id])) $modulePairs[$module->id] = '/' . $branchs[$module->branch]->name . $modulePairs[$module->id];
+            if(isset($modulePairs[$module->id]))
+            {
+                $branchName = isset($branchs[$module->branch]) ? '/' . $branchs[$module->branch]->name : '';
+                $modulePairs[$module->id] = $branchName . $modulePairs[$module->id];
+            }
         }
 
         return $modulePairs;

@@ -1273,6 +1273,13 @@ class project extends control
         $this->view->orderBy    = $orderBy;
         $this->view->projectID  = $projectID;
         $this->view->project    = $project;
+
+        $kanbanSetting = $this->project->getKanbanSetting($projectID);
+
+        $this->view->allCols    = $kanbanSetting->allCols;
+        $this->view->showOption = $kanbanSetting->showOption;
+        $this->view->colorList  = $kanbanSetting->colorList;
+
         $this->display();
     }
 
@@ -1991,5 +1998,76 @@ class project extends control
     public function doc($projectID)
     {
         $this->locate($this->createLink('doc', 'objectLibs', "type=project&objectID=$projectID&from=project"));
+    }
+
+    /**
+     * Kanban setting.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function ajaxKanbanSetting($projectID)
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting');
+            $data = fixer::input('post')->get();
+            if(common::hasPriv('project', 'kanbanHideCols'))
+            {
+                $allCols = array();
+                if(isset($this->config->project->kanbanSetting->allCols))
+                {
+                    $allCols = json_decode($this->config->project->kanbanSetting->allCols, true);
+                }
+                $allCols[$projectID] = $data->allCols;
+                $this->setting->setItem("system.project.kanbanSetting.allCols", json_encode($allCols));
+            }
+
+            $account = $this->app->user->account;
+            $this->setting->setItem("{$account}.project.kanbanSetting.showOption", $data->showOption);
+
+            if(common::hasPriv('project', 'kanbanColsColor')) $this->setting->setItem("system.project.kanbanSetting.colorList", json_encode($data->colorList));
+
+            die(js::reload('parent.parent'));
+        }
+
+        $this->app->loadLang('task');
+        $kanbanSetting = $this->project->getKanbanSetting($projectID);
+
+        $this->view->allCols    = $kanbanSetting->allCols;
+        $this->view->showOption = $kanbanSetting->showOption;
+        $this->view->colorList  = $kanbanSetting->colorList;
+        $this->view->projectID  = $projectID;
+        $this->display();
+    }
+
+    /**
+     * Ajax reset kanban setting
+     * 
+     * @param  int    $projectID 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function ajaxResetKanban($projectID, $confirm = 'no')
+    {
+        if($confirm != 'yes')die(js::confirm($this->lang->kanbanSetting->noticeReset, inlink('ajaxResetKanban', "projectID=$projectID&confirm=yes")));
+
+        $this->loadModel('setting');
+
+        if(common::hasPriv('project', 'kanbanHideCols') and isset($this->config->project->kanbanSetting->allCols))
+        {
+            $allCols = json_decode($this->config->project->kanbanSetting->allCols, true);
+            unset($allCols[$projectID]);
+            $this->setting->setItem("system.project.kanbanSetting.allCols", json_encode($allCols));
+        }
+
+        $account = $this->app->user->account;
+        $this->setting->deleteItems("owner={$account}&module=project&section=kanbanSetting&key=showOption");
+
+        if(common::hasPriv('project', 'kanbanColsColor')) $this->setting->deleteItems("owner=system&module=project&section=kanbanSetting&key=colorList");
+
+        die(js::reload('parent.parent'));
     }
 }

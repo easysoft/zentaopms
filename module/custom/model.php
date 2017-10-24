@@ -359,6 +359,8 @@ class customModel extends model
         $account    = $this->app->user->account;
         $settingKey = '';
 
+        $setPublic = $this->post->setPublic;
+        if($setPublic) $account = 'system';
         if(!is_string($menu)) $menu = json_encode($menu);
 
         $flow = $this->config->global->flow;
@@ -372,5 +374,101 @@ class customModel extends model
         }
 
         $this->loadModel('setting')->setItem($settingKey, $menu);
+    }
+
+    /**
+     * Get required fields by config.
+     * 
+     * @param  object    $moduleConfig 
+     * @access public
+     * @return array
+     */
+    public function getRequiredFields($moduleConfig)
+    {
+        $requiredFields = array();
+        foreach($moduleConfig as $method => $subConfig)
+        {
+            if(is_object($subConfig) and isset($subConfig->requiredFields)) $requiredFields[$method] = trim(str_replace(' ', '', $subConfig->requiredFields));
+        }
+
+        return $requiredFields;
+    }
+
+    /**
+     * Get module fields.
+     * 
+     * @param  string $moduleName 
+     * @param  string $method 
+     * @access public
+     * @return array
+     */
+    public function getDBFields($moduleName, $method = '')
+    {
+        $fields       = array();
+        $moduleLang   = $this->lang->$moduleName;
+        $customFields = $this->config->custom->fieldList;
+        if(isset($customFields[$moduleName]))
+        {
+            $fieldList = isset($customFields[$moduleName][$method]) ? $customFields[$moduleName][$method] : $customFields[$moduleName];
+            foreach(explode(',', $fieldList) as $fieldName)
+            {
+                if(isset($moduleLang->$fieldName) and is_string($moduleLang->$fieldName)) $fields[$fieldName] = $moduleLang->$fieldName;
+            }
+        }
+        else
+        {
+            $table  = zget($this->config->objectTables, $moduleName, '');
+            if($table)
+            {
+                $excludeFieldList = zget($this->config->custom->excludeFieldList, $moduleName, '');
+                foreach($this->dao->query("DESC $table")->fetchAll() as $field)
+                {
+                    $fieldName = $field->Field;
+                    if($fieldName == 'id' or $fieldName == 'deleted') continue;
+                    if($fieldName == 'openedBy' or $fieldName == 'createdBy' or $fieldName == 'addedBy') continue;
+                    if($fieldName == 'openedDate' or $fieldName == 'createdDate' or $fieldName == 'addedDate') continue;
+                    if($fieldName == 'lastEditedBy' or $fieldName == 'editedBy') continue;
+                    if($fieldName == 'lastEditedDate' or $fieldName == 'editedDate') continue;
+                    if(isset($excludeFieldList) and strpos(",{$excludeFieldList},", ",$fieldName,") !== false) continue;
+                    if(isset($moduleLang->$fieldName) and is_string($moduleLang->$fieldName)) $fields[$fieldName] = $moduleLang->$fieldName;
+                }
+            }
+        }
+        return $fields;
+    }
+
+    /**
+     * Save required fields.
+     * 
+     * @param  int    $moduleName 
+     * @access public
+     * @return void
+     */
+    public function saveRequiredFields($moduleName)
+    {
+        if(isset($this->config->system->$moduleName))   unset($this->config->system->$moduleName);
+        if(isset($this->config->personal->$moduleName)) unset($this->config->personal->$moduleName);
+
+        $this->loadModel($moduleName);
+        $systemFields = $this->getRequiredFields($this->config->$moduleName);
+
+        $data = fixer::input('post')->get();
+        $requiredFields = array();
+        foreach($data->requiredFields as $method => $fields)
+        {
+            $method      = strtolower($method);
+            $systemField = $this->config->$moduleName->$method->requiredFields;
+
+            $fields = join(',', $fields);
+            foreach(explode(',', $systemField) as $field)
+            {
+                $field = trim($field);
+                if(strpos(",$fields,", ",$field,") === false) $fields .= ",$field";
+            }
+
+            $requiredFields[$method]['requiredFields'] = $fields;
+        }
+
+        $this->loadModel('setting')->setItems("system.{$moduleName}", $requiredFields);
     }
 }

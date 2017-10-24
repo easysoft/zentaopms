@@ -20,11 +20,16 @@ function copyStoryTitle()
 /* Set the assignedTos field. */
 function setOwners(result)
 {
+    $("#multipleBox").removeAttr("checked");
+    $('.team-group').addClass('hidden');
+    $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
     if(result == 'affair')
     {
         $('#assignedTo').attr('multiple', 'multiple');
         $('#assignedTo').chosen('destroy');
         $('#assignedTo').chosen(defaultChosenOptions);
+        $('.affair').hide();
+        $('.team-group').addClass('hidden');
         $('#selectAllUser').removeClass('hidden');
     }
     else if($('#assignedTo').attr('multiple') == 'multiple')
@@ -32,6 +37,7 @@ function setOwners(result)
         $('#assignedTo').removeAttr('multiple');
         $('#assignedTo').chosen('destroy');
         $('#assignedTo').chosen(defaultChosenOptions);
+        $('.affair').show();
         $('#selectAllUser').addClass('hidden');
     }
 }
@@ -201,4 +207,27 @@ $(document).ready(function()
         }
         return false;
     });
+});
+
+/* show team menu. */
+$('[name^=multiple]').change(function()
+{
+    if($(this).prop('checked'))
+    {
+        $('#assignedTo, #assignedTo_chosen').addClass('hidden');
+        $('.team-group').removeClass('hidden');
+        $('#estimate').attr('readonly', true);
+    }
+    else
+    {
+        $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
+        $('.team-group').addClass('hidden');
+        $('#estimate').attr('readonly', false);
+    }
+});
+$(".team-group[data-toggle='modalTeam']").css('cursor', 'pointer');
+$(".team-group[data-toggle='modalTeam']").click(function()
+{
+    $('#modalTeam').modal('show');
+    adjustSortBtn();
 });

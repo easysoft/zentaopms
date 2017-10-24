@@ -37,17 +37,47 @@ var moduleID   = '<?php echo $moduleID;?>';
     $vars         = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
     $datatableId  = $this->moduleName . ucfirst($this->methodName);
     $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
-    $file2Include = $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(__FILE__) . '/casesdata.html.php';
 
     $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
     $canBatchAssign = common::hasPriv('testtask', 'batchAssign');
     $canBatchRun    = common::hasPriv('testtask', 'batchRun');
     $hasCheckbox    = ($canBatchEdit or $canBatchAssign or $canBatchRun);
-    include $file2Include;
+
+    if($useDatatable) include '../../common/view/datatable.html.php';
+    if(!$useDatatable) include '../../common/view/tablesorter.html.php';
+
+    $this->config->testcase->datatable->defaultField = $this->config->testtask->datatable->defaultField;
+    $this->config->testcase->datatable->fieldList['actions']['width'] = '100';
+
+    $setting = $this->datatable->getSetting('testtask');
+    $widths  = $this->datatable->setFixedFieldWidth($setting);
+    $columns = 0;
     ?>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed <?php echo $useDatatable ? 'datatable' : ''?>' id='caseList' data-checkable='<?php echo $hasCheckbox?>' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='caseIDList[]'>
+      <thead>
+        <tr>
+        <?php
+        foreach($setting as $key => $value)
+        {
+            if($value->show)
+            {
+                $this->datatable->printHead($value, $orderBy, $vars);
+                $columns ++;
+            }
+        }
+        ?>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach($runs as $run):?>
+        <tr class='text-center' data-id='<?php echo $run->case?>'>
+          <?php foreach($setting as $key => $value) $this->testtask->printCell($value, $run, $users, $task, $branches, $useDatatable ? 'datatable' : 'table');?>
+        </tr>
+        <?php endforeach;?>
+      </tbody>
       <tfoot>
         <tr>
-          <td colspan='13'>
+          <td colspan='<?php echo $columns?>'>
             <?php if($runs):?>
             <div class='table-actions clearfix'>
               <?php if($hasCheckbox) echo html::selectButton();?>

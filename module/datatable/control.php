@@ -62,11 +62,12 @@ class datatable extends control
             $this->loadModel('testcase');
             $this->app->loadConfig('testtask');
             $this->config->testcase->datatable->defaultField = $this->config->testtask->datatable->defaultField;
-            $this->config->testcase->datatable->fieldList['assignedTo']['title']    = 'assignedTo';
-            $this->config->testcase->datatable->fieldList['assignedTo']['fixed']    = 'no';
-            $this->config->testcase->datatable->fieldList['assignedTo']['width']    = '80';
-            $this->config->testcase->datatable->fieldList['assignedTo']['required'] = 'no';
-            $this->config->testcase->datatable->fieldList['actions']['width']       = '100';
+            $this->config->testcase->datatable->fieldList['actions']['width'] = '100';
+        }
+        if($module == 'testcase')
+        {
+            $this->loadModel('testcase');
+            unset($this->config->testcase->datatable->fieldList['assignedTo']);
         }
 
         $this->view->module = $module;

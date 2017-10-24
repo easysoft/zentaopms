@@ -217,9 +217,10 @@ $(function()
             });
         });
 
-        postData = $.map(postData, JSON.stringify);
+        postData  = $.map(postData, JSON.stringify);
+        setPublic = $('#setPublic1').prop('checked') ? 1 : 0;
 
-        $.post(createLink('custom', 'ajaxSetMenu'), {menus: postData}, function(data)
+        $.post(createLink('custom', 'ajaxSetMenu'), {menus: postData, setPublic: setPublic}, function(data)
         {
             if(data.result === 'success') window.parent.location.reload()
             if(data.message) alert(data.message);
@@ -241,5 +242,11 @@ $(function()
     $('#closeModalBtn').click(function()
     {
         window.parent.$.closeModal();
+    });
+
+    $('#resetMenuBtn').click(function()
+    {
+        var setPublic = $('#setPublic1').prop('checked') ? 1 : 0;
+        hiddenwin.location.href = createLink('custom', 'ajaxRestoreMenu', "public=" + setPublic);
     });
 });

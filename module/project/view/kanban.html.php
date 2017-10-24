@@ -10,7 +10,16 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include './taskheader.html.php';?> 
-<?php $taskCols = array('wait', 'doing', 'done', 'cancel', 'closed'); ?>
+<style>
+<?php foreach($colorList as $status => $color):?>
+<?php echo ".board-bug-$status, .board-task-$status {background: $color;}\n"?>
+<?php endforeach?>
+</style>
+<?php
+$taskCols = array('wait', 'doing', 'pause', 'done');
+if($allCols) $taskCols = array('wait', 'doing', 'pause', 'done', 'cancel', 'closed');
+$account = $this->app->user->account
+?>
 <div id='kanban'>
   <table class='boards-layout table' id='kanbanHeader'>
     <thead>
@@ -34,7 +43,15 @@
         <?php endforeach;?>
         <th class='col-<?php echo $endCol?>'><?php echo $lang->task->statusList[$endCol];?>
           <div class='actions'>
-          <?php if(common::hasPriv('project', 'printKanban')) echo html::commonButton("<i class='icon-print'></i><span class='btn-text'> " .  $lang->project->printKanban . '</span>', "id='printKanban' title='" . $lang->project->printKanban . "'", 'btn btn-sm btn-link');?>
+            <div class="dropdown">
+              <button type="button" class="btn btn-mini btn-link dropdown-toggle" data-toggle="dropdown">
+                <span class="icon-ellipsis-v"></span>
+              </button>
+              <ul class="dropdown-menu pull-right">
+                <?php echo '<li>' . html::a($this->createLink('project', 'ajaxKanbanSetting', "projectID=$projectID"), "<i class='icon-cog'></i> " .  $lang->project->kanbanSetting, '', "class='iframe'") . '</li>';?>
+                <?php if(common::hasPriv('project', 'printKanban')) echo '<li>' . html::a('###', "<i class='icon-print'></i> " .  $lang->project->printKanban, '', "id='printKanban' title='" . $lang->project->printKanban . "'") . '</li>';?>
+              </ul>
+            </div>
           </div>
         </th>
       </tr>
@@ -47,7 +64,7 @@
         <?php if($hasStory):?>
         <th class='w-p15 col-story'> </th>
         <?php endif;?>
-        <?php foreach ($taskCols as $col):?><th class='col-<?php echo $col?>'></th><?php endforeach;?>
+        <?php foreach($taskCols as $col):?><th class='col-<?php echo $col?>'></th><?php endforeach;?>
       </tr>
     </thead>
     <tbody>
@@ -58,7 +75,7 @@
         <?php if($hasStory):?>
         <td class='col-story'>
           <?php if(!empty($story->id)):?>
-          <div class='board board-story stage-<?php echo $story->stage?><?php if($story->assignedTo == $this->app->user->account) echo ' inverse';?>' data-id='<?php echo $story->id?>'>
+          <div class='board board-story stage-<?php echo $story->stage?><?php if($showOption) echo ' show-info'?><?php if($story->assignedTo == $account) echo ' inverse';?>' data-id='<?php echo $story->id?>'>
             <div class='board-title'>
               <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', 'class="kanbanFrame" title="' . $story->title . '"');?>
               <div class='board-actions'>
@@ -67,7 +84,7 @@
                   <button type='button' class='btn btn-mini btn-link dropdown-toggle' data-toggle='dropdown'>
                     <span class='icon-ellipsis-v'></span>
                   </button>
-                  <div class='dropdown-menu pull-right'>
+                  <div class='dropdown-menu' style='left:-30px;width:80px'>
                     <?php
                     echo (common::hasPriv('task', 'create')) ? html::a($this->createLink('task', 'create', "projectID=$story->project&storyID=$story->story&moduleID=$story->module", '', true), $lang->project->wbs, '', "class='kanbanFrame'") : '';
                     echo (common::hasPriv('task', 'batchCreate')) ? html::a($this->createLink('task', 'batchCreate', "projectID=$story->project&storyID=$story->story&iframe=true", '', true), $lang->project->batchWBS, '', "class='kanbanFrame' data-width='95%'") : '';
@@ -93,7 +110,7 @@
         <td class='col-droppable col-<?php echo $col?>' data-id='<?php echo $col?>'>
         <?php if(!empty($story->tasks[$col])):?>
           <?php foreach($story->tasks[$col] as $task):?>
-          <div class='board board-task board-task-<?php echo $col ?><?php if($task->assignedTo == $this->app->user->account) echo ' inverse';?>' data-id='<?php echo $task->id?>' id='task-<?php echo $task->id?>'>
+          <div class='board board-task board-task-<?php echo $col ?><?php if($showOption) echo ' show-info'?><?php if($task->assignedTo == $account) echo ' inverse';?>' data-id='<?php echo $task->id?>' id='task-<?php echo $task->id?>'>
             <div class='board-title'>
               <?php
               if(isset($task->delay))
@@ -109,7 +126,7 @@
                   <button type='button' class='btn btn-mini btn-link dropdown-toggle' data-toggle='dropdown'>
                     <span class='icon-ellipsis-v'></span>
                   </button>
-                  <div class='dropdown-menu pull-right'>
+                  <div class='dropdown-menu' style='left:-20px'>
                     <?php
                     echo (common::hasPriv('task', 'assignTo') and taskModel::isClickable($task, 'assignTo')) ? html::a($this->createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", '', 'true'), $lang->task->assignTo, '', "class='kanbanFrame'") : '';
                     echo (common::hasPriv('task', 'start')    and taskModel::isClickable($task, 'start'))    ? html::a($this->createLink('task', 'start',    "taskID=$task->id", '', 'true'), $lang->task->start, '', "class='kanbanFrame'") : '';
@@ -140,7 +157,7 @@
         <?php endif?>
         <?php if(!empty($story->bugs[$col])):?>
           <?php foreach($story->bugs[$col] as $bug):?>
-          <div class='board board-bug board-bug-<?php echo $col ?>' data-id='<?php echo $bug->id?>' id='bug-<?php echo $bug->id?>'>
+          <div class='board board-bug board-bug-<?php echo $col ?><?php if($showOption) echo ' show-info'?><?php if($bug->assignedTo == $account) echo ' inverse';?>' data-id='<?php echo $bug->id?>' id='bug-<?php echo $bug->id?>'>
             <div class='board-title'>
               <i class="icon-bug"></i> 
               <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', 'class="kanbanFrame" title="' . $bug->title . '"');?>
@@ -150,7 +167,7 @@
                   <button type='button' class='btn btn-mini btn-link dropdown-toggle' data-toggle='dropdown'>
                     <span class='icon-ellipsis-v'></span>
                   </button>
-                  <div class='dropdown-menu pull-right'>
+                  <div class='dropdown-menu' style='left:-20px'>
                     <?php
                     echo (common::hasPriv('bug', 'assignTo') and bugModel::isClickable($bug, 'assignTo')) ? html::a($this->createLink('bug', 'assignTo', "bugID=$bug->id", '', 'true'), $lang->bug->assignTo, '', "class='kanbanFrame'") : '';
                     echo (common::hasPriv('bug', 'resolve')  and bugModel::isClickable($bug, 'resolve'))  ? html::a($this->createLink('bug', 'resolve',  "bugID=$bug->id", '', 'true'), $lang->bug->resolve, '', "class='kanbanFrame'") : '';

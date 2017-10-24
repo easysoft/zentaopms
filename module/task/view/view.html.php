@@ -31,7 +31,7 @@
     {
         ob_start();
         echo "<div class='btn-group'>";
-        common::printIcon('task', 'assignTo',       "projectID=$task->project&taskID=$task->id", $task, 'button', '', '', 'iframe', true);
+        common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'button', '', '', 'iframe', true);
         common::printIcon('task', 'start',          "taskID=$task->id", $task, 'button', '', '', 'iframe', true);
         common::printIcon('task', 'restart',        "taskID=$task->id", $task, 'button', '', '', 'iframe', true);
         common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'button', '', '', 'iframe', true);
@@ -43,6 +43,7 @@
         echo '</div>';
 
         echo "<div class='btn-group'>";
+        if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate',    "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button','plus','','','','',' ');
         common::printIcon('task', 'edit',  "taskID=$task->id", $task);
         common::printCommentIcon('task', $task);
         common::printIcon('task', 'create', "productID=0&storyID=0&moduleID=0&taskID=$task->id", $task, 'button', 'copy');
@@ -87,7 +88,6 @@
         <div class='article-content'><?php echo $task->storyVerify;?></div>
       </fieldset>
       <?php endif;?>
-
       <?php if(isset($task->cases) and $task->cases):?>
       <fieldset>
         <legend><?php echo $lang->task->case;?></legend>
@@ -98,7 +98,52 @@
         </div>
       </fieldset>
       <?php endif;?>
-
+        <?php if(!empty($task->children)):?>
+      <fieldset>
+        <legend><?php echo $this->lang->task->children;?></legend>
+        <table class='table table-hover table-data table-fixed'>
+          <tr class='text-center'>
+            <th class='w-60px'> <?php echo$lang->task->id;?></th>
+            <th class='w-40px'> <?php echo$lang->task->lblPri;?></th>
+            <th>                <?php echo$lang->task->name;?></th>
+            <th class='w-100px'><?php echo$lang->task->deadline;?></th>
+            <th class='w-80px'> <?php echo$lang->task->assignedTo;?></th>
+            <th class='w-90px'> <?php echo$lang->task->status;?></th>
+            <th class='w-50px visible-lg'> <?php echo $lang->task->consumedAB . $lang->task->lblHour;?></th>
+            <th class='w-50px visible-lg'><?php echo $lang->task->leftAB . $lang->task->lblHour;?></th>
+            <th class='w-150px'><?php echo $lang->actions;?></th>
+          </tr>
+            <?php foreach($task->children as $child):?>
+              <tr class='text-center'>
+                <td><?php echo $child->id;?></td>
+                <td>
+                  <?php
+                  echo "<span class='pri" . zget($this->lang->task->priList, $child->pri, $child->pri) . "'>";
+                  echo $child->pri == '0' ? '' : zget($this->lang->task->priList, $child->pri, $child->pri);
+                  echo "</span>";
+                  ?>
+                </td>
+                <td class='text-left'><a href="<?php echo $this->createLink('task', 'view', "taskID=$child->id"); ?>"><?php echo $child->name;?></a></td>
+                <td><?php echo $child->deadline;?></td>
+                <td><?php if(isset($users[$child->assignedTo])) echo $users[$child->assignedTo];?></td>
+                <td><?php echo zget($lang->task->statusList, $child->status);?></td>
+                <td class='visible-lg'><?php echo $child->consumed;?></td>
+                <td class='visible-lg'><?php echo $child->left;?></td>
+                <td>
+                    <?php
+                    common::printIcon('task', 'assignTo', "projectID=$child->project&taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                    common::printIcon('task', 'start',    "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                    common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true);
+                    common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                    common::printIcon('task', 'close',    "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                    common::printIcon('task', 'edit',"taskID=$child->id", $child, 'list');
+                    ?>
+                </td>
+              </tr>
+            <?php endforeach;?>
+        </table>
+      </fieldset>
+        <?php endif;?>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='actions'> <?php if(!$task->deleted) echo $actionLinks;?></div>
@@ -175,7 +220,7 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->task->assignedTo;?></th>
-            <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : '';?></td> 
+            <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : '';?></td>
           </tr>
           <tr>
             <th><?php echo $lang->task->type;?></th>
@@ -195,6 +240,29 @@
           </tr>
         </table>
       </fieldset>
+      <?php if(!empty($task->team)) :?>
+      <fieldset>
+        <legend><?php echo $lang->task->team;?></legend>
+        <table class='table table-data table-condensed table-borderless'>
+          <thead>
+          <tr>
+            <th><?php echo $lang->task->team?></th>
+            <th class='text-center'><?php echo $lang->task->estimate?></th>
+            <th class='text-center'><?php echo $lang->task->consumed?></th>
+            <th class='text-center'><?php echo $lang->task->left?></th>
+          </tr>
+          </thead>
+            <?php foreach($task->team as $member):?>
+              <tr class='text-center'>
+                <td class='text-left'><?php echo zget($users, $member->account)?></td>
+                <td><?php echo $member->estimate?></td>
+                <td><?php echo $member->consumed?></td>
+                <td><?php echo $member->left?></td>
+              </tr>
+            <?php endforeach;?>
+        </table>
+      </fieldset>
+      <?php endif;?>
       <fieldset>
         <legend><?php echo $lang->task->legendEffort;?></legend>
         <table class='table table-data table-condensed table-borderless'> 

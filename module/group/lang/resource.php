@@ -321,6 +321,8 @@ $lang->resource->project->kanban           = 'kanban';
 $lang->resource->project->printKanban      = 'printKanban';
 $lang->resource->project->tree             = 'tree';
 $lang->resource->project->all              = 'all';
+$lang->resource->project->kanbanHideCols   = 'kanbanHideCols';
+$lang->resource->project->kanbanColsColor  = 'kanbanColsColor';
 
 $lang->project->methodOrder[0]   = 'index';
 $lang->project->methodOrder[5]   = 'view';
@@ -360,6 +362,8 @@ $lang->project->methodOrder[175] = 'kanban';
 $lang->project->methodOrder[180] = 'printKanban';
 $lang->project->methodOrder[185] = 'tree';
 $lang->project->methodOrder[190] = 'all';
+$lang->project->methodOrder[195] = 'kanbanHideCols';
+$lang->project->methodOrder[200] = 'kanbanColsColor';
 
 /* Task. */
 $lang->resource->task = new stdclass();
@@ -714,17 +718,24 @@ $lang->mail->methodOrder[60] = 'sendcloudUser';
 
 /* custom. */
 $lang->resource->custom = new stdclass();
-$lang->resource->custom->index   = 'index';
-$lang->resource->custom->set     = 'set';
-$lang->resource->custom->restore = 'restore';
-$lang->resource->custom->flow    = 'flow';
-$lang->resource->custom->working = 'working';
+$lang->resource->custom->index     = 'index';
+$lang->resource->custom->set       = 'set';
+$lang->resource->custom->restore   = 'restore';
+$lang->resource->custom->flow      = 'flow';
+$lang->resource->custom->working   = 'working';
+$lang->resource->custom->setPublic = 'setPublic';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
 $lang->custom->methodOrder[15] = 'restore';
 $lang->custom->methodOrder[20] = 'flow';
 $lang->custom->methodOrder[25] = 'working';
+$lang->custom->methodOrder[30] = 'setPublic';
+
+$lang->resource->datatable = new stdclass();
+$lang->resource->datatable->setGlobal = 'setGlobal';
+
+$lang->datatable->methodOrder[5]  = 'setGlobal';
 
 /* Subversion. */
 $lang->resource->svn = new stdclass();
@@ -1326,6 +1337,9 @@ $lang->changelog['9.2'][] = 'testsuite-exportTemplet';
 $lang->changelog['9.2'][] = 'testsuite-import';
 $lang->changelog['9.2'][] = 'testsuite-showImport';
 $lang->changelog['9.5'][] = 'bug-batchActivate';
+
+$lang->changelog['9.6'][] = 'custom-setPublic';
+$lang->changelog['9.6'][] = 'datatable-setGlobal';
 
 global $config;
 if($config->global->flow != 'full')

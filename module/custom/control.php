@@ -231,6 +231,51 @@ class custom extends control
     }
 
     /**
+     * Set Required.
+     * 
+     * @param  string $moduleName 
+     * @access public
+     * @return void
+     */
+    public function required($moduleName = '')
+    {
+        if($_POST)
+        {
+            $this->custom->saveRequiredFields($moduleName);
+            die(js::reload('parent.parent'));
+        }
+
+        if(empty($moduleName)) $moduleName = current($this->config->custom->requiredModules);
+
+        foreach($this->config->custom->requiredModules as $requiredModule) $this->app->loadLang($requiredModule);
+
+        /* Get this module requiredFields. */
+        $this->loadModel($moduleName);
+        $requiredFields = $this->custom->getRequiredFields($this->config->$moduleName);
+
+        if($moduleName == 'doc')
+        {
+            unset($requiredFields['createLib']);
+            unset($requiredFields['editLib']);
+        }
+
+        $fields = $this->custom->getDBFields($moduleName);
+        if($moduleName == 'testsuite')
+        {
+            $this->app->loadLang('testcase');
+            $this->view->caseFields = $this->custom->getDBFields('testcase');
+        }
+
+        $this->view->title      = $this->lang->custom->required;
+        $this->view->position[] = $this->lang->custom->required;
+
+        $this->view->requiredFields = $requiredFields;
+        $this->view->moduleName     = $moduleName;
+        $this->view->fields         = $fields;
+        $this->display();
+    }
+
+    /**
      * Ajax save custom fields.
      * 
      * @param  string $module 
@@ -310,7 +355,7 @@ class custom extends control
 
         if(is_array($menus))
         {
-            foreach ($menus as $menu)
+            foreach($menus as $menu)
             {
                 $menu = json_decode($menu);
                 $this->custom->saveCustomMenu($menu->value, $menu->module, isset($menu->method) ? $menu->method : '');
@@ -374,11 +419,29 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function ajaxRestoreMenu($confirm = 'no')
+    public function ajaxRestoreMenu($setPublic = 0, $confirm = 'no')
     {
-        if($confirm == 'no') die(js::confirm($this->lang->custom->confirmRestore, inlink('ajaxRestoreMenu', "confirm=yes")));
+        if($confirm == 'no') die(js::confirm($this->lang->custom->confirmRestore, inlink('ajaxRestoreMenu', "setPublic=$setPublic&confirm=yes")));
 
-        $this->loadModel('setting')->deleteItems("owner={$this->app->user->account}&module=common&section=customMenu");
+        $account = $this->app->user->account;
+        if($setPublic) $account = 'system';
+        $this->loadModel('setting')->deleteItems("owner={$account}&module=common&section=customMenu");
+        die(js::reload('parent.parent'));
+    }
+
+    /**
+     * Reset required.
+     * 
+     * @param  srting $module 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function resetRequired($module, $confirm = 'no')
+    {
+        if($confirm == 'no') die(js::confirm($this->lang->custom->confirmRestore, inlink('resetRequired', "module=$module&confirm=yes")));
+
+        $this->loadModel('setting')->deleteItems("owner=system&module={$module}&key=requiredFields");
         die(js::reload('parent.parent'));
     }
 }

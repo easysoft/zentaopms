@@ -129,3 +129,5 @@ $config->objectTables['custom']      = TABLE_LANG;
 $config->objectTables['branch']      = TABLE_BRANCH;
 $config->objectTables['module']      = TABLE_MODULE;
 $config->objectTables['caselib']     = TABLE_TESTSUITE;
+$config->objectTables['entry']       = TABLE_ENTRY;
+$config->objectTables['webhook']     = TABLE_WEBHOOK;

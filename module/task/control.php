@@ -169,12 +169,15 @@ class task extends control
     /**
      * Batch create task.
      *
-     * @param  int    $projectID
-     * @param  int    $storyID
+     * @param int $projectID
+     * @param int $storyID
+     * @param int $iframe
+     * @param int $taskID
+     *
      * @access public
-     * @return void
+     * @return mixed
      */
-    public function batchCreate($projectID = 0, $storyID = 0, $iframe = 0)
+    public function batchCreate($projectID = 0, $storyID = 0, $iframe = 0, $taskID = 0)
     {
         $project   = $this->project->getById($projectID); 
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
@@ -213,6 +216,7 @@ class task extends control
         $this->view->project    = $project;
         $this->view->stories    = $stories;
         $this->view->modules    = $modules;
+        $this->view->parent     = $taskID;
         $this->view->storyID    = $storyID;
         $this->view->story      = $this->story->getByID($storyID);
         $this->view->storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
@@ -229,7 +233,8 @@ class task extends control
      */
     public function commonAction($taskID)
     {
-        $this->view->task    = $this->loadModel('task')->getByID($taskID);
+        $task=$this->loadModel('task')->getByID($taskID);
+        $this->view->task    = $task;
         $this->view->project = $this->project->getById($this->view->task->project);
         $this->view->members = $this->project->getTeamMemberPairs($this->view->project->id ,'nodeleted');
         $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
@@ -426,10 +431,20 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
+        $task = $this->task->getByID($taskID);
+
+        $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+        /* Compute next assignedTo. */
+        if(!empty($task->team))
+        {
+            $task->assignedTo = $this->task->getNextUser(array_keys($task->team), $task->assignedTo);
+            $members = $this->task->getMemberPairs($task);
+        }
+
         $this->view->title      = $this->view->project->name . $this->lang->colon . $this->lang->task->assign;
         $this->view->position[] = $this->lang->task->assign;
-
-        $this->view->users = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+        $this->view->task       = $task;
+        $this->view->users      = $members;
         $this->display();
     }
 
@@ -517,6 +532,8 @@ class task extends control
             $task->storyVerify   = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->verify);
             $task->storyFiles    = $this->loadModel('file')->getByObject('story', $task->story);
         }
+
+        if($task->team) $this->lang->task->assign = $this->lang->task->transmit;
 
         /* Update action. */
         if($task->assignedTo == $this->app->user->account) $this->loadModel('action')->read('task', $taskID);

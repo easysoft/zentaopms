@@ -17,7 +17,8 @@ $(function()
         task:
         {
             wait   : {doing: 'start', done: 'finish', cancel: 'cancel'},
-            doing  : {done: 'finish'},
+            doing  : {done: 'finish', pause: 'pause'},
+            pause  : {doing: 'activate', done: 'finish', cancel: 'cancel'},
             done   : {doing: 'activate', closed: 'close'},
             cancel : {doing: 'activate', closed: 'close'},
             closed : {doing: 'activate'}

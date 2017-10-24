@@ -174,3 +174,20 @@ $(function()
         computeWorkDays(this.id);
     })
 });
+
+$('.task-toggle').click(function()
+{
+    var obj = $(this).find('i');
+    var id  = $(this).data('id');
+    if(obj.hasClass('icon-plus'))
+    {
+        $('tr.parent-'+id).show();
+        obj.removeClass('icon-plus').addClass('icon-minus');
+    }
+    else if(obj.hasClass('icon-minus'))
+    {
+        $('tr.parent-'+id).hide();
+        obj.removeClass('icon-minus').addClass('icon-plus');
+    }
+    return false;
+});

@@ -2310,8 +2310,9 @@ class bugModel extends model
      * @access public
      * @return void
      */
-    public function printCell($col, $bug, $users, $builds, $branches, $modulePairs, $projects = array(), $plans = array(), $stories = array(), $tasks = array())
+    public function printCell($col, $bug, $users, $builds, $branches, $modulePairs, $projects = array(), $plans = array(), $stories = array(), $tasks = array(), $mode = 'datatable')
     {
+        $canView = common::hasPriv('bug', 'view');
         $bugLink = inlink('view', "bugID=$bug->id");
         $account = $this->app->user->account;
         $id = $col->id;
@@ -2319,15 +2320,17 @@ class bugModel extends model
         {
             $class = '';
             if($id == 'status') $class .= ' bug-' . $bug->status;
-            if($id == 'title') $class .= ' text-left';
+            if($id == 'title')  $class .= ' text-left';
+            if($id == 'id')     $class .= ' cell-id';
             if($id == 'assignedTo' && $bug->assignedTo == $account) $class .= ' red';
             if($id == 'deadline' && isset($bug->delay)) $class .= ' delayed';
 
             echo "<td class='" . $class . "'" . ($id=='title' ? " title='{$bug->title}'" : '') . ">";
-            switch ($id)
+            switch($id)
             {
             case 'id':
-                echo html::a($bugLink, sprintf('%03d', $bug->id));
+                if($mode == 'table') echo "<input type='checkbox' name='bugIDList[{$bug->id}]'  value='{$bug->id}'/> ";
+                echo $canView ? html::a($bugLink, sprintf('%03d', $bug->id)) : sprintf('%03d', $bug->id);
                 break;
             case 'severity':
                 echo "<span class='severity" . zget($this->lang->bug->severityList, $bug->severity, $bug->severity) . "'>";
@@ -2344,7 +2347,7 @@ class bugModel extends model
                 echo "<span class='$class'>[{$this->lang->bug->confirmedList[$bug->confirmed]}]</span> ";
                 if($bug->branch)echo "<span class='label label-info label-badge'>{$branches[$bug->branch]}</span> ";
                 if($modulePairs and $bug->module)echo "<span class='label label-info label-badge'>{$modulePairs[$bug->module]}</span> ";
-                echo html::a($bugLink, $bug->title, null, "style='color: $bug->color'");
+                echo $canView ? html::a($bugLink, $bug->title, null, "style='color: $bug->color'") : "<span style='color: $bug->color'>{$bug->title}</span>";
                 break;
             case 'branch':
                 echo $branches[$bug->branch];
@@ -2401,7 +2404,7 @@ class bugModel extends model
                 echo substr($bug->openedDate, 5, 11);
                 break;
             case 'openedBuild':
-                foreach(explode(',', $bug->openedBuild) as $build) echo zget($builds, $build) . '<br />';
+                foreach(explode(',', $bug->openedBuild) as $build) echo zget($builds, $build) . ' ';
                 break;
             case 'assignedTo':
                 echo zget($users, $bug->assignedTo, $bug->assignedTo);

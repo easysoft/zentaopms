@@ -186,7 +186,7 @@ class testreportModel extends model
      */
     public function getBugInfo($tasks, $productIdList, $begin, $end, $builds)
     {
-        $bugsByTask     = $this->dao->select('*')->from(TABLE_BUG)->where('testtask')->in(array_keys($tasks))->andWhere('testtask')->ne(0)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $bugsByTask     = $this->dao->select('*')->from(TABLE_BUG)->where('testtask')->in(array_keys($tasks))->andWhere('testtask')->ne(0)->andWhere('`case`')->ne(0)->andWhere('deleted')->eq(0)->fetchAll('id');
         $severityGroups = $statusGroups = $openedByGroups = $resolvedByGroups = $resolutionGroups = $moduleGroups = $typeGroups = array();
         $resolvedBugs   = 0;
         foreach($bugsByTask as $bug)

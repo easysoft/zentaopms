@@ -503,6 +503,7 @@ class testcase extends control
         $caseFails = $this->dao->select('COUNT(*) AS count')->from(TABLE_TESTRESULT)->where('caseResult')->eq('fail')->andwhere('`case`')->eq($caseID)
             ->beginIF($from == 'testtask')->andwhere('`run`')->eq($taskID)->fi()
             ->fetch('count');
+        $case->caseFails = $caseFails;
 
         $this->view->position[] = $this->lang->testcase->common;
         $this->view->position[] = $this->lang->testcase->view;

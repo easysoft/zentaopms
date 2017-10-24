@@ -95,6 +95,17 @@ $lang->task->deleteEstimate    = 'Delete Man-Hour';
 $lang->task->colorTag          = 'Color Tag';
 $lang->task->files             = 'Files';
 $lang->task->hasConsumed       = 'Consumed';
+$lang->task->multiple          = 'Multiple Tasks';
+$lang->task->multipleAB        = 'Multiple';
+$lang->task->team              = 'Team';
+$lang->task->transmit          = 'Transfer';
+$lang->task->transmitTo        = 'Transfer To';
+$lang->task->children          = 'Child';
+$lang->task->childrenAB        = 'Child';
+$lang->task->parent            = 'Parent Task';
+$lang->task->unfinished        = 'Unfinished';
+$lang->task->lblPri            = 'P';
+$lang->task->lblHour           = '(h)';
 
 $lang->task->ditto         = 'Ditto';
 $lang->task->dittoNotice   = "This Task does not belong to the Project as the previous one does!";

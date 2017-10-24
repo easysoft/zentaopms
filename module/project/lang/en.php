@@ -242,9 +242,20 @@ $lang->project->orderList['id_desc']    = "ID Desc";
 $lang->project->orderList['stage_asc']  = "Stage Asc";
 $lang->project->orderList['stage_desc'] = "Stage Desc";
 
-$lang->project->kanban      = "Kanban";
-$lang->project->printKanban = "Print Kanban";
-$lang->project->bugList     = "Bugs";
+$lang->project->kanban        = "Kanban";
+$lang->project->kanbanSetting = "Kanban Setting";
+$lang->project->resetKanban   = "Reset Setting";
+$lang->project->printKanban   = "Print Kanban";
+$lang->project->bugList       = "Bugs";
+
+$lang->project->kanbanHideCols   = 'Kanban hidden has been closed and canceled columns';
+$lang->project->kanbanShowOption = 'Display folding information';
+$lang->project->kanbanColsColor  = 'Custom color for Kanban column';
+
+$lang->kanbanSetting = new stdclass();
+$lang->kanbanSetting->noticeReset     = 'Do you want to restore the Kanban default settings?';
+$lang->kanbanSetting->optionList['0'] = 'Hidden';
+$lang->kanbanSetting->optionList['1'] = 'Show';
 
 $lang->printKanban = new stdclass();
 $lang->printKanban->common  = 'Print Kanban';

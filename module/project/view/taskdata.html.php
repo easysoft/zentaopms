@@ -44,7 +44,7 @@
           <?php $columns++; ?>
           <?php endif;?>
 
-          <th class='w-150px {sorter:false}'><?php echo $lang->actions;?></th>
+          <th class='w-170px {sorter:false}'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <?php if($tasks):?>
@@ -122,9 +122,90 @@
         common::printIcon('task', 'finish',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
         common::printIcon('task', 'close',   "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
         common::printIcon('task', 'edit',    "taskID=$task->id", $task, 'list');
+        common::printIcon('task', 'batchCreate',    "project=$projectID&storyID=&moduleID=$moduleID&taskID=$task->id", $task, 'list','plus','','','','',$lang->task->children);
         ?>
         </td>
       </tr>
+          <?php if($task->children):?>
+              <?php foreach($task->children as $child):?>
+                  <?php $class = $child->assignedTo == $app->user->account ? 'style=color:red' : ''; ?>
+            <tr class='text-center table-children parent-<?php echo $task->id;?>'>
+              <td class='cell-id'>
+                <input type='checkbox' name='taskIDList[<?php echo $child->id;?>]'  value='<?php echo $child->id;?>'/>
+                <?php if(!common::printLink('task', 'view', "task=$child->id", sprintf('%03d', $child->id))) printf('%03d', $child->id);?>
+              </td>
+              <td><span class='<?php echo 'pri' . zget($lang->task->priList, $child->pri, $child->pri)?>'><?php echo $child->pri == '0' ? '' : zget($lang->task->priList, $child->pri, $child->pri);?></span></td>
+              <td class='text-left' title="<?php echo $child->name?>">
+                  <?php if(isset($branchGroups[$child->product][$child->branch])) echo "<span title='{$lang->product->branchName[$child->productType]}' class='label label-branch label-badge'>" . $branchGroups[$child->product][$child->branch] . '</span>';?>
+                  <?php if($modulePairs and $child->module) echo "<span title='{$lang->task->module}' class='label label-info label-badge'>" . $modulePairs[$child->module] . '</span>';?>
+                  <?php
+                  if(!common::printLink('task', 'view', "task=$child->id", $child->name, null, "style='color: $child->color'")) echo $child->name;
+                  if($child->fromBug) echo html::a($this->createLink('bug', 'view', "id=$child->fromBug"), "[BUG#$child->fromBug]", '_blank', "class='bug'");
+                  ?>
+              </td>
+              <td class="<?php echo $child->status;?>">
+                  <?php
+                  $storyChanged = ($child->storyStatus == 'active' and $child->latestStoryVersion > $child->storyVersion);
+                  if($storyChanged)
+                  {
+                      echo "(<span class='warning'>{$lang->story->changed}</span> ";
+                      echo html::a($this->createLink('task', 'confirmStoryChange', "taskID=$child->id"), $lang->confirm, 'hiddenwin');
+                      echo ")";
+                  }
+                  else
+                  {
+                      echo $lang->task->statusList[$child->status];
+                  }
+                  ?>
+              </td>
+              <td class="<?php if(isset($child->delay)) echo 'delayed';?>"><?php if(substr($child->deadline, 0, 4) > 0) echo substr($child->deadline, 5, 6);?></td>
+
+                <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
+                  <td><?php echo substr($child->openedDate, 5, 6);?></td>
+                <?php endif;?>
+
+              <td <?php echo $class;?>><?php echo $child->assignedTo == 'closed' ? 'Closed' : zget($users, $child->assignedTo, $child->assignedTo);?></td>
+              <td><?php echo zget($users, $child->finishedBy, $child->finishedBy);?></td>
+
+                <?php if($this->cookie->windowWidth > $this->config->wideSize):?>
+                  <td><?php echo substr($child->finishedDate, 5, 6);?></td>
+                <?php endif;?>
+
+              <td><?php echo $child->estimate;?></td>
+              <td><?php echo $child->consumed;?></td>
+              <td><?php echo $child->left;?></td>
+              <td><?php echo $child->progess?>%</td>
+                <?php
+                if($project->type == 'sprint')
+                {
+                    echo '<td class="text-left" title="' . $child->storyTitle . '">';
+                    if($child->storyID)
+                    {
+                        if(!common::printLink('story', 'view', "storyid=$child->storyID", $child->storyTitle)) print $child->storyTitle;
+                    }
+                    echo '</td>';
+                }
+                ?>
+              <td class='text-right'>
+                  <?php
+                  common::printIcon('task', 'assignTo', "projectID=$child->project&taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                  common::printIcon('task', 'start',    "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+
+                  common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true);
+                  if($browseType == 'needconfirm')
+                  {
+                      $lang->task->confirmStoryChange = $lang->confirm;
+                      common::printIcon('task', 'confirmStoryChange', "taskid=$child->id", '', 'list', '', 'hiddenwin');
+                  }
+                  common::printIcon('task', 'finish',  "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                  common::printIcon('task', 'close',   "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                  common::printIcon('task', 'edit',    "taskID=$child->id", $child, 'list');
+                  common::printIcon('task', 'batchCreate',    "", $child, 'list','plus','','','','',$lang->task->children);
+                  ?>
+              </td>
+            </tr>
+              <?php endforeach;?>
+          <?php endif;?>
       <?php endforeach;?>
       </tbody>
       <?php endif?>
