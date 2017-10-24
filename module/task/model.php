@@ -1133,7 +1133,14 @@ class taskModel extends model
         $taskList = array_keys($tasks);
         if(!empty($taskList))
         {
-            $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($taskList)->orderBy('id_desc')->fetchGroup('parent');
+            $children = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
+                ->from(TABLE_TASK)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+                ->where('t1.parent')->in($taskList)
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy('id_desc')
+                ->fetchGroup('parent');
             if(!empty($children)) foreach($children as $key => $child) $tasks[$key]->children = $child;
             $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->in($taskList)->fetchGroup('task');
             if($teams) foreach($teams as $key => $team) if(!empty($team)) $tasks[$key]->team = $team;
