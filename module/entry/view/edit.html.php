@@ -54,6 +54,11 @@
         <td></td>
       </tr>
       <tr>
+        <th><?php echo $lang->entry->apiIndex;?></th>
+        <td><?php echo common::getSysURL() . DS . "api.php?{$config->moduleVar}=moduleName&{$config->methodVar}=methodName&<span>params=params</span>";?></td>
+        <td></td>
+      </tr>
+      <tr>
         <th></th>
         <td><?php echo html::submitButton();?></td>
         <td></td>
