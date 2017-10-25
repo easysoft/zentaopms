@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS `zt_entry` (
 -- DROP TABLE IF EXISTS `zt_webhook`;
 CREATE TABLE IF NOT EXISTS `zt_webhook` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(10) NOT NULL,
   `name` varchar(50) NOT NULL,
   `url` varchar(255) NOT NULL,
   `contentType` enum('json','form') NOT NULL DEFAULT 'json',
