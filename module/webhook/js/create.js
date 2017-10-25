@@ -1,31 +1,17 @@
-/**
- * create key for an entry.
- * 
- * @access public
- * @return void
- */
-function createKey()
+$(function()
 {
-    var chars = '0123456789abcdefghiklmnopqrstuvwxyz'.split('');
-    var key   = ''; 
-    for(var i = 0; i < 32; i ++)
-    {   
-        key += chars[Math.floor(Math.random() * chars.length)];
-    }   
-    $('#key').val(key);
-    return false;
-}
-
-$('#allIP').change(function()
-{
-    if($(this).prop('checked'))
+    $('.objectType').click(function()
     {
-        $('#ip').attr('disabled', 'disabled');
-    }
-    else
-    {
-        $('#ip').removeAttr('disabled');
-    }
-})
+        if($(this).prop('checked'))
+        {
+            $(this).parent().parent().next().find('input[type=checkbox]').attr('checked', 'checked');
+        }
+        else
+        {
+            $(this).parent().parent().next().find('input[type=checkbox]').removeAttr('checked');
+        }
+    });
 
-$('#name').focus();
+    $('#name').focus();
+    $('#paramsmessage').attr('disabled', 'disabled');
+});

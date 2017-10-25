@@ -2215,10 +2215,24 @@ class projectModel extends model
             $tasks = $this->dao->select('*')->from(TABLE_TASK)
                 ->where('project')->eq((int)$projectID)
                 ->andWhere('deleted')->eq(0)
+                ->andWhere('parent')->eq(0)
                 ->orderBy('id_desc')
                 ->fetchAll();
+            $childTasks = $this->dao->select('*')->from(TABLE_TASK)
+                ->where('project')->eq((int)$projectID)
+                ->andWhere('deleted')->eq(0)
+                ->andWhere('parent')->ne(0)
+                ->orderBy('id_desc')
+                ->fetchGroup('parent');
             $taskGroups = array();
-            foreach($tasks as $task) $taskGroups[$task->module][$task->story][$task->id] = $task;
+            foreach($tasks as $task)
+            {
+                $taskGroups[$task->module][$task->story][$task->id] = $task;
+                if(!empty($childTasks[$task->id]))
+                {
+                    $taskGroups[$task->module][$task->story][$task->id]->children =  $childTasks[$task->id];
+                }
+            }
         }
 
         if(!empty($node->children))
@@ -2284,7 +2298,16 @@ class projectModel extends model
                 {
                     $taskItems = $this->formatTasksForTree($tasks);
                     $node->tasksCount += count($taskItems);
-                    foreach($taskItems as $taskItem) $node->children[$taskItem->id] = $taskItem;
+                    foreach($taskItems as $taskItem)
+                    {
+                        $node->children[$taskItem->id] = $taskItem;
+                        if(!empty($tasks[$taskItem->id]->children))
+                        {
+                            $task = $this->formatTasksForTree($tasks[$taskItem->id]->children);
+                            $node->children[$taskItem->id]->children=$task;
+                            $node->tasksCount += count($task);
+                        }
+                    }
                 }
                 $node->children = array_values($node->children);
             }

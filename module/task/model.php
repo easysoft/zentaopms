@@ -212,8 +212,8 @@ class taskModel extends model
             $data[$i]->openedBy   = $this->app->user->account;
             $data[$i]->openedDate = $now;
             $data[$i]->parent     = $tasks->parent[$i];
-            if($tasks->story[$i] != '') $data[$i]->storyVersion = $this->loadModel('story')->getVersion($data[$i]->story);
-            if($tasks->assignedTo[$i] != '') $data[$i]->assignedDate = $now;
+            if($story) $data[$i]->storyVersion = $this->loadModel('story')->getVersion($data[$i]->story);
+            if($assignedTo) $data[$i]->assignedDate = $now;
 
             $this->dao->insert(TABLE_TASK)->data($data[$i])
                 ->autoCheck()
@@ -224,7 +224,7 @@ class taskModel extends model
             if(dao::isError()) die(js::error(dao::getError()));
 
             $taskID = $this->dao->lastInsertID();
-            if($tasks->story[$i] != false) $this->story->setStage($tasks->story[$i]);
+            if($story) $this->story->setStage($tasks->story[$i]);
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
 
             $mails[$i]           = new stdclass();
