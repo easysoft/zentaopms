@@ -5,7 +5,7 @@ $lang->webhook->api      = '接口';
 $lang->webhook->entry    = '应用';
 $lang->webhook->dingding = '钉钉';
 $lang->webhook->log      = '日志';
-$lang->webhook->assigend = '指派给';
+$lang->webhook->assigned = '指派给';
 
 $lang->webhook->browse = '浏览钩子';
 $lang->webhook->create = '添加钩子';
