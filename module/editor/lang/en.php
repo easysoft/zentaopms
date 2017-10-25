@@ -31,6 +31,7 @@ $lang->editor->extendConfirm = 'Do you want to use original code?';
 $lang->editor->repeatFile    = 'File Name Dupliceted';
 $lang->editor->repeatPage    = 'Page existed. Do you want to override it?';
 $lang->editor->noticeOkFile  = 'For security reasons, your Admin account has to be confirmed. \n Please login ZenTao server and create %sFile.\n Note:\n 1. File is blank.\n 2. If the file existed, delete it and then create a new one.';
+$lang->editor->editFileError = 'You can only modify Zentao files!';
 
 $lang->editor->notWritable   = "Not wirtable. Privilege is required. Please try chmod 777 -R ";
 $lang->editor->notDelete     = 'Cannot be deleted. Please check your permission!';

@@ -668,7 +668,7 @@ class story extends control
             $this->story->review($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             $result = $this->post->result;
-            if($this->post->closedReason != '' and strpos('done,postponed,subdivided', $this->post->closedReason) !== false) $result = 'pass';
+            if($this->post->closedReason != '' and strpos('done,postponed,subdivided', $this->post->closedReason) === false) $result = 'pass';
             $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result));
             $this->story->sendmail($storyID, $actionID);
             if($this->post->result == 'reject')

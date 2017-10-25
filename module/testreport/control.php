@@ -128,12 +128,8 @@ class testreport extends control
             $builds  = array();
             if($task->build == 'trunk')
             {
-                $stories = $this->story->getProjectStories($project->id);
-                $bugs    = $this->testreport->getBugs4Test('trunk', $productID, $project->begin, date('Y-m-d', strtotime($task->begin) - 24 * 3600));
-                foreach($stories as $id => $story)
-                {
-                    if($story->product != $task->product) unset($stories[$id]);
-                }
+                echo js::alert($this->lang->testreport->errorTrunk);
+                die(js::locate('back'));
             }
             else
             {
@@ -264,12 +260,8 @@ class testreport extends control
             $builds  = array();
             if($task->build == 'trunk')
             {
-                $stories = $this->story->getProjectStories($project->id);
-                $bugs    = $this->testreport->getBugs4Test('trunk', $report->product, $project->begin, date('Y-m-d', strtotime($task->begin) - 24 * 3600));
-                foreach($stories as $id => $story)
-                {
-                    if($story->product != $task->product) unset($stories[$id]);
-                }
+                echo js::alert($this->lang->testreport->errorTrunk);
+                die(js::locate('back'));
             }
             else
             {

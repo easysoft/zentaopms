@@ -76,12 +76,13 @@ ALTER TABLE `zt_user` ADD `score_level` DECIMAL(12,1)  NOT NULL  DEFAULT '0'  AF
 
 CREATE TABLE `zt_score` (
   `id` bigint(12) unsigned NOT NULL AUTO_INCREMENT,
-  `userID` int(11) NOT NULL DEFAULT '0',
   `account` varchar(30) NOT NULL,
   `model` varchar(30) NOT NULL,
   `method` varchar(30) NOT NULL,
+  `desc` varchar(250) NOT NULL DEFAULT '',
+  `before` decimal(12,1) NOT NULL DEFAULT '0.0',
   `score` decimal(12,1) NOT NULL DEFAULT '0.0',
-  `type` enum('repeat','one') NOT NULL DEFAULT 'repeat',
+  `after` decimal(12,1) NOT NULL DEFAULT '0.0',
   `time` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `account` (`account`),

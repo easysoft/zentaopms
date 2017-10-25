@@ -134,14 +134,13 @@ class testtask extends control
             $productID = $productID ? $productID : key($products);
             $projects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetchPairs('id');
             $builds    = $this->dao->select('id, name')->from(TABLE_BUILD)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->fetchPairs('id');
-            $builds    = array('trunk' => $this->lang->trunk) + $builds;
         }
 
         /* Create testtask from testtask of test.*/
         if($projectID == 0)
         {
             $projects = $this->product->getProjectPairs($productID, $branch = 0, $params = 'nodeleted');
-            $builds   = $this->loadModel('build')->getProductBuildPairs($productID);
+            $builds   = $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
         }
 
         /* Set menu. */
@@ -442,7 +441,7 @@ class testtask extends control
 
         $this->view->task         = $task;
         $this->view->projects     = $this->product->getProjectPairs($productID);
-        $this->view->builds       = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = '');
+        $this->view->builds       = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = 'notrunk');
         $this->view->users        = $this->loadModel('user')->getPairs('nodeleted', $task->owner);
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
 
