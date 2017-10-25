@@ -13,7 +13,9 @@
   echo "</li><li id='workingTab'>"; 
   common::printLink('custom', 'working', '',  $lang->custom->working); 
   echo "</li><li id='requiredTab'>"; 
-  common::printLink('custom', 'required', '',  $lang->custom->required); 
+  common::printLink('custom', 'required', '',  $lang->custom->required);
+  echo "</li><li id='scoreTab'>";
+  common::printLink('custom', 'score', '',  $lang->custom->score);
   echo '</li>';
   ?>
   </ul>

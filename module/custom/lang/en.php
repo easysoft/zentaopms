@@ -15,6 +15,7 @@ $lang->custom->section   = 'Section';
 $lang->custom->lang      = 'Language';
 $lang->custom->setPublic = 'Set Public';
 $lang->custom->required  = 'Required';
+$lang->custom->score     = 'Score';
 
 $lang->custom->object['story']    = 'Story';
 $lang->custom->object['task']     = 'Task';
@@ -121,3 +122,6 @@ $lang->custom->workingList['onlyTask']  = 'Task';
 
 $lang->custom->menuTip  = 'Click to show/hide navigation bar. Drag to swtich display order.';
 $lang->custom->saveFail = 'Failed to save!';
+
+$lang->custom->scoreList['off'] = 'Off';
+$lang->custom->scoreList['on']  = 'On';
