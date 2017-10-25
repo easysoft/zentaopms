@@ -123,5 +123,5 @@ $lang->custom->workingList['onlyTask']  = 'Task';
 $lang->custom->menuTip  = 'Click to show/hide navigation bar. Drag to swtich display order.';
 $lang->custom->saveFail = 'Failed to save!';
 
-$lang->custom->scoreList['off'] = 'Off';
-$lang->custom->scoreList['on']  = 'On';
+$lang->custom->scoreList[0] = 'Off';
+$lang->custom->scoreList[1] = 'On';

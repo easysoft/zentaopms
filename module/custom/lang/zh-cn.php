@@ -123,5 +123,5 @@ $lang->custom->workingList['onlyTask']  = '任务管理工具';
 $lang->custom->menuTip  = '点击显示或隐藏导航条目，拖拽来更改显示顺序。';
 $lang->custom->saveFail = '保存失败！';
 
-$lang->custom->scoreList['off'] = '关闭';
-$lang->custom->scoreList['on']  = '开启';
+$lang->custom->scoreList[0] = '关闭';
+$lang->custom->scoreList[1] = '开启';

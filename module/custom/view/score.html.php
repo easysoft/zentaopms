@@ -15,7 +15,7 @@
     <table class='table table-form'>
       <tr>
         <th class='w-100px text-top'><?php echo $lang->custom->score; ?></th>
-        <td><?php echo html::radio('score', $lang->custom->scoreList, isset($config->global->score) ? $config->global->score : 'off', '', 'block'); ?></td>
+        <td><?php echo html::radio('score', $lang->custom->scoreList, isset($config->global->score) ? $config->global->score : 0, '', 'block'); ?></td>
       </tr>
       <tr>
         <td></td>
