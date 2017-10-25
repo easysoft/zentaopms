@@ -37,7 +37,7 @@ class webhookModel extends model
     public function getList($type = '', $orderBy = 'id_desc', $pager = null)
     {
         $webhooks = $this->dao->select('*')->from(TABLE_WEBHOOK)
-            ->where(1)
+            ->where('deleted')->eq('0')
             ->beginIF($type)->andWhere('type')->eq($type)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -63,7 +63,32 @@ class webhookModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        foreach($logs as $log) $log->data = json_decode($log->data);
+
+        $actions = array();
+        foreach($logs as $log) $actions[] = $log->action;
+
+        $this->loadModel('action');
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
+
+        foreach($logs as $log)
+        {
+            if(!isset($actions[$log->action]))
+            {
+                $log->action = '';
+                continue;
+            }
+
+            $action = $actions[$log->action];
+
+            $text   = $this->app->user->realname . $this->lang->action->label->{$action->action}. $this->lang->action->objectTypes[$action->objectType];
+            $object = $this->dao->select('*')->from($this->config->objectTables[$action->objectType])->where('id')->eq($action->objectID)->fetch();
+            $field  = $this->config->action->objectNameFields[$action->objectType];
+            $text  .= "[#{$action->objectID}::{$object->$field}]";
+            if($action->action == 'assigned') $text .= ' ' . $this->lang->webhook->assigned . ' ' . zget($users, $object->assignedTo);
+
+            $log->action    = $text;
+            $log->actionURL = $this->getViewLink($action->objectType, $action->objectID);
+        }
         return $logs;
     }
 
@@ -168,21 +193,6 @@ class webhookModel extends model
     }
 
     /**
-     * Delete a webhook. 
-     * 
-     * @param  int    $id 
-     * @param  object $null 
-     * @access public
-     * @return bool
-     */
-    public function delete($id, $null = null)
-    {
-        $this->dao->delete()->from(TABLE_WEBHOOK)->where('id')->eq($id)->exec();
-        $this->dao->delete()->from(TABLE_LOG)->where('objectType')->eq('webhook')->andWhere('objectID')->eq($id)->exec();
-        return !dao::isError();
-    }
-
-    /**
      * Send data. 
      * 
      * @param  string $objectType 
@@ -201,7 +211,7 @@ class webhookModel extends model
         $snoopy = $this->app->loadClass('snoopy');
         foreach($webhooks as $id => $webhook)
         {
-            if(!in_array($actionType, $webhook->actions->$objectType)) continue;
+            if(!isset($webhook->actions->$objectType) or !in_array($actionType, $webhook->actions->$objectType)) continue;
             $postData = $this->buildData($objectType, $objectID, $actionType, $actionID, $webhook);
             if(!$postData) continue;
 
@@ -212,8 +222,8 @@ class webhookModel extends model
             }
             
             $contentType = zget($this->config->webhook->contentTypes, $webhook->contentType, 'application/json');
-            $httpCode    = $this->fetchHook($contentType, $webhook->url, $postData);
-            $this->saveLog($id, $actionID, $webhook->url, $contentType, $postData, $httpCode);
+            $result      = $this->fetchHook($contentType, $webhook->url, $postData);
+            $this->saveLog($id, $actionID, $webhook->url, $contentType, $postData, $result);
         }
         return !dao::isError();
     }
@@ -275,7 +285,7 @@ class webhookModel extends model
         {
             if($param == 'text')
             {
-                $data->text = $this->app->user->realname . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType] . ' ' . "[#{$objectID}::{$title}](" . $host . $viewLink . ")";
+                $data->text = $this->app->user->realname . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType] . ' ' . "[#{$objectID}::{$text}](" . $host . $viewLink . ")";
                 if($actionType == 'assigned') $data->text .= ' ' . $this->lang->webhook->assigned . ' ' . zget($users, $object->assignedTo);
             }
             else
@@ -360,12 +370,13 @@ class webhookModel extends model
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_exec($ch);
+        $result   = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $error    = curl_error($ch);
         curl_close($ch);
 
-        if($error) return $error;
+        if($error)  return $error;
+        if($result) return $result;
         return $httpCode;
     }
 
@@ -399,11 +410,11 @@ class webhookModel extends model
      * @param  string $url 
      * @param  string $contentType 
      * @param  string $data 
-     * @param  int    $status 
+     * @param  string $result
      * @access public
      * @return bool 
      */
-    public function saveLog($webhookID, $actionID, $url, $contentType, $data, $status)
+    public function saveLog($webhookID, $actionID, $url, $contentType, $data, $result)
     {
         $log = new stdclass();
         $log->objectType  = 'webhook';
@@ -413,7 +424,7 @@ class webhookModel extends model
         $log->url         = $url;
         $log->contentType = $contentType;
         $log->data        = $data;
-        $log->status      = $status;
+        $log->result      = $result;
 
         $this->dao->insert(TABLE_LOG)->data($log)->exec();
         return !dao::isError();

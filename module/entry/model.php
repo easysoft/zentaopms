@@ -33,7 +33,7 @@ class entryModel extends model
      */
     public function getList($orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_ENTRY)->orderBy($orderBy)->page($pager)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_ENTRY)->where('deleted')->eq('0')->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
 
     /**
@@ -92,19 +92,5 @@ class entryModel extends model
         if(dao::isError()) return false;
 
         return common::createChanges($oldEntry, $entry);
-    }
-
-    /**
-     * Delete an entry. 
-     * 
-     * @param  int    $entryID 
-     * @param  int    $null 
-     * @access public
-     * @return bool
-     */
-    public function delete($entryID, $null = null)
-    {
-        $this->dao->delete()->from(TABLE_ENTRY)->where('id')->eq($entryID)->exec();
-        return !dao::isError();
     }
 }

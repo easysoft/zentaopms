@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS `zt_entry` (
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
+  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -30,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `zt_webhook` (
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
+  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

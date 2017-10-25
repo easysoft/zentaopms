@@ -97,7 +97,7 @@ class webhook extends control
      */
     public function delete($id)
     {
-        $this->webhook->delete($id);
+        $this->webhook->delete(TABLE_WEBHOOK, $id);
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success'));
@@ -149,8 +149,8 @@ class webhook extends control
             if($webhook)
             {
                 $contentType = zget($this->config->webhook->contentTypes, $webhook->contentType, 'application/json');
-                $httpCode    = $this->webhook->fetchHook($contentType, $webhook->url, $data->data);
-                $this->saveLog($data->webhook, $data->action, $webhook->url, $contentType, $data->data, $httpCode);
+                $result      = $this->webhook->fetchHook($contentType, $webhook->url, $data->data);
+                $this->saveLog($data->webhook, $data->action, $webhook->url, $contentType, $data->data, $result);
             }
             
             if($httpCode == 200) $this->dao->update(TABLE_WEBHOOKDATA)->set('status')->eq('sended')->where('id')->eq($data->id)->exec();

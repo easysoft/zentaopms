@@ -73,6 +73,8 @@ $lang->action->objectTypes['module']      = '模块';
 $lang->action->objectTypes['testsuite']   = '套件';
 $lang->action->objectTypes['caselib']     = '用例库';
 $lang->action->objectTypes['testreport']  = '报告';
+$lang->action->objectTypes['entry']       = '应用';
+$lang->action->objectTypes['webhook']     = 'Webhook';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -197,6 +199,8 @@ $lang->action->label->doclib      = '文档库|doc|browse|libID=%s';
 $lang->action->label->doc         = '文档|doc|view|docID=%s';
 $lang->action->label->user        = '用户|user|view|account=%s';
 $lang->action->label->testreport  = '报告|testreport|view|report=%s';
+$lang->action->label->entry       = '应用|entry|browse|';
+$lang->action->label->webhook     = 'Webhook|webhook|browse|';
 $lang->action->label->space       = ' ';
 
 /* Object type. */

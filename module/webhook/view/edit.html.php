@@ -29,7 +29,7 @@
       <tr>
         <th><?php echo $lang->webhook->url;?></th>
         <td><?php echo html::input('url', $webhook->url, "class='form-control'");?></td>
-        <td></td>
+        <td><?php if($webhook->type == 'dingding') echo $lang->webhook->note->dingding;?></td>
       </tr>
       <?php if($webhook->type != 'dingding'):?>
       <tr>
@@ -46,10 +46,12 @@
       <tr>
         <th><?php echo $lang->webhook->product;?></th>
         <td><?php echo html::select('products[]', $products, $webhook->products, "class='form-control chosen' multiple");?></td>
+        <td><?php echo $lang->webhook->note->product;?></td>
       </tr>
       <tr>
         <th><?php echo $lang->webhook->project;?></th>
         <td><?php echo html::select('projects[]', $projects, $webhook->projects, "class='form-control chosen' multiple");?></td>
+        <td><?php echo $lang->webhook->note->project;?></td>
       </tr>
       <?php if($webhook->type != 'dingding'):?>
       <tr>

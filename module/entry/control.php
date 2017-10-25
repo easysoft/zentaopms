@@ -91,7 +91,7 @@ class entry extends control
      */
     public function delete($entryID)
     {
-        $this->entry->delete($entryID);
+        $this->entry->delete(TABLE_ENTRY, $entryID);
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success'));

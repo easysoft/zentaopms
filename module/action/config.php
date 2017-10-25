@@ -19,5 +19,7 @@ $config->action->objectNameFields['module']      = 'name';
 $config->action->objectNameFields['testsuite']   = 'name';
 $config->action->objectNameFields['caselib']     = 'name';
 $config->action->objectNameFields['testreport']  = 'title';
+$config->action->objectNameFields['entry']       = 'name';
+$config->action->objectNameFields['webhook']     = 'name';
 
 $config->action->commonImgSize = 870;
