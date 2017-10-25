@@ -177,8 +177,8 @@ class webhookModel extends model
         $webhook = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
-            ->join('product', ',')
-            ->join('project', ',')
+            ->join('products', ',')
+            ->join('projects', ',')
             ->skipSpecial('url')
             ->get();
         $webhook->params  = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
@@ -247,7 +247,10 @@ class webhookModel extends model
         $action = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($actionID)->fetch();
         if($webhook->products)
         {
-            if(strpos(",$webhook->products,", ",$action->product,") === false) return false;
+            $webhookProducts = explode(',', trim($webhook->products, ','));
+            $actionProduct   = explode(',', trim($action->product, ','));
+            $intersect       = array_intersect($webhookProducts, $actionProduct);
+            if(!$intersect) return false;
         }
         if($webhook->projects)
         {
