@@ -12,14 +12,16 @@
 ?>
 <?php include 'header.html.php';?>
 <?php js::set('confirmDelete', $lang->webhook->confirmDelete);?>
+<?php js::set('type', $type);?>
 <form id='ajaxForm' method='post'>
   <table id='webhookList' class='table table-condensed table-hover table-striped table-fixed'>
     <thead>
       <tr>
-        <th class='w-40px'><?php echo $lang->webhook->id;?></th>
-        <th><?php echo $lang->webhook->name;?></th>
-        <th><?php echo $lang->webhook->url;?></th>
-        <th class='w-100px'><?php echo $lang->actions;?></th>
+        <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+        <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->webhook->id);?></th>
+        <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->webhook->name);?></th>
+        <th><?php common::printOrderLink('url', $orderBy, $vars, $lang->webhook->url);?></th>
+        <th class='w-70px'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>

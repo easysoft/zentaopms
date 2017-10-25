@@ -28,14 +28,20 @@ class webhookModel extends model
     /**
      * Get webhook list. 
      * 
+     * @param  string $type
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList($orderBy = 'id_desc', $pager = null)
+    public function getList($type = '', $orderBy = 'id_desc', $pager = null)
     {
-        $webhooks = $this->dao->select('*')->from(TABLE_WEBHOOK)->orderBy($orderBy)->page($pager)->fetchAll('id');
+        $webhooks = $this->dao->select('*')->from(TABLE_WEBHOOK)
+            ->where(1)
+            ->beginIF($type)->andWhere('type')->eq($type)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
         foreach($webhooks as $webhook) $webhook->actions = json_decode($webhook->actions);
         return $webhooks;
     }
@@ -110,18 +116,22 @@ class webhookModel extends model
     /**
      * Create a webhook. 
      * 
+     * @param  string $type
      * @access public
      * @return bool
      */
-    public function create()
+    public function create($type)
     {
         $webhook = fixer::input('post')
+            ->add('type', $type)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
-            ->setForce('params', implode(',', $this->post->params) . ',message')
-            ->setForce('actions', helper::jsonEncode($this->post->actions))
-            ->skipSpecial('url,actions')
+            ->join('products', ',')
+            ->join('projects', ',')
+            ->skipSpecial('url')
             ->get();
+        $webhook->params  = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
+        $webhook->actions = $this->post->actions ? json_encode($this->post->actions) : '[]';
         
         $this->dao->insert(TABLE_WEBHOOK)->data($webhook)
             ->batchCheck($this->config->webhook->create->requiredFields, 'notempty')
@@ -142,10 +152,12 @@ class webhookModel extends model
         $webhook = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
-            ->setForce('params', implode(',', $this->post->params) . ',message')
-            ->setForce('actions', helper::jsonEncode($this->post->actions))
-            ->skipSpecial('url,actions')
+            ->join('product', ',')
+            ->join('project', ',')
+            ->skipSpecial('url')
             ->get();
+        $webhook->params  = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
+        $webhook->actions = $this->post->actions ? json_encode($this->post->actions) : '[]';
 
         $this->dao->update(TABLE_WEBHOOK)->data($webhook)
             ->batchCheck($this->config->webhook->edit->requiredFields, 'notempty')
@@ -190,7 +202,9 @@ class webhookModel extends model
         foreach($webhooks as $id => $webhook)
         {
             if(!in_array($actionType, $webhook->actions->$objectType)) continue;
-            $postData = $this->buildData($objectType, $objectID, $actionType, $actionID, explode(',', $webhook->params));
+            $postData = $this->buildData($objectType, $objectID, $actionType, $actionID, $webhook);
+            if(!$postData) continue;
+
             if($webhook->sendType == 'async')
             {
                 $this->saveData($id, $actionID, $postData);
@@ -199,7 +213,6 @@ class webhookModel extends model
             
             $contentType = zget($this->config->webhook->contentTypes, $webhook->contentType, 'application/json');
             $httpCode    = $this->fetchHook($contentType, $webhook->url, $postData);
-
             $this->saveLog($id, $actionID, $webhook->url, $contentType, $postData, $httpCode);
         }
         return !dao::isError();
@@ -212,22 +225,79 @@ class webhookModel extends model
      * @param  int    $objectID 
      * @param  string $actionType 
      * @param  int    $actionID
-     * @param  array  $params 
+     * @param  object $webhook
      * @access public
      * @return string
      */
-    public function buildData($objectType, $objectID, $actionType, $actionID, $params)
+    public function buildData($objectType, $objectID, $actionType, $actionID, $webhook)
     {
-        static $users = array();
-        if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
         if(!isset($this->lang->action->label)) $this->loadModel('action');
         if(!isset($this->lang->action->label->$actionType)) return false;
         if(empty($this->config->objectTables[$objectType])) return false;
         $action = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($actionID)->fetch();
-        $object = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
-        $field  = $this->config->action->objectNameFields[$objectType];
-        $title  = $object->$field;
+        if($webhook->products)
+        {
+            if(strpos(",$webhook->products,", ",$action->product,") === false) return false;
+        }
+        if($webhook->projects)
+        {
+            if(strpos(",$webhook->projects,", ",$action->project,") === false) return false;
+        }
 
+        static $users = array();
+        if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
+
+        $object   = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+        $field    = $this->config->action->objectNameFields[$objectType];
+        $text     = $object->$field;
+        $host     = common::getSysURL();
+        $viewLink = $this->getViewLink($objectType, $objectID);
+
+        $data = new stdclass();
+        if($webhook->type == 'dingding')
+        {
+            $title = $this->app->user->realname . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType];
+            if($actionType == 'assigned') $title .= ' ' . $this->lang->webhook->assigned . ' ' . zget($users, $object->assignedTo);
+
+            $link = new stdclass();
+            $link->text       = "[#{$objectID}::{$text}]";
+            $link->title      = $title;
+            $link->picUrl     = '';
+            $link->messageUrl = $host . $viewLink;
+
+            $data->msgtype = 'link';
+            $data->link    = $link;
+
+            return helper::jsonEncode($data);
+        }
+
+        foreach(explode(',', $webhook->params) as $param)
+        {
+            if($param == 'text')
+            {
+                $data->text = $this->app->user->realname . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType] . ' ' . "[#{$objectID}::{$title}](" . $host . $viewLink . ")";
+                if($actionType == 'assigned') $data->text .= ' ' . $this->lang->webhook->assigned . ' ' . zget($users, $object->assignedTo);
+            }
+            else
+            {
+                $data->$param = $action->$param;
+            }
+        }
+        $data = $this->getFiles($data, $objectType, $objectID);
+
+        return helper::jsonEncode($data);
+    }
+
+    /**
+     * Get view link. 
+     * 
+     * @param  string $objectType 
+     * @param  int    $objectID 
+     * @access public
+     * @return string
+     */
+    public function getViewLink($objectType, $objectID)
+    {
         $oldOnlyBody = '';
         if(isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes')
         {
@@ -237,21 +307,20 @@ class webhookModel extends model
         $viewLink = helper::createLink($objectType, 'view', "id=$objectID");
         if($oldOnlyBody) $_GET['onlybody'] = $oldOnlyBody;
 
-        $host = common::getSysURL();
-        $data = new stdclass();
-        foreach($params as $param)
-        {
-            if($param == 'message')
-            {
-                $data->text = $this->app->user->realname . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType] . ' ' . "[#{$objectID}::{$title}](" . $host . $viewLink . ")";
-                if($actionType == 'assigned') $data->text .= ' ' . $this->lang->webhooks->assigned . ' ' . zget($users, $object->assignedTo);
-            }
-            else
-            {
-                $data->$param = $action->$param;
-            }
-        }
+        return $viewLink;
+    }
 
+    /**
+     * Get files. 
+     * 
+     * @param  object $data 
+     * @param  string $objectType 
+     * @param  int    $objectID 
+     * @access public
+     * @return object 
+     */
+    public function getFiles($data, $objectType, $objectID)
+    {
         if(!empty($_FILES['files']['name'][0]))
         {
             $this->loadModel('file');
@@ -267,8 +336,7 @@ class webhookModel extends model
                 }
             }
         }
-
-        return helper::jsonEncode($data);
+        return $data;
     }
 
     /**
@@ -282,20 +350,22 @@ class webhookModel extends model
      */
     public function fetchHook($contentType, $url, $sendData)
     {
-        $header[] = "Content-Type: $contentType";
+        $header[] = "Content-Type: $contentType;charset=utf-8";
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $sendData);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $error    = curl_error($ch);
         curl_close($ch);
 
+        if($error) return $error;
         return $httpCode;
     }
 

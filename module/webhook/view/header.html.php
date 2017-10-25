@@ -14,16 +14,17 @@
 <div id='featurebar'>
   <ul class='nav'>
     <?php 
-    echo '<li id="entry">'; common::printLink('entry', 'browse', "", $lang->webhook->entry); echo '</li>';
-    echo '<li id="webhook">'; common::printLink('webhook', 'browse', "",   $lang->webhook->common); echo '</li>';
+    echo "<li id='entry'>"; common::printLink('entry', 'browse', '', $lang->webhook->entry); echo '</li>';
+    echo "<li id='webhook'>"; common::printLink('webhook', 'browse', 'type=default', $lang->webhook->common); echo '</li>';
+    echo "<li id='dingding'>"; common::printLink('webhook', 'browse', 'type=dingding', $lang->webhook->dingding); echo '</li>';
     ?>
   </ul>
   <div class='actions'>
     <div class='btn-group'>
       <div class='btn-group' id='createActionMenu'>
-        <?php common::printIcon('webhook', 'create', '', '', 'button', '', '', 'btn-primary');?>
+        <?php common::printIcon('webhook', 'create', "type=$type", '', 'button', '', '', 'btn-primary');?>
       </div>
     </div>
   </div>
 </div>
-<script>$('#<?php echo $this->moduleName;?>').addClass('active')</script>
+<script>$('.nav li a[href*=<?php echo $type;?>]').parent().addClass('active');</script>

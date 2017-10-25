@@ -1,9 +1,11 @@
 <?php
-$lang->webhook->common = 'webhook';
-$lang->webhook->list   = '钩子列表';
-$lang->webhook->api    = '接口';
-$lang->webhook->entry  = '应用';
-$lang->webhook->log    = '日志';
+$lang->webhook->common   = 'webhook';
+$lang->webhook->list     = '钩子列表';
+$lang->webhook->api      = '接口';
+$lang->webhook->entry    = '应用';
+$lang->webhook->dingding = '钉钉';
+$lang->webhook->log      = '日志';
+$lang->webhook->assigend = '指派给';
 
 $lang->webhook->browse = '浏览钩子';
 $lang->webhook->create = '添加钩子';
@@ -16,6 +18,8 @@ $lang->webhook->url         = 'Hook地址';
 $lang->webhook->contentType = '内容类型';
 $lang->webhook->sendType    = '发送方式';
 $lang->webhook->params      = '参数';
+$lang->webhook->product     = '关联产品';
+$lang->webhook->project     = '关联项目';
 $lang->webhook->action      = '触发动作';
 $lang->webhook->desc        = '描述';
 $lang->webhook->data        = '数据';

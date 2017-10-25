@@ -16,11 +16,13 @@ CREATE TABLE IF NOT EXISTS `zt_entry` (
 -- DROP TABLE IF EXISTS `zt_webhook`;
 CREATE TABLE IF NOT EXISTS `zt_webhook` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `type` varchar(10) NOT NULL,
+  `type` varchar(10) NOT NULL DEFAULT 'default',
   `name` varchar(50) NOT NULL,
   `url` varchar(255) NOT NULL,
   `contentType` enum('json','form') NOT NULL DEFAULT 'json',
   `sendType` enum('sync','async') NOT NULL DEFAULT 'sync',
+  `products` text NOT NULL,
+  `projects` text NOT NULL,
   `params` varchar(100) NOT NULL,
   `actions` text NOT NULL,
   `desc` text NOT NULL,
@@ -89,3 +91,5 @@ CREATE TABLE `zt_score` (
   KEY `model` (`model`),
   KEY `method` (`method`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('*/5', '*', '*', '*', '*', 'moduleName=webhook&methodName=asyncSend', '异步发送Webhook', 'zentao', 0, 'normal', '0000-00-00 00:00:00');
