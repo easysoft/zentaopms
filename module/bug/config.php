@@ -247,11 +247,6 @@ $config->bug->datatable->fieldList['browser']['fixed']    = 'no';
 $config->bug->datatable->fieldList['browser']['width']    = '80';
 $config->bug->datatable->fieldList['browser']['required'] = 'no';
 
-$config->bug->datatable->fieldList['found']['title']    = 'found';
-$config->bug->datatable->fieldList['found']['fixed']    = 'no';
-$config->bug->datatable->fieldList['found']['width']    = '80';
-$config->bug->datatable->fieldList['found']['required'] = 'no';
-
 $config->bug->datatable->fieldList['mailto']['title']    = 'mailto';
 $config->bug->datatable->fieldList['mailto']['fixed']    = 'no';
 $config->bug->datatable->fieldList['mailto']['width']    = '100';

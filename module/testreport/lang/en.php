@@ -54,8 +54,18 @@ $lang->testreport->bugCreateByCaseRate = 'Bug Created in Case Rate (Bugs created
 
 $lang->testreport->caseSummary   = '  <strong>%s</strong> cases in total, <strong>%s</strong> cases performed, <strong>%s</strong> results generated, <strong>%s</strong> cases failed.';
 $lang->testreport->buildSummary  = ' Tested <strong>%s</strong> build.';
-$lang->testreport->bugSummary    = '<strong>%s</strong> Bug(s) generated in total and <strong>%s</strong> Bug(s) remained unresolved. Confirmed bug rate（bug resolution is resolved or delayedg status is resolved or closed): <strong>%s</strong>，Bug created in case rate(Bugs created in cases / Newly generated bugs): <strong>%s</strong>';
 $lang->testreport->confirmDelete = 'Do you want tot delete this report?';
 $lang->testreport->moreNotice    = 'More features can be extended with reference to the ZenTao extension mechanism, or you can contact us for customization.';
 $lang->testreport->exportNotice  = "Export By <a href='http://www.zentao.net' target='_blank' style='color:grey'>ZenTaoPMS</a>";
 $lang->testreport->noReport      = "The report has not yet been generated. Please check it later.";
+$lang->testreport->foundBugTip   = "openBuild in builds and create time in test time within the range of Bug number.";
+$lang->testreport->legacyBugTip  = "The Bug state is activated, or the settling time of Bug is at the end of the test.";
+$lang->testreport->fromCaseBugTip= "Bug created after failure of use case in test time range.";
+$lang->testreport->errorTrunk    = "The trunk version cannot create a test report. Please modify the associated version!";
+
+$lang->testreport->bugSummary    = <<<EOD
+<strong>%s</strong> Bug(s) generated in total <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-warning-sign'></i></a>,
+<strong>%s</strong> Bug(s) remained unresolve <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->legacyBugTip}'><i class='icon-warning-sign'></i></a>,
+<strong>%s</strong> Bug(s) failure of case <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->fromCaseBugTip}'><i class='icon-warning-sign'></i></a>.
+Confirmed bug rate（bug resolution is resolved or delayedg status is resolved or closed): <strong>%s</strong>，Bug created in caserate(Bugs created in cases / Newly generated bugs): <strong>%s</strong>'
+EOD;
