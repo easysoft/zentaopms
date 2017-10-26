@@ -601,6 +601,8 @@ class projectModel extends model
      */
     public function getList($status = 'all', $limit = 0, $productID = 0, $branch = 0)
     {
+        if($status == 'involved') return $this->getInvolvedList($status, $limit, $productID, $branch);
+
         if($productID != 0)
         {
             return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -624,6 +626,49 @@ class projectModel extends model
                 ->beginIF($status != 'all' and $status != 'isdoing' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('order_desc')
+                ->beginIF($limit)->limit($limit)->fi()
+                ->fetchAll('id');
+        }
+    }
+
+    /**
+     * Get project lists.
+     * 
+     * @param  string $status  involved
+     * @param  int    $limit 
+     * @param  int    $productID 
+     * @param  int    $branch
+     * @access public
+     * @return array
+     */
+    public function getInvolvedList($status = 'involved', $limit = 0, $productID = 0, $branch = 0)
+    {
+        if($productID != 0)
+        {
+            return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->leftJoin(TABLE_TEAM)->alias('t3')->on('t3.project=t2.id')
+                ->where('t1.product')->eq($productID)
+                ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t2.iscat')->eq(0)
+                ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+                ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
+                ->orWhere('t3.account')->eq($this->app->user->account)
+                ->markRight(1)
+                ->orderBy('order_desc')
+                ->beginIF($limit)->limit($limit)->fi()
+                ->fetchAll('id');
+        }
+        else
+        {
+            return $this->dao->select('t1.*, IF(INSTR(" done", t1.status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_TEAM)->alias('t2')->on('t2.project=t1.id')
+                ->where('t1.iscat')->eq(0)
+                ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
+                ->orWhere('t2.account')->eq($this->app->user->account)
+                ->markRight(1)
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy('t1.order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
         }
@@ -680,7 +725,7 @@ class projectModel extends model
     public function getProjectStats($status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
     {
         /* Init vars. */
-        $projects    = $this->getList($status, 0, $productID, $branch);
+        $projects = $this->getList($status, 0, $productID, $branch);
         foreach($projects as $projectID => $project)
         {
             if(!$this->checkPriv($project)) unset($projects[$projectID]);
