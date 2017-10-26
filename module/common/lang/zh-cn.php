@@ -167,17 +167,21 @@ $lang->my->menu->account        = array('link' => '<span id="myname"><i class="i
 $lang->my->menu->index          = '首页|my|index';
 $lang->my->menu->todo           = array('link' => '待办|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task           = array('link' => '任务|my|task|', 'subModule' => 'task');
-$lang->my->menu->bug            = array('link' => 'Bug|my|bug|',   'subModule' => 'bug');
+$lang->my->menu->bug            = array('link' => 'Bug|my|bug|', 'subModule' => 'bug');
 $lang->my->menu->testtask       = array('link' => '测试|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
-$lang->my->menu->story          = array('link' => '需求|my|story|',   'subModule' => 'story');
+$lang->my->menu->story          = array('link' => '需求|my|story|', 'subModule' => 'story');
 $lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = '动态|my|dynamic|';
 $lang->my->menu->profile        = array('link' => '档案|my|profile', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = '密码|my|changepassword';
 $lang->my->menu->manageContacts = '联系人|my|managecontacts';
+$lang->my->menu->score          = array('link' => '积分|score|browse', 'subModule' => 'score');
 
-$lang->todo = new stdclass();
+$lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
+
+$lang->score       = new stdclass();
+$lang->score->menu = $lang->my->menu;
 
 /* 产品视图设置。*/
 $lang->product = new stdclass();
@@ -342,7 +346,6 @@ $lang->admin->menu->cron      = array('link' => '计划任务|cron|index', 'subM
 $lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subModule' => 'action');
 $lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
 $lang->admin->menu->entry     = array('link' => '接口|entry|browse', 'alias' => 'create,edit', 'subModule' => 'entry,webhook');
-$lang->admin->menu->score     = array('link' => '积分|score|browse', 'subModule' => 'score');
 $lang->admin->menu->sso       = '然之集成|admin|sso';
 
 $lang->convert   = new stdclass();
@@ -358,7 +361,6 @@ $lang->dev       = new stdclass();
 $lang->entry     = new stdclass();
 $lang->webhook   = new stdclass();
 $lang->search    = new stdclass();
-$lang->score     = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
@@ -370,7 +372,6 @@ $lang->custom->menu    = $lang->admin->menu;
 $lang->editor->menu    = $lang->admin->menu;
 $lang->mail->menu      = $lang->admin->menu;
 $lang->dev->menu       = $lang->admin->menu;
-$lang->score->menu     = $lang->admin->menu;
 $lang->entry->menu     = $lang->admin->menu;
 $lang->webhook->menu   = $lang->admin->menu;
 
@@ -395,6 +396,7 @@ $lang->menugroup->testreport  = 'qa';
 $lang->menugroup->people      = 'company';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
+$lang->menugroup->score       = 'my';
 $lang->menugroup->action      = 'admin';
 $lang->menugroup->backup      = 'admin';
 $lang->menugroup->cron        = 'admin';
@@ -403,7 +405,6 @@ $lang->menugroup->custom      = 'admin';
 $lang->menugroup->editor      = 'admin';
 $lang->menugroup->mail        = 'admin';
 $lang->menugroup->dev         = 'admin';
-$lang->menugroup->score       = 'admin';
 $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 

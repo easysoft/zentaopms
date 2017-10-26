@@ -282,12 +282,11 @@ class customModel extends model
         $allMenu = $module == 'main' ? $lang->menu : (isset($lang->$module->menu) ? $lang->$module->menu : $lang->my->menu);
         if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
         if($module != 'main' and isset($lang->menugroup->$module)) $module = $lang->menugroup->$module;
-        if($module == 'admin' and empty($config->global->score)) unset($allMenu->score);
         $flowModule = $config->global->flow . '_' . $module;
         $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
         if(commonModel::isTutorialMode() && $module === 'main')$customMenu = 'my,product,project,qa,company';
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
-
+        if($module == 'my' && empty($config->global->score)) unset($allMenu->score);
         $menu = self::setMenuByConfig($allMenu, $customMenu, $module);
         return $menu;
     }

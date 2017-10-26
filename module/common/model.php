@@ -164,6 +164,7 @@ class commonModel extends model
             if($module == 'tutorial') return true;
             if($module == 'block') return true;
             if($module == 'product' and $method == 'showerrornone') return true;
+            if($module == 'score' and $method == 'browse') return true;
         }
         return false;
     }
@@ -1131,7 +1132,6 @@ class commonModel extends model
 
         /* Check is the super admin or not. */
         if(!empty($app->user->admin)) return true;
-
         /* If not super admin, check the rights. */
         $rights  = $app->user->rights['rights'];
         $acls    = $app->user->rights['acls'];
