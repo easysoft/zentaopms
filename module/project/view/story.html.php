@@ -20,6 +20,7 @@
   <div class='actions'>
     <div class='btn-group'>
     <?php 
+    common::printIcon('project', 'storyKanban', "project=$project->id", '', 'button', 'columns', '', '', '', '', $lang->project->kanban);
     common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc", '', 'button', '', '', 'export');
 
     $this->lang->story->create = $this->lang->project->createStory;

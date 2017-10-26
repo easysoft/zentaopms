@@ -1426,6 +1426,47 @@ class project extends control
     }
 
     /**
+     * Story kanban.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function storyKanban($projectID)
+    {
+        /* Save to session. */
+        $uri = $this->app->getURI(true);
+        $this->app->session->set('storyList', $uri);
+
+        /* Compatibility IE8*/
+        if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
+
+        $this->project->setMenu($this->projects, $projectID);
+        $project = $this->loadModel('project')->getById($projectID);
+        $stories = $this->loadModel('story')->getProjectStories($projectID);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
+
+        /* Get project's product. */
+        $productID = 0;
+        $productPairs = $this->loadModel('product')->getProductsByProject($projectID);
+        if($productPairs) $productID = key($productPairs);
+
+        $this->view->title      = $this->lang->project->kanban;
+        $this->view->position[] = html::a($this->createLink('project', 'story', "projectID=$projectID"), $project->name);
+        $this->view->position[] = $this->lang->project->kanban;
+        $this->view->stories    = $this->story->getKanbanGroupData($stories);
+        $this->view->realnames  = $this->loadModel('user')->getPairs('noletter');
+        $this->view->projectID  = $projectID;
+        $this->view->project    = $project;
+        $this->view->productID  = $productID;
+
+        $kanbanSetting = $this->project->getKanbanSetting($projectID);
+        $this->view->showOption = $kanbanSetting->showOption;
+
+        $this->display();
+    }
+
+    /**
      * Delete a project.
      *
      * @param  int    $projectID
