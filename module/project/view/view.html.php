@@ -126,7 +126,8 @@
             {
                 if($product->type !== 'normal')
                 {
-                    echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$product->branch"), $product->name . '/' . $branchGroups[$productID][$product->branch]);
+                    $branchName = isset($branchGroups[$productID][$product->branch]) ? '/' . $branchGroups[$productID][$product->branch] : ''
+                    echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$product->branch"), $product->name . $branchName);
                 }
                 else
                 {
