@@ -2175,6 +2175,21 @@ class storyModel extends model
     }
 
     /**
+     * Get kanban group data. 
+     * 
+     * @param  array    $stories 
+     * @access public
+     * @return array
+     */
+    public function getKanbanGroupData($stories)
+    {
+        $storyGroup = array();
+        foreach($stories as $story) $storyGroup[$story->stage][$story->id] = $story;
+
+        return $storyGroup;
+    }
+
+    /**
      * Adjust the action clickable.
      * 
      * @param  object $story 
