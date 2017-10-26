@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="titlebar">
   <div class="heading">
-    <strong><?php echo html::a(inlink('browse', "type={$webhook->type}"), $webhook->type ? $lang->webhook->dingding : $lang->webhook->common);?></strong>
+    <strong><?php echo html::a(inlink('browse', "type={$webhook->type}"), $webhook->type == 'dingding' ? $lang->webhook->dingding : $lang->webhook->common);?></strong>
     <small class="text-muted"> <?php echo $webhook->name;?> </small>
     <small class="text-muted"> <?php echo $lang->webhook->log;?> <i class="icon-file-text-o"></i></small>
   </div>
@@ -26,7 +26,7 @@
       <th><?php common::printOrderLink('url', $orderBy, $vars, $lang->webhook->url);?></th>
       <th class='w-300px'><?php common::printOrderLink('action', $orderBy, $vars, $lang->webhook->action);?></th>
       <th class='w-200px'><?php common::printOrderLink('contentType', $orderBy, $vars, $lang->webhook->contentType);?></th>
-      <th class='w-200px'><?php  common::printOrderLink('status', $orderBy, $vars, $lang->webhook->status);?></th>
+      <th class='w-200px'><?php  common::printOrderLink('result', $orderBy, $vars, $lang->webhook->result);?></th>
     </tr>
   </thead>
   <tbody>

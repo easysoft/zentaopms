@@ -49,6 +49,25 @@ class entryModel extends model
     }
 
     /**
+     * Get log list of an entry . 
+     * 
+     * @param  int    $id
+     * @param  string $orderBy 
+     * @param  object $pager 
+     * @access public
+     * @return array 
+     */
+    public function getLogList($id, $orderBy = 'date_desc', $pager = null)
+    {
+        return $this->dao->select('*')->from(TABLE_LOG)
+            ->where('objectType')->eq('entry')
+            ->andWhere('objectID')->eq($id)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
      * Create an entry. 
      * 
      * @access public

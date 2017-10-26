@@ -43,10 +43,10 @@ class entry extends control
     {
         if($_POST)
         {
-            $entryID = $this->entry->create();
+            $id = $this->entry->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('entry', $entryID, 'created');
+            $this->loadModel('action')->create('entry', $id, 'created');
             $this->send(array('result' => 'success', 'message' => $this->lang->entry->saveSuccess, 'locate' => inlink('browse')));
         }
 
@@ -57,26 +57,26 @@ class entry extends control
     /**
      * Edit an entry. 
      * 
-     * @param  int    $entryID 
+     * @param  int    $id 
      * @access public
      * @return void
      */
-    public function edit($entryID)
+    public function edit($id)
     {
         if($_POST)
         {
-            $changes = $this->entry->update($entryID);
+            $changes = $this->entry->update($id);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes)
             {
-                $actionID = $this->loadModel('action')->create('entry', $entryID, 'edited');
+                $actionID = $this->loadModel('action')->create('entry', $id, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
             $this->send(array('result' => 'success', 'message' => $this->lang->entry->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $entry = $this->entry->getById($entryID);
+        $entry = $this->entry->getById($id);
         $this->view->title = $this->lang->entry->edit . $this->lang->colon . $entry->name;
         $this->view->entry = $entry;
         $this->display();
@@ -85,30 +85,40 @@ class entry extends control
     /**
      * Delete an entry. 
      * 
-     * @param  int    $entryID 
+     * @param  int    $id 
      * @access public
      * @return void
      */
-    public function delete($entryID)
+    public function delete($id)
     {
-        $this->entry->delete(TABLE_ENTRY, $entryID);
+        $this->entry->delete(TABLE_ENTRY, $id);
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success'));
     }
 
     /**
-     * Show access logs of entry. 
+     * Browse logs of an entry. 
      * 
-     * @param  int    $entryID 
+     * @param  int    $id 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function log($entryID)
+    public function log($id, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $entry = $this->entry->getById($entryID);
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $entry = $this->entry->getByID($id);
         $this->view->title   = $this->lang->entry->log . $this->lang->colon . $entry->name;
-        $this->view->actions = $this->loadModel('action')->getList('entry', $entryID);
+        $this->view->logs    = $this->entry->getLogList($id, $orderBy, $pager);
+        $this->view->entry   = $entry;
+        $this->view->orderBy = $orderBy;
+        $this->view->pager   = $pager;
         $this->display();
     }
 }
