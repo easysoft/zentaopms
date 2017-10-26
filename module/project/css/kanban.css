@@ -63,12 +63,12 @@ table th.col-closed {width:14%}
 
 .board {background: #333; color: #f1f1f1; outline: 1px solid rgba(0,0,0,.1); outline-offset: -1px;}
 .board:hover {outline: 1px solid rgba(0,0,0,.3); color:#fff}
-.board-bug-cancel, .board-task-cancel {background: #333;   opacity: 0.7;}
-.board-bug-wait, .board-task-wait     {background: #2b529c;opacity: 0.7;}
-.board-task-pause                     {background: #E48600;opacity: 0.7;}
-.board-bug-doing, .board-task-doing   {background: #D2322D;opacity: 0.7;}
-.board-bug-done, .board-task-done     {background: #229F24;opacity: 0.7;}
-.board-bug-closed, .board-task-closed {background: #777;   opacity: 0.7;}
+.board-bug-cancel, .board-task-cancel {background: #333;   opacity: 1;}
+.board-bug-wait, .board-task-wait     {background: #2b529c;opacity: 1;}
+.board-task-pause                     {background: #E48600;opacity: 1;}
+.board-bug-doing, .board-task-doing   {background: #D2322D;opacity: 1;}
+.board-bug-done, .board-task-done     {background: #229F24;opacity: 1;}
+.board-bug-closed, .board-task-closed {background: #777;   opacity: 1;}
 
 .board-bug-cancel.inverse, .board-task-cancel.inverse {opacity: 1;}
 .board-bug-wait.inverse, .board-task-wait.inverse {opacity: 1}

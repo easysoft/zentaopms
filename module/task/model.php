@@ -1890,7 +1890,11 @@ class taskModel extends model
             if($id == 'deadline' and isset($task->delay)) $class .= ' delayed';
             if($id == 'assignedTo' && $task->assignedTo == $account) $class .= ' red';
 
-            echo "<td class='" . $class . "'" . ($id=='name' ? " title='{$task->name}'":'') . ">";
+            $title = '';
+            if($id == 'name')  $title = " title='{$task->name}'";
+            if($id == 'story') $title = " title='{$task->storyTitle}'";
+
+            echo "<td class='" . $class . "'" . $title . ">";
             switch($id)
             {
             case 'id':
