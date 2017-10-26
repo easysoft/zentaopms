@@ -14,8 +14,9 @@
 <div id='featurebar'>
   <ul class='nav'>
     <?php 
-    echo '<li id="entry">'; common::printLink('entry', 'browse', "", $lang->entry->common); echo '</li>';
-    echo '<li id="webhook">'; common::printLink('webhook', 'browse', "",   $lang->entry->webhook); echo '</li>';
+    echo "<li id='entry' class='active'>"; common::printLink('entry', 'browse', '', $lang->entry->common); echo '</li>';
+    echo "<li id='webhook'>"; common::printLink('webhook', 'browse', 'type=default',   $lang->entry->webhook); echo '</li>';
+    echo "<li id='dingding'>"; common::printLink('webhook', 'browse', 'type=dingding',   $lang->entry->dingding); echo '</li>';
     ?>
   </ul>
   <div class='actions'>
@@ -26,4 +27,3 @@
     </div>
   </div>
 </div>
-<script>$('#<?php echo $this->moduleName;?>').addClass('active')</script>

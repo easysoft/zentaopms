@@ -276,6 +276,24 @@ class custom extends control
     }
 
     /**
+     * Set score display switch
+     *
+     * @access public
+     * @return void
+     */
+    public function score()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.common.global.score', $this->post->score);
+            die(js::reload('parent'));
+        }
+
+        $this->view->title = $this->lang->custom->score;
+        $this->display();
+    }
+
+    /**
      * Ajax save custom fields.
      * 
      * @param  string $module 

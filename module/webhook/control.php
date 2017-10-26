@@ -14,16 +14,22 @@ class webhook extends control
     /**
      * Browse webhooks. 
      * 
+     * @param  string $type 
+     * @param  string $orderBy 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($type = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title    = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->list;
-        $this->view->webhooks = $this->webhook->getList($orderBy, $pager);
+        $this->view->webhooks = $this->webhook->getList($type, $orderBy, $pager);
+        $this->view->type     = $type;
         $this->view->orderBy  = $orderBy;
         $this->view->pager    = $pager;
         $this->display();
@@ -32,22 +38,26 @@ class webhook extends control
     /**
      * Create a webhook. 
      * 
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function create()
+    public function create($type = '')
     {
         if($_POST)
         {
-            $this->webhook->create();
+            $this->webhook->create($type);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->webhook->saveSuccess, 'locate' => inlink('browse')));
+            $this->send(array('result' => 'success', 'message' => $this->lang->webhook->saveSuccess, 'locate' => inlink('browse', "type=$type")));
         }
 
         $this->app->loadLang('action');
         $this->view->title         = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->create;
+        $this->view->products      = $this->loadModel('product')->getPairs();
+        $this->view->projects      = $this->loadModel('project')->getPairs();
         $this->view->objectTypes   = $this->webhook->getObjectTypes();
         $this->view->objectActions = $this->webhook->getObjectActions();
+        $this->view->type          = $type;
         $this->display();
     }
 
@@ -60,16 +70,18 @@ class webhook extends control
      */
     public function edit($id)
     {
+        $webhook = $this->webhook->getByID($id);
         if($_POST)
         {
             $this->webhook->update($id);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->webhook->saveSuccess, 'locate' => inlink('browse')));
+            $this->send(array('result' => 'success', 'message' => $this->lang->webhook->saveSuccess, 'locate' => inlink('browse', "type=$webhook->type")));
         }
 
         $this->app->loadLang('action');
-        $webhook = $this->webhook->getByID($id);
         $this->view->title         = $this->lang->webhook->edit . $this->lang->colon . $webhook->name;
+        $this->view->products      = $this->loadModel('product')->getPairs();
+        $this->view->projects      = $this->loadModel('project')->getPairs();
         $this->view->objectTypes   = $this->webhook->getObjectTypes();
         $this->view->objectActions = $this->webhook->getObjectActions();
         $this->view->webhook       = $webhook;
@@ -85,7 +97,7 @@ class webhook extends control
      */
     public function delete($id)
     {
-        $this->webhook->delete($id);
+        $this->webhook->delete(TABLE_WEBHOOK, $id);
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success'));
@@ -137,9 +149,8 @@ class webhook extends control
             if($webhook)
             {
                 $contentType = zget($this->config->webhook->contentTypes, $webhook->contentType, 'application/json');
-                $httpCode    = $this->webhook->fetchHook($contentType, $webhook->url, $data->data);
-
-                $this->saveLog($data->webhook, $data->action, $webhook->url, $contentType, $data->data, $httpCode);
+                $result      = $this->webhook->fetchHook($contentType, $webhook->url, $data->data);
+                $this->saveLog($data->webhook, $data->action, $webhook->url, $contentType, $data->data, $result);
             }
             
             if($httpCode == 200) $this->dao->update(TABLE_WEBHOOKDATA)->set('status')->eq('sended')->where('id')->eq($data->id)->exec();

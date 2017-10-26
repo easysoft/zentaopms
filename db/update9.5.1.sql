@@ -10,16 +10,20 @@ CREATE TABLE IF NOT EXISTS `zt_entry` (
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
+  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_webhook`;
 CREATE TABLE IF NOT EXISTS `zt_webhook` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(10) NOT NULL DEFAULT 'default',
   `name` varchar(50) NOT NULL,
   `url` varchar(255) NOT NULL,
   `contentType` enum('json','form') NOT NULL DEFAULT 'json',
   `sendType` enum('sync','async') NOT NULL DEFAULT 'sync',
+  `products` text NOT NULL,
+  `projects` text NOT NULL,
   `params` varchar(100) NOT NULL,
   `actions` text NOT NULL,
   `desc` text NOT NULL,
@@ -27,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `zt_webhook` (
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
+  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -53,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `zt_log` (
   `url` varchar(255) NOT NULL,
   `contentType` varchar(40) NOT NULL,
   `data` text NOT NULL,
-  `status` smallint(5) NOT NULL,
+  `result` text  NOT NULL,
   PRIMARY KEY `id` (`id`),
   KEY `objectType` (`objectType`),
   KEY `obejctID` (`objectID`)
@@ -85,6 +90,8 @@ CREATE TABLE `zt_score` (
   `time` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `account` (`account`),
-  KEY `method` (`method`),
-  KEY `model` (`model`)
+  KEY `model` (`model`),
+  KEY `method` (`method`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('*/5', '*', '*', '*', '*', 'moduleName=webhook&methodName=asyncSend', '异步发送Webhook', 'zentao', 0, 'normal', '0000-00-00 00:00:00');

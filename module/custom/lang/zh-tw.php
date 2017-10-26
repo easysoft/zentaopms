@@ -13,6 +13,7 @@ $lang->custom->owner     = '所有者';
 $lang->custom->module    = '模組';
 $lang->custom->section   = '附加部分';
 $lang->custom->lang      = '所屬語言';
+$lang->custom->score     = '積分';
 
 $lang->custom->object['story']    = '需求';
 $lang->custom->object['task']     = '任務';
@@ -119,3 +120,6 @@ $lang->custom->workingList['onlyTask']  = '任務管理工具';
 
 $lang->custom->menuTip  = '點擊顯示或隱藏導航條目，拖拽來更改顯示順序。';
 $lang->custom->saveFail = '保存失敗！';
+
+$lang->custom->scoreList[0] = '關閉';
+$lang->custom->scoreList[1] = '開啓';

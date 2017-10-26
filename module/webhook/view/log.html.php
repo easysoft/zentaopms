@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="titlebar">
   <div class="heading">
-    <strong><?php echo html::a(inlink('browse'), $lang->webhook->common);?></strong>
+    <strong><?php echo html::a(inlink('browse', "type={$webhook->type}"), $webhook->type ? $lang->webhook->dingding : $lang->webhook->common);?></strong>
     <small class="text-muted"> <?php echo $webhook->name;?> </small>
     <small class="text-muted"> <?php echo $lang->webhook->log;?> <i class="icon-file-text-o"></i></small>
   </div>
@@ -26,7 +26,7 @@
       <th><?php common::printOrderLink('url', $orderBy, $vars, $lang->webhook->url);?></th>
       <th class='w-300px'><?php common::printOrderLink('action', $orderBy, $vars, $lang->webhook->action);?></th>
       <th class='w-200px'><?php common::printOrderLink('contentType', $orderBy, $vars, $lang->webhook->contentType);?></th>
-      <th class='w-80px'><?php  common::printOrderLink('status', $orderBy, $vars, $lang->webhook->status);?></th>
+      <th class='w-200px'><?php  common::printOrderLink('status', $orderBy, $vars, $lang->webhook->status);?></th>
     </tr>
   </thead>
   <tbody>
@@ -34,9 +34,9 @@
     <tr>
       <td class='text-center'><?php echo $id;?></td>
       <td class='text' title='<?php echo $log->url;?>'><?php echo $log->url;?></td>
-      <td class='text' title='<?php echo $log->data->text;?>'><?php echo $log->data->text;?></td>
+      <td class='text' title='<?php echo $log->action;?>'><?php echo html::a($log->actionURL, $log->action);?></td>
       <td class='text-center'><?php echo $log->contentType;?></td>
-      <td><?php echo $log->status;?></td>
+      <td title='<?php echo $log->result;?>'><?php echo $log->result;?></td>
     </tr>
     <?php endforeach;?>
   </tbody>

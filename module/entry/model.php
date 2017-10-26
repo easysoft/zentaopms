@@ -24,6 +24,18 @@ class entryModel extends model
     }
 
     /**
+     * Get an entry by code. 
+     * 
+     * @param  string $code 
+     * @access public
+     * @return array
+     */
+    public function getByCode($code)
+    {
+        return $this->dao->select('*')->from(TABLE_ENTRY)->where('deleted')->eq('0')->andWhere('code')->eq($code)->fetch();
+    }
+
+    /**
      * Get entry list. 
      * 
      * @param  string $orderBy
@@ -33,7 +45,7 @@ class entryModel extends model
      */
     public function getList($orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('*')->from(TABLE_ENTRY)->orderBy($orderBy)->page($pager)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_ENTRY)->where('deleted')->eq('0')->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
 
     /**
@@ -94,17 +106,15 @@ class entryModel extends model
         return common::createChanges($oldEntry, $entry);
     }
 
-    /**
-     * Delete an entry. 
-     * 
-     * @param  int    $entryID 
-     * @param  int    $null 
-     * @access public
-     * @return bool
-     */
-    public function delete($entryID, $null = null)
+    public function saveLog($entryID, $url)
     {
-        $this->dao->delete()->from(TABLE_ENTRY)->where('id')->eq($entryID)->exec();
+        $log = new stdclass();
+        $log->objectType = 'entry';
+        $log->objectID   = $entryID;
+        $log->url        = $url;
+        $log->date       = helper::now();
+
+        $this->dao->insert(TABLE_LOG)->data($log)->exec();
         return !dao::isError();
     }
 }

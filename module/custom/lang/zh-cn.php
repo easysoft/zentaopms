@@ -15,6 +15,7 @@ $lang->custom->section   = '附加部分';
 $lang->custom->lang      = '所属语言';
 $lang->custom->setPublic = '设为公共';
 $lang->custom->required  = '必填项';
+$lang->custom->score     = '积分';
 
 $lang->custom->object['story']    = '需求';
 $lang->custom->object['task']     = '任务';
@@ -121,3 +122,6 @@ $lang->custom->workingList['onlyTask']  = '任务管理工具';
 
 $lang->custom->menuTip  = '点击显示或隐藏导航条目，拖拽来更改显示顺序。';
 $lang->custom->saveFail = '保存失败！';
+
+$lang->custom->scoreList[0] = '关闭';
+$lang->custom->scoreList[1] = '开启';

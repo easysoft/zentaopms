@@ -29,8 +29,9 @@
       <tr>
         <th><?php echo $lang->webhook->url;?></th>
         <td><?php echo html::input('url', '', "class='form-control'");?></td>
-        <td></td>
+        <td><?php if($type == 'dingding') echo $lang->webhook->note->dingding;?></td>
       </tr>
+      <?php if($type != 'dingding'):?>
       <tr>
         <th><?php echo $lang->webhook->contentType;?></th>
         <td><?php echo html::select('contentType', $config->webhook->contentTypes, '', "class='form-control'");?></td>
@@ -41,10 +42,23 @@
         <td><?php echo html::select('sendType', $lang->webhook->sendTypeList, '', "class='form-control'");?></td>
         <td><?php echo $lang->webhook->note->async;?></td>
       </tr>
+      <?php endif;?>
+      <tr>
+        <th><?php echo $lang->webhook->product;?></th>
+        <td><?php echo html::select('products[]', $products, '', "class='form-control chosen' multiple");?></td>
+        <td><?php echo $lang->webhook->note->product;?></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->webhook->project;?></th>
+        <td><?php echo html::select('projects[]', $projects, '', "class='form-control chosen' multiple");?></td>
+        <td><?php echo $lang->webhook->note->project;?></td>
+      </tr>
+      <?php if($type != 'dingding'):?>
       <tr>
         <th><?php echo $lang->webhook->params;?></th>
         <td class='labelWidth' colspan='2'><?php echo html::checkbox('params', $lang->webhook->paramsList, 'message');?></td>
       </tr>
+      <?php endif;?>
       <tr>
         <th><?php echo $lang->webhook->action;?></th>
         <td colspan='2'>

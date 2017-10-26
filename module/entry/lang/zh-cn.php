@@ -1,9 +1,10 @@
 <?php
-$lang->entry->common  = '应用';
-$lang->entry->list    = '应用列表';
-$lang->entry->api     = '接口';
-$lang->entry->webhook = 'webhook';
-$lang->entry->log     = '日志';
+$lang->entry->common   = '应用';
+$lang->entry->list     = '应用列表';
+$lang->entry->api      = '接口';
+$lang->entry->webhook  = 'webhook';
+$lang->entry->dingding = '钉钉';
+$lang->entry->log      = '日志';
 
 $lang->entry->browse    = '浏览应用';
 $lang->entry->create    = '添加应用';
