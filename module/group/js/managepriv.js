@@ -25,3 +25,15 @@ function setNoChecked()
     })
     $('#noChecked').val(noCheckValue);
 }
+
+$(function()
+{
+    $("[name^='allchecker']").change(function()
+    {
+        var click = $(this).attr('onclick');
+        if(click.indexOf('""') >= 0 || click.indexOf('"my"') >= 0)
+        {
+            $('#my-limited').closest('.group-item').find('input').prop("checked", false);
+        }
+    })
+})

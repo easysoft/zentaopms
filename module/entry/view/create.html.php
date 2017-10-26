@@ -55,8 +55,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->entry->apiIndex;?></th>
-        <td><?php echo common::getSysURL() . DS . "api.php?{$config->moduleVar}=moduleName&{$config->methodVar}=methodName&<span>params=params</span>";?></td>
-        <td></td>
+        <td colspan='2'><?php echo common::getSysURL() . DS . "api.php?{$config->moduleVar}=moduleName&{$config->methodVar}=methodName&<span>params=params</span>&code=code&token=token";?></td>
       </tr>
       <tr>
         <th></th>

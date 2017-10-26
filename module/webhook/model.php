@@ -69,7 +69,7 @@ class webhookModel extends model
 
         $this->loadModel('action');
         $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
-
+        $users   = $this->loadModel('user')->getPairs('noletter');
         foreach($logs as $log)
         {
             if(!isset($actions[$log->action]))
@@ -100,7 +100,7 @@ class webhookModel extends model
      */
     public function getDataList()
     {
-        return $this->dao->select('*')->from(TABLE_WEBHOOKDATA)->where('status')->eq('wait')->orderBy('id')->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_WEBHOOKDATAS)->where('status')->eq('wait')->orderBy('id')->fetchAll('id');
     }
 
     /**
@@ -317,6 +317,7 @@ class webhookModel extends model
             $oldOnlyBody = 'yes';
             unset($_GET['onlybody']);
         }
+        if($objectType == 'case') $objectType = 'testcase';
         $viewLink = helper::createLink($objectType, 'view', "id=$objectID");
         if($oldOnlyBody) $_GET['onlybody'] = $oldOnlyBody;
 
@@ -401,7 +402,7 @@ class webhookModel extends model
         $webhookData->createdBy   = $this->app->user->account;
         $webhookData->createdDate = helper::now();
 
-        $this->dao->insert(TABLE_WEBHOOKDATA)->data($webhookData)->exec();
+        $this->dao->insert(TABLE_WEBHOOKDATAS)->data($webhookData)->exec();
         return !dao::isError();
     }
 

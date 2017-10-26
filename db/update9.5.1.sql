@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `zt_log` (
   `url` varchar(255) NOT NULL,
   `contentType` varchar(40) NOT NULL,
   `data` text NOT NULL,
-  `status` smallint(5) NOT NULL,
+  `result` text  NOT NULL,
   PRIMARY KEY `id` (`id`),
   KEY `objectType` (`objectType`),
   KEY `obejctID` (`objectID`)

@@ -24,6 +24,18 @@ class entryModel extends model
     }
 
     /**
+     * Get an entry by code. 
+     * 
+     * @param  string $code 
+     * @access public
+     * @return array
+     */
+    public function getByCode($code)
+    {
+        return $this->dao->select('*')->from(TABLE_ENTRY)->where('deleted')->eq('0')->andWhere('code')->eq($code)->fetch();
+    }
+
+    /**
      * Get entry list. 
      * 
      * @param  string $orderBy
@@ -92,5 +104,17 @@ class entryModel extends model
         if(dao::isError()) return false;
 
         return common::createChanges($oldEntry, $entry);
+    }
+
+    public function saveLog($entryID, $url)
+    {
+        $log = new stdclass();
+        $log->objectType = 'entry';
+        $log->objectID   = $entryID;
+        $log->url        = $url;
+        $log->date       = helper::now();
+
+        $this->dao->insert(TABLE_LOG)->data($log)->exec();
+        return !dao::isError();
     }
 }
