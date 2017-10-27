@@ -14,7 +14,7 @@
     <div class='heading'><?php echo html::icon($lang->icons['score']); ?><?php echo $lang->score->record; ?></div>
     <div class='actions'>
       <span class='btn disabled'><label><?php echo $lang->score->current; ?>:</label><?php echo $user->score; ?></span>
-      <span class='btn disabled'><label><?php echo $lang->score->level; ?>:</label><?php echo $user->score_level; ?></span>
+      <span class='btn disabled hidden'><label><?php echo $lang->score->level; ?>:</label><?php echo $user->score_level; ?></span>
     </div>
   </div>
   <table class='table tablesorter'>

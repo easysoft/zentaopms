@@ -911,6 +911,8 @@ class testtaskModel extends model
             }
         }
 
+        $this->loadModel('score')->score('testTask', 'runCase', $postData->case);
+
         return $caseResult;
     }
 

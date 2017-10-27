@@ -37,7 +37,8 @@ class scoreModel extends model
     {
         if(empty($this->config->score->model[$model][$method])) return true;
         $rule = $this->config->score->model[$model][$method];
-        $desc = $this->lang->score->methods[$model][$method];
+        $desc = $this->lang->score->models[$model];
+        $user = $this->app->user->account;
         switch($model)
         {
             case 'user':
@@ -49,13 +50,13 @@ class scoreModel extends model
                 }
                 break;
             case 'doc':
-                if($method == 'create') $desc = $this->lang->score->models[$model] . 'ID:' . $param;
+                if($method == 'create') $desc .= 'ID:' . $param;
                 break;
             case 'todo':
-                if($method == 'create') $desc = $this->lang->score->methods[$model][$method] . 'ID:' . $param;
+                if($method == 'create') $desc .= 'ID:' . $param;
                 break;
             case 'story':
-                $desc = $this->lang->score->methods[$model][$method] . 'ID:' . $param;
+                $desc .= 'ID:' . $param;
                 if($method == 'close')
                 {
                     $createUser = $this->dao->findById($param)->from(TABLE_STORY)->fetch();
@@ -68,8 +69,83 @@ class scoreModel extends model
                     }
                 }
                 break;
+            case 'task':
+                $desc .= 'ID:' . $param;
+                if($method == 'finish')
+                {
+                    $desc = $this->lang->score->methods[$model][$method] . 'ID:' . $param;
+                    //每完成一个任务，增加初始积分1 + 工时积分round(工时 /10 * 预计 / 消耗) + 优先级积分(p1 2, p2, 1) 如果任务取消了，没有积分。
+                    $task = $this->loadModel('task')->getById($param);
+                    if(!empty($rule['other'][$task->pri])) $rule['score'] = $rule['score'] + $rule['other'][$task->pri];
+                    if(!empty($task->estimate)) $rule['score'] = $rule['score'] + round(($task->consumed / 10 * $task->estimate / $task->consumed), 1);
+                }
+                break;
+            case 'bug':
+                $desc .= 'ID:' . $param;
+                if($method == 'createFormCase')
+                {
+                    $desc     = $this->lang->score->models['testcase'] . 'ID:' . $param;
+                    $caseUser = $this->dao->findById($param)->from(TABLE_CASE)->fetch();
+                    if(!empty($caseUser))
+                    {
+                        $user = $caseUser->openedBy;
+                    }
+                }
+                if($method == 'saveTplModal') $desc = $this->lang->score->methods[$model][$method] . 'ID:' . $param;
+                if($method == 'confirmBug')
+                {
+                    $user = $param->openedBy;
+                    if(!empty($rule['other'][$param->severity])) $rule['score'] = $rule['score'] + $rule['other'][$param->severity];
+                }
+                if($method == 'resolve' && !empty($rule['other'][$param->severity])) $rule['score'] = $rule['score'] + $rule['other'][$param->severity];
+                break;
+            case 'testTask':
+                if($method == 'runCase') $desc = $this->lang->score->methods[$model][$method] . 'ID:' . $param;
+                break;
+            case 'build':
+                if($method == 'create') $desc .= 'ID:' . $param;
+                break;
+            case 'project':
+                if($method == 'create') $desc .= 'ID:' . $param;
+                if($method == 'close')
+                {
+                    $desc = $this->lang->score->methods[$model][$method] . ',' . $desc . 'ID:' . $param->id;
+                    if(!empty($param->PM))
+                    {
+                        $rule['score'] = $param->end > date('Y-m-d') ? $rule['other']['manager'][0] + $rule['other']['manager'][1] : $rule['other']['manager'][0];
+                        $this->saveScore($param->PM, $rule, $model, $method, $desc);
+                    }
+                    $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->eq($param->id)->fetchGroup('account');
+                    if(!empty($teams))
+                    {
+                        $users         = array_keys($teams);
+                        $rule['score'] = $param->end > date('Y-m-d') ? $rule['other']['member'][0] + $rule['other']['member'][1] : $rule['other']['member'][0];
+                        foreach($users as $user)
+                        {
+                            if($user != $param->PM) $this->saveScore($user, $rule, $model, $method, $desc);
+                        }
+                    }
+                }
+                return true;
+                break;
+            case 'productplan':
+                if($method == 'create') $desc .= 'ID:' . $param;
+                break;
+            case 'release':
+                if($method == 'create') $desc .= 'ID:' . $param;
+                break;
+            case 'testcase':
+                if($method == 'create') $desc .= 'ID:' . $param;
+                break;
+            case 'search':
+                if($method == 'saveQuery') $desc .= 'ID:' . $param;
+                if($method == 'saveQueryAdvanced') $desc = $this->lang->score->methods[$model][$method];
+                break;
+            case 'ajax':
+                $desc = $this->lang->score->methods[$model][$method];
+                break;
         }
-        $this->saveScore($this->app->user->account, $rule, $model, $method, $desc);
+        $this->saveScore($user, $rule, $model, $method, $desc);
     }
 
     /**

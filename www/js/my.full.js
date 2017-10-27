@@ -193,6 +193,11 @@ function showSearchMenu(objectType, objectID, module, method, extra)
     {
         $menu.find('#search').focus();
     }
+    if(!$.cookie('ajax_quickDump'))
+    {
+        $.cookie('ajax_quickDump', 'on', {expires: config.cookieLife, path: config.webRoot});
+        $.get(createLink('score', 'ajax', "method=quickDump"));
+    }
 }
 
 /**
@@ -1740,11 +1745,21 @@ function initHotKey()
     {
         /* left, go to pre object. */
         var preLink = $('#pre').attr('href');
+        if(!$.cookie('ajax_lastNext'))
+        {
+            $.cookie('ajax_lastNext', 'on', {expires: config.cookieLife, path: config.webRoot});
+            $.get(createLink('score', 'ajax', "method=lastNext"));
+        }
         if(preLink) location.href = preLink;
     }).bind('keydown', 'right', function()
     {
         /* right, go to next object. */
         var nextLink = $('#next').attr('href');
+        if(!$.cookie('ajax_lastNext'))
+        {
+            $.cookie('ajax_lastNext', 'on', {expires: config.cookieLife, path: config.webRoot});
+            $.get(createLink('score', 'ajax', "method=lastNext"));
+        }
         if(nextLink) location.href = nextLink;
     });
 }

@@ -151,6 +151,7 @@ class productplanModel extends model
         {
             $planID = $this->dao->lastInsertID();
             $this->file->updateObjectID($this->post->uid, $planID, 'plan');
+            $this->loadModel('score')->score('productplan', 'create', $planID);
             return $planID;
         }
     }

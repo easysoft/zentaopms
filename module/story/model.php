@@ -359,7 +359,7 @@ class storyModel extends model
             if(is_dir($realPath)) $classFile->removeDir($realPath);
             unset($_SESSION['storyImagesFile']);
         }
-
+        $this->loadModel('score')->score('ajax', 'batchCreate');
         return $mails;
     }
 
@@ -609,7 +609,7 @@ class storyModel extends model
                 }
             }
         }
-
+        $this->loadModel('score')->score('ajax', 'batchEdit');
         return $allChanges;
     }
 
