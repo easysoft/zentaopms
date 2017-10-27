@@ -12,7 +12,7 @@
 <?php include './taskheader.html.php';?> 
 <style>
 <?php foreach($colorList as $status => $color):?>
-<?php echo ".board-bug-$status, .board-task-$status {background: $color;}\n"?>
+<?php echo ".board-bug-$status, .board-task-$status {background: " . ($color ? $color : '#000') . ";}\n"?>
 <?php endforeach?>
 </style>
 <?php

@@ -35,8 +35,8 @@
         <div class='row-table'>
           <?php foreach($colorList as $status => $color):?>
           <div class='col-table'>
+            <input type='hidden' id='color<?php echo $status?>' name="colorList[<?php echo $status?>]" data-provide='colorpicker' data-wrapper='input-group-btn' value='<?php echo $color;?>' data-colors='#333,#2B529C,#E48600,#D2323D,#229F24,#777,#D2691E,#008B8B,#2E8B57,#4169E1,#4B0082,#FA8072,#BA55D3,#2E8B57,#6B8E23'>
             <?php echo $lang->task->statusList[$status];?>
-            <input type='hidden' id='color<?php echo $status?>' name="colorList[<?php echo $status?>]" data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false'  data-update-text='#name' value='<?php echo $color;?>'>
           </div>
           <?php endforeach;?>
         </div>
