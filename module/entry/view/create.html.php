@@ -54,8 +54,8 @@
         <td></td>
       </tr>
       <tr>
-        <th><?php echo $lang->entry->apiIndex;?></th>
-        <td colspan='2'><?php echo common::getSysURL() . DS . "api.php?{$config->moduleVar}=moduleName&{$config->methodVar}=methodName&<span>params=params</span>&code=code&token=token";?></td>
+        <th><?php echo $lang->entry->help;?></th>
+        <td colspan='2'><?php echo html::a($config->entry->help, '', "target='_blank'");?></td>
       </tr>
       <tr>
         <th></th>
