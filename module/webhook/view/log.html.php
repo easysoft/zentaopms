@@ -23,6 +23,7 @@
     <tr>
       <?php $vars = "id={$webhook->id}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
       <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->webhook->id);?></th>
+      <th class='w-160px'><?php common::printOrderLink('date', $orderBy, $vars, $lang->webhook->date);?></th>
       <th><?php common::printOrderLink('url', $orderBy, $vars, $lang->webhook->url);?></th>
       <th class='w-300px'><?php common::printOrderLink('action', $orderBy, $vars, $lang->webhook->action);?></th>
       <th class='w-200px'><?php common::printOrderLink('contentType', $orderBy, $vars, $lang->webhook->contentType);?></th>
@@ -33,6 +34,7 @@
     <?php foreach($logs as $id => $log):?>
     <tr>
       <td class='text-center'><?php echo $id;?></td>
+      <td><?php echo $log->date;?></td>
       <td class='text' title='<?php echo $log->url;?>'><?php echo $log->url;?></td>
       <td class='text' title='<?php echo $log->action;?>'><?php echo html::a($log->actionURL, $log->action);?></td>
       <td class='text-center'><?php echo $log->contentType;?></td>

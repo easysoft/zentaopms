@@ -2103,41 +2103,49 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getKanbanGroupData($stories, $tasks, $bugs)
+    public function getKanbanGroupData($stories, $tasks, $bugs, $type = 'story')
     {
-        $stories['nostory'] = new stdclass();
+        $kanbanGroup = array();
+        if($type == 'story') $kanbanGroup = $stories;
+
         foreach($tasks as $task)
         {
-            $storyID = $task->storyID;
-            $status  = $task->status;
-            if(!empty($storyID) and isset($stories[$storyID]))
+            $groupKey = $type == 'story' ? $task->storyID : $task->$type;
+
+            $status   = $task->status;
+            if(!empty($groupKey) and (($type == 'story' and isset($stories[$groupKey])) or $type != 'story'))
             {
-                $stories[$storyID]->tasks[$status][] = $task;
+                if(!isset($kanbanGroup[$groupKey])) $kanbanGroup[$groupKey] = new stdclass();
+                $kanbanGroup[$groupKey]->tasks[$status][] = $task;
             }
             else
             {
-                $noStoryTasks[$status][] = $task;
+                $noKeyTasks[$status][] = $task;
             }
         }
-        if(isset($noStoryTasks)) $stories['nostory']->tasks = $noStoryTasks;
 
         foreach($bugs as $bug)
         {
-            $storyID = $bug->story;
+            $groupKey = $type == 'finishedBy' ? $bug->resolvedBy : $bug->$type;
+
             $status  = $bug->status;
             $status  = $status == 'active' ? 'wait' : ($status == 'resolved' ? ($bug->resolution == 'postponed' ? 'cancel' : 'done') : $status);
-            if(!empty($storyID) and isset($stories[$storyID]))
+            if(!empty($groupKey) and (($type == 'story' and isset($stories[$groupKey])) or $type != 'story'))
             {
-                $stories[$storyID]->bugs[$status][] = $bug;
+                if(!isset($kanbanGroup[$groupKey])) $kanbanGroup[$groupKey] = new stdclass();
+                $kanbanGroup[$groupKey]->bugs[$status][] = $bug;
             }
             else
             {
-                $noStoryBugs[$status][] = $bug;
+                $noKeyBugs[$status][] = $bug;
             }
         }
-        if(isset($noStoryBugs)) $stories['nostory']->bugs = $noStoryBugs;
 
-        return $stories;
+        $kanbanGroup['nokey'] = new stdclass();
+        if(isset($noKeyTasks)) $kanbanGroup['nokey']->tasks = $noKeyTasks;
+        if(isset($noKeyBugs))  $kanbanGroup['nokey']->bugs = $noKeyBugs;
+
+        return $kanbanGroup;
     }
 
     /**

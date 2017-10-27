@@ -94,4 +94,4 @@ CREATE TABLE `zt_score` (
   KEY `method` (`method`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('*/5', '*', '*', '*', '*', 'moduleName=webhook&methodName=asyncSend', '异步发送Webhook', 'zentao', 0, 'normal', '0000-00-00 00:00:00');
+INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('*/5', '*', '*', '*', '*', 'moduleName=webhook&methodName=asyncSend', '异步发送Webhook', 'zentao', 1, 'normal', '0000-00-00 00:00:00');

@@ -1247,7 +1247,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function kanban($projectID, $orderBy = 'pri_asc')
+    public function kanban($projectID, $type = 'story', $orderBy = 'pri_asc')
     {
         /* Save to session. */
         $uri = $this->app->getURI(true);
@@ -1260,19 +1260,22 @@ class project extends control
 
         $this->project->setMenu($this->projects, $projectID);
         $project = $this->loadModel('project')->getById($projectID);
-        $stories = $this->loadModel('story')->getProjectStories($projectID, $orderBy);
         $tasks   = $this->project->getKanbanTasks($projectID, "id");
         $bugs    = $this->loadModel('bug')->getProjectBugs($projectID);
-        $stories = $this->project->getKanbanGroupData($stories, $tasks, $bugs);
+        $stories = $this->loadModel('story')->getProjectStories($projectID, $orderBy);
 
-        $this->view->title      = $this->lang->project->kanban;
-        $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
-        $this->view->position[] = $this->lang->project->kanban;
-        $this->view->stories    = $stories;
-        $this->view->realnames  = $this->loadModel('user')->getPairs('noletter');
-        $this->view->orderBy    = $orderBy;
-        $this->view->projectID  = $projectID;
-        $this->view->project    = $project;
+        $kanbanGroup = $this->project->getKanbanGroupData($stories, $tasks, $bugs, $type);
+
+        $this->view->title       = $this->lang->project->kanban;
+        $this->view->position[]  = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $this->view->position[]  = $this->lang->project->kanban;
+        $this->view->stories     = $stories;
+        $this->view->realnames   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->orderBy     = $orderBy;
+        $this->view->projectID   = $projectID;
+        $this->view->project     = $project;
+        $this->view->type        = $type;
+        $this->view->kanbanGroup = $kanbanGroup;
 
         $kanbanSetting = $this->project->getKanbanSetting($projectID);
 
