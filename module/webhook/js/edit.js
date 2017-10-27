@@ -13,5 +13,5 @@ $(function()
     });
 
     $('#name').focus();
-    $('#paramsmessage').attr('disabled', 'disabled');
+    $('#paramstext').attr('disabled', 'disabled');
 });

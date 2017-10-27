@@ -136,12 +136,20 @@ class webhook extends control
      */
     public function asyncSend()
     {
-        $webhooks = $this->webhook->getList();
-        if(empty($hooks)) return false;
-        $dataList = $this->webhook->getDataList();
-        if(empty($dataList)) return true;
+        $webhooks = $this->webhook->getList($type = '', $orderBy = 'id_desc', $pager = null, $decode = false);
+        if(empty($webhooks)) 
+        {
+            echo "NO WEBHOOK EXIST.\n";
+            return false;
+        }
 
-        $snoopy = $this->app->loadClass('snoopy');
+        $dataList = $this->webhook->getDataList();
+        if(empty($dataList)) 
+        {
+            echo "OK\n";
+            return true;
+        }
+
         foreach($dataList as $data)
         {
             $webhook = zget($webhooks, $data->webhook, '');
@@ -149,13 +157,15 @@ class webhook extends control
             {
                 $contentType = zget($this->config->webhook->contentTypes, $webhook->contentType, 'application/json');
                 $result      = $this->webhook->fetchHook($contentType, $webhook->url, $data->data);
-                $this->saveLog($data->webhook, $data->action, $webhook->url, $contentType, $data->data, $result);
+                $this->webhook->saveLog($data->webhook, $data->action, $webhook->url, $contentType, $data->data, $result);
             }
             
-            $this->dao->update(TABLE_WEBHOOKDATA)->set('status')->eq('sended')->where('id')->eq($data->id)->exec();
+            $this->dao->update(TABLE_WEBHOOKDATAS)->set('status')->eq('sended')->where('id')->eq($data->id)->exec();
         }
 
-        $this->dao->delete()->from(TABLE_WEBHOOKDATA)->where('status')->eq('sended')->exec();
+        $this->dao->delete()->from(TABLE_WEBHOOKDATAS)->where('status')->eq('sended')->exec();
+
+        echo "OK\n";
         return true;
     }
 }

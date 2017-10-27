@@ -31,10 +31,11 @@ class webhookModel extends model
      * @param  string $type
      * @param  string $orderBy
      * @param  object $pager
+     * @param  bool   $decode
      * @access public
      * @return array
      */
-    public function getList($type = '', $orderBy = 'id_desc', $pager = null)
+    public function getList($type = '', $orderBy = 'id_desc', $pager = null, $decode = true)
     {
         $webhooks = $this->dao->select('*')->from(TABLE_WEBHOOK)
             ->where('deleted')->eq('0')
@@ -42,7 +43,7 @@ class webhookModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        foreach($webhooks as $webhook) $webhook->actions = json_decode($webhook->actions);
+        if($decode) foreach($webhooks as $webhook) $webhook->actions = json_decode($webhook->actions);
         return $webhooks;
     }
 
@@ -208,7 +209,6 @@ class webhookModel extends model
         if(!$webhooks) $webhooks = $this->getList();
         if(!$webhooks) return true;
 
-        $snoopy = $this->app->loadClass('snoopy');
         foreach($webhooks as $id => $webhook)
         {
             if(!isset($webhook->actions->$objectType) or !in_array($actionType, $webhook->actions->$objectType)) continue;
