@@ -372,6 +372,7 @@ $lang->custom->menu    = $lang->admin->menu;
 $lang->editor->menu    = $lang->admin->menu;
 $lang->mail->menu      = $lang->admin->menu;
 $lang->dev->menu       = $lang->admin->menu;
+$lang->entry->menu     = $lang->admin->menu;
 $lang->webhook->menu   = $lang->admin->menu;
 
 /* 菜单分组。*/
@@ -422,6 +423,7 @@ $lang->error->int             = array("『%s』has to be numbers", "『%s』shou
 $lang->error->float           = "『%s』should be numbers, decimals included.";
 $lang->error->email           = "『%s』should be valid EMAIL.";
 $lang->error->date            = "『%s』should be valid date.";
+$lang->error->code            = "『%s』should be english or numbers.";
 $lang->error->account         = "『%s』should be valid account.";
 $lang->error->passwordsame    = "Two passwords should be consistent.";
 $lang->error->passwordrule    = "Password should meet requirements. It should be 6 characters at least.";
@@ -430,6 +432,16 @@ $lang->error->pasteImg        = 'Paste Image is not allowed in your browser!';
 $lang->error->noData          = 'No Data';
 $lang->error->editedByOther   = 'This record might have been changed. Please refresh and try to edit again!';
 $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Please exit tutorial first!';
+
+$lang->error->entry = array();
+$lang->error->entry['300001'] = 'Param code not set.';
+$lang->error->entry['300002'] = 'Param token not set.';
+$lang->error->entry['310001'] = 'Entry not exist.';
+$lang->error->entry['310002'] = 'Key of entry not set.';
+$lang->error->entry['320001'] = 'IP denied.';
+$lang->error->entry['330001'] = 'Invalid token.';
+$lang->error->entry['340001'] = 'Session code not set.';
+$lang->error->entry['340002'] = 'Session verify failed.';
 
 /* 分页信息。*/
 $lang->pager = new stdclass();

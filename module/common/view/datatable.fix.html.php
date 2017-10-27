@@ -49,6 +49,7 @@ $(function()
             success:function(){if(reload) window.location.reload();},
             url: '<?php echo $this->createLink('datatable', 'ajaxSave')?>'
         });
+        $.get(createLink('score', 'ajax', "method=switchToDataTable"));
     };
     window.saveDatatableConfig = saveDatatableConfig;
 });

@@ -1,32 +1,45 @@
 <?php
 /**
- * The log view file of entry module of RanZhi.
+ * The log view file of log module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
- * @package     entry 
+ * @package     log 
  * @version     $Id$
- * @link        http://www.ranzhico.com
+ * @link        http://www.zentao.net
  */
 ?>
-<?php include 'header.html.php';?>
-<table class='table table-condensed table-hover table-striped'>
+<?php include '../../common/view/header.html.php';?>
+<div id="titlebar">
+  <div class="heading">
+    <strong><?php echo html::a(inlink('browse'), $lang->entry->common);?></strong>
+    <small class="text-muted"> <?php echo $entry->name;?> </small>
+    <small class="text-muted"> <?php echo $lang->entry->log;?> <i class="icon-file-text-o"></i></small>
+  </div>
+</div>
+<table id='logList' class='table table-condensed table-hover table-striped tablesorter table-fixed'>
   <thead>
     <tr>
-      <th class='w-120px'><?php echo $lang->action->date;?></th>
-      <th class='w-100px'><?php echo $lang->action->actor;?></th>
-      <th><?php echo $lang->entry->desc;?></th>
+      <?php $vars = "id={$entry->id}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+      <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->entry->id);?></th>
+      <th class='w-160px'><?php  common::printOrderLink('date', $orderBy, $vars, $lang->entry->date);?></th>
+      <th><?php common::printOrderLink('url', $orderBy, $vars, $lang->entry->url);?></th>
     </tr>
   </thead>
   <tbody>
-    <?php foreach($actions as $action);?>
+    <?php foreach($logs as $id => $log):?>
     <tr>
-      <td><?php echo $action->date;?></td>
-      <td><?php echo zget($users, $action->actor);?></td>
-      <td><?php echo $action->extra;?></td>
+      <td class='text-center'><?php echo $id;?></td>
+      <td><?php echo $log->date;?></td>
+      <td class='text' title='<?php echo $log->url;?>'><?php echo $log->url;?></td>
     </tr>
     <?php endforeach;?>
   </tbody>
+  <tfoot>
+    <tr>
+      <td colspan='3'><?php $pager->show();?></td>
+    </tr>
+  </tfoot>
 </table>
 <?php include '../../common/view/footer.html.php';?>

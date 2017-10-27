@@ -280,10 +280,12 @@ $lang->block->typeList->story['closedBy']   = 'Closed by Me' ;
 $lang->block->typeList->product['noclosed'] = 'Open';
 $lang->block->typeList->product['closed']   = 'Closed';
 $lang->block->typeList->product['all']      = 'All';
+$lang->block->typeList->product['involved'] = 'Involved'
 
-$lang->block->typeList->project['undone']  = 'Undone';
-$lang->block->typeList->project['isdoing'] = 'Doing';
-$lang->block->typeList->project['all']     = 'All';
+$lang->block->typeList->project['undone']   = 'Undone';
+$lang->block->typeList->project['isdoing']  = 'Doing';
+$lang->block->typeList->project['all']      = 'All';
+$lang->block->typeList->project['involved'] = 'Involved';
 
 $lang->block->typeList->testtask['wait']    = 'Testing Pending';
 $lang->block->typeList->testtask['doing']   = 'Testing';

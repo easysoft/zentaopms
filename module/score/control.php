@@ -40,8 +40,6 @@ class score extends control
         $pager  = new pager($recTotal, $recPerPage, $pageID);
         $scores = $this->score->getScores($pager);
 
-        $this->loadModel('score')->score('user','login');
-
         $this->view->title  = $this->lang->score->common;
         $this->view->user   = $this->loadModel('user')->getById($this->app->user->account);
         $this->view->pager  = $pager;
@@ -52,14 +50,13 @@ class score extends control
     /**
      * Ajax action score
      *
-     * @param string $method
+     * @param string $method $.get(createLink('score', 'ajax', "method=selectLang"));
      *
      * @access public
      * @return void
      */
     public function ajax($method = '')
     {
-        //处理由ajax提交过来的任务,主要是一次性任务 在请求模型的时候model=ajax,
-        $this->loadModel('score')->score('ajax','login');
+        $this->loadModel('score')->score('ajax', $method);
     }
 }

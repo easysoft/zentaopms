@@ -36,21 +36,40 @@ class scoreModel extends model
     public function score($model = '', $method = '', $param = '')
     {
         if(empty($this->config->score->model[$model][$method])) return true;
+        $rule = $this->config->score->model[$model][$method];
+        $desc = $this->lang->score->methods[$model][$method];
         switch($model)
         {
             case 'user':
-                $desc = $this->lang->score->methods[$model][$method].'IP:'.helper::getRemoteIp();
-                $this->saveScore($this->app->user->account, $this->config->score->model[$model][$method], $model, $method, $desc);
+                if($method == 'login') $desc = $this->lang->score->methods[$model][$method] . 'IP:' . helper::getRemoteIp();
+                if($method == 'changePassword')
+                {
+                    if(!empty($rule['other'][$param])) $rule['score'] = $rule['score'] + $rule['other'][$param];
+                    $desc = $this->lang->score->methods[$model][$method];
+                }
                 break;
-            case 'ajax':
+            case 'doc':
+                if($method == 'create') $desc = $this->lang->score->models[$model] . 'ID:' . $param;
                 break;
-            case 'tutorial':
+            case 'todo':
+                if($method == 'create') $desc = $this->lang->score->methods[$model][$method] . 'ID:' . $param;
                 break;
-            case 'my':
-                break;
-            case 'all':
+            case 'story':
+                $desc = $this->lang->score->methods[$model][$method] . 'ID:' . $param;
+                if($method == 'close')
+                {
+                    $createUser = $this->dao->findById($param)->from(TABLE_STORY)->fetch();
+                    if(!empty($createUser))
+                    {
+                        $newRule          = $rule;
+                        $newRule['score'] = $rule['other']['createID'];
+                        $this->saveScore($createUser->openedBy, $newRule, $model, $method, $desc);
+                        unset($newRule);
+                    }
+                }
                 break;
         }
+        $this->saveScore($this->app->user->account, $rule, $model, $method, $desc);
     }
 
     /**
@@ -71,12 +90,12 @@ class scoreModel extends model
         {
             if(empty($rule['time']))
             {
-                $count = $this->dao->slect('id')->from(TABLE_SCORE)->where('account')->eq($account)->andWhere('model')->eq($model)->andWhere('method')->eq($method)->count('id');
+                $count = $this->dao->select('id')->from(TABLE_SCORE)->where('account')->eq($account)->andWhere('model')->eq($model)->andWhere('method')->eq($method)->count();
                 if($count >= $rule['num']) return true;
             }
             else
             {
-                $count = $this->dao->select('id')->from(TABLE_SCORE)->where('account')->eq($account)->andWhere('time')->between(date('Y-m-d 0:0:0'), date('Y-m-d 23:59:59'))->andWhere('model')->eq($model)->andWhere('method')->eq($method)->count('id');
+                $count = $this->dao->select('id')->from(TABLE_SCORE)->where('account')->eq($account)->andWhere('time')->between(date('Y-m-d 0:0:0'), date('Y-m-d 23:59:59'))->andWhere('model')->eq($model)->andWhere('method')->eq($method)->count();
                 if($count >= $rule['num']) return true;
             }
         }

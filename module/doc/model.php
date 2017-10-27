@@ -431,6 +431,7 @@ class docModel extends model
             $docContent->doc   = $docID;
             $docContent->files = join(',', array_keys($files));
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+            $this->loadModel('score')->score('doc', 'create', $docID);
             return array('status' => 'new', 'id' => $docID);
         }
         return false;

@@ -22,6 +22,8 @@ $lang->entry->createdBy   = '由谁创建';
 $lang->entry->createdDate = '创建时间';
 $lang->entry->editedby    = '最后编辑';
 $lang->entry->editedDate  = '编辑时间';
+$lang->entry->date        = '请求时间';
+$lang->entry->url         = '请求地址';
 
 $lang->entry->apiIndex      = '应用入口';
 $lang->entry->saveSuccess   = '保存成功';
@@ -30,6 +32,6 @@ $lang->entry->confirmDelete = '您确认要删除该应用吗？';
 $lang->entry->note = new stdClass();
 $lang->entry->note->name  = '授权应用名称';
 $lang->entry->note->code  = '授权应用代号，必须为字母或数字的组合';
-$lang->entry->note->ip    = "允许访问应用的ip，多个ip用逗号隔开。支持IP段，如192.168.1.*";
+$lang->entry->note->ip    = "允许访问API的应用ip，多个ip用逗号隔开。支持IP段，如192.168.1.*";
 $lang->entry->note->allIP = '无限制';
 $lang->entry->note->api   = 'moduleName、methodName以及参数列表替换成实际的值';

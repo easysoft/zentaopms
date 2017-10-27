@@ -372,6 +372,7 @@ class customModel extends model
         }
 
         $this->loadModel('setting')->setItem($settingKey, $menu);
+        $this->loadModel('score')->score('ajax', 'customMenu');
     }
 
     /**

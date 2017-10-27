@@ -415,6 +415,7 @@ function setTreeBox()
 function selectLang(lang)
 {
     $.cookie('lang', lang, {expires:config.cookieLife, path:config.webRoot});
+    $.get(createLink('score', 'ajax', "method=selectLang"));
     location.href = removeAnchor(location.href);
 }
 
@@ -427,6 +428,7 @@ function selectLang(lang)
 function selectTheme(theme)
 {
     $.cookie('theme', theme, {expires:config.cookieLife, path:config.webRoot});
+    $.get(createLink('score', 'ajax', "method=selectTheme"));
     location.href = removeAnchor(location.href);
 }
 
