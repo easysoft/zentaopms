@@ -1353,6 +1353,83 @@ class commonModel extends model
 
         return $convertedItems;
     }
+
+    /**
+     * Check an entry. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function checkEntry()
+    {
+        if(!$this->session->valid_entry)
+        {
+            if(!$this->session->entry_code) $this->response(340001);
+            if($this->session->valid_entry != md5(md5($this->get->code) . $this->server->remote_addr)) $this->response(340002);
+            return true;
+        }
+
+        if(!$this->get->code)  $this->response(300001);
+        if(!$this->get->token) $this->response(300002);
+
+        $entry = $this->loadModel('entry')->getByCode($this->get->code);
+        if(!$entry)      $this->response(310001);
+        if(!$entry->key) $this->response(310002);
+
+        $this->checkEntryIP($entry->ip);
+        $this->checkEntryToken($entry->key);
+
+        $this->session->set('ENTRY_CODE', $this->get->code);
+        $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . $this->server->remote_addr));
+        $this->loadModel('entry')->saveLog($entry->id, $this->server->request_uri);
+    }
+
+    /**
+     * Check ip of an entry. 
+     * 
+     * @param  string $ip 
+     * @access public
+     * @return void
+     */
+    public function checkEntryIP($ip)
+    {
+        $ipWhiteList = $this->config->ipWhiteList;
+        $this->config->ipWhiteList = $ip;
+        $result = $this->checkIP();
+        $this->config->ipWhiteList = $ipWhiteList;
+        if(!$result) $this->response(320001);
+    }
+
+    /**
+     * Check token of an entry. 
+     * 
+     * @param  string $key 
+     * @access public
+     * @return void
+     */
+    public function checkEntryToken($key)
+    {
+        parse_str($this->server->query_String, $queryString);
+        unset($queryString['token']);
+        $queryString = http_build_query($queryString);
+        if($_GET['token'] != md5(md5($queryString) . $key)) $this->response(330001);
+    }
+
+    /**
+     * Response. 
+     * 
+     * @param  int    $code 
+     * @access public
+     * @return void
+     */
+    public function response($code)
+    {
+        $response = new stdclass();
+        $response->errcode = $code;
+        $response->errmsg  = $this->lang->error->entry[$code];
+
+        die(helper::jsonEncode($response));
+    }
 }
 
 class common extends commonModel

@@ -22,8 +22,13 @@ $lang->webhook->product     = '关联产品';
 $lang->webhook->project     = '关联项目';
 $lang->webhook->action      = '触发动作';
 $lang->webhook->desc        = '描述';
+$lang->webhook->createdBy   = '由谁创建';
+$lang->webhook->createdDate = '创建时间';
+$lang->webhook->editedby    = '最后编辑';
+$lang->webhook->editedDate  = '编辑时间';
+$lang->webhook->date        = '发送时间';
 $lang->webhook->data        = '数据';
-$lang->webhook->status      = '状态';
+$lang->webhook->result      = '结果';
 
 $lang->webhook->sendTypeList['sync']  = '同步';
 $lang->webhook->sendTypeList['async'] = '异步';
@@ -36,7 +41,7 @@ $lang->webhook->paramsList['action']     = '动作';
 $lang->webhook->paramsList['actor']      = '操作者';
 $lang->webhook->paramsList['date']       = '操作日期';
 $lang->webhook->paramsList['comment']    = '备注';
-$lang->webhook->paramsList['message']    = '操作内容';
+$lang->webhook->paramsList['text']       = '操作内容';
 
 $lang->webhook->saveSuccess   = '保存成功';
 $lang->webhook->confirmDelete = '您确认要删除该webhook吗？';

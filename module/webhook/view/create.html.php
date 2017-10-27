@@ -56,7 +56,7 @@
       <?php if($type != 'dingding'):?>
       <tr>
         <th><?php echo $lang->webhook->params;?></th>
-        <td class='labelWidth' colspan='2'><?php echo html::checkbox('params', $lang->webhook->paramsList, 'message');?></td>
+        <td class='labelWidth' colspan='2'><?php echo html::checkbox('params', $lang->webhook->paramsList, 'text');?></td>
       </tr>
       <?php endif;?>
       <tr>

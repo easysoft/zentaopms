@@ -432,6 +432,16 @@ $lang->error->noData          = '没有数据';
 $lang->error->editedByOther   = '该记录可能已经被改动。请刷新页面重新编辑！';
 $lang->error->tutorialData    = '新手模式下不会插入数据，请退出新手模式操作';
 
+$lang->error->entry = array();
+$lang->error->entry['300001'] = '缺少code参数';
+$lang->error->entry['300002'] = '缺少token参数';
+$lang->error->entry['310001'] = '应用不存在';
+$lang->error->entry['310002'] = '应用未设置密钥';
+$lang->error->entry['320001'] = '该IP访问被限制访问';
+$lang->error->entry['330001'] = '不合法的token参数';
+$lang->error->entry['340001'] = '缺少session code';
+$lang->error->entry['340002'] = 'session验证失败';
+
 /* 分页信息。*/
 $lang->pager = new stdclass();
 $lang->pager->noRecord     = "暂时没有记录";
