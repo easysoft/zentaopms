@@ -58,6 +58,7 @@ $lang->project->activate = '激活';
 $lang->project->putoff   = '延期';
 $lang->project->suspend  = '挂起';
 $lang->project->close    = '关闭';
+$lang->project->export   = '导出';
 
 $lang->project->typeList['sprint']    = "短期$lang->projectCommon";
 $lang->project->typeList['waterfall'] = "长期$lang->projectCommon";

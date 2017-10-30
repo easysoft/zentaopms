@@ -40,8 +40,6 @@ class taskModel extends model
             ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams')
             ->get();
 
-
-
         foreach($this->post->assignedTo as $assignedTo)
         {
             /* When type is affair and has assigned then ignore none. */
@@ -126,7 +124,7 @@ class taskModel extends model
                 $team->task = $taskID;
                 $this->dao->insert(TABLE_TEAM)->data($team)->autoCheck()->exec();
             }
-
+            $this->loadModel('score')->score('task', 'create', $taskID);
             $tasksID[$assignedTo] = array('status' => 'created', 'id' => $taskID);
         }
         return $tasksID;
@@ -226,13 +224,14 @@ class taskModel extends model
             $taskID = $this->dao->lastInsertID();
             if($story) $this->story->setStage($tasks->story[$i]);
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
-
+            $this->loadModel('score')->score('task', 'create', $taskID);
             $mails[$i]           = new stdclass();
             $mails[$i]->taskID   = $taskID;
             $mails[$i]->actionID = $actionID;
         }
 
         $this->countTime($tasks->parent[0]);
+        $this->loadModel('score')->score('ajax', 'batchCreate');
         return $mails;
     }
 
@@ -601,7 +600,7 @@ class taskModel extends model
                 die(js::error('task#' . $taskID . dao::getError(true)));
             }
         }
-
+        $this->loadModel('score')->score('ajax', 'batchEdit');
         return $allChanges;
     }
 
@@ -886,6 +885,7 @@ class taskModel extends model
         $this->countTime($oldTask->parent);
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
+        $this->loadModel('score')->score('task', 'finish', $taskID);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -940,7 +940,7 @@ class taskModel extends model
         $data         = new stdClass();
         $data->status = 'closed';
         $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('parent')->eq($taskID)->exec();
-
+        $this->loadModel('score')->score('task', 'close', $taskID);
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }

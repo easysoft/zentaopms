@@ -13,6 +13,10 @@
 <?php include '../../common/view/sortable.html.php';?>
 <div id='featurebar'>
   <div class='actions'>
+    <?php 
+    $link = $this->createLink('product', 'export', "status=$status&orderBy=$orderBy");
+    if(common::hasPriv('product', 'export'))echo html::a($link, "<i class='icon-download-alt icon'></i> " . $lang->export, '', "class='export btn'");
+    ?>
     <?php echo html::a($this->createLink('product', 'create'), "<i class='icon-plus'></i> " . $lang->product->create,'', "class='btn'") ?>
   </div>
   <ul class='nav'>
@@ -42,15 +46,15 @@
       <tr>
         <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
         <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?></th>
-        <th class='w-80px'><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
-        <th class='w-80px'><?php echo $lang->story->statusList['changed'] . $lang->story->common;?></th>
-        <th class='w-80px'><?php echo $lang->story->statusList['draft']   . $lang->story->common;?></th>
-        <th class='w-80px'><?php echo $lang->story->statusList['closed']  . $lang->story->common;?></th>
+        <th class='w-80px'><?php echo $lang->product->activeStories;?></th>
+        <th class='w-80px'><?php echo $lang->product->changedStories;?></th>
+        <th class='w-80px'><?php echo $lang->product->draftStories;?></th>
+        <th class='w-80px'><?php echo $lang->product->closedStories;?></th>
         <th class='w-80px'><?php echo $lang->product->plans;?></th>
         <th class='w-80px'><?php echo $lang->product->releases;?></th>
         <th class='w-80px'><?php echo $lang->product->bugs;?></th>
-        <th class='w-80px'><?php echo $lang->bug->unResolved;?></th>
-        <th class='w-80px'><?php echo $lang->bug->assignToNull;?></th>
+        <th class='w-80px'><?php echo $lang->product->unResolvedBugs;?></th>
+        <th class='w-80px'><?php echo $lang->product->assignToNullBugs;?></th>
         <?php if($canOrder):?>
         <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->product->updateOrder);?></th>
         <?php endif;?>

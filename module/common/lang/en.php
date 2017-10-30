@@ -175,9 +175,13 @@ $lang->my->menu->dynamic        = 'Dynamic|my|dynamic|';
 $lang->my->menu->profile        = array('link' => 'Profile|my|profile', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = 'Password|my|changepassword';
 $lang->my->menu->manageContacts = 'Contact|my|managecontacts';
+$lang->my->menu->score          = array('link' => 'Score|score|browse', 'subModule' => 'score');
 
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;
+
+$lang->score       = new stdclass();
+$lang->score->menu = $lang->my->menu;
 
 /* 产品视图设置。*/
 $lang->product = new stdclass();
@@ -342,7 +346,6 @@ $lang->admin->menu->cron      = array('link' => 'Cron|cron|index', 'subModule' =
 $lang->admin->menu->trashes   = array('link' => 'Recycle|action|trash', 'subModule' => 'action');
 $lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
 $lang->admin->menu->entry     = array('link' => 'API|entry|browse', 'alias' => 'create,edit', 'subModule' => 'entry,webhook');
-$lang->admin->menu->score     = array('link' => 'Score|score|browse', 'subModule' => 'score');
 $lang->admin->menu->sso       = 'RangerTeam|admin|sso';
 
 $lang->convert   = new stdclass();
@@ -355,7 +358,6 @@ $lang->editor    = new stdclass();
 $lang->mail      = new stdclass();
 $lang->cron      = new stdclass();
 $lang->dev       = new stdclass();
-$lang->score     = new stdclass();
 $lang->entry     = new stdclass();
 $lang->webhook   = new stdclass();
 $lang->search    = new stdclass();
@@ -370,7 +372,6 @@ $lang->custom->menu    = $lang->admin->menu;
 $lang->editor->menu    = $lang->admin->menu;
 $lang->mail->menu      = $lang->admin->menu;
 $lang->dev->menu       = $lang->admin->menu;
-$lang->score->menu     = $lang->admin->menu;
 $lang->entry->menu     = $lang->admin->menu;
 $lang->webhook->menu   = $lang->admin->menu;
 
@@ -395,6 +396,7 @@ $lang->menugroup->testreport  = 'qa';
 $lang->menugroup->people      = 'company';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
+$lang->menugroup->score       = 'my';
 $lang->menugroup->action      = 'admin';
 $lang->menugroup->backup      = 'admin';
 $lang->menugroup->cron        = 'admin';
@@ -403,7 +405,6 @@ $lang->menugroup->custom      = 'admin';
 $lang->menugroup->editor      = 'admin';
 $lang->menugroup->mail        = 'admin';
 $lang->menugroup->dev         = 'admin';
-$lang->menugroup->score       = 'admin';
 $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 

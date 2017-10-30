@@ -408,7 +408,7 @@ class userModel extends model
             }
         }
         if(!empty($user->password) and $user->account == $this->app->user->account) $this->app->user->password = $user->password;
-
+        $this->loadModel('score')->score('user','editProfile');
         if(!dao::isError())
         {
             $this->loadModel('mail');
@@ -535,10 +535,10 @@ class userModel extends model
             dao::$errors['originalPassword'][] = $this->lang->user->error->originalPassword;
             return false;
         }
-
         $this->dao->update(TABLE_USER)->data($user)->autoCheck()->where('id')->eq((int)$userID)->exec();
         $this->app->user->password       = $user->password;
-        $this->app->user->modifyPassword = false;;
+        $this->app->user->modifyPassword = false;
+        $this->loadModel('score')->score('user','changePassword',$this->computePasswordStrength($this->post->password1));
     }
 
     /**

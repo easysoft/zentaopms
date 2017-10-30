@@ -19,7 +19,7 @@
       </tr>
       <tr>
         <td></td>
-        <td><?php echo html::submitButton() ?></td>
+        <td><?php echo html::submitButton() ?> <?php echo html::a(inLink('resetScore'), "<i class='icon-refresh'></i> " . $lang->custom->scoreReset, '', "class='btn'");?></td>
       </tr>
     </table>
   </form>
