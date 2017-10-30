@@ -59,4 +59,27 @@ class score extends control
     {
         $this->loadModel('score')->score('ajax', $method);
     }
+
+    public function init($lastID = 0)
+    {
+        if(helper::isAjaxRequest())
+        {
+            $result = $this->score->init($lastID);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($result['status'] == 'finish')
+            {
+                $this->send(array('result' => 'finished', 'message' => $this->lang->score->initFinish));
+            }
+            else
+            {
+                $this->send(array('result' => 'unfinished', 'message' => $this->lang->score->processed, 'lastID' => $result['lastID']));
+            }
+        }
+        $this->display();
+    }
+
+    public function refresh()
+    {
+        $this->display();
+    }
 }

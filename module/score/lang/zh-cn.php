@@ -1,8 +1,19 @@
 <?php
-$lang->score->common  = '积分';
-$lang->score->record  = '积分记录';
-$lang->score->current = '当前积分';
-$lang->score->level   = '等级积分';
+$lang->score->common         = '积分';
+$lang->score->record         = '积分记录';
+$lang->score->current        = '当前积分';
+$lang->score->level          = '等级积分';
+$lang->score->init           = '初始化';
+$lang->score->initTips       = '初始化将根据历史记录计算,执行时间可能会比较长.<br/><strong>请勿在未完成前关闭窗口</strong>';
+$lang->score->initStart      = '开始初始化';
+$lang->score->initLoading    = '正在初始化...';
+$lang->score->initFinish     = '初始化完成';
+$lang->score->refresh        = '重置积分';
+$lang->score->refreshTips    = '重置积分将对所有用户积分清零,执行时间可能会比较长.<br/><strong>请勿在未完成前关闭窗口</strong>';
+$lang->score->refreshStart   = '开始重置所有积分';
+$lang->score->refreshLoading = '积分重置中...';
+$lang->score->refreshFinish  = '重置完成';
+$lang->score->processed      = '正在处理中...';
 
 $lang->score->id      = '编号';
 $lang->score->userID  = '用户ID';

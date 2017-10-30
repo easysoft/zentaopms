@@ -9,6 +9,8 @@
  */
 class scoreModel extends model
 {
+    public static $num = 0;
+
     /**
      * get user score logs
      *
@@ -29,23 +31,27 @@ class scoreModel extends model
      * @param string $model
      * @param string $method
      * @param string $param
+     * @param string $account
+     * @param string $time
      *
      * @access public
      * @return bool
      */
-    public function score($model = '', $method = '', $param = '')
+    public function score($model = '', $method = '', $param = '', $account = '', $time = '')
     {
-        if(empty($this->config->score->model[$model][$method])) return true;
-        $rule = $this->config->score->model[$model][$method];
-        $desc = $this->lang->score->models[$model];
-        $user = $this->app->user->account;
+        if(!isset($this->config->score->model[$model][$method]) || empty($this->config->score->model[$model][$method])) return true;
+        $rule     = $this->config->score->model[$model][$method];
+        $desc     = $this->lang->score->models[$model];
+        $user     = empty($account) ? $this->app->user->account : $account;
+        $time     = empty($time) ? helper::now() : $time;
+        $objectID = is_numeric($param) ? $param : 0;
         switch($model)
         {
             case 'user':
                 if($method == 'login') $desc = $this->lang->score->methods[$model][$method] . 'IP:' . helper::getRemoteIp();
                 if($method == 'changePassword')
                 {
-                    if(!empty($rule['other'][$param])) $rule['score'] = $rule['score'] + $rule['other'][$param];
+                    if(!empty($rule['ext'][$param])) $rule['score'] = $rule['score'] + $rule['ext'][$param];
                     $desc = $this->lang->score->methods[$model][$method];
                 }
                 break;
@@ -63,8 +69,8 @@ class scoreModel extends model
                     if(!empty($createUser))
                     {
                         $newRule          = $rule;
-                        $newRule['score'] = $rule['other']['createID'];
-                        $this->saveScore($createUser->openedBy, $newRule, $model, $method, $desc);
+                        $newRule['score'] = $rule['ext']['createID'];
+                        $this->saveScore($createUser->openedBy, $newRule, $model, $method, $desc, $objectID, $time);
                         unset($newRule);
                     }
                 }
@@ -76,7 +82,7 @@ class scoreModel extends model
                     $desc = $this->lang->score->methods[$model][$method] . 'ID:' . $param;
                     //每完成一个任务，增加初始积分1 + 工时积分round(工时 /10 * 预计 / 消耗) + 优先级积分(p1 2, p2, 1) 如果任务取消了，没有积分。
                     $task = $this->loadModel('task')->getById($param);
-                    if(!empty($rule['other'][$task->pri])) $rule['score'] = $rule['score'] + $rule['other'][$task->pri];
+                    if(!empty($rule['ext'][$task->pri])) $rule['score'] = $rule['score'] + $rule['ext'][$task->pri];
                     if(!empty($task->estimate)) $rule['score'] = $rule['score'] + round(($task->consumed / 10 * $task->estimate / $task->consumed), 1);
                 }
                 break;
@@ -94,10 +100,16 @@ class scoreModel extends model
                 if($method == 'saveTplModal') $desc = $this->lang->score->methods[$model][$method] . 'ID:' . $param;
                 if($method == 'confirmBug')
                 {
-                    $user = $param->openedBy;
-                    if(!empty($rule['other'][$param->severity])) $rule['score'] = $rule['score'] + $rule['other'][$param->severity];
+                    $objectID = $param->id;
+                    $user     = $param->openedBy;
+                    $desc     .= 'ID:' . $param->id;
+                    if(!empty($rule['ext'][$param->severity])) $rule['score'] = $rule['score'] + $rule['ext'][$param->severity];
                 }
-                if($method == 'resolve' && !empty($rule['other'][$param->severity])) $rule['score'] = $rule['score'] + $rule['other'][$param->severity];
+                if($method == 'resolve' && !empty($rule['ext'][$param->severity]))
+                {
+                    $objectID      = $param->id;
+                    $rule['score'] = $rule['score'] + $rule['ext'][$param->severity];
+                }
                 break;
             case 'testTask':
                 if($method == 'runCase') $desc = $this->lang->score->methods[$model][$method] . 'ID:' . $param;
@@ -109,20 +121,21 @@ class scoreModel extends model
                 if($method == 'create') $desc .= 'ID:' . $param;
                 if($method == 'close')
                 {
-                    $desc = $this->lang->score->methods[$model][$method] . ',' . $desc . 'ID:' . $param->id;
+                    $desc     = $this->lang->score->methods[$model][$method] . ',' . $desc . 'ID:' . $param->id;
+                    $objectID = $param->id;
                     if(!empty($param->PM))
                     {
-                        $rule['score'] = $param->end > date('Y-m-d') ? $rule['other']['manager'][0] + $rule['other']['manager'][1] : $rule['other']['manager'][0];
-                        $this->saveScore($param->PM, $rule, $model, $method, $desc);
+                        $rule['score'] = $param->end > date('Y-m-d') ? $rule['ext']['manager'][0] + $rule['ext']['manager'][1] : $rule['ext']['manager'][0];
+                        $this->saveScore($param->PM, $rule, $model, $method, $desc, $objectID, $time);
                     }
                     $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->eq($param->id)->fetchGroup('account');
                     if(!empty($teams))
                     {
                         $users         = array_keys($teams);
-                        $rule['score'] = $param->end > date('Y-m-d') ? $rule['other']['member'][0] + $rule['other']['member'][1] : $rule['other']['member'][0];
+                        $rule['score'] = $param->end > date('Y-m-d') ? $rule['ext']['member'][0] + $rule['ext']['member'][1] : $rule['ext']['member'][0];
                         foreach($users as $user)
                         {
-                            if($user != $param->PM) $this->saveScore($user, $rule, $model, $method, $desc);
+                            if($user != $param->PM) $this->saveScore($user, $rule, $model, $method, $desc, $objectID, $time);
                         }
                     }
                 }
@@ -145,7 +158,7 @@ class scoreModel extends model
                 $desc = $this->lang->score->methods[$model][$method];
                 break;
         }
-        $this->saveScore($user, $rule, $model, $method, $desc);
+        $this->saveScore($user, $rule, $model, $method, $desc, $objectID, $time);
     }
 
     /**
@@ -156,11 +169,13 @@ class scoreModel extends model
      * @param string $model
      * @param string $method
      * @param string $desc
+     * @param int    $objectID
+     * @param string $time
      *
      * @access private
      * @return bool
      */
-    private function saveScore($account = '', $rule = array(), $model = '', $method = '', $desc = '')
+    private function saveScore($account = '', $rule = array(), $model = '', $method = '', $desc = '', $objectID = 0, $time = '')
     {
         if(!empty($rule['num']) || !empty($rule['time']))
         {
@@ -171,7 +186,8 @@ class scoreModel extends model
             }
             else
             {
-                $count = $this->dao->select('id')->from(TABLE_SCORE)->where('account')->eq($account)->andWhere('time')->between(date('Y-m-d 0:0:0'), date('Y-m-d 23:59:59'))->andWhere('model')->eq($model)->andWhere('method')->eq($method)->count();
+                $timestamp = empty($time) ? time() : strtotime($time);
+                $count     = $this->dao->select('id')->from(TABLE_SCORE)->where('account')->eq($account)->andWhere('time')->between(date('Y-m-d 0:0:0', $timestamp), date('Y-m-d 23:59:59', $timestamp))->andWhere('model')->eq($model)->andWhere('method')->eq($method)->count();
                 if($count >= $rule['num']) return true;
             }
         }
@@ -181,15 +197,16 @@ class scoreModel extends model
         {
             $user = $this->loadModel('user')->getById($account);
 
-            $data          = new stdClass();
-            $data->account = $account;
-            $data->model   = $model;
-            $data->method  = $method;
-            $data->desc    = $desc;
-            $data->before  = $user->score;
-            $data->score   = $rule['score'];
-            $data->after   = $user->score + $rule['score'];
-            $data->time    = helper::now();
+            $data           = new stdClass();
+            $data->account  = $account;
+            $data->model    = $model;
+            $data->method   = $method;
+            $data->desc     = $desc;
+            $data->objectID = $objectID;
+            $data->before   = $user->score;
+            $data->score    = $rule['score'];
+            $data->after    = $user->score + $rule['score'];
+            $data->time     = empty($time) ? helper::now() : $time;
             $this->dao->insert(TABLE_SCORE)->data($data)->exec();
             $this->dao->query("UPDATE " . TABLE_USER . " SET `score`=`score` + " . $rule['score'] . ",`score_level`=`score_level` + " . $rule['score'] . " WHERE `account`='" . $account . "'");
             $this->dao->commit();
@@ -202,11 +219,57 @@ class scoreModel extends model
 
     /**
      * reset all user score and level score
+     * 
      * @access public
      * @return void
      */
     public function resetScore()
     {
 
+    }
+
+    /**
+     * Score init from action
+     *
+     * @param int $lastID
+     *
+     * @access public
+     * @return array
+     */
+    public function init($lastID = 0)
+    {
+        if($lastID == 0)
+        {
+            $this->dao->query("UPDATE " . TABLE_USER . " SET `score`=0,`score_level`=0");
+            $this->dao->query("TRUNCATE TABLE " . TABLE_SCORE);
+        }
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->gt($lastID)->orderBy('id_asc')->limit(100)->fetchAll('id');
+        if(empty($actions))
+        {
+            $this->loadModel('setting')->setItem('system.common.global.scoreInit', 1);
+            return array('num' => 0, 'status' => 'finish');
+        }
+        foreach($actions as $action)
+        {
+            $param = $action->objectID;
+            if($action->objectType == 'project' && $action->action == 'closed') $param = $this->dao->findById($action->objectID)->from(TABLE_PROJECT)->fetch();
+            if($action->objectType == 'bug' && ($action->action == 'bugconfirmed' || $action->action == 'resolved')) $param = $this->dao->findById($action->objectID)->from(TABLE_BUG)->fetch();
+            $this->score($action->objectType, $this->fix_key($action->action), $param, $action->actor, $action->date);
+        }
+        return array('status' => 'more', 'lastID' => max(array_keys($actions)));
+    }
+
+    /**
+     * fix action type for score
+     *
+     * @param $string
+     *
+     * @access private
+     * @return mixed
+     */
+    private function fix_key($string)
+    {
+        $strings = array('created' => 'create', 'closed' => 'close', 'finished' => 'finish', 'bugconfirmed' => 'confirmBug', 'resolved' => 'resolve');
+        return isset($strings[$string]) ? $strings[$string] : $string;
     }
 }

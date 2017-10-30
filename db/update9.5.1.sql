@@ -88,6 +88,7 @@ CREATE TABLE `zt_score` (
   `score` decimal(12,1) NOT NULL DEFAULT '0.0',
   `after` decimal(12,1) NOT NULL DEFAULT '0.0',
   `time` datetime NOT NULL,
+  `objectID` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `account` (`account`),
   KEY `model` (`model`),

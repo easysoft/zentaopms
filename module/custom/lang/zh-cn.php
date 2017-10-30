@@ -17,6 +17,7 @@ $lang->custom->setPublic  = '设为公共';
 $lang->custom->required   = '必填项';
 $lang->custom->score      = '积分';
 $lang->custom->scoreReset = '重置积分';
+$lang->custom->scoreInit  = '初始化积分';
 
 $lang->custom->object['story']    = '需求';
 $lang->custom->object['task']     = '任务';
