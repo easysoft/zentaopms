@@ -661,6 +661,55 @@ class product extends control
     }
 
     /**
+     * Export product. 
+     * 
+     * @param  string    $status 
+     * @param  string    $orderBy 
+     * @access public
+     * @return void
+     */
+    public function export($status, $orderBy)
+    {
+        if($_POST)
+        {
+            $productLang   = $this->lang->product;
+            $productConfig = $this->config->product;
+
+            /* Create field lists. */
+            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $productConfig->list->exportFields);
+            foreach($fields as $key => $fieldName)
+            {
+                $fieldName = trim($fieldName);
+                $fields[$fieldName] = zget($productLang, $fieldName);
+                unset($fields[$key]);
+            }
+
+            $productStats = $this->product->getStats($orderBy, null, $status);
+            foreach($productStats as $i => $product)
+            {
+                $product->activeStories    = (int)$product->stories['active'];
+                $product->changedStories   = (int)$product->stories['changed'];
+                $product->draftStories     = (int)$product->stories['draft'];
+                $product->closedStories    = (int)$product->stories['closed'];
+                $product->unResolvedBugs   = (int)$product->unResolved;
+                $product->assignToNullBugs = (int)$product->assignToNull;
+
+                if($this->post->exportType == 'selected')
+                {
+                    $checkedItem = $this->cookie->checkedItem;
+                    if(strpos(",$checkedItem,", ",{$product->id},") === false) unset($productStats[$i]);
+                }
+            }
+
+            $this->post->set('fields', $fields);
+            $this->post->set('rows', $productStats);
+            $this->post->set('kind', 'product');
+            $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
+        }
+        $this->display();
+    }
+
+    /**
      * Doc for compatible.
      *
      * @param  int    $productID

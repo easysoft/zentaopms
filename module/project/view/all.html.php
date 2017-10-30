@@ -14,6 +14,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <div id='featurebar'>
   <div class='actions'>
+    <?php common::printLink('project', 'export', "status=$status&productID=$productID&orderBy=$orderBy", "<i class='icon-download-alt'></i> " . $lang->export, '', "class='btn export'")?>
     <?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn'")?>
   </div>
   <ul class='nav'>

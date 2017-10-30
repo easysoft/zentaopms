@@ -58,6 +58,7 @@ $lang->project->activate = 'Activate';
 $lang->project->putoff   = 'Deplay';
 $lang->project->suspend  = 'Suspend';
 $lang->project->close    = 'Close';
+$lang->project->export   = 'Export';
 
 $lang->project->typeList['sprint']    = 'Sprint';
 $lang->project->typeList['waterfall'] = 'Waterfall';

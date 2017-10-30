@@ -111,6 +111,7 @@ $filter->product->browse->cookie['storyModule']       = 'int';
 $filter->product->default->cookie['lastProduct']      = 'int';
 $filter->product->default->cookie['preProductID']     = 'int';
 $filter->product->index->cookie['preBranch']          = 'int';
+$filter->product->export->cookie['checkedItem']       = 'reg::checked';
 
 $filter->project->default->cookie['lastProject']     = 'int';
 $filter->project->default->cookie['projectMode']     = 'code';
@@ -120,6 +121,7 @@ $filter->project->task->cookie['preProjectID']       = 'int';
 $filter->project->task->cookie['productBrowseParam'] = 'int';
 $filter->project->task->cookie['projectTaskOrder']   = 'reg::orderBy';
 $filter->project->task->cookie['windowWidth']        = 'int';
+$filter->project->export->cookie['checkedItem']      = 'reg::checked';
 
 $filter->qa->default->cookie['lastProduct']  = 'int';
 $filter->qa->default->cookie['preBranch']    = 'int';
