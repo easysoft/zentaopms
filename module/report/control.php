@@ -210,6 +210,8 @@ class report extends control
 
             /* Get email content and title.*/
             $this->view->mail = $mail;
+            $this->view->mailTitle = $mailTitle;
+
             $oldViewType = $this->viewType;
             if($oldViewType == 'json') $this->viewType = 'html';
             $mailContent = $this->parse('report', 'dailyreminder');

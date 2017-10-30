@@ -12,8 +12,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and $root->type != 'normal') ? true : false;?>
+<?php $name = $viewType == 'category' ? $lang->tree->category : $lang->tree->name;?>
 <div id='featurebar'>
-  <div class='heading'><?php echo $lang->tree->common;?></div>
+  <div class='heading'><?php echo $viewType == 'category' ? $lang->tree->manageCategory : $lang->tree->common;?></div>
 </div>
 <div class='row'>
   <div class='col-sm-4'>
@@ -40,6 +41,7 @@
         <div class='panel-body'>
           <table class='table table-form'>
             <tr>
+              <?php if($viewType != 'category'):?>
               <td class='parentModule'>
                 <nobr>
                 <?php
@@ -53,6 +55,7 @@
                 ?>
                 </nobr>
               </td>
+              <?php endif;?>
               <td id='moduleBox'>
                 <?php
                 if($viewType == 'story' and $allProduct)
@@ -80,7 +83,7 @@
                 for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++)
                 {
                     echo "<div class='row-table addedItem' style='margin-bottom:5px'>";
-                    echo "<div class='col-table'>" . html::input("modules[]", '', "class='form-control' placeholder='{$lang->tree->name}' autocomplete='off'") . '</div>';
+                    echo "<div class='col-table'>" . html::input("modules[]", '', "class='form-control' placeholder='{$name}' autocomplete='off'") . '</div>';
                     if($hasBranch) echo '<div class="col-table">' . html::select("branch[]", $branches, $branch, 'class="form-control"') . '</div>';
                     echo "<div class='col-table' style='width:120px'><div class='input-group'>" . html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}' autocomplete='off'");
                     echo "<span class='input-group-btn'><a href='javascript:;' onclick='addItem(this)' class='btn btn-block'><i class='icon icon-plus'></i></a></span>";
@@ -91,7 +94,7 @@
 
                 echo "<div id='insertItemBox' class='hidden'>";
                 echo "<div class='row-table' style='margin-bottom:5px'>";
-                echo "<div class='col-table'>" . html::input("modules[]", '', "class='form-control' placeholder='{$lang->tree->name}' autocomplete='off'") . '</div>';
+                echo "<div class='col-table'>" . html::input("modules[]", '', "class='form-control' placeholder='{$name}' autocomplete='off'") . '</div>';
                 if($hasBranch) echo '<div class="col-table">' . html::select("branch[]", $branches, $branch, 'class="form-control" disabled') . '</div>';
                 echo "<div class='col-table' style='width:120px'><div class='input-group'>" . html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}' autocomplete='off'") . html::hidden("order[]");
                 echo "<span class='input-group-btn' style='border-left:1px solid'><a href='javascript:;' onclick='deleteItem(this)' class='btn btn-block'><i class='icon icon-remove'></i></a></span>";
@@ -103,7 +106,9 @@
               </td>
             </tr>
             <tr>
+              <?php if($viewType != 'category'):?>
               <td></td>
+              <?php endif;?>
               <td colspan='2'>
                 <?php 
                 echo html::submitButton();
@@ -175,8 +180,8 @@ $(function()
             subModules:
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'browse', "rootID=$rootID&viewType=$viewType&moduleID={0}&branch={1}"); ?>',
-                title: '<?php echo $lang->tree->child ?>',
-                template: '<a href="javascript:;"><?php echo $lang->tree->child?></a>'
+                title: '<?php echo $viewType == 'category' ? $lang->tree->categoryChild : $lang->tree->child ?>',
+                template: '<a href="javascript:;"><?php echo $viewType == 'category' ? $lang->tree->categoryChild : $lang->tree->child?></a>'
             }
         },
         action: function(event)
@@ -238,6 +243,8 @@ $(function()
     });
 
     $tree.find('[data-toggle="tooltip"]').tooltip();
+
+    $('#modulemenu > .nav > li > a[href*=tree][href*=browse]').not('[href*=<?php echo $viewType;?>]').parent().removeClass('active');
 });
 </script>
 <?php 

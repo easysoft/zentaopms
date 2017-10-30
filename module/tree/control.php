@@ -25,7 +25,7 @@ class tree extends control
     public function browse($rootID, $viewType, $currentModuleID = 0, $branch = 0)
     {
         /* According to the type, set the module root and modules. */
-        if(strpos('story|bug|case', $viewType) !== false)
+        if(strpos('story|bug|case|category', $viewType) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
             if($product->type != 'normal')
@@ -95,7 +95,6 @@ class tree extends control
             if($this->config->global->flow == 'onlyTest') $this->lang->set('menugroup.tree', 'testcase');
             if($this->config->global->flow != 'onlyTest') $this->lang->set('menugroup.tree', 'qa');
 
-
             $title      = $product->name . $this->lang->colon . $this->lang->tree->manageCase;
             $position[] = html::a($this->createLink('testcase', 'browse', "product=$rootID"), $product->name);
             $position[] = $this->lang->tree->manageCase;
@@ -122,6 +121,24 @@ class tree extends control
             $title      = $lib->name . $this->lang->colon . $this->lang->tree->manageCustomDoc;
             $position[] = html::a($this->createLink('doc', 'browse', "libID=$rootID"), $lib->name);
             $position[] = $this->lang->tree->manageCustomDoc;
+        }
+        elseif($viewType == 'category')
+        {
+            $this->lang->set('menugroup.tree', 'product');
+            $this->product->setMenu($this->product->getPairs(), $rootID, $branch, 'category', '', 'category');
+            $this->lang->tree->menu      = $this->lang->product->menu;
+            $this->lang->tree->menuOrder = $this->lang->product->menuOrder;
+
+            $products = $this->product->getPairs();
+            unset($products[$rootID]);
+            $currentProduct = key($products);
+
+            $this->view->allProduct     = $products;
+            $this->view->currentProduct = $currentProduct;
+            $this->view->productModules = $this->tree->getOptionMenu($currentProduct, 'category');
+
+            $title = $this->lang->product->common . $this->lang->colon . $this->lang->tree->manageCategory;
+            $position[] = $this->lang->tree->manageCategory;
         }
 
         $parentModules = $this->tree->getParents($currentModuleID);

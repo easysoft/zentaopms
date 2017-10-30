@@ -26,6 +26,7 @@ $lang->product->other       = '其他：';
 $lang->product->closed      = '已关闭';
 $lang->product->updateOrder = "排序";
 $lang->product->all         = "所有{$lang->productCommon}";
+$lang->product->export      = "导出";
 
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';
@@ -42,13 +43,22 @@ $lang->product->doc      = '文档列表';
 $lang->product->project  = $lang->projectCommon . '列表';
 $lang->product->build    = '版本列表';
 
+$lang->product->activeStories    = '激活需求';
+$lang->product->changedStories   = '已变更需求';
+$lang->product->draftStories     = '草稿需求';
+$lang->product->closedStories    = '已关闭需求';
+$lang->product->unResolvedBugs   = '未解决Bug';
+$lang->product->assignToNullBugs = '未指派Bug';
+
 $lang->product->confirmDelete   = " 您确定删除该{$lang->productCommon}吗？";
 
 $lang->product->errorNoProduct = "还没有创建{$lang->productCommon}！";
 $lang->product->accessDenied   = "您无权访问该{$lang->productCommon}";
 
+$lang->product->id        = "编号";
 $lang->product->name      = "{$lang->productCommon}名称";
 $lang->product->code      = "{$lang->productCommon}代号";
+$lang->product->category  = "{$lang->productCommon}目录";
 $lang->product->order     = '排序';
 $lang->product->type      = "{$lang->productCommon}类型";
 $lang->product->status    = '状态';

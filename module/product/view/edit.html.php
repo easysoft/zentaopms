@@ -32,6 +32,10 @@
         <td><?php echo html::input('code', $product->code, "class='form-control' autocomplete='off'");?></td><td></td>
       </tr>  
       <tr>
+        <th><?php echo $lang->product->category;?></th>
+        <td><?php echo html::select('category', $categories, $product->category, "class='form-control chosen'");?></td><td></td>
+      </tr>
+      <tr>
         <th><?php echo $lang->product->PO;?></th>
         <td><?php echo html::select('PO', $poUsers, $product->PO, "class='form-control chosen'");?></td><td></td>
       </tr>

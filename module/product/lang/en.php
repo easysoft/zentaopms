@@ -26,6 +26,7 @@ $lang->product->other       = 'Other:';
 $lang->product->closed      = 'Closed';
 $lang->product->updateOrder = 'Ranking';
 $lang->product->all         = "All {$lang->productCommon}";
+$lang->product->export      = "Export";
 
 $lang->product->basicInfo = 'Basic Info';
 $lang->product->otherInfo = 'Other Info';
@@ -41,6 +42,13 @@ $lang->product->roadmap  = 'Roadmap';
 $lang->product->doc      = 'Documents';
 $lang->product->project  = $lang->projectCommon . 'List';
 $lang->product->build    = 'Build List';
+
+$lang->product->activeStories    = 'Activated Story';
+$lang->product->changedStories   = 'Changed Story';
+$lang->product->draftStories     = 'Draft Story';
+$lang->product->closedStories    = 'Closed Story';
+$lang->product->unResolvedBugs   = 'Unresolved Bug';
+$lang->product->assignToNullBugs = 'No Assigned Bug';
 
 $lang->product->confirmDelete   = " Do you want to delete {$lang->productCommon}?";
 

@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
+<?php js::set('urlNote', $lang->webhook->note->typeList);?>
 <div class='container mw-1400px'>
   <div id="titlebar">
     <div class="heading">
@@ -22,27 +23,30 @@
   <form id='webhookForm' method='post' class='ajaxForm'>
     <table class='table table-form'>
       <tr>
-        <th class='w-80px'><?php echo $lang->webhook->name;?></th>
-        <td class='w-p50'><?php echo html::input('name', '', "class='form-control'");?></td>
+        <th class='w-80px'><?php echo $lang->webhook->type;?></th>
+        <td class='w-p50'><?php echo html::select('type', $lang->webhook->typeList, 'default', "class='form-control'");?></td>
+        <td></td>
+      </tr>
+      <tr>
+        <th><?php echo $lang->webhook->name;?></th>
+        <td><?php echo html::input('name', '', "class='form-control'");?></td>
         <td></td>
       </tr>
       <tr>
         <th><?php echo $lang->webhook->url;?></th>
         <td><?php echo html::input('url', '', "class='form-control'");?></td>
-        <td><?php if($type == 'dingding') echo $lang->webhook->note->dingding;?></td>
+        <td id='urlNote'><?php echo $lang->webhook->note->typeList['default'];?></td>
       </tr>
-      <?php if($type != 'dingding'):?>
-      <tr>
+      <tr id='contentTypeTR'>
         <th><?php echo $lang->webhook->contentType;?></th>
         <td><?php echo html::select('contentType', $config->webhook->contentTypes, '', "class='form-control'");?></td>
         <td></td>
       </tr>
-      <tr>
+      <tr id='sendTypeTR'>
         <th><?php echo $lang->webhook->sendType;?></th>
         <td><?php echo html::select('sendType', $lang->webhook->sendTypeList, '', "class='form-control'");?></td>
         <td><?php echo $lang->webhook->note->async;?></td>
       </tr>
-      <?php endif;?>
       <tr>
         <th><?php echo $lang->webhook->product;?></th>
         <td><?php echo html::select('products[]', $products, '', "class='form-control chosen' multiple");?></td>
@@ -53,12 +57,10 @@
         <td><?php echo html::select('projects[]', $projects, '', "class='form-control chosen' multiple");?></td>
         <td><?php echo $lang->webhook->note->project;?></td>
       </tr>
-      <?php if($type != 'dingding'):?>
-      <tr>
+      <tr id='paramsTR'>
         <th><?php echo $lang->webhook->params;?></th>
         <td class='labelWidth' colspan='2'><?php echo html::checkbox('params', $lang->webhook->paramsList, 'text');?></td>
       </tr>
-      <?php endif;?>
       <tr>
         <th><?php echo $lang->webhook->action;?></th>
         <td colspan='2'>

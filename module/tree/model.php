@@ -81,6 +81,8 @@ class treeModel extends model
      */
     public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0)
     {
+        if($type == 'category') $rootID = 0;
+
         $branches = array($branch => '');
         if(strpos('story|bug|case', $type) !== false)
         {
@@ -312,6 +314,8 @@ class treeModel extends model
      */
     public function getTreeMenu($rootID, $type = 'root', $startModule = 0, $userFunc, $extra = '', $branch = 0)
     {
+        if($type == 'category') $rootID = 0;
+
         $branches = array($branch => '');
         if($branch)
         {
@@ -945,6 +949,8 @@ class treeModel extends model
      */
     public function getSons($rootID, $moduleID, $type = 'root', $branch = 0)
     {
+        if($type == 'category') $rootID = 0;
+
         /* if createVersion <= 4.1 or type == 'story', only get modules of its type. */
         if(!$this->isMergeModule($rootID, $type) or $type == 'story')
         {
@@ -1495,6 +1501,8 @@ class treeModel extends model
      */
     public function getProductStructure($rootID, $viewType, $branch = 0, $currentModuleID = 0)
     {
+        if($viewType == 'category') $rootID = 0;
+
         $branches = array($branch => '');
         $product  = $this->loadModel('product')->getById($rootID);
         if(strpos('story|bug|case', $viewType) !== false and empty($branch))

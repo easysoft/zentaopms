@@ -28,18 +28,16 @@ class webhookModel extends model
     /**
      * Get webhook list. 
      * 
-     * @param  string $type
      * @param  string $orderBy
      * @param  object $pager
      * @param  bool   $decode
      * @access public
      * @return array
      */
-    public function getList($type = '', $orderBy = 'id_desc', $pager = null, $decode = true)
+    public function getList($orderBy = 'id_desc', $pager = null, $decode = true)
     {
         $webhooks = $this->dao->select('*')->from(TABLE_WEBHOOK)
             ->where('deleted')->eq('0')
-            ->beginIF($type)->andWhere('type')->eq($type)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -142,14 +140,12 @@ class webhookModel extends model
     /**
      * Create a webhook. 
      * 
-     * @param  string $type
      * @access public
      * @return bool
      */
-    public function create($type)
+    public function create()
     {
         $webhook = fixer::input('post')
-            ->add('type', $type)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->join('products', ',')
@@ -241,6 +237,7 @@ class webhookModel extends model
      */
     public function buildData($objectType, $objectID, $actionType, $actionID, $webhook)
     {
+        /* Validate data. */
         if(!isset($this->lang->action->label)) $this->loadModel('action');
         if(!isset($this->lang->action->label->$actionType)) return false;
         if(empty($this->config->objectTables[$objectType])) return false;
@@ -262,69 +259,43 @@ class webhookModel extends model
 
         $object   = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
         $field    = $this->config->action->objectNameFields[$objectType];
-        $text     = $object->$field;
         $host     = common::getSysURL();
         $viewLink = $this->getViewLink($objectType, $objectID);
+        $title    = $this->app->user->realname . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType];
+        $text     = $title . ' ' . "[#{$objectID}::{$object->$field}](" . $host . $viewLink . ")";
 
-        $data = new stdclass();
+        $mobile = '';
+        $email  = '';
+        if($actionType == 'assigned') 
+        {
+            $assignedTo = $object->assignedTo;
+            foreach($users as $user)
+            {
+                if($user->account == $object->assignedTo)
+                {
+                    $assignedTo = $user->realname;
+                    $mobile     = $user->mobile;
+                    $email      = $user->email;
+                    break;
+                }
+            }
+            $text .= ' ' . $this->lang->webhook->assigned . ' ' . $assignedTo;
+        }
+        $action->text = $text;
+
         if($webhook->type == 'dingding')
         {
-            $title  = $this->app->user->realname . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType];
-            $mobile = '';
-            if($actionType == 'assigned') 
-            {
-                $assignedTo = $object->assignedTo;
-                foreach($users as $user)
-                {
-                    if($user->account == $object->assignedTo)
-                    {
-                        $assignedTo = $user->realname;
-                        $mobile     = $user->mobile;
-                        break;
-                    }
-                }
-                if($mobile) $title .= ' ' . "[#{$objectID}::{$title}](" . $host . $viewLink . ")";
-                $title .= ' ' . $this->lang->webhook->assigned . ' ' . $assignedTo;
-            }
-
-            if($mobile)
-            {
-                $at = new stdclass();
-                $at->atMobiles = array($mobile);
-                $at->isAtAll   = false;
-
-                $data->msgtype = 'text';
-                $data->text    = array('content' => $title);
-                $data->at      = $at;
-            }
-            else
-            {
-                $link = new stdclass();
-                $link->text       = "[#{$objectID}::{$text}]";
-                $link->title      = $title;
-                $link->picUrl     = '';
-                $link->messageUrl = $host . $viewLink;
-
-                $data->msgtype = 'link';
-                $data->link    = $link;
-            }
-
-            return helper::jsonEncode($data);
+            $data = $this->getDingdingData($title, $text, $mobile);
         }
-
-        foreach(explode(',', $webhook->params) as $param)
+        elseif($webhook->type == 'bearychat')
         {
-            if($param == 'text')
-            {
-                $data->text = $this->app->user->realname . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType] . ' ' . "[#{$objectID}::{$text}](" . $host . $viewLink . ")";
-                if($actionType == 'assigned') $data->text .= ' ' . $this->lang->webhook->assigned . ' ' . zget($users, $object->assignedTo);
-            }
-            else
-            {
-                $data->$param = $action->$param;
-            }
+            $data = $this->getBearychatData($text, $mobile, $email, $objectType, $objectID);
         }
-        $data = $this->getFiles($data, $objectType, $objectID);
+        else
+        {
+            $data = new stdclass();
+            foreach(explode(',', $webhook->params) as $param) $data->$param = $action->$param;
+        }
 
         return helper::jsonEncode($data);
     }
@@ -353,16 +324,56 @@ class webhookModel extends model
     }
 
     /**
-     * Get files. 
+     * Get hook data for dingding. 
      * 
-     * @param  object $data 
+     * @param  string $title 
+     * @param  string $text 
+     * @param  string $mobile 
+     * @access public
+     * @return object 
+     */
+    public function getDingdingData($title, $text, $mobile)
+    {
+        if($mobile) $text .= " @{$mobile}";
+
+        $markdown = new stdclass();
+        $markdown->title = $title;
+        $markdown->text  = $text;
+
+        $data = new stdclass();
+        $data->msgtype  = 'markdown';
+        $data->markdown = $markdown;
+
+        if($mobile)
+        {
+            $at = new stdclass();
+            $at->atMobiles = array($mobile);
+            $at->isAtAll   = false;
+
+            $data->at = $at;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Get hook data for bearychat. 
+     * 
+     * @param  string $text 
+     * @param  string $mobile 
+     * @param  string $email 
      * @param  string $objectType 
      * @param  int    $objectID 
      * @access public
      * @return object 
      */
-    public function getFiles($data, $objectType, $objectID)
+    public function getBearychatData($text, $mobile, $email, $objectType, $objectID)
     {
+        $data = new stdclass();
+        $data->text     = $text;
+        $data->markdown = 'true';
+        $data->user     = $mobile ? $mobile : ($email ? $email : $this->app->user->account);
+
         if(!empty($_FILES['files']['name'][0]))
         {
             $this->loadModel('file');
@@ -378,6 +389,7 @@ class webhookModel extends model
                 }
             }
         }
+
         return $data;
     }
 

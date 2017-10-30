@@ -231,6 +231,7 @@ class product extends control
         $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst|noclosed');
         $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst|noclosed');
         $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst|noclosed');
+        $this->view->categories = $this->loadModel('tree')->getOptionMenu($rootID = 0, $type = 'category');
 
         unset($this->lang->product->typeList['']);
         $this->display();
@@ -275,6 +276,7 @@ class product extends control
         $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst',  $product->PO);
         $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst',  $product->QD);
         $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst', $product->RD);
+        $this->view->categories = $this->loadModel('tree')->getOptionMenu($rootID = 0, $type = 'category');
 
         unset($this->lang->product->typeList['']);
         $this->display();
@@ -657,6 +659,55 @@ class product extends control
         $this->view->recPerPage   = $pager->recPerPage;
         $this->view->orderBy      = $orderBy;
         $this->view->status       = $status;
+        $this->display();
+    }
+
+    /**
+     * Export product. 
+     * 
+     * @param  string    $status 
+     * @param  string    $orderBy 
+     * @access public
+     * @return void
+     */
+    public function export($status, $orderBy)
+    {
+        if($_POST)
+        {
+            $productLang   = $this->lang->product;
+            $productConfig = $this->config->product;
+
+            /* Create field lists. */
+            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $productConfig->list->exportFields);
+            foreach($fields as $key => $fieldName)
+            {
+                $fieldName = trim($fieldName);
+                $fields[$fieldName] = zget($productLang, $fieldName);
+                unset($fields[$key]);
+            }
+
+            $productStats = $this->product->getStats($orderBy, null, $status);
+            foreach($productStats as $i => $product)
+            {
+                $product->activeStories    = (int)$product->stories['active'];
+                $product->changedStories   = (int)$product->stories['changed'];
+                $product->draftStories     = (int)$product->stories['draft'];
+                $product->closedStories    = (int)$product->stories['closed'];
+                $product->unResolvedBugs   = (int)$product->unResolved;
+                $product->assignToNullBugs = (int)$product->assignToNull;
+
+                if($this->post->exportType == 'selected')
+                {
+                    $checkedItem = $this->cookie->checkedItem;
+                    if(strpos(",$checkedItem,", ",{$product->id},") === false) unset($productStats[$i]);
+                }
+            }
+
+            $this->post->set('fields', $fields);
+            $this->post->set('rows', $productStats);
+            $this->post->set('kind', 'product');
+            $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
+        }
         $this->display();
     }
 
