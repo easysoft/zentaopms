@@ -27,9 +27,9 @@
       </tr>
     </thead>
     <tbody>
-      <?php foreach($entries as $entry):?>
+      <?php foreach($entries as $id => $entry):?>
       <tr>
-        <td class='text-center'><?php echo $entry->id;?></td>
+        <td class='text-center'><?php echo $id;?></td>
         <td title='<?php echo $entry->name;?>'><?php echo $entry->name;?></td>
         <td><?php echo $entry->code;?></td>
         <td title='<?php echo $entry->key;?>'><?php echo $entry->key;?></td>
@@ -37,11 +37,11 @@
         <td title='<?php echo $entry->desc;?>'><?php echo $entry->desc;?></td>
         <td class='text-right'>
           <?php 
-          common::printIcon('entry', 'log', "entryID=$entry->id", '', 'list', 'file-text-o');
-          common::printIcon('entry', 'edit', "entryID=$entry->id", '', 'list');
+          common::printIcon('entry', 'log', "entryID=$id", '', 'list', 'file-text-o');
+          common::printIcon('entry', 'edit', "entryID=$id", '', 'list');
           if(common::hasPriv('entry', 'delete'))
           {
-              $deleteURL = $this->createLink('entry', 'delete', "entryID=$entry->id&confirm=yes");
+              $deleteURL = $this->createLink('entry', 'delete', "entryID=$id&confirm=yes");
               echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"entryList\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$lang->entry->delete}' class='btn-icon'");
           }
           ?>
