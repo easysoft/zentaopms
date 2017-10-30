@@ -334,25 +334,23 @@ class webhookModel extends model
      */
     public function getDingdingData($title, $text, $mobile)
     {
+        if($mobile) $text .= " @{$mobile}";
+
         $markdown = new stdclass();
         $markdown->title = $title;
         $markdown->text  = $text;
 
         $data = new stdclass();
+        $data->msgtype  = 'markdown';
+        $data->markdown = $markdown;
+
         if($mobile)
         {
             $at = new stdclass();
             $at->atMobiles = array($mobile);
             $at->isAtAll   = false;
 
-            $data->msgtype = 'text';
-            $data->text    = array('content' => $text);
-            $data->at      = $at;
-        }
-        else
-        {
-            $data->msgtype  = 'markdown';
-            $data->markdown = $markdown;
+            $data->at = $at;
         }
 
         return $data;
