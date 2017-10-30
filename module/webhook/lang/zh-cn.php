@@ -13,6 +13,7 @@ $lang->webhook->edit   = '编辑钩子';
 $lang->webhook->delete = '删除钩子';
 
 $lang->webhook->id          = 'ID';
+$lang->webhook->type        = '类型';
 $lang->webhook->name        = '名称';
 $lang->webhook->url         = 'Hook地址';
 $lang->webhook->contentType = '内容类型';

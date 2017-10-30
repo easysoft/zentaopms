@@ -52,7 +52,11 @@ class tutorial extends control
     {
         if($_POST && isset($_POST['finish'])) $finish = $_POST['finish'];
 
-        if($finish == 'keepAll') $this->send(array('result' => 'fail', 'message' => $this->lang->tutorial->ajaxSetError));
+        if($finish == 'keepAll')
+        {
+            $this->loadModel('score')->score('tutorial','keepAll');
+            $this->send(array('result' => 'fail', 'message' => $this->lang->tutorial->ajaxSetError));
+        }
 
         $account = $this->app->user->account;
         $this->session->set('tutorialMode', false);

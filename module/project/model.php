@@ -291,7 +291,7 @@ class projectModel extends model
             $lib->main    = '1';
             $lib->acl     = $project->acl == 'open' ? 'open' : 'private';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
-
+            $this->loadModel('score')->score('project', 'create', $projectID);
             return $projectID;
         } 
     }
@@ -537,7 +537,7 @@ class projectModel extends model
             ->autoCheck()
             ->where('id')->eq((int)$projectID)
             ->exec();
-
+        $this->loadModel('score')->score('project', 'close', $oldProject);
         if(!dao::isError()) return common::createChanges($oldProject, $project);
     }
 

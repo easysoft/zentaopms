@@ -25,6 +25,7 @@ $lang->my->menuOrder[40] = 'myProject';
 $lang->my->menuOrder[45] = 'dynamic';
 $lang->my->menuOrder[50] = 'profile';
 $lang->my->menuOrder[55] = 'changePassword';
+$lang->my->menuOrder[60] = 'score';
 $lang->todo->menuOrder   = $lang->my->menuOrder;
 
 /* product menu order. */

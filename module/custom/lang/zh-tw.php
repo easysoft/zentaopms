@@ -1,19 +1,20 @@
 <?php
-$lang->custom->common    = '自定義';
-$lang->custom->index     = '首頁';
-$lang->custom->set       = '自定義配置';
-$lang->custom->restore   = '恢復預設';
-$lang->custom->key       = '鍵';
-$lang->custom->value     = '值';
-$lang->custom->flow      = '流程';
-$lang->custom->working   = '工作方式';
-$lang->custom->select    = '請選擇流程：';
-$lang->custom->branch    = '多分支';
-$lang->custom->owner     = '所有者';
-$lang->custom->module    = '模組';
-$lang->custom->section   = '附加部分';
-$lang->custom->lang      = '所屬語言';
-$lang->custom->score     = '積分';
+$lang->custom->common     = '自定義';
+$lang->custom->index      = '首頁';
+$lang->custom->set        = '自定義配置';
+$lang->custom->restore    = '恢復預設';
+$lang->custom->key        = '鍵';
+$lang->custom->value      = '值';
+$lang->custom->flow       = '流程';
+$lang->custom->working    = '工作方式';
+$lang->custom->select     = '請選擇流程：';
+$lang->custom->branch     = '多分支';
+$lang->custom->owner      = '所有者';
+$lang->custom->module     = '模組';
+$lang->custom->section    = '附加部分';
+$lang->custom->lang       = '所屬語言';
+$lang->custom->score      = '積分';
+$lang->custom->scoreReset = '重置積分';
 
 $lang->custom->object['story']    = '需求';
 $lang->custom->object['task']     = '任務';

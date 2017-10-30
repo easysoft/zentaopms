@@ -145,6 +145,7 @@ class releaseModel extends model
             $releaseID = $this->dao->lastInsertID();
             $this->file->updateObjectID($this->post->uid, $releaseID, 'release');
             $this->file->saveUpload('release', $releaseID);
+            $this->loadModel('score')->score('release', 'create', $releaseID);
             if(!dao::isError()) return $releaseID;
         }
 

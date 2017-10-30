@@ -175,9 +175,13 @@ $lang->my->menu->dynamic        = '動態|my|dynamic|';
 $lang->my->menu->profile        = array('link' => '檔案|my|profile', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = '密碼|my|changepassword';
 $lang->my->menu->manageContacts = '聯繫人|my|managecontacts';
+$lang->my->menu->score          = array('link' => '積分|score|browse', 'subModule' => 'score');
 
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;
+
+$lang->score        = new stdclass();
+$lang->scoret->menu = $lang->my->menu;
 
 /* 產品視圖設置。*/
 $lang->product = new stdclass();
@@ -341,7 +345,6 @@ $lang->admin->menu->safe      = array('link' => '安全|admin|safe', 'alias' => 
 $lang->admin->menu->cron      = array('link' => '計劃任務|cron|index', 'subModule' => 'cron');
 $lang->admin->menu->trashes   = array('link' => '資源回收筒|action|trash', 'subModule' => 'action');
 $lang->admin->menu->dev       = array('link' => '二次開發|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
-$lang->admin->menu->score     = array('link' => '積分|score|browse', 'subModule' => 'score');
 $lang->admin->menu->sso       = '然之整合|admin|sso';
 
 $lang->convert   = new stdclass();
@@ -355,7 +358,6 @@ $lang->mail      = new stdclass();
 $lang->cron      = new stdclass();
 $lang->dev       = new stdclass();
 $lang->search    = new stdclass();
-$lang->score     = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
@@ -367,7 +369,6 @@ $lang->custom->menu    = $lang->admin->menu;
 $lang->editor->menu    = $lang->admin->menu;
 $lang->mail->menu      = $lang->admin->menu;
 $lang->dev->menu       = $lang->admin->menu;
-$lang->scoret->menu    = $lang->admin->menu;
 
 /* 菜單分組。*/
 $lang->menugroup = new stdclass();
@@ -390,6 +391,7 @@ $lang->menugroup->testreport  = 'qa';
 $lang->menugroup->people      = 'company';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
+$lang->menugroup->score       = 'my';
 $lang->menugroup->action      = 'admin';
 $lang->menugroup->backup      = 'admin';
 $lang->menugroup->cron        = 'admin';
@@ -398,7 +400,6 @@ $lang->menugroup->custom      = 'admin';
 $lang->menugroup->editor      = 'admin';
 $lang->menugroup->mail        = 'admin';
 $lang->menugroup->dev         = 'admin';
-$lang->menugroup->score       = 'admin';
 
 /* 錯誤提示信息。*/
 $lang->error = new stdclass();
