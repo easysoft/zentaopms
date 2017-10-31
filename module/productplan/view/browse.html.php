@@ -55,7 +55,9 @@
   </tr>
   </thead>
   <tbody>
+  <?php if($this->loadModel('file'));?>
   <?php foreach($plans as $plan):?>
+  <?php $plan = $this->file->replaceImgURL($plan, 'desc');?>
   <tr class='text-center'>
     <td class='cell-id'>
       <input type='checkbox' name='planIDList[<?php echo $plan->id;?>]' value='<?php echo $plan->id;?>' /> 
