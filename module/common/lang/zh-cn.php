@@ -187,20 +187,21 @@ $lang->score->menu = $lang->my->menu;
 $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
 
-$lang->product->menu->list    = array('link' => '%s', 'fixed' => true);
-$lang->product->menu->story   = array('link' => '需求|product|browse|productID=%s', 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->product->menu->dynamic = '动态|product|dynamic|productID=%s';
-$lang->product->menu->plan    = array('link' => '计划|productplan|browse|productID=%s', 'subModule' => 'productplan');
-$lang->product->menu->release = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
-$lang->product->menu->roadmap = '路线图|product|roadmap|productID=%s';
-$lang->product->menu->doc     = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->product->menu->branch  = '@branch@|branch|manage|productID=%s';
-$lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
-$lang->product->menu->view    = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
-$lang->product->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
-$lang->product->menu->create  = array('link' => "<i class='icon-plus'></i>&nbsp;添加{$lang->productCommon}|product|create", 'float' => 'right');
-$lang->product->menu->all     = array('link' => "<i class='icon-cubes'></i>&nbsp;所有{$lang->productCommon}|product|all|productID=%s", 'float' => 'right');
-$lang->product->menu->index   = array('link' => "<i class='icon-home'></i>{$lang->productCommon}主页|product|index|locate=no", 'float' => 'right');
+$lang->product->menu->list     = array('link' => '%s', 'fixed' => true);
+$lang->product->menu->story    = array('link' => '需求|product|browse|productID=%s', 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->product->menu->dynamic  = '动态|product|dynamic|productID=%s';
+$lang->product->menu->plan     = array('link' => '计划|productplan|browse|productID=%s', 'subModule' => 'productplan');
+$lang->product->menu->release  = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
+$lang->product->menu->roadmap  = '路线图|product|roadmap|productID=%s';
+$lang->product->menu->doc      = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
+$lang->product->menu->branch   = '@branch@|branch|manage|productID=%s';
+$lang->product->menu->module   = '模块|tree|browse|productID=%s&view=story';
+$lang->product->menu->category = '目录|tree|browse|productID=%s&view=category';
+$lang->product->menu->view     = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
+$lang->product->menu->project  = "{$lang->projectCommon}|product|project|status=all&productID=%s";
+$lang->product->menu->create   = array('link' => "<i class='icon-plus'></i>&nbsp;添加{$lang->productCommon}|product|create", 'float' => 'right');
+$lang->product->menu->all      = array('link' => "<i class='icon-cubes'></i>&nbsp;所有{$lang->productCommon}|product|all|productID=%s", 'float' => 'right');
+$lang->product->menu->index    = array('link' => "<i class='icon-home'></i>{$lang->productCommon}主页|product|index|locate=no", 'float' => 'right');
 
 $lang->story       = new stdclass();
 $lang->productplan = new stdclass();
@@ -787,6 +788,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     unset($lang->product->menu->roadmap);
     unset($lang->product->menu->doc);
     unset($lang->product->menu->module);
+    unset($lang->product->menu->category);
     unset($lang->product->menu->index);
 
     $lang->product->menu->build = array('link' => '版本|product|build', 'subModule' => 'build');

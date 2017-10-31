@@ -14,7 +14,6 @@ class webhook extends control
     /**
      * Browse webhooks. 
      * 
-     * @param  string $type 
      * @param  string $orderBy 
      * @param  int    $recTotal 
      * @param  int    $recPerPage 
@@ -22,14 +21,13 @@ class webhook extends control
      * @access public
      * @return void
      */
-    public function browse($type = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title    = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->list;
-        $this->view->webhooks = $this->webhook->getList($type, $orderBy, $pager);
-        $this->view->type     = $type;
+        $this->view->webhooks = $this->webhook->getList($orderBy, $pager);
         $this->view->orderBy  = $orderBy;
         $this->view->pager    = $pager;
         $this->display();
@@ -38,17 +36,16 @@ class webhook extends control
     /**
      * Create a webhook. 
      * 
-     * @param  string $type
      * @access public
      * @return void
      */
-    public function create($type = '')
+    public function create()
     {
         if($_POST)
         {
-            $this->webhook->create($type);
+            $this->webhook->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->webhook->saveSuccess, 'locate' => inlink('browse', "type=$type")));
+            $this->send(array('result' => 'success', 'message' => $this->lang->webhook->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->app->loadLang('action');
@@ -57,7 +54,6 @@ class webhook extends control
         $this->view->projects      = $this->loadModel('project')->getPairs();
         $this->view->objectTypes   = $this->webhook->getObjectTypes();
         $this->view->objectActions = $this->webhook->getObjectActions();
-        $this->view->type          = $type;
         $this->display();
     }
 
@@ -75,7 +71,7 @@ class webhook extends control
         {
             $this->webhook->update($id);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->webhook->saveSuccess, 'locate' => inlink('browse', "type=$webhook->type")));
+            $this->send(array('result' => 'success', 'message' => $this->lang->webhook->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->app->loadLang('action');
@@ -136,7 +132,7 @@ class webhook extends control
      */
     public function asyncSend()
     {
-        $webhooks = $this->webhook->getList($type = '', $orderBy = 'id_desc', $pager = null, $decode = false);
+        $webhooks = $this->webhook->getList($orderBy = 'id_desc', $pager = null, $decode = false);
         if(empty($webhooks)) 
         {
             echo "NO WEBHOOK EXIST.\n";

@@ -64,6 +64,8 @@ CREATE TABLE IF NOT EXISTS `zt_log` (
   KEY `obejctID` (`objectID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+ALTER TABLE `zt_product` ADD `category` mediumint(8) NOT NULL AFTER `code`;
+
 ALTER TABLE `zt_task` ADD `parent` INT(11)  NULL  DEFAULT '0'  AFTER `deleted`;
 ALTER TABLE `zt_team` ADD `task` INT(11)  NULL  DEFAULT '0'  AFTER `project`;
 ALTER TABLE `zt_team` ADD `estimate` DECIMAL(12,2)  UNSIGNED  NOT NULL  DEFAULT '0';

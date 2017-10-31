@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="titlebar">
   <div class="heading">
-    <strong><?php echo html::a(inlink('browse', "type={$webhook->type}"), $webhook->type == 'dingding' ? $lang->webhook->dingding : $lang->webhook->common);?></strong>
+    <strong><?php echo html::a(inlink('browse'), $lang->webhook->common);?></strong>
     <small class="text-muted"> <?php echo $webhook->name;?> </small>
     <small class="text-muted"> <?php echo $lang->webhook->log;?> <i class="icon-file-text-o"></i></small>
   </div>

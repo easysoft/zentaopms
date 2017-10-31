@@ -40,6 +40,7 @@ $lang->product->menuOrder[40] = 'doc';
 $lang->product->menuOrder[45] = 'project';
 $lang->product->menuOrder[50] = 'branch';
 $lang->product->menuOrder[55] = 'module';
+$lang->product->menuOrder[57] = 'category';
 $lang->product->menuOrder[60] = 'view';
 $lang->product->menuOrder[65] = 'create';
 $lang->product->menuOrder[70] = 'all';

@@ -29,7 +29,7 @@
       <tr>
         <th><?php echo $lang->webhook->url;?></th>
         <td><?php echo html::input('url', $webhook->url, "class='form-control'");?></td>
-        <td><?php if($webhook->type == 'dingding') echo $lang->webhook->note->dingding;?></td>
+        <td><?php echo zget($lang->webhook->note->typeList, $webhook->type);?></td>
       </tr>
       <?php if($webhook->type != 'dingding'):?>
       <tr>
@@ -53,7 +53,7 @@
         <td><?php echo html::select('projects[]', $projects, $webhook->projects, "class='form-control chosen' multiple");?></td>
         <td><?php echo $lang->webhook->note->project;?></td>
       </tr>
-      <?php if($webhook->type != 'dingding'):?>
+      <?php if(strpos(',bearychat,dingding,', ",$webhook->type,") === false):?>
       <tr>
         <th><?php echo $lang->webhook->params;?></th>
         <td class='labelWidth' colspan='2'><?php echo html::checkbox('params', $lang->webhook->paramsList, $webhook->params);?></td>

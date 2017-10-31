@@ -12,23 +12,23 @@
 ?>
 <?php include 'header.html.php';?>
 <?php js::set('confirmDelete', $lang->webhook->confirmDelete);?>
-<?php js::set('type', $type);?>
 <form id='ajaxForm' method='post'>
   <table id='webhookList' class='table table-condensed table-hover table-striped table-fixed'>
     <thead>
       <tr>
-        <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+        <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->webhook->id);?></th>
+        <th class='w-100px'><?php common::printOrderLink('type', $orderBy, $vars, $lang->webhook->type);?></th>
         <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->webhook->name);?></th>
         <th><?php common::printOrderLink('url', $orderBy, $vars, $lang->webhook->url);?></th>
         <th class='w-70px'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
-      <?php $index = 1;?>
       <?php foreach($webhooks as $id => $webhook):?>
       <tr>
-        <td class='text-center'><?php echo $index++;?></td>
+        <td class='text-center'><?php echo $id;?></td>
+        <td><?php echo zget($lang->webhook->typeList, $webhook->type);?></td>
         <td class='text' title='<?php echo $webhook->name;?>'><?php echo $webhook->name;?></td>
         <td class='text' title='<?php echo $webhook->url;?>'><?php echo $webhook->url;?></td>
         <td class='text-right'>
@@ -47,7 +47,7 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan='4'><?php $pager->show();?></td>
+        <td colspan='5'><?php $pager->show();?></td>
       </tr>
     </tfoot>
   </table>

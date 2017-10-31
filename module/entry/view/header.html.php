@@ -15,8 +15,7 @@
   <ul class='nav'>
     <?php 
     echo "<li id='entry' class='active'>"; common::printLink('entry', 'browse', '', $lang->entry->common); echo '</li>';
-    echo "<li id='webhook'>"; common::printLink('webhook', 'browse', 'type=default',   $lang->entry->webhook); echo '</li>';
-    echo "<li id='dingding'>"; common::printLink('webhook', 'browse', 'type=dingding',   $lang->entry->dingding); echo '</li>';
+    echo "<li id='webhook'>"; common::printLink('webhook', 'browse', '', $lang->entry->webhook); echo '</li>';
     ?>
   </ul>
   <div class='actions'>
