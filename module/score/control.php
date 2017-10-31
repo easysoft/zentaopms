@@ -10,44 +10,6 @@
 class score extends control
 {
     /**
-     * score constructor.
-     *
-     * @param string $module
-     * @param string $method
-     *
-     * @access public
-     * @return mixed
-     */
-    public function __construct($module = '', $method = '')
-    {
-        parent::__construct($module, $method);
-        $this->loadModel('my')->setMenu();
-    }
-
-    /**
-     * Get score list
-     *
-     * @param int $recTotal
-     * @param int $recPerPage
-     * @param int $pageID
-     *
-     * @access public
-     * @return mixed
-     */
-    public function browse($recTotal = 0, $recPerPage = 20, $pageID = 1)
-    {
-        $this->app->loadClass('pager', $static = true);
-        $pager  = new pager($recTotal, $recPerPage, $pageID);
-        $scores = $this->score->getScores($pager);
-
-        $this->view->title  = $this->lang->score->common;
-        $this->view->user   = $this->loadModel('user')->getById($this->app->user->account);
-        $this->view->pager  = $pager;
-        $this->view->scores = $scores;
-        $this->display();
-    }
-
-    /**
      * Ajax action score
      *
      * @param string $method $.get(createLink('score', 'ajax', "method=selectLang"));
@@ -78,8 +40,21 @@ class score extends control
         $this->display();
     }
 
-    public function refresh()
+    public function refresh($lastID = 0)
     {
+        if(helper::isAjaxRequest())
+        {
+            $result = $this->score->refresh($lastID);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($result['status'] == 'finish')
+            {
+                $this->send(array('result' => 'finished', 'message' => $this->lang->score->refreshFinish));
+            }
+            else
+            {
+                $this->send(array('result' => 'unfinished', 'message' => $this->lang->score->refreshLoading, 'lastID' => $result['lastID']));
+            }
+        }
         $this->display();
     }
 }

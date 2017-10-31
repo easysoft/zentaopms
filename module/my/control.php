@@ -38,6 +38,30 @@ class my extends control
     }
 
     /**
+     * Get score list
+     *
+     * @param int $recTotal
+     * @param int $recPerPage
+     * @param int $pageID
+     *
+     * @access public
+     * @return mixed
+     */
+    public function score($recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->app->loadClass('pager', $static = true);
+        $pager  = new pager($recTotal, $recPerPage, $pageID);
+        $scores =  $this->loadModel('score')->getScores($pager);
+
+        $this->view->title  = $this->lang->score->common;
+        $this->view->user   = $this->loadModel('user')->getById($this->app->user->account);
+        $this->view->pager  = $pager;
+        $this->view->scores = $scores;
+        $this->display();
+    }
+
+
+    /**
      * My todos. 
      * 
      * @param  string $type 

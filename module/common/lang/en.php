@@ -175,7 +175,7 @@ $lang->my->menu->dynamic        = 'Dynamic|my|dynamic|';
 $lang->my->menu->profile        = array('link' => 'Profile|my|profile', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = 'Password|my|changepassword';
 $lang->my->menu->manageContacts = 'Contact|my|managecontacts';
-$lang->my->menu->score          = array('link' => 'Score|score|browse', 'subModule' => 'score');
+$lang->my->menu->score          = 'Score|score|browse';
 
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;

@@ -78,7 +78,7 @@ ALTER TABLE `zt_team` DROP PRIMARY KEY;
 ALTER TABLE `zt_team` ADD PRIMARY KEY (`project`, `task`, `account`);
 
 ALTER TABLE `zt_user` ADD `score` DECIMAL(12,1)  NOT NULL  DEFAULT '0'  AFTER `deleted`;
-ALTER TABLE `zt_user` ADD `score_level` DECIMAL(12,1)  NOT NULL  DEFAULT '0'  AFTER `score`;
+ALTER TABLE `zt_user` ADD `scoreLevel` DECIMAL(12,1)  NOT NULL  DEFAULT '0'  AFTER `score`;
 
 CREATE TABLE `zt_score` (
   `id` bigint(12) unsigned NOT NULL AUTO_INCREMENT,

@@ -48,7 +48,7 @@ class scoreModel extends model
         switch($model)
         {
             case 'user':
-                if($method == 'login') $desc = $this->lang->score->methods[$model][$method] . 'IP:' . helper::getRemoteIp();
+                if($method == 'login') $desc = $this->lang->score->methods[$model][$method];
                 if($method == 'changePassword')
                 {
                     if(!empty($rule['ext'][$param])) $rule['score'] = $rule['score'] + $rule['ext'][$param];
@@ -87,7 +87,7 @@ class scoreModel extends model
                 }
                 break;
             case 'bug':
-                $desc .= 'ID:' . $param;
+                if(is_numeric($param)) $desc .= 'ID:' . $param;
                 if($method == 'createFormCase')
                 {
                     $desc     = $this->lang->score->models['testcase'] . 'ID:' . $param;
@@ -125,14 +125,14 @@ class scoreModel extends model
                     $objectID = $param->id;
                     if(!empty($param->PM))
                     {
-                        $rule['score'] = $param->end > date('Y-m-d') ? $rule['ext']['manager'][0] + $rule['ext']['manager'][1] : $rule['ext']['manager'][0];
+                        $rule['score'] = $param->end > date('Y-m-d', $time) ? $rule['ext']['manager'][0] + $rule['ext']['manager'][1] : $rule['ext']['manager'][0];
                         $this->saveScore($param->PM, $rule, $model, $method, $desc, $objectID, $time);
                     }
                     $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->eq($param->id)->fetchGroup('account');
                     if(!empty($teams))
                     {
                         $users         = array_keys($teams);
-                        $rule['score'] = $param->end > date('Y-m-d') ? $rule['ext']['member'][0] + $rule['ext']['member'][1] : $rule['ext']['member'][0];
+                        $rule['score'] = $param->end > date('Y-m-d', $time) ? $rule['ext']['member'][0] + $rule['ext']['member'][1] : $rule['ext']['member'][0];
                         foreach($users as $user)
                         {
                             if($user != $param->PM) $this->saveScore($user, $rule, $model, $method, $desc, $objectID, $time);
@@ -208,7 +208,7 @@ class scoreModel extends model
             $data->after    = $user->score + $rule['score'];
             $data->time     = empty($time) ? helper::now() : $time;
             $this->dao->insert(TABLE_SCORE)->data($data)->exec();
-            $this->dao->query("UPDATE " . TABLE_USER . " SET `score`=`score` + " . $rule['score'] . ",`score_level`=`score_level` + " . $rule['score'] . " WHERE `account`='" . $account . "'");
+            $this->dao->query("UPDATE " . TABLE_USER . " SET `score`=`score` + " . $rule['score'] . ",`scoreLevel`=`scoreLevel` + " . $rule['score'] . " WHERE `account`='" . $account . "'");
             $this->dao->commit();
         }
         catch(ErrorException $e)
@@ -218,14 +218,32 @@ class scoreModel extends model
     }
 
     /**
-     * reset all user score and level score
-     * 
+     * refresh all user score and level score
+     *
+     * @param int $lastID
+     *
      * @access public
      * @return void
      */
-    public function resetScore()
+    public function refresh($lastID = 0)
     {
-
+        if($lastID == 0)
+        {
+            $this->dao->query("DROP TABLE IF EXISTS `score_bak`");
+            $this->dao->query("RENAME TABLE " . TABLE_SCORE . ' TO score_bak');
+            $this->dao->query("CREATE TABLE " . TABLE_SCORE . ' LIKE score_bak');
+            $this->dao->query("UPDATE " . TABLE_USER . " SET `score`=0,`scoreLevel`=0");
+        }
+        $actions = $this->dao->select('*')->from('score_bak')->where('id')->gt($lastID)->orderBy('id_asc')->limit(100)->fetchAll('id');
+        if(empty($actions)) return array('num' => 0, 'status' => 'finish');
+        foreach($actions as $action)
+        {
+            $param = $action->objectID;
+            if($action->model == 'project' && $action->method == 'close') $param = $this->dao->findById($action->objectID)->from(TABLE_PROJECT)->fetch();
+            if($action->model == 'bug' && ($action->method == 'confirmBug' || $action->method == 'resolve')) $param = $this->dao->findById($action->objectID)->from(TABLE_BUG)->fetch();
+            $this->score($action->model, $action->method, $param, $action->account, $action->time);
+        }
+        return array('status' => 'more', 'lastID' => max(array_keys($actions)));
     }
 
     /**
@@ -240,7 +258,7 @@ class scoreModel extends model
     {
         if($lastID == 0)
         {
-            $this->dao->query("UPDATE " . TABLE_USER . " SET `score`=0,`score_level`=0");
+            $this->dao->query("UPDATE " . TABLE_USER . " SET `score`=0,`scoreLevel`=0");
             $this->dao->query("TRUNCATE TABLE " . TABLE_SCORE);
         }
         $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->gt($lastID)->orderBy('id_asc')->limit(100)->fetchAll('id');

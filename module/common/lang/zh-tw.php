@@ -175,7 +175,7 @@ $lang->my->menu->dynamic        = '動態|my|dynamic|';
 $lang->my->menu->profile        = array('link' => '檔案|my|profile', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = '密碼|my|changepassword';
 $lang->my->menu->manageContacts = '聯繫人|my|managecontacts';
-$lang->my->menu->score          = array('link' => '積分|score|browse', 'subModule' => 'score');
+$lang->my->menu->score          = '積分|my|score';
 
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;
