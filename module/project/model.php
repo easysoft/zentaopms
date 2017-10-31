@@ -1378,6 +1378,7 @@ class projectModel extends model
         if($this->post->stories == false) return false;
         $this->loadModel('action');
         $versions = $this->loadModel('story')->getVersions($this->post->stories);
+        $lastOrder = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
         foreach($this->post->stories as $key => $storyID)
         {
             $productID = (int)$this->post->products[$storyID];
@@ -1386,6 +1387,7 @@ class projectModel extends model
             $data->product = $productID;
             $data->story   = $storyID;
             $data->version = $versions[$storyID];
+            $data->order   = ++$lastOrder;
             $this->dao->insert(TABLE_PROJECTSTORY)->data($data)->exec();
             $this->story->setStage($storyID);
             $this->action->create('story', $storyID, 'linked2project', '', $projectID);
@@ -1403,8 +1405,18 @@ class projectModel extends model
     public function unlinkStory($projectID, $storyID)
     {
         $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->andWhere('story')->eq($storyID)->limit(1)->exec();
+
+        $order  = 1;
+        $storys = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order')->fetchAll();
+        foreach($storys as $projectstory)
+        {
+            if($projectstory->order != $order) $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('project')->eq($projectID)->andWhere('story')->eq($projectstory->story)->exec();
+            $order++;
+        }
+
         $this->loadModel('story')->setStage($storyID);
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromproject', '', $projectID);
+
         $tasks = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('project')->eq($projectID)->andWhere('status')->in('wait,doing')->fetchPairs('id');
         $this->dao->update(TABLE_TASK)->set('status')->eq('cancel')->where('id')->in($tasks)->exec();
         foreach($tasks as $taskID)
