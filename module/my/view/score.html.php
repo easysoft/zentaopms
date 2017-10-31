@@ -1,10 +1,10 @@
 <?php
 /**
- * The browse view file of score module of ZenTaoPMS.
+ * The score view file of my module of ZenTaoPMS.
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Memory <lvtao@cnezsoft.com>
- * @package     score
+ * @package     my
  * @version     $Id$
  * @link        http://www.zentao.net
  */
@@ -21,7 +21,7 @@
     <thead>
     <tr class='colhead'>
       <th class="w-200px"><?php echo $lang->score->time; ?></th>
-      <th class="w-150px"><?php echo $lang->score->model; ?></th>
+      <th class="w-150px"><?php echo $lang->score->module; ?></th>
       <th class="w-150px"><?php echo $lang->score->method; ?></th>
       <th class="w-100px"><?php echo $lang->score->before; ?></th>
       <th class="w-100px"><?php echo $lang->score->score; ?></th>
@@ -33,8 +33,8 @@
     <?php if(!empty($scores)) foreach($scores as $score): ?>
       <tr class='text-center'>
         <td><?php echo $score->time; ?></td>
-        <td><?php echo $lang->score->models[$score->model]; ?></td>
-        <td><?php echo $lang->score->methods[$score->model][$score->method]; ?></td>
+        <td><?php echo $lang->score->models[$score->module]; ?></td>
+        <td><?php echo $lang->score->methods[$score->module][$score->method]; ?></td>
         <td><?php echo $score->before; ?></td>
         <td><?php echo $score->score; ?></td>
         <td><?php echo $score->after; ?></td>

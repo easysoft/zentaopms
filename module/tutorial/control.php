@@ -54,7 +54,7 @@ class tutorial extends control
 
         if($finish == 'keepAll')
         {
-            $this->loadModel('score')->score('tutorial','keepAll');
+            $this->loadModel('score')->create('tutorial','keepAll');
             $this->send(array('result' => 'fail', 'message' => $this->lang->tutorial->ajaxSetError));
         }
 

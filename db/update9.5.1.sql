@@ -83,7 +83,7 @@ ALTER TABLE `zt_user` ADD `scoreLevel` DECIMAL(12,1)  NOT NULL  DEFAULT '0'  AFT
 CREATE TABLE `zt_score` (
   `id` bigint(12) unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL,
-  `model` varchar(30) NOT NULL,
+  `module` varchar(30) NOT NULL,
   `method` varchar(30) NOT NULL,
   `desc` varchar(250) NOT NULL DEFAULT '',
   `before` decimal(12,1) NOT NULL DEFAULT '0.0',

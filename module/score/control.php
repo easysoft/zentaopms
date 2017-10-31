@@ -11,17 +11,26 @@ class score extends control
 {
     /**
      * Ajax action score
+     * javascript use : $.get(createLink('score', 'ajax', "method=method"));
      *
-     * @param string $method $.get(createLink('score', 'ajax', "method=selectLang"));
+     * @param string $method
      *
      * @access public
      * @return void
      */
     public function ajax($method = '')
     {
-        $this->loadModel('score')->score('ajax', $method);
+        $this->loadModel('score')->create('ajax', $method);
     }
 
+    /**
+     * initialization score
+     *
+     * @param int $lastID
+     *
+     * @access public
+     * @return void
+     */
     public function init($lastID = 0)
     {
         if(helper::isAjaxRequest())
@@ -40,19 +49,27 @@ class score extends control
         $this->display();
     }
 
-    public function refresh($lastID = 0)
+    /**
+     * reset all score
+     *
+     * @param int $lastID
+     *
+     * @access public
+     * @return void
+     */
+    public function reset($lastID = 0)
     {
         if(helper::isAjaxRequest())
         {
-            $result = $this->score->refresh($lastID);
+            $result = $this->score->reset($lastID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($result['status'] == 'finish')
             {
-                $this->send(array('result' => 'finished', 'message' => $this->lang->score->refreshFinish));
+                $this->send(array('result' => 'finished', 'message' => $this->lang->score->resetFinish));
             }
             else
             {
-                $this->send(array('result' => 'unfinished', 'message' => $this->lang->score->refreshLoading, 'lastID' => $result['lastID']));
+                $this->send(array('result' => 'unfinished', 'message' => $this->lang->score->resetLoading, 'lastID' => $result['lastID']));
             }
         }
         $this->display();
