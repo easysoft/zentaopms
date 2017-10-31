@@ -177,7 +177,7 @@ class testsuiteModel extends model
      */
     public function getById($suiteID, $setImgSize = false)
     {
-        $suite = $this->dao->select("*")->from(TABLE_TESTSUITE)->where('id')->eq((int)$suiteID)->fetch();
+        $suite = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->eq((int)$suiteID)->fetch();
         $suite = $this->loadModel('file')->replaceImgURL($suite, 'desc');
         if($setImgSize) $suite->desc = $this->file->setImgSize($suite->desc);
         return $suite;

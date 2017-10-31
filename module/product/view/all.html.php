@@ -34,7 +34,7 @@
       <div class='panel-body'>
         <?php echo $categoryTree;?>
         <div class='text-right'>
-          <?php common::printLink('tree', 'browse', "rootID=$productID&view=category", $lang->tree->manageCategory);?>
+          <?php common::printLink('tree', 'browse', "rootID=&view=category", $lang->tree->manageCategory);?>
         </div>
       </div>
     </div>

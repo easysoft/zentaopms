@@ -196,7 +196,6 @@ $lang->product->menu->roadmap  = '路线图|product|roadmap|productID=%s';
 $lang->product->menu->doc      = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
 $lang->product->menu->branch   = '@branch@|branch|manage|productID=%s';
 $lang->product->menu->module   = '模块|tree|browse|productID=%s&view=story';
-$lang->product->menu->category = '目录|tree|browse|productID=%s&view=category';
 $lang->product->menu->view     = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->project  = "{$lang->projectCommon}|product|project|status=all&productID=%s";
 $lang->product->menu->create   = array('link' => "<i class='icon-plus'></i>&nbsp;添加{$lang->productCommon}|product|create", 'float' => 'right');
@@ -788,7 +787,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     unset($lang->product->menu->roadmap);
     unset($lang->product->menu->doc);
     unset($lang->product->menu->module);
-    unset($lang->product->menu->category);
     unset($lang->product->menu->index);
 
     $lang->product->menu->build = array('link' => '版本|product|build', 'subModule' => 'build');
