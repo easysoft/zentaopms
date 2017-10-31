@@ -1217,11 +1217,13 @@ class projectModel extends model
 
         /* Link stories. */
         $projectStories = $this->loadModel('story')->getProjectStoryPairs($projectID);
+        $lastOrder      = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
         foreach($stories as $storyID)
         {
             if(!isset($projectStories[$storyID]))
             {
                 $story = $this->dao->findById($storyID)->fields("$projectID as project, id as story, product, version")->from(TABLE_STORY)->fetch();
+                $story->order = ++$lastOrder;
                 $this->dao->insert(TABLE_PROJECTSTORY)->data($story)->exec();
             }
         }
@@ -1377,8 +1379,8 @@ class projectModel extends model
     {
         if($this->post->stories == false) return false;
         $this->loadModel('action');
-        $versions = $this->loadModel('story')->getVersions($this->post->stories);
-        $lastOrder = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+        $versions  = $this->loadModel('story')->getVersions($this->post->stories);
+        $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
         foreach($this->post->stories as $key => $storyID)
         {
             $productID = (int)$this->post->products[$storyID];
