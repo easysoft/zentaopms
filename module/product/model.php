@@ -181,6 +181,8 @@ class productModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProduct();
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+        if(!$product) return false;
+
         return $this->loadModel('file')->replaceImgURL($product, 'desc');
     }
 

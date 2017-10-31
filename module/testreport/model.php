@@ -198,8 +198,8 @@ class testreportModel extends model
             {
                 $foundBugs[$bug->id] = $bug;
                 if($bug->status == 'active' OR $bug->resolvedDate > "$end 23:59:59") $legacyBugs[$bug->id] = $bug;
+                if($bug->case and !empty($bug->testtask) and in_array($bug->testtask, $taskIdList)) $byCaseNum ++;
             }
-            if($bug->case and !empty($bug->testtask) and in_array($bug->testtask, $taskIdList)) $byCaseNum ++;
         }
 
         $severityGroups = $statusGroups = $openedByGroups = $resolvedByGroups = $resolutionGroups = $moduleGroups = $typeGroups = array();

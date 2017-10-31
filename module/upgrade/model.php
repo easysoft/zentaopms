@@ -1793,4 +1793,26 @@ class upgradeModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * Init project story order.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function initProjectStoryOrder()
+    {
+        $storyGroup = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->orderBy('story_asc')->fetchGroup('project', 'story');
+
+        foreach($storyGroup as $projectID => $stories)
+        {
+            $order = 1;
+            foreach($stories as $storyID => $projectStory)
+            {
+                $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('project')->eq($projectID)->andWhere('story')->eq($storyID)->exec();
+                $order++;
+            }
+        }
+        return true;
+    }
 }

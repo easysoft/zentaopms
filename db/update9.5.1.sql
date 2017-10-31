@@ -97,3 +97,4 @@ CREATE TABLE `zt_score` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('*/5', '*', '*', '*', '*', 'moduleName=webhook&methodName=asyncSend', '异步发送Webhook', 'zentao', 1, 'normal', '0000-00-00 00:00:00');
+ALTER TABLE `zt_projectstory` ADD `order` smallint(6) unsigned NOT NULL;
