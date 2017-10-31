@@ -752,20 +752,38 @@ class treeModel extends model
     /**
      * Create link of a story.
      * 
-     * @param  object   $module 
+     * @param  string $type
+     * @param  object $module 
      * @access public
      * @return string
      */
     public function createStoryLink($type, $module)
     {
-        $linkHtml = html::a(helper::createLink('product', 'browse', "root={$module->root}&branch=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
-        return $linkHtml;
+        return html::a(helper::createLink('product', 'browse', "root={$module->root}&branch=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+    }
+
+    /**
+     * Create link of a product.
+     * 
+     * @param  string $type
+     * @param  object $module 
+     * @param  array  $extra
+     * @access public
+     * @return string
+     */
+    public function createCategoryLink($type, $module, $extra)
+    {
+        $productID = $extra['productID'];
+        $status    = $extra['status'];
+        return html::a(helper::createLink('product', 'all', "productID={$productID}&category={$module->id}&status={$status}"), $module->name, '_self', "id='module{$module->id}'");
     }
 
     /**
      * Create link of a task.
      * 
-     * @param  object   $module 
+     * @param  string $type 
+     * @param  object $module 
+     * @param  array  $extra 
      * @access public
      * @return string
      */
@@ -773,8 +791,7 @@ class treeModel extends model
     {
         $projectID = $extra['projectID'];
         $productID = $extra['productID'];
-        $linkHtml = html::a(helper::createLink('project', 'task', "root={$projectID}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
-        return $linkHtml;
+        return html::a(helper::createLink('project', 'task', "root={$projectID}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
     }
 
     /**
@@ -790,8 +807,7 @@ class treeModel extends model
     {
         $projectID = $extra['projectID'];
         $productID = $extra['productID'];
-        $linkHtml = html::a(helper::createLink('project', 'story', "root={$projectID}&orderBy=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
-        return $linkHtml;
+        return html::a(helper::createLink('project', 'story', "root={$projectID}&orderBy=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
     }
 
     /**
@@ -803,9 +819,7 @@ class treeModel extends model
      */
     public function createDocLink($type, $module, $extra = '')
     {
-        $libID    = $module->root;
-        $linkHtml = html::a(helper::createLink('doc', 'browse', "libID={$libID}&browseType=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
-        return $linkHtml;
+        return html::a(helper::createLink('doc', 'browse', "libID={$module->root}&browseType=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
     }
 
     /**
@@ -877,8 +891,7 @@ class treeModel extends model
      */
     public function createBugLink($type, $module)
     {
-        $linkHtml = html::a(helper::createLink('bug', 'browse', "root={$module->root}&branch=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
-        return $linkHtml;
+        return html::a(helper::createLink('bug', 'browse', "root={$module->root}&branch=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
     }
 
     /**
@@ -890,8 +903,7 @@ class treeModel extends model
      */
     public function createCaseLink($type, $module)
     {
-        $linkHtml = html::a(helper::createLink('testcase', 'browse', "root={$module->root}&branch=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
-        return $linkHtml;
+        return html::a(helper::createLink('testcase', 'browse', "root={$module->root}&branch=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
     }
 
     /**
@@ -903,8 +915,7 @@ class treeModel extends model
      */
     public function createTestTaskLink($type, $module, $extra)
     {
-        $linkHtml = html::a(helper::createLink('testtask', 'cases', "taskID=$extra&type=byModule&module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
-        return $linkHtml;
+        return html::a(helper::createLink('testtask', 'cases', "taskID=$extra&type=byModule&module={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
     }
 
     /**
@@ -917,8 +928,7 @@ class treeModel extends model
      */
     public function createCaseLibLink($type, $module)
     {
-        $linkHtml = html::a(helper::createLink('testsuite', 'library', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
-        return $linkHtml;
+        return html::a(helper::createLink('testsuite', 'library', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
     }
 
     /**
@@ -935,7 +945,7 @@ class treeModel extends model
     {
         if($type == 'story') return html::a(helper::createLink('product', 'browse', "productID={$rootID}&branch=$branchID"), $branch, '_self', "id='branch{$branchID}'");
         if($type == 'bug')   return html::a(helper::createLink('bug', 'browse', "productID={$rootID}&branch=$branchID"), $branch, '_self', "id='branch{$branchID}'");
-        if($type == 'case')   return html::a(helper::createLink('testcase', 'browse', "productID={$rootID}&branch=$branchID"), $branch, '_self', "id='branch{$branchID}'");
+        if($type == 'case')  return html::a(helper::createLink('testcase', 'browse', "productID={$rootID}&branch=$branchID"), $branch, '_self', "id='branch{$branchID}'");
     }
 
     /**
@@ -1195,6 +1205,8 @@ class treeModel extends model
      */
     public function manageChild($rootID, $type, $parentModuleID, $childs)
     {
+        if($type == 'category') $rootID = 0;
+
         $this->checkUnique($rootID, $type, $parentModuleID, $childs);
         $parentModule = $this->getByID($parentModuleID);
 
