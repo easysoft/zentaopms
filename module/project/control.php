@@ -530,7 +530,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function story($projectID = 0, $orderBy = '', $type = 'byModule', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function story($projectID = 0, $orderBy = 'order', $type = 'byModule', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         /* Load these models. */
         $this->loadModel('story');
@@ -1988,6 +1988,32 @@ class project extends control
             $newID = array_shift($idList);
             if($id == $newID) continue;
             $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
+        }
+    }
+
+    /**
+     * Story sort.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function storySort($projectID)
+    {
+        $idList   = explode(',', trim($this->post->storys, ','));
+        $orderBy  = $this->post->orderBy;
+
+        $stories = $this->dao->select('story,`order`')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->where('t1.story')->in($idList)
+            ->andWhere('t1.project')->eq($projectID)
+            ->orderBy($orderBy)
+            ->fetchPairs('order', 'story');
+        foreach($stories as $order => $id)
+        {
+            $newID = array_shift($idList);
+            if($id == $newID) continue;
+            $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('story')->eq($newID)->andWhere('project')->eq($projectID)->exec();
         }
     }
 

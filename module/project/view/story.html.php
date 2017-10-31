@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php include '../../common/view/sortable.html.php';?>
 <?php js::set('moduleID', ($type == 'byModule' ? $param : 0));?>
 <?php js::set('productID', ($type == 'byProduct' ? $param : 0));?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
@@ -55,6 +56,7 @@
 <div class='main'>
   <script>setTreeBox();</script>
   <form method='post' id='projectStoryForm'>
+      <?php $canOrder = common::hasPriv('project', 'storySort');?>
     <table class='table tablesorter table-condensed table-fixed table-selectable' id='storyList'>
       <thead>
         <tr class='colhead'>
@@ -71,9 +73,12 @@
           <th title='<?php echo $lang->story->bugCount?>'  class='w-30px'><?php echo $lang->story->bugCountAB;?></th>
           <th title='<?php echo $lang->story->caseCount?>' class='w-30px'><?php echo $lang->story->caseCountAB;?></th>
           <th class='w-110px {sorter:false}'>  <?php echo $lang->actions;?></th>
+          <?php if($canOrder):?>
+          <th class='w-50px {sorter:false}'>    <?php common::printOrderLink('order',      $orderBy, $vars, $lang->project->updateOrder);?></th>
+          <?php endif;?>
         </tr>
       </thead>
-      <tbody>
+      <tbody id='storyTableList' class='sortable'>
         <?php
         $totalEstimate = 0;
         $canBatchEdit  = common::hasPriv('story', 'batchEdit');
@@ -84,7 +89,7 @@
         $storyLink      = $this->createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$project->id");
         $totalEstimate += $story->estimate;
         ?>
-        <tr class='text-center' id="story<?php echo $story->id?>">
+        <tr class='text-center' id="story<?php echo $story->id?>"  data-id='<?php echo $story->id ?>' data-order='<?php echo $story->order ?>'>
           <td class='cell-id'>
             <?php if($canBatchEdit or $canBatchClose):?>
             <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
@@ -147,12 +152,15 @@
             }
             ?>
           </td>
+          <?php if($canOrder):?>
+          <td class='sort-handler'><i class='icon-move'></i></td>
+          <?php endif;?>
         </tr>
         <?php endforeach;?>
       </tbody>
       <tfoot>
         <tr>
-          <td colspan='12'>
+          <td colspan='<?php echo $canOrder ? 13 : 12;?>'>
             <div class='table-actions clearfix'>
             <?php
             $storyInfo = sprintf($lang->project->productStories, inlink('linkStory', "project={$project->id}"));
@@ -193,4 +201,6 @@
     </table>
   </form>
 </div>
+<?php js::set('projectID', $project->id);?>
+<?php js::set('orderBy', $orderBy)?>
 <?php include '../../common/view/footer.html.php';?>
