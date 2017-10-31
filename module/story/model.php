@@ -186,11 +186,13 @@ class storyModel extends model
 
             if($projectID != 0 and $story->status != 'draft') 
             {
+                $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
                 $this->dao->insert(TABLE_PROJECTSTORY)
                     ->set('project')->eq($projectID)
                     ->set('product')->eq($this->post->product)
                     ->set('story')->eq($storyID)
                     ->set('version')->eq(1)
+                    ->set('order')->eq($lastOrder + 1)
                     ->exec();
             }
 

@@ -71,6 +71,5 @@ function toggleCopy()
 $(document).ready(function()
 {
     toggleCopy();
-    $('[data-id="create"] a').modalTrigger({type: 'iframe', width: 500});
     $('[data-id="edit"] a').modalTrigger({type: 'iframe', width: 500});
 });
