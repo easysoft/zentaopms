@@ -99,11 +99,8 @@ class scoreModel extends model
                 if($method == 'createFormCase')
                 {
                     $desc     = $this->lang->score->models['testcase'] . 'ID:' . $param;
-                    $caseUser = $this->dao->findById($param)->from(TABLE_CASE)->fetch();
-                    if(!empty($caseUser))
-                    {
-                        $user = $caseUser->openedBy;
-                    }
+                    $openedBy = $this->dao->findById($param)->from(TABLE_CASE)->fetch('openedBy');
+                    if(!empty($openedBy)) $user = $openedBy;
                 }
 
                 if($method == 'saveTplModal') $desc = $this->lang->score->methods[$module][$method] . 'ID:' . $param;

@@ -1031,6 +1031,9 @@ class taskModel extends model
         $children       = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
         $task->children = $children;
 
+        /* Check parent Task. */
+        if(!empty($task->parent)) $task->parentName = $openedBy = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('name');
+
         $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->eq($taskID)->orderBy('order_desc')->fetchGroup('task', 'account');
         foreach($teams as $key => $team) $teams[$key] = array_reverse($team);
         $task->team = isset($teams[$taskID]) ? $teams[$taskID] : array();
