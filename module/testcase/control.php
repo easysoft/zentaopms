@@ -1464,7 +1464,7 @@ class testcase extends control
                 }
                 else
                 {
-                    $steps = $cellValue;
+                    $steps = (array)$cellValue;
                     if(strpos($cellValue, "\n"))
                     {
                         $steps = explode("\n", $cellValue);
