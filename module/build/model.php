@@ -213,7 +213,7 @@ class buildModel extends model
             $buildID = $this->dao->lastInsertID();
             $this->file->updateObjectID($this->post->uid, $buildID, 'build');
             $this->file->saveUpload('build', $buildID);
-            $this->loadModel('score')->score('build', 'create', $buildID);
+            $this->loadModel('score')->create('build', 'create', $buildID);
             return $buildID;
         }
     }

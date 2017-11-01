@@ -175,7 +175,7 @@ $lang->my->menu->dynamic        = 'Dynamic|my|dynamic|';
 $lang->my->menu->profile        = array('link' => 'Profile|my|profile', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = 'Password|my|changepassword';
 $lang->my->menu->manageContacts = 'Contact|my|managecontacts';
-$lang->my->menu->score          = array('link' => 'Score|score|browse', 'subModule' => 'score');
+$lang->my->menu->score          = 'Score|score|browse';
 
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;
@@ -196,7 +196,6 @@ $lang->product->menu->roadmap  = 'Roadmap|product|roadmap|productID=%s';
 $lang->product->menu->doc      = array('link' => 'Document|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
 $lang->product->menu->branch   = '@branch@|branch|manage|productID=%s';
 $lang->product->menu->module   = 'Module|tree|browse|productID=%s&view=story';
-$lang->product->menu->category = 'Category|tree|browse|productID=%s&view=category';
 $lang->product->menu->view     = array('link' => 'Overview|product|view|productID=%s', 'alias' => 'edit');
 $lang->product->menu->project  = "{$lang->projectCommon}|product|project|status=all&productID=%s";
 $lang->product->menu->create   = array('link' => "<i class='icon-plus'></i>&nbsp;Add{$lang->productCommon}|product|create", 'float' => 'right');

@@ -131,7 +131,7 @@ class block extends control
             $this->dao->delete()->from(TABLE_BLOCK)->where('`id`')->eq($id)->andWhere('account')->eq($this->app->user->account)->andWhere('module')->eq($module)->exec();
         }
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        $this->loadModel('score')->score('block', 'set');
+        $this->loadModel('score')->create('block', 'set');
         $this->send(array('result' => 'success'));
     }
 
@@ -158,7 +158,7 @@ class block extends control
         }
 
         if(dao::isError()) $this->send(array('result' => 'fail'));
-        $this->loadModel('score')->score('block', 'set');
+        $this->loadModel('score')->create('block', 'set');
         $this->send(array('result' => 'success'));
     }
 

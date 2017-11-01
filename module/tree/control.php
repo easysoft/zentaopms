@@ -28,7 +28,7 @@ class tree extends control
         if(strpos('story|bug|case|category', $viewType) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
-            if($product->type != 'normal')
+            if(!empty($product->type) && $product->type != 'normal')
             {
                 $branches = $this->loadModel('branch')->getPairs($product->id);
                 if($currentModuleID)

@@ -33,7 +33,8 @@
       </tr>  
       <tr>
         <th><?php echo $lang->product->category;?></th>
-        <td><?php echo html::select('category', $categories, $product->category, "class='form-control chosen'");?></td><td></td>
+        <td><?php echo html::select('category', $categories, $product->category, "class='form-control chosen'");?></td>
+        <td><?php if(!$categories) common::printLink('tree', 'browse', 'rootID=&view=category', $lang->tree->manageCategory);?></td>
       </tr>
       <tr>
         <th><?php echo $lang->product->PO;?></th>

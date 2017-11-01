@@ -394,6 +394,7 @@ class product extends control
         $this->view->actions    = $this->loadModel('action')->getList('product', $productID);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->categories = $this->loadModel('tree')->getOptionMenu($rootID = 0, $type = 'category');
 
         $this->display();
     }
@@ -584,7 +585,23 @@ class product extends control
         $productsPinyin = common::convert2Pinyin($productPairs);
 
         foreach($products as $key => $product) $product->key = $productsPinyin[$product->name];
-        $this->view->products  = $products;
+
+        /* Sort products as categories' order first. */
+        $categories  = $this->loadModel('tree')->getOptionMenu($rootID = 0, $type = 'category');
+        $productList = array();
+        foreach($categories as $id => $category)
+        {
+            foreach($products as $product) 
+            {
+                if($product->category == $id) 
+                {
+                    $product->name = ltrim($category. '/' . $product->name, '/');
+                    $productList[] = $product;
+                }
+            }
+        }
+
+        $this->view->products  = $productList;
         $this->display();
     }
 
@@ -631,6 +648,7 @@ class product extends control
      * All product.
      *
      * @param  int    $productID
+     * @param  int    $category
      * @param  string $status
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -639,7 +657,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function all($productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function all($productID = 0, $category = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->session->set('productList', $this->app->getURI(true));
         $productID = $this->product->saveState($productID, $this->products);
@@ -652,13 +670,13 @@ class product extends control
         $this->app->loadLang('my');
         $this->view->title        = $this->lang->product->allProduct;
         $this->view->position[]   = $this->lang->product->allProduct;
-        $this->view->productStats = $this->product->getStats($orderBy, $pager, $status);
+        $this->view->productStats = $this->product->getStats($orderBy, $pager, $status, $category);
+        $this->view->categoryTree = $this->loadModel('tree')->getTreeMenu(0, $viewType = 'category', $startModuleID = 0, array('treeModel', 'createCategoryLink'), array('productID' => $productID, 'status' => $status));
         $this->view->productID    = $productID;
-        $this->view->pager        = $pager;
-        $this->view->recTotal     = $pager->recTotal;
-        $this->view->recPerPage   = $pager->recPerPage;
-        $this->view->orderBy      = $orderBy;
+        $this->view->category     = $category;
         $this->view->status       = $status;
+        $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
         $this->display();
     }
 

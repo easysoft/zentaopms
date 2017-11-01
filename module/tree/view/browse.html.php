@@ -11,7 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and $root->type != 'normal') ? true : false;?>
+<?php js::set('viewType', $viewType);?>
+<?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and (!empty($root->type) && $root->type != 'normal')) ? true : false;?>
 <?php $name = $viewType == 'category' ? $lang->tree->category : $lang->tree->name;?>
 <div id='featurebar'>
   <div class='heading'><?php echo $viewType == 'category' ? $lang->tree->manageCategory : $lang->tree->common;?></div>
@@ -28,7 +29,7 @@
     </div>
   </div>
   <div class='col-sm-8'>
-    <form id='childrenForm' class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "root={$root->id}&viewType=$viewType");?>'>
+    <form id='childrenForm' class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "root=$rootID&viewType=$viewType");?>'>
       <div class='panel'>
         <div class='panel-heading'>
           <i class='icon-sitemap'></i>
@@ -45,11 +46,11 @@
               <td class='parentModule'>
                 <nobr>
                 <?php
-                echo html::a($this->createLink('tree', 'browse', "root={$root->id}&viewType=$viewType"), $root->name);
+                echo html::a($this->createLink('tree', 'browse', "root=$rootID&viewType=$viewType"), empty($root->name) ? '' : $root->name);
                 echo $lang->arrow;
                 foreach($parentModules as $module)
                 {
-                    echo html::a($this->createLink('tree', 'browse', "root={$root->id}&viewType=$viewType&moduleID=$module->id"), $module->name);
+                    echo html::a($this->createLink('tree', 'browse', "root=$rootID&viewType=$viewType&moduleID=$module->id"), $module->name);
                     echo $lang->arrow;
                 }
                 ?>
@@ -180,8 +181,8 @@ $(function()
             subModules:
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'browse', "rootID=$rootID&viewType=$viewType&moduleID={0}&branch={1}"); ?>',
-                title: '<?php echo $viewType == 'category' ? $lang->tree->categoryChild : $lang->tree->child ?>',
-                template: '<a href="javascript:;"><?php echo $viewType == 'category' ? $lang->tree->categoryChild : $lang->tree->child?></a>'
+                title: '<?php echo $viewType == 'category' ? '': $lang->tree->child ?>',
+                template: '<a href="javascript:;"><?php echo $viewType == 'category' ? '': $lang->tree->child?></a>'
             }
         },
         action: function(event)
@@ -209,7 +210,7 @@ $(function()
                     var item = $li.data();
                     orders['orders[' + item.id + ']'] = $li.attr('data-order') || item.order;
                 });
-                $.post('<?php echo $this->createLink('tree', 'updateOrder', "root={$root->id}&viewType=$viewType");?>', orders).error(function()
+                $.post('<?php echo $this->createLink('tree', 'updateOrder', "rootID=$rootID&viewType=$viewType");?>', orders).error(function()
                 {
                     bootbox.alert(lang.timeout);
                 });
@@ -245,6 +246,7 @@ $(function()
     $tree.find('[data-toggle="tooltip"]').tooltip();
 
     $('#modulemenu > .nav > li > a[href*=tree][href*=browse]').not('[href*=<?php echo $viewType;?>]').parent().removeClass('active');
+    if(viewType == 'category') $('#modulemenu > .nav > li > a[href*=product][href*=all]').parent('li[data-id=all]').addClass('active');
 });
 </script>
 <?php 

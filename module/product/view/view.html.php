@@ -70,6 +70,10 @@
             <td><?php echo $product->code;?></td>
           </tr>
           <tr>
+            <th><?php echo $lang->product->category;?></th>
+            <td><?php echo zget($categories, $product->category);?></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->product->PO;?></th>
             <td><?php echo zget($users, $product->PO);?></td>
           </tr>

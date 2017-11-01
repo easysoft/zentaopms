@@ -1162,8 +1162,8 @@ class commonModel extends model
         global $app;
 
         if(!empty($app->user->admin)) return true;
-        if($module = 'todo' and ($method == 'create' or $method == 'batchcreate')) return true;
-        if($module = 'effort' and ($method == 'createforobject' or $method == 'batchcreate')) return true;
+        if($module == 'todo' and ($method == 'create' or $method == 'batchcreate')) return true;
+        if($module == 'effort' and ($method == 'createforobject' or $method == 'batchcreate')) return true;
 
         // limited project
         $limitedProject = false;

@@ -107,7 +107,7 @@ class testcaseModel extends model
             $caseID = $this->dao->lastInsertID();
             $this->loadModel('file')->saveUpload('testcase', $caseID);
             $parentStepID = 0;
-            $this->loadModel('score')->score('testcase', 'create', $caseID);
+            $this->loadModel('score')->create('testcase', 'create', $caseID);
             foreach($this->post->steps as $stepID => $stepDesc)
             {
                 if(empty($stepDesc)) continue;
@@ -224,7 +224,7 @@ class testcaseModel extends model
                 unset($cases->keywords[$i]);
             }
         }
-        $this->loadModel('score')->score('ajax', 'batchCreate');
+        $this->loadModel('score')->create('ajax', 'batchCreate');
     }
 
     /**

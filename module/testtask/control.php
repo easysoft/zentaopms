@@ -832,8 +832,8 @@ class testtask extends control
             } 
         }
 
-        $preCase  = '';
-        $nextCase = '';
+        $preCase  = array();
+        $nextCase = array();
         if($preAndNext->pre)
         {
             $preCase['runID']   = $runID ? $preAndNext->pre->id : 0;
