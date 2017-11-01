@@ -17,7 +17,7 @@
     <?php commonModel::printNotifyLink();?>
   </div>
 </div>
-
+<div id="noticeBox"><?php echo $this->loadModel('score')->getNotice(); ?></div>
 <script>
 <?php if(!isset($config->global->browserNotice)):?>
 browserNotice = '<?php echo $lang->browserNotice?>'

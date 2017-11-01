@@ -627,8 +627,9 @@ class userModel extends model
         {
             $ip   = $this->server->remote_addr;
             $last = $this->server->request_time;
-            $user->last  = date(DT_DATETIME1, $last);
-            $user->admin = strpos($this->app->company->admins, ",{$user->account},") !== false;
+            $user->lastTime = $user->last;
+            $user->last     = date(DT_DATETIME1, $last);
+            $user->admin    = strpos($this->app->company->admins, ",{$user->account},") !== false;
             $user->modifyPassword = ($user->visits == 0 and !empty($this->config->safe->modifyPasswordFirstLogin));
             if($user->modifyPassword) $user->modifyPasswordReason = 'modifyPasswordFirstLogin';
             if(!$user->modifyPassword and !empty($this->config->safe->changeWeak))

@@ -1,15 +1,14 @@
 <?php
-$lang->score->common      = '積分';
-$lang->score->record      = '積分記錄';
-$lang->score->current     = '當前積分';
-$lang->score->level       = '等級積分';
-$lang->score->init        = '初始化';
-$lang->score->tips        = '昨天增加了積分:<strong>%d</strong><br/>現共有積分:<strong>%d</strong><br/>今天再接再厲喲! ^_^';
-$lang->score->initTips    = '初始化將根據歷史記錄計算,執行時間可能會比較長.<br/><strong>請勿在未完成前關閉窗口</strong>';
-$lang->score->initStart   = '開始初始化';
-$lang->score->initLoading = '正在初始化...';
-$lang->score->initFinish  = '初始化完成';
-$lang->score->processed   = '正在處理中...';
+$lang->score->common       = '我的積分';
+$lang->score->record       = '積分記錄';
+$lang->score->current      = '當前積分';
+$lang->score->level        = '等級積分';
+$lang->score->reset        = '重置';
+$lang->score->tips         = '昨天增加了積分：<strong>%d</strong><br/>總積分:<strong>%d</strong>';
+$lang->score->resetTips    = '重置積分執行時間可能會比較長，<br/><strong>請不要關閉窗口</strong>';
+$lang->score->resetStart   = '開始重置';
+$lang->score->resetLoading = '正在重置，已處理：';
+$lang->score->resetFinish  = '重置完成';
 
 $lang->score->id      = '編號';
 $lang->score->userID  = '用戶ID';
@@ -32,7 +31,7 @@ $lang->score->models['todo']        = '待辦';
 $lang->score->models['story']       = '需求';
 $lang->score->models['bug']         = 'Bug';
 $lang->score->models['testcase']    = '用例';
-$lang->score->models['testtask']    = '測試';
+$lang->score->models['testtask']    = '測試單';
 $lang->score->models['build']       = 'Build';
 $lang->score->models['project']     = '項目';
 $lang->score->models['productplan'] = '計劃';

@@ -44,7 +44,6 @@ $filter->mail       = new stdclass();
 $filter->user       = new stdclass();
 $filter->block      = new stdclass();
 $filter->file       = new stdclass();
-$filter->my         = new stdclass();
 
 $filter->block->default          = new stdclass();
 $filter->block->main             = new stdclass();
@@ -86,7 +85,6 @@ $filter->testtask->default       = new stdclass();
 $filter->todo->export            = new stdclass();
 $filter->upgrade->license        = new stdclass();
 $filter->user->login             = new stdclass();
-$filter->my->index               = new stdclass();
 
 $filter->bug->batchcreate->cookie['preBranch'] = 'int';
 $filter->bug->browse->cookie['bugModule']      = 'int';
@@ -161,8 +159,6 @@ $filter->testtask->default->cookie['preProductID'] = 'int';
 $filter->todo->export->cookie['checkedItem'] = 'reg::checked';
 
 $filter->user->login->cookie['keepLogin'] = 'equal::on';
-
-$filter->my->index->cookie['showNotice'] = 'int';
 
 $filter->block->default->get['hash']    = 'reg::md5';
 $filter->block->main->get['blockid']    = 'code';

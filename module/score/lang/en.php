@@ -1,15 +1,14 @@
 <?php
-$lang->score->common      = 'Score';
-$lang->score->record      = 'Score record';
-$lang->score->current     = 'Current score';
-$lang->score->level       = 'Level score';
-$lang->score->init        = 'Initialize';
-$lang->score->tips        = 'Yesterday added score:<strong>%d</strong><br/>Today total score:<strong>%d</strong><br/>Come on! ^_^';
-$lang->score->initTips    = 'Initialization will be based on historical records, the execution time may be longer. <strong>Do not close the window before the completion</strong>';
-$lang->score->initStart   = 'Start initialize';
-$lang->score->initLoading = 'Initializing...';
-$lang->score->initFinish  = 'initialized';
-$lang->score->processed   = 'Processed ...';
+$lang->score->common       = 'My score';
+$lang->score->record       = 'Score record';
+$lang->score->current      = 'Current score';
+$lang->score->level        = 'Level score';
+$lang->score->reset        = 'Reset';
+$lang->score->tips         = 'Yesterday added score:<strong>%d</strong><br/>Total score:<strong>%d</strong>';
+$lang->score->resetTips    = 'Reset score the execution time may be longer. <strong>Do not close the window.</strong>';
+$lang->score->resetStart   = 'Start reset';
+$lang->score->resetLoading = 'Resetting,process:';
+$lang->score->resetFinish  = 'Reset finish';
 
 $lang->score->id      = 'ID';
 $lang->score->userID  = 'UserID';

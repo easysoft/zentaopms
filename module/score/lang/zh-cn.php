@@ -1,15 +1,14 @@
 <?php
-$lang->score->common      = '积分';
-$lang->score->record      = '积分记录';
-$lang->score->current     = '当前积分';
-$lang->score->level       = '等级积分';
-$lang->score->init        = '初始化';
-$lang->score->tips        = '昨天增加了积分:<strong>%d</strong><br/>现共有积分:<strong>%d</strong><br/>今天再接再厉哟! ^_^';
-$lang->score->initTips    = '初始化将根据历史记录计算,执行时间可能会比较长.<br/><strong>请勿在未完成前关闭窗口</strong>';
-$lang->score->initStart   = '开始初始化';
-$lang->score->initLoading = '正在初始化...';
-$lang->score->initFinish  = '初始化完成';
-$lang->score->processed   = '正在处理中...';
+$lang->score->common       = '我的积分';
+$lang->score->record       = '积分记录';
+$lang->score->current      = '当前积分';
+$lang->score->level        = '等级积分';
+$lang->score->reset        = '重置';
+$lang->score->tips         = '昨天增加了积分：<strong>%d</strong><br/>总积分：<strong>%d</strong>';
+$lang->score->resetTips    = '重置积分执行时间可能会比较长，<br/><strong>请不要关闭窗口。</strong>';
+$lang->score->resetStart   = '开始重置';
+$lang->score->resetLoading = '正在重置中，已处理：';
+$lang->score->resetFinish  = '重置完成';
 
 $lang->score->id      = '编号';
 $lang->score->userID  = '用户ID';
@@ -32,7 +31,7 @@ $lang->score->models['todo']        = '待办';
 $lang->score->models['story']       = '需求';
 $lang->score->models['bug']         = 'Bug';
 $lang->score->models['testcase']    = '用例';
-$lang->score->models['testtask']    = '测试';
+$lang->score->models['testtask']    = '测试单';
 $lang->score->models['build']       = 'Build';
 $lang->score->models['project']     = '项目';
 $lang->score->models['productplan'] = '计划';
