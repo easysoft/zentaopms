@@ -239,13 +239,13 @@ class custom extends control
      */
     public function required($moduleName = '')
     {
+        if(empty($moduleName)) $moduleName = current($this->config->custom->requiredModules);
+
         if($_POST)
         {
             $this->custom->saveRequiredFields($moduleName);
             die(js::reload('parent.parent'));
         }
-
-        if(empty($moduleName)) $moduleName = current($this->config->custom->requiredModules);
 
         foreach($this->config->custom->requiredModules as $requiredModule) $this->app->loadLang($requiredModule);
 
@@ -442,8 +442,8 @@ class custom extends control
         if($confirm == 'no') die(js::confirm($this->lang->custom->confirmRestore, inlink('ajaxRestoreMenu', "setPublic=$setPublic&confirm=yes")));
 
         $account = $this->app->user->account;
-        if($setPublic) $account = 'system';
         $this->loadModel('setting')->deleteItems("owner={$account}&module=common&section=customMenu");
+        if($setPublic) $this->setting->deleteItems("owner=system&module=common&section=customMenu");
         die(js::reload('parent.parent'));
     }
 

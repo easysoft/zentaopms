@@ -57,13 +57,13 @@ $columns = count($visibleFields) + 2;
       </tr>
     </thead>
     <tbody>
-      <?php foreach($bugIDList as $bugID):?>
+      <?php foreach($bugs as $bugID => $bug):?>
       <?php
       if(!$productID)
       {
-          $product = $this->product->getByID($bugs[$bugID]->product);
+          $product = $this->product->getByID($bug->product);
 
-          $plans = $this->loadModel('productplan')->getPairs($bugs[$bugID]->product, $branch);
+          $plans = $this->loadModel('productplan')->getPairs($bug->product, $branch);
           $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
 
           $branches = $product->type == 'normal' ? array('' => '') : $this->loadModel('branch')->getPairs($product->id);
@@ -77,43 +77,43 @@ $columns = count($visibleFields) + 2;
        * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task.
        * These thress types if upgrade from bugfree2.x.
        */
-      if($bugs[$bugID]->type != 'designchange') unset($typeList['designchange']);
-      if($bugs[$bugID]->type != 'newfeature')   unset($typeList['newfeature']);
-      if($bugs[$bugID]->type != 'trackthings')  unset($typeList['trackthings']);
+      if($bug->type != 'designchange') unset($typeList['designchange']);
+      if($bug->type != 'newfeature')   unset($typeList['newfeature']);
+      if($bug->type != 'trackthings')  unset($typeList['trackthings']);
       ?>
       <tr class='text-center'>
         <td><?php echo $bugID . html::hidden("bugIDList[$bugID]", $bugID);?></td>
-        <td <?php echo zget($visibleFields, 'type', "class='hidden'")?>><?php echo html::select("types[$bugID]",      $typeList, $bugs[$bugID]->type, 'class=form-control');?></td>
-        <td <?php echo zget($visibleFields, 'severity', "class='hidden'")?>><?php echo html::select("severities[$bugID]", $severityList, $bugs[$bugID]->severity, 'class=form-control');?></td>
-        <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$bugID]",       $priList, $bugs[$bugID]->pri, 'class=form-control');?></td>
-        <td style='overflow:visible' title='<?php echo $bugs[$bugID]->title?>'>
+        <td <?php echo zget($visibleFields, 'type', "class='hidden'")?>><?php echo html::select("types[$bugID]",      $typeList, $bug->type, 'class=form-control');?></td>
+        <td <?php echo zget($visibleFields, 'severity', "class='hidden'")?>><?php echo html::select("severities[$bugID]", $severityList, $bug->severity, 'class=form-control');?></td>
+        <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$bugID]",       $priList, $bug->pri, 'class=form-control');?></td>
+        <td style='overflow:visible' title='<?php echo $bug->title?>'>
           <div class='input-group'>
-          <?php echo html::hidden("colors[$bugID]", $bugs[$bugID]->color, "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->bug->colorTag}' data-update-text='#titles\\[{$bugID}\\]'");?>
-          <?php echo html::input("titles[$bugID]", $bugs[$bugID]->title, 'class=form-control');?>
+          <?php echo html::hidden("colors[$bugID]", $bug->color, "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->bug->colorTag}' data-update-text='#titles\\[{$bugID}\\]'");?>
+          <?php echo html::input("titles[$bugID]", $bug->title, 'class=form-control');?>
           <div>
         </td>
         <?php if($branchProduct):?>
         <td class='text-left<?php echo zget($visibleFields, 'branch', ' hidden')?>' style='overflow:visible'>
           <?php $branchProductID = $productID ? $productID : $product->id;?>
           <?php $disabled        = (isset($product) and $product->type == 'normal') ? "disabled='disabled'" : '';?>
-          <?php echo html::select("branches[$bugID]", $branches, $bugs[$bugID]->branch, "class='form-control chosen' $disabled");?>
+          <?php echo html::select("branches[$bugID]", $branches, $bug->branch, "class='form-control chosen' $disabled");?>
         </td>
         <?php endif;?>
-        <td class='text-left<?php echo zget($visibleFields, 'productplan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plans[$bugID]", $plans, $bugs[$bugID]->plan, "class='form-control chosen'");?></td>
-        <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $users, $bugs[$bugID]->assignedTo, "class='form-control chosen'");?></td>
-        <td class='<?php echo zget($visibleFields, 'deadline', ' hidden')?>' style='overflow:visible'><?php echo html::input("deadlines[$bugID]", $bugs[$bugID]->deadline, "class='form-control form-date'");?></td>
-        <td <?php echo zget($visibleFields, 'status', "class='hidden'")?>><?php echo html::select("statuses[$bugID]", $statusList, $bugs[$bugID]->status, 'class=form-control');?></td>
-        <td <?php echo zget($visibleFields, 'os', "class='hidden'")?>><?php echo html::select("os[$bugID]", $osList, $bugs[$bugID]->os, 'class=form-control');?></td>
-        <td <?php echo zget($visibleFields, 'browser', "class='hidden'")?>><?php echo html::select("browsers[$bugID]", $browserList, $bugs[$bugID]->browser, 'class=form-control');?></td>
-        <td <?php echo zget($visibleFields, 'keywords', "class='hidden'")?>><?php echo html::input("keywords[$bugID]", $bugs[$bugID]->keywords, 'class=form-control');?></td>
-        <td class='text-left<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("resolvedBys[$bugID]", $users, $bugs[$bugID]->resolvedBy, "class='form-control chosen'");?></td>
+        <td class='text-left<?php echo zget($visibleFields, 'productplan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plans[$bugID]", $plans, $bug->plan, "class='form-control chosen'");?></td>
+        <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $users, $bug->assignedTo, "class='form-control chosen'");?></td>
+        <td class='<?php echo zget($visibleFields, 'deadline', ' hidden')?>' style='overflow:visible'><?php echo html::input("deadlines[$bugID]", $bug->deadline, "class='form-control form-date'");?></td>
+        <td <?php echo zget($visibleFields, 'status', "class='hidden'")?>><?php echo html::select("statuses[$bugID]", $statusList, $bug->status, 'class=form-control');?></td>
+        <td <?php echo zget($visibleFields, 'os', "class='hidden'")?>><?php echo html::select("os[$bugID]", $osList, $bug->os, 'class=form-control');?></td>
+        <td <?php echo zget($visibleFields, 'browser', "class='hidden'")?>><?php echo html::select("browsers[$bugID]", $browserList, $bug->browser, 'class=form-control');?></td>
+        <td <?php echo zget($visibleFields, 'keywords', "class='hidden'")?>><?php echo html::input("keywords[$bugID]", $bug->keywords, 'class=form-control');?></td>
+        <td class='text-left<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("resolvedBys[$bugID]", $users, $bug->resolvedBy, "class='form-control chosen'");?></td>
         <td <?php echo zget($visibleFields, 'resolution', "class='hidden'")?>>
           <table class='w-p100'>
             <tr>
               <td class='pd-0'>
-                <?php echo html::select("resolutions[$bugID]", $resolutionList, $bugs[$bugID]->resolution, "class=form-control onchange=setDuplicate(this.value,$bugID)");?>
+                <?php echo html::select("resolutions[$bugID]", $resolutionList, $bug->resolution, "class=form-control onchange=setDuplicate(this.value,$bugID)");?>
               </td>
-              <td class='pd-0 w-p50' id='<?php echo 'duplicateBugBox' . $bugID;?>' <?php if($bugs[$bugID]->resolution != 'duplicate') echo "style='display:none'";?>>
+              <td class='pd-0 w-p50' id='<?php echo 'duplicateBugBox' . $bugID;?>' <?php if($bug->resolution != 'duplicate') echo "style='display:none'";?>>
                 <?php echo html::input("duplicateBugs[$bugID]", '', "class=form-control placeholder='{$lang->bug->duplicateBug}'");?>
               </td>
             </tr>

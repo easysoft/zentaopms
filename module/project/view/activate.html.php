@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../common/view/datepicker.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <div class='container'>
   <div id='titlebar'>
@@ -24,8 +25,28 @@
   <form class='form-condensed' method='post' target='hiddenwin'>
     <table class='table table-form'>
       <tr>
-        <th class='text-left'><?php echo $lang->comment;?></th>
-        <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
+        <th class='w-80px text-right'><?php echo $lang->project->beginAndEnd;?></th>
+        <td class='w-200px'><?php echo $project->begin . ' ~ ' . $project->end;?></td>
+        <td>
+          <label class="checkbox-inline"><input name="readjustTime" value="1" id="readjustTime" type="checkbox"> <strong><?php echo $lang->project->readjustTime?></strong></label>
+        </td>
+      </tr>
+      <tr id='readjustTimeBox' class='hide'>
+        <th></th>
+        <td colspan='2'>
+          <div class='input-group'>
+            <?php echo html::input('begin', $newBegin, "class='form-control form-date'")?>
+            <span class='input-group-addon'> ~ </span>
+            <?php echo html::input('end', $newEnd, "class='form-control form-date'")?>
+            <span class='input-group-addon'>
+              <label class="checkbox-inline"><input name="readjustTask" value="1" id="readjustTask" type="checkbox"> <strong><?php echo $lang->project->readjustTask?></strong></label>
+            </span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th class='text-right'><?php echo $lang->comment;?></th>
+        <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
       </tr>
       <tr>
         <th></th>
@@ -35,4 +56,13 @@
   </form>
   <div class='main'><?php include '../../common/view/action.html.php';?></div>
 </div>
+<script>
+$(function()
+{
+    $('#readjustTime').change(function()
+    {
+        $('#readjustTimeBox').toggle($(this).prop('checked'))
+    })
+})
+</script>
 <?php include '../../common/view/footer.html.php';?>

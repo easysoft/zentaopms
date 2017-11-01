@@ -348,6 +348,7 @@ class task extends control
         }
 
         $taskIDList = $this->post->taskIDList ? $this->post->taskIDList : die(js::locate($this->session->taskList, 'parent'));
+        $taskIDList = array_unique($taskIDList);
 
         /* The tasks of project. */
         if($projectID)
@@ -460,6 +461,7 @@ class task extends control
         if($this->post->taskIDList)
         {
             $taskIDList = $this->post->taskIDList;
+            $taskIDList = array_unique($taskIDList);
             unset($_POST['taskIDList']);
             $allChanges = $this->task->batchChangeModule($taskIDList, $moduleID);
             if(dao::isError()) die(js::error(dao::getError()));
@@ -486,6 +488,7 @@ class task extends control
         if(!empty($_POST))
         {
             $taskIDList = $this->post->taskIDList;
+            $taskIDList = array_unique($taskIDList);
             unset($_POST['taskIDList']);
             if(!is_array($taskIDList)) die(js::locate($this->createLink('project', 'task', "projectID=$project"), 'parent'));
             $taskIDList = array_unique($taskIDList);
@@ -890,6 +893,7 @@ class task extends control
         if($this->post->taskIDList)
         {
             $taskIDList = $this->post->taskIDList;
+            $taskIDList = array_unique($taskIDList);
             unset($_POST['taskIDList']);
             unset($_POST['assignedTo']);
             $this->loadModel('action');
@@ -923,6 +927,7 @@ class task extends control
         if($this->post->taskIDList or $skipTaskIdList)
         {
             $taskIDList = $this->post->taskIDList;
+            $taskIDList = array_unique($taskIDList);
             if($skipTaskIdList) $taskIDList = $skipTaskIdList;
             unset($_POST['taskIDList']);
             unset($_POST['assignedTo']);

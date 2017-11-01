@@ -52,6 +52,8 @@ $lang->project->other         = 'Other:';
 $lang->project->deleted       = 'Deleted';
 $lang->project->delayed       = 'Delayed';
 $lang->project->product       = $lang->project->products;
+$lang->project->readjustTime  = 'Readjust project time for begin and end';
+$lang->project->readjustTask  = 'Readjust task start date and deadline';
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';

@@ -33,11 +33,12 @@ class datatable extends control
         if(!empty($_POST))
         {
             $account = $this->app->user->account;
-            if($this->post->global) $account = 'system';
             if($account == 'guest') $this->send(array('result' => 'fail', 'target' => $target, 'message' => 'guest.'));
 
-            $name = $account . '.datatable.' . $this->post->target . '.' . $this->post->name;
-            $this->loadModel('setting')->setItem($name, $this->post->value);
+            $name = 'datatable.' . $this->post->target . '.' . $this->post->name;
+            $this->loadModel('setting')->setItem($account . '.' . $name, $this->post->value);
+            if($this->post->global) $this->setting->setItem('system.' . $name, $this->post->value);
+
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => 'dao error.'));
             $this->send(array('result' => 'success'));
         }
@@ -105,9 +106,9 @@ class datatable extends control
         $target  = $module . ucfirst($method);
         $mode    = isset($this->config->datatable->$target->mode) ? $this->config->datatable->$target->mode : 'table';
         $key     = $mode == 'datatable' ? 'cols' : 'tablecols';
-        if($system) $account = 'system';
 
         $this->loadModel('setting')->deleteItems("owner=$account&module=datatable&section=$target&key=$key");
+        if($system) $this->setting->deleteItems("owner=system&module=datatable&section=$target&key=$key");
         die(js::reload('parent'));
     }
 }
