@@ -99,7 +99,7 @@ class scoreModel extends model
                 if($method == 'createFormCase')
                 {
                     $desc     = $this->lang->score->models['testcase'] . 'ID:' . $param;
-                    $caseUser = $this->dao->findById($param)->from(TABLE_CASE)->fetch(); ####
+                    $caseUser = $this->dao->findById($param)->from(TABLE_CASE)->fetch();
                     if(!empty($caseUser))
                     {
                         $user = $caseUser->openedBy;
@@ -154,8 +154,7 @@ class scoreModel extends model
                         }
                     }
 
-                    #####
-                    return true;
+                    return true; //When the project is closed, no more user get score.
                 }
                 break;
             case 'productplan':
