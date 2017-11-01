@@ -877,6 +877,7 @@ class testtask extends control
         }
 
         $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($url, 'parent'));
+        $caseIDList = array_unique($caseIDList);
 
         /* The case of tasks of qa. */
         if($productID)

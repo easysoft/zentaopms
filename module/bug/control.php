@@ -643,6 +643,7 @@ class bug extends control
         }
 
         $bugIDList = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
+        $bugIDList = array_unique($bugIDList);
         /* Initialize vars.*/
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
 
@@ -776,6 +777,7 @@ class bug extends control
         if($this->post->bugIDList)
         {
             $bugIDList = $this->post->bugIDList;
+            $bugIDList = array_unique($bugIDList);
             unset($_POST['bugIDList']);
             $allChanges = $this->bug->batchChangeModule($bugIDList, $moduleID);
             if(dao::isError()) die(js::error(dao::getError()));
@@ -802,6 +804,7 @@ class bug extends control
         if(!empty($_POST) && isset($_POST['bugIDList']))
         {
             $bugIDList = $this->post->bugIDList;
+            $bugIDList = array_unique($bugIDList);
             unset($_POST['bugIDList']);
             foreach($bugIDList as $bugID)
             {
@@ -860,7 +863,8 @@ class bug extends control
      */
     public function batchConfirm()
     {
-        $bugIDList  = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
+        $bugIDList = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
+        $bugIDList = array_unique($bugIDList);
         $this->bug->batchConfirm($bugIDList);
         if(dao::isError()) die(js::error(dao::getError()));
         foreach($bugIDList as $bugID)
@@ -940,6 +944,7 @@ class bug extends control
     public function batchResolve($resolution, $resolvedBuild = '')
     {
         $bugIDList = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
+        $bugIDList = array_unique($bugIDList);
         $bugIDList = $this->bug->batchResolve($bugIDList, $resolution, $resolvedBuild);
         if(dao::isError()) die(js::error(dao::getError()));
         foreach($bugIDList as $bugID)
@@ -1116,6 +1121,7 @@ class bug extends control
         if($this->post->bugIDList)
         {
             $bugIDList = $this->post->bugIDList;
+            $bugIDList = array_unique($bugIDList);
 
             /* Reset $_POST. Do not unset that because the function of close need that in model. */
             $_POST = array();
@@ -1161,6 +1167,7 @@ class bug extends control
         }
 
         $bugIDList = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
+        $bugIDList = array_unique($bugIDList);
         $bugs = $this->dao->select('id, title, status, resolvedBy, openedBuild')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
 
         $this->bug->setMenu($this->products, $productID, $branch);

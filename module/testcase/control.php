@@ -651,6 +651,7 @@ class testcase extends control
         }
 
         $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList));
+        $caseIDList = array_unique($caseIDList);
 
         /* Get the edited cases. */
         $cases = $this->testcase->getByList($caseIDList);
@@ -779,6 +780,7 @@ class testcase extends control
     public function batchReview($result)
     {
         $caseIdList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList, 'parent'));
+        $caseIDList = array_unique($caseIDList);
         $actions    = $this->testcase->batchReview($caseIdList, $result);
 
         if(dao::isError()) die(js::error(dao::getError()));
@@ -832,6 +834,7 @@ class testcase extends control
     public function batchDelete($productID = 0)
     {
         $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList));
+        $caseIDList = array_unique($caseIDList);
 
         foreach($caseIDList as $caseID) $this->testcase->delete(TABLE_CASE, $caseID);
         die(js::locate($this->session->caseList));
@@ -849,6 +852,7 @@ class testcase extends control
         if($this->post->caseIDList)
         {
             $caseIDList = $this->post->caseIDList;
+            $caseIDList = array_unique($caseIDList);
             unset($_POST['caseIDList']);
             $allChanges = $this->testcase->batchChangeModule($caseIDList, $moduleID);
             if(dao::isError()) die(js::error(dao::getError()));
@@ -873,6 +877,7 @@ class testcase extends control
     public function batchCaseTypeChange($result)
     {
         $caseIdList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList, 'parent'));
+        $caseIDList = array_unique($caseIDList);
         $this->testcase->batchCaseTypeChange($caseIdList, $result);
 
         if(dao::isError()) die(js::error(dao::getError()));
@@ -1004,6 +1009,7 @@ class testcase extends control
     public function batchConfirmStoryChange($productID = 0)
     {
         $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList));
+        $caseIDList = array_unique($caseIDList);
 
         foreach($caseIDList as $caseID) $this->confirmStoryChange($caseID,false);
         die(js::locate($this->session->caseList));
