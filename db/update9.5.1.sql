@@ -77,23 +77,23 @@ ALTER TABLE `zt_team` CHANGE `days` `days` SMALLINT(5)  UNSIGNED  NOT NULL  DEFA
 ALTER TABLE `zt_team` DROP PRIMARY KEY;
 ALTER TABLE `zt_team` ADD PRIMARY KEY (`project`, `task`, `account`);
 
-ALTER TABLE `zt_user` ADD `score` DECIMAL(12,1)  NOT NULL  DEFAULT '0'  AFTER `deleted`;
-ALTER TABLE `zt_user` ADD `scoreLevel` DECIMAL(12,1)  NOT NULL  DEFAULT '0'  AFTER `score`;
+ALTER TABLE `zt_user` ADD `score` INT(12)  NOT NULL  DEFAULT '0'  AFTER `deleted`;
+ALTER TABLE `zt_user` ADD `scoreLevel` INT(11)  NOT NULL  DEFAULT '0'  AFTER `score`;
 
 CREATE TABLE `zt_score` (
   `id` bigint(12) unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL,
-  `module` varchar(30) NOT NULL,
+  `module` varchar(30) NOT NULL DEFAULT '',
   `method` varchar(30) NOT NULL,
   `desc` varchar(250) NOT NULL DEFAULT '',
-  `before` decimal(12,1) NOT NULL DEFAULT '0.0',
-  `score` decimal(12,1) NOT NULL DEFAULT '0.0',
-  `after` decimal(12,1) NOT NULL DEFAULT '0.0',
+  `before` int(11) NOT NULL DEFAULT '0',
+  `score` int(11) NOT NULL DEFAULT '0',
+  `after` int(11) NOT NULL DEFAULT '0',
   `time` datetime NOT NULL,
   `objectID` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `account` (`account`),
-  KEY `model` (`model`),
+  KEY `model` (`module`),
   KEY `method` (`method`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

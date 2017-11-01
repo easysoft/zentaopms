@@ -193,10 +193,10 @@ function showSearchMenu(objectType, objectID, module, method, extra)
     {
         $menu.find('#search').focus();
     }
-    if(!$.cookie('ajax_quickDump'))
+    if(!$.cookie('ajax_quickJump'))
     {
-        $.cookie('ajax_quickDump', 'on', {expires: config.cookieLife, path: config.webRoot});
-        $.get(createLink('score', 'ajax', "method=quickDump"));
+        $.cookie('ajax_quickJump', 'on', {expires: config.cookieLife, path: config.webRoot});
+        $.get(createLink('score', 'ajax', "method=quickJump"));
     }
 }
 

@@ -56,7 +56,7 @@
               else
               {
                   $('#loading_content').html("<li class='text-success' style='color:#" + (Math.random() * 0xffffff << 0).toString(16) + "'>" + response.message + "</li>");
-                  setTimeout(function(){score_init(response.lastID);}, 2000);
+                  setTimeout(function(){score_init(response.lastID);}, 500);
               }
           });
       }

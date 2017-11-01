@@ -33,7 +33,8 @@ class my extends control
      */
     public function index()
     {
-        $this->view->title = $this->lang->my->common;
+        $this->view->title  = $this->lang->my->common;
+        $this->view->notice = $this->loadModel('score')->getNotice();
         $this->display();
     }
 

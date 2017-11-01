@@ -19,7 +19,7 @@
         </tr>
         <tr>
           <td></td>
-          <td><?php echo html::submitButton() ?><?php isset($config->global->scoreInit) ? common::printLink('score', 'refresh', '', "<i class='icon-refresh'></i> " . $lang->custom->scoreReset, '', ' id="scoreRefresh" class="btn iframe" data-width="480"', true, true) : common::printLink('score', 'init', '', "<i class='icon-play'></i> " . $lang->custom->scoreInit, '', ' id="scoreInit" class="btn iframe" data-width="480"', true, true); ?></td>
+          <td><?php echo html::submitButton() ?><?php common::printLink('score', 'init', '', "<i class='icon-refresh'></i> " . isset($config->global->scoreInit) ? $lang->custom->scoreReset : $lang->custom->scoreInit, '', ' id="scoreRefresh" class="btn iframe" data-width="480"', true, true); ?></td>
         </tr>
       </table>
     </form>
