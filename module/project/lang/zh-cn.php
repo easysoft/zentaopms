@@ -52,6 +52,8 @@ $lang->project->other         = '其他：';
 $lang->project->deleted       = '已删除';
 $lang->project->delayed       = '已延期';
 $lang->project->product       = $lang->project->products;
+$lang->project->readjustTime  = '调整项目起止时间';
+$lang->project->readjustTask  = '顺延任务的起止时间';
 
 $lang->project->start    = '开始';
 $lang->project->activate = '激活';
