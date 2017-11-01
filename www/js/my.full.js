@@ -193,10 +193,10 @@ function showSearchMenu(objectType, objectID, module, method, extra)
     {
         $menu.find('#search').focus();
     }
-    if(!$.cookie('ajax_quickDump'))
+    if(!$.cookie('ajax_quickJump'))
     {
-        $.cookie('ajax_quickDump', 'on', {expires: config.cookieLife, path: config.webRoot});
-        $.get(createLink('score', 'ajax', "method=quickDump"));
+        $.cookie('ajax_quickJump', 'on', {expires: config.cookieLife, path: config.webRoot});
+        $.get(createLink('score', 'ajax', "method=quickJump"));
     }
 }
 
@@ -705,6 +705,11 @@ function checkTable($table)
             var isChecked = $checkbox.prop('checked');
             if(!$this.is(':checkbox'))
             {
+                if(!$.cookie('ajax_dragSelected') && $checkbox.size() > 2)
+                {
+                    $.cookie('ajax_dragSelected', 'on', {expires: config.cookieLife, path: config.webRoot});
+                    $.get(createLink('score', 'ajax', "method=dragSelected"));
+                }
                 isChecked = checked === true || checked === false  ? checked : !isChecked;
                 $checkbox.prop('checked', isChecked);
             }
@@ -714,7 +719,6 @@ function checkTable($table)
             $tr.closest('.table').find('.rows-selector').prop('checked', false);
         }
     };
-
     var isSelectableTable = $table.hasClass('table-selectable');
 
     $table.selectable(

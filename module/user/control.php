@@ -691,7 +691,7 @@ class user extends control
                 $this->session->set('user', $user);
                 $this->app->user = $this->session->user;
                 $this->loadModel('action')->create('user', $user->id, 'login');
-                $this->loadModel('score')->score('user','login');
+                $this->loadModel('score')->create('user','login');
                 /* Keep login. */
                 if($this->post->keepLogin) $this->user->keepLogin($user);
 

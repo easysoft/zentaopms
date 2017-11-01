@@ -33,7 +33,32 @@ class my extends control
      */
     public function index()
     {
-        $this->view->title = $this->lang->my->common;
+        $this->view->title  = $this->lang->my->common;
+        $this->view->notice = $this->loadModel('score')->getNotice();
+        $this->display();
+    }
+
+    /**
+     * Get score list
+     *
+     * @param int $recTotal
+     * @param int $recPerPage
+     * @param int $pageID
+     *
+     * @access public
+     * @return mixed
+     */
+    public function score($recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->app->loadClass('pager', $static = true);
+        $pager  = new pager($recTotal, $recPerPage, $pageID);
+        $scores = $this->loadModel('score')->getListByAccount($this->app->user->account, $pager);
+
+        $this->view->title  = $this->lang->score->common;
+        $this->view->user   = $this->loadModel('user')->getById($this->app->user->account);
+        $this->view->pager  = $pager;
+        $this->view->scores = $scores;
+
         $this->display();
     }
 
