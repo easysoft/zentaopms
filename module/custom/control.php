@@ -239,13 +239,13 @@ class custom extends control
      */
     public function required($moduleName = '')
     {
+        if(empty($moduleName)) $moduleName = current($this->config->custom->requiredModules);
+
         if($_POST)
         {
             $this->custom->saveRequiredFields($moduleName);
             die(js::reload('parent.parent'));
         }
-
-        if(empty($moduleName)) $moduleName = current($this->config->custom->requiredModules);
 
         foreach($this->config->custom->requiredModules as $requiredModule) $this->app->loadLang($requiredModule);
 
