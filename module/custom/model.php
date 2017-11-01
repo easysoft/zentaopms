@@ -358,20 +358,21 @@ class customModel extends model
         $settingKey = '';
 
         $setPublic = $this->post->setPublic;
-        if($setPublic) $account = 'system';
         if(!is_string($menu)) $menu = json_encode($menu);
 
         $flow = $this->config->global->flow;
         if(empty($method))
         {
-            $settingKey = "$account.common.customMenu.{$flow}_{$module}";
+            $settingKey = "common.customMenu.{$flow}_{$module}";
         }
         else
         {
-            $settingKey = "$account.common.customMenu.{$flow}_feature_{$module}_{$method}";
+            $settingKey = "common.customMenu.{$flow}_feature_{$module}_{$method}";
         }
 
-        $this->loadModel('setting')->setItem($settingKey, $menu);
+        $this->loadModel('setting')->setItem($account . '.' . $settingKey, $menu);
+        if($setPublic) $this->setting->setItem('system.' . $settingKey, $menu);
+
         $this->loadModel('score')->score('ajax', 'customMenu');
     }
 
