@@ -38,7 +38,7 @@ $lang->project->totalEstimate = 'Est.';
 $lang->project->totalConsumed = 'Consumed';
 $lang->project->totalLeft     = 'Total Remained';
 $lang->project->Left          = 'Remained';
-$lang->project->progess       = 'Progess';
+$lang->project->progress      = 'Progress';
 $lang->project->hours         = 'Estimate %s, Consumed %s, Remained %s';
 $lang->project->viewBug       = 'Bugs';
 $lang->project->noProduct     = "No {$lang->productCommon}";
@@ -238,10 +238,10 @@ $lang->project->placeholder->totalLeft = 'Total man-hour remained when start Pro
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->done = '(Done)';
 
+$lang->project->orderList['order_asc']  = "Order Asc";
+$lang->project->orderList['order_desc'] = "Order Desc";
 $lang->project->orderList['pri_asc']    = "Priority Asc";
 $lang->project->orderList['pri_desc']   = "Priority Desc";
-$lang->project->orderList['id_asc']     = "ID Asc";
-$lang->project->orderList['id_desc']    = "ID Desc";
 $lang->project->orderList['stage_asc']  = "Stage Asc";
 $lang->project->orderList['stage_desc'] = "Stage Desc";
 

@@ -110,6 +110,7 @@ class tutorialModel extends model
         $story->duplicateStory = 0;
         $story->version        = 1;
         $story->deleted        = '0';
+        $story->order          = '0';
 
         $stories = array();
         $stories[] = $story;
@@ -202,14 +203,15 @@ class tutorialModel extends model
     public function getTeamMembers()
     {
         $member = new stdclass();
-        $member->project    = 1;
-        $member->account    = $this->app->user->account;
-        $member->role       = $this->app->user->role;
-        $member->join       = $this->app->user->join;
-        $member->days       = 10;
-        $member->hours      = 7.0;
-        $member->totalHours = 70.0;
-        $member->realname   = $this->app->user->realname;
+        $member->project     = 1;
+        $member->account     = $this->app->user->account;
+        $member->role        = $this->app->user->role;
+        $member->join        = $this->app->user->join;
+        $member->days        = 10;
+        $member->hours       = 7.0;
+        $member->totalHours  = 70.0;
+        $member->realname    = $this->app->user->realname;
+        $member->limitedUser = 0;
         return array($member->account => $member);
     }
 
