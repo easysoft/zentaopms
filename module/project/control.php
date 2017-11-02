@@ -1254,7 +1254,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function kanban($projectID, $type = 'story', $orderBy = 'pri_asc')
+    public function kanban($projectID, $type = 'story', $orderBy = 'order_asc')
     {
         /* Save to session. */
         $uri = $this->app->getURI(true);

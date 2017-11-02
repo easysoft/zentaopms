@@ -27,18 +27,23 @@ $account = $this->app->user->account
         <?php $hasGroupCol = (($type == 'story' and count($stories) > 0) or $type != 'story');?>
         <?php if($hasGroupCol):?>
         <th class='w-p15 col-story'>
-          <?php if($type == 'story'):?>
           <div class='dropdown inline-block'>
-            <a data-toggle='dropdown' href='javascript:;'><?php echo $lang->project->orderList[$orderBy]?> <span class='icon-caret-down'></span> </a>
+            <a data-toggle='dropdown' href='javascript:;'>
+              <?php if($type == 'story'):?>
+              <?php echo $lang->project->orderList[$orderBy]?>
+              <?php else:?>
+              <?php echo $lang->task->$type;?>
+              <?php endif;?>
+               <span class='icon-caret-down'></span>
+            </a>
             <ul class='dropdown-menu text-left'>
-            <?php foreach ($lang->project->orderList as $key => $value):?>
-              <li <?php echo $orderBy == $key ? " class='active'" : '' ?>><?php echo html::a($this->createLink('project', 'kanban', "projectID=$projectID&type=story&orderBy=$key"), $value);?></li>
-            <?php endforeach;?>
+              <?php foreach ($lang->project->orderList as $key => $value):?>
+              <li <?php echo ($type == 'story' and $orderBy == $key) ? " class='active'" : '' ?>><?php echo html::a($this->createLink('project', 'kanban', "projectID=$projectID&type=story&orderBy=$key"), $value);?></li>
+              <?php endforeach;?>
+              <?php echo "<li" . ($type == 'assignedTo' ? " class='active'" : '') . ">" . html::a(inlink('kanban', "project=$projectID&type=assignedTo"), $lang->project->groups['assignedTo']) . "</li>";?>
+              <?php echo "<li" . ($type == 'finishedBy' ? " class='active'" : '') . ">" . html::a(inlink('kanban', "project=$projectID&type=finishedBy"), $lang->project->groups['finishedBy']) . "</li>";?>
             </ul>
           </div>
-          <?php else:?>
-          <?php echo $lang->task->$type;?>
-          <?php endif;?>
         </th>
         <?php endif;?>
         <?php $endCol = array_pop($taskCols);?>
