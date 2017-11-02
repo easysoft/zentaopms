@@ -345,7 +345,7 @@ $lang->admin->menu->safe      = array('link' => '安全|admin|safe', 'alias' => 
 $lang->admin->menu->cron      = array('link' => '计划任务|cron|index', 'subModule' => 'cron');
 $lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subModule' => 'action');
 $lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
-$lang->admin->menu->entry     = array('link' => '接口|entry|browse', 'alias' => 'create,edit', 'subModule' => 'entry,webhook');
+$lang->admin->menu->api       = array('link' => '接口|webhook|browse', 'alias' => 'create,edit', 'subModule' => 'entry,webhook');
 $lang->admin->menu->sso       = '然之集成|admin|sso';
 
 $lang->convert   = new stdclass();
@@ -434,14 +434,14 @@ $lang->error->editedByOther   = '该记录可能已经被改动。请刷新页�
 $lang->error->tutorialData    = '新手模式下不会插入数据，请退出新手模式操作';
 
 $lang->error->entry = array();
-$lang->error->entry['300001'] = '缺少code参数';
-$lang->error->entry['300002'] = '缺少token参数';
-$lang->error->entry['310001'] = '应用不存在';
-$lang->error->entry['310002'] = '应用未设置密钥';
-$lang->error->entry['320001'] = '该IP访问被限制访问';
-$lang->error->entry['330001'] = '不合法的token参数';
-$lang->error->entry['340001'] = '缺少session code';
-$lang->error->entry['340002'] = 'session验证失败';
+$lang->error->entry['301'] = '缺少code参数';
+$lang->error->entry['302'] = '缺少token参数';
+$lang->error->entry['311'] = '应用不存在';
+$lang->error->entry['312'] = '应用未设置密钥';
+$lang->error->entry['321'] = '该IP访问被限制访问';
+$lang->error->entry['331'] = '不合法的token参数';
+$lang->error->entry['341'] = '缺少session code';
+$lang->error->entry['342'] = 'session验证失败';
 
 /* 分页信息。*/
 $lang->pager = new stdclass();

@@ -20,9 +20,9 @@
     <?php echo html::a($this->createLink('product', 'create'), "<i class='icon-plus'></i> " . $lang->product->create,'', "class='btn'") ?>
   </div>
   <ul class='nav'>
-    <?php echo "<li id='noclosedTab'>" . html::a(inlink("all", "productID=$productID&category=&status=noclosed"), $lang->product->unclosed) . '</li>';?>
-    <?php echo "<li id='closedTab'>" . html::a(inlink("all", "productID=$productID&category=&status=closed"), $lang->product->statusList['closed']) . '</li>';?>
-    <?php echo "<li id='allTab'>" . html::a(inlink("all", "productID=$productID&category=&status=all"), $lang->product->allProduct) . '</li>';?>
+    <?php echo "<li id='noclosedTab'>" . html::a(inlink("all", "productID=$productID&line=&status=noclosed"), $lang->product->unclosed) . '</li>';?>
+    <?php echo "<li id='closedTab'>" . html::a(inlink("all", "productID=$productID&line=&status=closed"), $lang->product->statusList['closed']) . '</li>';?>
+    <?php echo "<li id='allTab'>" . html::a(inlink("all", "productID=$productID&line=&status=all"), $lang->product->allProduct) . '</li>';?>
   </ul>
 </div>
 
@@ -30,11 +30,11 @@
   <a class='side-handle' data-id='productTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>
     <div class='panel panel-sm'>
-      <div class='panel-heading nobr'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $lang->product->category;?></strong></div>
+      <div class='panel-heading nobr'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $lang->product->line;?></strong></div>
       <div class='panel-body'>
-        <?php echo $categoryTree;?>
+        <?php echo $lineTree;?>
         <div class='text-right'>
-          <?php common::printLink('tree', 'browse', "rootID=&view=category", $lang->tree->manageCategory);?>
+          <?php common::printLink('tree', 'browse', "rootID=&view=line", $lang->tree->manageLine);?>
         </div>
       </div>
     </div>
@@ -58,11 +58,12 @@
   <?php $canOrder = (common::hasPriv('product', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
   <form method='post' action='<?php echo inLink('batchEdit', "productID=$productID");?>' id='productsForm'>
     <table class='table table-condensed table-hover table-striped tablesorter table-datatable table-selectable' id='productList'>
-      <?php $vars = "category=$category&productID=$productID&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+      <?php $vars = "line=$line&productID=$productID&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
       <thead>
         <tr>
           <th class='w-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?></th>
+          <th class='w-80px text-left'><?php common::printOrderLink('line', $orderBy, $vars, $lang->product->line);?></th>
           <th class='w-80px'><?php echo $lang->product->activeStories;?></th>
           <th class='w-80px'><?php echo $lang->product->changedStories;?></th>
           <th class='w-80px'><?php echo $lang->product->draftStories;?></th>
@@ -88,6 +89,7 @@
             <?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), sprintf('%03d', $product->id));?>
           </td>
           <td class='text-left' title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
+          <td class='text-left'><?php echo zget($lines, $product->line);?></td>
           <td><?php echo $product->stories['active']?></td>
           <td><?php echo $product->stories['changed']?></td>
           <td><?php echo $product->stories['draft']?></td>
@@ -111,7 +113,7 @@
               <?php echo html::selectButton();?>
               <?php echo html::submitButton($lang->product->batchEdit);?>
               <?php endif;?>
-              <?php if(!$canOrder and common::hasPriv('product', 'updateOrder')) echo html::a(inlink('all', "productID=$productID&category=$category&status=$status&order=order_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->product->updateOrder, '' , "class='btn'");?>
+              <?php if(!$canOrder and common::hasPriv('product', 'updateOrder')) echo html::a(inlink('all', "productID=$productID&line=$line&status=$status&order=order_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->product->updateOrder, '' , "class='btn'");?>
             </div>
             <?php $pager->show();?>
           </td>

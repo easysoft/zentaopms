@@ -25,7 +25,7 @@ class tree extends control
     public function browse($rootID, $viewType, $currentModuleID = 0, $branch = 0)
     {
         /* According to the type, set the module root and modules. */
-        if(strpos('story|bug|case|category', $viewType) !== false)
+        if(strpos('story|bug|case|line', $viewType) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
             if(!empty($product->type) && $product->type != 'normal')
@@ -122,10 +122,10 @@ class tree extends control
             $position[] = html::a($this->createLink('doc', 'browse', "libID=$rootID"), $lib->name);
             $position[] = $this->lang->tree->manageCustomDoc;
         }
-        elseif($viewType == 'category')
+        elseif($viewType == 'line')
         {
             $this->lang->set('menugroup.tree', 'product');
-            $this->product->setMenu($this->product->getPairs(), $rootID, $branch, 'category', '', 'category');
+            $this->product->setMenu($this->product->getPairs(), $rootID, $branch, 'line', '', 'line');
             $this->lang->tree->menu      = $this->lang->product->menu;
             $this->lang->tree->menuOrder = $this->lang->product->menuOrder;
 
@@ -135,10 +135,10 @@ class tree extends control
 
             $this->view->allProduct     = $products;
             $this->view->currentProduct = $currentProduct;
-            $this->view->productModules = $this->tree->getOptionMenu($currentProduct, 'category');
+            $this->view->productModules = $this->tree->getOptionMenu($currentProduct, 'line');
 
-            $title = $this->lang->product->common . $this->lang->colon . $this->lang->tree->manageCategory;
-            $position[] = $this->lang->tree->manageCategory;
+            $title = $this->lang->product->common . $this->lang->colon . $this->lang->tree->manageLine;
+            $position[] = $this->lang->tree->manageLine;
         }
 
         $parentModules = $this->tree->getParents($currentModuleID);

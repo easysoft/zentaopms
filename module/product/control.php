@@ -231,7 +231,7 @@ class product extends control
         $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst|noclosed');
         $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst|noclosed');
         $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst|noclosed');
-        $this->view->categories = $this->loadModel('tree')->getOptionMenu($rootID = 0, $type = 'category');
+        $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
 
         unset($this->lang->product->typeList['']);
         $this->display();
@@ -276,7 +276,7 @@ class product extends control
         $this->view->poUsers    = $this->loadModel('user')->getPairs('nodeleted|pofirst',  $product->PO);
         $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst',  $product->QD);
         $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst', $product->RD);
-        $this->view->categories = $this->loadModel('tree')->getOptionMenu($rootID = 0, $type = 'category');
+        $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
 
         unset($this->lang->product->typeList['']);
         $this->display();
@@ -394,7 +394,7 @@ class product extends control
         $this->view->actions    = $this->loadModel('action')->getList('product', $productID);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->categories = $this->loadModel('tree')->getOptionMenu($rootID = 0, $type = 'category');
+        $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
 
         $this->display();
     }
@@ -586,20 +586,22 @@ class product extends control
 
         foreach($products as $key => $product) $product->key = $productsPinyin[$product->name];
 
-        /* Sort products as categories' order first. */
-        $categories  = $this->loadModel('tree')->getOptionMenu($rootID = 0, $type = 'category');
+        /* Sort products as lines' order first. */
+        $lines = $this->loadModel('tree')->getLinePairs();
         $productList = array();
-        foreach($categories as $id => $category)
+        foreach($lines as $id => $name)
         {
-            foreach($products as $product) 
+            foreach($products as $key => $product) 
             {
-                if($product->category == $id) 
+                if($product->line == $id) 
                 {
-                    $product->name = ltrim($category. '/' . $product->name, '/');
+                    $product->name = $name . '/' . $product->name;
                     $productList[] = $product;
+                    unset($products[$key]);
                 }
             }
         }
+        $productList = array_merge($productList, $products);
 
         $this->view->products  = $productList;
         $this->display();
@@ -648,7 +650,7 @@ class product extends control
      * All product.
      *
      * @param  int    $productID
-     * @param  int    $category
+     * @param  int    $line
      * @param  string $status
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -657,7 +659,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function all($productID = 0, $category = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function all($productID = 0, $line = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->session->set('productList', $this->app->getURI(true));
         $productID = $this->product->saveState($productID, $this->products);
@@ -670,10 +672,11 @@ class product extends control
         $this->app->loadLang('my');
         $this->view->title        = $this->lang->product->allProduct;
         $this->view->position[]   = $this->lang->product->allProduct;
-        $this->view->productStats = $this->product->getStats($orderBy, $pager, $status, $category);
-        $this->view->categoryTree = $this->loadModel('tree')->getTreeMenu(0, $viewType = 'category', $startModuleID = 0, array('treeModel', 'createCategoryLink'), array('productID' => $productID, 'status' => $status));
+        $this->view->productStats = $this->product->getStats($orderBy, $pager, $status, $line);
+        $this->view->lineTree     = $this->loadModel('tree')->getTreeMenu(0, $viewType = 'line', $startModuleID = 0, array('treeModel', 'createLineLink'), array('productID' => $productID, 'status' => $status));
+        $this->view->lines        = array('') + $this->tree->getLinePairs();
         $this->view->productID    = $productID;
-        $this->view->category     = $category;
+        $this->view->line         = $line;
         $this->view->status       = $status;
         $this->view->orderBy      = $orderBy;
         $this->view->pager        = $pager;

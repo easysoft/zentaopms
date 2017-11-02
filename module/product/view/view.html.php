@@ -70,8 +70,8 @@
             <td><?php echo $product->code;?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->product->category;?></th>
-            <td><?php echo zget($categories, $product->category);?></td>
+            <th><?php echo $lang->product->line;?></th>
+            <td><?php echo zget($lines, $product->line);?></td>
           </tr>
           <tr>
             <th><?php echo $lang->product->PO;?></th>

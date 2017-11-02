@@ -22,7 +22,7 @@
   <form id='webhookForm' method='post' class='ajaxForm'>
     <table class='table table-form'>
       <tr>
-        <th class='w-80px'><?php echo $lang->webhook->name;?></th>
+        <th class='w-100px'><?php echo $lang->webhook->name;?></th>
         <td class='w-p50'><?php echo html::input('name', $webhook->name, "class='form-control'");?></td>
         <td></td>
       </tr>
@@ -32,11 +32,6 @@
         <td><?php echo zget($lang->webhook->note->typeList, $webhook->type);?></td>
       </tr>
       <?php if($webhook->type != 'dingding'):?>
-      <tr>
-        <th><?php echo $lang->webhook->contentType;?></th>
-        <td><?php echo html::select('contentType', $config->webhook->contentTypes, $webhook->contentType, "class='form-control'");?></td>
-        <td></td>
-      </tr>
       <tr>
         <th><?php echo $lang->webhook->sendType;?></th>
         <td><?php echo html::select('sendType', $lang->webhook->sendTypeList, $webhook->sendType, "class='form-control'");?></td>
@@ -55,12 +50,20 @@
       </tr>
       <?php if(strpos(',bearychat,dingding,', ",$webhook->type,") === false):?>
       <tr>
-        <th><?php echo $lang->webhook->params;?></th>
+        <th>
+          <label class='checkbox-inline'>
+            <input type='checkbox' id='allParams' name='allParams'><strong><?php echo $lang->webhook->params;?></strong>
+          </label>
+        </th>
         <td class='labelWidth' colspan='2'><?php echo html::checkbox('params', $lang->webhook->paramsList, $webhook->params);?></td>
       </tr>
       <?php endif;?>
       <tr>
-        <th><?php echo $lang->webhook->action;?></th>
+        <th>
+          <label class='checkbox-inline'>
+            <input type='checkbox' id='allActions' name='allActions'><strong><?php echo $lang->webhook->action;?></strong>
+          </label>
+        </th>
         <td colspan='2'>
           <table class='table table-bordered'>
             <?php foreach($config->webhook->objectTypes as $objectType => $actions):?>

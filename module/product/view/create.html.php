@@ -31,9 +31,9 @@
         <td><?php echo html::input('code', '', "class='form-control' autocomplete='off'");?></td><td></td>
       </tr>  
       <tr>
-        <th><?php echo $lang->product->category;?></th>
-        <td><?php echo html::select('category', $categories, '', "class='form-control chosen'");?></td>
-        <td><?php if(!$categories) common::printLink('tree', 'browse', "rootID=&view=category", $lang->tree->manageCategory);?></td>
+        <th><?php echo $lang->product->line;?></th>
+        <td><?php echo html::select('line', $lines, '', "class='form-control chosen'");?></td>
+        <td><?php if(!$lines) common::printLink('tree', 'browse', "rootID=&view=line", $lang->tree->manageLine);?></td>
       </tr>
       <tr>
         <th><?php echo $lang->product->PO;?></th>
