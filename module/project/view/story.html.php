@@ -64,6 +64,9 @@
         <tr class='colhead'>
         <?php $vars = "projectID={$project->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
           <th class='w-id  {sorter:false}'>    <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
+          <?php if($canOrder):?>
+          <th class='w-50px {sorter:false}'>    <?php common::printOrderLink('order',      $orderBy, $vars, $lang->project->updateOrder);?></th>
+          <?php endif;?>
           <th class='w-pri {sorter:false}'>    <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
           <th class='{sorter:false}'>          <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
           <th class='w-user {sorter:false}'>   <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
@@ -75,9 +78,6 @@
           <th title='<?php echo $lang->story->bugCount?>'  class='w-30px'><?php echo $lang->story->bugCountAB;?></th>
           <th title='<?php echo $lang->story->caseCount?>' class='w-30px'><?php echo $lang->story->caseCountAB;?></th>
           <th class='w-110px {sorter:false}'>  <?php echo $lang->actions;?></th>
-          <?php if($canOrder):?>
-          <th class='w-50px {sorter:false}'>    <?php common::printOrderLink('order',      $orderBy, $vars, $lang->project->updateOrder);?></th>
-          <?php endif;?>
         </tr>
       </thead>
       <tbody id='storyTableList' class='sortable'>
@@ -98,6 +98,9 @@
             <?php endif;?>
             <?php echo html::a($storyLink, sprintf('%03d', $story->id));?>
           </td>
+          <?php if($canOrder):?>
+          <td class='sort-handler'><i class='icon-move'></i></td>
+          <?php endif;?>
           <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
           <td class='text-left' title="<?php echo $story->title?>">
             <?php if(isset($branchGroups[$story->product][$story->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$story->product][$story->branch] . '</span>';?>
@@ -154,9 +157,6 @@
             }
             ?>
           </td>
-          <?php if($canOrder):?>
-          <td class='sort-handler'><i class='icon-move'></i></td>
-          <?php endif;?>
         </tr>
         <?php endforeach;?>
       </tbody>
