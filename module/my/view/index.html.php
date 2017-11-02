@@ -12,5 +12,4 @@
 <?php include '../../common/view/header.html.php';?>
 <?php css::import($defaultTheme . 'index.css',   $config->version);?>
 <?php echo $this->fetch('block', 'dashboard', 'module=my');?>
-<div id="noticeBox"><?php echo $notice; ?></div>
 <?php include '../../common/view/footer.html.php';?>

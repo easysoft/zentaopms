@@ -1166,11 +1166,18 @@ class project extends control
             die(js::reload('parent.parent'));
         }
 
+        $newBegin = date('Y-m-d');
+        $dateDiff = helper::diffDate($newBegin, $project->begin);
+        $newEnd   = date('Y-m-d', strtotime($project->end) + $dateDiff * 24 * 3600);
+
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->project->activate;
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $this->view->project->name);
         $this->view->position[] = $this->lang->project->activate;
+        $this->view->project    = $project;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
+        $this->view->newBegin   = $newBegin;
+        $this->view->newEnd     = $newEnd;
         $this->display();
     }
 

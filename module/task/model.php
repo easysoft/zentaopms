@@ -1031,6 +1031,9 @@ class taskModel extends model
         $children       = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
         $task->children = $children;
 
+        /* Check parent Task. */
+        if(!empty($task->parent)) $task->parentName = $openedBy = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('name');
+
         $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->eq($taskID)->orderBy('order_desc')->fetchGroup('task', 'account');
         foreach($teams as $key => $team) $teams[$key] = array_reverse($team);
         $task->team = isset($teams[$taskID]) ? $teams[$taskID] : array();
@@ -1909,7 +1912,7 @@ class taskModel extends model
                 break;
             case 'name':
                 if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
-                if($modulePairs and $task->module) echo "<span class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span> ';
+                if($task->module and isset($modulePairs[$task->module])) echo "<span class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span> ';
                 if($child) echo '<span class="label">'.$this->lang->task->childrenAB.'</span> ';
                 if(!empty($task->team)) echo '<span class="label">'.$this->lang->task->multipleAB.'</span> ';
                 echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color'") : "<span style='color: $task->color'>$task->name</span>";
