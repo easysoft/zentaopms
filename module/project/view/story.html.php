@@ -16,12 +16,14 @@
 <?php js::set('moduleID', ($type == 'byModule' ? $param : 0));?>
 <?php js::set('productID', ($type == 'byProduct' ? $param : 0));?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
-<div id='titlebar'>
-  <div class='heading'><?php echo html::icon($lang->icons['story']);?> <?php echo $lang->project->story;?></div>
+<div id='featurebar'>
+  <ul class='nav'>
+    <li class='active'><?php if(common::hasPriv('project', 'story')) echo html::a($this->createLink('project', 'story', "project=$project->id"), $lang->project->story);?></li>
+    <li><?php if(common::hasPriv('project', 'storykanban')) echo html::a($this->createLink('project', 'storykanban', "project=$project->id"), $lang->project->kanban);?></li>
+  </ul>
   <div class='actions'>
     <div class='btn-group'>
     <?php 
-    common::printIcon('project', 'storyKanban', "project=$project->id", '', 'button', 'columns', '', '', '', '', $lang->project->kanban);
     common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc", '', 'button', '', '', 'export');
 
     $this->lang->story->create = $this->lang->project->createStory;

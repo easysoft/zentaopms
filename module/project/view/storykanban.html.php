@@ -10,12 +10,14 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
-<div id='titlebar'>
-  <div class='heading'><?php echo html::icon($lang->icons['story']);?> <?php echo $lang->project->story;?></div>
+<div id='featurebar'>
+  <ul class='nav'>
+    <li><?php if(common::hasPriv('project', 'story')) echo html::a($this->createLink('project', 'story', "project=$project->id"), $lang->project->story);?></li>
+    <li class='active'><?php if(common::hasPriv('project', 'storykanban')) echo html::a($this->createLink('project', 'storykanban', "project=$project->id"), $lang->project->kanban);?></li>
+  </ul>
   <div class='actions'>
     <div class='btn-group'>
     <?php 
-    common::printIcon('project', 'story', "project=$project->id", '', 'button', 'list', '', '', '', '', $lang->project->story);
     common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc", '', 'button', '', '', 'export');
 
     $this->lang->story->create = $this->lang->project->createStory;
@@ -43,15 +45,12 @@ $account = $this->app->user->account
   <table class='boards-layout table' id='kanbanHeader'>
     <thead>
       <tr>
-        <?php $endCol = array_pop($cols);?>
         <?php foreach ($cols as $col):?>
         <th class='col-<?php echo $col?>'><?php echo $lang->story->stageList[$col];?></th>
         <?php endforeach;?>
-        <th class='col-<?php echo $endCol?>'><?php echo $lang->story->stageList[$endCol];?></th>
       </tr>
     </thead>
   </table>
-  <?php $cols[] = $endCol;?>
   <table class='boards-layout table active-disabled table-bordered' id='kanbanWrapper'>
     <thead>
       <tr>
@@ -64,7 +63,7 @@ $account = $this->app->user->account
         <td class='col-droppable col-<?php echo $col?>' data-id='<?php echo $col?>'>
         <?php if(!empty($stories[$col])):?>
           <?php foreach($stories[$col] as $story):?>
-          <div class='board board-story board-story-<?php echo $col ?>;?>' data-id='<?php echo $story->id?>' id='task-<?php echo $story->id?>'>
+          <div class='board board-story board-story-<?php echo $col; ?>' data-id='<?php echo $story->id?>' id='story-<?php echo $story->id?>'>
             <div class='board-title'>
               <?php echo html::a($this->createLink('story', 'view', "story=$story->id", '', true), $story->title, '', 'class="kanbanFrame" title="' . $story->title . '"');?>
               <div class='board-actions'>
@@ -80,10 +79,10 @@ $account = $this->app->user->account
               </div>
             </div>
             <div class='board-footer clearfix'>
-              <span class='task-id board-id' title='<?php echo $lang->story->id?>'><?php echo $story->id?></span> 
-              <span class='task-pri pri-<?php echo $story->pri?>' title='<?php echo $lang->story->pri?>'></span>
+              <span class='story-id board-id' title='<?php echo $lang->story->id?>'><?php echo $story->id?></span> 
+              <span class='story-pri pri-<?php echo $story->pri?>' title='<?php echo $lang->story->pri?>'></span>
               <div class='pull-right'>
-                <span class='task-left' title='<?php echo $lang->story->status?>'><?php echo zget($this->lang->story->statusList, $story->status, '');?></span>
+                <span class='text-left' title='<?php echo $lang->story->status?>'><?php echo zget($this->lang->story->statusList, $story->status, '');?></span>
               </div>
             </div>
           </div>
