@@ -132,7 +132,7 @@ class scoreModel extends model
                     $desc      = $this->lang->score->methods[$module][$method] . ',' . $desc . 'ID:' . $param->id;
                     $objectID  = $param->id;
                     $timestamp = empty($time) ? time() : strtotime($time);
-                    //项目完成后，项目经理增加20个积分，项目成员增加5个积分。如果按期或者提前完成，项目经理额外增加10个积分，项目成员额外增加5个积分。
+
                     /* Project PM. */
                     if(!empty($param->PM))
                     {
