@@ -79,11 +79,9 @@ class webhookModel extends model
 
             $action = $actions[$log->action];
 
-            $text   = $this->app->user->realname . $this->lang->action->label->{$action->action}. $this->lang->action->objectTypes[$action->objectType];
             $object = $this->dao->select('*')->from($this->config->objectTables[$action->objectType])->where('id')->eq($action->objectID)->fetch();
             $field  = $this->config->action->objectNameFields[$action->objectType];
-            $text  .= "[#{$action->objectID}::{$object->$field}]";
-            if($action->action == 'assigned') $text .= ' ' . $this->lang->webhook->assigned . ' ' . zget($users, $object->assignedTo);
+            $text   = $this->app->user->realname . $this->lang->action->label->{$action->action}. $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
 
             $log->action    = $text;
             $log->actionURL = $this->getViewLink($action->objectType, $action->objectID);
@@ -151,6 +149,7 @@ class webhookModel extends model
             ->join('products', ',')
             ->join('projects', ',')
             ->skipSpecial('url')
+            ->remove('allParams, allActions')
             ->get();
         $webhook->params  = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
         $webhook->actions = $this->post->actions ? json_encode($this->post->actions) : '[]';
@@ -177,6 +176,7 @@ class webhookModel extends model
             ->join('products', ',')
             ->join('projects', ',')
             ->skipSpecial('url')
+            ->remove('allParams, allActions')
             ->get();
         $webhook->params  = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
         $webhook->actions = $this->post->actions ? json_encode($this->post->actions) : '[]';
@@ -217,9 +217,8 @@ class webhookModel extends model
                 continue;
             }
             
-            $contentType = zget($this->config->webhook->contentTypes, $webhook->contentType, 'application/json');
-            $result      = $this->fetchHook($contentType, $webhook->url, $postData);
-            $this->saveLog($id, $actionID, $webhook->url, $contentType, $postData, $result);
+            $result = $this->fetchHook($webhook, $postData);
+            $this->saveLog($webhook, $actionID, $postData, $result);
         }
         return !dao::isError();
     }
@@ -268,18 +267,15 @@ class webhookModel extends model
         $email  = '';
         if($actionType == 'assigned') 
         {
-            $assignedTo = $object->assignedTo;
             foreach($users as $user)
             {
                 if($user->account == $object->assignedTo)
                 {
-                    $assignedTo = $user->realname;
-                    $mobile     = $user->mobile;
-                    $email      = $user->email;
+                    $mobile = $user->mobile;
+                    $email  = $user->email;
                     break;
                 }
             }
-            $text .= ' ' . $this->lang->webhook->assigned . ' ' . $assignedTo;
         }
         $action->text = $text;
 
@@ -396,18 +392,17 @@ class webhookModel extends model
     /**
      * Post hook data. 
      * 
-     * @param  string $contentType 
-     * @param  string $url 
+     * @param  object $webhook 
      * @param  string $sendData 
      * @access public
      * @return int 
      */
-    public function fetchHook($contentType, $url, $sendData)
+    public function fetchHook($webhook, $sendData)
     {
-        $header[] = "Content-Type: $contentType;charset=utf-8";
+        $header[] = "Content-Type: {$webhook->contentType};charset=utf-8";
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_URL, $webhook->url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $sendData);
@@ -451,22 +446,21 @@ class webhookModel extends model
      * 
      * @param  int    $webhookID 
      * @param  int    $actionID 
-     * @param  string $url 
-     * @param  string $contentType 
+     * @param  object $webhook 
      * @param  string $data 
      * @param  string $result
      * @access public
      * @return bool 
      */
-    public function saveLog($webhookID, $actionID, $url, $contentType, $data, $result)
+    public function saveLog($webhook, $actionID, $data, $result)
     {
         $log = new stdclass();
         $log->objectType  = 'webhook';
-        $log->objectID    = $webhookID;
+        $log->objectID    = $webhook->id;
         $log->action      = $actionID;
         $log->date        = helper::now();
-        $log->url         = $url;
-        $log->contentType = $contentType;
+        $log->url         = $webhook->url;
+        $log->contentType = $webhook->contentType;
         $log->data        = $data;
         $log->result      = $result;
 

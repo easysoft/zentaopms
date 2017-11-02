@@ -5,9 +5,6 @@ $config->webhook->create->requiredFields = 'name, url';
 $config->webhook->edit = new stdclass();
 $config->webhook->edit->requiredFields = 'name, url';
 
-$config->webhook->contentTypes['json'] = 'application/json';
-$config->webhook->contentTypes['form'] = 'application/x-www-form-urlencoded';
-
 $config->webhook->objectTypes['product']     = array('opened', 'edited', 'closed', 'undeleted'); 
 $config->webhook->objectTypes['story']       = array('opened', 'edited', 'commented', 'frombug', 'changed', 'reviewed', 'closed', 'activated');
 $config->webhook->objectTypes['productplan'] = array('opened', 'edited'); 

@@ -18,8 +18,8 @@
       <tr>
         <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->webhook->id);?></th>
-        <th class='w-100px'><?php common::printOrderLink('type', $orderBy, $vars, $lang->webhook->type);?></th>
-        <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->webhook->name);?></th>
+        <th class='w-60px'><?php common::printOrderLink('type', $orderBy, $vars, $lang->webhook->type);?></th>
+        <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->webhook->name);?></th>
         <th><?php common::printOrderLink('url', $orderBy, $vars, $lang->webhook->url);?></th>
         <th class='w-70px'><?php echo $lang->actions;?></th>
       </tr>
@@ -28,7 +28,7 @@
       <?php foreach($webhooks as $id => $webhook):?>
       <tr>
         <td class='text-center'><?php echo $id;?></td>
-        <td><?php echo zget($lang->webhook->typeList, $webhook->type);?></td>
+        <td class='text-center'><?php echo zget($lang->webhook->typeList, $webhook->type);?></td>
         <td class='text' title='<?php echo $webhook->name;?>'><?php echo $webhook->name;?></td>
         <td class='text' title='<?php echo $webhook->url;?>'><?php echo $webhook->url;?></td>
         <td class='text-right'>

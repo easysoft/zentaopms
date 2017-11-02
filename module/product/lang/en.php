@@ -55,8 +55,10 @@ $lang->product->confirmDelete   = " Do you want to delete {$lang->productCommon}
 $lang->product->errorNoProduct = "{$lang->productCommon} is not created yet!";
 $lang->product->accessDenied   = "You have no access to {$lang->productCommon}.";
 
+$lang->product->id        = 'ID';
 $lang->product->name      = "{$lang->productCommon} Name";
 $lang->product->code      = "{$lang->productCommon} Code";
+$lang->product->line      = 'Product Line';
 $lang->product->order     = 'Sort';
 $lang->product->type      = "{$lang->productCommon} Type";
 $lang->product->status    = 'Status';

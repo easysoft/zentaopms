@@ -23,7 +23,7 @@
   <form id='webhookForm' method='post' class='ajaxForm'>
     <table class='table table-form'>
       <tr>
-        <th class='w-80px'><?php echo $lang->webhook->type;?></th>
+        <th class='w-100px'><?php echo $lang->webhook->type;?></th>
         <td class='w-p50'><?php echo html::select('type', $lang->webhook->typeList, 'default', "class='form-control'");?></td>
         <td></td>
       </tr>
@@ -36,11 +36,6 @@
         <th><?php echo $lang->webhook->url;?></th>
         <td><?php echo html::input('url', '', "class='form-control'");?></td>
         <td id='urlNote'><?php echo $lang->webhook->note->typeList['default'];?></td>
-      </tr>
-      <tr id='contentTypeTR'>
-        <th><?php echo $lang->webhook->contentType;?></th>
-        <td><?php echo html::select('contentType', $config->webhook->contentTypes, '', "class='form-control'");?></td>
-        <td></td>
       </tr>
       <tr id='sendTypeTR'>
         <th><?php echo $lang->webhook->sendType;?></th>
@@ -58,11 +53,19 @@
         <td><?php echo $lang->webhook->note->project;?></td>
       </tr>
       <tr id='paramsTR'>
-        <th><?php echo $lang->webhook->params;?></th>
+        <th>
+          <label class='checkbox-inline'>
+            <input type='checkbox' id='allParams' name='allParams'><strong><?php echo $lang->webhook->params;?></strong>
+          </label>
+        </th>
         <td class='labelWidth' colspan='2'><?php echo html::checkbox('params', $lang->webhook->paramsList, 'text');?></td>
       </tr>
       <tr>
-        <th><?php echo $lang->webhook->action;?></th>
+        <th>
+          <label class='checkbox-inline'>
+            <input type='checkbox' id='allActions' name='allActions'><strong><?php echo $lang->webhook->action;?></strong>
+          </label>
+        </th>
         <td colspan='2'>
           <table class='table table-bordered'>
             <?php foreach($config->webhook->objectTypes as $objectType => $actions):?>
