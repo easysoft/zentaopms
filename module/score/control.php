@@ -23,12 +23,6 @@ class score extends control
         $this->score->create('ajax', $method);
     }
 
-
-    public function a()
-    {
-        $this->score->create('user');exit;
-    }
-
     /**
      * Initialize score.
      *

@@ -190,9 +190,9 @@ class scoreModel extends model
      */
     private function saveScore($account = '', $rule = array(), $module = '', $method = '', $desc = '', $objectID = 0, $time = '')
     {
-        if(!empty($rule['times']) || !empty($rule['time']))
+        if(!empty($rule['times']) || !empty($rule['hour']))
         {
-            if(empty($rule['time']))
+            if(empty($rule['hour']))
             {
                 $count = $this->dao->select('id')->from(TABLE_SCORE)->where('account')->eq($account)->andWhere('module')->eq($module)->andWhere('method')->eq($method)->count();
                 if($count >= $rule['times']) return true;
