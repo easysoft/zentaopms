@@ -938,9 +938,11 @@ class story extends control
         $storyIDList = array_unique($storyIDList);
         $allChanges  = $this->story->batchChangeStage($storyIDList, $stage);
         if(dao::isError()) die(js::error(dao::getError()));
+
+        $action = $stage == 'verified' ? 'Verified' : 'Edited';
         foreach($allChanges as $storyID => $changes)
         {
-            $actionID = $this->action->create('story', $storyID, 'Edited');
+            $actionID = $this->action->create('story', $storyID, $action);
             $this->action->logHistory($actionID, $changes);
             $this->story->sendmail($storyID, $actionID);
         }

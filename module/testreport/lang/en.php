@@ -64,8 +64,8 @@ $lang->testreport->fromCaseBugTip= "Bug created after failure of use case in tes
 $lang->testreport->errorTrunk    = "The trunk version cannot create a test report. Please modify the associated version!";
 
 $lang->testreport->bugSummary    = <<<EOD
-<strong>%s</strong> Bug(s) generated in total <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-warning-sign'></i></a>,
-<strong>%s</strong> Bug(s) remained unresolve <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->legacyBugTip}'><i class='icon-warning-sign'></i></a>,
-<strong>%s</strong> Bug(s) failure of case <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->fromCaseBugTip}'><i class='icon-warning-sign'></i></a>.
+<strong>%s</strong> Bug(s) generated in total <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-info-sign'></i></a>,
+<strong>%s</strong> Bug(s) remained unresolve <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->legacyBugTip}'><i class='icon-info-sign'></i></a>,
+<strong>%s</strong> Bug(s) failure of case <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->fromCaseBugTip}'><i class='icon-info-sign></i></a>.
 Confirmed bug rate（bug resolution is resolved or delayedg status is resolved or closed): <strong>%s</strong>，Bug created in caserate(Bugs created in cases / Newly generated bugs): <strong>%s</strong>'
 EOD;

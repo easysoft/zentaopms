@@ -81,7 +81,7 @@ class treeModel extends model
      */
     public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0)
     {
-        if($type == 'category') $rootID = 0;
+        if($type == 'line') $rootID = 0;
 
         $branches = array($branch => '');
         if(strpos('story|bug|case', $type) !== false)
@@ -168,6 +168,11 @@ class treeModel extends model
         }
 
         return $modulePairs;
+    }
+
+    public function getLinePairs()
+    {
+        return $this->dao->select('id, name')->from(TABLE_MODULE)->where('type')->eq('line')->fetchPairs();
     }
 
     /**
@@ -314,7 +319,7 @@ class treeModel extends model
      */
     public function getTreeMenu($rootID, $type = 'root', $startModule = 0, $userFunc, $extra = '', $branch = 0)
     {
-        if($type == 'category') $rootID = 0;
+        if($type == 'line') $rootID = 0;
 
         $branches = array($branch => '');
         if($branch)
@@ -763,7 +768,7 @@ class treeModel extends model
     }
 
     /**
-     * Create link of a product.
+     * Create link of a product line.
      * 
      * @param  string $type
      * @param  object $module 
@@ -771,11 +776,11 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function createCategoryLink($type, $module, $extra)
+    public function createLineLink($type, $module, $extra)
     {
         $productID = $extra['productID'];
         $status    = $extra['status'];
-        return html::a(helper::createLink('product', 'all', "productID={$productID}&category={$module->id}&status={$status}"), $module->name, '_self', "id='module{$module->id}'");
+        return html::a(helper::createLink('product', 'all', "productID={$productID}&line={$module->id}&status={$status}"), $module->name, '_self', "id='module{$module->id}'");
     }
 
     /**
@@ -959,7 +964,7 @@ class treeModel extends model
      */
     public function getSons($rootID, $moduleID, $type = 'root', $branch = 0)
     {
-        if($type == 'category') $rootID = 0;
+        if($type == 'line') $rootID = 0;
 
         /* if createVersion <= 4.1 or type == 'story', only get modules of its type. */
         if(!$this->isMergeModule($rootID, $type) or $type == 'story')
@@ -1205,7 +1210,7 @@ class treeModel extends model
      */
     public function manageChild($rootID, $type, $parentModuleID, $childs)
     {
-        if($type == 'category') $rootID = 0;
+        if($type == 'line') $rootID = 0;
 
         $this->checkUnique($rootID, $type, $parentModuleID, $childs);
         $parentModule = $this->getByID($parentModuleID);
@@ -1513,7 +1518,7 @@ class treeModel extends model
      */
     public function getProductStructure($rootID, $viewType, $branch = 0, $currentModuleID = 0)
     {
-        if($viewType == 'category') $rootID = 0;
+        if($viewType == 'line') $rootID = 0;
 
         $branches = array($branch => '');
         $product  = $this->loadModel('product')->getById($rootID);

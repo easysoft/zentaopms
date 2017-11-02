@@ -13,9 +13,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('viewType', $viewType);?>
 <?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and (!empty($root->type) && $root->type != 'normal')) ? true : false;?>
-<?php $name = $viewType == 'category' ? $lang->tree->category : $lang->tree->name;?>
+<?php $name = $viewType == 'line' ? $lang->tree->line : $lang->tree->name;?>
 <div id='featurebar'>
-  <div class='heading'><?php echo $viewType == 'category' ? $lang->tree->manageCategory : $lang->tree->common;?></div>
+  <div class='heading'><?php echo $viewType == 'line' ? $lang->tree->manageLine : $lang->tree->common;?></div>
 </div>
 <div class='row'>
   <div class='col-sm-4'>
@@ -42,7 +42,7 @@
         <div class='panel-body'>
           <table class='table table-form'>
             <tr>
-              <?php if($viewType != 'category'):?>
+              <?php if($viewType != 'line'):?>
               <td class='parentModule'>
                 <nobr>
                 <?php
@@ -107,7 +107,7 @@
               </td>
             </tr>
             <tr>
-              <?php if($viewType != 'category'):?>
+              <?php if($viewType != 'line'):?>
               <td></td>
               <?php endif;?>
               <td colspan='2'>
@@ -151,7 +151,7 @@ $(function()
         },
         itemCreator: function($li, item)
         {
-            var link = item.id !== undefined ? ('<a href="' + createLink('tree', 'browse', 'rootID=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}&branch={1}'.format(item.id, item.branch)) + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
+            var link = (item.id !== undefined && item.type != 'line') ? ('<a href="' + createLink('tree', 'browse', 'rootID=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}&branch={1}'.format(item.id, item.branch)) + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
             if(item.type === 'bug') $toggle.append('&nbsp; <span class="text-muted">[B]</span>');
             if(item.type === 'case') $toggle.append('&nbsp; <span class="text-muted">[C]</span>');
@@ -181,8 +181,8 @@ $(function()
             subModules:
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'browse', "rootID=$rootID&viewType=$viewType&moduleID={0}&branch={1}"); ?>',
-                title: '<?php echo $viewType == 'category' ? '': $lang->tree->child ?>',
-                template: '<a href="javascript:;"><?php echo $viewType == 'category' ? '': $lang->tree->child?></a>'
+                title: '<?php echo $viewType == 'line' ? '': $lang->tree->child ?>',
+                template: '<a href="javascript:;"><?php echo $viewType == 'line' ? '': $lang->tree->child?></a>'
             }
         },
         action: function(event)
@@ -246,7 +246,7 @@ $(function()
     $tree.find('[data-toggle="tooltip"]').tooltip();
 
     $('#modulemenu > .nav > li > a[href*=tree][href*=browse]').not('[href*=<?php echo $viewType;?>]').parent().removeClass('active');
-    if(viewType == 'category') $('#modulemenu > .nav > li > a[href*=product][href*=all]').parent('li[data-id=all]').addClass('active');
+    if(viewType == 'line') $('#modulemenu > .nav > li > a[href*=product][href*=all]').parent('li[data-id=all]').addClass('active');
 });
 </script>
 <?php 

@@ -38,7 +38,7 @@ $lang->project->totalEstimate = '总预计';
 $lang->project->totalConsumed = '总消耗';
 $lang->project->totalLeft     = '总剩余';
 $lang->project->Left          = '剩余';
-$lang->project->progess       = '进度';
+$lang->project->progress      = '进度';
 $lang->project->hours         = '预计 %s 消耗 %s 剩余 %s';
 $lang->project->viewBug       = '查看bug';
 $lang->project->noProduct     = "无{$lang->productCommon}{$lang->projectCommon}";
@@ -238,10 +238,10 @@ $lang->project->placeholder->totalLeft = '项目开始时的总预计工时';
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->done = '(已结束)';
 
+$lang->project->orderList['order_asc']  = "需求排序正序";
+$lang->project->orderList['order_desc'] = "需求排序倒序";
 $lang->project->orderList['pri_asc']    = "需求优先级正序";
 $lang->project->orderList['pri_desc']   = "需求优先级倒序";
-$lang->project->orderList['id_asc']     = "需求ID正序";
-$lang->project->orderList['id_desc']    = "需求ID倒序";
 $lang->project->orderList['stage_asc']  = "需求阶段正序";
 $lang->project->orderList['stage_desc'] = "需求阶段倒序";
 

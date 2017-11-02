@@ -345,7 +345,7 @@ $lang->admin->menu->safe      = array('link' => 'Security|admin|safe', 'alias' =
 $lang->admin->menu->cron      = array('link' => 'Cron|cron|index', 'subModule' => 'cron');
 $lang->admin->menu->trashes   = array('link' => 'Recycle|action|trash', 'subModule' => 'action');
 $lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
-$lang->admin->menu->entry     = array('link' => 'API|entry|browse', 'alias' => 'create,edit', 'subModule' => 'entry,webhook');
+$lang->admin->menu->api       = array('link' => 'API|webhook|browse', 'alias' => 'create,edit', 'subModule' => 'entry,webhook');
 $lang->admin->menu->sso       = 'RangerTeam|admin|sso';
 
 $lang->convert   = new stdclass();
@@ -434,14 +434,14 @@ $lang->error->editedByOther   = 'This record might have been changed. Please ref
 $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Please exit tutorial first!';
 
 $lang->error->entry = array();
-$lang->error->entry['300001'] = 'Param code not set.';
-$lang->error->entry['300002'] = 'Param token not set.';
-$lang->error->entry['310001'] = 'Entry not exist.';
-$lang->error->entry['310002'] = 'Key of entry not set.';
-$lang->error->entry['320001'] = 'IP denied.';
-$lang->error->entry['330001'] = 'Invalid token.';
-$lang->error->entry['340001'] = 'Session code not set.';
-$lang->error->entry['340002'] = 'Session verify failed.';
+$lang->error->entry['301'] = 'Param code not set.';
+$lang->error->entry['302'] = 'Param token not set.';
+$lang->error->entry['311'] = 'Entry not exist.';
+$lang->error->entry['312'] = 'Key of entry not set.';
+$lang->error->entry['321'] = 'IP denied.';
+$lang->error->entry['331'] = 'Invalid token.';
+$lang->error->entry['341'] = 'Session code not set.';
+$lang->error->entry['342'] = 'Session verify failed.';
 
 /* 分页信息。*/
 $lang->pager = new stdclass();

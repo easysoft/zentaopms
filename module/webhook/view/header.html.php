@@ -14,7 +14,7 @@
 <div id='featurebar'>
   <ul class='nav'>
     <?php 
-    echo "<li id='entry'>"; common::printLink('entry', 'browse', '', $lang->webhook->entry); echo '</li>';
+    //echo "<li id='entry'>"; common::printLink('entry', 'browse', '', $lang->webhook->entry); echo '</li>';
     echo "<li id='webhook' class='active'>"; common::printLink('webhook', 'browse', '', $lang->webhook->common); echo '</li>';
     ?>
   </ul>

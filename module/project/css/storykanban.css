@@ -12,7 +12,6 @@
 #kanbanWrapper tbody td {vertical-align: top; padding: 6px}
 #kanbanWrapper tbody th {background: #f1f1f1}
 #kanbanWrapper .board-shadow {height: 0; opacity: 0; transition: opacity 0.2s;}
-#kanbanWrapper tbody tr.dragging td.col-droppable {background: #fff4e5}
 #kanbanWrapper tbody tr.dragging td.col-droppable.drop-to {background: #ffeacc}
 #kanbanWrapper tbody tr.dragging td.col-droppable.drop-to .board-story + .board-shadow {margin-top: 6px;}
 #kanbanWrapper tbody tr.dragging td.col-droppable.drop-to .board-shadow {height: 28px; background: #999; background: rgba(0,0,0,0.35); opacity: 1;}
@@ -56,12 +55,12 @@
 .story-pri.pri-4 {background-color:#795523;}
 
 .board-story {color: #dd7503; background-color: #FFF3E0;}
-.board-story.stage-projected  {color:#777;}
-.board-story.stage-developing {color:#D2322D; background-color: #FFEBEE;}
-.board-story.stage-developed  {color:#229F24; background-color: #E8F5E9;}
-.board-story.stage-testing    {color:#EF6C00; background-color: #FFF3E0;}
-.board-story.stage-tested     {color:#827717; background-color: #F9FBE7}
-.board-story.stage-released   {color:#9C27B0; background-color: #F3E5F5}
+.board-story.board-story-projected  {color:#777;}
+.board-story.board-story-developing {color:#D2322D; background-color: #FFEBEE;}
+.board-story.board-story-developed  {color:#229F24; background-color: #E8F5E9;}
+.board-story.board-story-testing    {color:#EF6C00; background-color: #FFF3E0;}
+.board-story.board-story-tested     {color:#827717; background-color: #F9FBE7}
+.board-story.board-story-released   {color:#9C27B0; background-color: #F3E5F5}
 
 .affix {position:fixed; top:0px; width:95%;z-index:1030;}
 #kanbanHeader.affix {box-shadow: 0 3px 10px rgba(0,0,0,.1);}

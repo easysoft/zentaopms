@@ -3,7 +3,6 @@ $lang->entry->common   = '应用';
 $lang->entry->list     = '应用列表';
 $lang->entry->api      = '接口';
 $lang->entry->webhook  = 'webhook';
-$lang->entry->dingding = '钉钉';
 $lang->entry->log      = '日志';
 
 $lang->entry->browse    = '浏览应用';
@@ -25,7 +24,6 @@ $lang->entry->editedDate  = '编辑时间';
 $lang->entry->date        = '请求时间';
 $lang->entry->url         = '请求地址';
 
-$lang->entry->apiIndex      = '应用入口';
 $lang->entry->saveSuccess   = '保存成功';
 $lang->entry->confirmDelete = '您确认要删除该应用吗？';
 $lang->entry->help          = '使用说明';

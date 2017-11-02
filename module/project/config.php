@@ -6,7 +6,7 @@ $config->project->maxBurnDay       = '31';
 $config->project->weekend          = '2';
 
 $config->project->list = new stdclass();
-$config->project->list->exportFields = 'id,name,code,PM,end,status,totalEstimate,totalConsumed,totalLeft,progess';
+$config->project->list->exportFields = 'id,name,code,PM,end,status,totalEstimate,totalConsumed,totalLeft,progress';
 
 global $lang, $app;
 $app->loadLang('task');

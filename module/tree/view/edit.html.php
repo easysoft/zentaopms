@@ -30,10 +30,12 @@ $jsRoot  = $webRoot . "js/";
         </tr>
         <?php endif;?>
         <?php $hidden = ($type != 'story' and $module->type == 'story');?>
+        <?php if($module->type != 'line'):?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
           <th class='w-80px'><?php echo $lang->tree->parent;?></th>
           <td><?php echo html::select('parent', $optionMenu, $module->parent, "class='form-control chosen'");?></td>
         </tr>
+        <?php endif;?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
           <th class='w-80px'><?php echo $lang->tree->name;?></th>
           <td><?php echo html::input('name', $module->name, "class='form-control' autocomplete='off'");?></td>

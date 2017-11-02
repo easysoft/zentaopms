@@ -1802,7 +1802,10 @@ class upgradeModel extends model
      */
     public function initProjectStoryOrder()
     {
-        $storyGroup = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->orderBy('story_asc')->fetchGroup('project', 'story');
+        $storyGroup = $this->dao->select('t1.*')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->orderBy('t2.pri_desc,t1.story_asc')
+            ->fetchGroup('project', 'story');
 
         foreach($storyGroup as $projectID => $stories)
         {

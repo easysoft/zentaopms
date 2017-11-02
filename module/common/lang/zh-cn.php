@@ -122,7 +122,7 @@ $lang->searchObjects['user']        = '用户';
 $lang->searchObjects['build']       = '版本';
 $lang->searchObjects['release']     = '发布';
 $lang->searchObjects['productplan'] = $lang->productCommon . '计划';
-$lang->searchObjects['testtask']    = '测试版本';
+$lang->searchObjects['testtask']    = '测试单';
 $lang->searchObjects['doc']         = '文档';
 $lang->searchObjects['testcase']   = '用例库';
 $lang->searchObjects['testreport']  = '测试报告';
@@ -222,7 +222,7 @@ $lang->project->menu->story     = array('link' => '需求|project|story|projectI
 $lang->project->menu->bug       = 'Bug|project|bug|projectID=%s';
 $lang->project->menu->dynamic   = '动态|project|dynamic|projectID=%s';
 $lang->project->menu->build     = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->menu->testtask  = array('link' => '测试|project|testtask|projectID=%s');
+$lang->project->menu->testtask  = array('link' => '测试单|project|testtask|projectID=%s');
 $lang->project->menu->team      = array('link' => '团队|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->doc       = array('link' => '文档|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
 $lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|projectID=%s';
@@ -243,7 +243,7 @@ $lang->qa->menu = new stdclass();
 $lang->qa->menu->product   = array('link' => '%s', 'fixed' => true);
 $lang->qa->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->qa->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
-$lang->qa->menu->testtask  = array('link' => '版本|testtask|browse|productID=%s');
+$lang->qa->menu->testtask  = array('link' => '测试单|testtask|browse|productID=%s');
 $lang->qa->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
 $lang->qa->menu->report    = array('link' => '报告|testreport|browse|productID=%s');
 $lang->qa->menu->caselib   = array('link' => '用例库|testsuite|library');
@@ -255,7 +255,7 @@ $lang->bug->menu = new stdclass();
 $lang->bug->menu->product   = array('link' => '%s', 'fixed' => true);
 $lang->bug->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirmbug,assignto', 'subModule' => 'tree');
 $lang->bug->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
-$lang->bug->menu->testtask  = array('link' => '版本|testtask|browse|productID=%s');
+$lang->bug->menu->testtask  = array('link' => '测试单|testtask|browse|productID=%s');
 $lang->bug->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
 $lang->bug->menu->report    = array('link' => '报告|testreport|browse|productID=%s');
 $lang->bug->menu->caselib   = array('link' => '用例库|testsuite|library');
@@ -267,7 +267,7 @@ $lang->testcase->menu = new stdclass();
 $lang->testcase->menu->product   = array('link' => '%s', 'fixed' => true);
 $lang->testcase->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testcase->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree');
-$lang->testcase->menu->testtask  = array('link' => '版本|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
+$lang->testcase->menu->testtask  = array('link' => '测试单|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
 $lang->testcase->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
 $lang->testcase->menu->report    = array('link' => '报告|testreport|browse|productID=%s', 'alias' => 'view,create,edit');
 $lang->testcase->menu->caselib   = array('link' => '用例库|testsuite|library');
@@ -285,7 +285,7 @@ $lang->caselib->menu = new stdclass();
 $lang->caselib->menu->lib       = array('link' => '%s', 'fixed' => true);
 $lang->caselib->menu->bug       = array('link' => 'Bug|bug|browse|');
 $lang->caselib->menu->testcase  = array('link' => '用例|testcase|browse|');
-$lang->caselib->menu->testtask  = array('link' => '版本|testtask|browse|');
+$lang->caselib->menu->testtask  = array('link' => '测试单|testtask|browse|');
 $lang->caselib->menu->testsuite = array('link' => '套件|testsuite|browse|');
 $lang->caselib->menu->report    = array('link' => '报告|testreport|browse|');
 $lang->caselib->menu->caselib   = array('link' => '用例库|testsuite|library', 'alias' => 'createlib,createcase,libview,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
@@ -345,7 +345,7 @@ $lang->admin->menu->safe      = array('link' => '安全|admin|safe', 'alias' => 
 $lang->admin->menu->cron      = array('link' => '计划任务|cron|index', 'subModule' => 'cron');
 $lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subModule' => 'action');
 $lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
-$lang->admin->menu->entry     = array('link' => '接口|entry|browse', 'alias' => 'create,edit', 'subModule' => 'entry,webhook');
+$lang->admin->menu->api       = array('link' => '接口|webhook|browse', 'alias' => 'create,edit', 'subModule' => 'entry,webhook');
 $lang->admin->menu->sso       = '然之集成|admin|sso';
 
 $lang->convert   = new stdclass();
@@ -434,14 +434,14 @@ $lang->error->editedByOther   = '该记录可能已经被改动。请刷新页�
 $lang->error->tutorialData    = '新手模式下不会插入数据，请退出新手模式操作';
 
 $lang->error->entry = array();
-$lang->error->entry['300001'] = '缺少code参数';
-$lang->error->entry['300002'] = '缺少token参数';
-$lang->error->entry['310001'] = '应用不存在';
-$lang->error->entry['310002'] = '应用未设置密钥';
-$lang->error->entry['320001'] = '该IP访问被限制访问';
-$lang->error->entry['330001'] = '不合法的token参数';
-$lang->error->entry['340001'] = '缺少session code';
-$lang->error->entry['340002'] = 'session验证失败';
+$lang->error->entry['301'] = '缺少code参数';
+$lang->error->entry['302'] = '缺少token参数';
+$lang->error->entry['311'] = '应用不存在';
+$lang->error->entry['312'] = '应用未设置密钥';
+$lang->error->entry['321'] = '该IP访问被限制访问';
+$lang->error->entry['331'] = '不合法的token参数';
+$lang->error->entry['341'] = '缺少session code';
+$lang->error->entry['342'] = 'session验证失败';
 
 /* 分页信息。*/
 $lang->pager = new stdclass();
@@ -680,7 +680,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->menu->bug       = 'Bug|bug|index';
     $lang->menu->testcase  = '用例|testcase|index';
     $lang->menu->testsuite = '套件|testsuite|index';
-    $lang->menu->testtask  = '测试|testtask|index';
+    $lang->menu->testtask  = '测试单|testtask|index';
     $lang->menu->caselib   = '用例库|testsuite|library';
 
     $lang->menuOrder[6]  = 'bug';

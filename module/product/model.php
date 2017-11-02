@@ -203,15 +203,15 @@ class productModel extends model
      * 
      * @param  string $status 
      * @param  int    $limit 
-     * @param  int    $category
+     * @param  int    $line
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $limit = 0, $category = 0)
+    public function getList($status = 'all', $limit = 0, $line = 0)
     {
         return $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
-            ->beginIF($category > 0)->andWhere('category')->eq($category)->fi()
+            ->beginIF($line > 0)->andWhere('line')->eq($line)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF($status != 'all' and $status != 'noclosed' and $status != 'involved')->andWhere('status')->in($status)->fi()
             ->beginIF($status == 'involved')
@@ -670,17 +670,17 @@ class productModel extends model
      * @param  string $orderBy
      * @param  object $pager
      * @param  string $status
-     * @param  int    $category
+     * @param  int    $line
      * @access public
      * @return array
      */
-    public function getStats($orderBy = 'order_desc', $pager = null, $status = 'noclosed', $category = 0)
+    public function getStats($orderBy = 'order_desc', $pager = null, $status = 'noclosed', $line = 0)
     {
         $this->loadModel('report');
         $this->loadModel('story');
         $this->loadModel('bug');
 
-        $products = $this->getList($status, $limit = 0, $category);
+        $products = $this->getList($status, $limit = 0, $line);
         foreach($products as $productID => $product)
         {
             if(!$this->checkPriv($product)) unset($products[$productID]);

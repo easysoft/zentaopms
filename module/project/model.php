@@ -2314,6 +2314,7 @@ class projectModel extends model
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->where('t1.project')->eq((int)$projectID)
                 ->andWhere('t2.deleted')->eq(0)
+                ->orderBy('t1.`order`_desc')
                 ->fetchAll();
             $storyGroups = array();
             foreach($stories as $story) $storyGroups[$story->product][$story->module][$story->id] = $story;

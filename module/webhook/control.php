@@ -151,9 +151,8 @@ class webhook extends control
             $webhook = zget($webhooks, $data->webhook, '');
             if($webhook)
             {
-                $contentType = zget($this->config->webhook->contentTypes, $webhook->contentType, 'application/json');
-                $result      = $this->webhook->fetchHook($contentType, $webhook->url, $data->data);
-                $this->webhook->saveLog($data->webhook, $data->action, $webhook->url, $contentType, $data->data, $result);
+                $result = $this->webhook->fetchHook($webhook, $data->data);
+                $this->webhook->saveLog($webhook, $data->action, $data->data, $result);
             }
             
             $this->dao->update(TABLE_WEBHOOKDATAS)->set('status')->eq('sended')->where('id')->eq($data->id)->exec();
