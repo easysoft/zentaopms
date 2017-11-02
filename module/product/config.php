@@ -8,7 +8,7 @@ $config->product->custom = new stdclass();
 $config->product->custom->batchEditFields = 'PO,QD,RD,status';
 
 $config->product->list = new stdclass();
-$config->product->list->exportFields = 'id,name,activeStories,changedStories,draftStories,closedStories,plans,releases,bugs,unResolvedBugs,assignToNullBugs';
+$config->product->list->exportFields = 'id,name,line,activeStories,changedStories,draftStories,closedStories,plans,releases,bugs,unResolvedBugs,assignToNullBugs';
 
 global $lang, $app;
 $app->loadLang('story');

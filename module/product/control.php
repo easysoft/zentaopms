@@ -707,9 +707,11 @@ class product extends control
                 unset($fields[$key]);
             }
 
+            $lines = $this->loadModel('tree')->getLinePairs();
             $productStats = $this->product->getStats($orderBy, null, $status);
             foreach($productStats as $i => $product)
             {
+                $product->line             = zget($lines, $product->line, '');
                 $product->activeStories    = (int)$product->stories['active'];
                 $product->changedStories   = (int)$product->stories['changed'];
                 $product->draftStories     = (int)$product->stories['draft'];

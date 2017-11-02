@@ -150,6 +150,8 @@ class taskModel extends model
         foreach($tasks->story as $key => $storyID)
         {
             if(empty($tasks->name[$key])) continue;
+            if($tasks->type[$key] == 'affair') continue;
+            if($tasks->type[$key] == 'ditto' && isset($tasks->type[$key - 1]) && $tasks->type[$key - 1] == 'affair') continue;
 
             $inNames = in_array($tasks->name[$key], $taskNames);
             if(!$inNames || $inNames && !in_array($storyID, $storyIDs))
