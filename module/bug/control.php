@@ -789,6 +789,7 @@ class bug extends control
                 $this->bug->sendmail($bugID, $actionID);
             }
         }
+        $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::locate($this->session->bugList, 'parent'));
     }
 
@@ -815,6 +816,7 @@ class bug extends control
                 $this->action->logHistory($actionID, $changes);
                 $this->bug->sendmail($bugID, $actionID);
             }
+            $this->loadModel('score')->create('ajax', 'batchOther');
         }
         if($type == 'product') die(js::locate($this->createLink('bug', 'browse', "productID=$projectID")));
         if($type == 'my')      die(js::locate($this->createLink('my', 'bug')));
@@ -872,6 +874,7 @@ class bug extends control
             $actionID = $this->action->create('bug', $bugID, 'bugConfirmed');
             $this->bug->sendmail($bugID, $actionID);
         }
+        $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::locate($this->session->bugList, 'parent'));
     }
     
@@ -952,6 +955,7 @@ class bug extends control
             $actionID = $this->action->create('bug', $bugID, 'Resolved', '', $resolution);
             $this->bug->sendmail($bugID, $actionID);
         }
+        $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::locate($this->session->bugList, 'parent'));
     }
 
@@ -1140,7 +1144,7 @@ class bug extends control
                 $actionID = $this->action->create('bug', $bugID, 'Closed');
                 $this->bug->sendmail($bugID, $actionID);
             }
-
+            $this->loadModel('score')->create('ajax', 'batchOther');
             if(isset($skipBugs)) echo js::alert(sprintf($this->lang->bug->skipClose, join(',', $skipBugs)));
         }
         die(js::reload('parent'));
@@ -1162,7 +1166,7 @@ class bug extends control
                 $actionID = $this->action->create('bug', $bugID, 'Activated', $bug['comment']);
                 $this->bug->sendmail($bugID, $actionID);
             }
-
+            $this->loadModel('score')->create('ajax', 'batchOther');
             die(js::locate($this->session->bugList, 'parent'));
         }
 

@@ -20,7 +20,7 @@ class scoreModel extends model
      */
     public function getListByAccount($account, $pager)
     {
-        return $this->dao->select('*')->from(TABLE_SCORE)->where('account')->eq($account)->orderBy('time_desc')->page($pager)->fetchAll();
+        return $this->dao->select('*')->from(TABLE_SCORE)->where('account')->eq($account)->orderBy('time_desc,id_desc')->page($pager)->fetchAll();
     }
 
     /**
@@ -85,8 +85,8 @@ class scoreModel extends model
                     $desc = $this->lang->score->methods[$module][$method] . 'ID:' . $param;
 
                     /* Check child task. */
-                    $childTask = $this->dao->select('id')->from(TABLE_TASK)->where('parent')->eq($param)->fetch('id');
-                    if(!empty($childTask)) return true;
+                    $parentTask = $this->dao->select('id')->from(TABLE_TASK)->where('parent')->eq($param)->fetch('id');
+                    if(!empty($parentTask)) return true;
 
                     $task = $this->loadModel('task')->getById($param);
                     if(!empty($this->config->score->extended->taskFinish['pri'][$task->pri])) $rule['score'] = $rule['score'] + $this->config->score->extended->taskFinish['pri'][$task->pri];
@@ -132,11 +132,12 @@ class scoreModel extends model
                     $desc      = $this->lang->score->methods[$module][$method] . ',' . $desc . 'ID:' . $param->id;
                     $objectID  = $param->id;
                     $timestamp = empty($time) ? time() : strtotime($time);
-
+                    //项目完成后，项目经理增加20个积分，项目成员增加5个积分。如果按期或者提前完成，项目经理额外增加10个积分，项目成员额外增加5个积分。
                     /* Project PM. */
                     if(!empty($param->PM))
                     {
-                        $rule['score'] = $param->end > date('Y-m-d', $timestamp) ? $this->config->score->extended->projectClose['manager']['in'] : $this->config->score->extended->projectClose['manager']['out'];
+                        $rule['score'] = $this->config->score->extended->projectClose['manager']['close'];
+                        if($param->end > date('Y-m-d', $timestamp)) $rule['score'] += $this->config->score->extended->projectClose['manager']['out'];
                         $this->saveScore($param->PM, $rule, $module, $method, $desc, $objectID, $time);
                     }
 
@@ -144,7 +145,8 @@ class scoreModel extends model
                     $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->eq($param->id)->fetchPairs();
                     if(!empty($teams))
                     {
-                        $rule['score'] = $param->end > date('Y-m-d', $timestamp) ? $this->config->score->extended->projectClose['member']['in'] : $this->config->score->extended->projectClose['member']['out'];
+                        $rule['score'] = $this->config->score->extended->projectClose['member']['close'];
+                        if($param->end > date('Y-m-d', $timestamp)) $rule['score'] += $this->config->score->extended->projectClose['member']['out'];
                         foreach($teams as $user)
                         {
                             if($user != $param->PM) $this->saveScore($user, $rule, $module, $method, $desc, $objectID, $time);

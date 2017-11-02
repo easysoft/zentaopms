@@ -57,6 +57,7 @@ $lang->score->methods['ajax']['submitPage']          = 'Change page number';
 $lang->score->methods['ajax']['quickJump']           = 'Quick jump';
 $lang->score->methods['ajax']['batchCreate']         = 'Batch create';
 $lang->score->methods['ajax']['batchEdit']           = 'Batch update';
+$lang->score->methods['ajax']['batchOther']          = 'Batch other';
 $lang->score->methods['doc']['create']               = 'Create doc';
 $lang->score->methods['todo']['create']              = 'Create todo';
 $lang->score->methods['story']['create']             = 'Create story';

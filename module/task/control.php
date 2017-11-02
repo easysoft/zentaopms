@@ -344,6 +344,7 @@ class task extends control
                     }
                 }
             }
+            $this->loadModel('score')->create('ajax', 'batchOther');
             die(js::locate($this->session->taskList, 'parent'));
         }
 
@@ -472,6 +473,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
                 $this->task->sendmail($taskID, $actionID);
             }
+            $this->loadModel('score')->create('ajax', 'batchOther');
         }
         die(js::reload('parent'));
     }
@@ -501,6 +503,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
                 $this->task->sendmail($taskID, $actionID);
             }
+            $this->loadModel('score')->create('ajax', 'batchOther');
             die(js::reload('parent'));
         }
     }
@@ -772,10 +775,19 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
+        $task    = $this->view->task;
+        $members = $this->loadModel('user')->getPairs('noletter');
+
+        if(!empty($task->team))
+        {
+            $task->openedBy = $this->task->getNextUser(array_keys($task->team), $task->assignedTo);
+            $members        = $this->task->getMemberPairs($task);
+        }
+
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
         $this->view->position[] = $this->lang->task->finish;
         $this->view->date       = strftime("%Y-%m-%d %X", strtotime('now'));
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->members    = $members;
        
         $this->display();
     }
@@ -959,6 +971,7 @@ class task extends control
                 $cancelURL  = $this->server->HTTP_REFERER;
                 die(js::confirm(sprintf($this->lang->task->error->skipClose, $skipTasks), $confirmURL, $cancelURL, 'self', 'parent'));
             }
+            $this->loadModel('score')->create('ajax', 'batchOther');
         }
         die(js::reload('parent'));
     }

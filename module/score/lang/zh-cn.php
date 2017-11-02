@@ -57,6 +57,7 @@ $lang->score->methods['ajax']['submitPage']          = '修改分页数量';
 $lang->score->methods['ajax']['quickJump']           = '使用快速跳转';
 $lang->score->methods['ajax']['batchCreate']         = '首次使用批量添加';
 $lang->score->methods['ajax']['batchEdit']           = '首次使用批量编辑';
+$lang->score->methods['ajax']['batchOther']          = '其它批量操作';
 $lang->score->methods['doc']['create']               = '创建文档';
 $lang->score->methods['todo']['create']              = '创建待办';
 $lang->score->methods['story']['create']             = '创建需求';

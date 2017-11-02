@@ -1830,6 +1830,7 @@ class project extends control
                 $this->project->unlinkStory($projectID, $storyID);
             }
         }
+        $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::locate($this->createLink('project', 'story', "projectID=$projectID")));
     }
 

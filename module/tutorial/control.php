@@ -52,11 +52,7 @@ class tutorial extends control
     {
         if($_POST && isset($_POST['finish'])) $finish = $_POST['finish'];
 
-        if($finish == 'keepAll')
-        {
-            $this->loadModel('score')->create('tutorial','keepAll');
-            $this->send(array('result' => 'fail', 'message' => $this->lang->tutorial->ajaxSetError));
-        }
+        if($finish == 'keepAll')  $this->send(array('result' => 'fail', 'message' => $this->lang->tutorial->ajaxSetError));
 
         $account = $this->app->user->account;
         $this->session->set('tutorialMode', false);
@@ -129,6 +125,7 @@ class tutorial extends control
      */
     public function ajaxSaveNovice($novice = 'true', $reload = 'false')
     {
+        if($novice == true) $this->loadModel('score')->create('tutorial','keepAll');
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', $novice == true ? 1 : 0);
         if($reload == 'true') die(js::reload('parent'));
     }

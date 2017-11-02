@@ -35,8 +35,9 @@ $config->score->ajax->customMenu        = array('times' => 1, 'hour' => 0, 'scor
 $config->score->ajax->quickJump         = array('times' => 1, 'hour' => 0, 'score' => 10);
 $config->score->ajax->batchCreate       = array('times' => 1, 'hour' => 0, 'score' => 20);
 $config->score->ajax->batchEdit         = array('times' => 1, 'hour' => 0, 'score' => 20);
+$config->score->ajax->batchOther        = array('times' => 1, 'hour' => 0, 'score' => 1);
 
-$config->score->doc->create = array('times' => 0, 'hour' => 0, 'score' => 1);
+$config->score->doc->create = array('times' => 0, 'hour' => 0, 'score' => 5);
 
 $config->score->todo->create = array('times' => 5, 'hour' => 24, 'score' => 1);
 
@@ -51,7 +52,7 @@ $config->score->bug->create         = array('times' => 0, 'hour' => 0, 'score' =
 $config->score->bug->confirmBug     = array('times' => 0, 'hour' => 0, 'score' => 1);
 $config->score->bug->createFormCase = array('times' => 0, 'hour' => 0, 'score' => 1);
 $config->score->bug->resolve        = array('times' => 0, 'hour' => 0, 'score' => 1);
-$config->score->bug->saveTplModal   = array('times' => 0, 'hour' => 0, 'score' => 20);
+$config->score->bug->saveTplModal   = array('times' => 1, 'hour' => 0, 'score' => 20);
 
 $config->score->testcase->create = array('times' => 0, 'hour' => 0, 'score' => 1);
 
@@ -73,7 +74,7 @@ $config->score->search->saveQueryAdvanced = array('times' => 1, 'hour' => 0, 'sc
 
 /* Extended rule. */
 $config->score->extended->changePassword = array('strength' => array(1 => 2, 2 => 5));
-$config->score->extended->projectClose   = array('manager' => array('in' => 20, 'out' => 10), 'member' => array('in' => 5, 'out' => 5));
+$config->score->extended->projectClose   = array('manager' => array('close' => 20, 'in' => 10), 'member' => array('close' => 5, 'in' => 5));
 $config->score->extended->bugResolve     = array('severity' => array(1 => 3, 2 => 2, 3 => 1));
 $config->score->extended->bugConfirmBug  = array('severity' => array(1 => 3, 2 => 2, 3 => 1));
 $config->score->extended->taskFinish     = array('pri' => array(1 => 2, 2 => 1, 3 => 0));

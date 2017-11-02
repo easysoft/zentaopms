@@ -15,7 +15,11 @@
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?> <strong><?php echo $task->id;?></strong></span>
-    <strong style='color: <?php echo $task->color; ?>'><?php echo isset($task->parentName) ? $task->parentName . '/' : '';?><?php echo $task->name;?></strong>
+    <strong style='color: <?php echo $task->color; ?>'>
+        <?php if(!empty($task->parent)) echo '<span class="label">'.$this->lang->task->childrenAB.'</span> ';?>
+        <?php if(!empty($task->team)) echo '<span class="label">'.$this->lang->task->multipleAB.'</span> ';?>
+        <?php echo isset($task->parentName) ? $task->parentName . '/' : '';?><?php echo $task->name;?>
+    </strong>
     <?php if($task->deleted):?>
     <span class='label label-danger'><?php echo $lang->task->deleted;?></span>
     <?php endif; ?>
@@ -31,7 +35,7 @@
     {
         ob_start();
         echo "<div class='btn-group'>";
-        common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'button', '', '', 'iframe', true);
+        common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', empty($task->team) ? $lang->task->assignTo : $lang->task->transmit);
         common::printIcon('task', 'start',          "taskID=$task->id", $task, 'button', '', '', 'iframe', true);
         common::printIcon('task', 'restart',        "taskID=$task->id", $task, 'button', '', '', 'iframe', true);
         common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'button', '', '', 'iframe', true);
@@ -219,7 +223,7 @@
           </tr>
           <?php endif;?>
           <tr>
-            <th><?php echo $lang->task->assignedTo;?></th>
+            <th><?php echo empty($task->team) ? $lang->task->assignTo : $lang->task->transmitTo;?></th>
             <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : '';?></td>
           </tr>
           <tr>

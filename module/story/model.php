@@ -497,6 +497,7 @@ class storyModel extends model
                     $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
                 }
             }
+            if($story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
             return common::createChanges($oldStory, $story);
         }
     }
@@ -603,6 +604,7 @@ class storyModel extends model
 
                 if(!dao::isError()) 
                 {
+                    if($story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
                     $allChanges[$storyID] = common::createChanges($oldStory, $story);
                 }
                 else

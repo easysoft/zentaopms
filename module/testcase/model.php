@@ -210,6 +210,7 @@ class testcaseModel extends model
                 }
 
                 $caseID   = $this->dao->lastInsertID();
+                $this->loadModel('score')->create('testcase', 'create', $caseID);
                 $actionID = $this->loadModel('action')->create('case', $caseID, 'Opened');
             }
             else

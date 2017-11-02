@@ -541,6 +541,7 @@ class bugModel extends model
 
         if(!dao::isError())
         {
+            if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
             return common::createChanges($oldBug, $bug);
         }
@@ -647,6 +648,7 @@ class bugModel extends model
 
                 if(!dao::isError())
                 {
+                    if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
                     $allChanges[$bugID] = common::createChanges($oldBug, $bug);
                 }
                 else

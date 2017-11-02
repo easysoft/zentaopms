@@ -91,6 +91,11 @@ function showSearchMenu(objectType, objectID, module, method, extra)
     if(!$toggle.hasClass('show')) return;
     var $menu = $toggle.find('#dropMenu');
     var uuid = $.zui.uuid();
+    if(!$.cookie('ajax_quickJump'))
+    {
+        $.cookie('ajax_quickJump', 'on', {expires: config.cookieLife, path: config.webRoot});
+        $.get(createLink('score', 'ajax', "method=quickJump"));
+    }
     if(!$menu.data('initData'))
     {
         var remoteUrl = createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra);
@@ -192,11 +197,6 @@ function showSearchMenu(objectType, objectID, module, method, extra)
     else
     {
         $menu.find('#search').focus();
-    }
-    if(!$.cookie('ajax_quickJump'))
-    {
-        $.cookie('ajax_quickJump', 'on', {expires: config.cookieLife, path: config.webRoot});
-        $.get(createLink('score', 'ajax', "method=quickJump"));
     }
 }
 

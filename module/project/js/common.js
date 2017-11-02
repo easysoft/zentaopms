@@ -179,15 +179,15 @@ $('.task-toggle').click(function()
 {
     var obj = $(this).find('i');
     var id  = $(this).data('id');
-    if(obj.hasClass('icon-plus'))
+    if(obj.hasClass('icon-double-angle-down'))
     {
         $('tr.parent-'+id).show();
-        obj.removeClass('icon-plus').addClass('icon-minus');
+        obj.removeClass('icon-double-angle-down').addClass('icon-double-angle-up');
     }
-    else if(obj.hasClass('icon-minus'))
+    else if(obj.hasClass('icon-double-angle-up'))
     {
         $('tr.parent-'+id).hide();
-        obj.removeClass('icon-minus').addClass('icon-plus');
+        obj.removeClass('icon-double-angle-up').addClass('icon-double-angle-down');
     }
     return false;
 });

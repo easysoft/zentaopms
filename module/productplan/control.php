@@ -124,6 +124,7 @@ class productplan extends control
                 $actionID = $this->action->create('productplan', $planID, 'Edited');
                 $this->action->logHistory($actionID, $change);
             }
+            $this->loadModel('score')->create('ajax', 'batchOther');
             die(js::locate(inlink('browse', "productID=$productID&branch=$branch"), 'parent'));
         }
         die(js::locate('back'));

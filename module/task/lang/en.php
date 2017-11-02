@@ -96,7 +96,8 @@ $lang->task->colorTag          = 'Color Tag';
 $lang->task->files             = 'Files';
 $lang->task->hasConsumed       = 'Consumed';
 $lang->task->multiple          = 'Multiple Tasks';
-$lang->task->multipleAB        = 'Multiple';
+$lang->task->multipleAB        = 'Multi';
+$lang->task->multipleABP       = 'Multiple';
 $lang->task->team              = 'Team';
 $lang->task->transmit          = 'Transfer';
 $lang->task->transmitTo        = 'Transfer To';
@@ -106,6 +107,7 @@ $lang->task->parent            = 'Parent Task';
 $lang->task->unfinished        = 'Unfinished';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
+$lang->task->deniedNotice      = 'This task only starting from <strong>% s </ strong>.';
 
 $lang->task->ditto         = 'Ditto';
 $lang->task->dittoNotice   = "This Task does not belong to the Project as the previous one does!";
@@ -175,6 +177,7 @@ $lang->task->error->left             = 'Please enter "Remained"';
 $lang->task->error->work             = '"Remark" must be less than %d characteres.';
 $lang->task->error->skipClose        = 'Task: %s is not“Done”or “Cancelled”. Confirm to close them?';
 $lang->task->error->consumed         = 'Task: %s man-hour must be more than 0. Ignore changes to this Task.';
+$lang->task->error->isFinish         = 'Has completed the task, do not repeat the submission.';
 
 /* 统计报表。*/
 $lang->task->report = new stdclass();

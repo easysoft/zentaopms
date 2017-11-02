@@ -419,6 +419,8 @@ class taskModel extends model
         if($this->post->story != false) $this->loadModel('story')->setStage($this->post->story);
         if(!dao::isError())
         {
+            if($task->status == 'done')  $this->loadModel('score')->create('task', 'finish', $taskID);
+            if($task->status == 'closed')  $this->loadModel('score')->create('task', 'close', $taskID);
             $this->file->updateObjectID($this->post->uid, $taskID, 'task');
             return common::createChanges($oldTask, $task);
         }
@@ -593,6 +595,9 @@ class taskModel extends model
             if($oldTask->story != false) $this->loadModel('story')->setStage($oldTask->story);
             if(!dao::isError())
             {
+                $this->countTime($oldTask->parent);
+                if($task->status == 'done')  $this->loadModel('score')->create('task', 'finish', $taskID);
+                if($task->status == 'closed')  $this->loadModel('score')->create('task', 'close', $taskID);
                 $allChanges[$taskID] = common::createChanges($oldTask, $task);
             }
             else
@@ -818,6 +823,24 @@ class taskModel extends model
             $data->assignedDate = $now;
         }
 
+
+        if(!empty($task->team))
+        {
+            if(in_array($this->app->user->account,array_keys($task->team)))
+            {
+                $myTeamInfo = $this->dao->select('`consumed`,`left`')->from(TABLE_TEAM)->where('task')->eq($taskID)->andWhere('account')->eq($this->app->user->account)->fetch();
+                if(!empty($myTeamInfo))
+                {
+                    $newTeamInfo           = new stdClass();
+                    $newTeamInfo->consumed = $myTeamInfo->consumed + $consumed;
+                    $newTeamInfo->left     = $left;
+                    $this->dao->update(TABLE_TEAM)->data($newTeamInfo)->where('task')->eq($taskID)->andWhere('account')->eq($this->app->user->account)->exec();
+                }
+            }
+
+            $data->left = $this->dao->select("sum(`left`) as leftTime")->from(TABLE_TEAM)->where('task')->eq((int)$taskID)->andWhere('account')->in(array_keys($task->team))->fetch('leftTime');
+        }
+
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($taskID)->exec();
 
         $oldTask = new stdClass();
@@ -833,7 +856,11 @@ class taskModel extends model
         if(!empty($actionID)) $this->action->logHistory($actionID, $changes);
         if($task->story) $this->loadModel('story')->setStage($task->story);
 
-        if($task->status == 'done') $this->parentStatus($task->parent, 'done');
+        if($task->status == 'done')
+        {
+            $this->parentStatus($task->parent, 'done');
+            $this->loadModel('score')->create('task', 'finish', $taskID);
+        }
         $this->countTime($task->parent);
 
         return $changes;
@@ -849,7 +876,8 @@ class taskModel extends model
     public function finish($taskID)
     {
         $oldTask = $this->getById($taskID);
-        $now  = helper::now();
+        $now     = helper::now();
+
         $task = fixer::input('post')
             ->setDefault('left', 0)
             ->setDefault('assignedTo',   $oldTask->openedBy)
@@ -859,10 +887,35 @@ class taskModel extends model
             ->setDefault('finishedDate, lastEditedDate', $now)
             ->remove('comment,files,labels')
             ->get();
-        if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
 
         if(!is_numeric($task->consumed)) die(js::error($this->lang->task->error->consumedNumber));
 
+        if(!empty($oldTask->team))
+        {
+            $teams = array_keys($oldTask->team);
+            if(in_array($this->app->user->account, $teams))
+            {
+                $myLeft = $this->dao->select("`left`")->from(TABLE_TEAM)->where('task')->eq((int)$taskID)->andWhere('account')->in($this->app->user->account)->fetch('left');
+                if($myLeft <= 0) die(js::error($this->lang->task->error->isFinish));
+
+                $data           = new stdClass();
+                $data->left     = 0;
+                $data->consumed = $task->consumed;
+                $this->dao->update(TABLE_TEAM)->data($data)->where('task')->eq((int)$taskID)->andWhere('account')->eq($this->app->user->account)->exec();
+
+                $left = $this->dao->select("sum(`left`) as leftTime")->from(TABLE_TEAM)->where('task')->eq((int)$taskID)->andWhere('account')->in($teams)->fetch('leftTime');
+
+                $newTask = new stdClass();
+                $newTask->left = $left;
+                $newTask->consumed = $oldTask->consumed + $task->consumed;
+                $newTask->assignedTo = $task->assignedTo;
+                $this->dao->update(TABLE_TASK)->data($newTask)->where('id')->eq((int)$taskID)->exec();
+
+                if($this->app->user->account != $teams[count($teams)]) return common::createChanges($oldTask, $newTask);
+            }
+        }
+
+        if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
         /* Record consumed and left. */
         $consumed = $task->consumed - $oldTask->consumed;
         if($consumed < 0) die(js::error($this->lang->task->error->consumedSmall));
@@ -885,7 +938,7 @@ class taskModel extends model
         $this->countTime($oldTask->parent);
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
-        $this->loadModel('score')->create('task', 'finish', $taskID);
+        if($task->status == 'done') $this->loadModel('score')->create('task', 'finish', $taskID);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -1901,8 +1954,7 @@ class taskModel extends model
             switch($id)
             {
             case 'id':
-                if($mode == 'table' && $child == false) echo "<input type='checkbox' name='taskIDList[{$task->id}]' value='{$task->id}'/> ";
-                if($mode == 'table' && $child) echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+                if($mode == 'table') echo "<input type='checkbox' name='taskIDList[{$task->id}]' value='{$task->id}'/> ";
                 echo $canView ? html::a($taskLink, sprintf('%03d', $task->id)) : sprintf('%03d', $task->id);
                 break;
             case 'pri':
@@ -1917,7 +1969,7 @@ class taskModel extends model
                 if(!empty($task->team)) echo '<span class="label">'.$this->lang->task->multipleAB.'</span> ';
                 echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color'") : "<span style='color: $task->color'>$task->name</span>";
                 if($task->fromBug) echo html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '_blank', "class='bug'");
-                if(!empty($task->children)) echo '<span class="task-toggle" data-id="'.$task->id.'">&nbsp;&nbsp;<i class="icon icon-minus"></i>&nbsp;&nbsp;</span>';
+                if(!empty($task->children)) echo '<span class="task-toggle" data-id="'.$task->id.'">&nbsp;&nbsp;<i class="icon icon-double-angle-up"></i>&nbsp;&nbsp;</span>';
                 break;
             case 'type':
                 echo $this->lang->task->typeList[$task->type];

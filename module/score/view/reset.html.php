@@ -21,8 +21,10 @@
   </div>
   <div class="alert alert-info with-icon hidden" id="score_loading">
     <i class="icon-info-sign"></i>
-    <p><?php echo $lang->score->resetTips; ?></p>
-    <p id="loading_content"></p>
+    <div class="content">
+      <p><?php echo $lang->score->resetTips; ?></p>
+      <p id="loading_content"></p>
+    </div>
   </div>
   <div class="alert alert-success with-icon hidden" id="score_finish">
     <i class="icon-ok-sign"></i>
