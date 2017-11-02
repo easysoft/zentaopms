@@ -42,7 +42,7 @@
       <th class='w-70px'><?php echo $lang->project->totalEstimate;?></th>
       <th class='w-70px'><?php echo $lang->project->totalConsumed;?></th>
       <th class='w-70px'><?php echo $lang->project->totalLeft;?></th>
-      <th class='w-150px'><?php echo $lang->project->progess;?></th>
+      <th class='w-150px'><?php echo $lang->project->progress;?></th>
       <th class='w-100px'><?php echo $lang->project->burn;?></th>
       <?php if($canOrder):?>
       <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->project->updateOrder);?></th>
