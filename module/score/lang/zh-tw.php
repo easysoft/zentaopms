@@ -81,6 +81,7 @@ $lang->score->methods['block']['set']                = '區塊自定義設置';
 $lang->score->methods['search']['saveQuery']         = '保存搜索條件';
 $lang->score->methods['search']['saveQueryAdvanced'] = '使用高級搜索';
 
+$lang->score->extended = new stdClass();
 $lang->score->extended->userchangePassword = '密碼強度中的，額外獲得#changePassword,strength,1#個積分，強的，額外獲得#changePassword,strength,2#個積分。';
 $lang->score->extended->projectclose       = '項目經理增加#projectClose,manager,close#個積分，項目成員增加#projectClose,member,close#個積分。按期或者提前完成，項目經理額外增加#projectClose,manager,in#個積分，項目成員額外增加#projectClose,member,in#個積分。';
 $lang->score->extended->bugresolve         = 'Bug解決後，額外增加嚴重程度積分：s1 + #bugResolve,severity,3#, s2 + #bugResolve,severity,2#, s3 + #bugResolve,severity,1#。';

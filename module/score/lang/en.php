@@ -80,6 +80,7 @@ $lang->score->methods['block']['set']                = 'Custom block';
 $lang->score->methods['search']['saveQuery']         = 'Save search query';
 $lang->score->methods['search']['saveQueryAdvanced'] = 'Advanced search';
 
+$lang->score->extended = new stdClass();
 $lang->score->extended->userchangePassword = 'Password strength,medium:add extra score : #changePassword,strength,1#; Strong:add extra score : #changePassword,strength,2#.';
 $lang->score->extended->projectclose       = 'Project closed,PM add extra score : #projectClose,manager,close#,Team member add extra score : #projectClose,member,close#. Completed on schedule or in advance,PM add extra score : #projectClose,manager,in#,Team member Add extra score : #projectClose,member,in#.';
 $lang->score->extended->bugresolve         = 'Bug resolved,Add extra severity score ：s1 + #bugResolve,severity,3#, s2 + #bugResolve,severity,2#, s3 + #bugResolve,severity,1#。';
