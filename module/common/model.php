@@ -1362,19 +1362,19 @@ class commonModel extends model
      */
     public function checkEntry()
     {
-        if(!$this->session->valid_entry)
+        if($this->session->valid_entry)
         {
-            if(!$this->session->entry_code) $this->response(340001);
-            if($this->session->valid_entry != md5(md5($this->get->code) . $this->server->remote_addr)) $this->response(340002);
+            if(!$this->session->entry_code) $this->response(341);
+            if($this->session->valid_entry != md5(md5($this->get->code) . $this->server->remote_addr)) $this->response(342);
             return true;
         }
 
-        if(!$this->get->code)  $this->response(300001);
-        if(!$this->get->token) $this->response(300002);
+        if(!$this->get->code)  $this->response(301);
+        if(!$this->get->token) $this->response(302);
 
         $entry = $this->loadModel('entry')->getByCode($this->get->code);
-        if(!$entry)      $this->response(310001);
-        if(!$entry->key) $this->response(310002);
+        if(!$entry)      $this->response(311);
+        if(!$entry->key) $this->response(312);
 
         $this->checkEntryIP($entry->ip);
         $this->checkEntryToken($entry->key);
@@ -1397,7 +1397,7 @@ class commonModel extends model
         $this->config->ipWhiteList = $ip;
         $result = $this->checkIP();
         $this->config->ipWhiteList = $ipWhiteList;
-        if(!$result) $this->response(320001);
+        if(!$result) $this->response(321);
     }
 
     /**
@@ -1412,7 +1412,7 @@ class commonModel extends model
         parse_str($this->server->query_String, $queryString);
         unset($queryString['token']);
         $queryString = http_build_query($queryString);
-        if($_GET['token'] != md5(md5($queryString) . $key)) $this->response(330001);
+        if($_GET['token'] != md5(md5($queryString) . $key)) $this->response(331);
     }
 
     /**
