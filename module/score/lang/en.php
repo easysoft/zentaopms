@@ -21,6 +21,8 @@ $lang->score->after   = 'After';
 $lang->score->time    = 'Time';
 $lang->score->desc    = 'Description';
 $lang->score->noLimit = 'No limited';
+$lang->score->times   = 'Times';
+$lang->score->hour    = 'Hour';
 
 $lang->score->models['task']        = 'Task';
 $lang->score->models['tutorial']    = 'Tutorial';

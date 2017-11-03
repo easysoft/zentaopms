@@ -13,11 +13,11 @@
   <table class="table table-striped">
     <thead>
     <tr>
-      <th class="w-150px">分类</th>
-      <th class="w-150px">动作</th>
-      <th class="w-150px">次数</th>
-      <th class="w-150px">间隔</th>
-      <th class="w-150px">分值</th>
+      <th class="w-150px"><?php echo $this->lang->score->module;?></th>
+      <th class="w-150px"><?php echo $this->lang->score->method;?></th>
+      <th class="w-150px"><?php echo $this->lang->score->times;?></th>
+      <th class="w-150px"><?php echo $this->lang->score->hour;?></th>
+      <th class="w-150px"><?php echo $this->lang->score->score;?></th>
       <th>备注</th>
     </tr>
     </thead>

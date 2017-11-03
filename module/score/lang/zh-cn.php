@@ -21,6 +21,8 @@ $lang->score->after   = '之后';
 $lang->score->time    = '时间';
 $lang->score->desc    = '描述';
 $lang->score->noLimit = '不限制';
+$lang->score->times   = '次数';
+$lang->score->hour    = '时间间隔';
 
 $lang->score->models['task']        = '任务';
 $lang->score->models['tutorial']    = '新手教程';
