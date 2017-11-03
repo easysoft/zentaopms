@@ -80,6 +80,7 @@ ALTER TABLE `zt_team` ADD PRIMARY KEY (`project`, `task`, `account`);
 ALTER TABLE `zt_user` ADD `score` INT(12)  NOT NULL  DEFAULT '0'  AFTER `deleted`;
 ALTER TABLE `zt_user` ADD `scoreLevel` INT(11)  NOT NULL  DEFAULT '0'  AFTER `score`;
 
+-- DROP TABLE IF EXISTS `zt_score`;
 CREATE TABLE `zt_score` (
   `id` bigint(12) unsigned NOT NULL AUTO_INCREMENT,
   `account` varchar(30) NOT NULL,

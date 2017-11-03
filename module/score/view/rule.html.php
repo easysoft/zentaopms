@@ -13,7 +13,7 @@
   <div id='titlebar'>
     <div class='heading'><?php echo $lang->my->scoreRule; ?></div>
     <div class='actions'>
-
+        <?php echo html::a($this->createLink('my', 'score'), $lang->score->common, '', "class='btn btn-primary'");?>
     </div>
   </div>
   <table class="table table-striped">
