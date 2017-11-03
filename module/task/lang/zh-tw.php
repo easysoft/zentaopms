@@ -107,7 +107,7 @@ $lang->task->parent            = '父任務';
 $lang->task->unfinished        = '未完成';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
-$lang->task->deniedNotice      = '此任務只允許由<strong>%s</strong>開始。';
+$lang->task->deniedNotice      = '此任務只允許由團隊第一人開始。';
 
 $lang->task->ditto         = '同上';
 $lang->task->dittoNotice   = "該任務與上一任務不屬於同一項目！";

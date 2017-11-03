@@ -15,6 +15,7 @@
     <div class='actions'>
       <span class='btn disabled'><label><?php echo $lang->score->current; ?>:</label><?php echo $user->score; ?></span>
       <span class='btn disabled hidden'><label><?php echo $lang->score->level; ?>:</label><?php echo $user->scoreLevel; ?></span>
+      <?php if($this->app->user->admin == 1) echo html::a($this->createLink('score', 'rule'), $lang->my->scoreRule, '', "class='btn btn-primary'");?>
     </div>
   </div>
   <table class='table tablesorter'>

@@ -106,7 +106,7 @@ $lang->task->childrenAB       = '子';
 $lang->task->parent           = '父任务';
 $lang->task->lblPri           = 'P';
 $lang->task->lblHour          = '(h)';
-$lang->task->deniedNotice     = '此任务只允许由<strong>%s</strong>开始。';
+$lang->task->deniedNotice     = '此任务只允许由团队第一人开始。';
 
 $lang->task->ditto         = '同上';
 $lang->task->dittoNotice   = "该任务与上一任务不属于同一项目！";

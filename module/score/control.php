@@ -24,6 +24,18 @@ class score extends control
     }
 
     /**
+     * Show score rule.
+     *
+     * @access public
+     * @return void
+     */
+    public function rule()
+    {
+        $this->view->rule = $this->config->score;
+        $this->display();
+    }
+
+    /**
      * Initialize score.
      *
      * @param int $lastID

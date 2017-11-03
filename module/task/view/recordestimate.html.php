@@ -54,7 +54,8 @@
       </tr>
       <?php endforeach;?>
       <?php endif;?>
-      <?php if($task->status == 'wait' or $task->status =='pause' or $task->status == 'doing'):?>
+      <?php if(in_array($task->status, array('wait', 'pause', 'doing'))):?>
+      <?php if(empty($task->team) || (!empty($task->team) && $task->assignedTo == $this->app->user->account)) :?>
       <thead>
         <tr class='text-center'>
           <th class="w-id"><?php echo $lang->idAB;?></th>
@@ -79,6 +80,7 @@
         <td colspan='6' class='text-center'><?php echo html::submitButton() . html::backButton();?></td>
       </tr>
     </table>
+    <?php endif;?>
     <?php endif;?>
   </form>
 </div>
