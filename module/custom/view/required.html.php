@@ -16,7 +16,8 @@
     <?php 
     foreach($config->custom->requiredModules as $requiredModule)
     {
-        echo "<li class='list-group-item' id='{$requiredModule}Tab'>" . html::a(inlink('required', "module=$requiredModule"), $lang->$requiredModule->common) . "</li>";
+        $requiredModuleName = zget($lang->custom->moduleName, $requiredModule, $lang->$requiredModule->common);
+        echo "<li class='list-group-item' id='{$requiredModule}Tab'>" . html::a(inlink('required', "module=$requiredModule"), $requiredModuleName) . "</li>";
     }
     ?>
   </div>
@@ -32,17 +33,19 @@
         <tr>
           <th class='w-100px'>
           <?php
-          $fieldList = $fields;
+          $fields = $this->custom->getDBFields($moduleName, $method);
+
           if($moduleName == 'testsuite' and $method == 'createlib')  $method = 'createLib';
           if($moduleName == 'testsuite' and $method == 'createcase')
           {
-              $fieldList = $caseFields;
-              $method    = 'createCase';
+              $this->app->loadLang('testcase');
+              $fields = $this->custom->getDBFields('testcase', $method);
+              $method = 'createCase';
           }
           echo $lang->$moduleName->$method;
           ?>
           </th>
-          <td><?php echo html::select("requiredFields[{$method}][]", $fieldList, $requiredField, "class='form-control chosen' multiple");?></td>
+          <td><?php echo html::select("requiredFields[{$method}][]", $fields, $requiredField, "class='form-control chosen' multiple");?></td>
           <td></td>
         </tr>
         <?php endforeach;?>

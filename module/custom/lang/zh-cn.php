@@ -126,3 +126,7 @@ $lang->custom->saveFail = '保存失败！';
 
 $lang->custom->scoreList[0] = '关闭';
 $lang->custom->scoreList[1] = '开启';
+
+$lang->custom->moduleName['product']     = $lang->productCommon;
+$lang->custom->moduleName['productplan'] = '计划';
+$lang->custom->moduleName['project']     = $lang->projectCommon;

@@ -486,7 +486,9 @@ class testsuite extends control
     {
         if(!empty($_POST))
         {
-            $caseResult = $this->loadModel('testcase')->create($bugID = 0);
+            $this->loadModel('testcase');
+            $this->config->testcase->create->requiredFields = $this->config->testsuite->createcase->requiredFields;
+            $caseResult = $this->testcase->create($bugID = 0);
             if(!$caseResult or dao::isError()) die(js::error(dao::getError()));
 
             $caseID = $caseResult['id'];
