@@ -126,3 +126,7 @@ $lang->custom->saveFail = 'Failed to save!';
 
 $lang->custom->scoreList[0] = 'Off';
 $lang->custom->scoreList[1] = 'On';
+
+$lang->custom->moduleName['product']     = $lang->productCommon;
+$lang->custom->moduleName['productplan'] = 'Plan';
+$lang->custom->moduleName['project']     = $lang->projectCommon;

@@ -800,6 +800,12 @@ class bugModel extends model
      */
     public function resolve($bugID)
     {
+        if(strpos($this->config->bug->resolve->requiredFields, 'comment') !== false and !$this->post->comment)
+        {
+            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
+            return false;
+        }
+
         $now    = helper::now();
         $oldBug = $this->getById($bugID);
         $bug    = fixer::input('post')

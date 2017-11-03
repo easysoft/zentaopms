@@ -78,7 +78,7 @@ table th.col-closed {width:14%}
 .board-story.stage-tested     {color:#827717; background-color: #F9FBE7}
 .board-story.stage-released   {color:#9C27B0; background-color: #F3E5F5}
 
-.board-story.inverse {background: #dd7503}
+.board-story.inverse {background: #dd7503; color:#f1f1f1}
 .board-story.stage-projected.inverse  {background-color:#777;}
 .board-story.stage-developing.inverse {background-color:#D2322D;}
 .board-story.stage-developed.inverse  {background-color:#229F24;}

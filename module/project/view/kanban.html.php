@@ -54,18 +54,9 @@ $account = $this->app->user->account
           <div class='actions'>
             <div class="dropdown">
               <button type="button" class="btn btn-mini btn-link dropdown-toggle" data-toggle="dropdown">
-                <span class="icon-ellipsis-v"></span>
+                <span class="icon-ellipsis-h"></span>
               </button>
               <ul class="dropdown-menu pull-right">
-                <?php
-                echo "<li class='dropdown-submenu'>";
-                echo "<a href='###'><i class='icon-group'></i> {$lang->project->groups['']}</a>";
-                echo "<ul class='dropdown-menu pull-left' style='width:105px'>";
-                echo "<li>" . html::a(inlink('kanban', "project=$projectID&type=story"), $lang->project->groups['story']) . "</li>";
-                echo "<li>" . html::a(inlink('kanban', "project=$projectID&type=assignedTo"), $lang->project->groups['assignedTo']) . "</li>";
-                echo "<li>" . html::a(inlink('kanban', "project=$projectID&type=finishedBy"), $lang->project->groups['finishedBy']) . "</li>";
-                echo "</ul></li>";
-                ?>
                 <?php echo '<li>' . html::a($this->createLink('project', 'ajaxKanbanSetting', "projectID=$projectID"), "<i class='icon-cog'></i> " .  $lang->project->kanbanSetting, '', "class='iframe'") . '</li>';?>
                 <?php if(common::hasPriv('project', 'printKanban')) echo '<li>' . html::a('###', "<i class='icon-print'></i> " .  $lang->project->printKanban, '', "id='printKanban' title='" . $lang->project->printKanban . "'") . '</li>';?>
               </ul>
@@ -102,7 +93,7 @@ $account = $this->app->user->account
                 <button type='button' class='btn btn-mini btn-link btn-info-toggle'><i class='icon-angle-down'></i></button>
                 <div class='dropdown'>
                   <button type='button' class='btn btn-mini btn-link dropdown-toggle' data-toggle='dropdown'>
-                    <span class='icon-ellipsis-v'></span>
+                    <span class='icon-ellipsis-h'></span>
                   </button>
                   <div class='dropdown-menu' style='left:-30px;width:80px'>
                     <?php
@@ -152,7 +143,7 @@ $account = $this->app->user->account
                 <button type='button' class='btn btn-mini btn-link btn-info-toggle'><i class='icon-angle-down'></i></button>
                 <div class='dropdown'>
                   <button type='button' class='btn btn-mini btn-link dropdown-toggle' data-toggle='dropdown'>
-                    <span class='icon-ellipsis-v'></span>
+                    <span class='icon-ellipsis-h'></span>
                   </button>
                   <div class='dropdown-menu' style='left:-15px'>
                     <?php
@@ -193,7 +184,7 @@ $account = $this->app->user->account
                 <button type='button' class='btn btn-mini btn-link btn-info-toggle'><i class='icon-angle-down'></i></button>
                 <div class='dropdown'>
                   <button type='button' class='btn btn-mini btn-link dropdown-toggle' data-toggle='dropdown'>
-                    <span class='icon-ellipsis-v'></span>
+                    <span class='icon-ellipsis-h'></span>
                   </button>
                   <div class='dropdown-menu' style='left:-15px'>
                     <?php

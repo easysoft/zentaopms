@@ -612,7 +612,7 @@ class testsuiteModel extends model
             $cases[$key] = $caseData;
         }
 
-        $forceReview = $this->testcase->forceReview();
+        $forceNotReview = $this->testcase->forceNotReview();
         foreach($cases as $key => $caseData)
         {
             if(!empty($_POST['id'][$key]) and empty($_POST['insert']))
@@ -667,7 +667,7 @@ class testsuiteModel extends model
                 {
                     $caseData->lastEditedBy   = $this->app->user->account;
                     $caseData->lastEditedDate = $now;
-                    if($stepChanged and $forceReview) $caseData->status = 'wait';
+                    if($stepChanged and !$forceNotReview) $caseData->status = 'wait';
                     $this->dao->update(TABLE_CASE)->data($caseData)->where('id')->eq($caseID)->autoCheck()->exec();
                     if($stepChanged)
                     {
@@ -700,7 +700,7 @@ class testsuiteModel extends model
                 $caseData->version    = 1;
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;
-                $caseData->status     = $forceReview ? 'wait' : 'normal';
+                $caseData->status     = $forceNotReview ? 'normal' : 'wait';
                 $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
 
                 if(!dao::isError())
@@ -768,7 +768,7 @@ class testsuiteModel extends model
             $cases->pri[$i]    = $pri;
         }
 
-        $forceReview = $this->testcase->forceReview();
+        $forceNotReview = $this->testcase->forceNotReview();
         for($i = 0; $i < $batchNum; $i++)
         {
             if($cases->type[$i] != '' and $cases->title[$i] != '')
@@ -785,7 +785,7 @@ class testsuiteModel extends model
                 $data[$i]->keywords     = $cases->keywords[$i];
                 $data[$i]->openedBy     = $this->app->user->account;
                 $data[$i]->openedDate   = $now;
-                $data[$i]->status       = $forceReview ? 'wait' : 'normal';
+                $data[$i]->status       = $forceNotReview ? 'normal' : 'wait';
                 $data[$i]->version      = 1;
 
                 $this->dao->insert(TABLE_CASE)->data($data[$i])

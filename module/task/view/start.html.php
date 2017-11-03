@@ -15,10 +15,10 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('confirmFinish', $lang->task->confirmFinish);?>
 <?php if(!empty($task->team) && array_keys($task->team)[0] != $this->app->user->account):?>
-  <div class="alert alert-info with-icon">
+  <div class="alert with-icon">
     <i class="icon-info-sign"></i>
     <div class="content">
-      <p><?php echo sprintf($lang->task->deniedNotice, array_keys($task->team)[0]);?></p>
+      <p><?php echo $lang->task->deniedNotice;?></p>
     </div>
   </div>
     <?php exit;?>

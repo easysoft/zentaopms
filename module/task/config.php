@@ -10,7 +10,6 @@ $config->task->activate = new stdclass();
 
 $config->task->create->requiredFields      = 'name,type';
 $config->task->edit->requiredFields        = $config->task->create->requiredFields;
-$config->task->start->requiredFields       = 'estimate';
 $config->task->finish->requiredFields      = 'consumed';
 $config->task->activate->requiredFields    = 'left';
 

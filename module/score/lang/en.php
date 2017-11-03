@@ -20,7 +20,9 @@ $lang->score->score   = 'Score';
 $lang->score->after   = 'After';
 $lang->score->time    = 'Time';
 $lang->score->desc    = 'Description';
-
+$lang->score->noLimit = 'No limited';
+$lang->score->times   = 'Times';
+$lang->score->hour    = 'Hour';
 
 $lang->score->models['task']        = 'Task';
 $lang->score->models['tutorial']    = 'Tutorial';
@@ -42,7 +44,7 @@ $lang->score->models['search']      = 'Search';
 $lang->score->methods['task']['create']              = 'Create task';
 $lang->score->methods['task']['close']               = 'Close task';
 $lang->score->methods['task']['finish']              = 'Finish task';
-$lang->score->methods['tutorial']['keepAll']         = 'Finish tutorial';
+$lang->score->methods['tutorial']['finish']          = 'Finish tutorial';
 $lang->score->methods['user']['login']               = 'Login';
 $lang->score->methods['user']['changePassword']      = 'Change password';
 $lang->score->methods['user']['editProfile']         = 'Edit profile';
@@ -77,3 +79,11 @@ $lang->score->methods['release']['create']           = 'Create release';
 $lang->score->methods['block']['set']                = 'Custom block';
 $lang->score->methods['search']['saveQuery']         = 'Save search query';
 $lang->score->methods['search']['saveQueryAdvanced'] = 'Advanced search';
+
+$lang->score->extended = new stdClass();
+$lang->score->extended->userchangePassword = 'Password strength,medium:add extra score : #changePassword,strength,1#; Strong:add extra score : #changePassword,strength,2#.';
+$lang->score->extended->projectclose       = 'Project closed,PM add extra score : #projectClose,manager,close#,Team member add extra score : #projectClose,member,close#. Completed on schedule or in advance,PM add extra score : #projectClose,manager,in#,Team member Add extra score : #projectClose,member,in#.';
+$lang->score->extended->bugresolve         = 'Bug resolved,Add extra severity score ：s1 + #bugResolve,severity,3#, s2 + #bugResolve,severity,2#, s3 + #bugResolve,severity,1#。';
+$lang->score->extended->bugconfirmBug      = 'Bug confirmed,Add extra severity score ：s1 + #bugConfirmBug,severity,3#, s2 + #bugConfirmBug,severity,2#, s3 + #bugConfirmBug,severity,1#。';
+$lang->score->extended->taskfinish         = 'Task finished, Add extra score round(consumed /10 * estimate / consumed) + severity score(p1 #taskFinish,pri,1#, p2, #taskFinish,pri,2#)。';
+$lang->score->extended->storyclose         = 'Add extra score for story creator : #storyClose,createID#.';

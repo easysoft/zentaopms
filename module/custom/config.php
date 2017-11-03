@@ -9,8 +9,6 @@ $config->custom->canAdd['todo']     = 'priList,typeList';
 $config->custom->canAdd['user']     = 'roleList';
 $config->custom->canAdd['block']    = '';
 
-$config->custom->requiredModules[10] = 'todo';
-
 $config->custom->requiredModules[15] = 'product';
 $config->custom->requiredModules[20] = 'story';
 $config->custom->requiredModules[25] = 'productplan';
@@ -28,20 +26,32 @@ $config->custom->requiredModules[70] = 'testtask';
 
 $config->custom->requiredModules[75] = 'doc';
 
-$config->custom->requiredModules[80] = 'group';
 $config->custom->requiredModules[85] = 'user';
 
-$config->custom->requiredModules[95]  = 'entry';
-$config->custom->requiredModules[100] = 'webhook';
-
-$config->custom->fieldList['group'] = 'name,desc';
-
-$config->custom->excludeFieldList['product']    = 'order';
-$config->custom->excludeFieldList['story']      = 'version,duplicateStory,linkStories,childStories,toBug,fromBug';
-$config->custom->excludeFieldList['project']    = 'order';
-$config->custom->excludeFieldList['task']       = 'fromBug';
-$config->custom->excludeFieldList['bug']        = 'storyVersion,toTask,toStory,hardware,found,confirmed,activatedCount,activatedDate,linkBug,case,caseVersion,result,testtask,repo';
-$config->custom->excludeFieldList['testcase']   = 'version,lastRunResult,lastRunDate,lastRunner,linkCase,fromBug';
-$config->custom->excludeFieldList['testreport'] = 'objectType';
-$config->custom->excludeFieldList['doc']        = 'version';
-$config->custom->excludeFieldList['user']       = 'ranzhi,visits,ip,last';
+$config->custom->fieldList['product']['create']      = 'name,code,line,PO,QD,RD,type,desc';
+$config->custom->fieldList['product']['edit']        = 'name,code,line,PO,QD,RD,type,desc,status';
+$config->custom->fieldList['story']['create']        = 'product,plan,source,sourceNote,title,pri,estimate,mailto,keywords,spec,verify';
+$config->custom->fieldList['story']['change']        = 'title,spec,verify,comment';
+$config->custom->fieldList['story']['close']         = 'closedReason,comment';
+$config->custom->fieldList['story']['review']        = 'reviewedDate,assignedTo,reviewedBy,comment';
+$config->custom->fieldList['productplan']            = 'title,begin,end,desc';
+$config->custom->fieldList['release']                = 'name,build,date,desc';
+$config->custom->fieldList['project']['create']      = 'name,code,begin,end,days,type,desc';
+$config->custom->fieldList['project']['edit']        = 'name,code,begin,end,days,type,desc,PO,PM,QD,RD';
+$config->custom->fieldList['task']['create']         = 'type,story,name,pri,estimate,desc,estStarted,deadline,mailto';
+$config->custom->fieldList['task']['edit']           = 'type,assignedTo,story,name,pri,estimate,desc,estStarted,deadline,mailto';
+$config->custom->fieldList['task']['finish']         = 'consumed,finishedDate,comment';
+$config->custom->fieldList['task']['activate']       = 'assignedTo,left,comment';
+$config->custom->fieldList['build']                  = 'product,name,builder,date,scmPath,filePath,desc';
+$config->custom->fieldList['bug']['create']          = 'product,project,openedBuild,assignedTo,deadline,type,os,browser,title,severity,pri,steps,story,task,mailto,keywords';
+$config->custom->fieldList['bug']['edit']            = 'product,plan,project,openedBuild,assignedTo,deadline,type,os,browser,title,severity,pri,steps,story,task,mailto,keywords,status';
+$config->custom->fieldList['bug']['resolve']         = 'resolution,resolvedBuild,resolvedDate,assignedTo,comment';
+$config->custom->fieldList['testcase']['create']     = 'product,type,stage,story,title,pri,precondition,keywords';
+$config->custom->fieldList['testcase']['edit']       = 'product,type,stage,story,title,pri,precondition,keywords,status';
+$config->custom->fieldList['testsuite']              = 'name,desc';
+$config->custom->fieldList['testcase']['createcase'] = 'lib,type,stage,title,pri,precondition,keywords';
+$config->custom->fieldList['testreport']             = 'begin,end,owner,members,title,report';
+$config->custom->fieldList['testtask']               = 'project,build,,owner,pri,begin,end,status,name,desc';
+$config->custom->fieldList['doc']                    = 'title,keywords,content';
+$config->custom->fieldList['user']['create']         = 'dept,account,realname,password,password1,password2,role,email,commiter,join';
+$config->custom->fieldList['user']['edit']           = 'dept,account,realname,role,email,commiter,join,skype,qq,mobile,phone,address,zipcode,wangwang,gtalk';

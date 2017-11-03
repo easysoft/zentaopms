@@ -259,19 +259,11 @@ class custom extends control
             unset($requiredFields['editLib']);
         }
 
-        $fields = $this->custom->getDBFields($moduleName);
-        if($moduleName == 'testsuite')
-        {
-            $this->app->loadLang('testcase');
-            $this->view->caseFields = $this->custom->getDBFields('testcase');
-        }
-
         $this->view->title      = $this->lang->custom->required;
         $this->view->position[] = $this->lang->custom->required;
 
         $this->view->requiredFields = $requiredFields;
         $this->view->moduleName     = $moduleName;
-        $this->view->fields         = $fields;
         $this->display();
     }
 

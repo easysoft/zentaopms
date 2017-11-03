@@ -16,7 +16,7 @@
     <strong><small class='text-muted'></small> <?php echo $lang->bug->common . $lang->colon . $lang->bug->batchActivate;?></strong>
   </div>
 </div>
-<form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchActivate', "productID=$productID");?>">
+<form class='form-condensed' method='post' target='hiddenwin'>
   <table class='table table-fixed with-border'>
     <thead>
       <tr>
