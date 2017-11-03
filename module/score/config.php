@@ -22,7 +22,7 @@ $config->score->user->login          = array('times' => 3, 'hour' => 24, 'score'
 $config->score->user->changePassword = array('times' => 1, 'hour' => 0,  'score' => 10);
 $config->score->user->editProfile    = array('times' => 1, 'hour' => 0,  'score' => 10);
 
-$config->score->tutorial->keepAll = array('times' => 1, 'hour' => 0, 'score' => 100);
+$config->score->tutorial->finish = array('times' => 1, 'hour' => 0, 'score' => 100);
 
 $config->score->ajax->selectTheme       = array('times' => 1, 'hour' => 0, 'score' => 10);
 $config->score->ajax->selectLang        = array('times' => 1, 'hour' => 0, 'score' => 10);
