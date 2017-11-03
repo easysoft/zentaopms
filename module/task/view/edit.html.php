@@ -35,7 +35,7 @@
         <div class='input-group'>
           <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->task->colorTag ?>' value='<?php echo $task->color ?>' data-update-text='.task-title, #name'>
           <?php echo html::input('name', $task->name, 'class="form-control" autocomplete="off" placeholder="' . $lang->task->name . '"');?>
-          <?php if(empty($task->children) and empty($task->parent)):?>
+          <?php if(empty($task->children) and empty($task->parent) and $task->type != 'affair'):?>
           <span class='input-group-addon'>
             <label class='checkbox-inline'>
               <input type='checkBox' name='multiple' value='1' <?php echo empty($task->team) ? '' : 'checked' ?> />
