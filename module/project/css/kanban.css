@@ -61,8 +61,8 @@ table th.col-closed {width:14%}
 .story-pri.pri-3 {background-color:#b56a00;}
 .story-pri.pri-4 {background-color:#795523;}
 
-.board {background: #333; color: #f1f1f1; outline: 1px solid rgba(0,0,0,.1); outline-offset: -1px;}
-.board:hover {outline: 1px solid rgba(0,0,0,.3); color:#fff}
+.board {background: #333; color: #f1f1f1; outline-offset: -1px;}
+.board:hover {color:#fff}
 .board-bug-cancel, .board-task-cancel {background: #333;   }
 .board-bug-wait, .board-task-wait     {background: #2b529c;}
 .board-task-pause                     {background: #E48600;}

@@ -16,3 +16,4 @@ a.removeModule{color:#ddd}
 a.removeModule:hover{color:red}
 
 tbody > tr > td > .btn-icon {margin-right: 3px;}
+#productStoryForm{overflow-y:auto;}

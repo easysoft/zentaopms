@@ -26,6 +26,7 @@ $(document).ready(function()
     if(browseType == 'bysearch') ajaxGetSearchForm();
     setTimeout(function(){fixedTfootAction('#batchForm')}, 100);
     setTimeout(function(){fixedTheadOfList('#caseList')}, 100);
+    if($('#caseList thead th.w-title').width() < 150) $('#caseList thead th.w-title').width(150);
 
     $('.dropdown-menu .with-search .menu-search').click(function(e)
     {

@@ -20,6 +20,8 @@ $(function()
             $option.toggleClass('hide', $option.text().toString().toLowerCase().indexOf(val) < 0 && $option.data('key').toString().toLowerCase().indexOf(val) < 0);
         });
     });
+
+    if($('#taskList thead th.w-name').width() < 150) $('#taskList thead th.w-name').width(150);
 });
 
 function setQueryBar(queryID, title)
