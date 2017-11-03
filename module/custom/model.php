@@ -410,28 +410,12 @@ class customModel extends model
         if(isset($customFields[$moduleName]))
         {
             $fieldList = isset($customFields[$moduleName][$method]) ? $customFields[$moduleName][$method] : $customFields[$moduleName];
+            if(!is_string($fieldList)) return $fields;
+
             foreach(explode(',', $fieldList) as $fieldName)
             {
+                if($fieldName == 'comment') $fields[$fieldName] = $this->lang->comment;
                 if(isset($moduleLang->$fieldName) and is_string($moduleLang->$fieldName)) $fields[$fieldName] = $moduleLang->$fieldName;
-            }
-        }
-        else
-        {
-            $table  = zget($this->config->objectTables, $moduleName, '');
-            if($table)
-            {
-                $excludeFieldList = zget($this->config->custom->excludeFieldList, $moduleName, '');
-                foreach($this->dao->query("DESC $table")->fetchAll() as $field)
-                {
-                    $fieldName = $field->Field;
-                    if($fieldName == 'id' or $fieldName == 'deleted') continue;
-                    if($fieldName == 'openedBy' or $fieldName == 'createdBy' or $fieldName == 'addedBy') continue;
-                    if($fieldName == 'openedDate' or $fieldName == 'createdDate' or $fieldName == 'addedDate') continue;
-                    if($fieldName == 'lastEditedBy' or $fieldName == 'editedBy') continue;
-                    if($fieldName == 'lastEditedDate' or $fieldName == 'editedDate') continue;
-                    if(isset($excludeFieldList) and strpos(",{$excludeFieldList},", ",$fieldName,") !== false) continue;
-                    if(isset($moduleLang->$fieldName) and is_string($moduleLang->$fieldName)) $fields[$fieldName] = $moduleLang->$fieldName;
-                }
             }
         }
         return $fields;

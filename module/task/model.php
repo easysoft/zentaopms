@@ -28,11 +28,11 @@ class taskModel extends model
         $task = fixer::input('post')
             ->add('project', (int)$projectID)
             ->setDefault('estimate, left, story', 0)
-            ->setDefault('estStarted', '0000-00-00')
-            ->setDefault('deadline', '0000-00-00')
             ->setDefault('status', 'wait')
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
+            ->setIF(strpos($this->config->task->create->requiredFields, 'estStarted') === false, 'estStarted', '0000-00-00')
+            ->setIF(strpos($this->config->task->create->requiredFields, 'deadline') === false, 'deadline', '0000-00-00')
             ->setDefault('openedBy',   $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
@@ -313,7 +313,8 @@ class taskModel extends model
         $now  = helper::now();
         $task = fixer::input('post')
             ->setDefault('story, estimate, left, consumed', 0)
-            ->setDefault('deadline', '0000-00-00')
+            ->setIF(strpos($this->config->task->edit->requiredFields, 'estStarted') === false, 'estStarted', '0000-00-00')
+            ->setIF(strpos($this->config->task->edit->requiredFields, 'deadline') === false, 'deadline', '0000-00-00')
             ->setIF($this->post->story != false and $this->post->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
 
             ->setIF($this->post->status == 'done', 'left', 0)
@@ -911,6 +912,12 @@ class taskModel extends model
         $oldTask = $this->getById($taskID);
         $now     = helper::now();
 
+        if(strpos($this->config->task->finish->requiredFields, 'comment') !== false and !$this->post->comment)
+        {
+            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
+            return false;
+        }
+
         $task = fixer::input('post')
             ->setDefault('left', 0)
             ->setDefault('assignedTo',   $oldTask->openedBy)
@@ -963,7 +970,7 @@ class taskModel extends model
 
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
-            ->check('consumed', 'notempty')
+            ->batchCheck($this->config->task->finish->requiredFields, 'notempty')
             ->where('id')->eq((int)$taskID)->exec();
 
         if($task->status == 'done') $this->parentStatus($oldTask->parent, 'done');
@@ -1066,6 +1073,12 @@ class taskModel extends model
      */
     public function activate($taskID)
     {
+        if(strpos($this->config->task->activate->requiredFields, 'comment') !== false and !$this->post->comment)
+        {
+            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
+            return false;
+        }
+
         $oldTask = $this->getById($taskID);
         $task = fixer::input('post')
             ->setDefault('left', 0)
@@ -1078,7 +1091,7 @@ class taskModel extends model
 
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
-            ->check('left', 'notempty')
+            ->batchCheck($this->config->task->activate->requiredFields, 'notempty')
             ->where('id')->eq((int)$taskID)->exec();
 
         $this->countTime($oldTask->parent);
