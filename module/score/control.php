@@ -10,6 +10,21 @@
 class score extends control
 {
     /**
+     * score constructor.
+     *
+     * @param string $module
+     * @param string $method
+     *
+     * @access public
+     * @return mixed
+     */
+    public function __construct($module = '', $method = '')
+    {
+        parent::__construct($module, $method);
+        $this->loadModel('my')->setMenu();
+    }
+
+    /**
      * Ajax action score.
      * javascript use : $.get(createLink('score', 'ajax', "method=method"));
      *
