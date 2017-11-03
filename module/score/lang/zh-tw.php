@@ -20,7 +20,9 @@ $lang->score->score   = '分值';
 $lang->score->after   = '之後';
 $lang->score->time    = '時間';
 $lang->score->desc    = '描述';
-
+$lang->score->noLimit = '不限制';
+$lang->score->times   = '次数';
+$lang->score->hour    = '时间间隔';
 
 $lang->score->models['task']        = '任務';
 $lang->score->models['tutorial']    = '新手教程';
@@ -78,3 +80,10 @@ $lang->score->methods['release']['create']           = '創建發布';
 $lang->score->methods['block']['set']                = '區塊自定義設置';
 $lang->score->methods['search']['saveQuery']         = '保存搜索條件';
 $lang->score->methods['search']['saveQueryAdvanced'] = '使用高級搜索';
+
+$lang->score->extended->userchangePassword = '密碼強度中的，額外獲得#changePassword,strength,1#個積分，強的，額外獲得#changePassword,strength,2#個積分。';
+$lang->score->extended->projectclose       = '項目經理增加#projectClose,manager,close#個積分，項目成員增加#projectClose,member,close#個積分。按期或者提前完成，項目經理額外增加#projectClose,manager,in#個積分，項目成員額外增加#projectClose,member,in#個積分。';
+$lang->score->extended->bugresolve         = 'Bug解決後，額外增加嚴重程度積分：s1 + #bugResolve,severity,3#, s2 + #bugResolve,severity,2#, s3 + #bugResolve,severity,1#。';
+$lang->score->extended->bugconfirmBug      = 'Bug確認後，額外增加嚴重程度積分：s1 + #bugConfirmBug,severity,3#, s2 + #bugConfirmBug,severity,2#, s3 + #bugConfirmBug,severity,1#。';
+$lang->score->extended->taskfinish         = '額外增加工時積分 round(工時/ 10 * 預計/消耗) + 優先級積分(p1 #taskFinish,pri,1#, p2, #taskFinish,pri,2#)。';
+$lang->score->extended->storyclose         = '需要的創建者額外增加#storyClose,createID#分';

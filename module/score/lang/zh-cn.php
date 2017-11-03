@@ -20,7 +20,9 @@ $lang->score->score   = '分值';
 $lang->score->after   = '之后';
 $lang->score->time    = '时间';
 $lang->score->desc    = '描述';
-
+$lang->score->noLimit = '不限制';
+$lang->score->times   = '次数';
+$lang->score->hour    = '时间间隔';
 
 $lang->score->models['task']        = '任务';
 $lang->score->models['tutorial']    = '新手教程';
@@ -77,3 +79,10 @@ $lang->score->methods['release']['create']           = '创建发布';
 $lang->score->methods['block']['set']                = '区块自定义设置';
 $lang->score->methods['search']['saveQuery']         = '保存搜索条件';
 $lang->score->methods['search']['saveQueryAdvanced'] = '使用高级搜索';
+
+$lang->score->extended->userchangePassword = '密码强度中的，额外获得#changePassword,strength,1#个积分，强的，额外获得#changePassword,strength,2#个积分。';
+$lang->score->extended->projectclose       = '项目经理增加#projectClose,manager,close#个积分，项目成员增加#projectClose,member,close#个积分。按期或者提前完成，项目经理额外增加#projectClose,manager,in#个积分，项目成员额外增加#projectClose,member,in#个积分。';
+$lang->score->extended->bugresolve         = 'Bug解决后，额外增加严重程度积分：s1 + #bugResolve,severity,3#, s2 + #bugResolve,severity,2#, s3 + #bugResolve,severity,1#。';
+$lang->score->extended->bugconfirmBug      = 'Bug确认后，额外增加严重程度积分：s1 + #bugConfirmBug,severity,3#, s2 + #bugConfirmBug,severity,2#, s3 + #bugConfirmBug,severity,1#。';
+$lang->score->extended->taskfinish         = '额外增加工时积分 round(工时 /10 * 预计 / 消耗) + 优先级积分(p1 #taskFinish,pri,1#, p2, #taskFinish,pri,2#)。';
+$lang->score->extended->storyclose         = '需求的创建者额外增加#storyClose,createID#分';

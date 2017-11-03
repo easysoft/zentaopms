@@ -687,6 +687,7 @@ class taskModel extends model
             ->setDefault('lastEditedDate', $now)
             ->setIF($oldTask->assignedTo != $this->app->user->account, 'assignedDate', $now)
             ->remove('comment')->get();
+
         if($this->post->left == 0)
         {
             $task->status       = 'done';
@@ -706,6 +707,27 @@ class taskModel extends model
             ->remove('realStarted,comment')->get();
         $estimate->consumed = $estimate->consumed - $oldTask->consumed;
         $this->addTaskEstimate($estimate);
+
+        if(!empty($oldTask->team) && $task->status == 'done')
+        {
+            $teams = array_keys($oldTask->team);
+            if(empty($oldTask->assignedTo)) $oldTask->assignedTo = $teams[0];
+
+            $newTeamInfo           = new stdClass();
+            $newTeamInfo->consumed = $task->consumed;
+            $newTeamInfo->left     = 0;
+            $this->dao->update(TABLE_TEAM)->data($newTeamInfo)->where('task')->eq($taskID)->andWhere('account')->eq($oldTask->assignedTo)->exec();
+
+            $newTask               = new stdClass();
+            $newTask->left         = 0;
+            $newTask->status       = 'doing';
+            $newTask->consumed     = $task->consumed;
+            $newTask->assignedTo   = $this->getNextUser($teams, $oldTask->assignedTo);
+            $newTask->assignedDate = $now;
+            $this->dao->update(TABLE_TASK)->data($newTask)->where('id')->eq((int)$taskID)->exec();
+
+            if($task->assignedTo != $teams[count($teams) - 1]) return common::createChanges($oldTask, $newTask);
+        }
 
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
@@ -826,22 +848,31 @@ class taskModel extends model
             $data->assignedDate = $now;
         }
 
-
         if(!empty($task->team))
         {
-            if(in_array($this->app->user->account,array_keys($task->team)))
-            {
-                $myTeamInfo = $this->dao->select('`consumed`,`left`')->from(TABLE_TEAM)->where('task')->eq($taskID)->andWhere('account')->eq($this->app->user->account)->fetch();
-                if(!empty($myTeamInfo))
-                {
-                    $newTeamInfo           = new stdClass();
-                    $newTeamInfo->consumed = $myTeamInfo->consumed + $consumed;
-                    $newTeamInfo->left     = $left;
-                    $this->dao->update(TABLE_TEAM)->data($newTeamInfo)->where('task')->eq($taskID)->andWhere('account')->eq($this->app->user->account)->exec();
-                }
-            }
+            $teams = array_keys($task->team);
 
-            $data->left = $this->dao->select("sum(`left`) as leftTime")->from(TABLE_TEAM)->where('task')->eq((int)$taskID)->andWhere('account')->in(array_keys($task->team))->fetch('leftTime');
+            $myConsumed = $this->dao->select('`consumed`')->from(TABLE_TEAM)->where('task')->eq($taskID)->andWhere('account')->eq($task->assignedTo)->fetch('consumed');
+
+            $newTeamInfo           = new stdClass();
+            $newTeamInfo->consumed = $myConsumed + $consumed;
+            $newTeamInfo->left     = $left;
+            $this->dao->update(TABLE_TEAM)->data($newTeamInfo)->where('task')->eq($taskID)->andWhere('account')->eq($task->assignedTo)->exec();
+
+            $teamTime = $this->dao->select("sum(`consumed`) as consumed,sum(`left`) as leftTime")->from(TABLE_TEAM)->where('task')->eq((int)$taskID)->andWhere('account')->in($teams)->fetch();
+            $data->consumed = $teamTime->consumed;
+            $data->left     = $teamTime->leftTime;
+
+            if($task->status == 'done')
+            {
+                $newTask             = new stdClass();
+                $newTask->left       = $data->left;
+                $newTask->consumed   = $data->consumed;
+                $newTask->assignedTo = $this->getNextUser($teams, $task->assignedTo);
+                $this->dao->update(TABLE_TASK)->data($newTask)->where('id')->eq((int)$taskID)->exec();
+
+                if($task->assignedTo != $teams[count($teams) - 1]) return common::createChanges($task, $newTask);
+            }
         }
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($taskID)->exec();
@@ -902,26 +933,25 @@ class taskModel extends model
         if(!empty($oldTask->team))
         {
             $teams = array_keys($oldTask->team);
-            if(in_array($this->app->user->account, $teams))
-            {
-                $myLeft = $this->dao->select("`left`")->from(TABLE_TEAM)->where('task')->eq((int)$taskID)->andWhere('account')->in($this->app->user->account)->fetch('left');
-                if($myLeft <= 0) die(js::error($this->lang->task->error->isFinish));
 
-                $data           = new stdClass();
-                $data->left     = 0;
-                $data->consumed = $task->consumed;
-                $this->dao->update(TABLE_TEAM)->data($data)->where('task')->eq((int)$taskID)->andWhere('account')->eq($this->app->user->account)->exec();
+            $myConsumed = $this->dao->select("`consumed`")->from(TABLE_TEAM)->where('task')->eq((int)$taskID)->andWhere('account')->eq($oldTask->assignedTo)->fetch('consumed');
+            if($task->consumed < $myConsumed) die(js::error($this->lang->task->error->consumedSmall));
 
-                $left = $this->dao->select("sum(`left`) as leftTime")->from(TABLE_TEAM)->where('task')->eq((int)$taskID)->andWhere('account')->in($teams)->fetch('leftTime');
+            $data           = new stdClass();
+            $data->left     = 0;
+            $data->consumed = $task->consumed;
+            $this->dao->update(TABLE_TEAM)->data($data)->where('task')->eq((int)$taskID)->andWhere('account')->eq($oldTask->assignedTo)->exec();
 
-                $newTask = new stdClass();
-                $newTask->left = $left;
-                $newTask->consumed = $oldTask->consumed + $task->consumed;
-                $newTask->assignedTo = $task->assignedTo;
-                $this->dao->update(TABLE_TASK)->data($newTask)->where('id')->eq((int)$taskID)->exec();
+            $myTime = $this->dao->select("sum(`left`) as leftTime,sum(`consumed`) as consumed")->from(TABLE_TEAM)->where('task')->eq((int)$taskID)->andWhere('account')->in($teams)->fetch();
 
-                if($this->app->user->account != $teams[count($teams)]) return common::createChanges($oldTask, $newTask);
-            }
+            $newTask             = new stdClass();
+            $newTask->left       = $myTime->leftTime;
+            $newTask->consumed   = $myTime->consumed;
+            $newTask->assignedTo = $task->assignedTo;
+            $this->dao->update(TABLE_TASK)->data($newTask)->where('id')->eq((int)$taskID)->exec();
+
+            if($oldTask->assignedTo != $teams[count($teams) - 1]) return common::createChanges($oldTask, $newTask);
+            $task->consumed = $myTime->consumed;
         }
 
         if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
