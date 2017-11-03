@@ -2139,13 +2139,8 @@ class project extends control
             $data = fixer::input('post')->get();
             if(common::hasPriv('project', 'kanbanHideCols'))
             {
-                $allCols = array();
-                if(isset($this->config->project->kanbanSetting->allCols))
-                {
-                    $allCols = json_decode($this->config->project->kanbanSetting->allCols, true);
-                }
-                $allCols[$projectID] = $data->allCols;
-                $this->setting->setItem("system.project.kanbanSetting.allCols", json_encode($allCols));
+                $allCols = $data->allCols;
+                $this->setting->setItem("system.project.kanbanSetting.allCols", $allCols);
             }
 
             $account = $this->app->user->account;
