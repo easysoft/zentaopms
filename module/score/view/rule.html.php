@@ -10,6 +10,12 @@
  */
 ?>
 <?php include '../../common/view/header.html.php'; ?>
+  <div id='titlebar'>
+    <div class='heading'><?php echo $lang->my->scoreRule; ?></div>
+    <div class='actions'>
+
+    </div>
+  </div>
   <table class="table table-striped">
     <thead>
     <tr>
