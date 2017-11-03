@@ -16,3 +16,4 @@
 
 tbody > tr > td > .btn-icon {margin-right: 3px;}
 tbody > tr > td   .icon-bug {margin-left: -8px;}
+#batchForm{overflow-y:auto;}
