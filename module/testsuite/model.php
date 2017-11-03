@@ -700,7 +700,7 @@ class testsuiteModel extends model
                 $caseData->version    = 1;
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;
-                $caseData->status     = $forceNotReview ? 'wait' : 'normal';
+                $caseData->status     = $forceNotReview ? 'normal' : 'wait';
                 $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
 
                 if(!dao::isError())

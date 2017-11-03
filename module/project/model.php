@@ -2243,16 +2243,9 @@ class projectModel extends model
     {
         $allCols    = '1';
         $showOption = '0';
-        if(isset($this->config->project->kanbanSetting->allCols))
-        {
-            $allColPairs = json_decode($this->config->project->kanbanSetting->allCols, true);
-            if(isset($allColPairs[$projectID])) $allCols = $allColPairs[$projectID];
-        }
+        if(isset($this->config->project->kanbanSetting->allCols)) $allCols = $this->config->project->kanbanSetting->allCols;
 
-        if(isset($this->config->project->kanbanSetting->showOption))
-        {
-            $showOption = $this->config->project->kanbanSetting->showOption;
-        }
+        if(isset($this->config->project->kanbanSetting->showOption)) $showOption = $this->config->project->kanbanSetting->showOption;
 
         $colorList = $this->config->project->kanbanSetting->colorList;
         if(!is_array($colorList)) $colorList = json_decode($colorList, true);
