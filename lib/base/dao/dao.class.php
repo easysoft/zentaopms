@@ -829,7 +829,7 @@ class baseDAO
         $sql   = $this->processSQL();
         $table = $this->table;
         $key   = md5($sql . $keyField);
-        if(isset(dao::$cache[$table]['fetchAll'][$key]) and dao::$cache[$table]['fetchAll'][$key]['time'] <= time() - $this->cacheTimeout)
+        if(isset(dao::$cache[$table]['fetchAll'][$key]['data']) and dao::$cache[$table]['fetchAll'][$key]['time'] <= time() - $this->cacheTimeout)
         {
             $rows   = dao::$cache[$table]['fetchAll'][$key]['data'];
             $result = array();
@@ -849,12 +849,13 @@ class baseDAO
         }
 
         $rows = array();
-        dao::$cache[$table]['fetchAll'][$key]['time'] = time();
         while($row = $stmt->fetch())
         {
             dao::$cache[$table]['fetchAll'][$key]['data'][$row->$keyField] = $row;
             $rows[$row->$keyField] = $this->getRow($row);
         }
+        if(isset(dao::$cache[$table]['fetchAll'][$key]['data'])) dao::$cache[$table]['fetchAll'][$key]['time'] = time();
+            
         return $rows;
     }
 
