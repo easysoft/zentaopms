@@ -71,7 +71,6 @@ class tutorial extends control
     {
         $this->session->set('tutorialMode', false);
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', 0);
-
         if(empty($referer)) $referer = $this->createLink('index');
         die(js::locate(helper::safe64Decode($referer), 'parent'));
     }
