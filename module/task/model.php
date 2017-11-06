@@ -74,7 +74,7 @@ class taskModel extends model
                 {
                     $firstMember        = reset($teams);
                     $task->assignedTo   = $firstMember->account;
-                    $task->assignedDate = helper::today();
+                    $task->assignedDate = helper::now();
                     $task->estimate     = $estimate;
                     $task->left         = $left;
                 }
@@ -865,10 +865,11 @@ class taskModel extends model
 
             if($task->status == 'done')
             {
-                $newTask             = new stdClass();
-                $newTask->left       = $data->left;
-                $newTask->consumed   = $data->consumed;
-                $newTask->assignedTo = $this->getNextUser($teams, $task->assignedTo);
+                $newTask               = new stdClass();
+                $newTask->left         = $data->left;
+                $newTask->consumed     = $data->consumed;
+                $newTask->assignedTo   = $this->getNextUser($teams, $task->assignedTo);
+                $newTask->assignedDate = $now;
                 $this->dao->update(TABLE_TASK)->data($newTask)->where('id')->eq((int)$taskID)->exec();
 
                 if($task->assignedTo != $teams[count($teams) - 1]) return common::createChanges($task, $newTask);
@@ -944,10 +945,11 @@ class taskModel extends model
 
             $myTime = $this->dao->select("sum(`left`) as leftTime,sum(`consumed`) as consumed")->from(TABLE_TEAM)->where('task')->eq((int)$taskID)->andWhere('account')->in($teams)->fetch();
 
-            $newTask             = new stdClass();
-            $newTask->left       = $myTime->leftTime;
-            $newTask->consumed   = $myTime->consumed;
-            $newTask->assignedTo = $task->assignedTo;
+            $newTask               = new stdClass();
+            $newTask->left         = $myTime->leftTime;
+            $newTask->consumed     = $myTime->consumed;
+            $newTask->assignedTo   = $task->assignedTo;
+            $newTask->assignedDate = $now;
             $this->dao->update(TABLE_TASK)->data($newTask)->where('id')->eq((int)$taskID)->exec();
 
             if($oldTask->assignedTo != $teams[count($teams) - 1]) return common::createChanges($oldTask, $newTask);
