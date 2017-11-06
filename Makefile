@@ -21,13 +21,13 @@ pms:
 	cp -fr lib zentaopms/
 	cp -fr module zentaopms/
 	cp -fr www zentaopms && rm -fr zentaopms/www/data/ && mkdir -p zentaopms/www/data/upload
-	cp -fr tmp zentaopms
+	mkdir zentaopms/tmp
+	mkdir zentaopms/tmp/cache/ 
+	mkdir zentaopms/tmp/extension/
+	mkdir zentaopms/tmp/log/
+	mkdir zentaopms/tmp/model/
 	mv zentaopms/www/install.php.tmp zentaopms/www/install.php
 	mv zentaopms/www/upgrade.php.tmp zentaopms/www/upgrade.php
-	rm -fr zentaopms/tmp/cache/* 
-	rm -fr zentaopms/tmp/extension/*
-	rm -fr zentaopms/tmp/log/*
-	rm -fr zentaopms/tmp/model/*
 	cp VERSION zentaopms/
 	# combine js and css files.
 	cp -fr tools zentaopms/tools && cd zentaopms/tools/ && php ./minifyfront.php
@@ -79,7 +79,7 @@ rpm:
 patchphpdoc:
 	sudo cp misc/doc/phpdoc/*.tpl /usr/share/php/data/PhpDocumentor/phpDocumentor/Converters/HTML/frames/templates/phphtmllib/templates/
 phpdoc:
-	phpdoc -d bin,framework,config,lib,module,www -t api -o HTML:frames:phphtmllib -ti ZenTaoPMSAPI≤Œøº ÷≤· -s on -pp on -i *test*
-	phpdoc -d bin,framework,config,lib,module,www -t api.chm -o chm:default:default -ti ZenTaoPMSAPI≤Œøº ÷≤· -s on -pp on -i *test*
+	phpdoc -d bin,framework,config,lib,module,www -t api -o HTML:frames:phphtmllib -ti ZenTaoPMSAPIÂèÇËÄÉÊâãÂÜå -s on -pp on -i *test*
+	phpdoc -d bin,framework,config,lib,module,www -t api.chm -o chm:default:default -ti ZenTaoPMSAPIÂèÇËÄÉÊâãÂÜå -s on -pp on -i *test*
 doxygen:
 	doxygen doc/doxygen/doxygen.conf

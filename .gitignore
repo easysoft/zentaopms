@@ -6,7 +6,6 @@ www/ok.txt
 tools/*
 release/*
 tmp/*
-tmp/extensions/*
 tmp/log/*
 tmp/model/*
 tmp/cache/*
@@ -16,4 +15,3 @@ tmp/extension/*
 .idea
 .gitignore
 .DS_Store
-framework/
