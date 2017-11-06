@@ -42,7 +42,7 @@ $lang->testtask->totalStatus      = "全部";
 $lang->testtask->all              = "全部" . $lang->productCommon;
 
 $lang->testtask->id             = '编号';
-$lang->testtask->common         = '测试版本';
+$lang->testtask->common         = '测试单';
 $lang->testtask->product        = '所属' . $lang->productCommon;
 $lang->testtask->project        = '所属' . $lang->projectCommon;
 $lang->testtask->build          = '版本';
