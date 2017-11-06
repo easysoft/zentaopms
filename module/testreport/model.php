@@ -89,6 +89,7 @@ class testreportModel extends model
             ->join('members', ',')
             ->remove('files,labels,uid')
             ->get();
+        $data->members = trim($data->members, ',');
 
         $data = $this->loadModel('file')->processImgURL($data, $this->config->testreport->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TESTREPORT)->data($data)->autocheck()
@@ -122,6 +123,8 @@ class testreportModel extends model
             ->join('members', ',')
             ->remove('files,labels,uid')
             ->get();
+        $data->members = trim($data->members, ',');
+
         $data = $this->loadModel('file')->processImgURL($data, $this->config->testreport->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTREPORT)->data($data)->autocheck()
              ->batchCheck($this->config->testreport->edit->requiredFields, 'notempty')
