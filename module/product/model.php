@@ -302,7 +302,7 @@ class productModel extends model
             ->get();
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
-            ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
+            ->batchCheck($this->config->product->create->requiredFields, 'notempty')
             ->check('name', 'unique', "deleted = '0'")
             ->check('code', 'unique', "deleted = '0'")
             ->exec();
@@ -342,7 +342,7 @@ class productModel extends model
             ->get();
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
-            ->batchCheck('name,code', 'notempty')
+            ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
             ->check('name', 'unique', "id != $productID and deleted = '0'")
             ->check('code', 'unique', "id != $productID and deleted = '0'")
             ->where('id')->eq($productID)
