@@ -53,5 +53,5 @@ $config->custom->fieldList['testcase']['createcase'] = 'lib,type,stage,title,pri
 $config->custom->fieldList['testreport']             = 'begin,end,owner,members,title,report';
 $config->custom->fieldList['testtask']               = 'project,build,,owner,pri,begin,end,status,name,desc';
 $config->custom->fieldList['doc']                    = 'title,keywords,content';
-$config->custom->fieldList['user']['create']         = 'dept,account,realname,password,password1,password2,role,email,commiter,join';
-$config->custom->fieldList['user']['edit']           = 'dept,account,realname,role,email,commiter,join,skype,qq,mobile,phone,address,zipcode,wangwang,gtalk';
+$config->custom->fieldList['user']['create']         = 'dept,account,realname,password,password1,password2,role,email,commiter';
+$config->custom->fieldList['user']['edit']           = 'dept,account,realname,role,email,commiter,skype,qq,mobile,phone,address,zipcode,wangwang,gtalk';

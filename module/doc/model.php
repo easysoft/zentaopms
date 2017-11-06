@@ -414,12 +414,11 @@ class docModel extends model
         $docContent->type    = $doc->contentType;
         $docContent->version = 1;
         if($doc->contentType == 'markdown') $docContent->content = str_replace('&gt;', '>', $docContent->content);
-        unset($doc->content);
         unset($doc->contentMarkdown);
         unset($doc->contentType);
         unset($doc->url);
 
-        $this->dao->insert(TABLE_DOC)->data($doc)->autoCheck()
+        $this->dao->insert(TABLE_DOC)->data($doc, 'content')->autoCheck()
             ->batchCheck($this->config->doc->create->requiredFields, 'notempty')
             ->exec();
         if(!dao::isError())
@@ -501,10 +500,9 @@ class docModel extends model
             $docContent->files   = trim($docContent->files, ',');
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
         }
-        unset($doc->content);
         unset($doc->contentType);
 
-        $this->dao->update(TABLE_DOC)->data($doc)
+        $this->dao->update(TABLE_DOC)->data($doc, 'content')
             ->autoCheck()
             ->batchCheck($this->config->doc->edit->requiredFields, 'notempty')
             ->where('id')->eq((int)$docID)
