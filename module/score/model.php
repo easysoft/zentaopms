@@ -137,7 +137,7 @@ class scoreModel extends model
                     if(!empty($param->PM))
                     {
                         $rule['score'] = $this->config->score->extended->projectClose['manager']['close'];
-                        if($param->end > date('Y-m-d', $timestamp)) $rule['score'] += $this->config->score->extended->projectClose['manager']['out'];
+                        if($param->end > date('Y-m-d', $timestamp)) $rule['score'] += $this->config->score->extended->projectClose['manager']['in'];
                         $this->saveScore($param->PM, $rule, $module, $method, $desc, $objectID, $time);
                     }
 
@@ -146,7 +146,7 @@ class scoreModel extends model
                     if(!empty($teams))
                     {
                         $rule['score'] = $this->config->score->extended->projectClose['member']['close'];
-                        if($param->end > date('Y-m-d', $timestamp)) $rule['score'] += $this->config->score->extended->projectClose['member']['out'];
+                        if($param->end > date('Y-m-d', $timestamp)) $rule['score'] += $this->config->score->extended->projectClose['member']['in'];
                         foreach($teams as $user)
                         {
                             if($user != $param->PM) $this->saveScore($user, $rule, $module, $method, $desc, $objectID, $time);
