@@ -137,7 +137,6 @@ $(function()
             $modal.addClass('in');
             $modalBack.addClass('in');
         }, 10);
-        $.getJSON(createLink('tutorial', 'ajaxQuit'));
     };
 
     var hideModal = function()
