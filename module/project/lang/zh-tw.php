@@ -52,12 +52,15 @@ $lang->project->other         = '其他：';
 $lang->project->deleted       = '已刪除';
 $lang->project->delayed       = '已延期';
 $lang->project->product       = $lang->project->products;
+$lang->project->readjustTime  = '調整項目起止時間';
+$lang->project->readjustTask  = '順延任務的起止時間';
 
 $lang->project->start    = '開始';
 $lang->project->activate = '激活';
 $lang->project->putoff   = '延期';
 $lang->project->suspend  = '掛起';
 $lang->project->close    = '關閉';
+$lang->project->export   = '導出';
 
 $lang->project->typeList['sprint']    = "短期$lang->projectCommon";
 $lang->project->typeList['waterfall'] = "長期$lang->projectCommon";
@@ -132,6 +135,8 @@ $lang->project->importTask       = '轉入任務';
 $lang->project->importBug        = '導入Bug';
 $lang->project->updateOrder      = '排序';
 $lang->project->tree             = '樹狀圖';
+$lang->project->storyKanban      = '需求看板';
+$lang->project->storySort        = '需求排序';
 
 /* 分組瀏覽。*/
 $lang->project->allTasks             = '所有';
@@ -235,16 +240,27 @@ $lang->project->placeholder->totalLeft = '項目開始時的總預計工時';
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->done = '(已結束)';
 
+$lang->project->orderList['order_asc']  = "需求排序正序";
+$lang->project->orderList['order_desc'] = "需求排序倒序";
 $lang->project->orderList['pri_asc']    = "需求優先順序正序";
 $lang->project->orderList['pri_desc']   = "需求優先順序倒序";
-$lang->project->orderList['id_asc']     = "需求ID正序";
-$lang->project->orderList['id_desc']    = "需求ID倒序";
 $lang->project->orderList['stage_asc']  = "需求階段正序";
 $lang->project->orderList['stage_desc'] = "需求階段倒序";
 
-$lang->project->kanban      = "看板";
-$lang->project->printKanban = "打印看板";
-$lang->project->bugList     = "Bug列表";
+$lang->project->kanban        = "看板";
+$lang->project->kanbanSetting = "看板設置";
+$lang->project->resetKanban   = "恢復預設";
+$lang->project->printKanban   = "打印看板";
+$lang->project->bugList       = "Bug列表";
+
+$lang->project->kanbanHideCols   = '看板隱藏已關閉、已取消列';
+$lang->project->kanbanShowOption = '顯示摺疊信息';
+$lang->project->kanbanColsColor  = '看板列自定義顏色';
+
+$lang->kanbanSetting = new stdclass();
+$lang->kanbanSetting->noticeReset     = '是否恢復看板預設設置？';
+$lang->kanbanSetting->optionList['0'] = '隱藏';
+$lang->kanbanSetting->optionList['1'] = '顯示';
 
 $lang->printKanban = new stdclass();
 $lang->printKanban->common  = '看板打印';

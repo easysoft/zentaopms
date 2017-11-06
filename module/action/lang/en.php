@@ -73,6 +73,8 @@ $lang->action->objectTypes['module']      = 'Module';
 $lang->action->objectTypes['testsuite']   = 'Suite';
 $lang->action->objectTypes['caselib']     = 'Library';
 $lang->action->objectTypes['testreport']  = 'Report';
+$lang->action->objectTypes['entry']       = 'Entry';
+$lang->action->objectTypes['webhook']     = 'Webhook';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -172,7 +174,7 @@ $lang->action->label->editestimate        = 'Edited Man-Hour';
 $lang->action->label->canceled            = 'Cancelled';
 $lang->action->label->finished            = 'Finished';
 $lang->action->label->paused              = 'Paused';
-$lang->action->label->paused              = 'Verified';
+$lang->action->label->verified            = 'Verified';
 $lang->action->label->delayed             = 'Delayed';
 $lang->action->label->suspended           = 'Suspended';
 $lang->action->label->login               = 'Login';
@@ -199,6 +201,8 @@ $lang->action->label->doclib      = 'Doc Lib|doc|browse|libID=%s';
 $lang->action->label->doc         = 'Document|doc|view|docID=%s';
 $lang->action->label->user        = 'User|user|view|account=%s';
 $lang->action->label->testreport  = 'Report|testreport|view|report=%s';
+$lang->action->label->entry       = 'Entry|entry|browse|';
+$lang->action->label->webhook     = 'Webhook|webhook|browse|';
 $lang->action->label->space       = ' ';
 
 /* Object type. */

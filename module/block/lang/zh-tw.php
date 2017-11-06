@@ -280,10 +280,12 @@ $lang->block->typeList->story['closedBy']   = '由我關閉';
 $lang->block->typeList->product['noclosed'] = '未關閉';
 $lang->block->typeList->product['closed']   = '已關閉';
 $lang->block->typeList->product['all']      = '全部';
+$lang->block->typeList->product['involved'] = '我參與的';
 
-$lang->block->typeList->project['undone']  = '未完成';
-$lang->block->typeList->project['isdoing'] = '進行中';
-$lang->block->typeList->project['all']     = '全部';
+$lang->block->typeList->project['undone']   = '未完成';
+$lang->block->typeList->project['isdoing']  = '進行中';
+$lang->block->typeList->project['all']      = '全部';
+$lang->block->typeList->project['involved'] = '我參與的';
 
 $lang->block->typeList->testtask['wait']    = '待測版本';
 $lang->block->typeList->testtask['doing']   = '測試中版本';
