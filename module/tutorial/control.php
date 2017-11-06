@@ -85,7 +85,6 @@ class tutorial extends control
     {
         $this->session->set('tutorialMode', false);
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', 0);
-        $this->loadModel('score')->create('tutorial', 'finish');
         die(json_encode(array('result' => 'success')));
     }
 
@@ -128,5 +127,17 @@ class tutorial extends control
     {
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', $novice == true ? 1 : 0);
         if($reload == 'true') die(js::reload('parent'));
+    }
+
+    /**
+     * Ajax save tutorial score.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxFinish()
+    {
+        define('TUTORIAL', false);
+        $this->loadModel('score')->create('tutorial', 'finish');
     }
 }
