@@ -189,6 +189,7 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('9.5'));
             case '9_5_1':
                 $this->execSQL($this->getUpgradeFile('9.5.1'));
+                $this->initProjectStoryOrder();
         }
 
         $this->deletePatch();
