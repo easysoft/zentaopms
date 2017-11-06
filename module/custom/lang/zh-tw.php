@@ -13,6 +13,8 @@ $lang->custom->owner      = '所有者';
 $lang->custom->module     = '模組';
 $lang->custom->section    = '附加部分';
 $lang->custom->lang       = '所屬語言';
+$lang->custom->setPublic  = '設為公共';
+$lang->custom->required   = '必填項';
 $lang->custom->score      = '積分';
 $lang->custom->scoreReset = '重置積分';
 
@@ -123,4 +125,8 @@ $lang->custom->menuTip  = '點擊顯示或隱藏導航條目，拖拽來更改�
 $lang->custom->saveFail = '保存失敗！';
 
 $lang->custom->scoreList[0] = '關閉';
-$lang->custom->scoreList[1] = '開啓';
+$lang->custom->scoreList[1] = '開啟';
+
+$lang->custom->moduleName['product']     = $lang->productCommon;
+$lang->custom->moduleName['productplan'] = '計劃';
+$lang->custom->moduleName['project']     = $lang->projectCommon;
