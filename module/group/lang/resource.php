@@ -144,6 +144,7 @@ $lang->resource->product->close       = 'close';
 $lang->resource->product->updateOrder = 'updateOrder';
 $lang->resource->product->all         = 'all';
 $lang->resource->product->build       = 'build';
+$lang->resource->product->export      = 'export';
 
 $lang->product->methodOrder[0]  = 'index';
 $lang->product->methodOrder[5]  = 'browse';
@@ -160,6 +161,7 @@ $lang->product->methodOrder[60] = 'close';
 $lang->product->methodOrder[65] = 'updateOrder';
 $lang->product->methodOrder[70] = 'all';
 $lang->product->methodOrder[75] = 'build';
+$lang->product->methodOrder[80] = 'export';
 
 /* Branch. */
 $lang->resource->branch = new stdclass();
@@ -325,6 +327,9 @@ $lang->resource->project->tree             = 'tree';
 $lang->resource->project->all              = 'all';
 $lang->resource->project->kanbanHideCols   = 'kanbanHideCols';
 $lang->resource->project->kanbanColsColor  = 'kanbanColsColor';
+$lang->resource->project->export           = 'export';
+$lang->resource->project->storyKanban      = 'storyKanban';
+$lang->resource->project->storySort        = 'storySort';
 
 $lang->project->methodOrder[0]   = 'index';
 $lang->project->methodOrder[5]   = 'view';
@@ -366,6 +371,9 @@ $lang->project->methodOrder[185] = 'tree';
 $lang->project->methodOrder[190] = 'all';
 $lang->project->methodOrder[195] = 'kanbanHideCols';
 $lang->project->methodOrder[200] = 'kanbanColsColor';
+$lang->project->methodOrder[205] = 'export';
+$lang->project->methodOrder[210] = 'storyKanban';
+$lang->project->methodOrder[215] = 'storySort';
 
 /* Task. */
 $lang->resource->task = new stdclass();
@@ -1342,6 +1350,10 @@ $lang->changelog['9.5'][] = 'bug-batchActivate';
 
 $lang->changelog['9.6'][] = 'custom-setPublic';
 $lang->changelog['9.6'][] = 'datatable-setGlobal';
+$lang->changelog['9.6'][] = 'product-export';
+$lang->changelog['9.6'][] = 'project-export';
+$lang->changelog['9.6'][] = 'project-storyKanban';
+$lang->changelog['9.6'][] = 'project-storySort';
 
 global $config;
 if($config->global->flow != 'full')

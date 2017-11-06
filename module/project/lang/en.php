@@ -135,6 +135,8 @@ $lang->project->importTask       = 'Import Task';
 $lang->project->importBug        = 'Import Bug';
 $lang->project->updateOrder      = 'Order';
 $lang->project->tree             = 'Tree';
+$lang->project->storyKanban      = 'Story Kanban';
+$lang->project->storySort        = 'Story Sort';
 
 /* 分组浏览。*/
 $lang->project->allTasks             = 'All';

@@ -135,6 +135,8 @@ $lang->project->importTask       = '转入任务';
 $lang->project->importBug        = '导入Bug';
 $lang->project->updateOrder      = '排序';
 $lang->project->tree             = '树状图';
+$lang->project->storyKanban      = '需求看板';
+$lang->project->storySort        = '需求排序';
 
 /* 分组浏览。*/
 $lang->project->allTasks             = '所有';
