@@ -138,24 +138,6 @@ class testtaskModel extends model
                 ->fetchAll('id');
 
             $projectTeam = $this->dao->select('project, account')->from(TABLE_TEAM)->where('account')->eq($this->app->user->account)->fetchAll('project');
-
-            foreach($testTask as $id => $task)
-            {
-                if($this->app->user->admin) break;
-                if($task->acl == 'open')    continue;
-                if($task->acl == 'private' && array_key_exists($task->project, $projectTeam)) continue;
-                if($task->acl == 'custom')
-                {
-                    $whiteListArray = array();
-                    if(!empty($task->whitelist)) $whiteListArray = explode(',', $task->whitelist);
-
-                    $intersect = array_intersect($whiteListArray, $this->app->user->groups);
-                    if(!empty($intersect)) continue;
-                }
-
-                unset($testTask[$id]);
-            }
-
             return $testTask;
         }
     }
