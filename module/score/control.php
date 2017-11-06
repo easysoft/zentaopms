@@ -47,7 +47,7 @@ class score extends control
     public function rule()
     {
         $this->view->rule  = $this->config->score;
-        $this->view->title = $this->lang->score->common;
+        $this->view->title = $this->lang->my->scoreRule;
         $this->display();
     }
 
