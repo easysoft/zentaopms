@@ -620,6 +620,8 @@ class docModel extends model
      */
     public function checkPriv($object, $type = 'lib')
     {
+        if($this->app->user->admin) return true;
+
         $acls = $this->app->user->rights['acls'];
         if(!empty($object->product) and !empty($acls['products']) and !in_array($object->product, $acls['products'])) return false;
         if(!empty($object->project) and !empty($acls['projects']) and !in_array($object->project, $acls['projects'])) return false;
@@ -628,7 +630,6 @@ class docModel extends model
 
         $account = ',' . $this->app->user->account . ',';
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
-        if($this->app->user->admin) return true;
         if($object->acl == 'private' and strpos(",$object->users,", $account) !== false) return true;
         if($object->acl == 'custom')
         {
