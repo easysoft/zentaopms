@@ -88,7 +88,7 @@ ALTER TABLE `zt_projectstory` ADD `order` smallint(6) unsigned NOT NULL;
 
 ALTER TABLE `zt_task` ADD `parent` INT(11) NULL DEFAULT '0' AFTER `id`;
 
-ALTER TABLE `zt_team` ADD `task` INT(11) NULL DEFAULT '0' AFTER `project`;
+ALTER TABLE `zt_team` ADD `task` INT(11) NOT NULL DEFAULT '0' AFTER `project`;
 ALTER TABLE `zt_team` ADD `estimate` DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT '0';
 ALTER TABLE `zt_team` ADD `consumed` DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT '0' AFTER `estimate`;
 ALTER TABLE `zt_team` ADD `left` DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT '0' AFTER `consumed`;

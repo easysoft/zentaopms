@@ -627,7 +627,7 @@ CREATE TABLE IF NOT EXISTS `zt_taskestimate` (
 -- DROP TABLE IF EXISTS `zt_team`;
 CREATE TABLE IF NOT EXISTS `zt_team` (
   `project` mediumint(8) unsigned NOT NULL default '0',
-  `task` INT(11) NULL DEFAULT '0',
+  `task` INT(11) NOT NULL DEFAULT '0',
   `account` char(30) NOT NULL default '',
   `role` char(30) NOT NULL default '',
   `limitedUser` char(8) NOT NULL default 'no',
