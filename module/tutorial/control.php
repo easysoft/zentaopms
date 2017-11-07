@@ -137,7 +137,7 @@ class tutorial extends control
      */
     public function ajaxFinish()
     {
-        define('TUTORIAL', false);
+        $this->session->set('tutorialMode', false);
         $this->loadModel('score')->create('tutorial', 'finish');
     }
 }
