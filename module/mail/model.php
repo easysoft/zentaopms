@@ -377,6 +377,7 @@ class mailModel extends model
     {
         $ccList = explode(',', str_replace(' ', '', $ccList));
         if(!is_array($ccList)) return;
+        $ccList = array_unique($ccList);
         foreach($ccList as $account)
         {
             if(!isset($emails[$account]) or isset($emails[$account]->sended) or strpos($emails[$account]->email, '@') == false) continue;
