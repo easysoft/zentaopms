@@ -38,8 +38,8 @@
   <div id='querybox' class='show'></div>
 </div>
 <?php
-$cols = array('projected', 'developing', 'developed', 'testing', 'tested', 'verified', 'released');
-$account = $this->app->user->account
+$cols    = array('projected', 'developing', 'developed', 'testing', 'tested', 'verified', 'released');
+$account = $this->app->user->account;
 ?>
 <div id='kanban'>
   <table class='boards-layout table' id='kanbanHeader'>
@@ -54,14 +54,16 @@ $account = $this->app->user->account
   <table class='boards-layout table active-disabled table-bordered' id='kanbanWrapper'>
     <thead>
       <tr>
-        <?php foreach($cols as $col):?><th class='col-<?php echo $col?>'></th><?php endforeach;?>
+        <?php foreach($cols as $col):?>
+        <th class='col-<?php echo $col?>'></th>
+        <?php endforeach;?>
       </tr>
     </thead>
     <tbody>
       <tr>
         <?php foreach($cols as $col):?>
         <td class='col-droppable col-<?php echo $col?>' data-id='<?php echo $col?>'>
-        <?php if(!empty($stories[$col])):?>
+          <?php if(!empty($stories[$col])):?>
           <?php foreach($stories[$col] as $story):?>
           <div class='board board-story board-story-<?php echo $col; ?>' data-id='<?php echo $story->id?>' id='story-<?php echo $story->id?>'>
             <div class='board-title'>
@@ -87,14 +89,12 @@ $account = $this->app->user->account
             </div>
           </div>
           <?php endforeach?>
-        <?php endif?>
+          <?php endif?>
         </td>
         <?php endforeach;?>
       </tr>
     </tbody>
   </table>
 </div>
-<script>
-var projectID = <?php echo $projectID?>;
-</script>
+<?php js::set('projectID', $projectID);?>
 <?php include '../../common/view/footer.html.php';?>

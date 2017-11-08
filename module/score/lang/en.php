@@ -1,14 +1,14 @@
 <?php
-$lang->score->common       = 'My score';
-$lang->score->record       = 'Score record';
-$lang->score->current      = 'Current score';
-$lang->score->level        = 'Level score';
+$lang->score->common       = 'My Score';
+$lang->score->record       = 'Score Record';
+$lang->score->current      = 'Current Score';
+$lang->score->level        = 'Level Score';
 $lang->score->reset        = 'Reset';
-$lang->score->tips         = 'Yesterday added score:<strong>%d</strong><br/>Total score:<strong>%d</strong>';
-$lang->score->resetTips    = 'Reset score the execution time may be longer. <strong>Do not close the window.</strong>';
-$lang->score->resetStart   = 'Start reset';
-$lang->score->resetLoading = 'Resetting,process:';
-$lang->score->resetFinish  = 'Reset finish';
+$lang->score->tips         = 'Yesterday added score: <strong>%d</strong><br/>Total score: <strong>%d</strong>';
+$lang->score->resetTips    = 'It will take a long time. <strong>Do not close the window.</strong>';
+$lang->score->resetStart   = 'Start';
+$lang->score->resetLoading = 'Processing: ';
+$lang->score->resetFinish  = 'Finished';
 
 $lang->score->id      = 'ID';
 $lang->score->userID  = 'UserID';
@@ -49,7 +49,7 @@ $lang->score->methods['user']['login']               = 'Login';
 $lang->score->methods['user']['changePassword']      = 'Change password';
 $lang->score->methods['user']['editProfile']         = 'Edit profile';
 $lang->score->methods['ajax']['selectTheme']         = 'Change theme';
-$lang->score->methods['ajax']['selectLang']          = 'Change Lang';
+$lang->score->methods['ajax']['selectLang']          = 'Change lang';
 $lang->score->methods['ajax']['showSearchMenu']      = 'Advanced search';
 $lang->score->methods['ajax']['customMenu']          = 'Custom menu';
 $lang->score->methods['ajax']['dragSelected']        = 'Drag selected';
@@ -81,9 +81,9 @@ $lang->score->methods['search']['saveQuery']         = 'Save search query';
 $lang->score->methods['search']['saveQueryAdvanced'] = 'Advanced search';
 
 $lang->score->extended = new stdClass();
-$lang->score->extended->userchangePassword = 'Password strength,medium:add extra score : #changePassword,strength,1#; Strong:add extra score : #changePassword,strength,2#.';
-$lang->score->extended->projectclose       = 'Project closed,PM add extra score : #projectClose,manager,close#,Team member add extra score : #projectClose,member,close#. Completed on schedule or in advance,PM add extra score : #projectClose,manager,in#,Team member Add extra score : #projectClose,member,in#.';
-$lang->score->extended->bugresolve         = 'Bug resolved,Add extra severity score ：s1 + #bugResolve,severity,3#, s2 + #bugResolve,severity,2#, s3 + #bugResolve,severity,1#。';
-$lang->score->extended->bugconfirmBug      = 'Bug confirmed,Add extra severity score ：s1 + #bugConfirmBug,severity,3#, s2 + #bugConfirmBug,severity,2#, s3 + #bugConfirmBug,severity,1#。';
+$lang->score->extended->userchangePassword = 'Password strength, medium:add extra score : #changePassword,strength,1#; Strong:add extra score : #changePassword,strength,2#.';
+$lang->score->extended->projectclose       = 'Project closed, PM add extra score : #projectClose,manager,close#,Team member add extra score : #projectClose,member,close#. Completed on schedule or in advance,PM add extra score : #projectClose,manager,in#,Team member Add extra score : #projectClose,member,in#.';
+$lang->score->extended->bugresolve         = 'Bug resolved, Add extra severity score ：s1 + #bugResolve,severity,3#, s2 + #bugResolve,severity,2#, s3 + #bugResolve,severity,1#。';
+$lang->score->extended->bugconfirmBug      = 'Bug confirmed, Add extra severity score ：s1 + #bugConfirmBug,severity,3#, s2 + #bugConfirmBug,severity,2#, s3 + #bugConfirmBug,severity,1#。';
 $lang->score->extended->taskfinish         = 'Task finished, Add extra score round(consumed /10 * estimate / consumed) + severity score(p1 #taskFinish,pri,1#, p2, #taskFinish,pri,2#)。';
 $lang->score->extended->storyclose         = 'Add extra score for story creator : #storyClose,createID#.';

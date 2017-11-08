@@ -10,21 +10,6 @@
 class score extends control
 {
     /**
-     * score constructor.
-     *
-     * @param string $module
-     * @param string $method
-     *
-     * @access public
-     * @return mixed
-     */
-    public function __construct($module = '', $method = '')
-    {
-        parent::__construct($module, $method);
-        $this->loadModel('my')->setMenu();
-    }
-
-    /**
      * Ajax action score.
      * javascript use : $.get(createLink('score', 'ajax', "method=method"));
      *
@@ -46,8 +31,10 @@ class score extends control
      */
     public function rule()
     {
-        $this->view->rule  = $this->config->score;
+        $this->loadModel('my')->setMenu();
+
         $this->view->title = $this->lang->my->scoreRule;
+        $this->view->rule  = $this->config->score;
         $this->display();
     }
 
@@ -65,6 +52,7 @@ class score extends control
         {
             $result = $this->score->reset($lastID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             if($result['status'] == 'finish')
             {
                 $this->send(array('result' => 'finished', 'message' => $this->lang->score->resetFinish));

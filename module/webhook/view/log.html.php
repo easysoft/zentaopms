@@ -14,8 +14,8 @@
 <div id="titlebar">
   <div class="heading">
     <strong><?php echo html::a(inlink('browse'), $lang->webhook->common);?></strong>
-    <small class="text-muted"> <?php echo $webhook->name;?> </small>
-    <small class="text-muted"> <?php echo $lang->webhook->log;?> <i class="icon-file-text-o"></i></small>
+    <small class="text-muted"> <?php echo $webhook->name;?></small>
+    <small class="text-muted"> <?php echo $lang->webhook->log;?></small>
   </div>
 </div>
 <table id='logList' class='table table-condensed table-hover table-striped tablesorter table-fixed'>

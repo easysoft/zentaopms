@@ -20,7 +20,7 @@ class scoreModel extends model
      */
     public function getListByAccount($account, $pager)
     {
-        return $this->dao->select('*')->from(TABLE_SCORE)->where('account')->eq($account)->orderBy('time_desc,id_desc')->page($pager)->fetchAll();
+        return $this->dao->select('*')->from(TABLE_SCORE)->where('account')->eq($account)->orderBy('time_desc, id_desc')->page($pager)->fetchAll();
     }
 
     /**
@@ -109,7 +109,7 @@ class scoreModel extends model
                 {
                     $objectID = $param->id;
                     $user     = $param->openedBy;
-                    $desc     .= 'ID:' . $param->id;
+                    $desc    .= 'ID:' . $param->id;
                     if(!empty($this->config->score->extended->bugConfirmBug['severity'][$param->severity])) $rule['score'] = $rule['score'] + $this->config->score->extended->bugConfirmBug['severity'][$param->severity];
                 }
 
@@ -153,7 +153,8 @@ class scoreModel extends model
                         }
                     }
 
-                    return true; //When the project is closed, no more user get score.
+                    /* When the project is closed, no more user get score. */
+                    return true; 
                 }
                 break;
             case 'productplan':
@@ -203,10 +204,10 @@ class scoreModel extends model
             {
                 $timestamp = empty($time) ? time() : strtotime($time);
                 $count     = $this->dao->select('id')->from(TABLE_SCORE)->where('account')->eq($account)
-                             ->andWhere('time')->between(date('Y-m-d 00:00:00', $timestamp), date('Y-m-d 23:59:59', $timestamp))
-                             ->andWhere('module')->eq($module)
-                             ->andWhere('method')->eq($method)
-                             ->count();
+                    ->andWhere('time')->between(date('Y-m-d 00:00:00', $timestamp), date('Y-m-d 23:59:59', $timestamp))
+                    ->andWhere('module')->eq($module)
+                    ->andWhere('method')->eq($method)
+                    ->count();
                 if($count >= $rule['times']) return true;
             }
         }
@@ -216,7 +217,7 @@ class scoreModel extends model
         {
             $user = $this->loadModel('user')->getById($account);
 
-            $data           = new stdClass();
+            $data = new stdClass();
             $data->account  = $account;
             $data->module   = $module;
             $data->method   = $method;
@@ -250,17 +251,12 @@ class scoreModel extends model
     {
         if($lastID == 0)
         {
-            $this->dao->query("UPDATE " . TABLE_USER . " SET `score`=0,`scoreLevel`=0");
+            $this->dao->query("UPDATE " . TABLE_USER . " SET `score`=0, `scoreLevel`=0");
             $this->dao->query("TRUNCATE TABLE " . TABLE_SCORE);
         }
 
         $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->gt($lastID)->orderBy('id_asc')->limit(100)->fetchAll('id');
-
-        if(empty($actions))
-        {
-            $this->loadModel('setting')->setItem('system.common.global.scoreInit', 1);
-            return array('number' => 0, 'status' => 'finish');
-        }
+        if(empty($actions)) return array('number' => 0, 'status' => 'finish');
 
         foreach($actions as $action)
         {
@@ -306,10 +302,13 @@ class scoreModel extends model
 
         $this->app->user->lastTime = time();
 
-        $score = $this->dao->select("sum(score) as score")->from(TABLE_SCORE)->where('time')->between(date('Y-m-d 00:00:00', strtotime('-1 day')), date('Y-m-d 23:59:59', strtotime('-1 day')))->andWhere('account')->eq($this->app->user->account)->fetch('score');
+        $score = $this->dao->select("SUM(score) AS score")->from(TABLE_SCORE)
+            ->where('time')->between(date('Y-m-d 00:00:00', strtotime('-1 day')), date('Y-m-d 23:59:59', strtotime('-1 day')))
+            ->andWhere('account')->eq($this->app->user->account)
+            ->fetch('score');
+        if(!$score) return '';
 
-        $notice = empty($score) ? '' : sprintf($this->lang->score->tips, $score, $this->app->user->score);
-
+        $notice     = sprintf($this->lang->score->tips, $score, $this->app->user->score);
         $fullNotice = <<<EOT
 <div id='noticeAttend' class='alert alert-success with-icon alert-dismissable' style='width:280px; position:fixed; bottom:25px; right:15px; z-index: 9999;' id='planInfo'>    
    <i class='icon icon-diamond'>  </i>
@@ -317,6 +316,6 @@ class scoreModel extends model
    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
  </div>
 EOT;
-        return empty($notice) ? '' : $fullNotice;
+        return $fullNotice;
     }
 }

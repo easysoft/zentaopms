@@ -16,7 +16,7 @@
   <div id="titlebar">
     <div class="heading">
       <strong><?php echo $lang->webhook->api;?></strong>
-      <small class="text-muted"> <?php echo $lang->webhook->edit;?> <i class="icon-pencil"></i></small>
+      <small class="text-muted"> <?php echo $lang->webhook->edit;?></small>
     </div>
   </div>
   <form id='webhookForm' method='post' class='ajaxForm'>

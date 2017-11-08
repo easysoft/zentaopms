@@ -1,9 +1,9 @@
 <?php
-$lang->entry->common   = 'Entry';
-$lang->entry->list     = 'Entry List';
-$lang->entry->api      = 'API';
-$lang->entry->webhook  = 'Webhook';
-$lang->entry->log      = 'Log';
+$lang->entry->common  = 'Entry';
+$lang->entry->list    = 'Entry List';
+$lang->entry->api     = 'API';
+$lang->entry->webhook = 'Webhook';
+$lang->entry->log     = 'Log';
 
 $lang->entry->browse    = 'Browse';
 $lang->entry->create    = 'Create';

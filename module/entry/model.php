@@ -16,7 +16,7 @@ class entryModel extends model
      * 
      * @param  int    $entryID 
      * @access public
-     * @return array
+     * @return object 
      */
     public function getById($entryID)
     {
@@ -28,7 +28,7 @@ class entryModel extends model
      * 
      * @param  string $code 
      * @access public
-     * @return array
+     * @return object 
      */
     public function getByCode($code)
     {
@@ -125,6 +125,15 @@ class entryModel extends model
         return common::createChanges($oldEntry, $entry);
     }
 
+    /**
+     * Save log of an entry.
+     *
+     * @params int    $entryID
+     * @params string $url
+     *
+     * @access public
+     * @return void
+     */
     public function saveLog($entryID, $url)
     {
         $log = new stdclass();

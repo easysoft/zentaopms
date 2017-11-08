@@ -16,7 +16,7 @@ class webhookModel extends model
      * 
      * @param  int    $id
      * @access public
-     * @return array
+     * @return object 
      */
     public function getByID($id)
     {
@@ -78,10 +78,9 @@ class webhookModel extends model
             }
 
             $action = $actions[$log->action];
-
             $object = $this->dao->select('*')->from($this->config->objectTables[$action->objectType])->where('id')->eq($action->objectID)->fetch();
             $field  = $this->config->action->objectNameFields[$action->objectType];
-            $text   = $this->app->user->realname . $this->lang->action->label->{$action->action}. $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
+            $text   = $this->app->user->realname . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
 
             $log->action    = $text;
             $log->actionURL = $this->getViewLink($action->objectType, $action->objectID);
@@ -241,6 +240,7 @@ class webhookModel extends model
         if(!isset($this->lang->action->label->$actionType)) return false;
         if(empty($this->config->objectTables[$objectType])) return false;
         $action = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($actionID)->fetch();
+
         if($webhook->products)
         {
             $webhookProducts = explode(',', trim($webhook->products, ','));

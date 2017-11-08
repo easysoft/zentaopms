@@ -13,10 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='featurebar'>
   <ul class='nav'>
-    <?php 
-    echo "<li id='entry' class='active'>"; common::printLink('entry', 'browse', '', $lang->entry->common); echo '</li>';
-    echo "<li id='webhook'>"; common::printLink('webhook', 'browse', '', $lang->entry->webhook); echo '</li>';
-    ?>
+    <li id='entry' class='active'><?php common::printLink('entry', 'browse', '', $lang->entry->common);?></li>
+    <li id='webhook'><?php common::printLink('webhook', 'browse', '', $lang->entry->webhook);?></li>
   </ul>
   <div class='actions'>
     <div class='btn-group'>

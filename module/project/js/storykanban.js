@@ -100,7 +100,16 @@ $(function()
             {
                 $('#kanbanWrapper').unwrap();
                 initBoards()
-                $(".kanbanFrame").modalTrigger({type: 'iframe', width: '80%', afterShow:function(){ $('#ajaxModal').data('cancel-reload', true)}, afterHidden: function(){refresh()}});
+                $(".kanbanFrame").modalTrigger(
+                {
+                    type: 'iframe', 
+                    width: '80%', 
+                    afterShow: function()
+                    { 
+                        $('#ajaxModal').data('cancel-reload', true)
+                    }, 
+                    afterHidden: function(){refresh()}
+                });
             });
         }
     }

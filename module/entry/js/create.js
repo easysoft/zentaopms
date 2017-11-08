@@ -13,6 +13,7 @@ function createKey()
         key += chars[Math.floor(Math.random() * chars.length)];
     }   
     $('#key').val(key);
+
     return false;
 }
 

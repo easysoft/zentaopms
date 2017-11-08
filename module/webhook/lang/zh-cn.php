@@ -1,5 +1,5 @@
 <?php
-$lang->webhook->common   = 'webhook';
+$lang->webhook->common   = 'Webhook';
 $lang->webhook->list     = '钩子列表';
 $lang->webhook->api      = '接口';
 $lang->webhook->entry    = '应用';

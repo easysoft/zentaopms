@@ -16,7 +16,7 @@
   <div id="titlebar">
     <div class="heading">
       <strong><?php echo $lang->entry->api;?></strong>
-      <small class="text-muted"> <?php echo $lang->entry->edit;?> <i class="icon-pencil"></i></small>
+      <small class="text-muted"> <?php echo $lang->entry->edit;?></small>
     </div>
   </div>
   <form id='entryForm' method='post' class='ajaxForm'>
