@@ -1250,6 +1250,7 @@ class project extends control
      * Kanban.
      * 
      * @param  int    $projectID 
+     * @param  string $type 
      * @param  string $orderBy 
      * @access public
      * @return void
@@ -1271,7 +1272,8 @@ class project extends control
         $bugs    = $this->loadModel('bug')->getProjectBugs($projectID);
         $stories = $this->loadModel('story')->getProjectStories($projectID, $orderBy);
 
-        $kanbanGroup = $this->project->getKanbanGroupData($stories, $tasks, $bugs, $type);
+        $kanbanGroup   = $this->project->getKanbanGroupData($stories, $tasks, $bugs, $type);
+        $kanbanSetting = $this->project->getKanbanSetting($projectID);
 
         $this->view->title       = $this->lang->project->kanban;
         $this->view->position[]  = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
@@ -1283,12 +1285,9 @@ class project extends control
         $this->view->project     = $project;
         $this->view->type        = $type;
         $this->view->kanbanGroup = $kanbanGroup;
-
-        $kanbanSetting = $this->project->getKanbanSetting($projectID);
-
-        $this->view->allCols    = $kanbanSetting->allCols;
-        $this->view->showOption = $kanbanSetting->showOption;
-        $this->view->colorList  = $kanbanSetting->colorList;
+        $this->view->allCols     = $kanbanSetting->allCols;
+        $this->view->showOption  = $kanbanSetting->showOption;
+        $this->view->colorList   = $kanbanSetting->colorList;
 
         $this->display();
     }
@@ -1298,7 +1297,7 @@ class project extends control
      * Product
      * 
      * @param  int    $projectID 
-     * @param  string $level 
+     * @param  string $type
      * @access public
      * @return void
      */

@@ -1713,7 +1713,7 @@ class upgradeModel extends model
      * Adjust priv for 9.4.
      *
      * @access public
-     * @return void
+     * @return bool 
      */
     public function adjustPriv9_4()
     {

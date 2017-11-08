@@ -41,12 +41,12 @@ class tree extends control
             }
             $this->view->root = $product;
         }
-        /* The viewType is doc. */
         elseif(strpos($viewType, 'doc') !== false)
         {
+            /* The viewType is doc. */
             $this->loadModel('doc');
             $viewType = 'doc';
-            $lib = $this->doc->getLibById($rootID);
+            $lib      = $this->doc->getLibById($rootID);
             $this->view->root = $lib;
         }
         elseif(strpos($viewType, 'caselib') !== false)
@@ -137,7 +137,7 @@ class tree extends control
             $this->view->currentProduct = $currentProduct;
             $this->view->productModules = $this->tree->getOptionMenu($currentProduct, 'line');
 
-            $title = $this->lang->product->common . $this->lang->colon . $this->lang->tree->manageLine;
+            $title      = $this->lang->product->common . $this->lang->colon . $this->lang->tree->manageLine;
             $position[] = $this->lang->tree->manageLine;
         }
 

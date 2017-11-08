@@ -15,7 +15,7 @@
   <div class='actions'>
     <?php 
     $link = $this->createLink('product', 'export', "status=$status&orderBy=$orderBy");
-    if(common::hasPriv('product', 'export'))echo html::a($link, "<i class='icon-download-alt icon'></i> " . $lang->export, '', "class='export btn'");
+    if(common::hasPriv('product', 'export')) echo html::a($link, "<i class='icon-download-alt icon'></i> " . $lang->export, '', "class='export btn'");
     ?>
     <?php echo html::a($this->createLink('product', 'create'), "<i class='icon-plus'></i> " . $lang->product->create,'', "class='btn'") ?>
   </div>

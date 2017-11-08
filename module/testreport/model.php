@@ -195,12 +195,13 @@ class testreportModel extends model
         $byCaseNum   = 0;
         $buildIdList = array_keys($builds);
         $taskIdList  = array_keys($tasks);
+
         foreach($allNewBugs as $bug)
         {
             if(!array_diff(explode(',', $bug->openedBuild), $buildIdList))
             {
                 $foundBugs[$bug->id] = $bug;
-                if($bug->status == 'active' OR $bug->resolvedDate > "$end 23:59:59") $legacyBugs[$bug->id] = $bug;
+                if($bug->status == 'active' or $bug->resolvedDate > "$end 23:59:59") $legacyBugs[$bug->id] = $bug;
                 if($bug->case and !empty($bug->testtask) and in_array($bug->testtask, $taskIdList)) $byCaseNum ++;
             }
         }
@@ -214,6 +215,7 @@ class testreportModel extends model
             $statusGroups[$bug->status]     = isset($statusGroups[$bug->status])     ? $statusGroups[$bug->status]     + 1 : 1;
             $openedByGroups[$bug->openedBy] = isset($openedByGroups[$bug->openedBy]) ? $openedByGroups[$bug->openedBy] + 1 : 1;
             $moduleGroups[$bug->module]     = isset($moduleGroups[$bug->module])     ? $moduleGroups[$bug->module]     + 1 : 1;
+
             if($bug->resolvedBy) $resolvedByGroups[$bug->resolvedBy] = isset($resolvedByGroups[$bug->resolvedBy]) ? $resolvedByGroups[$bug->resolvedBy] + 1 : 1;
             if($bug->resolution) $resolutionGroups[$bug->resolution] = isset($resolutionGroups[$bug->resolution]) ? $resolutionGroups[$bug->resolution] + 1 : 1;
             if($bug->status == 'resolved' or $bug->status == 'closed') $resolvedBugs ++;
@@ -236,7 +238,7 @@ class testreportModel extends model
         }
         $bugInfo['bugSeverityGroups'] = $data;
 
-        $data  = array();
+        $data = array();
         foreach($typeGroups as $type => $count)
         {
             $data[$type] = new stdclass();
@@ -245,7 +247,7 @@ class testreportModel extends model
         }
         $bugInfo['bugTypeGroups'] = $data;
 
-        $data  = array();
+        $data = array();
         foreach($statusGroups as $status => $count)
         {
             $data[$status] = new stdclass();
@@ -254,7 +256,7 @@ class testreportModel extends model
         }
         $bugInfo['bugStatusGroups'] = $data;
 
-        $data  = array();
+        $data = array();
         foreach($resolutionGroups as $resolution => $count)
         {
             $data[$resolution] = new stdclass();
@@ -263,7 +265,7 @@ class testreportModel extends model
         }
         $bugInfo['bugResolutionGroups'] = $data;
 
-        $data  = array();
+        $data = array();
         foreach($openedByGroups as $openedBy => $count)
         {
             $data[$openedBy] = new stdclass();
@@ -285,7 +287,7 @@ class testreportModel extends model
         }
         $bugInfo['bugModuleGroups'] = $data;
 
-        $data  = array();
+        $data = array();
         foreach($resolvedByGroups as $resolvedBy => $count)
         {
             $data[$resolvedBy] = new stdclass();

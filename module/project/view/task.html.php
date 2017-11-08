@@ -48,40 +48,39 @@ js::set('browseType', $browseType);
     $vars         = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";
 
     if($useDatatable) include '../../common/view/datatable.html.php';
-    $setting = $this->datatable->getSetting('project');
-    $widths  = $this->datatable->setFixedFieldWidth($setting);
-    $columns = 0;
+    $customFields = $this->datatable->getSetting('project');
+    $widths       = $this->datatable->setFixedFieldWidth($customFields);
+    $columns      = 0;
     ?>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed <?php echo $useDatatable ? 'datatable' : ''?>' id='taskList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='taskIDList[]'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed <?php if($useDatatable) echo 'datatable';?>' id='taskList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='taskIDList[]'>
       <thead>
-        <tr><?php
-        foreach ($setting as $key => $value)
+        <tr>
+        <?php
+        foreach($customFields as $field)
         {
-            if($value->show)
+            if($field->show)
             {
-                $this->datatable->printHead($value, $orderBy, $vars);
+                $this->datatable->printHead($field, $orderBy, $vars);
                 $columns++;
             }
         }
-        ?></tr>
+        ?>
+        </tr>
       </thead>
       <tbody>
         <?php foreach($tasks as $task):?>
-        <tr class='text-center' data-id='<?php echo $task->id?>'>
-          <?php foreach ($setting as $key => $value) $this->task->printCell($value, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
+        <tr class='text-center' data-id='<?php echo $task->id;?>'>
+          <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
         </tr>
-          <?php
-            if(!empty($task->children))
-            {
-              $childrenNum = count($task->children);
-              foreach($task->children as $key=>$child)
-              {
-          ?>
-            <tr class='text-center table-children<?php if($key==0) echo ' table-child-top';?><?php if(($key+1) == $childrenNum) echo ' table-child-bottom';?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>'>
-              <?php foreach ($setting as $key => $value) $this->task->printCell($value, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);?>
-            </tr>
-            <?php }?>
-          <?php }?>
+        <?php if(!empty($task->children)):?>
+        <?php foreach($task->children as $key => $child):?>
+        <?php $class  = $key == 0 ? ' table-child-top' : '';?>
+        <?php $class .= ($key + 1 == count($task->children)) ? ' table-child-bottom' : '';?>
+        <tr class='text-center table-children<?php echo $class;?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>'>
+          <?php foreach($customFields as $field) $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);?>
+        </tr>
+        <?php endforeach;?>
+        <?php endif;?>
         <?php endforeach;?>
       </tbody>
       <tfoot>

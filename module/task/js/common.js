@@ -30,6 +30,7 @@ $('.btn-move-up, .btn-move-down').click(function()
 
     adjustSortBtn();
 });
+
 function adjustSortBtn()
 {
     $('.btn-move-up:first').addClass('disabled').attr('disabled', 'disabled');
@@ -56,4 +57,4 @@ $('#modalTeam .btn').click(function()
         $('#teamMember').val(team);
         $('#estimate').val(time);
     })
-})
+});

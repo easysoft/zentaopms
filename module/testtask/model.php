@@ -124,11 +124,12 @@ class testtaskModel extends model
                 ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
                 ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project')
+
                 ->where('t1.deleted')->eq(0)
-                ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
                 ->andWhere('t5.product = t1.product')
                 ->andWhere('t3.id')->in(array_keys($projects))
-                ->beginIF($scopeAndStatus[1] == 'totalStatus')->andWhere('t1.status')->in(array('blocked','doing','wait','done'))->fi()
+                ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
+                ->beginIF($scopeAndStatus[1] == 'totalStatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
                 ->beginIF($scopeAndStatus[1] != 'totalStatus')->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
                 ->beginIF($branch)->andWhere("if(t4.branch, t4.branch, t5.branch) = '$branch'")->fi()
                 ->beginIF($beginTime)->andWhere('t1.begin')->ge($beginTime)->fi()
@@ -1158,26 +1159,26 @@ class testtaskModel extends model
                 echo $run->version;
                 break;
             case 'openedBy':
-                $openedBy = zget($users, $run->openedBy, $run->openedBy);
+                $openedBy = zget($users, $run->openedBy);
                 echo substr($openedBy, strpos($openedBy, ':') + 1);
                 break;
             case 'openedDate':
                 echo substr($run->openedDate, 5, 11);
                 break;
             case 'reviewedBy':
-                echo zget($users, $run->reviewedBy, $run->reviewedBy);
+                echo zget($users, $run->reviewedBy);
                 break;
             case 'reviewedDate':
                 echo substr($run->reviewedDate, 5, 11);
                 break;
             case 'lastEditedBy':
-                echo zget($users, $run->lastEditedBy, $run->lastEditedBy);
+                echo zget($users, $run->lastEditedBy);
                 break;
             case 'lastEditedDate':
                 echo substr($run->lastEditedDate, 5, 11);
                 break;
             case 'lastRunner':
-                $lastRunner = zget($users, $run->lastRunner, $run->lastRunner);
+                $lastRunner = zget($users, $run->lastRunner);
                 echo substr($lastRunner, strpos($lastRunner, ':') + 1);
                 break;
             case 'lastRunDate':
@@ -1190,7 +1191,7 @@ class testtaskModel extends model
                 if($run->story and $run->storyTitle) echo html::a(helper::createLink('story', 'view', "storyID=$run->story"), $run->storyTitle);
                 break;
             case 'assignedTo':
-                $assignedTo = zget($users, $run->assignedTo, $run->assignedTo);
+                $assignedTo = zget($users, $run->assignedTo);
                 echo substr($assignedTo, strpos($assignedTo, ':') + 1);
                 break;
             case 'bugs':
@@ -1203,8 +1204,8 @@ class testtaskModel extends model
                 echo $run->stepNumber;
                 break;
             case 'actions':
-                common::printIcon('testtask', 'runCase',    "id=$run->id", $run, 'list', '', '', 'runCase iframe', false, "data-width='95%'");
-                common::printIcon('testtask', 'results',    "id=$run->id", $run, 'list', '', '', 'iframe', '', "data-width='90%'");
+                common::printIcon('testtask', 'runCase', "id=$run->id", $run, 'list', '', '', 'runCase iframe', false, "data-width='95%'");
+                common::printIcon('testtask', 'results', "id=$run->id", $run, 'list', '', '', 'iframe', '', "data-width='90%'");
 
                 if(common::hasPriv('testtask', 'unlinkCase', $run))
                 {

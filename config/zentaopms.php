@@ -106,7 +106,7 @@ define('TABLE_ENTRY',         '`' . $config->db->prefix . 'entry`');
 define('TABLE_WEBHOOK',       '`' . $config->db->prefix . 'webhook`');
 define('TABLE_WEBHOOKDATAS',  '`' . $config->db->prefix . 'webhookdatas`');
 define('TABLE_LOG',           '`' . $config->db->prefix . 'log`');
-define('TABLE_SCORE',           '`' . $config->db->prefix . 'score`');
+define('TABLE_SCORE',         '`' . $config->db->prefix . 'score`');
 if(!defined('TABLE_LANG')) define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
 
 $config->objectTables['product']     = TABLE_PRODUCT;

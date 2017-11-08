@@ -193,7 +193,7 @@ js::set('branch', $branch);
       <tbody>
         <?php foreach($bugs as $bug):?>
         <tr class='text-center' data-id='<?php echo $bug->id?>'>
-          <?php foreach ($setting as $key => $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $projects, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');?>
+          <?php foreach($setting as $key => $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $projects, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');?>
         </tr>
         <?php endforeach;?>
       </tbody>

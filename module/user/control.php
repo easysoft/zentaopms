@@ -691,7 +691,7 @@ class user extends control
                 $this->session->set('user', $user);
                 $this->app->user = $this->session->user;
                 $this->loadModel('action')->create('user', $user->id, 'login');
-                $this->loadModel('score')->create('user','login');
+                $this->loadModel('score')->create('user', 'login');
                 /* Keep login. */
                 if($this->post->keepLogin) $this->user->keepLogin($user);
 
@@ -699,10 +699,7 @@ class user extends control
                 if(isset($this->config->safe->mode) and $this->user->computePasswordStrength($password) < $this->config->safe->mode) echo js::alert($this->lang->user->weakPassword);
 
                 /* Go to the referer. */
-                if($this->post->referer and 
-                   strpos($this->post->referer, $loginLink) === false and 
-                   strpos($this->post->referer, $denyLink)  === false 
-                )
+                if($this->post->referer and strpos($this->post->referer, $loginLink) === false and strpos($this->post->referer, $denyLink) === false)
                 {
                     if($this->app->getViewType() == 'json')
                     {

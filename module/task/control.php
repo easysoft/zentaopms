@@ -175,7 +175,7 @@ class task extends control
      * @param int $taskID
      *
      * @access public
-     * @return mixed
+     * @return void 
      */
     public function batchCreate($projectID = 0, $storyID = 0, $iframe = 0, $taskID = 0)
     {
@@ -233,8 +233,7 @@ class task extends control
      */
     public function commonAction($taskID)
     {
-        $task=$this->loadModel('task')->getByID($taskID);
-        $this->view->task    = $task;
+        $this->view->task    = $this->loadModel('task')->getByID($taskID);
         $this->view->project = $this->project->getById($this->view->task->project);
         $this->view->members = $this->project->getTeamMemberPairs($this->view->project->id ,'nodeleted');
         $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
@@ -436,6 +435,7 @@ class task extends control
         $task = $this->task->getByID($taskID);
 
         $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
+
         /* Compute next assignedTo. */
         if(!empty($task->team))
         {
@@ -1212,10 +1212,13 @@ class task extends control
 
                     $tasks[$key] = $task;
 
-                    if(isset($children[$task->id])) foreach($children[$task->id] as $child)
+                    if(isset($children[$task->id])) 
                     {
-                        $child->name       = $taskLang->childrenAB . ') ' . $child->name;
-                        $tasks[$child->id] = $child;
+                        foreach($children[$task->id] as $child)
+                        {
+                            $child->name       = $taskLang->childrenAB . ') ' . $child->name;
+                            $tasks[$child->id] = $child;
+                        }
                     }
                 }
             }

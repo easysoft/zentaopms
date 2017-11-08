@@ -63,21 +63,21 @@
       <thead>
         <tr class='colhead'>
         <?php $vars = "projectID={$project->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-          <th class='w-id  {sorter:false}'>    <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
+          <th class='w-id  {sorter:false}'>  <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
           <?php if($canOrder):?>
-          <th class='w-50px {sorter:false}'>    <?php common::printOrderLink('order',      $orderBy, $vars, $lang->project->updateOrder);?></th>
+          <th class='w-50px {sorter:false}'> <?php common::printOrderLink('order',      $orderBy, $vars, $lang->project->updateOrder);?></th>
           <?php endif;?>
-          <th class='w-pri {sorter:false}'>    <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-          <th class='{sorter:false}'>          <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
-          <th class='w-user {sorter:false}'>   <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='w-80px {sorter:false}'>   <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
-          <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
-          <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='w-pri {sorter:false}'>  <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+          <th class='{sorter:false}'>        <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
+          <th class='w-user {sorter:false}'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='w-80px {sorter:false}'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+          <th class='w-hour {sorter:false}'> <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
+          <th class='w-hour {sorter:false}'> <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
           <th class='w-70px {sorter:false}'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
           <th title='<?php echo $lang->story->taskCount?>' class='w-30px'><?php echo $lang->story->taskCountAB;?></th>
           <th title='<?php echo $lang->story->bugCount?>'  class='w-30px'><?php echo $lang->story->bugCountAB;?></th>
           <th title='<?php echo $lang->story->caseCount?>' class='w-30px'><?php echo $lang->story->caseCountAB;?></th>
-          <th class='w-110px {sorter:false}'>  <?php echo $lang->actions;?></th>
+          <th class='w-110px {sorter:false}'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody id='storyTableList' class='sortable'>
@@ -91,7 +91,7 @@
         $storyLink      = $this->createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$project->id");
         $totalEstimate += $story->estimate;
         ?>
-        <tr class='text-center' id="story<?php echo $story->id?>"  data-id='<?php echo $story->id ?>' data-order='<?php echo $story->order ?>'>
+        <tr class='text-center' id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>'>
           <td class='cell-id'>
             <?php if($canBatchEdit or $canBatchClose):?>
             <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 

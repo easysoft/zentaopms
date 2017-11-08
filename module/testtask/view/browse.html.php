@@ -40,7 +40,7 @@ $status = $this->session->testTaskVersionStatus;
     <li id='doneTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,done"), $lang->testtask->done);?></li>
     <li id='totalStatusTab'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,totalStatus"), $lang->testtask->totalStatus);?></li>
     <li style='margin-left: 20px;'>
-    <?php $condition = "productID=$productID&branch=$branch&type=$scope,$status&orderBy=$orderBy&recTotal=0&recPerPage=$pager->recPerPage&pageID=1"?>
+    <?php $condition = "productID=$productID&branch=$branch&type=$scope,$status&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1"?>
     <div class='input-group w-400px input-group-sm'>
       <span class='input-group-addon'><?php echo $lang->testtask->beginAndEnd;?></span>
       <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $beginTime, "class='w-100px form-control form-date' onchange='changeDate(this.value, \"$endTime\", \"$condition\")'");?></div>

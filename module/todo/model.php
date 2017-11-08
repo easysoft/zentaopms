@@ -46,7 +46,7 @@ class todoModel extends model
         {
             $todoID = $this->dao->lastInsertID();
             $this->file->updateObjectID($this->post->uid, $todoID, 'todo');
-            $this->loadModel('score')->create('todo','create',$todoID);
+            $this->loadModel('score')->create('todo', 'create', $todoID);
             return $todoID;
         }
     }

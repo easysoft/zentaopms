@@ -86,9 +86,9 @@ ALTER TABLE `zt_product` ADD `line` mediumint(8) NOT NULL AFTER `code`;
 
 ALTER TABLE `zt_projectstory` ADD `order` smallint(6) unsigned NOT NULL;
 
-ALTER TABLE `zt_task` ADD `parent` INT(11) NULL DEFAULT '0' AFTER `id`;
+ALTER TABLE `zt_task` ADD `parent` mediumint(8) NOT NULL DEFAULT '0' AFTER `id`;
 
-ALTER TABLE `zt_team` ADD `task` INT(11) NOT NULL DEFAULT '0' AFTER `project`;
+ALTER TABLE `zt_team` ADD `task` mediumint(8) NOT NULL DEFAULT '0' AFTER `project`;
 ALTER TABLE `zt_team` ADD `estimate` DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT '0';
 ALTER TABLE `zt_team` ADD `consumed` DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT '0' AFTER `estimate`;
 ALTER TABLE `zt_team` ADD `left` DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT '0' AFTER `consumed`;
@@ -96,7 +96,7 @@ ALTER TABLE `zt_team` ADD `order` TINYINT(3) NOT NULL DEFAULT '0' AFTER `left`;
 ALTER TABLE `zt_team` DROP PRIMARY KEY;
 ALTER TABLE `zt_team` ADD PRIMARY KEY (`project`, `task`, `account`);
 
-ALTER TABLE `zt_user` ADD `score` INT(12) NOT NULL DEFAULT '0' AFTER `ranzhi`;
+ALTER TABLE `zt_user` ADD `score` INT(11) NOT NULL DEFAULT '0' AFTER `ranzhi`;
 ALTER TABLE `zt_user` ADD `scoreLevel` INT(11) NOT NULL DEFAULT '0' AFTER `score`;
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('*/5', '*', '*', '*', '*', 'moduleName=webhook&methodName=asyncSend', '异步发送Webhook', 'zentao', 1, 'normal', '0000-00-00 00:00:00');

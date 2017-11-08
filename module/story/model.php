@@ -808,7 +808,7 @@ class storyModel extends model
             ->batchCheck($this->config->story->close->requiredFields, 'notempty')
             ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
             ->where('id')->eq($storyID)->exec();
-        if($this->post->closedReason == 'done') $this->loadModel('score')->create('story', 'close', $storyID);
+        if(!dao::isError() && $this->post->closedReason == 'done') $this->loadModel('score')->create('story', 'close', $storyID);
         return common::createChanges($oldStory, $story);
     }
 

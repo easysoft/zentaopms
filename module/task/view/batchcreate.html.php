@@ -56,7 +56,7 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
     $lang->task->typeList['ditto'] = $lang->task->ditto; 
     $members['ditto'] = $lang->task->ditto;
     $modules['ditto'] = $lang->task->ditto;
-    if($project->type == 'ops') $colspan = $colspan-1;
+    if($project->type == 'ops') $colspan = $colspan - 1;
     ?>
     <?php for($i = 0; $i < $config->task->batchCreate; $i++):?>
     <?php 
@@ -74,9 +74,10 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
     ?>
     <?php $pri = 3;?>
     <tr>
-      <td class='text-center'><?php echo $i+1;?><?php echo html::hidden("parent[]",$parent);?></td>
+      <td class='text-center'><?php echo $i + 1;?><?php echo html::hidden("parent[]", $parent);?></td>
       <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'><?php echo html::select("module[$i]", $modules, $module, "class='form-control chosen' onchange='setStories(this.value, $project->id, $i)'")?></td>
-        <?php if($project->type != 'ops'):?><td <?php echo zget($visibleFields, 'story', "class='hidden'"); echo $hiddenStory;?> style='overflow: visible'>
+      <?php if($project->type != 'ops'):?>
+      <td <?php echo zget($visibleFields, 'story', "class='hidden'"); echo $hiddenStory;?> style='overflow: visible'>
         <div class='input-group'>
           <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
           <span class='input-group-btn'>
@@ -84,7 +85,8 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
             <?php echo html::hidden("storyEstimate$i") . html::hidden("storyDesc$i") . html::hidden("storyPri$i");?>
           </span>
         </div>
-      </td><?php endif;?>
+      </td>
+      <?php endif;?>
       <td style='overflow:visible'>
         <div class='input-group'>
         <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->task->colorTag}' data-update-text='#name\\[{$i}\\]'");?>

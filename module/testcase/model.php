@@ -1253,7 +1253,7 @@ class testcaseModel extends model
             switch($id)
             {
             case 'id':
-                if($mode == 'table') echo "<input type='checkbox' name='caseIDList[]'  value='{$case->id}'/> ";
+                if($mode == 'table') echo "<input type='checkbox' name='caseIDList[]' value='{$case->id}'/> ";
                 echo $canView ? html::a($caseLink, sprintf('%03d', $case->id)) : sprintf('%03d', $case->id);
                 break;
             case 'pri':
@@ -1302,25 +1302,25 @@ class testcaseModel extends model
                 echo $case->version;
                 break;
             case 'openedBy':
-                echo zget($users, $case->openedBy, $case->openedBy);
+                echo zget($users, $case->openedBy);
                 break;
             case 'openedDate':
                 echo substr($case->openedDate, 5, 11);
                 break;
             case 'reviewedBy':
-                echo zget($users, $case->reviewedBy, $case->reviewedBy);
+                echo zget($users, $case->reviewedBy);
                 break;
             case 'reviewedDate':
                 echo substr($case->reviewedDate, 5, 11);
                 break;
             case 'lastEditedBy':
-                echo zget($users, $case->lastEditedBy, $case->lastEditedBy);
+                echo zget($users, $case->lastEditedBy);
                 break;
             case 'lastEditedDate':
                 echo substr($case->lastEditedDate, 5, 11);
                 break;
             case 'lastRunner':
-                echo zget($users, $case->lastRunner, $case->lastRunner);
+                echo zget($users, $case->lastRunner);
                 break;
             case 'lastRunDate':
                 if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));

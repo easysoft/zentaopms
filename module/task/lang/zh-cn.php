@@ -176,9 +176,8 @@ $lang->task->error->left             = '请填写"剩余"';
 $lang->task->error->work             = '"备注"必须小于%d个字符';
 $lang->task->error->skipClose        = '任务：%s 不是“已完成”或“已取消”状态，确定要关闭吗？';
 $lang->task->error->consumed         = '任务：%s工时不能小于0，忽略该任务工时的改动';
-$lang->task->error->isFinish         = '已完成任务，勿重复提交';
 
-/* 统计报表。*/
+/* Report. */
 $lang->task->report         = new stdclass();
 $lang->task->report->common = '报表';
 $lang->task->report->select = '请选择报表类型';

@@ -576,7 +576,7 @@ CREATE TABLE IF NOT EXISTS `zt_suitecase` (
 -- DROP TABLE IF EXISTS `zt_task`;
 CREATE TABLE IF NOT EXISTS `zt_task` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `parent` INT(11) NULL DEFAULT '0',
+  `parent` mediumint(8) NOT NULL DEFAULT '0',
   `project` mediumint(8) unsigned NOT NULL default '0',
   `module` mediumint(8) unsigned NOT NULL default '0',
   `story` mediumint(8) unsigned NOT NULL default '0',
@@ -627,7 +627,7 @@ CREATE TABLE IF NOT EXISTS `zt_taskestimate` (
 -- DROP TABLE IF EXISTS `zt_team`;
 CREATE TABLE IF NOT EXISTS `zt_team` (
   `project` mediumint(8) unsigned NOT NULL default '0',
-  `task` INT(11) NOT NULL DEFAULT '0',
+  `task` mediumint(8) NOT NULL DEFAULT '0',
   `account` char(30) NOT NULL default '',
   `role` char(30) NOT NULL default '',
   `limitedUser` char(8) NOT NULL default 'no',
@@ -887,7 +887,6 @@ CREATE TABLE `zt_score` (
   `score` int(11) NOT NULL DEFAULT '0',
   `after` int(11) NOT NULL DEFAULT '0',
   `time` datetime NOT NULL,
-  `objectID` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `account` (`account`),
   KEY `model` (`module`),

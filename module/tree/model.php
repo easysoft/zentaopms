@@ -170,6 +170,12 @@ class treeModel extends model
         return $modulePairs;
     }
 
+    /**
+     * Get line pairs. 
+     * 
+     * @access public
+     * @return array
+     */
     public function getLinePairs()
     {
         return $this->dao->select('id, name')->from(TABLE_MODULE)->where('type')->eq('line')->fetchPairs();

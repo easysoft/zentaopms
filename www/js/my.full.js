@@ -90,7 +90,7 @@ function showSearchMenu(objectType, objectID, module, method, extra)
     var $toggle = $(objectType == 'branch' ? '#currentBranch' : (objectType == 'tree' ? '#currentModule' : '#currentItem')).closest('li').toggleClass('show');
     if(!$toggle.hasClass('show')) return;
     var $menu = $toggle.find('#dropMenu');
-    var uuid = $.zui.uuid();
+    var uuid  = $.zui.uuid();
     if(!$.cookie('ajax_quickJump'))
     {
         $.cookie('ajax_quickJump', 'on', {expires: config.cookieLife, path: config.webRoot});
@@ -102,15 +102,16 @@ function showSearchMenu(objectType, objectID, module, method, extra)
         $.get(remoteUrl, function(data)
         {
             var $search = $menu.html(data).find('#search').focus();
-            var $items = $menu.find('#searchResult ul > li:not(.heading)');
-            var items = [];
+            var $items  = $menu.find('#searchResult ul > li:not(.heading)');
+            var items   = [];
             $items.each(function()
             {
                 var $item = $(this).removeClass('active');
-                var item = $item.data();
+                var item  = $item.data();
+
                 item.uuid = 'searchItem-' + (uuid++);
-                item.key = (item.key || '') + $item.text();
-                item.tag = (item.tag || '') + '#' + item.id;
+                item.key  = (item.key || '') + $item.text();
+                item.tag  = (item.tag || '') + '#' + item.id;
                 $item.attr('id', item.uuid);
                 items.push(item);
             });
@@ -148,8 +149,8 @@ function showSearchMenu(objectType, objectID, module, method, extra)
                 searchCallTask = setTimeout(searchItems, 200);
             }).on('keydown', function(e)
             {
-                var code = e.which;
-                var isSearching = $menu.hasClass('searching');
+                var code         = e.which;
+                var isSearching  = $menu.hasClass('searching');
                 var $resultItems = isSearching ? $items.filter('.show-search') : $items;
                 var resultLength = $resultItems.length;
                 if(!resultLength) return;
@@ -697,8 +698,8 @@ function checkTable($table)
     {
         if(document.activeElement.type != 'select-one' && document.activeElement.type != 'text')
         {
-            var $this = $(this);
-            var $tr = $this.closest('tr');
+            var $this     = $(this);
+            var $tr       = $this.closest('tr');
             var $checkbox = $tr.find(':checkbox');
             if($checkbox.size() == 0) return;
 

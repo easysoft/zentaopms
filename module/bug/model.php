@@ -2318,6 +2318,12 @@ class bugModel extends model
      * @param  array  $users
      * @param  array  $builds
      * @param  array  $branches
+     * @param  array  $modulePairs 
+     * @param  array  $projects 
+     * @param  array  $plans 
+     * @param  array  $stories 
+     * @param  array  $tasks 
+     * @param  string $mode 
      * @access public
      * @return void
      */

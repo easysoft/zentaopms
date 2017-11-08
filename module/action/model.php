@@ -51,9 +51,9 @@ class actionModel extends model
         $this->file->autoDelete($this->post->uid);
 
         /* Get product and project for this object. */
-        $productAndProject  = $this->getProductAndProject($action->objectType, $objectID);
-        $action->product    = $productAndProject['product'];
-        $action->project    = (int)$productAndProject['project'];
+        $productAndProject = $this->getProductAndProject($action->objectType, $objectID);
+        $action->product   = $productAndProject['product'];
+        $action->project   = (int) $productAndProject['project'];
 
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         $actionID = $this->dbh->lastInsertID();

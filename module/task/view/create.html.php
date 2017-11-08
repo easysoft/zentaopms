@@ -47,7 +47,9 @@
           </div>
         </td>
         <td>
-          <button type='button' class='btn btn-link<?php echo $task->type == 'affair' ? '' : ' hidden'?>' id='selectAllUser'><?php echo $lang->task->selectAllUser ?></button>
+          <button type='button' class='btn btn-link<?php if($task->type == 'affair') echo ' hidden';?>' id='selectAllUser'>
+            <?php echo $lang->task->selectAllUser;?>
+          </button>
         </td>
       </tr>
       <?php if(strpos(",$showFields,", ',story,') !== false and $this->config->global->flow != 'onlyTask'):?>
@@ -100,7 +102,7 @@
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->task->pri;?></span>
                 <?php if($hasCustomPri):?>
                 <?php echo html::select('pri', $lang->task->priList, $task->pri, "class='form-control'");?> 
-                <?php else: ?>
+                <?php else:?>
                 <div class='input-group-btn dropdown-pris'>
                   <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>
                     <span class='pri-text'></span> &nbsp;<span class='caret'></span>
@@ -108,11 +110,10 @@
                   <ul class='dropdown-menu pull-right'></ul>
                   <?php echo html::select('pri', $lang->task->priList, $task->pri, "class='hide'");?>
                 </div>
-                <?php endif; ?>
+                <?php endif;?>
               </div>
             </div>
-            <?php endif; ?>
-
+            <?php endif;?>
             <?php if(!$hiddenEst):?>
             <div class='col-table' id='estRowCol'>
               <div class='input-group'>
@@ -120,7 +121,7 @@
                 <?php echo html::input('estimate', $task->estimate, "class='form-control' placeholder='{$lang->task->hour}' autocomplete='off'");?>
               </div>
             </div>
-            <?php endif; ?>
+            <?php endif;?>
           </div>
         </td>
       </tr>
@@ -186,28 +187,29 @@
       <div class='modal-dialog'>
         <div class='modal-header'>
           <button type='button' class='close' data-dismiss='modal'>
-            <span aria-hidden='true'>×</span><span class='sr-only'>关闭</span></button>
-          <h4 class='modal-title'><?php echo $lang->task->team ?></h4>
+            <span aria-hidden='true'>×</span><span class='sr-only'><?php echo $lang->task->close;?></span>
+          </button>
+          <h4 class='modal-title'><?php echo $lang->task->team;?></h4>
         </div>
         <div class='modal-content'>
           <table class="table table-form">
-              <?php for($i = 0; $i < 6; $i++): ?>
-                <tr>
-                  <td class='w-150px'><?php echo html::select("team[]", $members, '', "class='form-control chosen'") ?></td>
-                  <td>
-                    <div class='input-group'>
-                        <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
-                      <span class='input-group-addon'><?php echo $lang->task->hour ?></span>
-                    </div>
-                  </td>
-                  <td class='w-90px'>
-                    <a href='javascript:;' class='btn btn-move-up btn-sm'><i class='icon-arrow-up'></i></a>
-                    <a href='javascript:;' class='btn btn-move-down btn-sm'><i class='icon-arrow-down'></i></a>
-                  </td>
-                </tr>
-              <?php endfor; ?>
+            <?php for($i = 0; $i < 6; $i++):?>
             <tr>
-              <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '',"class='btn btn-primary' data-dismiss='modal'") ?></td>
+              <td class='w-150px'><?php echo html::select("team[]", $members, '', "class='form-control chosen'");?></td>
+              <td>
+                <div class='input-group'>
+                  <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
+                  <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
+                </div>
+              </td>
+              <td class='w-90px'>
+                <a href='javascript:;' class='btn btn-move-up btn-sm'><i class='icon-arrow-up'></i></a>
+                <a href='javascript:;' class='btn btn-move-down btn-sm'><i class='icon-arrow-down'></i></a>
+              </td>
+            </tr>
+            <?php endfor;?>
+            <tr>
+              <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary' data-dismiss='modal'") ?></td>
             </tr>
           </table>
         </div>

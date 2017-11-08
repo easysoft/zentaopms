@@ -1,7 +1,8 @@
 /* Remove width in defaultChosenOptions. */
 delete defaultChosenOptions.width;
 
-$(document).ready(removeDitto());//Remove 'ditto' in first row.
+/* Remove 'ditto' in first row. */
+$(document).ready(removeDitto());
 
 /* Get select of stories.*/
 function setStories(moduleID, projectID, num)
@@ -154,10 +155,3 @@ $(function()
     if(storyID != 0) setStoryRelated(0);
 })
 
-// if(projectType == 'ops')
-// {
-//     $("#tableBody th").eq(2).addClass('hidden');
-//     $("#tableBody tr").each(function() {
-//         $(this).find('td').eq(2).addClass('hidden');
-//     });
-// }

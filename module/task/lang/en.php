@@ -176,9 +176,8 @@ $lang->task->error->left             = 'Please enter "Remained"';
 $lang->task->error->work             = '"Remark" must be less than %d characteres.';
 $lang->task->error->skipClose        = 'Task: %s is not“Done”or “Cancelled”. Confirm to close them?';
 $lang->task->error->consumed         = 'Task: %s man-hour must be more than 0. Ignore changes to this Task.';
-$lang->task->error->isFinish         = 'Has completed the task, do not repeat the submission.';
 
-/* 统计报表。*/
+/* Report. */
 $lang->task->report = new stdclass();
 $lang->task->report->common = 'Report';
 $lang->task->report->select = 'Select the type of Task Report';

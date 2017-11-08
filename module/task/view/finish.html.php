@@ -23,13 +23,13 @@
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table table-form'>
     <tr>
-      <th class='w-80px'><?php echo !empty($task->team) ?  $lang->task->common.$lang->task->consumed : $lang->task->hasConsumed;?></th>
-      <td class='w-p25-f'> <?php echo $task->consumed;?> <?php echo $lang->workingHour;?></td><td></td>
+      <th class='w-80px'><?php echo !empty($task->team) ? $lang->task->common . $lang->task->consumed : $lang->task->hasConsumed;?></th>
+      <td class='w-p25-f'><?php echo $task->consumed;?> <?php echo $lang->workingHour;?></td><td></td>
     </tr>
     <?php if(!empty($task->team)):?>
     <tr>
       <th class='w-80px'><?php echo $lang->task->hasConsumed;?></th>
-      <td class='w-p25-f'> <?php echo $task->myConsumed;?> <?php echo $lang->workingHour;?></td><td></td>
+      <td class='w-p25-f'><?php echo $task->myConsumed;?> <?php echo $lang->workingHour;?></td><td></td>
     </tr>
     <?php endif;?>
     <tr>

@@ -500,7 +500,9 @@ class testcase extends control
             $this->view->branchName  = $this->session->currentProductType == 'normal' ? '' : $this->loadModel('branch')->getById($case->branch);
         }
 
-        $caseFails = $this->dao->select('COUNT(*) AS count')->from(TABLE_TESTRESULT)->where('caseResult')->eq('fail')->andwhere('`case`')->eq($caseID)
+        $caseFails = $this->dao->select('COUNT(*) AS count')->from(TABLE_TESTRESULT)
+            ->where('caseResult')->eq('fail')
+            ->andwhere('`case`')->eq($caseID)
             ->beginIF($from == 'testtask')->andwhere('`run`')->eq($taskID)->fi()
             ->fetch('count');
         $case->caseFails = $caseFails;

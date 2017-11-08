@@ -440,7 +440,7 @@ $(function()
 
         $('.task-num-finish').text(finishCount);
         var isFinishAll = finishCount >= totalCount;
-        if(isFinishAll)  current = $tasks.children('li').first().data('name');
+        if(isFinishAll) current = $tasks.children('li').first().data('name');
 
         var progress = Math.round(100*finishCount/totalCount);
         $progress.toggleClass('finish', isFinishAll).find('.progress-bar').css('width', (100*finishCount/totalCount) + '%');

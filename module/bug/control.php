@@ -711,7 +711,6 @@ class bug extends control
         /* Assign. */
         $this->view->position[]     = $this->lang->bug->common;
         $this->view->position[]     = $this->lang->bug->batchEdit;
-        $this->view->bugIDList      = $bugIDList;
         $this->view->productID      = $productID;
         $this->view->branchProduct  = $branchProduct;
         $this->view->severityList   = array('ditto' => $this->lang->bug->ditto) + $this->lang->bug->severityList;

@@ -19,7 +19,7 @@ $lang->my->manageContacts = 'Maintain Contact';
 $lang->my->deleteContacts = 'Delete Contact';
 $lang->my->limited        = 'Restricted operation (editing only content related to itself)';
 $lang->my->score          = 'My Score';
-$lang->my->scoreRule      = 'Score rule';
+$lang->my->scoreRule      = 'Score Rule';
 
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = 'Assigned to Me';

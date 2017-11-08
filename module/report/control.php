@@ -201,15 +201,15 @@ class report extends control
             /* Reset $this->output. */
             $this->clear();
 
-            $mailTitle   = $this->lang->report->mailTitle->begin;
-            $mailTitle  .= isset($mail->bugs)  ? sprintf($this->lang->report->mailTitle->bug,  count($mail->bugs))  : '';
-            $mailTitle  .= isset($mail->tasks) ? sprintf($this->lang->report->mailTitle->task, count($mail->tasks)) : '';
-            $mailTitle  .= isset($mail->todos) ? sprintf($this->lang->report->mailTitle->todo, count($mail->todos)) : '';
-            $mailTitle  .= isset($mail->testTasks) ? sprintf($this->lang->report->mailTitle->testTask, count($mail->testTasks)) : '';
-            $mailTitle   = rtrim($mailTitle, ',');
+            $mailTitle  = $this->lang->report->mailTitle->begin;
+            $mailTitle .= isset($mail->bugs)  ? sprintf($this->lang->report->mailTitle->bug,  count($mail->bugs))  : '';
+            $mailTitle .= isset($mail->tasks) ? sprintf($this->lang->report->mailTitle->task, count($mail->tasks)) : '';
+            $mailTitle .= isset($mail->todos) ? sprintf($this->lang->report->mailTitle->todo, count($mail->todos)) : '';
+            $mailTitle .= isset($mail->testTasks) ? sprintf($this->lang->report->mailTitle->testTask, count($mail->testTasks)) : '';
+            $mailTitle  = rtrim($mailTitle, ',');
 
             /* Get email content and title.*/
-            $this->view->mail = $mail;
+            $this->view->mail      = $mail;
             $this->view->mailTitle = $mailTitle;
 
             $oldViewType = $this->viewType;

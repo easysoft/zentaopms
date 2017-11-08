@@ -38,7 +38,9 @@ $account = $this->app->user->account
             </a>
             <ul class='dropdown-menu text-left'>
               <?php foreach ($lang->project->orderList as $key => $value):?>
-              <li <?php echo ($type == 'story' and $orderBy == $key) ? " class='active'" : '' ?>><?php echo html::a($this->createLink('project', 'kanban', "projectID=$projectID&type=story&orderBy=$key"), $value);?></li>
+              <li <?php echo ($type == 'story' and $orderBy == $key) ? " class='active'" : '' ?>>
+                <?php echo html::a($this->createLink('project', 'kanban', "projectID=$projectID&type=story&orderBy=$key"), $value);?>
+              </li>
               <?php endforeach;?>
               <?php echo "<li" . ($type == 'assignedTo' ? " class='active'" : '') . ">" . html::a(inlink('kanban', "project=$projectID&type=assignedTo"), $lang->project->groups['assignedTo']) . "</li>";?>
               <?php echo "<li" . ($type == 'finishedBy' ? " class='active'" : '') . ">" . html::a(inlink('kanban', "project=$projectID&type=finishedBy"), $lang->project->groups['finishedBy']) . "</li>";?>
@@ -46,19 +48,19 @@ $account = $this->app->user->account
           </div>
         </th>
         <?php endif;?>
-        <?php $endCol = array_pop($taskCols);?>
-        <?php foreach ($taskCols as $col):?>
+        <?php $lastCol = array_pop($taskCols);?>
+        <?php foreach($taskCols as $col):?>
         <th class='col-<?php echo $col?>'><?php echo $lang->task->statusList[$col];?></th>
         <?php endforeach;?>
-        <th class='col-<?php echo $endCol?>'><?php echo $lang->task->statusList[$endCol];?>
+        <th class='col-<?php echo $lastCol?>'><?php echo $lang->task->statusList[$lastCol];?>
           <div class='actions'>
             <div class="dropdown">
               <button type="button" class="btn btn-mini btn-link dropdown-toggle" data-toggle="dropdown">
                 <span class="icon-ellipsis-h"></span>
               </button>
               <ul class="dropdown-menu pull-right">
-                <?php echo '<li>' . html::a($this->createLink('project', 'ajaxKanbanSetting', "projectID=$projectID"), "<i class='icon-cog'></i> " .  $lang->project->kanbanSetting, '', "class='iframe'") . '</li>';?>
-                <?php if(common::hasPriv('project', 'printKanban')) echo '<li>' . html::a('###', "<i class='icon-print'></i> " .  $lang->project->printKanban, '', "id='printKanban' title='" . $lang->project->printKanban . "'") . '</li>';?>
+                <?php echo '<li>' . html::a($this->createLink('project', 'ajaxKanbanSetting', "projectID=$projectID"), "<i class='icon-cog'></i> " . $lang->project->kanbanSetting, '', "class='iframe'") . '</li>';?>
+                <?php if(common::hasPriv('project', 'printKanban')) echo '<li>' . html::a('###', "<i class='icon-print'></i> " . $lang->project->printKanban, '', "id='printKanban' title='{$lang->project->printKanban}'") . '</li>';?>
               </ul>
             </div>
           </div>
@@ -66,7 +68,7 @@ $account = $this->app->user->account
       </tr>
     </thead>
   </table>
-  <?php $taskCols[] = $endCol;?>
+  <?php $taskCols[] = $lastCol;?>
   <table class='boards-layout table active-disabled table-bordered' id='kanbanWrapper'>
     <thead>
       <tr>
@@ -86,7 +88,10 @@ $account = $this->app->user->account
           <?php if($groupKey != 'nokey'):?>
           <?php if($type == 'story'):?>
           <?php $story = $group;?>
-          <div class='board board-story stage-<?php echo $story->stage?><?php if($showOption) echo ' show-info'?><?php if($story->assignedTo == $account) echo ' inverse';?>' data-id='<?php echo $story->id?>'>
+          <?php $class = "stage-{$story->stage}";?>
+          <?php if($showOption) $class .= ' show-info';?>
+          <?php if($story->assignedTo == $account) $class .= ' inverse';?>
+          <div class='board board-story <?php echo $class;?>' data-id='<?php echo $story->id;?>'>
             <div class='board-title'>
               <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', 'class="kanbanFrame" title="' . $story->title . '"');?>
               <div class='board-actions'>
@@ -128,7 +133,10 @@ $account = $this->app->user->account
         <td class='col-droppable col-<?php echo $col?>' data-id='<?php echo $col?>'>
         <?php if(!empty($group->tasks[$col])):?>
           <?php foreach($group->tasks[$col] as $task):?>
-          <div class='board board-task board-task-<?php echo $col ?><?php if($showOption) echo ' show-info'?><?php if($task->assignedTo == $account) echo ' inverse';?>' data-id='<?php echo $task->id?>' id='task-<?php echo $task->id?>'>
+          <?php $class = "board-task-{$col}";?>
+          <?php if($showOption) $class .= ' show-info';?>
+          <?php if($task->assignedTo == $account) $class .= ' inverse';?>
+          <div class='board board-task <?php echo $class;?>' data-id='<?php echo $task->id?>' id='task-<?php echo $task->id?>'>
             <div class='board-title'>
               <?php
               if(isset($task->delay))
@@ -176,7 +184,10 @@ $account = $this->app->user->account
         <?php endif?>
         <?php if(!empty($group->bugs[$col])):?>
           <?php foreach($group->bugs[$col] as $bug):?>
-          <div class='board board-bug board-bug-<?php echo $col ?><?php if($showOption) echo ' show-info'?><?php if($bug->assignedTo == $account) echo ' inverse';?>' data-id='<?php echo $bug->id?>' id='bug-<?php echo $bug->id?>'>
+          <?php $class = "board-bug-{$col}";?>
+          <?php if($showOption) $class .= ' show-info';?>
+          <?php if($bug->assignedTo == $account) $class .= ' inverse';?>
+          <div class='board board-bug <?php echo $class;?>' data-id='<?php echo $bug->id?>' id='bug-<?php echo $bug->id?>'>
             <div class='board-title'>
               <i class="icon-bug"></i> 
               <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', 'class="kanbanFrame" title="' . $bug->title . '"');?>

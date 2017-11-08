@@ -170,13 +170,13 @@ $(document).ready(function()
 
     $('[data-toggle=tooltip]').tooltip();
 
-    // adjust form controls layout
+    /* Adjust form controls layout */
     var ajustFormControls = function()
     {
-        // adjust style for file box
+        /* Adjust style for file box */
         applyCssStyle('.fileBox > tbody > tr > td:first-child {transition: none; width: ' + ($('#dataPlanGroup').width() - 1) + 'px}', 'filebox');
 
-        // adjust #priRowCol and #estRowCol size
+        /* Adjust #priRowCol and #estRowCol size */
         var $priRowCol = $('#priRowCol'),
             $estRowCol = $('#estRowCol');
         $priRowCol.css('width', 54 + $priRowCol.find('.input-group-addon').outerWidth());

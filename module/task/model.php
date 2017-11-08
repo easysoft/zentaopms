@@ -22,8 +22,8 @@ class taskModel extends model
      */
     public function create($projectID)
     {
-        $tasksID   = array();
-        $taskFiles = array();
+        $taskIdList = array();
+        $taskFiles  = array();
         $this->loadModel('file');
         $task = fixer::input('post')
             ->add('project', (int)$projectID)
@@ -56,7 +56,7 @@ class taskModel extends model
                 foreach($this->post->team as $row => $account)
                 {
                     if(empty($account) or isset($team[$account])) continue;
-                    $member           = new stdClass();
+                    $member = new stdClass();
                     $member->project  = 0;
                     $member->account  = $account;
                     $member->role     = $assignedTo;
@@ -64,10 +64,10 @@ class taskModel extends model
                     $member->estimate = $this->post->teamEstimate[$row] ? (float)$this->post->teamEstimate[$row] : 0;
                     $member->left     = $member->estimate;
                     $member->order    = $row;
+                    $teams[$account]  = $member;
 
-                    $teams[$account] = $member;
-                    $estimate        += (float)$member->estimate;
-                    $left            += (float)$member->left;
+                    $estimate += (float)$member->estimate;
+                    $left     += (float)$member->left;
                 }
 
                 if(!empty($teams))
@@ -86,7 +86,7 @@ class taskModel extends model
                 $result = $this->loadModel('common')->removeDuplicate('task', $task, "project=$projectID and story=$task->story");
                 if($result['stop'])
                 {
-                    $tasksID[$assignedTo] = array('status' => 'exists', 'id' => $result['duplicate']);
+                    $taskIdList[$assignedTo] = array('status' => 'exists', 'id' => $result['duplicate']);
                     continue;
                 }
             }
@@ -119,15 +119,19 @@ class taskModel extends model
                 foreach($taskFiles as $fileID => $taskFile) unset($taskFiles[$fileID]->id);
             }
 
-            if(!empty($teams)) foreach($teams as $team)
+            if(!empty($teams))
             {
-                $team->task = $taskID;
-                $this->dao->insert(TABLE_TEAM)->data($team)->autoCheck()->exec();
+                foreach($teams as $team)
+                {
+                    $team->task = $taskID;
+                    $this->dao->insert(TABLE_TEAM)->data($team)->autoCheck()->exec();
+                }
             }
+
             $this->loadModel('score')->create('task', 'create', $taskID);
-            $tasksID[$assignedTo] = array('status' => 'created', 'id' => $taskID);
+            $taskIdList[$assignedTo] = array('status' => 'created', 'id' => $taskID);
         }
-        return $tasksID;
+        return $taskIdList;
     }
 
     /**
@@ -162,8 +166,7 @@ class taskModel extends model
             else
             {
                 dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common);
-                echo js::error(dao::getError());
-                exit;
+                die(js::error(dao::getError()));
             }
         }
 
@@ -227,7 +230,8 @@ class taskModel extends model
             if($story) $this->story->setStage($tasks->story[$i]);
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
             $this->loadModel('score')->create('task', 'create', $taskID);
-            $mails[$i]           = new stdclass();
+
+            $mails[$i] = new stdclass();
             $mails[$i]->taskID   = $taskID;
             $mails[$i]->actionID = $actionID;
         }
@@ -242,15 +246,14 @@ class taskModel extends model
      *
      * @param $taskID
      *
-     * @access private
-     * @return void
+     * @access public
+     * @return bool
      */
-    private function countTime($taskID)
+    public function countTime($taskID)
     {
         if(!$taskID) return true;
 
         $tasks = $this->dao->select('`id`,`estimate`,`consumed`,`left`')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetchAll('id');
-
         if(empty($tasks)) return true;
 
         $estimate = 0;
@@ -263,36 +266,34 @@ class taskModel extends model
             $left     += $task->left;
         }
 
-        $newTask           = new stdClass();
+        $newTask = new stdClass();
         $newTask->estimate = $estimate;
         $newTask->consumed = $consumed;
         $newTask->left     = $left;
 
         $this->dao->update(TABLE_TASK)->data($newTask)->autoCheck()->where('id')->eq($taskID)->exec();
+        return !dao::isError();
     }
 
     /**
-     * Check that all child status
+     * Check that all children's status.
      *
      * @param $parentID
      * @param $status
      *
-     * @access private
+     * @access public 
      * @return bool
      */
-    private function parentStatus($parentID, $status = 'done')
+    public function parentStatus($parentID, $status = 'done')
     {
         if(!$parentID) return true;
-        $data     = new stdClass();
         $children = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->fetchPairs('id', 'status');
         $values   = array_values(array_unique($children));
         if((count($values) == 1 && $values[0] == $status) || (count($values) == 2 && in_array('closed', $values) && $status == 'done'))
         {
-            $data->status = $status;
-            $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('id')->eq($parentID)->exec();
+            $this->dao->update(TABLE_TASK)->set('status')->eq($status)->where('id')->eq($parentID)->exec();
         }
     }
-
 
     /**
      * Update a task.
@@ -349,7 +350,7 @@ class taskModel extends model
             foreach($this->post->team as $row => $account)
             {
                 if(empty($account) or isset($team[$account])) continue;
-                $member           = new stdClass();
+                $member = new stdClass();
                 $member->project  = 0;
                 $member->account  = $account;
                 $member->role     = $task->assignedTo;
@@ -359,10 +360,10 @@ class taskModel extends model
                 $member->consumed = $this->post->teamConsumed[$row] ? $this->post->teamConsumed[$row] : 0;
                 $member->left     = $member->estimate - $member->consumed;
                 $member->order    = $row;
+                $teams[$account]  = $member;
 
-                $teams[$account] = $member;
-                $estimate        += (float)$member->eatimate;
-                $left            += (float)$member->left;
+                $estimate += (float)$member->eatimate;
+                $left     += (float)$member->left;
             }
 
             if(!empty($teams))
@@ -401,7 +402,7 @@ class taskModel extends model
             ->checkIF($task->estimate != false, 'estimate', 'float')
             ->checkIF($task->left     != false, 'left',     'float')
             ->checkIF($task->consumed != false, 'consumed', 'float')
-            ->checkIF($task->status != 'wait' and $task->left == 0 and $task->status != 'cancel' and $task->status != 'closed', 'status', 'equal', 'done')
+            ->checkIF($task->status   != 'wait' and $task->left == 0 and $task->status != 'cancel' and $task->status != 'closed', 'status', 'equal', 'done')
 
             ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
 
@@ -422,8 +423,8 @@ class taskModel extends model
         if($this->post->story != false) $this->loadModel('story')->setStage($this->post->story);
         if(!dao::isError())
         {
-            if($task->status == 'done')  $this->loadModel('score')->create('task', 'finish', $taskID);
-            if($task->status == 'closed')  $this->loadModel('score')->create('task', 'close', $taskID);
+            if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
+            if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
             $this->file->updateObjectID($this->post->uid, $taskID, 'task');
             return common::createChanges($oldTask, $task);
         }
@@ -519,18 +520,15 @@ class taskModel extends model
             switch($task->status)
             {
                 case 'done':
-                {
                     $task->left = 0;
-                    if(!$task->finishedBy)   $task->finishedBy = $this->app->user->account;
-                    if($task->closedReason)  $task->closedDate = $now;
+                    if(!$task->finishedBy)  $task->finishedBy = $this->app->user->account;
+                    if($task->closedReason) $task->closedDate = $now;
                     $task->finishedDate = $oldTask->status == 'done' ?  $oldTask->finishedDate : $now;
 
                     $task->canceledBy   = '';
                     $task->canceledDate = '';
-                }
-                break;
+                    break;
                 case 'cancel':
-                {
                     $task->assignedTo   = $oldTask->openedBy;
                     $task->assignedDate = $now;
 
@@ -539,37 +537,26 @@ class taskModel extends model
 
                     $task->finishedBy   = '';
                     $task->finishedDate = '';
-                }
-                break;
+                    break;
                 case 'closed':
-                {
                     if(!$task->closedBy)   $task->closedBy   = $this->app->user->account;
                     if(!$task->closedDate) $task->closedDate = $now;
-                }
-                break;
+                    break;
                 case 'wait':
-                {
                     if($task->consumed > 0 and $task->left > 0) $task->status = 'doing';
                     if($task->left == $oldTask->left and $task->consumed == 0) $task->left = $task->estimate;
 
                     $task->canceledDate = '';
                     $task->finishedDate = '';
                     $task->closedDate   = '';
-                }
-                break;
+                    break;
                 case 'doing':
-                {
                     $task->canceledDate = '';
                     $task->finishedDate = '';
                     $task->closedDate   = '';
-                }
-                break;
+                    break;
                 case 'pause':
-                {
                     $task->finishedDate = '';
-                }
-
-                default:break;
             }
             if($task->assignedTo) $task->assignedDate = $now;
 
@@ -580,7 +567,7 @@ class taskModel extends model
                 ->checkIF($task->estimate != false, 'estimate', 'float')
                 ->checkIF($task->consumed != false, 'consumed', 'float')
                 ->checkIF($task->left     != false, 'left',     'float')
-                ->checkIF($task->left == 0 and $task->status != 'cancel' and $task->status != 'closed' and $task->status != 'wait' and $task->consumed != 0, 'status', 'equal', 'done')
+                ->checkIF($task->left     == 0 and $task->status != 'cancel' and $task->status != 'closed' and $task->status != 'wait' and $task->consumed != 0, 'status', 'equal', 'done')
 
                 ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
 
@@ -599,8 +586,8 @@ class taskModel extends model
             if(!dao::isError())
             {
                 $this->countTime($oldTask->parent);
-                if($task->status == 'done')  $this->loadModel('score')->create('task', 'finish', $taskID);
-                if($task->status == 'closed')  $this->loadModel('score')->create('task', 'close', $taskID);
+                if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
+                if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
                 $allChanges[$taskID] = common::createChanges($oldTask, $task);
             }
             else
@@ -650,8 +637,9 @@ class taskModel extends model
      */
     public function assign($taskID)
     {
-        $now = helper::now();
         $oldTask = $this->getById($taskID);
+
+        $now  = helper::now();
         $task = fixer::input('post')
             ->cleanFloat('left')
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -680,6 +668,7 @@ class taskModel extends model
     {
         $oldTask = $this->getById($taskID);
         if($this->post->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
+
         $now  = helper::now();
         $task = fixer::input('post')
             ->setDefault('assignedTo', $this->app->user->account)
@@ -704,7 +693,8 @@ class taskModel extends model
             ->setDefault('account', $this->app->user->account)
             ->setDefault('task', $taskID)
             ->setDefault('date', $task->realStarted)
-            ->remove('realStarted,comment')->get();
+            ->remove('realStarted,comment')
+            ->get();
         $estimate->consumed = $estimate->consumed - $oldTask->consumed;
         $this->addTaskEstimate($estimate);
 
@@ -713,12 +703,12 @@ class taskModel extends model
             $teams = array_keys($oldTask->team);
             if(empty($oldTask->assignedTo)) $oldTask->assignedTo = $teams[0];
 
-            $newTeamInfo           = new stdClass();
+            $newTeamInfo = new stdClass();
             $newTeamInfo->consumed = $task->consumed;
             $newTeamInfo->left     = 0;
             $this->dao->update(TABLE_TEAM)->data($newTeamInfo)->where('task')->eq($taskID)->andWhere('account')->eq($oldTask->assignedTo)->exec();
 
-            $newTask               = new stdClass();
+            $newTask = new stdClass();
             $newTask->left         = 0;
             $newTask->status       = 'doing';
             $newTask->consumed     = $task->consumed;
@@ -736,16 +726,13 @@ class taskModel extends model
 
         if($oldTask->parent)
         {
-            switch($task->status)
+            if($task->status == 'doing')
             {
-                case 'doing':
-                    $status         = new stdClass();
-                    $status->status = 'doing';
-                    $this->dao->update(TABLE_TASK)->data($status)->autoCheck()->where('id')->eq((int)$oldTask->parent)->exec();
-                    break;
-                case 'done':
-                    $this->parentStatus($oldTask->parent,'done');
-                    break;
+                $this->dao->update(TABLE_TASK)->set('status')->eq('doing')->where('id')->eq((int)$oldTask->parent)->exec();
+            }
+            elseif($task->status == 'done')
+            {
+                $this->parentStatus($oldTask->parent, 'done');
             }
         }
 
@@ -764,10 +751,10 @@ class taskModel extends model
      */
     public function recordEstimate($taskID)
     {
-        $record    = fixer::input('post')->get();
-        $estimates = array();
-        $task      = $this->getById($taskID);
-        $oldStatus = $task->status;
+        $record       = fixer::input('post')->get();
+        $estimates    = array();
+        $task         = $this->getById($taskID);
+        $oldStatus    = $task->status;
         $earliestTime = '';
         foreach(array_keys($record->id) as $id)
         {
@@ -782,9 +769,10 @@ class taskModel extends model
 
             if($record->dates[$id])
             {
-                if(!$record->consumed[$id]) die(js::alert($this->lang->task->error->consumedThisTime));
+                if(!$record->consumed[$id])   die(js::alert($this->lang->task->error->consumedThisTime));
                 if($record->left[$id] === '') die(js::alert($this->lang->task->error->left));
                 if(strlen($record->work[$id]) > $this->config->task->workLimitLength) die(js::alert(sprintf($this->lang->task->error->work, $this->config->task->workLimitLength)));
+
                 $estimates[$id] = new stdclass();
                 $estimates[$id]->date     = $record->dates[$id];
                 $estimates[$id]->task     = $taskID;
@@ -797,16 +785,19 @@ class taskModel extends model
 
         if(empty($estimates)) return;
 
+        $this->loadModel('action');
+
         $consumed = 0;
         $left     = $task->left;
         $now      = helper::now();
         $lastDate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($taskID)->orderBy('date_desc')->limit(1)->fetch('date');
-        $this->loadModel('action');
+
         foreach($estimates as $estimate)
         {
-            $consumed += $estimate->consumed;
-            $work      = $estimate->work;
             $this->addTaskEstimate($estimate);
+
+            $consumed  += $estimate->consumed;
+            $work       = $estimate->work;
             $estimateID = $this->dao->lastInsertID();
             $actionID   = $this->action->create('task', $taskID, 'RecordEstimate', $work, $estimate->consumed);
 
@@ -823,6 +814,7 @@ class taskModel extends model
         $data->status         = $task->status;
         $data->lastEditedBy   = $this->app->user->account;
         $data->lastEditedDate = $now;
+
         if($left == 0)
         {
             $task->status       = 'done';
@@ -832,7 +824,7 @@ class taskModel extends model
             $data->finishedBy   = $this->app->user->account;
             $data->finishedDate = $now;
         }
-        else if($task->status == 'wait')
+        elseif($task->status == 'wait')
         {
             $task->status       = 'doing';
             $data->status       = $task->status;
@@ -840,7 +832,7 @@ class taskModel extends model
             $data->assignedDate = $now;
             $data->realStarted  = $earliestTime;
         }
-        else if($task->status == 'pause')
+        elseif($task->status == 'pause')
         {
             $task->status       = 'doing';
             $data->status       = $task->status;
@@ -854,7 +846,7 @@ class taskModel extends model
 
             $myConsumed = $this->dao->select('`consumed`')->from(TABLE_TEAM)->where('task')->eq($taskID)->andWhere('account')->eq($task->assignedTo)->fetch('consumed');
 
-            $newTeamInfo           = new stdClass();
+            $newTeamInfo = new stdClass();
             $newTeamInfo->consumed = $myConsumed + $consumed;
             $newTeamInfo->left     = $left;
             $this->dao->update(TABLE_TEAM)->data($newTeamInfo)->where('task')->eq($taskID)->andWhere('account')->eq($task->assignedTo)->exec();
@@ -865,7 +857,7 @@ class taskModel extends model
 
             if($task->status == 'done')
             {
-                $newTask               = new stdClass();
+                $newTask = new stdClass();
                 $newTask->left         = $data->left;
                 $newTask->consumed     = $data->consumed;
                 $newTask->assignedTo   = $this->getNextUser($teams, $task->assignedTo);
@@ -879,16 +871,18 @@ class taskModel extends model
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($taskID)->exec();
 
         $oldTask = new stdClass();
-        $newTask = new stdClass();
         $oldTask->consumed = $task->consumed;
-        $newTask->consumed = $task->consumed + $consumed;
         $oldTask->left     = $task->left;
-        $newTask->left     = $left;
         $oldTask->status   = $oldStatus;
+
+        $newTask = new stdClass();
+        $newTask->left     = $left;
+        $newTask->consumed = $task->consumed + $consumed;
         $newTask->status   = $task->status;
 
         $changes = common::createChanges($oldTask, $newTask);
         if(!empty($actionID)) $this->action->logHistory($actionID, $changes);
+
         if($task->story) $this->loadModel('story')->setStage($task->story);
 
         if($task->status == 'done')
@@ -938,14 +932,14 @@ class taskModel extends model
             $myConsumed = $this->dao->select("`consumed`")->from(TABLE_TEAM)->where('task')->eq((int)$taskID)->andWhere('account')->eq($oldTask->assignedTo)->fetch('consumed');
             if($task->consumed < $myConsumed) die(js::error($this->lang->task->error->consumedSmall));
 
-            $data           = new stdClass();
+            $data = new stdClass();
             $data->left     = 0;
             $data->consumed = $task->consumed;
             $this->dao->update(TABLE_TEAM)->data($data)->where('task')->eq((int)$taskID)->andWhere('account')->eq($oldTask->assignedTo)->exec();
 
             $myTime = $this->dao->select("sum(`left`) as leftTime,sum(`consumed`) as consumed")->from(TABLE_TEAM)->where('task')->eq((int)$taskID)->andWhere('account')->in($teams)->fetch();
 
-            $newTask               = new stdClass();
+            $newTask = new stdClass();
             $newTask->left         = $myTime->leftTime;
             $newTask->consumed     = $myTime->consumed;
             $newTask->assignedTo   = $task->assignedTo;
@@ -957,9 +951,11 @@ class taskModel extends model
         }
 
         if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
+        
         /* Record consumed and left. */
         $consumed = $task->consumed - $oldTask->consumed;
         if($consumed < 0) die(js::error($this->lang->task->error->consumedSmall));
+
         $estimate = fixer::input('post')
             ->setDefault('account', $this->app->user->account)
             ->setDefault('task', $taskID)
@@ -973,7 +969,8 @@ class taskModel extends model
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheck($this->config->task->finish->requiredFields, 'notempty')
-            ->where('id')->eq((int)$taskID)->exec();
+            ->where('id')->eq((int)$taskID)
+            ->exec();
 
         if($task->status == 'done') $this->parentStatus($oldTask->parent, 'done');
         $this->countTime($oldTask->parent);
@@ -993,12 +990,13 @@ class taskModel extends model
     public function pause($taskID)
     {
         $oldTask = $this->getById($taskID);
-        $now     = helper::now();
+
         $task = fixer::input('post')
             ->setDefault('status', 'pause')
             ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->remove('comment')->get();
+            ->setDefault('lastEditedDate', helper::now())
+            ->remove('comment')
+            ->get();
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
 
@@ -1015,7 +1013,8 @@ class taskModel extends model
     public function close($taskID)
     {
         $oldTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
-        $now     = helper::now();
+
+        $now  = helper::now();
         $task = fixer::input('post')
             ->setDefault('status', 'closed')
             ->setDefault('assignedTo', 'closed')
@@ -1025,17 +1024,18 @@ class taskModel extends model
             ->setIF($oldTask->status == 'done',   'closedReason', 'done')
             ->setIF($oldTask->status == 'cancel', 'closedReason', 'cancel')
             ->remove('_recPerPage')
-            ->remove('comment')->get();
+            ->remove('comment')
+            ->get();
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
-        $this->parentStatus($oldTask->parent,'closed');
+        $this->parentStatus($oldTask->parent, 'closed');
         $this->countTime($oldTask->parent);
 
-        $data         = new stdClass();
-        $data->status = 'closed';
-        $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('parent')->eq($taskID)->exec();
+        $this->dao->update(TABLE_TASK)->set('status')->eq('closed')->where('parent')->eq($taskID)->exec();
+
         $this->loadModel('score')->create('task', 'close', $taskID);
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
+
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -1049,7 +1049,8 @@ class taskModel extends model
     public function cancel($taskID)
     {
         $oldTask = $this->getById($taskID);
-        $now     = helper::now();
+
+        $now  = helper::now();
         $task = fixer::input('post')
             ->setDefault('status', 'cancel')
             ->setDefault('assignedTo', $oldTask->openedBy)
@@ -1058,7 +1059,8 @@ class taskModel extends model
             ->setDefault('finishedDate', '0000-00-00')
             ->setDefault('canceledBy, lastEditedBy', $this->app->user->account)
             ->setDefault('canceledDate, lastEditedDate', $now)
-            ->remove('comment')->get();
+            ->remove('comment')
+            ->get();
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
 
@@ -1089,23 +1091,22 @@ class taskModel extends model
             ->setDefault('finishedDate, canceledDate, closedDate', '0000-00-00')
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
-            ->remove('comment')->get();
+            ->remove('comment')
+            ->get();
 
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheck($this->config->task->activate->requiredFields, 'notempty')
-            ->where('id')->eq((int)$taskID)->exec();
+            ->where('id')->eq((int)$taskID)
+            ->exec();
 
         $this->countTime($oldTask->parent);
 
-        $data         = new stdClass();
-        $data->status = 'doing';
-        $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('parent')->eq($taskID)->exec();
-        if($oldTask->parent)  $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('id')->eq((int)$oldTask->parent)->exec();
+        $this->dao->update(TABLE_TASK)->set('status')->eq('doing')->where('parent')->eq($taskID)->exec();
+        if($oldTask->parent) $this->dao->update(TABLE_TASK)->set('status')->eq('doing')->where('id')->eq((int)$oldTask->parent)->exec();
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
-
     }
 
     /**
@@ -1132,7 +1133,7 @@ class taskModel extends model
         $task->children = $children;
 
         /* Check parent Task. */
-        if(!empty($task->parent)) $task->parentName = $openedBy = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('name');
+        if(!empty($task->parent)) $task->parentName = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('name');
 
         $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->eq($taskID)->orderBy('order_desc')->fetchGroup('task', 'account');
         foreach($teams as $key => $team) $teams[$key] = array_reverse($team);
@@ -1141,8 +1142,12 @@ class taskModel extends model
 
         $task = $this->loadModel('file')->replaceImgURL($task, 'desc');
         if($setImgSize) $task->desc = $this->file->setImgSize($task->desc);
+
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
-        foreach($task as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $task->$key = '';
+        foreach($task as $key => $value)
+        {
+            if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $task->$key = '';
+        }
         $task->files = $this->loadModel('file')->getByObject('task', $taskID);
 
         /* Get related test cases. */
@@ -1199,10 +1204,10 @@ class taskModel extends model
     /**
      * Get tasks of a project.
      *
-     * @param        $projectID
+     * @param int    $projectID
      * @param int    $productID
      * @param string $type
-     * @param int    $modules
+     * @param string $modules
      * @param string $orderBy
      * @param null   $pager
      *
@@ -1244,9 +1249,9 @@ class taskModel extends model
                 ->andWhere('t1.deleted')->eq(0)
                 ->orderBy('id_desc')
                 ->fetchGroup('parent');
-            if(!empty($children)) foreach($children as $key => $child) $tasks[$key]->children = $child;
-            $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->in($taskList)->fetchGroup('task');
-            if($teams) foreach($teams as $key => $team) if(!empty($team)) $tasks[$key]->team = $team;
+            foreach($children as $key => $child) $tasks[$key]->children = $child;
+            $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->in($taskList)->fetchGroup('task');
+            foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
         }
 
         if($tasks) return $this->processTasks($tasks);
@@ -1317,14 +1322,15 @@ class taskModel extends model
      */
     public function getUserTaskPairs($account, $status = 'all')
     {
-        $tasks = array();
-        $sql = $this->dao->select('t1.id, t1.name, t2.name as project')
+        $stmt = $this->dao->select('t1.id, t1.name, t2.name as project')
             ->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.assignedTo')->eq($account)
-            ->andWhere('t1.deleted')->eq(0);
-        if($status != 'all') $sql->andwhere('t1.status')->in($status);
-        $stmt = $sql->query();
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
+            ->query();
+        
+        $tasks = array();
         while($task = $stmt->fetch())
         {
             $tasks[$task->id] = $task->project . ' / ' . $task->name;
@@ -1386,7 +1392,10 @@ class taskModel extends model
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->groupBy('story')
             ->fetchPairs();
-        foreach($stories as $storyID) if(!isset($taskCounts[$storyID])) $taskCounts[$storyID] = 0;
+        foreach($stories as $storyID) 
+        {
+            if(!isset($taskCounts[$storyID])) $taskCounts[$storyID] = 0;
+        }
         return $taskCounts;
     }
 
@@ -1415,15 +1424,15 @@ class taskModel extends model
     public function getEstimateById($estimateID)
     {
         $estimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)
-          ->where('id')->eq($estimateID)
-          ->fetch();
+            ->where('id')->eq($estimateID)
+            ->fetch();
 
         /* If the estimate is the last of its task, status of task will be checked. */
         $lastID = $this->dao->select('id')->from(TABLE_TASKESTIMATE)
             ->where('task')->eq($estimate->task)
             ->andWhere('id')->gt($estimate->id)
             ->fetch('id');
-        $estimate->isLast = $lastID ? false :true;
+        $estimate->isLast = $lastID ? false : true;
         return $estimate;
     }
 
@@ -1468,12 +1477,13 @@ class taskModel extends model
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
 
         $oldTask = new stdClass();
-        $newTask = new stdClass();
         $oldTask->consumed = $task->consumed;
-        $newTask->consumed = $consumed;
         $oldTask->left     = $task->left;
-        $newTask->left     = $left;
         $oldTask->status   = $oldStatus;
+
+        $newTask = new stdClass();
+        $newTask->consumed = $consumed;
+        $newTask->left     = $left;
         $newTask->status   = $task->status;
         if(!dao::isError()) return common::createChanges($oldTask, $newTask);
     }
@@ -1490,10 +1500,11 @@ class taskModel extends model
         $estimate = $this->getEstimateById($estimateID);
         $task     = $this->getById($estimate->task);
         $this->dao->delete()->from(TABLE_TASKESTIMATE)->where('id')->eq($estimateID)->exec();
-        $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('date desc,id desc')->fetch();
-        $consumed  = $task->consumed - $estimate->consumed;
-        $left      = $lastEstimate->left ? $lastEstimate->left : $estimate->left;
-        $oldStatus = $task->status;
+
+        $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('date desc,id desc')->limit(1)->fetch();
+        $consumed     = $task->consumed - $estimate->consumed;
+        $left         = $lastEstimate->left ? $lastEstimate->left : $estimate->left;
+        $oldStatus    = $task->status;
         if($left == 0 and $consumed != 0) $task->status = 'done';
         $this->dao->update(TABLE_TASK)
             ->set("consumed")->eq($consumed)
@@ -1503,13 +1514,15 @@ class taskModel extends model
             ->exec();
 
         $oldTask = new stdClass();
-        $newTask = new stdClass();
         $oldTask->consumed = $task->consumed;
-        $newTask->consumed = $consumed;
         $oldTask->left     = $task->left;
-        $newTask->left     = $left;
         $oldTask->status   = $oldStatus;
+
+        $newTask = new stdClass();
+        $newTask->consumed = $consumed;
+        $newTask->left     = $left;
         $newTask->status   = $task->status;
+
         if(!dao::isError()) return common::createChanges($oldTask, $newTask);
     }
 
@@ -1633,12 +1646,15 @@ class taskModel extends model
         $commonOption = $this->lang->task->report->options;
 
         $chartOption->graph->caption = $this->lang->task->report->charts[$chartType];
-        if(!isset($chartOption->type))    $chartOption->type  = $commonOption->type;
+        if(!isset($chartOption->type))   $chartOption->type   = $commonOption->type;
         if(!isset($chartOption->width))  $chartOption->width  = $commonOption->width;
         if(!isset($chartOption->height)) $chartOption->height = $commonOption->height;
 
         /* merge configuration */
-        foreach($commonOption->graph as $key => $value) if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
+        foreach($commonOption->graph as $key => $value)
+        {
+            if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
+        }
     }
 
     /**
@@ -1649,15 +1665,19 @@ class taskModel extends model
      */
     public function getDataOftasksPerProject()
     {
-        $datas = $this->dao->select('project as name, count(*) as value')
+        $datas = $this->dao->select('project AS name, COUNT(*) AS value')
             ->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
             ->groupBy('project')
             ->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
+
         $projects = $this->loadModel('project')->getPairs('all');
-        foreach($datas as $projectID => $data) $data->name = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
+        foreach($datas as $projectID => $data) 
+        {
+            $data->name = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
+        }
         return $datas;
     }
 
@@ -1669,7 +1689,7 @@ class taskModel extends model
      */
     public function getDataOftasksPerModule()
     {
-        $datas = $this->dao->select('module as name, count(*) as value')
+        $datas = $this->dao->select('module AS name, COUNT(*) AS value')
             ->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
             ->groupBy('module')
@@ -1690,15 +1710,19 @@ class taskModel extends model
      */
     public function getDataOftasksPerAssignedTo()
     {
-        $datas = $this->dao->select('assignedTo AS name, count(*) AS value')
+        $datas = $this->dao->select('assignedTo AS name, COUNT(*) AS value')
             ->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
             ->groupBy('assignedTo')
             ->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
+        
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
-        foreach($datas as $account => $data) if(isset($this->users[$account])) $data->name = $this->users[$account];
+        foreach($datas as $account => $data) 
+        {
+            if(isset($this->users[$account])) $data->name = $this->users[$account];
+        }
         return $datas;
     }
 
@@ -1710,14 +1734,18 @@ class taskModel extends model
      */
     public function getDataOftasksPerType()
     {
-        $datas = $this->dao->select('type AS  name, count(*) AS value')
+        $datas = $this->dao->select('type AS name, COUNT(*) AS value')
             ->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
             ->groupBy('type')
             ->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
-        foreach($datas as $type => $data) if(isset($this->lang->task->typeList[$type])) $data->name = $this->lang->task->typeList[$type];
+        
+        foreach($datas as $type => $data) 
+        {
+            if(isset($this->lang->task->typeList[$type])) $data->name = $this->lang->task->typeList[$type];
+        }
         return $datas;
     }
 
@@ -1735,12 +1763,12 @@ class taskModel extends model
             ->groupBy('pri')
             ->orderBy('value DESC')
             ->fetchAll('name');
+        if(!$priList) return array();
 
         foreach($priList as $index => $pri)
         {
             $priList[$index]->name = $this->lang->task->priList[$pri->name];
         }
-
         return $priList;
     }
 
@@ -1823,9 +1851,12 @@ class taskModel extends model
             ->groupBy('finishedBy')
             ->orderBy('value DESC')
             ->fetchAll('name');
-        if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
-        foreach($datas as $account => $data) if(isset($this->users[$account])) $data->name = $this->users[$account];
 
+        if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
+        foreach($datas as $account => $data) 
+        {
+            if(isset($this->users[$account])) $data->name = $this->users[$account];
+        }
         return $datas;
     }
 
@@ -1893,11 +1924,9 @@ class taskModel extends model
             ->groupBy('status')
             ->orderBy('value DESC')
             ->fetchAll('name');
-        if(!$datas)return array();
-        foreach($datas as $status => $data)
-        {
-            $data->name = $this->lang->task->statusList[$status];
-        }
+        if(!$datas) return array();
+
+        foreach($datas as $status => $data) $data->name = $this->lang->task->statusList[$status];
         return $datas;
     }
 
@@ -1913,24 +1942,22 @@ class taskModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'start' and !empty($task->children)) return false;
+        if($action == 'start'          and !empty($task->children)) return false;
         if($action == 'recordestimate' and !empty($task->children)) return false;
-        if($action == 'finish' and !empty($task->children)) return false;
-        if($action == 'cancel' and !empty($task->children)) return false;
-        if($action == 'pause' and !empty($task->children)) return false;
-        if($action == 'batchcreate' and !empty($task->team)) return false;
-        if($action == 'batchcreate' and $task->parent) return false;
+        if($action == 'finish'         and !empty($task->children)) return false;
+        if($action == 'cancel'         and !empty($task->children)) return false;
+        if($action == 'pause'          and !empty($task->children)) return false;
+        if($action == 'batchcreate'    and !empty($task->team))     return false;
+        if($action == 'batchcreate'    and $task->parent)           return false;
 
-        if($action == 'assignto') return $task->status != 'closed' and $task->status != 'cancel';
         if($action == 'start')    return $task->status == 'wait';
         if($action == 'restart')  return $task->status == 'pause';
-        if($action == 'finish')   return $task->status != 'done'   and $task->status != 'closed' and $task->status != 'cancel';
-        if($action == 'close')    return $task->status == 'done'   or  $task->status == 'cancel';
-        if($action == 'activate') return $task->status == 'done'   or  $task->status == 'closed'  or $task->status == 'cancel' ;
-        if($action == 'cancel')   return $task->status != 'done'   and $task->status != 'closed' and $task->status != 'cancel';
         if($action == 'pause')    return $task->status == 'doing';
-
-
+        if($action == 'assignto') return $task->status != 'closed' and $task->status != 'cancel';
+        if($action == 'close')    return $task->status == 'done'   or  $task->status == 'cancel';
+        if($action == 'activate') return $task->status == 'done'   or  $task->status == 'closed'  or $task->status  == 'cancel';
+        if($action == 'finish')   return $task->status != 'done'   and $task->status != 'closed'  and $task->status != 'cancel';
+        if($action == 'cancel')   return $task->status != 'done'   and $task->status != 'closed'  and $task->status != 'cancel';
 
         return true;
     }
@@ -1966,11 +1993,11 @@ class taskModel extends model
     /**
      * Print cell data.
      *
-     * @param        $col
-     * @param        $task
-     * @param        $users
-     * @param        $browseType
-     * @param        $branchGroups
+     * @param object $col
+     * @param object $task
+     * @param array  $users
+     * @param string $browseType
+     * @param array  $branchGroups
      * @param array  $modulePairs
      * @param string $mode
      * @param bool   $child
@@ -1983,7 +2010,7 @@ class taskModel extends model
         $canView  = common::hasPriv('task', 'view');
         $taskLink = helper::createLink('task', 'view', "taskID=$task->id");
         $account  = $this->app->user->account;
-        $id = $col->id;
+        $id       = $col->id;
         if($col->show)
         {
             $class = '';
@@ -2000,121 +2027,124 @@ class taskModel extends model
             echo "<td class='" . $class . "'" . $title . ">";
             switch($id)
             {
-            case 'id':
-                if($mode == 'table') echo "<input type='checkbox' name='taskIDList[{$task->id}]' value='{$task->id}'/> ";
-                echo $canView ? html::a($taskLink, sprintf('%03d', $task->id)) : sprintf('%03d', $task->id);
-                break;
-            case 'pri':
-                echo "<span class='pri" . zget($this->lang->task->priList, $task->pri, $task->pri) . "'>";
-                echo $task->pri == '0' ? '' : zget($this->lang->task->priList, $task->pri, $task->pri);
-                echo "</span>";
-                break;
-            case 'name':
-                if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
-                if($task->module and isset($modulePairs[$task->module])) echo "<span class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span> ';
-                if($child) echo '<span class="label">'.$this->lang->task->childrenAB.'</span> ';
-                if(!empty($task->team)) echo '<span class="label">'.$this->lang->task->multipleAB.'</span> ';
-                echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color'") : "<span style='color: $task->color'>$task->name</span>";
-                if($task->fromBug) echo html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '_blank', "class='bug'");
-                if(!empty($task->children)) echo '<span class="task-toggle" data-id="'.$task->id.'">&nbsp;&nbsp;<i class="icon icon-double-angle-up"></i>&nbsp;&nbsp;</span>';
-                break;
-            case 'type':
-                echo $this->lang->task->typeList[$task->type];
-                break;
-            case 'status':
-                $storyChanged = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion);
-                $storyChanged ? print("<span class='warning'>{$this->lang->story->changed}</span> ") : print($this->lang->task->statusList[$task->status]);
-                break;
-            case 'estimate':
-                echo round($task->estimate, 1);
-                break;
-            case 'consumed':
-                echo round($task->consumed, 1);
-                break;
-            case 'left':
-                echo round($task->left, 1);
-                break;
-            case 'progess':
-                echo "{$task->progess}%";
-                break;
-            case 'deadline':
-                if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);
-                break;
-            case 'openedBy':
-                echo zget($users, $task->openedBy, $task->openedBy);
-                break;
-            case 'openedDate':
-                echo substr($task->openedDate, 5, 11);
-                break;
-            case 'estStarted':
-                echo $task->estStarted;
-                break;
-            case 'realStarted':
-                echo $task->realStarted;
-                break;
-            case 'assignedTo':
-                echo zget($users, $task->assignedTo, $task->assignedTo);
-                break;
-            case 'assignedDate':
-                echo substr($task->assignedDate, 5, 11);
-                break;
-            case 'finishedBy':
-                echo zget($users, $task->finishedBy, $task->finishedBy);
-                break;
-            case 'finishedDate':
-                echo substr($task->finishedDate, 5, 11);
-                break;
-            case 'canceledBy':
-                echo zget($users, $task->canceledBy, $task->canceledBy);
-                break;
-            case 'canceledDate':
-                echo substr($task->canceledDate, 5, 11);
-                break;
-            case 'closedBy':
-                echo zget($users, $task->closedBy, $task->closedBy);
-                break;
-            case 'closedDate':
-                echo substr($task->closedDate, 5, 11);
-                break;
-            case 'closedReason':
-                echo $this->lang->task->reasonList[$task->closedReason];
-                break;
-            case 'story':
-                if(!empty($task->storyID))
-                {
-                    if(!common::printLink('story', 'view', "storyid=$task->storyID", $task->storyTitle)) print $task->storyTitle;
-                }
-                break;
-            case 'mailto':
-                $mailto = explode(',', $task->mailto);
-                foreach($mailto as $account)
-                {
-                    $account = trim($account);
-                    if(empty($account)) continue;
-                    echo zget($users, $account) . ' &nbsp;';
-                }
-                break;
-            case 'lastEditedBy':
-                echo zget($users, $task->lastEditedBy, $task->lastEditedBy);
-                break;
-            case 'lastEditedDate':
-                echo substr($task->lastEditedDate, 5, 11);
-                break;
-            case 'actions':
-                common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                common::printIcon('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                case 'id':
+                    if($mode == 'table') echo "<input type='checkbox' name='taskIDList[{$task->id}]' value='{$task->id}'/> ";
+                    echo $canView ? html::a($taskLink, sprintf('%03d', $task->id)) : sprintf('%03d', $task->id);
+                    break;
+                case 'pri':
+                    echo "<span class='pri" . zget($this->lang->task->priList, $task->pri, $task->pri) . "'>";
+                    echo $task->pri == '0' ? '' : zget($this->lang->task->priList, $task->pri, $task->pri);
+                    echo "</span>";
+                    break;
+                case 'name':
+                    if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
+                    if($task->module and isset($modulePairs[$task->module])) echo "<span class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span> ';
+                    if($child) echo '<span class="label">' . $this->lang->task->childrenAB . '</span> ';
+                    if(!empty($task->team)) echo '<span class="label">' . $this->lang->task->multipleAB . '</span> ';
+                    echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color'") : "<span style='color: $task->color'>$task->name</span>";
+                    if($task->fromBug) echo html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '_blank', "class='bug'");
+                    if(!empty($task->children)) echo '<span class="task-toggle" data-id="' . $task->id . '">&nbsp;&nbsp;<i class="icon icon-double-angle-up"></i>&nbsp;&nbsp;</span>';
+                    break;
+                case 'type':
+                    echo $this->lang->task->typeList[$task->type];
+                    break;
+                case 'status':
+                    $storyChanged = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion);
+                    $storyChanged ? print("<span class='warning'>{$this->lang->story->changed}</span> ") : print($this->lang->task->statusList[$task->status]);
+                    break;
+                case 'estimate':
+                    echo round($task->estimate, 1);
+                    break;
+                case 'consumed':
+                    echo round($task->consumed, 1);
+                    break;
+                case 'left':
+                    echo round($task->left, 1);
+                    break;
+                case 'progess':
+                    echo "{$task->progess}%";
+                    break;
+                case 'deadline':
+                    if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);
+                    break;
+                case 'openedBy':
+                    echo zget($users, $task->openedBy);
+                    break;
+                case 'openedDate':
+                    echo substr($task->openedDate, 5, 11);
+                    break;
+                case 'estStarted':
+                    echo $task->estStarted;
+                    break;
+                case 'realStarted':
+                    echo $task->realStarted;
+                    break;
+                case 'assignedTo':
+                    echo zget($users, $task->assignedTo);
+                    break;
+                case 'assignedDate':
+                    echo substr($task->assignedDate, 5, 11);
+                    break;
+                case 'finishedBy':
+                    echo zget($users, $task->finishedBy);
+                    break;
+                case 'finishedDate':
+                    echo substr($task->finishedDate, 5, 11);
+                    break;
+                case 'canceledBy':
+                    echo zget($users, $task->canceledBy);
+                    break;
+                case 'canceledDate':
+                    echo substr($task->canceledDate, 5, 11);
+                    break;
+                case 'closedBy':
+                    echo zget($users, $task->closedBy);
+                    break;
+                case 'closedDate':
+                    echo substr($task->closedDate, 5, 11);
+                    break;
+                case 'closedReason':
+                    echo $this->lang->task->reasonList[$task->closedReason];
+                    break;
+                case 'story':
+                    if(!empty($task->storyID))
+                    {
+                        if(!common::printLink('story', 'view', "storyid=$task->storyID", $task->storyTitle)) echo $task->storyTitle;
+                    }
+                    break;
+                case 'mailto':
+                    $mailto = explode(',', $task->mailto);
+                    foreach($mailto as $account)
+                    {
+                        $account = trim($account);
+                        if(empty($account)) continue;
+                        echo zget($users, $account) . ' &nbsp;';
+                    }
+                    break;
+                case 'lastEditedBy':
+                    echo zget($users, $task->lastEditedBy);
+                    break;
+                case 'lastEditedDate':
+                    echo substr($task->lastEditedDate, 5, 11);
+                    break;
+                case 'actions':
+                    common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                    common::printIcon('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
 
-                common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
-                if($browseType == 'needconfirm')
-                {
-                    $this->lang->task->confirmStoryChange = $this->lang->confirm;
-                    common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
-                }
-                common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                common::printIcon('task', 'close',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                common::printIcon('task', 'edit',"taskID=$task->id", $task, 'list');
-                if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate',    "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'list','plus','','','','',$this->lang->task->children);
-                break;
+                    common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
+                    if($browseType == 'needconfirm')
+                    {
+                        $this->lang->task->confirmStoryChange = $this->lang->confirm;
+                        common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
+                    }
+                    common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                    common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                    common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list');
+                    if(empty($task->team) or empty($task->children)) 
+                    {
+                        common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'list', 'plus', '', '', '', '', $this->lang->task->children);
+                    }
+                    break;
             }
             echo '</td>';
         }
@@ -2132,8 +2162,8 @@ class taskModel extends model
     {
         $this->loadModel('mail');
         $task        = $this->getById($taskID);
-        $projectName = $this->loadModel('project')->getById($task->project)->name;
         $users       = $this->loadModel('user')->getPairs('noletter');
+        $projectName = $this->loadModel('project')->getById($task->project)->name;
 
         /* Get action info. */
         $action          = $this->loadModel('action')->getById($actionID);
@@ -2141,20 +2171,23 @@ class taskModel extends model
         $action->history = isset($history[$actionID]) ? $history[$actionID] : array();
 
         /* Get mail content. */
-        $modulePath = $this->app->getModulePath($appName = '', 'task');
         $oldcwd     = getcwd();
+        $modulePath = $this->app->getModulePath($appName = '', 'task');
         $viewFile   = $modulePath . 'view/sendmail.html.php';
         chdir($modulePath . 'view');
+
         if(file_exists($modulePath . 'ext/view/sendmail.html.php'))
         {
             $viewFile = $modulePath . 'ext/view/sendmail.html.php';
             chdir($modulePath . 'ext/view');
         }
+
         ob_start();
         include $viewFile;
         foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
         $mailContent = ob_get_contents();
         ob_end_clean();
+        
         chdir($oldcwd);
 
         /* Set toList and ccList. */
@@ -2172,8 +2205,8 @@ class taskModel extends model
             else
             {
                 $commaPos = strpos($ccList, ',');
-                $toList = substr($ccList, 0, $commaPos);
-                $ccList = substr($ccList, $commaPos + 1);
+                $toList   = substr($ccList, 0, $commaPos);
+                $ccList   = substr($ccList, $commaPos + 1);
             }
         }
         elseif(strtolower($toList) == 'closed')
@@ -2199,6 +2232,7 @@ class taskModel extends model
         /* Process user */
         if(!is_array($users)) $users = explode(',', trim($users, ','));
         if(!$current) return reset($users);
+
         $hit  = false;
         $next = '';
         foreach($users as $key => $account)
@@ -2225,11 +2259,11 @@ class taskModel extends model
     public function getMemberPairs($task)
     {
         $users   = $this->loadModel('user')->getPairs('noletter');
-        $members = array();
+        $members = array('');
         foreach($task->team as $member)
         {
             $members[$member->account] = $users[$member->account];
         }
-        return array('' => '') + $members;
+        return $members;
     }
 }
