@@ -212,31 +212,21 @@ class scoreModel extends model
             }
         }
 
-        $this->dao->begin();
-        try
-        {
-            $user = $this->loadModel('user')->getById($account);
+        $user = $this->loadModel('user')->getById($account);
 
-            $data = new stdClass();
-            $data->account  = $account;
-            $data->module   = $module;
-            $data->method   = $method;
-            $data->desc     = $desc;
-            $data->objectID = $objectID;
-            $data->before   = $user->score;
-            $data->score    = $rule['score'];
-            $data->after    = $user->score + $rule['score'];
-            $data->time     = empty($time) ? helper::now() : $time;
-            $this->dao->insert(TABLE_SCORE)->data($data)->exec();
+        $data = new stdClass();
+        $data->account  = $account;
+        $data->module   = $module;
+        $data->method   = $method;
+        $data->desc     = $desc;
+        $data->objectID = $objectID;
+        $data->before   = $user->score;
+        $data->score    = $rule['score'];
+        $data->after    = $user->score + $rule['score'];
+        $data->time     = empty($time) ? helper::now() : $time;
+        $this->dao->insert(TABLE_SCORE)->data($data)->exec();
 
-            $this->dao->query("UPDATE " . TABLE_USER . " SET `score`=`score` + " . $rule['score'] . ",`scoreLevel`=`scoreLevel` + " . $rule['score'] . " WHERE `account`='" . $account . "'");
-
-            $this->dao->commit();
-        }
-        catch(ErrorException $e)
-        {
-            $this->dao->rollBack();
-        }
+        $this->dao->query("UPDATE " . TABLE_USER . " SET `score`=`score` + " . $rule['score'] . ",`scoreLevel`=`scoreLevel` + " . $rule['score'] . " WHERE `account`='" . $account . "'");
     }
 
     /**
