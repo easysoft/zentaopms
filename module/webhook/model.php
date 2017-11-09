@@ -399,6 +399,8 @@ class webhookModel extends model
      */
     public function fetchHook($webhook, $sendData)
     {
+        if(!extension_loaded('curl')) die(helper::jsonEncode($this->lang->webhook->error->curl));
+
         $header[] = "Content-Type: {$webhook->contentType};charset=utf-8";
 
         $ch = curl_init();

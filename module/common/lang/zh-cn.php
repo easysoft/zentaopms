@@ -433,15 +433,24 @@ $lang->error->noData          = '没有数据';
 $lang->error->editedByOther   = '该记录可能已经被改动。请刷新页面重新编辑！';
 $lang->error->tutorialData    = '新手模式下不会插入数据，请退出新手模式操作';
 
+if(!defined('PARAM_CODE_MISSING'))    define('PARAM_CODE_MISSING',    301);
+if(!defined('PARAM_TOKEN_MISSING'))   define('PARAM_TOKEN_MISSING',   302);
+if(!defined('INVALID_ENTRY'))         define('INVALID_ENTRY',         311);
+if(!defined('EMPTY_KEY'))             define('EMPTY_KEY',             312);
+if(!defined('IP_DENIED'))             define('IP_DENIED',             321);
+if(!defined('INVALID_TOKEN'))         define('INVALID_TOKEN',         331);
+if(!defined('SESSION_CODE_MISSING'))  define('SESSION_CODE_MISSING',  341);
+if(!defined('SESSION_VERIFY_FAILED')) define('SESSION_VERIFY_FAILED', 342);
+
 $lang->error->entry = array();
-$lang->error->entry['301'] = '缺少code参数';
-$lang->error->entry['302'] = '缺少token参数';
-$lang->error->entry['311'] = '应用不存在';
-$lang->error->entry['312'] = '应用未设置密钥';
-$lang->error->entry['321'] = '该IP访问被限制访问';
-$lang->error->entry['331'] = '不合法的token参数';
-$lang->error->entry['341'] = '缺少session code';
-$lang->error->entry['342'] = 'session验证失败';
+$lang->error->entry['PARAM_CODE_MISSING']    = '缺少code参数';
+$lang->error->entry['PARAM_TOKEN_MISSING']   = '缺少token参数';
+$lang->error->entry['INVALID_ENTRY']         = '应用不存在';
+$lang->error->entry['EMPTY_KEY']             = '应用未设置密钥';
+$lang->error->entry['IP_DENIED']             = '该IP访问被限制访问';
+$lang->error->entry['INVALID_TOKEN']         = '不合法的token参数';
+$lang->error->entry['SESSION_CODE_MISSING']  = '缺少session code';
+$lang->error->entry['SESSION_VERIFY_FAILED'] = 'session验证失败';
 
 /* 分页信息。*/
 $lang->pager = new stdclass();
