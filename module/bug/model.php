@@ -64,7 +64,8 @@ class bugModel extends model
             ->add('openedDate', $now)
             ->setDefault('project,story,task', 0)
             ->setDefault('openedBuild', '')
-            ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') === false, 'deadline', '0000-00-00')
+            ->setDefault('deadline', '0000-00-00')
+            ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->stripTags($this->config->bug->editor->create['id'], $this->config->allowedTags)
@@ -506,7 +507,8 @@ class bugModel extends model
             ->setDefault('project,module,project,story,task,duplicateBug,branch', 0)
             ->setDefault('openedBuild', '')
             ->setDefault('plan', 0)
-            ->setIF(strpos($this->config->bug->edit->requiredFields, 'deadline') === false, 'deadline', '0000-00-00')
+            ->setDefault('deadline', '0000-00-00')
+            ->setIF(strpos($this->config->bug->edit->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->join('openedBuild', ',')
@@ -847,7 +849,7 @@ class bugModel extends model
         unset($bug->createBuild);
         unset($bug->buildProject);
 
-        if($bug->resolvedBuild != 'trunk') $bug->testtask = $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($bug->resolvedBuild)->orderBy('id_desc')->limit(1)->fetch('id');
+        if($bug->resolvedBuild != 'trunk') $bug->testtask = (int) $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($bug->resolvedBuild)->orderBy('id_desc')->limit(1)->fetch('id');
 
         $this->dao->update(TABLE_BUG)->data($bug)
             ->autoCheck()

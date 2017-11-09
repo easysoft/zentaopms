@@ -31,8 +31,10 @@ class taskModel extends model
             ->setDefault('status', 'wait')
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->setIF(strpos($this->config->task->create->requiredFields, 'estStarted') === false, 'estStarted', '0000-00-00')
-            ->setIF(strpos($this->config->task->create->requiredFields, 'deadline') === false, 'deadline', '0000-00-00')
+            ->setDefault('estStarted', '0000-00-00')
+            ->setDefault('deadline', '0000-00-00')
+            ->setIF(strpos($this->config->task->create->requiredFields, 'estStarted') !== false, 'estStarted', $this->post->estStarted)
+            ->setIF(strpos($this->config->task->create->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
             ->setDefault('openedBy',   $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
@@ -314,8 +316,10 @@ class taskModel extends model
         $now  = helper::now();
         $task = fixer::input('post')
             ->setDefault('story, estimate, left, consumed', 0)
-            ->setIF(strpos($this->config->task->edit->requiredFields, 'estStarted') === false, 'estStarted', '0000-00-00')
-            ->setIF(strpos($this->config->task->edit->requiredFields, 'deadline') === false, 'deadline', '0000-00-00')
+            ->setDefault('estStarted', '0000-00-00')
+            ->setDefault('deadline', '0000-00-00')
+            ->setIF(strpos($this->config->task->edit->requiredFields, 'estStarted') !== false, 'estStarted', $this->post->estStarted)
+            ->setIF(strpos($this->config->task->edit->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
             ->setIF($this->post->story != false and $this->post->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
 
             ->setIF($this->post->status == 'done', 'left', 0)
@@ -1357,18 +1361,18 @@ class taskModel extends model
 
         foreach($tasks as $task)
         {
-            /* Compute task progess. */
+            /* Compute task progress. */
             if($task->consumed == 0 and $task->left == 0)
             {
-                $task->progess = 0;
+                $task->progress = 0;
             }
             elseif($task->consumed != 0 and $task->left == 0)
             {
-                $task->progess = 100;
+                $task->progress = 100;
             }
             else
             {
-                $task->progess = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
             }
         }
 
@@ -1581,18 +1585,18 @@ class taskModel extends model
         /* Set closed realname. */
         if($task->assignedTo == 'closed') $task->assignedToRealName = 'Closed';
 
-        /* Compute task progess. */
+        /* Compute task progress. */
         if($task->consumed == 0 and $task->left == 0)
         {
-            $task->progess = 0;
+            $task->progress = 0;
         }
         elseif($task->consumed != 0 and $task->left == 0)
         {
-            $task->progess = 100;
+            $task->progress = 100;
         }
         else
         {
-            $task->progess = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+            $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
         }
 
         return $task;
@@ -2061,8 +2065,8 @@ class taskModel extends model
                 case 'left':
                     echo round($task->left, 1);
                     break;
-                case 'progess':
-                    echo "{$task->progess}%";
+                case 'progress':
+                    echo "{$task->progress}%";
                     break;
                 case 'deadline':
                     if(substr($task->deadline, 0, 4) > 0) echo substr($task->deadline, 5, 6);

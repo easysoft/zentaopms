@@ -1194,21 +1194,21 @@ class task extends control
 
                 foreach($tasks as $key => $task)
                 {
-                    /* Compute task progess. */
+                    /* Compute task progress. */
                     if($task->consumed == 0 and $task->left == 0)
                     {
-                        $task->progess = 0;
+                        $task->progress = 0;
                     }
                     elseif($task->consumed != 0 and $task->left == 0)
                     {
-                        $task->progess = 100;
+                        $task->progress = 100;
                     }
                     else
                     {
-                        $task->progess = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                        $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
                     }
 
-                    $task->progess .= '%';
+                    $task->progress .= '%';
 
                     $tasks[$key] = $task;
 

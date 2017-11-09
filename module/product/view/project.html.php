@@ -24,7 +24,7 @@
       <th class='w-50px'><?php echo $lang->project->totalEstimate;?></th>
       <th class='w-50px'><?php echo $lang->project->totalConsumed;?></th>
       <th class='w-50px'><?php echo $lang->project->totalLeft;?></th>
-      <th class='w-150px'><?php echo $lang->project->progess;?></th>
+      <th class='w-150px'><?php echo $lang->project->progress;?></th>
       <th class='w-100px'><?php echo $lang->project->burn;?></th>
     </tr>
   </thead>

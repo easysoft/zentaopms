@@ -211,7 +211,7 @@ class tutorialModel extends model
         $member->hours       = 7.0;
         $member->totalHours  = 70.0;
         $member->realname    = $this->app->user->realname;
-        $member->limitedUser = 'no';
+        $member->limited     = 'no';
         return array($member->account => $member);
     }
 

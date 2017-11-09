@@ -39,7 +39,7 @@
       <th class='w-50px'><?php echo $lang->task->estimateAB;?></th>
       <th class='w-50px'><?php echo $lang->task->consumedAB;?></th>
       <th class='w-50px'><?php echo $lang->task->leftAB;?></th>
-      <th class='w-50px'><?php echo $lang->task->progess;?></th>
+      <th class='w-50px'><?php echo $lang->task->progress;?></th>
       <th class='w-50px'><?php echo $lang->typeAB;?></th>
       <th class='w-60px'><?php echo $lang->actions;?></th>
     </tr>
@@ -125,7 +125,7 @@
       <td><?php echo $task->estimate;?></td>
       <td><?php echo $task->consumed;?></td>
       <td><?php echo $task->left;?></td>
-      <td class='text-left'><?php echo $task->progess . '%';?></td>
+      <td class='text-left'><?php echo $task->progress . '%';?></td>
       <td><?php echo $lang->task->typeList[$task->type];?></td>
       <td>
         <?php common::printIcon('task', 'edit', "taskid=$task->id", '', 'list');?>
@@ -149,7 +149,7 @@
       <td><?php echo $child->estimate;?></td>
       <td><?php echo $child->consumed;?></td>
       <td><?php echo $child->left;?></td>
-      <td class='text-left'><?php echo $child->progess . '%';?></td>
+      <td class='text-left'><?php echo $child->progress . '%';?></td>
       <td><?php echo $lang->task->typeList[$child->type];?></td>
       <td>
         <?php common::printIcon('task', 'edit', "taskid=$child->id", '', 'list');?>

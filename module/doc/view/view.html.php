@@ -35,7 +35,7 @@
         {
             foreach($action->history as $history)
             {
-                if($history->field == 'contentType')
+                if($history->field == 'content')
                 {
                     $versions[$i] = "#$i " . zget($users, $action->actor) . ' ' . substr($action->date, 2, 14);
                     $i++;
