@@ -225,7 +225,7 @@ class testcaseModel extends model
                 unset($cases->keywords[$i]);
             }
         }
-        $this->loadModel('score')->create('ajax', 'batchCreate');
+        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
     }
 
     /**

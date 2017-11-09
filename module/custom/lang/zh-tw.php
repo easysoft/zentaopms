@@ -124,8 +124,8 @@ $lang->custom->workingList['onlyTask']  = '任務管理工具';
 $lang->custom->menuTip  = '點擊顯示或隱藏導航條目，拖拽來更改顯示順序。';
 $lang->custom->saveFail = '保存失敗！';
 
-$lang->custom->scoreList[0] = '關閉';
-$lang->custom->scoreList[1] = '開啟';
+$lang->custom->scoreStatus[0] = '關閉';
+$lang->custom->scoreStatus[1] = '開啟';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '計劃';

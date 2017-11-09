@@ -545,7 +545,6 @@ class basePager
             vars = vars.replace('_recTotal_', recTotal)
             vars = vars.replace('_recPerPage_', recPerPage)
             vars = vars.replace('_pageID_', pageID);
-            $.get(createLink('score', 'ajax', "method=submitPage"));
             location.href=createLink('$this->moduleName', '$this->methodName', vars);
         }
         </script>

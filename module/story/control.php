@@ -726,7 +726,7 @@ class story extends control
 
         if(dao::isError()) die(js::error(dao::getError()));
         foreach($actions as $storyID => $actionID) $this->story->sendmail($storyID, $actionID);
-        $this->loadModel('score')->create('ajax', 'batchOther');
+        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::locate($this->session->storyList, 'parent'));
     }
 
@@ -795,7 +795,7 @@ class story extends control
                     $this->story->sendmail($storyID, $actionID);
                 }
             }
-            $this->loadModel('score')->create('ajax', 'batchOther');
+            if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
             die(js::locate($this->session->storyList, 'parent'));
         }
 
@@ -875,7 +875,7 @@ class story extends control
             $this->action->logHistory($actionID, $changes);
             $this->story->sendmail($storyID, $actionID);
         }
-        $this->loadModel('score')->create('ajax', 'batchOther');
+        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::reload('parent'));
     }
 
@@ -898,7 +898,7 @@ class story extends control
             $this->action->logHistory($actionID, $changes);
             $this->story->sendmail($storyID, $actionID);
         }
-        $this->loadModel('score')->create('ajax', 'batchOther');
+        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::reload('parent'));
     }
 
@@ -921,7 +921,7 @@ class story extends control
             $this->action->logHistory($actionID, $changes);
             $this->story->sendmail($storyID, $actionID);
         }
-        $this->loadModel('score')->create('ajax', 'batchOther');
+        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::reload('parent'));
     }
 
@@ -946,7 +946,7 @@ class story extends control
             $this->action->logHistory($actionID, $changes);
             $this->story->sendmail($storyID, $actionID);
         }
-        $this->loadModel('score')->create('ajax', 'batchOther');
+        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::locate($this->session->storyList, 'parent'));
     }
 
@@ -969,7 +969,7 @@ class story extends control
                 $this->story->sendmail($storyID, $actionID);
             }
         }
-        $this->loadModel('score')->create('ajax', 'batchOther');
+        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::locate($this->session->storyList));
     }
 

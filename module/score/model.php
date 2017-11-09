@@ -37,13 +37,12 @@ class scoreModel extends model
      */
     public function create($module = '', $method = '', $param = '', $account = '', $time = '')
     {
-        if(empty($this->config->score->$module->$method)) return true;
+        if(empty($this->config->score->$module->$method) || empty($this->config->global->scoreStatus)) return true;
 
         $rule     = $this->config->score->$module->$method;
-        $desc     = $this->lang->score->models[$module];
+        $desc     = $this->lang->score->module[$module];
         $user     = empty($account) ? $this->app->user->account : $account;
         $time     = empty($time) ? helper::now() : $time;
-        $objectID = is_numeric($param) ? $param : 0;
 
         switch($module)
         {
@@ -72,7 +71,7 @@ class scoreModel extends model
                     {
                         $newRule          = $rule;
                         $newRule['score'] = $this->config->score->extended->storyClose['createID'];
-                        $this->saveScore($openedBy, $newRule, $module, $method, $desc, $objectID, $time);
+                        $this->saveScore($openedBy, $newRule, $module, $method, $desc, $time);
                         unset($newRule);
                     }
                 }
@@ -98,7 +97,7 @@ class scoreModel extends model
 
                 if($method == 'createFormCase')
                 {
-                    $desc     = $this->lang->score->models['testcase'] . 'ID:' . $param;
+                    $desc     = $this->lang->score->module['testcase'] . 'ID:' . $param;
                     $openedBy = $this->dao->findById($param)->from(TABLE_CASE)->fetch('openedBy');
                     if(!empty($openedBy)) $user = $openedBy;
                 }
@@ -107,7 +106,6 @@ class scoreModel extends model
 
                 if($method == 'confirmBug')
                 {
-                    $objectID = $param->id;
                     $user     = $param->openedBy;
                     $desc    .= 'ID:' . $param->id;
                     if(!empty($this->config->score->extended->bugConfirmBug['severity'][$param->severity])) $rule['score'] = $rule['score'] + $this->config->score->extended->bugConfirmBug['severity'][$param->severity];
@@ -115,7 +113,6 @@ class scoreModel extends model
 
                 if($method == 'resolve' && !empty($this->config->score->extended->bugResolve['severity'][$param->severity]))
                 {
-                    $objectID      = $param->id;
                     $rule['score'] = $rule['score'] + $this->config->score->extended->bugResolve['severity'][$param->severity];
                 }
                 break;
@@ -130,7 +127,6 @@ class scoreModel extends model
                 if($method == 'close')
                 {
                     $desc      = $this->lang->score->methods[$module][$method] . ',' . $desc . 'ID:' . $param->id;
-                    $objectID  = $param->id;
                     $timestamp = empty($time) ? time() : strtotime($time);
 
                     /* Project PM. */
@@ -138,7 +134,7 @@ class scoreModel extends model
                     {
                         $rule['score'] = $this->config->score->extended->projectClose['manager']['close'];
                         if($param->end > date('Y-m-d', $timestamp)) $rule['score'] += $this->config->score->extended->projectClose['manager']['in'];
-                        $this->saveScore($param->PM, $rule, $module, $method, $desc, $objectID, $time);
+                        $this->saveScore($param->PM, $rule, $module, $method, $desc, $time);
                     }
 
                     /* Project team user. */
@@ -149,7 +145,7 @@ class scoreModel extends model
                         if($param->end > date('Y-m-d', $timestamp)) $rule['score'] += $this->config->score->extended->projectClose['member']['in'];
                         foreach($teams as $user)
                         {
-                            if($user != $param->PM) $this->saveScore($user, $rule, $module, $method, $desc, $objectID, $time);
+                            if($user != $param->PM) $this->saveScore($user, $rule, $module, $method, $desc, $time);
                         }
                     }
 
@@ -174,7 +170,7 @@ class scoreModel extends model
                 $desc = $this->lang->score->methods[$module][$method];
                 break;
         }
-        $this->saveScore($user, $rule, $module, $method, $desc, $objectID, $time);
+        $this->saveScore($user, $rule, $module, $method, $desc, $time);
     }
 
     /**
@@ -185,13 +181,12 @@ class scoreModel extends model
      * @param string $module
      * @param string $method
      * @param string $desc
-     * @param int    $objectID
      * @param string $time
      *
      * @access private
      * @return bool
      */
-    private function saveScore($account = '', $rule = array(), $module = '', $method = '', $desc = '', $objectID = 0, $time = '')
+    private function saveScore($account = '', $rule = array(), $module = '', $method = '', $desc = '', $time = '')
     {
         if(!empty($rule['times']) || !empty($rule['hour']))
         {
@@ -219,7 +214,6 @@ class scoreModel extends model
         $data->module   = $module;
         $data->method   = $method;
         $data->desc     = $desc;
-        $data->objectID = $objectID;
         $data->before   = $user->score;
         $data->score    = $rule['score'];
         $data->after    = $user->score + $rule['score'];
@@ -287,7 +281,7 @@ class scoreModel extends model
      */
     public function getNotice()
     {
-        if(!isset($this->config->global->score) || empty($this->config->global->score)) return '';
+        if(empty($this->config->global->scoreStatus)) return '';
         if(date('Y-m-d', $this->app->user->lastTime) == helper::today()) return '';
 
         $this->app->user->lastTime = time();

@@ -35,7 +35,7 @@
     {
         ob_start();
         echo "<div class='btn-group'>";
-        common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', empty($task->team) ? $lang->task->assignTo : $lang->task->transmit);
+        common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', empty($task->team) ? $lang->task->assignTo : $lang->task->transfer);
         common::printIcon('task', 'start',          "taskID=$task->id", $task, 'button', '', '', 'iframe', true);
         common::printIcon('task', 'restart',        "taskID=$task->id", $task, 'button', '', '', 'iframe', true);
         common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'button', '', '', 'iframe', true);
@@ -223,7 +223,7 @@
           </tr>
           <?php endif;?>
           <tr>
-            <th><?php echo empty($task->team) ? $lang->task->assignTo : $lang->task->transmitTo;?></th>
+            <th><?php echo empty($task->team) ? $lang->task->assignTo : $lang->task->transferTo;?></th>
             <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : '';?></td>
           </tr>
           <tr>

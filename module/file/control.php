@@ -484,9 +484,10 @@ class file extends control
         $file = $this->file->getById($fileID);
         if(empty($file) or !file_exists($file->realPath)) return false;
 
-        $mime = in_array($file->extension, $this->config->file->imageExtensions) ? "image/{$file->extension}" : $this->config->file->mimes['default'];
-        ob_end_clean();
+        $obLevel = ob_get_level();
+        for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
+        $mime = in_array($file->extension, $this->config->file->imageExtensions) ? "image/{$file->extension}" : $this->config->file->mimes['default'];
         header("Content-type: $mime");
 
         $handle = fopen($file->realPath, "r");

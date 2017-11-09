@@ -473,7 +473,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
                 $this->task->sendmail($taskID, $actionID);
             }
-            $this->loadModel('score')->create('ajax', 'batchOther');
+            if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
         die(js::reload('parent'));
     }
@@ -503,7 +503,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
                 $this->task->sendmail($taskID, $actionID);
             }
-            $this->loadModel('score')->create('ajax', 'batchOther');
+            if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
             die(js::reload('parent'));
         }
     }
@@ -539,7 +539,7 @@ class task extends control
             $task->storyFiles    = $this->loadModel('file')->getByObject('story', $task->story);
         }
 
-        if($task->team) $this->lang->task->assign = $this->lang->task->transmit;
+        if($task->team) $this->lang->task->assign = $this->lang->task->transfer;
 
         /* Update action. */
         if($task->assignedTo == $this->app->user->account) $this->loadModel('action')->read('task', $taskID);
@@ -787,7 +787,6 @@ class task extends control
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
         $this->view->position[] = $this->lang->task->finish;
-        $this->view->date       = strftime("%Y-%m-%d %X", strtotime('now'));
         $this->view->members    = $members;
        
         $this->display();
@@ -972,7 +971,7 @@ class task extends control
                 $cancelURL  = $this->server->HTTP_REFERER;
                 die(js::confirm(sprintf($this->lang->task->error->skipClose, $skipTasks), $confirmURL, $cancelURL, 'self', 'parent'));
             }
-            $this->loadModel('score')->create('ajax', 'batchOther');
+            if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
         die(js::reload('parent'));
     }
@@ -1194,21 +1193,21 @@ class task extends control
 
                 foreach($tasks as $key => $task)
                 {
-                    /* Compute task progess. */
+                    /* Compute task progress. */
                     if($task->consumed == 0 and $task->left == 0)
                     {
-                        $task->progess = 0;
+                        $task->progress = 0;
                     }
                     elseif($task->consumed != 0 and $task->left == 0)
                     {
-                        $task->progess = 100;
+                        $task->progress = 100;
                     }
                     else
                     {
-                        $task->progess = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                        $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
                     }
 
-                    $task->progess .= '%';
+                    $task->progress .= '%';
 
                     $tasks[$key] = $task;
 
@@ -1216,7 +1215,7 @@ class task extends control
                     {
                         foreach($children[$task->id] as $child)
                         {
-                            $child->name       = $taskLang->childrenAB . ') ' . $child->name;
+                            $child->name       = '[' . $taskLang->childrenAB . '] ' . $child->name;
                             $tasks[$child->id] = $child;
                         }
                     }

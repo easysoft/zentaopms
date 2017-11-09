@@ -24,7 +24,7 @@
       <th class="w-150px"><?php echo $lang->score->times;?></th>
       <th class="w-150px"><?php echo $lang->score->hour;?></th>
       <th class="w-150px"><?php echo $lang->score->score;?></th>
-      <th><?php echo $lang->score->comment;?></th>
+      <th><?php echo $lang->score->desc;?></th>
     </tr>
   </thead>
   <tbody>
