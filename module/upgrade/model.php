@@ -190,6 +190,9 @@ class upgradeModel extends model
             case '9_5_1':
                 $this->execSQL($this->getUpgradeFile('9.5.1'));
                 $this->initProjectStoryOrder();
+            case '9_6':
+                $this->execSQL($this->getUpgradeFile('9.6'));
+                $this->fixDatatableColsConfig();
         }
 
         $this->deletePatch();
@@ -288,6 +291,7 @@ class upgradeModel extends model
         case '9_4':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.4'));
         case '9_5':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.5'));
         case '9_5_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.5.1'));
+        case '9_6':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.6'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -1820,6 +1824,34 @@ class upgradeModel extends model
                 $order++;
             }
         }
+        return true;
+    }
+
+    /**
+     * Fix datatable cols config.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function fixDatatableColsConfig()
+    {
+        $config = $this->dao->select('*')->from(TABLE_CONFIG)
+            ->where('module')->eq('datatable')
+            ->andWhere('section')->eq('projectTask')
+            ->andWhere('`key`')->eq('cols')
+            ->fetchAll('id');
+
+        foreach($config as $datatableCols)
+        {
+            $cols = json_decode($datatableCols->value);
+            foreach($cols as $i => $col)
+            {
+                if($col->id == 'progess') $col->id = 'progress';
+                if($col->id == 'actions' and $col->width == 'auto') $col->width =  '180px';
+            }
+            $this->dao->update(TABLE_CONFIG)->set('value')->eq(json_encode($cols))->where('id')->eq($datatableCols->id)->exec();
+        }
+
         return true;
     }
 }
