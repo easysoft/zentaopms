@@ -539,7 +539,7 @@ class task extends control
             $task->storyFiles    = $this->loadModel('file')->getByObject('story', $task->story);
         }
 
-        if($task->team) $this->lang->task->assign = $this->lang->task->transmit;
+        if($task->team) $this->lang->task->assign = $this->lang->task->transfer;
 
         /* Update action. */
         if($task->assignedTo == $this->app->user->account) $this->loadModel('action')->read('task', $taskID);
@@ -1216,7 +1216,7 @@ class task extends control
                     {
                         foreach($children[$task->id] as $child)
                         {
-                            $child->name       = $taskLang->childrenAB . ') ' . $child->name;
+                            $child->name       = '[' . $taskLang->childrenAB . '] ' . $child->name;
                             $tasks[$child->id] = $child;
                         }
                     }

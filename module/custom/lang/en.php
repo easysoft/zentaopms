@@ -124,8 +124,8 @@ $lang->custom->workingList['onlyTask']  = 'Task';
 $lang->custom->menuTip  = 'Click to show/hide navigation bar. Drag to swtich display order.';
 $lang->custom->saveFail = 'Failed to save!';
 
-$lang->custom->scoreList[0] = 'Off';
-$lang->custom->scoreList[1] = 'On';
+$lang->custom->scoreStatus[0] = 'Off';
+$lang->custom->scoreStatus[1] = 'On';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';

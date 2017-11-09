@@ -236,20 +236,20 @@ class taskModel extends model
             $mails[$i]->actionID = $actionID;
         }
 
-        $this->countTime($tasks->parent[0]);
+        $this->computeWorkingHours($tasks->parent[0]);
         $this->loadModel('score')->create('ajax', 'batchCreate');
         return $mails;
     }
 
     /**
-     * count parent task estimate and left value
+     * Compute parent task working hours.
      *
      * @param $taskID
      *
      * @access public
      * @return bool
      */
-    public function countTime($taskID)
+    public function computeWorkingHours($taskID)
     {
         if(!$taskID) return true;
 
@@ -284,7 +284,7 @@ class taskModel extends model
      * @access public 
      * @return bool
      */
-    public function parentStatus($parentID, $status = 'done')
+    public function updateParentStatus($parentID, $status = 'done')
     {
         if(!$parentID) return true;
         $children = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->fetchPairs('id', 'status');
@@ -414,7 +414,7 @@ class taskModel extends model
             ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
             ->where('id')->eq((int)$taskID)->exec();
 
-        $this->countTime($oldTask->parent);
+        $this->computeWorkingHours($oldTask->parent);
 
         /* Save team. */
         $this->dao->delete()->from(TABLE_TEAM)->where('task')->eq($taskID)->exec();
@@ -585,7 +585,7 @@ class taskModel extends model
             if($oldTask->story != false) $this->loadModel('story')->setStage($oldTask->story);
             if(!dao::isError())
             {
-                $this->countTime($oldTask->parent);
+                $this->computeWorkingHours($oldTask->parent);
                 if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
                 if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
                 $allChanges[$taskID] = common::createChanges($oldTask, $task);
@@ -732,11 +732,11 @@ class taskModel extends model
             }
             elseif($task->status == 'done')
             {
-                $this->parentStatus($oldTask->parent, 'done');
+                $this->updateParentStatus($oldTask->parent, 'done');
             }
         }
 
-        $this->countTime($oldTask->parent);
+        $this->computeWorkingHours($oldTask->parent);
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
@@ -887,10 +887,10 @@ class taskModel extends model
 
         if($task->status == 'done')
         {
-            $this->parentStatus($task->parent, 'done');
+            $this->updateParentStatus($task->parent, 'done');
             $this->loadModel('score')->create('task', 'finish', $taskID);
         }
-        $this->countTime($task->parent);
+        $this->computeWorkingHours($task->parent);
 
         return $changes;
     }
@@ -972,8 +972,8 @@ class taskModel extends model
             ->where('id')->eq((int)$taskID)
             ->exec();
 
-        if($task->status == 'done') $this->parentStatus($oldTask->parent, 'done');
-        $this->countTime($oldTask->parent);
+        if($task->status == 'done') $this->updateParentStatus($oldTask->parent, 'done');
+        $this->computeWorkingHours($oldTask->parent);
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if($task->status == 'done') $this->loadModel('score')->create('task', 'finish', $taskID);
@@ -1028,8 +1028,8 @@ class taskModel extends model
             ->get();
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
-        $this->parentStatus($oldTask->parent, 'closed');
-        $this->countTime($oldTask->parent);
+        $this->updateParentStatus($oldTask->parent, 'closed');
+        $this->computeWorkingHours($oldTask->parent);
 
         $this->dao->update(TABLE_TASK)->set('status')->eq('closed')->where('parent')->eq($taskID)->exec();
 
@@ -1100,7 +1100,7 @@ class taskModel extends model
             ->where('id')->eq((int)$taskID)
             ->exec();
 
-        $this->countTime($oldTask->parent);
+        $this->computeWorkingHours($oldTask->parent);
 
         $this->dao->update(TABLE_TASK)->set('status')->eq('doing')->where('parent')->eq($taskID)->exec();
         if($oldTask->parent) $this->dao->update(TABLE_TASK)->set('status')->eq('doing')->where('id')->eq((int)$oldTask->parent)->exec();

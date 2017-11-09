@@ -43,7 +43,7 @@
             <?php echo html::select('assignedTo[]', $members, $task->assignedTo, "class='form-control chosen'");?>
             <?php echo html::input('teamMember', '', "class='form-control team-group fix-border hidden' readonly='readonly'");?>
             <span class="input-group-addon team-group hidden" data-toggle='modalTeam'><?php echo $lang->task->team;?></span>
-            <label class='input-group-addon affair'><input type='checkBox' name='multiple' id="multipleBox" value='1'/><?php echo $lang->task->multipleABP;?></label>
+            <label class='input-group-addon affair'><input type='checkBox' name='multiple' id="multipleBox" value='1'/><?php echo $lang->task->multipleAB;?></label>
           </div>
         </td>
         <td>
