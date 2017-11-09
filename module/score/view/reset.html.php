@@ -10,31 +10,31 @@
  */
 ?>
 <?php include '../../common/view/header.html.php'; ?>
-<div class="alert with-icon" id="score_start">
+<div class="alert with-icon" id="scoreStart">
   <i class="icon-inbox"></i>
   <div class="content">
     <p><?php echo $lang->score->resetTips; ?></p>
-    <p><button class="btn btn-primary" id="score_reset"><?php echo $lang->score->resetStart; ?></button></p>
+    <p><button class="btn btn-primary" id="scoreReset"><?php echo $lang->score->resetStart; ?></button></p>
   </div>
 </div>
-<div class="alert alert-info with-icon hidden" id="score_loading">
+<div class="alert with-icon hidden" id="scoreLoading">
   <i class="icon-info-sign"></i>
   <div class="content">
     <p><?php echo $lang->score->resetTips; ?></p>
-    <p id="loading_content"></p>
+    <p id="loadingContent"></p>
   </div>
 </div>
-<div class="alert alert-success with-icon hidden" id="score_finish">
+<div class="alert with-icon hidden" id="scoreFinish">
   <i class="icon-ok-sign"></i>
   <div class="content">
     <strong><?php echo $lang->score->resetFinish; ?></strong>
   </div>
 </div>
 <script>
-$("#score_reset").on('click', function()
+$("#scoreReset").on('click', function()
 {
-    $("#score_start").addClass('hidden');
-    $("#score_loading").removeClass('hidden');
+    $("#scoreStart").addClass('hidden');
+    $("#scoreLoading").removeClass('hidden');
     scoreReset(0);
 });
 var total = 0;
@@ -44,15 +44,15 @@ function scoreReset(lastID)
     {
         if(response.result == 'finished')
         {
-            $("#score_loading").addClass('hidden');
-            $("#score_finish").removeClass('hidden');
+            $("#scoreLoading").addClass('hidden');
+            $("#scoreFinish").removeClass('hidden');
             setTimeout(function(){parent.location.reload();}, 2000);
             return false;
         }
         else
         {
             total = total + response.total;
-            $('#loading_content').html("<li class='text-success'>" + response.message + total + "</li>");
+            $('#loadingContent').html("<p>" + response.message + total + "</p>");
             setTimeout(function(){scoreReset(response.lastID);}, 500);
         }
     });

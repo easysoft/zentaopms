@@ -286,7 +286,7 @@ class customModel extends model
         $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
         if(commonModel::isTutorialMode() && $module === 'main')$customMenu = 'my,product,project,qa,company';
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
-        if($module == 'my' && empty($config->global->score)) unset($allMenu->score);
+        if($module == 'my' && empty($config->global->scoreStatus)) unset($allMenu->score);
         $menu = self::setMenuByConfig($allMenu, $customMenu, $module);
         return $menu;
     }

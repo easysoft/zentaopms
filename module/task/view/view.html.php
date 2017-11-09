@@ -223,7 +223,7 @@
           </tr>
           <?php endif;?>
           <tr>
-            <th><?php echo empty($task->team) ? $lang->task->assignTo : $lang->task->transmitTo;?></th>
+            <th><?php echo empty($task->team) ? $lang->task->assignTo : $lang->task->transferTo;?></th>
             <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : '';?></td>
           </tr>
           <tr>

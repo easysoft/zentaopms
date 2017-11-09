@@ -37,7 +37,7 @@ class scoreModel extends model
      */
     public function create($module = '', $method = '', $param = '', $account = '', $time = '')
     {
-        if(empty($this->config->score->$module->$method)) return true;
+        if(empty($this->config->score->$module->$method) || empty($this->config->global->scoreStatus)) return true;
 
         $rule     = $this->config->score->$module->$method;
         $desc     = $this->lang->score->models[$module];
@@ -281,7 +281,7 @@ class scoreModel extends model
      */
     public function getNotice()
     {
-        if(!isset($this->config->global->score) || empty($this->config->global->score)) return '';
+        if(empty($this->config->global->scoreStatus)) return '';
         if(date('Y-m-d', $this->app->user->lastTime) == helper::today()) return '';
 
         $this->app->user->lastTime = time();
