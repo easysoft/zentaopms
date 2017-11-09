@@ -129,7 +129,7 @@ class searchModel extends model
         $formSessionName  = $this->post->module . 'Form';
         $this->session->set($querySessionName, $where);
         $this->session->set($formSessionName,  $_POST);
-        if($scoreNum > 2) $this->loadModel('score')->create('search', 'saveQueryAdvanced');
+        if($scoreNum > 2 && !dao::isError()) $this->loadModel('score')->create('search', 'saveQueryAdvanced');
     }
 
     /**
@@ -306,7 +306,7 @@ class searchModel extends model
                 $featureBarConfig->value   = json_encode($newConfig);
                 $this->dao->replace(TABLE_CONFIG)->data($featureBarConfig)->exec();
             }
-            $this->loadModel('score')->create('search', 'saveQuery', $queryID);
+            if(!dao::isError()) $this->loadModel('score')->create('search', 'saveQuery', $queryID);
             return $queryID;
         }
         return false;

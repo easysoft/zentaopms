@@ -896,7 +896,7 @@ class testtaskModel extends model
             }
         }
 
-        $this->loadModel('score')->create('testtask', 'runCase', $runID);
+        if(!dao::isError()) $this->loadModel('score')->create('testtask', 'runCase', $runID);
 
         return $caseResult;
     }

@@ -130,7 +130,7 @@ class taskModel extends model
                 }
             }
 
-            $this->loadModel('score')->create('task', 'create', $taskID);
+            if(!dao::isError()) $this->loadModel('score')->create('task', 'create', $taskID);
             $taskIdList[$assignedTo] = array('status' => 'created', 'id' => $taskID);
         }
         return $taskIdList;
@@ -231,7 +231,7 @@ class taskModel extends model
             $taskID = $this->dao->lastInsertID();
             if($story) $this->story->setStage($tasks->story[$i]);
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
-            $this->loadModel('score')->create('task', 'create', $taskID);
+            if(!dao::isError()) $this->loadModel('score')->create('task', 'create', $taskID);
 
             $mails[$i] = new stdclass();
             $mails[$i]->taskID   = $taskID;
@@ -239,7 +239,7 @@ class taskModel extends model
         }
 
         $this->computeWorkingHours($tasks->parent[0]);
-        $this->loadModel('score')->create('ajax', 'batchCreate');
+        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
         return $mails;
     }
 
@@ -599,7 +599,7 @@ class taskModel extends model
                 die(js::error('task#' . $taskID . dao::getError(true)));
             }
         }
-        $this->loadModel('score')->create('ajax', 'batchEdit');
+        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchEdit');
         return $allChanges;
     }
 
@@ -892,7 +892,7 @@ class taskModel extends model
         if($task->status == 'done')
         {
             $this->updateParentStatus($task->parent, 'done');
-            $this->loadModel('score')->create('task', 'finish', $taskID);
+            if(!dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
         }
         $this->computeWorkingHours($task->parent);
 
@@ -980,7 +980,7 @@ class taskModel extends model
         $this->computeWorkingHours($oldTask->parent);
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
-        if($task->status == 'done') $this->loadModel('score')->create('task', 'finish', $taskID);
+        if($task->status == 'done' && !dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -1037,10 +1037,13 @@ class taskModel extends model
 
         $this->dao->update(TABLE_TASK)->set('status')->eq('closed')->where('parent')->eq($taskID)->exec();
 
-        $this->loadModel('score')->create('task', 'close', $taskID);
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
 
-        if(!dao::isError()) return common::createChanges($oldTask, $task);
+        if(!dao::isError())
+        {
+            $this->loadModel('score')->create('task', 'close', $taskID);
+            return common::createChanges($oldTask, $task);
+        }
     }
 
     /**
@@ -2228,6 +2231,7 @@ class taskModel extends model
      *
      * @param  string $users
      * @param  string $current
+     *
      * @access public
      * @return void
      */
@@ -2235,21 +2239,24 @@ class taskModel extends model
     {
         /* Process user */
         if(!is_array($users)) $users = explode(',', trim($users, ','));
-        if(!$current) return reset($users);
-
-        $hit  = false;
-        $next = '';
-        foreach($users as $key => $account)
+        if(!$current || !in_array($current, $users) || array_search($current, $users) == max(array_keys($users)))
         {
-            if($hit)
+            return reset($users);
+        }
+
+        $next = '';
+        while(true)
+        {
+            if(current($users) == $current)
             {
-                $next = $account;
+                $next = next($users);
                 break;
             }
-
-            if($account == $current) $hit = true;
+            else
+            {
+                next($users);
+            }
         }
-        if($next == '') return reset($users);
         return $next;
     }
 
@@ -2257,6 +2264,7 @@ class taskModel extends model
      * Get task's team member pairs.
      *
      * @param  object $task
+     *
      * @access public
      * @return array
      */
