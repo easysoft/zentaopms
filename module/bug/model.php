@@ -200,7 +200,7 @@ class bugModel extends model
 
             $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
             $bugID = $this->dao->lastInsertID();
-            $this->loadModel('score')->create('bug', 'create', $bugID);
+            if(!dao::isError()) $this->loadModel('score')->create('bug', 'create', $bugID);
             if(!empty($data->uploadImage[$i]) and !empty($file))
             {
                 $file['objectType'] = 'bug';
@@ -224,7 +224,7 @@ class bugModel extends model
             if(is_dir($realPath)) $classFile->removeDir($realPath);
             unset($_SESSION['bugImagesFile']);
         }
-        $this->loadModel('score')->create('ajax', 'batchCreate');
+        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
         return $actions;
     }
 
@@ -657,7 +657,7 @@ class bugModel extends model
                 }
             }
         }
-        $this->loadModel('score')->create('ajax', 'batchEdit');
+        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchEdit');
         return $allChanges;
     }
 
@@ -761,9 +761,12 @@ class bugModel extends model
             ->get();
 
         $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
-        $this->loadModel('score')->create('bug', 'confirmBug', $oldBug);
 
-        if(!dao::isError()) return common::createChanges($oldBug, $bug);
+        if(!dao::isError())
+        {
+            $this->loadModel('score')->create('bug', 'confirmBug', $oldBug);
+            return common::createChanges($oldBug, $bug);
+        }
     }
 
     /**
@@ -856,7 +859,7 @@ class bugModel extends model
             ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
             ->where('id')->eq((int)$bugID)
             ->exec();
-        $this->loadModel('score')->create('bug', 'resolve', $oldBug);
+        if(!dao::isError()) $this->loadModel('score')->create('bug', 'resolve', $oldBug);
         /* Link bug to build and release. */
         $this->linkBugToBuild($bugID, $bug->resolvedBuild);
     }
@@ -1863,7 +1866,7 @@ class bugModel extends model
 
         $condition = "`type`='bug' and account='{$this->app->user->account}'";
         $this->dao->insert(TABLE_USERTPL)->data($template)->batchCheck('title, content', 'notempty')->check('title', 'unique', $condition)->exec();
-        $this->loadModel('score')->create('bug', 'saveTplModal', $this->dao->lastInsertID());
+        if(!dao::isError()) $this->loadModel('score')->create('bug', 'saveTplModal', $this->dao->lastInsertID());
     }
 
     /**

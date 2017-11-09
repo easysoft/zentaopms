@@ -473,7 +473,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
                 $this->task->sendmail($taskID, $actionID);
             }
-            $this->loadModel('score')->create('ajax', 'batchOther');
+            if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
         die(js::reload('parent'));
     }
@@ -503,7 +503,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
                 $this->task->sendmail($taskID, $actionID);
             }
-            $this->loadModel('score')->create('ajax', 'batchOther');
+            if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
             die(js::reload('parent'));
         }
     }
@@ -972,7 +972,7 @@ class task extends control
                 $cancelURL  = $this->server->HTTP_REFERER;
                 die(js::confirm(sprintf($this->lang->task->error->skipClose, $skipTasks), $confirmURL, $cancelURL, 'self', 'parent'));
             }
-            $this->loadModel('score')->create('ajax', 'batchOther');
+            if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
         die(js::reload('parent'));
     }

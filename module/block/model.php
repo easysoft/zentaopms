@@ -50,7 +50,7 @@ class blockModel extends model
 
         $data->params = helper::jsonEncode($data->params);
         $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
-        $this->loadModel('score')->create('block', 'set');
+        if(!dao::isError()) $this->loadModel('score')->create('block', 'set');
     }
 
     /**
