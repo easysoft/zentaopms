@@ -53,10 +53,11 @@ class my extends control
         $pager  = new pager($recTotal, $recPerPage, $pageID);
         $scores = $this->loadModel('score')->getListByAccount($this->app->user->account, $pager);
 
-        $this->view->title  = $this->lang->score->common;
-        $this->view->user   = $this->loadModel('user')->getById($this->app->user->account);
-        $this->view->pager  = $pager;
-        $this->view->scores = $scores;
+        $this->view->title      = $this->lang->score->common;
+        $this->view->user       = $this->loadModel('user')->getById($this->app->user->account);
+        $this->view->pager      = $pager;
+        $this->view->scores     = $scores;
+        $this->view->position[] = $this->lang->score->record;
 
         $this->display();
     }

@@ -40,7 +40,7 @@ class scoreModel extends model
         if(empty($this->config->score->$module->$method) || empty($this->config->global->scoreStatus)) return true;
 
         $rule     = $this->config->score->$module->$method;
-        $desc     = $this->lang->score->models[$module];
+        $desc     = $this->lang->score->module[$module];
         $user     = empty($account) ? $this->app->user->account : $account;
         $time     = empty($time) ? helper::now() : $time;
 
@@ -97,7 +97,7 @@ class scoreModel extends model
 
                 if($method == 'createFormCase')
                 {
-                    $desc     = $this->lang->score->models['testcase'] . 'ID:' . $param;
+                    $desc     = $this->lang->score->module['testcase'] . 'ID:' . $param;
                     $openedBy = $this->dao->findById($param)->from(TABLE_CASE)->fetch('openedBy');
                     if(!empty($openedBy)) $user = $openedBy;
                 }

@@ -54,15 +54,14 @@
         <td></td>
       </tr>
       <tr>
-        <th><?php echo $lang->entry->help;?></th>
-        <td colspan='2'><?php echo html::a($config->entry->help, '', "target='_blank'");?></td>
-      </tr>
-      <tr>
         <th></th>
-        <td><?php echo html::submitButton();?></td>
+        <td>
+          <?php echo html::submitButton();?>
+          <?php echo html::a($config->entry->help, $lang->entry->help, '_blank', "class='help'");?>
+        </td>
         <td></td>
       </tr>
     </table>
   </form>
 </div>
-<?php include '../../common/view/footer.lite.html.php';?>
+<?php include '../../common/view/footer.html.php';?>

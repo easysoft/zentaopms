@@ -277,11 +277,13 @@ class custom extends control
     {
         if($_POST)
         {
-            $this->loadModel('setting')->setItem('system.common.global.score', $this->post->score);
+            $this->loadModel('setting')->setItem('system.common.global.scoreStatus', $this->post->score);
             die(js::reload('parent'));
         }
 
-        $this->view->title = $this->lang->custom->score;
+        $this->view->title      = $this->lang->custom->score;
+        $this->view->position[] = $this->lang->custom->common;
+        $this->view->position[] = $this->view->title;
         $this->display();
     }
 

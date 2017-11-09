@@ -68,7 +68,7 @@
           <table class='table table-bordered'>
             <?php foreach($config->webhook->objectTypes as $objectType => $actions):?>
             <tr>
-              <td class='w-90px'>
+              <td class='w-80px'>
                 <label class='checkbox-inline'>
                   <?php $checked = isset($webhook->actions->$objectType) ? "checked='checked'" : '';?>
                   <input type='checkbox' <?php echo $checked;?> class='objectType'><strong><?php echo $objectTypes[$objectType];?></strong>
@@ -92,4 +92,4 @@
     </table>
   </form>
 </div>
-<?php include '../../common/view/footer.lite.html.php';?>
+<?php include '../../common/view/footer.html.php';?>
