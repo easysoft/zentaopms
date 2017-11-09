@@ -402,7 +402,7 @@ class customModel extends model
      * @access public
      * @return array
      */
-    public function getDBFields($moduleName, $method = '')
+    public function getFormFields($moduleName, $method = '')
     {
         $fields       = array();
         $moduleLang   = $this->lang->$moduleName;

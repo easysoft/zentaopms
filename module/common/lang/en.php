@@ -601,7 +601,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyStory')
     unset($lang->product->menu->doc);
     
     /* Rename product module. */
-    $lang->menu->product = 'Product|product|index';
+    $lang->menu->product = "{$lang->productCommon}|product|index";
 
     /* Adjust search items. */
     unset($lang->searchObjects['bug']);
@@ -665,7 +665,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     unset($lang->menuOrder[30]);
 
     /* Rename product module. */
-    $lang->menu->product = 'Product|product|index';
+    $lang->menu->product = "{$lang->productCommon}|product|index";
 
     /* Adjust sub menu of my dashboard. */
     unset($lang->my->menu->task);
