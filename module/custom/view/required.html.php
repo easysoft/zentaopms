@@ -33,13 +33,13 @@
         <tr>
           <th class='w-100px'>
           <?php
-          $fields = $this->custom->getDBFields($moduleName, $method);
+          $fields = $this->custom->getFormFields($moduleName, $method);
 
           if($moduleName == 'testsuite' and $method == 'createlib')  $method = 'createLib';
           if($moduleName == 'testsuite' and $method == 'createcase')
           {
               $this->app->loadLang('testcase');
-              $fields = $this->custom->getDBFields('testcase', $method);
+              $fields = $this->custom->getFormFields('testcase', $method);
               $method = 'createCase';
           }
           echo $lang->$moduleName->$method;

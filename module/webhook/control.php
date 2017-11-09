@@ -26,10 +26,12 @@ class webhook extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title    = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->list;
-        $this->view->webhooks = $this->webhook->getList($orderBy, $pager);
-        $this->view->orderBy  = $orderBy;
-        $this->view->pager    = $pager;
+        $this->view->title      = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->list;
+        $this->view->webhooks   = $this->webhook->getList($orderBy, $pager);
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->api);
+        $this->view->position[] = $this->lang->webhook->common;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
         $this->display();
     }
 
@@ -54,6 +56,9 @@ class webhook extends control
         $this->view->projects      = $this->loadModel('project')->getPairs();
         $this->view->objectTypes   = $this->webhook->getObjectTypes();
         $this->view->objectActions = $this->webhook->getObjectActions();
+        $this->view->position[]    = html::a(inlink('browse'), $this->lang->webhook->api);
+        $this->view->position[]    = html::a(inlink('browse'), $this->lang->webhook->common);
+        $this->view->position[]    = $this->lang->webhook->create;
         $this->display();
     }
 
@@ -80,6 +85,9 @@ class webhook extends control
         $this->view->projects      = $this->loadModel('project')->getPairs();
         $this->view->objectTypes   = $this->webhook->getObjectTypes();
         $this->view->objectActions = $this->webhook->getObjectActions();
+        $this->view->position[]    = html::a(inlink('browse'), $this->lang->webhook->api);
+        $this->view->position[]    = html::a(inlink('browse'), $this->lang->webhook->common);
+        $this->view->position[]    = $this->lang->webhook->edit;
         $this->view->webhook       = $webhook;
         $this->display();
     }
@@ -116,11 +124,14 @@ class webhook extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $webhook = $this->webhook->getByID($id);
-        $this->view->title   = $this->lang->webhook->log . $this->lang->colon . $webhook->name;
-        $this->view->logs    = $this->webhook->getLogList($id, $orderBy, $pager);
-        $this->view->webhook = $webhook;
-        $this->view->orderBy = $orderBy;
-        $this->view->pager   = $pager;
+        $this->view->title      = $this->lang->webhook->log . $this->lang->colon . $webhook->name;
+        $this->view->logs       = $this->webhook->getLogList($id, $orderBy, $pager);
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->api);
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->common);
+        $this->view->position[] = $this->lang->webhook->log;
+        $this->view->webhook    = $webhook;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
         $this->display();
     }
 

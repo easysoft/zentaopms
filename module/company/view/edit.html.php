@@ -49,7 +49,7 @@
     </tr>  
     <tr>
       <th><?php echo $lang->company->guest;?></th>
-      <td><?php echo html::radio('guest', $lang->company->guestList, $company->guest);?></td>
+      <td><?php echo html::radio('guest', $lang->company->guestOptions, $company->guest);?></td>
     </tr>  
     <tr><td></td><td><?php echo html::submitButton();?></td></tr>
   </table>

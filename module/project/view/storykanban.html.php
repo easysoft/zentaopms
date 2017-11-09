@@ -42,7 +42,7 @@ $cols    = array('projected', 'developing', 'developed', 'testing', 'tested', 'v
 $account = $this->app->user->account;
 ?>
 <div id='kanban'>
-  <table class='boards-layout table' id='kanbanHeader'>
+  <table class='boards-layout table table-fixed' id='kanbanHeader'>
     <thead>
       <tr>
         <?php foreach ($cols as $col):?>
@@ -51,7 +51,7 @@ $account = $this->app->user->account;
       </tr>
     </thead>
   </table>
-  <table class='boards-layout table active-disabled table-bordered' id='kanbanWrapper'>
+  <table class='boards-layout table active-disabled table-bordered table-fixed' id='kanbanWrapper'>
     <thead>
       <tr>
         <?php foreach($cols as $col):?>

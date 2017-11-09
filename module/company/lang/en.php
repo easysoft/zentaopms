@@ -31,5 +31,5 @@ $lang->company->product = $lang->productCommon;
 $lang->company->project = $lang->projectCommon;
 $lang->company->user    = 'User';
 
-$lang->company->guestList[0] = 'Off';
-$lang->company->guestList[1] = 'On';
+$lang->company->guestOptions[0] = 'Off';
+$lang->company->guestOptions[1] = 'On';

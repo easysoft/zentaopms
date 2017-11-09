@@ -1,8 +1,5 @@
 #kanbanHeader th{border: 1px solid #ddd; padding:8px;}
-#kanbanHeader  th{position: relative}
-#kanbanHeader .actions {position: absolute; right: 0; top: 0; padding: 0px; background: #f1f1f1; border-left: 1px solid #ccc}
-#kanbanHeader .actions .btn {display: block; border-radius: 0; width: 34px; height: 36px; position: relative; text-align: center; padding: 5px 0; color: #036}
-#kanbanHeader .actions .btn-text {display: none}
+#kanbanHeader th{position: relative}
 
 #kanbanWrapper {table-layout: fixed; border-top: none}
 #kanbanWrapper > tbody > tr:first-child > td {border-top: none}

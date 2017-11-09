@@ -433,15 +433,24 @@ $lang->error->noData          = 'No Data';
 $lang->error->editedByOther   = 'This record might have been changed. Please refresh and try to edit again!';
 $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Please exit tutorial first!';
 
+if(!defined('PARAM_CODE_MISSING'))    define('PARAM_CODE_MISSING',    301);
+if(!defined('PARAM_TOKEN_MISSING'))   define('PARAM_TOKEN_MISSING',   302);
+if(!defined('INVALID_ENTRY'))         define('INVALID_ENTRY',         311);
+if(!defined('EMPTY_KEY'))             define('EMPTY_KEY',             312);
+if(!defined('IP_DENIED'))             define('IP_DENIED',             321);
+if(!defined('INVALID_TOKEN'))         define('INVALID_TOKEN',         331);
+if(!defined('SESSION_CODE_MISSING'))  define('SESSION_CODE_MISSING',  341);
+if(!defined('SESSION_VERIFY_FAILED')) define('SESSION_VERIFY_FAILED', 342);
+
 $lang->error->entry = array();
-$lang->error->entry['301'] = 'Param code not set.';
-$lang->error->entry['302'] = 'Param token not set.';
-$lang->error->entry['311'] = 'Entry not exist.';
-$lang->error->entry['312'] = 'Key of entry not set.';
-$lang->error->entry['321'] = 'IP denied.';
-$lang->error->entry['331'] = 'Invalid token.';
-$lang->error->entry['341'] = 'Session code not set.';
-$lang->error->entry['342'] = 'Session verify failed.';
+$lang->error->entry['PARAM_CODE_MISSING']    = 'Param code not set.';
+$lang->error->entry['PARAM_TOKEN_MISSING']   = 'Param token not set.';
+$lang->error->entry['INVALID_ENTRY']         = 'Entry not exist.';
+$lang->error->entry['EMPTY_KEY']             = 'Key of entry not set.';
+$lang->error->entry['IP_DENIED']             = 'IP denied.';
+$lang->error->entry['INVALID_TOKEN']         = 'Invalid token.';
+$lang->error->entry['SESSION_CODE_MISSING']  = 'Session code not set.';
+$lang->error->entry['SESSION_VERIFY_FAILED'] = 'Session verify failed.';
 
 /* 分页信息。*/
 $lang->pager = new stdclass();
@@ -601,7 +610,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyStory')
     unset($lang->product->menu->doc);
     
     /* Rename product module. */
-    $lang->menu->product = 'Product|product|index';
+    $lang->menu->product = "{$lang->productCommon}|product|index";
 
     /* Adjust search items. */
     unset($lang->searchObjects['bug']);
@@ -665,7 +674,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     unset($lang->menuOrder[30]);
 
     /* Rename product module. */
-    $lang->menu->product = 'Product|product|index';
+    $lang->menu->product = "{$lang->productCommon}|product|index";
 
     /* Adjust sub menu of my dashboard. */
     unset($lang->my->menu->task);

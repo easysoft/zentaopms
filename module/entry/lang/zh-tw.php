@@ -1,9 +1,9 @@
 <?php
-$lang->entry->common   = '應用';
-$lang->entry->list     = '應用列表';
-$lang->entry->api      = '介面';
-$lang->entry->webhook  = 'webhook';
-$lang->entry->log      = '日誌';
+$lang->entry->common  = '應用';
+$lang->entry->list    = '應用列表';
+$lang->entry->api     = '介面';
+$lang->entry->webhook = 'Webhook';
+$lang->entry->log     = '日誌';
 
 $lang->entry->browse    = '瀏覽應用';
 $lang->entry->create    = '添加應用';

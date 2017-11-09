@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='featurebar'>
   <ul class='nav'>
-    <li id='entry'><?php //common::printLink('entry', 'browse', '', $lang->webhook->entry);?></li>
+    <li id='entry'><?php common::printLink('entry', 'browse', '', $lang->webhook->entry);?></li>
     <li id='webhook' class='active'><?php common::printLink('webhook', 'browse', '', $lang->webhook->common);?></li>
   </ul>
   <div class='actions'>

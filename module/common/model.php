@@ -1156,7 +1156,17 @@ class commonModel extends model
         return false;
     }
 
-    public static function hasDBPriv($object, $module = null, $method = null)
+    /**
+     * Check db priv. 
+     * 
+     * @param  object $object 
+     * @param  string $module 
+     * @param  string $method 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function hasDBPriv($object, $module = '', $method = '')
     {
         global $app;
 
@@ -1203,14 +1213,15 @@ class commonModel extends model
     /**
      * Check whether IP in white list.
      *
+     * @param  string $ipWhiteList
      * @access public
      * @return bool
      */
-    public function checkIP()
+    public function checkIP($ipWhiteList = '')
     {
         $ip = $this->server->remote_addr;
 
-        $ipWhiteList = $this->config->ipWhiteList;
+        if(!$ipWhiteList) $ipWhiteList = $this->config->ipWhiteList;
 
         /* If the ip white list is '*'. */
         if($ipWhiteList == '*') return true;
@@ -1363,40 +1374,23 @@ class commonModel extends model
     {
         if($this->session->valid_entry)
         {
-            if(!$this->session->entry_code) $this->response(341);
-            if($this->session->valid_entry != md5(md5($this->get->code) . $this->server->remote_addr)) $this->response(342);
+            if(!$this->session->entry_code) $this->response(SESSION_CODE_MISSING);
+            if($this->session->valid_entry != md5(md5($this->get->code) . $this->server->remote_addr)) $this->response(SESSION_VERIFY_FAILED);
             return true;
         }
 
-        if(!$this->get->code)  $this->response(301);
-        if(!$this->get->token) $this->response(302);
+        if(!$this->get->code)  $this->response(PARAM_CODE_MISSING);
+        if(!$this->get->token) $this->response(PARAM_TOKEN_MISSING);
 
         $entry = $this->loadModel('entry')->getByCode($this->get->code);
-        if(!$entry)      $this->response(311);
-        if(!$entry->key) $this->response(312);
-
-        $this->checkEntryIP($entry->ip);
-        $this->checkEntryToken($entry->key);
+        if(!$entry)                              $this->response(INVALID_ENTRY);
+        if(!$entry->key)                         $this->response(EMPTY_KEY);
+        if(!$this->checkIP($entry->ip))          $this->response(IP_DENIED);
+        if(!$this->checkEntryToken($entry->key)) $this->response(INVALID_TOKEN);
 
         $this->session->set('ENTRY_CODE', $this->get->code);
         $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . $this->server->remote_addr));
         $this->loadModel('entry')->saveLog($entry->id, $this->server->request_uri);
-    }
-
-    /**
-     * Check ip of an entry. 
-     * 
-     * @param  string $ip 
-     * @access public
-     * @return void
-     */
-    public function checkEntryIP($ip)
-    {
-        $ipWhiteList = $this->config->ipWhiteList;
-        $this->config->ipWhiteList = $ip;
-        $result = $this->checkIP();
-        $this->config->ipWhiteList = $ipWhiteList;
-        if(!$result) $this->response(321);
     }
 
     /**
@@ -1411,7 +1405,7 @@ class commonModel extends model
         parse_str($this->server->query_String, $queryString);
         unset($queryString['token']);
         $queryString = http_build_query($queryString);
-        if($_GET['token'] != md5(md5($queryString) . $key)) $this->response(331);
+        return $this->get->token == md5(md5($queryString) . $key);
     }
 
     /**
