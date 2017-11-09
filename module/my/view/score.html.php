@@ -35,7 +35,7 @@
     <?php foreach($scores as $score):?>
     <tr class='text-center'>
       <td><?php echo $score->time; ?></td>
-      <td><?php echo $lang->score->models[$score->module]; ?></td>
+      <td><?php echo $lang->score->modules[$score->module]; ?></td>
       <td><?php echo $lang->score->methods[$score->module][$score->method]; ?></td>
       <td><?php echo $score->before; ?></td>
       <td><?php echo $score->score; ?></td>

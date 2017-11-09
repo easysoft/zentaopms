@@ -37,10 +37,10 @@ class scoreModel extends model
      */
     public function create($module = '', $method = '', $param = '', $account = '', $time = '')
     {
-        if(empty($this->config->score->$module->$method) || empty($this->config->global->scoreStatus)) return true;
+        if(empty($this->config->score->rule->{$module}->{$method}) || empty($this->config->global->scoreStatus)) return true;
 
-        $rule     = $this->config->score->$module->$method;
-        $desc     = $this->lang->score->module[$module];
+        $rule     = $this->config->score->rule->{$module}->{$method};
+        $desc     = $this->lang->score->modules[$module];
         $user     = empty($account) ? $this->app->user->account : $account;
         $time     = empty($time) ? helper::now() : $time;
 
@@ -51,7 +51,7 @@ class scoreModel extends model
 
                 if($method == 'changePassword')
                 {
-                    if(!empty($this->config->score->extended->changePassword['strength'][$param])) $rule['score'] = $rule['score'] + $this->config->score->extended->changePassword['strength'][$param];
+                    if(!empty($this->config->score->ruleExtended->changePassword['strength'][$param])) $rule['score'] = $rule['score'] + $this->config->score->ruleExtended->changePassword['strength'][$param];
                     $desc = $this->lang->score->methods[$module][$method];
                 }
                 break;
@@ -70,7 +70,7 @@ class scoreModel extends model
                     if(!empty($openedBy))
                     {
                         $newRule          = $rule;
-                        $newRule['score'] = $this->config->score->extended->storyClose['createID'];
+                        $newRule['score'] = $this->config->score->ruleExtended->storyClose['createID'];
                         $this->saveScore($openedBy, $newRule, $module, $method, $desc, $time);
                         unset($newRule);
                     }
@@ -88,7 +88,7 @@ class scoreModel extends model
                     if(!empty($parentTask)) return true;
 
                     $task = $this->loadModel('task')->getById($param);
-                    if(!empty($this->config->score->extended->taskFinish['pri'][$task->pri])) $rule['score'] = $rule['score'] + $this->config->score->extended->taskFinish['pri'][$task->pri];
+                    if(!empty($this->config->score->ruleExtended->taskFinish['pri'][$task->pri])) $rule['score'] = $rule['score'] + $this->config->score->ruleExtended->taskFinish['pri'][$task->pri];
                     if(!empty($task->estimate)) $rule['score'] = $rule['score'] + round(($task->consumed / 10 * $task->estimate / $task->consumed));
                 }
                 break;
@@ -97,7 +97,7 @@ class scoreModel extends model
 
                 if($method == 'createFormCase')
                 {
-                    $desc     = $this->lang->score->module['testcase'] . 'ID:' . $param;
+                    $desc     = $this->lang->score->modules['testcase'] . 'ID:' . $param;
                     $openedBy = $this->dao->findById($param)->from(TABLE_CASE)->fetch('openedBy');
                     if(!empty($openedBy)) $user = $openedBy;
                 }
@@ -108,12 +108,12 @@ class scoreModel extends model
                 {
                     $user     = $param->openedBy;
                     $desc    .= 'ID:' . $param->id;
-                    if(!empty($this->config->score->extended->bugConfirmBug['severity'][$param->severity])) $rule['score'] = $rule['score'] + $this->config->score->extended->bugConfirmBug['severity'][$param->severity];
+                    if(!empty($this->config->score->ruleExtended->bugConfirmBug['severity'][$param->severity])) $rule['score'] = $rule['score'] + $this->config->score->ruleExtended->bugConfirmBug['severity'][$param->severity];
                 }
 
-                if($method == 'resolve' && !empty($this->config->score->extended->bugResolve['severity'][$param->severity]))
+                if($method == 'resolve' && !empty($this->config->score->ruleExtended->bugResolve['severity'][$param->severity]))
                 {
-                    $rule['score'] = $rule['score'] + $this->config->score->extended->bugResolve['severity'][$param->severity];
+                    $rule['score'] = $rule['score'] + $this->config->score->ruleExtended->bugResolve['severity'][$param->severity];
                 }
                 break;
             case 'testTask':
@@ -132,8 +132,8 @@ class scoreModel extends model
                     /* Project PM. */
                     if(!empty($param->PM))
                     {
-                        $rule['score'] = $this->config->score->extended->projectClose['manager']['close'];
-                        if($param->end > date('Y-m-d', $timestamp)) $rule['score'] += $this->config->score->extended->projectClose['manager']['in'];
+                        $rule['score'] = $this->config->score->ruleExtended->projectClose['manager']['close'];
+                        if($param->end > date('Y-m-d', $timestamp)) $rule['score'] += $this->config->score->ruleExtended->projectClose['manager']['in'];
                         $this->saveScore($param->PM, $rule, $module, $method, $desc, $time);
                     }
 
@@ -141,8 +141,8 @@ class scoreModel extends model
                     $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->eq($param->id)->fetchPairs();
                     if(!empty($teams))
                     {
-                        $rule['score'] = $this->config->score->extended->projectClose['member']['close'];
-                        if($param->end > date('Y-m-d', $timestamp)) $rule['score'] += $this->config->score->extended->projectClose['member']['in'];
+                        $rule['score'] = $this->config->score->ruleExtended->projectClose['member']['close'];
+                        if($param->end > date('Y-m-d', $timestamp)) $rule['score'] += $this->config->score->ruleExtended->projectClose['member']['in'];
                         foreach($teams as $user)
                         {
                             if($user != $param->PM) $this->saveScore($user, $rule, $module, $method, $desc, $time);

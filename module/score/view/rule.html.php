@@ -28,34 +28,40 @@
     </tr>
   </thead>
   <tbody>
-    <?php foreach($rule as $module => $value):?>
-    <?php if($module == 'extended') break;?>
-    <?php foreach($value as $oneKey => $oneValue):?>
+    <?php foreach($this->config->score->rule as $module => $moduleRule):?>
+    <?php foreach($moduleRule as $method => $rule):?>
     <tr>
-      <td class="text-center"><?php echo $lang->score->models[$module];?></td>
-      <td class="text-center"><?php echo $lang->score->methods[$module][$oneKey];?></td>
-      <td class="text-center"><?php echo empty($oneValue['times']) ? $lang->score->noLimit : $oneValue['times'];?></td>
-      <td class="text-center"><?php echo empty($oneValue['hour']) ? $lang->score->noLimit : $oneValue['hour'];?></td>
-      <td class="text-center"><?php echo $oneValue['score'];?></td>
+      <td class="text-center"><?php echo $lang->score->modules[$module];?></td>
+      <td class="text-center"><?php echo $lang->score->methods[$module][$method];?></td>
+      <td class="text-center"><?php echo empty($rule['times']) ? $lang->score->noLimit : $rule['times'];?></td>
+      <td class="text-center"><?php echo empty($rule['hour']) ? $lang->score->noLimit : $rule['hour'];?></td>
+      <td class="text-center"><?php echo $rule['score'];?></td>
       <td>
         <?php
-        if(isset($lang->score->extended->{$module . $oneKey}))
+        if(isset($lang->score->extended->{$module . $method}))
         {
-            $str      = $lang->score->extended->{$module . $oneKey};
-            $strArray = explode('#', $str);
-            if(!empty($strArray)) 
+            $desc     = $lang->score->extended->{$module . $method};
+            $descRule = explode('#', $desc);
+            if(!empty($descRule))
             {
-                foreach($strArray as $strKey => $strVal)
+                foreach($descRule as $key => $value)
                 {
-                    if($strKey % 2 == 1)
+                    if($key % 2 == 1)
                     {
-                        $ab    = explode(',', $strVal);
-                        $score = count($ab) == 3 ? $rule->extended->{$ab[0]}[$ab[1]][$ab[2]] : $rule->extended->{$ab[0]}[$ab[1]];
-                        $str   = str_replace('#' . $strVal . '#', $score, $str);
+                        $match = explode(',', $value);
+                        if(count($match) == 2)
+                        {
+                            $score = $this->config->score->ruleExtended->{$module . $method}[$match[0]][$match[1]];
+                        }
+                        else
+                        {
+                            $score = $this->config->score->ruleExtended->{$module . $method}[$match[0]];
+                        }
+                        $desc = str_replace('#' . $value . '#', $score, $desc);
                     }
                 }
             }
-            echo $str;
+            echo $desc;
         }
         ?>
       </td>
