@@ -35,8 +35,8 @@ $lang->task->reportChart        = "報表統計";
 $lang->task->fromBug            = '來源Bug';
 $lang->task->case               = '相關用例';
 $lang->task->confirmStoryChange = "確認需求變動";
-$lang->task->progess            = '進度';
-$lang->task->progessTips        = '已消耗/(已消耗+剩餘)';
+$lang->task->progress           = '進度';
+$lang->task->progressTips       = '已消耗/(已消耗+剩餘)';
 $lang->task->copy               = '複製任務';
 
 $lang->task->common           = '任務';

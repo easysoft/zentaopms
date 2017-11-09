@@ -1573,10 +1573,10 @@ class projectModel extends model
             if(empty($account)) continue;
 
             $member = new stdclass();
-            $member->role        = $roles[$key];
-            $member->days        = $days[$key];
-            $member->hours       = $hours[$key];
-            $member->limitedUser = $limitedUser[$key];
+            $member->role    = $roles[$key];
+            $member->days    = $days[$key];
+            $member->hours   = $hours[$key];
+            $member->limited = $limited[$key];
 
             $mode = $modes[$key];
             if($mode == 'update')
@@ -1983,7 +1983,7 @@ class projectModel extends model
         if($this->app->user->admin) return true;
 
         /* Get all teams of all projects and group by projects, save it as static. */
-        $projects = $this->dao->select('project, limitedUser')->from(TABLE_TEAM)->where('account')->eq($this->app->user->account)->andWhere('limitedUser')->eq('yes')->orderBy('project asc')->fetchPairs('project', 'project');
+        $projects = $this->dao->select('project, limited')->from(TABLE_TEAM)->where('account')->eq($this->app->user->account)->andWhere('limited')->eq('yes')->orderBy('project asc')->fetchPairs('project', 'project');
         $_SESSION['limitedProjects'] = join(',', $projects);
     }
 

@@ -458,7 +458,7 @@ class docModel extends model
             ->get();
         if($doc->acl == 'private') $doc->users = $oldDoc->addedBy;
 
-        $oldDocContent = $this->dao->select('files,type')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($oldDoc->version)->fetch();
+        $oldDocContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($oldDoc->version)->fetch();
         if($oldDocContent)
         {
             $oldDoc->title       = $oldDocContent->title;

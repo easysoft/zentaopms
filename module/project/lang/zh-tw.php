@@ -82,9 +82,9 @@ $lang->team->hours      = '可用工時/天';
 $lang->team->days       = '可用工日';
 $lang->team->totalHours = '總計';
 
-$lang->team->limitedUser            = '受限用戶';
-$lang->team->limitedUserList['no']  = '否';
-$lang->team->limitedUserList['yes'] = '是';
+$lang->team->limited            = '受限用戶';
+$lang->team->limitedList['no']  = '否';
+$lang->team->limitedList['yes'] = '是';
 
 $lang->project->basicInfo = '基本信息';
 $lang->project->otherInfo = '其他信息';

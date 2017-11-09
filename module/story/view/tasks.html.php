@@ -21,7 +21,7 @@ include '../../common/view/chart.html.php';
           <th class='w-40px'>  <?php echo $lang->task->estimateAB;?></th>
           <th class='w-40px'>  <?php echo $lang->task->consumedAB;?></th>
           <th class='w-40px'>  <?php echo $lang->task->leftAB;?></th>
-          <th class='w-40px'>  <?php echo $lang->task->progess;?></th>
+          <th class='w-40px'>  <?php echo $lang->task->progress;?></th>
         </tr>
       </thead>
       <tbody>
@@ -35,7 +35,7 @@ include '../../common/view/chart.html.php';
           <td><?php echo $task->estimate;?></td>
           <td><?php echo $task->consumed;?></td>
           <td><?php echo $task->left;?></td>
-          <td><div class='progress-pie' title="<?php echo $task->progess?>%" data-value='<?php echo $task->progess;?>'></div></td>
+          <td><div class='progress-pie' title="<?php echo $task->progress?>%" data-value='<?php echo $task->progress;?>'></div></td>
         </tr>
         <?php endforeach;?>
       </tbody>
