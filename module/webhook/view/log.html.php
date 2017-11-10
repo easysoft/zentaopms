@@ -17,6 +17,13 @@
     <small class="text-muted"> <?php echo $webhook->name;?></small>
     <small class="text-muted"> <?php echo $lang->webhook->log;?></small>
   </div>
+  <div class='actions'>
+    <div class='btn-group'>
+      <div class='btn-group' id='createActionMenu'>
+        <?php common::printLink('admin', 'log', '', "<i class='icon icon-cog'> </i>" . $lang->webhook->setting, '', "class='btn btn-primary'");?>
+      </div>
+    </div>
+  </div>
 </div>
 <table id='logList' class='table table-condensed table-hover table-striped tablesorter table-fixed'>
   <thead>

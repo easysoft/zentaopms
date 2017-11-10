@@ -4,6 +4,7 @@ $lang->entry->list    = '应用列表';
 $lang->entry->api     = '接口';
 $lang->entry->webhook = 'Webhook';
 $lang->entry->log     = '日志';
+$lang->entry->setting = '设置';
 
 $lang->entry->browse    = '浏览应用';
 $lang->entry->create    = '添加应用';

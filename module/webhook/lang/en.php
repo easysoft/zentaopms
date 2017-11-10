@@ -5,6 +5,7 @@ $lang->webhook->api      = 'API';
 $lang->webhook->entry    = 'Entry';
 $lang->webhook->log      = 'Log';
 $lang->webhook->assigned = 'Assigned To';
+$lang->webhook->setting  = 'Setting';
 
 $lang->webhook->browse = 'Browse';
 $lang->webhook->create = 'Create';

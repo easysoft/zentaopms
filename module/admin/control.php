@@ -313,4 +313,41 @@ class admin extends control
     {
         die($this->admin->sendCodeByAPI($type));
     }
+
+    /**
+     * Set save days of log. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function log()
+    {
+        if($_POST)
+        {
+            if(!validater::checkInt($this->post->days)) $this->send(array('result' => 'fail', 'message' => array('days' => sprintf($this->lang->admin->notice->int, $this->lang->admin->days))));
+
+            $this->loadModel('setting')->setItem('system.admin.log.saveDays', $this->post->days);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->send(array('result' => 'success', 'message' => $this->lang->admin->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->title      = $this->lang->admin->log;
+        $this->view->position[] = html::a($this->createLink('webhook', 'browse'), $this->lang->admin->api);
+        $this->view->position[] = $this->lang->admin->log;
+        $this->view->position[] = $this->lang->admin->setting;
+        $this->display();
+    }
+
+    /**
+     * Delete logs older than save days.
+     * 
+     * @access public
+     * @return bool 
+     */
+    public function deleteLog()
+    {
+        $date = date(DT_DATE1, strtotime("-{$this->config->admin->log->saveDays} days"));
+        $this->dao->delete()->from(TABLE_LOG)->where('date')->lt($date)->exec();
+        return !dao::isError();
+    }
 }

@@ -21,14 +21,22 @@ $lang->admin->ztCompany     = 'Verifu your company';
 $lang->admin->captcha       = 'Verification Code';
 $lang->admin->getCaptcha    = 'Get Verification Code';
 
+$lang->admin->api           = 'API';
+$lang->admin->log           = 'Log';
+$lang->admin->setting       = 'Setting';
+$lang->admin->days          = 'Log Save Days';
+$lang->admin->saveSuccess   = 'Save success';
+
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'Current Version is %s. ';
 $lang->admin->info->links   = 'You can visit ';
-$lang->admin->info->account = "Your ZenTao account is %s.";
+$lang->admin->info->account = 'Your ZenTao account is %s.';
+$lang->admin->info->log     = 'The logs older than save days will be deleted.';
 
 $lang->admin->notice = new stdclass();
 $lang->admin->notice->register = "Note: You haven't registered in ZenTao(www.zentao.net), register %s and get the latest ZenTao news.";
 $lang->admin->notice->ignore   = "Ignore";
+$lang->admin->notice->int      = "『%s』should be a positive integer.";
 
 $lang->admin->register = new stdclass();
 $lang->admin->register->common     = 'Account Binding';
