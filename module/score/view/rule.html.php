@@ -28,19 +28,19 @@
     </tr>
   </thead>
   <tbody>
-    <?php foreach($this->config->score->rule as $module => $moduleRule):?>
+    <?php foreach($config->score->rule as $module => $moduleRule):?>
     <?php foreach($moduleRule as $method => $rule):?>
     <tr>
       <td class="text-center"><?php echo $lang->score->modules[$module];?></td>
       <td class="text-center"><?php echo $lang->score->methods[$module][$method];?></td>
       <td class="text-center"><?php echo empty($rule['times']) ? $lang->score->noLimit : $rule['times'];?></td>
-      <td class="text-center"><?php echo empty($rule['hour']) ? $lang->score->noLimit : $rule['hour'];?></td>
+      <td class="text-center"><?php echo empty($rule['hour'])  ? $lang->score->noLimit : $rule['hour'];?></td>
       <td class="text-center"><?php echo $rule['score'];?></td>
       <td>
         <?php
-        if(isset($lang->score->extended->{$module . $method}))
+        if(isset($lang->score->extended[$module][$method]))
         {
-            $desc     = $lang->score->extended->{$module . $method};
+            $desc     = $lang->score->extended[$module][$method];
             $descRule = explode('##', $desc);
             if(!empty($descRule))
             {
@@ -51,11 +51,11 @@
                         $match = explode(',', $value);
                         if(count($match) == 2)
                         {
-                            $score = $this->config->score->ruleExtended->{$module . $method}[$match[0]][$match[1]];
+                            $score = $config->score->ruleExtended[$module][$method][$match[0]][$match[1]];
                         }
                         else
                         {
-                            $score = $this->config->score->ruleExtended->{$module . $method}[$match[0]];
+                            $score = $config->score->ruleExtended[$module][$method][$match[0]];
                         }
                         $desc = str_replace('##' . $value . '##', $score, $desc);
                     }

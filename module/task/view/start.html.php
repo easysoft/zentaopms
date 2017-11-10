@@ -25,6 +25,7 @@ if($team[0] != $this->app->user->account):
     <p><?php echo $lang->task->deniedNotice;?></p>
   </div>
 </div>
+<?php endif;?>
 <?php else:?>
 <div id='titlebar'>
   <div class='heading'>
@@ -57,6 +58,5 @@ if($team[0] != $this->app->user->account):
   </table>
 </form>
 <div class='main'><?php include '../../common/view/action.html.php';?></div>
-<?php endif;?>
 <?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

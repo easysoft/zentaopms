@@ -18,8 +18,6 @@ $config->score->rule->testcase    = new stdClass();
 $config->score->rule->testtask    = new stdClass();
 $config->score->rule->productplan = new stdClass();
 
-$config->score->ruleExtended      = new stdClass();
-
 /* Score rule. */
 $config->score->rule->user->login          = array('times' => 3, 'hour' => 24, 'score' => 1);
 $config->score->rule->user->editProfile    = array('times' => 1, 'hour' => 0,  'score' => 10);
@@ -75,9 +73,11 @@ $config->score->rule->productplan->create = array('times' => 0, 'hour' => 0, 'sc
 $config->score->rule->search->saveQuery         = array('times' => 1, 'hour' => 0, 'score' => 1);
 $config->score->rule->search->saveQueryAdvanced = array('times' => 1, 'hour' => 0, 'score' => 1);
 
-$config->score->ruleExtended->storyclose         = array('createID' => 2);
-$config->score->ruleExtended->userchangePassword = array('strength' => array(1 => 2, 2 => 5));
-$config->score->ruleExtended->bugconfirmBug      = array('severity' => array(1 => 3, 2 => 2, 3 => 1));
-$config->score->ruleExtended->bugresolve         = array('severity' => array(1 => 3, 2 => 2, 3 => 1));
-$config->score->ruleExtended->taskfinish         = array('pri' => array(1 => 2, 2 => 1, 3 => 0));
-$config->score->ruleExtended->projectclose       = array('manager' => array('close' => 20, 'in' => 10), 'member' => array('close' => 5, 'in' => 5));
+$config->score->ruleExtended = array();
+$config->score->ruleExtended['story']['close']         = array('createID' => 2);
+$config->score->ruleExtended['user']['changePassword'] = array('strength' => array(1 => 2, 2 => 5));
+$config->score->ruleExtended['bug']['confirmBug']      = array('severity' => array(1 => 3, 2 => 2, 3 => 1));
+$config->score->ruleExtended['bug']['resolve']         = array('severity' => array(1 => 3, 2 => 2, 3 => 1));
+$config->score->ruleExtended['task']['finish']         = array('pri'      => array(1 => 2, 2 => 1, 3 => 0));
+$config->score->ruleExtended['project']['close']       = array('manager'  => array('close' => 20, 'onTime' => 10),
+                                                               'member'   => array('close' => 5,  'onTime' => 5));
