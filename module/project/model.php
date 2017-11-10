@@ -798,9 +798,12 @@ class projectModel extends model
             $hour = (object)$emptyHour;
             foreach($projectTasks as $task)
             {
-                $hour->totalEstimate += $task->estimate;
-                $hour->totalConsumed += $task->consumed;
-                $hour->totalLeft     += ($task->status != 'cancel' and $task->closedReason != 'cancel') ? $task->left : 0;
+                if($task->status != 'cancel')
+                {
+                    $hour->totalEstimate += $task->estimate;
+                    $hour->totalConsumed += $task->consumed;
+                    $hour->totalLeft     += $task->left;
+                }
             }
             $hours[$projectID] = $hour;
         }
