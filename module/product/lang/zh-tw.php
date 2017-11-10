@@ -11,7 +11,7 @@
  */
 $lang->product->common      = $lang->productCommon . '視圖';
 $lang->product->index       = $lang->productCommon . "首頁";
-$lang->product->browse      = "瀏覽{$lang->productCommon}";
+$lang->product->browse      = "需求列表";
 $lang->product->dynamic     = "動態";
 $lang->product->view        = "{$lang->productCommon}概況";
 $lang->product->edit        = "編輯{$lang->productCommon}";

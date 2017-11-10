@@ -5,6 +5,7 @@ $lang->webhook->api      = '介面';
 $lang->webhook->entry    = '應用';
 $lang->webhook->log      = '日誌';
 $lang->webhook->assigned = '指派給';
+$lang->webhook->setting  = '設置';
 
 $lang->webhook->browse = '瀏覽Webhook';
 $lang->webhook->create = '添加Webhook';
