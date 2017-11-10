@@ -182,9 +182,8 @@ class bugModel extends model
                         $file['addedDate']  = $now;
                         $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
-                        $fileID = $this->dao->lastInsertID;
+                        $fileID = $this->dao->lastInsertID();
                         $bug->steps .= '<img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
-                        unset($file);
                     }
                 }
                 else

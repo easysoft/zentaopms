@@ -326,8 +326,11 @@ class storyModel extends model
                     {
                         $file['addedBy']    = $this->app->user->account;    
                         $file['addedDate']  = $now;     
+                        $file['objectType'] = 'story';
+                        $file['objectID']   = $storyID;
                         if(in_array($file['extension'], $this->config->file->imageExtensions))
                         {
+                            $file['extra'] = 'editor';
                             $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
                             $fileID = $this->dao->lastInsertID();
@@ -335,8 +338,6 @@ class storyModel extends model
                         }
                         else
                         {
-                            $file['objectType'] = 'story';
-                            $file['objectID']   = $storyID;
                             $this->dao->insert(TABLE_FILE)->data($file)->exec();
                         }
                     }
