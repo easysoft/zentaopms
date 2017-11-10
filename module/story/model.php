@@ -465,8 +465,8 @@ class storyModel extends model
             ->add('lastEditedDate', $now)
             ->setDefault('status', $oldStory->status)
             ->setDefault('product', $oldStory->product)
-            ->setDefault('plan', 0)
-            ->setDefault('branch', 0)
+            ->setDefault('plan', $oldStory->plan)
+            ->setDefault('branch', $oldStory->branch)
             ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->closedBy     != false and $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedReason != false and $oldStory->closedDate == '', 'closedDate', $now)
@@ -503,7 +503,7 @@ class storyModel extends model
                     $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
                 }
             }
-            if($story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
+            if(isset($story->closedReason) and $story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
             return common::createChanges($oldStory, $story);
         }
     }
