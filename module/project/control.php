@@ -683,6 +683,8 @@ class project extends control
         $this->view->productID   = $productID;
         $this->view->branchID    = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
         $this->view->memberPairs = $memberPairs;
+        $this->view->type        = $type;
+        $this->view->param       = $param;
 
         $this->display();
     }
