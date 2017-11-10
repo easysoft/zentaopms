@@ -41,7 +41,7 @@
         if(isset($lang->score->extended->{$module . $method}))
         {
             $desc     = $lang->score->extended->{$module . $method};
-            $descRule = explode('#', $desc);
+            $descRule = explode('##', $desc);
             if(!empty($descRule))
             {
                 foreach($descRule as $key => $value)
@@ -57,7 +57,7 @@
                         {
                             $score = $this->config->score->ruleExtended->{$module . $method}[$match[0]];
                         }
-                        $desc = str_replace('#' . $value . '#', $score, $desc);
+                        $desc = str_replace('##' . $value . '##', $score, $desc);
                     }
                 }
             }

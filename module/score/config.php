@@ -77,7 +77,7 @@ $config->score->rule->search->saveQueryAdvanced = array('times' => 1, 'hour' => 
 
 $config->score->ruleExtended->storyclose         = array('createID' => 2);
 $config->score->ruleExtended->userchangePassword = array('strength' => array(1 => 2, 2 => 5));
-$config->score->ruleExtended->taskfinish         = array('pri' => array(1 => 2, 2 => 1, 3 => 0));
 $config->score->ruleExtended->bugconfirmBug      = array('severity' => array(1 => 3, 2 => 2, 3 => 1));
-$config->score->ruleExtended->bugrresolve        = array('severity' => array(1 => 3, 2 => 2, 3 => 1));
+$config->score->ruleExtended->bugresolve         = array('severity' => array(1 => 3, 2 => 2, 3 => 1));
+$config->score->ruleExtended->taskfinish         = array('pri' => array(1 => 2, 2 => 1, 3 => 0));
 $config->score->ruleExtended->projectclose       = array('manager' => array('close' => 20, 'in' => 10), 'member' => array('close' => 5, 'in' => 5));

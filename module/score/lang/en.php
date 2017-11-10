@@ -81,9 +81,9 @@ $lang->score->methods['search']['saveQuery']         = 'Save search query';
 $lang->score->methods['search']['saveQueryAdvanced'] = 'Advanced search';
 
 $lang->score->extended = new stdClass();
-$lang->score->extended->userchangePassword = 'Password strength, medium:add extra score : #strength,1#; Strong:add extra score : #strength,2#.';
-$lang->score->extended->projectclose       = 'Project closed, PM add extra score : #manager,close#,Team member add extra score : #member,close#. Completed on schedule or in advance,PM add extra score : #manager,in#,Team member Add extra score : #member,in#.';
-$lang->score->extended->bugresolve         = 'Bug resolved, Add extra severity score ：s1 + #severity,3#, s2 + #severity,2#, s3 + #severity,1#。';
-$lang->score->extended->bugconfirmBug      = 'Bug confirmed, Add extra severity score ：s1 + #severity,3#, s2 + #severity,2#, s3 + #severity,1#。';
-$lang->score->extended->taskfinish         = 'Task finished, Add extra score round(consumed /10 * estimate / consumed) + severity score(p1 #pri,1#, p2, #pri,2#)。';
-$lang->score->extended->storyclose         = 'Add extra score for story creator : #createID#.';
+$lang->score->extended->userchangePassword = 'Password strength, medium:add extra score : ##strength,1##; Strong:add extra score : ##strength,2##.';
+$lang->score->extended->projectclose       = 'Project closed, PM add extra score : ##manager,close##,Team member add extra score : ##member,close##. Completed on schedule or in advance,PM add extra score : ##manager,in##,Team member Add extra score : ##member,in##.';
+$lang->score->extended->bugresolve         = 'Bug resolved, Add extra severity score ：s1 + ##severity,3##, s2 + ##severity,2##, s3 + ##severity,1##。';
+$lang->score->extended->bugconfirmBug      = 'Bug confirmed, Add extra severity score ：s1 + ##severity,3##, s2 + ##severity,2##, s3 + ##severity,1##。';
+$lang->score->extended->taskfinish         = 'Task finished, Add extra score round(consumed /10 * estimate / consumed) + severity score(p1 ##pri,1##, p2, ##pri,2##)。';
+$lang->score->extended->storyclose         = 'Add extra score for story creator : ##createID##.';
