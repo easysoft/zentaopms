@@ -630,7 +630,7 @@ CREATE TABLE IF NOT EXISTS `zt_team` (
   `task` mediumint(8) NOT NULL DEFAULT '0',
   `account` char(30) NOT NULL default '',
   `role` char(30) NOT NULL default '',
-  `limitedUser` char(8) NOT NULL default 'no',
+  `limited` char(8) NOT NULL default 'no',
   `join` date NOT NULL default '0000-00-00',
   `days` smallint(5) unsigned NOT NULL,
   `hours` float(2,1) unsigned NOT NULL default '0',
@@ -901,7 +901,8 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=git&methodName=run',             '同步GIT',         'zentao', 1, 'stop',   '0000-00-00 00:00:00'),
 ('30',   '0',    '*',    '*',    '*',    'moduleName=backup&methodName=backup',       '备份数据和附件',  'zentao', 1, 'normal', '0000-00-00 00:00:00'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=mail&methodName=asyncSend',      '异步发信',        'zentao', 1, 'normal', '0000-00-00 00:00:00'),
-('*/5',  '*',    '*',    '*',    '*',    'moduleName=webhook&methodName=asyncSend',   '异步发送Webhook', 'zentao', 1, 'normal', '0000-00-00 00:00:00');
+('*/5',  '*',    '*',    '*',    '*',    'moduleName=webhook&methodName=asyncSend',   '异步发送Webhook', 'zentao', 1, 'normal', '0000-00-00 00:00:00'),
+('*/5',  '*',    '*',    '*',    '*',    'moduleName=admin&methodName=deleteLog',     '删除过期日志',    'zentao', 1, 'normal', '0000-00-00 00:00:00');
 
 INSERT INTO `zt_group` (`id`, `name`, `role`, `desc`) VALUES
 (1, 'ADMIN', 'admin', 'for administrator'),
