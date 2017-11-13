@@ -1054,7 +1054,7 @@ class baseDAO
         global $lang, $config, $app;
         if(isset($config->db->prefix))
         {
-            $table      = strtolower(str_replace(array($config->db->prefix, '`'), '', $this->table));
+            $table = strtolower(str_replace(array($config->db->prefix, '`'), '', $this->table));
         }
         elseif(strpos($this->table, '_') !== false)
         {

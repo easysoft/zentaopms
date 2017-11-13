@@ -263,10 +263,10 @@ class scoreModel extends model
      *
      * @param $string
      *
-     * @access private
-     * @return mixed
+     * @access public
+     * @return string
      */
-    private function fixKey($string)
+    public function fixKey($string)
     {
         $strings = array('created' => 'create', 'opened' => 'create', 'closed' => 'close', 'finished' => 'finish', 'bugconfirmed' => 'confirmBug', 'resolved' => 'resolve');
         return isset($strings[$string]) ? $strings[$string] : $string;

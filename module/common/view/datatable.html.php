@@ -54,9 +54,25 @@ $(document).ready(function()
         selectable    : 
         {
             clickBehavior: 'multi',
+            start: function(e) 
+            {
+                var $target = $(e.target);
+                if ($target.closest('.task-toggle').length) return false;
+                var $checkRow = $target.closest('.check-row, .check-btn');
+                if($checkRow.length)
+                {
+                    if($checkRow.is('.check-row'))
+                    {
+                        toggleRowClass($checkRow);
+                        syncChecks();
+                    }
+                    return false;
+                }
+            },
             startDrag: function(e)
             {
-                if(!this.multiKey && !$(e.target).closest('td[data-index="0"]').length) return false;
+                var $target = $(e.target);
+                if(!this.multiKey && !$target.closest('td[data-index="0"]').length) return false;
             }
         },
         fixedHeader: true,

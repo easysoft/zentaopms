@@ -70,7 +70,8 @@ function shortcut()
     objectValue = $('#searchQuery').attr('value');
     if(objectType && objectValue)
     {
-        location.href=createLink(objectType, 'view', "id=" + objectValue);
+        method = objectType == 'testsuite' ? 'library' : 'view';
+        location.href=createLink(objectType, method, "id=" + objectValue);
     }
 }
 

@@ -47,7 +47,7 @@
           </div>
         </td>
         <td>
-          <button type='button' class='btn btn-link<?php if($task->type == 'affair') echo ' hidden';?>' id='selectAllUser'>
+          <button type='button' class='btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>' id='selectAllUser'>
             <?php echo $lang->task->selectAllUser;?>
           </button>
         </td>

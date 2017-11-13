@@ -124,7 +124,7 @@ $lang->searchObjects['release']     = '发布';
 $lang->searchObjects['productplan'] = $lang->productCommon . '计划';
 $lang->searchObjects['testtask']    = '测试单';
 $lang->searchObjects['doc']         = '文档';
-$lang->searchObjects['testcase']    = '用例库';
+$lang->searchObjects['testsuite']   = '用例库';
 $lang->searchObjects['testreport']  = '测试报告';
 $lang->searchTips                   = '编号(ctrl+g)';
 

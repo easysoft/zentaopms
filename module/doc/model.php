@@ -1031,6 +1031,7 @@ class docModel extends model
 
         $node->type = 'module';
         $docs = isset($docGroups[$node->id]) ? $docGroups[$node->id] : array();
+        $menu = !empty($node->children) ? $node->children : array();
         if(!empty($docs))
         {
             $docItems = array();
@@ -1047,13 +1048,17 @@ class docModel extends model
                 if(common::hasPriv('doc', 'delete'))$buttons .= html::a(helper::createLink('doc', 'delete', "docID=$doc->id"), "<i class='icon icon-remove'></i>", 'hiddenwin', "class='btn-icon' title='{$this->lang->doc->delete}'");
                 $docItem->buttons = $buttons;
                 $docItem->actions = false;
-                $docItems[] = $docItem;
+                $docItems[]       = $docItem;
             }
-            $node->docsCount = count($docItems);
-            $node->children  = $docItems;
+
+            /* Reorder children. The doc is top of menu. */
+            if($menu) $docItems = array_merge($docItems, $menu);
+
+            $node->children = $docItems;
         }
 
-        $node->actions = false;
+        $node->docsCount = isset($node->children) ? count($node->children) : 0;
+        $node->actions   = false;
         return $node;
     }
 
