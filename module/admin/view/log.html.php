@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
-<div class='container mw-500px'>
+<div class='container mw-600px'>
   <div id="titlebar">
     <div class="heading">
       <strong><?php echo html::a($this->createLink('webhook', 'browse'), $lang->admin->api);?></strong>

@@ -124,7 +124,7 @@ $lang->searchObjects['release']     = '發佈';
 $lang->searchObjects['productplan'] = $lang->productCommon . '計劃';
 $lang->searchObjects['testtask']    = '測試單';
 $lang->searchObjects['doc']         = '文檔';
-$lang->searchObjects['testcase']   = '用例庫';
+$lang->searchObjects['testcase']    = '用例庫';
 $lang->searchObjects['testreport']  = '測試報告';
 $lang->searchTips                   = '編號(ctrl+g)';
 
@@ -610,7 +610,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyStory')
     unset($lang->product->menu->doc);
     
     /* Rename product module. */
-    $lang->menu->product = '產品|product|index';
+    $lang->menu->product = "{$lang->productCommon}|product|index";
 
     /* Adjust search items. */
     unset($lang->searchObjects['bug']);
@@ -674,7 +674,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     unset($lang->menuOrder[30]);
 
     /* Rename product module. */
-    $lang->menu->product = '產品|product|index';
+    $lang->menu->product = "{$lang->productCommon}|product|index";
 
     /* Adjust sub menu of my dashboard. */
     unset($lang->my->menu->task);

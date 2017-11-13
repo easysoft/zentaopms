@@ -31,7 +31,7 @@ $lang->admin->info = new stdclass();
 $lang->admin->info->version = '当前系统的版本是%s，';
 $lang->admin->info->links   = '您可以访问以下链接：';
 $lang->admin->info->account = "您的禅道社区账户为%s。";
-$lang->admin->info->log     = '超出保存天数的日志会被删除。';
+$lang->admin->info->log     = '超出存天数的日志会被删除，需要开启计划任务。';
 
 $lang->admin->notice = new stdclass();
 $lang->admin->notice->register = "友情提示：您还未在禅道社区(www.zentao.net)登记，%s进行登记，以及时获得禅道最新信息。";

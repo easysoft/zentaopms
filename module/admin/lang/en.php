@@ -31,7 +31,7 @@ $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'Current Version is %s. ';
 $lang->admin->info->links   = 'You can visit ';
 $lang->admin->info->account = 'Your ZenTao account is %s.';
-$lang->admin->info->log     = 'The logs older than save days will be deleted.';
+$lang->admin->info->log     = 'The logs older than save days will be deleted, need to run cron.';
 
 $lang->admin->notice = new stdclass();
 $lang->admin->notice->register = "Note: You haven't registered in ZenTao(www.zentao.net), register %s and get the latest ZenTao news.";
