@@ -30,7 +30,7 @@
           </div>
           <div class='col-md-4'>
             <a class="card ad" href="http://www.ranzhico.com" target="_blank">
-              <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/ranzhi.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/ranzhi.png'?>" alt=""></div>
+              <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/ranzhi.png'?>);background-size:230px 85px"><img src="<?php echo $defaultTheme . 'images/main/ranzhi.png'?>" alt=""></div>
             </a>
           </div>
           <div class='col-md-4'>
