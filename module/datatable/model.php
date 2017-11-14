@@ -47,12 +47,13 @@ class datatableModel extends model
      */
     public function getSetting($module)
     {
-        $datatableId = $module . ucfirst($this->app->getMethodName());
+        $method      = $this->app->getMethodName();
+        $datatableId = $module . ucfirst($method);
 
         $mode = isset($this->config->datatable->$datatableId->mode) ? $this->config->datatable->$datatableId->mode : 'table';
         $key  = $mode == 'datatable' ? 'cols' : 'tablecols';
 
-        $module = zget($this->config->datatable->moduleAlias, $module, $module);
+        $module = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
         if(!isset($this->config->$module)) $this->loadModel($module);
         if(isset($this->config->datatable->$datatableId->$key)) $setting = json_decode($this->config->datatable->$datatableId->$key);
 
@@ -157,19 +158,23 @@ class datatableModel extends model
      */
     public function setFixedFieldWidth($setting, $minLeftWidth = '550', $minRightWidth = '140')
     {
-        $widths['leftWidth']  = 0;
+        $widths['leftWidth']  = 30;
         $widths['rightWidth'] = 0;
+        $hasLeftAuto  = false;
+        $hasRightAuto = false;
         foreach($setting as $key => $value)
         {
             if($value->fixed != 'no')
             {
+                if($value->fixed == 'left' and $value->width == 'auto')  $hasLeftAuto  = true;
+                if($value->fixed == 'right' and $value->width == 'auto') $hasRightAuto = true;
                 $widthKey = $value->fixed . 'Width';
                 if(!isset($widths[$widthKey])) $widths[$widthKey] = 0;
                 $widths[$widthKey] += (int)trim($value->width, 'px');
             }
         }
-        if($widths['leftWidth'] <= 550) $widths['leftWidth']  = 550;
-        if($widths['rightWidth'] <= 0)  $widths['rightWidth'] = 140;
+        if($widths['leftWidth'] <= 550 and $hasLeftAuto) $widths['leftWidth']  = 550;
+        if($widths['rightWidth'] <= 0 and $hasRightAuto) $widths['rightWidth'] = 140;
 
         return $widths;
     }

@@ -1504,10 +1504,14 @@ class treeModel extends model
         if($viewType == 'bug' or $viewType == 'case' or $viewType == 'task')
         {
             /* Get createdVersion. */
-            $table        = $viewType == 'task' ? TABLE_PROJECT : TABLE_PRODUCT;
-            $versionField = $viewType == 'task' ? 'openedVersion' : 'createdVersion';
+            $table          = $viewType == 'task' ? TABLE_PROJECT : TABLE_PRODUCT;
+            $versionField   = $viewType == 'task' ? 'openedVersion' : 'createdVersion';
             $createdVersion = $this->dao->select($versionField)->from($table)->where('id')->eq($rootID)->fetch($versionField);
-            return ($createdVersion and version_compare($createdVersion, '4.1', '>'));
+            if($createdVersion)
+            {
+                if(is_numeric($createdVersion{0}) and version_compare($createdVersion, '4.1', '<=')) return false;
+                return true;
+            }
         }
         return false;
     }

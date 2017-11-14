@@ -155,15 +155,16 @@ $(document).ready(function()
   <?php if($isCustomExport):?>
   <?php
   $allExportFields  = explode(',', $allExportFields);
-  $selectedFields   = array();
+  $hasDefaultField  = isset($selectedFields);
+  $selectedFields   = $hasDefaultField ? explode(',', $selectedFields) : array();
   $exportFieldPairs = array();
   $moduleName = $this->moduleName;
   $moduleLang = $lang->$moduleName;
   foreach($allExportFields as $key => $field)
   {
       $field                    = trim($field);
-      $selectedFields[]         = $field;
       $exportFieldPairs[$field] = isset($moduleLang->$field) ? $moduleLang->$field : (isset($lang->$field) ? $lang->$field : $field);
+      if(!$hasDefaultField)$selectedFields[] = $field;
   }
   ?>
   <div class='mb-150px' style='margin-bottom:245px'></div>
