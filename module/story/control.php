@@ -1559,7 +1559,7 @@ class story extends control
         if($account == '') $account = $this->app->user->account;
         $storys = $this->story->getUserStoryPairs($account);
 
-        if($id) die(html::select("bugs[$id]", $storys, '', 'class="form-control"'));
-        die(html::select('bug', $storys, '', 'class=form-control'));
+        if($id) die(html::select("storys[$id]", $storys, '', 'class="form-control"'));
+        die(html::select('story', $storys, '', 'class=form-control'));
     }
 }
