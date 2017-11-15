@@ -42,6 +42,7 @@ $lang->todo->private     = '私人事务';
 
 $lang->todo->confirmBug   = '该Todo关联的是Bug #%s，需要修改它吗？';
 $lang->todo->confirmTask  = '该Todo关联的是Task #%s，需要修改它吗？';
+$lang->todo->confirmStory = '该Todo关联的是Story #%s，需要修改它吗？';
 
 $lang->todo->statusList['wait']  = '未开始';
 $lang->todo->statusList['doing'] = '进行中';
