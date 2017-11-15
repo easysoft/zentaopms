@@ -87,8 +87,9 @@ class todoModel extends model
                 $todo->status  = "wait";
                 $todo->private = 0;
                 $todo->idvalue = 0;
-                if($todo->type == 'bug')  $todo->idvalue = isset($todos->bugs[$i + 1]) ? $todos->bugs[$i + 1] : 0;
-                if($todo->type == 'task') $todo->idvalue = isset($todos->tasks[$i + 1]) ? $todos->tasks[$i + 1] : 0;
+                if($todo->type == 'bug')   $todo->idvalue = isset($todos->bugs[$i + 1]) ? $todos->bugs[$i + 1] : 0;
+                if($todo->type == 'task')  $todo->idvalue = isset($todos->tasks[$i + 1]) ? $todos->tasks[$i + 1] : 0;
+                if($todo->type == 'story') $todo->idvalue = isset($todos->storys[$i + 1]) ? $todos->storys[$i + 1] : 0;
 
                 $this->dao->insert(TABLE_TODO)->data($todo)->autoCheck()->exec();
                 if(dao::isError()) 
@@ -122,10 +123,10 @@ class todoModel extends model
     public function update($todoID)
     {
         $oldTodo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
-        if($oldTodo->type == 'bug' or $oldTodo->type == 'task') $oldTodo->name = '';
+        if(in_array($oldTodo->type, array('bug', 'task', 'story'))) $oldTodo->name = '';
         $todo = fixer::input('post')
             ->cleanInt('date, pri, begin, end, private')
-            ->setIF($this->post->type  == 'bug' or $this->post->type == 'task', 'name', '')
+            ->setIF(in_array($oldTodo->type, array('bug', 'task', 'story')), 'name', '')
             ->setIF($this->post->date  == false, 'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end', '2400')
@@ -133,6 +134,7 @@ class todoModel extends model
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid')
             ->get();
+
         $todo = $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TODO)->data($todo)
             ->autoCheck()
