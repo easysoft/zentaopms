@@ -48,10 +48,12 @@ class todo extends control
             {
                 $date = 'future'; 
             }
-            else if($date == date('Ymd'))
+            elseif($date == date('Ymd'))
             {
                 $date = 'today'; 
             }
+
+            if(!empty($_POST['idvalue'])) $this->send(array('result' => 'success'));
             die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
         }
 

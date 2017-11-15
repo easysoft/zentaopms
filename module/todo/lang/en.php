@@ -43,9 +43,9 @@ $lang->todo->private     = 'Private';
 $lang->todo->confirmBug   = 'This To-Do is related to Bug #%s. Do you want to edit it?';
 $lang->todo->confirmTask  = 'This To-Do is related to Task #%s，Do you want to edit it?';
 
-$lang->todo->statusList['wait']     = 'Wait';
-$lang->todo->statusList['doing']    = 'Doing';
-$lang->todo->statusList['done']     = 'Done';
+$lang->todo->statusList['wait']  = 'Wait';
+$lang->todo->statusList['doing'] = 'Doing';
+$lang->todo->statusList['done']  = 'Done';
 //$lang->todo->statusList['cancel']   = 'Cancelled';
 //$lang->todo->statusList['postpone'] = 'Delayed';
 
@@ -57,6 +57,7 @@ $lang->todo->priList[4] = '4';
 $lang->todo->typeList['custom'] = 'Custom';
 $lang->todo->typeList['bug']    = 'Bug';
 $lang->todo->typeList['task']   = $lang->projectCommon . 'Task';
+$lang->todo->typeList['story']  = $lang->projectCommon . 'Story';
 
 global $config;
 if($config->global->flow == 'onlyTest' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['task']);
@@ -80,5 +81,5 @@ $lang->todo->periods['before']     = 'Undone';
 $lang->todo->periods['all']        = 'All';
 
 $lang->todo->action = new stdclass();
-$lang->todo->action->finished  = array('main' => '$date, is finished by <strong>$actor</strong>.');
-$lang->todo->action->marked    = array('main' => '$date, is marked by <strong>$actor</strong> as <strong>$extra</strong>.', 'extra' => 'statusList');
+$lang->todo->action->finished = array('main' => '$date, is finished by <strong>$actor</strong>.');
+$lang->todo->action->marked   = array('main' => '$date, is marked by <strong>$actor</strong> as <strong>$extra</strong>.', 'extra' => 'statusList');
