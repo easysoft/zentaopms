@@ -25,16 +25,18 @@ class todoModel extends model
     {
         $todo = fixer::input('post')
             ->add('account', $this->app->user->account)
-            ->add('idvalue', 0)
+            ->setDefault('idvalue', 0)
             ->cleanInt('date, pri, begin, end, private')
             ->setIF($this->post->type == 'bug'  and $this->post->bug,  'idvalue', $this->post->bug)
             ->setIF($this->post->type == 'task' and $this->post->task, 'idvalue', $this->post->task)
+            ->setIF($this->post->type == 'story' and $this->post->story, 'idvalue', $this->post->story)
             ->setIF($this->post->date == false,  'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end',   '2400')
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
-            ->remove('bug, task,uid')
+            ->remove('bug, task, uid')
             ->get();
+
         $todo = $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TODO)->data($todo)
             ->autoCheck()
@@ -43,6 +45,7 @@ class todoModel extends model
             ->checkIF($todo->type == 'task'  and $todo->idvalue == 0, 'idvalue', 'notempty')
             ->checkIF($todo->type == 'story' and $todo->idvalue == 0, 'idvalue', 'notempty')
             ->exec();
+
         if(!dao::isError())
         {
             $todoID = $this->dao->lastInsertID();
