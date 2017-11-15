@@ -38,9 +38,10 @@ class todoModel extends model
         $todo = $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TODO)->data($todo)
             ->autoCheck()
-            ->checkIF($todo->type != 'bug' and$todo->type != 'task', $this->config->todo->create->requiredFields, 'notempty')
-            ->checkIF($todo->type == 'bug'  and $todo->idvalue == 0, 'idvalue', 'notempty')
-            ->checkIF($todo->type == 'task' and $todo->idvalue == 0, 'idvalue', 'notempty')
+            ->checkIF(!in_array($todo->type, array('bug', 'task', 'story')), $this->config->todo->create->requiredFields, 'notempty')
+            ->checkIF($todo->type == 'bug'   and $todo->idvalue == 0, 'idvalue', 'notempty')
+            ->checkIF($todo->type == 'task'  and $todo->idvalue == 0, 'idvalue', 'notempty')
+            ->checkIF($todo->type == 'story' and $todo->idvalue == 0, 'idvalue', 'notempty')
             ->exec();
         if(!dao::isError())
         {
