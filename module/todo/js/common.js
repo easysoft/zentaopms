@@ -33,8 +33,12 @@ function loadList(type, id)
     {
         link = createLink('task', 'ajaxGetUserTasks', param);
     }
+    else if(type == 'story')
+    {
+        link = createLink('story', 'ajaxGetUserStorys', param);
+    }
 
-    if(type == 'bug' || type == 'task')
+    if(type == 'bug' || type == 'task' || type == 'story')
     {
         $.get(link, function(data, status)
         {
