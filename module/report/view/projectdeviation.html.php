@@ -34,9 +34,9 @@
     </thead>
     <tbody>
     <?php foreach($projects as $id  =>$project):?>
-      <tr class="a-center">
+      <tr class="text-center">
         <td><?php echo $id;?></td>
-        <td align="left"><?php echo html::a($this->createLink('project', 'view', "projectID=$id"), $project->name);?></td>
+        <td class="text-left"><?php echo html::a($this->createLink('project', 'view', "projectID=$id"), $project->name);?></td>
         <td><?php echo $project->estimate;?></td>
         <td><?php echo $project->consumed;?></td>
         <?php $deviation = $project->consumed - $project->estimate;?>

@@ -11,7 +11,7 @@
       <tr>
         <th class='w-70px'><?php echo $lang->testcase->id?></th>
         <th><?php echo $lang->testcase->title?></th>
-        <?php if($branches):?>
+        <?php if(!empty($branches)):?>
         <th class='w-100px'><?php echo $lang->testcase->branch?></th>
         <?php endif;?>
         <th class='w-100px'><?php echo $lang->testcase->module?></th>
@@ -51,7 +51,7 @@
           ?>
         </td>
         <td><?php echo html::input("title[$key]", htmlspecialchars($case->title, ENT_QUOTES), "class='form-control'")?></td>
-        <?php if($branches):?>
+        <?php if(!empty($branches)):?>
         <td class='text-left' style='overflow:visible'><?php echo html::select("branch[$key]", $branches, (isset($case->branch) and $case->branch !== '') ? $case->branch : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->branch : $branch), "class='form-control chosen'")?></td>
         <?php endif;?>
         <td class='text-left' style='overflow:visible'><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->module : ''), "class='form-control chosen'")?></td>
