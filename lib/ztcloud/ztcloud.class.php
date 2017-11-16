@@ -176,6 +176,7 @@ class ztcloud
     public function clearAllRecipients()
     {
         $this->toList = '';
+        $this->ccList = '';
     }
 
     /**
