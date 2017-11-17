@@ -916,6 +916,7 @@ INSERT INTO `zt_group` (`id`, `name`, `role`, `desc`) VALUES
 (9, 'TOP', 'top', 'for top manager.'),
 (10, 'OTHERS', '', 'for others.'),
 (11, 'guest', 'guest', 'For guest');
+(12, 'limited', 'limited', 'For limited user');
 
 INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1, 'action', 'editComment'),
@@ -3289,4 +3290,5 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (11, 'user', 'testCase'),
 (11, 'user', 'testTask'),
 (11, 'user', 'todo'),
-(11, 'user', 'view');
+(11, 'user', 'view'),
+(12, 'my', 'limited');
