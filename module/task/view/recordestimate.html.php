@@ -55,7 +55,7 @@
       <?php endforeach;?>
       <?php endif;?>
       <?php if(in_array($task->status, array('wait', 'pause', 'doing'))):?>
-      <?php if(empty($task->team) || (!empty($task->team) && $task->assignedTo == $this->app->user->account)) :?>
+      <?php if(empty($task->team) || (!empty($task->team) && in_array($task->assignedTo, array_keys($task->team)))) :?>
       <thead>
         <tr class='text-center'>
           <th class="w-id"><?php echo $lang->idAB;?></th>
