@@ -407,4 +407,24 @@ class groupModel extends model
         }
         return $modules;
     }
+
+    /**
+     * Judge an action is clickable or not.
+     * 
+     * @param  object $group 
+     * @param  string $action 
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function isClickable($group, $action)
+    {
+        $action = strtolower($action);
+
+        if($action == 'manageview' and $group->role == 'limited') return false; 
+        if($action == 'edit' and $group->role == 'limited') return false; 
+        if($action == 'copy' and $group->role == 'limited') return false; 
+
+        return true;
+    }
 }

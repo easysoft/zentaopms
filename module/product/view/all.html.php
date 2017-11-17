@@ -34,7 +34,7 @@
       <div class='panel-body'>
         <?php echo $lineTree;?>
         <div class='text-right'>
-          <?php common::printLink('tree', 'browse', "rootID=&view=line", $lang->tree->manageLine);?>
+          <?php common::printLink('tree', 'browse', "rootID=$productID&view=line", $lang->tree->manageLine);?>
         </div>
       </div>
     </div>

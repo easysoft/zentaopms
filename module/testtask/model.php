@@ -99,7 +99,7 @@ class testtaskModel extends model
      */
     public function getProductTasks($productID, $branch = 0, $orderBy = 'id_desc', $pager = null, $scopeAndStatus = array(), $beginTime = 0, $endTime = 0)
     {
-        if($scopeAndStatus[0] == 'all') $products = $this->loadModel('product')->getPairs();
+        $products = $scopeAndStatus[0] == 'all' ? $this->loadModel('product')->getPairs() : array();
         if($this->config->global->flow == 'onlyTest')
         {
             return $this->dao->select("t1.*, t2.name AS productName,t4.name AS buildName, t4.branch AS branch")

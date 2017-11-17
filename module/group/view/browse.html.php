@@ -42,17 +42,21 @@
     <td class='text-left' title='<?php echo $users;?>'><?php echo $users;?></td>
     <td class='text-center'>
       <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
-      <?php common::printIcon('group', 'manageView',   "groupID=$group->id", '', 'list', 'eye-open');?>
-      <?php common::printIcon('group', 'managepriv',   "type=byGroup&param=$group->id", '', 'list', 'lock');?>
+      <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye-open');?>
+      <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
       <?php $lang->group->managemember = $lang->group->manageMember;?>
-      <?php common::printIcon('group', 'managemember', "groupID=$group->id", '', 'list', 'group', '', 'iframe', 'yes');?>
-      <?php common::printIcon('group', 'edit',         "groupID=$group->id", '', 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
-      <?php common::printIcon('group', 'copy',         "groupID=$group->id", '', 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
+      <?php common::printIcon('group', 'managemember', "groupID=$group->id", $group, 'list', 'group', '', 'iframe', 'yes');?>
+      <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
+      <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
       <?php
-      if(common::hasPriv('group', 'delete'))
+      if(common::hasPriv('group', 'delete') and $group->role != 'limited')
       {
           $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
-          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"groupList\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$lang->group->delete}' class='btn-icon'");
+          echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"groupList\", confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$lang->group->delete}' class='btn-icon'");
+      }
+      else
+      {
+          echo "<button class='btn-icon disabled'><i class='icon-remove disabled' title='{$lang->group->delete}'></i></button>";
       }
       ?>
     </td>

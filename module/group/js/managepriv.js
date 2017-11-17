@@ -21,19 +21,7 @@ function setNoChecked()
 {
     var noCheckValue = '';
     $(':checkbox').each(function(){
-        if(!$(this).attr('checked') && $(this).next('span').attr('id') != undefined) noCheckValue = noCheckValue + ',' + $(this).next('span').attr('id');
+        if(!$(this).prop('checked') && $(this).next('span').attr('id') != undefined) noCheckValue = noCheckValue + ',' + $(this).next('span').attr('id');
     })
     $('#noChecked').val(noCheckValue);
 }
-
-$(function()
-{
-    $("[name^='allchecker']").change(function()
-    {
-        var click = $(this).attr('onclick');
-        if(click.indexOf('""') >= 0 || click.indexOf('"my"') >= 0)
-        {
-            $('#my-limited').closest('.group-item').find('input').prop("checked", false);
-        }
-    })
-})

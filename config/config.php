@@ -16,7 +16,7 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version    = '9.6.1';                // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->version    = '9.6.2';                // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->charset    = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife = time() + 2592000;     // Cookie的生存时间。The cookie life time.
 $config->timezone   = 'Asia/Shanghai';      // 时区设置。        The time zone setting, for more see http://www.php.net/manual/en/timezones.php.

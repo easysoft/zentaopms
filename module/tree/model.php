@@ -178,7 +178,7 @@ class treeModel extends model
      */
     public function getLinePairs()
     {
-        return $this->dao->select('id, name')->from(TABLE_MODULE)->where('type')->eq('line')->fetchPairs();
+        return $this->dao->select('id, name')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->fetchPairs();
     }
 
     /**

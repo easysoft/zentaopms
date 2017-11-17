@@ -193,6 +193,8 @@ class upgradeModel extends model
             case '9_6':
                 $this->execSQL($this->getUpgradeFile('9.6'));
                 $this->fixDatatableColsConfig();
+            case '9_6_1':
+                $this->addLimitedGroup();
         }
 
         $this->deletePatch();
@@ -1851,6 +1853,51 @@ class upgradeModel extends model
             }
             $this->dao->update(TABLE_CONFIG)->set('value')->eq(json_encode($cols))->where('id')->eq($datatableCols->id)->exec();
         }
+
+        return true;
+    }
+
+    /**
+     * Add limited group.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function addLimitedGroup()
+    {
+        $limitedGroup = $this->dao->select('*')->from(TABLE_GROUP)->where('`role`')->eq('limited')->fetch();
+        if(empty($limitedGroup))
+        {
+            $group = new stdclass();
+            $group->name = 'limited';
+            $group->role = 'limited';
+            $group->desc = 'For limited user';
+            $this->dao->insert(TABLE_GROUP)->data($group)->exec();
+
+            $groupID = $this->dao->lastInsertID();
+        }
+        else
+        {
+            $groupID = $limitedGroup->id;
+        }
+
+        $limitedGroups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('my')
+            ->andWhere('method')->eq('limited')
+            ->fetchPairs('group', 'group');
+        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('module')->eq('my')->andWhere('method')->eq('limited')->exec();
+
+        $limitedUsers = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($limitedGroups)->fetchPairs('account', 'account');
+        foreach($limitedUsers as $limitedUser)
+        {
+            $this->dao->replace(TABLE_USERGROUP)->set('account')->eq($limitedUser)->set('`group`')->eq($groupID)->exec();
+        }
+
+        $groupPriv = new stdclass();
+        $groupPriv->group = $groupID;
+        $groupPriv->module = 'my';
+        $groupPriv->method = 'limited';
+        $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
 
         return true;
     }
