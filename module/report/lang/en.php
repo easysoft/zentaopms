@@ -42,6 +42,7 @@ $lang->report->bugOpenedDate    = 'Bug Open on';
 $lang->report->taskAssignedDate = 'Time Frame';
 $lang->report->beginAndEnd      = 'Date';
 $lang->report->dept             = 'Dept';
+$lang->report->deviationChart   = $lang->projectCommon . ' Deviation Chart';
 
 $lang->reportList->project->lists[10] = $lang->projectCommon . ' deviation|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . ' summary|report|productsummary';

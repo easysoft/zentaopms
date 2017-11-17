@@ -42,6 +42,7 @@ $lang->report->bugOpenedDate    = 'Bug创建时间';
 $lang->report->taskAssignedDate = '起止时间';
 $lang->report->beginAndEnd      = '起止时间';
 $lang->report->dept             = '部门';
+$lang->report->deviationChart   = $lang->projectCommon . '偏差曲线';
 
 $lang->reportList->project->lists[10] = $lang->projectCommon . '偏差报表|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . '汇总表|report|productsummary';
