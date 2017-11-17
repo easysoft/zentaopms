@@ -915,7 +915,7 @@ INSERT INTO `zt_group` (`id`, `name`, `role`, `desc`) VALUES
 (8, 'QD', 'qd', 'for quality director.'),
 (9, 'TOP', 'top', 'for top manager.'),
 (10, 'OTHERS', '', 'for others.'),
-(11, 'guest', 'guest', 'For guest');
+(11, 'guest', 'guest', 'For guest'),
 (12, 'limited', 'limited', 'For limited user');
 
 INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
