@@ -180,7 +180,7 @@ $lang->story->affectedProjects     = 'Affected' . $lang->projectCommon;
 $lang->story->affectedBugs         = 'Affected Bug';
 $lang->story->affectedCases        = 'Affected Case';
 
-$lang->story->specTemplate          = "Please refer to the Template to write the description. As a < user type>, I hope that < something be done>. So it will do < the value of development>.";
+$lang->story->specTemplate          = "Please refer to the Template to write the description. As a < type of user >, I want < some goal > so that < some reason >.";
 $lang->story->needNotReview         = 'No Review';
 $lang->story->successSaved          = "Story saved!";
 $lang->story->confirmDelete         = "Do you want to delete this Story?";
