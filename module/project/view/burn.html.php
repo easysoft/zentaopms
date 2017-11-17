@@ -15,7 +15,6 @@
 <?php include './taskheader.html.php';?>
 <?php js::set('projectID', $projectID);?>
 <?php js::set('type', $type);?>
-<?php a($chartData)?>
 <div class='container text-center bd-0'>
   <div class='clearfix'>
     <div class='actions pull-right'>
