@@ -1427,7 +1427,7 @@ class testcaseModel extends model
      */
     public function forceNotReview()
     {
-        if(!$this->config->testcase->needReview && strpos(",{$this->config->testcase->forceReview},", ",{$this->app->user->account},") === false) return true;
+        if(!$this->config->testcase->needReview && isset($this->config->testcase->forceReview) && strpos(",{$this->config->testcase->forceReview},", ",{$this->app->user->account},") === false) return true;
         if($this->config->testcase->needReview  && strpos(",{$this->config->testcase->forceNotReview},", ",{$this->app->user->account},")) return true;
 
         return false;
