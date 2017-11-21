@@ -54,7 +54,7 @@ $lang->todo->priList[3] = '一般';
 $lang->todo->priList[1] = '最高';
 $lang->todo->priList[2] = '较高';
 $lang->todo->priList[4] = '最低';
-$lang->task->priList[0] = '';
+$lang->todo->priList[0] = '';
 
 $lang->todo->typeList['custom'] = '自定义';
 $lang->todo->typeList['bug']    = 'Bug';

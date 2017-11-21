@@ -54,7 +54,7 @@ $lang->todo->priList[3] = '3';
 $lang->todo->priList[1] = '1';
 $lang->todo->priList[2] = '2';
 $lang->todo->priList[4] = '4';
-$lang->task->priList[0] = '';
+$lang->todo->priList[0] = '';
 
 $lang->todo->typeList['custom'] = 'Custom';
 $lang->todo->typeList['bug']    = 'Bug';
