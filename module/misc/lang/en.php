@@ -63,11 +63,11 @@ $lang->misc->tableStatus = "Status";
 $lang->misc->novice      = "First time to ZenTao? Do you want to start rookie mode?";
 
 $lang->misc->noticeRepair = "<h5>If you are not Administrator, please contact Administrator to repair table.</h5>
-    <h5>If you are, please login into your Zentao host and create the <span>%s</span> file.</h5>
+    <h5>If you are, please login into your Zentao host and create a file named <span>%s</span>.</h5>
     <p>Note:</p>
     <ol>
-    <li>Keep the ok.txt empty.</li>
-    <li>If ok.txt exists, remove it and create one again.</li>
+    <li>Keep the file empty.</li>
+    <li>If the file exists, remove it and create one again.</li>
     </ol>";
 
 $lang->misc->feature = new stdclass();
