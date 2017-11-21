@@ -94,6 +94,7 @@ class reportModel extends model
             ->where('t1.status')->ne('cancel')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.parent')->eq(0)
             ->andWhere('t2.status')->eq('done')
             ->beginIF($begin)->andWhere('t2.begin')->ge($begin)->fi()
             ->beginIF($end)->andWhere('t2.end')->le($end)->fi()
@@ -265,7 +266,7 @@ class reportModel extends model
                     $workload[$user]['task'][$task->projectName]['manhour']   = isset($workload[$user]['task'][$task->projectName]['manhour']) ? $workload[$user]['task'][$task->projectName]['manhour'] + $task->left : $task->left;
                     $workload[$user]['task'][$task->projectName]['projectID'] = $task->project;
                     $workload[$user]['total']['count']   = isset($workload[$user]['total']['count']) ? $workload[$user]['total']['count'] + 1 : 1;
-                    $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
+                    if($task->parent == 0) $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
                 }
             }
         }
