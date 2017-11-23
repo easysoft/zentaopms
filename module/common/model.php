@@ -1423,6 +1423,58 @@ class commonModel extends model
 
         die(helper::jsonEncode($response));
     }
+
+    /**
+     * Http. 
+     * 
+     * @param  string       $url 
+     * @param  string|array $data 
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function http($url, $data = null)
+    {
+        global $lang, $app;
+        if(!extension_loaded('curl')) return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Sae T OAuth2 v0.1');
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($curl, CURLOPT_ENCODING, "");
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_HEADER, FALSE);
+
+        $headers[] = "API-RemoteIP: " . $_SERVER['REMOTE_ADDR'];
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers );
+        curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
+        if(!empty($data))
+        {
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        }
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $logFile = $app->getLogRoot() . 'saas.'. date('Ymd') . '.log.php';
+        if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
+
+        $fh = @fopen($logFile, 'a');
+		if($fh)
+		{
+			fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
+			fwrite($fh, "url:    " . $url . "\n");
+			fwrite($fh, "results:" . print_r($response, true) . "\n");
+			fclose($fh);
+		}
+
+        return $response;
+    }
 }
 
 class common extends commonModel
