@@ -21,7 +21,7 @@ $lang->task->delete             = "Delete";
 $lang->task->deleted            = "Deleted";
 $lang->task->delayed            = 'Delayed';
 $lang->task->view               = "Info";
-$lang->task->logEfforts         = "Man-Hour Log";
+$lang->task->logEfforts         = "Man-Hour";
 $lang->task->record             = "Est.";
 $lang->task->start              = "Start";
 $lang->task->restart            = "Continue";
@@ -148,7 +148,7 @@ $lang->task->afterChoices['toTaskList']     = 'Back to Task List';
 $lang->task->afterChoices['toStoryList']    = 'Back to Story List';
 
 $lang->task->legendBasic  = 'Basic Info';
-$lang->task->legendEffort = 'Man-Hour';
+$lang->task->legendEffort = 'Effort';
 $lang->task->legendLife   = 'Task Life';
 $lang->task->legendDesc   = 'Task Description';
 
