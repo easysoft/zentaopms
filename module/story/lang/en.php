@@ -145,7 +145,7 @@ $lang->story->sourceList['support']    = 'Technical support';
 $lang->story->sourceList['competitor'] = 'Competitor';
 $lang->story->sourceList['partner']    = 'Partner';
 $lang->story->sourceList['dev']        = 'Dev Team';
-$lang->story->sourceList['tester']     = 'Testing Team';
+$lang->story->sourceList['tester']     = 'QA Team';
 $lang->story->sourceList['bug']        = 'Bug';
 $lang->story->sourceList['other']      = 'Other';
 
