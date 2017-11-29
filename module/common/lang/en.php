@@ -105,7 +105,7 @@ $lang->menu = new stdclass();
 $lang->menu->my       = '<i class="icon-home"></i><span>Dashboard</span>|my|index';
 $lang->menu->product  = $lang->productCommon . '|product|index';
 $lang->menu->project  = $lang->projectCommon . '|project|index';
-$lang->menu->qa       = 'Testing|qa|index';
+$lang->menu->qa       = 'QA|qa|index';
 $lang->menu->doc      = 'Document|doc|index';
 $lang->menu->report   = 'Report|report|index';
 $lang->menu->company  = 'Company|company|index';
@@ -247,7 +247,7 @@ $lang->qa->menu->testtask  = array('link' => 'Build|testtask|browse|productID=%s
 $lang->qa->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s');
 $lang->qa->menu->report    = array('link' => 'Report|testreport|browse|productID=%s');
 $lang->qa->menu->caselib   = array('link' => 'Library|testsuite|library');
-$lang->qa->menu->index     = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->qa->menu->index     = array('link' => "<i class='icon-home'></i>QA|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
@@ -259,7 +259,7 @@ $lang->bug->menu->testtask  = array('link' => 'Build|testtask|browse|productID=%
 $lang->bug->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s');
 $lang->bug->menu->report    = array('link' => 'Report|testreport|browse|productID=%s');
 $lang->bug->menu->caselib   = array('link' => 'Library|testsuite|library');
-$lang->bug->menu->index     = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->bug->menu->index     = array('link' => "<i class='icon-home'></i>QA|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
@@ -271,7 +271,7 @@ $lang->testcase->menu->testtask  = array('link' => 'Build|testtask|browse|produc
 $lang->testcase->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
 $lang->testcase->menu->report    = array('link' => 'Report|testreport|browse|productID=%s', 'alias' => 'view,create,edit');
 $lang->testcase->menu->caselib   = array('link' => 'Library|testsuite|library');
-$lang->testcase->menu->index     = array('link' => "<i class='icon-home'></i>TestingHomepage|qa|index|locate=no&productID=%s", 'float' => 'right');
+$lang->testcase->menu->index     = array('link' => "<i class='icon-home'></i>QA|qa|index|locate=no&productID=%s", 'float' => 'right');
 
 $lang->testtask = new stdclass();
 $lang->testtask->menu = $lang->testcase->menu;
@@ -306,7 +306,7 @@ $lang->report->menu = new stdclass();
 
 $lang->report->menu->product = array('link' => $lang->productCommon . '|report|productsummary');
 $lang->report->menu->prj     = array('link' => $lang->projectCommon . '|report|projectdeviation');
-$lang->report->menu->test    = array('link' => 'Testing|report|bugcreate', 'alias' => 'bugassign');
+$lang->report->menu->test    = array('link' => 'Test|report|bugcreate', 'alias' => 'bugassign');
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 $lang->report->notice = new stdclass();
@@ -687,10 +687,10 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Add bug, testcase and testtask module. */
     $lang->menu->bug       = 'Bug|bug|index';
-    $lang->menu->testcase  = 'Case|testcase|index';
-    $lang->menu->testsuite = 'Suite|testsuite|index';
-    $lang->menu->testtask  = 'Testing|testtask|index';
-    $lang->menu->caselib   = 'Library|testsuite|library';
+    $lang->menu->testcase  = 'Test Case|testcase|index';
+    $lang->menu->testsuite = 'Test Suite|testsuite|index';
+    $lang->menu->testtask  = 'Test Task|testtask|index';
+    $lang->menu->caselib   = 'Case Library|testsuite|library';
 
     $lang->menuOrder[6]  = 'bug';
     $lang->menuOrder[7]  = 'testcase';
@@ -707,7 +707,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->bug->menu->assigntome    = 'Assigned To Me|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
     $lang->bug->menu->openedbyme    = 'Created By Me|bug|browse|productID=%s&branch=%s&browseType=openedbyme&param=%s';
     $lang->bug->menu->resolvedbyme  = 'Resolved By Me|bug|browse|productID=%s&branch=%s&browseType=resolvedbyme&param=%s';
-    $lang->bug->menu->unconfirmed   = 'Not Confirmed|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s';
+    $lang->bug->menu->unconfirmed   = 'Unconfirmed|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s';
     $lang->bug->menu->assigntonull  = 'Unassigned|bug|browse|productID=%s&branch=%s&browseType=assigntonull&param=%s';
     $lang->bug->menu->unresolved    = 'Unresolved|bug|browse|productID=%s&branch=%s&browseType=unresolved&param=%s';
     $lang->bug->menu->toclosed      = 'To Be Closed|bug|browse|productID=%s&branch=%s&browseType=toclosed&param=%s';
@@ -753,10 +753,10 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->testtask->menu = new stdclass();
     $lang->testtask->menu->product     = array('link' => '%s', 'fixed' => true);
     $lang->testtask->menu->scope       = array('link' => '%s', 'fixed' => true);
-    $lang->testtask->menu->wait        = 'Build to be Tested|testtask|browse|productID=%s&branch=%s&type=%s,wait';
-    $lang->testtask->menu->doing       = 'Testing Build|testtask|browse|productID=%s&branch=%s&type=%s,doing';
-    $lang->testtask->menu->blocked     = 'Blocked Build|testtask|browse|productID=%s&branch=%s&type=%s,blocked';
-    $lang->testtask->menu->done        = 'Tested Build|testtask|browse|productID=%s&branch=%s&type=%s,done';
+    $lang->testtask->menu->wait        = 'Wait|testtask|browse|productID=%s&branch=%s&type=%s,wait';
+    $lang->testtask->menu->doing       = 'Doing|testtask|browse|productID=%s&branch=%s&type=%s,doing';
+    $lang->testtask->menu->blocked     = 'Blocked|testtask|browse|productID=%s&branch=%s&type=%s,blocked';
+    $lang->testtask->menu->done        = 'Done|testtask|browse|productID=%s&branch=%s&type=%s,done';
     $lang->testtask->menu->totalStatus = 'All|testtask|browse|productID=%s&branch=%s&type=%s,totalStatus';
     $lang->testtask->menu->report      = array('link' => 'Report|testreport|browse');
     $lang->testtask->menu->create      = array('link' => "<i class='icon-plus'></i> Create|testtask|create|productID=%s", 'float' => 'right');
