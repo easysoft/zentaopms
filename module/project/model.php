@@ -342,7 +342,7 @@ class projectModel extends model
                     $member->role    = $this->lang->project->$fieldName;
                     $member->days    = $project->days;
                     $member->hours   = $this->config->project->defaultWorkhours;
-                    $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+                    $this->dao->replace(TABLE_TEAM)->data($member)->exec();
                 }
             }
         }
