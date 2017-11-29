@@ -346,7 +346,7 @@ class build extends control
         }
         if($varName == 'testTaskBuild')
         {
-            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty');
+            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty,notrunk');
             if($isJsonView) die(json_encode($builds));
             else die(html::select('build', $builds, $build, "class='form-control'"));
         }
