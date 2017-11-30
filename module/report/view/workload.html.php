@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class='col-sm-1'>
-        <div class='input-group'><?php echo html::submitButton();?></div>
+        <div class='input-group'><?php echo html::submitButton($lang->report->query);?></div>
       </div>
     </div>
   </form>

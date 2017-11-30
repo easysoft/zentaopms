@@ -16,6 +16,7 @@ $lang->report->item       = 'Item';
 $lang->report->value      = 'Value';
 $lang->report->percent    = '%';
 $lang->report->undefined  = 'Undefined';
+$lang->report->query      = 'Query';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
@@ -54,7 +55,7 @@ $lang->report->id            = 'ID';
 $lang->report->project       = $lang->projectCommon;
 $lang->report->product       = $lang->productCommon;
 $lang->report->user          = 'Username';
-$lang->report->bug           = 'Bugs';
+$lang->report->bugTotal      = 'Bugs';
 $lang->report->task          = 'Tasks';
 $lang->report->estimate      = 'Est.';
 $lang->report->consumed      = 'Consumed';

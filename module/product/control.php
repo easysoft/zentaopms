@@ -158,7 +158,7 @@ class product extends control
         $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', $browseType != 'bysearch');
 
         /* Get related tasks, bugs, cases count of each story. */
         $storyIdList = array();
