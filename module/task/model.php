@@ -382,20 +382,7 @@ class taskModel extends model
             }
         }
 
-        if($task->consumed < $oldTask->consumed)
-        {
-            die(js::error($this->lang->task->error->consumedSmall));
-        }
-        elseif($task->consumed != $oldTask->consumed or $task->left != $oldTask->left)
-        {
-            $estimate = new stdClass();
-            $estimate->consumed = $task->consumed - $oldTask->consumed;
-            $estimate->left     = $task->left;
-            $estimate->task     = $taskID;
-            $estimate->account  = $this->app->user->account;
-            $estimate->date     = helper::now();
-            $this->addTaskEstimate($estimate);
-        }
+        if($task->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)
