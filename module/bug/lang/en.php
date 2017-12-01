@@ -230,7 +230,7 @@ $lang->bug->typeList['others']       = 'Other';
 
 $lang->bug->statusList['']         = '';
 $lang->bug->statusList['active']   = 'Active';
-$lang->bug->statusList['resolved'] = 'Reolved';
+$lang->bug->statusList['resolved'] = 'Resolved';
 $lang->bug->statusList['closed']   = 'Closed';
 
 $lang->bug->confirmedList[1] = 'Confirmed';

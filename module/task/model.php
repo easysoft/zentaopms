@@ -1216,7 +1216,6 @@ class taskModel extends model
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.parent')->eq(0)
             ->beginIF($productID)->andWhere('t2.product')->eq((int)$productID)->fi()
             ->beginIF($type == 'undone')->andWhere("(t1.status = 'wait' or t1.status ='doing')")->fi()
             ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
@@ -1225,26 +1224,22 @@ class taskModel extends model
             ->beginIF($type == 'delayed')->andWhere('t1.deadline')->gt('1970-1-1')->andWhere('t1.deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
-            ->orderBy($orderBy)
+            ->orderBy('t1.`parent`,' . $orderBy)
             ->page($pager)
             ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID or $type == 'needconfirm') ? false : true);
 
         $taskList = array_keys($tasks);
-        if(!empty($taskList))
+        $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->in($taskList)->fetchGroup('task');
+        foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
+        foreach($tasks as $taskID => $task)
         {
-            $children = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
-                ->from(TABLE_TASK)->alias('t1')
-                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
-                ->where('t1.parent')->in($taskList)
-                ->andWhere('t1.deleted')->eq(0)
-                ->orderBy('id_desc')
-                ->fetchGroup('parent');
-            foreach($children as $key => $child) $tasks[$key]->children = $child;
-            $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->in($taskList)->fetchGroup('task');
-            foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
+            if($task->parent and isset($tasks[$task->parent]))
+            {
+                $tasks[$task->parent]->children[] = $task;
+                unset($tasks[$taskID]);
+            }
         }
 
         if($tasks) return $this->processTasks($tasks);

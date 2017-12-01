@@ -76,6 +76,7 @@
         <legend><?php echo $lang->task->legendDesc;?></legend>
         <div class='article-content'><?php echo $task->desc;?></div>
       </fieldset>
+      <?php if($project->type != 'ops'):?>
       <?php if($task->fromBug != 0):?>
       <fieldset>
         <legend><?php echo $lang->bug->steps;?></legend>
@@ -102,7 +103,8 @@
         </div>
       </fieldset>
       <?php endif;?>
-        <?php if(!empty($task->children)):?>
+      <?php endif;?>
+      <?php if(!empty($task->children)):?>
       <fieldset>
         <legend><?php echo $this->lang->task->children;?></legend>
         <table class='table table-hover table-data table-fixed'>
@@ -147,7 +149,7 @@
             <?php endforeach;?>
         </table>
       </fieldset>
-        <?php endif;?>
+      <?php endif;?>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
       <div class='actions'> <?php if(!$task->deleted) echo $actionLinks;?></div>

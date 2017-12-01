@@ -1191,9 +1191,6 @@ class task extends control
                     ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
                     ->orderBy($orderBy)->fetchAll('id');
 
-                $taskList = array_keys($tasks);
-                if(!empty($taskList)) $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($taskList)->fetchGroup('parent');
-
                 foreach($tasks as $key => $task)
                 {
                     /* Compute task progress. */
@@ -1212,16 +1209,7 @@ class task extends control
 
                     $task->progress .= '%';
 
-                    $tasks[$key] = $task;
-
-                    if(isset($children[$task->id])) 
-                    {
-                        foreach($children[$task->id] as $child)
-                        {
-                            $child->name       = '[' . $taskLang->childrenAB . '] ' . $child->name;
-                            $tasks[$child->id] = $child;
-                        }
-                    }
+                    if($task->parent) $task->name = '[' . $taskLang->childrenAB . '] ' . $task->name;
                 }
             }
             else
