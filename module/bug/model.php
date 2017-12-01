@@ -728,7 +728,7 @@ class bugModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('assignedDate', $now)
-            ->remove('comment')
+            ->remove('comment,showModule')
             ->join('mailto', ',')
             ->get();
 
