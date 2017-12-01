@@ -1129,7 +1129,7 @@ class taskModel extends model
         if(!empty($task->parent)) $task->parentName = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('name');
 
         $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->eq($taskID)->orderBy('order_desc')->fetchGroup('task', 'account');
-        foreach($teams as $key => $team) $teams[$key] = array_reverse($team);
+        foreach($teams as $key => $team) $teams[$key] = array_reverse($team, true);
         $task->team = isset($teams[$taskID]) ? $teams[$taskID] : array();
         foreach($children as $child) $child->team = isset($teams[$child->id]) ? $teams[$child->id] : array();
 

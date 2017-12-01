@@ -779,6 +779,7 @@ class task extends control
         $task    = $this->view->task;
         $members = $this->loadModel('user')->getPairs('noletter');
 
+        $this->view->users = $members;
         if(!empty($task->team))
         {
             $task->openedBy   = $this->task->getNextUser(array_keys($task->team), $task->assignedTo);
@@ -789,7 +790,7 @@ class task extends control
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
         $this->view->position[] = $this->lang->task->finish;
         $this->view->members    = $members;
-       
+
         $this->display();
     }
 
@@ -822,6 +823,7 @@ class task extends control
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->pause;
         $this->view->position[] = $this->lang->task->pause;
         
+        $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
