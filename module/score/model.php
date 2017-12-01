@@ -43,7 +43,7 @@ class scoreModel extends model
         $desc     = $this->lang->score->modules[$module];
         $user     = empty($account) ? $this->app->user->account : $account;
         $time     = empty($time) ? helper::now() : $time;
-        $extended = $this->config->score->ruleExtended[$module][$method];
+        $extended = isset($this->config->score->ruleExtended[$module][$method]) ? $this->config->score->ruleExtended[$module][$method] : array();
 
         if(is_numeric($param)) $desc .= 'ID:' . $param;
 
@@ -207,6 +207,7 @@ class scoreModel extends model
         }
 
         $user = $this->loadModel('user')->getById($account);
+        if(empty($user)) return false;
 
         $data = new stdClass();
         $data->account  = $account;
@@ -219,7 +220,7 @@ class scoreModel extends model
         $data->time     = empty($time) ? helper::now() : $time;
         $this->dao->insert(TABLE_SCORE)->data($data)->exec();
 
-        $this->dao->query("UPDATE " . TABLE_USER . " SET `score`=`score` + " . $rule['score'] . ",`scoreLevel`=`scoreLevel` + " . $rule['score'] . " WHERE `account`='" . $account . "'");
+        $this->dao->update(TABLE_USER)->set("`score`=`score` + " . $rule['score'])->set("`scoreLevel`=`scoreLevel` + " . $rule['score'])->where('account')->eq($account)->exec();
     }
 
     /**
