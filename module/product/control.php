@@ -753,7 +753,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function build($productID = 0)
+    public function build($productID = 0, $branch = 0)
     {
         $this->app->loadLang('build');
         $this->session->set('productList', $this->app->getURI(true));
@@ -765,7 +765,7 @@ class product extends control
         /* Get current product. */
         $productID = $this->product->saveState($productID, $this->products);
         $product   = $this->product->getById($productID);
-        $this->product->setMenu($this->products, $productID);
+        $this->product->setMenu($this->products, $productID, $branch);
 
         /* Set menu.*/
         $this->session->set('buildList', $this->app->getURI(true));
@@ -774,7 +774,10 @@ class product extends control
         $this->view->position[] = $this->lang->product->build;
         $this->view->products   = $this->products;
         $this->view->product    = $product;
-        $this->view->builds     = $this->dao->select('*')->from(TABLE_BUILD)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetchAll();
+        $this->view->builds     = $this->dao->select('*')->from(TABLE_BUILD)->where('product')->eq($productID)
+            ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
