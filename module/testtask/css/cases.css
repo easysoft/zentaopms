@@ -8,5 +8,3 @@ tfoot.fixedTfootAction .chosen-results li.active-result {color: black;}
 tfoot .table-actions .input-group #assignedTo_chosen .chosen-single{height:24px;padding:3px 6px}
 tfoot .table-actions .input-group #assignedTo_chosen .chosen-single span{font-size:12px;}
 tfoot .table-actions .input-group #assignedTo_chosen .chosen-single div{line-height:10px;}
-
-#caseForm{overflow-y:auto}
