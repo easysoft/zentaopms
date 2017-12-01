@@ -635,8 +635,8 @@ class taskModel extends model
             ->cleanFloat('left')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
-            ->remove('comment,showModule')
             ->setDefault('assignedDate', $now)
+            ->remove('comment,showModule')
             ->get();
 
         $this->dao->update(TABLE_TASK)
