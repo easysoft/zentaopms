@@ -349,11 +349,10 @@ class taskModel extends model
         $teams = array();
         if($this->post->multiple)
         {
-            $estimate = 0;
-            $left     = 0;
             foreach($this->post->team as $row => $account)
             {
                 if(empty($account) or isset($team[$account])) continue;
+
                 $member = new stdClass();
                 $member->project  = 0;
                 $member->account  = $account;
@@ -365,20 +364,12 @@ class taskModel extends model
                 $member->left     = $member->estimate - $member->consumed;
                 $member->order    = $row;
                 $teams[$account]  = $member;
-
-                $estimate += (float)$member->eatimate;
-                $left     += (float)$member->left;
             }
 
-            if(!empty($teams))
+            if(!empty($teams) and !isset($task->assignedTo))
             {
-                $task->estimate = $estimate;
-                $task->left     = $left;
-                if(!isset($task->assignedTo))
-                {
-                    $firstMember      = reset($teams);
-                    $task->assignedTo = $firstMember->account;
-                }
+                $firstMember      = reset($teams);
+                $task->assignedTo = $firstMember->account;
             }
         }
 
