@@ -16,6 +16,7 @@ $lang->report->item       = '條目';
 $lang->report->value      = '值';
 $lang->report->percent    = '百分比';
 $lang->report->undefined  = '未設定';
+$lang->report->query      = '查詢';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
@@ -42,6 +43,7 @@ $lang->report->bugOpenedDate    = 'Bug創建時間';
 $lang->report->taskAssignedDate = '起止時間';
 $lang->report->beginAndEnd      = '起止時間';
 $lang->report->dept             = '部門';
+$lang->report->deviationChart   = $lang->projectCommon . '偏差曲綫';
 
 $lang->reportList->project->lists[10] = $lang->projectCommon . '偏差報表|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . '彙總表|report|productsummary';
@@ -53,7 +55,7 @@ $lang->report->id            = '編號';
 $lang->report->project       = $lang->projectCommon;
 $lang->report->product       = $lang->productCommon;
 $lang->report->user          = '姓名';
-$lang->report->bug           = 'Bug';
+$lang->report->bugTotal      = 'Bug';
 $lang->report->task          = '任務數';
 $lang->report->estimate      = '總預計';
 $lang->report->consumed      = '總消耗';
