@@ -281,14 +281,14 @@
                       $withSearch = count($users) > 10;
                       $actionLink = $this->createLink('story', 'batchAssignTo', "productID=$productID");
                       echo "<li class='dropdown-submenu'>";
-                      echo html::select('assignedTo', $users, '', 'class="hidden"');
+                      echo html::select('assignedTo', $users, 'admin', 'class="hidden"');
                       echo html::a('javascript::', $lang->story->assignedTo, '', 'id="assignItem"');
                       echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                       echo '<ul class="dropdown-list">';
                       foreach ($users as $key => $value)
                       {
                           if(empty($key) or $key == 'closed') continue;
-                          echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
+                          echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\",\"hiddenwin\")", $value, '', '') . '</li>';
                       }
                       echo "</ul>";
                       if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control'><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
