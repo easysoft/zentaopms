@@ -252,67 +252,68 @@
           </div>
 
           <div class='tab-pane <?php if($type == 'releaseInfo') echo 'active'?>' id='releaseInfo'>
-            <div>
-              <fieldset>
-                <legend><?php echo $lang->release->desc;?></legend>
-                <div class='article-content'><?php echo $release->desc;?></div>
-              </fieldset>
-              <fieldset>
-                <legend><?php echo $lang->release->basicInfo?></legend>
-                <table class='table table-data table-condensed table-borderless table-fixed'>
-                  <tr>
-                    <th class='w-80px'><?php echo $lang->release->product;?></th>
-                    <td><?php echo $release->productName;?></td>
-                  </tr>  
-                  <?php if($release->productType != 'normal'):?>
-                  <tr>
-                    <th><?php echo $lang->product->branch;?></th>
-                    <td><?php echo $branchName;?></td>
-                  </tr>
-                  <?php endif;?>
-                  <tr>
-                    <th><?php echo $lang->release->name;?></th>
-                    <td><?php echo $release->name;?></td>
-                  </tr>  
-                  <tr>
-                    <th><?php echo $lang->release->build;?></th>
-                    <td title='<?php echo $release->buildName?>'>
-                    <?php echo ($release->project) ? html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank') : $release->buildName;?>
-                    </td>
-                  </tr>  
-                  <tr>
-                    <th><?php echo $lang->release->status;?></th>
-                    <td><?php echo $lang->release->statusList[$release->status];?></td>
-                  </tr>
-                  <tr>
-                    <th><?php echo $lang->release->date;?></th>
-                    <td><?php echo $release->date;?></td>
-                  </tr>
-                </table>
-              </fieldset>
-              <fieldset>
-                <legend><?php echo $lang->files?></legend>
-                <div class='article-content'>
-                <?php
-                if($release->files)
-                {
-                    echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false'));
-                }
-                elseif($release->filePath)
-                {
-                    echo $lang->release->filePath . html::a($release->filePath, $release->filePath, '_blank');
-                }
-                elseif($release->scmPath)
-                {
-                    echo $lang->release->scmPath . html::a($release->scmPath, $release->scmPath, '_blank');
-                }
-                ?>
-                </div>
-              </fieldset>
-              <?php include '../../common/view/action.html.php';?>
+            <div class="row-table">
+              <div class="col-main">
+                <fieldset>
+                  <legend><?php echo $lang->release->basicInfo?></legend>
+                  <table class='table table-data table-condensed table-borderless table-fixed'>
+                    <tr>
+                      <th class='w-80px'><?php echo $lang->release->product;?></th>
+                      <td><?php echo $release->productName;?></td>
+                    </tr>
+                      <?php if($release->productType != 'normal'):?>
+                        <tr>
+                          <th><?php echo $lang->product->branch;?></th>
+                          <td><?php echo $branchName;?></td>
+                        </tr>
+                      <?php endif;?>
+                    <tr>
+                      <th><?php echo $lang->release->name;?></th>
+                      <td><?php echo $release->name;?></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->release->build;?></th>
+                      <td title='<?php echo $release->buildName?>'>
+                          <?php echo ($release->project) ? html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank') : $release->buildName;?>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->release->status;?></th>
+                      <td><?php echo $lang->release->statusList[$release->status];?></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->release->date;?></th>
+                      <td><?php echo $release->date;?></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->release->desc;?></th>
+                      <td><?php echo $release->desc;?></td>
+                    </tr>
+                  </table>
+                </fieldset>
+                <fieldset>
+                  <legend><?php echo $lang->files?></legend>
+                  <div class='article-content'>
+                      <?php
+                      if($release->files)
+                      {
+                          echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false'));
+                      }
+                      elseif($release->filePath)
+                      {
+                          echo $lang->release->filePath . html::a($release->filePath, $release->filePath, '_blank');
+                      }
+                      elseif($release->scmPath)
+                      {
+                          echo $lang->release->scmPath . html::a($release->scmPath, $release->scmPath, '_blank');
+                      }
+                      ?>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="col-side"><?php include '../../common/view/action.html.php';?></div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
