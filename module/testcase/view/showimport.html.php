@@ -83,7 +83,7 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan='10' class='text-center'>
+        <td colspan='<?php echo !empty($branches) ? 11 : 10;?>' class='text-center'>
           <?php
           if(!$insert)
           {
