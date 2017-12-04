@@ -1169,6 +1169,7 @@ class storyModel extends model
          */
         foreach($branchStatusList as $branch => $statusList)
         {
+            $stage      = 'projected';
             $testTasks  = isset($branchTestTasks[$branch]) ? $branchTestTasks[$branch] : 0;
             $develTasks = isset($branchDevelTasks[$branch]) ? $branchDevelTasks[$branch] : 0;
             if($statusList['devel']['doing'] > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developing'; 
