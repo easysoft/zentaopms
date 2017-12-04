@@ -1221,6 +1221,8 @@ class taskModel extends model
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID or $type == 'needconfirm') ? false : true);
 
+        if(empty($tasks)) return array();
+
         $taskList = array_keys($tasks);
         $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->in($taskList)->fetchGroup('task');
         foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
