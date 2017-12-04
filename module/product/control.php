@@ -220,6 +220,12 @@ class product extends control
             $productID = $this->product->create();
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('product', $productID, 'opened');
+
+            if(isset($this->config->global->flow) and $this->config->global->flow == 'onlyTest')
+            {
+                die(js::locate($this->createLink($this->moduleName, 'build', "productID=$productID"), 'parent'));
+            }
+
             die(js::locate($this->createLink($this->moduleName, 'browse', "productID=$productID"), 'parent'));
         }
 
