@@ -47,7 +47,7 @@ $lang->productplan->end     = 'End';
 $lang->productplan->last    = 'Last plan';
 
 $lang->productplan->endList[7]   = '1 Week';
-$lang->productplan->endList[14]  = '1 Weeks';
+$lang->productplan->endList[14]  = '2 Weeks';
 $lang->productplan->endList[31]  = '1 Month';
 $lang->productplan->endList[62]  = '2 Months';
 $lang->productplan->endList[93]  = '3 Months';
