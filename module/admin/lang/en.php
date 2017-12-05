@@ -34,7 +34,7 @@ $lang->admin->info->account = 'Your ZenTao account is %s.';
 $lang->admin->info->log     = 'The logs older than save days will be deleted, need to run cron.';
 
 $lang->admin->notice = new stdclass();
-$lang->admin->notice->register = "Note: You haven't registered in ZenTao(www.zentao.net), register %s and get the latest ZenTao news.";
+$lang->admin->notice->register = "Note: You haven't registered in ZenTao(www.zentao.pm), register %s and get the latest ZenTao news.";
 $lang->admin->notice->ignore   = "Ignore";
 $lang->admin->notice->int      = "『%s』should be a positive integer.";
 
