@@ -1836,6 +1836,8 @@ class projectModel extends model
         $totalEstimate = $totalConsumed = $totalLeft = 0.0;
         foreach($tasks as $task)
         {
+            if(!empty($task->parent)) continue;
+
             $totalEstimate  += $task->estimate;
             $totalConsumed  += $task->consumed;
             $totalLeft      += (($task->status == 'cancel' or $task->closedReason == 'cancel') ? 0 : $task->left);
