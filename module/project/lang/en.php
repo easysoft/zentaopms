@@ -176,12 +176,12 @@ $lang->project->aboveAllProject = "All the above {$lang->projectCommon}";
 /* 页面提示。*/
 $lang->project->selectProject   = "Select {$lang->projectCommon}";
 $lang->project->beginAndEnd     = 'Time Frame';
-$lang->project->lblStats        = 'Man-Hour Report';
-$lang->project->stats           = 'Available <strong>%s</strong> man-hour, <strong>%s</strong> man-hour Estimated, <strong>%s</strong> man-hour Consumed, <strong>%s</strong> man-hour.';
-$lang->project->taskSummary     = " <strong>%s</strong> Tasks on this page, <strong>%s</strong> Wait, <strong>%s</strong> Doing. <strong>%s</strong> man-hour Estimated, <strong>%s</strong> man-hour Consumed, <strong>%s</strong> man-hour Remained.";
-$lang->project->memberHours     = "%s has <strong>%s</strong> man-hour available ";
-$lang->project->groupSummary    = "<strong>%s</strong> Tasks in this group, Wait <strong>%s</strong>, Doing <strong>%s</strong>. <strong>%s</strong> man-hour Estimated , <strong>%s</strong> man-hour Consumed, <strong>%s</strong> man-hour Remained.";
-$lang->project->groupSummaryAB  = "Total Tasks <strong>%s</strong>, Wait <strong>%s</strong>, Doing <strong>%s</strong>.<br /> <strong>%s</strong> man-hour Estimated, <strong>%s</strong> man-hour Consumed，<strong>%s</strong> man-hour Remained.";
+$lang->project->lblStats        = 'Hour Report';
+$lang->project->stats           = '<strong>%s</strong> Hour(s) available, <strong>%s</strong> Hour(s) Estimated, <strong>%s</strong> Hour(s) Consumed, <strong>%s</strong> Hour(s) Remained.';
+$lang->project->taskSummary     = " <strong>%s</strong> Tasks on this page, <strong>%s</strong> Wait, <strong>%s</strong> Doing. <strong>%s</strong> Hour(s) Estimated, <strong>%s</strong> Hour(s) Consumed, <strong>%s</strong> Hour(s) Remained.";
+$lang->project->memberHours     = "%s has <strong>%s</strong> Hour(s) available ";
+$lang->project->groupSummary    = "<strong>%s</strong> Tasks in this group, Wait <strong>%s</strong>, Doing <strong>%s</strong>. <strong>%s</strong> Hour(s) Estimated , <strong>%s</strong> Hour(s) Consumed, <strong>%s</strong> Hour(s) Remained.";
+$lang->project->groupSummaryAB  = "Total Tasks <strong>%s</strong>, Wait <strong>%s</strong>, Doing <strong>%s</strong>.<br /> <strong>%s</strong> Hour(s) Estimated, <strong>%s</strong> Hour(s) Consumed，<strong>%s</strong> Hour(s) Remained.";
 $lang->project->noTimeSummary   = " <strong>%s</strong> Tasks in this group, Wait <strong>%s</strong>, Doing <strong>%s</strong>.";
 $lang->project->wbs             = "Decompose Task";
 $lang->project->batchWBS        = "Batch Decompose";
@@ -235,7 +235,7 @@ $lang->project->charts->burn->graph->showValues   = 0;
 
 $lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code      = "{$lang->projectCommon} Code";
-$lang->project->placeholder->totalLeft = 'Total man-hour remained when start Project';
+$lang->project->placeholder->totalLeft = 'Hour(s) remained at the beginning of Project';
 
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->done = '(Done)';

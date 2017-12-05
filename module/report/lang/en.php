@@ -65,11 +65,11 @@ $lang->report->deviationRate = 'Deviation Rate';
 $lang->report->total         = 'Total';
 $lang->report->to            = 'to';
 $lang->report->taskTotal     = "Total Tasks";
-$lang->report->manhourTotal  = "Total Man-Hour";
+$lang->report->manhourTotal  = "Total Hours";
 $lang->report->validRate     = "Efficiency";
 $lang->report->validRateTips = "Solution is fixed or postponed / status is resolved or closed.";
 $lang->report->unplanned     = 'Unplanned';
-$lang->report->workday       = 'Man-Hour/Day';
+$lang->report->workday       = 'Hours/Day';
 $lang->report->diffDays      = 'Work Days';
 
 $lang->report->conditions    = 'Filter by:';

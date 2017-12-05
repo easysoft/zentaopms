@@ -33,15 +33,15 @@ $lang->product->otherInfo = 'Other Info';
 
 $lang->product->plans    = 'Plans';
 $lang->product->releases = 'Releases';
-$lang->product->docs     = 'Documents';
+$lang->product->docs     = 'Doc';
 $lang->product->bugs     = 'Linked Bug';
-$lang->product->projects = "Linked {$lang->projectCommon}s";
+$lang->product->projects = "Linked {$lang->projectCommon}";
 $lang->product->cases    = 'Cases';
 $lang->product->builds   = 'Builds';
 $lang->product->roadmap  = 'Roadmap';
-$lang->product->doc      = 'Documents';
+$lang->product->doc      = 'Doc';
 $lang->product->project  = $lang->projectCommon . 'List';
-$lang->product->build    = 'Build List';
+$lang->product->build    = 'Build';
 
 $lang->product->activeStories    = 'Activated Story';
 $lang->product->changedStories   = 'Changed Story';
@@ -107,7 +107,7 @@ $lang->product->aclList['open']    = "Default({$lang->productCommon} with View p
 $lang->product->aclList['private'] = "Private{$lang->productCommon}({$lang->projectCommon}team members only)";
 $lang->product->aclList['custom']  = 'Custom(Team members and Whitelisr members have access to it.)';
 
-$lang->product->storySummary = " <strong>%s</strong> Story in total on this page, <strong>%s</strong> man-hour estimated. Case coverage is <strong>%s</strong>.";
+$lang->product->storySummary = " <strong>%s</strong> Story(ies), <strong>%s</strong> hour(s) estimated, case coverage is <strong>%s</strong> on this page.";
 $lang->product->noMatched    = '"%s" cannot be found.' . $lang->productCommon;
 
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
