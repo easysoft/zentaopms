@@ -81,7 +81,7 @@ $lang->extension->successInstallDB         = 'Database installed!';
 $lang->extension->viewInstalled            = 'Installed';
 $lang->extension->viewAvailable            = 'Available';
 $lang->extension->viewDeactivated          = 'Deactivated';
-$lang->extension->backDBFile               = 'Extension related data has been backed up to %s!';
+$lang->extension->backDBFile               = 'Extension data has been backed up to %s!';
 $lang->extension->noticeOkFile             = '<h5>For security reasons, your Admin account has to be confirmed.</h5>
     <h5>Plese Login your ZenTao server and create %s.</h5>
     <p>Note</p>

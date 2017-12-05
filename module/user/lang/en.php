@@ -128,19 +128,19 @@ $lang->user->tpl->content = 'Content';
 $lang->user->tpl->public  = 'Public';
 
 $lang->user->placeholder = new stdclass();
-$lang->user->placeholder->account   = 'must be contain letters, underline, and numbers,at lease three characters';
-$lang->user->placeholder->password1 = 'must be at lease six characters';
-$lang->user->placeholder->role      = "Role affects content and user's order.";
-$lang->user->placeholder->group     = "Group decides user's privilege.";
+$lang->user->placeholder->account   = 'letters, underline, and numbers,at lease three characters';
+$lang->user->placeholder->password1 = 'six characters at lease ';
+$lang->user->placeholder->role      = "Role affects content and user order.";
+$lang->user->placeholder->group     = "Group decides user privilege.";
 $lang->user->placeholder->commiter  = 'Subversion Account';
-$lang->user->placeholder->verify    = 'Password is required to verify.';
+$lang->user->placeholder->verify    = 'Password is required.';
 
-$lang->user->placeholder->passwordStrength[1] = 'must be contain letters and numbers,at lease six characters';
-$lang->user->placeholder->passwordStrength[2] = 'must be contain letters, numbers and special characters ,at lease 10 characters';
+$lang->user->placeholder->passwordStrength[1] = 'letters and numbers, at lease six characters';
+$lang->user->placeholder->passwordStrength[2] = 'letters, numbers and special characters, at lease 10 characters';
 
 $lang->user->error = new stdclass();
 $lang->user->error->account       = "ID %s，must be contain letters, underline, and numbers,at lease three characters";
-$lang->user->error->accountDupl   = "ID %s，account has been used";
+$lang->user->error->accountDupl   = "ID %s，account has been used.";
 $lang->user->error->realname      = "ID %s，must be real name";
 $lang->user->error->password      = "ID %s，password must be 6 characters at least.";
 $lang->user->error->mail          = "ID %s，please enter valid Email address";

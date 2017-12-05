@@ -419,16 +419,16 @@ $lang->error->ge              = "『%s』should be >=『%s』.";
 $lang->error->notempty        = "『%s』should not be blank.";
 $lang->error->empty           = "『%s』should be null.";
 $lang->error->equal           = "『%s』has to be『%s』.";
-$lang->error->int             = array("『%s』has to be numbers", "『%s』should be 『%s-%s』.");
+$lang->error->int             = array("『%s』should be numbers", "『%s』should be 『%s-%s』.");
 $lang->error->float           = "『%s』should be numbers, decimals included.";
-$lang->error->email           = "『%s』should be valid EMAIL.";
+$lang->error->email           = "『%s』should be valid Email.";
 $lang->error->date            = "『%s』should be valid date.";
 $lang->error->code            = "『%s』should be english or numbers.";
 $lang->error->account         = "『%s』should be valid account.";
 $lang->error->passwordsame    = "Two passwords should be consistent.";
 $lang->error->passwordrule    = "Password should meet requirements. It should be 6 characters at least.";
 $lang->error->accessDenied    = 'Access is denied.';
-$lang->error->pasteImg        = 'Paste Image is not allowed in your browser!';
+$lang->error->pasteImg        = 'Image is not allowed to be pasted in your browser!';
 $lang->error->noData          = 'No Data';
 $lang->error->editedByOther   = 'This record might have been changed. Please refresh and try to edit again!';
 $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Please exit tutorial first!';
@@ -471,14 +471,14 @@ $lang->downNotify     = "Download Desktop Notification";
 
 $lang->suhosinInfo   = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
 $lang->maxVarsInfo   = "Warning! Data is reaching the limit. Please change <font color=red>max_input_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
-$lang->pasteTextInfo = "Paste text into text field. Each line will be a header of each data record. ";
+$lang->pasteTextInfo = "Paste text here. Each line will be a header of each data record. ";
 $lang->noticeImport  = "<p style='font-size:14px'>Imported data contains data that has already existed in system. Please confirm you actions on the date </p><p><a href='javascript:submitForm(\"cover\")' class='btn btn-mini'>Override</a> <a href='javascript:submitForm(\"insert\")' class='btn btn-mini'>New Insertion</a></p>";
 
 $lang->noResultsMatch     = "No results match!";
 $lang->searchMore         = "More results：";
 $lang->chooseUsersToMail  = "Choose users you will send notifications to...";
 $lang->browserNotice      = 'Your current browser might not show the best effect. Please use Chrome, Firefox, IE9+, Opera or Safari.';
-$lang->noticePasteImg     = "Paste image to editor.";
+$lang->noticePasteImg     = "Paste image here.";
 
 /* 时间格式设置。*/
 if(!defined('DT_DATETIME1')) define('DT_DATETIME1',  'Y-m-d H:i:s');

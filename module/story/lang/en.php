@@ -9,7 +9,7 @@
  * @version     $Id: en.php 5141 2013-07-15 05:57:15Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->story->create      = "Create";
+$lang->story->create      = "Story";
 $lang->story->batchCreate = "Batch Create";
 $lang->story->change      = "Change";
 $lang->story->changed     = 'Change';
@@ -28,7 +28,7 @@ $lang->story->bugs        = "Linked Bug";
 $lang->story->cases       = "Linked Case";
 $lang->story->taskCount   = 'Tasks';
 $lang->story->bugCount    = 'Bugs';
-$lang->story->caseCount   = 'Test Cases';
+$lang->story->caseCount   = 'Cases';
 $lang->story->taskCountAB = 'T';
 $lang->story->bugCountAB  = 'B';
 $lang->story->caseCountAB = 'C';
@@ -180,7 +180,7 @@ $lang->story->affectedProjects     = 'Affected' . $lang->projectCommon;
 $lang->story->affectedBugs         = 'Affected Bug';
 $lang->story->affectedCases        = 'Affected Case';
 
-$lang->story->specTemplate          = "Please refer to the Template to write the description. As a < type of user >, I want < some goal > so that < some reason >.";
+$lang->story->specTemplate          = "As a < type of user >, I want < some goal > so that < some reason >.";
 $lang->story->needNotReview         = 'No Review';
 $lang->story->successSaved          = "Story saved!";
 $lang->story->confirmDelete         = "Do you want to delete this Story?";
@@ -189,10 +189,10 @@ $lang->story->mustChooseResult      = 'Please select a result.';
 $lang->story->mustChoosePreVersion  = 'Please select a Version to revert.';
 
 $lang->story->form = new stdclass();
-$lang->story->form->area      = 'Story Affiliation';
-$lang->story->form->desc      = 'Description and criteria. What Story is it? How to accept it?';
-$lang->story->form->resource  = 'Resource allocation. How finished it? How long does it take?';
-$lang->story->form->file      = 'Files. If there are Story linked files, please click Here to upload.';
+$lang->story->form->area      = 'Story Scope';
+$lang->story->form->desc      = 'What Story is it? How to verify it?';
+$lang->story->form->resource  = 'How to finish it? How long does it take?';
+$lang->story->form->file      = 'If there are Story linked files, please click Here to upload it.';
 
 $lang->story->action = new stdclass();
 $lang->story->action->reviewed            = array('main' => '$date, recorded by <strong>$actor</strong>. The result is <strong>$extra</strong>.', 'extra' => 'reviewResultList');
