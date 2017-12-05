@@ -446,7 +446,8 @@ class task extends control
         $this->view->title      = $this->view->project->name . $this->lang->colon . $this->lang->task->assign;
         $this->view->position[] = $this->lang->task->assign;
         $this->view->task       = $task;
-        $this->view->users      = $members;
+        $this->view->members    = $members;
+        $this->view->users      = $this->loadModel('user')->getPairs();
         $this->display();
     }
 
@@ -778,17 +779,22 @@ class task extends control
         $task    = $this->view->task;
         $members = $this->loadModel('user')->getPairs('noletter');
 
+        $this->view->users = $members;
         if(!empty($task->team))
         {
-            $task->openedBy   = $this->task->getNextUser(array_keys($task->team), $task->assignedTo);
-            $members          = $this->task->getMemberPairs($task);
+            $teams = array_keys($task->team);
+
+            $task->openedBy   = $this->task->getNextUser($teams, $task->assignedTo);
             $task->myConsumed = $this->dao->select('consumed')->from(TABLE_TEAM)->where('task')->eq($taskID)->andWhere('account')->eq($task->assignedTo)->fetch('consumed');
+
+            $lastAccount = end($teams);
+            if($lastAccount != $task->assignedTo) $members = $this->task->getMemberPairs($task);
         }
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
         $this->view->position[] = $this->lang->task->finish;
         $this->view->members    = $members;
-       
+
         $this->display();
     }
 
@@ -821,6 +827,7 @@ class task extends control
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->pause;
         $this->view->position[] = $this->lang->task->pause;
         
+        $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -1188,9 +1195,6 @@ class task extends control
                     ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
                     ->orderBy($orderBy)->fetchAll('id');
 
-                $taskList = array_keys($tasks);
-                if(!empty($taskList)) $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->in($taskList)->fetchGroup('parent');
-
                 foreach($tasks as $key => $task)
                 {
                     /* Compute task progress. */
@@ -1209,16 +1213,7 @@ class task extends control
 
                     $task->progress .= '%';
 
-                    $tasks[$key] = $task;
-
-                    if(isset($children[$task->id])) 
-                    {
-                        foreach($children[$task->id] as $child)
-                        {
-                            $child->name       = '[' . $taskLang->childrenAB . '] ' . $child->name;
-                            $tasks[$child->id] = $child;
-                        }
-                    }
+                    if($task->parent) $task->name = '[' . $taskLang->childrenAB . '] ' . $task->name;
                 }
             }
             else

@@ -970,7 +970,7 @@ class story extends control
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::locate($this->session->storyList));
+        die(js::locate($this->session->storyList, 'parent'));
     }
 
     /**

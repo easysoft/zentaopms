@@ -52,7 +52,7 @@ js::set('browseType', $browseType);
     $widths       = $this->datatable->setFixedFieldWidth($customFields);
     $columns      = 0;
     ?>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed <?php if($useDatatable) echo 'datatable';?>' id='taskList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='taskIDList[]'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed <?php echo ($useDatatable ? 'datatable' : 'table-selectable');?> table-selectable' id='taskList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='taskIDList[]'>
       <thead>
         <tr>
         <?php

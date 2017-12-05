@@ -1,3 +1,4 @@
+<?php $sysURL = $this->session->notHead ? common::getSysURL() : '';?>
 <table class='table' id='legacyBugs'>
   <thead>
     <tr>
@@ -16,7 +17,7 @@
     <tr>
       <td><?php echo $bug->id?></td>
       <td><span class='pri<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?></span></td>
-      <td class='text-left' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
+      <td class='text-left' title='<?php echo $bug->title?>'><?php echo html::a($sysURL . $this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
       <td><?php echo zget($users, $bug->openedBy);?></td>
       <td><?php echo zget($users, $bug->resolvedBy);?></td>
       <td><?php if($bug->resolvedDate != '0000-00-00 00:00:00') echo substr($bug->resolvedDate, 2);?></td>

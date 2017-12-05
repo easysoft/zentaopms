@@ -914,7 +914,7 @@ INSERT INTO `zt_group` (`id`, `name`, `role`, `desc`) VALUES
 (7, 'PD', 'pd', 'for product director.'),
 (8, 'QD', 'qd', 'for quality director.'),
 (9, 'TOP', 'top', 'for top manager.'),
-(10, 'OTHERS', '', 'for others.'),
+(10, 'OTHERS', 'others', 'for others.'),
 (11, 'guest', 'guest', 'For guest'),
 (12, 'limited', 'limited', 'For limited user');
 

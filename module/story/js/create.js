@@ -33,5 +33,3 @@ $(function()
     ajustFilebox();
     $(window).resize(ajustFilebox);
 });
-
-

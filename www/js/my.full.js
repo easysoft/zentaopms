@@ -681,7 +681,7 @@ function checkTable($table)
         $target.find('tbody > tr').toggleClass('active', isChecked).find('td :checkbox').prop('checked', isChecked);
     });
 
-    $table = $table || $('.table-selectable');
+    $table = $table || $('.table-selectable,table[checkable="true"]');
 
     if(!$table.length) return;
 

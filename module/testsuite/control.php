@@ -814,7 +814,7 @@ class testsuite extends control
         $libraries = $this->testsuite->getLibraries();
         if(empty($libraries)) $this->locate(inlink('createLib'));
 
-        $this->testsuite->setMenu($libraries, $libID);
+        $this->testsuite->setLibMenu($libraries, $libID);
 
         $file       = $this->session->importFile;
         $caseLang   = $this->lang->testcase;

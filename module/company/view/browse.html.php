@@ -65,7 +65,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           printf('%03d', $user->id);
           ?>
         </td>
-        <td><?php if(!common::printLink('user', 'view', "account=$user->account", $user->realname)) echo $user->realname;?></td>
+        <td><?php if(!common::printLink('user', 'view', "account=$user->account", $user->realname, '', "title='$user->realname'")) echo $user->realname;?></td>
         <td><?php echo $user->account;?></td>
         <td><?php echo $lang->user->roleList[$user->role];?></td>
         <td><?php echo html::mailto($user->email);?></td>
