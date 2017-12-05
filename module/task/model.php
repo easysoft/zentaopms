@@ -1225,7 +1225,11 @@ class taskModel extends model
 
         $taskList = array_keys($tasks);
         $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->in($taskList)->fetchGroup('task');
-        foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
+        if(!empty($taskTeam))
+        {
+            foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
+        }
+
         foreach($tasks as $taskID => $task)
         {
             if($task->parent and isset($tasks[$task->parent]))
@@ -1235,8 +1239,7 @@ class taskModel extends model
             }
         }
 
-        if($tasks) return $this->processTasks($tasks);
-        return array();
+        return $this->processTasks($tasks);
     }
 
     /**
