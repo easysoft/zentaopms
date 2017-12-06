@@ -185,7 +185,7 @@ $lang->project->groupSummaryAB  = "Total Tasks <strong>%s</strong>, Wait <strong
 $lang->project->noTimeSummary   = " <strong>%s</strong> Tasks in this group, Wait <strong>%s</strong>, Doing <strong>%s</strong>.";
 $lang->project->wbs             = "Decompose Task";
 $lang->project->batchWBS        = "Batch Decompose";
-$lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='How to Update the Burndown Chart?' class='btn btn-sm'>Help</a>";
+$lang->project->howToUpdateBurn = "<a href='http://api.zentao.pm/goto.php?item=burndown&lang=zh-cn' target='_blank' title='How to Update the Burndown Chart?' class='btn btn-sm'>Help</a>";
 $lang->project->whyNoStories    = "No Story can be linked. Please check whether there is Story in {$lang->projectCommon} linked {$lang->productCommon} and make sure it has been reviewed.";
 $lang->project->productStories  = "{$lang->projectCommon} linked  story is the subeset of {$lang->productCommon}, which can only be linked after review. Please <a href='%s'> Link Story</a>。";
 $lang->project->doneProjects    = 'Done';

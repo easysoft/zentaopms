@@ -466,7 +466,7 @@ $lang->pager->previousPage = "Prev";
 $lang->pager->nextPage     = "Next";
 $lang->pager->summery      = "<strong>%s-%s</strong> of <strong>%s</strong>.";
 
-$lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>ZenTao Pro <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
+$lang->proVersion     = "<a href='http://api.zentao.pm/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>ZenTao Pro <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "Download Desktop Notification";
 
 $lang->suhosinInfo   = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
