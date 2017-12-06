@@ -1834,6 +1834,7 @@ class projectModel extends model
     {
         $taskSum = $statusWait = $statusDone = $statusDoing = $statusClosed = $statusCancel = $statusPause = 0;  
         $totalEstimate = $totalConsumed = $totalLeft = 0.0;
+
         foreach($tasks as $task)
         {
             $totalEstimate  += $task->estimate;
@@ -1841,9 +1842,11 @@ class projectModel extends model
             $totalLeft      += (($task->status == 'cancel' or $task->closedReason == 'cancel') ? 0 : $task->left);
             $statusVar       = 'status' . ucfirst($task->status);
             $$statusVar ++;
+            if(!empty($task->children)) $taskSum += count($task->children);
+            $taskSum ++;
         }
 
-        return sprintf($this->lang->project->taskSummary, count($tasks), $statusWait, $statusDoing, $totalEstimate, round($totalConsumed, 1), $totalLeft);
+        return sprintf($this->lang->project->taskSummary, $taskSum, $statusWait, $statusDoing, $totalEstimate, round($totalConsumed, 1), $totalLeft);
     }
 
     /**

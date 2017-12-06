@@ -214,9 +214,12 @@ class story extends control
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
             if($storyID)
             {
+                if(empty($mails)) die(js::closeModal('parent.parent', 'this'));
                 $actionID = $this->story->subdivide($storyID, $mails);
+
                 if(dao::isError()) die(js::error(dao::getError()));
                 $this->story->sendmail($storyID, $actionID);
+
                 if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
                 die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
             }

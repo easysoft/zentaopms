@@ -71,16 +71,17 @@ $lang->product->whitelist = '分组白名单';
 $lang->product->branch    = '所属%s';
 
 $lang->product->searchStory  = '搜索';
-$lang->product->assignedToMe = '指派给我';
-$lang->product->openedByMe   = '由我创建';
-$lang->product->reviewedByMe = '由我评审';
-$lang->product->closedByMe   = '由我关闭';
+$lang->product->assignedToMe = '指给我';
+$lang->product->openedByMe   = '我创建';
+$lang->product->reviewedByMe = '我评审';
+$lang->product->closedByMe   = '我关闭';
 $lang->product->draftStory   = '草稿';
 $lang->product->activeStory  = '激活';
 $lang->product->changedStory = '已变更';
 $lang->product->willClose    = '待关闭';
 $lang->product->closedStory  = '已关闭';
 $lang->product->unclosed     = '未关闭';
+$lang->product->unplan       = '未计划';
 
 $lang->product->allStory    = '全部需求';
 $lang->product->allProduct  = '全部' . $lang->productCommon;
@@ -111,6 +112,7 @@ $lang->product->storySummary = "本页共 <strong>%s</strong> 个需求，预计
 $lang->product->noMatched    = '找不到包含"%s"的' . $lang->productCommon;
 
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
+$lang->product->featureBar['browse']['unplan']       = $lang->product->unplan;
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
 $lang->product->featureBar['browse']['assignedtome'] = $lang->product->assignedToMe;
 $lang->product->featureBar['browse']['openedbyme']   = $lang->product->openedByMe;

@@ -47,7 +47,7 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
         <th class='w-80px<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo $lang->story->source;?></th>
         <th class='w-p15<?php echo zget($visibleFields, 'verify', ' hidden')?>'><?php echo $lang->story->verify;?></th>
         <th class='w-80px<?php echo zget($visibleFields, 'pri', ' hidden')?>'><?php echo $lang->story->pri;?></th>
-        <th class='w-80px<?php echo zget($visibleFields, 'estimate', ' hidden')?>'><?php echo $lang->story->estimate;?></th>
+        <th class='w-100px<?php echo zget($visibleFields, 'estimate', ' hidden')?>'><?php echo $lang->story->estimate;?></th>
         <th class='w-70px<?php echo zget($visibleFields, 'review', ' hidden')?>'><?php echo $lang->story->review;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'><?php echo $lang->story->keywords;?></th>
       </tr>

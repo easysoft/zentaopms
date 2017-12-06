@@ -81,6 +81,7 @@ $lang->product->changedStory = 'Changed';
 $lang->product->willClose    = 'To be Closed';
 $lang->product->closedStory  = 'Closed';
 $lang->product->unclosed     = 'Open';
+$lang->product->unplan       = 'No plan';
 
 $lang->product->allStory    = 'All Stories';
 $lang->product->allProduct  = 'All' . $lang->productCommon;
@@ -111,6 +112,7 @@ $lang->product->storySummary = " <strong>%s</strong> Story(ies), <strong>%s</str
 $lang->product->noMatched    = '"%s" cannot be found.' . $lang->productCommon;
 
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
+$lang->product->featureBar['browse']['unplan']       = $lang->product->unplan;
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
 $lang->product->featureBar['browse']['assignedtome'] = $lang->product->assignedToMe;
 $lang->product->featureBar['browse']['openedbyme']   = $lang->product->openedByMe;

@@ -72,11 +72,11 @@ class todoModel extends model
                 $todo->account = $this->app->user->account;
                 if($this->post->date == false)
                 {
-                    $todo->date    = '2030-01-01';
+                    $todo->date = '2030-01-01';
                 }
                 else
                 {
-                    $todo->date    = $this->post->date;
+                    $todo->date = $this->post->date;
                 }
                 $todo->type    = $todos->types[$i];
                 $todo->pri     = $todos->pris[$i];

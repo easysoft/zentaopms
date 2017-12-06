@@ -45,6 +45,7 @@ $lang->tree->repeatName    = '模块名“%s”已经存在！';
 
 $lang->tree->name       = '模块名称';
 $lang->tree->line       = '产品线名称';
+$lang->tree->cate       = '分类名称';
 $lang->tree->root       = '所属根';
 $lang->tree->branch     = '平台/分支';
 $lang->tree->path       = '路径';

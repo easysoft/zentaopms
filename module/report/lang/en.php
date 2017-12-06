@@ -91,4 +91,4 @@ $lang->report->mailTitle->task     = " Task(%s),";
 $lang->report->mailTitle->todo     = " To-Do(%s),";
 $lang->report->mailTitle->testTask = " Test Task(%s),";
 
-$lang->report->proVersion = '<a href="http://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
+$lang->report->proVersion = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
