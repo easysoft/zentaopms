@@ -466,7 +466,6 @@ class storyModel extends model
             ->add('lastEditedDate', $now)
             ->setDefault('status', $oldStory->status)
             ->setDefault('product', $oldStory->product)
-            ->setDefault('plan', $oldStory->plan)
             ->setDefault('branch', $oldStory->branch)
             ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->closedBy     != false and $oldStory->closedDate == '', 'closedDate', $now)
@@ -1170,6 +1169,7 @@ class storyModel extends model
          */
         foreach($branchStatusList as $branch => $statusList)
         {
+            $stage      = 'projected';
             $testTasks  = isset($branchTestTasks[$branch]) ? $branchTestTasks[$branch] : 0;
             $develTasks = isset($branchDevelTasks[$branch]) ? $branchDevelTasks[$branch] : 0;
             if($statusList['devel']['doing'] > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developing'; 
@@ -1303,11 +1303,12 @@ class storyModel extends model
     /**
      * Get stories list of a product.
      * 
-     * @param  int           $productID 
-     * @param  array|string  $moduleIdList
-     * @param  string        $status 
-     * @param  string        $orderBy 
-     * @param  object        $pager 
+     * @param  int          $productID
+     * @param  array|string $moduleIdList
+     * @param  string       $status
+     * @param  string       $orderBy
+     * @param  object       $pager
+     *
      * @access public
      * @return array
      */
@@ -1431,6 +1432,23 @@ class storyModel extends model
     public function getByStatus($productID, $branch, $modules, $status, $orderBy, $pager)
     {
         return $this->getByField($productID, $branch, $modules, 'status', $status, $orderBy, $pager);
+    }
+
+    /**
+     * Get stories by plan.
+     *
+     * @param $productID
+     * @param $branch
+     * @param $modules
+     * @param $plan
+     * @param $orderBy
+     * @param $pager
+     *
+     * @return array
+     */
+    public function getByPlan($productID, $branch, $modules, $plan, $orderBy, $pager)
+    {
+        return $this->getByField($productID, $branch, $modules, 'plan', $plan, $orderBy, $pager);
     }
 
     /**
@@ -1570,8 +1588,11 @@ class storyModel extends model
             ->beginIF($productID != 'all' and $productID != '')->andWhere('product')->eq((int)$productID)->fi()
             ->fetchPairs();
 
-        $tmpStories = $this->dao->select('*')->from(TABLE_STORY)->where($sql)
-            ->beginIF($productID != 'all' and $productID != '')->andWhere('product')->eq((int)$productID)->fi()
+        $sql = str_replace(array('`product`', '`version`'), array('t1.`product`', 't1.`version`'), $sql);
+        $tmpStories = $this->dao->select('*')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
+            ->where($sql)
+            ->beginIF($productID != 'all' and $productID != '')->andWhere('t1.`product`')->eq((int)$productID)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)

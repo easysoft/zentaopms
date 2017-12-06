@@ -1,5 +1,6 @@
 $(document).ready(function()
 {
+    initChart();
     setTimeout(function(){fixedTheadOfList('#projectList')}, 100);
 });
 

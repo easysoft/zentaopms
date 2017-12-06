@@ -214,9 +214,12 @@ class story extends control
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
             if($storyID)
             {
+                if(empty($mails)) die(js::closeModal('parent.parent', 'this'));
                 $actionID = $this->story->subdivide($storyID, $mails);
+
                 if(dao::isError()) die(js::error(dao::getError()));
                 $this->story->sendmail($storyID, $actionID);
+
                 if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
                 die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
             }
@@ -970,7 +973,7 @@ class story extends control
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::locate($this->session->storyList));
+        die(js::locate($this->session->storyList, 'parent'));
     }
 
     /**
@@ -1544,5 +1547,22 @@ class story extends control
         $this->view->allExportFields = $this->config->story->list->exportFields;
         $this->view->customExport    = true;
         $this->display();
+    }
+
+    /**
+     * AJAX: get storys of a user in html select.
+     *
+     * @param  string $account
+     * @param  string $id       the id of the select control.
+     * @access public
+     * @return string
+     */
+    public function ajaxGetUserStorys($account = '', $id = '')
+    {
+        if($account == '') $account = $this->app->user->account;
+        $storys = $this->story->getUserStoryPairs($account);
+
+        if($id) die(html::select("storys[$id]", $storys, '', 'class="form-control"'));
+        die(html::select('story', $storys, '', 'class=form-control'));
     }
 }

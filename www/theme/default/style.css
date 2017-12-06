@@ -806,3 +806,5 @@ body {color:#141414; padding-bottom: 40px;}
 .icon-review:before{content: '\e9b8'}
 .icon-checked:before{content: '\e642'}
 .icon-file-text:before{content:'\e6d4'}
+
+body.body-modal .ke-container .ke-toolbar .ke-outline[data-name=fullscreen]{display:none;}

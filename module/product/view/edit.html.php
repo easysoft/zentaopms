@@ -24,7 +24,7 @@
   <form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
     <table align='center' class='table table-form'> 
       <tr>
-        <th class='w-90px'><?php echo $lang->product->name;?></th>
+        <th class='w-120px'><?php echo $lang->product->name;?></th>
         <td class='w-p25-f'><?php echo html::input('name', $product->name, "class='form-control' autocomplete='off'");?></td><td></td>
       </tr>  
       <tr>

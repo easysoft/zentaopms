@@ -1,4 +1,4 @@
 <?php
-$config->datatable->moduleAlias['product']  = 'story';
-$config->datatable->moduleAlias['project']  = 'task';
-$config->datatable->moduleAlias['testtask'] = 'testcase';
+$config->datatable->moduleAlias['product-browse'] = 'story';
+$config->datatable->moduleAlias['project-task']   = 'task';
+$config->datatable->moduleAlias['testtask-cases'] = 'testcase';

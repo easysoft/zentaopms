@@ -89,45 +89,34 @@ class reportModel extends model
      */
     public function getProjects($begin = 0, $end = 0)
     {
-        $projects = array();
-
-        $tasks = $this->dao->select('t1.*')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')
-            ->on('t1.project = t2.id')
+        $tasks = $this->dao->select('t1.*,t2.name as projectName')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.status')->ne('cancel')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.parent')->eq(0)
+            ->andWhere('t2.status')->eq('done')
+            ->beginIF($begin)->andWhere('t2.begin')->ge($begin)->fi()
+            ->beginIF($end)->andWhere('t2.end')->le($end)->fi()
+            ->orderBy('t2.end_desc')
             ->fetchAll();
+
+        $projects = array();
         foreach($tasks as $task)
         {
-            if(!isset($projects[$task->project])) $projects[$task->project] = new stdclass();
-
-            $projects[$task->project]->estimate = isset($projects[$task->project]->estimate) ? $projects[$task->project]->estimate + $task->estimate : $task->estimate;
-            $projects[$task->project]->consumed = isset($projects[$task->project]->consumed) ? $projects[$task->project]->consumed + $task->consumed : $task->consumed;
-        }
-
-        $projectList = $this->dao->select('id, name, status')->from(TABLE_PROJECT)
-            ->where('1=1')
-            ->beginIF($begin)->andWhere('begin')->ge($begin)->fi()
-            ->beginIF($end)->andWhere('end')->le($end)->fi()
-            ->fetchAll();
-        $projectPairs = array();
-        foreach($projectList as $project)
-        {
-            $projectPairs[$project->id] = $project->name;
-            if($project->status != 'done') unset($projects[$project->id]);
-        }
-        foreach($projects as $id => $project)
-        {
-            if(!isset($projectPairs[$id]))
-            { 
-                unset($projects[$id]);
-                continue;
+            $projectID = $task->project;
+            if(!isset($projects[$projectID]))
+            {
+                $projects[$projectID] = new stdclass();
+                $projects[$projectID]->estimate = 0;
+                $projects[$projectID]->consumed = 0;
             }
-            if(!isset($project->consumed)) $projects[$id]->consumed = 0;
-            if(!isset($project->estimate)) $projects[$id]->estimate = 0;
-            $projects[$id]->name = $projectPairs[$id];
+
+            $projects[$projectID]->name      = $task->projectName;
+            $projects[$projectID]->estimate += $task->estimate;
+            $projects[$projectID]->consumed += $task->consumed;
         }
+
         return $projects;
     }
 
@@ -277,7 +266,7 @@ class reportModel extends model
                     $workload[$user]['task'][$task->projectName]['manhour']   = isset($workload[$user]['task'][$task->projectName]['manhour']) ? $workload[$user]['task'][$task->projectName]['manhour'] + $task->left : $task->left;
                     $workload[$user]['task'][$task->projectName]['projectID'] = $task->project;
                     $workload[$user]['total']['count']   = isset($workload[$user]['total']['count']) ? $workload[$user]['total']['count'] + 1 : 1;
-                    $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
+                    if($task->parent == 0) $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
                 }
             }
         }
@@ -293,10 +282,8 @@ class reportModel extends model
      */
     public function getBugAssign()
     {
-        $bugs = $this->dao->select('t1.*, t2.name as productName')
-            ->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')
-            ->on('t1.product = t2.id')
+        $bugs = $this->dao->select('t1.*, t2.name as productName')->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.status')->eq('active')
             ->andWhere('t2.deleted')->eq(0)

@@ -81,7 +81,7 @@ $lang->score->methods['search']['saveQuery']         = '保存搜索条件';
 $lang->score->methods['search']['saveQueryAdvanced'] = '使用高级搜索';
 
 $lang->score->extended['user']['changePassword'] = '密码强度为中，额外获得##strength,1##个积分；为强，额外获得##strength,2##个积分。';
-$lang->score->extended['project']['close']       = '项目经理增加##manager,close##个积分，项目成员增加##member,close##个积分。按期或者提前完成，项目经理额外增加##manager,in##个积分，项目成员额外增加##member,in##个积分。';
+$lang->score->extended['project']['close']       = '项目经理增加##manager,close##个积分，项目成员增加##member,close##个积分。按期或者提前完成，项目经理额外增加##manager,onTime##个积分，项目成员额外增加##member,onTime##个积分。';
 $lang->score->extended['bug']['resolve']         = 'Bug解决后，额外增加严重程度积分：s1 + ##severity,3##, s2 + ##severity,2##, s3 + ##severity,1##。';
 $lang->score->extended['bug']['confirmBug']      = 'Bug确认后，额外增加严重程度积分：s1 + ##severity,3##, s2 + ##severity,2##, s3 + ##severity,1##。';
 $lang->score->extended['task']['finish']         = '额外增加工时积分 round(工时 / 10 * 预计 / 消耗) + 优先级积分(p1 ##pri,1##, p2 ##pri,2##)。';

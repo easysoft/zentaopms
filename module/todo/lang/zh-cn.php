@@ -42,10 +42,11 @@ $lang->todo->private     = '私人事务';
 
 $lang->todo->confirmBug   = '该Todo关联的是Bug #%s，需要修改它吗？';
 $lang->todo->confirmTask  = '该Todo关联的是Task #%s，需要修改它吗？';
+$lang->todo->confirmStory = '该Todo关联的是Story #%s，需要修改它吗？';
 
-$lang->todo->statusList['wait']     = '未开始';
-$lang->todo->statusList['doing']    = '进行中';
-$lang->todo->statusList['done']     = '已完成';
+$lang->todo->statusList['wait']  = '未开始';
+$lang->todo->statusList['doing'] = '进行中';
+$lang->todo->statusList['done']  = '已完成';
 //$lang->todo->statusList['cancel']   = '已取消';
 //$lang->todo->statusList['postpone'] = '已延期';
 
@@ -53,10 +54,12 @@ $lang->todo->priList[3] = '一般';
 $lang->todo->priList[1] = '最高';
 $lang->todo->priList[2] = '较高';
 $lang->todo->priList[4] = '最低';
+$lang->todo->priList[0] = '';
 
 $lang->todo->typeList['custom'] = '自定义';
 $lang->todo->typeList['bug']    = 'Bug';
 $lang->todo->typeList['task']   = $lang->projectCommon . '任务';
+$lang->todo->typeList['story']  = $lang->projectCommon . '需求';
 
 global $config;
 if($config->global->flow == 'onlyTest' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['task']);
@@ -80,5 +83,5 @@ $lang->todo->periods['before']     = '未完';
 $lang->todo->periods['all']        = '所有';
 
 $lang->todo->action = new stdclass();
-$lang->todo->action->finished  = array('main' => '$date, 由 <strong>$actor</strong>完成');
-$lang->todo->action->marked    = array('main' => '$date, 由 <strong>$actor</strong> 标记为<strong>$extra</strong>。', 'extra' => 'statusList');
+$lang->todo->action->finished = array('main' => '$date, 由 <strong>$actor</strong>完成');
+$lang->todo->action->marked   = array('main' => '$date, 由 <strong>$actor</strong> 标记为<strong>$extra</strong>。', 'extra' => 'statusList');

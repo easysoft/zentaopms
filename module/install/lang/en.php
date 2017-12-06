@@ -21,9 +21,9 @@ $lang->install->start            = 'Start to Install';
 $lang->install->keepInstalling   = 'Continue installing this version.';
 $lang->install->seeLatestRelease = 'View Latest Version';
 $lang->install->welcome          = 'Welcome to ZenTao Project Management Software!';
-$lang->install->license          = 'ZenTao PMS is under  Z PUBLIC LICENSE(ZPL) 1.2';
+$lang->install->license          = 'ZenTao PMS is under Z PUBLIC LICENSE(ZPL) 1.2';
 $lang->install->desc             = <<<EOT
-ZenTao Project Management Software (ZenTao PMS) is originated in China and under <a href='http://zpl.pub' target='_blank'>ZPL</a>. It us an open source and free project management software, integrated with Product Management、Project Management、Testing Management, as weel as To-Dos Management, Company Managementetc, which is the best choice for small and medium organizations to manage projects.
+ZenTao Project Management Software (ZenTao PMS) is originated in China and under <a href='http://zpl.pub' target='_blank'>ZPL</a>. It us an open source and free project management software, integrated with Product Management、Project Management、QA Management, as weel as To-Dos Management, Company Managementetc, which is the best choice for small and medium organizations to manage projects.
 
 ZenTao PMS uses PHP + MySQL as programming langugages and is based on ZenTaoPHP,  an independent framwork developed by our team. Third party developers/organizations can develop extensions or customization tailored to their needs.
 EOT;
@@ -127,32 +127,32 @@ $lang->install->password = 'Admin Password';
 $lang->install->errorEmptyPassword = 'Password should not be blank.';
 
 $lang->install->groupList['ADMIN']['name']  = 'Admin';
-$lang->install->groupList['ADMIN']['desc']  = 'System Admin';
+$lang->install->groupList['ADMIN']['desc']  = 'System Administrator';
 $lang->install->groupList['DEV']['name']    = 'Dev';
 $lang->install->groupList['DEV']['desc']    = 'Dev Team';
-$lang->install->groupList['QA']['name']     = 'Testing';
-$lang->install->groupList['QA']['desc']     = 'Testing Team';
-$lang->install->groupList['PM']['name']     = 'Project Manager';
+$lang->install->groupList['QA']['name']     = 'QA';
+$lang->install->groupList['QA']['desc']     = 'QA Team';
+$lang->install->groupList['PM']['name']     = 'PM';
 $lang->install->groupList['PM']['desc']     = 'for Project Manager';
-$lang->install->groupList['PO']['name']     = 'Product Owner';
+$lang->install->groupList['PO']['name']     = 'PO';
 $lang->install->groupList['PO']['desc']     = 'for Product Owner';
-$lang->install->groupList['TD']['name']     = 'Dev Supervisor';
-$lang->install->groupList['TD']['desc']     = 'for Dev Supervisor';
-$lang->install->groupList['PD']['name']     = 'Product Supervisor';
-$lang->install->groupList['PD']['desc']     = 'for Product Supervisor';
-$lang->install->groupList['QD']['name']     = 'Testing Supervisor';
-$lang->install->groupList['QD']['desc']     = 'for Testing Supervisor';
-$lang->install->groupList['TOP']['name']    = 'Senior Manager';
+$lang->install->groupList['TD']['name']     = 'Dev Manager';
+$lang->install->groupList['TD']['desc']     = 'for Dev Manager';
+$lang->install->groupList['PD']['name']     = 'PD';
+$lang->install->groupList['PD']['desc']     = 'for Product Director';
+$lang->install->groupList['QD']['name']     = 'QD';
+$lang->install->groupList['QD']['desc']     = 'for QA Director';
+$lang->install->groupList['TOP']['name']    = 'Senior';
 $lang->install->groupList['TOP']['desc']    = 'for Senior Manager';
 $lang->install->groupList['OTHERS']['name'] = 'Other';
 $lang->install->groupList['OTHERS']['desc'] = 'for Other';
 
 $lang->install->cronList[''] = 'Monitor cron';
-$lang->install->cronList['moduleName=project&methodName=computeburn'] = 'Compute burn';
+$lang->install->cronList['moduleName=project&methodName=computeburn'] = 'Update Burndown Chart';
 $lang->install->cronList['moduleName=report&methodName=remind']       = 'Daily task reminder';
 $lang->install->cronList['moduleName=svn&methodName=run']             = 'Synchronize SVN';
 $lang->install->cronList['moduleName=git&methodName=run']             = 'Synchronize GIT';
-$lang->install->cronList['moduleName=backup&methodName=backup']       = 'Backup data and attachment';
+$lang->install->cronList['moduleName=backup&methodName=backup']       = 'Backup';
 $lang->install->cronList['moduleName=mail&methodName=asyncSend']      = 'Asynchronous sending';
 
 $lang->install->success  = "Installed!";

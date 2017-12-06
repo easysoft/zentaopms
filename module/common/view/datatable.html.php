@@ -59,15 +59,7 @@ $(document).ready(function()
                 var $target = $(e.target);
                 if ($target.closest('.task-toggle').length) return false;
                 var $checkRow = $target.closest('.check-row, .check-btn');
-                if($checkRow.length)
-                {
-                    if($checkRow.is('.check-row'))
-                    {
-                        toggleRowClass($checkRow);
-                        syncChecks();
-                    }
-                    return false;
-                }
+                if($checkRow.length) return true;
             },
             startDrag: function(e)
             {

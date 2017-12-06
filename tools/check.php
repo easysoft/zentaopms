@@ -91,7 +91,28 @@ $whiteList[] = 'testsuite-library';
 $whiteList[] = 'testsuite-createlib';
 $whiteList[] = 'testsuite-createcase';
 $whiteList[] = 'testsuite-libview';
-
+$whiteList[] = 'admin-log';
+$whiteList[] = 'admin-deletelog';
+$whiteList[] = 'custom-required';
+$whiteList[] = 'custom-score';
+$whiteList[] = 'custom-resetrequired';
+$whiteList[] = 'entry-browse';
+$whiteList[] = 'entry-create';
+$whiteList[] = 'entry-edit';
+$whiteList[] = 'entry-delete';
+$whiteList[] = 'entry-log';
+$whiteList[] = 'score-rule';
+$whiteList[] = 'score-reset';
+$whiteList[] = 'testsuite-batchcreatecase';
+$whiteList[] = 'testsuite-exporttemplet';
+$whiteList[] = 'testsuite-import';
+$whiteList[] = 'testsuite-showimport';
+$whiteList[] = 'webhook-browse';
+$whiteList[] = 'webhook-create';
+$whiteList[] = 'webhook-edit';
+$whiteList[] = 'webhook-delete';
+$whiteList[] = 'webhook-log';
+$whiteList[] = 'webhook-asyncsend';
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";

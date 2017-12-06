@@ -21,11 +21,18 @@ class customModel extends model
     {
         $allCustomLang = $this->dao->select('*')->from(TABLE_LANG)->orderBy('lang,id')->fetchAll('id');
 
-        $currentLang   = $this->app->getClientLang();
+        $currentLang = $this->app->getClientLang();
+        $sectionLang = array();
+        foreach($allCustomLang as $customLang)
+        {
+            $sectionLang[$customLang->module][$customLang->section][$customLang->lang] = $customLang->lang;
+        }
+
         $processedLang = array();
         foreach($allCustomLang as $id => $customLang)
         {
             if($customLang->lang != $currentLang and $customLang->lang != 'all') continue;
+            if(isset($sectionLang[$customLang->module][$customLang->section]['all']) && isset($sectionLang[$customLang->module][$customLang->section][$currentLang]) && $customLang->lang == 'all') continue;
             $processedLang[$customLang->module][$customLang->section][$customLang->key] = $customLang->value;
         }
 

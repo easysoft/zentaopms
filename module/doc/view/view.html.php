@@ -108,7 +108,7 @@
           <?php $uploadDate = $lang->file->uploadDate . substr($file->addedDate, 0, 10);?>
           <li class='list-group-item' title='<?php echo $uploadDate?>' style='position:relative;'>
             <a href="<?php echo $file->webPath?>" target="_blank">
-              <img onload="setImageSize(this,0)" src="<?php echo $file->webPath?>" alt="<?php echo $file->title?>">
+              <img onload="setImageSize(this,0)" src="<?php echo $this->createLink('file', 'read', "fileID={$file->id}");?>" alt="<?php echo $file->title?>">
             </a>
             <span class='right-icon' style='position:absolute;right:-18px;top:0px;'>
               <?php if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon-remove'></i>", '', "class='btn-icon' onclick='deleteFile($file->id)' title='$lang->delete'");?>

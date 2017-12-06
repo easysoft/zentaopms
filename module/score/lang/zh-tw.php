@@ -81,7 +81,7 @@ $lang->score->methods['search']['saveQuery']         = '保存搜索條件';
 $lang->score->methods['search']['saveQueryAdvanced'] = '使用高級搜索';
 
 $lang->score->extended['user']['changePassword'] = '密碼強度為中，額外獲得##strength,1##個積分；為強，額外獲得##strength,2##個積分。';
-$lang->score->extended['project']['close']       = '項目經理增加##manager,close##個積分，項目成員增加##member,close##個積分。按期或者提前完成，項目經理額外增加##manager,in##個積分，項目成員額外增加##member,in##個積分。';
+$lang->score->extended['project']['close']       = '項目經理增加##manager,close##個積分，項目成員增加##member,close##個積分。按期或者提前完成，項目經理額外增加##manager,onTime##個積分，項目成員額外增加##member,onTime##個積分。';
 $lang->score->extended['bug']['resolve']         = 'Bug解決後，額外增加嚴重程度積分：s1 + ##severity,3##, s2 + ##severity,2##, s3 + ##severity,1##。';
 $lang->score->extended['bug']['confirmBug']      = 'Bug確認後，額外增加嚴重程度積分：s1 + ##severity,3##, s2 + ##severity,2##, s3 + ##severity,1##。';
 $lang->score->extended['task']['finish']         = '額外增加工時積分 round(工時 / 10 * 預計 / 消耗) + 優先順序積分(p1 ##pri,1##, p2 ##pri,2##)。';

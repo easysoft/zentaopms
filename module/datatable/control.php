@@ -75,7 +75,7 @@ class datatable extends control
         $this->view->method = $method;
         $this->view->mode   = $mode;
 
-        $module  = zget($this->config->datatable->moduleAlias, $module, $module);
+        $module  = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
         $setting = '';
         if(isset($this->config->datatable->$target->$key)) $setting = $this->config->datatable->$target->$key;
         if(empty($setting))

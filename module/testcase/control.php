@@ -1147,10 +1147,10 @@ class testcase extends control
                 }
 
                 /* fill some field with useful value. */
-                if(isset($products[$case->product]))      $case->product = $products[$case->product] . "(#$case->product)";
-                if(isset($branches[$case->branch]))       $case->branch  = $branches[$case->branch] . "(#$case->branch)";
-                if(isset($relatedModules[$case->module])) $case->module  = $relatedModules[$case->module] . "(#$case->module)";
-                if(isset($relatedStories[$case->story]))  $case->story   = $relatedStories[$case->story] . "(#$case->story)";
+                $case->product = !isset($products[$case->product])     ? '' : $products[$case->product] . "(#$case->product)";
+                $case->branch  = !isset($branches[$case->branch])      ? '' : $branches[$case->branch] . "(#$case->branch)";
+                $case->module  = !isset($relatedModules[$case->module])? '' : $relatedModules[$case->module] . "(#$case->module)";
+                $case->story   = !isset($relatedStories[$case->story]) ? '' : $relatedStories[$case->story] . "(#$case->story)";
 
                 if(isset($caseLang->priList[$case->pri]))              $case->pri           = $caseLang->priList[$case->pri];
                 if(isset($caseLang->typeList[$case->type]))            $case->type          = $caseLang->typeList[$case->type];
@@ -1211,13 +1211,13 @@ class testcase extends control
             if($product->type != 'normal') $fields['branch'] = $this->lang->product->branchName[$product->type];
             $fields['module']       = $this->lang->testcase->module;
             $fields['title']        = $this->lang->testcase->title;
+            $fields['precondition'] = $this->lang->testcase->precondition;
             $fields['stepDesc']     = $this->lang->testcase->stepDesc;
             $fields['stepExpect']   = $this->lang->testcase->stepExpect;
             $fields['keywords']     = $this->lang->testcase->keywords;
-            $fields['type']         = $this->lang->testcase->type;
             $fields['pri']          = $this->lang->testcase->pri;
+            $fields['type']         = $this->lang->testcase->type;
             $fields['stage']        = $this->lang->testcase->stage;
-            $fields['precondition'] = $this->lang->testcase->precondition;
 
             $fields[''] = '';
             $fields['typeValue']   = $this->lang->testcase->lblTypeValue;

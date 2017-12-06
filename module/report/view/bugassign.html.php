@@ -19,7 +19,7 @@
     <tr class='colhead'>
       <th><?php echo $lang->report->user;?></th>
       <th><?php echo $lang->report->product;?></th>
-      <th><?php echo $lang->report->bug;?></th>
+      <th><?php echo $lang->report->bugTotal;?></th>
       <th><?php echo $lang->report->total;?></th>
     </tr>
     </thead>

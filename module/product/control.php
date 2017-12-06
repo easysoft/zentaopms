@@ -158,7 +158,7 @@ class product extends control
         $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', $browseType != 'bysearch');
 
         /* Get related tasks, bugs, cases count of each story. */
         $storyIdList = array();
@@ -220,6 +220,12 @@ class product extends control
             $productID = $this->product->create();
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('product', $productID, 'opened');
+
+            if(isset($this->config->global->flow) and $this->config->global->flow == 'onlyTest')
+            {
+                die(js::locate($this->createLink($this->moduleName, 'build', "productID=$productID"), 'parent'));
+            }
+
             die(js::locate($this->createLink($this->moduleName, 'browse', "productID=$productID"), 'parent'));
         }
 
@@ -753,7 +759,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function build($productID = 0)
+    public function build($productID = 0, $branch = 0)
     {
         $this->app->loadLang('build');
         $this->session->set('productList', $this->app->getURI(true));
@@ -765,7 +771,7 @@ class product extends control
         /* Get current product. */
         $productID = $this->product->saveState($productID, $this->products);
         $product   = $this->product->getById($productID);
-        $this->product->setMenu($this->products, $productID);
+        $this->product->setMenu($this->products, $productID, $branch);
 
         /* Set menu.*/
         $this->session->set('buildList', $this->app->getURI(true));
@@ -774,7 +780,10 @@ class product extends control
         $this->view->position[] = $this->lang->product->build;
         $this->view->products   = $this->products;
         $this->view->product    = $product;
-        $this->view->builds     = $this->dao->select('*')->from(TABLE_BUILD)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetchAll();
+        $this->view->builds     = $this->dao->select('*')->from(TABLE_BUILD)->where('product')->eq($productID)
+            ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();

@@ -26,8 +26,9 @@
           <legend>
             <?php 
             echo $lang->todo->desc;
-            if($todo->type == 'bug')    echo html::a($this->createLink('bug',  'view', "id={$todo->idvalue}"), '  BUG#' . $todo->idvalue);
-            if($todo->type == 'task')   echo html::a($this->createLink('task', 'view', "id={$todo->idvalue}"), '  TASK#' . $todo->idvalue);
+            if($todo->type == 'bug')   echo html::a($this->createLink('bug',   'view', "id={$todo->idvalue}"), '  BUG#'   . $todo->idvalue);
+            if($todo->type == 'task')  echo html::a($this->createLink('task',  'view', "id={$todo->idvalue}"), '  TASK#'  . $todo->idvalue);
+            if($todo->type == 'story') echo html::a($this->createLink('story', 'view', "id={$todo->idvalue}"), '  STORY#' . $todo->idvalue);
             ?>
           </legend>
           <div><?php echo $todo->desc;?></div>

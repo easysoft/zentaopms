@@ -10,7 +10,7 @@
  * @link        http://www.ranzhi.org
  */
 $lang->block = new stdclass();
-$lang->block->common = 'Widget';
+$lang->block->common = 'Block';
 $lang->block->name   = 'Name';
 $lang->block->style  = 'Style';
 $lang->block->grid   = 'Grid';
@@ -25,7 +25,7 @@ $lang->block->order    = 'Order';
 $lang->block->height   = 'Height';
 
 $lang->block->lblModule    = 'Module';
-$lang->block->lblBlock     = 'Widget';
+$lang->block->lblBlock     = 'Block';
 $lang->block->lblNum       = 'Number';
 $lang->block->lblHtml      = 'HTML';
 $lang->block->dynamic      = 'Dynamic';
@@ -35,12 +35,12 @@ $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Name';
 $lang->block->params->value = 'Value';
 
-$lang->block->createBlock        = 'Create Widget';
+$lang->block->createBlock        = 'Add a Block';
 $lang->block->editBlock          = 'Edit';
-$lang->block->ordersSaved        = 'Ranking is saved.';
-$lang->block->confirmRemoveBlock = 'Do you want to remove Widget【{0}】?';
+$lang->block->ordersSaved        = 'Order is saved.';
+$lang->block->confirmRemoveBlock = 'Do you want to remove Block【{0}】?';
 $lang->block->closeForever       = 'Permanent Close';
-$lang->block->confirmClose       = 'Do you want to permanently close this block? Once done, it is not available to anyone. It can be switched on at Admin->Custom.';
+$lang->block->confirmClose       = 'Do you want to permanently close this block? Once done, it is not available to anyone. It can be activiated at Admin->Custom.';
 $lang->block->remove             = 'Remove';
 $lang->block->refresh            = 'Refresh';
 $lang->block->hidden             = 'Hide';
@@ -177,7 +177,7 @@ $lang->block->default['onlyTask']['my']['4']['grid']   = 6;
 
 $lang->block->num      = 'Number';
 $lang->block->type     = 'Type';
-$lang->block->orderBy  = 'Ranking';
+$lang->block->orderBy  = 'Order by';
 
 $lang->block->availableBlocks = new stdclass();
 
@@ -189,13 +189,13 @@ $lang->block->availableBlocks->story    = 'My Stories';
 $lang->block->availableBlocks->product  = $lang->productCommon . 'List';
 $lang->block->availableBlocks->project  = $lang->projectCommon . 'List';
 $lang->block->availableBlocks->plan     = 'Plans';
-$lang->block->availableBlocks->release  = 'Release List';
+$lang->block->availableBlocks->release  = 'Releases';
 $lang->block->availableBlocks->build    = 'Builds';
 $lang->block->availableBlocks->testtask = 'Test Builds';
 
 $lang->block->moduleList['product'] = $lang->productCommon;
 $lang->block->moduleList['project'] = $lang->projectCommon;
-$lang->block->moduleList['qa']      = 'Testing';
+$lang->block->moduleList['qa']      = 'QA';
 $lang->block->moduleList['todo']    = 'To-Dos';
 
 $lang->block->modules['product'] = new stdclass();
@@ -203,7 +203,7 @@ $lang->block->modules['product']->availableBlocks = new stdclass();
 $lang->block->modules['product']->availableBlocks->list    = $lang->productCommon . 'List';
 $lang->block->modules['product']->availableBlocks->story   = 'Stories';
 $lang->block->modules['product']->availableBlocks->plan    = 'Plans';
-$lang->block->modules['product']->availableBlocks->release = 'Release List';
+$lang->block->modules['product']->availableBlocks->release = 'Releases';
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
 $lang->block->modules['project']->availableBlocks->list  = $lang->projectCommon . 'List';
@@ -225,8 +225,8 @@ $lang->block->orderByList->task['id_asc']        = 'ID Ascending';
 $lang->block->orderByList->task['id_desc']       = 'ID Descending';
 $lang->block->orderByList->task['pri_asc']       = 'Priority Ascending';
 $lang->block->orderByList->task['pri_desc']      = 'Priority Descending';
-$lang->block->orderByList->task['estimate_asc']  = 'Estimated Time Ascending';
-$lang->block->orderByList->task['estimate_desc'] = 'Estimated Time Descending';
+$lang->block->orderByList->task['estimate_asc']  = 'Estimate Ascending';
+$lang->block->orderByList->task['estimate_desc'] = 'Estimate Descending';
 $lang->block->orderByList->task['status_asc']    = 'Status Ascending';
 $lang->block->orderByList->task['status_desc']   = 'Status Descending';
 $lang->block->orderByList->task['deadline_asc']  = 'Deadline Ascending';
@@ -237,20 +237,20 @@ $lang->block->orderByList->bug['id_asc']        = 'ID Ascending';
 $lang->block->orderByList->bug['id_desc']       = 'ID Descending';
 $lang->block->orderByList->bug['pri_asc']       = 'Priority Ascending';
 $lang->block->orderByList->bug['pri_desc']      = 'Priority Descending';
-$lang->block->orderByList->bug['severity_asc']  = 'Level Ascending';
-$lang->block->orderByList->bug['severity_desc'] = 'Level Descending';
+$lang->block->orderByList->bug['severity_asc']  = 'Severity Ascending';
+$lang->block->orderByList->bug['severity_desc'] = 'Severity Descending';
 
 $lang->block->orderByList->case = array();
 $lang->block->orderByList->case['id_asc']        = 'ID Ascending';
 $lang->block->orderByList->case['id_desc']       = 'ID Descending';
-$lang->block->orderByList->case['pri_asc']       = 'PriorityAscending';
-$lang->block->orderByList->case['pri_desc']      = 'PriorityDescending';
+$lang->block->orderByList->case['pri_asc']       = 'Priority Ascending';
+$lang->block->orderByList->case['pri_desc']      = 'Priority Descending';
 
 $lang->block->orderByList->story = array();
 $lang->block->orderByList->story['id_asc']        = 'ID Ascending';
 $lang->block->orderByList->story['id_desc']       = 'ID Descending';
-$lang->block->orderByList->story['pri_asc']       = 'PriorityAscending';
-$lang->block->orderByList->story['pri_desc']      = 'PriorityDescending';
+$lang->block->orderByList->story['pri_asc']       = 'Priority Ascending';
+$lang->block->orderByList->story['pri_desc']      = 'Priority Descending';
 $lang->block->orderByList->story['status_asc']    = 'Status Ascending';
 $lang->block->orderByList->story['status_desc']   = 'Status Descending';
 $lang->block->orderByList->story['stage_asc']     = 'Stage Ascending';
@@ -266,7 +266,7 @@ $lang->block->typeList->task['canceledBy'] = 'Cancelled by Me';
 
 $lang->block->typeList->bug['assignedTo'] = 'Assigned to Me';
 $lang->block->typeList->bug['openedBy']   = 'Created by Me';
-$lang->block->typeList->bug['resolvedBy'] = 'Solved by Me';
+$lang->block->typeList->bug['resolvedBy'] = 'Resolved by Me';
 $lang->block->typeList->bug['closedBy']   = 'Closed by Me';
 
 $lang->block->typeList->case['assigntome'] = 'Assigned to Me';
@@ -287,10 +287,10 @@ $lang->block->typeList->project['isdoing']  = 'Doing';
 $lang->block->typeList->project['all']      = 'All';
 $lang->block->typeList->project['involved'] = 'Involved';
 
-$lang->block->typeList->testtask['wait']    = 'Testing Pending';
-$lang->block->typeList->testtask['doing']   = 'Testing';
+$lang->block->typeList->testtask['wait']    = 'Wait';
+$lang->block->typeList->testtask['doing']   = 'Doing';
 $lang->block->typeList->testtask['blocked'] = 'Blocked';
-$lang->block->typeList->testtask['done']    = 'Tested';
+$lang->block->typeList->testtask['done']    = 'Done';
 $lang->block->typeList->testtask['all']     = 'All';
 
 $lang->block->modules['product']->moreLinkList = new stdclass();
@@ -302,7 +302,7 @@ $lang->block->modules['project']->moreLinkList->task  = 'my|task|type=%s';
 $lang->block->modules['qa']->moreLinkList = new stdclass();
 $lang->block->modules['qa']->moreLinkList->bug      = 'my|bug|type=%s';
 $lang->block->modules['qa']->moreLinkList->case     = 'my|testcase|type=%s';
-$lang->block->modules['qa']->moreLinkList->testtask = 'my|testtask|type=%s';
+$lang->block->modules['qa']->moreLinkList->testtask = 'testtask|browse|type=%s';
 $lang->block->modules['todo']->moreLinkList = new stdclass();
 $lang->block->modules['todo']->moreLinkList->list = 'my|todo|type=all';
 $lang->block->modules['common'] = new stdclass();
@@ -314,4 +314,4 @@ $lang->block->flowchart[] = array('Administration',   'Manage a Company', 'Add U
 $lang->block->flowchart[] = array($lang->productCommon . ' Manager', 'Add ' . $lang->productCommon, 'Maintain Modules', 'Maintain Plans', 'Maintain Stories', 'Create Release');
 $lang->block->flowchart[] = array($lang->projectCommon . ' Manager', 'Add ' . $lang->projectCommon, 'Maintain Teams', 'Link ' . $lang->productCommon . 's', 'Link Stories', 'Decompose Tasks');
 $lang->block->flowchart[] = array('DEV Team', 'Claim Tasks/Bugs', 'Update Status', 'Finish Tasks/Bugs');
-$lang->block->flowchart[] = array('Testing Team', 'Write Cases', 'Implement Cases', 'Report Bugs', 'Fix Bugs', 'Close Bugs');
+$lang->block->flowchart[] = array('QA Team', 'Write Cases', 'Implement Cases', 'Report Bugs', 'Resolve Bugs', 'Close Bugs');

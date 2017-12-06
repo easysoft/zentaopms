@@ -52,7 +52,7 @@
           </button>
         </td>
       </tr>
-      <?php if(strpos(",$showFields,", ',story,') !== false and $this->config->global->flow != 'onlyTask'):?>
+      <?php if(strpos(",$showFields,", ',story,') !== false and $this->config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
       <tr>
         <th><?php echo $lang->task->story;?></th>
         <td colspan='5'>

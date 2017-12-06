@@ -91,20 +91,20 @@ $lang->custom->notice->longlife             = 'List "Undone" bugs that are older
 $lang->custom->notice->priListKey           = 'Priority list key should be numbers！';
 $lang->custom->notice->keyList              = 'key should be English or digital!';
 $lang->custom->notice->severityListKey      = 'Bug severity list key should be numbers.';
-$lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage. Do you want to enter Product Homepage?";
-$lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage. Do you want to enter Project Homepage?";
-$lang->custom->notice->indexPage['qa']      = "ZenTao 8.2+ has Testing Homepage. Do you want to enter Testing Homepage?";
+$lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage. Do you want to go to Product Homepage?";
+$lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage. Do you want to go to Project Homepage?";
+$lang->custom->notice->indexPage['qa']      = "ZenTao 8.2+ has QA Homepage. Do you want to go to QA Homepage?";
 
 $lang->custom->storyReview    = 'Review';
 $lang->custom->forceReview    = 'Review Required';
-$lang->custom->forceNotReview = 'Need not review';
+$lang->custom->forceNotReview = 'No review';
 $lang->custom->reviewList[1]  = 'On';
 $lang->custom->reviewList[0]  = 'Off';
 
 $lang->custom->deletedList[1] = 'Show';
-$lang->custom->deletedList[0] = 'Not Show';
+$lang->custom->deletedList[0] = 'Hide';
 
-$lang->custom->workingHours   = 'Man-Hour/Day';
+$lang->custom->workingHours   = 'hours/day';
 $lang->custom->weekend        = 'Weekend';
 $lang->custom->weekendList[2] = '2-Day Off';
 $lang->custom->weekendList[1] = '1-Day Off';

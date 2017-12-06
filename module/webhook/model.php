@@ -172,6 +172,8 @@ class webhookModel extends model
         $webhook = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
+            ->setDefault('products', '')
+            ->setDefault('projects', '')
             ->join('products', ',')
             ->join('projects', ',')
             ->skipSpecial('url')

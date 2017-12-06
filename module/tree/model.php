@@ -178,7 +178,7 @@ class treeModel extends model
      */
     public function getLinePairs()
     {
-        return $this->dao->select('id, name')->from(TABLE_MODULE)->where('type')->eq('line')->fetchPairs();
+        return $this->dao->select('id, name')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->fetchPairs();
     }
 
     /**
@@ -676,7 +676,12 @@ class treeModel extends model
             if(!$hasObjects) return;
         }
 
-        if(is_array($extra) or empty($extra)) $extra['branchID'] = $branch;
+        if(is_array($extra)) $extra['branchID'] = $branch;
+        if(empty($extra))
+        {
+            $extra = array();
+            $extra['branchID'] = $branch;
+        }
         $linkHtml = call_user_func($userFunc, $type, $module, $extra);
 
         if(isset($treeMenu[$module->id]) and !empty($treeMenu[$module->id]))
@@ -1504,10 +1509,14 @@ class treeModel extends model
         if($viewType == 'bug' or $viewType == 'case' or $viewType == 'task')
         {
             /* Get createdVersion. */
-            $table        = $viewType == 'task' ? TABLE_PROJECT : TABLE_PRODUCT;
-            $versionField = $viewType == 'task' ? 'openedVersion' : 'createdVersion';
+            $table          = $viewType == 'task' ? TABLE_PROJECT : TABLE_PRODUCT;
+            $versionField   = $viewType == 'task' ? 'openedVersion' : 'createdVersion';
             $createdVersion = $this->dao->select($versionField)->from($table)->where('id')->eq($rootID)->fetch($versionField);
-            return ($createdVersion and version_compare($createdVersion, '4.1', '>'));
+            if($createdVersion)
+            {
+                if(is_numeric($createdVersion{0}) and version_compare($createdVersion, '4.1', '<=')) return false;
+                return true;
+            }
         }
         return false;
     }

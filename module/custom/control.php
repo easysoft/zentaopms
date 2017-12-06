@@ -120,7 +120,7 @@ class custom extends control
                     /* Fix bug #942. */
                     if($field == 'priList' and !is_numeric($key)) die(js::alert($this->lang->custom->notice->priListKey));
                     if($module == 'bug' and $field == 'severityList' and !is_numeric($key)) die(js::alert($this->lang->custom->notice->severityListKey));
-                    if(!empty($key) and $key != 'n/a' and !validater::checkCode($key)) die(js::alert($this->lang->custom->notice->keyList));
+                    if(!empty($key) and $key != 'n/a' and !validater::checkREG($key, '/^[a-zA-Z_0-9]+$/')) die(js::alert($this->lang->custom->notice->keyList));
 
                     /* the length of role is 20, check it when save. */
                     if($module == 'user' and $field == 'roleList' and strlen($key) > 20) die(js::alert($this->lang->custom->notice->userRole));

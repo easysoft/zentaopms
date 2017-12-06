@@ -22,7 +22,7 @@
   </div>
 </div>
 <div class='main'>
-  <form class='form-condensed' id="recordForm" method='post' target='hiddenwin'>
+  <form class='form-condensed' id="recordForm" method='post' target='hiddenwin' style='margin-top:25px'>
     <table class='table table-form table-fixed'>
       <?php if(count($estimates)):?>
       <thead>
@@ -55,7 +55,7 @@
       <?php endforeach;?>
       <?php endif;?>
       <?php if(in_array($task->status, array('wait', 'pause', 'doing'))):?>
-      <?php if(empty($task->team) || (!empty($task->team) && $task->assignedTo == $this->app->user->account)) :?>
+      <?php if(empty($task->team) || (!empty($task->team) && in_array($task->assignedTo, array_keys($task->team)))) :?>
       <thead>
         <tr class='text-center'>
           <th class="w-id"><?php echo $lang->idAB;?></th>
@@ -72,7 +72,7 @@
         <td><?php echo html::input("dates[$i]", '', "class='form-control text-center form-date'");?></td>
         <td><?php echo html::input("consumed[$i]", '', "class='form-control text-center' autocomplete='off'");?></td>
         <td><?php echo html::input("left[$i]", '', "class='form-control text-center left' autocomplete='off'");?></td>
-        <td class="text-left"><?php echo html::textarea("work[$i]", '', "class='form-control' rows='2'");?></td>
+        <td class="text-left"><?php echo html::textarea("work[$i]", '', "class='form-control' style='height:50px;'");?></td>
         <td></td>
       </tr>
       <?php endfor;?>

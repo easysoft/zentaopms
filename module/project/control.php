@@ -88,13 +88,13 @@ class project extends control
         /* Get projects and products info. */
         $projectID     = $this->project->saveState($projectID, $this->projects);
         $project       = $this->project->getById($projectID);
-        $products      = $this->project->getProducts($project->id);
-        $childProjects = $this->project->getChildProjects($project->id);
-        $teamMembers   = $this->project->getTeamMembers($project->id);
-        $actions       = $this->loadModel('action')->getList('project', $project->id);
+        $products      = $this->project->getProducts($projectID);
+        $childProjects = $this->project->getChildProjects($projectID);
+        $teamMembers   = $this->project->getTeamMembers($projectID);
+        $actions       = $this->loadModel('action')->getList('project', $projectID);
 
         /* Set menu. */
-        $this->project->setMenu($this->projects, $project->id, $extra);
+        $this->project->setMenu($this->projects, $projectID, $extra);
 
         /* Assign. */
         $this->view->projects      = $this->projects;
@@ -136,7 +136,6 @@ class project extends control
         $projectID = $project->id;
         $products  = $this->config->global->flow == 'onlyTask' ? array() : $this->loadModel('product')->getProductsByProject($projectID);
         setcookie('preProjectID', $projectID, $this->config->cookieLife, $this->config->webRoot);
-
 
         if($this->cookie->preProjectID != $projectID)
         {

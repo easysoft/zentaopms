@@ -30,25 +30,23 @@ $lang->misc->zentao->about['official']     = "官方网站";
 $lang->misc->zentao->about['changelog']    = "版本历史";
 $lang->misc->zentao->about['license']      = "授权协议";
 $lang->misc->zentao->about['extension']    = "插件平台";
+$lang->misc->zentao->about['follow']       = "关注我们";
 
 $lang->misc->zentao->support['vip']        = "商业技术支持";
 $lang->misc->zentao->support['manual']     = "用户手册";
 $lang->misc->zentao->support['faq']        = "常见问题";
 $lang->misc->zentao->support['ask']        = "官方问答";
+$lang->misc->zentao->support['video']      = "使用视频";
 $lang->misc->zentao->support['qqgroup']    = "官方QQ群";
 
 $lang->misc->zentao->cowin['donate']       = "捐助我们";
 $lang->misc->zentao->cowin['reportbug']    = "汇报Bug";
 $lang->misc->zentao->cowin['feedback']     = "反馈需求";
 $lang->misc->zentao->cowin['recommend']    = "推荐给朋友";
-$lang->misc->zentao->cowin['cowinmore']    = "更多方式...";
 
 $lang->misc->zentao->service['zentaotrain']= '禅道使用培训';
-$lang->misc->zentao->service['scrumtrain'] = '敏捷开发培训';
 $lang->misc->zentao->service['idc']        = '禅道在线托管';
 $lang->misc->zentao->service['custom']     = '禅道定制开发';
-$lang->misc->zentao->service['install']    = '禅道安装服务';
-$lang->misc->zentao->service['fixissue']   = '禅道问题解决';
 $lang->misc->zentao->service['servicemore']= '更多服务...';
 
 $lang->misc->mobile      = "手机访问";

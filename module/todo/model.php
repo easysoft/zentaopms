@@ -25,23 +25,27 @@ class todoModel extends model
     {
         $todo = fixer::input('post')
             ->add('account', $this->app->user->account)
-            ->add('idvalue', 0)
+            ->setDefault('idvalue', 0)
             ->cleanInt('date, pri, begin, end, private')
             ->setIF($this->post->type == 'bug'  and $this->post->bug,  'idvalue', $this->post->bug)
             ->setIF($this->post->type == 'task' and $this->post->task, 'idvalue', $this->post->task)
+            ->setIF($this->post->type == 'story' and $this->post->story, 'idvalue', $this->post->story)
             ->setIF($this->post->date == false,  'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end',   '2400')
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
-            ->remove('bug, task,uid')
+            ->remove('bug, task, uid')
             ->get();
+
         $todo = $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TODO)->data($todo)
             ->autoCheck()
-            ->checkIF($todo->type != 'bug' and$todo->type != 'task', $this->config->todo->create->requiredFields, 'notempty')
-            ->checkIF($todo->type == 'bug'  and $todo->idvalue == 0, 'idvalue', 'notempty')
-            ->checkIF($todo->type == 'task' and $todo->idvalue == 0, 'idvalue', 'notempty')
+            ->checkIF(!in_array($todo->type, array('bug', 'task', 'story')), $this->config->todo->create->requiredFields, 'notempty')
+            ->checkIF($todo->type == 'bug'   and $todo->idvalue == 0, 'idvalue', 'notempty')
+            ->checkIF($todo->type == 'task'  and $todo->idvalue == 0, 'idvalue', 'notempty')
+            ->checkIF($todo->type == 'story' and $todo->idvalue == 0, 'idvalue', 'notempty')
             ->exec();
+
         if(!dao::isError())
         {
             $todoID = $this->dao->lastInsertID();
@@ -68,11 +72,11 @@ class todoModel extends model
                 $todo->account = $this->app->user->account;
                 if($this->post->date == false)
                 {
-                    $todo->date    = '2030-01-01';
+                    $todo->date = '2030-01-01';
                 }
                 else
                 {
-                    $todo->date    = $this->post->date;
+                    $todo->date = $this->post->date;
                 }
                 $todo->type    = $todos->types[$i];
                 $todo->pri     = $todos->pris[$i];
@@ -83,8 +87,9 @@ class todoModel extends model
                 $todo->status  = "wait";
                 $todo->private = 0;
                 $todo->idvalue = 0;
-                if($todo->type == 'bug')  $todo->idvalue = isset($todos->bugs[$i + 1]) ? $todos->bugs[$i + 1] : 0;
-                if($todo->type == 'task') $todo->idvalue = isset($todos->tasks[$i + 1]) ? $todos->tasks[$i + 1] : 0;
+                if($todo->type == 'bug')   $todo->idvalue = isset($todos->bugs[$i + 1]) ? $todos->bugs[$i + 1] : 0;
+                if($todo->type == 'task')  $todo->idvalue = isset($todos->tasks[$i + 1]) ? $todos->tasks[$i + 1] : 0;
+                if($todo->type == 'story') $todo->idvalue = isset($todos->storys[$i + 1]) ? $todos->storys[$i + 1] : 0;
 
                 $this->dao->insert(TABLE_TODO)->data($todo)->autoCheck()->exec();
                 if(dao::isError()) 
@@ -118,10 +123,10 @@ class todoModel extends model
     public function update($todoID)
     {
         $oldTodo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
-        if($oldTodo->type == 'bug' or $oldTodo->type == 'task') $oldTodo->name = '';
+        if(in_array($oldTodo->type, array('bug', 'task', 'story'))) $oldTodo->name = '';
         $todo = fixer::input('post')
             ->cleanInt('date, pri, begin, end, private')
-            ->setIF($this->post->type  == 'bug' or $this->post->type == 'task', 'name', '')
+            ->setIF(in_array($oldTodo->type, array('bug', 'task', 'story')), 'name', '')
             ->setIF($this->post->date  == false, 'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end', '2400')
@@ -129,6 +134,7 @@ class todoModel extends model
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid')
             ->get();
+
         $todo = $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TODO)->data($todo)
             ->autoCheck()
@@ -232,8 +238,9 @@ class todoModel extends model
         if(!$todo) return false;
         $todo = $this->loadModel('file')->replaceImgURL($todo, 'desc');
         if($setImgSize) $todo->desc = $this->file->setImgSize($todo->desc);
-        if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
-        if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
+        if($todo->type == 'story') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_STORY)->fetch('title');
+        if($todo->type == 'task')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
+        if($todo->type == 'bug')   $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
         $todo->date = str_replace('-', '', $todo->date);
         return $todo;
     }
@@ -332,8 +339,9 @@ class todoModel extends model
             if($this->config->global->flow == 'onlyTask' and $todo->type == 'bug') continue;
             if($this->config->global->flow == 'onlyStory' and $todo->type != 'custom') continue;
 
-            if($todo->type == 'task') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
-            if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
+            if($todo->type == 'story') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_STORY)->fetch('title');
+            if($todo->type == 'task')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
+            if($todo->type == 'bug')   $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
             $todo->begin = date::formatTime($todo->begin);
             $todo->end   = date::formatTime($todo->end);
 

@@ -112,7 +112,7 @@
     $widths  = $this->datatable->setFixedFieldWidth($setting);
     $columns = 0;
     ?>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed <?php echo $useDatatable ? 'datatable' : ''?>' id='storyList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='storyIDList[]'>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed <?php echo ($useDatatable ? 'datatable' : 'table-selectable');?>' id='storyList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='storyIDList[]'>
       <thead>
         <tr>
         <?php
@@ -281,14 +281,14 @@
                       $withSearch = count($users) > 10;
                       $actionLink = $this->createLink('story', 'batchAssignTo', "productID=$productID");
                       echo "<li class='dropdown-submenu'>";
-                      echo html::select('assignedTo', $users, '', 'class="hidden"');
+                      echo html::select('assignedTo', $users, 'admin', 'class="hidden"');
                       echo html::a('javascript::', $lang->story->assignedTo, '', 'id="assignItem"');
                       echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                       echo '<ul class="dropdown-list">';
                       foreach ($users as $key => $value)
                       {
                           if(empty($key) or $key == 'closed') continue;
-                          echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
+                          echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\",\"hiddenwin\")", $value, '', '') . '</li>';
                       }
                       echo "</ul>";
                       if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control'><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";

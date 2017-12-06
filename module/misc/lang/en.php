@@ -29,26 +29,14 @@ $lang->misc->zentao->about['proversion']   = 'ZenTao Pro';
 $lang->misc->zentao->about['official']     = "Official Website";
 $lang->misc->zentao->about['changelog']    = "Version Log";
 $lang->misc->zentao->about['license']      = "License";
-$lang->misc->zentao->about['extension']    = "Extension Platform";
 
 $lang->misc->zentao->support['vip']        = "VIP Technical Support";
 $lang->misc->zentao->support['manual']     = "User Manual";
-$lang->misc->zentao->support['faq']        = "FAQ";
-$lang->misc->zentao->support['ask']        = "Q&A";
-$lang->misc->zentao->support['qqgroup']    = "Official QQ Group";
 
-$lang->misc->zentao->cowin['donate']       = "Donate";
 $lang->misc->zentao->cowin['reportbug']    = "Report Bug ";
 $lang->misc->zentao->cowin['feedback']     = "Feedback";
-$lang->misc->zentao->cowin['recommend']    = "Refer a Friend";
 $lang->misc->zentao->cowin['cowinmore']    = "More";
 
-$lang->misc->zentao->service['zentaotrain']= 'ZenTao Training';
-$lang->misc->zentao->service['scrumtrain'] = 'Agile Development Training';
-$lang->misc->zentao->service['idc']        = 'ZenTao Online Hosting';
-$lang->misc->zentao->service['custom']     = 'ZenTao Customized Development';
-$lang->misc->zentao->service['install']    = 'ZenTao Installation Service';
-$lang->misc->zentao->service['fixissue']   = 'ZenTao Trouble Shooting';
 $lang->misc->zentao->service['servicemore']= 'More';
 
 $lang->misc->mobile      = "Mobile Access";
@@ -63,11 +51,11 @@ $lang->misc->tableStatus = "Status";
 $lang->misc->novice      = "First time to ZenTao? Do you want to start rookie mode?";
 
 $lang->misc->noticeRepair = "<h5>If you are not Administrator, please contact Administrator to repair table.</h5>
-    <h5>If you are, please login into your Zentao host and create the <span>%s</span> file.</h5>
+    <h5>If you are, please login into your Zentao host and create a file named <span>%s</span>.</h5>
     <p>Note:</p>
     <ol>
-    <li>Keep the ok.txt empty.</li>
-    <li>If ok.txt exists, remove it and create one again.</li>
+    <li>Keep the file empty.</li>
+    <li>If the file exists, remove it and create one again.</li>
     </ol>";
 
 $lang->misc->feature = new stdclass();
@@ -79,7 +67,7 @@ $lang->misc->feature->all['9.0.beta'][] = array('title'=>'Optimized Rich Text Ed
 
 $lang->misc->feature->all['8.3.stable'][] = array('title'=>'Improved Documentation.', 'desc' => '<p>Added Document Home, restructured document library, and added privileges.</p><p>Markdown Editor is supported，and privilege and version managment is added.</p>');
 
-$lang->misc->feature->all['8.2.stable'][] = array('title'=>'Custom Home', 'desc' => '<p>You can add blocks to Dashboard and arrange the layout.</p><p> My Zone, Product, Project, and Testing all support home custom mentioned before. </p>');
+$lang->misc->feature->all['8.2.stable'][] = array('title'=>'Custom Home', 'desc' => '<p>You can add blocks to Dashboard and arrange the layout.</p><p> My Zone, Product, Project, and QA all support home custom mentioned before. </p>');
 $lang->misc->feature->all['8.2.stable'][] = array('title'=>'Custom Navigation', 'desc' => '<p>You can decide which project show in navigation bar and the order of projects shown in the bar.</p><p> Hover on the navigation bar and a sign will show to its right. Click the sign and a dialog box "Custom Navigation" will show. Drag the block name to switch its order on navigation bar.</p>');
 $lang->misc->feature->all['8.2.stable'][] = array('title'=>'Batch Add/Edit Custom', 'desc' => '<p>You can batch add and edit fields on custom pages.</p>');
 $lang->misc->feature->all['8.2.stable'][] = array('title'=>'Custom Story/Task/Bug/Case', 'desc' => '<p>You can custom fileds when add a Story/Task/Bug/Case.</p>');

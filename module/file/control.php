@@ -339,11 +339,12 @@ class file extends control
         {
             $this->app->loadLang('action');
             $file = $this->file->getByID($fileID);
-            $this->dao->update(TABLE_FILE)->set('title')->eq($this->post->fileName)->where('id')->eq($fileID)->exec();
+            $data = fixer::input('post')->get();
+            $this->dao->update(TABLE_FILE)->set('title')->eq($data->fileName)->where('id')->eq($fileID)->exec();
 
             $extension = "." . $file->extension;
-            $actionID = $this->loadModel('action')->create($file->objectType, $file->objectID, 'editfile', '', $this->post->fileName . $extension);
-            $changes[] = array('field' => 'fileName', 'old' => $file->title . $extension, 'new' => $this->post->fileName . $extension);
+            $actionID = $this->loadModel('action')->create($file->objectType, $file->objectID, 'editfile', '', $data->fileName . $extension);
+            $changes[] = array('field' => 'fileName', 'old' => $file->title . $extension, 'new' => $data->fileName . $extension);
             $this->action->logHistory($actionID, $changes);
 
             die(js::reload('parent.parent'));

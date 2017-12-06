@@ -11,7 +11,7 @@
  */
 ?>
 <style>
-#customModal .checkbox-inline{width:90px}
+#customModal .checkbox-inline{width:120px}
 #customModal .checkbox-inline+.checkbox-inline{margin-left:0px;}
 </style>
 <div class="modal fade" id="customModal" tabindex="-1" role="dialog" aria-hidden="true">

@@ -22,6 +22,7 @@ class release extends control
     {
         $this->loadModel('product');
         $product = $this->product->getById($productID);
+        if(empty($product)) $this->locate($this->createLink('product', 'create'));
         $this->view->product  = $product;
         $this->view->branch   = $branch;
         $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);

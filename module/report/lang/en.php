@@ -16,6 +16,7 @@ $lang->report->item       = 'Item';
 $lang->report->value      = 'Value';
 $lang->report->percent    = '%';
 $lang->report->undefined  = 'Undefined';
+$lang->report->query      = 'Query';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
@@ -42,6 +43,7 @@ $lang->report->bugOpenedDate    = 'Bug Open on';
 $lang->report->taskAssignedDate = 'Time Frame';
 $lang->report->beginAndEnd      = 'Date';
 $lang->report->dept             = 'Dept';
+$lang->report->deviationChart   = $lang->projectCommon . ' Deviation Chart';
 
 $lang->reportList->project->lists[10] = $lang->projectCommon . ' deviation|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . ' summary|report|productsummary';
@@ -53,7 +55,7 @@ $lang->report->id            = 'ID';
 $lang->report->project       = $lang->projectCommon;
 $lang->report->product       = $lang->productCommon;
 $lang->report->user          = 'Username';
-$lang->report->bug           = 'Bugs';
+$lang->report->bugTotal      = 'Bugs';
 $lang->report->task          = 'Tasks';
 $lang->report->estimate      = 'Est.';
 $lang->report->consumed      = 'Consumed';
@@ -63,11 +65,11 @@ $lang->report->deviationRate = 'Deviation Rate';
 $lang->report->total         = 'Total';
 $lang->report->to            = 'to';
 $lang->report->taskTotal     = "Total Tasks";
-$lang->report->manhourTotal  = "Total Man-Hour";
+$lang->report->manhourTotal  = "Total Hours";
 $lang->report->validRate     = "Efficiency";
 $lang->report->validRateTips = "Solution is fixed or postponed / status is resolved or closed.";
 $lang->report->unplanned     = 'Unplanned';
-$lang->report->workday       = 'Man-Hour/Day';
+$lang->report->workday       = 'Hours/Day';
 $lang->report->diffDays      = 'Work Days';
 
 $lang->report->conditions    = 'Filter by:';
@@ -89,4 +91,4 @@ $lang->report->mailTitle->task     = " Task(%s),";
 $lang->report->mailTitle->todo     = " To-Do(%s),";
 $lang->report->mailTitle->testTask = " Test Task(%s),";
 
-$lang->report->proVersion = '<a href="http://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
+$lang->report->proVersion = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';

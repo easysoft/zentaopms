@@ -19,7 +19,7 @@ $lang->backup->holdDays       = 'Backup the latest %s days.';
 $lang->backup->restoreTip     = 'Only attachments and databases will be restored when you click restore button, if you need to restore the code, you can restore manually.';
 
 $lang->backup->success = new stdclass();
-$lang->backup->success->backup  = 'Backed up!';
+$lang->backup->success->backup  = 'Done!';
 $lang->backup->success->restore = 'Restored!';
 
 $lang->backup->error = new stdclass();

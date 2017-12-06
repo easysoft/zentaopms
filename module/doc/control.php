@@ -691,6 +691,7 @@ class doc extends control
 
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $object = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
+        if(empty($object)) $this->locate($this->createLink($type, 'create'));
         if($from == 'product')
         {
             $this->lang->doc->menu      = $this->lang->product->menu;

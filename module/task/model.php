@@ -349,11 +349,10 @@ class taskModel extends model
         $teams = array();
         if($this->post->multiple)
         {
-            $estimate = 0;
-            $left     = 0;
             foreach($this->post->team as $row => $account)
             {
                 if(empty($account) or isset($team[$account])) continue;
+
                 $member = new stdClass();
                 $member->project  = 0;
                 $member->account  = $account;
@@ -365,37 +364,16 @@ class taskModel extends model
                 $member->left     = $member->estimate - $member->consumed;
                 $member->order    = $row;
                 $teams[$account]  = $member;
-
-                $estimate += (float)$member->eatimate;
-                $left     += (float)$member->left;
             }
 
-            if(!empty($teams))
+            if(!empty($teams) and !isset($task->assignedTo))
             {
-                $task->estimate = $estimate;
-                $task->left     = $left;
-                if(!isset($task->assignedTo))
-                {
-                    $firstMember      = reset($teams);
-                    $task->assignedTo = $firstMember->account;
-                }
+                $firstMember      = reset($teams);
+                $task->assignedTo = $firstMember->account;
             }
         }
 
-        if($task->consumed < $oldTask->consumed)
-        {
-            die(js::error($this->lang->task->error->consumedSmall));
-        }
-        elseif($task->consumed != $oldTask->consumed or $task->left != $oldTask->left)
-        {
-            $estimate = new stdClass();
-            $estimate->consumed = $task->consumed - $oldTask->consumed;
-            $estimate->left     = $task->left;
-            $estimate->task     = $taskID;
-            $estimate->account  = $this->app->user->account;
-            $estimate->date     = helper::now();
-            $this->addTaskEstimate($estimate);
-        }
+        if($task->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)
@@ -648,8 +626,8 @@ class taskModel extends model
             ->cleanFloat('left')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
-            ->remove('comment,showModule')
             ->setDefault('assignedDate', $now)
+            ->remove('comment,showModule')
             ->get();
 
         $this->dao->update(TABLE_TASK)
@@ -1142,7 +1120,7 @@ class taskModel extends model
         if(!empty($task->parent)) $task->parentName = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('name');
 
         $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->eq($taskID)->orderBy('order_desc')->fetchGroup('task', 'account');
-        foreach($teams as $key => $team) $teams[$key] = array_reverse($team);
+        foreach($teams as $key => $team) $teams[$key] = array_reverse($team, true);
         $task->team = isset($teams[$taskID]) ? $teams[$taskID] : array();
         foreach($children as $child) $child->team = isset($teams[$child->id]) ? $teams[$child->id] : array();
 
@@ -1228,8 +1206,8 @@ class taskModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.project')->eq((int)$projectID)
-            ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->eq(0)
+            ->andWhere('t1.deleted')->eq(0)
             ->beginIF($productID)->andWhere('t2.product')->eq((int)$productID)->fi()
             ->beginIF($type == 'undone')->andWhere("(t1.status = 'wait' or t1.status ='doing')")->fi()
             ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
@@ -1238,30 +1216,49 @@ class taskModel extends model
             ->beginIF($type == 'delayed')->andWhere('t1.deadline')->gt('1970-1-1')->andWhere('t1.deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
-            ->orderBy($orderBy)
+            ->orderBy('t1.`parent`,' . $orderBy)
             ->page($pager)
             ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID or $type == 'needconfirm') ? false : true);
 
+        if(empty($tasks)) return array();
+
         $taskList = array_keys($tasks);
-        if(!empty($taskList))
+        $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->in($taskList)->fetchGroup('task');
+        if(!empty($taskTeam))
         {
-            $children = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
-                ->from(TABLE_TASK)->alias('t1')
-                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
-                ->where('t1.parent')->in($taskList)
-                ->andWhere('t1.deleted')->eq(0)
-                ->orderBy('id_desc')
-                ->fetchGroup('parent');
-            foreach($children as $key => $child) $tasks[$key]->children = $child;
-            $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->in($taskList)->fetchGroup('task');
             foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
         }
 
-        if($tasks) return $this->processTasks($tasks);
-        return array();
+        /* Select children task. */
+        $children = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
+            ->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->where('t1.project')->eq((int)$projectID)
+            ->andWhere('t1.parent')->in($taskList)
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF($productID)->andWhere('t2.product')->eq((int)$productID)->fi()
+            ->beginIF($type == 'undone')->andWhere("(t1.status = 'wait' or t1.status ='doing')")->fi()
+            ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
+            ->beginIF($type == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
+            ->beginIF($type == 'finishedbyme')->andWhere('t1.finishedby')->eq($this->app->user->account)->fi()
+            ->beginIF($type == 'delayed')->andWhere('t1.deadline')->gt('1970-1-1')->andWhere('t1.deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
+            ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
+            ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
+            ->orderBy('t1.`parent`,' . $orderBy)
+            ->fetchAll('id');
+
+        if(!empty($children))
+        {
+            foreach($children as $child)
+            {
+                $tasks[$child->parent]->children[] = $child;
+            }
+        }
+
+        return $this->processTasks($tasks);
     }
 
     /**
@@ -2045,7 +2042,7 @@ class taskModel extends model
                 case 'name':
                     if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
                     if($task->module and isset($modulePairs[$task->module])) echo "<span class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span> ';
-                    if($child) echo '<span class="label">' . $this->lang->task->childrenAB . '</span> ';
+                    if($child or !empty($task->parent)) echo '<span class="label">' . $this->lang->task->childrenAB . '</span> ';
                     if(!empty($task->team)) echo '<span class="label">' . $this->lang->task->multipleAB . '</span> ';
                     echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color'") : "<span style='color: $task->color'>$task->name</span>";
                     if($task->fromBug) echo html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '_blank', "class='bug'");

@@ -44,20 +44,20 @@
         </div>
       </div>
       <div class='col-sm-1'>
-        <div class='input-group'><?php echo html::submitButton();?></div>
+        <div class='input-group'><?php echo html::submitButton($lang->report->query);?></div>
       </div>
     </div>
   </form>
   <table class='table table-condensed table-striped table-bordered table-fixed active-disabled' id="workload">
     <thead>
     <tr class='colhead'>
-      <th><?php echo $lang->report->user;?></th>
+      <th class="w-200px"><?php echo $lang->report->user;?></th>
       <th><?php echo $lang->report->project;?></th>
-      <th><?php echo $lang->report->task;?></th>
-      <th><?php echo $lang->report->remain;?></th>
-      <th><?php echo $lang->report->taskTotal;?></th>
-      <th><?php echo $lang->report->manhourTotal;?></th>
-      <th><?php echo $lang->report->workloadAB;?></th>
+      <th class="w-100px"><?php echo $lang->report->task;?></th>
+      <th class="w-100px"><?php echo $lang->report->remain;?></th>
+      <th class="w-100px"><?php echo $lang->report->taskTotal;?></th>
+      <th class="w-100px"><?php echo $lang->report->manhourTotal;?></th>
+      <th class="w-100px"><?php echo $lang->report->workloadAB;?></th>
     </tr>
     </thead>
     <tbody>
@@ -71,16 +71,16 @@
         <?php $class = $color ? 'rowcolor' : '';?>
         <?php if($id != 1) echo '<tr class="a-center">';?>
         <td class="<?php echo $class;?>"><?php echo html::a($this->createLink('project', 'view', "projectID={$info['projectID']}"), $project);?></td>
-        <td class="<?php echo $class;?>"><?php echo $info['count'];?></td>
-        <td class="<?php echo $class;?>"><?php echo $info['manhour'];?></td>
+        <td class="<?php echo $class;?> text-center"><?php echo $info['count'];?></td>
+        <td class="<?php echo $class;?> text-center"><?php echo $info['manhour'];?></td>
         <?php if($id == 1):?>
-        <td rowspan="<?php echo count($load['task']);?>">
+        <td rowspan="<?php echo count($load['task']);?>" class="text-center">
           <?php echo $load['total']['count'];?>
         </td>
-        <td rowspan="<?php echo count($load['task']);?>">
+        <td rowspan="<?php echo count($load['task']);?>" class="text-center">
           <?php echo $load['total']['manhour'];?>
         </td>
-        <td rowspan="<?php echo count($load['task']);?>">
+        <td rowspan="<?php echo count($load['task']);?>" class="text-center">
           <?php echo round($load['total']['manhour'] / $allHour * 100, 2) . '%';?>
         </td>
         <?php endif;?>

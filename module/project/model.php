@@ -342,7 +342,7 @@ class projectModel extends model
                     $member->role    = $this->lang->project->$fieldName;
                     $member->days    = $project->days;
                     $member->hours   = $this->config->project->defaultWorkhours;
-                    $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+                    $this->dao->replace(TABLE_TEAM)->data($member)->exec();
                 }
             }
         }
@@ -976,6 +976,7 @@ class projectModel extends model
             ->where('project')->eq((int)$projectID)
             ->andWhere('status')->ne('cancel')
             ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->eq(0)
             ->fetch();
         $project->days          = $project->days ? $project->days : '';
         $project->totalHours    = $this->dao->select('sum(days * hours) AS totalHours')->from(TABLE_TEAM)->where('project')->eq($project->id)->fetch('totalHours');
@@ -1833,6 +1834,7 @@ class projectModel extends model
     {
         $taskSum = $statusWait = $statusDone = $statusDoing = $statusClosed = $statusCancel = $statusPause = 0;  
         $totalEstimate = $totalConsumed = $totalLeft = 0.0;
+
         foreach($tasks as $task)
         {
             $totalEstimate  += $task->estimate;
@@ -1840,9 +1842,11 @@ class projectModel extends model
             $totalLeft      += (($task->status == 'cancel' or $task->closedReason == 'cancel') ? 0 : $task->left);
             $statusVar       = 'status' . ucfirst($task->status);
             $$statusVar ++;
+            if(!empty($task->children)) $taskSum += count($task->children);
+            $taskSum ++;
         }
 
-        return sprintf($this->lang->project->taskSummary, count($tasks), $statusWait, $statusDoing, $totalEstimate, round($totalConsumed, 1), $totalLeft);
+        return sprintf($this->lang->project->taskSummary, $taskSum, $statusWait, $statusDoing, $totalEstimate, round($totalConsumed, 1), $totalLeft);
     }
 
     /**

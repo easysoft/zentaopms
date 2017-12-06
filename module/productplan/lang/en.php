@@ -17,7 +17,7 @@ $lang->productplan->edit       = "Edit";
 $lang->productplan->delete     = "Delete";
 $lang->productplan->view       = "Details";
 $lang->productplan->bugSummary = "<strong>%s</strong> Bugs in total on this page.";
-$lang->productplan->basicInfo  = 'Basic Info';
+$lang->productplan->info  = 'Info';
 $lang->productplan->batchEdit  = 'Batch Edit';
 
 $lang->productplan->batchUnlink      = "Batch Unlink";
@@ -47,7 +47,7 @@ $lang->productplan->end     = 'End';
 $lang->productplan->last    = 'Last plan';
 
 $lang->productplan->endList[7]   = '1 Week';
-$lang->productplan->endList[14]  = '1 Weeks';
+$lang->productplan->endList[14]  = '2 Weeks';
 $lang->productplan->endList[31]  = '1 Month';
 $lang->productplan->endList[62]  = '2 Months';
 $lang->productplan->endList[93]  = '3 Months';
