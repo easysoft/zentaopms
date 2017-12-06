@@ -1303,11 +1303,12 @@ class storyModel extends model
     /**
      * Get stories list of a product.
      * 
-     * @param  int           $productID 
-     * @param  array|string  $moduleIdList
-     * @param  string        $status 
-     * @param  string        $orderBy 
-     * @param  object        $pager 
+     * @param  int          $productID
+     * @param  array|string $moduleIdList
+     * @param  string       $status
+     * @param  string       $orderBy
+     * @param  object       $pager
+     *
      * @access public
      * @return array
      */
@@ -1431,6 +1432,23 @@ class storyModel extends model
     public function getByStatus($productID, $branch, $modules, $status, $orderBy, $pager)
     {
         return $this->getByField($productID, $branch, $modules, 'status', $status, $orderBy, $pager);
+    }
+
+    /**
+     * Get stories by plan.
+     *
+     * @param $productID
+     * @param $branch
+     * @param $modules
+     * @param $plan
+     * @param $orderBy
+     * @param $pager
+     *
+     * @return array
+     */
+    public function getByPlan($productID, $branch, $modules, $plan, $orderBy, $pager)
+    {
+        return $this->getByField($productID, $branch, $modules, 'plan', $plan, $orderBy, $pager);
     }
 
     /**
