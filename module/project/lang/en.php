@@ -19,7 +19,7 @@ $lang->project->begin         = 'Begin';
 $lang->project->end           = 'End';
 $lang->project->dateRange     = 'Time Frame';
 $lang->project->to            = 'To';
-$lang->project->days          = 'Work Days';
+$lang->project->days          = 'Man-Day';
 $lang->project->day           = 'day';
 $lang->project->workHour      = 'Hour';
 $lang->project->status        = 'Status';
@@ -95,7 +95,7 @@ $lang->project->statusList['doing']     = 'Doing';
 $lang->project->statusList['suspended'] = 'Suspend';
 $lang->project->statusList['done']      = 'Done';
 
-$lang->project->aclList['open']    = "Default (With the privilege to view {$lang->projectCommon}, you will have access to {$lang->projectCommon}.)";
+$lang->project->aclList['open']    = "Default (You have access to {$lang->projectCommon}, if you can view it.)";
 $lang->project->aclList['private'] = 'Private (Only team members can access to it.)';
 $lang->project->aclList['custom']  = 'Whitelist (Team members and the whitelist members have access to it.)';
 

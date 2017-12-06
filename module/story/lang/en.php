@@ -58,8 +58,8 @@ $lang->story->title          = 'Title';
 $lang->story->spec           = 'Description';
 $lang->story->verify         = 'Acceptance';
 $lang->story->pri            = 'Priority';
-$lang->story->estimate       = 'Estimated Hour';
-$lang->story->estimateAB     = 'Est.';
+$lang->story->estimate       = 'Hour';
+$lang->story->estimateAB     = 'Hour';
 $lang->story->hour           = 'Hour';
 $lang->story->status         = 'Status';
 $lang->story->stage          = 'Stage';
@@ -176,9 +176,9 @@ $lang->story->lblActivate          = 'Activate';
 $lang->story->lblClose             = 'Close';
 
 $lang->story->checkAffection       = 'Impact';
-$lang->story->affectedProjects     = 'Affected' . $lang->projectCommon;
-$lang->story->affectedBugs         = 'Affected Bug';
-$lang->story->affectedCases        = 'Affected Case';
+$lang->story->affectedProjects     = '' . $lang->projectCommon;
+$lang->story->affectedBugs         = 'Bug';
+$lang->story->affectedCases        = 'Case';
 
 $lang->story->specTemplate          = "As a < type of user >, I want < some goal > so that < some reason >.";
 $lang->story->needNotReview         = 'No Review';
@@ -224,9 +224,9 @@ $lang->story->report->charts['storysPerPlan']           = 'per Plan';
 $lang->story->report->charts['storysPerStatus']         = 'per Status';
 $lang->story->report->charts['storysPerStage']          = 'per Stage';
 $lang->story->report->charts['storysPerPri']            = 'per Priority';
-$lang->story->report->charts['storysPerEstimate']       = 'per Estimated Hour';
+$lang->story->report->charts['storysPerEstimate']       = 'per Hour';
 $lang->story->report->charts['storysPerOpenedBy']       = 'per CreatedBy';
-$lang->story->report->charts['storysPerAssignedTo']     = 'per AssignedTo';
+$lang->story->report->charts['storysPerAssignedTo']     = 'per Assignee';
 $lang->story->report->charts['storysPerClosedReason']   = 'per Closed Reason';
 $lang->story->report->charts['storysPerChange']         = 'per Change';
 
@@ -259,7 +259,7 @@ $lang->story->report->storysPerPri->item          = 'Priority';
 $lang->story->report->storysPerOpenedBy->item     = 'Account';
 $lang->story->report->storysPerAssignedTo->item   = 'User';
 $lang->story->report->storysPerClosedReason->item = 'Reason';
-$lang->story->report->storysPerEstimate->item     = 'Estimated Hour';
+$lang->story->report->storysPerEstimate->item     = 'Hour';
 $lang->story->report->storysPerChange->item       = 'Change';
 
 $lang->story->report->storysPerProduct->graph      = new stdclass();
@@ -285,7 +285,7 @@ $lang->story->report->storysPerPri->graph->xAxisName          = 'Priority';
 $lang->story->report->storysPerOpenedBy->graph->xAxisName     = 'Created By';
 $lang->story->report->storysPerAssignedTo->graph->xAxisName   = 'Assigned To';
 $lang->story->report->storysPerClosedReason->graph->xAxisName = 'Closed Reason';
-$lang->story->report->storysPerEstimate->graph->xAxisName     = 'Estimated Time ';
+$lang->story->report->storysPerEstimate->graph->xAxisName     = 'Hour ';
 $lang->story->report->storysPerChange->graph->xAxisName       = 'Change';
 
 $lang->story->placeholder = new stdclass();

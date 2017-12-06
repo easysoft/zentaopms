@@ -170,8 +170,8 @@ $lang->install->chanzhi->name = 'Changer CMS';
 $lang->install->chanzhi->desc = <<<EOD
 <ul>
   <li>Professional Content Management Sysytem</li>
-  <li>Rich functionality and simple to operate</li>
-  <li>Aims at detaild for SEO</li>
+  <li>Rich features and simple to apply</li>
+  <li>Aims at details for SEO</li>
   <li>Open source and free</li>
 </ul>
 EOD;
@@ -181,7 +181,7 @@ $lang->install->ranzhi->desc = <<<EOD
 <ul>
   <li>Customer Management and Order Tracking</li>
   <li>Project/Task and Announcement/Document</li>
-  <li>Income/Expenditur and Account In/Out </li>
+  <li>Income/Expense and Account In/Out </li>
   <li>Forum/Blog and Dynamic/News</li>
 </ul>
 EOD;
@@ -200,8 +200,8 @@ $lang->install->xuanxuan->name = 'Xuanxuan IM';
 $lang->install->xuanxuan->desc = <<<EOD
 <ul>
   <li>lightweight and easy to deploy</li>
-  <li>truly complete cross platform solutions</li>
-  <li>Based on Html5, the beautiful</li>
-  <li>Open architecture</li>
+  <li>complete cross platform solutions</li>
+  <li>Based on Html5 and beautiful</li>
+  <li>Open framework</li>
 </ul>
 EOD;

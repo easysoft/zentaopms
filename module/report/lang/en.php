@@ -39,9 +39,9 @@ $lang->report->bugCreate        = 'Bugs';
 $lang->report->bugAssign        = 'Bug Assignment';
 $lang->report->workload         = 'Workload';
 $lang->report->workloadAB       = 'Workload';
-$lang->report->bugOpenedDate    = 'Bug Open on';
-$lang->report->taskAssignedDate = 'Time Frame';
-$lang->report->beginAndEnd      = 'Date';
+$lang->report->bugOpenedDate    = 'Open on';
+$lang->report->taskAssignedDate = 'Duration';
+$lang->report->beginAndEnd      = 'Duration';
 $lang->report->dept             = 'Dept';
 $lang->report->deviationChart   = $lang->projectCommon . ' Deviation Chart';
 
@@ -70,7 +70,7 @@ $lang->report->validRate     = "Efficiency";
 $lang->report->validRateTips = "Solution is fixed or postponed / status is resolved or closed.";
 $lang->report->unplanned     = 'Unplanned';
 $lang->report->workday       = 'Hours/Day';
-$lang->report->diffDays      = 'Work Days';
+$lang->report->diffDays      = 'Man-Day';
 
 $lang->report->conditions    = 'Filter by:';
 $lang->report->closedProduct = 'Closed ' . $lang->productCommon;

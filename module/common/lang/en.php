@@ -476,7 +476,7 @@ $lang->noticeImport  = "<p style='font-size:14px'>Imported data contains data th
 
 $lang->noResultsMatch     = "No results match!";
 $lang->searchMore         = "More results：";
-$lang->chooseUsersToMail  = "Choose users you will send notifications to...";
+$lang->chooseUsersToMail  = "Choose users that will be notified.";
 $lang->browserNotice      = 'Your current browser might not show the best effect. Please use Chrome, Firefox, IE9+, Opera or Safari.';
 $lang->noticePasteImg     = "Paste image here.";
 
