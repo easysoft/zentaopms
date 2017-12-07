@@ -59,7 +59,7 @@
             $this->app->loadLang('testcase');
             echo "<div class='btn-group'>";
             echo "<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>";
-            echo "<i class='icon icon-sitemap'></i>" . $lang->testcase->common . " <span class='caret'></span>";
+            echo "<i class='icon icon-sitemap'></i> " . $lang->testcase->common . " <span class='caret'></span>";
             echo "</button>";
             echo "<ul class='dropdown-menu' id='createCaseActionMenu'>";
             $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
