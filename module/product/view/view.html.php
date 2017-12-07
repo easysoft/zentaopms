@@ -62,7 +62,7 @@
         <legend><?php echo $lang->product->basicInfo?></legend>
         <table class='table table-data table-condensed table-borderless'>
           <tr>
-            <th class='strong w-80px'><?php echo $lang->product->name;?></th>
+            <th class='strong w-110px'><?php echo $lang->product->name;?></th>
             <td <?php if($product->deleted) echo "class='deleted text-danger'";?>><strong><?php echo $product->name;?></strong></td>
           </tr>
           <tr>
@@ -123,7 +123,7 @@
         <legend><?php echo $lang->product->otherInfo?></legend>
         <table class='table table-data table-condensed table-borderless'>
           <tr>
-            <th class='strong w-80px'><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
+            <th class='strong w-110px'><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
             <td class='strong'><?php echo $product->stories['active']?></td>
           </tr>
           <tr>

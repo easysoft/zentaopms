@@ -302,7 +302,7 @@ $lang->block->modules['project']->moreLinkList->task  = 'my|task|type=%s';
 $lang->block->modules['qa']->moreLinkList = new stdclass();
 $lang->block->modules['qa']->moreLinkList->bug      = 'my|bug|type=%s';
 $lang->block->modules['qa']->moreLinkList->case     = 'my|testcase|type=%s';
-$lang->block->modules['qa']->moreLinkList->testtask = 'my|testtask|type=%s';
+$lang->block->modules['qa']->moreLinkList->testtask = 'testtask|browse|type=%s';
 $lang->block->modules['todo']->moreLinkList = new stdclass();
 $lang->block->modules['todo']->moreLinkList->list = 'my|todo|type=all';
 $lang->block->modules['common'] = new stdclass();

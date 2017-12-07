@@ -370,35 +370,39 @@
             </form>
           </div>
           <div id='planInfo' class='tab-pane'>
-            <div>
-              <fieldset>
-                <legend><?php echo $lang->productplan->basicInfo?></legend>
-                <table class='table table-data table-condensed table-borderless'>
-                  <tr>
-                    <th class='w-80px strong'><?php echo $lang->productplan->title;?></th> 
-                    <td><?php echo $plan->title;?></td>
-                  </tr>
-                  <?php if($product->type != 'normal'):?>
-                  <tr>
-                    <th><?php echo $lang->product->branch;?></th>
-                    <td><?php echo $branches[$plan->branch];?></td>
-                  </tr>
-                  <?php endif;?>
-                  <tr>
-                    <th><?php echo $lang->productplan->begin;?></th>
-                    <td><?php echo $plan->begin;?></td>
-                  </tr>
-                  <tr>
-                    <th><?php echo $lang->productplan->end;?></th>
-                    <td><?php echo $plan->end;?></td>
-                  </tr>
-                </table>
-              </fieldset>
-              <fieldset>
-                <legend><?php echo $lang->productplan->desc;?></legend>
-                <div class='article-content'><?php echo $plan->desc;?></div>
-              </fieldset>
-              <?php include '../../common/view/action.html.php';?>
+            <div class="row-table">
+              <div class="col-main">
+                <fieldset>
+                  <legend><?php echo $lang->productplan->info?></legend>
+                  <table class='table table-data table-condensed table-borderless'>
+                    <tr>
+                      <th class='w-80px strong'><?php echo $lang->productplan->title;?></th>
+                      <td><?php echo $plan->title;?></td>
+                    </tr>
+                      <?php if($product->type != 'normal'):?>
+                        <tr>
+                          <th><?php echo $lang->product->branch;?></th>
+                          <td><?php echo $branches[$plan->branch];?></td>
+                        </tr>
+                      <?php endif;?>
+                    <tr>
+                      <th><?php echo $lang->productplan->begin;?></th>
+                      <td><?php echo $plan->begin;?></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->productplan->end;?></th>
+                      <td><?php echo $plan->end;?></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->productplan->desc;?></th>
+                      <td><?php echo $plan->desc;?></td>
+                    </tr>
+                  </table>
+                </fieldset>
+              </div>
+              <div class="col-side">
+                  <?php include '../../common/view/action.html.php';?>
+              </div>
             </div>
           </div>
         </div>

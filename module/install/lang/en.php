@@ -127,32 +127,32 @@ $lang->install->password = 'Admin Password';
 $lang->install->errorEmptyPassword = 'Password should not be blank.';
 
 $lang->install->groupList['ADMIN']['name']  = 'Admin';
-$lang->install->groupList['ADMIN']['desc']  = 'System Admin';
+$lang->install->groupList['ADMIN']['desc']  = 'System Administrator';
 $lang->install->groupList['DEV']['name']    = 'Dev';
 $lang->install->groupList['DEV']['desc']    = 'Dev Team';
 $lang->install->groupList['QA']['name']     = 'QA';
 $lang->install->groupList['QA']['desc']     = 'QA Team';
-$lang->install->groupList['PM']['name']     = 'Project Manager';
+$lang->install->groupList['PM']['name']     = 'PM';
 $lang->install->groupList['PM']['desc']     = 'for Project Manager';
-$lang->install->groupList['PO']['name']     = 'Product Owner';
+$lang->install->groupList['PO']['name']     = 'PO';
 $lang->install->groupList['PO']['desc']     = 'for Product Owner';
-$lang->install->groupList['TD']['name']     = 'Dev Supervisor';
-$lang->install->groupList['TD']['desc']     = 'for Dev Supervisor';
-$lang->install->groupList['PD']['name']     = 'Product Supervisor';
-$lang->install->groupList['PD']['desc']     = 'for Product Supervisor';
-$lang->install->groupList['QD']['name']     = 'QA Supervisor';
-$lang->install->groupList['QD']['desc']     = 'for QA Supervisor';
-$lang->install->groupList['TOP']['name']    = 'Senior Manager';
+$lang->install->groupList['TD']['name']     = 'Dev Manager';
+$lang->install->groupList['TD']['desc']     = 'for Dev Manager';
+$lang->install->groupList['PD']['name']     = 'PD';
+$lang->install->groupList['PD']['desc']     = 'for Product Director';
+$lang->install->groupList['QD']['name']     = 'QD';
+$lang->install->groupList['QD']['desc']     = 'for QA Director';
+$lang->install->groupList['TOP']['name']    = 'Senior';
 $lang->install->groupList['TOP']['desc']    = 'for Senior Manager';
 $lang->install->groupList['OTHERS']['name'] = 'Other';
 $lang->install->groupList['OTHERS']['desc'] = 'for Other';
 
 $lang->install->cronList[''] = 'Monitor cron';
-$lang->install->cronList['moduleName=project&methodName=computeburn'] = 'Compute burn';
+$lang->install->cronList['moduleName=project&methodName=computeburn'] = 'Update Burndown Chart';
 $lang->install->cronList['moduleName=report&methodName=remind']       = 'Daily task reminder';
 $lang->install->cronList['moduleName=svn&methodName=run']             = 'Synchronize SVN';
 $lang->install->cronList['moduleName=git&methodName=run']             = 'Synchronize GIT';
-$lang->install->cronList['moduleName=backup&methodName=backup']       = 'Backup data and attachment';
+$lang->install->cronList['moduleName=backup&methodName=backup']       = 'Backup';
 $lang->install->cronList['moduleName=mail&methodName=asyncSend']      = 'Asynchronous sending';
 
 $lang->install->success  = "Installed!";
@@ -170,8 +170,8 @@ $lang->install->chanzhi->name = 'Changer CMS';
 $lang->install->chanzhi->desc = <<<EOD
 <ul>
   <li>Professional Content Management Sysytem</li>
-  <li>Rich functionality and simple to operate</li>
-  <li>Aims at detaild for SEO</li>
+  <li>Rich features and simple to apply</li>
+  <li>Aims at details for SEO</li>
   <li>Open source and free</li>
 </ul>
 EOD;
@@ -181,7 +181,7 @@ $lang->install->ranzhi->desc = <<<EOD
 <ul>
   <li>Customer Management and Order Tracking</li>
   <li>Project/Task and Announcement/Document</li>
-  <li>Income/Expenditur and Account In/Out </li>
+  <li>Income/Expense and Account In/Out </li>
   <li>Forum/Blog and Dynamic/News</li>
 </ul>
 EOD;
@@ -200,8 +200,8 @@ $lang->install->xuanxuan->name = 'Xuanxuan IM';
 $lang->install->xuanxuan->desc = <<<EOD
 <ul>
   <li>lightweight and easy to deploy</li>
-  <li>truly complete cross platform solutions</li>
-  <li>Based on Html5, the beautiful</li>
-  <li>Open architecture</li>
+  <li>complete cross platform solutions</li>
+  <li>Based on Html5 and beautiful</li>
+  <li>Open framework</li>
 </ul>
 EOD;

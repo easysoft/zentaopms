@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('viewType', $viewType);?>
 <?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and (!empty($root->type) && $root->type != 'normal')) ? true : false;?>
-<?php $name = $viewType == 'line' ? $lang->tree->line : $lang->tree->name;?>
+<?php $name = $viewType == 'line' ? $lang->tree->line : ($viewType == 'doc' ? $lang->tree->cate : $lang->tree->name);?>
 <div id='featurebar'>
   <div class='heading'><?php echo $viewType == 'line' ? $lang->tree->manageLine : $lang->tree->common;?></div>
 </div>

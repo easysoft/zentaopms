@@ -39,9 +39,9 @@ $lang->report->bugCreate        = 'Bugs';
 $lang->report->bugAssign        = 'Bug Assignment';
 $lang->report->workload         = 'Workload';
 $lang->report->workloadAB       = 'Workload';
-$lang->report->bugOpenedDate    = 'Bug Open on';
-$lang->report->taskAssignedDate = 'Time Frame';
-$lang->report->beginAndEnd      = 'Date';
+$lang->report->bugOpenedDate    = 'Open on';
+$lang->report->taskAssignedDate = 'Duration';
+$lang->report->beginAndEnd      = 'Duration';
 $lang->report->dept             = 'Dept';
 $lang->report->deviationChart   = $lang->projectCommon . ' Deviation Chart';
 
@@ -65,12 +65,12 @@ $lang->report->deviationRate = 'Deviation Rate';
 $lang->report->total         = 'Total';
 $lang->report->to            = 'to';
 $lang->report->taskTotal     = "Total Tasks";
-$lang->report->manhourTotal  = "Total Man-Hour";
+$lang->report->manhourTotal  = "Total Hours";
 $lang->report->validRate     = "Efficiency";
 $lang->report->validRateTips = "Solution is fixed or postponed / status is resolved or closed.";
 $lang->report->unplanned     = 'Unplanned';
-$lang->report->workday       = 'Man-Hour/Day';
-$lang->report->diffDays      = 'Work Days';
+$lang->report->workday       = 'Hours/Day';
+$lang->report->diffDays      = 'Man-Day';
 
 $lang->report->conditions    = 'Filter by:';
 $lang->report->closedProduct = 'Closed ' . $lang->productCommon;
@@ -91,4 +91,4 @@ $lang->report->mailTitle->task     = " Task(%s),";
 $lang->report->mailTitle->todo     = " To-Do(%s),";
 $lang->report->mailTitle->testTask = " Test Task(%s),";
 
-$lang->report->proVersion = '<a href="http://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
+$lang->report->proVersion = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';

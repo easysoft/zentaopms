@@ -184,6 +184,21 @@
                     $misc       = "onclick=\"setFormAction('$actionLink')\"";
                     echo '<li>' . html::a('#', $lang->close, '', $misc) . '</li>';
                 }
+
+                if(common::hasPriv('story', 'batchChangeStage'))
+                {
+                    echo "<li class='dropdown-submenu'>";
+                    echo html::a('javascript:;', $lang->story->stageAB, '', "id='stageItem'");
+                    echo "<ul class='dropdown-menu'>";
+                    $lang->story->stageList[''] = $lang->null;
+                    foreach($lang->story->stageList as $key => $stage)
+                    {
+                        $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
+                        echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
+                    }
+                    echo '</ul></li>';
+                }
+
                 if(common::hasPriv('project', 'batchUnlinkStory'))
                 {
                     $actionLink = $this->createLink('project', 'batchUnlinkStory', "projectID=$project->id");

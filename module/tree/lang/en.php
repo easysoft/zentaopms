@@ -45,6 +45,7 @@ $lang->tree->repeatName    = 'The name "%s" has existed!';
 
 $lang->tree->name       = 'Name';
 $lang->tree->line       = 'Product Line';
+$lang->tree->cate       = 'Category Name';
 $lang->tree->root       = 'Root';
 $lang->tree->branch     = 'Platform/Branch';
 $lang->tree->path       = 'Path';

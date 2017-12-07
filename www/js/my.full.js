@@ -1960,8 +1960,11 @@ $(document).ready(function()
         {
             if($(this).attr('checked'))
             {
-                var checkedVal = parseInt($(this).val());
-                if(checkedVal != 0) checkeds = checkeds + checkedVal + ',';
+                if(!isNaN($(this).val()))
+                {
+                    var checkedVal = parseInt($(this).val());
+                    if(checkedVal != 0) checkeds = checkeds + checkedVal + ',';
+                }
             }
         })
         if(checkeds != '') checkeds = checkeds.substring(0, checkeds.length - 1);
