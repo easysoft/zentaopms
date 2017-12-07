@@ -23,7 +23,7 @@
     <table class='table table-form'>
       <tr>
         <th class='w-80px'><?php echo $lang->doc->libType?></th>
-        <td><?php echo html::select('libType', $lang->doc->libTypeList, $type, "class='form-control'")?></td>
+        <td><?php echo html::select('libType', $libTypeList, $type, "class='form-control'")?></td>
       </tr>
       <tr class='product'>
         <th><?php echo $lang->doc->product?></th>
