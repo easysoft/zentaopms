@@ -1,8 +1,8 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php js::set('fileID', $file->id);?>
 <style>
-#imageFile{text-align: center;}
-#imageFile img{margin: 10px auto;}
+#imageFile{text-align: center;padding:10px;}
+#imageFile img{max-width:100%;}
 #txtFile{padding: 5px 10px;}
 #txtFile div{overflow-x: auto;}
 #titlebar span{float: right; padding-right: 25px;}
