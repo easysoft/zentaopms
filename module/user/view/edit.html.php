@@ -39,10 +39,12 @@
         <td colspan='3'><?php echo html::select('groups[]', $groups, $userGroups, 'size=3 multiple=multiple class="form-control chosen"');?></td>
       </tr>
       <tr>
+        <!--
         <th><?php echo $lang->user->join;?></th>
         <td><?php echo html::input('join', $user->join, "class='form-control form-date'");?></td>
+        -->
         <th><?php echo $lang->user->gender;?></th>
-        <td><?php echo html::radio('gender', (array)$lang->user->genderList, $user->gender);?></td>
+        <td colspan="3"><?php echo html::radio('gender', (array)$lang->user->genderList, $user->gender);?></td>
       </tr>
     </table>
     <table align='center' class='table table-form'>

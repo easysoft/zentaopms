@@ -46,7 +46,6 @@ js::set('confirmDelete', $lang->user->confirmDelete);
         <th><?php common::printOrderLink('gender',   $orderBy, $vars, $lang->user->gender);?></th>
         <th><?php common::printOrderLink('phone',    $orderBy, $vars, $lang->user->phone);?></th>
         <th><?php common::printOrderLink('qq',       $orderBy, $vars, $lang->user->qq);?></th>
-        <th><?php common::printOrderLink('join',     $orderBy, $vars, $lang->user->join);?></th>
         <th><?php common::printOrderLink('last',     $orderBy, $vars, $lang->user->last);?></th>
         <th><?php common::printOrderLink('visits',   $orderBy, $vars, $lang->user->visits);?></th>
         <th class='w-90px'><?php echo $lang->actions;?></th>
@@ -72,7 +71,6 @@ js::set('confirmDelete', $lang->user->confirmDelete);
         <td><?php if(isset($lang->user->genderList[$user->gender])) echo $lang->user->genderList[$user->gender];?></td>
         <td><?php echo $user->phone;?></td>
         <td><?php if($user->qq) echo html::a("tencent://message/?uin=$user->qq", $user->qq);?></td>
-        <td><?php echo $user->join;?></td>
         <td><?php if($user->last) echo date('Y-m-d', $user->last);?></td>
         <td><?php echo $user->visits;?></td>
         <td class='text-left'>
@@ -94,7 +92,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
       </tbody>
       <tfoot>
       <tr>
-        <td colspan='12'>
+        <td colspan='11'>
         <div class='table-actions clearfix'>
         <?php
         if($canBatchEdit) echo html::selectButton();
