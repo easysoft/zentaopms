@@ -16,12 +16,12 @@
     <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>
     <strong>
       <small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small>
-      <?php echo $storyID ? $lang->story->subdivide : $lang->story->batchCreate;?>
+      <?php echo $storyID ? $lang->story->subdivide : $lang->story->batchTitle;?>
       <?php if($product->type !== 'normal') echo '<span class="label label-info">' . $branches[$branch] . '</span>';?>
     </strong>
     <div class='actions'>
-      <?php if(common::hasPriv('file', 'uploadImages')) echo html::a($this->createLink('file', 'uploadImages', 'module=story&params=' . helper::safe64Encode("productID=$productID&moduleID=$moduleID")), $lang->uploadImages, '', "data-toggle='modal' data-type='iframe' class='btn' data-width='70%'")?>
-      <?php echo html::commonButton($lang->pasteText, "data-toggle='myModal'")?>
+      <?php if(common::hasPriv('file', 'uploadImages')) echo html::a($this->createLink('file', 'uploadImages', 'module=story&params=' . helper::safe64Encode("productID=$productID&moduleID=$moduleID")), $lang->uploadImages, '', "data-toggle='modal' data-type='iframe' class='btn btn-primary' data-width='70%'")?>
+      <?php echo html::commonButton($lang->pasteText, "data-toggle='myModal'", 'btn btn-primary')?>
       <button type="button" class="btn btn-default" data-toggle="customModal"><i class='icon icon-cog'></i> </button>
     </div>
   </div>

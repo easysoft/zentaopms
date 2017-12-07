@@ -18,7 +18,7 @@
     <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->task->batchCreate . $lang->task->common;?></strong>
     <span><small><a href='javascript:toggleZeroTaskStory();' id='zeroTaskStory'><?php echo $lang->story->zeroTask;?><i class='icon icon-remove'></i></a></small></span>
     <div class='actions'>
-      <?php echo html::commonButton($lang->pasteText, "data-toggle='myModal'")?>
+      <?php echo html::commonButton($lang->pasteText, "data-toggle='myModal'", 'btn btn-primary')?>
       <button type="button" class="btn btn-default" data-toggle="customModal"><i class='icon icon-cog'></i> </button>
     </div>
   </div>
