@@ -56,16 +56,16 @@ $lang->product->errorNoProduct = "{$lang->productCommon} is not created yet!";
 $lang->product->accessDenied   = "You have no access to {$lang->productCommon}.";
 
 $lang->product->id        = 'ID';
-$lang->product->name      = "{$lang->productCommon} Name";
-$lang->product->code      = "{$lang->productCommon} Code";
+$lang->product->name      = "Name";
+$lang->product->code      = "Alias";
 $lang->product->line      = 'Product Line';
 $lang->product->order     = 'Sort';
-$lang->product->type      = "{$lang->productCommon} Type";
+$lang->product->type      = "Type";
 $lang->product->status    = 'Status';
 $lang->product->desc      = 'Description';
-$lang->product->PO        = "{$lang->productCommon} owner";
-$lang->product->QD        = 'Quality Director';
-$lang->product->RD        = 'Release Director';
+$lang->product->PO        = "PO";
+$lang->product->QD        = 'QD';
+$lang->product->RD        = 'RD';
 $lang->product->acl       = 'Acceptance';
 $lang->product->whitelist = 'Whitelist';
 $lang->product->branch    = '%s';
@@ -93,8 +93,8 @@ $lang->product->typeList['branch']   = 'Multi Branch';
 $lang->product->typeList['platform'] = 'Multi Platform';
 
 $lang->product->typeTips = array();
-$lang->product->typeTips['branch']   = '(Generally used to divide the custom content of different users)';
-$lang->product->typeTips['platform'] = '(Generally used to divide ios, Andrews, pc and so on)';
+$lang->product->typeTips['branch']   = '(Divide the custom content.)';
+$lang->product->typeTips['platform'] = '(Divide IOS, Android, PC, etc.)';
 
 $lang->product->branchName['normal']   = '';
 $lang->product->branchName['branch']   = 'Branch';
@@ -104,9 +104,9 @@ $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = 'Normal';
 $lang->product->statusList['closed'] = 'Closed';
 
-$lang->product->aclList['open']    = "Default({$lang->productCommon} with View permission can access to it)";
-$lang->product->aclList['private'] = "Private{$lang->productCommon}({$lang->projectCommon}team members only)";
-$lang->product->aclList['custom']  = 'Custom(Team members and Whitelisr members have access to it.)';
+$lang->product->aclList['open']    = "Default (User with {$lang->productCommon} View privilege have access to it)";
+$lang->product->aclList['private'] = "Private {$lang->productCommon} ({$lang->projectCommon} team members only)";
+$lang->product->aclList['custom']  = 'Custom (Team members and Whitelist members have access to it.)';
 
 $lang->product->storySummary = " <strong>%s</strong> Story(ies), <strong>%s</strong> hour(s) estimated, case coverage is <strong>%s</strong> on this page.";
 $lang->product->noMatched    = '"%s" cannot be found.' . $lang->productCommon;
