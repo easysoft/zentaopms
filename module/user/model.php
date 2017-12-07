@@ -468,6 +468,18 @@ class userModel extends model
             $users[$id]['dept']     = $data->dept[$id] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $data->dept[$id];
             $users[$id]['role']     = $data->role[$id] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : 0) : $data->role[$id];
 
+            if(!empty($this->config->user->batchAppendFields))
+            {
+                $appendFields = explode(',', $this->config->user->batchAppendFields);
+                foreach($appendFields as $appendField)
+                {
+                    if(empty($appendField)) continue;
+                    if(!isset($data->$appendField)) continue;
+                    $fieldList = $data->$appendField;
+                    $users[$id][$appendField] = $fieldList[$id];
+                }
+            }
+
             if(isset($accountGroup[$account]) and count($accountGroup[$account]) > 1) die(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
             if(in_array($account, $accounts)) die(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
             if(!validater::checkAccount($users[$id]['account'])) die(js::error(sprintf($this->lang->user->error->account, $id)));

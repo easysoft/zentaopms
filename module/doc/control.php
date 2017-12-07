@@ -194,12 +194,19 @@ class doc extends control
                 echo js::error(dao::getError());
             }
         }
-        $this->view->groups   = $this->loadModel('group')->getPairs();
-        $this->view->users    = $this->user->getPairs('nocode');
-        $this->view->products = $this->product->getPairs('nocode');
-        $this->view->projects = $this->project->getPairs('nocode');
-        $this->view->type     = $type;
-        $this->view->objectID = $objectID;
+        $libTypeList = $this->lang->doc->libTypeList;
+        $products    = $this->product->getPairs('nocode');
+        $projects    = $this->project->getPairs('nocode');
+        if(empty($products)) unset($libTypeList['product']);
+        if(empty($projects)) unset($libTypeList['project']);
+
+        $this->view->groups      = $this->loadModel('group')->getPairs();
+        $this->view->users       = $this->user->getPairs('nocode');
+        $this->view->products    = $products;
+        $this->view->projects    = $projects;
+        $this->view->type        = $type;
+        $this->view->libTypeList = $libTypeList;
+        $this->view->objectID    = $objectID;
         die($this->display());
     }
 

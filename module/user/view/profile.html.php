@@ -74,10 +74,12 @@
       <th><?php echo $lang->user->email;?></th>
       <td><?php echo $user->email;?></td>
     </tr>
+    <!--
     <tr>
       <th><?php echo $lang->user->join;?></th>
       <td><?php echo $user->join;?></td>
     </tr>
+    -->
     <tr>
       <th><?php echo $lang->user->visits;?></th>
       <td><?php echo $user->visits;?></td>

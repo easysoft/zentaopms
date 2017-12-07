@@ -484,11 +484,11 @@ $lang->noticePasteImg     = "Paste image here.";
 if(!defined('DT_DATETIME1')) define('DT_DATETIME1',  'Y-m-d H:i:s');
 if(!defined('DT_DATETIME2')) define('DT_DATETIME2',  'y-m-d H:i');
 if(!defined('DT_MONTHTIME1'))define('DT_MONTHTIME1', 'n/d H:i');
-if(!defined('DT_MONTHTIME2'))define('DT_MONTHTIME2', 'n月d日 H:i');
+if(!defined('DT_MONTHTIME2'))define('DT_MONTHTIME2', 'n/d H:i');
 if(!defined('DT_DATE1'))     define('DT_DATE1',     'Y-m-d');
 if(!defined('DT_DATE2'))     define('DT_DATE2',     'Ymd');
-if(!defined('DT_DATE3'))     define('DT_DATE3',     'Y年m月d日');
-if(!defined('DT_DATE4'))     define('DT_DATE4',     'n月j日');
+if(!defined('DT_DATE3'))     define('DT_DATE3',     'Y/m/d');
+if(!defined('DT_DATE4'))     define('DT_DATE4',     'n/j');
 if(!defined('DT_TIME1'))     define('DT_TIME1',     'H:i:s');
 if(!defined('DT_TIME2'))     define('DT_TIME2',     'H:i');
 

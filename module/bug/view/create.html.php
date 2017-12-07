@@ -44,7 +44,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
         </td>
         <td>
           <div class='input-group' id='moduleIdBox'>
-            <span class="input-group-addon"><?php echo $lang->bug->module?></span>
+            <span class="input-group-addon w-90px"><?php echo $lang->bug->module?></span>
             <?php
             echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()' class='form-control chosen'");
             if(count($moduleOptionMenu) == 1)
@@ -92,7 +92,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
         <?php endif;?>
         <td>
           <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->bug->openedBuild?></span>
+            <span class='input-group-addon w-90px'><?php echo $lang->bug->openedBuild?></span>
             <span id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?></span>
             <span class='input-group-addon fix-border' id='buildBoxActions'></span>
             <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn btn-default' data-toggle='tooltip' onclick='loadAllBuilds()'")?></span>
@@ -111,7 +111,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
         <?php if($showDeadline):?>
         <td>
           <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->bug->deadline?></span>
+            <span class='input-group-addon w-90px'><?php echo $lang->bug->deadline?></span>
             <span><?php echo html::input('deadline', $deadline, "class='form-control form-date'");?></span>
           </div>
         </td>
@@ -248,7 +248,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
         <td>
           <div class='input-group'>
             <?php if($showStory):?>
-            <span class='input-group-addon'><?php echo $lang->bug->task?></span>
+            <span class='input-group-addon w-90px'><?php echo $lang->bug->task?></span>
             <?php endif;?>
             <span id='taskIdBox'> <?php echo html::select('task', '', $taskID, "class='form-control chosen'") . html::hidden('oldTaskID', $taskID);?></span>
           </div>
@@ -278,7 +278,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
         <td <?php echo $colspan?>>
           <div class='input-group'>
             <?php if($showMailto):?>
-            <span class='input-group-addon' id='keywordsAddonLabel'><?php echo $lang->bug->keywords;?></span>
+            <span class='input-group-addon w-90px' id='keywordsAddonLabel'><?php echo $lang->bug->keywords;?></span>
             <?php endif;?>
             <?php echo html::input('keywords', $keywords, "class='form-control'");?>
           </div>

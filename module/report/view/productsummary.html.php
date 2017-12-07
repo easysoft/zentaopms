@@ -34,11 +34,11 @@
       <th><?php echo $lang->productplan->common;?></th>
       <th width="150"><?php echo $lang->productplan->begin;?></th>
       <th width="150"><?php echo $lang->productplan->end;?></th>
-      <th class="w-50px"><?php echo $lang->story->statusList['draft'];?></th>
-      <th class="w-50px"><?php echo $lang->story->statusList['active'];?></th>
-      <th class="w-50px"><?php echo $lang->story->statusList['changed'];?></th>
-      <th class="w-50px"><?php echo $lang->story->statusList['closed'];?></th>
-      <th class="w-50px"><?php echo $lang->report->total;?></th>
+      <th class="w-70px"><?php echo $lang->story->statusList['draft'];?></th>
+      <th class="w-70px"><?php echo $lang->story->statusList['active'];?></th>
+      <th class="w-70px"><?php echo $lang->story->statusList['changed'];?></th>
+      <th class="w-70px"><?php echo $lang->story->statusList['closed'];?></th>
+      <th class="w-70px"><?php echo $lang->report->total;?></th>
     </tr>
     </thead>
     <tbody>

@@ -69,10 +69,12 @@
         <th><?php echo $lang->user->commiter;?></th>
         <td><?php echo html::input('commiter', '', "class='form-control' autocomplete='off'");?></td>
       </tr>
+      <!--
       <tr>
         <th><?php echo $lang->user->join;?></th>
         <td><?php echo html::input('join', '', "class='form-control form-date'");?></td>
       </tr>
+      -->
       <tr>
         <th><?php echo $lang->user->gender;?></th>
         <td><?php echo html::radio('gender', (array)$lang->user->genderList, 'm');?></td>

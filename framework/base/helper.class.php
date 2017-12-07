@@ -186,6 +186,7 @@ class baseHelper
      */
     static public function import($file)
     {
+        $file = realpath($file);
         if(!is_file($file)) return false;
 
         static $includedFiles = array();
