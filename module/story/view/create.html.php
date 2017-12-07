@@ -35,7 +35,7 @@
         </td>
         <td>
           <div class='input-group' id='moduleIdBox'>
-          <span class='input-group-addon'><?php echo $lang->story->module;?></span>
+          <span class='input-group-addon w-80px'><?php echo $lang->story->module;?></span>
           <?php 
           echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");
           if(count($moduleOptionMenu) == 1)
@@ -70,7 +70,7 @@
         <?php if(strpos(",$showFields,", ',source,') !== false):?>
         <td>
           <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->story->source?></span>
+            <span class='input-group-addon w-60px'><?php echo $lang->story->source?></span>
             <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control'");?>
             <span class='input-group-addon fix-border'><?php echo $lang->story->sourceNote?></span>
             <?php echo html::input('sourceNote', $sourceNote, "class='form-control' autocomplete='off'");?>
