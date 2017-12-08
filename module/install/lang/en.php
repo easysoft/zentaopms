@@ -31,7 +31,7 @@ $lang->install->links = <<<EOT
 ZenTao PMS is developed by <strong><a href='http://www.cnezsoft.com' target='_blank' class='text-danger'>Qingdao Nature Easy Soft Co., LTD</a></strong>.
 Officila Wensite <a href='http://www.zentao.net' target='_blank'>http://www.zentao.net</a>
 Technical Support <a href='http://www.zentao.net/ask/' target='_blank'>http://www.zentao.net/ask/</a>
-新浪微博：<a href='http://weibo.com/easysoft' target='_blank'>http://weibo.com/easysoft</a>
+Weibo：<a href='http://weibo.com/easysoft' target='_blank'>http://weibo.com/easysoft</a>
 
 You are installing ZenTao <strong class='text-danger'>%s</strong> Version.
 EOT;
@@ -160,13 +160,14 @@ $lang->install->login    = 'Login ZenTao';
 $lang->install->register = 'Register in ZenTao';
 
 $lang->install->joinZentao = <<<EOT
-<p>Tou have installed ZenTao %s.<strong class='text-danger'> Please delete install.php asap</strong>.</p><p>Note: In order to get the latest news of ZenTao, please register in ZenTao(<a href='http://www.zentao.net' class='alert-link' target='_blank'>www.zentao.net</a>).</p>
-
+<p>Tou have installed ZenTao %s.<strong class='text-danger'> Please delete install.php asap</strong>.</p><p>Note: In order to get the latest news of ZenTao, please register in ZenTao(<a href='http://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
 EOT;
 
-$lang->install->promotion = "Products of Nature Easy Soft:";
-$lang->install->chanzhi   = new stdclass();
-$lang->install->chanzhi->name = 'Changer CMS';
+$lang->install->promotion     = "Products of Nature Easy Soft:";
+$lang->install->chanzhi       = new stdclass();
+$lang->install->chanzhi->name = 'Zsite CMS';
+$lang->install->chanzhi->logo = $defaultTheme . 'images/main/chanzhi_en.png';
+$lang->install->chanzhi->url  = 'http://www.zsite.net';
 $lang->install->chanzhi->desc = <<<EOD
 <ul>
   <li>Professional Content Management Sysytem</li>
@@ -175,8 +176,11 @@ $lang->install->chanzhi->desc = <<<EOD
   <li>Open source and free</li>
 </ul>
 EOD;
+
 $lang->install->ranzhi = new stdclass();
 $lang->install->ranzhi->name = 'Ranger Collaborative System';
+$lang->install->ranzhi->logo = $defaultTheme . 'images/main/ranzhi.png';
+$lang->install->ranzhi->url  = 'http://www.ranzhi.org';
 $lang->install->ranzhi->desc = <<<EOD
 <ul>
   <li>Customer Management and Order Tracking</li>
@@ -185,6 +189,7 @@ $lang->install->ranzhi->desc = <<<EOD
   <li>Forum/Blog and Dynamic/News</li>
 </ul>
 EOD;
+
 $lang->install->zdoo = new stdclass();
 $lang->install->zdoo->name = 'Integrated Cloud Platform';
 $lang->install->zdoo->desc = <<<EOD
@@ -197,6 +202,8 @@ $lang->install->zdoo->desc = <<<EOD
 EOD;
 $lang->install->xuanxuan = new stdclass();
 $lang->install->xuanxuan->name = 'Xuanxuan IM';
+$lang->install->xuanxuan->logo = $defaultTheme . 'images/main/xuanxuan.png';
+$lang->install->xuanxuan->url  = 'http://www.xuan.im';
 $lang->install->xuanxuan->desc = <<<EOD
 <ul>
   <li>lightweight and easy to deploy</li>

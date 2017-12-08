@@ -161,12 +161,13 @@ $lang->install->register = '禅道社区注册';
 
 $lang->install->joinZentao = <<<EOT
 <p>您已经成功安装禅道管理系统%s，<strong class='text-danger'>请及时删除install.php</strong>。</p><p>友情提示：为了您及时获得禅道的最新动态，请在禅道社区(<a href='http://www.zentao.net' class='alert-link' target='_blank'>www.zentao.net</a>)进行登记。</p>
-
 EOT;
 
-$lang->install->promotion = "为您推荐易软天创旗下其他产品：";
-$lang->install->chanzhi   = new stdclass();
+$lang->install->promotion     = "为您推荐易软天创旗下其他产品：";
+$lang->install->chanzhi       = new stdclass();
 $lang->install->chanzhi->name = '蝉知企业门户系统';
+$lang->install->chanzhi->logo = $defaultTheme . 'images/main/chanzhi.png';
+$lang->install->chanzhi->url  = 'http://www.chanzhi.org';
 $lang->install->chanzhi->desc = <<<EOD
 <ul>
   <li>专业的企业营销门户系统</li>
@@ -175,8 +176,11 @@ $lang->install->chanzhi->desc = <<<EOD
   <li>开源免费，不限商用！</li>
 </ul>
 EOD;
+
 $lang->install->ranzhi = new stdclass();
 $lang->install->ranzhi->name = '然之协同管理系统';
+$lang->install->ranzhi->logo = $defaultTheme . 'images/main/ranzhi.png';
+$lang->install->ranzhi->url  = 'http://www.ranzhi.org';
 $lang->install->ranzhi->desc = <<<EOD
 <ul>
   <li>客户管理，订单跟踪</li>
@@ -185,6 +189,7 @@ $lang->install->ranzhi->desc = <<<EOD
   <li>论坛博客，动态消息</li>
 </ul>
 EOD;
+
 $lang->install->zdoo = new stdclass();
 $lang->install->zdoo->name = '可深度定制的云端一体化协作平台';
 $lang->install->zdoo->desc = <<<EOD
@@ -195,8 +200,11 @@ $lang->install->zdoo->desc = <<<EOD
   <li>提供一体化管理平台</li>
 </ul>
 EOD;
+
 $lang->install->xuanxuan = new stdclass();
 $lang->install->xuanxuan->name = '喧喧即时聊天软件';
+$lang->install->xuanxuan->logo = $defaultTheme . 'images/main/xuanxuan.png';
+$lang->install->xuanxuan->url  = 'http://www.xuan.im';
 $lang->install->xuanxuan->desc = <<<EOD
 <ul>
   <li>轻：轻量级架构，容易部署</li>

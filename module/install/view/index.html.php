@@ -41,8 +41,8 @@
             <h5><?php echo $lang->install->promotion?></h5>
             <div class='row'>
               <div class='col-md-4'>
-                <a class="card ad" href="http://www.chanzhi.org" target="_blank">
-                  <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/chanzhi.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/chanzhi.png'?>" alt=""></div>
+                <a class="card ad" href="<?php echo $lang->install->chanzhi->url;?>" target="_blank">
+                  <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/chanzhi.png'?>)"><img src="<?php echo $lang->install->chanzhi->logo;?>" alt=""></div>
                   <div class="card-reveal">
                     <h5 class="card-heading"><?php echo $lang->install->chanzhi->name?></h5>
                     <div class="card-content"><?php echo $lang->install->chanzhi->desc?></div>
@@ -50,8 +50,8 @@
                 </a>
               </div>
               <div class='col-md-4'>
-                <a class="card ad" href="http://www.ranzhico.com" target="_blank">
-                  <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/ranzhi.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/ranzhi.png'?>" alt=""></div>
+                <a class="card ad" href="<?php echo $lang->install->ranzhi->url;?>" target="_blank">
+                  <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/ranzhi.png'?>)"><img src="<?php echo $lang->install->ranzhi->logo;?>" alt=""></div>
                   <div class="card-reveal">
                     <h5 class="card-heading"><?php echo $lang->install->ranzhi->name?></h5>
                     <div class="card-content"><?php echo $lang->install->ranzhi->desc?></div>
@@ -59,13 +59,12 @@
                 </a>
               </div>
               <div class='col-md-4'>
-                <a class="card ad" href="http://www.xuan.im" target="_blank">
-                  <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/xuanxuan.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/xuanxuan.png'?>" alt=""></div>
+                <a class="card ad" href="<?php echo $lang->install->xuanxuan->logo;?>" target="_blank">
+                  <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/xuanxuan.png'?>)"><img src="<?php echo $lang->install->xuanxuan->logo;?>" alt=""></div>
                   <div class="card-reveal">
                     <h5 class="card-heading"><?php echo $lang->install->xuanxuan->name?></h5>
                     <div class="card-content"><?php echo $lang->install->xuanxuan->desc?></div>
                   </div>
-
                 </a>
               </div>
             </div>
