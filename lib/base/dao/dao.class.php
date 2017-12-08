@@ -1771,7 +1771,7 @@ class baseSQL
         }
 
         if(!$this->inMark) $this->sql .= ' ' . DAO::WHERE ." $condition ";
-        if($this->inMark) $this->sql .= " $condition ";
+        if($this->inMark)  $this->sql .= " $condition ";
         return $this;
     } 
 

@@ -139,8 +139,9 @@ $lang->project->storyKanban      = 'Story Kanban';
 $lang->project->storySort        = 'Story Sort';
 
 /* 分组浏览。*/
-$lang->project->allTasks             = 'All';
-$lang->project->assignedToMe         = 'Assigned to Me';
+$lang->project->allTasks     = 'All';
+$lang->project->assignedToMe = 'Assigned to Me';
+$lang->project->myInvolved   = 'My Involved';
 
 $lang->project->statusSelects['']             = 'More';
 $lang->project->statusSelects['wait']         = 'Wait';
@@ -275,6 +276,7 @@ $lang->printKanban->typeList['increment'] = 'Increment';
 $lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;
 $lang->project->featureBar['task']['all']          = $lang->project->allTasks;
 $lang->project->featureBar['task']['assignedtome'] = $lang->project->assignedToMe;
+$lang->project->featureBar['task']['myinvolved']   = $lang->project->myInvolved;
 $lang->project->featureBar['task']['delayed']      = 'Delayed';
 $lang->project->featureBar['task']['needconfirm']  = 'Story Changed';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
