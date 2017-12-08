@@ -82,6 +82,7 @@ $lang->product->willClose    = 'To be Closed';
 $lang->product->closedStory  = 'Closed';
 $lang->product->unclosed     = 'Open';
 $lang->product->unplan       = 'No plan';
+$lang->product->my           = 'My';
 
 $lang->product->allStory    = 'All Stories';
 $lang->product->allProduct  = 'All' . $lang->productCommon;
@@ -111,12 +112,14 @@ $lang->product->aclList['custom']  = 'Custom (Team members and Whitelist members
 $lang->product->storySummary = " <strong>%s</strong> Story(ies), <strong>%s</strong> hour(s) estimated, case coverage is <strong>%s</strong> on this page.";
 $lang->product->noMatched    = '"%s" cannot be found.' . $lang->productCommon;
 
+$lang->product->mySelects['assignedtome'] = $lang->product->assignedToMe;
+$lang->product->mySelects['openedbyme']   = $lang->product->openedByMe;
+$lang->product->mySelects['resolvedbyme'] = $lang->product->reviewedByMe;
+
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
 $lang->product->featureBar['browse']['unplan']       = $lang->product->unplan;
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
-$lang->product->featureBar['browse']['assignedtome'] = $lang->product->assignedToMe;
-$lang->product->featureBar['browse']['openedbyme']   = $lang->product->openedByMe;
-$lang->product->featureBar['browse']['reviewedbyme'] = $lang->product->reviewedByMe;
+$lang->product->featureBar['browse']['my']           = $lang->product->my;
 $lang->product->featureBar['browse']['closedbyme']   = $lang->product->closedByMe;
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
 $lang->product->featureBar['browse']['activestory']  = $lang->product->activeStory;

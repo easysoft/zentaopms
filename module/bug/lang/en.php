@@ -114,6 +114,7 @@ $lang->bug->allBugs        = 'All';
 $lang->bug->byQuery        = 'Search';
 $lang->bug->needConfirm    = 'Story Change';
 $lang->bug->allProduct     = 'All' . $lang->productCommon;
+$lang->bug->my             = 'My';
 
 $lang->bug->ditto       = 'Ditto';
 $lang->bug->dittoNotice = 'This bug does not relate to the same product as the last one!';
@@ -360,11 +361,13 @@ $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = 'Choose Build...';
 $lang->bug->placeholder->newBuildName = 'The name of new build';
 
+$lang->bug->mySelects['assigntome']   = $lang->bug->assignToMe;
+$lang->bug->mySelects['openedbyme']   = $lang->bug->openedByMe;
+$lang->bug->mySelects['resolvedbyme'] = $lang->bug->resolvedByMe;
+
 $lang->bug->featureBar['browse']['unclosed']      = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['all']           = $lang->bug->allBugs;
-$lang->bug->featureBar['browse']['assigntome']    = $lang->bug->assignToMe;
-$lang->bug->featureBar['browse']['openedbyme']    = $lang->bug->openedByMe;
-$lang->bug->featureBar['browse']['resolvedbyme']  = $lang->bug->resolvedByMe;
+$lang->bug->featureBar['browse']['my']            = $lang->bug->my;
 $lang->bug->featureBar['browse']['unconfirmed']   = $lang->bug->confirmedList[0];
 $lang->bug->featureBar['browse']['assigntonull']  = $lang->bug->assignToNull;
 $lang->bug->featureBar['browse']['unresolved']    = $lang->bug->unResolved;

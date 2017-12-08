@@ -15,6 +15,7 @@
 <?php js::set('browseType', $browseType);?>
 <?php js::set('productID', $productID);?>
 <?php js::set('branch', $branch);?>
+<?php $currentBrowseType = isset($lang->product->mySelects[$browseType]) && in_array($browseType, array_keys($lang->product->mySelects)) ? $browseType : '';?>
 <div id='featurebar'>
   <ul class='nav'>
     <li>
@@ -31,11 +32,22 @@
     </li>
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php if(isset($menuItem->hidden)) continue;?>
-    <?php if(strpos($menuItem->name, 'QUERY') === 0):?>
-    <?php $queryID = (int)substr($menuItem->name, 5);?>
-    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $menuItem->text);?></li>
+    <?php $browseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;?>
+    <?php $param = strpos($menuItem->name, 'QUERY') === 0 ? '&param=' . (int)substr($menuItem->name, 5) : '';?>
+    <?php if($menuItem->name == 'my'):?>
+    <?php
+        echo "<li id='statusTab' class='dropdown " . (!empty($currentBrowseType) ? 'active' : '') . "'>";
+        echo html::a('javascript:;', $menuItem->text . " <span class='caret'></span>", '', "data-toggle='dropdown'");
+        echo "<ul class='dropdown-menu'>";
+        foreach ($lang->product->mySelects as $key => $value)
+        {
+            echo '<li' . ($key == $currentBrowseType ? " class='active'" : '') . '>';
+            echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$key" . $param), $value);
+        }
+        echo '</ul></li>';
+    ?>
     <?php else:?>
-    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuItem->name"), $menuItem->text);?></li>
+    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType" . $param), $menuItem->text);?></li>
     <?php endif;?>
     <?php endforeach;?>
     <li id='bysearchTab'><a href='javascript:;'><i class='icon-search icon'></i> <?php echo $lang->product->searchStory;?></a></li>

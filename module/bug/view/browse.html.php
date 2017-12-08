@@ -19,6 +19,7 @@ js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrows
 js::set('flow', $this->config->global->flow);
 js::set('productID', $productID);
 js::set('branch', $branch);
+$currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($browseType, array_keys($lang->bug->mySelects)) ? $browseType : '';
 ?>
 <?php if($this->config->global->flow == 'onlyTest'):?>
 <div id='featurebar'>
@@ -86,11 +87,22 @@ js::set('branch', $branch);
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php if(isset($menuItem->hidden)) continue;?>
     <?php if($this->config->global->flow == 'onlyTest' and $menuItem->name == 'needconfirm') continue;?>
-    <?php if(strpos($menuItem->name, 'QUERY') === 0):?>
-    <?php $queryID = (int)substr($menuItem->name, 5);?>
-    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $menuItem->text)?></li>
+    <?php $browseType = strpos($menuItem->name, 'QUERY' === 0) ? 'bySearch' : $menuItem->name;?>
+    <?php $param = strpos($menuItem->name, 'QUERY' === 0) ? (int)substr($menuItem->name, 5) : 0;?>
+    <?php if($menuItem->name == 'my'):?>
+    <?php
+        echo "<li id='statusTab' class='dropdown " . (!empty($currentBrowseType) ? 'active' : '') . "'>";
+        echo html::a('javascript:;', $menuItem->text . " <span class='caret'></span>", '', "data-toggle='dropdown'");
+        echo "<ul class='dropdown-menu'>";
+        foreach ($lang->bug->mySelects as $key => $value)
+        {
+            echo '<li' . ($key == $currentBrowseType ? " class='active'" : '') . '>';
+            echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$key&param=$param"), $value);
+        }
+        echo '</ul></li>';
+    ?>
     <?php else:?>
-    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType={$menuItem->name}&param=0"), $menuItem->text)?></li>
+    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$browseType&param=$param"), $menuItem->text)?></li>
     <?php endif;?>
     <?php endforeach;?>
     <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->bug->byQuery;?></a></li>
