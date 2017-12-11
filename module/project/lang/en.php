@@ -57,7 +57,7 @@ $lang->project->readjustTask  = 'Readjust task start date and deadline';
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';
-$lang->project->putoff   = 'Deplay';
+$lang->project->putoff   = 'Delay';
 $lang->project->suspend  = 'Suspend';
 $lang->project->close    = 'Close';
 $lang->project->export   = 'Export';
