@@ -166,7 +166,7 @@ EOT;
 $lang->install->promotion     = "为您推荐易软天创旗下其他产品：";
 $lang->install->chanzhi       = new stdclass();
 $lang->install->chanzhi->name = '蝉知企业门户系统';
-$lang->install->chanzhi->logo = $defaultTheme . 'images/main/chanzhi.png';
+$lang->install->chanzhi->logo = 'images/main/chanzhi.png';
 $lang->install->chanzhi->url  = 'http://www.chanzhi.org';
 $lang->install->chanzhi->desc = <<<EOD
 <ul>
@@ -179,7 +179,7 @@ EOD;
 
 $lang->install->ranzhi = new stdclass();
 $lang->install->ranzhi->name = '然之协同管理系统';
-$lang->install->ranzhi->logo = $defaultTheme . 'images/main/ranzhi.png';
+$lang->install->ranzhi->logo = 'images/main/ranzhi.png';
 $lang->install->ranzhi->url  = 'http://www.ranzhi.org';
 $lang->install->ranzhi->desc = <<<EOD
 <ul>
@@ -203,7 +203,7 @@ EOD;
 
 $lang->install->xuanxuan = new stdclass();
 $lang->install->xuanxuan->name = '喧喧即时聊天软件';
-$lang->install->xuanxuan->logo = $defaultTheme . 'images/main/xuanxuan.png';
+$lang->install->xuanxuan->logo = 'images/main/xuanxuan.png';
 $lang->install->xuanxuan->url  = 'http://www.xuan.im';
 $lang->install->xuanxuan->desc = <<<EOD
 <ul>

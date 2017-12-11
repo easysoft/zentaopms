@@ -166,7 +166,7 @@ EOT;
 $lang->install->promotion     = "Products of Nature Easy Soft:";
 $lang->install->chanzhi       = new stdclass();
 $lang->install->chanzhi->name = 'Zsite CMS';
-$lang->install->chanzhi->logo = $defaultTheme . 'images/main/chanzhi_en.png';
+$lang->install->chanzhi->logo = 'images/main/chanzhi_en.png';
 $lang->install->chanzhi->url  = 'http://www.zsite.net';
 $lang->install->chanzhi->desc = <<<EOD
 <ul>
@@ -179,7 +179,7 @@ EOD;
 
 $lang->install->ranzhi = new stdclass();
 $lang->install->ranzhi->name = 'Ranger Collaborative System';
-$lang->install->ranzhi->logo = $defaultTheme . 'images/main/ranzhi.png';
+$lang->install->ranzhi->logo = 'images/main/ranzhi.png';
 $lang->install->ranzhi->url  = 'http://www.ranzhi.org';
 $lang->install->ranzhi->desc = <<<EOD
 <ul>
@@ -202,7 +202,7 @@ $lang->install->zdoo->desc = <<<EOD
 EOD;
 $lang->install->xuanxuan = new stdclass();
 $lang->install->xuanxuan->name = 'Xuanxuan IM';
-$lang->install->xuanxuan->logo = $defaultTheme . 'images/main/xuanxuan.png';
+$lang->install->xuanxuan->logo = 'images/main/xuanxuan.png';
 $lang->install->xuanxuan->url  = 'http://www.xuan.im';
 $lang->install->xuanxuan->desc = <<<EOD
 <ul>
