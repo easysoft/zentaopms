@@ -163,6 +163,8 @@ $lang->install->joinZentao = <<<EOT
 <p>Tou have installed ZenTao %s.<strong class='text-danger'> Please delete install.php asap</strong>.</p><p>Note: In order to get the latest news of ZenTao, please register in ZenTao(<a href='http://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
 EOT;
 
+$lang->install->product = array('chanzhi', 'ranzhi');
+
 $lang->install->promotion     = "Products of Nature Easy Soft:";
 $lang->install->chanzhi       = new stdclass();
 $lang->install->chanzhi->name = 'Zsite CMS';
@@ -179,36 +181,13 @@ EOD;
 
 $lang->install->ranzhi = new stdclass();
 $lang->install->ranzhi->name = 'Ranger Collaborative System';
-$lang->install->ranzhi->logo = 'images/main/ranzhi.png';
-$lang->install->ranzhi->url  = 'http://www.ranzhi.org';
+$lang->install->ranzhi->logo = 'images/main/zdoo.png';
+$lang->install->ranzhi->url  = 'http://www.zdoo.com';
 $lang->install->ranzhi->desc = <<<EOD
 <ul>
   <li>Customer Management and Order Tracking</li>
   <li>Project/Task and Announcement/Document</li>
   <li>Income/Expense and Account In/Out </li>
   <li>Forum/Blog and Dynamic/News</li>
-</ul>
-EOD;
-
-$lang->install->zdoo = new stdclass();
-$lang->install->zdoo->name = 'Integrated Cloud Platform';
-$lang->install->zdoo->desc = <<<EOD
-<ul>
-  <li>Safe, Stable and Effective</li>
-  <li>Data isolation by docker</li>
-  <li>Code level customization</li>
-  <li>An integrated and collaborative platform</li>
-</ul>
-EOD;
-$lang->install->xuanxuan = new stdclass();
-$lang->install->xuanxuan->name = 'Xuanxuan IM';
-$lang->install->xuanxuan->logo = 'images/main/xuanxuan.png';
-$lang->install->xuanxuan->url  = 'http://www.xuan.im';
-$lang->install->xuanxuan->desc = <<<EOD
-<ul>
-  <li>lightweight and easy to deploy</li>
-  <li>complete cross platform solutions</li>
-  <li>Based on Html5 and beautiful</li>
-  <li>Open framework</li>
 </ul>
 EOD;
