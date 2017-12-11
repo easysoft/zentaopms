@@ -1253,7 +1253,7 @@ class taskModel extends model
             ->beginIF($type == 'delayed')->andWhere('t1.deadline')->gt('1970-1-1')->andWhere('t1.deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
-            ->orderBy('t1.`parent`,' . $orderBy)
+            ->orderBy('t1.`id`,' . $orderBy)
             ->fetchAll('id');
 
         if(!empty($children))
