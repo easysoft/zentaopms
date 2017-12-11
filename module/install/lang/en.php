@@ -181,8 +181,8 @@ EOD;
 
 $lang->install->ranzhi = new stdclass();
 $lang->install->ranzhi->name = 'Ranger Collaborative System';
-$lang->install->ranzhi->logo = 'images/main/zdoo.png';
-$lang->install->ranzhi->url  = 'http://www.zdoo.com';
+$lang->install->ranzhi->logo = 'images/main/zdoo_org.png';
+$lang->install->ranzhi->url  = 'http://www.zdoo.org';
 $lang->install->ranzhi->desc = <<<EOD
 <ul>
   <li>Customer Management and Order Tracking</li>
