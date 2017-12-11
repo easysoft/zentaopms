@@ -521,7 +521,7 @@ class treeModel extends model
                     ->orderBy('grade desc, type, `order`')
                     ->get();
                 $stmt = $this->dbh->query($query);
-                if($branch == 0)$productTree   = $this->getDataStructure($stmt, 'task', $projectModules);
+                if($branch == 0) $productTree = $this->getDataStructure($stmt, 'task', $projectModules);
                 if($branch != 0)
                 {
                     $children = $this->getDataStructure($stmt, 'task', $projectModules);
