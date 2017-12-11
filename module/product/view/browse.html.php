@@ -32,7 +32,7 @@
     </li>
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php if(isset($menuItem->hidden)) continue;?>
-    <?php $browseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;?>
+    <?php $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;?>
     <?php $param = strpos($menuItem->name, 'QUERY') === 0 ? '&param=' . (int)substr($menuItem->name, 5) : '';?>
     <?php if($menuItem->name == 'my'):?>
     <?php
@@ -47,7 +47,7 @@
         echo '</ul></li>';
     ?>
     <?php else:?>
-    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType" . $param), $menuItem->text);?></li>
+    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType" . $param), $menuItem->text);?></li>
     <?php endif;?>
     <?php endforeach;?>
     <li id='bysearchTab'><a href='javascript:;'><i class='icon-search icon'></i> <?php echo $lang->product->searchStory;?></a></li>
