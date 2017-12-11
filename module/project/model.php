@@ -1636,6 +1636,7 @@ class projectModel extends model
             ->from(TABLE_TASK)
             ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq('0')
+            ->andWhere('parent')->eq('0')
             ->andWhere('status')->notin('cancel,closed')
             ->groupBy('project')
             ->fetchAll();

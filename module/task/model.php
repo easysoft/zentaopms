@@ -153,14 +153,18 @@ class taskModel extends model
 
         $storyIDs  = array();
         $taskNames = array();
+        $preStory  = 0;
         foreach($tasks->story as $key => $storyID)
         {
             if(empty($tasks->name[$key])) continue;
             if($tasks->type[$key] == 'affair') continue;
             if($tasks->type[$key] == 'ditto' && isset($tasks->type[$key - 1]) && $tasks->type[$key - 1] == 'affair') continue;
 
+            if($storyID == 'ditto') $storyID = $preStory;
+            $preStory = $storyID;
+
             $inNames = in_array($tasks->name[$key], $taskNames);
-            if(!$inNames || $inNames && !in_array($storyID, $storyIDs))
+            if(!$inNames || ($inNames && !in_array($storyID, $storyIDs)))
             {
                 $storyIDs[]  = $storyID;
                 $taskNames[] = $tasks->name[$key];
