@@ -207,6 +207,7 @@ class userModel extends model
     public function create()
     {
         if(!$this->checkPassword()) return;
+        if(strtolower($_POST['account']) == 'guest') return false;
 
         $user = fixer::input('post')
             ->setDefault('join', '0000-00-00')
@@ -267,6 +268,7 @@ class userModel extends model
         {
             if($users->account[$i] != '')
             {
+                if(strtolower($users->account[$i]) == 'guest') die(js::error(sprintf($this->lang->user->error->reserved, $i+1)));
                 $account = $this->dao->select('account')->from(TABLE_USER)->where('account')->eq($users->account[$i])->fetch();
                 if($account) die(js::error(sprintf($this->lang->user->error->accountDupl, $i+1)));
                 if(in_array($users->account[$i], $accounts)) die(js::error(sprintf($this->lang->user->error->accountDupl, $i+1)));

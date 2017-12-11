@@ -145,6 +145,7 @@ $lang->user->error->realname      = "ID %s，必须填写真实姓名";
 $lang->user->error->password      = "ID %s，密码必须六位以上";
 $lang->user->error->mail          = "ID %s，请填写正确的邮箱地址";
 $lang->user->error->role          = "ID %s，职位不能为空";
+$lang->user->error->reserved      = "ID %s，该用户名系统预留";
 
 $lang->user->error->verifyPassword   = "安全验证密码错误，请输入你的登录密码";
 $lang->user->error->originalPassword = "原密码不正确";

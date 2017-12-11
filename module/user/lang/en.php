@@ -145,6 +145,7 @@ $lang->user->error->realname      = "ID %s，must be real name";
 $lang->user->error->password      = "ID %s，password must be 6 characters at least.";
 $lang->user->error->mail          = "ID %s，please enter valid Email address";
 $lang->user->error->role          = "ID %s，role cannot be null.";
+$lang->user->error->reserved      = "ID %s，account is reserved.";
 
 $lang->user->error->verifyPassword   = "Wrong password. Please enter your Login Password.";
 $lang->user->error->originalPassword = "Old password is incorrect.";
