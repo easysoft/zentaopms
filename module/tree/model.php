@@ -577,9 +577,9 @@ class treeModel extends model
         $projectModules = $this->getTaskTreeModules($rootID, true);
 
         /* Get module according to product. */
-        $products   = $this->loadModel('product')->getProductsByProject($rootID);
-        $branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
-        $productNum = count($products);
+        $products     = $this->loadModel('product')->getProductsByProject($rootID);
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $productNum   = count($products);
         foreach($products as $id => $product)
         {
             $extra['productID'] = $id;
