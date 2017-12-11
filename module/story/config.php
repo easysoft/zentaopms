@@ -51,7 +51,7 @@ $config->story->datatable->defaultField = array('id', 'pri', 'title', 'plan', 'o
 
 $config->story->datatable->fieldList['id']['title']    = 'idAB';
 $config->story->datatable->fieldList['id']['fixed']    = 'left';
-$config->story->datatable->fieldList['id']['width']    = '70';
+$config->story->datatable->fieldList['id']['width']    = '60';
 $config->story->datatable->fieldList['id']['required'] = 'yes';
 
 $config->story->datatable->fieldList['pri']['title']    = 'priAB';

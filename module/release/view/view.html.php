@@ -86,7 +86,7 @@
                 <tr>
                   <th class='w-id'><?php echo $lang->idAB;?></th>
                   <th class='w-pri'><?php echo $lang->priAB;?></th>
-                  <th><?php echo $lang->story->title;?></th>
+                  <th class="text-left"><?php echo $lang->story->title;?></th>
                   <th class='w-user'><?php echo $lang->openedByAB;?></th>
                   <th class='w-hour'><?php echo $lang->story->estimateAB;?></th>
                   <th class='w-hour'><?php echo $lang->statusAB;?></th>
