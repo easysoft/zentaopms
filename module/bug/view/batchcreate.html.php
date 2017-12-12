@@ -39,7 +39,7 @@ foreach(explode(',', $showFields) as $field)
       <tr>
         <th class='w-50px'>  <?php echo $lang->idAB;?></th> 
         <th class='w-120px<?php echo zget($visibleFields, $product->type, ' hidden')?>'> <?php echo $lang->product->branch;?></th>
-        <th class='w-120px<?php echo zget($visibleFields, 'module', ' hidden')?>'> <?php echo $lang->bug->module;?></th>
+        <th class='w-120px<?php echo zget($visibleFields, 'module', ' hidden')?>'> <?php echo $lang->bug->module;?> <span class='required'></span></th>
         <th class='w-130px<?php echo zget($visibleFields, 'project', ' hidden')?>'><?php echo $lang->bug->project;?></th>
         <th><?php echo $lang->bug->openedBuild;?> <span class='required'></span></th>
         <th><?php echo $lang->bug->title;?> <span class='required'></span></th>
