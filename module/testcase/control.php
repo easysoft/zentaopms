@@ -1273,10 +1273,10 @@ class testcase extends control
             $fileName = $this->file->savePath . $this->file->getSaveName($file['pathname']);
             move_uploaded_file($file['tmpname'], $fileName);
 
-            $rows     = $this->file->parseCSV($fileName);
-            $fields   = $this->testcase->getImportFields($productID);
-            $fields   = array_flip($fields);
-            $header   = array();
+            $rows   = $this->file->parseCSV($fileName);
+            $fields = $this->testcase->getImportFields($productID);
+            $fields = array_flip($fields);
+            $header = array();
             foreach($rows[0] as $i => $rowValue)
             {
                 if(empty($rowValue)) break;
@@ -1300,7 +1300,7 @@ class testcase extends control
 
                 $rows      = $this->file->parseCSV($fileName);
                 $columnKey = array();
-                $header   = array();
+                $header    = array();
                 foreach($rows[0] as $i => $rowValue)
                 {
                     if(empty($rowValue)) break;
