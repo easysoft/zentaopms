@@ -16,7 +16,7 @@
     <span class='prefix'><?php echo html::icon($lang->icons['bug']);?></span>
     <strong>
       <small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small>
-      <?php echo $lang->bug->batchCreate . $lang->bug->common;?>
+      <?php echo $lang->bug->batchCreate;?>
       <?php if($this->session->currentProductType !== 'normal') echo '<span class="label label-info">' . $branches[$branch] . '</span>';?>
     </strong>
     <div class='actions'>

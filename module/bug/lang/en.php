@@ -72,7 +72,7 @@ $lang->bug->colorTag         = 'Color Tag';
 /* 方法列表。*/
 $lang->bug->index              = 'Home';
 $lang->bug->create             = 'Report Bug';
-$lang->bug->batchCreate        = 'Batch Report';
+$lang->bug->batchCreate        = 'Batch Report Bug';
 $lang->bug->confirmBug         = 'Confirm';
 $lang->bug->batchConfirm       = 'Batch Confirm';
 $lang->bug->edit               = 'Edit';

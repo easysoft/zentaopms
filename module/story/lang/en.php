@@ -10,8 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->story->create      = "Story";
-$lang->story->batchCreate = "Batch Create";
-$lang->story->batchTitle  = "Batch Create Story";
+$lang->story->batchCreate = "Batch Create Story";
 $lang->story->change      = "Change";
 $lang->story->changed     = 'Change';
 $lang->story->review      = 'Review';
