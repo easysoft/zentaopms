@@ -79,17 +79,17 @@ $lang->user->todo        = 'To-Do';
 $lang->user->story       = 'Story';
 $lang->user->dynamic     = 'Dynamic';
 
-$lang->user->openedBy    = 'Opened by him';
-$lang->user->assignedTo  = 'Assigned to him';
-$lang->user->finishedBy  = 'Finished by him';
-$lang->user->resolvedBy  = 'Resolved by him';
-$lang->user->closedBy    = 'Closed by him';
-$lang->user->reviewedBy  = 'Reviewed by him';
-$lang->user->canceledBy  = 'Cancelled by him';
+$lang->user->openedBy    = 'Opened';
+$lang->user->assignedTo  = 'Assigned';
+$lang->user->finishedBy  = 'Finished';
+$lang->user->resolvedBy  = 'Resolved';
+$lang->user->closedBy    = 'Closed';
+$lang->user->reviewedBy  = 'Reviewed';
+$lang->user->canceledBy  = 'Cancelled';
 
-$lang->user->testTask2Him = 'His Build';
-$lang->user->case2Him     = 'His Case';
-$lang->user->caseByHim    = 'Case Open by Him';
+$lang->user->testTask2Him = 'Build';
+$lang->user->case2Him     = 'Case Assigned';
+$lang->user->caseByHim    = 'Case Opened';
 
 $lang->user->errorDeny    = "Sorry, your access to <b>%s</b> Module <b>%s</b> Feature has been denied. Please contact Admin to get permission. Click Back to return.";
 $lang->user->loginFailed  = "Login failed. Please check your account and password.";

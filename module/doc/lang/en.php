@@ -117,9 +117,9 @@ $lang->doc->confirmDeleteLib   = "Do you want to delete this Doc Lib?";
 $lang->doc->errorEditSystemDoc = "System Doc Lib needs no modifications.";
 $lang->doc->errorEmptyProduct  = "No {$lang->productCommon}. It cannot be created.";
 $lang->doc->errorEmptyProject  = "No {$lang->projectCommon}. It cannot be created.";
-$lang->doc->errorMainSysLib    = "Can not delete this library.";
+$lang->doc->errorMainSysLib    = "This library cannot be deleted.";
 $lang->doc->accessDenied       = "Access denied!";
-$lang->doc->versionNotFount    = 'It is not exist in this version.';
+$lang->doc->versionNotFount    = 'It does not exist in this build.';
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = 'Url';
