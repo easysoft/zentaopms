@@ -22,6 +22,11 @@
   <form id='webhookForm' method='post' class='ajaxForm'>
     <table class='table table-form'>
       <tr>
+        <th class='w-100px'><?php echo $lang->webhook->type;?></th>
+        <td class='w-p50'><?php echo html::select('type', $lang->webhook->typeList, $webhook->type, "class='form-control'");?></td>
+        <td></td>
+      </tr>
+      <tr>
         <th class='w-100px'><?php echo $lang->webhook->name;?></th>
         <td class='w-p50'><?php echo html::input('name', $webhook->name, "class='form-control'");?></td>
         <td></td>

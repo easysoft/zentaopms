@@ -39,6 +39,11 @@ include '../../common/view/chart.html.php';
         </tr>
         <?php endforeach;?>
       </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="9"><?php echo $summary;?></td>
+        </tr>
+      </tfoot>
     </table>
   </form>
 </div>

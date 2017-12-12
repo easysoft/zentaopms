@@ -11,7 +11,7 @@
  */
 $lang->task->index              = "Index";
 $lang->task->create             = "Create";
-$lang->task->batchCreate        = "Batch Create";
+$lang->task->batchCreate        = "Batch Create Task";
 $lang->task->batchEdit          = "Batch Edit";
 $lang->task->batchChangeModule  = "Batch Change Module";
 $lang->task->batchClose         = "Batch Close";
@@ -61,7 +61,7 @@ $lang->task->hour              = 'Hour';
 $lang->task->consumedThisTime  = 'Hour';
 $lang->task->leftThisTime      = 'Remained';
 $lang->task->datePlan          = 'Plan';
-$lang->task->estStarted        = 'Start Date';
+$lang->task->estStarted        = 'Estimate Start';
 $lang->task->realStarted       = 'Actual Start';
 $lang->task->date              = 'Date';
 $lang->task->deadline          = 'Finish Date';

@@ -11,7 +11,6 @@
  */
 $lang->story->create      = "Story";
 $lang->story->batchCreate = "Batch Create";
-$lang->story->batchTitle  = "Batch Create Story";
 $lang->story->change      = "Change";
 $lang->story->changed     = 'Change';
 $lang->story->review      = 'Review';
@@ -186,8 +185,8 @@ $lang->story->needNotReview         = 'No Review';
 $lang->story->successSaved          = "Story saved!";
 $lang->story->confirmDelete         = "Do you want to delete this Story?";
 $lang->story->errorEmptyChildStory  = '『Subdivide Story』canot be blank.';
-$lang->story->mustChooseResult      = 'Please select a result.';
-$lang->story->mustChoosePreVersion  = 'Please select a Version to revert.';
+$lang->story->mustChooseResult      = 'Select a result.';
+$lang->story->mustChoosePreVersion  = 'Select a Version to revert to.';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = 'Story Scope';

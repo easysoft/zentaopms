@@ -72,7 +72,10 @@
                 <tr>
                   <th class='w-id {sorter:false}' >   <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
                   <th class='w-pri {sorter:false}'>   <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-                  <th class='{sorter:false}'>         <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
+                  <?php if($modulePairs):?>
+                  <th class='w-150px text-left {sorter:false}'>         <?php common::printOrderLink('module',      $orderBy, $vars, $lang->story->module);?></th>
+                  <?php endif;?>
+                  <th class='text-left {sorter:false}'>         <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
                   <th class='w-user {sorter:false}'>  <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
                   <th class='w-user {sorter:false}'>  <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
                   <th class='w-60px {sorter:false}'>  <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
@@ -100,10 +103,10 @@
                       <?php echo html::a($viewLink, sprintf("%03d", $story->id));?>
                     </td>
                     <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-                    <td class='text-left nobr' title='<?php echo $story->title?>'>
-                      <?php if($modulePairs and $story->module) echo "<span title='{$lang->story->module}' class='label label-info label-badge'>{$modulePairs[$story->module]}</span> "?>
-                      <?php echo html::a($viewLink , $story->title);?>
-                    </td>
+                    <?php if($modulePairs):?>
+                    <td class='text-left nobr'><?php if(!empty($story->module)) echo $modulePairs[$story->module];?></td>
+                    <?php endif;?>
+                    <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($viewLink , $story->title);?></td>
                     <td><?php echo zget($users, $story->openedBy);?></td>
                     <td><?php echo zget($users, $story->assignedTo);?></td>
                     <td><?php echo $story->estimate;?></td>

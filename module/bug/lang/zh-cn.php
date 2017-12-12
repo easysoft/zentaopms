@@ -72,7 +72,7 @@ $lang->bug->colorTag         = '颜色标签';
 /* 方法列表。*/
 $lang->bug->index              = '首页';
 $lang->bug->create             = '提Bug';
-$lang->bug->batchCreate        = '批量添加';
+$lang->bug->batchCreate        = '批量提Bug';
 $lang->bug->confirmBug         = '确认';
 $lang->bug->batchConfirm       = '批量确认';
 $lang->bug->edit               = '编辑';
