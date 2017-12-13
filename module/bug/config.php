@@ -6,7 +6,7 @@ $config->bug->longlife    = 7;
 $config->bug->create  = new stdclass();
 $config->bug->edit    = new stdclass();
 $config->bug->resolve = new stdclass();
-$config->bug->create->requiredFields  = 'title,openedBuild';
+$config->bug->create->requiredFields  = 'title,openedBuild,module';
 $config->bug->edit->requiredFields    = $config->bug->create->requiredFields;
 $config->bug->resolve->requiredFields = 'resolution';
 

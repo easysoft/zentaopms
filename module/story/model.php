@@ -258,8 +258,13 @@ class storyModel extends model
         $plan   = 0;
         $pri    = 0;
         $source = '';
+
         for($i = 0; $i < $batchNum; $i++)
         {
+            if(!empty($stories->title[$i]) && empty($stories->modules[$i]))
+            {
+                die(js::alert(sprintf($this->lang->error->notempty, $this->lang->story->module)));
+            }
             $module = $stories->module[$i] == 'ditto' ? $module : $stories->module[$i];
             $plan   = $stories->plan[$i]   == 'ditto' ? $plan   : $stories->plan[$i];
             $pri    = $stories->pri[$i]    == 'ditto' ? $pri    : $stories->pri[$i];

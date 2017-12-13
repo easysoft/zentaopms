@@ -78,7 +78,7 @@ function loadBranch()
     $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
     $('#task').chosen(defaultChosenOptions);
     productID = $('#product').val();
-    loadProductModules(productID); 
+    loadProductModules(productID);
     loadProductProjects(productID); 
     loadProductBuilds(productID);
     loadProductplans(productID);

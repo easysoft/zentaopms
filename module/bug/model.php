@@ -113,7 +113,11 @@ class bugModel extends model
 
         for($i = 0; $i < $batchNum; $i++)
         {
-            if(!empty($data->title[$i]) and empty($data->openedBuilds[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->openedBuild)));
+            if(!empty($data->title[$i]))
+            {
+                if(empty($data->modules[$i]))      die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->module)));
+                if(empty($data->openedBuilds[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->openedBuild)));
+            }
         }
 
         /* Get pairs(moduleID => moduleOwner) for bug. */
