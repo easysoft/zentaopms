@@ -455,7 +455,7 @@ class my extends control
         $this->view->lists          = $lists;
         $this->view->listID         = $listID;
         $this->view->users          = $this->user->getPairs('noletter|noempty|noclosed|noclosed');
-        $this->view->disabled    = $disabled;
+        $this->view->disabled       = $disabled;
         $this->view->globalContacts = $globalContacts;
         $this->display();
     }
