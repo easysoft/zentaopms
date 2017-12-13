@@ -237,6 +237,23 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                   $misc = common::hasPriv('bug', 'batchActivate') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
                   if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->activate, '', $misc) . "</li>";
 
+                  if(common::hasPriv('bug', 'batchChangeBranch') and $this->session->currentProductType != 'normal')
+                  {
+                      $withSearch = count($branches) > 8;
+                      echo "<li class='dropdown-submenu'>";
+                      echo html::a('javascript:;', $lang->product->branchName[$this->session->currentProductType], '', "id='branchItem'");
+                      echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                      echo "<ul class='dropdown-list'>";
+                      foreach($branches as $branchID => $branchName)
+                      {
+                          $actionLink = $this->createLink('bug', 'batchChangeBranch', "branchID=$branchID");
+                          echo "<li class='option' data-key='$branchID'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
+                      }
+                      echo '</ul>';
+                      if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                      echo '</div></li>';
+                  }
+
                   if(common::hasPriv('bug', 'batchChangeModule'))
                   {
                       $withSearch = count($modules) > 8;

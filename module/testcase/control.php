@@ -843,6 +843,33 @@ class testcase extends control
     }
 
     /**
+     * Batch change branch.
+     * 
+     * @param  int    $branchID 
+     * @access public
+     * @return void
+     */
+    public function batchChangeBranch($branchID)
+    {
+        if($this->post->caseIDList)
+        {
+            $caseIDList = $this->post->caseIDList;
+            $caseIDList = array_unique($caseIDList);
+            unset($_POST['caseIDList']);
+            $allChanges = $this->testcase->batchChangeBranch($caseIDList, $branchID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            foreach($allChanges as $caseID => $changes)
+            {
+                $this->loadModel('action');
+                $actionID = $this->action->create('case', $caseID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+        }
+
+        die(js::locate($this->session->caseList, 'parent'));
+    }
+
+    /**
      * Batch change the module of case.
      *
      * @param  int    $moduleID
