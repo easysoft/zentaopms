@@ -406,12 +406,14 @@ class my extends control
             if($this->post->mode == 'new')
             {
                 $listID = $this->user->createContactList($this->post->newList, $this->post->users);
+                if(isset($_POST['share'])) $this->user->setGlobalContacts($listID);
                 if(isonlybody()) die(js::closeModal('parent.parent', '', 'function(){parent.parent.ajaxGetContacts(\'#mailtoGroup\')}'));
                 die(js::locate(inlink('manageContacts', "listID=$listID"), 'parent'));
             }
             elseif($this->post->mode == 'edit')
             {
                 $this->user->updateContactList($this->post->listID, $this->post->listName, $this->post->users);
+                if(isset($_POST['share'])) $this->user->setGlobalContacts($this->post->listID);
                 die(js::locate(inlink('manageContacts', "listID={$this->post->listID}"), 'parent'));
             }
         }
@@ -434,10 +436,14 @@ class my extends control
             $this->view->list       = $this->user->getContactListByID($listID);
         }
 
-        $this->view->mode   = $mode;
-        $this->view->lists  = $lists;
-        $this->view->listID = $listID;
-        $this->view->users  = $this->user->getPairs('noletter|noempty|noclosed|noclosed');
+        $globalContacts = isset($this->config->my->global->globalContact) ? $this->config->my->global->globalContact : '';
+        if(!empty($globalContacts)) $globalContacts = explode(',', $globalContacts);
+
+        $this->view->mode           = $mode;
+        $this->view->lists          = $lists;
+        $this->view->listID         = $listID;
+        $this->view->users          = $this->user->getPairs('noletter|noempty|noclosed|noclosed');
+        $this->view->globalContacts = $globalContacts;
         $this->display();
     }
 

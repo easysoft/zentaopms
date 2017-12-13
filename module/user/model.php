@@ -1012,6 +1012,22 @@ class userModel extends model
     }
 
     /**
+     * Update global contact.
+     *
+     * @param $listID
+     *
+     * @access public
+     * @return void
+     */
+    public function setGlobalContacts($listID)
+    {
+        $contacts    = $this->loadModel('setting')->getItem("owner=system&module=my&section=global&key=globalContact");
+        $contactsIDs = empty($contacts) ? array() : explode(',', $contacts);
+        array_push($contactsIDs, $listID);
+        $this->loadModel('setting')->setItem('system.my.global.globalContact', join(',', $contactsIDs));
+    }
+
+    /**
      * Delete a contact list.
      * 
      * @param  int    $listID 

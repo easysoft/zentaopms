@@ -19,7 +19,8 @@
     foreach($lists as $id => $listName)
     {
         $listClass = ($id == $listID) ? 'list-group-item active' : 'list-group-item';
-        echo html::a(inlink('managecontacts', "listID=$id&mode=edit"), $listName, '', "class='{$listClass}'");
+        $shareIcon = in_array($id, $globalContacts) ? '<i class="icon icon-share-sign"></i> ' : '';
+        echo html::a(inlink('managecontacts', "listID=$id&mode=edit"), $shareIcon . $listName, '', "class='{$listClass}'");
     }
     ?>
     </ul>
@@ -70,6 +71,14 @@
                   echo html::select('users[]', $users, $list->userList, "multiple class='form-control chosen'");
               }
               ?>
+              </td>
+            </tr>
+            <tr>
+              <th></th>
+              <td colspan="2">
+                <label class="checkbox-inline">
+                  <input type="checkbox" name="share" value="1" <?php if($mode != 'new' && in_array($list->id, $globalContacts)) echo 'checked';?>/> <?php echo $lang->my->shareContacts;?>
+                </label>
               </td>
             </tr>
             <tr>
