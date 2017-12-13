@@ -45,13 +45,14 @@
               <td class='w-300px'>
               <div class='required required-wrapper'></div>
               <?php
+              if($mode == 'edit') $readonly = in_array($list->id, $disabled) ? ' readonly' : '';
               if($mode == 'new')
               {
                   echo html::input('newList', '', "class='form-control'");
               }
               else
               {
-                  echo html::input('listName', $list->listName, "class='form-control'");
+                  echo html::input('listName', $list->listName, "$readonly class='form-control'");
                   echo html::hidden('listID',  $list->id);
               }
               ?>
@@ -68,7 +69,7 @@
               }
               else
               {
-                  echo html::select('users[]', $users, $list->userList, "multiple class='form-control chosen'");
+                  echo html::select('users[]', $users, $list->userList, "multiple $readonly class='form-control chosen'");
               }
               ?>
               </td>
