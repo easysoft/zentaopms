@@ -406,14 +406,14 @@ class my extends control
             if($this->post->mode == 'new')
             {
                 $listID = $this->user->createContactList($this->post->newList, $this->post->users);
-                if(isset($_POST['share'])) $this->user->setGlobalContacts($listID);
+                $this->user->setGlobalContacts($listID, isset($_POST['share']));
                 if(isonlybody()) die(js::closeModal('parent.parent', '', 'function(){parent.parent.ajaxGetContacts(\'#mailtoGroup\')}'));
                 die(js::locate(inlink('manageContacts', "listID=$listID"), 'parent'));
             }
             elseif($this->post->mode == 'edit')
             {
                 $this->user->updateContactList($this->post->listID, $this->post->listName, $this->post->users);
-                if(isset($_POST['share'])) $this->user->setGlobalContacts($this->post->listID);
+                $this->user->setGlobalContacts($this->post->listID, isset($_POST['share']));
                 die(js::locate(inlink('manageContacts', "listID={$this->post->listID}"), 'parent'));
             }
         }

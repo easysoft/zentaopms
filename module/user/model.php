@@ -1014,16 +1014,25 @@ class userModel extends model
     /**
      * Update global contact.
      *
-     * @param $listID
+     * @param      $listID
+     * @param bool $isPush
      *
      * @access public
      * @return void
      */
-    public function setGlobalContacts($listID)
+    public function setGlobalContacts($listID, $isPush = true)
     {
         $contacts    = $this->loadModel('setting')->getItem("owner=system&module=my&section=global&key=globalContact");
         $contactsIDs = empty($contacts) ? array() : explode(',', $contacts);
-        array_push($contactsIDs, $listID);
+        if($isPush)
+        {
+            if(!in_array($listID, $contactsIDs)) array_push($contactsIDs, $listID);
+        }
+        else
+        {
+            $key = array_search($listID, $contactsIDs);
+            if($key !== false) array_splice($contactsIDs, $key, 1);
+        }
         $this->loadModel('setting')->setItem('system.my.global.globalContact', join(',', $contactsIDs));
     }
 
