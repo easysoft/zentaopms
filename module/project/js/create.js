@@ -13,6 +13,12 @@ $(function()
     {
         $('#productsBox .col-sm-3').width(typeWidth);
     });
+    $('#begin').on('change', function()
+    {
+       $("#end").val('');
+       $("#days").val('');
+       $("input:radio[name='delta']").attr("checked",false);
+    });
 });
 
 function showTypeTips()

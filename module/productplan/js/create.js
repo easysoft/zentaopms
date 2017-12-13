@@ -35,3 +35,9 @@ function computeEndDate(delta)
     endDate = beginDate.addDays(delta - 1).toString('yyyy-MM-dd');
     $('#end').val(endDate);
 }
+
+$('#begin').on('change', function()
+{
+    $("#end").val('');
+    $("input:radio[name='delta']").attr("checked",false);
+});

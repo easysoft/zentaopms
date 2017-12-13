@@ -26,10 +26,11 @@ class actionModel extends model
      * @param  string $comment 
      * @param  string $extra        the extra info of this action, according to different modules and actions, can set different extra.
      * @param  string $actor
+     * @param  bool   $autoDelete
      * @access public
      * @return int
      */
-    public function create($objectType, $objectID, $actionType, $comment = '', $extra = '', $actor = '')
+    public function create($objectType, $objectID, $actionType, $comment = '', $extra = '', $actor = '', $autoDelete = true)
     {
         $actor      = $actor ? $actor : $this->app->user->account;
         $actionType = strtolower($actionType);
@@ -48,7 +49,7 @@ class actionModel extends model
 
         /* Process action. */
         $action = $this->loadModel('file')->processImgURL($action, 'comment', $this->post->uid);
-        $this->file->autoDelete($this->post->uid);
+        if($autoDelete) $this->file->autoDelete($this->post->uid);
 
         /* Get product and project for this object. */
         $productAndProject = $this->getProductAndProject($action->objectType, $objectID);
