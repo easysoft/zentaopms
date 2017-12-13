@@ -128,6 +128,23 @@ js::set('branch',         $branch);
                   $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
                   echo "<li>" . html::a('#', $lang->testtask->runCase, '', $misc) . "</li>";
 
+                  if(common::hasPriv('testcase', 'batchChangeBranch') and $this->session->currentProductType != 'normal')
+                  {
+                      $withSearch = count($branches) > 8;
+                      echo "<li class='dropdown-submenu'>";
+                      echo html::a('javascript:;', $lang->product->branchName[$this->session->currentProductType], '', "id='branchItem'");
+                      echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+                      echo "<ul class='dropdown-list'>";
+                      foreach($branches as $branchID => $branchName)
+                      {
+                          $actionLink = $this->createLink('testcase', 'batchChangeBranch', "branchID=$branchID");
+                          echo "<li class='option' data-key='$branchID'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
+                      }
+                      echo '</ul>';
+                      if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                      echo '</div></li>';
+                  }
+
                   if(common::hasPriv('testcase', 'batchChangeModule'))
                   {
                       $withSearch = count($modules) > 8;

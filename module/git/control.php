@@ -32,7 +32,9 @@ class git extends control
      */
     public function diff($path, $revision)
     {
+        if(isset($_GET['repoUrl'])) $path = $this->get->repoUrl;
         $path = helper::safe64Decode($path);
+
         $this->view->path     = $path;
         $this->view->revision = $revision;
         $this->view->diff     = $this->git->diff($path, $revision);
@@ -50,7 +52,9 @@ class git extends control
      */
     public function cat($path, $revision)
     {
+        if(isset($_GET['repoUrl'])) $path = $this->get->repoUrl;
         $path = helper::safe64Decode($path);
+
         $this->view->path     = $path;
         $this->view->revision = $revision;
         $this->view->code     = $this->git->cat($path, $revision);

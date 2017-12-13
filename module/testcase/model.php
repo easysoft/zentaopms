@@ -820,6 +820,36 @@ class testcaseModel extends model
     }
 
     /**
+     * Batch change branch.
+     * 
+     * @param  array  $caseIDList 
+     * @param  int    $branchID 
+     * @access public
+     * @return array
+     */
+    public function batchChangeBranch($caseIDList, $branchID)
+    {
+        $now        = helper::now();
+        $allChanges = array();
+        $oldCases   = $this->getByList($caseIDList);
+        foreach($caseIDList as $caseID)
+        {
+            $oldCase = $oldCases[$caseID];
+            if($branchID == $oldCase->branch) continue;
+
+            $case = new stdclass();
+            $case->lastEditedBy   = $this->app->user->account;
+            $case->lastEditedDate = $now;
+            $case->branch         = $branchID;
+
+            $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq((int)$caseID)->exec();
+            if(!dao::isError()) $allChanges[$caseID] = common::createChanges($oldCase, $case);
+        }
+
+        return $allChanges;
+    }
+
+    /**
      * Batch change the module of case.
      *
      * @param  array  $caseIDList

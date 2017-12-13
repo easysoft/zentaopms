@@ -38,7 +38,7 @@ $config->langs['zh-tw']    = '繁體';
 $config->langs['en']       = 'English';
 
 /* 设备类型视图文件前缀。The prefix for view file for different device. */ 
-$config->devicePrefix['mhtml'] = 'm.';
+$config->devicePrefix['mhtml'] = '';
 
 /* 默认值设置。Default settings. */
 $config->default = new stdclass();

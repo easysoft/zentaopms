@@ -214,7 +214,6 @@ class cron extends control
                         $log  = '';
                         $time = $now->format('G:i:s');
                         $log  = "$time task " .  $id . " executed,\ncommand: $cron[command].\nreturn : $return.\noutput : $output\n";
-                        $log .= $this->app->company->name . "\n";
                         $this->cron->logCron($log);
                         unset($log);
                     }

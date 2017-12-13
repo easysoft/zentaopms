@@ -611,9 +611,8 @@ class svnModel extends model
         {
             foreach($actionFiles as $file)
             {
-                $param = array('url' => helper::safe64Encode($repoRoot . $file), 'revision' => $log->revision);
-                $catLink  = trim(html::a(helper::createLink('svn', 'cat',  $param, 'html'), 'view', '', "class='repolink'"));
-                $diffLink = trim(html::a(helper::createLink('svn', 'diff', $param, 'html'), 'diff', '', "class='repolink'"));
+                $catLink  = trim(html::a($this->buildURL('cat', $repoRoot . $file, $log->revision), 'view', '', "class='repolink'"));
+                $diffLink = trim(html::a($this->buildURL('diff', $repoRoot . $file, $log->revision), 'diff', '', "class='repolink'"));
                 $diff .= $action . " " . $file . " $catLink ";
                 $diff .= $action == 'M' ? "$diffLink\n" : "\n" ;
             }
@@ -714,5 +713,23 @@ class svnModel extends model
     public function printLog($log)
     {
         echo helper::now() . " $log\n";
+    }
+
+    /**
+     * Build URL.
+     * 
+     * @param  string $methodName 
+     * @param  string $url 
+     * @param  int    $revision 
+     * @access public
+     * @return string
+     */
+    public function buildURL($methodName, $url, $revision)
+    {
+        $buildedURL  = helper::createLink('svn', $methodName, "url=&revision=$revision", 'html');
+        $buildedURL .= strpos($buildedURL, '?') === false ? '?' : '&';
+        $buildedURL .= 'repoUrl=' . helper::safe64Encode($url);
+
+        return $buildedURL;
     }
 }
