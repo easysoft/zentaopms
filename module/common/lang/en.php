@@ -49,7 +49,7 @@ $lang->day          = 'Day';
 $lang->customConfig = 'Custom';
 $lang->public       = 'Public';
 $lang->trunk        = 'Trunk';
-$lang->sort         = 'Ranking';
+$lang->sort         = 'Order';
 $lang->required     = 'Required';
 
 $lang->actions         = 'Actions';
@@ -64,7 +64,7 @@ $lang->pasteText       = 'Paste';
 $lang->uploadImages    = 'Upload';
 $lang->timeout         = 'Timeout. Pease check your network settings, or try it again!';
 $lang->repairTable     = 'Database table might be damaged. Please use phpmyadmin or myisamchk to fix it.';
-$lang->duplicate       = '%s has the same title as existing file.';
+$lang->duplicate       = '%s has the same title as an existing file.';
 $lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>Sorry, current IP Login has been restricted. PLease contact Admin to unrestrict it.</body></html>";
 $lang->unfold          = '+';
 $lang->fold            = '-';
@@ -109,7 +109,7 @@ $lang->menu->qa       = 'QA|qa|index';
 $lang->menu->doc      = 'Doc|doc|index';
 $lang->menu->report   = 'Report|report|index';
 $lang->menu->company  = 'Company|company|index';
-$lang->menu->admin    = 'Administration|admin|index';
+$lang->menu->admin    = 'Admin|admin|index';
 
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'Bug';
@@ -156,8 +156,8 @@ $lang->themes['blackberry']  = 'Blackberry';
 $lang->index = new stdclass();
 $lang->index->menu = new stdclass();
 
-$lang->index->menu->product = "View{$lang->productCommon}|product|browse";
-$lang->index->menu->project = "View{$lang->projectCommon}|project|browse";
+$lang->index->menu->product = "{$lang->productCommon}|product|browse";
+$lang->index->menu->project = "{$lang->projectCommon}|project|browse";
 
 /* 我的地盘菜单设置。*/
 $lang->my = new stdclass();
@@ -227,8 +227,8 @@ $lang->project->menu->team      = array('link' => 'Team|project|team|projectID=%
 $lang->project->menu->doc       = array('link' => 'Doc|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
 $lang->project->menu->product   = $lang->productCommon . '|project|manageproducts|projectID=%s';
 $lang->project->menu->view      = array('link' => 'Overview|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
-$lang->project->menu->create    = array('link' => "<i class='icon-plus'></i>&nbsp;Add{$lang->projectCommon}|project|create", 'float' => 'right');
-$lang->project->menu->all       = array('link' => "<i class='icon-th-large'></i>&nbsp;All{$lang->projectCommon}|project|all|status=undone&projectID=%s", 'float' => 'right');
+$lang->project->menu->create    = array('link' => "<i class='icon-plus'></i>&nbsp;Add {$lang->projectCommon}|project|create", 'float' => 'right');
+$lang->project->menu->all       = array('link' => "<i class='icon-th-large'></i>&nbsp;All {$lang->projectCommon}|project|all|status=undone&projectID=%s", 'float' => 'right');
 $lang->project->menu->index     = array('link' => "<i class='icon-home'></i>{$lang->projectCommon}|project|index|locate=no", 'float' => 'right');
 
 $lang->task  = new stdclass();
@@ -413,7 +413,7 @@ $lang->error = new stdclass();
 $lang->error->companyNotFound = "The domain %s cannot be found!";
 $lang->error->length          = array("『%s』Length Error. It should be『%s』", "『%s』length should be <=『%s』and >=『%s』.");
 $lang->error->reg             = "『%s』Format Error. It should be『%s』.";
-$lang->error->unique          = "『%s』『%s』existed. Please go to Admin->Recycle to restore it, if you are sure it has been deleted.";
+$lang->error->unique          = "『%s』『%s』existed. Please go to Admin->Recycle to restore it, if you are sure it is deleted.";
 $lang->error->gt              = "『%s』should be >『%s』.";
 $lang->error->ge              = "『%s』should be >=『%s』.";
 $lang->error->notempty        = "『%s』should not be blank.";
@@ -423,10 +423,10 @@ $lang->error->int             = array("『%s』should be numbers", "『%s』shou
 $lang->error->float           = "『%s』should be numbers, decimals included.";
 $lang->error->email           = "『%s』should be valid Email.";
 $lang->error->date            = "『%s』should be valid date.";
-$lang->error->code            = "『%s』should be english or numbers.";
+$lang->error->code            = "『%s』should be letters or numbers.";
 $lang->error->account         = "『%s』should be valid account.";
 $lang->error->passwordsame    = "Two passwords should be consistent.";
-$lang->error->passwordrule    = "Password should meet requirements. It should be 6 characters at least.";
+$lang->error->passwordrule    = "Password should follow rules. It must be at least 6 characters.";
 $lang->error->accessDenied    = 'Access is denied.';
 $lang->error->pasteImg        = 'Image is not allowed to be pasted in your browser!';
 $lang->error->noData          = 'No Data';
@@ -443,14 +443,14 @@ if(!defined('SESSION_CODE_MISSING'))  define('SESSION_CODE_MISSING',  341);
 if(!defined('SESSION_VERIFY_FAILED')) define('SESSION_VERIFY_FAILED', 342);
 
 $lang->error->entry = array();
-$lang->error->entry['PARAM_CODE_MISSING']    = 'Param code not set.';
-$lang->error->entry['PARAM_TOKEN_MISSING']   = 'Param token not set.';
-$lang->error->entry['INVALID_ENTRY']         = 'Entry not exist.';
-$lang->error->entry['EMPTY_KEY']             = 'Key of entry not set.';
-$lang->error->entry['IP_DENIED']             = 'IP denied.';
+$lang->error->entry['PARAM_CODE_MISSING']    = 'Param code is missing.';
+$lang->error->entry['PARAM_TOKEN_MISSING']   = 'Param token is missing.';
+$lang->error->entry['INVALID_ENTRY']         = 'Entry does not exist.';
+$lang->error->entry['EMPTY_KEY']             = 'Key of entry is missing.';
+$lang->error->entry['IP_DENIED']             = 'IP is denied.';
 $lang->error->entry['INVALID_TOKEN']         = 'Invalid token.';
-$lang->error->entry['SESSION_CODE_MISSING']  = 'Session code not set.';
-$lang->error->entry['SESSION_VERIFY_FAILED'] = 'Session verify failed.';
+$lang->error->entry['SESSION_CODE_MISSING']  = 'Session code is missing.';
+$lang->error->entry['SESSION_VERIFY_FAILED'] = 'Session verification failed.';
 
 /* 分页信息。*/
 $lang->pager = new stdclass();
@@ -461,7 +461,7 @@ $lang->pager->first        = "<i class='icon-step-backward' title='Home'></i>";
 $lang->pager->pre          = "<i class='icon-play icon-rotate-180' title='Previous Page'></i>";
 $lang->pager->next         = "<i class='icon-play' title='Next Page'></i>";
 $lang->pager->last         = "<i class='icon-step-forward' title='Last Page'></i>";
-$lang->pager->locate       = "GO!";
+$lang->pager->locate       = "Go!";
 $lang->pager->previousPage = "Prev";
 $lang->pager->nextPage     = "Next";
 $lang->pager->summery      = "<strong>%s-%s</strong> of <strong>%s</strong>.";
