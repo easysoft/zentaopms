@@ -95,8 +95,8 @@ $lang->bug->deleted            = 'Deleted';
 $lang->bug->saveTemplate       = 'Save as Template';
 $lang->bug->setPublic          = 'Set as Public';
 $lang->bug->deleteTemplate     = 'Delete Template';
-$lang->bug->confirmStoryChange = 'Story Change Confirmation';
-$lang->bug->copy               = 'Duplicate';
+$lang->bug->confirmStoryChange = 'Confirm Story Change';
+$lang->bug->copy               = 'Copy';
 
 /* 查询条件列表。*/
 $lang->bug->assignToMe     = 'Assigned to Me';
@@ -117,7 +117,7 @@ $lang->bug->allProduct     = 'All' . $lang->productCommon;
 $lang->bug->my             = 'My';
 
 $lang->bug->ditto       = 'Ditto';
-$lang->bug->dittoNotice = 'This bug does not relate to the same product as the last one!';
+$lang->bug->dittoNotice = 'This bug is not linked to the same product as the last one!';
 
 /* 页面标签。*/
 $lang->bug->lblAssignedTo               = 'Assignee';
@@ -220,7 +220,7 @@ $lang->bug->typeList['interface']    = 'Interface Optimization';
 $lang->bug->typeList['designchange'] = 'Design Change';
 $lang->bug->typeList['newfeature']   = 'New Feature';
 $lang->bug->typeList['designdefect'] = 'Design Defect';
-$lang->bug->typeList['config']       = 'Config';
+$lang->bug->typeList['config']       = 'Configuration';
 $lang->bug->typeList['install']      = 'Install/Deploy';
 $lang->bug->typeList['security']     = 'Security';
 $lang->bug->typeList['performance']  = 'Performance';
@@ -234,8 +234,8 @@ $lang->bug->statusList['active']   = 'Active';
 $lang->bug->statusList['resolved'] = 'Resolved';
 $lang->bug->statusList['closed']   = 'Closed';
 
-$lang->bug->confirmedList[1] = 'Confirmed';
-$lang->bug->confirmedList[0] = 'Not Confirmed';
+$lang->bug->confirmedList[1] = 'Yes';
+$lang->bug->confirmedList[0] = 'No';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = 'Design Issue';
@@ -245,7 +245,7 @@ $lang->bug->resolutionList['fixed']      = 'Resolved';
 $lang->bug->resolutionList['notrepro']   = 'Irreproducible';
 $lang->bug->resolutionList['postponed']  = 'Postponed';
 $lang->bug->resolutionList['willnotfix'] = "Not to Resolve";
-$lang->bug->resolutionList['tostory']    = 'Transfer to Story';
+$lang->bug->resolutionList['tostory']    = 'Convert to Story';
 
 /* 统计报表。*/
 $lang->bug->report = new stdclass();
@@ -346,7 +346,7 @@ $lang->bug->report->bugHistories->graph->xAxisName          = 'Handling Steps';
 /* 操作记录。*/
 $lang->bug->action = new stdclass();
 $lang->bug->action->resolved            = array('main' => '$date, resolved by <strong>$actor</strong> and the solution is <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
-$lang->bug->action->tostory             = array('main' => '$date, transferred by <strong>$actor</strong> to <strong>Story</strong> with ID <strong>$extra</strong>.');
+$lang->bug->action->tostory             = array('main' => '$date, converted by <strong>$actor</strong> to <strong>Story</strong> with ID <strong>$extra</strong>.');
 $lang->bug->action->totask              = array('main' => '$date, imported by <strong>$actor</strong> as <strong>Task</strong> with ID <strong>$extra</strong>.');
 $lang->bug->action->linked2plan         = array('main' => '$date, linked by <strong>$actor</strong> to Plan <strong>$extra</strong>.');
 $lang->bug->action->unlinkedfromplan    = array('main' => '$date, deleted by <strong>$actor</strong> from Plan <strong>$extra</strong>.');

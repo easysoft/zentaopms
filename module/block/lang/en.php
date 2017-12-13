@@ -35,7 +35,7 @@ $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Name';
 $lang->block->params->value = 'Value';
 
-$lang->block->createBlock        = 'Add a Block';
+$lang->block->createBlock        = 'Add';
 $lang->block->editBlock          = 'Edit';
 $lang->block->ordersSaved        = 'Order is saved.';
 $lang->block->confirmRemoveBlock = 'Do you want to remove Block【{0}】?';
