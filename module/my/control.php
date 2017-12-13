@@ -418,8 +418,23 @@ class my extends control
             }
         }
 
-        $mode   = empty($mode) ? 'edit' : $mode;
-        $lists  = $this->user->getContactLists($this->app->user->account);
+        $mode  = empty($mode) ? 'edit' : $mode;
+        $lists = $this->user->getContactLists($this->app->user->account);
+
+        $globalContacts = isset($this->config->my->global->globalContacts) ? $this->config->my->global->globalContacts : '';
+        $globalContacts = !empty($globalContacts) ? explode(',', $globalContacts) : array();
+
+        $myContacts = $this->user->getListByAccount($this->app->user->account);
+        $disabled   = $globalContacts;
+
+        if(!empty($myContacts) && !empty($globalContacts))
+        {
+            foreach($globalContacts as $id)
+            {
+                if(in_array($id, array_keys($myContacts))) unset($disabled[array_search($id, $disabled)]);
+            }
+        }
+
         $listID = $listID ? $listID : key($lists);
         if(!$listID) $mode = 'new';
 
@@ -436,13 +451,11 @@ class my extends control
             $this->view->list       = $this->user->getContactListByID($listID);
         }
 
-        $globalContacts = isset($this->config->my->global->globalContact) ? $this->config->my->global->globalContact : '';
-        if(!empty($globalContacts)) $globalContacts = explode(',', $globalContacts);
-
         $this->view->mode           = $mode;
         $this->view->lists          = $lists;
         $this->view->listID         = $listID;
         $this->view->users          = $this->user->getPairs('noletter|noempty|noclosed|noclosed');
+        $this->view->disabled    = $disabled;
         $this->view->globalContacts = $globalContacts;
         $this->display();
     }
