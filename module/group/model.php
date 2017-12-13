@@ -422,7 +422,6 @@ class groupModel extends model
         $action = strtolower($action);
 
         if($action == 'manageview' and $group->role == 'limited') return false; 
-        if($action == 'edit' and $group->role == 'limited') return false; 
         if($action == 'copy' and $group->role == 'limited') return false; 
 
         return true;

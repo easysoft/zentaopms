@@ -1901,4 +1901,21 @@ class upgradeModel extends model
 
         return true;
     }
+
+    /**
+     * Change limited name.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function changeLimitedName()
+    {
+        $this->app->loadLang('install');
+        $this->dao->update(TABLE_GROUP)->set('name')->eq($this->lang->install->groupList['LIMITED']['name'])
+            ->set('desc')->eq($this->lang->install->groupList['LIMITED']['desc'])
+            ->where('role')->eq('limited')
+            ->exec();
+
+        return true;
+    }
 }
