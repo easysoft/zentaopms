@@ -15,7 +15,7 @@ class testcase extends control
 
     /**
      * Construct function, load product, tree, user auto.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -31,7 +31,7 @@ class testcase extends control
 
     /**
      * Index page.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -61,8 +61,8 @@ class testcase extends control
         $browseType = strtolower($browseType);
 
         /* Set browseType, productID, moduleID and queryID. */
-        $productID  = $this->product->saveState($productID, $this->products);
-        $branch     = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
+        $productID = $this->product->saveState($productID, $this->products);
+        $branch    = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot);
         setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot);
 
@@ -75,9 +75,9 @@ class testcase extends control
         if($browseType == 'bysuite')  setcookie('caseSuite', (int)$param, $this->config->cookieLife, $this->config->webRoot);
         if($browseType != 'bymodule') $this->session->set('caseBrowseType', $browseType);
 
-        $moduleID   = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->caseModule ? $this->cookie->caseModule : 0));
-        $suiteID    = ($browseType == 'bysuite') ? (int)$param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? $this->cookie->caseSuite : 0) : 0);
-        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
+        $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->caseModule ? $this->cookie->caseModule : 0));
+        $suiteID  = ($browseType == 'bysuite') ? (int)$param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? $this->cookie->caseSuite : 0) : 0);
+        $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu, save session. */
         $this->testcase->setMenu($this->products, $productID, $branch, $moduleID, $suiteID);
@@ -93,7 +93,7 @@ class testcase extends control
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort  = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Get test cases. */
         $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $sort, $pager);
@@ -141,9 +141,9 @@ class testcase extends control
 
     /**
      * Group case.
-     * 
-     * @param  int    $productID 
-     * @param  string $groupBy 
+     *
+     * @param  int    $productID
+     * @param  string $groupBy
      * @access public
      * @return void
      */
@@ -173,21 +173,21 @@ class testcase extends control
             }
         }
 
-        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
-        $this->view->position[]    = html::a($this->createLink('testcase', 'groupTask', "productID=$productID&groupBy=$groupBy"), $this->products[$productID]);
-        $this->view->position[]    = $this->lang->testcase->common;
-        $this->view->productID     = $productID;
-        $this->view->productName   = $this->products[$productID];
-        $this->view->users         = $this->user->getPairs('noletter');
-        $this->view->browseType    = 'group';
-        $this->view->groupBy       = $groupBy;
-        $this->view->orderBy       = $groupBy;
-        $this->view->groupByList   = $groupByList;
-        $this->view->cases         = $groupCases;
-        $this->view->suiteList     = $this->loadModel('testsuite')->getSuites($productID);
-        $this->view->suiteID       = 0;
-        $this->view->moduleID      = 0;
-        $this->view->branch        = $branch;
+        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
+        $this->view->position[]  = html::a($this->createLink('testcase', 'groupTask', "productID=$productID&groupBy=$groupBy"), $this->products[$productID]);
+        $this->view->position[]  = $this->lang->testcase->common;
+        $this->view->productID   = $productID;
+        $this->view->productName = $this->products[$productID];
+        $this->view->users       = $this->user->getPairs('noletter');
+        $this->view->browseType  = 'group';
+        $this->view->groupBy     = $groupBy;
+        $this->view->orderBy     = $groupBy;
+        $this->view->groupByList = $groupByList;
+        $this->view->cases       = $groupCases;
+        $this->view->suiteList   = $this->loadModel('testsuite')->getSuites($productID);
+        $this->view->suiteID     = 0;
+        $this->view->moduleID    = 0;
+        $this->view->branch      = $branch;
         $this->display();
     }
 
@@ -286,13 +286,13 @@ class testcase extends control
         /* If bugID large than 0, use this bug as template. */
         if($bugID > 0)
         {
-            $bug      = $this->loadModel('bug')->getById($bugID);
-            $type     = $bug->type;
-            $pri      = $bug->pri ? $bug->pri : $bug->severity;
-            $storyID  = $bug->story;
-            $caseTitle= $bug->title;
-            $keywords = $bug->keywords;
-            $steps    = $this->testcase->createStepsFromBug($bug->steps);
+            $bug       = $this->loadModel('bug')->getById($bugID);
+            $type      = $bug->type;
+            $pri       = $bug->pri ? $bug->pri : $bug->severity;
+            $storyID   = $bug->story;
+            $caseTitle = $bug->title;
+            $keywords  = $bug->keywords;
+            $steps     = $this->testcase->createStepsFromBug($bug->steps);
         }
 
         /* Padding the steps to the default steps count. */
@@ -428,9 +428,9 @@ class testcase extends control
 
     /**
      * Create bug.
-     * 
-     * @param  int    $productID 
-     * @param  string $extras 
+     *
+     * @param  int    $productID
+     * @param  string $extras
      * @access public
      * @return void
      */
@@ -453,20 +453,20 @@ class testcase extends control
 
         if(!$case) die(js::error($this->lang->notFound) . js::locate('back', 'parent'));
 
-        $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->createBug;
-        $this->view->runID     = $runID;
-        $this->view->case      = $case;
-        $this->view->caseID    = $caseID;
-        $this->view->version   = $version;
+        $this->view->title   = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->createBug;
+        $this->view->runID   = $runID;
+        $this->view->case    = $case;
+        $this->view->caseID  = $caseID;
+        $this->view->version = $version;
         $this->display();
     }
 
     /**
      * View a test case.
-     * 
-     * @param  int    $caseID 
-     * @param  int    $version 
-     * @param  string $from 
+     *
+     * @param  int    $caseID
+     * @param  int    $version
+     * @param  string $from
      * @access public
      * @return void
      */
@@ -527,8 +527,8 @@ class testcase extends control
 
     /**
      * Edit a case.
-     * 
-     * @param  int   $caseID 
+     *
+     * @param  int   $caseID
      * @access public
      * @return void
      */
@@ -586,9 +586,9 @@ class testcase extends control
         }
         else
         {
-            $productID       = $case->product;
-            $title           = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->edit;
-            $position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+            $productID  = $case->product;
+            $title      = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->edit;
+            $position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
 
             /* Set menu. */
             $this->testcase->setMenu($this->products, $productID, $case->branch);
@@ -615,21 +615,21 @@ class testcase extends control
         $position[]      = $this->lang->testcase->common;
         $position[]      = $this->lang->testcase->edit;
 
-        $this->view->title            = $title;
-        $this->view->position         = $position;
-        $this->view->currentModuleID  = $case->module;
-        $this->view->users            = $this->user->getPairs('noletter');
-        $this->view->case             = $case;
-        $this->view->actions          = $this->loadModel('action')->getList('case', $caseID);
-        $this->view->isLibCase        = $isLibCase;
+        $this->view->title           = $title;
+        $this->view->position        = $position;
+        $this->view->currentModuleID = $case->module;
+        $this->view->users           = $this->user->getPairs('noletter');
+        $this->view->case            = $case;
+        $this->view->actions         = $this->loadModel('action')->getList('case', $caseID);
+        $this->view->isLibCase       = $isLibCase;
 
         $this->display();
     }
 
     /**
      * Batch edit case.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -750,8 +750,8 @@ class testcase extends control
 
     /**
      * Review case.
-     * 
-     * @param  int    $caseID 
+     *
+     * @param  int    $caseID
      * @access public
      * @return void
      */
@@ -761,7 +761,7 @@ class testcase extends control
         {
             $this->testcase->review($caseID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $result   = $this->post->result;
+            $result = $this->post->result;
             $this->loadModel('action')->create('case', $caseID, 'Reviewed', $this->post->comment, ucfirst($result));
             die(js::reload('parent.parent'));
         }
@@ -774,8 +774,8 @@ class testcase extends control
 
     /**
      * Batch review case.
-     * 
-     * @param  string    $result 
+     *
+     * @param  string $result
      * @access public
      * @return void
      */
@@ -791,8 +791,8 @@ class testcase extends control
 
     /**
      * Delete a test case
-     * 
-     * @param  int    $caseID 
+     *
+     * @param  int    $caseID
      * @param  string $confirm yes|noe
      * @access public
      * @return void
@@ -828,8 +828,8 @@ class testcase extends control
 
     /**
      * Batch delete cases.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -871,8 +871,8 @@ class testcase extends control
 
     /**
      * Batch review case.
-     * 
-     * @param  string    $result 
+     *
+     * @param  string $result
      * @access public
      * @return void
      */
@@ -973,9 +973,9 @@ class testcase extends control
     }
 
     /**
-     * Confirm testcase changed. 
-     * 
-     * @param  int    $caseID 
+     * Confirm testcase changed.
+     *
+     * @param  int    $caseID
      * @access public
      * @return void
      */
@@ -988,8 +988,8 @@ class testcase extends control
 
     /**
      * Confirm story changes.
-     * 
-     * @param  int   $caseID 
+     *
+     * @param  int    $caseID
      * @access public
      * @return void
      */
@@ -1003,8 +1003,8 @@ class testcase extends control
 
     /**
      * Batch ctory change cases.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -1018,11 +1018,11 @@ class testcase extends control
     }
 
     /**
-     * export 
-     * 
-     * @param  int    $productID 
-     * @param  string $orderBy 
-     * @param  int    $taskID 
+     * export
+     *
+     * @param  int    $productID
+     * @param  string $orderBy
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -1196,9 +1196,9 @@ class testcase extends control
     }
 
     /**
-     * Export templet 
-     * 
-     * @param  int    $productID 
+     * Export templet
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -1220,8 +1220,8 @@ class testcase extends control
             $fields['stage']        = $this->lang->testcase->stage;
 
             $fields[''] = '';
-            $fields['typeValue']   = $this->lang->testcase->lblTypeValue;
-            $fields['stageValue']  = $this->lang->testcase->lblStageValue;
+            $fields['typeValue']  = $this->lang->testcase->lblTypeValue;
+            $fields['stageValue'] = $this->lang->testcase->lblStageValue;
             if($product->type != 'normal') $fields['branchValue'] = $this->lang->product->branchName[$product->type];
 
             $branches = $this->loadModel('branch')->getPairs($productID);
@@ -1257,9 +1257,9 @@ class testcase extends control
     }
 
     /**
-     * Import csv 
-     * 
-     * @param  int    $productID 
+     * Import csv
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -1324,14 +1324,14 @@ class testcase extends control
 
     /**
      * Import case from lib.
-     * 
-     * @param  int    $productID 
-     * @param  int    $branch 
-     * @param  int    $libID 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $libID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -1395,8 +1395,8 @@ class testcase extends control
 
     /**
      * Show import data
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -1419,7 +1419,7 @@ class testcase extends control
         $fields     = array_flip($fields);
 
         $rows   = $this->loadModel('file')->parseCSV($file);
-        $header   = array();
+        $header = array();
         foreach($rows[0] as $i => $rowValue)
         {
             if(empty($rowValue)) break;
@@ -1451,7 +1451,7 @@ class testcase extends control
                     {
                         $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
                         $case->$field = $id;
-                    }   
+                    }
                 }
                 elseif(in_array($field, $caseConfig->export->listFields))
                 {
@@ -1568,10 +1568,10 @@ class testcase extends control
 
     /**
      * Case bugs.
-     * 
-     * @param  int    $runID 
-     * @param  int    $caseID 
-     * @param  int    $version 
+     *
+     * @param  int    $runID
+     * @param  int    $caseID
+     * @param  int    $version
      * @access public
      * @return void
      */
