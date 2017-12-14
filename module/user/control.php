@@ -393,7 +393,7 @@ class user extends control
 
         if(!empty($_POST))
         {
-            if(strtolower($_POST['account'] == 'guest'))
+            if(strtolower($_POST['account']) == 'guest')
             {
                 die(js::error(str_replace('ID ', '', sprintf($this->lang->user->error->reserved, $_POST['account']))));
             }
