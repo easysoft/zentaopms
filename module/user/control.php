@@ -395,7 +395,7 @@ class user extends control
         {
             if(strtolower($_POST['account'] == 'guest'))
             {
-                die(js::error(str_replace('ID', $this->lang->user->account, sprintf($this->lang->user->error->reserved, $_POST['account']))));
+                die(js::error(str_replace('ID ', '', sprintf($this->lang->user->error->reserved, $_POST['account']))));
             }
             $this->user->create();
             if(dao::isError()) die(js::error(dao::getError()));
