@@ -32,12 +32,11 @@
       echo "<div class='btn-group'>";
       echo "<div class='btn-group' id='createActionMenu'>";
       common::printIcon('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=0&bugID=0&planID=$plan->id", $plan, 'button', 'plus');
-      $misc = common::hasPriv('story', 'batchCreate') ? '' : "disabled";
-      $link = common::hasPriv('story', 'batchCreate') ?  $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=0&plan={$plan->id}") : '#';
-      a($link);
-      echo "<button type='button' class='btn dropdown-toggle {$misc}' data-toggle='dropdown'><span class='caret'></span></button>";
+      $batchMisc = common::hasPriv('story', 'batchCreate') ? '' : "disabled";
+      $batchLink = common::hasPriv('story', 'batchCreate') ?  $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=0&plan={$plan->id}") : '#';
+      echo "<button type='button' class='btn dropdown-toggle {$batchMisc}' data-toggle='dropdown'><span class='caret'></span></button>";
       echo "<ul class='dropdown-menu pull-right'>";
-      echo "<li>" . html::a($link, $lang->story->batchCreate, '', "class='$misc'") . "</li>";
+      echo "<li>" . html::a($batchLink, $lang->story->batchCreate, '', "class='$batchMisc'") . "</li>";
       echo '</ul>';
       echo '</div>';
       if(common::hasPriv('productplan', 'linkStory'))
