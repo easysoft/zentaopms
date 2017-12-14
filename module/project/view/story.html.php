@@ -27,7 +27,21 @@
     common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc", '', 'button', '', '', 'export');
 
     $this->lang->story->create = $this->lang->project->createStory;
-    if($productID and !$this->loadModel('story')->checkForceReview()) common::printIcon('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&project=$project->id");
+    if($productID and !$this->loadModel('story')->checkForceReview())
+    {
+        echo "<div class='btn-group' id='createActionMenu'>";
+        common::printIcon('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&project=$project->id");
+
+        $misc = common::hasPriv('story', 'batchCreate') ? '' : "disabled";
+        $link = common::hasPriv('story', 'batchCreate') ?  $this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&project=$project->id") : '#';
+        echo "<button type='button' class='btn dropdown-toggle {$misc}' data-toggle='dropdown'>";
+        echo "<span class='caret'></span>";
+        echo '</button>';
+        echo "<ul class='dropdown-menu pull-right'>";
+        echo "<li>" . html::a($link, $lang->story->batchCreate, '', "class='$misc'") . "</li>";
+        echo '</ul>';
+        echo '</div>';
+    }
 
     if(commonModel::isTutorialMode())
     {

@@ -631,7 +631,7 @@ class commonModel extends model
 
         global $lang;
 
-        if(!commonModel::hasPriv($module, 'edit', $object)) return false;
+        if(!commonModel::hasPriv('action', 'comment', $object)) return false;
         echo html::a('#commentBox', '<i class="icon-comment-alt"></i>', '', "title='$lang->comment' onclick='setComment()' class='btn'");
     }
 

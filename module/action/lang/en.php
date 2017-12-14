@@ -25,6 +25,7 @@ $lang->action->undelete    = 'Restore';
 $lang->action->hideOne     = 'Hide';
 $lang->action->hideAll     = 'Hide All';
 $lang->action->editComment = 'Edit';
+$lang->action->comment     = 'Comment';
 
 $lang->action->trashTips      = 'Note: Delete in ZenTao is logic.';
 $lang->action->textDiff       = 'Text Format';

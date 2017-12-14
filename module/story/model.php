@@ -261,10 +261,6 @@ class storyModel extends model
 
         for($i = 0; $i < $batchNum; $i++)
         {
-            if(!empty($stories->title[$i]) && empty($stories->modules[$i]))
-            {
-                die(js::alert(sprintf($this->lang->error->notempty, $this->lang->story->module)));
-            }
             $module = $stories->module[$i] == 'ditto' ? $module : $stories->module[$i];
             $plan   = $stories->plan[$i]   == 'ditto' ? $plan   : $stories->plan[$i];
             $pri    = $stories->pri[$i]    == 'ditto' ? $pri    : $stories->pri[$i];
@@ -273,6 +269,8 @@ class storyModel extends model
             $stories->plan[$i]   = $plan;
             $stories->pri[$i]    = (int)$pri;
             $stories->source[$i] = $source;
+
+            if(!empty($stories->title[$i]) && empty($stories->module[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->story->module)));
         }
 
         if(isset($stories->uploadImage)) $this->loadModel('file');
@@ -481,7 +479,7 @@ class storyModel extends model
             ->join('mailto', ',')
             ->remove('linkStories,childStories,files,labels,comment')
             ->get();
-        if(is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
+        if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
         if(empty($_POST['product'])) $story->branch = $oldStory->branch;
 
         $this->dao->update(TABLE_STORY)

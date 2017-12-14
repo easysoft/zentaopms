@@ -56,7 +56,7 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
     <?php if(!empty($titles)):?>
     <?php foreach($titles as $storyTitle => $fileName):?>
     <?php $moduleID = $i == 0 ? $moduleID : 'ditto';?>
-    <?php $planID   = $i == 0 ? '' : 'ditto';?>
+    <?php $planID   = $i == 0 ? $planID : 'ditto';?>
     <?php $pri      = $i == 0 ? '' : 'ditto';?>
     <?php $source   = $i == 0 ? '' : 'ditto';?>
     <tr class='text-center'>
@@ -88,7 +88,7 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
     <?php $nextStart = $i;?>
     <?php for($i = $nextStart; $i < $config->story->batchCreate; $i++):?>
     <?php $moduleID = $i - $nextStart == 0 ? $moduleID : 'ditto';?>
-    <?php $planID   = $i - $nextStart == 0 ? '' : 'ditto';?>
+    <?php $planID   = $i - $nextStart == 0 ? $planID : 'ditto';?>
     <?php $pri      = $i - $nextStart == 0 ? '' : 'ditto';?>
     <?php $source   = $i - $nextStart == 0 ? '' : 'ditto';?>
     <tr class='text-center'>
