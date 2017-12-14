@@ -39,7 +39,11 @@ echo %ztcli% > %baseDir%ztcli.bat
 echo ztcli.bat ok
 
 :: create backup.bat
-SET backup= %phpcli% %baseDir%php\backup.php 
+if %requestType% == 'PATH_INFO' (
+  SET backup= %phpcli% %baseDir%ztcli "%pmsRoot%/backup-backup.html"
+)else (
+  SET backup= %phpcli% %baseDir%ztcli "%pmsRoot%/index.php?m=backup&f=backup"
+)
 echo %backup% > %baseDir%backup.bat
 echo backup.bat ok
 

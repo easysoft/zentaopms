@@ -42,7 +42,11 @@ echo $ztcli > $basePath/ztcli.sh
 echo "ztcli.sh ok"
 
 # backup database
-backup="$phpcli $basePath/php/backup.php"
+if [ $requestType == 'PATH_INFO' ]; then
+  backup="$phpcli $basePath/ztcli '$pmsRoot/backup-backup.html'";
+else
+  backup="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=backup&f=backup'";
+fi
 echo $backup > $basePath/backup.sh
 echo "backup.sh ok"
 
