@@ -1118,8 +1118,6 @@ class testcase extends control
 
             foreach($cases as $case)
             {
-                $case->title = htmlspecialchars_decode($case->title);
-
                 $relatedModuleIdList[$case->module] = $case->module;
                 $relatedStoryIdList[$case->story]   = $case->story;
                 $relatedCaseIdList[$case->linkCase] = $case->linkCase;
@@ -1162,8 +1160,8 @@ class testcase extends control
                         }
                         if($step->version != $case->version) continue;
                         $sign = (in_array($this->post->fileType, array('html', 'xml'))) ? '<br />' : "\n";
-                        $case->stepDesc   .= $stepId . ". " . htmlspecialchars_decode($step->desc) . $sign;
-                        $case->stepExpect .= $stepId . ". " . htmlspecialchars_decode($step->expect) . $sign;
+                        $case->stepDesc   .= $stepId . ". " . $step->desc . $sign;
+                        $case->stepExpect .= $stepId . ". " . $step->expect . $sign;
                         $childId ++;
                     }
                 }

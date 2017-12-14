@@ -541,13 +541,15 @@ class testcaseModel extends model
         else
         {
             /* Compare every step. */
+            $i = 0;
             foreach($oldCase->steps as $key => $oldStep)
             {
-                if(trim($oldStep->desc) != trim($steps[$key]['desc']) or trim($oldStep->expect) != $steps[$key]['expect']) 
+                if(trim($oldStep->desc) != trim($steps[$i]['desc']) or trim($oldStep->expect) != $steps[$i]['expect']) 
                 {
                     $stepChanged = true;
                     break;
                 }
+                $i++;
             }
         }
         $version = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
