@@ -200,7 +200,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $project = 0)
+    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $project = 0, $plan = 0)
     {
         if(!empty($_POST))
         {
@@ -240,7 +240,7 @@ class story extends control
         $this->product->setMenu($products, $product->id, $branch);
 
         /* Init vars. */
-        $planID     = 0;
+        $planID     = $plan;
         $pri        = 0;
         $estimate   = '';
         $title      = '';
