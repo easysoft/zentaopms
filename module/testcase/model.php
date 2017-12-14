@@ -762,13 +762,15 @@ class testcaseModel extends model
             if($data->pris[$caseID]     == 'ditto') $data->pris[$caseID]     = isset($prev['pri'])    ? $prev['pri']    : 3;
             if($data->branches[$caseID] == 'ditto') $data->branches[$caseID] = isset($prev['branch']) ? $prev['branch'] : 0;
             if($data->modules[$caseID]  == 'ditto') $data->modules[$caseID]  = isset($prev['module']) ? $prev['module'] : 0;
+            if($data->stories[$caseID]  == 'ditto') $data->stories[$caseID]  = isset($prev['story'])  ? $prev['story']  : 0;
             if($data->types[$caseID]    == 'ditto') $data->types[$caseID]    = isset($prev['type'])   ? $prev['type']   : '';
             if($data->stories[$caseID]  == '')      $data->stories[$caseID]  = 0;
 
             $prev['pri']    = $data->pris[$caseID];
+            $prev['type']   = $data->types[$caseID];
+            $prev['story']  = $data->stories[$caseID];
             $prev['branch'] = $data->branches[$caseID];
             $prev['module'] = $data->modules[$caseID];
-            $prev['type']   = $data->types[$caseID];
         }
 
         /* Initialize cases from the post data.*/

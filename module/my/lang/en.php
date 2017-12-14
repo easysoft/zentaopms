@@ -17,6 +17,7 @@ $lang->my->changePassword = 'Edit Password';
 $lang->my->unbind         = 'Unbind Ranger';
 $lang->my->manageContacts = 'Maintain Contact';
 $lang->my->deleteContacts = 'Delete Contact';
+$lang->my->shareContacts  = 'Share List';
 $lang->my->limited        = 'Restricted operation (editing only content related to itself)';
 $lang->my->score          = 'My Score';
 $lang->my->scoreRule      = 'Score Rule';

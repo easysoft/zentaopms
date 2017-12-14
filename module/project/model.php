@@ -2239,7 +2239,7 @@ class projectModel extends model
      */
     public function getPrevKanban($projectID)
     {
-        $prevKanbans = $this->loadModel('setting')->getItem("ower=null&module=project&section=kanban&key=project$projectID");
+        $prevKanbans = $this->loadModel('setting')->getItem("owner=null&module=project&section=kanban&key=project$projectID");
         return json_decode($prevKanbans, true);
     }
 
