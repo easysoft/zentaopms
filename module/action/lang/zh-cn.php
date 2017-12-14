@@ -25,6 +25,7 @@ $lang->action->undelete    = '还原';
 $lang->action->hideOne     = '隐藏';
 $lang->action->hideAll     = '全部隐藏';
 $lang->action->editComment = '修改备注';
+$lang->action->comment     = '备注';
 
 $lang->action->trashTips      = '提示：为了保证系统的完整性，禅道系统的删除都是标记删除。';
 $lang->action->textDiff       = '文本格式';

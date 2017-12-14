@@ -89,7 +89,7 @@
       <div class='actions'><?php if(!$bug->deleted) echo $actionLinks;?></div>
       <fieldset id='commentBox' class='hide'>
         <legend><?php echo $lang->comment;?></legend>
-        <form method='post' action='<?php echo inlink('edit', "bugID=$bug->id&comment=true")?>'>
+        <form method='post' action='<?php echo $this->createLink('action', 'comment', "objectType=bug&objectID=$bug->id")?>' target='hiddenwin'>
           <div class="form-group"><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></div>
           <?php echo html::submitButton() . html::backButton();?>
         </form>

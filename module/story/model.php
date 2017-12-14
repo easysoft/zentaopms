@@ -479,7 +479,7 @@ class storyModel extends model
             ->join('mailto', ',')
             ->remove('linkStories,childStories,files,labels,comment')
             ->get();
-        if(is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
+        if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
         if(empty($_POST['product'])) $story->branch = $oldStory->branch;
 
         $this->dao->update(TABLE_STORY)
