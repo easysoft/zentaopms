@@ -13,8 +13,10 @@ class productplan extends control
 {
     /**
      * Common actions
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int $productID
+     * @param  int $branch
+     *
      * @access public
      * @return void
      */
@@ -33,8 +35,10 @@ class productplan extends control
 
     /**
      * Create a plan.
-     * 
-     * @param  int    $product 
+     *
+     * @param string $product
+     * @param int    $branch
+     *
      * @access public
      * @return void
      */
@@ -70,8 +74,9 @@ class productplan extends control
 
     /**
      * Edit a plan.
-     * 
-     * @param  int    $planID 
+     *
+     * @param int $planID
+     *
      * @access public
      * @return void
      */
@@ -99,8 +104,10 @@ class productplan extends control
 
     /**
      * Batch edit plan.
-     * 
-     * @param  int    $productID 
+     *
+     * @param int $productID
+     * @param int $branch
+     *
      * @access public
      * @return void
      */
@@ -130,11 +137,11 @@ class productplan extends control
         }
         die(js::locate('back'));
     }
-                                                          
+
     /**
      * Delete a plan.
-     * 
-     * @param  int    $planID 
+     *
+     * @param  int    $planID
      * @param  string $confirm  yes|no
      * @access public
      * @return void
@@ -171,11 +178,12 @@ class productplan extends control
 
     /**
      * Browse plans.
-     * 
-     * @param  int    $product 
-     * @param  string $orderBy 
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $orderBy
      * @param  string $browseType
-     * @param  int    $recTotal 
+     * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
@@ -209,6 +217,9 @@ class productplan extends control
      * @param  int    $planID
      * @param  string $type
      * @param  string $orderBy
+     * @param  string $link
+     * @param  string $param
+     *
      * @access public
      * @return void
      */
@@ -248,10 +259,12 @@ class productplan extends control
     }
 
     /**
-     * Ajax: Get product plans. 
-     * 
-     * @param  int    $productID 
+     * Ajax: Get product plans.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
      * @param  string $number
+     *
      * @access public
      * @return void
      */
@@ -267,7 +280,11 @@ class productplan extends control
     /**
      * Link stories.
      *
-     * @param  int    $planID
+     * @param int    $planID
+     * @param string $browseType
+     * @param int    $param
+     * @param string $orderBy
+     *
      * @access public
      * @return void
      */
@@ -340,9 +357,10 @@ class productplan extends control
     }
 
     /**
-     * Unlink story 
-     * 
-     * @param  int    $storyID 
+     * Unlink story
+     *
+     * @param  int    $storyID
+     * @param  int    $planID
      * @param  string $confirm  yes|no
      * @access public
      * @return void
@@ -377,9 +395,11 @@ class productplan extends control
     }
 
     /**
-     * Batch unlink story. 
-     * 
-     * @param  string $confirm 
+     * Batch unlink story.
+     *
+     * @param int    $planID
+     * @param string $orderBy
+     *
      * @access public
      * @return void
      */
@@ -391,10 +411,12 @@ class productplan extends control
 
     /**
      * Link bugs.
-     * 
-     * @param  int    $planID 
-     * @param  string $browseType 
-     * @param  int    $param 
+     *
+     * @param  int    $planID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     *
      * @access public
      * @return void
      */
@@ -469,9 +491,9 @@ class productplan extends control
     }
 
     /**
-     * Unlink story 
-     * 
-     * @param  int    $bugID 
+     * Unlink story
+     *
+     * @param  int    $bugID
      * @param  string $confirm  yes|no
      * @access public
      * @return void
@@ -506,9 +528,11 @@ class productplan extends control
     }
 
     /**
-     * Batch unlink story. 
-     * 
-     * @param  string $confirm 
+     * Batch unlink story.
+     *
+     * @param        $planID
+     * @param string $orderBy
+     *
      * @access public
      * @return void
      */
