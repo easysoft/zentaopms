@@ -152,6 +152,8 @@ class task extends control
 
         /* Set Custom*/
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
+        if($project->type == 'ops') unset($customFields['story']);
+
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->task->custom->createFields;
 
@@ -1172,14 +1174,17 @@ class task extends control
      */
     public function export($projectID, $orderBy)
     {
+        $project = $this->project->getById($projectID);
+        $allExportFields = $this->config->task->exportFields;
+        if($project->type == 'ops') $allExportFields = str_replace(' story,', '', $allExportFields);
+
         if($_POST)
         {
             $this->loadModel('file');
-            $taskLang   = $this->lang->task;
-            $taskConfig = $this->config->task;
+            $taskLang = $this->lang->task;
 
             /* Create field lists. */
-            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $taskConfig->exportFields);
+            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $allExportFields);
             foreach($fields as $key => $fieldName)
             {
                 $fieldName = trim($fieldName);
@@ -1286,7 +1291,7 @@ class task extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
-        $this->view->allExportFields = $this->config->task->exportFields;
+        $this->view->allExportFields = $allExportFields;
         $this->view->customExport    = true;
         $this->display();
     }

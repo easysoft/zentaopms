@@ -49,6 +49,13 @@ js::set('browseType', $browseType);
 
     if($useDatatable) include '../../common/view/datatable.html.php';
     $customFields = $this->datatable->getSetting('project');
+    if($project->type == 'ops')
+    {
+      foreach($customFields as $id => $customField)
+      {
+        if($customField->id == 'story') unset($customFields[$id]);
+      }
+    }
     $widths       = $this->datatable->setFixedFieldWidth($customFields);
     $columns      = 0;
     ?>
