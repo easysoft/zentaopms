@@ -195,8 +195,11 @@ class story extends control
      * Create a batch stories.
      * 
      * @param  int    $productID 
+     * @param  int    $branch 
      * @param  int    $moduleID 
      * @param  int    $storyID
+     * @param  int    $project 
+     * @param  int    $plan 
      * @access public
      * @return void
      */
