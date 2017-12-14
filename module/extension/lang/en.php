@@ -46,6 +46,7 @@ $lang->extension->downloads   = 'Downloads';
 $lang->extension->compatible  = 'Compatibility';
 $lang->extension->grade       = 'Score';
 $lang->extension->depends     = 'Dependent';
+$lang->extension->expireDate  = 'Expire';
 $lang->extension->zentaoCompatible  = 'Compatible Version';
 $lang->extension->installedTime     = 'Installed Time';
 

@@ -46,6 +46,7 @@ $lang->extension->downloads   = '下载量';
 $lang->extension->compatible  = '兼容性';
 $lang->extension->grade       = '评分';
 $lang->extension->depends     = '依赖';
+$lang->extension->expireDate  = '到期日期';
 $lang->extension->zentaoCompatible  = '适用版本';
 $lang->extension->installedTime     = '安装时间';
 
