@@ -53,6 +53,8 @@
     <?php
     echo "{$lang->extension->version}:    <i>{$extension->version}</i> ";
     echo "{$lang->extension->author}:     <i>{$extension->author}</i> ";
+    $expireDate = $this->extension->getExpireDate($extension);
+    if(!empty($expireDate)) echo "{$lang->extension->expireDate}:     <i>{$expireDate}</i>";
     ?>
   </div>
 </div></div>

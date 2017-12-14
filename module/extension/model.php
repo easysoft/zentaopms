@@ -886,4 +886,35 @@ class extensionModel extends model
         if($type != 'between') return !$result;
         return $result;
     }
+
+    /**
+     * Get extension expire date.
+     * 
+     * @param  int    $extension 
+     * @access public
+     * @return void
+     */
+    public function getExpireDate($extension)
+    {
+        $licencePath = $this->app->getConfigRoot() . 'license/';
+        $today       = date('Y-m-d');
+        $expireDate  = '';
+
+        $licenceOrderFile = $licencePath . 'order' . $extension->code . $extension->version . '.txt';
+        if(file_exists($licenceOrderFile))
+        {
+            $order = file_get_contents($licenceOrderFile);
+            $order = unserialize($order);
+            if($order->type != 'life')
+            {
+                $days = isset($order->days) ? $order->days : 0;
+                if($order->type == 'demo') $days = 31;
+                if($order->type == 'year') $days = 365;
+                $startDate  = $order->paidDate != '0000-00-00 00:00:00' ? $order->paidDate : $order->createdDate;
+                if($days) $expireDate = date('Y-m-d', strtotime($startDate) + $days * 24 * 3600);
+            }
+        }
+
+        return $expireDate;
+    }
 }
