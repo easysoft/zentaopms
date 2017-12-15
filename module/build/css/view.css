@@ -10,5 +10,8 @@
 
 .table-actions {padding-left: 5px;}
 
+#buildInfo {border-top: 1px solid #ddd;}
+#buildInfo > div {padding-top: 15px;}
+
 #querybox form {margin: 0px !important;}
 #moreOrLite {right: 0px !important;}

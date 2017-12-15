@@ -82,16 +82,17 @@
             <?php endif;?>
             <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory', "release=$release->id");?>" id='linkedStoriesForm'>
             <table class='table table-hover table-condensed table-striped tablesorter table-fixed table-selectable' id='storyList'>
+              <?php $vars = "releaseID={$release->id}&type=story&link=$link&param=$param&orderBy=%s";?>
               <thead>
                 <tr>
-                  <th class='w-id'><?php echo $lang->idAB;?></th>
-                  <th class='w-pri'><?php echo $lang->priAB;?></th>
-                  <th class="text-left"><?php echo $lang->story->title;?></th>
-                  <th class='w-user'><?php echo $lang->openedByAB;?></th>
-                  <th class='w-hour'><?php echo $lang->story->estimateAB;?></th>
-                  <th class='w-hour'><?php echo $lang->statusAB;?></th>
-                  <th class='w-100px'><?php echo $lang->story->stageAB;?></th>
-                  <th class='w-50px'><?php echo $lang->actions;?></th>
+                  <th class='w-id {sorter:false}'>     <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
+                  <th class='w-pri {sorter:false}'>    <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+                  <th class="text-left {sorter:false}"><?php common::printOrderLink('title',    $orderBy, $vars, $lang->story->title);?></th>
+                  <th class='w-user {sorter:false}'>   <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+                  <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
+                  <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
+                  <th class='w-100px {sorter:false}'>  <?php common::printOrderLink('stage',    $orderBy, $vars, $lang->story->stageAB);?></th>
+                  <th class='w-50px {sorter:false}'>   <?php echo $lang->actions?></th>
                 </tr>
               </thead>
               <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkStory');?>
@@ -141,16 +142,17 @@
             <?php endif;?>
             <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "releaseID=$release->id");?>" id='linkedBugsForm'>
             <table class='table table-hover table-condensed table-striped tablesorter table-fixed table-selectable' id='bugList'>
+              <?php $vars = "releaseID={$release->id}&type=bug&link=$link&param=$param&orderBy=%s";?>
               <thead>
                 <tr>
-                  <th class='w-id'><?php echo $lang->idAB;?></th>
-                  <th><?php echo $lang->bug->title;?></th>
-                  <th class='w-100px'><?php echo $lang->bug->status;?></th>
-                  <th class='w-user'><?php echo $lang->openedByAB;?></th>
-                  <th class='w-date'><?php echo $lang->bug->openedDateAB;?></th>
-                  <th class='w-user'><?php echo $lang->bug->resolvedByAB;?></th>
-                  <th class='w-100px'><?php echo $lang->bug->resolvedDateAB;?></th>
-                  <th class='w-50px'><?php echo $lang->actions;?></th>
+                  <th class='w-id {sorter:false}'>     <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
+                  <th class='text-left {sorter:false}'><?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
+                  <th class='w-100px {sorter:false}'>  <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
+                  <th class='w-user {sorter:false}'>   <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
+                  <th class='w-date {sorter:false}'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
+                  <th class='w-user {sorter:false}'>   <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+                  <th class='w-100px {sorter:false}'>  <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
+                  <th class='w-50px {sorter:false}'>   <?php echo $lang->actions;?></th>
                 </tr>
               </thead>
               <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkBug');?>
@@ -200,15 +202,16 @@
             <?php endif;?>
             <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "releaseID=$release->id&type=leftBug");?>" id='linkedBugsForm'>
             <table class='table table-hover table-condensed table-striped tablesorter table-fixed table-selectable' id='leftBugList'>
+              <?php $vars = "releaseID={$release->id}&type=leftBug&link=$link&param=$param&orderBy=%s";?>
               <thead>
                 <tr>
-                  <th class='w-id'><?php echo $lang->idAB;?></th>
-                  <th class='w-severity'><?php echo $lang->bug->severityAB;?></th>
-                  <th><?php echo $lang->bug->title;?></th>
-                  <th class='w-100px'><?php echo $lang->bug->status;?></th>
-                  <th class='w-user'><?php echo $lang->openedByAB;?></th>
-                  <th class='w-150px'><?php echo $lang->bug->openedDateAB;?></th>
-                  <th class='w-50px'><?php echo $lang->actions;?></th>
+                  <th class='w-id {sorter:false}'>      <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
+                  <th class='w-severity {sorter:false}'><?php common::printOrderLink('severity',   $orderBy, $vars, $lang->bug->severityAB);?></th>
+                  <th class='text-left {sorter:false}'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
+                  <th class='w-100px {sorter:false}'>   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->status);?></th>
+                  <th class='w-user {sorter:false}'>    <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+                  <th class='w-150px {sorter:false}'>   <?php common::printOrderLink('openedDate', $orderBy, $vars, $lang->bug->openedDateAB);?></th>
+                  <th class='w-50px {sorter:false}'>    <?php echo $lang->actions;?></th>
                 </tr>
               </thead>
               <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkBug');?>
