@@ -13,7 +13,7 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 ?>
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
-<?php 
+<?php
     if(!empty($this->config->sso->redirect)) js::set('ssoRedirect', $this->config->sso->redirect);
 ?>
 <header id='header'>
