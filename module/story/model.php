@@ -223,7 +223,7 @@ class storyModel extends model
                     foreach($files as $file)
                     {
                         $file->objectType = 'story';
-                        $file->objectID = $storyID;
+                        $file->objectID   = $storyID;
                         unset($file->id);
                         $this->dao->insert(TABLE_FILE)->data($file)->exec();
                     }
@@ -981,7 +981,9 @@ class storyModel extends model
     /**
      * Batch change the stage of story.
      *
-     * @param  string    $stage
+     * @param $storyIDList
+     * @param $stage
+     *
      * @access public
      * @return array
      */
