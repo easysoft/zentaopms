@@ -126,7 +126,7 @@ class release extends control
      * @access public
      * @return void
      */
-    public function view($releaseID, $type = 'story', $link = 'false', $param = '')
+    public function view($releaseID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc')
     {
         if($type == 'story') $this->session->set('storyList', $this->app->getURI(true));
         if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $this->app->getURI(true));
@@ -137,15 +137,21 @@ class release extends control
         $release = $this->release->getById((int)$releaseID, true);
         if(!$release) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->andWhere('deleted')->eq(0)
+            ->beginIF($type == 'story')->orderBy($orderBy)->fi()
+            ->fetchAll('id');
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
         $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($release->stories)->andWhere('branch')->eq($release->branch)->fetchPairs('story', 'stage');
         foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
 
-        $bugs    = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->bugs)->andWhere('deleted')->eq(0)->fetchAll();
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->bugs)->andWhere('deleted')->eq(0)
+            ->beginIF($type == 'bug')->orderBy($orderBy)->fi()
+            ->fetchAll();
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'linkedBug');
 
-        $leftBugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->leftBugs)->andWhere('deleted')->eq(0)->fetchAll();
+        $leftBugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($release->leftBugs)->andWhere('deleted')->eq(0)
+            ->beginIF($type == 'leftBug')->orderBy($orderBy)->fi()
+            ->fetchAll();
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'leftBugs');
 
         $this->commonAction($release->product);
@@ -162,6 +168,7 @@ class release extends control
         $this->view->type          = $type;
         $this->view->link          = $link;
         $this->view->param         = $param;
+        $this->view->orderBy       = $orderBy;
         $this->view->branchName    = $release->productType == 'normal' ? '' : $this->loadModel('branch')->getById($release->branch);
         $this->display();
     }
