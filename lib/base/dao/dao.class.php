@@ -782,7 +782,7 @@ class baseDAO
     {
         $sql   = $this->processSQL();
         $table = $this->table;
-        $key   = 'fetch-' . md5($sql);
+        $key   = 'fetch-' . md5($sql . $field);
         if(isset(dao::$cache[$table][$key]))
         {
             if(empty($field)) return $this->getRow(dao::$cache[$table][$key]);
@@ -800,7 +800,7 @@ class baseDAO
 
         $this->setFields($field);
         $result = $this->query()->fetch(PDO::FETCH_OBJ);
-        dao::$cache[$table][$key] = getRow($result);
+        dao::$cache[$table][$key] = $this->getRow($result);
         return $result ? $result->$field : '';
     }
 
