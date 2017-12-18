@@ -21,4 +21,43 @@ $(function()
 
     $('#module' + moduleID).addClass('active');
     $('#product' + productID).addClass('active');
+    $(document).on('click', "#storyList tbody tr", function(){showCheckedSummary();});
+    $(document).on('change', "#storyList :checkbox", function(){showCheckedSummary();});
 });
+
+function showCheckedSummary()
+{
+    var $summary = $('tfoot .table-actions .text:last');
+    if(!$summary.hasClass('readed'))
+    {
+        taskSummary = $summary.html();
+        $summary.addClass('readed');
+    }
+
+    var checkedTotal    = 0;
+    var checkedEstimate = 0;
+    var checkedCase     = 0;
+    $('[name^="storyIDList"]').each(function()
+    {
+        if($(this).prop('checked'))
+        {
+            checkedTotal += 1;
+            var taskID = $(this).val();
+            $tr = $("#storyList tbody tr[data-id='" + taskID + "']");
+            checkedEstimate += Number($tr.data('estimate'));
+            if(Number($tr.data('cases')) > 0) checkedCase += 1;
+        }
+    });
+    if(checkedTotal > 0)
+    {
+        rate    = Math.round(checkedCase / checkedTotal * 10000) / 100 + '' + '%';
+        summary = checkedSummary.replace('%total%', checkedTotal)
+          .replace('%estimate%', checkedEstimate)
+          .replace('%rate%', rate)
+        $('tfoot .table-actions .text:last').html(summary);
+    }
+    else
+    {
+        $('tfoot .table-actions .text:last').html(taskSummary);
+    }
+}

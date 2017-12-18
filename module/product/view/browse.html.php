@@ -141,7 +141,7 @@
       </thead>
       <tbody>
         <?php foreach($stories as $story):?>
-        <tr class='text-center' data-id='<?php echo $story->id?>'>
+        <tr class='text-center' data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
           <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
         </tr>
         <?php endforeach;?>
@@ -323,6 +323,7 @@
     </table>
   </form>
 </div>
+<?php js::set('checkedSummary', $lang->product->checkedSummary);?>
 <script language='javascript'>
 var moduleID = <?php echo $moduleID?>;
 $('#module<?php echo $moduleID;?>').addClass('active');
