@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->task->index              = "Index";
-$lang->task->create             = "Create";
+$lang->task->create             = "Task";
 $lang->task->batchCreate        = "Batch Create Task";
 $lang->task->batchEdit          = "Batch Edit";
 $lang->task->batchChangeModule  = "Batch Change Module";
