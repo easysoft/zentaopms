@@ -33,7 +33,19 @@ $(document).on('mousedown', 'select', function()
         }
         $(this).val(value);
     }
-})
+});
+
+$(document).keydown(function(event)
+{
+    if(event.keyCode == 38)
+    {
+        inputFocusJump('up');
+    }
+    else if(event.keyCode == 40)
+    {
+        inputFocusJump('down');
+    }
+});
 
 if(navigator.userAgent.indexOf("Firefox") < 0)
 {

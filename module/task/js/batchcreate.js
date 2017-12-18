@@ -153,5 +153,16 @@ $(function()
     if($.cookie('zeroTask') == 'true') toggleZeroTaskStory();
 
     if(storyID != 0) setStoryRelated(0);
-})
 
+    $(document).keydown(function(event)
+    {
+        if(event.keyCode == 38)
+        {
+            inputFocusJump('up');
+        }
+        else if(event.keyCode == 40)
+        {
+            inputFocusJump('down');
+        }
+    });
+});

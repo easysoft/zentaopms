@@ -90,4 +90,4 @@ $(document).on('change', 'select', function()
         $(this).trigger("chosen:updated");
         $(this).trigger("change");
     }
-})
+});

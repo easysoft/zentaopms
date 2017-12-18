@@ -136,3 +136,15 @@ if(navigator.userAgent.indexOf("Firefox") < 0)
         this.style.height = (this.scrollHeight + 2) + "px"; 
     });
 }
+
+$(document).keydown(function(event)
+{
+    if(event.keyCode == 38)
+    {
+        inputFocusJump('up');
+    }
+    else if(event.keyCode == 40)
+    {
+        inputFocusJump('down');
+    }
+});
