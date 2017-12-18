@@ -49,8 +49,15 @@ js::set('browseType', $browseType);
 
     if($useDatatable) include '../../common/view/datatable.html.php';
     $customFields = $this->datatable->getSetting('project');
-    $widths       = $this->datatable->setFixedFieldWidth($customFields);
-    $columns      = 0;
+    if($project->type == 'ops')
+    {
+        foreach($customFields as $id => $customField)
+        {
+            if($customField->id == 'story') unset($customFields[$id]);
+        }
+    }
+    $widths  = $this->datatable->setFixedFieldWidth($customFields);
+    $columns = 0;
     ?>
     <table class='table table-condensed table-hover table-striped tablesorter table-fixed <?php echo ($useDatatable ? 'datatable' : 'table-selectable');?> table-selectable' id='taskList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='taskIDList[]'>
       <thead>
@@ -69,14 +76,14 @@ js::set('browseType', $browseType);
       </thead>
       <tbody>
         <?php foreach($tasks as $task):?>
-        <tr class='text-center' data-id='<?php echo $task->id;?>'>
+            <tr class='text-center' data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
           <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
         </tr>
         <?php if(!empty($task->children)):?>
         <?php foreach($task->children as $key => $child):?>
         <?php $class  = $key == 0 ? ' table-child-top' : '';?>
         <?php $class .= ($key + 1 == count($task->children)) ? ' table-child-bottom' : '';?>
-        <tr class='text-center table-children<?php echo $class;?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>'>
+        <tr class='text-center table-children<?php echo $class;?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
           <?php foreach($customFields as $field) $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);?>
         </tr>
         <?php endforeach;?>
@@ -166,6 +173,7 @@ js::set('browseType', $browseType);
     </table>
   </form>
 </div>
+<?php js::set('checkedSummary', $lang->project->checkedSummary);?>
 <?php js::set('replaceID', 'taskList')?>
 <script>
 $('#project<?php echo $projectID;?>').addClass('active')

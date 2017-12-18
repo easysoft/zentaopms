@@ -1901,4 +1901,41 @@ class upgradeModel extends model
 
         return true;
     }
+
+    /**
+     * Change limited name.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function changeLimitedName()
+    {
+        $this->app->loadLang('install');
+        $this->dao->update(TABLE_GROUP)->set('name')->eq($this->lang->install->groupList['LIMITED']['name'])
+            ->set('desc')->eq($this->lang->install->groupList['LIMITED']['desc'])
+            ->where('role')->eq('limited')
+            ->exec();
+
+        return true;
+    }
+
+    /**
+     * Adjust Priv for 9.7 
+     * 
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv9_7()
+    {
+        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('method')->eq('edit')->andWhere('module')->in('story,task,bug,testcase')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'action';
+            $groupPriv->method = 'comment';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+        }
+        return true;
+    }
 }

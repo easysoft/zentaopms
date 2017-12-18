@@ -27,7 +27,21 @@
     common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc", '', 'button', '', '', 'export');
 
     $this->lang->story->create = $this->lang->project->createStory;
-    if($productID and !$this->loadModel('story')->checkForceReview()) common::printIcon('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&project=$project->id");
+    if($productID and !$this->loadModel('story')->checkForceReview())
+    {
+        echo "<div class='btn-group' id='createActionMenu'>";
+        common::printIcon('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&project=$project->id");
+
+        $misc = common::hasPriv('story', 'batchCreate') ? '' : "disabled";
+        $link = common::hasPriv('story', 'batchCreate') ?  $this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&project=$project->id") : '#';
+        echo "<button type='button' class='btn dropdown-toggle {$misc}' data-toggle='dropdown'>";
+        echo "<span class='caret'></span>";
+        echo '</button>';
+        echo "<ul class='dropdown-menu pull-right'>";
+        echo "<li>" . html::a($link, $lang->story->batchCreate, '', "class='$misc'") . "</li>";
+        echo '</ul>';
+        echo '</div>';
+    }
 
     if(commonModel::isTutorialMode())
     {
@@ -58,7 +72,7 @@
 <div class='main'>
   <script>setTreeBox();</script>
   <form method='post' id='projectStoryForm'>
-      <?php $canOrder = common::hasPriv('project', 'storySort');?>
+    <?php $canOrder = common::hasPriv('project', 'storySort');?>
     <table class='table tablesorter table-condensed table-fixed table-selectable' id='storyList'>
       <thead>
         <tr class='colhead'>
@@ -91,7 +105,7 @@
         $storyLink      = $this->createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$project->id");
         $totalEstimate += $story->estimate;
         ?>
-        <tr class='text-center' id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>'>
+        <tr class='text-center' id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
           <td class='cell-id'>
             <?php if($canBatchEdit or $canBatchClose):?>
             <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
@@ -218,6 +232,7 @@
     </table>
   </form>
 </div>
+<?php js::set('checkedSummary', $lang->product->checkedSummary);?>
 <?php js::set('projectID', $project->id);?>
 <?php js::set('orderBy', $orderBy)?>
 <?php include '../../common/view/footer.html.php';?>

@@ -19,6 +19,10 @@ $(function()
        $("#days").val('');
        $("input:radio[name='delta']").attr("checked",false);
     });
+    $('#end').on('change', function()
+    {
+        $("input:radio[name='delta']").attr("checked", false);
+    })
 });
 
 function showTypeTips()

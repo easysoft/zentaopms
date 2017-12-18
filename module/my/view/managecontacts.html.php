@@ -19,7 +19,8 @@
     foreach($lists as $id => $listName)
     {
         $listClass = ($id == $listID) ? 'list-group-item active' : 'list-group-item';
-        echo html::a(inlink('managecontacts', "listID=$id&mode=edit"), $listName, '', "class='{$listClass}'");
+        $shareIcon = in_array($id, $globalContacts) ? '<i class="icon icon-share-sign"></i> ' : '';
+        echo html::a(inlink('managecontacts', "listID=$id&mode=edit"), $shareIcon . $listName, '', "class='{$listClass}'");
     }
     ?>
     </ul>
@@ -44,13 +45,14 @@
               <td class='w-300px'>
               <div class='required required-wrapper'></div>
               <?php
+              if($mode == 'edit') $readonly = in_array($list->id, $disabled) ? ' readonly' : '';
               if($mode == 'new')
               {
                   echo html::input('newList', '', "class='form-control'");
               }
               else
               {
-                  echo html::input('listName', $list->listName, "class='form-control'");
+                  echo html::input('listName', $list->listName, "$readonly class='form-control'");
                   echo html::hidden('listID',  $list->id);
               }
               ?>
@@ -67,11 +69,22 @@
               }
               else
               {
-                  echo html::select('users[]', $users, $list->userList, "multiple class='form-control chosen'");
+                  echo html::select('users[]', $users, $list->userList, "multiple $readonly class='form-control chosen'");
               }
               ?>
               </td>
             </tr>
+            <?php if(common::hasPriv('datatable', 'setGlobal')):?>
+            <tr>
+              <th></th>
+              <td colspan="2">
+                <label class="checkbox-inline">
+                  <input type="checkbox" name="share" value="1" <?php if($mode != 'new' && in_array($list->id, $globalContacts)) echo 'checked';?>/> <?php echo $lang->my->shareContacts;?>
+                </label>
+              </td>
+            </tr>
+            <?php endif;?>
+            <?php if($mode == 'new' || !in_array($list->id, $disabled)):?>
             <tr>
               <td></td>
               <td>
@@ -79,6 +92,7 @@
               <?php if($mode == 'edit') echo html::a(inlink('deleteContacts', "listID=$listID"), $lang->delete, 'hiddenwin', "class='btn btn-danger'");?>
               </td>
             </tr>
+            <?php endif;?>
           </table>
         </div>
       </div>

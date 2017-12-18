@@ -102,6 +102,7 @@ class story extends control
 
         $users = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+        if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
         /* Set menu. */
         $this->product->setMenu($products, $product->id, $branch);
@@ -194,22 +195,28 @@ class story extends control
      * Create a batch stories.
      * 
      * @param  int    $productID 
+     * @param  int    $branch 
      * @param  int    $moduleID 
      * @param  int    $storyID
+     * @param  int    $project 
+     * @param  int    $plan 
      * @access public
      * @return void
      */
-    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0)
+    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $project = 0, $plan = 0)
     {
         if(!empty($_POST))
         {
             $mails = $this->story->batchCreate($productID, $branch);
             if(dao::isError()) die(js::error(dao::getError()));
 
+            $stories = array();
             foreach($mails as $mail)
             {
+                $stories[] = $mail->storyID;
                 if($mail->actionID) $this->story->sendmail($mail->storyID, $mail->actionID);
             }
+            if($project) $this->loadModel('project')->linkStory($project, $stories);
 
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
             if($storyID)
@@ -236,7 +243,7 @@ class story extends control
         $this->product->setMenu($products, $product->id, $branch);
 
         /* Init vars. */
-        $planID     = 0;
+        $planID     = $plan;
         $pri        = 0;
         $estimate   = '';
         $title      = '';
@@ -672,7 +679,7 @@ class story extends control
             $this->story->review($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             $result = $this->post->result;
-            if($this->post->closedReason != '' and strpos('done,postponed,subdivided', $this->post->closedReason) === false) $result = 'pass';
+            if($this->post->closedReason != '' and strpos('done,postponed,subdivided,willnotdo', $this->post->closedReason) === false) $result = 'pass';
             $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result));
             $this->story->sendmail($storyID, $actionID);
             if($this->post->result == 'reject')

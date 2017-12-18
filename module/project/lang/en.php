@@ -180,6 +180,7 @@ $lang->project->beginAndEnd     = 'Time Frame';
 $lang->project->lblStats        = 'Hour Report';
 $lang->project->stats           = '<strong>%s</strong> Hour(s) available, <strong>%s</strong> Hour(s) Estimated, <strong>%s</strong> Hour(s) Consumed, <strong>%s</strong> Hour(s) Remained.';
 $lang->project->taskSummary     = " <strong>%s</strong> Tasks on this page, <strong>%s</strong> Wait, <strong>%s</strong> Doing. <strong>%s</strong> Hour(s) Estimated, <strong>%s</strong> Hour(s) Consumed, <strong>%s</strong> Hour(s) Remained.";
+$lang->project->checkedSummary  = " <strong>%total%</strong> Checked, <strong>%wait%</strong> Wait, <strong>%doing%</strong> Doing, <strong>%estimate%</strong> Hour(s) Estimated, <strong>%consumed%</strong> Hour(s) Consumed, <strong>%left%</strong> Hour(s) Remained.";
 $lang->project->memberHours     = "%s has <strong>%s</strong> Hour(s) available ";
 $lang->project->groupSummary    = "<strong>%s</strong> Tasks in this group, Wait <strong>%s</strong>, Doing <strong>%s</strong>. <strong>%s</strong> Hour(s) Estimated , <strong>%s</strong> Hour(s) Consumed, <strong>%s</strong> Hour(s) Remained.";
 $lang->project->groupSummaryAB  = "Total Tasks <strong>%s</strong>, Wait <strong>%s</strong>, Doing <strong>%s</strong>.<br /> <strong>%s</strong> Hour(s) Estimated, <strong>%s</strong> Hour(s) Consumed，<strong>%s</strong> Hour(s) Remained.";

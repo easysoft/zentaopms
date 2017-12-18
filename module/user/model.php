@@ -915,20 +915,47 @@ class userModel extends model
     /**
      * Get contact list of a user.
      * 
-     * @param  string    $account 
-     * @param  string    $params   withempty|withnote 
+     * @param string $account
+     * @param string $params  withempty|withnote
+     *
      * @access public
      * @return object
      */
     public function getContactLists($account, $params= '')
     {
-        $contacts = $this->dao->select('id, listName')->from(TABLE_USERCONTACT)->where('account')->eq($account)->fetchPairs();
-        if(!$contacts) return array();
+        $contacts  = $this->getListByAccount($account);
+        $globalIDs = isset($this->config->my->global->globalContacts) ? $this->config->my->global->globalContacts : '';
+
+        if(!empty($globalIDs))
+        {
+            $globalIDs      = explode(',', $globalIDs);
+            $globalContacts = $this->dao->select('id, listName')->from(TABLE_USERCONTACT)->where('id')->in($globalIDs)->fetchPairs();
+            foreach($globalContacts as $id => $contact)
+            {
+                if(in_array($id, array_keys($contacts))) unset($globalContacts[$id]);
+            }
+            if(!empty($globalContacts)) $contacts = $globalContacts + $contacts;
+        }
+
+        if(empty($contacts)) return array();
 
         if(strpos($params, 'withempty') !== false) $contacts = array('' => '') + $contacts;
         if(strpos($params, 'withnote')  !== false) $contacts = array('' => $this->lang->user->contacts->common) + $contacts;
 
         return $contacts;
+    }
+
+    /**
+     * Get Contact List by account.
+     *
+     * @param string $account
+     *
+     * @access public
+     * @return array
+     */
+    public function getListByAccount($account)
+    {
+        return $this->dao->select('id, listName')->from(TABLE_USERCONTACT)->where('account')->eq($account)->fetchPairs();
     }
 
     /**
@@ -1009,6 +1036,31 @@ class userModel extends model
             ->where('id')->eq($listID)
             ->exec();
         if(dao::isError()) die(js::error(dao::getError()));
+    }
+
+    /**
+     * Update global contact.
+     *
+     * @param      $listID
+     * @param bool $isPush
+     *
+     * @access public
+     * @return void
+     */
+    public function setGlobalContacts($listID, $isPush = true)
+    {
+        $contacts    = $this->loadModel('setting')->getItem("owner=system&module=my&section=global&key=globalContacts");
+        $contactsIDs = empty($contacts) ? array() : explode(',', $contacts);
+        if($isPush)
+        {
+            if(!in_array($listID, $contactsIDs)) array_push($contactsIDs, $listID);
+        }
+        else
+        {
+            $key = array_search($listID, $contactsIDs);
+            if($key !== false) array_splice($contactsIDs, $key, 1);
+        }
+        $this->loadModel('setting')->setItem('system.my.global.globalContacts', join(',', $contactsIDs));
     }
 
     /**

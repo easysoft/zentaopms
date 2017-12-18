@@ -126,7 +126,7 @@
       <?php include '../../common/view/action.html.php';?>
       <fieldset id='commentBox' class='hide'>
         <legend><?php echo $lang->comment;?></legend>
-        <form method='post' action='<?php echo inlink('edit', "docID=$doc->id&comment=true")?>'>
+        <form method='post' action='<?php echo $this->createLink('action', 'comment', "objectType=doc&objectID=$doc->id")?>' target='hiddenwin'>
           <div class="form-group"><?php echo html::textarea('comment', '',"style='width:100%;height:100px'");?></div>
           <?php echo html::submitButton() . html::backButton();?>
         </form>

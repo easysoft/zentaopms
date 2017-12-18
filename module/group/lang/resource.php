@@ -1005,12 +1005,15 @@ $lang->resource->action->trash    = 'trash';
 $lang->resource->action->undelete = 'undelete';
 $lang->resource->action->hideOne  = 'hideOne';
 $lang->resource->action->hideAll  = 'hideAll';
+$lang->resource->action->comment  = 'comment';
 $lang->resource->action->editComment = 'editComment';
 
 $lang->action->methodOrder[5]  = 'trash';
 $lang->action->methodOrder[10] = 'undelete';
 $lang->action->methodOrder[15] = 'hideOne';
 $lang->action->methodOrder[20] = 'hideAll';
+$lang->action->methodOrder[25] = 'comment';
+$lang->action->methodOrder[30] = 'editComment';
 
 $lang->resource->backup = new stdclass();
 $lang->resource->backup->index   = 'index';

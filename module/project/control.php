@@ -857,6 +857,9 @@ class project extends control
     /**
      * Create a project.
      *
+     * @param string $projectID
+     * @param string $copyProjectID
+     *
      * @access public
      * @return void
      */
@@ -1305,8 +1308,8 @@ class project extends control
     public function tree($projectID, $type = '')
     {
         $this->project->setMenu($this->projects, $projectID);
-        $project  = $this->loadModel('project')->getById($projectID);
-        $tree     = $this->project->getProjectTree($projectID);
+        $project = $this->loadModel('project')->getById($projectID);
+        $tree    = $this->project->getProjectTree($projectID);
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
@@ -1946,6 +1949,7 @@ class project extends control
      */
     public function tips($projectID)
     {
+        $this->view->project   = $this->project->getById($projectID);
         $this->view->projectID = $projectID;
         $this->display('project', 'tips');
     }

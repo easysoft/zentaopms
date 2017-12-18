@@ -40,7 +40,7 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
       <tr class='text-center'>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
         <th class='w-120px<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
-        <th class='w-p15<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->story->module;?></th>
+        <th class='w-p15<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->story->module;?> <span class='required'></span></th>
         <th class='w-p15<?php echo zget($visibleFields, 'plan', ' hidden')?>'><?php echo $lang->story->plan;?></th>
         <th <?php if(count($visibleFields) >= 9) echo "class='w-150px'"?>><?php echo $lang->story->title;?> <span class='required'></span></th>
         <th class='w-p15<?php echo zget($visibleFields, 'spec', ' hidden')?>'><?php echo $lang->story->spec;?></th>
@@ -56,7 +56,7 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
     <?php if(!empty($titles)):?>
     <?php foreach($titles as $storyTitle => $fileName):?>
     <?php $moduleID = $i == 0 ? $moduleID : 'ditto';?>
-    <?php $planID   = $i == 0 ? '' : 'ditto';?>
+    <?php $planID   = $i == 0 ? $planID : 'ditto';?>
     <?php $pri      = $i == 0 ? '' : 'ditto';?>
     <?php $source   = $i == 0 ? '' : 'ditto';?>
     <tr class='text-center'>
@@ -88,7 +88,7 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
     <?php $nextStart = $i;?>
     <?php for($i = $nextStart; $i < $config->story->batchCreate; $i++):?>
     <?php $moduleID = $i - $nextStart == 0 ? $moduleID : 'ditto';?>
-    <?php $planID   = $i - $nextStart == 0 ? '' : 'ditto';?>
+    <?php $planID   = $i - $nextStart == 0 ? $planID : 'ditto';?>
     <?php $pri      = $i - $nextStart == 0 ? '' : 'ditto';?>
     <?php $source   = $i - $nextStart == 0 ? '' : 'ditto';?>
     <tr class='text-center'>

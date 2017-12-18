@@ -64,6 +64,7 @@ $lang->doc->manageType     = 'Manage Category';
 $lang->doc->editType       = 'Edit';
 $lang->doc->deleteType     = 'Delete';
 $lang->doc->addType        = 'Add';
+$lang->doc->childType      = 'Child';
 
 $lang->doc->libName        = 'Name';
 $lang->doc->libType        = 'Category';

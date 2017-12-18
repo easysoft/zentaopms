@@ -32,7 +32,9 @@ class svn extends control
      */
     public function diff($url, $revision)
     {
+        if(isset($_GET['repoUrl'])) $url = $this->get->repoUrl;
         $url = helper::safe64Decode($url);
+
         $this->view->url      = $url;
         $this->view->revision = $revision;
         $this->view->diff     = $this->svn->diff($url, $revision);
@@ -50,7 +52,9 @@ class svn extends control
      */
     public function cat($url, $revision)
     {
+        if(isset($_GET['repoUrl'])) $url = $this->get->repoUrl;
         $url = helper::safe64Decode($url);
+
         $this->view->url      = $url;
         $this->view->revision = $revision;
         $this->view->code     = $this->svn->cat($url, $revision);

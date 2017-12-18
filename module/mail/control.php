@@ -55,21 +55,26 @@ class mail extends control
      * @access public
      * @return void
      */
-    public function detect()
+    public function detect($type = 'smtp')
     {
-        if($_POST)
+        if($_POST or $type == 'gmail')
         {
             set_time_limit(30);
-            $error = '';
-            if($this->post->fromAddress == false) $error = sprintf($this->lang->error->notempty, $this->lang->mail->fromAddress);
-            if(!validater::checkEmail($this->post->fromAddress)) $error .= '\n' . sprintf($this->lang->error->email, $this->lang->mail->fromAddress);
+            if($type != 'gmail')
+            {
+                $error = '';
+                if($this->post->fromAddress == false) $error = sprintf($this->lang->error->notempty, $this->lang->mail->fromAddress);
+                if(!validater::checkEmail($this->post->fromAddress)) $error .= '\n' . sprintf($this->lang->error->email, $this->lang->mail->fromAddress);
 
-            if($error) die(js::alert($error));
+                if($error) die(js::alert($error));
+            }
+            if($type == 'gmail' and empty($_POST['fromAddress'])) $_POST['fromAddress'] = '@gmail.com';
 
             echo "<script>setTimeout(function(){parent.location.href='" . inlink('edit') . "'}, 10000)</script>";
             $mailConfig = $this->mail->autoDetect($this->post->fromAddress);
             $mailConfig->fromAddress = $this->post->fromAddress;
             $mailConfig->domain      = common::getSysURL();
+            if($type == 'gmail') $mailConfig->fromAddress = '';
             $this->session->set('mailConfig',  $mailConfig);
 
             die(js::locate(inlink('edit'), 'parent'));

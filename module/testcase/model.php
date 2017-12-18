@@ -541,13 +541,15 @@ class testcaseModel extends model
         else
         {
             /* Compare every step. */
+            $i = 0;
             foreach($oldCase->steps as $key => $oldStep)
             {
-                if(trim($oldStep->desc) != trim($steps[$key]['desc']) or trim($oldStep->expect) != $steps[$key]['expect']) 
+                if(trim($oldStep->desc) != trim($steps[$i]['desc']) or trim($oldStep->expect) != $steps[$i]['expect']) 
                 {
                     $stepChanged = true;
                     break;
                 }
+                $i++;
             }
         }
         $version = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
@@ -762,13 +764,15 @@ class testcaseModel extends model
             if($data->pris[$caseID]     == 'ditto') $data->pris[$caseID]     = isset($prev['pri'])    ? $prev['pri']    : 3;
             if($data->branches[$caseID] == 'ditto') $data->branches[$caseID] = isset($prev['branch']) ? $prev['branch'] : 0;
             if($data->modules[$caseID]  == 'ditto') $data->modules[$caseID]  = isset($prev['module']) ? $prev['module'] : 0;
+            if($data->stories[$caseID]  == 'ditto') $data->stories[$caseID]  = isset($prev['story'])  ? $prev['story']  : 0;
             if($data->types[$caseID]    == 'ditto') $data->types[$caseID]    = isset($prev['type'])   ? $prev['type']   : '';
             if($data->stories[$caseID]  == '')      $data->stories[$caseID]  = 0;
 
             $prev['pri']    = $data->pris[$caseID];
+            $prev['type']   = $data->types[$caseID];
+            $prev['story']  = $data->stories[$caseID];
             $prev['branch'] = $data->branches[$caseID];
             $prev['module'] = $data->modules[$caseID];
-            $prev['type']   = $data->types[$caseID];
         }
 
         /* Initialize cases from the post data.*/
@@ -812,6 +816,36 @@ class testcaseModel extends model
             {
                 die(js::error('case#' . $caseID . dao::getError(true)));
             }
+        }
+
+        return $allChanges;
+    }
+
+    /**
+     * Batch change branch.
+     * 
+     * @param  array  $caseIDList 
+     * @param  int    $branchID 
+     * @access public
+     * @return array
+     */
+    public function batchChangeBranch($caseIDList, $branchID)
+    {
+        $now        = helper::now();
+        $allChanges = array();
+        $oldCases   = $this->getByList($caseIDList);
+        foreach($caseIDList as $caseID)
+        {
+            $oldCase = $oldCases[$caseID];
+            if($branchID == $oldCase->branch) continue;
+
+            $case = new stdclass();
+            $case->lastEditedBy   = $this->app->user->account;
+            $case->lastEditedDate = $now;
+            $case->branch         = $branchID;
+
+            $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq((int)$caseID)->exec();
+            if(!dao::isError()) $allChanges[$caseID] = common::createChanges($oldCase, $case);
         }
 
         return $allChanges;

@@ -10,6 +10,10 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php
+$jsRoot = $this->app->getWebRoot() . "js/";
+include '../../common/view/tablesorter.html.php';
+?>
 <div id='querybox' class='show'></div>
 <div id='unlinkBugList'>
   <form method='post' id='unlinkedBugsForm' target='hiddenwin' action='<?php echo $this->createLink('build', 'linkBug', "buildID={$build->id}&browseType=$browseType&param=$param");?>'>

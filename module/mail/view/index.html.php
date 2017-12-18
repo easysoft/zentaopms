@@ -24,6 +24,9 @@ include '../../common/view/header.html.php';
         <?php if($this->app->getClientLang() != 'en'  and common::hasPriv('mail', 'ztCloud')):?>
         <?php echo html::a(inlink('ztCloud'), $lang->mail->ztCloud, '', "class='btn btn-sm w-120px'")?>
         <?php endif;?>
+        <?php if($this->app->getClientLang() == 'en'):?>
+        <?php echo html::a(inlink('detect', 'type=gmail'), $lang->mail->gmail, '', "class='btn btn-sm w-120px'")?>
+        <?php endif;?>
         <?php if(common::hasPriv('mail', 'detect')):?>
         <?php echo html::a(inlink('detect'), $lang->mail->smtp, '', "class='btn btn-sm w-120px'")?>
         <?php endif;?>

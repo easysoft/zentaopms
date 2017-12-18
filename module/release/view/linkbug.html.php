@@ -10,6 +10,10 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php
+$jsRoot = $this->app->getWebRoot() . "js/";
+include '../../common/view/tablesorter.html.php';
+?>
 <div id='querybox' class='show'></div>
 <?php
 $releaseBugs = $type == 'bug' ? $release->bugs : $release->leftBugs;

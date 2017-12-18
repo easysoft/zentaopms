@@ -113,7 +113,11 @@ class bugModel extends model
 
         for($i = 0; $i < $batchNum; $i++)
         {
-            if(!empty($data->title[$i]) and empty($data->openedBuilds[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->openedBuild)));
+            if(!empty($data->title[$i]))
+            {
+                if(empty($data->modules[$i]))      die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->module)));
+                if(empty($data->openedBuilds[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->openedBuild)));
+            }
         }
 
         /* Get pairs(moduleID => moduleOwner) for bug. */
@@ -863,6 +867,35 @@ class bugModel extends model
         if(!dao::isError()) $this->loadModel('score')->create('bug', 'resolve', $oldBug);
         /* Link bug to build and release. */
         $this->linkBugToBuild($bugID, $bug->resolvedBuild);
+    }
+
+    /**
+     * Batch change branch.
+     * 
+     * @param  array  $bugIDList 
+     * @param  int    $branchID 
+     * @access public
+     * @return array
+     */
+    public function batchChangeBranch($bugIDList, $branchID)
+    {
+        $now        = helper::now();
+        $allChanges = array();
+        $oldBugs    = $this->getByList($bugIDList);
+        foreach($bugIDList as $bugID)
+        {
+            $oldBug = $oldBugs[$bugID];
+            if($branchID == $oldBug->branch) continue;
+
+            $bug = new stdclass();
+            $bug->lastEditedBy   = $this->app->user->account;
+            $bug->lastEditedDate = $now;
+            $bug->branch         = $branchID;
+
+            $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
+            if(!dao::isError()) $allChanges[$bugID] = common::createChanges($oldBug, $bug);
+        }
+        return $allChanges;
     }
 
     /**

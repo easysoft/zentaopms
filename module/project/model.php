@@ -1423,13 +1423,15 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function linkStory($projectID)
+    public function linkStory($projectID, $stories = array())
     {
-        if($this->post->stories == false) return false;
+        if(empty($stories)) $stories = $this->post->stories;
+        if(empty($stories)) return false;
+
         $this->loadModel('action');
-        $versions  = $this->loadModel('story')->getVersions($this->post->stories);
+        $versions  = $this->loadModel('story')->getVersions($stories);
         $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
-        foreach($this->post->stories as $key => $storyID)
+        foreach($stories as $key => $storyID)
         {
             $productID = (int)$this->post->products[$storyID];
             $data = new stdclass();
@@ -2239,7 +2241,7 @@ class projectModel extends model
      */
     public function getPrevKanban($projectID)
     {
-        $prevKanbans = $this->loadModel('setting')->getItem("ower=null&module=project&section=kanban&key=project$projectID");
+        $prevKanbans = $this->loadModel('setting')->getItem("owner=null&module=project&section=kanban&key=project$projectID");
         return json_decode($prevKanbans, true);
     }
 

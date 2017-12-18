@@ -159,6 +159,7 @@ class cron extends control
         while(true)
         {
             dao::$cache = array();
+
             /* When cron is null then die. */
             if(empty($crons)) break;
             if(empty($parsedCrons)) break;
@@ -170,10 +171,12 @@ class cron extends control
 
             /* Run crons. */
             $now = new datetime('now');
+            unset($_SESSION['company']);
+            unset($this->app->company);
+            $this->common->setCompany();
             $this->common->loadConfigFromDB();
             foreach($parsedCrons as $id => $cron)
             {
-
                 $cronInfo = $this->cron->getById($id);
                 /* Skip empty and stop cron.*/
                 if(empty($cronInfo) or $cronInfo->status == 'stop') continue;

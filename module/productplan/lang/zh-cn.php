@@ -26,6 +26,7 @@ $lang->productplan->unlinkStory      = "移除需求";
 $lang->productplan->batchUnlinkStory = "批量移除需求";
 $lang->productplan->linkedStories    = '需求';
 $lang->productplan->unlinkedStories  = '未关联需求';
+$lang->productplan->updateOrder      = '排序';
 
 $lang->productplan->linkBug          = "关联Bug";
 $lang->productplan->unlinkBug        = "移除Bug";
