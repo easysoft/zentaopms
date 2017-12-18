@@ -228,13 +228,39 @@ class productplan extends control
         $this->session->set('storyList', $this->app->getURI(true) . '&type=' . 'story');
         $this->session->set('bugList', $this->app->getURI(true) . '&type=' . 'bug');
 
+        $reSort = false;
+        if($type == 'story' && strpos($orderBy, 'order') !== false)
+        {
+            $orderBy = str_replace('order', 'id', $orderBy);
+            $reSort  = true;
+        }
+
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         $plan = $this->productplan->getByID($planID, true);
         if(!$plan) die(js::error($this->lang->notFound) . js::locate('back'));
         $this->commonAction($plan->product, $plan->branch);
-        $products                = $this->product->getPairs();
+        $products = $this->product->getPairs();
+
+        $planStories = $this->loadModel('story')->getPlanStories($planID, 'all', $type == 'story' ? $sort : 'id_desc');
+        if($reSort)
+        {
+            if(!empty($plan->order))
+            {
+                $stories = array();
+                $order   = explode(',', $plan->order);
+                if(strpos($orderBy, 'asc') !== false) $order = array_reverse($order, true);
+                foreach($order as $id)
+                {
+                    if(empty($id)) continue;
+                    $stories[$id] = $planStories[$id];
+                }
+                $planStories = $stories;
+                unset($stories);
+            }
+            $orderBy = str_replace('id', 'order', $orderBy);
+        }
 
         $this->loadModel('datatable');
         $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
@@ -242,7 +268,7 @@ class productplan extends control
 
         $this->view->title       = "PLAN #$plan->id $plan->title/" . $products[$plan->product];
         $this->view->position[]  = $this->lang->productplan->view;
-        $this->view->planStories = $this->loadModel('story')->getPlanStories($planID, 'all', $type == 'story' ? $sort : 'id_desc');
+        $this->view->planStories = $planStories;
         $this->view->planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc');
         $this->view->products    = $products;
         $this->view->summary     = $this->product->summary($this->view->planStories);
@@ -275,6 +301,20 @@ class productplan extends control
          $planName = $number === '' ? 'plan' : "plan[$number]";
          $plans    = empty($plans) ? array('' => '') : $plans;
          die(html::select($planName, $plans, '', "class='form-control'"));
+    }
+
+    /**
+     * Sort story for productplan.
+     *
+     * @param int $planID
+     *
+     * @access public
+     * @return bool
+     */
+    public function ajaxStorySort($planID = 0)
+    {
+        if(empty($planID)) return true;
+        $this->dao->update(TABLE_PRODUCTPLAN)->set('`order`')->eq($this->post->storys)->where('id')->eq((int)$planID)->exec();
     }
 
     /**

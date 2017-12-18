@@ -14,11 +14,16 @@
 class productModel extends model
 {
     /**
-     * Set menu. 
-     * 
-     * @param  array  $products 
-     * @param  int    $productID 
-     * @param  string $extra 
+     *
+     * Set menu.
+     *
+     * @param array  $products
+     * @param int    $productID
+     * @param int    $branch
+     * @param int    $module
+     * @param string $moduleType
+     * @param string $extra
+     *
      * @access public
      * @return void
      */
@@ -53,13 +58,14 @@ class productModel extends model
     }
 
     /**
-     * Create the select code of products. 
-     * 
-     * @param  array     $products 
-     * @param  int       $productID 
-     * @param  string    $currentModule 
-     * @param  string    $currentMethod 
-     * @param  string    $extra 
+     * Create the select code of products.
+     *
+     * @param  array  $products
+     * @param  int    $productID
+     * @param  string $currentModule
+     * @param  string $currentMethod
+     * @param  string $extra
+     *
      * @access public
      * @return string
      */
@@ -115,8 +121,8 @@ class productModel extends model
 
     /**
      * Save the product id user last visited to session.
-     * 
-     * @param  int   $productID 
+     *
+     * @param  int   $productID
      * @param  array $products
      * @access public
      * @return int
@@ -148,8 +154,8 @@ class productModel extends model
 
     /**
      * Check privilege.
-     * 
-     * @param  int    $product 
+     *
+     * @param  int    $product
      * @access public
      * @return bool
      */
@@ -157,7 +163,7 @@ class productModel extends model
     {
         /* Is admin? */
         $account = ',' . $this->app->user->account . ',';
-        if($this->app->user->admin) return true; 
+        if($this->app->user->admin) return true;
 
         $acls = $this->app->user->rights['acls'];
         if(!empty($acls['products']) and !in_array($product->id, $acls['products'])) return false;
@@ -172,8 +178,8 @@ class productModel extends model
 
     /**
      * Get product by id.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return object
      */
@@ -188,8 +194,8 @@ class productModel extends model
 
     /**
      * Get by idList.
-     * 
-     * @param  array    $productIDList 
+     *
+     * @param  array    $productIDList
      * @access public
      * @return array
      */
@@ -200,9 +206,9 @@ class productModel extends model
 
     /**
      * Get products.
-     * 
-     * @param  string $status 
-     * @param  int    $limit 
+     *
+     * @param  string $status
+     * @param  int    $limit
      * @param  int    $line
      * @access public
      * @return array
@@ -227,9 +233,9 @@ class productModel extends model
     }
 
     /**
-     * Get product pairs. 
-     * 
-     * @param  string $mode 
+     * Get product pairs.
+     *
+     * @param  string $mode
      * @return array
      */
     public function getPairs($mode = '')
@@ -273,7 +279,7 @@ class productModel extends model
 
     /**
      * Get grouped products.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -284,7 +290,7 @@ class productModel extends model
 
     /**
      * Create a product.
-     * 
+     *
      * @access public
      * @return int
      */
@@ -325,8 +331,8 @@ class productModel extends model
 
     /**
      * Update a product.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return array
      */
@@ -358,7 +364,7 @@ class productModel extends model
 
     /**
      * Batch update products.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -399,10 +405,10 @@ class productModel extends model
         $this->fixOrder();
         return $allChanges;
     }
-    
+
     /**
      * Close product.
-     * 
+     *
      * @param  int    $productID.
      * @access public
      * @return void
@@ -520,8 +526,8 @@ class productModel extends model
 
     /**
      * Get projects of a product in pairs.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @param  string $param    all|nodeleted
      * @access public
      * @return array
@@ -549,8 +555,8 @@ class productModel extends model
 
     /**
      * Get roadmap of a proejct
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return array
      */
@@ -585,8 +591,8 @@ class productModel extends model
 
     /**
      * Get team members of a product from projects.
-     * 
-     * @param  object   $product 
+     *
+     * @param  object   $product
      * @access public
      * @return array
      */
@@ -624,9 +630,9 @@ class productModel extends model
     }
 
     /**
-     * Get product stat by id 
-     * 
-     * @param  int    $productID 
+     * Get product stat by id
+     *
+     * @param  int    $productID
      * @access public
      * @return object|bool
      */
@@ -737,7 +743,7 @@ class productModel extends model
           ->where('deleted')->eq(0)
           ->andWhere('product')->in(array_keys($products))
           ->groupBy('product')
-          ->fetchPairs(); 
+          ->fetchPairs();
        $unResolved  = $this->dao->select('product,count(*) AS count')
               ->from(TABLE_BUG)
               ->where('status')->eq('active')
@@ -803,8 +809,8 @@ class productModel extends model
 
     /**
      * Get the summary of product's stories.
-     * 
-     * @param  array    $stories 
+     *
+     * @param  array    $stories
      * @access public
      * @return string.
      */
@@ -834,9 +840,9 @@ class productModel extends model
 
     /**
      * Judge an action is clickable or not.
-     * 
-     * @param  object $product 
-     * @param  string $action 
+     *
+     * @param  object $product
+     * @param  string $action
      * @access public
      * @return void
      */
@@ -851,10 +857,10 @@ class productModel extends model
 
     /**
      * Create the link from module,method,extra
-     * 
-     * @param  string  $module 
-     * @param  string  $method 
-     * @param  mix     $extra 
+     *
+     * @param  string  $module
+     * @param  string  $method
+     * @param  mix     $extra
      * @access public
      * @return void
      */
@@ -903,7 +909,7 @@ class productModel extends model
 
     /**
      * Fix order.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -925,7 +931,7 @@ class productModel extends model
      * get the latest project of the product.
      *
      * @param  int     $productID
-     * @access public 
+     * @access public
      * @return object
      */
     public function getLatestProject($productID)

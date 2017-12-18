@@ -11,8 +11,10 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/sortable.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->productplan->confirmUnlinkStory)?>
 <?php js::set('confirmUnlinkBug', $lang->productplan->confirmUnlinkBug)?>
+<?php js::set('planID', $plan->id);?>
 <div id='titlebar'>
   <div class='heading'>
   <span class='prefix'><?php echo html::icon($lang->icons['plan']);?> <strong><?php echo $plan->id;?></strong></span>
@@ -102,7 +104,7 @@
                   <th class='w-50px {sorter:false}'>   <?php echo $lang->actions?></th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class='sortable'>
                   <?php
                   $totalEstimate = 0.0;
                   $canBatchUnlink     = common::hasPriv('productPlan', 'batchUnlinkStory');
@@ -113,10 +115,10 @@
                   $viewLink = $this->createLink('story', 'view', "storyID=$story->id");
                   $totalEstimate += $story->estimate;
                   ?>
-                  <tr class='text-center'>
+                  <tr class='text-center' data-id='<?php echo $story->id;?>'>
                     <td class='cell-id'>
                       <?php if($canBatchUnlink or $canBatchChangePlan):?>
-                      <input type='checkbox' name='storyIDList[]'  value='<?php echo $story->id;?>'/> 
+                      <input type='checkbox' name='storyIDList[]'  value='<?php echo $story->id;?>'/>
                       <?php endif;?>
                       <?php echo html::a($viewLink, sprintf("%03d", $story->id));?>
                     </td>
@@ -349,7 +351,7 @@
                   <tr class='text-center'>
                     <td class='cell-id'>
                       <?php if($canBatchUnlink):?>
-                      <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
+                      <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/>
                       <?php endif;?>
                       <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf("%03d", $bug->id));?>
                     </td>
@@ -374,7 +376,7 @@
                 <tr>
                   <td colspan='7'>
                     <div class='table-actions clearfix'>
-                      <?php 
+                      <?php
                       if(count($planBugs) and $canBatchUnlink)
                       {
                           echo html::selectButton();

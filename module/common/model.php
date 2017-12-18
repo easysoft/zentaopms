@@ -48,7 +48,7 @@ class commonModel extends model
     /**
      * Set the commpany.
      *
-     * First, search company by the http host. If not found, search by the default domain. Last, use the first as the default. 
+     * First, search company by the http host. If not found, search by the default domain. Last, use the first as the default.
      * After get the company, save it to session.
      * @access public
      * @return void
@@ -72,7 +72,7 @@ class commonModel extends model
 
     /**
      * Set the user info.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -99,7 +99,7 @@ class commonModel extends model
 
     /**
      * Load configs from database and save it to config->system and config->personal.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -170,9 +170,9 @@ class commonModel extends model
 
     /**
      * Deny access.
-     * 
+     *
      * @access public
-     * @return void
+     * @return mixed
      */
     public function deny($module, $method)
     {
@@ -207,7 +207,7 @@ class commonModel extends model
 
     /**
      * Print the run info.
-     * 
+     *
      * @param mixed $startTime  the start time.
      * @access public
      * @return array    the run info array.
@@ -223,7 +223,7 @@ class commonModel extends model
 
     /**
      * Print top bar.
-     * 
+     *
      * @static
      * @access public
      * @return void
@@ -293,8 +293,9 @@ class commonModel extends model
     /**
      * Create menu item link
      *
-     * @param  object   $menuItemLink
-     * @param  boolean  $isTutorialMode
+     * @param object $menuItem
+     *
+     * @static
      * @access public
      * @return string
      */
@@ -321,6 +322,8 @@ class commonModel extends model
      * Print the main menu.
      *
      * @param  string $moduleName
+     * @param  string $methodName
+     *
      * @static
      * @access public
      * @return void
@@ -383,14 +386,14 @@ class commonModel extends model
             if($config->global->flow == 'onlyTask')  $searchObject = 'task';
         }
 
-        echo "<div class='input-group input-group-sm' id='searchbox'>"; 
+        echo "<div class='input-group input-group-sm' id='searchbox'>";
         echo "<div class='input-group-btn' id='typeSelector'>";
         echo "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span id='searchTypeName'>" . $lang->searchObjects[$searchObject] . "</span> <span class='caret'></span></button>";
         echo html::hidden('searchType', $searchObject);
         echo "<ul class='dropdown-menu'>";
         foreach ($lang->searchObjects as $key => $value)
         {
-            echo "<li><a href='javascript:;' data-value='{$key}'>{$value}</a></li>"; 
+            echo "<li><a href='javascript:;' data-value='{$key}'>{$value}</a></li>";
         }
         echo '</ul></div>';
         echo html::input('searchQuery', '', "onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) shortcut()' class='form-control' placeholder='" . $lang->searchTips . "'");
@@ -400,8 +403,8 @@ class commonModel extends model
 
     /**
      * Print the module menu.
-     * 
-     * @param  string $moduleName 
+     *
+     * @param  string $moduleName
      * @static
      * @access public
      * @return void
@@ -470,9 +473,9 @@ class commonModel extends model
 
     /**
      * Print the bread menu.
-     * 
-     * @param  string $moduleName 
-     * @param  string $position 
+     *
+     * @param  string $moduleName
+     * @param  string $position
      * @static
      * @access public
      * @return void
@@ -504,7 +507,7 @@ class commonModel extends model
 
     /**
      * Print the link for notify file.
-     * 
+     *
      * @static
      * @access public
      * @return void
@@ -519,8 +522,10 @@ class commonModel extends model
     }
 
     /**
-     * Print QR code Link. 
-     * 
+     * Print QR code Link.
+     *
+     * @param string $color
+     *
      * @static
      * @access public
      * @return void
@@ -537,16 +542,16 @@ class commonModel extends model
     /**
      * Print the link contains orderBy field.
      *
-     * This method will auto set the orderby param according the params. Fox example, if the order by is desc, 
+     * This method will auto set the orderby param according the params. Fox example, if the order by is desc,
      * will be changed to asc.
-     * 
+     *
      * @param  string $fieldName    the field name to sort by
      * @param  string $orderBy      the order by string
      * @param  string $vars         the vars to be passed
      * @param  string $label        the label of the link
      * @param  string $module       the module name
      * @param  string $method       the method name
-     * @static
+     *
      * @access public
      * @return void
      */
@@ -583,17 +588,21 @@ class commonModel extends model
     }
 
     /**
+     *
      * Print link to an modules' methd.
      *
      * Before printing, check the privilege first. If no privilege, return fasle. Else, print the link, return true.
      *
-     * @param  string $module   the module name
-     * @param  string $method   the method
-     * @param  string $vars     vars to be passed
-     * @param  string $label    the label of the link
-     * @param  string $target   the target of the link
-     * @param  string $misc     others
-     * @param  bool   $newline
+     * @param string $module    the module name
+     * @param string $method    the method
+     * @param string $vars      vars to be passed
+     * @param string $label     the label of the link
+     * @param string $target    the target of the link
+     * @param string $misc      others
+     * @param bool   $newline
+     * @param bool   $onlyBody
+     * @param        $object
+     *
      * @static
      * @access public
      * @return bool
@@ -607,7 +616,7 @@ class commonModel extends model
 
     /**
      * Print icon of split line.
-     * 
+     *
      * @static
      * @access public
      * @return void
@@ -619,11 +628,13 @@ class commonModel extends model
 
     /**
      * Print icon of comment.
-     * 
-     * @param  string $module 
+     *
+     * @param string $module
+     * @param        $object
+     *
      * @static
      * @access public
-     * @return void
+     * @return mixed
      */
     public static function printCommentIcon($module, $object = null)
     {
@@ -683,7 +694,7 @@ class commonModel extends model
             $title = $method;
             if($method == 'create' and $icon == 'copy') $method = 'copy';
             if(isset($lang->$method) and is_string($lang->$method)) $title = $lang->$method;
-            if((isset($lang->$module->$method) or $app->loadLang($module)) and isset($lang->$module->$method)) 
+            if((isset($lang->$module->$method) or $app->loadLang($module)) and isset($lang->$module->$method))
             {
                 $title = $method == 'report' ? $lang->$module->$method->common : $lang->$module->$method;
             }
@@ -759,8 +770,11 @@ class commonModel extends model
     /**
      * Print backLink and preLink and nextLink.
      *
-     * @param  string $backLink
-     * @param  object $preAndNext
+     * @param string $backLink
+     * @param object $preAndNext
+     * @param string $linkTemplate
+     *
+     * @static
      * @access public
      * @return void
      */
@@ -772,7 +786,7 @@ class commonModel extends model
         $title = $lang->goback . $lang->backShortcutKey;
         echo html::a($backLink, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i>', '', "id='back' class='btn' title={$title}");
 
-        if(isset($preAndNext->pre) and $preAndNext->pre) 
+        if(isset($preAndNext->pre) and $preAndNext->pre)
         {
             $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->pre->case)) ? 'case' : 'id';
             $title = isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name;
@@ -780,7 +794,7 @@ class commonModel extends model
             $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->pre->$id) : inLink('view', "ID={$preAndNext->pre->$id}");
             echo html::a($link, '<i class="icon-pre icon-chevron-left"></i>', '', "id='pre' class='btn' title='{$title}'");
         }
-        if(isset($preAndNext->next) and $preAndNext->next) 
+        if(isset($preAndNext->next) and $preAndNext->next)
         {
             $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->next->case)) ? 'case' : 'id';
             $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
@@ -792,7 +806,7 @@ class commonModel extends model
 
     /**
      * Create changes of one object.
-     * 
+     *
      * @param mixed $old    the old object
      * @param mixed $new    the new object
      * @static
@@ -818,10 +832,10 @@ class commonModel extends model
 
             if($magicQuote) $value = stripslashes($value);
             if(isset($old->$key) and $value != stripslashes($old->$key))
-            { 
+            {
                 $diff = '';
-                if(substr_count($value, "\n") > 1     or 
-                    substr_count($old->$key, "\n") > 1 or 
+                if(substr_count($value, "\n") > 1     or
+                    substr_count($old->$key, "\n") > 1 or
                     strpos('name,title,desc,spec,steps,content,digest,verify,report', strtolower($key)) !== false)
                 {
                     $diff = commonModel::diff($old->$key, $value);
@@ -834,9 +848,9 @@ class commonModel extends model
 
     /**
      * Diff two string. (see phpt)
-     * 
-     * @param string $text1 
-     * @param string $text2 
+     *
+     * @param string $text1
+     * @param string $text2
      * @static
      * @access public
      * @return string
@@ -860,8 +874,8 @@ class commonModel extends model
 
     /**
      * Judge Suhosin Setting whether the actual size of post data is large than the setting size.
-     * 
-     * @param  int    $countInputVars 
+     *
+     * @param  int    $countInputVars
      * @static
      * @access public
      * @return bool
@@ -885,9 +899,9 @@ class commonModel extends model
 
     /**
      * Get the previous and next object.
-     * 
+     *
      * @param  string $type story|task|bug|case
-     * @param  string $objectID 
+     * @param  string $objectID
      * @access public
      * @return void
      */
@@ -952,9 +966,9 @@ class commonModel extends model
 
     /**
      * Save one executed query.
-     * 
-     * @param  string    $sql 
-     * @param  string    $objectType story|task|bug|testcase 
+     *
+     * @param  string    $sql
+     * @param  string    $objectType story|task|bug|testcase
      * @access public
      * @return void
      */
@@ -996,10 +1010,10 @@ class commonModel extends model
 
     /**
      * Remove duplicate for story, task, bug, case, doc.
-     * 
+     *
      * @param  string       $type  e.g. story task bug case doc.
-     * @param  array|object $data 
-     * @param  string       $condition 
+     * @param  array|object $data
+     * @param  string       $condition
      * @access public
      * @return array
      */
@@ -1033,9 +1047,9 @@ class commonModel extends model
 
     /**
      * Append order by.
-     * 
-     * @param  string $orderBy 
-     * @param  string $append 
+     *
+     * @param  string $orderBy
+     * @param  string $append
      * @access public
      * @return string
      */
@@ -1048,9 +1062,9 @@ class commonModel extends model
 
     /**
      * Check field exists
-     * 
-     * @param  string    $table 
-     * @param  string    $field 
+     *
+     * @param  string    $table
+     * @param  string    $field
      * @access public
      * @return bool
      */
@@ -1071,7 +1085,7 @@ class commonModel extends model
 
     /**
      * Check upgrade's status file is ok or not.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1092,7 +1106,7 @@ class commonModel extends model
 
     /**
      * Check the user has permission to access this method, if not, locate to the login page or deny page.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1157,11 +1171,11 @@ class commonModel extends model
     }
 
     /**
-     * Check db priv. 
-     * 
-     * @param  object $object 
-     * @param  string $module 
-     * @param  string $method 
+     * Check db priv.
+     *
+     * @param  object $object
+     * @param  string $module
+     * @param  string $method
      * @static
      * @access public
      * @return void
@@ -1259,7 +1273,7 @@ class commonModel extends model
      * we used %s as placeholder. These %s should be setted in one module.
      *
      * The items of one module's menu may be an string or array. For example, please see module/common/lang.
-     * 
+     *
      * @param  string $object     the menus of one module
      * @param  string $key        the menu item to be replaced
      * @param  string $params     the params passed to the menu item
@@ -1278,7 +1292,7 @@ class commonModel extends model
                 $menu->$key->link = vsprintf($menu->$key->link, $params);
                 $menu->$key = (array)$menu->$key;
             }
-            else 
+            else
             {
                 $menu->$key = vsprintf($menu->$key, $params);
             }
@@ -1300,7 +1314,7 @@ class commonModel extends model
 
     /**
      * Get the full url of the system.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -1323,8 +1337,8 @@ class commonModel extends model
 
     /**
      * Convert items to Pinyin.
-     * 
-     * @param  array    $items 
+     *
+     * @param  array    $items
      * @static
      * @access public
      * @return array
@@ -1365,8 +1379,8 @@ class commonModel extends model
     }
 
     /**
-     * Check an entry. 
-     * 
+     * Check an entry.
+     *
      * @access public
      * @return void
      */
@@ -1394,9 +1408,9 @@ class commonModel extends model
     }
 
     /**
-     * Check token of an entry. 
-     * 
-     * @param  string $key 
+     * Check token of an entry.
+     *
+     * @param  string $key
      * @access public
      * @return void
      */
@@ -1409,9 +1423,9 @@ class commonModel extends model
     }
 
     /**
-     * Response. 
-     * 
-     * @param  int    $code 
+     * Response.
+     *
+     * @param  int    $code
      * @access public
      * @return void
      */
@@ -1425,10 +1439,10 @@ class commonModel extends model
     }
 
     /**
-     * Http. 
-     * 
-     * @param  string       $url 
-     * @param  string|array $data 
+     * Http.
+     *
+     * @param  string       $url
+     * @param  string|array $data
      * @static
      * @access public
      * @return string
