@@ -759,9 +759,8 @@ class gitModel extends model
     public function buildURL($methodName, $url, $revision)
     {
         $buildedURL  = helper::createLink('git', $methodName, "path=&revision=$revision", 'html');
-        $buildedURL .= strpos($buildURL, '?') === false ? '?' : '&';
+        $buildedURL .= strpos($buildedURL, '?') === false ? '?' : '&';
         $buildedURL .= 'repoUrl=' . helper::safe64Encode($url);
-
         return $buildedURL;
     }
 }
