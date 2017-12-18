@@ -163,12 +163,15 @@ function loadBranch(){}
 /* Auto compute the work days. */
 $(function() 
 {
-    if(typeof(replaceID) != 'undefined') setModal4List('iframe', replaceID, function($list)
+    if(typeof(replaceID) != 'undefined')
     {
-        $list.find('.progress-pie:visible').progressPie();
-        var datatable = $list.data('zui.datatable');
-        if(datatable) datatable.$datatable.find('.progress-pie:visible').progressPie();
-    });
+        setModal4List('iframe', replaceID, function($list)
+        {
+            $list.find('.progress-pie:visible').progressPie();
+            var datatable = $list.data('zui.datatable');
+            if(datatable) datatable.$datatable.find('.progress-pie:visible').progressPie();
+        });
+    }
     $(".date").bind('dateSelected', function()
     {
         computeWorkDays(this.id);

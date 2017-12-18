@@ -1485,6 +1485,18 @@ function fixedTfootAction(formID)
     if(typeof(ssoRedirect) != "undefined") pageFooterHeight = 0;
     function fixTfoot()
     {
+        var $table = $form.find('table:last');
+        var $tfoot = $table.find('tfoot');
+        if($table.hasClass('table-datatable'))
+        {
+            $table = $form.find('.datatable-rows');
+            $tfoot = $form.find('.datatable-footer tfoot');
+        }
+
+        $tbody = $table.find('tbody'),
+        $inputGroup = $tfoot.find('.table-actions').children('.input-group'),
+        pageFooterHeight = $('#footer').height(),
+
         tableWidth   = $table.width();
         hasFixed     = $tfoot.hasClass('fixedTfootAction');
         offsetHeight = $(window).height() + $(window).scrollTop() - pageFooterHeight/2;
@@ -1516,6 +1528,15 @@ function fixedTfootAction(formID)
     {
         // Fix table foot when scrolling.
         fixTfoot();
+
+        var $table = $form.find('table:last');
+        var $tfoot = $table.find('tfoot');
+        if($table.hasClass('table-datatable'))
+        {
+            $table = $form.find('.datatable-rows');
+            $tfoot = $form.find('.datatable-footer tfoot');
+        }
+
         $tfoot.addClass('scrolling scrolled');
         clearTimeout(scrollCallTask);
         scrollCallTask = setTimeout(function(){$tfoot.removeClass('scrolling');}, 200)
