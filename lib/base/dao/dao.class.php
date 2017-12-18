@@ -800,7 +800,7 @@ class baseDAO
 
         $this->setFields($field);
         $result = $this->query()->fetch(PDO::FETCH_OBJ);
-        dao::$cache[$table][$key] = $result;
+        dao::$cache[$table][$key] = getRow($result);
         return $result ? $result->$field : '';
     }
 

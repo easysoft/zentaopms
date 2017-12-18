@@ -2118,7 +2118,14 @@ class taskModel extends model
                 case 'story':
                     if(!empty($task->storyID))
                     {
-                        if(!common::printLink('story', 'view', "storyid=$task->storyID", $task->storyTitle)) echo $task->storyTitle;
+                        if(common::hasPriv('story', 'view'))
+                        {
+                            echo html::a(helper::createLink('story', 'view', "storyid=$task->storyID", 'html', true), "<i class='icon icon-{$this->lang->icons['story']}'></i>", '', "class='iframe' title='{$task->storyTitle}'");
+                        }
+                        else
+                        {
+                            echo $task->storyTitle;
+                        }
                     }
                     break;
                 case 'mailto':

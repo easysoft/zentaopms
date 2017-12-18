@@ -1531,7 +1531,7 @@ class testcase extends control
                             $num     = $out[1];
                             $sign    = $out[2];
                             $signbit = $sign == '.' ? 1 : 3;
-                            $step    = trim(substr($step, strlen($num) + $signbit));
+                            $step    = trim(substr($step, strpos($step, $sign) + $signbit));
                             if(!empty($step)) $caseStep[$num]['content'] = $step;
                             $caseStep[$num]['type'] = 'step';
                         }
