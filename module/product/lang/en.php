@@ -109,8 +109,9 @@ $lang->product->aclList['open']    = "Default (User with {$lang->productCommon} 
 $lang->product->aclList['private'] = "Private {$lang->productCommon} ({$lang->projectCommon} team members only)";
 $lang->product->aclList['custom']  = 'Custom (Team members and Whitelist members have access to it.)';
 
-$lang->product->storySummary = " <strong>%s</strong> Story(ies), <strong>%s</strong> hour(s) estimated, case coverage is <strong>%s</strong> on this page.";
-$lang->product->noMatched    = '"%s" cannot be found.' . $lang->productCommon;
+$lang->product->storySummary   = " <strong>%s</strong> Story(ies), <strong>%s</strong> hour(s) estimated, case coverage is <strong>%s</strong> on this page.";
+$lang->product->checkedSummary = " <strong>%total%</strong> Checked, <strong>%estimate%</strong> hour(s) estimated, case coverage is <strong>%rate%</strong>.";
+$lang->product->noMatched      = '"%s" cannot be found.' . $lang->productCommon;
 
 $lang->product->mySelects['assignedtome'] = $lang->product->assignedToMe;
 $lang->product->mySelects['openedbyme']   = $lang->product->openedByMe;

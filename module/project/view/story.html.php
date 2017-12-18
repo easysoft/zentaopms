@@ -105,7 +105,7 @@
         $storyLink      = $this->createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$project->id");
         $totalEstimate += $story->estimate;
         ?>
-        <tr class='text-center' id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>'>
+        <tr class='text-center' id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
           <td class='cell-id'>
             <?php if($canBatchEdit or $canBatchClose):?>
             <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
@@ -232,6 +232,7 @@
     </table>
   </form>
 </div>
+<?php js::set('checkedSummary', $lang->product->checkedSummary);?>
 <?php js::set('projectID', $project->id);?>
 <?php js::set('orderBy', $orderBy)?>
 <?php include '../../common/view/footer.html.php';?>

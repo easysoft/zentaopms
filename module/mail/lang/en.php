@@ -10,6 +10,7 @@ $lang->mail->resend = 'Resend';
 $lang->mail->browse = 'Email List';
 $lang->mail->delete = 'Delete Email';
 $lang->mail->ztCloud       = 'ZenTao CloudMail';
+$lang->mail->gmail         = 'GMAIL';
 $lang->mail->sendCloud     = 'Notice SendCloud';
 $lang->mail->batchDelete   = 'Batch Delete';
 $lang->mail->sendcloudUser = 'Sync Contact';
