@@ -1,4 +1,5 @@
 $(document).ready()
 {
-    $('#password').focus();
+    $('#fromAddress').focus();
+    if($('#fromAddress').val() != '')$('#password').focus();
 }
