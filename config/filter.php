@@ -199,3 +199,8 @@ $filter->user->login->get['account']  = 'account';
 $filter->user->login->get['lang']     = 'reg::lang';
 $filter->user->login->get['password'] = 'reg::any';
 $filter->user->edit->get['from']      = 'reg::word';
+
+$filter->git->cat->get['repoUrl']  = 'reg::base64';
+$filter->git->diff->get['repoUrl'] = 'reg::base64';
+$filter->svn->cat->get['repoUrl']  = 'reg::base64';
+$filter->svn->diff->get['repoUrl'] = 'reg::base64';
