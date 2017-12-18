@@ -1217,8 +1217,6 @@ class task extends control
                     }
 
                     $task->progress .= '%';
-
-                    if($task->parent) $task->name = '[' . $taskLang->childrenAB . '] ' . $task->name;
                 }
             }
             else
@@ -1236,9 +1234,24 @@ class task extends control
             foreach($tasks as $task) $relatedStoryIdList[$task->story] = $task->story;
 
             /* Get related objects title or names. */
-            $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
+            $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(@array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
             $relatedModules = $this->loadModel('tree')->getTaskOptionMenu($projectID);
+
+            $children = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('parent')->in(array_keys($tasks))->fetchGroup('parent', 'id');
+            if(!empty($children))
+            {
+                $position = 0;
+                foreach($tasks as $task)
+                {
+                    $position ++;
+                    if(isset($children[$task->id]))
+                    {
+                        array_splice($tasks, $position, 0, $children[$task->id]);
+                        $position += count($children[$task->id]);
+                    }
+                }
+            }
 
             foreach($tasks as $task)
             {
@@ -1265,6 +1278,8 @@ class task extends control
                 if(isset($users[$task->canceledBy]))   $task->canceledBy   = $users[$task->canceledBy];
                 if(isset($users[$task->closedBy]))     $task->closedBy     = $users[$task->closedBy];
                 if(isset($users[$task->lastEditedBy])) $task->lastEditedBy = $users[$task->lastEditedBy];
+
+                if(!empty($task->parent)) $task->name = '[' . $taskLang->childrenAB . '] ' . $task->name;
 
                 $task->openedDate     = substr($task->openedDate,     0, 10);
                 $task->assignedDate   = substr($task->assignedDate,   0, 10);

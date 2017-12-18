@@ -2041,8 +2041,8 @@ class taskModel extends model
                     echo $canView ? html::a($taskLink, sprintf('%03d', $task->id)) : sprintf('%03d', $task->id);
                     break;
                 case 'pri':
-                    echo "<span class='pri" . zget($this->lang->task->priList, $task->pri, $task->pri) . "'>";
-                    echo $task->pri == '0' ? '' : zget($this->lang->task->priList, $task->pri, $task->pri);
+                    echo "<span class='pri" . zget(array_keys($this->lang->task->priList), $task->pri, $task->pri) . "'>";
+                    echo $task->pri == '0' ? '' : zget(array_keys($this->lang->task->priList), $task->pri, $task->pri);
                     echo "</span>";
                     break;
                 case 'name':
