@@ -60,7 +60,19 @@ $(document).ready(function()
 
     $(document).keydown(function(event)
     {
-        if(event.keyCode == 38)
+        if(event.ctrlKey && event.keyCode == 38)
+        {
+            event.stopPropagation();
+            event.preventDefault();
+            selectFocusJump('up');
+        }
+        else if(event.ctrlKey && event.keyCode == 40)
+        {
+            event.stopPropagation();
+            event.preventDefault();
+            selectFocusJump('down');
+        }
+        else if(event.keyCode == 38)
         {
             inputFocusJump('up');
         }

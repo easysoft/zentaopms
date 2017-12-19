@@ -1963,6 +1963,29 @@ function inputFocusJump(type){
     }
 }
 
+/**
+ * Focus move up or down for select.
+ *
+ * @param type
+ */
+function selectFocusJump(type)
+{
+    var hasFocus = $('select').is(':focus');
+    if(hasFocus)
+    {
+        var title     = $("select:focus").attr('name').replace(/\[\d]/g, '');
+        var $select   = $("select[name^=" + title + "]:not([name*='%'])");
+        var num       = $select.length;
+        var index     = parseInt($("select:focus").attr('name').replace(/[^0-9]/g, ''));
+        var nextIndex = type == 'down' ? index + 1 : index - 1;
+
+        if(nextIndex < num && nextIndex >= 0)
+        {
+            $select[nextIndex].focus();
+        }
+    }
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
