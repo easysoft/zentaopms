@@ -15,6 +15,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('moduleID', ($type == 'byModule' ? $param : 0));?>
 <?php js::set('productID', ($type == 'byProduct' ? $param : 0));?>
+<?php js::set('branchID', ($type == 'byBranch' ? (int)$param : ''));?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
 <div id='featurebar'>
   <ul class='nav'>

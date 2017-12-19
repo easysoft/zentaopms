@@ -481,6 +481,7 @@ class storyModel extends model
             ->get();
         if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
         if(empty($_POST['product'])) $story->branch = $oldStory->branch;
+        if(empty($_POST['branch']))  $story->branch = 0;
 
         $this->dao->update(TABLE_STORY)
             ->data($story)
@@ -1672,7 +1673,7 @@ class storyModel extends model
                 ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t2.product = t4.id')
                 ->where('t1.project')->eq((int)$projectID)
                 ->beginIF($type == 'byProduct')->andWhere('t1.product')->eq($param)->fi()
-                ->beginIF($type == 'byBrach')->andWhere('t2.branch')->eq($param)->fi()
+                ->beginIF($type == 'byBranch')->andWhere('t2.branch')->eq($param)->fi()
                 ->beginIF($type == 'byModule' and $param)->andWhere('t2.module')->in($modules)->fi()
                 ->andWhere('t2.deleted')->eq(0)
                 ->orderBy($orderBy)
