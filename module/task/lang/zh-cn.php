@@ -103,6 +103,7 @@ $lang->task->transferTo       = '转交给';
 $lang->task->children         = '子任务';
 $lang->task->childrenAB       = '子';
 $lang->task->parent           = '父任务';
+$lang->task->parentAB         = '父';
 $lang->task->lblPri           = 'P';
 $lang->task->lblHour          = '(h)';
 $lang->task->deniedNotice     = '此任务只允许由团队第一人开始。';
