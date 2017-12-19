@@ -103,6 +103,7 @@ $lang->task->transferTo        = 'Transfer To';
 $lang->task->children          = 'Child';
 $lang->task->childrenAB        = 'Child';
 $lang->task->parent            = 'Parent Task';
+$lang->task->parentAB          = 'Parent Task';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->deniedNotice      = 'This task can only be started by the first user in the team.';

@@ -290,6 +290,14 @@ class project extends control
             {
                 $groupTasks[$task->$groupBy][] = $task;
             }
+            if(isset($task->children))
+            {
+                foreach($task->children as $child)
+                {
+                    $groupTasks[$child->assignedToRealName][] = $child;
+                }
+                $task->children = true;
+            }
         }
         /* Process closed data when group by assignedTo. */
         if($groupBy == 'assignedTo' and isset($groupTasks['Closed']))
