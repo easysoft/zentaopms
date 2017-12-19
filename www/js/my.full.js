@@ -2042,4 +2042,17 @@ $(document).ready(function()
     initHelpLink();
     checkTutorial();
     revertModuleCookie();
+
+    /* Adjust for dropdown position. */
+    $('li.dropdown-submenu').mouseover(function()
+    {
+        $('li.dropdown-submenu > .dropdown-menu').each(function()
+        {
+            if($(this).css('display') == 'block')
+            {
+                var topPosition = $(this).offset().top;
+                if(topPosition < 0) $(this).css('bottom', Number($(this).css('bottom').replace('px', '')) + topPosition);
+            }
+        })
+    })
 });
