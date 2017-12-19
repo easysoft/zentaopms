@@ -666,7 +666,7 @@ class taskModel extends model
         if($this->post->left == 0)
         {
             $task->status       = 'done';
-            $task->finishedBy   = $this->app->user->account;
+            $task->finishedBy   = empty($oldTask->openedBy) ? $this->app->user->account : $oldTask->openedBy; //Fix bug#1341
             $task->finishedDate = helper::now();
         }
         else
