@@ -1681,7 +1681,7 @@ class projectModel extends model
      * 
      * @param  int    $projectID 
      * @access public
-     * @return void
+     * @return array
      */
     public function getBurnDataFlot($projectID = 0)
     {
@@ -1835,7 +1835,7 @@ class projectModel extends model
      */
     public function summary($tasks)
     {
-        $taskSum = $statusWait = $statusDone = $statusDoing = $statusClosed = $statusCancel = $statusPause = 0;  
+        $taskSum = $statusWait = $statusDone = $statusDoing = $statusClosed = $statusCancel = $statusPause = 0;
         $totalEstimate = $totalConsumed = $totalLeft = 0.0;
 
         foreach($tasks as $task)
@@ -1845,7 +1845,13 @@ class projectModel extends model
             $totalLeft      += (($task->status == 'cancel' or $task->closedReason == 'cancel') ? 0 : $task->left);
             $statusVar       = 'status' . ucfirst($task->status);
             $$statusVar ++;
-            if(!empty($task->children)) $taskSum += count($task->children);
+            if(!empty($task->children)){
+                $taskSum += count($task->children);
+                foreach($task->children as $child)
+                {
+                    if($child->status == 'wait') $statusWait ++;
+                }
+            }
             $taskSum ++;
         }
 
