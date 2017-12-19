@@ -1106,6 +1106,17 @@ class testcase extends control
                 }
             }
 
+            $stmt = $this->dao->select('*')->from(TABLE_TESTRESULT)
+                ->where('`case`')->in(array_keys($cases))
+                ->beginIF($taskID)->andWhere('run')->eq($taskID)->fi()
+                ->orderBy('id_desc')
+                ->query();
+            $results = array();
+            while($result = $stmt->fetch())
+            {
+                if(!isset($results[$result->case])) $results[$result->case] = unserialize($result->stepResults);
+            }
+
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
             $products = $this->loadModel('product')->getPairs('nocode');
@@ -1134,7 +1145,7 @@ class testcase extends control
             $relatedModules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($relatedModuleIdList)->fetchPairs();
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
-            $relatedSteps   = $this->dao->select('parent,`case`,version,type,`desc`,expect')->from(TABLE_CASESTEP)->where('`case`')->in(@array_keys($cases))->orderBy('version desc,id')->fetchGroup('case');
+            $relatedSteps   = $this->dao->select('id,parent,`case`,version,type,`desc`,expect')->from(TABLE_CASESTEP)->where('`case`')->in(@array_keys($cases))->orderBy('version desc,id')->fetchGroup('case', 'id');
             $relatedModules = array('0' => '/') + $relatedModules;
 
             $cases = $this->testcase->appendData($cases);
@@ -1142,6 +1153,9 @@ class testcase extends control
             {
                 $case->stepDesc   = '';
                 $case->stepExpect = '';
+                $case->real       = '';
+                $result = isset($results[$case->id]) ? $results[$case->id] : array();
+                if($case->lastRunResult == 'fail' and !isset($relatedSteps[$case->id]) and !empty($result)) $case->real = $result[0]['real'];
                 if(isset($relatedSteps[$case->id]))
                 {
                     $i = $childId = 0;
@@ -1162,6 +1176,7 @@ class testcase extends control
                         $sign = (in_array($this->post->fileType, array('html', 'xml'))) ? '<br />' : "\n";
                         $case->stepDesc   .= $stepId . ". " . $step->desc . $sign;
                         $case->stepExpect .= $stepId . ". " . $step->expect . $sign;
+                        if($case->lastRunResult == 'fail') $case->real .= $stepId . ". " . (isset($result[$step->id]) ? $result[$step->id]['real'] : '') . $sign;
                         $childId ++;
                     }
                 }
