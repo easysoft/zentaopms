@@ -1245,6 +1245,15 @@ class taskModel extends model
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.parent')->in($taskList)
             ->andWhere('t1.deleted')->eq(0)
+            ->beginIF($productID)->andWhere('t2.product')->eq((int)$productID)->fi()
+            ->beginIF($type == 'undone')->andWhere("(t1.status = 'wait' or t1.status ='doing')")->fi()
+            ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
+            ->beginIF($type == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
+            ->beginIF($type == 'finishedbyme')->andWhere('t1.finishedby')->eq($this->app->user->account)->fi()
+            ->beginIF($type == 'delayed')->andWhere('t1.deadline')->gt('1970-1-1')->andWhere('t1.deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
+            ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
+            ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
+            ->orderBy('t1.`id`,' . $orderBy)
             ->fetchAll('id');
 
         if(!empty($children))
