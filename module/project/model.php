@@ -1921,6 +1921,7 @@ class projectModel extends model
      * @param  string     $end 
      * @param  string     $type 
      * @param  string|int $interval 
+     * @param  string     $format
      * @access public
      * @return array
      */
