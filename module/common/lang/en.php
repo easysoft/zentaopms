@@ -93,8 +93,8 @@ $lang->workingHour  = 'Hour';
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
 $lang->statusAB     = 'Status';
-$lang->openedByAB   = 'Open';
-$lang->assignedToAB = 'To';
+$lang->openedByAB   = 'Created by';
+$lang->assignedToAB = 'Assignee';
 $lang->typeAB       = 'Type';
 
 $lang->common = new stdclass();
