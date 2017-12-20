@@ -211,7 +211,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr>
             <th><?php echo $lang->bug->resolvedDate;?></th>
-            <td><?php echo html::input('resolvedDate', $bug->resolvedDate, 'class=form-control');?></td>
+            <td><?php echo html::input('resolvedDate', $bug->resolvedDate, "class='form-control form-datetime'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->bug->resolvedBuild;?></th>
@@ -236,7 +236,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           </tr>
           <tr>
             <th><?php echo $lang->bug->closedDate;?></th>
-            <td><?php echo html::input('closedDate', $bug->closedDate, 'class=form-control');?></td>
+            <td><?php echo html::input('closedDate', $bug->closedDate, "class='form-control form-datetime'");?></td>
           </tr>
         </table>
       </fieldset>
