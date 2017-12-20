@@ -1035,9 +1035,10 @@ class taskModel extends model
     /**
      * Cancel a task.
      *
-     * @param  int      $taskID
+     * @param int $taskID
+     *
      * @access public
-     * @return void
+     * @return array
      */
     public function cancel($taskID)
     {
@@ -1064,9 +1065,10 @@ class taskModel extends model
     /**
      * Activate a task.
      *
-     * @param  int      $taskID
+     * @param int $taskID
+     *
      * @access public
-     * @return void
+     * @return array
      */
     public function activate($taskID)
     {
@@ -1105,8 +1107,9 @@ class taskModel extends model
     /**
      * Get task info by Id.
      *
-     * @param  int    $taskID
-     * @param  bool   $setImgSize
+     * @param  int  $taskID
+     * @param  bool $setImgSize
+     *
      * @access public
      * @return object|bool
      */
