@@ -1233,6 +1233,13 @@ class task extends control
             $relatedStoryIdList  = array();
             foreach($tasks as $task) $relatedStoryIdList[$task->story] = $task->story;
 
+            /* Get team for multiple task. */
+            $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');
+            if(!empty($taskTeam))
+            {
+                foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
+            }
+
             /* Get related objects title or names. */
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(@array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
@@ -1280,6 +1287,7 @@ class task extends control
                 if(isset($users[$task->lastEditedBy])) $task->lastEditedBy = $users[$task->lastEditedBy];
 
                 if(!empty($task->parent)) $task->name = '[' . $taskLang->childrenAB . '] ' . $task->name;
+                if(!empty($task->team))   $task->name = '[' . $taskLang->multipleAB . '] ' . $task->name;
 
                 $task->openedDate     = substr($task->openedDate,     0, 10);
                 $task->assignedDate   = substr($task->assignedDate,   0, 10);
