@@ -458,7 +458,7 @@ $lang->pager->noRecord     = "暫時沒有記錄";
 $lang->pager->digest       = "共 <strong>%s</strong> 條記錄，%s <strong>%s/%s</strong> &nbsp; ";
 $lang->pager->recPerPage   = "每頁 <strong>%s</strong> 條";
 $lang->pager->first        = "<i class='icon-step-backward' title='首頁'></i>";
-$lang->pager->pre          = "<i class='icon-play icon-rotate-180' title='上一頁'></i>";
+$lang->pager->pre          = "<i class='icon-play icon-flip-horizontal' title='上一頁'></i>";
 $lang->pager->next         = "<i class='icon-play' title='下一頁'></i>";
 $lang->pager->last         = "<i class='icon-step-forward' title='末頁'></i>";
 $lang->pager->locate       = "GO!";
