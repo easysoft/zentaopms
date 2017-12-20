@@ -2459,7 +2459,8 @@ class bugModel extends model
                 echo substr($bug->openedDate, 5, 11);
                 break;
             case 'openedBuild':
-                foreach(explode(',', $bug->openedBuild) as $build) echo zget($builds, $build) . ' ';
+                $builds = array_flip($builds);
+                foreach(explode(',', $bug->openedBuild) as $build) echo html::a(helper::createLink('build', 'view', "buildID=$builds[$build]"), $build, '', "title='$bug->openedBuild'");
                 break;
             case 'assignedTo':
                 echo zget($users, $bug->assignedTo, $bug->assignedTo);
