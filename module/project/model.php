@@ -789,6 +789,7 @@ class projectModel extends model
         $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
             ->from(TABLE_TASK)
             ->where('project')->in($projectKeys)
+            ->andWhere('parent')->eq(0)
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('project', 'id');
 
