@@ -1307,7 +1307,10 @@ class testcaseModel extends model
                 echo $this->lang->testcase->typeList[$case->type];
                 break;
             case 'stage':
-                foreach(explode(',', trim($case->stage, ',')) as $stage) echo $this->lang->testcase->stageList[$stage] . '<br />';
+                $stages = '';
+                foreach(explode(',', trim($case->stage, ',')) as $stage) $stages .= $this->lang->testcase->stageList[$stage] . ',';
+                $stages = trim($stages, ',');
+                echo "<span title='$stages'>$stages</span>";
                 break;
             case 'status':
                 if($case->needconfirm)
