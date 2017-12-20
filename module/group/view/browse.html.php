@@ -27,8 +27,8 @@
     <tr>
      <th class='w-id'><?php echo $lang->group->id;?></th>
      <th class='w-100px'><?php echo $lang->group->name;?></th>
-     <th><?php echo $lang->group->desc;?></th>
-     <th class='w-p60'><?php echo $lang->group->users;?></th>
+     <th class='w-250px'><?php echo $lang->group->desc;?></th>
+     <th><?php echo $lang->group->users;?></th>
      <th class='w-150px {sorter:false}'><?php echo $lang->actions;?></th>
     </tr>
   </thead>
@@ -38,7 +38,7 @@
   <tr class='text-center'>
     <td class='strong'><?php echo $group->id;?></td>
     <td class='text-left'><?php echo $group->name;?></td>
-    <td class='text-left'><?php echo $group->desc;?></td>
+    <td class='text-left' title='<?php echo $group->desc?>'><?php echo $group->desc;?></td>
     <td class='text-left' title='<?php echo $users;?>'><?php echo $users;?></td>
     <td class='text-center'>
       <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
