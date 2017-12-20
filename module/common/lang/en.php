@@ -458,7 +458,7 @@ $lang->pager->noRecord     = "No History";
 $lang->pager->digest       = " <strong>%s</strong> in total. %s <strong>%s/%s</strong> &nbsp; ";
 $lang->pager->recPerPage   = " <strong>%s</strong> per page";
 $lang->pager->first        = "<i class='icon-step-backward' title='Home'></i>";
-$lang->pager->pre          = "<i class='icon-play icon-rotate-180' title='Previous Page'></i>";
+$lang->pager->pre          = "<i class='icon-play icon-flip-horizontal' title='Previous Page'></i>";
 $lang->pager->next         = "<i class='icon-play' title='Next Page'></i>";
 $lang->pager->last         = "<i class='icon-step-forward' title='Last Page'></i>";
 $lang->pager->locate       = "Go!";
