@@ -90,6 +90,9 @@ $lang->dev->tableList['doccontent']     = 'Doc Content';
 $lang->dev->tableList['storystage']     = 'Story Stage';
 $lang->dev->tableList['tutorial']       = 'Tutorial';
 $lang->dev->tableList['suitecase']      = 'Suite Case';
+$lang->dev->tableList['score']          = 'Score';
+$lang->dev->tableList['entry']          = 'Entry';
+$lang->dev->tableList['webhook']        = 'WebHook';
 
 $lang->dev->groupList['my']      = 'Dashboard';
 $lang->dev->groupList['product'] = $lang->productCommon;
