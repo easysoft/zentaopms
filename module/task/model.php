@@ -666,7 +666,7 @@ class taskModel extends model
         if($this->post->left == 0)
         {
             $task->status       = 'done';
-            $task->finishedBy   = $this->app->user->account;
+            $task->finishedBy   = empty($oldTask->openedBy) ? $this->app->user->account : $oldTask->openedBy; //Fix bug#1341
             $task->finishedDate = helper::now();
         }
         else
@@ -1211,8 +1211,12 @@ class taskModel extends model
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->leftJoin(TABLE_TEAM)->alias('t4')->on('t1.id = t4.task')
             ->where('t1.project')->eq((int)$projectID)
-            ->andWhere('t1.parent', $type == 'myinvolved')->eq(0)
-            ->beginIF($type == 'myinvolved')->orWhere('t4.account')->eq($this->app->user->account)->markRight(1)->fi()
+            ->beginIF(!in_array($type, array('assignedtome', 'myinvolved')))->andWhere('t1.parent')->eq(0)->fi()
+            ->beginIF($type == 'myinvolved')
+            ->andWhere('t4.account', true)->eq($this->app->user->account)
+            ->orWhere('t1.assignedTo')->eq($this->app->user->account)
+            ->orWhere('t1.finishedby')->eq($this->app->user->account)
+            ->markRight(1)->fi()
             ->beginIF($productID)->andWhere('t2.product')->eq((int)$productID)->fi()
             ->beginIF($type == 'undone')->andWhere("(t1.status = 'wait' or t1.status ='doing')")->fi()
             ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
@@ -1225,7 +1229,7 @@ class taskModel extends model
             ->orderBy('t1.`parent`,' . $orderBy)
             ->page($pager)
             ->fetchAll('id');
-        
+
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID or $type == 'needconfirm' or $type == 'myinvolved') ? false : true);
 
         if(empty($tasks)) return array();
