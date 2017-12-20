@@ -2037,7 +2037,7 @@ class taskModel extends model
             $class = '';
             if($id == 'status') $class .= ' task-' . $task->status;
             if($id == 'id')     $class .= ' cell-id';
-            if($id == 'name' or $id == 'story') $class .= ' text-left';
+            if($id == 'name') $class .= ' text-left';
             if($id == 'deadline' and isset($task->delay)) $class .= ' delayed';
             if($id == 'assignedTo' && $task->assignedTo == $account) $class .= ' red';
 

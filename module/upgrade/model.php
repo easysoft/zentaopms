@@ -1938,4 +1938,25 @@ class upgradeModel extends model
         }
         return true;
     }
+
+    /**
+     * Change story field width.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function changeStoryWidth()
+    {
+        $projectCustom = $this->dao->select('*')->from(TABLE_CONFIG)->where('section')->eq('projectTask')->andWhere('`key`')->in('cols,tablecols')->fetchAll('id');
+        foreach($projectCustom as $configID => $projectTask)
+        {
+            $fields = json_decode($projectTask->value);
+            foreach($fields as $i => $field)
+            {
+                if($field->id == 'story') $field->width = '40px';
+            }
+            $this->dao->update(TABLE_CONFIG)->set('value')->eq(json_encode($fields))->where('id')->eq($configID)->exec();
+        }
+        return true;
+    }
 }

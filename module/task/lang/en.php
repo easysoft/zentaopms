@@ -45,6 +45,7 @@ $lang->task->project           = $lang->projectCommon;
 $lang->task->module            = 'Module';
 $lang->task->moduleAB          = 'Module';
 $lang->task->story             = 'Story';
+$lang->task->storyAB           = 'Story';
 $lang->task->storySpec         = 'Story Description';
 $lang->task->storyVerify       = 'Acceptance';
 $lang->task->name              = 'Name';

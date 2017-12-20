@@ -174,9 +174,9 @@ $config->task->datatable->fieldList['closedReason']['width']    = '80';
 $config->task->datatable->fieldList['closedReason']['required'] = 'no';
 
 global $lang;
-$config->task->datatable->fieldList['story']['title']    = "S";
+$config->task->datatable->fieldList['story']['title']    = "storyAB";
 $config->task->datatable->fieldList['story']['fixed']    = 'no';
-$config->task->datatable->fieldList['story']['width']    = '30';
+$config->task->datatable->fieldList['story']['width']    = '40';
 $config->task->datatable->fieldList['story']['required'] = 'no';
 $config->task->datatable->fieldList['story']['name']     = $lang->task->story;
 

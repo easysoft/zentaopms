@@ -45,6 +45,7 @@ $lang->task->project          = '所属' . $lang->projectCommon;
 $lang->task->module           = '所属模块';
 $lang->task->moduleAB         = '模块';
 $lang->task->story            = '相关需求';
+$lang->task->storyAB          = '需求';
 $lang->task->storySpec        = '需求描述';
 $lang->task->storyVerify      = '验收标准';
 $lang->task->name             = '任务名称';
