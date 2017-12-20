@@ -38,7 +38,7 @@
     </tr>
     <tr>
       <th><?php echo empty($task->team) ? $lang->task->assign : $lang->task->transferTo;?></th>
-      <td><?php echo html::select('assignedTo', $members, $task->openedBy, "class='form-control chosen'");?></td><td></td>
+      <td><?php echo html::select('assignedTo', $members, $task->nextBy, "class='form-control chosen'");?></td><td></td>
     </tr>
     <tr>
       <th><?php echo $lang->task->finishedDate;?></th>

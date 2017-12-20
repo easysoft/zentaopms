@@ -666,7 +666,7 @@ class taskModel extends model
         if($this->post->left == 0)
         {
             $task->status       = 'done';
-            $task->finishedBy   = empty($oldTask->openedBy) ? $this->app->user->account : $oldTask->openedBy; //Fix bug#1341
+            $task->finishedBy   = $oldTask->openedBy; // Fix bug#1341
             $task->finishedDate = helper::now();
         }
         else
@@ -850,20 +850,24 @@ class taskModel extends model
                 $this->dao->update(TABLE_TASK)->data($newTask)->where('id')->eq((int)$taskID)->exec();
 
                 if($task->assignedTo != $teams[count($teams) - 1]) return common::createChanges($task, $newTask);
+
+                $data->assignedTo = $task->openedBy; // Fix bug#1345
             }
         }
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($taskID)->exec();
 
         $oldTask = new stdClass();
-        $oldTask->consumed = $task->consumed;
-        $oldTask->left     = $task->left;
-        $oldTask->status   = $oldStatus;
+        $oldTask->consumed   = $task->consumed;
+        $oldTask->left       = $task->left;
+        $oldTask->status     = $oldStatus;
+        $oldTask->assignedTo = $task->assignedTo;
 
         $newTask = new stdClass();
-        $newTask->left     = $left;
-        $newTask->consumed = $task->consumed + $consumed;
-        $newTask->status   = $task->status;
+        $newTask->left       = $left;
+        $newTask->consumed   = $task->consumed + $consumed;
+        $newTask->status     = $task->status;
+        $newTask->assignedTo = $data->assignedTo;
 
         $changes = common::createChanges($oldTask, $newTask);
         if(!empty($actionID)) $this->action->logHistory($actionID, $changes);
@@ -932,7 +936,8 @@ class taskModel extends model
             $this->dao->update(TABLE_TASK)->data($newTask)->where('id')->eq((int)$taskID)->exec();
 
             if($oldTask->assignedTo != $teams[count($teams) - 1]) return common::createChanges($oldTask, $newTask);
-            $task->consumed = $myTime->consumed;
+            $task->consumed   = $myTime->consumed;
+            $task->assignedTo = $oldTask->openedBy; // Fix bug#1345
         }
 
         if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;

@@ -786,11 +786,18 @@ class task extends control
         {
             $teams = array_keys($task->team);
 
-            $task->openedBy   = $this->task->getNextUser($teams, $task->assignedTo);
+            $task->nextBy   = $this->task->getNextUser($teams, $task->assignedTo);
             $task->myConsumed = $this->dao->select('consumed')->from(TABLE_TEAM)->where('task')->eq($taskID)->andWhere('account')->eq($task->assignedTo)->fetch('consumed');
 
             $lastAccount = end($teams);
-            if($lastAccount != $task->assignedTo) $members = $this->task->getMemberPairs($task);
+            if($lastAccount != $task->assignedTo)
+            {
+                $members = $this->task->getMemberPairs($task);
+            }
+            else
+            {
+                $task->nextBy = $task->openedBy;
+            }
         }
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
