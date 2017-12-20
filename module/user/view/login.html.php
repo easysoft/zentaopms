@@ -60,11 +60,13 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
     <div id='demoUsers' class="panel-foot">
       <span><?php echo $lang->user->loginWithDemoUser; ?></span>
       <?php
-      $sign = $config->requestType == 'GET' ? '&' : '?';
-      foreach($demoUsers as $demoUser => $demoRealname)
+      $password = md5('123456');
+      $link     = inlink('login');
+      $link    .= strpos($link, '?') !== false ? '&' : '?';
+      foreach($demoUsers as $demoAccount => $demoUser)
       {
-          if(strpos($this->app->company->admins, ",{$demoUser},") !== false) continue;
-          echo html::a(inlink('login') . $sign . "account={$demoUser}&password=" . md5(md5('123456') + $this->session->rand), $demoRealname, 'hiddenwin');
+          if($demoUser->password != $password) continue;
+          echo html::a($link . "account={$demoAccount}&password=" . md5($password . $this->session->rand), $demoUser->realname, 'hiddenwin');
       }
       ?>  
     </div>  
