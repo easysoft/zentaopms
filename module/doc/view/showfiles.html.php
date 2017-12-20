@@ -72,7 +72,7 @@
         <td class='text-left'> <?php echo $file->pathname;?> </td>
         <td><?php echo $file->extension;?></td>
         <td><?php echo number_format($file->size / 1024 , 1) . 'K';?></td>
-        <td><?php echo isset($file->addedBy) ? $file->addedBy : '';?></td>
+        <td><?php echo isset($file->addedBy) ? zget($users, $file->addedBy) : '';?></td>
         <td><?php echo isset($file->addedDate) ? substr($file->addedDate, 0, 10) : '';?></td>
         <td class='text-center'>
           <?php

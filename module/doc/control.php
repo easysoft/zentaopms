@@ -601,12 +601,15 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function showFiles($type, $objectID, $viewType='card', $orderBy='t1.id_desc', $recTotal=0, $recPerPage=20, $pageID=1)
+    public function showFiles($type, $objectID, $viewType = '', $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $uri = $this->app->getURI(true);
         $this->app->session->set('taskList',  $uri);
         $this->app->session->set('storyList', $uri);
         $this->app->session->set('docList',   $uri);
+
+        if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'card';
+        setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot);
 
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $object = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
@@ -658,6 +661,7 @@ class doc extends control
         $this->view->type       = $type;
         $this->view->object     = $object;
         $this->view->files      = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
         $this->view->viewType   = $viewType;
         $this->view->orderBy    = $orderBy;
