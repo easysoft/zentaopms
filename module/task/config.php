@@ -173,10 +173,12 @@ $config->task->datatable->fieldList['closedReason']['fixed']    = 'no';
 $config->task->datatable->fieldList['closedReason']['width']    = '80';
 $config->task->datatable->fieldList['closedReason']['required'] = 'no';
 
-$config->task->datatable->fieldList['story']['title']    = 'story';
+global $lang;
+$config->task->datatable->fieldList['story']['title']    = "storyAB";
 $config->task->datatable->fieldList['story']['fixed']    = 'no';
-$config->task->datatable->fieldList['story']['width']    = '80';
+$config->task->datatable->fieldList['story']['width']    = '40';
 $config->task->datatable->fieldList['story']['required'] = 'no';
+$config->task->datatable->fieldList['story']['name']     = $lang->task->story;
 
 $config->task->datatable->fieldList['mailto']['title']    = 'mailto';
 $config->task->datatable->fieldList['mailto']['fixed']    = 'no';

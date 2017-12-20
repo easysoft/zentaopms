@@ -574,7 +574,12 @@ class treeModel extends model
             if($startModule) $startModulePath = $startModule->path . '%';
         }
 
-        $projectModules = $this->getTaskTreeModules($rootID, true);
+        $projectModules  = $this->getTaskTreeModules($rootID, true);
+        $projectBranches = $this->dao->select('DISTINCT t2.branch')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t1.project')->eq($rootID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchPairs();
 
         /* Get module according to product. */
         $products     = $this->loadModel('product')->getProductsByProject($rootID);
@@ -602,12 +607,13 @@ class treeModel extends model
                 while($module = $stmt->fetch())
                 {
                     /* if not manage, ignore unused modules. */
-                    if(!isset($projectModules[$module->id])) continue;
-                    $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
+                    if(isset($projectModules[$module->id])) $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
                 }
-                if(isset($treeMenu[0]) and $branch)
+                if((isset($treeMenu[0]) and $branch) or isset($projectBranches[$branch]))
                 {
-                    $treeMenu[0] = "<li>" . html::a($link, $branchName, '_self', "id='branch$branch'") . "<ul>{$treeMenu[0]}</ul></li>";
+                    $childMenu = isset($treeMenu[0]) ? "<ul>{$treeMenu[0]}</ul>" : '';
+                    $link      = helper::createLink('project', 'story', "project=$rootID&ordery=&status=byBranch&praram=$branch");
+                    if($branchName) $treeMenu[0] = "<li>" . html::a($link, $branchName, '_self', "id='branch$branch'") . "{$childMenu}</li>";
                 }
                 $tree .= isset($treeMenu[0]) ? $treeMenu[0] : '';
             }

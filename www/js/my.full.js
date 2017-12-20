@@ -1941,6 +1941,51 @@ function revertModuleCookie()
     }
 }
 
+/**
+ * Focus move up or down for input.
+ *
+ * @param type up|down
+ */
+function inputFocusJump(type){
+    var hasFocus = $('input').is(':focus');
+    if(hasFocus)
+    {
+        var title     = $("input:focus").attr('name').replace(/\[\d]/g, '');
+        var $input    = $(":input[name^=" + title + "]:text:not(:disabled):not([name*='%'])");
+        var num       = $input.length;
+        var index     = parseInt($("input:focus").attr('name').replace(/[^0-9]/g, ''));
+        var nextIndex = type == 'down' ? index + 1 : index - 1;
+
+        if(nextIndex < num && nextIndex >= 0)
+        {
+            $input[nextIndex].focus();
+        }
+    }
+}
+
+/**
+ * Focus move up or down for select.
+ *
+ * @param type
+ */
+function selectFocusJump(type)
+{
+    var hasFocus = $('select').is(':focus');
+    if(hasFocus)
+    {
+        var title     = $("select:focus").attr('name').replace(/\[\d]/g, '');
+        var $select   = $("select[name^=" + title + "]:not([name*='%'])");
+        var num       = $select.length;
+        var index     = parseInt($("select:focus").attr('name').replace(/[^0-9]/g, ''));
+        var nextIndex = type == 'down' ? index + 1 : index - 1;
+
+        if(nextIndex < num && nextIndex >= 0)
+        {
+            $select[nextIndex].focus();
+        }
+    }
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
@@ -1997,4 +2042,17 @@ $(document).ready(function()
     initHelpLink();
     checkTutorial();
     revertModuleCookie();
+
+    /* Adjust for dropdown position. */
+    $('li.dropdown-submenu').mouseover(function()
+    {
+        $('li.dropdown-submenu > .dropdown-menu').each(function()
+        {
+            if($(this).css('display') == 'block')
+            {
+                var topPosition = $(this).offset().top;
+                if(topPosition < 0) $(this).css('bottom', Number($(this).css('bottom').replace('px', '')) + topPosition);
+            }
+        })
+    })
 });

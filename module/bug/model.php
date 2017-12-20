@@ -511,6 +511,7 @@ class bugModel extends model
             ->setDefault('openedBuild', '')
             ->setDefault('plan', 0)
             ->setDefault('deadline', '0000-00-00')
+            ->setDefault('resolvedDate', '0000-00-00 00:00:00')
             ->setIF(strpos($this->config->bug->edit->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
@@ -2413,10 +2414,18 @@ class bugModel extends model
                 echo zget($plans, $bug->plan, '');
                 break;
             case 'story':
-                echo zget($stories, $bug->story, '');
+                if(isset($stories[$bug->story]))
+                {
+                    $story = $stories[$bug->story];
+                    echo common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$story->id", 'html', true), $story->title, '', "class='iframe'") : $story->title;
+                }
                 break;
             case 'task':
-                echo zget($tasks, $bug->task, '');
+                if(isset($tasks[$bug->task]))
+                {
+                    $task = $tasks[$bug->task];
+                    echo common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$task->id", 'html', true), $task->name, '', "class='iframe'") : $task->name;
+                }
                 break;
             case 'type':
                 echo zget($this->lang->bug->typeList, $bug->type);

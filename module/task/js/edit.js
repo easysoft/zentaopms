@@ -24,6 +24,11 @@ function loadAll(projectID)
         loadProjectStories(projectID);
         loadProjectMembers(projectID);
     }
+    else
+    {
+        $('#project').val(oldProjectID);
+        $("#project").trigger("chosen:updated");
+    }
 }
 
 /**

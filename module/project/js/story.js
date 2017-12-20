@@ -21,6 +21,7 @@ $(function()
 
     $('#module' + moduleID).addClass('active');
     $('#product' + productID).addClass('active');
+    $('#branch' + branchID).addClass('active');
     $(document).on('click', "#storyList tbody tr", function(){showCheckedSummary();});
     $(document).on('change', "#storyList :checkbox", function(){showCheckedSummary();});
 });

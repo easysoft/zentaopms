@@ -61,11 +61,11 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
       <span><?php echo $lang->user->loginWithDemoUser; ?></span>
       <?php
       $sign = $config->requestType == 'GET' ? '&' : '?';
-      if(isset($demoUsers['productManager'])) echo html::a(inlink('login') . $sign . "account=productManager&password=123456", $demoUsers['productManager'], 'hiddenwin');
-      if(isset($demoUsers['projectManager'])) echo html::a(inlink('login') . $sign . "account=projectManager&password=123456", $demoUsers['projectManager'], 'hiddenwin');
-      if(isset($demoUsers['testManager']))    echo html::a(inlink('login') . $sign . "account=testManager&password=123456",    $demoUsers['testManager'],    'hiddenwin');
-      if(isset($demoUsers['dev1']))           echo html::a(inlink('login') . $sign . "account=dev1&password=123456",           $demoUsers['dev1'],           'hiddenwin');
-      if(isset($demoUsers['tester1']))        echo html::a(inlink('login') . $sign . "account=tester1&password=123456",        $demoUsers['tester1'],        'hiddenwin');
+      foreach($demoUsers as $demoUser => $demoRealname)
+      {
+          if(strpos($this->app->company->admins, ",{$demoUser},") !== false) continue;
+          echo html::a(inlink('login') . $sign . "account={$demoUser}&password=" . md5(md5('123456') + $this->session->rand), $demoRealname, 'hiddenwin');
+      }
       ?>  
     </div>  
     <?php endif;?>

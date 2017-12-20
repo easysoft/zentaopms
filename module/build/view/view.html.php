@@ -217,7 +217,6 @@ tfoot tr td .table-actions .btn{display:none;}
                   <th class='w-date {sorter:false}'>    <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
                   <th class='w-user {sorter:false}'>    <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
                   <th class='w-100px {sorter:false}'>   <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
-                  <th class='w-50px {sorter:false}'>    <?php echo $lang->actions?></th>
                 </tr>
               </thead>
               <?php foreach($generatedBugs as $bug):?>
