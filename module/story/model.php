@@ -2287,7 +2287,6 @@ class storyModel extends model
         }
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($productID)
-            ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchPairs('id', 'title');
         $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('branch')->in($branch)->fetchGroup('story', 'branch');
