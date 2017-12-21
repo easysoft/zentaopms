@@ -98,7 +98,7 @@
         <ul class='dropdown-menu' id='exportActionMenu'>
         <?php 
         $misc = common::hasPriv('task', 'export') ? "class='export iframe' data-width='700'" : "class=disabled";
-        $link = common::hasPriv('task', 'export') ?  $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy") : '#';
+        $link = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=$browseType") : '#';
         echo "<li>" . html::a($link, $lang->task->export, '', $misc) . "</li>";
         ?>
         </ul>
