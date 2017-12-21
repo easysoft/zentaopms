@@ -88,10 +88,10 @@ foreach(explode(',', $showFields) as $field)
         </td>
         <?php endif;?>
         <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'>
-          <div class="input-group"><?php echo html::select("modules[$storyID]", $modules, $story->module, "class='form-control chosen'");?></div>
+          <?php echo html::select("modules[$storyID]", $modules, $story->module, "class='form-control chosen'");?>
         </td>
         <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'>
-          <div class="input-group"><?php echo html::select("plans[$storyID]", $productPlans, $story->plan, "class='form-control chosen'");?></div>
+          <?php echo html::select("plans[$storyID]", $productPlans, $story->plan, "class='form-control chosen'");?>
         </td>
         <td style='overflow:visible' title='<?php echo $story->title?>'>
           <div class='input-group'>
