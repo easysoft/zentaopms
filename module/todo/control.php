@@ -254,11 +254,23 @@ class todo extends control
         }
 
         /* Set menus. */
-        $this->lang->todo->menu      = $this->lang->user->menu;
-        $this->lang->todo->menuOrder = $this->lang->user->menuOrder;
-        $this->loadModel('user')->setMenu($this->user->getPairs(), $todo->account);
-        $this->lang->company->menu->browseUser['subModule'] = 'todo';
-        $this->lang->set('menugroup.todo', $from);
+        $this->loadModel('user');
+        if($from == 'company')
+        {
+            $this->lang->todo->menu      = $this->lang->user->menu;
+            $this->lang->todo->menuOrder = $this->lang->user->menuOrder;
+            $this->user->setMenu($this->user->getPairs(), $todo->account);
+            $this->lang->company->menu->browseUser['subModule'] = 'todo';
+            $this->lang->set('menugroup.todo', $from);
+        }
+        elseif($from == 'my')
+        {
+            $this->lang->todo->menu      = $this->lang->my->menu;
+            $this->lang->todo->menuOrder = $this->lang->my->menuOrder;
+            $this->loadModel('my')->setMenu();
+            $this->lang->my->menu->todo['subModule'] = 'todo';
+            $this->lang->set('menugroup.todo', $from);
+        }
 
         $this->view->title      = "{$this->lang->todo->common} #$todo->id $todo->name";
         $this->view->position[] = $this->lang->todo->view;
