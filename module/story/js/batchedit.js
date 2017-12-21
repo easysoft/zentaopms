@@ -31,11 +31,11 @@ function loadBranches(product, branch, storyID)
     if(!branch) branch = 0;
 
     moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + storyID + '&needManage=true');
-    $('#modules' + storyID).parent('td').load(moduleLink, function(){$('#modules' + storyID).chosen(defaultChosenOptions);})
+    $('#modules' + storyID).parent('td > .input-group').load(moduleLink, function(){$('#modules' + storyID).chosen(defaultChosenOptions);});
 
     planID = $('#plans' + storyID).val();
     planLink = createLink('product', 'ajaxGetPlans', 'productID=' + product + '&branch=' + branch + '&planID=' + planID + '&fieldID=' + storyID + '&needCreate=true');
-    $('#plans' + storyID).parent('td').load(planLink, function(){$('#plans' + storyID).chosen(defaultChosenOptions);});
+    $('#plans' + storyID).parent('td > .input-group').load(planLink, function(data){$('#plans' + storyID).chosen(defaultChosenOptions);});
 }
 
 $(document).ready(removeDitto());//Remove 'ditto' in first row.
