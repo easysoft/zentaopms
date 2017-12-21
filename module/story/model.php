@@ -2271,8 +2271,10 @@ class storyModel extends model
     /**
      * Merge plan title.
      *
-     * @param  int|array    $productID
-     * @param  array    $stories
+     * @param  int|array $productID
+     * @param  array     $stories
+     * @param  int       $branch
+     *
      * @access public
      * @return array
      */
@@ -2289,10 +2291,7 @@ class storyModel extends model
             ->where('product')->in($productID)
             ->andWhere('deleted')->eq(0)
             ->fetchPairs('id', 'title');
-        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('branch')->in($branch)->fetchGroup('story', 'branch');
 
-        $branch = trim(str_replace(',0,', '', ",$branch,"), ',');
-        $branch = empty($branch) ? 0 : $branch;
         foreach($stories as $story)
         {
             $story->planTitle = '';
