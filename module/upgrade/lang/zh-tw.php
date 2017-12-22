@@ -129,3 +129,4 @@ $lang->upgrade->fromVersions['9_5_1']     = '9.5.1';
 $lang->upgrade->fromVersions['9_6']       = '9.6';
 $lang->upgrade->fromVersions['9_6_1']     = '9.6.1';
 $lang->upgrade->fromVersions['9_6_2']     = '9.6.2';
+$lang->upgrade->fromVersions['9_6_3']     = '9.6.3';

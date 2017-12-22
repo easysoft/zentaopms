@@ -39,7 +39,7 @@ $lang->tutorial->tasks['createAccount']['nav']  = array('module' => 'user', 'met
 $lang->tutorial->tasks['createAccount']['desc'] = "<p>在系統創建一個新的用戶帳號：</p><ul><li data-target='nav'>打開 <span class='task-nav'>組織 <i class='icon icon-angle-right'></i> 用戶 <i class='icon icon-angle-right'></i> 添加用戶</span> 頁面；</li><li data-target='form'>在添加用戶表單中填寫新用戶信息；</li><li data-target='submit'>保存用戶信息。</li></ul>";
 
 $lang->tutorial->tasks['createProduct']         = array('title' => '創建產品');
-$lang->tutorial->tasks['createProduct']['nav']  = array('module' => 'product', 'method' => 'create', 'menu' => 'create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '新增產品');
+$lang->tutorial->tasks['createProduct']['nav']  = array('module' => 'product', 'method' => 'create', 'menu' => 'create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '添加產品');
 $lang->tutorial->tasks['createProduct']['desc'] = "<p>在系統創建一個新的產品：</p><ul><li data-target='nav'>打開 <span class='task-nav'>產品 <i class='icon icon-angle-right'></i> 添加產品</span> 頁面；</li><li data-target='form'>在表單中填寫要創建的產品信息；</li><li data-target='submit'>保存產品信息。</li></ul>";
 
 $lang->tutorial->tasks['createStory']         = array('title' => '創建需求');

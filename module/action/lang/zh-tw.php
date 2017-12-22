@@ -25,6 +25,7 @@ $lang->action->undelete    = '還原';
 $lang->action->hideOne     = '隱藏';
 $lang->action->hideAll     = '全部隱藏';
 $lang->action->editComment = '修改備註';
+$lang->action->comment     = '備註';
 
 $lang->action->trashTips      = '提示：為了保證系統的完整性，禪道系統的刪除都是標記刪除。';
 $lang->action->textDiff       = '文本格式';
