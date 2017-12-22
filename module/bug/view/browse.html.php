@@ -330,7 +330,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                       foreach ($memberPairs as $key => $value)
                       {
                           if(empty($key)) continue;
-                          echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
+                          echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\",\"hiddenwin\")", $value, '', '') . '</li>';
                       }
                       echo "</ul>";
                       if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";

@@ -847,7 +847,7 @@ class bug extends control
             }
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
-        if($type == 'product') die(js::locate($this->createLink('bug', 'browse', "productID=$projectID")));
+        if($type == 'product') die(js::locate($this->createLink('bug', 'browse', "productID=$projectID"), 'parent'));
         if($type == 'my')      die(js::locate($this->createLink('my', 'bug')));
         die(js::locate($this->createLink('project', 'bug', "projectID=$projectID")));
     }
