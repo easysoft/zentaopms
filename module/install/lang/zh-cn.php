@@ -156,6 +156,8 @@ $lang->install->cronList['moduleName=svn&methodName=run']             = '同步S
 $lang->install->cronList['moduleName=git&methodName=run']             = '同步GIT';
 $lang->install->cronList['moduleName=backup&methodName=backup']       = '备份数据和附件';
 $lang->install->cronList['moduleName=mail&methodName=asyncSend']      = '异步发信';
+$lang->install->cronList['moduleName=webhook&methodName=asyncSend']   = '异步发送Webhook';
+$lang->install->cronList['moduleName=admin&methodName=deleteLog']     = '删除过期日志';
 
 $lang->install->success  = "安装成功";
 $lang->install->login    = '登录禅道管理系统';
