@@ -1236,7 +1236,7 @@ class taskModel extends model
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.`parent`,' . $orderBy)
-            ->page($pager)
+            ->page($pager, 't1.id')
             ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID or in_array($type, array('assignedtome', 'myinvolved', 'needconfirm'))) ? false : true);
