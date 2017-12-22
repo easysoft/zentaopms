@@ -30,12 +30,23 @@ $lang->misc->zentao->about['official']     = "Official Website";
 $lang->misc->zentao->about['changelog']    = "Change Log";
 $lang->misc->zentao->about['license']      = "License";
 
+
+
 $lang->misc->zentao->support['vip']        = "VIP Technical Support";
 $lang->misc->zentao->support['manual']     = "User Manual";
 
+
+
+
+
+
 $lang->misc->zentao->cowin['reportbug']    = "Report Bug ";
 $lang->misc->zentao->cowin['feedback']     = "Feedback";
+
 $lang->misc->zentao->cowin['cowinmore']    = "More";
+
+
+
 
 $lang->misc->zentao->service['servicemore']= 'More';
 

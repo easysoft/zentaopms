@@ -483,6 +483,7 @@ $lang->resource->bug->saveTemplate       = 'saveTemplate';
 $lang->resource->bug->deleteTemplate     = 'deleteTemplate';
 $lang->resource->bug->setPublic          = 'setPublic';
 $lang->resource->bug->batchChangeModule  = 'batchChangeModule';
+$lang->resource->bug->batchChangeBranch  = 'batchChangeBranch';
 
 $lang->bug->methodOrder[0]   = 'index';
 $lang->bug->methodOrder[5]   = 'browse';
@@ -511,6 +512,7 @@ $lang->bug->methodOrder[110] = 'setPublic';
 $lang->bug->methodOrder[115] = 'linkBugs';
 $lang->bug->methodOrder[120] = 'unlinkBug';
 $lang->bug->methodOrder[125] = 'batchChangeModule';
+$lang->bug->methodOrder[130] = 'batchChangeBranch';
 
 /* Test case. */
 $lang->resource->testcase = new stdclass();
@@ -534,6 +536,7 @@ $lang->resource->testcase->showImport         = 'showImport';
 $lang->resource->testcase->confirmChange      = 'confirmChange';
 $lang->resource->testcase->confirmStoryChange = 'confirmStoryChange';
 $lang->resource->testcase->batchChangeModule  = 'batchChangeModule';
+$lang->resource->testcase->batchChangeBranch  = 'batchChangeBranch';
 $lang->resource->testcase->bugs               = 'bugs';
 $lang->resource->testcase->review             = 'review';
 $lang->resource->testcase->batchReview        = 'batchReview';
@@ -556,9 +559,10 @@ $lang->testcase->methodOrder[55]  = 'confirmStoryChange';
 $lang->testcase->methodOrder[60]  = 'batchEdit';
 $lang->testcase->methodOrder[65]  = 'batchDelete';
 $lang->testcase->methodOrder[70]  = 'batchChangeModule';
-$lang->testcase->methodOrder[75]  = 'linkCases';
-$lang->testcase->methodOrder[80]  = 'unlinkCase';
-$lang->testcase->methodOrder[85]  = 'bugs';
+$lang->testcase->methodOrder[75]  = 'batchChangeBranch';
+$lang->testcase->methodOrder[80]  = 'linkCases';
+$lang->testcase->methodOrder[85]  = 'unlinkCase';
+$lang->testcase->methodOrder[90]  = 'bugs';
 $lang->testcase->methodOrder[95]  = 'review';
 $lang->testcase->methodOrder[100] = 'batchReview';
 $lang->testcase->methodOrder[105] = 'batchConfirmStoryChange';

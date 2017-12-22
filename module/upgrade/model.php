@@ -195,6 +195,12 @@ class upgradeModel extends model
                 $this->fixDatatableColsConfig();
             case '9_6_1':
                 $this->addLimitedGroup();
+            case '9_6_2':
+            case '9_6_3':
+                $this->execSQL($this->getUpgradeFile('9.6.3'));
+                $this->changeLimitedName();
+                $this->adjustPriv9_7();
+                $this->changeStoryWidth();
         }
 
         $this->deletePatch();
@@ -294,6 +300,9 @@ class upgradeModel extends model
         case '9_5':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.5'));
         case '9_5_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.5.1'));
         case '9_6':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.6'));
+        case '9_6_1':
+        case '9_6_2':
+        case '9_6_3':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.6.3'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

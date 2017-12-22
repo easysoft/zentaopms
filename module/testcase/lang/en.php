@@ -78,6 +78,7 @@ $lang->testcase->batchReview             = "Batch Review";
 $lang->testcase->edit                    = "Edit";
 $lang->testcase->batchEdit               = "Batch Edit ";
 $lang->testcase->batchChangeModule       = "Batch Change Module";
+$lang->testcase->batchChangeBranch       = "Batch Change Branch";
 $lang->testcase->delete                  = "Delete";
 $lang->testcase->batchDelete             = "Batch Delete ";
 $lang->testcase->batchConfirmStoryChange = "Batch Confirm Story Change";

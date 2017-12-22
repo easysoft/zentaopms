@@ -337,6 +337,7 @@ $lang->user->menu  = $lang->company->menu;
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => 'Home|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
+
 $lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
 $lang->admin->menu->mail      = array('link' => 'Email|mail|index', 'subModule' => 'mail');
 $lang->admin->menu->backup    = array('link' => 'Backup|backup|index', 'subModule' => 'backup');
@@ -346,7 +347,6 @@ $lang->admin->menu->trashes   = array('link' => 'Recycle|action|trash', 'subModu
 $lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
 $lang->admin->menu->api       = array('link' => 'API|webhook|browse', 'alias' => 'create,edit', 'subModule' => 'entry,webhook');
 $lang->admin->menu->sso       = 'RangerTeam|admin|sso';
-//$lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();

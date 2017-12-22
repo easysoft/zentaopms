@@ -626,31 +626,6 @@ class user extends control
         }
     }
 
-    /**
-     * Check Tmp dir.
-     *
-     * @access public
-     * @return void
-     */
-    public function checkTmp()
-    {
-        if(!is_dir($this->app->tmpRoot))   mkdir($this->app->tmpRoot,   0755, true);
-        if(!is_dir($this->app->cacheRoot)) mkdir($this->app->cacheRoot, 0755, true);
-        if(!is_dir($this->app->logRoot))   mkdir($this->app->logRoot,   0755, true);
-        if(!is_dir($this->app->logRoot))   return false;
-
-        $file = $this->app->logRoot . DS . 'demo.txt';
-        if($fp = @fopen($file, 'a+'))
-        {
-            @fclose($fp);
-            @unlink($file);
-        }
-        else
-        {
-            return false;
-        }
-        return true;
-    }
 
     /**
      * User login, identify him and authorize him.
@@ -663,7 +638,7 @@ class user extends control
      */
     public function login($referer = '', $from = '')
     {
-        if($this->checkTmp() === false)
+        if($this->user->checkTmp() === false)
         {
             echo "<html><head><meta charset='utf-8'></head>";
             echo "<body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>";

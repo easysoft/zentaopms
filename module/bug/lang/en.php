@@ -77,7 +77,8 @@ $lang->bug->confirmBug         = 'Confirm';
 $lang->bug->batchConfirm       = 'Batch Confirm';
 $lang->bug->edit               = 'Edit';
 $lang->bug->batchEdit          = 'Batch Edit';
-$lang->bug->batchChangeModule  = 'Batch Modify';
+$lang->bug->batchChangeModule  = 'Batch Modify Module';
+$lang->bug->batchChangeBranch  = 'Batch Modify Branch';
 $lang->bug->batchClose         = 'Batch Close';
 $lang->bug->assignTo           = 'Assign';
 $lang->bug->batchAssignTo      = 'Batch Assign';
@@ -367,6 +368,9 @@ $lang->bug->mySelects['resolvedbyme'] = $lang->bug->resolvedByMe;
 
 $lang->bug->featureBar['browse']['unclosed']      = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['all']           = $lang->bug->allBugs;
+
+
+
 $lang->bug->featureBar['browse']['my']            = $lang->bug->my;
 $lang->bug->featureBar['browse']['unconfirmed']   = $lang->bug->confirmedList[0];
 $lang->bug->featureBar['browse']['assigntonull']  = $lang->bug->assignToNull;

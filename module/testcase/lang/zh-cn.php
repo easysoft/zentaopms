@@ -78,6 +78,7 @@ $lang->testcase->batchReview             = "批量评审";
 $lang->testcase->edit                    = "编辑";
 $lang->testcase->batchEdit               = "批量编辑 ";
 $lang->testcase->batchChangeModule       = "批量修改模块";
+$lang->testcase->batchChangeBranch       = "批量修改分支";
 $lang->testcase->delete                  = "删除";
 $lang->testcase->batchDelete             = "批量删除 ";
 $lang->testcase->batchConfirmStoryChange = "批量确认变更";

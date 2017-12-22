@@ -120,6 +120,9 @@ $lang->product->mySelects['resolvedbyme'] = $lang->product->reviewedByMe;
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
 $lang->product->featureBar['browse']['unplan']       = $lang->product->unplan;
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
+
+
+
 $lang->product->featureBar['browse']['my']           = $lang->product->my;
 $lang->product->featureBar['browse']['closedbyme']   = $lang->product->closedByMe;
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;

@@ -1188,4 +1188,30 @@ class userModel extends model
 
         return $strength;
     }
+
+    /**
+     * Check Tmp dir.
+     *
+     * @access public
+     * @return void
+     */
+    public function checkTmp()
+    {
+        if(!is_dir($this->app->tmpRoot))   mkdir($this->app->tmpRoot,   0755, true);
+        if(!is_dir($this->app->cacheRoot)) mkdir($this->app->cacheRoot, 0755, true);
+        if(!is_dir($this->app->logRoot))   mkdir($this->app->logRoot,   0755, true);
+        if(!is_dir($this->app->logRoot))   return false;
+
+        $file = $this->app->logRoot . DS . 'demo.txt';
+        if($fp = @fopen($file, 'a+'))
+        {
+            @fclose($fp);
+            @unlink($file);
+        }
+        else
+        {
+            return false;
+        }
+        return true;
+    }
 }
