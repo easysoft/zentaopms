@@ -31,7 +31,7 @@ td.delayed{background: #e84e0f!important; color: white;}
   ?>
   <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
     <td class='text-center'><?php echo $task->id;?></td>
-    <td class='text-center'><?php echo zget($lang->task->priList, $task->pri, $task->pri)?></td>
+    <td class='text-center'><?php echo zget(array_keys($lang->task->priList), $task->pri, $task->pri)?></td>
     <td style='color: <?php echo $task->color?>' title='<?php echo $task->name?>'><?php echo $task->name?></td>
     <td class='text-center'><?php echo $task->estimate?></td>
     <td class='<?php if(isset($task->delay)) echo 'delayed';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>

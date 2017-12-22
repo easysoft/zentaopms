@@ -10,6 +10,7 @@ $lang->mail->resend = '重發';
 $lang->mail->browse = '郵件列表';
 $lang->mail->delete = '刪除郵件';
 $lang->mail->ztCloud       = '禪道雲發信';
+$lang->mail->gmail         = 'GMAIL發信';
 $lang->mail->sendCloud     = 'Notice發信';
 $lang->mail->batchDelete   = '批量刪除';
 $lang->mail->sendcloudUser = '同步聯繫人';

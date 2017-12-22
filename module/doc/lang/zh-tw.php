@@ -64,6 +64,7 @@ $lang->doc->manageType     = '維護分類';
 $lang->doc->editType       = '編輯分類';
 $lang->doc->deleteType     = '刪除分類';
 $lang->doc->addType        = '增加分類';
+$lang->doc->childType      = '子分類';
 
 $lang->doc->libName        = '文檔庫名稱';
 $lang->doc->libType        = '文檔庫類型';

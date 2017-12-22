@@ -10,9 +10,10 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php $canOrder = common::hasPriv('project', 'storySort');?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<?php include '../../common/view/sortable.html.php';?>
+<?php if($canOrder) include '../../common/view/sortable.html.php';?>
 <?php js::set('moduleID', ($type == 'byModule' ? $param : 0));?>
 <?php js::set('productID', ($type == 'byProduct' ? $param : 0));?>
 <?php js::set('branchID', ($type == 'byBranch' ? (int)$param : ''));?>
@@ -73,7 +74,6 @@
 <div class='main'>
   <script>setTreeBox();</script>
   <form method='post' id='projectStoryForm'>
-    <?php $canOrder = common::hasPriv('project', 'storySort');?>
     <table class='table tablesorter table-condensed table-fixed table-selectable' id='storyList'>
       <thead>
         <tr class='colhead'>

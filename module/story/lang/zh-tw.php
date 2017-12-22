@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->story->create      = "提需求";
-$lang->story->batchCreate = "批量添加";
+$lang->story->batchCreate = "批量提需求";
 $lang->story->change      = "變更";
 $lang->story->changed     = '需求變更';
 $lang->story->review      = '評審';

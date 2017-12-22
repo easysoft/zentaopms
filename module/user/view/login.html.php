@@ -60,12 +60,14 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
     <div id='demoUsers' class="panel-foot">
       <span><?php echo $lang->user->loginWithDemoUser; ?></span>
       <?php
-      $sign = $config->requestType == 'GET' ? '&' : '?';
-      if(isset($demoUsers['productManager'])) echo html::a(inlink('login') . $sign . "account=productManager&password=123456", $demoUsers['productManager'], 'hiddenwin');
-      if(isset($demoUsers['projectManager'])) echo html::a(inlink('login') . $sign . "account=projectManager&password=123456", $demoUsers['projectManager'], 'hiddenwin');
-      if(isset($demoUsers['testManager']))    echo html::a(inlink('login') . $sign . "account=testManager&password=123456",    $demoUsers['testManager'],    'hiddenwin');
-      if(isset($demoUsers['dev1']))           echo html::a(inlink('login') . $sign . "account=dev1&password=123456",           $demoUsers['dev1'],           'hiddenwin');
-      if(isset($demoUsers['tester1']))        echo html::a(inlink('login') . $sign . "account=tester1&password=123456",        $demoUsers['tester1'],        'hiddenwin');
+      $password = md5('123456');
+      $link     = inlink('login');
+      $link    .= strpos($link, '?') !== false ? '&' : '?';
+      foreach($demoUsers as $demoAccount => $demoUser)
+      {
+          if($demoUser->password != $password) continue;
+          echo html::a($link . "account={$demoAccount}&password=" . md5($password . $this->session->rand), $demoUser->realname, 'hiddenwin');
+      }
       ?>  
     </div>  
     <?php endif;?>

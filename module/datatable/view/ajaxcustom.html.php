@@ -126,7 +126,7 @@ $(function()
         var $col = $cols.filter('[data-key=' + col.id + ']');
         $col.toggleClass('disabled', !col.show);
         $col.attr('data-order', col.order);
-        if(col.width) $col.find('input').val(col.width.replace('px', ''));
+        if(col.width) $col.find('input#width').val(col.width.replace('px', ''));
     }
 
     $('.cols-list').on('click', '.col:not(.require) .show-hide, .col:not(.require) .title', function()
@@ -149,14 +149,14 @@ $(function()
 
             $list.sortable({trigger: '.title', selector: '.col'});
         }
-    }).on('keyup change', 'input', function()
+    }).on('keyup change', 'input#width', function()
     {
         renderColWidth($(this).closest('.col'));
     });
 
     function renderColWidth($col)
     {
-        var width = $col.find('input').val();
+        var width = $col.find('input#width').val();
         if(width == 'auto')
         {
             width = '500';

@@ -27,10 +27,10 @@ $config->task->editor->cancel   = array('id' => 'comment', 'tools' => 'simpleToo
 $config->task->editor->pause    = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->task->exportFields = '
-    id, project, module, progress, story,
+    id, project, module, story,
     name, desc,
     type, pri,estStarted, realStarted, deadline, status,estimate, consumed, left,
-    mailto,
+    mailto, progress,
     openedBy, openedDate, assignedTo, assignedDate, 
     finishedBy, finishedDate, canceledBy, canceledDate,
     closedBy, closedDate, closedReason,
@@ -174,9 +174,9 @@ $config->task->datatable->fieldList['closedReason']['width']    = '80';
 $config->task->datatable->fieldList['closedReason']['required'] = 'no';
 
 global $lang;
-$config->task->datatable->fieldList['story']['title']    = "S";
+$config->task->datatable->fieldList['story']['title']    = "storyAB";
 $config->task->datatable->fieldList['story']['fixed']    = 'no';
-$config->task->datatable->fieldList['story']['width']    = '30';
+$config->task->datatable->fieldList['story']['width']    = '40';
 $config->task->datatable->fieldList['story']['required'] = 'no';
 $config->task->datatable->fieldList['story']['name']     = $lang->task->story;
 

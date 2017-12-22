@@ -666,7 +666,7 @@ class taskModel extends model
         if($this->post->left == 0)
         {
             $task->status       = 'done';
-            $task->finishedBy   = empty($oldTask->openedBy) ? $this->app->user->account : $oldTask->openedBy; //Fix bug#1341
+            $task->finishedBy   = $oldTask->openedBy; // Fix bug#1341
             $task->finishedDate = helper::now();
         }
         else
@@ -850,20 +850,24 @@ class taskModel extends model
                 $this->dao->update(TABLE_TASK)->data($newTask)->where('id')->eq((int)$taskID)->exec();
 
                 if($task->assignedTo != $teams[count($teams) - 1]) return common::createChanges($task, $newTask);
+
+                $data->assignedTo = $task->openedBy; // Fix bug#1345
             }
         }
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($taskID)->exec();
 
         $oldTask = new stdClass();
-        $oldTask->consumed = $task->consumed;
-        $oldTask->left     = $task->left;
-        $oldTask->status   = $oldStatus;
+        $oldTask->consumed   = $task->consumed;
+        $oldTask->left       = $task->left;
+        $oldTask->status     = $oldStatus;
+        $oldTask->assignedTo = $task->assignedTo;
 
         $newTask = new stdClass();
-        $newTask->left     = $left;
-        $newTask->consumed = $task->consumed + $consumed;
-        $newTask->status   = $task->status;
+        $newTask->left       = $left;
+        $newTask->consumed   = $task->consumed + $consumed;
+        $newTask->status     = $task->status;
+        $newTask->assignedTo = $data->assignedTo;
 
         $changes = common::createChanges($oldTask, $newTask);
         if(!empty($actionID)) $this->action->logHistory($actionID, $changes);
@@ -932,7 +936,8 @@ class taskModel extends model
             $this->dao->update(TABLE_TASK)->data($newTask)->where('id')->eq((int)$taskID)->exec();
 
             if($oldTask->assignedTo != $teams[count($teams) - 1]) return common::createChanges($oldTask, $newTask);
-            $task->consumed = $myTime->consumed;
+            $task->consumed   = $myTime->consumed;
+            $task->assignedTo = $oldTask->openedBy; // Fix bug#1345
         }
 
         if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
@@ -1030,9 +1035,10 @@ class taskModel extends model
     /**
      * Cancel a task.
      *
-     * @param  int      $taskID
+     * @param int $taskID
+     *
      * @access public
-     * @return void
+     * @return array
      */
     public function cancel($taskID)
     {
@@ -1059,9 +1065,10 @@ class taskModel extends model
     /**
      * Activate a task.
      *
-     * @param  int      $taskID
+     * @param int $taskID
+     *
      * @access public
-     * @return void
+     * @return array
      */
     public function activate($taskID)
     {
@@ -1100,8 +1107,9 @@ class taskModel extends model
     /**
      * Get task info by Id.
      *
-     * @param  int    $taskID
-     * @param  bool   $setImgSize
+     * @param  int  $taskID
+     * @param  bool $setImgSize
+     *
      * @access public
      * @return object|bool
      */
@@ -1210,6 +1218,7 @@ class taskModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->leftJoin(TABLE_TEAM)->alias('t4')->on('t1.id = t4.task')
+            ->leftJoin(TABLE_MODULE)->alias('t5')->on('t1.module = t5.id')
             ->where('t1.project')->eq((int)$projectID)
             ->beginIF(!in_array($type, array('assignedtome', 'myinvolved')))->andWhere('t1.parent')->eq(0)->fi()
             ->beginIF($type == 'myinvolved')
@@ -1217,7 +1226,7 @@ class taskModel extends model
             ->orWhere('t1.assignedTo')->eq($this->app->user->account)
             ->orWhere('t1.finishedby')->eq($this->app->user->account)
             ->markRight(1)->fi()
-            ->beginIF($productID)->andWhere('t2.product')->eq((int)$productID)->fi()
+            ->beginIF($productID)->andWhere("((t5.root=" . (int)$productID . " and t5.type='story') OR t2.product=" . (int)$productID . ")")->fi()
             ->beginIF($type == 'undone')->andWhere("(t1.status = 'wait' or t1.status ='doing')")->fi()
             ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
             ->beginIF($type == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
@@ -1227,10 +1236,10 @@ class taskModel extends model
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.`parent`,' . $orderBy)
-            ->page($pager)
+            ->page($pager, 't1.id')
             ->fetchAll('id');
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID or $type == 'needconfirm' or $type == 'myinvolved') ? false : true);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID or in_array($type, array('assignedtome', 'myinvolved', 'needconfirm'))) ? false : true);
 
         if(empty($tasks)) return array();
 
@@ -1246,10 +1255,11 @@ class taskModel extends model
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->leftJoin(TABLE_MODULE)->alias('t4')->on('t1.module = t4.id')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.parent')->in($taskList)
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($productID)->andWhere('t2.product')->eq((int)$productID)->fi()
+            ->beginIF($productID)->andWhere("((t4.root=" . (int)$productID . " and t4.type='story') OR t2.product=" . (int)$productID . ")")->fi()
             ->beginIF($type == 'undone')->andWhere("(t1.status = 'wait' or t1.status ='doing')")->fi()
             ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
             ->beginIF($type == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
@@ -2029,7 +2039,7 @@ class taskModel extends model
             $class = '';
             if($id == 'status') $class .= ' task-' . $task->status;
             if($id == 'id')     $class .= ' cell-id';
-            if($id == 'name' or $id == 'story') $class .= ' text-left';
+            if($id == 'name') $class .= ' text-left';
             if($id == 'deadline' and isset($task->delay)) $class .= ' delayed';
             if($id == 'assignedTo' && $task->assignedTo == $account) $class .= ' red';
 

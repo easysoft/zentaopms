@@ -786,11 +786,18 @@ class task extends control
         {
             $teams = array_keys($task->team);
 
-            $task->openedBy   = $this->task->getNextUser($teams, $task->assignedTo);
+            $task->nextBy   = $this->task->getNextUser($teams, $task->assignedTo);
             $task->myConsumed = $this->dao->select('consumed')->from(TABLE_TEAM)->where('task')->eq($taskID)->andWhere('account')->eq($task->assignedTo)->fetch('consumed');
 
             $lastAccount = end($teams);
-            if($lastAccount != $task->assignedTo) $members = $this->task->getMemberPairs($task);
+            if($lastAccount != $task->assignedTo)
+            {
+                $members = $this->task->getMemberPairs($task);
+            }
+            else
+            {
+                $task->nextBy = $task->openedBy;
+            }
         }
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
@@ -1172,7 +1179,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function export($projectID, $orderBy)
+    public function export($projectID, $orderBy, $type)
     {
         $project = $this->project->getById($projectID);
         $allExportFields = $this->config->task->exportFields;
@@ -1184,6 +1191,7 @@ class task extends control
             $taskLang = $this->lang->task;
 
             /* Create field lists. */
+            $sort   = $this->loadModel('common')->appendOrder($orderBy);
             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $allExportFields);
             foreach($fields as $key => $fieldName)
             {
@@ -1198,7 +1206,7 @@ class task extends control
             {
                 $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskQueryCondition)
                     ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
-                    ->orderBy($orderBy)->fetchAll('id');
+                    ->orderBy($sort)->fetchAll('id');
 
                 foreach($tasks as $key => $task)
                 {
@@ -1215,7 +1223,6 @@ class task extends control
                     {
                         $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
                     }
-
                     $task->progress .= '%';
                 }
             }
@@ -1245,9 +1252,34 @@ class task extends control
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(@array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
             $relatedModules = $this->loadModel('tree')->getTaskOptionMenu($projectID);
 
-            $children = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('parent')->in(array_keys($tasks))->fetchGroup('parent', 'id');
+            $children = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)
+                ->andWhere('parent')->in(array_keys($tasks))
+                ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+                ->orderBy($sort)
+                ->fetchGroup('parent', 'id');
             if(!empty($children))
             {
+                foreach($children as $parent => $childTasks)
+                {
+                    foreach($childTasks as $task)
+                    {
+                        /* Compute task progress. */
+                        if($task->consumed == 0 and $task->left == 0)
+                        {
+                            $task->progress = 0;
+                        }
+                        elseif($task->consumed != 0 and $task->left == 0)
+                        {
+                            $task->progress = 100;
+                        }
+                        else
+                        {
+                            $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                        }
+                        $task->progress .= '%';
+                    }
+                }
+
                 $position = 0;
                 foreach($tasks as $task)
                 {
@@ -1257,6 +1289,17 @@ class task extends control
                         array_splice($tasks, $position, 0, $children[$task->id]);
                         $position += count($children[$task->id]);
                     }
+                }
+            }
+
+            if($type == 'group')
+            {
+                $groupTasks = array();
+                foreach($tasks as $task) $groupTasks[$task->$orderBy][] = $task;
+                $tasks = array();
+                foreach($groupTasks as $groupTask)
+                {
+                    foreach($groupTask as $task)$tasks[] = $task;
                 }
             }
 

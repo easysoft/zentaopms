@@ -193,11 +193,9 @@ foreach(glob($moduleRoot . '*') as $modulePath)
         $lines = file($langFile);
         foreach($mainLines as $lineNO => $line)
         {
-            if(strpos($line, '$lang') === false)
-            {
-                //if($line != $lines[$lineNO]) echo $moduleName . ' ' . $langKey . ' ' . $lineNO . "\n";
-            }
-            else
+            if(!isset($lines[$lineNO]) OR empty(trim($lines[$lineNO]))) continue;
+            if(empty(trim($line))) continue;
+            if(strpos($line, '$lang') === 0)
             {
                 if(strpos($line, '=') !== false)
                 {

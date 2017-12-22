@@ -326,9 +326,11 @@ class tree extends control
      * AJAX: Get the option menu of modules.
      * 
      * @param  int    $rootID 
-     * @param  string $viewType 
-     * @param  int    $rootModuleID 
+     * @param  string $viewType
+     * @param  int    $branch
+     * @param  int    $rootModuleID
      * @param  string $returnType
+     * @param  string $fieldID
      * @param  bool   $needManage
      * @access public
      * @return string the html select string.

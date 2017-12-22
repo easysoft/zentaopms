@@ -78,6 +78,7 @@ $lang->bug->batchConfirm       = '批量确认';
 $lang->bug->edit               = '编辑';
 $lang->bug->batchEdit          = '批量编辑';
 $lang->bug->batchChangeModule  = '批量修改模块';
+$lang->bug->batchChangeBranch  = '批量修改分支';
 $lang->bug->batchClose         = '批量关闭';
 $lang->bug->assignTo           = '指派';
 $lang->bug->batchAssignTo      = '批量指派';
@@ -361,11 +362,16 @@ $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = '选择相关版本...';
 $lang->bug->placeholder->newBuildName = '新版本名称';
 
+
+
+
+
 $lang->bug->featureBar['browse']['unclosed']      = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['all']           = $lang->bug->allBugs;
 $lang->bug->featureBar['browse']['assigntome']    = $lang->bug->assignToMe;
 $lang->bug->featureBar['browse']['openedbyme']    = $lang->bug->openedByMe;
 $lang->bug->featureBar['browse']['resolvedbyme']  = $lang->bug->resolvedByMe;
+
 $lang->bug->featureBar['browse']['unconfirmed']   = $lang->bug->confirmedList[0];
 $lang->bug->featureBar['browse']['assigntonull']  = $lang->bug->assignToNull;
 $lang->bug->featureBar['browse']['unresolved']    = $lang->bug->unResolved;
