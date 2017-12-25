@@ -15,9 +15,9 @@ class testcaseModel extends model
 {
     /**
      * Set menu.
-     * 
-     * @param  array $products 
-     * @param  int   $productID 
+     *
+     * @param  array $products
+     * @param  int   $productID
      * @access public
      * @return void
      */
@@ -203,7 +203,7 @@ class testcaseModel extends model
                     ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
                     ->exec();
 
-                if(dao::isError()) 
+                if(dao::isError())
                 {
                     echo js::error(dao::getError());
                     die(js::reload('parent'));
@@ -230,11 +230,11 @@ class testcaseModel extends model
 
     /**
      * Get cases of a module.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @param  int    $moduleIdList
-     * @param  string $orderBy 
-     * @param  object $pager 
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -252,13 +252,13 @@ class testcaseModel extends model
 
     /**
      * Get by suite.
-     * 
-     * @param  int    $productID 
-     * @param  int    $branch 
-     * @param  int    $suiteID 
-     * @param  array  $moduleIdList 
-     * @param  string $orderBy 
-     * @param  object $pager 
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $suiteID
+     * @param  array  $moduleIdList
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return void
      */
@@ -277,9 +277,9 @@ class testcaseModel extends model
 
     /**
      * Get case info by ID.
-     * 
-     * @param  int    $caseID 
-     * @param  int    $version 
+     *
+     * @param  int    $caseID
+     * @param  int    $version
      * @access public
      * @return object|bool
      */
@@ -295,7 +295,7 @@ class testcaseModel extends model
             $case->storyStatus        = $story->status;
             $case->latestStoryVersion = $story->version;
         }
-        if($case->fromBug) $case->fromBugTitle = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('title')->fetch('title'); 
+        if($case->fromBug) $case->fromBugTitle = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('title')->fetch('title');
 
         $case->toBugs = array();
         $toBugs       = $this->dao->select('id, title')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
@@ -454,10 +454,10 @@ class testcaseModel extends model
 
     /**
      * Get cases by openedBy
-     * 
-     * @param  string $account 
-     * @param  string $orderBy 
-     * @param  object $pager 
+     *
+     * @param  string $account
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -506,8 +506,8 @@ class testcaseModel extends model
 
     /**
      * Update a case.
-     * 
-     * @param  int    $caseID 
+     *
+     * @param  int    $caseID
      * @access public
      * @return void
      */
@@ -544,7 +544,7 @@ class testcaseModel extends model
             $i = 0;
             foreach($oldCase->steps as $key => $oldStep)
             {
-                if(trim($oldStep->desc) != trim($steps[$i]['desc']) or trim($oldStep->expect) != $steps[$i]['expect']) 
+                if(trim($oldStep->desc) != trim($steps[$i]['desc']) or trim($oldStep->expect) != $steps[$i]['expect'])
                 {
                     $stepChanged = true;
                     break;
@@ -602,9 +602,9 @@ class testcaseModel extends model
     }
 
     /**
-     * Review case 
-     * 
-     * @param  int    $caseID 
+     * Review case
+     *
+     * @param  int    $caseID
      * @access public
      * @return bool
      */
@@ -629,8 +629,8 @@ class testcaseModel extends model
 
     /**
      * Batch review cases.
-     * 
-     * @param  array   $caseIDList 
+     *
+     * @param  array   $caseIDList
      * @access public
      * @return array
      */
@@ -746,7 +746,7 @@ class testcaseModel extends model
 
     /**
      * Batch update testcases.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -823,9 +823,9 @@ class testcaseModel extends model
 
     /**
      * Batch change branch.
-     * 
-     * @param  array  $caseIDList 
-     * @param  int    $branchID 
+     *
+     * @param  array  $caseIDList
+     * @param  int    $branchID
      * @access public
      * @return array
      */
@@ -883,8 +883,8 @@ class testcaseModel extends model
 
     /**
      * Batch case type change.
-     * 
-     * @param  array   $caseIDList 
+     *
+     * @param  array   $caseIDList
      * @param  string  $result
      * @access public
      * @return array
@@ -901,7 +901,7 @@ class testcaseModel extends model
             $case->lastEditedBy   = $this->app->user->account;
             $case->lastEditedDate = $now;
             $case->type           = $result;
-            
+
             $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq($caseID)->exec();
             $this->action->create('case', $caseID, 'Edited', '', ucfirst($result));
         }
@@ -909,8 +909,8 @@ class testcaseModel extends model
 
     /**
      * Join steps to a string, thus can diff them.
-     * 
-     * @param  array   $steps 
+     *
+     * @param  array   $steps
      * @access public
      * @return string
      */
@@ -924,8 +924,8 @@ class testcaseModel extends model
 
     /**
      * Create case steps from a bug's step.
-     * 
-     * @param  string    $steps 
+     *
+     * @param  string    $steps
      * @access public
      * @return array
      */
@@ -943,7 +943,7 @@ class testcaseModel extends model
         if($lblStepPos === false or $lblResultPos === false or $lblExpectPos === false) return $caseSteps;
 
         $caseSteps  = substr($steps, $lblStepPos + strlen($lblStep), $lblResultPos - strlen($lblStep));
-        $caseExpect = substr($steps, $lblExpectPos + strlen($lblExpect)); 
+        $caseExpect = substr($steps, $lblExpectPos + strlen($lblExpect));
         $caseSteps  = trim($caseSteps);
         $caseExpect = trim($caseExpect);
 
@@ -959,9 +959,9 @@ class testcaseModel extends model
 
     /**
      * Adjust the action is clickable.
-     * 
-     * @param  object $case 
-     * @param  string $action 
+     *
+     * @param  object $case
+     * @param  string $action
      * @access public
      * @return void
      */
@@ -976,9 +976,9 @@ class testcaseModel extends model
     }
 
     /**
-     * Create from import 
-     * 
-     * @param  int    $productID 
+     * Create from import
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -1058,7 +1058,7 @@ class testcaseModel extends model
                     foreach($this->post->desc[$key] as $id => $desc)
                     {
                         $desc = trim($desc);
-                        if(empty($desc))continue;
+                        if(empty($desc)) continue;
                         $step = new stdclass();
                         $step->type   = $data->stepType[$key][$id];
                         $step->desc   = $desc;
@@ -1119,7 +1119,7 @@ class testcaseModel extends model
                     }
                     $oldCase->steps  = $this->joinStep($oldStep);
                     $caseData->steps = $this->joinStep($steps);
-                    $changes = common::createChanges($oldCase, $caseData);
+                    $changes  = common::createChanges($oldCase, $caseData);
                     $actionID = $this->action->create('case', $caseID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
                 }
@@ -1164,7 +1164,7 @@ class testcaseModel extends model
 
     /**
      * Get fields for import.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -1188,8 +1188,8 @@ class testcaseModel extends model
 
     /**
      * Import case from Lib.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -1396,8 +1396,8 @@ class testcaseModel extends model
 
     /**
      * Append bugs and results.
-     * 
-     * @param  array    $cases 
+     *
+     * @param  array    $cases
      * @param  string   $type
      * @access public
      * @return array
