@@ -259,7 +259,7 @@ class taskModel extends model
     {
         if(!$taskID) return true;
 
-        $tasks = $this->dao->select('`id`,`estimate`,`consumed`,`left`')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('status')->ne('cancel')->fetchAll('id');
+        $tasks = $this->dao->select('`id`,`estimate`,`consumed`,`left`')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('status')->ne('cancel')->andWhere('deleted')->eq(0)->fetchAll('id');
         if(empty($tasks)) return true;
 
         $estimate = 0;
@@ -287,7 +287,7 @@ class taskModel extends model
      * @param $parentID
      * @param $status
      *
-     * @access public 
+     * @access public
      * @return bool
      */
     public function updateParentStatus($parentID, $status = 'done')
@@ -941,7 +941,7 @@ class taskModel extends model
         }
 
         if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
-        
+
         /* Record consumed and left. */
         $consumed = $task->consumed - $oldTask->consumed;
         if($consumed < 0) die(js::error($this->lang->task->error->consumedSmall));
@@ -1352,7 +1352,7 @@ class taskModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->query();
-        
+
         $tasks = array();
         while($task = $stmt->fetch())
         {
@@ -1415,7 +1415,7 @@ class taskModel extends model
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->groupBy('story')
             ->fetchPairs();
-        foreach($stories as $storyID) 
+        foreach($stories as $storyID)
         {
             if(!isset($taskCounts[$storyID])) $taskCounts[$storyID] = 0;
         }
@@ -1697,7 +1697,7 @@ class taskModel extends model
         if(!$datas) return array();
 
         $projects = $this->loadModel('project')->getPairs('all');
-        foreach($datas as $projectID => $data) 
+        foreach($datas as $projectID => $data)
         {
             $data->name = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
         }
@@ -1740,9 +1740,9 @@ class taskModel extends model
             ->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
-        
+
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
-        foreach($datas as $account => $data) 
+        foreach($datas as $account => $data)
         {
             if(isset($this->users[$account])) $data->name = $this->users[$account];
         }
@@ -1764,8 +1764,8 @@ class taskModel extends model
             ->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
-        
-        foreach($datas as $type => $data) 
+
+        foreach($datas as $type => $data)
         {
             if(isset($this->lang->task->typeList[$type])) $data->name = $this->lang->task->typeList[$type];
         }
@@ -1876,7 +1876,7 @@ class taskModel extends model
             ->fetchAll('name');
 
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
-        foreach($datas as $account => $data) 
+        foreach($datas as $account => $data)
         {
             if(isset($this->users[$account])) $data->name = $this->users[$account];
         }
@@ -2170,7 +2170,7 @@ class taskModel extends model
                     common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
                     common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
                     common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list');
-                    if(empty($task->team) or empty($task->children)) 
+                    if(empty($task->team) or empty($task->children))
                     {
                         common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'list', 'plus', '', '', '', '', $this->lang->task->children);
                     }
@@ -2217,7 +2217,7 @@ class taskModel extends model
         foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
         $mailContent = ob_get_contents();
         ob_end_clean();
-        
+
         chdir($oldcwd);
 
         /* Set toList and ccList. */

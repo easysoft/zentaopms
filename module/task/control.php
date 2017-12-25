@@ -13,7 +13,7 @@ class task extends control
 {
     /**
      * Construct function, load model of project and story modules.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -63,7 +63,7 @@ class task extends control
             $projectID = $task->project;
         }
 
-        $project   = $this->project->getById($projectID); 
+        $project   = $this->project->getById($projectID);
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('project', 'story', "projectID=$projectID");
 
@@ -177,11 +177,11 @@ class task extends control
      * @param int $taskID
      *
      * @access public
-     * @return void 
+     * @return void
      */
     public function batchCreate($projectID = 0, $storyID = 0, $iframe = 0, $taskID = 0)
     {
-        $project   = $this->project->getById($projectID); 
+        $project   = $this->project->getById($projectID);
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('project', 'story', "projectID=$projectID");
 
@@ -228,8 +228,8 @@ class task extends control
 
     /**
      * Common actions of task module.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -247,8 +247,8 @@ class task extends control
 
     /**
      * Edit a task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -302,15 +302,15 @@ class task extends control
         $this->view->position[] = $this->lang->task->common;
         $this->view->position[] = $this->lang->task->edit;
         $this->view->stories    = $this->story->getProjectStoryPairs($this->view->project->id);
-        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}"); 
+        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->modules    = $this->tree->getTaskOptionMenu($this->view->task->project);
         $this->display();
     }
 
     /**
      * Batch edit task.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -355,7 +355,7 @@ class task extends control
         /* The tasks of project. */
         if($projectID)
         {
-            $project = $this->project->getById($projectID); 
+            $project = $this->project->getById($projectID);
             $this->project->setMenu($this->project->getPairs(), $project->id);
 
             /* Set modules and members. */
@@ -411,7 +411,7 @@ class task extends control
     }
 
     /**
-     * Update assign of task 
+     * Update assign of task
      *
      * @param  int    $requestID
      * @access public
@@ -482,9 +482,9 @@ class task extends control
     }
 
     /**
-     * Batch update assign of task. 
-     * 
-     * @param  int    $project 
+     * Batch update assign of task.
+     *
+     * @param  int    $project
      * @access public
      * @return void
      */
@@ -569,9 +569,9 @@ class task extends control
     }
 
     /**
-     * Confirm story change 
-     * 
-     * @param  int    $taskID 
+     * Confirm story change
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -585,8 +585,8 @@ class task extends control
 
     /**
      * Start a task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -630,14 +630,14 @@ class task extends control
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->start;
         $this->view->position[] = $this->lang->task->start;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter'); 
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
-    
+
     /**
-     * Record consumed and estimate. 
-     * 
-     * @param  int    $taskID 
+     * Record consumed and estimate.
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -679,9 +679,9 @@ class task extends control
     }
 
     /**
-     * Edit consumed and estimate. 
-     * 
-     * @param  int    $estimateID 
+     * Edit consumed and estimate.
+     *
+     * @param  int    $estimateID
      * @access public
      * @return void
      */
@@ -709,10 +709,10 @@ class task extends control
     }
 
     /**
-     * Delete estimate. 
-     * 
-     * @param  int    $estimateID 
-     * @param  string $confirm 
+     * Delete estimate.
+     *
+     * @param  int    $estimateID
+     * @param  string $confirm
      * @access public
      * @return void
      */
@@ -736,8 +736,8 @@ class task extends control
 
     /**
      * Finish a task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -809,8 +809,8 @@ class task extends control
 
     /**
      * Pause task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -835,15 +835,15 @@ class task extends control
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->pause;
         $this->view->position[] = $this->lang->task->pause;
-        
+
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
     /**
-     * Restart task 
-     * 
-     * @param  int    $taskID 
+     * Restart task
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -870,14 +870,14 @@ class task extends control
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->restart;
         $this->view->position[] = $this->lang->task->restart;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter'); 
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
     /**
      * Close a task.
-     * 
-     * @param  int      $taskID 
+     *
+     * @param  int      $taskID
      * @access public
      * @return void
      */
@@ -903,7 +903,7 @@ class task extends control
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
         $this->view->position[] = $this->lang->task->finish;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter'); 
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
 
@@ -911,8 +911,8 @@ class task extends control
 
     /**
      * Batch cancel tasks.
-     * 
-     * @param  string $skipTaskIdList 
+     *
+     * @param  string $skipTaskIdList
      * @access public
      * @return void
      */
@@ -946,7 +946,7 @@ class task extends control
 
     /**
      * Batch close tasks.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -994,8 +994,8 @@ class task extends control
 
     /**
      * Cancel a task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -1021,15 +1021,15 @@ class task extends control
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->cancel;
         $this->view->position[] = $this->lang->task->cancel;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter'); 
-        
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+
         $this->display();
     }
 
     /**
      * Activate a task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -1056,15 +1056,15 @@ class task extends control
         if(!isset($this->view->members[$this->view->task->finishedBy])) $this->view->members[$this->view->task->finishedBy] = $this->view->task->finishedBy;
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->activate;
         $this->view->position[] = $this->lang->task->activate;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter'); 
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
     /**
      * Delete a task.
-     * 
-     * @param  int    $projectID 
-     * @param  int    $taskID 
+     *
+     * @param  int    $projectID
+     * @param  int    $taskID
      * @param  string $confirm yes|no
      * @access public
      * @return void
@@ -1080,6 +1080,7 @@ class task extends control
         {
             $story = $this->dao->select('story')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('story');
             $this->task->delete(TABLE_TASK, $taskID);
+            $this->task->computeWorkingHours($task->parent);
             if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
             if($story) $this->loadModel('story')->setStage($story);
             die(js::locate($this->session->taskList, 'parent'));
@@ -1087,11 +1088,11 @@ class task extends control
     }
 
     /**
-     * AJAX: return tasks of a user in html select. 
-     * 
-     * @param  string $account 
-     * @param  string $id 
-     * @param  string $status 
+     * AJAX: return tasks of a user in html select.
+     *
+     * @param  string $account
+     * @param  string $id
+     * @param  string $status
      * @access public
      * @return string
      */
@@ -1106,9 +1107,9 @@ class task extends control
 
     /**
      * AJAX: return project tasks in html select.
-     * 
-     * @param  int    $projectID 
-     * @param  int    $taskID 
+     *
+     * @param  int    $projectID
+     * @param  int    $taskID
      * @access public
      * @return string
      */
@@ -1120,8 +1121,8 @@ class task extends control
 
     /**
      * AJAX: get the actions of a task. for web app.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -1133,9 +1134,9 @@ class task extends control
 
     /**
      * The report page.
-     * 
-     * @param  int    $projectID 
-     * @param  string $browseType 
+     *
+     * @param  int    $projectID
+     * @param  string $browseType
      * @access public
      * @return void
      */
@@ -1173,9 +1174,9 @@ class task extends control
 
     /**
      * get data to export
-     * 
-     * @param  int $projectID 
-     * @param  string $orderBy 
+     *
+     * @param  int $projectID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
@@ -1364,8 +1365,8 @@ class task extends control
 
     /**
      * Ajax get task by ID.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
