@@ -60,12 +60,12 @@
         $autoWidth = $col['width'] == 'auto';
         ?>
         <div class='clearfix col<?php echo ($required ? ' require' : '') . (' fixed-' . $fixed) ?>' data-key='<?php echo $key?>' data-fixed='<?php echo $fixed?>' data-width='<?php echo $col['width']?>'>
-        <i class='icon-ok'></i> &nbsp;<span class='title'><span class='title-bar'><strong><?php echo $col['title']?></strong><i class='icon-move'></i></span></span> <?php if($required) echo "<span class='text-muted'>({$lang->datatable->required})</span>"?>
           <div class='actions pull-right'>
             <?php if(isset($col['name'])) echo html::hidden('name', $col['name'])?>
             <span><span class='text-muted'><?php echo $lang->datatable->width?></span> <input type='text' id='width' class='form-control' value='<?php echo $col['width']?>'><?php echo $autoWidth ? '&nbsp;' : 'px' ?></span>
             <button type='button' class='btn btn-link show-hide<?php echo $required ? ' disabled' : '' ?>'><span class='label-show'><?php echo $lang->datatable->show?></span><span class='text-muted'>/</span><span class='label-hide'><?php echo $lang->datatable->hide?></span></button>
           </div>
+          <i class='icon-ok'></i> &nbsp;<span class='title'><span class='title-bar'><strong><?php echo $col['title']?></strong><i class='icon-move'></i></span></span> <?php if($required) echo "<span class='text-muted'>({$lang->datatable->required})</span>"?>
         </div>
         <?php endforeach;?>
       </div>
