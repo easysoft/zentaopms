@@ -46,7 +46,6 @@ $(function()
     {
         var list = '';
         for(i = 0; i < data.list.length; i++) list += $(data.list[i]).attr('data-id') + ',';
-        console.log(list);
         $.post(createLink('productplan', 'ajaxStorySort', 'planID=' + planID), {'storys' : list, 'orderBy' : orderBy}, function()
         {
             var $target = $(data.element[0]);

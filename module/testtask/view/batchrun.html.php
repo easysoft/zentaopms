@@ -36,7 +36,7 @@
     <tr class='text-center'>
       <td><?php echo $caseID . html::hidden("version[$caseID]", $cases[$caseID]->version)?></td>
       <td class='text-left'><?php echo "<span title='" . $moduleOptionMenu[$cases[$caseID]->module] . "'>" . $moduleOptionMenu[$cases[$caseID]->module] . "</span>"?></td>
-      <td class='text-left wordwrap'><?php echo "<span title='{$cases[$caseID]->title}'>{$cases[$caseID]->title}</span>"?>我是测试的测试的测试我是测试的测试的测试我是测试的测试的测试我是测试的测试的测试我是测试的测试的测试</td>
+      <td class='text-left wordwrap'><?php echo "<span title='{$cases[$caseID]->title}'>{$cases[$caseID]->title}</span>"?></td>
       <td class='text-left precondition wordwrap'><?php echo "<span title='{$cases[$caseID]->precondition}'>{$cases[$caseID]->precondition}</span>"?></td>
       <td><?php echo html::radio("results[$caseID]", $this->lang->testcase->resultList, 'pass', "onclick='showAction(this.value,\".action$caseID\")'", 'block')?></td>
       <td>
