@@ -76,7 +76,7 @@ js::set('browseType', $browseType);
       </thead>
       <tbody>
         <?php foreach($tasks as $task):?>
-            <tr class='text-center' data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
+        <tr class='text-center' data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
           <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
         </tr>
         <?php if(!empty($task->children)):?>

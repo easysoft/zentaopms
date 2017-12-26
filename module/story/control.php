@@ -243,11 +243,11 @@ class story extends control
         $this->product->setMenu($products, $product->id, $branch);
 
         /* Init vars. */
-        $planID     = $plan;
-        $pri        = 0;
-        $estimate   = '';
-        $title      = '';
-        $spec       = '';
+        $planID   = $plan;
+        $pri      = 0;
+        $estimate = '';
+        $title    = '';
+        $spec     = '';
 
         /* Process upload images. */
         if($this->session->storyImagesFile)

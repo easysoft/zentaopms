@@ -1846,7 +1846,8 @@ class projectModel extends model
             $totalLeft      += (($task->status == 'cancel' or $task->closedReason == 'cancel') ? 0 : $task->left);
             $statusVar       = 'status' . ucfirst($task->status);
             $$statusVar ++;
-            if(!empty($task->children)){
+            if(!empty($task->children))
+            {
                 $taskSum += count($task->children);
                 foreach($task->children as $child)
                 {

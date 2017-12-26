@@ -2039,7 +2039,7 @@ class taskModel extends model
             $class = '';
             if($id == 'status') $class .= ' task-' . $task->status;
             if($id == 'id')     $class .= ' cell-id';
-            if($id == 'name') $class .= ' text-left';
+            if($id == 'name')   $class .= ' text-left';
             if($id == 'deadline' and isset($task->delay)) $class .= ' delayed';
             if($id == 'assignedTo' && $task->assignedTo == $account) $class .= ' red';
 
@@ -2138,7 +2138,7 @@ class taskModel extends model
                         }
                         else
                         {
-                            echo $task->storyTitle;
+                            echo "<i class='icon icon-{$this->lang->icons['story']}' title='{$task->storyTitle}'></i>";
                         }
                     }
                     break;
