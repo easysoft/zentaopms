@@ -12,6 +12,7 @@
 $lang->misc = new stdclass();
 $lang->misc->common = '杂项';
 $lang->misc->ping   = '防超时';
+$lang->misc->api    = 'http://api.zentao.net';
 
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = '版本%s';
@@ -67,7 +68,7 @@ $lang->misc->noticeRepair = "<h5>普通用户请联系管理员进行修复</h5>
     <ol>
     <li>文件内容为空。</li>
     <li>如果之前文件存在，删除之后重新创建。</li>
-    </ol>"; 
+    </ol>";
 
 $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';

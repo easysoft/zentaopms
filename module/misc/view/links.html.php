@@ -2,7 +2,6 @@
   <div class='cards'>
     <?php
     unset($lang->misc->zentao->version);
-    $API = $this->app->getClientLang() == 'en' ? 'http://api.zentao.pm' : 'http://api.zentao.net';
     ?>
     <?php foreach($lang->misc->zentao as $label => $groupItems):?>
     <?php if(strpos(',labels,icons,version,', ",$label,") !== false) continue; ?>
@@ -15,7 +14,7 @@
         <div class='card-content'>
           <ul>
             <?php foreach($groupItems as $item => $label):?>
-            <li><?php echo html::a($API . "/goto.php?item=$item&from=about", $label, '_blank', "id='$item'");;?></li>
+            <li><?php echo html::a($lang->misc->api . "/goto.php?item=$item&from=about", $label, '_blank', "id='$item'");;?></li>
             <?php endforeach;?>
           </ul>
         </div>
