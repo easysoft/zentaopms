@@ -93,6 +93,8 @@ $lang->dev->tableList['suitecase']      = 'Suite Case';
 $lang->dev->tableList['score']          = 'Score';
 $lang->dev->tableList['entry']          = 'Entry';
 $lang->dev->tableList['webhook']        = 'WebHook';
+$lang->dev->tableList['webhookdatas']   = 'WebHookDatas';
+$lang->dev->tableList['log']            = 'Log';
 
 $lang->dev->groupList['my']      = 'Dashboard';
 $lang->dev->groupList['product'] = $lang->productCommon;
