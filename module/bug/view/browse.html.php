@@ -87,7 +87,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php if(isset($menuItem->hidden)) continue;?>
     <?php if($this->config->global->flow == 'onlyTest' and $menuItem->name == 'needconfirm') continue;?>
-    <?php $browseType = strpos($menuItem->name, 'QUERY' === 0) ? 'bySearch' : $menuItem->name;?>
+    <?php $menuBrowseType = strpos($menuItem->name, 'QUERY' === 0) ? 'bySearch' : $menuItem->name;?>
     <?php $param = strpos($menuItem->name, 'QUERY' === 0) ? (int)substr($menuItem->name, 5) : 0;?>
     <?php if($menuItem->name == 'my'):?>
     <?php
@@ -102,7 +102,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     echo '</ul></li>';
     ?>
     <?php else:?>
-    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$browseType&param=$param"), $menuItem->text)?></li>
+    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType&param=$param"), $menuItem->text)?></li>
     <?php endif;?>
     <?php endforeach;?>
     <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->bug->byQuery;?></a></li>
