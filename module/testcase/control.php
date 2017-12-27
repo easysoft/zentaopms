@@ -160,6 +160,7 @@ class testcase extends control
 
         $cases = $this->testcase->getModuleCases($productID, $branch, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
         $cases = $this->testcase->appendData($cases);
 
         $groupCases  = array();
