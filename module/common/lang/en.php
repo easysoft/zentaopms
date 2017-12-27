@@ -468,6 +468,7 @@ $lang->pager->summery      = "<strong>%s-%s</strong> of <strong>%s</strong>.";
 
 $lang->proVersion     = "<a href='http://api.zentao.pm/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>ZenTao Pro <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "Download Desktop Notification";
+$lang->website        = "http://www.zentao.pm";
 
 $lang->suhosinInfo   = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
 $lang->maxVarsInfo   = "Warning! Data is reaching the limit. Please change <font color=red>max_input_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
@@ -608,7 +609,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyStory')
     /* Adjust sub menu of product module. */
     unset($lang->product->menu->project);
     unset($lang->product->menu->doc);
-    
+
     /* Rename product module. */
     $lang->menu->product = "{$lang->productCommon}|product|index";
 
@@ -806,7 +807,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     $lang->build->menu      = $lang->product->menu;
     $lang->build->menuOrder = $lang->product->menuOrder;
-    
+
     /* Adjust menu group. */
     $lang->menugroup->bug        = 'bug';
     $lang->menugroup->testcase   = 'testcase';
@@ -814,8 +815,8 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->menugroup->testsuite  = 'testsuite';
     $lang->menugroup->testreport = 'testtask';
     $lang->menugroup->build      = 'product';
-    
-    /* Adjust search objects. */ 
+
+    /* Adjust search objects. */
     unset($lang->searchObjects['story']);
     unset($lang->searchObjects['task']);
     unset($lang->searchObjects['release']);
