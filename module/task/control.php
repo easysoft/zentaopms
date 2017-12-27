@@ -778,15 +778,16 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $task    = $this->view->task;
-        $members = $this->loadModel('user')->getPairs('noletter');
+        $task         = $this->view->task;
+        $members      = $this->loadModel('user')->getPairs('noletter');
+        $task->nextBy = $task->assignedTo;
 
         $this->view->users = $members;
         if(!empty($task->team))
         {
             $teams = array_keys($task->team);
 
-            $task->nextBy   = $this->task->getNextUser($teams, $task->assignedTo);
+            $task->nextBy     = $this->task->getNextUser($teams, $task->assignedTo);
             $task->myConsumed = $this->dao->select('consumed')->from(TABLE_TEAM)->where('task')->eq($taskID)->andWhere('account')->eq($task->assignedTo)->fetch('consumed');
 
             $lastAccount = end($teams);
