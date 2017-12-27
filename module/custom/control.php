@@ -81,7 +81,12 @@ class custom extends control
 
         if(strtolower($_SERVER['REQUEST_METHOD']) == "post")
         {
-            if(($module == 'story' or $module == 'testcase') and $field == 'review')
+            if($module == 'story' and $field == 'review')
+            {
+                $data = fixer::input('post')->join('forceReview', ',')->get();
+                $this->loadModel('setting')->setItems("system.$module", $data);
+            }
+            elseif($module == 'testcase' and $field == 'review')
             {
                 $review = fixer::input('post')->get();
                 if($review->needReview) $data = fixer::input('post')->join('forceNotReview', ',')->remove('forceReview')->get();
