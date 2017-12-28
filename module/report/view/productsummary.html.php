@@ -47,7 +47,7 @@
       <tr class="text-center">
         <?php $count = isset($product->plans) ? count($product->plans) : 1;?>
         <td align='left' rowspan="<?php echo $count;?>"><?php echo "<p>" . html::a($this->createLink('product', 'view', "product=$product->id"), $product->name) . "</p>";?></td>
-        <td align='left' rowspan="<?php echo $count;?>" class="text-center"><?php echo "<p>" . $users[$product->PO] . '</p>';?></td>
+        <td align='left' rowspan="<?php echo $count;?>" class="text-center"><?php echo "<p>" . zget($users, $product->PO) . '</p>';?></td>
         <?php if(isset($product->plans)):?>
         <?php $id = 1;?>
         <?php foreach($product->plans as $plan):?>
