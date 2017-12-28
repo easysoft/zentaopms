@@ -788,7 +788,11 @@ class task extends control
             $teams = array_keys($task->team);
 
             $task->nextBy     = $this->task->getNextUser($teams, $task->assignedTo);
-            $task->myConsumed = $this->dao->select('consumed')->from(TABLE_TEAM)->where('task')->eq($taskID)->andWhere('account')->eq($task->assignedTo)->fetch('consumed');
+            $task->myConsumed = $this->dao->select('consumed')->from(TABLE_TEAM)
+                ->where('root')->eq($taskID)
+                ->andWhere('account')->eq($task->assignedTo)
+                ->andWhere('type')->eq('task')
+                ->fetch('consumed');
 
             $lastAccount = end($teams);
             if($lastAccount != $task->assignedTo)
@@ -1243,7 +1247,10 @@ class task extends control
             foreach($tasks as $task) $relatedStoryIdList[$task->story] = $task->story;
 
             /* Get team for multiple task. */
-            $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');
+            $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)
+                ->where('root')->in(array_keys($tasks))
+                ->andWhere('type')->eq('task')
+                ->fetchGroup('root');
             if(!empty($taskTeam))
             {
                 foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;

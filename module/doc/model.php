@@ -15,10 +15,10 @@ class docModel extends model
 {
     /**
      * Set menus
-     * 
-     * @param  array  $libs 
-     * @param  int    $libID 
-     * @param  string $moduleID 
+     *
+     * @param  array  $libs
+     * @param  int    $libID
+     * @param  string $moduleID
      * @access public
      * @return void
      */
@@ -80,8 +80,8 @@ class docModel extends model
 
     /**
      * Get library by id.
-     * 
-     * @param  int    $libID 
+     *
+     * @param  int    $libID
      * @access public
      * @return object
      */
@@ -92,7 +92,7 @@ class docModel extends model
 
     /**
      * Get libraries.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -127,7 +127,7 @@ class docModel extends model
 
     /**
      * Create a library.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -151,8 +151,8 @@ class docModel extends model
 
     /**
      * Update a library.
-     * 
-     * @param  int    $libID 
+     *
+     * @param  int    $libID
      * @access public
      * @return void
      */
@@ -373,7 +373,7 @@ class docModel extends model
 
     /**
      * Create a doc.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -438,8 +438,8 @@ class docModel extends model
 
     /**
      * Update a doc.
-     * 
-     * @param  int    $docID 
+     *
+     * @param  int    $docID
      * @access public
      * @return void
      */
@@ -541,7 +541,7 @@ class docModel extends model
 
     /**
      * Get pairs of project modules.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -556,9 +556,9 @@ class docModel extends model
 
     /**
      * Get doc menu.
-     * 
-     * @param  int    $libID 
-     * @param  int    $parent 
+     *
+     * @param  int    $libID
+     * @param  int    $parent
      * @access public
      * @return array
      */
@@ -576,8 +576,8 @@ class docModel extends model
      * Extract css styles for tables created in kindeditor.
      *
      * Like this: <table class="ke-table1" style="width:100%;" cellpadding="2" cellspacing="0" border="1" bordercolor="#000000">
-     * 
-     * @param  string    $content 
+     *
+     * @param  string    $content
      * @access public
      * @return void
      */
@@ -611,8 +611,8 @@ class docModel extends model
 
     /**
      * Check priv.
-     * 
-     * @param  object $object 
+     *
+     * @param  object $object
      * @access public
      * @return bool
      */
@@ -639,13 +639,13 @@ class docModel extends model
                 if(strpos(",$object->groups,", ",$groupID,") !== false) return true;
             }
         }
-        
+
         if(isset($object->lib))
         {
             static $libs;
             if(empty($libs)) $libs = $this->getLibs('all');
             if(!isset($libs[$object->lib])) return false;
-            
+
         }
 
         if($object->project)
@@ -667,10 +667,10 @@ class docModel extends model
 
     /**
      * Get all libs by type.
-     * 
-     * @param  string $type 
-     * @param  int    $pager 
-     * @param  string $extra 
+     *
+     * @param  string $type
+     * @param  int    $pager
+     * @param  string $extra
      * @access public
      * @return array
      */
@@ -708,7 +708,7 @@ class docModel extends model
 
     /**
      * Get all lib groups.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -792,9 +792,9 @@ class docModel extends model
 
     /**
      * Get limit libs.
-     * 
-     * @param  string $type 
-     * @param  int    $limit 
+     *
+     * @param  string $type
+     * @param  int    $limit
      * @access public
      * @return array
      */
@@ -836,11 +836,11 @@ class docModel extends model
     }
 
     /**
-     * Get project or product libs groups. 
-     * 
-     * @param  string $type 
-     * @param  array  $idList 
-     * @param  int    $limit 
+     * Get project or product libs groups.
+     *
+     * @param  string $type
+     * @param  array  $idList
+     * @param  int    $limit
      * @access public
      * @return array
      */
@@ -879,10 +879,10 @@ class docModel extends model
 
     /**
      * Get libs by object.
-     * 
-     * @param  string $type 
-     * @param  int    $objectID 
-     * @param  string $mode 
+     *
+     * @param  string $type
+     * @param  int    $objectID
+     * @param  string $mode
      * @access public
      * @return array
      */
@@ -983,8 +983,8 @@ class docModel extends model
 
     /**
      * Get doc tree.
-     * 
-     * @param  int    $libID 
+     *
+     * @param  int    $libID
      * @access public
      * @return array
      */
@@ -1003,9 +1003,9 @@ class docModel extends model
 
     /**
      * Fill docs in tree.
-     * 
-     * @param  object $node 
-     * @param  int    $libID 
+     *
+     * @param  object $node
+     * @param  int    $libID
      * @access public
      * @return array
      */
@@ -1063,11 +1063,11 @@ class docModel extends model
     }
 
     /**
-     * Get crumbs. 
-     * 
-     * @param  int    $libID 
-     * @param  int    $moduleID 
-     * @param  int    $docID 
+     * Get crumbs.
+     *
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  int    $docID
      * @access public
      * @return string
      */
@@ -1076,7 +1076,7 @@ class docModel extends model
         if(empty($libID)) return '';
 
         $lib = $this->getLibById($libID);
-        if(!$this->checkPriv($lib)) 
+        if(!$this->checkPriv($lib))
         {
             echo(js::alert($this->lang->doc->accessDenied));
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
@@ -1116,9 +1116,9 @@ class docModel extends model
 
     /**
      * Get product crumb.
-     * 
-     * @param  int    $productID 
-     * @param  int    $projectID 
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
      * @access public
      * @return string
      */
@@ -1147,9 +1147,9 @@ class docModel extends model
 
     /**
      * Set lib users.
-     * 
-     * @param  string $type 
-     * @param  int    $objectID 
+     *
+     * @param  string $type
+     * @param  int    $objectID
      * @access public
      * @return bool
      */
@@ -1159,15 +1159,16 @@ class docModel extends model
         if($type == 'product')
         {
             $teams = $this->dao->select('t1.account')->from(TABLE_TEAM)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.project=t2.project')
-                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project=t3.id')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.root=t2.project')
+                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.root=t3.id')
                 ->where('t2.product')->eq($objectID)
+                ->andWhere('t1.type')->eq('project')
                 ->andWhere('t3.deleted')->eq('0')
                 ->fetchPairs('account', 'account');
         }
         elseif($type == 'project')
         {
-            $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->eq($objectID)->fetchPairs('account', 'account');
+            $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->eq($objectID)->andWhere('type')->eq('project')->fetchPairs('account', 'account');
         }
 
         return $teams;

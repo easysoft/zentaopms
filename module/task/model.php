@@ -59,7 +59,7 @@ class taskModel extends model
                 {
                     if(empty($account) or isset($team[$account])) continue;
                     $member = new stdClass();
-                    $member->project  = 0;
+                    $member->root     = 0;
                     $member->account  = $account;
                     $member->role     = $assignedTo;
                     $member->join     = helper::today();
@@ -125,7 +125,8 @@ class taskModel extends model
             {
                 foreach($teams as $team)
                 {
-                    $team->task = $taskID;
+                    $team->root = $taskID;
+                    $team->type = 'task';
                     $this->dao->insert(TABLE_TEAM)->data($team)->autoCheck()->exec();
                 }
             }
@@ -358,11 +359,11 @@ class taskModel extends model
                 if(empty($account) or isset($team[$account])) continue;
 
                 $member = new stdClass();
-                $member->project  = 0;
                 $member->account  = $account;
                 $member->role     = $task->assignedTo;
                 $member->join     = helper::today();
-                $member->task     = $taskID;
+                $member->root     = $taskID;
+                $member->type     = 'task';
                 $member->estimate = $this->post->teamEstimate[$row] ? $this->post->teamEstimate[$row] : 0;
                 $member->consumed = $this->post->teamConsumed[$row] ? $this->post->teamConsumed[$row] : 0;
                 $member->left     = $member->estimate - $member->consumed;
@@ -403,8 +404,11 @@ class taskModel extends model
         $this->computeWorkingHours($oldTask->parent);
 
         /* Save team. */
-        $this->dao->delete()->from(TABLE_TEAM)->where('task')->eq($taskID)->exec();
-        if(!empty($teams)) foreach($teams as $member) $this->dao->insert(TABLE_TEAM)->data($member)->autoCheck()->exec();
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($taskID)->andWhere('type')->eq('task')->exec();
+        if(!empty($teams))
+        {
+            foreach($teams as $member) $this->dao->insert(TABLE_TEAM)->data($member)->autoCheck()->exec();
+        }
 
         if($this->post->story != false) $this->loadModel('story')->setStage($this->post->story);
         if(!dao::isError())
@@ -692,7 +696,11 @@ class taskModel extends model
             $newTeamInfo = new stdClass();
             $newTeamInfo->consumed = $task->consumed;
             $newTeamInfo->left     = 0;
-            $this->dao->update(TABLE_TEAM)->data($newTeamInfo)->where('task')->eq($taskID)->andWhere('account')->eq($oldTask->assignedTo)->exec();
+            $this->dao->update(TABLE_TEAM)->data($newTeamInfo)
+                ->where('root')->eq($taskID)
+                ->andWhere('account')->eq($oldTask->assignedTo)
+                ->andWhere('type')->eq('task')
+                ->exec();
 
             $newTask = new stdClass();
             $newTask->left         = 0;
@@ -829,14 +837,26 @@ class taskModel extends model
         {
             $teams = array_keys($task->team);
 
-            $myConsumed = $this->dao->select('`consumed`')->from(TABLE_TEAM)->where('task')->eq($taskID)->andWhere('account')->eq($task->assignedTo)->fetch('consumed');
+            $myConsumed = $this->dao->select('`consumed`')->from(TABLE_TEAM)
+                ->where('root')->eq($taskID)
+                ->andWhere('account')->eq($task->assignedTo)
+                ->andWhere('type')->eq('task')
+                ->fetch('consumed');
 
             $newTeamInfo = new stdClass();
             $newTeamInfo->consumed = $myConsumed + $consumed;
             $newTeamInfo->left     = $left;
-            $this->dao->update(TABLE_TEAM)->data($newTeamInfo)->where('task')->eq($taskID)->andWhere('account')->eq($task->assignedTo)->exec();
+            $this->dao->update(TABLE_TEAM)->data($newTeamInfo)
+                ->where('root')->eq($taskID)
+                ->andWhere('account')->eq($task->assignedTo)
+                ->andWhere('type')->eq('task')
+                ->exec();
 
-            $teamTime = $this->dao->select("sum(`consumed`) as consumed,sum(`left`) as leftTime")->from(TABLE_TEAM)->where('task')->eq((int)$taskID)->andWhere('account')->in($teams)->fetch();
+            $teamTime = $this->dao->select("sum(`consumed`) as consumed,sum(`left`) as leftTime")->from(TABLE_TEAM)
+                ->where('root')->eq((int)$taskID)
+                ->andWhere('account')->in($teams)
+                ->andWhere('type')->eq('task')
+                ->fetch();
             $data->consumed = $teamTime->consumed;
             $data->left     = $teamTime->leftTime;
 
@@ -918,15 +938,27 @@ class taskModel extends model
         {
             $teams = array_keys($oldTask->team);
 
-            $myConsumed = $this->dao->select("`consumed`")->from(TABLE_TEAM)->where('task')->eq((int)$taskID)->andWhere('account')->eq($oldTask->assignedTo)->fetch('consumed');
+            $myConsumed = $this->dao->select("`consumed`")->from(TABLE_TEAM)
+                ->where('root')->eq((int)$taskID)
+                ->andWhere('account')->eq($oldTask->assignedTo)
+                ->andWhere('type')->eq('task')
+                ->fetch('consumed');
             if($task->consumed < $myConsumed) die(js::error($this->lang->task->error->consumedSmall));
 
             $data = new stdClass();
             $data->left     = 0;
             $data->consumed = $task->consumed;
-            $this->dao->update(TABLE_TEAM)->data($data)->where('task')->eq((int)$taskID)->andWhere('account')->eq($oldTask->assignedTo)->exec();
+            $this->dao->update(TABLE_TEAM)->data($data)
+                ->where('root')->eq((int)$taskID)
+                ->andWhere('account')->eq($oldTask->assignedTo)
+                ->andWhere('type')->eq('task')
+                ->exec();
 
-            $myTime = $this->dao->select("sum(`left`) as leftTime,sum(`consumed`) as consumed")->from(TABLE_TEAM)->where('task')->eq((int)$taskID)->andWhere('account')->in($teams)->fetch();
+            $myTime = $this->dao->select("sum(`left`) as leftTime,sum(`consumed`) as consumed")->from(TABLE_TEAM)
+                ->where('root')->eq((int)$taskID)
+                ->andWhere('account')->in($teams)
+                ->andWhere('type')->eq('task')
+                ->fetch();
 
             $newTask = new stdClass();
             $newTask->left         = $myTime->leftTime;
@@ -1131,8 +1163,11 @@ class taskModel extends model
         /* Check parent Task. */
         if(!empty($task->parent)) $task->parentName = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('name');
 
-        $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->eq($taskID)->orderBy('order_desc')->fetchGroup('task', 'account');
-        foreach($teams as $key => $team) $teams[$key] = array_reverse($team, true);
+        $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($taskID)->andWhere('type')->eq('task')->orderBy('order_desc')->fetchGroup('root', 'account');
+        if(!empty($teams))
+        {
+            foreach($teams as $key => $team) $teams[$key] = array_reverse($team, true);
+        }
         $task->team = isset($teams[$taskID]) ? $teams[$taskID] : array();
         foreach($children as $child) $child->team = isset($teams[$child->id]) ? $teams[$child->id] : array();
 
@@ -1217,15 +1252,13 @@ class taskModel extends model
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
-            ->leftJoin(TABLE_TEAM)->alias('t4')->on('t1.id = t4.task')
+            ->leftJoin(TABLE_TEAM)->alias('t4')->on('t4.root = t1.id')
             ->leftJoin(TABLE_MODULE)->alias('t5')->on('t1.module = t5.id')
             ->where('t1.project')->eq((int)$projectID)
             ->beginIF(!in_array($type, array('assignedtome', 'myinvolved')))->andWhere('t1.parent')->eq(0)->fi()
             ->beginIF($type == 'myinvolved')
-            ->andWhere('t4.account', true)->eq($this->app->user->account)
-            ->orWhere('t1.assignedTo')->eq($this->app->user->account)
-            ->orWhere('t1.finishedby')->eq($this->app->user->account)
-            ->markRight(1)->fi()
+            ->andWhere("((t4.`account` = '{$this->app->user->account}' AND t4.`type` = 'task') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")
+            ->fi()
             ->beginIF($productID)->andWhere("((t5.root=" . (int)$productID . " and t5.type='story') OR t2.product=" . (int)$productID . ")")->fi()
             ->beginIF($type == 'undone')->andWhere("(t1.status = 'wait' or t1.status ='doing')")->fi()
             ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
@@ -1244,7 +1277,7 @@ class taskModel extends model
         if(empty($tasks)) return array();
 
         $taskList = array_keys($tasks);
-        $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->in($taskList)->fetchGroup('task');
+        $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($taskList)->andWhere('type')->eq('task')->fetchGroup('root');
         if(!empty($taskTeam))
         {
             foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;

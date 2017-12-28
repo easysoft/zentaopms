@@ -143,7 +143,7 @@ class scoreModel extends model
                     }
 
                     /* Project team user. */
-                    $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->eq($param->id)->fetchPairs();
+                    $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->eq($param->id)->andWhere('type')->eq('project')->fetchPairs();
                     if(!empty($teams))
                     {
                         $rule['score'] = $extended['member']['close'];
@@ -159,7 +159,7 @@ class scoreModel extends model
                     }
 
                     /* When the project is closed, no more user get score. */
-                    return true; 
+                    return true;
                 }
                 break;
             case 'search':
@@ -295,7 +295,7 @@ class scoreModel extends model
 
         $notice     = sprintf($this->lang->score->tips, $score, $this->app->user->score);
         $fullNotice = <<<EOT
-<div id='noticeAttend' class='alert alert-success with-icon alert-dismissable' style='width:280px; position:fixed; bottom:25px; right:15px; z-index: 9999;' id='planInfo'>    
+<div id='noticeAttend' class='alert alert-success with-icon alert-dismissable' style='width:280px; position:fixed; bottom:25px; right:15px; z-index: 9999;' id='planInfo'>
    <i class='icon icon-diamond'>  </i>
    <div class='content'>{$notice}</div>
    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
