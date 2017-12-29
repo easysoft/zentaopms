@@ -15,8 +15,8 @@ class reportModel extends model
 {
     /**
      * Compute percent of every item.
-     * 
-     * @param  array    $datas 
+     *
+     * @param  array    $datas
      * @access public
      * @return array
      */
@@ -69,9 +69,9 @@ class reportModel extends model
 
     /**
      * Convert date format.
-     * 
-     * @param  array  $dateList 
-     * @param  string $format 
+     *
+     * @param  array  $dateList
+     * @param  string $format
      * @access public
      * @return array
      */
@@ -82,8 +82,8 @@ class reportModel extends model
     }
 
     /**
-     * Get projects. 
-     * 
+     * Get projects.
+     *
      * @access public
      * @return void
      */
@@ -121,10 +121,10 @@ class reportModel extends model
     }
 
     /**
-     * Get products. 
-     * 
+     * Get products.
+     *
      * @access public
-     * @return array 
+     * @return array
      */
     public function getProducts($conditions)
     {
@@ -195,10 +195,10 @@ class reportModel extends model
     }
 
     /**
-     * Get bugs 
-     * 
-     * @param  int    $begin 
-     * @param  int    $end 
+     * Get bugs
+     *
+     * @param  int    $begin
+     * @param  int    $end
      * @access public
      * @return array
      */
@@ -232,12 +232,12 @@ class reportModel extends model
             $bugCreate[$account]['validRate'] = (isset($bug['resolved']) and $bug['resolved']) ? ($validRate / $bug['resolved']) : "0";
         }
         uasort($bugCreate, 'sortSummary');
-        return $bugCreate; 
+        return $bugCreate;
     }
 
     /**
-     * Get workload. 
-     * 
+     * Get workload.
+     *
      * @access public
      * @return array
      */
@@ -275,10 +275,10 @@ class reportModel extends model
     }
 
     /**
-     * Get bug assign. 
-     * 
+     * Get bug assign.
+     *
      * @access public
-     * @return array 
+     * @return array
      */
     public function getBugAssign()
     {
@@ -307,7 +307,7 @@ class reportModel extends model
 
     /**
      * Get System URL.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -331,7 +331,7 @@ class reportModel extends model
 
     /**
      * Get user bugs.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -351,7 +351,7 @@ class reportModel extends model
 
     /**
      * Get user tasks.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -372,7 +372,7 @@ class reportModel extends model
 
     /**
      * Get user todos.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -398,7 +398,7 @@ class reportModel extends model
 
     /**
      * Get user testTasks.
-     * 
+     *
      * @access public
      * @return array
      */

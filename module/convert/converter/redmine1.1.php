@@ -34,7 +34,7 @@ class redmine11ConvertModel extends redmineConvertModel
     }
     /**
      * Execute the converter.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -74,11 +74,11 @@ class redmine11ConvertModel extends redmineConvertModel
         $result['docs']         = self::$convertDocCount;
         $result['files']        = self::$convertFileCount;
         return $result;
-    }                       
-                               
-    /**                        
-     * Set table names.        
-     *                         
+    }
+
+    /**
+     * Set table names.
+     *
      * @access public
      * @return void
      */
@@ -137,9 +137,9 @@ class redmine11ConvertModel extends redmineConvertModel
 
     /**
      * Convert groups.
-     * 
+     *
      * @access public
-     * @return void   
+     * @return void
      */
     public function convertGroup()
     {
@@ -176,9 +176,9 @@ class redmine11ConvertModel extends redmineConvertModel
 
     /**
      * Convert users.
-     * 
+     *
      * @access public
-     * @return void 
+     * @return void
      */
     public function convertUser()
     {
@@ -217,8 +217,8 @@ class redmine11ConvertModel extends redmineConvertModel
     }
 
     /**
-     * convert relationship between user and group. 
-     * 
+     * convert relationship between user and group.
+     *
      * @access public
      * @return void
      */
@@ -255,10 +255,10 @@ class redmine11ConvertModel extends redmineConvertModel
     }
 
     /**
-     * convert products.  
-     * 
+     * convert products.
+     *
      * @access public
-     * @return void 
+     * @return void
      */
     public function convertProduct()
     {
@@ -280,9 +280,9 @@ class redmine11ConvertModel extends redmineConvertModel
 
     /**
      * Convert projects.
-     * 
+     *
      * @access public
-     * @return void 
+     * @return void
      */
     public function convertProject()
     {
@@ -313,12 +313,12 @@ class redmine11ConvertModel extends redmineConvertModel
         $convertCount = count($projects) + count($this->map['projectOfProduct']);
         self::$convertProjectCount += $convertCount;
     }
-    
+
     /**
-     * convert builds and releases 
-     * 
+     * convert builds and releases
+     *
      * @access public
-     * @return void 
+     * @return void
      */
     public function convertBuildAndRelease()
     {
@@ -370,10 +370,10 @@ class redmine11ConvertModel extends redmineConvertModel
     }
 
     /**
-     * convert productPlans 
-     * 
+     * convert productPlans
+     *
      * @access public
-     * @return void 
+     * @return void
      */
     public function convertProductPlan()
     {
@@ -401,11 +401,11 @@ class redmine11ConvertModel extends redmineConvertModel
         }
         $convertCount = count($this->map['products']) + count($productPlans);
         self::$convertProductPlanCount += $convertCount;
-    } 
+    }
 
     /**
-     * convert relationship between project and product. 
-     * 
+     * convert relationship between project and product.
+     *
      * @access public
      * @return void
      */
@@ -424,8 +424,8 @@ class redmine11ConvertModel extends redmineConvertModel
     }
 
     /**
-     * convert teams. 
-     * 
+     * convert teams.
+     *
      * @access public
      * @return void
      */
@@ -454,10 +454,10 @@ class redmine11ConvertModel extends redmineConvertModel
     }
 
     /**
-     * convert docLibs.  
-     * 
+     * convert docLibs.
+     *
      * @access public
-     * @return void 
+     * @return void
      */
     public function convertDocLib()
     {
@@ -478,10 +478,10 @@ class redmine11ConvertModel extends redmineConvertModel
     }
 
     /**
-     * convert docs.  
-     * 
+     * convert docs.
+     *
      * @access public
-     * @return void 
+     * @return void
      */
     public function convertDoc()
     {
@@ -507,10 +507,10 @@ class redmine11ConvertModel extends redmineConvertModel
     }
 
     /**
-     * convert news. 
-     * 
+     * convert news.
+     *
      * @access public
-     * @return void 
+     * @return void
      */
     public function convertNews()
     {
@@ -541,12 +541,12 @@ class redmine11ConvertModel extends redmineConvertModel
     }
 
     /**
-     * convert issue  
-     * 
+     * convert issue
+     *
      * @param  array  $aimTypes //aimTypes['issueTypeID'] = aimtype  eg. aimTypes[1] = 'bug';
      * @param  array  $statusTypes //statusTypes['task']['statusTypeID'] = statusType  eg. statusTypes['task'][1] = 'wait';
      *                             //statusTypes['bug']['statusTypeID'] = statusType   eg. statusTypes['bug'][1]  = 'active';
-     * @param  array  $priTypes //priTypes['task']['priTypeID'] = priType;   eg. priTypes['task'][1] = 1;              
+     * @param  array  $priTypes //priTypes['task']['priTypeID'] = priType;   eg. priTypes['task'][1] = 1;
      * @access public
      * @return void
      */
@@ -574,13 +574,13 @@ class redmine11ConvertModel extends redmineConvertModel
     }
 
     /**
-     * convert story 
-     * 
-     * @param  array    $issueType 
-     * @param  array    $statusTypes 
-     * @param  array    $priTypes 
+     * convert story
+     *
+     * @param  array    $issueType
+     * @param  array    $statusTypes
+     * @param  array    $priTypes
      * @access public
-     * @return void 
+     * @return void
      */
     public function convertStory($issueType, $statusTypes, $priTypes)
     {
@@ -623,13 +623,13 @@ class redmine11ConvertModel extends redmineConvertModel
     }
 
     /**
-     * convert task 
-     * 
-     * @param  array    $issueType 
-     * @param  array    $statusTypes 
-     * @param  array    $priTypes 
+     * convert task
+     *
+     * @param  array    $issueType
+     * @param  array    $statusTypes
+     * @param  array    $priTypes
      * @access public
-     * @return void 
+     * @return void
      */
     public function convertTask($issueType, $statusTypes, $priTypes)
     {
@@ -651,7 +651,7 @@ class redmine11ConvertModel extends redmineConvertModel
             $task->pri          = $priTypes['task'][$task->pri];
             $task->status       = $statusTypes['task'][$task->status];
             if($task->project == 0)
-            {  
+            {
                 $task->project = $this->map['projectOfProduct'][$task->product];
             }
             else
@@ -668,13 +668,13 @@ class redmine11ConvertModel extends redmineConvertModel
     }
 
     /**
-     * convert bug 
-     * 
-     * @param  array    $issueType 
-     * @param  array    $statusTypes 
-     * @param  array    $priTypes 
+     * convert bug
+     *
+     * @param  array    $issueType
+     * @param  array    $statusTypes
+     * @param  array    $priTypes
      * @access public
-     * @return void 
+     * @return void
      */
     public function convertBug($issueType, $statusTypes, $priTypes)
     {
@@ -704,7 +704,7 @@ class redmine11ConvertModel extends redmineConvertModel
             $bug->caseVersion  = 1;
             $bug->result       = 0;
             if($bug->project == 0)
-            {  
+            {
                 $bug->project = $this->map['projectOfProduct'][$bug->product];
             }
             else
@@ -712,7 +712,7 @@ class redmine11ConvertModel extends redmineConvertModel
                 $bug->project = $this->map['project'][$bug->project];
             }
             unset($bug->id);
-            $this->dao->dbh($this->dbh)->insert(TABLE_BUG)->data($bug)->exec(); 
+            $this->dao->dbh($this->dbh)->insert(TABLE_BUG)->data($bug)->exec();
             $this->map['issueID'][$issueID] = $this->dao->lastInsertID();
             $this->map['issueType'][$issueID] = 'bug';
         }
@@ -721,9 +721,9 @@ class redmine11ConvertModel extends redmineConvertModel
 
     /**
      * Convert attachments.
-     * 
+     *
      * @access public
-     * @return void 
+     * @return void
      */
     public function convertFile()
     {
@@ -752,7 +752,7 @@ class redmine11ConvertModel extends redmineConvertModel
             /* Transform objectType and objectID */
             if($file->objectType == 'Issue')
             {
-                $file->objectType = $this->map['issueType'][$file->objectID]; 
+                $file->objectType = $this->map['issueType'][$file->objectID];
                 $file->objectID   = $this->map['issueID'][$file->objectID];
             }
             elseif($file->objectType == 'Document')
@@ -808,7 +808,7 @@ class redmine11ConvertModel extends redmineConvertModel
 
     /**
      * Clear the converted records.
-     * 
+     *
      * @access public
      * @return void
      */

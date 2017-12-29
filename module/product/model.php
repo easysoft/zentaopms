@@ -614,10 +614,11 @@ class productModel extends model
         }
         if(empty($teams))
         {
-            $teams = $this->dao->select('t1.project, t1.account')->from(TABLE_TEAM)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            $teams = $this->dao->select('t1.root, t1.account')->from(TABLE_TEAM)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
                 ->where('t2.deleted')->eq(0)
-                ->fetchGroup('project', 'account');
+                ->andWhere('t1.type')->eq('project')
+                ->fetchGroup('root', 'account');
         }
 
         if(!isset($projects[$product->id])) return $members;
@@ -788,7 +789,7 @@ class productModel extends model
 
             $products = $this->dao->select('distinct t1.id')->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
-                ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.project = t3.project')
+                ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.project = t3.root')
                 ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t2.project = t4.id')
                 ->beginIF($this->app->user->admin)->where('t1.deleted')->eq(0)->fi()
                 ->beginIF(!$this->app->user->admin)
@@ -800,6 +801,7 @@ class productModel extends model
                 ->orWhere('t1.createdBy')->eq($this->app->user->account)
                 ->orWhere('t3.account')->eq($this->app->user->account)
                 ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t3.type')->eq('project')
                 ->andWhere('t4.deleted')->eq(0)
                 ->fi()
                 ->fetchAll('id');

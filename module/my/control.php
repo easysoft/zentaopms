@@ -13,7 +13,7 @@ class my extends control
 {
     /**
      * Construct function.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -27,7 +27,7 @@ class my extends control
 
     /**
      * Index page, goto todo.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -63,14 +63,14 @@ class my extends control
     }
 
     /**
-     * My todos. 
-     * 
-     * @param  string $type 
-     * @param  string $account 
-     * @param  string $status 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * My todos.
+     *
+     * @param  string $type
+     * @param  string $account
+     * @param  string $status
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -114,12 +114,12 @@ class my extends control
     }
 
     /**
-     * My stories 
-      
-     * @param  string $type 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * My stories
+
+     * @param  string $type
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -153,11 +153,11 @@ class my extends control
 
     /**
      * My tasks
-     * 
-     * @param  string $type 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  string $type
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -195,12 +195,12 @@ class my extends control
 
     /**
      * My bugs.
-     * 
-     * @param  string $type 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -209,7 +209,7 @@ class my extends control
         /* Save session. load Lang. */
         if($this->app->viewType != 'json') $this->session->set('bugList', $this->app->getURI(true));
         $this->app->loadLang('bug');
- 
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
@@ -239,7 +239,7 @@ class my extends control
 
     /**
      * My test task.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -260,7 +260,7 @@ class my extends control
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->testTask;
         $this->view->position[] = $this->lang->my->testTask;
         $this->view->tasks      = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $type);
-        
+
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
@@ -327,7 +327,7 @@ class my extends control
 
     /**
      * My projects.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -344,8 +344,8 @@ class my extends control
     }
 
     /**
-     * Edit profile 
-     * 
+     * Edit profile
+     *
      * @access public
      * @return void
      */
@@ -369,8 +369,8 @@ class my extends control
     }
 
     /**
-     * Change password 
-     * 
+     * Change password
+     *
      * @access public
      * @return void
      */
@@ -495,7 +495,7 @@ class my extends control
 
     /**
      * View my profile.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -509,18 +509,18 @@ class my extends control
         $this->view->position[] = $this->lang->my->profile;
         $this->view->user       = $user;
         $this->view->groups     = $this->loadModel('group')->getByAccount($this->app->user->account);
-        $this->view->deptPath   = $this->dept->getParents($user->dept); 
+        $this->view->deptPath   = $this->dept->getParents($user->dept);
         $this->display();
     }
 
     /**
      * My dynamic.
-     * 
-     * @param  string $type 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -562,9 +562,9 @@ class my extends control
     }
 
     /**
-     * Unbind ranzhi 
-     * 
-     * @param  string $confirm 
+     * Unbind ranzhi
+     *
+     * @param  string $confirm
      * @access public
      * @return void
      */

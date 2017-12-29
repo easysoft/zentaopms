@@ -115,10 +115,11 @@ class storyModel extends model
         /* Get team members. */
         if($story->projects)
         {
-            $story->teams = $this->dao->select('account, project')
+            $story->teams = $this->dao->select('account, root')
                 ->from(TABLE_TEAM)
-                ->where('project')->in(array_keys($story->projects))
-                ->fetchGroup('project');
+                ->where('root')->in(array_keys($story->projects))
+                ->andWhere('type')->eq('project')
+                ->fetchGroup('root');
         }
 
         /* Get affected bugs. */
@@ -1834,7 +1835,7 @@ class storyModel extends model
             ->andWhere('t2.status')->eq('doing')
             ->andWhere('t2.deleted')->eq(0)
             ->fetchPairs();
-        if($projects) return($this->dao->select('account')->from(TABLE_TEAM)->where('project')->in($projects)->fetchPairs('account'));
+        if($projects) return($this->dao->select('account')->from(TABLE_TEAM)->where('root')->in($projects)->andWhere('type')->eq('project')->fetchPairs('account'));
     }
 
     /**

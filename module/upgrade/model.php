@@ -75,13 +75,13 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('3.3'));
                 $this->updateTaskAssignedTo();
             case '4_0_beta1': $this->execSQL($this->getUpgradeFile('4.0.beta1'));
-            case '4_0_beta2':  
+            case '4_0_beta2':
                 $this->execSQL($this->getUpgradeFile('4.0.beta2'));
                 $this->updateProjectType();
                 $this->updateEstimatePriv();
-            case '4_0':  
+            case '4_0':
                 $this->execSQL($this->getUpgradeFile('4.0'));
-            case '4_0_1':  
+            case '4_0_1':
                 $this->execSQL($this->getUpgradeFile('4.0.1'));
                 $this->addPriv4_0_1();
             case '4_1':
@@ -201,6 +201,8 @@ class upgradeModel extends model
                 $this->changeLimitedName();
                 $this->adjustPriv9_7();
                 $this->changeStoryWidth();
+            case '9_7':
+                $this->changeTeamFields();
         }
 
         $this->deletePatch();
@@ -208,8 +210,8 @@ class upgradeModel extends model
 
     /**
      * Create the confirm contents.
-     * 
-     * @param  string $fromVersion 
+     *
+     * @param  string $fromVersion
      * @access public
      * @return string
      */
@@ -275,7 +277,7 @@ class upgradeModel extends model
         case '8_0_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.0.1'));
         case '8_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('8.1'));
         case '8_1_3':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.1.3'));
-        case '8_2_beta': 
+        case '8_2_beta':
         case '8_2':
         case '8_2_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.2.1'));
         case '8_2_2':
@@ -338,7 +340,7 @@ class upgradeModel extends model
 
     /**
      * Update ubb code in bug table and user Templates table to html.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -400,7 +402,7 @@ class upgradeModel extends model
 
     /**
      * Update nl to br from 1.3 version.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -446,7 +448,7 @@ class upgradeModel extends model
 
     /**
      * Update task fields.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -528,8 +530,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Update activated count of Bug. 
-     * 
+     * Update activated count of Bug.
+     *
      * @access public
      * @return void
      */
@@ -552,7 +554,7 @@ class upgradeModel extends model
 
     /**
      * Update lastRun and lastResult field in zt_case
-     * 
+     *
      * @access public
      * @return void
      */
@@ -570,21 +572,21 @@ class upgradeModel extends model
     }
 
     /**
-     * Update type of projects. 
-     * 
+     * Update type of projects.
+     *
      * @access public
      * @return void
      */
     public function updateProjectType()
     {
-        $projects = $this->dao->select('root')->from(TABLE_MODULE)->where('type')->eq('task')->fetchPairs('root'); 
-        $this->dao->update(TABLE_PROJECT)->set('type')->eq('waterfall')->where('id')->in($projects)->exec();        
+        $projects = $this->dao->select('root')->from(TABLE_MODULE)->where('type')->eq('task')->fetchPairs('root');
+        $this->dao->update(TABLE_PROJECT)->set('type')->eq('waterfall')->where('id')->in($projects)->exec();
         return true;
     }
 
     /**
      * Update estimate priv.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -637,8 +639,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Update the data of action. 
-     * 
+     * Update the data of action.
+     *
      * @access public
      * @return void
      */
@@ -682,8 +684,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Init the data of product and project order field. 
-     * 
+     * Init the data of product and project order field.
+     *
      * @access public
      * @return void
      */
@@ -704,7 +706,7 @@ class upgradeModel extends model
 
     /**
      * Update task assignedTo.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -719,7 +721,7 @@ class upgradeModel extends model
 
     /**
      * Delete the patch record.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -731,8 +733,8 @@ class upgradeModel extends model
 
     /**
      * Get the upgrade sql file.
-     * 
-     * @param  string $version 
+     *
+     * @param  string $version
      * @access public
      * @return string
      */
@@ -743,8 +745,8 @@ class upgradeModel extends model
 
     /**
      * Execute a sql.
-     * 
-     * @param  string  $sqlFile 
+     *
+     * @param  string  $sqlFile
      * @access public
      * @return void
      */
@@ -755,7 +757,7 @@ class upgradeModel extends model
 
         /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
         $sqls = explode("\n", file_get_contents($sqlFile));
-        foreach($sqls as $key => $line) 
+        foreach($sqls as $key => $line)
         {
             $line       = trim($line);
             $sqls[$key] = $line;
@@ -780,7 +782,7 @@ class upgradeModel extends model
             {
                 $this->dbh->exec($sql);
             }
-            catch (PDOException $e) 
+            catch (PDOException $e)
             {
                 $errorInfo = $e->errorInfo;
                 $errorCode = $errorInfo[1];
@@ -790,8 +792,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Add priv for version 4.0.1 
-     * 
+     * Add priv for version 4.0.1
+     *
      * @access public
      * @return void
      */
@@ -832,10 +834,10 @@ class upgradeModel extends model
     }
 
     /**
-     * Add priv for version 4.1 
-     * 
+     * Add priv for version 4.1
+     *
      * @access public
-     * @return bool 
+     * @return bool
      */
     public function addPriv4_1()
     {
@@ -927,7 +929,7 @@ class upgradeModel extends model
 
     /**
      * Add priv for 8.2.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -973,7 +975,7 @@ class upgradeModel extends model
 
     /**
      * Adjust config section and key.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -992,8 +994,8 @@ class upgradeModel extends model
 
     /**
      * To lower table.
-     * 
-     * @param  string $build 
+     *
+     * @param  string $build
      * @access public
      * @return bool
      */
@@ -1037,7 +1039,7 @@ class upgradeModel extends model
 
     /**
      * Process finishedBy and finishedDate of task.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1055,7 +1057,7 @@ class upgradeModel extends model
 
     /**
      * Delete company field for the table of zt_config and zt_groupPriv.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1089,7 +1091,7 @@ class upgradeModel extends model
 
     /**
      * Merge the goal and desc of project.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1110,7 +1112,7 @@ class upgradeModel extends model
 
     /**
      * Fix OS info of bugs.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1122,7 +1124,7 @@ class upgradeModel extends model
 
     /**
      * Fix finishedBy of task.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1152,7 +1154,7 @@ class upgradeModel extends model
 
     /**
      * Touch index.html for upload when has not it.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1168,7 +1170,7 @@ class upgradeModel extends model
 
     /**
      * Init order.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1187,7 +1189,7 @@ class upgradeModel extends model
 
     /**
      * Adjust order for 7.3
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1200,8 +1202,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Adjust priv for 7.4.beta 
-     * 
+     * Adjust priv for 7.4.beta
+     *
      * @access public
      * @return void
      */
@@ -1222,7 +1224,7 @@ class upgradeModel extends model
 
     /**
      * Adjust doc module.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1331,7 +1333,7 @@ class upgradeModel extends model
 
     /**
      * Update file objectID in editor.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1437,7 +1439,7 @@ class upgradeModel extends model
 
     /**
      * Move doc content to table zt_doccontent.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1447,7 +1449,7 @@ class upgradeModel extends model
         $processFields = 0;
         foreach($descDoc as $field)
         {
-            if($field->Field == 'content' or $field->Field == 'digest' or $field->Field == 'url') $processFields ++; 
+            if($field->Field == 'content' or $field->Field == 'digest' or $field->Field == 'url') $processFields ++;
         }
         if($processFields < 3) return true;
 
@@ -1475,8 +1477,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Adjust priv 8.3 
-     * 
+     * Adjust priv 8.3
+     *
      * @access public
      * @return bool
      */
@@ -1499,10 +1501,10 @@ class upgradeModel extends model
         }
         return true;
     }
-    
+
     /**
      * Rename main lib.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1516,7 +1518,7 @@ class upgradeModel extends model
 
     /**
      * Adjust priv for 8.4.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1547,8 +1549,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Adjust priv for 9.0 
-     * 
+     * Adjust priv for 9.0
+     *
      * @access public
      * @return void
      */
@@ -1577,7 +1579,7 @@ class upgradeModel extends model
 
     /**
      * Fix projectproduct data.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1589,7 +1591,7 @@ class upgradeModel extends model
 
     /**
      * Add bug deadline for custom fields.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1621,8 +1623,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Adjust priv for 9.0.1. 
-     * 
+     * Adjust priv for 9.0.1.
+     *
      * @access public
      * @return bool
      */
@@ -1728,7 +1730,7 @@ class upgradeModel extends model
      * Adjust priv for 9.4.
      *
      * @access public
-     * @return bool 
+     * @return bool
      */
     public function adjustPriv9_4()
     {
@@ -1756,7 +1758,7 @@ class upgradeModel extends model
 
     /**
      * Get errors during the upgrading.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -1769,7 +1771,7 @@ class upgradeModel extends model
 
     /**
      * Check safe file.
-     * 
+     *
      * @access public
      * @return string|false
      */
@@ -1782,7 +1784,7 @@ class upgradeModel extends model
 
     /**
      * Check weither process or not.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -1795,8 +1797,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Process customMenus for different working. 
-     * 
+     * Process customMenus for different working.
+     *
      * @access public
      * @return void
      */
@@ -1815,7 +1817,7 @@ class upgradeModel extends model
 
     /**
      * Init project story order.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1840,7 +1842,7 @@ class upgradeModel extends model
 
     /**
      * Fix datatable cols config.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1868,7 +1870,7 @@ class upgradeModel extends model
 
     /**
      * Add limited group.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1913,7 +1915,7 @@ class upgradeModel extends model
 
     /**
      * Change limited name.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1929,8 +1931,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Adjust Priv for 9.7 
-     * 
+     * Adjust Priv for 9.7
+     *
      * @access public
      * @return bool
      */
@@ -1950,7 +1952,7 @@ class upgradeModel extends model
 
     /**
      * Change story field width.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1966,6 +1968,22 @@ class upgradeModel extends model
             }
             $this->dao->update(TABLE_CONFIG)->set('value')->eq(json_encode($fields))->where('id')->eq($configID)->exec();
         }
+        return true;
+    }
+
+    /**
+     * Change team field for 9.8.
+     *
+     * @access public
+     * @return bool
+     */
+    public function changeTeamFields()
+    {
+        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " DROP PRIMARY KEY");
+        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " CHANGE `project` `root` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0'");
+        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " ADD `type` ENUM('project', 'task') NOT NULL DEFAULT 'project' AFTER `root`");
+        $this->dao->exec("UPDATE " . TABLE_TEAM . " SET `root` = `task`, `type` = 'task' WHERE `task` > '0'");
+        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " DROP `task`");
         return true;
     }
 }

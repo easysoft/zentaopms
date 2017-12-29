@@ -412,7 +412,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `name` varchar(90) NOT NULL,
   `code` varchar(45) NOT NULL,
-  `line` mediumint(8) NOT NULL, 
+  `line` mediumint(8) NOT NULL,
   `type` varchar(30) NOT NULL default 'normal',
   `status` varchar(30) NOT NULL default '',
   `desc` text NOT NULL,
@@ -627,8 +627,8 @@ CREATE TABLE IF NOT EXISTS `zt_taskestimate` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_team`;
 CREATE TABLE IF NOT EXISTS `zt_team` (
-  `project` mediumint(8) unsigned NOT NULL default '0',
-  `task` mediumint(8) NOT NULL DEFAULT '0',
+  `root` mediumint(8) unsigned NOT NULL default '0',
+  `type` enum('project','task') NOT NULL DEFAULT 'project',
   `account` char(30) NOT NULL default '',
   `role` char(30) NOT NULL default '',
   `limited` char(8) NOT NULL default 'no',
@@ -638,9 +638,8 @@ CREATE TABLE IF NOT EXISTS `zt_team` (
   `estimate` DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT '0',
   `consumed` DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT '0',
   `left` DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT '0',
-  `order` TINYINT(3) NOT NULL DEFAULT '0',
-  PRIMARY KEY  (`project`, `task`, `account`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `order` TINYINT(3) NOT NULL DEFAULT '0'
+  ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_testreport`;
 CREATE TABLE IF NOT EXISTS `zt_testreport` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -699,11 +698,11 @@ CREATE TABLE IF NOT EXISTS `zt_testsuite` (
   `desc` text NOT NULL,
   `type` varchar(20) NOT NULL,
   `addedBy` char(30) NOT NULL,
-  `addedDate` datetime NOT NULL, 
+  `addedDate` datetime NOT NULL,
   `lastEditedBy` char(30) NOT NULL,
-  `lastEditedDate` datetime NOT NULL, 
+  `lastEditedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL,
-  PRIMARY KEY (`id`) 
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_testtask`;
 CREATE TABLE IF NOT EXISTS `zt_testtask` (

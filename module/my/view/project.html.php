@@ -23,7 +23,7 @@
   <tr class='text-center'>
     <th class='w-id'><?php echo $lang->idAB;?></th>
     <th class='w-160px'><?php echo $lang->project->code;?></th>
-    <th><?php echo $lang->project->name;?></th>
+    <th class="text-left"><?php echo $lang->project->name;?></th>
     <th class='w-date'><?php echo $lang->project->begin;?></th>
     <th class='w-date'><?php echo $lang->project->end;?></th>
     <th class='w-status'><?php echo $lang->statusAB;?></th>
@@ -52,5 +52,5 @@
   </tr>
   <?php endforeach;?>
   </tbody>
-</table> 
+</table>
 <?php include '../../common/view/footer.html.php';?>

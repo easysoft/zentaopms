@@ -17,16 +17,16 @@ class projectModel extends model
     const LINK_MEMBERS_ONE_TIME = 20;
 
     /**
-     * Check the privilege. 
-     * 
-     * @param  object    $project 
+     * Check the privilege.
+     *
+     * @param  object    $project
      * @access public
      * @return bool
      */
     public function checkPriv($project)
     {
         /* If is admin, return true. */
-        if($this->app->user->admin) return true; 
+        if($this->app->user->admin) return true;
 
         $acls = $this->app->user->rights['acls'];
         if(!empty($acls['projects']) and !in_array($project->id, $acls['projects'])) return false;
@@ -36,7 +36,7 @@ class projectModel extends model
 
         /* Get all teams of all projects and group by projects, save it as static. */
         static $teams;
-        if(empty($teams)) $teams = $this->dao->select('project, account')->from(TABLE_TEAM)->fetchGroup('project', 'account');
+        if(empty($teams)) $teams = $this->dao->select('root, account')->from(TABLE_TEAM)->where('type')->eq('project')->fetchGroup('root', 'account');
         $currentTeam = isset($teams[$project->id]) ? $teams[$project->id] : array();
 
         /* If project is private, only members can access. */
@@ -61,9 +61,9 @@ class projectModel extends model
 
     /**
      * Set menu.
-     * 
-     * @param  array  $projects 
-     * @param  int    $projectID 
+     *
+     * @param  array  $projects
+     * @param  int    $projectID
      * @param  string $extra
      * @access public
      * @return void
@@ -74,7 +74,7 @@ class projectModel extends model
         $project = $this->getById($projectID);
 
         /* Unset story, bug, build and testtask if type is ops. */
-        if($project and $project->type == 'ops') 
+        if($project and $project->type == 'ops')
         {
             unset($this->lang->project->menu->story);
             unset($this->lang->project->menu->bug);
@@ -93,7 +93,7 @@ class projectModel extends model
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
 
-        if($this->cookie->projectMode == 'noclosed' and $project->status == 'done') 
+        if($this->cookie->projectMode == 'noclosed' and $project->status == 'done')
         {
             setcookie('projectMode', 'all');
             $this->cookie->projectMode = 'all';
@@ -108,12 +108,12 @@ class projectModel extends model
     }
 
     /**
-     * Create the select code of projects. 
-     * 
-     * @param  array     $projects 
-     * @param  int       $projectID 
-     * @param  string    $currentModule 
-     * @param  string    $currentMethod 
+     * Create the select code of projects.
+     *
+     * @param  array     $projects
+     * @param  int       $projectID
+     * @param  string    $currentModule
+     * @param  string    $currentMethod
      * @param  string    $extra
      * @access public
      * @return string
@@ -133,7 +133,7 @@ class projectModel extends model
 
     /**
      * Get project tree menu.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -150,7 +150,7 @@ class projectModel extends model
             $productName  = isset($products[$productID]) ? $products[$productID] : $this->lang->project->noProduct;
 
             $projectTree .= "<li>$productName<ul>";
-           
+
             foreach($projects as $project)
             {
                 if($project->status != 'done')
@@ -160,9 +160,9 @@ class projectModel extends model
             }
 
             $hasDone = false;
-            foreach($projects as $project) 
+            foreach($projects as $project)
             {
-                if($project->status == 'done') 
+                if($project->status == 'done')
                 {
                     $hasDone = true;
                     break;
@@ -191,9 +191,9 @@ class projectModel extends model
 
     /**
      * Save the project id user last visited to session.
-     * 
-     * @param  int   $projectID 
-     * @param  array $projects 
+     *
+     * @param  int   $projectID
+     * @param  array $projects
      * @access public
      * @return int
      */
@@ -217,8 +217,8 @@ class projectModel extends model
     }
 
     /**
-     * Create a project. 
-     * 
+     * Create a project.
+     *
      * @access public
      * @return void
      */
@@ -257,14 +257,15 @@ class projectModel extends model
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
 
             /* Copy team of project. */
-            if($copyProjectID != '') 
+            if($copyProjectID != '')
             {
-                $members = $this->dao->select('*')->from(TABLE_TEAM)->where('project')->eq($copyProjectID)->fetchAll();
+                $members = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($copyProjectID)->andWhere('type')->eq('project')->fetchAll();
                 foreach($members as $member)
                 {
-                    $member->project = $projectID;
-                    $member->join    = $today;
-                    $member->days    = $project->days;
+                    $member->root = $projectID;
+                    $member->join = $today;
+                    $member->days = $project->days;
+                    $member->type = 'project';
                     $this->dao->insert(TABLE_TEAM)->data($member)->exec();
                     if($member->account == $this->app->user->account) $creatorExists = true;
                 }
@@ -274,12 +275,13 @@ class projectModel extends model
             if($copyProjectID == '' or !$creatorExists)
             {
                 $member = new stdclass();
-                $member->project  = $projectID;
-                $member->account  = $this->app->user->account;
-                $member->role     = $this->lang->user->roleList[$this->app->user->role];
-                $member->join     = $today;
-                $member->days     = $project->days;
-                $member->hours    = $this->config->project->defaultWorkhours;
+                $member->root    = $projectID;
+                $member->account = $this->app->user->account;
+                $member->role    = $this->lang->user->roleList[$this->app->user->role];
+                $member->join    = $today;
+                $member->type    = 'project';
+                $member->days    = $project->days;
+                $member->hours   = $this->config->project->defaultWorkhours;
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
             }
 
@@ -293,13 +295,13 @@ class projectModel extends model
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
             if(!dao::isError()) $this->loadModel('score')->create('project', 'create', $projectID);
             return $projectID;
-        } 
+        }
     }
 
     /**
      * Update a project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return array
      */
@@ -336,11 +338,12 @@ class projectModel extends model
             {
                 if(!empty($value) and !isset($team[$value]))
                 {
-                    $member->project = (int)$projectID;
+                    $member->root    = (int)$projectID;
                     $member->account = $value;
                     $member->join    = helper::today();
                     $member->role    = $this->lang->project->$fieldName;
                     $member->days    = $project->days;
+                    $member->type    = 'project';
                     $member->hours   = $this->config->project->defaultWorkhours;
                     $this->dao->replace(TABLE_TEAM)->data($member)->exec();
                 }
@@ -356,8 +359,8 @@ class projectModel extends model
     }
 
     /**
-     * Batch update. 
-     * 
+     * Batch update.
+     *
      * @access public
      * @return void
      */
@@ -365,7 +368,7 @@ class projectModel extends model
     {
         $projects    = array();
         $allChanges  = array();
-        $data        = fixer::input('post')->get(); 
+        $data        = fixer::input('post')->get();
         $oldProjects = $this->getByIdList($this->post->projectIDList);
         foreach($data->projectIDList as $projectID)
         {
@@ -410,7 +413,8 @@ class projectModel extends model
                     if(!empty($value) and !isset($team[$value]))
                     {
                         $member = new stdClass();
-                        $member->project = (int)$projectID;
+                        $member->root    = (int)$projectID;
+                        $member->type    = 'project';
                         $member->account = $value;
                         $member->join    = helper::today();
                         $member->role    = $this->lang->project->$fieldName;
@@ -430,8 +434,8 @@ class projectModel extends model
 
     /**
      * Start project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -453,8 +457,8 @@ class projectModel extends model
 
     /**
      * Put project off.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -474,8 +478,8 @@ class projectModel extends model
 
     /**
      * Suspend project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -497,8 +501,8 @@ class projectModel extends model
 
     /**
      * Activate project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -561,8 +565,8 @@ class projectModel extends model
 
     /**
      * Close project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return array
      */
@@ -587,8 +591,8 @@ class projectModel extends model
 
     /**
      * Get project pairs.
-     * 
-     * @param  string $mode     all|noclosed or empty 
+     *
+     * @param  string $mode     all|noclosed or empty
      * @access public
      * @return array
      */
@@ -624,8 +628,8 @@ class projectModel extends model
 
     /**
      * Get by idList.
-     * 
-     * @param  array    $projectIDList 
+     *
+     * @param  array    $projectIDList
      * @access public
      * @return array
      */
@@ -636,10 +640,10 @@ class projectModel extends model
 
     /**
      * Get project lists.
-     * 
+     *
      * @param  string $status  all|undone|wait|running
-     * @param  int    $limit 
-     * @param  int    $productID 
+     * @param  int    $limit
+     * @param  int    $productID
      * @access public
      * @return array
      */
@@ -677,10 +681,10 @@ class projectModel extends model
 
     /**
      * Get project lists.
-     * 
+     *
      * @param  string $status  involved
-     * @param  int    $limit 
-     * @param  int    $productID 
+     * @param  int    $limit
+     * @param  int    $productID
      * @param  int    $branch
      * @access public
      * @return array
@@ -691,7 +695,7 @@ class projectModel extends model
         {
             return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-                ->leftJoin(TABLE_TEAM)->alias('t3')->on('t3.project=t2.id')
+                ->leftJoin(TABLE_TEAM)->alias('t3')->on('t3.root=t2.id')
                 ->where('t1.product')->eq($productID)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t2.iscat')->eq(0)
@@ -699,6 +703,7 @@ class projectModel extends model
                 ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
                 ->orWhere('t3.account')->eq($this->app->user->account)
                 ->markRight(1)
+                ->andWhere('t3.type')->eq('project')
                 ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
@@ -706,12 +711,13 @@ class projectModel extends model
         else
         {
             return $this->dao->select('t1.*, IF(INSTR(" done", t1.status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)->alias('t1')
-                ->leftJoin(TABLE_TEAM)->alias('t2')->on('t2.project=t1.id')
+                ->leftJoin(TABLE_TEAM)->alias('t2')->on('t2.root=t1.id')
                 ->where('t1.iscat')->eq(0)
                 ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
                 ->orWhere('t2.account')->eq($this->app->user->account)
                 ->markRight(1)
                 ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t2.type')->eq('project')
                 ->orderBy('t1.order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
@@ -720,7 +726,7 @@ class projectModel extends model
 
     /**
      * Get projects lists grouped by product.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -738,14 +744,14 @@ class projectModel extends model
         {
             foreach($product as $ID => $project)
             {
-                if(!$this->checkPriv($projects[$project->id])) 
+                if(!$this->checkPriv($projects[$project->id]))
                 {
                     unset($list[$id][$ID]);
                 }
                 if(!$project->product)
                 {
                     if($this->checkPriv($projects[$project->id])) $noProducts[] = $project;
-                    unset($list[$id][$ID]); 
+                    unset($list[$id][$ID]);
                 }
             }
         }
@@ -757,12 +763,12 @@ class projectModel extends model
 
     /**
      * Get project stats.
-     * 
-     * @param  string $status 
-     * @param  int    $productID 
-     * @param  int    $itemCounts 
-     * @param  string $orderBy 
-     * @param  int    $pager 
+     *
+     * @param  string $status
+     * @param  int    $productID
+     * @param  int    $itemCounts
+     * @param  string $orderBy
+     * @param  int    $pager
      * @access public
      * @return void
      */
@@ -949,8 +955,8 @@ class projectModel extends model
 
     /**
      * Get project by id.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @param  bool   $setImgSize
      * @access public
      * @return void
@@ -970,8 +976,8 @@ class projectModel extends model
         }
 
         $total = $this->dao->select('
-            SUM(estimate) AS totalEstimate, 
-            SUM(consumed) AS totalConsumed, 
+            SUM(estimate) AS totalEstimate,
+            SUM(consumed) AS totalConsumed,
             SUM(`left`) AS totalLeft')
             ->from(TABLE_TASK)
             ->where('project')->eq((int)$projectID)
@@ -980,7 +986,7 @@ class projectModel extends model
             ->andWhere('parent')->eq(0)
             ->fetch();
         $project->days          = $project->days ? $project->days : '';
-        $project->totalHours    = $this->dao->select('sum(days * hours) AS totalHours')->from(TABLE_TEAM)->where('project')->eq($project->id)->fetch('totalHours');
+        $project->totalHours    = $this->dao->select('sum(days * hours) AS totalHours')->from(TABLE_TEAM)->where('root')->eq($project->id)->andWhere('type')->eq('project')->fetch('totalHours');
         $project->totalEstimate = round($total->totalEstimate, 1);
         $project->totalConsumed = round($total->totalConsumed, 1);
         $project->totalLeft     = round($total->totalLeft, 1);
@@ -992,9 +998,9 @@ class projectModel extends model
     }
 
     /**
-     * Get the default managers for a project from it's related products. 
-     * 
-     * @param  int    $projectID 
+     * Get the default managers for a project from it's related products.
+     *
+     * @param  int    $projectID
      * @access public
      * @return object
      */
@@ -1015,8 +1021,8 @@ class projectModel extends model
 
     /**
      * Get products of a project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return array
      */
@@ -1039,12 +1045,12 @@ class projectModel extends model
 
     /**
      * Build story search form.
-     * 
-     * @param  array  $products 
-     * @param  array  $branchGroups 
-     * @param  array  $modules 
-     * @param  int    $queryID 
-     * @param  string $actionURL 
+     *
+     * @param  array  $products
+     * @param  array  $branchGroups
+     * @param  array  $modules
+     * @param  int    $queryID
+     * @param  string $actionURL
      * @param  string $type
      * @access public
      * @return void
@@ -1103,9 +1109,9 @@ class projectModel extends model
     }
 
     /**
-     * Get projects to import 
+     * Get projects to import
      *
-     * @param  array  $projectIds 
+     * @param  array  $projectIds
      * @access public
      * @return array
      */
@@ -1128,8 +1134,8 @@ class projectModel extends model
 
     /**
      * Update products of a project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1166,9 +1172,9 @@ class projectModel extends model
     }
 
     /**
-     * Get related projects 
-     * 
-     * @param  int    $projectID 
+     * Get related projects
+     *
+     * @param  int    $projectID
      * @access public
      * @return array
      */
@@ -1190,9 +1196,9 @@ class projectModel extends model
 
     /**
      * Get tasks can be imported.
-     * 
+     *
      * @param  int    $toProject
-     * @param  array  $branches 
+     * @param  array  $branches
      * @access public
      * @return array
      */
@@ -1217,8 +1223,8 @@ class projectModel extends model
 
     /**
      * Import tasks.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1257,9 +1263,14 @@ class projectModel extends model
         {
             if(!isset($teamMembers[$account]))
             {
-                $role = $this->dao->select('*')->from(TABLE_TEAM)->where('project')->eq($preProjectID)->andWhere('account')->eq($account)->fetch();
-                $role->project = $projectID;
-                $role->join    = helper::today();
+                $role = $this->dao->select('*')->from(TABLE_TEAM)
+                    ->where('root')->eq($preProjectID)
+                    ->andWhere('account')->eq($account)
+                    ->andWhere('type')->eq('project')
+                    ->fetch();
+
+                $role->root = $projectID;
+                $role->join = helper::today();
                 $this->dao->insert(TABLE_TEAM)->data($role)->exec();
             }
         }
@@ -1279,9 +1290,9 @@ class projectModel extends model
     }
 
     /**
-     * Import task from Bug. 
-     * 
-     * @param  int    $projectID 
+     * Import task from Bug.
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1326,7 +1337,7 @@ class projectModel extends model
             if(!$bug->confirmed) $this->dao->update(TABLE_BUG)->set('confirmed')->eq(1)->where('id')->eq($bug->id)->exec();
             $this->dao->insert(TABLE_TASK)->data($task)->checkIF($bugToTasks->estimate[$key] != '', 'estimate', 'float')->exec();
 
-            if(dao::isError()) 
+            if(dao::isError())
             {
                 echo js::error(dao::getError());
                 die(js::reload('parent'));
@@ -1387,8 +1398,8 @@ class projectModel extends model
 
     /**
      * Get child projects.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1399,8 +1410,8 @@ class projectModel extends model
 
     /**
      * Update childs.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1419,8 +1430,8 @@ class projectModel extends model
 
     /**
      * Link story.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1444,14 +1455,14 @@ class projectModel extends model
             $this->dao->insert(TABLE_PROJECTSTORY)->data($data)->exec();
             $this->story->setStage($storyID);
             $this->action->create('story', $storyID, 'linked2project', '', $projectID);
-        }        
+        }
     }
 
     /**
-     * Unlink story. 
-     * 
-     * @param  int    $projectID 
-     * @param  int    $storyID 
+     * Unlink story.
+     *
+     * @param  int    $projectID
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -1481,9 +1492,9 @@ class projectModel extends model
     }
 
     /**
-     * Get team members. 
-     * 
-     * @param  int    $projectID 
+     * Get team members.
+     *
+     * @param  int    $projectID
      * @access public
      * @return array
      */
@@ -1492,15 +1503,16 @@ class projectModel extends model
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembers();
         return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
-            ->where('t1.project')->eq((int)$projectID)
+            ->where('t1.root')->eq((int)$projectID)
+            ->andWhere('t1.type')->eq('project')
             ->fetchAll('account');
     }
 
     /**
      * Get team members in pair.
-     * 
-     * @param  int    $projectID 
-     * @param  string $params 
+     *
+     * @param  int    $projectID
+     * @param  string $params
      * @access public
      * @return array
      */
@@ -1509,7 +1521,8 @@ class projectModel extends model
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
         $users = $this->dao->select('t1.account, t2.realname')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
-            ->where('t1.project')->eq((int)$projectID)
+            ->where('t1.root')->eq((int)$projectID)
+            ->andWhere('t1.type')->eq('project')
             ->beginIF($params == 'nodeleted' or empty($this->config->user->showDeleted))
             ->andWhere('t2.deleted')->eq(0)
             ->fi()
@@ -1525,29 +1538,30 @@ class projectModel extends model
 
     /**
      * Get teams which can be imported.
-     * 
-     * @param  string $account 
-     * @param  int    $currentProject 
+     *
+     * @param  string $account
+     * @param  int    $currentProject
      * @access public
      * @return array
      */
     public function getTeams2Import($account, $currentProject)
     {
-        return $this->dao->select('t1.project, t2.name as projectName')
+        return $this->dao->select('t1.root, t2.name as projectName')
             ->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
             ->where('t1.account')->eq($account)
-            ->andWhere('t1.project')->ne($currentProject)
-            ->groupBy('t1.project')
-            ->orderBy('t1.project DESC')
+            ->andWhere('t1.root')->ne($currentProject)
+            ->andWhere('t1.type')->eq('project')
+            ->groupBy('t1.root')
+            ->orderBy('t1.root DESC')
             ->fetchPairs();
     }
 
     /**
      * Get members of a project who can be imported.
-     * 
-     * @param  int    $project 
-     * @param  array  $currentMembers 
+     *
+     * @param  int    $project
+     * @param  array  $currentMembers
      * @access public
      * @return array
      */
@@ -1557,8 +1571,9 @@ class projectModel extends model
 
         return $this->dao->select('account, role, hours')
             ->from(TABLE_TEAM)
-            ->where('project')->eq($project)
+            ->where('root')->eq($project)
             ->andWhere('account')->notIN($currentMembers)
+            ->andWhere('type')->eq('project')
             ->fetchAll('account');
     }
 
@@ -1590,15 +1605,17 @@ class projectModel extends model
             {
                 $this->dao->update(TABLE_TEAM)
                     ->data($member)
-                    ->where('project')->eq((int)$projectID)
+                    ->where('root')->eq((int)$projectID)
                     ->andWhere('account')->eq($account)
+                    ->andWhere('type')->eq('project')
                     ->exec();
             }
             else
             {
-                $member->project = (int)$projectID;
+                $member->root    = (int)$projectID;
                 $member->account = $account;
                 $member->join    = helper::today();
+                $member->type    = 'project';
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
             }
         }
@@ -1606,20 +1623,20 @@ class projectModel extends model
 
     /**
      * Unlink a member.
-     * 
-     * @param  int    $projectID 
-     * @param  string $account 
+     *
+     * @param  int    $projectID
+     * @param  string $account
      * @access public
      * @return void
      */
     public function unlinkMember($projectID, $account)
     {
-        $this->dao->delete()->from(TABLE_TEAM)->where('project')->eq((int)$projectID)->andWhere('account')->eq($account)->exec();
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('account')->eq($account)->andWhere('type')->eq('project')->exec();
     }
 
     /**
      * Compute burn of a project.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -1654,8 +1671,8 @@ class projectModel extends model
 
     /**
      * Fix burn for first day.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1678,9 +1695,9 @@ class projectModel extends model
     }
 
     /**
-     * Get burn data for flot 
-     * 
-     * @param  int    $projectID 
+     * Get burn data for flot
+     *
+     * @param  int    $projectID
      * @access public
      * @return array
      */
@@ -1694,7 +1711,7 @@ class projectModel extends model
 
         $count    = 0;
         $burnData = array();
-        foreach($sets as $date => $set) 
+        foreach($sets as $date => $set)
         {
             if($date < $project->begin) continue;
             if($date > $project->end) continue;
@@ -1709,12 +1726,12 @@ class projectModel extends model
 
     /**
      * Process burndown datas when the sets is smaller than the itemCounts.
-     * 
-     * @param  array   $sets 
-     * @param  int     $itemCounts 
-     * @param  date    $begin 
-     * @param  date    $end 
-     * @param  string  $mode 
+     *
+     * @param  array   $sets
+     * @param  int     $itemCounts
+     * @param  date    $begin
+     * @param  date    $end
+     * @param  string  $mode
      * @access public
      * @return array
      */
@@ -1772,10 +1789,10 @@ class projectModel extends model
 
     /**
      * Get taskes by search.
-     * 
-     * @param  string $condition 
-     * @param  object $pager 
-     * @param  string $orderBy 
+     *
+     * @param  string $condition
+     * @param  object $pager
+     * @param  string $orderBy
      * @access public
      * @return array
      */
@@ -1802,13 +1819,13 @@ class projectModel extends model
     }
 
     /**
-     * Get bugs by search in project. 
-     * 
-     * @param  int    $products 
-     * @param  int    $projectID 
-     * @param  int    $sql 
-     * @param  int    $pager 
-     * @param  int    $orderBy 
+     * Get bugs by search in project.
+     *
+     * @param  int    $products
+     * @param  int    $projectID
+     * @param  int    $sql
+     * @param  int    $pager
+     * @param  int    $orderBy
      * @access public
      * @return void
      */
@@ -1829,8 +1846,8 @@ class projectModel extends model
 
     /**
      * Get the summary of project.
-     * 
-     * @param  array    $tasks 
+     *
+     * @param  array    $tasks
      * @access public
      * @return string
      */
@@ -1862,9 +1879,9 @@ class projectModel extends model
 
     /**
      * Judge an action is clickable or not.
-     * 
+     *
      * @param  object    $project
-     * @param  string    $action 
+     * @param  string    $action
      * @access public
      * @return bool
      */
@@ -1883,10 +1900,10 @@ class projectModel extends model
 
     /**
      * Create the link from module,method,extra
-     * 
-     * @param  string  $module 
-     * @param  string  $method 
-     * @param  mix     $extra 
+     *
+     * @param  string  $module
+     * @param  string  $method
+     * @param  mix     $extra
      * @access public
      * @return void
      */
@@ -1897,12 +1914,12 @@ class projectModel extends model
         {
             $module = 'project';
             $method = 'task';
-        }   
+        }
         if($module == 'build' and ($method == 'edit' || $method= 'view'))
-        {   
+        {
             $module = 'project';
             $method = 'build';
-        }   
+        }
 
         if($module == 'project' and $method == 'create') return;
         if($extra != '')
@@ -1923,12 +1940,12 @@ class projectModel extends model
     }
 
     /**
-     * Get no weekend date 
-     * 
-     * @param  string     $begin 
-     * @param  string     $end 
-     * @param  string     $type 
-     * @param  string|int $interval 
+     * Get no weekend date
+     *
+     * @param  string     $begin
+     * @param  string     $end
+     * @param  string     $type
+     * @param  string|int $interval
      * @param  string     $format
      * @access public
      * @return array
@@ -1978,8 +1995,8 @@ class projectModel extends model
 
     /**
      * Get total estimate.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return float
      */
@@ -2002,7 +2019,7 @@ class projectModel extends model
         if($this->app->user->admin) return true;
 
         /* Get all teams of all projects and group by projects, save it as static. */
-        $projects = $this->dao->select('project, limited')->from(TABLE_TEAM)->where('account')->eq($this->app->user->account)->andWhere('limited')->eq('yes')->orderBy('project asc')->fetchPairs('project', 'project');
+        $projects = $this->dao->select('root, limited')->from(TABLE_TEAM)->where('account')->eq($this->app->user->account)->andWhere('limited')->eq('yes')->andWhere('type')->eq('project')->orderBy('root asc')->fetchPairs('root', 'root');
         $_SESSION['limitedProjects'] = join(',', $projects);
     }
 
@@ -2028,8 +2045,8 @@ class projectModel extends model
 
     /**
      * Get branches of project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return array
      */
@@ -2146,11 +2163,11 @@ class projectModel extends model
     }
 
     /**
-     * Get Kanban tasks 
-     * 
-     * @param  int    $projectID 
-     * @param  string $orderBy 
-     * @param  object $pager 
+     * Get Kanban tasks
+     *
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return void
      */
@@ -2173,10 +2190,10 @@ class projectModel extends model
     }
 
     /**
-     * Get kanban group data. 
-     * 
-     * @param  array  $tasks 
-     * @param  array  $bugs 
+     * Get kanban group data.
+     *
+     * @param  array  $tasks
+     * @param  array  $bugs
      * @access public
      * @return array
      */
@@ -2227,9 +2244,9 @@ class projectModel extends model
 
     /**
      * Save Kanban Data.
-     * 
-     * @param  int    $projectID 
-     * @param  array  $kanbanDatas 
+     *
+     * @param  int    $projectID
+     * @param  array  $kanbanDatas
      * @access public
      * @return void
      */
@@ -2243,8 +2260,8 @@ class projectModel extends model
 
     /**
      * Get Prev Kanban.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return array
      */
@@ -2256,8 +2273,8 @@ class projectModel extends model
 
     /**
      * Get kanban setting.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return object
      */
@@ -2282,10 +2299,10 @@ class projectModel extends model
 
     /**
      * Build burn data.
-     * 
-     * @param  int    $projectID 
-     * @param  array  $dateList 
-     * @param  string $type 
+     *
+     * @param  int    $projectID
+     * @param  array  $dateList
+     * @param  string $type
      * @access public
      * @return array
      */
@@ -2449,9 +2466,9 @@ class projectModel extends model
 
     /**
      * Format tasks for tree.
-     * 
-     * @param  array  $tasks 
-     * @param  object $story 
+     *
+     * @param  array  $tasks
+     * @param  object $story
      * @access public
      * @return array
      */
