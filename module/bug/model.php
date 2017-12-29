@@ -2468,7 +2468,22 @@ class bugModel extends model
                 break;
             case 'openedBuild':
                 $builds = array_flip($builds);
-                foreach(explode(',', $bug->openedBuild) as $build) echo html::a(helper::createLink('build', 'view', "buildID=$builds[$build]"), $build, '', "title='$bug->openedBuild'");
+                foreach(explode(',', $bug->openedBuild) as $build)
+                {
+                    $buildID = zget($builds, $build, '');
+                    if($buildID == 'trunk')
+                    {
+                        echo $build;
+                    }
+                    elseif($buildID and common::hasPriv('build', 'view'))
+                    {
+                        echo html::a(helper::createLink('build', 'view', "buildID=$buildID"), $build, '', "title='$bug->openedBuild'");
+                    }
+                    else
+                    {
+                        echo $build;
+                    }
+                }
                 break;
             case 'assignedTo':
                 echo zget($users, $bug->assignedTo, $bug->assignedTo);
