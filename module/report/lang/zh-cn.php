@@ -31,6 +31,9 @@ $lang->report->colors[]   = '008ED6';
 $lang->report->colors[]   = '9D080D';
 $lang->report->colors[]   = 'A186BE';
 
+$lang->report->isAssign[0] = '未指派';
+$lang->report->isAssign[1] = '已指派';
+
 $lang->report->singleColor[] = 'F6BD0F';
 
 $lang->report->projectDeviation = $lang->projectCommon . '偏差报表';
