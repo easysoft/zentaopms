@@ -5,7 +5,7 @@
  *
  * The author disclaims copyright to this source code.  In place of
  * a legal notice, here is a blessing:
- * 
+ *
  *  May you do good and not evil.
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
@@ -32,12 +32,12 @@ $config->sessionVar  = 'zentaosid';         // 请求类型为GET：session变�
 $config->views       = ',html,json,mhtml,'; // 支持的视图类型。                       Supported view formats.
 
 /* 支持的主题和语言。Supported thems and languages. */
-$config->themes['default'] = 'default'; 
+$config->themes['default'] = 'default';
 $config->langs['zh-cn']    = '简体';
 $config->langs['zh-tw']    = '繁體';
 $config->langs['en']       = 'English';
 
-/* 设备类型视图文件前缀。The prefix for view file for different device. */ 
+/* 设备类型视图文件前缀。The prefix for view file for different device. */
 $config->devicePrefix['mhtml'] = '';
 
 /* 默认值设置。Default settings. */
@@ -80,7 +80,7 @@ $config->domainPostfix .= "|rocks|social|co.com|bio|reviews|link|sexy|us.com|con
 $config->domainPostfix .= "|menu|info|events|webcam|dating|vacations|flights|cruises|global|ca|guru|";
 $config->domainPostfix .= "|futbol|rentals|dance|lawyer|attorney|democrat|republican|actor|condos|immobilien|";
 $config->domainPostfix .= "|villas|foundation|expert|works|tools|watch|zone|bargains|agency|best|solar|";
-$config->domainPostfix .= "|farm|pics|photo|marketing|holiday|gift|buzz|guitars|trade|construction|"; 
+$config->domainPostfix .= "|farm|pics|photo|marketing|holiday|gift|buzz|guitars|trade|construction|";
 $config->domainPostfix .= "|international|house|coffee|florist|rich|ceo|camp|education|repair|win|site|";
 
 /* 系统框架配置。Framework settings. */
@@ -103,7 +103,7 @@ $config->framework->detectDevice['zh-tw'] = true; // 在zh-tw语言情况下，�
 $config->framework->detectDevice['en']    = true; // 在en语言情况下，是否启用设备检测功能。    Whether enable device detect or not.
 
 /* 文件上传设置。 Upload settings. */
-$config->file = new stdclass();    
+$config->file = new stdclass();
 $config->file->dangers = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,aspx,ashx,asa,cer,cdx,aspl,shtm,shtml,html,htm';
 $config->file->allowed = 'txt,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz,mpp,rp,pdm,vsdx,vsd,sql';
 
