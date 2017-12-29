@@ -84,7 +84,28 @@
         $browseLink = $this->createLink('user', 'todo', "account=$todo->account");
     }
 
-    common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'button', '', 'hiddenwin', 'showinonlybody btn-success');
+    if($todo->status != 'done')
+    {
+        echo "<div class='btn-group dropup'>";
+        echo html::a($this->createLink('todo', 'finish', "id=$todo->id", 'html', true), "<i class='icon icon-ok'></i> " . $lang->todo->finish, 'hiddenwin', "class='btn showinonlybody btn-success'");
+        $createStoryPriv = common::hasPriv('story', 'create');
+        $createTaskPriv  = common::hasPriv('task', 'create');
+        $createBugPriv   = common::hasPriv('bug', 'create');
+        if($createStoryPriv or $createTaskPriv or $createBugPriv)
+        {
+            $isonlybody = isonlybody();
+            unset($_GET['onlybody']);
+            echo "<button type='button' class='btn btn-success dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
+            echo "<ul class='dropdown-menu pull-right' role='menu'>";
+            if($createStoryPriv) echo '<li>' . html::a($this->createLink('story', 'create', "productID=0&branch=0&moduleID=0&storyID=0&projectID=0&bugID=0&planID=0&todoID={$todo->id}"), $lang->todo->reasonList['story'], '_parent') . '</li>';
+            if($createTaskPriv)  echo '<li>' . html::a('###', $lang->todo->reasonList['task'], '', "data-toggle='modal' data-target='#projectModal' data-moveable='true' data-position='193px'") . '</li>';
+            if($createBugPriv)   echo '<li>' . html::a($this->createLink('bug', 'create', "productID=0&branch=0&extras=todoID={$todo->id}"), $lang->todo->reasonList['bug'], '_parent') . '</li>';
+            echo "</ul>";
+            if($isonlybody) $_GET['onlybody'] = 'yes';
+        }
+        echo "</div>";
+    }
+
     if($todo->account == $app->user->account)
     {
         common::printIcon('todo', 'edit',   "todoID=$todo->id");
@@ -94,6 +115,23 @@
     ?>
   </div>
 </div>
+<div class="modal fade" id="projectModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title"><i class="icon-file-text"></i> <?php echo $lang->project->selectProject;?></h4>
+      </div>
+      <div class="modal-body">
+        <div class='input-group'>
+          <?php echo html::select('project', $projects, '', "class='form-control chosen'");?>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->toTask, "id='toTaskButton'");?></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<?php js::set('todoID', $todo->id);?>
 <?php else:?>
 <?php echo $lang->todo->thisIsPrivate;?>
 <?php endif;?>

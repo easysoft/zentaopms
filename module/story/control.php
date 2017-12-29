@@ -37,10 +37,11 @@ class story extends control
      * @param  int    $projectID
      * @param  int    $bugID
      * @param  int    $planID
+     * @param  int    $todoID
      * @access public
      * @return void
      */
-    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $bugID = 0, $planID = 0)
+    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $bugID = 0, $planID = 0, $todoID = 0)
     {
         if(!empty($_POST))
         {
@@ -74,6 +75,12 @@ class story extends control
             $extra    = $bugID == 0 ? '' : $bugID;
             $actionID = $this->action->create('story', $storyID, $action, '', $extra);
             $this->story->sendmail($storyID, $actionID);
+
+            if($todoID > 0)
+            {
+                $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
+                $this->action->create('todo', $todoID, 'finished', '', "STORY:$storyID");
+            }
 
             if($this->post->newStory)
             {
@@ -154,6 +161,15 @@ class story extends control
             {
                 $mailto = $oldBug->mailto;
             }
+        }
+
+        if($todoID > 0)
+        {
+            $todo   = $this->loadModel('todo')->getById($todoID);
+            $source = 'todo';
+            $title  = $todo->name;
+            $spec   = $todo->desc;
+            $pri    = $todo->pri;
         }
 
         /* Set Custom*/
