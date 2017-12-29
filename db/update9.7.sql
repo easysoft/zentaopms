@@ -1,0 +1,1 @@
+ALTER TABLE `zt_story` CHANGE `stage` `stage` ENUM('','wait','planned','projected','developing','developed','testing','tested','verified','released','closed')  CHARACTER SET utf8  COLLATE utf8_general_ci  NOT NULL  DEFAULT 'wait';

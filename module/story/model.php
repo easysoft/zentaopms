@@ -803,6 +803,7 @@ class storyModel extends model
             ->add('assignedTo',   'closed')
             ->add('assignedDate', $now)
             ->add('status', 'closed')
+            ->add('stage', 'closed')
             ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->closedReason != 'subdivided', 'childStories')
             ->setIF($this->post->closedReason == 'done', 'stage', 'released')
@@ -848,6 +849,7 @@ class storyModel extends model
             $story->assignedTo     = 'closed';
             $story->assignedDate   = $now;
             $story->status         = 'closed';
+            $story->stage          = 'closed';
 
             $story->closedReason   = $data->closedReasons[$storyID];
             $story->duplicateStory = $data->duplicateStoryIDList[$storyID] ? $data->duplicateStoryIDList[$storyID] : $oldStory->duplicateStory;
