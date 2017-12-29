@@ -114,6 +114,7 @@ $lang->story->stageList['testing']    = 'Testing';
 $lang->story->stageList['tested']     = 'Tested';
 $lang->story->stageList['verified']   = 'Accepted';
 $lang->story->stageList['released']   = 'Released';
+$lang->story->stageList['closed']     = 'Closed';
 
 $lang->story->reasonList['']           = '';
 $lang->story->reasonList['done']       = 'Done';

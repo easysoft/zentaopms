@@ -114,6 +114,7 @@ $lang->story->stageList['testing']    = '测试中';
 $lang->story->stageList['tested']     = '测试完毕';
 $lang->story->stageList['verified']   = '已验收';
 $lang->story->stageList['released']   = '已发布';
+$lang->story->stageList['closed']     = '已关闭';
 
 $lang->story->reasonList['']           = '';
 $lang->story->reasonList['done']       = '已完成';
