@@ -1979,11 +1979,11 @@ class upgradeModel extends model
      */
     public function changeTeamFields()
     {
-        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " DROP PRIMARY KEY");
-        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " CHANGE `project` `root` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0'");
-        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " ADD `type` ENUM('project', 'task') NOT NULL DEFAULT 'project' AFTER `root`");
-        $this->dao->exec("UPDATE " . TABLE_TEAM . " SET `root` = `task`, `type` = 'task' WHERE `task` > '0'");
-        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " DROP `task`");
+        $this->dao->exec("ALTER TABLE `" . TABLE_TEAM . "`` DROP PRIMARY KEY");
+        $this->dao->exec("ALTER TABLE `" . TABLE_TEAM . "` CHANGE `project` `root` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0'");
+        $this->dao->exec("ALTER TABLE `" . TABLE_TEAM . "` ADD `type` ENUM('project', 'task') NOT NULL DEFAULT 'project' AFTER `root`");
+        $this->dao->exec("UPDATE `" . TABLE_TEAM . "` SET `root` = `task`, `type` = 'task' WHERE `task` > '0'");
+        $this->dao->exec("ALTER TABLE `" . TABLE_TEAM . "` DROP `task`");
         return true;
     }
 }
