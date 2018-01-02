@@ -55,21 +55,23 @@ EOT;
       <div class='help-block text-center'>
         <?php
         $configRoot   = $this->app->getConfigRoot();
+        $dbConfigFile = $configRoot . 'db.php';
         $myConfigFile = $configRoot . 'my.php';
         if(is_writable($configRoot))
         {
-            if(@file_put_contents($myConfigFile, $configContent))
+            if(@file_put_contents($dbConfigFile, $configContent))
             {
-                printf($lang->install->saved2File, $myConfigFile);
+                printf($lang->install->saved2File, $dbConfigFile);
             }
             else
             {
-                printf($lang->install->save2File, $this->app->getConfigRoot() . 'my.php');
+                printf($lang->install->save2File, $dbConfigFile);
             }
+            @file_put_contents($myConfigFile, "<?php\n");
         }
         else
         {
-            printf($lang->install->save2File, $this->app->getConfigRoot() . 'my.php');
+            printf($lang->install->save2File, $dbConfigFile);
         }
         ?>
       </div>
