@@ -24,6 +24,11 @@ $lang->todo->import2Today = "Import to Today";
 $lang->todo->import       = "Import";
 $lang->todo->legendBasic  = "Basic Info";
 
+$lang->todo->reasonList['story'] = "Transfer Story";
+$lang->todo->reasonList['task']  = "Transfer Task";
+$lang->todo->reasonList['bug']   = "Transfer Bug";
+$lang->todo->reasonList['done']  = "Done";
+
 $lang->todo->id          = 'ID';
 $lang->todo->account     = 'Owner';
 $lang->todo->date        = 'Date';
@@ -83,5 +88,5 @@ $lang->todo->periods['before']     = 'Undone';
 $lang->todo->periods['all']        = 'All';
 
 $lang->todo->action = new stdclass();
-$lang->todo->action->finished = array('main' => '$date, is finished by <strong>$actor</strong>.');
+$lang->todo->action->finished = array('main' => '$date, is $extra by <strong>$actor</strong>.', 'extra' => 'reasonList');
 $lang->todo->action->marked   = array('main' => '$date, is marked by <strong>$actor</strong> as <strong>$extra</strong>.', 'extra' => 'statusList');

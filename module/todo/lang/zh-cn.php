@@ -24,6 +24,11 @@ $lang->todo->import2Today = "导入到今天";
 $lang->todo->import       = "导入";
 $lang->todo->legendBasic  = "基本信息";
 
+$lang->todo->reasonList['story'] = "转需求";
+$lang->todo->reasonList['task']  = "转任务";
+$lang->todo->reasonList['bug']   = "转Bug";
+$lang->todo->reasonList['done']  = "完成";
+
 $lang->todo->id          = '编号';
 $lang->todo->account     = '所有者';
 $lang->todo->date        = '日期';
@@ -83,5 +88,5 @@ $lang->todo->periods['before']     = '未完';
 $lang->todo->periods['all']        = '所有';
 
 $lang->todo->action = new stdclass();
-$lang->todo->action->finished = array('main' => '$date, 由 <strong>$actor</strong>完成');
+$lang->todo->action->finished = array('main' => '$date, 由 <strong>$actor</strong> $extra。$appendLink', 'extra' => 'reasonList');
 $lang->todo->action->marked   = array('main' => '$date, 由 <strong>$actor</strong> 标记为<strong>$extra</strong>。', 'extra' => 'statusList');

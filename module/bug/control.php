@@ -247,6 +247,14 @@ class bug extends control
             $actionID = $this->action->create('bug', $bugID, 'Opened');
             $this->bug->sendmail($bugID, $actionID);
 
+            $extras = str_replace(array(',', ' '), array('&', ''), $extras);
+            parse_str($extras, $output);
+            if(isset($output['todoID']))
+            {
+                $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($output['todoID'])->exec();
+                $this->action->create('todo', $output['todoID'], 'finished', '', "BUG:$bugID");
+            }
+
             $location = $this->createLink('bug', 'browse', "productID={$this->post->product}&branch=$branch&type=byModule&param={$this->post->module}");
             $response['locate'] = isset($_SESSION['bugList']) ? $this->session->bugList : $location;
             $this->send($response);
@@ -303,6 +311,13 @@ class bug extends control
             $assignedTo = $bug->assignedTo;
             $deadline   = $bug->deadline;
             $color      = $bug->color;
+        }
+        if(isset($todoID))
+        {
+            $todo = $this->loadModel('todo')->getById($todoID);
+            $title = $todo->name;
+            $steps = $todo->desc;
+            $pri   = $todo->pri;
         }
 
         /* If projectID is setted, get builds and stories of this project. */

@@ -39,10 +39,11 @@ class task extends control
      * @param  int    $storyID
      * @param  int    $moduleID
      * @param  int    $taskID
+     * @param  int    $todoID
      * @access public
      * @return void
      */
-    public function create($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0)
+    public function create($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0)
     {
         $task = new stdClass();
         $task->module      = $moduleID;
@@ -61,6 +62,14 @@ class task extends control
         {
             $task      = $this->task->getByID($taskID);
             $projectID = $task->project;
+        }
+
+        if($todoID > 0)
+        {
+            $todo = $this->loadModel('todo')->getById($todoID);
+            $task->name = $todo->name;
+            $task->pri  = $todo->pri;
+            $task->desc = $todo->desc;
         }
 
         $project   = $this->project->getById($projectID);
@@ -113,6 +122,12 @@ class task extends control
                 $response['locate'] = 'reload';
                 $response['target'] = 'parent';
                 $this->send($response);
+            }
+
+            if($todoID > 0)
+            {
+                $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
+                $this->action->create('todo', $todoID, 'finished', '', "TASK:$taskID");
             }
 
             /* Locate the browser. */

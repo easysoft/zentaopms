@@ -325,6 +325,22 @@ class actionModel extends model
                     }
                 }
             }
+            elseif($actionName == 'finished' and $objectType == 'todo')
+            {
+                $action->appendLink = '';
+                if(strpos($action->extra, ':')!== false)
+                {
+                    list($extra, $id) = explode(':', $action->extra);
+                    $action->extra    = strtolower($extra);
+                    if($id)
+                    {
+                        $table = $this->config->objectTables[$action->extra];
+                        $field = $this->config->action->objectNameFields[$action->extra];
+                        $name  = $this->dao->select($field)->from($table)->where('id')->eq($id)->fetch($field);
+                        if($name) $action->appendLink = html::a(helper::createLink($action->extra, 'view', "id=$id"), "#$id " . $name);
+                    }
+                }
+            }
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
 
             $actionName = strtolower($action->action);

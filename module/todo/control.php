@@ -279,6 +279,7 @@ class todo extends control
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList('todo', $todoID);
         $this->view->from       = $from;
+        $this->view->projects   = $this->loadModel('project')->getPairs();
 
         $this->display();
     }
