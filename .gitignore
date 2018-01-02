@@ -1,3 +1,4 @@
+config/db.php
 config/my.php
 www/data/
 www/install.php
