@@ -238,10 +238,13 @@ class reportModel extends model
     /**
      * Get workload.
      *
+     * @param int $dept
+     * @param int $assign
+     *
      * @access public
      * @return array
      */
-    public function getWorkload($dept = 0)
+    public function getWorkload($dept = 0, $assign = 1)
     {
         $depts = array();
         if($dept) $depts = $this->loadModel('dept')->getAllChildId($dept);
@@ -265,7 +268,7 @@ class reportModel extends model
                     $workload[$user]['task'][$task->projectName]['count']     = isset($workload[$user]['task'][$task->projectName]['count']) ? $workload[$user]['task'][$task->projectName]['count'] + 1 : 1;
                     $workload[$user]['task'][$task->projectName]['manhour']   = isset($workload[$user]['task'][$task->projectName]['manhour']) ? $workload[$user]['task'][$task->projectName]['manhour'] + $task->left : $task->left;
                     $workload[$user]['task'][$task->projectName]['projectID'] = $task->project;
-                    $workload[$user]['total']['count']   = isset($workload[$user]['total']['count']) ? $workload[$user]['total']['count'] + 1 : 1;
+                    $workload[$user]['total']['count'] = isset($workload[$user]['total']['count']) ? $workload[$user]['total']['count'] + 1 : 1;
                     if($task->parent == 0) $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
                 }
             }

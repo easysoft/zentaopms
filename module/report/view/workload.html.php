@@ -17,7 +17,7 @@
 <div class='main'>
   <form method='post'>
     <div class='row' style='margin-bottom:5px;'>
-      <div class='col-sm-3'>
+      <div class='col-sm-2'>
         <div class='input-group'>
           <span class='input-group-addon'><?php echo $lang->report->dept;?></span>
           <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='changeParams(this)'");?>
@@ -42,6 +42,9 @@
           <span class='input-group-addon'><?php echo $lang->report->workday;?></span>
           <?php echo html::input('workday', $workday, "class='form-control' autocomplete='off' style='width:50px'");?>
         </div>
+      </div>
+      <div class='col-sm-1'>
+        <?php echo html::select('assign', $lang->report->isAssign, $assign, "class='form-control' onchange='changeParams(this)'");?>
       </div>
       <div class='col-sm-1'>
         <div class='input-group'><?php echo html::submitButton($lang->report->query);?></div>
