@@ -1,7 +1,7 @@
 /**
  * Convert a date string like 2011-11-11 to date object in js.
- * 
- * @param  string $date 
+ *
+ * @param  string $date
  * @access public
  * @return date
  */
@@ -9,14 +9,14 @@ function convertStringToDate(dateString)
 {
     dateString = dateString.split('-');
     dateString = dateString[1] + '/' + dateString[2] + '/' + dateString[0];
-    
+
     return Date.parse(dateString);
 }
 
 /**
  * Compute the end date for productplan.
- * 
- * @param  int    $delta 
+ *
+ * @param  int    $delta
  * @access public
  * @return void
  */
@@ -33,7 +33,15 @@ function computeEndDate(delta)
     }
 
     endDate = beginDate.addDays(delta - 1).toString('yyyy-MM-dd');
-    $('#end').val(endDate);
+
+    if(delta == 9999)
+    {
+        $('#end').val('').attr("disabled","disabled");
+    }
+    else
+    {
+        $('#end').val(endDate).removeAttr('disabled');
+    }
 }
 
 $('#begin').on('change', function()

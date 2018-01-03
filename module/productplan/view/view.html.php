@@ -413,7 +413,7 @@
                     </tr>
                     <tr>
                       <th><?php echo $lang->productplan->end;?></th>
-                      <td><?php echo $plan->end;?></td>
+                      <td><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
                     </tr>
                     <tr>
                       <th><?php echo $lang->productplan->desc;?></th>
