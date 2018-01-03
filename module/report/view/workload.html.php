@@ -70,6 +70,7 @@
       <tr class="a-center">
         <td rowspan="<?php echo count($load['task']);?>"><?php echo $users[$account];?></td>
         <?php $id = 1;?>
+        <?php if(!empty($load['task'])):?>
         <?php foreach($load['task'] as $project => $info):?>
         <?php $class = $color ? 'rowcolor' : '';?>
         <?php if($id != 1) echo '<tr class="a-center">';?>
@@ -90,6 +91,14 @@
         <?php if($id != 1) echo '</tr>'; $id ++;?>
         <?php $color = !$color;?>
         <?php endforeach;?>
+        <?php else:?>
+        <td></td>
+        <td class="text-center">0</td>
+        <td class="text-center">0</td>
+        <td class="text-center">0</td>
+        <td class="text-center">0</td>
+        <td class="text-center">0</td>
+        <?php endif;?>
       </tr>
     <?php endforeach;?>
     </tbody>

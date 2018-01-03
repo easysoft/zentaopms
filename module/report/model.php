@@ -249,6 +249,40 @@ class reportModel extends model
         $depts = array();
         if($dept) $depts = $this->loadModel('dept')->getAllChildId($dept);
 
+        if($assign == 0)
+        {
+            $project = $this->dao->select('id')->from(TABLE_PROJECT)
+                ->where('deleted')->eq(0)
+                ->andWhere('status')->notin('cancel, closed, done, suspended')
+                ->fetchPairs('id');
+
+            $members = $this->dao->select('t1.account')->from(TABLE_TEAM)->alias('t1')
+                ->leftJoin(TABLE_USER)->alias('t2')->on('t2.account = t1.account')
+                ->where('t1.type')->eq('project')
+                ->beginIF($dept)->andWhere('t2.dept')->in($depts)->fi()
+                ->andWhere('t1.root')->in(array_keys($project))
+                ->fetchPairs('account');
+
+            $taskAccounts = $this->dao->select('assignedTo')->from(TABLE_TASK)
+                ->where('deleted')->eq(0)
+                ->andWhere('project')->in(array_keys($project))
+                ->andWhere('status')->notin('cancel, closed, done, pause')
+                ->fetchPairs('assignedTo');
+
+            if(!empty($taskAccounts) && !empty($members))
+            {
+                foreach($members as $member)
+                {
+                    if(!empty($member) && in_array($member, $taskAccounts))
+                    {
+                        unset($members[$member]);
+                    }
+                }
+            }
+
+            return $members;
+        }
+
         $tasks = $this->dao->select('t1.*, t2.name as projectName')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
