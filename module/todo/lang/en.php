@@ -23,6 +23,8 @@ $lang->todo->delete       = "Delete";
 $lang->todo->import2Today = "Import to Today";
 $lang->todo->import       = "Import";
 $lang->todo->legendBasic  = "Basic Info";
+$lang->todo->cycle        = "Cycle";
+$lang->todo->cycleConfig  = "Cycle Config";
 
 $lang->todo->reasonList['story'] = "Transfer Story";
 $lang->todo->reasonList['task']  = "Transfer Task";
@@ -44,6 +46,14 @@ $lang->todo->name        = 'Name';
 $lang->todo->status      = 'Status';
 $lang->todo->desc        = 'Description';
 $lang->todo->private     = 'Private';
+$lang->todo->cycleDay    = 'Day';
+$lang->todo->cycleWeek   = 'Week';
+$lang->todo->cycleMonth  = 'Month';
+$lang->todo->deadline    = 'Deadline';
+
+$lang->todo->every      = 'Every';
+$lang->todo->beforeDays = "%s<span class='input-group-addon'>early in advance to be done</span>";
+$lang->todo->dayNames   = array(1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 0 => 'Sunday');
 
 $lang->todo->confirmBug   = 'This To-Do is related to Bug #%s. Do you want to edit it?';
 $lang->todo->confirmTask  = 'This To-Do is related to Task #%s，Do you want to edit it?';
@@ -62,6 +72,7 @@ $lang->todo->priList[4] = '4';
 $lang->todo->priList[0] = '';
 
 $lang->todo->typeList['custom'] = 'Custom';
+$lang->todo->typeList['cycle']  = 'Cycle';
 $lang->todo->typeList['bug']    = 'Bug';
 $lang->todo->typeList['task']   = $lang->projectCommon . 'Task';
 $lang->todo->typeList['story']  = $lang->projectCommon . 'Story';
@@ -73,6 +84,7 @@ if($config->global->flow == 'onlyTask' or $config->global->flow == 'onlyStory') 
 $lang->todo->confirmDelete  = "Are you sure to delete this To-Do?";
 $lang->todo->thisIsPrivate  = 'This is a private To-Do:)';
 $lang->todo->lblDisableDate = 'Set later.';
+$lang->todo->lblBeforeDays  = "%s early in advance to be done";
 $lang->todo->noTodo         = 'No this type of to-dos.';
 
 $lang->todo->periods['today']      = 'Today';
@@ -86,6 +98,7 @@ $lang->todo->periods['thisYear']   = 'This Year';
 $lang->todo->periods['future']     = 'Pending';
 $lang->todo->periods['before']     = 'Undone';
 $lang->todo->periods['all']        = 'All';
+$lang->todo->periods['cycle']      = 'Cycle';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, is $extra by <strong>$actor</strong>.', 'extra' => 'reasonList');

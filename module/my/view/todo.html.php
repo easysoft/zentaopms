@@ -64,7 +64,7 @@
     <?php foreach($todos as $todo):?>
     <tr class='text-center'>
       <td class='cell-id'>
-        <?php if(common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture)):?>
+        <?php if($type != 'cycle' and (common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture))):?>
         <input type='checkbox' name='todoIDList[<?php echo $todo->id;?>]' value='<?php echo $todo->id;?>' />
         <?php endif;?>
         <?php echo $todo->id; ?>
@@ -95,6 +95,7 @@
     <tfoot>
       <tr>
         <td colspan='9' align='left'>
+          <?php if($type != 'cycle'):?>
           <div class='table-actions clearfix'>
           <?php 
           if(common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture))
@@ -125,6 +126,7 @@
           }
           ?>
           </div>
+          <?php endif;?>
           <?php $pager->show();?>
         </td>
       </tr>

@@ -57,6 +57,7 @@ class todo extends control
             die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
         }
 
+        unset($this->lang->todo->typeList['cycle']);
         $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->create;
         $this->view->position[] = $this->lang->todo->common;
         $this->view->position[] = $this->lang->todo->create;
@@ -96,6 +97,7 @@ class todo extends control
         }
 
         /* Set Custom*/
+        unset($this->lang->todo->typeList['cycle']);
         foreach(explode(',', $this->config->todo->list->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->todo->$field;
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->todo->custom->batchCreateFields;
@@ -453,5 +455,17 @@ class todo extends control
     {
         $this->view->actions = $this->loadModel('action')->getList('todo', $todoID);
         $this->display();
+    }
+
+    /**
+     * Create cycle.
+     * 
+     * @access public
+     * @return void
+     */
+    public function createCycle()
+    {
+        $todoList = $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->fetchAll('id');
+        $this->todo->createByCycle($todoList);
     }
 }

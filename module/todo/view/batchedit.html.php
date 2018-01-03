@@ -38,12 +38,12 @@ $columns = count($visibleFields) + 3;
       <tr>
         <th class='w-40px'>   <?php echo $lang->idAB;?></th> 
         <th class='w-100px'>  <?php echo $lang->todo->date;?></th>
-        <th class='w-120px<?php echo zget($visibleFields, 'type', ' hidden')?>'>  <?php echo $lang->todo->type;?></th>
-        <th class='w-80px<?php echo zget($visibleFields, 'pri', ' hidden')?>'>   <?php echo $lang->todo->pri;?></th>
+        <th class='w-120px'>  <?php echo $lang->todo->type;?></th>
+        <th class='w-100px<?php echo zget($visibleFields, 'pri', ' hidden')?>'>   <?php echo $lang->todo->pri;?></th>
         <th class='red'><?php echo $lang->todo->name;?></th>
         <th <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo $lang->todo->desc;?></th>
         <th class='w-180px<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden')?>'>   <?php echo $lang->todo->status;?></th>
+        <th class='w-120px<?php echo zget($visibleFields, 'status', ' hidden')?>'>   <?php echo $lang->todo->status;?></th>
       </tr>
     </thead>
     <tbody>
@@ -51,13 +51,13 @@ $columns = count($visibleFields) + 3;
     <tr class='text-center'>
       <td><?php echo $todo->id . html::hidden("todoIDList[$todo->id]", $todo->id);?></td>
       <td><?php echo html::input("dates[$todo->id]", $todo->date, "class='form-control form-date'");?></td>
-      <td <?php echo zget($visibleFields, 'type', "class='hidden'")?>><?php echo html::select("types[$todo->id]", $lang->todo->typeList, $todo->type, "onchange=loadList(this.value,$todo->id) class='form-control'");?></td>
-      <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, 'class=form-control');?></td>
+      <td><?php echo zget($lang->todo->typeList, $todo->type);?></td>
+      <td style='overflow:visible' <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, "class='form-control chosen'");?></td>
       <td style='overflow:visible'>
         <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><? echo html::input("names[$todo->id]", '', "class='text-left form-control hiddenwin' autocomplete='off'"); ?></div>
         <div class='<?php echo "nameBox" . $todo->id;?> text-left'>
         <?php 
-        if($todo->type == 'custom')
+        if($todo->type == 'custom' or $todo->type == 'cycle')
         {
           echo html::input("names[$todo->id]", $todo->name, "class='form-control' autocomplete='off'"); ;
         }
@@ -73,12 +73,12 @@ $columns = count($visibleFields) + 3;
         </div>
       </td>
       <td <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo html::textarea("descs[$todo->id]", $todo->descs, "rows='1' class='form-control'");?></td>
-      <td <?php echo zget($visibleFields, 'beginAndEnd', "class='hidden'")?>>
+      <td <?php echo zget($visibleFields, 'beginAndEnd', "class='hidden'")?> style='overflow:visible'>
         <div class='input-group'>
-          <?php echo html::select("begins[$todo->id]", $times, $todo->begin, 'class="form-control" style="width: 50%"') . html::select("ends[$todo->id]", $times, $todo->end, 'class="form-control" style="width: 50%"');?>
+          <?php echo html::select("begins[$todo->id]", $times, $todo->begin, 'class="form-control chosen" style="width: 50%"') . html::select("ends[$todo->id]", $times, $todo->end, 'class="form-control chosen" style="width: 50%"');?>
         </div>
       </td>
-      <td <?php echo zget($visibleFields, 'status', "class='hidden'")?>><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='form-control'");?></td>
+      <td <?php echo zget($visibleFields, 'status', "class='hidden'")?> style='overflow:visible'><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='form-control chosen'");?></td>
     </tr>  
     <?php endforeach;?>
     </tbody>

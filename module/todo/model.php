@@ -36,6 +36,29 @@ class todoModel extends model
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
             ->remove('bug, task, uid')
             ->get();
+        if(empty($todo->cycle)) unset($todo->config);
+        if(!empty($todo->cycle))
+        {
+            $todo->config['begin'] = $todo->date;
+            if($todo->config['type'] == 'day')
+            {
+                unset($todo->config['week']);
+                unset($todo->config['month']);
+            }
+            if($todo->config['type'] == 'week')
+            {
+                unset($todo->config['day']);
+                unset($todo->config['month']);
+                $todo->config['week'] = join(',', $todo->config['week']);
+            }
+            if($todo->config['type'] == 'month')
+            {
+                unset($todo->config['day']);
+                unset($todo->config['week']);
+                $todo->config['month'] = join(',', $todo->config['month']);
+            }
+            $todo->config = json_encode($todo->config);
+        }
 
         $todo = $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TODO)->data($todo)
@@ -51,6 +74,7 @@ class todoModel extends model
             $todoID = $this->dao->lastInsertID();
             $this->file->updateObjectID($this->post->uid, $todoID, 'todo');
             $this->loadModel('score')->create('todo', 'create', $todoID);
+            if(!empty($todo->cycle)) $this->createByCycle(array($todoID => $todo));
             return $todoID;
         }
     }
@@ -126,6 +150,7 @@ class todoModel extends model
         if(in_array($oldTodo->type, array('bug', 'task', 'story'))) $oldTodo->name = '';
         $todo = fixer::input('post')
             ->cleanInt('date, pri, begin, end, private')
+            ->add('account', $oldTodo->account)
             ->setIF(in_array($oldTodo->type, array('bug', 'task', 'story')), 'name', '')
             ->setIF($this->post->date  == false, 'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
@@ -134,6 +159,28 @@ class todoModel extends model
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid')
             ->get();
+        if(!empty($oldTodo->cycle))
+        {
+            $todo->config['begin'] = $todo->date;
+            if($todo->config['type'] == 'day')
+            {
+                unset($todo->config['week']);
+                unset($todo->config['month']);
+            }
+            if($todo->config['type'] == 'week')
+            {
+                unset($todo->config['day']);
+                unset($todo->config['month']);
+                $todo->config['week'] = join(',', $todo->config['week']);
+            }
+            if($todo->config['type'] == 'month')
+            {
+                unset($todo->config['day']);
+                unset($todo->config['week']);
+                $todo->config['month'] = join(',', $todo->config['month']);
+            }
+            $todo->config = json_encode($todo->config);
+        }
 
         $todo = $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TODO)->data($todo)
@@ -144,6 +191,7 @@ class todoModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $todoID, 'todo');
+            if(!empty($oldTodo->cycle)) $this->createByCycle(array($todoID => $todo));
             return common::createChanges($oldTodo, $todo);
         }
     }
@@ -310,6 +358,10 @@ class todoModel extends model
             $begin = '1970-01-01';
             $end   = date::yesterday();
         }
+        elseif($date == 'cycle')
+        {
+            $begin = $end = '';
+        }
         else
         {
             $begin = $end = $date;
@@ -319,10 +371,12 @@ class todoModel extends model
 
         $stmt = $this->dao->select('*')->from(TABLE_TODO)
             ->where('account')->eq($account)
-            ->andWhere('date')->ge($begin)
-            ->andWhere('date')->le($end)
+            ->beginIF($begin)->andWhere('date')->ge($begin)->fi()
+            ->beginIF($end)->andWhere('date')->le($end)->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->ne('done')->fi()
+            ->beginIF($date == 'cycle')->andWhere('cycle')->eq('1')->fi()
+            ->beginIF($date != 'cycle')->andWhere('cycle')->eq('0')->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
@@ -365,8 +419,80 @@ class todoModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'finish') return $todo->status != 'done';
+        if($action == 'finish')
+        {
+            if(!empty($todo->cycle)) return false;
+            return $todo->status != 'done';
+        }
 
         return true;
+    }
+
+    /**
+     * CreateByCycle 
+     * 
+     * @param  int    $todoList 
+     * @access public
+     * @return void
+     */
+    public function createByCycle($todoList)
+    {
+        $this->loadModel('action');
+        $lastCycleList = $this->dao->select('*')->from(TABLE_TODO)->where('type')->eq('cycle')->andWhere('idvalue')->in(array_keys($todoList))->orderBy('date_asc')->fetchAll('idvalue');
+        foreach($todoList as $todoID => $todo)
+        {
+            $todo->config = json_decode($todo->config);
+            if(!empty($todo->config->end) and time() > strtotime($todo->config->end)) continue;
+            $lastCycle = zget($lastCycleList, $todoID, '');
+            $time      = time();
+            for($i = 0; $i <= $todo->config->beforeDays; $i++)
+            {
+                $newDate = '';
+                $newTodo = new stdclass();
+                $newTodo->account = $todo->account;
+                $newTodo->begin   = $todo->begin;
+                $newTodo->end     = $todo->end;
+                $newTodo->type    = 'cycle';
+                $newTodo->idvalue = $todoID;
+                $newTodo->pri     = $todo->pri;
+                $newTodo->name    = $todo->name;
+                $newTodo->desc    = $todo->desc;
+                $newTodo->status  = 'wait';
+                $newTodo->private = $todo->private;
+
+                $date = date('Y-m-d', $time + $i * 24 * 3600);
+                if($todo->config->type == 'day')
+                {
+                    if(empty($lastCycle)) $newDate = date('Y-m-d', $time + ($todo->config->day - 1) * 24 * 3600);
+                    if(!empty($lastCycle->date)) $newDate = date('Y-m-d', strtotime($lastCycle->date) + $todo->config->day * 24 * 3600);
+                }
+                elseif($todo->config->type == 'week')
+                {
+                    $week = date('w', strtotime($date));
+                    if(strpos(",{$todo->config->week},", ",{$week},") !== false)
+                    {
+                        if(empty($lastCycle)) $newDate = $date;
+                        if($lastCycle->date < $date) $newDate = $date;
+                    }
+                }
+                elseif($todo->config->type == 'month')
+                {
+                    $day = date('j', strtotime($date));
+                    if(strpos(",{$todo->config->month},", ",{$day},") !== false)
+                    {
+                        if(empty($lastCycle)) $newDate = $date;
+                        if($lastCycle->date < $date) $newDate = $date;
+                    }
+                }
+
+                if($date == $newDate)
+                {
+                    $newTodo->date = $newDate;
+                    $this->dao->insert(TABLE_TODO)->data($newTodo)->exec();
+                    $this->action->create('todo', $this->dao->lastInsertID(), 'opened');
+                    $lastCycleList[$todo->id] = $newTodo;
+                }
+            }
+        }
     }
 }
