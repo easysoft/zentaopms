@@ -23,6 +23,8 @@ $lang->todo->delete       = "删除待办";
 $lang->todo->import2Today = "导入到今天";
 $lang->todo->import       = "导入";
 $lang->todo->legendBasic  = "基本信息";
+$lang->todo->cycle        = "周期";
+$lang->todo->cycleConfig  = "周期设置";
 
 $lang->todo->reasonList['story'] = "转需求";
 $lang->todo->reasonList['task']  = "转任务";
@@ -44,6 +46,14 @@ $lang->todo->name        = '名称';
 $lang->todo->status      = '状态';
 $lang->todo->desc        = '描述';
 $lang->todo->private     = '私人事务';
+$lang->todo->cycleDay    = '天';
+$lang->todo->cycleWeek   = '周';
+$lang->todo->cycleMonth  = '月';
+$lang->todo->deadline    = '过期时间';
+
+$lang->todo->every      = '间隔';
+$lang->todo->beforeDays = "<span class='input-group-addon'>提前</span>%s<span class='input-group-addon'>天生成待办</span>";
+$lang->todo->dayNames   = array(1 => '星期一', 2 => '星期二', 3 => '星期三', 4 => '星期四', 5 => '星期五', 6 => '星期六', 0 => '星期日');
 
 $lang->todo->confirmBug   = '该Todo关联的是Bug #%s，需要修改它吗？';
 $lang->todo->confirmTask  = '该Todo关联的是Task #%s，需要修改它吗？';
@@ -62,6 +72,7 @@ $lang->todo->priList[4] = '最低';
 $lang->todo->priList[0] = '';
 
 $lang->todo->typeList['custom'] = '自定义';
+$lang->todo->typeList['cycle']  = '周期';
 $lang->todo->typeList['bug']    = 'Bug';
 $lang->todo->typeList['task']   = $lang->projectCommon . '任务';
 $lang->todo->typeList['story']  = $lang->projectCommon . '需求';
@@ -73,6 +84,7 @@ if($config->global->flow == 'onlyTask' or $config->global->flow == 'onlyStory') 
 $lang->todo->confirmDelete  = "您确定要删除这条待办吗？";
 $lang->todo->thisIsPrivate  = '这是一条私人事务。:)';
 $lang->todo->lblDisableDate = '暂时不设定时间';
+$lang->todo->lblBeforeDays  = "提前%s天生成待办";
 $lang->todo->noTodo         = '该类型没有待办事务';
 
 $lang->todo->periods['today']      = '今日';
@@ -86,6 +98,7 @@ $lang->todo->periods['thisYear']   = '本年';
 $lang->todo->periods['future']     = '待定';
 $lang->todo->periods['before']     = '未完';
 $lang->todo->periods['all']        = '所有';
+$lang->todo->periods['cycle']      = '周期';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, 由 <strong>$actor</strong> $extra。$appendLink', 'extra' => 'reasonList');

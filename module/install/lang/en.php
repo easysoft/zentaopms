@@ -158,6 +158,7 @@ $lang->install->cronList['moduleName=backup&methodName=backup']       = 'Backup'
 $lang->install->cronList['moduleName=mail&methodName=asyncSend']      = 'Asynchronous sending';
 $lang->install->cronList['moduleName=webhook&methodName=asyncSend']   = 'Asynchronous seding Webhook';
 $lang->install->cronList['moduleName=admin&methodName=deleteLog']     = 'Delete overdue log';
+$lang->install->cronList['moduleName=todo&methodName=createCycle']    = 'Create cycle todos.';
 
 $lang->install->success  = "Installed!";
 $lang->install->login    = 'Login ZenTao';

@@ -657,6 +657,10 @@ class userModel extends model
             }
 
             $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($ip)->set('last')->eq($last)->where('account')->eq($account)->exec();
+
+            /* Create cycle todo in login. */
+            $todoList = $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('account')->eq($user->account)->fetchAll('id');
+            $this->loadModel('todo')->createByCycle($todoList);
         }
         return $user;
     }

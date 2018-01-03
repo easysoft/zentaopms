@@ -39,7 +39,7 @@
     <div class='col-side'>
       <div class='main main-side'>
         <fieldset>
-        <legend><?php echo $lang->todo->legendBasic;?></legend>
+          <legend><?php echo $lang->todo->legendBasic;?></legend>
           <table class='table table-data table-condensed table-borderless'> 
             <tr>
               <th><?php echo $lang->todo->pri;?></th>
@@ -66,6 +66,40 @@
               <td><?php if(isset($times[$todo->begin])) echo $times[$todo->begin]; if(isset($times[$todo->end])) echo ' ~ ' . $times[$todo->end];?></td>
             </tr>
           </table>
+        </fieldset>
+        <?php if($todo->cycle):?>
+        <?php $todo->config = json_decode($todo->config);?>
+        <fieldset>
+          <legend><?php echo $lang->todo->cycle;?></legend>
+          <table class='table table-data table-condensed table-borderless'> 
+            <tr>
+              <th class='w-80px'><?php echo $lang->todo->beginAndEnd?></th>
+              <td><?php echo $todo->config->begin . " ~ " . $todo->config->end;?></td>
+            </tr>
+            <tr>
+              <th class='w-80px text-top'><?php echo $lang->todo->cycleConfig?></th>
+              <td>
+                <?php
+                if($todo->config->type == 'day')
+                {
+                    echo $lang->todo->every . $todo->config->day . $lang->day;
+                }
+                elseif($todo->config->type == 'week')
+                {
+                    foreach(explode(',', $todo->config->week) as $week) echo $lang->todo->dayNames[$week] . ' ';
+                }
+                elseif($todo->config->type == 'month')
+                {
+                    foreach(explode(',', $todo->config->month) as $month) echo $month . ' ';
+                }
+                echo '<br />';
+                if($todo->config->beforeDays) printf($lang->todo->lblBeforeDays, $todo->config->beforeDays);
+                ?>
+              </td>
+            </tr>
+          </table>
+        </fieldset>
+        <?php endif;?>
       </div>
     </div>
   </div>
@@ -125,7 +159,7 @@
       <div class="modal-body">
         <div class='input-group'>
           <?php echo html::select('project', $projects, '', "class='form-control chosen'");?>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->toTask, "id='toTaskButton'");?></span>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['task'], "id='toTaskButton'");?></span>
         </div>
       </div>
     </div>
