@@ -75,6 +75,11 @@ $lang->report->unplanned     = 'Unplanned';
 $lang->report->workday       = 'Hours/Day';
 $lang->report->diffDays      = 'Man-Day';
 
+$lang->report->typeList['']     = 'Default';
+$lang->report->typeList['pie']  = 'Pie';
+$lang->report->typeList['bar']  = 'Bar';
+$lang->report->typeList['line'] = 'Line';
+
 $lang->report->conditions    = 'Filter by:';
 $lang->report->closedProduct = 'Closed ' . $lang->productCommon;
 $lang->report->overduePlan   = 'Overdue Plan';

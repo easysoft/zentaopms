@@ -12,3 +12,9 @@ $(function()
     fixedTableHead('.table-wrapper');
     $(window).resize(resizeChartTable);
 });
+
+function changeChartType(type)
+{
+    $('form').attr('action', createLink('task', 'report', 'projectID=' + projectID + '&browseType=' + browseType + '&chartType=' + type));
+    $('form').find('#submit').click();
+}

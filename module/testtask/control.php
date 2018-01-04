@@ -317,7 +317,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function report($productID, $taskID, $browseType, $branchID, $moduleID)
+    public function report($productID, $taskID, $browseType, $branchID, $moduleID = 0, $chartType = '')
     {
         $this->loadModel('report');
         $this->view->charts = array();
@@ -332,6 +332,7 @@ class testtask extends control
                 $chartFunc   = 'getDataOf' . $chart;
                 $chartData   = isset($bugInfo[$chart]) ? $bugInfo[$chart] : $this->testtask->$chartFunc($taskID);
                 $chartOption = $this->testtask->mergeChartOption($chart);
+                if(!empty($chartType)) $chartOption->type = $chartType;
 
                 $this->view->charts[$chart] = $chartOption;
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);
@@ -346,6 +347,8 @@ class testtask extends control
         $this->view->taskID        = $taskID;
         $this->view->browseType    = $browseType;
         $this->view->moduleID      = $moduleID;
+        $this->view->branchID      = $branchID;
+        $this->view->chartType     = $chartType;
         $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
 
         $this->display();
