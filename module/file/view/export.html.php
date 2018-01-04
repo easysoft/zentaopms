@@ -167,7 +167,6 @@ $(document).ready(function()
       if(!$hasDefaultField)$selectedFields[] = $field;
   }
   ?>
-  <div class='mb-150px' style='margin-bottom:245px'></div>
   <div class='panel' id='customFields' style='margin-bottom:150px;display:none'>
     <div class='panel-heading'><strong><?php echo $lang->file->exportFields?></strong></div>
     <div class='panel-body'>
