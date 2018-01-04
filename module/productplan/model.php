@@ -15,8 +15,8 @@ class productplanModel extends model
 {
     /**
      * Get plan by id.
-     * 
-     * @param  int    $planID 
+     *
+     * @param  int    $planID
      * @param  bool   $setImgSize
      * @access public
      * @return object
@@ -30,9 +30,9 @@ class productplanModel extends model
     }
 
     /**
-     * Get plans by idList 
-     * 
-     * @param  int    $planIDList 
+     * Get plans by idList
+     *
+     * @param  int    $planIDList
      * @access public
      * @return array
      */
@@ -43,8 +43,8 @@ class productplanModel extends model
 
     /**
      * Get last plan.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -60,9 +60,9 @@ class productplanModel extends model
     }
 
     /**
-     * Get list 
-     * 
-     * @param  int    $product 
+     * Get list
+     *
+     * @param  int    $product
      * @param  int    $branch
      * @param  string $browseType
      * @param  object $pager
@@ -85,9 +85,9 @@ class productplanModel extends model
 
     /**
      * Get plan pairs.
-     * 
-     * @param  array|int    $product 
-     * @param  string       $expired 
+     *
+     * @param  array|int    $product
+     * @param  string       $expired
      * @access public
      * @return array
      */
@@ -117,9 +117,9 @@ class productplanModel extends model
     }
 
     /**
-     * Get plans for products 
-     * 
-     * @param  int    $products 
+     * Get plans for products
+     *
+     * @param  int    $products
      * @access public
      * @return void
      */
@@ -133,13 +133,16 @@ class productplanModel extends model
 
     /**
      * Create a plan.
-     * 
+     *
      * @access public
      * @return int
      */
     public function create()
     {
-        $plan = fixer::input('post')->stripTags($this->config->productplan->editor->create['id'], $this->config->allowedTags)->remove('delta,uid')->get();
+        $plan = fixer::input('post')->stripTags($this->config->productplan->editor->create['id'], $this->config->allowedTags)
+            ->setIF($this->post->delta == 9999 || empty($this->post->end), 'end', '2030-01-01')
+            ->remove('delta,uid')
+            ->get();
         $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCTPLAN)
             ->data($plan)
@@ -158,15 +161,18 @@ class productplanModel extends model
 
     /**
      * Update a plan
-     * 
-     * @param  int    $planID 
+     *
+     * @param  int    $planID
      * @access public
      * @return array
      */
     public function update($planID)
     {
         $oldPlan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
-        $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)->remove('delta,uid')->get();
+        $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)
+            ->setIF($this->post->delta == 9999 || empty($this->post->end), 'end', '2030-01-01')
+            ->remove('delta,uid')
+            ->get();
         $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCTPLAN)
             ->data($plan)
@@ -184,8 +190,8 @@ class productplanModel extends model
 
     /**
      * Batch update plan.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return array
      */
@@ -233,8 +239,8 @@ class productplanModel extends model
 
     /**
      * Link stories.
-     * 
-     * @param  int    $planID 
+     *
+     * @param  int    $planID
      * @access public
      * @return void
      */
@@ -267,9 +273,9 @@ class productplanModel extends model
     }
 
     /**
-     * Unlink story 
-     * 
-     * @param  int    $storyID 
+     * Unlink story
+     *
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -284,8 +290,8 @@ class productplanModel extends model
 
     /**
      * Link bugs.
-     * 
-     * @param  int    $planID 
+     *
+     * @param  int    $planID
      * @access public
      * @return void
      */
