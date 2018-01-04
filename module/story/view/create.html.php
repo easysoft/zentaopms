@@ -71,9 +71,9 @@
         <td>
           <div class='input-group'>
             <span class='input-group-addon w-60px'><?php echo $lang->story->source?></span>
-            <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control'");?>
+            <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
             <span class='input-group-addon fix-border'><?php echo $lang->story->sourceNote?></span>
-            <?php echo html::input('sourceNote', $sourceNote, "class='form-control' autocomplete='off'");?>
+            <?php echo html::input('sourceNote', $sourceNote, "class='form-control' autocomplete='off' style='width:200px;'");?>
           </div>
         </td>
         <?php endif;?>
@@ -120,8 +120,8 @@
                     }
                 }
                 ?>
-                <?php if($hasCustomPri):?>
-                <?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='form-control minw-80px'");?> 
+                <?php if(!$hasCustomPri):?>
+                <?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='form-control minw-80px chosen'");?> 
                 <?php else: ?>
                 <div class='input-group-btn dropdown-pris' data-set='0,1,2,3,4'>
                   <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>

@@ -123,7 +123,7 @@ $(function()
     {
         var $group = $('#bugTypeInputGroup');
         var width = $group.width(), addonWidth = 0;
-        var $controls = $group.children('.form-control');
+        var $controls = $group.find('.chosen-single');
         $group.children('.input-group-addon').each(function()
         {
             addonWidth += $(this).outerWidth();

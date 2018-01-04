@@ -1333,7 +1333,7 @@ class testcase extends control
                 $columnKey[] = $fields[$title];
             }
 
-            if(count($columnKey) != count($header) or $this->post->encode != 'utf-8')
+            if(count($columnKey) == 0 or $this->post->encode != 'utf-8')
             {
                 $fc     = file_get_contents($fileName);
                 $encode = $this->post->encode != "utf-8" ? $this->post->encode : 'gbk';
@@ -1354,7 +1354,7 @@ class testcase extends control
                     if(!isset($fields[$title])) continue;
                     $columnKey[] = $fields[$title];
                 }
-                if(count($columnKey) != count($header)) die(js::alert($this->lang->testcase->errorEncode));
+                if(count($columnKey) == 0) die(js::alert($this->lang->testcase->errorEncode));
             }
 
             $this->session->set('importFile', $fileName);
