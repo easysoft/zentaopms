@@ -1330,7 +1330,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function report($productID, $browseType, $branchID, $moduleID)
+    public function report($productID, $browseType, $branchID, $moduleID, $chartType = '')
     {
         $this->loadModel('report');
         $this->view->charts   = array();
@@ -1342,8 +1342,8 @@ class story extends control
                 $chartFunc   = 'getDataOf' . $chart;
                 $chartData   = $this->story->$chartFunc();
                 $chartOption = $this->lang->story->report->$chart;
+                if(!empty($chartType)) $chartOption->type = $chartType;
                 $this->story->mergeChartOption($chart);
-
 
                 $this->view->charts[$chart] = $chartOption;
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);
@@ -1356,8 +1356,10 @@ class story extends control
         $this->view->position[]    = $this->products[$productID];
         $this->view->position[]    = $this->lang->story->reportChart;
         $this->view->productID     = $productID;
+        $this->view->branchID      = $branchID;
         $this->view->browseType    = $browseType;
         $this->view->moduleID      = $moduleID;
+        $this->view->chartType     = $chartType;
         $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
         $this->display();
     }

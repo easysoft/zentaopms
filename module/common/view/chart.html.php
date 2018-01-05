@@ -82,6 +82,21 @@ if($config->debug)
 
                 chart = $canvas.barChart(data, options);
             }
+            else if(chartType === 'line')
+            {
+                var labels = [], dataset = {label: $table.find('thead .chart-label').text(), color: nextAccentColor().toCssStr(), data: []};
+
+                var $rows = $table.find('tbody > tr').each(function(idx)
+                {
+                    var $row = $(this);
+                    labels.push($row.find('.chart-label').text());
+                    dataset.data.push(parseInt($row.find('.chart-value').text()));
+                });
+                var data = {labels: labels, datasets: [dataset]};
+                if(labels.length) options.barValueSpacing = 5;
+
+                chart = $canvas.lineChart(data, options);
+            }
 
             if(chart !== null) $table.data('zui.chart', chart);
         });

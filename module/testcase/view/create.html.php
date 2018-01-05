@@ -109,7 +109,7 @@
                 }
                 ?>
                 <?php if($hasCustomPri):?>
-                <?php echo html::select('pri', (array)$lang->testcase->priList, $pri, "class='form-control minw-80px'");?> 
+                <?php echo html::select('pri', (array)$lang->testcase->priList, $pri, "class='form-control minw-80px chosen'");?> 
                 <?php else: ?>
                 <div class='input-group-btn dropdown-pris'>
                   <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>

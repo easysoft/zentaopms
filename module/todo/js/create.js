@@ -5,6 +5,7 @@ $(function()
     {
         var selectTime = $(this).val() != today ? start : nowTime;
         $('#begin').val(selectTime);
+        $('#begin').trigger("chosen:updated");
         selectNext();
     })
 

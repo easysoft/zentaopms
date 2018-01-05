@@ -38,7 +38,7 @@ $columns = count($visibleFields) + 3;
       <tr>
         <th class='w-40px'>   <?php echo $lang->idAB;?></th> 
         <th class='w-100px'>  <?php echo $lang->todo->date;?></th>
-        <th class='w-120px'>  <?php echo $lang->todo->type;?></th>
+        <th class='w-80px'>  <?php echo $lang->todo->type;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'pri', ' hidden')?>'>   <?php echo $lang->todo->pri;?></th>
         <th class='red'><?php echo $lang->todo->name;?></th>
         <th <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo $lang->todo->desc;?></th>
@@ -48,10 +48,10 @@ $columns = count($visibleFields) + 3;
     </thead>
     <tbody>
     <?php foreach($editedTodos as $todo):?>
-    <tr class='text-center'>
+    <tr class='text-left'>
       <td><?php echo $todo->id . html::hidden("todoIDList[$todo->id]", $todo->id);?></td>
       <td><?php echo html::input("dates[$todo->id]", $todo->date, "class='form-control form-date'");?></td>
-      <td><?php echo zget($lang->todo->typeList, $todo->type);?></td>
+      <td class='text-center'><?php echo zget($lang->todo->typeList, $todo->type);?></td>
       <td style='overflow:visible' <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, "class='form-control chosen'");?></td>
       <td style='overflow:visible'>
         <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><? echo html::input("names[$todo->id]", '', "class='text-left form-control hiddenwin' autocomplete='off'"); ?></div>

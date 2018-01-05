@@ -179,7 +179,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function report($productID, $browseType, $branchID, $moduleID)
+    public function report($productID, $browseType, $branchID, $moduleID, $chartType = '')
     {
         $this->loadModel('report');
         $this->view->charts   = array();
@@ -191,6 +191,7 @@ class bug extends control
                 $chartFunc   = 'getDataOf' . $chart;
                 $chartData   = $this->bug->$chartFunc();
                 $chartOption = $this->lang->bug->report->$chart;
+                if(!empty($chartType)) $chartOption->type = $chartType;
                 $this->bug->mergeChartOption($chart);
 
                 $this->view->charts[$chart] = $chartOption;
@@ -204,7 +205,9 @@ class bug extends control
         $this->view->position[]    = $this->lang->bug->reportChart;
         $this->view->productID     = $productID;
         $this->view->browseType    = $browseType;
+        $this->view->branchID      = $branchID;
         $this->view->moduleID      = $moduleID;
+        $this->view->chartType     = $chartType;
         $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
         $this->display();
     }

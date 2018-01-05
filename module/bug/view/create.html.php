@@ -74,15 +74,15 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
             unset($lang->bug->typeList['designchange']);
             unset($lang->bug->typeList['newfeature']);
             unset($lang->bug->typeList['trackthings']);
-            echo html::select('type', $lang->bug->typeList, $type, "class='form-control'");
+            echo html::select('type', $lang->bug->typeList, $type, "class='form-control chosen'");
             ?>
             <?php if($showOS):?>
             <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
-            <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control'");?>
+            <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control chosen'");?>
             <?php endif;?>
             <?php if($showBrowser):?>
             <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
-            <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control'");?>
+            <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control chosen'");?>
             <?php endif;?>
           </div>
         </td>
@@ -129,15 +129,15 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
             unset($lang->bug->typeList['designchange']);
             unset($lang->bug->typeList['newfeature']);
             unset($lang->bug->typeList['trackthings']);
-            echo html::select('type', $lang->bug->typeList, $type, "class='form-control'");
+            echo html::select('type', $lang->bug->typeList, $type, "class='form-control chosen'");
             ?>
             <?php if($showOS):?>
             <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
-            <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control'");?>
+            <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control chosen'");?>
             <?php endif;?>
             <?php if($showBrowser):?>
             <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
-            <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control'");?>
+            <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control chosen'");?>
             <?php endif;?>
           </div>
         </td>
@@ -173,7 +173,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
                 }
                 ?>
                 <?php if($hasCustomSeverity):?>
-                <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control minw-80px'");?> 
+                <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control minw-80px chosen'");?> 
                 <?php else: ?>
                 <div class='input-group-btn dropdown-pris' data-prefix='severity'>
                   <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>
@@ -198,7 +198,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
                 }
                 ?>
                 <?php if($hasCustomPri):?>
-                <?php echo html::select('pri', (array)$lang->bug->priList, $pri, "class='form-control minw-80px'");?> 
+                <?php echo html::select('pri', (array)$lang->bug->priList, $pri, "class='form-control minw-80px chosen'");?> 
                 <?php else: ?>
                 <div class='input-group-btn dropdown-pris'>
                   <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>

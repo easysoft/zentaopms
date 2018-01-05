@@ -93,7 +93,7 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
     <?php $source   = $i - $nextStart == 0 ? '' : 'ditto';?>
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
-      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModuleAndPlan(this.value, $productID, $i)'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>' style='overflow:visible'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control chosen' onchange='setModuleAndPlan(this.value, $productID, $i)'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, $planID, "class='form-control chosen'");?></td>
       <td style='overflow:visible'>
@@ -121,7 +121,7 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
   <tbody>
     <tr class='text-center'>
       <td>%s</td>
-      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[%s]", $branch, $branch, "class='form-control' onchange='setModuleAndPlan(this.value, $productID, \"%s\")'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>' style='overflow:visible'><?php echo html::select("branch[%s]", $branches, $branch, "class='form-control' onchange='setModuleAndPlan(this.value, $productID, \"%s\")'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plan[%s]", $plans, $planID, "class='form-control'");?></td>
       <td style='overflow:visible'>

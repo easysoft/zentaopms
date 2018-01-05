@@ -1160,9 +1160,8 @@ class task extends control
      * @access public
      * @return void
      */
-    public function report($projectID, $browseType = 'all')
+    public function report($projectID, $browseType = 'all', $chartType = '')
     {
-
         $this->loadModel('report');
         $this->view->charts   = array();
 
@@ -1173,6 +1172,7 @@ class task extends control
                 $chartFunc   = 'getDataOf' . $chart;
                 $chartData   = $this->task->$chartFunc();
                 $chartOption = $this->lang->task->report->$chart;
+                if(!empty($chartType)) $chartOption->type = $chartType;
                 $this->task->mergeChartOption($chart);
 
                 $this->view->charts[$chart] = $chartOption;
@@ -1187,6 +1187,7 @@ class task extends control
         $this->view->position[]    = $this->lang->task->report->common;
         $this->view->projectID     = $projectID;
         $this->view->browseType    = $browseType;
+        $this->view->chartType     = $chartType;
         $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
 
         $this->display();

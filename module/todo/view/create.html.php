@@ -82,7 +82,7 @@
       </tr>  
       <tr>
         <th><?php echo $lang->todo->pri;?></th>
-        <td><?php echo html::select('pri', $lang->todo->priList, '', "class='form-control'");?></td>
+        <td><?php echo html::select('pri', $lang->todo->priList, '', "class='form-control chosen'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->todo->name;?></th>
@@ -97,13 +97,13 @@
       </tr>  
       <tr>
         <th><?php echo $lang->todo->status;?></th>
-        <td><?php echo html::select('status', $lang->todo->statusList, '', "class='form-control'");?></td>
+        <td><?php echo html::select('status', $lang->todo->statusList, '', "class='form-control chosen'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->todo->beginAndEnd;?></th>
         <td>
           <div class='input-group'>
-            <?php echo html::select('begin', $times, date('Y-m-d') != $date ? key($times) : $time, 'onchange=selectNext(); class="form-control" style="width: 50%;"') . html::select('end', $times, '', 'class="form-control" style="width: 50%; margin-left:-1px"');?>
+            <?php echo html::select('begin', $times, date('Y-m-d') != $date ? key($times) : $time, 'onchange=selectNext(); class="form-control chosen" style="width: 50%;"') . html::select('end', $times, '', 'class="form-control chosen" style="width: 50%; margin-left:-1px"');?>
           </div>
         </td>
         <td><input type='checkbox' id='switchDate' onclick='switchDateFeature(this);'> <?php echo $lang->todo->lblDisableDate;?></td>

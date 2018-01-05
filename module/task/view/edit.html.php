@@ -96,21 +96,24 @@
           </tr>
           <tr>
             <th><?php echo $lang->task->type;?></th>
-            <td><?php echo html::select('type', $lang->task->typeList, $task->type, 'class=form-control');?></td>
+            <td><?php echo html::select('type', $lang->task->typeList, $task->type, "class='form-control chosen'");?></td>
           </tr>
           <?php if(empty($task->children)):?>
           <tr>
             <th><?php echo $lang->task->status;?></th>
-            <td><?php echo html::select('status', (array)$lang->task->statusList, $task->status, 'class=form-control');?></td>
+            <td><?php echo html::select('status', (array)$lang->task->statusList, $task->status, "class='form-control chosen'");?></td>
           </tr>
           <?php endif;?>
           <tr>
             <th><?php echo $lang->task->pri;?></th>
-            <td><?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=form-control');?> </td>
+            <td><?php echo html::select('pri', $lang->task->priList, $task->pri, "class='form-control chosen'");?> </td>
           </tr>
           <tr>
             <th><?php echo $lang->task->mailto;?></th>
-            <td><?php echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ' , '', $task->mailto), 'class="form-control" multiple');?></td>
+            <td>
+            <?php echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ' , '', $task->mailto), 'class="form-control" multiple');?>
+            <?php echo $this->fetch('my', 'buildContactLists');?>
+            </td>
           </tr>
         </table>
       </fieldset>
