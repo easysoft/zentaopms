@@ -87,7 +87,7 @@
       </tr>  
       <tr>
         <th><?php echo $lang->todo->pri;?></th>
-        <td><?php echo html::select('pri', $lang->todo->priList, $todo->pri, "class='form-control'");?></td>
+        <td><?php echo html::select('pri', $lang->todo->priList, $todo->pri, "class='form-control chosen'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->todo->name;?></th>
@@ -105,13 +105,13 @@
       </tr>
       <tr>
         <th><?php echo $lang->todo->status;?></th>
-        <td><?php echo html::select('status', $lang->todo->statusList, $todo->status, "class='form-control'");?></td>
+        <td><?php echo html::select('status', $lang->todo->statusList, $todo->status, "class='form-control chosen'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->todo->beginAndEnd;?></th>
         <td>
           <div class='input-group'>
-            <?php echo html::select('begin', $times, $todo->begin, 'onchange=selectNext(); class="form-control" style="width: 50%"') . html::select('end', $times, $todo->end, 'class="form-control" style="width: 50%"');?>
+            <?php echo html::select('begin', $times, $todo->begin, 'onchange=selectNext(); class="form-control chosen" style="width: 50%"') . html::select('end', $times, $todo->end, 'class="form-control chosen" style="width: 50%"');?>
           </div>
         </td>
         <td>

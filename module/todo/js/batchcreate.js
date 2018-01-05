@@ -17,12 +17,12 @@ function switchDateList(number)
 {
     if($('#switchDate' + number).attr('checked') == 'checked')
     {
-        $('#begins' + number).attr('disabled', 'disabled');
-        $('#ends' + number).attr('disabled', 'disabled');
+        $('#begins' + number).attr('disabled', 'disabled').trigger('chosen:updated');
+        $('#ends' + number).attr('disabled', 'disabled').trigger('chosen:updated');
     }
     else
     {
-        $('#begins' + number).removeAttr('disabled');
-        $('#ends' + number).removeAttr('disabled');
+        $('#begins' + number).removeAttr('disabled').trigger('chosen:updated');
+        $('#ends' + number).removeAttr('disabled').trigger('chosen:updated');
     }
 }
