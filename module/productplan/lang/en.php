@@ -47,6 +47,9 @@ $lang->productplan->begin   = 'Begin';
 $lang->productplan->end     = 'End';
 $lang->productplan->last    = 'Last plan';
 $lang->productplan->future  = 'Future';
+$lang->productplan->stories = 'Stories';
+$lang->productplan->bugs    = 'Bugs';
+$lang->productplan->hour    = 'Hour';
 
 $lang->productplan->endList[7]    = '1 Week';
 $lang->productplan->endList[14]   = '2 Weeks';

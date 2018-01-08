@@ -47,6 +47,9 @@ $lang->productplan->begin   = '开始日期';
 $lang->productplan->end     = '结束日期';
 $lang->productplan->last    = '上次计划';
 $lang->productplan->future  = '待定';
+$lang->productplan->stories = '需求数';
+$lang->productplan->bugs    = 'Bug数';
+$lang->productplan->hour    = '工时';
 
 $lang->productplan->endList[7]    = '一星期';
 $lang->productplan->endList[14]   = '两星期';

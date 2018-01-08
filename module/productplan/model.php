@@ -73,14 +73,29 @@ class productplanModel extends model
     public function getList($product = 0, $branch = 0, $browseType = 'all', $pager = null, $orderBy = 'begin_desc')
     {
         $date = date('Y-m-d');
-        return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
+        $productPlans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($branch))->andWhere('branch')->eq($branch)->fi()
             ->beginIF($browseType == 'unexpired')->andWhere('end')->gt($date)->fi()
             ->beginIF($browseType == 'overdue')->andWhere('end')->le($date)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
+
+        if(!empty($productPlans))
+        {
+            foreach($productPlans as $productPlan)
+            {
+                $stories = $this->dao->select('id,estimate')->from(TABLE_STORY)
+                    ->where("CONCAT(',', plan, ',')")->like("%,{$productPlan->id},%")
+                    ->andWhere('deleted')->eq(0)
+                    ->fetchPairs('id', 'estimate');
+                $productPlan->stories = count($stories);
+                $productPlan->bugs    = $this->dao->select()->from(TABLE_BUG)->where("plan")->eq($productPlan->id)->andWhere('deleted')->eq(0)->count();
+                $productPlan->hour    = array_sum($stories);
+            }
+        }
+        return $productPlans;
     }
 
     /**
