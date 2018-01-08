@@ -95,7 +95,6 @@ define('TABLE_FILE',          '`' . $config->db->prefix . 'file`');
 define('TABLE_HISTORY',       '`' . $config->db->prefix . 'history`');
 define('TABLE_EXTENSION',     '`' . $config->db->prefix . 'extension`');
 define('TABLE_CRON',          '`' . $config->db->prefix . 'cron`');
-define('TABLE_MAILQUEUE',     '`' . $config->db->prefix . 'mailqueue`');
 define('TABLE_BLOCK',         '`' . $config->db->prefix . 'block`');
 define('TABLE_DOCCONTENT',    '`' . $config->db->prefix . 'doccontent`');
 define('TABLE_TESTSUITE',     '`' . $config->db->prefix . 'testsuite`');
@@ -104,9 +103,9 @@ define('TABLE_TESTREPORT',    '`' . $config->db->prefix . 'testreport`');
 
 define('TABLE_ENTRY',         '`' . $config->db->prefix . 'entry`');
 define('TABLE_WEBHOOK',       '`' . $config->db->prefix . 'webhook`');
-define('TABLE_WEBHOOKDATAS',  '`' . $config->db->prefix . 'webhookdatas`');
 define('TABLE_LOG',           '`' . $config->db->prefix . 'log`');
 define('TABLE_SCORE',         '`' . $config->db->prefix . 'score`');
+define('TABLE_NOTIFY',        '`' . $config->db->prefix . 'notify`');
 if(!defined('TABLE_LANG')) define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
 
 $config->objectTables['product']     = TABLE_PRODUCT;

@@ -1986,4 +1986,48 @@ class upgradeModel extends model
         $this->dao->exec("ALTER TABLE `" . TABLE_TEAM . "` DROP `task`");
         return true;
     }
+
+    /**
+     * Move data to notify.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function moveData2Notify()
+    {
+        $this->dao->exec('TRUNCATE TABLE ' . TABLE_NOTIFY);
+        $mailQueueTable   = '`' . $this->config->db->prefix . 'mailqueue`';
+        $stmt = $this->dao->select('*')->from($mailQueueTable)->query();
+        while($mailQueue = $stmt->fetch())
+        {
+            $notify = new stdclass();
+            $notify->objectType  = 'mail';
+            $notify->toList      = $mailQueue->toList;
+            $notify->ccList      = $mailQueue->ccList;
+            $notify->subject     = $mailQueue->subject;
+            $notify->data        = $mailQueue->body;
+            $notify->createdBy   = $mailQueue->addedBy;
+            $notify->createdDate = $mailQueue->addedDate;
+            $notify->sendTime    = $mailQueue->sendTime;
+            $notify->status      = $mailQueue->status;
+            $notify->failReason  = $mailQueue->failReason;
+            $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+        }
+
+        $webhookDataTable = '`' . $this->config->db->prefix . 'webhookdatas`';
+        $stmt = $this->dao->select('*')->from($webhookDataTable)->query();
+        while($webhookData = $stmt->fetch())
+        {
+            $notify = new stdclass();
+            $notify->objectType  = 'webhook';
+            $notify->objectID    = $webhookData->webhook;
+            $notify->action      = $webhookData->action;
+            $notify->data        = $webhookData->data;
+            $notify->createdBy   = $webhookData->createdBy;
+            $notify->createdDate = $webhookData->createdDate;
+            $notify->status      = $webhookData->status;
+            $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+        }
+        return true;
+    }
 }

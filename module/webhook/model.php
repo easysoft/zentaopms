@@ -96,7 +96,7 @@ class webhookModel extends model
      */
     public function getDataList()
     {
-        return $this->dao->select('*')->from(TABLE_WEBHOOKDATAS)->where('status')->eq('wait')->orderBy('id')->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_NOTIFY)->where('status')->eq('wait')->andWhere('objectType')->eq('webhook')->orderBy('id')->fetchAll('id');
     }
 
     /**
@@ -435,13 +435,14 @@ class webhookModel extends model
     public function saveData($webhookID, $actionID, $data)
     {
         $webhookData = new stdclass();
-        $webhookData->webhook     = $webhookID;
+        $webhookData->objectType  = 'webhook';
+        $webhookData->objectID    = $webhookID;
         $webhookData->action      = $actionID;
         $webhookData->data        = $data;
         $webhookData->createdBy   = $this->app->user->account;
         $webhookData->createdDate = helper::now();
 
-        $this->dao->insert(TABLE_WEBHOOKDATAS)->data($webhookData)->exec();
+        $this->dao->insert(TABLE_NOTIFY)->data($webhookData)->exec();
         return !dao::isError();
     }
 
