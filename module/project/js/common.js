@@ -159,25 +159,20 @@ function loadBranches(product)
     });
 
     var productID = $(product).val();
-    if(productID != 0)
+
+    if(productID == 0 || productID != $(product).data('last')) $("#plan" + $(product).data('last')).remove();
+
+    if(productID != 0 && $("#plan" + productID).length == 0)
     {
-        console.log($("#plan" + productID).length );
-        if($("#plan" + productID).length == 0)
+        $(product).data("last", productID);
+        $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID), function(data)
         {
-            $(product).data("last", productID);
-            $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID), function(data)
+            if(data)
             {
-                if(data)
-                {
-                    $("#plansBox .row").append('<div class="col-sm-3" id="plan' + productID+ '">' + data + '</div>');
-                    $("#plan" + $(product).val()).find('select').attr('name', 'plans[' + productID + ']').attr('id', 'plans' + productID);
-                }
-            });
-        }
-    }
-    else
-    {
-        $("#plan" + $(product).data('last')).remove();
+                $("#plansBox .row").append('<div class="col-sm-3" id="plan' + productID+ '">' + data + '</div>');
+                $("#plan" + $(product).val()).find('select').attr('name', 'plans[' + productID + ']').attr('id', 'plans' + productID);
+            }
+        });
     }
 }
 
