@@ -41,7 +41,7 @@ class project extends control
     {
         if($this->app->user->account == 'guest' or commonModel::isTutorialMode()) $this->config->project->homepage = 'index';
         if(!isset($this->config->project->homepage))
-        { 
+        {
             if($this->projects and $this->app->viewType != 'mhtml') die($this->fetch('custom', 'ajaxSetHomepage', "module=project"));
 
             $this->config->project->homepage = 'index';
@@ -375,7 +375,7 @@ class project extends control
         $this->view->title          = $project->name . $this->lang->colon . $this->lang->project->importTask;
         $this->view->position[]     = html::a(inlink('browse', "projectID=$toProject"), $project->name);
         $this->view->position[]     = $this->lang->project->importTask;
-        $this->view->tasks2Imported = $tasks2Imported; 
+        $this->view->tasks2Imported = $tasks2Imported;
         $this->view->projects       = $projects;
         $this->view->projectID      = $project->id;
         $this->view->fromProject    = $fromProject;
@@ -826,8 +826,8 @@ class project extends control
 
     /**
      * Fix burn for first date.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -873,11 +873,12 @@ class project extends control
      *
      * @param string $projectID
      * @param string $copyProjectID
+     * @param int    $planID
      *
      * @access public
      * @return void
      */
-    public function create($projectID = '', $copyProjectID = '')
+    public function create($projectID = '', $copyProjectID = '', $planID = 0)
     {
         if($projectID)
         {
@@ -888,12 +889,14 @@ class project extends control
             exit;
         }
 
-        $name      = '';
-        $code      = '';
-        $team      = '';
-        $products  = array();
-        $whitelist = '';
-        $acl       = 'open';
+        $name        = '';
+        $code        = '';
+        $team        = '';
+        $products    = array();
+        $whitelist   = '';
+        $acl         = 'open';
+        $plan        = new stdClass();
+        $productPlan = new stdClass();
 
         if($copyProjectID)
         {
@@ -904,6 +907,16 @@ class project extends control
             $acl         = $copyProject->acl;
             $whitelist   = $copyProject->whitelist;
             $products    = $this->project->getProducts($copyProjectID);
+        }
+
+        if(!empty($planID))
+        {
+            $plan        = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->eq($planID)->fetch();
+            $products    = $this->dao->select('t1.id, t1.name, t1.type, t2.branch')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
+                ->where('t1.id')->eq($plan->product)
+                ->fetchAll('id');
+            $productPlan = $this->loadModel('productplan')->getPairs($plan->product, 0, 'unexpired');
         }
 
         if(!empty($_POST))
@@ -923,12 +936,14 @@ class project extends control
         $this->view->projects      = array('' => '') + $this->projects;
         $this->view->groups        = $this->loadModel('group')->getPairs();
         $this->view->allProducts   = array(0 => '') + $this->loadModel('product')->getPairs('noclosed|nocode');
+        $this->view->acl           = $acl;
+        $this->view->plan          = $plan;
         $this->view->name          = $name;
         $this->view->code          = $code;
         $this->view->team          = $team;
-        $this->view->products      = $products ;
+        $this->view->products      = $products;
+        $this->view->productPlan   = $productPlan;
         $this->view->whitelist     = $whitelist;
-        $this->view->acl           = $acl      ;
         $this->view->copyProjectID = $copyProjectID;
         $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->display();
@@ -938,6 +953,9 @@ class project extends control
      * Edit a project.
      *
      * @param  int    $projectID
+     * @param  string $action
+     * @param  string $extra
+     *
      * @access public
      * @return void
      */
@@ -994,6 +1012,7 @@ class project extends control
         $this->view->qdUsers        = $this->user->getPairs('noclosed|nodeleted|qdfirst',  $project->QD);
         $this->view->rdUsers        = $this->user->getPairs('noclosed|nodeleted|devfirst', $project->RD);
         $this->view->groups         = $this->loadModel('group')->getPairs();
+        $this->view->plans          = $this->project->getPlans(array_keys($linkedProducts));
         $this->view->allProducts    = $allProducts;
         $this->view->linkedProducts = $linkedProducts;
         $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts));
@@ -1266,10 +1285,10 @@ class project extends control
 
     /**
      * Kanban.
-     * 
-     * @param  int    $projectID 
-     * @param  string $type 
-     * @param  string $orderBy 
+     *
+     * @param  int    $projectID
+     * @param  string $type
+     * @param  string $orderBy
      * @access public
      * @return void
      */
@@ -1313,8 +1332,8 @@ class project extends control
     /**
      * Tree view.
      * Product
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @param  string $type
      * @access public
      * @return void
@@ -1340,14 +1359,14 @@ class project extends control
         $this->view->projectID  = $projectID;
         $this->view->level      = $type;
         $this->view->tree       = $tree;
-        $this->display(); 
+        $this->display();
     }
 
     /**
      * Print kanban.
-     * 
-     * @param  int    $projectID 
-     * @param  string $orderBy 
+     *
+     * @param  int    $projectID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
@@ -1362,7 +1381,7 @@ class project extends control
             $storySpecs = $this->story->getStorySpecs(array_keys($stories));
 
             $order = 1;
-            foreach($stories as $story) $story->order = $order++; 
+            foreach($stories as $story) $story->order = $order++;
 
             $kanbanTasks = $this->project->getKanbanTasks($projectID, "id");
             $kanbanBugs  = $this->loadModel('bug')->getProjectBugs($projectID);
@@ -1449,13 +1468,13 @@ class project extends control
 
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[] = $this->lang->project->printKanban;
-        $this->display(); 
+        $this->display();
     }
 
     /**
      * Story kanban.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1807,7 +1826,7 @@ class project extends control
             $this->project->unlinkStory($projectID, $storyID);
 
             /* if kanban then reload and if ajax request then send result. */
-            if(isonlybody()) 
+            if(isonlybody())
             {
                 die(js::reload('parent'));
             }
@@ -2019,8 +2038,8 @@ class project extends control
 
     /**
      * Story sort.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -2079,11 +2098,11 @@ class project extends control
     }
 
     /**
-     * Export project. 
-     * 
-     * @param  string $status 
-     * @param  int    $productID 
-     * @param  string $orderBy 
+     * Export project.
+     *
+     * @param  string $status
+     * @param  int    $productID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
@@ -2144,8 +2163,8 @@ class project extends control
 
     /**
      * Kanban setting.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -2181,9 +2200,9 @@ class project extends control
 
     /**
      * Ajax reset kanban setting
-     * 
-     * @param  int    $projectID 
-     * @param  string $confirm 
+     *
+     * @param  int    $projectID
+     * @param  string $confirm
      * @access public
      * @return void
      */

@@ -66,13 +66,13 @@ $lang->project->typeList['sprint']    = "短期$lang->projectCommon";
 $lang->project->typeList['waterfall'] = "长期$lang->projectCommon";
 $lang->project->typeList['ops']       = "运维$lang->projectCommon";
 
-$lang->project->endList[7]    = '一星期';
-$lang->project->endList[14]   = '两星期';
-$lang->project->endList[31]   = '一个月';
-$lang->project->endList[62]   = '两个月';
-$lang->project->endList[93]   = '三个月';
-$lang->project->endList[186]  = '半年';
-$lang->project->endList[365]  = '一年';
+$lang->project->endList[7]   = '一星期';
+$lang->project->endList[14]  = '两星期';
+$lang->project->endList[31]  = '一个月';
+$lang->project->endList[62]  = '两个月';
+$lang->project->endList[93]  = '三个月';
+$lang->project->endList[186] = '半年';
+$lang->project->endList[365] = '一年';
 
 $lang->team = new stdclass();
 $lang->team->account    = '用户';
@@ -117,6 +117,7 @@ $lang->project->team             = '团队成员';
 $lang->project->doc              = '文档列表';
 $lang->project->manageProducts   = '关联' . $lang->productCommon;
 $lang->project->linkStory        = '关联需求';
+$lang->project->linkPlan         = '关联计划';
 $lang->project->unlinkStoryTasks = '未关联需求任务';
 $lang->project->linkedProducts   = '已关联';
 $lang->project->unlinkedProducts = '未关联';
@@ -283,10 +284,10 @@ $lang->project->featureBar['task']['needconfirm']  = '需求变动';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
 
 $lang->project->treeLevel = array();
-$lang->project->treeLevel['root']    = '全部折叠';
-$lang->project->treeLevel['story']   = '显示需求';
-$lang->project->treeLevel['task']    = '显示任务';
-$lang->project->treeLevel['all']     = '全部展开';
+$lang->project->treeLevel['root']  = '全部折叠';
+$lang->project->treeLevel['story'] = '显示需求';
+$lang->project->treeLevel['task']  = '显示任务';
+$lang->project->treeLevel['all']   = '全部展开';
 
 global $config;
 if($config->global->flow == 'onlyTask')

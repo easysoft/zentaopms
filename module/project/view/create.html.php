@@ -44,7 +44,7 @@
     </div>
   </div>
   <form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
-    <table class='table table-form'> 
+    <table class='table table-form'>
       <tr>
         <th class='w-90px'><?php echo $lang->project->name;?></th>
         <td class='w-p25-f'><?php echo html::input('name', $name, "class='form-control' autocomplete='off'");?></td><td></td>
@@ -52,14 +52,14 @@
       <tr>
         <th><?php echo $lang->project->code;?></th>
         <td><?php echo html::input('code', $code, "class='form-control' autocomplete='off'");?></td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->project->dateRange;?></th>
         <td>
           <div class='input-group'>
-            <?php echo html::input('begin',date('Y-m-d'), "class='form-control w-100px form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->begin . "'");?>
+            <?php echo html::input('begin', (isset($plan) && !empty($plan->begin) ? $plan->begin : date('Y-m-d')), "class='form-control w-100px form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->begin . "'");?>
             <span class='input-group-addon'><?php echo $lang->project->to;?></span>
-            <?php echo html::input('end', '', "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->end . "'");?>
+            <?php echo html::input('end', (isset($plan) && !empty($plan->end) ? $plan->end : ''), "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->end . "'");?>
           </div>
         </td>
         <td>
@@ -70,15 +70,15 @@
         <th><?php echo $lang->project->days;?></th>
         <td>
           <div class='input-group'>
-          <?php echo html::input('days', '', "class='form-control' autocomplete='off'");?>
+          <?php echo html::input('days', (isset($plan) && !empty($plan->begin) ? helper::workDays($plan->begin, $plan->end) : ''), "class='form-control' autocomplete='off'");?>
             <span class='input-group-addon'><?php echo $lang->project->day;?></span>
           </div>
         </td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->project->teamname;?></th>
         <td><?php echo html::input('team', $team, "class='form-control' autocomplete='off'");?></td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->project->type;?></th>
         <td>
@@ -96,8 +96,8 @@
             <?php foreach($products as $product):?>
             <div class='col-sm-3'>
               <div class='input-group'>
-                <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)'");?>
-                <span class='input-group-addon fix-border' style='padding:0px'></span>
+                <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
+                <span class='input-group-addon fix-border' style='padding:0'></span>
                 <?php if($product->type != 'normal') echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control' style='width:80px'")?>
               </div>
             </div>
@@ -106,20 +106,32 @@
             <div class='col-sm-3'>
               <div class='input-group'>
                 <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
-                <span class='input-group-addon fix-border' style='padding:0px'></span>
+                <span class='input-group-addon fix-border' style='padding:0'></span>
               </div>
             </div>
+          </div>
+        </td>
+      </tr>
+      <tr <?php if($this->config->global->flow == 'onlyTask') echo "class='hidden'";?>>
+        <th><?php echo $lang->project->linkPlan;?></th>
+        <td colspan="2" id="plansBox">
+          <div class='row'>
+            <?php if(isset($plan) && !empty($plan->begin)):?>
+            <div class="col-sm-3" id="plan<?php echo $plan->product;?>">
+              <?php echo html::select("plans[<?php echo $plan->product;?>]", $productPlan, $plan->id, "class='form-control'");?>
+            </div>
+            <?php endif;?>
           </div>
         </td>
       </tr>
       <tr>
         <th><?php echo $lang->project->desc;?></th>
         <td colspan='2'><?php echo html::textarea('desc', '', "rows='6' class='form-control'");?></td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->project->acl;?></th>
         <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?></td>
-      </tr>  
+      </tr>
       <tr id='whitelistBox' <?php if($acl != 'custom') echo "class='hidden'";?>>
         <th><?php echo $lang->project->whitelist;?></th>
         <td colspan='2'><?php echo html::checkbox('whitelist', $groups, $whitelist);?></td>

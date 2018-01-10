@@ -5,7 +5,7 @@
  *
  * The author disclaims copyright to this source code. In place of
  * a legal notice, here is a blessing:
- * 
+ *
  *  May you do good and not evil.
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
@@ -43,7 +43,7 @@ class helper extends baseHelper
         {
             if(isset($_GET[$config->viewVar]))
             {
-                $viewType = $_GET[$config->viewVar]; 
+                $viewType = $_GET[$config->viewVar];
             }
             else
             {
@@ -59,9 +59,9 @@ class helper extends baseHelper
 
     /**
      * Encode json for $.parseJSON
-     * 
-     * @param  array  $data 
-     * @param  int    $options 
+     *
+     * @param  array  $data
+     * @param  int    $options
      * @static
      * @access public
      * @return string
@@ -78,10 +78,10 @@ class helper extends baseHelper
 
     /**
      * Convert encoding.
-     * 
-     * @param  string $string 
-     * @param  string $fromEncoding 
-     * @param  string $toEncoding 
+     *
+     * @param  string $string
+     * @param  string $fromEncoding
+     * @param  string $toEncoding
      * @static
      * @access public
      * @return string
@@ -111,12 +111,33 @@ class helper extends baseHelper
 
         return $string;
     }
+
+    /**
+     * Calculate two working days.
+     *
+     * @param string $begin
+     * @param string $end
+     *
+     * @return bool|float
+     */
+    static public function workDays($begin, $end)
+    {
+        $begin = strtotime($begin);
+        $end   = strtotime($end);
+        if($end < $begin) return false;
+
+        $double = floor(($end - $begin) / (7 * 24 * 3600));
+        $begin  = date('w', $begin);
+        $end    = date('w', $end);
+        $end    = $begin > $end ? $end + 5 : $end;
+        return $double * 5 + $end - $begin;
+    }
 }
 
 /**
  * 检查是否是onlybody模式。
  * Check exist onlybody param.
- * 
+ *
  * @access public
  * @return void
  */

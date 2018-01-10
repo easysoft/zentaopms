@@ -117,6 +117,7 @@ $lang->project->team             = 'Team Member';
 $lang->project->doc              = 'Doc';
 $lang->project->manageProducts   = 'Link ' . $lang->productCommon;
 $lang->project->linkStory        = 'Linked Story';
+$lang->project->linkPlan         = 'Linked Plan';
 $lang->project->unlinkStoryTasks = 'Unlinked';
 $lang->project->linkedProducts   = 'Linked Products';
 $lang->project->unlinkedProducts = 'Unlinked Products';
@@ -283,10 +284,10 @@ $lang->project->featureBar['task']['needconfirm']  = 'Story Changed';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
 
 $lang->project->treeLevel = array();
-$lang->project->treeLevel['root']    = 'Show Root';
-$lang->project->treeLevel['story']   = 'Show Story';
-$lang->project->treeLevel['task']    = 'Show Task';
-$lang->project->treeLevel['all']     = 'Show All';
+$lang->project->treeLevel['root']  = 'Show Root';
+$lang->project->treeLevel['story'] = 'Show Story';
+$lang->project->treeLevel['task']  = 'Show Task';
+$lang->project->treeLevel['all']   = 'Show All';
 
 global $config;
 if($config->global->flow == 'onlyTask')

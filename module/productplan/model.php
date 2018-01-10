@@ -185,9 +185,10 @@ class productplanModel extends model
     {
         $oldPlan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)
-            ->setIF($this->post->delta == 9999 || empty($this->post->end), 'end', '2030-01-01')
+            ->setIF($this->post->delta == 9999 || $this->post->end == '', 'end', '2030-01-01')
             ->remove('delta,uid')
             ->get();
+
         $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCTPLAN)
             ->data($plan)
