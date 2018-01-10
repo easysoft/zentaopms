@@ -603,9 +603,19 @@ class project extends control
 
         /* Count T B C */
         $storyIdList = array_keys($stories);;
-        $storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList,$projectID);
-        $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList,$projectID);
+        $storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList, $projectID);
+        $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $projectID);
         $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
+
+        $plans = $this->project->getPlans($productID);
+        $allPlans = array('' => '');
+        if(!empty($plans))
+        {
+            foreach($plans as $productID => $plan)
+            {
+                $allPlans = $allPlans + $plan;
+            }
+        }
 
         /* Assign. */
         $this->view->title        = $title;
@@ -613,6 +623,7 @@ class project extends control
         $this->view->productID    = $productID;
         $this->view->project      = $project;
         $this->view->stories      = $stories;
+        $this->view->allPlans     = $allPlans;
         $this->view->summary      = $this->product->summary($stories);
         $this->view->orderBy      = $orderBy;
         $this->view->type         = $type;
@@ -2234,5 +2245,27 @@ class project extends control
         if(common::hasPriv('project', 'kanbanColsColor')) $this->setting->deleteItems("owner=system&module=project&section=kanbanSetting&key=colorList");
 
         die(js::reload('parent.parent'));
+    }
+
+    /**
+     * Import stories by plan.
+     *
+     * @param int $projectID
+     * @param int $planID
+     *
+     * @access public
+     * @return void
+     */
+    public function importPlanStories($projectID, $planID)
+    {
+        $planStories  = $planProducts = array();
+        $planStory    = $this->loadModel('story')->getPlanStories($planID);
+        if(!empty($planStory))
+        {
+            $planStories = array_keys($planStory);
+            foreach($planStory as $story) $planProducts[$story->id] = $story->product;
+            $this->project->linkStory($projectID, $planStories, $planProducts);
+        }
+        die(js::locate(helper::createLink('project', 'story', 'projectID=' . $projectID), 'parent'));
     }
 }

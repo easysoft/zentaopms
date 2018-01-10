@@ -2581,16 +2581,16 @@ class projectModel extends model
     }
 
     /**
-     * Get plans by projectID.
+     * Get plans by $productID.
      *
-     * @param int|array $projectID
+     * @param int|array $productID
      *
      * @return mixed
      */
-    public function getPlans($projectID)
+    public function getPlans($productID)
     {
         $plans = $this->dao->select('id,title,product')->from(TABLE_PRODUCTPLAN)
-            ->where('product')->in($projectID)
+            ->where('product')->in($productID)
             ->fetchAll();
 
         $productPlans = array();

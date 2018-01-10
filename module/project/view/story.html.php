@@ -25,7 +25,7 @@
   </ul>
   <div class='actions'>
     <div class='btn-group'>
-    <?php 
+    <?php
     common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc", '', 'button', '', '', 'export');
 
     $this->lang->story->create = $this->lang->project->createStory;
@@ -52,7 +52,15 @@
     }
     else
     {
+        echo "<div class='btn-group' id='createActionMenu'>";
         common::printIcon('project', 'linkStory', "project=$project->id", '', 'button', 'link', '', 'link-story-btn');
+        echo "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown'>";
+        echo "<span class='caret'></span>";
+        echo '</button>';
+        echo "<ul class='dropdown-menu pull-right'>";
+        echo "<li>" . html::a('###', $lang->project->linkStoryByPlan, '', 'data-toggle="linkStoryByPlan"') . "</li>";
+        echo '</ul>';
+        echo '</div>';
     }
     ?>
     </div>
@@ -109,7 +117,7 @@
         <tr class='text-center' id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
           <td class='cell-id'>
             <?php if($canBatchEdit or $canBatchClose):?>
-            <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
+            <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' />
             <?php endif;?>
             <?php echo html::a($storyLink, sprintf('%03d', $story->id));?>
           </td>
@@ -232,6 +240,23 @@
       </tfoot>
     </table>
   </form>
+</div>
+
+<div class="modal fade" id="linkStoryByPlan">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title"><i class="icon-file-text"></i> <?php echo $lang->project->linkStoryByPlan;?></h4>
+      </div>
+      <div class="modal-body">
+        <div class='input-group'>
+          <?php echo html::select('plan', $allPlans, '', "class='form-control chosen' id='plan'");?>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->project->linkStory, "id='toTaskButton'");?></span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <?php js::set('checkedSummary', $lang->product->checkedSummary);?>
 <?php js::set('projectID', $project->id);?>

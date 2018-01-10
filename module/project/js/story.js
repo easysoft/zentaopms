@@ -24,6 +24,17 @@ $(function()
     $('#branch' + branchID).addClass('active');
     $(document).on('click', "#storyList tbody tr", function(){showCheckedSummary();});
     $(document).on('change', "#storyList :checkbox", function(){showCheckedSummary();});
+
+    $("a[data-toggle='linkStoryByPlan']").click(function(){$('#linkStoryByPlan').modal('show')})
+
+    $('#toTaskButton').on('click', function ()
+    {
+        var planID = $('#plan').val();
+        if(planID)
+        {
+            parent.location.href = createLink('project', 'importPlanStories', 'projectID=' + projectID + '&planID=' + planID);
+        }
+    })
 });
 
 function showCheckedSummary()

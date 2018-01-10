@@ -118,6 +118,7 @@ $lang->project->doc              = 'Doc';
 $lang->project->manageProducts   = 'Link ' . $lang->productCommon;
 $lang->project->linkStory        = 'Linked Story';
 $lang->project->linkPlan         = 'Linked Plan';
+$lang->project->linkStoryByPlan  = 'Linked Story From Plan';
 $lang->project->unlinkStoryTasks = 'Unlinked';
 $lang->project->linkedProducts   = 'Linked Products';
 $lang->project->unlinkedProducts = 'Unlinked Products';

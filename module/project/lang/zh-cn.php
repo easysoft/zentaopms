@@ -117,6 +117,7 @@ $lang->project->team             = '团队成员';
 $lang->project->doc              = '文档列表';
 $lang->project->manageProducts   = '关联' . $lang->productCommon;
 $lang->project->linkStory        = '关联需求';
+$lang->project->linkStoryByPlan  = '按照计划关联';
 $lang->project->linkPlan         = '关联计划';
 $lang->project->unlinkStoryTasks = '未关联需求任务';
 $lang->project->linkedProducts   = '已关联';
