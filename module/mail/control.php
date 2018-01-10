@@ -316,35 +316,35 @@ class mail extends control
         {
             if(!isset($queue->merge) or $queue->merge == false)
             {
-                $mailStatus = $this->dao->select('*')->from(TABLE_MAILQUEUE)->where('id')->eq($queue->id)->fetch('status');
+                $mailStatus = $this->dao->select('*')->from(TABLE_NOTIFY)->where('id')->eq($queue->id)->fetch('status');
                 if(empty($mailStatus) or $mailStatus != 'wait') continue;
             }
 
-            $this->dao->update(TABLE_MAILQUEUE)->set('status')->eq('sending')->where('id')->in($queue->id)->exec();
-            $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList, true);
+            $this->dao->update(TABLE_NOTIFY)->set('status')->eq('sending')->where('id')->in($queue->id)->exec();
+            $this->mail->send($queue->toList, $queue->subject, $queue->data, $queue->ccList, true);
 
             $data = new stdclass();
             $data->sendTime = $now;
-            $data->status   = 'send';
+            $data->status   = 'sended';
             if($this->mail->isError())
             {
                 $data->status = 'fail';
                 $data->failReason = join("\n", $this->mail->getError());
             }
-            $this->dao->update(TABLE_MAILQUEUE)->data($data)->where('id')->in($queue->id)->exec();
+            $this->dao->update(TABLE_NOTIFY)->data($data)->where('id')->in($queue->id)->exec();
 
             $log .= "Send #$queue->id  result is $data->status\n";
             if($data->status == 'fail') $log .= "reason is $data->failReason\n";
         }
 
         /* Delete sended mail. */
-        $lastMail  = $this->dao->select('id,status')->from(TABLE_MAILQUEUE)->orderBy('id_desc')->limit(1)->fetch();
+        $lastMail  = $this->dao->select('id,status')->from(TABLE_NOTIFY)->where('objectType')->eq('mail')->orderBy('id_desc')->limit(1)->fetch();
         if(!empty($lastMail) and $lastMail->id > 1000000)
         {
-            $unSendNum = $this->dao->select('count(id) as count')->from(TABLE_MAILQUEUE)->where('status')->eq('wait')->fetch('count');
-            if($unSendNum == 0) $this->dao->exec('TRUNCATE table ' . TABLE_MAILQUEUE);
+            $unSendNum = $this->dao->select('count(id) as count')->from(TABLE_NOTIFY)->where('status')->eq('wait')->fetch('count');
+            if($unSendNum == 0) $this->dao->exec('TRUNCATE table ' . TABLE_NOTIFY);
         }
-        $this->dao->delete()->from(TABLE_MAILQUEUE)->where('status')->eq('send')->andWhere('sendTime')->le(date('Y-m-d H:i:s', time() - 2 * 24 * 3600))->exec();
+        $this->dao->delete()->from(TABLE_NOTIFY)->where('status')->eq('sended')->andWhere('sendTime')->le(date('Y-m-d H:i:s', time() - 2 * 24 * 3600))->exec();
 
         echo $log;
         echo "OK\n";
@@ -366,7 +366,7 @@ class mail extends control
         }
 
         if(isset($this->config->mail->async)) $this->config->mail->async = 0;
-        $this->mail->send($queue->toList, $queue->subject, $queue->body, $queue->ccList);
+        $this->mail->send($queue->toList, $queue->subject, $queue->data, $queue->ccList);
 
         $data = new stdclass();
         $data->sendTime   = helper::now();
@@ -377,7 +377,7 @@ class mail extends control
             $data->status     = 'fail';
             $data->failReason = join("\n", $this->mail->getError());
         }
-        $this->dao->update(TABLE_MAILQUEUE)->data($data)->where('id')->in($queue->id)->exec();
+        $this->dao->update(TABLE_NOTIFY)->data($data)->where('id')->in($queue->id)->exec();
 
         if($data->status == 'fail') die(js::alert($data->failReason));
         echo js::alert($this->lang->mail->noticeResend);
@@ -422,7 +422,7 @@ class mail extends control
     {
         if($confirm == 'no') die(js::confirm($this->lang->mail->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
-        $this->dao->delete()->from(TABLE_MAILQUEUE)->where('id')->eq($id)->exec();
+        $this->dao->delete()->from(TABLE_NOTIFY)->where('id')->eq($id)->exec();
         die(js::reload('parent'));
     }
 
@@ -444,7 +444,7 @@ class mail extends control
         $idList = array();
         if(isset($_GET['idList'])) $idList = explode('|', $_GET['idList']);
 
-        if($idList) $this->dao->delete()->from(TABLE_MAILQUEUE)->where('id')->in($idList)->exec();
+        if($idList) $this->dao->delete()->from(TABLE_NOTIFY)->where('id')->in($idList)->exec();
         die(js::reload('parent'));
     }
 

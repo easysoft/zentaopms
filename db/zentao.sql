@@ -407,6 +407,22 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   PRIMARY KEY (`id`),
   KEY `module` (`root`,`type`,`path`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_notify`;
+CREATE TABLE IF NOT EXISTS `zt_notify` (
+  `id` mediumint unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `objectType` varchar(50) NOT NULL,
+  `objectID` mediumint unsigned NOT NULL,
+  `action` mediumint NOT NULL,
+  `toList` varchar(255) NOT NULL,
+  `ccList` text NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `data` text NOT NULL,
+  `createdBy` char(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `sendTime` datetime NOT NULL,
+  `status` varchar(10) NOT NULL DEFAULT 'wait',
+  `failReason` text NOT NULL
+) ENGINE='MyISAM' COLLATE 'utf8_general_ci';
 -- DROP TABLE IF EXISTS `zt_product`;
 CREATE TABLE IF NOT EXISTS `zt_product` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -483,6 +499,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectproduct` (
   `project` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `branch` mediumint(8) unsigned NOT NULL,
+  `plan` mediumint(8) unsigned NOT NULL,
   PRIMARY KEY  (`project`,`product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectstory`;

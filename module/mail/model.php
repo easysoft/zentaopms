@@ -514,13 +514,14 @@ class mailModel extends model
         if(empty($toList) or empty($subject)) return true;
         
         $data = new stdclass();
-        $data->toList    = $toList;
-        $data->ccList    = $ccList;
-        $data->subject   = $subject;
-        $data->body      = $body;
-        $data->addedBy   = $this->config->mail->fromName;
-        $data->addedDate = helper::now();
-        $this->dao->insert(TABLE_MAILQUEUE)->data($data)->autocheck()->exec();
+        $data->objectType  = 'mail';
+        $data->toList      = $toList;
+        $data->ccList      = $ccList;
+        $data->subject     = $subject;
+        $data->data        = $body;
+        $data->createdBy   = $this->config->mail->fromName;
+        $data->createdDate = helper::now();
+        $this->dao->insert(TABLE_NOTIFY)->data($data)->autocheck()->exec();
     }
 
     /**
@@ -532,8 +533,8 @@ class mailModel extends model
      */
     public function getQueue($status = '', $orderBy = 'id_desc', $pager = null)
     {
-        $mails = $this->dao->select('*')->from(TABLE_MAILQUEUE)
-            ->where('1=1')
+        $mails = $this->dao->select('*')->from(TABLE_NOTIFY)
+            ->where('objectType')->eq('mail')
             ->beginIF($status)->andWhere('status')->eq($status)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -562,7 +563,7 @@ class mailModel extends model
 
     public function getQueueById($queueID)
     {
-        return $this->dao->select('*')->from(TABLE_MAILQUEUE)->where('id')->eq($queueID)->fetch();
+        return $this->dao->select('*')->from(TABLE_NOTIFY)->where('id')->eq($queueID)->fetch();
     }
 
     /**
@@ -599,8 +600,8 @@ class mailModel extends model
         }
 
         /* Remove html tail for first mail. */
-        $endPos     = strripos($firstMail->body, '</td>');
-        $mail->body = trim(substr($firstMail->body, 0, $endPos));
+        $endPos     = strripos($firstMail->data, '</td>');
+        $mail->data = trim(substr($firstMail->data, 0, $endPos));
 
         /* Merge middle mails. */
         if($mails)
@@ -610,21 +611,21 @@ class mailModel extends model
                 $mail->id .= ',' . $middleMail->id;
 
                 /* Remove html head and tail for middle mails. */
-                $beginPos = strpos($middleMail->body, '</table>');
-                $mailBody = trim(substr($middleMail->body, $beginPos));
+                $beginPos = strpos($middleMail->data, '</table>');
+                $mailBody = trim(substr($middleMail->data, $beginPos));
                 $endPos   = strripos($mailBody, '</td>');
                 $mailBody = trim(substr($mailBody, 0, $endPos));
 
-                $mail->body .= ltrim($mailBody, '</table>');
+                $mail->data .= ltrim($mailBody, '</table>');
             }
         }
 
         $mail->id .= ',' . $lastMail->id;
 
         /* Remove html head for last mail. */
-        $beginPos    = strpos($lastMail->body, '</table>');
-        $mailBody    = substr($lastMail->body, $beginPos);
-        $mail->body .= trim(ltrim($mailBody, '</table>'));
+        $beginPos    = strpos($lastMail->data, '</table>');
+        $mailBody    = substr($lastMail->data, $beginPos);
+        $mail->data .= trim(ltrim($mailBody, '</table>'));
 
         return $mail;
     }
