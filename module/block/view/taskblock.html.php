@@ -19,7 +19,7 @@ td.delayed{background: #e84e0f!important; color: white;}
     <th width='50'><?php echo $lang->idAB?></th>
     <th width='30'><?php echo $lang->priAB?></th>
     <th>           <?php echo $lang->task->name;?></th>
-    <th width='40'><?php echo $lang->task->estimateAB;?></th>
+    <th width='50'><?php echo $lang->task->estimateAB;?></th>
     <th width='75'><?php echo $lang->task->deadline;?></th>
     <th width='70'><?php echo $lang->statusAB;?></th>
   </tr>

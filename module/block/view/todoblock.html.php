@@ -16,7 +16,7 @@
     <th width='90'><?php echo $lang->todo->date?></th>
     <th width='40'><?php echo $lang->priAB?></th>
     <th>           <?php echo $lang->todo->name;?></th>
-    <th width='50'><?php echo $lang->todo->beginAB;?></th>
+    <th width='55'><?php echo $lang->todo->beginAB;?></th>
     <th width='50'><?php echo $lang->todo->endAB;?></th>
   </tr>
   </thead>

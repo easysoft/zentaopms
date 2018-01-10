@@ -9,7 +9,7 @@
  * @version     $Id: en.php 4659 2013-04-17 06:45:08Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->productplan->common     = $lang->productCommon . 'Plan';
+$lang->productplan->common     = $lang->productCommon . ' Plan';
 $lang->productplan->browse     = "View";
 $lang->productplan->index      = "List";
 $lang->productplan->create     = "Create";
@@ -21,16 +21,16 @@ $lang->productplan->info       = 'Info';
 $lang->productplan->batchEdit  = 'Batch Edit';
 
 $lang->productplan->batchUnlink      = "Batch Unlink";
-$lang->productplan->linkStory        = "Linked Story";
+$lang->productplan->linkStory        = "Link Story";
 $lang->productplan->unlinkStory      = "Unlink Story";
 $lang->productplan->batchUnlinkStory = "Batch Unlink";
-$lang->productplan->linkedStories    = 'link Story';
-$lang->productplan->unlinkedStories  = 'UnLinkEd';
-$lang->productplan->updateOrder      = 'Ranking';
+$lang->productplan->linkedStories    = 'Linked Story';
+$lang->productplan->unlinkedStories  = 'Unlinked Story';
+$lang->productplan->updateOrder      = 'Sort';
 
 $lang->productplan->linkBug          = "Link Bug";
 $lang->productplan->unlinkBug        = "Unlink Bug";
-$lang->productplan->batchUnlinkBug   = "Batch Unlink";
+$lang->productplan->batchUnlinkBug   = "Batch Unlink Bug";
 $lang->productplan->linkedBugs       = 'Linked Bug';
 $lang->productplan->unlinkedBugs     = 'Unlinked';
 
@@ -51,13 +51,13 @@ $lang->productplan->stories = 'Stories';
 $lang->productplan->bugs    = 'Bugs';
 $lang->productplan->hour    = 'Hour';
 
-$lang->productplan->endList[7]    = '1 Week';
-$lang->productplan->endList[14]   = '2 Weeks';
-$lang->productplan->endList[31]   = '1 Month';
-$lang->productplan->endList[62]   = '2 Months';
-$lang->productplan->endList[93]   = '3 Months';
-$lang->productplan->endList[186]  = '6 Months';
-$lang->productplan->endList[365]  = '1 Year';
+$lang->productplan->endList[7]   = '1 Week';
+$lang->productplan->endList[14]  = '2 Weeks';
+$lang->productplan->endList[31]  = '1 Month';
+$lang->productplan->endList[62]  = '2 Months';
+$lang->productplan->endList[93]  = '3 Months';
+$lang->productplan->endList[186] = '6 Months';
+$lang->productplan->endList[365] = '1 Year';
 $lang->productplan->endList[9999] = 'Future';
 
 $lang->productplan->errorNoTitle = 'ID %s title should not be empty.';
@@ -66,5 +66,5 @@ $lang->productplan->errorNoEnd   = 'ID %s end time should not be empty.';
 $lang->productplan->beginGeEnd   = 'ID %s begin time value should not be greater than t.';
 
 $lang->productplan->featureBar['browse']['all']       = 'All';
-$lang->productplan->featureBar['browse']['unexpired'] = 'On Time';
-$lang->productplan->featureBar['browse']['overdue']   = 'Overdue';
+$lang->productplan->featureBar['browse']['unexpired'] = 'Unexpired';
+$lang->productplan->featureBar['browse']['overdue']   = 'Expired';

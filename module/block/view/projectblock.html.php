@@ -19,7 +19,7 @@
       <tr class='text-center'>
         <th class='text-left'><?php echo $lang->project->name;?></th>
         <th width='80'><?php echo $lang->project->end;?></th>
-        <th width='50'><?php echo $lang->statusAB;?></th>
+        <th width='70'><?php echo $lang->statusAB;?></th>
         <th width='60'><?php echo $lang->project->totalEstimate;?></th>
         <th width='60'><?php echo $lang->project->totalConsumed;?></th>
         <th width='60'><?php echo $lang->project->totalLeft;?></th>

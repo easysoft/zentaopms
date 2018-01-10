@@ -115,7 +115,7 @@ EOT;
       <?php elseif($module == 'user' and $field == 'deleted'):?>
       <table class='table table-form mw-600px'>
         <tr>
-          <th class='w-100px'><?php echo $lang->custom->user->fields['deleted'];?></th>
+          <th class='w-150px'><?php echo $lang->custom->user->fields['deleted'];?></th>
           <td><?php echo html::radio('showDeleted', $lang->custom->deletedList, $showDeleted);?></td>
         </tr>
         <tr>

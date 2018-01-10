@@ -18,9 +18,9 @@
       <th width='65' title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['changed'];?></th>
       <th width='65' title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['draft'];?></th>
       <th width='65'><?php echo $lang->product->plans;?></th>
-      <th width='65'><?php echo $lang->product->releases;?></th>
-      <th width='65' title='<?php echo $lang->bug->common;?>'><?php echo $lang->product->bugs;?></th>
-      <th width='65' title='<?php echo $lang->bug->common;?>'><?php echo $lang->bug->unResolved;?></th>
+      <th width='70'><?php echo $lang->product->releases;?></th>
+      <th width='95' title='<?php echo $lang->bug->common;?>'><?php echo $lang->product->bugs;?></th>
+      <th width='95' title='<?php echo $lang->bug->common;?>'><?php echo $lang->bug->unResolved;?></th>
     </tr>
   </thead>
   <tbody>

@@ -20,7 +20,7 @@
   </div>
   <table class='table table-borderless table-data'>
     <tr>
-      <th class='w-100px'><?php echo $lang->company->name;?></th>
+      <th class='w-150px'><?php echo $lang->company->name;?></th>
       <td><?php echo $company->name;?></td>
     </tr>
     <tr>

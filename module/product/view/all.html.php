@@ -66,7 +66,7 @@
           <th class='w-80px text-left'><?php common::printOrderLink('line', $orderBy, $vars, $lang->product->line);?></th>
           <th class='w-80px'><?php echo $lang->product->activeStories;?></th>
           <th class='w-80px'><?php echo $lang->product->changedStories;?></th>
-          <th class='w-80px'><?php echo $lang->product->draftStories;?></th>
+          <th class='w-70px'><?php echo $lang->product->draftStories;?></th>
           <th class='w-80px'><?php echo $lang->product->closedStories;?></th>
           <th class='w-80px'><?php echo $lang->product->plans;?></th>
           <th class='w-80px'><?php echo $lang->product->releases;?></th>

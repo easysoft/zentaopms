@@ -29,23 +29,23 @@ $lang->admin->saveSuccess   = 'Saved.';
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'Current Version is %s. ';
-$lang->admin->info->links   = 'You can visit ';
+$lang->admin->info->links   = 'You can visit links below';
 $lang->admin->info->account = 'Your ZenTao account is %s.';
 $lang->admin->info->log     = 'Logs that is beyond valid days will be deleted and it has to run cron.';
 
 $lang->admin->notice = new stdclass();
-$lang->admin->notice->register = "Note: You haven't registered in ZenTao(www.zentao.pm). Register %s and get the latest ZenTao news.";
+$lang->admin->notice->register = "Note: You haven't registered in ZenTao(www.zentao.pm). %s then get the Latest ZenTao Upgrades and News.";
 $lang->admin->notice->ignore   = "Ignore";
 $lang->admin->notice->int      = "『%s』should be a positive integer.";
 
 $lang->admin->register = new stdclass();
-$lang->admin->register->common     = 'Account Binding';
-$lang->admin->register->caption    = 'Register';
-$lang->admin->register->click      = 'Click Here';
-$lang->admin->register->lblAccount = 'at least 3 characters; must contain letters and numbers.';
-$lang->admin->register->lblPasswd  = 'at least 6 characters; must contain letters and numbers.';
+$lang->admin->register->common     = 'Binding New Account';
+$lang->admin->register->caption    = 'Register in Zentao Community';
+$lang->admin->register->click      = 'Please Register here';
+$lang->admin->register->lblAccount = 'at least 3 characters pls; contains letters and numbers.';
+$lang->admin->register->lblPasswd  = 'at least 6 characters pls; contains letters and numbers.';
 $lang->admin->register->submit     = 'Register';
-$lang->admin->register->bind       = "If you have already registered an account, link your account %s.";
+$lang->admin->register->bind       = "Binding Exsit Account";
 $lang->admin->register->success    = "You have registered with us!";
 
 $lang->admin->bind = new stdclass();
