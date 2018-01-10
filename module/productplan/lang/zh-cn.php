@@ -50,6 +50,7 @@ $lang->productplan->future  = '待定';
 $lang->productplan->stories = '需求数';
 $lang->productplan->bugs    = 'Bug数';
 $lang->productplan->hour    = '工时';
+$lang->productplan->project = $lang->projectCommon;
 
 $lang->productplan->endList[7]    = '一星期';
 $lang->productplan->endList[14]   = '两星期';

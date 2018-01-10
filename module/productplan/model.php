@@ -73,11 +73,13 @@ class productplanModel extends model
     public function getList($product = 0, $branch = 0, $browseType = 'all', $pager = null, $orderBy = 'begin_desc')
     {
         $date = date('Y-m-d');
-        $productPlans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!empty($branch))->andWhere('branch')->eq($branch)->fi()
-            ->beginIF($browseType == 'unexpired')->andWhere('end')->gt($date)->fi()
-            ->beginIF($browseType == 'overdue')->andWhere('end')->le($date)->fi()
+        $productPlans = $this->dao->select('t1.*,t2.project')->from(TABLE_PRODUCTPLAN)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t2.plan = t1.id and t2.product = ' . $product)
+            ->where('t1.product')->eq($product)
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF(!empty($branch))->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($browseType == 'unexpired')->andWhere('t1.end')->gt($date)->fi()
+            ->beginIF($browseType == 'overdue')->andWhere('t1.end')->le($date)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -90,9 +92,10 @@ class productplanModel extends model
                     ->where("CONCAT(',', plan, ',')")->like("%,{$productPlan->id},%")
                     ->andWhere('deleted')->eq(0)
                     ->fetchPairs('id', 'estimate');
-                $productPlan->stories = count($stories);
-                $productPlan->bugs    = $this->dao->select()->from(TABLE_BUG)->where("plan")->eq($productPlan->id)->andWhere('deleted')->eq(0)->count();
-                $productPlan->hour    = array_sum($stories);
+                $productPlan->stories   = count($stories);
+                $productPlan->bugs      = $this->dao->select()->from(TABLE_BUG)->where("plan")->eq($productPlan->id)->andWhere('deleted')->eq(0)->count();
+                $productPlan->hour      = array_sum($stories);
+                $productPlan->projectID = $productPlan->project;
             }
         }
         return $productPlans;

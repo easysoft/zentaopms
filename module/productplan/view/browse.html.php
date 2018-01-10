@@ -51,6 +51,7 @@
     <th class='w-60px'> <?php echo $lang->productplan->stories;?></th>
     <th class='w-60px'> <?php echo $lang->productplan->bugs;?></th>
     <th class='w-60px'> <?php echo $lang->productplan->hour;?></th>
+    <th class='w-60px'> <?php echo $lang->productplan->project;?></th>
     <th class='w-p40'>  <?php echo $lang->productplan->desc;?></th>
     <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
     <th class='w-100px'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
@@ -73,6 +74,7 @@
     <td class='text-center'><?php echo $plan->stories;?></td>
     <td class='text-center'><?php echo $plan->bugs;?></td>
     <td class='text-center'><?php echo $plan->hour;?></td>
+    <td class='text-center'><?php if(!empty($plan->projectID)) echo html::a(helper::createLink('project', 'task', 'projectID=' . $plan->projectID), '<i class="icon-search"></i>');?></td>
     <td class='text-left content'><div class='article-content'><?php echo $plan->desc;?></div></td>
     <td><?php echo $plan->begin;?></td>
     <td><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
@@ -95,7 +97,7 @@
   </tbody>
   <tfoot>
     <tr>
-      <td colspan='<?php echo $this->session->currentProductType == 'normal' ? '9' : '10';?>'>
+      <td colspan='<?php echo $this->session->currentProductType == 'normal' ? '10' : '11';?>'>
         <div class='table-actions clearfix'>
           <?php echo html::selectButton();?>
           <?php if(common::hasPriv('productplan', 'batchEdit')) echo html::submitButton($lang->edit);?>
