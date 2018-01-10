@@ -1435,21 +1435,25 @@ class projectModel extends model
     /**
      * Link story.
      *
-     * @param  int    $projectID
+     * @param int   $projectID
+     * @param array $stories
+     * @param array $products
+     *
      * @access public
-     * @return void
+     * @return mixed
      */
-    public function linkStory($projectID, $stories = array())
+    public function linkStory($projectID, $stories = array(), $products = array())
     {
         if(empty($stories)) $stories = $this->post->stories;
         if(empty($stories)) return false;
+        if(empty($products)) $products = $this->post->products;
 
         $this->loadModel('action');
         $versions  = $this->loadModel('story')->getVersions($stories);
         $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
         foreach($stories as $key => $storyID)
         {
-            $productID = (int)$this->post->products[$storyID];
+            $productID = (int)$products[$storyID];
             $data = new stdclass();
             $data->project = $projectID;
             $data->product = $productID;
@@ -1460,6 +1464,34 @@ class projectModel extends model
             $this->story->setStage($storyID);
             $this->action->create('story', $storyID, 'linked2project', '', $projectID);
         }
+    }
+
+    /**
+     * Link all stories by project.
+     *
+     * @param $projectID
+     */
+    public function linkStories($projectID)
+    {
+        $plans = $this->dao->select('plan,product')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->eq($projectID)
+            ->fetchPairs('plan', 'product');
+
+        $planStories  = array();
+        $planProducts = array();
+        if(!empty($plans))
+        {
+            foreach($plans as $planID => $productID)
+            {
+                $planStory = $this->loadModel('story')->getPlanStories($planID);
+                if(!empty($planStory))
+                {
+                    $planStories = array_merge($planStories, array_keys($planStory));
+                    foreach($planStory as $story) $planProducts[$story->id] = $story->product;
+                }
+            }
+        }
+        $this->linkStory($projectID, $planStories, $planProducts);
     }
 
     /**

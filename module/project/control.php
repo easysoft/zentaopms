@@ -882,6 +882,7 @@ class project extends control
     {
         if($projectID)
         {
+            if(!empty($planID)) $this->project->linkStories($projectID);
             $this->view->title     = $this->lang->project->tips;
             $this->view->tips      = $this->fetch('project', 'tips', "projectID=$projectID");
             $this->view->projectID = $projectID;
@@ -926,7 +927,15 @@ class project extends control
             if(dao::isError()) die(js::error(dao::getError()));
 
             $this->loadModel('action')->create('project', $projectID, 'opened');
-            die(js::locate($this->createLink('project', 'create', "projectID=$projectID"), 'parent'));
+            $url = $this->createLink('project', 'create', "projectID=$projectID");
+            if(!empty($planID))
+            {
+                die(js::confirm($this->lang->project->importPlanStory, $url . '&copyProjectID=&planID=' . $planID, $url, 'parent', 'parent'));
+            }
+            else
+            {
+                die(js::locate($url, 'parent'));
+            }
         }
 
         $this->project->setMenu($this->projects, key($this->projects));

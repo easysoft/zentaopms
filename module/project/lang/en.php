@@ -138,6 +138,7 @@ $lang->project->updateOrder      = 'Order';
 $lang->project->tree             = 'Tree';
 $lang->project->storyKanban      = 'Story Kanban';
 $lang->project->storySort        = 'Story Sort';
+$lang->project->importPlanStory  = 'Import the stories with the plan?';
 
 /* 分组浏览。*/
 $lang->project->allTasks     = 'All';
