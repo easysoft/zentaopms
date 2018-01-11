@@ -148,7 +148,7 @@ $config->testcase->datatable->fieldList['lastRunner']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastRunDate']['title']    = 'lastRunDate';
 $config->testcase->datatable->fieldList['lastRunDate']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['lastRunDate']['width']    = '120';
+$config->testcase->datatable->fieldList['lastRunDate']['width']    = '100';
 $config->testcase->datatable->fieldList['lastRunDate']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastRunResult']['title']    = 'lastRunResult';
@@ -158,7 +158,7 @@ $config->testcase->datatable->fieldList['lastRunResult']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['status']['title']    = 'statusAB';
 $config->testcase->datatable->fieldList['status']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['status']['width']    = '100';
+$config->testcase->datatable->fieldList['status']['width']    = '80';
 $config->testcase->datatable->fieldList['status']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
@@ -204,6 +204,6 @@ $config->testcase->datatable->fieldList['stepNumber']['name']     = $lang->testc
 
 $config->testcase->datatable->fieldList['actions']['title']    = 'actions';
 $config->testcase->datatable->fieldList['actions']['fixed']    = 'right';
-$config->testcase->datatable->fieldList['actions']['width']    = '140';
+$config->testcase->datatable->fieldList['actions']['width']    = '150';
 $config->testcase->datatable->fieldList['actions']['required'] = 'yes';
 $config->testcase->datatable->fieldList['actions']['sort']     = 'no';

@@ -74,7 +74,7 @@
         <legend><?php echo $lang->project->basicInfo?></legend>
         <table class='table table-data table-condensed table-borderless'>
           <tr>
-            <th class='w-80px text-right strong'><?php echo $lang->project->name;?></th>
+            <th class='w-100px text-right strong'><?php echo $lang->project->name;?></th>
             <td><?php echo $project->name;?></td>
           </tr>
           <tr>

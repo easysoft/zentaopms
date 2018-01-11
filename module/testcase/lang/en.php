@@ -73,7 +73,7 @@ $lang->testcase->stepVersion = 'Version';
 $lang->testcase->common                  = 'Case';
 $lang->testcase->index                   = "Home";
 $lang->testcase->create                  = "Create Case";
-$lang->testcase->batchCreate             = "Batch Create Case";
+$lang->testcase->batchCreate             = "Batch Create Cases";
 $lang->testcase->delete                  = "Delete";
 $lang->testcase->view                    = "Overview";
 $lang->testcase->review                  = "Review";
@@ -168,7 +168,7 @@ $lang->testcase->groups['']      = 'Group ';
 $lang->testcase->groups['story'] = 'Story Group';
 
 $lang->testcase->statusList['']            = '';
-$lang->testcase->statusList['wait']        = 'toReview';
+$lang->testcase->statusList['wait']        = 'ToReview';
 $lang->testcase->statusList['normal']      = 'Normal';
 $lang->testcase->statusList['blocked']     = 'Blocked';
 $lang->testcase->statusList['investigate'] = 'Investigating';
@@ -183,7 +183,7 @@ $lang->testcase->buttonToList = 'Back';
 $lang->testcase->errorEncode      = 'No Data. Please select right encoding and upload again!';
 $lang->testcase->noFunction       = 'Iconv and mb_convert_encoding is not found. You cannot convert the data into the desired one!';
 $lang->testcase->noRequire        = "Row %s has“%s”which is a required field and it should not be blank.";
-$lang->testcase->noLibrary        = "No library exists. Create one first！";
+$lang->testcase->noLibrary        = "No library exists. Please create one first.";
 $lang->testcase->mustChooseResult = 'Review result is required.';
 
 $lang->testcase->searchStories = 'Enter to searcu Story';

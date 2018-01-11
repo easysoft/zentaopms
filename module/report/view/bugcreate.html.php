@@ -45,7 +45,7 @@
       <th class="w-100px"><?php echo $lang->bug->resolutionList['notrepro'];?></th>
       <th><?php echo $lang->bug->resolutionList['postponed'];?></th>
       <th class="w-120px"><?php echo $lang->bug->resolutionList['willnotfix'];?></th>
-      <th class="w-120px"><?php echo $lang->bug->resolutionList['tostory'];?></th>
+      <th class="w-130px"><?php echo $lang->bug->resolutionList['tostory'];?></th>
       <th title='<?php echo $lang->report->validRateTips;?>'><?php echo $lang->report->validRate;?></th>
       <th><?php echo $lang->report->total;?></th>
     </tr>
