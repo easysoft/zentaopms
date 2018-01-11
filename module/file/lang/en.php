@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->file = new stdclass();
-$lang->file->common        = 'Attachment';
+$lang->file->common        = 'File';
 $lang->file->uploadImages  = 'Batch Upload Images';
 $lang->file->download      = 'Download Files';
 $lang->file->uploadDate    = 'Uploaded on';
@@ -26,16 +26,16 @@ $lang->file->exportFields  = "Fileds to be Exported";
 $lang->file->defaultTPL    = "Default Template";
 $lang->file->setExportTPL  = "Settings";
 $lang->file->preview       = "Preview";
-$lang->file->addFile       = 'Add File';
-$lang->file->beginUpload   = 'Start uploading';
-$lang->file->uploadSuccess = 'uploaded Successfully';
+$lang->file->addFile       = 'Add';
+$lang->file->beginUpload   = 'Upload';
+$lang->file->uploadSuccess = 'Uploaded!';
 
 $lang->file->pathname  = 'Path Name';
 $lang->file->title     = 'Title';
 $lang->file->extension = 'Extension';
 $lang->file->size      = 'Size';
 $lang->file->addedBy   = 'Added By';
-$lang->file->addedDate = 'Added Date';
+$lang->file->addedDate = 'Added On';
 $lang->file->downloads = 'Downloads';
 $lang->file->extra     = 'Extra';
 
@@ -50,4 +50,4 @@ $lang->file->errorFileMove    = " Uploading failed, there was an error when movi
 $lang->file->dangerFile       = " File has been rejected to upload for security issues.";
 $lang->file->errorSuffix      = 'Format is incorrect. .zip files ONLY!';
 $lang->file->errorExtract     = 'Extracting file failed. File might be damaged or invalid files in the zip package.';
-$lang->file->uploadImagesExplain = 'Note: please upload "jpg, jpeg, gif, png" format of the picture, the program will use the file name as the title, the picture as content.';
+$lang->file->uploadImagesExplain = 'Note: upload .jpg, .jpeg, .gif, and .png images. The image name will be taken as the title of the story and the image as its content.';

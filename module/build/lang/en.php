@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->build->common       = "Build";
-$lang->build->create       = "Create";
+$lang->build->create       = "Create Build";
 $lang->build->edit         = "Edit";
 $lang->build->linkStory    = "Link Story";
 $lang->build->linkBug      = "Link Bug";
@@ -44,7 +44,7 @@ $lang->build->unlinkStory        = 'Unlink Story';
 $lang->build->unlinkBug          = 'Unlink Bug';
 $lang->build->stories            = 'Finished Story';
 $lang->build->bugs               = 'Resolved Bug';
-$lang->build->generatedBugs      = 'Remained Bug';
+$lang->build->generatedBugs      = 'Left Bug';
 $lang->build->noProduct          = " <span style='color:red'>This {$lang->projectCommon} has not linked to {$lang->productCommon}, so Build cannot be created. Please first <a href='%s'> link {$lang->productCommon}</a></span>";
 
 $lang->build->finishStories = '  %s Story(ies) have been finished.';

@@ -20,7 +20,7 @@
 <form class='form-condensed mw-500px pdb-20' method='post' target='hiddenwin'>
   <table align='center' class='table table-form'> 
     <tr>
-      <th class='w-100px'><?php echo $lang->company->name;?></th>
+      <th class='w-150px'><?php echo $lang->company->name;?></th>
       <td><?php echo html::input('name', $company->name, "class='form-control' autocomplete='off'");?></td>
     </tr>  
     <tr>

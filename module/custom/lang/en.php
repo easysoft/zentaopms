@@ -5,9 +5,9 @@ $lang->custom->set        = 'Customize';
 $lang->custom->restore    = 'Reset to Default';
 $lang->custom->key        = 'Key';
 $lang->custom->value      = 'Value';
-$lang->custom->flow       = 'Process';
-$lang->custom->working    = 'Working';
-$lang->custom->select     = 'Select Process';
+$lang->custom->flow       = 'Workflow';
+$lang->custom->working    = 'WorkStyle';
+$lang->custom->select     = 'Select Workflow';
 $lang->custom->branch     = 'Multi Branch';
 $lang->custom->owner      = 'Owner';
 $lang->custom->module     = 'Module';
@@ -23,25 +23,25 @@ $lang->custom->object['task']     = 'Task';
 $lang->custom->object['bug']      = 'Bug';
 $lang->custom->object['testcase'] = 'Case';
 $lang->custom->object['testtask'] = 'Build';
-$lang->custom->object['todo']     = 'To-Dos';
+$lang->custom->object['todo']     = 'Todo';
 $lang->custom->object['user']     = 'User';
-$lang->custom->object['block']    = 'Block';
+$lang->custom->object['block']    = 'ClosedBlock';
 
 $lang->custom->story = new stdClass();
 $lang->custom->story->fields['priList']          = 'Priority';
 $lang->custom->story->fields['sourceList']       = 'Source';
-$lang->custom->story->fields['reasonList']       = 'Reason';
+$lang->custom->story->fields['reasonList']       = 'Close Reason';
 $lang->custom->story->fields['stageList']        = 'Stage';
 $lang->custom->story->fields['statusList']       = 'Status';
-$lang->custom->story->fields['reviewResultList'] = 'Result';
-$lang->custom->story->fields['review']           = 'Review';
+$lang->custom->story->fields['reviewResultList'] = 'Review Result';
+$lang->custom->story->fields['review']           = 'Review Required';
 
 $lang->custom->task = new stdClass();
 $lang->custom->task->fields['priList']    = 'Priority';
 $lang->custom->task->fields['typeList']   = 'Type';
-$lang->custom->task->fields['reasonList'] = 'Reason';
+$lang->custom->task->fields['reasonList'] = 'Close Reason';
 $lang->custom->task->fields['statusList'] = 'Status';
-$lang->custom->task->fields['hours']      = 'Working hours';
+$lang->custom->task->fields['hours']      = 'Man-hours';
 
 $lang->custom->bug = new stdClass();
 $lang->custom->bug->fields['priList']        = 'Priority';
@@ -51,7 +51,7 @@ $lang->custom->bug->fields['browserList']    = 'Browser';
 $lang->custom->bug->fields['typeList']       = 'Type';
 $lang->custom->bug->fields['resolutionList'] = 'Solution';
 $lang->custom->bug->fields['statusList']     = 'Status';
-$lang->custom->bug->fields['longlife']       = 'Long Life Days';
+$lang->custom->bug->fields['longlife']       = 'Shelved Days';
 
 $lang->custom->testcase = new stdClass();
 $lang->custom->testcase->fields['priList']    = 'Priority';
@@ -59,7 +59,7 @@ $lang->custom->testcase->fields['typeList']   = 'Type';
 $lang->custom->testcase->fields['stageList']  = 'Stage';
 $lang->custom->testcase->fields['resultList'] = 'Result';
 $lang->custom->testcase->fields['statusList'] = 'Status';
-$lang->custom->testcase->fields['review']     = 'Review';
+$lang->custom->testcase->fields['review']     = 'Review Required';
 
 $lang->custom->testtask = new stdClass();
 $lang->custom->testtask->fields['priList']    = 'Priority';
@@ -84,10 +84,10 @@ $lang->custom->confirmRestore = 'Do you want to reset to Default?';
 
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole             = 'Key must be no more than 20 characters!';
-$lang->custom->notice->canNotAdd            = 'This item will be processed, so customized feature is not enabled.';
-$lang->custom->notice->forceReview          = 'Review is required for %s submitted by certain assignee.';
-$lang->custom->notice->forceNotReview       = "Not review is required for %s submitted by certain assignee.";
-$lang->custom->notice->longlife             = 'List "Undone" bugs that are older than hold days from "Longlife" bugs.';
+$lang->custom->notice->canNotAdd            = 'These items are parameters of calculation, so customized creation is not enabled.';
+$lang->custom->notice->forceReview          = '%s Review is required for certain submitters.';
+$lang->custom->notice->forceNotReview       = "%s Review is NOT required for certain submitters.";
+$lang->custom->notice->longlife             = 'Define shelved bugs.';
 $lang->custom->notice->priListKey           = 'Priority list key should be numbers！';
 $lang->custom->notice->keyList              = 'key should be English or digital!';
 $lang->custom->notice->severityListKey      = 'Bug severity list key should be numbers.';
@@ -96,7 +96,7 @@ $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage.
 $lang->custom->notice->indexPage['qa']      = "ZenTao 8.2+ has QA Homepage. Do you want to go to QA Homepage?";
 
 $lang->custom->storyReview    = 'Review';
-$lang->custom->forceReview    = 'Review Required';
+$lang->custom->forceReview    = 'Selective Review';
 $lang->custom->forceNotReview = 'No review';
 $lang->custom->reviewList[1]  = 'On';
 $lang->custom->reviewList[0]  = 'Off';
@@ -116,10 +116,10 @@ $lang->custom->productProject->relation['1_1'] = 'Project - Sprint';
 
 $lang->custom->productProject->notice = 'Please select according to your team.';
 
-$lang->custom->workingList['full']      = 'Full';
-$lang->custom->workingList['onlyTest']  = 'Test';
-$lang->custom->workingList['onlyStory'] = 'Story';
-$lang->custom->workingList['onlyTask']  = 'Task';
+$lang->custom->workingList['full']      = 'Full Management of Dev';
+$lang->custom->workingList['onlyTest']  = 'Test Management';
+$lang->custom->workingList['onlyStory'] = 'Story Management';
+$lang->custom->workingList['onlyTask']  = 'Task Management';
 
 $lang->custom->menuTip  = 'Click to show/hide navigation bar. Drag to swtich display order.';
 $lang->custom->saveFail = 'Failed to save!';

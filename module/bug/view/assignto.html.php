@@ -20,14 +20,14 @@ js::set('page', 'assignedto');
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['bug']);?>  <strong><?php echo $bug->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('bug', 'view', 'bug=' . $bug->id), $bug->title, '_blank');?></strong>
-    <small class='text-muted'> <?php echo $lang->bug->assignedTo;?> <?php echo html::icon($lang->icons['assignTo']);?></small>
+    <small class='text-muted'> <?php echo $lang->bug->assignBug;?> <?php echo html::icon($lang->icons['assignTo']);?></small>
   </div>
 </div>
 
 <form class='form-condensed' method='post' target='hiddenwin'>
   <table class='table table-form'>
     <tr>
-      <th class='w-80px'><?php echo $lang->bug->assignedTo;?></th>
+      <th class='w-80px'><?php echo $lang->bug->assignBug;?></th>
       <td class='w-p25-f'><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='form-control chosen'");?></td><td></td>
     </tr>  
     <tr>

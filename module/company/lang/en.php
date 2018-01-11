@@ -11,25 +11,25 @@
  */
 $lang->company->common   = 'Company';
 $lang->company->index    = "Home";
-$lang->company->edit     = "Edit";
-$lang->company->view     = "Info";
+$lang->company->edit     = "Edit Company";
+$lang->company->view     = "Company Info";
 $lang->company->browse   = "User List";
 $lang->company->dynamic  = "Dynamic";
 $lang->company->orgView  = 'View';
 
-$lang->company->name     = 'Company Name';
+$lang->company->name     = 'Name';
 $lang->company->phone    = 'Phone';
 $lang->company->fax      = 'Fax';
 $lang->company->address  = 'Mailing Address';
 $lang->company->zipcode  = 'Zip Code';
 $lang->company->website  = 'Website';
 $lang->company->backyard = 'Intranet';
-$lang->company->guest    = 'Guest Login';
+$lang->company->guest    = 'Anonymous Login';
 $lang->company->admins   = 'Administrators';
 
 $lang->company->product = $lang->productCommon;
 $lang->company->project = $lang->projectCommon;
 $lang->company->user    = 'User';
 
-$lang->company->guestOptions[0] = 'Off';
-$lang->company->guestOptions[1] = 'On';
+$lang->company->guestOptions[0] = 'Deny';
+$lang->company->guestOptions[1] = 'Allow';

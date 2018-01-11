@@ -23,7 +23,7 @@ $lang->install->seeLatestRelease = 'View Latest Version';
 $lang->install->welcome          = 'Welcome to ZenTao Project Management Software!';
 $lang->install->license          = 'ZenTao PMS is under Z PUBLIC LICENSE(ZPL) 1.2';
 $lang->install->desc             = <<<EOT
-ZenTao Project Management Software (ZenTao PMS) is originated in China and under <a href='http://zpl.pub' target='_blank'>ZPL</a>. It us an open source and free project management software, integrated with Product Management、Project Management、QA Management, as weel as To-Dos Management, Company Managementetc, which is the best choice for small and medium organizations to manage projects.
+ZenTao Project Management Software (ZenTao PMS) is originated in China and under <a href='http://zpl.pub' target='_blank'>ZPL</a>. It us an open source and free project management software, integrated with Product Management、Project Management、QA Management, as weel as Todo Management, Company Managementetc, which is the best choice for small and medium organizations to manage projects.
 
 ZenTao PMS uses PHP + MySQL as programming langugages and is based on ZenTaoPHP,  an independent framwork developed by our team. Third party developers/organizations can develop extensions or customization tailored to their needs.
 EOT;
@@ -100,10 +100,10 @@ $lang->install->working        = 'Working way';
 $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
 
-$lang->install->workingList['full']      = 'Full';
-$lang->install->workingList['onlyTest']  = 'Only Test';
-$lang->install->workingList['onlyStory'] = 'Only Story';
-$lang->install->workingList['onlyTask']  = 'Only Task';
+$lang->install->workingList['full']      = 'Full Management of Dev';
+$lang->install->workingList['onlyTest']  = 'Only Test Management';
+$lang->install->workingList['onlyStory'] = 'Only Story Management';
+$lang->install->workingList['onlyTask']  = 'Only Task Management';
 
 $lang->install->errorConnectDB      = 'Connection to database Failed. ';
 $lang->install->errorDBName         = 'Database name should exclude “.” ';
@@ -139,9 +139,9 @@ $lang->install->groupList['PO']['desc']      = 'for Product Owner';
 $lang->install->groupList['TD']['name']      = 'Dev Manager';
 $lang->install->groupList['TD']['desc']      = 'for Dev Manager';
 $lang->install->groupList['PD']['name']      = 'PD';
-$lang->install->groupList['PD']['desc']      = 'for Product Director';
+$lang->install->groupList['PD']['desc']      = 'for Product Manager';
 $lang->install->groupList['QD']['name']      = 'QD';
-$lang->install->groupList['QD']['desc']      = 'for QA Director';
+$lang->install->groupList['QD']['desc']      = 'for QA Manager';
 $lang->install->groupList['TOP']['name']     = 'Senior';
 $lang->install->groupList['TOP']['desc']     = 'for Senior Manager';
 $lang->install->groupList['OTHERS']['name']  = 'Other';
@@ -185,7 +185,7 @@ $lang->install->chanzhi->desc = <<<EOD
 EOD;
 
 $lang->install->ranzhi = new stdclass();
-$lang->install->ranzhi->name = 'Ranger Collaborative System';
+$lang->install->ranzhi->name = 'Zdoo Collaborative System';
 $lang->install->ranzhi->logo = 'images/main/zdoo_org.png';
 $lang->install->ranzhi->url  = 'http://www.zdoo.org';
 $lang->install->ranzhi->desc = <<<EOD

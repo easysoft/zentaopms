@@ -9,6 +9,8 @@ $lang->testreport->view     = '报告详情';
 $lang->testreport->recreate = '重新生成报告';
 
 $lang->testreport->title       = '标题';
+$lang->testreport->bugTitle    = 'Bug 标题';
+$lang->testreport->storyTitle  = '需求标题';
 $lang->testreport->project     = '所属项目';
 $lang->testreport->testtask    = '测试版本';
 $lang->testreport->tasks       = $lang->testreport->testtask;

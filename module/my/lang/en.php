@@ -3,37 +3,37 @@ $lang->my->common = 'Dashboard';
 
 /* Method List。*/
 $lang->my->index          = 'Home';
-$lang->my->todo           = 'My To-Dos';
-$lang->my->task           = 'My Tasks';
-$lang->my->bug            = 'My Bugs';
-$lang->my->testTask       = 'My Builds';
-$lang->my->testCase       = 'My Cases';
-$lang->my->story          = 'My Stories';
-$lang->my->myProject      = "My {$lang->projectCommon}s";
+$lang->my->todo           = 'My Todo';
+$lang->my->task           = 'My Task';
+$lang->my->bug            = 'My Bug';
+$lang->my->testTask       = 'My Build';
+$lang->my->testCase       = 'My Case';
+$lang->my->story          = 'My Story';
+$lang->my->myProject      = "My {$lang->projectCommon}";
 $lang->my->profile        = 'My Profile';
 $lang->my->dynamic        = 'My Dynamic';
-$lang->my->editProfile    = 'Edit';
+$lang->my->editProfile    = 'Edit Profile';
 $lang->my->changePassword = 'Edit Password';
 $lang->my->unbind         = 'Unbind Ranger';
 $lang->my->manageContacts = 'Maintain Contact';
 $lang->my->deleteContacts = 'Delete Contact';
-$lang->my->shareContacts  = 'Share List';
+$lang->my->shareContacts  = 'Share the list';
 $lang->my->limited        = 'Restricted operation (editing only content related to itself)';
 $lang->my->score          = 'My Score';
 $lang->my->scoreRule      = 'Score Rule';
 
 $lang->my->taskMenu = new stdclass();
-$lang->my->taskMenu->assignedToMe = 'Assigned to Me';
-$lang->my->taskMenu->openedByMe   = 'Created by Me';
-$lang->my->taskMenu->finishedByMe = 'Finished by Me';
-$lang->my->taskMenu->closedByMe   = 'Closed by Me';
-$lang->my->taskMenu->canceledByMe = 'Cancelled by Me';
+$lang->my->taskMenu->assignedToMe = 'AssignedToMe';
+$lang->my->taskMenu->openedByMe   = 'CreatedByMe';
+$lang->my->taskMenu->finishedByMe = 'FinishedByMe';
+$lang->my->taskMenu->closedByMe   = 'ClosedByMe';
+$lang->my->taskMenu->canceledByMe = 'CancelledByMe';
 
 $lang->my->storyMenu = new stdclass();
-$lang->my->storyMenu->assignedToMe = 'Assigned to Me';
-$lang->my->storyMenu->openedByMe   = 'Created by Me';
-$lang->my->storyMenu->reviewedByMe = 'Reviewed by Me';
-$lang->my->storyMenu->closedByMe   = 'Closed by Me';
+$lang->my->storyMenu->assignedToMe = 'AssignedToMe';
+$lang->my->storyMenu->openedByMe   = 'CreatedByMe';
+$lang->my->storyMenu->reviewedByMe = 'ReviewedByMe';
+$lang->my->storyMenu->closedByMe   = 'ClosedByMe';
 
 $lang->my->home = new stdclass();
 $lang->my->home->latest        = 'Dynamic';

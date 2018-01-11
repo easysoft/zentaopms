@@ -9,13 +9,13 @@
  * @version     $Id: en.php 4676 2013-04-26 06:08:23Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->todo->common       = 'To-Do';
+$lang->todo->common       = 'Todo';
 $lang->todo->index        = "Home";
-$lang->todo->create       = "Create";
+$lang->todo->create       = "Create Todo";
 $lang->todo->batchCreate  = "Batch Create";
 $lang->todo->edit         = "Edit";
 $lang->todo->batchEdit    = "Batch Edit";
-$lang->todo->view         = "Info";
+$lang->todo->view         = "Overview";
 $lang->todo->finish       = "Finish";
 $lang->todo->batchFinish  = "Batch Finish";
 $lang->todo->export       = "Export";
@@ -55,9 +55,9 @@ $lang->todo->every      = 'Every';
 $lang->todo->beforeDays = "%s<span class='input-group-addon'>early in advance to be done</span>";
 $lang->todo->dayNames   = array(1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 0 => 'Sunday');
 
-$lang->todo->confirmBug   = 'This To-Do is related to Bug #%s. Do you want to edit it?';
-$lang->todo->confirmTask  = 'This To-Do is related to Task #%s，Do you want to edit it?';
-$lang->todo->confirmStory = 'This To-Do is related to Story #%s，Do you want to edit it?';
+$lang->todo->confirmBug   = 'This Todo is related to Bug #%s. Do you want to edit it?';
+$lang->todo->confirmTask  = 'This Todo is related to Task #%s，Do you want to edit it?';
+$lang->todo->confirmStory = 'This Todo is related to Story #%s，Do you want to edit it?';
 
 $lang->todo->statusList['wait']  = 'Wait';
 $lang->todo->statusList['doing'] = 'Doing';
@@ -81,22 +81,22 @@ global $config;
 if($config->global->flow == 'onlyTest' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['task']);
 if($config->global->flow == 'onlyTask' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['bug']);
 
-$lang->todo->confirmDelete  = "Are you sure to delete this To-Do?";
-$lang->todo->thisIsPrivate  = 'This is a private To-Do:)';
+$lang->todo->confirmDelete  = "Are you sure to delete this Todo?";
+$lang->todo->thisIsPrivate  = 'This is a private Todo';
 $lang->todo->lblDisableDate = 'Set later.';
 $lang->todo->lblBeforeDays  = "%s early in advance to be done";
-$lang->todo->noTodo         = 'No this type of to-dos.';
+$lang->todo->noTodo         = 'No this type of Todo.';
 
 $lang->todo->periods['today']      = 'Today';
 $lang->todo->periods['yesterday']  = 'Yesterday';
-$lang->todo->periods['thisWeek']   = 'This Week';
-$lang->todo->periods['lastWeek']   = 'Last Week';
-$lang->todo->periods['thisMonth']  = 'This Month';
-$lang->todo->periods['lastmonth']  = 'Last Month';
-$lang->todo->periods['thisSeason'] = 'This Season';
-$lang->todo->periods['thisYear']   = 'This Year';
+$lang->todo->periods['thisWeek']   = 'ThisWeek';
+$lang->todo->periods['lastWeek']   = 'LastWeek';
+$lang->todo->periods['thisMonth']  = 'ThisMonth';
+$lang->todo->periods['lastmonth']  = 'LastMonth';
+$lang->todo->periods['thisSeason'] = 'ThisSeason';
+$lang->todo->periods['thisYear']   = 'ThisYear';
 $lang->todo->periods['future']     = 'Pending';
-$lang->todo->periods['before']     = 'Undone';
+$lang->todo->periods['before']     = 'Unfinished';
 $lang->todo->periods['all']        = 'All';
 $lang->todo->periods['cycle']      = 'Cycle';
 

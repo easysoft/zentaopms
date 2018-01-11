@@ -24,15 +24,15 @@
 <form method='post' target='hiddenwin' class='form-condensed'>
     <table class='table table-form'>
       <tr>
-        <th class='w-80px'><?php echo $lang->testcase->reviewedDate;?></th>
+        <th class='w-80px'><?php echo $lang->testcase->reviewedDateAB;?></th>
         <td class='w-p25-f'><?php echo html::input('reviewedDate', helper::today(), "class='form-control form-date'");?></td><td></td>
       </tr>
       <tr>
-        <th><?php echo $lang->testcase->reviewResult;?></th>
+        <th><?php echo $lang->testcase->reviewResultAB;?></th>
         <td><?php echo html::select('result', $lang->testcase->reviewResultList, '', 'class=form-control');?></td><td></td>
       </tr>
       <tr>
-        <th><?php echo $lang->testcase->reviewedBy;?></th>
+        <th><?php echo $lang->testcase->reviewedByAB;?></th>
         <td colspan='2'><?php echo html::select('reviewedBy[]', $users, $app->user->account, "class='form-control chosen' multiple");?></td>
       </tr>
       <tr>

@@ -13,12 +13,12 @@
 <table class='table tablesorter table-data table-hover block-testtask table-fixed'>
   <thead>
   <tr>
-    <th width='50'><?php echo $lang->idAB?></th>
-    <th>           <?php echo $lang->testtask->product;?></th>
-    <th>           <?php echo $lang->testtask->name;?></th>
-    <th>           <?php echo $lang->testtask->project . '/' . $lang->testtask->build;?></th>
-    <th width='80'><?php echo $lang->testtask->begin;?></th>
-    <th width='80'><?php echo $lang->testtask->end;?></th>
+    <th width='30'><?php echo $lang->idAB?></th>
+    <th width='80'><?php echo $lang->testtask->product;?></th>
+    <th width='80'> <?php echo $lang->testtask->name;?></th>
+    <th width='80'><?php echo $lang->testtask->project . '/' . $lang->testtask->build;?></th>
+    <th width='50'><?php echo $lang->testtask->begin;?></th>
+    <th width='50'><?php echo $lang->testtask->end;?></th>
   </tr>
   </thead>
   <?php foreach($testtasks as $testtask):?>
