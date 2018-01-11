@@ -375,7 +375,11 @@ class todoModel extends model
         if($account == '')   $account = $this->app->user->account;
 
         $stmt = $this->dao->select('*')->from(TABLE_TODO)
-            ->where('account')->eq($account)
+            ->where('1')
+            ->andWhere('account', true)->eq($account)
+            ->orWhere('assignedTo')->eq($account)
+            ->orWhere('finishedBy')->eq($account)
+            ->markRight(1)
             ->beginIF($begin)->andWhere('date')->ge($begin)->fi()
             ->beginIF($end)->andWhere('date')->le($end)->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
