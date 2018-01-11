@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
+<?php include 'header.html.php';?>
 <div id="titlebar">
   <div class="heading">
     <strong><?php echo html::a(inlink('browse'), $lang->webhook->common);?></strong>

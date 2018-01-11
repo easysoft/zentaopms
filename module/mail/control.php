@@ -20,6 +20,7 @@ class mail extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
+        $this->loadModel('message');
 
         /* Task #1967. check the function of fsocket. */
         if(isset($this->config->mail->mta) and $this->config->mail->mta != 'sendcloud' and !function_exists('fsockopen'))

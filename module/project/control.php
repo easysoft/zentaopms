@@ -400,9 +400,6 @@ class project extends control
             $mails = $this->project->importBug($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            $this->loadModel('task');
-            foreach($mails as $mail) $this->task->sendmail($mail->taskID, $mail->actionID);
-
             die(js::locate($this->createLink('project', 'importBug', "projectID=$projectID"), 'parent'));
         }
 

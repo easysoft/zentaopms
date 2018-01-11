@@ -2543,9 +2543,8 @@ class bugModel extends model
     public function sendmail($bugID, $actionID)
     {
         $this->loadModel('mail');
-        $bug         = $this->getByID($bugID);
-        $productName = $this->loadModel('product')->getById($bug->product)->name;
-        $users       = $this->loadModel('user')->getPairs('noletter');
+        $bug   = $this->getByID($bugID);
+        $users = $this->loadModel('user')->getPairs('noletter');
 
         /* Get action info. */
         $action             = $this->loadModel('action')->getById($actionID);
@@ -2580,12 +2579,44 @@ class bugModel extends model
         ob_end_clean();
         chdir($oldcwd);
 
+        $sendUsers = $this->getToAndCcList($bug);
+        if(!$sendUsers) return;
+        list($toList, $ccList) = $sendUsers;
+        $subject = $this->getSubject($bug);
+
+        /* Send it. */
+        $this->mail->send($toList, $subject, $mailContent, $ccList);
+        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+    }
+
+    /**
+     * Get subject.
+     * 
+     * @param  object    $bug 
+     * @access public
+     * @return string
+     */
+    public function getSubject($bug)
+    {
+        $productName = $this->loadModel('product')->getById($bug->product)->name;
+        return 'BUG #'. $bug->id . ' ' . $bug->title . ' - ' . $productName;
+    }
+
+    /**
+     * Get toList and ccList.
+     * 
+     * @param  object    $bug 
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList($bug)
+    {
         /* Set toList and ccList. */
         $toList = $bug->assignedTo;
         $ccList = trim($bug->mailto, ',');
         if(empty($toList))
         {
-            if(empty($ccList)) return;
+            if(empty($ccList)) return false;
             if(strpos($ccList, ',') === false)
             {
                 $toList = $ccList;
@@ -2603,8 +2634,6 @@ class bugModel extends model
             $toList = $bug->resolvedBy;
         }
 
-        /* Send it. */
-        $this->mail->send($toList, 'BUG #'. $bug->id . ' ' . $bug->title . ' - ' . $productName, $mailContent, $ccList);
-        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+        return array($toList, $ccList);
     }
 }

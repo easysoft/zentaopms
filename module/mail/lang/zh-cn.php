@@ -51,8 +51,8 @@ $lang->mail->sendTime    = '发送时间';
 $lang->mail->status      = '状态';
 $lang->mail->failReason  = '失败原因';
 
-$lang->mail->statusList['send'] = '成功';
-$lang->mail->statusList['fail'] = '失败';
+$lang->mail->statusList['sended'] = '成功';
+$lang->mail->statusList['fail']   = '失败';
 
 $lang->mail->turnonList[1]  = '打开';
 $lang->mail->turnonList[0] = '关闭';

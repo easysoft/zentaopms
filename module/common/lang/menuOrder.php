@@ -112,6 +112,7 @@ $lang->user->menuOrder        = $lang->company->menuOrder;
 $lang->admin->menuOrder[5]  = 'index';
 $lang->admin->menuOrder[10] = 'extension';
 $lang->admin->menuOrder[15] = 'custom';
+$lang->admin->menuOrder[19] = 'message';
 $lang->admin->menuOrder[20] = 'mail';
 $lang->admin->menuOrder[25] = 'custom';
 $lang->admin->menuOrder[30] = 'convert';

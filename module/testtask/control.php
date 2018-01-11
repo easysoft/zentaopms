@@ -103,8 +103,7 @@ class testtask extends control
         {
             $taskID = $this->testtask->create();
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->loadModel('action')->create('testtask', $taskID, 'opened');
-            $this->testtask->sendmail($taskID, $actionID);
+            $this->loadModel('action')->create('testtask', $taskID, 'opened');
             die(js::locate($this->createLink('testtask', 'browse', "productID=$productID"), 'parent'));
         }
 
@@ -423,9 +422,6 @@ class testtask extends control
             {
                 $actionID = $this->loadModel('action')->create('testtask', $taskID, 'edited');
                 $this->action->logHistory($actionID, $changes);
-
-                /* send mail.*/
-                $this->testtask->sendmail($taskID, $actionID);
             }
             die(js::locate(inlink('view', "taskID=$taskID"), 'parent'));
         }
@@ -553,7 +549,6 @@ class testtask extends control
             {
                 $actionID = $this->action->create('testtask', $taskID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->testtask->sendmail($taskID, $actionID);
             }
 
             if(isonlybody()) die(js::reload('parent.parent'));

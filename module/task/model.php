@@ -2224,9 +2224,8 @@ class taskModel extends model
     public function sendmail($taskID, $actionID)
     {
         $this->loadModel('mail');
-        $task        = $this->getById($taskID);
-        $users       = $this->loadModel('user')->getPairs('noletter');
-        $projectName = $this->loadModel('project')->getById($task->project)->name;
+        $task  = $this->getById($taskID);
+        $users = $this->loadModel('user')->getPairs('noletter');
 
         /* Get action info. */
         $action          = $this->loadModel('action')->getById($actionID);
@@ -2253,13 +2252,45 @@ class taskModel extends model
 
         chdir($oldcwd);
 
+        $sendUsers = $this->getToAndCcList($task);
+        if(!$sendUsers) return;
+        list($toList, $ccList) = $sendUsers;
+        $subject = $this->getSubject($task);
+
+        /* Send emails. */
+        $this->mail->send($toList, $subject, $mailContent, $ccList);
+        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+    }
+
+    /**
+     * Get mail subject.
+     * 
+     * @param  object    $task 
+     * @access public
+     * @return string
+     */
+    public function getSubject($task)
+    {
+        $projectName = $this->loadModel('project')->getById($task->project)->name;
+        return 'TASK#' . $task->id . ' ' . $task->name . ' - ' . $projectName;
+    }
+
+    /**
+     * Get toList and ccList.
+     * 
+     * @param  object    $task 
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList($task)
+    {
         /* Set toList and ccList. */
         $toList = $task->assignedTo;
         $ccList = trim($task->mailto, ',');
 
         if(empty($toList))
         {
-            if(empty($ccList)) return;
+            if(empty($ccList)) return false;
             if(strpos($ccList, ',') === false)
             {
                 $toList = $ccList;
@@ -2277,9 +2308,7 @@ class taskModel extends model
             $toList = $task->finishedBy;
         }
 
-        /* Send emails. */
-        $this->mail->send($toList, 'TASK#' . $task->id . ' ' . $task->name . ' - ' . $projectName, $mailContent, $ccList);
-        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+        return array($toList, $ccList);
     }
 
     /**

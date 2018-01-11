@@ -112,8 +112,7 @@ class task extends control
                 if($taskID['status'] == 'exists') continue;
 
                 $taskID   = $taskID['id'];
-                $actionID = $this->action->create('task', $taskID, 'Opened', '');
-                $this->task->sendmail($taskID, $actionID);
+                $this->action->create('task', $taskID, 'Opened', '');
             }
 
             /* If link from no head then reload*/
@@ -208,8 +207,6 @@ class task extends control
             $mails = $this->task->batchCreate($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            foreach($mails as $mail) $this->task->sendmail($mail->taskID, $mail->actionID);
-
             /* Locate the browser. */
             if($iframe) die(js::reload('parent.parent'));
             die(js::locate($storyLink, 'parent'));
@@ -290,7 +287,6 @@ class task extends control
                 $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
                 $actionID = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
 
             if($task->fromBug != 0)
@@ -343,7 +339,6 @@ class task extends control
 
                     $actionID = $this->loadModel('action')->create('task', $taskID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
-                    $this->task->sendmail($taskID, $actionID);
 
                     $task = $this->task->getById($taskID);
                     if($task->fromBug != 0)
@@ -443,7 +438,6 @@ class task extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
             $this->action->logHistory($actionID, $changes);
-            $this->task->sendmail($taskID, $actionID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -489,7 +483,6 @@ class task extends control
                 $this->loadModel('action');
                 $actionID = $this->action->create('task', $taskID, 'Edited');
                 $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
@@ -519,7 +512,6 @@ class task extends control
                 if(dao::isError()) die(js::error(dao::getError()));
                 $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
                 $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
             die(js::reload('parent'));
@@ -620,7 +612,6 @@ class task extends control
                 $act = $this->post->left == 0 ? 'Finished' : 'Started';
                 $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
 
             /* Remind whether to update status of the bug, if task which from that bug has been finished. */
@@ -773,7 +764,6 @@ class task extends control
                 $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
                 $actionID = $this->action->create('task', $taskID, 'Finished', $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
 
             if($this->task->needUpdateBugStatus($task))
@@ -882,7 +872,6 @@ class task extends control
                 $act = $this->post->left == 0 ? 'Finished' : 'Restarted';
                 $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -915,7 +904,6 @@ class task extends control
             {
                 $actionID = $this->action->create('task', $taskID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -956,7 +944,6 @@ class task extends control
                 {
                     $actionID = $this->action->create('task', $taskID, 'Canceled', '');
                     $this->action->logHistory($actionID, $changes);
-                    $this->task->sendmail($taskID, $actionID);
                 }
             }
         }
@@ -997,7 +984,6 @@ class task extends control
                 {
                     $actionID = $this->action->create('task', $taskID, 'Closed', '');
                     $this->action->logHistory($actionID, $changes);
-                    $this->task->sendmail($taskID, $actionID);
                 }
             }
             if(isset($skipTasks) and empty($skipTaskIdList))
@@ -1033,7 +1019,6 @@ class task extends control
             {
                 $actionID = $this->action->create('task', $taskID, 'Canceled', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -1067,7 +1052,6 @@ class task extends control
             {
                 $actionID = $this->action->create('task', $taskID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));

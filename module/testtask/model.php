@@ -1255,12 +1255,57 @@ class testtaskModel extends model
         ob_end_clean();
         chdir($oldcwd);
 
+        $sendUsers = $this->getToAndCcList($testtask);
+        if(!$sendUsers) return;
+        list($toList, $ccList) = $sendUsers;
+        $subject = $this->getSubject($testtask, $action->action);
+
+        /* Send mail. */
+        $this->mail->send($toList, $subject, $mailContent, $ccList); 
+        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+    }
+
+    /**
+     * Get mail subject.
+     * 
+     * @param  object    $testtask 
+     * @param  string    $actionType 
+     * @access public
+     * @return string
+     */
+    public function getSubject($testtask, $actionType)
+    {
+        /* Set email title. */
+        if($actionType == 'opened')
+        {
+            return sprintf($this->lang->testtask->mail->create->title, $this->app->user->realname, $testtask->id, $tasktask->name);
+        }
+        elseif($actionType == 'closed')
+        {
+            return sprintf($this->lang->testtask->mail->close->title, $this->app->user->realname, $testtask->id, $testtask->name);
+        }
+        else
+        {
+            return sprintf($this->lang->testtask->mail->edit->title, $this->app->user->realname, $testtask->id, $testtask->name);
+        }
+    }
+
+    /**
+     * Get toList and ccList.
+     * 
+     * @param  object    $testtask 
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList($testtask)
+    {
         /* Set toList and ccList. */
         $toList   = $testtask->owner;
         $ccList   = str_replace(' ', '', trim($testtask->mailto, ','));
+
         if(empty($toList))
         {
-            if(empty($ccList)) return;
+            if(empty($ccList)) return false;
             if(strpos($ccList, ',') === false)
             {
                 $toList = $ccList;
@@ -1273,23 +1318,6 @@ class testtaskModel extends model
                 $ccList   = substr($ccList, $commaPos + 1);
             }
         }
-
-        /* Set email title. */
-        if($action->action == 'opened')
-        {
-            $mailTitle = sprintf($this->lang->testtask->mail->create->title, $this->app->user->realname, $testtaskID, $this->post->name);
-        }
-        elseif($action->action == 'closed')
-        {
-            $mailTitle = sprintf($this->lang->testtask->mail->close->title, $this->app->user->realname, $testtaskID, $testtask->name);
-        }
-        else
-        {
-            $mailTitle = sprintf($this->lang->testtask->mail->edit->title, $this->app->user->realname, $testtaskID, $this->post->name);
-        }
-
-        /* Send mail. */
-        $this->mail->send($toList, $mailTitle, $mailContent, $ccList); 
-        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+        return array($toList, $ccList);
     }
 }

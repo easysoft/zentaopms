@@ -747,12 +747,14 @@ CREATE TABLE IF NOT EXISTS `zt_todo` (
   `begin` smallint(4) unsigned zerofill NOT NULL,
   `end` smallint(4) unsigned zerofill NOT NULL,
   `type` char(10) NOT NULL,
+  `cycle` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `idvalue` mediumint(8) unsigned NOT NULL default '0',
   `pri` tinyint(3) unsigned NOT NULL,
   `name` char(150) NOT NULL,
   `desc` text NOT NULL,
   `status`  enum('wait','doing','done') NOT NULL DEFAULT 'wait',
   `private` tinyint(1) NOT NULL,
+  `config` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `todo` (`account`,`date`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
