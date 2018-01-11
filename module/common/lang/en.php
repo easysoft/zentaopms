@@ -339,13 +339,12 @@ $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => 'Home|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 
 $lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
-$lang->admin->menu->mail      = array('link' => 'Email|mail|index', 'subModule' => 'mail');
+$lang->admin->menu->message   = array('link' => 'Mssage|message|index', 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->backup    = array('link' => 'Backup|backup|index', 'subModule' => 'backup');
 $lang->admin->menu->safe      = array('link' => 'Security|admin|safe', 'alias' => 'checkweak');
 $lang->admin->menu->cron      = array('link' => 'Cron|cron|index', 'subModule' => 'cron');
 $lang->admin->menu->trashes   = array('link' => 'Recycle|action|trash', 'subModule' => 'action');
 $lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
-$lang->admin->menu->api       = array('link' => 'API|webhook|browse', 'alias' => 'create,edit', 'subModule' => 'entry,webhook');
 $lang->admin->menu->sso       = 'RangerTeam|admin|sso';
 
 $lang->convert   = new stdclass();
@@ -360,6 +359,7 @@ $lang->cron      = new stdclass();
 $lang->dev       = new stdclass();
 $lang->entry     = new stdclass();
 $lang->webhook   = new stdclass();
+$lang->message   = new stdclass();
 $lang->search    = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
@@ -374,6 +374,7 @@ $lang->mail->menu      = $lang->admin->menu;
 $lang->dev->menu       = $lang->admin->menu;
 $lang->entry->menu     = $lang->admin->menu;
 $lang->webhook->menu   = $lang->admin->menu;
+$lang->message->menu   = $lang->admin->menu;
 
 /* 菜单分组。*/
 $lang->menugroup = new stdclass();
@@ -407,6 +408,7 @@ $lang->menugroup->mail        = 'admin';
 $lang->menugroup->dev         = 'admin';
 $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
+$lang->menugroup->message     = 'admin';
 
 /* 错误提示信息。*/
 $lang->error = new stdclass();

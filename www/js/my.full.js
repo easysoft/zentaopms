@@ -1986,6 +1986,17 @@ function selectFocusJump(type)
     }
 }
 
+function adjustNoticePosition()
+{
+    var bottom = 25;
+    $('#noticeBox').find('.alert').each(function()
+    {
+        $(this).css('bottom',  bottom + 'px');
+        bottom += $(this).outerHeight(true) - 10;
+    });
+}
+
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 

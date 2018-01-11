@@ -16,7 +16,12 @@ $config->message->available['mail']['bug']      = $config->message->objectTypes[
 $config->message->available['mail']['testtask'] = array('opened', 'edited', 'closed');
 
 $config->message->available['webhook'] = $config->message->objectTypes;
-$config->message->available['message'] = $config->message->objectTypes;
+
+$config->message->available['message']['bug']      = $config->message->objectTypes['bug'];
+$config->message->available['message']['story']    = $config->message->objectTypes['story'];
+$config->message->available['message']['task']     = $config->message->objectTypes['task'];
+$config->message->available['message']['testtask'] = $config->message->objectTypes['testtask'];
+$config->message->available['message']['todo']     = $config->message->objectTypes['todo'];
 
 $config->message->typeLink['mail']    = 'mail|index';
 $config->message->typeLink['webhook'] = 'webhook|browse';

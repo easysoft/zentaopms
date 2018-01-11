@@ -53,4 +53,37 @@ class message extends control
         $this->view->objectActions = $this->message->getObjectActions();
         $this->display();
     }
+
+    /**
+     * Ajax get message.
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetMessage()
+    {
+        $waitMessages = $this->message->getMessages('wait');
+        $todos = $this->message->getNoticeTodos();
+        if(empty($waitMessages) and empty($todos)) die();
+
+        $messages = '';
+        $idList   = array();
+        foreach($waitMessages as $message)
+        {
+            $messages .= $message->data . '<br />';
+            $idList[]  = $message->id;
+        }
+        $this->dao->update(TABLE_NOTIFY)->set('status')->eq('sended')->andWhere('sendTime')->eq(helper::now())->where('id')->in($idList)->exec();
+
+        foreach($todos as $todo) $messages .= $todo->data . '<br />';
+
+        echo <<<EOT
+<div class='alert alert-info with-icon alert-dismissable' style='width:380px; position:fixed; bottom:25px; right:15px; z-index: 9999;'>
+   <i class='icon icon-envelope-alt'>  </i>
+   <div class='content'>{$messages}</div>
+   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+ </div>
+EOT;
+        $this->dao->delete('*')->from(TABLE_NOTIFY)->where('objectType')->eq('message')->andWhere('status')->eq('sended')->exec();
+    }
 }
