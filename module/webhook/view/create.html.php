@@ -10,16 +10,10 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
+<?php include 'header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <?php js::set('urlNote', $lang->webhook->note->typeList);?>
 <div class='container mw-1400px'>
-  <div id="titlebar">
-    <div class="heading">
-      <strong><?php echo $lang->webhook->api;?></strong>
-      <small class="text-muted"> <?php echo $lang->webhook->create;?></small>
-    </div>
-  </div>
   <form id='webhookForm' method='post' class='ajaxForm'>
     <table class='table table-form'>
       <tr>
@@ -59,27 +53,6 @@
           </label>
         </th>
         <td class='labelWidth' colspan='2'><?php echo html::checkbox('params', $lang->webhook->paramsList, 'text');?></td>
-      </tr>
-      <tr>
-        <th>
-          <label class='checkbox-inline'>
-            <input type='checkbox' id='allActions' name='allActions'><strong><?php echo $lang->webhook->action;?></strong>
-          </label>
-        </th>
-        <td colspan='2'>
-          <table class='table table-bordered'>
-            <?php foreach($config->webhook->objectTypes as $objectType => $actions):?>
-            <tr>
-              <th class='w-80px'>
-                <label class='checkbox-inline'>
-                  <input type='checkbox' class='objectType'><strong><?php echo $objectTypes[$objectType];?></strong>
-                </label>
-              </th>
-              <td class='labelWidth'><?php echo html::checkbox("actions[$objectType]", $objectActions[$objectType]);?></td>
-            </tr>
-            <?php endforeach;?>
-          </table>
-        </td>
       </tr>
       <tr>
         <th><?php echo $lang->webhook->desc;?></th>

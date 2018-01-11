@@ -21,7 +21,6 @@ class webhookModel extends model
     public function getByID($id)
     {
         $webhook = $this->dao->select('*')->from(TABLE_WEBHOOK)->where('id')->eq($id)->fetch();
-        $webhook->actions = json_decode($webhook->actions);
         return $webhook;
     }
 
@@ -41,7 +40,6 @@ class webhookModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        if($decode) foreach($webhooks as $webhook) $webhook->actions = json_decode($webhook->actions);
         return $webhooks;
     }
 
@@ -100,41 +98,6 @@ class webhookModel extends model
     }
 
     /**
-     * Get object types. 
-     * 
-     * @access public
-     * @return array
-     */
-    public function getObjectTypes()
-    {
-        $objectTypes = array();
-        foreach($this->config->webhook->objectTypes as $objectType => $actions)
-        {
-            $objectTypes[$objectType] = $this->lang->action->objectTypes[$objectType];
-        }
-        return $objectTypes;
-    }
-
-    /**
-     * Get object actions. 
-     * 
-     * @access public
-     * @return array
-     */
-    public function getObjectActions()
-    {
-        $objectActions = array();
-        foreach($this->config->webhook->objectTypes as $objectType => $actions)
-        {
-            foreach($actions as $action)
-            {
-                $objectActions[$objectType][$action] = str_replace($this->lang->webhook->trimWords, '', $this->lang->action->label->$action);
-            }
-        }
-        return $objectActions;
-    }
-
-    /**
      * Create a webhook. 
      * 
      * @access public
@@ -151,7 +114,6 @@ class webhookModel extends model
             ->remove('allParams, allActions')
             ->get();
         $webhook->params  = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
-        $webhook->actions = $this->post->actions ? json_encode($this->post->actions) : '[]';
         
         $this->dao->insert(TABLE_WEBHOOK)->data($webhook)
             ->batchCheck($this->config->webhook->create->requiredFields, 'notempty')
@@ -180,7 +142,6 @@ class webhookModel extends model
             ->remove('allParams, allActions')
             ->get();
         $webhook->params  = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
-        $webhook->actions = $this->post->actions ? json_encode($this->post->actions) : '[]';
 
         $this->dao->update(TABLE_WEBHOOK)->data($webhook)
             ->batchCheck($this->config->webhook->edit->requiredFields, 'notempty')
@@ -208,7 +169,6 @@ class webhookModel extends model
 
         foreach($webhooks as $id => $webhook)
         {
-            if(!isset($webhook->actions->$objectType) or !in_array($actionType, $webhook->actions->$objectType)) continue;
             $postData = $this->buildData($objectType, $objectID, $actionType, $actionID, $webhook);
             if(!$postData) continue;
 

@@ -25,6 +25,19 @@ function ajaxIgnoreBrowser(){$.get(createLink('misc', 'ajaxIgnoreBrowser'));}
 $(function(){showBrowserNotice()});
 <?php endif;?>
 
+/* Alert get message. */
+$(function()
+{
+    setInterval(function()
+    {
+        $.get('<?php echo $this->createLink('message', 'ajaxGetMessage')?>', function(data)
+        {
+            $('#noticeBox').append(data);
+            adjustNoticePosition();
+        });
+    }, 60 * 1000);
+})
+
 <?php if(!isset($config->global->novice) and $this->loadModel('tutorial')->checkNovice() and $config->global->flow == 'full'):?>
 novice = confirm('<?php echo $lang->tutorial->novice?>');
 $.get(createLink('tutorial', 'ajaxSaveNovice', 'novice=' + (novice ? 'true' : 'false')), function()

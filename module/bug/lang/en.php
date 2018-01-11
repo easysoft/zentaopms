@@ -220,7 +220,7 @@ $lang->bug->browserList['other']    = 'Other';
 
 $lang->bug->typeList['']             = '';
 $lang->bug->typeList['codeerror']    = 'Code Error';
-$lang->bug->typeList['interface']    = 'Interface Optimization';
+$lang->bug->typeList['interface']    = 'UI Optimization';
 $lang->bug->typeList['config']       = 'Configuration';
 $lang->bug->typeList['install']      = 'Install/Deploy';
 $lang->bug->typeList['security']     = 'Security';
@@ -255,9 +255,9 @@ $lang->bug->resolutionList['tostory']    = 'Converted to Story';
 $lang->bug->report = new stdclass();
 $lang->bug->report->common = 'Report';
 $lang->bug->report->select = 'Select Report Type ';
-$lang->bug->report->create = 'Generate a Report';
+$lang->bug->report->create = 'Generate Report';
 
-$lang->bug->report->charts['bugsPerProject']        = $lang->projectCommon . 'Bugs';
+$lang->bug->report->charts['bugsPerProject']        = $lang->projectCommon . ' Bugs';
 $lang->bug->report->charts['bugsPerBuild']          = 'Bugs Per Build';
 $lang->bug->report->charts['bugsPerModule']         = 'Bugs Per Module';
 $lang->bug->report->charts['openedBugsPerDay']      = 'Reported Bugs Per Day';

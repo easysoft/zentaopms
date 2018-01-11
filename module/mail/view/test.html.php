@@ -15,7 +15,7 @@
 <div class='alert alert-warning with-icon'><i class='icon-frown'></i><div class='content'><?php echo join('', $error);?></div></div>
 <?php include '../../common/view/footer.lite.html.php';?>
 <?php else:?>
-<?php include '../../common/view/header.html.php';?>
+<?php include $this->app->getModuleRoot() . 'message/view/header.html.php';?>
 <div class='container mw-700px'>
   <div id='titlebar'>
     <div class='heading'>

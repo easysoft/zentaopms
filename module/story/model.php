@@ -2508,9 +2508,8 @@ class storyModel extends model
     public function sendmail($storyID, $actionID)
     {
         $this->loadModel('mail');
-        $story       = $this->getById($storyID);
-        $productName = $this->loadModel('product')->getById($story->product)->name;
-        $users       = $this->loadModel('user')->getPairs('noletter');
+        $story = $this->getById($storyID);
+        $users = $this->loadModel('user')->getPairs('noletter');
 
         /* Get actions. */
         $action  = $this->loadModel('action')->getById($actionID);
@@ -2545,14 +2544,47 @@ class storyModel extends model
         ob_end_clean();
         chdir($oldcwd);
 
+        $sendUsers = $this->getToAndCcList($story, $action->action);
+        if(!$sendUsers) return;
+        list($toList, $ccList) = $sendUsers;
+        $subject = $this->getSubject($story);
+
+        /* Send it. */
+        $this->mail->send($toList, $subject, $mailContent, $ccList);
+        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+    }
+
+    /**
+     * Get mail subject.
+     * 
+     * @param  object    $story 
+     * @access public
+     * @return string
+     */
+    public function getSubject($story)
+    {
+        $productName = $this->loadModel('product')->getById($story->product)->name;
+        return 'STORY #' . $story->id . ' ' . $story->title . ' - ' . $productName;
+    }
+
+    /**
+     * Get toList and ccList.
+     * 
+     * @param  object    $story 
+     * @param  string    $actionType 
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList($story, $actionType)
+    {
         /* Set toList and ccList. */
         $toList = $story->assignedTo;
         $ccList = str_replace(' ', '', trim($story->mailto, ','));
 
         /* If the action is changed or reviewed, mail to the project team. */
-        if(strtolower($action->action) == 'changed' or strtolower($action->action) == 'reviewed')
+        if(strtolower($actionType) == 'changed' or strtolower($actionType) == 'reviewed')
         {
-            $prjMembers = $this->getProjectMembers($storyID);
+            $prjMembers = $this->getProjectMembers($story->id);
             if($prjMembers)
             {
                 $ccList .= ',' . join(',', $prjMembers);
@@ -2562,7 +2594,7 @@ class storyModel extends model
 
         if(empty($toList))
         {
-            if(empty($ccList)) return;
+            if(empty($ccList)) return false;
             if(strpos($ccList, ',') === false)
             {
                 $toList = $ccList;
@@ -2580,8 +2612,6 @@ class storyModel extends model
             $toList = $story->openedBy;
         }
 
-        /* Send it. */
-        $this->mail->send($toList, 'STORY #' . $story->id . ' ' . $story->title . ' - ' . $productName, $mailContent, $ccList);
-        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+        return array($toList, $ccList);
     }
 }

@@ -115,9 +115,6 @@ class action extends control
     public function comment($objectType, $objectID)
     {
         $actionID = $this->action->create($objectType, $objectID, 'Commented', $this->post->comment);
-
-        $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
-        $this->loadModel($moduleName)->sendmail($objectID, $actionID);
         die(js::reload('parent'));
     }
 

@@ -11,6 +11,12 @@
  */
 class webhook extends control
 {
+    public function __construct($moduleName = '', $methodName = '')
+    {
+        parent::__construct($moduleName, $methodName);
+        $this->loadModel('message');
+    }
+
     /**
      * Browse webhooks. 
      * 
@@ -54,8 +60,6 @@ class webhook extends control
         $this->view->title         = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->create;
         $this->view->products      = $this->loadModel('product')->getPairs();
         $this->view->projects      = $this->loadModel('project')->getPairs();
-        $this->view->objectTypes   = $this->webhook->getObjectTypes();
-        $this->view->objectActions = $this->webhook->getObjectActions();
         $this->view->position[]    = html::a(inlink('browse'), $this->lang->webhook->api);
         $this->view->position[]    = html::a(inlink('browse'), $this->lang->webhook->common);
         $this->view->position[]    = $this->lang->webhook->create;
@@ -83,8 +87,6 @@ class webhook extends control
         $this->view->title         = $this->lang->webhook->edit . $this->lang->colon . $webhook->name;
         $this->view->products      = $this->loadModel('product')->getPairs();
         $this->view->projects      = $this->loadModel('project')->getPairs();
-        $this->view->objectTypes   = $this->webhook->getObjectTypes();
-        $this->view->objectActions = $this->webhook->getObjectActions();
         $this->view->position[]    = html::a(inlink('browse'), $this->lang->webhook->api);
         $this->view->position[]    = html::a(inlink('browse'), $this->lang->webhook->common);
         $this->view->position[]    = $this->lang->webhook->edit;

@@ -10,15 +10,9 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
+<?php include 'header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <div class='container mw-1400px'>
-  <div id="titlebar">
-    <div class="heading">
-      <strong><?php echo $lang->webhook->api;?></strong>
-      <small class="text-muted"> <?php echo $lang->webhook->edit;?></small>
-    </div>
-  </div>
   <form id='webhookForm' method='post' class='ajaxForm'>
     <table class='table table-form'>
       <tr>
@@ -63,28 +57,6 @@
         <td class='labelWidth' colspan='2'><?php echo html::checkbox('params', $lang->webhook->paramsList, $webhook->params);?></td>
       </tr>
       <?php endif;?>
-      <tr>
-        <th>
-          <label class='checkbox-inline'>
-            <input type='checkbox' id='allActions' name='allActions'><strong><?php echo $lang->webhook->action;?></strong>
-          </label>
-        </th>
-        <td colspan='2'>
-          <table class='table table-bordered'>
-            <?php foreach($config->webhook->objectTypes as $objectType => $actions):?>
-            <tr>
-              <td class='w-80px'>
-                <label class='checkbox-inline'>
-                  <?php $checked = isset($webhook->actions->$objectType) ? "checked='checked'" : '';?>
-                  <input type='checkbox' <?php echo $checked;?> class='objectType'><strong><?php echo $objectTypes[$objectType];?></strong>
-                </label>
-              </td>
-              <td class='labelWidth'><?php echo html::checkbox("actions[$objectType]", $objectActions[$objectType], isset($webhook->actions->$objectType) ? $webhook->actions->$objectType : '');?></td>
-            </tr>
-            <?php endforeach;?>
-          </table>
-        </td>
-      </tr>
       <tr>
         <th><?php echo $lang->webhook->desc;?></th>
         <td colspan='2'><?php echo html::textarea('desc', $webhook->desc, "rows='3' class='form-control'");?></td>

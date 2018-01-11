@@ -11,7 +11,7 @@
  */
 $lang->group->common             = 'Groups';
 $lang->group->browse             = 'Browse Groups';
-$lang->group->create             = 'Create Group';
+$lang->group->create             = 'Add Group';
 $lang->group->edit               = 'Edit';
 $lang->group->copy               = 'Copy';
 $lang->group->delete             = 'Delete';

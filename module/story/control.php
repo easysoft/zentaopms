@@ -74,7 +74,6 @@ class story extends control
             $action   = $bugID == 0 ? 'Opened' : 'Frombug';
             $extra    = $bugID == 0 ? '' : $bugID;
             $actionID = $this->action->create('story', $storyID, $action, '', $extra);
-            $this->story->sendmail($storyID, $actionID);
 
             if($todoID > 0)
             {
@@ -227,11 +226,7 @@ class story extends control
             if(dao::isError()) die(js::error(dao::getError()));
 
             $stories = array();
-            foreach($mails as $mail)
-            {
-                $stories[] = $mail->storyID;
-                if($mail->actionID) $this->story->sendmail($mail->storyID, $mail->actionID);
-            }
+            foreach($mails as $mail) $stories[] = $mail->storyID;
             if($project) $this->loadModel('project')->linkStory($project, $stories);
 
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
@@ -241,7 +236,6 @@ class story extends control
                 $actionID = $this->story->subdivide($storyID, $mails);
 
                 if(dao::isError()) die(js::error(dao::getError()));
-                $this->story->sendmail($storyID, $actionID);
 
                 if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
                 die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
@@ -375,7 +369,6 @@ class story extends control
                 $action   = !empty($changes) ? 'Edited' : 'Commented';
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->story->sendmail($storyID, $actionID);
             }
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
@@ -419,7 +412,6 @@ class story extends control
 
                     $actionID = $this->action->create('story', $storyID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
-                    $this->story->sendmail($storyID, $actionID);
                 }
             }
             die(js::locate($this->session->storyList, 'parent'));
@@ -553,7 +545,6 @@ class story extends control
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
                 $actionID = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->story->sendmail($storyID, $actionID);
             }
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
@@ -587,7 +578,6 @@ class story extends control
             $this->story->activate($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
-            $this->story->sendmail($storyID, $actionID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
@@ -697,7 +687,6 @@ class story extends control
             $result = $this->post->result;
             if($this->post->closedReason != '' and strpos('done,postponed,subdivided,willnotdo', $this->post->closedReason) === false) $result = 'pass';
             $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result));
-            $this->story->sendmail($storyID, $actionID);
             if($this->post->result == 'reject')
             {
                 $this->action->create('story', $storyID, 'Closed', '', ucfirst($this->post->closedReason));
@@ -751,7 +740,6 @@ class story extends control
         $actions     = $this->story->batchReview($storyIDList, $result, $reason);
 
         if(dao::isError()) die(js::error(dao::getError()));
-        foreach($actions as $storyID => $actionID) $this->story->sendmail($storyID, $actionID);
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::locate($this->session->storyList, 'parent'));
     }
@@ -771,7 +759,6 @@ class story extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : ''));
             $this->action->logHistory($actionID, $changes);
-            $this->story->sendmail($storyID, $actionID);
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
@@ -818,7 +805,6 @@ class story extends control
                 {
                     $actionID = $this->action->create('story', $storyID, 'Closed', htmlspecialchars($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : ''));
                     $this->action->logHistory($actionID, $changes);
-                    $this->story->sendmail($storyID, $actionID);
                 }
             }
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
@@ -899,7 +885,6 @@ class story extends control
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            $this->story->sendmail($storyID, $actionID);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::reload('parent'));
@@ -922,7 +907,6 @@ class story extends control
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            $this->story->sendmail($storyID, $actionID);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::reload('parent'));
@@ -945,7 +929,6 @@ class story extends control
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            $this->story->sendmail($storyID, $actionID);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::reload('parent'));
@@ -970,7 +953,6 @@ class story extends control
         {
             $actionID = $this->action->create('story', $storyID, $action);
             $this->action->logHistory($actionID, $changes);
-            $this->story->sendmail($storyID, $actionID);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::locate($this->session->storyList, 'parent'));
@@ -992,7 +974,6 @@ class story extends control
             {
                 $actionID = $this->action->create('story', $storyID, 'Edited');
                 $this->action->logHistory($actionID, $changes);
-                $this->story->sendmail($storyID, $actionID);
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');

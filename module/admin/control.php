@@ -331,6 +331,9 @@ class admin extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->admin->saveSuccess, 'locate' => 'reload'));
         }
 
+        $this->loadModel('message');
+        $this->loadModel('webhook');
+
         $this->view->title      = $this->lang->admin->log;
         $this->view->position[] = html::a($this->createLink('webhook', 'browse'), $this->lang->admin->api);
         $this->view->position[] = $this->lang->admin->log;

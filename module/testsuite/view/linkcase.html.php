@@ -32,7 +32,7 @@
   <thead>
     <tr>
       <th class='w-id'><?php echo $lang->idAB;?></th>
-      <th class='w-60px'><nobr><?php echo $lang->testsuite->linkVersion;?></nobr></th>
+      <th class='w-70px'><nobr><?php echo $lang->testsuite->linkVersion;?></nobr></th>
       <th class='w-pri'><?php echo $lang->priAB;?></th>
       <th><?php echo $lang->testcase->title;?></th>
       <th class='w-type'><?php echo $lang->testcase->type;?></th>
