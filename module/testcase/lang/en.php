@@ -105,23 +105,23 @@ $lang->testcase->stepChild               = 'Child';
 
 $lang->testcase->new = 'New';
 
-$lang->testcase->num    = 'Cases:';
+$lang->testcase->num = 'Cases:';
 
 $lang->testcase->deleteStep   = 'Delete';
 $lang->testcase->insertBefore = 'Inserted Before';
 $lang->testcase->insertAfter  = 'Inserted After';
 
-$lang->testcase->assignToMe    = 'AssignedToMe';
-$lang->testcase->openedByMe    = 'CreatedByMe';
-$lang->testcase->allCases      = 'All';
-$lang->testcase->needConfirm   = 'StoryChanged';
-$lang->testcase->bySearch      = 'Search';
+$lang->testcase->assignToMe  = 'AssignedToMe';
+$lang->testcase->openedByMe  = 'CreatedByMe';
+$lang->testcase->allCases    = 'All';
+$lang->testcase->needConfirm = 'StoryChanged';
+$lang->testcase->bySearch    = 'Search';
 
-$lang->testcase->lblStory                    = 'Story';
-$lang->testcase->lblLastEdited               = 'Last Edit';
-$lang->testcase->lblTypeValue                = 'Type List';
-$lang->testcase->lblStageValue               = 'Stage List';
-$lang->testcase->lblStatusValue              = 'Status List';
+$lang->testcase->lblStory       = 'Story';
+$lang->testcase->lblLastEdited  = 'Last Edit';
+$lang->testcase->lblTypeValue   = 'Type List';
+$lang->testcase->lblStageValue  = 'Stage List';
+$lang->testcase->lblStatusValue = 'Status List';
 
 $lang->testcase->legendBasicInfo    = 'Basic Info';
 $lang->testcase->legendAttatch      = 'File';
@@ -152,13 +152,13 @@ $lang->testcase->typeList['security']    = 'Security';
 $lang->testcase->typeList['interface']   = 'Interface';
 $lang->testcase->typeList['other']       = 'Other';
 
-$lang->testcase->stageList['']            = '';
-$lang->testcase->stageList['unittest']    = 'Unit Test';
-$lang->testcase->stageList['feature']     = 'Function Test';
-$lang->testcase->stageList['intergrate']  = 'Integration Test';
-$lang->testcase->stageList['system']      = 'System Test';
-$lang->testcase->stageList['smoke']       = 'Smoking Test';
-$lang->testcase->stageList['bvt']         = 'BVT Test';
+$lang->testcase->stageList['']           = '';
+$lang->testcase->stageList['unittest']   = 'Unit Test';
+$lang->testcase->stageList['feature']    = 'Function Test';
+$lang->testcase->stageList['intergrate'] = 'Integration Test';
+$lang->testcase->stageList['system']     = 'System Test';
+$lang->testcase->stageList['smoke']      = 'Smoking Test';
+$lang->testcase->stageList['bvt']        = 'BVT Test';
 
 $lang->testcase->reviewResultList['']        = '';
 $lang->testcase->reviewResultList['pass']    = 'Pass';

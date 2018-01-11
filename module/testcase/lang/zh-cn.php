@@ -111,23 +111,23 @@ $lang->testcase->deleteStep   = '删除';
 $lang->testcase->insertBefore = '之前添加';
 $lang->testcase->insertAfter  = '之后添加';
 
-$lang->testcase->assignToMe    = '给我的用例';
-$lang->testcase->openedByMe    = '我建的用例';
-$lang->testcase->allCases      = '所有';
-$lang->testcase->needConfirm   = '需求变动';
-$lang->testcase->bySearch      = '搜索';
+$lang->testcase->assignToMe  = '给我的用例';
+$lang->testcase->openedByMe  = '我建的用例';
+$lang->testcase->allCases    = '所有';
+$lang->testcase->needConfirm = '需求变动';
+$lang->testcase->bySearch    = '搜索';
 
-$lang->testcase->lblStory           = '相关需求';
-$lang->testcase->lblLastEdited      = '最后编辑';
-$lang->testcase->lblTypeValue       = '类型可选值列表';
-$lang->testcase->lblStageValue      = '阶段可选值列表';
-$lang->testcase->lblStatusValue     = '状态可选值列表';
+$lang->testcase->lblStory       = '相关需求';
+$lang->testcase->lblLastEdited  = '最后编辑';
+$lang->testcase->lblTypeValue   = '类型可选值列表';
+$lang->testcase->lblStageValue  = '阶段可选值列表';
+$lang->testcase->lblStatusValue = '状态可选值列表';
 
-$lang->testcase->legendBasicInfo    = '基本信息';
-$lang->testcase->legendAttatch      = '附件';
-$lang->testcase->legendLinkBugs     = '相关Bug';
-$lang->testcase->legendOpenAndEdit  = '创建编辑';
-$lang->testcase->legendComment      = '备注';
+$lang->testcase->legendBasicInfo   = '基本信息';
+$lang->testcase->legendAttatch     = '附件';
+$lang->testcase->legendLinkBugs    = '相关Bug';
+$lang->testcase->legendOpenAndEdit = '创建编辑';
+$lang->testcase->legendComment     = '备注';
 
 $lang->testcase->confirmDelete      = '您确认要删除该测试用例吗？';
 $lang->testcase->confirmBatchDelete = '您确认要批量删除这些测试用例吗？';
