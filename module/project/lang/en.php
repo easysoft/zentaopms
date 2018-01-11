@@ -170,7 +170,7 @@ $lang->project->groupFilter['pri']['noset']         = 'Not set';
 $lang->project->groupFilter['assignedTo']['undone'] = 'Pending';
 $lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
 
-$lang->project->byQuery              = 'Search';
+$lang->project->byQuery = 'Search';
 
 /* 查询条件列表。*/
 $lang->project->allProject      = "All {$lang->projectCommon}";
@@ -286,10 +286,10 @@ $lang->project->featureBar['task']['needconfirm']  = 'StoryChanged';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
 
 $lang->project->treeLevel = array();
-$lang->project->treeLevel['root']    = 'Collapse All';
-$lang->project->treeLevel['story']   = 'Show Story';
-$lang->project->treeLevel['task']    = 'Show Task';
-$lang->project->treeLevel['all']     = 'Expand All';
+$lang->project->treeLevel['root']  = 'Collapse All';
+$lang->project->treeLevel['story'] = 'Show Story';
+$lang->project->treeLevel['task']  = 'Show Task';
+$lang->project->treeLevel['all']   = 'Expand All';
 
 global $config;
 if($config->global->flow == 'onlyTask')
