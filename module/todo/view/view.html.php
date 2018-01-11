@@ -24,7 +24,7 @@
       <div class='main'>
         <fieldset>
           <legend>
-            <?php 
+            <?php
             echo $lang->todo->desc;
             if($todo->type == 'bug')   echo html::a($this->createLink('bug',   'view', "id={$todo->idvalue}"), '  BUG#'   . $todo->idvalue);
             if($todo->type == 'task')  echo html::a($this->createLink('task',  'view', "id={$todo->idvalue}"), '  TASK#'  . $todo->idvalue);
@@ -40,7 +40,7 @@
       <div class='main main-side'>
         <fieldset>
           <legend><?php echo $lang->todo->legendBasic;?></legend>
-          <table class='table table-data table-condensed table-borderless'> 
+          <table class='table table-data table-condensed table-borderless'>
             <tr>
               <th><?php echo $lang->todo->pri;?></th>
               <td><?php echo $lang->todo->priList[$todo->pri];?></td>
@@ -71,7 +71,7 @@
         <?php $todo->config = json_decode($todo->config);?>
         <fieldset>
           <legend><?php echo $lang->todo->cycle;?></legend>
-          <table class='table table-data table-condensed table-borderless'> 
+          <table class='table table-data table-condensed table-borderless'>
             <tr>
               <th class='w-80px'><?php echo $lang->todo->beginAndEnd?></th>
               <td><?php echo $todo->config->begin . " ~ " . $todo->config->end;?></td>
@@ -105,6 +105,15 @@
   </div>
   <div class='panel-footer text-center'>
     <?php
+    if($todo->account == $app->user->account)
+    {
+        //if($todo->status != 'done') echo html::a($this->createLink('todo', 'assignTo', "todoID=$todo->id"), "<i class='icon icon-hand-right'></i> " . $lang->todo->assignTo, '', "class='btn showinonlybody'");
+        if($todo->status != 'closed') echo html::a($this->createLink('todo', 'edit', "todoID=$todo->id"), "<i class='icon icon-edit'></i> " . $lang->todo->edit, '', "class='btn showinonlybody'");
+        if($todo->status == 'done' || $todo->status == 'closed') echo html::a($this->createLink('todo', 'activate', "todoID=$todo->id"), "<i class='icon icon-magic'></i> " . $lang->todo->activate, 'hiddenwin', "class='btn showinonlybody'");
+        if($todo->status == 'done') echo html::a($this->createLink('todo', 'close', "todoID=$todo->id"), "<i class='icon icon-off'></i> " . $lang->todo->close, 'hiddenwin', "class='btn showinonlybody'");
+        echo html::a($this->createLink('todo', 'delete', "todoID=$todo->id"), "<i class='icon icon-remove'></i> " . $lang->todo->delete, 'hiddenwin', "class='btn showinonlybody'");
+    }
+
     if($this->session->todoList)
     {
         $browseLink = $this->session->todoList;
@@ -118,7 +127,7 @@
         $browseLink = $this->createLink('user', 'todo', "account=$todo->account");
     }
 
-    if($todo->status != 'done')
+    if($todo->status != 'done' && $todo->status != 'closed')
     {
         echo "<div class='btn-group dropup'>";
         echo html::a($this->createLink('todo', 'finish', "id=$todo->id", 'html', true), "<i class='icon icon-ok'></i> " . $lang->todo->finish, 'hiddenwin', "class='btn showinonlybody btn-success'");
@@ -140,11 +149,6 @@
         echo "</div>";
     }
 
-    if($todo->account == $app->user->account)
-    {
-        common::printIcon('todo', 'edit',   "todoID=$todo->id");
-        common::printIcon('todo', 'delete', "todoID=$todo->id", '', 'button', '', 'hiddenwin');
-    }
     common::printRPN($browseLink);
     ?>
   </div>

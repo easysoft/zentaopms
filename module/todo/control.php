@@ -13,7 +13,7 @@ class todo extends control
 {
     /**
      * Construct function, load model of task, bug, my.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -28,9 +28,9 @@ class todo extends control
 
     /**
      * Create a todo.
-     * 
-     * @param  string|date $date 
-     * @param  string      $account 
+     *
+     * @param  string|date $date
+     * @param  string      $account
      * @access public
      * @return void
      */
@@ -46,11 +46,11 @@ class todo extends control
             $date = str_replace('-', '', $this->post->date);
             if($date == '')
             {
-                $date = 'future'; 
+                $date = 'future';
             }
             elseif($date == date('Ymd'))
             {
-                $date = 'today'; 
+                $date = 'today';
             }
 
             if(!empty($_POST['idvalue'])) $this->send(array('result' => 'success'));
@@ -64,14 +64,14 @@ class todo extends control
         $this->view->date       = date("Y-m-d", strtotime($date));
         $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time       = date::now();
-        $this->display();      
+        $this->display();
     }
 
     /**
      * Batch create todo
-     * 
-     * @param  string $date 
-     * @param  string $account 
+     *
+     * @param  string $date
+     * @param  string $account
      * @access public
      * @return void
      */
@@ -87,11 +87,11 @@ class todo extends control
             $date = str_replace('-', '', $this->post->date);
             if($date == '')
             {
-                $date = 'future'; 
+                $date = 'future';
             }
             else if($date == date('Ymd'))
             {
-                $date= 'today'; 
+                $date= 'today';
             }
             die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
         }
@@ -114,8 +114,8 @@ class todo extends control
 
     /**
      * Edit a todo.
-     * 
-     * @param  int    $todoID 
+     *
+     * @param  int    $todoID
      * @access public
      * @return void
      */
@@ -137,7 +137,7 @@ class todo extends control
         /* Judge a private todo or not, If private, die. */
         $todo = $this->todo->getById($todoID);
         if($todo->private and $this->app->user->account != $todo->account) die('private');
-       
+
         $todo->date = date("Y-m-d", strtotime($todo->date));
         $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->edit;
         $this->view->position[] = $this->lang->todo->common;
@@ -149,11 +149,11 @@ class todo extends control
 
     /**
      * Batch edit todo.
-     * 
+     *
      * @param  string $from example:myTodo, todoBatchEdit.
-     * @param  string $type 
-     * @param  string $account 
-     * @param  string $status 
+     * @param  string $type
+     * @param  string $account
+     * @param  string $status
      * @access public
      * @return void
      */
@@ -174,14 +174,14 @@ class todo extends control
             if($this->post->todoIDList)  $todoIDList = $this->post->todoIDList;
 
             /* Initialize todos whose need to edited. */
-            foreach($allTodos as $todo) 
+            foreach($allTodos as $todo)
             {
                 if(in_array($todo->id, $todoIDList))
                 {
                     $editedTodos[$todo->id] = $todo;
                 }
             }
-            foreach($editedTodos as $todo) 
+            foreach($editedTodos as $todo)
             {
                 if($todo->type == 'story') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_STORY)->fetch('title');
                 if($todo->type == 'task')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
@@ -233,10 +233,61 @@ class todo extends control
     }
 
     /**
-     * View a todo. 
-     * 
-     * @param  int    $todoID 
-     * @param  string $from     my|company
+     * Activated todo.
+     *
+     * @param  $todoID
+     * @access public
+     * @return void
+     */
+    public function activate($todoID)
+    {
+        $todo = $this->todo->getById($todoID);
+        if($todo->status == 'done') $this->todo->activate($todoID);
+        if(isonlybody()) die(js::reload('parent.parent'));
+        die(js::reload('parent'));
+    }
+
+    /**
+     * Closed todo.
+     *
+     * @param  $todoID
+     *
+     * @access public
+     * @return void
+     */
+    public function close($todoID)
+    {
+        $todo = $this->todo->getById($todoID);
+        if($todo->status == 'done') $this->todo->close($todoID);
+        if(isonlybody()) die(js::reload('parent.parent'));
+        die(js::reload('parent'));
+    }
+
+    /**
+     * Assign.
+     *
+     * @param $todoID
+     *
+     * @access public
+     * @return void
+     */
+    public function assignTo($todoID)
+    {
+        if(!empty($_POST))
+        {
+            if(empty($_POST['assignedTo'])) die(js::error($this->lang->todo->noAssignedTo));
+            $this->todo->assignTo($todoID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            die(js::reload('parent'));
+        }
+    }
+
+    /**
+     * View a todo.
+     *
+     * @param int    $todoID
+     * @param string $from     my|company
+     *
      * @access public
      * @return void
      */
@@ -288,8 +339,8 @@ class todo extends control
 
     /**
      * Delete a todo.
-     * 
-     * @param  int    $todoID 
+     *
+     * @param  int    $todoID
      * @param  string $confirm yes|no
      * @access public
      * @return void
@@ -327,8 +378,8 @@ class todo extends control
 
     /**
      * Finish a todo.
-     * 
-     * @param  int    $todoID 
+     *
+     * @param  int    $todoID
      * @access public
      * @return void
      */
@@ -349,7 +400,7 @@ class todo extends control
 
     /**
      * Batch finish todos.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -357,7 +408,7 @@ class todo extends control
     {
         if(!empty($_POST['todoIDList']))
         {
-            foreach($_POST['todoIDList'] as $todoID) 
+            foreach($_POST['todoIDList'] as $todoID)
             {
                 $todo = $this->todo->getById($todoID);
                 if($todo->status != 'done') $this->todo->finish($todoID);
@@ -368,7 +419,7 @@ class todo extends control
 
     /**
      * Import selected todoes to today.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -381,10 +432,10 @@ class todo extends control
     }
 
     /**
-     * Get data to export 
-     * 
-     * @param  string $productID 
-     * @param  string $orderBy 
+     * Get data to export
+     *
+     * @param  string $productID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
@@ -446,8 +497,8 @@ class todo extends control
 
     /**
      * AJAX: get actions of a todo. for web app.
-     * 
-     * @param  int    $todoID 
+     *
+     * @param  int    $todoID
      * @access public
      * @return void
      */
@@ -459,7 +510,7 @@ class todo extends control
 
     /**
      * Create cycle.
-     * 
+     *
      * @access public
      * @return void
      */

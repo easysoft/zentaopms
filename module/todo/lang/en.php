@@ -12,8 +12,11 @@
 $lang->todo->common       = 'Todo';
 $lang->todo->index        = "Home";
 $lang->todo->create       = "Create Todo";
+$lang->todo->assignTo     = "Assign";
+$lang->todo->activate     = "Activate";
 $lang->todo->batchCreate  = "Batch Create";
 $lang->todo->edit         = "Edit";
+$lang->todo->close        = "Close";
 $lang->todo->batchEdit    = "Batch Edit";
 $lang->todo->view         = "Overview";
 $lang->todo->finish       = "Finish";
@@ -59,9 +62,10 @@ $lang->todo->confirmBug   = 'This Todo is related to Bug #%s. Do you want to edi
 $lang->todo->confirmTask  = 'This Todo is related to Task #%s，Do you want to edit it?';
 $lang->todo->confirmStory = 'This Todo is related to Story #%s，Do you want to edit it?';
 
-$lang->todo->statusList['wait']  = 'Wait';
-$lang->todo->statusList['doing'] = 'Doing';
-$lang->todo->statusList['done']  = 'Done';
+$lang->todo->statusList['wait']   = 'Wait';
+$lang->todo->statusList['doing']  = 'Doing';
+$lang->todo->statusList['done']   = 'Done';
+$lang->todo->statusList['closed'] = 'Closed';
 //$lang->todo->statusList['cancel']   = 'Cancelled';
 //$lang->todo->statusList['postpone'] = 'Delayed';
 
@@ -86,6 +90,7 @@ $lang->todo->thisIsPrivate  = 'This is a private Todo';
 $lang->todo->lblDisableDate = 'Set later.';
 $lang->todo->lblBeforeDays  = "%s early in advance to be done";
 $lang->todo->noTodo         = 'No this type of Todo.';
+$lang->todo->noAssignedTo   = "The AssignedTo user can't be empty.";
 
 $lang->todo->periods['today']      = 'Today';
 $lang->todo->periods['yesterday']  = 'Yesterday';

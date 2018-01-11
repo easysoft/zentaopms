@@ -108,6 +108,9 @@ class my extends control
         $this->view->account      = $this->app->user->account;
         $this->view->orderBy      = $orderBy == 'date_desc,status,begin,id_desc' ? '' : $orderBy;
         $this->view->pager        = $pager;
+        $this->view->times        = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->time         = date::now();
+        $this->view->members      = $this->loadModel('user')->getPairs();
         $this->view->importFuture = ($type != 'today');
 
         $this->display();

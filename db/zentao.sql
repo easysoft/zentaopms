@@ -742,21 +742,30 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_todo`;
 CREATE TABLE IF NOT EXISTS `zt_todo` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `account` char(30) NOT NULL,
   `date` date NOT NULL,
   `begin` smallint(4) unsigned zerofill NOT NULL,
   `end` smallint(4) unsigned zerofill NOT NULL,
   `type` char(10) NOT NULL,
-  `idvalue` mediumint(8) unsigned NOT NULL default '0',
+  `cycle` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `idvalue` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `pri` tinyint(3) unsigned NOT NULL,
   `name` char(150) NOT NULL,
   `desc` text NOT NULL,
-  `status`  enum('wait','doing','done') NOT NULL DEFAULT 'wait',
+  `status` enum('wait','doing','done','closed') NOT NULL DEFAULT 'wait',
   `private` tinyint(1) NOT NULL,
-  PRIMARY KEY  (`id`),
+  `config` varchar(255) NOT NULL,
+  `assignedTo` varchar(30) NOT NULL DEFAULT '',
+  `assignedBy` varchar(30) NOT NULL DEFAULT '',
+  `assignedDate` datetime NOT NULL,
+  `finishedBy` varchar(30) NOT NULL DEFAULT '',
+  `finishedDate` datetime NOT NULL,
+  `closedBy` varchar(30) NOT NULL DEFAULT '',
+  `closedDate` datetime NOT NULL,
+  PRIMARY KEY (`id`),
   KEY `todo` (`account`,`date`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_user`;
 CREATE TABLE IF NOT EXISTS `zt_user` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -787,7 +796,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `fails` tinyint(5) NOT NULL default '0',
   `locked` datetime NOT NULL default '0000-00-00 00:00:00',
   `ranzhi` char(30) NOT NULL default '',
-  `score` INT(12) NOT NULL DEFAULT '0',
+  `score` INT(11) NOT NULL DEFAULT '0',
   `scoreLevel` INT(11) NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
