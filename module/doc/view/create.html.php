@@ -24,7 +24,7 @@
   <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <table class='table table-form'> 
       <tr>
-        <th class='w-80px'><?php echo $lang->doc->module;?></th>
+        <th class='w-100px'><?php echo $lang->doc->module;?></th>
         <td class='w-400px'>
           <?php echo html::hidden('lib', $libID);?>
           <span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></span>

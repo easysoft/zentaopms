@@ -45,7 +45,7 @@ $lang->custom->task->fields['hours']      = 'Man-hours';
 
 $lang->custom->bug = new stdClass();
 $lang->custom->bug->fields['priList']        = 'Priority';
-$lang->custom->bug->fields['severityList']   = 'Priority';
+$lang->custom->bug->fields['severityList']   = 'Severity';
 $lang->custom->bug->fields['osList']         = 'OS';
 $lang->custom->bug->fields['browserList']    = 'Browser';
 $lang->custom->bug->fields['typeList']       = 'Type';

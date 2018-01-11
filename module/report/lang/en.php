@@ -48,9 +48,9 @@ $lang->report->beginAndEnd      = ' From';
 $lang->report->dept             = 'Dept';
 $lang->report->deviationChart   = $lang->projectCommon . ' Deviation Chart';
 
-$lang->reportList->project->lists[10] = $lang->projectCommon . ' deviation|report|projectdeviation';
-$lang->reportList->product->lists[10] = $lang->productCommon . ' summary|report|productsummary';
-$lang->reportList->test->lists[10]    = 'Bugs|report|bugcreate';
+$lang->reportList->project->lists[10] = $lang->projectCommon . ' Deviation|report|projectdeviation';
+$lang->reportList->product->lists[10] = $lang->productCommon . ' Summary|report|productsummary';
+$lang->reportList->test->lists[10]    = 'Bugs Creation|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bug Assignment|report|bugassign';
 $lang->reportList->staff->lists[10]   = 'Workload|report|workload';
 

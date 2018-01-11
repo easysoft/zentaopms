@@ -26,9 +26,9 @@
       <div class='col-sm-4'>
         <div class='input-group input-group-sm'>
           <span class='input-group-addon'><?php echo $lang->report->taskAssignedDate;?></span>
-          <div class='datepicker-wrapper datepicker-date'><?php echo html::input('begin', $begin, "class='w-100px form-control' onchange='changeParams(this)'");?></div>
+          <div class='datepicker-wrapper datepicker-date'><?php echo html::input('begin', $begin, "class='w-80px form-control' style='padding-right:10px' onchange='changeParams(this)'");?></div>
           <span class='input-group-addon fix-border'><?php echo $lang->report->to;?></span>
-          <div class='datepicker-wrapper datepicker-date'><?php echo html::input('end', $end, "class='form-control' onchange='changeParams(this)'");?></div>
+          <div class='datepicker-wrapper datepicker-date'><?php echo html::input('end', $end, "class='form-control' style='padding-right:10px' onchange='changeParams(this)'");?></div>
         </div>
       </div>
       <div class='col-sm-2'>
@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class='col-sm-1'>
-        <?php echo html::select('assign', $lang->report->isAssign, $assign, "class='form-control' onchange='changeParams(this)'");?>
+        <?php echo html::select('assign', $lang->report->isAssign, $assign, "class='form-control' onchange='changeParams(this)' style='width:90px'");?>
       </div>
       <div class='col-sm-1'>
         <div class='input-group'><?php echo html::submitButton($lang->report->query);?></div>

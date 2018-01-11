@@ -28,7 +28,7 @@ js::set('productID' , $bug->product);
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table table-form'>
     <tr>
-      <th class='w-80px'><?php echo $lang->bug->resolution;?></th>
+      <th class='w-100px'><?php echo $lang->bug->resolution;?></th>
       <td class='w-p35-f'><?php echo html::select('resolution', $lang->bug->resolutionList, '', 'class=form-control onchange=setDuplicate(this.value)');?></td>
       <td></td>
     </tr>
