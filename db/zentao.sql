@@ -499,6 +499,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectproduct` (
   `project` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `branch` mediumint(8) unsigned NOT NULL,
+  `plan` mediumint(8) unsigned NOT NULL,
   PRIMARY KEY  (`project`,`product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectstory`;

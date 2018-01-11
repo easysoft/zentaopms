@@ -16,11 +16,11 @@ $lang->release->linkStory = "Link Story";
 $lang->release->linkBug   = "Link Bug";
 $lang->release->delete    = "Delete";
 $lang->release->deleted   = 'Deleted';
-$lang->release->view      = "Info";
-$lang->release->browse    = "Releases";
+$lang->release->view      = "Overview";
+$lang->release->browse    = "Browse";
 $lang->release->changeStatus     = "Change Status";
 $lang->release->batchUnlink      = "Batch Unlink";
-$lang->release->batchUnlinkStory = "Batch Unlink";
+$lang->release->batchUnlinkStory = "Batch Unlink Story";
 $lang->release->batchUnlinkBug   = "Batch Unlink";
 
 $lang->release->confirmDelete      = "Do you want to delete this Release?";

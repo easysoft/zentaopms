@@ -17,43 +17,43 @@ $lang->project->name          = 'Name';
 $lang->project->code          = 'Alias';
 $lang->project->begin         = 'Begin';
 $lang->project->end           = 'End';
-$lang->project->dateRange     = 'Time Frame';
+$lang->project->dateRange     = 'Duration';
 $lang->project->to            = 'To';
 $lang->project->days          = 'Man-Day';
 $lang->project->day           = 'day';
-$lang->project->workHour      = 'Hour';
+$lang->project->workHour      = 'Hour(s)';
 $lang->project->status        = 'Status';
 $lang->project->desc          = 'Desc';
 $lang->project->owner         = 'Owner';
-$lang->project->PO            = $lang->productCommon . ' Owner';
-$lang->project->PM            = $lang->projectCommon . ' Manager';
-$lang->project->QD            = 'Quality Director';
-$lang->project->RD            = 'Release Director';
+$lang->project->PO            = 'PO';
+$lang->project->PM            = 'PM';
+$lang->project->QD            = 'QA Manager';
+$lang->project->RD            = 'Release Manager';
 $lang->project->acl           = 'Access Control';
 $lang->project->teamname      = 'Team Name';
 $lang->project->order         = "Sort {$lang->projectCommon}";
-$lang->project->products      = "Link {$lang->productCommon}";
+$lang->project->products      = "Linked {$lang->productCommon}";
 $lang->project->whitelist     = 'Whitelist';
-$lang->project->totalEstimate = 'Est.';
-$lang->project->totalConsumed = 'Consumed';
-$lang->project->totalLeft     = 'Total Remained';
-$lang->project->Left          = 'Remained';
+$lang->project->totalEstimate = 'Est.(h)';
+$lang->project->totalConsumed = 'Cost';
+$lang->project->totalLeft     = 'Left';
+$lang->project->Left          = 'Left';
 $lang->project->progress      = 'Progress';
-$lang->project->hours         = 'Estimate %s, Consumed %s, Remained %s';
+$lang->project->hours         = '%s Estimate, %s Cost, %s Left.';
 $lang->project->viewBug       = 'Bugs';
 $lang->project->noProduct     = "No {$lang->productCommon}";
 $lang->project->createStory   = "Create Story";
 $lang->project->all           = 'All';
-$lang->project->undone        = 'Undone';
+$lang->project->undone        = 'Unfinished';
 $lang->project->unclosed      = 'Unclosed';
-$lang->project->typeDesc      = 'No story, bug, build, testtask and burndown allowed in OPS';
+$lang->project->typeDesc      = 'No story, bug, build, test task or burndown is allowed in OPS';
 $lang->project->mine          = 'My Responsibility: ';
 $lang->project->other         = 'Other:';
 $lang->project->deleted       = 'Deleted';
 $lang->project->delayed       = 'Delayed';
 $lang->project->product       = $lang->project->products;
-$lang->project->readjustTime  = 'Readjust project time for begin and end';
-$lang->project->readjustTask  = 'Readjust task start date and deadline';
+$lang->project->readjustTime  = 'Adjust project begin and end time';
+$lang->project->readjustTask  = 'Adjust task start date and deadline';
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';
@@ -77,12 +77,12 @@ $lang->project->endList[365] = '1 Year';
 $lang->team = new stdclass();
 $lang->team->account    = 'Account';
 $lang->team->role       = 'Role';
-$lang->team->join       = 'Joined Date';
+$lang->team->join       = 'Joined';
 $lang->team->hours      = 'Hour/Day';
 $lang->team->days       = 'Workdays';
 $lang->team->totalHours = 'Total';
 
-$lang->team->limited            = 'limited User';
+$lang->team->limited            = 'Limited User';
 $lang->team->limitedList['no']  = 'No';
 $lang->team->limitedList['yes'] = 'Yes';
 
@@ -95,14 +95,14 @@ $lang->project->statusList['doing']     = 'Doing';
 $lang->project->statusList['suspended'] = 'Suspend';
 $lang->project->statusList['done']      = 'Done';
 
-$lang->project->aclList['open']    = "Default (You have access to {$lang->projectCommon}, if you can view it.)";
-$lang->project->aclList['private'] = 'Private (Only team members can access to it.)';
-$lang->project->aclList['custom']  = 'Whitelist (Team members and the whitelist members have access to it.)';
+$lang->project->aclList['open']    = "Default (Those who can visit ‘project view’ can access.)";
+$lang->project->aclList['private'] = 'Private (Only team members can access.)';
+$lang->project->aclList['custom']  = 'Whitelist (Team members and the whitelist members can access.)';
 
 /* 方法列表。*/
 $lang->project->index            = "Home";
 $lang->project->task             = 'Tasks';
-$lang->project->groupTask        = 'View by';
+$lang->project->groupTask        = 'View by Group';
 $lang->project->story            = 'Stories';
 $lang->project->bug              = 'Bugs';
 $lang->project->dynamic          = 'Dynamic';
@@ -112,16 +112,18 @@ $lang->project->burn             = 'Burndown';
 $lang->project->baseline         = 'Base Line';
 $lang->project->computeBurn      = 'Update';
 $lang->project->burnData         = 'Burndown Data';
-$lang->project->fixFirst         = 'Edit 1st Day Data';
+$lang->project->fixFirst         = 'Edit 1st Day Man-hour';
 $lang->project->team             = 'Team Member';
 $lang->project->doc              = 'Doc';
 $lang->project->manageProducts   = 'Link ' . $lang->productCommon;
 $lang->project->linkStory        = 'Linked Story';
+$lang->project->linkPlan         = 'Linked Plan';
+$lang->project->linkStoryByPlan  = 'Linked Story From Plan';
 $lang->project->unlinkStoryTasks = 'Unlinked';
 $lang->project->linkedProducts   = 'Linked Products';
 $lang->project->unlinkedProducts = 'Unlinked Products';
-$lang->project->view             = "Info";
-$lang->project->create           = "Add";
+$lang->project->view             = "Overview";
+$lang->project->create           = "Create Project";
 $lang->project->copy             = "Copy {$lang->projectCommon}";
 $lang->project->delete           = "Delete";
 $lang->project->browse           = "Browse";
@@ -136,12 +138,13 @@ $lang->project->importBug        = 'Import Bug';
 $lang->project->updateOrder      = 'Order';
 $lang->project->tree             = 'Tree';
 $lang->project->storyKanban      = 'Story Kanban';
-$lang->project->storySort        = 'Story Sort';
+$lang->project->storySort        = 'Sort Story';
+$lang->project->importPlanStory  = 'Import the stories with the plan?';
 
 /* 分组浏览。*/
 $lang->project->allTasks     = 'All';
-$lang->project->assignedToMe = 'Assigned to Me';
-$lang->project->myInvolved   = 'My Involved';
+$lang->project->assignedToMe = 'My';
+$lang->project->myInvolved   = 'Involved';
 
 $lang->project->statusSelects['']             = 'More';
 $lang->project->statusSelects['wait']         = 'Wait';
@@ -167,7 +170,7 @@ $lang->project->groupFilter['pri']['noset']         = 'Not set';
 $lang->project->groupFilter['assignedTo']['undone'] = 'Pending';
 $lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
 
-$lang->project->byQuery              = 'Search';
+$lang->project->byQuery = 'Search';
 
 /* 查询条件列表。*/
 $lang->project->allProject      = "All {$lang->projectCommon}";
@@ -176,14 +179,14 @@ $lang->project->aboveAllProject = "All the above {$lang->projectCommon}";
 
 /* 页面提示。*/
 $lang->project->selectProject   = "Select {$lang->projectCommon}";
-$lang->project->beginAndEnd     = 'Time Frame';
-$lang->project->lblStats        = 'Hour Report';
-$lang->project->stats           = '<strong>%s</strong> Hour(s) available, <strong>%s</strong> Hour(s) Estimated, <strong>%s</strong> Hour(s) Consumed, <strong>%s</strong> Hour(s) Remained.';
-$lang->project->taskSummary     = " <strong>%s</strong> Tasks on this page, <strong>%s</strong> Wait, <strong>%s</strong> Doing. <strong>%s</strong> Hour(s) Estimated, <strong>%s</strong> Hour(s) Consumed, <strong>%s</strong> Hour(s) Remained.";
-$lang->project->checkedSummary  = " <strong>%total%</strong> Checked, <strong>%wait%</strong> Wait, <strong>%doing%</strong> Doing, <strong>%estimate%</strong> Hour(s) Estimated, <strong>%consumed%</strong> Hour(s) Consumed, <strong>%left%</strong> Hour(s) Remained.";
+$lang->project->beginAndEnd     = 'Duration';
+$lang->project->lblStats        = 'Man-Hour Summary(h) : ';
+$lang->project->stats           = '<strong>%s</strong> Available, <strong>%s</strong> Total Estimated, <strong>%s</strong> Cost, <strong>%s</strong> Left.';
+$lang->project->taskSummary     = "Tasks on this page : <strong>%s</strong> Total, <strong>%s</strong> Wait, <strong>%s</strong> Doing;  &nbsp;&nbsp;&nbsp;  Hours : <strong>%s</strong> Est., <strong>%s</strong> Cost, <strong>%s</strong> Left.";
+$lang->project->checkedSummary  = " <strong>%total%</strong> Checked, <strong>%wait%</strong> Wait, <strong>%doing%</strong> Doing, <strong>%estimate%</strong> Hour(s) Estimated, <strong>%consumed%</strong> Hour(s) Cost, <strong>%left%</strong> Hour(s) Left.";
 $lang->project->memberHours     = "%s has <strong>%s</strong> Hour(s) available ";
-$lang->project->groupSummary    = "<strong>%s</strong> Tasks in this group, Wait <strong>%s</strong>, Doing <strong>%s</strong>. <strong>%s</strong> Hour(s) Estimated , <strong>%s</strong> Hour(s) Consumed, <strong>%s</strong> Hour(s) Remained.";
-$lang->project->groupSummaryAB  = "Total Tasks <strong>%s</strong>, Wait <strong>%s</strong>, Doing <strong>%s</strong>.<br /> <strong>%s</strong> Hour(s) Estimated, <strong>%s</strong> Hour(s) Consumed，<strong>%s</strong> Hour(s) Remained.";
+$lang->project->groupSummary    = "<strong>%s</strong> Tasks in this group, Wait <strong>%s</strong>, Doing <strong>%s</strong>. <strong>%s</strong> Hour(s) Estimated , <strong>%s</strong> Hour(s) Cost, <strong>%s</strong> Hour(s) Left.";
+$lang->project->groupSummaryAB  = "Tasks:<strong>%s</strong> Total,<strong>%s</strong> Wait, <strong>%s</strong> Doing.<br />Hours: <strong>%s</strong> Est., <strong>%s</strong> Cost，<strong>%s</strong> Left.";
 $lang->project->noTimeSummary   = " <strong>%s</strong> Tasks in this group, Wait <strong>%s</strong>, Doing <strong>%s</strong>.";
 $lang->project->wbs             = "Decompose Task";
 $lang->project->batchWBS        = "Batch Decompose";
@@ -202,7 +205,7 @@ $lang->project->copyNoProject   = "No {$lang->projectCommon} can be duplicated."
 $lang->project->copyFromProject = "Duplicate from {$lang->projectCommon} <strong>%s</strong>";
 $lang->project->cancelCopy      = 'Cancel Duplication';
 $lang->project->byPeriod        = 'By Time';
-$lang->project->byUser          = 'By User';
+$lang->project->byUser          = 'ByUser';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = "Do you want to delete {$lang->projectCommon}[%s]?";
@@ -220,7 +223,7 @@ $lang->project->goback                = "Go Back";
 $lang->project->noweekend             = 'Without Weekend';
 $lang->project->withweekend           = 'With Weekend';
 $lang->project->interval              = 'Intervals';
-$lang->project->fixFirstWithLeft      = 'Modify the left time';
+$lang->project->fixFirstWithLeft      = 'Modify the left';
 
 /* 统计。*/
 $lang->project->charts = new stdclass();
@@ -236,8 +239,8 @@ $lang->project->charts->burn->graph->rotateNames  = 1;
 $lang->project->charts->burn->graph->showValues   = 0;
 
 $lang->project->placeholder = new stdclass();
-$lang->project->placeholder->code      = "{$lang->projectCommon} Code";
-$lang->project->placeholder->totalLeft = 'Hour(s) remained at the beginning of Project';
+$lang->project->placeholder->code      = 'Project abbreviation in team';
+$lang->project->placeholder->totalLeft = 'Hour(s) remained at Project Starting';
 
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->done = '(Done)';
@@ -255,7 +258,7 @@ $lang->project->resetKanban   = "Reset Setting";
 $lang->project->printKanban   = "Print Kanban";
 $lang->project->bugList       = "Bugs";
 
-$lang->project->kanbanHideCols   = 'Kanban hidden has been closed and canceled columns';
+$lang->project->kanbanHideCols   = 'hide closed and canceled columns in Kanban';
 $lang->project->kanbanShowOption = 'Display folding information';
 $lang->project->kanbanColsColor  = 'Custom color for Kanban column';
 
@@ -279,14 +282,14 @@ $lang->project->featureBar['task']['all']          = $lang->project->allTasks;
 $lang->project->featureBar['task']['assignedtome'] = $lang->project->assignedToMe;
 $lang->project->featureBar['task']['myinvolved']   = $lang->project->myInvolved;
 $lang->project->featureBar['task']['delayed']      = 'Delayed';
-$lang->project->featureBar['task']['needconfirm']  = 'Story Changed';
+$lang->project->featureBar['task']['needconfirm']  = 'StoryChanged';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
 
 $lang->project->treeLevel = array();
-$lang->project->treeLevel['root']    = 'Show Root';
-$lang->project->treeLevel['story']   = 'Show Story';
-$lang->project->treeLevel['task']    = 'Show Task';
-$lang->project->treeLevel['all']     = 'Show All';
+$lang->project->treeLevel['root']  = 'Collapse All';
+$lang->project->treeLevel['story'] = 'Show Story';
+$lang->project->treeLevel['task']  = 'Show Task';
+$lang->project->treeLevel['all']   = 'Expand All';
 
 global $config;
 if($config->global->flow == 'onlyTask')

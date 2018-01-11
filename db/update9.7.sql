@@ -4,6 +4,9 @@ ALTER TABLE `zt_todo` ADD `cycle` tinyint unsigned NOT NULL DEFAULT '0' AFTER `t
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
 ('1',    '1',    '*',    '*',    '*',    'moduleName=todo&methodName=createCycle',    '生成周期性待办',  'zentao', 1, 'normal', '0000-00-00 00:00:00');
 
+
+ALTER TABLE `zt_projectproduct` ADD `plan` MEDIUMINT(8)  UNSIGNED  NOT NULL  AFTER `branch`;
+
 CREATE TABLE IF NOT EXISTS `zt_notify` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `objectType` varchar(50) NOT NULL,

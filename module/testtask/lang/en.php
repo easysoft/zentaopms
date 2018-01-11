@@ -9,11 +9,11 @@
  * @version     $Id: en.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->testtask->index            = "Index";
-$lang->testtask->create           = "Submit";
+$lang->testtask->index            = "Home";
+$lang->testtask->create           = "Submit for Test";
 $lang->testtask->reportChart      = 'Report';
 $lang->testtask->delete           = "Delete";
-$lang->testtask->view             = "Info";
+$lang->testtask->view             = "Overview";
 $lang->testtask->edit             = "Edit";
 $lang->testtask->browse           = "Test Tasks";
 $lang->testtask->linkCase         = "Link Cases";
@@ -27,17 +27,17 @@ $lang->testtask->results          = "Result";
 $lang->testtask->createBug        = "Bug(+)";
 $lang->testtask->assign           = 'Assign';
 $lang->testtask->cases            = 'Cases';
-$lang->testtask->groupCase        = "View By";
+$lang->testtask->groupCase        = "View By Group";
 $lang->testtask->pre              = 'Previous';
 $lang->testtask->next             = 'Next';
 $lang->testtask->start            = "Start";
 $lang->testtask->close            = "Close";
-$lang->testtask->wait             = "Build to be Tested";
+$lang->testtask->wait             = "Wait";
 $lang->testtask->block            = "Block";
-$lang->testtask->activate         = "Activation";
-$lang->testtask->testing          = "Testing Build";
-$lang->testtask->blocked          = "Blocked Build";
-$lang->testtask->done             = "Tested Build";
+$lang->testtask->activate         = "Activate";
+$lang->testtask->testing          = "Testing";
+$lang->testtask->blocked          = "Blocked";
+$lang->testtask->done             = "Tested";
 $lang->testtask->totalStatus      = "All";
 $lang->testtask->all              = "All " . $lang->productCommon;
 
@@ -54,10 +54,10 @@ $lang->testtask->end            = 'End';
 $lang->testtask->desc           = 'Description';
 $lang->testtask->mailto         = 'Mailto';
 $lang->testtask->status         = 'Status';
-$lang->testtask->assignedTo     = 'Assign';
+$lang->testtask->assignedTo     = 'Assigned';
 $lang->testtask->linkVersion    = 'Version';
-$lang->testtask->lastRunAccount = "Run";
-$lang->testtask->lastRunTime    = 'Time';
+$lang->testtask->lastRunAccount = 'Runner';
+$lang->testtask->lastRunTime    = 'Last Run';
 $lang->testtask->lastRunResult  = 'Result';
 $lang->testtask->reportField    = 'Report';
 $lang->testtask->files          = 'Upload';
@@ -88,10 +88,10 @@ $lang->testtask->priList[2] = '2';
 $lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = 'Unlinked Cases';
-$lang->testtask->linkByBuild   = 'Copy by build';
-$lang->testtask->linkByStory   = 'Linked by Story';
+$lang->testtask->linkByBuild   = 'Copy from build';
+$lang->testtask->linkByStory   = 'Link by Story';
 $lang->testtask->linkByBug     = 'Linked by Bug';
-$lang->testtask->linkBySuite   = 'Linked by Suite';
+$lang->testtask->linkBySuite   = 'Link by Suite';
 $lang->testtask->passAll       = 'All Pass';
 $lang->testtask->pass          = 'Pass';
 $lang->testtask->fail          = 'Failed';
@@ -102,8 +102,8 @@ $lang->testtask->confirmDelete     = 'Do you want to delete this test build?';
 $lang->testtask->confirmUnlinkCase = 'Do you want to unlink this Case?';
 $lang->testtask->noticeNoOther     = 'There are no other test task for this product';
 
-$lang->testtask->assignedToMe  = 'Assigned to Me';
-$lang->testtask->allCases      = 'All Cases';
+$lang->testtask->assignedToMe  = 'My';
+$lang->testtask->allCases      = 'AllCases';
 
 $lang->testtask->lblCases      = 'Cases';
 $lang->testtask->lblUnlinkCase = 'Unlink Case';

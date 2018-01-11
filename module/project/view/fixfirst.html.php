@@ -21,7 +21,7 @@
           <span class='input-group-addon fix-border'><input id='withLeft' type='checkbox' checked name='withLeft' value='1' /> <label for='withLeft'><?php echo $lang->project->fixFirstWithLeft?></label></span>
           <span class='input-group-btn'><?php echo html::submitButton();?></span>
         </div>
-        <div class='alert alert-info'><?php echo $lang->project->totalEstimate . $project->totalEstimate . $lang->project->workHour;?></div>
+        <div class='alert alert-info'><?php echo $lang->project->totalEstimate . ' : ' . $project->totalEstimate . $lang->project->workHour;?></div>
       </td>
     </tr>
   </table>

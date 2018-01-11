@@ -84,7 +84,7 @@ $config->task->datatable->fieldList['status']['required'] = 'no';
 
 $config->task->datatable->fieldList['estimate']['title']    = 'estimateAB';
 $config->task->datatable->fieldList['estimate']['fixed']    = 'no';
-$config->task->datatable->fieldList['estimate']['width']    = '40';
+$config->task->datatable->fieldList['estimate']['width']    = '57';
 $config->task->datatable->fieldList['estimate']['required'] = 'no';
 
 $config->task->datatable->fieldList['consumed']['title']    = 'consumedAB';

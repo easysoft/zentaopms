@@ -219,6 +219,8 @@ class projectModel extends model
     /**
      * Create a project.
      *
+     * @param string $copyProjectID
+     *
      * @access public
      * @return void
      */
@@ -232,7 +234,7 @@ class projectModel extends model
             ->setDefault('team', substr($this->post->name,0, 30))
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
-            ->remove('products, workDays, delta, branch,uid')
+            ->remove('products, workDays, delta, branch, uid, plans')
             ->get();
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
@@ -318,7 +320,7 @@ class projectModel extends model
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
-            ->remove('products,branch,uid')
+            ->remove('products, branch, uid, plans')
             ->get();
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PROJECT)->data($project)
@@ -1035,7 +1037,7 @@ class projectModel extends model
             if(!$withBranch) return $this->loadModel('tutorial')->getProductPairs();
             return $this->loadModel('tutorial')->getProjectProducts();
         }
-        $query = $this->dao->select('t2.id, t2.name, t2.type, t1.branch')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $query = $this->dao->select('t2.id, t2.name, t2.type, t1.branch, t1.plan')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')
             ->where('t1.project')->eq((int)$projectID);
@@ -1146,6 +1148,7 @@ class projectModel extends model
         if(!isset($_POST['products'])) return;
         $products = $_POST['products'];
         $branches = isset($_POST['branch']) ? $_POST['branch'] : array();
+        $plans    = $_POST['plans'];
 
         $existedProducts = array();
         $addedProducts   = array();
@@ -1166,6 +1169,7 @@ class projectModel extends model
             $data->project = $projectID;
             $data->product = $productID;
             $data->branch  = isset($branches[$i]) ? $branches[$i] : 0;
+            $data->plan    = isset($plans[$productID]) ? $plans[$productID] : 0;
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
             $existedProducts[$productID] = true;
         }
@@ -1431,21 +1435,25 @@ class projectModel extends model
     /**
      * Link story.
      *
-     * @param  int    $projectID
+     * @param int   $projectID
+     * @param array $stories
+     * @param array $products
+     *
      * @access public
-     * @return void
+     * @return mixed
      */
-    public function linkStory($projectID, $stories = array())
+    public function linkStory($projectID, $stories = array(), $products = array())
     {
         if(empty($stories)) $stories = $this->post->stories;
         if(empty($stories)) return false;
+        if(empty($products)) $products = $this->post->products;
 
         $this->loadModel('action');
         $versions  = $this->loadModel('story')->getVersions($stories);
         $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
         foreach($stories as $key => $storyID)
         {
-            $productID = (int)$this->post->products[$storyID];
+            $productID = (int)$products[$storyID];
             $data = new stdclass();
             $data->project = $projectID;
             $data->product = $productID;
@@ -1456,6 +1464,34 @@ class projectModel extends model
             $this->story->setStage($storyID);
             $this->action->create('story', $storyID, 'linked2project', '', $projectID);
         }
+    }
+
+    /**
+     * Link all stories by project.
+     *
+     * @param $projectID
+     */
+    public function linkStories($projectID)
+    {
+        $plans = $this->dao->select('plan,product')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->eq($projectID)
+            ->fetchPairs('plan', 'product');
+
+        $planStories  = array();
+        $planProducts = array();
+        if(!empty($plans))
+        {
+            foreach($plans as $planID => $productID)
+            {
+                $planStory = $this->loadModel('story')->getPlanStories($planID);
+                if(!empty($planStory))
+                {
+                    $planStories = array_merge($planStories, array_keys($planStory));
+                    foreach($planStory as $story) $planProducts[$story->id] = $story->product;
+                }
+            }
+        }
+        $this->linkStory($projectID, $planStories, $planProducts);
     }
 
     /**
@@ -2542,5 +2578,26 @@ class projectModel extends model
         }
         if(isset($fullTrees[0]) and empty($fullTrees[0]->children)) array_shift($fullTrees);
         return array_values($fullTrees);
+    }
+
+    /**
+     * Get plans by $productID.
+     *
+     * @param int|array $productID
+     *
+     * @return mixed
+     */
+    public function getPlans($productID)
+    {
+        $plans = $this->dao->select('id,title,product')->from(TABLE_PRODUCTPLAN)
+            ->where('product')->in($productID)
+            ->fetchAll();
+
+        $productPlans = array();
+        foreach ($plans as $plan)
+        {
+            $productPlans[$plan->product][$plan->id] = $plan->title;
+        }
+        return $productPlans;
     }
 }

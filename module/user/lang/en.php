@@ -20,13 +20,13 @@ $lang->user->role        = 'Role';
 $lang->user->group       = 'Group';
 $lang->user->realname    = 'Name';
 $lang->user->nickname    = 'Nickname';
-$lang->user->commiter    = 'Commiter';
+$lang->user->commiter    = 'SCM Account';
 $lang->user->birthyear   = 'Birth Year';
 $lang->user->gender      = 'Gender';
 $lang->user->email       = 'Email';
 $lang->user->basicInfo   = 'Basic Info';
 $lang->user->accountInfo = 'Account';
-$lang->user->verify      = 'Acceptance';
+$lang->user->verify      = 'Safety Verification';
 $lang->user->contactInfo = 'Contact';
 $lang->user->skype       = 'Skype';
 $lang->user->qq          = 'QQ';
@@ -48,8 +48,8 @@ $lang->user->verifyPassword   = 'Enter your password';
 $lang->user->resetPassword    = 'Forgot Password?';
 
 $lang->user->index           = "Home";
-$lang->user->view            = "Info";
-$lang->user->create          = "Add";
+$lang->user->view            = "Overview";
+$lang->user->create          = "Add User";
 $lang->user->batchCreate     = "Batch Add User";
 $lang->user->edit            = "Edit";
 $lang->user->batchEdit       = "Batch Edit";
@@ -75,7 +75,7 @@ $lang->user->bug         = 'Bug';
 $lang->user->test        = 'Test';
 $lang->user->testTask    = 'Test Task';
 $lang->user->testCase    = 'Test Case';
-$lang->user->todo        = 'To-Do';
+$lang->user->todo        = 'Todo';
 $lang->user->story       = 'Story';
 $lang->user->dynamic     = 'Dynamic';
 
@@ -102,9 +102,9 @@ $lang->user->roleList['dev']    = 'Developer';
 $lang->user->roleList['qa']     = 'Tester';
 $lang->user->roleList['pm']     = 'Project Manager';
 $lang->user->roleList['po']     = 'Product Owner';
-$lang->user->roleList['td']     = 'Technical Director';
-$lang->user->roleList['pd']     = 'Product Director';
-$lang->user->roleList['qd']     = 'QA Director';
+$lang->user->roleList['td']     = 'Technical Manager';
+$lang->user->roleList['pd']     = 'Product Manager';
+$lang->user->roleList['qd']     = 'QA Manager';
 $lang->user->roleList['top']    = 'Senior Manager';
 $lang->user->roleList['others'] = 'Other';
 
@@ -128,15 +128,15 @@ $lang->user->tpl->content = 'Content';
 $lang->user->tpl->public  = 'Public';
 
 $lang->user->placeholder = new stdclass();
-$lang->user->placeholder->account   = 'letters, underline, and numbers,at lease three characters';
+$lang->user->placeholder->account   = 'Letters, Underline and Numbers, at least 3 characters';
 $lang->user->placeholder->password1 = 'six characters at lease ';
 $lang->user->placeholder->role      = "Role affects content and user order.";
 $lang->user->placeholder->group     = "Group decides user privilege.";
-$lang->user->placeholder->commiter  = 'Subversion Account';
+$lang->user->placeholder->commiter  = 'Svn or Git like';
 $lang->user->placeholder->verify    = 'Password is required.';
 
-$lang->user->placeholder->passwordStrength[1] = 'letters and numbers, at lease six characters';
-$lang->user->placeholder->passwordStrength[2] = 'letters, numbers and special characters, at lease 10 characters';
+$lang->user->placeholder->passwordStrength[1] = 'Letters and Numbers, at least 6 characters';
+$lang->user->placeholder->passwordStrength[2] = 'Letters, Numbers and special characters, at lease 10 characters';
 
 $lang->user->error = new stdclass();
 $lang->user->error->account       = "ID %s，must be contain letters, underline, and numbers,at lease three characters";
@@ -157,7 +157,7 @@ $lang->user->contacts->userList = 'User List';
 
 $lang->user->contacts->manage        = 'Manage';
 $lang->user->contacts->contactsList  = 'Contacts';
-$lang->user->contacts->selectedUsers = 'User';
+$lang->user->contacts->selectedUsers = 'Select User';
 $lang->user->contacts->selectList    = 'List';
 $lang->user->contacts->createList    = 'Create a List';
 $lang->user->contacts->noListYet     = 'No contact list exists. Please create a list first.';
