@@ -765,7 +765,7 @@ CREATE TABLE IF NOT EXISTS `zt_todo` (
   `closedDate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `todo` (`account`,`date`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_user`;
 CREATE TABLE IF NOT EXISTS `zt_user` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
