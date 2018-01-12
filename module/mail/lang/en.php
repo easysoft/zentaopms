@@ -1,14 +1,15 @@
 <?php
-$lang->mail->common = 'Email Settings';
-$lang->mail->index  = 'Home';
-$lang->mail->detect = 'Testing';
-$lang->mail->edit   = 'Edit Settings';
-$lang->mail->save   = 'Saved';
-$lang->mail->test   = 'Email Sending Test';
-$lang->mail->reset  = 'Reset';
-$lang->mail->resend = 'Resend';
-$lang->mail->browse = 'Email List';
-$lang->mail->delete = 'Delete Email';
+$lang->mail->common        = 'Email Settings';
+$lang->mail->index         = 'Home';
+$lang->mail->detect        = 'Testing';
+$lang->mail->edit          = 'Edit Settings';
+$lang->mail->save          = 'Save';
+$lang->mail->saveSuccess   = 'Saved Successfully';
+$lang->mail->test          = 'Email Sending Test';
+$lang->mail->reset         = 'Reset';
+$lang->mail->resend        = 'Resend';
+$lang->mail->browse        = 'Email List';
+$lang->mail->delete        = 'Delete Email';
 $lang->mail->ztCloud       = 'ZenTao CloudMail';
 $lang->mail->gmail         = 'GMAIL';
 $lang->mail->sendCloud     = 'Notice SendCloud';

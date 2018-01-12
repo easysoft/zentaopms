@@ -16,7 +16,7 @@
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['mail']);?></span>
       <strong><?php echo $lang->mail->common;?></strong>
-      <small class='text-success'> <?php echo $lang->mail->save;?> <?php echo html::icon('ok-sign');?></small>
+      <small class='text-success'> <?php echo $lang->mail->saveSuccess;?> <?php echo html::icon('ok-sign');?></small>
     </div>
   </div>
   <div class='alert alert-block with-icon'>
