@@ -102,10 +102,10 @@ $lang->bug->confirmStoryChange = 'Confirm Story Change';
 $lang->bug->copy               = 'Copy';
 
 /* 查询条件列表。*/
-$lang->bug->assignToMe     = 'AssignedToMe';
-$lang->bug->openedByMe     = 'CreatedByMe';
-$lang->bug->resolvedByMe   = 'ResolvedByMe';
-$lang->bug->closedByMe     = 'ClosedByMe';
+$lang->bug->assignToMe     = 'Assigned To Me';
+$lang->bug->openedByMe     = 'Created By Me';
+$lang->bug->resolvedByMe   = 'Resolved By Me';
+$lang->bug->closedByMe     = 'Closed By Me';
 $lang->bug->assignToNull   = 'Unassigned';
 $lang->bug->unConfirmed    = 'Unconfirmed';
 $lang->bug->unResolved     = 'Unresolved';
