@@ -12,14 +12,17 @@
 $lang->todo->common       = '待办';
 $lang->todo->index        = "待办一览";
 $lang->todo->create       = "新增";
+$lang->todo->assignTo     = "指派";
+$lang->todo->activate     = "激活";
 $lang->todo->batchCreate  = "批量添加";
-$lang->todo->edit         = "更新待办";
+$lang->todo->edit         = "编辑";
+$lang->todo->close        = "关闭";
 $lang->todo->batchEdit    = "批量编辑";
 $lang->todo->view         = "待办详情";
 $lang->todo->finish       = "完成";
 $lang->todo->batchFinish  = "批量完成";
 $lang->todo->export       = "导出";
-$lang->todo->delete       = "删除待办";
+$lang->todo->delete       = "删除";
 $lang->todo->import2Today = "导入到今天";
 $lang->todo->import       = "导入";
 $lang->todo->legendBasic  = "基本信息";
@@ -59,9 +62,10 @@ $lang->todo->confirmBug   = '该Todo关联的是Bug #%s，需要修改它吗？'
 $lang->todo->confirmTask  = '该Todo关联的是Task #%s，需要修改它吗？';
 $lang->todo->confirmStory = '该Todo关联的是Story #%s，需要修改它吗？';
 
-$lang->todo->statusList['wait']  = '未开始';
-$lang->todo->statusList['doing'] = '进行中';
-$lang->todo->statusList['done']  = '已完成';
+$lang->todo->statusList['wait']   = '未开始';
+$lang->todo->statusList['doing']  = '进行中';
+$lang->todo->statusList['done']   = '已完成';
+$lang->todo->statusList['closed'] = '已关闭';
 //$lang->todo->statusList['cancel']   = '已取消';
 //$lang->todo->statusList['postpone'] = '已延期';
 
@@ -86,6 +90,7 @@ $lang->todo->thisIsPrivate  = '这是一条私人事务。:)';
 $lang->todo->lblDisableDate = '暂时不设定时间';
 $lang->todo->lblBeforeDays  = "提前%s天生成待办";
 $lang->todo->noTodo         = '该类型没有待办事务';
+$lang->todo->noAssignedTo   = '被指派人不能为空';
 
 $lang->todo->periods['today']      = '今日';
 $lang->todo->periods['yesterday']  = '昨日';
