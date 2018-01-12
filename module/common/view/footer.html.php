@@ -28,12 +28,25 @@ $(function(){showBrowserNotice()});
 /* Alert get message. */
 $(function()
 {
+    var windowBlur = false;
+    if(window.Notification)
+    {
+        window.onblur  = function(){windowBlur = true;}
+        window.onfocus = function(){windowBlur = false;}
+    }
     setInterval(function()
     {
-        $.get('<?php echo $this->createLink('message', 'ajaxGetMessage')?>', function(data)
+        $.get(createLink('message', 'ajaxGetMessage', "windowBlur=" + (windowBlur ? '1' : '0')), function(data)
         {
-            $('#noticeBox').append(data);
-            adjustNoticePosition();
+            if(!windowBlur)
+            {
+                $('#noticeBox').append(data);
+                adjustNoticePosition();
+            }
+            else
+            {
+                if(data) notifyMessage(data);
+            }
         });
     }, 60 * 1000);
 })
