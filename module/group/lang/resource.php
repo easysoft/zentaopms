@@ -115,6 +115,9 @@ $lang->resource->todo->export       = 'export';
 $lang->resource->todo->finish       = 'finish';
 $lang->resource->todo->batchFinish  = 'batchFinish';
 $lang->resource->todo->import2Today = 'import2Today';
+$lang->resource->todo->assignTo     = 'assignTo';
+$lang->resource->todo->activate     = 'activate';
+$lang->resource->todo->close        = 'close';
 
 $lang->todo->methodOrder[5]  = 'create';
 $lang->todo->methodOrder[10] = 'batchCreate';
@@ -953,7 +956,7 @@ $lang->editor->methodOrder[30] = 'delete';
 /* Convert. */
 $lang->resource->convert = new stdclass();
 $lang->resource->convert->index          = 'index';
-$lang->resource->convert->selectSource   = 'selectSource';  
+$lang->resource->convert->selectSource   = 'selectSource';
 $lang->resource->convert->setConfig      = 'setConfig';
 $lang->resource->convert->setBugfree     = 'setBugfree';
 $lang->resource->convert->setRedmine     = 'setRedmine';
@@ -1417,7 +1420,7 @@ if($config->global->flow == 'onlyStory')
     unset($lang->moduleOrder[150]);
     unset($lang->resource->git);
     unset($lang->moduleOrder[155]);
-    
+
     unset($lang->resource->story->tasks);
 }
 
