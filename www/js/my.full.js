@@ -1996,6 +1996,23 @@ function adjustNoticePosition()
     });
 }
 
+function notifyMessage(data)
+{
+    if(window.Notification)
+    {
+        if(Notification.permission == "granted")
+        {
+            new Notification("", {body:data});
+        }
+        else if(Notification.permission != "denied")
+        {
+            Notification.requestPermission(function(permission)
+            {
+                new Notification("", {body:data});
+            });
+        }
+    }
+}
 
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
