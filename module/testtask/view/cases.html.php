@@ -122,7 +122,7 @@ var moduleID   = '<?php echo $moduleID;?>';
   </form>
 </div>
 <script>
-$('#module' + moduleID).addClass('active'); 
+$('#module' + moduleID).addClass('active');
 $('#' + taskCaseBrowseType + 'Tab').addClass('active');
 <?php if($browseType == 'bysearch'):?>
 $shortcut = $('#QUERY<?php echo (int)$param;?>Tab');
