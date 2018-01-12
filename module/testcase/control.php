@@ -194,11 +194,12 @@ class testcase extends control
 
     /**
      * Create a test case.
-     *
-     * @param  int    $productID
-     * @param  int    $moduleID
-     * @param  string $from
-     * @param  int    $param
+     * @param        $productID
+     * @param string $branch
+     * @param int    $moduleID
+     * @param string $from
+     * @param int    $param
+     * @param int    $storyID
      * @access public
      * @return void
      */
@@ -846,8 +847,8 @@ class testcase extends control
 
     /**
      * Batch change branch.
-     * 
-     * @param  int    $branchID 
+     *
+     * @param  int    $branchID
      * @access public
      * @return void
      */
