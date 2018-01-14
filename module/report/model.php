@@ -414,7 +414,7 @@ class reportModel extends model
      * Get user todos.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getUserTodos()
     {
@@ -453,6 +453,12 @@ class reportModel extends model
     }
 }
 
+/**
+ * @param $pre
+ * @param $next
+ *
+ * @return int
+ */
 function sortSummary($pre, $next)
 {
     if($pre['validRate'] == $next['validRate']) return 0;
