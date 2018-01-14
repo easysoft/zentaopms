@@ -374,7 +374,7 @@ class reportModel extends model
      */
     public function getUserBugs()
     {
-        $bugs = $this->dao->select('t1.id, t1.title, t2.account as user, t1.deadline')
+        return $this->dao->select('t1.id, t1.title, t2.account as user, t1.deadline')
             ->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')
             ->on('t1.assignedTo = t2.account')
@@ -382,8 +382,10 @@ class reportModel extends model
             ->andWhere('t1.assignedTo')->ne('closed')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.deadline', true)->eq('0000-00-00')
+            ->orWhere('t1.deadline')->lt(date(DT_DATE1, strtotime('+4 day')))
+            ->markRight(1)
             ->fetchGroup('user');
-        return $bugs;
     }
 
     /**
@@ -394,7 +396,7 @@ class reportModel extends model
      */
     public function getUserTasks()
     {
-        $tasks = $this->dao->select('t1.id, t1.name, t2.account as user, t1.deadline')->from(TABLE_TASK)->alias('t1')
+        return $this->dao->select('t1.id, t1.name, t2.account as user, t1.deadline')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.assignedTo = t2.account')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->where('t1.assignedTo')->ne('')
@@ -402,9 +404,10 @@ class reportModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.status')->in('wait, doing')
             ->andWhere('t3.status')->ne('suspended')
+            ->andWhere('t1.deadline', true)->eq('0000-00-00')
+            ->orWhere('t1.deadline')->lt(date(DT_DATE1, strtotime('+4 day')))
+            ->markRight(1)
             ->fetchGroup('user');
-
-        return $tasks;
     }
 
     /**
