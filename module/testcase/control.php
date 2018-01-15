@@ -722,7 +722,7 @@ class testcase extends control
             }
         }
 
-        if(!$this->testcase->forceNotReview()) unset($this->lang->testcase->statusList['wait']);
+        // if(!$this->testcase->forceNotReview()) unset($this->lang->testcase->statusList['wait']); /* Bug#1343 */
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars = count($cases) * (count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
