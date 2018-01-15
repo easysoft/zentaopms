@@ -55,7 +55,7 @@
     $groupWait     = 0;
     $groupDone     = 0;
     $groupDoing    = 0;
-    $groupClosed   = 0;  
+    $groupClosed   = 0;
     $groupEstimate = 0.0;
     $groupConsumed = 0.0;
     $groupLeft     = 0.0;
@@ -113,7 +113,7 @@
       </td>
       <?php endif;?>
       <td><?php echo $task->id;?></td>
-      <td><span class='<?php echo 'pri' . zget(array_keys($lang->task->priList), $task->pri, $task->pri)?>'><?php echo zget(array_keys($lang->task->priList), $task->pri, $task->pri);?></span></td>
+      <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
       <td class='text-left'>
           <?php
             if(!empty($task->team))   echo '<span class="label">' . $lang->task->multipleAB . '</span> ';

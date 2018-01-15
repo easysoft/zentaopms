@@ -672,6 +672,7 @@ class taskModel extends model
             $task->status       = 'done';
             $task->finishedBy   = $oldTask->openedBy; // Fix bug#1341
             $task->finishedDate = helper::now();
+            $task->assignedTo   = $oldTask->openedBy; // Fix bug#1341
         }
         else
         {
@@ -741,7 +742,7 @@ class taskModel extends model
      *
      * @param  int    $taskID
      * @access public
-     * @return void
+     * @return array
      */
     public function recordEstimate($taskID)
     {
@@ -2264,8 +2265,8 @@ class taskModel extends model
 
     /**
      * Get mail subject.
-     * 
-     * @param  object    $task 
+     *
+     * @param  object    $task
      * @access public
      * @return string
      */
@@ -2277,8 +2278,8 @@ class taskModel extends model
 
     /**
      * Get toList and ccList.
-     * 
-     * @param  object    $task 
+     *
+     * @param  object    $task
      * @access public
      * @return bool|array
      */
