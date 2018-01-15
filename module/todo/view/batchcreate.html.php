@@ -19,7 +19,7 @@
       <strong class='pull-left'><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->todo->batchCreate;?></strong>
       <div class='input-group w-200px pull-left' id='datepicker'>
         <span class='input-group-addon'><?php echo $lang->todo->date;?></span>
-        <?php echo html::input('date', $date, "class='form-control form-date' onchange='updateAction(this.value)'");?>
+        <?php echo html::input('date', $date, "class='form-control form-date' style='width:90px;' onchange='updateAction(this.value)'");?>
         <span class='input-group-addon'><input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></span>
       </div>
       <div class='actions'>

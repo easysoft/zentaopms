@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <?php if(!$todo->private or ($todo->private and $todo->account == $app->user->account)):?>
 <div class='container mw-700px'>
   <div id='titlebar'>
@@ -112,6 +113,8 @@
         if($todo->status == 'done' || $todo->status == 'closed') echo html::a($this->createLink('todo', 'activate', "todoID=$todo->id"), "<i class='icon icon-magic'></i> " . $lang->todo->activate, 'hiddenwin', "class='btn showinonlybody'");
         if($todo->status == 'done') echo html::a($this->createLink('todo', 'close', "todoID=$todo->id"), "<i class='icon icon-off'></i> " . $lang->todo->close, 'hiddenwin', "class='btn showinonlybody'");
         echo html::a($this->createLink('todo', 'delete', "todoID=$todo->id"), "<i class='icon icon-remove'></i> " . $lang->todo->delete, 'hiddenwin', "class='btn showinonlybody'");
+
+        echo html::a('#commentBox', '<i class="icon-comment-alt"></i>', '', "title='$lang->comment' onclick='setComment()' class='btn'");
     }
 
     if($this->session->todoList)
@@ -153,6 +156,13 @@
     ?>
   </div>
 </div>
+<fieldset id='commentBox' class='hide'>
+  <legend><?php echo $lang->comment;?></legend>
+  <form method='post' action='<?php echo $this->createLink('action', 'comment', "objectType=todo&objectID=$todo->id")?>' target='hiddenwin'>
+    <div class="form-group"><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></div>
+    <?php echo html::submitButton();?>
+  </form>
+</fieldset>
 <div class="modal fade" id="projectModal">
   <div class="modal-dialog">
     <div class="modal-content">

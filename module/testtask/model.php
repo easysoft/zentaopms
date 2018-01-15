@@ -14,10 +14,10 @@
 class testtaskModel extends model
 {
     /**
-     * Set the menu. 
-     * 
-     * @param  array $products 
-     * @param  int   $productID 
+     * Set the menu.
+     *
+     * @param  array $products
+     * @param  int   $productID
      * @access public
      * @return void
      */
@@ -33,7 +33,7 @@ class testtaskModel extends model
             }
             else
             {
-                if($key == 'product') 
+                if($key == 'product')
                 {
                     $replace = $selectHtml;
                 }
@@ -64,8 +64,8 @@ class testtaskModel extends model
 
     /**
      * Create a test task.
-     * 
-     * @param  int   $productID 
+     *
+     * @param  int   $productID
      * @access public
      * @return void
      */
@@ -147,7 +147,7 @@ class testtaskModel extends model
      *
      * @param  int    $projectID
      * @param  string $orderBy
-     * @param  object $pager 
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -165,8 +165,8 @@ class testtaskModel extends model
 
     /**
      * Get task by idList.
-     * 
-     * @param  array    $idList 
+     *
+     * @param  array    $idList
      * @access public
      * @return array
      */
@@ -177,8 +177,8 @@ class testtaskModel extends model
 
     /**
      * Get test task info by id.
-     * 
-     * @param  int   $taskID 
+     *
+     * @param  int   $taskID
      * @param  bool  $setImgSize
      * @access public
      * @return void
@@ -214,8 +214,8 @@ class testtaskModel extends model
 
     /**
      * Get test tasks by user.
-     * 
-     * @param   string $account 
+     *
+     * @param   string $account
      * @access  public
      * @return  array
      */
@@ -238,9 +238,9 @@ class testtaskModel extends model
 
     /**
      * Get taskrun by case id.
-     * 
-     * @param  int    $taskID 
-     * @param  int    $caseID 
+     *
+     * @param  int    $taskID
+     * @param  int    $caseID
      * @access public
      * @return void
      */
@@ -251,13 +251,13 @@ class testtaskModel extends model
 
     /**
      * Get linkable casses.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @param  object $task
-     * @param  int    $taskID 
+     * @param  int    $taskID
      * @param  string $type
      * @param  string $param
-     * @param  object $pager 
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -282,9 +282,9 @@ class testtaskModel extends model
 
     /**
      * Get all linkable  cases.
-     * 
+     *
      * @param  object $task
-     * @param  string $query 
+     * @param  string $query
      * @param  array  $linkedCases
      * @param  object $pager
      * @access public
@@ -304,12 +304,12 @@ class testtaskModel extends model
 
     /**
      * Get linkable cases by story.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @param  object $task
      * @param  string $query
      * @param  array  $linkedCases
-     * @param  object $pager 
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -336,12 +336,12 @@ class testtaskModel extends model
 
     /**
      * Get linkable cases by bug.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @param  object $task
      * @param  string $query
      * @param  array  $linkedCases
-     * @param  object $pager 
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -368,13 +368,13 @@ class testtaskModel extends model
 
     /**
      * Get linkable cases by suite.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @param  object $task
      * @param  string $query
      * @param  string $suite
      * @param  array  $linkedCases
-     * @param  object $pager 
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -396,25 +396,25 @@ class testtaskModel extends model
 
     /**
      * Get linkeable cases by test task.
-     * 
+     *
      * @param  string $testTask
      * @param  array  $linkedCases
-     * @param  object $pager 
+     * @param  object $pager
      * @access public
      * @return array
      */
     public function getLinkableCasesByTestTask($testTask, $linkedCases, $pager)
     {
         $caseList  = $this->dao->select("`case`")->from(TABLE_TESTRUN)->where('task')->eq($testTask)->andWhere('`case`')->notin($linkedCases)->fetchPairs('case');
-        
+
         return $this->dao->select("*")->from(TABLE_CASE)->where('id')->in($caseList)->andWhere('status')->ne('wait')->page($pager)->fetchAll();
     }
 
     /**
      * Get related test tasks.
-     * 
-     * @param  int    $productID 
-     * @param  int    $testtaskID 
+     *
+     * @param  int    $productID
+     * @param  int    $testtaskID
      * @access public
      * @return array
      */
@@ -431,32 +431,32 @@ class testtaskModel extends model
             ->fetchPairs('id', 'name');
     }
 
-    /**  
+    /**
      * Get report data of test task per run result.
-     * 
-     * @param  int     $taskID 
+     *
+     * @param  int     $taskID
      * @access public
      * @return array
      */
     public function getDataOfTestTaskPerRunResult($taskID)
-    {    
+    {
         $datas = $this->dao->select('lastRunResult AS name, COUNT(*) AS value')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
 
         foreach($datas as $result => $data) $data->name = isset($this->lang->testcase->resultList[$result])? $this->lang->testcase->resultList[$result] : $this->lang->testtask->unexecuted;
 
         return $datas;
-    }    
+    }
 
-    /**  
+    /**
      * Get report data of test task per Type.
-     * 
-     * @param  int     $taskID 
+     *
+     * @param  int     $taskID
      * @access public
      * @return array
      */
     public function getDataOfTestTaskPerType($taskID)
-    { 
+    {
         $datas = $this->dao->select('t2.type as name,count(*) as value')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq($taskID)
@@ -471,15 +471,15 @@ class testtaskModel extends model
         return $datas;
     }
 
-    /**  
-     * Get report data of test task per module 
-     * 
-     * @param  int     $taskID 
+    /**
+     * Get report data of test task per module
+     *
+     * @param  int     $taskID
      * @access public
      * @return array
      */
     public function getDataOfTestTaskPerModule($taskID)
-    {    
+    {
         $datas = $this->dao->select('t2.module as name,count(*) as value')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq($taskID)
@@ -490,20 +490,20 @@ class testtaskModel extends model
         if(!$datas) return array();
 
         $modules = $this->loadModel('tree')->getModulesName(array_keys($datas));
-        foreach($datas as $moduleID => $data) $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/'; 
+        foreach($datas as $moduleID => $data) $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/';
 
         return $datas;
-    }    
+    }
 
-    /**  
+    /**
      * Get report data of test task per runner
-     * 
-     * @param  int     $taskID 
+     *
+     * @param  int     $taskID
      * @access public
      * @return array
      */
     public function getDataOfTestTaskPerRunner($taskID)
-    {    
+    {
         $datas = $this->dao->select('lastRunner AS name, COUNT(*) AS value')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
 
@@ -514,8 +514,8 @@ class testtaskModel extends model
 
      /**
      * Merge the default chart settings and the settings of current chart.
-     * 
-     * @param  string    $chartType 
+     *
+     * @param  string    $chartType
      * @access public
      * @return void
      */
@@ -537,8 +537,8 @@ class testtaskModel extends model
 
     /**
      * Update a test task.
-     * 
-     * @param  int   $taskID 
+     *
+     * @param  int   $taskID
      * @access public
      * @return void
      */
@@ -562,8 +562,8 @@ class testtaskModel extends model
 
     /**
      * Start testtask.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -584,7 +584,7 @@ class testtaskModel extends model
 
     /**
      * Close testtask.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -613,9 +613,9 @@ class testtaskModel extends model
 
     /**
      * update block testtask.
-     * 
-     * @param  int    $taskID 
-     * @access public 
+     *
+     * @param  int    $taskID
+     * @access public
      * @return void
      */
     public function block($taskID)
@@ -635,8 +635,8 @@ class testtaskModel extends model
 
     /**
      * update activate testtask.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -657,8 +657,8 @@ class testtaskModel extends model
 
     /**
      * Link cases.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @param  string $type
      * @access public
      * @return void
@@ -685,10 +685,10 @@ class testtaskModel extends model
 
     /**
      * Get test runs of a test task.
-     * 
-     * @param  int    $taskID 
-     * @param  int    $moduleID 
-     * @param  object $pager 
+     *
+     * @param  int    $taskID
+     * @param  int    $moduleID
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -709,10 +709,10 @@ class testtaskModel extends model
 
     /**
      * Get test runs of a user.
-     * 
-     * @param  int    $taskID 
-     * @param  int    $user 
-     * @param  obejct $pager 
+     *
+     * @param  int    $taskID
+     * @param  int    $user
+     * @param  obejct $pager
      * @access public
      * @return array
      */
@@ -732,15 +732,15 @@ class testtaskModel extends model
     }
 
     /**
-     * Get testtask linked cases. 
-     * 
-     * @param  int    $productID 
-     * @param  string $browseType 
-     * @param  int    $queryID 
-     * @param  int    $moduleID 
-     * @param  string $sort 
-     * @param  object $pager 
-     * @param  object $task 
+     * Get testtask linked cases.
+     *
+     * @param  int    $productID
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @param  int    $moduleID
+     * @param  string $sort
+     * @param  object $pager
+     * @param  object $task
      * @access public
      * @return array
      */
@@ -757,6 +757,10 @@ class testtaskModel extends model
         elseif($browseType == 'assignedtome')
         {
             $runs = $this->getUserRuns($task->id, $this->session->user->account, $modules, $sort, $pager);
+        }
+        elseif($browseType == 'account')
+        {
+            $runs = $this->getUserRuns($task->id, $this->session->taskCaseAccount, $modules, $sort, $pager);
         }
         /* By search. */
         elseif($browseType == 'bysearch')
@@ -802,8 +806,8 @@ class testtaskModel extends model
 
     /**
      * Get info of a test run.
-     * 
-     * @param  int   $runID 
+     *
+     * @param  int   $runID
      * @access public
      * @return void
      */
@@ -815,20 +819,20 @@ class testtaskModel extends model
     }
 
     /**
-     * Create test result 
-     * 
-     * @param  int   $runID 
+     * Create test result
+     *
+     * @param  int   $runID
      * @access public
      * @return void
      */
     public function createResult($runID = 0)
     {
-        /* Compute the test result. 
+        /* Compute the test result.
          *
          * 1. if there result in the post, use it.
          * 2. if no result, set default is pass.
          * 3. then check the steps to compute result.
-         * 
+         *
          * */
         $postData   = fixer::input('post')->get();
         $caseResult = isset($postData->result) ? $postData->result : 'pass';
@@ -903,8 +907,8 @@ class testtaskModel extends model
 
     /**
      * Batch run case
-     * 
-     * @param  string $runCaseType 
+     *
+     * @param  string $runCaseType
      * @access public
      * @return void
      */
@@ -986,9 +990,9 @@ class testtaskModel extends model
 
     /**
      * Get results by runID or caseID
-     * 
-     * @param  int   $runID 
-     * @param  int   $caseID 
+     *
+     * @param  int   $runID
+     * @param  int   $caseID
      * @access public
      * @return array
      */
@@ -1076,9 +1080,9 @@ class testtaskModel extends model
 
     /**
      * Judge an action is clickable or not.
-     * 
-     * @param  object $product 
-     * @param  string $action 
+     *
+     * @param  object $product
+     * @param  string $action
      * @access public
      * @return void
      */
@@ -1096,12 +1100,12 @@ class testtaskModel extends model
 
     /**
      * Print cell data.
-     * 
-     * @param  object  $col 
-     * @param  object  $run 
-     * @param  array   $users 
-     * @param  object  $task 
-     * @param  array   $branches 
+     *
+     * @param  object  $col
+     * @param  object  $run
+     * @param  array   $users
+     * @param  object  $task
+     * @param  array   $branches
      * @access public
      * @return void
      */
@@ -1221,9 +1225,9 @@ class testtaskModel extends model
 
     /**
      * Send mail.
-     * 
-     * @param  int    $testtaskID 
-     * @param  int    $actionID 
+     *
+     * @param  int    $testtaskID
+     * @param  int    $actionID
      * @access public
      * @return void
      */
@@ -1261,15 +1265,15 @@ class testtaskModel extends model
         $subject = $this->getSubject($testtask, $action->action);
 
         /* Send mail. */
-        $this->mail->send($toList, $subject, $mailContent, $ccList); 
+        $this->mail->send($toList, $subject, $mailContent, $ccList);
         if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
     }
 
     /**
      * Get mail subject.
-     * 
-     * @param  object    $testtask 
-     * @param  string    $actionType 
+     *
+     * @param  object    $testtask
+     * @param  string    $actionType
      * @access public
      * @return string
      */
@@ -1292,8 +1296,8 @@ class testtaskModel extends model
 
     /**
      * Get toList and ccList.
-     * 
-     * @param  object    $testtask 
+     *
+     * @param  object    $testtask
      * @access public
      * @return bool|array
      */
