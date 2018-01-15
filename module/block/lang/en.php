@@ -31,6 +31,12 @@ $lang->block->lblHtml      = 'HTML';
 $lang->block->dynamic      = 'Dynamic';
 $lang->block->lblFlowchart = 'Workflow';
 
+$lang->block->assignToMeList['todo']  = 'Todo';
+$lang->block->assignToMeList['story'] = 'Story';
+$lang->block->assignToMeList['task']  = 'Task';
+$lang->block->assignToMeList['bug']   = 'Bug';
+$lang->block->assignToMeList['case']  = 'Case';
+
 $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Name';
 $lang->block->params->value = 'Value';

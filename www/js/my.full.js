@@ -2041,7 +2041,7 @@ $(document).ready(function()
     fixStyle();
 
     // Init tree menu
-    $('.tree').tree({name: config.currentModule + '-' + config.currentMethod, initialState: 'preserve'});
+    $('.tree').tree({initialState: 'preserve'});
 
     $(window).resize(saveWindowSize);   // When window resized, call it again.
 

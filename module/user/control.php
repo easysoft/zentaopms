@@ -711,9 +711,6 @@ class user extends control
                 /* Keep login. */
                 if($this->post->keepLogin) $this->user->keepLogin($user);
 
-                /* Check password. */
-                if(isset($this->config->safe->mode) and $this->user->computePasswordStrength($password) < $this->config->safe->mode) echo js::alert($this->lang->user->weakPassword);
-
                 /* Go to the referer. */
                 if($this->post->referer and strpos($this->post->referer, $loginLink) === false and strpos($this->post->referer, $denyLink) === false)
                 {

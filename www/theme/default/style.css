@@ -808,3 +808,16 @@ body {color:#141414; padding-bottom: 40px;}
 .icon-file-text:before{content:'\e6d4'}
 
 body.body-modal .ke-container .ke-toolbar .ke-outline[data-name=fullscreen]{display:none;}
+
+.nav-tabs.nav-stacked{border-bottom:0px;}
+.nav-tabs.nav-stacked > li{ float: none; margin-right: -1px; margin-bottom: 0;}
+.nav-tabs.nav-stacked > li.active > a{
+  border: 1px solid #ddd;
+  border-right-color: rgb(221, 221, 221);
+  border-right-color: transparent;
+}
+
+.nav-tabs.nav-stacked > li > a {
+  margin-right: 0;
+  border-radius: 4px 0 0 4px;
+}

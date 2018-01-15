@@ -18,7 +18,7 @@ function getBlocks(moduleID)
         getNotSourceParams('html', moduleID.replace('hiddenBlock', ''));
         return true;
     }
-    if(moduleID == 'html' || moduleID == 'dynamic' || moduleID == 'flowchart')
+    if(moduleID == 'html' || moduleID == 'dynamic' || moduleID == 'flowchart' || moduleID == 'assigntome')
     {
         getNotSourceParams(moduleID, blockID);
         return true;

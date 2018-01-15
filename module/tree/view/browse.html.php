@@ -23,7 +23,7 @@
       <div class='panel-heading'><i class='icon-cog'></i> <strong><?php echo $title;?></strong></div>
       <div class='panel-body'>
         <div class='container'>
-          <ul class='tree-lines' id='modulesTree'></ul>
+          <ul class='tree-lines' id='modulesTree' data-name='tree-<?php echo $viewType?>'></ul>
         </div>
       </div>
     </div>
@@ -138,7 +138,6 @@ $(function()
 {
     var data = $.parseJSON('<?php echo helper::jsonEncode4Parse($tree);?>');
     var options = {
-        name: 'tree-<?php echo $viewType ?>-edit',
         initialState: 'preserve',
         data: data,
         sortable: {

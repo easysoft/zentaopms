@@ -372,7 +372,7 @@ class treeModel extends model
         }
 
         if(!$firstBranch) $lastMenu .= '</li></ul>';
-        $lastMenu = "<ul class='tree tree-lines'>$lastMenu</ul>\n";
+        $lastMenu = "<ul id='modulesTree' class='tree tree-lines' data-name='tree-{$type}'>$lastMenu</ul>\n";
         return $lastMenu;
     }
 
@@ -402,7 +402,7 @@ class treeModel extends model
         }
 
         /* createdVersion > 4.1. */
-        $menu = "<ul class='tree tree-lines'>";
+        $menu = "<ul id='modulesTree' class='tree tree-lines' data-name='tree-task'>";
 
         /* Set the start module. */
         $startModulePath = '';
@@ -566,7 +566,7 @@ class treeModel extends model
     public function getProjectStoryTreeMenu($rootID, $startModule = 0, $userFunc)
     {
         $extra['projectID'] = $rootID;
-        $menu = "<ul class='tree tree-lines'>";
+        $menu = "<ul id='modulesTree' class='tree tree-lines' data-name='tree-story'>";
         $startModulePath = '';
         if($startModule > 0)
         {
