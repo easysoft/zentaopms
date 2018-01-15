@@ -1457,7 +1457,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Check whether force not review
+     * Check whether force not review.
      *
      * @access public
      * @return bool
