@@ -64,6 +64,7 @@ $lang->testreport->foundBugTip    = "Bugs created in this build and created in t
 $lang->testreport->legacyBugTip   = "Active Bugs, or the resolved beyond the test period.";
 $lang->testreport->fromCaseBugTip = "Bugs created after case-failure in the test period.";
 $lang->testreport->errorTrunk     = "The trunk version cannot create a test report. Please modify the associated version!";
+$lang->testreport->moreProduct    = "A test report can only be generated for the same product.";
 
 $lang->testreport->bugSummary = <<<EOD
 <strong>%s</strong> Bug(s) generated in total <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-info-sign'></i></a>,

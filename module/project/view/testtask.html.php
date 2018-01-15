@@ -25,10 +25,12 @@
   </div>
 </div>
 
+<form method='post' target='hiddenwin' id='testtaskForm'>
 <table class='table tablesorter table-fixed' id='taskList'>
   <thead>
   <tr>
     <th class='w-id'><?php echo $lang->idAB;?></th>
+    <th class='w-150px'><?php echo $lang->testtask->product;?></th>
     <th><?php echo $lang->testtask->name;?></th>
     <th><?php echo $lang->testtask->build;?></th>
     <th class='w-user'><?php echo $lang->testtask->owner;?></th>
@@ -41,7 +43,13 @@
   <tbody>
   <?php foreach($tasks as $task):?>
   <tr class='text-center'>
-    <td><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
+    <td class='cell-id'>
+    <?php
+    echo "<input type='checkbox' name='taskIdList[]' value='{$task->id}' /> ";
+    echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));
+    ?>
+    </td>
+    <td title="<?php echo zget($products, $task->product, '')?>"><?php echo zget($products, $task->product, '');?></td>
     <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name);?></td>
     <td title="<?php echo $task->buildName?>"><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
     <td><?php echo $users[$task->owner];?></td>
@@ -65,5 +73,21 @@
   </tr>
   <?php endforeach;?>
   </tbody>
+  <tfoot>
+    <tr>
+      <td colspan='9'>
+        <div class='table-actions clearfix'>
+          <?php
+          echo html::selectButton();
+
+          $actionLink = $this->createLink('testreport', 'browse', "objectID=$projectID&objctType=project");
+          $misc       = common::hasPriv('testreport', 'browse') ? "onclick=\"setFormAction('$actionLink', '', '#testtaskForm')\"" : "disabled='disabled'";
+          echo html::commonButton($lang->testreport->common, $misc);
+          ?>
+        </div>
+      </td>
+    </tr>
+  </tfoot>
 </table>
+</form>
 <?php include '../../common/view/footer.html.php';?>

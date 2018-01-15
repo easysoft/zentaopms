@@ -770,6 +770,7 @@ class project extends control
         $this->view->orderBy     = $orderBy;
         $this->view->tasks       = $this->testtask->getProjectTasks($projectID);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->products    = $this->loadModel('product')->getPairs();
 
         $this->display();
     }

@@ -682,7 +682,7 @@ class testsuiteModel extends model
                             $stepData->case    = $caseID;
                             $stepData->version = $version;
                             $stepData->desc    = $step['desc'];
-                            $stepData->expect  = htmlspecialchars($step['expect']);
+                            $stepData->expect  = $step['expect'];
                             $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
                             if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
                             if($stepData->type == 'step')  $parentStepID = 0;
@@ -717,7 +717,7 @@ class testsuiteModel extends model
                         $stepData->case    = $caseID;
                         $stepData->version = 1;
                         $stepData->desc    = $desc;
-                        $stepData->expect  = htmlspecialchars($data->expect[$key][$id]);
+                        $stepData->expect  = $data->expect[$key][$id];
                         $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
                         if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
                         if($stepData->type == 'step')  $parentStepID = 0;
