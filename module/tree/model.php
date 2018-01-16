@@ -511,8 +511,8 @@ class treeModel extends model
         {
             $productInfo  = $this->product->getById($id);
             /* tree menu. */
-            $productTree = '';
-            $branchTrees = '';
+            $productTree = array();
+            $branchTrees = array();
             if(empty($branchGroups[$id])) $branchGroups[$id]['0'] = '';
             foreach($branchGroups[$id] as $branch => $branchName)
             {

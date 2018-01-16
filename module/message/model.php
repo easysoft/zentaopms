@@ -118,6 +118,7 @@ class messageModel extends model
         $object = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
         $toList = $this->getToList($object, $objectType);
         if(empty($toList)) return false;
+        if($toList == $this->app->user->account) return false;
 
         $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
         $data  = $this->app->user->realname . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType];

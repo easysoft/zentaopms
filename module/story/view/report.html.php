@@ -42,6 +42,7 @@
         <strong>
           <?php echo $lang->story->report->common;?>
           <div class="btn-group">
+          <?php unset($lang->report->typeList['']);?>
           <?php foreach($lang->report->typeList as $type => $typeName):?>
           <?php echo html::a("javascript:changeChartType(\"$type\")", $typeName, '', "class='btn btn-sm " . ($type == $chartType ? 'active' : '') . "'")?>
           <?php endforeach;?>

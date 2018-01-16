@@ -224,6 +224,8 @@ class taskModel extends model
             $data[$i]->parent     = $tasks->parent[$i];
             if($story) $data[$i]->storyVersion = $this->loadModel('story')->getVersion($data[$i]->story);
             if($assignedTo) $data[$i]->assignedDate = $now;
+            if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false and empty($tasks->estStarted[$i])) $data[$i]->estStarted = '';
+            if(strpos($this->config->task->create->requiredFields, 'deadline') !== false and empty($tasks->deadline[$i]))     $data[$i]->deadline   = '';
 
             $this->dao->insert(TABLE_TASK)->data($data[$i])
                 ->autoCheck()

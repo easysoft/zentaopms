@@ -1311,7 +1311,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function report($productID, $browseType, $branchID, $moduleID, $chartType = '')
+    public function report($productID, $browseType, $branchID, $moduleID, $chartType = 'pie')
     {
         $this->loadModel('report');
         $this->view->charts   = array();
