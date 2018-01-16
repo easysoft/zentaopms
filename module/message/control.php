@@ -90,7 +90,7 @@ class message extends control
 
         if($windowBlur)
         {
-            echo $messages;
+            echo json_encode(array('message' => $messages));
         }
         else
         {

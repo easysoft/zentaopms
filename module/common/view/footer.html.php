@@ -45,7 +45,7 @@ $(function()
             }
             else
             {
-                if(data) notifyMessage(data);
+                if(data && typeof data.message == 'string') notifyMessage(data.message);
             }
         });
     }, 60 * 1000);
