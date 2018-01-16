@@ -213,6 +213,7 @@ class userModel extends model
             ->setDefault('join', '0000-00-00')
             ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
             ->setIF($this->post->password1 == false, 'password', '')
+            ->setIF($this->post->email != false, 'email', trim($this->post->email))
             ->remove('group, password1, password2, verifyPassword')
             ->get();
 
@@ -233,7 +234,6 @@ class userModel extends model
             ->batchCheck($this->config->user->create->requiredFields, 'notempty')
             ->check('account', 'unique')
             ->check('account', 'account')
-            ->checkIF($this->post->email != false, 'email', 'email')
             ->exec();
         if($this->post->group)
         {
@@ -289,7 +289,7 @@ class userModel extends model
                 $data[$i]->gender   = $users->gender[$i];
                 $data[$i]->password = md5($users->password[$i]);
                 $data[$i]->commiter = $users->commiter[$i];
-                $data[$i]->join     = empty($users->join[$i]) ? '0000-00-00' : ($user->join[$i]);
+                $data[$i]->join     = empty($users->join[$i]) ? '0000-00-00' : ($users->join[$i]);
                 $data[$i]->skype    = $users->skype[$i];
                 $data[$i]->qq       = $users->qq[$i];
                 $data[$i]->yahoo    = $users->yahoo[$i];
@@ -362,6 +362,7 @@ class userModel extends model
         $user = fixer::input('post')
             ->setDefault('join', '0000-00-00')
             ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
+            ->setIF($this->post->email != false, 'email', trim($this->post->email))
             ->remove('password1, password2, groups,verifyPassword')
             ->get();
 
@@ -382,7 +383,6 @@ class userModel extends model
             ->batchCheck($this->config->user->edit->requiredFields, 'notempty')
             ->check('account', 'unique', "id != '$userID'")
             ->check('account', 'account')
-            ->checkIF($this->post->email != false, 'email', 'email')
             ->where('id')->eq((int)$userID)
             ->exec();
 
