@@ -10,16 +10,16 @@
  * @link        http://www.zentao.net
  */
 ?>
-<div class="row">
+<div class="row-table">
   <?php $active = key($hasViewPriv);?>
-  <div class="col-md-1" style='padding-right:0px;'>
+  <div class="col-table" style='padding-right:0px;width:60px;'>
     <ul class="nav nav-tabs nav-stacked">
       <?php foreach($hasViewPriv as $type => $bool):?>
       <li<?php if($type == $active) echo " class='active'"?>><a href="###" data-target="#<?php echo $type?>" data-toggle="tab"><?php echo $lang->block->assignToMeList[$type]?></a></li>
 	  <?php endforeach;?>
     </ul>
   </div>
-  <div class="col-md-11" style='padding:0px;'>
+  <div class="col-table" style='padding:0px;'>
     <div class="tab-content" style='padding:0px;'>
       <?php foreach($hasViewPriv as $type => $bool):?>
       <div class="tab-pane fade<?php if($type == $active) echo " active in"?>" id="<?php echo $type?>">
