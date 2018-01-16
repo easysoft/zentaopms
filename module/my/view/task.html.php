@@ -54,7 +54,11 @@
       </td>
       <td><span class='<?php echo 'pri' . $task->pri;?>'><?php echo $task->pri;?></span></td>
       <td class='nobr text-left'><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></td>
-      <td class='text-left nobr'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, null, "style='color: $task->color'");?></td>
+      <td class='text-left nobr'>
+        <?php if(!empty($task->team))   echo '<span class="label">' . $this->lang->task->multipleAB . '</span> ';?>
+        <?php if(!empty($task->parent)) echo '<span class="label">' . $this->lang->task->childrenAB . '</span> ';?>
+        <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, null, "style='color: $task->color'");?>
+      </td>
       <td><?php echo zget($users, $task->openedBy);?></td>
       <td><?php echo zget($users, $task->assignedTo);?></td>
       <td><?php echo zget($users, $task->finishedBy);?></td>
