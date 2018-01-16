@@ -333,6 +333,7 @@ class todo extends control
         $this->view->actions    = $this->loadModel('action')->getList('todo', $todoID);
         $this->view->from       = $from;
         $this->view->projects   = $this->loadModel('project')->getPairs();
+        $this->view->products   = $this->loadModel('product')->getPairs();
 
         $this->display();
     }
