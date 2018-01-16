@@ -251,8 +251,6 @@ class reportModel extends model
 
         if($assign == 'noassign')
         {
-
-
             $members = $this->dao->select('t1.account,t2.name,t1.root')->from(TABLE_TEAM)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t2.id = t1.root')
                 ->leftJoin(TABLE_USER)->alias('t3')->on('t3.account = t1.account')
