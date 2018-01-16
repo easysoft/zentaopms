@@ -1450,10 +1450,13 @@ class projectModel extends model
         if(empty($products)) $products = $this->post->products;
 
         $this->loadModel('action');
-        $versions  = $this->loadModel('story')->getVersions($stories);
-        $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+        $versions      = $this->loadModel('story')->getVersions($stories);
+        $linkedStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_desc')->fetchPairs('story', 'order');
+        $lastOrder     = reset($linkedStories);
         foreach($stories as $key => $storyID)
         {
+            if(isset($linkedStories[$storyID])) continue;
+
             $productID = (int)$products[$storyID];
             $data = new stdclass();
             $data->project = $projectID;

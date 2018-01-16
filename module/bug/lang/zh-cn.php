@@ -157,8 +157,8 @@ $lang->bug->confirmDeleteTemplate = '您确认要删除该模板吗？';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步骤]</p>";
-$lang->bug->tplResult = "</br><p>[结果]</p>";
-$lang->bug->tplExpect = "</br><p>[期望]</p>";
+$lang->bug->tplResult = "<p>[结果]</p>";
+$lang->bug->tplExpect = "<p>[期望]</p>";
 
 /* 各个字段取值列表。*/
 $lang->bug->severityList[3] = '3';

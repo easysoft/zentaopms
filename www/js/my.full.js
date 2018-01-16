@@ -15,7 +15,16 @@ function createLink(moduleName, methodName, vars, viewType, isOnlyBody)
     if(vars)
     {
         vars = vars.split('&');
-        for(i = 0; i < vars.length; i ++) vars[i] = vars[i].split('=');
+        for(i = 0; i < vars.length; i ++)
+        {
+            splited = vars[i].split('=');
+
+            var newvars = new Array()
+            newvars[0] = splited.shift();
+            newvars[1] = splited.join('=');
+
+            vars[i] = newvars;
+        }
     }
     if(config.requestType != 'GET')
     {

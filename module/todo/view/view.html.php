@@ -56,7 +56,7 @@
             </tr>
             <tr>
               <th class='w-80px'><?php echo $lang->todo->account;?></th>
-              <td><?php echo $todo->account;?></td>
+              <td><?php echo zget($users, $todo->account);?></td>
             </tr>
             <tr>
               <th class='w-80px'><?php echo $lang->todo->date;?></th>
@@ -143,9 +143,9 @@
             unset($_GET['onlybody']);
             echo "<button type='button' class='btn btn-success dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
             echo "<ul class='dropdown-menu pull-right' role='menu'>";
-            if($createStoryPriv) echo '<li>' . html::a($this->createLink('story', 'create', "productID=0&branch=0&moduleID=0&storyID=0&projectID=0&bugID=0&planID=0&todoID={$todo->id}"), $lang->todo->reasonList['story'], '_parent') . '</li>';
-            if($createTaskPriv)  echo '<li>' . html::a('###', $lang->todo->reasonList['task'], '', "data-toggle='modal' data-target='#projectModal' data-moveable='true' data-position='193px'") . '</li>';
-            if($createBugPriv)   echo '<li>' . html::a($this->createLink('bug', 'create', "productID=0&branch=0&extras=todoID={$todo->id}"), $lang->todo->reasonList['bug'], '_parent') . '</li>';
+            if($createStoryPriv) echo '<li>' . html::a('###', $lang->todo->reasonList['story'], '', "data-toggle='modal' data-target='#productModal' data-moveable='true' data-position='193px' id='toStoryLink'") . '</li>';
+            if($createTaskPriv)  echo '<li>' . html::a('###', $lang->todo->reasonList['task'], '', "data-toggle='modal' data-target='#projectModal' data-moveable='true' data-position='193px' id='toTaskLink'") . '</li>';
+            if($createBugPriv)   echo '<li>' . html::a('###', $lang->todo->reasonList['bug'], '', "data-toggle='modal' data-target='#productModal' data-moveable='true' data-position='193px' id='toBugLink'") . '</li>';
             echo "</ul>";
             if($isonlybody) $_GET['onlybody'] = 'yes';
         }
@@ -174,6 +174,23 @@
         <div class='input-group'>
           <?php echo html::select('project', $projects, '', "class='form-control chosen'");?>
           <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['task'], "id='toTaskButton'");?></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="productModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title"><i class="icon-file-text"></i> <?php echo $lang->product->select;?></h4>
+      </div>
+      <div class="modal-body">
+        <div class='input-group'>
+          <?php echo html::select('product', $products, '', "class='form-control chosen'");?>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['story'], "id='toStoryButton'");?></span>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['bug'], "id='toBugButton'");?></span>
         </div>
       </div>
     </div>
