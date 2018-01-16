@@ -405,6 +405,7 @@ class testtask extends control
         $this->view->groupBy     = $groupBy;
         $this->view->groupByList = $groupByList;
         $this->view->cases       = $groupCases;
+        $this->view->account     = 'all';
         $this->display();
     }
 

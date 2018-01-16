@@ -18,7 +18,7 @@ function changeParams(obj)
     {
         var beginarray = begin.split("-");
         var begin = '';
-        for(i=0 ; i < beginarray.length ; i++) begin = begin + beginarray[i];
+        for(i = 0; i < beginarray.length; i++) begin = begin + beginarray[i];
     }
     if(end.indexOf('-') != -1)
     {
@@ -27,7 +27,7 @@ function changeParams(obj)
         for(i=0 ; i < endarray.length ; i++) end = end + endarray[i];
     }
 
-    link = createLink('report', 'workload', 'begin=' + begin + '&end=' + end + '&days=' + days + '&workday=' + workday + '&dept=' + dept + '&assign=' + assign);
+    var link = createLink('report', 'workload', 'begin=' + begin + '&end=' + end + '&days=' + days + '&workday=' + workday + '&dept=' + dept + '&assign=' + assign);
     location.href=link;
 }
 

@@ -552,7 +552,7 @@ class todoModel extends model
             ->get();
 
         $this->dao->update(TABLE_TODO)->data($todo)->where('id')->eq((int)$todoID)->exec();
-        $this->loadModel('action')->create('todo', $todoID, 'assigned', '', 'assigned');
+        $this->loadModel('action')->create('todo', $todoID, 'assigned', '', $todo->assignedTo);
         return !dao::isError();
     }
 }
