@@ -46,18 +46,18 @@ class task extends control
     public function create($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0)
     {
         $task = new stdClass();
-        $task->module      = $moduleID;
-        $task->assignedTo  = '';
-        $task->name        = '';
-        $task->story       = $storyID;
-        $task->type        = '';
-        $task->pri         = '';
-        $task->estimate    = '';
-        $task->desc        = '';
-        $task->estStarted  = '';
-        $task->deadline    = '';
-        $task->mailto      = '';
-        $task->color       = '';
+        $task->module     = $moduleID;
+        $task->assignedTo = '';
+        $task->name       = '';
+        $task->story      = $storyID;
+        $task->type       = '';
+        $task->pri        = '';
+        $task->estimate   = '';
+        $task->desc       = '';
+        $task->estStarted = '';
+        $task->deadline   = '';
+        $task->mailto     = '';
+        $task->color      = '';
         if($taskID > 0)
         {
             $task      = $this->task->getByID($taskID);
@@ -784,7 +784,7 @@ class task extends control
         }
 
         $task         = $this->view->task;
-        $members      = $this->loadModel('user')->getPairs('noletter');
+        $members      = $this->loadModel('project')->getTeamMemberPairs($task->project, 'nodeleted');
         $task->nextBy = $task->assignedTo;
 
         $this->view->users = $members;

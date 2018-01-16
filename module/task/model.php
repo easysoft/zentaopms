@@ -2356,11 +2356,11 @@ class taskModel extends model
      */
     public function getMemberPairs($task)
     {
-        $users   = $this->loadModel('user')->getPairs('noletter');
+        $users   = $this->loadModel('project')->getTeamMemberPairs($task->project, 'nodeleted');
         $members = array('');
         foreach($task->team as $member)
         {
-            $members[$member->account] = $users[$member->account];
+            if(isset($users[$member->account])) $members[$member->account] = $users[$member->account];
         }
         return $members;
     }
