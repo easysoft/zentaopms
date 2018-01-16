@@ -238,18 +238,18 @@ class reportModel extends model
     /**
      * Get workload.
      *
-     * @param int $dept
-     * @param int $assign
+     * @param int    $dept
+     * @param string $assign
      *
      * @access public
      * @return array
      */
-    public function getWorkload($dept = 0, $assign = 1)
+    public function getWorkload($dept = 0, $assign = 'assign')
     {
         $depts = array();
         if($dept) $depts = $this->loadModel('dept')->getAllChildId($dept);
 
-        if($assign == 0)
+        if($assign == 'noassign')
         {
             $project = $this->dao->select('id')->from(TABLE_PROJECT)
                 ->where('deleted')->eq(0)
@@ -291,7 +291,22 @@ class reportModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.status')->notin('cancel, closed, done, suspended')
             ->beginIF($dept)->andWhere('t3.dept')->in($depts)->fi()
-            ->fetchGroup('assignedTo');
+            ->fetchGroup('assignedTo', 'id');
+
+        if(empty($tasks)) return array();
+
+        $parents = array();
+        foreach($tasks as $user => $userTasks)
+        {
+            if($user)
+            {
+                foreach($userTasks as $task)
+                {
+                    if(!empty($task->parent)) $parents[$task->parent] = $task->parent;
+                }
+            }
+        }
+
         $workload = array();
         foreach($tasks as $user => $userTasks)
         {
@@ -299,11 +314,12 @@ class reportModel extends model
             {
                 foreach($userTasks as $task)
                 {
+                    if(!empty($parents) && in_array($task->id, $parents)) continue;
                     $workload[$user]['task'][$task->projectName]['count']     = isset($workload[$user]['task'][$task->projectName]['count']) ? $workload[$user]['task'][$task->projectName]['count'] + 1 : 1;
                     $workload[$user]['task'][$task->projectName]['manhour']   = isset($workload[$user]['task'][$task->projectName]['manhour']) ? $workload[$user]['task'][$task->projectName]['manhour'] + $task->left : $task->left;
                     $workload[$user]['task'][$task->projectName]['projectID'] = $task->project;
-                    $workload[$user]['total']['count'] = isset($workload[$user]['total']['count']) ? $workload[$user]['total']['count'] + 1 : 1;
-                    if($task->parent == 0) $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
+                    $workload[$user]['total']['count']   = isset($workload[$user]['total']['count'])   ? $workload[$user]['total']['count'] + 1 : 1;
+                    $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
                 }
             }
         }

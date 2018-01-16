@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class='col-sm-1'>
-        <?php echo html::select('assign', $lang->report->isAssign, $assign, "class='form-control' onchange='changeParams(this)' style='width:90px'");?>
+        <?php echo html::select('assign', $lang->report->assign, $assign, "class='form-control' onchange='changeParams(this)' style='width:90px'");?>
       </div>
       <div class='col-sm-1'>
         <div class='input-group'><?php echo html::submitButton($lang->report->query);?></div>

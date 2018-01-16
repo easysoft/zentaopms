@@ -120,7 +120,7 @@ class report extends control
      * @access public
      * @return void
      */
-    public function workload($begin = '', $end = '', $days = 0, $workday = 0, $dept = 0, $assign = 1)
+    public function workload($begin = '', $end = '', $days = 0, $workday = 0, $dept = 0, $assign = 'assign')
     {
         if($_POST)
         {
@@ -140,7 +140,6 @@ class report extends control
         $beginWeekDay = date('w', $begin);
         $begin  = date('Y-m-d', $begin);
         $end    = date('Y-m-d', $end);
-        $assign = empty($assign) ? 0 : 1;
 
         if(empty($workday))$workday = $this->config->project->defaultWorkhours;
         $diffDays = helper::diffDate($end, $begin);

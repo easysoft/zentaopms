@@ -1487,7 +1487,7 @@ class projectModel extends model
         {
             foreach($plans as $planID => $productID)
             {
-                $planStory = $this->loadModel('story')->getPlanStories($planID);
+                $planStory = $this->loadModel('story')->getPlanStories($planID, 'active');
                 if(!empty($planStory))
                 {
                     $planStories = array_merge($planStories, array_keys($planStory));
