@@ -380,6 +380,12 @@ class taskModel extends model
 
         if($task->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
 
+        /* Fix bug#1388, Check children task projectID and moduleID. */
+        if($task->project != $oldTask->project)
+        {
+            $this->dao->update(TABLE_TASK)->set('project')->eq($task->project)->set('module')->eq($task->module)->where('parent')->eq($taskID)->exec();
+        }
+
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()

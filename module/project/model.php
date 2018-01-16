@@ -1219,6 +1219,7 @@ class projectModel extends model
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.status')->in('wait, doing, pause, cancel')
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.parent')->eq(0)
             ->andWhere('t1.project')->in(array_keys($projects))
             ->andWhere("(t1.story = 0 OR (t2.branch in ('0','" . join("','", $branches) . "') and t2.product " . helper::dbIN(array_keys($branches)) . "))")
             ->fetchGroup('project', 'id');
@@ -1241,20 +1242,20 @@ class projectModel extends model
         foreach($tasks as $task)
         {
             /* Save the assignedToes and stories, should linked to project. */
-            $assignedToes[$task->assignedTo]  = $task->project;
-            $stories[$task->story] = $task->story;
+            $assignedToes[$task->assignedTo] = $task->project;
+            $stories[$task->story]           = $task->story;
 
             $data = new stdclass();
             $data->project = $projectID;
 
             if($task->status == 'cancel')
             {
-                $data->canceledBy = '';
-                $data->canceledDate = NULL;
+                $data->canceledBy   = '';
+                $data->canceledDate = null;
             }
 
-            $data->status       = $task->consumed > 0 ? 'doing' : 'wait';
-            $this->dao->update(TABLE_TASK)->data($data)->where('id')->in($this->post->tasks)->exec();
+            $data->status = $task->consumed > 0 ? 'doing' : 'wait';
+            $this->dao->update(TABLE_TASK)->data($data)->where('id')->in($this->post->tasks)->orWhere('parent')->in($this->post->tasks)->exec();
             $this->loadModel('action')->create('task', $task->id, 'moved', '', $task->project);
         }
 
