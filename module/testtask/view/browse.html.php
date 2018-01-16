@@ -79,7 +79,7 @@ $status = $this->session->testTaskVersionStatus;
     <?php if($this->config->global->flow != 'onlyTest'):?>
     <td title="<?php echo $task->projectName?>"><?php echo $task->projectName?></td>
     <?php endif;?>
-    <td><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build",'',true), $task->buildName, '','class="iframe"'));?></td>
+    <td><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build",'',true), $task->buildName, '','class="iframe"');?></td>
     <td><?php echo zget($users, $task->owner);?></td>
     <td><?php echo $task->begin?></td>
     <td><?php echo $task->end?></td>
