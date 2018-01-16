@@ -13,9 +13,9 @@ class file extends control
 {
     /**
      * Build the upload form.
-     * 
-     * @param  int    $fileCount 
-     * @param  float  $percent 
+     *
+     * @param  int    $fileCount
+     * @param  float  $percent
      * @param  string $filesName
      * @param  string $labelsName
      * @access public
@@ -23,7 +23,7 @@ class file extends control
      */
     public function buildForm($fileCount = 1, $percent = 0.9, $filesName = 'files', $labelsName = 'labels')
     {
-        if(!file_exists($this->file->savePath)) 
+        if(!file_exists($this->file->savePath))
         {
             printf($this->lang->file->errorNotExists, $this->file->savePath);
             return false;
@@ -43,7 +43,7 @@ class file extends control
 
     /**
      * AJAX: get upload request from the web editor.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -79,7 +79,7 @@ class file extends control
 
     /**
      * AJAX: get upload request from the web editor.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -120,9 +120,9 @@ class file extends control
 
     /**
      * Down a file.
-     * 
-     * @param  int    $fileID 
-     * @param  string $mouse 
+     *
+     * @param  int    $fileID
+     * @param  string $mouse
      * @access public
      * @return void
      */
@@ -142,7 +142,7 @@ class file extends control
         /* Judge the mode, down or open. */
         $mode  = 'down';
         $fileTypes = 'txt|jpg|jpeg|gif|png|bmp|xml|html';
-        if(stripos($fileTypes, $file->extension) !== false and $mouse == 'left') $mode = 'open';
+        if(stripos($fileTypes, $file->extension) !== false && $mouse == 'left') $mode = 'open';
 
         if(file_exists($file->realPath))
         {
@@ -177,7 +177,7 @@ class file extends control
 
     /**
      * Export as csv format.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -193,28 +193,28 @@ class file extends control
 
     /**
      * export as xml format
-     * 
+     *
      * @access public
      * @return void
      */
-    public function export2XML() 
-    {  
+    public function export2XML()
+    {
         $this->view->fields = $this->post->fields;
         $this->view->rows   = $this->post->rows;
-        
+
         $output = $this->parse('file', 'export2XML');
 
         $this->sendDownHeader($this->post->fileName, 'xml', $output);
-    }  
+    }
 
     /**
      * export as html format
-     * 
+     *
      * @access public
      * @return void
      */
-    public function export2HTML() 
-    {  
+    public function export2HTML()
+    {
         $this->view->fields = $this->post->fields;
         $this->view->rows   = $this->post->rows;
         $this->host         = common::getSysURL();
@@ -224,25 +224,25 @@ class file extends control
             case 'task':
             foreach($this->view->rows as $row)
             {
-                $row->name = html::a($this->host . $this->createLink('task', 'view', "taskID=$row->id"), $row->name); 
+                $row->name = html::a($this->host . $this->createLink('task', 'view', "taskID=$row->id"), $row->name);
             }
             break;
             case 'story':
             foreach($this->view->rows as $row)
             {
-                $row->title= html::a($this->host . $this->createLink('story', 'view', "storyID=$row->id"), $row->title);  
+                $row->title= html::a($this->host . $this->createLink('story', 'view', "storyID=$row->id"), $row->title);
             }
             break;
             case 'bug':
             foreach($this->view->rows as $row)
             {
-                $row->title= html::a($this->host . $this->createLink('bug', 'view', "bugID=$row->id"), $row->title);  
+                $row->title= html::a($this->host . $this->createLink('bug', 'view', "bugID=$row->id"), $row->title);
             }
             break;
             case 'testcase':
             foreach($this->view->rows as $row)
             {
-                $row->title= html::a($this->host . $this->createLink('testcase', 'view', "caseID=$row->id"), $row->title);    
+                $row->title= html::a($this->host . $this->createLink('testcase', 'view', "caseID=$row->id"), $row->title);
             }
             break;
         }
@@ -250,13 +250,13 @@ class file extends control
         $output = $this->parse('file', 'export2Html');
 
         $this->sendDownHeader($this->post->fileName, 'html', $output);
-    }  
+    }
 
     /**
      * Send the download header to the client.
-     * 
-     * @param  string    $fileName 
-     * @param  string    $extension 
+     *
+     * @param  string    $fileName
+     * @param  string    $extension
      * @access public
      * @return void
      */
@@ -289,8 +289,8 @@ class file extends control
 
     /**
      * Delete a file.
-     * 
-     * @param  int    $fileID 
+     *
+     * @param  int    $fileID
      * @param  string $confirm  yes|no
      * @access public
      * @return void
@@ -312,10 +312,10 @@ class file extends control
     }
 
     /**
-     * Print files. 
-     * 
-     * @param  array  $files 
-     * @param  string $fieldset 
+     * Print files.
+     *
+     * @param  array  $files
+     * @param  string $fieldset
      * @access public
      * @return void
      */
@@ -327,9 +327,9 @@ class file extends control
     }
 
     /**
-     * Edit file's name. 
-     * 
-     * @param  int    $fileID 
+     * Edit file's name.
+     *
+     * @param  int    $fileID
      * @access public
      * @return void
      */
@@ -355,8 +355,8 @@ class file extends control
     }
 
     /**
-     * Paste image in kindeditor at firefox and chrome. 
-     * 
+     * Paste image in kindeditor at firefox and chrome.
+     *
      * @access public
      * @return void
      */
@@ -370,9 +370,9 @@ class file extends control
 
     /**
      * Upload Images.
-     * 
-     * @param  string    $module 
-     * @param  string    $params 
+     *
+     * @param  string    $module
+     * @param  string    $params
      * @access public
      * @return void
      */
@@ -424,9 +424,9 @@ class file extends control
 
     /**
      * Build export tpl.
-     * 
-     * @param  string $module 
-     * @param  int    $templateID 
+     *
+     * @param  string $module
+     * @param  int    $templateID
      * @access public
      * @return void
      */
@@ -444,8 +444,8 @@ class file extends control
 
     /**
      * Ajax save template.
-     * 
-     * @param  string $module 
+     *
+     * @param  string $module
      * @access public
      * @return void
      */
@@ -462,8 +462,8 @@ class file extends control
 
     /**
      * Ajax delete template.
-     * 
-     * @param  int    $templateID 
+     *
+     * @param  int    $templateID
      * @access public
      * @return void
      */
@@ -474,9 +474,9 @@ class file extends control
     }
 
     /**
-     * Read file. 
-     * 
-     * @param  int    $fileID 
+     * Read file.
+     *
+     * @param  int    $fileID
      * @access public
      * @return void
      */
