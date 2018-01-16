@@ -293,6 +293,7 @@ class reportModel extends model
 
         if(empty($tasks)) return array();
 
+        /* Fix bug for children. */
         $parents = array();
         foreach($tasks as $user => $userTasks)
         {
