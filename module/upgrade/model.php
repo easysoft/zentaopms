@@ -202,7 +202,9 @@ class upgradeModel extends model
                 $this->adjustPriv9_7();
                 $this->changeStoryWidth();
             case '9_7':
+                $this->execSQL($this->getUpgradeFile('9.7'));
                 $this->changeTeamFields();
+                $this->moveData2Notify();
         }
 
         $this->deletePatch();
@@ -305,6 +307,7 @@ class upgradeModel extends model
         case '9_6_1':
         case '9_6_2':
         case '9_6_3':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.6.3'));
+        case '9_7':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.7'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -1741,6 +1744,7 @@ class upgradeModel extends model
             $data->group  = $groupID;
             $data->module = 'bug';
             $data->method = 'batchActivate';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
         }
         return true;
     }
@@ -1979,11 +1983,20 @@ class upgradeModel extends model
      */
     public function changeTeamFields()
     {
-        $this->dao->exec("ALTER TABLE `" . TABLE_TEAM . "` DROP PRIMARY KEY");
-        $this->dao->exec("ALTER TABLE `" . TABLE_TEAM . "` CHANGE `project` `root` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0'");
-        $this->dao->exec("ALTER TABLE `" . TABLE_TEAM . "` ADD `type` ENUM('project', 'task') NOT NULL DEFAULT 'project' AFTER `root`");
-        $this->dao->exec("UPDATE `" . TABLE_TEAM . "` SET `root` = `task`, `type` = 'task' WHERE `task` > '0'");
-        $this->dao->exec("ALTER TABLE `" . TABLE_TEAM . "` DROP `task`");
+        $desc   = $this->dao->query('DESC ' . TABLE_TEAM)->fetchAll();
+        $fields = array();
+        foreach($desc as $field)
+        {
+            $fieldName = $field->Field;
+            $fields[$fieldName] = $fieldName;
+        }
+        if(isset($fields['root'])) return true;
+
+        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " CHANGE `project` `root` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0'");
+        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " ADD `type` ENUM('project', 'task') NOT NULL DEFAULT 'project' AFTER `root`");
+        $this->dao->exec("UPDATE " . TABLE_TEAM . " SET `root` = `task`, `type` = 'task' WHERE `task` > '0'");
+        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " DROP PRIMARY KEY");
+        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " DROP `task`");
         return true;
     }
 
@@ -2027,6 +2040,46 @@ class upgradeModel extends model
             $notify->createdDate = $webhookData->createdDate;
             $notify->status      = $webhookData->status;
             $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Adjust priv 9.8.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv9_8()
+    {
+        $groups = $this->dao->select('id')->from(TABLE_GROUP)->fetchPairs('id', 'id');
+        foreach($groups as $group)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'todo';
+            $groupPriv->method = 'createcycle';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+
+        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('mail')->orWhere('module')->eq('webhook')->fetchPairs('group', 'group');
+        foreach($groups as $group)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'message';
+            $groupPriv->method = 'index';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+
+        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->andWhere('method')->eq('linkStory')->fetchPairs('group', 'group');
+        foreach($groups as $group)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'project';
+            $groupPriv->method = 'importPlanStories';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
         }
         return true;
     }

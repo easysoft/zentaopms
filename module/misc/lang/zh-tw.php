@@ -12,6 +12,7 @@
 $lang->misc = new stdclass();
 $lang->misc->common = '雜項';
 $lang->misc->ping   = '防超時';
+$lang->misc->api    = 'http://api.zentao.net';
 
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = '版本%s';
@@ -52,7 +53,7 @@ $lang->misc->zentao->service['servicemore']= '更多服務...';
 
 $lang->misc->mobile      = "手機訪問";
 $lang->misc->noGDLib     = "請用手機瀏覽器訪問：<strong>%s</strong>";
-$lang->misc->copyright   = "&copy; 2009 - 2016 <a href='http://www.cnezsoft.com' target='_blank'>青島易軟天創網絡科技有限公司</a> 電話：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
+$lang->misc->copyright   = "&copy; 2009 - 2018 <a href='http://www.cnezsoft.com' target='_blank'>青島易軟天創網絡科技有限公司</a> 電話：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
 $lang->misc->checkTable  = "檢查修復數據表";
 $lang->misc->needRepair  = "修復表";
 $lang->misc->repairTable = "資料庫表可能因為斷電原因損壞，需要檢查修復！！";
@@ -67,11 +68,25 @@ $lang->misc->noticeRepair = "<h5>普通用戶請聯繫管理員進行修復</h5>
     <ol>
     <li>檔案內容為空。</li>
     <li>如果之前檔案存在，刪除之後重新創建。</li>
-    </ol>"; 
+    </ol>";
 
 $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '詳情';
+
+$lang->misc->feature->all['9.7.stable'][] = array('title'=>'調整國際版，增加英文Demo數據。', 'desc' => '');
+
+$lang->misc->feature->all['9.6.stable'][] = array('title'=>'新增了webhook功能', 'desc' => '實現與倍冾、釘釘的消息通知介面');
+$lang->misc->feature->all['9.6.stable'][] = array('title'=>'新增禪道操作獲取積分的功能', 'desc' => '');
+$lang->misc->feature->all['9.6.stable'][] = array('title'=>'項目任務新增了多人任務和子任務功能', 'desc' => '');
+$lang->misc->feature->all['9.6.stable'][] = array('title'=>'產品視圖新增了產品綫功能', 'desc' => '');
+
+$lang->misc->feature->all['9.5.1'][] = array('title'=>'新增受限操作', 'desc' => '');
+
+$lang->misc->feature->all['9.3.beta'][] = array('title'=>'升級框架，增強程序安全', 'desc' => '');
+
+$lang->misc->feature->all['9.1.stable'][] = array('title'=>'完善測試視圖', 'desc' => '<p>增加測試套件、公共測試庫和測試總結功能</p>');
+$lang->misc->feature->all['9.1.stable'][] = array('title'=>'支持測試步驟分組', 'desc' => '');
 
 $lang->misc->feature->all['9.0.beta'][] = array('title'=>'增加禪道雲發信功能', 'desc' => '<p>禪道雲發信是禪道聯合SendCloud推出的一項免費發信服務，只有用戶綁定禪道，並通過驗證即可使用。</p>');
 $lang->misc->feature->all['9.0.beta'][] = array('title'=>'優化富文本編輯器和markdown編輯器', 'desc' => '');

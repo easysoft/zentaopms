@@ -19,7 +19,16 @@ class message extends control
      */
     public function index()
     {
-        $this->locate($this->createLink('mail', 'index'));
+        foreach($this->lang->message->typeList as $type => $typeName)
+        {
+            if(isset($config->message->typeLink[$type]))
+            {
+                list($moduleName, $methodName) = explode('|', $this->config->message->typeLink[$type]);
+                $this->locate($this->createLink($moduleName, $methodName));
+            }
+        }
+
+        $this->locate($this->createLink('message', 'setting'));
     }
 
     /**

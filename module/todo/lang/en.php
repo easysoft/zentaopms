@@ -12,6 +12,7 @@
 $lang->todo->common       = 'Todo';
 $lang->todo->index        = "Home";
 $lang->todo->create       = "Create Todo";
+$lang->todo->createCycle  = "Create Cycle Todo";
 $lang->todo->assignTo     = "Assign";
 $lang->todo->activate     = "Activate";
 $lang->todo->batchCreate  = "Batch Create";

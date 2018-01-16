@@ -4,7 +4,7 @@ $lang->mail->index         = '首頁';
 $lang->mail->detect        = '檢測';
 $lang->mail->edit          = '編輯配置';
 $lang->mail->save          = '保存';
-$lang->mail->saveSuccess   = '成功保存';
+$lang->mail->saveSuccess   = '保存成功';
 $lang->mail->test          = '測試發信';
 $lang->mail->reset         = '重置';
 $lang->mail->resend        = '重發';
@@ -46,14 +46,14 @@ $lang->mail->remove     = '移除';
 $lang->mail->toList      = '收信人';
 $lang->mail->ccList      = '抄送給';
 $lang->mail->subject     = '主題';
-$lang->mail->addedBy     = '發送者';
-$lang->mail->addedDate   = '創建時間';
+$lang->mail->createdBy   = '發送者';
+$lang->mail->createdDate = '創建時間';
 $lang->mail->sendTime    = '發送時間';
 $lang->mail->status      = '狀態';
 $lang->mail->failReason  = '失敗原因';
 
-$lang->mail->statusList['send'] = '成功';
-$lang->mail->statusList['fail'] = '失敗';
+$lang->mail->statusList['sended'] = '成功';
+$lang->mail->statusList['fail']   = '失敗';
 
 $lang->mail->turnonList[1]  = '打開';
 $lang->mail->turnonList[0] = '關閉';

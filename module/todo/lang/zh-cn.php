@@ -12,6 +12,7 @@
 $lang->todo->common       = '待办';
 $lang->todo->index        = "待办一览";
 $lang->todo->create       = "新增";
+$lang->todo->createCycle  = "创建周期待办";
 $lang->todo->assignTo     = "指派";
 $lang->todo->activate     = "激活";
 $lang->todo->batchCreate  = "批量添加";

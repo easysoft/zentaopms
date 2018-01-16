@@ -107,7 +107,6 @@ $lang->bug->openedByMe     = 'Created By Me';
 $lang->bug->resolvedByMe   = 'Resolved By Me';
 $lang->bug->closedByMe     = 'Closed By Me';
 $lang->bug->assignToNull   = 'Unassigned';
-$lang->bug->unConfirmed    = 'Unconfirmed';
 $lang->bug->unResolved     = 'Unresolved';
 $lang->bug->toClosed       = 'WaitForClose';
 $lang->bug->unclosed       = 'Active';

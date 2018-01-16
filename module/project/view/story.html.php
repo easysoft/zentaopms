@@ -54,12 +54,15 @@
     {
         echo "<div class='btn-group' id='createActionMenu'>";
         common::printIcon('project', 'linkStory', "project=$project->id", '', 'button', 'link', '', 'link-story-btn');
-        echo "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown'>";
-        echo "<span class='caret'></span>";
-        echo '</button>';
-        echo "<ul class='dropdown-menu pull-right'>";
-        echo "<li>" . html::a('###', $lang->project->linkStoryByPlan, '', 'data-toggle="linkStoryByPlan"') . "</li>";
-        echo '</ul>';
+        if(common::hasPriv('project', 'importPlanStories'))
+        {
+            echo "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown'>";
+            echo "<span class='caret'></span>";
+            echo '</button>';
+            echo "<ul class='dropdown-menu pull-right'>";
+            echo "<li>" . html::a('###', $lang->project->linkStoryByPlan, '', 'data-toggle="linkStoryByPlan"') . "</li>";
+            echo '</ul>';
+        }
         echo '</div>';
     }
     ?>

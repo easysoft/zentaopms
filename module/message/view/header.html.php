@@ -7,6 +7,6 @@
     <li id='<?php echo $type?>Tab'><?php echo html::a($this->createLink($moduleName, $methodName), $typeName)?></li>
     <?php endif;?>
      <?php endforeach;?>
-    <li id='settingTab'><?php echo html::a($this->createLink('message', 'setting'), $lang->message->setting)?></li>
+    <li id='settingTab'><?php if(common::hasPriv('message', 'setting')) echo html::a($this->createLink('message', 'setting'), $lang->message->setting)?></li>
   </ul>
 </div>
