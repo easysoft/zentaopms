@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<div class="row-table">
+<div class="row-table" id='assigntomeBlock'>
   <?php $active = key($hasViewPriv);?>
   <div class="col-table" style='padding-right:0px;width:60px;'>
     <ul class="nav nav-tabs nav-stacked">
@@ -32,10 +32,16 @@
 <script>
 $(function()
 {
+    adjustTable();
+    $('#assigntomeBlock').resize(function(){adjustTable();});
+})
+
+function adjustTable()
+{
     setTimeout(function()
     {
-        $('.table-header-fixed').remove();
-        $('#todo table thead').removeAttr('style');
-    }, 500);
-})
+        $('#assigntomeBlock').closest('[id^="block"]').find('.table-header-fixed').remove();
+        $('#assigntomeBlock').closest('[id^="block"]').find('#todo table thead').removeAttr('style');
+    }, 400);
+}
 </script>
