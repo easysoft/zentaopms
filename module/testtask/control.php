@@ -251,11 +251,9 @@ class testtask extends control
         }
         if($browseType == 'bymodule') setcookie('taskCaseModule', (int)$param, $this->config->cookieLife, $this->config->webRoot);
         if($browseType != 'bymodule') $this->session->set('taskCaseBrowseType', $browseType);
-        if($browseType == 'account') $this->session->set('taskCaseAccount', $param);
 
         $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskCaseModule ? $this->cookie->taskCaseModule : 0));
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
-        $account  = ($browseType == 'account')  ? $param : 'all';
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy, 't2.id');
@@ -302,7 +300,6 @@ class testtask extends control
         $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->treeClass     = $browseType == 'bymodule' ? '' : 'hidden';
         $this->view->pager         = $pager;
-        $this->view->account       = $account;
         $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
         $this->view->setShowModule = false;
 
@@ -389,6 +386,11 @@ class testtask extends control
             {
                 $groupCases[$run->story][] = $run;
                 $groupByList[$run->story]  = $run->storyTitle;
+            }
+            elseif($groupBy == 'assignedTo')
+            {
+                if(empty($run->assignedTo)) continue;
+                $groupCases[$run->assignedTo][] = $run;
             }
         }
 

@@ -164,8 +164,9 @@ $lang->testcase->reviewResultList['']        = '';
 $lang->testcase->reviewResultList['pass']    = '确认通过';
 $lang->testcase->reviewResultList['clarify'] = '继续完善';
 
-$lang->testcase->groups['']      = '分组查看';
-$lang->testcase->groups['story'] = '需求分组';
+$lang->testcase->groups['']           = '分组查看';
+$lang->testcase->groups['story']      = '需求分组';
+$lang->testcase->groups['assignedTo'] = '指派分组';
 
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['wait']        = '待评审';

@@ -164,8 +164,9 @@ $lang->testcase->reviewResultList['']        = '';
 $lang->testcase->reviewResultList['pass']    = 'Pass';
 $lang->testcase->reviewResultList['clarify'] = 'Clarify';
 
-$lang->testcase->groups['']      = 'Group ';
-$lang->testcase->groups['story'] = 'Story Group';
+$lang->testcase->groups['']           = 'Group ';
+$lang->testcase->groups['story']      = 'Story Group';
+$lang->testcase->groups['assignedTo'] = 'Assign Group';
 
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['wait']        = 'ToReview';
