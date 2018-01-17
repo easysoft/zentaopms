@@ -110,6 +110,7 @@ $lang->bug->assignToNull   = 'Unassigned';
 $lang->bug->unResolved     = 'Unresolved';
 $lang->bug->toClosed       = 'WaitForClose';
 $lang->bug->unclosed       = 'Active';
+$lang->bug->unconfirmed    = 'UnConfirmed';
 $lang->bug->longLifeBugs   = 'Pending';
 $lang->bug->postponedBugs  = 'Postponed';
 $lang->bug->overdueBugs    = 'Overdue';
@@ -378,7 +379,7 @@ $lang->bug->featureBar['browse']['all']           = $lang->bug->allBugs;
 
 
 $lang->bug->featureBar['browse']['my']            = $lang->bug->my;
-$lang->bug->featureBar['browse']['unconfirmed']   = $lang->bug->confirmedList[0];
+$lang->bug->featureBar['browse']['unconfirmed']   = $lang->bug->unconfirmed;
 $lang->bug->featureBar['browse']['assigntonull']  = $lang->bug->assignToNull;
 $lang->bug->featureBar['browse']['unresolved']    = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['toclosed']      = $lang->bug->toClosed;

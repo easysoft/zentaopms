@@ -110,6 +110,7 @@ $lang->bug->assignToNull   = '未指派';
 $lang->bug->unResolved     = '未解決';
 $lang->bug->toClosed       = '待關閉';
 $lang->bug->unclosed       = '未關閉';
+$lang->bug->unconfirmed    = '未確認';
 $lang->bug->longLifeBugs   = '久未處理';
 $lang->bug->postponedBugs  = '被延期';
 $lang->bug->overdueBugs    = '過期Bug';
@@ -378,7 +379,7 @@ $lang->bug->featureBar['browse']['assigntome']    = $lang->bug->assignToMe;
 $lang->bug->featureBar['browse']['openedbyme']    = $lang->bug->openedByMe;
 $lang->bug->featureBar['browse']['resolvedbyme']  = $lang->bug->resolvedByMe;
 
-$lang->bug->featureBar['browse']['unconfirmed']   = $lang->bug->confirmedList[0];
+$lang->bug->featureBar['browse']['unconfirmed']   = $lang->bug->unconfirmed;
 $lang->bug->featureBar['browse']['assigntonull']  = $lang->bug->assignToNull;
 $lang->bug->featureBar['browse']['unresolved']    = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['toclosed']      = $lang->bug->toClosed;
