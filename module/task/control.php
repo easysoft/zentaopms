@@ -208,7 +208,7 @@ class task extends control
             if(dao::isError()) die(js::error(dao::getError()));
 
             /* Locate the browser. */
-            if($iframe) die(js::reload('parent.parent'));
+            if(!empty($iframe)) die(js::reload('parent.parent'));
             die(js::locate($storyLink, 'parent'));
         }
 
