@@ -30,13 +30,13 @@
   <table class='table table-condensed table-bordered active-disabled table-fixed'>
     <thead>
       <tr>
-        <th class='w-60px'><?php echo $lang->cron->m?></th>
-        <th class='w-60px'><?php echo $lang->cron->h?></th>
-        <th class='w-60px'><?php echo $lang->cron->dom?></th>
-        <th class='w-60px'><?php echo $lang->cron->mon?></th>
-        <th class='w-60px'><?php echo $lang->cron->dow?></th>
+        <th class='w-50px'><?php echo $lang->cron->m?></th>
+        <th class='w-50px'><?php echo $lang->cron->h?></th>
+        <th class='w-50px'><?php echo $lang->cron->dom?></th>
+        <th class='w-50px'><?php echo $lang->cron->mon?></th>
+        <th class='w-50px'><?php echo $lang->cron->dow?></th>
         <th><?php echo $lang->cron->command?></th>
-        <th class='w-100px'><?php echo $lang->cron->remark?></th>
+        <th class='w-160px'><?php echo $lang->cron->remark?></th>
         <th class='w-120px'><?php echo $lang->cron->lastTime?></th>
         <th class='w-60px'><?php echo $lang->cron->status?></th>
         <th class='w-100px'><?php echo $lang->actions;?></th>

@@ -102,10 +102,10 @@ $lang->bug->confirmStoryChange = 'Confirm Story Change';
 $lang->bug->copy               = 'Copy';
 
 /* 查询条件列表。*/
-$lang->bug->assignToMe     = 'Assigned To Me';
-$lang->bug->openedByMe     = 'Created By Me';
-$lang->bug->resolvedByMe   = 'Resolved By Me';
-$lang->bug->closedByMe     = 'Closed By Me';
+$lang->bug->assignToMe     = 'AssignedToMe';
+$lang->bug->openedByMe     = 'CreatedByMe';
+$lang->bug->resolvedByMe   = 'ResolvedByMe';
+$lang->bug->closedByMe     = 'ClosedByMe';
 $lang->bug->assignToNull   = 'Unassigned';
 $lang->bug->unResolved     = 'Unresolved';
 $lang->bug->toClosed       = 'WaitForClose';
@@ -118,6 +118,10 @@ $lang->bug->byQuery        = 'Search';
 $lang->bug->needConfirm    = 'StoryChanged';
 $lang->bug->allProduct     = 'All' . $lang->productCommon;
 $lang->bug->my             = 'My';
+
+$lang->bug->assignToMeAB   = 'Assigned To Me';
+$lang->bug->openedByMeAB   = 'Created By Me';
+$lang->bug->resolvedByMeAB = 'Resolved By Me';
 
 $lang->bug->ditto       = 'Ditto';
 $lang->bug->dittoNotice = 'This bug is not linked to the same product as the last one!';
@@ -364,9 +368,9 @@ $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = 'Choose Build...';
 $lang->bug->placeholder->newBuildName = 'The name of new build';
 
-$lang->bug->mySelects['assigntome']   = $lang->bug->assignToMe;
-$lang->bug->mySelects['openedbyme']   = $lang->bug->openedByMe;
-$lang->bug->mySelects['resolvedbyme'] = $lang->bug->resolvedByMe;
+$lang->bug->mySelects['assigntome']   = $lang->bug->assignToMeAB;
+$lang->bug->mySelects['openedbyme']   = $lang->bug->openedByMeAB;
+$lang->bug->mySelects['resolvedbyme'] = $lang->bug->resolvedByMeAB;
 
 $lang->bug->featureBar['browse']['unclosed']      = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['all']           = $lang->bug->allBugs;

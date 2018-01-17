@@ -27,7 +27,7 @@ $lang->action->hideAll     = 'Hide All';
 $lang->action->editComment = 'Edit';
 $lang->action->comment     = 'Comment';
 
-$lang->action->trashTips      = 'Note: Delete in ZenTao is logic.';
+$lang->action->trashTips      = 'Note: All Deletion in ZenTao are logical.';
 $lang->action->textDiff       = 'Text Format';
 $lang->action->original       = 'Original Format';
 $lang->action->confirmHideAll = 'Do you want to hide all the records?';

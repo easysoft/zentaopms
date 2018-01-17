@@ -147,18 +147,18 @@ $lang->install->groupList['TOP']['desc']     = 'for Senior Manager';
 $lang->install->groupList['OTHERS']['name']  = 'Other';
 $lang->install->groupList['OTHERS']['desc']  = 'for Other';
 $lang->install->groupList['LIMITED']['name'] = 'Limited User';
-$lang->install->groupList['LIMITED']['desc'] = 'for Limited user (editing only content related to itself)';
+$lang->install->groupList['LIMITED']['desc'] = 'Only edit contents related to themselves';
 
 $lang->install->cronList[''] = 'Monitor cron';
 $lang->install->cronList['moduleName=project&methodName=computeburn'] = 'Update Burndown Chart';
 $lang->install->cronList['moduleName=report&methodName=remind']       = 'Daily task reminder';
 $lang->install->cronList['moduleName=svn&methodName=run']             = 'Synchronize SVN';
 $lang->install->cronList['moduleName=git&methodName=run']             = 'Synchronize GIT';
-$lang->install->cronList['moduleName=backup&methodName=backup']       = 'Backup';
-$lang->install->cronList['moduleName=mail&methodName=asyncSend']      = 'Asynchronous sending';
-$lang->install->cronList['moduleName=webhook&methodName=asyncSend']   = 'Asynchronous seding Webhook';
+$lang->install->cronList['moduleName=backup&methodName=backup']       = 'Backup data&file';
+$lang->install->cronList['moduleName=mail&methodName=asyncSend']      = 'Async sending Message';
+$lang->install->cronList['moduleName=webhook&methodName=asyncSend']   = 'Async sending Webhook';
 $lang->install->cronList['moduleName=admin&methodName=deleteLog']     = 'Delete overdue log';
-$lang->install->cronList['moduleName=todo&methodName=createCycle']    = 'Create cycle todos.';
+$lang->install->cronList['moduleName=todo&methodName=createCycle']    = 'Create periodic todos';
 
 $lang->install->success  = "Installed!";
 $lang->install->login    = 'Login ZenTao';

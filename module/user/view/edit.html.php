@@ -105,7 +105,7 @@
     <table align='center' class='table table-form'>
       <caption class='text-left text-muted'><?php echo $lang->user->verify;?></caption>
       <tr>
-        <th class='w-120px'><?php echo $lang->user->verifyPassword;?></th>
+        <th class='w-130px'><?php echo $lang->user->verifyPassword;?></th>
         <td>
           <div class="required required-wrapper"></div>
           <?php echo html::password('verifyPassword', '', "class='form-control disabled-ie-placeholder' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?>

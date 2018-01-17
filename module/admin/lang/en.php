@@ -54,20 +54,20 @@ $lang->admin->bind->success = "Account has been linked!";
 
 $lang->admin->safe = new stdclass();
 $lang->admin->safe->common     = 'Security Policy';
-$lang->admin->safe->set        = 'Password Security Settings';
-$lang->admin->safe->password   = 'Password Security';
-$lang->admin->safe->weak       = 'Weak Password';
+$lang->admin->safe->set        = 'PasswordStrength';
+$lang->admin->safe->password   = 'Password Strength';
+$lang->admin->safe->weak       = 'Weak Passwords';
 $lang->admin->safe->reason     = 'Type';
-$lang->admin->safe->checkWeak  = 'Weak Password Check';
-$lang->admin->safe->changeWeak = 'Change weak password';
+$lang->admin->safe->checkWeak  = 'WeakPasswords';
+$lang->admin->safe->changeWeak = 'Weak password must be strengthen';
 $lang->admin->safe->modifyPasswordFirstLogin = 'Change password when first login';
 
 $lang->admin->safe->modeList[0] = 'N/A';
 $lang->admin->safe->modeList[1] = 'Medium';
 $lang->admin->safe->modeList[2] = 'Strong';
 
-$lang->admin->safe->modeRuleList[1] = 'must contain letters and numbers, at least six characters.';
-$lang->admin->safe->modeRuleList[2] = 'must contain letters, numbers and special characters, at least 10 characters.';
+$lang->admin->safe->modeRuleList[1] = 'Contains upper and lower case, numbers. Length >= 6';
+$lang->admin->safe->modeRuleList[2] = 'Contains upper and lower case, numbers and special characters.  Length >= 10.';
 
 $lang->admin->safe->reasonList['weak']     = 'Common Weak Password';
 $lang->admin->safe->reasonList['account']  = 'Same as your account';
@@ -78,5 +78,5 @@ $lang->admin->safe->reasonList['birthday'] = 'Same as your DOB';
 $lang->admin->safe->modifyPasswordList[1] = 'Yes';
 $lang->admin->safe->modifyPasswordList[0] = 'No';
 
-$lang->admin->safe->noticeMode   = 'User password will be checked when login, add/edit user password.';
-$lang->admin->safe->noticeStrong = 'The more uppercase letters and numbers a password has, the more secure it is!';
+$lang->admin->safe->noticeMode   = 'Password will be checked when login, add/edit user.';
+$lang->admin->safe->noticeStrong = '';

@@ -74,6 +74,11 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Latest Version';
 $lang->misc->feature->detailed = 'Details';
 
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>'Message centralized management', 'desc' => '<p>Centring Mail，SMS，webhook into Message</p>');
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>'Add Periodic Todo function', 'desc' => '');
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>"Add Block of 'Assigned to Me'", 'desc' => '');
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>'Support Generating TestStatements of TestBuilds', 'desc' => '');
+
 $lang->misc->feature->all['9.7.stable'][] = array('title'=>'optimize International package，Added Demo data。', 'desc' => '');
 
 $lang->misc->feature->all['9.6.stable'][] = array('title'=>'added Webhook Interface feature', 'desc' => 'support communication with BearyChat,dingding');

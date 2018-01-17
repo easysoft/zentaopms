@@ -71,9 +71,9 @@ $lang->product->whitelist = 'Whitelist';
 $lang->product->branch    = '%s';
 
 $lang->product->searchStory  = 'Search';
-$lang->product->assignedToMe = 'AssignedToMe';
-$lang->product->openedByMe   = 'CreatedByMe';
-$lang->product->reviewedByMe = 'ReviewedByMe';
+$lang->product->assignedToMe = 'Assigned To Me';
+$lang->product->openedByMe   = 'Created By Me';
+$lang->product->reviewedByMe = 'Reviewed By Me';
 $lang->product->closedByMe   = 'ClosedByMe';
 $lang->product->draftStory   = 'Draft';
 $lang->product->activeStory  = 'Activated';
