@@ -92,9 +92,7 @@
                   <th class='w-50px {sorter:false}'><?php common::printOrderLink('order', $orderBy, $vars, $lang->productplan->updateOrder);?></th>
                   <?php endif;?>
                   <th class='w-pri {sorter:false}'> <?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
-                  <?php if($modulePairs):?>
                   <th class='w-150px text-left {sorter:false}'><?php common::printOrderLink('module', $orderBy, $vars, $lang->story->module);?></th>
-                  <?php endif;?>
                   <th class='text-left {sorter:false}'><?php common::printOrderLink('title',     $orderBy, $vars, $lang->story->title);?></th>
                   <th class='w-user {sorter:false}'>   <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
                   <th class='w-user {sorter:false}'>   <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
@@ -124,7 +122,7 @@
                     </td>
                     <?php if($canOrder):?><td class='sort-handler'><i class='icon-move'></i></td><?php endif;?>
                     <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-                    <?php if($modulePairs):?><td class='text-left nobr'><?php if(!empty($story->module)) echo $modulePairs[$story->module];?></td><?php endif;?>
+                    <td class='text-left nobr'><?php echo zget($modulePairs, $story->module, '');?></td>
                     <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($viewLink , $story->title);?></td>
                     <td><?php echo zget($users, $story->openedBy);?></td>
                     <td><?php echo zget($users, $story->assignedTo);?></td>
