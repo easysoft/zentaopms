@@ -374,8 +374,7 @@ class testtask extends control
         $productID = $task->product;
         $this->testtask->setMenu($this->products, $productID, $task->branch);
 
-        $runs  = $this->testtask->getRuns($taskID, 0, $groupBy);
-        $users = $this->loadModel('user')->getPairs('noletter');
+        $runs = $this->testtask->getRuns($taskID, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $runs = $this->testcase->appendData($runs, 'run');
 
