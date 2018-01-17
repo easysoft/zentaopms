@@ -374,7 +374,8 @@ class testtask extends control
         $productID = $task->product;
         $this->testtask->setMenu($this->products, $productID, $task->branch);
 
-        $runs = $this->testtask->getRuns($taskID, 0, $groupBy);
+        $runs  = $this->testtask->getRuns($taskID, 0, $groupBy);
+        $users = $this->loadModel('user')->getPairs('noletter');
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $runs = $this->testcase->appendData($runs, 'run');
 
@@ -389,7 +390,6 @@ class testtask extends control
             }
             elseif($groupBy == 'assignedTo')
             {
-                if(empty($run->assignedTo)) continue;
                 $groupCases[$run->assignedTo][] = $run;
             }
         }
