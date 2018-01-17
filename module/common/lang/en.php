@@ -425,6 +425,7 @@ $lang->error->int             = array("『%s』should be numbers", "『%s』shou
 $lang->error->float           = "『%s』should be numbers, decimals included.";
 $lang->error->email           = "『%s』should be valid Email.";
 $lang->error->date            = "『%s』should be valid date.";
+$lang->error->datetime        = "『%s』should be valid date.";
 $lang->error->code            = "『%s』should be letters or numbers.";
 $lang->error->account         = "『%s』should be valid account.";
 $lang->error->passwordsame    = "Two passwords should be consistent.";

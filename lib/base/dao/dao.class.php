@@ -1356,6 +1356,10 @@ class baseDAO
             {
                 $field['rule'] = 'date';
             }
+            elseif($type == 'datetime')
+            {
+                $field['rule'] = 'datetime';
+            }
             else
             {
                 $field['rule'] = 'skip';
