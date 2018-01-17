@@ -78,7 +78,7 @@
       <td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList[$todo->status];?></td>
       <td class='text-right'>
         <?php
-        if($todo->status != 'done') echo html::a(helper::createLink('todo', 'assignto', "todoID=$todo->id"), '<i class="icon icon-hand-right"></i>', '', "data-toggle='assigntoModal' class='btn-icon'");
+        if($todo->status != 'done') common::printIcon('todo', 'assignto', "todoID=$todo->id", $todo, 'list', 'hand-right', '', "btn-icon", '', "data-toggle='assigntoModal'", $lang->todo->assignTo);
         if($todo->status == 'done') common::printIcon('todo', 'activate', "id=$todo->id", $todo, 'list', 'magic', 'hiddenwin');
         if($todo->status != 'done') common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'list', 'ok-sign', 'hiddenwin');
         if($todo->status == 'done') common::printIcon('todo', 'close', "id=$todo->id", $todo, 'list', 'off', 'hiddenwin');

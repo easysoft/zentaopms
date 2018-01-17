@@ -66,6 +66,16 @@
               <th><?php echo $lang->todo->beginAndEnd;?></th>
               <td><?php if(isset($times[$todo->begin])) echo $times[$todo->begin]; if(isset($times[$todo->end])) echo ' ~ ' . $times[$todo->end];?></td>
             </tr>
+            <?php if(isset($todo->assignedTo)):?>
+            <tr>
+              <th><?php echo $lang->todo->assignTo;?></th>
+              <td><?php echo $todo->assignedTo;?></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->todo->assignTo . $lang->todo->date;?></th>
+              <td><?php echo $todo->assignedDate;?></td>
+            </tr>
+            <?php endif;?>
           </table>
         </fieldset>
         <?php if($todo->cycle):?>
@@ -108,7 +118,6 @@
     <?php
     if($todo->account == $app->user->account)
     {
-        //if($todo->status != 'done') echo html::a($this->createLink('todo', 'assignTo', "todoID=$todo->id"), "<i class='icon icon-hand-right'></i> " . $lang->todo->assignTo, '', "class='btn showinonlybody'");
         if($todo->status != 'closed') echo html::a($this->createLink('todo', 'edit', "todoID=$todo->id"), "<i class='icon icon-edit'></i> " . $lang->todo->edit, '', "class='btn showinonlybody'");
         if($todo->status == 'done' || $todo->status == 'closed') echo html::a($this->createLink('todo', 'activate', "todoID=$todo->id"), "<i class='icon icon-magic'></i> " . $lang->todo->activate, 'hiddenwin', "class='btn showinonlybody'");
         if($todo->status == 'done') echo html::a($this->createLink('todo', 'close', "todoID=$todo->id"), "<i class='icon icon-off'></i> " . $lang->todo->close, 'hiddenwin', "class='btn showinonlybody'");

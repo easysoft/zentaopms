@@ -251,36 +251,34 @@ class reportModel extends model
 
         if($assign == 'noassign')
         {
-            $project = $this->dao->select('id')->from(TABLE_PROJECT)
-                ->where('deleted')->eq(0)
-                ->andWhere('status')->notin('cancel, closed, done, suspended')
-                ->fetchPairs('id');
+            $members = $this->dao->select('t1.account,t2.name,t1.root')->from(TABLE_TEAM)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t2.id = t1.root')
+                ->leftJoin(TABLE_USER)->alias('t3')->on('t3.account = t1.account')
+                ->where('t2.status')->notin('cancel, closed, done, suspended')
+                ->beginIF($dept)->andWhere('t3.dept')->in($depts)->fi()
+                ->andWhere('t1.type')->eq('project')
+                ->andWhere("t1.account NOT IN(SELECT `assignedTo` FROM " . TABLE_TASK . " WHERE `project` = t1.`root` AND `status` NOT IN('cancel, closed, done, pause') AND assignedTo != '' GROUP BY assignedTo)")
+                ->fetchGroup('account', 'name');
 
-            $members = $this->dao->select('t1.account')->from(TABLE_TEAM)->alias('t1')
-                ->leftJoin(TABLE_USER)->alias('t2')->on('t2.account = t1.account')
-                ->where('t1.type')->eq('project')
-                ->beginIF($dept)->andWhere('t2.dept')->in($depts)->fi()
-                ->andWhere('t1.root')->in(array_keys($project))
-                ->fetchPairs('account');
-
-            $taskAccounts = $this->dao->select('assignedTo')->from(TABLE_TASK)
-                ->where('deleted')->eq(0)
-                ->andWhere('project')->in(array_keys($project))
-                ->andWhere('status')->notin('cancel, closed, done, pause')
-                ->fetchPairs('assignedTo');
-
-            if(!empty($taskAccounts) && !empty($members))
+            $workload = array();
+            if(!empty($members))
             {
-                foreach($members as $member)
+                foreach($members as $member => $projects)
                 {
-                    if(!empty($member) && in_array($member, $taskAccounts))
+                    if(!empty($projects))
                     {
-                        unset($members[$member]);
+                        foreach($projects as $name => $project)
+                        {
+                            $workload[$member]['task'][$name]['count']     = 0;
+                            $workload[$member]['task'][$name]['manhour']   = 0;
+                            $workload[$member]['task'][$name]['projectID'] = $project->root;
+                            $workload[$member]['total']['count']           = 0;
+                            $workload[$member]['total']['manhour']         = 0;
+                        }
                     }
                 }
             }
-
-            return $members;
+            return $workload;
         }
 
         $tasks = $this->dao->select('t1.*, t2.name as projectName')->from(TABLE_TASK)->alias('t1')
@@ -295,6 +293,7 @@ class reportModel extends model
 
         if(empty($tasks)) return array();
 
+        /* Fix bug for children. */
         $parents = array();
         foreach($tasks as $user => $userTasks)
         {
