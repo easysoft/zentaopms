@@ -39,7 +39,6 @@
             echo html::a($this->inlink('groupCase', "taskID=$taskID&groupBy=$key"), $value);
         }
         echo '</ul></li>';
-        echo "<li id='account' class='w-150px'>" . html::select('account', $users, $account, "onchange='changeUser(this.value, $taskID)' class='form-control chosen'") . '</li>';
     }
 
     if($this->methodName == 'cases') echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";

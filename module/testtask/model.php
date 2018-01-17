@@ -758,10 +758,6 @@ class testtaskModel extends model
         {
             $runs = $this->getUserRuns($task->id, $this->session->user->account, $modules, $sort, $pager);
         }
-        elseif($browseType == 'account')
-        {
-            $runs = $this->getUserRuns($task->id, $this->session->taskCaseAccount, $modules, $sort, $pager);
-        }
         /* By search. */
         elseif($browseType == 'bysearch')
         {
