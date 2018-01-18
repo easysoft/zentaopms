@@ -74,6 +74,11 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '詳情';
 
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>'實現集中的消息處理機制', 'desc' => '<p>郵件，短信，webhook都放統一的消息發送</p><p>移植然之裡面的消息通知功能</p>');
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>'實現周期性待辦功能', 'desc' => '');
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>'增加指派給我的區塊', 'desc' => '');
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>'項目可以選擇多個測試單生成報告', 'desc' => '');
+
 $lang->misc->feature->all['9.7.stable'][] = array('title'=>'調整國際版，增加英文Demo數據。', 'desc' => '');
 
 $lang->misc->feature->all['9.6.stable'][] = array('title'=>'新增了webhook功能', 'desc' => '實現與倍冾、釘釘的消息通知介面');

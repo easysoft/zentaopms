@@ -425,6 +425,7 @@ $lang->error->int             = array("『%s』應當是數字。", "『%s』應
 $lang->error->float           = "『%s』應當是數字，可以是小數。";
 $lang->error->email           = "『%s』應當為合法的EMAIL。";
 $lang->error->date            = "『%s』應當為合法的日期。";
+$lang->error->datetime        = "『%s』應當為合法的日期。";
 $lang->error->code            = "『%s』應當為字母或數字的組合。";
 $lang->error->account         = "『%s』應當為合法的用戶名。";
 $lang->error->passwordsame    = "兩次密碼應當相等。";

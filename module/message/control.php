@@ -21,14 +21,14 @@ class message extends control
     {
         foreach($this->lang->message->typeList as $type => $typeName)
         {
-            if(isset($config->message->typeLink[$type]))
+            if(isset($this->config->message->typeLink[$type]))
             {
                 list($moduleName, $methodName) = explode('|', $this->config->message->typeLink[$type]);
-                $this->locate($this->createLink($moduleName, $methodName));
+                if(common::hasPriv($moduleName, $methodName)) $this->locate($this->createLink($moduleName, $methodName));
             }
         }
 
-        $this->locate($this->createLink('message', 'setting'));
+        if(common::hasPriv('message', 'setting')) $this->locate($this->createLink('message', 'setting'));
     }
 
     /**

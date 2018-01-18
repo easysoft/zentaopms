@@ -306,16 +306,16 @@ INSERT INTO `zt_taskestimate` (`id`, `task`, `date`, `left`, `consumed`, `accoun
 (10,	5,	'2017-12-12',	0,	30,	'pg1',	NULL),
 (11,	9,	'2017-12-13',	50,	8,	'pg3',	'Finish page design');
 
-INSERT INTO `zt_team` (`project`, `task`, `account`, `role`, `limited`, `join`, `days`, `hours`, `estimate`, `consumed`, `left`, `order`) VALUES
-(1,	0,	'thePO',	'Product Owner',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
-(1,	0,	'pm1',	'Project Manager',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
-(1,	0,	'pg2',	'Developer',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
-(1,	0,	'pg3',	'Developer',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
-(1,	0,	'qa1',	'Tester',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
-(2,	0,	'pm1',	'Project Manager',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
-(2,	0,	'pg1',	'Developer',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
-(2,	0,	'pg2',	'Developer',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
-(2,	0,	'pg3',	'Developer',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0);
+INSERT INTO `zt_team` (`root`, `type`, `account`, `role`, `limited`, `join`, `days`, `hours`, `estimate`, `consumed`, `left`, `order`) VALUES
+(1,	'project',	'thePO',	'Product Owner',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
+(1,	'project',	'pm1',	'Project Manager',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
+(1,	'project',	'pg2',	'Developer',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
+(1,	'project',	'pg3',	'Developer',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
+(1,	'project',	'qa1',	'Tester',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
+(2,	'project',	'pm1',	'Project Manager',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
+(2,	'project',	'pg1',	'Developer',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
+(2,	'project',	'pg2',	'Developer',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
+(2,	'project',	'pg3',	'Developer',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0);
 
 INSERT INTO `zt_testresult` (`id`, `run`, `case`, `version`, `caseResult`, `stepResults`, `lastRunner`, `date`) VALUES
 (1,	1,	2,	1,	'fail',	'a:3:{i:3;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}i:4;a:2:{s:6:\"result\";s:4:\"fail\";s:4:\"real\";s:24:\"Not all 400 page is displayed.\";}i:5;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}}',	'qa1',	'2017-12-13 00:08:52'),

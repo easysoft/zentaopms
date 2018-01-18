@@ -119,10 +119,10 @@ $lang->bug->byQuery        = '搜索';
 $lang->bug->needConfirm    = '需求变动';
 $lang->bug->allProduct     = '所有' . $lang->productCommon;
 
+
 $lang->bug->assignToMeAB   = '指派给我';
 $lang->bug->openedByMeAB   = '由我创建';
 $lang->bug->resolvedByMeAB = '由我解决';
-
 
 $lang->bug->ditto       = '同上';
 $lang->bug->dittoNotice = '该bug与上一bug不属于同一产品！';

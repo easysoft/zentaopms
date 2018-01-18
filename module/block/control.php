@@ -664,28 +664,38 @@ class block extends control
                 $todo->begin = date::formatTime($todo->begin);
                 $todo->end   = date::formatTime($todo->end);
             }
+            if(empty($todos)) unset($hasViewPriv['todo']);
             $this->view->todos = $todos;
         }
         if(isset($hasViewPriv['story']))
         {
             $this->app->loadLang('story');
-            $this->view->stories = $this->dao->select('*')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->orderBy('id_desc')->fetchAll();
+            $stories = $this->dao->select('*')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->orderBy('id_desc')->fetchAll();
+
+            if(empty($stories)) unset($hasViewPriv['story']);
+            $this->view->stories = $stories;
         }
         if(isset($hasViewPriv['task']))
         {
             $this->app->loadLang('task');
-            $this->view->tasks = $this->dao->select('*')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->orderBy('id_desc')->fetchAll();
+            $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->orderBy('id_desc')->fetchAll();
+
+            if(empty($tasks)) unset($hasViewPriv['task']);
+            $this->view->tasks = $tasks;
         }
         if(isset($hasViewPriv['bug']))
         {
             $this->app->loadLang('bug');
-            $this->view->bugs = $this->dao->select('*')->from(TABLE_BUG)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->orderBy('id_desc')->fetchAll();
+            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->orderBy('id_desc')->fetchAll();
+
+            if(empty($bugs)) unset($hasViewPriv['bug']);
+            $this->view->bugs = $bugs;
         }
         if(isset($hasViewPriv['case']))
         {
             $this->app->loadLang('testcase');
             $this->app->loadLang('testtask');
-            $this->view->cases   = $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
+            $cases = $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
                 ->Where('t1.assignedTo')->eq($this->app->user->account)
@@ -695,6 +705,9 @@ class block extends control
                 ->andWhere('t2.deleted')->eq(0)
                 ->orderBy('id_desc')
                 ->fetchAll();
+
+            if(empty($cases)) unset($hasViewPriv['case']);
+            $this->view->cases = $cases;
         }
 
         $this->view->hasViewPriv = $hasViewPriv;
