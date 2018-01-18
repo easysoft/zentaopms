@@ -23,7 +23,7 @@
     </div>
     <div class='modal-footer'>
       <?php 
-      echo html::a('http://www.zentao.net', $lang->install->register, '_blank', "class='btn btn-success'");
+      echo html::a($lang->install->officeDomain, $lang->install->register, '_blank', "class='btn btn-success'");
       echo "<span class='text-muted'> &nbsp; " . $lang->install->or . ' &nbsp; </span>';
       echo html::a('index.php', $lang->install->login, '', "class='btn btn-primary'");
       ?>

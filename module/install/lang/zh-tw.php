@@ -17,6 +17,8 @@ $lang->install->pre     = '返回';
 $lang->install->reload  = '刷新';
 $lang->install->error   = '錯誤 ';
 
+$lang->install->officeDomain     = 'http://www.zentao.net';
+
 $lang->install->start            = '開始安裝';
 $lang->install->keepInstalling   = '繼續安裝當前版本';
 $lang->install->seeLatestRelease = '看看最新的版本';
