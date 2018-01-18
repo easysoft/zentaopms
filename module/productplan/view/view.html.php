@@ -115,9 +115,7 @@
                   ?>
                   <tr class='text-center' data-id='<?php echo $story->id;?>'>
                     <td class='cell-id'>
-                      <?php if($canBatchUnlink or $canBatchChangePlan):?>
                       <input type='checkbox' name='storyIDList[]'  value='<?php echo $story->id;?>'/>
-                      <?php endif;?>
                       <?php echo html::a($viewLink, sprintf("%03d", $story->id));?>
                     </td>
                     <?php if($canOrder):?><td class='sort-handler'><i class='icon-move'></i></td><?php endif;?>
@@ -348,9 +346,7 @@
                   <?php foreach($planBugs as $bug):?>
                   <tr class='text-center'>
                     <td class='cell-id'>
-                      <?php if($canBatchUnlink):?>
                       <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/>
-                      <?php endif;?>
                       <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf("%03d", $bug->id));?>
                     </td>
                     <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?></span></td>
