@@ -24,13 +24,17 @@ $useGuest = $this->app->user->account == 'guest';
       <?php if(isset($config->block->closed) and strpos(",{$config->block->closed},", ",{$block->source}|{$block->block},") !== false) continue;?>
       <div class='row'>
         <div class='col-sm-12'>
-          <div class='panel <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>' data-url='<?php echo $block->blockLink?>' <?php if($block->height) echo "data-height='$block->height'";?>>
+          <div class='panel <?php echo "block-{$block->block}";?> <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>'>
+            <?php $hasHeading = ($block->block != 'welcome' and $block->block != 'flowchart');?>
+            <?php if($hasHeading):?>
             <div class='panel-heading'>
-              <div class='panel-actions'>
+              <div class='panel-title'><?php echo $block->title;?></div>
+            <?php endif;?>
+              <nav class='panel-actions nav nav-default'>
                 <?php if(!empty($block->moreLink)):?>
-                   <?php echo html::a($block->moreLink, " <i class='icon icon-more'></i>", null, "class='panel-action drag-disabled panel-action-more'"); ?>
+                   <?php echo '<li>' . html::a($block->moreLink, " <i class='icon icon-more'></i>") . '</li>'; ?>
                 <?php endif; ?>
-                <div class='dropdown'>
+                <li class='dropdown'>
                   <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
                   <ul class='dropdown-menu pull-right'>
                     <li><a href='javascript:;' class='refresh-panel'><i class='icon-repeat'></i> <?php echo $lang->block->refresh ?></a></li>
@@ -45,11 +49,12 @@ $useGuest = $this->app->user->account == 'guest';
                     <li><?php echo html::a($this->createLink('block', 'close', "blockID={$block->id}"), "<i class='icon-eye-close'></i> {$lang->block->closeForever}", 'hiddenwin', "class='close-block' onclick=\"return confirm('{$lang->block->confirmClose}')\"")?>
                     <?php endif;?>
                   </ul>
-                </div>
-              </div>
-              <span class='panel-title'><?php echo $block->title;?></span>
+                </li>
+              </nav>
+            <?php if($hasHeading):?>
             </div>
-            <div class='panel-body no-padding'></div>
+            <?php endif;?>
+            <div class='panel-body conatiner-fluid'><?php echo $this->fetch('block', 'printBlock', "id=$block->id")?></div>
           </div>
         </div>
       </div>
@@ -60,13 +65,17 @@ $useGuest = $this->app->user->account == 'guest';
       <?php if(isset($config->block->closed) and strpos(",{$config->block->closed},", ",{$block->source}|{$block->block},") !== false) continue;?>
       <div class='row'>
         <div class='col-sm-12'>
-          <div class='panel <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>' data-url='<?php echo $block->blockLink?>' <?php if($block->height) echo "data-height='$block->height'";?>>
+          <div class='panel <?php echo "block-{$block->block}";?> <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>'>
+            <?php $hasHeading = ($block->block != 'welcome' and $block->block != 'flowchart');?>
+            <?php if($hasHeading):?>
             <div class='panel-heading'>
-              <div class='panel-actions'>
+              <div class='panel-title'><?php echo $block->title;?></div>
+            <?php endif;?>
+              <nav class='panel-actions nav nav-default'>
                 <?php if(!empty($block->moreLink)):?>
-                   <?php echo html::a($block->moreLink, " <i class='icon icon-more'></i>", null, "class='panel-action drag-disabled panel-action-more'"); ?>
+                   <?php echo '<li>' . html::a($block->moreLink, " <i class='icon icon-more'></i>") . '</li>';?>
                 <?php endif; ?>
-                <div class='dropdown'>
+                <li class='dropdown'>
                   <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
                   <ul class='dropdown-menu pull-right'>
                     <li><a href='javascript:;' class='refresh-panel'><i class='icon-repeat'></i> <?php echo $lang->block->refresh ?></a></li>
@@ -81,11 +90,12 @@ $useGuest = $this->app->user->account == 'guest';
                     <li><?php echo html::a($this->createLink('block', 'close', "blockID={$block->id}"), "<i class='icon-eye-close'></i> {$lang->block->closeForever}", 'hiddenwin', "class='close-block' onclick=\"return confirm('{$lang->block->confirmClose}')\"")?>
                     <?php endif;?>
                   </ul>
-                </div>
-              </div>
-              <span class='panel-title'><?php echo $block->title;?></span>
+                </li>
+              </nav>
+            <?php if($hasHeading):?>
             </div>
-            <div class='panel-body no-padding'></div>
+            <?php endif;?>
+            <div class='panel-body conatiner-fluid'><?php echo $this->fetch('block', 'printBlock', "id=$block->id")?></div>
           </div>
         </div>
       </div>

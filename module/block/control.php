@@ -57,6 +57,7 @@ class block extends control
             if(strpos(",$closedBlock,", ",|assigntome,") === false) $modules['assigntome'] = $this->lang->block->assignToMe;
             if(strpos(",$closedBlock,", ",|dynamic,") === false) $modules['dynamic'] = $this->lang->block->dynamic;
             if(strpos(",$closedBlock,", ",|flowchart,") === false and $this->config->global->flow == 'full') $modules['flowchart'] = $this->lang->block->lblFlowchart;
+            if(strpos(",$closedBlock,", ",|welcome,") === false and $this->config->global->flow == 'full') $modules['welcome'] = $this->lang->block->welcome;
             if(strpos(",$closedBlock,", ",|html,") === false) $modules['html'] = 'HTML';
             $modules = array('' => '') + $modules;
 
@@ -259,6 +260,39 @@ class block extends control
     }
 
     /**
+     * Welcome block.
+     * 
+     * @access public
+     * @return void
+     */
+    public function welcome()
+    {
+        $projects = $this->loadModel('project')->getPairs();
+        $products = $this->loadModel('product')->getPairs();
+
+        $this->view->tutorialed = $this->loadModel('tutorial')->getTutorialed();
+        $this->view->tasks      = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->fetch('count');
+        $this->view->bugs       = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($this->app->user->account)->fetch('count');
+        $this->view->stories    = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->fetch('count');
+        $this->view->projects   = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)->where('id')->in(array_keys($projects))->andWhere("(status='wait' or status='doing')")->fetch('count');
+        $this->view->products   = (int)$this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)->where('status')->ne('closed')->andWhere('id')->in(array_keys($products))->fetch('count');
+
+        $today = date('Y-m-d');
+        $this->view->delay['task']    = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deadline')->ne('0000-00-00')->andWhere('deadline')->lt($today)->fetch('count');
+        $this->view->delay['bug']     = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($this->app->user->account)->andWhere('deadline')->ne('0000-00-00')->andWhere('deadline')->lt($today)->fetch('count');
+        $this->view->delay['project'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)->where('id')->in(array_keys($projects))->andWhere("(status='wait' or status='doing')")->andWhere('end')->lt($today)->fetch('count');
+
+        $time = date('H:i');
+        $welcomeType = '19:00';
+        foreach($this->lang->block->welcomeList as $type => $name)
+        {
+            if($time >= $type) $welcomeType = $type;
+        }
+        $this->view->welcomeType = $welcomeType;
+        $this->display();
+    }
+
+    /**
      * Print block. 
      * 
      * @param  int    $id 
@@ -298,8 +332,12 @@ class block extends control
         {
             $html = $this->fetch('block', 'printAssignToMeBlock');
         }
+        elseif($block->block == 'welcome')
+        {
+            $html = $this->fetch('block', 'welcome');
+        }
         
-        die($html);
+        echo $html;
     }
 
     /**

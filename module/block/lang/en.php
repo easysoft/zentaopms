@@ -31,6 +31,7 @@ $lang->block->lblHtml      = 'HTML';
 $lang->block->dynamic      = 'Dynamic';
 $lang->block->assignToMe   = 'Assign To Me';
 $lang->block->lblFlowchart = 'Workflow';
+$lang->block->welcome      = 'Welcome';
 
 $lang->block->assignToMeList['todo']  = 'Todo';
 $lang->block->assignToMeList['story'] = 'Story';
@@ -319,6 +320,11 @@ $lang->block->modules['todo']->moreLinkList->list = 'my|todo|type=all';
 $lang->block->modules['common'] = new stdclass();
 $lang->block->modules['common']->moreLinkList = new stdclass();
 $lang->block->modules['common']->moreLinkList->dynamic = 'company|dynamic|';
+
+$lang->block->welcomeList['06:00'] = 'Good morning, %s';
+$lang->block->welcomeList['11:30'] = 'Good noon, %s';
+$lang->block->welcomeList['13:30'] = 'Good afternoon, %s';
+$lang->block->welcomeList['19:00'] = 'Good evening, %s';
 
 $lang->block->flowchart   = array();
 $lang->block->flowchart[] = array('Administration',   'Manage a Company', 'Add Users', 'Maintain Privileges');

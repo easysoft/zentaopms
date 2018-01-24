@@ -14,8 +14,6 @@ function deleteBlock(index)
             alert(data.message);
             return false;
         }
-
-        checkEmpty();
     })  
 }
 
@@ -38,19 +36,6 @@ function sortBlocks(orders)
     {
         // if(data.result == 'success') $.zui.messager.success(config.ordersSaved);
     });
-}
-
-/**
- * Check dashboard wether is empty
- * @access public
- * @return void
- */
-function checkEmpty()
-{
-    var $dashboard = $('#dashboard');
-    var hasBlocks = !!$dashboard.children('.row').children().length;
-    $dashboard.find('.dashboard-empty-message').toggleClass('hide', hasBlocks);
-    if(!hasBlocks) $dashboard.find('.dashboard-actions').addClass('hide');
 }
 
 /**
@@ -168,28 +153,27 @@ function hiddenBlock(index)
 
 $(function()
 {
-    var $dashboard = $('#dashboard').dashboard(
-    {
-        height            : 240,
-        draggable         : !useGuest,
-        shadowType        : false,
-        afterOrdered      : sortBlocks,
-        afterPanelRemoved : deleteBlock,
-        sensitive         : true,
-        panelRemovingTip  : config.confirmRemoveBlock,
-        resizable         : !useGuest,
-        onResize          : resizeBlock,
-        afterRefresh      : function(e)
-        {
-            var $sortTable = e.$panel.find('.tablesorter');
-            if($sortTable.length) $sortTable.sortTable();
-            initTableHeader();
-        }
-    });
+//    var $dashboard = $('#dashboard').dashboard(
+//    {
+//        height            : 240,
+//        draggable         : !useGuest,
+//        shadowType        : false,
+//        afterOrdered      : sortBlocks,
+//        afterPanelRemoved : deleteBlock,
+//        sensitive         : true,
+//        panelRemovingTip  : config.confirmRemoveBlock,
+//        resizable         : !useGuest,
+//        onResize          : resizeBlock,
+//        afterRefresh      : function(e)
+//        {
+//            var $sortTable = e.$panel.find('.tablesorter');
+//            if($sortTable.length) $sortTable.sortTable();
+//            initTableHeader();
+//        }
+//    });
+//
+//    // $dashboard.find('ul.dashboard-actions').addClass('hide').children('li').addClass('right').appendTo($('#modulemenu > .nav'));
+//    $dashboard.find('[data-toggle=tooltip]').tooltip({container: 'body'});
 
-    // $dashboard.find('ul.dashboard-actions').addClass('hide').children('li').addClass('right').appendTo($('#modulemenu > .nav'));
-    $dashboard.find('[data-toggle=tooltip]').tooltip({container: 'body'});
-
-    checkEmpty();
-    initTableHeader();
+//    initTableHeader();
 });

@@ -31,12 +31,15 @@ $lang->block->lblHtml      = 'HTML内容';
 $lang->block->dynamic      = '最新动态';
 $lang->block->assignToMe   = '指派给我';
 $lang->block->lblFlowchart = '流程图';
+$lang->block->welcome      = '欢迎总览';
 
-$lang->block->assignToMeList['todo']  = '待办';
-$lang->block->assignToMeList['story'] = '需求';
-$lang->block->assignToMeList['task']  = '任务';
-$lang->block->assignToMeList['bug']   = 'Bug';
-$lang->block->assignToMeList['case']  = '用例';
+$lang->block->leftToday = '今天剩余工作总计';
+$lang->block->myTask    = '我的任务';
+$lang->block->myStory   = '我的需求';
+$lang->block->myBug     = '我的BUG';
+$lang->block->myProject = '进行中的' . $lang->projectCommon;
+$lang->block->myProduct = '未关闭的' . $lang->productCommon;
+$lang->block->delayed   = '已延期';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = '参数名称';
@@ -319,6 +322,11 @@ $lang->block->modules['todo']->moreLinkList->list = 'my|todo|type=all';
 $lang->block->modules['common'] = new stdclass();
 $lang->block->modules['common']->moreLinkList = new stdclass();
 $lang->block->modules['common']->moreLinkList->dynamic = 'company|dynamic|';
+
+$lang->block->welcomeList['06:00'] = '%s，早上好！';
+$lang->block->welcomeList['11:30'] = '%s，中文好！';
+$lang->block->welcomeList['13:30'] = '%s，下午好！';
+$lang->block->welcomeList['19:00'] = '%s，晚上好！';
 
 $lang->block->flowchart   = array();
 $lang->block->flowchart[] = array('管理员',   '维护公司', '添加用户', '维护权限');
