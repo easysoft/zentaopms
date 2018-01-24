@@ -236,7 +236,7 @@ class commonModel extends model
         {
             $isGuest = $app->user->account == 'guest';
 
-            echo "<div class='dropdown' id='userMenu'>";
+            echo "<div class='dropdown' style='display:inline-block;margin-right:5px'>";
             echo "<a href='javascript:;' data-toggle='dropdown'><i class='icon-user'></i> " . $app->user->realname . " <span class='caret'></span></a>";
 
             echo "<ul class='dropdown-menu'>";
@@ -280,7 +280,7 @@ class commonModel extends model
         if($app->company->website)  echo html::a($app->company->website,  $lang->company->website,  '_blank');
         if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');
 
-        echo "<div class='dropdown'>";
+        echo "<div class='dropdown' style='display:inline-block;margin-right:5px'>";
         echo "<a href='javascript:;' data-toggle='dropdown'>" . $lang->help . " <span class='caret'></span></a>";
         echo "<ul class='dropdown-menu pull-right'>";
         echo '<li>' . html::a('javascript:;', $lang->manual, '', "class='open-help-tab'") . '</li>';
@@ -288,6 +288,13 @@ class commonModel extends model
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
         echo "</ul></div>";
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'");
+    }
+
+    public static function printAboutBar()
+    {
+        global $app, $lang;
+        if(!commonModel::isTutorialMode() and $app->user->account != 'guest') echo html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'");
+        echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao . $lang->zentaoPMS, '', "class='about iframe' data-width='900' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'");
     }
 
     /**
@@ -340,16 +347,19 @@ class commonModel extends model
         $menu       = customModel::getMainMenu();
         $activeName = 'active';
 
-        echo "<ul class='nav'>\n";
+        echo "<ul class='nav nav-default'>\n";
         foreach($menu as $menuItem)
         {
-            if(isset($menuItem->hidden) && $menuItem->hidden) continue;
-            $active = $menuItem->name == $mainMenu ? "class='$activeName'" : '';
-            $link   = commonModel::createMenuLink($menuItem);
-            echo "<li $active data-id='$menuItem->name'><a href='$link' $active>$menuItem->text</a></li>\n";
+            if(empty($menuItem->hidden))
+            {
+                $active = $menuItem->name == $mainMenu ? "class='$activeName'" : '';
+                $link   = commonModel::createMenuLink($menuItem);
+                echo "<li $active data-id='$menuItem->name'><a href='$link' $active>$menuItem->text</a></li>\n";
+            }
+            if(strpos($lang->dividerMenu, ",{$menuItem->name},") !== false) echo "<li class='divider'></li>";
         }
         $customLink = helper::createLink('custom', 'ajaxMenu', "module={$app->getModuleName()}&method={$app->getMethodName()}", '', true);
-        if(!commonModel::isTutorialMode() and $app->viewType != 'mhtml' and $app->user->account != 'guest') echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' title='$lang->customMenu' data-icon='cog' data-width='80%'><i class='icon icon-cog'></i></a></li>";
+        if(!commonModel::isTutorialMode() and $app->viewType != 'mhtml' and $app->user->account != 'guest') echo "<li class='custom-item'><a href='$customLink' class='hidden' data-toggle='modal' data-type='iframe' title='$lang->customMenu' data-icon='cog' data-width='80%'><i class='icon icon-cog'></i></a></li>";
         echo "</ul>\n";
     }
 
@@ -396,8 +406,8 @@ class commonModel extends model
             echo "<li><a href='javascript:;' data-value='{$key}'>{$value}</a></li>";
         }
         echo '</ul></div>';
-        echo html::input('searchQuery', '', "onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) shortcut()' class='form-control' placeholder='" . $lang->searchTips . "'");
-        echo "<div id='objectSwitcher' class='input-group-btn'><a href='javascript:shortcut();' class='btn'>GO! </a></div>";
+        echo "<input type='search' name='searchQuery' id='searchInput' onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) shortcut()' class='form-control' placeholder='" . $lang->searchTips . "'/>";
+        echo "<a href='javascript:shortcut();' class='input-control-icon-right'><i class='icon icon-search'></i></a>";
         echo "</div>\n";
     }
 
@@ -427,7 +437,7 @@ class commonModel extends model
         $isMobile       = $app->viewType === 'mhtml';
 
         /* The beginning of the menu. */
-        echo $isMobile ? '' : "<ul class='nav'>\n";
+        echo $isMobile ? '' : "<ul class='nav nav-default'>\n";
 
         /* Cycling to print every sub menus. */
         foreach($menu as $menuItem)
@@ -485,24 +495,28 @@ class commonModel extends model
         global $lang;
         $mainMenu = $moduleName;
         if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
-        echo html::a(helper::createLink('my', 'index'), $lang->zentaoPMS) . $lang->arrow;
+        echo "<ul class='breadcrumb'>";
+        echo '<li>' . html::a(helper::createLink('my', 'index'), $lang->zentaoPMS) . '</li>';
         if($moduleName != 'index')
         {
             if(!isset($lang->menu->$mainMenu)) return;
             list($menuLabel, $module, $method) = explode('|', $lang->menu->$mainMenu);
-            echo html::a(helper::createLink($module, $method), $menuLabel);
+            echo '<li>' . html::a(helper::createLink($module, $method), $menuLabel) . '</li>';
         }
         else
         {
-            echo $lang->index->common;
+            echo '<li>' . $lang->index->common . '</li>';
         }
-        if(empty($position)) return;
-        echo $lang->arrow;
+        if(empty($position))
+        {
+            echo '</ul>';
+            return;
+        }
         foreach($position as $key => $link)
         {
-            echo $link;
-            if(isset($position[$key + 1])) echo $lang->arrow;
+            echo '<li>' . $link . '</li>';
         }
+        echo '</ul>';
     }
 
     /**

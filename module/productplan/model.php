@@ -158,7 +158,7 @@ class productplanModel extends model
     public function create()
     {
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->create['id'], $this->config->allowedTags)
-            ->setIF($this->post->delta == 9999 || empty($this->post->end), 'end', '2030-01-01')
+            ->setIF($this->post->delta == 9999 || empty($_POST['end']), 'end', '2030-01-01')
             ->remove('delta,uid')
             ->get();
         $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->create['id'], $this->post->uid);

@@ -21,7 +21,7 @@ class myModel extends model
      */
     public function setMenu()
     {
-        $this->lang->my->menu->account['link'] = sprintf($this->lang->my->menu->account['link'], $this->app->user->realname);
+        if(isset($this->lang->my->menu->account['link'])) $this->lang->my->menu->account['link'] = sprintf($this->lang->my->menu->account['link'], $this->app->user->realname);
 
         /* Adjust the menu order according to the user role. */
         $role = $this->app->user->role;

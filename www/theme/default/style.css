@@ -50,7 +50,6 @@ tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: righ
 /* columns */
 .row-table {display: table; width: 100%}
 .col-side, .col-main, .col-table {padding: 0; display: table-cell; vertical-align: top;}
-.col-side {width: 350px; max-width:350px; padding-left: 10px;}
 .col-main, .row-table-swap .col-side {padding-right: 10px; padding-left: 0;}
 .row-table-swap .col-main {padding-right: 0; padding-left: 10px;}
 .row-table-side-left .col-side {padding-right: 10px; padding-left: 0;}
@@ -78,7 +77,7 @@ a,a:focus,a:active {text-decoration: none; outline:none;}
 .dropdown-menu > li > a, .dropdown-header {font-size: 12px; padding: 5px 25px 5px 15px}
 .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:active {background: #f1f1f1; font-weight: bold;}
 .dropdown-menu > .active {position: relative;}
-.dropdown-menu > .active > a:before {content: '\e60d'; font-family: NewZenIcon; font-size: 14px; position: absolute; right: 8px; top: 4px; display: block; color: #808080; font-weight: normal;}
+.dropdown-menu > .active > a:before {content: '\e60d'; font-family: ZentaoIcon; font-size: 14px; position: absolute; right: 8px; top: 4px; display: block; color: #808080; font-weight: normal;}
 .dropdown-submenu > a {min-width: 80px;}
 .dropdown-menu .divider {margin: 4px 0;}
 .dropdown-submenu.left > .dropdown-menu{left: -110px;}
@@ -106,9 +105,9 @@ hr.small {margin: 10px 0}
 .tablesorter thead tr .header {cursor:pointer;}
 .tablesorter thead tr .header a,.tablesorter thead tr .headerSortUp a,.tablesorter thead tr .headerSortDown a{display: block; text-decoration:none}
 .tablesorter thead tr .header a {color:#333;}
-.tablesorter thead tr .header > a:after {font-family: NewZenIcon; font-weight: normal;content: "\e6bd";font-size: 14px; margin-left: -2px;}
-.tablesorter thead tr .headerSortUp > a:after {font-family: NewZenIcon; font-weight: normal;content: "\e6b9";font-size: 14px;color:#03C; margin-left: -2px;}
-.tablesorter thead tr .headerSortDown > a:after{font-family: NewZenIcon; font-weight: normal;content: "\e6b8";font-size: 14px;color:#03C; margin-left: -2px;}
+.tablesorter thead tr .header > a:after {font-family: ZentaoIcon; font-weight: normal;content: "\e6bd";font-size: 14px; margin-left: -2px;}
+.tablesorter thead tr .headerSortUp > a:after {font-family: ZentaoIcon; font-weight: normal;content: "\e6b9";font-size: 14px;color:#03C; margin-left: -2px;}
+.tablesorter thead tr .headerSortDown > a:after{font-family: ZentaoIcon; font-weight: normal;content: "\e6b8";font-size: 14px;color:#03C; margin-left: -2px;}
 .tablesorter-header-inner {display: inline;}
 .tablesorter thead tr .header.sorter-false:after {display: none}
 
@@ -121,7 +120,7 @@ hr.small {margin: 10px 0}
 
 /* Datepicker */
 .datepicker-wrapper {position: relative; cursor: pointer;}
-.datepicker-wrapper:before {font-family: NewZenIcon; content: '\e617'; display: block; position: absolute; right: 8px; color: #808080; font-size: 14px; top: 5px;}
+.datepicker-wrapper:before {font-family: ZentaoIcon; content: '\e617'; display: block; position: absolute; right: 8px; color: #808080; font-size: 14px; top: 5px;}
 .datepicker-wrapper > .form-control {padding-right: 30px; cursor: pointer;}
 .datepicker-wrapper.datepicker-date:before {content: '\e66c'}
 .datepicker-wrapper:hover:before {color: #145CCD}
@@ -345,7 +344,7 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 
 /* Panel */
 .panel > .table > thead > tr > th,.panel > form > .table > thead > tr > th {background-color: transparent;}
-.panel > .panel-heading,.nav-stacked.nav-primary>li.nav-heading,.list > header, #navbar {background-color: #f1f1f1;}
+.panel > .panel-heading,.nav-stacked.nav-primary>li.nav-heading,.list > header {background-color: #f1f1f1;}
 .panel-pure {box-shadow: none; border: 0; border-radius: 0;}
 .panel-pure .panel-heading {background: transparent;}
 .panel-actions {display: inline-block; margin-left: 8px;}
@@ -377,35 +376,14 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 
 /* === Layout === */
 /* Background */
-body {color:#141414; padding-bottom: 40px;}
 
 /* Header */
-#header {padding: 12px 20px 0; background:#003366;}
+.container-fixed{width:100%;}
+#extraNav .dropdown .dropdown-menu li {text-align:center;}
+#extraNav .dropdown .dropdown-menu li a{width:100%;color:rgb(60, 67, 83);}
+#extraNav .dropdown .dropdown-menu li a:hover{color:#fff;}
 
-#topbar {color: #ACCADF;}
-#topbar > .pull-right {margin-top: -4px; margin-right: -4px;}
-#topnav .dropdown-submenu > a,
-#topnav .dropdown-menu {min-width: 110px;}
-#topnav > .dropdown .caret {border-top-color: #fff}
-#topnav > .dropdown, #topnav > a {display: block; float: left;}
-#topnav > .dropdown > a, #topnav > a {display: block; padding: 3px 6px; position: relative;}
-#topnav > .dropdown:hover, #topnav > .dropdown.open, #topnav > a:hover {background: #185695}
-#topnav > a, #topnav > .dropdown > a, #companyname a {color:#d1e4f2;text-decoration:none;}
-#topnav > a:hover, #topnav > .dropdown > a:hover, #companyname a:hover {color: #fff;}
-#companyname {color:#ffcc00; font-weight: normal; margin: 0}
-#companyname a {display: inline-block; margin-left: 4px; font-size: 12px}
-
-#mainmenu {margin-top: 12px; width: 100%; position: relative;}
-#mainmenu .nav > li {float: left;}
-#mainmenu .nav > li > a {display: block; margin-right: 3px; white-space:nowrap; padding:7px 15px; color:#E5E5E5; font-size: 14px; background:#114f8e;-webkit-box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.10);box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.10);}
-#mainmenu .nav > li > a:hover{background-color: #2e6dad;color: #fff; box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);}
-#mainmenu .nav > li.active > a { background-color:#e5e5e5;color:#21841d; font-weight:bold;}
-#mainmenu .nav > li.custom-item {filter: alpha(opacity=0); opacity: 0; transition: opacity .4s .6s}
-#mainmenu:hover .nav > li.custom-item {filter: alpha(opacity=100); opacity: 1;}
-#mainmenu .nav > li.custom-item > a {background-color: transparent; box-shadow: none}
-#mainmenu .nav > li.custom-item > a:hover {background-color: #2e6dad;color: #fff; box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.2);}
-
-#searchbox {position: absolute; right: 0; top: 1px; width: 200px;}
+#searchbox{width:160px;}
 #searchbox .form-control, #searchbox .btn {padding: 2px 5px; line-height: 20px; height: 24px;border-top: 0; border-bottom: 0; float: left; display: block;}
 #typeSelector .btn{padding-left: 10px; border-right: none}
 #objectSwitcher .btn{padding-right: 10px; margin-left: -1px\0;}
@@ -468,12 +446,6 @@ body {color:#141414; padding-bottom: 40px;}
 #wrap .outer {position: relative; text-align:left; background:#fff;border:1px solid #cfcfcf; -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); padding: 20px}
 
 /* Footer. */
-#footer {width:100%;position:fixed; bottom:0; left:0; margin:0; border-top: 1px solid #ddd; background:#eef4fe;height:40px; line-height:40px;-webkit-box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05); z-index: 10}
-#crumbs a i.icon-home{display: none;}
-#crumbs {float: left;margin-left: 20px;}
-#crumbs > a {display: inline-block; margin-right: -4px;}
-#crumbs .icon-angle-right {margin: 0; position: relative; top: 1px;}
-#footer #poweredby {float: right; margin-right: 20px;}
 #qrcodePopover.show {display: block; position: fixed; right: 5px; bottom: 40px; left: inherit; top: inherit; max-width: 300px}
 #qrcodePopover.popover.top .arrow {left: inherit; right: 10px}
 .icon-zentao, a .icon-zentao {background: url(images/main/icon.png) center no-repeat; display: inline-block; width: 16px; height: 16px; position: relative; top: 2px}
@@ -484,7 +456,7 @@ body {color:#141414; padding-bottom: 40px;}
 #featurebar:after, #featurebar:before {content: ' '; display: table;}
 #featurebar:after {clear:both;}
 #featurebar .heading {float: left; padding: 0 5px; color: #666}
-#featurebar .heading:after {content: "\e6e1"; font-family: NewZenIcon; font-size: 14px; color: #999; display: inline-block; margin-left: 5px;}
+#featurebar .heading:after {content: "\e6e1"; font-family: ZentaoIcon; font-size: 14px; color: #999; display: inline-block; margin-left: 5px;}
 #featurebar .heading > i {color: #808080}
 
 #featurebar .nav {height: 30px; float: left;}
@@ -537,7 +509,7 @@ body {color:#141414; padding-bottom: 40px;}
 #titlebar > .heading > strong > i, #titlebar > .heading > strong > small > i {display: none}
 #titlebar > .heading > small > i {position: relative; top: 1px; display: none}
 #titlebar > .heading > small {font-size: 14px; color: #333;}
-#titlebar > .heading > small:before {content: '\e6e1';  font-family: NewZenIcon; font-weight: normal;}
+#titlebar > .heading > small:before {content: '\e6e1';  font-family: ZentaoIcon; font-weight: normal;}
 #titlebar .actions {position: absolute; right: 20px; top: 8px;}
 #titlebar .actions > .btn, #titlebar .actions > .btn-group {margin-left: 8px;}
 #titlebar .actions > .text {display: inline-block; margin-left: 8px; line-height: 30px}
@@ -798,9 +770,9 @@ body {color:#141414; padding-bottom: 40px;}
 .tooltip-max .tooltip-inner {max-width: 1000px}
 
 /* For new zentao icon. */
-@font-face{font-family:NewZenIcon;font-style:normal;font-weight:400;src:url(fonts/zenicon.eot?v=1.0.0);src:url(fonts/zenicon.eot?#iefix&v=1.0.0) format('embedded-opentype'),url(fonts/zenicon.woff?v=1.0.0) format('woff'),url(fonts/zenicon.ttf?v=1.0.0) format('truetype'),url(fonts/zenicon.svg#regular?v=1.0.0) format('svg')}
-.icon-times,.icon-search,.icon-envelope,.icon-heart,.icon-star,.icon-star-empty,.icon-user,.icon-th-large,.icon-th,.icon-check,.icon-off,.icon-cog,.icon-trash,.icon-home,.icon-time,.icon-download-alt,.icon-download,.icon-repeat,.icon-refresh,.icon-list-alt,.icon-lock,.icon-flag,.icon-volume-up,.icon-qrcode,.icon-tags,.icon-bookmark,.icon-print,.icon-align-left,.icon-align-justify,.icon-list,.icon-pencil,.icon-add,.icon-edit,.icon-checked,.icon-move,.icon-step-backward,.icon-play,.icon-pause,.icon-step-forward,.icon-chevron-left,.icon-chevron-right,.icon-plus-sign,.icon-minus-sign,.icon-remove-sign,.icon-ok-sign,.icon-question-sign,.icon-info-sign,.icon-ban-circle,.icon-arrow-left,.icon-arrow-right,.icon-arrow-up,.icon-arrow-down,.icon-sign-plus,.icon-minus,.icon-plus,.icon-eye-open,.icon-eye-close,.icon-calendar,.icon-random,.icon-chevron-up,.icon-chevron-down,.icon-resize-h,.icon-key,.icon-cogs,.icon-comments,.icon-collapse-full,.icon-upload-alt,.icon-check-empty,.icon-bullhorn,.icon-bell,.icon-hand-right,.icon-wrench,.icon-tasks,.icon-expand-full,.icon-group,.icon-link,.icon-cloud,.icon-copy,.icon-paper-clip,.icon-bars,.icon-list-ul,.icon-table,.icon-magic,.icon-caret-down,.icon-caret-up,.icon-caret-left,.icon-caret-right,.icon2-10,.icon-comment-alt,.icon-comments-alt,.icon-sitemap,.icon-lightbulb,.icon-file-text-o,.icon-building,.icon-double-angle-left,.icon-double-angle-right,.icon-double-angle-up,.icon-double-angle-down,.icon-angle-left,.icon-angle-right,.icon-angle-up,.icon-angle-down,.icon-mobile,.icon-spinner,.icon-circle,.icon-folder-close-alt,.icon-folder-open-alt,.icon-expand-alt,.icon-collapse-alt,.icon-smile,.icon-frown,.icon-terminal,.icon-star-half-full,.icon-code-fork,.icon-unlink,.icon-rocket,.icon-chevron-sign-left,.icon-chevron-sign-right,.icon-chevron-sign-up,.icon-chevron-sign-down,.icon-ellipsis-v,.icon-level-up,.icon-file,.icon-file-text,.icon-more,.icon-bug,.icon-branch,.icon-chat-dot,.icon-cube,.icon-stack,.icon-review,.icon-bar-chart,.icon-cubes,.icon-file-pdf,.icon-file-word,.icon-file-excel,.icon-file-powerpoint,.icon-file-archive,.icon-file-audio,.icon-file-movie,.icon-file-code{font-family:NewZenIcon}
-.icon-remove,.change-show,.change-hide,.log-desc,.log-asc,.diff-all,.diff-short,.icon-plus-border{font-family:NewZenIcon}
+@font-face{font-family:ZentaoIcon;font-style:normal;font-weight:400;src:url(fonts/zenicon.eot?v=1.0.0);src:url(fonts/zenicon.eot?#iefix&v=1.0.0) format('embedded-opentype'),url(fonts/zenicon.woff?v=1.0.0) format('woff'),url(fonts/zenicon.ttf?v=1.0.0) format('truetype'),url(fonts/zenicon.svg#regular?v=1.0.0) format('svg')}
+.icon-times,.icon-search,.icon-envelope,.icon-heart,.icon-star,.icon-star-empty,.icon-user,.icon-th-large,.icon-th,.icon-check,.icon-off,.icon-cog,.icon-trash,.icon-home,.icon-time,.icon-download-alt,.icon-download,.icon-repeat,.icon-refresh,.icon-list-alt,.icon-lock,.icon-flag,.icon-volume-up,.icon-qrcode,.icon-tags,.icon-bookmark,.icon-print,.icon-align-left,.icon-align-justify,.icon-list,.icon-pencil,.icon-add,.icon-edit,.icon-checked,.icon-move,.icon-step-backward,.icon-play,.icon-pause,.icon-step-forward,.icon-chevron-left,.icon-chevron-right,.icon-plus-sign,.icon-minus-sign,.icon-remove-sign,.icon-ok-sign,.icon-question-sign,.icon-info-sign,.icon-ban-circle,.icon-arrow-left,.icon-arrow-right,.icon-arrow-up,.icon-arrow-down,.icon-sign-plus,.icon-minus,.icon-plus,.icon-eye-open,.icon-eye-close,.icon-calendar,.icon-random,.icon-chevron-up,.icon-chevron-down,.icon-resize-h,.icon-key,.icon-cogs,.icon-comments,.icon-collapse-full,.icon-upload-alt,.icon-check-empty,.icon-bullhorn,.icon-bell,.icon-hand-right,.icon-wrench,.icon-tasks,.icon-expand-full,.icon-group,.icon-link,.icon-cloud,.icon-copy,.icon-paper-clip,.icon-bars,.icon-list-ul,.icon-table,.icon-magic,.icon-caret-down,.icon-caret-up,.icon-caret-left,.icon-caret-right,.icon2-10,.icon-comment-alt,.icon-comments-alt,.icon-sitemap,.icon-lightbulb,.icon-file-text-o,.icon-building,.icon-double-angle-left,.icon-double-angle-right,.icon-double-angle-up,.icon-double-angle-down,.icon-angle-left,.icon-angle-right,.icon-angle-up,.icon-angle-down,.icon-mobile,.icon-spinner,.icon-circle,.icon-folder-close-alt,.icon-folder-open-alt,.icon-expand-alt,.icon-collapse-alt,.icon-smile,.icon-frown,.icon-terminal,.icon-star-half-full,.icon-code-fork,.icon-unlink,.icon-rocket,.icon-chevron-sign-left,.icon-chevron-sign-right,.icon-chevron-sign-up,.icon-chevron-sign-down,.icon-ellipsis-v,.icon-level-up,.icon-file,.icon-file-text,.icon-more,.icon-bug,.icon-branch,.icon-chat-dot,.icon-cube,.icon-stack,.icon-review,.icon-bar-chart,.icon-cubes,.icon-file-pdf,.icon-file-word,.icon-file-excel,.icon-file-powerpoint,.icon-file-archive,.icon-file-audio,.icon-file-movie,.icon-file-code{font-family:ZentaoIcon}
+.icon-remove,.change-show,.change-hide,.log-desc,.log-asc,.diff-all,.diff-short,.icon-plus-border{font-family:ZentaoIcon}
 .icon-more:before{content: '\e744';}
 .icon-plus-border:before{content: '\e663'}
 .icon-review:before{content: '\e9b8'}

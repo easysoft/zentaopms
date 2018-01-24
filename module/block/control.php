@@ -210,6 +210,7 @@ class block extends control
             if($this->block->initBlock($module)) die(js::reload());
         }
 
+        $shortBlocks = $longBlocks = array();
         foreach($blocks as $key => $block)
         {
             if($this->config->global->flow == 'onlyStory' and $block->source != 'product' and $block->source != 'todo' and $block->block != 'dynamic') unset($blocks[$key]);
@@ -231,15 +232,15 @@ class block extends control
             {
                 $block->moreLink = $this->createLink('company', 'dynamic');
             }
+            if($block->grid >= 6) $longBlocks[$key]  = $block;
+            if($block->grid < 6)  $shortBlocks[$key] = $block;
         }
 
-        $this->view->blocks = $blocks;
-        $this->view->module = $module;
+        $this->view->longBlocks  = $longBlocks;
+        $this->view->shortBlocks = $shortBlocks;
+        $this->view->module      = $module;
 
-        if($this->app->getViewType() == 'json')
-        {
-            die(json_encode($blocks));
-        }
+        if($this->app->getViewType() == 'json') die(json_encode($blocks));
 
         $this->display();
     }

@@ -13,36 +13,67 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 ?>
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
-<?php
-    if(!empty($this->config->sso->redirect)) js::set('ssoRedirect', $this->config->sso->redirect);
-?>
+<?php if(!empty($this->config->sso->redirect)) js::set('ssoRedirect', $this->config->sso->redirect);?>
 <header id='header'>
-<?php if(empty($this->config->sso->redirect)):?>
-  <div id='topbar'>
-    <div class='pull-right' id='topnav'><?php commonModel::printTopBar();?></div>
-    <h5 id='companyname'>
-      <?php printf($lang->welcome, $app->company->name);?>
-    </h5>
+  <div id='mainHeader'>
+    <div class='container-fixed'>
+      <hrgroup id='heading'>
+        <?php if(empty($this->config->sso->redirect)):?>
+        <h1 id='companyname'><?php printf($lang->welcome, $app->company->name);?></h1>
+        <?php endif;?>
+      </hrgroup>
+      <nav id='navbar'><?php commonModel::printMainmenu($this->moduleName);?></nav>
+      <div id='toolbar'>
+        <div id="extraNav">
+          <?php //common::printTopBar();?>
+          <?php common::printAboutBar();?>
+        </div>
+        <div id="userMenu">
+          <?php common::printSearchBox();?>
+          <ul id="userNav" class="nav nav-default">
+            <?php list($adminName, $adminModule, $adminMethod) = explode('|', $lang->adminMenu);?>
+            <li><?php echo html::a($this->createLink($adminModule, $adminMethod), $adminName);?></li>
+            <li><?php echo '<a>通知</a>';?></li>
+            <li>
+              <a class="dropdown-toggle" data-toggle="dropdown">
+                <div class="avatar avatar-sm bg-info avatar-circle"><?php echo strtoupper($app->user->account{0})?></div>
+                <span class="user-name"><?php echo empty($app->user->realname) ? $app->user->account : $app->user->realname;?></span>
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <?php
+                list($taskName, $taskModule, $taskMethod) = explode('|', $lang->my->menu->task['link']);
+                echo '<li>' . html::a($this->createLink($taskModule, $taskMethod), $taskName) . '</li>';
+                list($bugName, $bugModule, $bugMethod) = explode('|', $lang->my->menu->bug['link']);
+                echo '<li>' . html::a($this->createLink($bugModule, $bugMethod), $bugName) . '</li>';
+                list($storyName, $storyModule, $storyMethod) = explode('|', $lang->my->menu->story['link']);
+                echo '<li>' . html::a($this->createLink($storyModule, $storyMethod), $storyName) . '</li>';
+                list($taskName, $taskModule, $taskMethod) = explode('|', $lang->my->menu->testtask['link']);
+                echo '<li>' . html::a($this->createLink($taskModule, $taskMethod), $taskName) . '</li>';
+                ?>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
-<?php endif;?>
-<?php
-if(!empty($this->config->sso->redirect))
-{
-    css::import($defaultTheme . 'bindranzhi.css');
-    js::import($jsRoot . 'bindranzhi.js');
-}
-?>
-  <nav id='mainmenu'>
-    <?php commonModel::printMainmenu($this->moduleName); commonModel::printSearchBox();?>
-    <?php if(!empty($this->config->sso->redirect)):?>
-    <div class='pull-right' id='topnav'><?php commonModel::printTopBar();?></div>
-    <?php endif;?>
-  </nav>
-  <nav id="modulemenu">
-    <?php commonModel::printModuleMenu($this->moduleName);?>
-  </nav>
+  <div id='subHeader'>
+    <div class='container-fixed'>
+      <div id="pageNav"></div>
+      <nav id='subNavbar'><?php common::printModuleMenu($this->moduleName);?></nav>
+      <div id="pageActions"></div>
+    </div>
+  </div>
+  <?php
+  if(!empty($this->config->sso->redirect))
+  {
+      css::import($defaultTheme . 'bindranzhi.css');
+      js::import($jsRoot . 'bindranzhi.js');
+  }
+  ?>
 </header>
 
-<div id='wrap' <?php if(!empty($this->config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >
+<main id='main' <?php if(!empty($this->config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >
 <?php endif;?>
-  <div class='outer'>
+  <div class='container-fixed'>
