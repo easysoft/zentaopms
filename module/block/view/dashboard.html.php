@@ -18,7 +18,7 @@ $useGuest = $this->app->user->account == 'guest';
 ?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <div class='dashboard' id='dashboard' data-confirm-remove-block='<?php  echo $lang->block->confirmRemoveBlock;?>'>
-  <div class='row'>
+  <div>
     <div class='col-md-8 col-main'>
       <?php foreach($longBlocks as $index => $block):?>
       <?php if(isset($config->block->closed) and strpos(",{$config->block->closed},", ",{$block->source}|{$block->block},") !== false) continue;?>
@@ -54,7 +54,7 @@ $useGuest = $this->app->user->account == 'guest';
             <?php if($hasHeading):?>
             </div>
             <?php endif;?>
-            <div class='panel-body conatiner-fluid'><?php echo $this->fetch('block', 'printBlock', "id=$block->id")?></div>
+            <?php echo $this->fetch('block', 'printBlock', "id=$block->id&module=$module")?>
           </div>
         </div>
       </div>
@@ -95,7 +95,7 @@ $useGuest = $this->app->user->account == 'guest';
             <?php if($hasHeading):?>
             </div>
             <?php endif;?>
-            <div class='panel-body conatiner-fluid'><?php echo $this->fetch('block', 'printBlock', "id=$block->id")?></div>
+            <?php echo $this->fetch('block', 'printBlock', "id=$block->id&module=$module")?>
           </div>
         </div>
       </div>
