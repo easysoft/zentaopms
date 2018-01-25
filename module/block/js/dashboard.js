@@ -7,14 +7,21 @@
  */
 function deleteBlock(index)
 {
-    $.getJSON(createLink('block', 'delete', 'index=' + index + '&module=' + module), function(data)
-    {   
-        if(data.result != 'success')
-        {   
-            alert(data.message);
-            return false;
-        }
-    })  
+    if(confirm(config.confirmRemoveBlock))
+    {
+        $.getJSON(createLink('block', 'delete', 'index=' + index + '&module=' + module), function(data)
+        {
+            if(data.result != 'success')
+            {
+                alert(data.message);
+                return false;
+            }
+            else
+            {
+                $('#block' + index).remove();
+            }
+        });
+    }
 }
 
 /**

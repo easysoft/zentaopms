@@ -15,7 +15,7 @@
 <?php $projectboxId = 'projectbox-' . rand(); ?>
 <?php $longBlock = $block->grid >= 6;?>
 <div id='<?php echo $projectboxId ?>'>
-  <table class='table table-borderless table-fixed block-project'>
+  <table class='table table-borderless table-hover table-fixed block-project'>
     <thead>
       <tr class='text-center'>
         <th class='text-left'><?php echo $lang->project->name;?></th>

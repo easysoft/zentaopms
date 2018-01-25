@@ -20,7 +20,7 @@
     <div class='w-240px'>
       <div class='input-group'>
         <span class='input-group-addon'><?php echo $lang->block->grid;?></span>
-        <?php echo html::select('grid', $config->block->gridOptions, $block ? $block->grid : 4, "class='form-control'")?>
+        <?php echo html::select('grid', $lang->block->gridOptions, $block ? $block->grid : 8, "class='form-control'")?>
         <div class='input-group-btn block'>
           <?php $btn = isset($block->params->color) ? 'btn-' . $block->params->color : 'btn-default'?>
           <button type='button' class="btn <?php echo $btn;?> dropdown-toggle" data-toggle='dropdown'>

@@ -46,7 +46,7 @@ $lang->block->params->value = 'Value';
 $lang->block->createBlock        = 'Add';
 $lang->block->editBlock          = 'Edit';
 $lang->block->ordersSaved        = 'Order is saved.';
-$lang->block->confirmRemoveBlock = 'Do you want to remove Block【{0}】?';
+$lang->block->confirmRemoveBlock = 'Do you want to remove Block?';
 $lang->block->closeForever       = 'Permanent Close';
 $lang->block->confirmClose       = 'Do you want to permanently close this block? Once done, it is not available to anyone. It can be activiated at Admin->Custom.';
 $lang->block->remove             = 'Remove';
@@ -323,6 +323,9 @@ $lang->block->welcomeList['06:00'] = 'Good morning, %s';
 $lang->block->welcomeList['11:30'] = 'Good noon, %s';
 $lang->block->welcomeList['13:30'] = 'Good afternoon, %s';
 $lang->block->welcomeList['19:00'] = 'Good evening, %s';
+
+$lang->block->gridOptions[8] = 'Left';
+$lang->block->gridOptions[4] = 'Right';
 
 $lang->block->flowchart   = array();
 $lang->block->flowchart[] = array('Administration',   'Manage a Company', 'Add Users', 'Maintain Privileges');

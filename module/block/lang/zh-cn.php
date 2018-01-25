@@ -13,7 +13,7 @@ $lang->block = new stdclass();
 $lang->block->common = '区块';
 $lang->block->name   = '区块名称';
 $lang->block->style  = '外观';
-$lang->block->grid   = '宽度';
+$lang->block->grid   = '位置';
 $lang->block->color  = '颜色';
 
 $lang->block->account  = '所属用户';
@@ -48,7 +48,7 @@ $lang->block->params->value = '参数值';
 $lang->block->createBlock        = '添加区块';
 $lang->block->editBlock          = '编辑区块';
 $lang->block->ordersSaved        = '排序已保存';
-$lang->block->confirmRemoveBlock = '确定移除区块【{0}】吗？';
+$lang->block->confirmRemoveBlock = '确定移除区块吗？';
 $lang->block->closeForever       = '永久关闭';
 $lang->block->confirmClose       = '确定永久关闭该区块吗？闭后所有人都将无法使用该区块，可以在后台自定义中打开';
 $lang->block->remove             = '移除';
@@ -325,6 +325,9 @@ $lang->block->welcomeList['06:00'] = '%s，早上好！';
 $lang->block->welcomeList['11:30'] = '%s，中文好！';
 $lang->block->welcomeList['13:30'] = '%s，下午好！';
 $lang->block->welcomeList['19:00'] = '%s，晚上好！';
+
+$lang->block->gridOptions[8] = '左侧';
+$lang->block->gridOptions[4] = '右侧';
 
 $lang->block->flowchart   = array();
 $lang->block->flowchart[] = array('管理员',   '维护公司', '添加用户', '维护权限');

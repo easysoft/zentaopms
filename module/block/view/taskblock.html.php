@@ -13,7 +13,7 @@
 <style>
 td.delayed{background: #e84e0f!important; color: white;}
 </style>
-<table class='table tablesorter table-data table-hover block-task table-fixed'>
+<table class='table table-borderless table-hover table-fixed block-task'>
   <thead>
   <tr>
     <th width='50'><?php echo $lang->idAB?></th>

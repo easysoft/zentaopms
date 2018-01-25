@@ -76,7 +76,7 @@ function setSearchBox()
 function shortcut()
 {
     objectType  = $('#searchType').attr('value');
-    objectValue = $('#searchQuery').attr('value');
+    objectValue = $("input[name='searchQuery']").attr('value');
     if(objectType && objectValue)
     {
         method = objectType == 'testsuite' ? 'library' : 'view';
