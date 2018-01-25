@@ -39,6 +39,3 @@ td.delayed{background: #e84e0f!important; color: white;}
   </tr>
   <?php endforeach;?>
 </table>
-<script>
-if(typeof(dataTable) == 'function')$('.block-task').dataTable();
-</script>

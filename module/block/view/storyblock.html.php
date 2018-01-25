@@ -36,6 +36,3 @@
   </tr>
   <?php endforeach;?>
 </table>
-<script>
-if(typeof(dataTable) == 'function')$('.block-story').dataTable();
-</script>

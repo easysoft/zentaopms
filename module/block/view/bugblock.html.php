@@ -34,6 +34,3 @@
   </tr>
   <?php endforeach;?>
 </table>
-<script>
-if(typeof(dataTable) == 'function')$('.block-bug').dataTable();
-</script>

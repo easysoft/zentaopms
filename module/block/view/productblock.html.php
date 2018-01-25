@@ -42,6 +42,3 @@
     <?php endforeach;?>
   </tbody>
 </table>
-<script>
-if(typeof(dataTable) == 'function')$('.block-product').dataTable();
-</script>

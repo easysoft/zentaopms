@@ -317,7 +317,7 @@ class block extends control
             $this->get->set('module', $block->module);
             $this->get->set('source', $block->source);
             $this->get->set('blockid', $block->block);
-            $this->get->set('param',base64_encode(json_encode($block->params)));
+            $this->get->set('param', base64_encode(json_encode($block->params)));
             $html = $this->fetch('block', 'main', "module={$block->source}&id=$id");
         }
         elseif($block->block == 'dynamic')
@@ -406,6 +406,7 @@ class block extends control
             $this->params      = $params;
             $this->view->code  = $this->get->blockid;
             $this->view->title = $this->get->blockTitle;
+            $this->view->block = $this->block->getByID($id);
 
             $func = 'print' . ucfirst($code) . 'Block';
             if(method_exists('block', $func))

@@ -32,6 +32,3 @@
   </tr>
   <?php endforeach;?>
 </table>
-<script>
-if(typeof(dataTable) == 'function')$('.block-build').dataTable();
-</script>
