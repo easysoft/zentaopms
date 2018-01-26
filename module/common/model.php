@@ -515,7 +515,7 @@ class commonModel extends model
         }
         foreach($position as $key => $link)
         {
-            echo '<li>' . $link . '</li>';
+            echo "<li class='active'>" . $link . '</li>';
         }
         echo '</ul>';
     }

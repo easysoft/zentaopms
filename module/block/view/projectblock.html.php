@@ -15,7 +15,7 @@
 <?php $projectboxId = 'projectbox-' . rand(); ?>
 <?php $longBlock = $block->grid >= 6;?>
 <div id='<?php echo $projectboxId ?>'>
-  <table class='table table-borderless table-hover table-fixed block-project'>
+  <table class='table table-borderless table-hover table-fixed block-projects'>
     <thead>
       <tr class='text-center'>
         <th class='text-left'><?php echo $lang->project->name;?></th>
@@ -53,7 +53,7 @@
         <td><?php echo $project->hours->totalLeft;?></td>
         <?php endif;?>
         <td>
-          <div class="progress-text-left">
+          <div class="progress progress-text-left">
             <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
             <span class="progress-text"><?php echo $project->hours->progress;?>%</span>
             </div>
