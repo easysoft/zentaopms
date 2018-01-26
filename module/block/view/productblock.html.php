@@ -10,17 +10,26 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php $longBlock = $block->grid >= 6;?>
 <table class='table table-borderless table-hover table-fixed block-product'>
   <thead>
     <tr class='text-center'>
       <th class='text-left'><?php echo $lang->product->name;?></th>
-      <th width='65' title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['active'];?></th>
+      <?php if(!$longBlock):?>
       <th width='65' title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['changed'];?></th>
-      <th width='65' title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['draft'];?></th>
+      <?php endif;?>
+      <?php if($longBlock):?>
       <th width='65'><?php echo $lang->product->plans;?></th>
-      <th width='70'><?php echo $lang->product->releases;?></th>
-      <th width='95' title='<?php echo $lang->bug->common;?>'><?php echo $lang->product->bugs;?></th>
-      <th width='95' title='<?php echo $lang->bug->common;?>'><?php echo $lang->bug->unResolved;?></th>
+      <?php endif;?>
+      <th width='65'><?php echo $lang->product->releases;?></th>
+      <?php if($longBlock):?>
+      <th width='150'><?php echo $lang->product->currentProject;?></th>
+      <th width='65' title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['active'];?></th>
+      <?php endif;?>
+      <?php if(!$longBlock):?>
+      <th width='80' title='<?php echo $lang->bug->common;?>'><?php echo $lang->product->bugs;?></th>
+      <?php endif;?>
+      <th width='65' title='<?php echo $lang->bug->common;?>'><?php echo $lang->bug->unResolved;?></th>
     </tr>
   </thead>
   <tbody>
@@ -31,12 +40,20 @@
     ?>
     <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
       <td class='text-left' title='<?php echo $product->name?>'><?php echo $product->name?></td>
-      <td><?php echo $product->stories['active']?></td>
+      <?php if(!$longBlock):?>
       <td><?php echo $product->stories['changed']?></td>
-      <td><?php echo $product->stories['draft']?></td>
+      <?php endif;?>
+      <?php if($longBlock):?>
       <td><?php echo $product->plans?></td>
+      <?php endif;?>
       <td><?php echo $product->releases?></td>
+      <?php if($longBlock):?>
+      <td class='text-left'><?php echo zget($projects, $product->id, '');?></td>
+      <td><?php echo $product->stories['active']?></td>
+      <?php endif;?>
+      <?php if(!$longBlock):?>
       <td><?php echo $product->bugs?></td>
+      <?php endif;?>
       <td><?php echo $product->unResolved?></td>
     </tr> 
     <?php endforeach;?>

@@ -43,6 +43,7 @@ $lang->product->doc      = '文档列表';
 $lang->product->project  = $lang->projectCommon . '列表';
 $lang->product->build    = '版本列表';
 
+$lang->product->currentProject   = '当前项目';
 $lang->product->activeStories    = '激活需求';
 $lang->product->changedStories   = '已变更需求';
 $lang->product->draftStories     = '草稿需求';
