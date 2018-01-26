@@ -16,10 +16,13 @@
       <h4><?php printf($lang->block->welcomeList[$welcomeType], $app->user->realname)?></h4>
       <ul class="timeline timeline-sm">
         <?php
+        $i = 1;
         foreach($lang->tutorial->tasks as $taskKey => $task)
         {
+            if($i > 3) break;
             $class = strpos(",$tutorialed,", ",$taskKey,") !== false ? "class='active'" : '';
-            echo "<li $class>" . html::a($this->createLink('tutorial', 'index', "referer=&task=$taskKey"), $task['title']) . "</li>";
+            echo "<li $class>" . html::a($this->createLink('tutorial', 'index', "referer=&task=$taskKey"), $i . '. ' . $task['title']) . "</li>";
+            $i++;
         }
         ?>
       </ul>
