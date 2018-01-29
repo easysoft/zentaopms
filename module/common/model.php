@@ -293,6 +293,7 @@ class commonModel extends model
     public static function printAboutBar()
     {
         global $app, $lang;
+        echo html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'");
         if(!commonModel::isTutorialMode() and $app->user->account != 'guest') echo html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'");
         echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao . $lang->zentaoPMS, '', "class='about iframe' data-width='900' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'");
     }

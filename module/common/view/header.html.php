@@ -50,6 +50,15 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
                 echo '<li>' . html::a($this->createLink($storyModule, $storyMethod), $storyName) . '</li>';
                 list($taskName, $taskModule, $taskMethod) = explode('|', $lang->my->menu->testtask['link']);
                 echo '<li>' . html::a($this->createLink($taskModule, $taskMethod), $taskName) . '</li>';
+                echo "<li class='divider'></li>";
+                echo '<li>' . html::a($this->createLink('user', 'logout'), $lang->logout) . '</li>';
+                echo "<li class='dropdown-submenu left'>";
+                echo "<a href='javascript:;'>" . $lang->lang . "</a><ul class='dropdown-menu'>";
+                foreach ($app->config->langs as $key => $value)
+                {
+                    echo "<li class='lang-option" . ($app->cookie->lang == $key ? " active" : '') . "'><a href='javascript:selectLang(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
+                }
+                echo '</ul></li>';
                 ?>
               </ul>
             </li>
