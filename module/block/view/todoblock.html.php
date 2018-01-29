@@ -10,27 +10,45 @@
  * @link        http://www.ranzhi.org
  */
 ?>
-<table class='table table-borderless table-fixed table-hover block-todo'>
-  <thead>
-  <tr>
-    <th width='90'><?php echo $lang->todo->date?></th>
-    <th width='40'><?php echo $lang->priAB?></th>
-    <th>           <?php echo $lang->todo->name;?></th>
-    <th width='55'><?php echo $lang->todo->beginAB;?></th>
-    <th width='50'><?php echo $lang->todo->endAB;?></th>
-  </tr>
-  </thead>
-  <?php foreach($todos as $id => $todo):?>
-  <?php
-  $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
-  $viewLink = $this->createLink('todo', 'view', "todoID={$todo->id}&from=my");
-  ?>
-  <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-    <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->periods['future'] : $todo->date;?></td>
-    <td><?php echo zget($lang->todo->priList, $todo->pri, $todo->pri)?></td>
-    <td><?php echo $todo->name?></td>
-    <td><?php echo $todo->begin?></td>
-    <td><?php echo $todo->end?></td>
-  </tr>
-  <?php endforeach;?>
-</table>
+<div class='panel-body'>
+  <div class="todoes-input dropdown">
+  <div data-toggle="dropdown"><input type="text" placeholder="<?php echo $lang->todo->lblClickCreate?>" class="form-control"></div>
+    <div class="dropdown-menu">
+      <header>
+      <div class="title"><?php echo $lang->todo->lblClickCreate;?></div>
+      </header>
+    </div>
+  </div>
+  <ul class="todoes">
+    <?php foreach($todos as $id => $todo):?>
+    <?php
+    $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
+    $viewLink = $this->createLink('todo', 'view', "todoID={$todo->id}&from=my");
+    ?>
+    <li data-id='<?php echo $todo->id?>'>
+      <span class="todo-check icon icon-check-circle"></span>
+      <a href="<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink);?>">
+        <span class="todo-title"><?php echo $todo->name;?></span>
+        <span class="todo-pri todo-pri-<?php echo $todo->pri?>"><?php echo zget($lang->todo->priList, $todo->pri);?></span><span class="todo-time"><?php echo date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin;?></span>
+      </a>
+    </li>
+    <?php endforeach;?>
+  </ul>
+</div>
+<script>
+$(function()
+{
+    $('ul.todoes li .todo-check').click(function()
+    {
+        var $liTag     = $(this).closest('li');
+        var isFinished = $liTag.hasClass('active');
+        var todoID     = $liTag.data('id');
+        var methodName = isFinished ? 'activate' : 'finish';
+        $liTag.removeClass('active');
+        $.get(createLink('todo', methodName, "todoID=" + todoID), function()
+        {
+            if(!isFinished) $liTag.addClass('active');
+        });
+    });
+});
+</script>

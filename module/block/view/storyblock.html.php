@@ -10,43 +10,42 @@
  * @link        http://www.ranzhi.org
  */
 ?>
-<?php $longBlock = $block->grid >= 6;?>
-<table class='table table-borderless table-hover table-fixed block-story'>
-  <thead>
-  <tr>
-    <?php if($longBlock):?>
-    <th width='50'><?php echo $lang->idAB?></th>
-    <?php endif;?>
-    <th width='30'><?php echo $lang->priAB?></th>
-    <th>           <?php echo $lang->story->title;?></th>
-    <?php if($longBlock):?>
-    <th width='50'><?php echo $lang->story->estimateAB;?></th>
-    <th width='70'><?php echo $lang->statusAB;?></th>
-    <?php endif;?>
-    <th width='70' class='text-center'><?php echo $lang->story->stageAB;?></th>
-  </tr>
-  </thead>
-  <?php foreach($stories as $story):?>
-  <?php
-  $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
-  $viewLink = $this->createLink('story', 'view', "storyID={$story->id}");
-  ?>
-  <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-    <?php if($longBlock):?>
-    <td class='text-center'><?php echo $story->id;?></td>
-    <?php endif;?>
-    <td class='text-center'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></td>
-    <td style='color: <?php echo $story->color?>' title='<?php echo $story->title?>'><?php echo $story->title?></td>
-    <?php if($longBlock):?>
-    <td class='text-center'><?php echo $story->estimate?></td>
-    <td class='text-left' title='<?php echo zget($lang->story->statusList, $story->status)?>'>
-      <span class="project-status-<?php echo $story->status?>">
-        <span class="label label-dot"></span>
-        <?php if($longBlock) echo zget($lang->story->statusList, $story->status);?>
-      </span>
-    </td>
-    <?php endif;?>
-    <td class='text-center'><?php echo zget($lang->story->stageList, $story->stage, $story->stage);?></td>
-  </tr>
-  <?php endforeach;?>
-</table>
+<div class='panel-body has-table'>
+  <table class='table table-borderless table-hover table-fixed-head block-stories'>
+    <thead>
+    <tr>
+      <th class="c-id w-80px"><?php echo $lang->idAB?></th>
+      <th class="c-pri w-40px"><?php echo $lang->priAB?></th>
+      <th class="c-name"><?php echo $lang->story->title;?></th>
+      <?php if($longBlock):?>
+      <th width='50'><?php echo $lang->story->estimateAB;?></th>
+      <?php endif;?>
+      <th class="c-status w-80px"><?php echo $lang->statusAB;?></th>
+      <?php if($longBlock):?>
+      <th class='c-stage w-80px'><?php echo $lang->story->stageAB;?></th>
+      <?php endif;?>
+    </tr>
+    </thead>
+    <?php foreach($stories as $story):?>
+    <?php
+    $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
+    $viewLink = $this->createLink('story', 'view', "storyID={$story->id}");
+    ?>
+    <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
+      <td class="c-id"><?php echo $story->id;?></td>
+    <?php $pri = zget($lang->story->priList, $story->pri, $story->pri);?>
+      <td class="c-pri"><span class="label-pri label-pri-<?php echo $pri?>"><?php echo $pri?></span></td>
+      <td class="c-name" style='color: <?php echo $story->color?>' title='<?php echo $story->title?>'><?php echo $story->title?></td>
+      <?php if($longBlock):?>
+      <td class='text-center'><?php echo $story->estimate?></td>
+      <?php endif;?>
+      <td class='text-left c-status' title='<?php echo zget($lang->story->statusList, $story->status)?>'>
+        <?php echo zget($lang->story->statusList, $story->status);?>
+      </td>
+      <?php if($longBlock):?>
+      <td class='text-center c-stage'><?php echo zget($lang->story->stageList, $story->stage, $story->stage);?></td>
+      <?php endif;?>
+    </tr>
+    <?php endforeach;?>
+  </table>
+</div>

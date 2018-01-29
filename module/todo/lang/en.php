@@ -90,6 +90,7 @@ $lang->todo->confirmDelete  = "Are you sure to delete this Todo?";
 $lang->todo->thisIsPrivate  = 'This is a private Todo';
 $lang->todo->lblDisableDate = 'Set later.';
 $lang->todo->lblBeforeDays  = "%s early in advance to be done";
+$lang->todo->lblClickCreate = "Clict to add todo";
 $lang->todo->noTodo         = 'No this type of Todo.';
 $lang->todo->noAssignedTo   = "The AssignedTo user can't be empty.";
 

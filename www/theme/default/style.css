@@ -378,7 +378,6 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 /* Background */
 
 /* Header */
-.container-fixed{width:100%;}
 #extraNav .dropdown .dropdown-menu li {text-align:center;}
 #extraNav .dropdown .dropdown-menu li a{width:100%;color:rgb(60, 67, 83);}
 #extraNav .dropdown .dropdown-menu li a:hover{color:#fff;}

@@ -233,8 +233,15 @@ class block extends control
             {
                 $block->moreLink = $this->createLink('company', 'dynamic');
             }
-            if($block->grid >= 6) $longBlocks[$key]  = $block;
-            if($block->grid < 6)  $shortBlocks[$key] = $block;
+
+            if($this->block->isLongBlock($block))
+            {
+                $longBlocks[$key] = $block;
+            }
+            else
+            {
+                $shortBlocks[$key] = $block;
+            }
         }
 
         $this->view->longBlocks  = $longBlocks;
@@ -402,11 +409,13 @@ class block extends control
                 $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
             }
 
+            $block = $this->block->getByID($id);
+            $this->view->longBlock = $this->block->isLongBlock($block);
+
             $this->viewType    = (isset($params->viewType) and $params->viewType == 'json') ? 'json' : 'html';
             $this->params      = $params;
             $this->view->code  = $this->get->blockid;
             $this->view->title = $this->get->blockTitle;
-            $this->view->block = $this->block->getByID($id);
 
             $func = 'print' . ucfirst($code) . 'Block';
             if(method_exists('block', $func))

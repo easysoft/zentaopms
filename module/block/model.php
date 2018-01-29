@@ -457,4 +457,16 @@ class blockModel extends model
         $params->num['control'] = 'input';
         return $params;
     }
+
+    /**
+     * Check whether long block.
+     * 
+     * @param  object    $block 
+     * @access public
+     * @return book
+     */
+    public function isLongBlock($block)
+    {
+        return $block->grid >= 6;
+    }
 }

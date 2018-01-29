@@ -1,5 +1,5 @@
 /*!
- * ZUI: Zentao template - v1.8.1 - 2018-01-22
+ * ZUI: Zentao template - v1.8.1 - 2018-01-27
  * http://zui.sexy
  * GitHub: https://github.com/easysoft/zui.git 
  * Copyright (c) 2018 cnezsoft.com; Licensed MIT
@@ -2565,11 +2565,11 @@ input[type="button"].btn-block {
     }
   }
 .progress {
-  height: 20px;
+  height: 6px;
   margin-bottom: 20px;
   overflow: hidden;
-  background-color: #eee;
-  border-radius: 4px;
+  background-color: #f2f3f6;
+  border-radius: 3px;
   }
 .progress-bar {
   float: left;
@@ -2579,6 +2579,7 @@ input[type="button"].btn-block {
   color: #fff;
   text-align: center;
   background-color: #006af1;
+  border-radius: 3px;
   -webkit-transition: width .6s ease;
        -o-transition: width .6s ease;
           transition: width .6s ease;
@@ -2926,7 +2927,7 @@ input[type="number"]::-webkit-inner-spin-button {
   color: #3c4353;
   vertical-align: middle;
   background-color: #fff;
-  border: 1px solid #ccc;
+  border: 1px solid #e8e9ee;
   border-radius: 4px;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
           box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
@@ -3977,7 +3978,7 @@ input:placeholder-shown + .search-icon + .search-clear-btn {
   color: #3c4353;
   text-align: center;
   background-color: #eee;
-  border: 1px solid #ccc;
+  border: 1px solid #e8e9ee;
   border-radius: 4px;
   }
 .input-group-addon input[type="radio"],
@@ -6999,6 +7000,32 @@ a .icon-spin {
 .project-status-suspended > .label-dot {
   background-color: #fdc137;
   }
+.label-pri {
+  display: inline-block;
+  min-width: 20px;
+  height: 20px;
+  line-height: 20px;
+  color: #a6aab8;
+  text-align: center;
+  background-color: #f0f2f5;
+  border-radius: 10px;
+  }
+.label-pri-1 {
+  color: #fff;
+  background: #51a1ff;
+  }
+.label-pri-2 {
+  color: #fff;
+  background: #72b3ff;
+  }
+.label-pri-3 {
+  color: #fff;
+  background: #98c8ff;
+  }
+.label-pri-4 {
+  color: #fff;
+  background: #c4dfff;
+  }
 .panel {
   position: relative;
   margin-bottom: 20px;
@@ -7010,6 +7037,12 @@ a .icon-spin {
   }
 .panel-body {
   padding: 20px;
+  }
+.panel-body.has-table {
+  padding: 10px;
+  }
+.panel-body.has-table .table {
+  margin-bottom: 0;
   }
 .panel-heading {
   padding: 18px 20px;
@@ -7043,8 +7076,23 @@ a .icon-spin {
   text-decoration: initial;
   background-color: #f1f1f1;
   }
-.panel > .table-borderless {
-  margin: 0 10px 10px;
+.progress-text-left {
+  position: relative;
+  margin: 7px 0;
+  margin-left: 35px;
+  overflow: visible;
+  }
+.progress-text-left .progress-text {
+  position: absolute;
+  top: -7px;
+  left: -35px;
+  display: block;
+  width: 35px;
+  height: 20px;
+  padding-right: 5px;
+  line-height: 20px;
+  color: #a6aab8;
+  text-align: right;
   }
 .tile {
   text-align: center;
@@ -7395,6 +7443,9 @@ a .icon-spin {
   font-size: 12px;
   font-weight: normal;
   }
+.block-dynamic .timeline {
+  margin: 0;
+  }
 .block-flowchart {
   padding: 10px;
   }
@@ -7479,19 +7530,107 @@ a .icon-spin {
   text-align: right;
   }
 .block-projects .c-progress {
-  width: 140px;
+  width: 155px;
   }
 .block-projects .c-spark {
-  width: 100px;
+  width: 120px;
+  padding: 0;
   }
-.block-projects .progress {
-  margin: 0;
+.block-stories .c-id {
+  color: #a6aab8;
+  }
+.block-stories .c-pri {
+  text-align: center;
+  }
+.block-stories .c-status {
+  color: #a6aab8;
+  }
+.block-todoes {
+  margin-top: 10px;
+  }
+.block-todoes .panel-body {
+  position: relative;
+  padding-top: 42px;
+  }
+.block-todoes .todoes-input {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  left: 20px;
+  }
+.block-todoes .todoes-input .form-control::-webkit-input-placeholder {
+  font-size: 12px;
+  line-height: 20px;
+  color: #a4a8b6;
+  }
+.block-todoes .todoes-input .form-control::-moz-placeholder {
+  font-size: 12px;
+  line-height: 20px;
+  color: #a4a8b6;
+  }
+.block-todoes .todoes-input .form-control:-ms-input-placeholder {
+  font-size: 12px;
+  line-height: 20px;
+  color: #a4a8b6;
+  }
+.block-todoes .todoes-input .form-control::placeholder {
+  font-size: 12px;
+  line-height: 20px;
+  color: #a4a8b6;
+  }
+.block-todoes .todoes {
+  padding-left: 0;
+  }
+.block-todoes .todoes > li {
+  position: relative;
+  padding: 5px 0 5px 25px;
+  list-style: none;
+  }
+.block-todoes .todo-title {
+  display: block;
+  padding: 5px;
+  }
+.block-todoes .todo-pri {
+  display: inline-block;
+  padding: 0 5px;
+  font-size: 12px;
+  color: #838a9d;
+  }
+.block-todoes .todo-pri-1 {
+  color: #ff5d5d;
+  }
+.block-todoes .todo-time {
+  display: inline-block;
+  padding: 0 5px;
+  font-size: 12px;
+  color: #a6aab8;
+  }
+.block-todoes .todo-check {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  display: block;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  color: transparent;
+  cursor: pointer;
+  border: 2px solid #eee;
+  border-radius: 50%;
+  }
+.block-todoes .todo-check:hover {
+  border-color: #a6aab8;
+  }
+.block-todoes .active > .todo-check {
+  color: #00da88;
+  border: none;
   }
 #footer {
   position: fixed;
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: 1100;
   height: 40px;
   background: #fff;
   border-top: 1px solid #eff1f7;
