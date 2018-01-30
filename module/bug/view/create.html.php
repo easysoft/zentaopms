@@ -165,7 +165,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
                 $hasCustomSeverity = false;
                 foreach($lang->bug->severityList as $severityKey => $severityValue)
                 {
-                    if($severityKey != $severityValue)
+                    if($severityKey != $severityValue or strlen($severityKey) != strlen($severityValue))
                     {
                         $hasCustomSeverity = true;
                         break;
@@ -190,7 +190,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
                 $hasCustomPri = false;
                 foreach($lang->bug->priList as $priKey => $priValue)
                 {
-                    if($priKey != $priValue)
+                    if($priKey != $priValue or strlen($priKey) != strlen($priValue))
                     {
                         $hasCustomPri = true;
                         break;

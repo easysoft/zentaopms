@@ -113,14 +113,14 @@
                 $hasCustomPri = false;
                 foreach($lang->story->priList as $priKey => $priValue)
                 {
-                    if($priKey != $priValue)
+                    if($priKey != $priValue or strlen($priKey) != strlen($priValue))
                     {
                         $hasCustomPri = true;
                         break;
                     }
                 }
                 ?>
-                <?php if(!$hasCustomPri):?>
+                <?php if($hasCustomPri):?>
                 <?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='form-control minw-80px chosen'");?> 
                 <?php else: ?>
                 <div class='input-group-btn dropdown-pris' data-set='0,1,2,3,4'>
