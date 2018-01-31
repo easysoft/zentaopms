@@ -228,7 +228,7 @@ class commonModel extends model
      * @access public
      * @return void
      */
-    public static function printTopBar()
+    public static function printUserBar()
     {
         global $lang, $app;
 
@@ -236,11 +236,12 @@ class commonModel extends model
         {
             $isGuest = $app->user->account == 'guest';
 
-            echo "<div class='dropdown' style='display:inline-block;margin-right:5px'>";
-            echo "<a href='javascript:;' data-toggle='dropdown'><i class='icon-user'></i> " . $app->user->realname . " <span class='caret'></span></a>";
-
-            echo "<ul class='dropdown-menu'>";
-
+            echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
+            echo "<div class='avatar avatar-sm bg-info avatar-circle'>" . strtoupper($app->user->account{0}) . '</div>';
+            echo "<span class='user-name'>" . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</span>';
+            echo "<span class='caret'></span>";
+            echo '</a>';
+            echo "<ul class='dropdown-menu pull-right'>";
             if(!$isGuest)
             {
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
@@ -249,24 +250,24 @@ class commonModel extends model
                 echo "<li class='divider'></li>";
             }
 
-            echo "<li class='dropdown-submenu left'>";
-            echo "<a href='javascript:;'>" . $lang->theme . "</a><ul class='dropdown-menu'>";
-            foreach ($app->lang->themes as $key => $value)
+            echo "<li class='dropdown-submenu'>";
+            echo "<a href='javascript:;'>" . $lang->theme . "</a><ul class='dropdown-menu pull-left'>";
+            foreach($app->lang->themes as $key => $value)
             {
-                echo "<li class='theme-option" . ($app->cookie->theme == $key ? " active" : '') . "'><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
+                echo "<li><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . ($app->cookie->theme == $key ? '<i class="icon icon-check-circle text-success"></i>' : '') . "</a></li>";
             }
             echo '</ul></li>';
 
-            echo "<li class='dropdown-submenu left'>";
-            echo "<a href='javascript:;'>" . $lang->lang . "</a><ul class='dropdown-menu'>";
+            echo "<li class='dropdown-submenu'>";
+            echo "<a href='javascript:;'>" . $lang->lang . "</a><ul class='dropdown-menu pull-left'>";
             foreach ($app->config->langs as $key => $value)
             {
-                echo "<li class='lang-option" . ($app->cookie->lang == $key ? " active" : '') . "'><a href='javascript:selectLang(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
+                echo "<li><a href='javascript:selectLang(\"$key\");'>" . $value . ($app->cookie->lang == $key ? ' <i class="icon icon-check-circle text-success"></i>' : '') . "</a></li>";
             }
             echo '</ul></li>';
 
-            echo '</ul></div>';
-
+            echo '<li class="divider"></li>';
+            echo '<li>';
             if($isGuest)
             {
                 echo html::a(helper::createLink('user', 'login'), $lang->login);
@@ -275,27 +276,30 @@ class commonModel extends model
             {
                 echo html::a(helper::createLink('user', 'logout'), $lang->logout);
             }
+            echo '</li></ul>';
         }
-
-        if($app->company->website)  echo html::a($app->company->website,  $lang->company->website,  '_blank');
-        if($app->company->backyard) echo html::a($app->company->backyard, $lang->company->backyard, '_blank');
-
-        echo "<div class='dropdown' style='display:inline-block;margin-right:5px'>";
-        echo "<a href='javascript:;' data-toggle='dropdown'>" . $lang->help . " <span class='caret'></span></a>";
-        echo "<ul class='dropdown-menu pull-right'>";
-        echo '<li>' . html::a('javascript:;', $lang->manual, '', "class='open-help-tab'") . '</li>';
-        if(!commonModel::isTutorialMode() and $app->user->account != 'guest') echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . "</li>";
-        echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
-        echo "</ul></div>";
-        echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'");
     }
 
+    /**
+     * Print about bar.
+     * 
+     * @static
+     * @access public
+     * @return void
+     */
     public static function printAboutBar()
     {
         global $app, $lang;
-        echo html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'");
-        if(!commonModel::isTutorialMode() and $app->user->account != 'guest') echo html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'");
-        echo html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao . $lang->zentaoPMS, '', "class='about iframe' data-width='900' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'");
+        echo "<ul id='extraNav' class='nav nav-default'>";
+        echo "<li class='dropdown'>";
+        echo "<a data-toggle='dropdown'>" . $lang->help . " <span class='caret'></span></a>";
+        echo "<ul class='dropdown-menu text-left'>";
+        if(!commonModel::isTutorialMode() and $app->user->account != 'guest') echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . "</li>";
+        echo '<li>' . html::a('javascript:;', $lang->manual, '', "class='open-help-tab'") . '</li>';
+        echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
+        echo "</ul></li>";
+        echo '<li>' . html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'") . '</li>';
+        echo '</ul>';
     }
 
     /**
@@ -397,18 +401,19 @@ class commonModel extends model
             if($config->global->flow == 'onlyTask')  $searchObject = 'task';
         }
 
-        echo "<div class='input-group input-group-sm' id='searchbox'>";
-        echo "<div class='input-group-btn' id='typeSelector'>";
-        echo "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span id='searchTypeName'>" . $lang->searchObjects[$searchObject] . "</span> <span class='caret'></span></button>";
+        echo "<div class='input-control search-box search-box-circle has-icon-right has-label-left' id='searchbox'>";
+        echo "<div class='input-control-label-left dropdown'>";
+        echo "<a data-toggle='dropdown'><span id='searchTypeName'>" . $lang->searchObjects[$searchObject] . "</span><span class='caret'></span></a>";
         echo html::hidden('searchType', $searchObject);
-        echo "<ul class='dropdown-menu'>";
+        echo "<ul class='dropdown-menu' id='searchTypeMenu'>";
         foreach ($lang->searchObjects as $key => $value)
         {
-            echo "<li><a href='javascript:;' data-value='{$key}'>{$value}</a></li>";
+            $class = $key == $searchObject ? "class='selected'" : '';
+            echo "<li $class><a href='javascript:;' data-value='{$key}'>{$value}</a></li>";
         }
         echo '</ul></div>';
-        echo "<input type='search' name='searchQuery' id='searchInput' onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) shortcut()' class='form-control' placeholder='" . $lang->searchTips . "'/>";
-        echo "<a href='javascript:shortcut();' class='input-control-icon-right'><i class='icon icon-search'></i></a>";
+        echo "<input type='search' id='searchInput' onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) shortcut()' class='form-control search-input' placeholder='" . $lang->searchTips . "'/>";
+        echo "<a href='javascript:shortcut();' class='input-control-icon-right'><i class='icon icon-up-circle icon-rotate-90'></i></a>";
         echo "</div>\n";
     }
 
@@ -1208,7 +1213,7 @@ class commonModel extends model
         // limited project
         $limitedProject = false;
         if(!empty($module) && $module == 'task' && !empty($object->project) or
-           !empty($module) && $module == 'project' && !empty($object->id))
+            !empty($module) && $module == 'project' && !empty($object->id))
         {
             $objectID = '';
             if(!empty($object->id)) $objectID = $object->id;
@@ -1228,14 +1233,14 @@ class commonModel extends model
         if(is_null($object)) return true;
 
         if(!empty($object->openedBy)     && $object->openedBy     == $app->user->account or
-           !empty($object->addedBy)      && $object->addedBy      == $app->user->account or
-           !empty($object->assignedTo)   && $object->assignedTo   == $app->user->account or
-           !empty($object->finishedBy)   && $object->finishedBy   == $app->user->account or
-           !empty($object->canceledBy)   && $object->canceledBy   == $app->user->account or
-           !empty($object->closedBy)     && $object->closedBy     == $app->user->account or
-           !empty($object->lastEditedBy) && $object->lastEditedBy == $app->user->account)
+            !empty($object->addedBy)      && $object->addedBy      == $app->user->account or
+            !empty($object->assignedTo)   && $object->assignedTo   == $app->user->account or
+            !empty($object->finishedBy)   && $object->finishedBy   == $app->user->account or
+            !empty($object->canceledBy)   && $object->canceledBy   == $app->user->account or
+            !empty($object->closedBy)     && $object->closedBy     == $app->user->account or
+            !empty($object->lastEditedBy) && $object->lastEditedBy == $app->user->account)
         {
-           return true;
+            return true;
         }
 
         return false;
@@ -1496,13 +1501,13 @@ class commonModel extends model
         if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
 
         $fh = @fopen($logFile, 'a');
-		if($fh)
-		{
-			fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
-			fwrite($fh, "url:    " . $url . "\n");
-			fwrite($fh, "results:" . print_r($response, true) . "\n");
-			fclose($fh);
-		}
+        if($fh)
+        {
+            fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
+            fwrite($fh, "url:    " . $url . "\n");
+            fwrite($fh, "results:" . print_r($response, true) . "\n");
+            fclose($fh);
+        }
 
         return $response;
     }

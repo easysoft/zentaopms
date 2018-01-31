@@ -374,20 +374,6 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 .progressbar {display: inline-block; height: 16px; background: #229F24; position: relative; top: -1px}
 
 /* === Layout === */
-/* Background */
-
-/* Header */
-#extraNav .dropdown .dropdown-menu li {text-align:center;}
-#extraNav .dropdown .dropdown-menu li a{width:100%;color:rgb(60, 67, 83);}
-#extraNav .dropdown .dropdown-menu li a:hover{color:#fff;}
-
-#searchbox{width:160px;}
-#searchbox .form-control, #searchbox .btn {padding: 2px 5px; line-height: 20px; height: 24px;border-top: 0; border-bottom: 0; float: left; display: block;}
-#typeSelector .btn{padding-left: 10px; border-right: none}
-#objectSwitcher .btn{padding-right: 10px; margin-left: -1px\0;}
-#searchbox .dropdown-menu {margin-top: -1px; width: 212px; padding: 0;}
-#searchbox .dropdown-menu > li {float: left; width: 105px; border-bottom: 1px dotted #ddd; border-right: 1px dotted #ddd}
-
 /* Module menu. */
 #modulemenu {background-color: #e5e5e5; margin: 0 -20px; padding: 0 20px; font-size: 14px; position: relative; height: 40px;}
 #modulemenu .nav > li {line-height: 30px; padding:5px 0px 1px;display: block; float: left; color: #808080}

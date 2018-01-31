@@ -57,11 +57,11 @@ function createLink(moduleName, methodName, vars, viewType, isOnlyBody)
  */
 function setSearchBox()
 {
-    $('#typeSelector a').click(function()
+    $('#searchTypeMenu a').click(function()
     {
-        $('#typeSelector li.active').removeClass('active');
+        $('#searchTypeMenu li.selected').removeClass('selected');
         var $this = $(this);
-        $this.closest('li').addClass('active');
+        $this.closest('li').addClass('selected');
         $("#searchType").val($this.data('value'));
         $("#searchTypeName").text($this.text());
     });
@@ -76,7 +76,7 @@ function setSearchBox()
 function shortcut()
 {
     objectType  = $('#searchType').attr('value');
-    objectValue = $("input[name='searchQuery']").attr('value');
+    objectValue = $("input#searchInput").attr('value');
     if(objectType && objectValue)
     {
         method = objectType == 'testsuite' ? 'library' : 'view';

@@ -24,44 +24,13 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
       </hrgroup>
       <nav id='navbar'><?php commonModel::printMainmenu($this->moduleName);?></nav>
       <div id='toolbar'>
-        <div id="extraNav">
-          <?php //common::printTopBar();?>
-          <?php common::printAboutBar();?>
-        </div>
+        <?php common::printAboutBar();?>
         <div id="userMenu">
           <?php common::printSearchBox();?>
           <ul id="userNav" class="nav nav-default">
             <?php list($adminName, $adminModule, $adminMethod) = explode('|', $lang->adminMenu);?>
             <li><?php echo html::a($this->createLink($adminModule, $adminMethod), $adminName);?></li>
-            <li><?php echo '<a>通知</a>';?></li>
-            <li>
-              <a class="dropdown-toggle" data-toggle="dropdown">
-                <div class="avatar avatar-sm bg-info avatar-circle"><?php echo strtoupper($app->user->account{0})?></div>
-                <span class="user-name"><?php echo empty($app->user->realname) ? $app->user->account : $app->user->realname;?></span>
-                <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                <?php
-                list($taskName, $taskModule, $taskMethod) = explode('|', $lang->my->menu->task['link']);
-                echo '<li>' . html::a($this->createLink($taskModule, $taskMethod), $taskName) . '</li>';
-                list($bugName, $bugModule, $bugMethod) = explode('|', $lang->my->menu->bug['link']);
-                echo '<li>' . html::a($this->createLink($bugModule, $bugMethod), $bugName) . '</li>';
-                list($storyName, $storyModule, $storyMethod) = explode('|', $lang->my->menu->story['link']);
-                echo '<li>' . html::a($this->createLink($storyModule, $storyMethod), $storyName) . '</li>';
-                list($taskName, $taskModule, $taskMethod) = explode('|', $lang->my->menu->testtask['link']);
-                echo '<li>' . html::a($this->createLink($taskModule, $taskMethod), $taskName) . '</li>';
-                echo "<li class='divider'></li>";
-                echo '<li>' . html::a($this->createLink('user', 'logout'), $lang->logout) . '</li>';
-                echo "<li class='dropdown-submenu left'>";
-                echo "<a href='javascript:;'>" . $lang->lang . "</a><ul class='dropdown-menu'>";
-                foreach ($app->config->langs as $key => $value)
-                {
-                    echo "<li class='lang-option" . ($app->cookie->lang == $key ? " active" : '') . "'><a href='javascript:selectLang(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
-                }
-                echo '</ul></li>';
-                ?>
-              </ul>
-            </li>
+            <li><?php common::printUserBar();?></li>
           </ul>
         </div>
       </div>
