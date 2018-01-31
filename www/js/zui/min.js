@@ -1,5 +1,5 @@
 /*!
- * ZUI: Zentao template - v1.8.1 - 2018-01-30
+ * ZUI: Zentao template - v1.8.1 - 2018-01-31
  * http://zui.sexy
  * GitHub: https://github.com/easysoft/zui.git 
  * Copyright (c) 2018 cnezsoft.com; Licensed MIT
@@ -10885,7 +10885,7 @@
             var $block = $(this);
             var $form = $block.find('form');
             var $titleInput = $form.find('[name="title"]');
-            var $startInput = $form.find('[name="start"]');
+            var $startInput = $form.find('[name="begin"]');
             var $endInput = $form.find('[name="end"]');
             var toggleForm = function(toggle) {
                 if (toggle === undefined) {
@@ -10899,7 +10899,7 @@
 
             var updateEndInput = function() {
                 var startVal = $startInput.val();
-                $block.find('.hide-empty-start').toggleClass('hide', !startVal);
+                $block.find('.hide-empty-begin').toggleClass('hide', !startVal);
                 if (startVal) {
                     $endInput.val(convertNumToTime(convertTimeToNum(startVal) + 30));
                 }
@@ -10909,9 +10909,9 @@
                 toggleForm($(this).data('trigger'));
             });
             $startInput.on('change', updateEndInput);
-            updateEndInput();
             initTimeSelect($startInput);
             initTimeSelect($endInput);
+            updateEndInput();
         });
     };
     $(function() {
@@ -10926,6 +10926,7 @@
             type = $searchType.val();
         }
         type = type || 'bug';
+        $searchType.val(type);
         $searchTypeMenu.find('li.selected').removeClass('selected');
         var $typeItem = $searchTypeMenu.find('a[data-value="' + type + '"]');
         var typeText = $typeItem.text();
