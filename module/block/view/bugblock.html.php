@@ -11,16 +11,16 @@
  */
 ?>
 <div class='panel-body has-table'>
-  <table class='table table-borderless table-fixed table-hover block-bug'>
+  <table class='table table-borderless table-fixed table-hover block-bugs <?php if(!$longBlock) echo 'block-sm'?>'>
     <thead>
       <tr>
+        <th class='c-id'><?php echo $lang->idAB?></th>
         <?php if($longBlock):?>
-        <th width='50'><?php echo $lang->idAB?></th>
+        <th class='c-pri'><?php echo $lang->priAB?></th>
         <?php endif;?>
-        <th width='50'><?php echo $lang->priAB?></th>
-        <th>           <?php echo $lang->bug->title;?></th>
-        <th width='50'><?php echo $lang->bug->severityAB?></th>
-        <th width='<?php echo $longBlock ? '90' : '60';?>'><?php echo $lang->bug->statusAB;?></th>
+        <th class='c-level'><?php echo $lang->bug->severityAB?></th>
+        <th class='c-name'><?php echo $lang->bug->title;?></th>
+        <th class='c-status'><?php echo $lang->bug->statusAB;?></th>
       </tr>
     </thead>
     <?php foreach($bugs as $bug):?>
@@ -29,16 +29,16 @@
     $viewLink = $this->createLink('bug', 'view', "bugID={$bug->id}");
     ?>
     <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
+      <td class='c-id'><?php echo $bug->id;?></td>
       <?php if($longBlock):?>
-      <td class='text-center'><?php echo $bug->id;?></td>
+      <td class='c-pri'><span class='label-pri label-pri-<?php echo $bug->pri?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
       <?php endif;?>
-      <td class='text-center'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></td>
-      <td style='color: <?php echo $bug->color?>' title='<?php echo $bug->title?>'><?php echo $bug->title?></td>
-      <td class='text-center'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?></td>
-      <td class='text-left' title='<?php echo zget($lang->bug->statusList, $bug->status)?>'>
-        <span class="project-status-<?php echo $bug->status?>">
+      <td class='c-level'><span class='label-level' data-level='<?php echo zget($lang->bug->severityList, $bug->severity);?>'></span></td>
+      <td class='c-name' style='color: <?php echo $bug->color?>' title='<?php echo $bug->title?>'><?php echo $bug->title?></td>
+      <td class='c-status' title='<?php echo zget($lang->bug->statusList, $bug->status)?>'>
+        <span class="bug-status-<?php echo $bug->status?>">
           <span class="label label-dot"></span>
-          <?php if($longBlock) echo zget($lang->bug->statusList, $bug->status);?>
+          <span class='status-text'><?php echo zget($lang->bug->statusList, $bug->status);?></span>
         </span>
       </td>
     </tr>

@@ -24,7 +24,7 @@ $useGuest = $this->app->user->account == 'guest';
       <?php if(isset($config->block->closed) and strpos(",{$config->block->closed},", ",{$block->source}|{$block->block},") !== false) continue;?>
       <div class='row'>
         <div class='col-sm-12'>
-          <div class='panel block-<?php echo ($block->source == 'todo' and $block->block == 'list') ? 'todoes' : $block->block;?> <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>'>
+          <div class='panel block-<?php echo $block->block;?> <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>'>
             <?php $hasHeading = ($block->block != 'welcome' and $block->block != 'flowchart');?>
             <?php if($hasHeading):?>
             <div class='panel-heading'>
@@ -64,7 +64,7 @@ $useGuest = $this->app->user->account == 'guest';
       <?php if(isset($config->block->closed) and strpos(",{$config->block->closed},", ",{$block->source}|{$block->block},") !== false) continue;?>
       <div class='row'>
         <div class='col-sm-12'>
-          <div class='panel block-<?php echo ($block->source == 'todo' and $block->block == 'list') ? 'todoes' : $block->block;?> <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>'>
+          <div class='panel block-<?php echo $block->block;?> <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>'>
             <?php $hasHeading = ($block->block != 'welcome' and $block->block != 'flowchart');?>
             <?php if($hasHeading):?>
             <div class='panel-heading'>

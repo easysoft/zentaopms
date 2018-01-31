@@ -337,7 +337,7 @@ class block extends control
         }
         elseif($block->block == 'assigntome')
         {
-            $html = $this->fetch('block', 'printAssignToMeBlock');
+            $html = $this->fetch('block', 'printAssignToMeBlock', 'longBlock=' . $this->block->isLongBlock($block));
         }
         elseif($block->block == 'welcome')
         {
@@ -701,7 +701,7 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printAssignToMeBlock()
+    public function printAssignToMeBlock($longBlock = true)
     {
        if(common::hasPriv('todo',  'view')) $hasViewPriv['todo']  = true;
        if(common::hasPriv('story', 'view')) $hasViewPriv['story'] = true;
@@ -771,6 +771,7 @@ class block extends control
         }
 
         $this->view->hasViewPriv = $hasViewPriv;
+        $this->view->longBlock   = $longBlock;
         $this->display();
     }
 

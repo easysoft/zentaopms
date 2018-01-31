@@ -11,19 +11,17 @@
  */
 ?>
 <div class='panel-body has-table'>
-  <table class='table table-borderless table-hover table-fixed block-task'>
+  <table class='table table-borderless table-hover table-fixed block-tasks <?php if(!$longBlock) echo 'block-sm';?>'>
     <thead>
     <tr>
+      <th class='c-id'><?php echo $lang->idAB?></th>
+      <th class='c-pri'><?php echo $lang->priAB?></th>
+      <th class='c-name'> <?php echo $lang->task->name;?></th>
       <?php if($longBlock):?>
-      <th width='50'><?php echo $lang->idAB?></th>
+      <th class='c-estimate'><?php echo $lang->task->estimateAB;?></th>
+      <th class='c-deadline'><?php echo $lang->task->deadline;?></th>
       <?php endif;?>
-      <th width='30'><?php echo $lang->priAB?></th>
-      <th>           <?php echo $lang->task->name;?></th>
-      <th width='50'><?php echo $lang->task->estimateAB;?></th>
-      <?php if($longBlock):?>
-      <th width='75'><?php echo $lang->task->deadline;?></th>
-      <?php endif;?>
-      <th width='70'><?php echo $lang->statusAB;?></th>
+      <th class='c-status'><?php echo $lang->statusAB;?></th>
     </tr>
     </thead>
     <?php foreach($tasks as $task):?>
@@ -32,19 +30,17 @@
     $viewLink = $this->createLink('task', 'view', "taskID={$task->id}");
     ?>
     <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
+      <td class='c-id'><?php echo $task->id;?></td>
+      <td class='c-pri'><span class='label-pri label-pri-<?php echo $task->pri;?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri)?></span></td>
+      <td class='c-name' style='color: <?php echo $task->color?>' title='<?php echo $task->name?>'><?php echo $task->name?></td>
       <?php if($longBlock):?>
-      <td class='text-center'><?php echo $task->id;?></td>
+      <td class='c-estimate'><?php echo $task->estimate?></td>
+      <td class='c-status'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
       <?php endif;?>
-      <td class='text-center'><?php echo zget($lang->task->priList, $task->pri, $task->pri)?></td>
-      <td style='color: <?php echo $task->color?>' title='<?php echo $task->name?>'><?php echo $task->name?></td>
-      <td class='text-center'><?php echo $task->estimate?></td>
-      <?php if($longBlock):?>
-      <td class='<?php if(isset($task->delay)) echo 'delayed';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
-      <?php endif;?>
-      <td class='text-center' title='<?php echo zget($lang->task->statusList, $task->status)?>'>
-        <span class="project-status-<?php echo $task->status?>">
+      <td class='c-status' title='<?php echo zget($lang->task->statusList, $task->status)?>'>
+        <span class="task-status-<?php echo $task->status?>">
           <span class="label label-dot"></span>
-          <?php if($longBlock) echo zget($lang->task->statusList, $task->status);?>
+          <span class='status-text'><?php echo zget($lang->task->statusList, $task->status);?></span>
         </span>
       </td>
     </tr>
