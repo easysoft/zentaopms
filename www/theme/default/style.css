@@ -343,14 +343,12 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 
 /* Panel */
 .panel > .table > thead > tr > th,.panel > form > .table > thead > tr > th {background-color: transparent;}
-.panel > .panel-heading,.nav-stacked.nav-primary>li.nav-heading,.list > header {background-color: #f1f1f1;}
 .panel-pure {box-shadow: none; border: 0; border-radius: 0;}
 .panel-pure .panel-heading {background: transparent;}
 .panel-actions {display: inline-block; margin-left: 8px;}
 .panel-actions .btn-mini {margin-top: -3px;}
 .panel-actions.pull-right{display: block; margin-top: -10px;margin-right: -10px;}
 .panel-actions.pull-right .btn{margin-top: 3px;}
-.panel-heading > h1,.panel-heading > h2,.panel-heading > h3,.panel-heading > h4,.panel-heading > h5,.panel-heading > h6 {margin: 0}
 .panel-actions > .btn.btn-link:hover{background: none; box-shadow: none;}
 .panel-actions a {display: inline-block;}
 .panel .table {margin-bottom: 0; border: none!important}

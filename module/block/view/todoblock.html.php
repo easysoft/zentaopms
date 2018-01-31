@@ -87,10 +87,10 @@
           var isFinished = $liTag.hasClass('active');
           var todoID     = $liTag.data('id');
           var methodName = isFinished ? 'activate' : 'finish';
-          $liTag.removeClass('active');
           $.get(createLink('todo', methodName, "todoID=" + todoID), function()
           {
               if(!isFinished) $liTag.addClass('active');
+              if(isFinished) $liTag.removeClass('active');
           });
       });
   });
