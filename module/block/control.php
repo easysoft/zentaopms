@@ -105,6 +105,11 @@ class block extends control
             $params = $this->block->$func($source);
             $this->view->params = json_decode($params, true);
         }
+        elseif($type == 'assigntome')
+        {
+            $params = $this->block->getAssignToMeParams();
+            $this->view->params = json_decode($params, true);
+        }
 
         $this->view->source  = $source;
         $this->view->type    = $type;
@@ -337,6 +342,7 @@ class block extends control
         }
         elseif($block->block == 'assigntome')
         {
+            $this->get->set('param', base64_encode(json_encode($block->params)));
             $html = $this->fetch('block', 'printAssignToMeBlock', 'longBlock=' . $this->block->isLongBlock($block));
         }
         elseif($block->block == 'welcome')
@@ -703,21 +709,26 @@ class block extends control
      */
     public function printAssignToMeBlock($longBlock = true)
     {
-       if(common::hasPriv('todo',  'view')) $hasViewPriv['todo']  = true;
-       if(common::hasPriv('story', 'view')) $hasViewPriv['story'] = true;
-       if(common::hasPriv('task',  'view')) $hasViewPriv['task']  = true;
-       if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']   = true;
-       if(common::hasPriv('testcase', 'view')) $hasViewPriv['case'] = true;
+        if(common::hasPriv('todo',  'view')) $hasViewPriv['todo']  = true;
+        if(common::hasPriv('story', 'view')) $hasViewPriv['story'] = true;
+        if(common::hasPriv('task',  'view')) $hasViewPriv['task']  = true;
+        if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']   = true;
+        if(common::hasPriv('testcase', 'view')) $hasViewPriv['case'] = true;
+
+        $params = $this->get->param;
+        $params = json_decode(base64_decode($params));
 
         if(isset($hasViewPriv['todo']))
         {
             $this->app->loadClass('date');
             $this->app->loadLang('todo');
-            $todos = $this->dao->select('*')->from(TABLE_TODO)
+            $stmt = $this->dao->select('*')->from(TABLE_TODO)
                 ->where("(assignedTo = '{$this->app->user->account}' or (assignedTo = '' and account='{$this->app->user->account}'))")
+                ->andWhere('status')->ne('done')
                 ->andWhere('cycle')->eq(0)
-                ->orderBy('`date`')
-                ->fetchAll();
+                ->orderBy('`date`');
+            if(isset($params->todoNum)) $stmt->limit($params->todoNum);
+            $todos = $stmt->fetchAll();
 
             foreach($todos as $todo)
             {
@@ -730,7 +741,13 @@ class block extends control
         if(isset($hasViewPriv['story']))
         {
             $this->app->loadLang('story');
-            $stories = $this->dao->select('*')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->orderBy('id_desc')->fetchAll();
+            $stmt = $this->dao->select('*')->from(TABLE_STORY)
+                ->where('assignedTo')->eq($this->app->user->account)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere('status')->ne('closed')
+                ->orderBy('id_desc');
+            if(isset($params->storyNum)) $stmt->limit($params->storyNum);
+            $stories = $stmt->fetchAll();
 
             if(empty($stories)) unset($hasViewPriv['story']);
             $this->view->stories = $stories;
@@ -738,7 +755,13 @@ class block extends control
         if(isset($hasViewPriv['task']))
         {
             $this->app->loadLang('task');
-            $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->orderBy('id_desc')->fetchAll();
+            $stmt = $this->dao->select('*')->from(TABLE_TASK)
+                ->where('assignedTo')->eq($this->app->user->account)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere('status')->ne('closed')
+                ->orderBy('id_desc');
+            if(isset($params->taskNum)) $stmt->limit($params->taskNum);
+            $tasks = $stmt->fetchAll();
 
             if(empty($tasks)) unset($hasViewPriv['task']);
             $this->view->tasks = $tasks;
@@ -746,7 +769,13 @@ class block extends control
         if(isset($hasViewPriv['bug']))
         {
             $this->app->loadLang('bug');
-            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->orderBy('id_desc')->fetchAll();
+            $stmt = $this->dao->select('*')->from(TABLE_BUG)
+                ->where('assignedTo')->eq($this->app->user->account)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere('status')->ne('closed')
+                ->orderBy('id_desc');
+            if(isset($params->bugNum)) $stmt->limit($params->bugNum);
+            $bugs = $stmt->fetchAll();
 
             if(empty($bugs)) unset($hasViewPriv['bug']);
             $this->view->bugs = $bugs;
@@ -755,7 +784,7 @@ class block extends control
         {
             $this->app->loadLang('testcase');
             $this->app->loadLang('testtask');
-            $cases = $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
+            $stmt = $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
                 ->Where('t1.assignedTo')->eq($this->app->user->account)
@@ -763,8 +792,9 @@ class block extends control
                 ->andWhere('t3.status')->ne('done')
                 ->andWhere('t3.deleted')->eq(0)
                 ->andWhere('t2.deleted')->eq(0)
-                ->orderBy('id_desc')
-                ->fetchAll();
+                ->orderBy('id_desc');
+            if(isset($params->testcaseNum)) $stmt->limit($params->testcaseNum);
+            $cases = $stmt->fetchAll();
 
             if(empty($cases)) unset($hasViewPriv['case']);
             $this->view->cases = $cases;

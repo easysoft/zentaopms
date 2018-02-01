@@ -102,14 +102,17 @@ $lang->common->common = 'Common Module';
 
 /* 主导航菜单。*/
 $lang->menu = new stdclass();
-$lang->menu->my       = '<i class="icon-home"></i><span>Dashboard</span>|my|index';
-$lang->menu->product  = $lang->productCommon . '|product|index';
-$lang->menu->project  = $lang->projectCommon . '|project|index';
-$lang->menu->qa       = 'QA|qa|index';
-$lang->menu->doc      = 'Doc|doc|index';
-$lang->menu->report   = 'Report|report|index';
-$lang->menu->company  = 'Company|company|index';
-$lang->menu->admin    = 'Admin|admin|index';
+$lang->menu->my      = '<span>Dashboard</span>|my|index';
+$lang->menu->product = $lang->productCommon . '|product|index';
+$lang->menu->project = $lang->projectCommon . '|project|index';
+$lang->menu->qa      = 'QA|qa|index';
+$lang->menu->doc     = 'Doc|doc|index';
+$lang->menu->report  = 'Report|report|index';
+$lang->menu->company = 'Company|company|index';
+
+$lang->adminMenu = 'Admin|admin|index';
+
+$lang->dividerMenu = ',qa,';
 
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'Bug';

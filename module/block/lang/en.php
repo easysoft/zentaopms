@@ -33,11 +33,13 @@ $lang->block->assignToMe   = 'Assign To Me';
 $lang->block->lblFlowchart = 'Workflow';
 $lang->block->welcome      = 'Welcome';
 
-$lang->block->assignToMeList['todo']  = 'Todo';
-$lang->block->assignToMeList['story'] = 'Story';
-$lang->block->assignToMeList['task']  = 'Task';
-$lang->block->assignToMeList['bug']   = 'Bug';
-$lang->block->assignToMeList['case']  = 'Case';
+$lang->block->leftToday = 'The rest of the work today';
+$lang->block->myTask    = 'My Task';
+$lang->block->myStory   = 'My Story';
+$lang->block->myBug     = 'My Bug';
+$lang->block->myProject = 'My ' . $lang->projectCommon;
+$lang->block->myProduct = 'My ' . $lang->productCommon;
+$lang->block->delayed   = 'Delayed';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Name';
@@ -265,6 +267,12 @@ $lang->block->orderByList->story['status_asc']    = 'Status Ascending';
 $lang->block->orderByList->story['status_desc']   = 'Status Descending';
 $lang->block->orderByList->story['stage_asc']     = 'Stage Ascending';
 $lang->block->orderByList->story['stage_desc']    = 'Stage Descending';
+
+$lang->block->todoNum     = 'Todo Number';
+$lang->block->storyNum    = 'Story Number';
+$lang->block->taskNum     = 'Task Number';
+$lang->block->bugNum      = 'Bug Number';
+$lang->block->testcaseNum = 'Case Number';
 
 $lang->block->typeList = new stdclass();
 

@@ -11,7 +11,7 @@
  */
 ?>
 <?php
-if(isset($lang->block->moduleList[$source]))
+if(!empty($params))
 {
     include 'setmodule.html.php';
     die();
