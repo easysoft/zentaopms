@@ -254,7 +254,7 @@ class commonModel extends model
             echo "<a href='javascript:;'>" . $lang->theme . "</a><ul class='dropdown-menu pull-left'>";
             foreach($app->lang->themes as $key => $value)
             {
-                echo "<li><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . ($app->cookie->theme == $key ? '<i class="icon icon-check-circle text-success"></i>' : '') . "</a></li>";
+                echo "<li style='position: relative;'><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . ($app->cookie->theme == $key ? '<i class="icon icon-check-circle text-success" style="top:2px;"></i>' : '') . "</a></li>";
             }
             echo '</ul></li>';
 
@@ -262,7 +262,7 @@ class commonModel extends model
             echo "<a href='javascript:;'>" . $lang->lang . "</a><ul class='dropdown-menu pull-left'>";
             foreach ($app->config->langs as $key => $value)
             {
-                echo "<li><a href='javascript:selectLang(\"$key\");'>" . $value . ($app->cookie->lang == $key ? ' <i class="icon icon-check-circle text-success"></i>' : '') . "</a></li>";
+                echo "<li style='position: relative;'><a href='javascript:selectLang(\"$key\");'>" . $value . ($app->cookie->lang == $key ? ' <i class="icon icon-check-circle text-success" style="top:2px;"></i>' : '') . "</a></li>";
             }
             echo '</ul></li>';
 

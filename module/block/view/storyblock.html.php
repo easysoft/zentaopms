@@ -26,32 +26,34 @@
         <?php endif;?>
       </tr>
     </thead>
-    <?php foreach($stories as $story):?>
-    <?php
-    $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
-    $viewLink = $this->createLink('story', 'view', "storyID={$story->id}");
-    ?>
-    <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-      <td class="c-id"><?php echo $story->id;?></td>
-      <?php $pri = zget($lang->story->priList, $story->pri, $story->pri);?>
-      <td class="c-pri"><span class="label-pri label-pri-<?php echo $pri?>"><?php echo $pri?></span></td>
-      <td class="c-name" style='color: <?php echo $story->color?>' title='<?php echo $story->title?>'><?php echo $story->title?></td>
-      <?php if($longBlock):?>
-      <td class='c-estimate'><?php echo $story->estimate?></td>
-      <?php endif;?>
-      <td class='c-status' title='<?php echo zget($lang->story->statusList, $story->status)?>'>
-        <span class='story-status-<?php echo $story->status?>'>
-          <span class='label label-dot'></span><span class='status-text'><?php echo zget($lang->story->statusList, $story->status);?></span>
-        </span>
-      </td>
-      <?php if($longBlock):?>
-      <td class='c-stage'>
-        <span class='story-stage-<?php echo $story->stage?>'>
-          <?php echo zget($lang->story->stageList, $story->stage, $story->stage);?>
-        </span>
-      </td>
-      <?php endif;?>
-    </tr>
-    <?php endforeach;?>
+    <tbody>
+      <?php foreach($stories as $story):?>
+      <?php
+      $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
+      $viewLink = $this->createLink('story', 'view', "storyID={$story->id}");
+      ?>
+      <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
+        <td class="c-id"><?php echo $story->id;?></td>
+        <?php $pri = zget($lang->story->priList, $story->pri, $story->pri);?>
+        <td class="c-pri"><span class="label-pri label-pri-<?php echo $pri?>"><?php echo $pri?></span></td>
+        <td class="c-name" style='color: <?php echo $story->color?>' title='<?php echo $story->title?>'><?php echo $story->title?></td>
+        <?php if($longBlock):?>
+        <td class='c-estimate'><?php echo $story->estimate?></td>
+        <?php endif;?>
+        <td class='c-status' title='<?php echo zget($lang->story->statusList, $story->status)?>'>
+          <span class='story-status-<?php echo $story->status?>'>
+            <span class='label label-dot'></span><span class='status-text'><?php echo zget($lang->story->statusList, $story->status);?></span>
+          </span>
+        </td>
+        <?php if($longBlock):?>
+        <td class='c-stage'>
+          <span class='story-stage-<?php echo $story->stage?>'>
+            <?php echo zget($lang->story->stageList, $story->stage, $story->stage);?>
+          </span>
+        </td>
+        <?php endif;?>
+      </tr>
+      <?php endforeach;?>
+    </tbody>
   </table>
 </div>

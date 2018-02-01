@@ -430,7 +430,6 @@ div.form-control[contenteditable='true'] {height: auto; text-align: left; outlin
 /* Footer. */
 #qrcodePopover.show {display: block; position: fixed; right: 5px; bottom: 40px; left: inherit; top: inherit; max-width: 300px}
 #qrcodePopover.popover.top .arrow {left: inherit; right: 10px}
-.icon-zentao, a .icon-zentao {background: url(images/main/icon.png) center no-repeat; display: inline-block; width: 16px; height: 16px; position: relative; top: 2px}
 .icon-pro-version {background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAOAQMAAADDr3TWAAAABlBMVEUAAADSMi2DxVCVAAAAAXRSTlMAQObYZgAAACJJREFUCNdjYGFg4GNgkGdgsG9gqD/A8P8BkI2OpBkYBBkAfZQE9VhZ0IgAAAAASUVORK5CYII=") center no-repeat; display: inline-block!important; width: 14px; height: 14px; position: relative; top: 2px}
 
 /* Feature bar. */
