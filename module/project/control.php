@@ -939,7 +939,7 @@ class project extends control
             $url = $this->createLink('project', 'create', "projectID=$projectID");
             if(!empty($planID))
             {
-                die(js::confirm($this->lang->project->importPlanStory, $url . '&copyProjectID=&planID=' . $planID, $url, 'parent', 'parent'));
+                die(js::confirm($this->lang->project->importPlanStory, $this->createLink('project', 'create', "projectID=$projectID&copyProjectID=&planID=$planID"), $url, 'parent', 'parent'));
             }
             else
             {

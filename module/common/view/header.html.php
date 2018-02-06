@@ -16,7 +16,7 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 <?php if(!empty($this->config->sso->redirect)) js::set('ssoRedirect', $this->config->sso->redirect);?>
 <header id='header'>
   <div id='mainHeader'>
-    <div class='container-fixed'>
+    <div class='container'>
       <hrgroup id='heading'>
         <?php if(empty($this->config->sso->redirect)):?>
         <h1 id='companyname' title='<?php printf($lang->welcome, $app->company->name);?>'><?php printf($lang->welcome, $app->company->name);?></h1>
@@ -37,7 +37,7 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
     </div>
   </div>
   <div id='subHeader'>
-    <div class='container-fixed'>
+    <div class='container'>
       <div id="pageNav"></div>
       <nav id='subNavbar'><?php common::printModuleMenu($this->moduleName);?></nav>
       <div id="pageActions"></div>
@@ -54,4 +54,4 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 
 <main id='main' <?php if(!empty($this->config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >
 <?php endif;?>
-  <div class='container-fixed'>
+  <div class='container'>

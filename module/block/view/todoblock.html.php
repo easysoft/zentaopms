@@ -28,7 +28,7 @@
           <div class="col-sm-9">
             <div class="input-control has-icon-right">
               <input type="text" required class="form-control form-date" id="todoDate" name="date" placeholder="(<?php echo $lang->required;?>)">
-              <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-delay"></i></label>
+              <label class="input-control-icon-right"><i class="icon icon-delay"></i></label>
             </div>
           </div>
         </div>
@@ -56,7 +56,7 @@
           <div class="col-sm-2"></div>
           <div class="col-sm-10">
             <?php echo html::hidden('type', 'custom');?>
-            <?php echo html::submitButton($lang->save, '', "btn btn-primary btn-wide");?>
+            <?php echo html::commonButton($lang->save, "onclick='ajaxCreateTodo(this)'", "btn btn-primary btn-wide");?>
             <button type="button" class="btn btn-default btn-wide todo-form-trigger" data-trigger="false"><?php echo $lang->goback;?></button>
           </div>
         </div>

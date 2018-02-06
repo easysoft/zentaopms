@@ -414,10 +414,6 @@ class blockModel extends model
         $params->todoNum['default'] = 20; 
         $params->todoNum['control'] = 'input';
 
-        $params->storyNum['name']    = $this->lang->block->storyNum;
-        $params->storyNum['default'] = 20; 
-        $params->storyNum['control'] = 'input';
-
         $params->taskNum['name']    = $this->lang->block->taskNum;
         $params->taskNum['default'] = 20; 
         $params->taskNum['control'] = 'input';
@@ -425,10 +421,6 @@ class blockModel extends model
         $params->bugNum['name']    = $this->lang->block->bugNum;
         $params->bugNum['default'] = 20; 
         $params->bugNum['control'] = 'input';
-
-        $params->testcaseNum['name']    = $this->lang->block->testcaseNum;
-        $params->testcaseNum['default'] = 20; 
-        $params->testcaseNum['control'] = 'input';
 
         return json_encode($params);
     }

@@ -83,7 +83,7 @@ class message extends control
             $messages .= $message->data . $newline;
             $idList[]  = $message->id;
         }
-        $this->dao->update(TABLE_NOTIFY)->set('status')->eq('sended')->andWhere('sendTime')->eq(helper::now())->where('id')->in($idList)->exec();
+        $this->dao->update(TABLE_NOTIFY)->set('status')->eq('sended')->set('sendTime')->eq(helper::now())->where('id')->in($idList)->exec();
 
         foreach($todos as $todo) $messages .= $todo->data . $newline;
         if($windowBlur) $messages = strip_tags($messages);
@@ -103,6 +103,6 @@ class message extends control
 EOT;
         }
 
-        $this->dao->delete('*')->from(TABLE_NOTIFY)->where('objectType')->eq('message')->andWhere('status')->eq('sended')->exec();
+        $this->dao->delete()->from(TABLE_NOTIFY)->where('objectType')->eq('message')->andWhere('status')->ne('wait')->exec();
     }
 }

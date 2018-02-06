@@ -269,10 +269,8 @@ $lang->block->orderByList->story['stage_asc']     = '阶段正序';
 $lang->block->orderByList->story['stage_desc']    = '阶段倒序';
 
 $lang->block->todoNum     = '待办数';
-$lang->block->storyNum    = '需求数';
 $lang->block->taskNum     = '任务数';
 $lang->block->bugNum      = 'Bug数';
-$lang->block->testcaseNum = '用例数';
 
 $lang->block->typeList = new stdclass();
 

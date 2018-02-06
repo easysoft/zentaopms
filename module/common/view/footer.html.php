@@ -8,7 +8,7 @@
 <?php if($onlybody != 'yes'):?>
 </main><?php /* end '#wrap' in 'header.html.php'. */ ?>
 <footer id='footer'>
-  <div class="container-fixed">
+  <div class="container">
     <?php commonModel::printBreadMenu($this->moduleName, isset($position) ? $position : ''); ?>
     <div id='poweredBy'>
       <a href='<?php echo $lang->website;?>' target='_blank' class='text-primary'><i class='icon-zentao'></i> <?php echo $lang->zentaoPMS . $config->version;?></a> &nbsp;
@@ -45,7 +45,11 @@ $(function()
             }
             else
             {
-                if(data && typeof data.message == 'string') notifyMessage(data.message);
+                if(data)
+                {
+                    if(typeof data == 'string') data = $.parseJSON(data);
+                    if(typeof data.message == 'string') notifyMessage(data.message);
+                }
             }
         });
     }, 60 * 1000);

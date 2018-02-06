@@ -269,10 +269,8 @@ $lang->block->orderByList->story['stage_asc']     = 'Stage Ascending';
 $lang->block->orderByList->story['stage_desc']    = 'Stage Descending';
 
 $lang->block->todoNum     = 'Todo Number';
-$lang->block->storyNum    = 'Story Number';
 $lang->block->taskNum     = 'Task Number';
 $lang->block->bugNum      = 'Bug Number';
-$lang->block->testcaseNum = 'Case Number';
 
 $lang->block->typeList = new stdclass();
 

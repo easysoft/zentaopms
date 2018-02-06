@@ -34,9 +34,9 @@ $lang->project->teamname      = '团队名称';
 $lang->project->order         = $lang->projectCommon . '排序';
 $lang->project->products      = '相关' . $lang->productCommon;
 $lang->project->whitelist     = '分组白名单';
-$lang->project->totalEstimate = '预计';
-$lang->project->totalConsumed = '消耗';
-$lang->project->totalLeft     = '剩余';
+$lang->project->totalEstimate = '总预计';
+$lang->project->totalConsumed = '总消耗';
+$lang->project->totalLeft     = '总剩余';
 $lang->project->Left          = '剩余';
 $lang->project->progress      = '进度';
 $lang->project->hours         = '预计 %s 消耗 %s 剩余 %s';
@@ -140,7 +140,7 @@ $lang->project->updateOrder       = '排序';
 $lang->project->tree              = '树状图';
 $lang->project->storyKanban       = '需求看板';
 $lang->project->storySort         = '需求排序';
-$lang->project->importPlanStory   = '是否导入计划关联的相关需求？';
+$lang->project->importPlanStory   = '创建' . $lang->projectCommon . '成功！\n是否导入计划关联的相关需求？';
 
 /* 分组浏览。*/
 $lang->project->allTasks     = '所有';
