@@ -32,8 +32,8 @@
       <th width='200'><?php echo $lang->product->name;?></th>
       <th width='120'><?php echo $lang->product->PO;?></th>
       <th><?php echo $lang->productplan->common;?></th>
-      <th width="150"><?php echo $lang->productplan->begin;?></th>
-      <th width="150"><?php echo $lang->productplan->end;?></th>
+      <th width="100"><?php echo $lang->productplan->begin;?></th>
+      <th width="100"><?php echo $lang->productplan->end;?></th>
       <th class="w-70px"><?php echo $lang->story->statusList['draft'];?></th>
       <th class="w-70px"><?php echo $lang->story->statusList['active'];?></th>
       <th class="w-70px"><?php echo $lang->story->statusList['changed'];?></th>
