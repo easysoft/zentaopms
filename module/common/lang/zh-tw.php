@@ -23,7 +23,7 @@ $lang->welcome        = "%s項目管理系統";
 $lang->logout         = '退出';
 $lang->login          = '登錄';
 $lang->help           = '幫助';
-$lang->aboutZenTao    = '關於';
+$lang->aboutZenTao    = '關於禪道';
 $lang->profile        = '個人檔案';
 $lang->changePassword = '更改密碼';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>時間: %s 毫秒, 內存: %s KB, 查詢: %s.  </div></div>";
@@ -102,14 +102,17 @@ $lang->common->common = '公有模組';
 
 /* 主導航菜單。*/
 $lang->menu = new stdclass();
-$lang->menu->my      = '<i class="icon-home"></i><span> 我的地盤</span>|my|index';
+$lang->menu->my      = '<span> 我的地盤</span>|my|index';
 $lang->menu->product = $lang->productCommon . '|product|index';
 $lang->menu->project = $lang->projectCommon . '|project|index';
 $lang->menu->qa      = '測試|qa|index';
 $lang->menu->doc     = '文檔|doc|index';
 $lang->menu->report  = '統計|report|index';
 $lang->menu->company = '組織|company|index';
-$lang->menu->admin   = '後台|admin|index';
+
+$lang->adminMenu = '後台|admin|index';
+
+$lang->dividerMenu = ',qa,';
 
 /* 查詢條中可以選擇的對象列表。*/
 $lang->searchObjects['bug']         = 'Bug';
@@ -163,7 +166,6 @@ $lang->index->menu->project = "瀏覽{$lang->projectCommon}|project|browse";
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
-$lang->my->menu->account        = array('link' => '<span id="myname"><i class="icon-user"></i> %s' . $lang->arrow . '</span>', 'fixed' => true);
 $lang->my->menu->index          = '首頁|my|index';
 $lang->my->menu->todo           = array('link' => '待辦|my|todo|', 'subModule' => 'todo');
 $lang->my->menu->task           = array('link' => '任務|my|task|', 'subModule' => 'task');

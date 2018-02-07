@@ -90,6 +90,7 @@ $lang->todo->confirmDelete  = "您確定要刪除這條待辦嗎？";
 $lang->todo->thisIsPrivate  = '這是一條私人事務。:)';
 $lang->todo->lblDisableDate = '暫時不設定時間';
 $lang->todo->lblBeforeDays  = "提前%s天生成待辦";
+$lang->todo->lblClickCreate = "點擊添加待辦";
 $lang->todo->noTodo         = '該類型沒有待辦事務';
 $lang->todo->noAssignedTo   = '被指派人不能為空';
 
