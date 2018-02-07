@@ -14,7 +14,7 @@
   <div class='panel-body'>
     <div class="todoes-input">
       <div class="todo-form-trigger"><input type="text" placeholder="<?php echo $lang->todo->lblClickCreate?>" class="form-control"></div>
-      <form class="form-horizontal todoes-form layer" method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'create');?>'>
+      <form class="form-horizontal todoes-form layer" method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'create', 'date=today&account=&from=block');?>'>
         <h3><?php echo $lang->todo->create . $lang->todo->common;?></h3>
         <div class="form-group">
           <div class="col-sm-12"><input required type="text" placeholder="<?php echo $lang->todo->name?>" class="form-control" name="name"></div>
@@ -94,5 +94,31 @@
           });
       });
   });
+
+  function ajaxCreateTodo(obj)
+  {
+      var $todoes = $(obj).closest('.block-todoes');
+      var $form   = $(obj).closest('form');
+      $.ajax(
+      {
+          type: "POST",
+          dataType: "json",
+          url: $form.attr('action'),
+          data: $form.serialize(),
+          success: function(todo)
+          {
+              var item = "<li data-id='" + todo.id + "'>";
+              item += '<span class="todo-check icon icon-check-circle"></span>';
+              item += '<a href="' + createLink('todo', 'view', "todoID=" + todo.id + "&from=my", 'html', true) + '" class="iframe">';
+              item += '<span class="todo-title">' + todo.name + '</span>';
+              item += '<span class="todo-pri todo-pri-' + todo.pri + '">' + todo.priName + '</span><span class="todo-time">' + todo.time + '</span></a></li>';
+              $todoes.find('ul.todoes').prepend(item);
+              $todoes.removeClass('show-form');
+              $todoes.find('ul.todoes li:first a').modalTrigger();
+              $form.find('input[name="name"]').val('');
+              $form.find('#todoDate').val('');
+          }
+      });
+  }
   </script>
 </div>

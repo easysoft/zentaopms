@@ -34,7 +34,7 @@ class todo extends control
      * @access public
      * @return void
      */
-    public function create($date = 'today', $account = '')
+    public function create($date = 'today', $account = '', $from = 'todo')
     {
         if($date == 'today') $date = date::today();
         if($account == '')   $account = $this->app->user->account;
@@ -54,6 +54,14 @@ class todo extends control
             }
 
             if(!empty($_POST['idvalue'])) $this->send(array('result' => 'success'));
+            if($from == 'block')
+            {
+                $todo = $this->todo->getById($todoID);
+                $this->app->loadClass('date');
+                $todo->begin = date::formatTime($todo->begin);
+                $this->send(array('result' => 'success', 'id' => $todoID, 'name' => $todo->name, 'pri' => $todo->pri, 'priName' => $this->lang->todo->priList[$todo->pri], 'time' => date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin));
+            }
+
             die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
         }
 
