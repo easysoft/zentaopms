@@ -192,6 +192,13 @@ class testreport extends control
             $stories = $this->story->getProjectStories($project->id);
             $builds  = $this->build->getProjectBuilds($project->id);
 
+            $useBuilds = array();
+            foreach($tasks as $task)
+            {
+                if(isset($builds[$task->build])) $useBuilds[$task->build] = $builds[$task->build];
+            }
+            $builds = $useBuilds;
+
             $begin = $project->begin;
             $end   = $project->end;
             $owner = current($owners);
