@@ -62,6 +62,11 @@ class my extends control
         $this->display();
     }
 
+    public function calendar()
+    {
+        $this->locate($this->createLink('my', 'todo'));
+    }
+
     /**
      * My todos.
      *

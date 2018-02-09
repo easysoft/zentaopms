@@ -16,7 +16,7 @@ $lang->index->menuOrder[10] = 'project';
 /* my menu order. */
 $lang->my->menuOrder[5]  = 'account';
 $lang->my->menuOrder[10] = 'index';
-$lang->my->menuOrder[15] = 'todo';
+$lang->my->menuOrder[15] = 'calendar';
 $lang->my->menuOrder[20] = 'task';
 $lang->my->menuOrder[25] = 'bug';
 $lang->my->menuOrder[30] = 'testtask';
