@@ -14,11 +14,16 @@
 class productModel extends model
 {
     /**
-     * Set menu. 
-     * 
-     * @param  array  $products 
-     * @param  int    $productID 
-     * @param  string $extra 
+     *
+     * Set menu.
+     *
+     * @param array  $products
+     * @param int    $productID
+     * @param int    $branch
+     * @param int    $module
+     * @param string $moduleType
+     * @param string $extra
+     *
      * @access public
      * @return void
      */
@@ -53,13 +58,14 @@ class productModel extends model
     }
 
     /**
-     * Create the select code of products. 
-     * 
-     * @param  array     $products 
-     * @param  int       $productID 
-     * @param  string    $currentModule 
-     * @param  string    $currentMethod 
-     * @param  string    $extra 
+     * Create the select code of products.
+     *
+     * @param  array  $products
+     * @param  int    $productID
+     * @param  string $currentModule
+     * @param  string $currentMethod
+     * @param  string $extra
+     *
      * @access public
      * @return string
      */
@@ -115,8 +121,8 @@ class productModel extends model
 
     /**
      * Save the product id user last visited to session.
-     * 
-     * @param  int   $productID 
+     *
+     * @param  int   $productID
      * @param  array $products
      * @access public
      * @return int
@@ -148,8 +154,8 @@ class productModel extends model
 
     /**
      * Check privilege.
-     * 
-     * @param  int    $product 
+     *
+     * @param  int    $product
      * @access public
      * @return bool
      */
@@ -157,7 +163,7 @@ class productModel extends model
     {
         /* Is admin? */
         $account = ',' . $this->app->user->account . ',';
-        if($this->app->user->admin) return true; 
+        if($this->app->user->admin) return true;
 
         $acls = $this->app->user->rights['acls'];
         if(!empty($acls['products']) and !in_array($product->id, $acls['products'])) return false;
@@ -172,8 +178,8 @@ class productModel extends model
 
     /**
      * Get product by id.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return object
      */
@@ -181,13 +187,15 @@ class productModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProduct();
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+        if(!$product) return false;
+
         return $this->loadModel('file')->replaceImgURL($product, 'desc');
     }
 
     /**
      * Get by idList.
-     * 
-     * @param  array    $productIDList 
+     *
+     * @param  array    $productIDList
      * @access public
      * @return array
      */
@@ -198,27 +206,36 @@ class productModel extends model
 
     /**
      * Get products.
-     * 
-     * @param  string $status 
-     * @param  int    $limit 
+     *
+     * @param  string $status
+     * @param  int    $limit
+     * @param  int    $line
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $limit = 0)
+    public function getList($status = 'all', $limit = 0, $line = 0)
     {
         return $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
+            ->beginIF($line > 0)->andWhere('line')->eq($line)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
-            ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->in($status)->fi()
+            ->beginIF($status != 'all' and $status != 'noclosed' and $status != 'involved')->andWhere('status')->in($status)->fi()
+            ->beginIF($status == 'involved')
+            ->andWhere('PO', true)->eq($this->app->user->account)
+            ->orWhere('QD')->eq($this->app->user->account)
+            ->orWhere('RD')->eq($this->app->user->account)
+            ->orWhere('createdBy')->eq($this->app->user->account)
+            ->markRight(1)
+            ->fi()
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->orderBy('`order` desc')
             ->fetchAll('id');
     }
 
     /**
-     * Get product pairs. 
-     * 
-     * @param  string $mode 
+     * Get product pairs.
+     *
+     * @param  string $mode
      * @return array
      */
     public function getPairs($mode = '')
@@ -262,7 +279,7 @@ class productModel extends model
 
     /**
      * Get grouped products.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -273,7 +290,7 @@ class productModel extends model
 
     /**
      * Create a product.
-     * 
+     *
      * @access public
      * @return int
      */
@@ -291,7 +308,7 @@ class productModel extends model
             ->get();
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
-            ->batchCheck('name,code', 'notempty')
+            ->batchCheck($this->config->product->create->requiredFields, 'notempty')
             ->check('name', 'unique', "deleted = '0'")
             ->check('code', 'unique', "deleted = '0'")
             ->exec();
@@ -314,8 +331,8 @@ class productModel extends model
 
     /**
      * Update a product.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return array
      */
@@ -331,7 +348,7 @@ class productModel extends model
             ->get();
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
-            ->batchCheck('name,code', 'notempty')
+            ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
             ->check('name', 'unique', "id != $productID and deleted = '0'")
             ->check('code', 'unique', "id != $productID and deleted = '0'")
             ->where('id')->eq($productID)
@@ -347,7 +364,7 @@ class productModel extends model
 
     /**
      * Batch update products.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -388,10 +405,10 @@ class productModel extends model
         $this->fixOrder();
         return $allChanges;
     }
-    
+
     /**
      * Close product.
-     * 
+     *
      * @param  int    $productID.
      * @access public
      * @return void
@@ -443,6 +460,7 @@ class productModel extends model
             unset($unclosedStatus['closed']);
             $stories = $this->story->getProductStories($productID, $branch, $modules, array_keys($unclosedStatus), $sort, $pager);
         }
+        if($browseType == 'unplan')       $stories = $this->story->getByPlan($productID, $queryID, $modules, '', $sort, $pager);
         if($browseType == 'allstory')     $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $sort, $pager);
         if($browseType == 'bymodule')     $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $sort, $pager);
         if($browseType == 'bysearch')     $stories = $this->story->getBySearch($productID, $queryID, $sort, $pager, '', $branch);
@@ -508,8 +526,8 @@ class productModel extends model
 
     /**
      * Get projects of a product in pairs.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @param  string $param    all|nodeleted
      * @access public
      * @return array
@@ -537,8 +555,8 @@ class productModel extends model
 
     /**
      * Get roadmap of a proejct
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return array
      */
@@ -573,8 +591,8 @@ class productModel extends model
 
     /**
      * Get team members of a product from projects.
-     * 
-     * @param  object   $product 
+     *
+     * @param  object   $product
      * @access public
      * @return array
      */
@@ -596,10 +614,11 @@ class productModel extends model
         }
         if(empty($teams))
         {
-            $teams = $this->dao->select('t1.project, t1.account')->from(TABLE_TEAM)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            $teams = $this->dao->select('t1.root, t1.account')->from(TABLE_TEAM)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
                 ->where('t2.deleted')->eq(0)
-                ->fetchGroup('project', 'account');
+                ->andWhere('t1.type')->eq('project')
+                ->fetchGroup('root', 'account');
         }
 
         if(!isset($projects[$product->id])) return $members;
@@ -612,9 +631,9 @@ class productModel extends model
     }
 
     /**
-     * Get product stat by id 
-     * 
-     * @param  int    $productID 
+     * Get product stat by id
+     *
+     * @param  int    $productID
      * @access public
      * @return object|bool
      */
@@ -657,17 +676,19 @@ class productModel extends model
      * Get product stats.
      *
      * @param  string $orderBy
-     * @param  int    $pager
+     * @param  object $pager
+     * @param  string $status
+     * @param  int    $line
      * @access public
      * @return array
      */
-    public function getStats($orderBy = 'order_desc', $pager = null, $status = 'noclosed')
+    public function getStats($orderBy = 'order_desc', $pager = null, $status = 'noclosed', $line = 0)
     {
         $this->loadModel('report');
         $this->loadModel('story');
         $this->loadModel('bug');
 
-        $products = $this->getList($status);
+        $products = $this->getList($status, $limit = 0, $line);
         foreach($products as $productID => $product)
         {
             if(!$this->checkPriv($product)) unset($products[$productID]);
@@ -723,7 +744,7 @@ class productModel extends model
           ->where('deleted')->eq(0)
           ->andWhere('product')->in(array_keys($products))
           ->groupBy('product')
-          ->fetchPairs(); 
+          ->fetchPairs();
        $unResolved  = $this->dao->select('product,count(*) AS count')
               ->from(TABLE_BUG)
               ->where('status')->eq('active')
@@ -753,44 +774,78 @@ class productModel extends model
         return $stats;
     }
 
+    /**
+     * Get priv products.
+     * 
+     * @access public
+     * @return array
+     */
     public function getPrivProducts()
     {
         $account = ',' . $this->app->user->account . ',';
         static $products;
         if($products === null)
         {
-            $groupSql = '';
+            $groups = '';
             if(isset($this->app->user->groups))
             {
-                foreach($this->app->user->groups as $group) $groupSql .= "INSTR(CONCAT(',', t1.whitelist, ','), ',$group,') > 0 OR ";
+                foreach($this->app->user->groups as $group) $groups .= ",$group,";
             }
-            $groupSql = !empty($groupSql) ? '(' . substr($groupSql, 0, strlen($groupSql) - 4) . ')' : '1 != 1';
 
-            $products = $this->dao->select('distinct t1.id')->from(TABLE_PRODUCT)->alias('t1')
+            $stmt = $this->dao->select('distinct t1.*,t3.account as teamAccount')->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
-                ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.project = t3.project')
+                ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.project = t3.root')
                 ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t2.project = t4.id')
-                ->beginIF($this->app->user->admin)->where('t1.deleted')->eq(0)->fi()
+                ->where('t1.deleted')->eq(0)
                 ->beginIF(!$this->app->user->admin)
-                ->where('t1.acl')->eq('open')
-                ->orWhere("(t1.acl = 'custom' AND $groupSql)")
-                ->orWhere('t1.PO')->eq($this->app->user->account)
-                ->orWhere('t1.QD')->eq($this->app->user->account)
-                ->orWhere('t1.RD')->eq($this->app->user->account)
-                ->orWhere('t1.createdBy')->eq($this->app->user->account)
-                ->orWhere('t3.account')->eq($this->app->user->account)
-                ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t3.type')->eq('project')
                 ->andWhere('t4.deleted')->eq(0)
                 ->fi()
-                ->fetchAll('id');
+                ->query();
+
+            $products = array();
+            $account  = $this->app->user->account;
+            while($product = $stmt->fetch())
+            {
+                $id = $product->id;
+                if($this->app->user->admin)
+                {
+                    $products[$id] = $id;
+                }
+                else
+                {
+                    if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy != $account OR $product->teamAccount == $account)
+                    {
+                        $products[$id] = $id;
+                        continue;
+                    }
+                    if($product->acl == 'open')
+                    {
+                        $products[$id] = $id;
+                        continue;
+                    }
+                    if($product->acl == 'custom')
+                    {
+                        foreach(explode(',', $product->whitelist) as $whitelist)
+                        {
+                            if(empty($whitelist)) continue;
+                            if(strpos($groups, ",$whitelist,") !== false)
+                            {
+                                $products[$id] = $id;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         }
         return $products;
     }
 
     /**
      * Get the summary of product's stories.
-     * 
-     * @param  array    $stories 
+     *
+     * @param  array    $stories
      * @access public
      * @return string.
      */
@@ -820,17 +875,15 @@ class productModel extends model
 
     /**
      * Judge an action is clickable or not.
-     * 
-     * @param  object $product 
-     * @param  string $action 
+     *
+     * @param  object $product
+     * @param  string $action
      * @access public
      * @return void
      */
     public static function isClickable($product, $action)
     {
         $action = strtolower($action);
-
-        if(!common::limitedUser($product)) return false;
 
         if($action == 'close') return $product->status != 'closed';
 
@@ -839,10 +892,10 @@ class productModel extends model
 
     /**
      * Create the link from module,method,extra
-     * 
-     * @param  string  $module 
-     * @param  string  $method 
-     * @param  mix     $extra 
+     *
+     * @param  string  $module
+     * @param  string  $method
+     * @param  mix     $extra
      * @access public
      * @return void
      */
@@ -891,7 +944,7 @@ class productModel extends model
 
     /**
      * Fix order.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -913,7 +966,7 @@ class productModel extends model
      * get the latest project of the product.
      *
      * @param  int     $productID
-     * @access public 
+     * @access public
      * @return object
      */
     public function getLatestProject($productID)

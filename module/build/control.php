@@ -174,7 +174,7 @@ class build extends control
      * @access public
      * @return void
      */
-    public function view($buildID, $type = 'story', $link = 'false', $param = '')
+    public function view($buildID, $type = 'story', $link = 'false', $param = '', $orderBy = 'id_desc')
     {
         if($type == 'story')$this->session->set('storyList', $this->app->getURI(true));
         if($type == 'bug')  $this->session->set('bugList', $this->app->getURI(true));
@@ -189,7 +189,9 @@ class build extends control
         $product = $this->loadModel('product')->getById($build->product);
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->andWhere('deleted')->eq(0)->fetchAll();
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($build->bugs)->andWhere('deleted')->eq(0)
+            ->beginIF($type == 'bug')->orderBy($orderBy)->fi()
+            ->fetchAll();
 
         if($this->config->global->flow == 'onlyTest')
         {
@@ -203,7 +205,9 @@ class build extends control
         }
         else
         {
-            $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($build->stories)->andWhere('deleted')->eq(0)->fetchAll('id');
+            $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($build->stories)->andWhere('deleted')->eq(0)
+                ->beginIF($type == 'story')->orderBy($orderBy)->fi()
+                ->fetchAll('id');
             $stages  = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($build->stories)->andWhere('branch')->eq($build->branch)->fetchPairs('story', 'stage');
             foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
 
@@ -214,7 +218,7 @@ class build extends control
             $this->view->position[]    = html::a($this->createLink('project', 'task', "projectID=$build->project"), $projects[$build->project]);
             $this->view->position[]    = $this->lang->build->view;
             $this->view->stories       = $stories;
-            $this->view->generatedBugs = $this->bug->getProjectBugs($build->project, $build->id, '', 0, 'status_desc,id_desc', null);
+            $this->view->generatedBugs = $this->bug->getProjectBugs($build->project, $build->id, '', 0, $type == 'newbug' ? $orderBy : 'status_desc,id_desc', null);
             $this->view->bugs          = $bugs;
             $this->view->type          = $type;
         }
@@ -225,6 +229,7 @@ class build extends control
         $this->view->actions       = $this->loadModel('action')->getList('build', $buildID);
         $this->view->link          = $link;
         $this->view->param         = $param;
+        $this->view->orderBy       = $orderBy;
         $this->view->branchName    = $build->productType == 'normal' ? '' : $this->loadModel('branch')->getById($build->branch);
         $this->display();
     }
@@ -346,7 +351,7 @@ class build extends control
         }
         if($varName == 'testTaskBuild')
         {
-            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty');
+            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty,notrunk');
             if($isJsonView) die(json_encode($builds));
             else die(html::select('build', $builds, $build, "class='form-control'"));
         }

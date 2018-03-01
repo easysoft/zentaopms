@@ -11,6 +11,36 @@
  */
 ?>
 <form class='form-condensed' method='post' target='hiddenwin'>
+  <?php if($group->role == 'limited'):?>
+  <div id='featurebar'>
+    <div class='heading'><i class='icon-lock'> <?php echo $group->name;?></i></div>
+  </div>
+  <table class='table table-hover table-striped table-bordered table-form'> 
+    <thead>
+      <tr>
+        <th><?php echo $lang->group->module;?></th>
+        <th><?php echo $lang->group->method;?></th>
+      </tr>
+    </thead>
+    <tr class='<?php echo cycle('even, bg-gray');?>'>
+      <th class='text-right w-150px'><?php echo $lang->my->common;?></th>
+      <td id='my' class='pv-10px'>
+          <input type='checkbox' name='actions[my][]' value='limited' <?php if(isset($groupPrivs['my']['limited'])) echo "checked";?> />
+          <span class='priv' id="my-limited"><?php echo $lang->my->limited;?></span>
+      </td>
+    </tr>
+    <tr>
+      <th class='text-right'></th>
+      <td>
+        <?php
+        echo html::submitButton($lang->save, "onclick='setNoChecked()'");
+        echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
+        echo html::hidden('noChecked'); // Save the value of no checked.
+        ?>
+      </td>
+    </tr>
+  </table>
+  <?php else:?>
   <div id='featurebar'>
     <div class='heading'><i class='icon-lock'> <?php echo $group->name;?></i></div>
     <ul class='nav'>
@@ -80,12 +110,12 @@
         <?php
         echo html::submitButton($lang->save, "onclick='setNoChecked()'");
         echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
-        echo html::hidden('foo'); // Just a hidden var, to make sure $_POST is not empty.
         echo html::hidden('noChecked'); // Save the value of no checked.
         ?>
       </td>
     </tr>
   </table>
+  <?php endif;?>
 </form>
 <script type='text/javascript'>
 var groupID = <?php echo $groupID?>;

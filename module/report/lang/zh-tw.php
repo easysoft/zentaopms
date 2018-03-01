@@ -16,6 +16,7 @@ $lang->report->item       = '條目';
 $lang->report->value      = '值';
 $lang->report->percent    = '百分比';
 $lang->report->undefined  = '未設定';
+$lang->report->query      = '查詢';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
@@ -30,6 +31,9 @@ $lang->report->colors[]   = '008ED6';
 $lang->report->colors[]   = '9D080D';
 $lang->report->colors[]   = 'A186BE';
 
+$lang->report->assign['noassign'] = '未指派';
+$lang->report->assign['assign'] = '已指派';
+
 $lang->report->singleColor[] = 'F6BD0F';
 
 $lang->report->projectDeviation = $lang->projectCommon . '偏差報表';
@@ -42,6 +46,7 @@ $lang->report->bugOpenedDate    = 'Bug創建時間';
 $lang->report->taskAssignedDate = '起止時間';
 $lang->report->beginAndEnd      = '起止時間';
 $lang->report->dept             = '部門';
+$lang->report->deviationChart   = $lang->projectCommon . '偏差曲綫';
 
 $lang->reportList->project->lists[10] = $lang->projectCommon . '偏差報表|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . '彙總表|report|productsummary';
@@ -53,7 +58,7 @@ $lang->report->id            = '編號';
 $lang->report->project       = $lang->projectCommon;
 $lang->report->product       = $lang->productCommon;
 $lang->report->user          = '姓名';
-$lang->report->bug           = 'Bug';
+$lang->report->bugTotal      = 'Bug';
 $lang->report->task          = '任務數';
 $lang->report->estimate      = '總預計';
 $lang->report->consumed      = '總消耗';
@@ -69,6 +74,11 @@ $lang->report->validRateTips = "方案為已解決或延期/狀態為已解決�
 $lang->report->unplanned     = '未計劃';
 $lang->report->workday       = '每天工時';
 $lang->report->diffDays      = '工作日天數';
+
+$lang->report->typeList['']     = '預設';
+$lang->report->typeList['pie']  = '餅圖';
+$lang->report->typeList['bar']  = '柱狀圖';
+$lang->report->typeList['line'] = '折線圖';
 
 $lang->report->conditions    = '篩選條件：';
 $lang->report->closedProduct = '關閉' . $lang->productCommon;

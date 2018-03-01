@@ -187,7 +187,7 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->testcase->type;?></th>
-            <td><?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, 'class=form-control');?></td>
+            <td><?php echo html::select('type', (array)$lang->testcase->typeList, $case->type, "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->testcase->stage;?></th>
@@ -195,11 +195,11 @@
           </tr>  
           <tr>
             <th><?php echo $lang->testcase->pri;?></th>
-            <td><?php echo html::select('pri', (array)$lang->testcase->priList, $case->pri, 'class=form-control');?></td>
+            <td><?php echo html::select('pri', (array)$lang->testcase->priList, $case->pri, "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->testcase->status;?></th>
-            <td><?php echo html::select('status', (array)$lang->testcase->statusList, $case->status, 'class=form-control');?></td>
+            <td><?php echo html::select('status', (array)$lang->testcase->statusList, $case->status, "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->testcase->keywords;?></th>

@@ -35,3 +35,5 @@
 .colorpicker.input-group-btn > .btn {border-right: none}
 
 #branch {border-left-width: 0px;}
+
+.input-group-addon.w-80px{min-width:80px;}

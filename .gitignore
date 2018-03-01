@@ -1,3 +1,4 @@
+config/db.php
 config/my.php
 www/data/
 www/install.php
@@ -6,10 +7,12 @@ www/ok.txt
 tools/*
 release/*
 tmp/*
-tmp/extensions/*
 tmp/log/*
 tmp/model/*
 tmp/cache/*
 tmp/extension/*
 .gitkeep
 .bak
+.idea
+.gitignore
+.DS_Store

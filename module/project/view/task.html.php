@@ -45,10 +45,51 @@ js::set('browseType', $browseType);
     <?php
     $datatableId  = $this->moduleName . ucfirst($this->methodName);
     $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
-    $file2Include = $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(__FILE__) . '/taskdata.html.php';
     $vars         = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";
-    include $file2Include;
+
+    if($useDatatable) include '../../common/view/datatable.html.php';
+    $customFields = $this->datatable->getSetting('project');
+    if($project->type == 'ops')
+    {
+        foreach($customFields as $id => $customField)
+        {
+            if($customField->id == 'story') unset($customFields[$id]);
+        }
+    }
+    $widths  = $this->datatable->setFixedFieldWidth($customFields);
+    $columns = 0;
     ?>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed <?php echo ($useDatatable ? 'datatable' : 'table-selectable');?> table-selectable' id='taskList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='taskIDList[]'>
+      <thead>
+        <tr>
+        <?php
+        foreach($customFields as $field)
+        {
+            if($field->show)
+            {
+                $this->datatable->printHead($field, $orderBy, $vars);
+                $columns++;
+            }
+        }
+        ?>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach($tasks as $task):?>
+        <tr class='text-center' data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
+          <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
+        </tr>
+        <?php if(!empty($task->children)):?>
+        <?php foreach($task->children as $key => $child):?>
+        <?php $class  = $key == 0 ? ' table-child-top' : '';?>
+        <?php $class .= ($key + 1 == count($task->children)) ? ' table-child-bottom' : '';?>
+        <tr class='text-center table-children<?php echo $class;?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-consumed='<?php echo $child->consumed?>' data-left='<?php echo $child->left?>'>
+          <?php foreach($customFields as $field) $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);?>
+        </tr>
+        <?php endforeach;?>
+        <?php endif;?>
+        <?php endforeach;?>
+      </tbody>
       <tfoot>
         <tr>
           <?php if(!isset($columns)) $columns = ($this->cookie->windowWidth > $this->config->wideSize ? 15 : 13) - ($project->type == 'sprint' ? 0 : 1);?>
@@ -65,7 +106,7 @@ js::set('browseType', $browseType);
                 echo html::selectButton();
 
                 $actionLink = $this->createLink('task', 'batchEdit', "projectID=$projectID");
-                $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+                $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink', '', '#projectTaskForm')\"" : "disabled='disabled'";
 
                 echo "<div class='btn-group dropup'>";
                 echo html::commonButton($lang->edit, $misc);
@@ -73,11 +114,11 @@ js::set('browseType', $browseType);
                 echo "<ul class='dropdown-menu' id='moreActionMenu'>";
 
                 $actionLink = $this->createLink('task', 'batchClose');
-                $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "class='disabled'";
+                $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#moreAction')\"" : "class='disabled'";
                 echo "<li>" . html::a('#', $lang->close, '', $misc) . "</li>";
 
                 $actionLink = $this->createLink('task', 'batchCancel');
-                $misc = $canBatchCancel ? "onclick=\"setFormAction('$actionLink','hiddenwin')\"" : "class='disabled'";
+                $misc = $canBatchCancel ? "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#moreAction')\"" : "class='disabled'";
                 echo "<li>" . html::a('#', $lang->task->cancel, '', $misc) . "</li>";
 
                 if($canBatchChangeModule)
@@ -90,7 +131,7 @@ js::set('browseType', $browseType);
                     foreach($modules as $moduleId => $module)
                     {
                         $actionLink = $this->createLink('task', 'batchChangeModule', "moduleID=$moduleId");
-                        echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
+                        echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#moreAction')\"") . "</li>";
                     }
                     echo '</ul>';
                     if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
@@ -114,7 +155,7 @@ js::set('browseType', $browseType);
                     foreach ($memberPairs as $key => $value)
                     {
                         if(empty($key)) continue;
-                        echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
+                        echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", \"hiddenwin\", \"#moreAction\")", $value, '', '') . '</li>';
                     }
                     echo "</ul>";
                     if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
@@ -132,6 +173,7 @@ js::set('browseType', $browseType);
     </table>
   </form>
 </div>
+<?php js::set('checkedSummary', $lang->project->checkedSummary);?>
 <?php js::set('replaceID', 'taskList')?>
 <script>
 $('#project<?php echo $projectID;?>').addClass('active')

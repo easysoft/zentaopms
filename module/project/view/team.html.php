@@ -27,7 +27,7 @@
       }
       else
       {
-          if($app->user->limitedUser === 'no') common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
+          if(!empty($app->user->admin) or empty($app->user->rights['rights']['my']['limited'])) common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
       }
       ?>
     </div>
@@ -41,7 +41,7 @@
         <th><?php echo $lang->team->days;?></th>
         <th><?php echo $lang->team->hours;?></th>
         <th><?php echo $lang->team->totalHours;?></th>
-        <th><?php echo $lang->team->limitedUser;?></th>
+        <th><?php echo $lang->team->limited;?></th>
         <th><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -61,7 +61,7 @@
       <td><?php echo $member->days . $lang->project->day;?></td>
       <td><?php echo $member->hours . $lang->project->workHour;?></td>
       <td><?php echo $memberHours . $lang->project->workHour;?></td>
-      <td><?php echo $lang->team->limitedUserList[$member->limitedUser];?></td>
+      <td><?php echo $lang->team->limitedList[$member->limited];?></td>
       <td>
         <?php
         if (common::hasPriv('project', 'unlinkMember', $member))

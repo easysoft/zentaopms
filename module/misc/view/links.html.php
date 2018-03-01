@@ -14,7 +14,7 @@
         <div class='card-content'>
           <ul>
             <?php foreach($groupItems as $item => $label):?>
-            <li><?php echo html::a("http://api.zentao.net/goto.php?item=$item&from=about", $label, '_blank', "id='$item'");;?></li>
+            <li><?php echo html::a($lang->misc->api . "/goto.php?item=$item&from=about", $label, '_blank', "id='$item'");;?></li>
             <?php endforeach;?>
           </ul>
         </div>

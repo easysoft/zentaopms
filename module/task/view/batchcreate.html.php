@@ -15,10 +15,10 @@
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
-    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->task->batchCreate . $lang->task->common;?></strong>
-    <span><small><a href='javascript:toggleZeroTaskStory();' id='zeroTaskStory'><?php echo $lang->story->zeroTask;?><i class='icon icon-remove'></i></a></small></span>
+    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->task->batchCreate;?></strong>
+      <?php if($project->type != 'ops'):?><span><small><a href='javascript:toggleZeroTaskStory();' id='zeroTaskStory'><?php echo $lang->story->zeroTask;?><i class='icon icon-remove'></i></a></small></span><?php endif;?>
     <div class='actions'>
-      <?php echo html::commonButton($lang->pasteText, "data-toggle='myModal'")?>
+      <?php echo html::commonButton($lang->pasteText, "data-toggle='myModal'", 'btn btn-primary')?>
       <button type="button" class="btn btn-default" data-toggle="customModal"><i class='icon icon-cog'></i> </button>
     </div>
   </div>
@@ -34,12 +34,12 @@ $hiddenStory = ((isonlybody() and $storyID) || $this->config->global->flow == 'o
 if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
 ?>
 <form class='form-condensed' method='post' target='hiddenwin'>
-  <table class='table table-form table-fixed with-border'>
+  <table class='table table-form table-fixed with-border' id="tableBody">
     <thead>
       <tr class='text-center'>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
         <th class='w-150px<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->task->module?></th>
-        <th class='w-200px<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>'><?php echo $lang->task->story;?></th>
+        <?php if($project->type != 'ops'):?><th class='w-200px<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>'><?php echo $lang->task->story;?></th><?php endif;?>
         <th><?php echo $lang->task->name;?> <span class='required'></span></th>
         <th class='w-80px'><?php echo $lang->typeAB;?> <span class='required'></span></th>
         <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'><?php echo $lang->task->assignedTo;?></th>
@@ -56,6 +56,7 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
     $lang->task->typeList['ditto'] = $lang->task->ditto; 
     $members['ditto'] = $lang->task->ditto;
     $modules['ditto'] = $lang->task->ditto;
+    if($project->type == 'ops') $colspan = $colspan - 1;
     ?>
     <?php for($i = 0; $i < $config->task->batchCreate; $i++):?>
     <?php 
@@ -73,8 +74,12 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
     ?>
     <?php $pri = 3;?>
     <tr>
-      <td class='text-center'><?php echo $i+1;?></td>
-      <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'><?php echo html::select("module[$i]", $modules, $module, "class='form-control chosen' onchange='setStories(this.value, $project->id, $i)'")?></td>
+      <td class='text-center'><?php echo $i + 1;?></td>
+      <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'>
+        <?php echo html::select("module[$i]", $modules, $module, "class='form-control chosen' onchange='setStories(this.value, $project->id, $i)'")?>
+        <?php echo html::hidden("parent[$i]", $parent);?>
+      </td>
+      <?php if($project->type != 'ops'):?>
       <td <?php echo zget($visibleFields, 'story', "class='hidden'"); echo $hiddenStory;?> style='overflow: visible'>
         <div class='input-group'>
           <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
@@ -84,6 +89,7 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
           </span>
         </div>
       </td>
+      <?php endif;?>
       <td style='overflow:visible'>
         <div class='input-group'>
         <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->task->colorTag}' data-update-text='#name\\[{$i}\\]'");?>
@@ -106,7 +112,10 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
   <tbody>
     <tr>
       <td class='text-center'>%s</td>
-      <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'><?php echo html::select("module[%s]", $modules, $module, "class='form-control' onchange='setStories(this.value, $project->id, \"%s\")'")?></td>
+      <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'>
+        <?php echo html::select("module[%s]", $modules, $module, "class='form-control' onchange='setStories(this.value, $project->id, \"%s\")'")?>
+        <?php echo html::hidden("parent[%s]", $parent);?>
+      </td>
       <td <?php echo zget($visibleFields, 'story', "class='hidden'"); echo $hiddenStory;?> style='overflow: visible'>
         <div class='input-group'>
           <?php echo html::select("story[%s]", $stories, $currentStory, "class='form-control' onchange='setStoryRelated(\"%s\")'");?>
@@ -131,6 +140,7 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
     </tr>
   </tbody>
 </table>
+<?php js::set('projectType', $project->type);?>
 <?php js::set('storyTasks', $storyTasks);?>
 <?php js::set('mainField', 'name');?>
 <?php js::set('ditto', $lang->task->ditto);?>

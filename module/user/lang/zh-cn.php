@@ -68,16 +68,16 @@ $lang->user->asGuest         = "游客访问";
 $lang->user->goback          = "返回前一页";
 $lang->user->deleted         = '(已删除)';
 
-$lang->user->profile      = '档案';
-$lang->user->project      = $lang->projectCommon;
-$lang->user->task         = '任务';
-$lang->user->bug          = '缺陷';
-$lang->user->test         = '测试';
-$lang->user->testTask     = '测试任务';
-$lang->user->testCase     = '测试用例';
-$lang->user->todo         = '待办';
-$lang->user->story        = '需求';
-$lang->user->dynamic      = '动态';
+$lang->user->profile     = '档案';
+$lang->user->project     = $lang->projectCommon;
+$lang->user->task        = '任务';
+$lang->user->bug         = '缺陷';
+$lang->user->test        = '测试';
+$lang->user->testTask    = '测试任务';
+$lang->user->testCase    = '测试用例';
+$lang->user->todo        = '待办';
+$lang->user->story       = '需求';
+$lang->user->dynamic     = '动态';
 
 $lang->user->openedBy    = '由他创建';
 $lang->user->assignedTo  = '指派给他';
@@ -96,10 +96,6 @@ $lang->user->loginFailed  = "登录失败，请检查您的用户名或密码是
 $lang->user->lockWarning  = "您还有%s次尝试机会。";
 $lang->user->loginLocked  = "密码尝试次数太多，请联系管理员解锁，或%s分钟后重试。";
 $lang->user->weakPassword = "您的密码强度小于系统设定。";
-
-$lang->user->limitedUser = '受限用户';
-$lang->user->limitedUserList['no']  = '否';
-$lang->user->limitedUserList['yes'] = '是';
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = '研发';
@@ -138,7 +134,6 @@ $lang->user->placeholder->role        = '职位影响内容和用户列表的顺
 $lang->user->placeholder->group       = '分组决定用户的权限列表。';
 $lang->user->placeholder->commiter    = '版本控制系统(subversion)中的帐号';
 $lang->user->placeholder->verify      = '需要输入你的密码加以验证';
-$lang->user->placeholder->limitedUser = '只能编辑与自己相关的内容。';
 
 $lang->user->placeholder->passwordStrength[1] = '6位以上，包含大小写字母，数字。';
 $lang->user->placeholder->passwordStrength[2] = '10位以上，包含大小写字母，数字，特殊字符。';
@@ -150,6 +145,7 @@ $lang->user->error->realname      = "ID %s，必须填写真实姓名";
 $lang->user->error->password      = "ID %s，密码必须六位以上";
 $lang->user->error->mail          = "ID %s，请填写正确的邮箱地址";
 $lang->user->error->role          = "ID %s，职位不能为空";
+$lang->user->error->reserved      = "ID %s，该用户名系统预留";
 
 $lang->user->error->verifyPassword   = "安全验证密码错误，请输入你的登录密码";
 $lang->user->error->originalPassword = "原密码不正确";

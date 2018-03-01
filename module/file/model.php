@@ -654,13 +654,7 @@ class fileModel extends model
         {
             foreach($_SESSION['album'][$uid] as $i => $imageID)
             {
-                if(!isset($imageIdList[$imageID]))
-                {
-                    $file = $this->getById($imageID);
-                    $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($imageID)->exec();
-                    @unlink($file->realPath);
-                    unset($_SESSION['album'][$uid][$i]);
-                }
+                if(isset($imageIdList[$imageID])) $_SESSION['album']['used'][$uid][$imageID] = $imageID;
             }
         }
         return $data;
@@ -779,8 +773,6 @@ class fileModel extends model
         if(isset($_SESSION['album'][$uid]) and $_SESSION['album'][$uid])
         {
             $this->dao->update(TABLE_FILE)->data($data)->where('id')->in($_SESSION['album'][$uid])->exec();
-            if(dao::isError()) return false;
-            unset($_SESSION['album'][$uid]);
             return !dao::isError();
         }
     }
@@ -803,5 +795,29 @@ class fileModel extends model
         }
         return $data;
 
+    }
+
+    /**
+     * Auto delete useless image.
+     * 
+     * @param  int    $uid 
+     * @access public
+     * @return void
+     */
+    public function autoDelete($uid)
+    {
+        if(!empty($_SESSION['album'][$uid]))
+        {
+            foreach($_SESSION['album'][$uid] as $i => $imageID)
+            {
+                if(!isset($_SESSION['album']['used'][$uid][$imageID]))
+                {
+                    $file = $this->getById($imageID);
+                    $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($imageID)->exec();
+                    @unlink($file->realPath);
+                }
+            }
+            unset($_SESSION['album'][$uid]);
+        }
     }
 }

@@ -26,7 +26,7 @@
     <small class='text-muted'><?php echo html::icon($lang->icons['story']) . ' ' . $story->title ?></small>
     <?php endif;?>
     <div class='actions'>
-      <?php echo html::commonButton($lang->pasteText, "data-toggle='myModal' ")?>
+      <?php echo html::commonButton($lang->pasteText, "data-toggle='myModal'", 'btn btn-primary')?>
       <button type="button" class="btn btn-default" data-toggle="customModal"><i class='icon icon-cog'></i></button>
     </div>
   </div>

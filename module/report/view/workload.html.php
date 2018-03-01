@@ -17,7 +17,7 @@
 <div class='main'>
   <form method='post'>
     <div class='row' style='margin-bottom:5px;'>
-      <div class='col-sm-3'>
+      <div class='col-sm-2'>
         <div class='input-group'>
           <span class='input-group-addon'><?php echo $lang->report->dept;?></span>
           <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='changeParams(this)'");?>
@@ -26,9 +26,9 @@
       <div class='col-sm-4'>
         <div class='input-group input-group-sm'>
           <span class='input-group-addon'><?php echo $lang->report->taskAssignedDate;?></span>
-          <div class='datepicker-wrapper datepicker-date'><?php echo html::input('begin', $begin, "class='w-100px form-control' onchange='changeParams(this)'");?></div>
+          <div class='datepicker-wrapper datepicker-date'><?php echo html::input('begin', $begin, "class='w-80px form-control' style='padding-right:10px' onchange='changeParams(this)'");?></div>
           <span class='input-group-addon fix-border'><?php echo $lang->report->to;?></span>
-          <div class='datepicker-wrapper datepicker-date'><?php echo html::input('end', $end, "class='form-control' onchange='changeParams(this)'");?></div>
+          <div class='datepicker-wrapper datepicker-date'><?php echo html::input('end', $end, "class='form-control' style='padding-right:10px' onchange='changeParams(this)'");?></div>
         </div>
       </div>
       <div class='col-sm-2'>
@@ -44,20 +44,23 @@
         </div>
       </div>
       <div class='col-sm-1'>
-        <div class='input-group'><?php echo html::submitButton();?></div>
+        <?php echo html::select('assign', $lang->report->assign, $assign, "class='form-control' onchange='changeParams(this)' style='width:90px'");?>
+      </div>
+      <div class='col-sm-1'>
+        <div class='input-group'><?php echo html::submitButton($lang->report->query);?></div>
       </div>
     </div>
   </form>
   <table class='table table-condensed table-striped table-bordered table-fixed active-disabled' id="workload">
     <thead>
     <tr class='colhead'>
-      <th><?php echo $lang->report->user;?></th>
+      <th class="w-200px"><?php echo $lang->report->user;?></th>
       <th><?php echo $lang->report->project;?></th>
-      <th><?php echo $lang->report->task;?></th>
-      <th><?php echo $lang->report->remain;?></th>
-      <th><?php echo $lang->report->taskTotal;?></th>
-      <th><?php echo $lang->report->manhourTotal;?></th>
-      <th><?php echo $lang->report->workloadAB;?></th>
+      <th class="w-100px"><?php echo $lang->report->task;?></th>
+      <th class="w-100px"><?php echo $lang->report->remain;?></th>
+      <th class="w-100px"><?php echo $lang->report->taskTotal;?></th>
+      <th class="w-100px"><?php echo $lang->report->manhourTotal;?></th>
+      <th class="w-100px"><?php echo $lang->report->workloadAB;?></th>
     </tr>
     </thead>
     <tbody>
@@ -71,16 +74,16 @@
         <?php $class = $color ? 'rowcolor' : '';?>
         <?php if($id != 1) echo '<tr class="a-center">';?>
         <td class="<?php echo $class;?>"><?php echo html::a($this->createLink('project', 'view', "projectID={$info['projectID']}"), $project);?></td>
-        <td class="<?php echo $class;?>"><?php echo $info['count'];?></td>
-        <td class="<?php echo $class;?>"><?php echo $info['manhour'];?></td>
+        <td class="<?php echo $class;?> text-center"><?php echo $info['count'];?></td>
+        <td class="<?php echo $class;?> text-center"><?php echo $info['manhour'];?></td>
         <?php if($id == 1):?>
-        <td rowspan="<?php echo count($load['task']);?>">
+        <td rowspan="<?php echo count($load['task']);?>" class="text-center">
           <?php echo $load['total']['count'];?>
         </td>
-        <td rowspan="<?php echo count($load['task']);?>">
+        <td rowspan="<?php echo count($load['task']);?>" class="text-center">
           <?php echo $load['total']['manhour'];?>
         </td>
-        <td rowspan="<?php echo count($load['task']);?>">
+        <td rowspan="<?php echo count($load['task']);?>" class="text-center">
           <?php echo round($load['total']['manhour'] / $allHour * 100, 2) . '%';?>
         </td>
         <?php endif;?>

@@ -53,7 +53,6 @@ class tutorial extends control
         if($_POST && isset($_POST['finish'])) $finish = $_POST['finish'];
 
         if($finish == 'keepAll') $this->send(array('result' => 'fail', 'message' => $this->lang->tutorial->ajaxSetError));
-
         $account = $this->app->user->account;
         $this->session->set('tutorialMode', false);
         $this->loadModel('setting')->setItem("$account.tutorial.tasks.setting", $finish);
@@ -72,7 +71,6 @@ class tutorial extends control
     {
         $this->session->set('tutorialMode', false);
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', 0);
-
         if(empty($referer)) $referer = $this->createLink('index');
         die(js::locate(helper::safe64Decode($referer), 'parent'));
     }
@@ -120,6 +118,8 @@ class tutorial extends control
      * Ajax save novice result.
      * 
      * @param  string $novice 
+     * @param  string $reload
+     *
      * @access public
      * @return void
      */
@@ -127,5 +127,17 @@ class tutorial extends control
     {
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', $novice == true ? 1 : 0);
         if($reload == 'true') die(js::reload('parent'));
+    }
+
+    /**
+     * Ajax save tutorial score.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxFinish()
+    {
+        $this->session->set('tutorialMode', false);
+        $this->loadModel('score')->create('tutorial', 'finish');
     }
 }

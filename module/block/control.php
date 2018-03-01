@@ -54,9 +54,11 @@ class block extends control
             if($this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest') unset($modules['project']);
 
             $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
-            if(strpos(",$closedBlock,", ",|dynamic,") === false)   $modules['dynamic']   = $this->lang->block->dynamic;
+            if(strpos(",$closedBlock,", ",|assigntome,") === false) $modules['assigntome'] = $this->lang->block->assignToMe;
+            if(strpos(",$closedBlock,", ",|dynamic,") === false) $modules['dynamic'] = $this->lang->block->dynamic;
             if(strpos(",$closedBlock,", ",|flowchart,") === false and $this->config->global->flow == 'full') $modules['flowchart'] = $this->lang->block->lblFlowchart;
-            if(strpos(",$closedBlock,", ",|html,") === false)      $modules['html']      = 'HTML';
+            if(strpos(",$closedBlock,", ",|welcome,") === false and $this->config->global->flow == 'full') $modules['welcome'] = $this->lang->block->welcome;
+            if(strpos(",$closedBlock,", ",|html,") === false) $modules['html'] = 'HTML';
             $modules = array('' => '') + $modules;
 
             $hiddenBlocks = $this->block->getHiddenBlocks();
@@ -103,6 +105,11 @@ class block extends control
             $params = $this->block->$func($source);
             $this->view->params = json_decode($params, true);
         }
+        elseif($type == 'assigntome')
+        {
+            $params = $this->block->getAssignToMeParams();
+            $this->view->params = json_decode($params, true);
+        }
 
         $this->view->source  = $source;
         $this->view->type    = $type;
@@ -131,6 +138,7 @@ class block extends control
             $this->dao->delete()->from(TABLE_BLOCK)->where('`id`')->eq($id)->andWhere('account')->eq($this->app->user->account)->andWhere('module')->eq($module)->exec();
         }
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        $this->loadModel('score')->create('block', 'set');
         $this->send(array('result' => 'success'));
     }
 
@@ -157,6 +165,7 @@ class block extends control
         }
 
         if(dao::isError()) $this->send(array('result' => 'fail'));
+        $this->loadModel('score')->create('block', 'set');
         $this->send(array('result' => 'success'));
     }
 
@@ -207,6 +216,7 @@ class block extends control
             if($this->block->initBlock($module)) die(js::reload());
         }
 
+        $shortBlocks = $longBlocks = array();
         foreach($blocks as $key => $block)
         {
             if($this->config->global->flow == 'onlyStory' and $block->source != 'product' and $block->source != 'todo' and $block->block != 'dynamic') unset($blocks[$key]);
@@ -228,15 +238,22 @@ class block extends control
             {
                 $block->moreLink = $this->createLink('company', 'dynamic');
             }
+
+            if($this->block->isLongBlock($block))
+            {
+                $longBlocks[$key] = $block;
+            }
+            else
+            {
+                $shortBlocks[$key] = $block;
+            }
         }
 
-        $this->view->blocks = $blocks;
-        $this->view->module = $module;
+        $this->view->longBlocks  = $longBlocks;
+        $this->view->shortBlocks = $shortBlocks;
+        $this->view->module      = $module;
 
-        if($this->app->getViewType() == 'json')
-        {
-            die(json_encode($blocks));
-        }
+        if($this->app->getViewType() == 'json') die(json_encode($blocks));
 
         $this->display();
     }
@@ -251,6 +268,39 @@ class block extends control
     {
         $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today');
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
+    }
+
+    /**
+     * Welcome block.
+     * 
+     * @access public
+     * @return void
+     */
+    public function welcome()
+    {
+        $projects = $this->loadModel('project')->getPairs();
+        $products = $this->loadModel('product')->getPairs();
+
+        $this->view->tutorialed = $this->loadModel('tutorial')->getTutorialed();
+        $this->view->tasks      = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->fetch('count');
+        $this->view->bugs       = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($this->app->user->account)->fetch('count');
+        $this->view->stories    = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->fetch('count');
+        $this->view->projects   = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)->where('id')->in(array_keys($projects))->andWhere("(status='wait' or status='doing')")->fetch('count');
+        $this->view->products   = (int)$this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)->where('status')->ne('closed')->andWhere('id')->in(array_keys($products))->fetch('count');
+
+        $today = date('Y-m-d');
+        $this->view->delay['task']    = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deadline')->ne('0000-00-00')->andWhere('deadline')->lt($today)->fetch('count');
+        $this->view->delay['bug']     = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($this->app->user->account)->andWhere('deadline')->ne('0000-00-00')->andWhere('deadline')->lt($today)->fetch('count');
+        $this->view->delay['project'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)->where('id')->in(array_keys($projects))->andWhere("(status='wait' or status='doing')")->andWhere('end')->lt($today)->fetch('count');
+
+        $time = date('H:i');
+        $welcomeType = '19:00';
+        foreach($this->lang->block->welcomeList as $type => $name)
+        {
+            if($time >= $type) $welcomeType = $type;
+        }
+        $this->view->welcomeType = $welcomeType;
         $this->display();
     }
 
@@ -270,7 +320,7 @@ class block extends control
         $html = '';
         if($block->block == 'html')
         {
-            $html = "<div class='article-content'>" . htmlspecialchars_decode($block->params->html) .'</div>';
+            $html = "<div class='panel-body'><div class='article-content'>" . htmlspecialchars_decode($block->params->html) .'</div></div>';
         }
         elseif($block->source != '')
         {
@@ -279,7 +329,7 @@ class block extends control
             $this->get->set('module', $block->module);
             $this->get->set('source', $block->source);
             $this->get->set('blockid', $block->block);
-            $this->get->set('param',base64_encode(json_encode($block->params)));
+            $this->get->set('param', base64_encode(json_encode($block->params)));
             $html = $this->fetch('block', 'main', "module={$block->source}&id=$id");
         }
         elseif($block->block == 'dynamic')
@@ -290,8 +340,17 @@ class block extends control
         {
             $html = $this->fetch('block', 'flowchart');
         }
+        elseif($block->block == 'assigntome')
+        {
+            $this->get->set('param', base64_encode(json_encode($block->params)));
+            $html = $this->fetch('block', 'printAssignToMeBlock', 'longBlock=' . $this->block->isLongBlock($block));
+        }
+        elseif($block->block == 'welcome')
+        {
+            $html = $this->fetch('block', 'welcome');
+        }
         
-        die($html);
+        echo $html;
     }
 
     /**
@@ -355,6 +414,9 @@ class block extends control
                 $this->view->sso  = $sso;
                 $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
             }
+
+            $block = $this->block->getByID($id);
+            $this->view->longBlock = $this->block->isLongBlock($block);
 
             $this->viewType    = (isset($params->viewType) and $params->viewType == 'json') ? 'json' : 'html';
             $this->params      = $params;
@@ -609,7 +671,18 @@ class block extends control
         $num   = isset($this->params->num) ? (int)$this->params->num : 0;
         $type  = isset($this->params->type) ? $this->params->type : '';
         $pager = pager::init(0, $num , 1);
-        $this->view->productStats = $this->loadModel('product')->getStats('order_desc', $this->viewType != 'json' ? $pager : '', $type);
+
+        $productStats  = $this->loadModel('product')->getStats('order_desc', $this->viewType != 'json' ? $pager : '', $type);
+        $productIdList = array();
+        foreach($productStats as $product) $productIdList[] = $product->id;
+
+        $this->view->projects = $this->dao->select('t1.product,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.product')->in($productIdList)
+            ->andWhere('t2.deleted')->eq(0)
+            ->orderBy('t1.project')
+            ->fetchPairs('product', 'name');
+        $this->view->productStats = $productStats;
     }
 
     /**
@@ -626,6 +699,75 @@ class block extends control
         $type  = isset($this->params->type) ? $this->params->type : 'all';
         $pager = pager::init(0, $num, 1);
         $this->view->projectStats = $this->loadModel('project')->getProjectStats($type, $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'order_desc', $this->viewType != 'json' ? $pager : '');
+    }
+
+    /**
+     * Print assign to me block.
+     * 
+     * @access public
+     * @return void
+     */
+    public function printAssignToMeBlock($longBlock = true)
+    {
+        if(common::hasPriv('todo',  'view')) $hasViewPriv['todo']  = true;
+        if(common::hasPriv('task',  'view')) $hasViewPriv['task']  = true;
+        if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']   = true;
+
+        $params = $this->get->param;
+        $params = json_decode(base64_decode($params));
+
+        if(isset($hasViewPriv['todo']))
+        {
+            $this->app->loadClass('date');
+            $this->app->loadLang('todo');
+            $stmt = $this->dao->select('*')->from(TABLE_TODO)
+                ->where("(assignedTo = '{$this->app->user->account}' or (assignedTo = '' and account='{$this->app->user->account}'))")
+                ->andWhere('status')->ne('done')
+                ->andWhere('cycle')->eq(0)
+                ->orderBy('`date`');
+            if(isset($params->todoNum)) $stmt->limit($params->todoNum);
+            $todos = $stmt->fetchAll();
+
+            foreach($todos as $todo)
+            {
+                $todo->begin = date::formatTime($todo->begin);
+                $todo->end   = date::formatTime($todo->end);
+            }
+            if(empty($todos)) unset($hasViewPriv['todo']);
+            $this->view->todos = $todos;
+        }
+        if(isset($hasViewPriv['task']))
+        {
+            $this->app->loadLang('task');
+            $stmt = $this->dao->select('*')->from(TABLE_TASK)
+                ->where('assignedTo')->eq($this->app->user->account)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere('status')->ne('closed')
+                ->orderBy('id_desc');
+            if(isset($params->taskNum)) $stmt->limit($params->taskNum);
+            $tasks = $stmt->fetchAll();
+
+            if(empty($tasks)) unset($hasViewPriv['task']);
+            $this->view->tasks = $tasks;
+        }
+        if(isset($hasViewPriv['bug']))
+        {
+            $this->app->loadLang('bug');
+            $stmt = $this->dao->select('*')->from(TABLE_BUG)
+                ->where('assignedTo')->eq($this->app->user->account)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere('status')->ne('closed')
+                ->orderBy('id_desc');
+            if(isset($params->bugNum)) $stmt->limit($params->bugNum);
+            $bugs = $stmt->fetchAll();
+
+            if(empty($bugs)) unset($hasViewPriv['bug']);
+            $this->view->bugs = $bugs;
+        }
+
+        $this->view->hasViewPriv = $hasViewPriv;
+        $this->view->longBlock   = $longBlock;
+        $this->display();
     }
 
     /**

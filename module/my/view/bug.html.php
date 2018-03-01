@@ -48,7 +48,7 @@
       </td>
       <td><span class='<?php echo 'severity' . zget($lang->bug->severityList, $bug->severity, $bug->severity)?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span></td>
       <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
-      <td><?php echo $lang->bug->typeList[$bug->type]?></td>
+      <td><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
       <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color'");?></td>
       <td><?php echo $users[$bug->openedBy];?></td>
       <td><?php echo $users[$bug->assignedTo];?></td>

@@ -105,6 +105,20 @@ class action extends control
     }
 
     /**
+     * Comment. 
+     * 
+     * @param  string $objectType 
+     * @param  int    $objectID 
+     * @access public
+     * @return void
+     */
+    public function comment($objectType, $objectID)
+    {
+        $actionID = $this->action->create($objectType, $objectID, 'Commented', $this->post->comment);
+        die(js::reload('parent'));
+    }
+
+    /**
      * Edit comment of a action.
      * 
      * @param  int    $actionID 

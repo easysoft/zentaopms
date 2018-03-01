@@ -35,7 +35,7 @@
         {
             foreach($action->history as $history)
             {
-                if($history->field == 'contentType')
+                if($history->field == 'content')
                 {
                     $versions[$i] = "#$i " . zget($users, $action->actor) . ' ' . substr($action->date, 2, 14);
                     $i++;
@@ -89,51 +89,48 @@
 <div class='row-table'>
   <div class='col-main'>
     <div class='main'>
-      <fieldset>
-        <legend><?php echo $lang->doc->content;?></legend>
-        <div class='content'>
-          <?php
-          $content = $doc->content;
-          if($doc->type == 'url')
-          {
-              $url = $doc->content;
-              if(!preg_match('/^https?:\/\//', $doc->content)) $url = 'http://' . $url;
-              $content = html::a($url, $doc->content, '_blank');
-          }
-          echo $content;
-          ?>
-          <div class='list-group files-list'>
-          <?php foreach($doc->files as $file):?>
-          <?php if(in_array($file->extension, $config->file->imageExtensions)):?>
-          <?php $uploadDate = $lang->file->uploadDate . substr($file->addedDate, 0, 10);?>
-          <li class='list-group-item' title='<?php echo $uploadDate?>' style='position:relative;'>
-            <a href="<?php echo $file->webPath?>" target="_blank">
-              <img onload="setImageSize(this,0)" src="<?php echo $file->webPath?>" alt="<?php echo $file->title?>">
-            </a>
-            <span class='right-icon' style='position:absolute;right:-18px;top:0px;'>
-              <?php if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon-remove'></i>", '', "class='btn-icon' onclick='deleteFile($file->id)' title='$lang->delete'");?>
-            </span>
-          </li>
-          <?php unset($doc->files[$file->id]);?>
-          <?php endif;?>
-          <?php endforeach;?>
-          </div>
-
-          <div class='file-content'><?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'false'));?></div>
+      <div class='content'>
+        <?php
+        $content = $doc->content;
+        if($doc->type == 'url')
+        {
+            $url = $doc->content;
+            if(!preg_match('/^https?:\/\//', $doc->content)) $url = 'http://' . $url;
+            $content = html::a($url, $doc->content, '_blank');
+        }
+        echo $content;
+        ?>
+        <div class='list-group files-list'>
+        <?php foreach($doc->files as $file):?>
+        <?php if(in_array($file->extension, $config->file->imageExtensions)):?>
+        <?php $uploadDate = $lang->file->uploadDate . substr($file->addedDate, 0, 10);?>
+        <li class='list-group-item' title='<?php echo $uploadDate?>' style='position:relative;'>
+          <a href="<?php echo $file->webPath?>" target="_blank">
+            <img onload="setImageSize(this,0)" src="<?php echo $this->createLink('file', 'read', "fileID={$file->id}");?>" alt="<?php echo $file->title?>">
+          </a>
+          <span class='right-icon' style='position:absolute;right:-18px;top:0px;'>
+            <?php if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon-remove'></i>", '', "class='btn-icon' onclick='deleteFile($file->id)' title='$lang->delete'");?>
+          </span>
+        </li>
+        <?php unset($doc->files[$file->id]);?>
+        <?php endif;?>
+        <?php endforeach;?>
         </div>
-      </fieldset>
+
+        <div class='file-content'><?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'false'));?></div>
+      </div>
       <div class='actions'><?php if(!$doc->deleted) echo $actionLinks;?></div>
-      <?php include '../../common/view/action.html.php';?>
+
       <fieldset id='commentBox' class='hide'>
         <legend><?php echo $lang->comment;?></legend>
-        <form method='post' action='<?php echo inlink('edit', "docID=$doc->id&comment=true")?>'>
+        <form method='post' action='<?php echo $this->createLink('action', 'comment', "objectType=doc&objectID=$doc->id")?>' target='hiddenwin'>
           <div class="form-group"><?php echo html::textarea('comment', '',"style='width:100%;height:100px'");?></div>
           <?php echo html::submitButton() . html::backButton();?>
         </form>
       </fieldset>
     </div>
   </div>
-  <div class='col-side'>
+  <div class='col-side hidden-xs'>
     <div class='main main-side'>
       <fieldset>
         <legend><?php echo $lang->doc->digest;?></legend>
@@ -180,6 +177,7 @@
           </tr>
         </table>
       </fieldset>
+      <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
 </div>

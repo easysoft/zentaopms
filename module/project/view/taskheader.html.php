@@ -28,6 +28,7 @@
 
     foreach(customModel::getFeatureMenu('project', 'task') as $menuItem)
     {
+        if($project->type == 'ops' && $menuItem->name == 'needconfirm') continue;
         if(isset($menuItem->hidden)) continue;
         $menuType = $menuItem->name;
         if(strpos($menuType, 'QUERY') === 0)
@@ -73,6 +74,7 @@
     foreach ($lang->project->groups as $key => $value)
     {
         if($key == '') continue;
+        if($project->type == 'ops' && $key == 'story') continue;
         echo '<li' . ($key == $groupBy ? " class='active'" : '') . '>';
         common::printLink('project', 'groupTask', "project=$projectID&groupBy=$key", $value);
     }
@@ -96,7 +98,7 @@
         <ul class='dropdown-menu' id='exportActionMenu'>
         <?php 
         $misc = common::hasPriv('task', 'export') ? "class='export iframe' data-width='700'" : "class=disabled";
-        $link = common::hasPriv('task', 'export') ?  $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy") : '#';
+        $link = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=$browseType") : '#';
         echo "<li>" . html::a($link, $lang->task->export, '', $misc) . "</li>";
         ?>
         </ul>
@@ -126,16 +128,15 @@
         $misc = common::hasPriv('task', 'create', $project) ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
         $link = common::hasPriv('task', 'create', $project) ?  $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')) : '#';
         echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->task->create, '', $misc);
+
+        $misc = common::hasPriv('task', 'batchCreate', $project) ? '' : "disabled";
+        $link = common::hasPriv('task', 'batchCreate', $project) ?  $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')) : '#';
         ?>
-        <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
+        <button type='button' class='btn btn-primary dropdown-toggle <?php echo $misc?>' data-toggle='dropdown'>
           <span class='caret'></span>
         </button>
         <ul class='dropdown-menu pull-right'>
-        <?php
-        $misc = common::hasPriv('task', 'batchCreate', $project) ? '' : "class=disabled";
-        $link = common::hasPriv('task', 'batchCreate', $project) ?  $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')) : '#';
-        echo "<li>" . html::a($link, $lang->task->batchCreate, '', $misc) . "</li>";
-        ?>
+        <?php echo "<li>" . html::a($link, $lang->task->batchCreate, '', "class='$misc'") . "</li>";?>
         </ul>
       </div>
     </div>

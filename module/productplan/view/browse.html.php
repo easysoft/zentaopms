@@ -43,33 +43,44 @@
   <thead>
   <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <tr class='colhead'>
-    <th class='w-id'>    <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
-    <th>                 <?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
+    <th class='w-id'>   <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
+    <th>                <?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
     <?php if($this->session->currentProductType != 'normal'):?>
-    <th class='w-100px'> <?php common::printOrderLink('branch',$orderBy, $vars, $lang->product->branch);?></th>
+    <th class='w-100px'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->product->branch);?></th>
     <?php endif;?>
-    <th class='w-p50'>   <?php echo $lang->productplan->desc;?></th>
-    <th class='w-100px'> <?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
-    <th class='w-100px'> <?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
-    <th class="w-110px {sorter: false}"><?php echo $lang->actions;?></th>
+    <th class='w-60px'> <?php echo $lang->productplan->stories;?></th>
+    <th class='w-60px'> <?php echo $lang->productplan->bugs;?></th>
+    <th class='w-60px'> <?php echo $lang->productplan->hour;?></th>
+    <th class='w-60px'> <?php echo $lang->productplan->project;?></th>
+    <th class='w-p40'>  <?php echo $lang->productplan->desc;?></th>
+    <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
+    <th class='w-100px'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
+    <th class="w-130px {sorter: false}"><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
+  <?php if($this->loadModel('file'));?>
   <?php foreach($plans as $plan):?>
+  <?php $plan = $this->file->replaceImgURL($plan, 'desc');?>
   <tr class='text-center'>
     <td class='cell-id'>
-      <input type='checkbox' name='planIDList[<?php echo $plan->id;?>]' value='<?php echo $plan->id;?>' /> 
+      <input type='checkbox' name='planIDList[<?php echo $plan->id;?>]' value='<?php echo $plan->id;?>' />
       <?php echo $plan->id;?>
     </td>
     <td class='text-left' title="<?php echo $plan->title?>"><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
     <?php if($this->session->currentProductType != 'normal'):?>
     <td><?php echo $branches[$plan->branch];?></td>
     <?php endif;?>
+    <td class='text-center'><?php echo $plan->stories;?></td>
+    <td class='text-center'><?php echo $plan->bugs;?></td>
+    <td class='text-center'><?php echo $plan->hour;?></td>
+    <td class='text-center'><?php if(!empty($plan->projectID)) echo html::a(helper::createLink('project', 'task', 'projectID=' . $plan->projectID), '<i class="icon-search"></i>');?></td>
     <td class='text-left content'><div class='article-content'><?php echo $plan->desc;?></div></td>
     <td><?php echo $plan->begin;?></td>
-    <td><?php echo $plan->end;?></td>
+    <td><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
     <td class='text-center'>
       <?php
+      if(common::hasPriv('project', 'create')) echo html::a(helper::createLink('project', 'create', "projectID=&copyProjectID=&planID=$plan->id"), '<i class="icon-play"></i>', '', "class='btn-icon' title='{$lang->project->create}'");
       if(common::hasPriv('productplan', 'linkStory')) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i>', '', "class='btn-icon' title='{$lang->productplan->linkStory}'");
       if(common::hasPriv('productplan', 'linkBug') and $config->global->flow != 'onlyStory') echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i>', '', "class='btn-icon' title='{$lang->productplan->linkBug}'");
       common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');
@@ -86,7 +97,7 @@
   </tbody>
   <tfoot>
     <tr>
-      <td colspan='<?php echo $this->session->currentProductType == 'normal' ? '6' : '7';?>'>
+      <td colspan='<?php echo $this->session->currentProductType == 'normal' ? '10' : '11';?>'>
         <div class='table-actions clearfix'>
           <?php echo html::selectButton();?>
           <?php if(common::hasPriv('productplan', 'batchEdit')) echo html::submitButton($lang->edit);?>

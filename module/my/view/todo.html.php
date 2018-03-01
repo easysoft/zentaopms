@@ -15,7 +15,7 @@
 <?php js::set('confirmDelete', $lang->todo->confirmDelete)?>
 <div id='featurebar'>
   <ul class='nav'>
-    <?php 
+    <?php
     foreach($lang->todo->periods as $period => $label)
     {
         $vars = "date=$period";
@@ -24,20 +24,20 @@
     }
     echo "<li id='byDate'>" . html::input('date', $date,"class='form-control form-date' onchange='changeDate(this.value)' autocomplete='off'") . '</li>';
 
-    if(is_numeric($type)) 
+    if(is_numeric($type))
     {
         if($date == date('Y-m-d'))
         {
-            $type = 'today'; 
+            $type = 'today';
         }
         else if($date == date('Y-m-d', strtotime('-1 day')))
         {
-            $type = 'yesterday'; 
+            $type = 'yesterday';
         }
     }
     ?>
     <script>$('#<?php echo $type;?>').addClass('active')</script>
-  </ul>  
+  </ul>
   <div class='actions'>
     <?php echo html::a(helper::createLink('todo', 'export', "account=$account&orderBy=id_desc"), "<i class='icon-download-alt'></i> " . $lang->todo->export, '', "class='btn export'") ?>
     <?php echo html::a(helper::createLink('todo', 'batchCreate', "date=" . str_replace('-', '', $date)), "<i class='icon-plus-sign'></i> " . $lang->todo->batchCreate, '', "class='btn'") ?>
@@ -57,14 +57,14 @@
         <th class='w-hour'>  <?php common::printOrderLink('begin',  $orderBy, $vars, $lang->todo->beginAB);?></th>
         <th class='w-hour'>  <?php common::printOrderLink('end',    $orderBy, $vars, $lang->todo->endAB);?></th>
         <th class='w-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->todo->status);?></th>
-        <th class='w-80px {sorter:false}'><?php echo $lang->actions;?></th>
+        <th class='w-100px {sorter:false}'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
     <?php foreach($todos as $todo):?>
     <tr class='text-center'>
       <td class='cell-id'>
-        <?php if(common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture)):?>
+        <?php if($type != 'cycle' and (common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture))):?>
         <input type='checkbox' name='todoIDList[<?php echo $todo->id;?>]' value='<?php echo $todo->id;?>' />
         <?php endif;?>
         <?php echo $todo->id; ?>
@@ -77,8 +77,11 @@
       <td><?php echo $todo->end;?></td>
       <td class='<?php echo $todo->status;?>'><?php echo $lang->todo->statusList[$todo->status];?></td>
       <td class='text-right'>
-        <?php 
-        common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'list', 'ok-sign', 'hiddenwin');
+        <?php
+        if($todo->status != 'done') common::printIcon('todo', 'assignto', "todoID=$todo->id", $todo, 'list', 'hand-right', '', "btn-icon", '', "data-toggle='assigntoModal'", $lang->todo->assignTo);
+        if($todo->status == 'done') common::printIcon('todo', 'activate', "id=$todo->id", $todo, 'list', 'magic', 'hiddenwin');
+        if($todo->status != 'done') common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'list', 'ok-sign', 'hiddenwin');
+        if($todo->status == 'done') common::printIcon('todo', 'close', "id=$todo->id", $todo, 'list', 'off', 'hiddenwin');
         common::printIcon('todo', 'edit',   "id=$todo->id", '', 'list', 'pencil', '', 'iframe', true);
 
         if(common::hasPriv('todo', 'delete'))
@@ -95,8 +98,9 @@
     <tfoot>
       <tr>
         <td colspan='9' align='left'>
+          <?php if($type != 'cycle'):?>
           <div class='table-actions clearfix'>
-          <?php 
+          <?php
           if(common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture))
           {
             echo html::selectButton();
@@ -125,6 +129,7 @@
           }
           ?>
           </div>
+          <?php endif;?>
           <?php $pager->show();?>
         </td>
       </tr>
@@ -132,5 +137,6 @@
     <?php endif;?>
   </table>
 </form>
+<?php include '../../todo/view/assignto.html.php';?>
 <?php js::set('listName', 'todoList')?>
 <?php include '../../common/view/footer.html.php';?>

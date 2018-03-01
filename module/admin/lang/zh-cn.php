@@ -21,14 +21,22 @@ $lang->admin->ztCompany     = '认证公司';
 $lang->admin->captcha       = '验证码';
 $lang->admin->getCaptcha    = '获取验证码';
 
+$lang->admin->api           = '接口';
+$lang->admin->log           = '日志';
+$lang->admin->setting       = '设置';
+$lang->admin->days          = '日志保存天数';
+$lang->admin->saveSuccess   = '保存成功';
+
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = '当前系统的版本是%s，';
 $lang->admin->info->links   = '您可以访问以下链接：';
 $lang->admin->info->account = "您的禅道社区账户为%s。";
+$lang->admin->info->log     = '超出存天数的日志会被删除，需要开启计划任务。';
 
 $lang->admin->notice = new stdclass();
 $lang->admin->notice->register = "友情提示：您还未在禅道社区(www.zentao.net)登记，%s进行登记，以及时获得禅道最新信息。";
 $lang->admin->notice->ignore   = "不再提示";
+$lang->admin->notice->int      = "『%s』应当是正整数。";
 
 $lang->admin->register = new stdclass();
 $lang->admin->register->common     = '注册新帐号绑定';

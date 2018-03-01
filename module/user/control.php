@@ -393,6 +393,10 @@ class user extends control
 
         if(!empty($_POST))
         {
+            if(strtolower($_POST['account']) == 'guest')
+            {
+                die(js::error(str_replace('ID ', '', sprintf($this->lang->user->error->reserved, $_POST['account']))));
+            }
             $this->user->create();
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate($this->createLink('company', 'browse'), 'parent'));
@@ -622,14 +626,26 @@ class user extends control
         }
     }
 
+
     /**
      * User login, identify him and authorize him.
-     * 
+     *
+     * @param string $referer
+     * @param string $from
+     *
      * @access public
      * @return void
      */
     public function login($referer = '', $from = '')
     {
+        if($this->user->checkTmp() === false)
+        {
+            echo "<html><head><meta charset='utf-8'></head>";
+            echo "<body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>";
+            echo "<div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>{$this->app->tmpRoot}</strong>是否存在并有操作权限。</div>";
+            echo "<div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>{$this->app->tmpRoot}</strong> exists and has permission to operate.</div>";
+            die("</td></tr></table></body></html>");
+        }
         $this->setReferer($referer);
 
         $loginLink = $this->createLink('user', 'login');
@@ -691,18 +707,12 @@ class user extends control
                 $this->session->set('user', $user);
                 $this->app->user = $this->session->user;
                 $this->loadModel('action')->create('user', $user->id, 'login');
-
+                $this->loadModel('score')->create('user', 'login');
                 /* Keep login. */
                 if($this->post->keepLogin) $this->user->keepLogin($user);
 
-                /* Check password. */
-                if(isset($this->config->safe->mode) and $this->user->computePasswordStrength($password) < $this->config->safe->mode) echo js::alert($this->lang->user->weakPassword);
-
                 /* Go to the referer. */
-                if($this->post->referer and 
-                   strpos($this->post->referer, $loginLink) === false and 
-                   strpos($this->post->referer, $denyLink)  === false 
-                )
+                if($this->post->referer and strpos($this->post->referer, $loginLink) === false and strpos($this->post->referer, $denyLink) === false)
                 {
                     if($this->app->getViewType() == 'json')
                     {
@@ -769,7 +779,9 @@ class user extends control
         {
             if(!empty($this->config->global->showDemoUsers))
             {
-                $demoUsers = $this->user->getPairs('noletter|noempty|noclosed|nodeleted');
+                $demoUsers = 'productManager,projectManager,dev1,dev2,dev3,tester1,tester2,tester3,testManager';
+                if($this->app->getClientLang() == 'en') $demoUsers = 'thePO,pm1,pm2,pg1,pg2,pg3,thePM,qa1,theQS';
+                $demoUsers = $this->dao->select('account,password,realname')->from(TABLE_USER)->where('account')->in($demoUsers)->andWhere('deleted')->eq(0)->fetchAll('account');
                 $this->view->demoUsers = $demoUsers;
             }
 
@@ -858,12 +870,14 @@ class user extends control
             die(js::locate(inlink('logout', $referer), 'parent'));
         }
 
-        $pathPos = strrpos($this->app->getBasePath(), DIRECTORY_SEPARATOR, -2);
+        /* Remove the real path for security reason. */
+        $pathPos       = strrpos($this->app->getBasePath(), DIRECTORY_SEPARATOR, -2);
+        $resetFileName = substr($resetFileName, $pathPos+1);
 
         $this->view->title          = $this->lang->user->resetPassword;
         $this->view->status         = 'reset';
         $this->view->needCreateFile = $needCreateFile;
-        $this->view->resetFileName  = substr($resetFileName, $pathPos+1);
+        $this->view->resetFileName  = $resetFileName;
 
         $this->display();
     }

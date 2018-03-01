@@ -148,9 +148,9 @@ class group extends control
     }
 
     /**
-     * Manage privleges of a group. 
-     * 
-     * @param  int    $groupID 
+     * Manage privleges of a group.
+     *
+     * @param  int    $groupID
      * @access public
      * @return void
      */

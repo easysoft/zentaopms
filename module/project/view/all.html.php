@@ -14,6 +14,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <div id='featurebar'>
   <div class='actions'>
+    <?php common::printLink('project', 'export', "status=$status&productID=$productID&orderBy=$orderBy", "<i class='icon-download-alt'></i> " . $lang->export, '', "class='btn export'")?>
     <?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn'")?>
   </div>
   <ul class='nav'>
@@ -41,7 +42,7 @@
       <th class='w-70px'><?php echo $lang->project->totalEstimate;?></th>
       <th class='w-70px'><?php echo $lang->project->totalConsumed;?></th>
       <th class='w-70px'><?php echo $lang->project->totalLeft;?></th>
-      <th class='w-150px'><?php echo $lang->project->progess;?></th>
+      <th class='w-150px'><?php echo $lang->project->progress;?></th>
       <th class='w-100px'><?php echo $lang->project->burn;?></th>
       <?php if($canOrder):?>
       <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->project->updateOrder);?></th>

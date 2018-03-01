@@ -486,7 +486,9 @@ class testsuite extends control
     {
         if(!empty($_POST))
         {
-            $caseResult = $this->loadModel('testcase')->create($bugID = 0);
+            $this->loadModel('testcase');
+            $this->config->testcase->create->requiredFields = $this->config->testsuite->createcase->requiredFields;
+            $caseResult = $this->testcase->create($bugID = 0);
             if(!$caseResult or dao::isError()) die(js::error(dao::getError()));
 
             $caseID = $caseResult['id'];
@@ -686,13 +688,13 @@ class testsuite extends control
         {
             $fields['module']       = $this->lang->testcase->module;
             $fields['title']        = $this->lang->testcase->title;
+            $fields['precondition'] = $this->lang->testcase->precondition;
             $fields['stepDesc']     = $this->lang->testcase->stepDesc;
             $fields['stepExpect']   = $this->lang->testcase->stepExpect;
             $fields['keywords']     = $this->lang->testcase->keywords;
-            $fields['type']         = $this->lang->testcase->type;
             $fields['pri']          = $this->lang->testcase->pri;
+            $fields['type']         = $this->lang->testcase->type;
             $fields['stage']        = $this->lang->testcase->stage;
-            $fields['precondition'] = $this->lang->testcase->precondition;
 
             $fields[''] = '';
             $fields['typeValue']   = $this->lang->testcase->lblTypeValue;
@@ -812,7 +814,7 @@ class testsuite extends control
         $libraries = $this->testsuite->getLibraries();
         if(empty($libraries)) $this->locate(inlink('createLib'));
 
-        $this->testsuite->setMenu($libraries, $libID);
+        $this->testsuite->setLibMenu($libraries, $libID);
 
         $file       = $this->session->importFile;
         $caseLang   = $this->lang->testcase;

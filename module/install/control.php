@@ -52,7 +52,7 @@ class install extends control
     public function license()
     {
         $this->view->title   = $this->lang->install->welcome;
-        $this->view->license = file_get_contents($this->app->getBasePath() . 'doc/LICENSE');
+        $this->view->license = $this->install->getLicense();
         $this->display();
     }
 
@@ -75,7 +75,6 @@ class install extends control
         $this->view->zlibResult     = $this->install->checkZlib();
         $this->view->curlResult     = $this->install->checkCurl();
         $this->view->filterResult   = $this->install->checkFilter();
-        $this->view->gdResult       = $this->install->checkGD();
         $this->view->iconvResult    = $this->install->checkIconv();
         $this->view->tmpRootInfo    = $this->install->getTmpRoot();
         $this->view->tmpRootResult  = $this->install->checkTmpRoot();

@@ -75,13 +75,13 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('3.3'));
                 $this->updateTaskAssignedTo();
             case '4_0_beta1': $this->execSQL($this->getUpgradeFile('4.0.beta1'));
-            case '4_0_beta2':  
+            case '4_0_beta2':
                 $this->execSQL($this->getUpgradeFile('4.0.beta2'));
                 $this->updateProjectType();
                 $this->updateEstimatePriv();
-            case '4_0':  
+            case '4_0':
                 $this->execSQL($this->getUpgradeFile('4.0'));
-            case '4_0_1':  
+            case '4_0_1':
                 $this->execSQL($this->getUpgradeFile('4.0.1'));
                 $this->addPriv4_0_1();
             case '4_1':
@@ -185,15 +185,38 @@ class upgradeModel extends model
             case '9_4':
                 $this->execSQL($this->getUpgradeFile('9.4'));
                 $this->adjustPriv9_4();
-        }
+            case '9_5':
+                $this->execSQL($this->getUpgradeFile('9.5'));
+            case '9_5_1':
+                $this->execSQL($this->getUpgradeFile('9.5.1'));
+                $this->initProjectStoryOrder();
+            case '9_6':
+                $this->execSQL($this->getUpgradeFile('9.6'));
+                $this->fixDatatableColsConfig();
+            case '9_6_1':
+                $this->addLimitedGroup();
+            case '9_6_2':
+            case '9_6_3':
+                $this->execSQL($this->getUpgradeFile('9.6.3'));
+                $this->changeLimitedName();
+                $this->adjustPriv9_7();
+                $this->changeStoryWidth();
+            case '9_7':
+                $this->execSQL($this->getUpgradeFile('9.7'));
+                $this->changeTeamFields();
+                $this->moveData2Notify();
+             case '9_8':
+                $this->fixFinishedBy();
+             case '9_8_1':
+       }
 
         $this->deletePatch();
     }
 
     /**
      * Create the confirm contents.
-     * 
-     * @param  string $fromVersion 
+     *
+     * @param  string $fromVersion
      * @access public
      * @return string
      */
@@ -259,7 +282,7 @@ class upgradeModel extends model
         case '8_0_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.0.1'));
         case '8_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('8.1'));
         case '8_1_3':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.1.3'));
-        case '8_2_beta': 
+        case '8_2_beta':
         case '8_2':
         case '8_2_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.2.1'));
         case '8_2_2':
@@ -281,6 +304,15 @@ class upgradeModel extends model
         case '9_2_1':
         case '9_3_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('9.3.beta'));
         case '9_4':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.4'));
+        case '9_5':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.5'));
+        case '9_5_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.5.1'));
+        case '9_6':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.6'));
+        case '9_6_1':
+        case '9_6_2':
+        case '9_6_3':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.6.3'));
+        case '9_7':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.7'));
+        case '9_8':
+        case '9_8_1':
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -316,7 +348,7 @@ class upgradeModel extends model
 
     /**
      * Update ubb code in bug table and user Templates table to html.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -378,7 +410,7 @@ class upgradeModel extends model
 
     /**
      * Update nl to br from 1.3 version.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -424,7 +456,7 @@ class upgradeModel extends model
 
     /**
      * Update task fields.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -506,8 +538,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Update activated count of Bug. 
-     * 
+     * Update activated count of Bug.
+     *
      * @access public
      * @return void
      */
@@ -530,7 +562,7 @@ class upgradeModel extends model
 
     /**
      * Update lastRun and lastResult field in zt_case
-     * 
+     *
      * @access public
      * @return void
      */
@@ -548,21 +580,21 @@ class upgradeModel extends model
     }
 
     /**
-     * Update type of projects. 
-     * 
+     * Update type of projects.
+     *
      * @access public
      * @return void
      */
     public function updateProjectType()
     {
-        $projects = $this->dao->select('root')->from(TABLE_MODULE)->where('type')->eq('task')->fetchPairs('root'); 
-        $this->dao->update(TABLE_PROJECT)->set('type')->eq('waterfall')->where('id')->in($projects)->exec();        
+        $projects = $this->dao->select('root')->from(TABLE_MODULE)->where('type')->eq('task')->fetchPairs('root');
+        $this->dao->update(TABLE_PROJECT)->set('type')->eq('waterfall')->where('id')->in($projects)->exec();
         return true;
     }
 
     /**
      * Update estimate priv.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -615,8 +647,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Update the data of action. 
-     * 
+     * Update the data of action.
+     *
      * @access public
      * @return void
      */
@@ -660,8 +692,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Init the data of product and project order field. 
-     * 
+     * Init the data of product and project order field.
+     *
      * @access public
      * @return void
      */
@@ -682,7 +714,7 @@ class upgradeModel extends model
 
     /**
      * Update task assignedTo.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -697,7 +729,7 @@ class upgradeModel extends model
 
     /**
      * Delete the patch record.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -709,8 +741,8 @@ class upgradeModel extends model
 
     /**
      * Get the upgrade sql file.
-     * 
-     * @param  string $version 
+     *
+     * @param  string $version
      * @access public
      * @return string
      */
@@ -721,8 +753,8 @@ class upgradeModel extends model
 
     /**
      * Execute a sql.
-     * 
-     * @param  string  $sqlFile 
+     *
+     * @param  string  $sqlFile
      * @access public
      * @return void
      */
@@ -733,7 +765,7 @@ class upgradeModel extends model
 
         /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
         $sqls = explode("\n", file_get_contents($sqlFile));
-        foreach($sqls as $key => $line) 
+        foreach($sqls as $key => $line)
         {
             $line       = trim($line);
             $sqls[$key] = $line;
@@ -758,7 +790,7 @@ class upgradeModel extends model
             {
                 $this->dbh->exec($sql);
             }
-            catch (PDOException $e) 
+            catch (PDOException $e)
             {
                 $errorInfo = $e->errorInfo;
                 $errorCode = $errorInfo[1];
@@ -768,8 +800,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Add priv for version 4.0.1 
-     * 
+     * Add priv for version 4.0.1
+     *
      * @access public
      * @return void
      */
@@ -810,10 +842,10 @@ class upgradeModel extends model
     }
 
     /**
-     * Add priv for version 4.1 
-     * 
+     * Add priv for version 4.1
+     *
      * @access public
-     * @return bool 
+     * @return bool
      */
     public function addPriv4_1()
     {
@@ -905,7 +937,7 @@ class upgradeModel extends model
 
     /**
      * Add priv for 8.2.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -951,7 +983,7 @@ class upgradeModel extends model
 
     /**
      * Adjust config section and key.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -970,8 +1002,8 @@ class upgradeModel extends model
 
     /**
      * To lower table.
-     * 
-     * @param  string $build 
+     *
+     * @param  string $build
      * @access public
      * @return bool
      */
@@ -1015,7 +1047,7 @@ class upgradeModel extends model
 
     /**
      * Process finishedBy and finishedDate of task.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1033,7 +1065,7 @@ class upgradeModel extends model
 
     /**
      * Delete company field for the table of zt_config and zt_groupPriv.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1067,7 +1099,7 @@ class upgradeModel extends model
 
     /**
      * Merge the goal and desc of project.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1088,7 +1120,7 @@ class upgradeModel extends model
 
     /**
      * Fix OS info of bugs.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1100,7 +1132,7 @@ class upgradeModel extends model
 
     /**
      * Fix finishedBy of task.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1130,7 +1162,7 @@ class upgradeModel extends model
 
     /**
      * Touch index.html for upload when has not it.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1146,7 +1178,7 @@ class upgradeModel extends model
 
     /**
      * Init order.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1165,7 +1197,7 @@ class upgradeModel extends model
 
     /**
      * Adjust order for 7.3
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1178,8 +1210,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Adjust priv for 7.4.beta 
-     * 
+     * Adjust priv for 7.4.beta
+     *
      * @access public
      * @return void
      */
@@ -1200,7 +1232,7 @@ class upgradeModel extends model
 
     /**
      * Adjust doc module.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1309,7 +1341,7 @@ class upgradeModel extends model
 
     /**
      * Update file objectID in editor.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1415,7 +1447,7 @@ class upgradeModel extends model
 
     /**
      * Move doc content to table zt_doccontent.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1425,7 +1457,7 @@ class upgradeModel extends model
         $processFields = 0;
         foreach($descDoc as $field)
         {
-            if($field->Field == 'content' or $field->Field == 'digest' or $field->Field == 'url') $processFields ++; 
+            if($field->Field == 'content' or $field->Field == 'digest' or $field->Field == 'url') $processFields ++;
         }
         if($processFields < 3) return true;
 
@@ -1453,8 +1485,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Adjust priv 8.3 
-     * 
+     * Adjust priv 8.3
+     *
      * @access public
      * @return bool
      */
@@ -1477,10 +1509,10 @@ class upgradeModel extends model
         }
         return true;
     }
-    
+
     /**
      * Rename main lib.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1494,7 +1526,7 @@ class upgradeModel extends model
 
     /**
      * Adjust priv for 8.4.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1525,8 +1557,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Adjust priv for 9.0 
-     * 
+     * Adjust priv for 9.0
+     *
      * @access public
      * @return void
      */
@@ -1555,7 +1587,7 @@ class upgradeModel extends model
 
     /**
      * Fix projectproduct data.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1567,7 +1599,7 @@ class upgradeModel extends model
 
     /**
      * Add bug deadline for custom fields.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -1599,8 +1631,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Adjust priv for 9.0.1. 
-     * 
+     * Adjust priv for 9.0.1.
+     *
      * @access public
      * @return bool
      */
@@ -1706,7 +1738,7 @@ class upgradeModel extends model
      * Adjust priv for 9.4.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function adjustPriv9_4()
     {
@@ -1717,7 +1749,9 @@ class upgradeModel extends model
             $data->group  = $groupID;
             $data->module = 'bug';
             $data->method = 'batchActivate';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
         }
+        return true;
     }
 
     /**
@@ -1733,7 +1767,7 @@ class upgradeModel extends model
 
     /**
      * Get errors during the upgrading.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -1746,7 +1780,7 @@ class upgradeModel extends model
 
     /**
      * Check safe file.
-     * 
+     *
      * @access public
      * @return string|false
      */
@@ -1759,7 +1793,7 @@ class upgradeModel extends model
 
     /**
      * Check weither process or not.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -1772,8 +1806,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Process customMenus for different working. 
-     * 
+     * Process customMenus for different working.
+     *
      * @access public
      * @return void
      */
@@ -1788,5 +1822,293 @@ class upgradeModel extends model
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * Init project story order.
+     *
+     * @access public
+     * @return bool
+     */
+    public function initProjectStoryOrder()
+    {
+        $storyGroup = $this->dao->select('t1.*')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->orderBy('t2.pri_desc,t1.story_asc')
+            ->fetchGroup('project', 'story');
+
+        foreach($storyGroup as $projectID => $stories)
+        {
+            $order = 1;
+            foreach($stories as $storyID => $projectStory)
+            {
+                $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('project')->eq($projectID)->andWhere('story')->eq($storyID)->exec();
+                $order++;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Fix datatable cols config.
+     *
+     * @access public
+     * @return bool
+     */
+    public function fixDatatableColsConfig()
+    {
+        $config = $this->dao->select('*')->from(TABLE_CONFIG)
+            ->where('module')->eq('datatable')
+            ->andWhere('section')->eq('projectTask')
+            ->andWhere('`key`')->eq('cols')
+            ->fetchAll('id');
+
+        foreach($config as $datatableCols)
+        {
+            $cols = json_decode($datatableCols->value);
+            foreach($cols as $i => $col)
+            {
+                if($col->id == 'progess') $col->id = 'progress';
+                if($col->id == 'actions' and $col->width == 'auto') $col->width =  '180px';
+            }
+            $this->dao->update(TABLE_CONFIG)->set('value')->eq(json_encode($cols))->where('id')->eq($datatableCols->id)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Add limited group.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addLimitedGroup()
+    {
+        $limitedGroup = $this->dao->select('*')->from(TABLE_GROUP)->where('`role`')->eq('limited')->fetch();
+        if(empty($limitedGroup))
+        {
+            $group = new stdclass();
+            $group->name = 'limited';
+            $group->role = 'limited';
+            $group->desc = 'For limited user';
+            $this->dao->insert(TABLE_GROUP)->data($group)->exec();
+
+            $groupID = $this->dao->lastInsertID();
+        }
+        else
+        {
+            $groupID = $limitedGroup->id;
+        }
+
+        $limitedGroups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('my')
+            ->andWhere('method')->eq('limited')
+            ->fetchPairs('group', 'group');
+        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('module')->eq('my')->andWhere('method')->eq('limited')->exec();
+
+        $limitedUsers = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($limitedGroups)->fetchPairs('account', 'account');
+        foreach($limitedUsers as $limitedUser)
+        {
+            $this->dao->replace(TABLE_USERGROUP)->set('account')->eq($limitedUser)->set('`group`')->eq($groupID)->exec();
+        }
+
+        $groupPriv = new stdclass();
+        $groupPriv->group = $groupID;
+        $groupPriv->module = 'my';
+        $groupPriv->method = 'limited';
+        $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+
+        return true;
+    }
+
+    /**
+     * Change limited name.
+     *
+     * @access public
+     * @return bool
+     */
+    public function changeLimitedName()
+    {
+        $this->app->loadLang('install');
+        $this->dao->update(TABLE_GROUP)->set('name')->eq($this->lang->install->groupList['LIMITED']['name'])
+            ->set('desc')->eq($this->lang->install->groupList['LIMITED']['desc'])
+            ->where('role')->eq('limited')
+            ->exec();
+
+        return true;
+    }
+
+    /**
+     * Adjust Priv for 9.7
+     *
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv9_7()
+    {
+        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('method')->eq('edit')->andWhere('module')->in('story,task,bug,testcase')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'action';
+            $groupPriv->method = 'comment';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Change story field width.
+     *
+     * @access public
+     * @return bool
+     */
+    public function changeStoryWidth()
+    {
+        $projectCustom = $this->dao->select('*')->from(TABLE_CONFIG)->where('section')->eq('projectTask')->andWhere('`key`')->in('cols,tablecols')->fetchAll('id');
+        foreach($projectCustom as $configID => $projectTask)
+        {
+            $fields = json_decode($projectTask->value);
+            foreach($fields as $i => $field)
+            {
+                if($field->id == 'story') $field->width = '40px';
+            }
+            $this->dao->update(TABLE_CONFIG)->set('value')->eq(json_encode($fields))->where('id')->eq($configID)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Change team field for 9.8.
+     *
+     * @access public
+     * @return bool
+     */
+    public function changeTeamFields()
+    {
+        $desc   = $this->dao->query('DESC ' . TABLE_TEAM)->fetchAll();
+        $fields = array();
+        foreach($desc as $field)
+        {
+            $fieldName = $field->Field;
+            $fields[$fieldName] = $fieldName;
+        }
+        if(isset($fields['root'])) return true;
+
+        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " CHANGE `project` `root` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0'");
+        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " ADD `type` ENUM('project', 'task') NOT NULL DEFAULT 'project' AFTER `root`");
+        $this->dao->exec("UPDATE " . TABLE_TEAM . " SET `root` = `task`, `type` = 'task' WHERE `task` > '0'");
+        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " DROP PRIMARY KEY");
+        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " DROP `task`");
+        return true;
+    }
+
+    /**
+     * Move data to notify.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function moveData2Notify()
+    {
+        $this->dao->exec('TRUNCATE TABLE ' . TABLE_NOTIFY);
+        $mailQueueTable   = '`' . $this->config->db->prefix . 'mailqueue`';
+        $stmt = $this->dao->select('*')->from($mailQueueTable)->query();
+        while($mailQueue = $stmt->fetch())
+        {
+            $notify = new stdclass();
+            $notify->objectType  = 'mail';
+            $notify->toList      = $mailQueue->toList;
+            $notify->ccList      = $mailQueue->ccList;
+            $notify->subject     = $mailQueue->subject;
+            $notify->data        = $mailQueue->body;
+            $notify->createdBy   = $mailQueue->addedBy;
+            $notify->createdDate = $mailQueue->addedDate;
+            $notify->sendTime    = $mailQueue->sendTime;
+            $notify->status      = $mailQueue->status;
+            $notify->failReason  = $mailQueue->failReason;
+            $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+        }
+
+        $webhookDataTable = '`' . $this->config->db->prefix . 'webhookdatas`';
+        $stmt = $this->dao->select('*')->from($webhookDataTable)->query();
+        while($webhookData = $stmt->fetch())
+        {
+            $notify = new stdclass();
+            $notify->objectType  = 'webhook';
+            $notify->objectID    = $webhookData->webhook;
+            $notify->action      = $webhookData->action;
+            $notify->data        = $webhookData->data;
+            $notify->createdBy   = $webhookData->createdBy;
+            $notify->createdDate = $webhookData->createdDate;
+            $notify->status      = $webhookData->status;
+            $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Adjust priv 9.8.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv9_8()
+    {
+        $groups = $this->dao->select('id')->from(TABLE_GROUP)->fetchPairs('id', 'id');
+        foreach($groups as $group)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'todo';
+            $groupPriv->method = 'createcycle';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+
+        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('mail')->orWhere('module')->eq('webhook')->fetchPairs('group', 'group');
+        foreach($groups as $group)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'message';
+            $groupPriv->method = 'index';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+
+        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->andWhere('method')->eq('linkStory')->fetchPairs('group', 'group');
+        foreach($groups as $group)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'project';
+            $groupPriv->method = 'importPlanStories';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Fix task finishedBy.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function fixFinishedBy()
+    {
+        $stmt = $this->dao->select('t1.id as historID,t2.objectType,t2.objectID,t2.actor')->from(TABLE_HISTORY)->alias('t1')
+            ->leftJoin(TABLE_ACTION)->alias('t2')->on('t1.action=t2.id')
+            ->where('t1.field')->eq('finishedBy')
+            ->andWhere('t2.objectType')->eq('task')
+            ->andWhere('t2.action')->eq('finished')
+            ->andWhere('t2.actor != t1.`new`')
+            ->query();
+        while($action = $stmt->fetch())
+        {
+            $this->dao->update(TABLE_HISTORY)->set('`new`')->eq($action->actor)->where('id')->eq($action->historID)->exec();
+            $this->dao->update(TABLE_TASK)->set('`finishedBy`')->eq($action->actor)->where('id')->eq($action->objectID)->exec();
+        }
+        return true;
     }
 }

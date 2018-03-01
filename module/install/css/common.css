@@ -11,5 +11,5 @@ body{background: #f1f1f1;}
 
 @media (max-width: 700px){.modal-dialog{padding: 0;} .modal-content{box-shadow: none;border-width: 1px 0;border-radius: 0}}
 
-.ok{background:green; color:white}
-.fail{background:red; color:white}
+#checker .ok{background:green; color:white}
+#checker .fail{background:red; color:white}

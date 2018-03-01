@@ -16,14 +16,14 @@
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?> <strong><?php echo $task->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name, '_blank');?></strong>
-    <small class='text-muted'> <?php echo $lang->task->assign;?></small>
+    <small class='text-muted'> <?php echo empty($task->team) ? $lang->task->assign : $lang->task->transfer;?></small>
   </div>
 </div>
 <form class='form-condensed' method='post' target='hiddenwin'>
   <table class='table table-form'>
     <tr>
-      <th class='w-80px'><?php echo $lang->task->assignedTo;?></th>
-      <td class='w-p25-f'><?php echo html::select('assignedTo', $users, '', "class='form-control chosen'");?></td><td></td>
+      <th class='w-80px'><?php echo empty($task->team) ? $lang->task->assign : $lang->task->transferTo;?></th>
+      <td class='w-p25-f'><?php echo html::select('assignedTo', $members, $task->assignedTo, "class='form-control chosen'");?></td><td></td>
     </tr>  
     <tr>
       <th><?php echo $lang->task->left;?></th>

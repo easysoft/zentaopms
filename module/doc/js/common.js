@@ -222,7 +222,7 @@ function toggleAcl(acl)
 
 $(document).ready(function()
 {
-    $('[data-id="create"] a').modalTrigger({type: 'iframe', width: 800});
+    $('[data-id="create"] a[href*=doc][href*=createLib]').modalTrigger({type: 'iframe', width: 800});
     $('#modulemenu .nav li').removeClass('active');
     if(typeof(type) != 'undefined') $('#modulemenu .nav li[data-id="' + type + '"]').addClass('active');
 

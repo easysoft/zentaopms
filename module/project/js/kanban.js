@@ -17,7 +17,8 @@ $(function()
         task:
         {
             wait   : {doing: 'start', done: 'finish', cancel: 'cancel'},
-            doing  : {done: 'finish'},
+            doing  : {done: 'finish', pause: 'pause'},
+            pause  : {doing: 'activate', done: 'finish', cancel: 'cancel'},
             done   : {doing: 'activate', closed: 'close'},
             cancel : {doing: 'activate', closed: 'close'},
             closed : {doing: 'activate'}
@@ -183,6 +184,10 @@ $(function()
         }
     }
 
+    $("#kanbanHeader thead tr th").each(function(i)
+    {
+        $(this).width($('#kanbanWrapper thead tr th').eq(i).width());
+    });
     var fixH = $("#kanbanHeader").offset().top;
     $(window).scroll(function()
     {

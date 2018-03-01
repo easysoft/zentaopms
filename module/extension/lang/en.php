@@ -38,7 +38,7 @@ $lang->extension->dirs        = 'Directories';
 $lang->extension->files       = 'Files';
 $lang->extension->status      = 'Status';
 $lang->extension->version     = 'Version';
-$lang->extension->latest      = '<small>Latest:<strong><a href="%s" target="_blank" class="extension">%s</a></strong>，need zentao <a href="http://api.zentao.net/goto.php?item=latest" target="_blank"><strong>%s</strong></small>';
+$lang->extension->latest      = '<small>Latest:<strong><a href="%s" target="_blank" class="extension">%s</a></strong>，need zentao <a href="http://api.zentao.pm/goto.php?item=latest" target="_blank"><strong>%s</strong></small>';
 $lang->extension->author      = 'Author';
 $lang->extension->license     = 'License';
 $lang->extension->site        = 'Website';
@@ -46,6 +46,7 @@ $lang->extension->downloads   = 'Downloads';
 $lang->extension->compatible  = 'Compatibility';
 $lang->extension->grade       = 'Score';
 $lang->extension->depends     = 'Dependent';
+$lang->extension->expireDate  = 'Expire';
 $lang->extension->zentaoCompatible  = 'Compatible Version';
 $lang->extension->installedTime     = 'Installed Time';
 
@@ -81,7 +82,7 @@ $lang->extension->successInstallDB         = 'Database installed!';
 $lang->extension->viewInstalled            = 'Installed';
 $lang->extension->viewAvailable            = 'Available';
 $lang->extension->viewDeactivated          = 'Deactivated';
-$lang->extension->backDBFile               = 'Extension related data has been backed up to %s!';
+$lang->extension->backDBFile               = 'Extension data has been backed up to %s!';
 $lang->extension->noticeOkFile             = '<h5>For security reasons, your Admin account has to be confirmed.</h5>
     <h5>Plese Login your ZenTao server and create %s.</h5>
     <p>Note</p>

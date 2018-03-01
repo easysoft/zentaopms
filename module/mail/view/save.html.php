@@ -9,14 +9,14 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-include '../../common/view/header.html.php';
 ?>
+<?php include $this->app->getModuleRoot() . 'message/view/header.html.php';?>
 <div class='container mw-700px'>
   <div id='titlebar'>
     <div class='heading'>
       <span class='prefix'><?php echo html::icon($lang->icons['mail']);?></span>
       <strong><?php echo $lang->mail->common;?></strong>
-      <small class='text-success'> <?php echo $lang->mail->save;?> <?php echo html::icon('ok-sign');?></small>
+      <small class='text-success'> <?php echo $lang->mail->saveSuccess;?> <?php echo html::icon('ok-sign');?></small>
     </div>
   </div>
   <div class='alert alert-block with-icon'>

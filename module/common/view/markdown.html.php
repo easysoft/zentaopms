@@ -9,7 +9,7 @@ $editor['id'] = explode(',', $editor['id']);
 <link rel="stylesheet" href="<?php echo $jsRoot?>markdown/simplemde.min.css"  type='text/css' media='screen' />
 <script type="text/javascript" charset="utf-8" src="<?php echo $jsRoot?>markdown/simplemde.min.js"></script>
 <style>
-.CodeMirror{min-height: 150px; height:150px;}
+.CodeMirror,.CodeMirror-scroll{min-height:200px!important;}
 .CodeMirror-fullscreen + .editor-preview-side{display:block;}
 .CodeMirror-fullscreen, .editor-preview-side{margin-bottom:40px;}
 .editor-toolbar .icon-html {position: relative; top: -1px;}
@@ -39,11 +39,11 @@ $(function()
             var markdown = new SimpleMDE(options);
             if(!window.markdownEditor) window.markdownEditor = {};
             window.markdownEditor['#'] = window.markdownEditor[markdownEditorID] = markdown;
-            markdown.codemirror.on('focus', function(){window.markdownEditor[markdownEditorID].toggleSideBySide();});
-            markdown.codemirror.on('change', function()
-            {
-                if($('#' + markdownEditorID).parent().find('.editor-preview-active-side').size() == 0) window.markdownEditor[markdownEditorID].toggleSideBySide();
-            });
+            // markdown.codemirror.on('focus', function(){window.markdownEditor[markdownEditorID].toggleSideBySide();});
+            // markdown.codemirror.on('change', function()
+            // {
+            //     if($('#' + markdownEditorID).parent().find('.editor-preview-active-side').size() == 0) window.markdownEditor[markdownEditorID].toggleSideBySide();
+            // });
         });
 
         if($.isFunction(afterInit)) afterInit();

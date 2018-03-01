@@ -119,7 +119,7 @@
       <div class='actions'><?php echo $actionLinks;?></div>
       <fieldset id='commentBox' class='hide'>
         <legend><?php echo $lang->comment;?></legend>
-        <form method='post' action='<?php echo inlink('edit', "caseID=$case->id&comment=true")?>'>
+        <form method='post' action='<?php echo $this->createLink('action', 'comment', "objectType=case&objectID=$case->id")?>' target='hiddenwin'>
           <div class="form-group"><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></div>
           <?php echo html::submitButton() . html::backButton();?>
         </form>
@@ -134,12 +134,12 @@
         <table class='table table-data table-condensed table-borderless table-fixed'>
         <?php if($isLibCase):?>
           <tr>
-            <th class='w-60px'><?php echo $lang->testcase->lib;?></th>
+            <th class='w-80px'><?php echo $lang->testcase->lib;?></th>
             <td><?php if(!common::printLink('testsuite', 'library', "libID=$case->lib", $libName)) echo $libName;?></td>
           </tr>
         <?php else:?>
           <tr>
-            <th class='w-60px'><?php echo $lang->testcase->product;?></th>
+            <th class='w-80px'><?php echo $lang->testcase->product;?></th>
             <td><?php if(!common::printLink('testcase', 'browse', "productID=$case->product", $productName)) echo $productName;?></td>
           </tr>
           <?php if($this->session->currentProductType != 'normal'):?>

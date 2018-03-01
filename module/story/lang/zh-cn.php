@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->story->create      = "提需求";
-$lang->story->batchCreate = "批量添加";
+$lang->story->batchCreate = "批量提需求";
 $lang->story->change      = "变更";
 $lang->story->changed     = '需求变更';
 $lang->story->review      = '评审';
@@ -114,6 +114,7 @@ $lang->story->stageList['testing']    = '测试中';
 $lang->story->stageList['tested']     = '测试完毕';
 $lang->story->stageList['verified']   = '已验收';
 $lang->story->stageList['released']   = '已发布';
+$lang->story->stageList['closed']     = '已关闭';
 
 $lang->story->reasonList['']           = '';
 $lang->story->reasonList['done']       = '已完成';

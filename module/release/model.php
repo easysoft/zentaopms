@@ -145,6 +145,7 @@ class releaseModel extends model
             $releaseID = $this->dao->lastInsertID();
             $this->file->updateObjectID($this->post->uid, $releaseID, 'release');
             $this->file->saveUpload('release', $releaseID);
+            $this->loadModel('score')->create('release', 'create', $releaseID);
             if(!dao::isError()) return $releaseID;
         }
 
@@ -171,7 +172,7 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
-            ->check('name', 'unique', "id != $releaseID AND product = {$release->product} AND branch = $branch AND deleted = '0'")
+            ->check('name', 'unique', "id != '$releaseID' AND product = '{$release->product}' AND branch = '$branch' AND deleted = '0'")
             ->where('id')->eq((int)$releaseID)
             ->exec();
         if(!dao::isError())
@@ -318,20 +319,5 @@ class releaseModel extends model
     {
         $this->dao->update(TABLE_RELEASE)->set('status')->eq($status)->where('id')->eq($releaseID)->exec();
         return dao::isError();
-    }
-
-    /**
-     * Judge an action is clickable or not.
-     *-
-     * @param  object $product-
-     * @param  string $action-
-     * @access public
-     * @return void
-     */
-    public static function isClickable($release, $action)
-    {
-        if(!common::limitedUser($release)) return false;
-
-        return true;
     }
 }

@@ -35,8 +35,8 @@
     <tr class='text-center'>
       <td><?php echo $build->id;?></td>
       <td class='text-left'><?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?></td>
-      <td class='text-left' title="<?php echo $build->scmPath?>"><?php strpos($build->scmPath,  'http') === 0 ? printf(html::a($build->scmPath))  : printf($build->scmPath);?></td>
-      <td class='text-left' title="<?php echo $build->filePath?>"><?php strpos($build->filePath, 'http') === 0 ? printf(html::a($build->filePath)) : printf($build->filePath);?></td>
+      <td class='text-left' title="<?php echo $build->scmPath?>"><?php  echo strpos($build->scmPath,  'http') === 0 ? html::a($build->scmPath)  : $build->scmPath;?></td>
+      <td class='text-left' title="<?php echo $build->filePath?>"><?php echo strpos($build->filePath, 'http') === 0 ? html::a($build->filePath) : $build->filePath;?></td>
       <td><?php echo $build->date?></td>
       <td><?php echo $users[$build->builder]?></td>
       <td class='text-right'>

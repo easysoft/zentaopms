@@ -24,9 +24,6 @@
 
 .dropdown-pris > .btn {background-color: #fff; text-shadow: none}
 
-/* Keep label has same width as relative task label*/
-#keywordsAddonLabel:before {content: '空'; color: transparent} 
-
 #contactListGroup .input-group-btn > .btn {margin-left: -1px!important;}
 #contactListGroup .chosen-container-single a {border-left-width: 0px;}
 
@@ -36,4 +33,6 @@
 
 .colorpicker.input-group-btn > .btn {border-right: none}
 
-#branch {border-left-width: 0px;}
+#branch {border-left-width: 0;}
+
+.input-group-addon.w-90px{min-width:90px;}

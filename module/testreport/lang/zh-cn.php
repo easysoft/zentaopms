@@ -9,6 +9,8 @@ $lang->testreport->view     = '报告详情';
 $lang->testreport->recreate = '重新生成报告';
 
 $lang->testreport->title       = '标题';
+$lang->testreport->bugTitle    = 'Bug 标题';
+$lang->testreport->storyTitle  = '需求标题';
 $lang->testreport->project     = '所属项目';
 $lang->testreport->testtask    = '测试版本';
 $lang->testreport->tasks       = $lang->testreport->testtask;
@@ -52,10 +54,21 @@ $lang->testreport->legacyBugs          = '遗留的Bug';
 $lang->testreport->bugConfirmedRate    = '有效Bug率 (方案为已解决或延期 / 状态为已解决或已关闭)';
 $lang->testreport->bugCreateByCaseRate = '用例发现Bug率 (用例创建的Bug / 时间区间中新增的Bug)';
 
-$lang->testreport->caseSummary   = '共有<strong>%s</strong>个用例，共执行<strong>%s</strong>个用例，产生了<strong>%s</strong>个结果，失败的用例有<strong>%s</strong>个。';
-$lang->testreport->buildSummary  = '共测试了<strong>%s</strong>个版本。';
-$lang->testreport->bugSummary    = '共产生<strong>%s</strong>个Bug，遗留<strong>%s</strong>个Bug。有效Bug率（方案为已解决或延期 / 状态为已解决或已关闭）：<strong>%s</strong>，用例发现Bug率（用例创建的Bug / 时间区间中新增的Bug）：<strong>%s</strong>';
-$lang->testreport->confirmDelete = '是否删除该报告？';
-$lang->testreport->moreNotice    = '更多功能可以参考禅道扩展机制进行扩展，也可以联系我们进行定制。';
-$lang->testreport->exportNotice  = "由<a href='http://www.zentao.net' target='_blank' style='color:grey'>禅道项目管理软件</a>导出";
-$lang->testreport->noReport      = "报表还没有生成，请稍候查看。";
+$lang->testreport->caseSummary    = '共有<strong>%s</strong>个用例，共执行<strong>%s</strong>个用例，产生了<strong>%s</strong>个结果，失败的用例有<strong>%s</strong>个。';
+$lang->testreport->buildSummary   = '共测试了<strong>%s</strong>个版本。';
+$lang->testreport->confirmDelete  = '是否删除该报告？';
+$lang->testreport->moreNotice     = '更多功能可以参考禅道扩展机制进行扩展，也可以联系我们进行定制。';
+$lang->testreport->exportNotice   = "由<a href='http://www.zentao.net' target='_blank' style='color:grey'>禅道项目管理软件</a>导出";
+$lang->testreport->noReport       = "报表还没有生成，请稍候查看。";
+$lang->testreport->foundBugTip    = "影响版本在测试轮次内，并且创建时间在测试时间范围内产生的Bug数。";
+$lang->testreport->legacyBugTip   = "Bug状态是激活，或Bug的解决时间在测试结束时间之后。";
+$lang->testreport->fromCaseBugTip = "测试时间范围内，用例执行失败后创建的Bug";
+$lang->testreport->errorTrunk     = "主干版本不能创建测试报告，请修改关联版本！";
+$lang->testreport->moreProduct    = "只能对同一个产品生成测试报告。";
+
+$lang->testreport->bugSummary = <<<EOD
+共发现<strong>%s</strong>个Bug <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-info-sign'></i></a>，
+遗留<strong>%s</strong>个Bug <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->legacyBugTip}'><i class='icon-info-sign'></i></a>。
+用例执行产生<strong>%s</strong>个Bug <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->fromCaseBugTip}'><i class='icon-info-sign'></i></a>。
+有效Bug率（方案为已解决或延期 / 状态为已解决或已关闭）：<strong>%s</strong>，用例发现Bug率（用例创建的Bug / 发现Bug数）：<strong>%s</strong>
+EOD;

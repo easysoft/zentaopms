@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php if(!empty($error)):?>
-<div id="notice" class='alert alert-success'>
+<div id="notice" class='alert alert-success' style="margin-bottom:35px;">
   <div class="content"><i class='icon-info-sign'></i> <?php echo $error;?></div>
 </div>
 <?php endif;?>
@@ -33,7 +33,7 @@
         <th class='w-150px'><?php echo $lang->backup->time?></th>
         <th><?php echo $lang->backup->files?></th>
         <th class='w-150px'><?php echo $lang->backup->size?></th>
-        <th class='w-80px'><?php echo $lang->actions?></th>
+        <th class='w-110px'><?php echo $lang->actions?></th>
       </tr>
     </thead>
     <tbody class='text-center'>

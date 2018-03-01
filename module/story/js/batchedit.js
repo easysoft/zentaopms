@@ -30,11 +30,11 @@ function loadBranches(product, branch, storyID)
     if(typeof(branch) == 'undefined') branch = 0;
     if(!branch) branch = 0;
 
-    moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + storyID + '&needManage=true');
-    $('#modules' + storyID).parent('td').load(moduleLink, function(){$('#modules' + storyID).chosen(defaultChosenOptions);})
+    moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + storyID);
+    $('#modules' + storyID).parent('td').load(moduleLink, function(){$('#modules' + storyID).chosen(defaultChosenOptions);});
 
     planID = $('#plans' + storyID).val();
-    planLink = createLink('product', 'ajaxGetPlans', 'productID=' + product + '&branch=' + branch + '&planID=' + planID + '&fieldID=' + storyID + '&needCreate=true');
+    planLink = createLink('product', 'ajaxGetPlans', 'productID=' + product + '&branch=' + branch + '&planID=' + planID + '&fieldID=' + storyID);
     $('#plans' + storyID).parent('td').load(planLink, function(){$('#plans' + storyID).chosen(defaultChosenOptions);});
 }
 
@@ -90,4 +90,4 @@ $(document).on('change', 'select', function()
         $(this).trigger("chosen:updated");
         $(this).trigger("change");
     }
-})
+});

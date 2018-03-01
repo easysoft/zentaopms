@@ -14,9 +14,9 @@
   <div class='modal-dialog'>
     <div class='modal-header'><strong><?php echo $lang->install->checking;?></strong></div>
     <div class='modal-body'>
-      <table class='table table-bordered'>
+      <table class='table table-bordered' id='checker'>
         <thead>
-          <tr class='text-center'>
+          <tr>
             <th class='w-p20'><?php echo $lang->install->checkItem;?></th>
             <th class='w-p25'><?php echo $lang->install->current?></th>
             <th class='w-p15'><?php echo $lang->install->result?></th>
@@ -76,12 +76,6 @@
           <td><?php $filterResult == 'ok' ? printf($lang->install->loaded) : printf($lang->install->unloaded);?></td>
           <td class='<?php echo $filterResult;?>'><?php echo $lang->install->$filterResult;?></td>
           <td class='text-left f-12px'><?php if($filterResult == 'fail') echo $lang->install->filterFail;?></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->install->gd;?></th>
-          <td><?php $gdResult == 'ok' ? printf($lang->install->loaded) : printf($lang->install->unloaded);?></td>
-          <td class='<?php echo $gdResult;?>'><?php echo $lang->install->$gdResult;?></td>
-          <td class='text-left f-12px'><?php if($gdResult == 'fail') echo $lang->install->gdFail;?></td>
         </tr>
         <tr>
           <th><?php echo $lang->install->iconv;?></th>
@@ -164,7 +158,6 @@
          $zlibResult     == 'ok' and
          $curlResult     == 'ok' and
          $filterResult   == 'ok' and
-         $gdResult       == 'ok' and
          $iconvResult    == 'ok')
       {
           echo html::a($this->createLink('install', 'step2'), $lang->install->next, '', "class='btn btn-primary'");

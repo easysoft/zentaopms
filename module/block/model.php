@@ -50,6 +50,7 @@ class blockModel extends model
 
         $data->params = helper::jsonEncode($data->params);
         $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
+        if(!dao::isError()) $this->loadModel('score')->create('block', 'set');
     }
 
     /**
@@ -407,6 +408,23 @@ class blockModel extends model
         return json_encode($this->onlyNumParams($module, $params));
     }
 
+    public function getAssignToMeParams()
+    {
+        $params->todoNum['name']    = $this->lang->block->todoNum;
+        $params->todoNum['default'] = 20; 
+        $params->todoNum['control'] = 'input';
+
+        $params->taskNum['name']    = $this->lang->block->taskNum;
+        $params->taskNum['default'] = 20; 
+        $params->taskNum['control'] = 'input';
+
+        $params->bugNum['name']    = $this->lang->block->bugNum;
+        $params->bugNum['default'] = 20; 
+        $params->bugNum['control'] = 'input';
+
+        return json_encode($params);
+    }
+
     /**
      * Get closed block pairs. 
      * 
@@ -455,5 +473,17 @@ class blockModel extends model
         $params->num['default'] = 20; 
         $params->num['control'] = 'input';
         return $params;
+    }
+
+    /**
+     * Check whether long block.
+     * 
+     * @param  object    $block 
+     * @access public
+     * @return book
+     */
+    public function isLongBlock($block)
+    {
+        return $block->grid >= 6;
     }
 }

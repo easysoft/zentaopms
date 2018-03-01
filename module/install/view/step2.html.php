@@ -17,9 +17,9 @@
       <div class='modal-body'>
         <table align='center' class='table table-bordered table-form'>
           <thead>
-            <tr class='text-center'>
-              <th class='w-p20'><?php echo $lang->install->key;?></th>
-              <th class='text-left' colspan='2'><?php echo $lang->install->value?></th>
+            <tr>
+              <th class='w-p20 text-right'><?php echo $lang->install->key;?></th>
+              <th colspan='2'><?php echo $lang->install->value?></th>
             </tr>
           </thead>
           <tr>

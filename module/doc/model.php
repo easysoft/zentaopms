@@ -15,10 +15,10 @@ class docModel extends model
 {
     /**
      * Set menus
-     * 
-     * @param  array  $libs 
-     * @param  int    $libID 
-     * @param  string $moduleID 
+     *
+     * @param  array  $libs
+     * @param  int    $libID
+     * @param  string $moduleID
      * @access public
      * @return void
      */
@@ -80,8 +80,8 @@ class docModel extends model
 
     /**
      * Get library by id.
-     * 
-     * @param  int    $libID 
+     *
+     * @param  int    $libID
      * @access public
      * @return object
      */
@@ -92,7 +92,7 @@ class docModel extends model
 
     /**
      * Get libraries.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -127,7 +127,7 @@ class docModel extends model
 
     /**
      * Create a library.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -151,8 +151,8 @@ class docModel extends model
 
     /**
      * Update a library.
-     * 
-     * @param  int    $libID 
+     *
+     * @param  int    $libID
      * @access public
      * @return void
      */
@@ -373,7 +373,7 @@ class docModel extends model
 
     /**
      * Create a doc.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -414,12 +414,11 @@ class docModel extends model
         $docContent->type    = $doc->contentType;
         $docContent->version = 1;
         if($doc->contentType == 'markdown') $docContent->content = str_replace('&gt;', '>', $docContent->content);
-        unset($doc->content);
         unset($doc->contentMarkdown);
         unset($doc->contentType);
         unset($doc->url);
 
-        $this->dao->insert(TABLE_DOC)->data($doc)->autoCheck()
+        $this->dao->insert(TABLE_DOC)->data($doc, 'content')->autoCheck()
             ->batchCheck($this->config->doc->create->requiredFields, 'notempty')
             ->exec();
         if(!dao::isError())
@@ -431,6 +430,7 @@ class docModel extends model
             $docContent->doc   = $docID;
             $docContent->files = join(',', array_keys($files));
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+            $this->loadModel('score')->create('doc', 'create', $docID);
             return array('status' => 'new', 'id' => $docID);
         }
         return false;
@@ -438,8 +438,8 @@ class docModel extends model
 
     /**
      * Update a doc.
-     * 
-     * @param  int    $docID 
+     *
+     * @param  int    $docID
      * @access public
      * @return void
      */
@@ -457,8 +457,17 @@ class docModel extends model
             ->remove('comment,files,labels,uid')
             ->get();
         if($doc->acl == 'private') $doc->users = $oldDoc->addedBy;
-        $oldDocContent = $this->dao->select('files,type')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($oldDoc->version)->fetch();
-        if($oldDocContent->type == 'markdown') $doc->content = str_replace('&gt;', '>', $doc->content);
+
+        $oldDocContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($oldDoc->version)->fetch();
+        if($oldDocContent)
+        {
+            $oldDoc->title       = $oldDocContent->title;
+            $oldDoc->digest      = $oldDocContent->digest;
+            $oldDoc->content     = $oldDocContent->content;
+            $oldDoc->contentType = $oldDocContent->type;
+
+            if($oldDocContent->type == 'markdown') $doc->content = str_replace('&gt;', '>', $doc->content);
+        }
 
         $lib = $this->getLibByID($doc->lib);
         $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
@@ -484,17 +493,16 @@ class docModel extends model
             $docContent->title   = $doc->title;
             $docContent->content = $doc->content;
             $docContent->version = $doc->version;
-            $docContent->digest  = $doc->digest;
             $docContent->type    = $oldDocContent->type;
             $docContent->files   = $oldDocContent->files;
+            if(isset($doc->digest)) $docContent->digest  = $doc->digest;
             if($files) $docContent->files .= ',' . join(',', array_keys($files));
             $docContent->files   = trim($docContent->files, ',');
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
         }
-        unset($doc->content);
         unset($doc->contentType);
 
-        $this->dao->update(TABLE_DOC)->data($doc)
+        $this->dao->update(TABLE_DOC)->data($doc, 'content')
             ->autoCheck()
             ->batchCheck($this->config->doc->edit->requiredFields, 'notempty')
             ->where('id')->eq((int)$docID)
@@ -533,7 +541,7 @@ class docModel extends model
 
     /**
      * Get pairs of project modules.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -548,9 +556,9 @@ class docModel extends model
 
     /**
      * Get doc menu.
-     * 
-     * @param  int    $libID 
-     * @param  int    $parent 
+     *
+     * @param  int    $libID
+     * @param  int    $parent
      * @access public
      * @return array
      */
@@ -568,8 +576,8 @@ class docModel extends model
      * Extract css styles for tables created in kindeditor.
      *
      * Like this: <table class="ke-table1" style="width:100%;" cellpadding="2" cellspacing="0" border="1" bordercolor="#000000">
-     * 
-     * @param  string    $content 
+     *
+     * @param  string    $content
      * @access public
      * @return void
      */
@@ -603,13 +611,15 @@ class docModel extends model
 
     /**
      * Check priv.
-     * 
-     * @param  object $object 
+     *
+     * @param  object $object
      * @access public
      * @return bool
      */
     public function checkPriv($object, $type = 'lib')
     {
+        if($this->app->user->admin) return true;
+
         $acls = $this->app->user->rights['acls'];
         if(!empty($object->product) and !empty($acls['products']) and !in_array($object->product, $acls['products'])) return false;
         if(!empty($object->project) and !empty($acls['projects']) and !in_array($object->project, $acls['projects'])) return false;
@@ -618,7 +628,6 @@ class docModel extends model
 
         $account = ',' . $this->app->user->account . ',';
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
-        if($this->app->user->admin) return true;
         if($object->acl == 'private' and strpos(",$object->users,", $account) !== false) return true;
         if($object->acl == 'custom')
         {
@@ -630,13 +639,13 @@ class docModel extends model
                 if(strpos(",$object->groups,", ",$groupID,") !== false) return true;
             }
         }
-        
+
         if(isset($object->lib))
         {
             static $libs;
             if(empty($libs)) $libs = $this->getLibs('all');
             if(!isset($libs[$object->lib])) return false;
-            
+
         }
 
         if($object->project)
@@ -658,10 +667,10 @@ class docModel extends model
 
     /**
      * Get all libs by type.
-     * 
-     * @param  string $type 
-     * @param  int    $pager 
-     * @param  string $extra 
+     *
+     * @param  string $type
+     * @param  int    $pager
+     * @param  string $extra
      * @access public
      * @return array
      */
@@ -699,7 +708,7 @@ class docModel extends model
 
     /**
      * Get all lib groups.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -783,9 +792,9 @@ class docModel extends model
 
     /**
      * Get limit libs.
-     * 
-     * @param  string $type 
-     * @param  int    $limit 
+     *
+     * @param  string $type
+     * @param  int    $limit
      * @access public
      * @return array
      */
@@ -827,11 +836,11 @@ class docModel extends model
     }
 
     /**
-     * Get project or product libs groups. 
-     * 
-     * @param  string $type 
-     * @param  array  $idList 
-     * @param  int    $limit 
+     * Get project or product libs groups.
+     *
+     * @param  string $type
+     * @param  array  $idList
+     * @param  int    $limit
      * @access public
      * @return array
      */
@@ -870,10 +879,10 @@ class docModel extends model
 
     /**
      * Get libs by object.
-     * 
-     * @param  string $type 
-     * @param  int    $objectID 
-     * @param  string $mode 
+     *
+     * @param  string $type
+     * @param  int    $objectID
+     * @param  string $mode
      * @access public
      * @return array
      */
@@ -974,8 +983,8 @@ class docModel extends model
 
     /**
      * Get doc tree.
-     * 
-     * @param  int    $libID 
+     *
+     * @param  int    $libID
      * @access public
      * @return array
      */
@@ -994,9 +1003,9 @@ class docModel extends model
 
     /**
      * Fill docs in tree.
-     * 
-     * @param  object $node 
-     * @param  int    $libID 
+     *
+     * @param  object $node
+     * @param  int    $libID
      * @access public
      * @return array
      */
@@ -1022,6 +1031,7 @@ class docModel extends model
 
         $node->type = 'module';
         $docs = isset($docGroups[$node->id]) ? $docGroups[$node->id] : array();
+        $menu = !empty($node->children) ? $node->children : array();
         if(!empty($docs))
         {
             $docItems = array();
@@ -1038,22 +1048,26 @@ class docModel extends model
                 if(common::hasPriv('doc', 'delete'))$buttons .= html::a(helper::createLink('doc', 'delete', "docID=$doc->id"), "<i class='icon icon-remove'></i>", 'hiddenwin', "class='btn-icon' title='{$this->lang->doc->delete}'");
                 $docItem->buttons = $buttons;
                 $docItem->actions = false;
-                $docItems[] = $docItem;
+                $docItems[]       = $docItem;
             }
-            $node->docsCount = count($docItems);
-            $node->children  = $docItems;
+
+            /* Reorder children. The doc is top of menu. */
+            if($menu) $docItems = array_merge($docItems, $menu);
+
+            $node->children = $docItems;
         }
 
-        $node->actions = false;
+        $node->docsCount = isset($node->children) ? count($node->children) : 0;
+        $node->actions   = false;
         return $node;
     }
 
     /**
-     * Get crumbs. 
-     * 
-     * @param  int    $libID 
-     * @param  int    $moduleID 
-     * @param  int    $docID 
+     * Get crumbs.
+     *
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  int    $docID
      * @access public
      * @return string
      */
@@ -1062,7 +1076,7 @@ class docModel extends model
         if(empty($libID)) return '';
 
         $lib = $this->getLibById($libID);
-        if(!$this->checkPriv($lib)) 
+        if(!$this->checkPriv($lib))
         {
             echo(js::alert($this->lang->doc->accessDenied));
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
@@ -1102,9 +1116,9 @@ class docModel extends model
 
     /**
      * Get product crumb.
-     * 
-     * @param  int    $productID 
-     * @param  int    $projectID 
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
      * @access public
      * @return string
      */
@@ -1133,9 +1147,9 @@ class docModel extends model
 
     /**
      * Set lib users.
-     * 
-     * @param  string $type 
-     * @param  int    $objectID 
+     *
+     * @param  string $type
+     * @param  int    $objectID
      * @access public
      * @return bool
      */
@@ -1145,32 +1159,18 @@ class docModel extends model
         if($type == 'product')
         {
             $teams = $this->dao->select('t1.account')->from(TABLE_TEAM)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.project=t2.project')
-                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project=t3.id')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.root=t2.project')
+                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.root=t3.id')
                 ->where('t2.product')->eq($objectID)
+                ->andWhere('t1.type')->eq('project')
                 ->andWhere('t3.deleted')->eq('0')
                 ->fetchPairs('account', 'account');
         }
         elseif($type == 'project')
         {
-            $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('project')->eq($objectID)->fetchPairs('account', 'account');
+            $teams = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->eq($objectID)->andWhere('type')->eq('project')->fetchPairs('account', 'account');
         }
 
         return $teams;
-    }
-
-    /**
-     * Judge an action is clickable or not.
-     *-
-     * @param  object $product-
-     * @param  string $action-
-     * @access public
-     * @return void
-     */
-    public static function isClickable($doc, $action)
-    {
-        if(!common::limitedUser($doc)) return false;
-
-        return true;
     }
 }

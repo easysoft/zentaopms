@@ -445,7 +445,7 @@ $(function()
         var progress = Math.round(100*finishCount/totalCount);
         $progress.toggleClass('finish', isFinishAll).find('.progress-bar').css('width', (100*finishCount/totalCount) + '%');
         $progress.find('.progress-text').text(progress + '%');
-
+        if(progress == 100) $.getJSON(createLink('tutorial', 'ajaxFinish'));
         showTask(current);
     };
 

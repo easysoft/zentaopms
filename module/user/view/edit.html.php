@@ -39,10 +39,8 @@
         <td colspan='3'><?php echo html::select('groups[]', $groups, $userGroups, 'size=3 multiple=multiple class="form-control chosen"');?></td>
       </tr>
       <tr>
-        <th><?php echo $lang->user->join;?></th>
-        <td><?php echo html::input('join', $user->join, "class='form-control form-date'");?></td>
         <th><?php echo $lang->user->gender;?></th>
-        <td><?php echo html::radio('gender', (array)$lang->user->genderList, $user->gender);?></td>
+        <td colspan="3"><?php echo html::radio('gender', (array)$lang->user->genderList, $user->gender);?></td>
       </tr>
     </table>
     <table align='center' class='table table-form'>
@@ -71,8 +69,6 @@
       <tr>
         <th><?php echo $lang->user->commiter;?></th>
         <td><?php echo html::input('commiter', $user->commiter, "class='form-control' autocomplete='off'");?></td>
-        <th><?php echo $lang->user->limitedUser;?></th>
-        <td><?php echo html::radio('limitedUser', $lang->user->limitedUserList, $user->limitedUser);?></td>
       </tr>
     </table>
     <table align='center' class='table table-form'>
@@ -100,7 +96,7 @@
         <td><?php echo html::input('phone', $user->phone, "class='form-control' autocomplete='off'");?></td>
         <th><?php echo $lang->user->address;?></th>
         <td><?php echo html::input('address', $user->address, "class='form-control' autocomplete='off'");?></td>
-      </tr>  
+      </tr>
       <tr>
         <th><?php echo $lang->user->zipcode;?></th>
         <td><?php echo html::input('zipcode', $user->zipcode, "class='form-control' autocomplete='off'");?></td>
@@ -109,7 +105,7 @@
     <table align='center' class='table table-form'>
       <caption class='text-left text-muted'><?php echo $lang->user->verify;?></caption>
       <tr>
-        <th class='w-120px'><?php echo $lang->user->verifyPassword;?></th>
+        <th class='w-130px'><?php echo $lang->user->verifyPassword;?></th>
         <td>
           <div class="required required-wrapper"></div>
           <?php echo html::password('verifyPassword', '', "class='form-control disabled-ie-placeholder' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?>

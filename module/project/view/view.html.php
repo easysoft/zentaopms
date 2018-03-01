@@ -74,7 +74,7 @@
         <legend><?php echo $lang->project->basicInfo?></legend>
         <table class='table table-data table-condensed table-borderless'>
           <tr>
-            <th class='w-80px text-right strong'><?php echo $lang->project->name;?></th>
+            <th class='w-110px text-right strong'><?php echo $lang->project->name;?></th>
             <td><?php echo $project->name;?></td>
           </tr>
           <tr>
@@ -126,7 +126,8 @@
             {
                 if($product->type !== 'normal')
                 {
-                    echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$product->branch"), $product->name . '/' . $branchGroups[$productID][$product->branch]);
+                    $branchName = isset($branchGroups[$productID][$product->branch]) ? '/' . $branchGroups[$productID][$product->branch] : '';
+                    echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$product->branch"), $product->name . $branchName);
                 }
                 else
                 {

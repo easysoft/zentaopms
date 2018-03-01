@@ -75,10 +75,6 @@
       <td><?php echo $user->email;?></td>
     </tr>
     <tr>
-      <th><?php echo $lang->user->join;?></th>
-      <td><?php echo $user->join;?></td>
-    </tr>
-    <tr>
       <th><?php echo $lang->user->visits;?></th>
       <td><?php echo $user->visits;?></td>
     </tr>
@@ -93,11 +89,11 @@
     <tr>
       <th><?php echo $lang->user->skype;?></th>
       <td><?php if($user->skype) echo html::a("callto://$user->skype", $user->skype);?></td>
-    </tr>  
+    </tr>
     <tr>
       <th><?php echo $lang->user->qq;?></th>
       <td><?php if($user->qq) echo html::a("tencent://message/?uin=$user->qq", $user->qq);?></td>
-    </tr>  
+    </tr>
     <tr>
       <th><?php echo $lang->user->yahoo;?></th>
       <td><?php echo $user->yahoo;?></td>
@@ -105,11 +101,11 @@
     <tr>
       <th><?php echo $lang->user->gtalk;?></th>
       <td><?php echo $user->gtalk;?></td>
-    </tr>  
+    </tr>
     <tr>
       <th><?php echo $lang->user->wangwang;?></th>
       <td><?php echo $user->wangwang;?></td>
-    </tr>  
+    </tr>
     <tr>
       <th><?php echo $lang->user->mobile;?></th>
       <td><?php echo $user->mobile;?></td>
@@ -117,11 +113,11 @@
      <tr>
       <th><?php echo $lang->user->phone;?></th>
       <td><?php echo $user->phone;?></td>
-    </tr>  
+    </tr>
     <tr>
       <th><?php echo $lang->user->address;?></th>
       <td><?php echo $user->address;?></td>
-    </tr>  
+    </tr>
     <tr>
       <th><?php echo $lang->user->zipcode;?></th>
       <td><?php echo $user->zipcode;?></td>

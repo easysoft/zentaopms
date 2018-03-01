@@ -11,9 +11,6 @@ function setModule(obj)
 
     var index = $(obj).closest('tr').index();
 
-      console.log(moduleID);
-      console.log(libModule);
-      console.log(index);
     $(obj).closest('tbody').find('tr').each(function(i)
     {
         if(i > index)

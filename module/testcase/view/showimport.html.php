@@ -6,12 +6,12 @@
 <div class='alert alert-info'><?php echo $suhosinInfo?></div>
 <?php else:?>
 <form target='hiddenwin' method='post' class='form-condensed'>
-  <table class='table table-fixed active-disabled table-custom'>
+  <table class='table table-fixed active-disabled table-custom' id='showData'>
     <thead>
       <tr>
         <th class='w-70px'><?php echo $lang->testcase->id?></th>
         <th><?php echo $lang->testcase->title?></th>
-        <?php if($branches):?>
+        <?php if(!empty($branches)):?>
         <th class='w-100px'><?php echo $lang->testcase->branch?></th>
         <?php endif;?>
         <th class='w-100px'><?php echo $lang->testcase->module?></th>
@@ -32,7 +32,10 @@
       </tr>
     </thead>
     <tbody>
-      <?php $insert = true;?>
+      <?php
+      $insert = true;
+      $addID  = 1;
+      ?>
       <?php foreach($caseData as $key => $case):?>
       <?php if(empty($case->title)) continue;?>
       <tr valign='top' align='center'>
@@ -45,13 +48,13 @@
           }
           else
           {
-              echo $key . " <sub class='gray' style='vertical-align:sub;'>{$lang->testcase->new}</sub>";
+              echo $addID++ . " <sub class='gray' style='vertical-align:sub;'>{$lang->testcase->new}</sub>";
           }
           echo html::hidden("product[$key]", $productID);
           ?>
         </td>
         <td><?php echo html::input("title[$key]", htmlspecialchars($case->title, ENT_QUOTES), "class='form-control'")?></td>
-        <?php if($branches):?>
+        <?php if(!empty($branches)):?>
         <td class='text-left' style='overflow:visible'><?php echo html::select("branch[$key]", $branches, (isset($case->branch) and $case->branch !== '') ? $case->branch : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->branch : $branch), "class='form-control chosen'")?></td>
         <?php endif;?>
         <td class='text-left' style='overflow:visible'><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->module : ''), "class='form-control chosen'")?></td>
@@ -80,7 +83,7 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan='10' class='text-center'>
+        <td colspan='<?php echo !empty($branches) ? 11 : 10;?>' class='text-center'>
           <?php
           if(!$insert)
           {
@@ -100,7 +103,7 @@
 </form>
 <?php endif;?>
 <script>
-$(function(){affix('thead')})
+$(function(){affix('#showData thead')})
 function affix(obj)
 {
     var fixH = $(obj).offset().top;

@@ -26,10 +26,11 @@ class actionModel extends model
      * @param  string $comment 
      * @param  string $extra        the extra info of this action, according to different modules and actions, can set different extra.
      * @param  string $actor
+     * @param  bool   $autoDelete
      * @access public
      * @return int
      */
-    public function create($objectType, $objectID, $actionType, $comment = '', $extra = '', $actor = '')
+    public function create($objectType, $objectID, $actionType, $comment = '', $extra = '', $actor = '', $autoDelete = true)
     {
         $actor      = $actor ? $actor : $this->app->user->account;
         $actionType = strtolower($actionType);
@@ -48,16 +49,19 @@ class actionModel extends model
 
         /* Process action. */
         $action = $this->loadModel('file')->processImgURL($action, 'comment', $this->post->uid);
+        if($autoDelete) $this->file->autoDelete($this->post->uid);
 
         /* Get product and project for this object. */
-        $productAndProject  = $this->getProductAndProject($action->objectType, $objectID);
-        $action->product    = $productAndProject['product'];
-        $action->project    = $productAndProject['project'];
+        $productAndProject = $this->getProductAndProject($action->objectType, $objectID);
+        $action->product   = $productAndProject['product'];
+        $action->project   = (int) $productAndProject['project'];
 
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         $actionID = $this->dbh->lastInsertID();
 
         $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
+
+        $this->loadModel('message')->send($objectType, $objectID, $actionType, $actionID);
 
         return $actionID;
     }
@@ -318,6 +322,22 @@ class actionModel extends model
                         $table = $action->objectType == 'story' ? TABLE_STORY : TABLE_BUG;
                         $name  = $this->dao->select('title')->from($table)->where('id')->eq($id)->fetch('title');
                         if($name) $action->appendLink = html::a(helper::createLink($action->objectType, 'view', "id=$id"), "#$id " . $name);
+                    }
+                }
+            }
+            elseif($actionName == 'finished' and $objectType == 'todo')
+            {
+                $action->appendLink = '';
+                if(strpos($action->extra, ':')!== false)
+                {
+                    list($extra, $id) = explode(':', $action->extra);
+                    $action->extra    = strtolower($extra);
+                    if($id)
+                    {
+                        $table = $this->config->objectTables[$action->extra];
+                        $field = $this->config->action->objectNameFields[$action->extra];
+                        $name  = $this->dao->select($field)->from($table)->where('id')->eq($id)->fetch($field);
+                        if($name) $action->appendLink = html::a(helper::createLink($action->extra, 'view', "id=$id"), "#$id " . $name);
                     }
                 }
             }
@@ -687,7 +707,7 @@ class actionModel extends model
             $objectIds   = array_unique($objectIds);
             $table       = $this->config->objectTables[$objectType];
             $field       = $this->config->action->objectNameFields[$objectType];
-            if($table != '`zt_todo`')
+            if($table != TABLE_TODO)
             {
                 $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
             }

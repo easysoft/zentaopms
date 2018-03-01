@@ -47,7 +47,7 @@ class searchModel extends model
         $groupItems = $this->config->search->groupItems;
         $groupAndOr = strtoupper($this->post->groupAndOr);
         if($groupAndOr != 'AND' and $groupAndOr != 'OR') $groupAndOr = 'AND';
-
+        $scoreNum = 0;
         for($i = 1; $i <= $groupItems * 2; $i ++)
         {
             /* The and or between two groups. */
@@ -65,6 +65,8 @@ class searchModel extends model
             if($this->post->$valueName == false) continue;
             if($this->post->$valueName == 'null') $this->post->$valueName = '';  // Null is special, stands to empty.
             if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
+
+            $scoreNum += 1;
 
             /* Set and or. */
             $andOr = strtoupper($this->post->$andOrName);
@@ -127,6 +129,7 @@ class searchModel extends model
         $formSessionName  = $this->post->module . 'Form';
         $this->session->set($querySessionName, $where);
         $this->session->set($formSessionName,  $_POST);
+        if($scoreNum > 2 && !dao::isError()) $this->loadModel('score')->create('search', 'saveQueryAdvanced');
     }
 
     /**
@@ -303,6 +306,7 @@ class searchModel extends model
                 $featureBarConfig->value   = json_encode($newConfig);
                 $this->dao->replace(TABLE_CONFIG)->data($featureBarConfig)->exec();
             }
+            if(!dao::isError()) $this->loadModel('score')->create('search', 'saveQuery', $queryID);
             return $queryID;
         }
         return false;

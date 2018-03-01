@@ -66,6 +66,9 @@
               <div class='input-group w-p100'>
                 <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->testcase->colorTag ?>' data-update-text='#title'>
                 <?php echo html::input('title', $caseTitle, "class='form-control' autocomplete='off'");?>
+                <?php if(!$this->loadModel('testcase')->forceNotReview()):?>
+                <span class='input-group-addon'><?php echo html::checkbox('forceNotReview', $lang->testcase->forceNotReview, '', "id='forceNotReview'");?></span>
+                <?php endif;?>
               </div>
             </div>
             <div class='col-table'>
@@ -75,7 +78,7 @@
                 $hasCustomPri = false;
                 foreach($lang->testcase->priList as $priKey => $priValue)
                 {
-                    if($priKey != $priValue)
+                    if($priKey != $priValue or strlen($priKey) != strlen($priValue))
                     {
                         $hasCustomPri = true;
                         break;

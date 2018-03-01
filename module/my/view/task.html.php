@@ -42,7 +42,7 @@
       <th class='w-status'><?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>
       <th class='w-140px'> <?php echo $lang->actions;?></th>
     </tr>
-    </thead>   
+    </thead>
     <tbody>
     <?php $canBatchEdit  = common::hasPriv('task', 'batchEdit');?>
     <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
@@ -52,9 +52,13 @@
         <?php if($canBatchEdit or $canBatchClose):?><input type='checkbox' name='taskIDList[]' value='<?php echo $task->id;?>' /><?php endif;?>
         <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?>
       </td>
-      <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
+      <td><span class='<?php echo 'pri' . $task->pri;?>'><?php echo $task->pri;?></span></td>
       <td class='nobr text-left'><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></td>
-      <td class='text-left nobr'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, null, "style='color: $task->color'");?></td>
+      <td class='text-left nobr'>
+        <?php if(!empty($task->team))   echo '<span class="label">' . $this->lang->task->multipleAB . '</span> ';?>
+        <?php if(!empty($task->parent)) echo '<span class="label">' . $this->lang->task->childrenAB . '</span> ';?>
+        <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, null, "style='color: $task->color'");?>
+      </td>
       <td><?php echo zget($users, $task->openedBy);?></td>
       <td><?php echo zget($users, $task->assignedTo);?></td>
       <td><?php echo zget($users, $task->finishedBy);?></td>
@@ -64,7 +68,7 @@
       <td class='<?php if(isset($task->delay)) echo 'delayed';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
       <td class='task-<?php echo $task->status;?>'><?php echo $lang->task->statusList[$task->status];?></td>
       <td class='text-right'>
-        <?php 
+        <?php
         common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', 'hand-right', '', 'iframe', true);
         common::printIcon('task', 'start',    "taskID=$task->id", $task, 'list', 'play', '', 'iframe', true);
         common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
@@ -81,7 +85,7 @@
         <td colspan='13'>
         <?php if(count($tasks)):?>
         <div class='table-actions clearfix'>
-        <?php 
+        <?php
         if($canBatchEdit or $canBatchClose) echo html::selectButton();
         echo "<div class='btn-group'>";
         if($canBatchEdit)
@@ -96,13 +100,13 @@
         }
         echo '</div>';
         ?>
-        </div> 
+        </div>
         <?php endif;?>
         <?php $pager->show();?>
         </td>
       </tr>
     </tfoot>
-  </table> 
+  </table>
 </form>
 <?php js::set('listName', 'tasktable')?>
 <?php include '../../common/view/footer.html.php';?>

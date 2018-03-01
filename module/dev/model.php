@@ -16,7 +16,7 @@ class devModel extends model
         foreach($datatables as $table)
         {
             $table = current($table);
-            if(strpos($table, $this->config->db->prefix) !== false)
+            if(empty($this->config->db->prefix) or strpos($table, $this->config->db->prefix) !== false)
             {
                 $subTable = substr($table, strpos($table, '_') + 1);
                 $group    = zget($this->config->dev->group, $subTable, 'other');

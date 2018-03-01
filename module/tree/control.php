@@ -25,10 +25,11 @@ class tree extends control
     public function browse($rootID, $viewType, $currentModuleID = 0, $branch = 0)
     {
         /* According to the type, set the module root and modules. */
-        if(strpos('story|bug|case', $viewType) !== false)
+        if(strpos('story|bug|case|line', $viewType) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
-            if($product->type != 'normal')
+            if(empty($product)) $this->locate($this->createLink('product', 'create'));
+            if(!empty($product->type) && $product->type != 'normal')
             {
                 $branches = $this->loadModel('branch')->getPairs($product->id);
                 if($currentModuleID)
@@ -41,12 +42,12 @@ class tree extends control
             }
             $this->view->root = $product;
         }
-        /* The viewType is doc. */
         elseif(strpos($viewType, 'doc') !== false)
         {
+            /* The viewType is doc. */
             $this->loadModel('doc');
             $viewType = 'doc';
-            $lib = $this->doc->getLibById($rootID);
+            $lib      = $this->doc->getLibById($rootID);
             $this->view->root = $lib;
         }
         elseif(strpos($viewType, 'caselib') !== false)
@@ -95,7 +96,6 @@ class tree extends control
             if($this->config->global->flow == 'onlyTest') $this->lang->set('menugroup.tree', 'testcase');
             if($this->config->global->flow != 'onlyTest') $this->lang->set('menugroup.tree', 'qa');
 
-
             $title      = $product->name . $this->lang->colon . $this->lang->tree->manageCase;
             $position[] = html::a($this->createLink('testcase', 'browse', "product=$rootID"), $product->name);
             $position[] = $this->lang->tree->manageCase;
@@ -122,6 +122,24 @@ class tree extends control
             $title      = $lib->name . $this->lang->colon . $this->lang->tree->manageCustomDoc;
             $position[] = html::a($this->createLink('doc', 'browse', "libID=$rootID"), $lib->name);
             $position[] = $this->lang->tree->manageCustomDoc;
+        }
+        elseif($viewType == 'line')
+        {
+            $this->lang->set('menugroup.tree', 'product');
+            $this->product->setMenu($this->product->getPairs(), $rootID, $branch, 'line', '', 'line');
+            $this->lang->tree->menu      = $this->lang->product->menu;
+            $this->lang->tree->menuOrder = $this->lang->product->menuOrder;
+
+            $products = $this->product->getPairs();
+            unset($products[$rootID]);
+            $currentProduct = key($products);
+
+            $this->view->allProduct     = $products;
+            $this->view->currentProduct = $currentProduct;
+            $this->view->productModules = $this->tree->getOptionMenu($currentProduct, 'line');
+
+            $title      = $this->lang->product->common . $this->lang->colon . $this->lang->tree->manageLine;
+            $position[] = $this->lang->tree->manageLine;
         }
 
         $parentModules = $this->tree->getParents($currentModuleID);
@@ -308,9 +326,11 @@ class tree extends control
      * AJAX: Get the option menu of modules.
      * 
      * @param  int    $rootID 
-     * @param  string $viewType 
-     * @param  int    $rootModuleID 
+     * @param  string $viewType
+     * @param  int    $branch
+     * @param  int    $rootModuleID
      * @param  string $returnType
+     * @param  string $fieldID
      * @param  bool   $needManage
      * @access public
      * @return string the html select string.

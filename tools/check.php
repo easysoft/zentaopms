@@ -91,7 +91,28 @@ $whiteList[] = 'testsuite-library';
 $whiteList[] = 'testsuite-createlib';
 $whiteList[] = 'testsuite-createcase';
 $whiteList[] = 'testsuite-libview';
-
+$whiteList[] = 'admin-log';
+$whiteList[] = 'admin-deletelog';
+$whiteList[] = 'custom-required';
+$whiteList[] = 'custom-score';
+$whiteList[] = 'custom-resetrequired';
+$whiteList[] = 'entry-browse';
+$whiteList[] = 'entry-create';
+$whiteList[] = 'entry-edit';
+$whiteList[] = 'entry-delete';
+$whiteList[] = 'entry-log';
+$whiteList[] = 'score-rule';
+$whiteList[] = 'score-reset';
+$whiteList[] = 'testsuite-batchcreatecase';
+$whiteList[] = 'testsuite-exporttemplet';
+$whiteList[] = 'testsuite-import';
+$whiteList[] = 'testsuite-showimport';
+$whiteList[] = 'webhook-browse';
+$whiteList[] = 'webhook-create';
+$whiteList[] = 'webhook-edit';
+$whiteList[] = 'webhook-delete';
+$whiteList[] = 'webhook-log';
+$whiteList[] = 'webhook-asyncsend';
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";
@@ -172,11 +193,9 @@ foreach(glob($moduleRoot . '*') as $modulePath)
         $lines = file($langFile);
         foreach($mainLines as $lineNO => $line)
         {
-            if(strpos($line, '$lang') === false)
-            {
-                //if($line != $lines[$lineNO]) echo $moduleName . ' ' . $langKey . ' ' . $lineNO . "\n";
-            }
-            else
+            if(!isset($lines[$lineNO]) OR empty(trim($lines[$lineNO]))) continue;
+            if(empty(trim($line))) continue;
+            if(strpos($line, '$lang') === 0)
             {
                 if(strpos($line, '=') !== false)
                 {

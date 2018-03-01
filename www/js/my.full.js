@@ -15,7 +15,16 @@ function createLink(moduleName, methodName, vars, viewType, isOnlyBody)
     if(vars)
     {
         vars = vars.split('&');
-        for(i = 0; i < vars.length; i ++) vars[i] = vars[i].split('=');
+        for(i = 0; i < vars.length; i ++)
+        {
+            splited = vars[i].split('=');
+
+            var newvars = new Array()
+            newvars[0] = splited.shift();
+            newvars[1] = splited.join('=');
+
+            vars[i] = newvars;
+        }
     }
     if(config.requestType != 'GET')
     {
@@ -48,11 +57,11 @@ function createLink(moduleName, methodName, vars, viewType, isOnlyBody)
  */
 function setSearchBox()
 {
-    $('#typeSelector a').click(function()
+    $('#searchTypeMenu a').click(function()
     {
-        $('#typeSelector li.active').removeClass('active');
+        $('#searchTypeMenu li.selected').removeClass('selected');
         var $this = $(this);
-        $this.closest('li').addClass('active');
+        $this.closest('li').addClass('selected');
         $("#searchType").val($this.data('value'));
         $("#searchTypeName").text($this.text());
     });
@@ -67,10 +76,11 @@ function setSearchBox()
 function shortcut()
 {
     objectType  = $('#searchType').attr('value');
-    objectValue = $('#searchQuery').attr('value');
+    objectValue = $("input#searchInput").attr('value');
     if(objectType && objectValue)
     {
-        location.href=createLink(objectType, 'view', "id=" + objectValue);
+        method = objectType == 'testsuite' ? 'library' : 'view';
+        location.href=createLink(objectType, method, "id=" + objectValue);
     }
 }
 
@@ -90,22 +100,28 @@ function showSearchMenu(objectType, objectID, module, method, extra)
     var $toggle = $(objectType == 'branch' ? '#currentBranch' : (objectType == 'tree' ? '#currentModule' : '#currentItem')).closest('li').toggleClass('show');
     if(!$toggle.hasClass('show')) return;
     var $menu = $toggle.find('#dropMenu');
-    var uuid = $.zui.uuid();
+    var uuid  = $.zui.uuid();
+    if(!$.cookie('ajax_quickJump'))
+    {
+        $.cookie('ajax_quickJump', 'on', {expires: config.cookieLife, path: config.webRoot});
+        $.get(createLink('score', 'ajax', "method=quickJump"));
+    }
     if(!$menu.data('initData'))
     {
         var remoteUrl = createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra);
         $.get(remoteUrl, function(data)
         {
             var $search = $menu.html(data).find('#search').focus();
-            var $items = $menu.find('#searchResult ul > li:not(.heading)');
-            var items = [];
+            var $items  = $menu.find('#searchResult ul > li:not(.heading)');
+            var items   = [];
             $items.each(function()
             {
                 var $item = $(this).removeClass('active');
-                var item = $item.data();
+                var item  = $item.data();
+
                 item.uuid = 'searchItem-' + (uuid++);
-                item.key = (item.key || '') + $item.text();
-                item.tag = (item.tag || '') + '#' + item.id;
+                item.key  = (item.key || '') + $item.text();
+                item.tag  = (item.tag || '') + '#' + item.id;
                 $item.attr('id', item.uuid);
                 items.push(item);
             });
@@ -143,8 +159,8 @@ function showSearchMenu(objectType, objectID, module, method, extra)
                 searchCallTask = setTimeout(searchItems, 200);
             }).on('keydown', function(e)
             {
-                var code = e.which;
-                var isSearching = $menu.hasClass('searching');
+                var code         = e.which;
+                var isSearching  = $menu.hasClass('searching');
                 var $resultItems = isSearching ? $items.filter('.show-search') : $items;
                 var resultLength = $resultItems.length;
                 if(!resultLength) return;
@@ -415,6 +431,7 @@ function setTreeBox()
 function selectLang(lang)
 {
     $.cookie('lang', lang, {expires:config.cookieLife, path:config.webRoot});
+    $.get(createLink('score', 'ajax', "method=selectLang"));
     location.href = removeAnchor(location.href);
 }
 
@@ -427,6 +444,7 @@ function selectLang(lang)
 function selectTheme(theme)
 {
     $.cookie('theme', theme, {expires:config.cookieLife, path:config.webRoot});
+    $.get(createLink('score', 'ajax', "method=selectTheme"));
     location.href = removeAnchor(location.href);
 }
 
@@ -547,7 +565,8 @@ function setFormAction(actionLink, hiddenwin, obj)
     $form.attr('action', actionLink);
 
     // Check safari for bug #1000, see http://pms.zentao.net/bug-view-1000.html
-    var isSafari = navigator.userAgent.indexOf('AppleWebKit') > -1;
+    var userAgent = navigator.userAgent;
+    var isSafari = userAgent.indexOf('AppleWebKit') > -1 && userAgent.indexOf('Safari') > -1 && userAgent.indexOf('Chrome') < 0;
     if(isSafari)
     {
         var idPreffix = 'checkbox-fix-' + $.zui.uuid();
@@ -671,7 +690,7 @@ function checkTable($table)
         $target.find('tbody > tr').toggleClass('active', isChecked).find('td :checkbox').prop('checked', isChecked);
     });
 
-    $table = $table || $('.table-selectable');
+    $table = $table || $('.table-selectable,table[checkable="true"]');
 
     if(!$table.length) return;
 
@@ -689,14 +708,19 @@ function checkTable($table)
     {
         if(document.activeElement.type != 'select-one' && document.activeElement.type != 'text')
         {
-            var $this = $(this);
-            var $tr = $this.closest('tr');
+            var $this     = $(this);
+            var $tr       = $this.closest('tr');
             var $checkbox = $tr.find(':checkbox');
             if($checkbox.size() == 0) return;
 
             var isChecked = $checkbox.prop('checked');
             if(!$this.is(':checkbox'))
             {
+                if(!$.cookie('ajax_dragSelected') && $checkbox.size() > 2)
+                {
+                    $.cookie('ajax_dragSelected', 'on', {expires: config.cookieLife, path: config.webRoot});
+                    $.get(createLink('score', 'ajax', "method=dragSelected"));
+                }
                 isChecked = checked === true || checked === false  ? checked : !isChecked;
                 $checkbox.prop('checked', isChecked);
             }
@@ -706,7 +730,6 @@ function checkTable($table)
             $tr.closest('.table').find('.rows-selector').prop('checked', false);
         }
     };
-
     var isSelectableTable = $table.hasClass('table-selectable');
 
     $table.selectable(
@@ -1471,6 +1494,18 @@ function fixedTfootAction(formID)
     if(typeof(ssoRedirect) != "undefined") pageFooterHeight = 0;
     function fixTfoot()
     {
+        var $table = $form.find('table:last');
+        var $tfoot = $table.find('tfoot');
+        if($table.hasClass('table-datatable'))
+        {
+            $table = $form.find('.datatable-rows');
+            $tfoot = $form.find('.datatable-footer tfoot');
+        }
+
+        $tbody = $table.find('tbody'),
+        $inputGroup = $tfoot.find('.table-actions').children('.input-group'),
+        pageFooterHeight = $('#footer').height(),
+
         tableWidth   = $table.width();
         hasFixed     = $tfoot.hasClass('fixedTfootAction');
         offsetHeight = $(window).height() + $(window).scrollTop() - pageFooterHeight/2;
@@ -1502,6 +1537,15 @@ function fixedTfootAction(formID)
     {
         // Fix table foot when scrolling.
         fixTfoot();
+
+        var $table = $form.find('table:last');
+        var $tfoot = $table.find('tfoot');
+        if($table.hasClass('table-datatable'))
+        {
+            $table = $form.find('.datatable-rows');
+            $tfoot = $form.find('.datatable-footer tfoot');
+        }
+
         $tfoot.addClass('scrolling scrolled');
         clearTimeout(scrollCallTask);
         scrollCallTask = setTimeout(function(){$tfoot.removeClass('scrolling');}, 200)
@@ -1737,11 +1781,21 @@ function initHotKey()
     {
         /* left, go to pre object. */
         var preLink = $('#pre').attr('href');
+        if(!$.cookie('ajax_lastNext'))
+        {
+            $.cookie('ajax_lastNext', 'on', {expires: config.cookieLife, path: config.webRoot});
+            $.get(createLink('score', 'ajax', "method=lastNext"));
+        }
         if(preLink) location.href = preLink;
     }).bind('keydown', 'right', function()
     {
         /* right, go to next object. */
         var nextLink = $('#next').attr('href');
+        if(!$.cookie('ajax_lastNext'))
+        {
+            $.cookie('ajax_lastNext', 'on', {expires: config.cookieLife, path: config.webRoot});
+            $.get(createLink('score', 'ajax', "method=lastNext"));
+        }
         if(nextLink) location.href = nextLink;
     });
 }
@@ -1896,6 +1950,79 @@ function revertModuleCookie()
     }
 }
 
+/**
+ * Focus move up or down for input.
+ *
+ * @param type up|down
+ */
+function inputFocusJump(type){
+    var hasFocus = $('input').is(':focus');
+    if(hasFocus)
+    {
+        var title     = $("input:focus").attr('name').replace(/\[\d]/g, '');
+        var $input    = $(":input[name^=" + title + "]:text:not(:disabled):not([name*='%'])");
+        var num       = $input.length;
+        var index     = parseInt($("input:focus").attr('name').replace(/[^0-9]/g, ''));
+        var nextIndex = type == 'down' ? index + 1 : index - 1;
+
+        if(nextIndex < num && nextIndex >= 0)
+        {
+            $input[nextIndex].focus();
+        }
+    }
+}
+
+/**
+ * Focus move up or down for select.
+ *
+ * @param type
+ */
+function selectFocusJump(type)
+{
+    var hasFocus = $('select').is(':focus');
+    if(hasFocus)
+    {
+        var title     = $("select:focus").attr('name').replace(/\[\d]/g, '');
+        var $select   = $("select[name^=" + title + "]:not([name*='%'])");
+        var num       = $select.length;
+        var index     = parseInt($("select:focus").attr('name').replace(/[^0-9]/g, ''));
+        var nextIndex = type == 'down' ? index + 1 : index - 1;
+
+        if(nextIndex < num && nextIndex >= 0)
+        {
+            $select[nextIndex].focus();
+        }
+    }
+}
+
+function adjustNoticePosition()
+{
+    var bottom = 25;
+    $('#noticeBox').find('.alert').each(function()
+    {
+        $(this).css('bottom',  bottom + 'px');
+        bottom += $(this).outerHeight(true) - 10;
+    });
+}
+
+function notifyMessage(data)
+{
+    if(window.Notification)
+    {
+        if(Notification.permission == "granted")
+        {
+            new Notification("", {body:data});
+        }
+        else if(Notification.permission != "denied")
+        {
+            Notification.requestPermission(function(permission)
+            {
+                new Notification("", {body:data});
+            });
+        }
+    }
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
@@ -1923,7 +2050,7 @@ $(document).ready(function()
     fixStyle();
 
     // Init tree menu
-    $('.tree').tree({name: config.currentModule + '-' + config.currentMethod, initialState: 'preserve'});
+    $('.tree').tree({initialState: 'preserve'});
 
     $(window).resize(saveWindowSize);   // When window resized, call it again.
 
@@ -1936,8 +2063,11 @@ $(document).ready(function()
         {
             if($(this).attr('checked'))
             {
-                var checkedVal = parseInt($(this).val());
-                if(checkedVal != 0) checkeds = checkeds + checkedVal + ',';
+                if(!isNaN($(this).val()))
+                {
+                    var checkedVal = parseInt($(this).val());
+                    if(checkedVal != 0) checkeds = checkeds + checkedVal + ',';
+                }
             }
         })
         if(checkeds != '') checkeds = checkeds.substring(0, checkeds.length - 1);
@@ -1949,4 +2079,17 @@ $(document).ready(function()
     initHelpLink();
     checkTutorial();
     revertModuleCookie();
+
+    /* Adjust for dropdown position. */
+    $('li.dropdown-submenu').mouseover(function()
+    {
+        $('li.dropdown-submenu > .dropdown-menu').each(function()
+        {
+            if($(this).css('display') == 'block')
+            {
+                var topPosition = $(this).offset().top;
+                if(topPosition < 0) $(this).css('bottom', Number($(this).css('bottom').replace('px', '')) + topPosition);
+            }
+        })
+    })
 });

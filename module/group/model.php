@@ -195,8 +195,8 @@ class groupModel extends model
 
     /**
      * Update privilege of a group.
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @access public
      * @return bool
      */
@@ -258,8 +258,8 @@ class groupModel extends model
 
     /**
      * Update view priv
-     * 
-     * @param  int    $groupID 
+     *
+     * @param  int    $groupID
      * @access public
      * @return bool
      */
@@ -406,5 +406,24 @@ class groupModel extends model
             if($this->checkMenuModule($menu, $moduleName)) $modules[] = $moduleName;
         }
         return $modules;
+    }
+
+    /**
+     * Judge an action is clickable or not.
+     * 
+     * @param  object $group 
+     * @param  string $action 
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function isClickable($group, $action)
+    {
+        $action = strtolower($action);
+
+        if($action == 'manageview' and $group->role == 'limited') return false; 
+        if($action == 'copy' and $group->role == 'limited') return false; 
+
+        return true;
     }
 }

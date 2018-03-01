@@ -12,6 +12,7 @@
 $lang->misc = new stdclass();
 $lang->misc->common = 'Misc';
 $lang->misc->ping   = 'Ping';
+$lang->misc->api    = 'http://api.zentao.pm';
 
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = 'Version %s';
@@ -27,33 +28,32 @@ $lang->misc->zentao->icons['service'] = 'heart';
 
 $lang->misc->zentao->about['proversion']   = 'ZenTao Pro';
 $lang->misc->zentao->about['official']     = "Official Website";
-$lang->misc->zentao->about['changelog']    = "Version Log";
+$lang->misc->zentao->about['changelog']    = "Change Log";
 $lang->misc->zentao->about['license']      = "License";
-$lang->misc->zentao->about['extension']    = "Extension Platform";
+
+
 
 $lang->misc->zentao->support['vip']        = "VIP Technical Support";
 $lang->misc->zentao->support['manual']     = "User Manual";
-$lang->misc->zentao->support['faq']        = "FAQ";
-$lang->misc->zentao->support['ask']        = "Q&A";
-$lang->misc->zentao->support['qqgroup']    = "Official QQ Group";
 
-$lang->misc->zentao->cowin['donate']       = "Donate";
+
+
+
+
+
 $lang->misc->zentao->cowin['reportbug']    = "Report Bug ";
 $lang->misc->zentao->cowin['feedback']     = "Feedback";
-$lang->misc->zentao->cowin['recommend']    = "Refer a Friend";
+
 $lang->misc->zentao->cowin['cowinmore']    = "More";
 
-$lang->misc->zentao->service['zentaotrain']= 'ZenTao Training';
-$lang->misc->zentao->service['scrumtrain'] = 'Agile Development Training';
-$lang->misc->zentao->service['idc']        = 'ZenTao Online Hosting';
-$lang->misc->zentao->service['custom']     = 'ZenTao Customized Development';
-$lang->misc->zentao->service['install']    = 'ZenTao Installation Service';
-$lang->misc->zentao->service['fixissue']   = 'ZenTao Trouble Shooting';
+
+
+
 $lang->misc->zentao->service['servicemore']= 'More';
 
 $lang->misc->mobile      = "Mobile Access";
 $lang->misc->noGDLib     = "Please use the browser on your phone to visit <strong>%s</strong>";
-$lang->misc->copyright   = "&copy; 2009 - 2016 <a href='http://www.cnezsoft.com' target='_blank'>Qingdao Nature Easy Soft Co., Ltd</a> Tel 4006-8899-23 Email <a href='mailto:co@zentao.net'>co@zentao.net</a>";
+$lang->misc->copyright   = "&copy; 2009 - 2018 <a href='http://easysoft.ltd' target='_blank'>Nature Easy Soft Network Technology Co,LTD</a> Email <a href='mailto:Max@easysoft.ltd'>Max@easysoft.ltd</a>";
 $lang->misc->checkTable  = "Check Data Table";
 $lang->misc->needRepair  = "Repair Table";
 $lang->misc->repairTable = "Database table is damaged due to power outage. Please chech and repair!";
@@ -63,23 +63,42 @@ $lang->misc->tableStatus = "Status";
 $lang->misc->novice      = "First time to ZenTao? Do you want to start rookie mode?";
 
 $lang->misc->noticeRepair = "<h5>If you are not Administrator, please contact Administrator to repair table.</h5>
-    <h5>If you are, please login into your Zentao host and create the <span>%s</span> file.</h5>
+    <h5>If you are, please login into your Zentao host and create a file named <span>%s</span>.</h5>
     <p>Note:</p>
     <ol>
-    <li>Keep the ok.txt empty.</li>
-    <li>If ok.txt exists, remove it and create one again.</li>
+    <li>Keep the file empty.</li>
+    <li>If the file exists, remove it and create one again.</li>
     </ol>";
 
 $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Latest Version';
 $lang->misc->feature->detailed = 'Details';
 
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>'Message centralized management', 'desc' => '<p>Centring Mail，SMS，webhook into Message</p>');
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>'Add Periodic Todo function', 'desc' => '');
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>"Add Block of 'Assigned to Me'", 'desc' => '');
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>'Support Generating TestStatements of TestBuilds', 'desc' => '');
+
+$lang->misc->feature->all['9.7.stable'][] = array('title'=>'optimize International package，Added Demo data。', 'desc' => '');
+
+$lang->misc->feature->all['9.6.stable'][] = array('title'=>'added Webhook Interface feature', 'desc' => 'support communication with BearyChat,dingding');
+$lang->misc->feature->all['9.6.stable'][] = array('title'=>'added Score feature', 'desc' => 'More skilled Use, More score');
+$lang->misc->feature->all['9.6.stable'][] = array('title'=>'added Multiplayer task and subTask to project tasks', 'desc' => '');
+$lang->misc->feature->all['9.6.stable'][] = array('title'=>'added Product line management to Product View', 'desc' => '');
+
+$lang->misc->feature->all['9.5.1'][] = array('title'=>'added Restricted Operatio', 'desc' => '');
+
+$lang->misc->feature->all['9.3.beta'][] = array('title'=>'upgraded framework，Enhanced security', 'desc' => '');
+
+$lang->misc->feature->all['9.1.stable'][] = array('title'=>'optimize Test View', 'desc' => '<p>added TestSuite,CaseLib and Test Statements</p>');
+$lang->misc->feature->all['9.1.stable'][] = array('title'=>'support Group steps of TestCase', 'desc' => '');
+
 $lang->misc->feature->all['9.0.beta'][] = array('title'=>'ZenTao CloudMail has been added.', 'desc' => '<p>ZenTao CloudMail is a free Email service launched jointly with SendCloud. Once binded with ZenTao and passed verification, users can use this service.</p>');
 $lang->misc->feature->all['9.0.beta'][] = array('title'=>'Optimized Rich Text Editor and Markdown Editor.', 'desc' => '');
 
 $lang->misc->feature->all['8.3.stable'][] = array('title'=>'Improved Documentation.', 'desc' => '<p>Added Document Home, restructured document library, and added privileges.</p><p>Markdown Editor is supported，and privilege and version managment is added.</p>');
 
-$lang->misc->feature->all['8.2.stable'][] = array('title'=>'Custom Home', 'desc' => '<p>You can add blocks to Dashboard and arrange the layout.</p><p> My Zone, Product, Project, and Testing all support home custom mentioned before. </p>');
+$lang->misc->feature->all['8.2.stable'][] = array('title'=>'Custom Home', 'desc' => '<p>You can add blocks to Dashboard and arrange the layout.</p><p> My Zone, Product, Project, and QA all support home custom mentioned before. </p>');
 $lang->misc->feature->all['8.2.stable'][] = array('title'=>'Custom Navigation', 'desc' => '<p>You can decide which project show in navigation bar and the order of projects shown in the bar.</p><p> Hover on the navigation bar and a sign will show to its right. Click the sign and a dialog box "Custom Navigation" will show. Drag the block name to switch its order on navigation bar.</p>');
 $lang->misc->feature->all['8.2.stable'][] = array('title'=>'Batch Add/Edit Custom', 'desc' => '<p>You can batch add and edit fields on custom pages.</p>');
 $lang->misc->feature->all['8.2.stable'][] = array('title'=>'Custom Story/Task/Bug/Case', 'desc' => '<p>You can custom fileds when add a Story/Task/Bug/Case.</p>');

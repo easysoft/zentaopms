@@ -20,11 +20,16 @@ function copyStoryTitle()
 /* Set the assignedTos field. */
 function setOwners(result)
 {
+    $("#multipleBox").removeAttr("checked");
+    $('.team-group').addClass('hidden');
+    $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
     if(result == 'affair')
     {
         $('#assignedTo').attr('multiple', 'multiple');
         $('#assignedTo').chosen('destroy');
         $('#assignedTo').chosen(defaultChosenOptions);
+        $('.affair').hide();
+        $('.team-group').addClass('hidden');
         $('#selectAllUser').removeClass('hidden');
     }
     else if($('#assignedTo').attr('multiple') == 'multiple')
@@ -32,6 +37,7 @@ function setOwners(result)
         $('#assignedTo').removeAttr('multiple');
         $('#assignedTo').chosen('destroy');
         $('#assignedTo').chosen(defaultChosenOptions);
+        $('.affair').show();
         $('#selectAllUser').addClass('hidden');
     }
 }
@@ -98,11 +104,13 @@ function setAfter()
             $('input[value="toTaskList"]').attr('checked', 'checked');
         }
         $('input[value="continueAdding"]').attr('disabled', 'disabled');
+        $('input[value="toStoryList"]').attr('disabled', 'disabled');
     }
     else
     {
         if(!toTaskList) $('input[value="continueAdding"]').attr('checked', 'checked');
         $('input[value="continueAdding"]').attr('disabled', false);
+        $('input[value="toStoryList"]').attr('disabled', false);
     }
 }
 
@@ -164,13 +172,13 @@ $(document).ready(function()
 
     $('[data-toggle=tooltip]').tooltip();
 
-    // adjust form controls layout
+    /* Adjust form controls layout */
     var ajustFormControls = function()
     {
-        // adjust style for file box
+        /* Adjust style for file box */
         applyCssStyle('.fileBox > tbody > tr > td:first-child {transition: none; width: ' + ($('#dataPlanGroup').width() - 1) + 'px}', 'filebox');
 
-        // adjust #priRowCol and #estRowCol size
+        /* Adjust #priRowCol and #estRowCol size */
         var $priRowCol = $('#priRowCol'),
             $estRowCol = $('#estRowCol');
         $priRowCol.css('width', 54 + $priRowCol.find('.input-group-addon').outerWidth());
@@ -201,4 +209,27 @@ $(document).ready(function()
         }
         return false;
     });
+});
+
+/* show team menu. */
+$('[name^=multiple]').change(function()
+{
+    if($(this).prop('checked'))
+    {
+        $('#assignedTo, #assignedTo_chosen').addClass('hidden');
+        $('.team-group').removeClass('hidden');
+        $('#estimate').attr('readonly', true);
+    }
+    else
+    {
+        $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
+        $('.team-group').addClass('hidden');
+        $('#estimate').attr('readonly', false);
+    }
+});
+$(".team-group[data-toggle='modalTeam']").css('cursor', 'pointer');
+$(".team-group[data-toggle='modalTeam']").click(function()
+{
+    $('#modalTeam').modal('show');
+    adjustSortBtn();
 });

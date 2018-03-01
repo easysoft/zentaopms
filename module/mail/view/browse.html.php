@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
+<?php include $this->app->getModuleRoot() . 'message/view/header.html.php';?>
 <div id='titlebar'>
   <div class='heading'><?php echo $lang->mail->browse?></div>
 </div>
@@ -20,13 +20,13 @@
     <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
     <thead>
       <tr>
-        <th class='w-id'>    <?php common::printOrderLink('id',        $orderBy, $vars, $lang->idAB);?></th>
-        <th class='w-80px'>  <?php common::printOrderLink('toList',    $orderBy, $vars, $lang->mail->toList);?></th>
-        <th class='w-150px'> <?php common::printOrderLink('subject',   $orderBy, $vars, $lang->mail->subject);?></th>
-        <th class='w-80px'>  <?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->mail->addedBy);?></th>
-        <th class='w-150px'> <?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->mail->addedDate);?></th>
-        <th class='w-150px'> <?php common::printOrderLink('sendTime',  $orderBy, $vars, $lang->mail->sendTime);?></th>
-        <th class='w-60px'>  <?php common::printOrderLink('status',    $orderBy, $vars, $lang->mail->status);?></th>
+        <th class='w-id'>    <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
+        <th class='w-80px'>  <?php common::printOrderLink('toList',      $orderBy, $vars, $lang->mail->toList);?></th>
+        <th class='w-150px'> <?php common::printOrderLink('subject',     $orderBy, $vars, $lang->mail->subject);?></th>
+        <th class='w-80px'>  <?php common::printOrderLink('createdBy',   $orderBy, $vars, $lang->mail->createdBy);?></th>
+        <th class='w-150px'> <?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->mail->createdDate);?></th>
+        <th class='w-150px'> <?php common::printOrderLink('sendTime',    $orderBy, $vars, $lang->mail->sendTime);?></th>
+        <th class='w-60px'>  <?php common::printOrderLink('status',      $orderBy, $vars, $lang->mail->status);?></th>
         <th>                 <?php echo $lang->mail->failReason;?></th>
         <th class='w-80px'>  <?php echo $lang->actions;?></th>
       </tr>
@@ -40,8 +40,8 @@
         </td>
         <td><?php echo zget($users, $queue->toList, $queue->toList)?></td>
         <td class='text-left'><?php echo $queue->subject?></td>
-        <td><?php echo zget($users, $queue->addedBy, $queue->addedBy)?></td>
-        <td><?php echo $queue->addedDate?></td>
+        <td><?php echo zget($users, $queue->createdBy)?></td>
+        <td><?php echo $queue->createdDate?></td>
         <td><?php echo $queue->sendTime?></td>
         <td><?php echo zget($lang->mail->statusList, $queue->status, '')?></td>
         <td class='text-left'><?php echo $queue->failReason?></td>

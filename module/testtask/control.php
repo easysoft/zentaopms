@@ -15,7 +15,7 @@ class testtask extends control
 
     /**
      * Construct function, load product module, assign products to view auto.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -29,7 +29,7 @@ class testtask extends control
 
     /**
      * Index page, header to browse.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -92,8 +92,8 @@ class testtask extends control
 
     /**
      * Create a test task.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -103,8 +103,7 @@ class testtask extends control
         {
             $taskID = $this->testtask->create();
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->loadModel('action')->create('testtask', $taskID, 'opened');
-            $this->testtask->sendmail($taskID, $actionID);
+            $this->loadModel('action')->create('testtask', $taskID, 'opened');
             die(js::locate($this->createLink('testtask', 'browse', "productID=$productID"), 'parent'));
         }
 
@@ -134,14 +133,13 @@ class testtask extends control
             $productID = $productID ? $productID : key($products);
             $projects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetchPairs('id');
             $builds    = $this->dao->select('id, name')->from(TABLE_BUILD)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->fetchPairs('id');
-            $builds    = array('trunk' => $this->lang->trunk) + $builds;
         }
 
         /* Create testtask from testtask of test.*/
         if($projectID == 0)
         {
             $projects = $this->product->getProjectPairs($productID, $branch = 0, $params = 'nodeleted');
-            $builds   = $this->loadModel('build')->getProductBuildPairs($productID);
+            $builds   = $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
         }
 
         /* Set menu. */
@@ -153,7 +151,7 @@ class testtask extends control
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->create;
 
-        if($projectID != 0) 
+        if($projectID != 0)
         {
             $this->view->products  = $products;
             $this->view->projectID = $projectID;
@@ -169,8 +167,8 @@ class testtask extends control
 
     /**
      * View a test task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -215,13 +213,13 @@ class testtask extends control
 
     /**
      * Browse cases of a test task.
-     * 
-     * @param  string $taskID 
+     *
+     * @param  string $taskID
      * @param  string $browseType  bymodule|all|assignedtome
-     * @param  int    $param 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -254,8 +252,8 @@ class testtask extends control
         if($browseType == 'bymodule') setcookie('taskCaseModule', (int)$param, $this->config->cookieLife, $this->config->webRoot);
         if($browseType != 'bymodule') $this->session->set('taskCaseBrowseType', $browseType);
 
-        $moduleID  = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskCaseModule ? $this->cookie->taskCaseModule : 0));
-        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
+        $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskCaseModule ? $this->cookie->taskCaseModule : 0));
+        $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy, 't2.id');
@@ -310,15 +308,15 @@ class testtask extends control
 
     /**
      * The report page.
-     * 
-     * @param  int    $productID 
-     * @param  string $browseType 
+     *
+     * @param  int    $productID
+     * @param  string $browseType
      * @param  int    $branchID
-     * @param  int    $moduleID 
+     * @param  int    $moduleID
      * @access public
      * @return void
      */
-    public function report($productID, $taskID, $browseType, $branchID, $moduleID)
+    public function report($productID, $taskID, $browseType, $branchID, $moduleID = 0, $chartType = '')
     {
         $this->loadModel('report');
         $this->view->charts = array();
@@ -333,6 +331,7 @@ class testtask extends control
                 $chartFunc   = 'getDataOf' . $chart;
                 $chartData   = isset($bugInfo[$chart]) ? $bugInfo[$chart] : $this->testtask->$chartFunc($taskID);
                 $chartOption = $this->testtask->mergeChartOption($chart);
+                if(!empty($chartType)) $chartOption->type = $chartType;
 
                 $this->view->charts[$chart] = $chartOption;
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);
@@ -347,6 +346,8 @@ class testtask extends control
         $this->view->taskID        = $taskID;
         $this->view->browseType    = $browseType;
         $this->view->moduleID      = $moduleID;
+        $this->view->branchID      = $branchID;
+        $this->view->chartType     = $chartType;
         $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
 
         $this->display();
@@ -386,6 +387,10 @@ class testtask extends control
                 $groupCases[$run->story][] = $run;
                 $groupByList[$run->story]  = $run->storyTitle;
             }
+            elseif($groupBy == 'assignedTo')
+            {
+                $groupCases[$run->assignedTo][] = $run;
+            }
         }
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
@@ -401,6 +406,7 @@ class testtask extends control
         $this->view->groupBy     = $groupBy;
         $this->view->groupByList = $groupByList;
         $this->view->cases       = $groupCases;
+        $this->view->account     = 'all';
         $this->display();
     }
 
@@ -421,9 +427,6 @@ class testtask extends control
             {
                 $actionID = $this->loadModel('action')->create('testtask', $taskID, 'edited');
                 $this->action->logHistory($actionID, $changes);
-
-                /* send mail.*/
-                $this->testtask->sendmail($taskID, $actionID);
             }
             die(js::locate(inlink('view', "taskID=$taskID"), 'parent'));
         }
@@ -442,7 +445,7 @@ class testtask extends control
 
         $this->view->task         = $task;
         $this->view->projects     = $this->product->getProjectPairs($productID);
-        $this->view->builds       = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = '');
+        $this->view->builds       = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = 'notrunk');
         $this->view->users        = $this->loadModel('user')->getPairs('nodeleted', $task->owner);
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
 
@@ -451,8 +454,8 @@ class testtask extends control
 
     /**
      * Start testtask.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -492,8 +495,8 @@ class testtask extends control
 
     /**
      * activate testtask.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -533,8 +536,8 @@ class testtask extends control
 
     /**
      * Close testtask.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -551,7 +554,6 @@ class testtask extends control
             {
                 $actionID = $this->action->create('testtask', $taskID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->testtask->sendmail($taskID, $actionID);
             }
 
             if(isonlybody()) die(js::reload('parent.parent'));
@@ -577,8 +579,8 @@ class testtask extends control
 
     /**
      * block testtask.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -618,8 +620,8 @@ class testtask extends control
 
     /**
      * Delete a test task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @param  string $confirm yes|no
      * @access public
      * @return void
@@ -656,8 +658,8 @@ class testtask extends control
 
     /**
      * Link cases to a test task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -728,8 +730,8 @@ class testtask extends control
 
     /**
      * Remove a case from test task.
-     * 
-     * @param  int    $rowID 
+     *
+     * @param  int    $rowID
      * @access public
      * @return void
      */
@@ -801,17 +803,17 @@ class testtask extends control
             $caseResult = $this->testtask->createResult($runID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            if('fail' == $caseResult) { 
+            if('fail' == $caseResult) {
 
                 $response['result']  = 'success';
                 $response['locate']  = $this->createLink('testtask', 'results',"runID=$runID&caseID=$caseID&version=$version");
                 die($this->send($response));
-            } 
-            else 
+            }
+            else
             {
                 /* set cookie for ajax load caselist when close colorbox. */
                 setcookie('selfClose', 1);
- 
+
                 if($preAndNext->next)
                 {
                     $nextRunID   = $runID ? $preAndNext->next->id : 0;
@@ -830,11 +832,11 @@ class testtask extends control
                     $response['target'] = 'parent';
                     die($this->send($response));
                 }
-            } 
+            }
         }
 
-        $preCase  = '';
-        $nextCase = '';
+        $preCase  = array();
+        $nextCase = array();
         if($preAndNext->pre)
         {
             $preCase['runID']   = $runID ? $preAndNext->pre->id : 0;
@@ -847,7 +849,7 @@ class testtask extends control
             $nextCase['caseID']  = $runID ? $preAndNext->next->case : $preAndNext->next->id;
             $nextCase['version'] = $preAndNext->next->version;
         }
-        
+
         $this->view->run      = $run;
         $this->view->preCase  = $preCase;
         $this->view->nextCase = $nextCase;
@@ -861,10 +863,10 @@ class testtask extends control
 
     /**
      * Batch run case.
-     * 
-     * @param  int    $productID 
-     * @param  string $orderBy 
-     * @param  string $from 
+     *
+     * @param  int    $productID
+     * @param  string $orderBy
+     * @param  string $from
      * @access public
      * @return void
      */
@@ -878,6 +880,7 @@ class testtask extends control
         }
 
         $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($url, 'parent'));
+        $caseIDList = array_unique($caseIDList);
 
         /* The case of tasks of qa. */
         if($productID)
@@ -901,7 +904,7 @@ class testtask extends control
             ->where('t2.id')->in($caseIDList)
             ->andWhere('t1.version=t2.version')
             ->fetchGroup('case', 'id');
-       
+
         $this->view->caseIDList = $caseIDList;
         $this->view->productID  = $productID;
         $this->view->title      = $this->lang->testtask->batchRun;
@@ -912,9 +915,9 @@ class testtask extends control
 
     /**
      * View test results of a test run.
-     * 
-     * @param  int    $runID 
-     * @param  int    $caseID 
+     *
+     * @param  int    $runID
+     * @param  int    $caseID
      * @access public
      * @return void
      */
@@ -947,8 +950,8 @@ class testtask extends control
 
     /**
      * Batch assign cases.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */

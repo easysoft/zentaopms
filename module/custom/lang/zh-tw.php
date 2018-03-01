@@ -1,18 +1,22 @@
 <?php
-$lang->custom->common    = '自定義';
-$lang->custom->index     = '首頁';
-$lang->custom->set       = '自定義配置';
-$lang->custom->restore   = '恢復預設';
-$lang->custom->key       = '鍵';
-$lang->custom->value     = '值';
-$lang->custom->flow      = '流程';
-$lang->custom->working   = '工作方式';
-$lang->custom->select    = '請選擇流程：';
-$lang->custom->branch    = '多分支';
-$lang->custom->owner     = '所有者';
-$lang->custom->module    = '模組';
-$lang->custom->section   = '附加部分';
-$lang->custom->lang      = '所屬語言';
+$lang->custom->common     = '自定義';
+$lang->custom->index      = '首頁';
+$lang->custom->set        = '自定義配置';
+$lang->custom->restore    = '恢復預設';
+$lang->custom->key        = '鍵';
+$lang->custom->value      = '值';
+$lang->custom->flow       = '流程';
+$lang->custom->working    = '工作方式';
+$lang->custom->select     = '請選擇流程：';
+$lang->custom->branch     = '多分支';
+$lang->custom->owner      = '所有者';
+$lang->custom->module     = '模組';
+$lang->custom->section    = '附加部分';
+$lang->custom->lang       = '所屬語言';
+$lang->custom->setPublic  = '設為公共';
+$lang->custom->required   = '必填項';
+$lang->custom->score      = '積分';
+$lang->custom->scoreReset = '重置積分';
 
 $lang->custom->object['story']    = '需求';
 $lang->custom->object['task']     = '任務';
@@ -69,6 +73,7 @@ $lang->custom->todo->fields['statusList'] = '狀態';
 $lang->custom->user = new stdClass();
 $lang->custom->user->fields['roleList']   = '職位';
 $lang->custom->user->fields['statusList'] = '狀態';
+$lang->custom->user->fields['deleted']    = '列出已刪除用戶';
 
 $lang->custom->block->fields['closed'] = '關閉的區塊';
 
@@ -81,8 +86,8 @@ $lang->custom->notice = new stdclass();
 $lang->custom->notice->userRole             = '鍵的長度必須小於20個字元！';
 $lang->custom->notice->canNotAdd            = '該項參與運算，不提供自定義添加功能';
 $lang->custom->notice->forceReview          = "指定人提交的%s必須評審。";
-$lang->custom->notice->longlife             = 'Bug列表頁面的久未處理標籤中，列出設置天數之前未處理的Bug。';
 $lang->custom->notice->forceNotReview       = "指定人提交的%s不需要評審。";
+$lang->custom->notice->longlife             = 'Bug列表頁面的久未處理標籤中，列出設置天數之前未處理的Bug。';
 $lang->custom->notice->priListKey           = '優先順序的鍵應當為數字！';
 $lang->custom->notice->keyList              = '鍵值應當為英文或數字';
 $lang->custom->notice->severityListKey      = 'Bug嚴重程度的鍵應當為數字！';
@@ -90,10 +95,14 @@ $lang->custom->notice->indexPage['product'] = "從8.2版本起增加了產品主
 $lang->custom->notice->indexPage['project'] = "從8.2版本起增加了項目主頁視圖，是否預設進入項目主頁？";
 $lang->custom->notice->indexPage['qa']      = "從8.2版本起增加了測試主頁視圖，是否預設進入測試主頁？";
 
-$lang->custom->storyReview   = '評審流程';
-$lang->custom->forceReview   = '強制評審';
-$lang->custom->reviewList[1] = '開啟';
-$lang->custom->reviewList[0] = '關閉';
+$lang->custom->storyReview    = '評審流程';
+$lang->custom->forceReview    = '強制評審';
+$lang->custom->forceNotReview = '不需要評審';
+$lang->custom->reviewList[1]  = '開啟';
+$lang->custom->reviewList[0]  = '關閉';
+
+$lang->custom->deletedList[1] = '列出';
+$lang->custom->deletedList[0] = '不列出';
 
 $lang->custom->workingHours   = '每天可用工時';
 $lang->custom->weekend        = '休息日';
@@ -114,3 +123,10 @@ $lang->custom->workingList['onlyTask']  = '任務管理工具';
 
 $lang->custom->menuTip  = '點擊顯示或隱藏導航條目，拖拽來更改顯示順序。';
 $lang->custom->saveFail = '保存失敗！';
+
+$lang->custom->scoreStatus[0] = '關閉';
+$lang->custom->scoreStatus[1] = '開啟';
+
+$lang->custom->moduleName['product']     = $lang->productCommon;
+$lang->custom->moduleName['productplan'] = '計劃';
+$lang->custom->moduleName['project']     = $lang->projectCommon;

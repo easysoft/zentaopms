@@ -136,3 +136,27 @@ if(navigator.userAgent.indexOf("Firefox") < 0)
         this.style.height = (this.scrollHeight + 2) + "px"; 
     });
 }
+
+$(document).keydown(function(event)
+{
+    if(event.ctrlKey && event.keyCode == 38)
+    {
+        event.stopPropagation();
+        event.preventDefault();
+        selectFocusJump('up');
+    }
+    else if(event.ctrlKey && event.keyCode == 40)
+    {
+        event.stopPropagation();
+        event.preventDefault();
+        selectFocusJump('down');
+    }
+    else if(event.keyCode == 38)
+    {
+        inputFocusJump('up');
+    }
+    else if(event.keyCode == 40)
+    {
+        inputFocusJump('down');
+    }
+});

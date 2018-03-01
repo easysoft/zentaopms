@@ -15,6 +15,7 @@
 <?php js::set('browseType', $browseType);?>
 <?php js::set('productID', $productID);?>
 <?php js::set('branch', $branch);?>
+<?php $currentBrowseType = isset($lang->product->mySelects[$browseType]) && in_array($browseType, array_keys($lang->product->mySelects)) ? $browseType : '';?>
 <div id='featurebar'>
   <ul class='nav'>
     <li>
@@ -31,11 +32,22 @@
     </li>
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php if(isset($menuItem->hidden)) continue;?>
-    <?php if(strpos($menuItem->name, 'QUERY') === 0):?>
-    <?php $queryID = (int)substr($menuItem->name, 5);?>
-    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $menuItem->text);?></li>
+    <?php $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;?>
+    <?php $param = strpos($menuItem->name, 'QUERY') === 0 ? '&param=' . (int)substr($menuItem->name, 5) : '';?>
+    <?php if($menuItem->name == 'my'):?>
+    <?php
+        echo "<li id='statusTab' class='dropdown " . (!empty($currentBrowseType) ? 'active' : '') . "'>";
+        echo html::a('javascript:;', $menuItem->text . " <span class='caret'></span>", '', "data-toggle='dropdown'");
+        echo "<ul class='dropdown-menu'>";
+        foreach ($lang->product->mySelects as $key => $value)
+        {
+            echo '<li' . ($key == $currentBrowseType ? " class='active'" : '') . '>';
+            echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$key" . $param), $value);
+        }
+        echo '</ul></li>';
+    ?>
     <?php else:?>
-    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuItem->name"), $menuItem->text);?></li>
+    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType" . $param), $menuItem->text);?></li>
     <?php endif;?>
     <?php endforeach;?>
     <li id='bysearchTab'><a href='javascript:;'><i class='icon-search icon'></i> <?php echo $lang->product->searchStory;?></a></li>
@@ -70,16 +82,15 @@
           $link = common::hasPriv('story', 'create') ?  $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID") : '#';
           echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->story->create, '', $misc);
       }
+
+      $misc = common::hasPriv('story', 'batchCreate') ? '' : "disabled";
+      $link = common::hasPriv('story', 'batchCreate') ?  $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID") : '#';
       ?>
-      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+      <button type="button" class="btn btn-primary dropdown-toggle <?php echo $misc?>" data-toggle="dropdown">
         <span class="caret"></span>
       </button>
       <ul class='dropdown-menu pull-right'>
-      <?php
-      $misc = common::hasPriv('story', 'batchCreate') ? '' : "class=disabled";
-      $link = common::hasPriv('story', 'batchCreate') ?  $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID") : '#';
-      echo "<li>" . html::a($link, $lang->story->batchCreate, '', $misc) . "</li>";
-      ?>
+      <?php echo "<li>" . html::a($link, $lang->story->batchCreate, '', "class='$misc'") . "</li>";?>
       </ul>
     </div>
   </div>
@@ -105,13 +116,39 @@
     <?php
     $datatableId  = $this->moduleName . ucfirst($this->methodName);
     $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
-    $file2Include = $useDatatable ? dirname(__FILE__) . '/datatabledata.html.php' : dirname(__FILE__) . '/browsedata.html.php';
     $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
-    include $file2Include;
+
+    if($useDatatable) include '../../common/view/datatable.html.php';
+    if(!$useDatatable) include '../../common/view/tablesorter.html.php';
+    $setting = $this->datatable->getSetting('product');
+    $widths  = $this->datatable->setFixedFieldWidth($setting);
+    $columns = 0;
     ?>
+    <table class='table table-condensed table-hover table-striped tablesorter table-fixed <?php echo ($useDatatable ? 'datatable' : 'table-selectable');?>' id='storyList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='storyIDList[]'>
+      <thead>
+        <tr>
+        <?php
+        foreach($setting as $key => $value)
+        {
+            if($value->show)
+            {
+                $this->datatable->printHead($value, $orderBy, $vars);
+                $columns ++;
+            }
+        }
+        ?>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach($stories as $story):?>
+        <tr class='text-center' data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
+          <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
+        </tr>
+        <?php endforeach;?>
+      </tbody>
       <tfoot>
       <tr>
-        <td colspan='13'>
+        <td colspan='<?php echo $columns?>'>
           <div class='table-actions clearfix'>
             <?php if(count($stories)):?>
             <?php echo html::selectButton();?>
@@ -256,14 +293,14 @@
                       $withSearch = count($users) > 10;
                       $actionLink = $this->createLink('story', 'batchAssignTo', "productID=$productID");
                       echo "<li class='dropdown-submenu'>";
-                      echo html::select('assignedTo', $users, '', 'class="hidden"');
+                      echo html::select('assignedTo', $users, 'admin', 'class="hidden"');
                       echo html::a('javascript::', $lang->story->assignedTo, '', 'id="assignItem"');
                       echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                       echo '<ul class="dropdown-list">';
                       foreach ($users as $key => $value)
                       {
                           if(empty($key) or $key == 'closed') continue;
-                          echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', '') . '</li>';
+                          echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\",\"hiddenwin\")", $value, '', '') . '</li>';
                       }
                       echo "</ul>";
                       if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control'><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
@@ -286,6 +323,7 @@
     </table>
   </form>
 </div>
+<?php js::set('checkedSummary', $lang->product->checkedSummary);?>
 <script language='javascript'>
 var moduleID = <?php echo $moduleID?>;
 $('#module<?php echo $moduleID;?>').addClass('active');

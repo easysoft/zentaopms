@@ -32,39 +32,48 @@
       <th width='200'><?php echo $lang->product->name;?></th>
       <th width='120'><?php echo $lang->product->PO;?></th>
       <th><?php echo $lang->productplan->common;?></th>
-      <th width="150"><?php echo $lang->productplan->begin;?></th>
-      <th width="150"><?php echo $lang->productplan->end;?></th>
-      <th class="w-50px"><?php echo $lang->story->statusList['draft'];?></th>
-      <th class="w-50px"><?php echo $lang->story->statusList['active'];?></th>
-      <th class="w-50px"><?php echo $lang->story->statusList['changed'];?></th>
-      <th class="w-50px"><?php echo $lang->story->statusList['closed'];?></th>
+      <th width="100"><?php echo $lang->productplan->begin;?></th>
+      <th width="100"><?php echo $lang->productplan->end;?></th>
+      <th class="w-70px"><?php echo $lang->story->statusList['draft'];?></th>
+      <th class="w-70px"><?php echo $lang->story->statusList['active'];?></th>
+      <th class="w-70px"><?php echo $lang->story->statusList['changed'];?></th>
+      <th class="w-70px"><?php echo $lang->story->statusList['closed'];?></th>
+      <th class="w-70px"><?php echo $lang->report->total;?></th>
     </tr>
     </thead>
     <tbody>
     <?php $color = false;?>
     <?php foreach($products as $product):?>
-      <tr class="a-center">
+      <tr class="text-center">
         <?php $count = isset($product->plans) ? count($product->plans) : 1;?>
         <td align='left' rowspan="<?php echo $count;?>"><?php echo "<p>" . html::a($this->createLink('product', 'view', "product=$product->id"), $product->name) . "</p>";?></td>
-        <td align='left' rowspan="<?php echo $count;?>" class="a-center"><?php echo "<p>" . $users[$product->PO] . '</p>';?></td>
+        <td align='left' rowspan="<?php echo $count;?>" class="text-center"><?php echo "<p>" . zget($users, $product->PO) . '</p>';?></td>
         <?php if(isset($product->plans)):?>
         <?php $id = 1;?>
         <?php foreach($product->plans as $plan):?>
           <?php $class = $color ? 'rowcolor' : '';?>
-          <?php if($id != 1) echo "<tr class='a-center'>"?>
+          <?php if($id != 1) echo "<tr class='text-center'>"?>
             <td align='left' class="<?php echo $class;?>"><?php echo $plan->title;?></td>
             <td class="<?php echo $class;?>"><?php echo $plan->begin;?></td>
             <td class="<?php echo $class;?>"><?php echo $plan->end;?></td>
-            <td class="<?php echo $class;?>"><?php echo (isset($plan->status['draft']) ? $plan->status['draft'] : 0);?></td>
-            <td class="<?php echo $class;?>"><?php echo (isset($plan->status['active']) ? $plan->status['active'] : 0);?></td>
-            <td class="<?php echo $class;?>"><?php echo (isset($plan->status['changed']) ? $plan->status['changed'] : 0);?></td>
-            <td class="<?php echo $class;?>"><?php echo (isset($plan->status['closed']) ? $plan->status['closed'] : 0);?></td>
+            <?php
+            $draftCount   = isset($plan->status['draft'])   ? $plan->status['draft']   : 0;
+            $activeCount  = isset($plan->status['active'])  ? $plan->status['active']  : 0;
+            $changedCount = isset($plan->status['changed']) ? $plan->status['changed'] : 0;
+            $closedCount  = isset($plan->status['closed'])  ? $plan->status['closed']  : 0;
+            ?>
+            <td class="<?php echo $class;?>"><?php echo $draftCount;?></td>
+            <td class="<?php echo $class;?>"><?php echo $activeCount;?></td>
+            <td class="<?php echo $class;?>"><?php echo $changedCount;?></td>
+            <td class="<?php echo $class;?>"><?php echo $closedCount;?></td>
+            <td class="<?php echo $class;?>"><?php echo $draftCount + $activeCount + $changedCount + $closedCount;?></td>
           <?php if($id != 1) echo "</tr>"?>
           <?php $id ++;?>
           <?php $color = !$color;?>
         <?php endforeach;?>
         <?php else:?>
           <?php $class = $color ? 'rowcolor' : '';?>
+          <td class="<?php echo $class;?>"></td>
           <td class="<?php echo $class;?>"></td>
           <td class="<?php echo $class;?>"></td>
           <td class="<?php echo $class;?>"></td>

@@ -9,8 +9,8 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-include '../../common/view/header.html.php';
 ?>
+<?php include $this->app->getModuleRoot() . 'message/view/header.html.php';?>
 <div class='container mw-800px'>
   <div id='titlebar'>
     <div class='heading'>
@@ -22,7 +22,7 @@ include '../../common/view/header.html.php';
   <form class='form-condensed' method='post' action='<?php echo inlink('save');?>' id='dataform'>
     <table class='table table-form'>
       <tr>
-        <th class='rowhead w-110px'><?php echo $lang->mail->turnon; ?></th>
+        <th class='rowhead w-130px'><?php echo $lang->mail->turnon; ?></th>
         <td class='w-p25-f'><?php echo html::radio('turnon', $lang->mail->turnonList, 1);?></td>
         <td></td>
         <td></td>

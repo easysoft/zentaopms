@@ -24,13 +24,18 @@
   <form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
     <table align='center' class='table table-form'> 
       <tr>
-        <th class='w-90px'><?php echo $lang->product->name;?></th>
+        <th class='w-120px'><?php echo $lang->product->name;?></th>
         <td class='w-p25-f'><?php echo html::input('name', $product->name, "class='form-control' autocomplete='off'");?></td><td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->product->code;?></th>
         <td><?php echo html::input('code', $product->code, "class='form-control' autocomplete='off'");?></td><td></td>
       </tr>  
+      <tr>
+        <th><?php echo $lang->product->line;?></th>
+        <td><?php echo html::select('line', $lines, $product->line, "class='form-control chosen'");?></td>
+        <td><?php if(!$lines) common::printLink('tree', 'browse', 'rootID=&view=line', $lang->tree->manageLine);?></td>
+      </tr>
       <tr>
         <th><?php echo $lang->product->PO;?></th>
         <td><?php echo html::select('PO', $poUsers, $product->PO, "class='form-control chosen'");?></td><td></td>

@@ -186,6 +186,7 @@ class baseHelper
      */
     static public function import($file)
     {
+        $file = realpath($file);
         if(!is_file($file)) return false;
 
         static $includedFiles = array();
@@ -214,7 +215,7 @@ class baseHelper
         {
             if(!function_exists('get_magic_quotes_gpc') or !get_magic_quotes_gpc())
             {
-                foreach ($idList as $key=>$value)  $idList[$key] = addslashes($value); 
+                foreach($idList as $key=>$value) $idList[$key] = addslashes($value); 
             }
             return "IN ('" . join("','", $idList) . "')";
         }

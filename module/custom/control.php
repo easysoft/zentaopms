@@ -81,7 +81,12 @@ class custom extends control
 
         if(strtolower($_SERVER['REQUEST_METHOD']) == "post")
         {
-            if(($module == 'story' or $module == 'testcase') and $field == 'review')
+            if($module == 'story' and $field == 'review')
+            {
+                $data = fixer::input('post')->join('forceReview', ',')->get();
+                $this->loadModel('setting')->setItems("system.$module", $data);
+            }
+            elseif($module == 'testcase' and $field == 'review')
             {
                 $review = fixer::input('post')->get();
                 if($review->needReview) $data = fixer::input('post')->join('forceNotReview', ',')->remove('forceReview')->get();
@@ -120,7 +125,7 @@ class custom extends control
                     /* Fix bug #942. */
                     if($field == 'priList' and !is_numeric($key)) die(js::alert($this->lang->custom->notice->priListKey));
                     if($module == 'bug' and $field == 'severityList' and !is_numeric($key)) die(js::alert($this->lang->custom->notice->severityListKey));
-                    if(!empty($key) and $key != 'n/a' and !validater::checkCode($key)) die(js::alert($this->lang->custom->notice->keyList));
+                    if(!empty($key) and $key != 'n/a' and !validater::checkREG($key, '/^[a-zA-Z_0-9]+$/')) die(js::alert($this->lang->custom->notice->keyList));
 
                     /* the length of role is 20, check it when save. */
                     if($module == 'user' and $field == 'roleList' and strlen($key) > 20) die(js::alert($this->lang->custom->notice->userRole));
@@ -231,6 +236,63 @@ class custom extends control
     }
 
     /**
+     * Set Required.
+     * 
+     * @param  string $moduleName 
+     * @access public
+     * @return void
+     */
+    public function required($moduleName = '')
+    {
+        if(empty($moduleName)) $moduleName = current($this->config->custom->requiredModules);
+
+        if($_POST)
+        {
+            $this->custom->saveRequiredFields($moduleName);
+            die(js::reload('parent.parent'));
+        }
+
+        foreach($this->config->custom->requiredModules as $requiredModule) $this->app->loadLang($requiredModule);
+
+        /* Get this module requiredFields. */
+        $this->loadModel($moduleName);
+        $requiredFields = $this->custom->getRequiredFields($this->config->$moduleName);
+
+        if($moduleName == 'doc')
+        {
+            unset($requiredFields['createLib']);
+            unset($requiredFields['editLib']);
+        }
+
+        $this->view->title      = $this->lang->custom->required;
+        $this->view->position[] = $this->lang->custom->required;
+
+        $this->view->requiredFields = $requiredFields;
+        $this->view->moduleName     = $moduleName;
+        $this->display();
+    }
+
+    /**
+     * Set score display switch
+     *
+     * @access public
+     * @return void
+     */
+    public function score()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.common.global.scoreStatus', $this->post->score);
+            die(js::reload('parent'));
+        }
+
+        $this->view->title      = $this->lang->custom->score;
+        $this->view->position[] = $this->lang->custom->common;
+        $this->view->position[] = $this->view->title;
+        $this->display();
+    }
+
+    /**
      * Ajax save custom fields.
      * 
      * @param  string $module 
@@ -310,7 +372,7 @@ class custom extends control
 
         if(is_array($menus))
         {
-            foreach ($menus as $menu)
+            foreach($menus as $menu)
             {
                 $menu = json_decode($menu);
                 $this->custom->saveCustomMenu($menu->value, $menu->module, isset($menu->method) ? $menu->method : '');
@@ -374,11 +436,29 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function ajaxRestoreMenu($confirm = 'no')
+    public function ajaxRestoreMenu($setPublic = 0, $confirm = 'no')
     {
-        if($confirm == 'no') die(js::confirm($this->lang->custom->confirmRestore, inlink('ajaxRestoreMenu', "confirm=yes")));
+        if($confirm == 'no') die(js::confirm($this->lang->custom->confirmRestore, inlink('ajaxRestoreMenu', "setPublic=$setPublic&confirm=yes")));
 
-        $this->loadModel('setting')->deleteItems("owner={$this->app->user->account}&module=common&section=customMenu");
+        $account = $this->app->user->account;
+        $this->loadModel('setting')->deleteItems("owner={$account}&module=common&section=customMenu");
+        if($setPublic) $this->setting->deleteItems("owner=system&module=common&section=customMenu");
+        die(js::reload('parent.parent'));
+    }
+
+    /**
+     * Reset required.
+     * 
+     * @param  srting $module 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function resetRequired($module, $confirm = 'no')
+    {
+        if($confirm == 'no') die(js::confirm($this->lang->custom->confirmRestore, inlink('resetRequired', "module=$module&confirm=yes")));
+
+        $this->loadModel('setting')->deleteItems("owner=system&module={$module}&key=requiredFields");
         die(js::reload('parent.parent'));
     }
 }

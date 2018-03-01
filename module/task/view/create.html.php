@@ -34,16 +34,25 @@
       </tr>
       <tr>
         <th><?php echo $lang->task->type;?></th>
-        <td><?php echo html::select('type', $lang->task->typeList, $task->type, 'class=form-control onchange="setOwners(this.value)"');?></td><td></td>
+        <td><?php echo html::select('type', $lang->task->typeList, $task->type, "class='form-control chosen' onchange='setOwners(this.value)'");?></td><td></td>
       </tr>
       <tr>
         <th><?php echo $lang->task->assignedTo;?></th>
-        <td><?php echo html::select('assignedTo[]', $members, $task->assignedTo, "class='form-control chosen'");?></td>
         <td>
-          <button type='button' class='btn btn-link<?php echo $task->type == 'affair' ? '' : ' hidden'?>' id='selectAllUser'><?php echo $lang->task->selectAllUser ?></button>
+          <div class="input-group" id="dataPlanGroup">
+            <?php echo html::select('assignedTo[]', $members, $task->assignedTo, "class='form-control chosen'");?>
+            <?php echo html::input('teamMember', '', "class='form-control team-group fix-border hidden' readonly='readonly'");?>
+            <span class="input-group-addon team-group hidden" data-toggle='modalTeam'><?php echo $lang->task->team;?></span>
+            <label class='input-group-addon affair'><input type='checkBox' name='multiple' id="multipleBox" value='1'/><?php echo $lang->task->multipleAB;?></label>
+          </div>
+        </td>
+        <td>
+          <button type='button' class='btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>' id='selectAllUser'>
+            <?php echo $lang->task->selectAllUser;?>
+          </button>
         </td>
       </tr>
-      <?php if(strpos(",$showFields,", ',story,') !== false and $this->config->global->flow != 'onlyTask'):?>
+      <?php if(strpos(",$showFields,", ',story,') !== false and $this->config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
       <tr>
         <th><?php echo $lang->task->story;?></th>
         <td colspan='5'>
@@ -81,7 +90,7 @@
             $hasCustomPri = false;
             foreach($lang->task->priList as $priKey => $priValue)
             {
-                if($priKey != $priValue)
+                if($priKey != $priValue or strlen($priKey) != strlen($priValue))
                 {
                     $hasCustomPri = true;
                     break;
@@ -92,8 +101,8 @@
               <div class='input-group'>
                 <span class='input-group-addon fix-border br-0'><?php echo $lang->task->pri;?></span>
                 <?php if($hasCustomPri):?>
-                <?php echo html::select('pri', $lang->task->priList, $task->pri, "class='form-control'");?> 
-                <?php else: ?>
+                <?php echo html::select('pri', $lang->task->priList, $task->pri, "class='form-control chosen'");?> 
+                <?php else:?>
                 <div class='input-group-btn dropdown-pris'>
                   <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>
                     <span class='pri-text'></span> &nbsp;<span class='caret'></span>
@@ -101,11 +110,10 @@
                   <ul class='dropdown-menu pull-right'></ul>
                   <?php echo html::select('pri', $lang->task->priList, $task->pri, "class='hide'");?>
                 </div>
-                <?php endif; ?>
+                <?php endif;?>
               </div>
             </div>
-            <?php endif; ?>
-
+            <?php endif;?>
             <?php if(!$hiddenEst):?>
             <div class='col-table' id='estRowCol'>
               <div class='input-group'>
@@ -113,7 +121,7 @@
                 <?php echo html::input('estimate', $task->estimate, "class='form-control' placeholder='{$lang->task->hour}' autocomplete='off'");?>
               </div>
             </div>
-            <?php endif; ?>
+            <?php endif;?>
           </div>
         </td>
       </tr>
@@ -175,6 +183,38 @@
       </tr>
     </table>
     <span id='responser'></span>
+    <div class='modal fade modal-team' id='modalTeam'>
+      <div class='modal-dialog'>
+        <div class='modal-header'>
+          <button type='button' class='close' data-dismiss='modal'>
+            <span aria-hidden='true'>×</span><span class='sr-only'><?php echo $lang->task->close;?></span>
+          </button>
+          <h4 class='modal-title'><?php echo $lang->task->team;?></h4>
+        </div>
+        <div class='modal-content'>
+          <table class="table table-form">
+            <?php for($i = 0; $i < 6; $i++):?>
+            <tr>
+              <td class='w-150px'><?php echo html::select("team[]", $members, '', "class='form-control chosen'");?></td>
+              <td>
+                <div class='input-group'>
+                  <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
+                  <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
+                </div>
+              </td>
+              <td class='w-90px'>
+                <a href='javascript:;' class='btn btn-move-up btn-sm'><i class='icon-arrow-up'></i></a>
+                <a href='javascript:;' class='btn btn-move-down btn-sm'><i class='icon-arrow-down'></i></a>
+              </td>
+            </tr>
+            <?php endfor;?>
+            <tr>
+              <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary' data-dismiss='modal'") ?></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
   </form>
 </div>
 <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=task&section=custom&key=createFields')?>

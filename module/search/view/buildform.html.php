@@ -44,8 +44,9 @@ include '../../common/view/chosen.html.php';
 #searchlite {line-height: 127px}
 #searchform.showmore #searchmore, #searchform #searchlite {display: none;}
 #searchform.showmore #searchlite, #searchform #searchmore {display: inline-block;}
-#searchform .chosen-container .chosen-single{width: 170px;}
-#searchform .chosen-container .chosen-drop{min-width: 400px;}
+#searchform .chosen-container[id^="field"] .chosen-drop{min-width: 120px;}
+#searchform [id^="valueBox"] .chosen-container .chosen-single{max-width: 170px;}
+#searchform [id^="valueBox"] .chosen-container .chosen-drop{min-width: 400px;}
 #searchform .chosen-container .chosen-drop ul.chosen-results li{white-space:normal}
 #searchmore > i, #searchlite > i {font-size: 28px;}
 #searchmore > i {position: relative; top: 4px;}
@@ -56,11 +57,11 @@ include '../../common/view/chosen.html.php';
 .outer > #querybox {margin: -20px -20px 20px; border-top: none; border-bottom: 1px solid #ddd}
 
 #searchform input.date::-webkit-input-placeholder{color: #000000; opacity: 1;}
-#searchform input.date::-moz-placeholder{color: #000000; opacity: 1;} 
+#searchform input.date::-moz-placeholder{color: #000000; opacity: 1;}
 #searchform input.date:-ms-input-placeholder{color: #000000; opacity: 1;}
 </style>
 <script language='Javascript'>
-var dtOptions = 
+var dtOptions =
 {
     language: '<?php echo $this->app->getClientLang();?>',
     weekStart: 1,
@@ -97,8 +98,8 @@ var actionURL     = '<?php echo $actionURL;?>';
 
 /**
  * Set date field
- * 
- * @param  string $query 
+ *
+ * @param  string $query
  * @return void
  */
 function setDateField(query, fieldNO)
@@ -160,9 +161,9 @@ function setDateField(query, fieldNO)
 
 /**
  * When the value of the fields select changed, set the operator and value of the new field.
- * 
- * @param  string $obj 
- * @param  int    $fieldNO 
+ *
+ * @param  string $obj
+ * @param  int    $fieldNO
  * @access public
  * @return void
  */
@@ -177,7 +178,7 @@ function setField(obj, fieldNO, moduleparams)
     if(typeof(params[fieldName]['class']) != undefined && params[fieldName]['class'] == 'date')
     {
         setDateField($(obj).closest('form').find("#value" + fieldNO), fieldNO);
-        $(obj).closest('form').find("#value" + fieldNO).addClass('date');   // Shortcut the width of the datepicker to make sure align with others. 
+        $(obj).closest('form').find("#value" + fieldNO).addClass('date');   // Shortcut the width of the datepicker to make sure align with others.
         var groupItems = <?php echo $config->search->groupItems?>;
         var maxNO      = 2 * groupItems;
         var nextNO     = fieldNO > groupItems ? fieldNO - groupItems + 1 : fieldNO + groupItems;
@@ -207,7 +208,7 @@ function setField(obj, fieldNO, moduleparams)
 
 /**
  * Reset forms.
- * 
+ *
  * @access public
  * @return void
  */
@@ -216,12 +217,13 @@ function resetForm(obj)
     for(i = 1; i <= groupItems * 2; i ++)
     {
         $(obj).closest('form').find('#value' + i).val('').trigger('chosen:updated');
+        $(obj).closest('form').find('#dateValue' + i).val('').attr('placeholder','');
     }
 }
 
 /**
  * Show more fields.
- * 
+ *
  * @access public
  * @return void
  */
@@ -241,7 +243,7 @@ function showmore(obj)
 
 /**
  * Show lite search form.
- * 
+ *
  * @access public
  * @return void
  */
@@ -261,8 +263,8 @@ function showlite(obj)
 
 /**
  * loadQueries.
- * 
- * @param  queryID $queryID 
+ *
+ * @param  queryID $queryID
  * @access public
  * @return void
  */
@@ -273,8 +275,8 @@ function loadQueries(queryID)
 
 /**
  * Execute a query.
- * 
- * @param  int    $queryID 
+ *
+ * @param  int    $queryID
  * @access public
  * @return void
  */
@@ -286,7 +288,7 @@ function executeQuery(queryID)
 
 /**
  * Delete a query.
- * 
+ *
  * @access public
  * @return void
  */
@@ -375,7 +377,7 @@ foreach($fieldParams as $fieldName => $param)
           echo '</td>';
 
           /* Print field. */
-          echo "<td class='w-90px'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control'") . '</td>';
+          echo "<td class='w-110px' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
           /* Print operator. */
           echo "<td class='w-70px'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
@@ -383,7 +385,7 @@ foreach($fieldParams as $fieldName => $param)
           /* Print value. */
           echo "<td id='valueBox$fieldNO' style='overflow:visible'>";
           if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen'");
-          if($param['control'] == 'input') 
+          if($param['control'] == 'input')
           {
               $fieldName  = $formSession["field$fieldNO"];
               $fieldValue = $formSession["value$fieldNO"];
@@ -434,7 +436,7 @@ foreach($fieldParams as $fieldName => $param)
           echo '</td>';
 
           /* Print field. */
-          echo "<td class='w-90px'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control'") . '</td>';
+          echo "<td class='w-90px' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
           /* Print operator. */
           echo "<td class='w-70px'>" .  html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
@@ -467,7 +469,7 @@ foreach($fieldParams as $fieldName => $param)
       ?>
       </table>
     </td>
-    <td class='<?php echo $style == 'simple' ? 'w-80px' : 'w-160px';?>'> 
+    <td class='<?php echo $style == 'simple' ? 'w-80px' : 'w-160px';?>'>
       <?php
       echo html::hidden('module',     $module);
       echo html::hidden('actionURL',  $actionURL);

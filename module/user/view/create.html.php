@@ -24,9 +24,9 @@
     </div>
   </div>
   <form class='form-condensed mw-700px' method='post' target='hiddenwin' id='dataform'>
-    <table align='center' class='table table-form'> 
+    <table align='center' class='table table-form'>
       <tr>
-        <th class='w-120px'><?php echo $lang->user->dept;?></th>
+        <th class='w-110px'><?php echo $lang->user->dept;?></th>
         <td class='w-p50'><?php echo html::select('dept', $depts, $deptID, "class='form-control chosen'");?></td>
       </tr>
       <tr>
@@ -62,21 +62,12 @@
         <td><?php echo $lang->user->placeholder->group?></td>
       </tr>
       <tr>
-        <th><?php echo $lang->user->limitedUser;?></th>
-        <td><?php echo html::radio('limitedUser', $lang->user->limitedUserList, 'no');?></td>
-        <td><?php echo $lang->user->placeholder->limitedUser?></td>
-      </tr>
-      <tr>
         <th><?php echo $lang->user->email;?></th>
         <td><?php echo html::input('email', '', "class='form-control' autocomplete='off'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->user->commiter;?></th>
         <td><?php echo html::input('commiter', '', "class='form-control' autocomplete='off'");?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->user->join;?></th>
-        <td><?php echo html::input('join', '', "class='form-control form-date'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->user->gender;?></th>

@@ -14,10 +14,10 @@
 class testsuiteModel extends model
 {
     /**
-     * Set the menu. 
-     * 
-     * @param  array $products 
-     * @param  int   $productID 
+     * Set the menu.
+     *
+     * @param  array $products
+     * @param  int   $productID
      * @access public
      * @return void
      */
@@ -35,12 +35,12 @@ class testsuiteModel extends model
 
     /**
      * Build select string.
-     * 
-     * @param  array  $products 
-     * @param  int    $productID 
-     * @param  string $currentModule 
-     * @param  string $currentMethod 
-     * @param  string $extra 
+     *
+     * @param  array  $products
+     * @param  int    $productID
+     * @param  string $currentModule
+     * @param  string $currentMethod
+     * @param  string $extra
      * @access public
      * @return string
      */
@@ -67,9 +67,9 @@ class testsuiteModel extends model
 
     /**
      * Set library menu.
-     * 
-     * @param  array  $libraries 
-     * @param  int    $libID 
+     *
+     * @param  array  $libraries
+     * @param  int    $libID
      * @access public
      * @return void
      */
@@ -120,8 +120,8 @@ class testsuiteModel extends model
 
     /**
      * Create a test suite.
-     * 
-     * @param  int   $productID 
+     *
+     * @param  int   $productID
      * @access public
      * @return bool|int
      */
@@ -149,10 +149,10 @@ class testsuiteModel extends model
 
     /**
      * Get test suites of a product.
-     * 
-     * @param  int    $productID 
-     * @param  string $orderBy 
-     * @param  object $pager 
+     *
+     * @param  int    $productID
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -169,15 +169,15 @@ class testsuiteModel extends model
 
     /**
      * Get test suite info by id.
-     * 
-     * @param  int   $suiteID 
+     *
+     * @param  int   $suiteID
      * @param  bool  $setImgSize
      * @access public
      * @return object
      */
     public function getById($suiteID, $setImgSize = false)
     {
-        $suite = $this->dao->select("*")->from(TABLE_TESTSUITE)->where('id')->eq((int)$suiteID)->fetch();
+        $suite = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->eq((int)$suiteID)->fetch();
         $suite = $this->loadModel('file')->replaceImgURL($suite, 'desc');
         if($setImgSize) $suite->desc = $this->file->setImgSize($suite->desc);
         return $suite;
@@ -185,8 +185,8 @@ class testsuiteModel extends model
 
     /**
      * Update a test suite.
-     * 
-     * @param  int   $suiteID 
+     *
+     * @param  int   $suiteID
      * @access public
      * @return bool|array
      */
@@ -215,8 +215,8 @@ class testsuiteModel extends model
 
     /**
      * Link cases.
-     * 
-     * @param  int   $suiteID 
+     *
+     * @param  int   $suiteID
      * @access public
      * @return void
      */
@@ -236,11 +236,11 @@ class testsuiteModel extends model
 
     /**
      * Get linked cases for suite.
-     * 
-     * @param  int    $suiteID 
-     * @param  string $orderBy 
-     * @param  object $pager 
-     * @param  bool   $append 
+     *
+     * @param  int    $suiteID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  bool   $append
      * @access public
      * @return array
      */
@@ -263,10 +263,10 @@ class testsuiteModel extends model
 
     /**
      * Get unlinked cases for suite.
-     * 
-     * @param  object $suite 
-     * @param  int    $param 
-     * @param  object $pager 
+     *
+     * @param  object $suite
+     * @param  int    $param
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -300,10 +300,10 @@ class testsuiteModel extends model
     }
 
     /**
-     * Delete suite and library. 
-     * 
-     * @param  int    $suiteID 
-     * @param  string $table 
+     * Delete suite and library.
+     *
+     * @param  int    $suiteID
+     * @param  string $table
      * @access public
      * @return bool
      */
@@ -324,7 +324,7 @@ class testsuiteModel extends model
 
     /**
      * Get libraries.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -340,7 +340,7 @@ class testsuiteModel extends model
 
     /**
      * Create lib.
-     * 
+     *
      * @access public
      * @return int
      */
@@ -369,13 +369,13 @@ class testsuiteModel extends model
 
     /**
      * Get lib cases.
-     * 
-     * @param  int    $libID 
-     * @param  string $browseType 
-     * @param  int    $queryID 
-     * @param  int    $moduleID 
-     * @param  string $sort 
-     * @param  object $pager 
+     *
+     * @param  int    $libID
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @param  int    $moduleID
+     * @param  string $sort
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -435,11 +435,11 @@ class testsuiteModel extends model
 
     /**
      * Get not imported cases.
-     * 
-     * @param  int    $productID 
-     * @param  int    $libID 
-     * @param  string $orderBy 
-     * @param  object $pager 
+     *
+     * @param  int    $productID
+     * @param  int    $libID
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -476,7 +476,7 @@ class testsuiteModel extends model
             if($withAllLib)  $query  = str_replace($allLib, 1, $query);
             if(!$withAllLib) $query .= " AND `lib` = '$libID'";
         }
-        
+
         return $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)
             ->beginIF($browseType != 'bysearch')->andWhere('lib')->eq($libID)->fi()
             ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
@@ -489,11 +489,11 @@ class testsuiteModel extends model
 
     /**
      * Build search form.
-     * 
-     * @param  int    $libID 
-     * @param  array  $libraries 
-     * @param  int    $queryID 
-     * @param  string $actionURL 
+     *
+     * @param  int    $libID
+     * @param  array  $libraries
+     * @param  int    $queryID
+     * @param  string $actionURL
      * @access public
      * @return void
      */
@@ -525,10 +525,10 @@ class testsuiteModel extends model
 
     /**
      * Get lib link.
-     * 
-     * @param  string $module 
-     * @param  string $method 
-     * @param  string $extra 
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  string $extra
      * @access public
      * @return string
      */
@@ -559,8 +559,8 @@ class testsuiteModel extends model
 
     /**
      * Create from import.
-     * 
-     * @param  int    $libID 
+     *
+     * @param  int    $libID
      * @access public
      * @return void
      */
@@ -569,8 +569,8 @@ class testsuiteModel extends model
         $this->loadModel('action');
         $this->loadModel('testcase');
         $this->loadModel('file');
-        $now    = helper::now();
-        $data   = fixer::input('post')->get();
+        $now  = helper::now();
+        $data = fixer::input('post')->get();
 
         if(!empty($_POST['id']))
         {
@@ -612,7 +612,7 @@ class testsuiteModel extends model
             $cases[$key] = $caseData;
         }
 
-        $forceReview = $this->testcase->forceReview();
+        $forceNotReview = $this->testcase->forceNotReview();
         foreach($cases as $key => $caseData)
         {
             if(!empty($_POST['id'][$key]) and empty($_POST['insert']))
@@ -630,7 +630,7 @@ class testsuiteModel extends model
                     foreach($data->desc[$key] as $id => $desc)
                     {
                         $desc = trim($desc);
-                        if(empty($desc))continue;
+                        if(empty($desc)) continue;
                         $step = new stdclass();
                         $step->type   = $data->stepType[$key][$id];
                         $step->desc   = $desc;
@@ -667,7 +667,7 @@ class testsuiteModel extends model
                 {
                     $caseData->lastEditedBy   = $this->app->user->account;
                     $caseData->lastEditedDate = $now;
-                    if($stepChanged and $forceReview) $caseData->status = 'wait';
+                    if($stepChanged and !$forceNotReview) $caseData->status = 'wait';
                     $this->dao->update(TABLE_CASE)->data($caseData)->where('id')->eq($caseID)->autoCheck()->exec();
                     if($stepChanged)
                     {
@@ -681,8 +681,8 @@ class testsuiteModel extends model
                             $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
                             $stepData->case    = $caseID;
                             $stepData->version = $version;
-                            $stepData->desc    = htmlspecialchars($step['desc']);
-                            $stepData->expect  = htmlspecialchars($step['expect']);
+                            $stepData->desc    = $step['desc'];
+                            $stepData->expect  = $step['expect'];
                             $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
                             if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
                             if($stepData->type == 'step')  $parentStepID = 0;
@@ -690,7 +690,7 @@ class testsuiteModel extends model
                     }
                     $oldCase->steps  = $this->joinStep($oldStep);
                     $caseData->steps = $this->joinStep($steps);
-                    $changes = common::createChanges($oldCase, $caseData);
+                    $changes  = common::createChanges($oldCase, $caseData);
                     $actionID = $this->action->create('case', $caseID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
                 }
@@ -700,7 +700,7 @@ class testsuiteModel extends model
                 $caseData->version    = 1;
                 $caseData->openedBy   = $this->app->user->account;
                 $caseData->openedDate = $now;
-                $caseData->status     = $forceReview ? 'wait' : 'normal';
+                $caseData->status     = $forceNotReview ? 'normal' : 'wait';
                 $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
 
                 if(!dao::isError())
@@ -716,8 +716,8 @@ class testsuiteModel extends model
                         $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
                         $stepData->case    = $caseID;
                         $stepData->version = 1;
-                        $stepData->desc    = htmlspecialchars($desc);
-                        $stepData->expect  = htmlspecialchars($data->expect[$key][$id]);
+                        $stepData->desc    = $desc;
+                        $stepData->expect  = $data->expect[$key][$id];
                         $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
                         if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
                         if($stepData->type == 'step')  $parentStepID = 0;
@@ -733,8 +733,8 @@ class testsuiteModel extends model
 
     /**
      * Batch create case for lib.
-     * 
-     * @param  int    $libID 
+     *
+     * @param  int    $libID
      * @access public
      * @return void
      */
@@ -768,7 +768,7 @@ class testsuiteModel extends model
             $cases->pri[$i]    = $pri;
         }
 
-        $forceReview = $this->testcase->forceReview();
+        $forceNotReview = $this->testcase->forceNotReview();
         for($i = 0; $i < $batchNum; $i++)
         {
             if($cases->type[$i] != '' and $cases->title[$i] != '')
@@ -785,7 +785,7 @@ class testsuiteModel extends model
                 $data[$i]->keywords     = $cases->keywords[$i];
                 $data[$i]->openedBy     = $this->app->user->account;
                 $data[$i]->openedDate   = $now;
-                $data[$i]->status       = $forceReview ? 'wait' : 'normal';
+                $data[$i]->status       = $forceNotReview ? 'normal' : 'wait';
                 $data[$i]->version      = 1;
 
                 $this->dao->insert(TABLE_CASE)->data($data[$i])
@@ -793,7 +793,7 @@ class testsuiteModel extends model
                     ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
                     ->exec();
 
-                if(dao::isError()) 
+                if(dao::isError())
                 {
                     echo js::error(dao::getError());
                     die(js::reload('parent'));
@@ -803,20 +803,5 @@ class testsuiteModel extends model
                 $actionID = $this->action->create('case', $caseID, 'Opened');
             }
         }
-    }
-
-    /**
-     * Judge an action is clickable or not.
-     *-
-     * @param  object $product-
-     * @param  string $action-
-     * @access public
-     * @return void
-     */
-    public static function isClickable($testsuite, $action)
-    {
-        if(!common::limitedUser($testsuite)) return false;
-
-        return true;
     }
 }

@@ -53,6 +53,7 @@ $filter->bug->default            = new stdclass();
 $filter->bug->create             = new stdclass();
 $filter->bug->export             = new stdclass();
 $filter->doc->browse             = new stdclass();
+$filter->doc->showfiles          = new stdclass();
 $filter->doc->default            = new stdclass();
 $filter->doc->showfiles          = new stdclass();
 $filter->mail->ztcloud           = new stdclass();
@@ -99,6 +100,7 @@ $filter->bug->export->cookie['checkedItem']    = 'reg::checked';
 $filter->doc->browse->cookie['browseType'] = 'reg::browseType';
 $filter->doc->default->cookie['from']      = 'code';
 $filter->doc->default->cookie['product']   = 'int';
+$filter->doc->showfiles->cookie['docFilesViewType'] = 'code';
 
 $filter->file->download->cookie[$config->sessionVar] = 'code';
 
@@ -111,6 +113,7 @@ $filter->product->browse->cookie['storyModule']       = 'int';
 $filter->product->default->cookie['lastProduct']      = 'int';
 $filter->product->default->cookie['preProductID']     = 'int';
 $filter->product->index->cookie['preBranch']          = 'int';
+$filter->product->export->cookie['checkedItem']       = 'reg::checked';
 
 $filter->project->default->cookie['lastProject']     = 'int';
 $filter->project->default->cookie['projectMode']     = 'code';
@@ -120,6 +123,7 @@ $filter->project->task->cookie['preProjectID']       = 'int';
 $filter->project->task->cookie['productBrowseParam'] = 'int';
 $filter->project->task->cookie['projectTaskOrder']   = 'reg::orderBy';
 $filter->project->task->cookie['windowWidth']        = 'int';
+$filter->project->export->cookie['checkedItem']      = 'reg::checked';
 
 $filter->qa->default->cookie['lastProduct']  = 'int';
 $filter->qa->default->cookie['preBranch']    = 'int';
@@ -197,3 +201,8 @@ $filter->user->login->get['account']  = 'account';
 $filter->user->login->get['lang']     = 'reg::lang';
 $filter->user->login->get['password'] = 'reg::any';
 $filter->user->edit->get['from']      = 'reg::word';
+
+$filter->git->cat->get['repoUrl']  = 'reg::base64';
+$filter->git->diff->get['repoUrl'] = 'reg::base64';
+$filter->svn->cat->get['repoUrl']  = 'reg::base64';
+$filter->svn->diff->get['repoUrl'] = 'reg::base64';

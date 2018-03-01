@@ -12,6 +12,7 @@ ul li{list-style:none;}
 #report-list .list-group-item {padding: 8px 15px; border-left: none; border-right: none;}
 #report-list .list-group-item:first-child {border-top: 1px}
 #report-list .list-group-item:last-child {border-bottom: 1px}
+#report-list .list-group-item.active{background:none;color:#333;}
 .proversion a {color: #81511C}
 
 .main > .input-group {margin-bottom: 10px;}

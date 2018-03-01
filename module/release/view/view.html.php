@@ -82,16 +82,17 @@
             <?php endif;?>
             <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory', "release=$release->id");?>" id='linkedStoriesForm'>
             <table class='table table-hover table-condensed table-striped tablesorter table-fixed table-selectable' id='storyList'>
+              <?php $vars = "releaseID={$release->id}&type=story&link=$link&param=$param&orderBy=%s";?>
               <thead>
                 <tr>
-                  <th class='w-id'><?php echo $lang->idAB;?></th>
-                  <th class='w-pri'><?php echo $lang->priAB;?></th>
-                  <th><?php echo $lang->story->title;?></th>
-                  <th class='w-user'><?php echo $lang->openedByAB;?></th>
-                  <th class='w-hour'><?php echo $lang->story->estimateAB;?></th>
-                  <th class='w-hour'><?php echo $lang->statusAB;?></th>
-                  <th class='w-100px'><?php echo $lang->story->stageAB;?></th>
-                  <th class='w-50px'><?php echo $lang->actions;?></th>
+                  <th class='w-id {sorter:false}'>     <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
+                  <th class='w-pri {sorter:false}'>    <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+                  <th class="text-left {sorter:false}"><?php common::printOrderLink('title',    $orderBy, $vars, $lang->story->title);?></th>
+                  <th class='w-user {sorter:false}'>   <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+                  <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
+                  <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
+                  <th class='w-100px {sorter:false}'>  <?php common::printOrderLink('stage',    $orderBy, $vars, $lang->story->stageAB);?></th>
+                  <th class='w-50px {sorter:false}'>   <?php echo $lang->actions?></th>
                 </tr>
               </thead>
               <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkStory');?>
@@ -141,16 +142,17 @@
             <?php endif;?>
             <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "releaseID=$release->id");?>" id='linkedBugsForm'>
             <table class='table table-hover table-condensed table-striped tablesorter table-fixed table-selectable' id='bugList'>
+              <?php $vars = "releaseID={$release->id}&type=bug&link=$link&param=$param&orderBy=%s";?>
               <thead>
                 <tr>
-                  <th class='w-id'><?php echo $lang->idAB;?></th>
-                  <th><?php echo $lang->bug->title;?></th>
-                  <th class='w-100px'><?php echo $lang->bug->status;?></th>
-                  <th class='w-user'><?php echo $lang->openedByAB;?></th>
-                  <th class='w-date'><?php echo $lang->bug->openedDateAB;?></th>
-                  <th class='w-user'><?php echo $lang->bug->resolvedByAB;?></th>
-                  <th class='w-100px'><?php echo $lang->bug->resolvedDateAB;?></th>
-                  <th class='w-50px'><?php echo $lang->actions;?></th>
+                  <th class='w-id {sorter:false}'>     <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
+                  <th class='text-left {sorter:false}'><?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
+                  <th class='w-100px {sorter:false}'>  <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
+                  <th class='w-user {sorter:false}'>   <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
+                  <th class='w-date {sorter:false}'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
+                  <th class='w-user {sorter:false}'>   <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+                  <th class='w-100px {sorter:false}'>  <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
+                  <th class='w-50px {sorter:false}'>   <?php echo $lang->actions;?></th>
                 </tr>
               </thead>
               <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkBug');?>
@@ -200,15 +202,16 @@
             <?php endif;?>
             <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "releaseID=$release->id&type=leftBug");?>" id='linkedBugsForm'>
             <table class='table table-hover table-condensed table-striped tablesorter table-fixed table-selectable' id='leftBugList'>
+              <?php $vars = "releaseID={$release->id}&type=leftBug&link=$link&param=$param&orderBy=%s";?>
               <thead>
                 <tr>
-                  <th class='w-id'><?php echo $lang->idAB;?></th>
-                  <th class='w-severity'><?php echo $lang->bug->severityAB;?></th>
-                  <th><?php echo $lang->bug->title;?></th>
-                  <th class='w-100px'><?php echo $lang->bug->status;?></th>
-                  <th class='w-user'><?php echo $lang->openedByAB;?></th>
-                  <th class='w-150px'><?php echo $lang->bug->openedDateAB;?></th>
-                  <th class='w-50px'><?php echo $lang->actions;?></th>
+                  <th class='w-id {sorter:false}'>      <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
+                  <th class='w-severity {sorter:false}'><?php common::printOrderLink('severity',   $orderBy, $vars, $lang->bug->severityAB);?></th>
+                  <th class='text-left {sorter:false}'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
+                  <th class='w-100px {sorter:false}'>   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->status);?></th>
+                  <th class='w-user {sorter:false}'>    <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+                  <th class='w-150px {sorter:false}'>   <?php common::printOrderLink('openedDate', $orderBy, $vars, $lang->bug->openedDateAB);?></th>
+                  <th class='w-50px {sorter:false}'>    <?php echo $lang->actions;?></th>
                 </tr>
               </thead>
               <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkBug');?>
@@ -252,67 +255,68 @@
           </div>
 
           <div class='tab-pane <?php if($type == 'releaseInfo') echo 'active'?>' id='releaseInfo'>
-            <div>
-              <fieldset>
-                <legend><?php echo $lang->release->desc;?></legend>
-                <div class='article-content'><?php echo $release->desc;?></div>
-              </fieldset>
-              <fieldset>
-                <legend><?php echo $lang->release->basicInfo?></legend>
-                <table class='table table-data table-condensed table-borderless table-fixed'>
-                  <tr>
-                    <th class='w-80px'><?php echo $lang->release->product;?></th>
-                    <td><?php echo $release->productName;?></td>
-                  </tr>  
-                  <?php if($release->productType != 'normal'):?>
-                  <tr>
-                    <th><?php echo $lang->product->branch;?></th>
-                    <td><?php echo $branchName;?></td>
-                  </tr>
-                  <?php endif;?>
-                  <tr>
-                    <th><?php echo $lang->release->name;?></th>
-                    <td><?php echo $release->name;?></td>
-                  </tr>  
-                  <tr>
-                    <th><?php echo $lang->release->build;?></th>
-                    <td title='<?php echo $release->buildName?>'>
-                    <?php echo ($release->project) ? html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank') : $release->buildName;?>
-                    </td>
-                  </tr>  
-                  <tr>
-                    <th><?php echo $lang->release->status;?></th>
-                    <td><?php echo $lang->release->statusList[$release->status];?></td>
-                  </tr>
-                  <tr>
-                    <th><?php echo $lang->release->date;?></th>
-                    <td><?php echo $release->date;?></td>
-                  </tr>
-                </table>
-              </fieldset>
-              <fieldset>
-                <legend><?php echo $lang->files?></legend>
-                <div class='article-content'>
-                <?php
-                if($release->files)
-                {
-                    echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false'));
-                }
-                elseif($release->filePath)
-                {
-                    echo $lang->release->filePath . html::a($release->filePath, $release->filePath, '_blank');
-                }
-                elseif($release->scmPath)
-                {
-                    echo $lang->release->scmPath . html::a($release->scmPath, $release->scmPath, '_blank');
-                }
-                ?>
-                </div>
-              </fieldset>
-              <?php include '../../common/view/action.html.php';?>
+            <div class="row-table">
+              <div class="col-main">
+                <fieldset>
+                  <legend><?php echo $lang->release->basicInfo?></legend>
+                  <table class='table table-data table-condensed table-borderless table-fixed'>
+                    <tr>
+                      <th class='w-80px'><?php echo $lang->release->product;?></th>
+                      <td><?php echo $release->productName;?></td>
+                    </tr>
+                      <?php if($release->productType != 'normal'):?>
+                        <tr>
+                          <th><?php echo $lang->product->branch;?></th>
+                          <td><?php echo $branchName;?></td>
+                        </tr>
+                      <?php endif;?>
+                    <tr>
+                      <th><?php echo $lang->release->name;?></th>
+                      <td><?php echo $release->name;?></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->release->build;?></th>
+                      <td title='<?php echo $release->buildName?>'>
+                          <?php echo ($release->project) ? html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank') : $release->buildName;?>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->release->status;?></th>
+                      <td><?php echo $lang->release->statusList[$release->status];?></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->release->date;?></th>
+                      <td><?php echo $release->date;?></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->release->desc;?></th>
+                      <td><?php echo $release->desc;?></td>
+                    </tr>
+                  </table>
+                </fieldset>
+                <fieldset>
+                  <legend><?php echo $lang->files?></legend>
+                  <div class='article-content'>
+                      <?php
+                      if($release->files)
+                      {
+                          echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false'));
+                      }
+                      elseif($release->filePath)
+                      {
+                          echo $lang->release->filePath . html::a($release->filePath, $release->filePath, '_blank');
+                      }
+                      elseif($release->scmPath)
+                      {
+                          echo $lang->release->scmPath . html::a($release->scmPath, $release->scmPath, '_blank');
+                      }
+                      ?>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="col-side"><?php include '../../common/view/action.html.php';?></div>
             </div>
           </div>
-
         </div>
       </div>
     </div>

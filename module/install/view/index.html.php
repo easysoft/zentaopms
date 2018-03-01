@@ -33,40 +33,26 @@
         <tr>
           <td class=''><?php echo nl2br(sprintf($lang->install->links, $config->version));?></td>
           <td class='w-p25'>
+            <?php if($this->app->clientLang != 'en'):?>
             <img src="<?php echo $this->app->getWebRoot() . 'theme/default/images/main/weixin.jpg'?>" width='200' height='200'>
+            <?php endif;?>
           </td>
         </tr> 
         <tr>
           <td colspan='2'>
             <h5><?php echo $lang->install->promotion?></h5>
             <div class='row'>
-              <div class='col-md-4'>
-                <a class="card ad" href="http://www.chanzhi.org" target="_blank">
-                  <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/chanzhi.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/chanzhi.png'?>" alt=""></div>
+              <?php foreach($lang->install->product as $product):?>
+              <div class='col-md-<?php echo 12 / count($lang->install->product);?>'>
+                <a class="card ad" href="<?php echo $lang->install->{$product}->url;?>" target="_blank">
+                  <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . $lang->install->{$product}->logo;?>)"><img src="<?php echo $defaultTheme . $lang->install->{$product}->logo;?>" alt=""></div>
                   <div class="card-reveal">
-                    <h5 class="card-heading"><?php echo $lang->install->chanzhi->name?></h5>
-                    <div class="card-content"><?php echo $lang->install->chanzhi->desc?></div>
+                    <h5 class="card-heading"><?php echo $lang->install->{$product}->name?></h5>
+                    <div class="card-content"><?php echo $lang->install->{$product}->desc?></div>
                   </div>
                 </a>
               </div>
-              <div class='col-md-4'>
-                <a class="card ad" href="http://www.ranzhico.com" target="_blank">
-                  <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/ranzhi.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/ranzhi.png'?>" alt=""></div>
-                  <div class="card-reveal">
-                    <h5 class="card-heading"><?php echo $lang->install->ranzhi->name?></h5>
-                    <div class="card-content"><?php echo $lang->install->ranzhi->desc?></div>
-                  </div>
-                </a>
-              </div>
-              <div class='col-md-4'>
-                <a class="card ad" href="http://www.zdoo.com" target="_blank">
-                  <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/zdoo.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/zdoo.png'?>" alt=""></div>
-                  <div class="card-reveal">
-                    <h5 class="card-heading"><?php echo $lang->install->zdoo->name?></h5>
-                    <div class="card-content"><?php echo $lang->install->zdoo->desc?></div>
-                  </div>
-                </a>
-              </div>
+              <?php endforeach;?>
             </div>
           </td>
         </tr>

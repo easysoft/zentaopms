@@ -14,6 +14,23 @@
 class installModel extends model
 {
     /**
+     * Get license according the client lang.
+     * 
+     * @access public
+     * @return string
+     */
+    public function getLicense()
+    {
+        $clientLang = $this->app->getClientLang();
+
+        $licenseCN = file_get_contents($this->app->getBasePath() . 'doc/LICENSE.CN');
+        $licenseEN = file_get_contents($this->app->getBasePath() . 'doc/LICENSE.EN');
+
+        if($clientLang == 'zh' or $clientLang == 'zh-tw') return $licenseCN . $licenseEN;
+        return $licenseEN . $licenseCN;
+    }
+
+    /**
      * Check version of zentao.
      * 
      * @access public
@@ -152,17 +169,6 @@ class installModel extends model
     public function checkFilter()
     {
         return $result = extension_loaded('filter') ? 'ok' : 'fail';
-    }
-
-    /**
-     * Check gd extension.
-     *
-     * @access public
-     * @return string   ok|fail
-     */
-    public function checkGD()
-    {
-        return $result = extension_loaded('gd') ? 'ok' : 'fail';
     }
 
     /**
@@ -508,7 +514,8 @@ class installModel extends model
      */
     public function importDemoData()
     {
-        $demoDataFile = $this->app->getAppRoot() . 'db' . DS . 'demo.sql';
+        $demoDataFile = $this->app->clientLang == 'en' ? 'endemo.sql' : 'demo.sql';
+        $demoDataFile = $this->app->getAppRoot() . 'db' . DS . $demoDataFile;
         $insertTables = explode(";\n", file_get_contents($demoDataFile));
         foreach($insertTables as $table)
         { 

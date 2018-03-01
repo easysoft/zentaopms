@@ -59,7 +59,7 @@
             $this->app->loadLang('testcase');
             echo "<div class='btn-group'>";
             echo "<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>";
-            echo "<i class='icon icon-sitemap'></i>" . $lang->testcase->common . " <span class='caret'></span>";
+            echo "<i class='icon icon-sitemap'></i> " . $lang->testcase->common . " <span class='caret'></span>";
             echo "</button>";
             echo "<ul class='dropdown-menu' id='createCaseActionMenu'>";
             $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
@@ -116,7 +116,7 @@
       </div>
       <fieldset id='commentBox' class='hide'>
         <legend><?php echo $lang->comment;?></legend>
-        <form method='post' action='<?php echo inlink('edit', "storyID=$story->id")?>'>
+        <form method='post' action='<?php echo $this->createLink('action', 'comment', "objectType=story&objectID=$story->id")?>' target='hiddenwin'>
           <div class="form-group"><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></div>
           <?php echo html::submitButton() . html::backButton();?>
         </form>

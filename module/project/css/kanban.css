@@ -1,8 +1,8 @@
-table th.col-closed {width:15%}
+table th.col-closed {width:14%}
 #kanbanHeader th{border: 1px solid #ddd; padding:8px;}
-#kanbanHeader .dropdown {display: inline-block; margin-left: 10px;}
+#kanbanHeader .dropdown {display: inline-block;}
 #kanbanHeader .dropdown > a {color: #036}
-#kanbanHeader  th.col-closed {position: relative}
+#kanbanHeader  th{position: relative}
 #kanbanHeader .actions {position: absolute; right: 0; top: 0; padding: 0px; background: #f1f1f1; border-left: 1px solid #ccc}
 #kanbanHeader .actions .btn {display: block; border-radius: 0; width: 34px; height: 36px; position: relative; text-align: center; padding: 5px 0; color: #036}
 #kanbanHeader .actions .btn-text {display: none}
@@ -39,7 +39,8 @@ table th.col-closed {width:15%}
 .board .dropdown-menu > a {display: block; padding: 3px 15px; color: #333; font-size: 12px}
 .board .dropdown-menu > a:hover {background: #f1f1f1; color: #1a53ff; text-decoration: none}
 .board .dropdown-menu > a.disabled, .board .dropdown-menu > a.disabled:hover, .board .dropdown-menu > a.active {color: #aaa; background: none}
-.board .board-footer {display: none; opacity: 0.9}
+.board .board-footer {display: none; opacity: 0.6}
+.board.inverse .board-footer {display: none; opacity: 0.9}
 .board.show-info .board-footer {display: block; margin: 0 -6px -3px -6px; padding: 5px; background: rgba(0,0,0,0.07);}
 .board-footer .board-id {display: inline-block; border: 1px solid #aaa; font-weight: normal; padding: 0px 4px; text-align: center; min-width: 20px; line-height: 16px; height: 17px; margin-right: 10px; font-size: 12px;}
 .board-bug-closed .board-footer .bug-pri, .board-task-closed .board-footer .task-pri {border-color: #666}
@@ -60,12 +61,14 @@ table th.col-closed {width:15%}
 .story-pri.pri-3 {background-color:#b56a00;}
 .story-pri.pri-4 {background-color:#795523;}
 
-.board {background: #ddd; color: #444; outline: 1px solid rgba(0,0,0,.1); outline-offset: -1px;}
-.board-bug-wait,.board-task-wait {color: #2b529c; background-color: #E8EAF6}
-.board-bug-doing,.board-task-doing {color: #D2322D; background-color: #FFEBEE;}
-.board-bug-done,.board-task-done {color: #229F24; background-color: #E8F5E9;}
-.board-bug-closed,.board-task-closed {color: #666; background-color: #ccc;}
-.board:hover {outline: 1px solid rgba(0,0,0,.3);}
+.board {background: #333; color: #f1f1f1; outline-offset: -1px;}
+.board:hover {color:#fff}
+.board-bug-cancel, .board-task-cancel {background: #333;   }
+.board-bug-wait, .board-task-wait     {background: #2b529c;}
+.board-task-pause                     {background: #E48600;}
+.board-bug-doing, .board-task-doing   {background: #DC143C;}
+.board-bug-done, .board-task-done     {background: #229F24;}
+.board-bug-closed, .board-task-closed {background: #777;   }
 
 .board-story {color: #dd7503; background-color: #FFF3E0;}
 .board-story.stage-projected  {color:#777;}
@@ -75,21 +78,16 @@ table th.col-closed {width:15%}
 .board-story.stage-tested     {color:#827717; background-color: #F9FBE7}
 .board-story.stage-released   {color:#9C27B0; background-color: #F3E5F5}
 
-.board.inverse {background: #333; color: #f1f1f1;}
-.board.inverse:hover {color: #fff;}
-.board-bug-cancel.inverse, .board-task-cancel.inverse {background: #333;}
-.board-bug-wait.inverse, .board-task-wait.inverse {background: #2b529c}
-.board-bug-doing.inverse, .board-task-doing.inverse {background: #D2322D}
-.board-bug-done.inverse, .board-task-done.inverse {background: #229F24}
-.board-bug-closed.inverse, .board-task-closed.inverse {background: #777;}
-
-.board-story.inverse {background: #dd7503}
+.board-story.inverse {background: #dd7503; color:#f1f1f1}
 .board-story.stage-projected.inverse  {background-color:#777;}
 .board-story.stage-developing.inverse {background-color:#D2322D;}
 .board-story.stage-developed.inverse  {background-color:#229F24;}
 .board-story.stage-testing.inverse    {background-color:#EF6C00;}
 .board-story.stage-tested.inverse     {background-color:#827717;}
 .board-story.stage-released.inverse   {background-color:#9C27B0;}
+
+.board-assignedTo {color:#D2322D; background-color: #FFEBEE;}
+.board-finishedBy {color:#229F24; background-color: #E8F5E9;}
 
 .bug-pri,.task-pri {display: inline-block; width: 16px; height: 16px; text-align: center; border-radius: 8px; border: 1px solid #ddd; font-size: 12px; line-height: 14px;}
 

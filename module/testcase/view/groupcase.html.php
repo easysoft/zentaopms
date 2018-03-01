@@ -47,7 +47,20 @@
     <td><?php echo $users[$case->lastRunner];?></td>
     <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
     <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
-    <td class='<?php if(isset($run)) echo $run->status;?>'><?php echo $lang->testcase->statusList[$case->status];?></td>
+    <td class='<?php if(isset($run)) echo $run->status;?>'>
+      <?php
+      if($case->needconfirm)
+      {
+          echo "(<span class='warning'>{$lang->story->changed}</span> ";
+          echo html::a(helper::createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
+          echo ")";
+      }
+      else
+      {
+          echo $lang->testcase->statusList[$case->status];
+      }
+      ?>
+    </td>
     <td><?php echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(inlink('bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;?></td>
     <td><?php echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a($this->createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;?></td>
     <td><?php echo $case->stepNumber;?></td>

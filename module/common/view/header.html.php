@@ -13,36 +13,45 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 ?>
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
-<?php 
-    if(!empty($this->config->sso->redirect)) js::set('ssoRedirect', $this->config->sso->redirect);
-?>
+<?php if(!empty($this->config->sso->redirect)) js::set('ssoRedirect', $this->config->sso->redirect);?>
 <header id='header'>
-<?php if(empty($this->config->sso->redirect)):?>
-  <div id='topbar'>
-    <div class='pull-right' id='topnav'><?php commonModel::printTopBar();?></div>
-    <h5 id='companyname'>
-      <?php printf($lang->welcome, $app->company->name);?>
-    </h5>
+  <div id='mainHeader'>
+    <div class='container'>
+      <hrgroup id='heading'>
+        <?php if(empty($this->config->sso->redirect)):?>
+        <h1 id='companyname' title='<?php printf($lang->welcome, $app->company->name);?>'><?php printf($lang->welcome, $app->company->name);?></h1>
+        <?php endif;?>
+      </hrgroup>
+      <nav id='navbar'><?php commonModel::printMainmenu($this->moduleName);?></nav>
+      <div id='toolbar'>
+        <?php common::printAboutBar();?>
+        <div id="userMenu">
+          <?php common::printSearchBox();?>
+          <ul id="userNav" class="nav nav-default">
+            <?php list($adminName, $adminModule, $adminMethod) = explode('|', $lang->adminMenu);?>
+            <li><?php echo html::a($this->createLink($adminModule, $adminMethod), $adminName);?></li>
+            <li><?php common::printUserBar();?></li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
-<?php endif;?>
-<?php
-if(!empty($this->config->sso->redirect))
-{
-    css::import($defaultTheme . 'bindranzhi.css');
-    js::import($jsRoot . 'bindranzhi.js');
-}
-?>
-  <nav id='mainmenu'>
-    <?php commonModel::printMainmenu($this->moduleName); commonModel::printSearchBox();?>
-    <?php if(!empty($this->config->sso->redirect)):?>
-    <div class='pull-right' id='topnav'><?php commonModel::printTopBar();?></div>
-    <?php endif;?>
-  </nav>
-  <nav id="modulemenu">
-    <?php commonModel::printModuleMenu($this->moduleName);?>
-  </nav>
+  <div id='subHeader'>
+    <div class='container'>
+      <div id="pageNav"></div>
+      <nav id='subNavbar'><?php common::printModuleMenu($this->moduleName);?></nav>
+      <div id="pageActions"></div>
+    </div>
+  </div>
+  <?php
+  if(!empty($this->config->sso->redirect))
+  {
+      css::import($defaultTheme . 'bindranzhi.css');
+      js::import($jsRoot . 'bindranzhi.js');
+  }
+  ?>
 </header>
 
-<div id='wrap' <?php if(!empty($this->config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >
+<main id='main' <?php if(!empty($this->config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >
 <?php endif;?>
-  <div class='outer'>
+  <div class='container'>

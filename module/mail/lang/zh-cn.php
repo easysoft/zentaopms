@@ -1,15 +1,17 @@
 <?php
-$lang->mail->common = '发信配置';
-$lang->mail->index  = '首页';
-$lang->mail->detect = '检测';
-$lang->mail->edit   = '编辑配置';
-$lang->mail->save   = '成功保存';
-$lang->mail->test   = '测试发信';
-$lang->mail->reset  = '重置';
-$lang->mail->resend = '重发';
-$lang->mail->browse = '邮件列表';
-$lang->mail->delete = '删除邮件';
+$lang->mail->common        = '发信配置';
+$lang->mail->index         = '首页';
+$lang->mail->detect        = '检测';
+$lang->mail->edit          = '编辑配置';
+$lang->mail->save          = '保存';
+$lang->mail->saveSuccess   = '保存成功';
+$lang->mail->test          = '测试发信';
+$lang->mail->reset         = '重置';
+$lang->mail->resend        = '重发';
+$lang->mail->browse        = '邮件列表';
+$lang->mail->delete        = '删除邮件';
 $lang->mail->ztCloud       = '禅道云发信';
+$lang->mail->gmail         = 'GMAIL发信';
 $lang->mail->sendCloud     = 'Notice发信';
 $lang->mail->batchDelete   = '批量删除';
 $lang->mail->sendcloudUser = '同步联系人';
@@ -44,14 +46,14 @@ $lang->mail->remove     = '移除';
 $lang->mail->toList      = '收信人';
 $lang->mail->ccList      = '抄送给';
 $lang->mail->subject     = '主题';
-$lang->mail->addedBy     = '发送者';
-$lang->mail->addedDate   = '创建时间';
+$lang->mail->createdBy   = '发送者';
+$lang->mail->createdDate = '创建时间';
 $lang->mail->sendTime    = '发送时间';
 $lang->mail->status      = '状态';
 $lang->mail->failReason  = '失败原因';
 
-$lang->mail->statusList['send'] = '成功';
-$lang->mail->statusList['fail'] = '失败';
+$lang->mail->statusList['sended'] = '成功';
+$lang->mail->statusList['fail']   = '失败';
 
 $lang->mail->turnonList[1]  = '打开';
 $lang->mail->turnonList[0] = '关闭';

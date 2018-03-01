@@ -13,8 +13,10 @@ class productplan extends control
 {
     /**
      * Common actions
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int $productID
+     * @param  int $branch
+     *
      * @access public
      * @return void
      */
@@ -23,17 +25,20 @@ class productplan extends control
         $this->loadModel('product');
         $this->app->loadConfig('project');
         $product = $this->product->getById($productID);
+        if(empty($product)) $this->locate($this->createLink('product', 'create'));
         $this->view->product  = $product;
         $this->view->branch   = $branch;
         $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
-        $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$this->view->product->id}&branch=$branch"), $this->view->product->name);
+        $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$productID}&branch=$branch"), $product->name);
         $this->product->setMenu($this->product->getPairs(), $productID, $branch);
     }
 
     /**
      * Create a plan.
-     * 
-     * @param  int    $product 
+     *
+     * @param string $product
+     * @param int    $branch
+     *
      * @access public
      * @return void
      */
@@ -69,8 +74,9 @@ class productplan extends control
 
     /**
      * Edit a plan.
-     * 
-     * @param  int    $planID 
+     *
+     * @param int $planID
+     *
      * @access public
      * @return void
      */
@@ -98,8 +104,10 @@ class productplan extends control
 
     /**
      * Batch edit plan.
-     * 
-     * @param  int    $productID 
+     *
+     * @param int $productID
+     * @param int $branch
+     *
      * @access public
      * @return void
      */
@@ -124,15 +132,16 @@ class productplan extends control
                 $actionID = $this->action->create('productplan', $planID, 'Edited');
                 $this->action->logHistory($actionID, $change);
             }
+            $this->loadModel('score')->create('ajax', 'batchOther');
             die(js::locate(inlink('browse', "productID=$productID&branch=$branch"), 'parent'));
         }
         die(js::locate('back'));
     }
-                                                          
+
     /**
      * Delete a plan.
-     * 
-     * @param  int    $planID 
+     *
+     * @param  int    $planID
      * @param  string $confirm  yes|no
      * @access public
      * @return void
@@ -169,11 +178,12 @@ class productplan extends control
 
     /**
      * Browse plans.
-     * 
-     * @param  int    $product 
-     * @param  string $orderBy 
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $orderBy
      * @param  string $browseType
-     * @param  int    $recTotal 
+     * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
@@ -181,6 +191,7 @@ class productplan extends control
      */
     public function browse($productID = 0, $branch = 0, $browseType = 'all', $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
     {
+        $this->app->loadLang('project');
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -207,6 +218,9 @@ class productplan extends control
      * @param  int    $planID
      * @param  string $type
      * @param  string $orderBy
+     * @param  string $link
+     * @param  string $param
+     *
      * @access public
      * @return void
      */
@@ -215,13 +229,39 @@ class productplan extends control
         $this->session->set('storyList', $this->app->getURI(true) . '&type=' . 'story');
         $this->session->set('bugList', $this->app->getURI(true) . '&type=' . 'bug');
 
+        $reSort = false;
+        if($type == 'story' && strpos($orderBy, 'order') !== false)
+        {
+            $orderBy = str_replace('order', 'id', $orderBy);
+            $reSort  = true;
+        }
+
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         $plan = $this->productplan->getByID($planID, true);
         if(!$plan) die(js::error($this->lang->notFound) . js::locate('back'));
         $this->commonAction($plan->product, $plan->branch);
-        $products                = $this->product->getPairs();
+        $products = $this->product->getPairs();
+
+        $planStories = $this->loadModel('story')->getPlanStories($planID, 'all', $type == 'story' ? $sort : 'id_desc');
+        if($reSort)
+        {
+            if(!empty($plan->order))
+            {
+                $stories = array();
+                $order   = explode(',', $plan->order);
+                if(strpos($orderBy, 'asc') !== false) $order = array_reverse($order, true);
+                foreach($order as $id)
+                {
+                    if(empty($id)) continue;
+                    $stories[$id] = $planStories[$id];
+                }
+                $planStories = $stories;
+                unset($stories);
+            }
+            $orderBy = str_replace('id', 'order', $orderBy);
+        }
 
         $this->loadModel('datatable');
         $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
@@ -229,7 +269,7 @@ class productplan extends control
 
         $this->view->title       = "PLAN #$plan->id $plan->title/" . $products[$plan->product];
         $this->view->position[]  = $this->lang->productplan->view;
-        $this->view->planStories = $this->loadModel('story')->getPlanStories($planID, 'all', $type == 'story' ? $sort : 'id_desc');
+        $this->view->planStories = $planStories;
         $this->view->planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc');
         $this->view->products    = $products;
         $this->view->summary     = $this->product->summary($this->view->planStories);
@@ -246,10 +286,12 @@ class productplan extends control
     }
 
     /**
-     * Ajax: Get product plans. 
-     * 
-     * @param  int    $productID 
+     * Ajax: Get product plans.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
      * @param  string $number
+     *
      * @access public
      * @return void
      */
@@ -263,9 +305,27 @@ class productplan extends control
     }
 
     /**
+     * Sort story for productplan.
+     *
+     * @param int $planID
+     *
+     * @access public
+     * @return bool
+     */
+    public function ajaxStorySort($planID = 0)
+    {
+        if(empty($planID)) return true;
+        $this->dao->update(TABLE_PRODUCTPLAN)->set('`order`')->eq($this->post->storys)->where('id')->eq((int)$planID)->exec();
+    }
+
+    /**
      * Link stories.
      *
-     * @param  int    $planID
+     * @param int    $planID
+     * @param string $browseType
+     * @param int    $param
+     * @param string $orderBy
+     *
      * @access public
      * @return void
      */
@@ -338,9 +398,10 @@ class productplan extends control
     }
 
     /**
-     * Unlink story 
-     * 
-     * @param  int    $storyID 
+     * Unlink story
+     *
+     * @param  int    $storyID
+     * @param  int    $planID
      * @param  string $confirm  yes|no
      * @access public
      * @return void
@@ -375,9 +436,11 @@ class productplan extends control
     }
 
     /**
-     * Batch unlink story. 
-     * 
-     * @param  string $confirm 
+     * Batch unlink story.
+     *
+     * @param int    $planID
+     * @param string $orderBy
+     *
      * @access public
      * @return void
      */
@@ -389,10 +452,12 @@ class productplan extends control
 
     /**
      * Link bugs.
-     * 
-     * @param  int    $planID 
-     * @param  string $browseType 
-     * @param  int    $param 
+     *
+     * @param  int    $planID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     *
      * @access public
      * @return void
      */
@@ -467,9 +532,9 @@ class productplan extends control
     }
 
     /**
-     * Unlink story 
-     * 
-     * @param  int    $bugID 
+     * Unlink story
+     *
+     * @param  int    $bugID
      * @param  string $confirm  yes|no
      * @access public
      * @return void
@@ -504,9 +569,11 @@ class productplan extends control
     }
 
     /**
-     * Batch unlink story. 
-     * 
-     * @param  string $confirm 
+     * Batch unlink story.
+     *
+     * @param        $planID
+     * @param string $orderBy
+     *
      * @access public
      * @return void
      */

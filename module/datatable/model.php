@@ -47,11 +47,15 @@ class datatableModel extends model
      */
     public function getSetting($module)
     {
-        $datatableId = $module . ucfirst($this->app->getMethodName());
+        $method      = $this->app->getMethodName();
+        $datatableId = $module . ucfirst($method);
 
-        $module = zget($this->config->datatable->moduleAlias, $module, $module);
+        $mode = isset($this->config->datatable->$datatableId->mode) ? $this->config->datatable->$datatableId->mode : 'table';
+        $key  = $mode == 'datatable' ? 'cols' : 'tablecols';
+
+        $module = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
         if(!isset($this->config->$module)) $this->loadModel($module);
-        if(isset($this->config->datatable->$datatableId->cols)) $setting = json_decode($this->config->datatable->$datatableId->cols);
+        if(isset($this->config->datatable->$datatableId->$key)) $setting = json_decode($this->config->datatable->$datatableId->$key);
 
         $fieldList = $this->getFieldList($module);
         if(empty($setting))
@@ -69,6 +73,7 @@ class datatableModel extends model
                 $set->fixed = $fieldList[$id]['fixed'];
                 $set->title = $fieldList[$id]['title'];
                 $set->sort  = isset($fieldList[$id]['sort']) ? $fieldList[$id]['sort'] : 'yes';
+                $set->name  = isset($fieldList[$id]['name']) ? $fieldList[$id]['name'] : '';
                 $setting[$key] = $set;
             }
         }
@@ -120,7 +125,12 @@ class datatableModel extends model
         $id = $col->id;
         if($col->show)
         {
-            echo "<th data-flex='" . ($col->fixed == 'no' ? 'true': 'false') . "' data-width='{$col->width}' class='w-$id'>";
+            $fixed  = $col->fixed == 'no' ? 'true': 'false';
+            $width  = is_numeric($col->width) ? "{$col->width}px" : $col->width;
+            $sorter = (isset($col->sort) and $col->sort == 'no') ? '' : '{sorter:false}';
+            $title  = isset($col->name) ? "title='$col->name'" : '';
+
+            echo "<th data-flex='$fixed' data-width='$width' style='width:$width' class='w-$id $sorter' $title>";
             if($id == 'actions')
             {
                 echo $this->lang->actions;
@@ -148,19 +158,23 @@ class datatableModel extends model
      */
     public function setFixedFieldWidth($setting, $minLeftWidth = '550', $minRightWidth = '140')
     {
-        $widths['leftWidth']  = 0;
+        $widths['leftWidth']  = 30;
         $widths['rightWidth'] = 0;
+        $hasLeftAuto  = false;
+        $hasRightAuto = false;
         foreach($setting as $key => $value)
         {
             if($value->fixed != 'no')
             {
+                if($value->fixed == 'left' and $value->width == 'auto')  $hasLeftAuto  = true;
+                if($value->fixed == 'right' and $value->width == 'auto') $hasRightAuto = true;
                 $widthKey = $value->fixed . 'Width';
                 if(!isset($widths[$widthKey])) $widths[$widthKey] = 0;
                 $widths[$widthKey] += (int)trim($value->width, 'px');
             }
         }
-        if($widths['leftWidth'] <= 550) $widths['leftWidth']  = 550;
-        if($widths['rightWidth'] <= 0)  $widths['rightWidth'] = 140;
+        if($widths['leftWidth'] <= 550 and $hasLeftAuto) $widths['leftWidth']  = 550;
+        if($widths['rightWidth'] <= 0 and $hasRightAuto) $widths['rightWidth'] = 140;
 
         return $widths;
     }

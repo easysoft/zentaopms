@@ -1,39 +1,41 @@
 <?php
-$lang->mail->common = 'Email Settings';
-$lang->mail->index  = 'Home';
-$lang->mail->detect = 'Testing';
-$lang->mail->edit   = 'Edit Settings';
-$lang->mail->save   = 'Saved';
-$lang->mail->test   = 'Email Testing';
-$lang->mail->reset  = 'Reset';
-$lang->mail->resend = 'Resend';
-$lang->mail->browse = 'Email List';
-$lang->mail->delete = 'Delete Email';
+$lang->mail->common        = 'Email Settings';
+$lang->mail->index         = 'Home';
+$lang->mail->detect        = 'Testing';
+$lang->mail->edit          = 'Edit Settings';
+$lang->mail->save          = 'Save';
+$lang->mail->saveSuccess   = 'Saved Successfully';
+$lang->mail->test          = 'Email Sending Test';
+$lang->mail->reset         = 'Reset';
+$lang->mail->resend        = 'Resend';
+$lang->mail->browse        = 'Email List';
+$lang->mail->delete        = 'Delete Email';
 $lang->mail->ztCloud       = 'ZenTao CloudMail';
+$lang->mail->gmail         = 'GMAIL';
 $lang->mail->sendCloud     = 'Notice SendCloud';
 $lang->mail->batchDelete   = 'Batch Delete';
 $lang->mail->sendcloudUser = 'Sync Contact';
 $lang->mail->agreeLicense  = 'Yes';
 $lang->mail->disagree      = 'No';
 
-$lang->mail->turnon      = 'Turn On';
-$lang->mail->async       = 'Asynchronous';
-$lang->mail->fromAddress = 'Email Address';
+$lang->mail->turnon      = 'Turn On Mail';
+$lang->mail->async       = 'Async Sending';
+$lang->mail->fromAddress = 'Sender Email';
 $lang->mail->fromName    = 'Sender';
-$lang->mail->domain      = 'Domain';
+$lang->mail->domain      = 'Zentao Domain';
 $lang->mail->host        = 'SMTP Server';
 $lang->mail->port        = 'SMTP Port';
-$lang->mail->auth        = 'Acceptance Required';
+$lang->mail->auth        = 'Validation Required';
 $lang->mail->username    = 'SMTP Account';
 $lang->mail->password    = 'SMTP Password';
-$lang->mail->secure      = 'Secure';
-$lang->mail->debug       = 'Debug';
+$lang->mail->secure      = 'Encryption';
+$lang->mail->debug       = 'Debug Level';
 $lang->mail->charset     = 'Charset';
 $lang->mail->accessKey   = 'Access Key';
 $lang->mail->secretKey   = 'Secret Key';
 $lang->mail->license     = 'ZenTao Cloud Notice';
 
-$lang->mail->selectMTA = 'Select MTA';
+$lang->mail->selectMTA = 'Select MTA(Mail Transfer Agent)';
 $lang->mail->smtp      = 'SMTP';
 
 $lang->mail->syncedUser = 'Synchronized';
@@ -44,14 +46,14 @@ $lang->mail->remove     = 'Remove';
 $lang->mail->toList      = 'Addressee';
 $lang->mail->ccList      = 'Copy to';
 $lang->mail->subject     = 'Subject';
-$lang->mail->addedBy     = 'Sender';
-$lang->mail->addedDate   = 'Added Date';
+$lang->mail->createdBy   = 'Sender';
+$lang->mail->createdDate = 'Added Date';
 $lang->mail->sendTime    = 'Send Date';
 $lang->mail->status      = 'Status';
 $lang->mail->failReason  = 'Fail Reason';
 
-$lang->mail->statusList['send'] = 'Sent';
-$lang->mail->statusList['fail'] = 'Failed';
+$lang->mail->statusList['sended'] = 'Sent';
+$lang->mail->statusList['fail']   = 'Failed';
 
 $lang->mail->turnonList[1]  = 'On';
 $lang->mail->turnonList[0] = 'Off';
@@ -72,7 +74,7 @@ $lang->mail->secureList['tls'] = 'tls';
 
 $lang->mail->more           = 'More';
 $lang->mail->noticeResend   = 'Sent it again!';
-$lang->mail->inputFromEmail = 'Enter Email Address';
+$lang->mail->inputFromEmail = 'Enter Sender Email';
 $lang->mail->nextStep       = 'Next';
 $lang->mail->successSaved   = 'Configuration has been saved.';
 $lang->mail->testSubject    = 'Testing Email';
@@ -94,7 +96,7 @@ $lang->mail->sendCloudHelp  = <<<EOD
 EOD;
 $lang->mail->sendCloudSuccess = 'Done';
 $lang->mail->closeSendCloud   = 'Close';
-$lang->mail->addressWhiteList = 'Please add the email to the whilte list on email server to avoid be treated as spam';
+$lang->mail->addressWhiteList = 'Please add to the whilte list of email server to avoid being blocked';
 $lang->mail->ztCloudNotice    = <<<EOD
 
 
@@ -108,4 +110,4 @@ $lang->mail->ztCloudNotice    = <<<EOD
 EOD;
 
 $lang->mail->placeholder = new stdclass();
-$lang->mail->placeholder->password = 'Some mail needs to fill in the auth code, specific to the mailbox related settings query.';
+$lang->mail->placeholder->password = 'Some mail server needs auth code, refer to your mail supplier.';

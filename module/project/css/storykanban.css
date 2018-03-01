@@ -1,0 +1,63 @@
+#kanbanHeader th{border: 1px solid #ddd; padding:8px;}
+#kanbanHeader th{position: relative}
+
+#kanbanWrapper {table-layout: fixed; border-top: none}
+#kanbanWrapper > tbody > tr:first-child > td {border-top: none}
+#kanbanWrapper thead th, #kanbanWrapper thead, #kanbanWrapper thead tr {padding: 0!important; border: none!important; height: 0!important; border-bottom: none!important}
+#kanbanWrapper tbody td {vertical-align: top; padding: 6px}
+#kanbanWrapper tbody th {background: #f1f1f1}
+#kanbanWrapper .board-shadow {height: 0; opacity: 0; transition: opacity 0.2s;}
+#kanbanWrapper tbody tr.dragging td.col-droppable.drop-to {background: #ffeacc}
+#kanbanWrapper tbody tr.dragging td.col-droppable.drop-to .board-story + .board-shadow {margin-top: 6px;}
+#kanbanWrapper tbody tr.dragging td.col-droppable.drop-to .board-shadow {height: 28px; background: #999; background: rgba(0,0,0,0.35); opacity: 1;}
+#kanbanWrapper tbody tr.dragging td.col-droppable.drop-to.drag-from .board-shadow {display: none}
+#kanbanWrapper .board.drag-from.dragging {opacity: 0.8;}
+
+.board {background: #333; color: #f1f1f1; color: rgba(255,255,255,0.9); opacity: 1; padding: 3px 6px; transition: all 0.2s; position:relative;}
+.board + .board {margin-top: 6px;}
+.board:hover {opacity: 1}
+.board a {opacity: 0.9; color: inherit}
+.board a:hover {opacity: 1}
+.board-title, .board-header, .board-footer {padding: 2px 0}
+.board-title {padding-right:35px;}
+.board-actions {position: absolute; right: 3px; top: 3px}
+.board-actions .btn {color: inherit; margin: 0; min-width: 20px}
+.board-actions .btn:active, .board-actions .btn:focus, .board-actions .btn:hover {background: #999; color: inherit; background: rgba(255,255,255,.2);}
+.ie-8 .board-actions .btn {min-width: 10px}
+.board-actions > .dropdown {display: inline-block; margin-left: -5px;}
+.board .dropdown-menu {min-width: 80px;}
+.board .dropdown .caret {border-top-color: #999}
+.board .dropdown-menu > a {display: block; padding: 3px 15px; color: #333; font-size: 12px}
+.board .dropdown-menu > a:hover {background: #f1f1f1; color: #1a53ff; text-decoration: none}
+.board .dropdown-menu > a.disabled, .board .dropdown-menu > a.disabled:hover, .board .dropdown-menu > a.active {color: #aaa; background: none}
+.board .board-footer {display: none; opacity: 0.6}
+.board.show-info .board-footer {display: block; margin: 0 -6px -3px -6px; padding: 5px; background: rgba(0,0,0,0.07);}
+.board-footer .board-id {display: inline-block; border: 1px solid #aaa; font-weight: normal; padding: 0px 4px; text-align: center; min-width: 20px; line-height: 16px; height: 17px; margin-right: 10px; font-size: 12px;}
+.board-footer .story-pri {margin-right: 10px;}
+
+.pri-0:before, .pri-3:before {content: "3";}
+.pri-1:before {content: "1";}
+.pri-2:before {content: "2";}
+.pri-4:before {content: "4";}
+.pri-5:before {content: "5";}
+.pri-6:before {content: "6";}
+
+.story-pri {display: inline-block; width: 16px; height: 16px; text-align: center; border-radius: 8px; line-height: 16px; font-size: 12px}
+.story-pri.pri-0 {background-color: #b56a00;}
+.story-pri.pri-1 {background-color: #E30413;}
+.story-pri.pri-2 {background-color: #E84E0E;}
+.story-pri.pri-3 {background-color: #b56a00;}
+.story-pri.pri-4 {background-color: #795523;}
+
+.board-story {color: #dd7503; background-color: #FFF3E0;}
+.board-story.board-story-projected  {color: #777;}
+.board-story.board-story-developing {color: #D2322D; background-color: #FFEBEE;}
+.board-story.board-story-developed  {color: #229F24; background-color: #E8F5E9;}
+.board-story.board-story-testing    {color: #EF6C00; background-color: #FFF3E0;}
+.board-story.board-story-tested     {color: #827717; background-color: #F9FBE7}
+.board-story.board-story-released   {color: #9C27B0; background-color: #F3E5F5}
+
+.affix {position:fixed; top:0px; width:95%;z-index:1030;}
+#kanbanHeader.affix {box-shadow: 0 3px 10px rgba(0,0,0,.1);}
+#kanbanHeader.affix th {border-bottom: 1px solid #bbb; background: #114f8e; color: #ccc; color: rgba(255,255,255,.8)}
+#kanbanHeader.affix th {border-color: rgba(255,255,255,.2)}

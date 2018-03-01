@@ -79,9 +79,10 @@ tfoot tr td .table-actions .btn{display:none;}
       <div class='tabs'>
       <?php $countStories = count($stories); $countBugs = count($bugs); $countNewBugs = count($generatedBugs);?>
         <ul class='nav nav-tabs'>
-          <li <?php if($type == 'story')  echo "class='active'"?>><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story'], 'green') . ' ' . $lang->build->stories;?></a></li>
-          <li <?php if($type == 'bug')    echo "class='active'"?>><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'green') . ' ' . $lang->build->bugs;?></a></li>
-          <li <?php if($type == 'newbug') echo "class='active'"?>><a href='#newBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'red') . ' ' . $lang->build->generatedBugs;?></a></li>
+          <li <?php if($type == 'story')     echo "class='active'"?>><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story'], 'green') . ' ' . $lang->build->stories;?></a></li>
+          <li <?php if($type == 'bug')       echo "class='active'"?>><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'green') . ' ' . $lang->build->bugs;?></a></li>
+          <li <?php if($type == 'newbug')    echo "class='active'"?>><a href='#newBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'red') . ' ' . $lang->build->generatedBugs;?></a></li>
+          <li <?php if($type == 'buildInfo') echo "class='active'"?>><a href='#buildInfo' data-toggle='tab'><?php echo html::icon($lang->icons['plan'], 'blue') . ' ' . $lang->build->view;?></a></li>
         </ul>
         <div class='tab-content'>
           <div class='tab-pane <?php if($type == 'story') echo 'active'?>' id='stories'>
@@ -91,16 +92,17 @@ tfoot tr td .table-actions .btn{display:none;}
             <?php endif;?>
             <form method='post' target='hiddenwin' action='<?php echo inlink('batchUnlinkStory', "buildID={$build->id}")?>' id='linkedStoriesForm'>
             <table class='table table-hover table-condensed table-striped tablesorter table-fixed table-selectable' id='storyList'>
+              <?php $vars = "buildID={$build->id}&type=story&link=$link&param=$param&orderBy=%s";?>
               <thead>
                 <tr>
-                  <th class='w-id'><?php echo $lang->idAB;?></th>
-                  <th class='w-pri'><?php echo $lang->priAB;?></th>
-                  <th><?php echo $lang->story->title;?></th>
-                  <th class='w-user'><?php echo $lang->openedByAB;?></th>
-                  <th class='w-hour'><?php echo $lang->story->estimateAB;?></th>
-                  <th class='w-hour'><?php echo $lang->statusAB;?></th>
-                  <th class='w-100px'><?php echo $lang->story->stageAB;?></th>
-                  <th class='w-50px'><?php echo $lang->actions;?></th>
+                  <th class='w-id {sorter:false}'>     <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
+                  <th class='w-pri {sorter:false}'>    <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+                  <th class='text-left {sorter:false}'><?php common::printOrderLink('title',    $orderBy, $vars, $lang->story->title);?></th>
+                  <th class='w-user {sorter:false}'>   <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+                  <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
+                  <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
+                  <th class='w-100px {sorter:false}'>  <?php common::printOrderLink('stage',    $orderBy, $vars, $lang->story->stageAB);?></th>
+                  <th class='w-60px {sorter:false}'>   <?php echo $lang->actions?></th>
                 </tr>
               </thead>
               <?php $canBatchUnlink = common::hasPriv('build', 'batchUnlinkStory');?>
@@ -150,16 +152,17 @@ tfoot tr td .table-actions .btn{display:none;}
             <?php endif;?>
             <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "build=$build->id");?>" id='linkedBugsForm'>
             <table class='table table-hover table-condensed table-striped tablesorter table-fixed table-selectable' id='bugList'>
+              <?php $vars = "buildID={$build->id}&type=bug&link=$link&param=$param&orderBy=%s";?>
               <thead>
                 <tr>
-                  <th class='w-id'><?php echo $lang->idAB;?></th>
-                  <th><?php echo $lang->bug->title;?></th>
-                  <th class='w-100px'><?php echo $lang->bug->status;?></th>
-                  <th class='w-user'><?php echo $lang->openedByAB;?></th>
-                  <th class='w-date'><?php echo $lang->bug->openedDateAB;?></th>
-                  <th class='w-user'><?php echo $lang->bug->resolvedByAB;?></th>
-                  <th class='w-100px'><?php echo $lang->bug->resolvedDateAB;?></th>
-                  <th class='w-50px'><?php echo $lang->actions;?></th>
+                  <th class='w-id {sorter:false}'>     <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
+                  <th class='text-left {sorter:false}'><?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
+                  <th class='w-100px {sorter:false}'>  <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
+                  <th class='w-user {sorter:false}'>   <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
+                  <th class='w-date {sorter:false}'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
+                  <th class='w-user {sorter:false}'>   <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+                  <th class='w-100px {sorter:false}'>  <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
+                  <th class='w-60px {sorter:false}'>   <?php echo $lang->actions?></th>
                 </tr>
               </thead>
               <?php $canBatchUnlink = common::hasPriv('build', 'batchUnlinkBug');?>
@@ -203,16 +206,17 @@ tfoot tr td .table-actions .btn{display:none;}
           </div>
           <div class='tab-pane <?php if($type == 'newbug') echo 'active'?>' id='newBugs'>
             <table class='table table-hover table-condensed table-striped tablesorter table-fixed'>
+              <?php $vars = "buildID={$build->id}&type=newbug&link=$link&param=$param&orderBy=%s";?>
               <thead>
                 <tr>
-                  <th class='w-id'><?php echo $lang->idAB;?></th>
-                  <th class='w-severity'><?php echo $lang->bug->severityAB;?></th>
-                  <th><?php echo $lang->bug->title;?></th>
-                  <th class='w-100px'><?php echo $lang->bug->status;?></th>
-                  <th class='w-user'><?php echo $lang->openedByAB;?></th>
-                  <th class='w-date'><?php echo $lang->bug->openedDateAB;?></th>
-                  <th class='w-user'><?php echo $lang->bug->resolvedByAB;?></th>
-                  <th class='w-100px'><?php echo $lang->bug->resolvedDateAB;?></th>
+                  <th class='w-id {sorter:false}'>      <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
+                  <th class='w-severity {sorter:false}'><?php common::printOrderLink('severity',     $orderBy, $vars, $lang->bug->severityAB);?></th>
+                  <th class='text-left {sorter:false}'> <?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
+                  <th class='w-100px {sorter:false}'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
+                  <th class='w-user {sorter:false}'>    <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
+                  <th class='w-date {sorter:false}'>    <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
+                  <th class='w-user {sorter:false}'>    <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+                  <th class='w-100px {sorter:false}'>   <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
                 </tr>
               </thead>
               <?php foreach($generatedBugs as $bug):?>
@@ -239,57 +243,59 @@ tfoot tr td .table-actions .btn{display:none;}
               </tfoot>
             </table>
           </div>
+          <div class='tab-pane <?php if($type == 'buildInfo') echo 'active'?>' id='buildInfo'>
+            <div class="row-table">
+              <div class='col-main'>
+                <fieldset>
+                  <legend><?php echo $lang->build->basicInfo?></legend>
+                  <table class='table table-data table-condensed table-borderless table-fixed'>
+                    <tr>
+                      <th class='w-80px'><?php echo $lang->build->product;?></th>
+                      <td><?php echo $build->productName;?></td>
+                    </tr>
+                    <?php if($build->productType != 'normal'):?>
+                    <tr>
+                      <th><?php echo $lang->product->branch;?></th>
+                      <td><?php echo $branchName;?></td>
+                    </tr>
+                    <?php endif;?>
+                    <tr>
+                      <th><?php echo $lang->build->name;?></th>
+                      <td><?php echo $build->name;?></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->build->builder;?></th>
+                      <td><?php echo $users[$build->builder];?></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->build->date;?></th>
+                      <td><?php echo $build->date;?></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->build->scmPath;?></th>
+                      <td style='word-break:break-all;'><?php echo html::a($build->scmPath, $build->scmPath, '_blank')?></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->build->filePath;?></th>
+                      <td style='word-break:break-all;'><?php echo html::a($build->filePath, $build->filePath, '_blank');?></td>
+                    </tr>
+                    <?php if($this->config->global->flow != 'onlyTest'):?>
+                    <tr>
+                      <th><?php echo $lang->build->desc;?></th>
+                      <td><div class='article-content'><?php echo $build->desc;?></div></td>
+                    </tr>
+                    <?php endif;?>
+                  </table>
+                </fieldset>
+                <?php if($this->config->global->flow != 'onlyTest'):?>
+                <?php echo $this->fetch('file', 'printFiles', array('files' => $build->files, 'fieldset' => 'true'));?>
+                <?php endif;?>
+              </div>
+              <div class="col-side"><?php include '../../common/view/action.html.php';?></div>
+            </div>
+          </div>
         </div>
       </div>
-      <?php endif;?>
-    </div>
-  </div>
-  <div class='col-side'>
-    <div class='main-side main'>
-      <?php if($this->config->global->flow != 'onlyTest'):?>
-      <fieldset>
-        <legend><?php echo $lang->build->desc;?></legend>
-        <div class='article-content'><?php echo $build->desc;?></div>
-      </fieldset>
-      <?php endif;?>
-      <fieldset>
-        <legend><?php echo $lang->build->basicInfo?></legend>
-        <table class='table table-data table-condensed table-borderless table-fixed'>
-          <tr>
-            <th class='w-80px'><?php echo $lang->build->product;?></th>
-            <td><?php echo $build->productName;?></td>
-          </tr>  
-          <?php if($build->productType != 'normal'):?>
-          <tr>
-            <th><?php echo $lang->product->branch;?></th>
-            <td><?php echo $branchName;?></td>
-          </tr>
-          <?php endif;?>
-          <tr>
-            <th><?php echo $lang->build->name;?></th>
-            <td><?php echo $build->name;?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->build->builder;?></th>
-            <td><?php echo $users[$build->builder];?></td>
-          </tr>  
-          <tr>
-            <th><?php echo $lang->build->date;?></th>
-            <td><?php echo $build->date;?></td>
-          </tr>  
-          <tr>
-            <th><?php echo $lang->build->scmPath;?></th>
-            <td style='word-break:break-all;'><?php echo html::a($build->scmPath, $build->scmPath, '_blank')?></td>
-          </tr>  
-          <tr>
-            <th><?php echo $lang->build->filePath;?></th>
-            <td style='word-break:break-all;'><?php echo html::a($build->filePath, $build->filePath, '_blank');?></td>
-          </tr>
-        </table>
-      </fieldset>
-      <?php if($this->config->global->flow != 'onlyTest'):?>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $build->files, 'fieldset' => 'true'));?>
-      <?php include '../../common/view/action.html.php';?>
       <?php endif;?>
     </div>
   </div>

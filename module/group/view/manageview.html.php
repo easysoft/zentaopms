@@ -21,11 +21,12 @@
 <form class='form-condensed' method='post' target='hiddenwin'>
   <table class='table table-form'> 
     <tr>
-      <th class='w-150px'>
+      <th class='w-180px'>
         <?php echo $lang->group->viewList;?>
       </th>
       <td class='w-p60'>
         <?php foreach($lang->menu as $menu):?>
+        <?php if(!is_string($menu)) continue;?>
         <?php list($moduleName, $module) = explode('|', $menu);?>
         <?php if($module == 'my') continue;?>
         <?php $moduleName = strip_tags($moduleName);?>

@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->story->create      = "提需求";
-$lang->story->batchCreate = "批量添加";
+$lang->story->batchCreate = "批量提需求";
 $lang->story->change      = "變更";
 $lang->story->changed     = '需求變更';
 $lang->story->review      = '評審';
@@ -90,7 +90,7 @@ $lang->story->keywords       = '關鍵詞';
 $lang->story->newStory       = '繼續添加需求';
 $lang->story->colorTag       = '顏色標籤';
 $lang->story->files          = '附件';
-$lang->story->copy           = "復制需求";
+$lang->story->copy           = "複製需求";
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = '該需求與上一需求不屬於同一產品！';
@@ -114,6 +114,7 @@ $lang->story->stageList['testing']    = '測試中';
 $lang->story->stageList['tested']     = '測試完畢';
 $lang->story->stageList['verified']   = '已驗收';
 $lang->story->stageList['released']   = '已發佈';
+$lang->story->stageList['closed']     = '已關閉';
 
 $lang->story->reasonList['']           = '';
 $lang->story->reasonList['done']       = '已完成';

@@ -24,7 +24,7 @@
     </div>
     <?php $idx++; ?>
     <?php endforeach; ?>
-    <?php if($detailed):?>
+    <?php if($detailed and $this->app->getClientLang() != 'en'):?>
     <div> <a href='###' onclick="$('.detailed').toggle()"><?php echo $lang->misc->feature->detailed;?></a></div>
     <div class='detailed hide'><?php echo $detailed;?></div>
     <?php endif;?>

@@ -17,7 +17,7 @@
 <table class='table table-fixed' id='treetable'>
   <thead>
     <tr>
-      <th class='w-50px'></th>
+      <th class='w-<?php echo $groupBy == 'story' ? '50' : '100';?>px'></th>
       <th><?php echo $lang->testcase->title;?></th>
       <th class='w-pri'>  <?php echo $lang->priAB;?></th>
       <th class='w-80px'> <?php echo $lang->typeAB;?></th>
@@ -34,13 +34,13 @@
   </thead>
   <?php $i = 0;?>
   <?php foreach($cases as $groupKey => $groupCases):?>
-  <?php $groupClass = ($i % 2 == 0) ? 'even' : 'highlight-warning'; $i ++;?>
+  <?php $groupClass = ($i % 2 == 0) ? 'even' : 'highlight-warning'; $i++;?>
   <tr id='node-<?php echo $groupKey;?>' class='actie-disabled group-title'>
-    <td class='text-right <?php echo $groupClass;?> text-left large strong group-name'><?php echo $groupKey;?></td>
+    <td class='text-right <?php echo $groupClass;?> large strong group-name'><?php echo $groupKey;?></td>
     <td colspan='12' class='text-left'><?php if($groupByList) echo $groupByList[$groupKey];?></td>
   </tr>
   <?php foreach($groupCases as $run):?>
-  <tr id='<?php echo $run->id;?>' class='a-center child-of-node-<?php echo $groupKey;?>'>
+  <tr id='<?php echo $run->id;?>' class='text-center child-of-node-<?php echo $groupKey;?>'>
     <td class='<?php echo $groupClass;?>'></td>
     <td class='text-left'>&nbsp;<?php echo $run->case . $lang->colon; if(!common::printLink('testcase', 'view', "case=$run->case", $run->title)) echo $run->title;?></td>
     <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $run->pri, $run->pri)?>'><?php echo zget($lang->testcase->priList, $run->pri, $run->pri);?></span></td>

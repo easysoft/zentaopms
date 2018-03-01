@@ -33,8 +33,12 @@ function loadList(type, id)
     {
         link = createLink('task', 'ajaxGetUserTasks', param);
     }
+    else if(type == 'story')
+    {
+        link = createLink('story', 'ajaxGetUserStorys', param);
+    }
 
-    if(type == 'bug' || type == 'task')
+    if(type == 'bug' || type == 'task' || type == 'story')
     {
         $.get(link, function(data, status)
         {
@@ -58,6 +62,7 @@ function loadList(type, id)
 function selectNext()
 {
     $("#end ")[0].selectedIndex = $("#begin ")[0].selectedIndex + 3;
+    $('#end').trigger('chosen:updated');
 }
 
 function setBeginsAndEnds(i, beginOrEnd)
@@ -68,6 +73,7 @@ function setBeginsAndEnds(i, beginOrEnd)
         {
             if(j != 0) $("#begins" + j)[0].selectedIndex = $("#ends" + (j - 1))[0].selectedIndex;
             $("#ends" + j)[0].selectedIndex = $("#begins" + j)[0].selectedIndex + 3;
+            $("#ends" + j).trigger('chosen:updated');
         }
     }
     else
@@ -75,11 +81,14 @@ function setBeginsAndEnds(i, beginOrEnd)
         if(beginOrEnd == 'begin')
         {
             $("#ends" + i)[0].selectedIndex = $("#begins" + i)[0].selectedIndex + 3;
+            $("#ends" + j).trigger('chosen:updated');
         }
         for(j = i+1; j < batchCreateNum; j++)
         {
             $("#begins" + j)[0].selectedIndex = $("#ends" + (j - 1))[0].selectedIndex;
             $("#ends" + j)[0].selectedIndex = $("#begins" + j)[0].selectedIndex + 3;
+            $("#begins" + j).trigger('chosen:updated');
+            $("#ends" + j).trigger('chosen:updated');
         }
     }
 }
@@ -88,12 +97,12 @@ function switchDateFeature(switcher)
 {
     if(switcher.checked) 
     {
-        $('#begin').attr('disabled','disabled');
-        $('#end').attr('disabled','disabled');
+        $('#begin').attr('disabled','disabled').trigger('chosen:updated');
+        $('#end').attr('disabled','disabled').trigger('chosen:updated');
     }
     else
     {
-        $('#begin').removeAttr('disabled');
-        $('#end').removeAttr('disabled');
+        $('#begin').removeAttr('disabled').trigger('chosen:updated');
+        $('#end').removeAttr('disabled').trigger('chosen:updated');
     }
 }

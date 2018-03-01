@@ -68,16 +68,16 @@ $lang->user->asGuest         = "遊客訪問";
 $lang->user->goback          = "返回前一頁";
 $lang->user->deleted         = '(已刪除)';
 
-$lang->user->profile      = '檔案';
-$lang->user->project      = $lang->projectCommon;
-$lang->user->task         = '任務';
-$lang->user->bug          = '缺陷';
-$lang->user->test         = '測試';
-$lang->user->testTask     = '測試任務';
-$lang->user->testCase     = '測試用例';
-$lang->user->todo         = '待辦';
-$lang->user->story        = '需求';
-$lang->user->dynamic      = '動態';
+$lang->user->profile     = '檔案';
+$lang->user->project     = $lang->projectCommon;
+$lang->user->task        = '任務';
+$lang->user->bug         = '缺陷';
+$lang->user->test        = '測試';
+$lang->user->testTask    = '測試任務';
+$lang->user->testCase    = '測試用例';
+$lang->user->todo        = '待辦';
+$lang->user->story       = '需求';
+$lang->user->dynamic     = '動態';
 
 $lang->user->openedBy    = '由他創建';
 $lang->user->assignedTo  = '指派給他';
@@ -128,12 +128,12 @@ $lang->user->tpl->content = '內容';
 $lang->user->tpl->public  = '是否公開';
 
 $lang->user->placeholder = new stdclass();
-$lang->user->placeholder->account   = '英文、數字和下劃線的組合，三位以上';
-$lang->user->placeholder->password1 = '六位以上';
-$lang->user->placeholder->role      = '職位影響內容和用戶列表的順序。';
-$lang->user->placeholder->group     = '分組決定用戶的權限列表。';
-$lang->user->placeholder->commiter  = '版本控制系統(subversion)中的帳號';
-$lang->user->placeholder->verify    = '需要輸入你的密碼加以驗證';
+$lang->user->placeholder->account     = '英文、數字和下劃線的組合，三位以上';
+$lang->user->placeholder->password1   = '六位以上';
+$lang->user->placeholder->role        = '職位影響內容和用戶列表的順序。';
+$lang->user->placeholder->group       = '分組決定用戶的權限列表。';
+$lang->user->placeholder->commiter    = '版本控制系統(subversion)中的帳號';
+$lang->user->placeholder->verify      = '需要輸入你的密碼加以驗證';
 
 $lang->user->placeholder->passwordStrength[1] = '6位以上，包含大小寫字母，數字。';
 $lang->user->placeholder->passwordStrength[2] = '10位以上，包含大小寫字母，數字，特殊字元。';
@@ -145,6 +145,7 @@ $lang->user->error->realname      = "ID %s，必須填寫真實姓名";
 $lang->user->error->password      = "ID %s，密碼必須六位以上";
 $lang->user->error->mail          = "ID %s，請填寫正確的郵箱地址";
 $lang->user->error->role          = "ID %s，職位不能為空";
+$lang->user->error->reserved      = "ID %s，該用戶名系統預留";
 
 $lang->user->error->verifyPassword   = "安全驗證密碼錯誤，請輸入你的登錄密碼";
 $lang->user->error->originalPassword = "原密碼不正確";

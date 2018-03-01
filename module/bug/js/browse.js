@@ -1,6 +1,7 @@
 $(document).ready(function()
 {
     if(browseType == 'bysearch') ajaxGetSearchForm();
+    if($('#bugList thead th.w-title').width() < 150) $('#bugList thead th.w-title').width(150);
 
     $('.dropdown-menu .with-search .menu-search').click(function(e)
     {

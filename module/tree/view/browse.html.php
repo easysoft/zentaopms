@@ -11,9 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and $root->type != 'normal') ? true : false;?>
+<?php js::set('viewType', $viewType);?>
+<?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and (!empty($root->type) && $root->type != 'normal')) ? true : false;?>
+<?php $name = $viewType == 'line' ? $lang->tree->line : ($viewType == 'doc' ? $lang->tree->cate : $lang->tree->name);?>
 <div id='featurebar'>
-  <div class='heading'><?php echo $lang->tree->common;?></div>
+  <div class='heading'><?php echo $viewType == 'line' ? $lang->tree->manageLine : $lang->tree->common;?></div>
 </div>
 <div class='row'>
   <div class='col-sm-4'>
@@ -21,13 +23,13 @@
       <div class='panel-heading'><i class='icon-cog'></i> <strong><?php echo $title;?></strong></div>
       <div class='panel-body'>
         <div class='container'>
-          <ul class='tree-lines' id='modulesTree'></ul>
+          <ul class='tree-lines' id='modulesTree' data-name='tree-<?php echo $viewType?>'></ul>
         </div>
       </div>
     </div>
   </div>
   <div class='col-sm-8'>
-    <form id='childrenForm' class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "root={$root->id}&viewType=$viewType");?>'>
+    <form id='childrenForm' class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "root=$rootID&viewType=$viewType");?>'>
       <div class='panel'>
         <div class='panel-heading'>
           <i class='icon-sitemap'></i>
@@ -40,19 +42,21 @@
         <div class='panel-body'>
           <table class='table table-form'>
             <tr>
+              <?php if($viewType != 'line'):?>
               <td class='parentModule'>
                 <nobr>
                 <?php
-                echo html::a($this->createLink('tree', 'browse', "root={$root->id}&viewType=$viewType"), $root->name);
+                echo html::a($this->createLink('tree', 'browse', "root=$rootID&viewType=$viewType"), empty($root->name) ? '' : $root->name);
                 echo $lang->arrow;
                 foreach($parentModules as $module)
                 {
-                    echo html::a($this->createLink('tree', 'browse', "root={$root->id}&viewType=$viewType&moduleID=$module->id"), $module->name);
+                    echo html::a($this->createLink('tree', 'browse', "root=$rootID&viewType=$viewType&moduleID=$module->id"), $module->name);
                     echo $lang->arrow;
                 }
                 ?>
                 </nobr>
               </td>
+              <?php endif;?>
               <td id='moduleBox'>
                 <?php
                 if($viewType == 'story' and $allProduct)
@@ -80,7 +84,7 @@
                 for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++)
                 {
                     echo "<div class='row-table addedItem' style='margin-bottom:5px'>";
-                    echo "<div class='col-table'>" . html::input("modules[]", '', "class='form-control' placeholder='{$lang->tree->name}' autocomplete='off'") . '</div>';
+                    echo "<div class='col-table'>" . html::input("modules[]", '', "class='form-control' placeholder='{$name}' autocomplete='off'") . '</div>';
                     if($hasBranch) echo '<div class="col-table">' . html::select("branch[]", $branches, $branch, 'class="form-control"') . '</div>';
                     echo "<div class='col-table' style='width:120px'><div class='input-group'>" . html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}' autocomplete='off'");
                     echo "<span class='input-group-btn'><a href='javascript:;' onclick='addItem(this)' class='btn btn-block'><i class='icon icon-plus'></i></a></span>";
@@ -91,7 +95,7 @@
 
                 echo "<div id='insertItemBox' class='hidden'>";
                 echo "<div class='row-table' style='margin-bottom:5px'>";
-                echo "<div class='col-table'>" . html::input("modules[]", '', "class='form-control' placeholder='{$lang->tree->name}' autocomplete='off'") . '</div>';
+                echo "<div class='col-table'>" . html::input("modules[]", '', "class='form-control' placeholder='{$name}' autocomplete='off'") . '</div>';
                 if($hasBranch) echo '<div class="col-table">' . html::select("branch[]", $branches, $branch, 'class="form-control" disabled') . '</div>';
                 echo "<div class='col-table' style='width:120px'><div class='input-group'>" . html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}' autocomplete='off'") . html::hidden("order[]");
                 echo "<span class='input-group-btn' style='border-left:1px solid'><a href='javascript:;' onclick='deleteItem(this)' class='btn btn-block'><i class='icon icon-remove'></i></a></span>";
@@ -103,11 +107,13 @@
               </td>
             </tr>
             <tr>
+              <?php if($viewType != 'line'):?>
               <td></td>
+              <?php endif;?>
               <td colspan='2'>
                 <?php 
                 echo html::submitButton();
-                echo $this->session->{$viewType .'List'} ? html::linkButton($this->lang->goback, $this->session->{$viewType .'List'}) : html::backButton();
+                echo $this->session->{$viewType . 'List'} ? html::linkButton($this->lang->goback, $this->session->{$viewType .'List'}) : html::backButton();
                 echo html::hidden('parentModuleID', $currentModuleID);
                 echo html::hidden('maxOrder', $maxOrder);
                 ?>      
@@ -132,7 +138,6 @@ $(function()
 {
     var data = $.parseJSON('<?php echo helper::jsonEncode4Parse($tree);?>');
     var options = {
-        name: 'tree-<?php echo $viewType ?>-edit',
         initialState: 'preserve',
         data: data,
         sortable: {
@@ -145,7 +150,7 @@ $(function()
         },
         itemCreator: function($li, item)
         {
-            var link = item.id !== undefined ? ('<a href="' + createLink('tree', 'browse', 'rootID=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}&branch={1}'.format(item.id, item.branch)) + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
+            var link = (item.id !== undefined && item.type != 'line') ? ('<a href="' + createLink('tree', 'browse', 'rootID=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}&branch={1}'.format(item.id, item.branch)) + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
             if(item.type === 'bug') $toggle.append('&nbsp; <span class="text-muted">[B]</span>');
             if(item.type === 'case') $toggle.append('&nbsp; <span class="text-muted">[C]</span>');
@@ -175,8 +180,8 @@ $(function()
             subModules:
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'browse', "rootID=$rootID&viewType=$viewType&moduleID={0}&branch={1}"); ?>',
-                title: '<?php echo $lang->tree->child ?>',
-                template: '<a href="javascript:;"><?php echo $lang->tree->child?></a>'
+                title: '<?php echo $viewType == 'line' ? '': $lang->tree->child ?>',
+                template: '<a href="javascript:;"><?php echo $viewType == 'line' ? '': (strpos($viewType, 'doc') !== false ? $lang->doc->childType : $lang->tree->child)?></a>'
             }
         },
         action: function(event)
@@ -204,7 +209,7 @@ $(function()
                     var item = $li.data();
                     orders['orders[' + item.id + ']'] = $li.attr('data-order') || item.order;
                 });
-                $.post('<?php echo $this->createLink('tree', 'updateOrder', "root={$root->id}&viewType=$viewType");?>', orders).error(function()
+                $.post('<?php echo $this->createLink('tree', 'updateOrder', "rootID=$rootID&viewType=$viewType");?>', orders).error(function()
                 {
                     bootbox.alert(lang.timeout);
                 });
@@ -238,6 +243,9 @@ $(function()
     });
 
     $tree.find('[data-toggle="tooltip"]').tooltip();
+
+    $('#modulemenu > .nav > li > a[href*=tree][href*=browse]').not('[href*=<?php echo $viewType;?>]').parent().removeClass('active');
+    if(viewType == 'line') $('#modulemenu > .nav > li > a[href*=product][href*=all]').parent('li[data-id=all]').addClass('active');
 });
 </script>
 <?php 

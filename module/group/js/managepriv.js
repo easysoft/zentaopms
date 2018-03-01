@@ -21,7 +21,7 @@ function setNoChecked()
 {
     var noCheckValue = '';
     $(':checkbox').each(function(){
-        if(!$(this).attr('checked') && $(this).next('span').attr('id') != undefined) noCheckValue = noCheckValue + ',' + $(this).next('span').attr('id');
+        if(!$(this).prop('checked') && $(this).next('span').attr('id') != undefined) noCheckValue = noCheckValue + ',' + $(this).next('span').attr('id');
     })
     $('#noChecked').val(noCheckValue);
 }

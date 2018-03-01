@@ -9,17 +9,19 @@
 <script>
 $(function()
 {
-    var table = $('#wrap > .outer > .main > form > table').first();
-    if($(table).length > 0)
+    var $table = $('#wrap > .outer > .main > form > table').first();
+    if($table.length > 0)
     {
         var $dropdown = $("<div class='datatable-menu-wrapper'><div class='dropdown datatable-menu'><button type='button' class='btn btn-link' data-toggle='dropdown'><i class='icon-cogs'></i> <span class='caret'></span></button></div></div>");
         var $dropmenu = $("<ul class='dropdown-menu pull-right'></ul>");
+        $dropmenu.append("<li><a id='tableCustomBtn' href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
         $dropmenu.append("<li><a href='javascript:;' id='switchToDatatable'><?php echo $lang->datatable->switchToDatatable?></a></li>");
         $dropdown.children('.dropdown').append($dropmenu);
-        $(table).before($dropdown);
+        $table.before($dropdown);
         <?php if(!empty($setShowModule)):?>
         $('.side .side-body .panel-body .tree').parent().append("<div class='text-right'><a href='javascript:;' data-toggle='showModuleModal'><?php echo $lang->datatable->showModule?></a></div>");
         <?php endif;?>
+        $('#tableCustomBtn').modalTrigger();
         $("a[data-toggle='showModuleModal']").click(function(){$('#showModuleModal').modal('show')});
     }
 
@@ -33,20 +35,23 @@ $(function()
         saveDatatableConfig('showModule', $('#showModuleModal input[name="showModule"]:checked').val(), true)
     });
 
-    function saveDatatableConfig(name, value, reload)
+    function saveDatatableConfig(name, value, reload, global)
     {
         if('<?php echo $this->app->user->account?>' == 'guest') return;
         datatableId = '<?php echo $datatableId?>';
         if(typeof value === 'object') value = JSON.stringify(value);
+        if(typeof global === 'undefined') global = 0;
         $.ajax(
         {
             type: "POST",
             dataType: 'json',
-            data: {target: datatableId, name: name, value: value},
+            data: {target: datatableId, name: name, value: value, global: global},
             success:function(){if(reload) window.location.reload();},
             url: '<?php echo $this->createLink('datatable', 'ajaxSave')?>'
         });
+        $.get(createLink('score', 'ajax', "method=switchToDataTable"));
     };
+    window.saveDatatableConfig = saveDatatableConfig;
 });
 </script>
 <div class="modal fade" id="showModuleModal" tabindex="-1" role="dialog" aria-hidden="true">

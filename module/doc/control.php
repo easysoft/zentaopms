@@ -194,12 +194,19 @@ class doc extends control
                 echo js::error(dao::getError());
             }
         }
-        $this->view->groups   = $this->loadModel('group')->getPairs();
-        $this->view->users    = $this->user->getPairs('nocode');
-        $this->view->products = $this->product->getPairs('nocode');
-        $this->view->projects = $this->project->getPairs('nocode');
-        $this->view->type     = $type;
-        $this->view->objectID = $objectID;
+        $libTypeList = $this->lang->doc->libTypeList;
+        $products    = $this->product->getPairs('nocode');
+        $projects    = $this->project->getPairs('nocode');
+        if(empty($products)) unset($libTypeList['product']);
+        if(empty($projects)) unset($libTypeList['project']);
+
+        $this->view->groups      = $this->loadModel('group')->getPairs();
+        $this->view->users       = $this->user->getPairs('nocode');
+        $this->view->products    = $products;
+        $this->view->projects    = $projects;
+        $this->view->type        = $type;
+        $this->view->libTypeList = $libTypeList;
+        $this->view->objectID    = $objectID;
         die($this->display());
     }
 
@@ -594,12 +601,15 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function showFiles($type, $objectID, $viewType='card', $orderBy='t1.id_desc', $recTotal=0, $recPerPage=20, $pageID=1)
+    public function showFiles($type, $objectID, $viewType = '', $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $uri = $this->app->getURI(true);
         $this->app->session->set('taskList',  $uri);
         $this->app->session->set('storyList', $uri);
         $this->app->session->set('docList',   $uri);
+
+        if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'card';
+        setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot);
 
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $object = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
@@ -651,6 +661,7 @@ class doc extends control
         $this->view->type       = $type;
         $this->view->object     = $object;
         $this->view->files      = $this->doc->getLibFiles($type, $objectID, $orderBy, $pager);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
         $this->view->viewType   = $viewType;
         $this->view->orderBy    = $orderBy;
@@ -691,6 +702,7 @@ class doc extends control
 
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $object = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
+        if(empty($object)) $this->locate($this->createLink($type, 'create'));
         if($from == 'product')
         {
             $this->lang->doc->menu      = $this->lang->product->menu;

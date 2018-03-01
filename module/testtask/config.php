@@ -15,4 +15,4 @@ $config->testtask->editor->block   = array('id' => 'comment', 'tools' => 'simple
 $config->testtask->editor->activate= array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->testtask->datatable = new stdclass();
-$config->testtask->datatable->defaultField = array('id', 'pri', 'title', 'type', 'assignedTo', 'lastRunner', 'lastRunDate', 'lastRunResult', 'status', 'bugs', 'results', 'actions');
+$config->testtask->datatable->defaultField = array('id', 'pri', 'title', 'type', 'assignedTo', 'lastRunner', 'lastRunDate', 'lastRunResult', 'status', 'bugs', 'results', 'stepNumber','actions');

@@ -37,7 +37,7 @@
         </td>
         <td style='padding-left:15px;'>
           <div class='input-group' id='moduleIdBox'>
-          <span class="input-group-addon"><?php echo $lang->testcase->module?></span>
+          <span class="input-group-addon w-80px"><?php echo $lang->testcase->module?></span>
           <?php
           echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated();' class='form-control chosen'");
           if(count($moduleOptionMenu) == 1)
@@ -57,7 +57,7 @@
         <?php if(strpos(",$showFields,", 'stage') !== false):?>
         <td style='padding-left:15px'>
           <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->testcase->stage?></span>
+            <span class='input-group-addon w-80px'><?php echo $lang->testcase->stage?></span>
             <?php echo html::select('stage[]', $lang->testcase->stageList, $stage, "class='form-control chosen' multiple='multiple'");?>
           </div>
         </td>
@@ -101,7 +101,7 @@
                 $hasCustomPri = false;
                 foreach($lang->testcase->priList as $priKey => $priValue)
                 {
-                    if($priKey != $priValue)
+                    if($priKey != $priValue or strlen($priKey) != strlen($priValue))
                     {
                         $hasCustomPri = true;
                         break;
@@ -109,7 +109,7 @@
                 }
                 ?>
                 <?php if($hasCustomPri):?>
-                <?php echo html::select('pri', (array)$lang->testcase->priList, $pri, "class='form-control minw-80px'");?> 
+                <?php echo html::select('pri', (array)$lang->testcase->priList, $pri, "class='form-control minw-80px chosen'");?> 
                 <?php else: ?>
                 <div class='input-group-btn dropdown-pris'>
                   <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>

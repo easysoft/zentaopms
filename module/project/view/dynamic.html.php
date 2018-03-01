@@ -24,18 +24,22 @@
     echo '<li id="all">'        . html::a(inlink('dynamic', "projectID=$projectID&type=all"),        $lang->action->dynamic->all)        . '</li>';
     // echo "<li id='account'>"    . html::select('account', $users, $account, "onchange=changeUser(this.value,$projectID)") . '</li>';
 
+    $withSearch = count($users) > 10;
     echo "<li id='account' class='dropdown'>";
     $current = zget($users, isset($account) ? $account : '', '');
     if(empty($current)) $current = $lang->project->byUser;
     echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown'");
-    echo "<ul class='dropdown-menu'>";
+    echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
+    echo '<ul class="dropdown-list">';
     foreach ($users as $key => $value)
     {
         echo '<li' . ($key == $account ? " class='active'" : '') . '>';
         if($key == '') echo html::a($this->createLink('project', 'dynamic', "projectID=$projectID&type=all"), $lang->project->all);
         else echo html::a($this->createLink('project', 'dynamic', "projectID=$projectID&type=account&param=$key"), $value);
+        echo '</li>';
     }
-    echo '</ul></li>';
+    echo "</ul>";
+    echo "</div></li>";
     ?>
   </ul>
 </div>

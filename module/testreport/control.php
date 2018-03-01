@@ -63,11 +63,25 @@ class testreport extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $reports = $this->testreport->getList($objectID, $objectType, $extra, $orderBy, $pager);
+        if($objectType == 'project' and isset($_POST['taskIdList']))
+        {
+            $taskIdList = $_POST['taskIdList'];
+            foreach($reports as $reportID => $report)
+            {
+                $tasks = explode(',', $report->tasks);
+                if(count($tasks) != count($taskIdList) or array_diff($tasks, $taskIdList)) unset($reports[$reportID]);
+            }
+        }
+
         if(empty($reports) and common::hasPriv('testreport', 'create'))
         {
             $param = '';
             if($objectType == 'product' and $extra) $param = "objectID=$extra&objectType=testtask"; 
-            if($objectType == 'project') $param = "objectID=$objectID&objectType=project"; 
+            if($objectType == 'project')
+            {
+                $param = "objectID=$objectID&objectType=project"; 
+                if(isset($_POST['taskIdList'])) $param .= '&extra=' . join(',', $_POST['taskIdList']);
+            }
             if($param) $this->locate($this->createLink('testreport', 'create', $param));
         }
 
@@ -102,10 +116,11 @@ class testreport extends control
      * 
      * @param  int    $objectID 
      * @param  string $objectType 
+     * @param  string $extra 
      * @access public
      * @return void
      */
-    public function create($objectID, $objectType = 'testtask')
+    public function create($objectID, $objectType = 'testtask', $extra = '')
     {
         if($_POST)
         {
@@ -128,12 +143,8 @@ class testreport extends control
             $builds  = array();
             if($task->build == 'trunk')
             {
-                $stories = $this->story->getProjectStories($project->id);
-                $bugs    = $this->testreport->getBugs4Test('trunk', $productID, $project->begin, date('Y-m-d', strtotime($task->begin) - 24 * 3600));
-                foreach($stories as $id => $story)
-                {
-                    if($story->product != $task->product) unset($stories[$id]);
-                }
+                echo js::alert($this->lang->testreport->errorTrunk);
+                die(js::locate('back'));
             }
             else
             {
@@ -161,13 +172,32 @@ class testreport extends control
             $tasks   = $this->testtask->getProjectTasks($projectID);
             $owners  = array();
             $productIdList = array();
-            foreach($tasks as $task)
+            foreach($tasks as $i => $task)
             {
+                if(!empty($extra) and strpos(",{$extra},", "{$task->id}") === false)
+                {
+                    unset($tasks[$i]);
+                    continue;
+                }
+
                 $owners[$task->owner] = $task->owner;
                 $productIdList[$task->product] = $task->product;
             }
+            if(count($productIdList) > 1)
+            {
+                echo(js::alert($this->lang->testreport->moreProduct));
+                die(js::locate('back'));
+            }
+
             $stories = $this->story->getProjectStories($project->id);
             $builds  = $this->build->getProjectBuilds($project->id);
+
+            $useBuilds = array();
+            foreach($tasks as $task)
+            {
+                if(isset($builds[$task->build])) $useBuilds[$task->build] = $builds[$task->build];
+            }
+            $builds = $useBuilds;
 
             $begin = $project->begin;
             $end   = $project->end;
@@ -264,12 +294,8 @@ class testreport extends control
             $builds  = array();
             if($task->build == 'trunk')
             {
-                $stories = $this->story->getProjectStories($project->id);
-                $bugs    = $this->testreport->getBugs4Test('trunk', $report->product, $project->begin, date('Y-m-d', strtotime($task->begin) - 24 * 3600));
-                foreach($stories as $id => $story)
-                {
-                    if($story->product != $task->product) unset($stories[$id]);
-                }
+                echo js::alert($this->lang->testreport->errorTrunk);
+                die(js::locate('back'));
             }
             else
             {

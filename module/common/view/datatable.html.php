@@ -54,9 +54,17 @@ $(document).ready(function()
         selectable    : 
         {
             clickBehavior: 'multi',
+            start: function(e) 
+            {
+                var $target = $(e.target);
+                if ($target.closest('.task-toggle').length) return false;
+                var $checkRow = $target.closest('.check-row, .check-btn');
+                if($checkRow.length) return true;
+            },
             startDrag: function(e)
             {
-                if(!this.multiKey && !$(e.target).closest('td[data-index="0"]').length) return false;
+                var $target = $(e.target);
+                if(!this.multiKey && !$target.closest('td[data-index="0"]').length) return false;
             }
         },
         fixedHeader: true,
@@ -84,16 +92,17 @@ $(document).ready(function()
         }
     });
 
-    window.saveDatatableConfig = function(name, value, reload)
+    window.saveDatatableConfig = function(name, value, reload, global)
     {
+        if('<?php echo $this->app->user->account?>' == 'guest') return;
         var datatableId = '<?php echo $datatableId;?>';
         if(typeof value === 'object') value = JSON.stringify(value);
-        if('<?php echo $this->app->user->account?>' == 'guest') return;
+        if(typeof global === 'undefined') global = 0;
         $.ajax(
         {
             type: "POST",
             dataType: 'json',
-            data: {target: datatableId, name: name, value: value},
+            data: {target: datatableId, name: name, value: value, global: global},
             success:function(e){if(reload) window.location.reload();},
             url: '<?php echo $this->createLink('datatable', 'ajaxSave')?>'
         });

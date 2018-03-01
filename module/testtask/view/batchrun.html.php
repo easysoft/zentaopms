@@ -24,8 +24,7 @@
     <thead>
       <tr>
         <th class='w-id'>   <?php  echo $lang->idAB;?></th> 
-        <th class='w-pri'>  <?php  echo $lang->priAB;?></th>
-        <th class='w-100px'><?php echo $lang->testcase->module;?></th> 
+        <th class='w-100px'><?php echo $lang->testcase->module;?></th>
         <th width='200'>    <?php echo $lang->testcase->title;?></th>
         <th class='precondition' width='60'><?php echo $lang->testcase->precondition;?></th>
         <th width='180'>    <?php echo $lang->testcase->result?></th>
@@ -36,11 +35,10 @@
     <?php if(!$productID) $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($cases[$caseID]->product, $viewType = 'case', $startModuleID = 0);?>
     <tr class='text-center'>
       <td><?php echo $caseID . html::hidden("version[$caseID]", $cases[$caseID]->version)?></td>
-      <td><?php echo $lang->testcase->priList[$cases[$caseID]->pri]?></td>
       <td class='text-left'><?php echo "<span title='" . $moduleOptionMenu[$cases[$caseID]->module] . "'>" . $moduleOptionMenu[$cases[$caseID]->module] . "</span>"?></td>
-      <td class='text-left'><?php echo "<span title='{$cases[$caseID]->title}'>{$cases[$caseID]->title}</span>"?></td>
-      <td class='text-left precondition'><?php echo "<span title='{$cases[$caseID]->precondition}'>{$cases[$caseID]->precondition}</span>"?></td>
-      <td><?php echo html::radio("results[$caseID]", $this->lang->testcase->resultList, 'pass', "onclick='showAction(this.value,\".action$caseID\")'")?></td>
+      <td class='text-left wordwrap'><?php echo "<span title='{$cases[$caseID]->title}'>{$cases[$caseID]->title}</span>"?></td>
+      <td class='text-left precondition wordwrap'><?php echo "<span title='{$cases[$caseID]->precondition}'>{$cases[$caseID]->precondition}</span>"?></td>
+      <td><?php echo html::radio("results[$caseID]", $this->lang->testcase->resultList, 'pass', "onclick='showAction(this.value,\".action$caseID\")'", 'block')?></td>
       <td>
         <?php if(!empty($steps[$caseID])):?>
         <table class='table table-fixed'>
@@ -72,7 +70,7 @@
       </td>
     </tr>  
     <?php endforeach;?>
-    <tr><td colspan='7' class='text-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='6' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <script type='text/javascript'>

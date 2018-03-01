@@ -25,21 +25,21 @@
 <table class='table active-disabled table-condensed table-fixed' id='groupTable'>
   <thead>
     <tr>
-      <th class='text-left' style='width:210px'>
+      <th class='text-left' style='width:230px'>
         <?php echo html::a('###', "<i class='icon-caret-down'></i> " . $lang->task->$groupBy, '', "class='expandAll' data-action='expand'")?>
         <?php echo html::a('###', "<i class='icon-caret-right'></i> " . $lang->task->$groupBy, '', "class='collapseAll hidden' data-action='collapse'")?>
       </th>
       <th class='w-id'><?php echo $lang->task->id;?></th>
       <th class='w-pri'> <?php echo $lang->priAB;?></th>
       <th><?php echo $lang->task->name;?></th>
-      <th class='w-80px'><?php echo $lang->task->status;?></th>
+      <th class='w-70px'><?php echo $lang->task->status;?></th>
       <th class='w-80px'><?php echo $lang->task->deadlineAB;?></th>
       <th class='w-user'><?php echo $lang->task->assignedTo;?></th>
       <th class='w-user'><?php echo $lang->task->finishedBy;?></th>
       <th class='w-50px'><?php echo $lang->task->estimateAB;?></th>
       <th class='w-50px'><?php echo $lang->task->consumedAB;?></th>
       <th class='w-50px'><?php echo $lang->task->leftAB;?></th>
-      <th class='w-50px'><?php echo $lang->task->progess;?></th>
+      <th class='w-60px'><?php echo $lang->task->progress;?></th>
       <th class='w-50px'><?php echo $lang->typeAB;?></th>
       <th class='w-60px'><?php echo $lang->actions;?></th>
     </tr>
@@ -55,7 +55,7 @@
     $groupWait     = 0;
     $groupDone     = 0;
     $groupDoing    = 0;
-    $groupClosed   = 0;  
+    $groupClosed   = 0;
     $groupEstimate = 0.0;
     $groupConsumed = 0.0;
     $groupLeft     = 0.0;
@@ -65,6 +65,7 @@
     if($groupBy == 'assignedTo' and $groupName == '') $groupName = $this->lang->task->noAssigned;
   ?>
   <?php
+  $groupSum = 0;
   foreach($groupTasks as $taskKey => $task)
   {
       if(isset($currentFilter) and $currentFilter != 'all')
@@ -103,7 +104,7 @@
   <?php $taskLink        = $this->createLink('task','view',"taskID=$task->id"); ?>
     <tr class='text-center' data-id='<?php echo $groupIndex?>'>
       <?php if($i == 0):?>
-      <td rowspan='<?php echo count($groupTasks)?>' class='groupby text-left'>
+      <td rowspan='<?php echo $groupSum?>' class='groupby text-left'>
         <?php echo html::a('###', "<i class='icon-caret-down'></i> " . $groupName, '', "class='expandGroup' data-action='expand' title='$groupName'");?>
         <div class='groupSummary text' style='white-space:normal'>
         <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHours, $users[$task->assignedTo], $members[$task->assignedTo]->totalHours);?>
@@ -113,7 +114,14 @@
       <?php endif;?>
       <td><?php echo $task->id;?></td>
       <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
-      <td class='text-left'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
+      <td class='text-left'>
+          <?php
+            if(!empty($task->team))   echo '<span class="label">' . $lang->task->multipleAB . '</span> ';
+            if(!empty($task->parent)) echo '<span class="label">' . $lang->task->childrenAB . '</span> ';
+            if(isset($task->children) && $task->children == true) echo '<span class="label">' . $lang->task->parentAB . '</span> ';
+            if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;
+          ?>
+      </td>
       <td class='task-<?php echo $task->status;?>'><?php echo $lang->task->statusList[$task->status];?></td>
       <td class='<?php if(isset($task->delay)) echo 'delayed';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
       <td <?php echo $assignedToClass;?>><?php echo $task->assignedToRealName;?></td>
@@ -121,7 +129,7 @@
       <td><?php echo $task->estimate;?></td>
       <td><?php echo $task->consumed;?></td>
       <td><?php echo $task->left;?></td>
-      <td class='text-left'><?php echo $task->progess . '%';?></td>
+      <td class='text-left'><?php echo $task->progress . '%';?></td>
       <td><?php echo $lang->task->typeList[$task->type];?></td>
       <td>
         <?php common::printIcon('task', 'edit', "taskid=$task->id", '', 'list');?>

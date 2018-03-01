@@ -24,6 +24,11 @@ function loadAll(projectID)
         loadProjectStories(projectID);
         loadProjectMembers(projectID);
     }
+    else
+    {
+        $('#project').val(oldProjectID);
+        $("#project").trigger("chosen:updated");
+    }
 }
 
 /**
@@ -67,3 +72,25 @@ function loadProjectMembers(projectID)
 
 /* empty function. */
 function setPreview(){}
+$(".btn[data-toggle='modalTeam']").click(function()
+{
+    $('#modalTeam').modal('show')
+    adjustSortBtn();
+});
+
+$(document).ready(function()
+{
+    /* show team menu. */
+    $('[name=multiple]').change(function()
+    {
+        var checked = $(this).prop('checked');
+        if(checked)
+        {
+            $('#teamTr').removeClass('hidden');
+        }
+        else
+        {
+            $('#teamTr').addClass('hidden');
+        }
+    });
+});

@@ -90,6 +90,11 @@ $lang->dev->tableList['doccontent']     = '文檔內容';
 $lang->dev->tableList['storystage']     = '需求階段';
 $lang->dev->tableList['tutorial']       = '新手教程';
 $lang->dev->tableList['suitecase']      = '套件用例';
+$lang->dev->tableList['score']          = '積分';
+$lang->dev->tableList['entry']          = '應用';
+$lang->dev->tableList['webhook']        = 'WebHook';
+$lang->dev->tableList['webhookdatas']   = 'WebHook數據';
+$lang->dev->tableList['log']            = '介面日誌';
 
 $lang->dev->groupList['my']      = '我的地盤';
 $lang->dev->groupList['product'] = $lang->productCommon;

@@ -1,8 +1,8 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php js::set('fileID', $file->id);?>
 <style>
-#imageFile{text-align: center;}
-#imageFile img{margin: 10px auto;}
+#imageFile{text-align: center;padding:10px;}
+#imageFile img{max-width:100%;}
 #txtFile{padding: 5px 10px;}
 #txtFile div{overflow-x: auto;}
 #titlebar span{float: right; padding-right: 25px;}
@@ -29,9 +29,9 @@
   }
   else
   {
-      if(!extension_loaded('mbstring'))
+      if(extension_loaded('mbstring'))
       {
-          $encoding = mb_detect_encoding($fileContent, array('ASCII','UTF-8','GB2312','GBK','BIG5'));
+          $encoding = mb_detect_encoding($fileContent, array('ASCII', 'UTF-8', 'GB2312', 'GBK', 'BIG5'));
           if($encoding != 'UTF-8') $fileContent = helper::convertEncoding($fileContent, $encoding, $config->charset);
       }
       else
