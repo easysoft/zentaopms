@@ -792,15 +792,11 @@ class productModel extends model
                 foreach($this->app->user->groups as $group) $groups .= ",$group,";
             }
 
-            $stmt = $this->dao->select('distinct t1.*,t3.account as teamAccount')->from(TABLE_PRODUCT)->alias('t1')
+            $stmt = $this->dao->select('distinct t1.*,t3.type as teamType,t3.account as teamAccount,t4.deleted as projectDeleted')->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
                 ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.project = t3.root')
                 ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t2.project = t4.id')
                 ->where('t1.deleted')->eq(0)
-                ->beginIF(!$this->app->user->admin)
-                ->andWhere('t3.type')->eq('project')
-                ->andWhere('t4.deleted')->eq(0)
-                ->fi()
                 ->query();
 
             $products = array();
@@ -814,7 +810,12 @@ class productModel extends model
                 }
                 else
                 {
-                    if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy != $account OR $product->teamAccount == $account)
+                    if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account)
+                    {
+                        $products[$id] = $id;
+                        continue;
+                    }
+                    if($product->teamType == 'project' and $product->teamAccount == $account and $product->projectDeleted == '0')
                     {
                         $products[$id] = $id;
                         continue;
