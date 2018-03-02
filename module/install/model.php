@@ -26,7 +26,7 @@ class installModel extends model
         $licenseCN = file_get_contents($this->app->getBasePath() . 'doc/LICENSE.CN');
         $licenseEN = file_get_contents($this->app->getBasePath() . 'doc/LICENSE.EN');
 
-        if($clientLang == 'zh' or $clientLang == 'zh-tw') return $licenseCN . $licenseEN;
+        if($clientLang == 'zh-cn' or $clientLang == 'zh-tw') return $licenseCN . $licenseEN;
         return $licenseEN . $licenseCN;
     }
 

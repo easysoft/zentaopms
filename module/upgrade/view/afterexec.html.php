@@ -22,22 +22,18 @@
       </div>
       <div class='panel adbox'>
         <div class='panel-heading'><strong><?php echo $lang->install->promotion?></strong></div>
-        <div class='panel-body'>
-          <div class='col-md-4'>
-            <a class="card ad" href="http://www.chanzhi.org" target="_blank">
-              <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/chanzhi.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/chanzhi.png'?>" alt=""></div>
+        <div class='panel-body row'>
+          <?php foreach($lang->install->product as $product):?>
+          <div class='col-md-<?php echo ceil(12 / count($lang->install->product));?>'>
+            <a class="card ad" href="<?php echo $lang->install->{$product}->url;?>" target="_blank">
+              <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . $lang->install->{$product}->logo;?>)"><img src="<?php echo $defaultTheme . $lang->install->{$product}->logo;?>" alt=""></div>
+              <div class="card-reveal">
+                <h5 class="card-heading"><?php echo $lang->install->{$product}->name?></h5>
+                <div class="card-content"><?php echo $lang->install->{$product}->desc?></div>
+              </div>
             </a>
           </div>
-          <div class='col-md-4'>
-            <a class="card ad" href="http://www.ranzhico.com" target="_blank">
-              <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/ranzhi.png'?>);background-size:230px 85px"><img src="<?php echo $defaultTheme . 'images/main/ranzhi.png'?>" alt=""></div>
-            </a>
-          </div>
-          <div class='col-md-4'>
-            <a class="card ad" href="http://www.zdoo.com" target="_blank">
-              <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . 'images/main/zdoo.png'?>)"><img src="<?php echo $defaultTheme . 'images/main/zdoo.png'?>" alt=""></div>
-            </a>
-          </div>
+          <?php endforeach;?>
         </div>
       </div>
     </div>
