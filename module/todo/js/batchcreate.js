@@ -26,3 +26,7 @@ function switchDateList(number)
         $('#ends' + number).removeAttr('disabled').trigger('chosen:updated');
     }
 }
+$(function()
+{
+    setBeginsAndEnds();
+})

@@ -57,3 +57,4 @@ tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: righ
 /* === Components === */
 /* remove outline of links */
 a,a:focus,a:active {text-decoration: none; outline:none;}
+.modal-content {background-color:#fff;}
