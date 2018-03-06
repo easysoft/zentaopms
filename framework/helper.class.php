@@ -162,11 +162,3 @@ function formatTime($time, $format = '')
     if($format) return date($format, strtotime($time));
     return trim($time);
 }
-
-function __autoload($class)
-{
-    if(!class_exists($class))
-    {
-        if($class == 'post_max_size' or $class == 'max_input_vars') eval('class ' . $class . ' {};');
-    }
-}
