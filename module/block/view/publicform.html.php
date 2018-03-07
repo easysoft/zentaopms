@@ -10,17 +10,16 @@
  * @link        http://www.zentao.net
  */
 ?>
-<tr>
-  <th class='w-100px'><?php echo $lang->block->name?></th>
-  <td><?php echo html::input('title', $block ? $block->title : '', "class='form-control' autocomplete='off'")?></td>
-</tr>
-<tr>
-  <th><?php echo $lang->block->style;?></th>
-  <td>
-    <div class='w-240px'>
+<div class='form-group'>
+  <label for='title' class='col-sm-3'><?php echo $lang->block->name?></label>
+  <div class='col-sm-7'><?php echo html::input('title', $block ? $block->title : '', "class='form-control' autocomplete='off'")?></div>
+</div>
+<div class='form-group'>
+  <label for='grid' class='col-sm-3'><?php echo $lang->block->style;?></label>
+  <div class='col-sm-7'>
       <div class='input-group'>
         <span class='input-group-addon'><?php echo $lang->block->grid;?></span>
-        <?php echo html::select('grid', $lang->block->gridOptions, $block ? $block->grid : 8, "class='form-control'")?>
+        <?php echo html::select('grid', $lang->block->gridOptions, $block ? $block->grid : 8, "class='form-control chosen'")?>
         <div class='input-group-btn block'>
           <?php $btn = isset($block->params->color) ? 'btn-' . $block->params->color : 'btn-default'?>
           <button type='button' class="btn <?php echo $btn;?> dropdown-toggle" data-toggle='dropdown'>
@@ -36,7 +35,6 @@
             <li><button type='button' data-id='info' class='btn btn-block btn-info'>&nbsp;</li>
           </div>
         </div>
-      </div>
     </div>
-  </td>
-</tr>
+  </div>
+</div>

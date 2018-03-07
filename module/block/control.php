@@ -74,7 +74,6 @@ class block extends control
         $this->view->title      = $title;
         $this->view->block      = $this->block->getByID($id);
         $this->view->blockID    = $id;
-        $this->view->title      = $title;
         $this->display();
     }
 
@@ -384,9 +383,11 @@ class block extends control
 
             $block = $this->block->getByID($id);
 
-            echo "<th>{$this->lang->block->lblBlock}</th>";
-            echo '<td>' . html::select('moduleBlock', $blockPairs, ($block and $block->source != '') ? $block->block : '', "class='form-control' onchange='getBlockParams(this.value, \"$module\")'") . '</td>';
-            if(isset($block->source)) echo "<script>$(function(){getBlockParams($('#moduleBlock').val(), '{$block->source}')})</script>";
+            echo '<div class="form-group">';
+            echo '<label for="moduleBlock" class="col-sm-3">' . $this->lang->block->lblBlock . '</label>';
+            echo '<div class="col-sm-7">';
+            echo html::select('moduleBlock', $blockPairs, ($block and $block->source != '') ? $block->block : '', "class='form-control chosen'");
+            echo '</div></div>';
         }   
         elseif($mode == 'getblockform')
         {   
