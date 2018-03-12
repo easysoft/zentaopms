@@ -439,25 +439,6 @@ $lang->error->noData          = 'No Data';
 $lang->error->editedByOther   = 'This record might have been changed. Please refresh and try to edit again!';
 $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Please exit tutorial first!';
 
-if(!defined('PARAM_CODE_MISSING'))    define('PARAM_CODE_MISSING',    301);
-if(!defined('PARAM_TOKEN_MISSING'))   define('PARAM_TOKEN_MISSING',   302);
-if(!defined('INVALID_ENTRY'))         define('INVALID_ENTRY',         311);
-if(!defined('EMPTY_KEY'))             define('EMPTY_KEY',             312);
-if(!defined('IP_DENIED'))             define('IP_DENIED',             321);
-if(!defined('INVALID_TOKEN'))         define('INVALID_TOKEN',         331);
-if(!defined('SESSION_CODE_MISSING'))  define('SESSION_CODE_MISSING',  341);
-if(!defined('SESSION_VERIFY_FAILED')) define('SESSION_VERIFY_FAILED', 342);
-
-$lang->error->entry = array();
-$lang->error->entry['PARAM_CODE_MISSING']    = 'Param code is missing.';
-$lang->error->entry['PARAM_TOKEN_MISSING']   = 'Param token is missing.';
-$lang->error->entry['INVALID_ENTRY']         = 'Entry does not exist.';
-$lang->error->entry['EMPTY_KEY']             = 'Key of entry is missing.';
-$lang->error->entry['IP_DENIED']             = 'IP is denied.';
-$lang->error->entry['INVALID_TOKEN']         = 'Invalid token.';
-$lang->error->entry['SESSION_CODE_MISSING']  = 'Session code is missing.';
-$lang->error->entry['SESSION_VERIFY_FAILED'] = 'Session verification failed.';
-
 /* 分页信息。*/
 $lang->pager = new stdclass();
 $lang->pager->noRecord     = "No Records";
