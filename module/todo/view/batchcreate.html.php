@@ -18,6 +18,7 @@
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=todo&section=custom&key=batchCreateFields')?>
       <?php include '../../common/view/dropdowncustomfield.html.php';?>
       <?php if(isonlybody()):?>
+      <div class="divider"></div>
       <button id='closeModal' type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>
       <?php endif;?>
     </div>

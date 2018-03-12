@@ -244,6 +244,12 @@ class commonModel extends model
             echo "<ul class='dropdown-menu pull-right'>";
             if(!$isGuest)
             {
+                echo '<li class="user-profile-item">';
+                echo '<a href="###">';
+                echo "<div class='avatar avatar-sm bg-info avatar-circle'>" . strtoupper($app->user->account{0}) . "</div>\n";
+                echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
+                if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
+                echo '</a></li><li class="divider"></li>';
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
                 echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), $lang->changePassword, '', "class='iframe' data-width='500'") . '</li>';
 
@@ -254,7 +260,7 @@ class commonModel extends model
             echo "<a href='javascript:;'>" . $lang->theme . "</a><ul class='dropdown-menu pull-left'>";
             foreach($app->lang->themes as $key => $value)
             {
-                echo "<li style='position: relative;'><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . ($app->cookie->theme == $key ? '<i class="icon icon-check-circle text-success" style="top:2px;"></i>' : '') . "</a></li>";
+                echo "<li " . ($app->cookie->theme == $key ? "class='selected'" : '') . "><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
             }
             echo '</ul></li>';
 
@@ -262,7 +268,7 @@ class commonModel extends model
             echo "<a href='javascript:;'>" . $lang->lang . "</a><ul class='dropdown-menu pull-left'>";
             foreach ($app->config->langs as $key => $value)
             {
-                echo "<li style='position: relative;'><a href='javascript:selectLang(\"$key\");'>" . $value . ($app->cookie->lang == $key ? ' <i class="icon icon-check-circle text-success" style="top:2px;"></i>' : '') . "</a></li>";
+                echo "<li " . ($app->cookie->lang == $key ? "class='selected'" : '') . "><a href='javascript:selectLang(\"$key\");'>" . $value . "</a></li>";
             }
             echo '</ul></li>';
 
@@ -293,7 +299,7 @@ class commonModel extends model
         echo "<ul id='extraNav' class='nav nav-default'>";
         echo "<li class='dropdown'>";
         echo "<a data-toggle='dropdown'>" . $lang->help . " <span class='caret'></span></a>";
-        echo "<ul class='dropdown-menu text-left'>";
+        echo "<ul class='dropdown-menu'>";
         if(!commonModel::isTutorialMode() and $app->user->account != 'guest') echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . "</li>";
         echo '<li>' . html::a('javascript:;', $lang->manual, '', "class='open-help-tab'") . '</li>';
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
@@ -401,19 +407,21 @@ class commonModel extends model
             if($config->global->flow == 'onlyTask')  $searchObject = 'task';
         }
 
-        echo "<div class='input-control search-box search-box-circle has-icon-right has-label-left' id='searchbox'>";
-        echo "<div class='input-control-label-left dropdown'>";
-        echo "<a data-toggle='dropdown'><span id='searchTypeName'>" . $lang->searchObjects[$searchObject] . "</span><span class='caret'></span></a>";
+        echo "<div id='searchbox'>";
+        echo "<div class='input-group'>";
+        echo "<div class='input-group-btn'>";
+        echo "<a data-toggle='dropdown' class='btn btn-link'><span id='searchTypeName'>" . $lang->searchObjects[$searchObject] . "</span> <span class='caret'></span></a>";
         echo html::hidden('searchType', $searchObject);
-        echo "<ul class='dropdown-menu' id='searchTypeMenu'>";
+        echo "<ul id='searchTypeMenu' class='dropdown-menu'>";
         foreach ($lang->searchObjects as $key => $value)
         {
             $class = $key == $searchObject ? "class='selected'" : '';
             echo "<li $class><a href='javascript:;' data-value='{$key}'>{$value}</a></li>";
         }
         echo '</ul></div>';
-        echo "<input type='search' id='searchInput' onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) shortcut()' class='form-control search-input' placeholder='" . $lang->searchTips . "'/>";
-        echo "<a href='javascript:shortcut();' class='input-control-icon-right'><i class='icon icon-up-circle icon-rotate-90'></i></a>";
+        echo "<input id='searchInput' class='form-control search-input' type='search' onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) shortcut()' placeholder='" . $lang->searchTips . "'/>";
+        echo '</div>';
+        echo "<a href='javascript:shortcut();' class='btn btn-link' id='searchGo'>GO!</a>";
         echo "</div>\n";
     }
 
