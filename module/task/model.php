@@ -678,7 +678,7 @@ class taskModel extends model
         if($this->post->left == 0)
         {
             $task->status       = 'done';
-            $task->finishedBy   = $oldTask->openedBy; // Fix bug#1341
+            $task->finishedBy   = $this->app->user->account;
             $task->finishedDate = helper::now();
             $task->assignedTo   = $oldTask->openedBy; // Fix bug#1341
         }
@@ -1365,6 +1365,7 @@ class taskModel extends model
             ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftjoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
             ->where('t1.deleted')->eq(0)
+            ->beginIF($type == 'assignedTo')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type != 'all')->andWhere("t1.`$type`")->eq($account)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()

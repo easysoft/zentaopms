@@ -38,14 +38,18 @@ $(function()
     {
         $.get(createLink('message', 'ajaxGetMessage', "windowBlur=" + (windowBlur ? '1' : '0')), function(data)
         {
-            if(!windowBlur)
+           if(!windowBlur)
             {
                 $('#noticeBox').append(data);
                 adjustNoticePosition();
             }
             else
             {
-                if(data && typeof data.message == 'string') notifyMessage(data.message);
+                if(data)
+				{
+					if(typeof data == 'string') data = $.parseJSON(data);
+					if(typeof data.message == 'string')	notifyMessage(data.message);
+				}
             }
         });
     }, 60 * 1000);

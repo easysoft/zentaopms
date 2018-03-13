@@ -1485,8 +1485,8 @@ class baseRouter
             if(!method_exists($tmpModelClass, $method)) continue;
             $methodRelfection = new reflectionMethod($tmpModelClass, $method);
             $definedFile = $methodRelfection->getFileName();
-            $startLine   = $methodRelfection->getStartLine() . ' ';
-            $endLine     = $methodRelfection->getEndLine() . ' ';
+            $startLine   = $methodRelfection->getStartLine();
+            $endLine     = $methodRelfection->getEndLine();
 
             /* 将Hook脚本和老的代码合并在一起，并替换原来的定义。Merge hook codes with old codes and replace back. */
             $oldCodes  = $definedFile == $tmpModelFile ? $mergedModelCodes : $mainModelCodes;

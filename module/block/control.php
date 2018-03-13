@@ -644,10 +644,8 @@ class block extends control
     public function printAssignToMeBlock()
     {
        if(common::hasPriv('todo',  'view')) $hasViewPriv['todo']  = true;
-       if(common::hasPriv('story', 'view')) $hasViewPriv['story'] = true;
        if(common::hasPriv('task',  'view')) $hasViewPriv['task']  = true;
        if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']   = true;
-       if(common::hasPriv('testcase', 'view')) $hasViewPriv['case'] = true;
 
         if(isset($hasViewPriv['todo']))
         {
@@ -667,14 +665,6 @@ class block extends control
             if(empty($todos)) unset($hasViewPriv['todo']);
             $this->view->todos = $todos;
         }
-        if(isset($hasViewPriv['story']))
-        {
-            $this->app->loadLang('story');
-            $stories = $this->dao->select('*')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->orderBy('id_desc')->fetchAll();
-
-            if(empty($stories)) unset($hasViewPriv['story']);
-            $this->view->stories = $stories;
-        }
         if(isset($hasViewPriv['task']))
         {
             $this->app->loadLang('task');
@@ -690,24 +680,6 @@ class block extends control
 
             if(empty($bugs)) unset($hasViewPriv['bug']);
             $this->view->bugs = $bugs;
-        }
-        if(isset($hasViewPriv['case']))
-        {
-            $this->app->loadLang('testcase');
-            $this->app->loadLang('testtask');
-            $cases = $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
-                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
-                ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
-                ->Where('t1.assignedTo')->eq($this->app->user->account)
-                ->andWhere('t1.status')->ne('done')
-                ->andWhere('t3.status')->ne('done')
-                ->andWhere('t3.deleted')->eq(0)
-                ->andWhere('t2.deleted')->eq(0)
-                ->orderBy('id_desc')
-                ->fetchAll();
-
-            if(empty($cases)) unset($hasViewPriv['case']);
-            $this->view->cases = $cases;
         }
 
         $this->view->hasViewPriv = $hasViewPriv;

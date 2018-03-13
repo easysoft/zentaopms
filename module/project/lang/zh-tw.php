@@ -140,7 +140,7 @@ $lang->project->updateOrder       = '排序';
 $lang->project->tree              = '樹狀圖';
 $lang->project->storyKanban       = '需求看板';
 $lang->project->storySort         = '需求排序';
-$lang->project->importPlanStory   = '是否導入計劃關聯的相關需求？';
+$lang->project->importPlanStory   = '創建' . $lang->projectCommon . '成功！\n是否導入計劃關聯的相關需求？';
 
 /* 分組瀏覽。*/
 $lang->project->allTasks     = '所有';

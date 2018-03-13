@@ -12,7 +12,7 @@
 ?>
 <div id='assigntomeBlock'>
   <?php foreach($hasViewPriv as $type => $bool):?>
-  <div class="tab-pane fade<?php if($type == $active) echo " active in"?>" id="<?php echo $type?>">
+  <div id="<?php echo $type?>">
     <?php include "{$type}block.html.php";?>
   </div>
   <?php endforeach;?>

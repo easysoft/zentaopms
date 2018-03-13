@@ -280,6 +280,7 @@ class baseValidater
     public static function checkDatetime($datetime)
     {
         if(empty($datetime)) return true;
+        if($datetime == '0000-00-00') return true;
         if($datetime == '0000-00-00 00:00:00') return true;
         $stamp = strtotime($datetime);
         if(!is_numeric($stamp)) return false; 

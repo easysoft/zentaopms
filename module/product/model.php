@@ -774,37 +774,70 @@ class productModel extends model
         return $stats;
     }
 
+    /**
+     * Get priv products.
+     * 
+     * @access public
+     * @return array
+     */
     public function getPrivProducts()
     {
         $account = ',' . $this->app->user->account . ',';
         static $products;
         if($products === null)
         {
-            $groupSql = '';
+            $groups = '';
             if(isset($this->app->user->groups))
             {
-                foreach($this->app->user->groups as $group) $groupSql .= "INSTR(CONCAT(',', t1.whitelist, ','), ',$group,') > 0 OR ";
+                foreach($this->app->user->groups as $group) $groups .= ",$group,";
             }
-            $groupSql = !empty($groupSql) ? '(' . substr($groupSql, 0, strlen($groupSql) - 4) . ')' : '1 != 1';
 
-            $products = $this->dao->select('distinct t1.id')->from(TABLE_PRODUCT)->alias('t1')
+            $stmt = $this->dao->select('distinct t1.*,t3.account as teamAccount')->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
                 ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.project = t3.root')
                 ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t2.project = t4.id')
-                ->beginIF($this->app->user->admin)->where('t1.deleted')->eq(0)->fi()
+                ->where('t1.deleted')->eq(0)
                 ->beginIF(!$this->app->user->admin)
-                ->where('t1.acl')->eq('open')
-                ->orWhere("(t1.acl = 'custom' AND $groupSql)")
-                ->orWhere('t1.PO')->eq($this->app->user->account)
-                ->orWhere('t1.QD')->eq($this->app->user->account)
-                ->orWhere('t1.RD')->eq($this->app->user->account)
-                ->orWhere('t1.createdBy')->eq($this->app->user->account)
-                ->orWhere('t3.account')->eq($this->app->user->account)
-                ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t3.type')->eq('project')
                 ->andWhere('t4.deleted')->eq(0)
                 ->fi()
-                ->fetchAll('id');
+                ->query();
+
+            $products = array();
+            $account  = $this->app->user->account;
+            while($product = $stmt->fetch())
+            {
+                $id = $product->id;
+                if($this->app->user->admin)
+                {
+                    $products[$id] = $id;
+                }
+                else
+                {
+                    if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy != $account OR $product->teamAccount == $account)
+                    {
+                        $products[$id] = $id;
+                        continue;
+                    }
+                    if($product->acl == 'open')
+                    {
+                        $products[$id] = $id;
+                        continue;
+                    }
+                    if($product->acl == 'custom')
+                    {
+                        foreach(explode(',', $product->whitelist) as $whitelist)
+                        {
+                            if(empty($whitelist)) continue;
+                            if(strpos($groups, ",$whitelist,") !== false)
+                            {
+                                $products[$id] = $id;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         }
         return $products;
     }

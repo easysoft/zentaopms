@@ -1278,7 +1278,7 @@ class testtaskModel extends model
         /* Set email title. */
         if($actionType == 'opened')
         {
-            return sprintf($this->lang->testtask->mail->create->title, $this->app->user->realname, $testtask->id, $tasktask->name);
+            return sprintf($this->lang->testtask->mail->create->title, $this->app->user->realname, $testtask->id, $testtask->name);
         }
         elseif($actionType == 'closed')
         {

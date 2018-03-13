@@ -205,7 +205,9 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('9.7'));
                 $this->changeTeamFields();
                 $this->moveData2Notify();
-        }
+             case '9_8':
+                $this->fixFinishedBy();
+       }
 
         $this->deletePatch();
     }
@@ -308,6 +310,7 @@ class upgradeModel extends model
         case '9_6_2':
         case '9_6_3':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.6.3'));
         case '9_7':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.7'));
+        case '9_8':
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -2080,6 +2083,29 @@ class upgradeModel extends model
             $groupPriv->module = 'project';
             $groupPriv->method = 'importPlanStories';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Fix task finishedBy.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function fixFinishedBy()
+    {
+        $stmt = $this->dao->select('t1.id as historID,t2.objectType,t2.objectID,t2.actor')->from(TABLE_HISTORY)->alias('t1')
+            ->leftJoin(TABLE_ACTION)->alias('t2')->on('t1.action=t2.id')
+            ->where('t1.field')->eq('finishedBy')
+            ->andWhere('t2.objectType')->eq('task')
+            ->andWhere('t2.action')->eq('finished')
+            ->andWhere('t2.actor != t1.`new`')
+            ->query();
+        while($action = $stmt->fetch())
+        {
+            $this->dao->update(TABLE_HISTORY)->set('`new`')->eq($action->actor)->where('id')->eq($action->historID)->exec();
+            $this->dao->update(TABLE_TASK)->set('`finishedBy`')->eq($action->actor)->where('id')->eq($action->objectID)->exec();
         }
         return true;
     }

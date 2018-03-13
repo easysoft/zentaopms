@@ -17,6 +17,8 @@ $lang->install->pre     = '返回';
 $lang->install->reload  = '刷新';
 $lang->install->error   = '錯誤 ';
 
+$lang->install->officeDomain     = 'http://www.zentao.net';
+
 $lang->install->start            = '開始安裝';
 $lang->install->keepInstalling   = '繼續安裝當前版本';
 $lang->install->seeLatestRelease = '看看最新的版本';
@@ -80,10 +82,10 @@ $lang->install->tmpRoot      = '臨時檔案目錄';
 $lang->install->dataRoot     = '上傳檔案目錄';
 $lang->install->session      = 'Session存儲目錄';
 $lang->install->sessionFail  = '修改PHP配置檔案，設置session.save_path';
-$lang->install->mkdirWin     = '<p>需要創建目錄%s。命令行下面命令為：<br /> mkdir %s</p>';
+$lang->install->mkdirWin     = '<p>需要創建目錄%s。命令為：<br /> mkdir %s</p>';
 $lang->install->chmodWin     = '需要修改目錄 "%s" 的權限。';
-$lang->install->mkdirLinux   = '<p>需要創建目錄%s。<br /> 命令行下面命令為：<br /> mkdir -p %s</p>';
-$lang->install->chmodLinux   = '需要修改目錄 "%s" 的權限。<br />命令行下面命令為：<br />chmod o=rwx -R %s';
+$lang->install->mkdirLinux   = '<p>需要創建目錄%s。<br /> 命令為：<br /> mkdir -p %s</p>';
+$lang->install->chmodLinux   = '需要修改目錄 "%s" 的權限。<br />命令為：<br />chmod o=rwx -R %s';
 
 $lang->install->defaultLang    = '預設語言';
 $lang->install->dbHost         = '資料庫伺服器';

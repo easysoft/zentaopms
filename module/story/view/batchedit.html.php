@@ -42,7 +42,7 @@ foreach(explode(',', $showFields) as $field)
         <?php if($branchProduct):?>
         <th class='w-150px<?php echo zget($visibleFields, 'branch', ' hidden')?>'><?php echo $lang->story->branch;?></th>
         <?php endif;?>
-        <th class='w-150px<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->story->module;?></th>
+        <th class='w-150px'><?php echo $lang->story->module;?></th>
         <th class='w-150px<?php echo zget($visibleFields, 'plan', ' hidden')?>'><?php echo $lang->story->planAB;?></th>
         <th class='w-150px'> <?php echo $lang->story->title;?> <span class='required'></span></th>
         <th class='w-50px<?php echo zget($visibleFields, 'estimate', ' hidden')?>'> <?php echo $lang->story->estimateAB;?></th>

@@ -16,7 +16,7 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version    = '9.8';                // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->version    = '9.8.1';                // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->charset    = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife = time() + 2592000;     // Cookie的生存时间。The cookie life time.
 $config->timezone   = 'Asia/Shanghai';      // 时区设置。        The time zone setting, for more see http://www.php.net/manual/en/timezones.php.
@@ -115,6 +115,10 @@ if(file_exists($filterConfig)) include $filterConfig;
 $dbConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'db.php';
 if(file_exists($dbConfig)) include $dbConfig;
 
+/* 引用自定义的配置。 Include the custom config file. */
+$myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';
+if(file_exists($myConfig)) include $myConfig;
+
 /* 禅道配置文件。zentaopms settings. */
 $zentaopmsConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'zentaopms.php';
 if(file_exists($zentaopmsConfig)) include $zentaopmsConfig;
@@ -122,7 +126,3 @@ if(file_exists($zentaopmsConfig)) include $zentaopmsConfig;
 /* Include extension config files. */
 $extConfigFiles = glob(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ext/*.php');
 if($extConfigFiles) foreach($extConfigFiles as $extConfigFile) include $extConfigFile;
-
-/* 引用自定义的配置。 Include the custom config file. */
-$myConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'my.php';
-if(file_exists($myConfig)) include $myConfig;
