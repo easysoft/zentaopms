@@ -30,7 +30,7 @@ $account = $this->app->user->account
           <div class='dropdown inline-block'>
             <a data-toggle='dropdown' href='javascript:;'>
               <?php if($type == 'story'):?>
-              <?php echo $lang->project->orderList[$orderBy]?>
+              <?php echo $lang->project->orderList[$storyOrder]?>
               <?php else:?>
               <?php echo $lang->task->$type;?>
               <?php endif;?>
@@ -38,7 +38,7 @@ $account = $this->app->user->account
             </a>
             <ul class='dropdown-menu text-left'>
               <?php foreach ($lang->project->orderList as $key => $value):?>
-              <li <?php echo ($type == 'story' and $orderBy == $key) ? " class='active'" : '' ?>>
+              <li <?php echo ($type == 'story' and $storyOrder == $key) ? " class='active'" : '' ?>>
                 <?php echo html::a($this->createLink('project', 'kanban', "projectID=$projectID&type=story&orderBy=$key"), $value);?>
               </li>
               <?php endforeach;?>

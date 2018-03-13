@@ -1335,7 +1335,8 @@ class project extends control
         $this->view->position[]  = $this->lang->project->kanban;
         $this->view->stories     = $stories;
         $this->view->realnames   = $this->loadModel('user')->getPairs('noletter');
-        $this->view->orderBy     = $orderBy;
+        $this->view->storyOrder  = $orderBy;
+        $this->view->orderBy     = 'id_asc';
         $this->view->projectID   = $projectID;
         $this->view->project     = $project;
         $this->view->type        = $type;
