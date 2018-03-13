@@ -296,12 +296,16 @@ class taskModel extends model
     public function updateParentStatus($parentID, $status = 'done')
     {
         if(!$parentID) return true;
-        $children = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->fetchPairs('id', 'status');
-        $values   = array_values(array_unique($children));
-        if((count($values) == 1 && $values[0] == $status) || (count($values) == 2 && in_array('closed', $values) && $status == 'done'))
+        $children = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('id', 'status');
+
+        $changeStatus = true;
+        foreach($children as $taskStatus)
         {
-            $this->dao->update(TABLE_TASK)->set('status')->eq($status)->where('id')->eq($parentID)->exec();
+            if($status == 'done' and $taskStatus != $status and $taskStatus != 'closed' and $taskStatus != 'cancel') $changeStatus = false;
+            if($status != 'done' and $taskStatus != $status) $changeStatus = false;
+
         }
+        if($changeStatus) $this->dao->update(TABLE_TASK)->set('status')->eq($status)->where('id')->eq($parentID)->exec();
     }
 
     /**
