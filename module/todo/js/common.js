@@ -73,6 +73,7 @@ function setBeginsAndEnds(i, beginOrEnd)
         {
             if(j != 0) $("#begins" + j)[0].selectedIndex = $("#ends" + (j - 1))[0].selectedIndex;
             $("#ends" + j)[0].selectedIndex = $("#begins" + j)[0].selectedIndex + 3;
+            $("#begins" + j).trigger('chosen:updated');
             $("#ends" + j).trigger('chosen:updated');
         }
     }

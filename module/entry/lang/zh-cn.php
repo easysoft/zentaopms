@@ -34,3 +34,12 @@ $lang->entry->note->name  = '授权应用名称';
 $lang->entry->note->code  = '授权应用代号，必须为字母或数字的组合';
 $lang->entry->note->ip    = "允许访问API的应用ip，多个ip用逗号隔开。支持IP段，如192.168.1.*";
 $lang->entry->note->allIP = '无限制';
+
+$lang->entry->errmsg['PARAM_CODE_MISSING']    = '缺少code参数';
+$lang->entry->errmsg['PARAM_TOKEN_MISSING']   = '缺少token参数';
+$lang->entry->errmsg['SESSION_CODE_MISSING']  = '缺少session code';
+$lang->entry->errmsg['EMPTY_KEY']             = '应用未设置密钥';
+$lang->entry->errmsg['INVALID_TOKEN']         = '无效的token参数';
+$lang->entry->errmsg['SESSION_VERIFY_FAILED'] = 'session验证失败';
+$lang->entry->errmsg['IP_DENIED']             = '该IP被限制访问';
+$lang->entry->errmsg['EMPTY_ENTRY']           = '应用不存在';

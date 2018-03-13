@@ -46,10 +46,10 @@ $(function()
             else
             {
                 if(data)
-				{
-					if(typeof data == 'string') data = $.parseJSON(data);
-					if(typeof data.message == 'string')	notifyMessage(data.message);
-				}
+                {
+                    if(typeof data == 'string') data = $.parseJSON(data);
+                    if(typeof data.message == 'string')	notifyMessage(data.message);
+                }
             }
         });
     }, 60 * 1000);

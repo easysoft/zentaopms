@@ -1192,7 +1192,7 @@ class commonModel extends model
         // limited project
         $limitedProject = false;
         if(!empty($module) && $module == 'task' && !empty($object->project) or
-           !empty($module) && $module == 'project' && !empty($object->id))
+            !empty($module) && $module == 'project' && !empty($object->id))
         {
             $objectID = '';
             if(!empty($object->id)) $objectID = $object->id;
@@ -1212,14 +1212,14 @@ class commonModel extends model
         if(is_null($object)) return true;
 
         if(!empty($object->openedBy)     && $object->openedBy     == $app->user->account or
-           !empty($object->addedBy)      && $object->addedBy      == $app->user->account or
-           !empty($object->assignedTo)   && $object->assignedTo   == $app->user->account or
-           !empty($object->finishedBy)   && $object->finishedBy   == $app->user->account or
-           !empty($object->canceledBy)   && $object->canceledBy   == $app->user->account or
-           !empty($object->closedBy)     && $object->closedBy     == $app->user->account or
-           !empty($object->lastEditedBy) && $object->lastEditedBy == $app->user->account)
+            !empty($object->addedBy)      && $object->addedBy      == $app->user->account or
+            !empty($object->assignedTo)   && $object->assignedTo   == $app->user->account or
+            !empty($object->finishedBy)   && $object->finishedBy   == $app->user->account or
+            !empty($object->canceledBy)   && $object->canceledBy   == $app->user->account or
+            !empty($object->closedBy)     && $object->closedBy     == $app->user->account or
+            !empty($object->lastEditedBy) && $object->lastEditedBy == $app->user->account)
         {
-           return true;
+            return true;
         }
 
         return false;
@@ -1387,25 +1387,30 @@ class commonModel extends model
      */
     public function checkEntry()
     {
+        $this->loadModel('entry');
+
         if($this->session->valid_entry)
         {
-            if(!$this->session->entry_code) $this->response(SESSION_CODE_MISSING);
-            if($this->session->valid_entry != md5(md5($this->get->code) . $this->server->remote_addr)) $this->response(SESSION_VERIFY_FAILED);
+            if(!$this->session->entry_code) $this->response('SESSION_CODE_MISSING');
+            if($this->session->valid_entry != md5(md5($this->get->code) . $this->server->remote_addr)) $this->response('SESSION_VERIFY_FAILED');
             return true;
         }
 
-        if(!$this->get->code)  $this->response(PARAM_CODE_MISSING);
-        if(!$this->get->token) $this->response(PARAM_TOKEN_MISSING);
+        if(!$this->get->code)  $this->response('PARAM_CODE_MISSING');
+        if(!$this->get->token) $this->response('PARAM_TOKEN_MISSING');
 
-        $entry = $this->loadModel('entry')->getByCode($this->get->code);
-        if(!$entry)                              $this->response(INVALID_ENTRY);
-        if(!$entry->key)                         $this->response(EMPTY_KEY);
-        if(!$this->checkIP($entry->ip))          $this->response(IP_DENIED);
-        if(!$this->checkEntryToken($entry->key)) $this->response(INVALID_TOKEN);
+        $entry = $this->entry->getByCode($this->get->code);
+        if(!$entry)                              $this->response('EMPTY_ENTRY');
+        if(!$entry->key)                         $this->response('EMPTY_KEY');
+        if(!$this->checkIP($entry->ip))          $this->response('IP_DENIED');
+        if(!$this->checkEntryToken($entry->key)) $this->response('INVALID_TOKEN');
 
         $this->session->set('ENTRY_CODE', $this->get->code);
         $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . $this->server->remote_addr));
         $this->loadModel('entry')->saveLog($entry->id, $this->server->request_uri);
+
+        unset($_GET['code']);
+        unset($_GET['token']);
     }
 
     /**
@@ -1426,15 +1431,15 @@ class commonModel extends model
     /**
      * Response.
      *
-     * @param  int    $code
+     * @param  string $code
      * @access public
      * @return void
      */
     public function response($code)
     {
         $response = new stdclass();
-        $response->errcode = $code;
-        $response->errmsg  = $this->lang->error->entry[$code];
+        $response->errcode = $this->config->entry->errcode[$code];
+        $response->errmsg  = $this->lang->entry->errmsg[$code];
 
         die(helper::jsonEncode($response));
     }
@@ -1480,13 +1485,13 @@ class commonModel extends model
         if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
 
         $fh = @fopen($logFile, 'a');
-		if($fh)
-		{
-			fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
-			fwrite($fh, "url:    " . $url . "\n");
-			fwrite($fh, "results:" . print_r($response, true) . "\n");
-			fclose($fh);
-		}
+        if($fh)
+        {
+            fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
+            fwrite($fh, "url:    " . $url . "\n");
+            fwrite($fh, "results:" . print_r($response, true) . "\n");
+            fclose($fh);
+        }
 
         return $response;
     }

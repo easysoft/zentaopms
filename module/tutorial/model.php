@@ -242,4 +242,15 @@ class tutorialModel extends model
         $users['test']   = 'Test';
         return $users;
     }
+
+    /**
+     * Get tutorialed.
+     * 
+     * @access public
+     * @return string
+     */
+    public function getTutorialed()
+    {
+        return $this->dao->select('*')->from(TABLE_CONFIG)->where('module')->eq('tutorial')->andWhere('owner')->eq($this->app->user->account)->andWhere('section')->eq('tasks')->andWhere('`key`')->eq('setting')->fetch('value');
+    }
 }

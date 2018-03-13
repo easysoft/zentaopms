@@ -4,6 +4,7 @@
     <?php foreach($lang->message->typeList as $type => $typeName):?>
     <?php if(isset($config->message->typeLink[$type])):?>
     <?php list($moduleName, $methodName) = explode('|', $config->message->typeLink[$type]);?>
+    <?php if(!common::hasPriv($moduleName, $methodName)) continue;?>
     <li id='<?php echo $type?>Tab'><?php echo html::a($this->createLink($moduleName, $methodName), $typeName)?></li>
     <?php endif;?>
      <?php endforeach;?>

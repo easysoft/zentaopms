@@ -1820,7 +1820,7 @@ class storyModel extends model
             ->andWhere('assignedTo')->eq($account)
             ->orderBy('id_desc')
             ->limit($limit)
-            ->fetchAll();
+            ->fetchPairs('id', 'title');
     }
 
     /**

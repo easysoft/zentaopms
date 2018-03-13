@@ -1477,7 +1477,7 @@ class treeModel extends model
         if(empty($branches)) $branches = $this->post->branch;
         $branches = array_unique($branches);
 
-        if($this->isMergeModule($rootID, $viewType)) $viewType .= ',story';
+        if($this->isMergeModule($rootID, $viewType) and $viewType != 'task') $viewType .= ',story';
 
         $existsModules = $this->dao->select('id,branch,name')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->andWhere('parent')->eq($parentModuleID)->andWhere('branch')->in($branches)->andWhere('deleted')->eq(0)->fetchAll();
         $repeatName    = '';
