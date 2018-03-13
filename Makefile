@@ -46,6 +46,8 @@ pms:
 	chmod 777 zentaopms/module
 	chmod 777 zentaopms/www
 	chmod a+rx zentaopms/bin/*
+	mkdir zentaopms/config/ext
+	for module in `ls zentaopms/module/`; do mkdir zentaopms/module/$$module/ext; done
 	find zentaopms/ -name ext |xargs chmod -R 777
 	zip -r -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	rm -fr zentaopms
