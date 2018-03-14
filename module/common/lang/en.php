@@ -73,6 +73,7 @@ $lang->tutorial        = 'Tutorial';
 $lang->changeLog       = 'Change Log';
 $lang->manual          = 'Manual';
 $lang->customMenu      = 'Custom Menu';
+$lang->lineNumber      = 'Line No.';
 $lang->tutorialConfirm = 'You are using tutorial. Do you want to exit right now？';
 
 $lang->preShortcutKey  = '[Shortcut:←]';
