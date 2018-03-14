@@ -113,15 +113,8 @@ class custom extends control
             }
             else
             {
-                $lang = $_POST['lang'];
-                $this->custom->deleteItems("lang=$lang&module=$module&section=$field");
                 foreach($_POST['keys'] as $index => $key)
                 {
-                    $value  = $_POST['values'][$index];
-                    $system = $_POST['systems'][$index];
-
-                    //if(!$system and (!$value or !$key)) continue; //Fix bug #951.
-
                     /* Fix bug #942. */
                     if($field == 'priList' and !is_numeric($key)) die(js::alert($this->lang->custom->notice->priListKey));
                     if($module == 'bug' and $field == 'severityList' and !is_numeric($key)) die(js::alert($this->lang->custom->notice->severityListKey));
@@ -129,7 +122,16 @@ class custom extends control
 
                     /* the length of role is 20, check it when save. */
                     if($module == 'user' and $field == 'roleList' and strlen($key) > 20) die(js::alert($this->lang->custom->notice->userRole));
+                }
 
+                $lang = $_POST['lang'];
+                $this->custom->deleteItems("lang=$lang&module=$module&section=$field");
+                foreach($_POST['keys'] as $index => $key)
+                {
+                    //if(!$system and (!$value or !$key)) continue; //Fix bug #951.
+                    
+                    $value  = $_POST['values'][$index];
+                    $system = $_POST['systems'][$index];
                     $this->custom->setItem("{$lang}.{$module}.{$field}.{$key}.{$system}", $value);
                 }
             }
