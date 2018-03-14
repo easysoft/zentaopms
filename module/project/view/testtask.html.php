@@ -76,6 +76,9 @@
   <tfoot>
     <tr>
       <td colspan='9'>
+      <?php if(empty($task)):?>
+        <div class='pull-right'><?php echo $lang->pager->noRecord;?></div>
+      <?php else:?> 
         <div class='table-actions clearfix'>
           <?php
           echo html::selectButton();
@@ -85,6 +88,7 @@
           echo html::commonButton($lang->testreport->common, $misc);
           ?>
         </div>
+      <?php endif;?> 
       </td>
     </tr>
   </tfoot>
