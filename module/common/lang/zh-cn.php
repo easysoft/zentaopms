@@ -73,6 +73,7 @@ $lang->tutorial        = '新手教程';
 $lang->changeLog       = '修改日志';
 $lang->manual          = '手册';
 $lang->customMenu      = '自定义导航';
+$lang->lineNumber      = '行号';
 $lang->tutorialConfirm = '检测到你尚未退出新手教程模式，是否现在退出？';
 
 $lang->preShortcutKey  = '[快捷键:←]';
