@@ -1,3 +1,10 @@
+#stories .action{display:none;}
+#bugs .action{display:none;}
+tbody tr td:first-child input{display:none;}
+tfoot tr td .table-actions .btn{display:none;}
+
+#titlebar .actions{display:none}
+.row-table .col-side{display:none;}
 .tabs {position:relative;}
 
 .tabs .nav-tabs{border-bottom:none;}

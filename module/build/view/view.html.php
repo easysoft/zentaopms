@@ -15,15 +15,6 @@
 <?php js::set('confirmUnlinkBug', $lang->build->confirmUnlinkBug)?>
 <?php js::set('flow', $this->config->global->flow)?>
 <?php if(isonlybody()):?>
-<style>
-#stories .action{display:none;}
-#bugs .action{display:none;}
-tbody tr td:last-child a{display:none;}
-tbody tr td:first-child input{display:none;}
-tfoot tr td .table-actions .btn{display:none;}
-#titlebar .actions{display:none}
-.row-table .col-side{display:none;}
-</style>
 <?php endif;?>
 <div id='titlebar'>
   <div class='heading'>
