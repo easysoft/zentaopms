@@ -89,7 +89,7 @@
             <?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), sprintf('%03d', $product->id));?>
           </td>
           <td class='text-left' title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
-          <td class='text-left'><?php echo zget($lines, $product->line);?></td>
+          <td class='text-left'><?php echo zget($lines, $product->line, '');?></td>
           <td><?php echo $product->stories['active']?></td>
           <td><?php echo $product->stories['changed']?></td>
           <td><?php echo $product->stories['draft']?></td>
