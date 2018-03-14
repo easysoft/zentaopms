@@ -74,6 +74,20 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '详情';
 
+$lang->misc->releaseDate['9.8.stable'] = '2017-01-17';
+$lang->misc->releaseDate['9.7.stable'] = '2017-12-22';
+$lang->misc->releaseDate['9.6.stable'] = '2017-11-06';
+$lang->misc->releaseDate['9.5.1']      = '2017-09-27';
+$lang->misc->releaseDate['9.3.beta']   = '2017-06-21';
+$lang->misc->releaseDate['9.1.stable'] = '2017-03-23';
+$lang->misc->releaseDate['9.0.beta']   = '2017-01-03';
+$lang->misc->releaseDate['8.3.stable'] = '2016-11-09';
+$lang->misc->releaseDate['8.2.stable'] = '2016-05-17';
+$lang->misc->releaseDate['7.4.beta']   = '2015-11-13';
+$lang->misc->releaseDate['7.2.stable'] = '2015-05-22';
+$lang->misc->releaseDate['7.1.stable'] = '2015-03-07';
+$lang->misc->releaseDate['6.3.stable'] = '2014-11-07';
+
 $lang->misc->feature->all['9.8.stable'][] = array('title'=>'实现集中的消息处理机制', 'desc' => '<p>邮件，短信，webhook都放统一的消息发送</p><p>移植然之里面的消息通知功能</p>');
 $lang->misc->feature->all['9.8.stable'][] = array('title'=>'实现周期性待办功能', 'desc' => '');
 $lang->misc->feature->all['9.8.stable'][] = array('title'=>'增加指派给我的区块', 'desc' => '');
