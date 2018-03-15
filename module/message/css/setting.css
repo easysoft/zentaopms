@@ -1,2 +1,4 @@
 .checkbox-inline + .checkbox-inline {margin:0px;}
 .checkbox-inline {margin:0px; margin-right:10px !important; width:100px;}
+
+div.chosen-container + select + div.chosen-container > .chosen-choices {border-top:0px;}
