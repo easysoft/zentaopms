@@ -208,6 +208,7 @@ class upgradeModel extends model
              case '9_8':
                 $this->fixFinishedBy();
              case '9_8_1':
+                $this->fixAssignedTo();
        }
 
         $this->deletePatch();
@@ -2110,5 +2111,39 @@ class upgradeModel extends model
             $this->dao->update(TABLE_TASK)->set('`finishedBy`')->eq($action->actor)->where('id')->eq($action->objectID)->exec();
         }
         return true;
+    }
+
+    /**
+     * Fix assignedTo for closed tasks.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function fixAssignedTo()
+    {
+        $tasks = $this->dao->select('*')->from(TABLE_TASK)->fetchAll('id');
+        $needUpdateTasks = $this->dao->select('*')->from(TABLE_TASK)
+            ->where('status')->eq('closed')
+            ->andWhere('assignedTo')->ne('closed')
+            ->andWhere('parent')->ne(0)
+            ->fetchAll();
+
+        foreach($needUpdateTasks as $task)
+        {
+            $parent = isset($tasks[$task->parent]) ? $tasks[$task->parent] : '';
+
+            $this->dao->update(TABLE_TASK)
+                ->set('assignedTo')->eq('closed')
+                ->beginIF($parent)
+                ->set('assignedDate')->eq($parent->assignedDate)
+                ->set('closedBy')->eq($parent->closedBy)
+                ->set('closedDate')->eq($parent->closedDate)
+                ->set('closedReason')->eq($parent->closedReason)
+                ->fi()
+                ->where('id')->eq($task->id)
+                ->exec();
+        }
+
+        return dao::isError();
     }
 }
