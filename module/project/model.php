@@ -811,8 +811,8 @@ class projectModel extends model
                 {
                     $hour->totalEstimate += $task->estimate;
                     $hour->totalConsumed += $task->consumed;
-                    $hour->totalLeft     += $task->left;
                 }
+                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
             }
             $hours[$projectID] = $hour;
         }
@@ -987,11 +987,18 @@ class projectModel extends model
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->eq(0)
             ->fetch();
+        $closedTotalLeft= (int)$this->dao->select('SUM(`left`) AS totalLeft')->from(TABLE_TASK)
+            ->where('project')->eq((int)$projectID)
+            ->andWhere('status')->eq('closed')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->eq(0)
+            ->fetch('totalLeft');
+
         $project->days          = $project->days ? $project->days : '';
         $project->totalHours    = $this->dao->select('sum(days * hours) AS totalHours')->from(TABLE_TEAM)->where('root')->eq($project->id)->andWhere('type')->eq('project')->fetch('totalHours');
         $project->totalEstimate = round($total->totalEstimate, 1);
         $project->totalConsumed = round($total->totalConsumed, 1);
-        $project->totalLeft     = round($total->totalLeft, 1);
+        $project->totalLeft     = round($total->totalLeft - $closedTotalLeft, 1);
 
         $project = $this->loadModel('file')->replaceImgURL($project, 'desc');
         if($setImgSize) $project->desc = $this->file->setImgSize($project->desc);
@@ -1697,12 +1704,25 @@ class projectModel extends model
             ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq('0')
             ->andWhere('parent')->eq('0')
-            ->andWhere('status')->notin('cancel,closed')
+            ->andWhere('status')->ne('cancel')
             ->groupBy('project')
-            ->fetchAll();
+            ->fetchAll('project');
+        $closedLefts = $this->dao->select("project, sum(`left`) AS `left`")->from(TABLE_TASK)
+            ->where('project')->in(array_keys($projects))
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('parent')->eq('0')
+            ->andWhere('status')->eq('closed')
+            ->groupBy('project')
+            ->fetchAll('project');
 
-        foreach($burns as $Key => $burn)
+        foreach($burns as $projectID => $burn)
         {
+            if(isset($closedLefts[$projectID]))
+            {
+                $closedLeft  = $closedLefts[$projectID];
+                $burn->left -= (int)$closedLeft->left;
+            }
+
             $this->dao->replace(TABLE_BURN)->data($burn)->exec();
             $burn->projectName = $projects[$burn->project];
         }
@@ -1898,11 +1918,16 @@ class projectModel extends model
 
         foreach($tasks as $task)
         {
-            $totalEstimate  += $task->estimate;
-            $totalConsumed  += $task->consumed;
-            $totalLeft      += (($task->status == 'cancel' or $task->closedReason == 'cancel') ? 0 : $task->left);
-            $statusVar       = 'status' . ucfirst($task->status);
+            if($task->status != 'cancel')
+            {
+                $totalEstimate  += $task->estimate;
+                $totalConsumed  += $task->consumed;
+            }
+            if($task->status != 'cancel' and $task->status != 'closed') $totalLeft += $task->left;
+
+            $statusVar = 'status' . ucfirst($task->status);
             $$statusVar ++;
+
             if(!empty($task->children))
             {
                 $taskSum += count($task->children);
