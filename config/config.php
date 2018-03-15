@@ -8,7 +8,7 @@
  *
  *  May you do good and not evil.
  *  May you find forgiveness for yourself and forgive others.
- *  you share freely, never taking more than you give.
+ *  May you share freely, never taking more than you give.
  */
 
 /* 保证在命令行环境也能运行。Make sure to run in ztcli env. */
