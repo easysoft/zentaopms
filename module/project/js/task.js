@@ -53,14 +53,23 @@ function showCheckedSummary()
     {
         if($(this).prop('checked'))
         {
-            checkedTotal += 1;
             var taskID = $(this).val();
             $tr = $("#taskList tbody tr[data-id='" + taskID + "']");
-            if($tr.data('status') == 'wait')  checkedWait += 1;
-            if($tr.data('status') == 'doing') checkedDoing += 1;
-            checkedEstimate += Number($tr.data('estimate'));
-            checkedConsumed += Number($tr.data('consumed'));
-            checkedLeft     += Number($tr.data('left'));
+
+            checkedTotal += 1;
+
+            var taskStatus = $tr.data('status');
+            if(taskStatus == 'wait')  checkedWait += 1;
+            if(taskStatus == 'doing') checkedDoing += 1;
+            if(!$tr.hasClass('table-children'))
+            {
+                if(taskStatus != 'cancel')
+                {
+                    checkedEstimate += Number($tr.data('estimate'));
+                    checkedConsumed += Number($tr.data('consumed'));
+                }
+                if(taskStatus != 'cancel' && taskStatus != 'closed') checkedLeft += Number($tr.data('left'));
+            }
         }
     });
     if(checkedTotal > 0)
