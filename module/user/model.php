@@ -383,6 +383,7 @@ class userModel extends model
             ->batchCheck($this->config->user->edit->requiredFields, 'notempty')
             ->check('account', 'unique', "id != '$userID'")
             ->check('account', 'account')
+            ->checkIF($this->post->email != '', 'email', 'email')
             ->where('id')->eq((int)$userID)
             ->exec();
 
