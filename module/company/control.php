@@ -215,8 +215,15 @@ class company extends control
         ksort($products);
         $projects['all'] = $this->lang->project->allProject;
         $products['all'] = $this->lang->product->allProduct;
+
+        foreach($this->lang->action->search->label as $action => $name)
+        {
+            if($action) $this->lang->action->search->label[$action] .= " [ $action ]";
+        }
+
         $this->config->company->dynamic->search['actionURL'] = $this->createLink('company', 'dynamic', "browseType=bysearch&param=myQueryID");
         $this->config->company->dynamic->search['queryID']   = $queryID;
+        $this->config->company->dynamic->search['params']['action']['values']  = $this->lang->action->search->label;
         $this->config->company->dynamic->search['params']['project']['values'] = $projects;
         $this->config->company->dynamic->search['params']['product']['values'] = $products; 
         $this->config->company->dynamic->search['params']['actor']['values']   = $users; 
