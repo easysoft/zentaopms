@@ -1066,7 +1066,7 @@ class taskModel extends model
         $this->updateParentStatus($oldTask->parent, 'closed');
         $this->computeWorkingHours($oldTask->parent);
 
-        $this->dao->update(TABLE_TASK)->set('status')->eq('closed')->where('parent')->eq($taskID)->exec();
+        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq($taskID)->exec();
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
 
