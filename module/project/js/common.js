@@ -163,21 +163,22 @@ function loadBranches(product)
 
 function loadPlans(product, branchID)
 {
+    if($('#plansBox').size() == 0) return false;
+
     var productID = $(product).val();
     var branchID  = typeof(branchID) == 'undefined' ? 0 : branchID;
+    var index     = $(product).attr('id').replace('products', '');
 
     if(productID != 0)
     {
         if(typeof(planID) == 'undefined') planID = 0;
         planID = $("select#plans" + productID).val() != '' ? $("select#plans" + productID).val() : planID;
-        $("div#plan" + productID).remove();
-        $(product).data("last", productID);
         $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=' + branchID + '&planID=' + planID + '&fieldID&needCreate=&expired=' + (config.currentMethod == 'create' ? 'unexpired' : '')), function(data)
         {
             if(data)
             {
-                $("#plansBox .row").append('<div class="col-sm-3" id="plan' + productID + '">' + data + '</div>');
-                $("#plan" + $(product).val()).width($(product).closest('.col-sm-3').width()).find('select').attr('name', 'plans[' + productID + ']').attr('id', 'plans' + productID);
+                if($("div#plan" + index).size() == 0) $("#plansBox .row").append('<div class="col-sm-3" id="plan' + index + '"></div>');
+                $("div#plan" + index).width($(product).closest('.col-sm-3').width()).html(data).find('select').attr('name', 'plans[' + productID + ']').attr('id', 'plans' + productID);
             }
         });
     }

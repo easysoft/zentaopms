@@ -1150,7 +1150,7 @@ class projectModel extends model
      */
     public function updateProducts($projectID)
     {
-        $deletedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchPairs('product', 'product');
+        $oldProjectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchAll('product');
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->exec();
         if(!isset($_POST['products'])) return;
         $products = $_POST['products'];
@@ -1158,25 +1158,23 @@ class projectModel extends model
         $plans    = isset($_POST['plans']) ? $_POST['plans'] : array();;
 
         $existedProducts = array();
-        $addedProducts   = array();
         foreach($products as $i => $productID)
         {
             if(empty($productID)) continue;
             if(isset($existedProducts[$productID])) continue;
-            if(isset($deletedProducts[$productID]))
+
+            $oldPlan = 0;
+            if(isset($oldProjectProducts[$productID]))
             {
-                unset($deletedProducts[$productID]);
-            }
-            else
-            {
-                $addedProducts[$productID] = $productID;
+                $oldProjectProduct = $oldProjectProducts[$productID];
+                $oldPlan           = $oldProjectProduct->plan;
             }
 
             $data = new stdclass();
             $data->project = $projectID;
             $data->product = $productID;
             $data->branch  = isset($branches[$i]) ? $branches[$i] : 0;
-            $data->plan    = isset($plans[$productID]) ? $plans[$productID] : 0;
+            $data->plan    = isset($plans[$productID]) ? $plans[$productID] : $oldPlan;
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
             $existedProducts[$productID] = true;
         }

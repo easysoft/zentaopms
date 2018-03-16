@@ -1027,7 +1027,6 @@ class project extends control
         $this->view->qdUsers        = $this->user->getPairs('noclosed|nodeleted|qdfirst',  $project->QD);
         $this->view->rdUsers        = $this->user->getPairs('noclosed|nodeleted|devfirst', $project->RD);
         $this->view->groups         = $this->loadModel('group')->getPairs();
-        $this->view->plans          = $this->project->getPlans($linkedProducts);
         $this->view->allProducts    = $allProducts;
         $this->view->linkedProducts = $linkedProducts;
         $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts));

@@ -131,18 +131,6 @@
           </div>
         </td>
       </tr>
-      <tr <?php if($this->config->global->flow == 'onlyTask') echo "class='hidden'";?>>
-        <th><?php echo $lang->project->linkPlan;?></th>
-        <td class='text-left' id="plansBox" colspan="2">
-          <div class='row'>
-          <?php foreach($plans as $productID => $plan):?>
-            <div class="col-sm-3" id="plan<?php echo $productID;?>">
-                <?php echo html::select("plans[$productID]", $plan, $linkedProducts[$productID]->plan, "class='form-control'");?>
-            </div>
-          <?php endforeach;?>
-          </div>
-        </td>
-      </tr>
       <tr>
         <th><?php echo $lang->project->desc;?></th>
         <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($project->desc), "rows='6' class='form-control'");?></td>
