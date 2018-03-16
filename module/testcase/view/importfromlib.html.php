@@ -48,7 +48,8 @@
       <?php endif;?>
       <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo $case->pri == '0' ? '' : zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
       <td class='text-left nobr'><?php if(!common::printLink('testcase', 'view', "caseID=$case->id", $case->title)) echo $case->title;?></td>
-      <td class='text-left'><?php echo zget($libModules, $case->module, '');?></th>
+      <?php $libModule = zget($libModules, $case->module, '');?>
+      <td class='text-left' title='<?php echo $libModule?>'><?php echo $libModule;?></th>
       <td class='text-left' data-module='<?php echo $case->module?>' style='overflow:visible'><?php echo html::select("module[{$case->id}]", $modules, 0, "class='from-control chosen' onchange='setModule(this)'");?></th>
       <td><?php echo zget($lang->testcase->typeList, $case->type);?></th>
     </tr>
