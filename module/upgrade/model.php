@@ -208,6 +208,7 @@ class upgradeModel extends model
              case '9_8':
                 $this->fixFinishedBy();
              case '9_8_1':
+                $this->execSQL($this->getUpgradeFile('9.8.1'));
                 $this->fixAssignedTo();
        }
 
@@ -313,7 +314,7 @@ class upgradeModel extends model
         case '9_6_3':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.6.3'));
         case '9_7':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.7'));
         case '9_8':
-        case '9_8_1':
+        case '9_8_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.8.1'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
