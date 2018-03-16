@@ -373,7 +373,7 @@ class todo extends control
                 }
                 $this->send($response);
             }
-            die(js::locate($this->session->todoList, 'parent'));
+            die(js::closeModal('parent.parent'));
         }
     }
 
