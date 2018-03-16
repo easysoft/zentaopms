@@ -1155,7 +1155,7 @@ class projectModel extends model
         if(!isset($_POST['products'])) return;
         $products = $_POST['products'];
         $branches = isset($_POST['branch']) ? $_POST['branch'] : array();
-        $plans    = $_POST['plans'];
+        $plans    = isset($_POST['plans']) ? $_POST['plans'] : array();;
 
         $existedProducts = array();
         $addedProducts   = array();
