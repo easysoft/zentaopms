@@ -2616,16 +2616,13 @@ class projectModel extends model
      *
      * @return mixed
      */
-    public function getPlans($productID)
+    public function getPlans($products)
     {
-        $plans = $this->dao->select('id,title,product')->from(TABLE_PRODUCTPLAN)
-            ->where('product')->in($productID)
-            ->fetchAll();
-
+        $this->loadModel('productplan');
         $productPlans = array();
-        foreach ($plans as $plan)
+        foreach($products as $productID => $product)
         {
-            $productPlans[$plan->product][$plan->id] = $plan->title;
+            $productPlans[$productID] = $this->productplan->getPairs($product->id, $product->branch);
         }
         return $productPlans;
     }

@@ -154,23 +154,30 @@ function loadBranches(product)
         if(data)
         {
             $inputgroup.append(data);
-            $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).css('width', '80px');
+            $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).css('width', '80px').attr('onchange', "loadPlans('#products" + index + "', this.value)");
         }
     });
 
+    loadPlans(product);
+}
+
+function loadPlans(product, branchID)
+{
     var productID = $(product).val();
+    var branchID  = typeof(branchID) == 'undefined' ? 0 : branchID;
 
-    if(productID == 0 || productID != $(product).data('last')) $("#plan" + $(product).data('last')).remove();
-
-    if(productID != 0 && $("#plan" + productID).length == 0)
+    if(productID != 0)
     {
+        if(typeof(planID) == 'undefined') planID = 0;
+        planID = $("select#plans" + productID).val() != '' ? $("select#plans" + productID).val() : planID;
+        $("div#plan" + productID).remove();
         $(product).data("last", productID);
-        $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID), function(data)
+        $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=' + branchID + '&planID=' + planID + '&fieldID&needCreate=&expired=' + (config.currentMethod == 'create' ? 'unexpired' : '')), function(data)
         {
             if(data)
             {
-                $("#plansBox .row").append('<div class="col-sm-3" id="plan' + productID+ '">' + data + '</div>');
-                $("#plan" + $(product).val()).find('select').attr('name', 'plans[' + productID + ']').attr('id', 'plans' + productID);
+                $("#plansBox .row").append('<div class="col-sm-3" id="plan' + productID + '">' + data + '</div>');
+                $("#plan" + $(product).val()).width($(product).closest('.col-sm-3').width()).find('select').attr('name', 'plans[' + productID + ']').attr('id', 'plans' + productID);
             }
         });
     }

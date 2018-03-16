@@ -119,6 +119,7 @@
             <?php if(isset($plan) && !empty($plan->begin)):?>
             <div class="col-sm-3" id="plan<?php echo $plan->product;?>">
               <?php echo html::select("plans[" . $plan->product . "]", $productPlan, $plan->id, "class='form-control'");?>
+              <?php js::set('currentPlanID', $plan->id)?>
             </div>
             <?php endif;?>
           </div>

@@ -23,6 +23,19 @@ $(function()
     {
         $("input:radio[name='delta']").attr("checked", false);
     })
+
+    if(typeof(currentPlanID) == 'undefined')
+    {
+        $('#productsBox select[id^="products"]').each(function()
+        {
+            var branchID = 0;
+            if($(this).closest('.input-group').find('select[id^="branch"]').size() > 0)
+            {
+                var branchID = $(this).closest('.input-group').find('select[id^="branch"]').val();
+            }
+            loadPlans($(this), branchID);
+        });
+    }
 });
 
 function showTypeTips()

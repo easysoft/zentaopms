@@ -117,7 +117,7 @@
               <div class='input-group'>
                 <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
                 <span class='input-group-addon fix-border' style='padding:0px'></span>
-                <?php if($product->type != 'normal' and isset($branchGroups[$product->id])) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control' style='width:80px'")?>
+                <?php if($product->type != 'normal' and isset($branchGroups[$product->id])) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control' style='width:80px' onchange=\"loadPlans('#products{$i}', this.value)\"")?>
               </div>
             </div>
             <?php $i++;?>
