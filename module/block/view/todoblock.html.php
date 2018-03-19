@@ -23,9 +23,9 @@
   <?php foreach($todos as $id => $todo):?>
   <?php
   $appid = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
-  $viewLink = $this->createLink('todo', 'view', "todoID={$todo->id}&from=my");
+  $viewLink = $this->createLink('todo', 'view', "todoID={$todo->id}&from=my", '', true);
   ?>
-  <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
+  <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' data-toggle='modal' data-type='iframe' <?php echo $appid?>>
     <td><?php echo $todo->date == '2030-01-01' ? $lang->todo->periods['future'] : $todo->date;?></td>
     <td><?php echo zget($lang->todo->priList, $todo->pri, $todo->pri)?></td>
     <td><?php echo $todo->name?></td>
