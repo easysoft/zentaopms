@@ -147,14 +147,14 @@ function loadBranches(product)
     }
 
     var $inputgroup = $(product).closest('.input-group');
-    if($inputgroup.find('select').size() >= 2) $inputgroup.find('select:last').remove();
+    if($inputgroup.find('select').size() >= 2) $inputgroup.removeClass('has-branch').find('select:last').remove();
     var index = $inputgroup.find('select:first').attr('id').replace('products' , '');
     $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val()), function(data)
     {
         if(data)
         {
-            $inputgroup.append(data);
-            $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).css('width', '80px').attr('onchange', "loadPlans('#products" + index + "', this.value)");
+            $inputgroup.addClass('has-branch').append(data);
+            $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).attr('onchange', "loadPlans('#products" + index + "', this.value)");
         }
     });
 

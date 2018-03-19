@@ -95,10 +95,10 @@
             <?php $i = 0;?>
             <?php foreach($products as $product):?>
             <div class='col-sm-3'>
-              <div class='input-group'>
+              <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
+              <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
                 <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
-                <span class='input-group-addon fix-border' style='padding:0'></span>
-                <?php if($product->type != 'normal') echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control' style='width:80px'")?>
+                <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
               </div>
             </div>
             <?php $i++;?>

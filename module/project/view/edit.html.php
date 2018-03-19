@@ -114,10 +114,10 @@
             <?php $i = 0;?>
             <?php foreach($linkedProducts as $product):?>
             <div class='col-sm-3'>
-              <div class='input-group'>
+              <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
+              <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
                 <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
-                <span class='input-group-addon fix-border' style='padding:0px'></span>
-                <?php if($product->type != 'normal' and isset($branchGroups[$product->id])) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control' style='width:80px' onchange=\"loadPlans('#products{$i}', this.value)\"")?>
+                <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
               </div>
             </div>
             <?php $i++;?>
@@ -125,7 +125,6 @@
             <div class='col-sm-3'>
               <div class='input-group'>
                 <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
-                <span class='input-group-addon fix-border' style='padding:0px'></span>
               </div>
             </div>
           </div>
