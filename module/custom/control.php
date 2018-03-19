@@ -121,7 +121,7 @@ class custom extends control
                     if(!empty($key) and $key != 'n/a' and !validater::checkREG($key, '/^[a-zA-Z_0-9]+$/')) die(js::alert($this->lang->custom->notice->keyList));
 
                     /* the length of role is 20, check it when save. */
-                    if($module == 'user' and $field == 'roleList' and strlen($key) > 20) die(js::alert($this->lang->custom->notice->userRole));
+                    if($module == 'user' and $field == 'roleList' and strlen($key) > 10) die(js::alert($this->lang->custom->notice->userRole));
                 }
 
                 $lang = $_POST['lang'];
