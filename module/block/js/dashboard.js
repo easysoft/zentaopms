@@ -184,6 +184,7 @@ $(function()
             var $sortTable = e.$panel.find('.tablesorter');
             if($sortTable.length) $sortTable.sortTable();
             initTableHeader();
+            e.$panel.find('[data-toggle=modal],a.iframe').modalTrigger();
         }
     });
 
