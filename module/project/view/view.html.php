@@ -138,6 +138,21 @@
             ?>
             </td>
           </tr>
+          <tr>
+            <th><?php echo $lang->project->linkPlan;?></th>
+            <td>
+            <?php 
+            foreach($products as $productID => $product) 
+            {
+                if(isset($planGroups[$productID][$product->plan]))
+                {
+                    echo html::a($this->createLink('productplan', 'view', "planID={$product->id}"), $product->name . '/' . $planGroups[$productID][$product->plan]);
+                }
+                echo '<br />';
+            }
+            ?>
+            </td>
+          </tr>
           <?php endif;?>
           <tr>
             <th><?php echo $lang->project->acl;?></th>
