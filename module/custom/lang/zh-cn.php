@@ -83,7 +83,7 @@ $lang->custom->allLang     = '适用所有语言';
 $lang->custom->confirmRestore = '是否要恢复默认配置？';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userRole             = '键的长度必须小于20个字符！';
+$lang->custom->notice->userRole             = '键的长度必须小于10个字符！';
 $lang->custom->notice->canNotAdd            = '该项参与运算，不提供自定义添加功能';
 $lang->custom->notice->forceReview          = "指定人提交的%s必须评审。";
 $lang->custom->notice->forceNotReview       = "指定人提交的%s不需要评审。";

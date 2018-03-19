@@ -609,7 +609,7 @@ function setImageSize(image, maxWidth)
 function setModalTriggerLink()
 {
     $('.repolink').modalTrigger({width:960, type:'iframe'});
-    $(".export").modalTrigger({width:800, type:'iframe'});
+    $('.export').modalTrigger({width:800, type:'iframe', afterShown: setCheckedCookie});
 }
 
 /**
@@ -1356,6 +1356,30 @@ function setModal4List(triggerClass, replaceID, callback, width)
 }
 
 /**
+ * Set checked in cookie.
+ * 
+ * @access public
+ * @return void
+ */
+function setCheckedCookie()
+{
+    var checkeds = '';
+    $(':checkbox').each(function()
+    {
+        if($(this).attr('checked'))
+        {
+            if(!isNaN($(this).val()))
+            {
+                var checkedVal = parseInt($(this).val());
+                if(checkedVal != 0) checkeds = checkeds + checkedVal + ',';
+            }
+        }
+    })
+    if(checkeds != '') checkeds = checkeds.substring(0, checkeds.length - 1);
+    $.cookie('checkedItem', checkeds, {expires:config.cookieLife, path:config.webRoot});
+}
+
+/**
  * Set table behavior
  * 
  * @access public
@@ -2055,24 +2079,6 @@ $(document).ready(function()
     $(window).resize(saveWindowSize);   // When window resized, call it again.
 
     if(needPing) setTimeout('setPing()', 1000 * 60 * 10);  // After 10 minutes, begin ping.
-
-    $('.export').bind('click', function()
-    {
-        var checkeds = '';
-        $(':checkbox').each(function()
-        {
-            if($(this).attr('checked'))
-            {
-                if(!isNaN($(this).val()))
-                {
-                    var checkedVal = parseInt($(this).val());
-                    if(checkedVal != 0) checkeds = checkeds + checkedVal + ',';
-                }
-            }
-        })
-        if(checkeds != '') checkeds = checkeds.substring(0, checkeds.length - 1);
-        $.cookie('checkedItem', checkeds, {expires:config.cookieLife, path:config.webRoot});
-    });
 
     initPrioritySelector();
     initHotKey();

@@ -41,13 +41,12 @@
       </tr>
       <tr>
         <th><?php echo $lang->productplan->begin;?></th>
-        <td><?php echo html::input('begin', $plan->begin, "class='form-control form-date'");?></td>
+        <td><?php echo html::input('begin', $plan->begin != '2030-01-01' ? formatTime($plan->begin) : '', "class='form-control form-date'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->productplan->end;?></th>
         <td>
-          <?php $disabled = $plan->end == '2030-01-01' ? ' disabled="disabled"' : '';?>
-          <?php echo html::input('end', empty($disabled) ? $plan->end : '', 'class="form-control form-date"' . $disabled);?>
+          <?php echo html::input('end', $plan->end != '2030-01-01' ? formatTime($plan->end) : '', 'class="form-control form-date"');?>
         </td>
         <td>
           &nbsp; &nbsp; <?php echo html::radio('delta', $lang->productplan->endList , '', "onclick='computeEndDate(this.value)'");?>

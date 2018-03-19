@@ -20,7 +20,11 @@
       <div class='input-group w-200px pull-left' id='datepicker'>
         <span class='input-group-addon'><?php echo $lang->todo->date;?></span>
         <?php echo html::input('date', $date, "class='form-control form-date' style='width:90px;' onchange='updateAction(this.value)'");?>
-        <span class='input-group-addon'><input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></span>
+        <span class='input-group-addon'>
+          <label class='checkbox-inline'>
+            <input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?>
+          </label>
+        </span>
       </div>
       <div class='actions'>
         <button type="button" class="btn btn-default" data-toggle="customModal"><i class='icon icon-cog'></i> </button>
@@ -64,7 +68,11 @@
           echo html::select("begins[$i]", $times, $time, "onchange=\"setBeginsAndEnds($i, 'begin');\" class='form-control chosen' style='width: 50%'" . (isset($visibleFields['beginAndEnd']) ? '' : " disabled"));
           echo html::select("ends[$i]", $times, '', "onchange=\"setBeginsAndEnds($i, 'end');\" class='form-control chosen' style='width: 50%'" . (isset($visibleFields['beginAndEnd']) ? '' : " disabled"));
           ?>
-          <span class='input-group-addon'><input type='checkbox' name="switchDate[<?php echo $i?>]" id="switchDate<?php echo $i?>" onclick='switchDateList(<?php echo $i?>);'><?php echo $lang->todo->periods['future'];?></span>
+          <span class='input-group-addon'>
+            <label class='checkbox-inline'>
+              <input type='checkbox' name="switchDate[<?php echo $i?>]" id="switchDate<?php echo $i?>" onclick='switchDateList(<?php echo $i?>);'> <?php echo $lang->todo->periods['future'];?>
+            </label>
+          </span>
         </div>
       </td>
     </tr>  

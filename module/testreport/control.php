@@ -174,7 +174,7 @@ class testreport extends control
             $productIdList = array();
             foreach($tasks as $i => $task)
             {
-                if(!empty($extra) and strpos(",{$extra},", "{$task->id}") === false)
+                if(!empty($extra) and strpos(",{$extra},", ",{$task->id},") === false)
                 {
                     unset($tasks[$i]);
                     continue;

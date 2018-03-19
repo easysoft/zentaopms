@@ -23,22 +23,33 @@ function convertStringToDate(dateString)
 function computeEndDate(delta)
 {
     beginDate = $('#begin').val();
-    if(!beginDate) return;
-
     delta     = parseInt(delta);
-    beginDate = convertStringToDate(beginDate);
-    if((delta == 7 || delta == 14) && (beginDate.getDay() == 1))
-    {
-        delta = (weekend == 2) ? (delta - 2) : (delta - 1);
-    }
 
-    endDate = beginDate.addDays(delta - 1).toString('yyyy-MM-dd');
     if(delta == 9999)
     {
+        $('#begin').attr("disabled", "disabled");
         $('#end').val('').attr("disabled","disabled");
     }
     else
     {
+        if(beginDate)
+        {
+            beginDate = convertStringToDate(beginDate);
+            if((delta == 7 || delta == 14) && (beginDate.getDay() == 1))
+            {
+                delta = (weekend == 2) ? (delta - 2) : (delta - 1);
+            }
+
+            currentBeginDate = beginDate.toString('yyyy-MM-dd');
+            endDate = beginDate.addDays(delta - 1).toString('yyyy-MM-dd');
+        }
+        else
+        {
+            currentBeginDate = '';
+            endDate = '';
+        }
+
+        $('#begin').val(currentBeginDate).removeAttr('disabled')
         $('#end').val(endDate).removeAttr('disabled').datetimepicker('update');
     }
 }

@@ -100,8 +100,8 @@ class docModel extends model
     {
         if($type == 'product' or $type == 'project')
         {
-            $table   = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-            $stmt    = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
+            $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+            $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
                 ->leftJoin($table)->alias('t2')->on("t1.$type=t2.id")
                 ->where("t1.$type")->ne(0)
                 ->andWhere('t1.deleted')->eq(0)
@@ -691,16 +691,16 @@ class docModel extends model
         }
         if(isset($projects)) $stmt = $stmt->andWhere('project')->in($projects);
 
-        $idList = $stmt->andWhere('id')->in(array_keys($libs))->orderBy("{$key}_desc")->page($pager, $key)->fetchPairs($key, $key);
+        $idList = $stmt->andWhere('id')->in(array_keys($libs))->orderBy("{$key}_desc")->fetchPairs($key, $key);
 
         if($type == 'product' or $type == 'project')
         {
             $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-            $libs = $this->dao->select('id,name,`order`')->from($table)->where('id')->in($idList)->orderBy('`order` desc, id desc')->fetchAll('id');
+            $libs = $this->dao->select('id,name,`order`')->from($table)->where('id')->in($idList)->page($pager, 'id')->orderBy('`order` desc, id desc')->fetchAll('id');
         }
         else
         {
-            $libs = $this->dao->select('id,name')->from(TABLE_DOCLIB)->where('id')->in($idList)->orderBy('`order`, id desc')->fetchAll('id');
+            $libs = $this->dao->select('id,name')->from(TABLE_DOCLIB)->where('id')->in($idList)->page($pager, 'id')->orderBy('`order`, id desc')->fetchAll('id');
         }
 
         return $libs;
@@ -889,7 +889,7 @@ class docModel extends model
     public function getLibsByObject($type, $objectID, $mode = '')
     {
         if($type != 'product' and $type != 'project') return false;
-        $objectLibs   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
+        $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
         if($type == 'product')
         {
             if($this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest')
