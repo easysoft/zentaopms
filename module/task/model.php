@@ -2092,7 +2092,11 @@ class taskModel extends model
             if($id == 'assignedTo' && $task->assignedTo == $account) $class .= ' red';
 
             $title = '';
-            if($id == 'name')  $title = " title='{$task->name}'";
+            if($id == 'name')
+            {
+                $title = " title='{$task->name}'";
+                if(!empty($task->children)) $class .= ' has-child';
+            }
             if($id == 'story') $title = " title='{$task->storyTitle}'";
 
             echo "<td class='" . $class . "'" . $title . ">";
