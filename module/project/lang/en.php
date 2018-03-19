@@ -94,6 +94,7 @@ $lang->project->statusList['wait']      = 'Wait';
 $lang->project->statusList['doing']     = 'Doing';
 $lang->project->statusList['suspended'] = 'Suspend';
 $lang->project->statusList['done']      = 'Done';
+$lang->project->statusList['closed']    = 'Closed';
 
 $lang->project->aclList['open']    = "Default (Those who can visit ‘project view’ can access.)";
 $lang->project->aclList['private'] = 'Private (Only team members can access.)';

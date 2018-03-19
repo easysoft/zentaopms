@@ -577,8 +577,11 @@ class projectModel extends model
         $oldProject = $this->getById($projectID);
         $now        = helper::now();
         $project = fixer::input('post')
-            ->setDefault('status', 'done')
-            ->remove('comment')->get();
+            ->setDefault('status', 'closed')
+            ->setDefault('closedBy', $this->app->user->account)
+            ->setDefault('closedDate', $now)
+            ->remove('comment')
+            ->get();
 
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
@@ -1954,10 +1957,10 @@ class projectModel extends model
         $action = strtolower($action);
 
         if($action == 'start')    return $project->status == 'wait';
-        if($action == 'close')    return $project->status != 'done';
+        if($action == 'close')    return $project->status != 'closed';
         if($action == 'suspend')  return $project->status == 'wait' or $project->status == 'doing';
         if($action == 'putoff')   return $project->status == 'wait' or $project->status == 'doing';
-        if($action == 'activate') return $project->status == 'suspended' or $project->status == 'done';
+        if($action == 'activate') return $project->status == 'suspended' or $project->status == 'closed';
 
         return true;
     }

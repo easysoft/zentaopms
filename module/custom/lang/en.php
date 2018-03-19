@@ -83,7 +83,7 @@ $lang->custom->allLang     = 'All Language';
 $lang->custom->confirmRestore = 'Do you want to reset to Default?';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userRole             = 'Key must be no more than 20 characters!';
+$lang->custom->notice->userRole             = 'Key must be no more than 10 characters!';
 $lang->custom->notice->canNotAdd            = 'These items are parameters of calculation, so customized creation is not enabled.';
 $lang->custom->notice->forceReview          = '%s Review is required for certain submitters.';
 $lang->custom->notice->forceNotReview       = "%s Review is NOT required for certain submitters.";

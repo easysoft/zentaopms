@@ -32,14 +32,17 @@ function computeEndDate(delta)
         delta = (weekend == 2) ? (delta - 2) : (delta - 1);
     }
 
+    currentBeginDate = beginDate.toString('yyyy-MM-dd');
     endDate = beginDate.addDays(delta - 1).toString('yyyy-MM-dd');
 
     if(delta == 9999)
     {
-        $('#end').val('').attr("disabled","disabled");
+        $('#begin').attr("disabled", "disabled");
+        $('#end').val('').attr("disabled", "disabled");
     }
     else
     {
+        $('#begin').val(currentBeginDate).removeAttr('disabled')
         $('#end').val(endDate).removeAttr('disabled');
     }
 }

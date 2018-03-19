@@ -38,36 +38,28 @@
     <tr class='colhead'>
       <th><?php echo $lang->bug->openedBy;?></th>
       <th><?php echo $lang->bug->unResolved;?></th>
-      <th><?php echo $lang->bug->resolutionList['bydesign'];?></th>
-      <th><?php echo $lang->bug->resolutionList['duplicate'];?></th>
-      <th><?php echo $lang->bug->resolutionList['external'];?></th>
-      <th><?php echo $lang->bug->resolutionList['fixed'];?></th>
-      <th class="w-100px"><?php echo $lang->bug->resolutionList['notrepro'];?></th>
-      <th><?php echo $lang->bug->resolutionList['postponed'];?></th>
-      <th class="w-120px"><?php echo $lang->bug->resolutionList['willnotfix'];?></th>
-      <th class="w-130px"><?php echo $lang->bug->resolutionList['tostory'];?></th>
+      <?php foreach($lang->bug->resolutionList as $key => $resolution):?>
+      <?php if(empty($key) or empty($resolution)) continue;?>
+      <th><?php echo $resolution;?></th>
+      <?php endforeach;?> 
       <th title='<?php echo $lang->report->validRateTips;?>'><?php echo $lang->report->validRate;?></th>
       <th><?php echo $lang->report->total;?></th>
     </tr>
     </thead>
     <tbody>
-    <?php foreach($bugs as $user => $bug):?>
+      <?php foreach($bugs as $user => $bug):?>
       <?php if(!array_key_exists($user, $users)) continue;?>
       <tr class="a-center">
         <td><?php echo $users[$user];?></td>
         <td><?php echo isset($bug['']) ? $bug[''] : 0;?></td>
-        <td><?php echo isset($bug['bydesign']) ? $bug['bydesign'] : 0;?></td>
-        <td><?php echo isset($bug['duplicate']) ? $bug['duplicate'] : 0;?></td>
-        <td><?php echo isset($bug['external']) ? $bug['external'] : 0;?></td>
-        <td><?php echo isset($bug['fixed']) ? $bug['fixed'] : 0;?></td>
-        <td><?php echo isset($bug['notrepro']) ? $bug['notrepro'] : 0;?></td>
-        <td><?php echo isset($bug['postponed']) ? $bug['postponed'] : 0;?></td>
-        <td><?php echo isset($bug['willnotfix']) ? $bug['willnotfix'] : 0;?></td>
-        <td><?php echo isset($bug['tostory']) ? $bug['tostory'] : 0;?></td>
+        <?php foreach($lang->bug->resolutionList as $key => $resolution):?>
+        <?php if(empty($key) or empty($resolution)) continue;?>
+        <td><?php echo isset($bug[$key]) ? $bug[$key] : 0;?></td>
+        <?php endforeach;?>
         <td title='<?php echo $lang->report->validRateTips;?>'><?php echo round($bug['validRate'] * 100, 2) . '%';?></td>
         <td><?php echo $bug['all'];?></td>
       </tr>
-    <?php endforeach;?>
+      <?php endforeach;?>
     </tbody>
   </table> 
 </div>
