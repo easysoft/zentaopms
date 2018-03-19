@@ -48,13 +48,13 @@
     <?php if($this->session->currentProductType != 'normal'):?>
     <th class='w-100px'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->product->branch);?></th>
     <?php endif;?>
+    <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
+    <th class='w-100px'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
     <th class='w-60px'> <?php echo $lang->productplan->stories;?></th>
     <th class='w-60px'> <?php echo $lang->productplan->bugs;?></th>
     <th class='w-60px'> <?php echo $lang->productplan->hour;?></th>
     <th class='w-60px'> <?php echo $lang->productplan->project;?></th>
     <th class='w-p40'>  <?php echo $lang->productplan->desc;?></th>
-    <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
-    <th class='w-100px'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
     <th class="w-130px {sorter: false}"><?php echo $lang->actions;?></th>
   </tr>
   </thead>
@@ -71,6 +71,8 @@
     <?php if($this->session->currentProductType != 'normal'):?>
     <td><?php echo $branches[$plan->branch];?></td>
     <?php endif;?>
+    <td><?php echo $plan->begin;?></td>
+    <td><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
     <td class='text-center'><?php echo $plan->stories;?></td>
     <td class='text-center'><?php echo $plan->bugs;?></td>
     <td class='text-center'><?php echo $plan->hour;?></td>

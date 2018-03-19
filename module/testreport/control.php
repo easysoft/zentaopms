@@ -215,7 +215,7 @@ class testreport extends control
 
         $this->view->begin   = $begin;
         $this->view->end     = $end;
-        $this->view->members = $this->dao->select('lastRunner')->from(TABLE_TESTRESULT)->where('run')->in(array_keys($tasks))->fetchPairs('lastRunner', 'lastRunner');
+        $this->view->members = $this->dao->select('DISTINCT lastRunner')->from(TABLE_TESTRUN)->where('task')->in(array_keys($tasks))->fetchPairs('lastRunner', 'lastRunner');
         $this->view->owner   = $owner;
 
         $this->view->stories       = $stories;

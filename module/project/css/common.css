@@ -1,5 +1,9 @@
 .mgr-5px{margin-right:5px;}
 #productsBox .col-sm-3{margin-bottom:5px;}
+#productsBox .input-group {table-layout: fixed; width: 100%;}
+#productsBox .has-branch .chosen-container {width: 70%!important}
+#productsBox .has-branch select {width: 100%; display: table-cell; border-radius: 0 2px 2px 0; border-left: none;}
+#productsBox .has-branch select:focus {box-shadow: inset 1px 0 #4d90fe}
 
 .table-children > td:first-child{border-left:2px solid #ccc;}
 .table-children > td:last-child{border-right:2px solid #ccc;}

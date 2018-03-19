@@ -814,8 +814,8 @@ class projectModel extends model
                 {
                     $hour->totalEstimate += $task->estimate;
                     $hour->totalConsumed += $task->consumed;
-                    $hour->totalLeft     += $task->left;
                 }
+                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
             }
             $hours[$projectID] = $hour;
         }
@@ -990,11 +990,18 @@ class projectModel extends model
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->eq(0)
             ->fetch();
+        $closedTotalLeft= (int)$this->dao->select('SUM(`left`) AS totalLeft')->from(TABLE_TASK)
+            ->where('project')->eq((int)$projectID)
+            ->andWhere('status')->eq('closed')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->eq(0)
+            ->fetch('totalLeft');
+
         $project->days          = $project->days ? $project->days : '';
         $project->totalHours    = $this->dao->select('sum(days * hours) AS totalHours')->from(TABLE_TEAM)->where('root')->eq($project->id)->andWhere('type')->eq('project')->fetch('totalHours');
         $project->totalEstimate = round($total->totalEstimate, 1);
         $project->totalConsumed = round($total->totalConsumed, 1);
-        $project->totalLeft     = round($total->totalLeft, 1);
+        $project->totalLeft     = round($total->totalLeft - $closedTotalLeft, 1);
 
         $project = $this->loadModel('file')->replaceImgURL($project, 'desc');
         if($setImgSize) $project->desc = $this->file->setImgSize($project->desc);
@@ -1146,33 +1153,32 @@ class projectModel extends model
      */
     public function updateProducts($projectID)
     {
-        $deletedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchPairs('product', 'product');
+        $oldProjectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchGroup('product', 'branch');
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->exec();
         if(!isset($_POST['products'])) return;
         $products = $_POST['products'];
         $branches = isset($_POST['branch']) ? $_POST['branch'] : array();
-        $plans    = $_POST['plans'];
+        $plans    = isset($_POST['plans']) ? $_POST['plans'] : array();;
 
         $existedProducts = array();
-        $addedProducts   = array();
         foreach($products as $i => $productID)
         {
             if(empty($productID)) continue;
             if(isset($existedProducts[$productID])) continue;
-            if(isset($deletedProducts[$productID]))
+
+            $oldPlan = 0;
+            $branch  = isset($branches[$i]) ? $branches[$i] : 0;
+            if(isset($oldProjectProducts[$productID][$branch]))
             {
-                unset($deletedProducts[$productID]);
-            }
-            else
-            {
-                $addedProducts[$productID] = $productID;
+                $oldProjectProduct = $oldProjectProducts[$productID][$branch];
+                $oldPlan           = $oldProjectProduct->plan;
             }
 
             $data = new stdclass();
             $data->project = $projectID;
             $data->product = $productID;
-            $data->branch  = isset($branches[$i]) ? $branches[$i] : 0;
-            $data->plan    = isset($plans[$productID]) ? $plans[$productID] : 0;
+            $data->branch  = $branch;
+            $data->plan    = isset($plans[$productID]) ? $plans[$productID] : $oldPlan;
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
             $existedProducts[$productID] = true;
         }
@@ -1700,12 +1706,25 @@ class projectModel extends model
             ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq('0')
             ->andWhere('parent')->eq('0')
-            ->andWhere('status')->notin('cancel,closed')
+            ->andWhere('status')->ne('cancel')
             ->groupBy('project')
-            ->fetchAll();
+            ->fetchAll('project');
+        $closedLefts = $this->dao->select("project, sum(`left`) AS `left`")->from(TABLE_TASK)
+            ->where('project')->in(array_keys($projects))
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('parent')->eq('0')
+            ->andWhere('status')->eq('closed')
+            ->groupBy('project')
+            ->fetchAll('project');
 
-        foreach($burns as $Key => $burn)
+        foreach($burns as $projectID => $burn)
         {
+            if(isset($closedLefts[$projectID]))
+            {
+                $closedLeft  = $closedLefts[$projectID];
+                $burn->left -= (int)$closedLeft->left;
+            }
+
             $this->dao->replace(TABLE_BURN)->data($burn)->exec();
             $burn->projectName = $projects[$burn->project];
         }
@@ -1901,11 +1920,16 @@ class projectModel extends model
 
         foreach($tasks as $task)
         {
-            $totalEstimate  += $task->estimate;
-            $totalConsumed  += $task->consumed;
-            $totalLeft      += (($task->status == 'cancel' or $task->closedReason == 'cancel') ? 0 : $task->left);
-            $statusVar       = 'status' . ucfirst($task->status);
+            if($task->status != 'cancel')
+            {
+                $totalEstimate  += $task->estimate;
+                $totalConsumed  += $task->consumed;
+            }
+            if($task->status != 'cancel' and $task->status != 'closed') $totalLeft += $task->left;
+
+            $statusVar = 'status' . ucfirst($task->status);
             $$statusVar ++;
+
             if(!empty($task->children))
             {
                 $taskSum += count($task->children);
@@ -2216,12 +2240,19 @@ class projectModel extends model
      */
     public function getKanbanTasks($projectID, $orderBy = 'status_asc, id_desc', $pager = null)
     {
+        $parents = $this->dao->select('parent')->from(TABLE_TASK)
+            ->where('project')->eq((int)$projectID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->ne(0)
+            ->fetchPairs('parent', 'parent');
+
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.id')->notin($parents)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -2594,16 +2625,13 @@ class projectModel extends model
      *
      * @return mixed
      */
-    public function getPlans($productID)
+    public function getPlans($products)
     {
-        $plans = $this->dao->select('id,title,product')->from(TABLE_PRODUCTPLAN)
-            ->where('product')->in($productID)
-            ->fetchAll();
-
+        $this->loadModel('productplan');
         $productPlans = array();
-        foreach ($plans as $plan)
+        foreach($products as $productID => $product)
         {
-            $productPlans[$plan->product][$plan->id] = $plan->title;
+            $productPlans[$productID] = $this->productplan->getPairs($product->id, $product->branch);
         }
         return $productPlans;
     }

@@ -2092,7 +2092,11 @@ class taskModel extends model
             if($id == 'assignedTo' && $task->assignedTo == $account) $class .= ' red';
 
             $title = '';
-            if($id == 'name')  $title = " title='{$task->name}'";
+            if($id == 'name')
+            {
+                $title = " title='{$task->name}'";
+                if(!empty($task->children)) $class .= ' has-child';
+            }
             if($id == 'story') $title = " title='{$task->storyTitle}'";
 
             echo "<td class='" . $class . "'" . $title . ">";
@@ -2220,7 +2224,7 @@ class taskModel extends model
                     common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list');
                     if(empty($task->team) or empty($task->children))
                     {
-                        common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'list', 'plus', '', '', '', '', $this->lang->task->children);
+                        common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&isChildren=true", $task, 'list', 'plus', '', '', '', '', $this->lang->task->children);
                     }
                     break;
             }

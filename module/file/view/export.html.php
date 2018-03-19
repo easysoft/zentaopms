@@ -13,6 +13,11 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <?php $this->app->loadLang('file');?>
+<style>
+#customFields{margin-bottom:0px;margin-top:50px;}
+#exportFields_chosen{margin-top:15px;margin-bottom:10px;}
+#exportFields_chosen ul.chosen-choices{border:0px;box-shadow:none}
+</style>
 <script>
 function setDownloading()
 {
@@ -119,7 +124,7 @@ $(document).ready(function()
   </div>
 </div>
 <?php $isCustomExport = (!empty($customExport) and !empty($allExportFields));?>
-<form class='form-condensed' method='post' target='hiddenwin' style='padding: 40px 1% 50px'>
+<form class='form-condensed' method='post' target='hiddenwin' style='padding: 50px 1% 50px'>
   <table class='w-p100 table-fixed'>
     <tr>
       <td>
@@ -128,7 +133,7 @@ $(document).ready(function()
           <?php echo html::input('fileName', '', "class='form-control' autocomplete='off'");?>
         </div>
       </td>
-      <td class='w-60px'>
+      <td class='w-70px'>
         <?php echo html::select('fileType',   $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value) class="form-control"');?>
       </td>
       <td class='w-80px'>
@@ -167,7 +172,7 @@ $(document).ready(function()
       if(!$hasDefaultField)$selectedFields[] = $field;
   }
   ?>
-  <div class='panel' id='customFields' style='margin-bottom:150px;display:none'>
+  <div class='panel' id='customFields' style='display:none'>
     <div class='panel-heading'><strong><?php echo $lang->file->exportFields?></strong></div>
     <div class='panel-body'>
       <p><?php echo html::select('exportFields[]', $exportFieldPairs, $selectedFields, "class='form-control chosen' multiple")?></p>
@@ -176,7 +181,9 @@ $(document).ready(function()
           <span class='input-group-addon'><?php echo $lang->file->tplTitle;?></span>
           <?php echo html::input('title', '', "class='form-control' autocomplete='off'")?>
           <?php if(common::hasPriv('file', 'setPublic')):?>
-          <span class='input-group-addon'><?php echo html::checkbox('public', array(1 => $lang->public));?></span>
+          <span class='input-group-addon' style='border-left:0px;'>
+            <label class="checkbox-inline"><input name="public[]" value="1" id="public1" type="checkbox" style='margin-top:0px;'> <?php echo $lang->public;?></label>
+          </span>
           <?php endif?>
           <span class='input-group-btn'><button id='saveTpl' type='button' onclick='saveTemplate()' class='btn btn-primary'><?php echo $lang->save?></button></span>
           <span class='input-group-btn'><button type='button' onclick='deleteTemplate()' class='btn'><?php echo $lang->delete?></button></span>

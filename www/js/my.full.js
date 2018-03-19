@@ -609,7 +609,7 @@ function setImageSize(image, maxWidth)
 function setModalTriggerLink()
 {
     $('.repolink').modalTrigger({width:960, type:'iframe'});
-    $('.export').modalTrigger({width:650, type:'iframe', afterShown: setCheckedCookie})
+    $('.export').modalTrigger({width:800, type:'iframe', afterShown: setCheckedCookie});
 }
 
 /**

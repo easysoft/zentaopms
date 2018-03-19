@@ -616,14 +616,11 @@ class project extends control
         $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $projectID);
         $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
-        $plans = $this->project->getPlans($productID);
+        $plans = $this->project->getPlans($products);
         $allPlans = array('' => '');
         if(!empty($plans))
         {
-            foreach($plans as $productID => $plan)
-            {
-                $allPlans = $allPlans + $plan;
-            }
+            foreach($plans as $productID => $plan) $allPlans += $plan;
         }
 
         /* Assign. */
@@ -1042,7 +1039,6 @@ class project extends control
         $this->view->qdUsers        = $this->user->getPairs('noclosed|nodeleted|qdfirst',  $project->QD);
         $this->view->rdUsers        = $this->user->getPairs('noclosed|nodeleted|devfirst', $project->RD);
         $this->view->groups         = $this->loadModel('group')->getPairs();
-        $this->view->plans          = $this->project->getPlans(array_keys($linkedProducts));
         $this->view->allProducts    = $allProducts;
         $this->view->linkedProducts = $linkedProducts;
         $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts));
@@ -1306,6 +1302,7 @@ class project extends control
         $this->view->project      = $project;
         $this->view->products     = $products;
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $this->view->planGroups   = $this->project->getPlans($products);
         $this->view->groups       = $this->loadModel('group')->getPairs();
         $this->view->actions      = $this->loadModel('action')->getList('project', $projectID);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');

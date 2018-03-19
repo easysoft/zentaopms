@@ -273,7 +273,7 @@ class product extends control
 
         $this->product->setMenu($this->products, $productID);
 
-        $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+        $product  = $this->product->getStatByID($productID);
         $this->view->title      = $this->lang->product->edit . $this->lang->colon . $product->name;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[] = $this->lang->product->edit;
@@ -333,6 +333,7 @@ class product extends control
 
         $this->view->title         = $this->lang->product->batchEdit;
         $this->view->position[]    = $this->lang->product->batchEdit;
+        $this->view->lines         = array('') + $this->tree->getLinePairs();
         $this->view->productIDList = $productIDList;
         $this->view->products      = $products;
         $this->view->poUsers       = $this->loadModel('user')->getPairs('nodeleted|pofirst', $appendPoUsers);
@@ -548,12 +549,13 @@ class product extends control
      * @param  int    $productID 
      * @param  int    $planID 
      * @param  bool   $needCreate
+     * @param  string $expired
      * @access public
      * @return void
      */
-    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false)
+    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '')
     {
-        $plans = $this->loadModel('productplan')->getPairs($productID, $branch);
+        $plans = $this->loadModel('productplan')->getPairs($productID, $branch, $expired);
         $field = $fieldID ? "plans[$fieldID]" : 'plan';
         $output = html::select($field, $plans, $planID, "class='form-control chosen'");
         if(count($plans) == 1 and $needCreate) 

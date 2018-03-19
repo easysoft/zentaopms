@@ -117,7 +117,7 @@ class testtask extends control
                 ->fetchPairs('id');
 
             $productID = $productID ? $productID : key($products);
-            $projects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetchPairs('id');
+            $projects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('type')->ne('ops')->andWhere('deleted')->eq(0)->fetchPairs('id');
             $builds    = $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->eq($build)->andWhere('deleted')->eq(0)->fetchPairs('id');
         }
 
@@ -131,14 +131,32 @@ class testtask extends control
                 ->fetchPairs('id');
 
             $productID = $productID ? $productID : key($products);
-            $projects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetchPairs('id');
+            $projects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('type')->ne('ops')->andWhere('deleted')->eq(0)->fetchPairs('id');
             $builds    = $this->dao->select('id, name')->from(TABLE_BUILD)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->fetchPairs('id');
         }
 
         /* Create testtask from testtask of test.*/
         if($projectID == 0)
         {
-            $projects = $this->product->getProjectPairs($productID, $branch = 0, $params = 'nodeleted');
+            $projectList  = array_keys($this->loadModel('project')->getPairs());
+        
+            $params   = 'nodeleted';
+            $projects = array();
+            $datas = $this->dao->select('t2.id, t2.name, t2.deleted')->from(TABLE_PROJECTPRODUCT)
+                ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t1.product')->eq((int)$productID)
+                ->beginIF('0')->andWhere('t1.branch')->in('0')->fi()
+                ->andWhere('t2.id')->in($projectList)
+                ->andWhere('t2.type')->ne('ops')
+                ->orderBy('t1.project desc')
+                ->fetchAll();
+    
+            foreach($datas as $data)
+            {
+                if($params == 'nodeleted' and $data->deleted) continue;
+                $projects[$data->id] = $data->name;
+            }
+            $projects = array('' => '') +  $projects;
             $builds   = $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
         }
 
