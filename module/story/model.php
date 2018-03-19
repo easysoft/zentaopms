@@ -1956,7 +1956,7 @@ class storyModel extends model
             }
             else
             {
-                $property = '(' . $this->lang->story->pri . ':' . $story->pri . ',' . $this->lang->story->estimate . ':' . $story->estimate . ')';
+                $property = '(' . $this->lang->story->pri . ':' . (!empty($this->lang->story->priList[$story->pri]) ? $this->lang->story->priList[$story->pri] : 0) . ',' . $this->lang->story->estimate . ':' . $story->estimate . ')';
             }
             $storyPairs[$story->id] = $story->id . ':' . $story->title . $property;
 
