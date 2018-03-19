@@ -33,6 +33,7 @@ foreach(explode(',', $showFields) as $field)
         <th class='w-id'>   <?php echo $lang->idAB;?></th>
         <th><?php echo $lang->product->name;?> <span class='required'></span></th>
         <th class='w-150px'><?php echo $lang->product->code;?> <span class='required'></span></th>
+        <th class='w-150px'><?php echo $lang->product->line;?><th>
         <th class='w-150px<?php echo zget($visibleFields, 'PO',     ' hidden')?>'><?php echo $lang->product->PO;?></th>
         <th class='w-150px<?php echo zget($visibleFields, 'QD',     ' hidden')?>'><?php echo $lang->product->QD;?></th>
         <th class='w-150px<?php echo zget($visibleFields, 'RD',     ' hidden')?>'><?php echo $lang->product->RD;?></th>
@@ -47,6 +48,7 @@ foreach(explode(',', $showFields) as $field)
       <td><?php echo sprintf('%03d', $productID) . html::hidden("productIDList[$productID]", $productID);?></td>
       <td title='<?php echo $products[$productID]->name?>'><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control' autocomplete='off'");?></td>
       <td><?php echo html::input("codes[$productID]", $products[$productID]->code, "class='form-control' autocomplete='off'");?></td>
+      <td class='text-left<?php echo zget($lines, $products[$productID]->line, '')?>' style='overflow:visible'><?php echo html::select("line[$productID]", $lines, $products[$productID]->line, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'PO', ' hidden')?>' style='overflow:visible'><?php echo html::select("POs[$productID]",  $poUsers, $products[$productID]->PO, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'QD', ' hidden')?>' style='overflow:visible'><?php echo html::select("QDs[$productID]",  $qdUsers, $products[$productID]->QD, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'RD', ' hidden')?>' style='overflow:visible'><?php echo html::select("RDs[$productID]",  $rdUsers, $products[$productID]->RD, "class='form-control chosen'");?></td>
