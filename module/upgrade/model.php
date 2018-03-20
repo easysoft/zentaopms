@@ -210,6 +210,7 @@ class upgradeModel extends model
              case '9_8_1':
                 $this->execSQL($this->getUpgradeFile('9.8.1'));
                 $this->fixAssignedTo();
+                $this->fixClosedInfo();
        }
 
         $this->deletePatch();
@@ -2146,5 +2147,26 @@ class upgradeModel extends model
         }
 
         return dao::isError();
+    }
+
+    /**
+     * Fix project closedBy and closedDate.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function fixClosedInfo()
+    {
+        $stmt = $this->dao->select('t2.objectType,t2.objectID,t2.actor,t2.date')->from(TABLE_HISTORY)->alias('t1')
+            ->leftJoin(TABLE_ACTION)->alias('t2')->on('t1.action=t2.id')
+            ->where('t1.field')->in('closedBy,closedDate')
+            ->andWhere('t2.objectType')->eq('project')
+            ->andWhere('t2.action')->eq('closed')
+            ->query();
+        while($action = $stmt->fetch())
+        {
+            $this->dao->update(TABLE_PROJECT)->set('status')->eq('closed')->set('`closedBy`')->eq($action->actor)->set('`closedDate`')->eq($action->date)->where('id')->eq($action->objectID)->exec();
+        }
+        return !dao::isError();
     }
 }
