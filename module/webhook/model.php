@@ -227,16 +227,13 @@ class webhookModel extends model
 
         $mobile = '';
         $email  = '';
-        if(in_array($actionType, array('assigned', 'resolved', 'bugconfirmed')))
+        foreach($users as $user)
         {
-            foreach($users as $user)
+            if($user->account == $object->assignedTo)
             {
-                if($user->account == $object->assignedTo)
-                {
-                    $mobile = $user->mobile;
-                    $email  = $user->email;
-                    break;
-                }
+                $mobile = $user->mobile;
+                $email  = $user->email;
+                break;
             }
         }
         $action->text = $text;
