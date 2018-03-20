@@ -49,14 +49,14 @@ unset($visibleFields['module']);
     <thead>
       <tr class='text-center'>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
-        <th class='w-120px<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
-        <th class='w-p15'><?php echo $lang->story->module;?> <span class='required'></span></th>
-        <th class='w-p15<?php echo zget($visibleFields, 'plan', ' hidden')?>'>
+        <th class='w-100px<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
+        <th class='w-p13'><?php echo $lang->story->module;?> <span class='required'></span></th>
+        <th class='w-p13<?php echo zget($visibleFields, 'plan', ' hidden')?>'>
           <?php echo $lang->story->plan;?>
           <?php if(isset($requiredFields['plan'])) echo " <span class='required'></span>";?>
         </th>
-        <th <?php if(count($visibleFields) >= 9) echo "class='w-150px'"?>><?php echo $lang->story->title;?> <span class='required'></span></th>
-        <th class='w-p15<?php echo zget($visibleFields, 'spec', ' hidden')?>'>
+        <th <?php if(count($visibleFields) >= 9) echo "class='w-200px'"?>><?php echo $lang->story->title;?> <span class='required'></span></th>
+        <th class='w-p13<?php echo zget($visibleFields, 'spec', ' hidden')?>'>
           <?php echo $lang->story->spec;?>
           <?php if(isset($requiredFields['spec'])) echo " <span class='required'></span>";?>
         </th>
@@ -64,7 +64,7 @@ unset($visibleFields['module']);
           <?php echo $lang->story->source;?>
           <?php if(isset($requiredFields['source'])) echo " <span class='required'></span>";?>
         </th>
-        <th class='w-p15<?php echo zget($visibleFields, 'verify', ' hidden')?>'>
+        <th class='w-p12<?php echo zget($visibleFields, 'verify', ' hidden')?>'>
           <?php echo $lang->story->verify;?>
           <?php if(isset($requiredFields['verify'])) echo " <span class='required'></span>";?>
         </th>
@@ -72,12 +72,12 @@ unset($visibleFields['module']);
           <?php echo $lang->story->pri;?>
           <?php if(isset($requiredFields['pri'])) echo " <span class='required'></span>";?>
         </th>
-        <th class='w-100px<?php echo zget($visibleFields, 'estimate', ' hidden')?>'>
+        <th class='w-80px<?php echo zget($visibleFields, 'estimate', ' hidden')?>'>
           <?php echo $lang->story->estimate;?>
           <?php if(isset($requiredFields['estimate'])) echo " <span class='required'></span>";?>
         </th>
         <th class='w-70px<?php echo zget($visibleFields, 'review', ' hidden')?>'><?php echo $lang->story->review;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'>
+        <th class='w-80px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'>
           <?php echo $lang->story->keywords;?>
           <?php if(isset($requiredFields['keywords'])) echo " <span class='required'></span>";?>
         </th>
