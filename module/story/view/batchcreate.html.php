@@ -27,29 +27,60 @@
   </div>
 </div>
 <?php
-$visibleFields = array();
+$visibleFields  = array();
+$requiredFields = array();
 foreach(explode(',', $showFields) as $field)
 {
     if($field) $visibleFields[$field] = '';
 }
+foreach(explode(',', $this->config->story->create->requiredFields) as $field)
+{
+    if($field)
+    {
+        $requiredFields[$field] = '';
+        if(strpos(",{$config->story->list->customBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+    }
+}
 if($this->story->checkForceReview()) unset($visibleFields['review']);
+unset($visibleFields['module']);
 ?>
 <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
   <table class='table table-form table-fixed with-border'> 
     <thead>
       <tr class='text-center'>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
-        <th class='w-120px<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
-        <th class='w-p15'><?php echo $lang->story->module;?> <span class='required'></span></th>
-        <th class='w-p15<?php echo zget($visibleFields, 'plan', ' hidden')?>'><?php echo $lang->story->plan;?></th>
-        <th <?php if(count($visibleFields) >= 9) echo "class='w-150px'"?>><?php echo $lang->story->title;?> <span class='required'></span></th>
-        <th class='w-p15<?php echo zget($visibleFields, 'spec', ' hidden')?>'><?php echo $lang->story->spec;?></th>
-        <th class='w-80px<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo $lang->story->source;?></th>
-        <th class='w-p15<?php echo zget($visibleFields, 'verify', ' hidden')?>'><?php echo $lang->story->verify;?></th>
-        <th class='w-80px<?php echo zget($visibleFields, 'pri', ' hidden')?>'><?php echo $lang->story->pri;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'estimate', ' hidden')?>'><?php echo $lang->story->estimate;?></th>
+        <th class='w-100px<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
+        <th class='w-p13'><?php echo $lang->story->module;?> <span class='required'></span></th>
+        <th class='w-p13<?php echo zget($visibleFields, 'plan', ' hidden')?>'>
+          <?php echo $lang->story->plan;?>
+          <?php if(isset($requiredFields['plan'])) echo " <span class='required'></span>";?>
+        </th>
+        <th <?php if(count($visibleFields) >= 9) echo "class='w-200px'"?>><?php echo $lang->story->title;?> <span class='required'></span></th>
+        <th class='w-p13<?php echo zget($visibleFields, 'spec', ' hidden')?>'>
+          <?php echo $lang->story->spec;?>
+          <?php if(isset($requiredFields['spec'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-80px<?php echo zget($visibleFields, 'source', ' hidden')?>'>
+          <?php echo $lang->story->source;?>
+          <?php if(isset($requiredFields['source'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-p12<?php echo zget($visibleFields, 'verify', ' hidden')?>'>
+          <?php echo $lang->story->verify;?>
+          <?php if(isset($requiredFields['verify'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-80px<?php echo zget($visibleFields, 'pri', ' hidden')?>'>
+          <?php echo $lang->story->pri;?>
+          <?php if(isset($requiredFields['pri'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-80px<?php echo zget($visibleFields, 'estimate', ' hidden')?>'>
+          <?php echo $lang->story->estimate;?>
+          <?php if(isset($requiredFields['estimate'])) echo " <span class='required'></span>";?>
+        </th>
         <th class='w-70px<?php echo zget($visibleFields, 'review', ' hidden')?>'><?php echo $lang->story->review;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'><?php echo $lang->story->keywords;?></th>
+        <th class='w-80px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'>
+          <?php echo $lang->story->keywords;?>
+          <?php if(isset($requiredFields['keywords'])) echo " <span class='required'></span>";?>
+        </th>
       </tr>
     </thead>
     <?php $i = 0; ?>
@@ -62,7 +93,7 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
       <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModuleAndPlan(this.value, $productID, $i)'");?></td>
-      <td class='text-left<?php echo zget($visibleFields, 'module')?>' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, $planID, "class='form-control chosen'");?></td>
       <td style='overflow:visible'>
         <div class='input-group'>
@@ -94,7 +125,7 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
     <tr class='text-center'>
       <td><?php echo $i+1;?></td>
       <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>' style='overflow:visible'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control chosen' onchange='setModuleAndPlan(this.value, $productID, $i)'");?></td>
-      <td class='text-left<?php echo zget($visibleFields, 'module')?>' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, $planID, "class='form-control chosen'");?></td>
       <td style='overflow:visible'>
         <div class='input-group'>
@@ -122,7 +153,7 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
     <tr class='text-center'>
       <td>%s</td>
       <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>' style='overflow:visible'><?php echo html::select("branch[%s]", $branches, $branch, "class='form-control' onchange='setModuleAndPlan(this.value, $productID, \"%s\")'");?></td>
-      <td class='text-left<?php echo zget($visibleFields, 'module')?>' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plan[%s]", $plans, $planID, "class='form-control'");?></td>
       <td style='overflow:visible'>
         <div class='input-group'>
