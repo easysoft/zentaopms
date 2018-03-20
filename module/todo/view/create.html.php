@@ -28,7 +28,7 @@
         <td class='w-p25-f'>
           <div class='input-group'>
             <?php echo html::input('date', $date, "class='form-control form-date'");?>
-            <span class='input-group-addon'><input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></span>
+            <span class='input-group-addon switchDate'><input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></span>
             <span class='input-group-addon'><input type='checkbox' id='cycle' name='cycle' value='1'> <?php echo $lang->todo->cycle;?></span>
           </div>
         </td><td></td>
