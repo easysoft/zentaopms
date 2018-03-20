@@ -71,15 +71,13 @@
     <?php if($this->session->currentProductType != 'normal'):?>
     <td><?php echo $branches[$plan->branch];?></td>
     <?php endif;?>
-    <td><?php echo $plan->begin;?></td>
+    <td><?php echo $plan->begin == '2030-01-01' ? $lang->productplan->future : $plan->begin;?></td>
     <td><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
     <td class='text-center'><?php echo $plan->stories;?></td>
     <td class='text-center'><?php echo $plan->bugs;?></td>
     <td class='text-center'><?php echo $plan->hour;?></td>
     <td class='text-center'><?php if(!empty($plan->projectID)) echo html::a(helper::createLink('project', 'task', 'projectID=' . $plan->projectID), '<i class="icon-search"></i>');?></td>
     <td class='text-left content'><div class='article-content'><?php echo $plan->desc;?></div></td>
-    <td><?php echo $plan->begin == '2030-01-01' ? $lang->productplan->future : $plan->begin;?></td>
-    <td><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
     <td class='text-center'>
       <?php
       if(common::hasPriv('project', 'create')) echo html::a(helper::createLink('project', 'create', "projectID=&copyProjectID=&planID=$plan->id"), '<i class="icon-play"></i>', '', "class='btn-icon' title='{$lang->project->create}'");
