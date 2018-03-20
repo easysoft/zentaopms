@@ -238,8 +238,15 @@ class searchModel extends model
         $query->form = htmlspecialchars_decode($query->form, ENT_QUOTES);
         $query->sql  = htmlspecialchars_decode($query->sql, ENT_QUOTES);
 
+        $hasDynamic  = strpos($query->form, '$') !== false;
         $query->form = unserialize($query->form);
-        $query->sql  = $this->replaceDynamic($query->sql);
+        if($hasDynamic)
+        {
+            $_POST = $query->form;
+            $this->buildQuery();
+            $querySessionName = $query->form['module'] . 'Query';
+            $query->sql = $this->session->$querySessionName;
+        }
         return $query;
     }
 
