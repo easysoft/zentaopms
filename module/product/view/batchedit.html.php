@@ -20,10 +20,19 @@
   </div>
 </div>
 <?php
-$visibleFields = array();
+$visibleFields  = array();
+$requiredFields = array();
 foreach(explode(',', $showFields) as $field)
 {
-    if($field)$visibleFields[$field] = '';
+    if($field) $visibleFields[$field] = '';
+}
+foreach(explode(',', $this->config->product->edit->requiredFields) as $field)
+{
+    if($field)
+    {
+        $requiredFields[$field] = '';
+        if(strpos(",{$config->product->customBatchEditFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+    }
 }
 ?>
 <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo inLink('batchEdit');?>'>
@@ -33,18 +42,39 @@ foreach(explode(',', $showFields) as $field)
         <th class='w-id'>   <?php echo $lang->idAB;?></th>
         <th><?php echo $lang->product->name;?> <span class='required'></span></th>
         <th class='w-150px'><?php echo $lang->product->code;?> <span class='required'></span></th>
-        <th class='w-150px'><?php echo $lang->product->line;?></th>
-        <th class='w-150px<?php echo zget($visibleFields, 'PO',     ' hidden')?>'><?php echo $lang->product->PO;?></th>
-        <th class='w-150px<?php echo zget($visibleFields, 'QD',     ' hidden')?>'><?php echo $lang->product->QD;?></th>
-        <th class='w-150px<?php echo zget($visibleFields, 'RD',     ' hidden')?>'><?php echo $lang->product->RD;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'type',   ' hidden')?>'><?php echo $lang->product->type;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden')?>'><?php echo $lang->product->status;?></th>
-        <th class='w-200px<?php echo zget($visibleFields, 'desc',   ' hidden')?>'><?php echo $lang->product->desc;?></th>
+        <th class='w-150px'>
+          <?php echo $lang->product->line;?>
+          <?php if(isset($requiredFields['line'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-150px<?php if(!isset($visibleFields['PO'])) echo ' hidden';?>'>
+          <?php echo $lang->product->PO;?>
+          <?php if(isset($requiredFields['PO'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-150px<?php if(!isset($visibleFields['QD'])) echo ' hidden';?>'>
+          <?php echo $lang->product->QD;?>
+          <?php if(isset($requiredFields['QD'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-150px<?php if(!isset($visibleFields['RD'])) echo ' hidden';?>'>
+          <?php echo $lang->product->RD;?>
+          <?php if(isset($requiredFields['RD'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-100px<?php if(!isset($visibleFields['type'])) echo ' hidden';?>'>
+          <?php echo $lang->product->type;?>
+          <?php if(isset($requiredFields['type'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-100px<?php if(!isset($visibleFields['status'])) echo ' hidden';?>'>
+          <?php echo $lang->product->status;?>
+          <?php if(isset($requiredFields['status'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-200px<?php if(!isset($visibleFields['desc'])) echo ' hidden';?>'>
+          <?php echo $lang->product->desc;?>
+          <?php if(isset($requiredFields['desc'])) echo " <span class='required'></span>";?>
+        </th>
         <th class='w-80px'><?php echo $lang->product->order;?></th>
       </tr>
     </thead>
-    <tr class='text-center'>
     <?php foreach($productIDList as $productID):?>
+    <tr class='text-center'>
       <td><?php echo sprintf('%03d', $productID) . html::hidden("productIDList[$productID]", $productID);?></td>
       <td title='<?php echo $products[$productID]->name?>'><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control' autocomplete='off'");?></td>
       <td><?php echo html::input("codes[$productID]", $products[$productID]->code, "class='form-control' autocomplete='off'");?></td>
