@@ -30,7 +30,7 @@ foreach(explode(',', $showFields) as $field)
 {
     if($field)$visibleFields[$field] = '';
 }
-$columns = count($visibleFields) + 3;
+$columns = count($visibleFields) + 4;
 ?>
 <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->inlink('batchEdit', "from=todoBatchEdit");?>'>
   <table class='table table-form table-fixed with-border'>
@@ -51,7 +51,10 @@ $columns = count($visibleFields) + 3;
     <tr class='text-left'>
       <td><?php echo $todo->id . html::hidden("todoIDList[$todo->id]", $todo->id);?></td>
       <td><?php echo html::input("dates[$todo->id]", $todo->date, "class='form-control form-date'");?></td>
-      <td class='text-center'><?php echo zget($lang->todo->typeList, $todo->type);?></td>
+      <td class='text-center'>
+        <?php echo zget($lang->todo->typeList, $todo->type);?>
+        <?php echo html::hidden("types[$todo->id]", $todo->type);?>
+      </td>
       <td style='overflow:visible' <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, "class='form-control chosen'");?></td>
       <td style='overflow:visible'>
         <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><? echo html::input("names[$todo->id]", '', "class='text-left form-control hiddenwin' autocomplete='off'"); ?></div>

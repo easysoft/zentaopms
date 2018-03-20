@@ -1,7 +1,10 @@
 #datepicker {position: relative; top: -6px; margin-left: 10px;}
+#datepicker .input-group-addon input[type="checkbox"]{vertical-align: middle; top: -4px; margin-left: -15px;}
 .input-group > .form-control:first-child {border-right: 0}
 
 .body-modal .outer > form, .body-modal .outer > .container > form {margin: 0;padding: 0 20px 20px;}
 .body-modal #titlebar {margin: 0 -20px 20px}
 .body-modal #titlebar + .table-form {border: 1px solid #ddd}
 #titlebar input#date{background:#F8FAFE;box-shadow:none}
+
+div[id*="ends"] .chosen-single{border-left: none;}

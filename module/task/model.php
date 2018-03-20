@@ -1066,7 +1066,7 @@ class taskModel extends model
         $this->updateParentStatus($oldTask->parent, 'closed');
         $this->computeWorkingHours($oldTask->parent);
 
-        $this->dao->update(TABLE_TASK)->set('status')->eq('closed')->where('parent')->eq($taskID)->exec();
+        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq($taskID)->exec();
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
 
@@ -1269,7 +1269,7 @@ class taskModel extends model
             ->leftJoin(TABLE_TEAM)->alias('t4')->on('t4.root = t1.id')
             ->leftJoin(TABLE_MODULE)->alias('t5')->on('t1.module = t5.id')
             ->where('t1.project')->eq((int)$projectID)
-            ->beginIF(!in_array($type, array('assignedtome', 'myinvolved')))->andWhere('t1.parent')->eq(0)->fi()
+            ->beginIF($type =='all' || is_array($type))->andWhere('t1.parent')->eq(0)->fi()
             ->beginIF($type == 'myinvolved')
             ->andWhere("((t4.`account` = '{$this->app->user->account}' AND t4.`type` = 'task') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")
             ->fi()
