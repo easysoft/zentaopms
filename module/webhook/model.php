@@ -227,7 +227,7 @@ class webhookModel extends model
 
         $mobile = '';
         $email  = '';
-        if($actionType == 'assigned') 
+        if(in_array($actionType, array('assigned', 'resolved', 'bugconfirmed')))
         {
             foreach($users as $user)
             {
