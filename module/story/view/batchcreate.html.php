@@ -39,17 +39,17 @@ if($this->story->checkForceReview()) unset($visibleFields['review']);
     <thead>
       <tr class='text-center'>
         <th class='w-30px'><?php echo $lang->idAB;?></th> 
-        <th class='w-120px<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
-        <th class='w-p15'><?php echo $lang->story->module;?> <span class='required'></span></th>
-        <th class='w-p15<?php echo zget($visibleFields, 'plan', ' hidden')?>'><?php echo $lang->story->plan;?></th>
-        <th <?php if(count($visibleFields) >= 9) echo "class='w-150px'"?>><?php echo $lang->story->title;?> <span class='required'></span></th>
-        <th class='w-p15<?php echo zget($visibleFields, 'spec', ' hidden')?>'><?php echo $lang->story->spec;?></th>
+        <th class='w-100px<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
+        <th class='w-p13'><?php echo $lang->story->module;?> <span class='required'></span></th>
+        <th class='w-p13<?php echo zget($visibleFields, 'plan', ' hidden')?>'><?php echo $lang->story->plan;?></th>
+        <th <?php if(count($visibleFields) >= 9) echo "class='w-200px'"?>><?php echo $lang->story->title;?> <span class='required'></span></th>
+        <th class='w-p13<?php echo zget($visibleFields, 'spec', ' hidden')?>'><?php echo $lang->story->spec;?></th>
         <th class='w-80px<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo $lang->story->source;?></th>
-        <th class='w-p15<?php echo zget($visibleFields, 'verify', ' hidden')?>'><?php echo $lang->story->verify;?></th>
+        <th class='w-p12<?php echo zget($visibleFields, 'verify', ' hidden')?>'><?php echo $lang->story->verify;?></th>
         <th class='w-80px<?php echo zget($visibleFields, 'pri', ' hidden')?>'><?php echo $lang->story->pri;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'estimate', ' hidden')?>'><?php echo $lang->story->estimate;?></th>
+        <th class='w-80px<?php echo zget($visibleFields, 'estimate', ' hidden')?>'><?php echo $lang->story->estimate;?></th>
         <th class='w-70px<?php echo zget($visibleFields, 'review', ' hidden')?>'><?php echo $lang->story->review;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'><?php echo $lang->story->keywords;?></th>
+        <th class='w-80px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'><?php echo $lang->story->keywords;?></th>
       </tr>
     </thead>
     <?php $i = 0; ?>
