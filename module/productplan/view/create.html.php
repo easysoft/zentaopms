@@ -43,7 +43,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->productplan->begin;?></th>
-        <td><?php echo html::input('begin', $begin, "class='form-control form-date'");?></td>
+        <td><?php echo html::input('begin', formatTime($begin), "class='form-control form-date'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->productplan->end;?></th>

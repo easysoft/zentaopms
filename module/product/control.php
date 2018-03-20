@@ -333,6 +333,7 @@ class product extends control
 
         $this->view->title         = $this->lang->product->batchEdit;
         $this->view->position[]    = $this->lang->product->batchEdit;
+        $this->view->lines         = array('') + $this->tree->getLinePairs();
         $this->view->productIDList = $productIDList;
         $this->view->products      = $products;
         $this->view->poUsers       = $this->loadModel('user')->getPairs('nodeleted|pofirst', $appendPoUsers);

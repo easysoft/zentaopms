@@ -83,7 +83,7 @@ $lang->custom->allLang     = '適用所有語言';
 $lang->custom->confirmRestore = '是否要恢復預設配置？';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userRole             = '鍵的長度必須小於20個字元！';
+$lang->custom->notice->userRole             = '鍵的長度必須小於10個字元！';
 $lang->custom->notice->canNotAdd            = '該項參與運算，不提供自定義添加功能';
 $lang->custom->notice->forceReview          = "指定人提交的%s必須評審。";
 $lang->custom->notice->forceNotReview       = "指定人提交的%s不需要評審。";

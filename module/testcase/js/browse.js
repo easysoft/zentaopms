@@ -51,7 +51,7 @@ $(document).ready(function()
         $('#modulemenu > .nav').append($('#featurebar > .submenu').html());
 
         toggleSearch();
-        $('.export').modalTrigger({width:650, type:'iframe'});
+        $('.export').modalTrigger({width:650, type:'iframe', afterShown: setCheckedCookie})
 
         $('#modulemenu > .nav > li').removeClass('active');
         $('#modulemenu > .nav > li[data-id=' + browseType + ']').addClass('active');

@@ -83,13 +83,13 @@ $lang->custom->allLang     = 'All Language';
 $lang->custom->confirmRestore = 'Do you want to reset to Default?';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userRole             = 'Key must be no more than 20 characters!';
+$lang->custom->notice->userRole             = 'Key must be no more than 10 characters!';
 $lang->custom->notice->canNotAdd            = 'These items are parameters of calculation, so customized creation is not enabled.';
 $lang->custom->notice->forceReview          = '%s Review is required for certain submitters.';
 $lang->custom->notice->forceNotReview       = "%s Review is NOT required for certain submitters.";
 $lang->custom->notice->longlife             = 'Define shelved bugs.';
 $lang->custom->notice->priListKey           = 'Priority list key should be numbers！';
-$lang->custom->notice->keyList              = 'key should be English or digital!';
+$lang->custom->notice->keyList              = 'The key should be a combination of lowercase English letters, numbers or underscores';
 $lang->custom->notice->severityListKey      = 'Bug severity list key should be numbers.';
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage. Do you want to go to Product Homepage?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage. Do you want to go to Project Homepage?";

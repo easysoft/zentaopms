@@ -208,6 +208,8 @@ class upgradeModel extends model
              case '9_8':
                 $this->fixFinishedBy();
              case '9_8_1':
+                $this->execSQL($this->getUpgradeFile('9.8.1'));
+                $this->fixAssignedTo();
        }
 
         $this->deletePatch();
@@ -312,7 +314,7 @@ class upgradeModel extends model
         case '9_6_3':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.6.3'));
         case '9_7':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.7'));
         case '9_8':
-        case '9_8_1':
+        case '9_8_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.8.1'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -2110,5 +2112,39 @@ class upgradeModel extends model
             $this->dao->update(TABLE_TASK)->set('`finishedBy`')->eq($action->actor)->where('id')->eq($action->objectID)->exec();
         }
         return true;
+    }
+
+    /**
+     * Fix assignedTo for closed tasks.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function fixAssignedTo()
+    {
+        $tasks = $this->dao->select('*')->from(TABLE_TASK)->fetchAll('id');
+        $needUpdateTasks = $this->dao->select('*')->from(TABLE_TASK)
+            ->where('status')->eq('closed')
+            ->andWhere('assignedTo')->ne('closed')
+            ->andWhere('parent')->ne(0)
+            ->fetchAll();
+
+        foreach($needUpdateTasks as $task)
+        {
+            $parent = isset($tasks[$task->parent]) ? $tasks[$task->parent] : '';
+
+            $this->dao->update(TABLE_TASK)
+                ->set('assignedTo')->eq('closed')
+                ->beginIF($parent)
+                ->set('assignedDate')->eq($parent->assignedDate)
+                ->set('closedBy')->eq($parent->closedBy)
+                ->set('closedDate')->eq($parent->closedDate)
+                ->set('closedReason')->eq($parent->closedReason)
+                ->fi()
+                ->where('id')->eq($task->id)
+                ->exec();
+        }
+
+        return dao::isError();
     }
 }
