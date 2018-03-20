@@ -1025,9 +1025,11 @@ class project extends control
 
         $allProducts    = array(0 => '') + $this->loadModel('product')->getPairs('noclosed|nocode');
         $linkedProducts = $this->project->getProducts($project->id);
+        $linkedBranches = array();
         foreach($linkedProducts as $product)
         {
             if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
+            if($product->branch) $linkedBranches[$product->branch] = $product->branch;
         }
 
         $this->view->title          = $title;
@@ -1041,7 +1043,7 @@ class project extends control
         $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->allProducts    = $allProducts;
         $this->view->linkedProducts = $linkedProducts;
-        $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts));
+        $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
 
         $this->display();
     }
@@ -1291,6 +1293,11 @@ class project extends control
         if(!$project) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $products = $this->project->getProducts($project->id);
+        $linkedBranches = array();
+        foreach($products as $product)
+        {
+            if($product->branch) $linkedBranches[$product->branch] = $product->branch;
+        }
 
         /* Set menu. */
         $this->project->setMenu($this->projects, $project->id);
@@ -1301,7 +1308,7 @@ class project extends control
 
         $this->view->project      = $project;
         $this->view->products     = $products;
-        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
         $this->view->planGroups   = $this->project->getPlans($products);
         $this->view->groups       = $this->loadModel('group')->getPairs();
         $this->view->actions      = $this->loadModel('action')->getList('project', $projectID);
@@ -1599,10 +1606,12 @@ class project extends control
 
         $allProducts     = $this->product->getPairs('noclosed|nocode');
         $linkedProducts  = $this->project->getProducts($project->id);
+        $linkedBranches  = array();
         // Merge allProducts and linkedProducts for closed product.
         foreach($linkedProducts as $product)
         {
             if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
+            if(!empty($product->branch)) $linkedBranches[$product->branch] = $product->branch;
         }
 
         /* Assign. */
@@ -1610,7 +1619,7 @@ class project extends control
         $this->view->position       = $position;
         $this->view->allProducts    = $allProducts;
         $this->view->linkedProducts = $linkedProducts;
-        $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($allProducts));
+        $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($allProducts), '', $linkedBranches);
 
         $this->display();
     }

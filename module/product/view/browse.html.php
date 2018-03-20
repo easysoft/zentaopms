@@ -33,7 +33,7 @@
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php if(isset($menuItem->hidden)) continue;?>
     <?php $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;?>
-    <?php $param = strpos($menuItem->name, 'QUERY') === 0 ? '&param=' . (int)substr($menuItem->name, 5) : '';?>
+    <?php $barParam = strpos($menuItem->name, 'QUERY') === 0 ? '&param=' . (int)substr($menuItem->name, 5) : '';?>
     <?php if($menuItem->name == 'my'):?>
     <?php
         echo "<li id='statusTab' class='dropdown " . (!empty($currentBrowseType) ? 'active' : '') . "'>";
@@ -42,12 +42,12 @@
         foreach ($lang->product->mySelects as $key => $value)
         {
             echo '<li' . ($key == $currentBrowseType ? " class='active'" : '') . '>';
-            echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$key" . $param), $value);
+            echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$key" . $barParam), $value);
         }
         echo '</ul></li>';
     ?>
     <?php else:?>
-    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType" . $param), $menuItem->text);?></li>
+    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType" . $barParam), $menuItem->text);?></li>
     <?php endif;?>
     <?php endforeach;?>
     <li id='bysearchTab'><a href='javascript:;'><i class='icon-search icon'></i> <?php echo $lang->product->searchStory;?></a></li>
