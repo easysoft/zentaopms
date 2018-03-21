@@ -111,15 +111,6 @@ class bugModel extends model
         $result = $this->loadModel('common')->removeDuplicate('bug', $data, "product={$productID}");
         $data   = $result['data'];
 
-        for($i = 0; $i < $batchNum; $i++)
-        {
-            if(!empty($data->title[$i]))
-            {
-                if(empty($data->modules[$i]))      die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->module)));
-                if(empty($data->openedBuilds[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->openedBuild)));
-            }
-        }
-
         /* Get pairs(moduleID => moduleOwner) for bug. */
         $stmt         = $this->dbh->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug', $startModuleID = 0, $branch));
         $moduleOwners = array();
@@ -149,6 +140,7 @@ class bugModel extends model
         }
 
         if(isset($data->uploadImage)) $this->loadModel('file');
+        $bugs = array();
         for($i = 0; $i < $batchNum; $i++)
         {
             if(empty($data->title[$i])) continue;
@@ -172,6 +164,23 @@ class bugModel extends model
             $bug->browser     = $data->browsers[$i];
             $bug->keywords    = $data->keywords[$i];
 
+            if(!empty($moduleOwners[$bug->module]))
+            {
+                $bug->assignedTo   = $moduleOwners[$bug->module];
+                $bug->assignedDate = $now;
+            }
+
+            foreach(explode(',', $this->config->bug->create->requiredFields) as $field)
+            {
+                $field = trim($field);
+                if($field and empty($bug->$field)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->$field)));
+            }
+
+            $bugs[$i] = $bug;
+        }
+
+        foreach($bugs as $i => $bug)
+        {
             if(!empty($data->uploadImage[$i]))
             {
                 $fileName = $data->uploadImage[$i];
@@ -197,15 +206,14 @@ class bugModel extends model
                 }
             }
 
-            if(!empty($moduleOwners[$bug->module]))
-            {
-                $bug->assignedTo   = $moduleOwners[$bug->module];
-                $bug->assignedDate = $now;
-            }
+            $this->dao->insert(TABLE_BUG)->data($bug)
+                ->autoCheck()
+                ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
+                ->exec();
+            if(dao::isError()) die(js::error(dao::getError()));
 
-            $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
             $bugID = $this->dao->lastInsertID();
-            if(!dao::isError()) $this->loadModel('score')->create('bug', 'create', $bugID);
+            $this->loadModel('score')->create('bug', 'create', $bugID);
             if(!empty($data->uploadImage[$i]) and !empty($file))
             {
                 $file['objectType'] = 'bug';

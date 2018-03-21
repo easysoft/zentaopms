@@ -43,7 +43,7 @@ foreach(explode(',', $this->config->testcase->create->requiredFields) as $field)
     if($field)
     {
         $requiredFields[$field] = '';
-        if(strpos(",{$config->bug->customBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+        if(strpos(",{$config->testcase->customBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
     }
 }
 $colspan     = count($visibleFields) + 3;

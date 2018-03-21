@@ -30,8 +30,8 @@ $config->custom->requiredModules[85] = 'user';
 
 $config->custom->fieldList['product']['create']      = 'name,code,line,PO,QD,RD,type,desc';
 $config->custom->fieldList['product']['edit']        = 'name,code,line,PO,QD,RD,type,desc,status';
-$config->custom->fieldList['story']['create']        = 'module,plan,source,title,pri,estimate,keywords,spec,verify';
-$config->custom->fieldList['story']['change']        = 'title,spec,verify,comment';
+$config->custom->fieldList['story']['create']        = 'module,plan,source,title,pri,estimate,keywords';
+$config->custom->fieldList['story']['change']        = 'title,comment';
 $config->custom->fieldList['story']['close']         = 'closedReason,comment';
 $config->custom->fieldList['story']['review']        = 'reviewedDate,assignedTo,reviewedBy,comment';
 $config->custom->fieldList['productplan']            = 'title,begin,end,desc';

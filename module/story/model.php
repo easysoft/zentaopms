@@ -277,84 +277,94 @@ class storyModel extends model
         if(isset($stories->uploadImage)) $this->loadModel('file');
 
         $forceReview = $this->checkForceReview();
+        $data        = array();
         for($i = 0; $i < $batchNum; $i++)
         {
-            if(!empty($stories->title[$i]))
+            if(empty($stories->title[$i])) continue;
+            $story = new stdclass();
+            $story->branch     = $stories->branch[$i];
+            $story->module     = $stories->module[$i];
+            $story->plan       = $stories->plan[$i];
+            $story->color      = $stories->color[$i];
+            $story->title      = $stories->title[$i];
+            $story->source     = $stories->source[$i];
+            $story->pri        = $stories->pri[$i];
+            $story->estimate   = $stories->estimate[$i];
+            $story->status     = ($stories->needReview[$i] == 0 and !$forceReview) ? 'active' : 'draft';
+            $story->keywords   = $stories->keywords[$i];
+            $story->product    = $productID;
+            $story->openedBy   = $this->app->user->account;
+            $story->openedDate = $now;
+            $story->version    = 1;
+
+            foreach(explode(',', $this->config->story->create->requiredFields) as $field)
             {
-                $data = new stdclass();
-                $data->branch     = $stories->branch[$i];
-                $data->module     = $stories->module[$i];
-                $data->plan       = $stories->plan[$i];
-                $data->color      = $stories->color[$i];
-                $data->title      = $stories->title[$i];
-                $data->source     = $stories->source[$i];
-                $data->pri        = $stories->pri[$i];
-                $data->estimate   = $stories->estimate[$i];
-                $data->status     = ($stories->needReview[$i] == 0 and !$forceReview) ? 'active' : 'draft';
-                $data->keywords   = $stories->keywords[$i];
-                $data->product    = $productID;
-                $data->openedBy   = $this->app->user->account;
-                $data->openedDate = $now;
-                $data->version    = 1;
+                $field = trim($field);
+                if($field and empty($story->$field)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->story->$field)));
+            }
 
-                $this->dao->insert(TABLE_STORY)->data($data)->autoCheck()
-                    ->batchCheck($this->config->story->create->requiredFields, 'notempty')
-                    ->exec();
-                if(dao::isError())
+            $data[$i] = $story;
+        }
+
+        foreach($data as $i => $story)
+        {
+            $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()
+                ->batchCheck($this->config->story->create->requiredFields, 'notempty')
+                ->exec();
+            if(dao::isError())
+            {
+                echo js::error(dao::getError());
+                die(js::reload('parent'));
+            }
+
+            $storyID = $this->dao->lastInsertID();
+            $this->setStage($storyID);
+
+            $specData = new stdclass();
+            $specData->story   = $storyID;
+            $specData->version = 1;
+            $specData->title   = $stories->title[$i];
+            $specData->spec    = '';
+            $specData->verify  = '';
+            if(!empty($stories->spec[$i]))  $specData->spec   = nl2br($stories->spec[$i]);
+            if(!empty($stories->verify[$i]))$specData->verify = nl2br($stories->verify[$i]);
+
+            if(!empty($stories->uploadImage[$i]))
+            {
+                $fileName = $stories->uploadImage[$i];
+                $file     = $this->session->storyImagesFile[$fileName];
+
+                $realPath = $file['realpath'];
+                unset($file['realpath']);
+
+                if(rename($realPath, $this->file->savePath . $this->file->getSaveName($file['pathname'])))
                 {
-                    echo js::error(dao::getError());
-                    die(js::reload('parent'));
-                }
-
-                $storyID = $this->dao->lastInsertID();
-                $this->setStage($storyID);
-
-                $specData = new stdclass();
-                $specData->story   = $storyID;
-                $specData->version = 1;
-                $specData->title   = $stories->title[$i];
-                $specData->spec    = '';
-                $specData->verify  = '';
-                if(!empty($stories->spec[$i]))  $specData->spec   = nl2br($stories->spec[$i]);
-                if(!empty($stories->verify[$i]))$specData->verify = nl2br($stories->verify[$i]);
-
-                if(!empty($stories->uploadImage[$i]))
-                {
-                    $fileName = $stories->uploadImage[$i];
-                    $file     = $this->session->storyImagesFile[$fileName];
-
-                    $realPath = $file['realpath'];
-                    unset($file['realpath']);
-
-                    if(rename($realPath, $this->file->savePath . $this->file->getSaveName($file['pathname'])))
+                    $file['addedBy']    = $this->app->user->account;
+                    $file['addedDate']  = $now;
+                    $file['objectType'] = 'story';
+                    $file['objectID']   = $storyID;
+                    if(in_array($file['extension'], $this->config->file->imageExtensions))
                     {
-                        $file['addedBy']    = $this->app->user->account;
-                        $file['addedDate']  = $now;
-                        $file['objectType'] = 'story';
-                        $file['objectID']   = $storyID;
-                        if(in_array($file['extension'], $this->config->file->imageExtensions))
-                        {
-                            $file['extra'] = 'editor';
-                            $this->dao->insert(TABLE_FILE)->data($file)->exec();
+                        $file['extra'] = 'editor';
+                        $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
-                            $fileID = $this->dao->lastInsertID();
-                            $specData->spec .= '<img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
-                        }
-                        else
-                        {
-                            $this->dao->insert(TABLE_FILE)->data($file)->exec();
-                        }
+                        $fileID = $this->dao->lastInsertID();
+                        $specData->spec .= '<img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
+                    }
+                    else
+                    {
+                        $this->dao->insert(TABLE_FILE)->data($file)->exec();
                     }
                 }
-
-                $this->dao->insert(TABLE_STORYSPEC)->data($specData)->exec();
-
-                $actionID = $this->action->create('story', $storyID, 'Opened', '');
-                if(!dao::isError()) $this->loadModel('score')->create('story', 'create',$storyID);
-                $mails[$i] = new stdclass();
-                $mails[$i]->storyID  = $storyID;
-                $mails[$i]->actionID = $actionID;
             }
+
+            $this->dao->insert(TABLE_STORYSPEC)->data($specData)->exec();
+
+            $actionID = $this->action->create('story', $storyID, 'Opened', '');
+            if(!dao::isError()) $this->loadModel('score')->create('story', 'create',$storyID);
+            $mails[$i] = new stdclass();
+            $mails[$i]->storyID  = $storyID;
+            $mails[$i]->actionID = $actionID;
         }
 
         /* Remove upload image file and session. */
