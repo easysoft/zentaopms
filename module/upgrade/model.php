@@ -2168,7 +2168,7 @@ class upgradeModel extends model
         {
             $this->dao->insert(TABLE_HISTORY)->set('`new`')->eq($action->actor)->set('`field`')->eq('closedBy')->set('`action`')->eq($action->id)->exec();
             $this->dao->insert(TABLE_HISTORY)->set('`new`')->eq($action->date)->set('`old`')->eq('0000-00-00 00:00:00')->set('`field`')->eq('closedDate')->set('`action`')->eq($action->id)->exec();
-            $this->dao->insert(TABLE_HISTORY)->set('`new`')->eq('closed')->where('`action`')->eq($action->id)->exec();
+            $this->dao->update(TABLE_HISTORY)->set('`new`')->eq('closed')->where('`action`')->eq($action->id)->andWhere('field')->eq('status')->exec();
             $this->dao->update(TABLE_PROJECT)->set('`status`')->eq('closed')->set('`closedBy`')->eq($action->actor)->set('`closedDate`')->eq($action->date)->where('id')->eq($action->objectID)->exec();
         }
         return !dao::isError();
