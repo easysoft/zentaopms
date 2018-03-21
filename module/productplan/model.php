@@ -53,6 +53,7 @@ class productplanModel extends model
         return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
             ->andWhere('product')->eq($productID)
+            ->andWhere('end')->ne('2030-01-01')
             ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
             ->orderBy('end desc')
             ->limit(1)
