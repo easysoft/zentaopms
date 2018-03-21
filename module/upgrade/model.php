@@ -2157,15 +2157,19 @@ class upgradeModel extends model
      */
     public function fixClosedInfo()
     {
-        $stmt = $this->dao->select('t2.objectType,t2.objectID,t2.actor,t2.date')->from(TABLE_HISTORY)->alias('t1')
+        $stmt = $this->dao->select('t1.id as historID, t2.id, t2.objectType,t2.objectID,t2.actor,t2.date')->from(TABLE_HISTORY)->alias('t1')
             ->leftJoin(TABLE_ACTION)->alias('t2')->on('t1.action=t2.id')
-            ->where('t1.field')->in('closedBy,closedDate')
+            ->where('t1.field')->eq('status')
             ->andWhere('t2.objectType')->eq('project')
             ->andWhere('t2.action')->eq('closed')
             ->query();
+
         while($action = $stmt->fetch())
         {
-            $this->dao->update(TABLE_PROJECT)->set('status')->eq('closed')->set('`closedBy`')->eq($action->actor)->set('`closedDate`')->eq($action->date)->where('id')->eq($action->objectID)->exec();
+            $this->dao->insert(TABLE_HISTORY)->set('`new`')->eq($action->actor)->set('`field`')->eq('closedBy')->set('`action`')->eq($action->id)->exec();
+            $this->dao->insert(TABLE_HISTORY)->set('`new`')->eq($action->date)->set('`old`')->eq('0000-00-00 00:00:00')->set('`field`')->eq('closedDate')->set('`action`')->eq($action->id)->exec();
+            $this->dao->update(TABLE_HISTORY)->set('`new`')->eq('closed')->where('`action`')->eq($action->id)->andWhere('field')->eq('status')->exec();
+            $this->dao->update(TABLE_PROJECT)->set('`status`')->eq('closed')->set('`closedBy`')->eq($action->actor)->set('`closedDate`')->eq($action->date)->where('id')->eq($action->objectID)->exec();
         }
         return !dao::isError();
     }
