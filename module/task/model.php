@@ -305,7 +305,29 @@ class taskModel extends model
             if($status != 'done' and $taskStatus != $status) $changeStatus = false;
 
         }
-        if($changeStatus) $this->dao->update(TABLE_TASK)->set('status')->eq($status)->where('id')->eq($parentID)->exec();
+        if($changeStatus)
+        {
+            $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetchAll();
+            $now  = helper::now();
+            $task = new stdclass();
+            $task->status = $status;
+            if($status == 'done')
+            {
+                $task->assignedTo   = $parent->openedBy;
+                $task->assignedDate = $now;
+                $task->finishedBy   = $this->app->user->account;
+                $task->finishedDate = $now;
+            }
+
+            if($status == 'closed')
+            {
+                $task->assignedTo   = 'closed';
+                $task->assignedDate = $now;
+                $task->closedBy     = $this->app->user->account;
+                $task->closedDate   = $now;
+            }
+            $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentID)->exec();
+        }
     }
 
     /**
@@ -1141,10 +1163,9 @@ class taskModel extends model
             ->where('id')->eq((int)$taskID)
             ->exec();
 
+        $this->dao->update(TABLE_TASK)->data($task)->where('parent')->eq($taskID)->exec();
+        if($oldTask->parent) $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq((int)$oldTask->parent)->exec();
         $this->computeWorkingHours($oldTask->parent);
-
-        $this->dao->update(TABLE_TASK)->set('status')->eq('doing')->where('parent')->eq($taskID)->exec();
-        if($oldTask->parent) $this->dao->update(TABLE_TASK)->set('status')->eq('doing')->where('id')->eq((int)$oldTask->parent)->exec();
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
