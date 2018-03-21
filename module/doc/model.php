@@ -696,11 +696,11 @@ class docModel extends model
         if($type == 'product' or $type == 'project')
         {
             $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-            $libs = $this->dao->select('id,name,`order`')->from($table)->where('id')->in($idList)->page($pager, 'id')->orderBy('`order` desc, id desc')->fetchAll('id');
+            $libs = $this->dao->select('id,name,`order`')->from($table)->where('id')->in($idList)->orderBy('`order` desc, id desc')->page($pager, 'id')->fetchAll('id');
         }
         else
         {
-            $libs = $this->dao->select('id,name')->from(TABLE_DOCLIB)->where('id')->in($idList)->page($pager, 'id')->orderBy('`order`, id desc')->fetchAll('id');
+            $libs = $this->dao->select('id,name')->from(TABLE_DOCLIB)->where('id')->in($idList)->orderBy('`order`, id desc')->page($pager, 'id')->fetchAll('id');
         }
 
         return $libs;
