@@ -139,13 +139,13 @@ $lang->user->placeholder->passwordStrength[1] = '6位以上，包含大小寫字
 $lang->user->placeholder->passwordStrength[2] = '10位以上，包含大小寫字母，數字，特殊字元。';
 
 $lang->user->error = new stdclass();
-$lang->user->error->account       = "ID %s，英文、數字和下劃線的組合，三位以上";
-$lang->user->error->accountDupl   = "ID %s，該用戶名已經存在";
-$lang->user->error->realname      = "ID %s，必須填寫真實姓名";
-$lang->user->error->password      = "ID %s，密碼必須六位以上";
-$lang->user->error->mail          = "ID %s，請填寫正確的郵箱地址";
-$lang->user->error->role          = "ID %s，職位不能為空";
-$lang->user->error->reserved      = "ID %s，該用戶名系統預留";
+$lang->user->error->account       = "【ID %s】的用戶名應該為：三位以上的英文、數字或下劃線的組合";
+$lang->user->error->accountDupl   = "【ID %s】的用戶名已經存在";
+$lang->user->error->realname      = "【ID %s】的真實姓名必須填寫";
+$lang->user->error->password      = "【ID %s】的密碼必須為六位以上";
+$lang->user->error->mail          = "【ID %s】的郵箱地址不正確";
+$lang->user->error->role          = "【ID %s】的職位不能為空";
+$lang->user->error->reserved      = "【ID %s】的用戶名已被系統預留";
 
 $lang->user->error->verifyPassword   = "安全驗證密碼錯誤，請輸入你的登錄密碼";
 $lang->user->error->originalPassword = "原密碼不正確";

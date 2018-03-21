@@ -71,15 +71,22 @@ class testtaskModel extends model
      */
     function create()
     {
-        $task = fixer::input('post')->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)->join('mailto', ',')->remove('uid')->get();
+        $task = fixer::input('post')
+            ->setDefault('build', '')
+            ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
+            ->join('mailto', ',')
+            ->remove('uid')
+            ->get();
+
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TESTTASK)->data($task)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->testtask->create->requiredFields, 'notempty')
             ->checkIF($task->begin != '', 'begin', 'date')
-            ->checkIF($task->end   != '', 'end', 'date')
+            ->checkIF($task->end != '', 'end', 'date')
             ->checkIF($task->end != '', 'end', 'ge', $task->begin)
             ->exec();
+
         if(!dao::isError())
         {
             $taskID = $this->dao->lastInsertID();
