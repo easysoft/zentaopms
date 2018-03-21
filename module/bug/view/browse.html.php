@@ -162,7 +162,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   <a class='side-handle' data-id='bugTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>
     <div class='panel panel-sm'>
-      <div class='panel-heading nobr'>
+      <div class='panel-heading text-ellipsis'>
         <?php echo html::icon($lang->icons['product']);?> <strong><?php echo $branch ? $branches[$branch] : $productName;?></strong>
       </div>
       <div class='panel-body'>

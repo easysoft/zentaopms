@@ -21,10 +21,19 @@
   </div>
 </div>
 <?php
-$visibleFields = array();
+$visibleFields  = array();
+$requiredFields = array();
 foreach(explode(',', $showFields) as $field)
 {
     if($field)$visibleFields[$field] = '';
+}
+foreach(explode(',', $this->config->project->edit->requiredFields) as $field)
+{
+    if($field)
+    {
+        $requiredFields[$field] = '';
+        if(strpos(",{$config->project->customBatchEditFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+    }
 }
 $minWidth = (count($visibleFields) > 5) ? 'w-150px' : '';
 ?>
@@ -35,17 +44,38 @@ $minWidth = (count($visibleFields) > 5) ? 'w-150px' : '';
       <th class='w-50px'><?php echo $lang->idAB;?></th>
       <th class='<?php echo $minWidth?>'><?php echo $lang->project->name;?> <span class='required'></span></th>
       <th class='w-150px'><?php echo $lang->project->code;?> <span class='required'></span></th>
-      <th class='w-150px<?php echo zget($visibleFields, 'PM',     ' hidden')?>'><?php echo $lang->project->PM;?></th>
-      <th class='w-150px<?php echo zget($visibleFields, 'PO',     ' hidden')?>'><?php echo $lang->project->PO;?></th>
-      <th class='w-150px<?php echo zget($visibleFields, 'QD',     ' hidden')?>'><?php echo $lang->project->QD;?></th>
-      <th class='w-150px<?php echo zget($visibleFields, 'RD',     ' hidden')?>'><?php echo $lang->project->RD;?></th>
-      <th class='w-100px<?php echo zget($visibleFields, 'type',   ' hidden')?>'><?php echo $lang->project->type;?></th>
+      <th class='w-150px<?php echo zget($visibleFields, 'PM',     ' hidden')?>'>
+        <?php echo $lang->project->PM;?>
+        <?php if(isset($requiredFields['PM'])) echo " <span class='required'></span>";?>
+      </th>
+      <th class='w-150px<?php echo zget($visibleFields, 'PO',     ' hidden')?>'>
+        <?php echo $lang->project->PO;?>
+        <?php if(isset($requiredFields['PO'])) echo " <span class='required'></span>";?>
+      </th>
+      <th class='w-150px<?php echo zget($visibleFields, 'QD',     ' hidden')?>'>
+        <?php echo $lang->project->QD;?>
+        <?php if(isset($requiredFields['QD'])) echo " <span class='required'></span>";?>
+      </th>
+      <th class='w-150px<?php echo zget($visibleFields, 'RD',     ' hidden')?>'>
+        <?php echo $lang->project->RD;?>
+        <?php if(isset($requiredFields['RD'])) echo " <span class='required'></span>";?>
+      </th>
+      <th class='w-100px<?php echo zget($visibleFields, 'type',   ' hidden')?>'>
+        <?php echo $lang->project->type;?>
+        <?php if(isset($requiredFields['type'])) echo " <span class='required'></span>";?>
+      </th>
       <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden')?>'><?php echo $lang->project->status;?></th>
       <th class='w-110px'><?php echo $lang->project->begin;?> <span class='required'></span></th>
       <th class='w-110px'><?php echo $lang->project->end;?> <span class='required'></span></th>
-      <th class='w-150px<?php echo zget($visibleFields, 'desc', ' hidden')?>'>    <?php echo $lang->project->desc;?></th>
+      <th class='w-150px<?php echo zget($visibleFields, 'desc', ' hidden')?>'>
+        <?php echo $lang->project->desc;?>
+        <?php if(isset($requiredFields['desc'])) echo " <span class='required'></span>";?>
+      </th>
       <th class='w-150px<?php echo zget($visibleFields, 'teamname', ' hidden')?>'><?php echo $lang->project->teamname;?></th>
-      <th class='w-150px<?php echo zget($visibleFields, 'days',     ' hidden')?>'><?php echo $lang->project->days;?></th>
+      <th class='w-150px<?php echo zget($visibleFields, 'days',     ' hidden')?>'>
+        <?php echo $lang->project->days;?>
+        <?php if(isset($requiredFields['days'])) echo " <span class='required'></span>";?>
+      </th>
       <th class='w-80px'><?php echo $lang->project->order;?></th>
     </tr>
   </thead>

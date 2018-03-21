@@ -26,10 +26,19 @@
 <div class='alert alert-info'><?php echo $suhosinInfo;?></div>
 <?php else:?>
 <?php
-$visibleFields = array();
+$visibleFields  = array();
+$requiredFields = array();
 foreach(explode(',', $showFields) as $field)
 {
     if($field)$visibleFields[$field] = '';
+}
+foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
+{
+    if($field)
+    {
+        $requiredFields[$field] = '';
+        if(strpos(",{$config->task->customBatchEditFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+    }
 }
 ?>
 <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "projectID={$projectID}")?>">
@@ -42,12 +51,24 @@ foreach(explode(',', $showFields) as $field)
         <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'><?php echo $lang->task->assignedTo;?></th>
         <th class='w-80px'><?php echo $lang->typeAB;?> <span class='required'></span></th>
         <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden')?>'><?php echo $lang->task->status;?></th>
-        <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden')?>'><?php echo $lang->task->pri;?></th>
-        <th class='w-40px<?php echo zget($visibleFields, 'estimate', ' hidden')?>'><?php echo $lang->task->estimateAB;?></th>
+        <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden')?>'>
+          <?php echo $lang->task->pri;?>
+          <?php if(isset($requiredFields['pri'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-40px<?php echo zget($visibleFields, 'estimate', ' hidden')?>'>
+          <?php echo $lang->task->estimateAB;?>
+          <?php if(isset($requiredFields['estimate'])) echo " <span class='required'></span>";?>
+        </th>
         <th class='w-50px<?php echo zget($visibleFields, 'record', ' hidden')?>'><?php echo $lang->task->consumedThisTime?></th>
         <th class='w-40px<?php echo zget($visibleFields, 'left', ' hidden')?>'><?php echo $lang->task->leftAB?></th>
-        <th class='w-90px<?php echo zget($visibleFields, 'estStarted', ' hidden')?>'><?php echo $lang->task->estStarted?></th>
-        <th class='w-90px<?php echo zget($visibleFields, 'deadline', ' hidden')?>'><?php echo $lang->task->deadline?></th>
+        <th class='w-90px<?php echo zget($visibleFields, 'estStarted', ' hidden')?>'>
+          <?php echo $lang->task->estStarted?>
+          <?php if(isset($requiredFields['estStarted'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-90px<?php echo zget($visibleFields, 'deadline', ' hidden')?>'>
+          <?php echo $lang->task->deadline?>
+          <?php if(isset($requiredFields['deadline'])) echo " <span class='required'></span>";?>
+        </th>
         <th class='w-100px<?php echo zget($visibleFields, 'finishedBy', ' hidden')?>'><?php echo $lang->task->finishedBy;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'canceledBy', ' hidden')?>'><?php echo $lang->task->canceledBy;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'closedBy', ' hidden')?>'><?php echo $lang->task->closedBy;?></th>

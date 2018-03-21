@@ -29,3 +29,5 @@
 .resultSteps .step-group .step-expects {display: none;}
 .resultSteps .step-item .step-item-id {display: table-cell;}
 .resultSteps .step-item .step-id {color: transparent}
+
+.form-condensed textarea[id*='reals']{height: 35px;}
