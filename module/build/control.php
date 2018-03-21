@@ -357,7 +357,7 @@ class build extends control
             {
                 if(empty($builds))
                 {
-                    echo html::a($this->createLink('build', 'create', "projectID=$projectID "), $this->lang->build->create, '_blank');
+                    echo html::a($this->createLink('build', 'create', "projectID=$projectID"), $this->lang->build->create, '_blank');
                     echo '&nbsp; ';
                     echo html::a("javascript:loadProjectBuilds($projectID)", $this->lang->refresh);
                 }
