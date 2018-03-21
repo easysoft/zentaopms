@@ -180,21 +180,14 @@ class taskModel extends model
         $result = $this->loadModel('common')->removeDuplicate('task', $tasks, "project=$projectID and story " . helper::dbIN($storyIDs));
         $tasks  = $result['data'];
 
-        /* check estimate. */
-        for($i = 0; $i < $batchNum; $i++)
-        {
-            if(!empty($tasks->name[$i]) and $tasks->estimate[$i] and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $tasks->estimate[$i]))
-            {
-                die(js::alert($this->lang->task->error->estimateNumber));
-            }
-            if(!empty($tasks->name[$i]) and empty($tasks->type[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->task->type)));
-        }
 
         $story      = 0;
         $module     = 0;
         $type       = '';
         $assignedTo = '';
 
+        /* Get task data. */
+        $data = array();
         for($i = 0; $i < $batchNum; $i++)
         {
             $story      = !isset($tasks->story[$i]) || $tasks->story[$i]           == 'ditto' ? $story     : $tasks->story[$i];
@@ -226,11 +219,26 @@ class taskModel extends model
             if($assignedTo) $data[$i]->assignedDate = $now;
             if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false and empty($tasks->estStarted[$i])) $data[$i]->estStarted = '';
             if(strpos($this->config->task->create->requiredFields, 'deadline') !== false and empty($tasks->deadline[$i]))     $data[$i]->deadline   = '';
+        }
 
-            $this->dao->insert(TABLE_TASK)->data($data[$i])
+        /* check data. */
+        foreach($data as $i => $task)
+        {
+            if($task->estimate and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate)) die(js::alert($this->lang->task->error->estimateNumber));
+            foreach(explode(',', $this->config->task->create->requiredFields) as $field)
+            {
+                $field = trim($field);
+                if($field and empty($task->$field)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->task->$field)));
+            }
+            if($task->estimate) $task->estimate = (float)$task->estimate;
+        }
+
+        foreach($data as $i => $task)
+        {
+            $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
                 ->batchCheck($this->config->task->create->requiredFields, 'notempty')
-                ->checkIF($data[$i]->estimate != '', 'estimate', 'float')
+                ->checkIF($task->estimate != '', 'estimate', 'float')
                 ->exec();
 
             if(dao::isError()) die(js::error(dao::getError()));

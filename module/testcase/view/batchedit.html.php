@@ -36,7 +36,7 @@ foreach(explode(',', $this->config->testcase->edit->requiredFields) as $field)
     if($field)
     {
         $requiredFields[$field] = '';
-        if(strpos(",{$config->bug->customBatchEditFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+        if(strpos(",{$config->testcase->customBatchEditFields},", ",{$field},") !== false) $visibleFields[$field] = '';
     }
 }
 ?>
