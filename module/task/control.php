@@ -193,7 +193,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function batchCreate($projectID = 0, $storyID = 0, $iframe = 0, $taskID = 0, $isChildren = false)
+    public function batchCreate($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $iframe = 0, $isChildren = false)
     {
         $project   = $this->project->getById($projectID);
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
@@ -236,6 +236,7 @@ class task extends control
         $this->view->story      = $this->story->getByID($storyID);
         $this->view->storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
         $this->view->members    = $members;
+        $this->view->moduleID   = $moduleID;
         $this->display();
     }
 

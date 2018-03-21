@@ -37,7 +37,7 @@ foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
     if($field)
     {
         $requiredFields[$field] = '';
-        if(strpos(",{$config->task->custom->batchEditFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+        if(strpos(",{$config->task->customBatchEditFields},", ",{$field},") !== false) $visibleFields[$field] = '';
     }
 }
 ?>

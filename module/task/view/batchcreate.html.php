@@ -35,7 +35,7 @@ foreach(explode(',', $this->config->task->create->requiredFields) as $field)
     if($field)
     {
         $requiredFields[$field] = '';
-        if(strpos(",{$config->task->custom->batchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+        if(strpos(",{$config->task->customBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
     }
 }
 $colspan     = count($visibleFields) + 3;
@@ -94,7 +94,7 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
         $currentStory = $storyID;
         $type         = '';
         $member       = '';
-        $module       = $story ? $story->module : '';
+        $module       = $story ? $story->module : $moduleID;
     }
     else
     {
