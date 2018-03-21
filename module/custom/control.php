@@ -117,7 +117,7 @@ class custom extends control
                 {
                     /* Fix bug #942. */
                     if(!empty($key)) $key = trim($key);
-                    if($field == 'priList' and !is_numeric($key)) die(js::alert($this->lang->custom->notice->priListKey));
+                    if($field == 'priList' and !is_numeric($key) or $key > 255) die(js::alert($this->lang->custom->notice->priListKey));
                     if($module == 'bug' and $field == 'severityList' and !is_numeric($key)) die(js::alert($this->lang->custom->notice->severityListKey));
                     if(!empty($key) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_0-9]+$/')) die(js::alert($this->lang->custom->notice->keyList));
 
