@@ -773,7 +773,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `account` char(30) NOT NULL default '',
   `password` char(32) NOT NULL default '',
   `role` char(10) NOT NULL default '',
-  `realname` char(30) NOT NULL default '',
+  `realname` char(100) NOT NULL default '',
   `nickname` char(60) NOT NULL default '',
   `commiter` varchar(100) NOT NULL,
   `avatar` char(30) NOT NULL default '',

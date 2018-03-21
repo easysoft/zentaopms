@@ -44,7 +44,7 @@
   <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <tr class='colhead'>
     <th class='w-id'>   <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
-    <th>                <?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
+    <th class='w-p10'>  <?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
     <?php if($this->session->currentProductType != 'normal'):?>
     <th class='w-100px'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->product->branch);?></th>
     <?php endif;?>
@@ -54,8 +54,8 @@
     <th class='w-60px'> <?php echo $lang->productplan->bugs;?></th>
     <th class='w-60px'> <?php echo $lang->productplan->hour;?></th>
     <th class='w-60px'> <?php echo $lang->productplan->project;?></th>
-    <th class='w-p40'>  <?php echo $lang->productplan->desc;?></th>
-    <th class="w-130px {sorter: false}"><?php echo $lang->actions;?></th>
+    <th class='w-p20'>  <?php echo $lang->productplan->desc;?></th>
+    <th class="w-150px {sorter: false}"><?php echo $lang->actions;?></th>
   </tr>
   </thead>
   <tbody>
@@ -99,8 +99,11 @@
     <tr>
       <td colspan='<?php echo $this->session->currentProductType == 'normal' ? '10' : '11';?>'>
         <div class='table-actions clearfix'>
+          <?php if(empty($plan)):?>
+          <?php else:?> 
           <?php echo html::selectButton();?>
           <?php if(common::hasPriv('productplan', 'batchEdit')) echo html::submitButton($lang->edit);?>
+          <?php endif;?> 
         </div>
         <?php $pager->show();?>
       </td>
