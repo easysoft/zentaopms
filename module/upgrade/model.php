@@ -206,7 +206,7 @@ class upgradeModel extends model
                 $this->changeTeamFields();
                 $this->moveData2Notify();
              case '9_8':
-                $this->fixFinishedBy();
+                $this->fixTaskFinishedInfo();
              case '9_8_1':
                 $this->execSQL($this->getUpgradeFile('9.8.1'));
                 $this->fixTaskAssignedTo();
@@ -2099,7 +2099,7 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function fixFinishedBy()
+    public function fixTaskFinishedInfo()
     {
         $stmt = $this->dao->select('t1.id as historID,t2.objectType,t2.objectID,t2.actor')->from(TABLE_HISTORY)->alias('t1')
             ->leftJoin(TABLE_ACTION)->alias('t2')->on('t1.action=t2.id')
@@ -2141,14 +2141,8 @@ class upgradeModel extends model
             }
             else
             {
-                if(!isset($needUpdateChildTasks[$task->parent]))
-                {
-                    $needUpdateChildTasks[$task->parent] = array();
-                }
-                else
-                {
-                     $needUpdateChildTasks[$task->parent][] = $task;
-                }
+                if(!isset($needUpdateChildTasks[$task->parent])) $needUpdateChildTasks[$task->parent] = array();
+                $needUpdateChildTasks[$task->parent][$taskID] = $task;
             }
         }
 

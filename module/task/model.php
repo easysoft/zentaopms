@@ -329,7 +329,7 @@ class taskModel extends model
             $status = 'cancel';
         }
 
-        $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetchAll();
+        $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
         if($status and $parentTask->status != $status)
         {
             $now  = helper::now();
@@ -359,6 +359,7 @@ class taskModel extends model
                 $task->assignedDate = $now;
                 $task->closedBy     = $this->app->user->account;
                 $task->closedDate   = $now;
+                $task->closedReason = 'done';
             }
 
             if($status == 'doing')
@@ -369,6 +370,7 @@ class taskModel extends model
                 $task->finishedDate = '';
                 $task->closedBy     = '';
                 $task->closedDate   = '';
+                $task->closedReason = '';
             }
 
             $task->lastEditedBy   = $this->app->user->account;
@@ -2175,7 +2177,7 @@ class taskModel extends model
                     break;
                 case 'name':
                     if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
-                    if($task->module and isset($modulePairs[$task->module])) echo "<span class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span> ';
+                    if(empty($task->children) and $task->module and isset($modulePairs[$task->module])) echo "<span class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span> ';
                     if($child or !empty($task->parent)) echo '<span class="label">' . $this->lang->task->childrenAB . '</span> ';
                     if(!empty($task->team)) echo '<span class="label">' . $this->lang->task->multipleAB . '</span> ';
                     echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color'") : "<span style='color: $task->color'>$task->name</span>";
