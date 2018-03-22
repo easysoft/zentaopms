@@ -124,7 +124,10 @@ class custom extends control
                     if(!empty($key) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_0-9]+$/')) die(js::alert($this->lang->custom->notice->invalidStringKey));
 
                     /* The length of role is 10, check it when saved. */
-                    if($field == 'roleList' and strlen($key) > 10) die(js::alert($this->lang->custom->notice->invalidStrlen['ten']));
+                    if($field == 'roleList' or $module == 'todo' and $field == 'typeList')
+                    {
+                        if(strlen($key) > 10) die(js::alert($this->lang->custom->notice->invalidStrlen['ten']));
+                    }
                     
                     /* The length of these string is litter than 20, check it when saved. */
                     if($field == 'sourceList' or $module == 'task' and $field == 'typeList')
