@@ -13,4 +13,4 @@
 #zeroTaskStory.zeroTask {background-color: #114f8e; color: #fff; border-color: #114f8e;}
 #zeroTaskStory.zeroTask .icon{display:inline;}
 
-.heading .pull-left {width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.heading .pull-left {max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
