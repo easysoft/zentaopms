@@ -1962,7 +1962,7 @@ class storyModel extends model
         {
             if($type == 'short')
             {
-                $property = '[p' . $story->pri . ', ' . $story->estimate . 'h]';
+                $property = '[p' . (!empty($this->lang->story->priList[$story->pri]) ? $this->lang->story->priList[$story->pri] : 0) . ', ' . $story->estimate . 'h]';
             }
             else
             {
