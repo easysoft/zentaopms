@@ -16,3 +16,5 @@ $config->webhook->objectTypes['bug']         = array('opened', 'edited', 'commen
 $config->webhook->objectTypes['case']        = array('opened', 'edited', 'commented', 'reviewed', 'confirmed');
 $config->webhook->objectTypes['testtask']    = array('opened', 'edited', 'started', 'blocked', 'closed', 'activated');
 $config->webhook->objectTypes['todo']        = array('opened', 'edited');
+
+$config->webhook->needAssignTypes = array('story', 'task', 'bug', 'todo');

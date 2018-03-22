@@ -41,7 +41,17 @@
       </tr>
       <tr>
         <th><?php echo $lang->productplan->begin;?></th>
-        <td><?php echo html::input('begin', $plan->begin != '2030-01-01' ? formatTime($plan->begin) : '', "class='form-control form-date'");?></td>
+        <td>
+          <div class='input-group'>
+            <?php echo html::input('begin', $plan->begin != '2030-01-01' ? formatTime($plan->begin) : '', "class='form-control form-date'");?>
+            <?php $checked = $plan->begin == '2030-01-01' || $plan->end == '2030-01-01' ? "checked='checked'" : '';?>
+            <span class='input-group-addon'>
+              <label class='checkbox-inline'>
+                <input type='checkbox' id='future' name='future' value='1' <?php echo $checked;?>> <?php echo $lang->productplan->future;?>
+              </label>
+            </span>
+          </div>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->productplan->end;?></th>

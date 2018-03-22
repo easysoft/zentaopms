@@ -1615,8 +1615,8 @@ class storyModel extends model
             ->where($sql)
             ->beginIF($productID != 'all' and $productID != '')->andWhere('t1.`product`')->eq((int)$productID)->fi()
             ->andWhere('deleted')->eq(0)
-            ->orderBy($orderBy, 't1.id')
-            ->page($pager)
+            ->orderBy($orderBy)
+            ->page($pager, 't1.id')
             ->fetchAll('id');
 
         if(!$tmpStories) return array();
@@ -1962,7 +1962,7 @@ class storyModel extends model
         {
             if($type == 'short')
             {
-                $property = '[p' . $story->pri . ', ' . $story->estimate . 'h]';
+                $property = '[p' . (!empty($this->lang->story->priList[$story->pri]) ? $this->lang->story->priList[$story->pri] : 0) . ', ' . $story->estimate . 'h]';
             }
             else
             {
