@@ -789,7 +789,7 @@ class task extends control
 
         $task         = $this->view->task;
         $members      = $this->loadModel('project')->getTeamMemberPairs($task->project, 'nodeleted');
-        $task->nextBy = $task->assignedTo;
+        $task->nextBy = $task->openedBy;
 
         $this->view->users = $members;
         if(!empty($task->team))
