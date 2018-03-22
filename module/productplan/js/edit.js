@@ -23,33 +23,34 @@ function convertStringToDate(dateString)
 function computeEndDate(delta)
 {
     beginDate = $('#begin').val();
-    delta     = parseInt(delta);
+    if(!beginDate) return;
 
-    if(delta == 9999)
+    delta     = parseInt(delta);
+    beginDate = convertStringToDate(beginDate);
+    if((delta == 7 || delta == 14) && (beginDate.getDay() == 1))
     {
-        $('#begin').attr("disabled", "disabled");
-        $('#end').val('').attr("disabled","disabled");
+        delta = (weekend == 2) ? (delta - 2) : (delta - 1);
+    }
+
+    currentBeginDate = beginDate.toString('yyyy-MM-dd');
+    endDate = beginDate.addDays(delta - 1).toString('yyyy-MM-dd');
+
+    $('#begin').val(currentBeginDate);
+    $('#end').val(endDate).datetimepicker('update');
+}
+
+$('#future').on('change', function()
+{
+    if($(this).prop('checked'))
+    {
+        $('#begin').val('').attr('disabled', 'disabled');
+        $('#end').val('').parents('tr').hide();
     }
     else
     {
-        if(beginDate)
-        {
-            beginDate = convertStringToDate(beginDate);
-            if((delta == 7 || delta == 14) && (beginDate.getDay() == 1))
-            {
-                delta = (weekend == 2) ? (delta - 2) : (delta - 1);
-            }
-
-            currentBeginDate = beginDate.toString('yyyy-MM-dd');
-            endDate = beginDate.addDays(delta - 1).toString('yyyy-MM-dd');
-        }
-        else
-        {
-            currentBeginDate = '';
-            endDate = '';
-        }
-
-        $('#begin').val(currentBeginDate).removeAttr('disabled')
-        $('#end').val(endDate).removeAttr('disabled').datetimepicker('update');
+        $('#begin').removeAttr('disabled');
+        $('#end').val('').parents('tr').show();
     }
-}
+});
+
+$('#future').change();

@@ -159,16 +159,16 @@ class productplanModel extends model
     public function create()
     {
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->create['id'], $this->config->allowedTags)
-            ->setIF($this->post->delta == 9999 || empty($_POST['end']), 'end', '2030-01-01')
-            ->setIF($this->post->delta == 9999 || empty($_POST['begin']), 'begin', '2030-01-01')
-            ->remove('delta,uid')
+            ->setIF($this->post->future || empty($_POST['begin']), 'begin', '2030-01-01')
+            ->setIF($this->post->future || empty($_POST['end']), 'end', '2030-01-01')
+            ->remove('delta,uid,future')
             ->get();
         $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCTPLAN)
             ->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->productplan->create->requiredFields, 'notempty')
-            ->checkIF($this->post->delta != 9999 && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'gt', $plan->begin)
+            ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'gt', $plan->begin)
             ->exec();
         if(!dao::isError())
         {
@@ -190,9 +190,9 @@ class productplanModel extends model
     {
         $oldPlan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)
-            ->setIF($this->post->delta == 9999 || $this->post->end == '', 'end', '2030-01-01')
-            ->setIF($this->post->delta == 9999 || empty($_POST['begin']), 'begin', '2030-01-01')
-            ->remove('delta,uid')
+            ->setIF($this->post->future || empty($_POST['begin']), 'begin', '2030-01-01')
+            ->setIF($this->post->future || empty($_POST['end']), 'end', '2030-01-01')
+            ->remove('delta,uid,future')
             ->get();
 
         $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->edit['id'], $this->post->uid);
@@ -200,7 +200,7 @@ class productplanModel extends model
             ->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->productplan->edit->requiredFields, 'notempty')
-            ->checkIF($this->post->delta != 9999 && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'gt', $plan->begin)
+            ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'gt', $plan->begin)
             ->where('id')->eq((int)$planID)
             ->exec();
         if(!dao::isError())
