@@ -280,7 +280,7 @@ class taskModel extends model
         {
             $estimate += $task->estimate;
             $consumed += $task->consumed;
-            $left     += $task->left;
+            if($task->status != 'closed') $left += $task->left;
         }
 
         $newTask = new stdClass();
@@ -293,38 +293,64 @@ class taskModel extends model
     }
 
     /**
-     * Check that all children's status.
+     * Update parent status by taskID.
      *
-     * @param $parentID
-     * @param $status
+     * @param $taskID
      *
      * @access public
      * @return bool
      */
-    public function updateParentStatus($parentID, $status = 'done')
+    public function updateParentStatus($taskID)
     {
-        if(!$parentID) return true;
-        $children = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('id', 'status');
+        $childTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $parentID  = $childTask->parent;
+        if(empty($parentID)) return true;
 
-        $changeStatus = true;
-        foreach($children as $taskStatus)
+        $childrenStatus = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
+        $status         = '';
+        if(isset($childrenStatus['doing']))
         {
-            if($status == 'done' and $taskStatus != $status and $taskStatus != 'closed' and $taskStatus != 'cancel') $changeStatus = false;
-            if($status != 'done' and $taskStatus != $status) $changeStatus = false;
-
+            $status = 'doing';
         }
-        if($changeStatus)
+        elseif(isset($childrenStatus['pause']) and !isset($childrenStatus['wait']))
         {
-            $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetchAll();
+            $status = 'pause';
+        }
+        elseif(isset($childrenStatus['done']) and !isset($childrenStatus['wait']))
+        {
+            $status = 'done';
+        }
+        elseif(isset($childrenStatus['closed']) and !isset($childrenStatus['wait']))
+        {
+            $status = 'closed';
+        }
+        elseif(isset($childrenStatus['cancel']) and !isset($childrenStatus['wait']))
+        {
+            $status = 'cancel';
+        }
+
+        $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetchAll();
+        if($status and $parentTask->status != $status)
+        {
             $now  = helper::now();
             $task = new stdclass();
             $task->status = $status;
             if($status == 'done')
             {
-                $task->assignedTo   = $parent->openedBy;
+                $task->assignedTo   = $parentTask->openedBy;
                 $task->assignedDate = $now;
                 $task->finishedBy   = $this->app->user->account;
                 $task->finishedDate = $now;
+            }
+
+            if($status == 'cancel')
+            {
+                $task->assignedTo   = $parentTask->openedBy;
+                $task->assignedDate = $now;
+                $task->finishedBy   = '';
+                $task->finishedDate = '';
+                $task->canceledBy   = $this->app->user->account;
+                $task->canceledDate = $now;
             }
 
             if($status == 'closed')
@@ -334,7 +360,34 @@ class taskModel extends model
                 $task->closedBy     = $this->app->user->account;
                 $task->closedDate   = $now;
             }
+
+            if($status == 'doing')
+            {
+                $task->assignedTo   = '';
+                $task->assignedDate = '';
+                $task->finishedBy   = '';
+                $task->finishedDate = '';
+                $task->closedBy     = '';
+                $task->closedDate   = '';
+            }
+
+            $task->lastEditedBy   = $this->app->user->account;
+            $task->lastEditedDate = $now;
             $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentID)->exec();
+            if(!dao::isError())
+            {
+                $this->computeWorkingHours($parentID);
+                $changes = common::createChanges($parentTask, $task);
+                $action  = 'Canceled';
+                if($status == 'done') $action = 'Finished';
+                if($status == 'closed') $action = 'Closed';
+                if($status == 'pause') $action = 'Paused';
+                if($status == 'doing' and $parentTask->status == 'wait') $action = 'Started';
+                if($status == 'doing' and $parentTask->status == 'pause') $action = 'Restarted';
+                if($status == 'doing' and $parentTask->status != 'wait' and $parentTask->status != 'pause') $action = 'Activated';
+                $actionID = $this->loadModel('action')->create('task', $parentID, $action);
+                $this->action->logHistory($actionID, $changes);
+            }
         }
     }
 
@@ -443,7 +496,7 @@ class taskModel extends model
             ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
             ->where('id')->eq((int)$taskID)->exec();
 
-        $this->computeWorkingHours($oldTask->parent);
+        if($oldTask->parent) $this->updateParentStatus($taskID);
 
         /* Save team. */
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($taskID)->andWhere('type')->eq('task')->exec();
@@ -617,7 +670,7 @@ class taskModel extends model
             if($oldTask->story != false) $this->loadModel('story')->setStage($oldTask->story);
             if(!dao::isError())
             {
-                $this->computeWorkingHours($oldTask->parent);
+                if($oldTask->parent) $this->updateParentStatus($oldTask->id);
                 if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
                 if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
                 $allChanges[$taskID] = common::createChanges($oldTask, $task);
@@ -761,20 +814,7 @@ class taskModel extends model
             ->check('consumed,left', 'float')
             ->where('id')->eq((int)$taskID)->exec();
 
-        if($oldTask->parent)
-        {
-            if($task->status == 'doing')
-            {
-                $this->dao->update(TABLE_TASK)->set('status')->eq('doing')->where('id')->eq((int)$oldTask->parent)->exec();
-            }
-            elseif($task->status == 'done')
-            {
-                $this->updateParentStatus($oldTask->parent, 'done');
-            }
-        }
-
-        $this->computeWorkingHours($oldTask->parent);
-
+        if($oldTask->parent) $this->updateParentStatus($taskID);
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
@@ -935,14 +975,9 @@ class taskModel extends model
         $changes = common::createChanges($oldTask, $newTask);
         if(!empty($actionID)) $this->action->logHistory($actionID, $changes);
 
+        if($task->parent)$this->updateParentStatus($task->id);
         if($task->story) $this->loadModel('story')->setStage($task->story);
-
-        if($task->status == 'done')
-        {
-            $this->updateParentStatus($task->parent, 'done');
-            if(!dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
-        }
-        $this->computeWorkingHours($task->parent);
+        if($task->status == 'done' and !dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
 
         return $changes;
     }
@@ -1037,9 +1072,7 @@ class taskModel extends model
             ->where('id')->eq((int)$taskID)
             ->exec();
 
-        if($task->status == 'done') $this->updateParentStatus($oldTask->parent, 'done');
-        $this->computeWorkingHours($oldTask->parent);
-
+        if($oldTask->parent) $this->updateParentStatus($taskID);
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
         if($task->status == 'done' && !dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
@@ -1065,6 +1098,7 @@ class taskModel extends model
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
 
+        if($oldTask->parent) $this->updateParentStatus($taskID);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -1093,15 +1127,11 @@ class taskModel extends model
             ->get();
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
-        $this->updateParentStatus($oldTask->parent, 'closed');
-        $this->computeWorkingHours($oldTask->parent);
-
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq($taskID)->exec();
-
-        if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
 
         if(!dao::isError())
         {
+            if($oldTask->parent) $this->updateParentStatus($taskID);
+            if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
             $this->loadModel('score')->create('task', 'close', $taskID);
             return common::createChanges($oldTask, $task);
         }
@@ -1132,9 +1162,8 @@ class taskModel extends model
             ->get();
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
-        $this->updateParentStatus($oldTask->parent);
-        $this->computeWorkingHours($oldTask->parent);
-        if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
+        if($oldTask->parent) $this->updateParentStatus($taskID);
+        if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -1171,11 +1200,8 @@ class taskModel extends model
             ->where('id')->eq((int)$taskID)
             ->exec();
 
-        $this->dao->update(TABLE_TASK)->data($task)->where('parent')->eq($taskID)->exec();
-        if($oldTask->parent) $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq((int)$oldTask->parent)->exec();
-        $this->computeWorkingHours($oldTask->parent);
-
-        if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
+        if($oldTask->parent) $this->updateParentStatus($taskID);
+        if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -1575,6 +1601,8 @@ class taskModel extends model
         }
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
+        if($task->parent) $this->updateParentStatus($task->id);
+        if($task->story)  $this->loadModel('story')->setStage($oldTask->story);
 
         $oldTask = new stdClass();
         $oldTask->consumed = $task->consumed;
@@ -1612,6 +1640,8 @@ class taskModel extends model
             ->set('status')->eq($task->status)
             ->where('id')->eq($estimate->task)
             ->exec();
+        if($task->parent) $this->updateParentStatus($task->id);
+        if($task->story)  $this->loadModel('story')->setStage($oldTask->story);
 
         $oldTask = new stdClass();
         $oldTask->consumed = $task->consumed;
@@ -2047,6 +2077,9 @@ class taskModel extends model
         if($action == 'finish'         and !empty($task->children)) return false;
         if($action == 'cancel'         and !empty($task->children)) return false;
         if($action == 'pause'          and !empty($task->children)) return false;
+        if($action == 'activate'       and !empty($task->children)) return false;
+        if($action == 'assignto'       and !empty($task->children)) return false;
+        if($action == 'close'          and !empty($task->children)) return false;
         if($action == 'batchcreate'    and !empty($task->team))     return false;
         if($action == 'batchcreate'    and $task->parent)           return false;
 
