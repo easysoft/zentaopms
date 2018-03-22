@@ -42,7 +42,7 @@ foreach(explode(',', $this->config->product->edit->requiredFields) as $field)
         <th class='w-id'>   <?php echo $lang->idAB;?></th>
         <th><?php echo $lang->product->name;?> <span class='required'></span></th>
         <th class='w-150px'><?php echo $lang->product->code;?> <span class='required'></span></th>
-        <th class='w-150px'>
+        <th class='w-150px<?php if(!isset($visibleFields['line'])) echo ' hidden';?>'>
           <?php echo $lang->product->line;?>
           <?php if(isset($requiredFields['line'])) echo " <span class='required'></span>";?>
         </th>
@@ -78,7 +78,7 @@ foreach(explode(',', $this->config->product->edit->requiredFields) as $field)
       <td><?php echo sprintf('%03d', $productID) . html::hidden("productIDList[$productID]", $productID);?></td>
       <td title='<?php echo $products[$productID]->name?>'><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control' autocomplete='off'");?></td>
       <td><?php echo html::input("codes[$productID]", $products[$productID]->code, "class='form-control' autocomplete='off'");?></td>
-      <td class='text-left<?php echo zget($lines, $products[$productID]->line, '')?>' style='overflow:visible'><?php echo html::select("line[$productID]", $lines, $products[$productID]->line, "class='form-control chosen'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'line', ' hidden')?>' style='overflow:visible'><?php echo html::select("lines[$productID]", $lines, $products[$productID]->line, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'PO', ' hidden')?>' style='overflow:visible'><?php echo html::select("POs[$productID]",  $poUsers, $products[$productID]->PO, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'QD', ' hidden')?>' style='overflow:visible'><?php echo html::select("QDs[$productID]",  $qdUsers, $products[$productID]->QD, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'RD', ' hidden')?>' style='overflow:visible'><?php echo html::select("RDs[$productID]",  $rdUsers, $products[$productID]->RD, "class='form-control chosen'");?></td>
@@ -88,7 +88,7 @@ foreach(explode(',', $this->config->product->edit->requiredFields) as $field)
       <td><?php echo html::input("orders[$productID]", $products[$productID]->order, "class='form-control' autocomplete='off'");?></td>
     </tr>
     <?php endforeach;?>
-    <tr><td colspan='<?php echo count($visibleFields) + 5?>' class='text-center'><?php echo html::submitButton();?></td></tr>
+    <tr><td colspan='<?php echo count($visibleFields) + 4?>' class='text-center'><?php echo html::submitButton();?></td></tr>
   </table>
 </form>
 <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=product&section=custom&key=batchEditFields')?>
