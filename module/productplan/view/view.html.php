@@ -20,7 +20,9 @@
   <span class='prefix'><?php echo html::icon($lang->icons['plan']);?> <strong><?php echo $plan->id;?></strong></span>
     <strong><?php echo $plan->title;?></strong>
     <?php if($product->type !== 'normal') echo "<span title='{$lang->product->branchName[$product->type]}' class='label label-branch label-badge'>" . $branches[$branch] . '</span>';?>
-    <span class='label label-info label-badge'><?php echo $plan->begin . '~' . $plan->end;?></span>
+    <span class='label label-info label-badge'>
+      <?php echo ($plan->begin == '2030-01-01' || $plan->end == '2030-01-01') ? $lang->productplan->future : $plan->begin . '~' . $plan->end;?>
+    </span>
     <?php if($plan->deleted):?>
     <span class='label label-danger'><?php echo $lang->plan->deleted;?></span>
     <?php endif; ?>
@@ -403,7 +405,7 @@
                     <?php endif;?>
                     <tr>
                       <th><?php echo $lang->productplan->begin;?></th>
-                      <td><?php echo $plan->begin;?></td>
+                      <td><?php echo $plan->begin == '2030-01-01' ? $lang->productplan->future : $plan->begin;?></td>
                     </tr>
                     <tr>
                       <th><?php echo $lang->productplan->end;?></th>

@@ -35,16 +35,8 @@ function computeEndDate(delta)
     currentBeginDate = beginDate.toString('yyyy-MM-dd');
     endDate = beginDate.addDays(delta - 1).toString('yyyy-MM-dd');
 
-    if(delta == 9999)
-    {
-        $('#begin').attr("disabled", "disabled");
-        $('#end').val('').attr("disabled", "disabled");
-    }
-    else
-    {
-        $('#begin').val(currentBeginDate).removeAttr('disabled')
-        $('#end').val(endDate).removeAttr('disabled');
-    }
+    $('#begin').val(currentBeginDate);
+    $('#end').val(endDate);
 }
 
 $('#begin').on('change', function()
@@ -56,4 +48,18 @@ $('#begin').on('change', function()
 $('#end').on('change', function()
 {
     $("input:radio[name='delta']").attr("checked", false);
+});
+
+$('#future').on('change', function()
+{
+    if($(this).prop('checked'))
+    {
+        $('#begin').val('').attr('disabled', 'disabled');
+        $('#end').val('').parents('tr').hide();
+    }
+    else
+    {
+        $('#begin').removeAttr('disabled');
+        $('#end').val('').parents('tr').show();
+    }
 });

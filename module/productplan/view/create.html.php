@@ -43,7 +43,16 @@
       </tr>
       <tr>
         <th><?php echo $lang->productplan->begin;?></th>
-        <td><?php echo html::input('begin', formatTime($begin), "class='form-control form-date'");?></td>
+        <td>
+          <div class='input-group'>
+            <?php echo html::input('begin', formatTime($begin), "class='form-control form-date'");?>
+            <span class='input-group-addon'>
+               <label class='checkbox-inline'> 
+                 <input type='checkbox' id='future' name='future' value='1'> <?php echo $lang->productplan->future;?>
+               </label>
+            </span>
+          </div>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->productplan->end;?></th>
