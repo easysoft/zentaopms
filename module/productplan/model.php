@@ -117,16 +117,18 @@ class productplanModel extends model
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
-            ->beginIF($expired == 'unexpired')->andWhere('end')->gt($date)->fi()
+            ->beginIF($expired == 'unexpired')->andWhere('end')->ge($date)->fi()
             ->orderBy('begin desc')
             ->fetchPairs();
 
-        if($expired == 'unexpired' and empty($plans))
+        if($expired == 'unexpired')
         {
-            $plans = $this->dao->select('id,CONCAT(title, " [", begin, " ~ ", end, "]") as title')->from(TABLE_PRODUCTPLAN)
+            $plans += $this->dao->select('id,CONCAT(title, " [", begin, " ~ ", end, "]") as title')->from(TABLE_PRODUCTPLAN)
                 ->where('product')->in($product)
                 ->andWhere('deleted')->eq(0)
+                ->andWhere('end')->lt($date)
                 ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
+                ->beginIF($plans)->andWhere("id")->notIN(array_keys($plans))->fi()
                 ->orderBy('begin desc')
                 ->limit(5)
                 ->fetchPairs();
