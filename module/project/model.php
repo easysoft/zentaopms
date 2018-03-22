@@ -1081,6 +1081,7 @@ class projectModel extends model
                 $productType = $product->type;
                 if($product->branch)
                 {
+                    if(!isset($branchGroups[$product->id][$product->branch])) continue;
                     $branchPairs[$product->branch] = (count($products) > 1 ? $product->name . '/' : '') . $branchGroups[$product->id][$product->branch];
                 }
                 else
