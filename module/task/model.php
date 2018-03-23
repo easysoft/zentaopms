@@ -329,7 +329,7 @@ class taskModel extends model
             $status = 'cancel';
         }
 
-        $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetchAll();
+        $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
         if($status and $parentTask->status != $status)
         {
             $now  = helper::now();
@@ -359,6 +359,7 @@ class taskModel extends model
                 $task->assignedDate = $now;
                 $task->closedBy     = $this->app->user->account;
                 $task->closedDate   = $now;
+                $task->closedReason = 'done';
             }
 
             if($status == 'doing')
@@ -369,6 +370,7 @@ class taskModel extends model
                 $task->finishedDate = '';
                 $task->closedBy     = '';
                 $task->closedDate   = '';
+                $task->closedReason = '';
             }
 
             $task->lastEditedBy   = $this->app->user->account;
