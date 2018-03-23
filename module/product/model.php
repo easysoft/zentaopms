@@ -383,7 +383,7 @@ class productModel extends model
             $products[$productID]->QD     = $data->QDs[$productID];
             $products[$productID]->RD     = $data->RDs[$productID];
             $products[$productID]->type   = $data->types[$productID];
-            $products[$productID]->line   = $data->line[$productID];
+            $products[$productID]->line   = $data->lines[$productID];
             $products[$productID]->status = $data->statuses[$productID];
             $products[$productID]->desc   = strip_tags($this->post->descs[$productID], $this->config->allowedTags);
             $products[$productID]->order  = $data->orders[$productID];
