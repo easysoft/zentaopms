@@ -211,6 +211,7 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('9.8.1'));
                 $this->fixTaskAssignedTo();
                 $this->fixProjectClosedInfo();
+                $this->resetProductLine();
        }
 
         $this->deletePatch();
@@ -2229,6 +2230,19 @@ class upgradeModel extends model
             $this->dao->update(TABLE_HISTORY)->set('`new`')->eq('closed')->where('`action`')->eq($action->id)->andWhere('field')->eq('status')->exec();
             $this->dao->update(TABLE_PROJECT)->set('`status`')->eq('closed')->set('`closedBy`')->eq($action->actor)->set('`closedDate`')->eq($action->date)->where('id')->eq($action->objectID)->exec();
         }
+        return !dao::isError();
+    }
+
+    /**
+     * Set the value of deleted product line to 0.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function resetProductLine()
+    {
+        $deletedLines = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq('1')->fetchPairs();
+        $this->dao->update(TABLE_PRODUCT)->set('line')->eq(0)->where('line')->in($deletedLines)->exec();
         return !dao::isError();
     }
 }

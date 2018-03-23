@@ -8,7 +8,9 @@
 .chosen-container[id^="story"] .chosen-drop {min-width: 450px;!important}
 .chosen-container[id^="module"] .chosen-drop {min-width: 400px;!important}
 
-#zeroTaskStory{background-color: #fafafa; color: #808080; padding: 5px 8px; text-align: center; margin-left: 10px; border: 1px solid #ddd; }
+#zeroTaskStory{background-color: #fafafa; color: #808080; padding: 5px 8px; text-align: center; margin-left: 10px; border: 1px solid #ddd;}
 #zeroTaskStory .icon{display:none;}
-#zeroTaskStory.zeroTask {background-color: #114f8e; color: #fff; border-color: #114f8e; }
+#zeroTaskStory.zeroTask {background-color: #114f8e; color: #fff; border-color: #114f8e;}
 #zeroTaskStory.zeroTask .icon{display:inline;}
+
+.heading .pull-left {max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
