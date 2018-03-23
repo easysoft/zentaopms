@@ -209,8 +209,8 @@ class upgradeModel extends model
                 $this->fixFinishedBy();
              case '9_8_1':
                 $this->execSQL($this->getUpgradeFile('9.8.1'));
-                $this->fixAssignedTo();
-                $this->fixClosedInfo();
+                $this->fixTaskAssignedTo();
+                $this->fixProjectClosedInfo();
        }
 
         $this->deletePatch();
@@ -2116,34 +2116,98 @@ class upgradeModel extends model
     }
 
     /**
-     * Fix assignedTo for closed tasks.
+     * Fix assignedTo for closed tasks, but assignedTo is not closed.
      * 
      * @access public
      * @return bool
      */
-    public function fixAssignedTo()
+    public function fixTaskAssignedTo()
     {
-        $tasks = $this->dao->select('*')->from(TABLE_TASK)->fetchAll('id');
-        $needUpdateTasks = $this->dao->select('*')->from(TABLE_TASK)
+        $needUpdateTasks = $this->dao->select('id,parent,closedBy')->from(TABLE_TASK)
             ->where('status')->eq('closed')
             ->andWhere('assignedTo')->ne('closed')
-            ->andWhere('parent')->ne(0)
-            ->fetchAll();
+            ->fetchAll('id');
 
-        foreach($needUpdateTasks as $task)
+        if(!$needUpdateTasks) return true;
+
+        $needUpdateParentTasks = array();
+        $needUpdateChildTasks  = array();
+        foreach($needUpdateTasks as $taskID => $task)
         {
-            $parent = isset($tasks[$task->parent]) ? $tasks[$task->parent] : '';
+            if(!$task->parent)
+            {
+                $needUpdateParentTasks[$taskID] = $task;
+            }
+            else
+            {
+                if(!isset($needUpdateChildTasks[$task->parent]))
+                {
+                    $needUpdateChildTasks[$task->parent] = array();
+                }
+                else
+                {
+                     $needUpdateChildTasks[$task->parent][] = $task;
+                }
+            }
+        }
+
+        /* Update parent task.*/
+        $childTasks     = $this->dao->select('id,parent,assignedDate,closedBy,closedDate,closedReason')->from(TABLE_TASK)->where('parent')->in(array_keys($needUpdateParentTasks))->fetchGroup('parent');
+        $lastChildTasks = array();
+        foreach($childTasks as $parentID => $tasks)
+        {
+            foreach($tasks as $task)
+            {
+                if(isset($lastChildTasks[$parentID]))
+                {
+                    if($lastChildTasks[$parentID]->closedDate < $task->closedDate) $lastChildTasks[$parentID] = $task;
+                }
+                else
+                {
+                    $lastChildTasks[$parentID] = $task;
+                }
+            }
+        }
+
+        foreach($needUpdateParentTasks as $parentTask)
+        {
+            $lastChild = isset($lastChildTasks[$parentTask->id]) ? $lastChildTasks[$parentTask->id] : '';
 
             $this->dao->update(TABLE_TASK)
                 ->set('assignedTo')->eq('closed')
-                ->beginIF($parent)
-                ->set('assignedDate')->eq($parent->assignedDate)
-                ->set('closedBy')->eq($parent->closedBy)
-                ->set('closedDate')->eq($parent->closedDate)
-                ->set('closedReason')->eq($parent->closedReason)
-                ->fi()
-                ->where('id')->eq($task->id)
+                ->beginIF($lastChild)->set('assignedDate')->eq($lastChild->assignedDate)->fi()
+                ->where('id')->eq($parentTask->id)
                 ->exec();
+
+            if(empty($parentTask->closedBy) && !empty($lastChild->closedBy))
+            {
+                $this->dao->update(TABLE_TASK)->set('closedBy')->eq($lastChild->closedBy)->set('closedDate')->eq($lastChild->closedDate)->set('closedReason')->eq($lastChild->closedReason)->where('id')->eq($parentTask->id)->exec();
+            }
+        }
+
+        /* Update children task.*/
+        $parentTasks = $this->dao->select('id,assignedDate,closedBy,closedDate,closedReason')->from(TABLE_TASK)
+            ->where('parent')->eq(0)
+            ->andWhere('id')->in(array_keys($needUpdateChildTasks))
+            ->fetchAll('id');
+
+        foreach($needUpdateChildTasks as $parentID => $childTasks)
+        {
+            $parent = isset($parentTasks[$parentID]) ? $parentTasks[$parentID] : '';
+
+            foreach($childTasks as $childTask)
+            {
+                $this->dao->update(TABLE_TASK)
+                    ->set('assignedTo')->eq('closed')
+                    ->beginIF(!empty($parent))->set('assignedDate')->eq($parent->assignedDate)->fi()
+                    ->where('id')->eq($childTask->id)
+                    ->exec();
+
+                if(empty($childTask->closedBy) && !empty($parent->closedBy))
+                {
+                    $this->dao->update(TABLE_TASK)->set('closedBy')->eq($parent->closedBy)->set('closedDate')->eq($parent->closedDate)->set('closedReason')->eq($parent->closedReason)->where('id')->eq($childTask->id)->exec();
+                }
+            }
         }
 
         return dao::isError();
@@ -2155,7 +2219,7 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function fixClosedInfo()
+    public function fixProjectClosedInfo()
     {
         $stmt = $this->dao->select('t1.id as historID, t2.id, t2.objectType,t2.objectID,t2.actor,t2.date')->from(TABLE_HISTORY)->alias('t1')
             ->leftJoin(TABLE_ACTION)->alias('t2')->on('t1.action=t2.id')
