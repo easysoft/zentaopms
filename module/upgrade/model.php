@@ -764,7 +764,7 @@ class upgradeModel extends model
     public function execSQL($sqlFile)
     {
         $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
-        $ignoreCode   = '|1050|1060|1062|1091|1169|1061|';
+        $ignoreCode   = '|1050|1060|1091|1061|';
 
         /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
         $sqls = explode("\n", file_get_contents($sqlFile));

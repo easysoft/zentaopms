@@ -15,7 +15,7 @@
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
-    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $isChildren ? $lang->task->batchCreateChildren : $lang->task->batchCreate;?></strong>
+    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $isChildren ? $parentTitle . '&nbsp; ' . $lang->task->batchCreateChildren : $lang->task->batchCreate;?></strong>
       <?php if($project->type != 'ops'):?><span><small><a href='javascript:toggleZeroTaskStory();' id='zeroTaskStory'><?php echo $lang->story->zeroTask;?><i class='icon icon-remove'></i></a></small></span><?php endif;?>
     <div class='actions'>
       <?php echo html::commonButton($lang->pasteText, "data-toggle='myModal'", 'btn btn-primary')?>
