@@ -1086,8 +1086,7 @@ class task extends control
         {
             $story = $this->dao->select('story')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('story');
             $this->task->delete(TABLE_TASK, $taskID);
-            $this->task->updateParentStatus($task->parent, 'done');
-            $this->task->computeWorkingHours($task->parent);
+            if($task->parent) $this->task->updateParentStatus($task->id);
             if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
             if($story) $this->loadModel('story')->setStage($story);
             die(js::locate($this->session->taskList, 'parent'));

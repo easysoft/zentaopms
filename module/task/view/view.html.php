@@ -118,7 +118,7 @@
             <th class='w-90px'> <?php echo $lang->task->status;?></th>
             <th class='w-50px visible-lg'><?php echo $lang->task->consumedAB . $lang->task->lblHour;?></th>
             <th class='w-50px visible-lg'><?php echo $lang->task->leftAB . $lang->task->lblHour;?></th>
-            <th class='w-150px'><?php echo $lang->actions;?></th>
+            <th class='w-160px'><?php echo $lang->actions;?></th>
           </tr>
             <?php foreach($task->children as $child):?>
               <tr class='text-center'>
@@ -137,14 +137,15 @@
                 <td class='visible-lg'><?php echo $child->consumed;?></td>
                 <td class='visible-lg'><?php echo $child->left;?></td>
                 <td>
-                    <?php
-                    common::printIcon('task', 'assignTo', "projectID=$child->project&taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                    common::printIcon('task', 'start',    "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                    common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true);
-                    common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                    common::printIcon('task', 'close',    "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                    common::printIcon('task', 'edit',"taskID=$child->id", $child, 'list');
-                    ?>
+                  <?php
+                  common::printIcon('task', 'assignTo', "projectID=$child->project&taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                  common::printIcon('task', 'start',    "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                  common::printIcon('task', 'activate', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                  common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true);
+                  common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                  common::printIcon('task', 'close',    "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                  common::printIcon('task', 'edit',"taskID=$child->id", $child, 'list');
+                  ?>
                 </td>
               </tr>
             <?php endforeach;?>
