@@ -115,14 +115,34 @@ class custom extends control
             {
                 foreach($_POST['keys'] as $index => $key)
                 {
-                    /* Fix bug #942. */
                     if(!empty($key)) $key = trim($key);
-                    if($field == 'priList' and !is_numeric($key) or $key > 255) die(js::alert($this->lang->custom->notice->priListKey));
-                    if($module == 'bug' and $field == 'severityList' and !is_numeric($key)) die(js::alert($this->lang->custom->notice->severityListKey));
-                    if(!empty($key) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_0-9]+$/')) die(js::alert($this->lang->custom->notice->keyList));
+                    /* Invalid key. It should be numbers. (It includes severityList in bug module and priList in stroy, task, bug, testcasea, testtask and todo module.) */
+                    if($field == 'priList' or $field == 'severityList')
+                    {
+                        if(!is_numeric($key) or $key > 255) die(js::alert($this->lang->custom->notice->invalidNumberKey));
+                    }
+                    if(!empty($key) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_0-9]+$/')) die(js::alert($this->lang->custom->notice->invalidStringKey));
 
-                    /* the length of role is 20, check it when save. */
-                    if($module == 'user' and $field == 'roleList' and strlen($key) > 10) die(js::alert($this->lang->custom->notice->userRole));
+                    /* The length of role is 10, check it when saved. */
+                    if($field == 'roleList' or $module == 'todo' and $field == 'typeList')
+                    {
+                        if(strlen($key) > 10) die(js::alert($this->lang->custom->notice->invalidStrlen['ten']));
+                    }
+                    
+                    /* The length of these string is litter than 20, check it when saved. */
+                    if($field == 'sourceList' or $module == 'task' and $field == 'typeList')
+                    {
+                        if(strlen($key) > 20) die(js::alert($this->lang->custom->notice->invalidStrlen['twenty']));
+                    }
+                    
+                    /* The length of stageList is 255, check it when saved. */
+                    if($module == 'testcase' and $field == 'stageList' and strlen($key) > 255) die(js::alert($this->lang->custom->notice->invalidStrlen['twoHundred']));
+                    
+                    /* The length of these string is litter than 30, check it when saved. */
+                    if($module == 'bug' or $field == 'reasonList' or $module == 'testcase')
+                    {
+                        if(strlen($key) > 30) die(js::alert($this->lang->custom->notice->invalidStrlen['thirty']));
+                    }
                 }
 
                 $lang = $_POST['lang'];
