@@ -1085,11 +1085,19 @@ class task extends control
         }
         else
         {
-            $story = $this->dao->select('story')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('story');
             $this->task->delete(TABLE_TASK, $taskID);
             if($task->parent) $this->task->updateParentStatus($task->id);
             if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
-            if($story) $this->loadModel('story')->setStage($story);
+            if($task->story) $this->loadModel('story')->setStage($task->story);
+            if(!empty($task->children))
+            {
+                foreach($task->children as $childTask)
+                {
+                    $this->task->delete(TABLE_TASK, $childTask->id);
+                    if($childTask->story) $this->loadModel('story')->setStage($childTask->story);
+                }
+            }
+
             die(js::locate($this->session->taskList, 'parent'));
         }
     }
