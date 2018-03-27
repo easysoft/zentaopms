@@ -413,12 +413,13 @@ class bugModel extends model
      * getActiveBugs 
      * 
      * @param  array    $products
+     * @param  int      $branch 
      * @param  int      $projectID 
      * @param  object   $pager 
      * @access public
      * @return array
      */
-    public function getActiveBugs($products, $branch, $projectID, $pager = null)
+    public function getActiveBugs($products, $branch, $projects, $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->eq('active')
@@ -426,7 +427,7 @@ class bugModel extends model
             ->andWhere('tostory')->eq(0)
             ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
             ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
-            ->beginIF(empty($products))->andWhere('project')->eq($projectID)->fi()
+            ->beginIF(!empty($projects))->andWhere('project')->in($projects)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->page($pager)

@@ -2168,11 +2168,9 @@ class upgradeModel extends model
         {
             $lastChild = isset($lastChildTasks[$parentTask->id]) ? $lastChildTasks[$parentTask->id] : '';
 
-            $this->dao->update(TABLE_TASK)
-                ->set('assignedTo')->eq('closed')
-                ->beginIF($lastChild)->set('assignedDate')->eq($lastChild->assignedDate)->fi()
-                ->where('id')->eq($parentTask->id)
-                ->exec();
+            $stmt = $this->dao->update(TABLE_TASK)->set('assignedTo')->eq('closed');
+            if($lastChild) $stmt->set('assignedDate')->eq($lastChild->assignedDate);
+            $stmt->where('id')->eq($parentTask->id)->exec();
 
             if(empty($parentTask->closedBy) && !empty($lastChild->closedBy))
             {
@@ -2192,11 +2190,9 @@ class upgradeModel extends model
 
             foreach($childTasks as $childTask)
             {
-                $this->dao->update(TABLE_TASK)
-                    ->set('assignedTo')->eq('closed')
-                    ->beginIF(!empty($parent))->set('assignedDate')->eq($parent->assignedDate)->fi()
-                    ->where('id')->eq($childTask->id)
-                    ->exec();
+                $stmt = $this->dao->update(TABLE_TASK)->set('assignedTo')->eq('closed');
+                if(!empty($parent)) $stmt->set('assignedDate')->eq($parent->assignedDate);
+                $stmt->where('id')->eq($childTask->id)->exec();
 
                 if(empty($childTask->closedBy) && !empty($parent->closedBy))
                 {
