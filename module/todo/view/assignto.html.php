@@ -30,8 +30,12 @@
               <th><?php echo $lang->todo->date;?></th>
               <td>
                 <div class='input-group'>
-                    <?php echo html::input('date', $date, "class='form-control form-date' id='todoDate'");?>
-                  <span class='input-group-addon'><input type='checkbox' name="future" id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></span>
+                  <?php echo html::input('date', $date, "class='form-control form-date' id='todoDate'");?>
+                  <span class='input-group-addon'>
+                    <label class='checkbox-inline'>
+                      <input type='checkbox' name="future" id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?>
+                    </label>
+                  </span>
                 </div>
               </td><td></td>
             </tr>
@@ -39,7 +43,7 @@
               <th><?php echo $lang->todo->beginAndEnd;?></th>
               <td>
                 <div class='input-group'>
-                    <?php echo html::select('begin', $times, date('Y-m-d') != $date ? key($times) : $time, 'onchange=selectNext(); class="form-control chosen" style="width: 50%;"') . html::select('end', $times, '', 'class="form-control chosen" style="width: 50%; margin-left:-1px"');?>
+                  <?php echo html::select('begin', $times, date('Y-m-d') != $date ? key($times) : $time, 'onchange=selectNext(); class="form-control chosen" style="width: 50%;"') . html::select('end', $times, '', 'class="form-control chosen" style="width: 50%; margin-left:-1px"');?>
                 </div>
               </td>
               <td><input type='checkbox' id='switchDate' onclick='switchDateFeature(this);' name="lblDisableDate"> <?php echo $lang->todo->lblDisableDate;?></td>
@@ -86,3 +90,4 @@
       }
   }
 </script>
+<style>#end_chosen .chosen-single{border-left: none;}</style>
