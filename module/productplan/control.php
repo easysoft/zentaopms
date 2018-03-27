@@ -514,9 +514,9 @@ class productplan extends control
         }
         else
         {
-            $projects = $this->loadModel('project')->getPairs();
+            $projects    = $this->loadModel('project')->getPairs();
             $projects[0] = '';
-            $allBugs= $this->bug->getActiveBugs($this->view->product->id, $plan->branch, $projects);
+            $allBugs     = $this->bug->getActiveBugs($this->view->product->id, $plan->branch, array_keys($projects));
         }
 
         $this->view->allBugs    = $allBugs;
