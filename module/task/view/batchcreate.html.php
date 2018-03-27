@@ -17,7 +17,7 @@
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
     <strong>
       <small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small>
-      <?php if($isChildren):?>
+      <?php if($parent):?>
       <span class='pull-left'><?php echo $parentTitle;?></span> 
       <?php echo $lang->task->batchCreateChildren;?>
       <?php else:?>

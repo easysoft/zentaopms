@@ -2288,7 +2288,7 @@ class taskModel extends model
                     common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list');
                     if(empty($task->team) or empty($task->children))
                     {
-                        common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0&isChildren=1", $task, 'list', 'plus', '', '', '', '', $this->lang->task->children);
+                        common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'plus', '', '', '', '', $this->lang->task->children);
                     }
                     break;
             }

@@ -193,7 +193,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function batchCreate($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $iframe = 0, $isChildren = false)
+    public function batchCreate($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $iframe = 0)
     {
         $project   = $this->project->getById($projectID);
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
@@ -225,7 +225,7 @@ class task extends control
         $position[] = $this->lang->task->common;
         $position[] = $this->lang->task->batchCreate;
 
-        if($isChildren) $this->view->parentTitle = $this->dao->select('name')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('name');
+        if($taskID) $this->view->parentTitle = $this->dao->select('name')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('name');
 
         $this->view->title      = $title;
         $this->view->position   = $position;
@@ -233,7 +233,6 @@ class task extends control
         $this->view->stories    = $stories;
         $this->view->modules    = $modules;
         $this->view->parent     = $taskID;
-        $this->view->isChildren = $isChildren;
         $this->view->storyID    = $storyID;
         $this->view->story      = $this->story->getByID($storyID);
         $this->view->storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
