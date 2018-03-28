@@ -599,12 +599,12 @@ class commonModel extends model
             if(isset($order[1]) and $order[1] == 'asc')
             {
                 $orderBy   = "{$order[0]}_desc";
-                $className = $isMobile ? 'SortUp' : 'headerSortDown';
+                $className = $isMobile ? 'SortUp' : 'sort-up';
             }
             else
             {
                 $orderBy = "{$order[0]}_asc";
-                $className = $isMobile ? 'SortDown' : 'headerSortUp';
+                $className = $isMobile ? 'SortDown' : 'sort-down';
             }
         }
         else
@@ -613,7 +613,7 @@ class commonModel extends model
             $className = 'header';
         }
         $link = helper::createLink($module, $method, sprintf($vars, $orderBy));
-        echo $isMobile ? html::a($link, $label, '', "class='$className'") : "<div class='$className'>" . html::a($link, $label) . '</div>';
+        echo $isMobile ? html::a($link, $label, '', "class='$className'") : html::a($link, $label, '', "class='$className'");
     }
 
     /**
@@ -762,14 +762,14 @@ class commonModel extends model
             }
             else
             {
-                return html::a($link, "<i class='$class'></i>", $target, "class='btn-icon $extraClass' title='$title' $misc", false);
+                return html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title='$title' $misc", false);
             }
         }
         else
         {
             if($type == 'list')
             {
-                return "<button type='button' class='disabled btn-icon $extraClass'><i class='$class' title='$title' $misc></i></button>";
+                return "<button type='button' class='disabled btn $extraClass'><i class='$class' title='$title' $misc></i></button>";
             }
         }
     }

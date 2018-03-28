@@ -20,4 +20,30 @@ helper::import(dirname(dirname(__FILE__)) . '/base/pager/pager.class.php');
  */
 class pager extends basePager
 {
+    /**
+     * Show pager.
+     * 
+     * @param  string $align 
+     * @param  string $type 
+     * @access public
+     * @return void
+     */
+    public function show($align = 'right', $type = 'full')
+    {
+        if($type == 'pagerjs')
+        {
+            $this->setParams();
+            $params = $this->params;
+            foreach($params as $key => $value)
+            {
+                if(strtolower($key) == 'recperpage') $params[$key] = '{recPerPage}';
+                if(strtolower($key) == 'pageid')     $params[$key] = '{page}';
+            }
+            echo "<ul class='pager' data-ride='pager' data-rec-total='{$this->recTotal}' data-rec-per-page='{$this->recPerPage}' data-page='{$this->pageID}' data-link-creator='" . helper::createLink($this->moduleName, $this->methodName, $params) . "'></ul>";
+        }
+        else
+        {
+            parent::show($align, $type);
+        }
+    }
 }

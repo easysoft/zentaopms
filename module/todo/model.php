@@ -540,6 +540,13 @@ class todoModel extends model
         return !dao::isError();
     }
 
+    /**
+     * Assign todo. 
+     * 
+     * @param  int    $todoID 
+     * @access public
+     * @return bool
+     */
     public function assignTo($todoID)
     {
         $todo = fixer::input('post')
@@ -554,5 +561,24 @@ class todoModel extends model
         $this->dao->update(TABLE_TODO)->data($todo)->where('id')->eq((int)$todoID)->exec();
         $this->loadModel('action')->create('todo', $todoID, 'assigned', '', $todo->assignedTo);
         return !dao::isError();
+    }
+
+    /**
+     * Get todo count.
+     * 
+     * @param  string $account 
+     * @access public
+     * @return int
+     */
+    public function getCount($account = '')
+    {
+        if(empty($account)) $account = $this->app->user->account;
+        return $this->dao->select('count(*) as count')->from(TABLE_TODO)
+            ->where('cycle')->eq('0')
+            ->andWhere('account', true)->eq($account)
+            ->orWhere('assignedTo')->eq($account)
+            ->orWhere('finishedBy')->eq($account)
+            ->markRight(1)
+            ->fetch('count');
     }
 }

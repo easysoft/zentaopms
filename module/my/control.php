@@ -104,6 +104,7 @@ class my extends control
 
         /* Assign. */
         $this->view->todos        = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $sort);
+        $this->view->todoCount    = $this->todo->getCount();
         $this->view->date         = (int)$type == 0 ? date(DT_DATE1) : date(DT_DATE1, strtotime($type));
         $this->view->type         = $type;
         $this->view->recTotal     = $recTotal;
