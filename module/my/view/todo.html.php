@@ -28,7 +28,7 @@
         ?>
         <?php endforeach;?>
         <div class="input-control has-icon-right space">
-          <input type="text" required="" class="form-control form-date" id="todoDate" name="date">
+          <?php echo html::input('date', $date,"class='form-control form-date' onchange='changeDate(this.value)' autocomplete='off'");?>
           <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-delay"></i></label>
         </div>
       </div>
