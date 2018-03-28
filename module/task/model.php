@@ -445,6 +445,9 @@ class taskModel extends model
         $teams = array();
         if($this->post->multiple)
         {
+            $consumed = 0;
+            $estimate = 0;
+            $left = 0;
             foreach($this->post->team as $row => $account)
             {
                 if(empty($account) or isset($team[$account])) continue;
@@ -457,15 +460,26 @@ class taskModel extends model
                 $member->type     = 'task';
                 $member->estimate = $this->post->teamEstimate[$row] ? $this->post->teamEstimate[$row] : 0;
                 $member->consumed = $this->post->teamConsumed[$row] ? $this->post->teamConsumed[$row] : 0;
-                $member->left     = $member->estimate - $member->consumed;
+                $member->left     = $this->post->teamLeft[$row] ? $this->post->teamLeft[$row] : ($member->estimate - $member->consumed);
                 $member->order    = $row;
                 $teams[$account]  = $member;
-            }
 
-            if(!empty($teams) and !isset($task->assignedTo))
+                $consumed += (float)$member->consumed;
+                $estimate += (float)$member->estimate;
+                $left     += (float)$member->left;
+            }
+            
+            if(!empty($teams))
             {
-                $firstMember      = reset($teams);
-                $task->assignedTo = $firstMember->account;
+                $task->consumed = $consumed;
+                $task->estimate = $estimate;
+                $task->left     = $left;
+
+                if(!isset($task->assignedTo))
+                {
+                    $firstMember      = reset($teams);
+                    $task->assignedTo = $firstMember->account;
+                }
             }
         }
 
@@ -945,19 +959,28 @@ class taskModel extends model
             $data->consumed = $teamTime->consumed;
             $data->left     = $teamTime->leftTime;
 
-            if($task->status == 'done')
+            $newTask = new stdClass();
+            $newTask->left     = $data->left;
+            $newTask->consumed = $data->consumed;
+
+            if($left != 0 || $task->assignedTo != $teams[count($teams) - 1])
             {
-                $newTask = new stdClass();
-                $newTask->left         = $data->left;
-                $newTask->consumed     = $data->consumed;
-                $newTask->assignedTo   = $this->getNextUser($teams, $task->assignedTo);
-                $newTask->assignedDate = $now;
+                $newTask->status = 'doing';
+                if($task->assignedTo != $teams[count($teams) - 1] && $left == 0)
+                {
+                    $newTask->assignedTo   = $this->getNextUser($teams, $task->assignedTo);
+                    $newTask->assignedDate = $now;
+                }
+
+                $task->status = $oldStatus;
                 $this->dao->update(TABLE_TASK)->data($newTask)->where('id')->eq((int)$taskID)->exec();
 
-                if($task->assignedTo != $teams[count($teams) - 1]) return common::createChanges($task, $newTask);
-
-                $data->assignedTo = $task->openedBy; // Fix bug#1345
+                $changes = common::createChanges($task, $newTask);
+                if(!empty($actionID)) $this->action->logHistory($actionID, $changes);
+                return $changes;
             }
+
+            $data->assignedTo = $task->openedBy;
         }
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($taskID)->exec();

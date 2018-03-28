@@ -12,7 +12,8 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php js::set('confirmRecord',    $lang->task->confirmRecord);?>
+<?php $team = array_keys($task->team);?>
+<?php js::set('confirmRecord',    (!empty($team) && $task->assignedTo != end($team)) ? $lang->task->confirmTransfer : $lang->task->confirmRecord);?>
 <?php js::set('noticeSaveRecord', $lang->task->noticeSaveRecord);?>
 <div id='titlebar'>
   <div class='heading'>
