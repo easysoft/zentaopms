@@ -117,7 +117,6 @@
           {
               $actionLink = $this->createLink('todo', 'batchFinish');
               echo html::commonButton($lang->todo->finish, "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
-
           }
           if(common::hasPriv('todo', 'import2Today') and $importFuture)
           {
