@@ -121,7 +121,12 @@
               <?php echo html::select("plans[" . $plan->product . "]", $productPlan, $plan->id, "class='form-control'");?>
               <?php js::set('currentPlanID', $plan->id)?>
             </div>
-            <?php endif;?>
+            <?php else:?>
+            <div class="col-sm-3" id="plan0">
+              <?php echo html::select("plans[]", $productPlan, '', "class='form-control'");?>
+              <?php js::set('currentPlanID', '')?>
+            </div>
+            <?php endif?>
           </div>
         </td>
       </tr>
