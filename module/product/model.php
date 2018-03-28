@@ -309,6 +309,7 @@ class productModel extends model
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
+            ->checkIF(strlen($product->code) == 0, 'code', 'notempty') //the value of product code can be 0 or 00.00
             ->check('name', 'unique', "deleted = '0'")
             ->check('code', 'unique', "deleted = '0'")
             ->exec();
@@ -349,6 +350,7 @@ class productModel extends model
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
+            ->checkIF(strlen($product->code) == 0, 'code', 'notempty') //the value of product code can be 0 or 00.0
             ->check('name', 'unique', "id != $productID and deleted = '0'")
             ->check('code', 'unique', "id != $productID and deleted = '0'")
             ->where('id')->eq($productID)
@@ -396,6 +398,7 @@ class productModel extends model
                 ->data($product)
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
+                ->checkIF(strlen($product->code) == 0, 'code', 'notempty') //the value of product code can be 0 or 00.0
                 ->check('name', 'unique', "id != $productID and deleted = '0'")
                 ->check('code', 'unique', "id != $productID and deleted = '0'")
                 ->where('id')->eq($productID)
