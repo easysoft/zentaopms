@@ -17,7 +17,7 @@
     <?php if($build) echo ' <span class="label label-danger">Build:' . $build->name . '</span>'; ?>
   </div>
   <div class='actions'>
-    <?php common::printIcon('bug', 'export', "productID=$productID&orderBy=$orderBy", '', 'button', '', '', "export iframe");?>
+    <?php common::printIcon('bug', 'export', "productID=$productID&orderBy=$orderBy", '', 'button', '', '', "export");?>
     <?php common::printIcon('bug', 'create', "productID=$productID&branch=$branchID&extra=projectID=$project->id");?>
   </div>
   <div id='querybox' class='show'></div>
