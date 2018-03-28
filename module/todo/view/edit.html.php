@@ -149,8 +149,13 @@
 <?php if(isonlybody()):?>
 $(function()
 {
-    parent.$('#triggerModal .modal-header').hide();
-    $('#closeModal').click(function(){parent.$.closeModal();})
+    parent.$('.modal-header').hide();
+    parent.$('.modal-body').css('padding', '0px');
+    $('#closeModal').click(function()
+    {
+        parent.$('.modal-backdrop.in').remove();
+        parent.$('.modal.in').remove();
+    })
 })
 <?php endif;?>
 </script>

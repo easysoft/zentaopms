@@ -28,7 +28,7 @@
         ?>
         <?php endforeach;?>
         <div class="input-control has-icon-right space">
-          <input type="text" required="" class="form-control form-date" id="todoDate" name="date" placeholder="2018-02-28">
+          <input type="text" required="" class="form-control form-date" id="todoDate" name="date">
           <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-delay"></i></label>
         </div>
       </div>
@@ -99,6 +99,7 @@
             <?php endforeach;?>
           </tbody>
         </table>
+        <?php if($todos):?>
         <div class="table-footer">
           <?php if($type != 'cycle'):?>
           <?php if(common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture)):?>
@@ -132,6 +133,7 @@
           <?php endif;?>
           <?php $pager->show('right', 'pagerjs');?>
         </div>
+        <?php endif;?>
       </form>
     </div>
   </div>

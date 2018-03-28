@@ -109,7 +109,9 @@ var batchCreateNum = '<?php echo $config->todo->batchCreate;?>';
 <?php if(isonlybody()):?>
 $(function()
 {
-    $('#closeModal').click(function(){parent.$.closeModal();})
+    parent.$('.modal-header').hide();
+    parent.$('.modal-body').css('padding', '0px');
+    $('#closeModal').click(function(){parent.$.closeModal();});
 })
 <?php endif;?>
 </script>
