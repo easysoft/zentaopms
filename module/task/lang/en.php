@@ -165,6 +165,7 @@ $lang->task->remindBug             = "This Task is converted from a Bug. Do you 
 $lang->task->confirmChangeProject  = "If you change {$lang->projectCommon}, the related Module, Story and Assignor will be changed. Do you want to do it?";
 $lang->task->confirmFinish         = '"Left Hour" is 0. Do you want to change the Status to "Done"?';
 $lang->task->confirmRecord         = '"Left Hour" is 0. Do you want to set Task as "Done"?';
+$lang->task->confirmTransfer       = '"Left Hour" is 0，Do you want to transfer task?';
 $lang->task->noticeLinkStory       = "No story has been linked. You can %s for this project, then %s.";
 $lang->task->noticeSaveRecord      = 'Your Hour is not saved. Please save it first.';
 $lang->task->commentActions        = '%s. %s, commented by <strong>%s</strong>.';

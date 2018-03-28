@@ -908,6 +908,8 @@ class projectModel extends model
             if(($this->session->taskBrowseType) and ($this->session->taskBrowseType != 'bysearch')) $browseType = $this->session->taskBrowseType;
         }
 
+        $this->session->set('taskWithChildren', in_array($browseType, array('unclosed', 'byproject', 'all')) ? false : true);
+
         /* Get tasks. */
         $tasks = array();
         if($browseType != "bysearch")
