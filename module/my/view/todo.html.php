@@ -44,12 +44,12 @@
           <thead>
             <tr>
               <th class="c-id">
+                <?php if($type != 'cycle' and (common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture))):?>
                 <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
-                  <?php if($type != 'cycle' and (common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture))):?>
                   <label></label>
-                  <?php endif;?>
-                  <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </div>
+                <?php endif;?>
+                <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
               </th>
               <th class="c-date">  <?php common::printOrderLink('date',   $orderBy, $vars, $lang->todo->date);?></th>
               <th class="c-type">  <?php common::printOrderLink('type',   $orderBy, $vars, $lang->todo->type);?></th>

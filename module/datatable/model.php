@@ -142,9 +142,8 @@ class datatableModel extends model
             }
             else
             {
-                if($id == 'id') echo "<div class='checkbox-primary check-all' title='{$this->lang->selectAll}'><label></label>";
+                if($id == 'id') echo "<div class='checkbox-primary check-all' title='{$this->lang->selectAll}'><label></label></div>";
                 common::printOrderLink($id, $orderBy, $vars, $col->title);
-                if($id == 'id') echo "</div>";
             }
             echo '</th>';
         }

@@ -29,17 +29,17 @@
       <form id='myTaskForm' class="main-table table-task" data-ride="table" method="post">
         <?php $canBatchEdit  = common::hasPriv('task', 'batchEdit');?>
         <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
-        <table class="table has-sort-head table-lg">
+        <table class="table has-sort-head table-lg table-fixed">
           <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
           <thead>
             <tr>
               <th class="w-100px">
+                <?php if($canBatchEdit or $canBatchClose):?>
                 <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
-                  <?php if($canBatchEdit or $canBatchClose):?>
                   <label></label>
-                  <?php endif;?>
-                  <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </div>
+                <?php endif;?>
+                <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
               </th>
               <th class='w-pri'>   <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
               <th class='w-150px'> <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
