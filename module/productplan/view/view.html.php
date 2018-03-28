@@ -28,40 +28,40 @@
     <?php endif; ?>
   </div>
   <div class='actions'>
-  <?php
-   $browseLink = $this->session->productPlanList ? $this->session->productPlanList : inlink('browse', "planID=$plan->id");
-   if(!$plan->deleted)
-   {
-      ob_start();
-      echo "<div class='btn-group'>";
-      echo "<div class='btn-group' id='createActionMenu'>";
-      common::printIcon('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=0&bugID=0&planID=$plan->id", $plan, 'button', 'plus');
-      $batchMisc = common::hasPriv('story', 'batchCreate') ? '' : "disabled";
-      $batchLink = common::hasPriv('story', 'batchCreate') ?  $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=0&plan={$plan->id}") : '#';
-      echo "<button type='button' class='btn dropdown-toggle {$batchMisc}' data-toggle='dropdown'><span class='caret'></span></button>";
-      echo "<ul class='dropdown-menu pull-right'>";
-      echo "<li>" . html::a($batchLink, $lang->story->batchCreate, '', "class='$batchMisc'") . "</li>";
-      echo '</ul>';
-      echo '</div>';
-      if(common::hasPriv('productplan', 'linkStory'))
-      {
-        echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn'");
-      }
-      if(common::hasPriv('productplan', 'linkBug') and $config->global->flow != 'onlyStory')
-      {
-          echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn'");
-      }
-      echo '</div>';
-      echo "<div class='btn-group'>";
-      common::printIcon('productplan', 'edit',   "planID=$plan->id", $plan);
-      common::printIcon('productplan', 'delete', "planID=$plan->id", $plan, 'button', '', 'hiddenwin');
-      echo '</div>';
-      $actionLinks = ob_get_contents();
-      ob_end_clean();
-      echo $actionLinks;
-   }
-   common::printRPN($browseLink);
-  ?>
+    <?php
+    $browseLink = $this->session->productPlanList ? $this->session->productPlanList : inlink('browse', "planID=$plan->id");
+    if(!$plan->deleted)
+    {
+       ob_start();
+       echo "<div class='btn-group'>";
+       echo "<div class='btn-group' id='createActionMenu'>";
+       common::printIcon('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=0&bugID=0&planID=$plan->id", $plan, 'button', 'plus');
+       $batchMisc = common::hasPriv('story', 'batchCreate') ? '' : "disabled";
+       $batchLink = common::hasPriv('story', 'batchCreate') ?  $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=0&plan={$plan->id}") : '#';
+       echo "<button type='button' class='btn dropdown-toggle {$batchMisc}' data-toggle='dropdown'><span class='caret'></span></button>";
+       echo "<ul class='dropdown-menu pull-right'>";
+       echo "<li>" . html::a($batchLink, $lang->story->batchCreate, '', "class='$batchMisc'") . "</li>";
+       echo '</ul>';
+       echo '</div>';
+       if(common::hasPriv('productplan', 'linkStory'))
+       {
+         echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn'");
+       }
+       if(common::hasPriv('productplan', 'linkBug') and $config->global->flow != 'onlyStory')
+       {
+           echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn'");
+       }
+       echo '</div>';
+       echo "<div class='btn-group'>";
+       common::printIcon('productplan', 'edit',   "planID=$plan->id", $plan);
+       common::printIcon('productplan', 'delete', "planID=$plan->id", $plan, 'button', '', 'hiddenwin');
+       echo '</div>';
+       $actionLinks = ob_get_contents();
+       ob_end_clean();
+       echo $actionLinks;
+    }
+    common::printRPN($browseLink);
+    ?>
   </div>
 </div>
 <div class='row-table'>
