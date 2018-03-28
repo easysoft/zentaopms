@@ -28,7 +28,7 @@
       </tr>  
       <tr>
         <th><?php echo $lang->product->code;?></th>
-        <td><?php echo html::input('code', '', "class='form-control' autocomplete='off'");?></td><td></td>
+        <td><div class='required required-wrapper'></div><?php echo html::input('code', '', "class='form-control' autocomplete='off'");?></td><td></td>
       </tr>  
       <tr>
         <th><?php echo $lang->product->line;?></th>

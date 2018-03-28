@@ -915,7 +915,7 @@ class project extends control
         $whitelist   = '';
         $acl         = 'open';
         $plan        = new stdClass();
-        $productPlan = new stdClass();
+        $productPlan = array();
 
         if($copyProjectID)
         {
@@ -969,7 +969,7 @@ class project extends control
         $this->view->code          = $code;
         $this->view->team          = $team;
         $this->view->products      = $products;
-        $this->view->productPlan   = $productPlan;
+        $this->view->productPlan   = array(0 => '') + $productPlan;
         $this->view->whitelist     = $whitelist;
         $this->view->copyProjectID = $copyProjectID;
         $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));

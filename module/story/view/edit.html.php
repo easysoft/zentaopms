@@ -185,10 +185,13 @@
             <td><?php echo html::input('duplicateStory', $story->duplicateStory, "class='form-control' autocomplete='off'");?></td>
           </tr>
           <?php endif;?>
-          <tr class='text-top'>
+          <tr>
             <th class='w-70px'><?php echo $lang->story->linkStories;?></th>
+            <td><?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?></td>
+          </tr>
+          <tr>
+            <th></th>
             <td>
-              <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?>
               <ul class='list-unstyled' id='linkStoriesBox'>
               <?php
               $linkStories = explode(',', $story->linkStories);

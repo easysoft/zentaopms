@@ -14,11 +14,12 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('confirmFinish', $lang->task->confirmFinish);?>
-<?php if(!empty($task->team) && key($task->team) != $this->app->user->account):?>
+<!-- IF it is multi-task, the suspened can only be restarted by the current user who it is assigned to.-->
+<?php if(!empty($task->team) && $task->assignedTo != $this->app->user->account):?>
 <div class="alert with-icon">
   <i class="icon-info-sign"></i>
   <div class="content">
-    <p><?php echo $lang->task->deniedNotice;?></p>
+    <p><?php echo sprintf($lang->task->deniedNotice, $lang->task->start);?></p>
   </div>
 </div>
 <?php else:?>

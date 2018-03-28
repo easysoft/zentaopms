@@ -123,22 +123,22 @@ class custom extends control
                     }
                     if(!empty($key) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_0-9]+$/')) die(js::alert($this->lang->custom->notice->invalidStringKey));
 
-                    /* The length of role is 10, check it when saved. */
+                    /* The length of roleList in user module and typeList in todo module is less than 10. check it when saved. */
                     if($field == 'roleList' or $module == 'todo' and $field == 'typeList')
                     {
                         if(strlen($key) > 10) die(js::alert($this->lang->custom->notice->invalidStrlen['ten']));
                     }
                     
-                    /* The length of these string is litter than 20, check it when saved. */
+                    /* The length of sourceList in story module and typeList in task module is less than 20, check it when saved. */
                     if($field == 'sourceList' or $module == 'task' and $field == 'typeList')
                     {
                         if(strlen($key) > 20) die(js::alert($this->lang->custom->notice->invalidStrlen['twenty']));
                     }
                     
-                    /* The length of stageList is 255, check it when saved. */
+                    /* The length of stageList in testcase module is less than 255, check it when saved. */
                     if($module == 'testcase' and $field == 'stageList' and strlen($key) > 255) die(js::alert($this->lang->custom->notice->invalidStrlen['twoHundred']));
                     
-                    /* The length of these string is litter than 30, check it when saved. */
+                    /* The length of field that in bug and testcase module and reasonList in story and task module is less than 30, check it when saved. */
                     if($module == 'bug' or $field == 'reasonList' or $module == 'testcase')
                     {
                         if(strlen($key) > 30) die(js::alert($this->lang->custom->notice->invalidStrlen['thirty']));

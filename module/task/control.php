@@ -1272,42 +1272,45 @@ class task extends control
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(@array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
             $relatedModules = $this->loadModel('tree')->getTaskOptionMenu($projectID);
 
-            $children = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)
-                ->andWhere('parent')->in(array_keys($tasks))
-                ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
-                ->orderBy($sort)
-                ->fetchGroup('parent', 'id');
-            if(!empty($children))
+            if(!$this->session->taskWithChildren)
             {
-                foreach($children as $parent => $childTasks)
+                $children = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)
+                    ->andWhere('parent')->in(array_keys($tasks))
+                    ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+                    ->orderBy($sort)
+                    ->fetchGroup('parent', 'id');
+                if(!empty($children))
                 {
-                    foreach($childTasks as $task)
+                    foreach($children as $parent => $childTasks)
                     {
-                        /* Compute task progress. */
-                        if($task->consumed == 0 and $task->left == 0)
+                        foreach($childTasks as $task)
                         {
-                            $task->progress = 0;
+                            /* Compute task progress. */
+                            if($task->consumed == 0 and $task->left == 0)
+                            {
+                                $task->progress = 0;
+                            }
+                            elseif($task->consumed != 0 and $task->left == 0)
+                            {
+                                $task->progress = 100;
+                            }
+                            else
+                            {
+                                $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                            }
+                            $task->progress .= '%';
                         }
-                        elseif($task->consumed != 0 and $task->left == 0)
-                        {
-                            $task->progress = 100;
-                        }
-                        else
-                        {
-                            $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
-                        }
-                        $task->progress .= '%';
                     }
-                }
 
-                $position = 0;
-                foreach($tasks as $task)
-                {
-                    $position ++;
-                    if(isset($children[$task->id]))
+                    $position = 0;
+                    foreach($tasks as $task)
                     {
-                        array_splice($tasks, $position, 0, $children[$task->id]);
-                        $position += count($children[$task->id]);
+                        $position ++;
+                        if(isset($children[$task->id]))
+                        {
+                            array_splice($tasks, $position, 0, $children[$task->id]);
+                            $position += count($children[$task->id]);
+                        }
                     }
                 }
             }

@@ -31,10 +31,7 @@ include '../../common/view/tablesorter.html.php';
       </thead>
       <tbody>
       <?php foreach($allBugs as $bug):?>
-      <?php
-      if(isset($planBugs[$bug->id])) continue;
-      if($bug->plan and helper::diffDate($plans[$bug->plan], helper::today()) > 0) continue;
-      ?>
+      <?php if(isset($planBugs[$bug->id])) continue;?>
       <tr>
         <td class='cell-id'>
           <input type='checkbox' name='bugs[]'  value='<?php echo $bug->id;?>'/> 
