@@ -1366,7 +1366,7 @@ class taskModel extends model
             ->page($pager, 't1.id')
             ->fetchAll('id');
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID or in_array($type, array('assignedtome', 'myinvolved', 'needconfirm'))) ? false : true);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', ($productID or in_array($type, array('myinvolved', 'needconfirm'))) ? false : true);
 
         if(empty($tasks)) return array();
 
