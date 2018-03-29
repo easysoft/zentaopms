@@ -10,7 +10,3 @@ function changeGroup(role)
     }
     $('#group').trigger("chosen:updated");
 }
-/*
-   设置用户的入职日期,默认为当天
-*/
-document.getElementById('join').value = new Date().format("yyyy-MM-dd");
