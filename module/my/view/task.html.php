@@ -15,20 +15,20 @@
   <div class="container">
     <div id="mainMenu" class="clearfix">
       <div class="btn-toolbar pull-left">
-    <?php
-    echo html::a(inlink('task', "type=assignedTo"),  "<span class='text'>{$lang->my->taskMenu->assignedToMe}</span>", '', "class='btn btn-link" .($type == 'assignedTo' ? ' btn-active-text' : ''). "'");
-    echo html::a(inlink('task', "type=openedBy"),    "<span class='text'>{$lang->my->taskMenu->openedByMe}</span>",   '', "class='btn btn-link" .($type == 'openedBy'   ? ' btn-active-text' : ''). "'");
-    echo html::a(inlink('task', "type=finishedBy"),  "<span class='text'>{$lang->my->taskMenu->finishedByMe}</span>", '', "class='btn btn-link" .($type == 'finishedBy' ? ' btn-active-text' : ''). "'");
-    echo html::a(inlink('task', "type=closedBy"),    "<span class='text'>{$lang->my->taskMenu->closedByMe}</span>",   '', "class='btn btn-link" .($type == 'closedBy'   ? ' btn-active-text' : ''). "'");
-    echo html::a(inlink('task', "type=canceledBy"),  "<span class='text'>{$lang->my->taskMenu->canceledByMe}</span>", '', "class='btn btn-link" .($type == 'canceledBy' ? ' btn-active-text' : ''). "'");
-    ?>
+        <?php
+        echo html::a(inlink('task', "type=assignedTo"),  "<span class='text'>{$lang->my->taskMenu->assignedToMe}</span>", '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink('task', "type=openedBy"),    "<span class='text'>{$lang->my->taskMenu->openedByMe}</span>",   '', "class='btn btn-link" . ($type == 'openedBy'   ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink('task', "type=finishedBy"),  "<span class='text'>{$lang->my->taskMenu->finishedByMe}</span>", '', "class='btn btn-link" . ($type == 'finishedBy' ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink('task', "type=closedBy"),    "<span class='text'>{$lang->my->taskMenu->closedByMe}</span>",   '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink('task', "type=canceledBy"),  "<span class='text'>{$lang->my->taskMenu->canceledByMe}</span>", '', "class='btn btn-link" . ($type == 'canceledBy' ? ' btn-active-text' : '') . "'");
+        ?>
       </div>
     </div>
     <div id="mainContent">
       <form id='myTaskForm' class="main-table table-task" data-ride="table" method="post">
         <?php $canBatchEdit  = common::hasPriv('task', 'batchEdit');?>
         <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
-        <table class="table has-sort-head table-lg table-fixed">
+        <table class="table has-sort-head table-lg table-fixed" id='tasktable'>
           <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
           <thead>
             <tr>

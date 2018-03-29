@@ -951,7 +951,6 @@ class commonModel extends model
         $queryCondition = $this->session->$queryCondition;
         $orderBy = $type . 'OrderBy';
         $orderBy = $this->session->$orderBy;
-        $orderBy = str_replace('`left`', 'left', $orderBy); // process the `left` to left.
 
         if(empty($queryCondition) or $this->session->$typeOnlyCondition)
         {

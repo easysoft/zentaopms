@@ -18,12 +18,12 @@
   <div class="container">
     <div id="mainMenu" class="clearfix">
       <div class="btn-toolbar pull-left">
-    <?php
-    echo html::a(inlink('bug', "type=assignedTo"), "<span class='text'>{$lang->bug->assignedTo}</span>", '', "class='btn btn-link" .($type == 'assignedTo' ? ' btn-active-text' : ''). "'");
-    echo html::a(inlink('bug', "type=openedBy"),   "<span class='text'>{$lang->bug->openedBy}</span>",   '', "class='btn btn-link" .($type == 'openedBy'   ? ' btn-active-text' : ''). "'");
-    echo html::a(inlink('bug', "type=resolvedBy"), "<span class='text'>{$lang->bug->resolvedBy}</span>", '', "class='btn btn-link" .($type == 'resolvedBy' ? ' btn-active-text' : ''). "'");
-    echo html::a(inlink('bug', "type=closedBy"),   "<span class='text'>{$lang->bug->closedBy}</span>",   '', "class='btn btn-link" .($type == 'closedBy'   ? ' btn-active-text' : ''). "'");
-    ?>
+        <?php
+        echo html::a(inlink('bug', "type=assignedTo"), "<span class='text'>{$lang->bug->assignedTo}</span>", '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink('bug', "type=openedBy"),   "<span class='text'>{$lang->bug->openedBy}</span>",   '', "class='btn btn-link" . ($type == 'openedBy'   ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink('bug', "type=resolvedBy"), "<span class='text'>{$lang->bug->resolvedBy}</span>", '', "class='btn btn-link" . ($type == 'resolvedBy' ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink('bug', "type=closedBy"),   "<span class='text'>{$lang->bug->closedBy}</span>",   '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
+        ?>
       </div>
     </div>
     <div id="mainContent">
