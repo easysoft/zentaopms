@@ -52,6 +52,10 @@
         <td><?php echo html::password('password2', '', "class='form-control' autocomplete='off'");?></td>
       </tr>
       <tr>
+        <th><?php echo $lang->user->join;?></th>
+        <td><input type="date" name="join" id="join" class="form-control" ></td>
+      </tr>
+      <tr>
         <th><?php echo $lang->user->role;?></th>
         <td><?php echo html::select('role', $lang->user->roleList, '', "class='form-control' onchange='changeGroup(this.value)'");?></td>
         <td><?php echo $lang->user->placeholder->role?></td>

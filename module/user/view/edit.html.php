@@ -35,6 +35,10 @@
         <td><?php echo html::select('role', $lang->user->roleList, $user->role, "class='form-control'");?></td>
       </tr>
       <tr>
+        <th><?php echo $lang->user->join;?></th>
+        <td><input type="date" name="join" value="<?php echo $user->join;?>" class="form-control"></td>
+      </tr>
+      <tr>
         <th><?php echo $lang->group->priv;?></th>
         <td colspan='3'><?php echo html::select('groups[]', $groups, $userGroups, 'size=3 multiple=multiple class="form-control chosen"');?></td>
       </tr>
