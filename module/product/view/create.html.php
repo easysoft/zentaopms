@@ -32,8 +32,18 @@
       </tr>  
       <tr>
         <th><?php echo $lang->product->line;?></th>
-        <td><?php echo html::select('line', $lines, '', "class='form-control chosen'");?></td>
-        <td><?php if(!$lines) common::printLink('tree', 'browse', "rootID=&view=line", $lang->tree->manageLine);?></td>
+        <td>
+          <div class='input-group' id='lineIdBox'>
+            <?php
+            echo html::select('line', $lines, '', "class='form-control chosen'");
+            echo "<span class='input-group-addon'>";
+            echo html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=line"), $lang->tree->manageLine, '_blank');
+            echo '&nbsp; ';
+            echo html::a("javascript:loadProductLines({$rootID})", $lang->refresh);
+            echo '</span>';
+            ?>
+          </div>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->product->PO;?></th>

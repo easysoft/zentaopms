@@ -24,10 +24,12 @@ class tree extends control
      */
     public function browse($rootID, $viewType, $currentModuleID = 0, $branch = 0)
     {
+        $this->loadModel('product');
+
         /* According to the type, set the module root and modules. */
-        if(strpos('story|bug|case|line', $viewType) !== false)
+        if(strpos('story|bug|case', $viewType) !== false)
         {
-            $product = $this->loadModel('product')->getById($rootID);
+            $product = $this->product->getById($rootID);
             if(empty($product)) $this->locate($this->createLink('product', 'create'));
             if(!empty($product->type) && $product->type != 'normal')
             {
@@ -350,13 +352,14 @@ class tree extends control
             $changeFunc = '';
             if($viewType == 'task' or $viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
             $field = $fieldID ? "modules[$fieldID]" : 'module';
+            if($viewType == 'line') $field = 'line';
             $output = html::select("$field", $optionMenu, '', "class='form-control' $changeFunc");
             if(count($optionMenu) == 1 and $needManage)
             {
                 $output .=  "<span class='input-group-addon'>";
                 $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch"), $this->lang->tree->manage, '_blank');
                 $output .= '&nbsp; ';
-                $output .= html::a("javascript:loadProductModules($rootID)", $this->lang->refresh);
+                $output .= $viewType == 'line' ? html::a("javascript:loadProductLines($rootID)", $this->lang->refresh) : html::a("javascript:loadProductModules($rootID)", $this->lang->refresh);
                 $output .= '</span>';
             }
             die($output);
