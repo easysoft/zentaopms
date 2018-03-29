@@ -16,7 +16,6 @@ $clientTheme  = $this->app->getClientTheme();
   <meta name="renderer" content="webkit">
   <?php
   echo html::title($title . ' - ' . $lang->zentaoPMS);
-
   js::exportConfigVars();
   if($config->debug)
   {
