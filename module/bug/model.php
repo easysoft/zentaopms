@@ -53,10 +53,11 @@ class bugModel extends model
     /**
      * Create a bug.
      * 
+     * @param  string $from   object that is transfered to bug.
      * @access public
      * @return int|bool
      */
-    public function create()
+    public function create($from = '')
     {
         $now = helper::now();
         $bug = fixer::input('post')
@@ -87,6 +88,10 @@ class bugModel extends model
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
             $this->file->saveUpload('bug', $bugID);
             empty($bug->case) ? $this->loadModel('score')->create('bug', 'create', $bugID) : $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
+
+            /* Callback the callable method to process the related data for object that is transfered to bug. */
+            if(is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
+
             return array('status' => 'created', 'id' => $bugID);
         }
         return false;

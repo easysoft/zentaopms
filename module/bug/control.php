@@ -222,8 +222,34 @@ class bug extends control
      */
     public function create($productID, $branch = '', $extras = '')
     {
-        $this->view->users = $this->user->getPairs('devfirst|noclosed|nodeleted');
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
+
+        /* Whether there is a object to transfer bug, for example feedback. */
+        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
+        parse_str($extras, $output);
+        foreach($output as $paramKey => $paramValue)
+        {
+            if(isset($this->config->bug->fromObjects[$paramKey]))
+            {
+                $fromObjectIDKey  = $paramKey;
+                $fromObjectID     = $paramValue;
+                $fromObjectName   = $this->config->bug->fromObjects[$fromObjectIDKey]['name'];
+                $fromObjectAction = $this->config->bug->fromObjects[$fromObjectIDKey]['action'];
+                break;
+            }
+        }
+
+        /* If there is a object to transfer bug, get it by getById function and set objectID,object in views. */
+        if(isset($fromObjectID))
+        {
+            $fromObject = $this->loadModel($fromObjectName)->getById($fromObjectID);
+            if(!$fromObject) die(js::error($this->lang->notFound) . js::locate('back', 'parent'));
+
+            $this->view->$fromObjectIDKey = $fromObjectID;
+            $this->view->$fromObjectName  = $fromObject;
+        }
+
+        $this->view->users = $this->user->getPairs('devfirst|noclosed|nodeleted');
         $this->app->loadLang('release');
 
         if(!empty($_POST) and !isset($_POST['stepIDList']))
@@ -231,7 +257,8 @@ class bug extends control
             $response['result']  = 'success';
             $response['message'] = '';
 
-            $bugResult = $this->bug->create();
+            /* Set from param if there is a object to transfer bug. */
+            $bugResult = $this->bug->create($from = isset($fromObjectIDKey) ? $fromObjectIDKey : '');
             if(!$bugResult or dao::isError())
             {
                 $response['result']  = 'fail';
@@ -247,7 +274,15 @@ class bug extends control
                 $this->send($response);
             }
 
-            $actionID = $this->action->create('bug', $bugID, 'Opened');
+            /* Record related action, for example FromFeedback. */
+            if(isset($fromObjectID))
+            {
+                $actionID = $this->action->create('bug', $bugID, $fromObjectAction, '', $fromObjectID);
+            }
+            else
+            {
+                $actionID = $this->action->create('bug', $bugID, 'Opened');
+            }
 
             $extras = str_replace(array(',', ' '), array('&', ''), $extras);
             parse_str($extras, $output);
@@ -316,10 +351,18 @@ class bug extends control
         }
         if(isset($todoID))
         {
-            $todo = $this->loadModel('todo')->getById($todoID);
+            $todo  = $this->loadModel('todo')->getById($todoID);
             $title = $todo->name;
             $steps = $todo->desc;
             $pri   = $todo->pri;
+        }
+        /* Replace the value of bug that needs to be replaced with the value of the object that is transferred to bug. */
+        if(isset($fromObject))
+        {
+            foreach($this->config->bug->fromObjects[$fromObjectIDKey]['fields'] as $bugField => $fromObjectField)
+            {
+                $$bugField = $fromObject->{$fromObjectField};
+            }
         }
 
         /* If projectID is setted, get builds and stories of this project. */
