@@ -688,8 +688,8 @@ class testsuiteModel extends model
                             if($stepData->type == 'step')  $parentStepID = 0;
                         }
                     }
-                    $oldCase->steps  = $this->joinStep($oldStep);
-                    $caseData->steps = $this->joinStep($steps);
+                    $oldCase->steps  = $this->testcase->joinStep($oldStep);
+                    $caseData->steps = $this->testcase->joinStep($steps);
                     $changes  = common::createChanges($oldCase, $caseData);
                     $actionID = $this->action->create('case', $caseID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
