@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<script language="Javascript">var type='<?php echo $type;?>';</script>
 <main id="main">
   <div class="container">
     <div id="mainMenu" class="clearfix">
