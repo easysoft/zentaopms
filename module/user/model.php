@@ -210,7 +210,7 @@ class userModel extends model
         if(strtolower($_POST['account']) == 'guest') return false;
 
         $user = fixer::input('post')
-            ->setDefault('join', '0000-00-00')
+            ->setDefault('join', '0000-00-00' )
             ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
             ->setIF($this->post->password1 == false, 'password', '')
             ->setIF($this->post->email != false, 'email', trim($this->post->email))

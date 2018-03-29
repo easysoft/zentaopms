@@ -105,7 +105,7 @@
                       }
                       else
                       {
-                          echo html::commonButton("<i class='icon-ok'></i> " . $lang->extension->installed, "disabled='disabled'", 'text-success');
+                          echo html::commonButton("<i class='icon-ok'></i> " . $lang->extension->installed, "disabled='disabled'", 'btn text-success');
                       }
                   }
                   else

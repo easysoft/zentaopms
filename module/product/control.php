@@ -229,7 +229,8 @@ class product extends control
             die(js::locate($this->createLink($this->moduleName, 'browse', "productID=$productID"), 'parent'));
         }
 
-        $this->product->setMenu($this->products, key($this->products));
+        $rootID = key($this->products);
+        $this->product->setMenu($this->products, $rootID);
 
         $this->view->title      = $this->lang->product->create;
         $this->view->position[] = $this->view->title;
@@ -238,6 +239,7 @@ class product extends control
         $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst|noclosed');
         $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst|noclosed');
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
+        $this->view->rootID     = $rootID;
 
         unset($this->lang->product->typeList['']);
         $this->display();
