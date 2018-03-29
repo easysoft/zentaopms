@@ -1,2 +1,2 @@
-ALTER TABLE `zt_team` DROP PRIMARY KEY,
-ADD PRIMARY KEY (`root`,`type`,`account`);
+ALTER TABLE `zt_team` DROP PRIMARY KEY;
+ALTER TABLE `zt_team` ADD PRIMARY KEY (`root`, `type`, `account`);
