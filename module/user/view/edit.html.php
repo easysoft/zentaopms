@@ -36,7 +36,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->user->join;?></th>
-        <td><input type="date" name="join" value="<?php echo $user->join;?>" class="form-control"></td>
+        <td><?php echo html::input('join', $user->join, "class='form-control form-date'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->group->priv;?></th>

@@ -53,7 +53,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->user->join;?></th>
-        <td><input type="date" name="join" id="join" class="form-control" ></td>
+        <td><?php echo html::input('join', date('Y-m-d'), "class='form-control form-date'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->user->role;?></th>
