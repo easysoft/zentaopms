@@ -1462,7 +1462,7 @@ class story extends control
                     foreach(explode(',', $story->plan) as $planID)
                     {
                         if(empty($planID)) continue;
-                        if(isset($relatedPlans[$planID]))$plans .= $relatedPlans[$planID] . "(#$planID) ";
+                        if(isset($relatedPlans[$planID]))$plans .= $relatedPlans[$planID] . "(#$planID)";
                     }
                     $story->plan = $plans;
                 }
