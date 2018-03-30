@@ -523,7 +523,6 @@ class productplan extends control
         $this->view->planBugs   = $this->bug->getPlanBugs($planID);
         $this->view->products   = $products;
         $this->view->plan       = $plan;
-        $this->view->plans      = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->browseType = $browseType;
         $this->view->param      = $param;

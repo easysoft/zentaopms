@@ -973,15 +973,15 @@ class taskModel extends model
             if($left != 0 || $task->assignedTo != $teams[count($teams) - 1])
             {
                 $newTask->status = 'doing';
-                if($task->assignedTo != $teams[count($teams) - 1] && $left == 0)
+                if($left == 0)
                 {
                     $newTask->assignedTo   = $this->getNextUser($teams, $task->assignedTo);
                     $newTask->assignedDate = $now;
                 }
 
-                $task->status = $oldStatus;
                 $this->dao->update(TABLE_TASK)->data($newTask)->where('id')->eq((int)$taskID)->exec();
 
+                $task->status = $oldStatus;
                 $changes = common::createChanges($task, $newTask);
                 if(!empty($actionID)) $this->action->logHistory($actionID, $changes);
                 return $changes;
