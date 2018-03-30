@@ -140,7 +140,7 @@ class storyModel extends model
      * @access public
      * @return int|bool the id of the created story or false when error.
      */
-    public function create($projectID = 0, $bugID = 0)
+    public function create($projectID = 0, $bugID = 0, $from = '')
     {
         $now   = helper::now();
         $story = fixer::input('post')
@@ -232,6 +232,10 @@ class storyModel extends model
             }
             $this->setStage($storyID);
             if(!dao::isError()) $this->loadModel('score')->create('story', 'create',$storyID);
+
+            /* Callback the callable method to process the related data for object that is transfered to story. */
+            if($from && is_callable(array($this, $this->config->story->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->story->fromObjects[$from]['callback']), $storyID);
+
             return array('status' => 'created', 'id' => $storyID);
         }
         return false;
