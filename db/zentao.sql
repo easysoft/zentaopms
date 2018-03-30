@@ -486,7 +486,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `PM` varchar(30) NOT NULL default '',
   `QD` varchar(30) NOT NULL default '',
   `RD` varchar(30) NOT NULL default '',
-  `team` varchar(30) NOT NULL,
+  `team` varchar(90) NOT NULL,
   `acl` enum('open','private','custom') NOT NULL default 'open',
   `whitelist` text NOT NULL,
   `order` mediumint(8) unsigned NOT NULL,

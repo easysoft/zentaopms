@@ -212,6 +212,8 @@ class upgradeModel extends model
                 $this->fixTaskAssignedTo();
                 $this->fixProjectClosedInfo();
                 $this->resetProductLine();
+             case '9_8_2':
+                $this->execSQL($this->getUpgradeFile('9.8.2'));   
        }
 
         $this->deletePatch();
@@ -317,6 +319,7 @@ class upgradeModel extends model
         case '9_7':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.7'));
         case '9_8':
         case '9_8_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.8.1'));
+        case '9_8_2':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.8.2'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
