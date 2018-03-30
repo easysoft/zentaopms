@@ -1222,7 +1222,7 @@ class story extends control
             $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
-        $stories   = $this->story->getProjectStoryPairs($projectID, $productID, $branch, $moduleID, $type);
+        $stories = $this->story->getProjectStoryPairs($projectID, $productID, $branch, $moduleID, $type);
         if($this->app->getViewType() === 'json')
         {
             die(json_encode($stories));
