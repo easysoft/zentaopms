@@ -118,7 +118,7 @@ class html extends baseHTML
             $optionPinyin = zget($convertedPinYin, $value, '');
             $key      = str_replace('item', '', $key);
             $selected = strpos($selectedItems, ",$key,") !== false ? " selected='selected'" : '';
-            $string  .= "<option value='$key'$selected data-keys='{$optionPinyin}'>$value</option>\n";
+            $string  .= "<option value='$key'$selected title='{$value}' data-keys='{$optionPinyin}'>$value</option>\n";
         }
 
         /* End. */
