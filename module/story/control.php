@@ -100,7 +100,7 @@ class story extends control
             $action = $bugID == 0 ? 'Opened' : 'Frombug';
             $extra  = $bugID == 0 ? '' : $bugID;
             /* Record related action, for example FromFeedback. */
-            if($fromObjectID)
+            if(isset($fromObjectID))
             {
                 $action = $fromObjectAction;
                 $extra  = $fromObjectID;
