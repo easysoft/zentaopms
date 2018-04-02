@@ -153,7 +153,7 @@ class projectModel extends model
 
             foreach($projects as $project)
             {
-                if($project->status != 'done')
+                if($project->status != 'done' or $project->status != 'closed')
                 {
                     $projectTree .= "<li>" . html::a(inlink('task', "projectID=$project->id"), $project->name, '', "id='project$project->id'") . "</li>";
                 }
@@ -162,7 +162,7 @@ class projectModel extends model
             $hasDone = false;
             foreach($projects as $project)
             {
-                if($project->status == 'done')
+                if($project->status == 'done' or $project->status == 'closed')
                 {
                     $hasDone = true;
                     break;
@@ -173,7 +173,7 @@ class projectModel extends model
                 $projectTree .= "<li>{$this->lang->project->selectGroup->done}<ul>";
                 foreach($projects as $project)
                 {
-                    if($project->status == 'done')
+                    if($project->status == 'done' or $project->status == 'closed')
                     {
                         $projectTree .= "<li>" . html::a(inlink('task', "projectID=$project->id"), $project->name, '', "id='project$project->id'") . "</li>";
                     }
@@ -608,7 +608,7 @@ class projectModel extends model
         $orderBy  = !empty($this->config->project->orderBy) ? $this->config->project->orderBy : 'isDone, status';
         $mode    .= $this->cookie->projectMode;
         /* Order by status's content whether or not done */
-        $projects = $this->dao->select('*, IF(INSTR(" done", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
+        $projects = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
             ->orderBy($orderBy)
@@ -616,7 +616,7 @@ class projectModel extends model
         $pairs = array();
         foreach($projects as $project)
         {
-            if(strpos($mode, 'noclosed') !== false and $project->status == 'done') continue;
+            if(strpos($mode, 'noclosed') !== false and ($project->status == 'done' or $project->status == 'closed')) continue;
             if($this->checkPriv($project)) $pairs[$project->id] = $project->name;
         }
         if(strpos($mode, 'empty') !== false) $pairs[0] = '';
@@ -663,9 +663,9 @@ class projectModel extends model
                 ->where('t1.product')->eq($productID)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t2.iscat')->eq(0)
-                ->beginIF($status == 'undone')->andWhere('t2.status')->ne('done')->fi()
+                ->beginIF($status == 'undone')->andWhere('t2.status')->ne('done')->andWhere('t2.status')->ne('closed')->fi()
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
-                ->beginIF($status == 'isdoing')->andWhere('t2.status')->ne('done')->andWhere('t2.status')->ne('suspended')->fi()
+                ->beginIF($status == 'isdoing')->andWhere('t2.status')->ne('done')->andWhere('t2.status')->ne('suspended')->andWhere('t2.status')->ne('closed')->fi()
                 ->beginIF($status != 'all' and $status != 'isdoing' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
@@ -673,9 +673,9 @@ class projectModel extends model
         }
         else
         {
-            return $this->dao->select('*, IF(INSTR(" done", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)->where('iscat')->eq(0)
-                ->beginIF($status == 'undone')->andWhere('status')->ne('done')->fi()
-                ->beginIF($status == 'isdoing')->andWhere('status')->ne('done')->andWhere('status')->ne('suspended')->fi()
+            return $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)->where('iscat')->eq(0)
+                ->beginIF($status == 'undone')->andWhere('status')->ne('done')->andWhere('status')->ne('closed')->fi()
+                ->beginIF($status == 'isdoing')->andWhere('status')->ne('done')->andWhere('status')->ne('suspended')->andWhere('status')->ne('closed')->fi()
                 ->beginIF($status != 'all' and $status != 'isdoing' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('order_desc')
@@ -976,7 +976,7 @@ class projectModel extends model
         if(!$project) return false;
 
         /* Judge whether the project is delayed. */
-        if($project->status != 'done' and $project->status != 'suspended' and $project->status != 'closed')
+        if($project->status != 'done' and $project->status != 'closed' and $project->status != 'suspended')
         {
             $delay = helper::diffDate(helper::today(), $project->end);
             if($delay > 0) $project->delay = $delay;
@@ -1701,7 +1701,7 @@ class projectModel extends model
         $projects = $this->dao->select('id, code')->from(TABLE_PROJECT)
             ->where("end")->ge($today)
             ->andWhere('type')->ne('ops')
-            ->andWhere('status')->notin('done,suspended')
+            ->andWhere('status')->notin('done,closed,suspended')
             ->fetchPairs();
         if(!$projects) return $burns;
 

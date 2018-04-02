@@ -13,15 +13,15 @@
     $dones    = 0;
     foreach($projects as $project)
     {
-        if($project->status != 'done' and $project->PM == $this->app->user->account) $iCharges++;
-        if($project->status != 'done' and !($project->PM == $this->app->user->account)) $others++;
-        if($project->status == 'done') $dones++;
+        if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account) $iCharges++;
+        if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account)) $others++;
+        if($project->status == 'done' or $project->status == 'closed') $dones++;
     }
  
     if($iCharges and $others) echo "<li class='heading'>{$lang->project->mine}</li>";
     foreach($projects as $project)
     {
-        if($project->status != 'done' and $project->PM == $this->app->user->account)
+        if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
         {
             echo "<li data-id='{$project->id}' data-tag=':{$project->status} @{$project->PM} @mine' data-key='{$project->key}'>" . html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name). "</li>";
         }
@@ -31,7 +31,7 @@
     $class = ($iCharges and $others) ? "class='other'" : '';
     foreach($projects as $project)
     {
-        if($project->status != 'done' and !($project->PM == $this->app->user->account))
+        if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
         {
             echo "<li data-id='{$project->id}' data-tag=':{$project->status} @{$project->PM}' data-key='{$project->key}'>" . html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "$class"). "</li>";
         }
@@ -48,12 +48,12 @@
   </div>
   <div id='moreMenu'>
     <ul>
-    <?php
+      <?php
       foreach($projects as $project)
       {
-        if($project->status == 'done') echo "<li data-id='{$project->id}' data-tag=':{$project->status} @{$project->PM}' data-key='{$project->key}'>" . html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "class='done'"). "</li>";
+        if($project->status == 'done' or $project->status == 'closed') echo "<li data-id='{$project->id}' data-tag=':{$project->status} @{$project->PM}' data-key='{$project->key}'>" . html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "class='done'"). "</li>";
       }
-    ?>
+      ?>
     </ul>
   </div>
 </div>
