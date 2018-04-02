@@ -108,7 +108,7 @@ $lang->task->parent            = 'Parent Task';
 $lang->task->parentAB          = 'Parent Task';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
-$lang->task->deniedNotice      = 'Current user has no right to start.';
+$lang->task->deniedNotice      = 'Only the %s can %s the task.';
 
 $lang->task->ditto         = 'Ditto';
 $lang->task->dittoNotice   = "This Task does not belong to the Project as the previous one does!";

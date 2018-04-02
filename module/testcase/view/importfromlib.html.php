@@ -50,7 +50,7 @@
       <td class='text-left nobr'><?php if(!common::printLink('testcase', 'view', "caseID=$case->id", $case->title)) echo $case->title;?></td>
       <?php $libModule = zget($libModules, $case->module, '');?>
       <td class='text-left' title='<?php echo $libModule?>'><?php echo $libModule;?></th>
-      <td class='text-left' data-module='<?php echo $case->module?>' style='overflow:visible'><?php echo html::select("module[{$case->id}]", $modules, 0, "class='from-control chosen' onchange='setModule(this)'");?></th>
+      <td class='text-left' data-module='<?php echo $case->module?>' style='overflow:visible'><?php echo html::select("module[{$case->id}]", $modules, 0, "class='form-control chosen' onchange='setModule(this)'");?></th>
       <td><?php echo zget($lang->testcase->typeList, $case->type);?></th>
     </tr>
     <?php endforeach;?>

@@ -296,6 +296,8 @@ fieldset > .content table th, fieldset > .content table td, fieldset > .article-
 .chosen-up.chosen-container .chosen-drop {bottom: 100%; top: inherit; border-radius: 2px 2px 0 0; box-shadow: 0 -3px 5px rgba(0,0,0,.15); margin-top: auto; margin-bottom: -1px;}
 .chosen-container-single .chosen-single abbr {top: 6px!important;}
 
+.table-fixed .chosen-container .chosen-drop .chosen-results > li{white-space: normal;}
+
 /* Condensed form */
 .form-condensed .table-form {margin-bottom: 0;}
 .form-condensed .table-form td, .form-condensed .table-form th {padding: 5px; font-size: 12px;}

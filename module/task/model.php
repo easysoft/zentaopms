@@ -155,6 +155,10 @@ class taskModel extends model
         $storyIDs  = array();
         $taskNames = array();
         $preStory  = 0;
+
+        /* Judge whether the current task is a parent. */
+        $parentID = !empty($this->post->parent[0]) ? $this->post->parent[0] : 0; 
+
         foreach($tasks->story as $key => $storyID)
         {
             if(empty($tasks->name[$key])) continue;
@@ -179,7 +183,6 @@ class taskModel extends model
 
         $result = $this->loadModel('common')->removeDuplicate('task', $tasks, "project=$projectID and story " . helper::dbIN($storyIDs));
         $tasks  = $result['data'];
-
 
         $story      = 0;
         $module     = 0;
@@ -255,6 +258,7 @@ class taskModel extends model
 
         $this->computeWorkingHours($tasks->parent[0]);
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
+        if($parentID) $this->updateParentStatus($taskID);
         return $mails;
     }
 
@@ -308,25 +312,28 @@ class taskModel extends model
 
         $childrenStatus = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
         $status         = '';
-        if(isset($childrenStatus['doing']))
+        if(count($childrenStatus) == 1)
         {
-            $status = 'doing';
+            $status = current($childrenStatus);
         }
-        elseif(isset($childrenStatus['pause']) and !isset($childrenStatus['wait']))
+        else
         {
-            $status = 'pause';
-        }
-        elseif(isset($childrenStatus['done']) and !isset($childrenStatus['wait']))
-        {
-            $status = 'done';
-        }
-        elseif(isset($childrenStatus['closed']) and !isset($childrenStatus['wait']))
-        {
-            $status = 'closed';
-        }
-        elseif(isset($childrenStatus['cancel']) and !isset($childrenStatus['wait']))
-        {
-            $status = 'cancel';
+            if(isset($childrenStatus['doing']) or isset($childrenStatus['pause']) or isset($childrenStatus['wait']))
+            {
+                $status = 'doing';
+            }
+            elseif(isset($childrenStatus['done']))
+            {
+                $status = 'done';
+            }
+            elseif(isset($childrenStatus['closed']))
+            {
+                $status = 'closed';
+            }
+            elseif(isset($childrenStatus['cancel']))
+            {
+                $status = 'cancel';
+            }
         }
 
         $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
