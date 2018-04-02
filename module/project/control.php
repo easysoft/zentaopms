@@ -916,7 +916,6 @@ class project extends control
         $acl         = 'open';
         $plan        = new stdClass();
         $productPlan = array();
-
         if($copyProjectID)
         {
             $copyProject = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProjectID)->fetch();
@@ -927,7 +926,6 @@ class project extends control
             $whitelist   = $copyProject->whitelist;
             $products    = $this->project->getProducts($copyProjectID);
         }
-
         if(!empty($planID))
         {
             $plan        = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->eq($planID)->fetch();
