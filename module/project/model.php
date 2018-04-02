@@ -370,7 +370,6 @@ class projectModel extends model
     {
         $projects    = array();
         $allChanges  = array();
-        $users       = $this->loadModel('user')->getPairs('nodeleted');
         $data        = fixer::input('post')->get();
         $oldProjects = $this->getByIdList($this->post->projectIDList);
         foreach($data->projectIDList as $projectID)
@@ -413,7 +412,7 @@ class projectModel extends model
             {
                 if($fieldName == 'PO' or $fieldName == 'PM' or $fieldName == 'QD' or $fieldName == 'RD' )
                 {
-                    if(!empty($value) and !isset($team[$value]) and !empty($users[$value]))
+                    if(!empty($value) and !isset($team[$value]))
                     {
                         $member = new stdClass();
                         $member->root    = (int)$projectID;
@@ -423,7 +422,7 @@ class projectModel extends model
                         $member->role    = $this->lang->project->$fieldName;
                         $member->days    = 0;
                         $member->hours   = $this->config->project->defaultWorkhours;
-                        $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+                        $this->dao->replace(TABLE_TEAM)->data($member)->exec();
                     }
                 }
             }
@@ -1290,7 +1289,7 @@ class projectModel extends model
 
                 $role->root = $projectID;
                 $role->join = helper::today();
-                $this->dao->insert(TABLE_TEAM)->data($role)->exec();
+                $this->dao->replace(TABLE_TEAM)->data($role)->exec();
             }
         }
 
