@@ -11,9 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<style>
-.table-actions.btn-toolbar{overflow:visible;}
-</style>
 <main id="main">
   <div class="container">
     <div id="mainMenu" class="clearfix">
