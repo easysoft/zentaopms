@@ -93,7 +93,7 @@ class projectModel extends model
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
 
-        if($this->cookie->projectMode == 'noclosed' and $project->status == 'done')
+        if($this->cookie->projectMode == 'noclosed' and ($project->status == 'done' or $project->status == 'closed'))
         {
             setcookie('projectMode', 'all');
             $this->cookie->projectMode = 'all';
@@ -715,7 +715,7 @@ class projectModel extends model
         }
         else
         {
-            return $this->dao->select('t1.*, IF(INSTR(" done", t1.status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)->alias('t1')
+            return $this->dao->select('t1.*, IF(INSTR(" done,closed", t1.status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_TEAM)->alias('t2')->on('t2.root=t1.id')
                 ->where('t1.iscat')->eq(0)
                 ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
@@ -862,7 +862,7 @@ class projectModel extends model
             $project->end = date("Y-m-d", strtotime($project->end));
 
             /* Judge whether the project is delayed. */
-            if($project->status != 'done' and $project->status != 'suspended')
+            if($project->status != 'done' and $project->status != 'closed' and $project->status != 'suspended')
             {
                 $delay = helper::diffDate(helper::today(), $project->end);
                 if($delay > 0) $project->delay = $delay;
