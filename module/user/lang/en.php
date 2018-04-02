@@ -99,13 +99,13 @@ $lang->user->weakPassword = "Your password does meet the setting requirements.";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Developer';
-$lang->user->roleList['qa']     = 'Tester';
+$lang->user->roleList['qa']     = 'QA';
 $lang->user->roleList['pm']     = 'Project Manager';
 $lang->user->roleList['po']     = 'Product Owner';
-$lang->user->roleList['td']     = 'Technical Director';
+$lang->user->roleList['td']     = 'Test Director';
 $lang->user->roleList['pd']     = 'Product Director';
 $lang->user->roleList['qd']     = 'QA Director';
-$lang->user->roleList['top']    = 'Senior Manager';
+$lang->user->roleList['top']    = 'Top Manager';
 $lang->user->roleList['others'] = 'Other';
 
 $lang->user->genderList['m'] = 'M';
