@@ -92,7 +92,7 @@ $minWidth = (count($visibleFields) > 5) ? 'w-150px' : '';
     <td class='<?php echo zget($visibleFields, 'status', 'hidden')?>'><?php echo html::select("statuses[$projectID]", $lang->project->statusList, $projects[$projectID]->status, 'class=form-control');?></td>
     <td><?php echo html::input("begins[$projectID]", $projects[$projectID]->begin, "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
     <td><?php echo html::input("ends[$projectID]",   $projects[$projectID]->end,   "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
-    <td class='<?php echo zget($visibleFields, 'desc', 'hidden')?>'>    <?php echo html::textarea("descs[$projectID]",  htmlspecialchars($projects[$projectID]->desc),  "rows='1' class='form-control autosize'");?></td>
+    <td class='<?php echo zget($visibleFields, 'desc', 'hidden')?>'>    <?php echo html::textarea("descs[$projectID]",  $projects[$projectID]->desc,  "rows='1' class='form-control autosize'");?></td>
     <td class='<?php echo zget($visibleFields, 'teamname', 'hidden')?>'><?php echo html::input("teams[$projectID]",  $projects[$projectID]->team,  "class='form-control' autocomplete='off'");?></td>
     <td class='<?php echo zget($visibleFields, 'days',     'hidden')?>'>
       <div class='input-group'>

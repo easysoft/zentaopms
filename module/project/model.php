@@ -370,6 +370,7 @@ class projectModel extends model
     {
         $projects    = array();
         $allChanges  = array();
+        $users       = $this->loadModel('user')->getPairs('nodeleted');
         $data        = fixer::input('post')->get();
         $oldProjects = $this->getByIdList($this->post->projectIDList);
         foreach($data->projectIDList as $projectID)
@@ -386,7 +387,7 @@ class projectModel extends model
             $projects[$projectID]->begin  = $data->begins[$projectID];
             $projects[$projectID]->end    = $data->ends[$projectID];
             $projects[$projectID]->team   = $data->teams[$projectID];
-            $projects[$projectID]->desc   = $data->descs[$projectID];
+            $projects[$projectID]->desc   = htmlspecialchars_decode($data->descs[$projectID]);
             $projects[$projectID]->days   = $data->dayses[$projectID];
             $projects[$projectID]->order  = $data->orders[$projectID];
         }
@@ -412,7 +413,7 @@ class projectModel extends model
             {
                 if($fieldName == 'PO' or $fieldName == 'PM' or $fieldName == 'QD' or $fieldName == 'RD' )
                 {
-                    if(!empty($value) and !isset($team[$value]))
+                    if(!empty($value) and !isset($team[$value]) and !empty($users[$value]))
                     {
                         $member = new stdClass();
                         $member->root    = (int)$projectID;
