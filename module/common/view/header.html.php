@@ -38,9 +38,9 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
   </div>
   <div id='subHeader'>
     <div class='container'>
-      <div id="pageNav"></div>
+    <div id="pageNav" class='btn-toolbar'><?php if(isset($lang->modulePageNav)) echo $lang->modulePageNav;?></div>
       <nav id='subNavbar'><?php common::printModuleMenu($this->moduleName);?></nav>
-      <div id="pageActions"></div>
+      <div id="pageActions"><div class='btn-toolbar'><?php if(isset($lang->modulePageActions)) echo $lang->modulePageActions;?></div></div>
     </div>
   </div>
   <?php

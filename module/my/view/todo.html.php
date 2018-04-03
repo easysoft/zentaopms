@@ -29,7 +29,7 @@
         <?php endforeach;?>
         <div class="input-control has-icon-right space">
           <?php echo html::input('date', $date,"class='form-control form-date' onchange='changeDate(this.value)' autocomplete='off'");?>
-          <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-delay"></i></label>
+          <label for="date" class="input-control-icon-right"><i class="icon icon-delay"></i></label>
         </div>
       </div>
       <div class="btn-toolbar pull-right">
@@ -123,7 +123,7 @@
               $actionLink = $this->createLink('todo', 'import2Today');
               echo "<div class='input-control has-icon-right space'>";
               echo html::input('date', date('Y-m-d'), "class='form-control form-date'");
-              echo '<label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-delay"></i></label>';
+              echo '<label for="date" class="input-control-icon-right"><i class="icon icon-delay"></i></label>';
               echo '</div>';
               echo html::commonButton($lang->todo->import, "onclick=\"setFormAction('$actionLink')\"");
           }

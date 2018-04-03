@@ -50,9 +50,18 @@ class productModel extends model
         if($currentMethod == 'report') $currentMethod = 'browse';
 
         $selectHtml = $this->select($products, $productID, $currentModule, $currentMethod, $extra, $branch, $module, $moduleType);
+
+        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $this->lang->product->index . ' <span class="caret"></span></button>';
+        $productIndex .= '<ul class="dropdown-menu">';
+        if(common::hasPriv('product', 'all')) $productIndex .= '<li>' . html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->product->all) . '</li>';
+        if(common::hasPriv('product', 'create')) $productIndex .= '<li>' . html::a(helper::createLink('product', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->product->create) . '</li>';
+        $productIndex .= '</ul></div></div>';
+        $productIndex .= $selectHtml;
+
+        $this->lang->modulePageNav = $productIndex;
         foreach($this->lang->product->menu as $key => $menu)
         {
-            $replace = $key == 'list' ? $selectHtml : $productID;
+            $replace = $productID;
             common::setMenuVars($this->lang->product->menu, $key, $replace);
         }
     }
@@ -81,7 +90,7 @@ class productModel extends model
         setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot);
         $currentProduct = $this->getById($productID);
         $this->session->set('currentProductType', $currentProduct->type);
-        $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+        $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' onclick=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'><i class='icon icon-spin icon-spinner'></i></div></div>";
         if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
         if($currentProduct->type == 'normal') unset($this->lang->product->menu->branch);
         if($currentProduct->type != 'normal')
@@ -92,8 +101,7 @@ class productModel extends model
             $branchName = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
             if(!$isMobile)
             {
-                $output .= '</li><li>';
-                $output .= "<a id='currentBranch' href=\"javascript:showSearchMenu('branch', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+                $output .= "<div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit' onclick=\"javascript:showSearchMenu('branch', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'><i class='icon icon-spin icon-spinner'></i></div></div>";
             }
             else
             {
@@ -107,14 +115,14 @@ class productModel extends model
             $moduleName = $module ? $module->name : $this->lang->tree->all;
             if(!$isMobile)
             {
-                $output .= '</li><li>';
-                $output .= "<a id='currentModule' href=\"javascript:showSearchMenu('tree', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$moduleName} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+                $output .= "<div class='btn-group'><button id='currentModule' data-toggle='dropdown' type='button' class='btn btn-limit' onclick=\"javascript:showSearchMenu('tree', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$moduleName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'><i class='icon icon-spin icon-spinner'></i></div></div>";
             }
             else
             {
                 $output .= "<a id='currentModule' href=\"javascript:showSearchMenu('tree', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$moduleName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
             }
         }
+        if(!$isMobile) $output .= '</div>';
 
         return $output;
     }

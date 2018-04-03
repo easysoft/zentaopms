@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->product->common      = $lang->productCommon . '视图';
-$lang->product->index       = $lang->productCommon . "首页";
+$lang->product->index       = $lang->productCommon . "主页";
 $lang->product->browse      = "需求列表";
 $lang->product->dynamic     = "动态";
 $lang->product->view        = "{$lang->productCommon}概况";

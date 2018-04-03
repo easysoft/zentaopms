@@ -672,7 +672,7 @@ class commonModel extends model
         global $lang;
 
         if(!commonModel::hasPriv('action', 'comment', $object)) return false;
-        echo html::a('#commentBox', '<i class="icon-comment-alt"></i>', '', "title='$lang->comment' onclick='setComment()' class='btn'");
+        echo html::a('#commentBox', '<i class="icon icon-chat-line"></i> ' . $lang->action->create, '', "title='$lang->comment' onclick=\"toggleComment('#commentBox')\" class='btn btn-link pull-right'");
     }
 
     /**
@@ -831,6 +831,40 @@ class commonModel extends model
             $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->next->$id) : inLink('view', "ID={$preAndNext->next->$id}");
             echo html::a($link, '<i class="icon-pre icon-chevron-right"></i>', '', "id='next' class='btn' title='$title'");
         }
+    }
+
+    static public function printBack($backLink)
+    {
+        global $lang, $app;
+        if(isonlybody()) return false;
+
+        $title = $lang->goback . $lang->backShortcutKey;
+        echo html::a($backLink, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i>', '', "id='back' class='btn' title={$title}");
+    }
+
+    public static function printPreAndNext($preAndNext = '', $linkTemplate = '')
+    {
+        global $lang, $app;
+        if(isonlybody()) return false;
+
+        echo "<nav class='container'>";
+        if(isset($preAndNext->pre) and $preAndNext->pre)
+        {
+            $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->pre->case)) ? 'case' : 'id';
+            $title = isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name;
+            $title = '#' . $preAndNext->pre->$id . ' ' . $title . ' ' . $lang->preShortcutKey;
+            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->pre->$id) : inLink('view', "ID={$preAndNext->pre->$id}");
+            echo html::a($link, '<i class="icon-pre icon-chevron-left"></i>', '', "id='prevPage' class='btn btn-info' title='{$title}'");
+        }
+        if(isset($preAndNext->next) and $preAndNext->next)
+        {
+            $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->next->case)) ? 'case' : 'id';
+            $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
+            $title = '#' . $preAndNext->next->$id . ' ' . $title . ' ' . $lang->nextShortcutKey;
+            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->next->$id) : inLink('view', "ID={$preAndNext->next->$id}");
+            echo html::a($link, '<i class="icon-pre icon-chevron-right"></i>', '', "id='nextPage' class='btn btn-info' title='$title'");
+        }
+        echo '</nav>';
     }
 
     /**

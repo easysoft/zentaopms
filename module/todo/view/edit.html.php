@@ -29,7 +29,7 @@
       <div class="col-sm-9">
         <div class='input-group has-icon-right'>
           <?php echo html::input('date', $todo->date, "class='form-control form-date'");?>
-          <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-delay"></i></label>
+          <label for="date" class="input-control-icon-right"><i class="icon icon-delay"></i></label>
         </div>
       </div>
     </div>
@@ -125,7 +125,7 @@
       <div class="col-sm-2" style='padding-left:0px'>
         <?php echo html::select('end', $times, $todo->end, 'class="form-control chosen"');?>
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-4">
         <input type='checkbox' id='dateSwitcher' onclick='switchDateFeature(this);' <?php if($todo->begin == 2400) echo 'checked';?> >
         <label for='dateSwitcher'><?php echo $lang->todo->lblDisableDate;?></label>
       </div>

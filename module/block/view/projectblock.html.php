@@ -43,7 +43,7 @@
           <?php if(isset($project->delay)):?>
           <span class="project-status-delayed"><span class="label label-dot"></span> <?php echo $lang->project->delayed;?></span>
           <?php else:?>
-          <span class="project-status-<?php echo $project->status?>"><span class="label label-dot"></span> <?php echo $lang->project->statusList[$project->status];?></span>
+          <span class="project-status-<?php echo $project->status?>"><span class="label label-dot"></span> <?php echo zget($lang->project->statusList, $project->status, '');?></span>
           <?php endif;?>
         </td>
         <td class="c-estimate"><?php echo $project->hours->totalEstimate;?></td>

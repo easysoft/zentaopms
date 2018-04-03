@@ -101,6 +101,7 @@ class todo extends control
             {
                 $date= 'today';
             }
+            if(isonlybody())die(js::reload('parent.parent'));
             die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
         }
 

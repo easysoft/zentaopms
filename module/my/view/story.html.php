@@ -148,7 +148,7 @@
               if($withSearch)
               {
                   echo '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">';
-                  echo '<input id="userSearchBox" type="search" class="form-control search-input" placeholder="' . $lang->search .'">';
+                  echo '<input id="userSearchBox" type="search" class="form-control search-input" />';
                   echo '<label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>';
                   echo '<a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>';
                   echo '</div>';
