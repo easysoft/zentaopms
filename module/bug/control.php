@@ -216,6 +216,7 @@ class bug extends control
      * Create a bug.
      *
      * @param  int    $productID
+     * @param  string $branch
      * @param  string $extras       others params, forexample, projectID=10,moduleID=10
      * @access public
      * @return void
