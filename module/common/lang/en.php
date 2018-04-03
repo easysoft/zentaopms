@@ -414,7 +414,7 @@ $lang->menugroup->message     = 'admin';
 /* 错误提示信息。*/
 $lang->error = new stdclass();
 $lang->error->companyNotFound = "The domain %s cannot be found!";
-$lang->error->length          = array("『%s』Length Error. It should be『%s』", "『%s』length should be <=『%s』and >=『%s』.");
+$lang->error->length          = array("『%s』Length Error. It should be『%s』", "『%s』length should be <=『%s』and >『%s』.");
 $lang->error->reg             = "『%s』Format Error. It should be『%s』.";
 $lang->error->unique          = "『%s』『%s』existed. Please go to Admin->Recycle to restore it, if you are sure it is deleted.";
 $lang->error->gt              = "『%s』should be >『%s』.";
