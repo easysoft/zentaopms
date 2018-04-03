@@ -26,17 +26,15 @@
       <caption class='text-left text-muted'><?php echo $lang->user->basicInfo;?></caption>
       <tr>
         <th class='w-90px'><?php echo $lang->user->realname;?></th>
-        <td class='w-p40'><?php echo html::input('realname', $user->realname, "class='form-control' autocomplete='off'");?></td><td></td><td></td>
+        <td class='w-p40'><?php echo html::input('realname', $user->realname, "class='form-control' autocomplete='off'");?></td>
+        <th class='w-90px'><?php echo $lang->user->join;?></th>
+        <td class='w-p40'><?php echo html::input('join', $user->join, "class='form-control form-date'");?></td>  
       </tr>
       <tr>
         <th class='w-90px'><?php echo $lang->user->dept;?></th>
         <td class='w-p40'><?php echo html::select('dept', $depts, $user->dept, "class='form-control chosen'");?></td>
         <th><?php echo $lang->user->role;?></th>
         <td><?php echo html::select('role', $lang->user->roleList, $user->role, "class='form-control'");?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->user->join;?></th>
-        <td><?php echo html::input('join', $user->join, "class='form-control form-date'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->group->priv;?></th>
