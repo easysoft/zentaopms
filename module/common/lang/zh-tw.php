@@ -414,7 +414,7 @@ $lang->menugroup->message     = 'admin';
 /* 錯誤提示信息。*/
 $lang->error = new stdclass();
 $lang->error->companyNotFound = "您訪問的域名 %s 沒有對應的公司。";
-$lang->error->length          = array("『%s』長度錯誤，應當為『%s』", "『%s』長度應當不超過『%s』，且不小於『%s』。");
+$lang->error->length          = array("『%s』長度錯誤，應當為『%s』", "『%s』長度應當小於『%s』，且大於『%s』。");
 $lang->error->reg             = "『%s』不符合格式，應當為:『%s』。";
 $lang->error->unique          = "『%s』已經有『%s』這條記錄了。如果您確定該記錄已刪除，請到後台管理-資源回收筒還原。。";
 $lang->error->gt              = "『%s』應當大於『%s』。";
