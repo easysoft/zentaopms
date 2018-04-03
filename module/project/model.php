@@ -1283,8 +1283,8 @@ class projectModel extends model
             {
                 $role = $this->dao->select('*')->from(TABLE_TEAM)
                     ->where('root')->eq($preProjectID)
-                    ->andWhere('account')->eq($account)
                     ->andWhere('type')->eq('project')
+                    ->andWhere('account')->eq($account)
                     ->fetch();
 
                 $role->root = $projectID;
@@ -1625,8 +1625,8 @@ class projectModel extends model
         return $this->dao->select('account, role, hours')
             ->from(TABLE_TEAM)
             ->where('root')->eq($project)
-            ->andWhere('account')->notIN($currentMembers)
             ->andWhere('type')->eq('project')
+            ->andWhere('account')->notIN($currentMembers)
             ->fetchAll('account');
     }
 
@@ -1659,8 +1659,8 @@ class projectModel extends model
                 $this->dao->update(TABLE_TEAM)
                     ->data($member)
                     ->where('root')->eq((int)$projectID)
-                    ->andWhere('account')->eq($account)
                     ->andWhere('type')->eq('project')
+                    ->andWhere('account')->eq($account)
                     ->exec();
             }
             else
@@ -1684,7 +1684,7 @@ class projectModel extends model
      */
     public function unlinkMember($projectID, $account)
     {
-        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('account')->eq($account)->andWhere('type')->eq('project')->exec();
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
     }
 
     /**
@@ -2090,7 +2090,7 @@ class projectModel extends model
         if($this->app->user->admin) return true;
 
         /* Get all teams of all projects and group by projects, save it as static. */
-        $projects = $this->dao->select('root, limited')->from(TABLE_TEAM)->where('account')->eq($this->app->user->account)->andWhere('limited')->eq('yes')->andWhere('type')->eq('project')->orderBy('root asc')->fetchPairs('root', 'root');
+        $projects = $this->dao->select('root, limited')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('account')->eq($this->app->user->account)->andWhere('limited')->eq('yes')->orderBy('root asc')->fetchPairs('root', 'root');
         $_SESSION['limitedProjects'] = join(',', $projects);
     }
 

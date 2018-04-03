@@ -258,7 +258,7 @@ class taskModel extends model
 
         $this->computeWorkingHours($tasks->parent[0]);
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
-        if($parentID) $this->updateParentStatus($taskID);
+        if($parentID && !empty($taskID)) $this->updateParentStatus($taskID);
         return $mails;
     }
 
@@ -817,8 +817,8 @@ class taskModel extends model
             $newTeamInfo->left     = 0;
             $this->dao->update(TABLE_TEAM)->data($newTeamInfo)
                 ->where('root')->eq($taskID)
-                ->andWhere('account')->eq($oldTask->assignedTo)
                 ->andWhere('type')->eq('task')
+                ->andWhere('account')->eq($oldTask->assignedTo)
                 ->exec();
 
             $newTask = new stdClass();
@@ -945,8 +945,8 @@ class taskModel extends model
 
             $myConsumed = $this->dao->select('`consumed`')->from(TABLE_TEAM)
                 ->where('root')->eq($taskID)
-                ->andWhere('account')->eq($task->assignedTo)
                 ->andWhere('type')->eq('task')
+                ->andWhere('account')->eq($task->assignedTo)
                 ->fetch('consumed');
 
             $newTeamInfo = new stdClass();
@@ -954,14 +954,14 @@ class taskModel extends model
             $newTeamInfo->left     = $left;
             $this->dao->update(TABLE_TEAM)->data($newTeamInfo)
                 ->where('root')->eq($taskID)
-                ->andWhere('account')->eq($task->assignedTo)
                 ->andWhere('type')->eq('task')
+                ->andWhere('account')->eq($task->assignedTo)
                 ->exec();
 
             $teamTime = $this->dao->select("sum(`consumed`) as consumed,sum(`left`) as leftTime")->from(TABLE_TEAM)
                 ->where('root')->eq((int)$taskID)
-                ->andWhere('account')->in($teams)
                 ->andWhere('type')->eq('task')
+                ->andWhere('account')->in($teams)
                 ->fetch();
             $data->consumed = $teamTime->consumed;
             $data->left     = $teamTime->leftTime;
@@ -1050,8 +1050,8 @@ class taskModel extends model
 
             $myConsumed = $this->dao->select("`consumed`")->from(TABLE_TEAM)
                 ->where('root')->eq((int)$taskID)
-                ->andWhere('account')->eq($oldTask->assignedTo)
                 ->andWhere('type')->eq('task')
+                ->andWhere('account')->eq($oldTask->assignedTo)
                 ->fetch('consumed');
             if($task->consumed < $myConsumed) die(js::error($this->lang->task->error->consumedSmall));
 
@@ -1060,14 +1060,14 @@ class taskModel extends model
             $data->consumed = $task->consumed;
             $this->dao->update(TABLE_TEAM)->data($data)
                 ->where('root')->eq((int)$taskID)
-                ->andWhere('account')->eq($oldTask->assignedTo)
                 ->andWhere('type')->eq('task')
+                ->andWhere('account')->eq($oldTask->assignedTo)
                 ->exec();
 
             $myTime = $this->dao->select("sum(`left`) as leftTime,sum(`consumed`) as consumed")->from(TABLE_TEAM)
                 ->where('root')->eq((int)$taskID)
-                ->andWhere('account')->in($teams)
                 ->andWhere('type')->eq('task')
+                ->andWhere('account')->in($teams)
                 ->fetch();
 
             $newTask = new stdClass();
