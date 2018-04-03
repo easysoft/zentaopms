@@ -1507,16 +1507,16 @@ class story extends control
                     $story->verify = str_replace('&nbsp;', ' ', $story->verify);
                 }
                 /* fill some field with useful value. */
-                if(isset($products[$story->product]))       $story->product = $products[$story->product] . "(#$story->product)";
-                if(isset($relatedModules[$story->module]))  $story->module  = $relatedModules[$story->module] . "(#$story->module)";
-                if(isset($relatedBranch[$story->branch]))   $story->branch  = $relatedBranch[$story->branch] . "(#$story->branch)";
+                if(isset($products[$story->product]))      $story->product = $products[$story->product] . "(#$story->product)";
+                if(isset($relatedModules[$story->module])) $story->module  = $relatedModules[$story->module] . "(#$story->module)";
+                if(isset($relatedBranch[$story->branch]))  $story->branch  = $relatedBranch[$story->branch] . "(#$story->branch)";
                 if(isset($story->plan))
                 {
                     $plans = '';
                     foreach(explode(',', $story->plan) as $planID)
                     {
                         if(empty($planID)) continue;
-                        if(isset($relatedPlans[$planID]))$plans .= $relatedPlans[$planID] . "(#$planID)";
+                        if(isset($relatedPlans[$planID])) $plans .= $relatedPlans[$planID] . "(#$planID)";
                     }
                     $story->plan = $plans;
                 }
