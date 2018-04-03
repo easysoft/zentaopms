@@ -19,7 +19,7 @@
 <div class="alert with-icon">
   <i class="icon-info-sign"></i>
   <div class="content">
-    <p><?php echo sprintf($lang->task->deniedNotice, $task->assignedTo, $lang->task->start);?></p>
+    <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->start);?></p>
   </div>
 </div>
 <?php else:?>
