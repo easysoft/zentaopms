@@ -600,8 +600,8 @@ class actionModel extends model
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($projectID == 'all' or $productID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
-            ->beginIF($docs)->andWhere("IF(objectType != 'doc', '1=1', objectID " . helper::dbIN($docs) . ")")->fi()
-            ->beginIF($libs)->andWhere("IF(objectType != 'doclib', '1=1', objectID " . helper::dbIN(array_keys($libs)) . ') ')->fi()
+            ->beginIF($docs and !$this->app->user->admin)->andWhere("IF(objectType != 'doc', '1=1', objectID " . helper::dbIN($docs) . ")")->fi()
+            ->beginIF($libs and !$this->app->user->admin)->andWhere("IF(objectType != 'doclib', '1=1', objectID " . helper::dbIN(array_keys($libs)) . ') ')->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
 
         if(!$actions) return array();
@@ -738,9 +738,10 @@ class actionModel extends model
 
             $actionType = strtolower($action->action);
             $objectType = strtolower($action->objectType);
-            $action->date        = date(DT_MONTHTIME2, strtotime($action->date));
-            $action->actionLabel = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->action;
-            $action->objectLabel = $objectType;
+            $action->originalDate = $action->date;
+            $action->date         = date(DT_MONTHTIME2, strtotime($action->date));
+            $action->actionLabel  = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->action;
+            $action->objectLabel  = $objectType;
             if(isset($this->lang->action->label->$objectType))
             {
                 $objectLabel = $this->lang->action->label->$objectType;
@@ -954,5 +955,39 @@ class actionModel extends model
             ->where('id')->eq($actionID)
             ->exec();
         $this->file->updateObjectID($this->post->uid, $action->objectID, $action->objectType);
+    }
+
+    /**
+     * Get action count.
+     * 
+     * @param  string $account 
+     * @access public
+     * @return int
+     */
+    public function getCount($account = '')
+    {
+        if(empty($account)) $account = $this->app->user->account;
+        return $this->dao->select('count(*) AS count')->from(TABLE_ACTION)->where('actor')->eq($account)->fetch('count');
+    }
+
+    /**
+     * Build date group by actions
+     * 
+     * @param  array  $actions 
+     * @access public
+     * @return array
+     */
+    public function buildDateGroup($actions)
+    {
+        $dateGroup = array();
+        foreach($actions as $action)
+        {
+            $timeStamp = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
+            $date = date(DT_DATE4, $timeStamp);
+            $action->time = date(DT_TIME2, $timeStamp);
+            $dateGroup[$date][] = $action;
+        }
+
+        return $dateGroup;
     }
 }
