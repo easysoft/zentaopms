@@ -408,7 +408,11 @@ class taskModel extends model
             $currentTask = isset($task) ? $task : new stdclass();
             if(!isset($currentTask->status)) $currentTask->status = $oldTask->status;
 
-            if(empty($currentTask->assignedTo))
+            if(!empty($this->post->assignedTo))
+            {
+                $currentTask->assignedTo = $this->post->assignedTo;
+            }
+            else
             {
                 if(!$oldTask->assignedTo)
                 {
@@ -1066,8 +1070,8 @@ class taskModel extends model
         }
         else
         {
-            $myConsumed = $oldTask->team[$this->app->user->account]->consumed;
-            if($task->consumed < $myConsumed) die(js::error($this->lang->task->error->consumedSmall));
+            $consumed = $oldTask->team[$this->app->user->account]->consumed;
+            if($task->consumed < $consumed) die(js::error($this->lang->task->error->consumedSmall));
         }
 
         $estimate = fixer::input('post')
@@ -1082,8 +1086,12 @@ class taskModel extends model
 
         if(!empty($oldTask->team))
         {
-            $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq((int)$taskID)->andWhere('type')->eq('task')->exec();
-            $this->dao->update(TABLE_TEAM)->set('consumed')->eq($task->consumed)->where('root')->eq((int)$taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($this->app->user->account)->exec();
+            $this->dao->update(TABLE_TEAM)
+                ->set('left')->eq(0)
+                ->set('consumed')->eq($task->consumed)
+                ->where('root')->eq((int)$taskID)
+                ->andWhere('type')->eq('task')
+                ->andWhere('account')->eq($this->app->user->account)->exec();
 
             $task = $this->computeHours4Multiple($oldTask, $task);
         }
