@@ -298,6 +298,8 @@ class taskModel extends model
         $parentID  = $childTask->parent;
         if(empty($parentID)) return true;
 
+        $this->computeWorkingHours($parentID);
+
         $childrenStatus = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
         $status         = '';
         if(count($childrenStatus) == 1)
@@ -373,7 +375,6 @@ class taskModel extends model
             $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentID)->exec();
             if(!dao::isError())
             {
-                $this->computeWorkingHours($parentID);
                 $changes = common::createChanges($parentTask, $task);
                 $action  = 'Canceled';
                 if($status == 'done') $action = 'Finished';
@@ -1024,8 +1025,8 @@ class taskModel extends model
         $changes = common::createChanges($task, $data);
         if(!empty($actionID)) $this->action->logHistory($actionID, $changes);
 
-        if($task->parent)$this->updateParentStatus($task->id);
-        if($task->story) $this->loadModel('story')->setStage($task->story);
+        if($task->parent) $this->updateParentStatus($task->id);
+        if($task->story)  $this->loadModel('story')->setStage($task->story);
         if($task->status == 'done' and !dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
 
         return $changes;
