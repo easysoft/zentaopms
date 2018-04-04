@@ -65,7 +65,6 @@
       <th><?php echo $lang->user->join;?></th>
       <td><?php echo $user->join;?></td>
     </tr> 
-    <?php;?>
     <tr>
       <th><?php echo $lang->user->commiter;?></th>
       <td><?php echo $user->commiter;?></td>
