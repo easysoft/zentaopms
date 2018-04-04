@@ -453,7 +453,7 @@ class taskModel extends model
                 if($currentTask->left > 0 && $currentTask->consumed > 0 && $oldTask->status == 'wait') $currentTask->status = 'doing';
                 if($currentTask->left > 0 && ($currentTask->status == 'done' or $oldTask->status == 'done'))
                 {
-                    $currentTask->status = 'doing';
+                    $currentTask->status       = 'doing';
                     $currentTask->finishedBy   = '';
                     $currentTask->finishedDate = '0000-00-00';
                 }
