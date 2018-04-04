@@ -90,6 +90,7 @@ foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
       }
       ?>
       <tr class='text-center'>
+        <?php $disableHour = isset($teams[$taskID]) ? "disabled='disabled'" : '';?>
         <td><?php echo $taskID . html::hidden("taskIDList[$taskID]", $taskID);?></td>
         <td style='overflow:visible' title='<?php echo $tasks[$taskID]->name?>'>
           <div class='input-group'>
@@ -100,11 +101,11 @@ foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
         <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$taskID]",     $modules, $tasks[$taskID]->module, "class='form-control chosen'")?></td>
         <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$taskID]", $members, $tasks[$taskID]->assignedTo, "class='form-control chosen'");?></td>
         <td><?php echo html::select("types[$taskID]",    $typeList, $tasks[$taskID]->type, 'class=form-control');?></td>
-        <td <?php echo zget($visibleFields, 'status', "class='hidden'")?>><?php echo html::select("statuses[$taskID]", $statusList, $tasks[$taskID]->status, 'class=form-control');?></td>
-        <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$taskID]",     $priList, $tasks[$taskID]->pri, 'class=form-control');?></td>
-        <td <?php echo zget($visibleFields, 'estimate', "class='hidden'")?>><?php echo html::input("estimates[$taskID]", $tasks[$taskID]->estimate, "class='form-control text-center' autocomplete='off'");?></td>
-        <td <?php echo zget($visibleFields, 'record', "class='hidden'")?>><?php echo html::input("consumeds[$taskID]", '', "class='form-control text-center' autocomplete='off'");?></td>
-        <td <?php echo zget($visibleFields, 'left', "class='hidden'")?>><?php echo html::input("lefts[$taskID]",     $tasks[$taskID]->left, "class='form-control text-center' autocomplete='off'");?></td>
+        <td <?php echo zget($visibleFields, 'status', "class='hidden'")?>><?php echo html::select("statuses[$taskID]", $statusList, $tasks[$taskID]->status, "class='form-control'");?></td>
+        <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$taskID]",     $priList, $tasks[$taskID]->pri, "class='form-control'");?></td>
+        <td <?php echo zget($visibleFields, 'estimate', "class='hidden'")?>><?php echo html::input("estimates[$taskID]", $tasks[$taskID]->estimate, "class='form-control text-center' autocomplete='off' {$disableHour}");?></td>
+        <td <?php echo zget($visibleFields, 'record', "class='hidden'")?>><?php echo html::input("consumeds[$taskID]", '', "class='form-control text-center' autocomplete='off' {$disableHour}");?></td>
+        <td <?php echo zget($visibleFields, 'left', "class='hidden'")?>><?php echo html::input("lefts[$taskID]",     $tasks[$taskID]->left, "class='form-control text-center' autocomplete='off' {$disableHour}");?></td>
         <td <?php echo zget($visibleFields, 'estStarted', "class='hidden'")?>><?php echo html::input("estStarteds[$taskID]",     $tasks[$taskID]->estStarted, "class='form-control text-center form-date'");?></td>
         <td <?php echo zget($visibleFields, 'deadline', "class='hidden'")?>><?php echo html::input("deadlines[$taskID]",     $tasks[$taskID]->deadline, "class='form-control text-center form-date'");?></td>
         <td class='text-left<?php echo zget($visibleFields, 'finishedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("finishedBys[$taskID]", $members, $tasks[$taskID]->finishedBy, "class='form-control chosen'");?></td>

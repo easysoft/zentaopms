@@ -58,6 +58,7 @@ $lang->task->estimateAB       = '預';
 $lang->task->left             = '預計剩餘';
 $lang->task->leftAB           = '剩';
 $lang->task->consumed         = '總消耗';
+$lang->task->myConsumed       = '我的總消耗';
 $lang->task->consumedAB       = '消耗';
 $lang->task->hour             = '小時';
 $lang->task->consumedThisTime = '工時';
@@ -108,7 +109,7 @@ $lang->task->parent           = '父任務';
 $lang->task->parentAB         = '父';
 $lang->task->lblPri           = 'P';
 $lang->task->lblHour          = '(h)';
-$lang->task->deniedNotice     = '當前任務只有【%s】才可以 %s';
+$lang->task->deniedNotice     = '當前任務只有%s才可以%s。';
 
 $lang->task->ditto         = '同上';
 $lang->task->dittoNotice   = "該任務與上一任務不屬於同一項目！";

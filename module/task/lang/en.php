@@ -58,6 +58,7 @@ $lang->task->estimateAB        = 'Est.(h)';
 $lang->task->left              = 'Left';
 $lang->task->leftAB            = 'Left';
 $lang->task->consumed          = 'Cost';
+$lang->task->myConsumed        = 'My Cost';
 $lang->task->consumedAB        = 'Cost';
 $lang->task->hour              = 'Hour';
 $lang->task->consumedThisTime  = 'Hour';
