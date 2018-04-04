@@ -38,11 +38,21 @@
     </tr>  
     <tr>
       <th><?php echo $lang->task->consumed;?></th>
-      <td><div class='input-group'><?php echo html::input('consumed', $task->consumed, "class='form-control' autocomplete='off'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td><td></td>
+      <td>
+        <div class='input-group'>
+          <?php $consumed = (!empty($task->team) && isset($task->team[$task->assignedTo])) ? $task->team[$task->assignedTo]->consumed : $task->consumed;?>
+          <?php echo html::input('consumed', $consumed, "class='form-control' autocomplete='off'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
+        </div>
+      </td><td></td>
     </tr>  
     <tr>
       <th><?php echo $lang->task->left;?></th>
-      <td><div class='input-group'><?php echo html::input('left', $task->left, "class='form-control' autocomplete='off'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td><td></td>
+      <td>
+        <div class='input-group'>
+          <?php $left = (!empty($task->team) && isset($task->team[$task->assignedTo])) ? $task->team[$task->assignedTo]->left : $task->left;?>
+          <?php echo html::input('left', $left, "class='form-control' autocomplete='off'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
+        </div>
+      </td><td></td>
     </tr>
     <tr>
       <th><?php echo $lang->comment;?></th>

@@ -50,38 +50,6 @@ class taskModel extends model
             $task->assignedTo = $assignedTo;
             if($assignedTo) $task->assignedDate = helper::now();
 
-            $teams = array();
-            if($this->post->multiple)
-            {
-                $estimate = 0;
-                $left     = 0;
-                foreach($this->post->team as $row => $account)
-                {
-                    if(empty($account) or isset($team[$account])) continue;
-                    $member = new stdClass();
-                    $member->root     = 0;
-                    $member->account  = $account;
-                    $member->role     = $assignedTo;
-                    $member->join     = helper::today();
-                    $member->estimate = $this->post->teamEstimate[$row] ? (float)$this->post->teamEstimate[$row] : 0;
-                    $member->left     = $member->estimate;
-                    $member->order    = $row;
-                    $teams[$account]  = $member;
-
-                    $estimate += (float)$member->estimate;
-                    $left     += (float)$member->left;
-                }
-
-                if(!empty($teams))
-                {
-                    $firstMember        = reset($teams);
-                    $task->assignedTo   = $firstMember->account;
-                    $task->assignedDate = helper::now();
-                    $task->estimate     = $estimate;
-                    $task->left         = $left;
-                }
-            }
-
             /* Check duplicate task. */
             if($task->type != 'affair')
             {
@@ -121,6 +89,24 @@ class taskModel extends model
                 foreach($taskFiles as $fileID => $taskFile) unset($taskFiles[$fileID]->id);
             }
 
+            $teams = array();
+            if($this->post->multiple)
+            {
+                foreach($this->post->team as $row => $account)
+                {
+                    if(empty($account) or isset($team[$account])) continue;
+                    $member = new stdClass();
+                    $member->root     = 0;
+                    $member->account  = $account;
+                    $member->role     = $assignedTo;
+                    $member->join     = helper::today();
+                    $member->estimate = $this->post->teamEstimate[$row] ? (float)$this->post->teamEstimate[$row] : 0;
+                    $member->left     = $member->estimate;
+                    $member->order    = $row;
+                    $teams[$account]  = $member;
+                }
+            }
+
             if(!empty($teams))
             {
                 foreach($teams as $team)
@@ -129,6 +115,9 @@ class taskModel extends model
                     $team->type = 'task';
                     $this->dao->insert(TABLE_TEAM)->data($team)->autoCheck()->exec();
                 }
+
+                $task->id = $taskID;
+                $this->computeHours4Multiple($task);
             }
 
             if(!dao::isError()) $this->loadModel('score')->create('task', 'create', $taskID);
@@ -256,7 +245,6 @@ class taskModel extends model
             $mails[$i]->actionID = $actionID;
         }
 
-        $this->computeWorkingHours($tasks->parent[0]);
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
         if($parentID && !empty($taskID)) $this->updateParentStatus($taskID);
         return $mails;
@@ -399,6 +387,84 @@ class taskModel extends model
             }
         }
     }
+    
+    /**
+     * Compute hours for multiple task.
+     * 
+     * @param  object  $oldTask 
+     * @param  object  $task 
+     * @access public
+     * @return object|bool
+     */
+    public function computeHours4Multiple($oldTask, $task = null)
+    {
+        if(!$oldTask) return false;
+
+        $team = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($oldTask->id)->andWhere('type')->eq('task')->orderBy('order')->fetchAll('account');
+        if(!empty($team))
+        {
+            $now         = helper::now();
+            $teams       = array_keys($team);
+            $currentTask = isset($task) ? $task : new stdclass();
+            if(!isset($currentTask->status)) $currentTask->status = $oldTask->status;
+
+            if(empty($currentTask->assignedTo))
+            {
+                if(!$oldTask->assignedTo)
+                {
+                    $firstMember = reset($team);
+                    $currentTask->assignedTo   = $firstMember->account;
+                    $currentTask->assignedDate = $now;
+                }
+                else
+                {
+                    if($team[$oldTask->assignedTo]->left == 0)
+                    {
+                        if($oldTask->assignedTo != $teams[count($teams) - 1])
+                        {
+                            $currentTask->assignedTo = $this->getNextUser(array_keys($team), $oldTask->assignedTo);
+                        }
+                        else
+                        {
+                            $currentTask->assignedTo = $oldTask->openedBy;
+                        }
+                        $currentTask->assignedDate = $now;
+                    }
+                }
+            }
+
+            $currentTask->estimate = 0;
+            $currentTask->consumed = 0;
+            $currentTask->left     = 0;
+            foreach($team as $member)
+            {
+                $currentTask->estimate += (float)$member->estimate;
+                $currentTask->consumed += (float)$member->consumed;
+                $currentTask->left     += (float)$member->left;
+            }
+
+            if(isset($task))
+            {
+                if($currentTask->left > 0 && $currentTask->consumed > 0 && $oldTask->status == 'wait') $currentTask->status = 'doing';
+                if($currentTask->left > 0 && ($currentTask->status == 'done' or $oldTask->status == 'done'))
+                {
+                    $currentTask->status = 'doing';
+                    $currentTask->finishedBy   = '';
+                    $currentTask->finishedDate = '0000-00-00';
+                }
+
+                if($currentTask->left == 0)
+                {
+                    $currentTask->status       = 'done';
+                    $currentTask->finishedBy   = $this->app->user->account;
+                    $currentTask->finishedDate = $now;
+                }
+
+                return $currentTask;
+            }
+            $this->dao->update(TABLE_TASK)->data($currentTask)->autoCheck()->where('id')->eq($oldTask->id)->exec();
+        }
+    }
 
     /**
      * Update a task.
@@ -449,12 +515,19 @@ class taskModel extends model
             ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft')
             ->get();
 
+        if($task->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
+
+        /* Fix bug#1388, Check children task projectID and moduleID. */
+        if($task->project != $oldTask->project)
+        {
+            $this->dao->update(TABLE_TASK)->set('project')->eq($task->project)->set('module')->eq($task->module)->where('parent')->eq($taskID)->exec();
+        }
+
+        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
+
         $teams = array();
         if($this->post->multiple)
         {
-            $consumed = 0;
-            $estimate = 0;
-            $left = 0;
             foreach($this->post->team as $row => $account)
             {
                 if(empty($account) or isset($team[$account])) continue;
@@ -470,35 +543,18 @@ class taskModel extends model
                 $member->left     = $this->post->teamLeft[$row] ? $this->post->teamLeft[$row] : ($member->estimate - $member->consumed);
                 $member->order    = $row;
                 $teams[$account]  = $member;
-
-                $consumed += (float)$member->consumed;
-                $estimate += (float)$member->estimate;
-                $left     += (float)$member->left;
-            }
-            
-            if(!empty($teams))
-            {
-                $task->consumed = $consumed;
-                $task->estimate = $estimate;
-                $task->left     = $left;
-
-                if(!isset($task->assignedTo))
-                {
-                    $firstMember      = reset($teams);
-                    $task->assignedTo = $firstMember->account;
-                }
+                if($task->status == 'done') $member->left = 0;
             }
         }
 
-        if($task->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
-
-        /* Fix bug#1388, Check children task projectID and moduleID. */
-        if($task->project != $oldTask->project)
+        /* Save team. */
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($taskID)->andWhere('type')->eq('task')->exec();
+        if(!empty($teams))
         {
-            $this->dao->update(TABLE_TASK)->set('project')->eq($task->project)->set('module')->eq($task->module)->where('parent')->eq($taskID)->exec();
+            foreach($teams as $member) $this->dao->insert(TABLE_TEAM)->data($member)->autoCheck()->exec();
+            $task = $this->computeHours4Multiple($oldTask, $task);
         }
 
-        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $this->config->task->edit->requiredFields, 'notempty')
@@ -520,13 +576,6 @@ class taskModel extends model
             ->where('id')->eq((int)$taskID)->exec();
 
         if($oldTask->parent) $this->updateParentStatus($taskID);
-
-        /* Save team. */
-        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($taskID)->andWhere('type')->eq('task')->exec();
-        if(!empty($teams))
-        {
-            foreach($teams as $member) $this->dao->insert(TABLE_TEAM)->data($member)->autoCheck()->exec();
-        }
 
         if($this->post->story != false) $this->loadModel('story')->setStage($this->post->story);
         if(!dao::isError())
@@ -589,8 +638,8 @@ class taskModel extends model
             $task->status         = $data->statuses[$taskID];
             $task->assignedTo     = $task->status == 'closed' ? 'closed' : $data->assignedTos[$taskID];
             $task->pri            = $data->pris[$taskID];
-            $task->estimate       = $data->estimates[$taskID];
-            $task->left           = $data->lefts[$taskID];
+            $task->estimate       = isset($data->estimates[$taskID]) ? $data->estimates[$taskID] : $oldTask->estimate;
+            $task->left           = isset($data->lefts[$taskID]) ? $data->lefts[$taskID] : $oldTask->left;
             $task->estStarted     = $data->estStarteds[$taskID];
             $task->deadline       = $data->deadlines[$taskID];
             $task->finishedBy     = $data->finishedBys[$taskID];
@@ -756,6 +805,23 @@ class taskModel extends model
             ->remove('comment,showModule')
             ->get();
 
+        if(!empty($oldTask->team))
+        {
+            $this->dao->update(TABLE_TEAM)->set('left')->eq(0)
+                ->where('root')->eq($taskID)
+                ->andWhere('type')->eq('task')
+                ->andWhere('account')->eq($oldTask->assignedTo)
+                ->exec();
+
+            $this->dao->update(TABLE_TEAM)->set('left')->eq($task->left)
+                ->where('root')->eq($taskID)
+                ->andWhere('type')->eq('task')
+                ->andWhere('account')->eq($task->assignedTo)
+                ->exec();
+
+            $task = $this->computeHours4Multiple($oldTask, $task);
+        }
+
         $this->dao->update(TABLE_TASK)
             ->data($task)
             ->autoCheck()
@@ -775,26 +841,31 @@ class taskModel extends model
     public function start($taskID)
     {
         $oldTask = $this->getById($taskID);
-        if($this->post->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
+        if(!empty($oldTask->team))
+        {
+            if($this->post->consumed < $oldTask->team[$this->app->user->account]->consumed) die(js::error($this->lang->task->error->consumedSmall));
+        }
+        else
+        {
+            if($this->post->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
+        }
 
         $now  = helper::now();
         $task = fixer::input('post')
             ->setDefault('assignedTo', $this->app->user->account)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->setDefault('status', 'doing')
             ->setIF($oldTask->assignedTo != $this->app->user->account, 'assignedDate', $now)
+            ->removeIF(!empty($oldTask->team), 'consumed,left')
             ->remove('comment')->get();
 
-        if($this->post->left == 0)
+        if(empty($task->team) && $this->post->left == 0)
         {
             $task->status       = 'done';
             $task->finishedBy   = $this->app->user->account;
             $task->finishedDate = helper::now();
             $task->assignedTo   = $oldTask->openedBy; // Fix bug#1341
-        }
-        else
-        {
-            $task->status = 'doing';
         }
 
         /* Record consumed and left. */
@@ -807,29 +878,22 @@ class taskModel extends model
         $estimate->consumed = $estimate->consumed - $oldTask->consumed;
         $this->addTaskEstimate($estimate);
 
-        if(!empty($oldTask->team) && $task->status == 'done')
+        if(!empty($oldTask->team))
         {
-            $teams = array_keys($oldTask->team);
-            if(empty($oldTask->assignedTo)) $oldTask->assignedTo = $teams[0];
+            $teams      = array_keys($oldTask->team);
+            $assignedTo = empty($oldTask->assignedTo) ? $teams[0] : $oldTask->assignedTo;
 
-            $newTeamInfo = new stdClass();
-            $newTeamInfo->consumed = $task->consumed;
-            $newTeamInfo->left     = 0;
-            $this->dao->update(TABLE_TEAM)->data($newTeamInfo)
+            $data = new stdclass();
+            $data->consumed = $this->post->consumed;
+            $data->left     = $this->post->left;
+
+            $this->dao->update(TABLE_TEAM)->data($data)
                 ->where('root')->eq($taskID)
                 ->andWhere('type')->eq('task')
-                ->andWhere('account')->eq($oldTask->assignedTo)
+                ->andWhere('account')->eq($assignedTo)
                 ->exec();
 
-            $newTask = new stdClass();
-            $newTask->left         = 0;
-            $newTask->status       = 'doing';
-            $newTask->consumed     = $task->consumed;
-            $newTask->assignedTo   = $this->getNextUser($teams, $oldTask->assignedTo);
-            $newTask->assignedDate = $now;
-            $this->dao->update(TABLE_TASK)->data($newTask)->where('id')->eq((int)$taskID)->exec();
-
-            if($task->assignedTo != $teams[count($teams) - 1]) return common::createChanges($oldTask, $newTask);
+            $task = $this->computeHours4Multiple($oldTask, $task);
         }
 
         $this->dao->update(TABLE_TASK)->data($task)
@@ -854,7 +918,6 @@ class taskModel extends model
         $record       = fixer::input('post')->get();
         $estimates    = array();
         $task         = $this->getById($taskID);
-        $oldStatus    = $task->status;
         $earliestTime = '';
         foreach(array_keys($record->id) as $id)
         {
@@ -916,8 +979,7 @@ class taskModel extends model
 
         if($left == 0)
         {
-            $task->status       = 'done';
-            $data->status       = $task->status;
+            $data->status       = 'done';
             $data->assignedTo   = $task->openedBy;
             $data->assignedDate = $now;
             $data->finishedBy   = $this->app->user->account;
@@ -925,29 +987,21 @@ class taskModel extends model
         }
         elseif($task->status == 'wait')
         {
-            $task->status       = 'doing';
-            $data->status       = $task->status;
+            $data->status       = 'doing';
             $data->assignedTo   = $this->app->user->account;
             $data->assignedDate = $now;
             $data->realStarted  = $earliestTime;
         }
         elseif($task->status == 'pause')
         {
-            $task->status       = 'doing';
-            $data->status       = $task->status;
+            $data->status       = 'doing';
             $data->assignedTo   = $this->app->user->account;
             $data->assignedDate = $now;
         }
 
         if(!empty($task->team))
         {
-            $teams = array_keys($task->team);
-
-            $myConsumed = $this->dao->select('`consumed`')->from(TABLE_TEAM)
-                ->where('root')->eq($taskID)
-                ->andWhere('type')->eq('task')
-                ->andWhere('account')->eq($task->assignedTo)
-                ->fetch('consumed');
+            $myConsumed = $task->team[$task->assignedTo]->consumed;
 
             $newTeamInfo = new stdClass();
             $newTeamInfo->consumed = $myConsumed + $consumed;
@@ -958,53 +1012,12 @@ class taskModel extends model
                 ->andWhere('account')->eq($task->assignedTo)
                 ->exec();
 
-            $teamTime = $this->dao->select("sum(`consumed`) as consumed,sum(`left`) as leftTime")->from(TABLE_TEAM)
-                ->where('root')->eq((int)$taskID)
-                ->andWhere('type')->eq('task')
-                ->andWhere('account')->in($teams)
-                ->fetch();
-            $data->consumed = $teamTime->consumed;
-            $data->left     = $teamTime->leftTime;
-
-            $newTask = new stdClass();
-            $newTask->left     = $data->left;
-            $newTask->consumed = $data->consumed;
-
-            if($left != 0 || $task->assignedTo != $teams[count($teams) - 1])
-            {
-                $newTask->status = 'doing';
-                if($left == 0)
-                {
-                    $newTask->assignedTo   = $this->getNextUser($teams, $task->assignedTo);
-                    $newTask->assignedDate = $now;
-                }
-
-                $this->dao->update(TABLE_TASK)->data($newTask)->where('id')->eq((int)$taskID)->exec();
-
-                $task->status = $oldStatus;
-                $changes = common::createChanges($task, $newTask);
-                if(!empty($actionID)) $this->action->logHistory($actionID, $changes);
-                return $changes;
-            }
-
-            $data->assignedTo = $task->openedBy;
+            $data = $this->computeHours4Multiple($task, $data);
         }
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($taskID)->exec();
 
-        $oldTask = new stdClass();
-        $oldTask->consumed   = $task->consumed;
-        $oldTask->left       = $task->left;
-        $oldTask->status     = $oldStatus;
-        $oldTask->assignedTo = $task->assignedTo;
-
-        $newTask = new stdClass();
-        $newTask->left       = $left;
-        $newTask->consumed   = $task->consumed + $consumed;
-        $newTask->status     = $task->status;
-        $newTask->assignedTo = $data->assignedTo;
-
-        $changes = common::createChanges($oldTask, $newTask);
+        $changes = common::createChanges($task, $data);
         if(!empty($actionID)) $this->action->logHistory($actionID, $changes);
 
         if($task->parent)$this->updateParentStatus($task->id);
@@ -1039,54 +1052,23 @@ class taskModel extends model
             ->setDefault('status', 'done')
             ->setDefault('finishedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('finishedDate, lastEditedDate', $now)
+            ->removeIF(!empty($oldTask->team), 'finishedBy,finishedDate,status')
             ->remove('comment,files,labels')
             ->get();
 
         if(!is_numeric($task->consumed)) die(js::error($this->lang->task->error->consumedNumber));
 
-        if(!empty($oldTask->team))
-        {
-            $teams = array_keys($oldTask->team);
-
-            $myConsumed = $this->dao->select("`consumed`")->from(TABLE_TEAM)
-                ->where('root')->eq((int)$taskID)
-                ->andWhere('type')->eq('task')
-                ->andWhere('account')->eq($oldTask->assignedTo)
-                ->fetch('consumed');
-            if($task->consumed < $myConsumed) die(js::error($this->lang->task->error->consumedSmall));
-
-            $data = new stdClass();
-            $data->left     = 0;
-            $data->consumed = $task->consumed;
-            $this->dao->update(TABLE_TEAM)->data($data)
-                ->where('root')->eq((int)$taskID)
-                ->andWhere('type')->eq('task')
-                ->andWhere('account')->eq($oldTask->assignedTo)
-                ->exec();
-
-            $myTime = $this->dao->select("sum(`left`) as leftTime,sum(`consumed`) as consumed")->from(TABLE_TEAM)
-                ->where('root')->eq((int)$taskID)
-                ->andWhere('type')->eq('task')
-                ->andWhere('account')->in($teams)
-                ->fetch();
-
-            $newTask = new stdClass();
-            $newTask->left         = $myTime->leftTime;
-            $newTask->consumed     = $myTime->consumed;
-            $newTask->assignedTo   = $task->assignedTo;
-            $newTask->assignedDate = $now;
-            $this->dao->update(TABLE_TASK)->data($newTask)->where('id')->eq((int)$taskID)->exec();
-
-            if($oldTask->assignedTo != $teams[count($teams) - 1]) return common::createChanges($oldTask, $newTask);
-            $task->consumed   = $myTime->consumed;
-            $task->assignedTo = $oldTask->openedBy; // Fix bug#1345
-        }
-
-        if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
-
         /* Record consumed and left. */
-        $consumed = $task->consumed - $oldTask->consumed;
-        if($consumed < 0) die(js::error($this->lang->task->error->consumedSmall));
+        if(empty($oldTask->team))
+        {
+            $consumed = $task->consumed - $oldTask->consumed;
+            if($consumed < 0) die(js::error($this->lang->task->error->consumedSmall));
+        }
+        else
+        {
+            $myConsumed = $oldTask->team[$this->app->user->account]->consumed;
+            if($task->consumed < $myConsumed) die(js::error($this->lang->task->error->consumedSmall));
+        }
 
         $estimate = fixer::input('post')
             ->setDefault('account', $this->app->user->account)
@@ -1097,6 +1079,16 @@ class taskModel extends model
             ->get();
         $estimate->consumed = $consumed;
         if($estimate->consumed) $this->addTaskEstimate($estimate);
+
+        if(!empty($oldTask->team))
+        {
+            $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq((int)$taskID)->andWhere('type')->eq('task')->exec();
+            $this->dao->update(TABLE_TEAM)->set('consumed')->eq($task->consumed)->where('root')->eq((int)$taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($this->app->user->account)->exec();
+
+            $task = $this->computeHours4Multiple($oldTask, $task);
+        }
+
+        if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
 
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
@@ -1223,8 +1215,20 @@ class taskModel extends model
             ->setDefault('finishedDate, canceledDate, closedDate', '0000-00-00')
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('assignedDate', helper::now())
             ->remove('comment')
             ->get();
+
+        if(!empty($oldTask->team))
+        {
+            $this->dao->update(TABLE_TEAM)->set('left')->eq($this->post->left)
+                ->where('root')->eq($taskID)
+                ->andWhere('type')->eq('task')
+                ->andWhere('account')->eq($this->post->assignedTo)
+                ->exec();
+
+            $task = $this->computeHours4Multiple($oldTask, $task);
+        }
 
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
@@ -1258,18 +1262,13 @@ class taskModel extends model
             ->fetch();
         if(!$task) return false;
 
-        $children       = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
         $task->children = $children;
 
         /* Check parent Task. */
         if(!empty($task->parent)) $task->parentName = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('name');
 
-        $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($taskID)->andWhere('type')->eq('task')->orderBy('order_desc')->fetchGroup('root', 'account');
-        if(!empty($teams))
-        {
-            foreach($teams as $key => $team) $teams[$key] = array_reverse($team, true);
-        }
-        $task->team = isset($teams[$taskID]) ? $teams[$taskID] : array();
+        $task->team = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($taskID)->andWhere('type')->eq('task')->orderBy('order')->fetchAll('account');
         foreach($children as $child) $child->team = isset($teams[$child->id]) ? $teams[$child->id] : array();
 
         $task = $this->loadModel('file')->replaceImgURL($task, 'desc');

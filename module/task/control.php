@@ -398,6 +398,7 @@ class task extends control
 
         /* Get edited tasks. */
         $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIDList)->fetchAll('id');
+        $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($taskIDList)->andWhere('type')->eq('task')->fetchAll('root');
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
@@ -418,6 +419,7 @@ class task extends control
         $this->view->typeList    = array('' => '',  'ditto' => $this->lang->task->ditto) + $this->lang->task->typeList;
         $this->view->taskIDList  = $taskIDList;
         $this->view->tasks       = $tasks;
+        $this->view->teams       = $teams;
         $this->view->projectName = isset($project) ? $project->name : '';
 
         $this->display();
@@ -796,11 +798,7 @@ class task extends control
             $teams = array_keys($task->team);
 
             $task->nextBy     = $this->task->getNextUser($teams, $task->assignedTo);
-            $task->myConsumed = $this->dao->select('consumed')->from(TABLE_TEAM)
-                ->where('root')->eq($taskID)
-                ->andWhere('account')->eq($task->assignedTo)
-                ->andWhere('type')->eq('task')
-                ->fetch('consumed');
+            $task->myConsumed = $task->team[$this->app->user->account]->consumed;
 
             $lastAccount = end($teams);
             if($lastAccount != $task->assignedTo)
