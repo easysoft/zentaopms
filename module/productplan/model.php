@@ -134,6 +134,13 @@ class productplanModel extends model
                 ->fetchPairs();
         }
 
+        foreach($plans as $key => $value)
+        {
+          if(strpos($value,'2030-01-01'))
+          {
+            $plans[$key] = str_replace('2030-01-01 ~ 2030-01-01',$this->lang->productplan->future,$value);
+          }
+        }
         return array('' => '') + $plans;
     }
 

@@ -7,3 +7,11 @@ fieldset > .content table tr th { border-top: 1px solid #BBB;
 }
 fieldset > .content table tr th, fieldset > .content table tr td{ padding: 5px 10px; }
 .col-main{width:100%}
+
+.content table.noBorderTable td,table.noBorderTable th,table.noBorderTable caption{border:1px dashed #ddd !important}
+.content table{margin-bottom:10px;border-collapse:collapse;display:table;}
+.content td,th{padding: 5px 10px;border: 1px solid #DDD;}
+.content caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center;}
+.content th{border-top:1px solid #BBB;background-color:#F7F7F7;}
+.content table tr.firstRow th{border-top-width:2px;}
+.content td p{margin:0;padding:0;}
