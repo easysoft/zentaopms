@@ -644,6 +644,7 @@ CREATE TABLE IF NOT EXISTS `zt_taskestimate` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_team`;
 CREATE TABLE IF NOT EXISTS `zt_team` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
   `root` mediumint(8) unsigned NOT NULL default '0',
   `type` enum('project','task') NOT NULL DEFAULT 'project',
   `account` char(30) NOT NULL default '',
@@ -656,7 +657,8 @@ CREATE TABLE IF NOT EXISTS `zt_team` (
   `consumed` DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT '0',
   `left` DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT '0',
   `order` TINYINT(3) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`root`,`type`,`account`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `team` (`root`,`type`,`account`)
   ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_testreport`;
 CREATE TABLE IF NOT EXISTS `zt_testreport` (
