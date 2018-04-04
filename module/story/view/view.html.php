@@ -50,7 +50,7 @@
             <div class="detail-title"><?php echo $lang->story->legendVerify;?></div>
             <div class="detail-content article-content"><?php echo $story->verify;?></div>
           </div>
-          <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'false'));?>
+          <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true'));?>
           <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
           <?php include '../../common/view/action.html.php';?>
         </div>

@@ -103,7 +103,7 @@ class projectModel extends model
 
         $projectIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $this->lang->project->index . ' <span class="caret"></span></button>';
         $projectIndex .= '<ul class="dropdown-menu">';
-        if(common::hasPriv('project', 'all')) $projectIndex .= '<li>' . html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->project->all) . '</li>';
+        if(common::hasPriv('project', 'all')) $projectIndex .= '<li>' . html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->project->allProjects) . '</li>';
         if(common::hasPriv('project', 'create')) $projectIndex .= '<li>' . html::a(helper::createLink('product', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->project->create) . '</li>';
         $projectIndex .= '</ul></div></div>';
         $projectIndex .= $selectHtml;
