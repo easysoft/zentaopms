@@ -100,7 +100,7 @@ $lang->project->aclList['private'] = "私有{$lang->projectCommon}(只有{$lang-
 $lang->project->aclList['custom']  = "自定义白名单(团队成员和白名单的成员可以访问)";
 
 /* 方法列表。*/
-$lang->project->index             = "{$lang->projectCommon}首页";
+$lang->project->index             = "{$lang->projectCommon}主页";
 $lang->project->task              = '任务列表';
 $lang->project->groupTask         = '分组浏览任务';
 $lang->project->story             = '需求列表';

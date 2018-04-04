@@ -215,7 +215,6 @@ $lang->release->menu     = $lang->product->menu;
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
-$lang->project->menu->list     = array('link' => '%s', 'fixed' => true);
 $lang->project->menu->task     = array('link' => '任务|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'grouptask,importtask,burn,importbug,kanban,printkanban,tree');
 $lang->project->menu->story    = array('link' => '需求|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
 $lang->project->menu->bug      = 'Bug|project|bug|projectID=%s';
@@ -226,9 +225,6 @@ $lang->project->menu->team     = array('link' => '团队|project|team|projectID=
 $lang->project->menu->doc      = array('link' => '文档|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
 $lang->project->menu->product  = $lang->productCommon . '|project|manageproducts|projectID=%s';
 $lang->project->menu->view     = array('link' => '概况|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
-$lang->project->menu->create   = array('link' => "<i class='icon-plus'></i>&nbsp;添加{$lang->projectCommon}|project|create", 'float' => 'right');
-$lang->project->menu->all      = array('link' => "<i class='icon-th-large'></i>&nbsp;所有{$lang->projectCommon}|project|all|status=undone&projectID=%s", 'float' => 'right');
-$lang->project->menu->index    = array('link' => "<i class='icon-home'></i>{$lang->projectCommon}主页|project|index|locate=no", 'float' => 'right');
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
@@ -542,7 +538,7 @@ $lang->icons['report']             = 'bar-chart';
 $lang->icons['export']             = 'download-alt';
 $lang->icons['report-file']        = 'file-powerpoint';
 $lang->icons['import']             = 'upload-alt';
-$lang->icons['finish']             = 'ok-sign';
+$lang->icons['finish']             = 'checked';
 $lang->icons['resolve']            = 'ok-sign';
 $lang->icons['start']              = 'play';
 $lang->icons['restart']            = 'play';

@@ -100,9 +100,18 @@ class projectModel extends model
         }
 
         $selectHtml = $this->select($projects, $projectID, $moduleName, $methodName, $extra);
+
+        $projectIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $this->lang->project->index . ' <span class="caret"></span></button>';
+        $projectIndex .= '<ul class="dropdown-menu">';
+        if(common::hasPriv('project', 'all')) $projectIndex .= '<li>' . html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->project->all) . '</li>';
+        if(common::hasPriv('project', 'create')) $projectIndex .= '<li>' . html::a(helper::createLink('product', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->project->create) . '</li>';
+        $projectIndex .= '</ul></div></div>';
+        $projectIndex .= $selectHtml;
+
+        $this->lang->modulePageNav = $projectIndex;
         foreach($this->lang->project->menu as $key => $menu)
         {
-            $replace = $key == 'list' ? $selectHtml : $projectID;
+            $replace = $projectID;
             common::setMenuVars($this->lang->project->menu, $key,  $replace);
         }
     }
@@ -126,7 +135,7 @@ class projectModel extends model
 
         setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot);
         $currentProject = $this->getById($projectID);
-        $output = "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+        $output = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' onclick=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'><i class='icon icon-spin icon-spinner'></i></div></div></div>";
         if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
         return $output;
     }

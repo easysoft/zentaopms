@@ -1,13 +1,13 @@
+<?php if($files):?>
 <?php
 $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
 $sessionString .= session_name() . '=' . session_id();
 ?>
-<?php if($files):?>
 <?php if($fieldset == 'true'):?>
-<fieldset>
-  <legend><?php echo $lang->file->common;?></legend>
-<?php endif;?>
 <div class="detail">
+  <div class="detail-title"><?php echo $lang->file->common;?> <i class="icon icon-paper-clip icon-sm"></i></div>
+  <div class="detail-content">
+<?php endif;?>
   <script language='Javascript'>
   $(function(){
        $(".edit").modalTrigger({width:350, type:'iframe'});
@@ -39,8 +39,6 @@ $sessionString .= session_name() . '=' . session_id();
       return false;
   }
   </script>
-  <div class="detail-title"><?php echo $lang->file->common;?> <i class="icon icon-paper-clip icon-sm"></i></div>
-  <div class="detail-content">
     <ul class="files-list">
       <?php
       foreach($files as $file)
@@ -89,7 +87,8 @@ $sessionString .= session_name() . '=' . session_id();
       }
       ?>
     </ul>
+<?php if($fieldset == 'true'):?>
   </div>
 </div>
-<?php if($fieldset == 'true') echo '</fieldset>';?>
+<?php endif;?>
 <?php endif;?>
