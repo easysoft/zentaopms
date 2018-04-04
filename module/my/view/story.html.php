@@ -157,7 +157,7 @@
               foreach ($users as $key => $value)
               {
                   if(empty($key) or $key == 'closed') continue;
-                  echo html::a('javascript:$(".table-actions #assignedTo").val("' . $key . '");setFormAction("' . $actionLink . '")', '<i class="icon icon-person icon-sm"></i> ' . $value, '', "data-filter='$key'");
+                  echo html::a('javascript:$(".table-actions #assignedTo").val("' . $key . '");setFormAction("' . $actionLink . '")', '<i class="icon icon-person icon-sm"></i> ' . $value, '', "data-key='@$key'");
               }
               echo "</div>";
               echo "</div>";

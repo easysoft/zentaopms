@@ -640,7 +640,7 @@ class testsuite extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($libID, $module, $method, $extra)
+    public function ajaxGetDropMenu($libID, $module, $method, $extra = '')
     {
         $this->view->link      = $this->testsuite->getLibLink($module, $method, $extra);
         $this->view->libID     = $libID;

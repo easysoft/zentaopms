@@ -60,7 +60,11 @@ class testsuiteModel extends model
 
         setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot);
         $currentProduct = $this->product->getById($productID);
-        $output = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' onclick=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'><i class='icon icon-spin icon-spinner'></i></div></div>";
+
+        $dropMenuLink = helper::createLink('product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
+        $output = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' >{$currentProduct->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output .= '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= "</div></div>";
         if($currentProduct->type != 'normal')
         {
             $this->app->loadLang('branch');
@@ -83,7 +87,14 @@ class testsuiteModel extends model
     public function setLibMenu($libraries, $libID, $moduleID = 0)
     {
         $currentLibName = zget($libraries, $libID, '');
-        $selectHtml = empty($libraries) ? '' : "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' onclick=\"javascript:showSearchMenu('testsuite', '$libID', 'testsuite', 'library', '')\">{$currentLibName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'><i class='icon icon-spin icon-spinner'></i></div></div>";
+        $selectHtml = '';
+        if(!empty($libraries))
+        {
+            $dropMenuLink = helper::createLink('testsuite', 'ajaxGetDropMenu', "objectID=$libID&module=testsuite&method=library");
+            $selectHtml = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem'>{$currentLibName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+            $selectHtml .= '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+            $selectHtml .= "</div></div>";
+        }
 
         if($this->config->global->flow == 'onlyTest')
         {
@@ -93,7 +104,10 @@ class testsuiteModel extends model
 
             if(!$isMobile)
             {
-                $selectHtml .= "<div class='btn-group'><button id='currentModule' data-toggle='dropdown' type='button' class='btn btn-limit' onclick=\"javascript:showSearchMenu('tree', '$libID', 'testsuite', 'library', '')\">{$moduleName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'><i class='icon icon-spin icon-spinner'></i></div></div>";
+                $dropMenuLink = helper::createLink('tree', 'ajaxGetDropMenu', "objectID=$libID&module=testsuite&method=library");
+                $selectHtml .= "<div class='btn-group'><button id='currentModule' data-toggle='dropdown' type='button' class='btn btn-limit'>{$moduleName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+                $selectHtml .= '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+                $selectHtml .= "</div></div>";
             }
             else
             {
