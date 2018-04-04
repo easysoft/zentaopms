@@ -113,11 +113,11 @@
                   </tr>
                   <tr>
                     <th><?php echo $lang->bug->pri;?></th>
-                    <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
+                    <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri;?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->bug->status;?></th>
-                    <td class='bug-<?php echo $bug->status?>'><strong><?php echo $lang->bug->statusList[$bug->status];?></strong></td>
+                    <td><span class='status-<?php echo $bug->status?>'><span class="label label-dot"></span> <?php echo $lang->bug->statusList[$bug->status];?></span></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->bug->activatedCount;?></th>

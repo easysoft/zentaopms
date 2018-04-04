@@ -25,7 +25,7 @@
     </div>
     <div id="mainContent">
       <form id='myStoryForm' class="main-table table-story" data-ride="table" method="post">
-        <table class="table has-sort-head table-lg table-fixed">
+        <table class="table has-sort-head table-fixed">
           <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
           <?php
           $canBatchEdit  = common::hasPriv('story', 'batchEdit');
@@ -65,7 +65,7 @@
                   <?php printf('%03d', $story->id);?>
                 </div>
               </td>
-              <td class='c-pri'><span class='<?php echo 'pri-' . $story->pri;?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+              <td class='c-pri'><span class='lable-pri <?php echo 'lable-pri-' . $story->pri;?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
               <td class='c-product'><?php echo $story->productTitle;?></td>
               <td class='c-name nobr'><?php echo html::a($storyLink, $story->title, null, "style='color: $story->color'");?></td>
               <td class='c-plan'><?php echo $story->planTitle;?></td>
@@ -148,7 +148,7 @@
               if($withSearch)
               {
                   echo '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">';
-                  echo '<input id="userSearchBox" type="search" class="form-control search-input" />';
+                  echo '<input id="userSearchBox" type="search" class="form-control search-input" autocomplete="off" />';
                   echo '<label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>';
                   echo '<a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>';
                   echo '</div>';

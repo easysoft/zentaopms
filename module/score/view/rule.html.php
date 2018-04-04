@@ -21,7 +21,7 @@
       </div>
     </div>
     <div id="mainContent">
-      <table class="main-table table has-sort-head table-lg table-fixed">
+      <table class="main-table table has-sort-head table-fixed">
         <thead>
           <tr>
             <th class="w-150px"><?php echo $lang->score->module;?></th>

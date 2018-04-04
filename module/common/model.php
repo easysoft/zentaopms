@@ -658,21 +658,44 @@ class commonModel extends model
     /**
      * Print icon of comment.
      *
-     * @param string $module
-     * @param        $object
+     * @param string $commentFormLink
+     * @param object $object
      *
      * @static
      * @access public
      * @return mixed
      */
-    public static function printCommentIcon($module, $object = null)
+    public static function printCommentIcon($commentFormLink, $object = null)
     {
         if(isonlybody()) return false;
 
         global $lang;
 
         if(!commonModel::hasPriv('action', 'comment', $object)) return false;
-        echo html::a('#commentBox', '<i class="icon icon-chat-line"></i> ' . $lang->action->create, '', "title='$lang->comment' onclick=\"toggleComment('#commentBox')\" class='btn btn-link pull-right'");
+        echo html::commonButton('<i class="icon icon-chat-line"></i> ' . $lang->action->create, "title='$lang->comment'", 'btn btn-link pull-right btn-comment');
+        echo <<<EOD
+<div class="modal fade modal-comment">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+        <h4 class="modal-title">{$lang->action->create}</h4>
+      </div>
+      <div class="modal-body">
+    <form action="$commentFormLink" target='hiddenwin' method='post'>
+          <div class="form-group">
+            <textarea id='comment' name='comment' class="form-control" rows="8"></textarea>
+          </div>
+          <div class="form-group form-actions">
+            <button type="submit" class="btn btn-primary btn-wide">{$lang->save}</button>
+            <button type="button" class="btn btn-wide" data-dismiss="modal">{$lang->close}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+EOD;
     }
 
     /**

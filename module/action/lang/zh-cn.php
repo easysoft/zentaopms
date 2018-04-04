@@ -116,7 +116,7 @@ $lang->action->desc->finished       = '$date, 由 <strong>$actor</strong> 完成
 $lang->action->desc->paused         = '$date, 由 <strong>$actor</strong> 暂停。' . "\n";
 $lang->action->desc->verified       = '$date, 由 <strong>$actor</strong> 验收。' . "\n";
 $lang->action->desc->diff1          = '修改了 <strong><i>%s</i></strong>，旧值为 "%s"，新值为 "%s"。<br />' . "\n";
-$lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，区别为：' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
+$lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，区别为：' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>";
 $lang->action->desc->diff3          = '将文件名 %s 改为 %s 。' . "\n";
 $lang->action->desc->linked2bug     = '$date 由 <strong>$actor</strong> 关联到版本 <strong>$extra</strong>';
 

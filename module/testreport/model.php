@@ -26,26 +26,22 @@ class testreportModel extends model
         $selectHtml = $this->product->select($products, $productID, 'testreport', 'browse', '', $branch);
 
         /* Remove branch. */
-        if(strpos($selectHtml, 'currentBranch') !== false)
-        {
-            $selectHtml = substr($selectHtml, 0, strpos($selectHtml, 'currentBranch'));
-            $selectHtml = substr($selectHtml, 0, strrpos($selectHtml, '<'));
-            if(strpos($selectHtml, '</li>') !== false) $selectHtml = substr($selectHtml, 0, strrpos($selectHtml, '</li>'));
-        }
+        if(strpos($selectHtml, 'currentBranch') !== false) $selectHtml = substr($selectHtml, 0, strrpos($selectHtml, "<div class='btn-group'>")) . '</div>';
 
+        $this->app->loadLang('qa');
+        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
+        $productIndex .= $selectHtml;
+
+        $this->lang->modulePageNav = $productIndex;
         foreach($this->lang->testtask->menu as $key => $value)
         {
             if($this->config->global->flow != 'onlyTest')
             {
-                $replace = ($key == 'product') ? $selectHtml : $productID;
+                $replace = $productID;
             }
             else
             {
-                if($key == 'product') 
-                {
-                    $replace = $selectHtml;
-                }
-                elseif($key == 'scope')
+                if($key == 'scope')
                 {
                     $scope = $this->session->testTaskVersionScope;
                     $status = $this->session->testTaskVersionStatus;

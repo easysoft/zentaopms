@@ -39,7 +39,7 @@
     </div>
     <div id="mainContent">
       <form class="main-table table-todo" data-ride="table" method="post">
-        <table class="table has-sort-head table-lg" id='todoList'>
+        <table class="table has-sort-head" id='todoList'>
           <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
           <thead>
             <tr>

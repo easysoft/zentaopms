@@ -195,11 +195,11 @@
                   </tr>
                   <tr>
                     <th><?php echo $lang->task->status;?></th>
-                    <td><?php $lang->show($lang->task->statusList, $task->status);?></td>
+                    <td><span class='status-<?php echo $task->status;?>'><span class="label label-dot"></span> <?php zget($lang->task->statusList, $task->status);?></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->task->pri;?></th>
-                    <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri);?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri)?></span></td>
+                    <td><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri)?></span></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->task->mailto;?></th>

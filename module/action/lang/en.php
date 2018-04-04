@@ -115,7 +115,7 @@ $lang->action->desc->finished       = '$date, finished by <strong>$actor</strong
 $lang->action->desc->paused         = '$date, paused by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->verified       = '$date, verified by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->diff1          = '<strong><i>%s</i></strong> has been changed. It was "%s" and it is "%s".<br />' . "\n";
-$lang->action->desc->diff2          = '<strong><i>%s</i></strong> has been changed. The difference is ' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
+$lang->action->desc->diff2          = '<strong><i>%s</i></strong> has been changed. The difference is ' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>";
 $lang->action->desc->diff3          = 'File Name %s was changed to %s .' . "\n";
 $lang->action->desc->linked2bug     = '$date Linked to <strong>$extra</strong> by <strong>$actor</strong>';
 

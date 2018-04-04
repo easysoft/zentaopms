@@ -125,7 +125,7 @@
                   </tr>
                   <tr>
                     <th><?php echo $lang->story->status;?></th>
-                    <td><span class='story-<?php echo $story->status?>'><span class="label label-dot"></span> <?php echo $lang->story->statusList[$story->status];?></span></td>
+                    <td><span class='status-<?php echo $story->status?>'><span class="label label-dot"></span> <?php echo $lang->story->statusList[$story->status];?></span></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->story->stage;?></th>

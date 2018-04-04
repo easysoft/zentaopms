@@ -10,4 +10,4 @@
  * @link        http://www.zentao.net
  */
 $lang->qa->common = '测试视图';
-$lang->qa->index  = '测试首页';
+$lang->qa->index  = '测试主页';

@@ -25,6 +25,12 @@ class testtaskModel extends model
     {
         $this->loadModel('product')->setMenu($products, $productID, $branch);
         $selectHtml = $this->product->select($products, $productID, 'testtask', 'browse', '', $branch);
+
+        $this->app->loadLang('qa');
+        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
+        $productIndex .= $selectHtml;
+
+        $this->lang->modulePageNav = $productIndex;
         foreach($this->lang->testtask->menu as $key => $value)
         {
             if($this->config->global->flow != 'onlyTest')
