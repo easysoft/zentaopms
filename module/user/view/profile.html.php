@@ -60,10 +60,9 @@
       <th><?php echo $lang->user->role;?></th>
       <td><?php echo $lang->user->roleList[$user->role];?></td>
     </tr>
-    <?php $style = $user->join == '0000-00-00' ? "style='display:none'" : '';?> 
-    <tr <?php echo $style;?>>
+    <tr>
       <th><?php echo $lang->user->join;?></th>
-      <td><?php echo $user->join;?></td>
+      <td><?php echo formatTime($user->join);?></td>
     </tr> 
     <tr>
       <th><?php echo $lang->user->commiter;?></th>
