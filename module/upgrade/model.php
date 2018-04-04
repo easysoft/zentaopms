@@ -214,6 +214,7 @@ class upgradeModel extends model
                 $this->resetProductLine();
              case '9_8_2':
                 $this->execSQL($this->getUpgradeFile('9.8.2'));   
+                $this->addUniqueKeyToTeam();
        }
 
         $this->deletePatch();
@@ -2242,6 +2243,35 @@ class upgradeModel extends model
     {
         $deletedLines = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq('1')->fetchPairs('id', 'id');
         $this->dao->update(TABLE_PRODUCT)->set('line')->eq(0)->where('line')->in($deletedLines)->exec();
+        return !dao::isError();
+    }
+    
+    /**
+     * Add unique key to team table. 
+     * 
+     * @access public
+     * @return bool
+     */
+    public function  addUniqueKeyToTeam()
+    {
+        $members = $this->dao->select('root, type, account')->from(TABLE_TEAM)->groupBy('root, type, account')->having('count(*)')->gt(1)->fetchAll();
+
+        foreach($members as $member)
+        {
+            $maxID = $this->dao->select('MAX(id) id')
+                ->from(TABLE_TEAM)
+                ->where('root')->eq($member->root)
+                ->andWhere('`type`')->eq($member->type)
+                ->andWhere('account')->eq($member->account)
+                ->fetch('id');
+            $this->dao->delete()->from(TABLE_TEAM)
+                ->where('root')->eq($member->root)
+                ->andWhere('`type`')->eq($member->type)
+                ->andWhere('account')->eq($member->account)
+                ->andWhere('id')->ne($maxID)
+                ->exec();
+        }
+        $this->dao->exec("ALTER TABLE `zt_team` ADD UNIQUE `team` (`root`, `type`, `account`)");
         return !dao::isError();
     }
 }

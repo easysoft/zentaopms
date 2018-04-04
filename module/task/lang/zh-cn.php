@@ -109,7 +109,7 @@ $lang->task->parent           = '父任务';
 $lang->task->parentAB         = '父';
 $lang->task->lblPri           = 'P';
 $lang->task->lblHour          = '(h)';
-$lang->task->deniedNotice     = '当前任务只有【%s】才可以 %s';
+$lang->task->deniedNotice     = '当前任务只有%s才可以%s。';
 
 $lang->task->ditto         = '同上';
 $lang->task->dittoNotice   = "该任务与上一任务不属于同一项目！";
