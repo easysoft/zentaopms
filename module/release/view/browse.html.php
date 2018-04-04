@@ -29,7 +29,7 @@
       </div>
     </div>
     <div id="mainContent">
-      <table class="main-table table has-sort-head table-lg table-fixed tablesorter" id='releaseList'>
+      <table class="main-table table has-sort-head table-fixed tablesorter" id='releaseList'>
         <thead>
           <tr>
             <th class='w-id'><?php echo $lang->release->id;?></th>

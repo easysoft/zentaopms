@@ -28,7 +28,7 @@
     </div>
     <div id="mainContent">
       <form class="main-table table-testtask" data-ride="table" method="post" target='hiddenwin' id='testtaskForm'>
-        <table class="table has-sort-head table-lg tablesorter" id='taskList'>
+        <table class="table has-sort-head tablesorter" id='taskList'>
           <thead>
             <tr>
               <th class="w-100px">

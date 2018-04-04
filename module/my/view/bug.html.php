@@ -26,7 +26,7 @@
     <div id="mainContent">
       <form class="main-table table-bug" data-ride="table" method="post" action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
         <?php $canBatchEdit  = common::hasPriv('bug', 'batchEdit');?>
-        <table class="table has-sort-head table-lg table-fixed". id='bugList'>
+        <table class="table has-sort-head table-fixed". id='bugList'>
           <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
           <thead>
             <tr>
@@ -46,7 +46,7 @@
               <th class='w-user'>      <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
               <th class='w-user'>      <?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
               <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
-              <th class='w-140px'><?php echo $lang->actions;?></th>
+              <th class='c-actions-4'> <?php echo $lang->actions;?></th>
             </tr>
           </thead>
           <tbody>

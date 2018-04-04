@@ -28,7 +28,7 @@
       <form id='myTaskForm' class="main-table table-task" data-ride="table" method="post">
         <?php $canBatchEdit  = common::hasPriv('task', 'batchEdit');?>
         <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
-        <table class="table has-sort-head table-lg table-fixed" id='tasktable'>
+        <table class="table has-sort-head table-fixed" id='tasktable'>
           <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
           <thead>
             <tr>
@@ -51,7 +51,7 @@
               <th class='w-hour'>  <?php common::printOrderLink('left',        $orderBy, $vars, $lang->task->leftAB);?></th>
               <th class='w-date'>  <?php common::printOrderLink('deadline',    $orderBy, $vars, $lang->task->deadlineAB);?></th>
               <th class='w-70px'>  <?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>
-              <th class='w-200px'> <?php echo $lang->actions;?></th>
+              <th class='c-actions-4'><?php echo $lang->actions;?></th>
             </tr>
           </thead>
           <tbody>

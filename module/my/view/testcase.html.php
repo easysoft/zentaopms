@@ -29,7 +29,7 @@
     </div>
     <div id="mainContent">
       <form id='myCaseForm' class="main-table table-case" data-ride="table" method="post">
-        <table class="main-table table has-sort-head table-lg table-fixed" id='caseList'>
+        <table class="main-table table has-sort-head table-fixed" id='caseList'>
           <?php 
           $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
           $this->app->loadLang('testtask');
@@ -54,7 +54,7 @@
               <th class='w-120px'> <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
               <th class='w-80px'>  <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
               <th class='w-status'><?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
-              <th class='w-230px'> <?php echo $lang->actions;?></th>
+              <th class='w-200px'> <?php echo $lang->actions;?></th>
             </tr>
           </thead>
           <tbody>
