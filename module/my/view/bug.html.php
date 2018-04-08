@@ -44,7 +44,7 @@
           <th class='w-user'>      <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
           <th class='w-user'>      <?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
           <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
-          <th class='c-actions-4'> <?php echo $lang->actions;?></th>
+          <th class='w-160px'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

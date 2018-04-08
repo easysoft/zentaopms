@@ -326,7 +326,7 @@ $lang->block->modules['common']->moreLinkList = new stdclass();
 $lang->block->modules['common']->moreLinkList->dynamic = 'company|dynamic|';
 
 $lang->block->welcomeList['06:00'] = '%s，早上好！';
-$lang->block->welcomeList['11:30'] = '%s，中文好！';
+$lang->block->welcomeList['11:30'] = '%s，中午好！';
 $lang->block->welcomeList['13:30'] = '%s，下午好！';
 $lang->block->welcomeList['19:00'] = '%s，晚上好！';
 
