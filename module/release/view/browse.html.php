@@ -13,69 +13,65 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmDelete', $lang->release->confirmDelete)?>
-<main id="main">
-  <div class="container">
-    <div id="mainMenu" class="clearfix">
-      <div class="btn-toolbar pull-left">
-        <span class='btn btn-link btn-active-text'>
-          <span class='text'><?php echo $lang->release->browse;?></span>
-          <?php if($product->type !== 'normal'):?>
-          <span class='label label-light label-badge'><?php echo $branches[$branch];?></span>
-          <?php endif;?>
-        </span>
-      </div>
-      <div class="btn-toolbar pull-right">
-        <?php common::printIcon('release', 'create', "product=$product->id&branch=$branch");?>
-      </div>
-    </div>
-    <div id="mainContent">
-      <table class="main-table table has-sort-head table-fixed tablesorter" id='releaseList'>
-        <thead>
-          <tr>
-            <th class='w-id'><?php echo $lang->release->id;?></th>
-            <th><?php echo $lang->release->name;?></th>
-            <th><?php echo $lang->release->build;?></th>
-            <?php if($product->type != 'normal'):?>
-            <th class='w-100px'><?php echo $lang->product->branch;?></th>
-            <?php endif;?>
-            <th class='w-100px'><?php echo $lang->release->date;?></th>
-            <th class='w-100px'><?php echo $lang->release->status;?></th>
-            <th class='w-200px'><?php echo $lang->actions;?></th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach($releases as $release):?>
-          <tr>
-            <td class='text-center'><?php echo $release->id;?></td>
-            <td><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></td>
-            <td title='<?php echo $release->buildName?>'><?php echo html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank');?></td>
-            <?php if($product->type != 'normal'):?>
-            <td class='text-center'><?php echo $branches[$release->branch];?></td>
-            <?php endif;?>
-            <td class='text-center'><?php echo $release->date;?></td>
-            <td class='text-center'><?php echo $lang->release->statusList[$release->status];?></td>
-            <td class='c-actions'>
-              <?php
-              if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ', '', "class='btn' title='{$lang->release->linkStory}'");
-              if(common::hasPriv('release', 'linkBug') and $this->config->global->flow != 'onlyStory') echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"),   '<i class="icon-bug"></i> ',  '', "class='btn' title='{$lang->release->linkBug}'");
-              if(common::hasPriv('release', 'changeStatus', $release))
-              {
-                  $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
-                  echo html::a(inlink('changeStatus', "releaseID=$release->id&status=$changedStatus"),   '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ',  'hiddenwin', "class='btn' title='{$lang->release->changeStatusList[$changedStatus]}'");
-              }
-              common::printIcon('release', 'edit',   "release=$release->id", $release, 'list');
-              if(common::hasPriv('release', 'delete', $release))
-              {
-                  $deleteURL = $this->createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
-                  echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"releaseList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->release->delete}'");
-              }
-              ?>
-            </td>
-          </tr>
-          <?php endforeach;?>
-        </tbody>
-      </table>
-    </div>
+<div id="mainMenu" class="clearfix">
+  <div class="btn-toolbar pull-left">
+    <span class='btn btn-link btn-active-text'>
+      <span class='text'><?php echo $lang->release->browse;?></span>
+      <?php if($product->type !== 'normal'):?>
+      <span class='label label-light label-badge'><?php echo $branches[$branch];?></span>
+      <?php endif;?>
+    </span>
   </div>
-</main>
+  <div class="btn-toolbar pull-right">
+    <?php common::printIcon('release', 'create', "product=$product->id&branch=$branch");?>
+  </div>
+</div>
+<div id="mainContent">
+  <table class="main-table table has-sort-head table-fixed tablesorter" id='releaseList'>
+    <thead>
+      <tr>
+        <th class='w-id'><?php echo $lang->release->id;?></th>
+        <th><?php echo $lang->release->name;?></th>
+        <th><?php echo $lang->release->build;?></th>
+        <?php if($product->type != 'normal'):?>
+        <th class='w-100px'><?php echo $lang->product->branch;?></th>
+        <?php endif;?>
+        <th class='w-100px'><?php echo $lang->release->date;?></th>
+        <th class='w-100px'><?php echo $lang->release->status;?></th>
+        <th class='w-200px'><?php echo $lang->actions;?></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach($releases as $release):?>
+      <tr>
+        <td class='text-center'><?php echo $release->id;?></td>
+        <td><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></td>
+        <td title='<?php echo $release->buildName?>'><?php echo html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank');?></td>
+        <?php if($product->type != 'normal'):?>
+        <td class='text-center'><?php echo $branches[$release->branch];?></td>
+        <?php endif;?>
+        <td class='text-center'><?php echo $release->date;?></td>
+        <td class='text-center'><?php echo $lang->release->statusList[$release->status];?></td>
+        <td class='c-actions'>
+          <?php
+          if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ', '', "class='btn' title='{$lang->release->linkStory}'");
+          if(common::hasPriv('release', 'linkBug') and $this->config->global->flow != 'onlyStory') echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"),   '<i class="icon-bug"></i> ',  '', "class='btn' title='{$lang->release->linkBug}'");
+          if(common::hasPriv('release', 'changeStatus', $release))
+          {
+              $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
+              echo html::a(inlink('changeStatus', "releaseID=$release->id&status=$changedStatus"),   '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ',  'hiddenwin', "class='btn' title='{$lang->release->changeStatusList[$changedStatus]}'");
+          }
+          common::printIcon('release', 'edit',   "release=$release->id", $release, 'list');
+          if(common::hasPriv('release', 'delete', $release))
+          {
+              $deleteURL = $this->createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
+              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"releaseList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->release->delete}'");
+          }
+          ?>
+        </td>
+      </tr>
+      <?php endforeach;?>
+    </tbody>
+  </table>
+</div>
 <?php include '../../common/view/footer.html.php';?>
