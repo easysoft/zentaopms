@@ -27,9 +27,10 @@
 <div id="mainContent" class="main-content">
   <div id="dynamics">
     <?php foreach($dateGroups as $date => $actions):?>
-    <div class="dynamic">
+    <?php $isToday = date(DT_DATE4) == $date;?>
+    <div class="dynamic <?php if($isToday) echo 'active';?>">
       <div class="dynamic-date">
-        <?php if(date(DT_DATE4) == $date):?>
+        <?php if($isToday):?>
         <span class="date-label"><?php echo $lang->action->dynamic->today;?></span>
         <?php endif;?>
         <span class="date-text"><?php echo $date;?></span>
@@ -50,7 +51,6 @@
 <script>
 $(function()
 {
-    $('#dynamics .dynamic:first').addClass('active');
     $('#dynamics').on('click', '.dynamic-btn', function()
     {
         $(this).closest('.dynamic').toggleClass('collapsed');
