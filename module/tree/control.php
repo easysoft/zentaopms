@@ -357,7 +357,7 @@ class tree extends control
             if(count($optionMenu) == 1 and $needManage)
             {
                 $output .=  "<span class='input-group-addon'>";
-                $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch"), $this->lang->tree->manage, '_blank');
+                $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch"), $viewType == 'line' ? $this->lang->tree->manageLine : $this->lang->tree->manage, '_blank');
                 $output .= '&nbsp; ';
                 $output .= $viewType == 'line' ? html::a("javascript:loadProductLines($rootID)", $this->lang->refresh) : html::a("javascript:loadProductModules($rootID)", $this->lang->refresh);
                 $output .= '</span>';
