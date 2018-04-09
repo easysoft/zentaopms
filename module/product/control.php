@@ -464,7 +464,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function dynamic($productID = 0, $type = 'today', $param = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function dynamic($productID = 0, $type = 'today', $param = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         /* Save session. */
         $uri   = $this->app->getURI(true);
@@ -491,6 +491,7 @@ class product extends control
         /* Set the user and type. */
         $account = $type == 'account' ? $param : 'all';
         $period  = $type == 'account' ? 'all'  : $type;
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, $productID);
 
         /* The header and position. */
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
@@ -498,14 +499,15 @@ class product extends control
         $this->view->position[] = $this->lang->product->dynamic;
 
         /* Assign. */
-        $this->view->productID = $productID;
-        $this->view->type      = $type;
-        $this->view->users     = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $this->view->account   = $account;
-        $this->view->orderBy   = $orderBy;
-        $this->view->pager     = $pager;
-        $this->view->param     = $param;
-        $this->view->actions   = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, $productID);
+        $this->view->productID  = $productID;
+        $this->view->type       = $type;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->account    = $account;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->param      = $param;
+        $this->view->dateGroups = $this->action->buildDateGroup($actions);
+        $this->view->allCount   = $this->action->getCount('product', $productID);
         $this->display();
     }
 
