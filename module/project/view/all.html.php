@@ -18,13 +18,13 @@
     <?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn'")?>
   </div>
   <ul class='nav'>
-    <?php echo "<li id='undoneTab'>" . html::a(inlink("all", "status=undone&projectID=$project->id"), $lang->project->undone) . '</li>';?>
-    <?php echo "<li id='allTab'>" . html::a(inlink("all", "status=all&projectID=$project->id"), $lang->project->all) . '</li>';?>
-    <?php echo "<li id='waitTab'>" . html::a(inlink("all", "status=wait&projectID=$project->id"), $lang->project->statusList['wait']) . '</li>';?>
-    <?php echo "<li id='doingTab'>" . html::a(inlink("all", "status=doing&projectID=$project->id"), $lang->project->statusList['doing']) . '</li>';?>
-    <?php echo "<li id='suspendedTab'>" . html::a(inlink("all", "status=suspended&projectID=$project->id"), $lang->project->statusList['suspended']) . '</li>';?>
-    <?php echo "<li id='doneTab'>" . html::a(inlink("all", "status=done&projectID=$project->id"), $lang->project->statusList['done']) . '</li>';?>
-    <?php echo "<li>" . html::select('product', $products, $productID, "class='chosen' onchange='byProduct(this.value, $projectID)'") . '</li>';?>
+    <?php echo "<li id='undoneTab'>" . html::a(inlink("all", "status=undone&projectID=$project->id&orderBy=$orderBy&productID=$productID"), $lang->project->undone) . '</li>';?>
+    <?php echo "<li id='allTab'>" . html::a(inlink("all", "status=all&projectID=$project->id&orderBy=$orderBy&productID=$productID"), $lang->project->all) . '</li>';?>
+    <?php echo "<li id='waitTab'>" . html::a(inlink("all", "status=wait&projectID=$project->id&orderBy=$orderBy&productID=$productID"), $lang->project->statusList['wait']) . '</li>';?>
+    <?php echo "<li id='doingTab'>" . html::a(inlink("all", "status=doing&projectID=$project->id&orderBy=$orderBy&productID=$productID"), $lang->project->statusList['doing']) . '</li>';?>
+    <?php echo "<li id='suspendedTab'>" . html::a(inlink("all", "status=suspended&projectID=$project->id&orderBy=$orderBy&productID=$productID"), $lang->project->statusList['suspended']) . '</li>';?>
+    <?php echo "<li id='doneTab'>" . html::a(inlink("all", "status=done&projectID=$project->id&orderBy=$orderBy&productID=$productID"), $lang->project->statusList['done']) . '</li>';?>
+    <?php echo "<li>" . html::select('product', $products, $productID, "class='chosen' onchange='byProduct(this.value, $projectID, \"$status\")'") . '</li>';?>
   </ul>
 </div>
 <?php $canOrder = (common::hasPriv('project', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
