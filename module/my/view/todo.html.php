@@ -108,7 +108,6 @@
       {
           $actionLink = $this->createLink('todo', 'batchEdit', "from=myTodo&type=$type&account=$account&status=$status");
           echo html::commonButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"");
-
       }
       if(common::hasPriv('todo', 'batchFinish'))
       {
