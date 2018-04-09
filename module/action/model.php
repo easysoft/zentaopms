@@ -960,14 +960,20 @@ class actionModel extends model
     /**
      * Get action count.
      * 
-     * @param  string $account 
+     * @param  string $type 
+     * @param  string $id 
      * @access public
      * @return int
      */
-    public function getCount($account = '')
+    public function getCount($type = 'account', $id = '')
     {
-        if(empty($account)) $account = $this->app->user->account;
-        return $this->dao->select('count(*) AS count')->from(TABLE_ACTION)->where('actor')->eq($account)->fetch('count');
+        if($type == 'account' and empty($id)) $id = $this->app->user->account;
+        return $this->dao->select('count(*) AS count')->from(TABLE_ACTION)
+            ->where('1=1')
+            ->beginIF($type == 'account')->andWhere('actor')->eq($id)->fi()
+            ->beginIF($type == 'product')->andWhere('product')->like("%,$id,%")->fi()
+            ->beginIF($type == 'project')->andWhere('project')->eq($id)->fi()
+            ->fetch('count');
     }
 
     /**
@@ -982,8 +988,8 @@ class actionModel extends model
         $dateGroup = array();
         foreach($actions as $action)
         {
-            $timeStamp = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
-            $date = date(DT_DATE4, $timeStamp);
+            $timeStamp    = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
+            $date         = date(DT_DATE4, $timeStamp);
             $action->time = date(DT_TIME2, $timeStamp);
             $dateGroup[$date][] = $action;
         }
