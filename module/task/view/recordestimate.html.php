@@ -15,6 +15,14 @@
 <?php $team = array_keys($task->team);?>
 <?php js::set('confirmRecord',    (!empty($team) && $task->assignedTo != end($team)) ? $lang->task->confirmTransfer : $lang->task->confirmRecord);?>
 <?php js::set('noticeSaveRecord', $lang->task->noticeSaveRecord);?>
+<?php if(!empty($task->team) && $task->assignedTo != $this->app->user->account):?>
+<div class="alert with-icon">
+  <i class="icon-info-sign"></i>
+  <div class="content">
+    <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts);?></p>
+  </div>
+</div>
+<?php else:?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?> <strong><?php echo $task->id;?></strong></span>
@@ -56,7 +64,6 @@
       <?php endforeach;?>
       <?php endif;?>
       <?php if(in_array($task->status, array('wait', 'pause', 'doing'))):?>
-      <?php if(empty($task->team) || (!empty($task->team) && in_array($task->assignedTo, array_keys($task->team)))) :?>
       <thead>
         <tr class='text-center'>
           <th class="w-id"><?php echo $lang->idAB;?></th>
@@ -82,7 +89,7 @@
       </tr>
     </table>
     <?php endif;?>
-    <?php endif;?>
   </form>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>
+<?php endif;?>

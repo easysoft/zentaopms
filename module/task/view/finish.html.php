@@ -13,6 +13,14 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php if(!empty($task->team) && $task->assignedTo != $this->app->user->account):?>
+<div class="alert with-icon">
+  <i class="icon-info-sign"></i>
+  <div class="content">
+    <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->finish);?></p>
+  </div>
+</div>
+<?php else:?>
 <div id='titlebar'>
   <div class='heading'>
     <span class='prefix'><?php echo html::icon($lang->icons['task']);?> <strong><?php echo $task->id;?></strong></span>
@@ -61,4 +69,5 @@
   </table>
 </form>
 <div class='main'><?php include '../../common/view/action.html.php';?></div>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

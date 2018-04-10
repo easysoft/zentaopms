@@ -1092,7 +1092,7 @@ class taskModel extends model
                 ->set('consumed')->eq($task->consumed)
                 ->where('root')->eq((int)$taskID)
                 ->andWhere('type')->eq('task')
-                ->andWhere('account')->eq($this->app->user->account)->exec();
+                ->andWhere('account')->eq($oldTask->assignedTo)->exec();
 
             $task = $this->computeHours4Multiple($oldTask, $task);
         }
@@ -1614,7 +1614,6 @@ class taskModel extends model
         $oldEstimate = $this->getEstimateById($estimateID);
         $estimate    = fixer::input('post')->get();
         $task        = $this->getById($oldEstimate->task);
-        $oldStatus   = $task->status;
         $this->dao->update(TABLE_TASKESTIMATE)->data($estimate)
             ->autoCheck()
             ->check('consumed', 'notempty')
@@ -1624,13 +1623,12 @@ class taskModel extends model
         $consumed     = $task->consumed + $estimate->consumed - $oldEstimate->consumed;
         $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($task->id)->orderBy('id desc')->fetch();
         $left         = ($lastEstimate and $estimateID == $lastEstimate->id) ? $estimate->left : $task->left;
-        if($left == 0) $task->status = 'done';
 
         $now  = helper::now();
         $data = new stdClass();
         $data->consumed       = $consumed;
         $data->left           = $left;
-        $data->status         = $task->status;
+        $data->status         = $left == 0 ? 'done' : $task->status;
         $data->lastEditedBy   = $this->app->user->account;
         $data->lastEditedDate = $now;
         if(!$left)
@@ -1638,6 +1636,22 @@ class taskModel extends model
             $data->finishedBy   = $this->app->user->account;
             $data->finishedDate = $now;
             $data->assignedTo   = $task->openedBy;
+        }
+        
+        if(!empty($task->team))
+        {
+            $oldConsumed = $task->team[$oldEstimate->account]->consumed;
+
+            $newTeamInfo = new stdClass();
+            $newTeamInfo->consumed = $oldConsumed + $estimate->consumed - $oldEstimate->consumed;
+            $newTeamInfo->left     = $left;
+            $this->dao->update(TABLE_TEAM)->data($newTeamInfo)
+                ->where('root')->eq($oldEstimate->task)
+                ->andWhere('type')->eq('task')
+                ->andWhere('account')->eq($oldEstimate->account)
+                ->exec();
+
+            $data = $this->computeHours4Multiple($task, $data);
         }
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
@@ -1647,12 +1661,12 @@ class taskModel extends model
         $oldTask = new stdClass();
         $oldTask->consumed = $task->consumed;
         $oldTask->left     = $task->left;
-        $oldTask->status   = $oldStatus;
+        $oldTask->status   = $task->status;
 
         $newTask = new stdClass();
-        $newTask->consumed = $consumed;
-        $newTask->left     = $left;
-        $newTask->status   = $task->status;
+        $newTask->consumed = $data->consumed;
+        $newTask->left     = $data->left;
+        $newTask->status   = $data->status;
         if(!dao::isError()) return common::createChanges($oldTask, $newTask);
     }
 
@@ -1672,26 +1686,41 @@ class taskModel extends model
         $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('date desc,id desc')->limit(1)->fetch();
         $consumed     = $task->consumed - $estimate->consumed;
         $left         = $lastEstimate->left ? $lastEstimate->left : $estimate->left;
-        $oldStatus    = $task->status;
-        if($left == 0 and $consumed != 0) $task->status = 'done';
-        $this->dao->update(TABLE_TASK)
-            ->set("consumed")->eq($consumed)
-            ->set('`left`')->eq($left)
-            ->set('status')->eq($task->status)
-            ->where('id')->eq($estimate->task)
-            ->exec();
+
+        $data = new stdclass();
+        $data->consumed = $consumed;
+        $data->left     = $left;
+        $data->status   = ($left == 0 && $consumed != 0) ? 'done' : $task->status;
+
+        if(!empty($task->team))
+        {
+            $oldConsumed = $task->team[$estimate->account]->consumed;
+
+            $newTeamInfo = new stdClass();
+            $newTeamInfo->consumed = $oldConsumed - $estimate->consumed;
+            $newTeamInfo->left     = $left;
+            $this->dao->update(TABLE_TEAM)->data($newTeamInfo)
+                ->where('root')->eq($estimate->task)
+                ->andWhere('type')->eq('task')
+                ->andWhere('account')->eq($estimate->account)
+                ->exec();
+
+            $data = $this->computeHours4Multiple($task, $data);
+        }
+
+        $this->dao->update(TABLE_TASK)->data($data) ->where('id')->eq($estimate->task)->exec();
         if($task->parent) $this->updateParentStatus($task->id);
         if($task->story)  $this->loadModel('story')->setStage($oldTask->story);
 
         $oldTask = new stdClass();
         $oldTask->consumed = $task->consumed;
         $oldTask->left     = $task->left;
-        $oldTask->status   = $oldStatus;
+        $oldTask->status   = $task->status;
 
         $newTask = new stdClass();
-        $newTask->consumed = $consumed;
-        $newTask->left     = $left;
-        $newTask->status   = $task->status;
+        $newTask->consumed = $data->consumed;
+        $newTask->left     = $data->left;
+        $newTask->status   = $data->status;
 
         if(!dao::isError()) return common::createChanges($oldTask, $newTask);
     }

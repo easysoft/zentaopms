@@ -455,7 +455,7 @@ class task extends control
         /* Compute next assignedTo. */
         if(!empty($task->team))
         {
-            $task->assignedTo = $this->task->getNextUser(array_keys($task->team), $task->assignedTo);
+            $task->nextUser = $this->task->getNextUser(array_keys($task->team), $task->assignedTo);
             $members = $this->task->getMemberPairs($task);
         }
 
@@ -798,7 +798,7 @@ class task extends control
             $teams = array_keys($task->team);
 
             $task->nextBy     = $this->task->getNextUser($teams, $task->assignedTo);
-            $task->myConsumed = $task->team[$this->app->user->account]->consumed;
+            $task->myConsumed = $task->team[$task->assignedTo]->consumed;
 
             $lastAccount = end($teams);
             if($lastAccount != $task->assignedTo)
