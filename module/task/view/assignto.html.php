@@ -31,7 +31,7 @@
   <table class='table table-form'>
     <tr>
       <th class='w-80px'><?php echo empty($task->team) ? $lang->task->assign : $lang->task->transferTo;?></th>
-      <td class='w-p25-f'><?php echo html::select('assignedTo', $members, $task->nextUser, "class='form-control chosen'");?></td><td></td>
+      <td class='w-p25-f'><?php echo html::select('assignedTo', $members, empty($task->team) ? $task->assignedTo : $task->nextUser, "class='form-control chosen'");?></td><td></td>
     </tr>  
     <tr>
       <th><?php echo $lang->task->left;?></th>
