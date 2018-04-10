@@ -104,7 +104,7 @@ $lang->common->common = '公有模块';
 /* 主导航菜单。*/
 $lang->menu = new stdclass();
 $lang->menu->my      = '<span> 我的地盘</span>|my|index';
-$lang->menu->product = $lang->productCommon . '|product|index';
+$lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = $lang->projectCommon . '|project|index';
 $lang->menu->qa      = '测试|qa|index';
 $lang->menu->doc     = '文档|doc|index';

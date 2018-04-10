@@ -53,6 +53,7 @@ class productModel extends model
 
         $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $this->lang->product->index . ' <span class="caret"></span></button>';
         $productIndex .= '<ul class="dropdown-menu">';
+        if(common::hasPriv('product', 'index')) $productIndex .= '<li>' . html::a(helper::createLink('product', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->product->index) . '</li>';
         if(common::hasPriv('product', 'all')) $productIndex .= '<li>' . html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->product->all) . '</li>';
         if(common::hasPriv('product', 'create')) $productIndex .= '<li>' . html::a(helper::createLink('product', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->product->create) . '</li>';
         $productIndex .= '</ul></div></div>';

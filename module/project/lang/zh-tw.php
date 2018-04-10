@@ -11,7 +11,7 @@
  */
 /* 欄位列表。*/
 $lang->project->common        = $lang->projectCommon . '視圖';
-$lang->project->allProjects   = '全部';
+$lang->project->allProjects   = '全部' . $lang->projectCommon;
 $lang->project->type          = $lang->projectCommon . '類型';
 $lang->project->name          = $lang->projectCommon . '名稱';
 $lang->project->code          = $lang->projectCommon . '代號';
@@ -100,7 +100,7 @@ $lang->project->aclList['private'] = "私有{$lang->projectCommon}(只有{$lang-
 $lang->project->aclList['custom']  = "自定義白名單(團隊成員和白名單的成員可以訪問)";
 
 /* 方法列表。*/
-$lang->project->index             = "{$lang->projectCommon}首頁";
+$lang->project->index             = "{$lang->projectCommon}主頁";
 $lang->project->task              = '任務列表';
 $lang->project->groupTask         = '分組瀏覽任務';
 $lang->project->story             = '需求列表';
