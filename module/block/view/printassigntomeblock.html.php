@@ -17,19 +17,3 @@
   </div>
   <?php endforeach;?>
 </div>
-<script>
-$(function()
-{
-    adjustTable();
-    $('#assigntomeBlock').resize(function(){adjustTable();});
-})
-
-function adjustTable()
-{
-    setTimeout(function()
-    {
-        $('#assigntomeBlock').closest('[id^="block"]').find('.table-header-fixed').remove();
-        $('#assigntomeBlock').closest('[id^="block"]').find('#todo table thead').removeAttr('style');
-    }, 400);
-}
-</script>
