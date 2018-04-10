@@ -189,7 +189,7 @@ class project extends control
         /* Get tasks. */
         $tasks = $this->project->getTasks($productID, $projectID, $this->projects, $browseType, $queryID, $moduleID, $sort, $pager);
 
-        if($browseType != 'unclosed' and $browseType != 'all')
+        if(strpos('unclosed,all,bymodule,byproduct', $browseType) === false)
         {
             foreach($tasks as $task)
             {
