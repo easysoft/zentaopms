@@ -109,7 +109,6 @@ $lang->task->parent            = 'Parent Task';
 $lang->task->parentAB          = 'Parent Task';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
-$lang->task->deniedNotice      = 'Only the %s can %s the task.';
 
 $lang->task->ditto         = 'Ditto';
 $lang->task->dittoNotice   = "This Task does not belong to the Project as the previous one does!";
@@ -170,6 +169,7 @@ $lang->task->confirmTransfer       = '"Left Hour" is 0，Do you want to transfer
 $lang->task->noticeLinkStory       = "No story has been linked. You can %s for this project, then %s.";
 $lang->task->noticeSaveRecord      = 'Your Hour is not saved. Please save it first.';
 $lang->task->commentActions        = '%s. %s, commented by <strong>%s</strong>.';
+$lang->task->deniedNotice          = 'Only the %s can %s the task.';
 
 $lang->task->error = new stdclass();
 $lang->task->error->consumedNumber   = '"Consumed" must be numbers.';

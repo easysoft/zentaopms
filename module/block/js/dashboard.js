@@ -82,7 +82,7 @@ function initTableHeader()
         var $panel = $(this);
         var $table = $panel.find('.table:first');
 
-        if(!$table.length || !$table.children('thead').length) return;
+        if(!$table.length || !$table.children('thead').length || ($panel.find('#assigntomeBlock').length && $panel.find('#assigntomeBlock > div').length > 1)) return;
         var isFixed = $panel.find('.panel-body').height() < $table.outerHeight();
 
         $panel.toggleClass('with-fixed-header', isFixed);
