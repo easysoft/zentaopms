@@ -49,7 +49,7 @@
           <?php endif;?>
           <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
         </th>
-        <th class='w-140px'>  <?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
+        <th class='w-140px'><?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
         <?php if($this->session->currentProductType != 'normal'):?>
         <th class='w-100px'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->product->branch);?></th>
         <?php endif;?>
