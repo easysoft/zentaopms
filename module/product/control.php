@@ -204,6 +204,7 @@ class product extends control
         $this->view->storyCases    = $storyCases;
         $this->view->param         = $param;
         $this->view->products      = $this->products;
+        $this->view->allCount      = $this->story->getCount($productID);
         $this->display();
     }
 
@@ -464,7 +465,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function dynamic($productID = 0, $type = 'today', $param = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function dynamic($productID = 0, $type = 'today', $param = '', $orderBy = 'date_desc', $lastDate = '')
     {
         /* Save session. */
         $uri   = $this->app->getURI(true);
@@ -484,14 +485,10 @@ class product extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
-        /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
-
         /* Set the user and type. */
         $account = $type == 'account' ? $param : 'all';
         $period  = $type == 'account' ? 'all'  : $type;
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, $productID);
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $lastDate, $productID);
 
         /* The header and position. */
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
@@ -504,7 +501,6 @@ class product extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->account    = $account;
         $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
         $this->view->param      = $param;
         $this->view->dateGroups = $this->action->buildDateGroup($actions);
         $this->view->allCount   = $this->action->getCount('product', $productID);

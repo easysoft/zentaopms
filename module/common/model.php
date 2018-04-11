@@ -776,11 +776,11 @@ EOD;
             {
                 if($method != 'edit' and $method != 'copy' and $method != 'delete')
                 {
-                    return html::a($link, "<i class='$class'></i> " . $title, $target, "class='btn $extraClass' $misc", true);
+                    return html::a($link, "<i class='$class muted'></i> " . "<span class='text'>{$title}</span>", $target, "class='btn btn-link $extraClass' $misc", true);
                 }
                 else
                 {
-                    return html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title='$title' $misc", false);
+                    return html::a($link, "<i class='$class muted'></i>", $target, "class='btn btn-link $extraClass' title='$title' $misc", false);
                 }
             }
             else

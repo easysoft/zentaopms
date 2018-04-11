@@ -114,20 +114,16 @@ $lang->product->storySummary   = " <strong>%s</strong> Story(ies), <strong>%s</s
 $lang->product->checkedSummary = " <strong>%total%</strong> Checked, <strong>%estimate%</strong> hour(s) estimated, case coverage is <strong>%rate%</strong>.";
 $lang->product->noMatched      = '"%s" cannot be found.' . $lang->productCommon;
 
-$lang->product->mySelects['assignedtome'] = $lang->product->assignedToMe;
-$lang->product->mySelects['openedbyme']   = $lang->product->openedByMe;
-$lang->product->mySelects['resolvedbyme'] = $lang->product->reviewedByMe;
-
-$lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
-$lang->product->featureBar['browse']['unplan']       = $lang->product->unplan;
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
-
-
-
-$lang->product->featureBar['browse']['my']           = $lang->product->my;
-$lang->product->featureBar['browse']['closedbyme']   = $lang->product->closedByMe;
+$lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
+$lang->product->featureBar['browse']['assignedtome'] = $lang->product->assignedToMe;
+$lang->product->featureBar['browse']['openedbyme']   = $lang->product->openedByMe;
+$lang->product->featureBar['browse']['reviewedbyme'] = $lang->product->reviewedByMe;
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
-$lang->product->featureBar['browse']['activestory']  = $lang->product->activeStory;
-$lang->product->featureBar['browse']['changedstory'] = $lang->product->changedStory;
-$lang->product->featureBar['browse']['willclose']    = $lang->product->willClose;
-$lang->product->featureBar['browse']['closedstory']  = $lang->product->closedStory;
+$lang->product->featureBar['browse']['more']         = $lang->more;
+
+$lang->product->moreSelects['closedbyme']   = $lang->product->closedByMe;
+$lang->product->moreSelects['activestory']  = $lang->product->activeStory;
+$lang->product->moreSelects['changedstory'] = $lang->product->changedStory;
+$lang->product->moreSelects['willclose']    = $lang->product->willClose;
+$lang->product->moreSelects['closedstory']  = $lang->product->closedStory;

@@ -33,7 +33,7 @@ $(function()
 
 function showCheckedSummary()
 {
-    var $summary = $('tfoot .table-actions .text:last');
+    var $summary = $('#main #mainContent form.main-table .table-header .table-statistic');
     if(!$summary.hasClass('readed'))
     {
         taskSummary = $summary.html();
@@ -60,15 +60,15 @@ function showCheckedSummary()
         summary = checkedSummary.replace('%total%', checkedTotal)
           .replace('%estimate%', checkedEstimate)
           .replace('%rate%', rate)
-        $('tfoot .table-actions .text:last').html(summary);
+        $summary.html(summary);
     }
     else
     {
-        $('tfoot .table-actions .text:last').html(taskSummary);
+        $summary.html(taskSummary);
     }
 }
 
 function setQueryBar(queryID, title)
 {
-    $('#bysearchTab').before("<li id='QUERY" + queryID + "Tab' class='active'><a href='" + createLink('product', 'browse', "productID=" + productID + "&branch=" + branch + "&browseType=bysearch&param=" + queryID) + "'>" + title + "</a></li>");
+    $('#bysearchTab').before("<a id='QUERY" + queryID + "Tab' class='btn btn-link btn-active-text' href='" + createLink('product', 'browse', "productID=" + productID + "&branch=" + branch + "&browseType=bysearch&param=" + queryID) + "'><span class='text'>" + title + "</span></a>");
 }
