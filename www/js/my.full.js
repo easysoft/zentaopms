@@ -686,28 +686,28 @@ function toggleSearch()
         {
             if(browseType == 'bymodule')
             {
-                $('#bymoduleTab').removeClass('active');
+                $('#bymoduleTab').removeClass('btn-active-text');
             }
             else
             {
-                $('#' + browseType + 'Tab').removeClass('active');
+                $('#' + browseType + 'Tab').removeClass('btn-active-text');
             }
-            $('#bysearchTab').addClass('active');
+            $('#bysearchTab').addClass('btn-active-text');
             ajaxGetSearchForm();
-            $('#querybox').addClass('show');
+            $('#queryBox').addClass('show');
         },
         function()
         {
             if(browseType == 'bymodule')
             {
-                $('#bymoduleTab').addClass('active');
+                $('#bymoduleTab').addClass('btn-active-text');
             }
             else
             {
-                $('#' + browseType +'Tab').addClass('active');
+                $('#' + browseType +'Tab').addClass('btn-active-text');
             }
-            $('#bysearchTab').removeClass('active');
-            $('#querybox').removeClass('show');
+            $('#bysearchTab').removeClass('btn-active-text');
+            $('#queryBox').removeClass('show');
         } 
     );
 }
@@ -720,7 +720,7 @@ function toggleSearch()
  */
 function ajaxGetSearchForm(querybox)
 {
-    var $querybox = $(querybox || '#querybox');
+    var $querybox = $(querybox || '#queryBox');
     if($querybox.html() == '')
     {
         $.get(createLink('search', 'buildForm'), function(data)

@@ -1,34 +1,20 @@
-<style>
-.datatable-menu-wrapper {position: relative;}
-.datatable-menu {position: absolute; right: 0; top: 0; border: 1px solid #ddd; background: #fff; z-index: 999;}
-.datatable-menu > .btn {padding: 5px 6px; outline: none; color: #4d90fe!important}
-.datatable-menu > .btn:hover {color: #002563!important}
-.datatable + .datatable-menu-wrapper .datatable-menu > .btn {padding: 5px 6px 6px;}
-</style>
 <?php $datatableId = $this->moduleName . ucfirst($this->methodName);?>
 <script>
 $(function()
 {
-    var $table = $('#wrap > .outer > .main > form > table').first();
-    if($table.length > 0)
+    var $btnToolbar = $('#main #mainContent form.main-table .table-header .btn-toolbar:first');
+    if($btnToolbar.length > 0)
     {
-        var $dropdown = $("<div class='datatable-menu-wrapper'><div class='dropdown datatable-menu'><button type='button' class='btn btn-link' data-toggle='dropdown'><i class='icon-cogs'></i> <span class='caret'></span></button></div></div>");
-        var $dropmenu = $("<ul class='dropdown-menu pull-right'></ul>");
-        $dropmenu.append("<li><a id='tableCustomBtn' href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
-        $dropmenu.append("<li><a href='javascript:;' id='switchToDatatable'><?php echo $lang->datatable->switchToDatatable?></a></li>");
-        $dropdown.children('.dropdown').append($dropmenu);
-        $table.before($dropdown);
+        <?php $mode = isset($this->config->datatable->$datatableId->mode) ? $this->config->datatable->$datatableId->mode : 'table';?>
+        $btnToolbar.append("<a href=\"javascript:saveDatatableConfig('mode', 'table', true);\" class='btn btn-link <?php echo $mode == 'table' ? 'btn-active-line' : '';?>'><?php echo $lang->datatable->table?></a>");
+        $btnToolbar.append("<a href=\"javascript:saveDatatableConfig('mode', 'datatable', true);\" class='btn btn-link <?php echo $mode == 'datatable' ? 'btn-active-line' : '';?>'><?php echo $lang->datatable->datatable?></a>");
+        $btnToolbar.append("<a id='tableCustomBtn' class='btn btn-link' href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><i class='icon icon-cog'></i></a>");
         <?php if(!empty($setShowModule)):?>
-        $('.side .side-body .panel-body .tree').parent().append("<div class='text-right'><a href='javascript:;' data-toggle='showModuleModal'><?php echo $lang->datatable->showModule?></a></div>");
+        $('#sidebar .cell .text-center').append("<a href='javascript:;' data-toggle='showModuleModal' class='text-secondary small'><?php echo $lang->datatable->showModule?></a><hr class='space-sm' />");
         <?php endif;?>
         $('#tableCustomBtn').modalTrigger();
         $("a[data-toggle='showModuleModal']").click(function(){$('#showModuleModal').modal('show')});
     }
-
-    $('#switchToDatatable').click(function()
-    {
-        saveDatatableConfig('mode', 'datatable', true)
-    });
 
     $('#setShowModule').click(function()
     {
@@ -54,6 +40,7 @@ $(function()
     window.saveDatatableConfig = saveDatatableConfig;
 });
 </script>
+
 <div class="modal fade" id="showModuleModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog w-600px">
     <div class="modal-content">
