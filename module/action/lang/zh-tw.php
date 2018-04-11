@@ -25,6 +25,7 @@ $lang->action->undelete    = '還原';
 $lang->action->hideOne     = '隱藏';
 $lang->action->hideAll     = '全部隱藏';
 $lang->action->editComment = '修改備註';
+$lang->action->create      = '添加備註';
 $lang->action->comment     = '備註';
 
 $lang->action->trashTips      = '提示：為了保證系統的完整性，禪道系統的刪除都是標記刪除。';
@@ -115,7 +116,7 @@ $lang->action->desc->finished       = '$date, 由 <strong>$actor</strong> 完成
 $lang->action->desc->paused         = '$date, 由 <strong>$actor</strong> 暫停。' . "\n";
 $lang->action->desc->verified       = '$date, 由 <strong>$actor</strong> 驗收。' . "\n";
 $lang->action->desc->diff1          = '修改了 <strong><i>%s</i></strong>，舊值為 "%s"，新值為 "%s"。<br />' . "\n";
-$lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，區別為：' . "\n" . "<blockquote>%s</blockquote>" . "\n<div class='hidden'>%s</div>";
+$lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，區別為：' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>";
 $lang->action->desc->diff3          = '將檔案名 %s 改為 %s 。' . "\n";
 $lang->action->desc->linked2bug     = '$date 由 <strong>$actor</strong> 關聯到版本 <strong>$extra</strong>';
 

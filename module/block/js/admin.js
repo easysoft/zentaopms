@@ -89,4 +89,5 @@ $(function()
     });
 
     if(blockID) setTimeout(function(){getBlocks($('#modules').val());}, 200);
+    if(module) $blocksList.data('module', module);
 });

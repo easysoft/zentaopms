@@ -40,11 +40,7 @@
         <?php if($longBlock):?>
         <td class='c-estimate'><?php echo $story->estimate?></td>
         <?php endif;?>
-        <td class='c-status' title='<?php echo zget($lang->story->statusList, $story->status)?>'>
-          <span class='story-status-<?php echo $story->status?>'>
-            <span class='label label-dot'></span><span class='status-text'><?php echo zget($lang->story->statusList, $story->status);?></span>
-          </span>
-        </td>
+        <td class='c-status'><?php echo zget($lang->story->statusList, $story->status);?></td>
         <?php if($longBlock):?>
         <td class='c-stage'>
           <span class='story-stage-<?php echo $story->stage?>'>

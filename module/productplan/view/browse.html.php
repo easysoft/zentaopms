@@ -16,98 +16,123 @@
 <div id='featurebar'>
   <ul class='nav'>
     <li>
-      <?php if($product->type !== 'normal'):?>
-      <div class='label-angle<?php if($branch) echo ' with-close';?>'>
-      <?php
-      echo $branches[$branch];
-      if($branch)
-      {
-          $removeLink = inlink('browse', "productID=$productID&branch=0&browseType=$browseType&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}");
-          echo html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='text-muted'");
-      }
-      ?>
-      </div>
-      <?php endif;?>
     </li>
-    <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
-    <?php if(isset($menuItem->hidden)) continue;?>
-    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType={$menuItem->name}"), $menuItem->text);?></li>
-    <?php endforeach;?>
   </ul>
   <div class='actions'>
-    <?php common::printIcon('productplan', 'create', "productID=$product->id&branch=$branch", '', 'button', 'plus');?>
   </div>
 </div>
-<form method='post' id='productplanForm' action='<?php echo inlink('batchEdit', "productID=$product->id&branch=$branch")?>'>
-<table class='table table-bordered table-selectable' id="productplan">
-  <thead>
-  <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-  <tr class='colhead'>
-    <th class='w-id'>   <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
-    <th>                <?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
-    <?php if($this->session->currentProductType != 'normal'):?>
-    <th class='w-100px'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->product->branch);?></th>
+<div id="mainMenu" class="clearfix">
+  <div class="btn-toolbar pull-left">
+    <?php if($product->type !== 'normal'):?>
+    <div class='label-angle<?php if($branch) echo ' with-close';?>'>
+    <?php
+    echo $branches[$branch];
+    if($branch)
+    {
+        $removeLink = inlink('browse', "productID=$productID&branch=0&browseType=$browseType&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}");
+        echo html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='btn btn-link'");
+    }
+    ?>
+    </div>
     <?php endif;?>
-    <th class='w-60px'> <?php echo $lang->productplan->stories;?></th>
-    <th class='w-60px'> <?php echo $lang->productplan->bugs;?></th>
-    <th class='w-60px'> <?php echo $lang->productplan->hour;?></th>
-    <th class='w-60px'> <?php echo $lang->productplan->project;?></th>
-    <th class='w-p40'>  <?php echo $lang->productplan->desc;?></th>
-    <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
-    <th class='w-100px'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
-    <th class="w-130px {sorter: false}"><?php echo $lang->actions;?></th>
-  </tr>
-  </thead>
-  <tbody>
-  <?php if($this->loadModel('file'));?>
-  <?php foreach($plans as $plan):?>
-  <?php $plan = $this->file->replaceImgURL($plan, 'desc');?>
-  <tr class='text-center'>
-    <td class='cell-id'>
-      <input type='checkbox' name='planIDList[<?php echo $plan->id;?>]' value='<?php echo $plan->id;?>' />
-      <?php echo $plan->id;?>
-    </td>
-    <td class='text-left' title="<?php echo $plan->title?>"><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
-    <?php if($this->session->currentProductType != 'normal'):?>
-    <td><?php echo $branches[$plan->branch];?></td>
+    <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
+    <?php if(isset($menuItem->hidden)) continue;?>
+    <?php $label  = "<span class='text'>{$menuItem->text}</span>";?>
+    <?php $active = $menuItem->name == $browseType ? 'btn-active-text' : '';?>
+    <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType={$menuItem->name}"), $label, '', "class='btn btn-link $active' id='{$menuItem->name}'");?>
+    <?php endforeach;?>
+  </div>
+  <div class="btn-toolbar pull-right">
+    <?php common::printIcon('productplan', 'create', "productID=$product->id&branch=$branch", '', 'button', 'plus', '', 'btn-primary');?>
+  </div>
+</div>
+<div id="mainContent">
+  <form class='main-table table-productplan' data-ride='table' method='post' id='productplanForm' action='<?php echo inlink('batchEdit', "productID=$product->id&branch=$branch")?>'>
+    <table class='table has-sort-head' id="productplan">
+      <thead>
+      <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+      <tr class='colhead'>
+        <th class='w-80px'>
+          <?php if(common::hasPriv('productplan', 'batchEdit')):?>
+          <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
+            <label></label>
+          </div>
+          <?php endif;?>
+          <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
+        </th>
+        <th class='w-140px'>  <?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
+        <?php if($this->session->currentProductType != 'normal'):?>
+        <th class='w-100px'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->product->branch);?></th>
+        <?php endif;?>
+        <th class='w-70px'> <?php echo $lang->productplan->stories;?></th>
+        <th class='w-60px'> <?php echo $lang->productplan->bugs;?></th>
+        <th class='w-60px'> <?php echo $lang->productplan->hour;?></th>
+        <th class='w-60px'> <?php echo $lang->productplan->project;?></th>
+        <th>                <?php echo $lang->productplan->desc;?></th>
+        <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
+        <th class='w-100px'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
+        <th class='c-actions-3'><?php echo $lang->actions;?></th>
+      </tr>
+      </thead>
+      <tbody>
+      <?php $this->loadModel('file');?>
+      <?php foreach($plans as $plan):?>
+      <?php $plan = $this->file->replaceImgURL($plan, 'desc');?>
+      <tr>
+        <td class='cell-id'>
+          <div class="checkbox-primary">
+            <?php if(common::hasPriv('productplan', 'batchEdit')):?>
+            <input type='checkbox' name='planIDList[<?php echo $plan->id;?>]' value='<?php echo $plan->id;?>' />
+            <label></label>
+            <?php endif;?>
+            <?php echo $plan->id?>
+          </div>
+        </td>
+        <td class='text-left' title="<?php echo $plan->title?>"><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
+        <?php if($this->session->currentProductType != 'normal'):?>
+        <td><?php echo $branches[$plan->branch];?></td>
+        <?php endif;?>
+        <td class='text-center'><?php echo $plan->stories;?></td>
+        <td class='text-center'><?php echo $plan->bugs;?></td>
+        <td class='text-center'><?php echo $plan->hour;?></td>
+        <td class='text-center'><?php if(!empty($plan->projectID)) echo html::a(helper::createLink('project', 'task', 'projectID=' . $plan->projectID), '<i class="icon-search"></i>');?></td>
+        <td class='text-left content'><div class='article-content'><?php echo $plan->desc;?></div></td>
+        <td><?php echo $plan->begin;?></td>
+        <td><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
+        <td class='c-actions'>
+          <div class='more'>
+          <?php
+          if(common::hasPriv('productplan', 'delete', $plan))
+          {
+              $deleteURL = $this->createLink('productplan', 'delete', "planID=$plan->id&confirm=yes");
+              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"productplan\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn btn-icon' title='{$lang->productplan->delete}'");
+          }
+          ?>
+          </div>
+          <?php
+          if(common::hasPriv('project', 'create')) echo html::a(helper::createLink('project', 'create', "projectID=&copyProjectID=&planID=$plan->id"), '<i class="icon-play"></i>', '', "class='btn btn-icon' title='{$lang->project->create}'");
+          if(common::hasPriv('productplan', 'linkStory')) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i>', '', "class='btn btn-icon' title='{$lang->productplan->linkStory}'");
+          if(common::hasPriv('productplan', 'linkBug') and $config->global->flow != 'onlyStory') echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i>', '', "class='btn btn-icon' title='{$lang->productplan->linkBug}'");
+          common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');
+          ?>
+        </td>
+      </tr>
+      <?php endforeach;?>
+      </tbody>
+    </table>
+    <?php if($plans):?>
+    <div class="table-footer">
+      <?php if(common::hasPriv('productplan', 'batchEdit')):?>
+      <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+      <?php endif;?>
+      <div class="table-actions btn-toolbar">
+        <?php if(common::hasPriv('productplan', 'batchEdit')) echo html::submitButton($lang->edit);?>
+      </div>
+      <?php $pager->show('right', 'pagerjs');?>
+    </div>
     <?php endif;?>
-    <td class='text-center'><?php echo $plan->stories;?></td>
-    <td class='text-center'><?php echo $plan->bugs;?></td>
-    <td class='text-center'><?php echo $plan->hour;?></td>
-    <td class='text-center'><?php if(!empty($plan->projectID)) echo html::a(helper::createLink('project', 'task', 'projectID=' . $plan->projectID), '<i class="icon-search"></i>');?></td>
-    <td class='text-left content'><div class='article-content'><?php echo $plan->desc;?></div></td>
-    <td><?php echo $plan->begin;?></td>
-    <td><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
-    <td class='text-center'>
-      <?php
-      if(common::hasPriv('project', 'create')) echo html::a(helper::createLink('project', 'create', "projectID=&copyProjectID=&planID=$plan->id"), '<i class="icon-play"></i>', '', "class='btn-icon' title='{$lang->project->create}'");
-      if(common::hasPriv('productplan', 'linkStory')) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i>', '', "class='btn-icon' title='{$lang->productplan->linkStory}'");
-      if(common::hasPriv('productplan', 'linkBug') and $config->global->flow != 'onlyStory') echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i>', '', "class='btn-icon' title='{$lang->productplan->linkBug}'");
-      common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');
-
-      if(common::hasPriv('productplan', 'delete', $plan))
-      {
-          $deleteURL = $this->createLink('productplan', 'delete', "planID=$plan->id&confirm=yes");
-          echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"productplan\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='btn-icon' title='{$lang->productplan->delete}'");
-      }
-      ?>
-    </td>
-  </tr>
-  <?php endforeach;?>
-  </tbody>
-  <tfoot>
-    <tr>
-      <td colspan='<?php echo $this->session->currentProductType == 'normal' ? '10' : '11';?>'>
-        <div class='table-actions clearfix'>
-          <?php echo html::selectButton();?>
-          <?php if(common::hasPriv('productplan', 'batchEdit')) echo html::submitButton($lang->edit);?>
-        </div>
-        <?php $pager->show();?>
-      </td>
-    </tr>
-  </tfoot>
-</table>
-</form>
+  </form>
+</div>
 <script>
 $('#' + browseType + 'Tab').addClass('active');
 $(function(){fixedTfootAction('#productplanForm')});

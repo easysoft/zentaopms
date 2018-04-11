@@ -69,11 +69,12 @@ class block extends control
         {
             $this->get->set('mode', 'getblocklist');
             $this->view->blocks = $this->fetch('block', 'main', "module=$module&id=$id");
+            $this->view->module = $module;
         }
 
-        $this->view->title      = $title;
-        $this->view->block      = $this->block->getByID($id);
-        $this->view->blockID    = $id;
+        $this->view->title   = $title;
+        $this->view->block   = $this->block->getByID($id);
+        $this->view->blockID = $id;
         $this->display();
     }
 
