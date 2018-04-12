@@ -1,62 +1,62 @@
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog w-800px">
+<div id="importLinesModal" class="modal fade">
+  <div class="modal-dialog modal-lg modal-simple load-indicator">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title"><i class="icon-file-text"></i> <?php echo $lang->pasteText?></h4>
+        <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $lang->pasteText;?></h4>
       </div>
       <div class="modal-body">
-        <?php echo html::textarea('pasteText', '', "class='form-control mgb-10' rows='10' placeholder='$lang->pasteTextInfo'")?>
-        <?php echo html::submitButton()?>
+    	<?php echo html::textarea('importLines', '', "class='form-control mgb-10' rows='10' placeholder='$lang->pasteTextInfo'")?>
+      </div>
+      <div class="modal-footer text-left">
+        <button type="button" class="btn btn-primary btn-wide" id="importLinesBtn"><?php $lang->save;?></button>
       </div>
     </div>
   </div>
 </div>
 <script>
-$("button[data-toggle='myModal']").click(function(){$('#myModal').modal('show')})
-$("#myModal button[type='submit']").click(function()
+$(function()
 {
-    var pasteText = $('#myModal #pasteText').val();
-
-    $('#myModal').modal('hide')
-    $('#myModal #pasteText').val('');
-
-    var dataList = pasteText.split("\n");
-
-    if(typeof(mainField) == 'undefined') mainField = 'title';
-    var index = 0;
-    for(i in dataList)
+    $("button[data-toggle='importLinesModal']").click(function(){$('#importLinesModal').modal('show')})
+    $form = $('#batchCreateForm');
+    var batchForm = $form.data('zui.batchActionForm');
+    
+    var $importLines = $('#importLines');
+    $('#importLinesBtn').on('click', function()
     {
-        var data = dataList[i].replace(/(^\s*)|(\s*$)/g, "");;
-
-        if(data.length == 0) continue;
-        while(true)
+        var $modal = $('#importLinesModal');
+        var $dialog = $modal.find('.modal-dialog').addClass('loading');
+        setTimeout(function()
         {
-            var title = $('form tbody tr').eq(index).find("input[id*='" + mainField + "']");
-            if($(title).size() == 0)
+            var importText = $importLines.val();
+            var lines = importText.split('\n');
+            var $lastRow;
+            $.each(lines, function(index, line)
             {
-                if(index == 0) break;
-                cloneTr = $('#trTemp tbody').html();
-                cloneTr = cloneTr.replace(/%s/g, index);
-                $('form tbody tr').eq(index - 1).after(cloneTr);
-                $('form tbody tr').eq(index).find('td:first').html(index + 1);
-                $('form tbody tr').eq(index - 1).find('td').each(function()
+                line = $.trim(line);
+                if (!line.length) return;
+                if (!$lastRow) $row = $form.find('tbody>tr:first');
+                else $row = $lastRow.next();
+                while ($row.length && $row.find('.input-story-title').val().length)
                 {
-                    if($(this).find('div.chosen-container').size() != 0)
-                    {
-                        $('form tbody tr').eq(index).find("td").eq($(this).index()).find('select').chosen(defaultChosenOptions);
-                    }
-                });
-                title = $('form tbody tr').eq(index).find("input[id*='" + mainField + "']");
-                $('#color\\[' + index + '\\]').colorPicker();//Update color picker.
-            }
-
-            index++;
-
-            if($(title).val() != '') continue;
-            if($(title).val() == '')$(title).val(data);
-            break;
-        }
-    }
+                    $row = $row.next();
+                }
+                if (!$row || !$row.length)
+                {
+                    $row = batchForm.createRow();
+                }
+                $row.find('.input-story-title').val(line);
+                $lastRow = $row;
+            });
+            $importLines.val('');
+            $dialog.removeClass('loading');
+            $modal.modal('hide');
+        }, 200);
+    });
+    
+    $importLines.on('scroll', function()
+    {
+        $importLines.css('background-position-y', -$importLines.scrollTop() + 6);
+    });
 });
 </script>
