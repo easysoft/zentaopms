@@ -13,14 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->productplan->confirmDelete)?>
 <?php js::set('browseType', $browseType);?>
-<div id='featurebar'>
-  <ul class='nav'>
-    <li>
-    </li>
-  </ul>
-  <div class='actions'>
-  </div>
-</div>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
@@ -32,7 +24,7 @@
     <?php endforeach;?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printIcon('productplan', 'create', "productID=$product->id&branch=$branch", '', 'button', 'plus', '', 'btn-primary');?>
+    <?php common::printLink('productplan', 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->productplan->create}", '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent">

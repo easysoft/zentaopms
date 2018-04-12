@@ -20,7 +20,7 @@
     </span>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printIcon('release', 'create', "product=$product->id&branch=$branch", '', 'button', 'plus', '', 'btn-primary');?>
+    <?php common::printLink('release', 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->release->create}", '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent">
