@@ -2271,7 +2271,7 @@ class upgradeModel extends model
                 ->andWhere('id')->ne($maxID)
                 ->exec();
         }
-        $this->dao->exec("ALTER TABLE `zt_team` ADD UNIQUE `team` (`root`, `type`, `account`)");
+        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " ADD UNIQUE `team` (`root`, `type`, `account`)");
         return !dao::isError();
     }
 }
