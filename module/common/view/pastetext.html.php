@@ -9,7 +9,7 @@
     	<?php echo html::textarea('importLines', '', "class='form-control mgb-10' rows='10' placeholder='$lang->pasteTextInfo'")?>
       </div>
       <div class="modal-footer text-left">
-        <button type="button" class="btn btn-primary btn-wide" id="importLinesBtn"><?php $lang->save;?></button>
+        <button type="button" class="btn btn-primary btn-wide" id="importLinesBtn"><?php echo $lang->save;?></button>
       </div>
     </div>
   </div>
