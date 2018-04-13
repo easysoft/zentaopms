@@ -30,7 +30,7 @@ include '../../common/view/chosen.html.php';
 #searchForm .form-actions {padding-bottom: 20px; padding-top: 0;}
 #searchForm .chosen-container[id^="field"] .chosen-drop {min-width: 140px;}
 #searchForm [id^="valueBox"] .chosen-container .chosen-single {max-width: 170px;}
-#searchForm [id^="valueBox"] .chosen-container .chosen-drop {min-width: 400px;}
+#searchForm [id^="valueBox"] .chosen-container .chosen-drop {min-width: 300px;}
 #searchForm .chosen-container .chosen-drop ul.chosen-results li {white-space:normal}
 #searchForm input.date::-webkit-input-placeholder {color: #000000; opacity: 1;}
 #searchForm input.date::-moz-placeholder {color: #000000; opacity: 1;}
@@ -204,13 +204,13 @@ foreach($fieldParams as $fieldName => $param)
         echo html::hidden('module',     $module);
         echo html::hidden('actionURL',  $actionURL);
         echo html::hidden('groupItems', $groupItems);
-        echo html::submitButton($lang->search->common);
+        echo html::submitButton($lang->search->common, '', 'btn btn-wide btn-primary') . " &nbsp; ";
         if($style != 'simple')
         {
-            if(common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), $lang->save, '', "class='btn-save-form btn btn-secondary btn-wide'");
-            echo html::commonButton($lang->search->reset, 'onclick=resetForm(this)');
+            if(common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), $lang->save, '', "class='btn-save-form btn btn-secondary btn-wide'") . "&nbsp;";
+            echo html::commonButton($lang->search->reset, 'onclick=resetForm(this)', 'btn-reset-form btn btn-gray btn-wide');
         }
-        echo html::commonButton('<i class="icon icon-chevron-double-down"></i>', '', '"btn-expand-form btn btn-info pull-right"');
+        echo html::commonButton('<i class="icon icon-chevron-double-down"></i>', '', 'btn-expand-form btn btn-info pull-right');
         echo html::hidden('formType', 'lite');
         ?>
       </td>
