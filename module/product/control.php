@@ -465,7 +465,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function dynamic($productID = 0, $type = 'today', $param = '', $orderBy = 'date_desc', $lastDate = '')
+    public function dynamic($productID = 0, $type = 'today', $param = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         /* Save session. */
         $uri   = $this->app->getURI(true);
@@ -485,10 +485,15 @@ class product extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         /* Set the user and type. */
         $account = $type == 'account' ? $param : 'all';
         $period  = $type == 'account' ? 'all'  : $type;
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $lastDate, $productID);
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, $productID);
 
         /* The header and position. */
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
@@ -502,6 +507,7 @@ class product extends control
         $this->view->account    = $account;
         $this->view->orderBy    = $orderBy;
         $this->view->param      = $param;
+        $this->view->pager      = $pager;
         $this->view->dateGroups = $this->action->buildDateGroup($actions);
         $this->view->allCount   = $this->action->getCount('product', $productID);
         $this->display();
