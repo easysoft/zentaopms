@@ -129,7 +129,7 @@ class datatableModel extends model
             $width  = is_numeric($col->width) ? "{$col->width}px" : $col->width;
             $title  = isset($col->name) ? "title='$col->name'" : '';
             if($id == 'id' and (int)$width < 90) $width = '90px';
-            $width = $id != 'actions' ? "data-width='$width' style='width:$width'" : '';
+            $width = "data-width='$width' style='width:$width'";
 
             echo "<th data-flex='$fixed' $width class='c-$id' $title>";
             if($id == 'actions')

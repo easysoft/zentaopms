@@ -91,7 +91,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan="<?php echo count($visibleFields) + 2?>" class="text-center">
+          <td colspan="<?php echo count($visibleFields) + 3?>" class="text-center">
             <?php echo html::submitButton($lang->save, '', 'btn btn-wide btn-primary') . '&nbsp;' . html::backButton('', '', "btn btn-wide");?>
           </td>
         </tr>
@@ -104,13 +104,6 @@ $(function()
 {
     $('#batchCreateForm').batchActionForm(
     {
-        colorPicker:
-        {
-            updateBtn: function(color, $btn)
-            {
-                $btn.find('.color-bar').css('background', color || '');
-            }
-        },
         rowCreator: function($row, index)
         {
             $row.find('select').each(function()

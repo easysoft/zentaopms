@@ -38,7 +38,7 @@
       </div>
       <ul class="timeline timeline-tag-left">
         <?php foreach($actions as $i => $action):?>
-        <li <?php if($i % 3 == 0) echo "class='active'";?>><div><span class="timeline-tag"><?php echo $action->time?></span><span class="timeline-text"><?php echo $app->user->realname . ' ' . $action->actionLabel;?> <span class="text-muted"><?php echo $action->objectLabel;?></span> <span class="label label-id"><?php echo $action->objectID;?></span> <?php echo html::a($action->objectLink, $action->objectName);?></span></div></li>
+        <li <?php if($action->actor == $this->app->user->account) echo "class='active'";?>><div><span class="timeline-tag"><?php echo $action->time?></span><span class="timeline-text"><?php echo $app->user->realname . ' ' . $action->actionLabel;?> <span class="text-muted"><?php echo $action->objectLabel;?></span> <span class="label label-id"><?php echo $action->objectID;?></span> <?php echo html::a($action->objectLink, $action->objectName);?></span></div></li>
         <?php endforeach;?>
       </ul>
     </div>
