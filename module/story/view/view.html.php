@@ -315,9 +315,8 @@
     </div>
   </div>
 </div>
-div>
 
-iv id="mainActions">
+<div id="mainActions">
 <?php common::printPreAndNext($preAndNext);?>
 <div class="btn-toolbar">
   <?php if(!$story->deleted):?>

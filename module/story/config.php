@@ -91,12 +91,12 @@ $config->story->datatable->fieldList['sourceNote']['required'] = 'no';
 
 $config->story->datatable->fieldList['status']['title']    = 'statusAB';
 $config->story->datatable->fieldList['status']['fixed']    = 'no';
-$config->story->datatable->fieldList['status']['width']    = '60';
+$config->story->datatable->fieldList['status']['width']    = '80';
 $config->story->datatable->fieldList['status']['required'] = 'no';
 
 $config->story->datatable->fieldList['estimate']['title']    = 'estimateAB';
 $config->story->datatable->fieldList['estimate']['fixed']    = 'no';
-$config->story->datatable->fieldList['estimate']['width']    = '55';
+$config->story->datatable->fieldList['estimate']['width']    = '65';
 $config->story->datatable->fieldList['estimate']['required'] = 'no';
 
 $config->story->datatable->fieldList['stage']['title']    = 'stageAB';
@@ -193,5 +193,5 @@ $config->story->datatable->fieldList['caseCount']['name']     = $lang->story->ca
 
 $config->story->datatable->fieldList['actions']['title']    = 'actions';
 $config->story->datatable->fieldList['actions']['fixed']    = 'right';
-$config->story->datatable->fieldList['actions']['width']    = '140';
+$config->story->datatable->fieldList['actions']['width']    = '160';
 $config->story->datatable->fieldList['actions']['required'] = 'yes';

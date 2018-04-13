@@ -785,14 +785,14 @@ EOD;
             }
             else
             {
-                return html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title='$title' $misc", false);
+                return html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title='$title' $misc", false) . "\n";
             }
         }
         else
         {
             if($type == 'list')
             {
-                return "<button type='button' class='disabled btn $extraClass'><i class='$class' title='$title' $misc></i></button>";
+                return "<button type='button' class='disabled btn $extraClass'><i class='$class' title='$title' $misc></i></button>\n";
             }
         }
     }

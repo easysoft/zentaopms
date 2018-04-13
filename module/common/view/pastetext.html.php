@@ -30,7 +30,7 @@ $(function()
         {
             var importText = $importLines.val();
             var lines = importText.split('\n');
-            var $lastRow;
+            var $lastRow, $firstRow;
             $.each(lines, function(index, line)
             {
                 line = $.trim(line);
@@ -45,12 +45,20 @@ $(function()
                 {
                     $row = batchForm.createRow();
                 }
-                $row.find('.input-story-title').val(line);
+                $row.find('.input-story-title').val(line).addClass('highlight');
                 $lastRow = $row;
+                if(!$firstRow) $firstRow = $row;
             });
             $importLines.val('');
             $dialog.removeClass('loading');
-            $modal.modal('hide');
+            $modal.on('hidden.zui.modal', function()
+            {
+                $firstRow[0].scrollIntoView();
+            }).modal('hide');
+            setTimeout(function()
+            {
+                $form.find('.input-story-title.highlight').removeClass('highlight');
+            }, 3000);
         }, 200);
     });
     
