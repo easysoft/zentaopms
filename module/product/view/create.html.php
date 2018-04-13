@@ -13,64 +13,65 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('noProject', ($config->global->flow == 'onlyStory' or $config->global->flow == 'onlyTest') ? true : false);?>
-<div class='container mw-1400px'>
-  <div id='titlebar'>
-    <div class='heading'>
-      <span class='prefix'><?php echo html::icon($lang->icons['product']);?></span>
-      <strong><small class='text-muted'><i class='icon icon-plus'></i></small> <?php echo $lang->product->create;?></strong>
+<div id="mainContent" class="main-content">
+  <div class="center-block">
+    <div class="main-header">
+      <h2><?php echo $lang->product->create;?></h2>
     </div>
+    <form class="load-indicator main-form form-ajax" id="createForm" method="post" target='hiddenwin'>
+      <table class="table table-form">
+        <tbody>
+          <tr>
+            <th><?php echo $lang->product->name;?></th>
+            <td><?php echo html::input('name', '', "class='form-control input-product-title' autocomplete='off' required");?></td><td></td>
+          </tr>  
+          <tr>
+            <th><?php echo $lang->product->code;?></th>
+            <td><?php echo html::input('code', '', "class='form-control input-product-code' autocomplete='off' required");?></td><td></td>
+          </tr>  
+          <tr>
+            <th><?php echo $lang->product->line;?></th>
+            <td><?php echo html::select('line', $lines, '', "class='form-control chosen'");?></td>
+            <td><?php if(!$lines) common::printLink('tree', 'browse', "rootID=&view=line", $lang->tree->manageLine);?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->product->PO;?></th>
+            <td><?php echo html::select('PO', $poUsers, $this->app->user->account, "class='form-control chosen'");?></td><td></td>
+          </tr>  
+          <tr>
+            <th><?php echo $lang->product->QD;?></th>
+            <td><?php echo html::select('QD', $qdUsers, '', "class='form-control chosen'");?></td><td></td>
+          </tr>  
+          <tr>
+            <th><?php echo $lang->product->RD;?></th>
+            <td><?php echo html::select('RD', $rdUsers, '', "class='form-control chosen'");?></td><td></td>
+          </tr>  
+          <tr>
+            <th><?php echo $lang->product->type;?></th>
+            <td>
+              <?php
+              $proudctTypeList = array();
+              foreach($lang->product->typeList as $key => $type) $productTypeList[$key] = $type . zget($lang->product->typeTips, $key, '');
+              ?>
+              <?php echo html::select('type', $productTypeList, 'normal', "class='form-control'");?>
+            </td><td></td>
+          </tr>  
+          <tr>
+            <th><?php echo $lang->product->desc;?></th>
+            <td colspan='2'><?php echo html::textarea('desc', '', "rows='8' class='form-control kindeditor' hidefocus='true' tabindex=''");?></td>
+          </tr>  
+          <tr>
+            <th><?php echo $lang->product->acl;?></th>
+            <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->product->aclList, 'open', "onclick='setWhite(this.value);'", 'block'));?></td>
+          </tr>  
+          <tr id='whitelistBox' class='hidden'>
+            <th><?php echo $lang->product->whitelist;?></th>
+            <td colspan='2'><?php echo html::checkbox('whitelist', $groups);?></td>
+          </tr>  
+          <tr><td></td><td colspan='2'><?php echo html::submitButton();?></td></tr>
+        </tbody>
+      </table>
+    </form>
   </div>
-  <form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
-    <table class='table table-form'> 
-      <tr>
-        <th class='w-110px'><?php echo $lang->product->name;?></th>
-        <td class='w-p25-f'><?php echo html::input('name', '', "class='form-control' autocomplete='off'");?></td><td></td>
-      </tr>  
-      <tr>
-        <th><?php echo $lang->product->code;?></th>
-        <td><?php echo html::input('code', '', "class='form-control' autocomplete='off'");?></td><td></td>
-      </tr>  
-      <tr>
-        <th><?php echo $lang->product->line;?></th>
-        <td><?php echo html::select('line', $lines, '', "class='form-control chosen'");?></td>
-        <td><?php if(!$lines) common::printLink('tree', 'browse', "rootID=&view=line", $lang->tree->manageLine);?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->product->PO;?></th>
-        <td><?php echo html::select('PO', $poUsers, $this->app->user->account, "class='form-control chosen'");?></td><td></td>
-      </tr>  
-      <tr>
-        <th><?php echo $lang->product->QD;?></th>
-        <td><?php echo html::select('QD', $qdUsers, '', "class='form-control chosen'");?></td><td></td>
-      </tr>  
-      <tr>
-        <th><?php echo $lang->product->RD;?></th>
-        <td><?php echo html::select('RD', $rdUsers, '', "class='form-control chosen'");?></td><td></td>
-      </tr>  
-      <tr>
-        <th><?php echo $lang->product->type;?></th>
-        <td>
-          <?php
-          $proudctTypeList = array();
-          foreach($lang->product->typeList as $key => $type) $productTypeList[$key] = $type . zget($lang->product->typeTips, $key, '');
-          ?>
-          <?php echo html::select('type', $productTypeList, 'normal', "class='form-control'");?>
-        </td><td></td>
-      </tr>  
-      <tr>
-        <th><?php echo $lang->product->desc;?></th>
-        <td colspan='2'><?php echo html::textarea('desc', '', "rows='8' class='form-control'");?></td>
-      </tr>  
-      <tr>
-        <th><?php echo $lang->product->acl;?></th>
-        <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->product->aclList, 'open', "onclick='setWhite(this.value);'", 'block'));?></td>
-      </tr>  
-      <tr id='whitelistBox' class='hidden'>
-        <th><?php echo $lang->product->whitelist;?></th>
-        <td colspan='2'><?php echo html::checkbox('whitelist', $groups);?></td>
-      </tr>  
-      <tr><td></td><td colspan='2'><?php echo html::submitButton();?></td></tr>
-    </table>
-  </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>
