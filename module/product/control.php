@@ -390,7 +390,7 @@ class product extends control
     {
         $this->product->setMenu($this->products, $productID);
 
-        $product  = $this->product->getStatByID($productID);
+        $product = $this->product->getStatByID($productID);
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
 

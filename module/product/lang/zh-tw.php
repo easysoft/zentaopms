@@ -114,20 +114,16 @@ $lang->product->storySummary   = "本頁共 <strong>%s</strong> 個需求，預�
 $lang->product->checkedSummary = "選中 <strong>%total%</strong> 個需求，預計 <strong>%estimate%</strong> 個工時，用例覆蓋率<strong>%rate%</strong>。";
 $lang->product->noMatched      = '找不到包含"%s"的' . $lang->productCommon;
 
-
-
-
-
-$lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
-$lang->product->featureBar['browse']['unplan']       = $lang->product->unplan;
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
+$lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
 $lang->product->featureBar['browse']['assignedtome'] = $lang->product->assignedToMe;
 $lang->product->featureBar['browse']['openedbyme']   = $lang->product->openedByMe;
 $lang->product->featureBar['browse']['reviewedbyme'] = $lang->product->reviewedByMe;
-
-$lang->product->featureBar['browse']['closedbyme']   = $lang->product->closedByMe;
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
-$lang->product->featureBar['browse']['activestory']  = $lang->product->activeStory;
-$lang->product->featureBar['browse']['changedstory'] = $lang->product->changedStory;
-$lang->product->featureBar['browse']['willclose']    = $lang->product->willClose;
-$lang->product->featureBar['browse']['closedstory']  = $lang->product->closedStory;
+$lang->product->featureBar['browse']['more']         = $lang->more;
+
+$lang->product->moreSelects['closedbyme']   = $lang->product->closedByMe;
+$lang->product->moreSelects['activestory']  = $lang->product->activeStory;
+$lang->product->moreSelects['changedstory'] = $lang->product->changedStory;
+$lang->product->moreSelects['willclose']    = $lang->product->willClose;
+$lang->product->moreSelects['closedstory']  = $lang->product->closedStory;

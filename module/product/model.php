@@ -720,7 +720,6 @@ class productModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        $stats = array();
         $stories = $this->dao->select('product, status, count(status) AS count')
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
@@ -761,33 +760,35 @@ class productModel extends model
             ->fetchPairs();
 
         $bugs = $this->dao->select('product,count(*) AS conut')
-          ->from(TABLE_BUG)
-          ->where('deleted')->eq(0)
-          ->andWhere('product')->in(array_keys($products))
-          ->groupBy('product')
-          ->fetchPairs();
-       $unResolved  = $this->dao->select('product,count(*) AS count')
-              ->from(TABLE_BUG)
-              ->where('status')->eq('active')
-              ->andwhere('deleted')->eq(0)
-              ->andWhere('product')->in(array_keys($products))
-              ->groupBy('product')
-              ->fetchPairs();
-        $assignToNull = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
-             ->where('AssignedTo')->eq('')
-            ->andwhere('deleted')->eq(0)
+            ->where('deleted')->eq(0)
             ->andWhere('product')->in(array_keys($products))
             ->groupBy('product')
             ->fetchPairs();
+        $unResolved = $this->dao->select('product,count(*) AS count')
+            ->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->andwhere('status')->eq('active')
+            ->andWhere('product')->in(array_keys($products))
+            ->groupBy('product')
+            ->fetchPairs();
+        $assignToNull = $this->dao->select('product,count(*) AS count')
+            ->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->andwhere('assignedTo')->eq('')
+            ->andWhere('product')->in(array_keys($products))
+            ->groupBy('product')
+            ->fetchPairs();
+
+        $stats = array();
         foreach($products as $key => $product)
         {
-            $product->stories = $stories[$product->id];
-            $product->plans   = isset($plans[$product->id])    ? $plans[$product->id]    : 0;
-            $product->releases= isset($releases[$product->id]) ? $releases[$product->id] : 0;
+            $product->stories  = $stories[$product->id];
+            $product->plans    = isset($plans[$product->id])    ? $plans[$product->id]    : 0;
+            $product->releases = isset($releases[$product->id]) ? $releases[$product->id] : 0;
 
-            $product->bugs = isset($bugs[$product->id]) ? $bugs[$product->id] : 0;
-            $product->unResolved = isset($unResolved[$product->id]) ? $unResolved[$product->id] : 0;
+            $product->bugs         = isset($bugs[$product->id]) ? $bugs[$product->id] : 0;
+            $product->unResolved   = isset($unResolved[$product->id]) ? $unResolved[$product->id] : 0;
             $product->assignToNull = isset($assignToNull[$product->id]) ? $assignToNull[$product->id] : 0;
             $stats[] = $product;
         }

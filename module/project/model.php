@@ -869,7 +869,7 @@ class projectModel extends model
         foreach($projects as $key => $project)
         {
             // Process the end time.
-            $project->end = date("Y-m-d", strtotime($project->end));
+            $project->end = date(DT_DATE1, strtotime($project->end));
 
             /* Judge whether the project is delayed. */
             if($project->status != 'done' and $project->status != 'suspended')

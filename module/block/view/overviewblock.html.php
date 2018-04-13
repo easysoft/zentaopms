@@ -1,0 +1,17 @@
+<?php
+/**
+ * The overview block view file of block module of RanZhi.
+ *
+ * @copyright   Copyright 2009-2018 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Gang Liu <liugang@cnezsoft.com>
+ * @package     block 
+ * @version     $Id$
+ * @link        http://www.zentao.net
+ */
+?>
+<div class='panel-body has-table'>
+<?php echo $lang->product->all . $total;?>
+<?php echo $lang->product->statusList['normal'] . $normal;?>
+<?php echo $lang->product->statusList['closed'] . $closed;?>
+</div>
