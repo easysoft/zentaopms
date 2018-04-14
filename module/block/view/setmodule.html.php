@@ -17,6 +17,7 @@ $themeRoot = $webRoot . "theme/";
 ?>
 <?php include './publicform.html.php'?>
 <?php echo html::hidden('actionLink', $this->createLink('block', 'set', "id=$id&type=$type&source=$source"));?>
+<?php if(!empty($params) && is_array($params)):?>
 <?php foreach($params as $key => $param):?>
 <div class='form-group'>
   <label for='<?php echo $key?>' class='col-sm-3'><?php echo $param['name']?></label>
@@ -28,7 +29,7 @@ $themeRoot = $webRoot . "theme/";
     $control = $param['control'];
     $attr    = empty($param['attr']) ? '' : $param['attr'];
     $default = $block ? (isset($block->params->$key) ? $block->params->$key : '') : (isset($param['default']) ? $param['default'] : '');
-    $options  = isset($param['options']) ? $param['options'] : array();
+    $options = isset($param['options']) ? $param['options'] : array();
     if($control == 'select' or $control == 'radio' or $control == 'checkbox')
     {
         $chosen = $control == 'select' ? 'chosen' : '';
@@ -49,12 +50,18 @@ $themeRoot = $webRoot . "theme/";
   </div>
 </div>
 <?php endforeach;?>
+<?php endif;?>
 <?php if(!isset($block->name)):?>
 <script>
 $(function()
 {
-    options = $('#moduleBlock').find("option").text();
-    if($('#title').val() == '') $('#title').val($('#moduleBlock').find("option:selected").text());
+    var module = $('#modules').find('option:selected').text();
+    var block  = $('#moduleBlock').find('option:selected').text();
+    if($('#title').val() == '')
+    {
+        if(module) $('#title').val(module);
+        if(block)  $('#title').val(block);
+    }
 })
 </script>
 <?php endif;?>

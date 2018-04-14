@@ -198,7 +198,7 @@ class blockModel extends model
      * 
      * @param  string $module 
      * @access public
-     * @return void
+     * @return string
      */
     public function getListParams($module = '')
     {
@@ -206,7 +206,7 @@ class blockModel extends model
         if($module == 'project') return $this->getProjectParams($module);
 
         $params = new stdclass();
-        $params = $this->onlyNumParams($module, $params);
+        $params = $this->onlyNumParams($params);
         return json_encode($params);
     }
 
@@ -348,9 +348,9 @@ class blockModel extends model
      * @access public
      * @return json
      */
-    public function getPlanParams($module = '')
+    public function getPlanParams()
     {
-        $params = $this->onlyNumParams($module);
+        $params = $this->onlyNumParams();
         return json_encode($params);
     }
 
@@ -360,9 +360,9 @@ class blockModel extends model
      * @access public
      * @return json
      */
-    public function getReleaseParams($module = '')
+    public function getReleaseParams()
     {
-        $params = $this->onlyNumParams($module);
+        $params = $this->onlyNumParams();
         return json_encode($params);
     }
 
@@ -372,9 +372,9 @@ class blockModel extends model
      * @access public
      * @return json
      */
-    public function getBuildParams($module = '')
+    public function getBuildParams()
     {
-        $params = $this->onlyNumParams($module);
+        $params = $this->onlyNumParams();
         return json_encode($params);
     }
 
@@ -384,13 +384,45 @@ class blockModel extends model
      * @access public
      * @return json
      */
-    public function getProductParams($module = '')
+    public function getProductParams()
     {
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->product;
         $params->type['control'] = 'select';
 
-        return json_encode($this->onlyNumParams($module, $params));
+        return json_encode($this->onlyNumParams($params));
+    }
+
+    /**
+     * Get product report params.
+     *
+     * @access public
+     * @return string
+     */
+    public function getReportParams()
+    {
+        $params = new stdclass();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->block->typeList->product;
+        $params->type['control'] = 'select';
+
+        $params->orderBy['name']    = $this->lang->block->orderBy;
+        $params->orderBy['default'] = 'id_desc';
+        $params->orderBy['options'] = $this->lang->block->orderByList->product;
+        $params->orderBy['control'] = 'select';
+
+        return json_encode($params);
+    }
+
+    /**
+     * Get product overview pararms.
+     *
+     * @access public
+     * @return string
+     */
+    public function getOverviewParams()
+    {
+        return false;
     }
 
     /**
@@ -399,13 +431,13 @@ class blockModel extends model
      * @access public
      * @return json
      */
-    public function getProjectParams($module = '')
+    public function getProjectParams()
     {
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->project;
         $params->type['control'] = 'select';
 
-        return json_encode($this->onlyNumParams($module, $params));
+        return json_encode($this->onlyNumParams($params));
     }
 
     public function getAssignToMeParams()
@@ -461,12 +493,11 @@ class blockModel extends model
     /**
      * Build number params.
      * 
-     * @param  string $module 
      * @param  object $params 
      * @access public
      * @return object
      */
-    public function onlyNumParams($module = '', $params = '')
+    public function onlyNumParams($params = '')
     {
         if(empty($params)) $params = new stdclass();
         $params->num['name']    = $this->lang->block->num;
