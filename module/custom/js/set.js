@@ -10,6 +10,6 @@ function delItem(clickedButton)
 
 $(function()
 {
-    $('#' + module + 'Tab').addClass('active');
+    $('#' + module + 'Tab').addClass('btn-active-text');
     $('#' + field + 'Tab').addClass('active');
 })

@@ -12,16 +12,15 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/chart.html.php';?>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>
-    <strong><small class='text-muted'><?php echo html::icon($lang->icons['report']);?></small> <?php echo $lang->story->report->common;?></strong>
+<div id="mainMenu" class="clearfix">
+  <div class="btn-toolbar pull-left">
+    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->story->report->common;?></span></span>
   </div>
-  <div class='actions'>
+  <div class="btn-toolbar pull-right">
     <?php echo html::a($this->createLink('product', 'browse', "productID=$productID&browseType=$browseType&moduleID=$moduleID"), $lang->goback, '', "class='btn'");?>
   </div>
 </div>
-<div class='row'>
+<div id="mainContent" class='main-row'>
   <div class='col-md-3 col-lg-2'>
     <div class='panel panel-sm'>
       <div class='panel-heading'>
@@ -30,8 +29,8 @@
       <div class='panel-body' style='padding-top:0'>
         <form method='post'>
           <?php echo html::checkBox('charts', $lang->story->report->charts, $checkedCharts, '', 'block');?>
-          <?php echo html::selectAll('', "button", false, 'btn btn-sm')?>
-          <?php echo html::submitButton($lang->story->report->create, '', 'btn btn-sm btn-primary');?>
+          <?php echo html::selectAll('', "button", false, 'btn')?>
+          <?php echo html::submitButton($lang->story->report->create, '', 'btn btn-wide btn-primary');?>
         </form>
       </div>
     </div>
