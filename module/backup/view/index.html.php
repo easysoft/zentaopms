@@ -17,9 +17,11 @@
 </div>
 <?php endif;?>
 
-<div id='titlebar'>
-  <div class='heading'><?php echo $lang->backup->common;?></div>
-  <div class='actions'><?php common::printIcon('backup', 'backup', 'reload=yes', '', 'button', 'cloud', 'hiddenwin', 'backup');?></div>
+<div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
+    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->backup->common;?></span></span>
+  </div>
+  <div class='btn-toolbar pull-right'><?php common::printIcon('backup', 'backup', 'reload=yes', '', 'button', 'cloud', 'hiddenwin', 'backup');?></div>
 </div>
 
 <div class='panel'>
@@ -64,7 +66,7 @@
       <tr>
         <td colspan='4'>
         <?php printf($lang->backup->holdDays, $config->backup->holdDays)?>
-        <?php if(common::hasPriv('backup', 'change')) echo html::a(inlink('change'), $lang->backup->changeAB, '', "class='iframe' data-width='300'");?>
+        <?php if(common::hasPriv('backup', 'change')) echo html::a(inlink('change'), $lang->backup->changeAB, '', "class='iframe btn btn-sm btn-info' data-width='300'");?>
         </td>
       </tr>
     </tfoot>

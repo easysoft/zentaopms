@@ -111,7 +111,7 @@ $(function()
                 var $select = $(this);
                 if(index == 0) $select.find("option[value='ditto']").remove();
                 if(index > 0) $select.val('ditto');
-                $select.chosen(defaultChosenOptions);
+                $select.chosen();
                 setTimeout(function()
                 {
                     $select.next('.chosen-container').find('.chosen-drop').width($select.closest('td').width() + 50);

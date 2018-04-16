@@ -26,7 +26,7 @@ function loadProductBranches(productID)
         {
             $('#product').closest('.input-group').append(data);
             $('#branch').css('width', config.currentMethod == 'create' ? '120px' : '65px');
-            $('#branch').chosen(defaultChosenOptions);
+            $('#branch').chosen();
         }
     })
 }
@@ -38,7 +38,7 @@ function loadProductModules(productID, branch)
     moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
     $('#moduleIdBox').load(moduleLink, function()
     {
-        $('#moduleIdBox #module').chosen(defaultChosenOptions);
+        $('#moduleIdBox #module').chosen();
         if(typeof(storyModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon'>" + storyModule + "</span>")
     });
 }
@@ -48,12 +48,12 @@ function loadProductPlans(productID, branch)
     if(typeof(branch) == 'undefined') branch = 0;
     if(!branch) branch = 0;
     planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=&needCreate=true');
-    $('#planIdBox').load(planLink, function(){$('#planIdBox #plan').chosen(defaultChosenOptions);});
+    $('#planIdBox').load(planLink, function(){$('#planIdBox #plan').chosen();});
 }
 
 $(function() 
 {
-    $("#reviewedBy").chosen(defaultChosenOptions);
-    $("#mailto").chosen(defaultChosenOptions);
+    $("#reviewedBy").chosen();
+    $("#mailto").chosen();
 })
 </script>
