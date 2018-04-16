@@ -1,15 +1,15 @@
 <?php include '../../common/view/header.html.php';?>
-<div id='featurebar'>
-  <ul class='nav'>
+<div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
     <?php 
-    echo '<li id="installed">'; common::printLink('extension', 'browse', "type=installed",   $lang->extension->installed); echo '</li>';
-    echo '<li id="deactivated">'; common::printLink('extension', 'browse', "type=deactivated", $lang->extension->deactivated); echo '</li>';
-    echo '<li id="available">'; common::printLink('extension', 'browse', "type=available",   $lang->extension->available ); echo '</li>';
-    echo '<li>'; common::printLink('extension', 'upload', '', $lang->extension->upload, '', "class='iframe'"); echo '</li>';
+    common::printLink('extension', 'browse', "type=installed",   "<span class='text'>{$lang->extension->installed}</span>"  , '', "class='btn btn-link' id='installed'");
+    common::printLink('extension', 'browse', "type=deactivated", "<span class='text'>{$lang->extension->deactivated}</span>", '', "class='btn btn-link' id='deactivated'");
+    common::printLink('extension', 'browse', "type=available",   "<span class='text'>{$lang->extension->available}</span>"  , '', "class='btn btn-link' id='available'");
+    common::printLink('extension', 'upload', '', "<span class='text'>{$lang->extension->upload}</span>", '', "class='iframe btn btn-link'");
     ?>
-  </ul>
-  <div class='actions'>
-    <div class='btn-group'><?php common::printLink('extension', 'obtain', '', '<i class="icon-download-alt"></i> ' . $lang->extension->obtain, '', "class='btn'");?></div>
+  </div>
+  <div class='btn-toolbar pull-right'>
+    <?php common::printLink('extension', 'obtain', '', '<i class="icon-download-alt"></i> ' . $lang->extension->obtain, '', "class='btn'");?>
   </div>
 </div>
-<script>$('#<?php echo $tab;?>').addClass('active')</script>
+<script>$('#<?php echo $tab;?>').addClass('btn-active-text')</script>

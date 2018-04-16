@@ -1,14 +1,11 @@
-#batchSetting {min-width: 300px;}
-#batchSettingForm .checkboxes {padding: 10px 3px;}
-#batchSettingForm .checkbox-primary {width: 50%; float: left; margin: 3px 0;}
 
 #batchCreateForm .col-id {width: 50px; text-align: center; color: #838A9D}
 #batchCreateForm .col-module,
 #batchCreateForm .col-plan {width: 180px;}
 #batchCreateForm .chosen[name^="plan"] + .chosen-container .chosen-drop,
 #batchCreateForm .chosen[name^="module"] + .chosen-container .chosen-drop {min-width: 300px;}
+#batchCreateForm .col-pri {width: 100px;}
 #batchCreateForm .col-review,
-#batchCreateForm .col-pri,
 #batchCreateForm .col-estimate {width: 90px;}
 #batchCreateForm .input-group,
 #batchCreateForm .input-group .form-control {position: static;}

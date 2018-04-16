@@ -22,6 +22,9 @@
     echo html::a(inlink('dynamic', "productID=$productID&type=thismonth"), "<span class='text'>{$lang->action->dynamic->thisMonth}</span>", '', "class='btn btn-link " . ($type == 'thismonth' ? 'btn-active-text' : '') . "'");
     echo html::a(inlink('dynamic', "productID=$productID&type=lastmonth"), "<span class='text'>{$lang->action->dynamic->lastMonth}</span>", '', "class='btn btn-link " . ($type == 'lastmonth' ? 'btn-active-text' : '') . "'");
     ?>
+    <div class="input-control space w-150px">
+      <?php echo html::select('account', $users, $account, "onchange='changeUser(this.value,$productID)' class='form-control chosen'");?>
+    </div>
   </div>
 </div>
 <div id="mainContent" class="main-content">
