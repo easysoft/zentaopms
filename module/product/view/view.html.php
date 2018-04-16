@@ -42,7 +42,7 @@
             <div class="panel-heading">
             <div class="panel-title"><?php echo $lang->product->latestDynamic;?></div>
               <nav class="panel-actions nav nav-default">
-                <li><a href="<?php echo $this->createLink('product', 'dynamic', "productID={$product->id}");?>" title="<?php echo $lang->more;?>">MORE</i></a></li>
+                <li><a href="<?php echo $this->createLink('product', 'dynamic', "productID={$product->id}&type=all");?>" title="<?php echo $lang->more;?>">MORE</i></a></li>
               </nav>
             </div>
             <div class="panel-body">
