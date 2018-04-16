@@ -23,6 +23,7 @@ $lang->story->batchClose  = '批量关闭';
 $lang->story->activate    = '激活';
 $lang->story->delete      = "删除";
 $lang->story->view        = "需求详情";
+$lang->story->setting     = "设置";
 $lang->story->tasks       = "相关任务";
 $lang->story->bugs        = "相关Bug";
 $lang->story->cases       = "相关用例";
