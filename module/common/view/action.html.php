@@ -1,5 +1,9 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
+<?php if(!empty($blockHistory)):?>
+<div class="panel block-histories histories" data-textDiff="<?php echo $lang->action->textDiff;?>" data-original="<?php echo $lang->action->original;?>">
+<?php else:?>
 <div class="detail histories" id='actionbox' data-textDiff="<?php echo $lang->action->textDiff;?>" data-original="<?php echo $lang->action->original;?>">
+<?php endif;?>
   <script>
   $(function()
   {
@@ -17,7 +21,11 @@
       })
   })
   </script>
+  <?php if(!empty($blockHistory)):?>
+  <div class="panel-heading"><div class="panel-title">
+  <?php else:?>
   <div class="detail-title">
+  <?php endif;?>
     <?php echo $lang->history?> &nbsp;
     <button type="button" class="btn btn-mini btn-icon btn-reverse" title='<?php echo $lang->reverse;?>'>
       <i class="icon icon-arrow-up icon-sm"></i>
@@ -27,7 +35,14 @@
     </button>
     <?php if(isset($actionFormLink)) echo common::printCommentIcon($actionFormLink);?>
   </div>
+  <?php if(!empty($blockHistory)):?>
+  </div>
+  <?php endif;?>
+  <?php if(!empty($blockHistory)):?>
+  <div class="panel-body">
+  <?php else:?>
   <div class="detail-content">
+  <?php endif;?>
     <ol class='histories-list'>
       <?php $i = 1; ?>
       <?php foreach($actions as $action):?>

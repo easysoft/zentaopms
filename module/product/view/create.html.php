@@ -66,7 +66,7 @@
           </tr>  
           <tr id='whitelistBox' class='hidden'>
             <th><?php echo $lang->product->whitelist;?></th>
-            <td colspan='2'><?php echo html::checkbox('whitelist', $groups);?></td>
+            <td colspan='2'><?php echo html::checkbox('whitelist', $groups, '', '', 'inline');?></td>
           </tr>  
           <tr><td></td><td colspan='2'><?php echo html::submitButton();?></td></tr>
         </tbody>

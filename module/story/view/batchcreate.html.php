@@ -49,7 +49,7 @@
             <button type='button' data-toggle="importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
           </th>
           <th class='col-desc<?php echo zget($visibleFields, 'spec', ' hidden'); echo isset($requiredFields['spec']) ? ' required' : ''?>'><?php echo $lang->story->spec;?></th>
-          <th class='w-80px<?php echo zget($visibleFields, 'source', ' hidden'); echo isset($requiredFields['source']) ? ' required' : ''?>'><?php echo $lang->story->source;?></th>
+          <th class='w-100px<?php echo zget($visibleFields, 'source', ' hidden'); echo isset($requiredFields['source']) ? ' required' : ''?>'><?php echo $lang->story->source;?></th>
           <th class='w-p15<?php echo zget($visibleFields, 'verify', ' hidden'); echo isset($requiredFields['verify']) ? ' required' : ''?>'><?php echo $lang->story->verify;?></th>
           <th class='col-pri<?php echo zget($visibleFields, 'pri', ' hidden'); echo isset($requiredFields['pri']) ? ' required' : ''?>'><?php echo $lang->story->pri;?></th>
           <th class='col-estimate<?php echo zget($visibleFields, 'estimate', ' hidden'); echo isset($requiredFields['estimate']) ? ' required' : ''?>'><?php echo $lang->story->estimate;?></th>
