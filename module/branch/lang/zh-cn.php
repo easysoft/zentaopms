@@ -3,6 +3,7 @@ $lang->branch->common = '分支';
 $lang->branch->manage = '分支管理';
 $lang->branch->sort   = '排序';
 $lang->branch->delete = '分支删除';
+$lang->branch->add    = '添加';
 
 $lang->branch->manageTitle = '%s管理';
 $lang->branch->all         = '所有';

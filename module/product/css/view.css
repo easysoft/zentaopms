@@ -1,1 +1,4 @@
-.outer .main-side > fieldset {padding-right: 0px;}
+.branch-list {padding-left: 0; margin: 0;}
+.branch-list > li {float: left; list-style: none; width: 50%; margin: 5px 0;}
+.data-basic.table-data tbody > tr > th {width: 80px;}
+.block-release .panel-body, .block-dynamic .panel-body {height: 224px; overflow: auto;}
