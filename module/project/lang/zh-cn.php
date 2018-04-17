@@ -11,7 +11,7 @@
  */
 /* 字段列表。*/
 $lang->project->common        = $lang->projectCommon . '视图';
-$lang->project->allProjects   = '全部' . $lang->projectCommon;
+$lang->project->allProjects   = '所有' . $lang->projectCommon;
 $lang->project->type          = $lang->projectCommon . '类型';
 $lang->project->name          = $lang->projectCommon . '名称';
 $lang->project->code          = $lang->projectCommon . '代号';
@@ -171,7 +171,7 @@ $lang->project->groupFilter['pri']['noset']         = '未设置';
 $lang->project->groupFilter['assignedTo']['undone'] = '未完成';
 $lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
 
-$lang->project->byQuery              = '搜索';
+$lang->project->byQuery = '搜索';
 
 /* 查询条件列表。*/
 $lang->project->allProject      = "所有{$lang->projectCommon}";
@@ -278,8 +278,8 @@ $lang->printKanban->taskStatus = '状态';
 $lang->printKanban->typeList['all']       = '全部';
 $lang->printKanban->typeList['increment'] = '增量';
 
-$lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;
 $lang->project->featureBar['task']['all']          = $lang->project->allTasks;
+$lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;
 $lang->project->featureBar['task']['assignedtome'] = $lang->project->assignedToMe;
 $lang->project->featureBar['task']['myinvolved']   = $lang->project->myInvolved;
 $lang->project->featureBar['task']['delayed']      = '已延期';

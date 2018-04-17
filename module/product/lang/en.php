@@ -10,23 +10,23 @@
  * @link        http://www.zentao.net
  */
 $lang->product->common      = $lang->productCommon;
-$lang->product->index       = $lang->productCommon . "Home";
-$lang->product->browse      = "Story List";
-$lang->product->dynamic     = "Dynamic";
-$lang->product->view        = "Overview";
+$lang->product->index       = $lang->productCommon . 'Home';
+$lang->product->browse      = 'Story List';
+$lang->product->dynamic     = 'Dynamic';
+$lang->product->view        = 'Overview';
 $lang->product->edit        = "Edit {$lang->productCommon}";
-$lang->product->batchEdit   = "Batch Edit";
+$lang->product->batchEdit   = 'Batch Edit';
 $lang->product->create      = "Create {$lang->productCommon}";
 $lang->product->delete      = "Delete {$lang->productCommon}";
-$lang->product->deleted     = "Deleted";
-$lang->product->close       = "Close";
-$lang->product->select      = "    Select {$lang->productCommon}";
+$lang->product->deleted     = 'Deleted';
+$lang->product->close       = 'Close';
+$lang->product->select      = "Select {$lang->productCommon}";
 $lang->product->mine        = 'My responsibility:';
 $lang->product->other       = 'Other:';
 $lang->product->closed      = 'Closed';
 $lang->product->updateOrder = 'Ranking';
 $lang->product->all         = "All {$lang->productCommon}";
-$lang->product->export      = "Export";
+$lang->product->export      = 'Export Data';
 
 $lang->product->basicInfo = 'Basic Info';
 $lang->product->otherInfo = 'Other Info';
@@ -51,25 +51,30 @@ $lang->product->closedStories    = 'Closed Story';
 $lang->product->unResolvedBugs   = 'Unresolved Bug';
 $lang->product->assignToNullBugs = 'Unassigned Bug';
 
-$lang->product->confirmDelete   = " Do you want to delete {$lang->productCommon}?";
-
+$lang->product->confirmDelete  = " Do you want to delete {$lang->productCommon}?";
 $lang->product->errorNoProduct = "{$lang->productCommon} is not created yet!";
 $lang->product->accessDenied   = "You have no access to {$lang->productCommon}.";
 
-$lang->product->id        = 'ID';
-$lang->product->name      = "Name";
-$lang->product->code      = "Alias";
-$lang->product->line      = 'Product Line';
-$lang->product->order     = 'Sort';
-$lang->product->type      = "Type";
-$lang->product->status    = 'Status';
-$lang->product->desc      = 'Description';
-$lang->product->PO        = "PO";
-$lang->product->QD        = 'QA Manager';
-$lang->product->RD        = 'Release Manager';
-$lang->product->acl       = 'Access Control';
-$lang->product->whitelist = 'Whitelist';
-$lang->product->branch    = '%s';
+$lang->product->id            = 'ID';
+$lang->product->name          = 'Name';
+$lang->product->code          = 'Alias';
+$lang->product->line          = 'Product Line';
+$lang->product->order         = 'Sort';
+$lang->product->type          = 'Type';
+$lang->product->status        = 'Status';
+$lang->product->desc          = 'Description';
+$lang->product->manager       = 'Manager';
+$lang->product->PO            = 'PO';
+$lang->product->QD            = 'QA Manager';
+$lang->product->RD            = 'Release Manager';
+$lang->product->acl           = 'Access Control';
+$lang->product->whitelist     = 'Whitelist';
+$lang->product->branch        = '%s';
+$lang->product->qa            = 'QA';
+$lang->product->release       = 'Release';
+$lang->product->latestDynamic = 'Latest Dynamic';
+$lang->product->iteration     = 'Iteration';
+$lang->product->iterationInfo = 'Iterate %s times';
 
 $lang->product->searchStory  = 'Search';
 $lang->product->assignedToMe = 'Assigned To Me';
@@ -83,10 +88,9 @@ $lang->product->willClose    = 'ToBeClose';
 $lang->product->closedStory  = 'Closed';
 $lang->product->unclosed     = 'Open';
 $lang->product->unplan       = 'Wait';
-$lang->product->my           = 'My';
 
-$lang->product->allStory    = 'All';
-$lang->product->allProduct  = 'All' . $lang->productCommon;
+$lang->product->allStory             = 'All';
+$lang->product->allProduct           = 'All' . $lang->productCommon;
 $lang->product->allProductsOfProject = 'All linked' . $lang->productCommon;
 
 $lang->product->typeList['']         = '';
@@ -121,6 +125,10 @@ $lang->product->featureBar['browse']['openedbyme']   = $lang->product->openedByM
 $lang->product->featureBar['browse']['reviewedbyme'] = $lang->product->reviewedByMe;
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
 $lang->product->featureBar['browse']['more']         = $lang->more;
+
+$lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
+$lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
+$lang->product->featureBar['all']['all']      = $lang->product->allProduct;
 
 $lang->product->moreSelects['closedbyme']   = $lang->product->closedByMe;
 $lang->product->moreSelects['activestory']  = $lang->product->activeStory;

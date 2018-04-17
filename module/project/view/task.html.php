@@ -20,8 +20,6 @@ js::set('productID', $productID);
 js::set('projectID', $projectID);
 js::set('browseType', $browseType);
 ?>
-
-
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
     <?php echo html::commonButton('<i class="icon icon-caret-left"></i>', '', 'btn btn-icon btn-sm btn-info sidebar-toggle');?>
@@ -32,16 +30,14 @@ js::set('browseType', $browseType);
           $product    = $this->product->getById($productID);
           $removeLink = $browseType == 'byproduct' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("productBrowseParam")';
           echo $product->name;
-          echo html::a($removeLink, "<span class='close'>&times;</span>", '', "class='text-muted'");
-          echo html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='text-muted'");
+          echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
       }
       elseif(!empty($moduleID))
       {
           $module     = $this->tree->getById($moduleID);
           $removeLink = $browseType == 'bymodule' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("moduleBrowseParam")';
           echo $module->name;
-          echo html::a($removeLink, "<span class='close'>&times;</span>", '', "class='text-muted'");
-          echo html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='text-muted'");
+          echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
       }
       else
       {
@@ -65,7 +61,10 @@ js::set('browseType', $browseType);
         }
         elseif($menuType != 'status')
         {
-            echo html::a(inlink('task', "project=$projectID&type=$menuType"), $menuItem->text, '', "id='{$menuType}Tab' class='btn btn-link'");
+            $label   = "<span class='text'>{$menuItem->text}</span>";
+            $label  .= $menuType == $browseType ? "<span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
+            $active  = $menuType == $browseType ? 'btn-active-text' : '';
+            echo html::a(inlink('task', "project=$projectID&type=$menuType"), $label, '', "id='{$menuType}' class='btn btn-link $active'");
         }
         elseif($menuType == 'status')
         {
@@ -85,12 +84,12 @@ js::set('browseType', $browseType);
         }
     }
 
-    echo common::printLink('project', 'kanban', "projectID=$projectID", $lang->project->kanban, '', "id='kanbanTab' class='btn btn-link'");
+    common::printLink('project', 'kanban', "projectID=$projectID", $lang->project->kanban, '', "id='kanbanTab' class='btn btn-link'");
     if($project->type == 'sprint' or $project->type == 'waterfall')
     {
         common::printLink('project', 'burn', "project=$projectID", $lang->project->burn, '', "id='burnTab' class='btn btn-link'");
     }
-    echo common::printLink('project', 'tree', "projectID=$projectID", $lang->project->tree, '', "id='treeTab' class='btn btn-link'");
+    common::printLink('project', 'tree', "projectID=$projectID", $lang->project->tree, '', "id='treeTab' class='btn btn-link'");
     echo "<div class='btn-group'>";
     $groupBy = isset($groupBy) ? $groupBy : '';
     $current = zget($lang->project->groups, isset($groupBy) ? $groupBy : '', '');
@@ -141,17 +140,13 @@ js::set('browseType', $browseType);
         </ul>
       </div>
     </div>
-    <div class='btn-group'>
-      <div class='btn-group' id='createActionMenu'>
-        <?php
-        $link = $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
-        if(common::hasPriv('task', 'batchCreate')) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->batchCreate}", '', "class='btn btn btn-secondary'");
+    <?php
+    $link = $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
+    if(common::hasPriv('task', 'batchCreate')) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->batchCreate}", '', "class='btn btn btn-secondary'");
 
-        $link = $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
-        if(common::hasPriv('task', 'create')) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
-        ?>
-      </div>
-    </div>
+    $link = $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
+    if(common::hasPriv('task', 'create')) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
+    ?>
   </div>
 </div>
 <div id="mainContent" class="main-row">
@@ -207,7 +202,7 @@ js::set('browseType', $browseType);
         </thead>
         <tbody>
           <?php foreach($tasks as $task):?>
-          <tr class='text-center' data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
+          <tr data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
             <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
           </tr>
           <?php if(!empty($task->children)):?>
