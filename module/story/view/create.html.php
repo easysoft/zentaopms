@@ -149,7 +149,6 @@
         <tr>
           <th><?php echo $lang->story->legendAttatch;?></th>
           <td colspan='4'><?php echo $this->fetch('file', 'buildform');?></td>
-          </td>
         </tr>  
         <?php if(strpos(",$showFields,", ',mailto,') !== false):?>
         <tr>
