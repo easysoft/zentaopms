@@ -1076,7 +1076,7 @@ function setModal()
             var frame$ = window.frames[options.name].$;
             frame$(function()
             {
-                if(frame$('#titlebar').length)
+                if(frame$('#titlebar').length || frame$('.main-header').length || frame$('.modal-header').length)
                 {
                     modal.addClass('with-titlebar');
                     if(options.size == 'fullscreen')
