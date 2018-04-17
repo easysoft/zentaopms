@@ -66,7 +66,7 @@
             <input type='checkbox' name='planIDList[<?php echo $plan->id;?>]' value='<?php echo $plan->id;?>' />
             <label></label>
             <?php endif;?>
-            <?php echo $plan->id?>
+            <?php echo $plan->id;?>
           </div>
         </td>
         <td class='text-left' title="<?php echo $plan->title?>"><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>

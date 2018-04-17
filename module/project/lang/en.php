@@ -278,8 +278,8 @@ $lang->printKanban->taskStatus = 'Status';
 $lang->printKanban->typeList['all']       = 'All';
 $lang->printKanban->typeList['increment'] = 'Increment';
 
-$lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;
 $lang->project->featureBar['task']['all']          = $lang->project->allTasks;
+$lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;
 $lang->project->featureBar['task']['assignedtome'] = $lang->project->assignedToMe;
 $lang->project->featureBar['task']['myinvolved']   = $lang->project->myInvolved;
 $lang->project->featureBar['task']['delayed']      = 'Delayed';
