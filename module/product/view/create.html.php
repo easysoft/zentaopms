@@ -68,7 +68,12 @@
             <th><?php echo $lang->product->whitelist;?></th>
             <td colspan='2'><?php echo html::checkbox('whitelist', $groups, '', '', 'inline');?></td>
           </tr>  
-          <tr><td></td><td colspan='2'><?php echo html::submitButton();?></td></tr>
+          <tr>
+            <td colspan='3' class='text-center'>
+              <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+              <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
+            </td>
+          </tr>
         </tbody>
       </table>
     </form>
