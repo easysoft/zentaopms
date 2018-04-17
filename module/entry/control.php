@@ -49,7 +49,7 @@ class entry extends control
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('entry', $id, 'created');
-            $this->send(array('result' => 'success', 'message' => $this->lang->entry->saveSuccess, 'locate' => inlink('browse')));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->view->title      = $this->lang->entry->api . $this->lang->colon . $this->lang->entry->create;
@@ -78,7 +78,7 @@ class entry extends control
                 $actionID = $this->loadModel('action')->create('entry', $id, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            $this->send(array('result' => 'success', 'message' => $this->lang->entry->saveSuccess, 'locate' => inlink('browse')));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $entry = $this->entry->getById($id);

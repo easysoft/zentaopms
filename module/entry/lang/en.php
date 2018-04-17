@@ -25,7 +25,6 @@ $lang->entry->editedDate  = 'Edited Date';
 $lang->entry->date        = 'Request Time';
 $lang->entry->url         = 'Request URL';
 
-$lang->entry->saveSuccess   = 'Save success.';
 $lang->entry->confirmDelete = 'Are you sure delete this entry?';
 $lang->entry->help          = 'Help';
 

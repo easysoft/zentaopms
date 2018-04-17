@@ -11,12 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php 
-js::set('productID' , $productID);
-js::set('page'      , 'create');
-?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -36,7 +31,7 @@ js::set('page'      , 'create');
           </tr>  
           <tr>
             <th><?php echo $lang->release->date;?></th>
-            <td><?php echo html::input('date', helper::today(), "class='form-control form-date'");?></td><td></td>
+            <td><?php echo html::input('date', helper::today(), "class='form-control form-date' required");?></td><td></td>
           </tr>  
           <tr>
             <th><?php echo $lang->release->desc;?></th>

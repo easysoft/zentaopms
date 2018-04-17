@@ -48,7 +48,6 @@ $lang->webhook->paramsList['date']       = 'Date';
 $lang->webhook->paramsList['comment']    = 'Comment';
 $lang->webhook->paramsList['text']       = 'Action Desc';
 
-$lang->webhook->saveSuccess   = 'Save success.';
 $lang->webhook->confirmDelete = 'Are your sure delete this hook?';
 
 $lang->webhook->trimWords = '';

@@ -41,6 +41,7 @@ $lang->export       = '導出';
 $lang->setFileName  = '檔案名：';
 $lang->submitting   = '稍候...';
 $lang->save         = '保存';
+$lang->saveSuccess  = '保存成功';
 $lang->confirm      = '確認';
 $lang->preview      = '查看';
 $lang->goback       = '返回';
