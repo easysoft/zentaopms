@@ -11,52 +11,49 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php 
-js::set('page'             , 'edit');
-js::set('productID'        , $release->product);
-js::set('oldReleasedBuild' , $release->build);
-?>
-<div class='container mw-1400px'>
-  <div id='titlebar'>
-    <div class='heading'>
-      <span class='prefix'><?php echo html::icon($lang->icons['release']);?> <strong><?php echo $release->id;?></strong></span>
-      <strong><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></strong>
-      <small class='text-muted'> <?php echo $lang->release->edit;?> <i class='icon icon-pencil'></i></small>
+<div id='mainContent' class='main-content'>
+  <div class='center-block'>
+    <div class='main-header'>
+      <h2><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?> <?php echo $lang->release->edit;?></h2>
     </div>
+    <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform' enctype='multipart/form-data'>
+      <table class='table table-form'> 
+        <tbody>
+          <tr>
+            <th><?php echo $lang->release->name;?></th>
+            <td><?php echo html::input('name', $release->name, "class='form-control' autocomplete='off' required");?></td><td></td>
+          </tr>  
+          <tr>
+            <th><?php echo $lang->release->build;?></th>
+            <td><?php echo html::select('build', $builds, $release->build, "class='form-control chosen' required"); ?></td><td></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->release->date;?></th>
+            <td><?php echo html::input('date', $release->date, "class='form-control form-date' required");?></td><td></td>
+          </tr>  
+          <tr>
+            <th><?php echo $lang->release->status;?></th>
+            <td><?php echo html::select('status', $lang->release->statusList, $release->status, "class='form-control'");?></td><td></td>
+          </tr>  
+          <tr>
+            <th><?php echo $lang->release->desc;?></th>
+            <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($release->desc), "rows=10 class='form-control kindeditor' hidefocus='true'");?></td>
+          </tr>  
+          <tr>
+            <th><?php echo $lang->files;?></th>
+            <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
+          </tr>  
+          <tr>
+            <td colspan='3' class='text-center'>
+              <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+              <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
+              <?php echo html::hidden('product', $release->product);?>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>  
   </div>
-  <form class='form-condensed' method='post' target='hiddenwin' id='dataform' enctype='multipart/form-data'>
-    <table class='table table-form'> 
-      <tr>
-        <th class='w-90px'><?php echo $lang->release->name;?></th>
-        <td class='w-p25-f'><?php echo html::input('name', $release->name, "class='form-control' autocomplete='off'");?></td><td></td>
-      </tr>  
-      <tr>
-        <th><?php echo $lang->release->build;?></th>
-        <td><span id='buildBox'><?php echo html::select('build', $builds, $release->build, "class='form-control chosen'"); ?></span></td><td></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->release->date;?></th>
-        <td><?php echo html::input('date', $release->date, "class='form-control form-date'");?></td><td></td>
-      </tr>  
-      <tr>
-        <th><?php echo $lang->release->status;?></th>
-        <td><?php echo html::select('status', $lang->release->statusList, $release->status, "class='form-control'");?></td><td></td>
-      </tr>  
-      <tr>
-        <th><?php echo $lang->release->desc;?></th>
-        <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($release->desc), "rows=10 class='form-control'");?></td>
-      </tr>  
-      <tr>
-        <th><?php echo $lang->files;?></th>
-        <td colspan='2'><?php echo $this->fetch('file', 'buildform', array('fileCount' => 1));?></td>
-      </tr>  
-      <tr>
-        <td></td>
-        <td colspan='2'><?php echo html::submitButton() . html::backButton() . html::hidden('product', $release->product);?></td>
-      </tr>
-    </table>
-  </form>  
 </div>
 <?php include '../../common/view/footer.html.php';?>
