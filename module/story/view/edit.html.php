@@ -11,20 +11,21 @@
  */
 ?>
 <?php include './header.html.php';?>
-<form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
-<div id='titlebar'>
-  <div class='heading'>
+<div class='main-content' id='mainContent'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
+<div class='main-header'>
+  <h2>
     <span class='prefix'><?php echo html::icon($lang->icons['story']);?> <strong><?php echo $story->id;?></strong></span>
     <strong><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title, '', 'class="story-title"');?></strong>
-    <small><?php echo html::icon($lang->icons['edit']) . ' ' . $lang->story->edit;?></small>
-  </div>
-  <div class='actions'>
+    <small><?php echo $lang->arrow . ' ' . $lang->story->edit;?></small>
+  </h2>
+  <div class="pull-right btn-toolbar">
     <?php echo html::submitButton($lang->save)?>
   </div>
 </div>
-<div class='row-table'>
-  <div class='col-main'>
-    <div class='main'>
+<div class='main-row'>
+  <div class='main-col col-8'>
+    <div class='cell'>
       <div class='form-group'>
         <div class='input-group'>
           <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->story->colorTag ?>' value='<?php echo $story->color ?>' data-update-text='#title, .story-title'>
@@ -50,15 +51,15 @@
       <div class='actions actions-form'>
         <?php 
         echo html::hidden('lastEditedDate', $story->lastEditedDate);
-        echo html::submitButton($lang->save);
-        echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"));
+        echo html::submitButton($lang->save, '', 'btn btn-wide btn-primary');
+        echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"), 'self', '', 'btn btn-wide');
         ?>
       </div>
       <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
-  <div class='col-side'>
-    <div class='main main-side'>
+  <div class='side-col col-4'>
+    <div class='cell'>
       <fieldset>
         <legend><?php echo $lang->story->legendBasicInfo;?></legend>
         <table class='table table-form'>
@@ -235,4 +236,5 @@
   </div>
 </div>
 </form>
+</div>
 <?php include '../../common/view/footer.html.php';?>

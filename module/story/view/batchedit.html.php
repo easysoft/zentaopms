@@ -12,16 +12,17 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('dittoNotice', $this->lang->story->dittoNotice);?>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>
-    <strong><small class='text-muted'><?php echo html::icon($lang->icons['batchEdit']);?></small> <?php echo $lang->story->common . $lang->colon . $lang->story->batchEdit;?></strong>
+<div class='main-content' id='mainContent'>
+<div class='main-header'>
+  <h2>
+    <strong><?php echo $lang->story->common . $lang->colon . $lang->story->batchEdit;?></strong>
     <?php if($productName):?>
     <small class='text-muted'><?php echo html::icon($lang->icons['product']) . ' ' . $lang->story->product . $lang->colon . ' ' . $productName;?></small>
     <?php endif;?>
-    <div class='actions'>
-      <button type="button" class="btn btn-default" data-toggle="customModal"><i class='icon icon-cog'></i> </button>
-    </div>
+  </h2>
+  <div class='pull-right btn-toolbar'>
+    <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=batchEditFields')?>
+    <?php include '../../common/view/customfield.html.php';?>
   </div>
 </div>
 <?php if(isset($suhosinInfo)):?>
@@ -34,7 +35,7 @@ foreach(explode(',', $showFields) as $field)
     if($field)$visibleFields[$field] = '';
 }
 ?>
-<form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "from=storyBatchEdit")?>">
+<form method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "from=storyBatchEdit")?>">
   <table class='table table-form table-fixed with-border'>
     <thead>
       <tr class='text-center'>
@@ -136,6 +137,4 @@ foreach(explode(',', $showFields) as $field)
   </table>
 </form>
 <?php endif;?>
-<?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=batchEditFields')?>
-<?php include '../../common/view/customfield.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

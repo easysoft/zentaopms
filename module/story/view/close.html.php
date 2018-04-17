@@ -11,15 +11,15 @@
  */
 ?>
 <?php include './header.html.php';?>
-<div class='container'>
-  <div id='titlebar'>
-    <div class='heading'>
+<div id='mainContent' class='main-content'>
+  <div class='main-header'>
+    <h2>
       <span class='prefix'><?php echo html::icon($lang->icons['story']);?> <strong><?php echo $story->id;?></strong></span>
       <strong><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></strong>
-      <small><?php echo $lang->story->close;?></small>
-    </div>
+      <small><?php echo $lang->arrow . $lang->story->close;?></small>
+    </h2>
   </div>
-  <form method='post' target='hiddenwin' class='form-condensed'>
+  <form method='post' target='hiddenwin'>
     <table class='table table-form'>
       <tr>
         <th class='w-80px'><?php echo $lang->story->closedReason;?></th>
@@ -46,7 +46,7 @@
       </tr>
     </table>
   </form>
-  <hr class='small'>
+  <hr class='small' />
   <div class='main'>
     <?php include '../../common/view/action.html.php';?>
   </div>

@@ -106,6 +106,13 @@ class search extends control
         $query   = $queryID ? $queryID : '';
         $module  = empty($module) ? $this->session->searchParams['module'] : $module;
         $queries = $this->search->getQueryPairs($module);
-        die(html::select('queryID', $queries, $query, 'onchange=executeQuery(this.value) class=form-control'));
+
+        $html = '';
+        foreach($queries as $queryID => $queryName)
+        {
+            if(empty($queryID)) continue;
+            $html .= html::a("###", $queryName . (common::hasPriv('search', 'deleteQuery') ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID'");
+        }
+        die($html);
     }
 }
