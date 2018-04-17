@@ -11,7 +11,7 @@
  */
 /* 欄位列表。*/
 $lang->project->common        = $lang->projectCommon . '視圖';
-$lang->project->allProjects   = '全部' . $lang->projectCommon;
+$lang->project->allProjects   = '所有' . $lang->projectCommon;
 $lang->project->type          = $lang->projectCommon . '類型';
 $lang->project->name          = $lang->projectCommon . '名稱';
 $lang->project->code          = $lang->projectCommon . '代號';

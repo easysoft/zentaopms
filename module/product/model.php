@@ -51,7 +51,11 @@ class productModel extends model
 
         $selectHtml = $this->select($products, $productID, $currentModule, $currentMethod, $extra, $branch, $module, $moduleType);
 
-        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $this->lang->product->index . ' <span class="caret"></span></button>';
+        $label = $this->lang->product->index;
+        if($currentModule == 'product' && $currentMethod == 'all')    $label = $this->lang->product->all;
+        if($currentModule == 'product' && $currentMethod == 'create') $label = $this->lang->product->create;
+
+        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
         $productIndex .= '<ul class="dropdown-menu">';
         if(common::hasPriv('product', 'index'))  $productIndex .= '<li>' . html::a(helper::createLink('product', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->product->index) . '</li>';
         if(common::hasPriv('product', 'all'))    $productIndex .= '<li>' . html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->product->all) . '</li>';

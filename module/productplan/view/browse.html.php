@@ -29,11 +29,11 @@
 </div>
 <div id="mainContent">
   <form class='main-table table-productplan' data-ride='table' method='post' id='productplanForm' action='<?php echo inlink('batchEdit', "productID=$product->id&branch=$branch")?>'>
-    <table class='table has-sort-head' id="productplan">
+    <table class='table has-sort-head' id="productplanList">
       <thead>
       <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <tr class='colhead'>
-        <th class='w-80px'>
+        <th class='c-id'>
           <?php if(common::hasPriv('productplan', 'batchEdit')):?>
           <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
             <label></label>
@@ -61,13 +61,13 @@
       <?php $plan = $this->file->replaceImgURL($plan, 'desc');?>
       <tr>
         <td class='cell-id'>
+          <?php if(common::hasPriv('productplan', 'batchEdit')):?>
           <div class="checkbox-primary">
-            <?php if(common::hasPriv('productplan', 'batchEdit')):?>
             <input type='checkbox' name='planIDList[<?php echo $plan->id;?>]' value='<?php echo $plan->id;?>' />
             <label></label>
-            <?php endif;?>
-            <?php echo $plan->id;?>
           </div>
+          <?php endif;?>
+          <?php echo sprintf('%03d', $plan->id);?>
         </td>
         <td class='text-left' title="<?php echo $plan->title?>"><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
         <?php if($this->session->currentProductType != 'normal'):?>
@@ -105,10 +105,10 @@
     <div class="table-footer">
       <?php if(common::hasPriv('productplan', 'batchEdit')):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <?php endif;?>
       <div class="table-actions btn-toolbar">
-        <?php if(common::hasPriv('productplan', 'batchEdit')) echo html::submitButton($lang->edit);?>
+        <?php echo html::submitButton($lang->edit);?>
       </div>
+      <?php endif;?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>
