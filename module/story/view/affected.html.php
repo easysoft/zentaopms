@@ -40,9 +40,9 @@
       <table class='table table-borderless table-condensed'>
         <thead>
           <tr>
-            <th class='w-60px'><?php echo $lang->bug->id;?></th>
+            <th class='w-80px'><?php echo $lang->bug->id;?></th>
             <th><?php echo $lang->bug->title;?></th>
-            <th class='w-60px'><?php echo $lang->bug->status;?></th>
+            <th class='w-80px'><?php echo $lang->bug->status;?></th>
             <th class='w-70px'><?php echo $lang->bug->openedBy;?></th>
             <th><?php echo $lang->bug->resolvedBy;?></th>
             <th><?php echo $lang->bug->resolution;?></th>

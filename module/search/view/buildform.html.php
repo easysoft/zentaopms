@@ -193,6 +193,7 @@ foreach($fieldParams as $fieldName => $param)
         <h4><?php echo $lang->search->savedQuery;?></h4>
         <div>
           <?php foreach($queries as $queryID => $queryName):?>
+          <?php if(empty($queryID)) continue;?>
           <?php echo html::a("javascript:executeQuery($queryID)", $queryName . (common::hasPriv('search', 'deleteQuery') ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID'");?>
           <?php endforeach;?>
         </div>
@@ -237,9 +238,14 @@ var setQueryTitle = '<?php echo $lang->search->setQueryTitle;?>';
 var module        = '<?php echo $module;?>';
 var actionURL     = '<?php echo $actionURL;?>';
 
+function executeQuery(queryID)
+{
+    if(!queryID) return;
+    location.href = actionURL.replace('myQueryID', queryID);
+}
+
 $(function()
 {
-
     var $searchForm = $('#searchForm');
     $searchForm.find('select.chosen').chosen();
 
@@ -248,7 +254,7 @@ $(function()
      */
     var loadQueries = window.loadQueries = function(queryID)
     {
-        $('#queryBox').load($.createLink('search', 'ajaxGetQuery', 'module=' + module + '&queryID=' + queryID));
+        $('#userQueries div:first').load($.createLink('search', 'ajaxGetQuery', 'module=' + module + '&queryID=' + queryID));
     };
 
     /*

@@ -15,11 +15,6 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <div class="modal-content">
   <div class="modal-header">
-    <div class="modal-actions">
-      <?php if(isonlybody()):?>
-      <button id='closeModal' type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>
-      <?php endif;?>
-    </div>
     <h4 class='modal-title pull-left'><?php echo html::a($this->createLink('todo', 'view', 'todo=' . $todo->id), "TODO #{$todo->id} {$todo->name}");?></h4>
   </div>
 
@@ -145,19 +140,5 @@
     </div>
   </form>
 </div>
-<script>
-<?php if(isonlybody()):?>
-$(function()
-{
-    parent.$('.modal-header').hide();
-    parent.$('.modal-body').css('padding', '0px');
-    $('#closeModal').click(function()
-    {
-        parent.$('.modal-backdrop.in').remove();
-        parent.$('.modal.in').remove();
-    })
-})
-<?php endif;?>
-</script>
 <?php include './footer.html.php';?>
 <script language='Javascript'>switchDateFeature(document.getElementById('dateSwitcher'));</script>
