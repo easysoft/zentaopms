@@ -60,9 +60,9 @@ class release extends control
         if(!empty($_POST))
         {
             $releaseID = $this->release->create($productID, $branch);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('release', $releaseID, 'opened');
-            die(js::locate(inlink('view', "releaseID=$releaseID"), 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 
         $builds        = $this->loadModel('build')->getProductBuildPairs($productID, $branch, 'notrunk|withbranch', false);
