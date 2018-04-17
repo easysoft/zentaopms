@@ -40,7 +40,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->productplan->begin;?></th>
-            <td><?php echo html::input('begin', $begin, "class='form-control form-date'");?></td><td></td><td></td>
+            <td><?php echo html::input('begin', $begin, "class='form-control form-date' required");?></td><td></td><td></td>
           </tr>
           <tr>
             <th><?php echo $lang->productplan->end;?></th>
