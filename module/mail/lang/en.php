@@ -4,7 +4,6 @@ $lang->mail->index         = 'Home';
 $lang->mail->detect        = 'Testing';
 $lang->mail->edit          = 'Edit Settings';
 $lang->mail->save          = 'Save';
-$lang->mail->saveSuccess   = 'Saved Successfully';
 $lang->mail->test          = 'Email Sending Test';
 $lang->mail->reset         = 'Reset';
 $lang->mail->resend        = 'Resend';

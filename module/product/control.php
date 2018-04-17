@@ -219,15 +219,15 @@ class product extends control
         if(!empty($_POST))
         {
             $productID = $this->product->create();
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('product', $productID, 'opened');
 
             if(isset($this->config->global->flow) and $this->config->global->flow == 'onlyTest')
             {
-                die(js::locate($this->createLink($this->moduleName, 'build', "productID=$productID"), 'parent'));
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($this->moduleName, 'build', "productID=$productID")));
             }
 
-            die(js::locate($this->createLink($this->moduleName, 'browse', "productID=$productID"), 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink($this->moduleName, 'browse', "productID=$productID")));
         }
 
         $this->product->setMenu($this->products, key($this->products));

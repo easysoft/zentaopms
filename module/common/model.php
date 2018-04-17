@@ -762,7 +762,7 @@ EOD;
         if(strpos(',edit,copy,report,export,delete,', ",$method,") !== false) $module = 'common';
         $class = "icon-$module-$method";
         if(!$clickable) $class .= ' disabled';
-        if($icon) $class       .= ' icon-' . $icon;
+        if($icon)       $class .= ' icon-' . $icon;
 
 
         /* Create the icon link. */

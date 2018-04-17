@@ -25,7 +25,6 @@ $lang->entry->editedDate  = '编辑时间';
 $lang->entry->date        = '请求时间';
 $lang->entry->url         = '请求地址';
 
-$lang->entry->saveSuccess   = '保存成功';
 $lang->entry->confirmDelete = '您确认要删除该应用吗？';
 $lang->entry->help          = '使用说明';
 

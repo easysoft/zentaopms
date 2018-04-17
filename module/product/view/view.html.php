@@ -215,8 +215,11 @@
     if(!$product->deleted)
     {
         ob_start();
-        common::printIcon('product', 'close', "productID=$product->id", $product, 'button', '', '', 'iframe text-danger', true);
-        echo "<div class='divider'></div>";
+        if($product->status != 'closed')
+        {
+            common::printIcon('product', 'close', "productID=$product->id", $product, 'button', '', '', 'iframe text-danger', true);
+            echo "<div class='divider'></div>";
+        }
 
         common::printIcon('product', 'edit', $params, $product);
         common::printIcon('product', 'delete', $params, $product, 'button', '', 'hiddenwin');
