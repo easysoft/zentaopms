@@ -4,7 +4,6 @@ $lang->mail->index         = '首頁';
 $lang->mail->detect        = '檢測';
 $lang->mail->edit          = '編輯配置';
 $lang->mail->save          = '保存';
-$lang->mail->saveSuccess   = '保存成功';
 $lang->mail->test          = '測試發信';
 $lang->mail->reset         = '重置';
 $lang->mail->resend        = '重發';

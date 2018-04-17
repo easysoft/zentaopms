@@ -48,7 +48,6 @@ $lang->webhook->paramsList['date']       = '操作日期';
 $lang->webhook->paramsList['comment']    = '备注';
 $lang->webhook->paramsList['text']       = '操作内容';
 
-$lang->webhook->saveSuccess   = '保存成功';
 $lang->webhook->confirmDelete = '您确认要删除该webhook吗？';
 
 $lang->webhook->trimWords = '了';

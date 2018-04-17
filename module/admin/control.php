@@ -328,7 +328,7 @@ class admin extends control
 
             $this->loadModel('setting')->setItem('system.admin.log.saveDays', $this->post->days);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->admin->saveSuccess, 'locate' => 'reload'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
         $this->loadModel('message');

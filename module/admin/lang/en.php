@@ -21,11 +21,10 @@ $lang->admin->ztCompany     = 'Verify your company';
 $lang->admin->captcha       = 'Verification Code';
 $lang->admin->getCaptcha    = 'Get Verification Code';
 
-$lang->admin->api           = 'API';
-$lang->admin->log           = 'Log';
-$lang->admin->setting       = 'Setting';
-$lang->admin->days          = 'Valid Days';
-$lang->admin->saveSuccess   = 'Saved.';
+$lang->admin->api     = 'API';
+$lang->admin->log     = 'Log';
+$lang->admin->setting = 'Setting';
+$lang->admin->days    = 'Valid Days';
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'Current Version is %s. ';

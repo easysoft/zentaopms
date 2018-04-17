@@ -253,7 +253,7 @@ class product extends control
         if(!empty($_POST))
         {
             $changes = $this->product->update($productID); 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($action == 'undelete')
             {
                 $this->loadModel('action');
@@ -266,7 +266,8 @@ class product extends control
                 $actionID = $this->loadModel('action')->create('product', $productID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate(inlink('view', "product=$productID"), 'parent'));
+
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "product=$productID")));
         }
 
         $this->product->setMenu($this->products, $productID);

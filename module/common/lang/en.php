@@ -41,6 +41,7 @@ $lang->export       = 'Export';
 $lang->setFileName  = 'File Name';
 $lang->submitting   = 'Saving...';
 $lang->save         = 'Save';
+$lang->saveSuccess  = 'Saved successfully';
 $lang->confirm      = 'Confirm';
 $lang->preview      = 'View';
 $lang->goback       = 'Back';
