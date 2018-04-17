@@ -17,7 +17,11 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title) . $lang->productplan->edit;?></h2>
+      <h2>
+        <span class='prefix'><?php echo html::icon($lang->icons['plan']);?></span>
+        <strong><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></strong>
+        <small><?php echo $lang->arrow . ' ' . $lang->productplan->edit;?></small>
+      </h2>
     </div>
     <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>

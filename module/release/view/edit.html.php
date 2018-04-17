@@ -15,7 +15,11 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?> <?php echo $lang->release->edit;?></h2>
+      <h2>
+        <span class='prefix'><?php echo html::icon($lang->icons['release']);?> <strong><?php echo $release->id;?></strong></span>
+        <strong><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></strong>
+        <small><?php echo $lang->arrow . ' ' . $lang->release->edit;?></small>
+      </h2>
     </div>
     <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform' enctype='multipart/form-data'>
       <table class='table table-form'> 
