@@ -179,9 +179,9 @@
             }
             if(count($story->tasks) == 0)
             {
-                foreach($story->projects as $project)
+                foreach($story->projects as $projectID => $project)
                 {
-                    echo "<li title='$project->name'>" . html::a($this->createLink('project', 'browse', "projectID=$project->id"), $project->name, '', "class='text-muted'") . '</li>';
+                    echo "<li title='$project->name'>" . html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name, '', "class='text-muted'") . '</li>';
                 }
             }
             ?>

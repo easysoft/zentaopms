@@ -16,7 +16,7 @@
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->product->project;?></span></span>
   </div>
 </div>
-<div id="mainContent">
+<div id="mainContent" class='main-content'>
   <table class="main-table table has-sort-head table-fixed table-project">
     <thead>
       <tr>

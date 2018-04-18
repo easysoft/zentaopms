@@ -16,7 +16,11 @@
 <div id="mainContent" class="main-content">
   <div class="center-block">
     <div class="main-header">
-      <h2><?php echo $lang->product->edit;?></h2>
+      <h2>
+        <span class='prefix'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $product->id;?></strong></span>
+        <strong><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></strong>
+        <small><?php echo $lang->arrow . ' ' . $lang->product->edit;?></small>
+      </h2>
     </div>
     <form class="load-indicator main-form form-ajax" id="createForm" method="post" target='hiddenwin'>
       <table class="table table-form">

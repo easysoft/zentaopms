@@ -776,11 +776,11 @@ EOD;
             {
                 if($method != 'edit' and $method != 'copy' and $method != 'delete')
                 {
-                    return html::a($link, "<i class='$class muted'></i> " . "<span class='text'>{$title}</span>", $target, "class='btn btn-link $extraClass' $misc", true);
+                    return html::a($link, "<i class='$class'></i> " . "<span class='text'>{$title}</span>", $target, "class='btn btn-link $extraClass' $misc", true);
                 }
                 else
                 {
-                    return html::a($link, "<i class='$class muted'></i>", $target, "class='btn btn-link $extraClass' title='$title' $misc", false);
+                    return html::a($link, "<i class='$class'></i>", $target, "class='btn btn-link $extraClass' title='$title' $misc", false);
                 }
             }
             else
@@ -836,7 +836,7 @@ EOD;
         if(isonlybody()) return false;
 
         $title = $lang->goback . $lang->backShortcutKey;
-        echo html::a($backLink, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i>', '', "id='back' class='btn' title={$title}");
+        echo html::a($backLink, '<i class="icon-goback icon-back icon-large"></i>', '', "id='back' class='btn' title={$title}");
 
         if(isset($preAndNext->pre) and $preAndNext->pre)
         {
@@ -856,15 +856,33 @@ EOD;
         }
     }
 
-    static public function printBack($backLink)
+    /**
+     * Print back link
+     * 
+     * @param  string $backLink 
+     * @static
+     * @access public
+     * @return void
+     */
+    static public function printBack($backLink, $class = '')
     {
         global $lang, $app;
         if(isonlybody()) return false;
 
+        if(empty($class)) $class = 'btn';
         $title = $lang->goback . $lang->backShortcutKey;
-        echo html::a($backLink, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i>', '', "id='back' class='btn' title={$title}");
+        echo html::a($backLink, '<i class="icon-goback icon-back"></i>', '', "id='back' class='{$class}' title={$title}");
     }
 
+    /**
+     * Print pre and next link
+     * 
+     * @param  string $preAndNext 
+     * @param  string $linkTemplate 
+     * @static
+     * @access public
+     * @return void
+     */
     public static function printPreAndNext($preAndNext = '', $linkTemplate = '')
     {
         global $lang, $app;
