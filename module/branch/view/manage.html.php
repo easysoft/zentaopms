@@ -28,7 +28,7 @@
             <span class='input-group-addon sort-handler'><a><i class='icon icon-move'></i></a></span>
             <?php endif;?>
             <?php if(common::hasPriv('branch', 'delete')):?>
-            <span class='input-group-addon'><?php echo html::a(inlink('delete', "branchID=$branchID"), "<i class='icon icon-remove'></i>", 'hiddenwin')?></span>
+            <span class='input-group-addon'><?php echo html::a(inlink('delete', "branchID=$branchID"), "<i class='icon icon-trash'></i>", 'hiddenwin')?></span>
             <?php endif;?>
           </div>
           <?php endforeach;?>
@@ -38,7 +38,7 @@
           <div class='input-group'>
             <?php echo html::input("newbranch[]", '', "class='form-control'")?>
              <span class='input-group-addon'><a href='javascript:;' onclick='addItem(this)'><i class='icon icon-plus'></i></a></span>
-             <span class='input-group-addon'><a href='javascript:;' onclick='deleteItem(this)'><i class='icon icon-remove'></i></a></span>
+             <span class='input-group-addon'><a href='javascript:;' onclick='deleteItem(this)'><i class='icon icon-trash'></i></a></span>
           </div>
           <?php endfor;?>
          </div>

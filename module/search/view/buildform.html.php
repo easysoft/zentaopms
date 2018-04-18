@@ -88,7 +88,7 @@ foreach($fieldParams as $fieldName => $param)
                 $param = $fieldParams[$currentField];
 
                 /* Print and or. */
-                echo "<td class='text-right w-60px'>";
+                echo "<td class='text-right w-80px'>";
                 if($i == 1) echo "<span id='searchgroup1'><strong>{$lang->search->group1}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
                 if($i > 1)  echo html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"], "class='form-control'");
                 echo '</td>';
@@ -149,7 +149,7 @@ foreach($fieldParams as $fieldName => $param)
                 $param = $fieldParams[$currentField];
 
                 /* Print and or. */
-                echo "<td class='text-right w-60px'>";
+                echo "<td class='text-right w-80px'>";
                 if($i == 1) echo "<span id='searchgroup2'><strong>{$lang->search->group2}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
                 if($i > 1)  echo html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"], "class='form-control'");
                 echo '</td>';

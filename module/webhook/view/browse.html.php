@@ -38,7 +38,7 @@
           if(common::hasPriv('webhook', 'delete'))
           {
               $deleteURL = $this->createLink('webhook', 'delete', "webhookID=$id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"webhookList\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$lang->webhook->delete}' class='btn-icon'");
+              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"webhookList\",confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->webhook->delete}' class='btn-icon'");
           }
           ?>
         </td>
