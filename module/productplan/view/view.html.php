@@ -11,56 +11,43 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/sortable.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->productplan->confirmUnlinkStory)?>
 <?php js::set('confirmUnlinkBug', $lang->productplan->confirmUnlinkBug)?>
 <?php js::set('planID', $plan->id);?>
-<div id='titlebar'>
-  <div class='heading'>
-  <span class='prefix'><?php echo html::icon($lang->icons['plan']);?> <strong><?php echo $plan->id;?></strong></span>
-    <strong><?php echo $plan->title;?></strong>
-    <?php if($product->type !== 'normal') echo "<span title='{$lang->product->branchName[$product->type]}' class='label label-branch label-badge'>" . $branches[$branch] . '</span>';?>
-    <span class='label label-info label-badge'><?php echo $plan->begin . '~' . $plan->end;?></span>
-    <?php if($plan->deleted):?>
-    <span class='label label-danger'><?php echo $lang->plan->deleted;?></span>
-    <?php endif; ?>
+<?php $browseLink = $app->session->productPlanList != false ? $app->session->productPlanList : $this->createLink('productplan', 'browse', "productID=$plan->product&branch=$plan->branch");?>
+<div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
+    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-link'");?>
+    <div class='divider'></div>
+    <div class='page-title'>
+      <span class='label label-id'><?php echo $plan->id;?></span>
+      <span class='text'><?php echo $plan->title;?></span>
+      <?php if($product->type !== 'normal') echo "<span title='{$lang->product->branchName[$product->type]}' class='label label-branch label-badge'>" . $branches[$branch] . '</span>';?>
+      <span class='label label-info label-badge'><?php echo $plan->begin . '~' . $plan->end;?></span>
+      <?php if($plan->deleted):?>
+      <span class='label label-danger'><?php echo $lang->plan->deleted;?></span>
+      <?php endif; ?>
+    </div>
   </div>
-  <div class='actions'>
-  <?php
-   $browseLink = $this->session->productPlanList ? $this->session->productPlanList : inlink('browse', "planID=$plan->id");
-   if(!$plan->deleted)
-   {
-      ob_start();
-      echo "<div class='btn-group'>";
-      echo "<div class='btn-group' id='createActionMenu'>";
-      common::printIcon('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=0&bugID=0&planID=$plan->id", $plan, 'button', 'plus');
-      $batchMisc = common::hasPriv('story', 'batchCreate') ? '' : "disabled";
-      $batchLink = common::hasPriv('story', 'batchCreate') ?  $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=0&plan={$plan->id}") : '#';
-      echo "<button type='button' class='btn dropdown-toggle {$batchMisc}' data-toggle='dropdown'><span class='caret'></span></button>";
-      echo "<ul class='dropdown-menu pull-right'>";
-      echo "<li>" . html::a($batchLink, $lang->story->batchCreate, '', "class='$batchMisc'") . "</li>";
-      echo '</ul>';
-      echo '</div>';
-      if(common::hasPriv('productplan', 'linkStory'))
-      {
-        echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn'");
-      }
-      if(common::hasPriv('productplan', 'linkBug') and $config->global->flow != 'onlyStory')
-      {
-          echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn'");
-      }
-      echo '</div>';
-      echo "<div class='btn-group'>";
-      common::printIcon('productplan', 'edit',   "planID=$plan->id", $plan);
-      common::printIcon('productplan', 'delete', "planID=$plan->id", $plan, 'button', '', 'hiddenwin');
-      echo '</div>';
-      $actionLinks = ob_get_contents();
-      ob_end_clean();
-      echo $actionLinks;
-   }
-   common::printRPN($browseLink);
-  ?>
+  <?php if(!$plan->deleted):?>
+  <div class='btn-toolbar pull-right'>
+    <div class='btn-group'>
+      <?php common::printIcon('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=0&plan={$plan->id}", $plan, 'button', 'plus');?>
+      <?php common::printIcon('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=0&bugID=0&planID=$plan->id", $plan, 'button', 'plus');?>
+    </div>
+    <?php if(common::hasPriv('productplan', 'linkStory'))
+    {
+        //echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-secondary'");
+        echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-primary'");
+    }
+    if(common::hasPriv('productplan', 'linkBug') and $config->global->flow != 'onlyStory')
+    {
+        //echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn btn-secondary'");
+        echo html::a("javascript:showLink($plan->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn btn-primary'");
+    }
+    ?>
   </div>
+  <?php endif;?>
 </div>
 <div class='row-table'>
   <div class='col-main'>
@@ -71,35 +58,35 @@
           <?php if($config->global->flow != 'onlyStory'):?>
           <li class='<?php if($type == 'bug') echo 'active'?>'><a href='#bugs' data-toggle='tab'><?php echo  html::icon($lang->icons['bug']) . ' ' . $lang->productplan->linkedBugs;?></a></li>
           <?php endif;?>
-          <li><a href='#planInfo' data-toggle='tab'><?php echo  html::icon($lang->icons['plan']) . ' ' . $lang->productplan->view;?></a></li>
+          <li><a href='#planInfo' data-toggle='tab'><?php echo html::icon($lang->icons['plan']) . ' ' . $lang->productplan->view;?></a></li>
         </ul>
         <div class='tab-content'>
           <div id='stories' class='tab-pane <?php if($type == 'story') echo 'active'?>'>
             <?php if(common::hasPriv('productplan', 'linkStory')):?>
             <?php $canOrder = common::hasPriv('project', 'storySort');?>
             <div class='action'>
-            <?php echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-sm btn-primary'");?>
+            <?php //echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-sm btn-primary'");?>
             </div>
             <div class='linkBox'></div>
             <?php endif;?>
-            <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");?>">
-              <table class='table tablesorter table-condensed table-hover table-striped table-fixed table-selectable' id='storyList'>
+            <form class="main-table table-story" data-ride="table" method="post" id='storyForm' action="<?php echo inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");?>">
+              <table class="table has-sort-head" id='storyList'>
                 <?php $vars = "planID={$plan->id}&type=story&orderBy=%s&link=$link&param=$param"; ?>
                 <thead>
                 <tr>
-                  <th class='w-id {sorter:false}' > <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
+                  <th class='c-id {sorter:false}' > <?php common::printOrderLink('id',    $orderBy, $vars, $lang->idAB);?></th>
                   <?php if($canOrder):?>
-                  <th class='w-50px {sorter:false}'><?php common::printOrderLink('order', $orderBy, $vars, $lang->productplan->updateOrder);?></th>
+                  <th class='w-70px {sorter:false}'><?php common::printOrderLink('order', $orderBy, $vars, $lang->productplan->updateOrder);?></th>
                   <?php endif;?>
                   <th class='w-pri {sorter:false}'> <?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
                   <th class='w-150px text-left {sorter:false}'><?php common::printOrderLink('module', $orderBy, $vars, $lang->story->module);?></th>
-                  <th class='text-left {sorter:false}'><?php common::printOrderLink('title',     $orderBy, $vars, $lang->story->title);?></th>
-                  <th class='w-user {sorter:false}'>   <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-                  <th class='w-user {sorter:false}'>   <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
-                  <th class='w-60px {sorter:false}'>   <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
-                  <th class='w-status {sorter:false}'> <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
-                  <th class='w-80px {sorter:false}'>   <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
-                  <th class='w-50px {sorter:false}'>   <?php echo $lang->actions?></th>
+                  <th class='text-left {sorter:false}'><?php common::printOrderLink('title',   $orderBy, $vars, $lang->story->title);?></th>
+                  <th class='w-user {sorter:false}'><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+                  <th class='w-user {sorter:false}'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+                  <th class='w-70px {sorter:false}'><?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
+                  <th class='w-70px {sorter:false}'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
+                  <th class='w-80px {sorter:false}'><?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
+                  <th class='w-50px {sorter:false}'><?php echo $lang->actions?></th>
                 </tr>
                 </thead>
                 <tbody class='sortable'>
@@ -323,7 +310,7 @@
           <div id='bugs' class='tab-pane <?php if($type == 'bug') echo 'active';?>'>
             <?php if(common::hasPriv('productplan', 'linkBug')):?>
             <div class='action'>
-            <?php echo html::a("javascript:showLink($plan->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn btn-sm btn-primary'");?>
+            <?php //echo html::a("javascript:showLink($plan->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn btn-sm btn-primary'");?>
             </div>
             <div class='linkBox'></div>
             <?php endif;?>
@@ -424,6 +411,19 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+<div id="mainActions">
+  <div class="btn-toolbar">
+    <?php
+    if(!$plan->deleted)
+    {
+        common::printIcon('productplan', 'edit',   "planID=$plan->id", $plan);
+        common::printIcon('productplan', 'delete', "planID=$plan->id", $plan, 'button', '', 'hiddenwin');
+        echo "<div class='divider'></div>";
+    }
+    common::printBack($browseLink);
+    ?>
   </div>
 </div>
 <?php js::set('param', helper::safe64Decode($param))?>

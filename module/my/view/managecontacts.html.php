@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='row'>
+<div class="modal-content">
   <?php if($mode == 'edit'):?>
   <div class='col-sm-3 col-lg-2'>
     <ul class='list-group'>
@@ -29,7 +29,7 @@
   <?php endif;?>
   <?php $class = $mode == 'edit' ? 'col-sm-9 col-lg-10' : 'col-sm-12 col-lg-12';?>
     <div class='<?php echo $class?>'>
-    <form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
+    <form method='post' target='hiddenwin' id='dataform'>
       <div class='panel panel-sm'>
         <div class='panel-heading'>
           <?php if($mode == 'new'):?>

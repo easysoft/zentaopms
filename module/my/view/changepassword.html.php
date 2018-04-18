@@ -11,11 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='container mw-500px'>
-  <div id='titlebar'>
-    <div class='heading'><i class='icon-key'></i> <?php echo $lang->my->changePassword;?></div>
+<div id='mainContent' class='main-content'>
+  <div class='main-header'>
+    <h2><i class='icon-key'></i> <?php echo $lang->my->changePassword;?></h2>
   </div>
-  <form class='form-condensed' method='post' target='hiddenwin'>
+  <form method='post' target='hiddenwin'>
     <table align='center' class='table table-form w-320px'>
       <tr>
         <th class='rowhead w-120px'><?php echo $lang->user->account;?></th>
@@ -50,9 +50,8 @@
       <?php echo $this->app->user->modifyPasswordReason == 'weak' ? $lang->admin->safe->changeWeak : $lang->admin->safe->modifyPasswordFirstLogin;?>
     </div>
     <?php endif;?>
-  </form>  
+  </form>
 </div>
-
 <?php js::set('passwordStrengthList', $lang->user->passwordStrengthList)?>
 <script>
 function checkPassword(password)

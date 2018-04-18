@@ -16,8 +16,8 @@ include '../../common/view/tablesorter.html.php';
 ?>
 <div id='querybox' class='show'></div>
 <div id='unlinkStoryList'>
-  <form method='post' id='unlinkedStoriesForm' target='hiddenwin' action='<?php echo $this->createLink('productplan', 'linkStory', "planID=$plan->id&browseType=$browseType&param=$param&orderBy=$orderBy")?>'>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable'> 
+  <form class="main-table table-story" data-ride="table" method="post" target='hiddenwin' id='unlinkedStoriesForm' action="<?php echo $this->createLink('productplan', 'linkStory', "planID=$plan->id&browseType=$browseType&param=$param&orderBy=$orderBy")?>">
+    <table class="table has-sort-head" id='storyList'>
     <caption class='text-left text-special'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedStories;?></strong></caption>
       <thead>
         <tr>
