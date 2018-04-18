@@ -72,7 +72,7 @@
         <div class="col-sm-12">
           <div class="cell">
             <div class="detail">
-              <h2 class="detail-title"><span class="label-id"><?php echo $product->id;?></span> <span class="label label-light label-outline">zentaopms</span> <?php echo $product->name;?></h2>
+              <h2 class="detail-title"><span class="label-id"><?php echo $product->id;?></span> <span class="label label-light label-outline"><?php echo $product->code;?></span> <?php echo $product->name;?></h2>
               <div class="detail-content article-content">
                 <p><span class="text-limit" data-limit-size="40"><?php echo $product->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></p>
                 <p>
@@ -121,10 +121,6 @@
               <div class="detail-content">
                 <table class="table table-data data-basic">
                   <tbody>
-                    <tr>
-                      <th><?php echo $lang->product->code;?></th>
-                      <td><em><?php echo $product->code;?></em></td>
-                    </tr>
                     <tr>
                       <th><?php echo $lang->product->line;?></th>
                       <td><em><?php echo zget($lines, $product->line);?></em></td>
