@@ -13,53 +13,43 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->release->confirmUnlinkStory)?>
 <?php js::set('confirmUnlinkBug', $lang->release->confirmUnlinkBug)?>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['release']);?> <strong><?php echo $release->id;?></strong></span>
-    <strong><?php echo $release->name;?></strong>
-    <?php if($release->deleted):?>
-    <span class='label label-danger'><?php echo $lang->release->deleted;?></span>
-    <?php endif; ?>
+<div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
+    <?php $browseLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID=$release->product");?>
+    <div class='page-title'>
+      <span class='label label-id'><?php echo $release->id;?></span>
+      <?php echo $release->name;?>
+      <?php if($release->deleted):?>
+      <span class='label label-danger'><?php echo $lang->release->deleted;?></span>
+      <?php endif; ?>
+    </div>
   </div>
-  <div class='actions'>
+  <div class='btn-toolbar pull-right'>
     <?php
-    $browseLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID=$release->product");
     if(!$release->deleted)
     {
-        ob_start();
-
-        echo "<div class='btn-group'>";
         if(common::hasPriv('release', 'changeStatus', $release))
         {
             $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
-            echo html::a(inlink('changeStatus', "releaseID=$release->id&type=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ' . $lang->release->changeStatusList[$changedStatus], 'hiddenwin', "class='btn'");
+            echo html::a(inlink('changeStatus', "releaseID=$release->id&type=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ' . $lang->release->changeStatusList[$changedStatus], 'hiddenwin', "class='btn btn-link'");
         }
-        if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn'");
-        if(common::hasPriv('release', 'linkBug') and $this->config->global->flow != 'onlyStory') echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"),   '<i class="icon-bug"></i> '  . $lang->release->linkBug,   '', "class='btn'");
-        echo '</div>';
+        if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn btn-link'");
+        if(common::hasPriv('release', 'linkBug') and $this->config->global->flow != 'onlyStory') echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"),   '<i class="icon-bug"></i> '  . $lang->release->linkBug,   '', "class='btn btn-link'");
 
-        echo "<div class='btn-group'>";
         common::printIcon('release', 'edit',   "releaseID=$release->id", $release);
         common::printIcon('release', 'delete', "releaseID=$release->id", $release, 'button', '', 'hiddenwin');
-        echo '</div>';
 
-        echo "<div class='btn-group'>";
-        echo common::printRPN($browseLink, $lang->goback);
-        echo '</div>';
-
-        $actionLinks = ob_get_contents();
-        ob_end_clean();
-        echo $actionLinks;
+        common::printBack($browseLink, 'btn btn-link');
     }
     else
     {
-        common::printRPN($browseLink);
+        common::printBack($browseLink, 'btn btn-link');
     }
     ?>
   </div>
 </div>
-<div class='row-table'>
-  <div class='col-main'>
+<div id='mainContent' class='main-content'>
+  <div class='main-col'>
     <div class='main'>
       <div class='tabs'>
         <?php $countStories = count($stories); $countBugs = count($bugs); $countLeftBugs = count($leftBugs);?>
@@ -80,59 +70,68 @@
             <div class='action'><?php echo html::a("javascript:showLink({$release->id}, \"story\")", '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn btn-sm btn-primary'");?></div>
             <div class='linkBox'></div>
             <?php endif;?>
-            <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory', "release=$release->id");?>" id='linkedStoriesForm'>
-            <table class='table table-hover table-condensed table-striped tablesorter table-fixed table-selectable' id='storyList'>
-              <?php $vars = "releaseID={$release->id}&type=story&link=$link&param=$param&orderBy=%s";?>
-              <thead>
+            <form class='main-table table-story' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory', "release=$release->id");?>" id='linkedStoriesForm' data-ride="table">
+              <table class='table has-sort-head' id='storyList'>
+                <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkStory');?>
+                <?php $vars = "releaseID={$release->id}&type=story&link=$link&param=$param&orderBy=%s";?>
+                <thead>
+                  <tr>
+                    <th class='c-id'>
+                      <?php if($canBatchUnlink):?>
+                      <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
+                        <label></label>
+                      </div>
+                      <?php endif;?>
+                      <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
+                    </th>
+                    <th class='w-pri'>    <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+                    <th class="text-left"><?php common::printOrderLink('title',    $orderBy, $vars, $lang->story->title);?></th>
+                    <th class='w-user'>   <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+                    <th class='w-80px'>   <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
+                    <th class='w-90px'>   <?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
+                    <th class='w-100px'>  <?php common::printOrderLink('stage',    $orderBy, $vars, $lang->story->stageAB);?></th>
+                    <th class='w-50px'>   <?php echo $lang->actions?></th>
+                  </tr>
+                </thead>
+                <?php foreach($stories as $storyID => $story):?>
+                <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
                 <tr>
-                  <th class='w-id {sorter:false}'>     <?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
-                  <th class='w-pri {sorter:false}'>    <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
-                  <th class="text-left {sorter:false}"><?php common::printOrderLink('title',    $orderBy, $vars, $lang->story->title);?></th>
-                  <th class='w-user {sorter:false}'>   <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
-                  <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
-                  <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
-                  <th class='w-100px {sorter:false}'>  <?php common::printOrderLink('stage',    $orderBy, $vars, $lang->story->stageAB);?></th>
-                  <th class='w-50px {sorter:false}'>   <?php echo $lang->actions?></th>
-                </tr>
-              </thead>
-              <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkStory');?>
-              <?php foreach($stories as $storyID => $story):?>
-              <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
-              <tr class='text-center'>
-                <td class='cell-id'>
-                  <?php if($canBatchUnlink):?>
-                  <input type='checkbox' name='unlinkStories[]'  value='<?php echo $story->id;?>'/> 
-                  <?php endif;?>
-                  <?php echo sprintf('%03d', $story->id);?>
-                </td>
-                <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-                <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($storyLink,$story->title, '', "class='preview'");?></td>
-                <td><?php echo $users[$story->openedBy];?></td>
-                <td><?php echo $story->estimate;?></td>
-                <td class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
-                <td><?php echo $lang->story->stageList[$story->stage];?></td>
-                <td>
-                  <?php
-                  if(common::hasPriv('release', 'unlinkStory'))
-                  {
-                      $unlinkURL = $this->createLink('release', 'unlinkStory', "releaseID=$release->id&story=$story->id");
-                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn-icon' title='{$lang->release->unlinkStory}'");
-                  }
-                  ?>
-                </td>
-              </tr>
-              <?php endforeach;?>
-              <tfoot>
-                <tr>
-                  <td colspan='8'>
-                    <div class='table-actions clearfix'>
-                      <?php if($countStories and $canBatchUnlink) echo html::selectButton() . html::submitButton($lang->release->batchUnlink);?>
-                      <div class='text'><?php echo sprintf($lang->release->finishStories, $countStories);?></div>
+                  <td class='c-id'>
+                    <div class="checkbox-primary">
+                      <?php if($canBatchUnlink):?>
+                      <input type='checkbox' name='unlinkStories[]'  value='<?php echo $story->id;?>'/> 
+                      <label></label>
+                      <?php endif;?>
+                      <?php echo sprintf('%03d', $story->id);?>
                     </div>
                   </td>
+                  <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+                  <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($storyLink,$story->title, '', "class='preview'");?></td>
+                  <td><?php echo $users[$story->openedBy];?></td>
+                  <td><?php echo $story->estimate;?></td>
+                  <td><span class='status-<?php echo $story->status;?>'><span class="label label-dot"></span> <?php echo $lang->story->statusList[$story->status];?></span></td>
+                  <td><?php echo $lang->story->stageList[$story->stage];?></td>
+                  <td class='c-actions'>
+                    <?php
+                    if(common::hasPriv('release', 'unlinkStory'))
+                    {
+                        $unlinkURL = $this->createLink('release', 'unlinkStory', "releaseID=$release->id&story=$story->id");
+                        echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn-icon' title='{$lang->release->unlinkStory}'");
+                    }
+                    ?>
+                  </td>
                 </tr>
-              </tfoot>
-            </table>
+                <?php endforeach;?>
+              </table>
+              <?php if($countStories and $canBatchUnlink):?>
+              <div class='table-footer'>
+                <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+                <div class="table-actions btn-toolbar">
+                  <?php echo html::submitButton($lang->release->batchUnlink);?>
+                </div>
+                <div class='text'><?php echo sprintf($lang->release->finishStories, $countStories);?></div>
+              </div>
+              <?php endif;?>
             </form>
           </div>
           <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
@@ -140,59 +139,68 @@
             <div class='action'><?php echo html::a("javascript:showLink({$release->id}, \"bug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-sm btn-primary'");?></div>
             <div class='linkBox'></div>
             <?php endif;?>
-            <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "releaseID=$release->id");?>" id='linkedBugsForm'>
-            <table class='table table-hover table-condensed table-striped tablesorter table-fixed table-selectable' id='bugList'>
-              <?php $vars = "releaseID={$release->id}&type=bug&link=$link&param=$param&orderBy=%s";?>
-              <thead>
+            <form class='main-table table-bug' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "releaseID=$release->id");?>" id='linkedBugsForm' data-ride="table">
+              <table class='table has-sort-head' id='bugList'>
+                <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkBug');?>
+                <?php $vars = "releaseID={$release->id}&type=bug&link=$link&param=$param&orderBy=%s";?>
+                <thead>
+                  <tr>
+                    <th class='c-id'>
+                      <?php if($canBatchUnlink):?>
+                      <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
+                        <label></label>
+                      </div>
+                      <?php endif;?>
+                      <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
+                    </th>
+                    <th class='text-left'><?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
+                    <th class='w-100px'>  <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
+                    <th class='w-user'>   <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
+                    <th class='w-date'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
+                    <th class='w-user'>   <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+                    <th class='w-100px'>  <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
+                    <th class='w-50px'>   <?php echo $lang->actions;?></th>
+                  </tr>
+                </thead>
+                <?php foreach($bugs as $bug):?>
+                <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
                 <tr>
-                  <th class='w-id {sorter:false}'>     <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
-                  <th class='text-left {sorter:false}'><?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
-                  <th class='w-100px {sorter:false}'>  <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
-                  <th class='w-user {sorter:false}'>   <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
-                  <th class='w-date {sorter:false}'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
-                  <th class='w-user {sorter:false}'>   <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
-                  <th class='w-100px {sorter:false}'>  <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
-                  <th class='w-50px {sorter:false}'>   <?php echo $lang->actions;?></th>
-                </tr>
-              </thead>
-              <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkBug');?>
-              <?php foreach($bugs as $bug):?>
-              <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
-              <tr class='text-center'>
-                <td class='cell-id'>
-                  <?php if($canBatchUnlink):?>
-                  <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
-                  <?php endif;?>
-                  <?php echo sprintf('%03d', $bug->id);?>
-                </td>
-                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
-                <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
-                <td><?php echo $users[$bug->openedBy];?></td>
-                <td><?php echo substr($bug->openedDate, 5, 11)?></td>
-                <td><?php echo $users[$bug->resolvedBy];?></td>
-                <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
-                <td>
-                  <?php
-                  if(common::hasPriv('release', 'unlinkBug'))
-                  {
-                      $unlinkURL = $this->createLink('release', 'unlinkBug', "releaseID=$release->id&bug=$bug->id");
-                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn-icon' title='{$lang->release->unlinkBug}'");
-                  }
-                  ?>
-                </td>
-              </tr>
-              <?php endforeach;?>
-              <tfoot>
-                <tr>
-                  <td colspan='8'>
-                    <div class='table-actions clearfix'>
-                      <?php if($countBugs and $canBatchUnlink) echo html::selectButton() . html::submitButton($lang->release->batchUnlink);?>
-                      <div class='text'><?php echo sprintf($lang->release->resolvedBugs, $countBugs);?></div>
+                  <td class='c-id'>
+                    <div class="checkbox-primary">
+                      <?php if($canBatchUnlink):?>
+                      <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
+                      <label></label>
+                      <?php endif;?>
+                      <?php echo sprintf('%03d', $bug->id);?>
                     </div>
                   </td>
+                  <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
+                  <td><span class='status-<?php echo $bug->status?>'><span class="label label-dot"></span> <?php echo zget($lang->bug->statusList, $bug->status);?></td>
+                  <td><?php echo $users[$bug->openedBy];?></td>
+                  <td><?php echo substr($bug->openedDate, 5, 11)?></td>
+                  <td><?php echo $users[$bug->resolvedBy];?></td>
+                  <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
+                  <td class='c-actions'>
+                    <?php
+                    if(common::hasPriv('release', 'unlinkBug'))
+                    {
+                        $unlinkURL = $this->createLink('release', 'unlinkBug', "releaseID=$release->id&bug=$bug->id");
+                        echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn-icon' title='{$lang->release->unlinkBug}'");
+                    }
+                    ?>
+                  </td>
                 </tr>
-              </tfoot>
-            </table>
+                <?php endforeach;?>
+              </table>
+              <?php if($countBugs and $canBatchUnlink):?>
+              <div class='table-footer'>
+                <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+                <div class="table-actions btn-toolbar">
+                  <?php echo html::submitButton($lang->release->batchUnlink);?>
+                </div>
+                <div class='text'><?php echo sprintf($lang->release->resolvedBugs, $countBugs);?></div>
+              </div>
+              <?php endif;?>
             </form>
           </div>
           <div class='tab-pane <?php if($type == 'leftBug') echo 'active'?>' id='leftBugs'>
@@ -200,121 +208,134 @@
             <div class='action'><?php echo html::a("javascript:showLink({$release->id}, \"leftBug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-sm btn-primary'");?></div>
             <div class='linkBox'></div>
             <?php endif;?>
-            <form method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "releaseID=$release->id&type=leftBug");?>" id='linkedBugsForm'>
-            <table class='table table-hover table-condensed table-striped tablesorter table-fixed table-selectable' id='leftBugList'>
-              <?php $vars = "releaseID={$release->id}&type=leftBug&link=$link&param=$param&orderBy=%s";?>
-              <thead>
+            <form class='main-table table-bug' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "releaseID=$release->id&type=leftBug");?>" id='linkedBugsForm' data-ride="table">
+              <table class='table has-sort-head' id='leftBugList'>
+                <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkBug');?>
+                <?php $vars = "releaseID={$release->id}&type=leftBug&link=$link&param=$param&orderBy=%s";?>
+                <thead>
+                  <tr>
+                    <th class='c-id'>
+                      <?php if($canBatchUnlink):?>
+                      <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
+                        <label></label>
+                      </div>
+                      <?php endif;?>
+                      <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
+                    </th>
+                    <th class='w-80px'>    <?php common::printOrderLink('severity',   $orderBy, $vars, $lang->bug->severityAB);?></th>
+                    <th class='text-left'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
+                    <th class='w-100px'>   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->status);?></th>
+                    <th class='w-user'>    <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+                    <th class='w-150px'>   <?php common::printOrderLink('openedDate', $orderBy, $vars, $lang->bug->openedDateAB);?></th>
+                    <th class='w-50px'>    <?php echo $lang->actions;?></th>
+                  </tr>
+                </thead>
+                <?php foreach($leftBugs as $bug):?>
+                <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
                 <tr>
-                  <th class='w-id {sorter:false}'>      <?php common::printOrderLink('id',         $orderBy, $vars, $lang->idAB);?></th>
-                  <th class='w-severity {sorter:false}'><?php common::printOrderLink('severity',   $orderBy, $vars, $lang->bug->severityAB);?></th>
-                  <th class='text-left {sorter:false}'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
-                  <th class='w-100px {sorter:false}'>   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->status);?></th>
-                  <th class='w-user {sorter:false}'>    <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-                  <th class='w-150px {sorter:false}'>   <?php common::printOrderLink('openedDate', $orderBy, $vars, $lang->bug->openedDateAB);?></th>
-                  <th class='w-50px {sorter:false}'>    <?php echo $lang->actions;?></th>
-                </tr>
-              </thead>
-              <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkBug');?>
-              <?php foreach($leftBugs as $bug):?>
-              <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
-              <tr class='text-center'>
-                <td class='cell-id'>
-                  <?php if($canBatchUnlink):?>
-                  <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
-                  <?php endif;?>
-                  <?php echo sprintf('%03d', $bug->id);?>
-                </td>
-                <td><span class='severity<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span></td>
-                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
-                <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
-                <td><?php echo $users[$bug->openedBy];?></td>
-                <td><?php echo $bug->openedDate?></td>
-                <td>
-                  <?php
-                  if(common::hasPriv('release', 'unlinkBug'))
-                  {
-                      $unlinkURL = $this->createLink('release', 'unlinkBug', "releaseID=$release->id&bug=$bug->id&type=leftBug");
-                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"leftBugList\",confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn-icon' title='{$lang->release->unlinkBug}'");
-                  }
-                  ?>
-                </td>
-              </tr>
-              <?php endforeach;?>
-              <tfoot>
-                <tr>
-                  <td colspan='7'>
-                    <div class='table-actions clearfix'>
-                      <?php if($countLeftBugs and $canBatchUnlink) echo html::selectButton() . html::submitButton($lang->release->batchUnlink);?>
-                      <div class='text'><?php echo sprintf($lang->release->createdBugs, $countLeftBugs);?></div>
+                  <td class='c-id'>
+                    <div class="checkbox-primary">
+                      <?php if($canBatchUnlink):?>
+                      <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
+                      <label></label>
+                      <?php endif;?>
+                      <?php echo sprintf('%03d', $bug->id);?>
                     </div>
                   </td>
+                  <td><span class='severity<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span></td>
+                  <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
+                  <td><span class='status-<?php echo $bug->status?>'><span class="label label-dot"></span> <?php echo zget($lang->bug->statusList, $bug->status);?></span></td>
+                  <td><?php echo zget($users, $bug->openedBy);?></td>
+                  <td><?php echo $bug->openedDate?></td>
+                  <td class='c-actions'>
+                    <?php
+                    if(common::hasPriv('release', 'unlinkBug'))
+                    {
+                        $unlinkURL = $this->createLink('release', 'unlinkBug', "releaseID=$release->id&bug=$bug->id&type=leftBug");
+                        echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"leftBugList\",confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn-icon' title='{$lang->release->unlinkBug}'");
+                    }
+                    ?>
+                  </td>
                 </tr>
-              </tfoot>
-            </table>
+                <?php endforeach;?>
+              </table>
+              <?php if($countLeftBugs and $canBatchUnlink):?>
+              <div class='table-footer'>
+                <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+                <div class="table-actions btn-toolbar">
+                  <?php echo html::submitButton($lang->release->batchUnlink);?>
+                </div>
+                <div class='text'><?php echo sprintf($lang->release->createdBugs, $countLeftBugs);?></div>
+              </div>
+              <?php endif;?>
             </form>
           </div>
 
           <div class='tab-pane <?php if($type == 'releaseInfo') echo 'active'?>' id='releaseInfo'>
-            <div class="row-table">
-              <div class="col-main">
-                <fieldset>
-                  <legend><?php echo $lang->release->basicInfo?></legend>
-                  <table class='table table-data table-condensed table-borderless table-fixed'>
-                    <tr>
-                      <th class='w-80px'><?php echo $lang->release->product;?></th>
-                      <td><?php echo $release->productName;?></td>
-                    </tr>
-                      <?php if($release->productType != 'normal'):?>
+            <div class="main-row">
+              <div class="main-col col-8">
+                <div class='cell'>
+                  <div class='detail'>
+                    <div class='detail-title'><?php echo $lang->release->basicInfo?></div>
+                    <div class='detail-content'>
+                      <table class='table table-data'>
                         <tr>
-                          <th><?php echo $lang->product->branch;?></th>
-                          <td><?php echo $branchName;?></td>
+                          <th class='w-80px'><?php echo $lang->release->product;?></th>
+                          <td><?php echo $release->productName;?></td>
                         </tr>
-                      <?php endif;?>
-                    <tr>
-                      <th><?php echo $lang->release->name;?></th>
-                      <td><?php echo $release->name;?></td>
-                    </tr>
-                    <tr>
-                      <th><?php echo $lang->release->build;?></th>
-                      <td title='<?php echo $release->buildName?>'>
-                          <?php echo ($release->project) ? html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank') : $release->buildName;?>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th><?php echo $lang->release->status;?></th>
-                      <td><?php echo $lang->release->statusList[$release->status];?></td>
-                    </tr>
-                    <tr>
-                      <th><?php echo $lang->release->date;?></th>
-                      <td><?php echo $release->date;?></td>
-                    </tr>
-                    <tr>
-                      <th><?php echo $lang->release->desc;?></th>
-                      <td><?php echo $release->desc;?></td>
-                    </tr>
-                  </table>
-                </fieldset>
-                <fieldset>
-                  <legend><?php echo $lang->files?></legend>
-                  <div class='article-content'>
-                      <?php
-                      if($release->files)
-                      {
-                          echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false'));
-                      }
-                      elseif($release->filePath)
-                      {
-                          echo $lang->release->filePath . html::a($release->filePath, $release->filePath, '_blank');
-                      }
-                      elseif($release->scmPath)
-                      {
-                          echo $lang->release->scmPath . html::a($release->scmPath, $release->scmPath, '_blank');
-                      }
-                      ?>
+                          <?php if($release->productType != 'normal'):?>
+                            <tr>
+                              <th><?php echo $lang->product->branch;?></th>
+                              <td><?php echo $branchName;?></td>
+                            </tr>
+                          <?php endif;?>
+                        <tr>
+                          <th><?php echo $lang->release->name;?></th>
+                          <td><?php echo $release->name;?></td>
+                        </tr>
+                        <tr>
+                          <th><?php echo $lang->release->build;?></th>
+                          <td title='<?php echo $release->buildName?>'>
+                              <?php echo ($release->project) ? html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank') : $release->buildName;?>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th><?php echo $lang->release->status;?></th>
+                          <td><?php echo $lang->release->statusList[$release->status];?></td>
+                        </tr>
+                        <tr>
+                          <th><?php echo $lang->release->date;?></th>
+                          <td><?php echo $release->date;?></td>
+                        </tr>
+                        <tr>
+                          <th><?php echo $lang->release->desc;?></th>
+                          <td><?php echo $release->desc;?></td>
+                        </tr>
+                      </table>
+                    </div>
                   </div>
-                </fieldset>
+                  <div class='detail'>
+                    <div class='detail-title'><?php echo $lang->files?></div>
+                    <div class='detail-content article-content'>
+                        <?php
+                        if($release->files)
+                        {
+                            echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false'));
+                        }
+                        elseif($release->filePath)
+                        {
+                            echo $lang->release->filePath . html::a($release->filePath, $release->filePath, '_blank');
+                        }
+                        elseif($release->scmPath)
+                        {
+                            echo $lang->release->scmPath . html::a($release->scmPath, $release->scmPath, '_blank');
+                        }
+                        ?>
+                    </div>
+                  </div>
+                  <?php include '../../common/view/action.html.php';?>
+                </div>
               </div>
-              <div class="col-side"><?php include '../../common/view/action.html.php';?></div>
             </div>
           </div>
         </div>
@@ -323,7 +344,7 @@
   </div>
 </div>
 <style>
-.tabs .tab-content .tab-pane .action{position: absolute; right: <?php echo ($countStories or $countBugs or $countLeftBugs) ? '110px' : '-1px'?>; top: 0px;}
+.tabs .tab-content .tab-pane .action{position: absolute; right: <?php echo ($countStories or $countBugs or $countLeftBugs) ? '80px' : '-1px'?>; top: 0px;}
 </style>
 <?php js::set('param', helper::safe64Decode($param))?>
 <?php js::set('link', $link)?>

@@ -52,7 +52,7 @@ class sql extends baseSQL
     public function groupBy($groupBy)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
-        if(!preg_match('/^\w+[a-zA-Z0-9_`.,\s]+$/', $groupBy))
+        if(!preg_match('/^[a-zA-Z0-9_`\.,\s]+$/', $groupBy))
         {
             $groupBy = htmlspecialchars($groupBy);
             die("Group is bad query, The group is $groupBy");
