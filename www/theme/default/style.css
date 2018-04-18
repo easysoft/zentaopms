@@ -67,3 +67,18 @@ body.body-modal #mainMenu{margin-top:5px;}
 .modal.with-titlebar .modal-header .modal-body,  .modal-dialog.hide-header .modal-header .modal-body {z-index: 990}
 .modal.with-titlebar .modal-header .modal-title, .modal-dialog.hide-header .modal-header .modal-title {display: none}
 .modal.with-titlebar .modal-header .close, .modal-dialog.hide-header .modal-header .close {position: absolute; right: 15px; top: 15px}
+
+.fixedTfootAction {background-color: #f5f5f5; position: fixed; bottom: 40px; box-shadow: 0 -3px 4px rgba(0,0,0,0.05);}
+.ranzhiFixedTfootAction .fixedTfootAction {bottom: 0px;}
+.table > .fixedTfootAction > tr > td {border-bottom: none}
+.table > .fixedTfootAction.scrolled > tr > td {background: #2e6dad; border: none; color: #fff}
+.fixedTfootAction.scrolled .btn {border: 1px solid #fff; border-color: rgba(255,255,255,.5); background-color: #2e6dad!important; text-shadow: none; color: #e5e5e5!important;}
+.fixedTfootAction.scrolled .btn:hover {background-color: #2e6dad!important;}
+.fixedTfootAction.scrolled .pager,
+.fixedTfootAction.scrolled .pager > a,
+.fixedTfootAction.scrolled .pager > .dropdown > a,
+.fixedTfootAction.scrolled .table-actions > .text {color: #e5e5e5}
+.fixedTfootAction.scrolled .pager strong,
+.fixedTfootAction.scrolled .table-actions > .text strong {color: #fff;}
+.fixedTfootAction.scrolled .pager .dropdown > a:hover,
+.fixedTfootAction.scrolled .pager > a:hover {background-color: #2e6dad}
