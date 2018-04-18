@@ -29,7 +29,7 @@ include '../../common/view/chosen.html.php';
 #searchForm > table > tbody > tr > td {padding: 10px 15px; color: #838A9D;}
 #searchForm .form-actions {padding-bottom: 20px; padding-top: 0;}
 #searchForm .chosen-container[id^="field"] .chosen-drop {min-width: 140px;}
-#searchForm [id^="valueBox"] .chosen-container .chosen-single {max-width: 170px;}
+#searchForm [id^="valueBox"] .chosen-container .chosen-single {min-width: 140px;}
 #searchForm [id^="valueBox"] .chosen-container .chosen-drop {min-width: 300px;}
 #searchForm .chosen-container .chosen-drop ul.chosen-results li {white-space:normal}
 #searchForm input.date::-webkit-input-placeholder {color: #000000; opacity: 1;}
@@ -88,7 +88,7 @@ foreach($fieldParams as $fieldName => $param)
                 $param = $fieldParams[$currentField];
 
                 /* Print and or. */
-                echo "<td class='text-right w-60px'>";
+                echo "<td class='text-right w-80px'>";
                 if($i == 1) echo "<span id='searchgroup1'><strong>{$lang->search->group1}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
                 if($i > 1)  echo html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"], "class='form-control'");
                 echo '</td>';
@@ -97,7 +97,7 @@ foreach($fieldParams as $fieldName => $param)
                 echo "<td class='w-110px' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
                 /* Print operator. */
-                echo "<td class='w-70px'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
+                echo "<td class='w-80px'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
 
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO' style='overflow:visible'>";
@@ -127,7 +127,7 @@ foreach($fieldParams as $fieldName => $param)
           </tbody>
         </table>
       </td>
-      <td class='text-center nobr'><?php echo html::select('groupAndOr', $lang->search->andor, $formSession['groupAndOr'], "class='form-control w-60px'")?></td>
+      <td class='text-center nobr w-90px'><?php echo html::select('groupAndOr', $lang->search->andor, $formSession['groupAndOr'], "class='form-control'")?></td>
       <td class='w-400px'>
         <table class='table table-form'>
           <tbody>
@@ -149,16 +149,16 @@ foreach($fieldParams as $fieldName => $param)
                 $param = $fieldParams[$currentField];
 
                 /* Print and or. */
-                echo "<td class='text-right w-60px'>";
+                echo "<td class='text-right w-80px'>";
                 if($i == 1) echo "<span id='searchgroup2'><strong>{$lang->search->group2}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
                 if($i > 1)  echo html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"], "class='form-control'");
                 echo '</td>';
 
                 /* Print field. */
-                echo "<td class='w-90px' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
+                echo "<td class='w-110px' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
                 /* Print operator. */
-                echo "<td class='w-70px'>" .  html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
+                echo "<td class='w-80px'>" .  html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
 
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO'>";
@@ -189,6 +189,7 @@ foreach($fieldParams as $fieldName => $param)
           </tbody>
         </table>
       </td>
+      <?php if($style != 'simple'):?>
       <td class='w-160px' rowspan='2' id='userQueries'>
         <h4><?php echo $lang->search->savedQuery;?></h4>
         <div>
@@ -198,6 +199,7 @@ foreach($fieldParams as $fieldName => $param)
           <?php endforeach;?>
         </div>
       </td>
+      <?php endif;?>
     </tr>
     <tr>
       <td colspan='3' class='text-center form-actions'>

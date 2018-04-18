@@ -281,7 +281,7 @@
               $withSearch = count($users) > 10;
               $actionLink = $this->createLink('story', 'batchAssignTo', "productID=$productID");
               echo html::select('assignedTo', $users, '', 'class="hidden"');
-              if(!$withSearch):
+              if($withSearch):
               ?>
               <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
@@ -317,7 +317,7 @@ if($shortcut.size() > 0)
 {
     $shortcut.addClass('btn-active-text');
     $('#bysearchTab').removeClass('btn-active-text');
-    $('#querybox').removeClass('show');
+    $('#queryBox').removeClass('show');
 }
 <?php endif;?>
 </script>
