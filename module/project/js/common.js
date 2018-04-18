@@ -129,7 +129,7 @@ function loadBranches(product)
         var $product = $(product);
         if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id'))
         {
-            bootbox.alert(errorSameProducts);
+            alert(errorSameProducts);
             $product.val(0);
             $product.trigger("chosen:updated");
             return false;
@@ -139,11 +139,13 @@ function loadBranches(product)
     if($('#productsBox .input-group:last select:first').val() != 0)
     {
         var length = $('#productsBox .input-group').size();
-        $('#productsBox .row').append('<div class="col-sm-3">' + $('#productsBox .col-sm-3:last').html() + '</div>');
+        $('#productsBox .row').append('<div class="col-sm-4">' + $('#productsBox .col-sm-4:last').html() + '</div>');
         if($('#productsBox .input-group:last select').size() >= 2) $('#productsBox .input-group:last select:last').remove();
         $('#productsBox .input-group:last .chosen-container').remove();
         $('#productsBox .input-group:last select:first').attr('name', 'products[' + length + ']').attr('id', 'products' + length);
-        $('#productsBox .input-group:last .chosen').chosen(defaultChosenOptions);
+        $('#productsBox .input-group:last .chosen').chosen();
+
+        adjustProductBoxMargin();
     }
 
     var $inputgroup = $(product).closest('.input-group');
@@ -154,7 +156,7 @@ function loadBranches(product)
         if(data)
         {
             $inputgroup.append(data);
-            $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).css('width', '80px');
+            $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).chosen();
         }
     });
 
@@ -169,10 +171,37 @@ function loadBranches(product)
         {
             if(data)
             {
-                $("#plansBox .row").append('<div class="col-sm-3" id="plan' + productID+ '">' + data + '</div>');
+                $("#plansBox .row").append('<div class="col-sm-4" id="plan' + productID+ '">' + data + '</div>');
                 $("#plan" + $(product).val()).find('select').attr('name', 'plans[' + productID + ']').attr('id', 'plans' + productID);
+
+                adjustPlanBoxMargin();
             }
         });
+    }
+}
+
+
+function adjustProductBoxMargin()
+{
+    var productRows = Math.ceil($('#productsBox > .row > .col-sm-4').length / 3);
+    if(productRows > 1)
+    {
+        for(i = 1; i <= productRows - 1; i++)
+        {
+            $('#productsBox .col-sm-4:lt(' + (i * 3) + ')').css('margin-bottom', '10px');
+        }
+    }
+}
+
+function adjustPlanBoxMargin()
+{
+    var planRows = Math.ceil($('#plansBox > .row > .col-sm-4').length / 3);
+    if(planRows > 1)
+    {
+        for(j = 1; j <= planRows - 1; j++)
+        {
+            $('#plansBox .col-sm-4:lt(' + (j * 3) + ')').css('margin-bottom', '10px');
+        }
     }
 }
 
@@ -217,4 +246,6 @@ $(function()
         e.stopPropagation();
         e.preventDefault();
     });
+
+    adjustProductBoxMargin();
 });

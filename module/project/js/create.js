@@ -7,12 +7,6 @@ $(function()
 {
     $('#cpmBtn').click(function(){$('#copyProjectModal').modal('show')});
     $('#copyProjects a').click(function(){setCopyProject($(this).data('id')); $('#copyProjectModal').modal('hide')});
-    var typeWidth = $('#type').closest('td').width();
-    $('#productsBox .col-sm-3,#plansBox .col-sm-3').width(typeWidth);
-    $(document).on('change', "#productsBox select", function()
-    {
-        $('#productsBox .col-sm-3,#plansBox .col-sm-3').width(typeWidth);
-    });
     $('#begin').on('change', function()
     {
        $("#end").val('');

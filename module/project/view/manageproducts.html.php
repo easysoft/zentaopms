@@ -11,16 +11,17 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div>
-  <div id='titlebar'>
-    <div class='heading'>
-      <?php echo html::icon($lang->icons['product']);?> <?php echo $lang->project->manageProducts;?>
-    </div>
+<div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
+    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->project->manageProducts;?></span></span>
   </div>
-  <form id='productsBox' class='form-condensed' method='post'>
-    <fieldset>
-      <legend><?php echo $lang->project->linkedProducts;?></legend>
-      <div class='row'>
+</div>
+<div id='mainContent' class='main-content'>
+<div class='cell'>
+  <form id='productsBox' method='post'>
+    <div class='detail'>
+      <div class='detail-title'><?php echo $lang->project->linkedProducts;?></div>
+      <div class='detail-content row'>
         <?php foreach($allProducts as $productID => $productName):?>
         <?php if(isset($linkedProducts[$productID])):?>
         <?php $checked = 'checked';?>
@@ -39,10 +40,10 @@
         <?php endif;?>
         <?php endforeach;?>
       </div>
-    </fieldset>
-    <fieldset>
-      <legend><?php echo $lang->project->unlinkedProducts;?></legend>
-      <div class='row'>
+    </div>
+    <div class='detail'>
+      <div class='detail-title'><?php echo $lang->project->unlinkedProducts;?></div>
+      <div class='detail-content row'>
         <?php foreach($allProducts as $productID => $productName):?>
         <div class='col-sm-4 product<?php echo isset($branchGroups[$productID]) ? ' has-branch' : ''?>'>
           <label class='text-ellipsis checkbox-inline' for='<?php echo 'products'. $productID?>';>
@@ -57,8 +58,8 @@
         </div>
         <?php endforeach;?>
       </div>
-    </fieldset>
-    <div class="text-center">
+    </div>
+    <div class="detail text-center">
       <?php echo html::hidden("post", 'post');?>
       <?php echo html::submitButton();?>
     </div>

@@ -16,10 +16,10 @@ function setRole(account, roleID)
 function addItem()
 {
     var item = $('#addItem').html().replace(/%i%/g, i);
-    $('#submit').before('<tr class="addedItem">' + item  + '</tr>');
+    $('#teamForm table tbody').append('<tr class="addedItem">' + item  + '</tr>');
     var accounts = $('#submit').closest('table').find('tr.addedItem:last').find('select:first')
     accounts.trigger('liszt:updated');
-    accounts.chosen(defaultChosenOptions);
+    accounts.chosen();
     i ++;
 }
 
