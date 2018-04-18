@@ -12,27 +12,32 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<div class='container mw-1400px'>
-  <div id='titlebar'>
-    <div class='heading'>
+<div id='mainContent' class='main-content'>
+  <div class='main-header'>
+    <h2>
       <span class='prefix'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $product->id;?></strong></span>
       <strong><?php echo html::a($this->createLink('product', 'view', "productID=$product->id"), $product->name);?></strong>
-      <small class='text-danger'><?php echo html::icon($lang->icons['close']) . ' ' . $lang->product->close;?></small>
-    </div>
+      <small><?php echo $lang->arrow . $lang->product->close;?></small>
+    </h2>
   </div>
-
-  <form class='form-condensed' method='post' target='hiddenwin'>
+  <form class='load-indicator main-form' method='post' target='hiddenwin'>
     <table class='table table-form'>
       <tr>
         <th><?php echo $lang->comment;?></th>
-        <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
+        <td><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
       </tr>
       <tr>
         <th></th>
-        <td><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList); ?></td>
+        <td>
+          <?php echo html::submitButton();?>
+          <?php echo html::linkButton($lang->goback, $this->session->taskList);?>
+        </td>
       </tr>
     </table>
   </form>
-  <div class='main'><?php include '../../common/view/action.html.php';?></div>
+  <hr class='small' />
+  <div class='main'>
+    <?php include '../../common/view/action.html.php';?>
+  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
