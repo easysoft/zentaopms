@@ -142,7 +142,7 @@
           $withSearch = count($users) > 10;
           $actionLink = $this->createLink('story', 'batchAssignTo');
           echo html::select('assignedTo', $users, '', 'class="hidden"');
-          echo "<div class='dropdown-menu" . ($withSearch ? ' search-list' : '') . "'  data-ride='searchList'>";
+          echo "<div class='dropdown-menu search-list' data-ride='searchList'>";
           if($withSearch)
           {
               echo '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">';
@@ -152,7 +152,7 @@
               echo '</div>';
           }
           echo '<div class="list-group">';
-          foreach ($users as $key => $value)
+          foreach($users as $key => $value)
           {
               if(empty($key) or $key == 'closed') continue;
               echo html::a('javascript:$(".table-actions #assignedTo").val("' . $key . '");setFormAction("' . $actionLink . '")', '<i class="icon icon-person icon-sm"></i> ' . $value, '', "data-key='@$key'");

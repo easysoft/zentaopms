@@ -82,3 +82,5 @@ body.body-modal #mainMenu{margin-top:5px;}
 .fixedTfootAction.scrolled .table-actions > .text strong {color: #fff;}
 .fixedTfootAction.scrolled .pager .dropdown > a:hover,
 .fixedTfootAction.scrolled .pager > a:hover {background-color: #2e6dad}
+
+.search-list .list-group {max-height: 214px; height:auto !important;}

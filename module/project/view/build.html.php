@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmDelete', $lang->build->confirmDelete)?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -21,8 +20,8 @@
     <?php common::printIcon('build', 'create', "project=$project->id");?>
   </div>
 </div>
-<div id="mainContent">
-  <table class="main-table table has-sort-head table-fixed tablesorter" id='buildList'>
+<div id="mainContent" class='main-content'>
+  <table class="main-table table has-sort-head" id='buildList'>
     <thead>
       <tr>
         <th class='w-id'><?php echo $lang->build->id;?></th>
@@ -30,7 +29,7 @@
         <th><?php echo $lang->build->name;?></th>
         <th><?php echo $lang->build->scmPath;?></th>
         <th><?php echo $lang->build->filePath;?></th>
-        <th class='w-date'><?php echo $lang->build->date;?></th>
+        <th class='w-100px'><?php echo $lang->build->date;?></th>
         <th class='w-user'><?php echo $lang->build->builder;?></th>
         <th class='w-200px'><?php echo $lang->actions;?></th>
       </tr>
@@ -39,8 +38,8 @@
       <?php foreach($builds as $build):?>
       <tr>
         <td><?php echo $build->id;?></td>
-        <td title='<?php echo $build->productName?>'><?php echo $build->productName;?></td>
-        <td class='text-left'>
+        <td class='nobr' title='<?php echo $build->productName?>'><?php echo $build->productName;?></td>
+        <td class='text-left nobr'>
           <?php if($build->branchName) echo "<span class='label label-info label-badge'>{$build->branchName}</span>"?>
           <?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?>
         </td>

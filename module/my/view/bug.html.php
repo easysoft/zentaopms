@@ -115,7 +115,7 @@
           $withSearch = count($memberPairs) > 10;
           $actionLink = $this->createLink('bug', 'batchAssignTo', "productID=0&type=my");
           echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
-          echo "<div class='dropdown-menu" . ($withSearch ? ' search-list' : '') . "'  data-ride='searchList'>";
+          echo "<div class='dropdown-menu search-list' data-ride='searchList'>";
           if($withSearch)
           {
               echo '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">';

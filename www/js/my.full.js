@@ -726,6 +726,7 @@ function ajaxGetSearchForm(querybox)
         $.get(createLink('search', 'buildForm'), function(data)
         {
             $querybox.html(data);
+            $querybox.addClass('show');
         });
     }
 }
