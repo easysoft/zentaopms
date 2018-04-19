@@ -17,6 +17,7 @@ function setPreview()
 
 $(function()
 {
+    $('#product_chosen .chosen-single').css('max-width', $('#product_chosen').closest('td').width());
     var $searchStories = $('#searchStories');
     var lastSearchFn = false;
     var $searchInput = $('#storySearchInput');
@@ -33,10 +34,7 @@ $(function()
     };
     $(document).on('change', '#story', function()
     {
-       if($(this).val() === 'showmore')
-       {
-            showSearchModal();
-       }
+       if($(this).val() === 'showmore') showSearchModal();
     });
 
     $(document).on('click', '#story_chosen .chosen-results > li.no-results', showSearchModal);
