@@ -14,7 +14,8 @@
   <div id="sidebarHeader">
     <?php echo html::commonButton('<i class="icon icon-caret-left"></i>', '', 'btn btn-icon btn-sm btn-info sidebar-toggle');?>
     <div class="title">
-      <?php echo $lang->product->line;?>
+      <?php echo $line ? zget($lines, $line) : $lang->product->line;?>
+      <?php if($line) echo html::a(inlink('all', "productID={$productID}&line=&status={$status}"), "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");?>
     </div>
   </div>
   <div class="btn-toolbar pull-left">
@@ -117,7 +118,7 @@
       </table>
       <?php if($productStats):?>
       <div class="table-footer">
-        <?php if(common::hasPriv('productplan', 'batchEdit')):?>
+        <?php if($canBatchEdit):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
           <?php echo html::submitButton($lang->edit);?>

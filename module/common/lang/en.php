@@ -319,15 +319,11 @@ $lang->report->notice->help = 'Note: Report is generated from search results. Pl
 /* 组织结构视图菜单设置。*/
 $lang->company = new stdclass();
 $lang->company->menu = new stdclass();
-$lang->company->menu->name         = array('link' => '%s' . $lang->arrow, 'fixed' => true);
-$lang->company->menu->browseUser   = array('link' => 'User|company|browse', 'subModule' => 'user');
-$lang->company->menu->dept         = array('link' => 'Department|dept|browse', 'subModule' => 'dept');
-$lang->company->menu->browseGroup  = array('link' => 'Group|group|browse', 'subModule' => 'group');
-$lang->company->menu->view         = array('link' => 'Company|company|view', 'alias' => 'edit');
-$lang->company->menu->dynamic      = 'Dynamic|company|dynamic|';
-$lang->company->menu->addGroup     = array('link' => '<i class="icon-group"></i>&nbsp;Add Group|group|create', 'float' => 'right');
-$lang->company->menu->batchAddUser = array('link' => '<i class="icon-plus-sign"></i>&nbsp;Batch Add|user|batchCreate|dept=%s', 'subModule' => 'user', 'float' => 'right');
-$lang->company->menu->addUser      = array('link' => '<i class="icon-plus"></i>&nbsp;Add User|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->browseUser  = array('link' => 'User|company|browse', 'subModule' => 'user');
+$lang->company->menu->dept        = array('link' => 'Department|dept|browse', 'subModule' => 'dept');
+$lang->company->menu->browseGroup = array('link' => 'Group|group|browse', 'subModule' => 'group');
+$lang->company->menu->view        = array('link' => 'Company|company|view', 'alias' => 'edit');
+$lang->company->menu->dynamic     = 'Dynamic|company|dynamic|';
 
 $lang->dept  = new stdclass();
 $lang->group = new stdclass();
