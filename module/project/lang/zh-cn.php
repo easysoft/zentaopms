@@ -22,6 +22,7 @@ $lang->project->to            = '至';
 $lang->project->days          = '可用工作日';
 $lang->project->day           = '天';
 $lang->project->workHour      = '工时';
+$lang->project->totalHours    = '可用工时';
 $lang->project->status        = $lang->projectCommon . '状态';
 $lang->project->desc          = $lang->projectCommon . '描述';
 $lang->project->owner         = '负责人';
