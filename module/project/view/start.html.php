@@ -12,26 +12,31 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<div class='container mw-1400px'>
-  <div id='titlebar'>
-    <div class='heading'>
-      <span class='prefix'><?php echo html::icon($lang->icons['project']);?> <strong><?php echo $project->id;?></strong></span>
-      <strong><?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?></strong>
-      <small class='text-muted'> <?php echo $lang->project->start;?> <?php echo html::icon($lang->icons['start']);?></small>
-    </div>
+<div id='mainContent' class='main-content'>
+  <div class='main-header'>
+    <h2>
+      <span class='prefix label-id'><strong><?php echo $project->id;?></strong></span>
+      <?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?>
+      <small><?php echo $lang->arrow . $lang->project->start;?></small>
+    </h2>
   </div>
-  <form class='form-condensed' method='post' target='hiddenwin'>
+  <form class='load-indicator main-form' method='post' target='hiddenwin'>
     <table class='table table-form'>
-      <tr>
-        <th class='text-left'><?php echo $lang->comment;?></th>
-        <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
-      </tr>
-      <tr>
-        <th></th>
-        <td><?php echo html::submitButton($lang->project->start) . html::linkButton($lang->goback, $this->session->taskList); ?></td>
-      </tr>
+      <tbody>
+        <tr>
+          <th><?php echo $lang->comment;?></th>
+          <td><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
+        </tr>
+        <tr>
+          <th></th>
+          <td><?php echo html::submitButton($lang->project->start) . html::linkButton($lang->goback, $this->session->taskList); ?></td>
+        </tr>
+      </tbody>
     </table>
   </form>
-  <div class='main'><?php include '../../common/view/action.html.php';?></div>
+  <hr class='small' />
+  <div class='main'>
+    <?php include '../../common/view/action.html.php';?>
+  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
