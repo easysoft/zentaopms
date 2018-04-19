@@ -64,7 +64,7 @@
     </tr>
     <tr>
       <th><?php echo $lang->user->join;?></th>
-      <td><?php echo $user->join;?></td>
+      <td><?php echo formatTime($user->join);?></td>
     </tr>
     <tr>
       <th><?php echo $lang->user->visits;?></th>

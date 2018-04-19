@@ -35,8 +35,8 @@
         </tr>
         <tr>
           <th><?php echo $lang->user->join;?></th>
-          <td>
-            <?php echo $user->join;?>
+          <td class='text-middle'>
+            <?php echo formatTime($user->join);?>
             <?php echo html::hidden('join',$user->join);?>
           </td>
         </tr>

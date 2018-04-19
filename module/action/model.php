@@ -570,6 +570,7 @@ class actionModel extends model
         extract($beginAndEnd);
 
         /* Build has priv condition. */
+        $condition = 1;
         if($productID == 'all') $products = $this->loadModel('product')->getPairs();
         if($projectID == 'all') $projects = $this->loadModel('project')->getPairs();
         if($productID == 'all' or $projectID == 'all')
