@@ -1287,6 +1287,9 @@ class project extends control
         /* Set menu. */
         $this->project->setMenu($this->projects, $project->id);
 
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('project')->eq("$projectID")->orderBy('date_desc')->limit(6)->fetchAll();
+        if($actions) $this->loadModel('action')->transformActions($actions);
+
         $this->view->title      = $this->lang->project->view;
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[] = $this->view->title;
@@ -1295,8 +1298,9 @@ class project extends control
         $this->view->products     = $products;
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->view->groups       = $this->loadModel('group')->getPairs();
-        $this->view->actions      = $this->loadModel('action')->getList('project', $projectID);
+        $this->view->actions      = $actions;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->builds       = $this->loadModel('build')->getProjectBuilds((int)$projectID);
 
         $this->display();
     }
