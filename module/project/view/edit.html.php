@@ -18,8 +18,8 @@
   <div class='center-block'>
     <div class='main-header'>
       <h2>
-        <span class='prefix'><?php echo html::icon($lang->icons['project']);?> <strong><?php echo $project->id;?></strong></span>
-        <strong><?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?></strong>
+        <span class='prefix label-id'><strong><?php echo $project->id;?></strong></span>
+        <?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?>
         <small><?php echo $lang->arrow . ' ' . $lang->project->edit;?></small>
       </h2>
     </div>
