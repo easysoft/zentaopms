@@ -372,7 +372,7 @@ class treeModel extends model
         }
 
         if(!$firstBranch) $lastMenu .= '</li></ul>';
-        $lastMenu = "<ul id='modulesTree' class='tree tree-lines' data-name='tree-{$type}'>$lastMenu</ul>\n";
+        if($lastMenu) $lastMenu = "<ul id='modulesTree' class='tree tree-lines' data-name='tree-{$type}'>$lastMenu</ul>\n";
         return $lastMenu;
     }
 

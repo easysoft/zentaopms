@@ -85,6 +85,7 @@
     <div class="cell">
       <?php echo $moduleTree;?>
       <div class="text-center">
+        <?php if(!$moduleTree) echo "<div class='noModule'><strong>{$lang->product->noModule}</strong></div>";?>
         <?php common::printLink('tree', 'browse', "rootID=$productID&view=story", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
       </div>
@@ -302,6 +303,10 @@
           <?php endif;?>
         </div>
         <?php $pager->show('right', 'pagerjs');?>
+      </div>
+      <?php elseif(common::hasPriv('story', 'create')):?>
+      <div class='noStory'>
+        <span class='text-muted'><?php echo $lang->product->noStory;?></span> <strong><?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}"), $lang->story->create);?></strong>
       </div>
       <?php endif;?>
     </form>
