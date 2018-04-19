@@ -471,7 +471,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function dynamic($productID = 0, $type = 'today', $param = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function dynamic($productID = 0, $type = 'today', $param = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 50, $pageID = 1, $lastDate = '')
     {
         /* Save session. */
         $uri   = $this->app->getURI(true);
@@ -499,7 +499,7 @@ class product extends control
         /* Set the user and type. */
         $account = $type == 'account' ? $param : 'all';
         $period  = $type == 'account' ? 'all'  : $type;
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, $productID);
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, $productID, $lastDate);
 
         /* The header and position. */
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;

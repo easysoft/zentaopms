@@ -33,7 +33,7 @@
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php if(isset($menuItem->hidden)) continue;?>
     <?php $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;?>
-    <?php $param = strpos($menuItem->name, 'QUERY') === 0 ? '&param=' . (int)substr($menuItem->name, 5) : '';?>
+    <?php $queryParam = strpos($menuItem->name, 'QUERY') === 0 ? '&param=' . (int)substr($menuItem->name, 5) : '';?>
     <?php if($menuItem->name == 'more'):?>
     <?php
         echo '<div class="btn-group">';
@@ -42,12 +42,12 @@
         foreach ($lang->product->moreSelects as $key => $value)
         {
             echo '<li' . ($key == $this->session->storyBrowseType ? " class='active'" : '') . '>';
-            echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$key" . $param), $value);
+            echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$key" . $queryParam), $value);
         }
         echo '</ul></div>';
     ?>
     <?php else:?>
-    <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType" . $param), "<span class='text'>$menuItem->text</span>" . ($menuItem->name == 'allstory' ? ' <span class="label label-light label-badge">' . $allCount . '</span>' : ''), '', "id='{$menuItem->name}Tab' class='btn btn-link" . ($this->session->storyBrowseType == $menuItem->name ? ' btn-active-text' : '') . "'");?>
+    <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType" . $queryParam), "<span class='text'>$menuItem->text</span>" . ($menuItem->name == 'allstory' ? ' <span class="label label-light label-badge">' . $allCount . '</span>' : ''), '', "id='{$menuItem->name}Tab' class='btn btn-link" . ($this->session->storyBrowseType == $menuItem->name ? ' btn-active-text' : '') . "'");?>
     <?php endif;?>
     <?php endforeach;?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
@@ -322,7 +322,10 @@ if($shortcut.size() > 0)
 {
     $shortcut.addClass('btn-active-text');
     $('#bysearchTab').removeClass('btn-active-text');
-    $('#queryBox').removeClass('show');
+}
+else
+{
+    ajaxGetSearchForm();
 }
 <?php endif;?>
 </script>
