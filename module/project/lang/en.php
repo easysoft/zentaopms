@@ -29,6 +29,8 @@ $lang->project->PO            = 'PO';
 $lang->project->PM            = 'PM';
 $lang->project->QD            = 'QA Manager';
 $lang->project->RD            = 'Release Manager';
+$lang->project->qa            = 'Test';
+$lang->project->release       = 'Release';
 $lang->project->acl           = 'Access Control';
 $lang->project->teamname      = 'Team Name';
 $lang->project->order         = "Sort {$lang->projectCommon}";
@@ -106,6 +108,7 @@ $lang->project->groupTask         = 'View by Group';
 $lang->project->story             = 'Stories';
 $lang->project->bug               = 'Bugs';
 $lang->project->dynamic           = 'Dynamic';
+$lang->project->latestDynamic     = 'Latest Dynamic';
 $lang->project->build             = 'Builds';
 $lang->project->testtask          = 'Test Tasks';
 $lang->project->burn              = 'Burndown';
@@ -141,6 +144,8 @@ $lang->project->tree              = 'Tree';
 $lang->project->storyKanban       = 'Story Kanban';
 $lang->project->storySort         = 'Sort Story';
 $lang->project->importPlanStory   = 'Create ' . $lang->projectCommon . ' success!\nImport the stories with the plan?';
+$lang->project->iteration         = 'Iteration';
+$lang->project->iterationInfo     = 'Iteration %s times';
 
 /* 分组浏览。*/
 $lang->project->allTasks     = 'All';

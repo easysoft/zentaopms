@@ -29,6 +29,8 @@ $lang->project->PO            = $lang->productCommon . '负责人';
 $lang->project->PM            = $lang->projectCommon . '负责人';
 $lang->project->QD            = '测试负责人';
 $lang->project->RD            = '发布负责人';
+$lang->project->qa            = '测试';
+$lang->project->release       = '发布';
 $lang->project->acl           = '访问控制';
 $lang->project->teamname      = '团队名称';
 $lang->project->order         = $lang->projectCommon . '排序';
@@ -106,6 +108,7 @@ $lang->project->groupTask         = '分组浏览任务';
 $lang->project->story             = '需求列表';
 $lang->project->bug               = 'Bug列表';
 $lang->project->dynamic           = '动态';
+$lang->project->latestDynamic     = '最新动态';
 $lang->project->build             = '版本列表';
 $lang->project->testtask          = '测试任务';
 $lang->project->burn              = '燃尽图';
@@ -141,6 +144,8 @@ $lang->project->tree              = '树状图';
 $lang->project->storyKanban       = '需求看板';
 $lang->project->storySort         = '需求排序';
 $lang->project->importPlanStory   = '创建' . $lang->projectCommon . '成功！\n是否导入计划关联的相关需求？';
+$lang->project->iteration         = '版本迭代';
+$lang->project->iterationInfo     = '迭代%s次';
 
 /* 分组浏览。*/
 $lang->project->allTasks     = '所有';
