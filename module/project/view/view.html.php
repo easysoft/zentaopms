@@ -47,10 +47,8 @@
             </div>
             <div class="panel-body">
               <ul class="timeline timeline-tag-left">
-                <?php $i = 1;?>
                 <?php foreach($actions as $action):?>
-                <?php $i++;?>
-                <li <?php if($i % 3 == 0) echo "class='active'";?>>
+                <li <?php if($action->actor == $this->app->user->account) echo "class='active'";?>>
                   <div>
                     <span class="timeline-tag"><?php echo $action->date;?></span>
                     <span class="timeline-text"><?php echo zget($users, $action->actor) . ' ' . $action->actionLabel . $action->objectLabel . ' ' . html::a($action->objectLink, $action->objectName);?></span>
@@ -74,10 +72,7 @@
             <div class="detail">
               <h2 class="detail-title"><span class="label-id"><?php echo $project->id;?></span> <span class="label label-light label-outline"><?php echo $project->code;?></span> <?php echo $project->name;?></h2>
               <div class="detail-content article-content">
-                <p>
-                  <span class="text-limit" data-limit-size="40"><?php echo $project->desc;?></span>
-                  <a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a>
-                </p>
+                <p><span class="text-limit" data-limit-size="40"><?php echo $project->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></p>
                 <p>
                   <?php if($project->deleted):?>
                   <span class='label label-danger label-outline'><?php echo $lang->project->deleted;?></span>

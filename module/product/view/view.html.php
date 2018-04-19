@@ -47,10 +47,8 @@
             </div>
             <div class="panel-body">
               <ul class="timeline timeline-tag-left">
-                <?php $i = 1;?>
                 <?php foreach($actions as $action):?>
-                <?php $i++;?>
-                <li <?php if($i % 3 == 0) echo "class='active'";?>>
+                <li <?php if($action->actor == $this->app->user->account) echo "class='active'";?>>
                   <div>
                     <span class="timeline-tag"><?php echo $action->date;?></span>
                     <span class="timeline-text"><?php echo zget($users, $action->actor) . ' ' . $action->actionLabel . $action->objectLabel . ' ' . html::a($action->objectLink, $action->objectName);?></span>
