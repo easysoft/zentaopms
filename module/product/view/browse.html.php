@@ -24,7 +24,7 @@
       if($moduleID)
       {
           $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("storyModule")';
-          echo html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='text-muted'");
+          echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
       }
       ?>
     </div>

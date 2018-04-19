@@ -395,11 +395,13 @@ class user extends control
         {
             if(strtolower($_POST['account']) == 'guest')
             {
-                die(js::error(str_replace('ID ', '', sprintf($this->lang->user->error->reserved, $_POST['account']))));
+                $this->send(array('result' => 'fail', 'message' => str_replace('ID ', '', sprintf($this->lang->user->error->reserved, $_POST['account']))));
             }
+
             $this->user->create();
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($this->createLink('company', 'browse'), 'parent'));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('company', 'browse')));
         }
         $groups    = $this->dao->select('id, name, role')->from(TABLE_GROUP)->fetchAll();
         $groupList = array('' => '');
@@ -485,8 +487,10 @@ class user extends control
         if(!empty($_POST))
         {
             $this->user->update($userID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse'), 'parent'));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $link = $this->session->userList ? $this->session->userList : $this->createLink('company', 'browse');
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
         $user       = $this->user->getById($userID, 'id');

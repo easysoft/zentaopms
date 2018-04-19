@@ -1,1 +1,3 @@
-.outer .main-side > fieldset {padding-right: 0px;}
+.data-basic > tbody > tr > th{width: 80px;}
+.block-release .panel-body, .block-dynamic .panel-body {height: 224px; overflow: auto;}
+.block-release .panel-body .release-line > li > a > .info{min-height: 18px;}

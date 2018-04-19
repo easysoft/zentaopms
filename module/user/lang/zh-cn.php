@@ -67,6 +67,7 @@ $lang->user->relogin         = "重新登录";
 $lang->user->asGuest         = "游客访问";
 $lang->user->goback          = "返回前一页";
 $lang->user->deleted         = '(已删除)';
+$lang->user->search          = '搜索';
 
 $lang->user->profile     = '档案';
 $lang->user->project     = $lang->projectCommon;
