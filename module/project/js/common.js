@@ -150,6 +150,8 @@ function loadBranches(product)
 
     var $inputgroup = $(product).closest('.input-group');
     if($inputgroup.find('select').size() >= 2) $inputgroup.find('select:last').remove();
+    if($inputgroup.find('.chosen-container').size() >= 2) $inputgroup.find('.chosen-container:last').remove();
+
     var index = $inputgroup.find('select:first').attr('id').replace('products' , '');
     $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val()), function(data)
     {
