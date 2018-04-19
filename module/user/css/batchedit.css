@@ -1,1 +1,2 @@
 .chosen-container[id^="dept"] .chosen-drop {min-width: 400px;!important}
+th.required:after {position: relative; right: 10px;}

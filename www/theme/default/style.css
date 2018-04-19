@@ -83,4 +83,7 @@ body.body-modal #mainMenu{margin-top:5px;}
 .fixedTfootAction.scrolled .pager .dropdown > a:hover,
 .fixedTfootAction.scrolled .pager > a:hover {background-color: #2e6dad}
 
+.fixedTheadOfList {position: fixed; top: 0px; z-index:1000;}
+.fixedTheadOfList > thead > tr > th {background-color: #2e6dad; border-bottom-color: #bbb; color: #dedede}
+
 .search-list .list-group {max-height: 214px; height:auto !important;}
