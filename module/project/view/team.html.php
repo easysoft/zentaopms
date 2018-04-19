@@ -30,7 +30,7 @@
     ?>
   </div>
 </div>
-<div id='mainCount' class='main-content'>
+<div id='mainContent' class='main-content'>
   <table class='table main-table' id='memberList'>
     <thead>
       <tr>
