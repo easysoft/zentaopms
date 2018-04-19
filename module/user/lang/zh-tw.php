@@ -67,6 +67,7 @@ $lang->user->relogin         = "重新登錄";
 $lang->user->asGuest         = "遊客訪問";
 $lang->user->goback          = "返回前一頁";
 $lang->user->deleted         = '(已刪除)';
+$lang->user->search          = '搜索';
 
 $lang->user->profile     = '檔案';
 $lang->user->project     = $lang->projectCommon;

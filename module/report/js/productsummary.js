@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-    setTimeout(function(){fixedTheadOfList('#product')}, 100);
+    setTimeout(function(){fixedTheadOfList('#productList')}, 100);
 });
 
 $('#conditions input:checkbox').change(function()

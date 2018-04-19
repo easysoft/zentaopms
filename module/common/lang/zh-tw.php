@@ -307,15 +307,11 @@ $lang->report->notice->help = '註：統計報表的數據，來源於列表頁�
 /* 組織結構視圖菜單設置。*/
 $lang->company = new stdclass();
 $lang->company->menu = new stdclass();
-$lang->company->menu->name         = array('link' => '%s' . $lang->arrow, 'fixed' => true);
-$lang->company->menu->browseUser   = array('link' => '用戶|company|browse', 'subModule' => 'user');
-$lang->company->menu->dept         = array('link' => '部門|dept|browse', 'subModule' => 'dept');
-$lang->company->menu->browseGroup  = array('link' => '權限|group|browse', 'subModule' => 'group');
-$lang->company->menu->view         = array('link' => '公司|company|view', 'alias' => 'edit');
-$lang->company->menu->dynamic      = '動態|company|dynamic|';
-$lang->company->menu->addGroup     = array('link' => '<i class="icon-group"></i>&nbsp;添加分組|group|create', 'float' => 'right');
-$lang->company->menu->batchAddUser = array('link' => '<i class="icon-plus-sign"></i>&nbsp;批量添加|user|batchCreate|dept=%s', 'subModule' => 'user', 'float' => 'right');
-$lang->company->menu->addUser      = array('link' => '<i class="icon-plus"></i>&nbsp;添加用戶|user|create|dept=%s', 'subModule' => 'user', 'float' => 'right');
+$lang->company->menu->browseUser  = array('link' => '用戶|company|browse', 'subModule' => 'user');
+$lang->company->menu->dept        = array('link' => '部門|dept|browse', 'subModule' => 'dept');
+$lang->company->menu->browseGroup = array('link' => '權限|group|browse', 'subModule' => 'group');
+$lang->company->menu->view        = array('link' => '公司|company|view', 'alias' => 'edit');
+$lang->company->menu->dynamic     = '動態|company|dynamic|';
 
 $lang->dept  = new stdclass();
 $lang->group = new stdclass();
