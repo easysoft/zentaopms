@@ -156,7 +156,7 @@ function loadBranches(product)
         if(data)
         {
             $inputgroup.append(data);
-            $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).css('width', '80px');
+            $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).chosen();
         }
     });
 
@@ -198,7 +198,7 @@ function adjustPlanBoxMargin()
     var planRows = Math.ceil($('#plansBox > .row > .col-sm-4').length / 3);
     if(planRows > 1)
     {
-        for(j = 1; j <= productRows - 1; j++)
+        for(j = 1; j <= planRows - 1; j++)
         {
             $('#plansBox .col-sm-4:lt(' + (j * 3) + ')').css('margin-bottom', '10px');
         }

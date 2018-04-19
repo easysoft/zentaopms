@@ -10,65 +10,63 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php
-$jsRoot = $this->app->getWebRoot() . "js/";
-include '../../common/view/tablesorter.html.php';
-?>
-<div id='querybox' class='show'></div>
+<div id='queryBox' class='show'></div>
 <div id='unlinkBugList'>
-  <form method='post' id='unlinkedBugsForm' target='hiddenwin' action='<?php echo $this->createLink('productplan', 'linkBug', "planID=$plan->id&browseType=$browseType&param=$param&orderBy=$orderBy")?>'>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable'> 
-      <caption class='text-left text-special'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedBugs;?></strong></caption>
+  <form class='main-table table-bug' data-ride='table' method='post' id='unlinkedBugsForm' target='hiddenwin' action='<?php echo $this->createLink('productplan', 'linkBug', "planID=$plan->id&browseType=$browseType&param=$param&orderBy=$orderBy")?>'>
+    <div class='table-header'>
+      <div class='table-statistic'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedBugs;?></strong></div>
+    </div>
+    <table class='table'>
       <thead>
-      <tr class='colhead'>
-        <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
-        <th class='w-pri'>   <?php echo $lang->priAB;?></th>
-        <th>                 <?php echo $lang->bug->title;?></th>
-        <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
-        <th class='w-user'>  <?php echo $lang->assignedToAB;?></th>
-        <th class='w-status'><?php echo $lang->statusAB;?></th>
+      <tr>
+        <th class='c-id text-center'><?php echo $lang->idAB;?></th>
+        <th class='w-pri'><?php echo $lang->priAB;?></th>
+        <th><?php echo $lang->bug->title;?></th>
+        <th class='w-user'><?php echo $lang->openedByAB;?></th>
+        <th class='w-user'><?php echo $lang->bug->assignedToAB;?></th>
+        <th class='w-80px'><?php echo $lang->bug->status;?></th>
       </tr>
       </thead>
       <tbody>
+      <?php $unlinkedCount = 0;?>
       <?php foreach($allBugs as $bug):?>
       <?php
       if(isset($planBugs[$bug->id])) continue;
       if($bug->plan and helper::diffDate($plans[$bug->plan], helper::today()) > 0) continue;
       ?>
       <tr>
-        <td class='cell-id'>
-          <input type='checkbox' name='bugs[]'  value='<?php echo $bug->id;?>'/> 
-          <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id);?>
+        <td class='c-id'>
+          <input class='ml-10px' type='checkbox' name='bugs[]'  value='<?php echo $bug->id;?>'/> 
+          <?php printf('%03d', $bug->id);?>
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
-        <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
-        <td class='text-center'><?php echo $users[$bug->openedBy];?></td>
-        <td class='text-center'><?php echo $users[$bug->assignedTo];?></td>
+        <td class='nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
+        <td><?php echo $users[$bug->openedBy];?></td>
+        <td><?php echo $users[$bug->assignedTo];?></td>
         <td class='text-center bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
       </tr>
+      <?php $unlinkedCount++;?>
       <?php endforeach;?>
       </tbody>
+      <?php if($unlinkedCount):?>
       <tfoot>
       <tr>
-        <td colspan='6' class='text-left'>
-          <?php if(count($allBugs))
-          {
-              echo "<div class='table-actions clearfix'>";
-              echo html::selectButton() . html::submitButton($lang->productplan->linkBug);
-              echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=$orderBy"), $lang->goback, '', "class='btn'");
-              echo '</div>';
-          }
-          ?>
+        <td colspan='6' class='text-left table-footer'>
+          <div class='clearfix'>
+            <?php echo html::selectButton() . html::submitButton($lang->productplan->linkBug);?>
+            <?php echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=$orderBy"), $lang->goback, '', "class='btn'");?>
+          </div>
         </td>
       </tr>
       </tfoot>
+      <?php endif;?>
     </table>
   </form>
 </div>
 <script>
 $(function()
 {
-    ajaxGetSearchForm('#bugs .linkBox #querybox');
+    ajaxGetSearchForm('#bugs .linkBox #queryBox');
     setModal();
 })
 </script>

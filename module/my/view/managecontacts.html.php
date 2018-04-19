@@ -14,16 +14,14 @@
 <div class="modal-content">
   <?php if($mode == 'edit'):?>
   <div class='col-sm-3 col-lg-2'>
-    <ul class='list-group'>
     <?php
     foreach($lists as $id => $listName)
     {
-        $listClass = ($id == $listID) ? 'list-group-item active' : 'list-group-item';
+        $listClass = ($id == $listID) ? 'btn btn-block active' : 'btn btn-block';
         $shareIcon = in_array($id, $globalContacts) ? '<i class="icon icon-share-sign"></i> ' : '';
         echo html::a(inlink('managecontacts', "listID=$id&mode=edit"), $shareIcon . $listName, '', "class='{$listClass}'");
     }
     ?>
-    </ul>
     <?php echo html::a(inlink('managecontacts', "listID=0&mode=new"), '<i class="icon icon-plus"></i> ' . $lang->user->contacts->createList, '', "class='btn btn-block'"); ?>
   </div>
   <?php endif;?>

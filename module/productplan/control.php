@@ -384,16 +384,16 @@ class productplan extends control
             $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, $moduleID = '0', $status = 'draft,active,changed');
         }
 
-        $this->view->allStories = $allStories;
-        $this->view->planStories= $this->story->getPlanStories($planID);
-        $this->view->products   = $products;
-        $this->view->plan       = $plan;
-        $this->view->plans      = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->browseType = $browseType;
-        $this->view->modules    = $this->loadModel('tree')->getOptionMenu($plan->product);
-        $this->view->param      = $param;
-        $this->view->orderBy    = $orderBy;
+        $this->view->allStories  = $allStories;
+        $this->view->planStories = $this->story->getPlanStories($planID);
+        $this->view->products    = $products;
+        $this->view->plan        = $plan;
+        $this->view->plans       = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->browseType  = $browseType;
+        $this->view->modules     = $this->loadModel('tree')->getOptionMenu($plan->product);
+        $this->view->param       = $param;
+        $this->view->orderBy     = $orderBy;
         $this->display();
     }
 
