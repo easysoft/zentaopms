@@ -52,11 +52,9 @@
           </tr>
           <tr>
             <td colspan='4' class='text-center'>
-              <?php 
-              echo html::submitButton('', '', 'btn btn-wide btn-primary');
-              echo html::backButton('', '', 'btn btn-wide btn-gray');
-              echo html::hidden('product', $product->id);
-              ?>
+              <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+              <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
+              <?php echo html::hidden('product', $product->id);?>
             </td>
           </tr>
         </tbody>

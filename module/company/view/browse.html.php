@@ -27,7 +27,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printIcon('group', 'create');?>
+    <?php common::printIcon('group', 'create', '', '', 'button', '', '', 'iframe', true, "data-width='550px'");?>
     <?php common::printLink('user', 'batchCreate', "dept={$deptID}", "<i class='icon icon-plus'> </i>" . $lang->user->batchCreate, '', "class='btn btn-secondary'");?>
     <?php common::printLink('user', 'create', "dept={$deptID}", "<i class='icon icon-plus'> </i>" . $lang->user->create, '', "class='btn btn-primary'");?>
   </div>

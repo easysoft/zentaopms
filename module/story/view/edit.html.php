@@ -15,8 +15,8 @@
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
       <h2>
-        <span class='prefix'><?php echo html::icon($lang->icons['story']);?> <strong><?php echo $story->id;?></strong></span>
-        <strong><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title, '', 'class="story-title"');?></strong>
+        <span><?php echo html::icon($lang->icons['story']);?> <?php echo $story->id;?></span>
+        <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title, '', 'class="story-title"');?>
         <small><?php echo $lang->arrow . ' ' . $lang->story->edit;?></small>
       </h2>
       <div class="pull-right btn-toolbar">
