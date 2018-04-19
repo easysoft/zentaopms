@@ -248,4 +248,5 @@ $(function()
     });
 
     adjustProductBoxMargin();
+    adjustPlanBoxMargin();
 });
