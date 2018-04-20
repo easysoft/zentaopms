@@ -15,7 +15,7 @@
   <div class='main-header'>
     <h2><?php echo html::icon($lang->icons['company']);?> <?php echo $lang->company->view;?></h2>
     <div class='btn-toolbar pull-right'>
-      <?php common::printLink('company', 'edit', '', $lang->edit, '', 'id="editCompany" class="btn btn-primary iframe" data-width="580"', true, true);?>
+      <?php common::printLink('company', 'edit', '', $lang->edit, '', 'id="editCompany" class="btn btn-wide btn-primary iframe" data-width="580"', true, true);?>
     </div>
   </div>
   <table class='table table-borderless table-data'>
