@@ -1,22 +1,8 @@
-function addItem(obj)
-{
-    var $inputgroup = $(obj).closest('.row-table');
-    $inputgroup.after($inputgroup.clone()).next('.row-table').find('input').val('');
-}
-
-function insertItem(obj)
-{
-    var $inputgroup = $(obj).closest('.row-table');
-    var insertHtml  = $('#insertItemBox').children('.row-table').clone();
-    $inputgroup.after(insertHtml).next('.row-table').find('input').val('');
-
-    updateItemOrder();
-}
-
 function updateItemOrder()
 {
     var order = 10;
-    $('#sonModule').children('.row-table').each(function(){
+    $('#sonModule').children('.row-table').each(function()
+    {
         if($(this).find("input[name*='order']").length > 0)
         {
             console.log(order);
@@ -28,8 +14,35 @@ function updateItemOrder()
     $('#maxOrder').val(order - 10);
 }
 
+function addItem(obj)
+{
+    var $inputRow = $(obj).closest('.row-module');
+    var $newRow = $('#insertItemBox').children('.row-module').clone().insertAfter($inputRow).addClass('highlight');
+    $newRow.find('input').val('');
+    setTimeout(function()
+    {
+        $newRow.removeClass('highlight');
+    }, 1600);
+    updateItemOrder();
+}
+
+function insertItem(obj)
+{
+    var $inputgroup = $(obj).closest('.row-table');
+    var insertHtml  = $('#insertItemBox').children('.row-table').clone();
+    $inputgroup.after(insertHtml).next('.row-table').find('input').val('');
+
+    updateItemOrder();
+}
+
 function deleteItem(obj)
 {
-    if($(obj).closest('.row-table').siblings('.row-table.addedItem').find('i.icon-remove').size() <= 0) return;
-    $(obj).closest('.row-table').remove();
+    var $inputRow = $(obj).closest('.row-module');
+    if ($inputRow.siblings('.row-module.row-module-new').find('.btn-delete').length > 0)
+    {
+        $inputRow.addClass('highlight').fadeOut(500, function()
+        {
+            $inputRow.remove();
+        });
+    }
 }

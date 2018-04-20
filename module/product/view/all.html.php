@@ -91,12 +91,10 @@
         <tr data-id='<?php echo $product->id ?>' data-order='<?php echo $product->code;?>'>
           <td class='cell-id'>
             <?php if($canBatchEdit):?>
-            <div class="checkbox-primary">
-              <input type='checkbox' name='productIDList[<?php echo $product->id;?>]' value='<?php echo $product->id;?>' /> 
-              <label></label>
-            </div>
+            <?php echo html::checkbox('productIDList', array($product->id => sprintf('%03d', $product->id)));?>
+            <?php else:?>
+            <?php printf('%03d', $product->id);?>
             <?php endif;?>
-            <?php echo sprintf('%03d', $product->id);?>
           </td>
           <td title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
           <td><?php echo zget($lines, $product->line);?></td>

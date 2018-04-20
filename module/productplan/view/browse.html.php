@@ -62,12 +62,10 @@
       <tr>
         <td class='cell-id'>
           <?php if(common::hasPriv('productplan', 'batchEdit')):?>
-          <div class="checkbox-primary">
-            <input type='checkbox' name='planIDList[<?php echo $plan->id;?>]' value='<?php echo $plan->id;?>' />
-            <label></label>
-          </div>
-          <?php endif;?>
+          <?php echo html::checkbox('planIDList', array($plan->id => sprintf('%03d', $plan->id)));?>
+          <?php else:?>
           <?php echo sprintf('%03d', $plan->id);?>
+          <?php endif;?>
         </td>
         <td class='text-left' title="<?php echo $plan->title?>"><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
         <?php if($this->session->currentProductType != 'normal'):?>
