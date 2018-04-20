@@ -1903,7 +1903,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function dynamic($projectID = 0, $type = 'today', $param = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function dynamic($projectID = 0, $type = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
     {
         /* Save session. */
         $uri   = $this->app->getURI(true);
@@ -1922,7 +1922,8 @@ class project extends control
         if(!isset($this->projects[$projectID])) $projectID = key($this->projects);
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
+        $sort    = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Set the menu. If the projectID = 0, use the indexMenu instead. */
         $this->project->setMenu($this->projects, $projectID);
@@ -1936,11 +1937,13 @@ class project extends control
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
 
         /* Set the user and type. */
         $account = $type == 'account' ? $param : 'all';
         $period  = $type == 'account' ? 'all'  : $type;
+        $date    = empty($date) ? '' : date('Y-m-d', $date);
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', $projectID, $date, $direction);
 
         /* The header and position. */
         $project = $this->project->getByID($projectID);
@@ -1949,14 +1952,16 @@ class project extends control
         $this->view->position[] = $this->lang->project->dynamic;
 
         /* Assign. */
-        $this->view->projectID = $projectID;
-        $this->view->type      = $type;
-        $this->view->users     = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $this->view->account   = $account;
-        $this->view->orderBy   = $orderBy;
-        $this->view->pager     = $pager;
-        $this->view->param     = $param;
-        $this->view->actions   = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', $projectID);
+        $this->view->projectID  = $projectID;
+        $this->view->type       = $type;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->account    = $account;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->param      = $param;
+        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction);
+        $this->view->allCount   = $this->action->getCount('project', $projectID);
+        $this->view->direction  = $direction;
         $this->display();
     }
 
