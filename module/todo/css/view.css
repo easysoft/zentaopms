@@ -1,1 +1,3 @@
 #wrap .outer>table#actionbox>caption {margin-top:0px;}
+.table-data tbody > tr > th {width: 80px;}
+.modal-footer {text-align: center;}
