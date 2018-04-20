@@ -533,7 +533,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function dynamic($type = 'today', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function dynamic($type = 'today', $recTotal = 0, $date = '', $direction = 'next')
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -550,27 +550,26 @@ class my extends control
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
 
         /* Append id for secend sort. */
+        $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         /* The header and position. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->dynamic;
         $this->view->position[] = $this->lang->my->dynamic;
 
-        $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $sort, $pager);
+        $date    = empty($date) ? '' : date('Y-m-d', $date);
+        $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $sort, $pager, 'all', 'all', $date, $direction);
 
         /* Assign. */
         $this->view->type       = $type;
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
-        $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        $this->view->actions    = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $sort, $pager);
-        $this->view->dateGroups = $this->action->buildDateGroup($actions);
+        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction);
         $this->view->allCount   = $this->action->getCount();
+        $this->view->direction  = $direction;
         $this->display();
     }
 
