@@ -2106,10 +2106,14 @@ class taskModel extends model
             switch($id)
             {
                 case 'id':
-                    echo "<div class='checkbox-primary'>";
-                    if($mode == 'table' && $canBatchAction) echo "<input type='checkbox' name='taskIDList[{$task->id}]' value='{$task->id}'/><label></label>";
-                    echo sprintf('%03d', $task->id);
-                    echo '</div>';
+                    if($mode == 'table' && $canBatchAction) 
+                    {
+                        echo html::checkbox('taskIDList', array($task->id => sprintf('%03d', $task->id)));
+                    }
+                    else
+                    {
+                        printf('%03d', $task->id);
+                    }
                     break;
                 case 'pri':
                     echo "<span class='label-pri label-pri-" . $task->pri . "'>";

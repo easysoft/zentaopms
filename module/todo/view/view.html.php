@@ -164,15 +164,15 @@
 
     common::printRPN($browseLink);
     ?>
+    <div id='commentBox' class='hide'>
+      <h4 class='text-left'><?php echo $lang->comment;?></h2>
+      <form method='post' action='<?php echo $this->createLink('action', 'comment', "objectType=todo&objectID=$todo->id")?>' target='hiddenwin'>
+        <div class="form-group"><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></div>
+        <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+      </form>
+    </div>
   </div>
 </div>
-<fieldset id='commentBox' class='hide'>
-  <legend><?php echo $lang->comment;?></legend>
-  <form method='post' action='<?php echo $this->createLink('action', 'comment', "objectType=todo&objectID=$todo->id")?>' target='hiddenwin'>
-    <div class="form-group"><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></div>
-    <?php echo html::submitButton();?>
-  </form>
-</fieldset>
 <div class="modal fade" id="projectModal">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -183,7 +183,7 @@
       <div class="modal-body">
         <div class='input-group'>
           <?php echo html::select('project', $projects, '', "class='form-control chosen'");?>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['task'], "id='toTaskButton'");?></span>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['task'], "id='toTaskButton'", 'btn btn-primary');?></span>
         </div>
       </div>
     </div>
@@ -199,8 +199,8 @@
       <div class="modal-body">
         <div class='input-group'>
           <?php echo html::select('product', $products, '', "class='form-control chosen'");?>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['story'], "id='toStoryButton'");?></span>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['bug'], "id='toBugButton'");?></span>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['story'], "id='toStoryButton'", 'btn btn-primary');?></span>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['bug'], "id='toBugButton'", 'btn btn-primary');?></span>
         </div>
       </div>
     </div>
