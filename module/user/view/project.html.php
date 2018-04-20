@@ -18,7 +18,7 @@
   <tr class='colhead'>
     <th class='w-id'><?php echo $lang->idAB;?></th>
     <th class='w-100px'><?php echo $lang->project->code;?></th>
-    <th><?php echo $lang->project->name;?></th>
+    <th class="text-left"><?php echo $lang->project->name;?></th>
     <th class='w-date'><?php echo $lang->project->begin;?></th>
     <th class='w-date'><?php echo $lang->project->end;?></th>
     <th class='w-status'><?php echo $lang->statusAB;?></th>
@@ -33,7 +33,7 @@
   <tr class='text-center'>
     <td><?php echo html::a($projectLink, $project->id);?></td>
     <td><?php echo $project->code;?></td>
-    <td><?php echo html::a($projectLink, $project->name);?></td>
+    <td class="text-left"><?php echo html::a($projectLink, $project->name);?></td>
     <td><?php echo $project->begin;?></td>
     <td><?php echo $project->end;?></td>
     <?php if(isset($project->delay)):?>
@@ -47,5 +47,5 @@
   </tr>
   <?php endforeach;?>
   </tbody>
-</table> 
+</table>
 <?php include '../../common/view/footer.html.php';?>

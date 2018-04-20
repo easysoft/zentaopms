@@ -13,7 +13,7 @@ class task extends control
 {
     /**
      * Construct function, load model of project and story modules.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -39,31 +39,40 @@ class task extends control
      * @param  int    $storyID
      * @param  int    $moduleID
      * @param  int    $taskID
+     * @param  int    $todoID
      * @access public
      * @return void
      */
-    public function create($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0)
+    public function create($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0)
     {
         $task = new stdClass();
-        $task->module      = $moduleID;
-        $task->assignedTo  = '';
-        $task->name        = '';
-        $task->story       = $storyID;
-        $task->type        = '';
-        $task->pri         = '';
-        $task->estimate    = '';
-        $task->desc        = '';
-        $task->estStarted  = '';
-        $task->deadline    = '';
-        $task->mailto      = '';
-        $task->color       = '';
+        $task->module     = $moduleID;
+        $task->assignedTo = '';
+        $task->name       = '';
+        $task->story      = $storyID;
+        $task->type       = '';
+        $task->pri        = '';
+        $task->estimate   = '';
+        $task->desc       = '';
+        $task->estStarted = '';
+        $task->deadline   = '';
+        $task->mailto     = '';
+        $task->color      = '';
         if($taskID > 0)
         {
             $task      = $this->task->getByID($taskID);
             $projectID = $task->project;
         }
 
-        $project   = $this->project->getById($projectID); 
+        if($todoID > 0)
+        {
+            $todo = $this->loadModel('todo')->getById($todoID);
+            $task->name = $todo->name;
+            $task->pri  = $todo->pri;
+            $task->desc = $todo->desc;
+        }
+
+        $project   = $this->project->getById($projectID);
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('project', 'story', "projectID=$projectID");
 
@@ -103,8 +112,7 @@ class task extends control
                 if($taskID['status'] == 'exists') continue;
 
                 $taskID   = $taskID['id'];
-                $actionID = $this->action->create('task', $taskID, 'Opened', '');
-                $this->task->sendmail($taskID, $actionID);
+                $this->action->create('task', $taskID, 'Opened', '');
             }
 
             /* If link from no head then reload*/
@@ -113,6 +121,12 @@ class task extends control
                 $response['locate'] = 'reload';
                 $response['target'] = 'parent';
                 $this->send($response);
+            }
+
+            if($todoID > 0)
+            {
+                $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
+                $this->action->create('todo', $todoID, 'finished', '', "TASK:$taskID");
             }
 
             /* Locate the browser. */
@@ -177,11 +191,11 @@ class task extends control
      * @param int $taskID
      *
      * @access public
-     * @return void 
+     * @return void
      */
     public function batchCreate($projectID = 0, $storyID = 0, $iframe = 0, $taskID = 0)
     {
-        $project   = $this->project->getById($projectID); 
+        $project   = $this->project->getById($projectID);
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('project', 'story', "projectID=$projectID");
 
@@ -193,10 +207,8 @@ class task extends control
             $mails = $this->task->batchCreate($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            foreach($mails as $mail) $this->task->sendmail($mail->taskID, $mail->actionID);
-
             /* Locate the browser. */
-            if($iframe) die(js::reload('parent.parent'));
+            if(!empty($iframe)) die(js::reload('parent.parent'));
             die(js::locate($storyLink, 'parent'));
         }
 
@@ -228,8 +240,8 @@ class task extends control
 
     /**
      * Common actions of task module.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -247,8 +259,8 @@ class task extends control
 
     /**
      * Edit a task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -275,7 +287,6 @@ class task extends control
                 $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
                 $actionID = $this->action->create('task', $taskID, $action, $fileAction . $this->post->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
 
             if($task->fromBug != 0)
@@ -302,15 +313,15 @@ class task extends control
         $this->view->position[] = $this->lang->task->common;
         $this->view->position[] = $this->lang->task->edit;
         $this->view->stories    = $this->story->getProjectStoryPairs($this->view->project->id);
-        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}"); 
+        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->modules    = $this->tree->getTaskOptionMenu($this->view->task->project);
         $this->display();
     }
 
     /**
      * Batch edit task.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -328,7 +339,6 @@ class task extends control
 
                     $actionID = $this->loadModel('action')->create('task', $taskID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
-                    $this->task->sendmail($taskID, $actionID);
 
                     $task = $this->task->getById($taskID);
                     if($task->fromBug != 0)
@@ -355,7 +365,7 @@ class task extends control
         /* The tasks of project. */
         if($projectID)
         {
-            $project = $this->project->getById($projectID); 
+            $project = $this->project->getById($projectID);
             $this->project->setMenu($this->project->getPairs(), $project->id);
 
             /* Set modules and members. */
@@ -411,7 +421,7 @@ class task extends control
     }
 
     /**
-     * Update assign of task 
+     * Update assign of task
      *
      * @param  int    $requestID
      * @access public
@@ -428,7 +438,6 @@ class task extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
             $this->action->logHistory($actionID, $changes);
-            $this->task->sendmail($taskID, $actionID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -474,7 +483,6 @@ class task extends control
                 $this->loadModel('action');
                 $actionID = $this->action->create('task', $taskID, 'Edited');
                 $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
@@ -482,9 +490,9 @@ class task extends control
     }
 
     /**
-     * Batch update assign of task. 
-     * 
-     * @param  int    $project 
+     * Batch update assign of task.
+     *
+     * @param  int    $project
      * @access public
      * @return void
      */
@@ -504,7 +512,6 @@ class task extends control
                 if(dao::isError()) die(js::error(dao::getError()));
                 $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
                 $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
             die(js::reload('parent'));
@@ -569,9 +576,9 @@ class task extends control
     }
 
     /**
-     * Confirm story change 
-     * 
-     * @param  int    $taskID 
+     * Confirm story change
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -585,8 +592,8 @@ class task extends control
 
     /**
      * Start a task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -605,7 +612,6 @@ class task extends control
                 $act = $this->post->left == 0 ? 'Finished' : 'Started';
                 $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
 
             /* Remind whether to update status of the bug, if task which from that bug has been finished. */
@@ -630,14 +636,14 @@ class task extends control
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->start;
         $this->view->position[] = $this->lang->task->start;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter'); 
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
-    
+
     /**
-     * Record consumed and estimate. 
-     * 
-     * @param  int    $taskID 
+     * Record consumed and estimate.
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -679,9 +685,9 @@ class task extends control
     }
 
     /**
-     * Edit consumed and estimate. 
-     * 
-     * @param  int    $estimateID 
+     * Edit consumed and estimate.
+     *
+     * @param  int    $estimateID
      * @access public
      * @return void
      */
@@ -709,10 +715,10 @@ class task extends control
     }
 
     /**
-     * Delete estimate. 
-     * 
-     * @param  int    $estimateID 
-     * @param  string $confirm 
+     * Delete estimate.
+     *
+     * @param  int    $estimateID
+     * @param  string $confirm
      * @access public
      * @return void
      */
@@ -736,8 +742,8 @@ class task extends control
 
     /**
      * Finish a task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -758,7 +764,6 @@ class task extends control
                 $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
                 $actionID = $this->action->create('task', $taskID, 'Finished', $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
 
             if($this->task->needUpdateBugStatus($task))
@@ -778,16 +783,21 @@ class task extends control
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $task    = $this->view->task;
-        $members = $this->loadModel('user')->getPairs('noletter');
+        $task         = $this->view->task;
+        $members      = $this->loadModel('project')->getTeamMemberPairs($task->project, 'nodeleted');
+        $task->nextBy = $task->assignedTo;
 
         $this->view->users = $members;
         if(!empty($task->team))
         {
             $teams = array_keys($task->team);
 
-            $task->nextBy   = $this->task->getNextUser($teams, $task->assignedTo);
-            $task->myConsumed = $this->dao->select('consumed')->from(TABLE_TEAM)->where('task')->eq($taskID)->andWhere('account')->eq($task->assignedTo)->fetch('consumed');
+            $task->nextBy     = $this->task->getNextUser($teams, $task->assignedTo);
+            $task->myConsumed = $this->dao->select('consumed')->from(TABLE_TEAM)
+                ->where('root')->eq($taskID)
+                ->andWhere('account')->eq($task->assignedTo)
+                ->andWhere('type')->eq('task')
+                ->fetch('consumed');
 
             $lastAccount = end($teams);
             if($lastAccount != $task->assignedTo)
@@ -809,8 +819,8 @@ class task extends control
 
     /**
      * Pause task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -835,15 +845,15 @@ class task extends control
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->pause;
         $this->view->position[] = $this->lang->task->pause;
-        
+
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
     /**
-     * Restart task 
-     * 
-     * @param  int    $taskID 
+     * Restart task
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -862,7 +872,6 @@ class task extends control
                 $act = $this->post->left == 0 ? 'Finished' : 'Restarted';
                 $actionID = $this->action->create('task', $taskID, $act, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -870,14 +879,14 @@ class task extends control
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->restart;
         $this->view->position[] = $this->lang->task->restart;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter'); 
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
     /**
      * Close a task.
-     * 
-     * @param  int      $taskID 
+     *
+     * @param  int      $taskID
      * @access public
      * @return void
      */
@@ -895,7 +904,6 @@ class task extends control
             {
                 $actionID = $this->action->create('task', $taskID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -903,7 +911,7 @@ class task extends control
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;
         $this->view->position[] = $this->lang->task->finish;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter'); 
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
 
@@ -911,8 +919,8 @@ class task extends control
 
     /**
      * Batch cancel tasks.
-     * 
-     * @param  string $skipTaskIdList 
+     *
+     * @param  string $skipTaskIdList
      * @access public
      * @return void
      */
@@ -936,7 +944,6 @@ class task extends control
                 {
                     $actionID = $this->action->create('task', $taskID, 'Canceled', '');
                     $this->action->logHistory($actionID, $changes);
-                    $this->task->sendmail($taskID, $actionID);
                 }
             }
         }
@@ -946,7 +953,7 @@ class task extends control
 
     /**
      * Batch close tasks.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -977,7 +984,6 @@ class task extends control
                 {
                     $actionID = $this->action->create('task', $taskID, 'Closed', '');
                     $this->action->logHistory($actionID, $changes);
-                    $this->task->sendmail($taskID, $actionID);
                 }
             }
             if(isset($skipTasks) and empty($skipTaskIdList))
@@ -994,8 +1000,8 @@ class task extends control
 
     /**
      * Cancel a task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -1013,7 +1019,6 @@ class task extends control
             {
                 $actionID = $this->action->create('task', $taskID, 'Canceled', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -1021,15 +1026,15 @@ class task extends control
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->cancel;
         $this->view->position[] = $this->lang->task->cancel;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter'); 
-        
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+
         $this->display();
     }
 
     /**
      * Activate a task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -1047,7 +1052,6 @@ class task extends control
             {
                 $actionID = $this->action->create('task', $taskID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->task->sendmail($taskID, $actionID);
             }
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -1056,15 +1060,15 @@ class task extends control
         if(!isset($this->view->members[$this->view->task->finishedBy])) $this->view->members[$this->view->task->finishedBy] = $this->view->task->finishedBy;
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->activate;
         $this->view->position[] = $this->lang->task->activate;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter'); 
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
     /**
      * Delete a task.
-     * 
-     * @param  int    $projectID 
-     * @param  int    $taskID 
+     *
+     * @param  int    $projectID
+     * @param  int    $taskID
      * @param  string $confirm yes|no
      * @access public
      * @return void
@@ -1080,6 +1084,7 @@ class task extends control
         {
             $story = $this->dao->select('story')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('story');
             $this->task->delete(TABLE_TASK, $taskID);
+            $this->task->computeWorkingHours($task->parent);
             if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
             if($story) $this->loadModel('story')->setStage($story);
             die(js::locate($this->session->taskList, 'parent'));
@@ -1087,11 +1092,11 @@ class task extends control
     }
 
     /**
-     * AJAX: return tasks of a user in html select. 
-     * 
-     * @param  string $account 
-     * @param  string $id 
-     * @param  string $status 
+     * AJAX: return tasks of a user in html select.
+     *
+     * @param  string $account
+     * @param  string $id
+     * @param  string $status
      * @access public
      * @return string
      */
@@ -1106,9 +1111,9 @@ class task extends control
 
     /**
      * AJAX: return project tasks in html select.
-     * 
-     * @param  int    $projectID 
-     * @param  int    $taskID 
+     *
+     * @param  int    $projectID
+     * @param  int    $taskID
      * @access public
      * @return string
      */
@@ -1120,8 +1125,8 @@ class task extends control
 
     /**
      * AJAX: get the actions of a task. for web app.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */
@@ -1133,15 +1138,14 @@ class task extends control
 
     /**
      * The report page.
-     * 
-     * @param  int    $projectID 
-     * @param  string $browseType 
+     *
+     * @param  int    $projectID
+     * @param  string $browseType
      * @access public
      * @return void
      */
-    public function report($projectID, $browseType = 'all')
+    public function report($projectID, $browseType = 'all', $chartType = '')
     {
-
         $this->loadModel('report');
         $this->view->charts   = array();
 
@@ -1152,6 +1156,7 @@ class task extends control
                 $chartFunc   = 'getDataOf' . $chart;
                 $chartData   = $this->task->$chartFunc();
                 $chartOption = $this->lang->task->report->$chart;
+                if(!empty($chartType)) $chartOption->type = $chartType;
                 $this->task->mergeChartOption($chart);
 
                 $this->view->charts[$chart] = $chartOption;
@@ -1166,6 +1171,7 @@ class task extends control
         $this->view->position[]    = $this->lang->task->report->common;
         $this->view->projectID     = $projectID;
         $this->view->browseType    = $browseType;
+        $this->view->chartType     = $chartType;
         $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
 
         $this->display();
@@ -1173,13 +1179,13 @@ class task extends control
 
     /**
      * get data to export
-     * 
-     * @param  int $projectID 
-     * @param  string $orderBy 
+     *
+     * @param  int $projectID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function export($projectID, $orderBy)
+    public function export($projectID, $orderBy, $type)
     {
         $project = $this->project->getById($projectID);
         $allExportFields = $this->config->task->exportFields;
@@ -1191,6 +1197,7 @@ class task extends control
             $taskLang = $this->lang->task;
 
             /* Create field lists. */
+            $sort   = $this->loadModel('common')->appendOrder($orderBy);
             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $allExportFields);
             foreach($fields as $key => $fieldName)
             {
@@ -1205,7 +1212,7 @@ class task extends control
             {
                 $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskQueryCondition)
                     ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
-                    ->orderBy($orderBy)->fetchAll('id');
+                    ->orderBy($sort)->fetchAll('id');
 
                 foreach($tasks as $key => $task)
                 {
@@ -1222,7 +1229,6 @@ class task extends control
                     {
                         $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
                     }
-
                     $task->progress .= '%';
                 }
             }
@@ -1241,7 +1247,10 @@ class task extends control
             foreach($tasks as $task) $relatedStoryIdList[$task->story] = $task->story;
 
             /* Get team for multiple task. */
-            $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');
+            $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)
+                ->where('root')->in(array_keys($tasks))
+                ->andWhere('type')->eq('task')
+                ->fetchGroup('root');
             if(!empty($taskTeam))
             {
                 foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
@@ -1252,9 +1261,34 @@ class task extends control
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(@array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
             $relatedModules = $this->loadModel('tree')->getTaskOptionMenu($projectID);
 
-            $children = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('parent')->in(array_keys($tasks))->fetchGroup('parent', 'id');
+            $children = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)
+                ->andWhere('parent')->in(array_keys($tasks))
+                ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+                ->orderBy($sort)
+                ->fetchGroup('parent', 'id');
             if(!empty($children))
             {
+                foreach($children as $parent => $childTasks)
+                {
+                    foreach($childTasks as $task)
+                    {
+                        /* Compute task progress. */
+                        if($task->consumed == 0 and $task->left == 0)
+                        {
+                            $task->progress = 0;
+                        }
+                        elseif($task->consumed != 0 and $task->left == 0)
+                        {
+                            $task->progress = 100;
+                        }
+                        else
+                        {
+                            $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                        }
+                        $task->progress .= '%';
+                    }
+                }
+
                 $position = 0;
                 foreach($tasks as $task)
                 {
@@ -1264,6 +1298,17 @@ class task extends control
                         array_splice($tasks, $position, 0, $children[$task->id]);
                         $position += count($children[$task->id]);
                     }
+                }
+            }
+
+            if($type == 'group')
+            {
+                $groupTasks = array();
+                foreach($tasks as $task) $groupTasks[$task->$orderBy][] = $task;
+                $tasks = array();
+                foreach($groupTasks as $groupTask)
+                {
+                    foreach($groupTask as $task)$tasks[] = $task;
                 }
             }
 
@@ -1328,8 +1373,8 @@ class task extends control
 
     /**
      * Ajax get task by ID.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return void
      */

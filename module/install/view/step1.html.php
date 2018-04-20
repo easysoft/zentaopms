@@ -14,9 +14,9 @@
   <div class='modal-dialog'>
     <div class='modal-header'><strong><?php echo $lang->install->checking;?></strong></div>
     <div class='modal-body'>
-      <table class='table table-bordered'>
+      <table class='table table-bordered' id='checker'>
         <thead>
-          <tr class='text-center'>
+          <tr>
             <th class='w-p20'><?php echo $lang->install->checkItem;?></th>
             <th class='w-p25'><?php echo $lang->install->current?></th>
             <th class='w-p15'><?php echo $lang->install->result?></th>

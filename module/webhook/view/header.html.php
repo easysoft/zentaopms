@@ -13,8 +13,14 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='featurebar'>
   <ul class='nav'>
-    <li id='entry'><?php //common::printLink('entry', 'browse', '', $lang->webhook->entry);?></li>
-    <li id='webhook' class='active'><?php common::printLink('webhook', 'browse', '', $lang->webhook->common);?></li>
+    <?php foreach($lang->message->typeList as $type => $typeName):?>
+    <?php if(isset($config->message->typeLink[$type])):?>
+    <?php list($moduleName, $methodName) = explode('|', $config->message->typeLink[$type]);?>
+    <?php if(!common::hasPriv($moduleName, $methodName)) continue;?>
+    <li id='<?php echo $type;?>Tab' <?php if($type == 'webhook') echo "class='active'"?>><?php echo html::a($this->createLink($moduleName, $methodName), $typeName)?></li>
+    <?php endif;?>
+    <?php endforeach;?>
+    <li id='settingTab'><?php echo html::a($this->createLink('message', 'setting'), $lang->message->setting)?></li>
   </ul>
   <div class='actions'>
     <div class='btn-group'>

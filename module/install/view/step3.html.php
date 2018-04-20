@@ -64,12 +64,12 @@ EOT;
             }
             else
             {
-                printf($lang->install->save2File, $this->app->getConfigRoot() . 'my.php');
+                printf($lang->install->save2File, $myConfigFile);
             }
         }
         else
         {
-            printf($lang->install->save2File, $this->app->getConfigRoot() . 'my.php');
+            printf($lang->install->save2File, $myConfigFile);
         }
         ?>
       </div>

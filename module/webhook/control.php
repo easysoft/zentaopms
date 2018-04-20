@@ -11,6 +11,12 @@
  */
 class webhook extends control
 {
+    public function __construct($moduleName = '', $methodName = '')
+    {
+        parent::__construct($moduleName, $methodName);
+        $this->loadModel('message');
+    }
+
     /**
      * Browse webhooks. 
      * 
@@ -54,8 +60,6 @@ class webhook extends control
         $this->view->title         = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->create;
         $this->view->products      = $this->loadModel('product')->getPairs();
         $this->view->projects      = $this->loadModel('project')->getPairs();
-        $this->view->objectTypes   = $this->webhook->getObjectTypes();
-        $this->view->objectActions = $this->webhook->getObjectActions();
         $this->view->position[]    = html::a(inlink('browse'), $this->lang->webhook->api);
         $this->view->position[]    = html::a(inlink('browse'), $this->lang->webhook->common);
         $this->view->position[]    = $this->lang->webhook->create;
@@ -83,8 +87,6 @@ class webhook extends control
         $this->view->title         = $this->lang->webhook->edit . $this->lang->colon . $webhook->name;
         $this->view->products      = $this->loadModel('product')->getPairs();
         $this->view->projects      = $this->loadModel('project')->getPairs();
-        $this->view->objectTypes   = $this->webhook->getObjectTypes();
-        $this->view->objectActions = $this->webhook->getObjectActions();
         $this->view->position[]    = html::a(inlink('browse'), $this->lang->webhook->api);
         $this->view->position[]    = html::a(inlink('browse'), $this->lang->webhook->common);
         $this->view->position[]    = $this->lang->webhook->edit;
@@ -157,19 +159,20 @@ class webhook extends control
             return true;
         }
 
+        $now = helper::now();
         foreach($dataList as $data)
         {
-            $webhook = zget($webhooks, $data->webhook, '');
+            $webhook = zget($webhooks, $data->objectID, '');
             if($webhook)
             {
                 $result = $this->webhook->fetchHook($webhook, $data->data);
                 $this->webhook->saveLog($webhook, $data->action, $data->data, $result);
             }
             
-            $this->dao->update(TABLE_WEBHOOKDATAS)->set('status')->eq('sended')->where('id')->eq($data->id)->exec();
+            $this->dao->update(TABLE_NOTIFY)->set('status')->eq('sended')->set('sendTime')->eq($now)->where('id')->eq($data->id)->exec();
         }
 
-        $this->dao->delete()->from(TABLE_WEBHOOKDATAS)->where('status')->eq('sended')->exec();
+        $this->dao->delete()->from(TABLE_NOTIFY)->where('status')->eq('sended')->exec();
 
         echo "OK\n";
         return true;

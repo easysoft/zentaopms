@@ -1485,8 +1485,8 @@ class baseRouter
             if(!method_exists($tmpModelClass, $method)) continue;
             $methodRelfection = new reflectionMethod($tmpModelClass, $method);
             $definedFile = $methodRelfection->getFileName();
-            $startLine   = $methodRelfection->getStartLine() . ' ';
-            $endLine     = $methodRelfection->getEndLine() . ' ';
+            $startLine   = $methodRelfection->getStartLine();
+            $endLine     = $methodRelfection->getEndLine();
 
             /* 将Hook脚本和老的代码合并在一起，并替换原来的定义。Merge hook codes with old codes and replace back. */
             $oldCodes  = $definedFile == $tmpModelFile ? $mergedModelCodes : $mainModelCodes;
@@ -2184,6 +2184,7 @@ class baseRouter
     {
         /* 设置错误信息(Set the error info) */
         $message = htmlspecialchars($message);
+        if(preg_match('/[^\x00-\x80]/', $message)) $message = helper::convertEncoding($message, 'gbk');
         $log     = "ERROR: $message in $file on line $line";
         if(isset($_SERVER['SCRIPT_URI'])) $log .= ", request: $_SERVER[SCRIPT_URI]";; 
         $trace = debug_backtrace();
@@ -2236,6 +2237,7 @@ class baseRouter
          * 设置错误信息。
          * Set the error info.
          **/
+        if(preg_match('/[^\x00-\x80]/', $message)) $message = helper::convertEncoding($message, 'gbk');
         $errorLog  = "\n" . date('H:i:s') . " $message in <strong>$file</strong> on line <strong>$line</strong> ";
         $errorLog .= "when visiting <strong>" . htmlspecialchars($this->getURI()) . "</strong>\n";
 

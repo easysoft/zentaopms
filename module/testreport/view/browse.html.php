@@ -26,7 +26,7 @@
       <th class='w-120px'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->testreport->createdDate);?></th>
       <th class='w-250px'><?php common::printOrderLink('project',     $orderBy, $vars, $lang->testreport->project);?></th>
       <th class='w-250px'><?php echo $lang->testreport->testtask;?></th>
-      <th class='w-50px'> <?php echo $lang->actions;?></th>
+      <th class='w-60px'> <?php echo $lang->actions;?></th>
     </tr>
   </thead>
   <?php if($reports):?>

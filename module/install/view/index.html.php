@@ -43,7 +43,7 @@
             <h5><?php echo $lang->install->promotion?></h5>
             <div class='row'>
               <?php foreach($lang->install->product as $product):?>
-              <div class='col-md-<?php echo 12/count($lang->install->product);?>'>
+              <div class='col-md-<?php echo ceil(12 / count($lang->install->product));?>'>
                 <a class="card ad" href="<?php echo $lang->install->{$product}->url;?>" target="_blank">
                   <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . $lang->install->{$product}->logo;?>)"><img src="<?php echo $defaultTheme . $lang->install->{$product}->logo;?>" alt=""></div>
                   <div class="card-reveal">

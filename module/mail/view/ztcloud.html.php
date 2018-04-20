@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
+<?php include $this->app->getModuleRoot() . 'message/view/header.html.php';?>
 <div class='container mw-800px'>
 <?php if($step == 'license'):?>
   <div id='titlebar'>

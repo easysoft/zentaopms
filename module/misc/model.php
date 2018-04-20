@@ -1,7 +1,6 @@
 <?php
 /**
  * The model file of misc module of ZenTaoPMS.
- *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
@@ -20,8 +19,9 @@ class miscModel extends model
 
     /**
      * Get table and status.
-     * 
-     * @param  string $type 
+     *
+     * @param  string $type
+     *
      * @access public
      * @return array|false
      */
@@ -29,14 +29,14 @@ class miscModel extends model
     {
         if($type != 'check' and $type != 'repair') return false;
         $tables = array();
-        $stmt = $this->dao->query("show full tables");
-        while($table = $stmt->fetch(PDO::FETCH_ASSOC)) 
+        $stmt   = $this->dao->query("show full tables");
+        while($table = $stmt->fetch(PDO::FETCH_ASSOC))
         {
             $tableName = $table["Tables_in_{$this->config->db->name}"];
             $tableType = strtolower($table['Table_type']);
             if($tableType == 'base table')
             {
-                $tableStatus = $this->dao->query("$type table $tableName")->fetch();
+                $tableStatus        = $this->dao->query("$type table $tableName")->fetch();
                 $tables[$tableName] = strtolower($tableStatus->Msg_text);
             }
         }

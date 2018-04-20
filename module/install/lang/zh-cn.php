@@ -17,6 +17,8 @@ $lang->install->pre     = '返回';
 $lang->install->reload  = '刷新';
 $lang->install->error   = '错误 ';
 
+$lang->install->officeDomain     = 'http://www.zentao.net';
+
 $lang->install->start            = '开始安装';
 $lang->install->keepInstalling   = '继续安装当前版本';
 $lang->install->seeLatestRelease = '看看最新的版本';
@@ -80,10 +82,10 @@ $lang->install->tmpRoot      = '临时文件目录';
 $lang->install->dataRoot     = '上传文件目录';
 $lang->install->session      = 'Session存储目录';
 $lang->install->sessionFail  = '修改PHP配置文件，设置session.save_path';
-$lang->install->mkdirWin     = '<p>需要创建目录%s。命令行下面命令为：<br /> mkdir %s</p>';
+$lang->install->mkdirWin     = '<p>需要创建目录%s。命令为：<br /> mkdir %s</p>';
 $lang->install->chmodWin     = '需要修改目录 "%s" 的权限。';
-$lang->install->mkdirLinux   = '<p>需要创建目录%s。<br /> 命令行下面命令为：<br /> mkdir -p %s</p>';
-$lang->install->chmodLinux   = '需要修改目录 "%s" 的权限。<br />命令行下面命令为：<br />chmod o=rwx -R %s';
+$lang->install->mkdirLinux   = '<p>需要创建目录%s。<br /> 命令为：<br /> mkdir -p %s</p>';
+$lang->install->chmodLinux   = '需要修改目录 "%s" 的权限。<br />命令为：<br />chmod o=rwx -R %s';
 
 $lang->install->defaultLang    = '默认语言';
 $lang->install->dbHost         = '数据库服务器';
@@ -156,6 +158,9 @@ $lang->install->cronList['moduleName=svn&methodName=run']             = '同步S
 $lang->install->cronList['moduleName=git&methodName=run']             = '同步GIT';
 $lang->install->cronList['moduleName=backup&methodName=backup']       = '备份数据和附件';
 $lang->install->cronList['moduleName=mail&methodName=asyncSend']      = '异步发信';
+$lang->install->cronList['moduleName=webhook&methodName=asyncSend']   = '异步发送Webhook';
+$lang->install->cronList['moduleName=admin&methodName=deleteLog']     = '删除过期日志';
+$lang->install->cronList['moduleName=todo&methodName=createCycle']    = '生成周期性待办';
 
 $lang->install->success  = "安装成功";
 $lang->install->login    = '登录禅道管理系统';

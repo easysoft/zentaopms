@@ -102,7 +102,7 @@ tfoot tr td .table-actions .btn{display:none;}
                   <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
                   <th class='w-hour {sorter:false}'>   <?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
                   <th class='w-100px {sorter:false}'>  <?php common::printOrderLink('stage',    $orderBy, $vars, $lang->story->stageAB);?></th>
-                  <th class='w-50px {sorter:false}'>   <?php echo $lang->actions?></th>
+                  <th class='w-60px {sorter:false}'>   <?php echo $lang->actions?></th>
                 </tr>
               </thead>
               <?php $canBatchUnlink = common::hasPriv('build', 'batchUnlinkStory');?>
@@ -162,7 +162,7 @@ tfoot tr td .table-actions .btn{display:none;}
                   <th class='w-date {sorter:false}'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
                   <th class='w-user {sorter:false}'>   <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
                   <th class='w-100px {sorter:false}'>  <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
-                  <th class='w-50px {sorter:false}'>   <?php echo $lang->actions?></th>
+                  <th class='w-60px {sorter:false}'>   <?php echo $lang->actions?></th>
                 </tr>
               </thead>
               <?php $canBatchUnlink = common::hasPriv('build', 'batchUnlinkBug');?>

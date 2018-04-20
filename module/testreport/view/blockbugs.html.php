@@ -4,7 +4,7 @@
     <tr>
       <th class='w-id'>   <?php echo $lang->idAB;?></th>
       <th class='w-pri'>  <?php echo $lang->priAB;?></th>
-      <th>                <?php echo $lang->bug->title;?></th>
+      <th>                <?php echo $lang->testreport->bugTitle;?></th>
       <th class='w-user'> <?php echo $lang->openedByAB;?></th>
       <th class='w-user'><?php echo $lang->bug->resolvedBy;?></th>
       <th class='w-130px'><?php echo $lang->bug->resolvedDate;?></th>

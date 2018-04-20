@@ -124,6 +124,24 @@ class html extends baseHTML
         /* End. */
         return $string .= "</select>\n";
     }
+
+    /**
+     * Create input tag that type is number.
+     * 
+     * @param  string $name 
+     * @param  string $value 
+     * @param  string $attrib 
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function number($name, $value = '', $attrib = '')
+    {
+        $id = "id='$name'";
+        if(strpos($attrib, 'id=') !== false) $id = '';
+        $value = str_replace("'", '&#039;', $value);
+        return "<input type='number' name='$name' {$id} value='$value' $attrib />\n";
+    }
 }
 
 /**

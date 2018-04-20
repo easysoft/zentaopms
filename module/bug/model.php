@@ -2400,12 +2400,12 @@ class bugModel extends model
             case 'title':
                 $class = 'confirm' . $bug->confirmed;
                 echo "<span class='$class'>[{$this->lang->bug->confirmedList[$bug->confirmed]}]</span> ";
-                if($bug->branch)echo "<span class='label label-info label-badge'>{$branches[$bug->branch]}</span> ";
-                if($modulePairs and $bug->module)echo "<span class='label label-info label-badge'>{$modulePairs[$bug->module]}</span> ";
+                if($bug->branch and isset($branches[$bug->branch]))    echo "<span class='label label-info label-badge'>{$branches[$bug->branch]}</span> ";
+                if($bug->module and isset($modulePairs[$bug->module])) echo "<span class='label label-info label-badge'>{$modulePairs[$bug->module]}</span> ";
                 echo $canView ? html::a($bugLink, $bug->title, null, "style='color: $bug->color'") : "<span style='color: $bug->color'>{$bug->title}</span>";
                 break;
             case 'branch':
-                echo $branches[$bug->branch];
+                echo zget($branches, $bug->branch, '');
                 break;
             case 'project':
                 echo zget($projects, $bug->project, '');
@@ -2467,7 +2467,23 @@ class bugModel extends model
                 echo substr($bug->openedDate, 5, 11);
                 break;
             case 'openedBuild':
-                foreach(explode(',', $bug->openedBuild) as $build) echo zget($builds, $build) . ' ';
+                $builds = array_flip($builds);
+                foreach(explode(',', $bug->openedBuild) as $build)
+                {
+                    $buildID = zget($builds, $build, '');
+                    if($buildID == 'trunk')
+                    {
+                        echo $build;
+                    }
+                    elseif($buildID and common::hasPriv('build', 'view'))
+                    {
+                        echo html::a(helper::createLink('build', 'view', "buildID=$buildID"), $build, '', "title='$bug->openedBuild'");
+                    }
+                    else
+                    {
+                        echo $build;
+                    }
+                }
                 break;
             case 'assignedTo':
                 echo zget($users, $bug->assignedTo, $bug->assignedTo);
@@ -2527,9 +2543,8 @@ class bugModel extends model
     public function sendmail($bugID, $actionID)
     {
         $this->loadModel('mail');
-        $bug         = $this->getByID($bugID);
-        $productName = $this->loadModel('product')->getById($bug->product)->name;
-        $users       = $this->loadModel('user')->getPairs('noletter');
+        $bug   = $this->getByID($bugID);
+        $users = $this->loadModel('user')->getPairs('noletter');
 
         /* Get action info. */
         $action             = $this->loadModel('action')->getById($actionID);
@@ -2564,12 +2579,44 @@ class bugModel extends model
         ob_end_clean();
         chdir($oldcwd);
 
+        $sendUsers = $this->getToAndCcList($bug);
+        if(!$sendUsers) return;
+        list($toList, $ccList) = $sendUsers;
+        $subject = $this->getSubject($bug);
+
+        /* Send it. */
+        $this->mail->send($toList, $subject, $mailContent, $ccList);
+        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+    }
+
+    /**
+     * Get subject.
+     * 
+     * @param  object    $bug 
+     * @access public
+     * @return string
+     */
+    public function getSubject($bug)
+    {
+        $productName = $this->loadModel('product')->getById($bug->product)->name;
+        return 'BUG #'. $bug->id . ' ' . $bug->title . ' - ' . $productName;
+    }
+
+    /**
+     * Get toList and ccList.
+     * 
+     * @param  object    $bug 
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList($bug)
+    {
         /* Set toList and ccList. */
         $toList = $bug->assignedTo;
         $ccList = trim($bug->mailto, ',');
         if(empty($toList))
         {
-            if(empty($ccList)) return;
+            if(empty($ccList)) return false;
             if(strpos($ccList, ',') === false)
             {
                 $toList = $ccList;
@@ -2587,8 +2634,6 @@ class bugModel extends model
             $toList = $bug->resolvedBy;
         }
 
-        /* Send it. */
-        $this->mail->send($toList, 'BUG #'. $bug->id . ' ' . $bug->title . ' - ' . $productName, $mailContent, $ccList);
-        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+        return array($toList, $ccList);
     }
 }

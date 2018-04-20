@@ -17,6 +17,7 @@ $lang->my->changePassword = '修改密碼';
 $lang->my->unbind         = '解除然之綁定';
 $lang->my->manageContacts = '維護聯繫人';
 $lang->my->deleteContacts = '刪除聯繫人';
+$lang->my->shareContacts  = '共享聯繫人列表';
 $lang->my->limited        = '受限操作(只能編輯與自己相關的內容)';
 $lang->my->score          = '我的積分';
 $lang->my->scoreRule      = '積分規則';

@@ -115,10 +115,11 @@ class storyModel extends model
         /* Get team members. */
         if($story->projects)
         {
-            $story->teams = $this->dao->select('account, project')
+            $story->teams = $this->dao->select('account, root')
                 ->from(TABLE_TEAM)
-                ->where('project')->in(array_keys($story->projects))
-                ->fetchGroup('project');
+                ->where('root')->in(array_keys($story->projects))
+                ->andWhere('type')->eq('project')
+                ->fetchGroup('root');
         }
 
         /* Get affected bugs. */
@@ -614,6 +615,7 @@ class storyModel extends model
 
                 if(!dao::isError())
                 {
+                    $this->setStage($storyID);
                     if($story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
                     $allChanges[$storyID] = common::createChanges($oldStory, $story);
                 }
@@ -800,6 +802,7 @@ class storyModel extends model
             ->add('assignedTo',   'closed')
             ->add('assignedDate', $now)
             ->add('status', 'closed')
+            ->add('stage', 'closed')
             ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->closedReason != 'subdivided', 'childStories')
             ->setIF($this->post->closedReason == 'done', 'stage', 'released')
@@ -845,6 +848,7 @@ class storyModel extends model
             $story->assignedTo     = 'closed';
             $story->assignedDate   = $now;
             $story->status         = 'closed';
+            $story->stage          = 'closed';
 
             $story->closedReason   = $data->closedReasons[$storyID];
             $story->duplicateStory = $data->duplicateStoryIDList[$storyID] ? $data->duplicateStoryIDList[$storyID] : $oldStory->duplicateStory;
@@ -1310,6 +1314,7 @@ class storyModel extends model
      * Get stories list of a product.
      *
      * @param  int          $productID
+     * @param  int          $branch
      * @param  array|string $moduleIdList
      * @param  string       $status
      * @param  string       $orderBy
@@ -1595,7 +1600,7 @@ class storyModel extends model
             ->fetchPairs();
 
         $sql = str_replace(array('`product`', '`version`'), array('t1.`product`', 't1.`version`'), $sql);
-        $tmpStories = $this->dao->select('*')->from(TABLE_STORY)->alias('t1')
+        $tmpStories = $this->dao->select('t1.*')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
             ->where($sql)
             ->beginIF($productID != 'all' and $productID != '')->andWhere('t1.`product`')->eq((int)$productID)->fi()
@@ -1815,7 +1820,7 @@ class storyModel extends model
             ->andWhere('assignedTo')->eq($account)
             ->orderBy('id_desc')
             ->limit($limit)
-            ->fetchAll();
+            ->fetchPairs('id', 'title');
     }
 
     /**
@@ -1833,7 +1838,7 @@ class storyModel extends model
             ->andWhere('t2.status')->eq('doing')
             ->andWhere('t2.deleted')->eq(0)
             ->fetchPairs();
-        if($projects) return($this->dao->select('account')->from(TABLE_TEAM)->where('project')->in($projects)->fetchPairs('account'));
+        if($projects) return($this->dao->select('account')->from(TABLE_TEAM)->where('root')->in($projects)->andWhere('type')->eq('project')->fetchPairs('account'));
     }
 
     /**
@@ -2271,8 +2276,10 @@ class storyModel extends model
     /**
      * Merge plan title.
      *
-     * @param  int|array    $productID
-     * @param  array    $stories
+     * @param  int|array $productID
+     * @param  array     $stories
+     * @param  int       $branch
+     *
      * @access public
      * @return array
      */
@@ -2287,13 +2294,9 @@ class storyModel extends model
         }
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($productID)
-            ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchPairs('id', 'title');
-        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('branch')->in($branch)->fetchGroup('story', 'branch');
 
-        $branch = trim(str_replace(',0,', '', ",$branch,"), ',');
-        $branch = empty($branch) ? 0 : $branch;
         foreach($stories as $story)
         {
             $story->planTitle = '';
@@ -2352,15 +2355,15 @@ class storyModel extends model
                 echo "</span>";
                 break;
             case 'title':
-                if($story->branch) echo "<span class='label label-info label-badge'>{$branches[$story->branch]}</span> ";
-                if($modulePairs and $story->module) echo "<span class='label label-info label-badge'>{$modulePairs[$story->module]}</span> ";
+                if($story->branch and isset($branches[$story->branch])) echo "<span class='label label-info label-badge'>{$branches[$story->branch]}</span> ";
+                if($story->module and isset($modulePairs[$story->module])) echo "<span class='label label-info label-badge'>{$modulePairs[$story->module]}</span> ";
                 echo $canView ? html::a($storyLink, $story->title, '', "style='color: $story->color'") : "<span style='color: $story->color'>{$story->title}</span>";
                 break;
             case 'plan':
                 echo $story->planTitle;
                 break;
             case 'branch':
-                echo $branches[$story->branch];
+                echo zget($branches, $story->branch, '');
                 break;
             case 'keywords':
                 echo $story->keywords;
@@ -2504,9 +2507,8 @@ class storyModel extends model
     public function sendmail($storyID, $actionID)
     {
         $this->loadModel('mail');
-        $story       = $this->getById($storyID);
-        $productName = $this->loadModel('product')->getById($story->product)->name;
-        $users       = $this->loadModel('user')->getPairs('noletter');
+        $story = $this->getById($storyID);
+        $users = $this->loadModel('user')->getPairs('noletter');
 
         /* Get actions. */
         $action  = $this->loadModel('action')->getById($actionID);
@@ -2541,14 +2543,47 @@ class storyModel extends model
         ob_end_clean();
         chdir($oldcwd);
 
+        $sendUsers = $this->getToAndCcList($story, $action->action);
+        if(!$sendUsers) return;
+        list($toList, $ccList) = $sendUsers;
+        $subject = $this->getSubject($story);
+
+        /* Send it. */
+        $this->mail->send($toList, $subject, $mailContent, $ccList);
+        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+    }
+
+    /**
+     * Get mail subject.
+     * 
+     * @param  object    $story 
+     * @access public
+     * @return string
+     */
+    public function getSubject($story)
+    {
+        $productName = $this->loadModel('product')->getById($story->product)->name;
+        return 'STORY #' . $story->id . ' ' . $story->title . ' - ' . $productName;
+    }
+
+    /**
+     * Get toList and ccList.
+     * 
+     * @param  object    $story 
+     * @param  string    $actionType 
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList($story, $actionType)
+    {
         /* Set toList and ccList. */
         $toList = $story->assignedTo;
         $ccList = str_replace(' ', '', trim($story->mailto, ','));
 
         /* If the action is changed or reviewed, mail to the project team. */
-        if(strtolower($action->action) == 'changed' or strtolower($action->action) == 'reviewed')
+        if(strtolower($actionType) == 'changed' or strtolower($actionType) == 'reviewed')
         {
-            $prjMembers = $this->getProjectMembers($storyID);
+            $prjMembers = $this->getProjectMembers($story->id);
             if($prjMembers)
             {
                 $ccList .= ',' . join(',', $prjMembers);
@@ -2558,7 +2593,7 @@ class storyModel extends model
 
         if(empty($toList))
         {
-            if(empty($ccList)) return;
+            if(empty($ccList)) return false;
             if(strpos($ccList, ',') === false)
             {
                 $toList = $ccList;
@@ -2576,8 +2611,6 @@ class storyModel extends model
             $toList = $story->openedBy;
         }
 
-        /* Send it. */
-        $this->mail->send($toList, 'STORY #' . $story->id . ' ' . $story->title . ' - ' . $productName, $mailContent, $ccList);
-        if($this->mail->isError()) trigger_error(join("\n", $this->mail->getError()));
+        return array($toList, $ccList);
     }
 }

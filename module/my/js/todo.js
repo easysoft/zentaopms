@@ -13,7 +13,7 @@ $(function()
     if(hash.indexOf('#todo-') === 0)
     {
         var todoId = hash.substr(6);
-        var url = createLink('todo', 'view', 'id=1&from=my&onlybody=yes');
+        var url = createLink('todo', 'view', 'id=' + todoId + '&from=my&onlybody=yes');
         var $a = $('<a/>');
         $a.attr({href: url}).modalTrigger(
         {

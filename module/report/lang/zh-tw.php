@@ -31,6 +31,9 @@ $lang->report->colors[]   = '008ED6';
 $lang->report->colors[]   = '9D080D';
 $lang->report->colors[]   = 'A186BE';
 
+$lang->report->assign['noassign'] = '未指派';
+$lang->report->assign['assign'] = '已指派';
+
 $lang->report->singleColor[] = 'F6BD0F';
 
 $lang->report->projectDeviation = $lang->projectCommon . '偏差報表';
@@ -71,6 +74,11 @@ $lang->report->validRateTips = "方案為已解決或延期/狀態為已解決�
 $lang->report->unplanned     = '未計劃';
 $lang->report->workday       = '每天工時';
 $lang->report->diffDays      = '工作日天數';
+
+$lang->report->typeList['']     = '預設';
+$lang->report->typeList['pie']  = '餅圖';
+$lang->report->typeList['bar']  = '柱狀圖';
+$lang->report->typeList['line'] = '折線圖';
 
 $lang->report->conditions    = '篩選條件：';
 $lang->report->closedProduct = '關閉' . $lang->productCommon;

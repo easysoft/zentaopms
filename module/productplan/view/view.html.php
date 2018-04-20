@@ -92,9 +92,7 @@
                   <th class='w-50px {sorter:false}'><?php common::printOrderLink('order', $orderBy, $vars, $lang->productplan->updateOrder);?></th>
                   <?php endif;?>
                   <th class='w-pri {sorter:false}'> <?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
-                  <?php if($modulePairs):?>
                   <th class='w-150px text-left {sorter:false}'><?php common::printOrderLink('module', $orderBy, $vars, $lang->story->module);?></th>
-                  <?php endif;?>
                   <th class='text-left {sorter:false}'><?php common::printOrderLink('title',     $orderBy, $vars, $lang->story->title);?></th>
                   <th class='w-user {sorter:false}'>   <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
                   <th class='w-user {sorter:false}'>   <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
@@ -117,14 +115,12 @@
                   ?>
                   <tr class='text-center' data-id='<?php echo $story->id;?>'>
                     <td class='cell-id'>
-                      <?php if($canBatchUnlink or $canBatchChangePlan):?>
                       <input type='checkbox' name='storyIDList[]'  value='<?php echo $story->id;?>'/>
-                      <?php endif;?>
                       <?php echo html::a($viewLink, sprintf("%03d", $story->id));?>
                     </td>
                     <?php if($canOrder):?><td class='sort-handler'><i class='icon-move'></i></td><?php endif;?>
                     <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-                    <?php if($modulePairs):?><td class='text-left nobr'><?php if(!empty($story->module)) echo $modulePairs[$story->module];?></td><?php endif;?>
+                    <td class='text-left nobr'><?php echo zget($modulePairs, $story->module, '');?></td>
                     <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($viewLink , $story->title);?></td>
                     <td><?php echo zget($users, $story->openedBy);?></td>
                     <td><?php echo zget($users, $story->assignedTo);?></td>
@@ -350,9 +346,7 @@
                   <?php foreach($planBugs as $bug):?>
                   <tr class='text-center'>
                     <td class='cell-id'>
-                      <?php if($canBatchUnlink):?>
                       <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/>
-                      <?php endif;?>
                       <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), sprintf("%03d", $bug->id));?>
                     </td>
                     <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?></span></td>
@@ -401,19 +395,19 @@
                       <th class='w-80px strong'><?php echo $lang->productplan->title;?></th>
                       <td><?php echo $plan->title;?></td>
                     </tr>
-                      <?php if($product->type != 'normal'):?>
-                        <tr>
-                          <th><?php echo $lang->product->branch;?></th>
-                          <td><?php echo $branches[$plan->branch];?></td>
-                        </tr>
-                      <?php endif;?>
+                    <?php if($product->type != 'normal'):?>
+                    <tr>
+                      <th><?php echo $lang->product->branch;?></th>
+                      <td><?php echo $branches[$plan->branch];?></td>
+                    </tr>
+                    <?php endif;?>
                     <tr>
                       <th><?php echo $lang->productplan->begin;?></th>
                       <td><?php echo $plan->begin;?></td>
                     </tr>
                     <tr>
                       <th><?php echo $lang->productplan->end;?></th>
-                      <td><?php echo $plan->end;?></td>
+                      <td><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
                     </tr>
                     <tr>
                       <th><?php echo $lang->productplan->desc;?></th>
@@ -423,7 +417,7 @@
                 </fieldset>
               </div>
               <div class="col-side">
-                  <?php include '../../common/view/action.html.php';?>
+                <?php include '../../common/view/action.html.php';?>
               </div>
             </div>
           </div>

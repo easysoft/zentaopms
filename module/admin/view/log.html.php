@@ -10,16 +10,9 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
+<?php include $this->app->getModuleRoot() . 'webhook/view/header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <div class='container mw-600px'>
-  <div id="titlebar">
-    <div class="heading">
-      <strong><?php echo html::a($this->createLink('webhook', 'browse'), $lang->admin->api);?></strong>
-      <small class="text-muted"> <?php echo $lang->admin->log;?></small>
-      <small class="text-muted"> <?php echo $lang->admin->setting;?></small>
-    </div>
-  </div>
   <form id='logForm' method='post' class='ajaxForm'>
     <table class='table table-form'>
       <tr>

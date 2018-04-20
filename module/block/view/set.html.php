@@ -11,7 +11,7 @@
  */
 ?>
 <?php
-if(isset($lang->block->moduleList[$source]))
+if(!empty($params))
 {
     include 'setmodule.html.php';
     die();
@@ -24,20 +24,14 @@ if($type == 'html')
     include '../../common/view/kindeditor.html.php';
 }
 ?>
-<form method='post' id='blockForm' target='hiddenwin' class='form form-horizontal' action='<?php echo $this->createLink('block', 'set', "id=$id&type=$type&source=$source")?>'>
-  <table class='table table-form'>
-    <tbody>
-      <?php include 'publicform.html.php';?>
-      <?php if($type == 'html'):?>
-      <tr>
-        <th class='w-100px'><?php echo $lang->block->lblHtml;?></th>
-        <td><?php echo html::textarea('html', $block ? $block->params->html : '', "class='form-control' rows='10'")?></td>
-      </tr>
-      <?php endif;?>
-    </tbody>
-    <tfoot><tr><td colspan='2' class='text-center'><?php echo html::submitButton()?></td></tr></tfoot>
-  </table>
-</form>
+<?php include 'publicform.html.php';?>
+<?php echo html::hidden('actionLink', $this->createLink('block', 'set', "id=$id&type=$type&source=$source"));?>
+<?php if($type == 'html'):?>
+<div class="form-group">
+  <label for="html" class="col-sm-3"><?php echo $lang->block->lblHtml;?></label>
+  <div class='col-sm-7'><?php echo html::textarea('html', $block ? $block->params->html : '', "class='form-control' rows='10'")?></div>
+</div>
+<?php endif;?>
 <script>
 $(function()
 {

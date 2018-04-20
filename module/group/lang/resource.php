@@ -58,6 +58,7 @@ $lang->moduleOrder[180] = 'misc';
 $lang->moduleOrder[185] = 'backup';
 $lang->moduleOrder[190] = 'cron';
 $lang->moduleOrder[195] = 'dev';
+$lang->moduleOrder[200] = 'message';
 
 $lang->resource = new stdclass();
 
@@ -106,6 +107,7 @@ $lang->my->methodOrder[80] = 'score';
 /* Todo. */
 $lang->resource->todo = new stdclass();
 $lang->resource->todo->create       = 'create';
+$lang->resource->todo->createcycle  = 'createCycle';
 $lang->resource->todo->batchCreate  = 'batchCreate';
 $lang->resource->todo->edit         = 'edit';
 $lang->resource->todo->batchEdit    = 'batchEdit';
@@ -115,15 +117,19 @@ $lang->resource->todo->export       = 'export';
 $lang->resource->todo->finish       = 'finish';
 $lang->resource->todo->batchFinish  = 'batchFinish';
 $lang->resource->todo->import2Today = 'import2Today';
+$lang->resource->todo->assignTo     = 'assignTo';
+$lang->resource->todo->activate     = 'activate';
+$lang->resource->todo->close        = 'close';
 
 $lang->todo->methodOrder[5]  = 'create';
-$lang->todo->methodOrder[10] = 'batchCreate';
-$lang->todo->methodOrder[15] = 'edit';
-$lang->todo->methodOrder[20] = 'view';
-$lang->todo->methodOrder[25] = 'delete';
-$lang->todo->methodOrder[30] = 'export';
-$lang->todo->methodOrder[35] = 'finish';
-$lang->todo->methodOrder[40] = 'import2Today';
+$lang->todo->methodOrder[10] = 'createCycle';
+$lang->todo->methodOrder[15] = 'batchCreate';
+$lang->todo->methodOrder[20] = 'edit';
+$lang->todo->methodOrder[25] = 'view';
+$lang->todo->methodOrder[30] = 'delete';
+$lang->todo->methodOrder[35] = 'export';
+$lang->todo->methodOrder[40] = 'finish';
+$lang->todo->methodOrder[45] = 'import2Today';
 
 /* Product. */
 $lang->resource->product = new stdclass();
@@ -284,50 +290,51 @@ $lang->release->methodOrder[70] = 'changeStatus';
 
 /* Project. */
 $lang->resource->project = new stdclass();
-$lang->resource->project->index          = 'index';
-$lang->resource->project->view           = 'view';
-$lang->resource->project->browse         = 'browse';
-$lang->resource->project->create         = 'create';
-$lang->resource->project->edit           = 'edit';
-$lang->resource->project->batchedit      = 'batchEdit';
-$lang->resource->project->start          = 'start';
-$lang->resource->project->activate       = 'activate';
-$lang->resource->project->putoff         = 'putoff';
-$lang->resource->project->suspend        = 'suspend';
-$lang->resource->project->close          = 'close';
-$lang->resource->project->delete         = 'delete';
-$lang->resource->project->task           = 'task';
-$lang->resource->project->grouptask      = 'groupTask';
-$lang->resource->project->importtask     = 'importTask';
-$lang->resource->project->importBug      = 'importBug';
-$lang->resource->project->story          = 'story';
-$lang->resource->project->build          = 'build';
-$lang->resource->project->testtask       = 'testtask';
-$lang->resource->project->bug            = 'bug';
-$lang->resource->project->burn           = 'burn';
-$lang->resource->project->computeBurn    = 'computeBurn';
-$lang->resource->project->fixFirst       = 'fixFirst';
-$lang->resource->project->burnData       = 'burnData';
-$lang->resource->project->team           = 'team';
-$lang->resource->project->doc            = 'doc';
-$lang->resource->project->dynamic        = 'dynamic';
-$lang->resource->project->manageProducts = 'manageProducts';
+$lang->resource->project->index             = 'index';
+$lang->resource->project->view              = 'view';
+$lang->resource->project->browse            = 'browse';
+$lang->resource->project->create            = 'create';
+$lang->resource->project->edit              = 'edit';
+$lang->resource->project->batchedit         = 'batchEdit';
+$lang->resource->project->start             = 'start';
+$lang->resource->project->activate          = 'activate';
+$lang->resource->project->putoff            = 'putoff';
+$lang->resource->project->suspend           = 'suspend';
+$lang->resource->project->close             = 'close';
+$lang->resource->project->delete            = 'delete';
+$lang->resource->project->task              = 'task';
+$lang->resource->project->grouptask         = 'groupTask';
+$lang->resource->project->importtask        = 'importTask';
+$lang->resource->project->importplanstories = 'importPlanStories';
+$lang->resource->project->importBug         = 'importBug';
+$lang->resource->project->story             = 'story';
+$lang->resource->project->build             = 'build';
+$lang->resource->project->testtask          = 'testtask';
+$lang->resource->project->bug               = 'bug';
+$lang->resource->project->burn              = 'burn';
+$lang->resource->project->computeBurn       = 'computeBurn';
+$lang->resource->project->fixFirst          = 'fixFirst';
+$lang->resource->project->burnData          = 'burnData';
+$lang->resource->project->team              = 'team';
+$lang->resource->project->doc               = 'doc';
+$lang->resource->project->dynamic           = 'dynamic';
+$lang->resource->project->manageProducts    = 'manageProducts';
 //$lang->resource->project->manageChilds   = 'manageChilds';
-$lang->resource->project->manageMembers  = 'manageMembers';
-$lang->resource->project->unlinkMember   = 'unlinkMember';
-$lang->resource->project->linkStory      = 'linkStory';
-$lang->resource->project->unlinkStory    = 'unlinkStory';
-$lang->resource->project->batchUnlinkStory = 'batchUnlinkStory';
-$lang->resource->project->updateOrder      = 'updateOrder';
-$lang->resource->project->kanban           = 'kanban';
-$lang->resource->project->printKanban      = 'printKanban';
-$lang->resource->project->tree             = 'tree';
-$lang->resource->project->all              = 'all';
-$lang->resource->project->kanbanHideCols   = 'kanbanHideCols';
-$lang->resource->project->kanbanColsColor  = 'kanbanColsColor';
-$lang->resource->project->export           = 'export';
-$lang->resource->project->storyKanban      = 'storyKanban';
-$lang->resource->project->storySort        = 'storySort';
+$lang->resource->project->manageMembers     = 'manageMembers';
+$lang->resource->project->unlinkMember      = 'unlinkMember';
+$lang->resource->project->linkStory         = 'linkStory';
+$lang->resource->project->unlinkStory       = 'unlinkStory';
+$lang->resource->project->batchUnlinkStory  = 'batchUnlinkStory';
+$lang->resource->project->updateOrder       = 'updateOrder';
+$lang->resource->project->kanban            = 'kanban';
+$lang->resource->project->printKanban       = 'printKanban';
+$lang->resource->project->tree              = 'tree';
+$lang->resource->project->all               = 'all';
+$lang->resource->project->kanbanHideCols    = 'kanbanHideCols';
+$lang->resource->project->kanbanColsColor   = 'kanbanColsColor';
+$lang->resource->project->export            = 'export';
+$lang->resource->project->storyKanban       = 'storyKanban';
+$lang->resource->project->storySort         = 'storySort';
 
 $lang->project->methodOrder[0]   = 'index';
 $lang->project->methodOrder[5]   = 'view';
@@ -344,16 +351,17 @@ $lang->project->methodOrder[60]  = 'delete';
 $lang->project->methodOrder[65]  = 'task';
 $lang->project->methodOrder[70]  = 'grouptask';
 $lang->project->methodOrder[75]  = 'importtask';
-$lang->project->methodOrder[80]  = 'importBug';
-$lang->project->methodOrder[85]  = 'story';
-$lang->project->methodOrder[90]  = 'build';
-$lang->project->methodOrder[95]  = 'testtask';
-$lang->project->methodOrder[100] = 'bug';
-$lang->project->methodOrder[105] = 'burn';
-$lang->project->methodOrder[110] = 'computeBurn';
-$lang->project->methodOrder[115] = 'fixFirst';
-$lang->project->methodOrder[120] = 'burnData';
-$lang->project->methodOrder[125] = 'team';
+$lang->project->methodOrder[80]  = 'importplanstories';
+$lang->project->methodOrder[85]  = 'importBug';
+$lang->project->methodOrder[90]  = 'story';
+$lang->project->methodOrder[95]  = 'build';
+$lang->project->methodOrder[100] = 'testtask';
+$lang->project->methodOrder[105] = 'bug';
+$lang->project->methodOrder[110] = 'burn';
+$lang->project->methodOrder[115] = 'computeBurn';
+$lang->project->methodOrder[120] = 'fixFirst';
+$lang->project->methodOrder[125] = 'burnData';
+$lang->project->methodOrder[130] = 'team';
 //$lang->project->methodOrder[130] = 'doc';
 $lang->project->methodOrder[135] = 'dynamic';
 $lang->project->methodOrder[140] = 'manageProducts';
@@ -483,6 +491,7 @@ $lang->resource->bug->saveTemplate       = 'saveTemplate';
 $lang->resource->bug->deleteTemplate     = 'deleteTemplate';
 $lang->resource->bug->setPublic          = 'setPublic';
 $lang->resource->bug->batchChangeModule  = 'batchChangeModule';
+$lang->resource->bug->batchChangeBranch  = 'batchChangeBranch';
 
 $lang->bug->methodOrder[0]   = 'index';
 $lang->bug->methodOrder[5]   = 'browse';
@@ -511,6 +520,7 @@ $lang->bug->methodOrder[110] = 'setPublic';
 $lang->bug->methodOrder[115] = 'linkBugs';
 $lang->bug->methodOrder[120] = 'unlinkBug';
 $lang->bug->methodOrder[125] = 'batchChangeModule';
+$lang->bug->methodOrder[130] = 'batchChangeBranch';
 
 /* Test case. */
 $lang->resource->testcase = new stdclass();
@@ -534,6 +544,7 @@ $lang->resource->testcase->showImport         = 'showImport';
 $lang->resource->testcase->confirmChange      = 'confirmChange';
 $lang->resource->testcase->confirmStoryChange = 'confirmStoryChange';
 $lang->resource->testcase->batchChangeModule  = 'batchChangeModule';
+$lang->resource->testcase->batchChangeBranch  = 'batchChangeBranch';
 $lang->resource->testcase->bugs               = 'bugs';
 $lang->resource->testcase->review             = 'review';
 $lang->resource->testcase->batchReview        = 'batchReview';
@@ -556,9 +567,10 @@ $lang->testcase->methodOrder[55]  = 'confirmStoryChange';
 $lang->testcase->methodOrder[60]  = 'batchEdit';
 $lang->testcase->methodOrder[65]  = 'batchDelete';
 $lang->testcase->methodOrder[70]  = 'batchChangeModule';
-$lang->testcase->methodOrder[75]  = 'linkCases';
-$lang->testcase->methodOrder[80]  = 'unlinkCase';
-$lang->testcase->methodOrder[85]  = 'bugs';
+$lang->testcase->methodOrder[75]  = 'batchChangeBranch';
+$lang->testcase->methodOrder[80]  = 'linkCases';
+$lang->testcase->methodOrder[85]  = 'unlinkCase';
+$lang->testcase->methodOrder[90]  = 'bugs';
 $lang->testcase->methodOrder[95]  = 'review';
 $lang->testcase->methodOrder[100] = 'batchReview';
 $lang->testcase->methodOrder[105] = 'batchConfirmStoryChange';
@@ -949,7 +961,7 @@ $lang->editor->methodOrder[30] = 'delete';
 /* Convert. */
 $lang->resource->convert = new stdclass();
 $lang->resource->convert->index          = 'index';
-$lang->resource->convert->selectSource   = 'selectSource';  
+$lang->resource->convert->selectSource   = 'selectSource';
 $lang->resource->convert->setConfig      = 'setConfig';
 $lang->resource->convert->setBugfree     = 'setBugfree';
 $lang->resource->convert->setRedmine     = 'setRedmine';
@@ -999,6 +1011,13 @@ $lang->resource->misc = new stdclass();
 $lang->resource->misc->ping = 'ping';
 
 $lang->misc->methodOrder[5] = 'ping';
+
+$lang->resource->message = new stdclass();
+$lang->resource->message->index   = 'index';
+$lang->resource->message->setting = 'setting';
+
+$lang->message->methodOrder[5]  = 'index';
+$lang->message->methodOrder[10] = 'setting';
 
 $lang->resource->action = new stdclass();
 $lang->resource->action->trash    = 'trash';
@@ -1356,6 +1375,11 @@ $lang->changelog['9.6'][] = 'project-export';
 $lang->changelog['9.6'][] = 'project-storyKanban';
 $lang->changelog['9.6'][] = 'project-storySort';
 
+$lang->changelog['9.8'][] = 'message-index';
+$lang->changelog['9.8'][] = 'message-setting';
+$lang->changelog['9.8'][] = 'todo-createCycle';
+$lang->changelog['9.8'][] = 'project-importPlanStories';
+
 global $config;
 if($config->global->flow != 'full')
 {
@@ -1413,7 +1437,7 @@ if($config->global->flow == 'onlyStory')
     unset($lang->moduleOrder[150]);
     unset($lang->resource->git);
     unset($lang->moduleOrder[155]);
-    
+
     unset($lang->resource->story->tasks);
 }
 

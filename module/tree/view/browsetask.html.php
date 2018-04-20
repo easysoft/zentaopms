@@ -19,7 +19,7 @@
     <div class='panel'>
       <div class='panel-heading'><i class='icon-cog'></i> <strong><?php echo $title;?></strong></div>
       <div class='panel-body'>
-        <ul class='tree-lines' id='modulesTree'></ul>
+        <ul class='tree-lines' id='modulesTree' data-name='tree-task'></ul>
       </div>
     </div>
   </div>
@@ -121,14 +121,11 @@ $(function()
 {
     var data = $.parseJSON('<?php echo helper::jsonEncode4Parse($tree);?>');
     var options = {
-        name: 'tree-project-edit',
         initialState: 'preserve',
         data: data,
         itemCreator: function($li, item)
         {
-            
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
-            
 
             var title = (item.type === 'product' ? '<i class="icon icon-cube text-muted"></i> ' : '') + item.name;
             var link = item.id !== undefined ? ('<a href="' + createLink('tree', 'browsetask', 'rootID=<?php echo $rootID ?>&viewType=task&moduleID={0}'.format(item.id)) + '">' + title + '</a>') : ('<span class="tree-toggle">' + title + '</span>');

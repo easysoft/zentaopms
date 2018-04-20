@@ -40,8 +40,13 @@
     <div class='panel panel-sm'>
       <div class='panel-heading'>
         <strong>
-        <?php echo $lang->bug->report->common;?>
-        <span><?php echo $lang->report->notice->help?></span>
+          <?php echo $lang->bug->report->common;?>
+          <div class="btn-group">
+          <?php foreach($lang->report->typeList as $type => $typeName):?>
+          <?php echo html::a("javascript:changeChartType(\"$type\")", $typeName, '', "class='btn btn-sm " . ($type == $chartType ? 'active' : '') . "'")?>
+          <?php endforeach;?>
+          </div>
+          <span><?php echo $lang->report->notice->help?></span>
         </strong>
       </div>
       <table class='table active-disabled'>
@@ -81,4 +86,8 @@
     </div>
   </div>
 </div>
+<?php js::set('productID', $productID);?>
+<?php js::set('browseType', $browseType);?>
+<?php js::set('branchID', $branchID);?>
+<?php js::set('moduleID', $moduleID);?>
 <?php include '../../common/view/footer.html.php';?>

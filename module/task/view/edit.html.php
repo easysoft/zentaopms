@@ -72,12 +72,14 @@
       <fieldset>
         <legend><?php echo $lang->task->legendBasic;?></legend>
         <table class='table table-form'>
+          <?php if(empty($task->parent)):?>
           <tr>
             <th class='w-80px'><?php echo $lang->task->project;?></th>
             <td><?php echo html::select('project', $projects, $task->project, 'class="form-control chosen" onchange="loadAll(this.value)"');?></td>
           </tr>
+          <?php endif;?>
           <tr>
-            <th><?php echo $lang->task->module;?></th>
+            <th class='w-80px'><?php echo $lang->task->module;?></th>
             <td id="moduleIdBox"><?php echo html::select('module', $modules, $task->module, 'class="form-control chosen" onchange="loadModuleRelated()"');?></td>
           </tr>
           <?php if($config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
@@ -88,7 +90,7 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->task->assignedTo;?></th>
-            <td><span id="assignedToIdBox"><?php echo html::select('assignedTo', $members, $task->assignedTo, "class='form-control chosen'");?></span></td> 
+            <td><span id="assignedToIdBox"><?php echo html::select('assignedTo', $members, $task->assignedTo, "class='form-control chosen'");?></span></td>
           </tr>
           <tr class='<?php echo empty($task->team) ? 'hidden' : ''?>' id='teamTr'>
             <th><?php echo $lang->task->team;?></th>
@@ -96,21 +98,24 @@
           </tr>
           <tr>
             <th><?php echo $lang->task->type;?></th>
-            <td><?php echo html::select('type', $lang->task->typeList, $task->type, 'class=form-control');?></td>
+            <td><?php echo html::select('type', $lang->task->typeList, $task->type, "class='form-control chosen'");?></td>
           </tr>
           <?php if(empty($task->children)):?>
           <tr>
             <th><?php echo $lang->task->status;?></th>
-            <td><?php echo html::select('status', (array)$lang->task->statusList, $task->status, 'class=form-control');?></td>
+            <td><?php echo html::select('status', (array)$lang->task->statusList, $task->status, "class='form-control chosen'");?></td>
           </tr>
           <?php endif;?>
           <tr>
             <th><?php echo $lang->task->pri;?></th>
-            <td><?php echo html::select('pri', $lang->task->priList, $task->pri, 'class=form-control');?> </td>
+            <td><?php echo html::select('pri', $lang->task->priList, $task->pri, "class='form-control chosen'");?> </td>
           </tr>
           <tr>
             <th><?php echo $lang->task->mailto;?></th>
-            <td><?php echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ' , '', $task->mailto), 'class="form-control" multiple');?></td>
+            <td>
+            <?php echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ' , '', $task->mailto), 'class="form-control" multiple');?>
+            <?php echo $this->fetch('my', 'buildContactLists');?>
+            </td>
           </tr>
         </table>
       </fieldset>
@@ -195,7 +200,7 @@
         <table class='table table-form'>
           <?php foreach($task->team as $member):?>
           <tr>
-            <td class='w-80px'><?php echo html::select("team[]", $users, $member->account, "class='form-control chosen'")?></td>
+            <td class='w-80px'><?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'")?></td>
             <td>
               <div class='input-group'>
                 <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
@@ -214,7 +219,7 @@
           <?php endforeach;?>
           <?php for($i = 0; $i < 3; $i++):?>
           <tr>
-            <td class='w-150px'><?php echo html::select("team[]", $users, '', "class='form-control chosen'")?></td>
+            <td class='w-150px'><?php echo html::select("team[]", $members, '', "class='form-control chosen'")?></td>
             <td>
               <div class='input-group'>
                 <span class='input-group-addon'><?php echo $lang->task->estimate?></span>

@@ -184,6 +184,10 @@ $(function()
         }
     }
 
+    $("#kanbanHeader thead tr th").each(function(i)
+    {
+        $(this).width($('#kanbanWrapper thead tr th').eq(i).width());
+    });
     var fixH = $("#kanbanHeader").offset().top;
     $(window).scroll(function()
     {

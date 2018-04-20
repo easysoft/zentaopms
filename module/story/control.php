@@ -37,10 +37,11 @@ class story extends control
      * @param  int    $projectID
      * @param  int    $bugID
      * @param  int    $planID
+     * @param  int    $todoID
      * @access public
      * @return void
      */
-    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $bugID = 0, $planID = 0)
+    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $bugID = 0, $planID = 0, $todoID = 0)
     {
         if(!empty($_POST))
         {
@@ -73,7 +74,12 @@ class story extends control
             $action   = $bugID == 0 ? 'Opened' : 'Frombug';
             $extra    = $bugID == 0 ? '' : $bugID;
             $actionID = $this->action->create('story', $storyID, $action, '', $extra);
-            $this->story->sendmail($storyID, $actionID);
+
+            if($todoID > 0)
+            {
+                $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
+                $this->action->create('todo', $todoID, 'finished', '', "STORY:$storyID");
+            }
 
             if($this->post->newStory)
             {
@@ -156,6 +162,15 @@ class story extends control
             }
         }
 
+        if($todoID > 0)
+        {
+            $todo   = $this->loadModel('todo')->getById($todoID);
+            $source = 'todo';
+            $title  = $todo->name;
+            $spec   = $todo->desc;
+            $pri    = $todo->pri;
+        }
+
         /* Set Custom*/
         foreach(explode(',', $this->config->story->list->customCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
         $this->view->customFields = $customFields;
@@ -211,11 +226,7 @@ class story extends control
             if(dao::isError()) die(js::error(dao::getError()));
 
             $stories = array();
-            foreach($mails as $mail)
-            {
-                $stories[] = $mail->storyID;
-                if($mail->actionID) $this->story->sendmail($mail->storyID, $mail->actionID);
-            }
+            foreach($mails as $mail) $stories[] = $mail->storyID;
             if($project) $this->loadModel('project')->linkStory($project, $stories);
 
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
@@ -225,7 +236,6 @@ class story extends control
                 $actionID = $this->story->subdivide($storyID, $mails);
 
                 if(dao::isError()) die(js::error(dao::getError()));
-                $this->story->sendmail($storyID, $actionID);
 
                 if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
                 die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
@@ -243,11 +253,11 @@ class story extends control
         $this->product->setMenu($products, $product->id, $branch);
 
         /* Init vars. */
-        $planID     = $plan;
-        $pri        = 0;
-        $estimate   = '';
-        $title      = '';
-        $spec       = '';
+        $planID   = $plan;
+        $pri      = 0;
+        $estimate = '';
+        $title    = '';
+        $spec     = '';
 
         /* Process upload images. */
         if($this->session->storyImagesFile)
@@ -359,7 +369,6 @@ class story extends control
                 $action   = !empty($changes) ? 'Edited' : 'Commented';
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->story->sendmail($storyID, $actionID);
             }
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
@@ -403,7 +412,6 @@ class story extends control
 
                     $actionID = $this->action->create('story', $storyID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
-                    $this->story->sendmail($storyID, $actionID);
                 }
             }
             die(js::locate($this->session->storyList, 'parent'));
@@ -537,7 +545,6 @@ class story extends control
                 if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
                 $actionID = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
-                $this->story->sendmail($storyID, $actionID);
             }
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
@@ -571,7 +578,6 @@ class story extends control
             $this->story->activate($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
-            $this->story->sendmail($storyID, $actionID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
@@ -681,7 +687,6 @@ class story extends control
             $result = $this->post->result;
             if($this->post->closedReason != '' and strpos('done,postponed,subdivided,willnotdo', $this->post->closedReason) === false) $result = 'pass';
             $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result));
-            $this->story->sendmail($storyID, $actionID);
             if($this->post->result == 'reject')
             {
                 $this->action->create('story', $storyID, 'Closed', '', ucfirst($this->post->closedReason));
@@ -735,7 +740,6 @@ class story extends control
         $actions     = $this->story->batchReview($storyIDList, $result, $reason);
 
         if(dao::isError()) die(js::error(dao::getError()));
-        foreach($actions as $storyID => $actionID) $this->story->sendmail($storyID, $actionID);
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::locate($this->session->storyList, 'parent'));
     }
@@ -755,7 +759,6 @@ class story extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : ''));
             $this->action->logHistory($actionID, $changes);
-            $this->story->sendmail($storyID, $actionID);
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
@@ -802,7 +805,6 @@ class story extends control
                 {
                     $actionID = $this->action->create('story', $storyID, 'Closed', htmlspecialchars($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : ''));
                     $this->action->logHistory($actionID, $changes);
-                    $this->story->sendmail($storyID, $actionID);
                 }
             }
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
@@ -883,7 +885,6 @@ class story extends control
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            $this->story->sendmail($storyID, $actionID);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::reload('parent'));
@@ -906,7 +907,6 @@ class story extends control
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            $this->story->sendmail($storyID, $actionID);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::reload('parent'));
@@ -929,7 +929,6 @@ class story extends control
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
-            $this->story->sendmail($storyID, $actionID);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::reload('parent'));
@@ -954,7 +953,6 @@ class story extends control
         {
             $actionID = $this->action->create('story', $storyID, $action);
             $this->action->logHistory($actionID, $changes);
-            $this->story->sendmail($storyID, $actionID);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::locate($this->session->storyList, 'parent'));
@@ -976,7 +974,6 @@ class story extends control
             {
                 $actionID = $this->action->create('story', $storyID, 'Edited');
                 $this->action->logHistory($actionID, $changes);
-                $this->story->sendmail($storyID, $actionID);
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
@@ -1314,7 +1311,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function report($productID, $browseType, $branchID, $moduleID)
+    public function report($productID, $browseType, $branchID, $moduleID, $chartType = 'pie')
     {
         $this->loadModel('report');
         $this->view->charts   = array();
@@ -1326,8 +1323,8 @@ class story extends control
                 $chartFunc   = 'getDataOf' . $chart;
                 $chartData   = $this->story->$chartFunc();
                 $chartOption = $this->lang->story->report->$chart;
+                if(!empty($chartType)) $chartOption->type = $chartType;
                 $this->story->mergeChartOption($chart);
-
 
                 $this->view->charts[$chart] = $chartOption;
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);
@@ -1340,8 +1337,10 @@ class story extends control
         $this->view->position[]    = $this->products[$productID];
         $this->view->position[]    = $this->lang->story->reportChart;
         $this->view->productID     = $productID;
+        $this->view->branchID      = $branchID;
         $this->view->browseType    = $browseType;
         $this->view->moduleID      = $moduleID;
+        $this->view->chartType     = $chartType;
         $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';
         $this->display();
     }

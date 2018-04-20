@@ -15,8 +15,8 @@ class buildModel extends model
 {
     /**
      * Get build info.
-     * 
-     * @param  int    $buildID 
+     *
+     * @param  int    $buildID
      * @param  bool   $setImgSize
      * @access public
      * @return object
@@ -39,8 +39,8 @@ class buildModel extends model
 
     /**
      * Get by ID list.
-     * 
-     * @param  array $idList 
+     *
+     * @param  array $idList
      * @access public
      * @return array
      */
@@ -51,8 +51,8 @@ class buildModel extends model
 
     /**
      * Get builds of a project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return array
      */
@@ -70,10 +70,10 @@ class buildModel extends model
     }
 
     /**
-     * Get builds of a project in pairs. 
-     * 
-     * @param  int    $projectID 
-     * @param  int    $productID 
+     * Get builds of a project in pairs.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
      * @param  string $params       noempty|notrunk, can be a set of them
      * @access public
      * @return array
@@ -122,25 +122,22 @@ class buildModel extends model
      * @param int    $branch
      * @param string $params   noempty|notrunk, can be a set of them
      * @param bool   $replace
-     * @param int    $project
      *
      * @access public
      * @return array
      */
-    public function getProductBuildPairs($products, $branch = 0, $params = 'noterminate, nodone', $replace = true, $project = 0)
+    public function getProductBuildPairs($products, $branch = 0, $params = 'noterminate, nodone', $replace = true)
     {
         $sysBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => $this->lang->trunk);
 
-        /* Add project for Bug#1344. */
         $productBuilds = $this->dao->select('t1.id, t1.name, t1.project, t2.status as projectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName')->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t1.id = t3.build')
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.product')->in($products)
             ->beginIF($branch)->andWhere('t1.branch')->in("0,$branch")->fi()
-            ->beginIF($project)->andWhere('t1.project')->eq($project)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
 
@@ -172,14 +169,14 @@ class buildModel extends model
 
     /**
      * Get last build.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return bool | object
      */
     public function getLast($projectID)
     {
-        return $this->dao->select('id, name')->from(TABLE_BUILD) 
+        return $this->dao->select('id, name')->from(TABLE_BUILD)
             ->where('project')->eq((int)$projectID)
             ->orderBy('date DESC,id DESC')
             ->limit(1)
@@ -188,8 +185,8 @@ class buildModel extends model
 
     /**
      * Create a build
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -226,8 +223,8 @@ class buildModel extends model
 
     /**
      * Update a build.
-     * 
-     * @param  int    $buildID 
+     *
+     * @param  int    $buildID
      * @access public
      * @return void
      */
@@ -256,8 +253,8 @@ class buildModel extends model
 
     /**
      * Update linked bug to resolved.
-     * 
-     * @param  object    $build 
+     *
+     * @param  object    $build
      * @access public
      * @return void
      */
@@ -299,8 +296,8 @@ class buildModel extends model
 
     /**
      * Link stories
-     * 
-     * @param  int    $buildID 
+     *
+     * @param  int    $buildID
      * @access public
      * @return void
      */
@@ -317,10 +314,10 @@ class buildModel extends model
     }
 
     /**
-     * Unlink story 
-     * 
-     * @param  int    $buildID 
-     * @param  int    $storyID 
+     * Unlink story
+     *
+     * @param  int    $buildID
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -334,8 +331,8 @@ class buildModel extends model
 
     /**
      * Batch unlink story.
-     * 
-     * @param  int    $buildID 
+     *
+     * @param  int    $buildID
      * @access public
      * @return void
      */
@@ -357,8 +354,8 @@ class buildModel extends model
 
     /**
      * Link bugs.
-     * 
-     * @param  int    $buildID 
+     *
+     * @param  int    $buildID
      * @access public
      * @return void
      */
@@ -376,10 +373,10 @@ class buildModel extends model
     }
 
     /**
-     * Unlink bug. 
-     * 
-     * @param  int    $buildID 
-     * @param  int    $bugID 
+     * Unlink bug.
+     *
+     * @param  int    $buildID
+     * @param  int    $bugID
      * @access public
      * @return void
      */
@@ -393,8 +390,8 @@ class buildModel extends model
 
     /**
      * Batch unlink bug.
-     * 
-     * @param  int    $buildID 
+     *
+     * @param  int    $buildID
      * @access public
      * @return void
      */

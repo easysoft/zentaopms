@@ -11,12 +11,29 @@
  */
 /* Judge my.php exists or not. */
 define('IN_UPGRADE', true);
-$myConfig = dirname(dirname(__FILE__)) . '/config/my.php';
-if(!file_exists($myConfig))
+$dbConfig = dirname(dirname(__FILE__)) . '/config/db.php';
+if(file_exists($dbConfig))
 {
-    echo "文件" . $myConfig . "不存在！ 提示：不要重命名原来的禅道安装目录，下载最新的源码包，覆盖即可。" . "<br />";
-    echo $myConfig . " doesn't exists! Please don't rename zentao before overriding the source code!";
-    exit;
+    $myConfig = dirname(dirname(__FILE__)) . '/config/my.php';
+    if(file_exists($myConfig))
+    {
+        $myContent = trim(file_get_contents($myConfig));
+        $myContent = str_replace('<?php', '', $myContent);
+    }
+
+    if(!@rename($dbConfig, $myConfig))
+    {
+        $configDir = dirname(dirname(__FILE__)) . '/config/';
+        echo "请执行命令 chmod 777 $configDir 来修改权限，保证禅道在该目录有操作文件权限" . "<br />";
+        echo "Please execute the command 'chmod 777 $configDir' to modify the permissions to ensure that the ZenTao has operating file permissions in this directory";
+        exit;
+    }
+
+    if(!empty($myContent))
+    {
+        $myContent = file_get_contents($myConfig) . "\n" . $myContent;
+        file_put_contents($myConfig, $myContent);
+    }
 }
 
 error_reporting(0);

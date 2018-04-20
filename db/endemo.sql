@@ -39,15 +39,15 @@ INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `
 (33,	'user',	1,	',0,',	0,	'admin',	'login',	'2017-12-12 15:18:58',	'',	'',	'0'),
 (34,	'user',	10,	',0,',	0,	'admin',	'deleted',	'2017-12-12 15:20:05',	'',	'1',	'0'),
 (35,	'user',	1,	',0,',	0,	'admin',	'logout',	'2017-12-12 15:22:11',	'',	'',	'0'),
-(36,	'user',	12,	',0,',	0,	'theQS',	'login',	'2017-12-12 15:22:36',	'',	'',	'0'),
-(37,	'user',	12,	',0,',	0,	'theQS',	'logout',	'2017-12-12 15:22:48',	'',	'',	'0'),
+(36,	'user',	12,	',0,',	0,	'pm1',	'login',	'2017-12-12 15:22:36',	'',	'',	'0'),
+(37,	'user',	12,	',0,',	0,	'pm1',	'logout',	'2017-12-12 15:22:48',	'',	'',	'0'),
 (38,	'user',	1,	',0,',	0,	'admin',	'login',	'2017-12-12 15:23:02',	'',	'',	'0'),
 (39,	'user',	1,	',0,',	0,	'admin',	'logout',	'2017-12-12 15:23:27',	'',	'',	'0'),
-(40,	'user',	11,	',0,',	0,	'qa1',	'login',	'2017-12-12 15:23:34',	'',	'',	'0'),
-(41,	'build',	1,	',1,',	1,	'qa1',	'opened',	'2017-12-12 15:25:13',	'',	'',	'0'),
-(42,	'bug',	1,	',1,',	1,	'qa1',	'opened',	'2017-12-12 15:27:56',	'',	'',	'0'),
-(43,	'bug',	2,	',1,',	1,	'qa1',	'opened',	'2017-12-12 15:30:32',	'',	'',	'0'),
-(44,	'user',	11,	',0,',	0,	'qa1',	'logout',	'2017-12-12 15:32:26',	'',	'',	'0'),
+(40,	'user',	11,	',0,',	0,	'pm1',	'login',	'2017-12-12 15:23:34',	'',	'',	'0'),
+(41,	'build',	1,	',1,',	1,	'pm1',	'opened',	'2017-12-12 15:25:13',	'',	'',	'0'),
+(42,	'bug',	1,	',1,',	1,	'pm1',	'opened',	'2017-12-12 15:27:56',	'',	'',	'0'),
+(43,	'bug',	2,	',1,',	1,	'pm1',	'opened',	'2017-12-12 15:30:32',	'',	'',	'0'),
+(44,	'user',	11,	',0,',	0,	'pm1',	'logout',	'2017-12-12 15:32:26',	'',	'',	'0'),
 (45,	'user',	1,	',0,',	0,	'admin',	'login',	'2017-12-12 15:32:41',	'',	'',	'0'),
 (46,	'project',	1,	',1,',	1,	'admin',	'started',	'2017-12-12 15:32:54',	'',	'',	'0'),
 (47,	'product',	2,	',2,',	0,	'admin',	'opened',	'2017-12-12 23:28:29',	'',	'',	'0'),
@@ -80,54 +80,54 @@ INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `
 (74,	'task',	8,	',2,',	2,	'pm1',	'started',	'2017-12-12 23:45:36',	'',	'',	'0'),
 (75,	'task',	7,	',2,',	2,	'pm1',	'recordestimate',	'2017-12-12 23:45:53',	'',	'8',	'0'),
 (76,	'user',	3,	',0,',	0,	'pm1',	'logout',	'2017-12-12 23:46:28',	'',	'',	'0'),
-(77,	'user',	5,	',0,',	0,	'pg1',	'login',	'2017-12-12 23:46:35',	'',	'',	'0'),
-(78,	'task',	9,	',2,',	2,	'pg1',	'started',	'2017-12-12 23:46:58',	'',	'',	'0'),
-(79,	'task',	5,	',2,',	2,	'pg1',	'started',	'2017-12-12 23:47:03',	'',	'',	'0'),
-(80,	'task',	5,	',2,',	2,	'pg1',	'finished',	'2017-12-12 23:47:37',	'Finished general setup at backend',	'',	'0'),
-(81,	'user',	5,	',0,',	0,	'pg1',	'logout',	'2017-12-12 23:48:31',	'',	'',	'0'),
-(82,	'user',	7,	',0,',	0,	'pg3',	'login',	'2017-12-12 23:48:39',	'',	'',	'0'),
-(83,	'build',	2,	',2,',	2,	'pg3',	'opened',	'2017-12-12 23:49:31',	'',	'',	'0'),
-(84,	'task',	9,	',2,',	2,	'pg3',	'recordestimate',	'2017-12-12 23:51:14',	'Finished page design.',	'8',	'0'),
-(85,	'user',	7,	',0,',	0,	'pg3',	'logout',	'2017-12-12 23:52:27',	'',	'',	'0'),
+(77,	'user',	5,	',0,',	0,	'pm1',	'login',	'2017-12-12 23:46:35',	'',	'',	'0'),
+(78,	'task',	9,	',2,',	2,	'pm1',	'started',	'2017-12-12 23:46:58',	'',	'',	'0'),
+(79,	'task',	5,	',2,',	2,	'pm1',	'started',	'2017-12-12 23:47:03',	'',	'',	'0'),
+(80,	'task',	5,	',2,',	2,	'pm1',	'finished',	'2017-12-12 23:47:37',	'Finished general setup at backend',	'',	'0'),
+(81,	'user',	5,	',0,',	0,	'pm1',	'logout',	'2017-12-12 23:48:31',	'',	'',	'0'),
+(82,	'user',	7,	',0,',	0,	'pm1',	'login',	'2017-12-12 23:48:39',	'',	'',	'0'),
+(83,	'build',	2,	',2,',	2,	'pm1',	'opened',	'2017-12-12 23:49:31',	'',	'',	'0'),
+(84,	'task',	9,	',2,',	2,	'pm1',	'recordestimate',	'2017-12-12 23:51:14',	'Finished page design.',	'8',	'0'),
+(85,	'user',	7,	',0,',	0,	'pm1',	'logout',	'2017-12-12 23:52:27',	'',	'',	'0'),
 (86,	'user',	2,	',0,',	0,	'thePO',	'login',	'2017-12-12 23:52:30',	'',	'',	'0'),
 (87,	'story',	10,	',2,',	2,	'thePO',	'edited',	'2017-12-12 23:52:40',	'',	'',	'0'),
 (88,	'story',	11,	',2,',	2,	'thePO',	'edited',	'2017-12-12 23:53:04',	'',	'',	'0'),
 (89,	'project',	2,	',2,',	2,	'thePO',	'started',	'2017-12-12 23:54:13',	'',	'',	'0'),
 (90,	'user',	2,	',0,',	0,	'thePO',	'logout',	'2017-12-12 23:55:42',	'',	'',	'0'),
-(91,	'user',	7,	',0,',	0,	'pg3',	'login',	'2017-12-12 23:55:49',	'',	'',	'0'),
-(92,	'testtask',	1,	',2,',	2,	'pg3',	'opened',	'2017-12-12 23:56:59',	'',	'',	'0'),
-(93,	'user',	7,	',0,',	0,	'pg3',	'logout',	'2017-12-12 23:57:22',	'',	'',	'0'),
-(94,	'user',	11,	',0,',	0,	'qa1',	'login',	'2017-12-12 23:57:33',	'',	'',	'0'),
-(95,	'case',	1,	',2,',	0,	'qa1',	'opened',	'2017-12-13 00:00:29',	'',	'',	'0'),
-(96,	'case',	2,	',2,',	0,	'qa1',	'opened',	'2017-12-13 00:04:09',	'',	'',	'0'),
-(97,	'testsuite',	1,	',0,',	0,	'qa1',	'opened',	'2017-12-13 00:05:13',	'',	'',	'0'),
-(98,	'bug',	3,	',2,',	2,	'qa1',	'opened',	'2017-12-13 00:09:48',	'',	'',	'0'),
-(99,	'case',	3,	',2,',	0,	'qa1',	'opened',	'2017-12-13 00:13:25',	'',	'',	'0'),
-(100,	'case',	2,	',2,',	0,	'qa1',	'edited',	'2017-12-13 00:18:17',	'',	'',	'0'),
-(101,	'bug',	4,	',2,',	2,	'qa1',	'opened',	'2017-12-13 00:30:07',	'',	'',	'0'),
-(102,	'bug',	4,	',2,',	2,	'qa1',	'edited',	'2017-12-13 00:30:41',	'',	'',	'0'),
-(103,	'bug',	3,	',2,',	2,	'qa1',	'edited',	'2017-12-13 00:31:10',	'',	'',	'0'),
-(104,	'bug',	5,	',2,',	2,	'qa1',	'opened',	'2017-12-13 00:32:08',	'',	'',	'0'),
-(105,	'user',	11,	',0,',	0,	'qa1',	'logout',	'2017-12-13 00:34:34',	'',	'',	'0');
+(91,	'user',	7,	',0,',	0,	'pm1',	'login',	'2017-12-12 23:55:49',	'',	'',	'0'),
+(92,	'testtask',	1,	',2,',	2,	'pm1',	'opened',	'2017-12-12 23:56:59',	'',	'',	'0'),
+(93,	'user',	7,	',0,',	0,	'pm1',	'logout',	'2017-12-12 23:57:22',	'',	'',	'0'),
+(94,	'user',	11,	',0,',	0,	'pm1',	'login',	'2017-12-12 23:57:33',	'',	'',	'0'),
+(95,	'case',	1,	',2,',	0,	'pm1',	'opened',	'2017-12-13 00:00:29',	'',	'',	'0'),
+(96,	'case',	2,	',2,',	0,	'pm1',	'opened',	'2017-12-13 00:04:09',	'',	'',	'0'),
+(97,	'testsuite',	1,	',0,',	0,	'pm1',	'opened',	'2017-12-13 00:05:13',	'',	'',	'0'),
+(98,	'bug',	3,	',2,',	2,	'pm1',	'opened',	'2017-12-13 00:09:48',	'',	'',	'0'),
+(99,	'case',	3,	',2,',	0,	'pm1',	'opened',	'2017-12-13 00:13:25',	'',	'',	'0'),
+(100,	'case',	2,	',2,',	0,	'pm1',	'edited',	'2017-12-13 00:18:17',	'',	'',	'0'),
+(101,	'bug',	4,	',2,',	2,	'pm1',	'opened',	'2017-12-13 00:30:07',	'',	'',	'0'),
+(102,	'bug',	4,	',2,',	2,	'pm1',	'edited',	'2017-12-13 00:30:41',	'',	'',	'0'),
+(103,	'bug',	3,	',2,',	2,	'pm1',	'edited',	'2017-12-13 00:31:10',	'',	'',	'0'),
+(104,	'bug',	5,	',2,',	2,	'pm1',	'opened',	'2017-12-13 00:32:08',	'',	'',	'0'),
+(105,	'user',	11,	',0,',	0,	'pm1',	'logout',	'2017-12-13 00:34:34',	'',	'',	'0');
 
 INSERT INTO `zt_bug` (`id`, `product`, `branch`, `module`, `project`, `plan`, `story`, `storyVersion`, `task`, `toTask`, `toStory`, `title`, `keywords`, `severity`, `pri`, `type`, `os`, `browser`, `hardware`, `found`, `steps`, `status`, `color`, `confirmed`, `activatedCount`, `activatedDate`, `mailto`, `openedBy`, `openedDate`, `openedBuild`, `assignedTo`, `assignedDate`, `deadline`, `resolvedBy`, `resolution`, `resolvedBuild`, `resolvedDate`, `closedBy`, `closedDate`, `duplicateBug`, `linkBug`, `case`, `caseVersion`, `result`, `testtask`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES
-(1,	1,	0,	1,	1,	0,	1,	1,	1,	0,	0,	'Switch desktops three time, then the order of desktops is different from that before.',	'',	3,	0,	'codeerror',	'all',	'',	'',	'',	'<p>[Steps]Switch desktops three times.</p>\r\n<p>[Results]The order of desktops is different from that was before.</p>\r\n<p>[Expectations]The order of desktops is the same as that was before.</p>',	'active',	'',	0,	0,	'0000-00-00 00:00:00',	',pm1',	'qa1',	'2017-12-12 15:27:55',	'1',	'pm1',	'2017-12-12 15:27:55',	'2017-12-16',	'',	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	0,	'',	0,	0,	0,	0,	'',	'0000-00-00 00:00:00',	'0'),
-(2,	1,	0,	2,	1,	0,	0,	1,	0,	0,	0,	'Full text retrieval in Word files. If Chinese characters exist in the file, it cannot be retrieved.',	'',	3,	0,	'codeerror',	'',	'',	'',	'',	'<p>[Steps]Enter “禅道(ZenTao)” in a Word and serach “禅道”.</p>\r\n<p>[Results] “禅道” is not found.</p>\r\n<p>[Expectations] “禅道” is found.</p>',	'active',	'',	0,	0,	'0000-00-00 00:00:00',	'',	'qa1',	'2017-12-12 15:30:32',	'1',	'pm1',	'2017-12-12 15:30:32',	'0000-00-00',	'',	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	0,	'',	0,	0,	0,	0,	'',	'0000-00-00 00:00:00',	'0'),
-(3,	2,	0,	8,	2,	0,	10,	1,	0,	0,	0,	'400 page is incomplete.',	'',	3,	0,	'codeerror',	'',	'',	'',	'',	'<p>[Steps]</p>\r\n1. Click “400 page”<br /><p>[Results]</p>\r\n1. Not all 400 page is displayed.<br /><p>[Expectations]</p>\r\n1. List all 400 error pages.<br />',	'active',	'',	0,	0,	'0000-00-00 00:00:00',	'',	'qa1',	'2017-12-13 00:09:48',	'2',	'',	'0000-00-00 00:00:00',	'0000-00-00',	'',	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	0,	'',	2,	1,	1,	1,	'qa1',	'2017-12-13 00:31:10',	'0'),
-(4,	2,	0,	8,	2,	0,	10,	1,	0,	0,	0,	'Generate sitemap.',	'',	3,	0,	'codeerror',	'',	'',	'',	'',	'<p>[Steps]</p>\r\n1. Click “Generate sitemap”.<br /><p>[Results]</p>\r\n1. ‘Contact Us’ page is missing in sitemap.<br /><p>[Expectations]</p>\r\n1. Generate sitemap.<br />',	'active',	'',	0,	0,	'0000-00-00 00:00:00',	'',	'qa1',	'2017-12-13 00:30:07',	'2',	'',	'0000-00-00 00:00:00',	'0000-00-00',	'',	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	0,	'',	2,	2,	0,	0,	'qa1',	'2017-12-13 00:30:41',	'0'),
-(5,	2,	0,	8,	2,	0,	10,	1,	0,	0,	0,	'Database error in adding blogroll.',	'',	3,	0,	'codeerror',	'',	'',	'',	'',	'<p>[Steps]</p>\r\n1. Add ”www.zentao.pm\"<br /><p>[Results]</p>\r\n1. It cannot be added, and database error prompts.<br /><p>[Expectations]</p>1. In database form ‘friend link’, add ”www.zentao.pm\"<br />',	'active',	'',	0,	0,	'0000-00-00 00:00:00',	'',	'qa1',	'2017-12-13 00:32:08',	'2',	'',	'0000-00-00 00:00:00',	'0000-00-00',	'',	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	0,	'',	2,	2,	0,	0,	'',	'0000-00-00 00:00:00',	'0');
+(1,	1,	0,	1,	1,	0,	1,	1,	1,	0,	0,	'Switch desktops three time, then the order of desktops is different from that before.',	'',	3,	0,	'codeerror',	'all',	'',	'',	'',	'<p>[Steps]Switch desktops three times.</p>\r\n<p>[Results]The order of desktops is different from that was before.</p>\r\n<p>[Expectations]The order of desktops is the same as that was before.</p>',	'active',	'',	0,	0,	'0000-00-00 00:00:00',	',pm1',	'pm1',	'2017-12-12 15:27:55',	'1',	'pm1',	'2017-12-12 15:27:55',	'2017-12-16',	'',	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	0,	'',	0,	0,	0,	0,	'',	'0000-00-00 00:00:00',	'0'),
+(2,	1,	0,	2,	1,	0,	0,	1,	0,	0,	0,	'Full text retrieval in Word files. If Chinese characters exist in the file, it cannot be retrieved.',	'',	3,	0,	'codeerror',	'',	'',	'',	'',	'<p>[Steps]Enter “禅道(ZenTao)” in a Word and serach “禅道”.</p>\r\n<p>[Results] “禅道” is not found.</p>\r\n<p>[Expectations] “禅道” is found.</p>',	'active',	'',	0,	0,	'0000-00-00 00:00:00',	'',	'pm1',	'2017-12-12 15:30:32',	'1',	'pm1',	'2017-12-12 15:30:32',	'0000-00-00',	'',	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	0,	'',	0,	0,	0,	0,	'',	'0000-00-00 00:00:00',	'0'),
+(3,	2,	0,	8,	2,	0,	10,	1,	0,	0,	0,	'400 page is incomplete.',	'',	3,	0,	'codeerror',	'',	'',	'',	'',	'<p>[Steps]</p>\r\n1. Click “400 page”<br /><p>[Results]</p>\r\n1. Not all 400 page is displayed.<br /><p>[Expectations]</p>\r\n1. List all 400 error pages.<br />',	'active',	'',	0,	0,	'0000-00-00 00:00:00',	'',	'pm1',	'2017-12-13 00:09:48',	'2',	'',	'0000-00-00 00:00:00',	'0000-00-00',	'',	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	0,	'',	2,	1,	1,	1,	'pm1',	'2017-12-13 00:31:10',	'0'),
+(4,	2,	0,	8,	2,	0,	10,	1,	0,	0,	0,	'Generate sitemap.',	'',	3,	0,	'codeerror',	'',	'',	'',	'',	'<p>[Steps]</p>\r\n1. Click “Generate sitemap”.<br /><p>[Results]</p>\r\n1. ‘Contact Us’ page is missing in sitemap.<br /><p>[Expectations]</p>\r\n1. Generate sitemap.<br />',	'active',	'',	0,	0,	'0000-00-00 00:00:00',	'',	'pm1',	'2017-12-13 00:30:07',	'2',	'',	'0000-00-00 00:00:00',	'0000-00-00',	'',	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	0,	'',	2,	2,	0,	0,	'pm1',	'2017-12-13 00:30:41',	'0'),
+(5,	2,	0,	8,	2,	0,	10,	1,	0,	0,	0,	'Database error in adding blogroll.',	'',	3,	0,	'codeerror',	'',	'',	'',	'',	'<p>[Steps]</p>\r\n1. Add ”www.zentao.pm\"<br /><p>[Results]</p>\r\n1. It cannot be added, and database error prompts.<br /><p>[Expectations]</p>1. In database form ‘friend link’, add ”www.zentao.pm\"<br />',	'active',	'',	0,	0,	'0000-00-00 00:00:00',	'',	'pm1',	'2017-12-13 00:32:08',	'2',	'',	'0000-00-00 00:00:00',	'0000-00-00',	'',	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	0,	'',	2,	2,	0,	0,	'',	'0000-00-00 00:00:00',	'0');
 
 INSERT INTO `zt_build` (`id`, `product`, `branch`, `project`, `name`, `scmPath`, `filePath`, `date`, `stories`, `bugs`, `builder`, `desc`, `deleted`) VALUES
-(1,	1,	0,	1,	'win10 V1.0build1',	'',	'',	'2017-12-12',	'',	'',	'qa1',	'',	'0'),
-(2,	2,	0,	2,	'blog v0.1',	'',	'',	'2017-12-12',	'',	'',	'pg3',	'build for inner test<br />',	'0');
+(1,	1,	0,	1,	'win10 V1.0build1',	'',	'',	'2017-12-12',	'',	'',	'pm1',	'',	'0'),
+(2,	2,	0,	2,	'blog v0.1',	'',	'',	'2017-12-12',	'',	'',	'pm1',	'build for inner test<br />',	'0');
 
 INSERT INTO `zt_burn` (`project`, `date`, `estimate`, `left`, `consumed`) VALUES
 (1,	'2017-12-12',	280,	184,	68);
 
 INSERT INTO `zt_case` (`id`, `product`, `branch`, `lib`, `module`, `path`, `story`, `storyVersion`, `title`, `precondition`, `keywords`, `pri`, `type`, `stage`, `howRun`, `scriptedBy`, `scriptedDate`, `scriptStatus`, `scriptLocation`, `status`, `color`, `frequency`, `order`, `openedBy`, `openedDate`, `reviewedBy`, `reviewedDate`, `lastEditedBy`, `lastEditedDate`, `version`, `linkCase`, `fromBug`, `fromCaseID`, `deleted`, `lastRunner`, `lastRunDate`, `lastRunResult`) VALUES
-(1,	2,	0,	0,	8,	0,	11,	1,	'Cache setup test',	'',	'',	3,	'feature',	',unittest,feature',	'',	'',	'0000-00-00',	'',	'',	'normal',	'',	'1',	0,	'qa1',	'2017-12-13 00:00:29',	'',	'0000-00-00',	'',	'0000-00-00 00:00:00',	1,	'',	0,	0,	'0',	'qa1',	'2017-12-13 00:10:24',	'pass'),
-(2,	2,	0,	0,	8,	0,	10,	1,	'SEO setup test',	'',	'',	2,	'feature',	',feature',	'',	'',	'0000-00-00',	'',	'',	'normal',	'',	'1',	0,	'qa1',	'2017-12-13 00:04:09',	'',	'0000-00-00',	'qa1',	'2017-12-13 00:18:17',	2,	'',	0,	0,	'0',	'qa1',	'2017-12-13 00:23:48',	'fail'),
-(3,	2,	0,	0,	8,	0,	0,	1,	'general setup test',	'',	'',	3,	'feature',	'',	'',	'',	'0000-00-00',	'',	'',	'normal',	'',	'1',	0,	'qa1',	'2017-12-13 00:13:25',	'',	'0000-00-00',	'',	'0000-00-00 00:00:00',	1,	'',	0,	0,	'0',	'',	'0000-00-00 00:00:00',	'');
+(1,	2,	0,	0,	8,	0,	11,	1,	'Cache setup test',	'',	'',	3,	'feature',	',unittest,feature',	'',	'',	'0000-00-00',	'',	'',	'normal',	'',	'1',	0,	'pm1',	'2017-12-13 00:00:29',	'',	'0000-00-00',	'',	'0000-00-00 00:00:00',	1,	'',	0,	0,	'0',	'pm1',	'2017-12-13 00:10:24',	'pass'),
+(2,	2,	0,	0,	8,	0,	10,	1,	'SEO setup test',	'',	'',	2,	'feature',	',feature',	'',	'',	'0000-00-00',	'',	'',	'normal',	'',	'1',	0,	'pm1',	'2017-12-13 00:04:09',	'',	'0000-00-00',	'pm1',	'2017-12-13 00:18:17',	2,	'',	0,	0,	'0',	'pm1',	'2017-12-13 00:23:48',	'fail'),
+(3,	2,	0,	0,	8,	0,	0,	1,	'general setup test',	'',	'',	3,	'feature',	'',	'',	'',	'0000-00-00',	'',	'',	'normal',	'',	'1',	0,	'pm1',	'2017-12-13 00:13:25',	'',	'0000-00-00',	'',	'0000-00-00 00:00:00',	1,	'',	0,	0,	'0',	'',	'0000-00-00 00:00:00',	'');
 
 INSERT INTO `zt_casestep` (`id`, `parent`, `case`, `version`, `type`, `desc`, `expect`) VALUES
 (1,	0,	1,	1,	'step',	'Switch on cache.',	'Cache is on.'),
@@ -159,15 +159,15 @@ INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES
 (1,	7,	'desc',	'Finish developing system drive program.',	'Add advanced features such as remote desktop.',	'001- <del>Finish developing system drive program.</del>\n001+ <ins>Add advanced features such as remote desktop.</ins>'),
 (2,	8,	'desc',	'Finish developing general features.<br />',	'Finish developing general features for users.<br />',	'001- <del>Finish developing features that are often used.<br /></del>\n001+ <ins>Finish developing general features for users.<br /></ins>'),
 (3,	27,	'realStarted',	'0000-00-00',	'2017-12-12',	''),
-(4,	27,	'assignedTo',	'pg2',	'pm1',	''),
+(4,	27,	'assignedTo',	'pm1',	'pm1',	''),
 (5,	27,	'status',	'wait',	'doing',	''),
 (6,	28,	'left',	'100',	'64',	''),
 (7,	28,	'consumed',	'0',	'8',	''),
 (8,	29,	'realStarted',	'0000-00-00',	'2017-12-12',	''),
-(9,	29,	'assignedTo',	'pg2',	'pm1',	''),
+(9,	29,	'assignedTo',	'pm1',	'pm1',	''),
 (10,	29,	'status',	'wait',	'doing',	''),
 (11,	30,	'realStarted',	'0000-00-00',	'2017-12-12',	''),
-(12,	30,	'assignedTo',	'pg3',	'pm1',	''),
+(12,	30,	'assignedTo',	'pm1',	'pm1',	''),
 (13,	30,	'status',	'wait',	'doing',	''),
 (14,	31,	'left',	'60',	'0',	''),
 (15,	31,	'consumed',	'0',	'60',	''),
@@ -183,11 +183,11 @@ INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES
 (25,	79,	'realStarted',	'0000-00-00',	'2017-12-12',	''),
 (26,	79,	'status',	'wait',	'doing',	''),
 (27,	80,	'consumed',	'0',	'30',	''),
-(28,	80,	'assignedTo',	'pg1',	'pm1',	''),
+(28,	80,	'assignedTo',	'pm1',	'pm1',	''),
 (29,	80,	'finishedDate',	'',	'2017-12-12 23:47:37',	''),
 (30,	80,	'left',	'40',	'0',	''),
 (31,	80,	'status',	'doing',	'done',	''),
-(32,	80,	'finishedBy',	'',	'pg1',	''),
+(32,	80,	'finishedBy',	'',	'pm1',	''),
 (33,	84,	'left',	'60',	'50',	''),
 (34,	84,	'consumed',	'0',	'8',	''),
 (35,	87,	'pri',	'3',	'2',	''),
@@ -215,8 +215,8 @@ INSERT INTO `zt_module` (`id`, `root`, `branch`, `name`, `parent`, `path`, `grad
 (10,	2,	0,	'Manage Articles',	7,	',7,10,',	2,	30,	'story',	'',	'',	'0');
 
 INSERT INTO `zt_product` (`id`, `name`, `code`, `line`, `type`, `status`, `desc`, `PO`, `QD`, `RD`, `acl`, `whitelist`, `createdBy`, `createdDate`, `createdVersion`, `order`, `deleted`) VALUES
-(1,	'windows 10',	'win10',	0,	'normal',	'normal',	'',	'thePO',	'thePM',	'pg3',	'open',	'',	'thePO',	'2017-12-12 14:44:55',	'9.6.3',	5,	'0'),
-(2,	'Blog',	'blog',	0,	'normal',	'normal',	'A blogging system<br />',	'thePO',	'theQS',	'pg3',	'open',	'',	'admin',	'2017-12-12 23:28:29',	'9.6.3',	10,	'0');
+(1,	'windows 10',	'win10',	0,	'normal',	'normal',	'',	'thePO',	'pm1',	'pm1',	'open',	'',	'thePO',	'2017-12-12 14:44:55',	'9.6.3',	5,	'0'),
+(2,	'Blog',	'blog',	0,	'normal',	'normal',	'A blogging system<br />',	'thePO',	'pm1',	'pm1',	'open',	'',	'admin',	'2017-12-12 23:28:29',	'9.6.3',	10,	'0');
 
 INSERT INTO `zt_productplan` (`id`, `product`, `branch`, `title`, `desc`, `begin`, `end`, `deleted`) VALUES
 (1,	1,	0,	'win10 v1.0',	'Finish developing general features for users.<br />',	'2017-12-30',	'2018-07-03',	'0'),
@@ -285,13 +285,13 @@ INSERT INTO `zt_task` (`id`, `parent`, `project`, `module`, `story`, `storyVersi
 (1,	0,	1,	1,	1,	1,	0,	'Offer up to 10 desktops to users.',	'devel',	3,	100,	8,	64,	'0000-00-00',	'doing',	'',	NULL,	'User can do different tasks on different desktops.',	'pm1',	'2017-12-12 15:05:06',	'pm1',	'2017-12-12 15:12:17',	'0000-00-00',	'2017-12-12',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'pm1',	'2017-12-12 15:13:13',	'0'),
 (2,	0,	1,	1,	2,	1,	0,	'Custom desktop wallpaper',	'devel',	3,	80,	0,	80,	'0000-00-00',	'doing',	'',	NULL,	'',	'pm1',	'2017-12-12 15:05:06',	'pm1',	'2017-12-12 15:13:25',	'0000-00-00',	'2017-12-12',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'pm1',	'2017-12-12 15:13:25',	'0'),
 (3,	0,	1,	1,	3,	1,	0,	'Auto classify files.',	'devel',	3,	60,	60,	0,	'0000-00-00',	'done',	'',	NULL,	'',	'pm1',	'2017-12-12 15:05:06',	'pm1',	'2017-12-12 15:14:47',	'0000-00-00',	'2017-12-12',	'pm1',	'2017-12-12 15:14:47',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'pm1',	'2017-12-12 15:14:47',	'0'),
-(4,	0,	1,	1,	3,	1,	0,	'File type configuration',	'devel',	4,	40,	0,	40,	'0000-00-00',	'wait',	'',	NULL,	'',	'pm1',	'2017-12-12 15:05:06',	'pg3',	'2017-12-12 15:05:06',	'0000-00-00',	'0000-00-00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'',	'0000-00-00 00:00:00',	'0'),
-(5,	0,	2,	8,	9,	1,	0,	'General backend setup',	'devel',	3,	40,	30,	0,	'0000-00-00',	'done',	'',	NULL,	'',	'pm1',	'2017-12-12 23:45:14',	'pm1',	'2017-12-12 23:47:37',	'0000-00-00',	'2017-12-12',	'pg1',	'2017-12-12 23:47:37',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'pg1',	'2017-12-12 23:47:37',	'0'),
-(6,	0,	2,	8,	10,	1,	0,	'backend SEO setup',	'devel',	3,	50,	0,	50,	'0000-00-00',	'wait',	'',	NULL,	'Set SEO switch and report.',	'pm1',	'2017-12-12 23:45:14',	'pg2',	'2017-12-12 23:45:14',	'0000-00-00',	'0000-00-00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'',	'0000-00-00 00:00:00',	'0'),
+(4,	0,	1,	1,	3,	1,	0,	'File type configuration',	'devel',	4,	40,	0,	40,	'0000-00-00',	'wait',	'',	NULL,	'',	'pm1',	'2017-12-12 15:05:06',	'pm1',	'2017-12-12 15:05:06',	'0000-00-00',	'0000-00-00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'',	'0000-00-00 00:00:00',	'0'),
+(5,	0,	2,	8,	9,	1,	0,	'General backend setup',	'devel',	3,	40,	30,	0,	'0000-00-00',	'done',	'',	NULL,	'',	'pm1',	'2017-12-12 23:45:14',	'pm1',	'2017-12-12 23:47:37',	'0000-00-00',	'2017-12-12',	'pm1',	'2017-12-12 23:47:37',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'pm1',	'2017-12-12 23:47:37',	'0'),
+(6,	0,	2,	8,	10,	1,	0,	'backend SEO setup',	'devel',	3,	50,	0,	50,	'0000-00-00',	'wait',	'',	NULL,	'Set SEO switch and report.',	'pm1',	'2017-12-12 23:45:14',	'pm1',	'2017-12-12 23:45:14',	'0000-00-00',	'0000-00-00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'',	'0000-00-00 00:00:00',	'0'),
 (7,	0,	2,	8,	11,	1,	0,	'backend cache setup',	'devel',	3,	30,	8,	55,	'0000-00-00',	'doing',	'',	NULL,	'Set cache switch and time.',	'pm1',	'2017-12-12 23:45:14',	'pm1',	'2017-12-12 23:45:53',	'0000-00-00',	'2017-12-12',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'pm1',	'2017-12-12 23:45:53',	'0'),
 (8,	0,	2,	8,	12,	1,	0,	'backend security setup',	'devel',	3,	30,	0,	30,	'0000-00-00',	'doing',	'',	NULL,	'',	'pm1',	'2017-12-12 23:45:14',	'pm1',	'2017-12-12 23:45:14',	'0000-00-00',	'2017-12-12',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'pm1',	'2017-12-12 23:45:35',	'0'),
-(9,	0,	2,	9,	13,	1,	0,	'backend UI setup',	'devel',	3,	60,	8,	50,	'0000-00-00',	'doing',	'',	NULL,	'',	'pm1',	'2017-12-12 23:45:14',	'pg1',	'2017-12-12 23:45:14',	'0000-00-00',	'2017-12-12',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'pg3',	'2017-12-12 23:51:14',	'0'),
-(10,	0,	2,	6,	14,	1,	0,	'Page display',	'devel',	3,	60,	0,	60,	'0000-00-00',	'wait',	'',	NULL,	'',	'pm1',	'2017-12-12 23:45:14',	'pg2',	'2017-12-12 23:45:14',	'0000-00-00',	'0000-00-00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'',	'0000-00-00 00:00:00',	'0');
+(9,	0,	2,	9,	13,	1,	0,	'backend UI setup',	'devel',	3,	60,	8,	50,	'0000-00-00',	'doing',	'',	NULL,	'',	'pm1',	'2017-12-12 23:45:14',	'pm1',	'2017-12-12 23:45:14',	'0000-00-00',	'2017-12-12',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'pm1',	'2017-12-12 23:51:14',	'0'),
+(10,	0,	2,	6,	14,	1,	0,	'Page display',	'devel',	3,	60,	0,	60,	'0000-00-00',	'wait',	'',	NULL,	'',	'pm1',	'2017-12-12 23:45:14',	'pm1',	'2017-12-12 23:45:14',	'0000-00-00',	'0000-00-00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00',	'',	'',	'0000-00-00 00:00:00',	'0');
 
 INSERT INTO `zt_taskestimate` (`id`, `task`, `date`, `left`, `consumed`, `account`, `work`) VALUES
 (1,	1,	'2017-12-12',	100,	0,	'pm1',	NULL),
@@ -301,55 +301,37 @@ INSERT INTO `zt_taskestimate` (`id`, `task`, `date`, `left`, `consumed`, `accoun
 (5,	3,	'2017-12-12',	0,	60,	'pm1',	'Finish'),
 (6,	8,	'2017-12-12',	30,	0,	'pm1',	NULL),
 (7,	7,	'2017-12-12',	55,	8,	'pm1',	''),
-(8,	9,	'2017-12-12',	60,	0,	'pg1',	NULL),
-(9,	5,	'2017-12-12',	40,	0,	'pg1',	NULL),
-(10,	5,	'2017-12-12',	0,	30,	'pg1',	NULL),
-(11,	9,	'2017-12-13',	50,	8,	'pg3',	'Finish page design');
+(8,	9,	'2017-12-12',	60,	0,	'pm1',	NULL),
+(9,	5,	'2017-12-12',	40,	0,	'pm1',	NULL),
+(10,	5,	'2017-12-12',	0,	30,	'pm1',	NULL),
+(11,	9,	'2017-12-13',	50,	8,	'pm1',	'Finish page design');
 
-INSERT INTO `zt_team` (`project`, `task`, `account`, `role`, `limited`, `join`, `days`, `hours`, `estimate`, `consumed`, `left`, `order`) VALUES
-(1,	0,	'thePO',	'Product Owner',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
-(1,	0,	'pm1',	'Project Manager',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
-(1,	0,	'pg2',	'Developer',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
-(1,	0,	'pg3',	'Developer',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
-(1,	0,	'qa1',	'Tester',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
-(2,	0,	'pm1',	'Project Manager',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
-(2,	0,	'pg1',	'Developer',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
-(2,	0,	'pg2',	'Developer',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
-(2,	0,	'pg3',	'Developer',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0);
+INSERT INTO `zt_team` (`root`, `type`, `account`, `role`, `limited`, `join`, `days`, `hours`, `estimate`, `consumed`, `left`, `order`) VALUES
+(2,	'project',	'thePO',	'Product Owner',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
+(2,	'project',	'pm1',	'Project Manager',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
+(1,	'project',	'thePO',	'Product Owner',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0),
+(1,	'project',	'pm1',	'Project Manager',	'no',	'2017-12-12',	10,	7.0,	0.00,	0.00,	0.00,	0);
 
 INSERT INTO `zt_testresult` (`id`, `run`, `case`, `version`, `caseResult`, `stepResults`, `lastRunner`, `date`) VALUES
-(1,	1,	2,	1,	'fail',	'a:3:{i:3;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}i:4;a:2:{s:6:\"result\";s:4:\"fail\";s:4:\"real\";s:24:\"Not all 400 page is displayed.\";}i:5;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}}',	'qa1',	'2017-12-13 00:08:52'),
-(2,	2,	1,	1,	'pass',	'a:2:{i:1;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}i:2;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}}',	'qa1',	'2017-12-13 00:10:24'),
-(3,	0,	2,	2,	'fail',	'a:4:{i:7;a:2:{s:6:\"result\";s:4:\"fail\";s:4:\"real\";s:42:\"‘Contact Us’ page is missing in sitemap.\";}i:8;a:2:{s:6:\"result\";s:4:\"fail\";s:4:\"real\";s:36:\"400 page is missing.‘/notExitPage’；\";}i:9;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}i:10;a:2:{s:6:\"result\";s:3:\"n/a\";s:4:\"real\";s:45:\"Blogroll cannot be added, and database error prompts.\";}}',	'qa1',	'2017-12-13 00:23:41'),
-(4,	0,	2,	2,	'fail',	'a:4:{i:7;a:2:{s:6:\"result\";s:4:\"fail\";s:4:\"real\";s:42:\"‘Contact Us’ page is missing in sitemap.\";}i:8;a:2:{s:6:\"result\";s:4:\"fail\";s:4:\"real\";s:36:\"400 page is missing.‘/notExitPage’；\";}i:9;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}i:10;a:2:{s:6:\"result\";s:4:\"fail\";s:4:\"real\";s:45:\"Blogroll cannot be added, and database error prompts.\";}}',	'qa1',	'2017-12-13 00:23:48');
+(1,	1,	2,	1,	'fail',	'a:3:{i:3;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}i:4;a:2:{s:6:\"result\";s:4:\"fail\";s:4:\"real\";s:24:\"Not all 400 page is displayed.\";}i:5;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}}',	'pm1',	'2017-12-13 00:08:52'),
+(2,	2,	1,	1,	'pass',	'a:2:{i:1;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}i:2;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}}',	'pm1',	'2017-12-13 00:10:24'),
+(3,	0,	2,	2,	'fail',	'a:4:{i:7;a:2:{s:6:\"result\";s:4:\"fail\";s:4:\"real\";s:42:\"‘Contact Us’ page is missing in sitemap.\";}i:8;a:2:{s:6:\"result\";s:4:\"fail\";s:4:\"real\";s:36:\"400 page is missing.‘/notExitPage’；\";}i:9;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}i:10;a:2:{s:6:\"result\";s:3:\"n/a\";s:4:\"real\";s:45:\"Blogroll cannot be added, and database error prompts.\";}}',	'pm1',	'2017-12-13 00:23:41'),
+(4,	0,	2,	2,	'fail',	'a:4:{i:7;a:2:{s:6:\"result\";s:4:\"fail\";s:4:\"real\";s:42:\"‘Contact Us’ page is missing in sitemap.\";}i:8;a:2:{s:6:\"result\";s:4:\"fail\";s:4:\"real\";s:36:\"400 page is missing.‘/notExitPage’；\";}i:9;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}i:10;a:2:{s:6:\"result\";s:4:\"fail\";s:4:\"real\";s:45:\"Blogroll cannot be added, and database error prompts.\";}}',	'pm1',	'2017-12-13 00:23:48');
 
 INSERT INTO `zt_testrun` (`id`, `task`, `case`, `version`, `assignedTo`, `lastRunner`, `lastRunDate`, `lastRunResult`, `status`) VALUES
-(1,	1,	2,	2,	'theQS',	'qa1',	'2017-12-13 00:08:52',	'fail',	'done'),
-(2,	1,	1,	1,	'qa1',	'qa1',	'2017-12-13 00:10:24',	'pass',	'done');
+(1,	1,	2,	2,	'pm1',	'pm1',	'2017-12-13 00:08:52',	'fail',	'done'),
+(2,	1,	1,	1,	'pm1',	'pm1',	'2017-12-13 00:10:24',	'pass',	'done');
 
 INSERT INTO `zt_testsuite` (`id`, `product`, `name`, `desc`, `type`, `addedBy`, `addedDate`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES
-(1,	2,	'Testsuite',	'Testsuite',	'public',	'qa1',	'2017-12-13 00:05:13',	'',	'0000-00-00 00:00:00',	'0');
+(1,	2,	'Testsuite',	'Testsuite',	'public',	'pm1',	'2017-12-13 00:05:13',	'',	'0000-00-00 00:00:00',	'0');
 
 INSERT INTO `zt_testtask` (`id`, `name`, `product`, `project`, `build`, `owner`, `pri`, `begin`, `end`, `mailto`, `desc`, `report`, `status`, `deleted`) VALUES
 (1,	'test for blog v0.1',	2,	2,	'2',	'thePO',	0,	'2018-01-05',	'2018-01-20',	'',	'',	'',	'wait',	'0');
 
 INSERT INTO `zt_user` (`dept`, `account`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `yahoo`, `gtalk`, `wangwang`, `mobile`, `phone`, `address`, `zipcode`, `join`, `visits`, `ip`, `last`, `fails`, `locked`, `ranzhi`, `score`, `scoreLevel`, `deleted`) VALUES
 (1,	'thePO',	'e10adc3949ba59abbe56e057f20f883e',	'po',	'Richard',	'',	'',	'',	'0000-00-00',	'm',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'0000-00-00',	3,	'127.0.0.1',	1513093950,	0,	'0000-00-00 00:00:00',	'',	0,	0,	'0'),
-(5,	'pm1',	'e10adc3949ba59abbe56e057f20f883e',	'pm',	'Daniel',	'',	'',	'',	'0000-00-00',	'm',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'0000-00-00',	2,	'127.0.0.1',	1513093318,	0,	'0000-00-00 00:00:00',	'',	0,	0,	'0'),
-(6,	'pm2',	'e10adc3949ba59abbe56e057f20f883e',	'pm',	'Matthew',	'',	'',	'',	'0000-00-00',	'm',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'0000-00-00',	0,	'',	0,	0,	'0000-00-00 00:00:00',	'',	0,	0,	'0'),
-(5,	'pg1',	'e10adc3949ba59abbe56e057f20f883e',	'dev',	'Mark',	'',	'',	'',	'0000-00-00',	'm',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'0000-00-00',	1,	'127.0.0.1',	1513093595,	0,	'0000-00-00 00:00:00',	'',	0,	0,	'0'),
-(5,	'pg2',	'e10adc3949ba59abbe56e057f20f883e',	'dev',	'Andrew',	'',	'',	'',	'0000-00-00',	'm',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'0000-00-00',	0,	'',	0,	0,	'0000-00-00 00:00:00',	'',	0,	0,	'0'),
-(5,	'pg3',	'e10adc3949ba59abbe56e057f20f883e',	'dev',	'Jean',	'',	'',	'',	'0000-00-00',	'm',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'0000-00-00',	2,	'127.0.0.1',	1513094149,	0,	'0000-00-00 00:00:00',	'',	0,	0,	'0'),
-(3,	'thePM',	'e10adc3949ba59abbe56e057f20f883e',	'qd',	'Tracy',	'',	'',	'',	'0000-00-00',	'm',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'0000-00-00',	0,	'',	0,	0,	'0000-00-00 00:00:00',	'',	0,	0,	'1'),
-(3,	'qa1',	'e10adc3949ba59abbe56e057f20f883e',	'qa',	'Robert',	'',	'',	'',	'0000-00-00',	'm',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'admin',	'0000-00-00',	2,	'127.0.0.1',	1513094253,	0,	'0000-00-00 00:00:00',	'',	0,	0,	'0'),
-(3,	'theQS',	'e10adc3949ba59abbe56e057f20f883e',	'qd',	'Hannah',	'',	'',	'',	'0000-00-00',	'm',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'0000-00-00',	1,	'127.0.0.1',	1513063356,	0,	'0000-00-00 00:00:00',	'',	0,	0,	'0');
+(5,	'pm1',	'e10adc3949ba59abbe56e057f20f883e',	'pm',	'Daniel',	'',	'',	'',	'0000-00-00',	'm',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'0000-00-00',	2,	'127.0.0.1',	1513093318,	0,	'0000-00-00 00:00:00',	'',	0,	0,	'0');
 
 INSERT INTO `zt_usergroup` (`account`, `group`) VALUES
-('pg1',	2),
-('pg2',	2),
-('pg3',	2),
 ('pm1',	4),
-('pm2',	4),
-('qa1',	3),
-('thePM',	8),
 ('thePO',	5);

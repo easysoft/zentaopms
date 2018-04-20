@@ -160,6 +160,7 @@ class testcase extends control
 
         $cases = $this->testcase->getModuleCases($productID, $branch, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
         $cases = $this->testcase->appendData($cases);
 
         $groupCases  = array();
@@ -193,11 +194,12 @@ class testcase extends control
 
     /**
      * Create a test case.
-     *
-     * @param  int    $productID
-     * @param  int    $moduleID
-     * @param  string $from
-     * @param  int    $param
+     * @param        $productID
+     * @param string $branch
+     * @param int    $moduleID
+     * @param string $from
+     * @param int    $param
+     * @param int    $storyID
      * @access public
      * @return void
      */
@@ -720,7 +722,7 @@ class testcase extends control
             }
         }
 
-        if(!$this->testcase->forceNotReview()) unset($this->lang->testcase->statusList['wait']);
+        // if(!$this->testcase->forceNotReview()) unset($this->lang->testcase->statusList['wait']); /* Bug#1343 */
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars = count($cases) * (count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
@@ -845,8 +847,8 @@ class testcase extends control
 
     /**
      * Batch change branch.
-     * 
-     * @param  int    $branchID 
+     *
+     * @param  int    $branchID
      * @access public
      * @return void
      */
@@ -1332,7 +1334,7 @@ class testcase extends control
                 $columnKey[] = $fields[$title];
             }
 
-            if(count($columnKey) != count($header) or $this->post->encode != 'utf-8')
+            if(count($columnKey) == 0 or $this->post->encode != 'utf-8')
             {
                 $fc     = file_get_contents($fileName);
                 $encode = $this->post->encode != "utf-8" ? $this->post->encode : 'gbk';
@@ -1353,7 +1355,7 @@ class testcase extends control
                     if(!isset($fields[$title])) continue;
                     $columnKey[] = $fields[$title];
                 }
-                if(count($columnKey) != count($header)) die(js::alert($this->lang->testcase->errorEncode));
+                if(count($columnKey) == 0) die(js::alert($this->lang->testcase->errorEncode));
             }
 
             $this->session->set('importFile', $fileName);
@@ -1405,7 +1407,7 @@ class testcase extends control
         $this->config->testcase->search['queryID']   = $queryID;
         $this->config->testcase->search['fields']['lib'] = $this->lang->testcase->lib;
         $this->config->testcase->search['params']['lib'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '', $libID => $libraries[$libID], 'all' => $this->lang->caselib->all));
-        $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
+        $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib');
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         unset($this->config->testcase->search['fields']['product']);
         unset($this->config->testcase->search['fields']['branch']);

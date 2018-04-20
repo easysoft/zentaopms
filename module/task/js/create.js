@@ -104,11 +104,13 @@ function setAfter()
             $('input[value="toTaskList"]').attr('checked', 'checked');
         }
         $('input[value="continueAdding"]').attr('disabled', 'disabled');
+        $('input[value="toStoryList"]').attr('disabled', 'disabled');
     }
     else
     {
         if(!toTaskList) $('input[value="continueAdding"]').attr('checked', 'checked');
         $('input[value="continueAdding"]').attr('disabled', false);
+        $('input[value="toStoryList"]').attr('disabled', false);
     }
 }
 

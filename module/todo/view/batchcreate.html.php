@@ -12,72 +12,107 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<form class='form-condensed' method='post' target='hiddenwin' style='overflow:visible'>
-  <div id='titlebar'>
-    <div class='heading'>
-      <span class='prefix pull-left'><?php echo html::icon($lang->icons['todo']);?></span>
-      <strong class='pull-left'><small class='text-muted'><?php echo html::icon($lang->icons['batchCreate']);?></small> <?php echo $lang->todo->batchCreate;?></strong>
-      <div class='input-group w-200px pull-left' id='datepicker'>
-        <span class='input-group-addon'><?php echo $lang->todo->date;?></span>
-        <?php echo html::input('date', $date, "class='form-control form-date' onchange='updateAction(this.value)'");?>
-        <span class='input-group-addon'><input type='checkbox' id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?></span>
-      </div>
-      <div class='actions'>
-        <button type="button" class="btn btn-default" data-toggle="customModal"><i class='icon icon-cog'></i> </button>
-      </div>
+<div class="modal-content">
+  <div class="modal-header" id="todoBatchAddHeader">
+    <div class="modal-actions">
+      <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=todo&section=custom&key=batchCreateFields')?>
+      <?php include '../../common/view/dropdowncustomfield.html.php';?>
+      <?php if(isonlybody()):?>
+      <div class="divider"></div>
+      <button id='closeModal' type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>
+      <?php endif;?>
+    </div>
+    <h4 class="modal-title pull-left"><?php echo $lang->todo->batchCreate . $lang->todo->common;?></h4>
+    <div class="input-group pull-left">
+      <span class="input-group-addon"><?php echo $lang->todo->date;?></span>
+      <input type="text" name="date" value="<?php echo $date;?>" class="form-control form-date" autocomplete="off" />
+      <span class="input-group-addon"><label class="checkbox-inline"><input type="checkbox" name="switchDate" class="control-time-switch" /> <?php echo $lang->todo->periods['future'];?></label></span>
     </div>
   </div>
-  <?php
-  $visibleFields = array();
-  foreach(explode(',', $showFields) as $field)
-  {
-      if($field)$visibleFields[$field] = '';
-  }
-  $columns = count($visibleFields) + 2;
-  ?>
-  <table class='table table-form table-fixed with-border'>
-    <thead>
-      <tr>
-        <th class='w-30px'><?php echo $lang->idAB;?></th> 
-        <th class='w-120px<?php echo zget($visibleFields, 'type', ' hidden')?>'><?php echo $lang->todo->type;?></th>
-        <th class='w-80px<?php echo zget($visibleFields, 'pri', ' hidden')?>'><?php echo $lang->todo->pri;?></th>
-        <th><?php echo $lang->todo->name;?><span class='required'></span></th>
-        <th <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo $lang->todo->desc;?></th>
-        <th class='w-230px<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
-      </tr>
-    </thead>
-    <?php $pri = 3;?>
-    <?php $time = $date != date('Y-m-d') ? key($times) : $time;?>
-    <?php for($i = 0; $i < $config->todo->batchCreate; $i++):?>
-    <tr class='text-center'>
-      <td><?php echo $i+1;?></td>
-      <td <?php echo zget($visibleFields, 'type', "class='hidden'")?>><?php echo html::select("types[$i]", $lang->todo->typeList, '', "onchange='loadList(this.value, " . ($i + 1) . ")' class='form-control'");?></td>
-      <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$i]", $lang->todo->priList, $pri, 'class=form-control');?></td>
-      <td class='text-left' style='overflow:visible'>
-        <div id='<?php echo "nameBox" . ($i+1);?>' class='hidden'><?php echo html::input("names[$i]", '', 'class="text-left form-control" autocomplete="off"');?></div>
-        <div class='<?php echo "nameBox" . ($i+1);?>'><?php echo html::input("names[$i]", '', 'class="text-left form-control" autocomplete="off"');?></div>
-      </td>
-      <td <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo html::textarea("descs[$i]", '', "rows='1' class='form-control'");?></td>
-      <td <?php echo zget($visibleFields, 'beginAndEnd', "class='hidden'")?>>
-        <div class='input-group'>
-          <?php
-          echo html::select("begins[$i]", $times, $time, "onchange=\"setBeginsAndEnds($i, 'begin');\" class='form-control' style='width: 50%'" . (isset($visibleFields['beginAndEnd']) ? '' : " disabled"));
-          echo html::select("ends[$i]", $times, '', "onchange=\"setBeginsAndEnds($i, 'end');\" class='form-control' style='width: 50%'" . (isset($visibleFields['beginAndEnd']) ? '' : " disabled"));
-          ?>
-          <span class='input-group-addon'><input type='checkbox' name="switchDate[<?php echo $i?>]" id="switchDate<?php echo $i?>" onclick='switchDateList(<?php echo $i?>);'><?php echo $lang->todo->periods['future'];?></span>
-        </div>
-      </td>
-    </tr>  
-    <?php endfor;?>
-    <tfoot>
-      <tr><td colspan='<?php echo $columns?>'><?php echo html::submitButton() . html::backButton();?></td></tr>
-    </tfoot>
-  </table>
-</form>
-<?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=todo&section=custom&key=batchCreateFields')?>
-<?php include '../../common/view/customfield.html.php';?>
-<?php include './footer.html.php';?>
+  <form id='todoBatchAddForm' class='modal-body' method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'batchCreate');?>'>
+    <?php
+    $visibleFields = array();
+    foreach(explode(',', $showFields) as $field)
+    {
+        if($field)$visibleFields[$field] = '';
+    }
+    $columns = count($visibleFields) + 2;
+    ?>
+    <table class='table table-form table-fixed with-border'>
+      <thead>
+        <tr>
+          <th class='col-id'><?php echo $lang->idAB;?></th> 
+          <th class='col-type<?php echo zget($visibleFields, 'type', ' hidden')?>'><?php echo $lang->todo->type;?></th>
+          <th class='col-pri<?php echo zget($visibleFields, 'pri', ' hidden')?>'><?php echo $lang->todo->pri;?></th>
+          <th class='col-name required'><?php echo $lang->todo->name;?></th>
+          <th class='col-desc<?php echo zget($visibleFields, 'desc', ' hidden');?>'><?php echo $lang->todo->desc;?></th>
+          <th class='col-date<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
+        </tr>
+      </thead>
+      <tbody>
+      <?php $pri = 3;?>
+      <?php $time = $date != date('Y-m-d') ? key($times) : $time;?>
+      <?php for($i = 0; $i < $config->todo->batchCreate; $i++):?>
+      <tr class='text-left'>
+        <td class='col-id'><?php echo $i+1;?></td>
+        <td <?php echo zget($visibleFields, 'type', "class='hidden'")?> style='overflow:visible'><?php echo html::select("types[$i]", $lang->todo->typeList, '', "onchange='loadList(this.value, " . ($i + 1) . ")' class='form-control chosen'");?></td>
+        <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?> style='overflow:visible'><?php echo html::select("pris[$i]", $lang->todo->priList, $pri, "class='form-control chosen'");?></td>
+        <td style='overflow:visible'>
+          <div id='<?php echo "nameBox" . ($i+1);?>' class='hidden'><?php echo html::input("names[$i]", '', 'class="text-left form-control" autocomplete="off"');?></div>
+          <div class='<?php echo "nameBox" . ($i+1);?>'><?php echo html::input("names[$i]", '', 'class="text-left form-control" autocomplete="off"');?></div>
+        </td>
+        <td <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo html::textarea("descs[$i]", '', "rows='1' class='form-control'");?></td>
+        <td <?php echo zget($visibleFields, 'beginAndEnd', "class='hidden'")?> style='overflow:visible'>
+          <div class='input-group'>
+            <?php
+            echo html::select("begins[$i]", $times, $time, "onchange=\"setBeginsAndEnds($i, 'begin');\" class='form-control chosen control-time-begin'" . (isset($visibleFields['beginAndEnd']) ? '' : " disabled"));
+            echo '<span class="input-group-addon fix-border fix-padding"></span>';
+            echo html::select("ends[$i]", $times, '', "onchange=\"setBeginsAndEnds($i, 'end');\" class='form-control chosen control-time-end'" . (isset($visibleFields['beginAndEnd']) ? '' : " disabled"));
+            ?>
+            <span class='input-group-addon'><input type='checkbox' name="switchDate[<?php echo $i?>]" class='control-time-switch' id="switchDate<?php echo $i?>" onclick='switchDateList(<?php echo $i?>);'> <?php echo $lang->todo->periods['future'];?></span>
+          </div>
+        </td>
+      </tr>  
+      <?php endfor;?>
+      </tbody>
+      <tfoot>
+        <tr><td class='text-center' colspan='<?php echo $columns?>'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::backButton('', '', 'btn btn-wide btn-gray');?></td></tr>
+      </tfoot>
+    </table>
+    <div class="hidden">
+      <input type="hidden" name="date" value="<?php echo $date;?>" />
+      <input type="checkbox" name="switchDate" class="control-time-switch" />
+    </div>
+  </form>
+</div>
 <script language='Javascript'>
+var $form = $('#todoBatchAddForm').on('change', '.control-time-switch', function()
+{
+    var $checkbox = $(this);
+    $checkbox.closest('.input-group').find('select').attr('disabled', $checkbox.is(':checked') ? 'disabled' : null).trigger('chosen:updated');
+});
+
+var $header = $('#todoBatchAddHeader');
+var $dateControl = $header.find('.form-date');
+$header.find('[name="switchDate"]').on('change', function()
+{
+    var isDisabled = $(this).is(':checked');
+    $dateControl.attr('disabled', isDisabled ? 'disabled' : null);
+    $form.find('[name="switchDate"]').prop('checked', isDisabled);
+});
+$header.find('[name="date"]').on('change', function()
+{
+    $form.find('[name="date"]').val($(this).val());
+});
+
 var batchCreateNum = '<?php echo $config->todo->batchCreate;?>';
-setBeginsAndEnds();
+<?php if(isonlybody()):?>
+$(function()
+{
+    parent.$('.modal-header').hide();
+    parent.$('.modal-body').css('padding', '0px');
+    $('#closeModal').click(function(){parent.$.closeModal();});
+})
+<?php endif;?>
 </script>
+<?php include './footer.html.php';?>

@@ -127,10 +127,11 @@ class datatableModel extends model
         {
             $fixed  = $col->fixed == 'no' ? 'true': 'false';
             $width  = is_numeric($col->width) ? "{$col->width}px" : $col->width;
-            $sorter = (isset($col->sort) and $col->sort == 'no') ? '' : '{sorter:false}';
             $title  = isset($col->name) ? "title='$col->name'" : '';
+            if($id == 'id' and (int)$width < 90) $width = '90px';
+            $width = $id != 'actions' ? "data-width='$width' style='width:$width'" : '';
 
-            echo "<th data-flex='$fixed' data-width='$width' style='width:$width' class='w-$id $sorter' $title>";
+            echo "<th data-flex='$fixed' $width class='c-$id' $title>";
             if($id == 'actions')
             {
                 echo $this->lang->actions;
@@ -141,6 +142,7 @@ class datatableModel extends model
             }
             else
             {
+                if($id == 'id') echo "<div class='checkbox-primary check-all' title='{$this->lang->selectAll}'><label></label></div>";
                 common::printOrderLink($id, $orderBy, $vars, $col->title);
             }
             echo '</th>';

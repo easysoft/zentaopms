@@ -372,7 +372,7 @@ class treeModel extends model
         }
 
         if(!$firstBranch) $lastMenu .= '</li></ul>';
-        $lastMenu = "<ul class='tree tree-lines'>$lastMenu</ul>\n";
+        $lastMenu = "<ul id='modulesTree' class='tree tree-lines' data-name='tree-{$type}'>$lastMenu</ul>\n";
         return $lastMenu;
     }
 
@@ -402,7 +402,7 @@ class treeModel extends model
         }
 
         /* createdVersion > 4.1. */
-        $menu = "<ul class='tree tree-lines'>";
+        $menu = "<ul id='modulesTree' class='tree tree-lines' data-name='tree-task'>";
 
         /* Set the start module. */
         $startModulePath = '';
@@ -511,8 +511,8 @@ class treeModel extends model
         {
             $productInfo  = $this->product->getById($id);
             /* tree menu. */
-            $productTree = '';
-            $branchTrees = '';
+            $productTree = array();
+            $branchTrees = array();
             if(empty($branchGroups[$id])) $branchGroups[$id]['0'] = '';
             foreach($branchGroups[$id] as $branch => $branchName)
             {
@@ -566,7 +566,7 @@ class treeModel extends model
     public function getProjectStoryTreeMenu($rootID, $startModule = 0, $userFunc)
     {
         $extra['projectID'] = $rootID;
-        $menu = "<ul class='tree tree-lines'>";
+        $menu = "<ul id='modulesTree' class='tree tree-lines' data-name='tree-story'>";
         $startModulePath = '';
         if($startModule > 0)
         {
@@ -1477,7 +1477,7 @@ class treeModel extends model
         if(empty($branches)) $branches = $this->post->branch;
         $branches = array_unique($branches);
 
-        if($this->isMergeModule($rootID, $viewType)) $viewType .= ',story';
+        if($this->isMergeModule($rootID, $viewType) and $viewType != 'task') $viewType .= ',story';
 
         $existsModules = $this->dao->select('id,branch,name')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->andWhere('parent')->eq($parentModuleID)->andWhere('branch')->in($branches)->andWhere('deleted')->eq(0)->fetchAll();
         $repeatName    = '';

@@ -27,10 +27,10 @@ $config->task->editor->cancel   = array('id' => 'comment', 'tools' => 'simpleToo
 $config->task->editor->pause    = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->task->exportFields = '
-    id, project, module, progress, story,
+    id, project, module, story,
     name, desc,
     type, pri,estStarted, realStarted, deadline, status,estimate, consumed, left,
-    mailto,
+    mailto, progress,
     openedBy, openedDate, assignedTo, assignedDate, 
     finishedBy, finishedDate, canceledBy, canceledDate,
     closedBy, closedDate, closedReason,
@@ -84,7 +84,7 @@ $config->task->datatable->fieldList['status']['required'] = 'no';
 
 $config->task->datatable->fieldList['estimate']['title']    = 'estimateAB';
 $config->task->datatable->fieldList['estimate']['fixed']    = 'no';
-$config->task->datatable->fieldList['estimate']['width']    = '40';
+$config->task->datatable->fieldList['estimate']['width']    = '57';
 $config->task->datatable->fieldList['estimate']['required'] = 'no';
 
 $config->task->datatable->fieldList['consumed']['title']    = 'consumedAB';

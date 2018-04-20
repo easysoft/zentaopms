@@ -1356,6 +1356,10 @@ class baseDAO
             {
                 $field['rule'] = 'date';
             }
+            elseif($type == 'datetime')
+            {
+                $field['rule'] = 'datetime';
+            }
             else
             {
                 $field['rule'] = 'skip';
@@ -1993,11 +1997,16 @@ class baseSQL
         $pos    = stripos($order, 'limit');
         $orders = $pos ? substr($order, 0, $pos) : $order;
         $limit  = $pos ? substr($order, $pos) : '';
-        if($limit and !preg_match('/^[0-9]+ *(, *[0-9]+)?$/', $limit)) $limit = '';
+        if(!empty($limit))
+        {
+            $trimedLimit = trim(str_replace('limit', '', $limit));
+            if(!preg_match('/^[0-9]+ *(, *[0-9]+)?$/', $trimedLimit)) die("Limit is bad query, The limit is " . htmlspecialchars($limit));
+        }
+
 
         $orders = trim($orders);
         if(empty($orders)) return $this;
-        if(!preg_match('/^(\w+\.)?(`\w+`|\w+)( +(desc|asc))?( *(, *(\w+\.)?(`\w+`|\w+)( +(desc|asc))?)?)*$/i', $orders)) die("Order is bad request, The order is $orders");
+        if(!preg_match('/^(\w+\.)?(`\w+`|\w+)( +(desc|asc))?( *(, *(\w+\.)?(`\w+`|\w+)( +(desc|asc))?)?)*$/i', $orders)) die("Order is bad request, The order is " . htmlspecialchars($orders));
 
         $orders = explode(',', $orders);
         foreach($orders as $i => $order)

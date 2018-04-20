@@ -13,13 +13,13 @@ class report extends control
 {
     /**
      * The index of report, goto project deviation.
-     * 
+     *
      * @access public
      * @return void
      */
     public function index()
     {
-        $this->locate(inlink('productSummary')); 
+        $this->locate(inlink('productSummary'));
     }
 
     /**
@@ -45,7 +45,7 @@ class report extends control
 
     /**
      * Product information report.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -65,9 +65,9 @@ class report extends control
 
     /**
      * Bug create report.
-     * 
-     * @param  int    $begin 
-     * @param  int    $end 
+     *
+     * @param  int    $begin
+     * @param  int    $end
      * @access public
      * @return void
      */
@@ -88,12 +88,12 @@ class report extends control
         $this->view->project    = $project;
         $this->view->product    = $product;
         $this->view->submenu    = 'test';
-        $this->display(); 
+        $this->display();
     }
 
     /**
      * Bug assign report.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -104,34 +104,42 @@ class report extends control
         $this->view->submenu    = 'test';
         $this->view->assigns    = $this->report->getBugAssign();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
-        $this->display(); 
+        $this->display();
     }
 
     /**
      * Workload report.
-     * 
+     *
+     * @param string $begin
+     * @param string $end
+     * @param int    $days
+     * @param int    $workday
+     * @param int    $dept
+     * @param int    $assign
+     *
      * @access public
      * @return void
      */
-    public function workload($begin = '', $end = '', $days = 0, $workday = 0, $dept = 0)
+    public function workload($begin = '', $end = '', $days = 0, $workday = 0, $dept = 0, $assign = 'assign')
     {
         if($_POST)
         {
-            $data     = fixer::input('post')->get();
-            $begin    = $data->begin;
-            $end      = $data->end;
-            $dept     = $data->dept;
-            $days     = $data->days;
-            $workday  = $data->workday;
+            $data    = fixer::input('post')->get();
+            $begin   = $data->begin;
+            $end     = $data->end;
+            $dept    = $data->dept;
+            $days    = $data->days;
+            $assign  = $data->assign;
+            $workday = $data->workday;
         }
 
         $this->app->loadConfig('project');
-        $begin = $begin ? strtotime($begin) : time();
-        $end   = $end   ? strtotime($end)   : time() + (7 * 24 * 3600);
-        $end  += 24 * 3600;
+        $begin  = $begin ? strtotime($begin) : time();
+        $end    = $end   ? strtotime($end)   : time() + (7 * 24 * 3600);
+        $end   += 24 * 3600;
         $beginWeekDay = date('w', $begin);
-        $begin = date('Y-m-d', $begin);
-        $end   = date('Y-m-d', $end);
+        $begin  = date('Y-m-d', $begin);
+        $end    = date('Y-m-d', $end);
 
         if(empty($workday))$workday = $this->config->project->defaultWorkhours;
         $diffDays = helper::diffDate($end, $begin);
@@ -150,7 +158,7 @@ class report extends control
         $this->view->title      = $this->lang->report->workload;
         $this->view->position[] = $this->lang->report->workload;
 
-        $this->view->workload = $this->report->getWorkload($dept);
+        $this->view->workload = $this->report->getWorkload($dept, $assign);
         $this->view->users    = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
         $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
         $this->view->begin    = $begin;
@@ -158,6 +166,7 @@ class report extends control
         $this->view->days     = $days;
         $this->view->workday  = $workday;
         $this->view->dept     = $dept;
+        $this->view->assign   = $assign;
         $this->view->allHour  = $days * $workday;
         $this->view->submenu  = 'staff';
         $this->display();
@@ -165,7 +174,7 @@ class report extends control
 
     /**
      * Send daily reminder mail.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -176,7 +185,7 @@ class report extends control
         if($this->config->report->dailyreminder->task)     $tasks = $this->report->getUserTasks();
         if($this->config->report->dailyreminder->todo)     $todos = $this->report->getUserTodos();
         if($this->config->report->dailyreminder->testTask) $testTasks = $this->report->getUserTestTasks();
-        
+
         $reminder = array();
 
         $users = array_unique(array_merge(array_keys($bugs), array_keys($tasks), array_keys($todos), array_keys($testTasks)));
@@ -216,7 +225,7 @@ class report extends control
             if($oldViewType == 'json') $this->viewType = 'html';
             $mailContent = $this->parse('report', 'dailyreminder');
             $this->viewType == $oldViewType;
-            
+
             /* Send email.*/
             echo date('Y-m-d H:i:s') . " sending to $user, ";
             $this->mail->send($user, $mailTitle, $mailContent, '', true);

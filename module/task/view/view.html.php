@@ -110,13 +110,13 @@
         <legend><?php echo $this->lang->task->children;?></legend>
         <table class='table table-hover table-data table-fixed'>
           <tr class='text-center'>
-            <th class='w-60px'> <?php echo$lang->task->id;?></th>
-            <th class='w-40px'> <?php echo$lang->task->lblPri;?></th>
-            <th>                <?php echo$lang->task->name;?></th>
-            <th class='w-100px'><?php echo$lang->task->deadline;?></th>
-            <th class='w-80px'> <?php echo$lang->task->assignedTo;?></th>
-            <th class='w-90px'> <?php echo$lang->task->status;?></th>
-            <th class='w-50px visible-lg'> <?php echo $lang->task->consumedAB . $lang->task->lblHour;?></th>
+            <th class='w-60px'> <?php echo $lang->task->id;?></th>
+            <th class='w-40px'> <?php echo $lang->task->lblPri;?></th>
+            <th>                <?php echo $lang->task->name;?></th>
+            <th class='w-100px'><?php echo $lang->task->deadline;?></th>
+            <th class='w-80px'> <?php echo $lang->task->assignedTo;?></th>
+            <th class='w-90px'> <?php echo $lang->task->status;?></th>
+            <th class='w-50px visible-lg'><?php echo $lang->task->consumedAB . $lang->task->lblHour;?></th>
             <th class='w-50px visible-lg'><?php echo $lang->task->leftAB . $lang->task->lblHour;?></th>
             <th class='w-150px'><?php echo $lang->actions;?></th>
           </tr>
@@ -167,11 +167,11 @@
     <div class='main main-side'>
       <fieldset>
         <legend><?php echo $lang->task->legendBasic;?></legend>
-        <table class='table table-data table-condensed table-borderless'> 
+        <table class='table table-data table-condensed table-borderless'>
           <tr>
             <th class='w-80px'><?php echo $lang->task->project;?></th>
             <td><?php if(!common::printLink('project', 'view', "projectID=$task->project", $project->name)) echo $project->name;?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->task->module;?></th>
             <?php
@@ -204,11 +204,11 @@
             ob_end_clean();
             ?>
             <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
-          </tr>  
+          </tr>
           <tr class='nofixed'>
             <th><?php echo $lang->task->story;?></th>
             <td>
-            <?php 
+            <?php
             if($task->storyTitle and !common::printLink('story', 'view', "storyID=$task->story", $task->storyTitle, '', "class='iframe' data-width='80%'", true, true)) echo $task->storyTitle;
             if($task->needConfirm)
             {
@@ -222,7 +222,7 @@
           <?php if($task->fromBug):?>
           <tr>
             <th><?php echo $lang->task->fromBug;?></th>
-            <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$task->fromBug"), "#$task->fromBug " . $fromBug->title, '_blank');?></td> 
+            <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$task->fromBug"), "#$task->fromBug " . $fromBug->title, '_blank');?></td>
           </tr>
           <?php endif;?>
           <tr>
@@ -272,7 +272,7 @@
       <?php endif;?>
       <fieldset>
         <legend><?php echo $lang->task->legendEffort;?></legend>
-        <table class='table table-data table-condensed table-borderless'> 
+        <table class='table table-data table-condensed table-borderless'>
           <tr>
             <th class='w-80px'><?php echo $lang->task->estStarted;?></th>
             <td><?php echo $task->estStarted;?></td>
@@ -280,7 +280,7 @@
           <tr>
             <th><?php echo $lang->task->realStarted;?></th>
             <td><?php echo $task->realStarted; ?> </td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->task->deadline;?></th>
             <td>
@@ -289,15 +289,15 @@
             if(isset($task->delay)) printf($lang->task->delayWarning, $task->delay);
             ?>
             </td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->task->estimate;?></th>
             <td><?php echo $task->estimate . $lang->workingHour;?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->task->consumed;?></th>
             <td><?php echo round($task->consumed, 2) . $lang->workingHour;?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->task->left;?></th>
             <td><?php echo $task->left . $lang->workingHour;?></td>
@@ -306,7 +306,7 @@
       </fieldset>
       <fieldset>
         <legend><?php echo $lang->task->legendLife;?></legend>
-        <table class='table table-data table-condensed table-borderless'> 
+        <table class='table table-data table-condensed table-borderless'>
           <tr>
             <th class='w-80px'><?php echo $lang->task->openedBy;?></th>
             <td><?php if($task->openedBy) echo zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate;?></td>

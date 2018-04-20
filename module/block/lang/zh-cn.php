@@ -13,7 +13,7 @@ $lang->block = new stdclass();
 $lang->block->common = '区块';
 $lang->block->name   = '区块名称';
 $lang->block->style  = '外观';
-$lang->block->grid   = '宽度';
+$lang->block->grid   = '位置';
 $lang->block->color  = '颜色';
 
 $lang->block->account  = '所属用户';
@@ -29,7 +29,17 @@ $lang->block->lblBlock     = '区块';
 $lang->block->lblNum       = '条数';
 $lang->block->lblHtml      = 'HTML内容';
 $lang->block->dynamic      = '最新动态';
+$lang->block->assignToMe   = '指派给我';
 $lang->block->lblFlowchart = '流程图';
+$lang->block->welcome      = '欢迎总览';
+
+$lang->block->leftToday = '今天剩余工作总计';
+$lang->block->myTask    = '我的任务';
+$lang->block->myStory   = '我的需求';
+$lang->block->myBug     = '我的BUG';
+$lang->block->myProject = '进行中的' . $lang->projectCommon;
+$lang->block->myProduct = '未关闭的' . $lang->productCommon;
+$lang->block->delayed   = '已延期';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = '参数名称';
@@ -38,13 +48,13 @@ $lang->block->params->value = '参数值';
 $lang->block->createBlock        = '添加区块';
 $lang->block->editBlock          = '编辑区块';
 $lang->block->ordersSaved        = '排序已保存';
-$lang->block->confirmRemoveBlock = '确定移除区块【{0}】吗？';
+$lang->block->confirmRemoveBlock = '确定移除区块吗？';
 $lang->block->closeForever       = '永久关闭';
 $lang->block->confirmClose       = '确定永久关闭该区块吗？闭后所有人都将无法使用该区块，可以在后台自定义中打开';
 $lang->block->remove             = '移除';
 $lang->block->refresh            = '刷新';
 $lang->block->hidden             = '隐藏';
-$lang->block->dynamicInfo        = "%s, %s <em>%s</em> %s <a href='%s'>%s</a>。";
+$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span>, <span class='timeline-text'>%s <em>%s</em> %s <a href='%s'>%s</a></span>";
 
 $lang->block->default['product']['1']['title'] = '未关闭的' . $lang->productCommon;
 $lang->block->default['product']['1']['block'] = 'list';
@@ -101,31 +111,33 @@ $lang->block->default['qa']['3']['params']['num']     = 15;
 $lang->block->default['qa']['3']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['3']['params']['type']    = 'wait';
 
-$lang->block->default['full']['my']['1']['title']  = '流程图';
-$lang->block->default['full']['my']['1']['block']  = 'flowchart';
+$lang->block->default['full']['my']['1']['title']  = '欢迎';
+$lang->block->default['full']['my']['1']['block']  = 'welcome';
 $lang->block->default['full']['my']['1']['grid']   = 8;
 $lang->block->default['full']['my']['1']['source'] = '';
 $lang->block->default['full']['my']['2']['title']  = '最新动态';
 $lang->block->default['full']['my']['2']['block']  = 'dynamic';
 $lang->block->default['full']['my']['2']['grid']   = 4;
 $lang->block->default['full']['my']['2']['source'] = '';
-$lang->block->default['full']['my']['3'] = $lang->block->default['project']['1'];
-$lang->block->default['full']['my']['3']['source'] = 'project';
-$lang->block->default['full']['my']['4']['title']  = '我的待办';
-$lang->block->default['full']['my']['4']['block']  = 'list';
-$lang->block->default['full']['my']['4']['grid']   = 4;
-$lang->block->default['full']['my']['4']['source'] = 'todo';
-$lang->block->default['full']['my']['4']['params']['num'] = '20';
-$lang->block->default['full']['my']['5'] = $lang->block->default['product']['1'];
-$lang->block->default['full']['my']['5']['source'] = 'product';
-$lang->block->default['full']['my']['6'] = $lang->block->default['project']['2'];
+$lang->block->default['full']['my']['3']['title']  = '流程图';
+$lang->block->default['full']['my']['3']['block']  = 'flowchart';
+$lang->block->default['full']['my']['3']['grid']   = 8;
+$lang->block->default['full']['my']['3']['source'] = '';
+$lang->block->default['full']['my']['5']['title']  = '我的待办';
+$lang->block->default['full']['my']['5']['block']  = 'list';
+$lang->block->default['full']['my']['5']['grid']   = 4;
+$lang->block->default['full']['my']['5']['source'] = 'todo';
+$lang->block->default['full']['my']['5']['params']['num'] = '20';
+$lang->block->default['full']['my']['6'] = $lang->block->default['project']['1'];
 $lang->block->default['full']['my']['6']['source'] = 'project';
-$lang->block->default['full']['my']['7'] = $lang->block->default['qa']['1'];
-$lang->block->default['full']['my']['7']['source'] = 'qa';
-$lang->block->default['full']['my']['8'] = $lang->block->default['product']['2'];
+$lang->block->default['full']['my']['7'] = $lang->block->default['project']['2'];
+$lang->block->default['full']['my']['7']['source'] = 'project';
+$lang->block->default['full']['my']['8'] = $lang->block->default['product']['1'];
 $lang->block->default['full']['my']['8']['source'] = 'product';
-$lang->block->default['full']['my']['9'] = $lang->block->default['qa']['2'];
-$lang->block->default['full']['my']['9']['source'] = 'qa';
+$lang->block->default['full']['my']['9'] = $lang->block->default['product']['2'];
+$lang->block->default['full']['my']['9']['source'] = 'product';
+$lang->block->default['full']['my']['10'] = $lang->block->default['qa']['2'];
+$lang->block->default['full']['my']['10']['source'] = 'qa';
 
 $lang->block->default['onlyTest']['my']['1'] = $lang->block->default['qa']['1'];
 $lang->block->default['onlyTest']['my']['1']['source'] = 'qa';
@@ -256,6 +268,10 @@ $lang->block->orderByList->story['status_desc']   = '状态倒序';
 $lang->block->orderByList->story['stage_asc']     = '阶段正序';
 $lang->block->orderByList->story['stage_desc']    = '阶段倒序';
 
+$lang->block->todoNum     = '待办数';
+$lang->block->taskNum     = '任务数';
+$lang->block->bugNum      = 'Bug数';
+
 $lang->block->typeList = new stdclass();
 
 $lang->block->typeList->task['assignedTo'] = '指派给我';
@@ -308,6 +324,14 @@ $lang->block->modules['todo']->moreLinkList->list = 'my|todo|type=all';
 $lang->block->modules['common'] = new stdclass();
 $lang->block->modules['common']->moreLinkList = new stdclass();
 $lang->block->modules['common']->moreLinkList->dynamic = 'company|dynamic|';
+
+$lang->block->welcomeList['06:00'] = '%s，早上好！';
+$lang->block->welcomeList['11:30'] = '%s，中文好！';
+$lang->block->welcomeList['13:30'] = '%s，下午好！';
+$lang->block->welcomeList['19:00'] = '%s，晚上好！';
+
+$lang->block->gridOptions[8] = '左侧';
+$lang->block->gridOptions[4] = '右侧';
 
 $lang->block->flowchart   = array();
 $lang->block->flowchart[] = array('管理员',   '维护公司', '添加用户', '维护权限');

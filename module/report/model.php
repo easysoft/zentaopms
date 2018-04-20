@@ -15,8 +15,8 @@ class reportModel extends model
 {
     /**
      * Compute percent of every item.
-     * 
-     * @param  array    $datas 
+     *
+     * @param  array    $datas
      * @access public
      * @return array
      */
@@ -69,9 +69,9 @@ class reportModel extends model
 
     /**
      * Convert date format.
-     * 
-     * @param  array  $dateList 
-     * @param  string $format 
+     *
+     * @param  array  $dateList
+     * @param  string $format
      * @access public
      * @return array
      */
@@ -82,8 +82,8 @@ class reportModel extends model
     }
 
     /**
-     * Get projects. 
-     * 
+     * Get projects.
+     *
      * @access public
      * @return void
      */
@@ -121,10 +121,10 @@ class reportModel extends model
     }
 
     /**
-     * Get products. 
-     * 
+     * Get products.
+     *
      * @access public
-     * @return array 
+     * @return array
      */
     public function getProducts($conditions)
     {
@@ -195,10 +195,10 @@ class reportModel extends model
     }
 
     /**
-     * Get bugs 
-     * 
-     * @param  int    $begin 
-     * @param  int    $end 
+     * Get bugs
+     *
+     * @param  int    $begin
+     * @param  int    $end
      * @access public
      * @return array
      */
@@ -232,19 +232,54 @@ class reportModel extends model
             $bugCreate[$account]['validRate'] = (isset($bug['resolved']) and $bug['resolved']) ? ($validRate / $bug['resolved']) : "0";
         }
         uasort($bugCreate, 'sortSummary');
-        return $bugCreate; 
+        return $bugCreate;
     }
 
     /**
-     * Get workload. 
-     * 
+     * Get workload.
+     *
+     * @param int    $dept
+     * @param string $assign
+     *
      * @access public
      * @return array
      */
-    public function getWorkload($dept = 0)
+    public function getWorkload($dept = 0, $assign = 'assign')
     {
         $depts = array();
         if($dept) $depts = $this->loadModel('dept')->getAllChildId($dept);
+
+        if($assign == 'noassign')
+        {
+            $members = $this->dao->select('t1.account,t2.name,t1.root')->from(TABLE_TEAM)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t2.id = t1.root')
+                ->leftJoin(TABLE_USER)->alias('t3')->on('t3.account = t1.account')
+                ->where('t2.status')->notin('cancel, closed, done, suspended')
+                ->beginIF($dept)->andWhere('t3.dept')->in($depts)->fi()
+                ->andWhere('t1.type')->eq('project')
+                ->andWhere("t1.account NOT IN(SELECT `assignedTo` FROM " . TABLE_TASK . " WHERE `project` = t1.`root` AND `status` NOT IN('cancel, closed, done, pause') AND assignedTo != '' GROUP BY assignedTo)")
+                ->fetchGroup('account', 'name');
+
+            $workload = array();
+            if(!empty($members))
+            {
+                foreach($members as $member => $projects)
+                {
+                    if(!empty($projects))
+                    {
+                        foreach($projects as $name => $project)
+                        {
+                            $workload[$member]['task'][$name]['count']     = 0;
+                            $workload[$member]['task'][$name]['manhour']   = 0;
+                            $workload[$member]['task'][$name]['projectID'] = $project->root;
+                            $workload[$member]['total']['count']           = 0;
+                            $workload[$member]['total']['manhour']         = 0;
+                        }
+                    }
+                }
+            }
+            return $workload;
+        }
 
         $tasks = $this->dao->select('t1.*, t2.name as projectName')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -254,7 +289,23 @@ class reportModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.status')->notin('cancel, closed, done, suspended')
             ->beginIF($dept)->andWhere('t3.dept')->in($depts)->fi()
-            ->fetchGroup('assignedTo');
+            ->fetchGroup('assignedTo', 'id');
+
+        if(empty($tasks)) return array();
+
+        /* Fix bug for children. */
+        $parents = array();
+        foreach($tasks as $user => $userTasks)
+        {
+            if($user)
+            {
+                foreach($userTasks as $task)
+                {
+                    if(!empty($task->parent)) $parents[$task->parent] = $task->parent;
+                }
+            }
+        }
+
         $workload = array();
         foreach($tasks as $user => $userTasks)
         {
@@ -262,11 +313,12 @@ class reportModel extends model
             {
                 foreach($userTasks as $task)
                 {
+                    if(!empty($parents) && in_array($task->id, $parents)) continue;
                     $workload[$user]['task'][$task->projectName]['count']     = isset($workload[$user]['task'][$task->projectName]['count']) ? $workload[$user]['task'][$task->projectName]['count'] + 1 : 1;
                     $workload[$user]['task'][$task->projectName]['manhour']   = isset($workload[$user]['task'][$task->projectName]['manhour']) ? $workload[$user]['task'][$task->projectName]['manhour'] + $task->left : $task->left;
                     $workload[$user]['task'][$task->projectName]['projectID'] = $task->project;
-                    $workload[$user]['total']['count']   = isset($workload[$user]['total']['count']) ? $workload[$user]['total']['count'] + 1 : 1;
-                    if($task->parent == 0) $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
+                    $workload[$user]['total']['count']   = isset($workload[$user]['total']['count'])   ? $workload[$user]['total']['count'] + 1 : 1;
+                    $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
                 }
             }
         }
@@ -275,10 +327,10 @@ class reportModel extends model
     }
 
     /**
-     * Get bug assign. 
-     * 
+     * Get bug assign.
+     *
      * @access public
-     * @return array 
+     * @return array
      */
     public function getBugAssign()
     {
@@ -307,7 +359,7 @@ class reportModel extends model
 
     /**
      * Get System URL.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -331,13 +383,13 @@ class reportModel extends model
 
     /**
      * Get user bugs.
-     * 
+     *
      * @access public
      * @return void
      */
     public function getUserBugs()
     {
-        $bugs = $this->dao->select('t1.id, t1.title, t2.account as user, t1.deadline')
+        return $this->dao->select('t1.id, t1.title, t2.account as user, t1.deadline')
             ->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')
             ->on('t1.assignedTo = t2.account')
@@ -345,19 +397,21 @@ class reportModel extends model
             ->andWhere('t1.assignedTo')->ne('closed')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.deadline', true)->eq('0000-00-00')
+            ->orWhere('t1.deadline')->lt(date(DT_DATE1, strtotime('+4 day')))
+            ->markRight(1)
             ->fetchGroup('user');
-        return $bugs;
     }
 
     /**
      * Get user tasks.
-     * 
+     *
      * @access public
      * @return void
      */
     public function getUserTasks()
     {
-        $tasks = $this->dao->select('t1.id, t1.name, t2.account as user, t1.deadline')->from(TABLE_TASK)->alias('t1')
+        return $this->dao->select('t1.id, t1.name, t2.account as user, t1.deadline')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.assignedTo = t2.account')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->where('t1.assignedTo')->ne('')
@@ -365,16 +419,17 @@ class reportModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.status')->in('wait, doing')
             ->andWhere('t3.status')->ne('suspended')
+            ->andWhere('t1.deadline', true)->eq('0000-00-00')
+            ->orWhere('t1.deadline')->lt(date(DT_DATE1, strtotime('+4 day')))
+            ->markRight(1)
             ->fetchGroup('user');
-
-        return $tasks;
     }
 
     /**
      * Get user todos.
-     * 
+     *
      * @access public
-     * @return void
+     * @return array
      */
     public function getUserTodos()
     {
@@ -398,7 +453,7 @@ class reportModel extends model
 
     /**
      * Get user testTasks.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -413,6 +468,12 @@ class reportModel extends model
     }
 }
 
+/**
+ * @param $pre
+ * @param $next
+ *
+ * @return int
+ */
 function sortSummary($pre, $next)
 {
     if($pre['validRate'] == $next['validRate']) return 0;

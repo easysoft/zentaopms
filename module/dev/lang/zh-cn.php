@@ -93,6 +93,8 @@ $lang->dev->tableList['suitecase']      = '套件用例';
 $lang->dev->tableList['score']          = '积分';
 $lang->dev->tableList['entry']          = '应用';
 $lang->dev->tableList['webhook']        = 'WebHook';
+$lang->dev->tableList['webhookdatas']   = 'WebHook数据';
+$lang->dev->tableList['log']            = '接口日志';
 
 $lang->dev->groupList['my']      = '我的地盘';
 $lang->dev->groupList['product'] = $lang->productCommon;

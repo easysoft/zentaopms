@@ -9,6 +9,8 @@ $lang->testreport->view     = '报告详情';
 $lang->testreport->recreate = '重新生成报告';
 
 $lang->testreport->title       = '标题';
+$lang->testreport->bugTitle    = 'Bug 标题';
+$lang->testreport->storyTitle  = '需求标题';
 $lang->testreport->project     = '所属项目';
 $lang->testreport->testtask    = '测试版本';
 $lang->testreport->tasks       = $lang->testreport->testtask;
@@ -62,6 +64,7 @@ $lang->testreport->foundBugTip    = "影响版本在测试轮次内，并且创�
 $lang->testreport->legacyBugTip   = "Bug状态是激活，或Bug的解决时间在测试结束时间之后。";
 $lang->testreport->fromCaseBugTip = "测试时间范围内，用例执行失败后创建的Bug";
 $lang->testreport->errorTrunk     = "主干版本不能创建测试报告，请修改关联版本！";
+$lang->testreport->moreProduct    = "只能对同一个产品生成测试报告。";
 
 $lang->testreport->bugSummary = <<<EOD
 共发现<strong>%s</strong>个Bug <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-info-sign'></i></a>，

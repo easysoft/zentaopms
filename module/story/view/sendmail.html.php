@@ -16,7 +16,10 @@
   <td>
     <table cellpadding='0' cellspacing='0' width='600' style='border: none; border-collapse: collapse;'>
       <tr>
-        <td style='padding: 10px; background-color: #F8FAFE; border: none; font-size: 14px; font-weight: 500; border-bottom: 1px solid #e5e5e5;'><?php echo html::a(zget($this->config->mail, 'domain', common::getSysURL()) . helper::createLink('story', 'view', "storyID=$story->id"), $mailTitle, '', "style='color: #333; text-decoration: underline;'");?></td>
+        <td style='padding: 10px; background-color: #F8FAFE; border: none; font-size: 14px; font-weight: 500; border-bottom: 1px solid #e5e5e5;'>
+          <?php $color = empty($story->color) ? '#333' : $story->color;?>
+          <?php echo html::a(zget($this->config->mail, 'domain', common::getSysURL()) . helper::createLink('story', 'view', "storyID=$story->id"), $mailTitle, '', "style='color: {$color}; text-decoration: underline;'");?>
+        </td>
       </tr>
     </table>
   </td>

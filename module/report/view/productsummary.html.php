@@ -32,8 +32,8 @@
       <th width='200'><?php echo $lang->product->name;?></th>
       <th width='120'><?php echo $lang->product->PO;?></th>
       <th><?php echo $lang->productplan->common;?></th>
-      <th width="150"><?php echo $lang->productplan->begin;?></th>
-      <th width="150"><?php echo $lang->productplan->end;?></th>
+      <th width="100"><?php echo $lang->productplan->begin;?></th>
+      <th width="100"><?php echo $lang->productplan->end;?></th>
       <th class="w-70px"><?php echo $lang->story->statusList['draft'];?></th>
       <th class="w-70px"><?php echo $lang->story->statusList['active'];?></th>
       <th class="w-70px"><?php echo $lang->story->statusList['changed'];?></th>
@@ -47,7 +47,7 @@
       <tr class="text-center">
         <?php $count = isset($product->plans) ? count($product->plans) : 1;?>
         <td align='left' rowspan="<?php echo $count;?>"><?php echo "<p>" . html::a($this->createLink('product', 'view', "product=$product->id"), $product->name) . "</p>";?></td>
-        <td align='left' rowspan="<?php echo $count;?>" class="text-center"><?php echo "<p>" . $users[$product->PO] . '</p>';?></td>
+        <td align='left' rowspan="<?php echo $count;?>" class="text-center"><?php echo "<p>" . zget($users, $product->PO) . '</p>';?></td>
         <?php if(isset($product->plans)):?>
         <?php $id = 1;?>
         <?php foreach($product->plans as $plan):?>

@@ -25,21 +25,21 @@
 <table class='table active-disabled table-condensed table-fixed' id='groupTable'>
   <thead>
     <tr>
-      <th class='text-left' style='width:210px'>
+      <th class='text-left' style='width:230px'>
         <?php echo html::a('###', "<i class='icon-caret-down'></i> " . $lang->task->$groupBy, '', "class='expandAll' data-action='expand'")?>
         <?php echo html::a('###', "<i class='icon-caret-right'></i> " . $lang->task->$groupBy, '', "class='collapseAll hidden' data-action='collapse'")?>
       </th>
       <th class='w-id'><?php echo $lang->task->id;?></th>
       <th class='w-pri'> <?php echo $lang->priAB;?></th>
       <th><?php echo $lang->task->name;?></th>
-      <th class='w-80px'><?php echo $lang->task->status;?></th>
+      <th class='w-70px'><?php echo $lang->task->status;?></th>
       <th class='w-80px'><?php echo $lang->task->deadlineAB;?></th>
       <th class='w-user'><?php echo $lang->task->assignedTo;?></th>
       <th class='w-user'><?php echo $lang->task->finishedBy;?></th>
       <th class='w-50px'><?php echo $lang->task->estimateAB;?></th>
       <th class='w-50px'><?php echo $lang->task->consumedAB;?></th>
       <th class='w-50px'><?php echo $lang->task->leftAB;?></th>
-      <th class='w-50px'><?php echo $lang->task->progress;?></th>
+      <th class='w-60px'><?php echo $lang->task->progress;?></th>
       <th class='w-50px'><?php echo $lang->typeAB;?></th>
       <th class='w-60px'><?php echo $lang->actions;?></th>
     </tr>
@@ -55,7 +55,7 @@
     $groupWait     = 0;
     $groupDone     = 0;
     $groupDoing    = 0;
-    $groupClosed   = 0;  
+    $groupClosed   = 0;
     $groupEstimate = 0.0;
     $groupConsumed = 0.0;
     $groupLeft     = 0.0;
@@ -113,7 +113,7 @@
       </td>
       <?php endif;?>
       <td><?php echo $task->id;?></td>
-      <td><span class='<?php echo 'pri' . zget(array_keys($lang->task->priList), $task->pri, $task->pri)?>'><?php echo zget(array_keys($lang->task->priList), $task->pri, $task->pri);?></span></td>
+      <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
       <td class='text-left'>
           <?php
             if(!empty($task->team))   echo '<span class="label">' . $lang->task->multipleAB . '</span> ';

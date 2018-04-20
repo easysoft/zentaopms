@@ -23,7 +23,7 @@
   <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
   <thead>
   <tr class='colhead'>
-    <th class='w-90px'><?php common::printOrderLink('objectType', $orderBy, $vars, $lang->action->objectType);?></th>
+    <th class='w-130px'><?php common::printOrderLink('objectType', $orderBy, $vars, $lang->action->objectType);?></th>
     <th class='w-id'>  <?php common::printOrderLink('objectID',   $orderBy, $vars, $lang->idAB);?></th>
     <th><?php echo $lang->action->objectName;?></th>
     <th class='w-100px'><?php common::printOrderLink('actor',     $orderBy, $vars, $lang->action->actor);?></th>

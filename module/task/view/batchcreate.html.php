@@ -74,8 +74,11 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
     ?>
     <?php $pri = 3;?>
     <tr>
-      <td class='text-center'><?php echo $i + 1;?><?php echo html::hidden("parent[]", $parent);?></td>
-      <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'><?php echo html::select("module[$i]", $modules, $module, "class='form-control chosen' onchange='setStories(this.value, $project->id, $i)'")?></td>
+      <td class='text-center'><?php echo $i + 1;?></td>
+      <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'>
+        <?php echo html::select("module[$i]", $modules, $module, "class='form-control chosen' onchange='setStories(this.value, $project->id, $i)'")?>
+        <?php echo html::hidden("parent[$i]", $parent);?>
+      </td>
       <?php if($project->type != 'ops'):?>
       <td <?php echo zget($visibleFields, 'story', "class='hidden'"); echo $hiddenStory;?> style='overflow: visible'>
         <div class='input-group'>
@@ -109,7 +112,10 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
   <tbody>
     <tr>
       <td class='text-center'>%s</td>
-      <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'><?php echo html::select("module[%s]", $modules, $module, "class='form-control' onchange='setStories(this.value, $project->id, \"%s\")'")?></td>
+      <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'>
+        <?php echo html::select("module[%s]", $modules, $module, "class='form-control' onchange='setStories(this.value, $project->id, \"%s\")'")?>
+        <?php echo html::hidden("parent[%s]", $parent);?>
+      </td>
       <td <?php echo zget($visibleFields, 'story', "class='hidden'"); echo $hiddenStory;?> style='overflow: visible'>
         <div class='input-group'>
           <?php echo html::select("story[%s]", $stories, $currentStory, "class='form-control' onchange='setStoryRelated(\"%s\")'");?>

@@ -15,7 +15,16 @@ function createLink(moduleName, methodName, vars, viewType, isOnlyBody)
     if(vars)
     {
         vars = vars.split('&');
-        for(i = 0; i < vars.length; i ++) vars[i] = vars[i].split('=');
+        for(i = 0; i < vars.length; i ++)
+        {
+            splited = vars[i].split('=');
+
+            var newvars = new Array()
+            newvars[0] = splited.shift();
+            newvars[1] = splited.join('=');
+
+            vars[i] = newvars;
+        }
     }
     if(config.requestType != 'GET')
     {
@@ -48,11 +57,11 @@ function createLink(moduleName, methodName, vars, viewType, isOnlyBody)
  */
 function setSearchBox()
 {
-    $('#typeSelector a').click(function()
+    $('#searchTypeMenu a').click(function()
     {
-        $('#typeSelector li.active').removeClass('active');
+        $('#searchTypeMenu li.selected').removeClass('selected');
         var $this = $(this);
-        $this.closest('li').addClass('active');
+        $this.closest('li').addClass('selected');
         $("#searchType").val($this.data('value'));
         $("#searchTypeName").text($this.text());
     });
@@ -67,7 +76,7 @@ function setSearchBox()
 function shortcut()
 {
     objectType  = $('#searchType').attr('value');
-    objectValue = $('#searchQuery').attr('value');
+    objectValue = $("input#searchInput").attr('value');
     if(objectType && objectValue)
     {
         method = objectType == 'testsuite' ? 'library' : 'view';
@@ -1986,6 +1995,34 @@ function selectFocusJump(type)
     }
 }
 
+function adjustNoticePosition()
+{
+    var bottom = 25;
+    $('#noticeBox').find('.alert').each(function()
+    {
+        $(this).css('bottom',  bottom + 'px');
+        bottom += $(this).outerHeight(true) - 10;
+    });
+}
+
+function notifyMessage(data)
+{
+    if(window.Notification)
+    {
+        if(Notification.permission == "granted")
+        {
+            new Notification("", {body:data});
+        }
+        else if(Notification.permission != "denied")
+        {
+            Notification.requestPermission(function(permission)
+            {
+                new Notification("", {body:data});
+            });
+        }
+    }
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
@@ -2013,7 +2050,7 @@ $(document).ready(function()
     fixStyle();
 
     // Init tree menu
-    $('.tree').tree({name: config.currentModule + '-' + config.currentMethod, initialState: 'preserve'});
+    $('.tree').tree({initialState: 'preserve'});
 
     $(window).resize(saveWindowSize);   // When window resized, call it again.
 

@@ -44,8 +44,9 @@ include '../../common/view/chosen.html.php';
 #searchlite {line-height: 127px}
 #searchform.showmore #searchmore, #searchform #searchlite {display: none;}
 #searchform.showmore #searchlite, #searchform #searchmore {display: inline-block;}
-#searchform .chosen-container .chosen-single{max-width: 170px;}
-#searchform .chosen-container .chosen-drop{min-width: 400px;}
+#searchform .chosen-container[id^="field"] .chosen-drop{min-width: 120px;}
+#searchform [id^="valueBox"] .chosen-container .chosen-single{max-width: 170px;}
+#searchform [id^="valueBox"] .chosen-container .chosen-drop{min-width: 400px;}
 #searchform .chosen-container .chosen-drop ul.chosen-results li{white-space:normal}
 #searchmore > i, #searchlite > i {font-size: 28px;}
 #searchmore > i {position: relative; top: 4px;}
@@ -376,7 +377,7 @@ foreach($fieldParams as $fieldName => $param)
           echo '</td>';
 
           /* Print field. */
-          echo "<td class='w-90px'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control'") . '</td>';
+          echo "<td class='w-110px' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
           /* Print operator. */
           echo "<td class='w-70px'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
@@ -435,7 +436,7 @@ foreach($fieldParams as $fieldName => $param)
           echo '</td>';
 
           /* Print field. */
-          echo "<td class='w-90px'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control'") . '</td>';
+          echo "<td class='w-90px' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
           /* Print operator. */
           echo "<td class='w-70px'>" .  html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';

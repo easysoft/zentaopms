@@ -29,7 +29,7 @@ $lang->tutorial->requiredTip      = '【%s】is required.';
 $lang->tutorial->congratulateTask = 'Congratulations! You have finished【<span class="task-name-current"></span>】!';
 $lang->tutorial->serverErrorTip   = 'Error!';
 $lang->tutorial->ajaxSetError     = 'Finished task must be defined. If you want to reset the Task, please set its value as null.';
-$lang->tutorial->novice           = "If you use ZenTao for the first time, do you want to start the Tutorial?";
+$lang->tutorial->novice           = "For a quick start, let's go through a smart(2min) Tutorial?";
 $lang->tutorial->dataNotSave      = "Data generated in the Tutorial will not be saved!";
 
 $lang->tutorial->tasks = array();

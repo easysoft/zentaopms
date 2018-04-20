@@ -9,11 +9,11 @@
  * @version     $Id: en.php 5091 2013-07-10 06:06:46Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->product->common      = $lang->productCommon . 'View';
+$lang->product->common      = $lang->productCommon;
 $lang->product->index       = $lang->productCommon . "Home";
 $lang->product->browse      = "Story List";
 $lang->product->dynamic     = "Dynamic";
-$lang->product->view        = "{$lang->productCommon}s";
+$lang->product->view        = "Overview";
 $lang->product->edit        = "Edit {$lang->productCommon}";
 $lang->product->batchEdit   = "Batch Edit";
 $lang->product->create      = "Create {$lang->productCommon}";
@@ -31,24 +31,25 @@ $lang->product->export      = "Export";
 $lang->product->basicInfo = 'Basic Info';
 $lang->product->otherInfo = 'Other Info';
 
-$lang->product->plans    = 'Plans';
-$lang->product->releases = 'Releases';
+$lang->product->plans    = 'Plan';
+$lang->product->releases = 'Release';
 $lang->product->docs     = 'Doc';
 $lang->product->bugs     = 'Linked Bug';
 $lang->product->projects = "Linked {$lang->projectCommon}";
-$lang->product->cases    = 'Cases';
-$lang->product->builds   = 'Builds';
+$lang->product->cases    = 'Case';
+$lang->product->builds   = 'Build';
 $lang->product->roadmap  = 'Roadmap';
 $lang->product->doc      = 'Doc';
 $lang->product->project  = $lang->projectCommon . 'List';
 $lang->product->build    = 'Build';
 
+$lang->product->currentProject   = 'Current Project';
 $lang->product->activeStories    = 'Activated Story';
 $lang->product->changedStories   = 'Changed Story';
 $lang->product->draftStories     = 'Draft Story';
 $lang->product->closedStories    = 'Closed Story';
 $lang->product->unResolvedBugs   = 'Unresolved Bug';
-$lang->product->assignToNullBugs = 'No Assigned Bug';
+$lang->product->assignToNullBugs = 'Unassigned Bug';
 
 $lang->product->confirmDelete   = " Do you want to delete {$lang->productCommon}?";
 
@@ -64,27 +65,27 @@ $lang->product->type      = "Type";
 $lang->product->status    = 'Status';
 $lang->product->desc      = 'Description';
 $lang->product->PO        = "PO";
-$lang->product->QD        = 'QD';
-$lang->product->RD        = 'RD';
-$lang->product->acl       = 'Acceptance';
+$lang->product->QD        = 'QA Manager';
+$lang->product->RD        = 'Release Manager';
+$lang->product->acl       = 'Access Control';
 $lang->product->whitelist = 'Whitelist';
 $lang->product->branch    = '%s';
 
 $lang->product->searchStory  = 'Search';
-$lang->product->assignedToMe = 'Assigned to Me';
-$lang->product->openedByMe   = 'Created by Me';
-$lang->product->reviewedByMe = 'Reviewed by Me';
-$lang->product->closedByMe   = 'Closed by Me';
+$lang->product->assignedToMe = 'Assigned To Me';
+$lang->product->openedByMe   = 'Created By Me';
+$lang->product->reviewedByMe = 'Reviewed By Me';
+$lang->product->closedByMe   = 'ClosedByMe';
 $lang->product->draftStory   = 'Draft';
-$lang->product->activeStory  = 'Activate';
+$lang->product->activeStory  = 'Activated';
 $lang->product->changedStory = 'Changed';
-$lang->product->willClose    = 'To be Closed';
+$lang->product->willClose    = 'ToBeClose';
 $lang->product->closedStory  = 'Closed';
 $lang->product->unclosed     = 'Open';
-$lang->product->unplan       = 'No plan';
+$lang->product->unplan       = 'Wait';
 $lang->product->my           = 'My';
 
-$lang->product->allStory    = 'All Stories';
+$lang->product->allStory    = 'All';
 $lang->product->allProduct  = 'All' . $lang->productCommon;
 $lang->product->allProductsOfProject = 'All linked' . $lang->productCommon;
 
@@ -120,6 +121,9 @@ $lang->product->mySelects['resolvedbyme'] = $lang->product->reviewedByMe;
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
 $lang->product->featureBar['browse']['unplan']       = $lang->product->unplan;
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
+
+
+
 $lang->product->featureBar['browse']['my']           = $lang->product->my;
 $lang->product->featureBar['browse']['closedbyme']   = $lang->product->closedByMe;
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;

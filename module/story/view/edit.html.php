@@ -108,7 +108,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->story->source;?></th>
-            <td><?php echo html::select('source', $lang->story->sourceList, $story->source, 'class=form-control');?></td>
+            <td><?php echo html::select('source', $lang->story->sourceList, $story->source, "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->story->sourceNote;?></th>
@@ -122,12 +122,12 @@
           <?php if($story->status != 'draft'):?>
           <tr>
             <th><?php echo $lang->story->stage;?></th>
-            <td><?php echo html::select('stage', $lang->story->stageList, $story->stage, 'class=form-control');?></td>
+            <td><?php echo html::select('stage', $lang->story->stageList, $story->stage, "class='form-control chosen'");?></td>
           </tr>
           <?php endif;?>
           <tr>
             <th><?php echo $lang->story->pri;?></th>
-            <td><?php echo html::select('pri', $lang->story->priList, $story->pri, 'class=form-control');?></td>
+            <td><?php echo html::select('pri', $lang->story->priList, $story->pri, "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->story->estimate;?></th>
@@ -139,7 +139,10 @@
           </tr>
           <tr>
             <th><?php echo $lang->story->mailto;?></th>
-            <td><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='form-control' multiple");?></td>
+            <td>
+              <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='form-control' multiple");?>
+              <?php echo $this->fetch('my', 'buildContactLists')?>
+            </td>
           </tr>
         </table>
       </fieldset>

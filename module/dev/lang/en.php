@@ -53,7 +53,7 @@ $lang->dev->tableList['team']           = 'Team';
 $lang->dev->tableList['testresult']     = 'Testing Result';
 $lang->dev->tableList['testrun']        = 'Run Testing ';
 $lang->dev->tableList['testtask']       = 'Test Task';
-$lang->dev->tableList['todo']           = 'To-Do';
+$lang->dev->tableList['todo']           = 'Todo';
 $lang->dev->tableList['user']           = 'User';
 $lang->dev->tableList['usercontact']    = 'User Contact';
 $lang->dev->tableList['usergroup']      = 'User Group';
@@ -93,6 +93,8 @@ $lang->dev->tableList['suitecase']      = 'Suite Case';
 $lang->dev->tableList['score']          = 'Score';
 $lang->dev->tableList['entry']          = 'Entry';
 $lang->dev->tableList['webhook']        = 'WebHook';
+$lang->dev->tableList['webhookdatas']   = 'WebHookDatas';
+$lang->dev->tableList['log']            = 'Log';
 
 $lang->dev->groupList['my']      = 'Dashboard';
 $lang->dev->groupList['product'] = $lang->productCommon;

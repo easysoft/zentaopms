@@ -43,6 +43,7 @@ $lang->product->doc      = '文档列表';
 $lang->product->project  = $lang->projectCommon . '列表';
 $lang->product->build    = '版本列表';
 
+$lang->product->currentProject   = '当前项目';
 $lang->product->activeStories    = '激活需求';
 $lang->product->changedStories   = '已变更需求';
 $lang->product->draftStories     = '草稿需求';
@@ -83,6 +84,7 @@ $lang->product->closedStory  = '已关闭';
 $lang->product->unclosed     = '未关闭';
 $lang->product->unplan       = '未计划';
 
+
 $lang->product->allStory    = '全部需求';
 $lang->product->allProduct  = '全部' . $lang->productCommon;
 $lang->product->allProductsOfProject = '全部关联' . $lang->productCommon;
@@ -112,12 +114,17 @@ $lang->product->storySummary   = "本页共 <strong>%s</strong> 个需求，预�
 $lang->product->checkedSummary = "选中 <strong>%total%</strong> 个需求，预计 <strong>%estimate%</strong> 个工时，用例覆盖率<strong>%rate%</strong>。";
 $lang->product->noMatched      = '找不到包含"%s"的' . $lang->productCommon;
 
+
+
+
+
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
 $lang->product->featureBar['browse']['unplan']       = $lang->product->unplan;
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
 $lang->product->featureBar['browse']['assignedtome'] = $lang->product->assignedToMe;
 $lang->product->featureBar['browse']['openedbyme']   = $lang->product->openedByMe;
 $lang->product->featureBar['browse']['reviewedbyme'] = $lang->product->reviewedByMe;
+
 $lang->product->featureBar['browse']['closedbyme']   = $lang->product->closedByMe;
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
 $lang->product->featureBar['browse']['activestory']  = $lang->product->activeStory;

@@ -172,7 +172,7 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
-            ->check('name', 'unique', "id != $releaseID AND product = {$release->product} AND branch = $branch AND deleted = '0'")
+            ->check('name', 'unique', "id != '$releaseID' AND product = '{$release->product}' AND branch = '$branch' AND deleted = '0'")
             ->where('id')->eq((int)$releaseID)
             ->exec();
         if(!dao::isError())

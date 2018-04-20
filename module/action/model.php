@@ -61,7 +61,7 @@ class actionModel extends model
 
         $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
 
-        $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID);
+        $this->loadModel('message')->send($objectType, $objectID, $actionType, $actionID);
 
         return $actionID;
     }
@@ -322,6 +322,22 @@ class actionModel extends model
                         $table = $action->objectType == 'story' ? TABLE_STORY : TABLE_BUG;
                         $name  = $this->dao->select('title')->from($table)->where('id')->eq($id)->fetch('title');
                         if($name) $action->appendLink = html::a(helper::createLink($action->objectType, 'view', "id=$id"), "#$id " . $name);
+                    }
+                }
+            }
+            elseif($actionName == 'finished' and $objectType == 'todo')
+            {
+                $action->appendLink = '';
+                if(strpos($action->extra, ':')!== false)
+                {
+                    list($extra, $id) = explode(':', $action->extra);
+                    $action->extra    = strtolower($extra);
+                    if($id)
+                    {
+                        $table = $this->config->objectTables[$action->extra];
+                        $field = $this->config->action->objectNameFields[$action->extra];
+                        $name  = $this->dao->select($field)->from($table)->where('id')->eq($id)->fetch($field);
+                        if($name) $action->appendLink = html::a(helper::createLink($action->extra, 'view', "id=$id"), "#$id " . $name);
                     }
                 }
             }
@@ -691,7 +707,7 @@ class actionModel extends model
             $objectIds   = array_unique($objectIds);
             $table       = $this->config->objectTables[$objectType];
             $field       = $this->config->action->objectNameFields[$objectType];
-            if($table != '`zt_todo`')
+            if($table != TABLE_TODO)
             {
                 $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIds)->fetchPairs();
             }

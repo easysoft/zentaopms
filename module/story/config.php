@@ -38,8 +38,8 @@ $config->story->list->exportFields      = '
     childStories, linkStories, duplicateStory, files';
 
 $config->story->list->customCreateFields      = 'source,verify,pri,estimate,mailto,keywords';
-$config->story->list->customBatchCreateFields = 'module,plan,spec,source,verify,pri,estimate,review,keywords';
-$config->story->list->customBatchEditFields   = 'branch,module,plan,estimate,pri,assignedTo,source,stage,closedBy,closedReason,keywords';
+$config->story->list->customBatchCreateFields = 'plan,spec,source,verify,pri,estimate,review,keywords';
+$config->story->list->customBatchEditFields   = 'branch,plan,estimate,pri,assignedTo,source,stage,closedBy,closedReason,keywords';
 
 $config->story->custom = new stdclass();
 $config->story->custom->createFields      = $config->story->list->customCreateFields;
@@ -91,12 +91,12 @@ $config->story->datatable->fieldList['sourceNote']['required'] = 'no';
 
 $config->story->datatable->fieldList['status']['title']    = 'statusAB';
 $config->story->datatable->fieldList['status']['fixed']    = 'no';
-$config->story->datatable->fieldList['status']['width']    = '50';
+$config->story->datatable->fieldList['status']['width']    = '60';
 $config->story->datatable->fieldList['status']['required'] = 'no';
 
 $config->story->datatable->fieldList['estimate']['title']    = 'estimateAB';
 $config->story->datatable->fieldList['estimate']['fixed']    = 'no';
-$config->story->datatable->fieldList['estimate']['width']    = '50';
+$config->story->datatable->fieldList['estimate']['width']    = '55';
 $config->story->datatable->fieldList['estimate']['required'] = 'no';
 
 $config->story->datatable->fieldList['stage']['title']    = 'stageAB';

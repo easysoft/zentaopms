@@ -11,7 +11,7 @@
  */
 $lang->report->common     = 'Report';
 $lang->report->index      = 'Home';
-$lang->report->list       = 'List';
+$lang->report->list       = 'Report List';
 $lang->report->item       = 'Item';
 $lang->report->value      = 'Value';
 $lang->report->percent    = '%';
@@ -31,6 +31,9 @@ $lang->report->colors[]   = '008ED6';
 $lang->report->colors[]   = '9D080D';
 $lang->report->colors[]   = 'A186BE';
 
+$lang->report->assign['noassign'] = 'Not assigned';
+$lang->report->assign['assign'] = 'Assigned';
+
 $lang->report->singleColor[] = 'F6BD0F';
 
 $lang->report->projectDeviation = $lang->projectCommon . ' Deviation';
@@ -39,27 +42,27 @@ $lang->report->bugCreate        = 'Bug Submission Report';
 $lang->report->bugAssign        = 'Bug Assignment Report';
 $lang->report->workload         = 'Workload';
 $lang->report->workloadAB       = 'Workload';
-$lang->report->bugOpenedDate    = 'Bug Opened From';
+$lang->report->bugOpenedDate    = 'Bug Created From';
 $lang->report->taskAssignedDate = 'From';
-$lang->report->beginAndEnd      = 'Date';
+$lang->report->beginAndEnd      = ' From';
 $lang->report->dept             = 'Dept';
 $lang->report->deviationChart   = $lang->projectCommon . ' Deviation Chart';
 
-$lang->reportList->project->lists[10] = $lang->projectCommon . ' deviation|report|projectdeviation';
-$lang->reportList->product->lists[10] = $lang->productCommon . ' summary|report|productsummary';
-$lang->reportList->test->lists[10]    = 'Bugs|report|bugcreate';
+$lang->reportList->project->lists[10] = $lang->projectCommon . ' Deviation|report|projectdeviation';
+$lang->reportList->product->lists[10] = $lang->productCommon . ' Summary|report|productsummary';
+$lang->reportList->test->lists[10]    = 'Bugs Creation|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bug Assignment|report|bugassign';
 $lang->reportList->staff->lists[10]   = 'Workload|report|workload';
 
 $lang->report->id            = 'ID';
 $lang->report->project       = $lang->projectCommon;
 $lang->report->product       = $lang->productCommon;
-$lang->report->user          = 'Username';
+$lang->report->user          = 'Name';
 $lang->report->bugTotal      = 'Bug';
 $lang->report->task          = 'Task';
-$lang->report->estimate      = 'Hour';
-$lang->report->consumed      = 'Consumed';
-$lang->report->remain        = 'Remained';
+$lang->report->estimate      = 'Est.(h)';
+$lang->report->consumed      = 'Cost';
+$lang->report->remain        = 'Left';
 $lang->report->deviation     = 'Deviation';
 $lang->report->deviationRate = 'Deviation Rate';
 $lang->report->total         = 'Total';
@@ -72,23 +75,28 @@ $lang->report->unplanned     = 'Unplanned';
 $lang->report->workday       = 'Hours/Day';
 $lang->report->diffDays      = 'Man-Day';
 
+$lang->report->typeList['']     = 'Default';
+$lang->report->typeList['pie']  = 'Pie';
+$lang->report->typeList['bar']  = 'Bar';
+$lang->report->typeList['line'] = 'Line';
+
 $lang->report->conditions    = 'Filter by:';
 $lang->report->closedProduct = 'Closed ' . $lang->productCommon;
-$lang->report->overduePlan   = 'Overdue Plan';
+$lang->report->overduePlan   = 'Expired Plan';
 
 /* daily reminder. */
 $lang->report->idAB  = 'ID';
 $lang->report->bugTitle     = 'Bug Title';
 $lang->report->taskName     = 'Task Name';
-$lang->report->todoName     = 'To-Do Name';
+$lang->report->todoName     = 'Todo Name';
 $lang->report->testTaskName = 'Test Task Name';
 $lang->report->deadline     = 'Deadline';
 
 $lang->report->mailTitle           = new stdclass();
 $lang->report->mailTitle->begin    = 'Notice: You have';
-$lang->report->mailTitle->bug      = " Bug(%s),";
-$lang->report->mailTitle->task     = " Task(%s),";
-$lang->report->mailTitle->todo     = " To-Do(%s),";
-$lang->report->mailTitle->testTask = " Test Task(%s),";
+$lang->report->mailTitle->bug      = " Bug (%s),";
+$lang->report->mailTitle->task     = " Task (%s),";
+$lang->report->mailTitle->todo     = " Todo (%s),";
+$lang->report->mailTitle->testTask = " Test Task (%s),";
 
 $lang->report->proVersion = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';

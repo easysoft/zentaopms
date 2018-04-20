@@ -17,7 +17,7 @@ $lang->productplan->edit       = "编辑计划";
 $lang->productplan->delete     = "删除计划";
 $lang->productplan->view       = "计划详情";
 $lang->productplan->bugSummary = "本页共 <strong>%s</strong> 个Bug";
-$lang->productplan->info  = '信息';
+$lang->productplan->info       = '信息';
 $lang->productplan->batchEdit  = '批量编辑';
 
 $lang->productplan->batchUnlink      = "批量移除";
@@ -46,14 +46,20 @@ $lang->productplan->desc    = '描述';
 $lang->productplan->begin   = '开始日期';
 $lang->productplan->end     = '结束日期';
 $lang->productplan->last    = '上次计划';
+$lang->productplan->future  = '待定';
+$lang->productplan->stories = '需求数';
+$lang->productplan->bugs    = 'Bug数';
+$lang->productplan->hour    = '工时';
+$lang->productplan->project = $lang->projectCommon;
 
-$lang->productplan->endList[7]   = '一星期';
-$lang->productplan->endList[14]  = '两星期';
-$lang->productplan->endList[31]  = '一个月';
-$lang->productplan->endList[62]  = '两个月';
-$lang->productplan->endList[93]  = '三个月';
-$lang->productplan->endList[186] = '半年';
-$lang->productplan->endList[365] = '一年';
+$lang->productplan->endList[7]    = '一星期';
+$lang->productplan->endList[14]   = '两星期';
+$lang->productplan->endList[31]   = '一个月';
+$lang->productplan->endList[62]   = '两个月';
+$lang->productplan->endList[93]   = '三个月';
+$lang->productplan->endList[186]  = '半年';
+$lang->productplan->endList[365]  = '一年';
+$lang->productplan->endList[9999] = '待定';
 
 $lang->productplan->errorNoTitle = 'ID %s 标题不能为空';
 $lang->productplan->errorNoBegin = 'ID %s 开始时间不能为空';

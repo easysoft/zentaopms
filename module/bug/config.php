@@ -267,7 +267,7 @@ $config->bug->datatable->fieldList['openedBuild']['fixed']    = 'no';
 $config->bug->datatable->fieldList['openedBuild']['width']    = '120';
 $config->bug->datatable->fieldList['openedBuild']['required'] = 'no';
 
-$config->bug->datatable->fieldList['assignedTo']['title']    = 'assignedTo';
+$config->bug->datatable->fieldList['assignedTo']['title']    = 'assignedToAB';
 $config->bug->datatable->fieldList['assignedTo']['fixed']    = 'no';
 $config->bug->datatable->fieldList['assignedTo']['width']    = '80';
 $config->bug->datatable->fieldList['assignedTo']['required'] = 'no';

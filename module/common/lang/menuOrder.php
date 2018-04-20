@@ -16,7 +16,7 @@ $lang->index->menuOrder[10] = 'project';
 /* my menu order. */
 $lang->my->menuOrder[5]  = 'account';
 $lang->my->menuOrder[10] = 'index';
-$lang->my->menuOrder[15] = 'todo';
+$lang->my->menuOrder[15] = 'calendar';
 $lang->my->menuOrder[20] = 'task';
 $lang->my->menuOrder[25] = 'bug';
 $lang->my->menuOrder[30] = 'testtask';
@@ -112,6 +112,7 @@ $lang->user->menuOrder        = $lang->company->menuOrder;
 $lang->admin->menuOrder[5]  = 'index';
 $lang->admin->menuOrder[10] = 'extension';
 $lang->admin->menuOrder[15] = 'custom';
+$lang->admin->menuOrder[19] = 'message';
 $lang->admin->menuOrder[20] = 'mail';
 $lang->admin->menuOrder[25] = 'custom';
 $lang->admin->menuOrder[30] = 'convert';

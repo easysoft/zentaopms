@@ -9,6 +9,7 @@ function changeParams(obj)
     var end = $('.main .row').find('#end').val();
     var workday = $('.main .row').find('#workday').val();
     var dept = $('.main .row').find('#dept').val();
+    var assign = $('.main .row').find('#assign').val();
     var days = diffDate(begin, end);
 
     $('#days').val(days);
@@ -17,23 +18,23 @@ function changeParams(obj)
     {
         var beginarray = begin.split("-");
         var begin = '';
-        for(i=0 ; i < beginarray.length ; i++) begin = begin + beginarray[i]; 
+        for(i = 0; i < beginarray.length; i++) begin = begin + beginarray[i];
     }
     if(end.indexOf('-') != -1)
     {
         var endarray = end.split("-");
         var end = '';
-        for(i=0 ; i < endarray.length ; i++) end = end + endarray[i]; 
+        for(i=0 ; i < endarray.length ; i++) end = end + endarray[i];
     }
 
-    link = createLink('report', 'workload', 'begin=' + begin + '&end=' + end + '&days=' + days + '&workday=' + workday + '&dept=' + dept);
+    var link = createLink('report', 'workload', 'begin=' + begin + '&end=' + end + '&days=' + days + '&workday=' + workday + '&dept=' + dept + '&assign=' + assign);
     location.href=link;
 }
 
 /**
  * Convert a date string to date object in js.
- * 
- * @param  string $date 
+ *
+ * @param  string $date
  * @access public
  * @return date
  */
@@ -45,9 +46,9 @@ function convertStringToDate(dateString)
 
 /**
  * Compute the diff days of two date.
- * 
- * @param  string $date1 
- * @param  string $date1 
+ *
+ * @param  string $date1
+ * @param  string $date1
  * @access public
  * @return int
  */
@@ -65,12 +66,12 @@ function diffDate(date1, date2)
         date1 += 1000 * 60 * 60 * 24;
         date1 = new Date(date1);
     }
-    return delta - weekEnds; 
+    return delta - weekEnds;
 }
 
 $(function()
 {
-    var options = 
+    var options =
     {
         language: config.clientLang,
         weekStart: 1,
@@ -85,4 +86,4 @@ $(function()
         startDate: new Date()
     };
     $('input#begin,input#end').fixedDate().datetimepicker(options);
-})
+});
