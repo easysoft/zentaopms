@@ -25,10 +25,10 @@
         </div>
         <div class="form-group">
           <label for="todoDate" class="col-sm-2"><?php echo $lang->todo->date?></label>
-          <div class="col-sm-9">
+          <div class="col-sm-9 required">
             <div class="input-control has-icon-right">
-              <input type="text" required class="form-control form-date" id="todoDate" name="date" placeholder="(<?php echo $lang->required;?>)">
-              <label class="input-control-icon-right"><i class="icon icon-delay"></i></label>
+              <input type="text" class="form-control form-date" id="todoDate" name="date" placeholder="(<?php echo $lang->required;?>)">
+              <label for='todoDate' class="input-control-icon-right"><i class="icon icon-delay"></i></label>
             </div>
           </div>
         </div>
@@ -47,8 +47,9 @@
         <div class="form-group">
           <div class="col-sm-2"></div>
           <div class="col-sm-10">
-            <div class="checkbox">
-              <label><input type="checkbox"> <?php echo $lang->todo->private?></label>
+            <div class="checkbox-primary">
+              <input type="checkbox" name="private" id="private" value="1"> 
+              <label for="private"><?php echo $lang->todo->private?></label>
             </div>
           </div>
         </div>
