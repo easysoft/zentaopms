@@ -72,7 +72,7 @@ class tree extends control
             $this->view->currentProduct = $currentProduct;
             $this->view->productModules = $this->tree->getOptionMenu($currentProduct, 'story');
 
-            $title      = $product->name . $this->lang->colon . $this->lang->tree->manageProduct;
+            $title      = $this->lang->tree->manageProduct;
             $position[] = html::a($this->createLink('product', 'browse', "product=$rootID"), $product->name);
             $position[] = $this->lang->tree->manageProduct;
         }
@@ -84,7 +84,7 @@ class tree extends control
             if($this->config->global->flow == 'onlyTest') $this->lang->set('menugroup.tree', 'bug');
             if($this->config->global->flow != 'onlyTest') $this->lang->set('menugroup.tree', 'qa');
 
-            $title      = $product->name . $this->lang->colon . $this->lang->tree->manageBug;
+            $title      = $this->lang->tree->manageBug;
             $position[] = html::a($this->createLink('bug', 'browse', "product=$rootID"), $product->name);
             $position[] = $this->lang->tree->manageBug;
         }
@@ -96,7 +96,7 @@ class tree extends control
             if($this->config->global->flow == 'onlyTest') $this->lang->set('menugroup.tree', 'testcase');
             if($this->config->global->flow != 'onlyTest') $this->lang->set('menugroup.tree', 'qa');
 
-            $title      = $product->name . $this->lang->colon . $this->lang->tree->manageCase;
+            $title      = $this->lang->tree->manageCase;
             $position[] = html::a($this->createLink('testcase', 'browse', "product=$rootID"), $product->name);
             $position[] = $this->lang->tree->manageCase;
         }
@@ -107,7 +107,7 @@ class tree extends control
             $this->lang->tree->menuOrder = $this->lang->testsuite->menuOrder;
             $this->lang->set('menugroup.tree', 'qa');
 
-            $title      = $lib->name . $this->lang->colon . $this->lang->tree->manageCaseLib;
+            $title      = $this->lang->tree->manageCaseLib;
             $position[] = html::a($this->createLink('testsuite', 'library', "libID=$rootID"), $lib->name);
             $position[] = $this->lang->tree->manageCaseLib;
         }
@@ -119,7 +119,7 @@ class tree extends control
             $this->lang->tree->menuOrder = $this->lang->doc->menuOrder;
             $this->lang->set('menugroup.tree', 'doc');
 
-            $title      = $lib->name . $this->lang->colon . $this->lang->tree->manageCustomDoc;
+            $title      = $this->lang->tree->manageCustomDoc;
             $position[] = html::a($this->createLink('doc', 'browse', "libID=$rootID"), $lib->name);
             $position[] = $this->lang->tree->manageCustomDoc;
         }
@@ -138,7 +138,7 @@ class tree extends control
             $this->view->currentProduct = $currentProduct;
             $this->view->productModules = $this->tree->getOptionMenu($currentProduct, 'line');
 
-            $title      = $this->lang->product->common . $this->lang->colon . $this->lang->tree->manageLine;
+            $title      = $this->lang->tree->manageLine;
             $position[] = $this->lang->tree->manageLine;
         }
 
