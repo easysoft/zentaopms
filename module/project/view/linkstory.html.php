@@ -11,20 +11,24 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
-<div id='titlebar'>
-  <div class='heading' style='margin-bottom: 15px'>
-    <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>
-    <strong><small><?php echo html::icon($lang->icons['link']);?></small> <?php echo $lang->project->linkStory;?></strong>
+<div id="mainMenu" class="clearfix">
+  <div class="btn-toolbar pull-left">
+    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->project->linkStory;?></span></span>
   </div>
-  <div class='actions'><?php echo html::a($this->server->http_referer, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i> ' . $lang->goback, '', "class='btn'")?></div>
-  <div id='querybox' class='show'></div>
+  <div class='btn-toolbar pull-right'><?php echo html::a($this->server->http_referer, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i> ' . $lang->goback, '', "class='btn btn-link'")?></div>
 </div>
-<form method='post' class='form-condensed' id='linkStoryForm'>
-  <table class='table tablesorter table-fixed table-selectable' id='linkStoryList'> 
+<div id="mainContent" class="main-content">
+  <div id='queryBox' class='show'></div>
+<form class='main-table table-story' method='post' data-ride='table' id='linkStoryForm'>
+  <table class='table table-fixed' id='linkStoryList'> 
     <thead>
     <tr>
-      <th class='w-id'><?php echo $lang->idAB;?></th>
+      <th class='c-id'>
+        <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
+          <label></label>
+        </div>
+        <?php echo $lang->idAB;?>
+      </th>
       <th class='w-pri'><?php echo $lang->priAB;?></th>
       <th class='w-150px'><?php echo $lang->story->product;?></th>
       <th class='w-150px'><?php echo $lang->story->module;?></th>
@@ -43,13 +47,16 @@
     <?php foreach($allStories as $story):?>
     <?php if(isset($prjStories[$story->id])) continue;?>
     <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id");?>
-    <tr class='text-center'>
-      <td class='cell-id'>
-        <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>'/> 
-        <?php echo html::hidden("products[$story->id]", $story->product);?>
-        <?php echo html::a($storyLink, sprintf('%03d', $story->id));?>
+    <tr>
+      <td class='c-id'>
+        <div class="checkbox-primary">
+          <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>'/> 
+          <label></label>
+          <?php echo html::hidden("products[$story->id]", $story->product);?>
+          <?php printf('%03d', $story->id);?>
+        </div>
       </td>
-      <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+      <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
       <td class='text-left' title='<?php echo $products[$story->product]->name?>'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name, '_blank');?></td>
       <td class='text-left' title='<?php echo zget($modules, $story->module, '')?>'><?php echo zget($modules, $story->module, '')?></td>
       <td class='text-left nobr' title="<?php echo $story->title?>"><?php echo html::a($storyLink, $story->title);?></td>
@@ -64,33 +71,23 @@
     <?php $storyCount ++;?>
     <?php endforeach;?>
     </tbody>
-    <tfoot>
-      <tr>
-        <td colspan='<?php echo $productType == 'normal' ? '8' :'9';?>' class='text-left'>
-          <div class='table-actions clearfix'>
-          <?php 
-          if($storyCount)
-          {
-              echo html::selectButton() . html::submitButton();
-          }
-          else
-          {
-              echo "<div class='text'>" . $lang->project->whyNoStories . '</div>';
-          }
-          ?>
-          </div>
-        </td>
-      </tr>
-    </tfoot>
   </table>
+  <div class='table-footer'>
+    <?php if($storyCount):?>
+    <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+    <div class='table-actions btn-toolbar'>
+      <?php echo html::submitButton();?>
+    </div>
+    <?php else:?>
+    <div class='text'><?php echo $lang->project->whyNoStories;?></div>
+    <?php endif;?>
+  </div>
 </form>
 
 <script type='text/javascript'>
 $(function()
 {
     ajaxGetSearchForm()
-    setTimeout(function(){fixedTheadOfList('#linkStoryList')}, 500);
-    setTimeout(function(){fixedTfootAction('#linkStoryForm')}, 500);
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>

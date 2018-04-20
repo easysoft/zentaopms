@@ -5,7 +5,7 @@ $(function()
 
     if($('#storyList thead th.w-title').width() < 150) $('#storyList thead th.w-title').width(150);
 
-    $(document).on('click',  "#storyList tbody tr", function(){showCheckedSummary();});
+    $(document).on('click',  "#storyList tbody tr, .table-footer .check-all, #storyList thead .check-all", function(){showCheckedSummary();});
     $(document).on('change', "#storyList :checkbox", function(){showCheckedSummary();});
     $(document).on('click',  "#datatable-storyList table tr", function(){showCheckedSummary();});
 })

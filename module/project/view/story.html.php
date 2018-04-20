@@ -133,11 +133,12 @@
                 <label></label>
                 <?php endif;?>
                 <?php printf('%03d', $story->id);?>
+              </div>
             </td>
             <?php if($canOrder):?>
             <td class='sort-handler'><i class='icon-move'></i></td>
             <?php endif;?>
-            <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+            <td><span class='label-pri <?php echo 'label-pri-' . $story->pri?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
             <td class='text-left' title="<?php echo $story->title?>">
               <?php if(isset($branchGroups[$story->product][$story->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$story->product][$story->branch] . '</span>';?>
               <?php echo html::a($storyLink,$story->title, null, "style='color: $story->color'");?>
