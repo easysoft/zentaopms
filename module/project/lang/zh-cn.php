@@ -11,7 +11,7 @@
  */
 /* 字段列表。*/
 $lang->project->common        = $lang->projectCommon . '视图';
-$lang->project->allProjects   = '全部';
+$lang->project->allProjects   = '所有' . $lang->projectCommon;
 $lang->project->type          = $lang->projectCommon . '类型';
 $lang->project->name          = $lang->projectCommon . '名称';
 $lang->project->code          = $lang->projectCommon . '代号';
@@ -22,6 +22,7 @@ $lang->project->to            = '至';
 $lang->project->days          = '可用工作日';
 $lang->project->day           = '天';
 $lang->project->workHour      = '工时';
+$lang->project->totalHours    = '可用工时';
 $lang->project->status        = $lang->projectCommon . '状态';
 $lang->project->desc          = $lang->projectCommon . '描述';
 $lang->project->owner         = '负责人';
@@ -29,6 +30,8 @@ $lang->project->PO            = $lang->productCommon . '负责人';
 $lang->project->PM            = $lang->projectCommon . '负责人';
 $lang->project->QD            = '测试负责人';
 $lang->project->RD            = '发布负责人';
+$lang->project->qa            = '测试';
+$lang->project->release       = '发布';
 $lang->project->acl           = '访问控制';
 $lang->project->teamname      = '团队名称';
 $lang->project->order         = $lang->projectCommon . '排序';
@@ -100,12 +103,13 @@ $lang->project->aclList['private'] = "私有{$lang->projectCommon}(只有{$lang-
 $lang->project->aclList['custom']  = "自定义白名单(团队成员和白名单的成员可以访问)";
 
 /* 方法列表。*/
-$lang->project->index             = "{$lang->projectCommon}首页";
+$lang->project->index             = "{$lang->projectCommon}主页";
 $lang->project->task              = '任务列表';
 $lang->project->groupTask         = '分组浏览任务';
 $lang->project->story             = '需求列表';
 $lang->project->bug               = 'Bug列表';
 $lang->project->dynamic           = '动态';
+$lang->project->latestDynamic     = '最新动态';
 $lang->project->build             = '版本列表';
 $lang->project->testtask          = '测试任务';
 $lang->project->burn              = '燃尽图';
@@ -141,6 +145,8 @@ $lang->project->tree              = '树状图';
 $lang->project->storyKanban       = '需求看板';
 $lang->project->storySort         = '需求排序';
 $lang->project->importPlanStory   = '创建' . $lang->projectCommon . '成功！\n是否导入计划关联的相关需求？';
+$lang->project->iteration         = '版本迭代';
+$lang->project->iterationInfo     = '迭代%s次';
 
 /* 分组浏览。*/
 $lang->project->allTasks     = '所有';
@@ -171,7 +177,7 @@ $lang->project->groupFilter['pri']['noset']         = '未设置';
 $lang->project->groupFilter['assignedTo']['undone'] = '未完成';
 $lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
 
-$lang->project->byQuery              = '搜索';
+$lang->project->byQuery = '搜索';
 
 /* 查询条件列表。*/
 $lang->project->allProject      = "所有{$lang->projectCommon}";
@@ -278,8 +284,8 @@ $lang->printKanban->taskStatus = '状态';
 $lang->printKanban->typeList['all']       = '全部';
 $lang->printKanban->typeList['increment'] = '增量';
 
-$lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;
 $lang->project->featureBar['task']['all']          = $lang->project->allTasks;
+$lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;
 $lang->project->featureBar['task']['assignedtome'] = $lang->project->assignedToMe;
 $lang->project->featureBar['task']['myinvolved']   = $lang->project->myInvolved;
 $lang->project->featureBar['task']['delayed']      = '已延期';

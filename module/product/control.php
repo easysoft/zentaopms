@@ -204,6 +204,7 @@ class product extends control
         $this->view->storyCases    = $storyCases;
         $this->view->param         = $param;
         $this->view->products      = $this->products;
+        $this->view->allCount      = $this->story->getCount($productID);
         $this->display();
     }
 
@@ -218,15 +219,12 @@ class product extends control
         if(!empty($_POST))
         {
             $productID = $this->product->create();
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('product', $productID, 'opened');
 
-            if(isset($this->config->global->flow) and $this->config->global->flow == 'onlyTest')
-            {
-                die(js::locate($this->createLink($this->moduleName, 'build', "productID=$productID"), 'parent'));
-            }
-
-            die(js::locate($this->createLink($this->moduleName, 'browse', "productID=$productID"), 'parent'));
+            $locate = $this->createLink($this->moduleName, 'browse', "productID=$productID");
+            if(isset($this->config->global->flow) and $this->config->global->flow == 'onlyTest') $locate = $this->createLink($this->moduleName, 'build', "productID=$productID");
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
         $this->product->setMenu($this->products, key($this->products));
@@ -255,7 +253,7 @@ class product extends control
         if(!empty($_POST))
         {
             $changes = $this->product->update($productID); 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($action == 'undelete')
             {
                 $this->loadModel('action');
@@ -268,7 +266,8 @@ class product extends control
                 $actionID = $this->loadModel('action')->create('product', $productID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate(inlink('view', "product=$productID"), 'parent'));
+
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "product=$productID")));
         }
 
         $this->product->setMenu($this->products, $productID);
@@ -389,9 +388,14 @@ class product extends control
     {
         $this->product->setMenu($this->products, $productID);
 
-        $product  = $this->product->getStatByID($productID);
+        $product = $this->product->getStatByID($productID);
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
+
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('product')->like("%,$productID,%")->orderBy('date_desc')->limit(6)->fetchAll();
+        if($actions) $this->loadModel('action')->transformActions($actions);
+
+        $releases = $this->dao->select('*')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->orderBy('date')->fetchAll();
 
         $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->view;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
@@ -401,6 +405,9 @@ class product extends control
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
+        $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
+        $this->view->actions    = $actions;
+        $this->view->releases   = $releases;
 
         $this->display();
     }
@@ -464,7 +471,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function dynamic($productID = 0, $type = 'today', $param = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function dynamic($productID = 0, $type = 'today', $param = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 50, $pageID = 1, $lastDate = '')
     {
         /* Save session. */
         $uri   = $this->app->getURI(true);
@@ -484,13 +491,15 @@ class product extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
-        /* Set the pager. */
+        /* Load pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Set the user and type. */
         $account = $type == 'account' ? $param : 'all';
         $period  = $type == 'account' ? 'all'  : $type;
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, $productID, $lastDate);
 
         /* The header and position. */
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
@@ -498,14 +507,15 @@ class product extends control
         $this->view->position[] = $this->lang->product->dynamic;
 
         /* Assign. */
-        $this->view->productID = $productID;
-        $this->view->type      = $type;
-        $this->view->users     = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $this->view->account   = $account;
-        $this->view->orderBy   = $orderBy;
-        $this->view->pager     = $pager;
-        $this->view->param     = $param;
-        $this->view->actions   = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, $productID);
+        $this->view->productID  = $productID;
+        $this->view->type       = $type;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->account    = $account;
+        $this->view->orderBy    = $orderBy;
+        $this->view->param      = $param;
+        $this->view->pager      = $pager;
+        $this->view->dateGroups = $this->action->buildDateGroup($actions);
+        $this->view->allCount   = $this->action->getCount('product', $productID);
         $this->display();
     }
 

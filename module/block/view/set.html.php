@@ -11,7 +11,7 @@
  */
 ?>
 <?php
-if(!empty($params))
+if($type != 'html')
 {
     include 'setmodule.html.php';
     die();

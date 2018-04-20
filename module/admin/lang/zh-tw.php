@@ -21,11 +21,10 @@ $lang->admin->ztCompany     = '認證公司';
 $lang->admin->captcha       = '驗證碼';
 $lang->admin->getCaptcha    = '獲取驗證碼';
 
-$lang->admin->api           = '介面';
-$lang->admin->log           = '日誌';
-$lang->admin->setting       = '設置';
-$lang->admin->days          = '日誌保存天數';
-$lang->admin->saveSuccess   = '保存成功';
+$lang->admin->api     = '介面';
+$lang->admin->log     = '日誌';
+$lang->admin->setting = '設置';
+$lang->admin->days    = '日誌保存天數';
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = '當前系統的版本是%s，';

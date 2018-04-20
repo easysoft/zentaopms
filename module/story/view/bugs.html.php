@@ -1,12 +1,12 @@
 <?php include '../../common/view/header.lite.html.php';?>
-<div id='titlebar'>
-  <div class='heading'>
-    <span><?php echo html::icon($lang->icons['report']);?></span>
-    <small class='text-muted'> <?php echo $lang->story->bugs;?></small>
+<div id='mainContent' class='main-content'>
+  <div class='main-header'>
+    <h2>
+      <span><?php echo html::icon($lang->icons['report']);?></span>
+      <?php echo $lang->story->bugs;?>
+    </h2>
   </div>
-</div>
-<div class='bugsList'>
-  <form class='form-condensed' target='hiddenwin'>
+  <div class='bugsList'>
     <table class='table table-fixed'>
       <thead>
         <tr class='text-center'>
@@ -35,6 +35,6 @@
         <?php endforeach;?>
       </tbody>
     </table>
-  </form>
+  </div>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>

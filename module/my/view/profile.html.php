@@ -11,9 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='container mw-600px'>
-  <div id='titlebar'>
-    <div class='heading'><?php echo html::icon($lang->icons['user']);?> <?php echo $lang->my->profile;?></div>
+<div id='mainContent' class='main-content'>
+  <div class='main-header'>
+    <h2><?php echo html::icon($lang->icons['user']);?> <?php echo $lang->my->profile;?></h2>
     <div class='actions'>
       <?php echo html::a($this->createLink('my', 'editprofile'), $lang->user->editProfile, '', "class='btn btn-primary'");?>
     </div>
@@ -64,7 +64,7 @@
     </tr>
     <tr>
       <th><?php echo $lang->user->join;?></th>
-      <td><?php echo $user->join;?></td>
+      <td><?php echo formatTime($user->join);?></td>
     </tr>
     <tr>
       <th><?php echo $lang->user->visits;?></th>

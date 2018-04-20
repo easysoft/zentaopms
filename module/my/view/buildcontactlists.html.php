@@ -18,8 +18,8 @@ if($contactLists)
 else
 {
     echo '<span class="input-group-btn">';
-    echo '<a data-toggle="tooltip" title="' . $lang->user->contacts->manage . '" href="' . $this->createLink('my', 'managecontacts', "listID=0&mode=new", '', true) . "\" target='_blank' data-icon='cog' data-title='{$lang->user->contacts->manage}' class='btn iframe'><i class='icon icon-cog'></i></a>";
-    echo '<a data-toggle="tooltip" title="' . $lang->refresh . '" href="###" class="btn" onclick="ajaxGetContacts(this)"><i class="icon icon-refresh"></i></a>';
+    echo '<a title="' . $lang->user->contacts->manage . '" href="' . $this->createLink('my', 'managecontacts', "listID=0&mode=new", '', true) . "\" target='_blank' data-icon='cog' data-title='{$lang->user->contacts->manage}' class='btn btn-icon iframe'><i class='icon icon-cog'></i></a>";
+    echo '<button type="button" title="' . $lang->refresh . '" class="btn btn-icon" onclick="ajaxGetContacts(this)"><i class="icon icon-refresh"></i></button>';
     echo '</span>';
 }
 ?>

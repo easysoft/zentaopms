@@ -9,3 +9,5 @@
 .table-children.table-child-top{border-top:2px solid #ccc;}
 .table-children.table-child-bottom{border-bottom:2px solid #ccc;}
 .table-striped>tbody>tr.table-children:nth-child(odd)>td, .table-striped>tbody>tr.table-children:nth-child(odd)>th{background-color:#fff;}
+
+.chosen-container-single .chosen-single > span{max-width:200px;}

@@ -1,3 +1,4 @@
 #featurebar ul.nav li .chosen-container a.chosen-single{background:#F8FAFE; border:none; -webkit-box-shadow:none;box-shadow:none; padding-top:5px;}
 #featurebar ul.nav li .chosen-container .chosen-drop {min-width: 200px;!important}
 #dept_chosen.chosen-container .chosen-drop {min-width: 400px;!important}
+.w-verifyPassword {width: 120px !important;}

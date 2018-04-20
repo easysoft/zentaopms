@@ -79,6 +79,7 @@ class company extends control
         $this->view->searchForm  = $this->fetch('search', 'buildForm', $this->config->company->browse->search);
         $this->view->deptTree    = $this->dept->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createMemberLink'));
         $this->view->parentDepts = $this->dept->getParents($deptID);
+        $this->view->dept        = $this->dept->getById($deptID);
         $this->view->orderBy     = $orderBy;
         $this->view->deptID      = $deptID;
         $this->view->pager       = $pager;

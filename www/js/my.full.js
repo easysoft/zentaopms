@@ -97,8 +97,8 @@ function shortcut()
  */
 function showSearchMenu(objectType, objectID, module, method, extra)
 {
-    var $toggle = $(objectType == 'branch' ? '#currentBranch' : (objectType == 'tree' ? '#currentModule' : '#currentItem')).closest('li').toggleClass('show');
-    if(!$toggle.hasClass('show')) return;
+    var $toggle = $(objectType == 'branch' ? '#currentBranch' : (objectType == 'tree' ? '#currentModule' : '#currentItem')).closest('.btn-group').toggleClass('open');
+    if(!$toggle.hasClass('open')) return;
     var $menu = $toggle.find('#dropMenu');
     var uuid  = $.zui.uuid();
     if(!$.cookie('ajax_quickJump'))
@@ -106,108 +106,13 @@ function showSearchMenu(objectType, objectID, module, method, extra)
         $.cookie('ajax_quickJump', 'on', {expires: config.cookieLife, path: config.webRoot});
         $.get(createLink('score', 'ajax', "method=quickJump"));
     }
+
     if(!$menu.data('initData'))
     {
         var remoteUrl = createLink(objectType, 'ajaxGetDropMenu', "objectID=" + objectID + "&module=" + module + "&method=" + method + "&extra=" + extra);
-        $.get(remoteUrl, function(data)
-        {
-            var $search = $menu.html(data).find('#search').focus();
-            var $items  = $menu.find('#searchResult ul > li:not(.heading)');
-            var items   = [];
-            $items.each(function()
-            {
-                var $item = $(this).removeClass('active');
-                var item  = $item.data();
-
-                item.uuid = 'searchItem-' + (uuid++);
-                item.key  = (item.key || '') + $item.text();
-                item.tag  = (item.tag || '') + '#' + item.id;
-                $item.attr('id', item.uuid);
-                items.push(item);
-            });
-
-            var searchItems = function()
-            {
-                var searchText = $.trim($search.val());
-                if(searchText !== null && searchText.length)
-                {
-                    $items.removeClass('show-search');
-                    $menu.addClass('searching');
-                    var isTag = searchText.length > 1 && (searchText[0] === ':' || searchText[0] === '@' || searchText[0] === '#');
-                    $.each(items, function(idx, item)
-                    {
-                        if((isTag && item.tag.indexOf(searchText) > -1) || item.key.indexOf(searchText) > -1)
-                        {
-                            $('#' + item.uuid).addClass('show-search');
-                        }
-                    });
-                    var $resultItems = $items.filter('.show-search');
-                    if(!$resultItems.filter('.active').length)
-                    {
-                        $resultItems.first().addClass('active');
-                    }
-                }
-                else
-                {
-                    $menu.removeClass('searching');
-                }
-            };
-            var searchCallTask = null;
-            $search.on('change keyup paste input propertychange', function()
-            {
-                clearTimeout(searchCallTask);
-                searchCallTask = setTimeout(searchItems, 200);
-            }).on('keydown', function(e)
-            {
-                var code         = e.which;
-                var isSearching  = $menu.hasClass('searching');
-                var $resultItems = isSearching ? $items.filter('.show-search') : $items;
-                var resultLength = $resultItems.length;
-                if(!resultLength) return;
-                var $this = $resultItems.filter('.active:first');
-                var getIndex = function()
-                {
-                    var thisIdx = -1;
-                    $resultItems.each(function(idx)
-                    {
-                        if($(this).is($this))
-                        {
-                            thisIdx = idx;
-                            return false;
-                        }
-                    });
-                    return thisIdx;
-                };
-                if(code === 38) // up
-                {
-                    $items.removeClass('active');
-                    if($this.length) $resultItems.eq((getIndex() - 1)%resultLength).addClass('active');
-                    else $resultItems.last().addClass('active');
-                }
-                else if(code === 40) // down
-                {
-                    $items.removeClass('active');
-                    if($this.length) $resultItems.eq((getIndex() + 1)%resultLength).addClass('active');
-                    else $resultItems.first().addClass('active');
-                }
-                else if(code === 13) // enter
-                {
-                    if($this.length) window.location.href = $this.children('a').attr('href');
-                }
-            });
-            $menu.on('mouseenter', ' ul > li:not(.heading)', function()
-            {
-                $items.filter('.active').removeClass('active');
-                $(this).addClass('active');
-            });
-        });
+        $.get(remoteUrl, function(data){ $menu.html(data); });
         $menu.data('initData', true);
-        $(document).on('click', function(){$toggle.removeClass('show');});
         $toggle.on('click', function(e){e.stopPropagation();});
-    }
-    else
-    {
-        $menu.find('#search').focus();
     }
 }
 
@@ -781,28 +686,28 @@ function toggleSearch()
         {
             if(browseType == 'bymodule')
             {
-                $('#bymoduleTab').removeClass('active');
+                $('#bymoduleTab').removeClass('btn-active-text');
             }
             else
             {
-                $('#' + browseType + 'Tab').removeClass('active');
+                $('#' + browseType + 'Tab').removeClass('btn-active-text');
             }
-            $('#bysearchTab').addClass('active');
+            $('#bysearchTab').addClass('btn-active-text');
             ajaxGetSearchForm();
-            $('#querybox').addClass('show');
+            $('#queryBox').addClass('show');
         },
         function()
         {
             if(browseType == 'bymodule')
             {
-                $('#bymoduleTab').addClass('active');
+                $('#bymoduleTab').addClass('btn-active-text');
             }
             else
             {
-                $('#' + browseType +'Tab').addClass('active');
+                $('#' + browseType +'Tab').addClass('btn-active-text');
             }
-            $('#bysearchTab').removeClass('active');
-            $('#querybox').removeClass('show');
+            $('#bysearchTab').removeClass('btn-active-text');
+            $('#queryBox').removeClass('show');
         } 
     );
 }
@@ -815,12 +720,13 @@ function toggleSearch()
  */
 function ajaxGetSearchForm(querybox)
 {
-    var $querybox = $(querybox || '#querybox');
+    var $querybox = $(querybox || '#queryBox');
     if($querybox.html() == '')
     {
         $.get(createLink('search', 'buildForm'), function(data)
         {
             $querybox.html(data);
+            $querybox.addClass('show');
         });
     }
 }
@@ -1171,7 +1077,7 @@ function setModal()
             var frame$ = window.frames[options.name].$;
             frame$(function()
             {
-                if(frame$('#titlebar').length)
+                if(frame$('#titlebar').length || frame$('.main-header').length || frame$('.modal-header').length || frame$('#mainMenu').length)
                 {
                     modal.addClass('with-titlebar');
                     if(options.size == 'fullscreen')

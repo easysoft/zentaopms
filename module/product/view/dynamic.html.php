@@ -11,47 +11,53 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='featurebar'>
-  <nav class='nav'>
-  <?php 
-  echo '<li id="today">'      . html::a(inlink('dynamic', "productID=$productID&type=today"),      $lang->action->dynamic->today)      . '</li>';
-  echo '<li id="yesterday">'  . html::a(inlink('dynamic', "productID=$productID&type=yesterday"),  $lang->action->dynamic->yesterday)  . '</li>';
-  echo '<li id="twodaysago">' . html::a(inlink('dynamic', "productID=$productID&type=twodaysago"), $lang->action->dynamic->twoDaysAgo) . '</li>';
-  echo '<li id="thisweek">'   . html::a(inlink('dynamic', "productID=$productID&type=thisweek"),   $lang->action->dynamic->thisWeek)   . '</li>';
-  echo '<li id="lastweek">'   . html::a(inlink('dynamic', "productID=$productID&type=lastweek"),   $lang->action->dynamic->lastWeek)   . '</li>';
-  echo '<li id="thismonth">'  . html::a(inlink('dynamic', "productID=$productID&type=thismonth"),  $lang->action->dynamic->thisMonth)  . '</li>';
-  echo '<li id="lastmonth">'  . html::a(inlink('dynamic', "productID=$productID&type=lastmonth"),  $lang->action->dynamic->lastMonth)  . '</li>';
-  echo '<li id="all">'        . html::a(inlink('dynamic', "productID=$productID&type=all"),        $lang->action->dynamic->all)        . '</li>';
-  echo "<li id='account' class='w-150px'>" . html::select('account', $users, $account, "onchange='changeUser(this.value,$productID)' class='form-control chosen'") . '</li>';
-  ?>
-  </nav>
+<div id="mainMenu" class="clearfix">
+  <div class="btn-toolbar pull-left">
+    <?php
+    echo html::a(inlink('dynamic', "productID=$productID&type=all"),       "<span class='text'>{$lang->action->dynamic->all}</span> <span class='label label-light label-badge'>{$allCount}</span>", '', "class='btn btn-link " . ($type == 'all' ? 'btn-active-text' : '') . "'");
+    echo html::a(inlink('dynamic', "productID=$productID&type=today"),     "<span class='text'>{$lang->action->dynamic->today}</span>",     '', "class='btn btn-link " . ($type == 'today'     ? 'btn-active-text' : '') . "'");
+    echo html::a(inlink('dynamic', "productID=$productID&type=yesterday"), "<span class='text'>{$lang->action->dynamic->yesterday}</span>", '', "class='btn btn-link " . ($type == 'yesterday' ? 'btn-active-text' : '') . "'");
+    echo html::a(inlink('dynamic', "productID=$productID&type=thisweek"),  "<span class='text'>{$lang->action->dynamic->thisWeek}</span>",  '', "class='btn btn-link " . ($type == 'thisweek'  ? 'btn-active-text' : '') . "'");
+    echo html::a(inlink('dynamic', "productID=$productID&type=lastweek"),  "<span class='text'>{$lang->action->dynamic->lastWeek}</span>",  '', "class='btn btn-link " . ($type == 'lastweek'  ? 'btn-active-text' : '') . "'");
+    echo html::a(inlink('dynamic', "productID=$productID&type=thismonth"), "<span class='text'>{$lang->action->dynamic->thisMonth}</span>", '', "class='btn btn-link " . ($type == 'thismonth' ? 'btn-active-text' : '') . "'");
+    echo html::a(inlink('dynamic', "productID=$productID&type=lastmonth"), "<span class='text'>{$lang->action->dynamic->lastMonth}</span>", '', "class='btn btn-link " . ($type == 'lastmonth' ? 'btn-active-text' : '') . "'");
+    ?>
+    <div class="input-control space w-150px">
+      <?php echo html::select('account', $users, $account, "onchange='changeUser(this.value,$productID)' class='form-control chosen'");?>
+    </div>
+  </div>
 </div>
-
-<table class='table with-border'>
-  <thead>
-    <tr class='colhead'>
-      <?php $vars = "productID={$productID}&type=$type&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-      <th class='w-100px'><?php common::printOrderLink('date',       $orderBy, $vars, $lang->action->date);?></th>
-      <th class='w-80px'> <?php common::printOrderLink('actor',      $orderBy, $vars, $lang->action->actor);?></th>
-      <th class='w-100px'><?php common::printOrderLink('action',     $orderBy, $vars, $lang->action->action);?></th>
-      <th class='w-110px'> <?php common::printOrderLink('objectType', $orderBy, $vars, $lang->action->objectType);?></th>
-      <th class='w-id'>   <?php common::printOrderLink('objectID',   $orderBy, $vars, $lang->idAB);?></th>
-      <th><?php echo $lang->action->objectName;?></th>
-    </tr>
-  </thead>
-  <tbody>
-  <?php foreach($actions as $action):?>
-  <tr class='text-center'>
-    <td><?php echo $action->date;?></td>
-    <td><?php isset($users[$action->actor]) ? print($users[$action->actor]) : print($action->actor);?></td>
-    <td><?php echo $action->actionLabel;?></td>
-    <td><?php echo $lang->action->objectTypes[$action->objectType];?></td>
-    <td><?php echo $action->objectID;?></td>
-    <td class='text-left'><?php echo html::a($action->objectLink, $action->objectName);?></td>
-  </tr>
-  <?php endforeach;?>
-  </tbody>
-  <tfoot><tr><td colspan='6'><?php $pager->show();?></td></tr></tfoot>
-</table>
-<script>$('#<?php echo $type;?>').addClass('active')</script>
+<div id="mainContent" class="main-content">
+  <div id="dynamics">
+    <?php foreach($dateGroups as $date => $actions):?>
+    <?php $isToday = date(DT_DATE4) == $date;?>
+    <div class="dynamic <?php if($isToday) echo 'active';?>">
+      <div class="dynamic-date">
+        <?php if($isToday):?>
+        <span class="date-label"><?php echo $lang->action->dynamic->today;?></span>
+        <?php endif;?>
+        <span class="date-text"><?php echo $date;?></span>
+        <button type="button" class="btn btn-info btn-icon btn-sm dynamic-btn"><i class="icon icon-caret-up"></i></button>
+      </div>
+      <ul class="timeline timeline-tag-left">
+        <?php foreach($actions as $i => $action):?>
+        <li <?php if($action->actor == $this->app->user->account) echo "class='active'";?>><div><span class="timeline-tag"><?php echo $action->time?></span><span class="timeline-text"><?php echo $app->user->realname . ' ' . $action->actionLabel;?> <span class="text-muted"><?php echo $action->objectLabel;?></span> <span class="label label-id"><?php echo $action->objectID;?></span> <?php echo html::a($action->objectLink, $action->objectName);?></span></div></li>
+        <?php endforeach;?>
+      </ul>
+    </div>
+    <?php endforeach;?>
+  </div>
+  <?php if($pager->recTotal > $pager->recPerPage):?>
+  <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+  <?php endif;?>
+</div>
+<script>
+$(function()
+{
+    $('#dynamics').on('click', '.dynamic-btn', function()
+    {
+        $(this).closest('.dynamic').toggleClass('collapsed');
+    });
+})
+</script>
 <?php include '../../common/view/footer.html.php';?>

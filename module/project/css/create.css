@@ -1,6 +1,4 @@
 #tipsModal {margin-top: 10%;}
-#begin + .input-group-addon {border-left: none; border-right: none;}
-#begin,#end {max-width: 150px; width: auto}
 
 #copyProjectModal {padding: 0}
 #copyProjectModal {padding: 0 2px}
@@ -16,4 +14,4 @@
 
 .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {margin-top: 1px;}
 
-.type-tips {display: none; margin: 5px 0; color: #545454;}
+.type-tips {display: none;}

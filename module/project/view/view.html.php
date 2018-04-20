@@ -11,15 +11,192 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['project']);?> <strong><?php echo $project->id;?></strong></span>
-    <strong><?php echo $project->name;?></strong>
-    <?php if($project->deleted):?>
-    <span class='label label-danger'><?php echo $lang->project->deleted;?></span>
-    <?php endif; ?>
+  <div class="main-row">
+    <div class="col-8 main-col">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="panel block-release">
+            <div class="panel-heading">
+              <div class="panel-title"><?php echo $lang->project->iteration;?> <span class="label label-badge label-light"><?php echo sprintf($lang->project->iterationInfo, count($builds));?></span></div>
+            </div>
+            <div class="panel-body">
+              <div class="release-path">
+                <ul class="release-line">
+                  <?php foreach($builds as $build):?>
+                  <?php $icon = !empty($build->flag) ? "<i class='icon icon-flag'></i>" : '';?>
+                  <li class="<?php echo end($build)->id == $build->id ? 'active' : '';?>">
+                    <a href="<?php echo $this->createLink('build', 'view', "buildID={$build->id}");?>">
+                      <span class="title"><?php echo $build->name;?></span>
+                      <span class="date"><?php echo $build->date;?></span>
+                      <span class="info"><?php echo $build->desc;?></span>
+                    </a>
+                  </li>
+                  <?php endforeach;?>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="panel block-dynamic">
+            <div class="panel-heading">
+              <div class="panel-title"><?php echo $lang->project->latestDynamic;?></div>
+              <nav class="panel-actions nav nav-default">
+                <li><a href="<?php echo $this->createLink('project', 'dynamic', "projectID=$project->id&type=all")?>" title="<?php echo $lang->more;?>">MORE</i></a></li>
+              </nav>
+            </div>
+            <div class="panel-body">
+              <ul class="timeline timeline-tag-left">
+                <?php foreach($actions as $action):?>
+                <li <?php if($action->actor == $this->app->user->account) echo "class='active'";?>>
+                  <div>
+                    <span class="timeline-tag"><?php echo $action->date;?></span>
+                    <span class="timeline-text"><?php echo zget($users, $action->actor) . ' ' . $action->actionLabel . $action->objectLabel . ' ' . html::a($action->objectLink, $action->objectName);?></span>
+                  </div>
+                </li>
+                <?php endforeach;?>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <?php $blockHistory = true;?>
+          <?php include '../../common/view/action.html.php';?>
+        </div>
+      </div>
+    </div>
+    <div class="col-4 side-col">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="cell">
+            <div class="detail">
+              <h2 class="detail-title"><span class="label-id"><?php echo $project->id;?></span> <span class="label label-light label-outline"><?php echo $project->code;?></span> <?php echo $project->name;?></h2>
+              <div class="detail-content article-content">
+                <p><span class="text-limit" data-limit-size="40"><?php echo $project->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></p>
+                <p>
+                  <?php if($project->deleted):?>
+                  <span class='label label-danger label-outline'><?php echo $lang->project->deleted;?></span>
+                  <?php endif; ?>
+                  <span class="label label-primary label-outline"><?php echo zget($lang->project->typeList, $project->type);?></span>
+                  <?php if(isset($project->delay)):?>
+                  <span class="label label-danger label-outline"><?php echo $lang->project->delayed;?></span>
+                  <?php else:?>
+                  <span class="label label-success label-outline"><?php echo zget($lang->project->statusList, $project->status);?></span>
+                  <?php endif;?>
+                </p>
+              </div>
+            </div>
+            <div class='detail'>
+              <div class='detail-title'><strong><?php echo $lang->project->lblStats;?></strong></div>
+              <div class="detail-content">
+                <table class='table table-data data-stats'>
+                  <tbody>
+                    <tr>
+                      <th><?php echo $lang->project->totalHours;?></th>
+                      <td><em><?php echo $project->totalHours;?></em></td>
+                      <th><?php echo $lang->project->totalEstimate;?></th>
+                      <td><em><?php echo $project->totalEstimate;?></em></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->project->totalConsumed;?></th>
+                      <td><em><?php echo $project->totalConsumed;?></em></td>
+                      <th><?php echo $lang->project->totalLeft;?></th>
+                      <td><em><?php echo $project->totalLeft;?></em></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <?php if($this->config->global->flow != 'onlyTask'):?>
+            <div class="detail">
+              <div class="detail-title"><strong><?php echo $lang->project->owner;?></strong></div>
+              <div class="detail-content">
+                <table class="table table-data">
+                  <tbody>
+                    <tr>
+                      <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->projectCommon;?></th>
+                      <td><em><?php echo zget($users, $project->PM);?></em></td>
+                      <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->productCommon;?></th>
+                      <td><em><?php echo zget($users, $project->PO);?></em></td>
+                    </tr>
+                    <tr>
+                      <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->project->qa;?></th>
+                      <td><em><?php echo zget($users, $project->QD);?></em></td>
+                      <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->project->release;?></th>
+                      <td><em><?php echo zget($users, $project->RD);?></em></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <?php endif;?>
+            <div class="detail">
+              <div class="detail-title"><strong><?php echo $lang->project->basicInfo;?></strong></div>
+              <div class="detail-content">
+                <table class="table table-data data-basic">
+                  <tbody>
+                    <tr>
+                      <th><?php echo $lang->project->beginAndEnd;?></th>
+                      <td><em><?php echo $project->begin . ' ~ ' . $project->end;?></em></td>
+                    <tr>
+                      <th><?php echo $lang->project->days;?></th>
+                      <td><em><?php echo $project->days;?></em></td>
+                    </tr>
+                    <?php if($this->config->global->flow != 'onlyTask'):?>
+                    <tr>
+                      <th><?php echo $lang->project->products;?></th>
+                      <td>
+                        <em>
+                          <?php 
+                          foreach($products as $productID => $product) 
+                          {
+                              if($product->type !== 'normal')
+                              {
+                                  $branchName = isset($branchGroups[$productID][$product->branch]) ? '/' . $branchGroups[$productID][$product->branch] : '';
+                                  echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$product->branch"), $product->name . $branchName);
+                              }
+                              else
+                              {
+                                  echo html::a($this->createLink('product', 'browse', "productID=$productID"), $product->name);
+                              }
+                              echo '<br />';
+                          }
+                          ?>
+                        </em> 
+                      </td>
+                    </tr>
+                    <?php endif;?>
+                    <tr>
+                      <th><?php echo $lang->project->acl;?></th>
+                      <td><em><?php echo $lang->project->aclList[$project->acl];?></em></td>
+                    </tr>  
+                    <?php if($project->acl == 'custom'):?>
+                    <tr>
+                      <th><?php echo $lang->project->whitelist;?></th>
+                      <td>
+                        <em>
+                        <?php
+                        $whitelist = explode(',', $project->whitelist);
+                        foreach($whitelist as $groupID) if(isset($groups[$groupID])) echo $groups[$groupID] . '&nbsp;';
+                        ?>
+                        </em>
+                      </td>
+                    </tr>  
+                    <?php endif;?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class='actions'>
+</div>
+
+<div id="mainActions">
+  <nav class="container"></nav>
+  <div class="btn-toolbar">
     <?php
     $params = "project=$project->id";
     $browseLink = $this->session->projectList ? $this->session->projectList : inlink('browse', "projectID=$project->id");
@@ -50,113 +227,4 @@
     }
     ?>
   </div>
-</div>
-<div class='row-table'>
-  <div class='col-main'>
-    <div class='main'>
-      <fieldset>
-        <legend><?php echo $lang->project->desc;?></legend>
-        <div class='content'>
-          <?php echo $project->desc;?>
-          <div>
-            <label><?php echo $lang->project->lblStats?></label>
-            <?php printf($lang->project->stats, $project->totalHours, $project->totalEstimate, $project->totalConsumed, $project->totalLeft, 10)?>
-          </div>
-        </div>
-      </fieldset>
-      <?php include '../../common/view/action.html.php';?>
-      <div class='actions'> <?php if(!$project->deleted) echo $actionLinks;?></div>
-    </div>
-  </div>
-  <div class='col-side'>
-    <div class='main main-side'>
-      <fieldset>
-        <legend><?php echo $lang->project->basicInfo?></legend>
-        <table class='table table-data table-condensed table-borderless'>
-          <tr>
-            <th class='w-110px text-right strong'><?php echo $lang->project->name;?></th>
-            <td><?php echo $project->name;?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->project->code;?></th>
-            <td><?php echo $project->code;?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->project->beginAndEnd;?></th>
-            <td><?php echo $project->begin . ' ~ ' . $project->end;?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->project->days;?></th>
-            <td><?php echo $project->days;?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->project->type;?></th>
-            <td><?php echo $lang->project->typeList[$project->type];?></td>
-          </tr>
-          <tr> 
-            <th><?php echo $lang->project->status;?></th>
-            <?php if(isset($project->delay)):?>
-            <td class='delay'><?php echo $lang->project->delayed;?></td>
-            <?php else:?>
-            <td class='<?php echo $project->status;?>'><?php $lang->show($lang->project->statusList, $project->status);?></td>
-            <?php endif;?>
-          </tr>
-          <tr>
-            <th><?php echo $lang->project->PM;?></th>
-            <td><?php echo zget($users, $project->PM, $project->PM);?></td>
-          </tr>
-          <?php if($this->config->global->flow != 'onlyTask'):?>
-          <tr>
-            <th><?php echo $lang->project->PO;?></th>
-            <td><?php echo zget($users, $project->PO, $project->PO);?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->project->QD;?></th>
-            <td><?php echo zget($users, $project->QD, $project->QD);?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->project->RD;?></th>
-            <td><?php echo zget($users, $project->RD, $project->RD);?></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->project->products;?></th>
-            <td>
-            <?php 
-            foreach($products as $productID => $product) 
-            {
-                if($product->type !== 'normal')
-                {
-                    $branchName = isset($branchGroups[$productID][$product->branch]) ? '/' . $branchGroups[$productID][$product->branch] : '';
-                    echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$product->branch"), $product->name . $branchName);
-                }
-                else
-                {
-                    echo html::a($this->createLink('product', 'browse', "productID=$productID"), $product->name);
-                }
-                echo '<br />';
-            }
-            ?>
-            </td>
-          </tr>
-          <?php endif;?>
-          <tr>
-            <th><?php echo $lang->project->acl;?></th>
-            <td><?php echo $lang->project->aclList[$project->acl];?></td>
-          </tr>  
-          <?php if($project->acl == 'custom'):?>
-          <tr>
-            <th><?php echo $lang->project->whitelist;?></th>
-            <td>
-              <?php
-              $whitelist = explode(',', $project->whitelist);
-              foreach($whitelist as $groupID) if(isset($groups[$groupID])) echo $groups[$groupID] . '&nbsp;';
-              ?>
-            </td>
-          </tr>  
-          <?php endif;?>
-        </table>
-      </fieldset>
-    </div>
-  </div>
-</div>
 <?php include '../../common/view/footer.html.php';?>

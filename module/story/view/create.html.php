@@ -13,185 +13,175 @@
 <?php include './header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <?php js::set('holders', $lang->story->placeholder); ?>
-<div class='container mw-1400px'>
-  <div id='titlebar'>
-    <div class='heading'>
-      <span class='prefix'><?php echo html::icon($lang->icons['story']);?></span>
-      <strong><small class='text-muted'><?php echo html::icon($lang->icons['create']);?></small> <?php echo $lang->story->create;?></strong>
+<div id="mainContent" class="main-content">
+  <div class="center-block">
+    <div class="main-header">
+      <h2><?php echo $lang->story->create;?></h2>
+      <div class="pull-right btn-toolbar">
+        <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=createFields')?>
+        <?php include '../../common/view/customfield.html.php';?>
+      </div>
     </div>
-    <div class='actions'>
-      <button type="button" class="btn btn-default" data-toggle="customModal"><i class='icon icon-cog'></i> </button>
-    </div>
-  </div>
-  <form class='form-condensed' method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
-    <table class='table table-form'> 
-      <tr>
-        <th class='w-80px'><?php echo $lang->story->product;?></th>
-        <td class='w-p45-f'>
-          <div class='input-group'>
-            <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control chosen'");?>
-            <?php if($product->type != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control chosen' style='width:120px'");?>
-          </div>
-        </td>
-        <td>
-          <div class='input-group' id='moduleIdBox'>
-          <span class='input-group-addon w-80px'><?php echo $lang->story->module;?></span>
-          <?php 
-          echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");
-          if(count($moduleOptionMenu) == 1)
-          {
-              echo "<span class='input-group-addon'>";
-              echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch"), $lang->tree->manage, '_blank');
-              echo '&nbsp; ';
-              echo html::a("javascript:loadProductModules($productID)", $lang->refresh);
-              echo '</span>';
-          }
-          ?>
-          </div>
-        </td><td></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->story->plan;?></th>
-        <td>
-          <div class='input-group' id='planIdBox'>
-          <?php 
-          echo html::select('plan', $plans, $planID, "class='form-control chosen'");
-          if(count($plans) == 1) 
-          {
-              echo "<span class='input-group-btn'>";
-              echo html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch"), "<i class='icon icon-plus'></i>", '_blank', "class='btn' data-toggle='tooltip' title='{$lang->productplan->create}'");
-              echo '&nbsp; ';
-              echo html::a("javascript:loadProductPlans($productID)", "<i class='icon icon-refresh'></i>", '', "class='btn' data-toggle='tooltip' title='{$lang->refresh}'");
-              echo '</span>';
-          }
-          ?>
-          </div>
-        </td>
-        <?php if(strpos(",$showFields,", ',source,') !== false):?>
-        <td>
-          <div class='input-group'>
-            <span class='input-group-addon w-60px'><?php echo $lang->story->source?></span>
-            <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
-            <span class='input-group-addon fix-border'><?php echo $lang->story->sourceNote?></span>
-            <?php echo html::input('sourceNote', $sourceNote, "class='form-control' autocomplete='off' style='width:200px;'");?>
-          </div>
-        </td>
-        <?php endif;?>
-      </tr>
-      <tr>
-        <th><?php echo $lang->story->reviewedBy;?></th>
-        <td>
-          <div class='input-group'>
-            <?php echo html::select('assignedTo', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen'");?>
-            <?php if(!$this->story->checkForceReview()):?>
-            <span class='input-group-addon'><?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview' {$needReview}");?></span>
+    <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
+      <table class="table table-form">
+        <tbody>
+        <tr>
+          <th><?php echo $lang->story->product;?></th>
+          <td colspan="2">
+            <?php if($product->type != 'normal'):?>
+            <div class='input-group'>
             <?php endif;?>
-          </div>
-        </td>
-      </tr> 
-      <tr>
-        <th><?php echo $lang->story->title;?></th>
-        <td colspan='2'>
-          <div class='row-table'>
-            <div class='col-table'>
-              <div class="input-group w-p100">
-                <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->story->colorTag ?>' data-update-text='#title' value='<?php echo $color;?>'>
-                <?php echo html::input('title', $storyTitle, "class='form-control' autocomplete='off'");?>
-              </div>
+            <?php echo html::select('product', $products, $productID, "onchange='loadProduct(this.value);' class='form-control chosen control-product'");?>
+            <?php if($product->type != 'normal'):?>
+            <span class='input-group-addon fix-border fix-padding'></span>
+            <?php echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?>
             </div>
-            <?php
-            $hiddenPri = strpos(",$showFields,", ',pri,') === false;
-            $hiddenEst = strpos(",$showFields,", ',estimate,') === false;
-            ?>
-            <?php if(!$hiddenPri or !$hiddenEst):?>
-            <?php $widthClass = ($hiddenPri or $hiddenEst) ? 'w-100px' : 'w-230px';?>
-            <div class='col-table <?php echo $widthClass?>'>
+            <?php endif;?>
+          </td>
+          <td colspan="2">
+            <div class='input-group' id='moduleIdBox'>
+              <div class="input-group-addon"><?php echo $lang->story->module;?></div>
+              <?php 
+              echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen' required");
+              if(count($moduleOptionMenu) == 1)
+              {
+                  echo "<div class='input-group-addon'>";
+                  echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch"), $lang->tree->manage, '_blank');
+                  echo '&nbsp; ';
+                  echo html::a("javascript:loadProductModules($productID)", $lang->refresh);
+                  echo '</div>';
+              }
+              ?>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->plan;?></th>
+          <td colspan="2">
+            <div class='input-group' id='planIdBox'>
+              <?php 
+              echo html::select('plan', $plans, $planID, "class='form-control chosen'");
+              if(count($plans) != 1) 
+              {
+                  echo "<div class='input-group-btn'>";
+                  echo html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch"), "<i class='icon icon-plus'></i>", '_blank', "class='btn' data-toggle='tooltip' title='{$lang->productplan->create}'");
+                  echo '&nbsp; ';
+                  echo html::a("javascript:loadProductPlans($productID)", "<i class='icon icon-refresh'></i>", '', "class='btn' data-toggle='tooltip' title='{$lang->refresh}'");
+                  echo '</div>';
+              }
+              ?>
+            </div>
+          </td>
+          <?php if(strpos(",$showFields,", ',source,') !== false):?>
+          <td colspan="2">
+            <div class="input-group">
               <div class="input-group">
-                <?php if(!$hiddenPri):?>
-                <span class='input-group-addon fix-border br-0'><?php echo $lang->story->pri;?></span>
-                <?php
-                $hasCustomPri = false;
-                foreach($lang->story->priList as $priKey => $priValue)
-                {
-                    if($priKey != $priValue or strlen($priKey) != strlen($priValue))
-                    {
-                        $hasCustomPri = true;
-                        break;
-                    }
-                }
-                ?>
-                <?php if($hasCustomPri):?>
-                <?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='form-control minw-80px chosen'");?> 
-                <?php else: ?>
-                <div class='input-group-btn dropdown-pris' data-set='0,1,2,3,4'>
-                  <button type='button' class='btn dropdown-toggle br-0' data-toggle='dropdown'>
-                    <span class='pri-text'></span> &nbsp;<span class='caret'></span>
-                  </button>
-                  <ul class='dropdown-menu pull-right'></ul>
-                  <?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='hide'");?>
-                </div>
-                <?php endif; ?>
-                <?php endif;?>
-                <?php if(!$hiddenEst):?>
-                <span class='input-group-addon fix-border br-0'><?php echo $lang->story->estimateAB;?></span>
-                <?php echo html::input('estimate', $estimate, "class='form-control minw-60px' autocomplete='off'");?>
-                <?php endif;?>
+                <div class="input-group-addon"><?php echo $lang->story->source;?></div>
+                <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
+                <span class='input-group-addon'><?php echo $lang->story->sourceNote;?></span>
+                <?php echo html::input('sourceNote', $sourceNote, "class='form-control' autocomplete='off' style='width:140px;'");?>
               </div>
             </div>
-            <?php endif;?>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->story->spec;?></th>
-        <td colspan='2'><?php echo html::textarea('spec', $spec, "rows='9' class='form-control disabled-ie-placeholder' placeholder='" . htmlspecialchars($lang->story->specTemplate) . "'");?></td>
-      </tr>
-      <?php if(strpos(",$showFields,", ',verify,') !== false):?>
-      <tr>
-        <th><?php echo $lang->story->verify;?></th>
-        <td colspan='2'><?php echo html::textarea('verify', $verify, "rows='6' class='form-control'");?></td>
-      </tr>
-      <?php endif;?>
-      <?php
-      $hiddenMailto   = strpos(",$showFields,", ',mailto,') === false;
-      $hiddenKeywords = strpos(",$showFields,", ',keywords,') === false;
-      ?>
-      <?php if(!$hiddenMailto or !$hiddenKeywords):?>
-      <?php $colspan = ($hiddenMailto or $hiddenKeywords) ? "colspan='2'" : '';?>
-      <tr>
-        <th><?php echo $hiddenMailto ? $lang->story->keywords : $lang->story->mailto;?></th>
-        <?php if(!$hiddenMailto):?>
-        <td>
-          <div class='input-group' id='mailtoGroup'>
-            <?php 
-            echo html::select('mailto[]', $users, str_replace(' ' , '', $mailto), "multiple"); 
-            echo $this->fetch('my', 'buildContactLists');
+          </td>
+          <?php endif;?>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->title;?></th>
+          <td colspan="4">
+            <div class="input-control has-icon-right">
+              <?php echo html::input('title', $storyTitle, "class='form-control input-story-title' autocomplete='off' required");?>
+              <div class="colorpicker">
+                <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+                <ul class="dropdown-menu clearfix">
+                  <li class="heading"><?php echo $lang->story->colorTag;?><i class="icon icon-close"></i></li>
+                </ul>
+                <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title"  data-provide="colorpicker">
+              </div>
+            </div>
+          </td>
+        </tr>
+        <?php if(strpos(",$showFields,", ',pri,') !== false):?>
+        <tr>
+          <th><?php echo $lang->story->pri;?></th>
+          <td colspan="4">
+            <?php
+            $hasCustomPri = false;
+            foreach($lang->story->priList as $priKey => $priValue)
+            {
+                if($priKey and $priValue and ($priKey != $priValue or strlen($priKey) != strlen($priValue)))
+                {
+                    $hasCustomPri = true;
+                    break;
+                }
+            }
             ?>
-          </div>
-        </td>
+            <?php if($hasCustomPri):?>
+            <?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='form-control chosen'");?> 
+            <?php else: ?>
+            <?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='form-control' data-provide='labelSelector'");?> 
+            <?php endif; ?>
+           </td>
+         </tr>
+         <?php endif;?>
+         <?php if(strpos(",$showFields,", ',estimate,') !== false):?>
+         <tr>
+           <th><?php echo $lang->story->estimateAB;?></th>
+           <td><input type="number" min="0" step="0.5" name="estimate" id="estimate" value="<?php echo $estimate;?>" class="form-control" autocomplete="off"></td>
+           <td class="muted"><?php echo $lang->story->hour;?></td>
+         </tr>
+         <?php endif;?>
+        <tr>
+          <th><?php echo $lang->story->reviewedBy;?></th>
+          <td><?php echo html::select('assignedTo', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen'");?></td>
+          <?php if(!$this->story->checkForceReview()):?>
+          <td><?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview' class='no-margin' {$needReview}");?></td>
+          <?php endif;?>
+        </tr> 
+        <tr>
+          <th><?php echo $lang->story->spec;?></th>
+          <td colspan="4"><?php echo html::textarea('spec', $spec, "rows='9' class='form-control kindeditor disabled-ie-placeholder' hidefocus='true' placeholder='" . htmlspecialchars($lang->story->specTemplate) . "'");?></td>
+        </tr>
+        <?php if(strpos(",$showFields,", ',verify,') !== false):?>
+        <tr>
+          <th><?php echo $lang->story->verify;?></th>
+          <td colspan="4"><?php echo html::textarea('verify', $verify, "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
+        </tr>
         <?php endif;?>
-        <?php if(!$hiddenKeywords):?>
-        <td <?php echo $colspan?>>
-          <div class='input-group'>
-            <?php if(!$hiddenMailto):?>
-            <span class='input-group-addon'><?php echo $lang->story->keywords;?></span>
-            <?php endif;?>
+        <tr>
+          <th><?php echo $lang->story->legendAttatch;?></th>
+          <td colspan='4'><?php echo $this->fetch('file', 'buildform');?></td>
+        </tr>  
+        <?php if(strpos(",$showFields,", ',mailto,') !== false):?>
+        <tr>
+          <th><?php echo $lang->story->mailto;?></th>
+          <td colspan="4">
+            <div class="input-group">
+              <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $mailto), "class='form-control chosen' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
+              <?php echo $this->fetch('my', 'buildContactLists');?>
+            </div>
+          </td>
+        </tr>
+        <?php endif;?>
+        <?php if(strpos(",$showFields,", ',keywords,') !== false):?>
+        <tr>
+          <th><?php echo $lang->story->keywords;?></th>
+          <td colspan="4">
             <?php echo html::input('keywords', $keywords, 'class="form-control" autocomplete="off"');?>
-          </div>
-        </td>
+          </td>
+        </tr>
         <?php endif;?>
-      </tr>
-      <?php endif;?>
-      <tr>
-        <th><?php echo $lang->story->legendAttatch;?></th>
-        <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
-      </tr>  
-      <tr><td></td><td colspan='2' class='text-center'><?php echo html::submitButton() . html::backButton();?></td></tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5" class="text-center">
+            <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+            <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
+          </td>
+        </tr>
+      </tfoot>
     </table>
     <span id='responser'></span>
   </form>
 </div>
-<?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=createFields')?>
-<?php include '../../common/view/customfield.html.php';?>
 <?php js::set('storyModule', $lang->story->module);?>
 <?php include '../../common/view/footer.html.php';?>

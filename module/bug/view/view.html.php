@@ -12,63 +12,26 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['bug']);?> <strong><?php echo $bug->id;?></strong></span>
-    <strong style='color: <?php echo $bug->color; ?>'><?php echo $bug->title;?></strong>
-    <?php if($bug->deleted):?>
-    <span class='label label-danger'><?php echo $lang->bug->deleted;?></span>
-    <?php endif; ?>
-  </div>
-  <div class='actions'>
-    <?php
-    $browseLink    = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
-    $params        = "bugID=$bug->id";
-    $copyParams    = "productID=$productID&branch=$bug->branch&extras=bugID=$bug->id";
-    $convertParams = "productID=$productID&branch=$bug->branch&moduleID=0&from=bug&bugID=$bug->id";
-    if(!$bug->deleted)
-    {
-        ob_start();
-        echo "<div class='btn-group'>";
-        common::printIcon('bug', 'confirmBug', $params, $bug, 'button', 'search', '', 'iframe', true);
-        common::printIcon('bug', 'assignTo',   $params, $bug, 'button', '', '', 'iframe', true);
-        common::printIcon('bug', 'resolve',    $params, $bug, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
-        common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
-
-        if($this->config->global->flow != 'onlyTest') common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
-        common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
-        echo '</div>';
-
-        echo "<div class='btn-group'>";
-        common::printIcon('bug', 'edit', $params, $bug);
-        common::printCommentIcon('bug', $bug);
-        common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy');
-        common::printIcon('bug', 'delete', $params, $bug, 'button', '', 'hiddenwin');
-        echo '</div>';
-
-        echo "<div class='btn-group'>";
-        common::printRPN($browseLink, $preAndNext);
-        echo '</div>';
-
-        $actionLinks = ob_get_contents();
-        ob_end_clean();
-        echo $actionLinks;
-    }
-    else
-    {
-        common::printRPN($browseLink);
-    }
-    ?>
+<?php $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");?>
+<div id="mainMenu" class="clearfix">
+  <div class="btn-toolbar pull-left">
+    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-link'");?>
+    <div class="divider"></div>
+    <div class="page-title">
+      <span class="label label-id"><?php echo $bug->id?></span>
+      <span class="text" style='color: <?php echo $bug->color; ?>'><?php echo $bug->title;?></span>
+      <?php if($bug->deleted):?>
+      <span class='label label-danger'><?php echo $lang->bug->deleted;?></span>
+      <?php endif; ?>
+	</div>
   </div>
 </div>
-
-<div class='row-table'>
-  <div class='col-main'>
-    <div class='main'>
-      <fieldset>
-        <legend><?php echo $lang->bug->legendSteps;?></legend>
-        <div class='content'>
+<div id="mainContent" class="main-row">
+  <div class="main-col col-8">
+    <div class="cell">
+      <div class="detail">
+        <div class="detail-title"><?php echo $lang->bug->legendSteps;?></div>
+        <div class="detail-content article-content">
           <?php
           $tplStep = strip_tags(trim($lang->bug->tplStep));
           $steps   = str_replace('<p>' . $tplStep, '<p class="stepTitle">' . $tplStep . '</p><p>', $bug->steps);
@@ -83,29 +46,19 @@
           echo $steps;
           ?>
         </div>
-      </fieldset>
+      </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'true'));?>
+      <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=bug&objectID=$bug->id");?>
       <?php include '../../common/view/action.html.php';?>
-      <div class='actions'><?php if(!$bug->deleted) echo $actionLinks;?></div>
-      <fieldset id='commentBox' class='hide'>
-        <legend><?php echo $lang->comment;?></legend>
-        <form method='post' action='<?php echo $this->createLink('action', 'comment', "objectType=bug&objectID=$bug->id")?>' target='hiddenwin'>
-          <div class="form-group"><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></div>
-          <?php echo html::submitButton() . html::backButton();?>
-        </form>
-      </fieldset>
     </div>
   </div>
-  <div class='col-side'>
-    <div class='main main-side'>
-      <div class='tabs'>
-        <ul class='nav nav-tabs'>
-          <li class='active'><a href='#legendBasicInfo' data-toggle='tab'><?php echo $lang->bug->legendBasicInfo;?></a></li>
-          <li><a href='#legendPrjStoryTask' data-toggle='tab'><?php echo $lang->bug->legendPrjStoryTask;?></a></li>
-        </ul>
-        <div class='tab-content'>
-          <div class='tab-pane active' id='legendBasicInfo'>
-            <table class='table table-data table-condensed table-borderless table-fixed'>
+  <div class="side-col col-4">
+    <div class="cell">
+      <details class="detail" open>
+        <summary class="detail-title"><?php echo $lang->bug->legendBasicInfo;?></summary>
+        <div class="detail-content">
+          <table class="table table-data">
+            <tbody>
               <tr valign='middle'>
                 <th class='w-70px'><?php echo $lang->bug->product;?></th>
                 <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product", $productName)) echo $productName;?></td>
@@ -158,11 +111,11 @@
               </tr>
               <tr>
                 <th><?php echo $lang->bug->pri;?></th>
-                <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
+                <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri;?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
               </tr>
               <tr>
                 <th><?php echo $lang->bug->status;?></th>
-                <td class='bug-<?php echo $bug->status?>'><strong><?php echo $lang->bug->statusList[$bug->status];?></strong></td>
+                <td><span class='status-<?php echo $bug->status?>'><span class="label label-dot"></span> <?php echo $lang->bug->statusList[$bug->status];?></span></td>
               </tr>
               <tr>
                 <th><?php echo $lang->bug->activatedCount;?></th>
@@ -200,44 +153,17 @@
                 <th><?php echo $lang->bug->mailto;?></th>
                 <td><?php $mailto = explode(',', str_replace(' ', '', $bug->mailto)); foreach($mailto as $account) echo ' ' . $users[$account]; ?></td>
               </tr>
-            </table>
-          </div>
-          <div class='tab-pane' id='legendPrjStoryTask'>
-            <table class='table table-data table-condensed table-borderless table-fixed'>
-              <tr>
-                <th class='w-60px'><?php echo $lang->bug->project;?></th>
-                <td><?php if($bug->project) echo html::a($this->createLink('project', 'browse', "projectid=$bug->project"), $bug->projectName);?></td>
-              </tr>
-              <tr class='nofixed'>
-                <th><?php echo $lang->bug->story;?></th>
-                <td>
-                  <?php
-                  if($bug->story) echo html::a($this->createLink('story', 'view', "storyID=$bug->story"), "#$bug->story $bug->storyTitle");
-                  if($bug->storyStatus == 'active' and $bug->latestStoryVersion > $bug->storyVersion)
-                  {
-                      echo "(<span class='warning'>{$lang->story->changed}</span> ";
-                      echo html::a($this->createLink('bug', 'confirmStoryChange', "bugID=$bug->id"), $lang->confirm, 'hiddenwin');
-                      echo ")";
-                  }
-                  ?>
-                </td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->task;?></th>
-                <td><?php if($bug->task) echo html::a($this->createLink('task', 'view', "taskID=$bug->task"), $bug->taskName);?></td>
-              </tr>
-            </table>
-          </div>
+            </tbody>
+          </table>
         </div>
-      </div>
-      <div class='tabs'>
-        <ul class='nav nav-tabs'>
-          <li class='active'><a href='#legendLife' data-toggle='tab'><?php echo $lang->bug->legendLife;?></a></li>
-          <li><a href='#legendMisc' data-toggle='tab'><?php echo $lang->bug->legendMisc;?></a></li>
-        </ul>
-        <div class='tab-content'>
-          <div class='tab-pane active' id='legendLife'>
-            <table class='table table-data table-condensed table-borderless table-fixed'>
+      </details>
+    </div>
+    <div class="cell">
+      <details class="detail" open>
+        <summary class="detail-title"><?php echo $lang->bug->legendLife;?></summary>
+        <div class="detail-content">
+          <table class="table table-data">
+            <tbody>
               <tr>
                 <th class='w-90px'><?php echo $lang->bug->openedBy;?></th>
                 <td> <?php echo zget($users, $bug->openedBy) . $lang->at . $bug->openedDate;?></td>
@@ -283,10 +209,50 @@
                 <th><?php echo $lang->bug->lblLastEdited;?></th>
                 <td><?php if($bug->lastEditedBy) echo zget($users, $bug->lastEditedBy, $bug->lastEditedBy) . $lang->at . $bug->lastEditedDate?></td>
               </tr>
-            </table>
-          </div>
-          <div class='tab-pane' id='legendMisc'>
-            <table class='table table-data table-condensed table-borderless table-fixed'>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+    <div class="cell">
+      <details class="detail" open>
+        <summary class="detail-title"><?php echo $lang->bug->legendPrjStoryTask;?></summary>
+        <div class="detail-content">
+          <table class='table table-data'>
+            <tbody>
+              <tr>
+                <th class='w-60px'><?php echo $lang->bug->project;?></th>
+                <td><?php if($bug->project) echo html::a($this->createLink('project', 'browse', "projectid=$bug->project"), $bug->projectName);?></td>
+              </tr>
+              <tr class='nofixed'>
+                <th><?php echo $lang->bug->story;?></th>
+                <td>
+                  <?php
+                  if($bug->story) echo html::a($this->createLink('story', 'view', "storyID=$bug->story"), "#$bug->story $bug->storyTitle");
+                  if($bug->storyStatus == 'active' and $bug->latestStoryVersion > $bug->storyVersion)
+                  {
+                      echo "(<span class='warning'>{$lang->story->changed}</span> ";
+                      echo html::a($this->createLink('bug', 'confirmStoryChange', "bugID=$bug->id"), $lang->confirm, 'hiddenwin');
+                      echo ")";
+                  }
+                  ?>
+                </td>
+              </tr>
+              <tr>
+                <th><?php echo $lang->bug->task;?></th>
+                <td><?php if($bug->task) echo html::a($this->createLink('task', 'view', "taskID=$bug->task"), $bug->taskName);?></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+    <div class="cell">
+      <details class="detail" open>
+        <summary class="detail-title"><?php echo $lang->bug->legendMisc;?></summary>
+        <div class="detail-content">
+          <table class="table table-data">
+            <tbody>
               <tr class='text-top'>
                 <th class='w-80px'><?php echo $lang->bug->linkBug;?></th>
                 <td>
@@ -334,12 +300,45 @@
               </tr>
               <?php endif;?>
               <?php endif;?>
-            </table>
-          </div>
+            </tbody>
+          </table>
         </div>
-      </div>
+      </details>
     </div>
   </div>
+</div>
+div>
+
+php
+arams        = "bugID=$bug->id";
+opyParams    = "productID=$productID&branch=$bug->branch&extras=bugID=$bug->id";
+onvertParams = "productID=$productID&branch=$bug->branch&moduleID=0&from=bug&bugID=$bug->id";
+
+iv id="mainActions">
+<?php common::printPreAndNext($preAndNext);?>
+<div class="btn-toolbar">
+  <?php if(!$bug->deleted):?>
+  <?php
+  common::printIcon('bug', 'confirmBug', $params, $bug, 'button', 'search', '', 'iframe', true);
+  common::printIcon('bug', 'assignTo',   $params, $bug, 'button', '', '', 'iframe', true);
+  common::printIcon('bug', 'resolve',    $params, $bug, 'button', '', '', 'iframe showinonlybody', true);
+  common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
+  common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
+
+  if($this->config->global->flow != 'onlyTest') common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
+  common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
+
+  echo "<div class='divider'></div>";
+  common::printIcon('bug', 'edit', $params, $bug);
+  common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy');
+  common::printIcon('bug', 'delete', $params, $bug, 'button', '', 'hiddenwin');
+
+  echo "<div class='divider'></div>";
+  common::printBack($browseLink);
+  ?>
+  <?php else:?>
+  <?php common::printBack($browseLink);?>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

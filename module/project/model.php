@@ -100,9 +100,23 @@ class projectModel extends model
         }
 
         $selectHtml = $this->select($projects, $projectID, $moduleName, $methodName, $extra);
+
+        $label = $this->lang->project->index;
+        if($moduleName == 'project' && $methodName == 'all')    $label = $this->lang->project->allProjects;
+        if($moduleName == 'project' && $methodName == 'create') $label = $this->lang->project->create;
+
+        $projectIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
+        $projectIndex .= '<ul class="dropdown-menu">';
+        if(common::hasPriv('project', 'index'))  $projectIndex .= '<li>' . html::a(helper::createLink('project', 'index', 'locate=no'), '<i class="icon icon-cards-view"></i> ' . $this->lang->project->index) . '</li>';
+        if(common::hasPriv('project', 'all'))    $projectIndex .= '<li>' . html::a(helper::createLink('project', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->project->allProjects) . '</li>';
+        if(common::hasPriv('project', 'create')) $projectIndex .= '<li>' . html::a(helper::createLink('project', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->project->create) . '</li>';
+        $projectIndex .= '</ul></div></div>';
+        $projectIndex .= $selectHtml;
+
+        $this->lang->modulePageNav = $projectIndex;
         foreach($this->lang->project->menu as $key => $menu)
         {
-            $replace = $key == 'list' ? $selectHtml : $projectID;
+            $replace = $projectID;
             common::setMenuVars($this->lang->project->menu, $key,  $replace);
         }
     }
@@ -126,7 +140,11 @@ class projectModel extends model
 
         setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot);
         $currentProject = $this->getById($projectID);
-        $output = "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+
+        $dropMenuLink = helper::createLink('project', 'ajaxGetDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod&extra=$extra");
+        $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem'>{$currentProject->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output .= '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= "</div></div></div>";
         if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
         return $output;
     }
@@ -856,7 +874,7 @@ class projectModel extends model
         foreach($projects as $key => $project)
         {
             // Process the end time.
-            $project->end = date("Y-m-d", strtotime($project->end));
+            $project->end = date(DT_DATE1, strtotime($project->end));
 
             /* Judge whether the project is delayed. */
             if($project->status != 'done' and $project->status != 'suspended')

@@ -67,6 +67,7 @@ $lang->user->relogin         = "Login Again";
 $lang->user->asGuest         = "Guest";
 $lang->user->goback          = "Back";
 $lang->user->deleted         = '(Deleted)';
+$lang->user->search          = 'Search';
 
 $lang->user->profile     = 'Profile';
 $lang->user->project     = $lang->projectCommon;

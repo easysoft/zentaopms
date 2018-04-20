@@ -21,11 +21,10 @@ $lang->admin->ztCompany     = '认证公司';
 $lang->admin->captcha       = '验证码';
 $lang->admin->getCaptcha    = '获取验证码';
 
-$lang->admin->api           = '接口';
-$lang->admin->log           = '日志';
-$lang->admin->setting       = '设置';
-$lang->admin->days          = '日志保存天数';
-$lang->admin->saveSuccess   = '保存成功';
+$lang->admin->api     = '接口';
+$lang->admin->log     = '日志';
+$lang->admin->setting = '设置';
+$lang->admin->days    = '日志保存天数';
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = '当前系统的版本是%s，';

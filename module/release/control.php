@@ -60,9 +60,9 @@ class release extends control
         if(!empty($_POST))
         {
             $releaseID = $this->release->create($productID, $branch);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('release', $releaseID, 'opened');
-            die(js::locate(inlink('view', "releaseID=$releaseID"), 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 
         $builds        = $this->loadModel('build')->getProductBuildPairs($productID, $branch, 'notrunk|withbranch', false);
@@ -91,7 +91,7 @@ class release extends control
         if(!empty($_POST))
         {
             $changes = $this->release->update($releaseID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $files = $this->loadModel('file')->saveUpload('release', $releaseID);
             if($changes or $files)
             {
@@ -100,7 +100,7 @@ class release extends control
                 $actionID = $this->loadModel('action')->create('release', $releaseID, 'Edited', $fileAction);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate(inlink('view', "releaseID=$releaseID"), 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
         $this->loadModel('story');
         $this->loadModel('bug');

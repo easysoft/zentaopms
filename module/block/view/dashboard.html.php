@@ -32,17 +32,17 @@ $useGuest = $this->app->user->account == 'guest';
             <?php endif;?>
               <nav class='panel-actions nav nav-default'>
                 <?php if(!empty($block->moreLink)):?>
-                   <?php echo '<li>' . html::a($block->moreLink, " <i class='icon icon-more'></i>") . '</li>'; ?>
+                   <?php echo '<li>' . html::a($block->moreLink, 'MORE', '', "title='{$lang->more}'") . '</li>'; ?>
                 <?php endif; ?>
                 <li class='dropdown'>
                   <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
                   <ul class='dropdown-menu pull-right'>
                     <?php if(!$useGuest):?>
-                    <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "id=$block->id&module=$module"); ?>" class='edit-block' data-title='<?php echo $block->title; ?>' data-icon='icon-pencil'><i class='icon-pencil'></i> <?php echo $lang->edit; ?></a></li>
+                    <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "id=$block->id&module=$module"); ?>" class='edit-block' data-title='<?php echo $block->title; ?>' data-icon='icon-pencil'><i class='icon-pencil'></i> <?php echo $lang->edit;?></a></li>
                     <?php if(!$block->source and $block->block == 'html'):?>
                     <li><a href="javascript:hiddenBlock(<?php echo $index;?>)" class="hidden-panel"><i class='icon-eye-close'></i><?php echo $lang->block->hidden; ?></a></li>
                     <?php endif;?>
-                    <li><a href='javascript:deleteBlock(<?php echo $index;?>);' class='remove-panel'><i class='icon-remove'></i> <?php echo $lang->block->remove; ?></a></li>
+                    <li><a href='javascript:deleteBlock(<?php echo $index;?>);' class='remove-panel'><i class='icon-sm icon-close'></i> <?php echo $lang->block->remove;?></a></li>
                     <?php endif;?>
                     <?php if($this->app->user->admin):?>
                     <li><?php echo html::a($this->createLink('block', 'close', "blockID={$block->id}"), "<i class='icon-eye-close'></i> {$lang->block->closeForever}", 'hiddenwin', "class='close-block' onclick=\"return confirm('{$lang->block->confirmClose}')\"")?>
@@ -72,7 +72,7 @@ $useGuest = $this->app->user->account == 'guest';
             <?php endif;?>
               <nav class='panel-actions nav nav-default'>
                 <?php if(!empty($block->moreLink)):?>
-                   <?php echo '<li>' . html::a($block->moreLink, " <i class='icon icon-more'></i>") . '</li>';?>
+                   <?php echo '<li>' . html::a($block->moreLink, 'MORE', '', "title='{$lang->more}'") . '</li>';?>
                 <?php endif; ?>
                 <li class='dropdown'>
                   <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
@@ -107,7 +107,7 @@ config.confirmRemoveBlock = '<?php echo $lang->block->confirmRemoveBlock; ?>';
 var module   = '<?php echo $module?>';
 var useGuest = <?php echo $useGuest ? 'true' : 'false';?>;
 <?php if(!$useGuest):?>
-$('#subHeader #pageActions').append(<?php echo json_encode(html::a($this->createLink("block", "admin", "id=0&module=$module"), "<i class='icon icon-plus text-muted'></i> {$lang->block->createBlock}", '', "class='btn btn-default' data-toggle='modal' data-type='ajax' data-width='700' data-title='{$lang->block->createBlock}'"))?>);
+$('#subHeader #pageActions .btn-toolbar:last').append(<?php echo json_encode(html::a($this->createLink("block", "admin", "id=0&module=$module"), "<i class='icon icon-plus text-muted'></i> {$lang->block->createBlock}", '', "class='btn btn-default' data-toggle='modal' data-type='ajax' data-width='700' data-title='{$lang->block->createBlock}'"))?>);
 <?php endif;?>
 </script>
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>

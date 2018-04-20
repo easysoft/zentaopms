@@ -1,5 +1,3 @@
-$(document).ready(removeDitto());//Remove 'ditto' in first row.
-
 $(document).on('click', '.chosen-with-drop', function()
 {
     var select = $(this).prev('select');
@@ -85,7 +83,7 @@ function setModuleAndPlan(branchID, productID, num)
         if(!modules) modules = '<select id="module' + num + '" name="module[' + num + ']" class="form-control"></select>';
         $('#module' + num).replaceWith(modules);
         $("#module" + num + "_chosen").remove();
-        $("#module" + num).chosen(defaultChosenOptions);
+        $("#module" + num).chosen();
     });
 
     planLink = createLink('productPlan', 'ajaxGetProductPlans', 'productID=' + productID + '&branch=' + branchID + '&num=' + num);
@@ -94,7 +92,7 @@ function setModuleAndPlan(branchID, productID, num)
         if(!plans) plans = '<select id="plan' + num + '" name="plan[' + num + ']" class="form-control"></select>';
         $('#plan' + num).replaceWith(plans);
         $("#plan" + num + "_chosen").remove();
-        $("#plan" + num).chosen(defaultChosenOptions);
+        $("#plan" + num).chosen();
     });
 }
 

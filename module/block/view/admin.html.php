@@ -17,6 +17,7 @@ include '../../common/view/chosen.html.php';
 ?>
 <?php if(isset($pageCSS)) css::internal($pageCSS); ?>
 <form class="form-horizontal load-indicator" id="blockAdminForm" method='post' target='hiddenwin'>
+  <?php if(!empty($modules)):?>
   <div class="form-group">
     <label for="modules" class="col-sm-3"><?php echo $lang->block->lblModule;?></label>
     <div class="col-sm-7">
@@ -27,7 +28,9 @@ include '../../common/view/chosen.html.php';
       <?php echo html::select('modules', $modules, $moduleID, "class='form-control chosen'")?>
     </div>
   </div>
-
+  <?php else:?>
+  <?php echo html::hidden('modules', $module);?>
+  <?php endif;?>
   <!-- #blockParams 用于动态加载区块设置参数 -->
   <div id="blocksList"><?php if(!empty($blocks)) echo $blocks;?></div>
 
@@ -36,10 +39,11 @@ include '../../common/view/chosen.html.php';
 
   <div class="form-group form-actions">
     <div class="col-sm-7 col-sm-offset-3">
-      <button type="submit" class="btn btn-wide btn-primary">保存</button> &nbsp;
-      <button type="cancel" class="btn btn-wide btn-gray" data-dismiss="modal">取消</button>
+      <button type="submit" class="btn btn-wide btn-primary"><?php echo $lang->save;?></button> &nbsp;
+      <button type="cancel" class="btn btn-wide btn-gray" data-dismiss="modal"><?php echo $lang->cancel;?></button>
     </div>
   </div>
 </form>
-<?php js::set('blockID', $blockID)?>
+<?php js::set('blockID', $blockID);?>
+<?php if(!empty($module)) js::set('module', $module);?>
 <?php if(isset($pageJS)) js::execute($pageJS);?>

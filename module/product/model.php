@@ -50,9 +50,23 @@ class productModel extends model
         if($currentMethod == 'report') $currentMethod = 'browse';
 
         $selectHtml = $this->select($products, $productID, $currentModule, $currentMethod, $extra, $branch, $module, $moduleType);
+
+        $label = $this->lang->product->index;
+        if($currentModule == 'product' && $currentMethod == 'all')    $label = $this->lang->product->all;
+        if($currentModule == 'product' && $currentMethod == 'create') $label = $this->lang->product->create;
+
+        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
+        $productIndex .= '<ul class="dropdown-menu">';
+        if(common::hasPriv('product', 'index'))  $productIndex .= '<li>' . html::a(helper::createLink('product', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->product->index) . '</li>';
+        if(common::hasPriv('product', 'all'))    $productIndex .= '<li>' . html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->product->all) . '</li>';
+        if(common::hasPriv('product', 'create')) $productIndex .= '<li>' . html::a(helper::createLink('product', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->product->create) . '</li>';
+        $productIndex .= '</ul></div></div>';
+        $productIndex .= $selectHtml;
+
+        $this->lang->modulePageNav = $productIndex;
         foreach($this->lang->product->menu as $key => $menu)
         {
-            $replace = $key == 'list' ? $selectHtml : $productID;
+            $replace = $productID;
             common::setMenuVars($this->lang->product->menu, $key, $replace);
         }
     }
@@ -81,9 +95,15 @@ class productModel extends model
         setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot);
         $currentProduct = $this->getById($productID);
         $this->session->set('currentProductType', $currentProduct->type);
-        $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
-        if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+
+        $dropMenuLink = helper::createLink('product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
+        $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem'>{$currentProduct->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output .= '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= "</div></div>";
+        if($isMobile) $output = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+
         if($currentProduct->type == 'normal') unset($this->lang->product->menu->branch);
+
         if($currentProduct->type != 'normal')
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
@@ -92,8 +112,10 @@ class productModel extends model
             $branchName = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
             if(!$isMobile)
             {
-                $output .= '</li><li>';
-                $output .= "<a id='currentBranch' href=\"javascript:showSearchMenu('branch', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$branchName} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+                $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
+                $output .= "<div class='btn-group'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$branchName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+                $output .= '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+                $output .= "</div></div>";
             }
             else
             {
@@ -107,14 +129,17 @@ class productModel extends model
             $moduleName = $module ? $module->name : $this->lang->tree->all;
             if(!$isMobile)
             {
-                $output .= '</li><li>';
-                $output .= "<a id='currentModule' href=\"javascript:showSearchMenu('tree', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$moduleName} <span class='icon-caret-down'></span></a><div id='dropMenu'><i class='icon icon-spin icon-spinner'></i></div>";
+                $dropMenuLink = helper::createLink('tree', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
+                $output .= "<div class='btn-group'><button id='currentModule' data-toggle='dropdown' type='button' class='btn btn-limit'>{$moduleName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+                $output .= '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+                $output .= "</div></div>";
             }
             else
             {
                 $output .= "<a id='currentModule' href=\"javascript:showSearchMenu('tree', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$moduleName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
             }
         }
+        if(!$isMobile) $output .= '</div>';
 
         return $output;
     }
@@ -699,7 +724,6 @@ class productModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        $stats = array();
         $stories = $this->dao->select('product, status, count(status) AS count')
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
@@ -740,33 +764,35 @@ class productModel extends model
             ->fetchPairs();
 
         $bugs = $this->dao->select('product,count(*) AS conut')
-          ->from(TABLE_BUG)
-          ->where('deleted')->eq(0)
-          ->andWhere('product')->in(array_keys($products))
-          ->groupBy('product')
-          ->fetchPairs();
-       $unResolved  = $this->dao->select('product,count(*) AS count')
-              ->from(TABLE_BUG)
-              ->where('status')->eq('active')
-              ->andwhere('deleted')->eq(0)
-              ->andWhere('product')->in(array_keys($products))
-              ->groupBy('product')
-              ->fetchPairs();
-        $assignToNull = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
-             ->where('AssignedTo')->eq('')
-            ->andwhere('deleted')->eq(0)
+            ->where('deleted')->eq(0)
             ->andWhere('product')->in(array_keys($products))
             ->groupBy('product')
             ->fetchPairs();
+        $unResolved = $this->dao->select('product,count(*) AS count')
+            ->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->andwhere('status')->eq('active')
+            ->andWhere('product')->in(array_keys($products))
+            ->groupBy('product')
+            ->fetchPairs();
+        $assignToNull = $this->dao->select('product,count(*) AS count')
+            ->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->andwhere('assignedTo')->eq('')
+            ->andWhere('product')->in(array_keys($products))
+            ->groupBy('product')
+            ->fetchPairs();
+
+        $stats = array();
         foreach($products as $key => $product)
         {
-            $product->stories = $stories[$product->id];
-            $product->plans   = isset($plans[$product->id])    ? $plans[$product->id]    : 0;
-            $product->releases= isset($releases[$product->id]) ? $releases[$product->id] : 0;
+            $product->stories  = $stories[$product->id];
+            $product->plans    = isset($plans[$product->id])    ? $plans[$product->id]    : 0;
+            $product->releases = isset($releases[$product->id]) ? $releases[$product->id] : 0;
 
-            $product->bugs = isset($bugs[$product->id]) ? $bugs[$product->id] : 0;
-            $product->unResolved = isset($unResolved[$product->id]) ? $unResolved[$product->id] : 0;
+            $product->bugs         = isset($bugs[$product->id]) ? $bugs[$product->id] : 0;
+            $product->unResolved   = isset($unResolved[$product->id]) ? $unResolved[$product->id] : 0;
             $product->assignToNull = isset($assignToNull[$product->id]) ? $assignToNull[$product->id] : 0;
             $stats[] = $product;
         }

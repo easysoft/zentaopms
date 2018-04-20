@@ -47,9 +47,9 @@ class productplan extends control
         if(!empty($_POST))
         {
             $planID = $this->productplan->create();
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('productplan', $planID, 'opened');
-            die(js::locate($this->createLink('productplan', 'browse', "productID=$product&branch=$branch"), 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('productplan', 'browse', "productID=$product&branch=$branch")));
         }
 
         $this->commonAction($product, $branch);
@@ -85,13 +85,13 @@ class productplan extends control
         if(!empty($_POST))
         {
             $changes = $this->productplan->update($planID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('productplan', $planID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate(inlink('view', "planID=$planID"), 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "planID=$planID")));
         }
 
         $plan = $this->productplan->getByID($planID);
@@ -384,16 +384,16 @@ class productplan extends control
             $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, $moduleID = '0', $status = 'draft,active,changed');
         }
 
-        $this->view->allStories = $allStories;
-        $this->view->planStories= $this->story->getPlanStories($planID);
-        $this->view->products   = $products;
-        $this->view->plan       = $plan;
-        $this->view->plans      = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->browseType = $browseType;
-        $this->view->modules    = $this->loadModel('tree')->getOptionMenu($plan->product);
-        $this->view->param      = $param;
-        $this->view->orderBy    = $orderBy;
+        $this->view->allStories  = $allStories;
+        $this->view->planStories = $this->story->getPlanStories($planID);
+        $this->view->products    = $products;
+        $this->view->plan        = $plan;
+        $this->view->plans       = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->browseType  = $browseType;
+        $this->view->modules     = $this->loadModel('tree')->getOptionMenu($plan->product);
+        $this->view->param       = $param;
+        $this->view->orderBy     = $orderBy;
         $this->display();
     }
 

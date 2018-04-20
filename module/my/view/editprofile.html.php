@@ -13,11 +13,11 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::import($jsRoot . 'md5.js');?>
-<div class='container mw-800px'>
-  <div id='titlebar'>
-    <div class='heading'><i class='icon-pencil'></i> <?php echo $lang->my->editProfile;?></div>
+<div id='mainContent' class='main-content'>
+  <div class='main-header'>
+    <h2><i class='icon-pencil'></i> <?php echo $lang->my->editProfile;?></h2>
   </div>
-  <form method='post' target='hiddenwin' class='form-condensed' id='dataform'>
+  <form method='post' target='hiddenwin' id='dataform'>
     <fieldset>
       <legend><?php echo $lang->my->form->lblBasic;?></legend>
       <table class='table table-form'> 
@@ -35,10 +35,9 @@
         </tr>
         <tr>
           <th><?php echo $lang->user->join;?></th>
-          <td><?php
-              echo $user->join;
-              echo html::hidden('join',$user->join);
-              ?>
+          <td class='text-middle'>
+            <?php echo formatTime($user->join);?>
+            <?php echo html::hidden('join',$user->join);?>
           </td>
         </tr>
       </table>
@@ -104,7 +103,7 @@
       <legend><?php echo $lang->user->verify;?></legend>
       <table class='table table-form'>
         <tr>
-          <th class='w-120px'><?php echo $lang->user->verifyPassword;?></th>
+          <th class='w-verifyPassword'><?php echo $lang->user->verifyPassword;?></th>
           <td>
             <div class="required required-wrapper"></div>
             <?php echo html::password('verifyPassword', '', "class='form-control disabled-ie-placeholder' placeholder='{$lang->user->placeholder->verify}'");?>

@@ -2,14 +2,14 @@
 include '../../common/view/header.lite.html.php';
 include '../../common/view/chart.html.php';
 ?>
-<div id='titlebar'>
-  <div class='heading'>
-    <span><?php echo html::icon($lang->icons['report']);?></span>
-    <small class='text-muted'> <?php echo $lang->story->tasks;?></small>
+<div id='mainContent' class='main-content'>
+  <div class='main-header'>
+    <h2>
+      <span><?php echo html::icon($lang->icons['report']);?></span>
+      <?php echo $lang->story->tasks;?>
+    </h2>
   </div>
-</div>
-<div class='tasksList'>
-  <form class='form-condensed' target='hiddenwin'>
+  <div class='tasksList'>
     <table class='table table-fixed'>
       <thead>
         <tr class='text-center'>
@@ -45,6 +45,6 @@ include '../../common/view/chart.html.php';
         </tr>
       </tfoot>
     </table>
-  </form>
+  </div>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>

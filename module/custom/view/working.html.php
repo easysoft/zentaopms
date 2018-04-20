@@ -25,7 +25,7 @@
 <script>
 $(function()
 {
-    $('#featurebar #workingTab').addClass('active');
+    $('#workingTab').addClass('btn-active-text');
 })
 </script>
 <?php include '../../common/view/footer.html.php';?>

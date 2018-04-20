@@ -6,14 +6,14 @@ $lang->datatable->show   = 'Show';
 $lang->datatable->hide   = 'Hide';
 $lang->datatable->reset  = 'Reset';
 
-$lang->datatable->custom            = 'Custom Columns';
-$lang->datatable->customTip         = 'Check Columns to Display';
-$lang->datatable->switchToTable     = 'Switch to Common Table';
-$lang->datatable->switchToDatatable = 'Switch to Advanced Table';
-$lang->datatable->required          = 'Required';
-$lang->datatable->confirmReset      = 'Do you want to restore the default settings?';
-$lang->datatable->setGlobal         = 'Global';
-$lang->datatable->resetGlobal       = 'Reset Global Default';
+$lang->datatable->custom       = 'Custom Columns';
+$lang->datatable->customTip    = 'Check Columns to Display';
+$lang->datatable->table        = 'Switch to Common Table';
+$lang->datatable->datatable    = 'Switch to Advanced Table';
+$lang->datatable->required     = 'Required';
+$lang->datatable->confirmReset = 'Do you want to restore the default settings?';
+$lang->datatable->setGlobal    = 'Global';
+$lang->datatable->resetGlobal  = 'Reset Global Default';
 
 $lang->datatable->branch   = 'Branch';
 $lang->datatable->platform = 'Platform';

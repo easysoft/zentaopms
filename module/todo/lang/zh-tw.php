@@ -94,17 +94,10 @@ $lang->todo->lblClickCreate = "點擊添加待辦";
 $lang->todo->noTodo         = '該類型沒有待辦事務';
 $lang->todo->noAssignedTo   = '被指派人不能為空';
 
-$lang->todo->periods['today']      = '今日';
-$lang->todo->periods['yesterday']  = '昨日';
-$lang->todo->periods['thisWeek']   = '本週';
-$lang->todo->periods['lastWeek']   = '上周';
-$lang->todo->periods['thisMonth']  = '本月';
-$lang->todo->periods['lastmonth']  = '上月';
-$lang->todo->periods['thisSeason'] = '本季';
+$lang->todo->periods['all']        = '所有待辦';
 $lang->todo->periods['thisYear']   = '本年';
 $lang->todo->periods['future']     = '待定';
 $lang->todo->periods['before']     = '未完';
-$lang->todo->periods['all']        = '所有';
 $lang->todo->periods['cycle']      = '周期';
 
 $lang->todo->action = new stdclass();

@@ -15,21 +15,16 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <div class="modal-content">
   <div class="modal-header">
-    <div class="modal-actions">
-      <?php if(isonlybody()):?>
-      <button id='closeModal' type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>
-      <?php endif;?>
-    </div>
     <h4 class='modal-title pull-left'><?php echo html::a($this->createLink('todo', 'view', 'todo=' . $todo->id), "TODO #{$todo->id} {$todo->name}");?></h4>
   </div>
 
-  <form class='modal-body' method='post' target='hiddenwin' id='dataform'>
+  <form class='modal-body form-horizontal' method='post' target='hiddenwin' id='dataform'>
     <div class="row form-group">
       <label class="col-sm-2"><?php echo $lang->todo->date;?></label>
       <div class="col-sm-9">
         <div class='input-group has-icon-right'>
           <?php echo html::input('date', $todo->date, "class='form-control form-date'");?>
-          <label for="inputPasswordExample1" class="input-control-icon-right"><i class="icon icon-delay"></i></label>
+          <label for="date" class="input-control-icon-right"><i class="icon icon-delay"></i></label>
         </div>
       </div>
     </div>
@@ -125,7 +120,7 @@
       <div class="col-sm-2" style='padding-left:0px'>
         <?php echo html::select('end', $times, $todo->end, 'class="form-control chosen"');?>
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-4">
         <input type='checkbox' id='dateSwitcher' onclick='switchDateFeature(this);' <?php if($todo->begin == 2400) echo 'checked';?> >
         <label for='dateSwitcher'><?php echo $lang->todo->lblDisableDate;?></label>
       </div>
@@ -145,19 +140,5 @@
     </div>
   </form>
 </div>
-<script>
-<?php if(isonlybody()):?>
-$(function()
-{
-    parent.$('.modal-header').hide();
-    parent.$('.modal-body').css('padding', '0px');
-    $('#closeModal').click(function()
-    {
-        parent.$('.modal-backdrop.in').remove();
-        parent.$('.modal.in').remove();
-    })
-})
-<?php endif;?>
-</script>
 <?php include './footer.html.php';?>
 <script language='Javascript'>switchDateFeature(document.getElementById('dateSwitcher'));</script>

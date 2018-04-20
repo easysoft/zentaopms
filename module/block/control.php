@@ -69,11 +69,12 @@ class block extends control
         {
             $this->get->set('mode', 'getblocklist');
             $this->view->blocks = $this->fetch('block', 'main', "module=$module&id=$id");
+            $this->view->module = $module;
         }
 
-        $this->view->title      = $title;
-        $this->view->block      = $this->block->getByID($id);
-        $this->view->blockID    = $id;
+        $this->view->title   = $title;
+        $this->view->block   = $this->block->getByID($id);
+        $this->view->blockID = $id;
         $this->display();
     }
 
@@ -110,10 +111,10 @@ class block extends control
             $this->view->params = json_decode($params, true);
         }
 
-        $this->view->source  = $source;
-        $this->view->type    = $type;
-        $this->view->id      = $id;
-        $this->view->block   = ($block) ? $block : array();
+        $this->view->source = $source;
+        $this->view->type   = $type;
+        $this->view->id     = $id;
+        $this->view->block  = ($block) ? $block : array();
         $this->display();      
     }
 
@@ -620,7 +621,7 @@ class block extends control
 
     /**
      * Print releases block.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -641,7 +642,7 @@ class block extends control
 
     /**
      * Print Build block.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -684,6 +685,147 @@ class block extends control
             ->orderBy('t1.project')
             ->fetchPairs('product', 'name');
         $this->view->productStats = $productStats;
+    }
+
+    /**
+     * Print report block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printReportBlock()
+    {
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+
+        $status  = isset($this->params->type) ? $this->params->type : '';
+        $orderBy = isset($this->params->type) ? $this->params->orderBy : 'id_asc';
+
+        /* Get products. */
+        $products = $this->loadModel('product')->getList($status);
+        foreach($products as $productID => $product)
+        {
+            if(!$this->product->checkPriv($product)) unset($products[$productID]);
+        }
+        $productIDList = array_keys($products);
+        if(!$productIDList)
+        {
+            $this->view->products = $products;
+            return false;
+        }
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)
+            ->where('id')->in($productIDList)
+            ->orderBy($orderBy)
+            ->fetchAll('id');
+
+        /* Get stories. */
+        $stories = $this->dao->select('product, stage, COUNT(status) AS count')
+            ->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in($productIDList)
+            ->groupBy('product, stage')
+            ->fetchGroup('product', 'stage');
+        /* Padding the stories to sure all status have records. */
+        foreach($stories as $product => $story)
+        {
+            foreach(array_keys($this->lang->story->stageList) as $stage)
+            {
+                $story[$stage] = isset($story[$stage]) ? $story[$stage]->count : 0;
+            }
+            $stories[$product] = $story;
+        }
+
+        /* Get plans. */
+        $plans = $this->dao->select('product, end')->from(TABLE_PRODUCTPLAN)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in($productIDList)
+            ->fetchGroup('product');
+        foreach($plans as $product => $productPlans)
+        {
+            $expired   = 0;
+            $unexpired = 0;
+
+            foreach($productPlans as $plan)
+            {
+                if($plan->end <  helper::today()) $expired++;
+                if($plan->end >= helper::today()) $unexpired++;
+            }
+
+            $plan = new stdclass;
+            $plan->expired   = $expired;
+            $plan->unexpired = $unexpired;
+
+            $plans[$product] = $plan;
+        }
+
+        /* Get projects. */
+        $projects = $this->dao->select('t1.product, t2.status, t2.end')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.product')->in($productIDList)
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchGroup('product');
+        foreach($projects as $product => $productProjects)
+        {
+            $doing = 0;
+            $done  = 0;
+            $delay = 0;
+
+            foreach($productProjects as $project)
+            {
+                if($project->status == 'doing') $doing++;
+                if($project->status == 'done' or $project->status == 'closed') $done++;
+                if($project->status != 'done' && $project->status != 'closed' && $project->status != 'suspended' && $project->end < helper::today()) $delay++;
+            }
+
+            $project = new stdclass();
+            $project->doing = $doing;
+            $project->done  = $done;
+            $project->delay = $delay;
+
+            $projects[$product] = $project;
+        }
+
+        /* Get releases. */
+        $releases = $this->dao->select('product, COUNT(*) AS count')
+            ->from(TABLE_RELEASE)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in($productIDList)
+            ->groupBy('product')
+            ->fetchPairs();
+
+        foreach($products as $productID => $product)
+        {
+            $product->stories  = isset($stories[$productID])  ? $stories[$productID]  : 0;
+            $product->plans    = isset($plans[$productID])    ? $plans[$productID]    : 0;
+            $product->projects = isset($projects[$productID]) ? $projects[$productID] : 0;
+            $product->releases = isset($releases[$productID]) ? $releases[$productID] : 0;
+        }
+
+        $this->view->products = $products;
+    }
+
+    /**
+     * Print overview block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printOverviewBlock()
+    {
+        $normal = 0;
+        $closed = 0;
+
+        $products = $this->loadModel('product')->getList();
+        foreach($products as $product)
+        {
+            if(!$this->product->checkPriv($product)) continue;
+
+            if($product->status == 'normal') $normal++;
+            if($product->status == 'closed') $closed++;
+        }
+
+        $this->view->total  = $normal + $closed;
+        $this->view->normal = $normal;
+        $this->view->closed = $closed;
     }
 
     /**

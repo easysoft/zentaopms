@@ -40,6 +40,43 @@ class html extends baseHTML
     }
 
     /**
+     * 生成多选按钮。
+     * Create tags like "<input type='checkbox' />"
+     *
+     * @param  string $name      the name of the checkbox tag.
+     * @param  array  $options   the array to create checkbox tag from.
+     * @param  string $checked   the value to checked by default, can be item1,item2
+     * @param  string $attrib    other attribs.
+     * @param  string $type       inline or block
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function checkbox($name, $options, $checked = "", $attrib = "", $type = 'block')
+    {
+        $options = (array)($options);
+        if(!is_array($options) or empty($options)) return false;
+
+        if(is_array($checked)) $checked = implode(',', $checked);
+        $string  = '';
+        $checked = ",$checked,";
+        $isBlock = $type == 'block';
+
+        foreach($options as $key => $value)
+        {
+            $key = str_replace('item', '', $key);
+            if($isBlock) $string .= "<div class='checkbox-primary'>";
+            else $string .= "<div class='checkbox-primary checkbox-inline'>";
+            $string .= "<input type='checkbox' name='{$name}[]' value='$key' ";
+            $string .= (strpos($checked, ",$key,") !== false) ? " checked ='checked'" : "";
+            $string .= $attrib;
+            $string .= " id='$name$key' /> ";
+            $string .= "<label for='$name$key'>" . $value . '</label></div>';
+        }
+        return $string;
+    }
+
+    /**
      * 创建提交按钮。
      * Create submit button.
      * 

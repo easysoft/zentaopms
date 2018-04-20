@@ -2332,10 +2332,7 @@ class storyModel extends model
         $id        = $col->id;
         if($col->show)
         {
-            $class = '';
-            if($id == 'status') $class .= ' story-' . $story->status;
-            if($id == 'title')  $class .= ' text-left';
-            if($id == 'id')     $class .= ' cell-id';
+            $class = "c-{$id}";
             if($id == 'assignedTo' && $story->assignedTo == $account) $class .= ' red';
 
             $title = '';
@@ -2346,11 +2343,10 @@ class storyModel extends model
             switch($id)
             {
             case 'id':
-                if($mode == 'table') echo "<input type='checkbox' name='storyIDList[{$story->id}]' value='{$story->id}' /> ";
-                echo $canView ? html::a($storyLink, sprintf('%03d', $story->id)) : sprintf('%03d', $story->id);
+                echo '<div class="checkbox-primary"><input type="checkbox" name="storyIDList[' . $story->id . ']" value="' . $story->id . '"><label></label>' . sprintf('%03d', $story->id) . '</div>';
                 break;
             case 'pri':
-                echo "<span class='pri" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>";
+                echo "<span class='label-pri label-pri-" . $story->pri . "'>";
                 echo zget($this->lang->story->priList, $story->pri, $story->pri);
                 echo "</span>";
                 break;
@@ -2375,7 +2371,9 @@ class storyModel extends model
                 echo $story->sourceNote;
                 break;
             case 'status':
-                echo $this->lang->story->statusList[$story->status];
+                echo "<span class='status-{$story->status}'>";
+                echo "<span class='label label-dot'></span> " . $this->lang->story->statusList[$story->status];
+                echo '</span>';
                 break;
             case 'estimate':
                 echo $story->estimate;
@@ -2451,10 +2449,13 @@ class storyModel extends model
                 break;
             case 'actions':
                 $vars = "story={$story->id}";
-                common::printIcon('story', 'change',     $vars, $story, 'list', 'random');
-                common::printIcon('story', 'review',     $vars, $story, 'list', 'review');
+                echo "<div class='more'>";
+                common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
+                common::printIcon('story', 'delete',     $vars, $story, 'list', 'trash', 'hiddenwin');
+                echo "</div>";
+                common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
                 common::printIcon('story', 'close',      $vars, $story, 'list', 'off', '', 'iframe', true);
-                common::printIcon('story', 'edit',       $vars, $story, 'list', 'pencil');
+                common::printIcon('story', 'edit',       $vars, $story, 'list');
                 if($this->config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
                 break;
             }
@@ -2612,5 +2613,17 @@ class storyModel extends model
         }
 
         return array($toList, $ccList);
+    }
+
+    /**
+     * Get story count.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return int
+     */
+    public function getCount($productID)
+    {
+        return $this->dao->select('count(*) as count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch('count');
     }
 }

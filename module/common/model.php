@@ -658,21 +658,44 @@ class commonModel extends model
     /**
      * Print icon of comment.
      *
-     * @param string $module
-     * @param        $object
+     * @param string $commentFormLink
+     * @param object $object
      *
      * @static
      * @access public
      * @return mixed
      */
-    public static function printCommentIcon($module, $object = null)
+    public static function printCommentIcon($commentFormLink, $object = null)
     {
         if(isonlybody()) return false;
 
         global $lang;
 
         if(!commonModel::hasPriv('action', 'comment', $object)) return false;
-        echo html::a('#commentBox', '<i class="icon-comment-alt"></i>', '', "title='$lang->comment' onclick='setComment()' class='btn'");
+        echo html::commonButton('<i class="icon icon-chat-line"></i> ' . $lang->action->create, "title='$lang->comment'", 'btn btn-link pull-right btn-comment');
+        echo <<<EOD
+<div class="modal fade modal-comment">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+        <h4 class="modal-title">{$lang->action->create}</h4>
+      </div>
+      <div class="modal-body">
+    <form action="$commentFormLink" target='hiddenwin' method='post'>
+          <div class="form-group">
+            <textarea id='comment' name='comment' class="form-control" rows="8"></textarea>
+          </div>
+          <div class="form-group form-actions">
+            <button type="submit" class="btn btn-primary btn-wide">{$lang->save}</button>
+            <button type="button" class="btn btn-wide" data-dismiss="modal">{$lang->close}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+EOD;
     }
 
     /**
@@ -739,7 +762,7 @@ class commonModel extends model
         if(strpos(',edit,copy,report,export,delete,', ",$method,") !== false) $module = 'common';
         $class = "icon-$module-$method";
         if(!$clickable) $class .= ' disabled';
-        if($icon) $class       .= ' icon-' . $icon;
+        if($icon)       $class .= ' icon-' . $icon;
 
 
         /* Create the icon link. */
@@ -753,23 +776,23 @@ class commonModel extends model
             {
                 if($method != 'edit' and $method != 'copy' and $method != 'delete')
                 {
-                    return html::a($link, "<i class='$class'></i> " . $title, $target, "class='btn $extraClass' $misc", true);
+                    return html::a($link, "<i class='$class'></i> " . "<span class='text'>{$title}</span>", $target, "class='btn btn-link $extraClass' $misc", true);
                 }
                 else
                 {
-                    return html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title='$title' $misc", false);
+                    return html::a($link, "<i class='$class'></i>", $target, "class='btn btn-link $extraClass' title='$title' $misc", false);
                 }
             }
             else
             {
-                return html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title='$title' $misc", false);
+                return html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title='$title' $misc", false) . "\n";
             }
         }
         else
         {
             if($type == 'list')
             {
-                return "<button type='button' class='disabled btn $extraClass'><i class='$class' title='$title' $misc></i></button>";
+                return "<button type='button' class='disabled btn $extraClass'><i class='$class' title='$title' $misc></i></button>\n";
             }
         }
     }
@@ -813,7 +836,7 @@ class commonModel extends model
         if(isonlybody()) return false;
 
         $title = $lang->goback . $lang->backShortcutKey;
-        echo html::a($backLink, '<i class="icon-goback icon-level-up icon-large icon-rotate-270"></i>', '', "id='back' class='btn' title={$title}");
+        echo html::a($backLink, '<i class="icon-goback icon-back icon-large"></i>', '', "id='back' class='btn' title={$title}");
 
         if(isset($preAndNext->pre) and $preAndNext->pre)
         {
@@ -831,6 +854,58 @@ class commonModel extends model
             $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->next->$id) : inLink('view', "ID={$preAndNext->next->$id}");
             echo html::a($link, '<i class="icon-pre icon-chevron-right"></i>', '', "id='next' class='btn' title='$title'");
         }
+    }
+
+    /**
+     * Print back link
+     * 
+     * @param  string $backLink 
+     * @static
+     * @access public
+     * @return void
+     */
+    static public function printBack($backLink, $class = '')
+    {
+        global $lang, $app;
+        if(isonlybody()) return false;
+
+        if(empty($class)) $class = 'btn';
+        $title = $lang->goback . $lang->backShortcutKey;
+        echo html::a($backLink, '<i class="icon-goback icon-back"></i>', '', "id='back' class='{$class}' title={$title}");
+    }
+
+    /**
+     * Print pre and next link
+     * 
+     * @param  string $preAndNext 
+     * @param  string $linkTemplate 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printPreAndNext($preAndNext = '', $linkTemplate = '')
+    {
+        global $lang, $app;
+        if(isonlybody()) return false;
+
+        echo "<nav class='container'>";
+        if(isset($preAndNext->pre) and $preAndNext->pre)
+        {
+            $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->pre->case)) ? 'case' : 'id';
+            $title = isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name;
+            $title = '#' . $preAndNext->pre->$id . ' ' . $title . ' ' . $lang->preShortcutKey;
+            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->pre->$id) : inLink('view', "ID={$preAndNext->pre->$id}");
+            echo html::a($link, '<i class="icon-pre icon-chevron-left"></i>', '', "id='prevPage' class='btn btn-info' title='{$title}'");
+        }
+        if(isset($preAndNext->next) and $preAndNext->next)
+        {
+            $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->next->case)) ? 'case' : 'id';
+            $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
+            $title = '#' . $preAndNext->next->$id . ' ' . $title . ' ' . $lang->nextShortcutKey;
+            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->next->$id) : inLink('view', "ID={$preAndNext->next->$id}");
+            echo html::a($link, '<i class="icon-pre icon-chevron-right"></i>', '', "id='nextPage' class='btn btn-info' title='$title'");
+        }
+        echo '</nav>';
     }
 
     /**

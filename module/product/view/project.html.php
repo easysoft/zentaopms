@@ -11,42 +11,52 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sparkline.html.php';?>
-<div id='titlebar'>
-  <div class='heading'><i class='icon-folder-close'></i> <?php echo $lang->product->project;?>  </div>
+<div id="mainMenu" class="clearfix">
+  <div class="btn-toolbar pull-left">
+    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->product->project;?></span></span>
+  </div>
 </div>
-<table class='table table-fixed'>
-  <thead>
-    <tr class='colhead'>
-      <th><?php echo $lang->project->name;?></th>
-      <th class='w-100px'><?php echo $lang->project->code;?></th>
-      <th class='w-120px'><?php echo $lang->project->end;?></th>
-      <th class='w-80px'><?php echo $lang->project->status;?></th>
-      <th class='w-50px'><?php echo $lang->project->totalEstimate;?></th>
-      <th class='w-50px'><?php echo $lang->project->totalConsumed;?></th>
-      <th class='w-50px'><?php echo $lang->project->totalLeft;?></th>
-      <th class='w-150px'><?php echo $lang->project->progress;?></th>
-      <th class='w-100px'><?php echo $lang->project->burn;?></th>
-    </tr>
-  </thead>
-  <?php foreach($projectStats as $project):?>
-  <tr class='text-center'>
-    <td class='text-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '_parent');?></td>
-    <td><?php echo $project->code;?></td>
-    <td><?php echo $project->end;?></td>
-    <?php if(isset($project->delay)):?>
-    <td class='status-delay'><?php echo $lang->project->delayed;?></td>
-    <?php else:?>
-    <td class='status-<?php echo $project->status?>'><?php echo $lang->project->statusList[$project->status];?></td>
-    <?php endif;?>
-    <td><?php echo $project->hours->totalEstimate;?></td>
-    <td><?php echo $project->hours->totalConsumed;?></td>
-    <td><?php echo $project->hours->totalLeft;?></td>
-    <td class='text-left w-150px'>
-      <img src='<?php echo $defaultTheme;?>images/main/green.png' width=<?php echo $project->hours->progress;?> height='13' text-align: />
-      <small><?php echo $project->hours->progress;?>%</small>
-    </td>
-    <td class='projectline text-left' values='<?php echo join(',', $project->burns);?>'></td>
- </tr>
- <?php endforeach;?>
-</table>
+<div id="mainContent" class='main-content'>
+  <table class="main-table table has-sort-head table-fixed table-project">
+    <thead>
+      <tr>
+        <th><?php echo $lang->project->name;?></th>
+        <th class='w-100px'><?php echo $lang->project->code;?></th>
+        <th class='w-120px'><?php echo $lang->project->end;?></th>
+        <th class='w-80px'><?php echo $lang->project->status;?></th>
+        <th class='w-50px'><?php echo $lang->project->totalEstimate;?></th>
+        <th class='w-50px'><?php echo $lang->project->totalConsumed;?></th>
+        <th class='w-50px'><?php echo $lang->project->totalLeft;?></th>
+        <th class='w-150px'><?php echo $lang->project->progress;?></th>
+        <th class='w-100px'><?php echo $lang->project->burn;?></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php $id = 0;?>
+      <?php foreach($projectStats as $project):?>
+      <tr>
+        <td class='text-left'><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '_parent');?></td>
+        <td><?php echo $project->code;?></td>
+        <td><?php echo $project->end;?></td>
+        <?php if(isset($project->delay)):?>
+        <td class='status-delay'><?php echo $lang->project->delayed;?></td>
+        <?php else:?>
+        <td class='status-<?php echo $project->status?>'><?php echo $lang->project->statusList[$project->status];?></td>
+        <?php endif;?>
+        <td><?php echo $project->hours->totalEstimate;?></td>
+        <td><?php echo $project->hours->totalConsumed;?></td>
+        <td><?php echo $project->hours->totalLeft;?></td>
+        <td class="c-progress">
+          <div class="progress progress-text-left">
+            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
+            <span class="progress-text"><?php echo $project->hours->progress;?>%</span>
+            </div>
+          </div>
+        </td>
+        <td id='spark-<?php echo $id++?>' class='c-spark sparkline' values='<?php echo join(',', $project->burns);?>'></td>
+      </tr>
+      <?php endforeach;?>
+    </tbody>
+  </table>
+</div>
 <?php include '../../common/view/footer.html.php';?>

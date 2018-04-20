@@ -16,12 +16,12 @@
       <tr>
         <th class='c-name'><?php echo $lang->product->name;?></th>
         <th class='c-plans'><?php echo $lang->product->plans;?></th>
-        <th class="c-publishs"><?php echo $lang->product->releases;?></th>
+        <th class='c-publishs'><?php echo $lang->product->releases;?></th>
         <?php if($longBlock):?>
-        <th class="c-project"><?php echo $lang->product->currentProject;?></th>
+        <th class='c-project'><?php echo $lang->product->currentProject;?></th>
         <?php endif;?>
-        <th class="c-stories" title='<?php echo $lang->story->common;?>'><?php echo $lang->story->statusList['active'];?></th>
-        <th class="c-bugs" title='<?php echo $lang->bug->common;?>'><?php echo $lang->bug->unResolved;?></th>
+        <th class='c-stories'><?php echo $lang->story->statusList['active'] . $lang->story->common;?></th>
+        <th class='c-bugs'><?php echo $lang->bug->unResolved . $lang->bug->common;?></th>
       </tr>
     </thead>
     <tbody>

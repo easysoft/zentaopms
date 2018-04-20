@@ -2073,18 +2073,30 @@ class taskModel extends model
      */
     public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array(), $mode = 'datatable', $child = false)
     {
+        $canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($task) ? $task : null);
+        $canBatchClose        = (common::hasPriv('task', 'batchClose', !empty($task) ? $task : null) && strtolower($browseType) != 'closedBy');
+        $canBatchCancel       = common::hasPriv('task', 'batchCancel', !empty($task) ? $task : null);
+        $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', !empty($task) ? $task : null);
+        $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($task) ? $task : null);
+
+        $canBatchAction = $canBatchEdit or $canBatchClose or $canBatchCancel or $canBatchChangeModule or $canBatchAssignTo;
+
         $canView  = common::hasPriv('task', 'view');
         $taskLink = helper::createLink('task', 'view', "taskID=$task->id");
         $account  = $this->app->user->account;
         $id       = $col->id;
         if($col->show)
         {
-            $class = '';
+            $class = "c-{$id}";
             if($id == 'status') $class .= ' task-' . $task->status;
             if($id == 'id')     $class .= ' cell-id';
             if($id == 'name')   $class .= ' text-left';
             if($id == 'deadline' and isset($task->delay)) $class .= ' delayed';
-            if($id == 'assignedTo' && $task->assignedTo == $account) $class .= ' red';
+            if($id == 'assignedTo')
+            {
+                $class .= ' c-actions';
+                if($task->assignedTo == $account) $class .= ' red';
+            }
 
             $title = '';
             if($id == 'name')  $title = " title='{$task->name}'";
@@ -2094,12 +2106,14 @@ class taskModel extends model
             switch($id)
             {
                 case 'id':
-                    if($mode == 'table') echo "<input type='checkbox' name='taskIDList[{$task->id}]' value='{$task->id}'/> ";
-                    echo $canView ? html::a($taskLink, sprintf('%03d', $task->id)) : sprintf('%03d', $task->id);
+                    echo "<div class='checkbox-primary'>";
+                    if($mode == 'table' && $canBatchAction) echo "<input type='checkbox' name='taskIDList[{$task->id}]' value='{$task->id}'/><label></label>";
+                    echo sprintf('%03d', $task->id);
+                    echo '</div>';
                     break;
                 case 'pri':
-                    echo "<span class='pri" . zget($this->lang->task->priList, $task->pri) . "'>";
-                    echo $task->pri == '0' ? '' : zget($this->lang->task->priList, $task->pri);
+                    echo "<span class='label-pri label-pri-" . $task->pri . "'>";
+                    echo zget($this->lang->task->priList, $task->pri, $task->pri);
                     echo "</span>";
                     break;
                 case 'name':
@@ -2146,6 +2160,7 @@ class taskModel extends model
                     echo $task->realStarted;
                     break;
                 case 'assignedTo':
+                    common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
                     echo zget($users, $task->assignedTo);
                     break;
                 case 'assignedDate':
@@ -2201,17 +2216,23 @@ class taskModel extends model
                     echo substr($task->lastEditedDate, 5, 11);
                     break;
                 case 'actions':
-                    common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                    common::printIcon('task', 'start',    "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-
-                    common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
-                    if($browseType == 'needconfirm')
+                    if($task->storyStatus == 'changed' or $browseType == 'needconfirm')
                     {
                         $this->lang->task->confirmStoryChange = $this->lang->confirm;
-                        common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
+                        common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin', 'btn-wide');
+                        break;
                     }
-                    common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                    common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+
+                    echo "<div class='more'>";
+                    if($task->status == 'wait') common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                    echo "</div>";
+                    
+                    if($task->status == 'wait') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                    if($task->status == 'pause') common::printIcon('task', 'restart', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                    if($task->status == 'done' or $task->status == 'cancel' or $task->status == 'closed') common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                    if($task->status == 'doing') common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+
+                    common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
                     common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list');
                     if(empty($task->team) or empty($task->children))
                     {

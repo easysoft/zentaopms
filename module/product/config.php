@@ -89,3 +89,18 @@ $config->product->editor = new stdclass();
 $config->product->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->product->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->product->editor->close  = array('id' => 'comment', 'tools' => 'simpleTools');
+
+$config->product->report = new stdclass();
+$config->product->report->stage = array();
+$config->product->report->stageLabels[] = 'wait';
+$config->product->report->stageLabels[] = 'planed';
+$config->product->report->stageLabels[] = 'released';
+
+$config->product->report->planLabels   = array();
+$config->product->report->planLabels[] = '';
+
+$config->product->report->projectLabels   = array();
+$config->product->report->projectLabels[] = '';
+
+$config->product->report->planLabels   = array();
+$config->product->report->planLabels[] = '';

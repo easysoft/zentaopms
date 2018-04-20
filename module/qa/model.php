@@ -24,11 +24,15 @@ class qaModel extends model
     {
         $this->loadModel('product')->setMenu($products, $productID, $branch);
         $selectHtml = $this->product->select($products, $productID, 'qa', 'index', '', $branch);
+
+        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
+        $productIndex .= $selectHtml;
+
+        $this->lang->modulePageNav = $productIndex;
         foreach($this->lang->qa->menu as $key => $menu)
         {
-            $replace = ($key == 'product') ? $selectHtml : $productID;
+            $replace = $productID;
             common::setMenuVars($this->lang->qa->menu, $key, $replace);
         }
     }
 }
-

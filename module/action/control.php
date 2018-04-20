@@ -136,7 +136,6 @@ class action extends control
             dao::$errors['submit'][] = $this->lang->action->historyEdit;
             $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
-
-        die(js::locate($this->server->http_referer, 'parent'));
+        $this->send(array('result' => 'success', 'locate' => 'reload'));
     }
 }
