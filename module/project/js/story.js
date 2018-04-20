@@ -16,9 +16,6 @@ $(function()
         });
     });
 
-    fixedTfootAction('#projectStoryForm');
-    fixedTheadOfList('#storyList');
-
     $('#module' + moduleID).addClass('active');
     $('#product' + productID).addClass('active');
     $('#branch' + branchID).addClass('active');

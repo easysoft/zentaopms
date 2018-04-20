@@ -1,3 +1,4 @@
+table#kanbanHeader {margin-bottom:0px;}
 #kanbanHeader th{border: 1px solid #ddd; padding:8px;}
 #kanbanHeader th{position: relative}
 
