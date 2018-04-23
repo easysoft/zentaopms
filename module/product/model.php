@@ -608,7 +608,12 @@ class productModel extends model
         /* Get last 5 roadmap. */
         $lastKeys    = array_slice(array_keys($roadmap), -5);
         $lastRoadmap = array();
-        foreach($lastKeys as $key) $lastRoadmap[$key] = $roadmap[$key];
+        $lastRoadmap['total'] = 0;
+        foreach($lastKeys as $key)
+        {
+            $lastRoadmap[$key]     = $roadmap[$key];
+            $lastRoadmap['total'] += (count($roadmap[$key], 1) - count($roadmap[$key]));
+        }
 
         return $lastRoadmap;
     }

@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div class='main-content' id='mainContent'>
-  <h2><?php echo $lang->product->iteration;?> <span class="label label-badge label-light"><?php echo sprintf($lang->product->iterationInfo, count($roadmaps, 1) - count($roadmaps));?></span></h2>
+  <h2><?php echo $lang->product->iteration;?> <span class="label label-badge label-light"><?php echo sprintf($lang->product->iterationInfo, $roadmaps['total']);?></span></h2>
   <?php if($product->type != 'normal'):?>
   <div class="text-center branch-nav">
     <ul class="nav nav-secondary inline-block">
@@ -28,12 +28,12 @@
     <div class="tab-pane fade release-paths <?php if($branchKey == 0) echo 'active in';?>" id="tabContent<?php echo $branchKey;?>">
       <?php foreach($roadmaps as $year => $yearRoadmaps):?>
       <?php if(!isset($yearRoadmaps[$branchKey])) continue;?>
+      <?php $roadmapData = zget($yearRoadmaps, $branchKey, array());?>
       <div class="release-path">
         <div class="release-head">
           <div class="title text-primary"><?php echo $year . (is_numeric($year) ? $lang->year : '');?></div>
-          <div class="subtitle"><?php echo sprintf($lang->product->iterationInfo, count($yearRoadmaps, 1) - count($yearRoadmaps));?></div>
+          <div class="subtitle"><?php echo sprintf($lang->product->iterationInfo, count($roadmapData));?></div>
         </div>
-        <?php $roadmapData = zget($yearRoadmaps, $branchKey, array());?>
         <?php $i = 0;?>
         <?php foreach($roadmapData as $roadmap):?>
         <?php $totalData = count($roadmapData);?>
