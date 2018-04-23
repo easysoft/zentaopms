@@ -44,6 +44,7 @@ $lang->story->batchChangeBranch = "Batch Change Branches";
 $lang->story->batchChangeStage  = "Batch Change Stages";
 $lang->story->batchAssignTo     = "Batch Assign";
 $lang->story->batchChangeModule = "Batch Change Modules";
+$lang->story->viewAll           = "View All";
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
@@ -91,6 +92,7 @@ $lang->story->newStory       = 'Continue adding Story.';
 $lang->story->colorTag       = 'Color Tag';
 $lang->story->files          = 'Files';
 $lang->story->copy           = "Duplicate a Story";
+$lang->story->total          = "Total Stories";
 
 $lang->story->ditto       = 'Ditto';
 $lang->story->dittoNotice = 'This Story does not belong to the same Product as the last Story does!';

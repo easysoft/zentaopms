@@ -11,7 +11,14 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php if(empty($products)):?>
+<div class='noProduct'>
+  <span class='text-muted'><?php echo $lang->product->noProduct;?></span>
+  <strong><?php common::printLink('product', 'create', '', $lang->product->create);?></strong>
+</div>
+<?php else:?>
 <?php echo $this->fetch('block', 'dashboard', 'module=product');?>
+<?php endif;?>
 <script>
 <?php if($this->config->product->homepage != 'index'):?>
 $(function()
