@@ -455,7 +455,7 @@ class product extends control
         $this->view->position[] = $this->lang->product->roadmap;
         $this->view->product    = $product;
         $this->view->roadmaps   = $this->product->getRoadmap($productID, $branch);
-        $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches   = $product->type == 'normal' ? array(0 => '') : $this->loadModel('branch')->getPairs($productID);
 
         $this->display();
     }

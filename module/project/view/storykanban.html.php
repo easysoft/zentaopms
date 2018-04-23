@@ -11,6 +11,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
 <div id="mainMenu" class="clearfix">
+  <div id="sidebarHeader">
+    <div class="title" title='<?php echo $project->name?>'><?php echo $project->name;?></div>
+  </div>
   <div class="btn-toolbar pull-left">
     <?php if(common::hasPriv('project', 'story')) echo html::a($this->createLink('project', 'story', "project=$project->id"), "<span class='text'>{$lang->project->story}</span>", '', "class='btn btn-link'");?>
     <?php if(common::hasPriv('project', 'storykanban')) echo html::a($this->createLink('project', 'storykanban', "project=$project->id"), "<span class='text'>{$lang->project->kanban}</span>", '', "class='btn btn-link btn-active-text'");?>
