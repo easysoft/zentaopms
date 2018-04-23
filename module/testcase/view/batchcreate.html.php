@@ -131,9 +131,10 @@ if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
       </td>
       <td><?php echo html::select("type[%s]", $lang->testcase->typeList, $type, "class=form-control");?></td>
       <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[%s]", $lang->testcase->priList, $pri, "class=form-control");?></td>
-      <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[%s]", '', "class='form-control'")?></td>
+      <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[%s]", '', "rows='1'class='form-control'")?></td>
       <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[%s]", '', "class='form-control' autocomplete='off'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[%s][]", $lang->testcase->stageList, '', "class='form-control' multiple");?></td>
+      <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[%s]", $lang->testcase->reviewList, $needReview, "class='form-control'");?></td>
     </tr>
   </tbody>
 </table>
