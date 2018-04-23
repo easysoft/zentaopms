@@ -41,11 +41,9 @@
     </tr>
     <tr>
       <td class='text-center' colspan='3'>
-        <?php 
-        echo html::submitButton($lang->save);
-        echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
-        echo html::hidden('foo'); // Just make $_POST not empty..
-        ?>
+        <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
+        <?php echo html::backButton('', '', 'btn btn-wide');?>
+        <?php echo html::hidden('foo'); // Just make $_POST not empty..?>
       </td>
     </tr>
   </table>
