@@ -134,7 +134,12 @@
           <th><?php echo $lang->story->reviewedBy;?></th>
           <td><?php echo html::select('assignedTo', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen'");?></td>
           <?php if(!$this->story->checkForceReview()):?>
-          <td><?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview' class='no-margin' {$needReview}");?></td>
+          <td>
+            <div class='checkbox-primary'>
+              <input id='needNotReview' name='needNotReview' value='1' type='checkbox' class='no-margin' <?php echo $needReview;?>/>
+              <label for='marker'><?php echo $lang->story->needNotReview;?></label>
+            </div>
+          </td>
           <?php endif;?>
         </tr> 
         <tr>

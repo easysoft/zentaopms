@@ -590,17 +590,16 @@ class productModel extends model
         $plans    = $this->loadModel('productplan')->getList($productID, $branch);
         $releases = $this->loadModel('release')->getList($productID, $branch);
         $roadmap  = array();
-        if(is_array($releases)) $releases = array_reverse($releases);
-        if(is_array($plans))    $plans    = array_reverse($plans);
         foreach($releases as $release)
         {
             $year = substr($release->date, 0, 4);
             $roadmap[$year][$release->branch][] = $release;
         }
+
         foreach($plans as $plan)
         {
             if($plan->end != '0000-00-00' and strtotime($plan->end) - time() <= 0) continue;
-            $year = substr($plan->end, 0, 4);
+            $year = $plan->end == '2030-01-01' ? $this->lang->productplan->future : substr($plan->end, 0, 4);
             $roadmap[$year][$plan->branch][] = $plan;
         }
 
@@ -609,7 +608,12 @@ class productModel extends model
         /* Get last 5 roadmap. */
         $lastKeys    = array_slice(array_keys($roadmap), -5);
         $lastRoadmap = array();
-        foreach($lastKeys as $key) $lastRoadmap[$key] = $roadmap[$key];
+        $lastRoadmap['total'] = 0;
+        foreach($lastKeys as $key)
+        {
+            $lastRoadmap[$key]     = $roadmap[$key];
+            $lastRoadmap['total'] += (count($roadmap[$key], 1) - count($roadmap[$key]));
+        }
 
         return $lastRoadmap;
     }

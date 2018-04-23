@@ -26,7 +26,14 @@
         <tbody>
           <tr>
             <th><?php echo $lang->release->name;?></th>
-            <td><?php echo html::input('name', $release->name, "class='form-control' autocomplete='off' required");?></td><td></td>
+            <td><?php echo html::input('name', $release->name, "class='form-control' autocomplete='off' required");?></td>
+            <td>
+              <?php $checked = !empty($release->marker) ? "checked='checked'" : '';?>
+              <div class='checkbox-primary'>
+                <input id='marker' name='marker' value='1' type='checkbox' <?php echo $checked;?> />
+                <label for='marker'><?php echo $lang->release->marker;?></label>
+              </div>
+            </td>
           </tr>  
           <tr>
             <th><?php echo $lang->release->build;?></th>
