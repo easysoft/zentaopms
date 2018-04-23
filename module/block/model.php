@@ -394,12 +394,12 @@ class blockModel extends model
     }
 
     /**
-     * Get product report params.
+     * Get product statistic params.
      *
      * @access public
      * @return string
      */
-    public function getReportParams()
+    public function getStatisticParams()
     {
         $params = new stdclass();
         $params->type['name']    = $this->lang->block->type;
@@ -411,7 +411,7 @@ class blockModel extends model
         $params->orderBy['options'] = $this->lang->block->orderByList->product;
         $params->orderBy['control'] = 'select';
 
-        return json_encode($params);
+        return json_encode($this->onlyNumParams($params));
     }
 
     /**

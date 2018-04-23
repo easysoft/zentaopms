@@ -45,6 +45,7 @@ $lang->story->batchChangeBranch = "批量修改分支";
 $lang->story->batchChangeStage  = "批量修改阶段";
 $lang->story->batchAssignTo     = "批量指派";
 $lang->story->batchChangeModule = "批量修改模块";
+$lang->story->viewAll           = '查看全部';
 
 $lang->story->common         = '需求';
 $lang->story->id             = '编号';
@@ -92,6 +93,7 @@ $lang->story->newStory       = '继续添加需求';
 $lang->story->colorTag       = '颜色标签';
 $lang->story->files          = '附件';
 $lang->story->copy           = "复制需求";
+$lang->story->total          = '总需求';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = '该需求与上一需求不属于同一产品！';

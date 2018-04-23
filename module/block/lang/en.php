@@ -57,11 +57,12 @@ $lang->block->hidden             = 'Hide';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span>, <span class='timeline-text'>%s <em>%s</em> %s <a href='%s'>%s</a></span>";
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . ' Report';
-$lang->block->default['product']['1']['block'] = 'report';
+$lang->block->default['product']['1']['block'] = 'statistic';
 $lang->block->default['product']['1']['grid']  = 8;
 
 $lang->block->default['product']['1']['params']['orderBy'] = 'id_desc';
 $lang->block->default['product']['1']['params']['type']    = 'noclosed';
+$lang->block->default['product']['1']['params']['num']     = 5;
 
 $lang->block->default['product']['2']['title'] = $lang->productCommon . ' Overview';
 $lang->block->default['product']['2']['block'] = 'overview';
@@ -223,12 +224,12 @@ $lang->block->moduleList['todo']    = 'Todo';
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();
-$lang->block->modules['product']->availableBlocks->report   = $lang->productCommon . ' Report';
-$lang->block->modules['product']->availableBlocks->overview = $lang->productCommon . ' Overview';
-$lang->block->modules['product']->availableBlocks->list     = $lang->productCommon . 'List';
-$lang->block->modules['product']->availableBlocks->story    = 'Stories';
-$lang->block->modules['product']->availableBlocks->plan     = 'Plans';
-$lang->block->modules['product']->availableBlocks->release  = 'Releases';
+$lang->block->modules['product']->availableBlocks->statistic = $lang->productCommon . ' Report';
+$lang->block->modules['product']->availableBlocks->overview  = $lang->productCommon . ' Overview';
+$lang->block->modules['product']->availableBlocks->list      = $lang->productCommon . 'List';
+$lang->block->modules['product']->availableBlocks->story     = 'Stories';
+$lang->block->modules['product']->availableBlocks->plan      = 'Plans';
+$lang->block->modules['product']->availableBlocks->release   = 'Releases';
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
 $lang->block->modules['project']->availableBlocks->list  = $lang->projectCommon . 'List';

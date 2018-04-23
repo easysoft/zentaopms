@@ -57,11 +57,12 @@ $lang->block->hidden             = '隐藏';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span>, <span class='timeline-text'>%s <em>%s</em> %s <a href='%s'>%s</a></span>";
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . '统计';
-$lang->block->default['product']['1']['block'] = 'report';
+$lang->block->default['product']['1']['block'] = 'statistic';
 $lang->block->default['product']['1']['grid']  = 8;
 
 $lang->block->default['product']['1']['params']['orderBy'] = 'id_desc';
 $lang->block->default['product']['1']['params']['type']    = 'noclosed';
+$lang->block->default['product']['1']['params']['num']     = 5;
 
 $lang->block->default['product']['2']['title'] = $lang->productCommon . '总览';
 $lang->block->default['product']['2']['block'] = 'overview';
@@ -223,12 +224,12 @@ $lang->block->moduleList['todo']    = '待办';
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();
-$lang->block->modules['product']->availableBlocks->report   = $lang->productCommon . '统计';
-$lang->block->modules['product']->availableBlocks->overview = $lang->productCommon . '总览';
-$lang->block->modules['product']->availableBlocks->list     = $lang->productCommon . '列表';
-$lang->block->modules['product']->availableBlocks->story    = '需求列表';
-$lang->block->modules['product']->availableBlocks->plan     = '计划列表';
-$lang->block->modules['product']->availableBlocks->release  = '发布列表';
+$lang->block->modules['product']->availableBlocks->statistic = $lang->productCommon . '统计';
+$lang->block->modules['product']->availableBlocks->overview  = $lang->productCommon . '总览';
+$lang->block->modules['product']->availableBlocks->list      = $lang->productCommon . '列表';
+$lang->block->modules['product']->availableBlocks->story     = '需求列表';
+$lang->block->modules['product']->availableBlocks->plan      = '计划列表';
+$lang->block->modules['product']->availableBlocks->release   = '发布列表';
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
 $lang->block->modules['project']->availableBlocks->list  = $lang->projectCommon . '列表';

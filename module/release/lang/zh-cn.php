@@ -49,6 +49,7 @@ $lang->release->finishStories         = '本次共完成 %s 个需求';
 $lang->release->resolvedBugs          = '本次共解决 %s 个Bug';
 $lang->release->createdBugs           = '本次共遗留 %s 个Bug';
 $lang->release->export                = '导出HTML';
+$lang->release->yesterday             = '昨日发布';
 
 $lang->release->filePath = '下载地址：';
 $lang->release->scmPath  = '版本库地址：';

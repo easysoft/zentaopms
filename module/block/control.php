@@ -239,6 +239,12 @@ class block extends control
                 $block->moreLink = $this->createLink('company', 'dynamic');
             }
 
+            $block->actionLink = '';
+            if($block->block == 'overview' && common::hasPriv('product', 'create'))
+            {
+                $block->actionLink = html::a($this->createLink('product', 'create'), "<i class='icon icon-plus'> </i>" . $this->lang->product->create, '', "class='btn'");
+            }
+
             if($this->block->isLongBlock($block))
             {
                 $longBlocks[$key] = $block;
@@ -688,17 +694,18 @@ class block extends control
     }
 
     /**
-     * Print report block.
+     * Print statistic block.
      *
      * @access public
      * @return void
      */
-    public function printReportBlock()
+    public function printStatisticBlock()
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
         $status  = isset($this->params->type) ? $this->params->type : '';
         $orderBy = isset($this->params->type) ? $this->params->orderBy : 'id_asc';
+        $num     = isset($this->params->num)  ? (int)$this->params->num : 0;
 
         /* Get products. */
         $products = $this->loadModel('product')->getList($status);
@@ -715,11 +722,11 @@ class block extends control
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('id')->in($productIDList)
             ->orderBy($orderBy)
+            ->beginIF($this->viewType != 'json')->limit($num)->fi()
             ->fetchAll('id');
 
         /* Get stories. */
-        $stories = $this->dao->select('product, stage, COUNT(status) AS count')
-            ->from(TABLE_STORY)
+        $stories = $this->dao->select('product, stage, COUNT(status) AS count')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productIDList)
             ->groupBy('product, stage')
@@ -750,9 +757,9 @@ class block extends control
                 if($plan->end >= helper::today()) $unexpired++;
             }
 
-            $plan = new stdclass;
-            $plan->expired   = $expired;
-            $plan->unexpired = $unexpired;
+            $plan = array();
+            $plan['expired']   = $expired;
+            $plan['unexpired'] = $unexpired;
 
             $plans[$product] = $plan;
         }
@@ -776,29 +783,48 @@ class block extends control
                 if($project->status != 'done' && $project->status != 'closed' && $project->status != 'suspended' && $project->end < helper::today()) $delay++;
             }
 
-            $project = new stdclass();
-            $project->doing = $doing;
-            $project->done  = $done;
-            $project->delay = $delay;
+            $project = array();
+            $project['doing'] = $doing;
+            $project['done']  = $done;
+            $project['delay'] = $delay;
 
             $projects[$product] = $project;
         }
 
         /* Get releases. */
-        $releases = $this->dao->select('product, COUNT(*) AS count')
-            ->from(TABLE_RELEASE)
+        $releases = $this->dao->select('product, status, COUNT(*) AS count')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
+            ->andWhere('product')->in($productIDList)
+            ->groupBy('product, status')
+            ->fetchGroup('product', 'status');
+        foreach($releases as $product => $release)
+        {
+            $release['normal']    = isset($release['normal'])    ? $release['normal']->count    : 0;
+            $release['terminate'] = isset($release['terminate']) ? $release['terminate']->count : 0;
+
+            $releases[$product] = $release;
+        }
+
+        /* Get last releases. */
+        $lastReleases = $this->dao->select('product, COUNT(*) AS count')->from(TABLE_RELEASE)
+            ->where('date')->eq(date('Y-m-d', strtotime('-1 day')))
             ->andWhere('product')->in($productIDList)
             ->groupBy('product')
             ->fetchPairs();
 
         foreach($products as $productID => $product)
         {
-            $product->stories  = isset($stories[$productID])  ? $stories[$productID]  : 0;
-            $product->plans    = isset($plans[$productID])    ? $plans[$productID]    : 0;
-            $product->projects = isset($projects[$productID]) ? $projects[$productID] : 0;
-            $product->releases = isset($releases[$productID]) ? $releases[$productID] : 0;
+            $product->stories     = isset($stories[$productID])      ? $stories[$productID]      : 0;
+            $product->plans       = isset($plans[$productID])        ? $plans[$productID]        : 0;
+            $product->projects    = isset($projects[$productID])     ? $projects[$productID]     : 0;
+            $product->releases    = isset($releases[$productID])     ? $releases[$productID]     : 0;
+            $product->lastRelease = isset($lastReleases[$productID]) ? $lastReleases[$productID] : 0;
         }
+
+        $this->app->loadLang('story');
+        $this->app->loadLang('productplan');
+        $this->app->loadLang('project');
+        $this->app->loadLang('release');
 
         $this->view->products = $products;
     }

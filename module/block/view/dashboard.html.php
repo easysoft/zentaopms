@@ -25,15 +25,14 @@ $useGuest = $this->app->user->account == 'guest';
       <div class='row'>
         <div class='col-sm-12'>
           <div class='panel block-<?php echo $block->block;?> <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>'>
-            <?php $hasHeading = ($block->block != 'welcome' and $block->block != 'flowchart');?>
+            <?php $hasHeading = ($block->block != 'welcome' and $block->block != 'flowchart' and $block->block != 'statistic');?>
             <?php if($hasHeading):?>
             <div class='panel-heading'>
               <div class='panel-title'><?php echo $block->title;?></div>
             <?php endif;?>
               <nav class='panel-actions nav nav-default'>
-                <?php if(!empty($block->moreLink)):?>
-                <?php echo '<li>' . html::a($block->moreLink, 'MORE', '', "title='{$lang->more}'") . '</li>'; ?>
-                <?php endif; ?>
+                <?php if(!empty($block->actionLink)) echo '<li>' . $block->actionLink . '</li>';?>
+                <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, 'MORE', '', "title='{$lang->more}'") . '</li>'; ?>
                 <li class='dropdown'>
                   <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
                   <ul class='dropdown-menu pull-right'>
@@ -71,9 +70,8 @@ $useGuest = $this->app->user->account == 'guest';
               <div class='panel-title'><?php echo $block->title;?></div>
             <?php endif;?>
               <nav class='panel-actions nav nav-default'>
-                <?php if(!empty($block->moreLink)):?>
-                   <?php echo '<li>' . html::a($block->moreLink, 'MORE', '', "title='{$lang->more}'") . '</li>';?>
-                <?php endif; ?>
+                <?php if(!empty($block->actionLink)) echo '<li>' . $block->actionLink . '</li>';?>
+                <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, 'MORE', '', "title='{$lang->more}'") . '</li>';?>
                 <li class='dropdown'>
                   <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
                   <ul class='dropdown-menu pull-right'>
