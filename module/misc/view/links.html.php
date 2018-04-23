@@ -1,8 +1,6 @@
 <div class='container mw-800px bd-0'>
   <div class='cards'>
-    <?php
-    unset($lang->misc->zentao->version);
-    ?>
+    <?php unset($lang->misc->zentao->version);?>
     <?php foreach($lang->misc->zentao as $label => $groupItems):?>
     <?php if(strpos(',labels,icons,version,', ",$label,") !== false) continue; ?>
     <div class='col-sm-6'>
