@@ -75,6 +75,7 @@ $lang->product->release       = 'Release';
 $lang->product->latestDynamic = 'Latest Dynamic';
 $lang->product->iteration     = 'Iteration';
 $lang->product->iterationInfo = 'Iterate %s times';
+$lang->product->iterationView = 'Iteration View';
 
 $lang->product->searchStory  = 'Search';
 $lang->product->assignedToMe = 'Assigned To Me';

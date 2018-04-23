@@ -22,10 +22,10 @@
             <div class="panel-body">
               <div class="release-path">
                 <ul class="release-line">
-                  <?php foreach($releases as $release):?>
-                  <?php $icon = !empty($release->flag) ? "<i class='icon icon-flag'></i>" : '';?>
-                  <li class="<?php echo end($releases)->id == $release->id ? 'active' : '';?>">
+                  <?php foreach(array_slice($releases, count($releases) - 6) as $release):?>
+                  <li <?php if(date('Y-m-d') < $release->date) echo "class='active'";?>>
                     <a href="<?php echo $this->createLink('release', 'view', "releaseID={$release->id}");?>">
+                      <?php if(!empty($release->marker)) echo "<i class='icon icon-flag text-primary'></i>";?>
                       <span class="title"><?php echo $release->name;?></span>
                       <span class="date"><?php echo $release->date;?></span>
                       <span class="info"><?php echo $release->desc;?></span>
@@ -34,6 +34,7 @@
                   <?php endforeach;?>
                 </ul>
               </div>
+              <?php echo html::a($this->createLink('product', 'roadmap', "productID={$product->id}"), $lang->product->iterationView . "<span class='label label-badge label-icon'><i class='icon icon-arrow-right'></i></span>", '', "class='btn btn-primary btn-circle btn-icon-right btn-sm pull-right'");?>
             </div>
           </div>
         </div>
