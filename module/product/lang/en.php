@@ -116,7 +116,7 @@ $lang->product->aclList['custom']  = 'Custom (Team members and Whitelist members
 
 $lang->product->storySummary   = " <strong>%s</strong> Story(ies), <strong>%s</strong> hour(s) estimated, case coverage is <strong>%s</strong> on this page.";
 $lang->product->checkedSummary = " <strong>%total%</strong> Checked, <strong>%estimate%</strong> hour(s) estimated, case coverage is <strong>%rate%</strong>.";
-$lang->product->noModule       = 'You have no modules<br/>Manage now';
+$lang->product->noModule       = '<div>You have no modules</div><div>Manage now</div>';
 $lang->product->noStory        = 'No records. You could ';
 $lang->product->noMatched      = '"%s" cannot be found.' . $lang->productCommon;
 

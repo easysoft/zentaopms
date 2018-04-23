@@ -83,14 +83,23 @@
 <div id="mainContent" class="main-row">
   <div class="side-col" id="sidebar">
     <div class="cell">
+      <?php if(!$moduleTree):?>
+      <hr class="space">
+      <div class="text-center text-muted">
+        <?php echo $lang->product->noModule;?>
+      </div>
+      <hr class="space">
+      <?php endif;?>
+
       <?php echo $moduleTree;?>
       <div class="text-center">
-        <?php if(!$moduleTree) echo "<div class='noModule'><strong>{$lang->product->noModule}</strong></div>";?>
         <?php common::printLink('tree', 'browse', "rootID=$productID&view=story", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
       </div>
+
     </div>
   </div>
+
   <div class="main-col">
     <div class="cell" id="queryBox"></div>
     <form class="main-table table-story" data-ride="table" method="post" id='productStoryForm'>
@@ -305,8 +314,8 @@
         <?php $pager->show('right', 'pagerjs');?>
       </div>
       <?php elseif(common::hasPriv('story', 'create')):?>
-      <div class='noStory'>
-        <span class='text-muted'><?php echo $lang->product->noStory;?></span> <strong><?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}"), $lang->story->create);?></strong>
+      <div class="table-empty-tip">
+        <p><span class="text-muted"><?php echo $lang->product->noStory;?></span> <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}"), "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-info'");?></strong></p>
       </div>
       <?php endif;?>
     </form>

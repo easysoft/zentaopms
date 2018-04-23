@@ -10,7 +10,7 @@ $(function()
         $btnToolbar.append("<a href=\"javascript:saveDatatableConfig('mode', 'datatable', true);\" class='btn btn-link <?php echo $mode == 'datatable' ? 'btn-active-line' : '';?>'><?php echo $lang->datatable->datatable?></a>");
         $btnToolbar.append("<a id='tableCustomBtn' class='btn btn-link' href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><i class='icon icon-cog'></i></a>");
         <?php if(!empty($setShowModule)):?>
-        $('#sidebar .cell .text-center').append("<a href='javascript:;' data-toggle='showModuleModal' class='text-secondary small'><?php echo $lang->datatable->showModule?></a><hr class='space-sm' />");
+        $('#sidebar .cell .text-center:last').append("<a href='javascript:;' data-toggle='showModuleModal' class='text-secondary small'><?php echo $lang->datatable->showModule?></a><hr class='space-sm' />");
         <?php endif;?>
         $('#tableCustomBtn').modalTrigger();
         $("a[data-toggle='showModuleModal']").click(function(){$('#showModuleModal').modal('show')});
