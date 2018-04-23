@@ -22,7 +22,10 @@
             <div class="panel-body">
               <div class="release-path">
                 <ul class="release-line">
-                  <?php foreach(array_slice($releases, count($releases) - 6) as $release):?>
+                  <?php $i = 0;?>
+                  <?php foreach($releases as $release):?>
+                  <?php $i++;?>
+                  <?php if($i > 6) break;?>
                   <li <?php if(date('Y-m-d') < $release->date) echo "class='active'";?>>
                     <a href="<?php echo $this->createLink('release', 'view', "releaseID={$release->id}");?>">
                       <?php if(!empty($release->marker)) echo "<i class='icon icon-flag text-primary'></i>";?>
