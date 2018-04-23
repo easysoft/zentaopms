@@ -34,6 +34,7 @@ $lang->release->product               = $lang->productCommon;
 $lang->release->branch                = '平台/分支';
 $lang->release->build                 = '版本';
 $lang->release->name                  = '发布名称';
+$lang->release->marker                = '里程碑';
 $lang->release->date                  = '发布日期';
 $lang->release->desc                  = '描述';
 $lang->release->status                = '状态';
