@@ -75,6 +75,7 @@ $lang->product->release       = '发布';
 $lang->product->latestDynamic = '最新动态';
 $lang->product->iteration     = '版本迭代';
 $lang->product->iterationInfo = '迭代 %s 次';
+$lang->product->iterationView = '查看详情';
 
 $lang->product->searchStory  = '搜索';
 $lang->product->assignedToMe = '指给我';
