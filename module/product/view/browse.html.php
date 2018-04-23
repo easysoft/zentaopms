@@ -315,7 +315,7 @@
       </div>
       <?php elseif(common::hasPriv('story', 'create')):?>
       <div class="table-empty-tip">
-        <p><span class="text-muted"><?php echo $lang->product->noStory;?></span> <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}"), "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-info'");?></strong></p>
+        <p><span class="text-muted"><?php echo $lang->product->noStory;?></span> <?php common::printLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}", "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-info'");?></p>
       </div>
       <?php endif;?>
     </form>
