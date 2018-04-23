@@ -106,8 +106,8 @@ $lang->extension->errorPackageFileExists       = '<strong>%s</strong> has existe
 $lang->extension->errorDownloadFailed          = 'Download failed. Please try it again. If still not OK, try to download it manually and upload it to install.';
 $lang->extension->errorMd5Checking             = 'Incomplete File. Please download it again. If still not OK, try to download it manually and upload it to install.';
 $lang->extension->errorExtracted               = 'Unzip <strong> %s </strong> failed. It could be an invailid zip file. Error: <br />%s';
-$lang->extension->errorCheckIncompatible       = 'It is incompatible with this versiosn of ZenTao. %sed it and you might not be able to use it. <h3>Choose <a href="%s">Force %s</a> or <a href="#" onclick=parent.location.href="%s"> Cancel</a></h3>';
-$lang->extension->errorFileConflicted          = '<br />%s <h3> is conflicted with others. Choose <a href="%s">Override</a> or <a href="#" onclick=parent.location.href="%s">Cancel</a></h3>';
+$lang->extension->errorCheckIncompatible       = 'It is incompatible with this versiosn of ZenTao. %sed it and you might not be able to use it. <h5>Choose <a href="%s" class="btn btn-sm">Force %s</a> or <a href="#" onclick=parent.location.href="%s" class="btn btn-sm"> Cancel</a></h5>';
+$lang->extension->errorFileConflicted          = '<br />%s <h5> is conflicted with others. Choose <a href="%s" class="btn btn-sm">Override</a> or <a href="#" onclick=parent.location.href="%s" class="btn btn-sm">Cancel</a></h5>';
 $lang->extension->errorPackageNotFound         = '<strong>%s </strong> is not found. Downloading might be failed. Please download it again.';
 $lang->extension->errorTargetPathNotWritable   = '<strong>%s </strong> is not writable.';
 $lang->extension->errorTargetPathNotExists     = '<strong>%s </strong> is not found.';
