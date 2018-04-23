@@ -49,7 +49,7 @@ $('#future').on('change', function()
     else
     {
         $('#begin').removeAttr('disabled');
-        $('#end').val('').parents('tr').show();
+        $('#end').parents('tr').show();
     }
 });
 
