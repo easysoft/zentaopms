@@ -11,18 +11,19 @@
  */
 ?>
 <?php include $this->app->getModuleRoot() . 'message/view/header.html.php';?>
-<div class='container mw-700px'>
-  <div id='titlebar'>
-    <div class='heading'>
-      <span class='prefix'><?php echo html::icon($lang->icons['mail']);?></span>
-      <strong><?php echo $lang->mail->common;?></strong>
-      <small class='text-muted'> <?php echo $lang->mail->detect;?> <?php echo html::icon('cog');?></small>
+<div id='mainContent' class='main-content'>
+  <div class='center-block mw-700px'>
+    <div class='main-header'>
+      <h2>
+        <?php echo $lang->mail->common;?>
+        <small class='text-muted'> <?php echo $lang->mail->detect;?> <?php echo html::icon('cog');?></small>
+      </h2>
     </div>
+    <form class='pdt-20' method='post' target='hiddenwin'>
+      <table class='table table-form'>
+        <tr><th style='width:130px'><?php echo $lang->mail->inputFromEmail; ?></th><td class='w-p50'><?php echo html::input('fromAddress', $fromAddress, "class='form-control' autocomplete='off'");?></td><td><?php echo html::submitButton($lang->mail->nextStep);?></td></tr>
+      </table>
+    </form>
   </div>
-  <form class='form-condensed pdt-20' method='post' target='hiddenwin'>
-    <table class='table table-form'>
-      <tr><th class='w-p25'><?php echo $lang->mail->inputFromEmail; ?></th><td class='w-p50'><?php echo html::input('fromAddress', $fromAddress, "class='form-control' autocomplete='off'");?></td><td><?php echo html::submitButton($lang->mail->nextStep);?></td></tr>
-    </table>
-  </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>

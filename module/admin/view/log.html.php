@@ -12,21 +12,23 @@
 ?>
 <?php include $this->app->getModuleRoot() . 'webhook/view/header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
-<div class='container mw-600px'>
-  <form id='logForm' method='post' class='ajaxForm'>
-    <table class='table table-form'>
-      <tr>
-        <th class='w-100px'><?php echo $lang->admin->days;?></th>
-        <td><?php echo html::input('days', $config->admin->log->saveDays, "class='form-control'");?></td>
-      </tr>
-      <tr>
-        <th></th>
-        <td>
-          <?php echo html::submitButton();?>
-          <?php echo $lang->admin->info->log;?>
-        </td>
-      </tr>
-    </table>
-  </form>
+<div id='mainContent' class='main-content'>
+  <div class='center-block mw-600px'>
+    <form id='logForm' method='post' class='ajaxForm'>
+      <table class='table table-form'>
+        <tr>
+          <th class='w-100px'><?php echo $lang->admin->days;?></th>
+          <td><?php echo html::input('days', $config->admin->log->saveDays, "class='form-control'");?></td>
+        </tr>
+        <tr>
+          <th></th>
+          <td>
+            <?php echo html::submitButton();?>
+            <?php echo $lang->admin->info->log;?>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

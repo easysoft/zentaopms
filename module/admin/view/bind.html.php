@@ -11,31 +11,39 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='container mw-500px'>
-  <div id='titlebar'>
-    <div class='heading'>
-      <span class='prefix'><?php echo html::icon('cloud');?></span>
-      <strong><?php echo $lang->admin->bind->caption;?></strong>
+<div id='mainContent' class='main-content'>
+  <div class='center-block mw-500px'>
+    <div class='main-header'>
+      <h2>
+        <span class='prefix'><?php echo html::icon('cloud');?></span>
+        <?php echo $lang->admin->bind->caption;?>
+      </h2>
     </div>
+    <form class='mw-400px' method="post" target="hiddenwin">
+      <table class='table table-form'>
+        <tr>
+          <th class='w-100px'><?php echo $lang->user->account;?></th>
+          <?php
+          $account = zget($config->global, 'community', '');
+          if($account == 'na') $account = '';
+          ?>
+          <td><?php echo html::input('account', $account, "class='form-control' autocomplete='off'");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->user->password;?></th>
+          <td><?php echo html::password('password', '', "class='form-control'");?></td>
+        </tr>  
+        <tr>
+          <th></th>
+          <td class="text-center">
+            <?php
+            echo html::submitButton('', '', 'btn btn-wide btn-primary');
+            echo html::hidden('sn', $sn) . html::hidden('site', common::getSysURL());
+            ?>
+          </td>
+        </tr>
+      </table>
+    </form>
   </div>
-  <form class='form-condensed mw-400px' method="post" target="hiddenwin">
-    <table align='center' class='table table-form'>
-      <tr>
-        <th class='w-100px'><?php echo $lang->user->account;?></th>
-        <?php
-        $account = zget($config->global, 'community', '');
-        if($account == 'na') $account = '';
-        ?>
-        <td><?php echo html::input('account', $account, "class='form-control' autocomplete='off'");?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->user->password;?></th>
-        <td><?php echo html::password('password', '', "class='form-control'");?></td>
-      </tr>  
-      <tr>
-        <th></th><td class="text-center"><?php echo html::submitButton() . html::hidden('sn', $sn) . html::hidden('site', common::getSysURL());?></td>
-      </tr>
-    </table>
-  </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>

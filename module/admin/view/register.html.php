@@ -16,17 +16,16 @@
 .input-group-btn .btn{border-left:0px}
 .input-group:last-child .input-group-addon {border-right:0px;}
 </style>
-<div id='featurebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon('cloud');?></span>
-    <strong><?php echo $lang->admin->register->caption;?></strong>
+<div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
+    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->admin->register->caption;?></span></span>
   </div>
 </div>
-<div class='row'>
+<div id='mainContent' class='main-row'>
   <div class='col-md-6'>
     <div class='panel'>
       <div class='panel-heading'><strong><?php echo $lang->admin->register->common?></strong></div>
-      <form class='form-condensed mw-600px' method="post" target="hiddenwin">
+      <form class='mw-600px' method="post" target="hiddenwin">
         <table align='center' class='table table-form'>
           <tr>
             <th class='w-100px'><?php echo $lang->user->account;?></th>
@@ -78,11 +77,14 @@
           </tr>
           <tr>
             <th><?php echo $lang->user->password2;?></th>
-            <td><?php echo html::password('password2', '', "class='form-control'") . '<span class="star">*</span>';?></td>
+            <td>
+              <div class="required required-wrapper"></div>
+              <?php echo html::password('password2', '', "class='form-control'");?>
+            </td>
           </tr>
           <tr>
             <th></th>
-            <td colspan="2">
+            <td>
               <?php echo html::submitButton($lang->admin->register->submit) . html::hidden('sn', $sn) . html::hidden('bindSite', common::getSysURL());?>
             </td>
           </tr>
@@ -93,7 +95,7 @@
   <div class='col-md-6'>
     <div class='panel'>
       <div class='panel-heading'><strong><?php echo $lang->admin->register->bind?></strong></div>
-      <form class='form-condensed mw-400px' method="post" target="hiddenwin" action='<?php echo inlink('bind', "from=$from")?>'>
+      <form class='mw-400px' method="post" target="hiddenwin" action='<?php echo inlink('bind', "from=$from")?>'>
         <table align='center' class='table table-form'>
           <tr>
             <th class='w-100px'><?php echo $lang->user->account;?></th>

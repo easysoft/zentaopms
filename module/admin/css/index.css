@@ -6,7 +6,7 @@
 .card > .media > h5 {position: absolute; display: block; color: #666; z-index: 100; font-size: 14px; left: 15px; top: 10px; transition: all 0.4s;}
 .card:hover > .media {background: #F8FAFE}
 .card:hover > .media > .icon {color: #ccc}
-.card .card-content {padding: 20px}
+.card .card-content {padding: 20px; border:1px solid #f1f1f1;}
 .card-content > ul {padding-left: 20px;}
 .card-content > ul > li {margin-bottom: 5px;}
 .card a, .card:hover a {color: #444}

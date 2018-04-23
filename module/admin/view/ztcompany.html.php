@@ -11,23 +11,25 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='container mw-500px'>
-  <div id='titlebar'>
-    <div class='heading'><strong><?php echo $lang->admin->ztCompany;?></strong></div>
+<div id='mainContent' class='main-content'>
+  <div class='center-block mw-500px'>
+    <div class='main-header'>
+      <h2><?php echo $lang->admin->ztCompany;?></h2>
+    </div>
+    <form method='post' target='hiddenwin'>
+      <table class='table table-form'>
+        <?php foreach($fields as $field):?>
+        <tr>
+          <th><?php echo $field == 'company' ? $lang->company->name : $lang->user->$field;?></th>
+          <td><?php echo html::input($field, '', "class='form-control' autocomplete='off'");?></td>
+        </tr>
+        <?php endforeach;?>
+        <tr>
+          <th></th>
+          <td><?php echo html::submitButton();?></td>
+        </tr>
+      </table>
+    </form>
   </div>
-  <form method='post' target='hiddenwin'>
-    <table class='table table-form'>
-      <?php foreach($fields as $field):?>
-      <tr>
-        <th><?php echo $field == 'company' ? $lang->company->name : $lang->user->$field;?></th>
-        <td><?php echo html::input($field, '', "class='form-control' autocomplete='off'");?></td>
-      </tr>
-      <?php endforeach;?>
-      <tr>
-        <th></th>
-        <td><?php echo html::submitButton();?></td>
-      </tr>
-    </table>
-  </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>
