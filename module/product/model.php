@@ -590,29 +590,57 @@ class productModel extends model
         $plans    = $this->loadModel('productplan')->getList($productID, $branch);
         $releases = $this->loadModel('release')->getList($productID, $branch);
         $roadmap  = array();
+
+        foreach($plans as $plan)
+        {
+            if($plan->end != '0000-00-00' and strtotime($plan->end) - time() <= 0) continue;
+            $year = substr($plan->end, 0, 4);
+            $roadmap[$year][$plan->branch][] = $plan;
+        }
+
         foreach($releases as $release)
         {
             $year = substr($release->date, 0, 4);
             $roadmap[$year][$release->branch][] = $release;
         }
 
-        foreach($plans as $plan)
+        krsort($roadmap);
+
+        $groupRoadmap = array();
+        foreach($roadmap as $year => $branchRoadmaps)
         {
-            if($plan->end != '0000-00-00' and strtotime($plan->end) - time() <= 0) continue;
-            $year = $plan->end == '2030-01-01' ? $this->lang->productplan->future : substr($plan->end, 0, 4);
-            $roadmap[$year][$plan->branch][] = $plan;
+            foreach($branchRoadmaps as $branch => $roadmaps)
+            {
+                $totalData = count($roadmaps);
+                $rows      = ceil($totalData / 8);
+                $maxPerRow = ceil($totalData / $rows);
+                $j = 1;
+                for($i = 0; $i < $totalData; $i += $maxPerRow)
+                {
+                    $groupRoadmap[$year][$branch][$j] = array_slice($roadmaps, $i, $maxPerRow);
+                    krsort($groupRoadmap[$year][$branch][$j]);
+                    $j++;
+                }
+            }
         }
 
-        ksort($roadmap);
 
         /* Get last 5 roadmap. */
-        $lastKeys    = array_slice(array_keys($roadmap), -5);
+        $lastKeys    = array_slice(array_keys($groupRoadmap), -5);
         $lastRoadmap = array();
         $lastRoadmap['total'] = 0;
         foreach($lastKeys as $key)
         {
-            $lastRoadmap[$key]     = $roadmap[$key];
-            $lastRoadmap['total'] += (count($roadmap[$key], 1) - count($roadmap[$key]));
+            if($key == '2030') 
+            {
+                $lastRoadmap[$this->lang->productplan->future] = $groupRoadmap[$key];
+            }
+            else
+            {
+                $lastRoadmap[$key] = $groupRoadmap[$key];
+            }
+
+            foreach($groupRoadmap[$key] as $branchRoadmaps) $lastRoadmap['total'] += (count($branchRoadmaps, 1) - count($branchRoadmaps));
         }
 
         return $lastRoadmap;

@@ -28,21 +28,16 @@
     <div class="tab-pane fade release-paths <?php if($branchKey == 0) echo 'active in';?>" id="tabContent<?php echo $branchKey;?>">
       <?php foreach($roadmaps as $year => $yearRoadmaps):?>
       <?php if(!isset($yearRoadmaps[$branchKey])) continue;?>
-      <?php $roadmapData = zget($yearRoadmaps, $branchKey, array());?>
+      <?php $groupRoadmaps = zget($yearRoadmaps, $branchKey, array());?>
       <div class="release-path">
         <div class="release-head">
           <div class="title text-primary"><?php echo $year . (is_numeric($year) ? $lang->year : '');?></div>
-          <div class="subtitle"><?php echo sprintf($lang->product->iterationInfo, count($roadmapData));?></div>
+          <div class="subtitle"><?php echo sprintf($lang->product->iterationInfo, count($groupRoadmaps, 1) - count($groupRoadmaps));?></div>
         </div>
         <?php $i = 0;?>
-        <?php foreach($roadmapData as $roadmap):?>
-        <?php $totalData = count($roadmapData);?>
-        <?php $rows      = ceil($totalData / 8);?>
-        <?php $maxPerRow = ceil($totalData / $rows);?>
-        <?php if($i == 0 || $i % $maxPerRow == 0):?>
+        <?php foreach($groupRoadmaps as $row => $roadmapData):?>
         <ul class="release-line">
-        <?php endif;?>
-          <?php $i++;?>
+          <?php foreach($roadmapData as $roadmap):?>
           <li <?php if(isset($roadmap->build) && date('Y-m-d') < $roadmap->date) echo "class='active'";?>>
             <?php $viewLink = isset($roadmap->build) ? $this->createLink('release', 'view', "releaseID=$roadmap->id") : $this->createLink('productplan', 'view', "planID=$roadmap->id");?>
             <a href="<?php echo $viewLink;?>">
@@ -56,9 +51,8 @@
               </div>
             </a>
           </li>
-        <?php if($i % $maxPerRow == 0):?>
+          <?php endforeach;?>
         </ul>
-        <?php endif;?>
         <?php endforeach;?>
       </div>
       <?php endforeach;?>
