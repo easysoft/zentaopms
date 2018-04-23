@@ -27,9 +27,12 @@
       </tr>
       <tr>
         <th><?php echo $lang->group->option;?></th>
-        <td><?php echo html::checkbox('options', $lang->group->copyOptions);?></td>
+        <td><?php echo html::checkbox('options', $lang->group->copyOptions, '', '', 'inline');?></td>
       </tr>  
-      <tr><th></th><td><?php echo html::submitButton();?></td></tr>
+      <tr>
+        <th></th>
+        <td><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td>
+      </tr>
     </table>
   </form>
 </div>

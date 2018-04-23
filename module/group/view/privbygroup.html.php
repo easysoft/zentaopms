@@ -10,114 +10,125 @@
  * @link        http://www.zentao.net
  */
 ?>
-<form class='form-condensed' method='post' target='hiddenwin'>
-  <?php if($group->role == 'limited'):?>
-  <div id='featurebar'>
-    <div class='heading'><i class='icon-lock'> <?php echo $group->name;?></i></div>
+<?php if($group->role == 'limited'):?>
+<div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
+    <a href='javascript:;' class='btn btn-link btn-active-text'><span class='text'><?php echo $group->name;?></span></a>
   </div>
-  <table class='table table-hover table-striped table-bordered table-form'> 
-    <thead>
-      <tr>
-        <th><?php echo $lang->group->module;?></th>
-        <th><?php echo $lang->group->method;?></th>
+</div>
+<div id='mainContent' class='main-content'>
+  <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post" target='hiddenwin'>
+    <table class='table table-hover table-striped table-bordered'>
+      <thead>
+        <tr class='text-center'>
+          <th><?php echo $lang->group->module;?></th>
+          <th><?php echo $lang->group->method;?></th>
+        </tr>
+      </thead>
+      <tr class='<?php echo cycle('even, bg-gray');?>'>
+        <th class='text-right w-150px'><?php echo $lang->my->common;?></th>
+        <td id='my' class='pv-10px'>
+          <div class='checkbox-primary'>
+            <input type='checkbox' name='actions[my][]' value='limited' <?php if(isset($groupPrivs['my']['limited'])) echo "checked";?> />
+            <label class='priv' id="my-limited"><?php echo $lang->my->limited;?></label>
+          </div>
+        </td>
       </tr>
-    </thead>
-    <tr class='<?php echo cycle('even, bg-gray');?>'>
-      <th class='text-right w-150px'><?php echo $lang->my->common;?></th>
-      <td id='my' class='pv-10px'>
-          <input type='checkbox' name='actions[my][]' value='limited' <?php if(isset($groupPrivs['my']['limited'])) echo "checked";?> />
-          <span class='priv' id="my-limited"><?php echo $lang->my->limited;?></span>
-      </td>
-    </tr>
-    <tr>
-      <th class='text-right'></th>
-      <td>
-        <?php
-        echo html::submitButton($lang->save, "onclick='setNoChecked()'");
-        echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
-        echo html::hidden('noChecked'); // Save the value of no checked.
-        ?>
-      </td>
-    </tr>
-  </table>
-  <?php else:?>
-  <div id='featurebar'>
-    <div class='heading'><i class='icon-lock'> <?php echo $group->name;?></i></div>
-    <ul class='nav'>
-      <?php $params = "type=byGroup&param=$groupID&menu=%s&version=$version";?>
-      <li <?php echo empty($menu) ? "class='active'" : ""?>>
-        <?php echo html::a(inlink('managePriv', sprintf($params, '')), $lang->group->all)?>
-      </li>
-
-      <?php foreach($lang->menu as $module => $title):?>
-      <?php if(!is_string($title)) continue;?>
-      <li <?php echo $menu == $module ? "class='active'" : ""?>>
-        <?php echo html::a(inlink('managePriv', sprintf($params, $module)), substr($title, 0, strpos($title, '|')))?>
-      </li>
-      <?php endforeach;?>
-
-      <li <?php echo $menu == 'other' ? "class='active'" : "";?>>
-        <?php echo html::a(inlink('managePriv', sprintf($params, 'other')), $lang->group->other);?>
-      </li>
-
-      <li class='w-150px'><?php echo html::select('version', $this->lang->group->versions, $version, "onchange=showPriv(this.value) class='form-control chosen'");?></li>
-    </ul>
-  </div>
-  <table class='table table-hover table-striped table-bordered table-form'> 
-    <thead>
       <tr>
-        <th><?php echo $lang->group->module;?></th>
-        <th><?php echo $lang->group->method;?></th>
+        <th class='text-right'></th>
+        <td>
+          <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
+          <?php echo html::backButton('', '', 'btn btn-wide');?>
+          <?php echo html::hidden('noChecked'); // Save the value of no checked.?>
+        </td>
       </tr>
-    </thead>
-    <?php foreach($lang->resource as $moduleName => $moduleActions):?>
-    <?php if(!count((array)$moduleActions)) continue;?>
-    <?php if(!$this->group->checkMenuModule($menu, $moduleName)) continue;?>
-    <?php
-    /* Check method in select version. */
-    if($version)
-    {
-        $hasMethod = false;
-        foreach($moduleActions as $action => $actionLabel)
-        {
-            if(strpos($changelogs, ",$moduleName-$actionLabel,") !== false)
-            {
-                $hasMethod = true;
-                break;
-            }
-        }
-        if(!$hasMethod) continue;
-    }
-    ?>
-    <tr class='<?php echo cycle('even, bg-gray');?>'>
-      <th class='text-right w-150px'><?php echo $lang->$moduleName->common;?><?php echo html::selectAll($moduleName, 'checkbox')?></th>
-      <td id='<?php echo $moduleName;?>' class='pv-10px'>
-        <?php $i = 1;?>
-        <?php if($moduleName == 'caselib') $moduleName = 'testsuite';?>
-        <?php foreach($moduleActions as $action => $actionLabel):?>
-        <?php if(!empty($version) and strpos($changelogs, ",$moduleName-$actionLabel,") === false) continue;?>
-        <div class='group-item'>
-          <input type='checkbox' name='actions[<?php echo $moduleName;?>][]' value='<?php echo $action;?>' <?php if(isset($groupPrivs[$moduleName][$action])) echo "checked";?> />
-          <span class='priv' id="<?php echo $moduleName . '-' . $actionLabel;?>"><?php echo $lang->$moduleName->$actionLabel;?></span>
-        </div>
-        <?php endforeach;?>
-      </td>
-    </tr>
+    </table>
+  </form>
+</div>
+<?php else:?>
+<div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
+    <?php $params = "type=byGroup&param=$groupID&menu=%s&version=$version";?>
+    <?php $active = empty($menu) ? 'btn-active-text' : '';?>
+    <?php echo html::a(inlink('managePriv', sprintf($params, '')), "<span class='text'>{$lang->group->all}</span>", '', "class='btn btn-link $active'")?>
+
+    <?php foreach($lang->menu as $module => $title):?>
+    <?php if(!is_string($title)) continue;?>
+    <?php $active = $menu == $module ? 'btn-active-text' : '';?>
+    <?php echo html::a(inlink('managePriv', sprintf($params, $module)), "<span class='text'>" . substr($title, 0, strpos($title, '|')) . '</span>', '', "class='btn btn-link $active'")?>
     <?php endforeach;?>
-    <tr>
-      <th class='text-right'><?php echo $lang->selectAll . html::selectAll('', 'checkbox')?></th>
-      <td>
-        <?php
-        echo html::submitButton($lang->save, "onclick='setNoChecked()'");
-        echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
-        echo html::hidden('noChecked'); // Save the value of no checked.
-        ?>
-      </td>
-    </tr>
-  </table>
-  <?php endif;?>
-</form>
-<script type='text/javascript'>
-var groupID = <?php echo $groupID?>;
-var menu    = "<?php echo $menu?>";
-</script>
+
+    <?php $active = $menu == 'other' ? 'btn-active-text' : '';?>
+    <?php echo html::a(inlink('managePriv', sprintf($params, 'other')), "<span class='text'>{$lang->group->other}</span>", '', "class='btn btn-link $active'");?>
+
+    <div class='input-control space w-150px'>
+    <?php echo html::select('version', $this->lang->group->versions, $version, "onchange=showPriv(this.value) class='form-control chosen'");?>
+    </div>
+  </div>
+</div>
+<div id='mainContent' class='main-content'>
+  <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post" target='hiddenwin'>
+    <table class='table table-hover table-striped table-bordered' id='privList'>
+      <thead>
+        <tr class='text-center'>
+          <th class='w-150px'><?php echo $lang->group->module;?></th>
+          <th><?php echo $lang->group->method;?></th>
+        </tr>
+      </thead>
+      <?php foreach($lang->resource as $moduleName => $moduleActions):?>
+      <?php if(!count((array)$moduleActions)) continue;?>
+      <?php if(!$this->group->checkMenuModule($menu, $moduleName)) continue;?>
+      <?php
+      /* Check method in select version. */
+      if($version)
+      {
+          $hasMethod = false;
+          foreach($moduleActions as $action => $actionLabel)
+          {
+              if(strpos($changelogs, ",$moduleName-$actionLabel,") !== false)
+              {
+                  $hasMethod = true;
+                  break;
+              }
+          }
+          if(!$hasMethod) continue;
+      }
+      ?>
+      <tr class='<?php echo cycle('even, bg-gray');?>'>
+        <th class='text-middle text-right w-150px'>
+          <div class="checkbox-primary checkbox-inline checkbox-right check-all">
+            <input type='checkbox' id='allChecker<?php echo $moduleName;?>'>
+            <label class='text-right' for='allChecker<?php echo $moduleName;?>'><?php echo $lang->$moduleName->common;?></label>
+          </div>
+        </th>
+        <td id='<?php echo $moduleName;?>' class='pv-10px'>
+          <?php $i = 1;?>
+          <?php if($moduleName == 'caselib') $moduleName = 'testsuite';?>
+          <?php foreach($moduleActions as $action => $actionLabel):?>
+          <?php if(!empty($version) and strpos($changelogs, ",$moduleName-$actionLabel,") === false) continue;?>
+          <div class='group-item'>
+            <?php echo html::checkbox("actions[{$moduleName}]", array($action => $lang->$moduleName->$actionLabel), isset($groupPrivs[$moduleName][$action]) ? $action : '', '', 'inline');?>
+          </div>
+          <?php endforeach;?>
+        </td>
+      </tr>
+      <?php endforeach;?>
+      <tr>
+        <th class='text-right'>
+          <div class="checkbox-primary checkbox-inline checkbox-right check-all">
+            <input type='checkbox' id='allChecker'>
+            <label class='text-right' for='allChecker'><?php echo $lang->selectAll;?></label>
+          </div>
+        </th>
+        <td>
+          <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
+          <?php echo html::backButton('', '', 'btn btn-wide');?>
+          <?php echo html::hidden('noChecked'); // Save the value of no checked.?>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+<?php endif;?>
+<?php js::set('groupID', $groupID);?>
+<?php js::set('menu', $menu);?>

@@ -130,8 +130,10 @@ class group extends control
     {
         if($_POST)
         {
-            $result = $this->group->updateView($groupID);
-            die(js::alert($result ? $this->lang->group->successSaved : $this->lang->group->errorNotSaved));
+            $this->group->updateView($groupID);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $group = $this->group->getById($groupID);
@@ -167,8 +169,9 @@ class group extends control
         {
             if($type == 'byGroup')  $result = $this->group->updatePrivByGroup($groupID, $menu, $version);
             if($type == 'byModule') $result = $this->group->updatePrivByModule();
-            print(js::alert($result ? $this->lang->group->successSaved : $this->lang->group->errorNotSaved));
-            exit;
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         if($type == 'byGroup')

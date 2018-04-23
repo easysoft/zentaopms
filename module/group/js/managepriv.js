@@ -25,3 +25,21 @@ function setNoChecked()
     })
     $('#noChecked').val(noCheckValue);
 }
+
+$(function()
+{
+    $('#privList > tbody > tr > th input[type=checkbox]').change(function()
+    {
+        var id      = $(this).attr('id');
+        var checked = $(this).prop('checked');
+
+        if(id == 'allChecker')
+        {
+            $('input[type=checkbox]').prop('checked', checked);
+        }
+        else
+        {
+            $(this).parents('tr').find('input[type=checkbox]').prop('checked', checked);
+        }
+    });
+})
