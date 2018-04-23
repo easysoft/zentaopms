@@ -49,6 +49,7 @@ $lang->release->finishStories         = 'Finished %s Story';
 $lang->release->resolvedBugs          = 'Solved %s Bug';
 $lang->release->createdBugs           = 'Generated %s Bug';
 $lang->release->export                = 'Export as HTML';
+$lang->release->yesterday             = 'Released Yesterday';
 
 $lang->release->filePath = 'Download : ';
 $lang->release->scmPath  = 'SCM Path : ';

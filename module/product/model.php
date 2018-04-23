@@ -252,8 +252,8 @@ class productModel extends model
             ->orWhere('createdBy')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
-            ->beginIF($limit > 0)->limit($limit)->fi()
             ->orderBy('`order` desc')
+            ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
     }
 

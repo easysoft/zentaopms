@@ -48,6 +48,7 @@ $lang->release->finishStories         = '本次共完成 %s 個需求';
 $lang->release->resolvedBugs          = '本次共解決 %s 個Bug';
 $lang->release->createdBugs           = '本次共遺留 %s 個Bug';
 $lang->release->export                = '導出HTML';
+$lang->release->yesterday             = '昨日發佈';
 
 $lang->release->filePath = '下載地址：';
 $lang->release->scmPath  = '版本庫地址：';
