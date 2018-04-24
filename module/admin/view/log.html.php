@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include $this->app->getModuleRoot() . 'webhook/view/header.html.php';?>
+<?php include $this->app->getModuleRoot() . 'message/view/header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='center-block mw-600px'>
@@ -31,4 +31,7 @@
     </form>
   </div>
 </div>
+<script>
+$(function(){$('#mainMenu #webhookTab').addClass('btn-active-text');})
+</script>
 <?php include '../../common/view/footer.html.php';?>
