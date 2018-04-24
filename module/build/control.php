@@ -23,9 +23,9 @@ class build extends control
         if(!empty($_POST))
         {
             $buildID = $this->build->create($projectID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('build', $buildID, 'opened');
-            die(js::locate($this->createLink('build', 'view', "buildID=$buildID"), 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID")));
         }
 
         $this->session->set('buildCreate', $this->app->getURI(true));
@@ -93,7 +93,7 @@ class build extends control
         if(!empty($_POST))
         {
             $changes = $this->build->update($buildID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $files = $this->loadModel('file')->saveUpload('build', $buildID);
 
             if($changes or $files)
@@ -103,7 +103,7 @@ class build extends control
                 $actionID = $this->loadModel('action')->create('build', $buildID, 'Edited', $fileAction);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate(inlink('view', "buildID=$buildID"), 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "buildID=$buildID")));
         }
 
         $build = $this->build->getById((int)$buildID);
