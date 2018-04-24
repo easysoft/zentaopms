@@ -22,10 +22,13 @@
             <div class="panel-body">
               <div class="release-path">
                 <ul class="release-line">
-                  <?php foreach($builds as $build):?>
-                  <?php $icon = !empty($build->flag) ? "<i class='icon icon-flag'></i>" : '';?>
-                  <li class="<?php echo end($build)->id == $build->id ? 'active' : '';?>">
+                  <?php $i = 0;?>
+                  <?php foreach(array_reverse($builds) as $build):?>
+                  <?php $i++;?>
+                  <?php if($i > 6) break;?>
+                  <li <?php if(date('Y-m-d') < $build->date) echo "class='active'";?>>
                     <a href="<?php echo $this->createLink('build', 'view', "buildID={$build->id}");?>">
+                      <?php if(!empty($build->marker)) echo "<i class='icon icon-flag text-primary'></i>";?>
                       <span class="title"><?php echo $build->name;?></span>
                       <span class="date"><?php echo $build->date;?></span>
                       <span class="info"><?php echo $build->desc;?></span>
