@@ -5,9 +5,9 @@
     <?php if(isset($config->message->typeLink[$type])):?>
     <?php list($moduleName, $methodName) = explode('|', $config->message->typeLink[$type]);?>
     <?php if(!common::hasPriv($moduleName, $methodName)) continue;?>
-    <?php echo html::a($this->createLink($moduleName, $methodName), "<span class='text'>$typeName</span>", '', "class='btn btn-link'")?>
+    <?php echo html::a($this->createLink($moduleName, $methodName), "<span class='text'>$typeName</span>", '', "class='btn btn-link' id='{$type}Tab'")?>
     <?php endif;?>
      <?php endforeach;?>
-    <?php if(common::hasPriv('message', 'setting')) echo html::a($this->createLink('message', 'setting'), "<span class='text'>{$lang->message->setting}</span>", '', "class='btn btn-link'")?>
+    <?php if(common::hasPriv('message', 'setting')) echo html::a($this->createLink('message', 'setting'), "<span class='text'>{$lang->message->setting}</span>", '', "class='btn btn-link' id='settingTab'")?>
   </div>
 </div>
