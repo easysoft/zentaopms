@@ -17,7 +17,7 @@
     <div class='main-header'>
       <h2><?php echo $lang->release->create;?></h2>
     </div>
-    <form class='load-indicator main-form form-ajax' id='dataform' method='post' target='hiddenwin' enctype='multipart/form-data'>
+    <form class='load-indicator main-form form-ajax' id='dataform' method='post' enctype='multipart/form-data'>
       <table class='table table-form'> 
         <tbody>
           <tr>
