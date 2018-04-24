@@ -41,7 +41,7 @@
       <?php
       $methodName = $module == 'caselib' ? 'libview' : 'view';
       $params     = $action->objectType == 'user' ? "account={$action->objectName}" : "id={$action->objectID}";
-      if($module == 'doclib')
+      if($module == 'doclib' or $module == 'module')
       {
           echo $action->objectName;
       }
