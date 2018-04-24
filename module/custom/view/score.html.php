@@ -10,28 +10,29 @@
  */
 ?>
 <?php include 'header.html.php';?>
-<div class='main'>
-  <form method='post' class='form-condensed' target='hiddenwin'>
-    <table class='table table-form'>
-      <tr>
-        <th class='w-100px text-top'><?php echo $lang->custom->score;?></th>
-        <td><?php echo html::radio('score', $lang->custom->scoreStatus, isset($config->global->scoreStatus) ? $config->global->scoreStatus : 0, '', 'block');?></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td>
-          <?php echo html::submitButton();?>
-          <?php common::printLink('score', 'reset', '', "<i class='icon-refresh'></i> " . $lang->custom->scoreReset, '', ' id="scoreRefresh" class="btn iframe" data-width="480"', true, true);?>
-        </td>
-      </tr>
-    </table>
-  </form>
+<div id='mainContent' class='main-content'>
+  <div class='center-block'>
+    <form method='post' target='hiddenwin'>
+      <table class='table table-form'>
+        <tr>
+          <th class='w-100px text-top'><?php echo $lang->custom->score;?></th>
+          <td><?php echo html::radio('score', $lang->custom->scoreStatus, isset($config->global->scoreStatus) ? $config->global->scoreStatus : 0, '', 'block');?></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <?php echo html::submitButton();?>
+            <?php common::printLink('score', 'reset', '', "<i class='icon-refresh'></i> " . $lang->custom->scoreReset, '', ' id="scoreRefresh" class="btn iframe" data-width="480"', true, true);?>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
 </div>
 <script>
 $(function()
 {
-    $('#featurebar #scoreTab').addClass('active');
-    $('.side #<?php echo $moduleName;?>Tab').addClass('active');
+    $('#mainMenu #scoreTab').addClass('btn-active-text');
 })
 </script>
 <?php include '../../common/view/footer.html.php';?>
