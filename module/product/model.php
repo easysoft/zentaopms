@@ -614,16 +614,11 @@ class productModel extends model
                 $totalData = count($roadmaps);
                 $rows      = ceil($totalData / 8);
                 $maxPerRow = ceil($totalData / $rows);
-                $j = 1;
-                for($i = 0; $i < $totalData; $i += $maxPerRow)
-                {
-                    $groupRoadmap[$year][$branch][$j] = array_slice($roadmaps, $i, $maxPerRow);
-                    krsort($groupRoadmap[$year][$branch][$j]);
-                    $j++;
-                }
+
+                $groupRoadmap[$year][$branch] = array_chunk($roadmaps, $maxPerRow);
+                foreach($groupRoadmap[$year][$branch] as $row => $rowRoadmaps) krsort($groupRoadmap[$year][$branch][$row]);
             }
         }
-
 
         /* Get last 5 roadmap. */
         $lastKeys    = array_slice(array_keys($groupRoadmap), -5);
