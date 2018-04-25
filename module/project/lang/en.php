@@ -212,6 +212,7 @@ $lang->project->copyFromProject = "Duplicate from {$lang->projectCommon} <strong
 $lang->project->cancelCopy      = 'Cancel Duplication';
 $lang->project->byPeriod        = 'By Time';
 $lang->project->byUser          = 'ByUser';
+$lang->project->noProject       = 'No project. You could ';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = "Do you want to delete {$lang->projectCommon}[%s]?";

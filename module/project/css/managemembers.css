@@ -15,6 +15,7 @@
 
 #dept_chosen    .chosen-single{width: 220px;}
 #project_chosen .chosen-single{width: 220px;}
+.radio-inline {line-height:normal;}
 
-.outer .main .table tr > td:first-child {padding-left: 10px;}
-.outer .main .table tr > td:last-child {padding-right: 10px;}
+#teamForm .table tr > td:first-child {padding-left: 10px;}
+#teamForm .table tr > td:last-child {padding-right: 10px;}

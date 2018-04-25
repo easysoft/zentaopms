@@ -106,7 +106,7 @@ $lang->common->common = 'Common Module';
 $lang->menu = new stdclass();
 $lang->menu->my      = '<span>Dashboard</span>|my|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
-$lang->menu->project = $lang->projectCommon . '|project|index';
+$lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
 $lang->menu->qa      = 'QA|qa|index';
 $lang->menu->doc     = 'Doc|doc|index';
 $lang->menu->report  = 'Report|report|index';
