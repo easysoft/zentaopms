@@ -196,7 +196,7 @@ class build extends control
         if($this->config->global->flow == 'onlyTest')
         {
             $products = $this->loadModel('product')->getPairs();
-            $this->product->setMenu($products, $build->product);
+            $this->product->setMenu($products, $build->product, $buildID);
             $this->lang->build->menu = $this->lang->product->menu;
 
             $this->view->title      = "BUILD #$build->id $build->name - " . $build->productName;
@@ -211,7 +211,7 @@ class build extends control
             $stages  = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($build->stories)->andWhere('branch')->eq($build->branch)->fetchPairs('story', 'stage');
             foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
 
-            $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
+            $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project, $buildID);
             $projects = $this->project->getPairs('empty');
 
             $this->view->title         = "BUILD #$build->id $build->name - " . $projects[$build->project];
@@ -354,6 +354,17 @@ class build extends control
             $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty,notrunk');
             if($isJsonView) die(json_encode($builds));
             else die(html::select('build', $builds, $build, "class='form-control'"));
+        }
+        if($varName == 'dropdownList')
+        {
+            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty,notrunk');
+            if($isJsonView) die(json_encode($builds));
+
+            $list  = "<div class='list-group'>";
+            foreach($builds as $buildID => $buildName) $list .= html::a(inlink('view', "buildID={$buildID}"), $buildName);
+            $list .= '</div>';
+
+            die($list);
         }
     }
 

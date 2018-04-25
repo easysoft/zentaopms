@@ -64,11 +64,12 @@ class projectModel extends model
      *
      * @param  array  $projects
      * @param  int    $projectID
+     * @param  int    $buildID
      * @param  string $extra
      * @access public
      * @return void
      */
-    public function setMenu($projects, $projectID, $extra = '')
+    public function setMenu($projects, $projectID, $buildID = 0, $extra = '')
     {
         /* Check the privilege. */
         $project = $this->getById($projectID);
@@ -99,7 +100,7 @@ class projectModel extends model
             $this->cookie->projectMode = 'all';
         }
 
-        $selectHtml = $this->select($projects, $projectID, $moduleName, $methodName, $extra);
+        $selectHtml = $this->select($projects, $projectID, $buildID, $moduleName, $methodName, $extra);
 
         $label = $this->lang->project->index;
         if($moduleName == 'project' && $methodName == 'all')    $label = $this->lang->project->allProjects;
@@ -126,13 +127,14 @@ class projectModel extends model
      *
      * @param  array     $projects
      * @param  int       $projectID
+     * @param  int       $buildID
      * @param  string    $currentModule
      * @param  string    $currentMethod
      * @param  string    $extra
      * @access public
      * @return string
      */
-    public function select($projects, $projectID, $currentModule, $currentMethod, $extra = '')
+    public function select($projects, $projectID, $buildID, $currentModule, $currentMethod, $extra = '')
     {
         if(!$projectID) return;
 
@@ -146,6 +148,21 @@ class projectModel extends model
         $output .= '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div></div>";
         if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+
+        if($buildID)
+        {
+            setCookie('lastBuild', $buildID, $this->config->cookieLife, $this->config->webRoot);
+            $currentBuild = $this->loadModel('build')->getById($buildID);
+
+            if($currentBuild)
+            {
+                $dropMenuLink = helper::createLink('build', 'ajaxGetProjectBuilds', "projectID=$projectID&productID=&varName=dropdownList");
+                $output .= "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem'>{$currentBuild->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+                $output .= '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+                $output .= "</div></div></div>";
+            }
+        }
+
         return $output;
     }
 

@@ -16,9 +16,9 @@
   <div class='center-block'>
     <div class='main-header'>
       <h2>
-        <span class='prefix'><?php echo html::icon($lang->icons['build']);?> <strong><?php echo $build->id;?></strong></span>
-        <strong><?php echo html::a($this->createLink('build', 'view', 'build=' . $build->id), $build->name, '_blank');?></strong>
-        <small class='text-muted'> <?php echo $lang->build->edit;?> <?php echo html::icon($lang->icons['edit']);?></small>
+        <span class='label-id'><?php echo $build->id;?></span>
+        <?php echo html::a($this->createLink('build', 'view', 'build=' . $build->id), $build->name);?>
+        <small><?php echo $lang->arrow . $lang->build->edit;?></small>
       </h2>
     </div>
     <form class='load-indicator main-form form-ajax' method='post' id='dataform' enctype='multipart/form-data'>
