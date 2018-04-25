@@ -26,7 +26,7 @@
       <table class='table table-form'> 
         <tr>
           <th><?php echo $lang->task->type;?></th>
-          <td><?php echo html::select('type', $lang->task->typeList, $task->type, "class='form-control chosen' onchange='setOwners(this.value)'");?></td><td></td><td></td>
+          <td><?php echo html::select('type', $lang->task->typeList, $task->type, "class='form-control chosen' onchange='setOwners(this.value)' required");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->task->module;?></th>
