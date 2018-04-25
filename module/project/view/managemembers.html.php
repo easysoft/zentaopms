@@ -119,15 +119,9 @@
         <?php $i ++; $memberCount ++;?>
         <?php endfor;?>
       </tbody>
-      <tfoot>
-        <?php js::set('i', $i);?>
-        <tr id='submit'>
-          <td colspan='6' class='text-center'>
-            <?php echo html::submitButton() ?>
-          </td>
-        </tr>
-      </tfoot>
     </table>
+    <div class='table-footer text-center'><?php echo html::submitButton() . ' ' . html::backButton(); ?></div>
+    <?php js::set('i', $i);?>
   </form>
 </div>
 <div>
