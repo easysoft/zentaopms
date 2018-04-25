@@ -1,8 +1,12 @@
 $(function()
 {
-   var showHeight = $('.outer').height() - $('#featurebar').height() - 40;
+   var showHeight = $('#main').height() - $('#mainMenu').height() - 40;
    $('#editWin').height(showHeight);
    $('#extendWin').height(showHeight);
 
-   $('.panel a.list-group-item').click(function(){$('.panel a.list-group-item.active').removeClass('active'); $(this).addClass('active')});
+   $('.side-col a').click(function()
+   {
+       $('.side-col a.active').removeClass('active');
+       $(this).addClass('active');
+   });
 });
