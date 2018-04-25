@@ -11,17 +11,17 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form class='form-condensed' method='post' target='hiddenwin' action='<?php echo inlink('save', "filePath=$safeFilePath&action=$action")?>'>
-<div class='panel panel-sm'>
-  <div class='panel-heading'><i class='icon-edit'></i> 
-  <?php if($filePath):?>        
-  <strong>
-    <?php echo $lang->editor->filePath;?>
-  </strong> 
-  <code><?php echo $filePath?></code>
-  <?php endif?>  
+<div class='main-header'>
+  <div class='heading'>
+    <i class='icon-edit'></i> 
+    <?php if($filePath):?>        
+    <strong><?php echo $lang->editor->filePath;?></strong> 
+    <code><?php echo $filePath?></code>
+    <?php endif?>  
   </div>
-  <div class='panel-body'>
+</div>
+<form method='post' target='hiddenwin' action='<?php echo inlink('save', "filePath=$safeFilePath&action=$action")?>'>
+  <div class='main-content'>
     <table class='table table-form'>
       <?php if(!empty($showContent)):?>
       <tr>
@@ -36,7 +36,7 @@
       </tr>
       <tr>
         <td>
-        <?php if($action and $action != 'edit' and $action != 'newPage' and $action != 'override' and $action != 'extendControl'):?>
+          <?php if($action and $action != 'edit' and $action != 'newPage' and $action != 'override' and $action != 'extendControl'):?>
           <div class='form-group'>
             <div class='input-group'>
               <span class='input-group-addon'><?php echo $lang->editor->fileName;?></span>
@@ -63,15 +63,17 @@
               </span>
             </div>
           </div>
-        <?php endif;?>
-        <?php if($action and $action != 'edit' and $action != 'newPage'):?>
-          <span class='strong'><input type='checkbox' name='override' id='override' /> <?php echo $lang->editor->isOverride?></span>
-        <?php endif;?>
+          <?php endif;?>
+          <?php if($action and $action != 'edit' and $action != 'newPage'):?>
+          <div class='checkbox-primary'>
+            <input type='checkbox' name='override' id='override' />
+            <label for='override'><?php echo $lang->editor->isOverride?></span>
+          </div>
+          <?php endif;?>
         </td>
       </tr>
       <tr><td align='center'><?php echo html::submitButton()?></td></tr>
     </table>
   </div>
-</div>
 </form>
 <?php include '../../common/view/footer.lite.html.php';?>

@@ -31,21 +31,25 @@ EOT;
 <?php js::set('itemRow', $itemRow)?>
 <?php js::set('module',  $module)?>
 <?php js::set('field',   $field)?>
-<div class='side'>
-  <div class='list-group'>
-    <?php 
-    foreach($lang->custom->{$module}->fields as $key => $value)
-    {
-        echo "<li class='list-group-item' id='{$key}Tab'>" . html::a(inlink('set', "module=$module&field=$key"), $value) . "</li>";
-    }
-    ?>
+<div id='mainContent' class='main-row'>
+  <div class='side-col' id='sidebar'>
+    <div class='cell'>
+      <div class='list-group'>
+        <?php 
+        foreach($lang->custom->{$module}->fields as $key => $value)
+        {
+            echo html::a(inlink('set', "module=$module&field=$key"), $value, '', " id='{$key}Tab'");
+        }
+        ?>
+      </div>
+    </div>
   </div>
-</div>
-<div class='main'>
-  <form method='post' class='form-condensed' target='hiddenwin'>
-    <div class='panel panel-sm'>
-      <div class='panel-heading'>
-        <strong><?php echo $lang->custom->object[$module] . $lang->arrow . $lang->custom->$module->fields[$field]?></strong>
+  <div class='main-col main-content'>
+    <form method='post' target='hiddenwin'>
+      <div class='main-header'>
+        <div class='heading'>
+          <strong><?php echo $lang->custom->object[$module] . $lang->arrow . $lang->custom->$module->fields[$field]?></strong>
+        </div>
       </div>
       <?php if(($module == 'story' or $module == 'testcase') and $field == 'review'):?>
       <table class='table table-form mw-800px'>
@@ -160,8 +164,8 @@ EOT;
       <div class='alert alert-warning alert-block'><?php echo $lang->custom->notice->canNotAdd;?></div>
       <?php endif;?>
       <?php endif;?>
-    </div>
-  </form>
+    </form>
+  </div>
 </div>
 <?php if($module == 'testcase' and $field == 'review'):?>
 <script>

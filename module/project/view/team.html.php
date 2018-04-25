@@ -40,8 +40,8 @@
         <th><?php echo $lang->team->days;?></th>
         <th><?php echo $lang->team->hours;?></th>
         <th><?php echo $lang->team->totalHours;?></th>
-        <th><?php echo $lang->team->limited;?></th>
-        <th><?php echo $lang->actions;?></th>
+        <th class='w-80px'><?php echo $lang->team->limited;?></th>
+        <th class='w-50px'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -73,13 +73,9 @@
       </tr>
       <?php endforeach;?>
     </tbody>
-    <tfoot>
-      <tr>
-        <td colspan='8'>
-          <div class='clearfix'><div class='text'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours{$lang->project->workHour}</strong>";?></div></div>
-        </td>
-      </tr>
-    </tfoot>
   </table>
+  <div class='table-footer'>
+    <div class='text'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours{$lang->project->workHour}</strong>";?></div>
+  </tfoot>
 </div>
 <?php include '../../common/view/footer.html.php';?>

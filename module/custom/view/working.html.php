@@ -11,21 +11,23 @@
  */
 ?>
 <?php include 'header.html.php';?>
-<div class='main'>
-  <form method='post' class='form-condensed' target='hiddenwin'>
-    <table class='table table-form'>
-      <tr>
-        <th class='w-100px text-top'><?php echo $lang->custom->working;?></th>
-        <td><?php echo html::radio('flow', $lang->custom->workingList, isset($config->global->flow) ? $config->global->flow : 'full', '', 'block');?></td>
-      </tr>
-      <tr><td></td><td><?php echo html::submitButton()?></td></tr>
-    </table>
-  </form>
+<div id='mainContent' class='main-content'>
+  <div class='center-block'>
+    <form method='post' class='form-condensed' target='hiddenwin'>
+      <table class='table table-form'>
+        <tr>
+          <th class='w-100px text-top'><?php echo $lang->custom->working;?></th>
+          <td><?php echo html::radio('flow', $lang->custom->workingList, isset($config->global->flow) ? $config->global->flow : 'full', '', 'block');?></td>
+        </tr>
+        <tr><td></td><td><?php echo html::submitButton()?></td></tr>
+      </table>
+    </form>
+  </div>
 </div>
 <script>
 $(function()
 {
-    $('#workingTab').addClass('btn-active-text');
+    $('#mainMenu #workingTab').addClass('btn-active-text');
 })
 </script>
 <?php include '../../common/view/footer.html.php';?>

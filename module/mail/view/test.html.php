@@ -12,6 +12,7 @@
 ?>
 <?php if(isset($error)):?>
 <?php include '../../common/view/header.lite.html.php';?>
+<style>body{background:#fff;}</style>
 <div class='alert alert-warning with-icon'><i class='icon-frown'></i><div class='content'><?php echo join('', $error);?></div></div>
 <?php include '../../common/view/footer.lite.html.php';?>
 <?php else:?>

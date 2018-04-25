@@ -3,3 +3,4 @@ table tr > td:first-child {padding-left: 0;}
 table tr > td:last-child {padding-right: 0;}
 .modulegroup {font-weight:bold; padding-top:8px; border-top:1px solid #ddd;}
 td.w-200px a:hover {font-weight:bold;}
+.w-350px{width:350px;}

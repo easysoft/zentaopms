@@ -11,51 +11,52 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmDelete', $lang->testtask->confirmDelete)?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-  <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->testtask->browse;?></span></span>
+    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->testtask->browse;?></span></span>
   </div>
   <div class="btn-toolbar pull-right">
     <?php
     common::printIcon('testreport', 'browse', "objectID=$projectID&objectType=project", '', 'button','flag');
-    common::printIcon('testtask', 'create', "product=0&project=$projectID");
+    common::printLink('testtask', 'create', "product=0&project=$projectID", "<i class='icon icon-plus'> </i>" . $lang->testtask->create, '', "class='btn btn-primary'");
     ?>
   </div>
 </div>
 <div id="mainContent">
   <form class="main-table table-testtask" data-ride="table" method="post" target='hiddenwin' id='testtaskForm'>
-    <table class="table has-sort-head tablesorter" id='taskList'>
+    <table class="table has-sort-head" id='taskList'>
       <thead>
+        <?php $vars = "projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+        <?php $canTestReport = common::hasPriv('testreport', 'browse');?>
         <tr>
-          <th class="w-100px">
-            <?php if($tasks):?>
+          <th class="c-id">
+            <?php if($canTestReport):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
               <label></label>
             </div>
             <?php endif;?>
-            <?php echo $lang->idAB;?>
+            <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='w-150px'><?php echo $lang->testtask->product;?></th>
-          <th><?php echo $lang->testtask->name;?></th>
-          <th><?php echo $lang->testtask->build;?></th>
-          <th class='w-user'><?php echo $lang->testtask->owner;?></th>
-          <th class='w-100px'><?php echo $lang->testtask->begin;?></th>
-          <th class='w-100px'><?php echo $lang->testtask->end;?></th>
-          <th class='w-80px'><?php echo $lang->statusAB;?></th>
-          <th class='w-200px {sorter:false}'><?php echo $lang->actions;?></th>
+          <th class='w-150px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->testtask->product);?></th>
+          <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->testtask->name);?></th>
+          <th><?php common::printOrderLink('build', $orderBy, $vars, $lang->testtask->build);?></th>
+          <th class='w-user'><?php common::printOrderLink('owner', $orderBy, $vars, $lang->testtask->owner);?></th>
+          <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->testtask->begin);?></th>
+          <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->testtask->end);?></th>
+          <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='c-actions-3'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach($tasks as $task):?>
         <tr>
-          <td class="c-id">
-            <div class="checkbox-primary">
-              <input type='checkbox' name='taskIdList[]' value='<?php echo $task->id;?>' />
-              <label></label>
-              <?php printf('%03d', $task->id);?>
-            </div>
+          <td class="cell-id">
+            <?php if($canTestReport):?>
+            <?php echo html::checkbox('taskIdList', array($task->id => sprintf('%03d', $task->id)));?>
+            <?php else:?>
+            <?php printf('%03d', $task->id);?>
+            <?php endif;?>
           </td>
           <td title="<?php echo zget($products, $task->product, '')?>"><?php echo zget($products, $task->product, '');?></td>
           <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name);?></td>
@@ -65,17 +66,20 @@
           <td><?php echo $task->end?></td>
           <td class='status-<?php echo $task->status?>'><?php echo $lang->testtask->statusList[$task->status];?></td>
           <td class='c-actions'>
+            <div class='more'>
+              <?php
+              if(common::hasPriv('testtask', 'delete', $task))
+              {
+                  $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
+                  echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->testtask->delete}'");
+              }
+              ?>
+            </div>
             <?php
-            common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
-            common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'list', 'link');
-            common::printIcon('testtask', 'edit',     "taskID=$task->id", $task, 'list');
-            common::printIcon('testreport', 'browse', "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
-
-            if(common::hasPriv('testtask', 'delete', $task))
-            {
-                $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->testtask->delete}'");
-            }
+            common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
+            common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
+            common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
+            common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list');
             ?>
           </td>
         </tr>
@@ -84,6 +88,7 @@
     </table>
     <?php if($tasks):?>
     <div class="table-footer">
+      <?php if($canTestReport):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar">
       <?php
@@ -92,6 +97,8 @@
       echo html::commonButton($lang->testreport->common, $misc);
       ?>
       </div>
+      <?php endif;?>
+      <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>
   </form>
