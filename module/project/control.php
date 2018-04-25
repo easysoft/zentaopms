@@ -768,7 +768,7 @@ class project extends control
         $this->view->projectName = $this->projects[$projectID];
         $this->view->pager       = $pager;
         $this->view->orderBy     = $orderBy;
-        $this->view->tasks       = $this->testtask->getProjectTasks($projectID);
+        $this->view->tasks       = $this->testtask->getProjectTasks($projectID, $orderBy, $pager);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->products    = $this->loadModel('product')->getPairs();
 
