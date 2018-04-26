@@ -19,8 +19,13 @@
     <?php
     $vars = "date=$period";
     if($period == 'before') $vars .= "&account={$app->user->account}&status=undone";
-    $label  = $period == 'all' ? "<span class='text'>$label</span> <span class='label label-light label-badge'>{$todoCount}</span>" : "<span class='text'>$label</span>";
-    $active = $period == $type ? 'btn-active-text' : '';
+    $label  = "<span class='text'>$label</span>";
+    $active = '';
+    if($period == $type)
+    {
+        $active = 'btn-active-text';
+        $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+    }
     echo html::a(inlink('todo', $vars), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
     <?php endforeach;?>

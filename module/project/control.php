@@ -1960,7 +1960,6 @@ class project extends control
         $this->view->pager      = $pager;
         $this->view->param      = $param;
         $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction);
-        $this->view->allCount   = $this->action->getCount('project', $projectID);
         $this->view->direction  = $direction;
         $this->display();
     }

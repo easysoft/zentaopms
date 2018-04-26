@@ -13,15 +13,18 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php 
-    echo html::a(inlink('dynamic', "browseType=all"),        "<span class='text'>{$lang->action->dynamic->all}<span> <span class='label label-light label-badge'>{$allCount}</span>", '', "class='btn btn-link " . ($browseType == 'all' ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "browseType=today"),      "<span class='text'>{$lang->action->dynamic->today}<span>",     '', "class='btn btn-link " . ($browseType == 'today'     ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "browseType=yesterday"),  "<span class='text'>{$lang->action->dynamic->yesterday}<span>", '', "class='btn btn-link " . ($browseType == 'yesterday' ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "browseType=thisweek"),   "<span class='text'>{$lang->action->dynamic->thisWeek}<span>",  '', "class='btn btn-link " . ($browseType == 'thisweek'  ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "browseType=lastweek"),   "<span class='text'>{$lang->action->dynamic->lastWeek}<span>",  '', "class='btn btn-link " . ($browseType == 'lastweek'  ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "browseType=thismonth"),  "<span class='text'>{$lang->action->dynamic->thisMonth}<span>", '', "class='btn btn-link " . ($browseType == 'thismonth' ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "browseType=lastmonth"),  "<span class='text'>{$lang->action->dynamic->lastMonth}<span>", '', "class='btn btn-link " . ($browseType == 'lastmonth' ? 'btn-active-text' : '') . "'");
+    <?php foreach($lang->action->periods as $period => $label):?>
+    <?php
+    $label  = "<span class='text'>$label</span>";
+    $active = '';
+    if($period == $browseType)
+    {
+        $active = 'btn-active-text';
+        $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+    }
+    echo html::a(inlink('dynamic', "browseType=$period"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
+    <?php endforeach;?>
     <div class="input-control space w-150px"><?php echo html::select('account', $users, $account, 'onchange=changeUser(this.value) class="form-control chosen"');?></div>
     <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, 'onchange=changeProduct(this.value) class="form-control chosen"');?></div>
     <?php if($this->config->global->flow != 'onlyTest'):?>
