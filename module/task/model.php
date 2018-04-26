@@ -62,9 +62,16 @@ class taskModel extends model
             }
 
             $task = $this->file->processImgURL($task, $this->config->task->editor->create['id'], $this->post->uid);
+
+            /* Fix Bug #1525 */
+            $projectType =$this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('type'); 
+            $requiredFields =explode(',', $this->config->task->create->requiredFields);
+            if($projectType == 'ops')unset($requiredFields[array_search("story",  $requiredFields)]);
+            $requiredFields =implode(',', $requiredFields);
+
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
-                ->batchCheck($this->config->task->create->requiredFields, 'notempty')
+                ->batchCheck($requiredFields, 'notempty')
                 ->checkIF($task->estimate != '', 'estimate', 'float')
                 ->checkIF($task->deadline != '0000-00-00', 'deadline', 'ge', $task->estStarted)
                 ->exec();
@@ -213,11 +220,17 @@ class taskModel extends model
             if(strpos($this->config->task->create->requiredFields, 'deadline') !== false and empty($tasks->deadline[$i]))     $data[$i]->deadline   = '';
         }
 
+        /* Fix bug #1525*/
+        $projectType =$this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('type'); 
+        $requiredFields = explode(',', $this->config->task->create->requiredFields);
+        if($projectType == 'ops') unset($requiredFields[array_search('story', $requiredFields)]);
+        $requiredFields = implode(',', $requiredFields);
+
         /* check data. */
         foreach($data as $i => $task)
         {
             if($task->estimate and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate)) die(js::alert($this->lang->task->error->estimateNumber));
-            foreach(explode(',', $this->config->task->create->requiredFields) as $field)
+            foreach(explode(',', $requiredFields) as $field)
             {
                 $field = trim($field);
                 if($field and empty($task->$field)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->task->$field)));
@@ -229,7 +242,7 @@ class taskModel extends model
         {
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
-                ->batchCheck($this->config->task->create->requiredFields, 'notempty')
+                ->batchCheck($requiredFields, 'notempty')
                 ->checkIF($task->estimate != '', 'estimate', 'float')
                 ->exec();
 
