@@ -11,7 +11,8 @@ function showLink(releaseID, type, param)
 
         var formID = type == 'story' ? '#unlinkedStoriesForm' : (type == 'leftBug' ? '#unlinkedLeftBugsForm' : '#unlinkedBugsForm');
         setTimeout(function(){fixedTfootAction(formID)}, 100);
-        checkTable($(formID).find('table'));
+
+        $('[data-ride="table"]').table();
     });
 }
 $(function()

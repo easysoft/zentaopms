@@ -94,7 +94,7 @@ class project extends control
         $actions       = $this->loadModel('action')->getList('project', $projectID);
 
         /* Set menu. */
-        $this->project->setMenu($this->projects, $projectID, $extra);
+        $this->project->setMenu($this->projects, $projectID, $buildID = 0, $extra);
 
         /* Assign. */
         $this->view->projects      = $this->projects;

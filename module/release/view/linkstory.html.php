@@ -20,9 +20,11 @@
       <thead>
         <tr>
           <th class='c-id'>
+            <?php if($allStories):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
               <label></label>
             </div>
+            <?php endif;?>
             <?php echo $lang->idAB;?>
           </th>
           <th class='w-pri'><?php echo $lang->priAB;?></th>
@@ -59,17 +61,15 @@
         <?php endforeach;?>
       </tbody>
     </table>
-    <?php if($unlinkedCount):?>
     <div class='table-footer'>
+      <?php if($unlinkedCount):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class='btn-toolbar'>
-        <?php
-        echo html::selectButton() . html::submitButton($lang->story->linkStory);
-        echo html::a(inlink('view', "releaseID=$release->id&type=story"), $lang->goback, '', "class='btn'");
-        ?>
+        <?php echo html::submitButton($lang->release->linkStory);?>
       </div>
+      <?php endif;?>
+      <?php echo html::a(inlink('view', "releaseID=$release->id&type=story"), $lang->goback, '', "class='btn'");?>
     </div>
-    <?php endif;?>
   </form>
 </div>
 <script>
@@ -77,6 +77,5 @@ $(function()
 {
     ajaxGetSearchForm('#stories .linkBox #queryBox');
     setModal();
-    $('[data-ride="table"]').table();
 })
 </script>

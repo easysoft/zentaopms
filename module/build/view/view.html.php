@@ -297,7 +297,13 @@ tbody tr td:first-child input{display:none;}
                 <?php if($this->config->global->flow != 'onlyTest'):?>
                 <tr>
                   <th><?php echo $lang->build->desc;?></th>
-                  <td><div class='article-content'><?php echo $build->desc;?></div></td>
+                  <td>
+                    <?php if($build->desc):?>
+                    <div class='article-content'><?php echo $build->desc;?></div>
+                    <?php else:?>
+                    <?php echo $lang->build->noData;?>
+                    <?php endif;?>
+                  </td>
                 </tr>
                 <?php endif;?>
               </table>

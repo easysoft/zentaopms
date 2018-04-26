@@ -100,6 +100,7 @@ $lang->bug->setPublic          = '設為公共模板';
 $lang->bug->deleteTemplate     = '刪除模板';
 $lang->bug->confirmStoryChange = '確認需求變動';
 $lang->bug->copy               = '複製Bug';
+$lang->bug->search             = '搜索';
 
 /* 查詢條件列表。*/
 $lang->bug->assignToMe     = '指派給我';
@@ -118,7 +119,7 @@ $lang->bug->allBugs        = '所有';
 $lang->bug->byQuery        = '搜索';
 $lang->bug->needConfirm    = '需求變動';
 $lang->bug->allProduct     = '所有' . $lang->productCommon;
-
+$lang->bug->my             = '我的';
 
 $lang->bug->assignToMeAB   = '指派給我';
 $lang->bug->openedByMeAB   = '由我創建';
@@ -128,13 +129,13 @@ $lang->bug->ditto       = '同上';
 $lang->bug->dittoNotice = '該bug與上一bug不屬於同一產品！';
 
 /* 頁面標籤。*/
-$lang->bug->lblAssignedTo               = '當前指派';
-$lang->bug->lblMailto                   = '抄送給';
-$lang->bug->lblLastEdited               = '最後修改';
-$lang->bug->lblResolved                 = '由誰解決';
-$lang->bug->allUsers                    = '所有用戶';
-$lang->bug->allBuilds                   = '所有';
-$lang->bug->createBuild                 = '新建';
+$lang->bug->lblAssignedTo = '當前指派';
+$lang->bug->lblMailto     = '抄送給';
+$lang->bug->lblLastEdited = '最後修改';
+$lang->bug->lblResolved   = '由誰解決';
+$lang->bug->allUsers      = '所有用戶';
+$lang->bug->allBuilds     = '所有';
+$lang->bug->createBuild   = '新建';
 
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = '基本信息';
@@ -149,7 +150,7 @@ $lang->bug->legendMisc                  = '其他相關';
 $lang->bug->legendRelated               = '其他信息';
 
 /* 功能按鈕。*/
-$lang->bug->buttonConfirm        = '確認';
+$lang->bug->buttonConfirm = '確認';
 
 /* 交互提示。*/
 $lang->bug->confirmChangeProduct  = "修改{$lang->productCommon}會導致相應的{$lang->projectCommon}、需求和任務發生變化，確定嗎？";
@@ -368,10 +369,6 @@ $lang->bug->action->unlinkrelatedbug    = array('main' => '$date, 由 <strong>$a
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = '選擇相關版本...';
 $lang->bug->placeholder->newBuildName = '新版本名稱';
-
-
-
-
 
 $lang->bug->featureBar['browse']['unclosed']      = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['all']           = $lang->bug->allBugs;
