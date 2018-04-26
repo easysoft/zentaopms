@@ -16,14 +16,19 @@ $releaseBugs = $type == 'bug' ? $release->bugs : $release->leftBugs;
 $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
 ?>
 <div id='<?php echo $type == 'bug' ? 'unlinkBugList' : 'unlinkLeftBugList';?>'>
-  <form class='main-table' method='post' target='hiddenwin' id='<?php echo $formID?>' action='<?php echo $this->createLink('release', 'linkBug', "releaseID=$release->id&browseType=$browseType&param=$param&type=$type")?>'>
+  <form class='main-table' method='post' target='hiddenwin' id='<?php echo $formID?>' action='<?php echo $this->createLink('release', 'linkBug', "releaseID=$release->id&browseType=$browseType&param=$param&type=$type")?>' data-ride='table'>
     <div class='table-header'>
       <div class='table-statistic'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedBugs;?></strong></div>
     </div>
     <table class='table'> 
       <thead>
         <tr>
-          <th class='c-id'> <?php echo $lang->idAB;?></th>
+          <th class='c-id'>
+            <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
+              <label></label>
+            </div>
+            <?php echo $lang->idAB;?>
+          </th>
           <th class='w-pri'><?php echo $lang->priAB;?></th>
           <th>              <?php echo $lang->bug->title;?></th>
           <th class='w-user text-left'>  <?php echo $lang->openedByAB;?></th>
@@ -37,7 +42,10 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
         <?php if(strpos(",{$releaseBugs},", ",$bug->id,") !== false) continue;?>
         <tr>
           <td class='c-id'>
-            <input class='ml-10px' type='checkbox' name='bugs[<?php echo $bug->id?>]'  value='<?php echo $bug->id;?>' <?php if($type == 'leftBug' or $bug->status == 'resolved' or $bug->status == 'closed') echo "checked";?> /> 
+            <div class="checkbox-primary">
+              <input type='checkbox' name='bugs[<?php echo $bug->id?>]'  value='<?php echo $bug->id;?>' <?php if($type == 'leftBug' or $bug->status == 'resolved' or $bug->status == 'closed') echo "checked";?> /> 
+              <label></label>
+            </div>
             <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id);?>
           </td>
           <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
@@ -49,21 +57,16 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
         <?php $unlinkedCount++;?>
         <?php endforeach;?>
       </tbody>
-      <?php if($unlinkedCount):?>
-      <tfoot>
-        <tr>
-          <td colspan='6' class='text-left table-footer'>
-            <div class='clearfix'>
-              <?php
-              echo html::selectButton() . html::submitButton($lang->release->linkBug);
-              echo html::a(inlink('view', "releaseID=$release->id&type=$type"), $lang->goback, '', "class='btn'");
-              ?>
-            </div>
-          </td>
-        </tr>
-      </tfoot>
-      <?php endif;?>
     </table>
+    <?php if($unlinkedCount):?>
+    <div class='table-footer'>
+      <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+      <div class="btn-toolbar">
+        <?php echo html::submitButton($lang->release->linkBug);?>
+        <?php echo html::a(inlink('view', "releaseID=$release->id&type=$type"), $lang->goback, '', "class='btn'");?>
+      </div>
+    </div>
+    <?php endif;?>
   </form>
 </div>
 <script>
@@ -71,5 +74,6 @@ $(function()
 {
     ajaxGetSearchForm('#<?php echo $type == 'bug' ? 'bugs' : 'leftBugs'?> .linkBox #queryBox')
     setModal();
+    $('[data-ride="table"]').table();
 })
 </script>
