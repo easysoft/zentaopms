@@ -12,14 +12,19 @@
 ?>
 <div id='queryBox' class='show'></div>
 <div id='unlinkStoryList'>
-  <form class='main-table' method='post' target='hiddenwin' id='unlinkedStoriesForm' action='<?php echo $this->createLink('release', 'linkStory', "releaseID=$release->id&browseType=$browseType&param=$param")?>'>
+  <form class='main-table' method='post' target='hiddenwin' id='unlinkedStoriesForm' action='<?php echo $this->createLink('release', 'linkStory', "releaseID=$release->id&browseType=$browseType&param=$param")?>' data-ride='table'>
     <div class='table-header'>
       <div class='table-statistic'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedStories;?></strong></div>
     </div>
     <table class='table'> 
       <thead>
         <tr>
-          <th class='c-id'> <?php echo $lang->idAB;?></th>
+          <th class='c-id'>
+            <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
+              <label></label>
+            </div>
+            <?php echo $lang->idAB;?>
+          </th>
           <th class='w-pri'><?php echo $lang->priAB;?></th>
           <th>              <?php echo $lang->story->title;?></th>
           <th class='w-user text-left'>  <?php echo $lang->openedByAB;?></th>
@@ -36,8 +41,11 @@
         <?php if($release->product != $story->product) continue; ?>
         <tr>
           <td class='c-id'>
-              <input class='ml-10px' type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' <?php if($story->stage == 'developed' or $story->status == 'closed') echo 'checked';?> /> 
-              <?php printf('%03d', $story->id);?>
+            <div class="checkbox-primary">
+              <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' <?php if($story->stage == 'developed' or $story->status == 'closed') echo 'checked';?> /> 
+              <label></label>
+            </div>
+            <?php printf('%03d', $story->id);?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
           <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
@@ -50,21 +58,18 @@
         <?php $unlinkedCount++;?>
         <?php endforeach;?>
       </tbody>
-      <?php if($unlinkedCount):?>
-      <tfoot>
-        <tr>
-          <td colspan='8' class='text-left table-footer'>
-            <div class='clearfix'>
-              <?php
-              echo html::selectButton() . html::submitButton($lang->story->linkStory);
-              echo html::a(inlink('view', "releaseID=$release->id&type=story"), $lang->goback, '', "class='btn'");
-              ?>
-            </div>
-          </td>
-        </tr>
-      </tfoot>
-      <?php endif;?>
     </table>
+    <?php if($unlinkedCount):?>
+    <div class='table-footer'>
+      <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+      <div class='btn-toolbar'>
+        <?php
+        echo html::selectButton() . html::submitButton($lang->story->linkStory);
+        echo html::a(inlink('view', "releaseID=$release->id&type=story"), $lang->goback, '', "class='btn'");
+        ?>
+      </div>
+    </div>
+    <?php endif;?>
   </form>
 </div>
 <script>
@@ -72,5 +77,6 @@ $(function()
 {
     ajaxGetSearchForm('#stories .linkBox #queryBox');
     setModal();
+    $('[data-ride="table"]').table();
 })
 </script>
