@@ -242,7 +242,8 @@ class block extends control
             $block->actionLink = '';
             if($block->block == 'overview' && common::hasPriv('product', 'create'))
             {
-                $block->actionLink = html::a($this->createLink('product', 'create'), "<i class='icon icon-plus'> </i>" . $this->lang->product->create, '', "class='btn'");
+                if($module == 'product' && common::hasPriv('product', 'create')) $block->actionLink = html::a($this->createLink('product', 'create'), "<i class='icon icon-plus'> </i>" . $this->lang->product->create, '', "class='btn'");
+                if($module == 'project' && common::hasPriv('project', 'create')) $block->actionLink = html::a($this->createLink('project', 'create'), "<i class='icon icon-sm icon-plus'> </i>" . $this->lang->project->create, '', "class='btn btn-sm'");
             }
 
             if($this->block->isLongBlock($block))
@@ -835,7 +836,20 @@ class block extends control
      * @access public
      * @return void
      */
-    public function printOverviewBlock()
+    public function printOverviewBlock($module = 'product')
+    {
+        $func = 'print' . ucfirst($module) . 'OverviewBlock';
+        $this->view->module = $module;
+        $this->$func();
+    }
+
+    /**
+     * Print product overview block.
+     * 
+     * @access public
+     * @return void
+     */
+    public function printProductOverviewBlock()
     {
         $normal = 0;
         $closed = 0;
@@ -852,6 +866,39 @@ class block extends control
         $this->view->total  = $normal + $closed;
         $this->view->normal = $normal;
         $this->view->closed = $closed;
+    }
+
+    /**
+     * Print project overview block.
+     * 
+     * @access public
+     * @return void
+     */
+    public function printProjectOverviewBlock()
+    {
+        $projects = $this->loadModel('project')->getList();
+
+        $total = 0;
+        foreach($projects as $project)
+        {
+            if(!$this->project->checkPriv($project)) continue;
+
+            if(!isset($overview[$project->status])) $overview[$project->status] = 0;
+            $overview[$project->status]++;
+            $total++;
+        }
+
+
+        $overviewPercent = array();
+        foreach($this->lang->project->statusList as $statusKey => $statusName)
+        {
+            if(!isset($overview[$statusKey])) $overview[$statusKey] = 0;
+            $overviewPercent[$statusKey] = round($overview[$statusKey] / $total, 2) * 100 . '%';
+        }
+
+        $this->view->total           = $total;
+        $this->view->overview        = $overview;
+        $this->view->overviewPercent = $overviewPercent;
     }
 
     /**

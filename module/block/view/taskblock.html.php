@@ -14,7 +14,7 @@
   <table class='table table-borderless table-hover table-fixed-head block-tasks <?php if(!$longBlock) echo 'block-sm';?>'>
     <thead>
       <tr>
-        <th class='c-id'><?php echo $lang->idAB?></th>
+        <th class='c-id'><?php echo $lang->idAB;?></th>
         <th class='c-pri'><?php echo $lang->priAB?></th>
         <th class='c-name'> <?php echo $lang->task->name;?></th>
         <?php if($longBlock):?>
@@ -36,7 +36,7 @@
         <td class='c-name' style='color: <?php echo $task->color?>' title='<?php echo $task->name?>'><?php echo $task->name?></td>
         <?php if($longBlock):?>
         <td class='c-estimate'><?php echo $task->estimate?></td>
-        <td class='c-status'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
+        <td class='c-deadline'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
         <?php endif;?>
         <td class='c-status' title='<?php echo zget($lang->task->statusList, $task->status)?>'>
           <span class="task-status-<?php echo $task->status?>">

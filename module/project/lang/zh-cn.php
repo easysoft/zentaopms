@@ -147,6 +147,7 @@ $lang->project->storySort         = '需求排序';
 $lang->project->importPlanStory   = '创建' . $lang->projectCommon . '成功！\n是否导入计划关联的相关需求？';
 $lang->project->iteration         = '版本迭代';
 $lang->project->iterationInfo     = '迭代%s次';
+$lang->project->viewAll           = '查看所有';
 
 /* 分组浏览。*/
 $lang->project->allTasks     = '所有';
