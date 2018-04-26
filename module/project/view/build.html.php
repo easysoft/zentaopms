@@ -14,7 +14,10 @@
 <?php js::set('confirmDelete', $lang->build->confirmDelete)?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <span class='btn btn-link btn-active-text'> <span class='text'><?php echo $lang->project->build;?></span></span>
+    <span class='btn btn-link btn-active-text'>
+      <span class='text'><?php echo $lang->project->build;?></span>
+      <span class='label label-light label-badge'><?php echo count($builds);?></span>
+    </span>
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('build', 'create', "project=$project->id", "<i class='icon icon-plus'> </i>" . $lang->build->create, '', "class='btn btn-primary'");?>

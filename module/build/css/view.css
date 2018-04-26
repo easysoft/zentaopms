@@ -1,16 +1,15 @@
 .tabs {position:relative;}
-
-.tabs .nav-tabs{border-bottom:none;}
 .tabs .nav-tabs>li{margin-bottom:0px;}
-
 .tabs .tab-content {padding: 0; border: none;}
 .tabs .tab-content .tab-pane .action {position: absolute; right: 0; top: -1px;}
 .tabs .tab-content .tab-pane #querybox{margin:0px; border-left:1px solid #ddd; border-right:1px solid #ddd;}
 .tabs .tab-content .tab-pane #querybox form {padding-left:0px;}
 
-.table-actions {padding-left: 5px;}
+#unlinkStoryList, #unlinkBugList{border:1px solid #ddd;}
 
-#buildInfo {border-top: 1px solid #ddd;}
+.table-footer .text {line-height: 30px;}
+.table-footer .table-actions {margin-right: 10px;}
+
 #buildInfo > div {padding-top: 15px;}
 
 #querybox form {margin: 0px !important;}

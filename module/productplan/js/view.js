@@ -9,7 +9,8 @@ function showLink(planID, type, orderBy, param)
 
         var formID = type == 'story' ? '#unlinkedStoriesForm' : '#unlinkedBugsForm';
         setTimeout(function(){fixedTfootAction(formID)}, 100);
-        checkTable($(formID).find('table'));
+
+        $('[data-ride="table"]').table();
     });
 }
 $(function()

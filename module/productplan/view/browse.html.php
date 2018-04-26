@@ -32,7 +32,7 @@
     <table class='table has-sort-head' id="productplanList">
       <thead>
       <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-      <tr class='colhead'>
+      <tr>
         <th class='c-id'>
           <?php if(common::hasPriv('productplan', 'batchEdit')):?>
           <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">

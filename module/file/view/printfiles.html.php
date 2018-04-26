@@ -8,6 +8,9 @@ $sessionString .= session_name() . '=' . session_id();
   <div class="detail-title"><?php echo $lang->file->common;?> <i class="icon icon-paper-clip icon-sm"></i></div>
   <div class="detail-content">
 <?php endif;?>
+  <style>
+    .files-list>li>a {display: inline;}
+  </style>
   <script language='Javascript'>
   $(function(){
        $(".edit").modalTrigger({width:350, type:'iframe'});
@@ -80,7 +83,7 @@ $sessionString .= session_name() . '=' . session_id();
 
               echo "<span class='right-icon'>";
               common::printLink('file', 'edit', "fileID=$file->id", "<i class='icon-pencil'></i>", '', "class='edit btn-icon' title='{$lang->file->edit}'");
-              if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon-remove'></i>", '', "class='btn-icon' onclick='deleteFile($file->id)' title='$lang->delete'");
+              if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon-sm icon-close'></i>", '', "class='btn-icon' onclick='deleteFile($file->id)' title='$lang->delete'");
               echo '</span>';
               echo '</li>';
           }
