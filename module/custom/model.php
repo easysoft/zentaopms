@@ -209,11 +209,12 @@ class customModel extends model
         {
             if(is_object($item)) $item = (array)$item;
 
-            $label  = '';
-            $module = '';
-            $method = '';
-            $float  = '';
-            $fixed  = '';
+            $label     = '';
+            $module    = '';
+            $method    = '';
+            $class     = '';
+            $subModule = '';
+            $alias     = '';
 
             $link = (is_array($item) and isset($item['link'])) ? $item['link'] : $item;
             /* The variable of item has not link and is not link then ignore it. */
@@ -235,31 +236,28 @@ class customModel extends model
                 {
                     $itemLink = array('module' => $module, 'method' => $method);
                     if(isset($link[3])) $itemLink['vars'] = $link[3];
-                    if(is_array($item))
-                    {
-                        if(isset($item['subModule'])) $itemLink['subModule'] = $item['subModule'];
-                        if(isset($item['alias']))     $itemLink['alias']     = $item['alias'];
-                        if(isset($item['target']))    $itemLink['target']    = $item['target'];
-                    }
+                    if(is_array($item) and isset($item['target'])) $itemLink['target'] = $item['target'];
                 }
 
                 if(is_array($item))
                 {
-                    if(isset($item['float'])) $float = $item['float'];
-                    if(isset($item['fixed'])) $fixed = $item['fixed'];
+                    if(isset($item['class']))     $class     = $item['class'];
+                    if(isset($item['subModule'])) $subModule = $item['subModule'];
+                    if(isset($item['alias']))     $alias     = $item['alias'];
                 }
 
-                $hidden = !$fixed && isset($customMenuMap[$name]) && isset($customMenuMap[$name]->hidden) && $customMenuMap[$name]->hidden;
+                $hidden = isset($customMenuMap[$name]) && isset($customMenuMap[$name]->hidden) && $customMenuMap[$name]->hidden;
                 if(strpos($name, 'QUERY') === 0 and !isset($customMenuMap[$name])) $hidden = true;
 
                 $menuItem = new stdclass();
                 $menuItem->name   = $name;
                 $menuItem->link   = $itemLink;
                 $menuItem->text   = $label;
-                $menuItem->order  = $fixed ? -1 : (isset($customMenuMap[$name]) && isset($customMenuMap[$name]->order) ? $customMenuMap[$name]->order : $order++);
-                if($float)  $menuItem->float   = $float;
-                if($fixed)  $menuItem->fixed   = $fixed;
-                if($hidden) $menuItem->hidden  = $hidden;
+                $menuItem->order  = (isset($customMenuMap[$name]) && isset($customMenuMap[$name]->order) ? $customMenuMap[$name]->order : $order++);
+                if($hidden)   $menuItem->hidden    = $hidden;
+                if($class)    $menuItem->class     = $class;
+                if($subModule)$menuItem->subModule = $subModule;
+                if($alias)    $menuItem->alias     = $alias;
                 if($isTutorialMode) $menuItem->tutorial = true;
 
                 /* Hidden menu by config in mobile. */

@@ -48,19 +48,15 @@ $lang->branch->menuOrder      = $lang->product->menuOrder;
 
 /* project menu order. */
 $lang->project->menuOrder[5]  = 'list';
-$lang->project->menuOrder[10] = 'index';
-$lang->project->menuOrder[15] = 'task';
+$lang->project->menuOrder[10] = 'kanban';
+$lang->project->menuOrder[15] = 'burn';
 $lang->project->menuOrder[20] = 'story';
-$lang->project->menuOrder[25] = 'bug';
-$lang->project->menuOrder[30] = 'build';
-$lang->project->menuOrder[35] = 'testtask';
+$lang->project->menuOrder[25] = 'qa';
+$lang->project->menuOrder[30] = 'doc';
+$lang->project->menuOrder[35] = 'action';
 $lang->project->menuOrder[40] = 'team';
-$lang->project->menuOrder[45] = 'dynamic';
-$lang->project->menuOrder[50] = 'doc';
-$lang->project->menuOrder[55] = 'product';
-$lang->project->menuOrder[60] = 'view';
-$lang->project->menuOrder[65] = 'create';
-$lang->project->menuOrder[70] = 'all';
+$lang->project->menuOrder[45] = 'product';
+$lang->project->menuOrder[50] = 'view';
 $lang->task->menuOrder        = $lang->project->menuOrder;
 $lang->build->menuOrder       = $lang->project->menuOrder;
 
