@@ -147,6 +147,7 @@ $lang->project->storySort         = '需求排序';
 $lang->project->importPlanStory   = '創建' . $lang->projectCommon . '成功！\n是否導入計劃關聯的相關需求？';
 $lang->project->iteration         = '版本迭代';
 $lang->project->iterationInfo     = '迭代%s次';
+$lang->project->viewAll           = '查看所有';
 
 /* 分組瀏覽。*/
 $lang->project->allTasks     = '所有';
@@ -213,6 +214,7 @@ $lang->project->copyFromProject = "複製自{$lang->projectCommon} <strong>%s</s
 $lang->project->cancelCopy      = '取消複製';
 $lang->project->byPeriod        = '按時間段';
 $lang->project->byUser          = '按用戶';
+$lang->project->noProject       = '暫時沒有項目，您現在可以';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = "您確定刪除{$lang->projectCommon}[%s]嗎？";

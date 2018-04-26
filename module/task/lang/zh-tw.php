@@ -167,6 +167,7 @@ $lang->task->confirmRecord         = '"剩餘"為0，任務將標記為"已完�
 $lang->task->noticeLinkStory       = "沒有可關聯的相關需求，您可以為當前項目%s，然後%s";
 $lang->task->noticeSaveRecord      = '您有尚未保存的工時記錄，請先將其保存。';
 $lang->task->commentActions        = '%s. %s, 由 <strong>%s</strong> 添加備註。';
+$lang->task->noData                = '暫無';
 
 $lang->task->error                   = new stdclass();
 $lang->task->error->consumedNumber   = '"已經消耗"必須為數字';
