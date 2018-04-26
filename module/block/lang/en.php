@@ -83,21 +83,33 @@ $lang->block->default['product']['4']['params']['num']     = 15;
 $lang->block->default['product']['4']['params']['orderBy'] = 'id_desc';
 $lang->block->default['product']['4']['params']['type']    = 'assignedTo';
 
-$lang->block->default['project']['1']['title'] = 'Active ' . $lang->projectCommon . 's';
-$lang->block->default['project']['1']['block'] = 'list';
+$lang->block->default['project']['1']['title'] = $lang->projectCommon . 'statistic';
+$lang->block->default['project']['1']['block'] = 'statistic';
 $lang->block->default['project']['1']['grid']  = 8;
 
-$lang->block->default['project']['1']['params']['num']     = 15;
 $lang->block->default['project']['1']['params']['orderBy'] = 'id_desc';
-$lang->block->default['project']['1']['params']['type']    = 'undone';
+$lang->block->default['project']['1']['params']['type']    = 'noclosed';
+$lang->block->default['project']['1']['params']['num']     = 5;
 
-$lang->block->default['project']['2']['title'] = 'My Tasks';
-$lang->block->default['project']['2']['block'] = 'task';
+$lang->block->default['project']['2']['title'] = $lang->projectCommon . 'overview';
+$lang->block->default['project']['2']['block'] = 'overview';
 $lang->block->default['project']['2']['grid']  = 4;
 
-$lang->block->default['project']['2']['params']['num']     = 15;
-$lang->block->default['project']['2']['params']['orderBy'] = 'id_desc';
-$lang->block->default['project']['2']['params']['type']    = 'assignedTo';
+$lang->block->default['project']['3']['title'] = 'Active ' . $lang->projectCommon . 's';
+$lang->block->default['project']['3']['block'] = 'list';
+$lang->block->default['project']['3']['grid']  = 8;
+
+$lang->block->default['project']['3']['params']['num']     = 15;
+$lang->block->default['project']['3']['params']['orderBy'] = 'id_desc';
+$lang->block->default['project']['3']['params']['type']    = 'undone';
+
+$lang->block->default['project']['4']['title'] = 'My Tasks';
+$lang->block->default['project']['4']['block'] = 'task';
+$lang->block->default['project']['4']['grid']  = 4;
+
+$lang->block->default['project']['4']['params']['num']     = 15;
+$lang->block->default['project']['4']['params']['orderBy'] = 'id_desc';
+$lang->block->default['project']['4']['params']['type']    = 'assignedTo';
 
 $lang->block->default['qa']['1']['title'] = 'My Bugs';
 $lang->block->default['qa']['1']['block'] = 'bug';
@@ -232,6 +244,8 @@ $lang->block->modules['product']->availableBlocks->plan      = 'Plans';
 $lang->block->modules['product']->availableBlocks->release   = 'Releases';
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
+$lang->block->modules['project']->availableBlocks->statistic = $lang->projectCommon . 'statistic';
+$lang->block->modules['project']->availableBlocks->overview  = $lang->projectCommon . 'overview';
 $lang->block->modules['project']->availableBlocks->list  = $lang->projectCommon . 'List';
 $lang->block->modules['project']->availableBlocks->task  = 'Tasks';
 $lang->block->modules['project']->availableBlocks->build = 'Builds';

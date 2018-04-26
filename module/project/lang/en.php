@@ -146,6 +146,7 @@ $lang->project->storySort         = 'Sort Story';
 $lang->project->importPlanStory   = 'Create ' . $lang->projectCommon . ' success!\nImport the stories with the plan?';
 $lang->project->iteration         = 'Iteration';
 $lang->project->iterationInfo     = 'Iteration %s times';
+$lang->project->viewAll           = 'View All';
 
 /* 分组浏览。*/
 $lang->project->allTasks     = 'All';
