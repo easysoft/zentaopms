@@ -266,6 +266,12 @@ $lang->block->orderByList->product['id_desc']     = 'ID Descending';
 $lang->block->orderByList->product['status_asc']  = 'Status Ascending';
 $lang->block->orderByList->product['status_desc'] = 'Status Descending';
 
+$lang->block->orderByList->project = array();
+$lang->block->orderByList->project['id_asc']      = 'ID Ascending';
+$lang->block->orderByList->project['id_desc']     = 'ID Descending';
+$lang->block->orderByList->project['status_asc']  = 'Status Ascending';
+$lang->block->orderByList->project['status_desc'] = 'Status Descending';
+
 $lang->block->orderByList->task = array();
 $lang->block->orderByList->task['id_asc']        = 'ID Ascending';
 $lang->block->orderByList->task['id_desc']       = 'ID Descending';
