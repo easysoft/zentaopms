@@ -151,8 +151,8 @@ class projectModel extends model
                 $replace .= '</ul>';
                 $replace  = "<a data-toggle='dropdown'>$dropTitle <span class='caret'></span></a>" . $replace;
 
-                $this->lang->project->menu->$key['class'] = 'dropdown';
-                if($hasActive) $this->lang->project->menu->$key['class'] .= ' active';
+                $this->lang->project->menu->{$key}['class'] = 'dropdown';
+                if($hasActive) $this->lang->project->menu->{$key}['class'] .= ' active';
             }
             common::setMenuVars($this->lang->project->menu, $key,  $replace);
         }
