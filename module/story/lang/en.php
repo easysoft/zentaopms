@@ -95,6 +95,7 @@ $lang->story->files          = 'Files';
 $lang->story->copy           = "Duplicate a Story";
 $lang->story->total          = "Total Stories";
 $lang->story->allStories     = 'All';
+$lang->story->unclosed       = 'Unclosed';
 
 $lang->story->ditto       = 'Ditto';
 $lang->story->dittoNotice = 'This Story does not belong to the same Product as the last Story does!';
@@ -154,11 +155,11 @@ $lang->story->sourceList['tester']     = 'QA Team';
 $lang->story->sourceList['bug']        = 'Bug';
 $lang->story->sourceList['other']      = 'Other';
 
-$lang->story->priList[]   = '';
-$lang->story->priList[3]  = '3';
-$lang->story->priList[1]  = '1';
-$lang->story->priList[2]  = '2';
-$lang->story->priList[4]  = '4';
+$lang->story->priList[]  = '';
+$lang->story->priList[3] = '3';
+$lang->story->priList[1] = '1';
+$lang->story->priList[2] = '2';
+$lang->story->priList[4] = '4';
 
 $lang->story->legendBasicInfo      = 'Basic Info';
 $lang->story->legendLifeTime       = 'Story Life ';
