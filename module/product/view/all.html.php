@@ -119,7 +119,7 @@
         <?php if($canBatchEdit):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
-          <?php echo html::submitButton($lang->edit);?>
+          <?php echo html::submitButton($lang->edit, '', 'btn');?>
         </div>
         <?php endif;?>
         <?php if(!$canOrder and common::hasPriv('product', 'updateOrder')) echo html::a(inlink('all', "productID=$productID&line=$line&status=$status&order=order_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->product->updateOrder, '' , "class='btn'");?>

@@ -94,6 +94,7 @@ $lang->story->colorTag       = '颜色标签';
 $lang->story->files          = '附件';
 $lang->story->copy           = "复制需求";
 $lang->story->total          = '总需求';
+$lang->story->allStories     = '所有需求';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = '该需求与上一需求不属于同一产品！';

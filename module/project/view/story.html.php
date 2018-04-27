@@ -20,33 +20,24 @@
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
     <?php echo html::commonButton('<i class="icon icon-caret-left"></i>', '', 'btn btn-icon btn-sm btn-info sidebar-toggle');?>
+    <?php if(!empty($module->name)):?>
+    <div class="title" title='<?php echo $module->name?>'>
+      <?php $removeLink = inlink('story', "projectID=$project->id&orderBy=$orderBy&type=$type&param=0&recTotal=0&recPerPage={$pager->recPerPage}");?>
+      <?php echo $module->name;?>
+      <?php echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");?>
+    </div>
+    <?php else:?>
     <div class="title" title='<?php echo $project->name?>'><?php echo $project->name;?></div>
+    <?php endif;?>
   </div>
   <div class="btn-toolbar pull-left">
-    <?php if(common::hasPriv('project', 'story')) echo html::a($this->createLink('project', 'story', "project=$project->id"), "<span class='text'>{$lang->project->story}</span>", '', "class='btn btn-link btn-active-text'");?>
-    <?php if(common::hasPriv('project', 'storykanban')) echo html::a($this->createLink('project', 'storykanban', "project=$project->id"), "<span class='text'>{$lang->project->kanban}</span>", '', "class='btn btn-link'");?>
+    <?php if(common::hasPriv('project', 'story')) echo html::a($this->createLink('project', 'story', "projectID=$project->id"), "<span class='text'>{$lang->story->allStories}</span><span class='label label-light label-badge'>{$pager->recTotal}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php if(common::hasPriv('project', 'storykanban')) echo html::a($this->createLink('project', 'storykanban', "projectID=$project->id"), "<span class='text'>{$lang->project->kanban}</span>", '', "class='btn btn-link'");?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
   <div class="btn-toolbar pull-right">
-    <div class='btn-group'>
     <?php
-    common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc", '', 'button', '', '', 'export');
-
-    $this->lang->story->create = $this->lang->project->createStory;
-    if($productID and !$this->loadModel('story')->checkForceReview())
-    {
-        echo "<div class='btn-group' id='createActionMenu'>";
-        common::printIcon('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&project=$project->id");
-
-        $misc = common::hasPriv('story', 'batchCreate') ? '' : "disabled";
-        $link = common::hasPriv('story', 'batchCreate') ?  $this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&project=$project->id") : '#';
-        echo "<button type='button' class='btn btn-link dropdown-toggle {$misc}' data-toggle='dropdown'>";
-        echo "<span class='caret'></span>";
-        echo '</button>';
-        echo "<ul class='dropdown-menu pull-right'>";
-        echo "<li>" . html::a($link, $lang->story->batchCreate, '', "class='$misc'") . "</li>";
-        echo '</ul>';
-        echo '</div>';
-    }
+    common::printLink('story', 'export', "productID=$productID&orderBy=id_desc", "<i class='icon icon-export'> </i>" . $lang->story->export, '', "class='btn btn-link export'");
 
     if(commonModel::isTutorialMode())
     {
@@ -68,12 +59,17 @@
         }
         echo '</div>';
     }
+
+    $this->lang->story->create = $this->lang->project->createStory;
+    if($productID and !$this->loadModel('story')->checkForceReview())
+    {
+        common::printLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&project=$project->id", "<i class='icon icon-plus'> </i>" . $lang->story->batchCreate, '', "class='btn btn-secondary'");
+        common::printLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&project=$project->id", "<i class='icon icon-plus'> </i>" . $lang->story->create, '', "class='btn btn-primary'");
+    }
     ?>
-    </div>
   </div>
 </div>
 
-<div id='queryBox' class='show'></div>
 <div id="mainContent" class="main-row">
   <div class='side-col' id='sidebar'>
     <div class="cell">
@@ -81,6 +77,7 @@
     </div>
   </div>
   <div class="main-col">
+    <div class="cell" id="queryBox"></div>
     <form class='main-table table-story' method='post' data-ride='table' id='projectStoryForm'>
       <div class="table-header">
         <div class="table-statistic"><?php echo $summary;?></div>
@@ -106,7 +103,7 @@
             <?php if($canOrder):?>
             <th class='w-80px'> <?php common::printOrderLink('order',      $orderBy, $vars, $lang->project->updateOrder);?></th>
             <?php endif;?>
-            <th class='w-pri'>  <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+            <th class='c-pri'>  <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
             <th> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
             <th class='w-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
             <th class='w-80px'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
@@ -116,7 +113,7 @@
             <th title='<?php echo $lang->story->taskCount?>' class='w-30px'><?php echo $lang->story->taskCountAB;?></th>
             <th title='<?php echo $lang->story->bugCount?>'  class='w-30px'><?php echo $lang->story->bugCountAB;?></th>
             <th title='<?php echo $lang->story->caseCount?>' class='w-30px'><?php echo $lang->story->caseCountAB;?></th>
-            <th class='w-160px'><?php echo $lang->actions;?></th>
+            <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody id='storyTableList' class='sortable'>
@@ -126,14 +123,12 @@
           $totalEstimate += $story->estimate;
           ?>
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
-            <td class='c-id'>
-              <div class="checkbox-primary">
-                <?php if($canBatchEdit or $canBatchClose):?>
-                <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' />
-                <label></label>
-                <?php endif;?>
-                <?php printf('%03d', $story->id);?>
-              </div>
+            <td class='cell-id'>
+              <?php if($canBatchEdit or $canBatchClose):?>
+              <?php echo html::checkbox('storyIDList', array($story->id => sprintf('%03d', $story->id)));?>
+              <?php else:?>
+              <?php printf('%03d', $story->id);?>
+              <?php endif;?>
             </td>
             <?php if($canOrder):?>
             <td class='sort-handler'><i class='icon-move'></i></td>

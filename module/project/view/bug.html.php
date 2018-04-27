@@ -14,11 +14,11 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <span class='btn btn-link btn-active-text'>
-      <span class='text'><?php echo html::icon($lang->icons['bug']);?> <?php echo $lang->project->bug;?></span>
+      <span class='text'><?php echo $lang->bug->allBugs;?></span>
       <span class="label label-light label-badge"><?php echo $pager->recTotal;?></span>
       <?php if($build) echo ' <span class="label label-danger">Build:' . $build->name . '</span>';?>
     </span>
-        <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->bug->search;?></a>
+    <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->bug->search;?></a>
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('bug', 'export', "productID=$productID&orderBy=$orderBy", "<i class='icon icon-export'> </i>" . $lang->bug->export, '', "class='btn btn-link export iframe'");?>

@@ -190,7 +190,7 @@
             <?php
             echo html::submitButton($lang->save, '', 'btn btn-wide btn-primary');
             echo ' &nbsp; ';
-            echo html::backButton($lang->goback, '', 'btn btn-wide');
+            echo html::backButton($lang->goback, '', 'btn btn-wide btn-gray');
             ?>
           </td>
         </tr>
