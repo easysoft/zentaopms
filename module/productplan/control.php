@@ -264,9 +264,7 @@ class productplan extends control
         }
 
         $this->loadModel('datatable');
-        $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
-        $this->view->modulePairs = $showModule ? $this->loadModel('tree')->getModulePairs($plan->product, 'story', $showModule) : array();
-
+        $this->view->modulePairs = $this->loadModel('tree')->getOptionMenu($plan->product, 'story');
         $this->view->title       = "PLAN #$plan->id $plan->title/" . $products[$plan->product];
         $this->view->position[]  = $this->lang->productplan->view;
         $this->view->planStories = $planStories;

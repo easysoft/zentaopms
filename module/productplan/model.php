@@ -280,10 +280,19 @@ class productplanModel extends model
         $stories = $this->story->getByList($this->post->stories);
         $plan    = $this->getByID($planID);
 
+        $currentOrder = $plan->order;
         foreach($this->post->stories as $storyID)
         {
             if(!isset($stories[$storyID])) continue;
             $story = $stories[$storyID];
+
+            /* Fix Bug #1538*/
+            $currentOrder = $currentOrder . $storyID . ',';
+            $oldOrder = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where("id")->eq($story->plan)->fetch('order'); 
+            $oldOrder = explode(',', $oldOrder);
+            unset($oldOrder[array_search($storyID,  $oldOrder)]);
+            $oldOrder = implode(',', $oldOrder);
+            $this->dao->update(TABLE_PRODUCTPLAN)->set("order")->eq($oldOrder)->where('id')->eq($story->plan)->exec();
 
             if($this->session->currentProductType == 'normal' or $story->branch != 0 or empty($story->plan))
             {
@@ -297,7 +306,10 @@ class productplanModel extends model
             }
             $this->action->create('story', $storyID, 'linked2plan', '', $planID);
             $this->story->setStage($storyID);
+
         }
+
+        $this->dao->update(TABLE_PRODUCTPLAN)->set("order")->eq($currentOrder)->where('id')->eq((int)$planID)->exec();
     }
 
     /**
@@ -312,6 +324,14 @@ class productplanModel extends model
         $story = $this->dao->findByID($storyID)->from(TABLE_STORY)->fetch();
         $plans = array_unique(explode(',', trim(str_replace(",$planID,", ',', ',' . trim($story->plan) . ','). ',')));
         $this->dao->update(TABLE_STORY)->set('plan')->eq(join(',', $plans))->where('id')->eq((int)$storyID)->exec();
+
+        /* Fix Bug #1538. */ 
+        $oldOrder = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where("id")->eq($story->plan)->fetch('order');
+        $oldOrder = explode(',', $oldOrder);
+        unset($oldOrder[array_search($storyID, $oldOrder)]);
+        $oldOrder = implode(',', $oldOrder);
+        $this->dao->update(TABLE_PRODUCTPLAN)->set('order')->eq($oldOrder)->where('id')->eq($story->plan)->exec();
+
         $this->loadModel('story')->setStage($storyID);
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromplan', '', $planID);
     }
