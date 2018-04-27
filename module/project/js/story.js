@@ -1,7 +1,5 @@
 $(function()
 {
-    ajaxGetSearchForm();
-
     $('#storyList').on('sort.sortable', function(e, data)
     {
         var list = '';
@@ -36,7 +34,6 @@ $(function()
 
 function showCheckedSummary()
 {
-  console.log('test');
     var $summary = $('#main #mainContent form.main-table .table-header .table-statistic');
 
     var checkedTotal    = 0;

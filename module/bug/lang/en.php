@@ -103,23 +103,24 @@ $lang->bug->copy               = 'Copy';
 $lang->bug->search             = 'Search';
 
 /* 查询条件列表。*/
-$lang->bug->assignToMe     = 'AssignedToMe';
-$lang->bug->openedByMe     = 'CreatedByMe';
-$lang->bug->resolvedByMe   = 'ResolvedByMe';
-$lang->bug->closedByMe     = 'ClosedByMe';
-$lang->bug->assignToNull   = 'Unassigned';
-$lang->bug->unResolved     = 'Unresolved';
-$lang->bug->toClosed       = 'WaitForClose';
-$lang->bug->unclosed       = 'Active';
-$lang->bug->unconfirmed    = 'UnConfirmed';
-$lang->bug->longLifeBugs   = 'Pending';
-$lang->bug->postponedBugs  = 'Postponed';
-$lang->bug->overdueBugs    = 'Overdue';
-$lang->bug->allBugs        = 'All';
-$lang->bug->byQuery        = 'Search';
-$lang->bug->needConfirm    = 'StoryChanged';
-$lang->bug->allProduct     = 'All' . $lang->productCommon;
-$lang->bug->my             = 'My';
+$lang->bug->assignToMe        = 'AssignedToMe';
+$lang->bug->openedByMe        = 'CreatedByMe';
+$lang->bug->resolvedByMe      = 'ResolvedByMe';
+$lang->bug->closedByMe        = 'ClosedByMe';
+$lang->bug->assignToNull      = 'Unassigned';
+$lang->bug->unResolved        = 'Unresolved';
+$lang->bug->toClosed          = 'WaitForClose';
+$lang->bug->unclosed          = 'Active';
+$lang->bug->unconfirmed       = 'UnConfirmed';
+$lang->bug->longLifeBugs      = 'Pending';
+$lang->bug->postponedBugs     = 'Postponed';
+$lang->bug->overdueBugs       = 'Overdue';
+$lang->bug->allBugs           = 'All';
+$lang->bug->byQuery           = 'Search';
+$lang->bug->needConfirm       = 'StoryChanged';
+$lang->bug->allProduct        = 'All' . $lang->productCommon;
+$lang->bug->my                = 'My';
+$lang->bug->yesterdayResolved = 'Resolved Yesterday ';
 
 $lang->bug->assignToMeAB   = 'Assigned To Me';
 $lang->bug->openedByMeAB   = 'Created By Me';
@@ -233,6 +234,10 @@ $lang->bug->typeList['performance']  = 'Performance';
 $lang->bug->typeList['standard']     = 'Standard';
 $lang->bug->typeList['automation']   = 'Testing Script';
 $lang->bug->typeList['others']       = 'Other';
+$lang->bug->typeList['designchange'] = 'Design Changed';
+$lang->bug->typeList['newfeature']   = 'New Feature';
+$lang->bug->typeList['designdefect'] = 'Design Defect';
+$lang->bug->typeList['trackthings']  = 'Track Things';
 
 $lang->bug->statusList['']         = '';
 $lang->bug->statusList['active']   = 'Active';
@@ -366,14 +371,12 @@ $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = 'Choose Build...';
 $lang->bug->placeholder->newBuildName = 'The name of new build';
 
-$lang->bug->mySelects['assigntome']   = $lang->bug->assignToMeAB;
-$lang->bug->mySelects['openedbyme']   = $lang->bug->openedByMeAB;
-$lang->bug->mySelects['resolvedbyme'] = $lang->bug->resolvedByMeAB;
-
 $lang->bug->featureBar['browse']['unclosed']      = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['all']           = $lang->bug->allBugs;
+$lang->bug->featureBar['browse']['assigntome']    = $lang->bug->assignToMe;
+$lang->bug->featureBar['browse']['openedbyme']    = $lang->bug->openedByMe;
+$lang->bug->featureBar['browse']['resolvedbyme']  = $lang->bug->resolvedByMe;
 
-$lang->bug->featureBar['browse']['my']            = $lang->bug->my;
 $lang->bug->featureBar['browse']['unconfirmed']   = $lang->bug->unconfirmed;
 $lang->bug->featureBar['browse']['assigntonull']  = $lang->bug->assignToNull;
 $lang->bug->featureBar['browse']['unresolved']    = $lang->bug->unResolved;

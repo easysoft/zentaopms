@@ -94,6 +94,8 @@ $lang->story->colorTag       = '顏色標籤';
 $lang->story->files          = '附件';
 $lang->story->copy           = "複製需求";
 $lang->story->total          = '總需求';
+$lang->story->allStories     = '所有需求';
+$lang->story->unclosed       = '未關閉';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = '該需求與上一需求不屬於同一產品！';
@@ -153,11 +155,11 @@ $lang->story->sourceList['tester']     = '測試人員';
 $lang->story->sourceList['bug']        = 'Bug';
 $lang->story->sourceList['other']      = '其他';
 
-$lang->story->priList[]   = '';
-$lang->story->priList[3]  = '3';
-$lang->story->priList[1]  = '1';
-$lang->story->priList[2]  = '2';
-$lang->story->priList[4]  = '4';
+$lang->story->priList[]  = '';
+$lang->story->priList[3] = '3';
+$lang->story->priList[1] = '1';
+$lang->story->priList[2] = '2';
+$lang->story->priList[4] = '4';
 
 $lang->story->legendBasicInfo      = '基本信息';
 $lang->story->legendLifeTime       = '需求的一生';

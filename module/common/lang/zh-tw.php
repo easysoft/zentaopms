@@ -17,6 +17,7 @@ $lang->at        = ' 于 ';
 $lang->downArrow = '↓';
 $lang->null      = '空';
 $lang->ellipsis  = '…';
+$lang->percent   = '%';
 
 $lang->zentaoPMS      = '禪道';
 $lang->welcome        = "%s項目管理系統";
@@ -241,7 +242,7 @@ $lang->project->subMenu->list->groupTask = '分組視圖|project|groupTask|proje
 $lang->project->subMenu->qa = new stdclass();
 $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
 $lang->project->subMenu->qa->build    = '版本|project|build|projectID=%s';
-$lang->project->subMenu->qa->testtask = '測試單|project|testtask|projectID=%s';
+$lang->project->subMenu->qa->testtask = array('link' => '測試單|project|testtask|projectID=%s', 'subModule' => 'testreport');
 
 $lang->project->subMenu->action = new stdclass();
 $lang->project->subMenu->action->dynamic  = '動態|project|dynamic|projectID=%s';

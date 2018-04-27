@@ -166,7 +166,10 @@
           <td colspan='3'><?php echo html::radio('after', $lang->task->afterChoices, $this->config->global->flow == 'onlyTask' || !empty($task->id) ? 'toTaskList' : 'continueAdding');?></td>
         </tr>
         <tr>
-          <td colspan='4' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide') . html::backButton('', '', 'btn btn-gray btn-wide');?></td>
+          <td colspan='4' class='text-center'>
+            <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
+            <?php echo html::backButton('', '', 'btn btn-gray btn-wide');?>
+          </td>
         </tr>
       </table>
 
@@ -196,7 +199,9 @@
               </tr>
               <?php endfor;?>
               <tr>
-                <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary' data-dismiss='modal'") ?></td>
+                <td colspan='3' class='text-center'>
+                  <?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary' data-dismiss='modal'");?>
+                </td>
               </tr>
             </table>
           </div>
