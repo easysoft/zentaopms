@@ -109,13 +109,15 @@ $lang->task->lblPri           = 'P';
 $lang->task->lblHour          = '(h)';
 $lang->task->deniedNotice     = '此任务只允许由团队第一人开始。';
 
-$lang->task->ditto         = '同上';
-$lang->task->dittoNotice   = "该任务与上一任务不属于同一项目！";
-$lang->task->selectAllUser = '全部';
-$lang->task->noStory       = '无需求';
-$lang->task->noAssigned    = '未指派';
-$lang->task->noFinished    = '未完成';
-$lang->task->noClosed      = '未关闭';
+$lang->task->ditto             = '同上';
+$lang->task->dittoNotice       = "该任务与上一任务不属于同一项目！";
+$lang->task->selectAllUser     = '全部';
+$lang->task->noStory           = '无需求';
+$lang->task->noAssigned        = '未指派';
+$lang->task->noFinished        = '未完成';
+$lang->task->noClosed          = '未关闭';
+$lang->task->yesterdayFinished = '昨日完成';
+$lang->task->allTasks          = '总任务';
 
 $lang->task->statusList['']       = '';
 $lang->task->statusList['wait']   = '未开始';

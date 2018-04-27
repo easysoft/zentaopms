@@ -696,16 +696,30 @@ class block extends control
 
     /**
      * Print statistic block.
+     * 
+     * @param  string $module 
+     * @access public
+     * @return void
+     */
+    public function printStatisticBlock($module = 'product')
+    {
+        $func = 'print' . ucfirst($module) . 'StatisticBlock';
+        $this->view->module = $module;
+        $this->$func();
+    }
+
+    /**
+     * Print product statistic block.
      *
      * @access public
      * @return void
      */
-    public function printStatisticBlock()
+    public function printProductStatisticBlock()
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
         $status  = isset($this->params->type) ? $this->params->type : '';
-        $orderBy = isset($this->params->type) ? $this->params->orderBy : 'id_asc';
+        $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_asc';
         $num     = isset($this->params->num)  ? (int)$this->params->num : 0;
 
         /* Get products. */
@@ -828,6 +842,127 @@ class block extends control
         $this->app->loadLang('release');
 
         $this->view->products = $products;
+    }
+
+    /**
+     * Print project statistic block.
+     * 
+     * @access public
+     * @return void
+     */
+    public function printProjectStatisticBlock()
+    {
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+
+        $status  = isset($this->params->type) ? $this->params->type : '';
+        $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_asc';
+        $num     = isset($this->params->num)  ? (int)$this->params->num : 0;
+
+        /* Get projects. */
+        $projects = $this->loadModel('project')->getList($status);
+        foreach($projects as $projectID => $project)
+        {
+            if(!$this->project->checkPriv($project)) unset($projects[$projectID]);
+        }
+        $projectIDList = array_keys($projects);
+        if(!$projectIDList)
+        {
+            $this->view->projects = $projects;
+            return false;
+        }
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('id')->in($projectIDList)
+            ->orderBy($orderBy)
+            ->beginIF($this->viewType != 'json')->limit($num)->fi()
+            ->fetchAll('id');
+
+
+        /* Get tasks. */
+        $yesterday = date('Y-m-d', strtotime('-1 day'));
+        $tasks = $this->dao->select("project, count(id) as totalTasks, count(status not in ('wait,doing,pause') or null) as undoneTasks, count(finishedDate like '{$yesterday}%' or null) as yesterdayFinished, sum(if(status != 'cancel', estimate, 0)) as totalEstimate, sum(if(status != 'cancel', consumed, 0)) as totalConsumed, sum(if(status != 'cancel', `left`, 0)) as totalLeft")->from(TABLE_TASK)
+            ->where('project')->in($projectIDList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->eq(0)
+            ->groupBy('project')
+            ->fetchAll('project');
+
+        foreach($tasks as $projectID => $task)
+        {
+            foreach($task as $key => $value)
+            {
+                if($key == 'project') continue;
+                $projects[$projectID]->$key = $value;
+            }
+        }
+
+        /* Get stories. */
+        $stories = $this->dao->select("t1.project, count(t2.status) as totalStories, count(t2.status != 'closed' or null) as unclosedStories, count(t2.stage = 'released' or null) as releasedStories")->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t1.project')->in($projectIDList)
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('project')
+            ->fetchAll('project');
+
+        foreach($stories as $projectID => $story)
+        {
+            foreach($story as $key => $value)
+            {
+                if($key == 'project') continue;
+                $projects[$projectID]->$key = $value;
+            }
+        }
+
+        /* Get bugs. */
+        $bugs = $this->dao->select("project, status, count(status) as totalBugs, count(status = 'active' or null) as activeBugs, count(resolvedDate like '{$yesterday}%' or null) as yesterdayResolved")->from(TABLE_BUG)
+            ->where('project')->in($projectIDList)
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('project')
+            ->fetchAll('project');
+
+        foreach($bugs as $projectID => $bug)
+        {
+            foreach($bug as $key => $value)
+            {
+                if($key == 'project') continue;
+                $projects[$projectID]->$key = $value;
+            }
+        }
+
+        foreach($projects as $project)
+        {
+            if(!isset($projects[$project->id]->totalTasks))
+            {
+                $projects[$project->id]->totalTasks        = 0;
+                $projects[$project->id]->undoneTasks       = 0;
+                $projects[$project->id]->yesterdayFinished = 0;
+                $projects[$project->id]->totalEstimate     = 0;
+                $projects[$project->id]->totalConsumed     = 0;
+                $projects[$project->id]->totalLeft         = 0;
+            }
+            if(!isset($projects[$project->id]->totalBugs))
+            {
+                $projects[$project->id]->totalBugs         = 0;
+                $projects[$project->id]->activeBugs        = 0;
+                $projects[$project->id]->yesterdayResolved = 0;
+            }
+            if(!isset($projects[$project->id]->totalStories))
+            {
+                $projects[$project->id]->totalStories    = 0;
+                $projects[$project->id]->unclosedStories = 0;
+                $projects[$project->id]->releasedStories = 0;
+            }
+
+            $projects[$project->id]->progress      = ($project->totalConsumed || $project->totalLeft) ? round($project->totalConsumed / ($project->totalConsumed + $project->totalLeft), 2) * 100 : 0;
+            $projects[$project->id]->taskProgress  = $project->totalTasks ? round(($project->totalTasks - $project->undoneTasks) / $project->totalTasks, 2) * 100 : 0;
+            $projects[$project->id]->storyProgress = $project->totalStories ? round(($project->totalStories - $project->unclosedStories) / $project->totalStories, 2) * 100 : 0;
+            $projects[$project->id]->bugProgress   = $project->totalBugs ? round(($project->totalBugs - $project->activeBugs) / $project->totalBugs, 2) * 100 : 0;
+        }
+
+        $this->app->loadLang('task');
+        $this->app->loadLang('story');
+        $this->app->loadLang('bug');
+
+        $this->view->projects = $projects;
     }
 
     /**
