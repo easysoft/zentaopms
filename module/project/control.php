@@ -1341,6 +1341,7 @@ class project extends control
         $this->view->realnames   = $this->loadModel('user')->getPairs('noletter');
         $this->view->orderBy     = $orderBy;
         $this->view->projectID   = $projectID;
+        $this->view->browseType  = '';
         $this->view->project     = $project;
         $this->view->type        = $type;
         $this->view->kanbanGroup = $kanbanGroup;
