@@ -17,7 +17,7 @@ $lang->productplan->edit       = "編輯計劃";
 $lang->productplan->delete     = "刪除計劃";
 $lang->productplan->view       = "計劃詳情";
 $lang->productplan->bugSummary = "本頁共 <strong>%s</strong> 個Bug";
-$lang->productplan->info       = '信息';
+$lang->productplan->basicInfo  = '基本信息';
 $lang->productplan->batchEdit  = '批量編輯';
 
 $lang->productplan->batchUnlink      = "批量移除";

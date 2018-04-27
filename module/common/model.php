@@ -456,40 +456,38 @@ class commonModel extends model
         /* Cycling to print every sub menus. */
         foreach($menu as $menuItem)
         {
+            if(isset($lang->$moduleName->dividerMenu) and strpos($lang->$moduleName->dividerMenu, ",{$menuItem->name},") !== false) echo "<li class='divider'></li>";
             if(isset($menuItem->hidden) && $menuItem->hidden) continue;
             if($isMobile and empty($menuItem->link)) continue;
 
             /* Init the these vars. */
+            $alias     = isset($menuItem->alias) ? $menuItem->alias : '';
+            $subModule = isset($menuItem->subModule) ? explode(',', $menuItem->subModule) : array();
+            $class     = isset($menuItem->class) ? $menuItem->class : '';
+            $active    = '';
+            if($subModule and in_array($currentModule, $subModule)) $active = 'active';
+            if($alias and $moduleName == $currentModule and strpos(",$alias,", ",$currentMethod,") !== false) $active = 'active';
             if($menuItem->link)
             {
-                $active = '';
-                $float  = isset($menuItem->float) ? $menuItem->float : '';
-                $alias  = '';
                 $target = '';
                 $module = '';
                 $method = '';
                 $link   = commonModel::createMenuLink($menuItem);
                 if(is_array($menuItem->link))
                 {
-                    if(isset($menuItem->link['subModule']))
-                    {
-                        $subModules = explode(',', $menuItem->link['subModule']);
-                        if(in_array($currentModule, $subModules) and $float != 'right') $active = 'active';
-                    }
-                    if(isset($menuItem->link['alias']))  $alias  = $menuItem->link['alias'];
                     if(isset($menuItem->link['target'])) $target = $menuItem->link['target'];
                     if(isset($menuItem->link['module'])) $module = $menuItem->link['module'];
                     if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
                 }
-                if($float != 'right' and $module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false)) $active = 'active';
+                if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false)) $active = 'active';
 
-                $menuItemHtml = "<li class='$float $active' data-id='$menuItem->name'>" . html::a($link, $menuItem->text, $target) . "</li>\n";
-                if($isMobile) $menuItemHtml = html::a($link, $menuItem->text, $target, "class='$active'") . "\n";
+                $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $menuItem->text, $target) . "</li>\n";
+                if($isMobile) $menuItemHtml = html::a($link, $menuItem->text, $target, "class='$class $active'") . "\n";
                 echo $menuItemHtml;
             }
             else
             {
-                echo $isMobile ? $menuItem->text : "<li data-id='$menuItem->name'>$menuItem->text</li>\n";
+                echo $isMobile ? $menuItem->text : "<li class='$class $active' data-id='$menuItem->name'>$menuItem->text</li>\n";
             }
         }
         echo $isMobile ? '' : "</ul>\n";
@@ -1290,7 +1288,7 @@ EOD;
 
         if(!empty($app->user->admin)) return true;
         if($module == 'todo' and ($method == 'create' or $method == 'batchcreate')) return true;
-        if($module == 'effort' and $method == 'batchcreate') return true;
+        if($module == 'effort' and ($method == 'batchcreate' or $method == 'createforobject')) return true;
 
         // limited project
         $limitedProject = false;

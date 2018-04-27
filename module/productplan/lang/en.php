@@ -17,7 +17,7 @@ $lang->productplan->edit       = "Edit";
 $lang->productplan->delete     = "Delete";
 $lang->productplan->view       = "Details";
 $lang->productplan->bugSummary = "<strong>%s</strong> Bugs in total on this page.";
-$lang->productplan->info       = 'Info';
+$lang->productplan->basicInfo  = 'Basic Info';
 $lang->productplan->batchEdit  = 'Batch Edit';
 
 $lang->productplan->batchUnlink      = "Batch Unlink";

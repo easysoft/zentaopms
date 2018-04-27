@@ -100,6 +100,7 @@ $lang->bug->setPublic          = '设为公共模板';
 $lang->bug->deleteTemplate     = '删除模板';
 $lang->bug->confirmStoryChange = '确认需求变动';
 $lang->bug->copy               = '复制Bug';
+$lang->bug->search             = '搜索';
 
 /* 查询条件列表。*/
 $lang->bug->assignToMe        = '指派给我';
@@ -118,6 +119,7 @@ $lang->bug->allBugs           = '所有';
 $lang->bug->byQuery           = '搜索';
 $lang->bug->needConfirm       = '需求变动';
 $lang->bug->allProduct        = '所有' . $lang->productCommon;
+$lang->bug->my                = '我的';
 $lang->bug->yesterdayResolved = '昨天解决';
 
 $lang->bug->assignToMeAB   = '指派给我';
@@ -128,13 +130,13 @@ $lang->bug->ditto       = '同上';
 $lang->bug->dittoNotice = '该bug与上一bug不属于同一产品！';
 
 /* 页面标签。*/
-$lang->bug->lblAssignedTo               = '当前指派';
-$lang->bug->lblMailto                   = '抄送给';
-$lang->bug->lblLastEdited               = '最后修改';
-$lang->bug->lblResolved                 = '由谁解决';
-$lang->bug->allUsers                    = '所有用户';
-$lang->bug->allBuilds                   = '所有';
-$lang->bug->createBuild                 = '新建';
+$lang->bug->lblAssignedTo = '当前指派';
+$lang->bug->lblMailto     = '抄送给';
+$lang->bug->lblLastEdited = '最后修改';
+$lang->bug->lblResolved   = '由谁解决';
+$lang->bug->allUsers      = '所有用户';
+$lang->bug->allBuilds     = '所有';
+$lang->bug->createBuild   = '新建';
 
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = '基本信息';
@@ -149,7 +151,7 @@ $lang->bug->legendMisc                  = '其他相关';
 $lang->bug->legendRelated               = '其他信息';
 
 /* 功能按钮。*/
-$lang->bug->buttonConfirm        = '确认';
+$lang->bug->buttonConfirm = '确认';
 
 /* 交互提示。*/
 $lang->bug->confirmChangeProduct  = "修改{$lang->productCommon}会导致相应的{$lang->projectCommon}、需求和任务发生变化，确定吗？";
@@ -368,10 +370,6 @@ $lang->bug->action->unlinkrelatedbug    = array('main' => '$date, 由 <strong>$a
 $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = '选择相关版本...';
 $lang->bug->placeholder->newBuildName = '新版本名称';
-
-
-
-
 
 $lang->bug->featureBar['browse']['unclosed']      = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['all']           = $lang->bug->allBugs;

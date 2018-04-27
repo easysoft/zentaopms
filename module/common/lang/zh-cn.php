@@ -222,21 +222,42 @@ $lang->release->menu     = $lang->product->menu;
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
-$lang->project->menu->task     = array('link' => '任务|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'grouptask,importtask,burn,importbug,kanban,printkanban,tree');
+$lang->project->menu->list     = array('link' => '%s', 'subModule' => 'task,tree', 'alias' => 'grouptask,importtask,importbug,tree');
+$lang->project->menu->kanban   = array('link' => '看板|project|kanban|projectID=%s');
+$lang->project->menu->burn     = array('link' => '燃尽图|project|burn|projectID=%s');
 $lang->project->menu->story    = array('link' => '需求|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->project->menu->bug      = 'Bug|project|bug|projectID=%s';
-$lang->project->menu->dynamic  = '动态|project|dynamic|projectID=%s';
-$lang->project->menu->build    = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->menu->testtask = array('link' => '测试单|project|testtask|projectID=%s');
-$lang->project->menu->team     = array('link' => '团队|project|team|projectID=%s', 'alias' => 'managemembers');
+$lang->project->menu->qa       = array('link' => '%s', 'subModule' => 'build');
 $lang->project->menu->doc      = array('link' => '文档|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
+$lang->project->menu->action   = array('link' => '%s');
 $lang->project->menu->product  = $lang->productCommon . '|project|manageproducts|projectID=%s';
+$lang->project->menu->team     = array('link' => '团队|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->view     = array('link' => '概况|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
+
+$lang->project->subMenu = new stdclass();
+$lang->project->subMenu->list = new stdclass();
+$lang->project->subMenu->list->task      = '任务列表|project|task|projectID=%s';
+$lang->project->subMenu->list->tree      = '树状图|project|tree|projectID=%s';
+$lang->project->subMenu->list->groupTask = '分组视图|project|groupTask|projectID=%s';
+
+$lang->project->subMenu->qa = new stdclass();
+$lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
+$lang->project->subMenu->qa->build    = '版本|project|build|projectID=%s';
+$lang->project->subMenu->qa->testtask = array('link' => '测试单|project|testtask|projectID=%s', 'subModule' => 'testreport');
+
+$lang->project->subMenu->action = new stdclass();
+$lang->project->subMenu->action->dynamic  = '动态|project|dynamic|projectID=%s';
+
+$lang->project->dividerMenu = ',story,doc,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
-$lang->task->menu  = $lang->project->menu;
-$lang->build->menu = $lang->project->menu;
+$lang->task->menu      = $lang->project->menu;
+$lang->task->subMenu   = $lang->project->subMenu;
+$lang->build->menu     = $lang->project->menu;
+$lang->build->subMenu  = $lang->project->subMenu;
+
+$lang->task->dividerMenu  = $lang->project->dividerMenu;
+$lang->build->dividerMenu = $lang->project->dividerMenu;
 
 /* QA视图菜单设置。*/
 $lang->qa = new stdclass();

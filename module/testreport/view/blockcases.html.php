@@ -1,5 +1,5 @@
 <?php $sysURL = $this->session->notHead ? common::getSysURL() : '';?>
-<table class='table' id='cases'>
+<table class='table main-table' id='cases'>
   <thead>
     <tr>
       <th class='w-id'>    <?php echo $lang->idAB;?></th>
@@ -8,9 +8,9 @@
       <th class='w-type'>  <?php echo $lang->testcase->type;?></th>
       <th class='w-user'>  <?php echo $lang->testtask->assignedTo;?></th>
       <th class='w-user'>  <?php echo $lang->testtask->lastRunAccount;?></th>
-      <th class='w-130px'> <?php echo $lang->testtask->lastRunTime;?></th>
+      <th class='w-150px'> <?php echo $lang->testtask->lastRunTime;?></th>
       <th class='w-80px'>  <?php echo $lang->testtask->lastRunResult;?></th>
-      <th class='w-status'><?php echo $lang->statusAB;?></th>
+      <th class='w-100px'><?php echo $lang->statusAB;?></th>
     </tr>
   </thead>
   <?php if($cases):?>

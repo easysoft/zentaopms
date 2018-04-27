@@ -100,6 +100,7 @@ $lang->bug->setPublic          = 'Set as Public Template';
 $lang->bug->deleteTemplate     = 'Delete Template';
 $lang->bug->confirmStoryChange = 'Confirm Story Change';
 $lang->bug->copy               = 'Copy';
+$lang->bug->search             = 'Search';
 
 /* 查询条件列表。*/
 $lang->bug->assignToMe     = 'AssignedToMe';
@@ -128,13 +129,13 @@ $lang->bug->ditto       = 'Ditto';
 $lang->bug->dittoNotice = 'This bug is not linked to the same product as the last one!';
 
 /* 页面标签。*/
-$lang->bug->lblAssignedTo               = 'Assignee';
-$lang->bug->lblMailto                   = 'Mail To';
-$lang->bug->lblLastEdited               = 'Last Edited';
-$lang->bug->lblResolved                 = 'Resolved By';
-$lang->bug->allUsers                    = 'All User';
-$lang->bug->allBuilds                   = 'All';
-$lang->bug->createBuild                 = 'New';
+$lang->bug->lblAssignedTo = 'Assignee';
+$lang->bug->lblMailto     = 'Mail To';
+$lang->bug->lblLastEdited = 'Last Edited';
+$lang->bug->lblResolved   = 'Resolved By';
+$lang->bug->allUsers      = 'All User';
+$lang->bug->allBuilds     = 'All';
+$lang->bug->createBuild   = 'New';
 
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = 'Basic Info';
@@ -149,7 +150,7 @@ $lang->bug->legendMisc                  = 'Misc';
 $lang->bug->legendRelated               = 'Related Info';
 
 /* 功能按钮。*/
-$lang->bug->buttonConfirm        = 'Confirm';
+$lang->bug->buttonConfirm = 'Confirm';
 
 /* 交互提示。*/
 $lang->bug->confirmChangeProduct = "Change {$lang->productCommon} will cause linked {$lang->projectCommon},Story and Task change. Do you want to do this?";
@@ -232,10 +233,6 @@ $lang->bug->typeList['performance']  = 'Performance';
 $lang->bug->typeList['standard']     = 'Standard';
 $lang->bug->typeList['automation']   = 'Testing Script';
 $lang->bug->typeList['others']       = 'Other';
-
-
-
-
 
 $lang->bug->statusList['']         = '';
 $lang->bug->statusList['active']   = 'Active';
@@ -375,8 +372,6 @@ $lang->bug->mySelects['resolvedbyme'] = $lang->bug->resolvedByMeAB;
 
 $lang->bug->featureBar['browse']['unclosed']      = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['all']           = $lang->bug->allBugs;
-
-
 
 $lang->bug->featureBar['browse']['my']            = $lang->bug->my;
 $lang->bug->featureBar['browse']['unconfirmed']   = $lang->bug->unconfirmed;

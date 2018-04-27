@@ -114,11 +114,17 @@
                     break;
                 }
             }
+            $priList = $lang->story->priList;
+            if(end($priList))
+            {
+                unset($priList[0]);
+                $priList[0] = '';
+            }
             ?>
             <?php if($hasCustomPri):?>
-            <?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='form-control chosen'");?> 
+            <?php echo html::select('pri', (array)$priList, $pri, "class='form-control chosen'");?> 
             <?php else: ?>
-            <?php echo html::select('pri', (array)$lang->story->priList, $pri, "class='form-control' data-provide='labelSelector'");?> 
+            <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector'");?> 
             <?php endif; ?>
            </td>
          </tr>
@@ -137,7 +143,7 @@
           <td>
             <div class='checkbox-primary'>
               <input id='needNotReview' name='needNotReview' value='1' type='checkbox' class='no-margin' <?php echo $needReview;?>/>
-              <label for='marker'><?php echo $lang->story->needNotReview;?></label>
+              <label for='needNotReview'><?php echo $lang->story->needNotReview;?></label>
             </div>
           </td>
           <?php endif;?>

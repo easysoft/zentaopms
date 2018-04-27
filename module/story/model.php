@@ -2614,16 +2614,4 @@ class storyModel extends model
 
         return array($toList, $ccList);
     }
-
-    /**
-     * Get story count.
-     * 
-     * @param  int    $productID 
-     * @access public
-     * @return int
-     */
-    public function getCount($productID)
-    {
-        return $this->dao->select('count(*) as count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch('count');
-    }
 }

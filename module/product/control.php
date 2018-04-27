@@ -204,7 +204,6 @@ class product extends control
         $this->view->storyCases    = $storyCases;
         $this->view->param         = $param;
         $this->view->products      = $this->products;
-        $this->view->allCount      = $this->story->getCount($productID);
         $this->display();
     }
 
@@ -516,7 +515,6 @@ class product extends control
         $this->view->param      = $param;
         $this->view->pager      = $pager;
         $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction);
-        $this->view->allCount   = $this->action->getCount('product', $productID);
         $this->view->direction  = $direction;
         $this->display();
     }
