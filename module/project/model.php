@@ -127,13 +127,19 @@ class projectModel extends model
                 $replace   = "<ul class='dropdown-menu'>";
                 foreach($this->lang->project->subMenu->$key as $subMenuKey => $subMenuLink)
                 {
+                    $subModule = '';
+                    if(is_array($subMenuLink))
+                    {
+                        if(isset($subMenuLink['subModule'])) $subModule = $subMenuLink['subModule'];
+                        $subMenuLink = $subMenuLink['link'];
+                    }
                     list($subMenuName, $subMenuModule, $subMenuMethod, $subMenuParams) = explode('|', $subMenuLink);
                     if(!commonModel::hasPriv($subMenuModule, $subMenuMethod)) continue;
 
                     if(empty($dropTitle)) $dropTitle = $subMenuName;
 
                     $active = '';
-                    if($moduleName == $subMenuModule and $methodName == $subMenuMethod)
+                    if(($moduleName == $subMenuModule and $methodName == $subMenuMethod) or strpos(",$subModule,", ",$moduleName,") !== false)
                     {
                         $active    = "class='active'";
                         $dropTitle = $subMenuName;
