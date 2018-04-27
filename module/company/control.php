@@ -235,7 +235,6 @@ class company extends control
         $this->view->pager      = $pager;
         $this->view->param      = $param;
         $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction);
-        $this->view->allCount   = $this->action->getCount('all');
         $this->view->direction  = $direction;
         $this->display();
     }

@@ -13,15 +13,18 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
+    <?php foreach($lang->action->periods as $period => $label):?>
     <?php
-    echo html::a(inlink('dynamic', "type=all"),       "<span class='text'>{$lang->action->dynamic->all}</span> <span class='label label-light label-badge'>{$allCount}</span>", '', "class='btn btn-link " . ($type == 'all' ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "type=today"),     "<span class='text'>{$lang->action->dynamic->today}</span>",     '', "class='btn btn-link " . ($type == 'today'     ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "type=yesterday"), "<span class='text'>{$lang->action->dynamic->yesterday}</span>", '', "class='btn btn-link " . ($type == 'yesterday' ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "type=thisweek"),  "<span class='text'>{$lang->action->dynamic->thisWeek}</span>",  '', "class='btn btn-link " . ($type == 'thisweek'  ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "type=lastweek"),  "<span class='text'>{$lang->action->dynamic->lastWeek}</span>",  '', "class='btn btn-link " . ($type == 'lastweek'  ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "type=thismonth"), "<span class='text'>{$lang->action->dynamic->thisMonth}</span>", '', "class='btn btn-link " . ($type == 'thismonth' ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "type=lastmonth"), "<span class='text'>{$lang->action->dynamic->lastMonth}</span>", '', "class='btn btn-link " . ($type == 'lastmonth' ? 'btn-active-text' : '') . "'");
+    $label  = "<span class='text'>$label</span>";
+    $active = '';
+    if($period == $type)
+    {
+        $active = 'btn-active-text';
+        $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+    }
+    echo html::a(inlink('dynamic', "type=$period"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
+    <?php endforeach;?>
   </div>
 </div>
 <div id="mainContent" class="main-content">

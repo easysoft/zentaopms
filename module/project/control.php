@@ -1346,6 +1346,7 @@ class project extends control
         $this->view->realnames   = $this->loadModel('user')->getPairs('noletter');
         $this->view->orderBy     = $orderBy;
         $this->view->projectID   = $projectID;
+        $this->view->browseType  = '';
         $this->view->project     = $project;
         $this->view->type        = $type;
         $this->view->kanbanGroup = $kanbanGroup;
@@ -1965,7 +1966,6 @@ class project extends control
         $this->view->pager      = $pager;
         $this->view->param      = $param;
         $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction);
-        $this->view->allCount   = $this->action->getCount('project', $projectID);
         $this->view->direction  = $direction;
         $this->display();
     }

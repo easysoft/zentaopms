@@ -394,12 +394,28 @@ class blockModel extends model
     }
 
     /**
-     * Get product statistic params.
+     * Get statistic params.
      *
      * @access public
      * @return string
      */
-    public function getStatisticParams()
+    public function getStatisticParams($module = 'product')
+    {
+        if($module == 'product') return $this->getProductStatisticParams($module);
+        if($module == 'project') return $this->getProjectStatisticParams($module);
+
+        $params = new stdclass();
+        $params = $this->onlyNumParams($params);
+        return json_encode($params);
+    }
+
+    /**
+     * Get product statistic params.
+     * 
+     * @access public
+     * @return void
+     */
+    public function getProductStatisticParams()
     {
         $params = new stdclass();
         $params->type['name']    = $this->lang->block->type;
@@ -409,6 +425,27 @@ class blockModel extends model
         $params->orderBy['name']    = $this->lang->block->orderBy;
         $params->orderBy['default'] = 'id_desc';
         $params->orderBy['options'] = $this->lang->block->orderByList->product;
+        $params->orderBy['control'] = 'select';
+
+        return json_encode($this->onlyNumParams($params));
+    }
+
+    /**
+     * Get project statistic params.
+     * 
+     * @access public
+     * @return void
+     */
+    public function getProjectStatisticParams()
+    {
+        $params = new stdclass();
+        $params->type['name']    = $this->lang->block->type;
+        $params->type['options'] = $this->lang->block->typeList->project;
+        $params->type['control'] = 'select';
+
+        $params->orderBy['name']    = $this->lang->block->orderBy;
+        $params->orderBy['default'] = 'id_desc';
+        $params->orderBy['options'] = $this->lang->block->orderByList->project;
         $params->orderBy['control'] = 'select';
 
         return json_encode($this->onlyNumParams($params));

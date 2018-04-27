@@ -13,15 +13,18 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php 
-    echo html::a(inlink('dynamic', "projectID=$projectID&type=all"),        "<span class='text'>{$lang->action->dynamic->all}</span> <span class='label label-light label-badge'>{$allCount}</span>", '', "class='btn btn-link " . ($type == 'all' ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "projectID=$projectID&type=today"),      "<span class='text'>{$lang->action->dynamic->today}</span>",     '', "class='btn btn-link " . ($type == 'today'     ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "projectID=$projectID&type=yesterday"),  "<span class='text'>{$lang->action->dynamic->yesterday}</span>", '', "class='btn btn-link " . ($type == 'yesterday' ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "projectID=$projectID&type=thisweek"),   "<span class='text'>{$lang->action->dynamic->thisWeek}</span>",  '', "class='btn btn-link " . ($type == 'thisweek'  ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "projectID=$projectID&type=lastweek"),   "<span class='text'>{$lang->action->dynamic->lastWeek}</span>",  '', "class='btn btn-link " . ($type == 'lastweek'  ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "projectID=$projectID&type=thismonth"),  "<span class='text'>{$lang->action->dynamic->thisMonth}</span>", '', "class='btn btn-link " . ($type == 'thismonth' ? 'btn-active-text' : '') . "'");
-    echo html::a(inlink('dynamic', "projectID=$projectID&type=lastmonth"),  "<span class='text'>{$lang->action->dynamic->lastMonth}</span>", '', "class='btn btn-link " . ($type == 'lastmonth' ? 'btn-active-text' : '') . "'");
+    <?php foreach($lang->action->periods as $period => $label):?>
+    <?php
+    $label  = "<span class='text'>$label</span>";
+    $active = '';
+    if($period == $type)
+    {
+        $active = 'btn-active-text';
+        $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+    }
+    echo html::a(inlink('dynamic', "projectID=$projectID&type=$period"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
+    <?php endforeach;?>
     <div class="input-control space w-150px">
       <?php echo html::select('account', $users, $account, "onchange='changeUser(this.value, $projectID)' class='form-control chosen'");?>
     </div>

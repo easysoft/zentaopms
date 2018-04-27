@@ -317,54 +317,52 @@
 </div>
 
 <div id="mainActions">
-<?php common::printPreAndNext($preAndNext);?>
-<div class="btn-toolbar">
-  <?php if(!$story->deleted):?>
-  <?php
-  common::printIcon('story', 'change', "storyID=$story->id", $story);
-  common::printIcon('story', 'review', "storyID=$story->id", $story);
-  if($story->status != 'closed' and !isonlybody())
-  {
-      $misc = "class='btn' data-toggle='modal' data-type='iframe' data-width='95%'";
-      $link = $this->createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', true);
-      if(common::hasPriv('story', 'batchCreate')) echo html::a($link, "<i class='icon icon-sitemap'></i> " . $lang->story->subdivide, '', $misc);
-  }
+  <?php common::printPreAndNext($preAndNext);?>
+  <div class="btn-toolbar">
+    <?php common::printBack($browseLink);?>
+    <?php if(!$story->deleted):?>
+    <div class='divider'></div>
+    <?php
+    common::printIcon('story', 'change', "storyID=$story->id", $story);
+    common::printIcon('story', 'review', "storyID=$story->id", $story);
+    if($story->status != 'closed' and !isonlybody())
+    {
+        $misc = "class='btn' data-toggle='modal' data-type='iframe' data-width='95%'";
+        $link = $this->createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', true);
+        if(common::hasPriv('story', 'batchCreate')) echo html::a($link, "<i class='icon icon-sitemap'></i> " . $lang->story->subdivide, '', $misc);
+    }
 
-  common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe', true);
-  common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe', true);
+    common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe', true);
+    common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe', true);
 
-  if($this->config->global->flow != 'onlyStory' and !isonlybody() and (common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'batchCreate')))
-  {
-      $this->app->loadLang('testcase');
-      echo "<div class='btn-group dropup'>";
-      echo "<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'><i class='icon icon-sitemap'></i> " . $lang->testcase->common . " <span class='caret'></span></button>";
-      echo "<ul class='dropdown-menu' id='createCaseActionMenu'>";
+    if($this->config->global->flow != 'onlyStory' and !isonlybody() and (common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'batchCreate')))
+    {
+        $this->app->loadLang('testcase');
+        echo "<div class='btn-group dropup'>";
+        echo "<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'><i class='icon icon-sitemap'></i> " . $lang->testcase->common . " <span class='caret'></span></button>";
+        echo "<ul class='dropdown-menu' id='createCaseActionMenu'>";
 
-      $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
-      $link = $this->createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&storyID=$story->id", '', true);
-      if(common::hasPriv('testcase', 'create', $story)) echo "<li>" . html::a($link, $lang->testcase->create, '', $misc) . "</li>";
+        $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
+        $link = $this->createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&storyID=$story->id", '', true);
+        if(common::hasPriv('testcase', 'create', $story)) echo "<li>" . html::a($link, $lang->testcase->create, '', $misc) . "</li>";
 
-      $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
-      $link = $this->createLink('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&storyID=$story->id", '', true);
-      if(common::hasPriv('testcase', 'batchCreate')) echo "<li>" . html::a($link, $lang->testcase->batchCreate, '', $misc) . "</li>";
+        $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
+        $link = $this->createLink('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&storyID=$story->id", '', true);
+        if(common::hasPriv('testcase', 'batchCreate')) echo "<li>" . html::a($link, $lang->testcase->batchCreate, '', $misc) . "</li>";
 
-      echo "</ul>";
-      echo "</div>";
-  }
+        echo "</ul>";
+        echo "</div>";
+    }
 
-  if($from == 'project') common::printIcon('task', 'create', "project=$param&storyID=$story->id&moduleID=$story->module", $story, 'button', 'smile');
+    if($from == 'project') common::printIcon('task', 'create', "project=$param&storyID=$story->id&moduleID=$story->module", $story, 'button', 'smile');
 
-  echo "<div class='divider'></div>";
-  common::printIcon('story', 'edit', "storyID=$story->id", $story);
-  common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", $story, 'button', 'copy');
-  common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', '', 'hiddenwin');
-
-  echo "<div class='divider'></div>";
-  common::printBack($browseLink);
-  ?>
-  <?php else:?>
-  <?php common::printBack($browseLink);?>
-  <?php endif;?>
+    echo "<div class='divider'></div>";
+    common::printIcon('story', 'edit', "storyID=$story->id", $story);
+    common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", $story, 'button', 'copy');
+    common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', '', 'hiddenwin');
+    ?>
+    <?php endif;?>
+  </div>
 </div>
 <?php
 js::set('canCreate', common::hasPriv('story', 'story'));

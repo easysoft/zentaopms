@@ -1945,7 +1945,7 @@ $(document).ready(function()
     setSearchBox();
     setOuterBox();
 
-    setRequiredFields();
+    //setRequiredFields();
     setPlaceholder();
 
     setModalTriggerLink();

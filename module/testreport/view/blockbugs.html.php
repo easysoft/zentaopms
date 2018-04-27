@@ -1,5 +1,5 @@
 <?php $sysURL = $this->session->notHead ? common::getSysURL() : '';?>
-<table class='table' id='bugs'>
+<table class='table main-table' id='bugs'>
   <thead>
     <tr>
       <th class='w-id'>   <?php echo $lang->idAB;?></th>

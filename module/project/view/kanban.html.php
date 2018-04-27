@@ -9,7 +9,47 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include './taskheader.html.php';?> 
+<div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-right'>
+    <?php echo html::a($this->createLink('project', 'ajaxKanbanSetting', "projectID=$projectID"), "<i class='icon-cog'></i> " . $lang->project->kanbanSetting, '', "class='iframe btn btn-link'");?>
+    <?php if(common::hasPriv('project', 'printKanban')) echo html::a('###', "<i class='icon-print'></i> " . $lang->project->printKanban, '', "class='btn btn-link' id='printKanban' title='{$lang->project->printKanban}'");?>
+    <div class='btn-group'>
+      <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='exportAction'>
+        <i class='icon-download-alt'></i> <?php echo $lang->export ?>
+        <span class='caret'></span>
+      </button>
+      <ul class='dropdown-menu' id='exportActionMenu'>
+        <?php 
+        $misc = common::hasPriv('task', 'export') ? "class='export iframe' data-width='700'" : "class=disabled";
+        $link = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=$browseType") : '#';
+        echo "<li>" . html::a($link, $lang->task->export, '', $misc) . "</li>";
+        ?>
+      </ul>
+    </div>
+    <div class='btn-group'>
+      <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'>
+        <i class='icon-upload-alt'></i> <?php echo $lang->import ?>
+        <span class='caret'></span>
+      </button>
+      <ul class='dropdown-menu' id='importActionMenu'>
+        <?php 
+        $misc = common::hasPriv('project', 'importTask') ? '' : "class=disabled";
+        $link = common::hasPriv('project', 'importTask') ?  $this->createLink('project', 'importTask', "project=$project->id") : '#';
+        echo "<li>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
+
+        $misc = common::hasPriv('project', 'importBug') ? '' : "class=disabled";
+        $link = common::hasPriv('project', 'importBug') ?  $this->createLink('project', 'importBug', "project=$project->id") : '#';
+        echo "<li>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
+        ?>
+      </ul>
+    </div>
+    <?php 
+    $misc = common::hasPriv('task', 'create', $project) ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
+    $link = common::hasPriv('task', 'create', $project) ?  $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')) : '#';
+    echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->task->create, '', $misc);
+    ?>
+  </div>
+</div>
 <style>
 <?php foreach($colorList as $status => $color):?>
 <?php echo ".board-bug-$status, .board-task-$status {background: " . ($color ? $color : '#000') . ";}\n"?>
@@ -20,7 +60,7 @@ $taskCols = array('wait', 'doing', 'pause', 'done');
 if($allCols) $taskCols = array('wait', 'doing', 'pause', 'done', 'cancel', 'closed');
 $account = $this->app->user->account
 ?>
-<div id='kanban'>
+<div id='kanban' class='main-content'>
   <table class='boards-layout table' id='kanbanHeader'>
     <thead>
       <tr>
@@ -53,17 +93,6 @@ $account = $this->app->user->account
         <th class='col-<?php echo $col?>'><?php echo $lang->task->statusList[$col];?></th>
         <?php endforeach;?>
         <th class='col-<?php echo $lastCol?>'><?php echo $lang->task->statusList[$lastCol];?>
-          <div class='actions'>
-            <div class="dropdown">
-              <button type="button" class="btn btn-mini btn-link dropdown-toggle" data-toggle="dropdown">
-                <span class="icon-ellipsis-h"></span>
-              </button>
-              <ul class="dropdown-menu pull-right">
-                <?php echo '<li>' . html::a($this->createLink('project', 'ajaxKanbanSetting', "projectID=$projectID"), "<i class='icon-cog'></i> " . $lang->project->kanbanSetting, '', "class='iframe'") . '</li>';?>
-                <?php if(common::hasPriv('project', 'printKanban')) echo '<li>' . html::a('###', "<i class='icon-print'></i> " . $lang->project->printKanban, '', "id='printKanban' title='{$lang->project->printKanban}'") . '</li>';?>
-              </ul>
-            </div>
-          </div>
         </th>
       </tr>
     </thead>
