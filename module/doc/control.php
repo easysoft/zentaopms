@@ -37,20 +37,29 @@ class doc extends control
      */
     public function index()
     {
-        $this->doc->setMenu();
+        $products   = $this->doc->getLimitLibs('product');
+        $projects   = $this->doc->getLimitLibs('project');
+        $customLibs = $this->doc->getLimitLibs('custom');
 
-        $products   = $this->doc->getLimitLibs('product', '9');
-        $projects   = $this->doc->getLimitLibs('project', '9');
-        $customLibs = $this->doc->getLimitLibs('custom', '9');
         $subLibs['product'] = $this->doc->getSubLibGroups('product', array_keys($products));
         $subLibs['project'] = $this->doc->getSubLibGroups('project', array_keys($projects));
 
-        $this->view->title      = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
-        $this->view->position[] = $this->lang->doc->index;
-        $this->view->products   = $products;
-        $this->view->projects   = $projects;
-        $this->view->customLibs = $customLibs;
-        $this->view->subLibs    = $subLibs;
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(6, 6, 1);
+
+        $this->view->title            = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
+        $this->view->position[]       = $this->lang->doc->index;
+        $this->view->products         = $products;
+        $this->view->projects         = $projects;
+        $this->view->customLibs       = $customLibs;
+        $this->view->subLibs          = $subLibs;
+        $this->view->modules          = $this->loadModel('tree')->getDocStructure();
+        $this->view->latestEditedDocs = $this->loadModel('doc')->getDocsByBrowseType(0, 'byediteddate', 0, 0, 'editedDate_desc, id_desc', $pager);
+        $this->view->myDocs           = $this->loadModel('doc')->getDocsByBrowseType(0, 'openedbyme', 0, 0, 'addedDate_desc', $pager);
+        $this->view->statisticInfo    = $this->doc->getStatisticInfo();
+        $this->view->users            = $this->loadModel('user')->getPairs('noletter');
+        $this->view->doingProjects    = $this->loadModel('project')->getList('isdoing', 5);
+
         $this->display();
     }
 
@@ -126,7 +135,7 @@ class doc extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
-        if($browseType == 'bymenu' and strtolower($orderBy) != 'editeddate_desc' and strtolower($orderBy) != 'addeddate_desc') $orderBy = 'title_asc';
+        if($browseType == 'bymenu' and strpos('editeddate_desc,addeddate_desc,visiteddate_desc', strtolower($orderBy)) === false) $orderBy = 'title_asc';
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Get docs by browse type. */
@@ -413,6 +422,9 @@ class doc extends control
 
         /* Set menu. */
         $this->doc->setMenu($doc->lib, $doc->module);
+
+        /* Update visitedDate and views for current doc.*/
+        $this->doc->updateVisitData($docID);
 
         $this->view->title      = "DOC #$doc->id $doc->title - " . $lib->name;
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$doc->lib"), $lib->name);
