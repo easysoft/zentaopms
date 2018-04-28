@@ -569,10 +569,10 @@ class project extends control
 
         $stories = $this->story->getProjectStories($projectID, $sort, $type, $param, $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
-        $users      = $this->user->getPairs('noletter');
+        $users   = $this->user->getPairs('noletter');
 
         /* Get project's product. */
-        $productID = 0;
+        $productID    = 0;
         $productPairs = $this->loadModel('product')->getProductsByProject($projectID);
         if($productPairs) $productID = key($productPairs);
 
@@ -600,9 +600,9 @@ class project extends control
 
         /* Count T B C */
         $storyIdList = array_keys($stories);;
-        $storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList, $projectID);
-        $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $projectID);
-        $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
+        $storyTasks  = $this->loadModel('task')->getStoryTaskCounts($storyIdList, $projectID);
+        $storyBugs   = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $projectID);
+        $storyCases  = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
         $plans = $this->project->getPlans($productID);
         $allPlans = array('' => '');
@@ -612,6 +612,11 @@ class project extends control
             {
                 $allPlans = $allPlans + $plan;
             }
+        }
+
+        if($type == 'byModule')
+        {
+            $this->view->module = $this->loadModel('tree')->getById($param);
         }
 
         /* Assign. */
@@ -1341,6 +1346,7 @@ class project extends control
         $this->view->realnames   = $this->loadModel('user')->getPairs('noletter');
         $this->view->orderBy     = $orderBy;
         $this->view->projectID   = $projectID;
+        $this->view->browseType  = '';
         $this->view->project     = $project;
         $this->view->type        = $type;
         $this->view->kanbanGroup = $kanbanGroup;

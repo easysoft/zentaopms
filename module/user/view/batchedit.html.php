@@ -94,7 +94,8 @@
       <tfoot>
         <tr>
           <td colspan="<?php echo count($visibleFields) + 4;?>" class="text-center">
-            <?php echo html::submitButton($lang->save, '', 'btn btn-wide btn-primary') . '&nbsp;' . html::backButton('', '', "btn btn-wide");?>
+            <?php echo html::submitButton($lang->save, '', 'btn btn-wide btn-primary');?>
+            <?php echo html::backButton('', '', "btn btn-wide btn-gray");?>
           </td>
         </tr>
       </tfoot>

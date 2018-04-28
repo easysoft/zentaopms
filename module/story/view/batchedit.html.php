@@ -45,12 +45,12 @@ foreach(explode(',', $showFields) as $field)
         <?php endif;?>
         <th class='w-150px'><?php echo $lang->story->module;?></th>
         <th class='w-150px<?php echo zget($visibleFields, 'plan', ' hidden')?>'><?php echo $lang->story->planAB;?></th>
-        <th class='w-150px'> <?php echo $lang->story->title;?> <span class='required'></span></th>
+        <th class='w-150px'><?php echo $lang->story->title;?> <span class='required'></span></th>
         <th class='w-50px<?php echo zget($visibleFields, 'estimate', ' hidden')?>'> <?php echo $lang->story->estimateAB;?></th>
         <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden')?>'> <?php echo $lang->priAB;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'> <?php echo $lang->story->assignedTo;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'source', ' hidden')?>'> <?php echo $lang->story->source;?></th>
-        <th class='w-80px'> <?php echo $lang->story->status;?></th>
+        <th class='w-80px'><?php echo $lang->story->status;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'stage', ' hidden')?>'> <?php echo $lang->story->stageAB;?></th>
         <th class='w-130px<?php echo zget($visibleFields, 'closedBy', ' hidden')?>'><?php echo $lang->story->closedBy;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'closedReason', ' hidden')?>'> <?php echo $lang->story->closedReason;?></th>
@@ -132,7 +132,12 @@ foreach(explode(',', $showFields) as $field)
       <?php endforeach;?>
     </tbody>
     <tfoot>
-      <tr><td colspan='<?php echo count($visibleFields) + ($branchProduct ? 3 : 2);?>' class='text-center'><?php echo html::submitButton();?></td></tr>
+      <tr>
+        <td colspan='<?php echo count($visibleFields) + ($branchProduct ? 3 : 2);?>' class='text-center'>
+          <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+          <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
+        </td>
+      </tr>
     </tfoot>
   </table>
 </form>

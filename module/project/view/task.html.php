@@ -84,12 +84,6 @@ js::set('browseType', $browseType);
         }
     }
 
-    common::printLink('project', 'kanban', "projectID=$projectID", $lang->project->kanban, '', "id='kanbanTab' class='btn btn-link'");
-    if($project->type == 'sprint' or $project->type == 'waterfall')
-    {
-        common::printLink('project', 'burn', "project=$projectID", $lang->project->burn, '', "id='burnTab' class='btn btn-link'");
-    }
-    common::printLink('project', 'tree', "projectID=$projectID", $lang->project->tree, '', "id='treeTab' class='btn btn-link'");
     echo "<div class='btn-group'>";
     $groupBy = isset($groupBy) ? $groupBy : '';
     $current = zget($lang->project->groups, isset($groupBy) ? $groupBy : '', '');

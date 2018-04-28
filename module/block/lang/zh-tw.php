@@ -266,6 +266,12 @@ $lang->block->orderByList->product['id_desc']     = 'ID 遞減';
 $lang->block->orderByList->product['status_asc']  = '狀態正序';
 $lang->block->orderByList->product['status_desc'] = '狀態倒序';
 
+$lang->block->orderByList->project = array();
+$lang->block->orderByList->project['id_asc']      = 'ID 遞增';
+$lang->block->orderByList->project['id_desc']     = 'ID 遞減';
+$lang->block->orderByList->project['status_asc']  = '狀態正序';
+$lang->block->orderByList->project['status_desc'] = '狀態倒序';
+
 $lang->block->orderByList->task = array();
 $lang->block->orderByList->task['id_asc']        = 'ID 遞增';
 $lang->block->orderByList->task['id_desc']       = 'ID 遞減';

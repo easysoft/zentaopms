@@ -829,7 +829,7 @@ class treeModel extends model
     {
         $projectID = $extra['projectID'];
         $productID = $extra['productID'];
-        return html::a(helper::createLink('project', 'story', "root={$projectID}&orderBy=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return html::a(helper::createLink('project', 'story', "projectID={$projectID}&orderBy=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
     }
 
     /**
