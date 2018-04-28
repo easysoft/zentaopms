@@ -10,8 +10,13 @@
  * @link        http://www.zentao.net
  */
 ?>
+<style>
+#formSetting {min-width: 300px;}
+#formSettingForm .checkboxes {padding: 10px 3px;}
+#formSettingForm .checkbox-primary {width: 50%; float: left; margin: 3px 0;}
+</style>
 <div class="dropdown">
-  <button type="button" title="<?php echo $lang->customField;?>" class="btn btn-link" data-toggle="dropdown"><i class="icon icon-cog"></i> <?php echo $lang->story->setting;?></button>
+  <button type="button" title="<?php echo $lang->customField;?>" class="btn btn-link" data-toggle="dropdown"><i class="icon icon-cog"></i></button>
   <div class="dropdown-menu pull-right" id="formSetting">
     <form class='with-padding load-indicator' id='formSettingForm' method='post' target='hiddenwin' action='<?php echo $customLink?>'>
       <div><?php echo $lang->customField;?></div>
@@ -25,12 +30,6 @@
     </form>
   </div>
 </div>
-<style>
-#formSetting {min-width: 300px;}
-#formSettingForm .checkboxes {padding: 10px 3px;}
-#formSettingForm .checkbox-primary {width: 50%; float: left; margin: 3px 0;}
-</style>
-
 <script>
 var $formSetting = $('#formSetting');
 $formSetting.on('click', '.close-dropdown', function()

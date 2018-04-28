@@ -22,7 +22,7 @@
     </a>
     <div class="divider"></div>
     <div class="page-title">
-    <span class="text"><?php echo ($viewType == 'line' ? $lang->tree->manageLine : $lang->tree->common) . '：' . $root->name;?></span>
+      <span class="text"><?php echo ($viewType == 'line' ? $lang->tree->manageLine : $lang->tree->common) . '：' . $root->name;?></span>
     </div>
   </div>
 </div>
