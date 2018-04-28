@@ -306,7 +306,9 @@ class file extends control
             $file = $this->file->getById($fileID);
             $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
             $this->loadModel('action')->create($file->objectType, $file->objectID, 'deletedFile', '', $extra=$file->title);
-            @unlink($file->realPath);
+            /* Fix Bug #1518. */
+            $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
+            if(empty($fileRecord)) @unlink($file->realPath);
             die(js::reload('parent'));
         }
     }

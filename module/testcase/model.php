@@ -1221,6 +1221,17 @@ class testcaseModel extends model
                         $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
                     }
                 }
+                /* Fix bug #1518. */
+                $oldFile = $this->dao->select('*')->from(TABLE_FILE)->where('objectID')->eq($case->fromCaseID)->fetchAll();
+                foreach($oldFile as $fileID => $File)
+                {
+                    $File->objectID  = $caseID;
+                    $File->addedBy   = $this->app->user->account;
+                    $File->addedDate = helper::today();
+                    $File->downloads = 0;
+                    unset($File->id);
+                    $this->dao->insert(TABLE_FILE)->data($File)->exec();
+                }
                 $this->loadModel('action')->create('case', $caseID, 'fromlib', '', $case->lib);
             }
         }
