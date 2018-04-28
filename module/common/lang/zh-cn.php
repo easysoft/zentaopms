@@ -252,12 +252,7 @@ $lang->project->dividerMenu = ',story,doc,';
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
 $lang->task->menu      = $lang->project->menu;
-$lang->task->subMenu   = $lang->project->subMenu;
 $lang->build->menu     = $lang->project->menu;
-$lang->build->subMenu  = $lang->project->subMenu;
-
-$lang->task->dividerMenu  = $lang->project->dividerMenu;
-$lang->build->dividerMenu = $lang->project->dividerMenu;
 
 /* QA视图菜单设置。*/
 $lang->qa = new stdclass();

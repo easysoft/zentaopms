@@ -184,7 +184,7 @@ class tree extends control
         $parentModules  = $this->tree->getParents($currentModuleID);
         $newModule      = (version_compare($project->openedVersion, '4.1', '>') and $products) ? true : false;
 
-        $title      = $project->name . $this->lang->colon . $this->lang->tree->manageProject;
+        $title      = $this->lang->tree->manageProject;
         $position[] = html::a($this->createLink('project', 'task', "projectID=$rootID"), $project->name);
         $position[] = $this->lang->tree->manageProject;
 

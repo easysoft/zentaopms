@@ -47,13 +47,6 @@ tr.text-center > td.text-left, tr.text-center > th.text-left {text-align: left;}
 tr.text-center > td.text-right, tr.text-center > th.text-right {text-align: right;}
 .text-top, tr.text-top td, tr.text-top th {vertical-align: top!important;}
 
-/* columns */
-.row-table {display: table; width: 100%}
-.col-main, .row-table-swap .col-side {padding-right: 10px; padding-left: 0;}
-.row-table-swap .col-main {padding-right: 0; padding-left: 10px;}
-.row-table-side-left .col-side {padding-right: 10px; padding-left: 0;}
-.row-table-side-left .col-main {padding-left: 10px; padding-right: 0;}
-
 /* === Components === */
 /* remove outline of links */
 a,a:focus,a:active {text-decoration: none; outline:none;}

@@ -64,7 +64,7 @@ $config->task->datatable->fieldList['id']['required'] = 'yes';
 
 $config->task->datatable->fieldList['pri']['title']    = 'priAB';
 $config->task->datatable->fieldList['pri']['fixed']    = 'left';
-$config->task->datatable->fieldList['pri']['width']    = '40';
+$config->task->datatable->fieldList['pri']['width']    = '50';
 $config->task->datatable->fieldList['pri']['required'] = 'no';
 
 $config->task->datatable->fieldList['name']['title']    = 'name';
@@ -197,5 +197,5 @@ $config->task->datatable->fieldList['lastEditedDate']['required'] = 'no';
 
 $config->task->datatable->fieldList['actions']['title']    = 'actions';
 $config->task->datatable->fieldList['actions']['fixed']    = 'right';
-$config->task->datatable->fieldList['actions']['width']    = '156';
+$config->task->datatable->fieldList['actions']['width']    = '160';
 $config->task->datatable->fieldList['actions']['required'] = 'yes';

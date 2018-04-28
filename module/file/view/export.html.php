@@ -117,7 +117,7 @@ $(document).ready(function()
     <h2><?php echo $lang->export;?></h2>
   </div>
   <?php $isCustomExport = (!empty($customExport) and !empty($allExportFields));?>
-  <form method='post' target='hiddenwin' style='padding: 40px 1% 50px'>
+  <form class='main-form' method='post' target='hiddenwin' style='padding: 40px 1% 50px'>
     <table class='w-p100 table-fixed'>
       <tr>
         <td>
