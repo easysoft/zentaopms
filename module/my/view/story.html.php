@@ -55,12 +55,12 @@
         <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
         <tr>
           <td class="c-id">
+            <?php if($canBatchEdit or $canBatchClose):?>
             <div class="checkbox-primary">
-              <?php if($canBatchEdit or $canBatchClose):?>
               <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
               <label></label>
-              <?php endif;?>
             </div>
+            <?php endif;?>
             <?php printf('%03d', $story->id);?>
           </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
