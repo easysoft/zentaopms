@@ -46,10 +46,16 @@ $lang->doc->users          = '用户';
 
 $lang->doc->moduleDoc      = '按模块浏览';
 $lang->doc->searchDoc      = '搜索';
+$lang->doc->fast           = '快速访问';
 $lang->doc->allDoc         = '所有文档';
 $lang->doc->openedByMe     = '由我创建';
 $lang->doc->orderByOpen    = '最近添加';
-$lang->doc->orderByEdit    = '最近修改';
+$lang->doc->orderByEdit    = '最近更新';
+$lang->doc->orderByVisit   = '最近访问';
+$lang->doc->todayEdited    = '今日更新';
+$lang->doc->pastEdited     = '往日更新';
+$lang->doc->myDoc          = '我的文档';
+$lang->doc->myCollection   = '我的收藏';
 
 /* 方法列表。*/
 $lang->doc->index          = '首页';
@@ -112,6 +118,16 @@ $lang->doc->browseTypeList['list'] = '列表';
 $lang->doc->browseTypeList['menu'] = '目录';
 $lang->doc->browseTypeList['tree'] = '树状图';
 $lang->doc->browseTypeList['card'] = '卡片';
+
+$lang->doc->fastMenuList['editeddate']    = '最近更新';
+$lang->doc->fastMenuList['visiteddate']   = '最近访问';
+$lang->doc->fastMenuList['openedbyme']    = '我的文档';
+$lang->doc->fastMenuList['collectedbyme'] = '我的收藏';
+
+$lang->doc->fastMenuIconList['editeddate']    = 'icon-folder-upload';
+$lang->doc->fastMenuIconList['visiteddate']   = 'icon-folder-move';
+$lang->doc->fastMenuIconList['openedbyme']    = 'icon-folder-account';
+$lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 
 $lang->doc->confirmDelete      = "您确定删除该文档吗？";
 $lang->doc->confirmDeleteLib   = "您确定删除该文档库吗？";
