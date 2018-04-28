@@ -21,7 +21,7 @@ $jsRoot  = $webRoot . "js/";
     <h4 class="modal-title"><strong><?php echo $lang->tree->edit;?></strong></h4>
   </div>
   <div class='modal-body'>
-    <form action="<?php echo inlink('edit', 'module=' . $module->id .'&type=' .$type);?>" target='hiddenwin' class='form-condensed' method='post' class='mt-10px' id='dataform'>
+    <form action="<?php echo inlink('edit', 'module=' . $module->id .'&type=' .$type);?>" target='hiddenwin' method='post' class='mt-10px' id='dataform'>
       <table class='table table-form'> 
         <?php if($showProduct):?>
         <tr>
