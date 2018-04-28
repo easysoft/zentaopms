@@ -91,7 +91,7 @@
           <a class="text-muted tree-toggle"><?php echo $lang->projectCommon;?></a>
           <ul>
             <?php foreach($projects as $project):?>
-            <li class="open">
+            <li>
               <?php echo html::a($this->createLink('doc', 'objectLibs', "type=project&objectID=$project->id"), "<i class='icon icon-cube'></i> " . $project->name);?>
               <?php if(isset($subLibs['project'][$project->id])):?>
               <ul>
