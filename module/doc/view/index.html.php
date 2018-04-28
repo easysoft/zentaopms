@@ -171,7 +171,7 @@
                   <td class="c-name"><?php echo $doc->title;?></td>
                   <td class="c-num text-right"><?php echo $doc->fileSize;?></td>
                   <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
-                  <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'Y-m-d');?></td>
+                  <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'm-d H:i');?></td>
                 </tr>
                 <?php endforeach;?>
               </tbody>
@@ -305,7 +305,7 @@
                 <tr data-url="">
                   <td class="c-name"><?php echo $doc->title;?></td>
                   <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
-                  <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'Y-m-d');?></td>
+                  <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'm-d H:i');?></td>
                 </tr>
                 <?php endforeach;?>
               </tbody>
