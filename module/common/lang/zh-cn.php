@@ -252,12 +252,7 @@ $lang->project->dividerMenu = ',story,doc,';
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
 $lang->task->menu      = $lang->project->menu;
-$lang->task->subMenu   = $lang->project->subMenu;
 $lang->build->menu     = $lang->project->menu;
-$lang->build->subMenu  = $lang->project->subMenu;
-
-$lang->task->dividerMenu  = $lang->project->dividerMenu;
-$lang->build->dividerMenu = $lang->project->dividerMenu;
 
 /* QA视图菜单设置。*/
 $lang->qa = new stdclass();
@@ -310,9 +305,9 @@ $lang->caselib->menu->caselib   = array('link' => '用例库|testsuite|library',
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
 
-$lang->doc->menu->list   = array('link' => '%s', 'fixed' => true);
-$lang->doc->menu->crumb  = array('link' => '%s', 'fixed' => true);
-$lang->doc->menu->create = array('link' => '<i class="icon-plus"></i>&nbsp;添加文档库|doc|createLib', 'float' => 'right');
+//$lang->doc->menu->list   = array('link' => '%s', 'fixed' => true);
+//$lang->doc->menu->crumb  = array('link' => '%s', 'fixed' => true);
+//$lang->doc->menu->create = array('link' => '<i class="icon-plus"></i>&nbsp;添加文档库|doc|createLib', 'float' => 'right');
 
 /* 统计视图菜单设置。*/
 $lang->report = new stdclass();

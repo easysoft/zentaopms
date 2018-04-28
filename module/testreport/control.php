@@ -452,7 +452,6 @@ class testreport extends control
         {
             $this->projects = $this->project->getPairs('nocode');
             $projectID      = $this->project->saveState($objectID, $this->projects);
-            $this->lang->testreport->dividerMenu = $this->lang->project->dividerMenu;
             $this->project->setMenu($this->projects, $projectID);
             $this->lang->testreport->menu = $this->lang->project->menu;
             $this->lang->testreport->menu->testtask['subModule'] = 'testreport';

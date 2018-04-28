@@ -197,8 +197,61 @@ class docModel extends model
         {
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
-                ->andWhere('lib')->in($libID)
+                ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
                 ->andWhere('addedBy')->eq($this->app->user->account)
+                ->orderBy($sort)
+                ->page($pager)
+                ->fetchAll();
+        }
+        elseif($browseType == 'byediteddate')
+        {
+            $docIdList = $this->getPrivDocs($libID, $moduleID);
+            $docs = $this->dao->select('*')->from(TABLE_DOC)
+                ->where('deleted')->eq(0)
+                ->andWhere('id')->in($docIdList)
+                ->orderBy($sort)
+                ->page($pager)
+                ->fetchAll('id');
+
+            $files = $this->dao->select('*')->from(TABLE_FILE)
+                ->where('objectType')->eq('doc')
+                ->andWhere('objectID')->in(array_keys($docs))
+                ->fetchGroup('objectID');
+
+            foreach($docs as $doc)
+            {
+                $docs[$doc->id]->fileSize = 0;
+                if(isset($files[$doc->id]))
+                {
+                    $fileSize = 0;
+                    foreach($files[$doc->id] as $file) $fileSize += $file->size;
+                    if($fileSize < 1024)
+                    {
+                        $fileSize .= 'B';
+                    }
+                    elseif($fileSize < 1024 * 1024)
+                    {
+                        $fileSize = round($fileSize / 1024, 2) . 'KB';
+                    }
+                    elseif($fileSize < 1024 * 1024 * 1024)
+                    {
+                        $fileSize = round($fileSize / 1024 / 1024, 2) . 'MB';
+                    }
+                    else
+                    {
+                        $fileSize = round($fileSize / 1024 / 1024 /1024, 2) . 'G';
+                    }
+
+                    $docs[$doc->id]->fileSize = $fileSize;
+                }
+            }
+        }
+        elseif($browseType == "collectedbyme")
+        {
+            $docs = $this->dao->select('*')->from(TABLE_DOC)
+                ->where('deleted')->eq(0)
+                ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
+                ->andWhere('collector')->like("%,{$this->app->user->account},%")
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll();
@@ -515,6 +568,19 @@ class docModel extends model
     }
 
     /**
+     * Update visit Data.
+     * 
+     * @param  int    $docID 
+     * @access public
+     * @return bool
+     */
+    public function updateVisitData($docID)
+    {
+        $this->dao->update(TABLE_DOC)->set('views = views + 1')->set('visitedDate')->eq(helper::now())->where('id')->eq($docID)->exec();
+        return !dao::isError();
+    }
+
+    /**
      * Build search form.
      *
      * @param  string $libID
@@ -798,7 +864,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getLimitLibs($type, $limit = 4)
+    public function getLimitLibs($type, $limit = 0)
     {
         if($type == 'project' and ($this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest')) return array();
         if($type == 'product' and $this->config->global->flow == 'onlyTask')  return array();
@@ -821,7 +887,7 @@ class docModel extends model
         $libs = array();
         while($docLib = $stmt->fetch())
         {
-            if($i > $limit) break;
+            if($limit && $i > $limit) break;
             $key = ($type == 'product' or $type == 'project') ? $type : 'id';
             if($this->checkPriv($docLib) and !isset($libs[$docLib->$key]))
             {
@@ -1172,5 +1238,33 @@ class docModel extends model
         }
 
         return $teams;
+    }
+
+    /**
+     * Get statistic information.
+     * 
+     * @access public
+     * @return object
+     */
+    public function getStatisticInfo()
+    {
+        $docIdList = $this->getPrivDocs();
+
+        $today  = date('Y-m-d');
+        $lately = date('Y-m-d', strtotime('-3 day'));
+        $statisticInfo = $this->dao->select("count(id) as totalDocs, count(editedDate like '{$today}%' or null) as todayEditedDocs,
+            count(editedDate > '{$lately}' or null) as lastEditedDocs, count(visitedDate > '{$lately}' or null) as lastVisitedDocs, 
+            count(collector like '%,{$this->app->user->account},%' or null) as myCollection, count(addedBy = '{$this->app->user->account}' or null) as myDocs")->from(TABLE_DOC)
+            ->where('deleted')->eq(0)
+            ->andWhere('id')->in($docIdList)
+            ->fetch();
+
+        $statisticInfo->pastEditedDocs       = $statisticInfo->totalDocs - $statisticInfo->todayEditedDocs;
+        $statisticInfo->lastEditedProgress   = $statisticInfo->totalDocs ? round($statisticInfo->lastEditedDocs / $statisticInfo->totalDocs, 2) * 100 : 0;
+        $statisticInfo->lastVisitedProgress  = $statisticInfo->totalDocs ? round($statisticInfo->lastVisitedDocs / $statisticInfo->totalDocs, 2) * 100 : 0;
+        $statisticInfo->myCollectionProgress = $statisticInfo->totalDocs ? round($statisticInfo->myCollection / $statisticInfo->totalDocs, 2) * 100 : 0;
+        $statisticInfo->myDocsProgress       = $statisticInfo->totalDocs ? round($statisticInfo->myDocs / $statisticInfo->totalDocs, 2) * 100 : 0;
+
+        return $statisticInfo;
     }
 }

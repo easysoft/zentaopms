@@ -1,6 +1,5 @@
 $(function()
 {
-    setTimeout(function(){fixedTheadOfList('#groupTable')}, 100);
     $(document).on('click', '.expandAll', function()
     {
         $('.expandAll').addClass('hidden');

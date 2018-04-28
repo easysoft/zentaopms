@@ -10,7 +10,6 @@ function showLink(releaseID, type, param)
         $('#' + type + 'List').closest('form').hide();
 
         var formID = type == 'story' ? '#unlinkedStoriesForm' : (type == 'leftBug' ? '#unlinkedLeftBugsForm' : '#unlinkedBugsForm');
-        setTimeout(function(){fixedTfootAction(formID)}, 100);
 
         $('[data-ride="table"]').table();
     });
@@ -18,7 +17,6 @@ function showLink(releaseID, type, param)
 $(function()
 {
     if(link == 'true') showLink(releaseID, type, param);
-    fixedTfootAction($('#' + type + 'List').closest('form'));
     $('.nav.nav-tabs a[data-toggle="tab"]').on('shown.zui.tab', function(e)
     {
         var href = $(e.target).attr('href');
@@ -26,6 +24,5 @@ $(function()
         if(tabPane.size() == 0) return;
         var formID = tabPane.find('.linkBox').find('form:last');
         if(formID.size() == 0) formID = tabPane.find('form:last');
-        setTimeout(function(){fixedTfootAction(formID)}, 100);
     });
 })

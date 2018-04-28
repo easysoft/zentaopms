@@ -22,8 +22,8 @@
     ?>
   </div>
 </div>
-<div id="mainContent">
-  <table class="main-table table has-sort-head table-fixed" id='taskList'>
+<div id="mainContent" class='main-content'>
+  <table class="main-table table table-fixed" id='taskList'>
     <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
       <tr>

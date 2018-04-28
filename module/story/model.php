@@ -2343,7 +2343,7 @@ class storyModel extends model
             switch($id)
             {
             case 'id':
-                echo '<div class="checkbox-primary"><input type="checkbox" name="storyIDList[' . $story->id . ']" value="' . $story->id . '"><label></label>' . sprintf('%03d', $story->id) . '</div>';
+                echo html::checkbox('storyIDList', array($story->id => sprintf('%03d', $story->id)));
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $story->pri . "'>";

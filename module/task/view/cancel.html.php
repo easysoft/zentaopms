@@ -12,24 +12,33 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['task']);?> <strong><?php echo $task->id;?></strong></span>
-    <strong><?php echo html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name, '_blank');?></strong>
-    <small class='text-muted'> <?php echo $lang->task->cancel;?> <?php echo html::icon($lang->icons['cancel']);?></small>
-  </div>
-</div>
+<div id='mainContent' class='main-content'>
+  <div class='center-block'>
+    <div class='main-header'>
+      <h2>
+        <span class='label label-id'><?php echo $task->id;?></span>
+        <?php echo isonlybody() ? $task->name : html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name);?>
+        <small> <?php echo $lang->arrow . $lang->task->cancel;?></small>
+      </div>
+    </div>
 
-<form class='form-condensed' method='post' target='hiddenwin'>
-  <table class='table table-form'>
-    <tr>
-      <th><?php echo $lang->comment;?></th>
-      <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
-    </tr>
-    <tr><th></th><td><?php echo html::submitButton($lang->task->cancel);?></td></tr>
-  </table>
-</form>
-<div class='main'>
-  <?php include '../../common/view/action.html.php';?>
+    <form method='post' target='hiddenwin'>
+      <table class='table table-form'>
+        <tr>
+          <th><?php echo $lang->comment;?></th>
+          <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
+        </tr>
+        <tr>
+          <th></th>
+          <td>
+            <?php echo html::submitButton($lang->task->cancel);?>
+            <?php echo html::linkButton($lang->goback, $this->session->taskList);?>
+          </td>
+        </tr>
+      </table>
+    </form>
+    <hr class='small' />
+    <div class='main'><?php include '../../common/view/action.html.php';?></div>
+  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

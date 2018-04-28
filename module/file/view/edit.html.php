@@ -28,24 +28,23 @@ function closeWindow()
     clearInterval(time);
 }
 </script>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['edit']);?></span>
-    <strong><?php echo $lang->file->inputFileName;?></strong>
+<div id='mainContent' class='main-content'>
+  <div class='main-header'>
+    <h2><?php echo $lang->file->inputFileName;?></h2>
   </div>
-</div>
 
-<form class='form-condensed' method='post' target='hiddenwin' onsubmit='setFileName();' style='padding: 30px 5%'>
-  <table class='w-p100'>
-    <tr>
-      <td>
-        <div class='input-group'>
-          <?php echo html::input('fileName', $file->title, "class='form-control' autocomplete='off'");?>
-          <strong class='input-group-addon'>.<?php echo $file->extension;?></strong>
-        </div>
-      </td>
-      <td><?php echo html::submitButton();?></td>
-    </tr>
-  </table>
-</form>
+  <form class='main-form' method='post' target='hiddenwin' onsubmit='setFileName();'>
+    <table class='table table-form'>
+      <tr>
+        <td>
+          <div class='input-group'>
+            <?php echo html::input('fileName', $file->title, "class='form-control' autocomplete='off'");?>
+            <strong class='input-group-addon'>.<?php echo $file->extension;?></strong>
+          </div>
+        </td>
+        <td class='w-80px'><?php echo html::submitButton();?></td>
+      </tr>
+    </table>
+  </form>
+</div>
 <?php include '../../common/view/footer.lite.html.php';?>

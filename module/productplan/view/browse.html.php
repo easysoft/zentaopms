@@ -112,9 +112,4 @@
     <?php endif;?>
   </form>
 </div>
-<script>
-$('#' + browseType + 'Tab').addClass('active');
-$(function(){fixedTfootAction('#productplanForm')});
-$(function(){fixedTheadOfList('#productplan')});
-</script>
 <?php include '../../common/view/footer.html.php';?>

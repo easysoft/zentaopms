@@ -18,7 +18,7 @@
     <h2><?php echo $lang->user->batchCreate;?></h2>
     <div class="pull-right btn-toolbar">
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=user&section=custom&key=batchCreateFields')?>
-      <?php include '../../common/view/dropdowncustomfield.html.php';?>
+      <?php include '../../common/view/customfield.html.php';?>
     </div>
   </div>
   <?php

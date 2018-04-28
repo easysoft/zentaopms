@@ -821,6 +821,7 @@ class project extends control
         $this->view->chartData   = $chartData;
         $this->view->dayList     = array('full' => $this->lang->project->interval . $space . 1 . $space . $this->lang->day) + $dayList;
 
+        unset($this->lang->modulePageActions);
         $this->display();
     }
 
@@ -1611,47 +1612,6 @@ class project extends control
         $this->view->allProducts    = $allProducts;
         $this->view->linkedProducts = $linkedProducts;
         $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($allProducts));
-
-        $this->display();
-    }
-
-    /**
-     * Manage childs projects.
-     *
-     * @param  int    $projectID
-     * @access public
-     * @return void
-     */
-    public function manageChilds($projectID)
-    {
-        $browseProjectLink = $this->createLink('project', 'browse', "projectID=$projectID");
-        if(!empty($_POST))
-        {
-            $this->project->updateChilds($projectID);
-            die(js::locate($browseProjectLink));
-        }
-        $project  = $this->project->getById($projectID);
-        $projects = $this->projects;
-        unset($projects[$projectID]);
-        unset($projects[$project->parent]);
-        if(empty($projects)) $this->locate($browseProjectLink);
-
-        /* Header and position. */
-        $title      = $this->lang->project->manageChilds . $this->lang->colon . $project->name;
-        $position[] = html::a($browseProjectLink, $project->name);
-        $position[] = $this->lang->project->manageChilds;
-
-        $childProjects = $this->project->getChildProjects($project->id);
-        $childProjects = join(",", array_keys($childProjects));
-
-        /* Set menu. */
-        $this->project->setMenu($this->projects, $project->id);
-
-        /* Assign. */
-        $this->view->title         = $title;
-        $this->view->position      = $position;
-        $this->view->projects      = $projects;
-        $this->view->childProjects = $childProjects;
 
         $this->display();
     }

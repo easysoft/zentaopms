@@ -39,7 +39,6 @@
 .list-menu-item.active,
 .list-menu-item:hover {color: #1a53ff}
 .list-menu-item-footer {clear:left}
-#searchLib {padding: 2px 8px; height: 28px; max-width: 190px;}
 
 #dropMenu[data-filter] #libMenuGroups {table-layout: auto;}
 #dropMenu[data-filter="project"] #libMenuProductGroup,

@@ -218,50 +218,6 @@
                   echo '</div></li>';
               }
 
-              if(common::hasPriv('story', 'batchChangeModule'))
-              {
-                  $withSearch = count($modules) > 8;
-                  echo "<li class='dropdown-submenu'>";
-                  echo html::a('javascript:;', $lang->story->moduleAB, '', "id='moduleItem'");
-                  echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
-                  echo "<ul class='dropdown-list'>";
-                  foreach($modules as $moduleId => $module)
-                  {
-                      $actionLink = $this->createLink('story', 'batchChangeModule', "moduleID=$moduleId");
-                      echo "<li class='option' data-key='$moduleID'>" . html::a('#', empty($module) ? '/' : $module, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
-                  }
-                  echo '</ul>';
-                  if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
-                  echo '</div></li>';
-              }
-              else
-              {
-                  echo '<li>' . html::a('javascript:;', $lang->story->moduleAB, '', $class) . '</li>';
-              }
-
-              if(common::hasPriv('story', 'batchChangePlan'))
-              {
-                  unset($plans['']);
-                  $plans      = array(0 => $lang->null) + $plans;
-                  $withSearch = count($plans) > 8;
-                  echo "<li class='dropdown-submenu'>";
-                  echo html::a('javascript:;', $lang->story->planAB, '', "id='planItem'");
-                  echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
-                  echo "<ul class='dropdown-list'>";
-                  foreach($plans as $planID => $plan)
-                  {
-                      $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID");
-                      echo "<li class='option' data-key='$planID'>" . html::a('#', $plan, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
-                  }
-                  echo '</ul>';
-                  if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
-                  echo '</div></li>';
-              }
-              else
-              {
-                  echo '<li>' . html::a('javascript:;', $lang->story->planAB, '', $class) . '</li>';
-              }
-
               if(common::hasPriv('story', 'batchChangeStage'))
               {
                   echo "<li class='dropdown-submenu'>";
@@ -283,6 +239,59 @@
             </ul>
           </div>
 
+          <?php if(common::hasPriv('story', 'batchChangeModule')):?>
+          <div class="btn-group dropup">
+            <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->moduleAB;?> <span class="caret"></span></button>
+            <div class="dropdown-menu search-list" data-ride="searchList">
+              <?php $withSearch = count($modules) > 8;?>
+              <?php if($withSearch):?>
+              <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">
+                <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
+                <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
+                <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
+              </div>
+              <?php endif;?>
+              <div class="list-group">
+                <?php
+                foreach($modules as $moduleId => $module)
+                {
+                    $actionLink = $this->createLink('story', 'batchChangeModule', "moduleID=$moduleId");
+                    echo html::a('#', empty($module) ? '/' : $module, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
+                }
+                ?>
+              </div>
+            </div>
+          </div>
+          <?php endif;?>
+          <?php if(common::hasPriv('story', 'batchChangePlan')):?>
+          <div class="btn-group dropup">
+            <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->planAB;?> <span class="caret"></span></button>
+            <div class="dropdown-menu search-list" data-ride="searchList">
+              <?php
+              unset($plans['']);
+              $plans      = array(0 => $lang->null) + $plans;
+              $withSearch = count($plans) > 8;
+              ?>
+              <?php if($withSearch):?>
+              <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">
+                <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
+                <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
+                <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
+              </div>
+              <?php endif;?>
+              <div class="list-group">
+                <?php
+                foreach($plans as $planID => $plan)
+                {
+                    $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID");
+                    echo html::a('#', $plan, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
+                }
+                ?>
+              </div>
+            </div>
+          </div>
+          <?php endif;?>
+
           <?php if(common::hasPriv('story', 'batchAssignTo')):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->assignedTo;?> <span class="caret"></span></button>
@@ -303,7 +312,7 @@
               <?php foreach ($users as $key => $value):?>
               <?php
               if(empty($key) or $key == 'closed') continue;
-              echo html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", \"hiddenwin\")", $value, '', '');
+              echo html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", \"hiddenwin\")", $value);
               ?>
               <?php endforeach;?>
               </div>
