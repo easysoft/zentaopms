@@ -56,7 +56,7 @@ $config->story->datatable->fieldList['id']['required'] = 'yes';
 
 $config->story->datatable->fieldList['pri']['title']    = 'priAB';
 $config->story->datatable->fieldList['pri']['fixed']    = 'left';
-$config->story->datatable->fieldList['pri']['width']    = '40';
+$config->story->datatable->fieldList['pri']['width']    = '50';
 $config->story->datatable->fieldList['pri']['required'] = 'no';
 
 $config->story->datatable->fieldList['title']['title']    = 'title';

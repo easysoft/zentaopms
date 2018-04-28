@@ -148,8 +148,6 @@ js::set('browseType', $browseType);
     <div class="cell">
       <?php echo $moduleTree;?>
       <div class="text-center">
-        <?php common::printLink('project', 'edit',    "projectID=$projectID", $lang->edit, '', "class='btn btn-info btn-wide'");?>
-        <?php common::printLink('project', 'delete',  "projectID=$projectID&confirm=no", $lang->delete, 'hiddenwin', "class='btn btn-info btn-wide'");?>
         <?php common::printLink('tree', 'browsetask', "rootID=$projectID&productID=0", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
       </div>
