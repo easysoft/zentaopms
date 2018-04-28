@@ -23,7 +23,7 @@ $(function()
 
     if($('#taskList thead th.w-name').width() < 150) $('#taskList thead th.w-name').width(150);
     
-    $(document).on('click', "#taskList tbody tr", function(){showCheckedSummary();});
+    $(document).on('click', "#taskList tbody tr, .table-footer .check-all, #taskList thead .check-all", function(){showCheckedSummary();});
     $(document).on('change', "#taskList :checkbox", function(){showCheckedSummary();});
     $(document).on('click', "#datatable-taskList table tr", function(){showCheckedSummary();});
 });
@@ -36,12 +36,7 @@ function setQueryBar(queryID, title)
 
 function showCheckedSummary()
 {
-    var $summary = $('tfoot .table-actions .text:last');
-    if(!$summary.hasClass('readed'))
-    {
-        taskSummary = $summary.html();
-        $summary.addClass('readed');
-    }
+    var $summary = $('#main #mainContent form.main-table .table-header .table-statistic');
 
     var checkedTotal    = 0;
     var checkedWait     = 0;
@@ -70,7 +65,7 @@ function showCheckedSummary()
           .replace('%estimate%', checkedEstimate)
           .replace('%consumed%', checkedConsumed)
           .replace('%left%', checkedLeft);
-        $('tfoot .table-actions .text:last').html(summary);
+        $summary.html(summary);
     }
     else
     {
