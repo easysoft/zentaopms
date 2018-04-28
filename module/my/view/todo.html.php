@@ -68,13 +68,13 @@
         <?php foreach($todos as $todo):?>
         <tr>
           <td class="c-id">
+            <?php if($type != 'cycle' and (common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture))):?>
             <div class="checkbox-primary">
-              <?php if($type != 'cycle' and (common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture))):?>
               <input type='checkbox' name='todoIDList[<?php echo $todo->id;?>]' value='<?php echo $todo->id;?>' />
               <label></label>
-              <?php endif;?>
-              <?php echo $todo->id?>
             </div>
+            <?php endif;?>
+            <?php echo $todo->id?>
           </td>
           <td class="c-date"><?php echo $todo->date == '2030-01-01' ? $lang->todo->periods['future'] : $todo->date;?></td>
           <td class="c-type"><?php echo $lang->todo->typeList[$todo->type];?></td>

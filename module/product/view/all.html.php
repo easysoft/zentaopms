@@ -58,7 +58,7 @@
     <form class="main-table table-product" data-ride="table" method="post" id='productsForm' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
       <?php $canOrder = (common::hasPriv('product', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
       <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
-      <table class="table has-sort-head" id='productList'>
+      <table class="table has-sort-head table-fixed" id='productList'>
         <?php $vars = "productID=$productID&line=$line&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <thead>
           <tr>

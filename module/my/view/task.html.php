@@ -38,31 +38,31 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='w-pri'>   <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
+          <th class='w-50px'>   <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
           <th class='w-150px'> <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
           <th>                 <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
           <th class='w-user'>  <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
           <th class='w-user'>  <?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->task->assignedTo);?></th>
           <th class='w-120px'> <?php common::printOrderLink('finishedBy',  $orderBy, $vars, $lang->task->finishedBy);?></th>
-          <th class='w-hour'>  <?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
+          <th class='w-60px'>  <?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
           <th class='w-70px'>  <?php common::printOrderLink('consumed',    $orderBy, $vars, $lang->task->consumedAB);?></th>
-          <th class='w-hour'>  <?php common::printOrderLink('left',        $orderBy, $vars, $lang->task->leftAB);?></th>
+          <th class='w-60px'>  <?php common::printOrderLink('left',        $orderBy, $vars, $lang->task->leftAB);?></th>
           <th class='w-date'>  <?php common::printOrderLink('deadline',    $orderBy, $vars, $lang->task->deadlineAB);?></th>
           <th class='w-70px'>  <?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='w-160px'><?php echo $lang->actions;?></th>
+          <th class='w-180px'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach($tasks as $task):?>
         <tr>
           <td class="c-id">
+            <?php if($canBatchEdit or $canBatchClose):?>
             <div class="checkbox-primary">
-              <?php if($canBatchEdit or $canBatchClose):?>
               <input type='checkbox' name='taskIDList[]' value='<?php echo $task->id;?>' />
               <label></label>
-              <?php endif;?>
-              <?php printf('%03d', $task->id);?>
             </div>
+            <?php endif;?>
+            <?php printf('%03d', $task->id);?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>'><?php echo zget($lang->task->priList, $task->pri);?></span></td>
           <td class='nobr text-left'><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></td>
