@@ -1606,4 +1606,42 @@ class treeModel extends model
         }
         return $tree;
     }
+
+    /**
+     * Get all doc structure.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getDocStructure() 
+    {
+        $stmt = $this->dbh->query($this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('doc')->get());
+        $parent = array();
+        while($module = $stmt->fetch())
+        {
+            if(!isset($parent[$module->root])) $parent[$module->root] = array();
+
+            if(isset($parent[$module->root][$module->id]))
+            {
+                $module->children = $parent[$module->root][$module->id]->children;
+                unset($parent[$module->root][$module->id]);
+            }
+            if(!isset($parent[$module->root][$module->parent])) $parent[$module->root][$module->parent] = new stdclass();
+            $parent[$module->root][$module->parent]->children[] = $module;
+        }
+
+        $tree = array();
+        foreach($parent as $root => $modules)
+        {
+            foreach($modules as $module)
+            {
+                foreach($module->children as $children)
+                {
+                    if($children->parent != 0) continue;//Filter project children modules.
+                    $tree[$root][] = $children;
+                }
+            }
+        }
+        return $tree;
+    }
 }
