@@ -15,7 +15,7 @@
 <div class='main-content' id='mainContent'>
 <div class='main-header'>
   <h2>
-    <strong><?php echo $lang->story->common . $lang->colon . $lang->story->batchEdit;?></strong>
+    <?php echo $lang->story->common . $lang->colon . $lang->story->batchEdit;?>
     <?php if($productName):?>
     <small class='text-muted'><?php echo html::icon($lang->icons['product']) . ' ' . $lang->story->product . $lang->colon . ' ' . $productName;?></small>
     <?php endif;?>
@@ -38,14 +38,14 @@ foreach(explode(',', $showFields) as $field)
 <form method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "from=storyBatchEdit")?>">
   <table class='table table-form table-fixed with-border'>
     <thead>
-      <tr class='text-center'>
+      <tr>
         <th class='w-40px'> <?php echo $lang->idAB;?></th> 
         <?php if($branchProduct):?>
         <th class='w-150px<?php echo zget($visibleFields, 'branch', ' hidden')?>'><?php echo $lang->story->branch;?></th>
         <?php endif;?>
         <th class='w-150px'><?php echo $lang->story->module;?></th>
         <th class='w-150px<?php echo zget($visibleFields, 'plan', ' hidden')?>'><?php echo $lang->story->planAB;?></th>
-        <th class='w-150px'><?php echo $lang->story->title;?> <span class='required'></span></th>
+        <th class='w-150px required'><?php echo $lang->story->title;?></th>
         <th class='w-50px<?php echo zget($visibleFields, 'estimate', ' hidden')?>'> <?php echo $lang->story->estimateAB;?></th>
         <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden')?>'> <?php echo $lang->priAB;?></th>
         <th class='w-100px<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'> <?php echo $lang->story->assignedTo;?></th>
@@ -79,7 +79,7 @@ foreach(explode(',', $showFields) as $field)
           $productPlans = array('' => '', 'ditto' => $this->lang->story->ditto) + $productPlans;
       }
       ?>
-      <tr class='text-center'>
+      <tr>
         <td><?php echo $storyID . html::hidden("storyIDList[$storyID]", $storyID);?></td>
         <?php if($branchProduct):?>
         <td class='text-left<?php echo zget($visibleFields, 'branch', ' hidden')?>' style='overflow:visible'>

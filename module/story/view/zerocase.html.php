@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../testcase/view/caseheader.html.php';?>
-<div class='mainContent'>
+<div id='mainContent' class='main-control'>
   <form method='post' id='productStoryForm' class='main-table table-story' data-ride='table'>
     <table class='table has-sort-head table-fixed' id='storyList'>
       <thead>
