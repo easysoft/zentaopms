@@ -39,17 +39,6 @@ class project extends control
      */
     public function index($locate = 'auto', $projectID = 0)
     {
-        if($this->app->user->account == 'guest' or commonModel::isTutorialMode()) $this->config->project->homepage = 'index';
-        if(!isset($this->config->project->homepage))
-        {
-            if($this->projects and $this->app->viewType != 'mhtml') die($this->fetch('custom', 'ajaxSetHomepage', "module=project"));
-
-            $this->config->project->homepage = 'index';
-            $this->fetch('custom', 'ajaxSetHomepage', "module=project&page=index");
-        }
-
-        $homepage = $this->config->project->homepage;
-        if($homepage == 'browse' and $locate == 'auto') $locate = 'yes';
         if($locate == 'yes') $this->locate($this->createLink('project', 'task'));
 
         if($this->app->viewType != 'mhtml') unset($this->lang->project->menu->index);
