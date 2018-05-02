@@ -30,17 +30,7 @@
           <a class="text-muted tree-toggle"><?php echo $lang->doc->fast;?></a>
           <ul>
             <?php foreach($lang->doc->fastMenuList as $type => $menu):?>
-            <?php
-            if($type == 'editedDate' or $type == 'visitedDate')
-            {
-                $link = $this->createLink('doc', 'browse', "libID=0&browseTyp=bymenu&module=0&orderBy={$type}_desc");
-            }
-            else
-            {
-                $link = $this->createLink('doc', 'browse', "libID=0&browseTyp={$type}");
-            }
-            ?>
-            <li><?php echo html::a($link, "<i class='icon {$lang->doc->fastMenuIconList[$type]}'></i> {$menu}");?>
+            <li><?php echo html::a($this->createLink('doc', 'browse', "libID=0&browseType={$type}"), "<i class='icon {$lang->doc->fastMenuIconList[$type]}'></i> {$menu}");?>
             <?php endforeach;?>
           </ul>
         </li>
