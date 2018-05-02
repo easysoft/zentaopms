@@ -24,10 +24,12 @@
   <div class='btn-toolbar pull-right'><?php common::printIcon('backup', 'backup', 'reload=yes', '', 'button', 'cloud', 'hiddenwin', 'backup');?></div>
 </div>
 
-<div class='panel'>
-  <div class='panel-heading'>
-    <strong><?php echo $lang->backup->history?></strong>
-    <span class='label label-info'><?php echo $lang->backup->restoreTip;?></span>
+<div id='mainContent' class='main-content'>
+  <div class='main-header'>
+    <h2>
+      <?php echo $lang->backup->history?>
+      <span class='label label-info'><?php echo $lang->backup->restoreTip;?></span>
+    </h2>
   </div>
   <table class='table table-condensed table-bordered active-disabled table-fixed'>
     <thead>

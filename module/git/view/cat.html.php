@@ -11,6 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<div class='box-title'><?php echo "$path@$revision";?></div>
-<div class='box-content'><xmp><?php echo $code;?></xmp></div>
+<div class='detail'>
+  <div class='detail-title'><?php echo "$path@$revision";?></div>
+  <div class='detail-content'><xmp><?php echo $code;?></xmp></div>
+</div>
 <?php include '../../common/view/footer.lite.html.php';?>

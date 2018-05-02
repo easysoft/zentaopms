@@ -11,16 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='featurebar'>
-  <ul class='nav'>
-    <li id='entry' class='active'><?php common::printLink('entry', 'browse', '', $lang->entry->common);?></li>
-    <li id='webhook'><?php common::printLink('webhook', 'browse', '', $lang->entry->webhook);?></li>
-  </ul>
-  <div class='actions'>
-    <div class='btn-group'>
-      <div class='btn-group' id='createActionMenu'>
-        <?php common::printIcon('entry', 'create', '', '', 'button', '', '', 'btn-primary');?>
-      </div>
-    </div>
+<div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
+    <?php common::printLink('entry', 'browse', '', "<span class='text'>{$lang->entry->common}</span>", '', "class='btn btn-link btn-active-text'");?>
+  </div>
+  <div class='btn-toolbar pull-right'>
+    <?php common::printIcon('entry', 'create', '', '', 'button', '', '', 'btn-primary');?>
   </div>
 </div>

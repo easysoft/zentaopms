@@ -22,60 +22,162 @@ class docModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($libID = 0, $moduleID = 0, $crumb = '')
+    public function setMenu($type = '', $libID = 0, $moduleID = 0, $productID = 0, $projectID = 0, $crumb = '')
     {
-        $customMenuKey = $this->config->global->flow . '_doc';
-        if(isset($this->config->customMenu->{$customMenuKey}))
+        $selectHtml  = "<div class='btn-group angle-btn'>";
+        $selectHtml .= html::a(helper::createLink('doc', 'index'), $this->lang->doc->index, '', "class='btn'");
+        $selectHtml .= '</div>';
+
+        if($type)
         {
-            $customMenu = json_decode($this->config->customMenu->{$customMenuKey}, true);
-            $menuLibIdList = array();
-            foreach($customMenu as $i => $menu)
+            $mainLib = in_array($type, array_keys($this->lang->doc->fastMenuList)) ? $this->lang->doc->fastMenuList[$type] : '';
+
+            if($libID)
             {
-                if(strpos($menu['name'], 'custom') === 0)
+                $lib = $this->getLibById($libID);
+                if($this->checkPriv($lib))
                 {
-                    $menuLibID = (int)substr($menu['name'], 6);
-                    if($menuLibID) $menuLibIdList[$i] = $menuLibID;
+                    $type = $lib->product ? 'product' : 'custom';
+                    $type = $lib->project ? 'project' : $type;
                 }
             }
 
-            $productIdList = array();
-            $projectIdList = array();
-            if($menuLibIdList)
+            $mainLib = $type == 'custom' ? $this->lang->doc->customAB : $mainLib;
+            $mainLib = $type == 'product' ? $this->lang->productCommon : $mainLib;
+            $mainLib = $type == 'project' ? $this->lang->projectCommon : $mainLib;
+
+            $selectHtml .= "<div class='btn-group angle-btn'>";
+            $selectHtml .= "<div class='btn-group'>";
+            $selectHtml .= "<a data-toggle='dropdown' class='btn'>" . $mainLib . " <span class='caret'></span></a>";
+            $selectHtml .= "<ul class='dropdown-menu'>";
+            foreach($this->lang->doc->fastMenuList as $key => $fastMenu)
             {
-                $libs = $this->dao->select('id,name,product,project')->from(TABLE_DOCLIB)->where('id')->in($menuLibIdList)->fetchAll('id');
-                foreach($libs as $lib)
+                if($key == 'editedDate' or $key == 'visitedDate')
                 {
-                    if($lib->product) $productIdList[] = $lib->product;
-                    if($lib->project) $projectIdList[] = $lib->project;
+                    $link = helper::createLink('doc', 'browse', "libID=0&browseTyp=bymenu&module=0&orderBy={$key}_desc");
                 }
+                else
+                {
+                    $link = helper::createLink('doc', 'browse', "libID=0&browseTyp={$key}");
+                }
+                $selectHtml .= '<li>' . html::a($link, "<i class='icon {$this->lang->doc->fastMenuIconList[$key]}'></i> {$fastMenu}") . '</li>';
             }
-            $products = $productIdList ? $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchPairs('id', 'name') : array();
-            $projects = $projectIdList ? $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs('id', 'name') : array();
-            foreach($menuLibIdList as $i => $menuLibID)
+            $selectHtml .= "<li class='divider'></li>";
+            $selectHtml .= '<li>' . html::a(helper::createLink('doc', 'allLibs', "type=product"), "<i class='icon icon-cube'></i> {$this->lang->productCommon}") . '</li>';
+            $selectHtml .= '<li>' . html::a(helper::createLink('doc', 'allLibs', "type=project"), "<i class='icon icon-stack'></i> {$this->lang->projectCommon}") . '</li>';
+            $selectHtml .= '<li>' . html::a(helper::createLink('doc', 'allLibs', "type=custom"), "<i class='icon icon-folder-o'></i> {$this->lang->doc->customAB}") . '</li>';
+            $selectHtml .='</ul></div></div>';
+
+            if(strpos('product,project,custom', $type) !== false)
             {
-                $lib = $libs[$menuLibID];
-                $libName = '';
-                if($lib->product) $libName = isset($products[$lib->product]) ? '[' . $products[$lib->product] . ']' : '';
-                if($lib->project) $libName = isset($projects[$lib->project]) ? '[' . $projects[$lib->project] . ']' : '';
-                $libName .= $lib->name;
-                $customMenu[$i]['link'] = "{$libName}|doc|browse|libID={$menuLibID}";
+                $allLibGroups = $this->getAllLibGroups();
+                $currentGroups = $allLibGroups[$type];
+
+                if($type == 'custom')  $currentLib = $libID ? $libID : key($currentGroups);
+                if($type == 'product') $currentLib = $productID ? $productID : key($currentGroups);
+                if($type == 'project') $currentLib = $projectID ? $projectID : key($currentGroups);
+
+                $selectHtml .= "<div class='btn-group angle-btn'>";
+                $selectHtml .= "<div class='btn-group'>";
+                $selectHtml .= '<a data-toggle="dropdown" class="btn">' . (is_array($currentGroups[$currentLib]) ? $currentGroups[$currentLib]['name'] : $currentGroups[$currentLib]) . ' <span class="caret"></span></a>';
+                $selectHtml .='<ul class="dropdown-menu">';
+                if($type == 'custom')
+                {
+                    foreach($currentGroups as $groupID => $groupName)
+                    {
+                        if($type == 'custom')
+                        {
+                            $link = helper::createLink('doc', 'browse', "libID=$groupID");
+                            $icon = 'icon-folder-o';
+                        }
+                        elseif($type == 'product')
+                        {
+                            $link = helper::createLink('doc', 'objectLibs', "type=product&objectID=$groupID");
+                            $icon = 'icon-cube';
+                        }
+                        else
+                        {
+                            $link = helper::createLink('doc', 'objectLibs', "type=project&objectID=$groupID");
+                            $icon = 'icon-stack';
+                        }
+
+                        $active = $currentLib == $groupID ? "class='active'" : '';
+                        $selectHtml .= "<li $active>" . html::a(helper::createLink('doc', 'browse', "libID=$groupID"), "<i class='icon icon-folder-o'></i> {$groupName}") . '</li>';
+                    }
+                }
+                else
+                {
+                    foreach($currentGroups as $groupID => $libGroups)
+                    {
+                        $link = helper::createLink('doc', 'objectLibs', "type=$type&objectID=$groupID");
+                        $icon = $type == 'product' ? 'icon-cube' : 'icon-stack';
+
+                        $active = $currentLib == $groupID ? "class='active'" : '';
+                        $selectHtml .= "<li $active>" . html::a($link, "<i class='icon {$icon}'></i> {$libGroups['name']}") . '</li>';
+                    }
+                }
+                $selectHtml .= '</ul></div></div>';
             }
-            $this->config->customMenu->{$customMenuKey} = json_encode($customMenu);
+
+            $actions = '';
+            $customMenuKey = $this->config->global->flow . '_doc';
+            if(isset($this->config->customMenu->{$customMenuKey}))
+            {
+                $customMenu = json_decode($this->config->customMenu->{$customMenuKey}, true);
+                $menuLibIdList = array();
+                foreach($customMenu as $i => $menu)
+                {
+                    if(strpos($menu['name'], 'custom') === 0)
+                    {
+                        $menuLibID = (int)substr($menu['name'], 6);
+                        if($menuLibID) $menuLibIdList[$i] = $menuLibID;
+                    }
+                }
+
+                $productIdList = array();
+                $projectIdList = array();
+                if($menuLibIdList)
+                {
+                    $libs = $this->dao->select('id,name,product,project')->from(TABLE_DOCLIB)->where('id')->in($menuLibIdList)->fetchAll('id');
+                    foreach($libs as $lib)
+                    {
+                        if($lib->product) $productIdList[] = $lib->product;
+                        if($lib->project) $projectIdList[] = $lib->project;
+                    }
+                }
+                $products = $productIdList ? $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchPairs('id', 'name') : array();
+                $projects = $projectIdList ? $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs('id', 'name') : array();
+                foreach($menuLibIdList as $i => $menuLibID)
+                {
+                    $lib = $libs[$menuLibID];
+                    $libName = '';
+                    if($lib->product) $libName = isset($products[$lib->product]) ? '[' . $products[$lib->product] . ']' : '';
+                    if($lib->project) $libName = isset($projects[$lib->project]) ? '[' . $projects[$lib->project] . ']' : '';
+                    $libName .= $lib->name;
+                    $customMenu[$i]['link'] = "{$libName}|doc|browse|libID={$menuLibID}";
+                }
+
+                foreach($customMenu as $menu)
+                {
+                    if(isset($menu['link']))
+                    {
+                        list($menuLabel, $module, $method, $vars) = explode('|', $menu['link']);
+                        $actions .= html::a(helper::createLink($module, $method, $vars), $menuLabel, '', "class='btn btn-gray'");
+                    }
+                        
+                }
+
+            }
+
+            $actions .= html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-folder-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary' data-toggle='modal'");
+            if($libID) $actions .= html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary' data-toggle='modal'");
+
+            $this->lang->modulePageActions = $actions;
+
         }
 
-        $this->app->loadLang('project');
-        $selectHtml  = "<a id='currentItem' data-lib-id='$libID' href=\"javascript:showLibMenu()\">{$this->lang->doclib->all} <span class='icon-caret-down'></span></a>";
-        $selectHtml .= "<div id='dropMenu'>";
-        $selectHtml .= "<i class='icon icon-spin icon-spinner'></i>";
-        $selectHtml .= "<div id='libMenu'>";
-        $selectHtml .= "<div id='libMenuHeading'><input id='searchLib' type='search' placeholder='{$this->lang->doc->searchDoc}' class='form-control'></div>";
-        $selectHtml .= "<div id='libMenuGroups' class='clearfix'>";
-        if($this->config->global->flow != 'onlyTask' and isset($this->lang->doc->libTypeList['product']))  $selectHtml .= "<div class='lib-menu-group' id='libMenuProductGroup'><div class='lib-menu-list-heading' data-type='product'>{$this->lang->doc->libTypeList['product']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
-        if($this->config->global->flow != 'onlyStory' and $this->config->global->flow != 'onlyTest' and isset($this->lang->doc->libTypeList['project'])) $selectHtml .= "<div class='lib-menu-group' id='libMenuProjectGroup'><div class='lib-menu-list-heading' data-type='project'>{$this->lang->doc->libTypeList['project']}<i class='icon icon-remove'></i></div><div class='lib-menu-project-done'>{$this->lang->project->statusList['done']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
-        $selectHtml .= "<div class='lib-menu-group' id='libMenuCustomGroup'><div class='lib-menu-list-heading' data-type='custom'>{$this->lang->doc->libTypeList['custom']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
-        $selectHtml .= "</div></div></div>";
-        common::setMenuVars($this->lang->doc->menu, 'list', $selectHtml);
-        common::setMenuVars($this->lang->doc->menu, 'crumb', $crumb ? $crumb : $this->getCrumbs($libID, $moduleID));
+        //$selectHtml .= $crumb ? $crumb : $this->getCrumbs($libID, $moduleID);
+        $this->lang->modulePageNav     = $selectHtml;
     }
 
     /**
@@ -209,7 +311,7 @@ class docModel extends model
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
                 ->andWhere('id')->in($docIdList)
-                ->orderBy($sort)
+                ->orderBy('editedDate_desc')
                 ->page($pager)
                 ->fetchAll('id');
 
@@ -245,6 +347,16 @@ class docModel extends model
                     $docs[$doc->id]->fileSize = $fileSize;
                 }
             }
+        }
+        elseif($browseType == 'visiteddate')
+        {
+            $docIdList = $this->getPrivDocs($libID, $moduleID);
+            $docs = $this->dao->select('*')->from(TABLE_DOC)
+                ->where('deleted')->eq(0)
+                ->andWhere('id')->in($docIdList)
+                ->orderBy('visitedDate_desc')
+                ->page($pager)
+                ->fetchAll('id');
         }
         elseif($browseType == "collectedbyme")
         {
@@ -596,7 +708,7 @@ class docModel extends model
         $this->config->doc->search['queryID']   = $queryID;
         $this->config->doc->search['params']['product']['values'] = array(''=>'') + $this->loadModel('product')->getPairs('nocode') + array('all'=>$this->lang->doc->allProduct);
         $this->config->doc->search['params']['project']['values'] = array(''=>'') + $this->loadModel('project')->getPairs('nocode') + array('all'=>$this->lang->doc->allProject);
-        $this->config->doc->search['params']['lib']['values']     = array(''=>'', $libID => $libs[$libID], 'all' => $this->lang->doclib->all);
+        $this->config->doc->search['params']['lib']['values']     = array(''=>'', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
 
         /* Get the modules. */
         $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
@@ -853,7 +965,7 @@ class docModel extends model
             }
         }
 
-        return array('product' => array_values($productOrderLibs), 'project' => array_values($projectOrderLibs), 'custom' => $customLibs);
+        return array('product' => $productOrderLibs, 'project' => $projectOrderLibs, 'custom' => $customLibs);
     }
 
     /**
