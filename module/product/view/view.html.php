@@ -78,8 +78,8 @@
               <div class="detail-content article-content">
                 <p><span class="text-limit" data-limit-size="40"><?php echo $product->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></p>
                 <p>
-                  <span class="label label-primary label-outline"><?php echo zget($lang->product->typeList, $product->type);?></span>
-                  <span class="label label-success label-outline"><?php echo zget($lang->product->statusList, $product->status);?></span>
+                  <span class="label label-primary label-outline" title='<?php echo $lang->product->type;?>'><?php echo zget($lang->product->typeList, $product->type);?></span>
+                  <span class="label label-success label-outline" title='<?php echo $lang->product->status;?>'><?php echo zget($lang->product->statusList, $product->status);?></span>
                   <?php if($product->deleted):?>
                   <span class='label label-danger label-outline'><?php echo $lang->product->deleted;?></span>
                   <?php endif; ?>
@@ -210,9 +210,10 @@
     <?php
     $params = "product=$product->id";
     $browseLink = $this->session->productList ? $this->session->productList : inlink('browse', "productID=$product->id");
+    common::printBack($browseLink);
     if(!$product->deleted)
     {
-        ob_start();
+        echo "<div class='divider'></div>";
         if($product->status != 'closed')
         {
             common::printIcon('product', 'close', "productID=$product->id", $product, 'button', '', '', 'iframe text-danger', true);
@@ -221,15 +222,10 @@
 
         common::printIcon('product', 'edit', $params, $product);
         common::printIcon('product', 'delete', $params, $product, 'button', '', 'hiddenwin');
-        common::printRPN($browseLink);
-
-        $actionLinks = ob_get_contents();
-        ob_end_clean();
-        echo $actionLinks;
     }
     else
     {
-        common::printRPN($browseLink);
+        common::printBack($browseLink);
     }
     ?>
   </div>

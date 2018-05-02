@@ -875,6 +875,7 @@ class block extends control
             ->orderBy($orderBy)
             ->beginIF($this->viewType != 'json')->limit($num)->fi()
             ->fetchAll('id');
+        $projectIDList = array_keys($projects);
 
 
         /* Get tasks. */
