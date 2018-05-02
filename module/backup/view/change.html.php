@@ -11,25 +11,23 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['edit']);?></span>
-    <strong><?php echo $lang->backup->change;?></strong>
+<div id='mainContent' class='main-content'>
+  <div class='main-header'>
+    <h2><?php echo $lang->backup->change;?></h2>
   </div>
+  <form method='post' target='hiddenwin' style='padding:10px 5%'>
+    <table class='w-p100'>
+      <tr>
+        <td>
+          <div class='input-group'>
+            <?php echo html::input('holdDays', $config->backup->holdDays, "class='form-control' autocomplete='off'");?>
+            <strong class='input-group-addon'><?php echo $lang->day;?></strong>
+          </div>
+        </td>
+        <td><?php echo html::submitButton();?></td>
+      </tr>
+    </table>
+  </form>
 </div>
-
-<form class='form-condensed' method='post' target='hiddenwin' style='padding: 30px 5%'>
-  <table class='w-p100'>
-    <tr>
-      <td>
-        <div class='input-group'>
-          <?php echo html::input('holdDays', $config->backup->holdDays, "class='form-control' autocomplete='off'");?>
-          <strong class='input-group-addon'><?php echo $lang->day;?></strong>
-        </div>
-      </td>
-      <td><?php echo html::submitButton();?></td>
-    </tr>
-  </table>
-</form>
 <?php include '../../common/view/footer.lite.html.php';?>
 
