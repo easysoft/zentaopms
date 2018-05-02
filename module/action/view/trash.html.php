@@ -21,7 +21,7 @@
   </div>
 </div>
 
-<div id='mainContent'>
+<div id='mainContent' class='main-content'>
   <div class='main-table'>
     <table class='table has-sort-head'>
       <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>

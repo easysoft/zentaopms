@@ -10,6 +10,9 @@
  * @link        http://www.zentao.net
  */
 ?>
+<style>
+.block-overview .tile-amount {font-size: 48px; margin-bottom: 10px;}
+</style>
 <div class="panel-body table-row">
   <div class="col-6 text-middle text-center">
     <div class="tile">
@@ -30,9 +33,3 @@
     </ul>
   </div>
 </div>
-
-<style>
-.block-overview .tile-amount {font-size: 48px; margin-bottom: 10px;}
-.nav > li > a.btn{color: #3c4353;}
-.nav > li > a.btn-sm{padding: 2px 8px; font-size: 12px; line-height: 1.5; border-radius: 4px;}
-</style>

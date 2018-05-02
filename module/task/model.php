@@ -2094,7 +2094,7 @@ class taskModel extends model
             if($id == 'deadline' and isset($task->delay)) $class .= ' delayed';
             if($id == 'assignedTo')
             {
-                $class .= ' c-actions';
+                $class .= ' c-actions text-left';
                 if($task->assignedTo == $account) $class .= ' red';
             }
 

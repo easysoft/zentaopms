@@ -15,8 +15,8 @@
   <div class='center-block'>
     <div class='main-header'>
       <h2>
-        <span class='prefix'><strong><?php echo $story->id;?></strong></span>
-        <strong><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></strong>
+        <span class='label label-id'><?php echo $story->id;?></span>
+        <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?>
         <small><?php echo $lang->arrow . ' ' . $lang->story->change;?></small>
       </h2>
     </div>

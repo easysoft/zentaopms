@@ -179,7 +179,7 @@ $config->bug->datatable->fieldList['severity']['required'] = 'no';
 
 $config->bug->datatable->fieldList['pri']['title']    = 'P';
 $config->bug->datatable->fieldList['pri']['fixed']    = 'left';
-$config->bug->datatable->fieldList['pri']['width']    = '40';
+$config->bug->datatable->fieldList['pri']['width']    = '50';
 $config->bug->datatable->fieldList['pri']['required'] = 'no';
 
 $config->bug->datatable->fieldList['title']['title']    = 'title';

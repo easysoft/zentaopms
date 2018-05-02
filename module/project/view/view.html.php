@@ -203,30 +203,23 @@
     <?php
     $params = "project=$project->id";
     $browseLink = $this->session->projectList ? $this->session->projectList : inlink('browse', "projectID=$project->id");
+    common::printBack($browseLink);
     if(!$project->deleted)
     {
-        ob_start();
-        echo "<div class='btn-group'>";
+        echo "<div class='divider'></div>";
         common::printIcon('project', 'start',    "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
         common::printIcon('project', 'activate', "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
         common::printIcon('project', 'putoff',   "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
         common::printIcon('project', 'suspend',  "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
         common::printIcon('project', 'close',    "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
-        echo '</div>';
 
-        echo "<div class='btn-group'>";
+        echo "<div class='divider'></div>";
         common::printIcon('project', 'edit', $params, $project);
         common::printIcon('project', 'delete', $params, $project, 'button', '', 'hiddenwin');
-        echo '</div>';
-        common::printRPN($browseLink);
-
-        $actionLinks = ob_get_contents();
-        ob_end_clean();
-        echo $actionLinks;
     }
     else
     {
-        common::printRPN($browseLink);
+        common::printBack($browseLink);
     }
     ?>
   </div>
