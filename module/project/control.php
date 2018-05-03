@@ -1281,6 +1281,7 @@ class project extends control
 
         /* Set menu. */
         $this->project->setMenu($this->projects, $project->id);
+        $this->app->loadLang('bug');
 
         $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('project')->eq("$projectID")->orderBy('date_desc')->limit(6)->fetchAll();
         if($actions) $this->loadModel('action')->transformActions($actions);
@@ -1296,6 +1297,9 @@ class project extends control
         $this->view->actions      = $actions;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->builds       = $this->loadModel('build')->getProjectBuilds((int)$projectID);
+        $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
+        $this->view->docLibs      = $this->loadModel('doc')->getLibsByObject('project', $projectID);
+        $this->view->statData     = $this->project->statRelatedData($projectID);
 
         $this->display();
     }

@@ -15,37 +15,35 @@
     <div class="col-8 main-col">
       <div class="row">
         <div class="col-sm-6">
-          <div class="panel block-release">
+          <div class="panel block-efforts" style="height: 280px">
             <div class="panel-heading">
-              <div class="panel-title"><?php echo $lang->project->iteration;?> <span class="label label-badge label-light"><?php echo sprintf($lang->project->iterationInfo, count($builds));?></span></div>
+              <div class="panel-title"><?php echo $lang->project->effort;?></div>
             </div>
             <div class="panel-body">
-              <div class="release-path">
-                <ul class="release-line">
-                  <?php $i = 0;?>
-                  <?php foreach(array_reverse($builds) as $build):?>
-                  <?php $i++;?>
-                  <?php if($i > 6) break;?>
-                  <li <?php if(date('Y-m-d') < $build->date) echo "class='active'";?>>
-                    <a href="<?php echo $this->createLink('build', 'view', "buildID={$build->id}");?>">
-                      <?php if(!empty($build->marker)) echo "<i class='icon icon-flag text-primary'></i>";?>
-                      <span class="title"><?php echo $build->name;?></span>
-                      <span class="date"><?php echo $build->date;?></span>
-                      <span class="info"><?php echo $build->desc;?></span>
-                    </a>
-                  </li>
-                  <?php endforeach;?>
-                </ul>
-              </div>
+              <ul class="effort-list text-muted list-unstyled no-margin">
+                <?php $i = 0;?>
+                <?php foreach(array_reverse($builds) as $build):?>
+                <?php $i++;?>
+                <?php if($i > 6) break;?>
+                <li <?php if(date('Y-m-d') < $build->date) echo "class='active'";?>>
+                  <a href="<?php echo $this->createLink('build', 'view', "buildID={$build->id}");?>">
+                    <?php if(!empty($build->marker)) echo "<i class='icon icon-flag text-primary'></i>";?>
+                    <span class="title"><?php echo $build->name;?></span>
+                    <span class="date"><?php echo $build->date;?></span>
+                    <span class="info"><?php echo $build->desc;?></span>
+                  </a>
+                </li>
+                <?php endforeach;?>
+              </ul>
             </div>
           </div>
         </div>
         <div class="col-sm-6">
-          <div class="panel block-dynamic">
+          <div class="panel block-dynamic" style="height: 280px">
             <div class="panel-heading">
               <div class="panel-title"><?php echo $lang->project->latestDynamic;?></div>
               <nav class="panel-actions nav nav-default">
-                <li><a href="<?php echo $this->createLink('project', 'dynamic', "projectID=$project->id&type=all")?>" title="<?php echo $lang->more;?>">MORE</i></a></li>
+                <li><?php common::printLink('project', 'dynamic', "projectID=$project->id&type=all", 'MORE', '', "title=$lang->more");?></li>
               </nav>
             </div>
             <div class="panel-body">
@@ -59,6 +57,73 @@
                 </li>
                 <?php endforeach;?>
               </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="panel block-team" style="height: 240px">
+            <div class="panel-heading">
+              <div class="panel-title"><?php echo $lang->project->relatedMember;?></div>
+              <nav class="panel-actions nav nav-default">
+                <li><?php common::printLink('project', 'team', "projectID=$project->id", 'MORE', '', "title=$lang->more");?></li>
+              </nav>
+            </div>
+            <div class="panel-body">
+              <div class="row row-grid">
+                <?php $i = 9; $j = 0;?>
+                <?php if($this->config->global->flow != 'onlyTask'):?>
+                <?php if($project->PM):?>
+                <?php $i--;?>
+                <?php unset($teamMembers[$project->PM]);?>
+                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $project->PM);?> <span class="text-muted">（<?php echo $lang->project->PM;?>）</span></div>
+                <?php endif;?>
+                <?php if($project->PO):?>
+                <?php $i--;?>
+                <?php unset($teamMembers[$project->PO]);?>
+                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $project->PO);?> <span class="text-muted">（<?php echo $lang->project->PO;?>）</span></div>
+                <?php endif;?>
+                <?php if($project->QD):?>
+                <?php $i--;?>
+                <?php unset($teamMembers[$project->QD]);?>
+                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $project->QD);?> <span class="text-muted">（<?php echo $lang->project->QD;?>）</span></div>
+                <?php endif;?>
+                <?php if($project->RD):?>
+                <?php $i--;?>
+                <?php unset($teamMembers[$project->RD]);?>
+                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $project->RD);?> <span class="text-muted">（<?php echo $lang->project->RD;?>）</span></div>
+                <?php endif;?>
+                <?php endif;?>
+
+                <?php foreach($teamMembers as $teamMember):?>
+                <?php if($j > $i) break;?>
+                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $teamMember->account);?></div>
+                <?php $j++;?>
+                <?php endforeach;?>
+                <div class="col-xs-6">
+                  <?php common::printLink('project', 'manageMembers', "projectID=$project->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->project->manageMembers, '', "class='text-muted'");?>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="panel block-docs" style="height: 240px">
+            <div class="panel-heading">
+            <div class="panel-title"><?php echo $lang->project->doclib;?></div>
+              <nav class="panel-actions nav nav-default">
+                <li><a href="<?php echo $this->createLink('doc', 'objectLibs', "type=project&projectID=$project->id&from=project")?>" title="<?php echo $lang->more;?>">MORE</i></a></li>
+              </nav>
+            </div>
+            <div class="panel-body">
+              <div class="row row-grid">
+                <?php $i = 0;?>
+                <?php foreach($docLibs as $libID => $docLib):?>
+                <?php if($i > 8) break;?>
+                <div class="col-xs-6"><?php echo html::a($this->createLink('doc', 'browse', "libID=$libID&browseTyp=all&param=&orderBy=&from=project"), "<i class='icon icon-folder text-yellow'></i> " . $docLib);?></div>
+                <?php $i++;?>
+                <?php endforeach;?>
+                <div class="col-xs-6"><?php echo html::a($this->createLink('doc', 'createLib', "type=project&objectID=$project->id"), "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->doc->createLib, '', "class='text-muted' data-toggle='modal'");?></div>
+              </div>
             </div>
           </div>
         </div>
@@ -89,105 +154,94 @@
                 </p>
               </div>
             </div>
+            <?php if($this->config->global->flow != 'onlyTask'):?>
+            <div class="detail">
+              <div class="detail-title">
+                <strong><?php echo $lang->project->manageProducts;?></strong>
+                <?php echo html::a($this->createLink('project', 'manageproducts', "projectID=$project->id"), 'MORE', '', "class='btn btn-link pull-right muted'");?>
+              </div>
+              <div class="detail-content">
+                <div class="row row-grid">
+                  <?php foreach($products as $productID => $product):?>
+                  <?php $branchName = isset($branchGroups[$productID][$product->branch]) ? '/' . $branchGroups[$productID][$product->branch] : '';?>
+                  <div class="col-xs-6">
+                    <?php echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$product->branch"), "<i class='icon icon-cube text-muted'></i> " . $product->name . $branchName);?>
+                  </div>
+                  <?php endforeach;?>
+                </div>
+              </div>
+            </div>
+            <?php endif;?>
             <div class='detail'>
               <div class='detail-title'><strong><?php echo $lang->project->lblStats;?></strong></div>
               <div class="detail-content">
                 <table class='table table-data data-stats'>
                   <tbody>
                     <tr>
-                      <th><?php echo $lang->project->totalHours;?></th>
-                      <td><em><?php echo $project->totalHours;?></em></td>
-                      <th><?php echo $lang->project->totalEstimate;?></th>
-                      <td><em><?php echo $project->totalEstimate;?></em></td>
+                      <td colspan="2">
+                        <?php $progress = $project->totalHours ? round($project->totalConsumed / $project->totalHours, 3) * 100 : 0;?>
+                        <?php echo $lang->projectCommon . $lang->project->progress;?> <em><?php echo $progress . $lang->percent;?></em> &nbsp;
+                        <div class="progress inline-block">
+                          <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $progress . $lang->percent;?>"></div>
+                        </div>
+                      </td>
                     </tr>
                     <tr>
+                      <th><?php echo $lang->project->begin;?></th>
+                      <td><?php echo $project->begin;?></td>
+                      <th><?php echo $lang->project->totalEstimate;?></th>
+                      <td><em><?php echo $project->totalEstimate . $lang->project->workHour;?></em></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->project->end;?></th>
+                      <td><?php echo $project->end;?></td>
                       <th><?php echo $lang->project->totalConsumed;?></th>
-                      <td><em><?php echo $project->totalConsumed;?></em></td>
+                      <td><em><?php echo $project->totalConsumed . $lang->project->workHour;?></em></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->project->totalDays;?></th>
+                      <td><?php echo $project->days;?></td>
                       <th><?php echo $lang->project->totalLeft;?></th>
                       <td><em><?php echo $project->totalLeft;?></em></td>
                     </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <?php if($this->config->global->flow != 'onlyTask'):?>
-            <div class="detail">
-              <div class="detail-title"><strong><?php echo $lang->project->owner;?></strong></div>
-              <div class="detail-content">
-                <table class="table table-data">
-                  <tbody>
                     <tr>
-                      <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->projectCommon;?></th>
-                      <td><em><?php echo zget($users, $project->PM);?></em></td>
-                      <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->productCommon;?></th>
-                      <td><em><?php echo zget($users, $project->PO);?></em></td>
-                    </tr>
-                    <tr>
-                      <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->project->qa;?></th>
-                      <td><em><?php echo zget($users, $project->QD);?></em></td>
-                      <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->project->release;?></th>
-                      <td><em><?php echo zget($users, $project->RD);?></em></td>
+                      <th><?php echo $lang->project->totalHours;?></th>
+                      <td><em><?php echo $project->totalHours . $lang->project->workHour;?></em></td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
-            <?php endif;?>
             <div class="detail">
               <div class="detail-title"><strong><?php echo $lang->project->basicInfo;?></strong></div>
               <div class="detail-content">
                 <table class="table table-data data-basic">
                   <tbody>
                     <tr>
-                      <th><?php echo $lang->project->beginAndEnd;?></th>
-                      <td><em><?php echo $project->begin . ' ~ ' . $project->end;?></em></td>
-                    <tr>
-                      <th><?php echo $lang->project->days;?></th>
-                      <td><em><?php echo $project->days;?></em></td>
+                      <th><?php echo $lang->story->common;?></th>
+                      <td><em><?php echo $statData->storyCount;?></em></td>
+                      <th><?php echo $lang->task->common;?></th>
+                      <td><em><?php echo $statData->taskCount;?></em></td>
+                      <th><?php echo $lang->bug->common;?></th>
+                      <td><em><?php echo $statData->bugCount;?></em></td>
                     </tr>
-                    <?php if($this->config->global->flow != 'onlyTask'):?>
-                    <tr>
-                      <th><?php echo $lang->project->products;?></th>
-                      <td>
-                        <em>
-                          <?php 
-                          foreach($products as $productID => $product) 
-                          {
-                              if($product->type !== 'normal')
-                              {
-                                  $branchName = isset($branchGroups[$productID][$product->branch]) ? '/' . $branchGroups[$productID][$product->branch] : '';
-                                  echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$product->branch"), $product->name . $branchName);
-                              }
-                              else
-                              {
-                                  echo html::a($this->createLink('product', 'browse', "productID=$productID"), $product->name);
-                              }
-                              echo '<br />';
-                          }
-                          ?>
-                        </em> 
-                      </td>
-                    </tr>
-                    <?php endif;?>
-                    <tr>
-                      <th><?php echo $lang->project->acl;?></th>
-                      <td><em><?php echo $lang->project->aclList[$project->acl];?></em></td>
-                    </tr>  
-                    <?php if($project->acl == 'custom'):?>
-                    <tr>
-                      <th><?php echo $lang->project->whitelist;?></th>
-                      <td>
-                        <em>
-                        <?php
-                        $whitelist = explode(',', $project->whitelist);
-                        foreach($whitelist as $groupID) if(isset($groups[$groupID])) echo $groups[$groupID] . '&nbsp;';
-                        ?>
-                        </em>
-                      </td>
-                    </tr>  
-                    <?php endif;?>
                   </tbody>
                 </table>
+              </div>
+            </div>
+
+            <div class="detail">
+              <div class="detail-title"><strong><?php echo $lang->project->acl;?></strong></div>
+              <div class="detail-content">
+                <p><?php echo $lang->project->aclList[$project->acl];?></p>
+                <?php if($project->acl == 'custom'):?>
+                <p>
+                  <?php
+                  $whitelist = explode(',', $project->whitelist);
+                  foreach($whitelist as $groupID) if(isset($groups[$groupID])) echo $groups[$groupID] . '&nbsp;';
+                  ?>
+                </p>  
+                <?php endif;?>
               </div>
             </div>
           </div>
