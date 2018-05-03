@@ -252,6 +252,8 @@ $lang->project->charts->burn->graph->formatNumber = 0;
 $lang->project->charts->burn->graph->animation    = 0;
 $lang->project->charts->burn->graph->rotateNames  = 1;
 $lang->project->charts->burn->graph->showValues   = 0;
+$lang->project->charts->burn->graph->reference    = '参考';
+$lang->project->charts->burn->graph->actuality    = '实际';
 
 $lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code      = '团队内部的简称';
