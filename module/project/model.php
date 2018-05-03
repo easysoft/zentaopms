@@ -1367,6 +1367,32 @@ class projectModel extends model
     }
 
     /**
+     * Stat story, task, bug data for project.
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function statRelatedData($projectID)
+    {
+        $storyCount = $this->dao->select('count(t2.story) as storyCount')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
+            ->where('project')->eq($projectID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->fetch('storyCount');
+
+        $taskCount = $this->dao->select('count(id) as taskCount')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('parent')->eq(0)->andWhere('deleted')->eq(0)->fetch('taskCount');
+        $bugCount  = $this->dao->select('count(id) as bugCount')->from(TABLE_BUG)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->fetch('bugCount');
+
+        $statData = new stdclass();
+        $statData->storyCount = $storyCount;
+        $statData->taskCount  = $taskCount;
+        $statData->bugCount   = $bugCount;
+
+        return $statData;
+    }
+
+    /**
      * Import task from Bug.
      *
      * @param  int    $projectID
