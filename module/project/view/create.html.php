@@ -54,6 +54,10 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->dateRange;?></th>
+          <td colspan='3'><?php echo html::radio('delta', $lang->project->endList , '', "onclick='computeEndDate(this.value)'");?></td>
+        </tr>
+        <tr>
+          <th></th>
           <td>
             <div class='input-group'>
               <?php echo html::input('begin', (isset($plan) && !empty($plan->begin) ? $plan->begin : date('Y-m-d')), "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->begin . "' required");?>
@@ -61,7 +65,7 @@
               <?php echo html::input('end', (isset($plan) && !empty($plan->end) ? $plan->end : ''), "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->end . "' required");?>
             </div>
           </td>
-          <td colspan='2'><?php echo html::radio('delta', $lang->project->endList , '', "onclick='computeEndDate(this.value)'");?></td>
+          <td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->days;?></th>
