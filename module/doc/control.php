@@ -363,7 +363,7 @@ class doc extends control
             if($comment == false)
             {
                 $result = $this->doc->update($docID);
-                if(dao::isError()) die(js::error(dao::getError()));
+                if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 $changes = $result['changes'];
                 $files   = $result['files'];
             }
@@ -375,7 +375,7 @@ class doc extends control
                 $actionID = $this->action->create('doc', $docID, $action, $fileAction . $this->post->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'view', "docID=$docID")));
         }
 
         /* Get doc and set menu. */
