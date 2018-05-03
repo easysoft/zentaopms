@@ -37,6 +37,8 @@ class doc extends control
      */
     public function index()
     {
+        $this->doc->setMenu();
+
         $products   = $this->doc->getLimitLibs('product');
         $projects   = $this->doc->getLimitLibs('project');
         $customLibs = $this->doc->getLimitLibs('custom');
@@ -90,20 +92,22 @@ class doc extends control
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
         $moduleID   = ($browseType == 'bymodule' or $browseType == 'bymenu') ? (int)$param : 0;
 
-        $type = 'custom';
+        $type = '';
+        $productID = 0;
+        $projectID = 0;
         if($libID)
         {
-            $lib = $this->doc->getLibByID($libID);
-            if($lib->product or $lib->project) $type = $lib->product ? 'product' : 'project';
+            $type = 'custom';
+            $lib  = $this->doc->getLibByID($libID);
+            if($lib->product or $lib->project)
+            {
+                $type = $lib->product ? 'product' : 'project';
+                $productID = $lib->product; 
+                $projectID = $lib->project; 
+            }
         }
-        if(empty($libID)) $type = 'product';
 
         $this->libs = $this->doc->getLibs($type);
-        if(empty($libID))
-        {
-            $libID = key($this->libs);
-            $lib = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->eq($libID)->orderBy('id')->fetch();
-        }
 
         /* According the from, set menus. */
         if($from == 'product')
@@ -122,20 +126,21 @@ class doc extends control
         }
         else
         {
-            $this->doc->setMenu($libID, $moduleID);
+            $menuType = (!$type && in_array($browseType, array_keys($this->lang->doc->fastMenuList))) ? $browseType : $type;
+            $this->doc->setMenu($menuType, $libID, $moduleID, $productID, $projectID);
         }
         $this->session->set('docList',   $this->app->getURI(true));
 
         /* Set header and position. */
-        $this->view->title      = $this->lang->doc->common . $this->lang->colon . $this->libs[$libID];
-        $this->view->position[] = $this->libs[$libID];
+        $this->view->title      = $this->lang->doc->common . ($libID ? $this->lang->colon . $this->libs[$libID] : '');
+        $this->view->position[] = $libID ? $this->libs[$libID] : '';
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
-        if($browseType == 'bymenu' and strpos('editeddate_desc,addeddate_desc,visiteddate_desc', strtolower($orderBy)) === false) $orderBy = 'title_asc';
+        if($browseType == 'bymenu' and strpos('editeddate_desc,addeddate_desc', strtolower($orderBy)) === false) $orderBy = 'title_asc';
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Get docs by browse type. */
@@ -166,7 +171,7 @@ class doc extends control
         }
 
         $this->view->libID         = $libID;
-        $this->view->libName       = $this->libs[$libID];
+        $this->view->libName       = $libID ? $this->libs[$libID] : '';
         $this->view->moduleID      = $moduleID;
         $this->view->docs          = $docs;
         $this->view->pager         = $pager;
@@ -308,8 +313,8 @@ class doc extends control
             die(js::locate($link, 'parent'));
         }
 
-        $lib        = $this->doc->getLibByID($libID);
-        $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
+        $lib  = $this->doc->getLibByID($libID);
+        $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
 
         /* According the from, set menus. */
         if($this->from == 'product')
@@ -328,7 +333,7 @@ class doc extends control
         }
         else
         {
-            $this->doc->setMenu($libID, $moduleID);
+            $this->doc->setMenu($type, $libID, $moduleID, $lib->product, $lib->project);
         }
 
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->create;
@@ -382,7 +387,7 @@ class doc extends control
 
         $lib        = $this->doc->getLibByID($libID);
         $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
-        $this->doc->setMenu($libID, $doc->module);
+        $this->doc->setMenu($type, $libID, $doc->module, $lib->product, $lib->project);
 
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->edit;
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$libID"), $lib->name);
@@ -421,7 +426,7 @@ class doc extends control
         $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
 
         /* Set menu. */
-        $this->doc->setMenu($doc->lib, $doc->module);
+        $this->doc->setMenu($type, $doc->lib, $doc->module, $lib->product, $lib->project);
 
         /* Update visitedDate and views for current doc.*/
         $this->doc->updateVisitData($docID);
@@ -527,6 +532,7 @@ class doc extends control
         if(empty($customMenus))
         {
             if($type == 'remove') die(js::reload('parent'));
+            $customMenus = array();
             $i = 0;
             foreach($this->lang->doc->menu as $name => $item)
             {
@@ -539,6 +545,7 @@ class doc extends control
             }
         }
 
+        $customMenus = (array)$customMenus;
         foreach($customMenus as $i => $customMenu)
         {
             if(isset($customMenu->name) and $customMenu->name == "custom{$libID}") unset($customMenus[$i]);
@@ -587,7 +594,7 @@ class doc extends control
         $this->view->title      = $libName;
         $this->view->position[] = $libName;
 
-        $this->doc->setMenu($libID = 0, $moduleID = 0, $crumb);
+        $this->doc->setMenu($type, $libID = 0, $moduleID = 0, $productID = 0, $projectID = 0, $crumb);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -648,19 +655,23 @@ class doc extends control
             $crumb .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID"), $object->name);
             $crumb .= $this->lang->doc->separator . ' ' . $this->lang->doclib->files;
 
+            $productID = 0;
+            $projectID = 0;
             if($type == 'product')
             {
+                $productID = $objectID;
                 $lib = $this->product->getById($objectID);
                 if(!$this->product->checkPriv($lib)) $this->accessDenied();
             }
 
             if($type == 'project')
             {
+                $projectID = $objectID;
                 $lib = $this->project->getById($objectID);
                 if(!$this->project->checkPriv($lib)) $this->accessDenied();
             }
 
-            $this->doc->setMenu($libID = 0, $moduleID = 0, $crumb);
+            $this->doc->setMenu($type, $libID = 0, $moduleID = 0, $productID, $projectID, $crumb);
         }
 
         /* Load pager. */
@@ -734,7 +745,9 @@ class doc extends control
             $crumb  = html::a(inlink('allLibs', "type=$type"), $type == 'product' ? $this->lang->productCommon : $this->lang->projectCommon) . $this->lang->doc->separator;
             if($this->productID and $type == 'project') $crumb = $this->doc->getProductCrumb($this->productID, $objectID);
             $crumb .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID"), $object->name);
-            $this->doc->setMenu($libID = 0, $moduleID = 0, $crumb);
+            $productID = $type == 'product' ? $objectID : 0;
+            $projectID = $type == 'project' ? $objectID : 0;
+            $this->doc->setMenu($type, $libID = 0, $moduleID = 0, $productID, $projectID, $crumb);
         }
 
         $this->view->title      = $object->name;

@@ -58,7 +58,7 @@ $lang->doc->myDoc          = '我的文档';
 $lang->doc->myCollection   = '我的收藏';
 
 /* 方法列表。*/
-$lang->doc->index          = '首页';
+$lang->doc->index          = '文档主页';
 $lang->doc->create         = '创建文档';
 $lang->doc->edit           = '编辑文档';
 $lang->doc->delete         = '删除文档';
@@ -119,12 +119,12 @@ $lang->doc->browseTypeList['menu'] = '目录';
 $lang->doc->browseTypeList['tree'] = '树状图';
 $lang->doc->browseTypeList['card'] = '卡片';
 
-$lang->doc->fastMenuList['editeddate']    = '最近更新';
+$lang->doc->fastMenuList['byediteddate']  = '最近更新';
 $lang->doc->fastMenuList['visiteddate']   = '最近访问';
 $lang->doc->fastMenuList['openedbyme']    = '我的文档';
 $lang->doc->fastMenuList['collectedbyme'] = '我的收藏';
 
-$lang->doc->fastMenuIconList['editeddate']    = 'icon-folder-upload';
+$lang->doc->fastMenuIconList['byediteddate']  = 'icon-folder-upload';
 $lang->doc->fastMenuIconList['visiteddate']   = 'icon-folder-move';
 $lang->doc->fastMenuIconList['openedbyme']    = 'icon-folder-account';
 $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
