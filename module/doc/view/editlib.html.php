@@ -12,14 +12,15 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['doclib']);?></span>
-    <strong><?php echo $lang->doc->editLib;?></strong>
+<div id='mainContent' class='main-content'>
+  <div class='center-block'>
+    <div class='main-header'>
+    <h2>
+      <span class='prefix'><?php echo html::icon($lang->icons['doclib']);?></span>
+      <?php echo $lang->doc->editLib;?>
+    </h2>
   </div>
-</div>
-<div class='main'>
-  <form method='post' target='hiddenwin' class='form-condensed' style='margin: 20px 0px 200px'>
+  <form method='post' target='hiddenwin'>
     <table class='table table-form'>
       <?php if(!empty($lib->product)):?>
       <tr>
