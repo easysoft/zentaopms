@@ -83,56 +83,40 @@ js::set('browseType', $browseType);
             echo '</ul></div>';
         }
     }
-
-    echo "<div class='btn-group'>";
-    $groupBy = isset($groupBy) ? $groupBy : '';
-    $current = zget($lang->project->groups, isset($groupBy) ? $groupBy : '', '');
-    echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link'");
-    echo "<ul class='dropdown-menu'>";
-    foreach ($lang->project->groups as $key => $value)
-    {
-        if($key == '') continue;
-        if($project->type == 'ops' && $key == 'story') continue;
-        echo '<li' . ($key == $groupBy ? " class='active'" : '') . '>';
-        common::printLink('project', 'groupTask', "project=$projectID&groupBy=$key", $value);
-    }
-    echo '</ul></div>';
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
   <div class="btn-toolbar pull-right">
-    <div class='btn-group'>
-      <?php
-      if(!isset($browseType)) $browseType = '';
-      if(!isset($orderBy))    $orderBy = '';
-      common::printIcon('task', 'report', "project=$projectID&browseType=$browseType", '', 'button', 'bar-chart');
-      ?>
+    <?php
+    if(!isset($browseType)) $browseType = '';
+    if(!isset($orderBy))    $orderBy = '';
+    common::printIcon('task', 'report', "project=$projectID&browseType=$browseType", '', 'button', 'bar-chart');
+    ?>
 
-      <div class="btn-group">
-        <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export;?></span> <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-          <?php
-          $misc = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
-          $link = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=$browseType") : '#';
-          echo "<li>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
-          ?>
-        </ul>
-      </div>
+    <div class="btn-group">
+      <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export;?></span> <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        <?php
+        $misc = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
+        $link = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=$browseType") : '#';
+        echo "<li>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
+        ?>
+      </ul>
+    </div>
 
-      <div class="btn-group">
-        <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-import muted"></i> <span class="text"><?php echo $lang->import;?></span> <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-          <?php
-          $misc = common::hasPriv('project', 'importTask') ? "class='import'" : "class=disabled";
-          $link = common::hasPriv('project', 'importTask') ? $this->createLink('project', 'importTask', "project=$project->id") : '#';
-          echo "<li>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
+    <div class="btn-group">
+      <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-import muted"></i> <span class="text"><?php echo $lang->import;?></span> <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        <?php
+        $misc = common::hasPriv('project', 'importTask') ? "class='import'" : "class=disabled";
+        $link = common::hasPriv('project', 'importTask') ? $this->createLink('project', 'importTask', "project=$project->id") : '#';
+        echo "<li>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
 
-          $misc = common::hasPriv('project', 'importBug') ? "class='import'" : "class=disabled";
-          $link = common::hasPriv('project', 'importBug') ? $this->createLink('project', 'importBug', "project=$project->id") : '#';
-          echo "<li>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
-          ?>
-        </ul>
-      </div>
+        $misc = common::hasPriv('project', 'importBug') ? "class='import'" : "class=disabled";
+        $link = common::hasPriv('project', 'importBug') ? $this->createLink('project', 'importBug', "project=$project->id") : '#';
+        echo "<li>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
+        ?>
+      </ul>
     </div>
     <?php
     $link = $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
