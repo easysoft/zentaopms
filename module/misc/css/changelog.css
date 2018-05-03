@@ -1,4 +1,4 @@
-#versionMenu {margin: 20px;}
+#versionMenu {margin-left: 20px;}
 #versionMenu .dropdown-menu {min-width: 130px; max-height:180px;overflow-y:auto;}
 
 #featureList {padding: 0 20px 20px; min-height:200px;}
