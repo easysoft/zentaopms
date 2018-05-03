@@ -1,11 +1,15 @@
-.highlight-warning {background: #FBF5C6!important}
-.group-title td {background: #f1f1f1!important; border-bottom: 1px solid #ccc!important}
-tr.groupdivider td {background: #fff!important;}
-.groupdivider  .text {color: #808080}
-.groupdivider  .text strong {color: #333}
-.groupby{border-right:1px solid #ddd;cursor: pointer;}
-.group-collapse{cursor: pointer;}
-#groupTable tr > th:first-child, #groupTable tr > td:first-child{padding:6px 5px;} 
-
-.sub-featurebar {margin: -20px -20px -1px; padding: 5px 20px 0; border-bottom: none}
-.sub-featurebar .nav-tabs > li {margin-bottom: 0}
+.table-group-btns {width: 200px;}
+.group-menu {padding: 1px 5px!important;}
+.group-menu .btn {font-size: 15px; color: #3C4353;}
+.fixed-header-copy .group-menu .btn {background-color: transparent; color: #fff;}
+.fixed-header-copy .group-menu .btn .icon {background: transparent!important; color: #fff; opacity: .5;}
+.icon-caret-right.text-muted {color: #CBD0DB;}
+.segments-list {max-width: 700px; margin: 10px;}
+.segments-list .table-col {vertical-align: middle;}
+.segments-list .segments {width: 150px; margin: 0 auto;}
+.segment {float: left; line-height: 18px;}
+.segment + .segment > .segment-title:before {content: '/'; display: inline-block; padding: 0 4px;}
+.segment + .segment > .segment-value {padding-left: 10px;}
+.segment-title {color: #828A9D; font-size: 12px;}
+.segment-value {font-weight: bold;}
+.c-assign a{height:30px}

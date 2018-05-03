@@ -140,7 +140,7 @@ class projectModel extends model
                     if(empty($dropTitle)) $dropTitle = $subMenuName;
 
                     $active = '';
-                    if(($moduleName == $subMenuModule and $methodName == $subMenuMethod) or strpos(",$subModule,", ",$moduleName,") !== false)
+                    if(($moduleName == $subMenuModule and $methodName == strtolower($subMenuMethod)) or strpos(",$subModule,", ",$moduleName,") !== false)
                     {
                         $active    = "class='active'";
                         $dropTitle = $subMenuName;

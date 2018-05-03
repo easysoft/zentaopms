@@ -248,12 +248,18 @@ class project extends control
         $groupTasks  = array();
 
         $groupTasks = array();
+        $allCount   = 0;
         foreach($tasks as $task)
         {
             $groupTasks[] = $task;
+            $allCount++;
             if(isset($task->children))
             {
-                foreach($task->children as $child) $groupTasks[] = $child;
+                foreach($task->children as $child)
+                {
+                    $groupTasks[] = $child;
+                    $allCount++;
+                }
                 $task->children = true;
                 unset($task->children);
             }
@@ -303,6 +309,47 @@ class project extends control
             $groupTasks['closed'] = $closedTasks;
         }
 
+        /* Remove task by filter and group. */
+        $filter = (empty($filter) and isset($this->lang->project->groupFilter[$groupBy])) ? key($this->lang->project->groupFilter[$groupBy]) : $filter;
+        if($filter != 'all')
+        {
+            if($groupBy == 'story' and $filter == 'linked' and isset($groupTasks[0]))
+            {
+                $allCount -= count($groupTasks[0]);
+                unset($groupTasks[0]);
+            }
+            elseif($groupBy == 'pri' and $filter == 'noset')
+            {
+                foreach($groupTasks as $pri => $tasks)
+                {
+                    if($pri)
+                    {
+                        $allCount -= count($tasks);
+                        unset($groupTasks[$pri]);
+                    }
+                }
+            }
+            elseif($groupBy == 'assignedTo' and $filter == 'undone')
+            {
+                foreach($groupTasks as $assignedTo => $tasks)
+                {
+                    foreach($tasks as $i => $task)
+                    {
+                        if($task->status != 'wait' and $task->status != 'doing')
+                        {
+                            $allCount -= 1;
+                            unset($groupTasks[$assignedTo][$i]);
+                        }
+                    }
+                }
+            }
+            elseif(($groupBy == 'finishedBy' or $groupBy == 'closedBy') and isset($tasks['']))
+            {
+                $allCount -= count($tasks['']);
+                unset($tasks['']);
+            }
+        }
+
         /* Assign. */
         $this->app->loadLang('tree');
         $this->view->members     = $this->project->getTeamMembers($projectID);
@@ -317,6 +364,7 @@ class project extends control
         $this->view->moduleID    = 0;
         $this->view->moduleName  = $this->lang->tree->all;
         $this->view->filter      = $filter;
+        $this->view->allCount    = $allCount;
         $this->display();
     }
 
