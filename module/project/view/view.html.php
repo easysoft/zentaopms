@@ -15,26 +15,26 @@
     <div class="col-8 main-col">
       <div class="row">
         <div class="col-sm-6">
-          <div class="panel block-efforts" style="height: 280px">
+          <div class="panel block-burn" style="height: 280px">
             <div class="panel-heading">
-              <div class="panel-title"><?php echo $lang->project->effort;?></div>
+              <div class="panel-title"><?php echo $project->name . $lang->project->burn;?></div>
+              <nav class="panel-actions nav nav-default">
+                <li><?php common::printLink('project', 'burn', "projectID=$project->id", 'MORE', '', "title=$lang->more");?></li>
+              </nav>
             </div>
             <div class="panel-body">
-              <ul class="effort-list text-muted list-unstyled no-margin">
-                <?php $i = 0;?>
-                <?php foreach(array_reverse($builds) as $build):?>
-                <?php $i++;?>
-                <?php if($i > 6) break;?>
-                <li <?php if(date('Y-m-d') < $build->date) echo "class='active'";?>>
-                  <a href="<?php echo $this->createLink('build', 'view', "buildID={$build->id}");?>">
-                    <?php if(!empty($build->marker)) echo "<i class='icon icon-flag text-primary'></i>";?>
-                    <span class="title"><?php echo $build->name;?></span>
-                    <span class="date"><?php echo $build->date;?></span>
-                    <span class="info"><?php echo $build->desc;?></span>
-                  </a>
-                </li>
-                <?php endforeach;?>
-              </ul>
+              <?php if(common::hasPriv('project', 'burn')):?>
+              <div id="burnWrapper">
+                <div id="burnChart">
+                  <canvas id="burnCanvas"></canvas>
+                </div>
+                <div id="burnYUnit">(<?php echo $lang->project->workHour;?>)</div>
+                <div id="burnLegend">
+                  <div class="line-ref"><?php echo $lang->project->charts->burn->graph->reference;?></div>
+                  <div class="line-real"><?php echo $lang->project->charts->burn->graph->actuality;?></div>
+                </div>
+              </div>
+              <?php endif;?>
             </div>
           </div>
         </div>
@@ -94,6 +94,7 @@
                 <?php endif;?>
                 <?php endif;?>
 
+                <?php if(common::hasPriv('project', 'team')):?>
                 <?php foreach($teamMembers as $teamMember):?>
                 <?php if($j > $i) break;?>
                 <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $teamMember->account);?></div>
@@ -102,6 +103,7 @@
                 <div class="col-xs-6">
                   <?php common::printLink('project', 'manageMembers', "projectID=$project->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->project->manageMembers, '', "class='text-muted'");?>
                 </div>
+                <?php endif;?>
               </div>
             </div>
           </div>
@@ -111,18 +113,22 @@
             <div class="panel-heading">
             <div class="panel-title"><?php echo $lang->project->doclib;?></div>
               <nav class="panel-actions nav nav-default">
-                <li><a href="<?php echo $this->createLink('doc', 'objectLibs', "type=project&projectID=$project->id&from=project")?>" title="<?php echo $lang->more;?>">MORE</i></a></li>
+                <li><?php common::printLink('doc', 'objectLibs', "type=project&projectID=$project->id&from=project", 'MORE', '', "title=$lang->more");?></li>
               </nav>
             </div>
             <div class="panel-body">
               <div class="row row-grid">
+                <?php if(common::hasPriv('project', 'objectLibs')):?>
                 <?php $i = 0;?>
                 <?php foreach($docLibs as $libID => $docLib):?>
                 <?php if($i > 8) break;?>
                 <div class="col-xs-6"><?php echo html::a($this->createLink('doc', 'browse', "libID=$libID&browseTyp=all&param=&orderBy=&from=project"), "<i class='icon icon-folder text-yellow'></i> " . $docLib);?></div>
                 <?php $i++;?>
                 <?php endforeach;?>
-                <div class="col-xs-6"><?php echo html::a($this->createLink('doc', 'createLib', "type=project&objectID=$project->id"), "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->doc->createLib, '', "class='text-muted' data-toggle='modal'");?></div>
+                <div class="col-xs-6">
+                  <?php common::printLink('doc', 'createLib', "type=project&objectID=$project->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->doc->createLib, '', "class='text-muted' data-toggle='modal'");?>
+                </div>
+                <?php endif;?>
               </div>
             </div>
           </div>
@@ -158,7 +164,7 @@
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->project->manageProducts;?></strong>
-                <?php echo html::a($this->createLink('project', 'manageproducts', "projectID=$project->id"), 'MORE', '', "class='btn btn-link pull-right muted'");?>
+                <?php common::printLink('project', 'manageproducts', "projectID=$project->id", 'MORE', '', "class='btn btn-link pull-right muted'");?>
               </div>
               <div class="detail-content">
                 <div class="row row-grid">
@@ -277,4 +283,51 @@
     }
     ?>
   </div>
+<script>
+$(function()
+{
+    var data =
+    {
+        labels: <?php echo json_encode($chartData['labels'])?>,
+        datasets: [
+        {
+            label: "<?php echo $lang->project->baseline;?>",
+            color: "#F1F1F1",
+            pointColor: '#D8D8D8',
+            pointStrokeColor: '#D8D8D8',
+            pointHighlightStroke: '#D8D8D8',
+            fillColor: 'transparent',
+            pointHighlightFill: '#fff',
+            data: <?php echo $chartData['baseLine']?>
+        },
+        {
+            label: "<?php echo $lang->project->Left?>",
+            color: "#006AF1",
+            pointStrokeColor: '#006AF1',
+            pointHighlightStroke: '#006AF1',
+            pointColor: '#006AF1',
+            fillColor: 'rgba(0,106,241, .07)',
+            pointHighlightFill: '#fff',
+            data: <?php echo $chartData['burnLine']?>
+        }]
+    };
+
+    var burnChart = $("#burnCanvas").lineChart(data,
+    {
+        pointDotStrokeWidth: 2,
+        pointDotRadius: 2,
+        datasetStrokeWidth: 2,
+        datasetFill: true,
+        datasetStroke: true,
+        scaleShowBeyondLine: false,
+        responsive: true,
+        bezierCurve: false,
+        scaleFontColor: '#838A9D',
+        tooltipXPadding: 10,
+        tooltipYPadding: 10,
+        multiTooltipTitleTemplate: '<%= label %> 工时 /h',
+        multiTooltipTemplate: "<%if (datasetLabel){%><%=datasetLabel%>: <%}%><%= value %>",
+    });
+});
+</script>
 <?php include '../../common/view/footer.html.php';?>

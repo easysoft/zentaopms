@@ -244,8 +244,17 @@ $lang->project->fixFirstWithLeft      = '修改剩余工时';
 /* 统计。*/
 $lang->project->charts = new stdclass();
 $lang->project->charts->burn = new stdclass();
-$lang->project->charts->burn->real = '实际';
-$lang->project->charts->burn->ref  = '参考';
+$lang->project->charts->burn->graph = new stdclass();
+$lang->project->charts->burn->graph->caption      = "燃尽图";
+$lang->project->charts->burn->graph->xAxisName    = "日期";
+$lang->project->charts->burn->graph->yAxisName    = "HOUR";
+$lang->project->charts->burn->graph->baseFontSize = 12;
+$lang->project->charts->burn->graph->formatNumber = 0;
+$lang->project->charts->burn->graph->animation    = 0;
+$lang->project->charts->burn->graph->rotateNames  = 1;
+$lang->project->charts->burn->graph->showValues   = 0;
+$lang->project->charts->burn->graph->reference    = '参考';
+$lang->project->charts->burn->graph->actuality    = '实际';
 
 $lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code      = '团队内部的简称';

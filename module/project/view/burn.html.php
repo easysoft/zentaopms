@@ -39,8 +39,8 @@
     </div>
     <div id="burnYUnit"><?php echo "({$lang->project->workHour})";?></div>
     <div id="burnLegend">
-      <div class="line-ref"><?php echo $lang->project->charts->burn->ref;?></div>
-      <div class="line-real"><?php echo $lang->project->charts->burn->real;?></div>
+      <div class="line-ref"><?php echo $lang->project->charts->burn->graph->reference;?></div>
+      <div class="line-real"><?php echo $lang->project->charts->burn->graph->actuality;?></div>
     </div>
   </div>
 </div>
