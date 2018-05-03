@@ -170,7 +170,7 @@ class docModel extends model
             }
 
             $actions .= html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-folder-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary' data-toggle='modal'");
-            if($libID) $actions .= html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary' data-toggle='modal'");
+            if($libID) $actions .= html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");
 
             $this->lang->modulePageActions = $actions;
 

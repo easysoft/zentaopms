@@ -297,20 +297,19 @@ class doc extends control
         if(!empty($_POST))
         {
             $docResult = $this->doc->create();
-            if(!$docResult or dao::isError()) die(js::error(dao::getError()));
+            if(!$docResult or dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $docID = $docResult['id'];
             $lib   = $this->doc->getLibByID($this->post->lib);
             if($docResult['status'] == 'exists')
             {
-                echo js::alert(sprintf($this->lang->duplicate, $this->lang->doc->common));
-                die(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
+                $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->doc->common), 'locate' => $this->createLink('doc', 'view', "docID=$docID")));
             }
             $this->action->create('doc', $docID, 'Created');
 
             $vars = "libID=$libID&browseType=byModule&moduleID={$this->post->module}&orderBy=id_desc&from=$this->from";
             $link = $this->createLink('doc', 'browse', $vars);
-            die(js::locate($link, 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
         $lib  = $this->doc->getLibByID($libID);
