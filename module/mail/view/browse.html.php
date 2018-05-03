@@ -12,11 +12,11 @@
 ?>
 <?php include $this->app->getModuleRoot() . 'message/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
-<div class='main-header'>
-  <div class='heading'>
-    <strong><?php echo $lang->mail->browse?></strong>
+  <div class='main-header'>
+    <div class='heading'>
+      <strong><?php echo $lang->mail->browse?></strong>
+    </div>
   </div>
-</div>
   <form class='main-table' method='post' action='<?php echo inlink('batchDelete')?>' target='hiddenwin' id='mailForm' data-ride='table'>
     <table class='table has-sort-head table-fixed'>
       <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
