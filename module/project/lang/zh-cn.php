@@ -205,7 +205,7 @@ $lang->project->timeSummary     = '<div class="table-col"><div class="clearfix s
 $lang->project->groupSummaryAB  = "<div>总任务 <strong>%s</strong></div><div><span class='text-muted'>未开始</span> %s &nbsp; <span class='text-muted'>进行中</span> %s</div><div>总预计 <strong>%s</strong></div><div><span class='text-muted'>已消耗</span> %s &nbsp; <span class='text-muted'>剩余</span> %s</div>";
 $lang->project->wbs             = "分解任务";
 $lang->project->batchWBS        = "批量分解";
-$lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='如何更新燃尽图？' class='btn btn-link'>帮助</a>";
+$lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='如何更新燃尽图？' class='btn btn-link'>帮助 <i class='icon icon-help'></i></a>";
 $lang->project->whyNoStories    = "看起来没有需求可以关联。请检查下{$lang->projectCommon}关联的{$lang->productCommon}中有没有需求，而且要确保它们已经审核通过。";
 $lang->project->productStories  = "{$lang->projectCommon}关联的需求是{$lang->productCommon}需求的子集，并且只有评审通过的需求才能关联。请<a href='%s'>关联需求</a>。";
 $lang->project->doneProjects    = '已结束';
@@ -244,15 +244,8 @@ $lang->project->fixFirstWithLeft      = '修改剩余工时';
 /* 统计。*/
 $lang->project->charts = new stdclass();
 $lang->project->charts->burn = new stdclass();
-$lang->project->charts->burn->graph = new stdclass();
-$lang->project->charts->burn->graph->caption      = "燃尽图";
-$lang->project->charts->burn->graph->xAxisName    = "日期";
-$lang->project->charts->burn->graph->yAxisName    = "HOUR";
-$lang->project->charts->burn->graph->baseFontSize = 12;
-$lang->project->charts->burn->graph->formatNumber = 0;
-$lang->project->charts->burn->graph->animation    = 0;
-$lang->project->charts->burn->graph->rotateNames  = 1;
-$lang->project->charts->burn->graph->showValues   = 0;
+$lang->project->charts->burn->real = '实际';
+$lang->project->charts->burn->ref  = '参考';
 
 $lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code      = '团队内部的简称';

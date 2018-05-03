@@ -18,7 +18,8 @@
   <div class='btn-toolbar pull-left'>
     <?php
     $weekend = ($type == 'noweekend') ? 'withweekend' : "noweekend";
-    common::printLink('project', 'computeBurn', 'reload=yes', $lang->project->computeBurn, 'hiddenwin', "title='{$lang->project->computeBurn}{$lang->project->burn}' class='btn btn-primary' id='computeBurn'");
+    common::printLink('project', 'computeBurn', 'reload=yes', '<i class="icon icon-refresh"></i> ' . $lang->project->computeBurn, 'hiddenwin', "title='{$lang->project->computeBurn}{$lang->project->burn}' class='btn btn-primary' id='computeBurn'");
+    echo '<div class="space"></div>';
     echo html::a($this->createLink('project', 'burn', "projectID=$projectID&type=$weekend&interval=$interval"), $lang->project->$weekend, '', "class='btn btn-link'");
     common::printLink('project', 'fixFirst', "project=$project->id", $lang->project->fixFirst, '', "class='btn btn-link iframe' data-width='600'");
     echo $lang->project->howToUpdateBurn;
@@ -30,9 +31,18 @@
     <?php endif;?>
   </div>
 </div>
-<div id='mainContent' class='main-content text-center bd-0'>
-  <h1><?php echo $projectName . ' ' . $this->lang->project->burn;?></h1>
-  <div class='canvas-wrapper'><div class='chart-canvas'><canvas id='burnChart' width='800' height='400' data-bezier-curve='false' data-responsive='true'></canvas></div></div>
+<div id='mainContent' class='main-content'>
+  <h2 class='text-center'><?php echo $projectName . ' ' . $this->lang->project->burn;?></h2>
+  <div id="burnWrapper">
+    <div id="burnChart">
+      <canvas id="burnCanvas"></canvas>
+    </div>
+    <div id="burnYUnit"><?php echo "({$lang->project->workHour})";?></div>
+    <div id="burnLegend">
+      <div class="line-ref"><?php echo $lang->project->charts->burn->ref;?></div>
+      <div class="line-real"><?php echo $lang->project->charts->burn->real;?></div>
+    </div>
+  </div>
 </div>
 <script>
 function initBurnChar()
@@ -43,28 +53,41 @@ function initBurnChar()
         datasets: [
         {
             label: "<?php echo $lang->project->baseline;?>",
-            color: "#CCC",
-            showTooltips: false,
+            color: "#F1F1F1",
+            pointColor: '#D8D8D8',
+            pointStrokeColor: '#D8D8D8',
+            pointHighlightStroke: '#D8D8D8',
+            fillColor: 'transparent',
+            pointHighlightFill: '#fff',
             data: <?php echo $chartData['baseLine']?>
         },
         {
             label: "<?php echo $lang->project->Left?>",
-            color: "#0033CC",
-            pointStrokeColor: '#0033CC',
-            pointHighlightStroke: '0033CC',
+            color: "#006AF1",
+            pointStrokeColor: '#006AF1',
+            pointHighlightStroke: '#006AF1',
+            pointColor: '#006AF1',
+            fillColor: 'rgba(0,106,241, .07)',
+            pointHighlightFill: '#fff',
             data: <?php echo $chartData['burnLine']?>
         }]
     };
 
-    var burnChart = $("#burnChart").lineChart(data,
+    var burnChart = $("#burnCanvas").lineChart(data,
     {
-        animation: !($.zui.browser && $.zui.browser.ie === 8),
-        pointDotStrokeWidth: 0,
-        pointDotRadius: 1,
-        datasetFill: false,
+        pointDotStrokeWidth: 2,
+        pointDotRadius: 3,
+        datasetStrokeWidth: 3,
+        datasetFill: true,
         datasetStroke: true,
         scaleShowBeyondLine: false,
-        multiTooltipTemplate: "<%= value %>h"
+        responsive: true,
+        bezierCurve: false,
+        scaleFontColor: '#838A9D',
+        tooltipXPadding: 10,
+        tooltipYPadding: 10,
+        multiTooltipTitleTemplate: '<%= label %> <?php echo $lang->project->workHour;?> /h',
+        multiTooltipTemplate: "<%if (datasetLabel){%><%=datasetLabel%>: <%}%><%= value %>",
     });
 }
 </script>

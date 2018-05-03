@@ -2457,7 +2457,7 @@ class projectModel extends model
         $days         = count($dateList) - 1;
         $rate         = $firstTime / $days;
         $baselineJSON = '[';
-        foreach($dateList as $i => $date) $baselineJSON .= ($days - $i) * $rate . ',';
+        foreach($dateList as $i => $date) $baselineJSON .= round(($days - $i) * $rate, 1) . ',';
         $baselineJSON = rtrim($baselineJSON, ',') . ']';
 
         $chartData['labels']   = $this->report->convertFormat($dateList, 'j/n');
