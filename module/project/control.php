@@ -1396,7 +1396,6 @@ class project extends control
         $this->view->type        = $type;
         $this->view->kanbanGroup = $kanbanGroup;
         $this->view->allCols     = $kanbanSetting->allCols;
-        $this->view->showOption  = $kanbanSetting->showOption;
         $this->view->colorList   = $kanbanSetting->colorList;
 
         $this->display();
@@ -1578,9 +1577,6 @@ class project extends control
         $this->view->projectID  = $projectID;
         $this->view->project    = $project;
         $this->view->productID  = $productID;
-
-        $kanbanSetting = $this->project->getKanbanSetting($projectID);
-        $this->view->showOption = $kanbanSetting->showOption;
 
         $this->display();
     }
@@ -2215,10 +2211,6 @@ class project extends control
                 $allCols = $data->allCols;
                 $this->setting->setItem("system.project.kanbanSetting.allCols", $allCols);
             }
-
-            $account = $this->app->user->account;
-            $this->setting->setItem("{$account}.project.kanbanSetting.showOption", $data->showOption);
-
             if(common::hasPriv('project', 'kanbanColsColor')) $this->setting->setItem("system.project.kanbanSetting.colorList", json_encode($data->colorList));
 
             die(js::reload('parent.parent'));
@@ -2228,7 +2220,6 @@ class project extends control
         $kanbanSetting = $this->project->getKanbanSetting($projectID);
 
         $this->view->allCols    = $kanbanSetting->allCols;
-        $this->view->showOption = $kanbanSetting->showOption;
         $this->view->colorList  = $kanbanSetting->colorList;
         $this->view->projectID  = $projectID;
         $this->display();

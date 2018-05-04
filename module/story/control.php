@@ -943,7 +943,9 @@ class story extends control
      */
     public function batchChangeStage($stage)
     {
-        $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
+        $storyIDList = $this->post->storyIDList;
+        if(empty($storyIDList)) die(js::locate($this->session->storyList, 'parent'));
+
         $storyIDList = array_unique($storyIDList);
         $allChanges  = $this->story->batchChangeStage($storyIDList, $stage);
         if(dao::isError()) die(js::error(dao::getError()));

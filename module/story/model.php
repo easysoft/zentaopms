@@ -1008,10 +1008,13 @@ class storyModel extends model
             $story->stage          = $stage;
 
             /* When stage is verified then only change to released. */
-            if($oldStory->stage == 'verified' and $stage->stage != 'released') $stage->stage = 'verified';
-
-            $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
-            if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
+            if($oldStory->stage == 'verified' and $story->stage != 'released')
+            {
+                $story->stage = 'verified';
+                $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
+                $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq('verified')->where('story')->eq((int)$storyID)->exec();
+                if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
+            }
         }
         return $allChanges;
     }

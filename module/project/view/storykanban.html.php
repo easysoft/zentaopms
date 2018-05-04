@@ -39,67 +39,49 @@
     </div>
   </div>
 </div>
-<div id='querybox' class='show'></div>
-<div id="mainContent" class="main-content">
-  <?php
-  $cols    = array('projected', 'developing', 'developed', 'testing', 'tested', 'verified', 'released');
-  $account = $this->app->user->account;
-  ?>
-  <div id='kanban'>
-    <table class='boards-layout table table-fixed' id='kanbanHeader'>
-      <thead>
-        <tr>
-          <?php foreach ($cols as $col):?>
-          <th class='col-<?php echo $col?>'><?php echo $lang->story->stageList[$col];?></th>
-          <?php endforeach;?>
-        </tr>
-      </thead>
-    </table>
-    <table class='boards-layout table active-disabled table-bordered table-fixed' id='kanbanWrapper'>
-      <thead>
-        <tr>
-          <?php foreach($cols as $col):?>
-          <th class='col-<?php echo $col?>'></th>
-          <?php endforeach;?>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <?php foreach($cols as $col):?>
-          <td class='col-droppable col-<?php echo $col?>' data-id='<?php echo $col?>'>
-            <?php if(!empty($stories[$col])):?>
-            <?php foreach($stories[$col] as $story):?>
-            <div class='board board-story board-story-<?php echo $col; ?>' data-id='<?php echo $story->id?>' id='story-<?php echo $story->id?>'>
-              <div class='board-title'>
-                <?php echo html::a($this->createLink('story', 'view', "story=$story->id", '', true), $story->title, '', 'class="kanbanFrame" title="' . $story->title . '"');?>
-                <div class='board-actions'>
-                  <button type='button' class='btn btn-mini btn-link btn-info-toggle'><i class='icon-angle-down'></i></button>
-                  <div class='dropdown'>
-                    <button type='button' class='btn btn-mini btn-link dropdown-toggle' data-toggle='dropdown'>
-                      <span class='icon-ellipsis-v'></span>
-                    </button>
-                    <div class='dropdown-menu' style='left:-20px'>
-                      <?php echo (common::hasPriv('project', 'unlinkStory')) ? html::a($this->createLink('project', 'unlinkStory', "story=$story->id"), $lang->project->unlinkStory, 'hiddenwin') : '';?>
-                    </div>
+<?php
+$cols    = array('projected', 'developing', 'developed', 'testing', 'tested', 'verified', 'released');
+$account = $this->app->user->account;
+?>
+<div id="kanban" class="main-table" data-ride="table" data-checkable="false" data-group="true">
+  <table class="table table-grouped text-center">
+    <thead>
+      <tr>
+        <?php foreach ($cols as $col):?>
+        <th class='c-board s-<?php echo $col?>'><?php echo $lang->story->stageList[$col];?></th>
+        <?php endforeach;?>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="c-boards no-padding text-left" colspan='<?php echo count($cols);?>'>
+          <div class="boards-wrapper">
+            <div class="boards">
+              <?php foreach($cols as $col):?>
+              <div class="board" data-type="<?php echo $col;?>">
+                <?php if(!empty($stories[$col])):?>
+                <?php foreach($stories[$col] as $story):?>
+                <div class='board-item' data-id='<?php echo $story->id?>' id='story-<?php echo $story->id?>' data-type='story'>
+                  <?php echo html::a($this->createLink('story', 'view', "story=$story->id", '', true), "#{$story->id} {$story->title}", '', 'class="title kanbaniframe" title="' . $story->title . '"');?>
+                  <div class='info'>
+                    <span class='label-pri label-pri-<?php echo $story->pri?>' title='<?php echo $lang->story->pri?>'><?php echo zget($lang->story->priList, $story->pri);?></span>
+                    <span class='status-<?php echo $story->status;?>' title='<?php echo $lang->story->status?>'><span class="label label-dot"></span> <?php echo $lang->story->statusList[$story->status];?></span>
+                    <?php if(common::hasPriv('project', 'unlinkStory')):?>
+                    <div class='pull-right'><?php echo html::a($this->createLink('project', 'unlinkStory', "projectID=$projectID&story=$story->id"), "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->project->unlinkStory}'");?></div>
+                    <?php endif;?>
+                    <div class='pull-right text-muted story-estimate' title='<?php echo $lang->story->estimate?>'><?php echo $story->estimate . 'h ';?></div>
                   </div>
                 </div>
+                <?php endforeach?>
+                <?php endif?>
               </div>
-              <div class='board-footer clearfix'>
-                <span class='story-id board-id' title='<?php echo $lang->story->id?>'><?php echo $story->id?></span> 
-                <span class='story-pri pri-<?php echo $story->pri?>' title='<?php echo $lang->story->pri?>'></span>
-                <div class='pull-right'>
-                  <span class='text-left' title='<?php echo $lang->story->status?>'><?php echo zget($this->lang->story->statusList, $story->status, '');?></span>
-                </div>
-              </div>
+              <?php endforeach;?>
             </div>
-            <?php endforeach?>
-            <?php endif?>
-          </td>
-          <?php endforeach;?>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 <?php js::set('projectID', $projectID);?>
 <?php include '../../common/view/footer.html.php';?>

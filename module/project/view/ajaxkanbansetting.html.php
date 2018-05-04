@@ -24,10 +24,6 @@
           <td><?php echo html::radio('allCols', $lang->kanbanSetting->optionList, $allCols)?></td>
         </tr>
         <?php endif;?>
-        <tr>
-          <th class='w-200px text-right'><?php echo $lang->project->kanbanShowOption?></th>
-          <td><?php echo html::radio('showOption', $lang->kanbanSetting->optionList, $showOption)?></td>
-        </tr>
         <?php if(common::hasPriv('project', 'kanbanColsColor')):?>
         <tr>
           <th class='text-right'><?php echo $lang->project->kanbanColsColor?></th>
