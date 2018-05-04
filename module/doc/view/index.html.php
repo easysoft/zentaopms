@@ -15,11 +15,9 @@
   <div class="side-col" style="width: 220px" data-min-width="220">
     <div class="cell">
       <header class="table-row space">
-        <form method='post' action='<?php echo '';?>'>
-          <div class="input-control has-icon-right table-col">
-            <input id="searchLib" type="search" class="form-control" placeholder="<?php echo $this->lang->doc->searchDoc;?>">
-            <label for="searchLib" class="input-control-icon-right"><i class="icon icon-search"></i></label>
-          </div>
+        <form method='post' action='<?php echo $this->createLink('doc', 'browse', "libID=&browseType=fastsearch");?>' class='input-control has-icon-right table-col'>
+          <input id="searchDoc" type="searchDoc" name='searchDoc' class="form-control" placeholder="<?php echo $this->lang->doc->searchDoc;?>">
+          <button type="submit" class="btn btn-icon btn-link input-control-icon-right"><i class="icon icon-search"></i></button>
         </form>
         <div class="table-col text-right c-sm">
           <?php echo html::a($this->createLink('doc', 'createLib'), "<i class='icon icon-plus'></i>", '', "class='btn btn-secondary btn-icon iframe'");?>

@@ -419,6 +419,12 @@ class docModel extends model
             }
             $docs = $this->dao->select('*')->from(TABLE_DOC)->where('id')->in(array_keys($docs))->orderBy($sort)->page($pager)->fetchAll();
         }
+        elseif($browseType == 'fastsearch')
+        {
+            if(!$this->post->searchDoc) return array();
+            $docIdList = $this->getPrivDocs($libID, $moduleID);
+            $docs = $this->dao->select('*')->from(TABLE_DOC)->where('id')->in($docIdList)->andWhere('title')->like("%{$this->post->searchDoc}%")->orderBy($sort)->page($pager)->fetchAll();
+        }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc');
         if($docs) return $docs;
