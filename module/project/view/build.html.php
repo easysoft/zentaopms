@@ -20,7 +20,7 @@
     </div>
     <span class='btn btn-link btn-active-text'>
       <span class='text'><?php echo $lang->project->build;?></span>
-      <span class='label label-light label-badge'><?php echo count($buildsTotal);?></span>
+      <span class='label label-light label-badge'><?php echo $buildsTotal;?></span>
     </span>
   </div>
   <div class="btn-toolbar pull-right">
