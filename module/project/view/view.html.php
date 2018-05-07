@@ -122,7 +122,7 @@
                 <?php $i = 0;?>
                 <?php foreach($docLibs as $libID => $docLib):?>
                 <?php if($i > 8) break;?>
-                <div class="col-xs-6"><?php echo html::a($this->createLink('doc', 'browse', "libID=$libID&browseTyp=all&param=&orderBy=&from=project"), "<i class='icon icon-folder text-yellow'></i> " . $docLib);?></div>
+                <div class="col-xs-6"><?php echo html::a($this->createLink('doc', 'browse', "libID=$libID&browseTyp=all&param=&orderBy=&from=project"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?></div>
                 <?php $i++;?>
                 <?php endforeach;?>
                 <div class="col-xs-6">

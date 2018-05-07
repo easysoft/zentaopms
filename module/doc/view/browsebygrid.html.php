@@ -1,0 +1,46 @@
+<div class="main-col" data-min-width="400">
+  <div class="panel block-files block-sm no-margin">
+    <div class="panel-heading">
+      <div class="panel-title font-normal"><i class="icon icon-folder-open-o text-muted"></i> <?php echo $title;?></div>
+      <nav class="panel-actions btn-toolbar">
+        <div class="btn-group">
+          <?php echo html::a('javascript:setBrowseType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='{$lang->doc->browseTypeList['grid']}' class='btn btn-gray btn-icon'");?>
+          <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-gray btn-icon text-primary'");?>
+        </div>
+      </nav>
+    </div>
+    <div class="panel-body">
+      <div class="row row-grid files-grid" data-size="300">
+          <?php foreach($modules as $module):?>
+          <?php $star = strpos($module->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
+          <div class="col">
+            <a class="file" href="<?php echo inlink('browse', "libID=$libID&browseType=bymodule&param=$module->id&orderBy=$orderBy&from=$from");?>">
+              <i class="file-icon icon icon-folder text-yellow"></i>
+              <div class="file-name"><?php echo (strpos($module->collector, $this->app->user->account) !== false ? "<i class='icon icon-star text-yellow'></i> " : '') . $module->name;?></div>
+              <div class="text-primary file-info"><?php echo $module->docCount . $lang->doc->item;?></div>
+            </a>
+            <div class="actions">
+              <?php common::printLink('doc', 'collect', "objectID={$module->id}&objectType=module", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$lang->doc->collect}' class='btn btn-link'")?>
+            </div>
+          </div>
+          <?php endforeach;?>
+          <?php foreach($docs as $doc):?>
+          <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
+          <div class="col">
+            <a class="file" href="<?php echo inlink('view', "docID=$doc->id");?>">
+              <i class="file-icon icon icon-file-text text-muted"></i>
+              <div class="file-name"><?php echo (strpos($doc->collector, $this->app->user->account) !== false ? "<i class='icon icon-star text-yellow'></i> " : '') . $doc->title;?></div>
+              <div class="text-primary file-info"><?php echo zget($users, $doc->addedBy);?></div>
+            </a>
+            <div class="actions">
+              <?php common::printLink('doc', 'collect', "objectID={$doc->id}&objectType=doc", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$lang->doc->collect}' class='btn btn-link'")?>
+              <?php common::printLink('doc', 'edit', "docID={$doc->id}", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link' data-toggle='modal'")?>
+              <?php common::printLink('doc', 'delete', "docID={$doc->id}", "<i class='icon icon-trash'></i>", '', "title='{$lang->delete}' class='btn btn-link'")?>
+            </div>
+          </div>
+          <?php endforeach;?>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

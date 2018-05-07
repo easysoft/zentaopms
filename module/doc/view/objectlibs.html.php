@@ -11,27 +11,72 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='featurebar'>
-  <strong><?php echo $object->name?></strong>
-  <div class='actions'><?php echo html::backButton();?></div>
-</div>
-<div id='libs'>
-  <div class='libs-group clearfix <?php if(common::hasPriv('doc', 'sort')) echo 'sort'?>'>
-    <?php foreach($libs as $libID => $libName):?>
-    <?php
-    if($libID == 'project' and $from != 'doc') continue;
+<div class="main-row split-row" id="mainRow">
+  <?php include './side.html.php';?>
+  <div class="main-col" data-min-width="400">
+    <div class="panel block-files block-sm no-margin">
+      <div class="panel-heading">
+        <div class="panel-title font-normal">
+          <i class="icon icon-folder-open-o text-muted"></i> <?php echo $object->name;?>
+        </div>
+        <nav class="panel-actions btn-toolbar">
+          <div class="dropdown">
+            <button type="button" title="<?php echo $lang->customConfig;?>" class="btn btn-gray btn-icon" data-toggle="dropdown"><i class="icon icon-cog"></i></button>
+            <div class="dropdown-menu pull-right col-lg" id="pageSetting">
+              <form class='with-padding load-indicator' id='pageSettingForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('custom', 'ajaxSaveCustomFields', 'module=doc&section=custom&key=objectLibs');?>'>
+                <div><?php echo $lang->customConfig;?></div>
+                <div class="row row-grid with-padding">
+                  <?php foreach($customObjectLibs as $libType => $libTypeName):?>
+                  <div class="col-xs-12">
+                    <?php $checked = (strpos(",$showLibs,", ",$libType,") !== false) ? " checked ='checked'" : "";?>
+                    <div class="checkbox-primary">
+                      <input type="checkbox" name="fields[]" value="<?php echo $libType;?>" <?php echo $checked;?> id="fields<?php echo $libType;?>">
+                      <label for="fields<?php echo $libType;?>"><?php echo $libTypeName;?></label>
+                    </div>
+                  </div>
+                  <?php endforeach;?>
+                </div>
+                <div>
+                  <?php echo html::submitButton($lang->save);?>
+                  <?php echo html::commonButton($lang->cancel, '', "btn btn-gray close-dropdown");?>
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+      </div>
+      <div class='panel-body'>
+        <div class="row row-grid files-grid" data-size="300">
+          <?php foreach($libs as $libID => $lib):?>
+          <?php if($libID == 'project' and $from != 'doc') continue;?>
+          <?php if(strpos($this->config->doc->custom->objectLibs, 'files') === false && $libID == 'files') continue;?>
+          <?php if(strpos($this->config->doc->custom->objectLibs, 'customFiles') === false && !$lib->main) continue;?>
 
-    $libLink = inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=$from");
-    if($libID == 'project') $libLink = inlink('allLibs', "type=project&product=$object->id");
-    if($libID == 'files')   $libLink = inlink('showFiles', "type=$type&objectID=$object->id");
-    ?>
-    <a class='lib <?php echo $libID == 'files' ? 'files' : '';?>' title='<?php echo $libName?>' href='<?php echo $libLink?>' data-id='<?php echo $libID;?>'>
-      <?php if($libID != 'files' and $libID != 'project' and common::hasPriv('doc', 'sort')):?><i class='icon icon-move'></i><?php endif;?>
-      <img src='<?php echo $config->webRoot . 'theme/default/images/main/doc-lib.png'?>' class='file-icon' />
-      <div class='lib-name' title='<?php echo $libName?>'><?php echo $libName?></div>
-    </a>
-    <?php endforeach; ?>
-    <?php if(common::hasPriv('doc', 'createLib')) echo html::a(inlink('createLib', "type=$type&objectID={$object->id}"), "<i class='icon icon-plus'></i>", '', "class='lib addbtn' data-toggle='modal' data-type='iframe' title='{$lang->doc->createLib}'")?>
+          <?php $libLink = inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=$from");?>
+          <?php if($libID == 'project') $libLink = inlink('allLibs', "type=project&product=$object->id");?>
+          <?php if($libID == 'files')   $libLink = inlink('showFiles', "type=$type&objectID=$object->id");?>
+
+          <?php $icon = 'icon-folder text-yellow';?>
+          <?php if($libID == 'files') $icon = 'icon-paper-clip text-brown';?>
+
+          <div class="col">
+            <a class="file" href="<?php echo $libLink;?>">
+              <i class="file-icon icon <?php echo $icon;?>"></i>
+              <div class="file-name"><?php echo ($libID != 'project' && $libID != 'files' && strpos($lib->collector, $this->app->user->account) !== false ? "<i class='icon icon-star text-yellow'></i> " : '') . $lib->name;?></div>
+              <div class="text-primary file-info"><?php echo  $lib->allCount . $lang->doc->item;?></div>
+            </a>
+            <?php if($libID != 'project' and $libID != 'files'):?>
+            <div class="actions">
+              <?php common::printLink('doc', 'collect', "objectID=$libID&objectType=doclib", "<i class='icon icon-star-empty'></i>", 'hiddenwin', "title='{$lang->doc->collect}' class='btn btn-link'")?>
+              <?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link' data-toggle='modal'")?>
+              <?php common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-trash'></i>", '', "title='{$lang->delete}' class='btn btn-link'")?>
+            </div>
+            <?php endif;?>
+          </div>
+          <?php endforeach;?>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <?php js::set('type', 'doc');?>

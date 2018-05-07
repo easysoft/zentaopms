@@ -11,128 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class="main-row spilter-row">
-  <div class="side-col" style="width: 220px" data-min-width="220">
-    <div class="cell">
-      <header class="table-row space">
-        <form method='post' action='<?php echo $this->createLink('doc', 'browse', "libID=&browseType=fastsearch");?>' class='input-control has-icon-right table-col'>
-          <input id="searchDoc" type="searchDoc" name='searchDoc' class="form-control" placeholder="<?php echo $this->lang->doc->searchDoc;?>">
-          <button type="submit" class="btn btn-icon btn-link input-control-icon-right"><i class="icon icon-search"></i></button>
-        </form>
-        <div class="table-col text-right c-sm">
-          <?php echo html::a($this->createLink('doc', 'createLib'), "<i class='icon icon-plus'></i>", '', "class='btn btn-secondary btn-icon iframe'");?>
-        </div>
-      </header>
-      <ul id="docsTree" data-ride="tree" class="tree no-margin">
-        <li class="open">
-          <a class="text-muted tree-toggle"><?php echo $lang->doc->fast;?></a>
-          <ul>
-            <?php foreach($lang->doc->fastMenuList as $type => $menu):?>
-            <li><?php echo html::a($this->createLink('doc', 'browse', "libID=0&browseType={$type}"), "<i class='icon {$lang->doc->fastMenuIconList[$type]}'></i> {$menu}");?>
-            <?php endforeach;?>
-          </ul>
-        </li>
-        <li class="open">
-          <a class="text-muted tree-toggle"><?php echo $lang->productCommon;?></a>
-          <ul>
-            <?php foreach($products as $product):?>
-            <li>
-              <?php echo html::a($this->createLink('doc', 'objectLibs', "type=product&objectID=$product->id"), "<i class='icon icon-cube'></i> " . $product->name);?>
-              <?php if(isset($subLibs['product'][$product->id])):?>
-              <ul>
-                <?php foreach($subLibs['product'][$product->id] as $libID => $libName):?>
-                <?php
-                if($libID == 'project')
-                {
-                    $libLink = inlink('allLibs', "type=project&product=$product->id");
-                    $icon    = 'icon-stack';
-                }
-                elseif($libID == 'files')
-                {
-                    $libLink = inlink('showFiles', "type=product&objectID=$product->id");
-                    $icon    = 'icon-paper-clip';
-                }
-                else  
-                {
-                    $libLink = inlink('browse', "libID=$libID");
-                    $icon    = 'icon-folder-outline';
-                }
-                ?>
-                <li>
-                  <?php echo html::a($libLink, "<i class='icon {$icon}'></i> " . $libName);?>
-                  <?php if(isset($modules[$libID])):?>
-                  <ul>
-                    <?php foreach($modules[$libID] as $module):?>
-                    <li><?php echo html::a($this->createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$module->id}"), "<i class='icon icon-folder-outline'></i> " . $module->name);?></li>
-                    <?php endforeach;?>
-                  </ul>
-                  <?php endif;?>
-                </li>
-                <?php endforeach;?>
-              </ul>
-              <?php endif;?>
-            </li>
-            <?php endforeach;?>
-          </ul>
-        </li>
-        <li>
-          <a class="text-muted tree-toggle"><?php echo $lang->projectCommon;?></a>
-          <ul>
-            <?php foreach($projects as $project):?>
-            <li>
-              <?php echo html::a($this->createLink('doc', 'objectLibs', "type=project&objectID=$project->id"), "<i class='icon icon-cube'></i> " . $project->name);?>
-              <?php if(isset($subLibs['project'][$project->id])):?>
-              <ul>
-                <?php foreach($subLibs['project'][$project->id] as $libID => $libName):?>
-                <?php
-                if($libID == 'files')
-                {
-                    $libLink = inlink('showFiles', "type=project&objectID=$project->id");
-                    $icon = 'icon-paper-clip';
-                }
-                else 
-                {
-                    $libLink = inlink('browse', "libID=$libID");
-                    $icon = 'icon-paper-outline';
-                }
-                ?>
-                <li>
-                  <?php echo html::a($libLink, "<i class='icon $icon'></i> " . $libName);?>
-                  <?php if(isset($modules[$libID])):?>
-                  <ul>
-                    <?php foreach($modules[$libID] as $module):?>
-                    <li><?php echo html::a($this->createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$module->id}"), "<i class='icon icon-folder-outline'></i> " . $module->name);?></li>
-                    <?php endforeach;?>
-                  </ul>
-                  <?php endif;?>
-                </li>
-                <?php endforeach;?> 
-              </ul>
-              <?php endif;?>
-            </li>
-            <?php endforeach;?>
-          </ul>
-        </li>
-        <li>
-          <a class="text-muted tree-toggle"><?php echo $lang->doc->custom;?></a>
-          <ul>
-            <?php foreach($customLibs as $libID => $libName):?>
-            <li>
-              <?php echo html::a(inlink('browse', "libID=$libID"), "<i class='icon icon-folder-outline'></i> " . $libName);?>
-              <?php if(isset($modules[$libID])):?>
-              <ul>
-                <?php foreach($modules[$libID] as $module):?>
-                <li><?php echo html::a($this->createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$module->id}"), "<i class='icon icon-folder-outline'></i> " . $module->name);?></li>
-                <?php endforeach;?>
-              </ul>
-              <?php endif;?>
-            </li>
-            <?php endforeach;?>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </div>
+<div class='main-row split-row' id='mainRow'>
+  <?php include './side.html.php';?>
   <div class="main-col" data-min-width="400">
     <div class="row">
       <div class="col-sm-7">
@@ -140,7 +20,7 @@
           <div class="panel-heading">
           <div class="panel-title"><?php echo $lang->doc->orderByEdit;?></div>
             <nav class="panel-actions nav nav-default">
-              <li><?php echo html::a($this->createLink('doc', 'browse', "libID=0&browseTyp=bymenu&module=0&orderBy=editeddate_desc"), 'MORE', '', "title='{$lang->more}'");?></li>
+              <li><?php echo html::a($this->createLink('doc', 'browse', "libID=0&browseTyp=bygrid&module=0&orderBy=editeddate_desc"), 'MORE', '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
           <div class="panel-body has-table">
