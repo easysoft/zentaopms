@@ -772,9 +772,17 @@ class project extends control
         $this->view->position[] = html::a(inlink('browse', "projectID=$projectID"), $project->name);
         $this->view->position[] = $this->lang->project->build;
 
+        $builds = $this->loadModel('build')->getProjectBuilds((int)$projectID);
+        $projectBuilds = array();
+        if(!empty($builds))
+        {
+            foreach($builds as $build) $projectBuilds[$build->product][] = $build;
+        }
+
         /* Get builds. */
-        $this->view->builds = $this->loadModel('build')->getProjectBuilds((int)$projectID);
-        $this->view->users  = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->buildsTotal   = count($builds);
+        $this->view->projectBuilds = $projectBuilds;
 
         $this->display();
     }
