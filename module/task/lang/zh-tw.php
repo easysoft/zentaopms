@@ -11,7 +11,7 @@
  */
 $lang->task->index              = "任務一覽";
 $lang->task->create             = "建任務";
-$lang->task->batchCreate        = "批量建任務";
+$lang->task->batchCreate        = "批量創建";
 $lang->task->batchEdit          = "批量編輯";
 $lang->task->batchChangeModule  = "批量修改模組";
 $lang->task->batchClose         = "批量關閉";

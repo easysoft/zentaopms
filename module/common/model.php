@@ -1580,6 +1580,7 @@ EOD;
         }
 
         $response = curl_exec($curl);
+        $errors   = curl_error($curl);
         curl_close($curl);
 
         $logFile = $app->getLogRoot() . 'saas.'. date('Ymd') . '.log.php';
@@ -1590,7 +1591,9 @@ EOD;
         {
             fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
             fwrite($fh, "url:    " . $url . "\n");
+            if(!empty($data)) fwrite($fh, "data:   " . print_r($data, true) . "\n");
             fwrite($fh, "results:" . print_r($response, true) . "\n");
+            if(!empty($errors)) fwrite($fh, "errors: " . $errors . "\n");
             fclose($fh);
         }
 

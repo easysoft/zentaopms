@@ -252,12 +252,7 @@ $lang->project->dividerMenu = ',story,doc,';
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
 $lang->task->menu      = $lang->project->menu;
-$lang->task->subMenu   = $lang->project->subMenu;
 $lang->build->menu     = $lang->project->menu;
-$lang->build->subMenu  = $lang->project->subMenu;
-
-$lang->task->dividerMenu  = $lang->project->dividerMenu;
-$lang->build->dividerMenu = $lang->project->dividerMenu;
 
 /* QA視圖菜單設置。*/
 $lang->qa = new stdclass();
@@ -309,10 +304,7 @@ $lang->caselib->menu->caselib   = array('link' => '用例庫|testsuite|library',
 /* 文檔視圖菜單設置。*/
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
-
-$lang->doc->menu->list   = array('link' => '%s', 'fixed' => true);
-$lang->doc->menu->crumb  = array('link' => '%s', 'fixed' => true);
-$lang->doc->menu->create = array('link' => '<i class="icon-plus"></i>&nbsp;添加文檔庫|doc|createLib', 'float' => 'right');
+//$lang->doc->menu->createLib = array('link' => '<i class="icon icon-folder-plus"></i>&nbsp;添加檔案夾|doc|createLib', 'float' => 'right');
 
 /* 統計視圖菜單設置。*/
 $lang->report = new stdclass();
@@ -550,9 +542,9 @@ $lang->icons['edit']               = 'edit';
 $lang->icons['delete']             = 'trash';
 $lang->icons['copy']               = 'copy';
 $lang->icons['report']             = 'bar-chart';
-$lang->icons['export']             = 'download-alt';
+$lang->icons['export']             = 'export';
 $lang->icons['report-file']        = 'file-powerpoint';
-$lang->icons['import']             = 'upload-alt';
+$lang->icons['import']             = 'import';
 $lang->icons['finish']             = 'checked';
 $lang->icons['resolve']            = 'ok-sign';
 $lang->icons['start']              = 'play';

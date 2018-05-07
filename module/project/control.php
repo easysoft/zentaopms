@@ -803,6 +803,14 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        $tasks = $this->testtask->getProjectTasks($projectID, $orderBy, $pager);
+        foreach($tasks as $key => $task)
+        {
+            $tasks[$task->product][] = $task;
+
+            unset($tasks[$key]);
+        }
+
         $this->view->title       = $this->projects[$projectID] . $this->lang->colon . $this->lang->testtask->common;
         $this->view->position[]  = html::a($this->createLink('project', 'testtask', "projectID=$projectID"), $this->projects[$projectID]);
         $this->view->position[]  = $this->lang->testtask->common;
@@ -810,7 +818,7 @@ class project extends control
         $this->view->projectName = $this->projects[$projectID];
         $this->view->pager       = $pager;
         $this->view->orderBy     = $orderBy;
-        $this->view->tasks       = $this->testtask->getProjectTasks($projectID, $orderBy, $pager);
+        $this->view->tasks       = $tasks;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->products    = $this->loadModel('product')->getPairs();
 
