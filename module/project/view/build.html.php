@@ -43,11 +43,10 @@
         </tr>
       </thead>
       <tbody>
-        <?php foreach($projectBuilds as $projectID => $builds):?>
+        <?php foreach($projectBuilds as $productID => $builds):?>
         <?php $total = count($builds);?>
         <?php foreach($builds as $index => $build):?>
-        <?php $trClass = $index == 0 ? 'divider-top' : '';?>
-        <tr data-id="<?php echo $projectID;?>" class="<?php echo $trClass;?>">
+        <tr data-id="<?php echo $productID;?>" class="<?php echo $index == 0 ? 'divider-top' : '';?>">
           <?php if($index == 0):?>
           <td rowspan="<?php echo $total;?>" class="c-side text-left group-toggle">
             <a title="<?php echo $build->productName;?>" class="text-primary"><i class="icon-caret-down"></i> <?php echo $build->productName;?></a>
@@ -86,7 +85,7 @@
           </td>
         </tr>
         <?php if(($index + 1) == $total):?>
-        <tr class="group-toggle group-summary divider hidden" data-id="<?php echo $projectID;?>">
+        <tr class="group-toggle group-summary divider hidden" data-id="<?php echo $productID;?>">
           <td class="c-side text-left">
             <a title="<?php echo $build->productName;?>"><i class="icon-caret-right text-muted"></i> <?php echo $build->productName;?></a>
           </td>
