@@ -92,10 +92,11 @@
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
               <div class='col-sm-4'>
-                <div class='input-group'>
+                <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
+                <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
                   <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
                   <span class='input-group-addon fix-border'></span>
-                  <?php if($product->type != 'normal') echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen'")?>
+                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
                 </div>
               </div>
               <?php $i++;?>
@@ -114,9 +115,11 @@
           <td colspan="3" id="plansBox">
             <div class='row'>
               <?php if(isset($plan) && !empty($plan->begin)):?>
-              <div class="col-sm-4" id="plan<?php echo $plan->product;?>">
-                <?php echo html::select("plans[" . $plan->product . "]", $productPlan, $plan->id, "class='form-control'");?>
-              </div>
+              <div class="col-sm-4" id="plan<?php echo $plan->product;?>"><?php echo html::select("plans[" . $plan->product . "]", $productPlan, $plan->id, "class='form-control'");?></div>
+              <?php js::set('currentPlanID', $plan->id)?>
+              <?php else:?>
+              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[]", $productPlan, '', "class='form-control'");?></div>
+              <?php js::set('currentPlanID', '')?>
               <?php endif;?>
             </div>
           </td>

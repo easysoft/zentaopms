@@ -18,7 +18,6 @@
 <style>
 #stories .action{display:none;}
 #bugs .action{display:none;}
-tbody tr td:last-child a{display:none;}
 tbody tr td:first-child input{display:none;}
 </style>
 <?php endif;?>

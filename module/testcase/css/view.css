@@ -3,3 +3,4 @@
 .outer.hide-side .col-side{width:0px;}
 .outer .col-side .side-handle{right:0px;top:10px;}
 .outer.hide-side .main-side{display:none;}
+.table-fixed td{white-space: unset;}

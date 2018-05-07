@@ -23,37 +23,41 @@
     ?>
   </ul>
 </div>
-<table class='table tablesorter table-fixed'>
-  <thead>
-    <tr class='colhead'>
-      <th class='w-id'>    <?php echo $lang->idAB;?></th>
-      <th class='w-pri'>   <?php echo $lang->priAB;?></th>
-      <th class='w-200px'> <?php echo $lang->story->product;?></th>
-      <th>                 <?php echo $lang->story->title;?></th>
-      <th class='w-150px'> <?php echo $lang->story->plan;?></th>
-      <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
-      <th class='w-hour'>  <?php echo $lang->story->estimateAB;?></th>
-      <th class='w-status'><?php echo $lang->statusAB;?></th>
-      <th class='w-100px'> <?php echo $lang->story->stageAB;?></th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php foreach($stories as $key => $story):?>
-      <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
-      <tr class='text-center'>
-      <td><?php echo html::a($storyLink, sprintf('%03d', $story->id));?></td>
-      <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-      <td><?php echo $story->productTitle;?></td>
-      <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
-      <td title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
-      <td><?php echo $users[$story->openedBy];?></td>
-      <td><?php echo $story->estimate;?></td>
-      <td class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
-      <td><?php echo $lang->story->stageList[$story->stage];?></td>
-    </tr>
-    <?php endforeach;?>
-  </tbody>
-  <tfoot><tr><td colspan='9'><?php echo $pager->show();?></td></tr></tfoot>
-</table>
+<div id='mainContent'>
+  <table class='table has-sort-head table-fixed'>
+    <thead>
+      <tr class='colhead'>
+        <th class='w-id'>    <?php echo $lang->idAB;?></th>
+        <th class='w-pri'>   <?php echo $lang->priAB;?></th>
+        <th class='w-200px'> <?php echo $lang->story->product;?></th>
+        <th>                 <?php echo $lang->story->title;?></th>
+        <th class='w-150px'> <?php echo $lang->story->plan;?></th>
+        <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
+        <th class='w-hour'>  <?php echo $lang->story->estimateAB;?></th>
+        <th class='w-status'><?php echo $lang->statusAB;?></th>
+        <th class='w-100px'> <?php echo $lang->story->stageAB;?></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach($stories as $key => $story):?>
+        <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
+        <tr class='text-center'>
+        <td><?php echo html::a($storyLink, sprintf('%03d', $story->id));?></td>
+        <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+        <td><?php echo $story->productTitle;?></td>
+        <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
+        <td title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
+        <td><?php echo $users[$story->openedBy];?></td>
+        <td><?php echo $story->estimate;?></td>
+        <td class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
+        <td><?php echo $lang->story->stageList[$story->stage];?></td>
+      </tr>
+      <?php endforeach;?>
+    </tbody>
+  </table>
+  <?php if($stories):?>
+  <div class="table-footer"><?php $pager->show('right', 'pagerjs');?></div>
+  <?php endif;?>
+</div>
 <script language='javascript'>$("#<?php echo $type;?>Tab").addClass('active');</script>
 <?php include '../../common/view/footer.html.php';?>

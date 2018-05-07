@@ -137,7 +137,10 @@
               </tr>
               <tr>
                 <th><?php echo $lang->task->estimate;?></th>
-                <td><?php echo html::input('estimate', $task->estimate, "class='form-control' autocomplete='off'");?></td>
+                <td>
+                  <?php $disabled = !empty($task->team) ? "disabled='disabled'" : '';?>
+                  <?php echo html::input('estimate', $task->estimate, "class='form-control' autocomplete='off' {$disabled}");?>
+                </td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->consumed;?></th>
@@ -145,7 +148,10 @@
               </tr>
               <tr>
                 <th><?php echo $lang->task->left;?></th>
-                <td><?php echo html::input('left', $task->left, "class='form-control' autocomplete='off'");?></td>
+                <td>
+                  <?php $disabled = !empty($task->team) ? "disabled='disabled'" : '';?>
+                  <?php echo html::input('left', $task->left, "class='form-control' autocomplete='off' {$disabled}");?>
+                </td>
               </tr>
             </table>
           </div>
@@ -218,7 +224,7 @@
               </td>
             </tr>
             <?php endforeach;?>
-            <?php for($i = 0; $i < 3; $i++):?>
+            <?php for($i = 0; $i < 5; $i++):?>
             <tr>
               <td class='w-150px'><?php echo html::select("team[]", $members, '', "class='form-control chosen'")?></td>
               <td>

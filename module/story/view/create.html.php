@@ -108,7 +108,7 @@
             $hasCustomPri = false;
             foreach($lang->story->priList as $priKey => $priValue)
             {
-                if($priKey and $priValue and ($priKey != $priValue or strlen($priKey) != strlen($priValue)))
+                if(!empty($priKey) and (string)$priKey != (string)$priValue)
                 {
                     $hasCustomPri = true;
                     break;

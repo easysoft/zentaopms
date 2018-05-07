@@ -97,7 +97,7 @@
             <?php endif;?>
           </td>
           <td title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
-          <td><?php echo zget($lines, $product->line);?></td>
+          <td><?php echo zget($lines, $product->line, '');?></td>
           <td class='text-center'><?php echo $product->stories['active'];?></td>
           <td class='text-center'><?php echo $product->stories['changed'];?></td>
           <td class='text-center'><?php echo $product->stories['draft'];?></td>

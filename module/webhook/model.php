@@ -227,7 +227,7 @@ class webhookModel extends model
 
         $mobile = '';
         $email  = '';
-        if($actionType == 'assigned') 
+        if(in_array($objectType, $this->config->webhook->needAssignTypes) && !empty($object->assignedTo))
         {
             foreach($users as $user)
             {

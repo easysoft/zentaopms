@@ -81,6 +81,7 @@ $lang->changeLog       = '修改日志';
 $lang->manual          = '手册';
 $lang->customMenu      = '自定义导航';
 $lang->customField     = '自定义表单项';
+$lang->lineNumber      = '行号';
 $lang->tutorialConfirm = '检测到你尚未退出新手教程模式，是否现在退出？';
 
 $lang->preShortcutKey  = '[快捷键:←]';
@@ -415,7 +416,7 @@ $lang->menugroup->message     = 'admin';
 /* 错误提示信息。*/
 $lang->error = new stdclass();
 $lang->error->companyNotFound = "您访问的域名 %s 没有对应的公司。";
-$lang->error->length          = array("『%s』长度错误，应当为『%s』", "『%s』长度应当不超过『%s』，且不小于『%s』。");
+$lang->error->length          = array("『%s』长度错误，应当为『%s』", "『%s』长度应当不超过『%s』，且大于『%s』。");
 $lang->error->reg             = "『%s』不符合格式，应当为:『%s』。";
 $lang->error->unique          = "『%s』已经有『%s』这条记录了。如果您确定该记录已删除，请到后台管理-回收站还原。。";
 $lang->error->gt              = "『%s』应当大于『%s』。";

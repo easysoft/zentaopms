@@ -177,6 +177,18 @@
                 </div>
               </div>
             </div>
+            <div class="detail">
+              <div class="detail-title"><strong><?php echo $lang->project->linkPlan;?></strong></div>
+              <div class="detail-content">
+                <div class="row row-grid">
+                  <?php foreach($products as $productID => $product):?>
+                  <?php if(isset($planGroups[$productID][$product->plan])):?>
+                  <div class="col-xs-6"><?php echo html::a($this->createLink('productplan', 'view', "planID={$product->id}"), $product->name . '/' . $planGroups[$productID][$product->plan]);?></div>
+                  <?php endif;?>
+                  <?php endforeach;?>
+                </div>
+              </div>
+            </div>
             <?php endif;?>
             <div class='detail'>
               <div class='detail-title'><strong><?php echo $lang->project->lblStats;?></strong></div>

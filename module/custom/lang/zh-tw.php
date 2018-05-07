@@ -83,17 +83,21 @@ $lang->custom->allLang     = '適用所有語言';
 $lang->custom->confirmRestore = '是否要恢復預設配置？';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userRole             = '鍵的長度必須小於20個字元！';
-$lang->custom->notice->canNotAdd            = '該項參與運算，不提供自定義添加功能';
-$lang->custom->notice->forceReview          = "指定人提交的%s必須評審。";
-$lang->custom->notice->forceNotReview       = "指定人提交的%s不需要評審。";
-$lang->custom->notice->longlife             = 'Bug列表頁面的久未處理標籤中，列出設置天數之前未處理的Bug。';
-$lang->custom->notice->priListKey           = '優先順序的鍵應當為數字！';
-$lang->custom->notice->keyList              = '鍵值應當為英文或數字';
-$lang->custom->notice->severityListKey      = 'Bug嚴重程度的鍵應當為數字！';
-$lang->custom->notice->indexPage['product'] = "從8.2版本起增加了產品主頁視圖，是否預設進入產品主頁？";
-$lang->custom->notice->indexPage['project'] = "從8.2版本起增加了項目主頁視圖，是否預設進入項目主頁？";
-$lang->custom->notice->indexPage['qa']      = "從8.2版本起增加了測試主頁視圖，是否預設進入測試主頁？";
+$lang->custom->notice->canNotAdd                   = '該項參與運算，不提供自定義添加功能';
+$lang->custom->notice->forceReview                 = "指定人提交的%s必須評審。";
+$lang->custom->notice->forceNotReview              = "指定人提交的%s不需要評審。";
+$lang->custom->notice->longlife                    = 'Bug列表頁面的久未處理標籤中，列出設置天數之前未處理的Bug。';
+$lang->custom->notice->invalidNumberKey            = '鍵值應為不大於255的數字';
+$lang->custom->notice->invalidStringKey            = '鍵值應當為小寫英文字母、數字或下劃線的組合';
+
+$lang->custom->notice->indexPage['product']        = "從8.2版本起增加了產品主頁視圖，是否預設進入產品主頁？";
+$lang->custom->notice->indexPage['project']        = "從8.2版本起增加了項目主頁視圖，是否預設進入項目主頁？";
+$lang->custom->notice->indexPage['qa']             = "從8.2版本起增加了測試主頁視圖，是否預設進入測試主頁？";
+
+$lang->custom->notice->invalidStrlen['ten']        = '鍵的長度必須小於10個字元！';
+$lang->custom->notice->invalidStrlen['twenty']     = '鍵的長度必須小於20個字元！';
+$lang->custom->notice->invalidStrlen['thirty']     = '鍵的長度必須小於30個字元！';
+$lang->custom->notice->invalidStrlen['twoHundred'] = '鍵的長度必須小於225個字元！';
 
 $lang->custom->storyReview    = '評審流程';
 $lang->custom->forceReview    = '強制評審';

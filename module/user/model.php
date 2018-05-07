@@ -210,7 +210,7 @@ class userModel extends model
         if(strtolower($_POST['account']) == 'guest') return false;
 
         $user = fixer::input('post')
-            ->setDefault('join', '0000-00-00')
+            ->setDefault('join', '0000-00-00' )
             ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
             ->setIF($this->post->password1 == false, 'password', '')
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
@@ -383,6 +383,7 @@ class userModel extends model
             ->batchCheck($this->config->user->edit->requiredFields, 'notempty')
             ->check('account', 'unique', "id != '$userID'")
             ->check('account', 'account')
+            ->checkIF($this->post->email != '', 'email', 'email')
             ->where('id')->eq((int)$userID)
             ->exec();
 
@@ -831,8 +832,8 @@ class userModel extends model
     {
         $projects = $this->dao->select('t1.*,t2.*')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
-            ->where('t1.account')->eq($account)
-            ->andWhere('t1.type')->eq('project')
+            ->where('t1.type')->eq('project')
+            ->andWhere('t1.account')->eq($account)
             ->andWhere('t2.deleted')->eq(0)
             ->fetchAll();
 

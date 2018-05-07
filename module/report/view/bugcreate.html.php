@@ -53,7 +53,7 @@
           </thead>
           <tbody>
             <?php foreach($bugs as $user => $bug):?>
-            <?php if(!array_key_exists($user, $users)) continue;?>
+            <?php if(isset($users[$user])) continue;?>
             <tr class="text-center">
               <td><?php echo $users[$user];?></td>
               <td><?php echo isset($bug['']) ? $bug[''] : 0;?></td>

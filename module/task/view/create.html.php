@@ -92,7 +92,7 @@
             $hasCustomPri = false;
             foreach($lang->task->priList as $priKey => $priValue)
             {
-                if($priKey and $priValue and ($priKey != $priValue or strlen($priKey) != strlen($priValue)))
+                if(!empty($priKey) and (string)$priKey != (string)$priValue)
                 {
                     $hasCustomPri = true;
                     break;
@@ -183,7 +183,7 @@
           </div>
           <div class='modal-content with-padding'>
             <table class="table table-form">
-              <?php for($i = 0; $i < 6; $i++):?>
+              <?php for($i = 0; $i < 5; $i++):?>
               <tr>
                 <td><?php echo html::select("team[]", $members, '', "class='form-control chosen'");?></td>
                 <td>

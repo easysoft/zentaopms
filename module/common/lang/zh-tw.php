@@ -80,7 +80,11 @@ $lang->tutorial        = '新手教程';
 $lang->changeLog       = '修改日誌';
 $lang->manual          = '手冊';
 $lang->customMenu      = '自定義導航';
+<<<<<<< HEAD
 $lang->customField     = '自定義表單項';
+=======
+$lang->lineNumber      = '行號';
+>>>>>>> zentaopms_9.8
 $lang->tutorialConfirm = '檢測到你尚未退出新手教程模式，是否現在退出？';
 
 $lang->preShortcutKey  = '[快捷鍵:←]';
@@ -252,12 +256,7 @@ $lang->project->dividerMenu = ',story,doc,';
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
 $lang->task->menu      = $lang->project->menu;
-$lang->task->subMenu   = $lang->project->subMenu;
 $lang->build->menu     = $lang->project->menu;
-$lang->build->subMenu  = $lang->project->subMenu;
-
-$lang->task->dividerMenu  = $lang->project->dividerMenu;
-$lang->build->dividerMenu = $lang->project->dividerMenu;
 
 /* QA視圖菜單設置。*/
 $lang->qa = new stdclass();
@@ -309,10 +308,7 @@ $lang->caselib->menu->caselib   = array('link' => '用例庫|testsuite|library',
 /* 文檔視圖菜單設置。*/
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
-
-$lang->doc->menu->list   = array('link' => '%s', 'fixed' => true);
-$lang->doc->menu->crumb  = array('link' => '%s', 'fixed' => true);
-$lang->doc->menu->create = array('link' => '<i class="icon-plus"></i>&nbsp;添加文檔庫|doc|createLib', 'float' => 'right');
+//$lang->doc->menu->createLib = array('link' => '<i class="icon icon-folder-plus"></i>&nbsp;添加檔案夾|doc|createLib', 'float' => 'right');
 
 /* 統計視圖菜單設置。*/
 $lang->report = new stdclass();
@@ -423,7 +419,7 @@ $lang->menugroup->message     = 'admin';
 /* 錯誤提示信息。*/
 $lang->error = new stdclass();
 $lang->error->companyNotFound = "您訪問的域名 %s 沒有對應的公司。";
-$lang->error->length          = array("『%s』長度錯誤，應當為『%s』", "『%s』長度應當不超過『%s』，且不小於『%s』。");
+$lang->error->length          = array("『%s』長度錯誤，應當為『%s』", "『%s』長度應當不超過『%s』，且大於『%s』。");
 $lang->error->reg             = "『%s』不符合格式，應當為:『%s』。";
 $lang->error->unique          = "『%s』已經有『%s』這條記錄了。如果您確定該記錄已刪除，請到後台管理-資源回收筒還原。。";
 $lang->error->gt              = "『%s』應當大於『%s』。";
@@ -550,9 +546,9 @@ $lang->icons['edit']               = 'edit';
 $lang->icons['delete']             = 'trash';
 $lang->icons['copy']               = 'copy';
 $lang->icons['report']             = 'bar-chart';
-$lang->icons['export']             = 'download-alt';
+$lang->icons['export']             = 'export';
 $lang->icons['report-file']        = 'file-powerpoint';
-$lang->icons['import']             = 'upload-alt';
+$lang->icons['import']             = 'import';
 $lang->icons['finish']             = 'checked';
 $lang->icons['resolve']            = 'ok-sign';
 $lang->icons['start']              = 'play';

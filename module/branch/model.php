@@ -82,12 +82,14 @@ class branchModel extends model
      * 
      * @param  array  $products 
      * @param  string $params 
+     * @param  array  $appendBranch 
      * @access public
      * @return array
      */
-    public function getByProducts($products, $params = '')
+    public function getByProducts($products, $params = '', $appendBranch = '')
     {
-        $branches = $this->dao->select('*')->from(TABLE_BRANCH)->where('product')->in($products)->andWhere('deleted')->eq(0)->orderBy('`order`')->fetchAll();
+        $branches = $this->dao->select('*')->from(TABLE_BRANCH)->where('product')->in($products)->andWhere('deleted')->eq(0)->orderBy('`order`')->fetchAll('id');
+        if(!empty($appendBranch)) $branches += $this->dao->select('*')->from(TABLE_BRANCH)->where('id')->in($appendBranch)->orderBy('`order`')->fetchAll('id');
         $products = $this->loadModel('product')->getByIdList($products);
 
         $branchGroups = array();
@@ -154,6 +156,12 @@ class branchModel extends model
         $case    = $this->dao->select('id')->from(TABLE_CASE)->where('branch')->eq($branchID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
         $release = $this->dao->select('id')->from(TABLE_RELEASE)->where('branch')->eq($branchID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
         $build   = $this->dao->select('id')->from(TABLE_BUILD)->where('branch')->eq($branchID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
-        return empty($module) and empty($story) and empty($bug) and empty($case) and empty($release) and empty($build) and empty($plan);
+        $project = $this->dao->select('t1.id')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
+            ->where('t2.branch')->eq($branchID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->limit(1)
+            ->fetch();
+        return empty($module) && empty($story) && empty($bug) && empty($case) && empty($release) && empty($build) && empty($plan) && empty($project);
     }
 }

@@ -22,8 +22,8 @@ $itemRow = <<<EOT
       <input type='text' class="form-control" autocomplete='off' value="" name="values[]">
     </td>
     <td class='text-left'>
-      <a href='javascript:void()' class='btn-icon' onclick='addItem(this)'><i class='icon-plus'></i></a>
-      <a href='javascript:void()' class='btn-icon' onclick='delItem(this)'><i class='icon-remove'></i></a>
+      <a href="javascript:void(0)" class='btn-icon' onclick="addItem(this)"><i class='icon-plus'></i></a>
+      <a href="javascript:void(0)" class='btn-icon' onclick="delItem(this)"><i class='icon-remove'></i></a>
     </td>
   </tr>
 EOT;
@@ -143,8 +143,8 @@ EOT;
           </td>
           <?php if($canAdd):?>
           <td class='text-left w-100px'>
-            <a href='javascript:void()' class='btn-icon' onclick='addItem(this)'><i class='icon-plus'></i></a>
-            <a href='javascript:void()' onclick='delItem(this)' class='btn-icon'><i class='icon-remove'></i></a>
+            <a href="javascript:void(0)" onclick="addItem(this)" class='btn-icon'><i class='icon-plus'></i></a>
+            <a href="javascript:void(0)" onclick="delItem(this)" class='btn-icon'><i class='icon-remove'></i></a>
           </td>
           <?php endif;?>
         </tr>

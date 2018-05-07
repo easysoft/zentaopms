@@ -14,22 +14,30 @@
 <?php js::set('confirmDelete', $lang->testtask->confirmDelete)?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->testtask->browse;?></span></span>
+    <div class="pull-left table-group-btns">
+      <button type="button" class="btn btn-link group-collapse-all"><?php echo $lang->testtask->collapseAll;?> <i class="icon-fold-all"></i></button>
+      <button type="button" class="btn btn-link group-expand-all"><?php echo $lang->testtask->expandAll;?> <i class="icon-unfold-all"></i></button>
+    </div>
+    <?php $total = 0;?>
+    <?php foreach($tasks as $productTasks) $total += count($productTasks);?>
+    <a href='' class='btn btn-link btn-active-text'>
+      <span class='text'><?php echo $lang->testtask->browse;?></span>
+      <span class="label label-light label-badge"><?php echo $total;?></span>
+    </a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php
-    common::printIcon('testreport', 'browse', "objectID=$projectID&objectType=project", '', 'button','flag');
-    common::printLink('testtask', 'create', "product=0&project=$projectID", "<i class='icon icon-plus'> </i>" . $lang->testtask->create, '', "class='btn btn-primary'");
-    ?>
+    <?php common::printIcon('testreport', 'browse', "objectID=$projectID&objectType=project", '', 'button','flag');?>
+    <?php common::printLink('testtask', 'create', "product=0&project=$projectID", "<i class='icon icon-plus'> </i>" . $lang->testtask->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent">
-  <form class="main-table table-testtask" data-ride="table" method="post" target='hiddenwin' id='testtaskForm'>
-    <table class="table has-sort-head" id='taskList'>
+  <form class="main-table table-testtask" data-ride="table" data-group="true" method="post" target='hiddenwin' id='testtaskForm'>
+    <table class="table table-grouped has-sort-head" id='taskList'>
       <thead>
         <?php $vars = "projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <?php $canTestReport = common::hasPriv('testreport', 'browse');?>
-        <tr>
+        <tr class='divider'>
+          <th class='c-side text-center'><?php common::printOrderLink('product', $orderBy, $vars, $lang->testtask->product);?></th>
           <th class="c-id">
             <?php if($canTestReport):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
@@ -38,19 +46,26 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='w-150px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->testtask->product);?></th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->testtask->name);?></th>
           <th><?php common::printOrderLink('build', $orderBy, $vars, $lang->testtask->build);?></th>
           <th class='w-user'><?php common::printOrderLink('owner', $orderBy, $vars, $lang->testtask->owner);?></th>
           <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->testtask->begin);?></th>
           <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->testtask->end);?></th>
           <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='c-actions-3'><?php echo $lang->actions;?></th>
+          <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
-        <?php foreach($tasks as $task):?>
-        <tr>
+        <?php foreach($tasks as $product => $productTasks):?>
+        <?php $productName = zget($products, $product, '');?>
+        <?php foreach($productTasks as $task):?>
+        <tr data-id='<?php echo $product;?>' <?php if($task == reset($productTasks)) echo "class='divider-top'";?>>
+          <?php if($task == reset($productTasks)):?>
+          <td rowspan='<?php echo count($productTasks);?>' class='c-side text-left group-toggle'>
+            <a class='text-primary' title='<?php echo $productName;?>'><i class='icon icon-caret-down'></i> <?php echo $productName;?></a>
+            <div class='small'><span class='text-muted'><?php echo $lang->testtask->allTasks;?></span> <?php echo count($productTasks);?></div>
+          </td>
+          <?php endif;?>
           <td class="cell-id">
             <?php if($canTestReport):?>
             <?php echo html::checkbox('taskIdList', array($task->id => sprintf('%03d', $task->id)));?>
@@ -58,7 +73,6 @@
             <?php printf('%03d', $task->id);?>
             <?php endif;?>
           </td>
-          <td title="<?php echo zget($products, $task->product, '')?>"><?php echo zget($products, $task->product, '');?></td>
           <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name);?></td>
           <td title="<?php echo $task->buildName?>"><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName);?></td>
           <td><?php echo $users[$task->owner];?></td>
@@ -81,6 +95,17 @@
             common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
             common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list');
             ?>
+          </td>
+        </tr>
+        <?php endforeach;?>
+        <tr data-id='<?php echo $product;?>' class='group-toggle group-summary divider hidden'>
+          <td class='c-side text-left'>
+            <a title='<?php echo $productName;?>'><i class='icon-caret-right text-muted'></i> <?php echo $productName;?></a>
+          </td>
+          <td colspan='8' class='text-left'>
+            <div class='small with-padding'>
+              <span class='text-muted'><?php echo $lang->testtask->allTasks;?></span> <?php echo count($productTasks);?>
+            </div>
           </td>
         </tr>
         <?php endforeach;?>

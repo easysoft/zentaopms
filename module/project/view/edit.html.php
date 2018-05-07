@@ -115,10 +115,11 @@
               <?php $i = 0;?>
               <?php foreach($linkedProducts as $product):?>
               <div class='col-sm-4'>
-                <div class='input-group'>
+                <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
+                <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
                   <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
                   <span class='input-group-addon fix-border'></span>
-                  <?php if($product->type != 'normal' and isset($branchGroups[$product->id])) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen'")?>
+                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?> 
                 </div>
               </div>
               <?php $i++;?>
@@ -129,18 +130,6 @@
                   <span class='input-group-addon fix-border'></span>
                 </div>
               </div>
-            </div>
-          </td>
-        </tr>
-        <tr <?php if($this->config->global->flow == 'onlyTask') echo "class='hidden'";?>>
-          <th><?php echo $lang->project->linkPlan;?></th>
-          <td class='text-left' id="plansBox" colspan="2">
-            <div class='row'>
-            <?php foreach($plans as $productID => $plan):?>
-              <div class="col-sm-4" id="plan<?php echo $productID;?>">
-                <?php echo html::select("plans[$productID]", $plan, $linkedProducts[$productID]->plan, "class='form-control'");?>
-              </div>
-            <?php endforeach;?>
             </div>
           </td>
         </tr>

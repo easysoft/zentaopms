@@ -140,7 +140,7 @@ $lang->user->placeholder->passwordStrength[1] = 'Letters and Numbers, at least 6
 $lang->user->placeholder->passwordStrength[2] = 'Letters, Numbers and special characters, at lease 10 characters';
 
 $lang->user->error = new stdclass();
-$lang->user->error->account       = "ID %s，must be contain letters, underline, and numbers,at lease three characters";
+$lang->user->error->account       = "ID %s，account must contain letters, underline, or numbers,at lease three characters";
 $lang->user->error->accountDupl   = "ID %s，account has been used.";
 $lang->user->error->realname      = "ID %s，must be real name";
 $lang->user->error->password      = "ID %s，password must be 6 characters at least.";

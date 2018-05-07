@@ -169,63 +169,61 @@ class testcaseModel extends model
         }
 
         $this->loadModel('story');
-        $storyVersions = array();
-        $forceNotReview   = $this->forceNotReview();
+        $storyVersions  = array();
+        $forceNotReview = $this->forceNotReview();
+        $data           = array();
         for($i = 0; $i < $batchNum; $i++)
         {
-            if($cases->type[$i] != '' and $cases->title[$i] != '')
+            if(empty($cases->title[$i])) continue;
+
+            $data[$i] = new stdclass();
+            $data[$i]->product      = $productID;
+            $data[$i]->branch       = $cases->branch[$i];
+            $data[$i]->module       = $cases->module[$i];
+            $data[$i]->type         = $cases->type[$i];
+            $data[$i]->pri          = $cases->pri[$i];
+            $data[$i]->stage        = empty($cases->stage[$i]) ? '' : implode(',', $cases->stage[$i]);
+            $data[$i]->story        = $storyID ? $storyID : $cases->story[$i];
+            $data[$i]->color        = $cases->color[$i];
+            $data[$i]->title        = $cases->title[$i];
+            $data[$i]->precondition = $cases->precondition[$i];
+            $data[$i]->keywords     = $cases->keywords[$i];
+            $data[$i]->openedBy     = $this->app->user->account;
+            $data[$i]->openedDate   = $now;
+            $data[$i]->status       = $forceNotReview || $cases->needReview[$i] == 0 ? 'normal' : 'wait';
+            $data[$i]->version      = 1;
+
+            $caseStory = $data[$i]->story;
+            $data[$i]->storyVersion = isset($storyVersions[$caseStory]) ? $storyVersions[$caseStory] : 0;
+            if($caseStory and !isset($storyVersions[$caseStory]))
             {
-                $data[$i] = new stdclass();
-                $data[$i]->product      = $productID;
-                $data[$i]->branch       = $cases->branch[$i];
-                $data[$i]->module       = $cases->module[$i];
-                $data[$i]->type         = $cases->type[$i];
-                $data[$i]->pri          = $cases->pri[$i];
-                $data[$i]->stage        = empty($cases->stage[$i]) ? '' : implode(',', $cases->stage[$i]);
-                $data[$i]->story        = $storyID ? $storyID : $cases->story[$i];
-                $data[$i]->color        = $cases->color[$i];
-                $data[$i]->title        = $cases->title[$i];
-                $data[$i]->precondition = $cases->precondition[$i];
-                $data[$i]->keywords     = $cases->keywords[$i];
-                $data[$i]->openedBy     = $this->app->user->account;
-                $data[$i]->openedDate   = $now;
-                $data[$i]->status       = $forceNotReview || $cases->needReview[$i] == 0 ? 'normal' : 'wait';
-                $data[$i]->version      = 1;
-
-                $caseStory = $data[$i]->story;
-                $data[$i]->storyVersion = isset($storyVersions[$caseStory]) ? $storyVersions[$caseStory] : 0;
-                if($caseStory and !isset($storyVersions[$caseStory]))
-                {
-                    $data[$i]->storyVersion = $this->story->getVersion($caseStory);
-                    $storyVersions[$caseStory] = $data[$i]->storyVersion;
-                }
-
-                $this->dao->insert(TABLE_CASE)->data($data[$i])
-                    ->autoCheck()
-                    ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
-                    ->exec();
-
-                if(dao::isError())
-                {
-                    echo js::error(dao::getError());
-                    die(js::reload('parent'));
-                }
-
-                $caseID   = $this->dao->lastInsertID();
-                $this->loadModel('score')->create('testcase', 'create', $caseID);
-                $actionID = $this->loadModel('action')->create('case', $caseID, 'Opened');
+                $data[$i]->storyVersion = $this->story->getVersion($caseStory);
+                $storyVersions[$caseStory] = $data[$i]->storyVersion;
             }
-            else
+
+            foreach(explode(',', $this->config->testcase->create->requiredFields) as $field)
             {
-                unset($cases->module[$i]);
-                unset($cases->type[$i]);
-                unset($cases->pri[$i]);
-                unset($cases->story[$i]);
-                unset($cases->title[$i]);
-                unset($cases->stage[$i]);
-                unset($cases->precondition[$i]);
-                unset($cases->keywords[$i]);
+                $field = trim($field);
+                if($field and empty($data[$i]->$field)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->$field)));
             }
+        }
+
+        foreach($data as $i => $case)
+        {
+            $this->dao->insert(TABLE_CASE)->data($case)
+                ->autoCheck()
+                ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
+                ->exec();
+
+            if(dao::isError())
+            {
+                echo js::error(dao::getError());
+                die(js::reload('parent'));
+            }
+
+            $caseID   = $this->dao->lastInsertID();
+            $this->loadModel('score')->create('testcase', 'create', $caseID);
+            $actionID = $this->loadModel('action')->create('case', $caseID, 'Opened');
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
     }
@@ -1224,6 +1222,17 @@ class testcaseModel extends model
                         unset($step->id);
                         $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
                     }
+                }
+                /* Fix bug #1518. */
+                $oldFile = $this->dao->select('*')->from(TABLE_FILE)->where('objectID')->eq($case->fromCaseID)->fetchAll();
+                foreach($oldFile as $fileID => $File)
+                {
+                    $File->objectID  = $caseID;
+                    $File->addedBy   = $this->app->user->account;
+                    $File->addedDate = helper::today();
+                    $File->downloads = 0;
+                    unset($File->id);
+                    $this->dao->insert(TABLE_FILE)->data($File)->exec();
                 }
                 $this->loadModel('action')->create('case', $caseID, 'fromlib', '', $case->lib);
             }

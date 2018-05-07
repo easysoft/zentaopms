@@ -13,6 +13,11 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
 <?php $this->app->loadLang('file');?>
+<style>
+#customFields{margin-bottom:0px;margin-top:50px;}
+#exportFields_chosen{margin-top:15px;margin-bottom:10px;}
+#exportFields_chosen ul.chosen-choices{border:0px;box-shadow:none}
+</style>
 <script>
 function setDownloading()
 {
@@ -98,7 +103,6 @@ function deleteTemplate()
 function setExportTPL()
 {
     $('#customFields').toggle();
-    $('.mb-150px').toggle();
 }
 
 $(document).ready(function()
@@ -117,7 +121,7 @@ $(document).ready(function()
     <h2><?php echo $lang->export;?></h2>
   </div>
   <?php $isCustomExport = (!empty($customExport) and !empty($allExportFields));?>
-  <form class='main-form' method='post' target='hiddenwin' style='padding: 40px 1% 50px'>
+  <form class='main-form' method='post' target='hiddenwin' style='padding: 50px 1% 50px'>
     <table class='w-p100 table-fixed'>
       <tr>
         <td>
@@ -165,7 +169,7 @@ $(document).ready(function()
         if(!$hasDefaultField)$selectedFields[] = $field;
     }
     ?>
-    <div class='panel' id='customFields' style='margin-bottom:150px;display:none'>
+    <div class='panel' id='customFields' style='display:none'>
       <div class='panel-heading'><strong><?php echo $lang->file->exportFields?></strong></div>
       <div class='panel-body'>
         <p><?php echo html::select('exportFields[]', $exportFieldPairs, $selectedFields, "class='form-control chosen' multiple")?></p>
