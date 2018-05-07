@@ -25,10 +25,19 @@
 <div class='alert alert-info'><?php echo $suhosinInfo;?></div>
 <?php else:?>
 <?php
-$visibleFields = array();
+$visibleFields  = array();
+$requiredFields = array();
 foreach(explode(',', $showFields) as $field)
 {
     if($field)$visibleFields[$field] = '';
+}
+foreach(explode(',', $this->config->testcase->edit->requiredFields) as $field)
+{
+    if($field)
+    {
+        $requiredFields[$field] = '';
+        if(strpos(",{$config->testcase->customBatchEditFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+    }
 }
 ?>
 <form class='form-condensed' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit');?>">
@@ -36,18 +45,36 @@ foreach(explode(',', $showFields) as $field)
     <thead>
       <tr>
         <th class='w-50px'><?php  echo $lang->idAB;?></th> 
-        <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden')?>'>    <?php echo $lang->priAB;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden')?>'><?php echo $lang->statusAB;?></th>
+        <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden')?>'>
+          <?php echo $lang->priAB;?>
+          <?php if(isset($requiredFields['pri'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden')?>'>
+          <?php echo $lang->statusAB;?>
+          <?php if(isset($requiredFields['status'])) echo " <span class='required'></span>";?>
+        </th>
         <?php if($branchProduct):?>
         <th class='w-150px<?php echo zget($visibleFields, 'branch', ' hidden')?>'><?php echo $lang->testcase->branch;?></th>
         <?php endif;?>
         <th class='w-150px<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->testcase->module;?></th>
-        <th class='w-150px<?php echo zget($visibleFields, 'story', ' hidden')?>'><?php echo $lang->testcase->story;?></th>
-        <th><?php echo $lang->testcase->title;?></th>
-        <th class='w-120px'><?php echo $lang->testcase->type;?></th>
-        <th class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'>    <?php echo $lang->testcase->precondition;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'><?php echo $lang->testcase->keywords;?></th>
-        <th class='w-300px<?php echo zget($visibleFields, 'stage', ' hidden')?>'>   <?php echo $lang->testcase->stage;?></th>
+        <th class='w-150px<?php echo zget($visibleFields, 'story', ' hidden')?>'>
+          <?php echo $lang->testcase->story;?>
+          <?php if(isset($requiredFields['story'])) echo " <span class='required'></span>";?>
+        </th>
+        <th><?php echo $lang->testcase->title;?> <span class='required'></span></th>
+        <th class='w-120px'><?php echo $lang->testcase->type;?> <span class='required'></span></th>
+        <th class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'>
+          <?php echo $lang->testcase->precondition;?>
+          <?php if(isset($requiredFields['precondition'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'>
+          <?php echo $lang->testcase->keywords;?>
+          <?php if(isset($requiredFields['keywords'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-300px<?php echo zget($visibleFields, 'stage', ' hidden')?>'>
+          <?php echo $lang->testcase->stage;?>
+          <?php if(isset($requiredFields['stage'])) echo " <span class='required'></span>";?>
+        </th>
       </tr>
     </thead>
     <tbody>

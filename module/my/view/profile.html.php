@@ -62,7 +62,7 @@
       <th><?php echo $lang->user->email;?></th>
       <td><?php echo $user->email;?></td>
     </tr>
-    <tr>
+    <tr> 
       <th><?php echo $lang->user->join;?></th>
       <td><?php echo formatTime($user->join);?></td>
     </tr>

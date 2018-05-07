@@ -85,6 +85,7 @@ class upgrade extends control
      */
     public function confirm()
     {
+        $this->session->set('step', '');
         $this->view->title       = $this->lang->upgrade->confirm;
         $this->view->position[]  = $this->lang->upgrade->common;
         $this->view->confirm     = $this->upgrade->getConfirm($this->post->fromVersion);
@@ -104,6 +105,7 @@ class upgrade extends control
      */
     public function execute($fromVersion = '')
     {
+        $this->session->set('step', '');
         $fromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
         $this->upgrade->execute($fromVersion);
 

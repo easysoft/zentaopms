@@ -60,8 +60,8 @@
                 <?php $class = $color ? 'rowcolor' : '';?>
                 <?php if($id != 1) echo "<tr class='text-center'>"?>
                   <td align='left' class="<?php echo $class;?>"><?php echo $plan->title;?></td>
-                  <td class="<?php echo $class;?>"><?php echo $plan->begin;?></td>
-                  <td class="<?php echo $class;?>"><?php echo $plan->end;?></td>
+                  <td class="<?php echo $class;?>"><?php echo $plan->begin == '2030-01-01' ? $lang->productplan->future : $plan->begin;?></td>
+                  <td class="<?php echo $class;?>"><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
                   <?php
                   $draftCount   = isset($plan->status['draft'])   ? $plan->status['draft']   : 0;
                   $activeCount  = isset($plan->status['active'])  ? $plan->status['active']  : 0;

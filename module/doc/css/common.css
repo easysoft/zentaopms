@@ -1,6 +1,6 @@
 .libs-group-heading {color: #808080; border-bottom:1px solid #ddd; padding:8px;}
 .libs-group-heading a{overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
-.libs-group{padding:10px; height:84px;}
+.libs-group{padding:10px; min-height:84px;}
 .lib {float: left; display: block; width:80px; padding: 5px; margin:0px 3px; text-align: center; color: #333; overflow: hidden; text-overflow: ellipsis;}
 .lib .file-icon{margin-bottom:5px;}
 .lib .lib-name{overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}

@@ -32,13 +32,25 @@ function computeEndDate(delta)
         delta = (weekend == 2) ? (delta - 2) : (delta - 1);
     }
 
+    currentBeginDate = beginDate.toString('yyyy-MM-dd');
     endDate = beginDate.addDays(delta - 1).toString('yyyy-MM-dd');
-    if(delta == 9999)
+
+    $('#begin').val(currentBeginDate);
+    $('#end').val(endDate).datetimepicker('update');
+}
+
+$('#future').on('change', function()
+{
+    if($(this).prop('checked'))
     {
-        $('#end').val('').attr("disabled","disabled");
+        $('#begin').val('').attr('disabled', 'disabled');
+        $('#end').val('').parents('tr').hide();
     }
     else
     {
-        $('#end').val(endDate).removeAttr('disabled').datetimepicker('update');
+        $('#begin').removeAttr('disabled');
+        $('#end').parents('tr').show();
     }
-}
+});
+
+$('#future').change();

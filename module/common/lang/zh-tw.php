@@ -80,7 +80,11 @@ $lang->tutorial        = '新手教程';
 $lang->changeLog       = '修改日誌';
 $lang->manual          = '手冊';
 $lang->customMenu      = '自定義導航';
+<<<<<<< HEAD
 $lang->customField     = '自定義表單項';
+=======
+$lang->lineNumber      = '行號';
+>>>>>>> zentaopms_9.8
 $lang->tutorialConfirm = '檢測到你尚未退出新手教程模式，是否現在退出？';
 
 $lang->preShortcutKey  = '[快捷鍵:←]';
@@ -423,7 +427,7 @@ $lang->menugroup->message     = 'admin';
 /* 錯誤提示信息。*/
 $lang->error = new stdclass();
 $lang->error->companyNotFound = "您訪問的域名 %s 沒有對應的公司。";
-$lang->error->length          = array("『%s』長度錯誤，應當為『%s』", "『%s』長度應當不超過『%s』，且不小於『%s』。");
+$lang->error->length          = array("『%s』長度錯誤，應當為『%s』", "『%s』長度應當不超過『%s』，且大於『%s』。");
 $lang->error->reg             = "『%s』不符合格式，應當為:『%s』。";
 $lang->error->unique          = "『%s』已經有『%s』這條記錄了。如果您確定該記錄已刪除，請到後台管理-資源回收筒還原。。";
 $lang->error->gt              = "『%s』應當大於『%s』。";

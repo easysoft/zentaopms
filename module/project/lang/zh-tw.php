@@ -97,6 +97,7 @@ $lang->project->statusList['wait']      = '未開始';
 $lang->project->statusList['doing']     = '進行中';
 $lang->project->statusList['suspended'] = '已掛起';
 $lang->project->statusList['done']      = '已完成';
+$lang->project->statusList['closed']    = '已關閉';
 
 $lang->project->aclList['open']    = "預設設置(有{$lang->projectCommon}視圖權限，即可訪問)";
 $lang->project->aclList['private'] = "私有{$lang->projectCommon}(只有{$lang->projectCommon}團隊成員才能訪問)";
@@ -145,9 +146,12 @@ $lang->project->tree              = '樹狀圖';
 $lang->project->storyKanban       = '需求看板';
 $lang->project->storySort         = '需求排序';
 $lang->project->importPlanStory   = '創建' . $lang->projectCommon . '成功！\n是否導入計劃關聯的相關需求？';
+<<<<<<< HEAD
 $lang->project->iteration         = '版本迭代';
 $lang->project->iterationInfo     = '迭代%s次';
 $lang->project->viewAll           = '查看所有';
+=======
+>>>>>>> zentaopms_9.8
 
 /* 分組瀏覽。*/
 $lang->project->allTasks     = '所有';

@@ -206,8 +206,18 @@ class upgradeModel extends model
                 $this->changeTeamFields();
                 $this->moveData2Notify();
              case '9_8':
-                $this->fixFinishedBy();
+                $this->fixTaskFinishedInfo();
              case '9_8_1':
+                $this->execSQL($this->getUpgradeFile('9.8.1'));
+                $this->fixTaskAssignedTo();
+                $this->fixProjectClosedInfo();
+                $this->resetProductLine();
+             case '9_8_2':
+                $this->execSQL($this->getUpgradeFile('9.8.2'));
+                $this->addUniqueKeyToTeam();
+             case '9_8_3':
+             case '10_0_beta':
+                $this->execSQL($this->getUpgradeFile('10_0_beta'));
        }
 
         $this->deletePatch();
@@ -312,7 +322,10 @@ class upgradeModel extends model
         case '9_6_3':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.6.3'));
         case '9_7':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.7'));
         case '9_8':
-        case '9_8_1':
+        case '9_8_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.8.1'));
+        case '9_8_2':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.8.2'));
+        case '9_8_3':
+        case '10_0_beta': $confirmContent .= file_get_contents($this->getUpgradeFile('10.0.beta'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -761,7 +774,7 @@ class upgradeModel extends model
     public function execSQL($sqlFile)
     {
         $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
-        $ignoreCode   = '|1050|1060|1062|1091|1169|1061|';
+        $ignoreCode   = '|1050|1060|1091|1061|';
 
         /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
         $sqls = explode("\n", file_get_contents($sqlFile));
@@ -2095,7 +2108,7 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function fixFinishedBy()
+    public function fixTaskFinishedInfo()
     {
         $stmt = $this->dao->select('t1.id as historID,t2.objectType,t2.objectID,t2.actor')->from(TABLE_HISTORY)->alias('t1')
             ->leftJoin(TABLE_ACTION)->alias('t2')->on('t1.action=t2.id')
@@ -2111,4 +2124,162 @@ class upgradeModel extends model
         }
         return true;
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * Fix assignedTo for closed tasks, but assignedTo is not closed.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function fixTaskAssignedTo()
+    {
+        $needUpdateTasks = $this->dao->select('id,parent,closedBy')->from(TABLE_TASK)
+            ->where('status')->eq('closed')
+            ->andWhere('assignedTo')->ne('closed')
+            ->fetchAll('id');
+
+        if(!$needUpdateTasks) return true;
+
+        $needUpdateParentTasks = array();
+        $needUpdateChildTasks  = array();
+        foreach($needUpdateTasks as $taskID => $task)
+        {
+            if(!$task->parent)
+            {
+                $needUpdateParentTasks[$taskID] = $task;
+            }
+            else
+            {
+                if(!isset($needUpdateChildTasks[$task->parent])) $needUpdateChildTasks[$task->parent] = array();
+                $needUpdateChildTasks[$task->parent][$taskID] = $task;
+            }
+        }
+
+        /* Update parent task.*/
+        $childTasks     = $this->dao->select('id,parent,assignedDate,closedBy,closedDate,closedReason')->from(TABLE_TASK)->where('parent')->in(array_keys($needUpdateParentTasks))->fetchGroup('parent');
+        $lastChildTasks = array();
+        foreach($childTasks as $parentID => $tasks)
+        {
+            foreach($tasks as $task)
+            {
+                if(isset($lastChildTasks[$parentID]))
+                {
+                    if($lastChildTasks[$parentID]->closedDate < $task->closedDate) $lastChildTasks[$parentID] = $task;
+                }
+                else
+                {
+                    $lastChildTasks[$parentID] = $task;
+                }
+            }
+        }
+
+        foreach($needUpdateParentTasks as $parentTask)
+        {
+            $lastChild = isset($lastChildTasks[$parentTask->id]) ? $lastChildTasks[$parentTask->id] : '';
+
+            $stmt = $this->dao->update(TABLE_TASK)->set('assignedTo')->eq('closed');
+            if($lastChild) $stmt->set('assignedDate')->eq($lastChild->assignedDate);
+            $stmt->where('id')->eq($parentTask->id)->exec();
+
+            if(empty($parentTask->closedBy) && !empty($lastChild->closedBy))
+            {
+                $this->dao->update(TABLE_TASK)->set('closedBy')->eq($lastChild->closedBy)->set('closedDate')->eq($lastChild->closedDate)->set('closedReason')->eq($lastChild->closedReason)->where('id')->eq($parentTask->id)->exec();
+            }
+        }
+
+        /* Update children task.*/
+        $parentTasks = $this->dao->select('id,assignedDate,closedBy,closedDate,closedReason')->from(TABLE_TASK)
+            ->where('parent')->eq(0)
+            ->andWhere('id')->in(array_keys($needUpdateChildTasks))
+            ->fetchAll('id');
+
+        foreach($needUpdateChildTasks as $parentID => $childTasks)
+        {
+            $parent = isset($parentTasks[$parentID]) ? $parentTasks[$parentID] : '';
+
+            foreach($childTasks as $childTask)
+            {
+                $stmt = $this->dao->update(TABLE_TASK)->set('assignedTo')->eq('closed');
+                if(!empty($parent)) $stmt->set('assignedDate')->eq($parent->assignedDate);
+                $stmt->where('id')->eq($childTask->id)->exec();
+
+                if(empty($childTask->closedBy) && !empty($parent->closedBy))
+                {
+                    $this->dao->update(TABLE_TASK)->set('closedBy')->eq($parent->closedBy)->set('closedDate')->eq($parent->closedDate)->set('closedReason')->eq($parent->closedReason)->where('id')->eq($childTask->id)->exec();
+                }
+            }
+        }
+
+        return dao::isError();
+    }
+
+    /**
+     * Fix project closedBy and closedDate.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function fixProjectClosedInfo()
+    {
+        $stmt = $this->dao->select('t1.id as historID, t2.id, t2.objectType,t2.objectID,t2.actor,t2.date')->from(TABLE_HISTORY)->alias('t1')
+            ->leftJoin(TABLE_ACTION)->alias('t2')->on('t1.action=t2.id')
+            ->where('t1.field')->eq('status')
+            ->andWhere('t2.objectType')->eq('project')
+            ->andWhere('t2.action')->eq('closed')
+            ->query();
+
+        while($action = $stmt->fetch())
+        {
+            $this->dao->insert(TABLE_HISTORY)->set('`new`')->eq($action->actor)->set('`field`')->eq('closedBy')->set('`action`')->eq($action->id)->exec();
+            $this->dao->insert(TABLE_HISTORY)->set('`new`')->eq($action->date)->set('`old`')->eq('0000-00-00 00:00:00')->set('`field`')->eq('closedDate')->set('`action`')->eq($action->id)->exec();
+            $this->dao->update(TABLE_HISTORY)->set('`new`')->eq('closed')->where('`action`')->eq($action->id)->andWhere('field')->eq('status')->exec();
+            $this->dao->update(TABLE_PROJECT)->set('`status`')->eq('closed')->set('`closedBy`')->eq($action->actor)->set('`closedDate`')->eq($action->date)->where('id')->eq($action->objectID)->exec();
+        }
+        return !dao::isError();
+    }
+
+    /**
+     * Set the value of deleted product line to 0.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function resetProductLine()
+    {
+        $deletedLines = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq('1')->fetchPairs('id', 'id');
+        $this->dao->update(TABLE_PRODUCT)->set('line')->eq(0)->where('line')->in($deletedLines)->exec();
+        return !dao::isError();
+    }
+    
+    /**
+     * Add unique key to team table. 
+     * 
+     * @access public
+     * @return bool
+     */
+    public function  addUniqueKeyToTeam()
+    {
+        $members = $this->dao->select('root, type, account')->from(TABLE_TEAM)->groupBy('root, type, account')->having('count(*)')->gt(1)->fetchAll();
+
+        foreach($members as $member)
+        {
+            $maxID = $this->dao->select('MAX(id) id')
+                ->from(TABLE_TEAM)
+                ->where('root')->eq($member->root)
+                ->andWhere('`type`')->eq($member->type)
+                ->andWhere('account')->eq($member->account)
+                ->fetch('id');
+            $this->dao->delete()->from(TABLE_TEAM)
+                ->where('root')->eq($member->root)
+                ->andWhere('`type`')->eq($member->type)
+                ->andWhere('account')->eq($member->account)
+                ->andWhere('id')->ne($maxID)
+                ->exec();
+        }
+        $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " ADD UNIQUE `team` (`root`, `type`, `account`)");
+        return !dao::isError();
+    }
+>>>>>>> zentaopms_9.8
 }

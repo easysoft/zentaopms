@@ -138,15 +138,16 @@ if($config->debug)
                 {value: options.value, label: options.name, color: options.color},
                 {value: 100 - options.value, label: '', color: options.backColor}
             ];
-
-            $canvas[options.doughnut ? 'doughnutChart' : 'pieChart'](data, $.extend(
+            var chartOptions = $.extend(
             {
                 segmentShowStroke: false,
                 animation: options.animation,
                 showTooltips: options.showTip,
                 tooltipTemplate: options.tipTemplate,
                 percentageInnerCutout: options.doughnutSize,
-            }, options.chartOptions));
+            }, options.chartOptions);
+
+            $canvas[options.doughnut ? 'doughnutChart' : 'pieChart'](data, chartOptions);
         });
     };
 
@@ -154,8 +155,7 @@ if($config->debug)
     {
         $('.table-chart').tableChart();
         var $pies = $('.progress-pie');
-        if($pies.length > 100)  setTimeout(function(){$pies.progressPie();}, 1000);
-        else $pies.progressPie();
+        setTimeout(function(){$pies.progressPie();}, $pies.length > 100 ? 1000 : 200);
     });
 }());
 </script>

@@ -12,10 +12,19 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php js::set('confirmRecord',    $lang->task->confirmRecord);?>
+<?php $team = array_keys($task->team);?>
+<?php js::set('confirmRecord',    (!empty($team) && $task->assignedTo != end($team)) ? $lang->task->confirmTransfer : $lang->task->confirmRecord);?>
 <?php js::set('noticeSaveRecord', $lang->task->noticeSaveRecord);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
+    <?php if(!empty($task->team) && $task->assignedTo != $this->app->user->account):?>
+    <div class="alert with-icon">
+      <i class="icon-info-sign"></i>
+      <div class="content">
+        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts);?></p>
+      </div>
+    </div>
+    <?php else:?>
     <div class='main-header'>
       <h2>
         <span class='label label-id'><?php echo $task->id;?></span>
@@ -56,7 +65,6 @@
         <?php endforeach;?>
         <?php endif;?>
         <?php if(in_array($task->status, array('wait', 'pause', 'doing'))):?>
-        <?php if(empty($task->team) || (!empty($task->team) && in_array($task->assignedTo, array_keys($task->team)))) :?>
         <thead>
           <tr class='text-center'>
             <th class="w-id"><?php echo $lang->idAB;?></th>
@@ -82,8 +90,9 @@
         </tr>
       </table>
       <?php endif;?>
-      <?php endif;?>
     </form>
+    <?php endif;?>
   </div>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>
+<?php endif;?>

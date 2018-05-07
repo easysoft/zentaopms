@@ -88,7 +88,7 @@ foreach(explode(',', $showFields) as $field)
           <?php echo html::select("branches[$storyID]", $branches, $story->branch, "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $storyID);' $disabled");?>
         </td>
         <?php endif;?>
-        <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'>
+        <td class='text-left<?php echo zget($visibleFields, 'module')?>' style='overflow:visible'>
           <?php echo html::select("modules[$storyID]", $modules, $story->module, "class='form-control chosen'");?>
         </td>
         <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'>

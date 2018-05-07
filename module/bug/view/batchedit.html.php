@@ -26,10 +26,19 @@
 <div class='alert alert-info'><?php echo $suhosinInfo;?></div>
 <?php else:?>
 <?php
-$visibleFields = array();
+$visibleFields  = array();
+$requiredFields = array();
 foreach(explode(',', $showFields) as $field)
 {
     if($field)$visibleFields[$field] = '';
+}
+foreach(explode(',', $this->config->bug->edit->requiredFields) as $field)
+{
+    if($field)
+    {
+        $requiredFields[$field] = '';
+        if(strpos(",{$config->bug->list->customBatchEditFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+    }
 }
 $columns = count($visibleFields) + 2;
 ?>
@@ -38,20 +47,47 @@ $columns = count($visibleFields) + 2;
     <thead>
       <tr>
         <th class='w-50px'><?php echo $lang->idAB;?></th>
-        <th class='w-110px<?php echo zget($visibleFields, 'type', ' hidden')?>'><?php echo $lang->bug->type;?></th>
-        <th class='w-70px<?php echo zget($visibleFields, 'severity', ' hidden')?>'><?php echo $lang->bug->severityAB;?></th>
-        <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden')?>'><?php echo $lang->bug->pri;?></th>
+        <th class='w-110px<?php echo zget($visibleFields, 'type', ' hidden')?>'>
+          <?php echo $lang->bug->type;?>
+          <?php if(isset($requiredFields['type'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-70px<?php echo zget($visibleFields, 'severity', ' hidden')?>'>
+          <?php echo $lang->bug->severityAB;?>
+          <?php if(isset($requiredFields['severity'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden')?>'>
+          <?php echo $lang->bug->pri;?>
+          <?php if(isset($requiredFields['pri'])) echo " <span class='required'></span>";?>
+        </th>
         <th <?php if(count($visibleFields) >= 10) echo "class='w-150px'"?>><?php echo $lang->bug->title;?> <span class='required'></span></th>
         <?php if($branchProduct):?>
         <th class='w-150px<?php echo zget($visibleFields, 'branch', ' hidden')?>'><?php echo $lang->bug->branch;?></th>
         <?php endif;?>
-        <th class='w-150px<?php echo zget($visibleFields, 'productplan', ' hidden')?>'><?php echo $lang->bug->productplan;?></th>
-        <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'><?php echo $lang->bug->assignedTo;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'deadline', ' hidden')?>'><?php echo $lang->bug->deadline;?></th>
+        <th class='w-150px<?php echo zget($visibleFields, 'productplan', ' hidden')?>'>
+          <?php echo $lang->bug->productplan;?>
+          <?php if(isset($requiredFields['productplan'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'>
+          <?php echo $lang->bug->assignedTo;?>
+          <?php if(isset($requiredFields['assignedTo'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-100px<?php echo zget($visibleFields, 'deadline', ' hidden')?>'>
+          <?php echo $lang->bug->deadline;?>
+          <?php if(isset($requiredFields['deadline'])) echo " <span class='required'></span>";?>
+        </th>
         <th class='w-90px<?php echo zget($visibleFields, 'status', ' hidden')?>'><?php echo $lang->bug->status;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'os', ' hidden')?>'><?php echo $lang->bug->os;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'browser', ' hidden')?>'><?php echo $lang->bug->browser;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'><?php echo $lang->bug->keywords;?></th>
+        <th class='w-100px<?php echo zget($visibleFields, 'os', ' hidden')?>'>
+          <?php echo $lang->bug->os;?>
+          <?php if(isset($requiredFields['os'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-100px<?php echo zget($visibleFields, 'browser', ' hidden')?>'>
+          <?php echo $lang->bug->browser;?>
+          <?php if(isset($requiredFields['browser'])) echo " <span class='required'></span>";?>
+        </th>
+        <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'>
+          <?php echo $lang->bug->keywords;?>
+          <?php if(isset($requiredFields['keywords'])) echo " <span class='required'></span>";?>
+        </th>
         <th class='w-120px<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>'><?php echo $lang->bug->resolvedByAB;?></th>
         <th class='w-120px<?php echo zget($visibleFields, 'resolution', ' hidden')?>'><?php echo $lang->bug->resolutionAB;?></th>
       </tr>
