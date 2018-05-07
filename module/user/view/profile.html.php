@@ -13,17 +13,17 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include './featurebar.html.php';?>
-<div class='container mw-600px'>
-  <div id='titlebar'>
-    <div class='heading'>
+<div id='mainContent' class='main-content'>
+<div class='main-header'>
+  <h2>
       <span class='prefix' title='USER'><?php echo html::icon($lang->icons['user']);?> <strong><?php echo $user->id;?></strong></span>
       <strong><?php echo $user->realname;?> (<small><?php echo $user->account;?></small>)</strong>
       <small class='text-muted'> <?php echo $lang->user->profile;?> <?php echo html::icon('eye-open');?></small>
-    </div>
-    <div class='actions'>
-      <?php echo html::a($this->createLink('user', 'edit', "userID=$user->id"), html::icon('pencil') . ' ' . $lang->user->editProfile, '', "class='btn btn-primary'"); ?>
-    </div>
+  </h2>
+  <div class='actions'>
+    <?php echo html::a($this->createLink('user', 'edit', "userID=$user->id"), html::icon('pencil') . ' ' . $lang->user->editProfile, '', "class='btn btn-primary'"); ?>
   </div>
+
   <table class='table table-borderless table-data'>
     <tr>
       <th class='w-100px'><?php echo $lang->user->dept;?></th>

@@ -13,47 +13,93 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include './featurebar.html.php';?>
-<div class='sub-featurebar'>
-  <ul class='nav'>
-    <?php 
-    echo "<li id='today'>"      . html::a(inLink('dynamic', "period=today&account=$account"),      $lang->action->dynamic->today)      . '</li>';
-    echo "<li id='yesterday'>"  . html::a(inLink('dynamic', "period=yesterday&account=$account"),  $lang->action->dynamic->yesterday)  . '</li>';
-    echo "<li id='twodaysago'>" . html::a(inLink('dynamic', "period=twodaysago&account=$account"), $lang->action->dynamic->twoDaysAgo) . '</li>';
-    echo "<li id='thisweek'>"   . html::a(inLink('dynamic', "period=thisweek&account=$account"),   $lang->action->dynamic->thisWeek)   . '</li>';
-    echo "<li id='lastweek'>"   . html::a(inLink('dynamic', "period=lastweek&account=$account"),   $lang->action->dynamic->lastWeek)   . '</li>';
-    echo "<li id='thismonth'>"  . html::a(inLink('dynamic', "period=thismonth&account=$account"),  $lang->action->dynamic->thisMonth)  . '</li>';
-    echo "<li id='lastmonth'>"  . html::a(inLink('dynamic', "period=lastmonth&account=$account"),  $lang->action->dynamic->lastMonth)  . '</li>';
-    echo "<li id='all'>"        . html::a(inLink('dynamic', "period=all&account=$account"),        $lang->action->dynamic->all)        . '</li>';
+<div id="mainMenu" class="clearfix">
+  <div class="btn-toolbar pull-left">
+    <?php foreach($lang->action->periods as $period => $label):?>
+    <?php
+    $label  = "<span class='text'>$label</span>";
+    $active = '';
+    if($period == $type)
+    {
+        $active = 'btn-active-text';
+        $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+    }
+    echo html::a(inlink('dynamic', "type=$period&account=$account"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
-  </ul>
+    <?php endforeach;?>
+  </div>
 </div>
-<table class='table tablesorter table-fixed'>
-  <thead>
-  <tr class='colhead'>
-    <th class='w-150px'><?php echo $lang->action->date;?></th>
-    <th class='w-user'> <?php echo $lang->action->actor;?></th>
-    <th class='w-100px'><?php echo $lang->action->action;?></th>
-    <th class='w-80px'> <?php echo $lang->action->objectType;?></th>
-    <th class='w-id'>   <?php echo $lang->idAB;?></th>
-    <th><?php echo $lang->action->objectName;?></th>
-  </tr>
-  </thead>
-  <tbody>
-  <?php foreach($actions as $action):?>
-  <?php $module = $action->objectType == 'case' ? 'testcase' : $action->objectType;?>
-  <tr class='text-center'>
-    <td><?php echo $action->date;?></td>
-    <td><?php echo $users[$action->actor];?></td>
-    <td><?php echo $action->actionLabel;?></td>
-    <td><?php echo $lang->action->objectTypes[$action->objectType];?></td>
-    <td><?php echo $action->objectID;?></td>
-    <td class='text-left'><?php echo html::a($action->objectLink, $action->objectName);?></td>
-  </tr>
-  <?php endforeach;?>
-  </tbody>
-  <tfoot><tr><td colspan='6'><?php $pager->show();?></td></tr></tfoot>
-</table>
+<div id="mainContent" class="main-content">
+  <div id="dynamics">
+    <?php $firstAction = '';?>
+    <?php foreach($dateGroups as $date => $actions):?>
+    <?php $isToday = date(DT_DATE4) == $date;?>
+    <div class="dynamic <?php if($isToday) echo 'active';?>">
+      <div class="dynamic-date">
+        <?php if($isToday):?>
+        <span class="date-label"><?php echo $lang->action->dynamic->today;?></span>
+        <?php endif;?>
+        <span class="date-text"><?php echo $date;?></span>
+        <button type="button" class="btn btn-info btn-icon btn-sm dynamic-btn"><i class="icon icon-caret-up"></i></button>
+      </div>
+      <ul class="timeline timeline-tag-left">
+        <?php if($direction == 'next') $actions = array_reverse($actions);?>
+        <?php foreach($actions as $i => $action):?>
+        <?php if(empty($firstAction)) $firstAction = $action;?>
+        <li <?php if($action->actor == $this->app->user->account) echo "class='active'";?>>
+          <div>
+            <span class="timeline-tag"><?php echo $action->time?></span>
+            <span class="timeline-text">
+              <?php echo $app->user->realname . ' ' . $action->actionLabel;?>
+              <span class="text-muted"><?php echo $action->objectLabel;?></span>
+              <span class="label label-id"><?php echo $action->objectID;?></span>
+              <?php echo html::a($action->objectLink, $action->objectName);?>
+            </span>
+          </div>
+        </li>
+        <?php endforeach;?>
+      </ul>
+    </div>
+    <?php endforeach;?>
+  </div>
+  <?php if(!empty($firstAction)):?>
+  <?php
+  $firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
+  $lastDate  = substr($action->originalDate, 0, 10);
+  $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
+  $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
+  ?>
+  <?php if($hasPre or $hasNext):?>
+  <div class='table-footer'>
+    <ul class='pager'>
+      <?php $class = $hasPre ? '' : 'disabled';?>
+      <li class='<?php echo $class;?> pager-item-left'>
+        <?php
+        $link = '###';
+        if($hasPre) $link = inlink('dynamic', "type=$type&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . '&direction=pre');
+        echo html::a($link, '<i class="icon icon-angle-left"></i>', '', "class='pager-item'");
+        ?>
+      </li>
+      <?php $class = $hasNext ? '' : 'disabled';?>
+      <li class='<?php echo $class;?> pager-item-left'>
+        <?php
+        $link = '###';
+        if($hasNext) $link = inlink('dynamic', "type=$type&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next');
+        echo html::a($link, '<i class="icon icon-angle-right"></i>', '', "class='pager-item'");
+        ?>
+      </li>
+    </ul>
+  </div>
+  <?php endif;?>
+  <?php endif;?>
+</div>
 <script type='text/javascript'>
-$(function(){$('#<?php echo $period?>').addClass('active');})
+$(function()
+{
+    $('#dynamics').on('click', '.dynamic-btn', function()
+    {
+        $(this).closest('.dynamic').toggleClass('collapsed');
+    });
+})
 </script>
 <?php include '../../common/view/footer.html.php';?>
