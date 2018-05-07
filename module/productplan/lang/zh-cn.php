@@ -52,14 +52,13 @@ $lang->productplan->bugs    = 'Bug数';
 $lang->productplan->hour    = '工时';
 $lang->productplan->project = $lang->projectCommon;
 
-$lang->productplan->endList[7]    = '一星期';
-$lang->productplan->endList[14]   = '两星期';
-$lang->productplan->endList[31]   = '一个月';
-$lang->productplan->endList[62]   = '两个月';
-$lang->productplan->endList[93]   = '三个月';
-$lang->productplan->endList[186]  = '半年';
-$lang->productplan->endList[365]  = '一年';
-$lang->productplan->endList[9999] = '待定';
+$lang->productplan->endList[7]   = '一星期';
+$lang->productplan->endList[14]  = '两星期';
+$lang->productplan->endList[31]  = '一个月';
+$lang->productplan->endList[62]  = '两个月';
+$lang->productplan->endList[93]  = '三个月';
+$lang->productplan->endList[186] = '半年';
+$lang->productplan->endList[365] = '一年';
 
 $lang->productplan->errorNoTitle = 'ID %s 标题不能为空';
 $lang->productplan->errorNoBegin = 'ID %s 开始时间不能为空';

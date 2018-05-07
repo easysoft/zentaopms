@@ -20,10 +20,19 @@
     </div>
   </div>
   <?php
-  $visibleFields = array();
+  $visibleFields  = array();
+  $requiredFields = array();
   foreach(explode(',', $showFields) as $field)
   {
       if($field)$visibleFields[$field] = '';
+  }
+  foreach(explode(',', $this->config->project->edit->requiredFields) as $field)
+  {
+      if($field)
+      {
+          $requiredFields[$field] = '';
+          if(strpos(",{$config->project->customBatchEditFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+      }
   }
   $minWidth = (count($visibleFields) > 5) ? 'w-150px' : '';
   ?>
@@ -34,17 +43,17 @@
           <th class='w-50px'><?php echo $lang->idAB;?></th>
           <th class='required <?php echo $minWidth?>'><?php echo $lang->project->name;?></th>
           <th class='w-150px required'><?php echo $lang->project->code;?></th>
-          <th class='w-150px<?php echo zget($visibleFields, 'PM',     ' hidden')?>'><?php echo $lang->project->PM;?></th>
-          <th class='w-150px<?php echo zget($visibleFields, 'PO',     ' hidden')?>'><?php echo $lang->project->PO;?></th>
-          <th class='w-150px<?php echo zget($visibleFields, 'QD',     ' hidden')?>'><?php echo $lang->project->QD;?></th>
-          <th class='w-150px<?php echo zget($visibleFields, 'RD',     ' hidden')?>'><?php echo $lang->project->RD;?></th>
-          <th class='w-100px<?php echo zget($visibleFields, 'type',   ' hidden')?>'><?php echo $lang->project->type;?></th>
-          <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden')?>'><?php echo $lang->project->status;?></th>
+          <th class='w-150px<?php echo zget($visibleFields, 'PM',     ' hidden') . zget($requiredFields, 'PM',     ' required');?>'><?php echo $lang->project->PM;?></th>
+          <th class='w-150px<?php echo zget($visibleFields, 'PO',     ' hidden') . zget($requiredFields, 'PO',     ' required');?>'><?php echo $lang->project->PO;?></th>
+          <th class='w-150px<?php echo zget($visibleFields, 'QD',     ' hidden') . zget($requiredFields, 'QD',     ' required');?>'><?php echo $lang->project->QD;?></th>
+          <th class='w-150px<?php echo zget($visibleFields, 'RD',     ' hidden') . zget($requiredFields, 'RD',     ' required');?>'><?php echo $lang->project->RD;?></th>
+          <th class='w-100px<?php echo zget($visibleFields, 'type',   ' hidden') . zget($requiredFields, 'type',   ' required');?>'><?php echo $lang->project->type;?></th>
+          <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden') . zget($requiredFields, 'status', ' required');?>'><?php echo $lang->project->status;?></th>
           <th class='w-110px required'><?php echo $lang->project->begin;?></th>
           <th class='w-110px required'><?php echo $lang->project->end;?></th>
-          <th class='w-150px<?php echo zget($visibleFields, 'desc', ' hidden')?>'>    <?php echo $lang->project->desc;?></th>
-          <th class='w-150px<?php echo zget($visibleFields, 'teamname', ' hidden')?>'><?php echo $lang->project->teamname;?></th>
-          <th class='w-150px<?php echo zget($visibleFields, 'days',     ' hidden')?>'><?php echo $lang->project->days;?></th>
+          <th class='w-150px<?php echo zget($visibleFields, 'desc', ' hidden') . zget($requiredFields, 'desc', ' required');?>'>    <?php echo $lang->project->desc;?></th>
+          <th class='w-150px<?php echo zget($visibleFields, 'teamname', ' hidden') . zget($requiredFields, 'teamname', ' required');?>'><?php echo $lang->project->teamname;?></th>
+          <th class='w-150px<?php echo zget($visibleFields, 'days',     ' hidden') . zget($requiredFields, 'days',     ' required');?>'><?php echo $lang->project->days;?></th>
           <th class='w-80px'><?php echo $lang->project->order;?></th>
         </tr>
       </thead>
@@ -62,7 +71,7 @@
           <td class='<?php echo zget($visibleFields, 'status', 'hidden')?>'><?php echo html::select("statuses[$projectID]", $lang->project->statusList, $projects[$projectID]->status, 'class=form-control');?></td>
           <td><?php echo html::input("begins[$projectID]", $projects[$projectID]->begin, "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
           <td><?php echo html::input("ends[$projectID]",   $projects[$projectID]->end,   "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
-          <td class='<?php echo zget($visibleFields, 'desc', 'hidden')?>'>    <?php echo html::textarea("descs[$projectID]",  htmlspecialchars($projects[$projectID]->desc),  "rows='1' class='form-control autosize'");?></td>
+          <td class='<?php echo zget($visibleFields, 'desc', 'hidden')?>'>    <?php echo html::textarea("descs[$projectID]",  $projects[$projectID]->desc,  "rows='1' class='form-control autosize'");?></td>
           <td class='<?php echo zget($visibleFields, 'teamname', 'hidden')?>'><?php echo html::input("teams[$projectID]",  $projects[$projectID]->team,  "class='form-control' autocomplete='off'");?></td>
           <td class='<?php echo zget($visibleFields, 'days',     'hidden')?>'>
             <div class='input-group'>

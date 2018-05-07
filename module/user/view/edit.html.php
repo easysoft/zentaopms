@@ -28,8 +28,8 @@
         <tr>
           <th class='w-90px'><?php echo $lang->user->realname;?></th>
           <td class='w-p40'><?php echo html::input('realname', $user->realname, "class='form-control' autocomplete='off'");?></td>
-          <th class='w-90px'></th>
-          <td></td>
+          <th class='w-90px'><?php echo $lang->user->join;?></th>
+          <td><?php echo html::input('join', formatTime($user->join), "class='form-control form-date'");?></td>  
         </tr>
         <tr>
           <th class='w-90px'><?php echo $lang->user->dept;?></th>

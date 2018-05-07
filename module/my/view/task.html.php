@@ -65,7 +65,7 @@
             <?php printf('%03d', $task->id);?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>'><?php echo zget($lang->task->priList, $task->pri);?></span></td>
-          <td class='nobr text-left'><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></td>
+          <td class='nobr text-left' title="<?php echo $task->projectName;?>"><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></td>
           <td class='text-left nobr'>
             <?php if(!empty($task->team))   echo '<span class="label">' . $this->lang->task->multipleAB . '</span> ';?>
             <?php if(!empty($task->parent)) echo '<span class="label">' . $this->lang->task->childrenAB . '</span> ';?>

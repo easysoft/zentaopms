@@ -100,6 +100,7 @@ $lang->project->statusList['wait']      = '未开始';
 $lang->project->statusList['doing']     = '进行中';
 $lang->project->statusList['suspended'] = '已挂起';
 $lang->project->statusList['done']      = '已完成';
+$lang->project->statusList['closed']    = '已关闭';
 
 $lang->project->aclList['open']    = "默认设置(有{$lang->projectCommon}视图权限，即可访问)";
 $lang->project->aclList['private'] = "私有{$lang->projectCommon}(只有{$lang->projectCommon}团队成员才能访问)";
@@ -113,7 +114,7 @@ $lang->project->story             = '需求列表';
 $lang->project->bug               = 'Bug列表';
 $lang->project->dynamic           = '动态';
 $lang->project->latestDynamic     = '最新动态';
-$lang->project->build             = '版本列表';
+$lang->project->build             = '所有版本';
 $lang->project->testtask          = '测试任务';
 $lang->project->burn              = '燃尽图';
 $lang->project->baseline          = '基准线';

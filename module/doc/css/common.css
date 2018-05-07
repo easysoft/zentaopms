@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .split-row > .side-col,
 .split-row > .main-col {padding: 0;}
 .col-spliter {width: 20px; position: relative; z-index: 10; cursor: ew-resize;}
@@ -12,6 +13,22 @@
 .col-spliter:hover:after,
 .row-spliting .col-spliter:before,
 .row-spliting .col-spliter:after {opacity: 1;}
+=======
+.libs-group-heading {color: #808080; border-bottom:1px solid #ddd; padding:8px;}
+.libs-group-heading a{overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+.libs-group{padding:10px; min-height:84px;}
+.lib {float: left; display: block; width:80px; padding: 5px; margin:0px 3px; text-align: center; color: #333; overflow: hidden; text-overflow: ellipsis;}
+.lib .file-icon{margin-bottom:5px;}
+.lib .lib-name{overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+.lib:hover, .lib:focus, .lib:active {border-color: #2e6dad; background-color: #EBF2F9; color: #2e6dad}
+.lib .icon-move{display: none; position: relative; top: -10px; right : -70px;}
+.lib:hover .icon-move{display: inline-block; cursor: move;}
+.w-lib-p100{width:100%;}
+.w-lib-p50{width:45%;}
+.w-lib-p33{width:30%;}
+#titlebar > .heading > strong > i{display:inline;} 
+#modulemenu .nav > li > a{display: inline-block;}
+>>>>>>> f6289cc53c13786e3242f8792030e7752898794f
 
 @media (max-width: 720px) {
   .split-row > .side-col,

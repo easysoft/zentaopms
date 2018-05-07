@@ -87,22 +87,22 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php if(isset($menuItem->hidden)) continue;?>
     <?php if($this->config->global->flow == 'onlyTest' and $menuItem->name == 'needconfirm') continue;?>
-    <?php $menuBrowseType = strpos($menuItem->name, 'QUERY' === 0) ? 'bySearch' : $menuItem->name;?>
-    <?php $param = strpos($menuItem->name, 'QUERY' === 0) ? (int)substr($menuItem->name, 5) : 0;?>
+    <?php $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;?>
+    <?php $barParam = strpos($menuItem->name, 'QUERY') === 0 ? (int)substr($menuItem->name, 5) : 0;?>
     <?php if($menuItem->name == 'my'):?>
     <?php
     echo "<li id='statusTab' class='dropdown " . (!empty($currentBrowseType) ? 'active' : '') . "'>";
     echo html::a('javascript:;', $menuItem->text . " <span class='caret'></span>", '', "data-toggle='dropdown'");
     echo "<ul class='dropdown-menu'>";
-    foreach ($lang->bug->mySelects as $key => $value)
+    foreach($lang->bug->mySelects as $key => $value)
     {
         echo '<li' . ($key == $currentBrowseType ? " class='active'" : '') . '>';
-        echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$key&param=$param"), $value);
+        echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$key&param=$barParam"), $value);
     }
     echo '</ul></li>';
     ?>
     <?php else:?>
-    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType&param=$param"), $menuItem->text)?></li>
+    <li id='<?php echo $menuItem->name?>Tab'><?php echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType&param=$barParam"), $menuItem->text)?></li>
     <?php endif;?>
     <?php endforeach;?>
     <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->bug->byQuery;?></a></li>
@@ -162,7 +162,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   <a class='side-handle' data-id='bugTree'><i class='icon-caret-left'></i></a>
   <div class='side-body'>
     <div class='panel panel-sm'>
-      <div class='panel-heading nobr'>
+      <div class='panel-heading text-ellipsis'>
         <?php echo html::icon($lang->icons['product']);?> <strong><?php echo $branch ? $branches[$branch] : $productName;?></strong>
       </div>
       <div class='panel-body'>

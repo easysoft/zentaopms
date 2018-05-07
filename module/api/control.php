@@ -37,7 +37,15 @@ class api extends control
      */
     public function getModel($moduleName, $methodName, $params = '')
     {
-        parse_str(str_replace(',', '&', $params), $params);
+        $params    = explode(',', $params);
+        $newParams = array_shift($params);
+        foreach($params as $param)
+        {
+            $sign = strpos($param, '=') !== false ? '&' : ',';
+            $newParams .= $sign . $param;
+        }
+
+        parse_str($newParams, $params);
         $module = $this->loadModel($moduleName);
         $result = call_user_func_array(array(&$module, $methodName), $params);
         if(dao::isError()) die(json_encode(dao::getError()));

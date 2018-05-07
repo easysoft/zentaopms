@@ -113,23 +113,46 @@ class custom extends control
             }
             else
             {
+                foreach($_POST['keys'] as $index => $key)
+                {
+                    if(!empty($key)) $key = trim($key);
+                    /* Invalid key. It should be numbers. (It includes severityList in bug module and priList in stroy, task, bug, testcasea, testtask and todo module.) */
+                    if($field == 'priList' or $field == 'severityList')
+                    {
+                        if(!is_numeric($key) or $key > 255) die(js::alert($this->lang->custom->notice->invalidNumberKey));
+                    }
+                    if(!empty($key) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_0-9]+$/')) die(js::alert($this->lang->custom->notice->invalidStringKey));
+
+                    /* The length of roleList in user module and typeList in todo module is less than 10. check it when saved. */
+                    if($field == 'roleList' or $module == 'todo' and $field == 'typeList')
+                    {
+                        if(strlen($key) > 10) die(js::alert($this->lang->custom->notice->invalidStrlen['ten']));
+                    }
+                    
+                    /* The length of sourceList in story module and typeList in task module is less than 20, check it when saved. */
+                    if($field == 'sourceList' or $module == 'task' and $field == 'typeList')
+                    {
+                        if(strlen($key) > 20) die(js::alert($this->lang->custom->notice->invalidStrlen['twenty']));
+                    }
+                    
+                    /* The length of stageList in testcase module is less than 255, check it when saved. */
+                    if($module == 'testcase' and $field == 'stageList' and strlen($key) > 255) die(js::alert($this->lang->custom->notice->invalidStrlen['twoHundred']));
+                    
+                    /* The length of field that in bug and testcase module and reasonList in story and task module is less than 30, check it when saved. */
+                    if($module == 'bug' or $field == 'reasonList' or $module == 'testcase')
+                    {
+                        if(strlen($key) > 30) die(js::alert($this->lang->custom->notice->invalidStrlen['thirty']));
+                    }
+                }
+
                 $lang = $_POST['lang'];
                 $this->custom->deleteItems("lang=$lang&module=$module&section=$field");
                 foreach($_POST['keys'] as $index => $key)
                 {
+                    //if(!$system and (!$value or !$key)) continue; //Fix bug #951.
+                    
                     $value  = $_POST['values'][$index];
                     $system = $_POST['systems'][$index];
-
-                    //if(!$system and (!$value or !$key)) continue; //Fix bug #951.
-
-                    /* Fix bug #942. */
-                    if($field == 'priList' and !is_numeric($key)) die(js::alert($this->lang->custom->notice->priListKey));
-                    if($module == 'bug' and $field == 'severityList' and !is_numeric($key)) die(js::alert($this->lang->custom->notice->severityListKey));
-                    if(!empty($key) and $key != 'n/a' and !validater::checkREG($key, '/^[a-zA-Z_0-9]+$/')) die(js::alert($this->lang->custom->notice->keyList));
-
-                    /* the length of role is 20, check it when save. */
-                    if($module == 'user' and $field == 'roleList' and strlen($key) > 20) die(js::alert($this->lang->custom->notice->userRole));
-
                     $this->custom->setItem("{$lang}.{$module}.{$field}.{$key}.{$system}", $value);
                 }
             }

@@ -15,6 +15,14 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
+    <?php if(!empty($task->team) && $task->assignedTo != $this->app->user->account):?>
+    <div class="alert with-icon">
+      <i class="icon-info-sign"></i>
+      <div class="content">
+        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->finish);?></p>
+      </div>
+    </div>
+    <?php else:?>
     <div class='main-header'>
       <h2>
         <span class='label label-id'><?php echo $task->id;?></span>
@@ -36,8 +44,11 @@
         </tr>
         <?php endif;?>
         <tr>
-          <th><?php echo $lang->task->consumed;?></th>
-          <td><div class='input-group'><?php echo html::input('consumed', $task->consumed, "class='form-control' autocomplete='off'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td>
+          <th><?php echo empty($task->team) ? $lang->task->consumed : $lang->task->myConsumed;?></th>
+          <td>
+            <?php $consumed = empty($task->team) ? $task->consumed : $task->myConsumed;?>
+            <div class='input-group'><?php echo html::input('consumed', $consumed, "class='form-control' autocomplete='off'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div>
+          </td>
         </tr>
         <tr>
           <th><?php echo empty($task->team) ? $lang->task->assign : $lang->task->transferTo;?></th>
@@ -66,6 +77,7 @@
     </form>
     <hr class='small' />
     <div class='main'><?php include '../../common/view/action.html.php';?></div>
+    <?php endif;?>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

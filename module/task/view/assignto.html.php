@@ -14,6 +14,14 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
+    <?php if(!empty($task->team) && $task->assignedTo != $this->app->user->account):?>
+    <div class="alert with-icon">
+      <i class="icon-info-sign"></i>
+      <div class="content">
+        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->transfer);?></p>
+      </div>
+    </div>
+    <?php else:?>
     <div class='main-header'>
       <h2>
         <span class='label label-id'><?php echo $task->id;?></span>
@@ -25,7 +33,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo empty($task->team) ? $lang->task->assign : $lang->task->transferTo;?></th>
-          <td class='w-p25-f'><?php echo html::select('assignedTo', $members, $task->assignedTo, "class='form-control chosen'");?></td><td></td>
+          <td class='w-p25-f'><?php echo html::select('assignedTo', $members, empty($task->team) ? $task->assignedTo : $task->nextUser, "class='form-control chosen'");?></td><td></td>
         </tr>  
         <tr>
           <th><?php echo $lang->task->left;?></th>
@@ -46,6 +54,7 @@
     </form>
     <hr class='small' />
     <div class='main'><?php include '../../common/view/action.html.php';?></div>
+    <?php endif;?>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

@@ -36,7 +36,7 @@
     </thead>
     <tbody>
     <?php foreach($groups as $group):?>
-    <?php $users = implode(' ', $groupUsers[$group->id]);?>
+    <?php $users = implode(',', $groupUsers[$group->id]);?>
     <tr>
       <td class='text-center'><?php echo $group->id;?></td>
       <td><?php echo $group->name;?></td>

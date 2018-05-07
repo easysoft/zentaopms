@@ -37,12 +37,9 @@
       <tbody>
         <?php $unlinkedCount = 0;?>
         <?php foreach($allBugs as $bug):?>
-        <?php
-        if(isset($planBugs[$bug->id])) continue;
-        if($bug->plan and helper::diffDate($plans[$bug->plan], helper::today()) > 0) continue;
-        ?>
+        <?php if(isset($planBugs[$bug->id])) continue;?>
         <tr>
-          <td class='cell-id'>
+          <td class='c-id'>
             <?php echo html::checkbox('bugs', array($bug->id => sprintf('%03d', $bug->id)));?>
           </td>
           <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>

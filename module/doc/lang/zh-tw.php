@@ -46,13 +46,19 @@ $lang->doc->users          = '用戶';
 
 $lang->doc->moduleDoc      = '按模組瀏覽';
 $lang->doc->searchDoc      = '搜索';
+$lang->doc->fast           = '快速訪問';
 $lang->doc->allDoc         = '所有文檔';
 $lang->doc->openedByMe     = '由我創建';
 $lang->doc->orderByOpen    = '最近添加';
-$lang->doc->orderByEdit    = '最近修改';
+$lang->doc->orderByEdit    = '最近更新';
+$lang->doc->orderByVisit   = '最近訪問';
+$lang->doc->todayEdited    = '今日更新';
+$lang->doc->pastEdited     = '往日更新';
+$lang->doc->myDoc          = '我的文檔';
+$lang->doc->myCollection   = '我的收藏';
 
 /* 方法列表。*/
-$lang->doc->index          = '首頁';
+$lang->doc->index          = '文檔主頁';
 $lang->doc->create         = '創建文檔';
 $lang->doc->edit           = '編輯文檔';
 $lang->doc->delete         = '刪除文檔';
@@ -112,6 +118,16 @@ $lang->doc->browseTypeList['list'] = '列表';
 $lang->doc->browseTypeList['menu'] = '目錄';
 $lang->doc->browseTypeList['tree'] = '樹狀圖';
 $lang->doc->browseTypeList['card'] = '卡片';
+
+$lang->doc->fastMenuList['byediteddate']  = '最近更新';
+$lang->doc->fastMenuList['visiteddate']   = '最近訪問';
+$lang->doc->fastMenuList['openedbyme']    = '我的文檔';
+$lang->doc->fastMenuList['collectedbyme'] = '我的收藏';
+
+$lang->doc->fastMenuIconList['byediteddate']  = 'icon-folder-upload';
+$lang->doc->fastMenuIconList['visiteddate']   = 'icon-folder-move';
+$lang->doc->fastMenuIconList['openedbyme']    = 'icon-folder-account';
+$lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 
 $lang->doc->confirmDelete      = "您確定刪除該文檔嗎？";
 $lang->doc->confirmDeleteLib   = "您確定刪除該文檔庫嗎？";

@@ -39,7 +39,17 @@
           </tr>
           <tr>
             <th><?php echo $lang->productplan->begin;?></th>
-            <td><?php echo html::input('begin', $begin, "class='form-control form-date' required");?></td><td></td><td></td>
+            <td>
+              <div class='input-group'>
+                <?php echo html::input('begin', formatTime($begin), "class='form-control form-date'");?>
+                <span class='input-group-addon'>
+                  <div class='checkbox-primary'> 
+                    <input type='checkbox' id='future' name='future' value='1' />
+                    <label for='future'><?php echo $lang->productplan->future;?></label>
+                  </div>
+                </span>
+              </div>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->productplan->end;?></th>

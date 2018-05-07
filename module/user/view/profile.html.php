@@ -61,6 +61,10 @@
       <td><?php echo $lang->user->roleList[$user->role];?></td>
     </tr>
     <tr>
+      <th><?php echo $lang->user->join;?></th>
+      <td><?php echo formatTime($user->join);?></td>
+    </tr> 
+    <tr>
       <th><?php echo $lang->user->commiter;?></th>
       <td><?php echo $user->commiter;?></td>
     </tr>

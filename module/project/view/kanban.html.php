@@ -68,11 +68,11 @@ $account = $this->app->user->account
         <?php if($hasGroupCol):?>
         <th class="c-board c-side has-btn">
           <div class="dropdown">
-            <?php $dropTitle = $type == 'story' ? $lang->project->orderList[$orderBy] : $lang->task->$type;?>
+            <?php $dropTitle = $type == 'story' ? $lang->project->orderList[$storyOrder] : $lang->task->$type;?>
             <button type="button" data-toggle="dropdown" class="btn btn-block btn-link"><?php echo $dropTitle;?> <span class="caret"></span></button>
             <ul class='dropdown-menu text-left'>
               <?php foreach($lang->project->orderList as $key => $value):?>
-              <li <?php echo ($type == 'story' and $orderBy == $key) ? " class='active'" : '' ?>>
+              <li <?php echo ($type == 'story' and $storyOrder == $key) ? " class='active'" : '' ?>>
                 <?php echo html::a($this->createLink('project', 'kanban', "projectID=$projectID&type=story&orderBy=$key"), $value);?>
               </li>
               <?php endforeach;?>

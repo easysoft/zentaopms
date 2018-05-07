@@ -15,7 +15,12 @@
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2>
+      <?php if($parent):?>
+      <span class='pull-left'><?php echo $parentTitle;?></span> 
+      <?php echo $lang->task->batchCreateChildren;?>
+      <?php else:?>
       <?php echo $lang->task->batchCreate;?>
+      <?php endif;?>
       <?php if($project->type != 'ops'):?>
       <span><small><a href='javascript:toggleZeroTaskStory();' id='zeroTaskStory'><?php echo $lang->story->zeroTask;?><i class='icon icon-sm icon-close'></i></a></small></span>
       <?php endif;?>
@@ -26,10 +31,19 @@
     </div>
   </div>
   <?php
-  $visibleFields = array();
+  $visibleFields  = array();
+  $requiredFields = array();
   foreach(explode(',', $showFields) as $field)
   {
       if($field)$visibleFields[$field] = '';
+  }
+  foreach(explode(',', $this->config->task->create->requiredFields) as $field)
+  {
+      if($field)
+      {
+          $requiredFields[$field] = '';
+          if(strpos(",{$config->task->customBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+      }
   }
   $colspan     = count($visibleFields) + 3;
   $hiddenStory = ((isonlybody() and $storyID) || $this->config->global->flow == 'onlyTask') ? ' hidden' : '';
@@ -40,21 +54,21 @@
       <thead>
         <tr>
           <th class='w-30px'><?php echo $lang->idAB;?></th>
-          <th class='w-150px<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->task->module?></th>
+          <th class='w-150px<?php echo zget($visibleFields, 'module', ' hidden') . zget($requiredFields, 'module', ' required');?>'><?php echo $lang->task->module?></th>
           <?php if($project->type != 'ops'):?>
-          <th class='w-200px<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>'><?php echo $lang->task->story;?></th>
+          <th class='w-200px<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', ' required'); echo $hiddenStory;?>'><?php echo $lang->task->story;?></th>
           <?php endif;?>
           <th class='required has-btn'>
             <?php echo $lang->task->name;?></span>
             <button type='button' data-toggle="importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
           </th>
           <th class='w-80px required'><?php echo $lang->typeAB;?></span></th>
-          <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'><?php echo $lang->task->assignedTo;?></th>
-          <th class='w-50px<?php echo zget($visibleFields, 'estimate', ' hidden')?>'><?php echo $lang->task->estimateAB;?></th>
-          <th class='w-100px<?php echo zget($visibleFields, 'estStarted', ' hidden')?>'><?php echo $lang->task->estStarted;?></th>
-          <th class='w-100px<?php echo zget($visibleFields, 'deadline', ' hidden')?>'><?php echo $lang->task->deadline;?></th>
-          <th class='<?php echo zget($visibleFields, 'desc', ' hidden')?>'><?php echo $lang->task->desc;?></th>
-          <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden')?>'><?php echo $lang->task->pri;?></th>
+          <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden') . zget($requiredFields, 'assignedTo', ' required');?>'><?php echo $lang->task->assignedTo;?></th>
+          <th class='w-50px<?php  echo zget($visibleFields, 'estimate',   ' hidden') . zget($requiredFields, 'estimate',   ' required');?>'><?php echo $lang->task->estimateAB;?></th>
+          <th class='w-100px<?php echo zget($visibleFields, 'estStarted', ' hidden') . zget($requiredFields, 'estStarted', ' required');?>'><?php echo $lang->task->estStarted;?></th>
+          <th class='w-100px<?php echo zget($visibleFields, 'deadline',   ' hidden') . zget($requiredFields, 'deadline',   ' required');?>'><?php echo $lang->task->deadline;?></th>
+          <th class='<?php        echo zget($visibleFields, 'desc',       ' hidden') . zget($requiredFields, 'desc',       ' required');?>'><?php echo $lang->task->desc;?></th>
+          <th class='w-70px<?php  echo zget($visibleFields, 'pri',        ' hidden') . zget($requiredFields, 'pri',        ' required');?>'><?php echo $lang->task->pri;?></th>
         </tr>
       </thead>
       <tbody>
@@ -72,7 +86,7 @@
             $currentStory = $storyID;
             $type         = '';
             $member       = '';
-            $module       = $story ? $story->module : '';
+            $module       = $story ? $story->module : $moduleID;
         }
         else
         {

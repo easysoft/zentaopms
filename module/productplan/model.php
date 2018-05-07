@@ -53,6 +53,7 @@ class productplanModel extends model
         return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
             ->andWhere('product')->eq($productID)
+            ->andWhere('end')->ne('2030-01-01')
             ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
             ->orderBy('end desc')
             ->limit(1)
@@ -116,21 +117,27 @@ class productplanModel extends model
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
-            ->beginIF($expired == 'unexpired')->andWhere('end')->gt($date)->fi()
+            ->beginIF($expired == 'unexpired')->andWhere('end')->ge($date)->fi()
             ->orderBy('begin desc')
             ->fetchPairs();
 
-        if($expired == 'unexpired' and empty($plans))
+        if($expired == 'unexpired')
         {
-            $plans = $this->dao->select('id,CONCAT(title, " [", begin, " ~ ", end, "]") as title')->from(TABLE_PRODUCTPLAN)
+            $plans += $this->dao->select('id,CONCAT(title, " [", begin, " ~ ", end, "]") as title')->from(TABLE_PRODUCTPLAN)
                 ->where('product')->in($product)
                 ->andWhere('deleted')->eq(0)
+                ->andWhere('end')->lt($date)
                 ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
+                ->beginIF($plans)->andWhere("id")->notIN(array_keys($plans))->fi()
                 ->orderBy('begin desc')
                 ->limit(5)
                 ->fetchPairs();
         }
 
+        foreach($plans as $key => $value)
+        {
+            $plans[$key] = str_replace('[2030-01-01 ~ 2030-01-01]', '[' . $this->lang->productplan->future . ']', $value);
+        }
         return array('' => '') + $plans;
     }
 
@@ -158,15 +165,16 @@ class productplanModel extends model
     public function create()
     {
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->create['id'], $this->config->allowedTags)
-            ->setIF($this->post->delta == 9999 || empty($_POST['end']), 'end', '2030-01-01')
-            ->remove('delta,uid')
+            ->setIF($this->post->future || empty($_POST['begin']), 'begin', '2030-01-01')
+            ->setIF($this->post->future || empty($_POST['end']), 'end', '2030-01-01')
+            ->remove('delta,uid,future')
             ->get();
         $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCTPLAN)
             ->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->productplan->create->requiredFields, 'notempty')
-            ->check('end', 'gt', $plan->begin)
+            ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'gt', $plan->begin)
             ->exec();
         if(!dao::isError())
         {
@@ -188,8 +196,9 @@ class productplanModel extends model
     {
         $oldPlan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)
-            ->setIF($this->post->delta == 9999 || $this->post->end == '', 'end', '2030-01-01')
-            ->remove('delta,uid')
+            ->setIF($this->post->future || empty($_POST['begin']), 'begin', '2030-01-01')
+            ->setIF($this->post->future || empty($_POST['end']), 'end', '2030-01-01')
+            ->remove('delta,uid,future')
             ->get();
 
         $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->edit['id'], $this->post->uid);
@@ -197,7 +206,7 @@ class productplanModel extends model
             ->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->productplan->edit->requiredFields, 'notempty')
-            ->check('end', 'gt', $plan->begin)
+            ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'gt', $plan->begin)
             ->where('id')->eq((int)$planID)
             ->exec();
         if(!dao::isError())
@@ -271,10 +280,19 @@ class productplanModel extends model
         $stories = $this->story->getByList($this->post->stories);
         $plan    = $this->getByID($planID);
 
+        $currentOrder = $plan->order;
         foreach($this->post->stories as $storyID)
         {
             if(!isset($stories[$storyID])) continue;
             $story = $stories[$storyID];
+
+            /* Fix Bug #1538*/
+            $currentOrder = $currentOrder . $storyID . ',';
+            $oldOrder = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where("id")->eq($story->plan)->fetch('order'); 
+            $oldOrder = explode(',', $oldOrder);
+            unset($oldOrder[array_search($storyID,  $oldOrder)]);
+            $oldOrder = implode(',', $oldOrder);
+            $this->dao->update(TABLE_PRODUCTPLAN)->set("order")->eq($oldOrder)->where('id')->eq($story->plan)->exec();
 
             if($this->session->currentProductType == 'normal' or $story->branch != 0 or empty($story->plan))
             {
@@ -288,7 +306,10 @@ class productplanModel extends model
             }
             $this->action->create('story', $storyID, 'linked2plan', '', $planID);
             $this->story->setStage($storyID);
+
         }
+
+        $this->dao->update(TABLE_PRODUCTPLAN)->set("order")->eq($currentOrder)->where('id')->eq((int)$planID)->exec();
     }
 
     /**
@@ -303,6 +324,14 @@ class productplanModel extends model
         $story = $this->dao->findByID($storyID)->from(TABLE_STORY)->fetch();
         $plans = array_unique(explode(',', trim(str_replace(",$planID,", ',', ',' . trim($story->plan) . ','). ',')));
         $this->dao->update(TABLE_STORY)->set('plan')->eq(join(',', $plans))->where('id')->eq((int)$storyID)->exec();
+
+        /* Fix Bug #1538. */ 
+        $oldOrder = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where("id")->eq($story->plan)->fetch('order');
+        $oldOrder = explode(',', $oldOrder);
+        unset($oldOrder[array_search($storyID, $oldOrder)]);
+        $oldOrder = implode(',', $oldOrder);
+        $this->dao->update(TABLE_PRODUCTPLAN)->set('order')->eq($oldOrder)->where('id')->eq($story->plan)->exec();
+
         $this->loadModel('story')->setStage($storyID);
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromplan', '', $planID);
     }

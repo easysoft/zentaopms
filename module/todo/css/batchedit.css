@@ -1,1 +1,3 @@
 .input-group > .form-control:first-child {border-right: 0}
+
+div[id*="ends"] .chosen-single{border-left: none;}

@@ -38,7 +38,7 @@ $(function()
     {
         $.get(createLink('message', 'ajaxGetMessage', "windowBlur=" + (windowBlur ? '1' : '0')), function(data)
         {
-            if(!windowBlur)
+           if(!windowBlur)
             {
                 $('#noticeBox').append(data);
                 adjustNoticePosition();

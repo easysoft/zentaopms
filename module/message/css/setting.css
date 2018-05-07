@@ -1,2 +1,3 @@
 .checkbox-primary + .checkbox-primary {margin:0px;}
 .checkbox-primary {margin:0px; margin-right:10px !important; width:100px;display:inline-block}
+div.chosen-container + select + div.chosen-container > .chosen-choices {border-top:0px;}

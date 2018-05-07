@@ -51,10 +51,11 @@ class bugModel extends model
     /**
      * Create a bug.
      * 
+     * @param  string $from   object that is transfered to bug.
      * @access public
      * @return int|bool
      */
-    public function create()
+    public function create($from = '')
     {
         $now = helper::now();
         $bug = fixer::input('post')
@@ -85,6 +86,10 @@ class bugModel extends model
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
             $this->file->saveUpload('bug', $bugID);
             empty($bug->case) ? $this->loadModel('score')->create('bug', 'create', $bugID) : $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
+
+            /* Callback the callable method to process the related data for object that is transfered to bug. */
+            if($from && is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
+
             return array('status' => 'created', 'id' => $bugID);
         }
         return false;
@@ -108,15 +113,6 @@ class bugModel extends model
 
         $result = $this->loadModel('common')->removeDuplicate('bug', $data, "product={$productID}");
         $data   = $result['data'];
-
-        for($i = 0; $i < $batchNum; $i++)
-        {
-            if(!empty($data->title[$i]))
-            {
-                if(empty($data->modules[$i]))      die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->module)));
-                if(empty($data->openedBuilds[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->openedBuild)));
-            }
-        }
 
         /* Get pairs(moduleID => moduleOwner) for bug. */
         $stmt         = $this->dbh->query($this->loadModel('tree')->buildMenuQuery($productID, 'bug', $startModuleID = 0, $branch));
@@ -147,6 +143,7 @@ class bugModel extends model
         }
 
         if(isset($data->uploadImage)) $this->loadModel('file');
+        $bugs = array();
         for($i = 0; $i < $batchNum; $i++)
         {
             if(empty($data->title[$i])) continue;
@@ -161,6 +158,7 @@ class bugModel extends model
             $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
             $bug->color       = $data->color[$i];
             $bug->title       = $data->title[$i];
+            $bug->deadline    = $data->deadlines[$i];
             $bug->steps       = nl2br($data->stepses[$i]);
             $bug->type        = $data->types[$i];
             $bug->pri         = $data->pris[$i];
@@ -169,6 +167,23 @@ class bugModel extends model
             $bug->browser     = $data->browsers[$i];
             $bug->keywords    = $data->keywords[$i];
 
+            if(!empty($moduleOwners[$bug->module]))
+            {
+                $bug->assignedTo   = $moduleOwners[$bug->module];
+                $bug->assignedDate = $now;
+            }
+
+            foreach(explode(',', $this->config->bug->create->requiredFields) as $field)
+            {
+                $field = trim($field);
+                if($field and empty($bug->$field)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->$field)));
+            }
+
+            $bugs[$i] = $bug;
+        }
+
+        foreach($bugs as $i => $bug)
+        {
             if(!empty($data->uploadImage[$i]))
             {
                 $fileName = $data->uploadImage[$i];
@@ -194,15 +209,14 @@ class bugModel extends model
                 }
             }
 
-            if(!empty($moduleOwners[$bug->module]))
-            {
-                $bug->assignedTo   = $moduleOwners[$bug->module];
-                $bug->assignedDate = $now;
-            }
+            $this->dao->insert(TABLE_BUG)->data($bug)
+                ->autoCheck()
+                ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
+                ->exec();
+            if(dao::isError()) die(js::error(dao::getError()));
 
-            $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
             $bugID = $this->dao->lastInsertID();
-            if(!dao::isError()) $this->loadModel('score')->create('bug', 'create', $bugID);
+            $this->loadModel('score')->create('bug', 'create', $bugID);
             if(!empty($data->uploadImage[$i]) and !empty($file))
             {
                 $file['objectType'] = 'bug';
@@ -402,12 +416,13 @@ class bugModel extends model
      * getActiveBugs 
      * 
      * @param  array    $products
+     * @param  int      $branch 
      * @param  int      $projectID 
      * @param  object   $pager 
      * @access public
      * @return array
      */
-    public function getActiveBugs($products, $branch, $projectID, $pager = null)
+    public function getActiveBugs($products, $branch, $projects, $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->eq('active')
@@ -415,7 +430,7 @@ class bugModel extends model
             ->andWhere('tostory')->eq(0)
             ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
             ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
-            ->beginIF(empty($products))->andWhere('project')->eq($projectID)->fi()
+            ->beginIF(!empty($projects))->andWhere('project')->in($projects)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->page($pager)

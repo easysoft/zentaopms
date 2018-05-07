@@ -353,7 +353,16 @@ class build extends control
         {
             $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty,notrunk');
             if($isJsonView) die(json_encode($builds));
-            else die(html::select('build', $builds, $build, "class='form-control'"));
+            else
+            {
+                if(empty($builds))
+                {
+                    echo html::a($this->createLink('build', 'create', "projectID=$projectID"), $this->lang->build->create, '_blank');
+                    echo '&nbsp; ';
+                    echo html::a("javascript:loadProjectBuilds($projectID)", $this->lang->refresh);
+                }
+                die(html::select('build', $builds, $build, "class='form-control'"));
+            }
         }
         if($varName == 'dropdownList')
         {

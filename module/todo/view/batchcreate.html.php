@@ -26,7 +26,12 @@
     <div class="input-group pull-left">
       <span class="input-group-addon"><?php echo $lang->todo->date;?></span>
       <input type="text" name="date" value="<?php echo $date;?>" class="form-control form-date" autocomplete="off" />
-      <span class="input-group-addon"><label class="checkbox-inline"><input type="checkbox" name="switchDate" class="control-time-switch" /> <?php echo $lang->todo->periods['future'];?></label></span>
+      <span class="input-group-addon">
+        <div class="checkbox-primary">
+          <input type="checkbox" name="switchDate" id='switchDate' class="control-time-switch" />
+          <label for='switchDate'><?php echo $lang->todo->periods['future'];?></label>
+        </div>
+      </span>
     </div>
   </div>
   <form id='todoBatchAddForm' class='modal-body' method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'batchCreate');?>'>
@@ -69,7 +74,12 @@
             echo '<span class="input-group-addon fix-border fix-padding"></span>';
             echo html::select("ends[$i]", $times, '', "onchange=\"setBeginsAndEnds($i, 'end');\" class='form-control chosen control-time-end'" . (isset($visibleFields['beginAndEnd']) ? '' : " disabled"));
             ?>
-            <span class='input-group-addon'><input type='checkbox' name="switchDate[<?php echo $i?>]" class='control-time-switch' id="switchDate<?php echo $i?>" onclick='switchDateList(<?php echo $i?>);'> <?php echo $lang->todo->periods['future'];?></span>
+            <span class='input-group-addon'>
+              <div class='checkbox-primary'>
+                <input type='checkbox' name="switchDate[<?php echo $i?>]" id="switchDate<?php echo $i?>" class='control-time-switch' onclick='switchDateList(<?php echo $i?>);' />
+                <label for="switchDate<?php echo $i?>"> <?php echo $lang->todo->periods['future'];?></label>
+              </div>
+            </span>
           </div>
         </td>
       </tr>  
@@ -80,8 +90,11 @@
       </tfoot>
     </table>
     <div class="hidden">
-      <input type="hidden" name="date" value="<?php echo $date;?>" />
-      <input type="checkbox" name="switchDate" class="control-time-switch" />
+      <div class='checkbox-primary'>
+        <input type="hidden" name="date" value="<?php echo $date;?>" />
+        <input type="checkbox" name="switchDate" class="control-time-switch" />
+        <label></label>
+      </div>
     </div>
   </form>
 </div>
