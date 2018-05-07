@@ -2124,8 +2124,6 @@ class upgradeModel extends model
         }
         return true;
     }
-<<<<<<< HEAD
-=======
 
     /**
      * Fix assignedTo for closed tasks, but assignedTo is not closed.
