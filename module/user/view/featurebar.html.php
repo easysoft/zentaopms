@@ -4,7 +4,7 @@
   <?php
     $date = isset($date) ? $date : helper::today();
 
-    echo "<div class='input-control space w-150px'>" . $userList . "</div>";
+    echo "<div class='input-control w-150px'>" . $userList . "</div>";
 
     $methodName = $this->app->getMethodName();
 
@@ -36,7 +36,7 @@
         echo html::a($this->createLink('user', 'bug', "account=$account"), $label, '', "class='btn btn-link $active'");
 
         $label  = "<span class='text'>{$lang->user->test}</span>";
-        $active = $methodName == 'testtask' ? ' btn-active-text' : '';
+        $active = ($methodName == 'testtask' or $methodName == 'testcase')? ' btn-active-text' : '';
         echo html::a($this->createLink('user', 'testtask', "account=$account"), $label, '', "class='btn btn-link $active'");
     }
 
