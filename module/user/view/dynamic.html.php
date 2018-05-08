@@ -13,8 +13,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php include './featurebar.html.php';?>
-<div id="mainMenu" class="clearfix">
-  <div class="btn-toolbar pull-left">
+<?php js::set('period', $type);?>
+<div id='mainContent'>
+  <div id='contentNav'>
     <?php foreach($lang->action->periods as $period => $label):?>
     <?php
     $label  = "<span class='text'>$label</span>";
@@ -28,9 +29,8 @@
     ?>
     <?php endforeach;?>
   </div>
-</div>
-<div id="mainContent" class="main-content">
-  <div id="dynamics">
+
+  <div id="dynamics" class='main-content'>
     <?php $firstAction = '';?>
     <?php foreach($dateGroups as $date => $actions):?>
     <?php $isToday = date(DT_DATE4) == $date;?>

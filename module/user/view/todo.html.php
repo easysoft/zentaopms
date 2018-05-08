@@ -13,23 +13,26 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include "../../common/view/datepicker.html.php"; ?>
 <?php include './featurebar.html.php';?>
-<script language='Javascript'>var account='<?php echo $account;?>'</script>
-<div class='sub-featurebar'>
-  <ul class='nav'>
-  <?php 
-    foreach($lang->todo->periods as $period => $label)
-    {
-        $vars = "account={$account}&date=$period";
-        if($period == 'before') $vars .= "&status=undone";
-        echo "<li id='$period'>" . html::a(inlink('todo', $vars), $label) . '</li> ';
-    }
-    ?>
-  </ul>
-</div>
+<?php js::set('account', $account);?>
+<?php js::set('type', $type);?>
 <div id='mainContent'>
-  <form method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'import2Today');?>' id='todoform' class='main-table table-task'>
+  <nav id='contentNav'>
+    <ul class='nav nav-default'>
+      <?php 
+      foreach($lang->todo->periods as $period => $label)
+      {
+          $active = $type == $period ? 'active' : '';
+          $vars = "account={$account}&date=$period";
+          if($period == 'before') $vars .= "&status=undone";
+          echo "<li id='$period' class='$active'>" . html::a(inlink('todo', $vars), $label) . '</li> ';
+      }
+      ?>
+    </ul>
+  </nav>
+
+  <form method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'import2Today');?>' data-ride='table' id='todoform' class='main-table table-todo'>
     <table class='table has-sort-head table-fixed'>
-      <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
+      <?php $vars = "account=$account&type=$type&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
       <thead>
       <tr class='colhead'>
         <th class='w-id'>    <?php common::printOrderLink('id',     $orderBy, $vars, $lang->idAB);?></th>

@@ -141,6 +141,7 @@ class doc extends control
         if($module) $title = $module->name;
         if($libID)  $title = $this->libs[$libID];
         if(in_array($browseType, array_keys($this->lang->doc->fastMenuList))) $title = $this->lang->doc->fastMenuList[$browseType];
+        if($browseType == 'fastsearch') $title = '"' . $this->post->searchDoc  . '" ' . $this->lang->doc->searchResult;
 
         $this->view->title      = $title;
         $this->view->libID      = $libID;
