@@ -310,17 +310,17 @@ class docModel extends model
         elseif($browseType == 'byediteddate')
         {
             $docIdList = $this->getPrivDocs($libID, $moduleID);
+            $files = $this->dao->select('*')->from(TABLE_FILE)
+                ->where('objectType')->eq('doc')
+                ->andWhere('objectID')->in($docIdList)
+                ->fetchGroup('objectID');
+
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
                 ->andWhere('id')->in($docIdList)
                 ->orderBy('editedDate_desc')
                 ->page($pager)
                 ->fetchAll('id');
-
-            $files = $this->dao->select('*')->from(TABLE_FILE)
-                ->where('objectType')->eq('doc')
-                ->andWhere('objectID')->in(array_keys($docs))
-                ->fetchGroup('objectID');
 
             foreach($docs as $doc)
             {
@@ -466,7 +466,7 @@ class docModel extends model
         $stmt = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
-            ->beginIF($module)->andWhere('module')->in($module)->fi()
+            ->andWhere('module')->in($module)
             ->query();
 
 
@@ -1145,6 +1145,7 @@ class docModel extends model
         $docCounts= $this->dao->select("lib, count(id) as docCount")->from(TABLE_DOC)
             ->where('lib')->in($idList)
             ->andWhere('deleted')->eq(0)
+            ->andWhere('module')->eq(0)
             ->groupBy('lib')
             ->fetchPairs();
 

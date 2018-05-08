@@ -40,7 +40,7 @@ class doc extends control
         $this->doc->setMenu();
 
         $this->app->loadClass('pager', $static = true);
-        $pager = new pager(6, 6, 1);
+        $pager = new pager(0, 5, 1);
 
         $this->view->title            = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
         $this->view->position[]       = $this->lang->doc->index;
@@ -141,6 +141,7 @@ class doc extends control
         if($module) $title = $module->name;
         if($libID)  $title = $this->libs[$libID];
         if(in_array($browseType, array_keys($this->lang->doc->fastMenuList))) $title = $this->lang->doc->fastMenuList[$browseType];
+        if($browseType == 'fastsearch') $title = '"' . $this->post->searchDoc  . '" ' . $this->lang->doc->searchResult;
 
         $this->view->title      = $title;
         $this->view->libID      = $libID;

@@ -49,7 +49,7 @@
   $hiddenStory = ((isonlybody() and $storyID) || $this->config->global->flow == 'onlyTask') ? ' hidden' : '';
   if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
   ?>
-  <form method='post' class='load-indicator main-form' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
+  <form method='post' class='load-indicator' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
     <table class="table table-form" id="tableBody">
       <thead>
         <tr>

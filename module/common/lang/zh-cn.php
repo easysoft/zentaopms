@@ -54,6 +54,7 @@ $lang->public       = '公共';
 $lang->trunk        = '主干';
 $lang->sort         = '排序';
 $lang->required     = '必填';
+$lang->noData       = '暂无';
 
 $lang->actions         = '操作';
 $lang->comment         = '备注';
@@ -237,8 +238,8 @@ $lang->project->menu->view     = array('link' => '概况|project|view|projectID=
 $lang->project->subMenu = new stdclass();
 $lang->project->subMenu->list = new stdclass();
 $lang->project->subMenu->list->task      = '任务列表|project|task|projectID=%s';
-$lang->project->subMenu->list->tree      = '树状图|project|tree|projectID=%s';
 $lang->project->subMenu->list->groupTask = '分组视图|project|groupTask|projectID=%s';
+$lang->project->subMenu->list->tree      = '树状图|project|tree|projectID=%s';
 
 $lang->project->subMenu->qa = new stdclass();
 $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
