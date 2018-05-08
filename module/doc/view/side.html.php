@@ -88,7 +88,7 @@ $projectSubLibs = $this->doc->getSubLibGroups('project', array_keys($projects));
               else 
               {
                   $subLibLink = inlink('browse', "libID=$subLibID");
-                  $icon = 'icon-paper-outline';
+                  $icon = 'icon-folder-o';
               }
               ?>
               <li>
