@@ -81,6 +81,7 @@ var browseType = '<?php echo $browseType;?>';
           </tbody>
         </table>
       </div>
+      <div class='table-footer'><?php echo $pager->show('right', 'pagerjs');?></div>
     </div>
   </div>
   <?php endif;?>
