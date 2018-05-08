@@ -305,10 +305,10 @@ $lang->project->featureBar['task']['needconfirm']  = '需求变动';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
 
 $lang->project->treeLevel = array();
-$lang->project->treeLevel['root']  = '全部折叠';
-$lang->project->treeLevel['story'] = '显示需求';
-$lang->project->treeLevel['task']  = '显示任务';
 $lang->project->treeLevel['all']   = '全部展开';
+$lang->project->treeLevel['root']  = '全部折叠';
+$lang->project->treeLevel['story'] = '只看需求';
+$lang->project->treeLevel['task']  = '只看任务';
 
 global $config;
 if($config->global->flow == 'onlyTask')
