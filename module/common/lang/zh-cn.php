@@ -54,6 +54,7 @@ $lang->public       = '公共';
 $lang->trunk        = '主干';
 $lang->sort         = '排序';
 $lang->required     = '必填';
+$lang->noData       = '暂无';
 
 $lang->actions         = '操作';
 $lang->comment         = '备注';
