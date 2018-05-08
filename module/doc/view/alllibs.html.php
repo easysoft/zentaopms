@@ -51,6 +51,7 @@
           <?php endforeach;?>
         </div>
       </div>
+      <div class='table-footer'><?php echo $pager->show('right', 'pagerjs');?></div>
     </div>
   </div>
 </div>

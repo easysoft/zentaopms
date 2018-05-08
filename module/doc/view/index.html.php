@@ -20,7 +20,7 @@
           <div class="panel-heading">
           <div class="panel-title"><?php echo $lang->doc->orderByEdit;?></div>
             <nav class="panel-actions nav nav-default">
-              <li><?php echo html::a($this->createLink('doc', 'browse', "libID=0&browseTyp=bygrid&module=0&orderBy=editeddate_desc"), 'MORE', '', "title='{$lang->more}'");?></li>
+              <li><?php echo html::a($this->createLink('doc', 'browse', "libID=0&browseTyp=byediteddate"), 'MORE', '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
           <div class="panel-body has-table">
@@ -37,9 +37,9 @@
                 <?php foreach($latestEditedDocs as $doc):?>
                 <tr data-url="<?php echo $this->createLink('doc', 'view', "docID={$doc->id}");?>">
                   <td class="c-name"><?php echo $doc->title;?></td>
-                  <td class="c-num text-right"><?php echo $doc->fileSize;?></td>
+                  <td class="c-num text-right"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
                   <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
-                  <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'm-d H:i');?></td>
+                  <td class="c-datetime"><?php echo $doc->editedDate == '0000-00-00 00:00:00' ? formatTime($doc->addedDate, 'm-d H:i') : formatTime($doc->editedDate, 'm-d H:i');?></td>
                 </tr>
                 <?php endforeach;?>
               </tbody>
@@ -134,16 +134,16 @@
               <thead>
                 <tr>
                   <th class="c-name"><?php echo $lang->project->name;?></th>
-                  <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
-                  <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
+                  <th class="c-date"><?php echo $lang->project->begin;?></th>
+                  <th class="c-date"><?php echo $lang->project->end;?></th>
                 </tr>
               </thead>
               <tbody>
                 <?php foreach($doingProjects as $project):?>
                 <tr data-url="<?php echo $this->createLink('doc', 'objectLibs', "type=project&objectID={$project->id}")?>">
                   <td class="c-name"><i class="icon icon-folder text-yellow"></i> <?php echo $project->name;?></td>
-                  <td class="c-user"><?php echo zget($users, $project->openedBy);?></td>
-                  <td class="c-datetime"><?php echo formatTime($project->openedDate, 'm-d H:i');?></td>
+                  <td class="c-datetime"><?php echo formatTime($project->begin);?></td>
+                  <td class="c-datetime"><?php echo formatTime($project->end);?></td>
                 </tr>
                 <?php endforeach;?>
               </tbody>
@@ -165,7 +165,7 @@
                 <tr>
                   <th class="c-name"><?php echo $lang->doc->title;?></th>
                   <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
-                  <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
+                  <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
                 </tr>
               </thead>
               <tbody>
@@ -173,7 +173,7 @@
                 <tr data-url="">
                   <td class="c-name"><?php echo $doc->title;?></td>
                   <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
-                  <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'm-d H:i');?></td>
+                  <td class="c-datetime"><?php echo formatTime($doc->editedDate) ? formatTime($doc->editedDate, 'm-d H:i') : formatTime($doc->addedDate, 'm-d H:i');?></td>
                 </tr>
                 <?php endforeach;?>
               </tbody>
