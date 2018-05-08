@@ -2309,4 +2309,44 @@ class project extends control
         }
         die(js::locate(helper::createLink('project', 'story', 'projectID=' . $projectID), 'parent'));
     }
+
+    public function treeProduct($productID)
+    {
+        $this->display();
+    }
+
+    public function treeStory($storyID, $version = 0)
+    {
+        $this->loadModel('story');
+        $story = $this->story->getById($storyID, $version, true);
+
+        $story->files = $this->loadModel('file')->getByObject('story', $storyID);
+        $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type')->fetch();
+        $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
+        $bugs         = $this->dao->select('id,title')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
+        $fromBug      = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
+        $cases        = $this->dao->select('id,title')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
+        $modulePath   = $this->loadModel('tree')->getParents($story->module);
+        $users        = $this->loadModel('user')->getPairs('noletter');
+
+        $this->view->product    = $product;
+        $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
+        $this->view->plan       = $plan;
+        $this->view->bugs       = $bugs;
+        $this->view->fromBug    = $fromBug;
+        $this->view->cases      = $cases;
+        $this->view->story      = $story;
+        $this->view->users      = $users;
+        $this->view->projects   = $this->loadModel('project')->getPairs('nocode');
+        $this->view->actions    = $this->loadModel('action')->getList('story', $storyID);
+        $this->view->modulePath = $modulePath;
+        $this->view->version    = $version == 0 ? $story->version : $version;
+        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
+        $this->display();
+    }
+
+    public function treeTask($taskID)
+    {
+        $this->display();
+    }
 }
