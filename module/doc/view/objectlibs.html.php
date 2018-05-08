@@ -12,7 +12,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div class="main-row split-row" id="mainRow">
+  <?php if($this->from == 'doc'):?>
   <?php include './side.html.php';?>
+  <?php endif;?>
   <div class="main-col" data-min-width="400">
     <div class="panel block-files block-sm no-margin">
       <div class="panel-heading">
@@ -68,8 +70,8 @@
             <?php if($libID != 'project' and $libID != 'files'):?>
             <div class="actions">
               <?php common::printLink('doc', 'collect', "objectID=$libID&objectType=doclib", "<i class='icon icon-star-empty'></i>", 'hiddenwin', "title='{$lang->doc->collect}' class='btn btn-link'")?>
-              <?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link' data-toggle='modal'")?>
-              <?php common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-trash'></i>", '', "title='{$lang->delete}' class='btn btn-link'")?>
+              <?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link iframe'")?>
+              <?php common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
             </div>
             <?php endif;?>
           </div>
