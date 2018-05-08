@@ -27,7 +27,13 @@ var browseType = '<?php echo $browseType;?>';
   <div class="main-col" data-min-width="400">
     <div class="panel block-files block-sm no-margin">
       <div class="panel-heading">
-        <div class="panel-title font-normal"><i class="icon icon-folder-open-o text-muted"></i> <?php echo $title;?></div>
+        <div class="panel-title font-normal">
+          <?php if($browseType != 'fastsearch'):?>
+          <i class="icon icon-folder-open-o text-muted"></i>
+          <?php else:?>
+          <i class="icon icon-search text-muted"></i>
+          <?php endif;?>
+          <?php echo $title;?></div>
         <nav class="panel-actions btn-toolbar">
           <div class="btn-group">
             <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-gray btn-icon text-primary'");?>
