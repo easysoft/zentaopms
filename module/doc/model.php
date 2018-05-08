@@ -310,17 +310,17 @@ class docModel extends model
         elseif($browseType == 'byediteddate')
         {
             $docIdList = $this->getPrivDocs($libID, $moduleID);
+            $files = $this->dao->select('*')->from(TABLE_FILE)
+                ->where('objectType')->eq('doc')
+                ->andWhere('objectID')->in($docIdList)
+                ->fetchGroup('objectID');
+
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
                 ->andWhere('id')->in($docIdList)
                 ->orderBy('editedDate_desc')
                 ->page($pager)
                 ->fetchAll('id');
-
-            $files = $this->dao->select('*')->from(TABLE_FILE)
-                ->where('objectType')->eq('doc')
-                ->andWhere('objectID')->in(array_keys($docs))
-                ->fetchGroup('objectID');
 
             foreach($docs as $doc)
             {
