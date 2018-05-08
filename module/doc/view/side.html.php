@@ -75,7 +75,7 @@ $projectSubLibs = $this->doc->getSubLibGroups('project', array_keys($projects));
         <ul>
           <?php foreach($projects as $project):?>
           <li>
-            <?php echo html::a($this->createLink('doc', 'objectLibs', "type=project&objectID=$project->id"), "<i class='icon icon-cube'></i> " . $project->name);?>
+            <?php echo html::a($this->createLink('doc', 'objectLibs', "type=project&objectID=$project->id"), "<i class='icon icon-stack'></i> " . $project->name);?>
             <?php if(isset($projectSubLibs[$project->id])):?>
             <ul>
               <?php foreach($projectSubLibs[$project->id] as $subLibID => $subLibName):?>
@@ -88,7 +88,7 @@ $projectSubLibs = $this->doc->getSubLibGroups('project', array_keys($projects));
               else 
               {
                   $subLibLink = inlink('browse', "libID=$subLibID");
-                  $icon = 'icon-paper-outline';
+                  $icon = 'icon-folder-o';
               }
               ?>
               <li>
