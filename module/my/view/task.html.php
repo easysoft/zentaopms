@@ -67,8 +67,8 @@
           <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>'><?php echo zget($lang->task->priList, $task->pri);?></span></td>
           <td class='c-project' title="<?php echo $task->projectName;?>"><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></td>
           <td class='c-name'>
-            <?php if(!empty($task->team))   echo '<span class="label">' . $this->lang->task->multipleAB . '</span> ';?>
-            <?php if(!empty($task->parent)) echo '<span class="label">' . $this->lang->task->childrenAB . '</span> ';?>
+            <?php if(!empty($task->team))   echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
+            <?php if(!empty($task->parent)) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, null, "style='color: $task->color'");?>
           </td>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>

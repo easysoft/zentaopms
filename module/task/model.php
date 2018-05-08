@@ -2243,8 +2243,7 @@ class taskModel extends model
             if($id == 'deadline' and isset($task->delay)) $class .= ' delayed';
             if($id == 'assignedTo')
             {
-                $class .= ' c-actions text-left';
-                if($task->assignedTo == $account) $class .= ' red';
+                $class .= ' has-btn text-left';
             }
 
             $title = '';
@@ -2274,20 +2273,20 @@ class taskModel extends model
                     echo "</span>";
                     break;
                 case 'name':
+                    if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-caret-down"></i></a>';
                     if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
                     if(empty($task->children) and $task->module and isset($modulePairs[$task->module])) echo "<span class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span> ';
-                    if($child or !empty($task->parent)) echo '<span class="label">' . $this->lang->task->childrenAB . '</span> ';
-                    if(!empty($task->team)) echo '<span class="label">' . $this->lang->task->multipleAB . '</span> ';
+                    if($child or !empty($task->parent)) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';
+                    if(!empty($task->team)) echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';
                     echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color'") : "<span style='color: $task->color'>$task->name</span>";
                     if($task->fromBug) echo html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '_blank', "class='bug'");
-                    if(!empty($task->children)) echo '<span class="task-toggle" data-id="' . $task->id . '">&nbsp;&nbsp;<i class="icon icon-double-angle-up"></i>&nbsp;&nbsp;</span>';
                     break;
                 case 'type':
                     echo $this->lang->task->typeList[$task->type];
                     break;
                 case 'status':
                     $storyChanged = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion);
-                    $storyChanged ? print("<span class='warning'>{$this->lang->story->changed}</span> ") : print($this->lang->task->statusList[$task->status]);
+                    $storyChanged ? print("<span class='status-changed'><span class='label label-dot'></span> {$this->lang->story->changed}</span>") : print("<span class='status-{$task->status}'><span class='label label-dot'></span> {$this->lang->task->statusList[$task->status]}</span>");
                     break;
                 case 'estimate':
                     echo round($task->estimate, 1);
@@ -2317,8 +2316,17 @@ class taskModel extends model
                     echo $task->realStarted;
                     break;
                 case 'assignedTo':
-                    common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                    echo zget($users, $task->assignedTo);
+                    $btnTextClass   = '';
+                    $assignedToText = $task->assignedTo;
+                    if (empty($assignedToText))
+                    {
+                        $btnTextClass   = 'text-primary';
+                        $assignedToText = $this->lang->task->noAssigned;
+                    }
+                    else if ($assignedToText == $account) $btnTextClass = 'text-red';
+                    $btnClass = $assignedToText == 'closed' ? ' disabled' : '';
+                    
+                    echo html::a(helper::createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id"), "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='iframe btn btn-icon-left{$btnClass}'");
                     break;
                 case 'assignedDate':
                     echo substr($task->assignedDate, 5, 11);
