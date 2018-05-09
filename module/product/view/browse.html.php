@@ -57,7 +57,7 @@
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export ?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu">
-        <?php 
+        <?php
         $misc = common::hasPriv('story', 'export') ? "class='export'" : "class=disabled";
         $link = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy") : '#';
         echo "<li>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
@@ -154,7 +154,7 @@
             <?php echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");?>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
             <ul class='dropdown-menu'>
-              <?php 
+              <?php
               $class = "class='disabled'";
               $canBatchClose = common::hasPriv('story', 'batchClose') && strtolower($browseType) != 'closedbyme' && strtolower($browseType) != 'closedstory';
               $actionLink    = $this->createLink('story', 'batchClose', "productID=$productID&projectID=0");

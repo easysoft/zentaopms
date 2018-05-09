@@ -160,7 +160,7 @@ $lang->task->confirmDeleteEstimate = "Do you want to delete it?";
 $lang->task->copyStoryTitle        = "Copy Story";
 $lang->task->afterSubmit           = "After Created,";
 $lang->task->successSaved          = "Created!";
-$lang->task->delayWarning          = " <strong class='delayed f-14px'> Delay %s days </strong>";
+$lang->task->delayWarning          = " <strong class='text-danger'> Delay %s days </strong>";
 $lang->task->remindBug             = "This Task is converted from a Bug. Do you want to update te Bug:%s?";
 $lang->task->confirmChangeProject  = "If you change {$lang->projectCommon}, the related Module, Story and Assignor will be changed. Do you want to do it?";
 $lang->task->confirmFinish         = '"Left Hour" is 0. Do you want to change the Status to "Done"?';
