@@ -89,9 +89,9 @@
           ?>
           </div>
           <?php
-          if(common::hasPriv('project', 'create')) echo html::a(helper::createLink('project', 'create', "projectID=&copyProjectID=&planID=$plan->id"), '<i class="icon-play"></i>', '', "class='btn btn-icon' title='{$lang->project->create}'");
-          if(common::hasPriv('productplan', 'linkStory')) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i>', '', "class='btn btn-icon' title='{$lang->productplan->linkStory}'");
-          if(common::hasPriv('productplan', 'linkBug') and $config->global->flow != 'onlyStory') echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i>', '', "class='btn btn-icon' title='{$lang->productplan->linkBug}'");
+          if(common::hasPriv('project', 'create')) echo html::a(helper::createLink('project', 'create', "projectID=&copyProjectID=&planID=$plan->id"), '<i class="icon-play"></i>', '', "class='btn' title='{$lang->project->create}'");
+          if(common::hasPriv('productplan', 'linkStory')) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i>', '', "class='btn' title='{$lang->productplan->linkStory}'");
+          if(common::hasPriv('productplan', 'linkBug') and $config->global->flow != 'onlyStory') echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i>', '', "class='btn' title='{$lang->productplan->linkBug}'");
           common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');
           ?>
         </td>
