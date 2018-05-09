@@ -2312,8 +2312,10 @@ class project extends control
 
     /**
      * Story info for tree list.
-     * @param     $storyID
+     *
+     * @param int $storyID
      * @param int $version
+     *
      * @access public
      * @return void
      */
@@ -2349,7 +2351,9 @@ class project extends control
 
     /**
      * Task info for tree list.
-     * @param $taskID
+     *
+     * @param int $taskID
+     *
      * @access public
      * @return void
      */
