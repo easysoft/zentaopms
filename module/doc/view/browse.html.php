@@ -11,12 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<<<<<<< HEAD
-<script language='Javascript'>
-=======
 <?php include '../../common/view/datepicker.html.php';?>
 <script>
->>>>>>> a4e6189f518dcb49e98ef2c70757ec0ed757aea0
 var browseType = '<?php echo $browseType;?>';
 </script>
 <?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
@@ -26,11 +22,8 @@ var browseType = '<?php echo $browseType;?>';
 <div class='main-row split-row' id='mainRow'>
   <?php if($this->from == 'doc'):?>
   <?php include './side.html.php';?>
-<<<<<<< HEAD
   <div class="col-spliter"></div>
-=======
   <?php endif;?>
->>>>>>> a4e6189f518dcb49e98ef2c70757ec0ed757aea0
   <?php if($this->cookie->browseType == 'bygrid'):?>
   <?php include dirname(__FILE__) . '/browsebygrid.html.php';?>
   <?php else:?>
