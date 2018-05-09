@@ -52,14 +52,7 @@ class docModel extends model
             $selectHtml .= "<ul class='dropdown-menu'>";
             foreach($this->lang->doc->fastMenuList as $key => $fastMenu)
             {
-                if($key == 'editedDate' or $key == 'visitedDate')
-                {
-                    $link = helper::createLink('doc', 'browse', "libID=0&browseTyp=bygrid&module=0&orderBy={$key}_desc");
-                }
-                else
-                {
-                    $link = helper::createLink('doc', 'browse', "libID=0&browseTyp={$key}");
-                }
+                $link = helper::createLink('doc', 'browse', "libID=0&browseTyp={$key}");
                 $selectHtml .= '<li>' . html::a($link, "<i class='icon {$this->lang->doc->fastMenuIconList[$key]}'></i> {$fastMenu}") . '</li>';
             }
             $selectHtml .= "<li class='divider'></li>";
@@ -349,16 +342,6 @@ class docModel extends model
                     $docs[$doc->id]->fileSize = $fileSize;
                 }
             }
-        }
-        elseif($browseType == 'visiteddate')
-        {
-            $docIdList = $this->getPrivDocs($libID, $moduleID);
-            $docs = $this->dao->select('*')->from(TABLE_DOC)
-                ->where('deleted')->eq(0)
-                ->andWhere('id')->in($docIdList)
-                ->orderBy('visitedDate_desc')
-                ->page($pager)
-                ->fetchAll('id');
         }
         elseif($browseType == "collectedbyme")
         {
@@ -681,19 +664,6 @@ class docModel extends model
             $this->file->updateObjectID($this->post->uid, $docID, 'doc');
             return array('changes' => $changes, 'files' => $files);
         }
-    }
-
-    /**
-     * Update visit Data.
-     * 
-     * @param  int    $docID 
-     * @access public
-     * @return bool
-     */
-    public function updateVisitData($docID)
-    {
-        $this->dao->update(TABLE_DOC)->set('views = views + 1')->set('visitedDate')->eq(helper::now())->where('id')->eq($docID)->exec();
-        return !dao::isError();
     }
 
     /**
@@ -1427,7 +1397,7 @@ class docModel extends model
         $today  = date('Y-m-d');
         $lately = date('Y-m-d', strtotime('-3 day'));
         $statisticInfo = $this->dao->select("count(id) as totalDocs, count(editedDate like '{$today}%' or null) as todayEditedDocs,
-            count(editedDate > '{$lately}' or null) as lastEditedDocs, count(visitedDate > '{$lately}' or null) as lastVisitedDocs, 
+            count(editedDate > '{$lately}' or null) as lastEditedDocs, count(addedDate > '{$lately}' or null) as lastAddedDocs, 
             count(collector like '%,{$this->app->user->account},%' or null) as myCollection, count(addedBy = '{$this->app->user->account}' or null) as myDocs")->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('id')->in($docIdList)
@@ -1435,7 +1405,7 @@ class docModel extends model
 
         $statisticInfo->pastEditedDocs       = $statisticInfo->totalDocs - $statisticInfo->todayEditedDocs;
         $statisticInfo->lastEditedProgress   = $statisticInfo->totalDocs ? round($statisticInfo->lastEditedDocs / $statisticInfo->totalDocs, 2) * 100 : 0;
-        $statisticInfo->lastVisitedProgress  = $statisticInfo->totalDocs ? round($statisticInfo->lastVisitedDocs / $statisticInfo->totalDocs, 2) * 100 : 0;
+        $statisticInfo->lastAddedProgress    = $statisticInfo->totalDocs ? round($statisticInfo->lastAddedDocs / $statisticInfo->totalDocs, 2) * 100 : 0;
         $statisticInfo->myCollectionProgress = $statisticInfo->totalDocs ? round($statisticInfo->myCollection / $statisticInfo->totalDocs, 2) * 100 : 0;
         $statisticInfo->myDocsProgress       = $statisticInfo->totalDocs ? round($statisticInfo->myDocs / $statisticInfo->totalDocs, 2) * 100 : 0;
 

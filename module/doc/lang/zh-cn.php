@@ -121,12 +121,12 @@ $lang->doc->browseTypeList['list'] = '列表';
 $lang->doc->browseTypeList['grid'] = '目录';
 
 $lang->doc->fastMenuList['byediteddate']  = '最近更新';
-$lang->doc->fastMenuList['visiteddate']   = '最近访问';
+//$lang->doc->fastMenuList['visiteddate']   = '最近访问';
 $lang->doc->fastMenuList['openedbyme']    = '我的文档';
 $lang->doc->fastMenuList['collectedbyme'] = '我的收藏';
 
 $lang->doc->fastMenuIconList['byediteddate']  = 'icon-folder-upload';
-$lang->doc->fastMenuIconList['visiteddate']   = 'icon-folder-move';
+//$lang->doc->fastMenuIconList['visiteddate']   = 'icon-folder-move';
 $lang->doc->fastMenuIconList['openedbyme']    = 'icon-folder-account';
 $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 

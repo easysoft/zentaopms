@@ -401,9 +401,6 @@ class doc extends control
         /* Set menu. */
         $this->doc->setMenu($type, $doc->lib, $doc->module, $lib->product, $lib->project);
 
-        /* Update visitedDate and views for current doc.*/
-        $this->doc->updateVisitData($docID);
-
         $this->view->title      = "DOC #$doc->id $doc->title - " . $lib->name;
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$doc->lib"), $lib->name);
         $this->view->position[] = $this->lang->doc->view;

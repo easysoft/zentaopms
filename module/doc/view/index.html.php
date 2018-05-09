@@ -77,14 +77,14 @@
             <div class="col-5 text-middle text-center">
               <a class="table-row space-lg">
                 <div class="table-col text-middle">
-                  <small class="muted"><?php echo $lang->doc->orderByVisit;?></small>
-                  <div class="strong"><?php echo $statisticInfo->lastVisitedDocs;?></div>
+                  <small class="muted"><?php echo $lang->doc->orderByOpen;?></small>
+                  <div class="strong"><?php echo $statisticInfo->lastAddedDocs;?></div>
                 </div>
                 <div class="table-col text-middle">
-                  <div class="progress-pie inline-block" data-value="<?php echo $statisticInfo->lastVisitedProgress;?>" data-doughnut-size="78" data-color="#00a9fc">
+                  <div class="progress-pie inline-block" data-value="<?php echo $statisticInfo->lastAddedProgress;?>" data-doughnut-size="78" data-color="#00a9fc">
                     <canvas width="50" height="50"></canvas>
                     <div class="progress-info">
-                      <strong><span class="progress-value"><?php echo $statisticInfo->lastVisitedProgress;?></span><small>%</small></strong>
+                      <strong><span class="progress-value"><?php echo $statisticInfo->lastAddedProgress;?></span><small>%</small></strong>
                     </div>
                   </div>
                 </div>
