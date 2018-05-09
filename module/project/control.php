@@ -984,7 +984,7 @@ class project extends control
             $acl         = $copyProject->acl;
             $whitelist   = $copyProject->whitelist;
             $products    = $this->project->getProducts($copyProjectID);
-        }     
+        }
 
         if(!empty($planID))
         {
@@ -1462,7 +1462,7 @@ class project extends control
         $this->view->project    = $project;
         $this->view->projectID  = $projectID;
         $this->view->level      = $type;
-        $this->view->tree       = $tree;
+        $this->view->tree       = $this->project->printTree($tree);
         $this->display();
     }
 

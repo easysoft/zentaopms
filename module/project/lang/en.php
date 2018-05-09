@@ -297,10 +297,10 @@ $lang->project->featureBar['task']['needconfirm']  = 'StoryChanged';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
 
 $lang->project->treeLevel = array();
+$lang->project->treeLevel['all']   = 'Expand All';
 $lang->project->treeLevel['root']  = 'Collapse All';
 $lang->project->treeLevel['story'] = 'Show Story';
 $lang->project->treeLevel['task']  = 'Show Task';
-$lang->project->treeLevel['all']   = 'Expand All';
 
 global $config;
 if($config->global->flow == 'onlyTask')
