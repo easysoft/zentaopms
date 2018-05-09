@@ -16,8 +16,10 @@
   <div class='main-header'>
     <h2>
       <span class='prefix label-id'><strong><?php echo $project->id;?></strong></span>
-      <?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?>
+      <?php echo isonlybody() ? $project->name : html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?>
+      <?php if(!isonlybody()):?>
       <small><?php echo $lang->arrow . $lang->project->suspend;?></small>
+      <?php endif;?>
     </h2>
   </div>
   <form class='load-indicator main-form' method='post' target='hiddenwin'>

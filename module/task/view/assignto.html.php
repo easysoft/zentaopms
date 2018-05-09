@@ -26,7 +26,9 @@
       <h2>
         <span class='label label-id'><?php echo $task->id;?></span>
         <?php echo isonlybody() ? $task->name : html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name);?>
+        <?php if(!isonlybody()):?>
         <small> <?php echo $lang->arrow . (empty($task->team) ? $lang->task->assign : $lang->task->transfer);?></small>
+        <?php endif;?>
       </h2>
     </div>
     <form method='post' target='hiddenwin'>

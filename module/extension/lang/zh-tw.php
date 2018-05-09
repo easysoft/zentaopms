@@ -105,15 +105,9 @@ $lang->extension->errorDownloadPathNotWritable = '插件下載存儲路徑<stron
 $lang->extension->errorPackageFileExists       = '下載路徑已經有一個名為的<strong>%s</strong>附件。<h5>重新%s，<a href="%s" class="alert-link">請點擊此連結</a></h5>';
 $lang->extension->errorDownloadFailed          = '下載失敗，請重新下載。如果多次重試還不行，請嘗試手工下載，然後通過上傳功能上傳。';
 $lang->extension->errorMd5Checking             = '下載檔案不完整，請重新下載。如果多次重試還不行，請嘗試手工下載，然後通過上傳功能上傳。';
-<<<<<<< HEAD
 $lang->extension->errorExtracted               = '包檔案<strong> %s </strong>解壓縮失敗，可能不是一個有效的zip檔案。錯誤信息如下：<br />%s';
 $lang->extension->errorCheckIncompatible       = '該插件與禪道版本不兼容，%s後可能無法使用。<h5>您可以選擇 <a href="%s" class="btn btn-sm">強制%s</a> 或者 <a href="#" onclick=parent.location.href="%s" class="btn btn-sm">取消</a></h5>';
 $lang->extension->errorFileConflicted          = '有以下檔案衝突：<br />%s <h5>您可以選擇 <a href="%s" class="btn btn-sm">覆蓋</a> 或者 <a href="#" onclick=parent.location.href="%s" class="btn btn-sm">取消</a></h5>';
-=======
-$lang->extension->errorExtracted               = '包檔案:"%s"解壓縮失敗，可能不是一個有效的zip檔案。錯誤信息如下:"%s"';
-$lang->extension->errorCheckIncompatible       = '該插件與禪道版本不兼容，%s後可能無法使用。<h3>您可以選擇 <a href="%s">強制%s</a> 或者 <a href="#" onclick=parent.location.href="%s">取消</a></h3>';
-$lang->extension->errorFileConflicted          = '有以下檔案衝突：<br />%s <h3>您可以選擇 <a href="%s">覆蓋</a> 或者 <a href="#" onclick=parent.location.href="%s">取消</a></h3>';
->>>>>>> zentaopms_9.8
 $lang->extension->errorPackageNotFound         = '包檔案 <strong>%s </strong>沒有找到，可能是因為自動下載失敗。您可以嘗試再次下載。';
 $lang->extension->errorTargetPathNotWritable   = '目標路徑 <strong>%s </strong>不可寫。';
 $lang->extension->errorTargetPathNotExists     = '目標路徑 <strong>%s </strong>不存在。';

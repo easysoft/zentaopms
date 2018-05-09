@@ -150,12 +150,9 @@ $lang->project->tree              = '樹狀圖';
 $lang->project->storyKanban       = '需求看板';
 $lang->project->storySort         = '需求排序';
 $lang->project->importPlanStory   = '創建' . $lang->projectCommon . '成功！\n是否導入計劃關聯的相關需求？';
-<<<<<<< HEAD
 $lang->project->iteration         = '版本迭代';
 $lang->project->iterationInfo     = '迭代%s次';
 $lang->project->viewAll           = '查看所有';
-=======
->>>>>>> zentaopms_9.8
 
 /* 分組瀏覽。*/
 $lang->project->allTasks     = '所有';

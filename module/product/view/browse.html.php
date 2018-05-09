@@ -56,7 +56,7 @@
     <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", '', 'button', 'bar-chart'); ?>
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export ?></span> <span class="caret"></span></button>
-      <ul class="dropdown-menu">
+      <ul class="dropdown-menu" id='exportActionMenu'>
         <?php
         $misc = common::hasPriv('story', 'export') ? "class='export'" : "class=disabled";
         $link = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy") : '#';

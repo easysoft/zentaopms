@@ -29,7 +29,9 @@
       <h2>
         <span class='label label-id'><?php echo $task->id;?></span>
         <?php echo isonlybody() ? $task->name : html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name);?>
+        <?php if(!isonlybody()):?>
         <small><?php echo $lang->arrow . $lang->task->logEfforts;?></small>
+        <?php endif;?>
       </div>
     </div>
     <form id="recordForm" method='post' target='hiddenwin' style='margin-top:25px'>

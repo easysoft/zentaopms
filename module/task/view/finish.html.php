@@ -27,7 +27,9 @@
       <h2>
         <span class='label label-id'><?php echo $task->id;?></span>
         <?php echo isonlybody() ? $task->name : html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name);?>
+        <?php if(!isonlybody()):?>
         <small> <?php echo $lang->arrow . $lang->task->finish;?></small>
+        <?php endif;?>
       </div>
     </div>
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>

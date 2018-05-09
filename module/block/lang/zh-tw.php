@@ -143,7 +143,6 @@ $lang->block->default['full']['my']['2']['title']  = '最新動態';
 $lang->block->default['full']['my']['2']['block']  = 'dynamic';
 $lang->block->default['full']['my']['2']['grid']   = 4;
 $lang->block->default['full']['my']['2']['source'] = '';
-<<<<<<< HEAD
 $lang->block->default['full']['my']['3']['title']  = '流程圖';
 $lang->block->default['full']['my']['3']['block']  = 'flowchart';
 $lang->block->default['full']['my']['3']['grid']   = 8;
@@ -163,25 +162,6 @@ $lang->block->default['full']['my']['9'] = $lang->block->default['product']['2']
 $lang->block->default['full']['my']['9']['source'] = 'product';
 $lang->block->default['full']['my']['10'] = $lang->block->default['qa']['2'];
 $lang->block->default['full']['my']['10']['source'] = 'qa';
-=======
-$lang->block->default['full']['my']['3'] = $lang->block->default['project']['1'];
-$lang->block->default['full']['my']['3']['source'] = 'project';
-$lang->block->default['full']['my']['4']['title']  = '我的待辦';
-$lang->block->default['full']['my']['4']['block']  = 'list';
-$lang->block->default['full']['my']['4']['grid']   = 4;
-$lang->block->default['full']['my']['4']['source'] = 'todo';
-$lang->block->default['full']['my']['4']['params']['num'] = '20';
-$lang->block->default['full']['my']['5']['title']  = '指派給我';
-$lang->block->default['full']['my']['5']['block']  = 'assigntome';
-$lang->block->default['full']['my']['5']['grid']   = 8;
-$lang->block->default['full']['my']['5']['source'] = '';
-$lang->block->default['full']['my']['6'] = $lang->block->default['product']['2'];
-$lang->block->default['full']['my']['6']['source'] = 'product';
-$lang->block->default['full']['my']['7'] = $lang->block->default['product']['1'];
-$lang->block->default['full']['my']['7']['source'] = 'product';
-$lang->block->default['full']['my']['8'] = $lang->block->default['qa']['2'];
-$lang->block->default['full']['my']['8']['source'] = 'qa';
->>>>>>> zentaopms_9.8
 
 $lang->block->default['onlyTest']['my']['1'] = $lang->block->default['qa']['1'];
 $lang->block->default['onlyTest']['my']['1']['source'] = 'qa';
