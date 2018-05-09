@@ -2310,28 +2310,13 @@ class project extends control
         die(js::locate(helper::createLink('project', 'story', 'projectID=' . $projectID), 'parent'));
     }
 
-    public function treeProduct($productID)
-    {
-        $this->loadModel('product');
-        $product = $this->product->getStatByID($productID);
-        $product->desc = $this->loadModel('file')->setImgSize($product->desc);
-
-        $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('product')->like("%,$productID,%")->orderBy('date_desc')->limit(6)->fetchAll();
-        if($actions) $this->loadModel('action')->transformActions($actions);
-
-        $releases = $this->dao->select('*')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->orderBy('date')->fetchAll();
-
-        $this->view->product  = $product;
-        $this->view->actions  = $this->loadModel('action')->getList('product', $productID);
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
-        $this->view->groups   = $this->loadModel('group')->getPairs();
-        $this->view->lines    = array('') + $this->loadModel('tree')->getLinePairs();
-        $this->view->branches = $this->loadModel('branch')->getPairs($productID);
-        $this->view->actions  = $actions;
-        $this->view->releases = $releases;
-        $this->display();
-    }
-
+    /**
+     * Story info for tree list.
+     * @param     $storyID
+     * @param int $version
+     * @access public
+     * @return void
+     */
     public function treeStory($storyID, $version = 0)
     {
         $this->loadModel('story');
@@ -2362,6 +2347,12 @@ class project extends control
         $this->display();
     }
 
+    /**
+     * Task info for tree list.
+     * @param $taskID
+     * @access public
+     * @return void
+     */
     public function treeTask($taskID)
     {
         $this->loadModel('task');

@@ -2767,9 +2767,8 @@ class projectModel extends model
                     break;
                 case 'product':
                     $this->app->loadLang('product');
-                    $link = helper::createLink('project', 'treeProduct', "productID={$tree->id}");
                     $html .= '<li class="item-product">';
-                    $html .= '<a class="tree-link" href="' . $link . '"><span class="label label-type">' . $this->lang->productCommon . '</span><span class="title">' . $tree->name . '</span></a>';
+                    $html .= '<a class="tree-toggle"><span class="label label-type">' . $this->lang->productCommon . '</span><span class="title">' . $tree->name . '</span></a>';
                     break;
                 case 'story':
                     $this->app->loadLang('story');
