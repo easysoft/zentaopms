@@ -684,7 +684,7 @@ function toggleSearch()
     (
         function()
         {
-            if(browseType == 'bymodule')
+            if(typeof(browseType) == 'undefined' || browseType == 'bymodule')
             {
                 $('#bymoduleTab').removeClass('btn-active-text');
             }
@@ -698,7 +698,7 @@ function toggleSearch()
         },
         function()
         {
-            if(browseType == 'bymodule')
+            if(typeof(browseType) == 'undefined' || browseType == 'bymodule')
             {
                 $('#bymoduleTab').addClass('btn-active-text');
             }

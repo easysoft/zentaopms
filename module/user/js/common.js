@@ -8,7 +8,7 @@
  */
 $(document).ready(function()
 {
-    $('#dataform').submit(function()
+    $('#verifyPassword').closest('form').find('#submit').click(function()
     {
         var password = $('input#verifyPassword').val();
         var rand = $('input#verifyRand').val();

@@ -16,7 +16,9 @@
     <h2>
       <span class='label label-id'><?php echo $story->id;?></span>
       <?php echo isonlybody() ? $story->title : html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?>
+      <?php if(!isonlybody()):?>
       <small><?php echo $lang->arrow . $lang->story->linkStory;?></small>
+      <?php endif;?>
     </h2>
   </div>
   <div id='queryBox' class='show'></div>

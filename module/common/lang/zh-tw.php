@@ -80,11 +80,8 @@ $lang->tutorial        = '新手教程';
 $lang->changeLog       = '修改日誌';
 $lang->manual          = '手冊';
 $lang->customMenu      = '自定義導航';
-<<<<<<< HEAD
 $lang->customField     = '自定義表單項';
-=======
 $lang->lineNumber      = '行號';
->>>>>>> zentaopms_9.8
 $lang->tutorialConfirm = '檢測到你尚未退出新手教程模式，是否現在退出？';
 
 $lang->preShortcutKey  = '[快捷鍵:←]';

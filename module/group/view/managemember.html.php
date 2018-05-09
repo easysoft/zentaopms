@@ -16,7 +16,6 @@
     <h2>
       <span class='label label-id' title='GROUP'><?php echo $group->id;?></span>
       <?php echo $group->name;?>
-      <small class='text-muted'> <?php echo $lang->arrow . $lang->group->manageMember;?></small>
     </h2>
   </div>
   <div class='main-row'>
