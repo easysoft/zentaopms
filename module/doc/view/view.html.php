@@ -83,12 +83,14 @@
 
           <?php foreach($doc->files as $file):?>
           <?php if(in_array($file->extension, $config->file->imageExtensions)):?>
-          <a href="<?php echo $file->webPath?>" target="_blank">
-            <img onload="setImageSize(this,0)" src="<?php echo $this->createLink('file', 'read', "fileID={$file->id}");?>" alt="<?php echo $file->title?>">
-          </a>
-          <span class='right-icon' style='position:absolute;right:-18px;top:0px;'>
-            <?php if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon-remove'></i>", '', "class='btn-icon' onclick='deleteFile($file->id)' title='$lang->delete'");?>
-          </span>
+          <div class='file-image'>
+            <a href="<?php echo $file->webPath?>" target="_blank">
+              <img onload="setImageSize(this,0)" src="<?php echo $this->createLink('file', 'read', "fileID={$file->id}");?>" alt="<?php echo $file->title?>">
+            </a>
+            <span class='right-icon'>
+              <?php if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='btn-icon' onclick='deleteFile($file->id)' title='$lang->delete'");?>
+            </span>
+          </div>
           <?php unset($doc->files[$file->id]);?>
           <?php endif;?>
           <?php endforeach;?>
