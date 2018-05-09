@@ -75,7 +75,7 @@
               </div>
             </div>
             <div class="product-info">
-              <div class="progress-info"><i class="icon icon-exclamation-sign text-danger icon-sm"></i> <span class="text-muted"><?php echo $lang->story->stageList['released'];?></span> <strong><?php echo $project->releasedStories;?></strong></div>
+              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->story->stageList['released'];?></span> <strong><?php echo $project->releasedStories;?></strong></div>
               <div class="progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $project->storyProgress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->storyProgress;?>%"></div>
               </div>
