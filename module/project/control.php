@@ -2312,6 +2312,23 @@ class project extends control
 
     public function treeProduct($productID)
     {
+        $this->loadModel('product');
+        $product = $this->product->getStatByID($productID);
+        $product->desc = $this->loadModel('file')->setImgSize($product->desc);
+
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('product')->like("%,$productID,%")->orderBy('date_desc')->limit(6)->fetchAll();
+        if($actions) $this->loadModel('action')->transformActions($actions);
+
+        $releases = $this->dao->select('*')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->orderBy('date')->fetchAll();
+
+        $this->view->product  = $product;
+        $this->view->actions  = $this->loadModel('action')->getList('product', $productID);
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->groups   = $this->loadModel('group')->getPairs();
+        $this->view->lines    = array('') + $this->loadModel('tree')->getLinePairs();
+        $this->view->branches = $this->loadModel('branch')->getPairs($productID);
+        $this->view->actions  = $actions;
+        $this->view->releases = $releases;
         $this->display();
     }
 
@@ -2347,6 +2364,38 @@ class project extends control
 
     public function treeTask($taskID)
     {
+        $this->loadModel('task');
+        $task = $this->task->getById($taskID, true);
+        if($task->fromBug != 0)
+        {
+            $bug = $this->loadModel('bug')->getById($task->fromBug);
+            $task->bugSteps = '';
+            if($bug)
+            {
+                $task->bugSteps = $this->loadModel('file')->setImgSize($bug->steps);
+                foreach($bug->files as $file) $task->files[] = $file;
+            }
+            $this->view->fromBug = $bug;
+        }
+        else
+        {
+            $story = $this->loadModel('story')->getById($task->story);
+            $task->storySpec     = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->spec);
+            $task->storyVerify   = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->verify);
+            $task->storyFiles    = $this->loadModel('file')->getByObject('story', $task->story);
+        }
+
+        if($task->team) $this->lang->task->assign = $this->lang->task->transfer;
+
+        /* Update action. */
+        if($task->assignedTo == $this->app->user->account) $this->loadModel('action')->read('task', $taskID);
+
+        $project = $this->project->getById($task->project);
+
+        $this->view->task    = $task;
+        $this->view->project = $project;
+        $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 }
