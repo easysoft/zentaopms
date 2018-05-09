@@ -1,0 +1,288 @@
+<div class="detail">
+    <h2 class="detail-title"><span class="label-id"><?php echo $story->id?></span> <span class="label label-story"><?php echo $lang->story->common?></span> <span class="title"><?php echo $story->title;?></span></h2>
+    <div class="detail-content article-content">
+      <div class="infos">
+        <span class="status-draft"><span class="label label-dot"></span> <?php echo $lang->story->statusList[$story->status];?></span>
+        <span><?php echo $lang->story->stage;?>: <?php echo $lang->story->stageList[$story->stage];?></span>
+        <span><?php echo $lang->story->estimate;?>: <?php echo $story->estimate;?></span>
+      </div>
+      <div class="btn-toolbar">
+        <?php
+        $vars = "story={$story->id}";
+        common::printIcon('story', 'change', $vars, $story, 'list', 'fork', '', 'btn btn-info btn-icon');
+        common::printIcon('story', 'delete', $vars, $story, 'list', 'trash', 'hiddenwin', 'btn btn-info btn-icon');
+        common::printIcon('story', 'review', $vars, $story, 'list', 'glasses', '', 'btn btn-info btn-icon');
+        common::printIcon('story', 'close',  $vars, $story, 'list', 'off', '', 'btn btn-info btn-icon iframe', true);
+        common::printIcon('story', 'edit',   $vars, $story, 'list', '', '', 'btn btn-info btn-icon');
+        if($this->config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', 'btn btn-info btn-icon');
+        ?>
+      </div>
+    </div>
+  </div>
+  <div class="detail">
+    <div class="detail-title"><?php echo $lang->story->legendSpec;?></div>
+    <div class="detail-content article-content"><?php echo $story->spec;?></div>
+  </div>
+  <div class="detail">
+    <div class="detail-title"><?php echo $lang->story->legendVerify;?></div>
+    <div class="detail-content article-content"><?php echo $story->verify;?></div>
+  </div>
+  <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true'));?>
+
+  <details class="detail" open>
+    <summary class="detail-title"><?php echo $lang->story->legendBasicInfo;?></summary>
+    <div class="detail-content">
+      <table class="table table-data">
+        <tbody>
+        <tr>
+          <th><?php echo $lang->story->product;?></th>
+          <td><?php echo html::a($this->createLink('product', 'view', "productID=$story->product"), $product->name);?></td>
+        </tr>
+        <?php if($product->type != 'normal'):?>
+          <tr>
+            <th><?php echo $lang->product->branch;?></th>
+            <td><?php common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch", $branches[$story->branch]);?></td>
+          </tr>
+        <?php endif;?>
+        <tr>
+          <th><?php echo $lang->story->module;?></th>
+            <?php
+            $moduleTitle = '';
+            ob_start();
+            if(empty($modulePath))
+            {
+                $moduleTitle .= '/';
+                echo "/";
+            }
+            else
+            {
+                foreach($modulePath as $key => $module)
+                {
+                    $moduleTitle .= $module->name;
+                    if(!common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                    if(isset($modulePath[$key + 1]))
+                    {
+                        $moduleTitle .= '/';
+                        echo $lang->arrow;
+                    }
+                }
+            }
+            $printModule = ob_get_contents();
+            ob_end_clean();
+            ?>
+          <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->plan;?></th>
+          <td>
+              <?php
+              if(isset($story->planTitle))
+              {
+                  foreach($story->planTitle as $planID => $planTitle)
+                  {
+                      if(!common::printLink('productplan', 'view', "planID=$planID", $planTitle)) echo $lanTitle;
+                      echo '<br />';
+                  }
+              }
+              ?>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->source;?></th>
+          <td id='source'><?php echo $lang->story->sourceList[$story->source];?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->sourceNote;?></th>
+          <td><?php echo $story->sourceNote;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->status;?></th>
+          <td><span class='status-<?php echo $story->status?>'><span class="label label-dot"></span> <?php echo $lang->story->statusList[$story->status];?></span></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->stage;?></th>
+          <td>
+              <?php
+              if($story->stages and $branches)
+              {
+                  foreach($story->stages as $branch => $stage) if(isset($branches[$branch])) echo $branches[$branch] . ' : ' . $lang->story->stageList[$stage] . '<br />';
+              }
+              else
+              {
+                  echo $lang->story->stageList[$story->stage];
+              }
+              ?>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->pri;?></th>
+          <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->estimate;?></th>
+          <td><?php echo $story->estimate;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->keywords;?></th>
+          <td><?php echo $story->keywords;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->legendMailto;?></th>
+          <td><?php $mailto = explode(',', $story->mailto); foreach($mailto as $account) {if(empty($account)) continue; echo "<span>" . $users[trim($account)] . '</span> &nbsp;'; }?></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <details class="detail" open>
+    <summary class="detail-title"><?php echo $lang->story->legendProjectAndTask;?></summary>
+    <div class="detail-content">
+      <ul class="list-unstyled">
+          <?php
+          foreach($story->tasks as $projectTasks)
+          {
+              foreach($projectTasks as $task)
+              {
+                  if(!isset($projects[$task->project])) continue;
+                  $projectName = $projects[$task->project];
+                  echo "<li title='$task->name'>" . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), "#$task->id $task->name", '', "class='iframe' data-width='80%'");
+                  echo html::a($this->createLink('project', 'browse', "projectID=$task->project"), $projectName, '', "class='text-muted'") . '</li>';
+              }
+          }
+          if(count($story->tasks) == 0)
+          {
+              foreach($story->projects as $projectID => $project)
+              {
+                  echo "<li title='$project->name'>" . html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name, '', "class='text-muted'") . '</li>';
+              }
+          }
+          ?>
+      </ul>
+    </div>
+  </details>
+
+  <details class="detail" open>
+    <summary class="detail-title"><?php echo $lang->story->legendRelated;?></summary>
+    <div class="detail-content">
+      <table class="table table-data">
+        <tbody>
+        <?php if($config->global->flow != 'onlyStory'):?>
+            <?php if(!empty($fromBug)):?>
+            <tr class='text-top'>
+              <th class='w-70px'><?php echo $lang->story->legendFromBug;?></th>
+              <td class='pd-0'>
+                <ul class='list-unstyled'>
+                    <?php echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id"), "#$fromBug->id $fromBug->title") . '</li>';?>
+                </ul>
+              </td>
+            </tr>
+            <?php endif;?>
+          <tr class='text-top'>
+            <th class='w-70px'><?php echo $lang->story->legendBugs;?></th>
+            <td class='pd-0'>
+              <ul class='list-unstyled'>
+                  <?php
+                  foreach($bugs as $bug)
+                  {
+                      echo "<li title='#$bug->id $bug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$bug->id"), "#$bug->id $bug->title") . '</li>';
+                  }
+                  ?>
+              </ul>
+            </td>
+          </tr>
+          <tr class='text-top'>
+            <th><?php echo $lang->story->legendCases;?></th>
+            <td class='pd-0'>
+              <ul class='list-unstyled'>
+                  <?php
+                  foreach($cases as $case)
+                  {
+                      echo "<li title='#$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id"), "#$case->id $case->title") . '</li>';
+                  }
+                  ?>
+              </ul>
+            </td>
+          </tr>
+        <?php endif;?>
+        <tr class='text-top'>
+          <th class='w-80px'><?php echo $lang->story->legendLinkStories;?></th>
+          <td class='pd-0'>
+            <ul class='list-unstyled'>
+                <?php
+                $linkStories = explode(',', $story->linkStories) ;
+                foreach($linkStories as $linkStoryID)
+                {
+                    if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]) . '</li>';
+                }
+                ?>
+            </ul>
+          </td>
+        </tr>
+        <tr class='text-top'>
+          <th><?php echo $lang->story->legendChildStories;?></th>
+          <td class='pd-0'>
+            <ul class='list-unstyled'>
+                <?php
+                $childStories = explode(',', $story->childStories) ;
+                foreach($childStories as $childStoryID)
+                {
+                    if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$childStoryID"), "#$childStoryID " . $story->extraStories[$childStoryID]) . '</li>';
+                }
+                ?>
+            </ul>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <details class="detail" open>
+    <summary class="detail-title"><?php echo $lang->story->legendLifeTime;?></summary>
+    <div class="detail-content">
+      <table class="table table-data">
+        <tbody>
+        <tr>
+          <th class='w-70px'><?php echo $lang->story->openedBy;?></th>
+          <td><?php echo $users[$story->openedBy] . $lang->at . $story->openedDate;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->assignedTo;?></th>
+          <td><?php if($story->assignedTo) echo $users[$story->assignedTo] . $lang->at . $story->assignedDate;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->reviewedBy;?></th>
+          <td><?php $reviewedBy = explode(',', $story->reviewedBy); foreach($reviewedBy as $account) echo ' ' . $users[trim($account)]; ?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->reviewedDate;?></th>
+          <td><?php if($story->reviewedBy) echo $story->reviewedDate;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->closedBy;?></th>
+          <td><?php if($story->closedBy) echo $users[$story->closedBy] . $lang->at . $story->closedDate;?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->closedReason;?></th>
+          <td>
+              <?php
+              if($story->closedReason) echo $lang->story->reasonList[$story->closedReason];
+              if(isset($story->extraStories[$story->duplicateStory]))
+              {
+                  echo html::a(inlink('view', "storyID=$story->duplicateStory"), '#' . $story->duplicateStory . ' ' . $story->extraStories[$story->duplicateStory]);
+              }
+              ?>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->lastEditedBy;?></th>
+          <td><?php if($story->lastEditedBy) echo $users[$story->lastEditedBy] . $lang->at . $story->lastEditedDate;?></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
+  <?php include '../../common/view/action.html.php';?>

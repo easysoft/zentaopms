@@ -8,3 +8,4 @@
 #todoBatchAddForm .control-time-begin + .chosen-container-single .chosen-single {border-radius: 2px 0 0 2px; border-right-width: 0; padding-right: 1px;}
 #todoBatchAddForm .control-time-begin + .chosen-container-active .chosen-single {border-right-width: 1px; padding-right: 0;}
 #todoBatchAddHeader [name="date"]:disabled {color: #ccc; text-decoration: line-through;}
+.main-header > .input-group {width: 220px;}

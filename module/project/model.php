@@ -1381,8 +1381,8 @@ class projectModel extends model
 
     /**
      * Stat story, task, bug data for project.
-     * 
-     * @param  int    $projectID 
+     *
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -2545,7 +2545,7 @@ class projectModel extends model
                 $taskGroups[$task->module][$task->story][$task->id] = $task;
                 if(!empty($childTasks[$task->id]))
                 {
-                    $taskGroups[$task->module][$task->story][$task->id]->children =  $childTasks[$task->id];
+                    $taskGroups[$task->module][$task->story][$task->id]->children = $childTasks[$task->id];
                 }
             }
         }
@@ -2581,6 +2581,8 @@ class projectModel extends model
                 $storyItem->color         = $story->color;
                 $storyItem->pri           = $story->pri;
                 $storyItem->storyId       = $story->id;
+                $storyItem->openedBy      = $story->openedBy;
+                $storyItem->assignedTo    = $story->assignedTo;
                 $storyItem->url           = helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$projectID");
                 $storyItem->taskCreateUrl = helper::createLink('task', 'batchCreate', "projectID={$projectID}&story={$story->id}");
 
@@ -2661,9 +2663,11 @@ class projectModel extends model
             $taskItem->color        = $task->color;
             $taskItem->pri          = (int)$task->pri;
             $taskItem->status       = $task->status;
+            $taskItem->parent       = $task->parent;
             $taskItem->estimate     = $task->estimate;
             $taskItem->consumed     = $task->consumed;
             $taskItem->left         = $task->left;
+            $taskItem->openedBy     = $users[$task->openedBy];
             $taskItem->assignedTo   = $users[$task->assignedTo];
             $taskItem->url          = helper::createLink('task', 'view', "task=$task->id");
             $taskItem->storyChanged = $story and $story->status == 'active' and $story->version > $story->taskVersion;
@@ -2734,5 +2738,53 @@ class projectModel extends model
             $productPlans[$productID] = $this->productplan->getPairs($product->id, $product->branch);
         }
         return $productPlans;
+    }
+
+    /**
+     * Print html for tree.
+     *
+     * @param object $trees
+     * @access pubic
+     * @return string
+     */
+    public function printTree($trees)
+    {
+        $html = '';
+        foreach($trees as $tree)
+        {
+            if(is_array($tree)) $tree = (object)$tree;
+            switch($tree->type)
+            {
+                case 'module':
+                    $this->app->loadLang('tree');
+                    $html .= "<li class='item-module'>";
+                    $html .= '<a class="tree-toggle"><span class="label label-type">' . (empty($tree->parent) ? $this->lang->tree->module : $this->lang->tree->child) . '</span><span class="title">' . $tree->name . '</span></a>';
+                    break;
+                case 'task':
+                    $link = helper::createLink('project', 'treeTask', "taskID={$tree->id}");
+                    $html .= '<li class="item-task">';
+                    $html .= '<a class="tree-link" href="' . $link . '"><span class="label label-id">' . $tree->id . '</span><span class="label label-type">' . (empty($tree->parent) ? $this->lang->task->common : $this->lang->task->children) . '</span><span class="title">' . $tree->title . '</span> <span class="user"><i class="icon icon-person"></i> ' . (empty($tree->assignedTo) ? $tree->openedBy : $tree->assignedTo) . '</span></a>';
+                    break;
+                case 'product':
+                    $this->app->loadLang('product');
+                    $html .= '<li class="item-product">';
+                    $html .= '<a class="tree-toggle"><span class="label label-type">' . $this->lang->productCommon . '</span><span class="title">' . $tree->name . '</span></a>';
+                    break;
+                case 'story':
+                    $this->app->loadLang('story');
+                    $link = helper::createLink('project', 'treeStory', "storyID={$tree->storyId}");
+                    $html .= '<li class="item-story">';
+                    $html .= '<a class="tree-link" href="' . $link . '"><span class="label label-id">' . $tree->storyId . '</span><span class="label label-type">' . $this->lang->story->common . '</span><span class="title">' . $tree->title . '</span> <span class="user"><i class="icon icon-person"></i> ' . (empty($tree->assignedTo) ? $tree->openedBy : $tree->assignedTo) . '</span></a>';
+                    break;
+            }
+            if(isset($tree->children))
+            {
+                $html .= '<ul>';
+                $html .= $this->printTree($tree->children);
+                $html .= '</ul>';
+            }
+            $html .= '</li>';
+        }
+        return $html;
     }
 }

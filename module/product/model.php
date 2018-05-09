@@ -629,7 +629,7 @@ class productModel extends model
         $lastRoadmap['total'] = 0;
         foreach($lastKeys as $key)
         {
-            if($key == '2030') 
+            if($key == '2030')
             {
                 $lastRoadmap[$this->lang->productplan->future] = $groupRoadmap[$key];
             }
@@ -832,7 +832,7 @@ class productModel extends model
 
     /**
      * Get priv products.
-     * 
+     *
      * @access public
      * @return array
      */

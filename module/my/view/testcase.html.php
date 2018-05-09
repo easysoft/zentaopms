@@ -25,7 +25,7 @@
     ?>
   </div>
 </div>
-<div id="mainContent" class='main-content'>
+<div id="mainContent">
   <form id='myCaseForm' class="main-table table-case" data-ride="table" method="post">
     <table class="table has-sort-head" id='caseList'>
       <?php 

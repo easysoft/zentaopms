@@ -30,6 +30,7 @@ class upgradeModel extends model
      */
     public function execute($fromVersion)
     {
+        set_time_limit(0);
         switch($fromVersion)
         {
             case '0_3beta': $this->execSQL($this->getUpgradeFile('0.3'));
@@ -1251,7 +1252,6 @@ class upgradeModel extends model
      */
     public function adjustDocModule()
     {
-        set_time_limit(0);
         $this->app->loadLang('doc');
         $productDocModules = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('productdoc')->orderBy('grade,id')->fetchAll('id');
         $allProductIdList  = $this->dao->select('id,name,acl,whitelist,createdBy')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchAll('id');
@@ -2257,7 +2257,7 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function  addUniqueKeyToTeam()
+    public function addUniqueKeyToTeam()
     {
         $members = $this->dao->select('root, type, account')->from(TABLE_TEAM)->groupBy('root, type, account')->having('count(*)')->gt(1)->fetchAll();
 
@@ -2279,5 +2279,4 @@ class upgradeModel extends model
         $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " ADD UNIQUE `team` (`root`, `type`, `account`)");
         return !dao::isError();
     }
->>>>>>> zentaopms_9.8
 }

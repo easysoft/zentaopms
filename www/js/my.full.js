@@ -1671,9 +1671,6 @@ needPing = true;
 /* When body's ready, execute these. */
 $(document).ready(function() 
 {
-    if(typeof(config.onlybody) != 'undefined' && config.onlybody == 'yes') checkOnlybodyPage();
-    $('body').addClass('m-{currentModule}-{currentMethod}'.format(config));
-
     setTableBehavior();
     setForm();
     saveWindowSize();

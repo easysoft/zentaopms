@@ -20,40 +20,42 @@
   </div>
 </div>
 <div id="mainContent">
-  <table class="main-table table has-sort-head table-fixed">
-    <thead>
-      <tr>
-        <th class='w-id'><?php echo $lang->idAB;?></th>
-        <th class='w-160px'><?php echo $lang->project->code;?></th>
-        <th class="text-left"><?php echo $lang->project->name;?></th>
-        <th class='w-date'><?php echo $lang->project->begin;?></th>
-        <th class='w-date'><?php echo $lang->project->end;?></th>
-        <th class='w-status'><?php echo $lang->statusAB;?></th>
-        <th class='w-user'><?php echo $lang->team->role;?></th>
-        <th class='w-date'><?php echo $lang->team->join;?></th>
-        <th class='w-110px'><?php echo $lang->team->hours;?></th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php foreach($projects as $project):?>
-      <?php $projectLink = $this->createLink('project', 'browse', "projectID=$project->id");?>
-      <tr>
-        <td><?php echo html::a($projectLink, $project->id);?></td>
-        <td class='text-left'><?php echo $project->code;?></td>
-        <td class='text-left'><?php echo html::a($projectLink, $project->name);?></td>
-        <td><?php echo $project->begin;?></td>
-        <td><?php echo $project->end;?></td>
-        <?php if(isset($project->delay)):?>
-        <td class='project-delay'><?php echo $lang->project->delayed;?></td>
-        <?php else:?>
-        <td class='project-<?php echo $project->status?>'><?php echo $lang->project->statusList[$project->status];?></td>
-        <?php endif;?>
-        <td><?php echo $project->role;?></td>
-        <td><?php echo $project->join;?></td>
-        <td><?php echo $project->hours;?></td>
-      </tr>
-      <?php endforeach;?>
-    </tbody>
-  </table>
+  <form class='main-table'>
+    <table class="table has-sort-head table-fixed" id='projectList'>
+      <thead>
+        <tr>
+          <th class='w-id'><?php echo $lang->idAB;?></th>
+          <th class='w-160px'><?php echo $lang->project->code;?></th>
+          <th class="text-left"><?php echo $lang->project->name;?></th>
+          <th class='w-date'><?php echo $lang->project->begin;?></th>
+          <th class='w-date'><?php echo $lang->project->end;?></th>
+          <th class='w-status'><?php echo $lang->statusAB;?></th>
+          <th class='w-user'><?php echo $lang->team->role;?></th>
+          <th class='w-date'><?php echo $lang->team->join;?></th>
+          <th class='w-110px'><?php echo $lang->team->hours;?></th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach($projects as $project):?>
+        <?php $projectLink = $this->createLink('project', 'browse', "projectID=$project->id");?>
+        <tr>
+          <td><?php echo html::a($projectLink, $project->id);?></td>
+          <td class='text-left'><?php echo $project->code;?></td>
+          <td class='text-left'><?php echo html::a($projectLink, $project->name);?></td>
+          <td><?php echo $project->begin;?></td>
+          <td><?php echo $project->end;?></td>
+          <?php if(isset($project->delay)):?>
+          <td class='project-delay'><?php echo $lang->project->delayed;?></td>
+          <?php else:?>
+          <td class='project-<?php echo $project->status?>'><?php echo $lang->project->statusList[$project->status];?></td>
+          <?php endif;?>
+          <td><?php echo $project->role;?></td>
+          <td><?php echo $project->join;?></td>
+          <td><?php echo $project->hours;?></td>
+        </tr>
+        <?php endforeach;?>
+      </tbody>
+    </table>
+  </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>

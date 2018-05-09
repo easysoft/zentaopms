@@ -11,7 +11,12 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<<<<<<< HEAD
 <script language='Javascript'>
+=======
+<?php include '../../common/view/datepicker.html.php';?>
+<script>
+>>>>>>> a4e6189f518dcb49e98ef2c70757ec0ed757aea0
 var browseType = '<?php echo $browseType;?>';
 </script>
 <?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
@@ -19,8 +24,13 @@ var browseType = '<?php echo $browseType;?>';
 <?php if($this->from != 'doc') js::set('type', 'doc');?>
 
 <div class='main-row split-row' id='mainRow'>
+  <?php if($this->from == 'doc'):?>
   <?php include './side.html.php';?>
+<<<<<<< HEAD
   <div class="col-spliter"></div>
+=======
+  <?php endif;?>
+>>>>>>> a4e6189f518dcb49e98ef2c70757ec0ed757aea0
   <?php if($this->cookie->browseType == 'bygrid'):?>
   <?php include dirname(__FILE__) . '/browsebygrid.html.php';?>
   <?php else:?>
@@ -76,8 +86,8 @@ var browseType = '<?php echo $browseType;?>';
               <td class="c-name"><?php echo html::a(inlink('view', "docID=$doc->id"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title);?></td>
               <td class="c-actions">
                 <?php common::printLink('doc', 'collect', "objectID=$doc->id&objectType=doc", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$lang->doc->collect}' class='btn btn-link'")?>
-                <?php common::printLink('doc', 'edit', "docID=$doc->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'")?>
-                <?php common::printLink('doc', 'delete', "docID=$doc->id", "<i class='icon icon-trash'></i>", '', "title='{$lang->delete}' class='btn btn-link'")?>
+                <?php common::printLink('doc', 'edit', "docID=$doc->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link iframe'")?>
+                <?php common::printLink('doc', 'delete', "docID=$doc->id", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
               </td>
               <td class="c-num"></td>
               <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>

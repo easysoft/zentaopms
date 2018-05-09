@@ -984,7 +984,7 @@ class project extends control
             $acl         = $copyProject->acl;
             $whitelist   = $copyProject->whitelist;
             $products    = $this->project->getProducts($copyProjectID);
-        }     
+        }
 
         if(!empty($planID))
         {
@@ -1462,7 +1462,7 @@ class project extends control
         $this->view->project    = $project;
         $this->view->projectID  = $projectID;
         $this->view->level      = $type;
-        $this->view->tree       = $tree;
+        $this->view->tree       = $this->project->printTree($tree);
         $this->display();
     }
 
@@ -2308,5 +2308,89 @@ class project extends control
             $this->project->linkStory($projectID, $planStories, $planProducts);
         }
         die(js::locate(helper::createLink('project', 'story', 'projectID=' . $projectID), 'parent'));
+    }
+
+    /**
+     * Story info for tree list.
+     *
+     * @param int $storyID
+     * @param int $version
+     *
+     * @access public
+     * @return void
+     */
+    public function treeStory($storyID, $version = 0)
+    {
+        $this->loadModel('story');
+        $story = $this->story->getById($storyID, $version, true);
+
+        $story->files = $this->loadModel('file')->getByObject('story', $storyID);
+        $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type')->fetch();
+        $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
+        $bugs         = $this->dao->select('id,title')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
+        $fromBug      = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
+        $cases        = $this->dao->select('id,title')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
+        $modulePath   = $this->loadModel('tree')->getParents($story->module);
+        $users        = $this->loadModel('user')->getPairs('noletter');
+
+        $this->view->product    = $product;
+        $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
+        $this->view->plan       = $plan;
+        $this->view->bugs       = $bugs;
+        $this->view->fromBug    = $fromBug;
+        $this->view->cases      = $cases;
+        $this->view->story      = $story;
+        $this->view->users      = $users;
+        $this->view->projects   = $this->loadModel('project')->getPairs('nocode');
+        $this->view->actions    = $this->loadModel('action')->getList('story', $storyID);
+        $this->view->modulePath = $modulePath;
+        $this->view->version    = $version == 0 ? $story->version : $version;
+        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
+        $this->display();
+    }
+
+    /**
+     * Task info for tree list.
+     *
+     * @param int $taskID
+     *
+     * @access public
+     * @return void
+     */
+    public function treeTask($taskID)
+    {
+        $this->loadModel('task');
+        $task = $this->task->getById($taskID, true);
+        if($task->fromBug != 0)
+        {
+            $bug = $this->loadModel('bug')->getById($task->fromBug);
+            $task->bugSteps = '';
+            if($bug)
+            {
+                $task->bugSteps = $this->loadModel('file')->setImgSize($bug->steps);
+                foreach($bug->files as $file) $task->files[] = $file;
+            }
+            $this->view->fromBug = $bug;
+        }
+        else
+        {
+            $story = $this->loadModel('story')->getById($task->story);
+            $task->storySpec     = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->spec);
+            $task->storyVerify   = empty($story) ? '' : $this->loadModel('file')->setImgSize($story->verify);
+            $task->storyFiles    = $this->loadModel('file')->getByObject('story', $task->story);
+        }
+
+        if($task->team) $this->lang->task->assign = $this->lang->task->transfer;
+
+        /* Update action. */
+        if($task->assignedTo == $this->app->user->account) $this->loadModel('action')->read('task', $taskID);
+
+        $project = $this->project->getById($task->project);
+
+        $this->view->task    = $task;
+        $this->view->project = $project;
+        $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
     }
 }

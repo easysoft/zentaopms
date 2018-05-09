@@ -15,7 +15,7 @@ class product extends control
 
     /**
      * Construct function.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -39,11 +39,11 @@ class product extends control
      * Index page, to browse.
      *
      * @param  string $locate     locate to browse page or not. If not, display all products.
-     * @param  int    $productID 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * @param  int    $productID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -63,10 +63,10 @@ class product extends control
     }
 
     /**
-     * project 
-     * 
-     * @param  string $status 
-     * @param  int    $productID 
+     * project
+     *
+     * @param  string $status
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -195,8 +195,8 @@ class product extends control
     }
 
     /**
-     * Create a product. 
-     * 
+     * Create a product.
+     *
      * @access public
      * @return void
      */
@@ -231,8 +231,8 @@ class product extends control
 
     /**
      * Edit a product.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -240,7 +240,7 @@ class product extends control
     {
         if(!empty($_POST))
         {
-            $changes = $this->product->update($productID); 
+            $changes = $this->product->update($productID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($action == 'undelete')
             {
@@ -277,8 +277,8 @@ class product extends control
 
     /**
      * Batch edit products.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -333,8 +333,8 @@ class product extends control
 
     /**
      * Close product.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -368,8 +368,8 @@ class product extends control
 
     /**
      * View a product.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -403,8 +403,8 @@ class product extends control
 
     /**
      * Delete a product.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @param  string $confirm    yes|no
      * @access public
      * @return void
@@ -425,9 +425,9 @@ class product extends control
     }
 
     /**
-     * Road map of a product. 
-     * 
-     * @param  int    $productID 
+     * Road map of a product.
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -451,12 +451,12 @@ class product extends control
 
     /**
      * Product dynamic.
-     * 
-     * @param  string $type 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -511,9 +511,9 @@ class product extends control
 
     /**
      * AJAX: get projects of a product in html select.
-     * 
-     * @param  int    $productID 
-     * @param  int    $projectID 
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
      * @param  string $number
      * @access public
      * @return void
@@ -529,7 +529,7 @@ class product extends control
             $projects = $this->product->getProjectPairs($productID, $branch ? "0,$branch" : $branch, $params = 'nodeleted');
         }
         if($this->app->getViewType() == 'json') die(json_encode($projects));
-        
+
         if($number === '')
         {
             die(html::select('project', $projects, $projectID, 'class=form-control onchange=loadProjectRelated(this.value)'));
@@ -543,10 +543,10 @@ class product extends control
     }
 
     /**
-     * AJAX: get plans of a product in html select. 
-     * 
-     * @param  int    $productID 
-     * @param  int    $planID 
+     * AJAX: get plans of a product in html select.
+     *
+     * @param  int    $productID
+     * @param  int    $planID
      * @param  bool   $needCreate
      * @param  string $expired
      * @access public
@@ -557,7 +557,7 @@ class product extends control
         $plans = $this->loadModel('productplan')->getPairs($productID, $branch, $expired);
         $field = $fieldID ? "plans[$fieldID]" : 'plan';
         $output = html::select($field, $plans, $planID, "class='form-control chosen'");
-        if(count($plans) == 1 and $needCreate) 
+        if(count($plans) == 1 and $needCreate)
         {
             $output .= "<span class='input-group-addon'>";
             $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch"), $this->lang->productplan->create, '_blank');
@@ -570,11 +570,11 @@ class product extends control
 
     /**
      * Drop menu page.
-     * 
-     * @param  int    $productID 
-     * @param  string $module 
-     * @param  string $method 
-     * @param  string $extra 
+     *
+     * @param  int    $productID
+     * @param  string $module
+     * @param  string $method
+     * @param  string $extra
      * @access public
      * @return void
      */
@@ -598,9 +598,9 @@ class product extends control
         $productList = array();
         foreach($lines as $id => $name)
         {
-            foreach($products as $key => $product) 
+            foreach($products as $key => $product)
             {
-                if($product->line == $id) 
+                if($product->line == $id)
                 {
                     $product->name = $name . '/' . $product->name;
                     $productList[] = $product;
@@ -616,7 +616,7 @@ class product extends control
 
     /**
      * Update order.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -637,8 +637,8 @@ class product extends control
 
     /**
      * Show error no product when visit qa.
-     * 
-     * @param  string $fromModule 
+     *
+     * @param  string $fromModule
      * @access public
      * @return void
      */
@@ -691,10 +691,10 @@ class product extends control
     }
 
     /**
-     * Export product. 
-     * 
-     * @param  string    $status 
-     * @param  string    $orderBy 
+     * Export product.
+     *
+     * @param  string    $status
+     * @param  string    $orderBy
      * @access public
      * @return void
      */
@@ -755,8 +755,8 @@ class product extends control
 
     /**
      * Build of product.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */

@@ -162,7 +162,7 @@ $lang->task->confirmDeleteEstimate = "您确定要删除这个记录吗？";
 $lang->task->copyStoryTitle        = "同需求";
 $lang->task->afterSubmit           = "添加之后";
 $lang->task->successSaved          = "成功添加，";
-$lang->task->delayWarning          = " <strong class='delayed f-14px'> 延期%s天 </strong>";
+$lang->task->delayWarning          = " <strong class='text-danger'> 延期%s天 </strong>";
 $lang->task->remindBug             = "该任务为Bug转化得到，是否更新Bug:%s ?";
 $lang->task->confirmChangeProject  = "修改{$lang->projectCommon}会导致相应的所属模块、相关需求和指派人发生变化，确定吗？";
 $lang->task->confirmFinish         = '"预计剩余"为0，确认将任务状态改为"已完成"吗？';

@@ -43,6 +43,7 @@ $lang->tree->successSave   = 'Saved.';
 $lang->tree->successFixed  = 'Fixed.';
 $lang->tree->repeatName    = 'The name "%s" has existed!';
 
+$lang->tree->module     = 'Module';
 $lang->tree->name       = 'Name';
 $lang->tree->line       = 'Product Line';
 $lang->tree->cate       = 'Category Name';
