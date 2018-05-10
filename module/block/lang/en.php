@@ -350,7 +350,7 @@ $lang->block->typeList->testtask['done']    = 'Done';
 $lang->block->typeList->testtask['all']     = 'All';
 
 $lang->block->modules['product']->moreLinkList = new stdclass();
-$lang->block->modules['product']->moreLinkList->list  = 'product|all|product=&status=%s';
+$lang->block->modules['product']->moreLinkList->list  = 'product|all|product=&line=0&status=%s';
 $lang->block->modules['product']->moreLinkList->story = 'my|story|type=%s';
 $lang->block->modules['project']->moreLinkList = new stdclass();
 $lang->block->modules['project']->moreLinkList->list  = 'project|all|status=%s&project=';

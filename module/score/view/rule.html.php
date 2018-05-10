@@ -18,8 +18,8 @@
     <?php echo html::a($this->createLink('my', 'score'), $lang->score->common, '', "class='btn btn-primary'");?>
   </div>
 </div>
-<div id="mainContent">
-  <table class="main-table table has-sort-head table-fixed">
+<div id="mainContent" class='main-table'>
+  <table class="table has-sort-head table-fixed">
     <thead>
       <tr>
         <th class="w-150px"><?php echo $lang->score->module;?></th>

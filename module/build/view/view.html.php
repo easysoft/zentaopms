@@ -51,10 +51,10 @@ tbody tr td:first-child input{display:none;}
 </div>
 <div id='mainContent' class='main-content'>
   <?php if($this->config->global->flow == 'onlyTest'):?>
-  <fieldset>
-    <legend><?php echo $lang->build->desc;?></legend>
-    <div class='article-content'><?php echo $build->desc;?></div>
-  </fieldset>
+  <div class='detail'>
+    <div class='detail-title'><?php echo $lang->build->desc;?></div>
+    <div class='detail-content article-content'><?php echo $build->desc;?></div>
+  </div>
   <?php echo $this->fetch('file', 'printFiles', array('files' => $build->files, 'fieldset' => 'true'));?>
   <?php include '../../common/view/action.html.php';?>
   <div class='actions'>
