@@ -2326,7 +2326,7 @@ class taskModel extends model
                     else if ($assignedToText == $account) $btnTextClass = 'text-red';
                     $btnClass = $assignedToText == 'closed' ? ' disabled' : '';
                     
-                    echo html::a(helper::createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id"), "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='iframe btn btn-icon-left{$btnClass}'");
+                    echo html::a(helper::createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", '', true), "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='iframe btn btn-icon-left{$btnClass}'");
                     break;
                 case 'assignedDate':
                     echo substr($task->assignedDate, 5, 11);

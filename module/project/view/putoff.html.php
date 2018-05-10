@@ -27,7 +27,7 @@
     <table class='table table-form'>
       <tbody>
         <tr>
-          <th><?php echo $lang->project->dateRange;?></th>
+          <th class='w-80px'><?php echo $lang->project->dateRange;?></th>
           <td colspan='2'>
             <div class='input-group'>
               <?php echo html::input('begin', $project->begin, "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->begin . "'");?>
@@ -43,7 +43,7 @@
               </div>
             </div>
           </td>
-          <td></td>
+          <td class='w-100px'></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->days;?></th>
