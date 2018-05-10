@@ -16,8 +16,8 @@
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->testreport->browse;?></span></span>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
-  <table class='table has-sort-head main-table table-fixed' id='reportList'>
+<div id='mainContent' class='main-table'>
+  <table class='table has-sort-head table-fixed' id='reportList'>
     <?php $vars = "objectID=$objectID&objectType=$objectType&extra=$extra&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
     <thead>
       <tr>

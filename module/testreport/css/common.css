@@ -1,3 +1,11 @@
 .none-data{padding:8px !important;}
 .main #stories{margin-bottom:10px}
 .main .table-report{border:0px;}
+
+.detail-title
+{
+  background:#f1f1f1;
+  padding:8px 10px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+}
