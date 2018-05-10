@@ -7,7 +7,7 @@
       <th>                <?php echo $lang->testreport->bugTitle;?></th>
       <th class='w-user'> <?php echo $lang->openedByAB;?></th>
       <th class='w-user'><?php echo $lang->bug->resolvedBy;?></th>
-      <th class='w-130px'><?php echo $lang->bug->resolvedDate;?></th>
+      <th class='w-140px'><?php echo $lang->bug->resolvedDate;?></th>
       <th class='w-80px'> <?php echo $lang->statusAB;?></th>
     </tr>
   </thead>
