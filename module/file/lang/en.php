@@ -41,7 +41,7 @@ $lang->file->extra     = 'Extra';
 
 $lang->file->dragFile         = 'Please drag here.';
 $lang->file->errorNotExists   = "<span class='text-red'>'%s' is not found.</span>";
-$lang->file->errorCanNotWrite = "<span class='text-red'>'%s' is not writable. Please change its permission. Enter sudo chmod -R 777 '%s'</span> in Linux.";
+$lang->file->errorCanNotWrite = "<span class='text-red'>'%s' is not writable. Please change its permission. Enter <span class='code'>sudo chmod -R 777 '%s'</span></span> in Linux.";
 $lang->file->confirmDelete    = " Do you want to delete it?";
 $lang->file->errorFileSize    = " File size exceeds the limit. It cannot be uploaded!";
 $lang->file->errorFileUpload  = " Uploading failed. File size might exceeds the limit.";
