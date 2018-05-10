@@ -98,13 +98,13 @@
                   <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
                   <tr>
                     <td class='c-id'>
+                      <?php if($canBatchUnlink):?>
                       <div class="checkbox-primary">
-                        <?php if($canBatchUnlink):?>
                         <input type='checkbox' name='unlinkStories[]'  value='<?php echo $story->id;?>'/> 
                         <label></label>
-                        <?php endif;?>
-                        <?php echo sprintf('%03d', $story->id);?>
                       </div>
+                      <?php endif;?>
+                      <?php echo sprintf('%03d', $story->id);?>
                     </td>
                     <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
                     <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($storyLink,$story->title, '', "class='preview'");?></td>
@@ -169,13 +169,13 @@
                   <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
                   <tr>
                     <td class='c-id'>
+                      <?php if($canBatchUnlink):?>
                       <div class="checkbox-primary">
-                        <?php if($canBatchUnlink):?>
                         <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
                         <label></label>
-                        <?php endif;?>
-                        <?php echo sprintf('%03d', $bug->id);?>
                       </div>
+                      <?php endif;?>
+                      <?php echo sprintf('%03d', $bug->id);?>
                     </td>
                     <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                     <td><span class='status-<?php echo $bug->status?>'><span class="label label-dot"></span> <?php echo zget($lang->bug->statusList, $bug->status);?></td>
@@ -239,13 +239,13 @@
                   <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
                   <tr>
                     <td class='c-id'>
+                      <?php if($canBatchUnlink):?>
                       <div class="checkbox-primary">
-                        <?php if($canBatchUnlink):?>
                         <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
                         <label></label>
-                        <?php endif;?>
-                        <?php echo sprintf('%03d', $bug->id);?>
                       </div>
+                      <?php endif;?>
+                      <?php echo sprintf('%03d', $bug->id);?>
                     </td>
                     <td><span class='severity<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span></td>
                     <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
