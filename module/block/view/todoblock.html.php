@@ -10,7 +10,8 @@
  * @link        http://www.ranzhi.org
  */
 ?>
-<div class='block-todoes'>
+<?php echo ($block->id)?>
+<div class='block-todoes' id="block <?php echo ($block->block)?>">
   <div class='panel-body'>
     <div class="todoes-input">
       <div class="todo-form-trigger"><input type="text" placeholder="<?php echo $lang->todo->lblClickCreate?>" class="form-control"></div>
@@ -83,39 +84,44 @@
   $(function()
   {
       // Todoes block
-      $.fn.blockTodoes = function()
+      if(!$.fn.blockTodoes)
       {
-          return this.each(function()
+          $.fn.blockTodoes = function()
           {
-              var $block = $(this);
-              var $form = $block.find('form');
-              var $titleInput = $form.find('[name="name"]');
-
-              var toggleForm = function(toggle)
+              return this.each(function()
               {
-                  if (toggle === undefined)
+                  var $block = $(this);
+                  if($block.data('blockTodoes')) return;
+                  $block.data('blockTodoes', 1);
+                  var $form = $block.find('form');
+                  var $titleInput = $form.find('[name="name"]');
+    
+                  var toggleForm = function(toggle)
                   {
-                      toggle = !$block.hasClass('show-form');
-                  }
-                  $block.toggleClass('show-form', toggle);
-                  if (toggle)
+                      if(toggle === undefined)
+                      {
+                          toggle = !$block.hasClass('show-form');
+                      }
+                      $block.toggleClass('show-form', toggle);
+                      if(toggle)
+                      {
+                          setTimeout(function() {$titleInput.focus();}, 50);
+                      }
+                  };
+                  $block.on('click', '.todo-form-trigger', function()
                   {
-                      setTimeout(function() {$titleInput.focus();}, 50);
-                  }
-              };
-              $block.on('click', '.todo-form-trigger', function()
-              {
-                  toggleForm($(this).data('trigger'));
+                      toggleForm($(this).data('trigger'));
+                  });
+                  $form.timeSpanControl(
+                  {
+                      onChange: function($control)
+                      {
+                          $control.trigger('chosen:updated');
+                      }
+                  });
               });
-              $form.timeSpanControl(
-              {
-                  onChange: function($control)
-                  {
-                      $control.trigger('chosen:updated');
-                  }
-              });
-          });
-      };
+          };
+      }
 
       $('ul.todoes li .todo-check').click(function()
       {
