@@ -11,16 +11,17 @@
 ?>
 <?php include 'header.html.php';?>
 <div id='mainContent' class='main-content'>
-  <div class='center-block'>
+  <div class='center-block mw-400px'>
+    <div class='main-header'>
+      <h2><?php echo $lang->custom->score;?></h2>
+    </div>
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <th class='w-100px text-top'><?php echo $lang->custom->score;?></th>
           <td><?php echo html::radio('score', $lang->custom->scoreStatus, isset($config->global->scoreStatus) ? $config->global->scoreStatus : 0, '', 'block');?></td>
         </tr>
         <tr>
-          <td></td>
-          <td>
+          <td class='text-center'>
             <?php echo html::submitButton();?>
             <?php common::printLink('score', 'reset', '', "<i class='icon-refresh'></i> " . $lang->custom->scoreReset, '', ' id="scoreRefresh" class="btn iframe" data-width="480"', true, true);?>
           </td>
