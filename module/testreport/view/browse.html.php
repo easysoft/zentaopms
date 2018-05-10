@@ -13,7 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->testreport->browse;?></span></span>
+    <span class='btn btn-link btn-active-text'>
+      <span class='text'><?php echo $lang->testreport->browse;?></span>
+      <span class="label label-light label-badge"><?php echo $pager->recTotal;?></span>
+    </span>
   </div>
 </div>
 <div id='mainContent' class='main-table'>
