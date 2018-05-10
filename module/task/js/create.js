@@ -199,27 +199,25 @@ $(document).ready(function()
             return false;
         }
     });
-});
 
-/* show team menu. */
-$('[name^=multiple]').change(function()
-{
-    if($(this).prop('checked'))
+    /* show team menu. */
+    $('[name^=multiple]').change(function()
     {
-        $('#assignedTo, #assignedTo_chosen').addClass('hidden');
-        $('.team-group').removeClass('hidden');
-        $('#estimate').attr('readonly', true);
-    }
-    else
+        if($(this).prop('checked'))
+        {
+            $('#assignedTo, #assignedTo_chosen').addClass('hidden');
+            $('.team-group').removeClass('hidden');
+            $('#estimate').attr('readonly', true);
+        }
+        else
+        {
+            $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
+            $('.team-group').addClass('hidden');
+            $('#estimate').attr('readonly', false);
+        }
+    });
+    $('#modalTeam').on('show', function()
     {
-        $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
-        $('.team-group').addClass('hidden');
-        $('#estimate').attr('readonly', false);
-    }
-});
-$(".team-group[data-toggle='modalTeam']").css('cursor', 'pointer');
-$(".team-group[data-toggle='modalTeam']").click(function()
-{
-    $('#modalTeam').modal('show');
-    adjustSortBtn();
+        adjustSortBtn();
+    });
 });

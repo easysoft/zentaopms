@@ -38,16 +38,14 @@
             <div class="input-group" id="dataPlanGroup">
               <?php echo html::select('assignedTo[]', $members, $task->assignedTo, "class='form-control chosen'");?>
               <?php echo html::input('teamMember', '', "class='form-control team-group fix-border hidden' readonly='readonly'");?>
-              <span class="input-group-addon team-group hidden" data-toggle='modalTeam'><?php echo $lang->task->team;?></span>
-              <label class='input-group-addon affair'><input type='checkBox' name='multiple' id="multipleBox" value='1'/> <?php echo $lang->task->multipleAB;?></label>
-              <span class='input-group-btn <?php if($task->type !== 'affair') echo 'hidden';?>' id='selectAllUser'>
-                <button type='button' class='btn'>
-                  <?php echo $lang->task->selectAllUser;?>
-                </button>
-              </span>
+              <span class="input-group-btn team-group hidden"><a class="btn br-0" href="#modalTeam" data-toggle="modal"><?php echo $lang->task->team;?></a></span>
             </div>
           </td>
           <td>
+            <div class="checkbox-primary affair">
+              <input type="checkbox" name="multiple" value="1" id="multipleBox"><label for="multipleBox" class="no-margin"><?php echo $lang->task->multipleAB;?></label>
+            </div>
+            <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>
           </td>
         </tr>
         <?php if(strpos(",$showFields,", ',story,') !== false and $this->config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
@@ -68,13 +66,13 @@
         <tr>
           <th><?php echo $lang->task->name;?></th>
           <td colspan='3'>
-            <div class="input-control has-icon-left has-icon-right">
+            <div class="input-control has-icon-right">
               <div class="colorpicker">
                 <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                 <ul class="dropdown-menu clearfix">
                   <li class="heading"><?php echo $lang->task->colorTag;?><i class="icon icon-close"></i></li>
                 </ul>
-                <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-left" data-update-color="#title"  data-provide="colorpicker">
+                <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#name"  data-provide="colorpicker">
               </div>
               <?php echo html::input('name', $task->name, "class='form-control' autocomplete='off' required");?>
               <?php if($this->config->global->flow != 'onlyTask'):?>
@@ -192,9 +190,9 @@
                     <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
                   </div>
                 </td>
-                <td class='w-90px'>
-                  <a href='javascript:;' class='btn btn-move-up btn-sm'><i class='icon-arrow-up'></i></a>
-                  <a href='javascript:;' class='btn btn-move-down btn-sm'><i class='icon-arrow-down'></i></a>
+                <td class='w-70px'>
+                  <a class='btn btn-move-up btn-sm btn-icon'><i class='icon-arrow-up'></i></a>
+                  <a class='btn btn-move-down btn-sm btn-icon'><i class='icon-arrow-down'></i></a>
                 </td>
               </tr>
               <?php endfor;?>
