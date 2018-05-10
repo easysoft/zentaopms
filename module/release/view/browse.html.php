@@ -25,7 +25,7 @@
 </div>
 <div id="mainContent">
   <form class='main-table'>
-    <table class="table table-fixed" id='releaseList'>
+    <table class="table" id='releaseList'>
       <thead>
         <tr>
           <th class='w-id'><?php echo $lang->release->id;?></th>
