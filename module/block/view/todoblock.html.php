@@ -10,7 +10,6 @@
  * @link        http://www.ranzhi.org
  */
 ?>
-<?php echo ($block->id)?>
 <div class='block-todoes' id="block <?php echo ($block->block)?>">
   <div class='panel-body'>
     <div class="todoes-input">
@@ -18,7 +17,8 @@
       <form class="form-horizontal todoes-form layer" method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'create', 'date=today&account=&from=block');?>'>
         <h3><?php echo $lang->todo->create . $lang->todo->common;?></h3>
         <div class="form-group">
-          <div class="col-sm-12"><input required type="text" placeholder="<?php echo $lang->todo->name?>" class="form-control" name="name"></div>
+          <label for="todoName" class="col-sm-2"><?php echo $lang->todo->name?></label>
+          <div class="col-sm-9 required"><input type="text" class="form-control" name="name"></div>
         </div>
         <div class="form-group">
           <label for="todoPri" class="col-sm-2"><?php echo $lang->todo->pri?></label>
