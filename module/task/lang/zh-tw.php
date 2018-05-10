@@ -11,7 +11,7 @@
  */
 $lang->task->index               = "任務一覽";
 $lang->task->create              = "建任務";
-$lang->task->batchCreate         = "批量建任務";
+$lang->task->batchCreate         = "批量創建";
 $lang->task->batchCreateChildren = "批量建子任務";
 $lang->task->batchEdit           = "批量編輯";
 $lang->task->batchChangeModule   = "批量修改模組";
@@ -109,7 +109,6 @@ $lang->task->parent           = '父任務';
 $lang->task->parentAB         = '父';
 $lang->task->lblPri           = 'P';
 $lang->task->lblHour          = '(h)';
-$lang->task->deniedNotice     = '當前任務只有%s才可以%s。';
 
 $lang->task->ditto             = '同上';
 $lang->task->dittoNotice       = "該任務與上一任務不屬於同一項目！";
@@ -163,7 +162,7 @@ $lang->task->confirmDeleteEstimate = "您確定要刪除這個記錄嗎？";
 $lang->task->copyStoryTitle        = "同需求";
 $lang->task->afterSubmit           = "添加之後";
 $lang->task->successSaved          = "成功添加，";
-$lang->task->delayWarning          = " <strong class='delayed f-14px'> 延期%s天 </strong>";
+$lang->task->delayWarning          = " <strong class='text-danger'> 延期%s天 </strong>";
 $lang->task->remindBug             = "該任務為Bug轉化得到，是否更新Bug:%s ?";
 $lang->task->confirmChangeProject  = "修改{$lang->projectCommon}會導致相應的所屬模組、相關需求和指派人發生變化，確定嗎？";
 $lang->task->confirmFinish         = '"預計剩餘"為0，確認將任務狀態改為"已完成"嗎？';
@@ -173,6 +172,7 @@ $lang->task->noticeLinkStory       = "沒有可關聯的相關需求，您可以
 $lang->task->noticeSaveRecord      = '您有尚未保存的工時記錄，請先將其保存。';
 $lang->task->commentActions        = '%s. %s, 由 <strong>%s</strong> 添加備註。';
 $lang->task->noData                = '暫無';
+$lang->task->deniedNotice          = '當前任務只有%s才可以%s。';
 
 $lang->task->error                   = new stdclass();
 $lang->task->error->consumedNumber   = '"已經消耗"必須為數字';

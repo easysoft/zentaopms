@@ -23,9 +23,6 @@
     <?php 
     common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc", '', 'button', '', '', 'export');
 
-    $this->lang->story->create = $this->lang->project->createStory;
-    if($productID and !$this->loadModel('story')->checkForceReview()) common::printIcon('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&project=$project->id");
-
     if(commonModel::isTutorialMode())
     {
         $wizardParams = helper::safe64Encode("project=$project->id");
@@ -37,6 +34,7 @@
     }
     ?>
     </div>
+    <?php if($productID and !$this->loadModel('story')->checkForceReview()) common::printLink('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&project=$project->id", "<i class='icon icon-plus'> </i>" . $lang->project->createStory, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php

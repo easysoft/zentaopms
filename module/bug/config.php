@@ -165,17 +165,12 @@ $config->bug->search['params']['lastEditedDate']= array('operator' => '=',      
 $config->bug->search['params']['deadline']      = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 
 $config->bug->datatable = new stdclass();
-$config->bug->datatable->defaultField = array('id', 'severity', 'pri', 'title', 'status', 'openedBy', 'openedDate', 'assignedTo', 'resolvedBy', 'resolution', 'actions');
+$config->bug->datatable->defaultField = array('id', 'pri', 'title', 'severity', 'status', 'openedBy', 'openedDate', 'assignedTo', 'resolvedBy', 'resolution', 'actions');
 
 $config->bug->datatable->fieldList['id']['title']    = 'idAB';
 $config->bug->datatable->fieldList['id']['fixed']    = 'left';
 $config->bug->datatable->fieldList['id']['width']    = '70';
 $config->bug->datatable->fieldList['id']['required'] = 'yes';
-
-$config->bug->datatable->fieldList['severity']['title']    = 'severityAB';
-$config->bug->datatable->fieldList['severity']['fixed']    = 'left';
-$config->bug->datatable->fieldList['severity']['width']    = '40';
-$config->bug->datatable->fieldList['severity']['required'] = 'no';
 
 $config->bug->datatable->fieldList['pri']['title']    = 'P';
 $config->bug->datatable->fieldList['pri']['fixed']    = 'left';
@@ -186,6 +181,11 @@ $config->bug->datatable->fieldList['title']['title']    = 'title';
 $config->bug->datatable->fieldList['title']['fixed']    = 'left';
 $config->bug->datatable->fieldList['title']['width']    = 'auto';
 $config->bug->datatable->fieldList['title']['required'] = 'yes';
+
+$config->bug->datatable->fieldList['severity']['title']    = 'severityAB';
+$config->bug->datatable->fieldList['severity']['fixed']    = 'left';
+$config->bug->datatable->fieldList['severity']['width']    = '60';
+$config->bug->datatable->fieldList['severity']['required'] = 'no';
 
 $config->bug->datatable->fieldList['branch']['title']    = 'branch';
 $config->bug->datatable->fieldList['branch']['fixed']    = 'left';
@@ -269,7 +269,7 @@ $config->bug->datatable->fieldList['openedBuild']['required'] = 'no';
 
 $config->bug->datatable->fieldList['assignedTo']['title']    = 'assignedToAB';
 $config->bug->datatable->fieldList['assignedTo']['fixed']    = 'no';
-$config->bug->datatable->fieldList['assignedTo']['width']    = '80';
+$config->bug->datatable->fieldList['assignedTo']['width']    = '120';
 $config->bug->datatable->fieldList['assignedTo']['required'] = 'no';
 
 $config->bug->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
@@ -324,5 +324,5 @@ $config->bug->datatable->fieldList['lastEditedDate']['required'] = 'no';
 
 $config->bug->datatable->fieldList['actions']['title']    = 'actions';
 $config->bug->datatable->fieldList['actions']['fixed']    = 'right';
-$config->bug->datatable->fieldList['actions']['width']    = '140';
+$config->bug->datatable->fieldList['actions']['width']    = '190';
 $config->bug->datatable->fieldList['actions']['required'] = 'yes';
