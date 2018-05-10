@@ -350,7 +350,7 @@
   </div>
 </div>
 <style>
-.tabs .tab-content .tab-pane .action{position: absolute; right: <?php echo ($countStories or $countBugs or $countLeftBugs) ? '80px' : '-1px'?>; top: 0px;}
+.tabs .tab-content .tab-pane .action{position: absolute; right: <?php echo ($countStories or $countBugs or $countLeftBugs) ? '100px' : '-1px'?>; top: 0px;}
 </style>
 <?php js::set('param', helper::safe64Decode($param))?>
 <?php js::set('link', $link)?>

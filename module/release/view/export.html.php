@@ -32,25 +32,24 @@ function closeWindow()
     i ++;
 }
 </script>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['export']);?></span>
-    <strong><?php echo $lang->export;?></strong>
+<div id='mainContent' class='main-content'>
+  <div class='main-header'>
+    <h2><?php echo $lang->export;?></h2>
   </div>
+  <form method='post' target='hiddenwin' onsubmit='setDownloading();' style='padding: 10px 5%'>
+    <table class='w-p100'>
+      <tr>
+        <td>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->setFileName;?></span>
+            <?php echo html::input('fileName', '', "class='form-control' autocomplete='off'");?>
+            <span class='input-group-addon'>.html</span>
+            <?php echo html::select('type', $lang->release->exportTypeList, 'all', "class='form-control'")?>
+          </div>
+        </td>
+        <td><?php echo html::submitButton($lang->export);?></td>
+      </tr>
+    </table>
+  </form>
 </div>
-<form class='form-condensed' method='post' target='hiddenwin' onsubmit='setDownloading();' style='padding: 40px 5%'>
-  <table class='w-p100'>
-    <tr>
-      <td>
-        <div class='input-group'>
-          <span class='input-group-addon'><?php echo $lang->setFileName;?></span>
-          <?php echo html::input('fileName', '', "class='form-control' autocomplete='off'");?>
-          <span class='input-group-addon'>.html</span>
-          <?php echo html::select('type', $lang->release->exportTypeList, 'all', "class='form-control'")?>
-        </div>
-      </td>
-      <td><?php echo html::submitButton($lang->export);?></td>
-    </tr>
-  </table>
-</form>
 <?php include '../../common/view/footer.lite.html.php';?>
