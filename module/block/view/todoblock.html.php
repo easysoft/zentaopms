@@ -82,6 +82,41 @@
   <script>
   $(function()
   {
+      // Todoes block
+      $.fn.blockTodoes = function()
+      {
+          return this.each(function()
+          {
+              var $block = $(this);
+              var $form = $block.find('form');
+              var $titleInput = $form.find('[name="name"]');
+
+              var toggleForm = function(toggle)
+              {
+                  if (toggle === undefined)
+                  {
+                      toggle = !$block.hasClass('show-form');
+                  }
+                  $block.toggleClass('show-form', toggle);
+                  if (toggle)
+                  {
+                      setTimeout(function() {$titleInput.focus();}, 50);
+                  }
+              };
+              $block.on('click', '.todo-form-trigger', function()
+              {
+                  toggleForm($(this).data('trigger'));
+              });
+              $form.timeSpanControl(
+              {
+                  onChange: function($control)
+                  {
+                      $control.trigger('chosen:updated');
+                  }
+              });
+          });
+      };
+
       $('ul.todoes li .todo-check').click(function()
       {
           var $liTag     = $(this).closest('li');
@@ -94,6 +129,8 @@
               if(isFinished) $liTag.removeClass('active');
           });
       });
+
+      $('.block-todoes').blockTodoes();
   });
 
   function ajaxCreateTodo(obj)
