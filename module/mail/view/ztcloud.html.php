@@ -27,9 +27,8 @@
   <?php else:?>
     <div class='main-header'>
       <h2>
-        <span class='prefix'><?php echo html::icon($lang->icons['mail']);?></span>
         <?php echo $lang->mail->common;?>
-        <small class='text-muted'> <?php echo $lang->mail->edit;?> <?php echo html::icon('pencil');?></small>
+        <small class='text-muted'> <?php echo $lang->arrow . $lang->mail->edit;?></small>
       </h2>
     </div>
     <form method='post' target='hiddenwin' id='dataform'>
