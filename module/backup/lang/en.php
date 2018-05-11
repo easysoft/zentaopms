@@ -5,10 +5,10 @@ $lang->backup->history  = 'History';
 $lang->backup->delete   = 'Delete';
 $lang->backup->backup   = 'Backup';
 $lang->backup->restore  = 'Restore';
-$lang->backup->change   = 'Modify days';
+$lang->backup->change   = 'Modify expiration';
 $lang->backup->changeAB = 'Modify';
 
-$lang->backup->time  = 'Backup Time';
+$lang->backup->time  = 'Date';
 $lang->backup->files = 'Files';
 $lang->backup->size  = 'Size';
 

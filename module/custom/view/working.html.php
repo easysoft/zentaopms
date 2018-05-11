@@ -22,7 +22,7 @@
       </div>
       <table class='table table-form'>
         <tr>
-          <th class='w-100px text-top'><?php echo $lang->custom->working;?></th>
+          <th class='w-150px text-top'><?php echo $lang->custom->working;?></th>
           <td>
             <?php $checkedKey = isset($config->global->flow) ? $config->global->flow : 'full';?>
             <?php foreach($lang->custom->workingList as $key => $value):?>
@@ -30,15 +30,9 @@
             <?php endforeach;?>
           </td>
         </tr>
-        <tr><td></td><td><?php echo html::submitButton()?></td></tr>
+        <tr><td></td><td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide')?></td></tr>
       </table>
     </form>
   </div>
 </div>
-<script>
-$(function()
-{
-    $('#mainMenu #workingTab').addClass('btn-active-text');
-})
-</script>
 <?php include '../../common/view/footer.html.php';?>
