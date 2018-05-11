@@ -5,7 +5,7 @@
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
- * @package     webhook 
+ * @package     webhook
  * @version     $Id$
  * @link        http://www.zentao.net
  */
@@ -33,7 +33,7 @@
           <td class='text' title='<?php echo $webhook->name;?>'><?php echo $webhook->name;?></td>
           <td class='text' title='<?php echo $webhook->url;?>'><?php echo $webhook->url;?></td>
           <td class='c-actions'>
-            <?php 
+            <?php
             common::printIcon('webhook', 'log', "webhookID=$id", '', 'list', 'file-text');
             common::printIcon('webhook', 'edit', "webhookID=$id", '', 'list');
             if(common::hasPriv('webhook', 'delete'))
