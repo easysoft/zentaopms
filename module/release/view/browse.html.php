@@ -23,8 +23,8 @@
     <?php common::printLink('release', 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->release->create}", '', "class='btn btn-primary'");?>
   </div>
 </div>
-<div id="mainContent" class='main-content'>
-  <table class="main-table table has-sort-head" id='releaseList'>
+<div id="mainContent" class='main-table'>
+  <table class="table" id='releaseList'>
     <thead>
       <tr>
         <th class='w-id'><?php echo $lang->release->id;?></th>
@@ -43,7 +43,7 @@
       <tr>
         <td><?php echo $release->id;?></td>
         <td><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></td>
-        <td title='<?php echo $release->buildName?>'><?php echo html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank');?></td>
+        <td title='<?php echo $release->buildName?>'><?php echo html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName);?></td>
         <?php if($product->type != 'normal'):?>
         <td class='text-center'><?php echo $branches[$release->branch];?></td>
         <?php endif;?>

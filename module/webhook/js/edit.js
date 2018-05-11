@@ -20,7 +20,7 @@ $(function()
         }
         else
         {
-            $(this).parents('tr').find('input[type=checkbox]').removeAttr('checked');
+            $(this).parents('tr').find('input[type=checkbox][disabled!=disabled]').removeAttr('checked');
         }
     });
 

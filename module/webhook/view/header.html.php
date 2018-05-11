@@ -11,18 +11,18 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='featurebar'>
-  <ul class='nav'>
+<div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
     <?php foreach($lang->message->typeList as $type => $typeName):?>
     <?php if(isset($config->message->typeLink[$type])):?>
     <?php list($moduleName, $methodName) = explode('|', $config->message->typeLink[$type]);?>
     <?php if(!common::hasPriv($moduleName, $methodName)) continue;?>
-    <li id='<?php echo $type;?>Tab' <?php if($type == 'webhook') echo "class='active'"?>><?php echo html::a($this->createLink($moduleName, $methodName), $typeName)?></li>
+    <?php echo html::a($this->createLink($moduleName, $methodName), "<span class='text'>{$typeName}</span>", '', "class='btn btn-link " . ($type == 'webhook' ? 'btn-active-text' : '') . "' id='{$type}Tab'")?>
     <?php endif;?>
     <?php endforeach;?>
-    <li id='settingTab'><?php echo html::a($this->createLink('message', 'setting'), $lang->message->setting)?></li>
-  </ul>
-  <div class='actions'>
+    <?php echo html::a($this->createLink('message', 'setting'), "<span class='text'>{$lang->message->setting}</span>", '', "class='btn btn-link' id='settingTab'")?>
+  </div>
+  <div class='btn-toolbar pull-right'>
     <div class='btn-group'>
       <div class='btn-group' id='createActionMenu'>
         <?php common::printIcon('webhook', 'create', '', '', 'button', '', '', 'btn-primary');?>

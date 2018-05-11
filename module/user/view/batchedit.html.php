@@ -17,7 +17,7 @@
     <h2><?php echo $lang->user->batchEdit;?></h2>
     <div class="pull-right btn-toolbar">
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=user&section=custom&key=batchEditFields')?>
-      <?php include '../../common/view/dropdowncustomfield.html.php';?>
+      <?php include '../../common/view/customfield.html.php';?>
     </div>
   </div>
   <?php
@@ -94,7 +94,8 @@
       <tfoot>
         <tr>
           <td colspan="<?php echo count($visibleFields) + 4;?>" class="text-center">
-            <?php echo html::submitButton($lang->save, '', 'btn btn-wide btn-primary') . '&nbsp;' . html::backButton('', '', "btn btn-wide");?>
+            <?php echo html::submitButton($lang->save, '', 'btn btn-wide btn-primary');?>
+            <?php echo html::backButton('', '', "btn btn-wide btn-gray");?>
           </td>
         </tr>
       </tfoot>

@@ -11,22 +11,26 @@
  */
 ?>
 <?php include 'header.html.php';?>
-<div class='side'>
-  <div class='list-group'>
-    <?php 
-    foreach($config->custom->requiredModules as $requiredModule)
-    {
-        $requiredModuleName = zget($lang->custom->moduleName, $requiredModule, $lang->$requiredModule->common);
-        echo "<li class='list-group-item' id='{$requiredModule}Tab'>" . html::a(inlink('required', "module=$requiredModule"), $requiredModuleName) . "</li>";
-    }
-    ?>
+<div id='mainContent' class='main-row'>
+  <div class='side-col' id='sidebar'>
+    <div class='cell'>
+      <div class='list-group'>
+        <?php
+        foreach($config->custom->requiredModules as $requiredModule)
+        {
+            $requiredModuleName = zget($lang->custom->moduleName, $requiredModule, $lang->$requiredModule->common);
+            echo html::a(inlink('required', "module=$requiredModule"), $requiredModuleName, '', "id='{$requiredModule}Tab'");
+        }
+        ?>
+      </div>
+    </div>
   </div>
-</div>
-<div class='main'>
-  <form method='post' class='form-condensed' target='hiddenwin'>
-    <div class='panel panel-sm'>
-      <div class='panel-heading'>
-        <strong><?php echo $lang->$moduleName->common?></strong>
+  <div class='main-col main-content'>
+    <form method='post' target='hiddenwin'>
+      <div class='main-header'>
+        <div class='heading'>
+          <strong><?php echo $lang->$moduleName->common?></strong>
+        </div>
       </div>
       <table class='table table-form mw-800px'>
         <?php foreach($requiredFields as $method => $requiredField):?>
@@ -52,21 +56,19 @@
         <tr>
           <td></td>
           <td>
-          <?php
-          echo html::submitButton();
-          if(common::hasPriv('custom', 'resetRequired')) echo html::a(inlink('resetRequired', "module=$moduleName"), $lang->custom->restore, 'hiddenwin', "class='btn'");
-          ?>
+          <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
+          <?php if(common::hasPriv('custom', 'resetRequired')) echo html::a(inlink('resetRequired', "module=$moduleName"), $lang->custom->restore, 'hiddenwin', "class='btn btn-wide'");?>
           </td>
         </tr>
       </table>
-    </div>
-  </form>
+    </form>
+  </div>
 </div>
 <script>
 $(function()
 {
-    $('#featurebar #requiredTab').addClass('active');
-    $('.side #<?php echo $moduleName?>Tab').addClass('active');
+    $('#mainMenu #requiredTab').addClass('btn-active-text');
+    $('#sidebar #<?php echo $moduleName?>Tab').addClass('active');
 })
 </script>
 <?php include '../../common/view/footer.html.php';?>

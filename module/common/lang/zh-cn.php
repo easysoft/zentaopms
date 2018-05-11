@@ -17,6 +17,7 @@ $lang->at        = ' 于 ';
 $lang->downArrow = '↓';
 $lang->null      = '空';
 $lang->ellipsis  = '…';
+$lang->percent   = '%';
 
 $lang->zentaoPMS      = '禅道';
 $lang->welcome        = "%s项目管理系统";
@@ -53,6 +54,7 @@ $lang->public       = '公共';
 $lang->trunk        = '主干';
 $lang->sort         = '排序';
 $lang->required     = '必填';
+$lang->noData       = '暂无';
 
 $lang->actions         = '操作';
 $lang->comment         = '备注';
@@ -80,6 +82,7 @@ $lang->changeLog       = '修改日志';
 $lang->manual          = '手册';
 $lang->customMenu      = '自定义导航';
 $lang->customField     = '自定义表单项';
+$lang->lineNumber      = '行号';
 $lang->tutorialConfirm = '检测到你尚未退出新手教程模式，是否现在退出？';
 
 $lang->preShortcutKey  = '[快捷键:←]';
@@ -111,7 +114,7 @@ $lang->common->common = '公有模块';
 $lang->menu = new stdclass();
 $lang->menu->my      = '<span> 我的地盘</span>|my|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
-$lang->menu->project = $lang->projectCommon . '|project|index';
+$lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
 $lang->menu->qa      = '测试|qa|index';
 $lang->menu->doc     = '文档|doc|index';
 $lang->menu->report  = '统计|report|index';
@@ -221,21 +224,37 @@ $lang->release->menu     = $lang->product->menu;
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
-$lang->project->menu->task     = array('link' => '任务|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'grouptask,importtask,burn,importbug,kanban,printkanban,tree');
+$lang->project->menu->list     = array('link' => '%s', 'subModule' => 'task,tree', 'alias' => 'grouptask,importtask,importbug,tree');
+$lang->project->menu->kanban   = array('link' => '看板|project|kanban|projectID=%s');
+$lang->project->menu->burn     = array('link' => '燃尽图|project|burn|projectID=%s');
 $lang->project->menu->story    = array('link' => '需求|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->project->menu->bug      = 'Bug|project|bug|projectID=%s';
-$lang->project->menu->dynamic  = '动态|project|dynamic|projectID=%s';
-$lang->project->menu->build    = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->menu->testtask = array('link' => '测试单|project|testtask|projectID=%s');
-$lang->project->menu->team     = array('link' => '团队|project|team|projectID=%s', 'alias' => 'managemembers');
+$lang->project->menu->qa       = array('link' => '%s', 'subModule' => 'build');
 $lang->project->menu->doc      = array('link' => '文档|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
+$lang->project->menu->action   = array('link' => '%s');
 $lang->project->menu->product  = $lang->productCommon . '|project|manageproducts|projectID=%s';
+$lang->project->menu->team     = array('link' => '团队|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->view     = array('link' => '概况|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
+
+$lang->project->subMenu = new stdclass();
+$lang->project->subMenu->list = new stdclass();
+$lang->project->subMenu->list->task      = '任务列表|project|task|projectID=%s';
+$lang->project->subMenu->list->groupTask = '分组视图|project|groupTask|projectID=%s';
+$lang->project->subMenu->list->tree      = '树状图|project|tree|projectID=%s';
+
+$lang->project->subMenu->qa = new stdclass();
+$lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
+$lang->project->subMenu->qa->build    = '版本|project|build|projectID=%s';
+$lang->project->subMenu->qa->testtask = array('link' => '测试单|project|testtask|projectID=%s', 'subModule' => 'testreport');
+
+$lang->project->subMenu->action = new stdclass();
+$lang->project->subMenu->action->dynamic  = '动态|project|dynamic|projectID=%s';
+
+$lang->project->dividerMenu = ',story,doc,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
-$lang->task->menu  = $lang->project->menu;
-$lang->build->menu = $lang->project->menu;
+$lang->task->menu      = $lang->project->menu;
+$lang->build->menu     = $lang->project->menu;
 
 /* QA视图菜单设置。*/
 $lang->qa = new stdclass();
@@ -287,10 +306,7 @@ $lang->caselib->menu->caselib   = array('link' => '用例库|testsuite|library',
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
-
-$lang->doc->menu->list   = array('link' => '%s', 'fixed' => true);
-$lang->doc->menu->crumb  = array('link' => '%s', 'fixed' => true);
-$lang->doc->menu->create = array('link' => '<i class="icon-plus"></i>&nbsp;添加文档库|doc|createLib', 'float' => 'right');
+//$lang->doc->menu->createLib = array('link' => '<i class="icon icon-folder-plus"></i>&nbsp;添加文件夹|doc|createLib', 'float' => 'right');
 
 /* 统计视图菜单设置。*/
 $lang->report = new stdclass();
@@ -401,7 +417,7 @@ $lang->menugroup->message     = 'admin';
 /* 错误提示信息。*/
 $lang->error = new stdclass();
 $lang->error->companyNotFound = "您访问的域名 %s 没有对应的公司。";
-$lang->error->length          = array("『%s』长度错误，应当为『%s』", "『%s』长度应当不超过『%s』，且不小于『%s』。");
+$lang->error->length          = array("『%s』长度错误，应当为『%s』", "『%s』长度应当不超过『%s』，且大于『%s』。");
 $lang->error->reg             = "『%s』不符合格式，应当为:『%s』。";
 $lang->error->unique          = "『%s』已经有『%s』这条记录了。如果您确定该记录已删除，请到后台管理-回收站还原。。";
 $lang->error->gt              = "『%s』应当大于『%s』。";
@@ -528,9 +544,9 @@ $lang->icons['edit']               = 'edit';
 $lang->icons['delete']             = 'trash';
 $lang->icons['copy']               = 'copy';
 $lang->icons['report']             = 'bar-chart';
-$lang->icons['export']             = 'download-alt';
+$lang->icons['export']             = 'export';
 $lang->icons['report-file']        = 'file-powerpoint';
-$lang->icons['import']             = 'upload-alt';
+$lang->icons['import']             = 'import';
 $lang->icons['finish']             = 'checked';
 $lang->icons['resolve']            = 'ok-sign';
 $lang->icons['start']              = 'play';

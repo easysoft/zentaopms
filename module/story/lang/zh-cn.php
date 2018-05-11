@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->story->create      = "提需求";
-$lang->story->batchCreate = "批量提需求";
+$lang->story->batchCreate = "批量创建";
 $lang->story->change      = "变更";
 $lang->story->changed     = '需求变更';
 $lang->story->review      = '评审';
@@ -45,6 +45,7 @@ $lang->story->batchChangeBranch = "批量修改分支";
 $lang->story->batchChangeStage  = "批量修改阶段";
 $lang->story->batchAssignTo     = "批量指派";
 $lang->story->batchChangeModule = "批量修改模块";
+$lang->story->viewAll           = '查看全部';
 
 $lang->story->common         = '需求';
 $lang->story->id             = '编号';
@@ -92,6 +93,9 @@ $lang->story->newStory       = '继续添加需求';
 $lang->story->colorTag       = '颜色标签';
 $lang->story->files          = '附件';
 $lang->story->copy           = "复制需求";
+$lang->story->total          = '总需求';
+$lang->story->allStories     = '所有需求';
+$lang->story->unclosed       = '未关闭';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = '该需求与上一需求不属于同一产品！';
@@ -151,11 +155,11 @@ $lang->story->sourceList['tester']     = '测试人员';
 $lang->story->sourceList['bug']        = 'Bug';
 $lang->story->sourceList['other']      = '其他';
 
-$lang->story->priList[]   = '';
-$lang->story->priList[3]  = '3';
-$lang->story->priList[1]  = '1';
-$lang->story->priList[2]  = '2';
-$lang->story->priList[4]  = '4';
+$lang->story->priList[]  = '';
+$lang->story->priList[3] = '3';
+$lang->story->priList[1] = '1';
+$lang->story->priList[2] = '2';
+$lang->story->priList[4] = '4';
 
 $lang->story->legendBasicInfo      = '基本信息';
 $lang->story->legendLifeTime       = '需求的一生';

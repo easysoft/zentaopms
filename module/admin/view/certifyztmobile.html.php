@@ -11,27 +11,29 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='container mw-700px' id='checkMobile'>
-  <div id='titlebar'>
-    <div class='heading'><strong><?php echo $lang->admin->certifyMobile;?></strong></div>
+<div id='mainContent' class='main-content'>
+  <div class='center-block mw-700px' id='checkMobile'>
+    <div class='main-header'>
+      <h2><?php echo $lang->admin->certifyMobile;?></h2>
+    </div>
+    <form method='post' target='hiddenwin'>
+      <table class='table table-form'>
+        <tr>
+          <th><?php echo $lang->user->mobile;?></th>
+          <td><?php echo html::input('mobile', $mobile, "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::a(inlink('ajaxsendcode', 'type=mobile'), $lang->admin->getCaptcha, '', "id='codeSender' class='btn'");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->admin->captcha;?></th>
+          <td><?php echo html::input('captcha', '', "class='form-control' autocomplete='off'");?></td>
+        </tr>
+        <tr>
+          <th></th>
+          <td><?php echo html::submitButton();?></td>
+        </tr>
+      </table>
+    </form>
   </div>
-  <form method='post' target='hiddenwin'>
-    <table class='table table-form'>
-      <tr>
-        <th><?php echo $lang->user->mobile;?></th>
-        <td><?php echo html::input('mobile', $mobile, "class='form-control' autocomplete='off'");?></td>
-        <td><?php echo html::a(inlink('ajaxsendcode', 'type=mobile'), $lang->admin->getCaptcha, '', "id='codeSender' class='btn'");?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->admin->captcha;?></th>
-        <td><?php echo html::input('captcha', '', "class='form-control' autocomplete='off'");?></td>
-      </tr>
-      <tr>
-        <th></th>
-        <td><?php echo html::submitButton();?></td>
-      </tr>
-    </table>
-  </form>
 </div>
 <script>
 $(function()

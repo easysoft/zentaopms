@@ -10,14 +10,15 @@
  * @link        http://www.ranzhi.org
  */
 ?>
-<div class='block-todoes'>
+<div class='block-todoes' id="block <?php echo ($block->block)?>">
   <div class='panel-body'>
     <div class="todoes-input">
       <div class="todo-form-trigger"><input type="text" placeholder="<?php echo $lang->todo->lblClickCreate?>" class="form-control"></div>
       <form class="form-horizontal todoes-form layer" method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'create', 'date=today&account=&from=block');?>'>
         <h3><?php echo $lang->todo->create . $lang->todo->common;?></h3>
         <div class="form-group">
-          <div class="col-sm-12"><input required type="text" placeholder="<?php echo $lang->todo->name?>" class="form-control" name="name"></div>
+          <label for="todoName" class="col-sm-2"><?php echo $lang->todo->name?></label>
+          <div class="col-sm-9 required"><input type="text" class="form-control" name="name"></div>
         </div>
         <div class="form-group">
           <label for="todoPri" class="col-sm-2"><?php echo $lang->todo->pri?></label>
@@ -25,10 +26,10 @@
         </div>
         <div class="form-group">
           <label for="todoDate" class="col-sm-2"><?php echo $lang->todo->date?></label>
-          <div class="col-sm-9">
+          <div class="col-sm-9 required">
             <div class="input-control has-icon-right">
-              <input type="text" required class="form-control form-date" id="todoDate" name="date" placeholder="(<?php echo $lang->required;?>)">
-              <label class="input-control-icon-right"><i class="icon icon-delay"></i></label>
+              <input type="text" class="form-control form-date" id="todoDate" name="date" placeholder="(<?php echo $lang->required;?>)">
+              <label for='todoDate' class="input-control-icon-right"><i class="icon icon-delay"></i></label>
             </div>
           </div>
         </div>
@@ -47,8 +48,9 @@
         <div class="form-group">
           <div class="col-sm-2"></div>
           <div class="col-sm-10">
-            <div class="checkbox">
-              <label><input type="checkbox"> <?php echo $lang->todo->private?></label>
+            <div class="checkbox-primary">
+              <input type="checkbox" name="private" id="private" value="1"> 
+              <label for="private"><?php echo $lang->todo->private?></label>
             </div>
           </div>
         </div>
@@ -70,7 +72,7 @@
       ?>
       <li data-id='<?php echo $todo->id?>'>
         <span class="todo-check icon icon-check-circle"></span>
-        <a href="<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink);?>" class='iframe'>
+        <a href="<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink);?>" class='iframe' <?php echo $appid?>>
           <span class="todo-title"><?php echo $todo->name;?></span>
           <span class="todo-pri todo-pri-<?php echo $todo->pri?>"><?php echo zget($lang->todo->priList, $todo->pri);?></span><span class="todo-time"><?php echo date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin;?></span>
         </a>
@@ -81,6 +83,46 @@
   <script>
   $(function()
   {
+      // Todoes block
+      if(!$.fn.blockTodoes)
+      {
+          $.fn.blockTodoes = function()
+          {
+              return this.each(function()
+              {
+                  var $block = $(this);
+                  if($block.data('blockTodoes')) return;
+                  $block.data('blockTodoes', 1);
+                  var $form = $block.find('form');
+                  var $titleInput = $form.find('[name="name"]');
+    
+                  var toggleForm = function(toggle)
+                  {
+                      if(toggle === undefined)
+                      {
+                          toggle = !$block.hasClass('show-form');
+                      }
+                      $block.toggleClass('show-form', toggle);
+                      if(toggle)
+                      {
+                          setTimeout(function() {$titleInput.focus();}, 50);
+                      }
+                  };
+                  $block.on('click', '.todo-form-trigger', function()
+                  {
+                      toggleForm($(this).data('trigger'));
+                  });
+                  $form.timeSpanControl(
+                  {
+                      onChange: function($control)
+                      {
+                          $control.trigger('chosen:updated');
+                      }
+                  });
+              });
+          };
+      }
+
       $('ul.todoes li .todo-check').click(function()
       {
           var $liTag     = $(this).closest('li');
@@ -93,6 +135,8 @@
               if(isFinished) $liTag.removeClass('active');
           });
       });
+
+      $('.block-todoes').blockTodoes();
   });
 
   function ajaxCreateTodo(obj)

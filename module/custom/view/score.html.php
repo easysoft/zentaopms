@@ -10,28 +10,40 @@
  */
 ?>
 <?php include 'header.html.php';?>
-<div class='main'>
-  <form method='post' class='form-condensed' target='hiddenwin'>
-    <table class='table table-form'>
-      <tr>
-        <th class='w-100px text-top'><?php echo $lang->custom->score;?></th>
-        <td><?php echo html::radio('score', $lang->custom->scoreStatus, isset($config->global->scoreStatus) ? $config->global->scoreStatus : 0, '', 'block');?></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td>
-          <?php echo html::submitButton();?>
-          <?php common::printLink('score', 'reset', '', "<i class='icon-refresh'></i> " . $lang->custom->scoreReset, '', ' id="scoreRefresh" class="btn iframe" data-width="480"', true, true);?>
-        </td>
-      </tr>
-    </table>
-  </form>
+<div id='mainContent' class='main-row'>
+  <div class='side-col' id='sidebar'></div>
+  <div class='main-col main-content'>
+    <form method='post' target='hiddenwin'>
+      <div class='main-header'>
+        <div class='heading'>
+          <strong><?php echo $lang->custom->score?></strong>
+        </div>
+      </div>
+      <table class='table table-form'>
+        <tr>
+          <th class='w-100px text-top'><?php echo $lang->custom->score;?></th>
+          <td>
+            <?php $checkedKey = isset($config->global->scoreStatus) ? $config->global->scoreStatus : 0;?>
+            <?php foreach($lang->custom->scoreStatus as $key => $value):?>
+            <p><label class="radio-inline"><input type="radio" name="flow" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="flow<?php echo $key;?>"><?php echo $value;?></label></p>
+            <?php endforeach;?>
+          </td>
+        </tr>
+        <tr>
+          <th></th>
+          <td>
+            <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
+            <?php common::printLink('score', 'reset', '', "<i class='icon-refresh'></i> " . $lang->custom->scoreReset, '', ' id="scoreRefresh" class="btn btn-wide iframe" data-width="480"', true, true);?>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
 </div>
 <script>
 $(function()
 {
-    $('#featurebar #scoreTab').addClass('active');
-    $('.side #<?php echo $moduleName;?>Tab').addClass('active');
+    $('#mainMenu #scoreTab').addClass('btn-active-text');
 })
 </script>
 <?php include '../../common/view/footer.html.php';?>

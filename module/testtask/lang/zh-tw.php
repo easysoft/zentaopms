@@ -40,6 +40,9 @@ $lang->testtask->blocked          = "被阻塞版本";
 $lang->testtask->done             = "已測版本";
 $lang->testtask->totalStatus      = "全部";
 $lang->testtask->all              = "全部" . $lang->productCommon;
+$lang->testtask->allTasks         = '所有測試';
+$lang->testtask->collapseAll      = '全部摺疊';
+$lang->testtask->expandAll        = '全部展開';
 
 $lang->testtask->id             = '編號';
 $lang->testtask->common         = '測試單';

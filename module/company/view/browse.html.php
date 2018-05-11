@@ -74,16 +74,14 @@ js::set('confirmDelete', $lang->user->confirmDelete);
         <tr>
           <td class='cell-id'>
             <?php if($canBatchEdit):?>
-            <div class="checkbox-primary">
-              <input type='checkbox' name='users[]' value='<?php echo $user->id;?>'/>
-              <label></label>
-            </div>
-            <?php endif;?>
+            <?php echo html::checkbox('users', array($user->account => sprintf('%03d', $user->id)));?>
+            <?php else:?>
             <?php printf('%03d', $user->id);?>
+            <?php endif;?>
           </td>
           <td><?php if(!common::printLink('user', 'view', "account=$user->account", $user->realname, '', "title='$user->realname'")) echo $user->realname;?></td>
           <td><?php echo $user->account;?></td>
-          <td><?php echo $lang->user->roleList[$user->role];?></td>
+          <td><?php echo zget($lang->user->roleList, $user->role, '');?></td>
           <td><?php echo html::mailto($user->email);?></td>
           <td><?php if(isset($lang->user->genderList[$user->gender])) echo $lang->user->genderList[$user->gender];?></td>
           <td><?php echo $user->phone;?></td>
@@ -114,9 +112,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
       <div class='table-footer'>
         <?php if($canBatchEdit):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-        <div class="table-actions btn-toolbar">
-          <?php echo html::submitButton($lang->edit);?>
-        </div>
+        <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->edit);?></div>
         <?php endif;?>
         <?php $pager->show('right', 'pagerjs');?>
       </div>

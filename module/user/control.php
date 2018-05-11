@@ -898,7 +898,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function dynamic($period = 'today', $account = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function dynamic($period = 'today', $account = '', $recTotal = 0, $direction = 'next')
     {
         /* set menus. */
         $this->lang->set('menugroup.user', 'company');
@@ -919,19 +919,25 @@ class user extends control
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
-        $this->view->orderBy = $orderBy;
-        $this->view->pager   = $pager;
+        $pager = pager::init($recTotal, $recPerPage = 50, $pageID = 1);
+
+        /* Append id for secend sort. */
+        $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
+        $sort    = $this->loadModel('common')->appendOrder($orderBy);
+
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->dynamic;
         $this->view->position[] = $this->lang->user->dynamic;
 
         /* Assign. */
-        $this->view->period  = $period;
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
-        $this->view->account = $account;
-        $this->view->user    = $this->user->getById($account);
-        $this->view->actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager);
+        $this->view->type       = $period;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->account    = $account;
+        $this->view->pager      = $pager;
+        $this->view->user       = $this->user->getById($account);
+        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction);
+        $this->view->direction  = $direction;
         $this->display();
     }
 

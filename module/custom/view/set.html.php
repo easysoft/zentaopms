@@ -22,8 +22,8 @@ $itemRow = <<<EOT
       <input type='text' class="form-control" autocomplete='off' value="" name="values[]">
     </td>
     <td class='text-left'>
-      <a href='javascript:void()' class='btn-icon' onclick='addItem(this)'><i class='icon-plus'></i></a>
-      <a href='javascript:void()' class='btn-icon' onclick='delItem(this)'><i class='icon-remove'></i></a>
+      <a href="javascript:void(0)" class='btn-icon' onclick="addItem(this)"><i class='icon-plus'></i></a>
+      <a href="javascript:void(0)" class='btn-icon' onclick="delItem(this)"><i class='icon-remove'></i></a>
     </td>
   </tr>
 EOT;
@@ -31,21 +31,25 @@ EOT;
 <?php js::set('itemRow', $itemRow)?>
 <?php js::set('module',  $module)?>
 <?php js::set('field',   $field)?>
-<div class='side'>
-  <div class='list-group'>
-    <?php 
-    foreach($lang->custom->{$module}->fields as $key => $value)
-    {
-        echo "<li class='list-group-item' id='{$key}Tab'>" . html::a(inlink('set', "module=$module&field=$key"), $value) . "</li>";
-    }
-    ?>
+<div id='mainContent' class='main-row'>
+  <div class='side-col' id='sidebar'>
+    <div class='cell'>
+      <div class='list-group'>
+        <?php
+        foreach($lang->custom->{$module}->fields as $key => $value)
+        {
+            echo html::a(inlink('set', "module=$module&field=$key"), $value, '', " id='{$key}Tab'");
+        }
+        ?>
+      </div>
+    </div>
   </div>
-</div>
-<div class='main'>
-  <form method='post' class='form-condensed' target='hiddenwin'>
-    <div class='panel panel-sm'>
-      <div class='panel-heading'>
-        <strong><?php echo $lang->custom->object[$module] . $lang->arrow . $lang->custom->$module->fields[$field]?></strong>
+  <div class='main-col main-content'>
+    <form method='post' target='hiddenwin'>
+      <div class='main-header'>
+        <div class='heading'>
+          <strong><?php echo $lang->custom->object[$module] . $lang->arrow . $lang->custom->$module->fields[$field]?></strong>
+        </div>
       </div>
       <?php if(($module == 'story' or $module == 'testcase') and $field == 'review'):?>
       <table class='table table-form mw-800px'>
@@ -68,7 +72,7 @@ EOT;
         <?php endif;?>
         <tr>
           <td></td>
-          <td><?php echo html::submitButton();?></td>
+          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
       <?php elseif($module == 'task' and $field == 'hours'):?>
@@ -84,7 +88,7 @@ EOT;
         </tr>
         <tr>
           <td></td>
-          <td><?php echo html::submitButton();?></td>
+          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
       <?php elseif($module == 'bug' and $field == 'longlife'):?>
@@ -97,7 +101,7 @@ EOT;
               <span class='input-group-addon'><?php echo $lang->day?></span>
             </div>
           </td>
-          <td><?php echo html::submitButton();?></td>
+          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
       <div class='alert alert-info alert-block'><?php echo $lang->custom->notice->longlife;?></div>
@@ -109,7 +113,7 @@ EOT;
         </tr>
         <tr>
           <td></td>
-          <td><?php echo html::submitButton();?></td>
+          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
       <?php elseif($module == 'user' and $field == 'deleted'):?>
@@ -120,7 +124,7 @@ EOT;
         </tr>
         <tr>
           <td></td>
-          <td><?php echo html::submitButton();?></td>
+          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
       <?php else:?>
@@ -139,19 +143,19 @@ EOT;
           </td>
           <?php if($canAdd):?>
           <td class='text-left w-100px'>
-            <a href='javascript:void()' class='btn-icon' onclick='addItem(this)'><i class='icon-plus'></i></a>
-            <a href='javascript:void()' onclick='delItem(this)' class='btn-icon'><i class='icon-remove'></i></a>
+            <a href="javascript:void(0)" onclick="addItem(this)" class='btn-icon'><i class='icon-plus'></i></a>
+            <a href="javascript:void(0)" onclick="delItem(this)" class='btn-icon'><i class='icon-remove'></i></a>
           </td>
           <?php endif;?>
         </tr>
         <?php endforeach;?>
         <tr>
           <td colspan='<?php $canAdd ? print(3) : print(2);?>' class='text-center'>
-          <?php 
+          <?php
           $appliedTo = array($currentLang => $lang->custom->currentLang, 'all' => $lang->custom->allLang);
           echo html::radio('lang', $appliedTo, $lang2Set);
-          echo html::submitButton();
-          if(common::hasPriv('custom', 'restore')) echo html::linkButton($lang->custom->restore, inlink('restore', "module=$module&field=$field"), 'hiddenwin');
+          echo html::submitButton('', '', 'btn btn-primary btn-wide');
+          if(common::hasPriv('custom', 'restore')) echo html::linkButton($lang->custom->restore, inlink('restore', "module=$module&field=$field"), 'hiddenwin', '', 'btn btn-wide');
           ?>
           </td>
         </tr>
@@ -160,8 +164,8 @@ EOT;
       <div class='alert alert-warning alert-block'><?php echo $lang->custom->notice->canNotAdd;?></div>
       <?php endif;?>
       <?php endif;?>
-    </div>
-  </form>
+    </form>
+  </div>
 </div>
 <?php if($module == 'testcase' and $field == 'review'):?>
 <script>

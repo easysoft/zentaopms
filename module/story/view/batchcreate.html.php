@@ -15,8 +15,9 @@
   <div class="main-header">
     <h2><?php echo $lang->story->batchCreate;?></h2>
     <div class="pull-right btn-toolbar">
+      <button type='button' data-toggle="importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=batchCreateFields')?>
-      <?php include '../../common/view/dropdowncustomfield.html.php';?>
+      <?php include '../../common/view/customfield.html.php';?>
     </div>
   </div>
   <?php
@@ -35,6 +36,7 @@
       }
   }
   if($this->story->checkForceReview()) unset($visibleFields['review']);
+  unset($visibleFields['module']);
   ?>
   <form method='post' class='load-indicator main-form' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
     <table class="table table-form">
@@ -43,18 +45,15 @@
           <th class='col-id'><?php echo $lang->idAB;?></th> 
           <th class='col-branch<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
           <th class='col-module required'><?php echo $lang->story->module;?></th>
-          <th class='col-plan<?php echo zget($visibleFields, 'plan', ' hidden'); echo isset($requiredFields['plan']) ? ' required' : ''?>'><?php echo $lang->story->plan;?></th>
-          <th class='col-name required has-btn'>
-            <?php echo $lang->story->title;?>
-            <button type='button' data-toggle="importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
-          </th>
-          <th class='col-desc<?php echo zget($visibleFields, 'spec', ' hidden'); echo isset($requiredFields['spec']) ? ' required' : ''?>'><?php echo $lang->story->spec;?></th>
-          <th class='w-100px<?php echo zget($visibleFields, 'source', ' hidden'); echo isset($requiredFields['source']) ? ' required' : ''?>'><?php echo $lang->story->source;?></th>
-          <th class='w-p15<?php echo zget($visibleFields, 'verify', ' hidden'); echo isset($requiredFields['verify']) ? ' required' : ''?>'><?php echo $lang->story->verify;?></th>
-          <th class='col-pri<?php echo zget($visibleFields, 'pri', ' hidden'); echo isset($requiredFields['pri']) ? ' required' : ''?>'><?php echo $lang->story->pri;?></th>
-          <th class='col-estimate<?php echo zget($visibleFields, 'estimate', ' hidden'); echo isset($requiredFields['estimate']) ? ' required' : ''?>'><?php echo $lang->story->estimate;?></th>
-          <th class='col-review<?php echo zget($visibleFields, 'review', ' hidden'); echo isset($requiredFields['review']) ? ' required' : ''?>'><?php echo $lang->story->review;?></th>
-          <th class='col-keywords<?php echo zget($visibleFields, 'keywords', ' hidden'); echo isset($requiredFields['keywords']) ? ' required' : ''?>'><?php echo $lang->story->keywords;?></th>
+          <th class='col-plan<?php echo zget($visibleFields, 'plan', ' hidden') . zget($requiredFields, 'plan', ' required');?>'><?php echo $lang->story->plan;?></th>
+          <th class='col-name required has-btn'><?php echo $lang->story->title;?></th>
+          <th class='col-desc<?php     echo zget($visibleFields, 'spec',     ' hidden') . zget($requiredFields, 'spec',     ' required');?>'><?php echo $lang->story->spec;?></th>
+          <th class='w-100px<?php      echo zget($visibleFields, 'source',   ' hidden') . zget($requiredFields, 'source',   ' required');?>'><?php echo $lang->story->source;?></th>
+          <th class='w-p15<?php        echo zget($visibleFields, 'verify',   ' hidden') . zget($requiredFields, 'verify',   ' required');?>'><?php echo $lang->story->verify;?></th>
+          <th class='col-pri<?php      echo zget($visibleFields, 'pri',      ' hidden') . zget($requiredFields, 'pri',      ' required');?>'><?php echo $lang->story->pri;?></th>
+          <th class='col-estimate<?php echo zget($visibleFields, 'estimate', ' hidden') . zget($requiredFields, 'estimate', ' required');?>'><?php echo $lang->story->estimate;?></th>
+          <th class='col-review<?php   echo zget($visibleFields, 'review',   ' hidden') . zget($requiredFields, 'review',   ' required');?>'><?php echo $lang->story->review;?></th>
+          <th class='col-keywords<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', ' required');?>'><?php echo $lang->story->keywords;?></th>
         </tr>
       </thead>
       <tbody>
@@ -92,7 +91,8 @@
       <tfoot>
         <tr>
           <td colspan="<?php echo count($visibleFields) + 3?>" class="text-center">
-            <?php echo html::submitButton($lang->save, '', 'btn btn-wide btn-primary') . '&nbsp;' . html::backButton('', '', "btn btn-wide");?>
+            <?php echo html::submitButton($lang->save, '', 'btn btn-wide btn-primary');?>
+            <?php echo html::backButton('', '', "btn btn-wide btn-gray");?>
           </td>
         </tr>
       </tfoot>

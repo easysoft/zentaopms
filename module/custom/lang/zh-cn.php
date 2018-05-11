@@ -83,17 +83,21 @@ $lang->custom->allLang     = '适用所有语言';
 $lang->custom->confirmRestore = '是否要恢复默认配置？';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userRole             = '键的长度必须小于20个字符！';
-$lang->custom->notice->canNotAdd            = '该项参与运算，不提供自定义添加功能';
-$lang->custom->notice->forceReview          = "指定人提交的%s必须评审。";
-$lang->custom->notice->forceNotReview       = "指定人提交的%s不需要评审。";
-$lang->custom->notice->longlife             = 'Bug列表页面的久未处理标签中，列出设置天数之前未处理的Bug。';
-$lang->custom->notice->priListKey           = '优先级的键应当为数字！';
-$lang->custom->notice->keyList              = '键值应当为英文或数字';
-$lang->custom->notice->severityListKey      = 'Bug严重程度的键应当为数字！';
-$lang->custom->notice->indexPage['product'] = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
-$lang->custom->notice->indexPage['project'] = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";
-$lang->custom->notice->indexPage['qa']      = "从8.2版本起增加了测试主页视图，是否默认进入测试主页？";
+$lang->custom->notice->canNotAdd                   = '该项参与运算，不提供自定义添加功能';
+$lang->custom->notice->forceReview                 = "指定人提交的%s必须评审。";
+$lang->custom->notice->forceNotReview              = "指定人提交的%s不需要评审。";
+$lang->custom->notice->longlife                    = 'Bug列表页面的久未处理标签中，列出设置天数之前未处理的Bug。';
+$lang->custom->notice->invalidNumberKey            = '键值应为不大于255的数字';
+$lang->custom->notice->invalidStringKey            = '键值应当为小写英文字母、数字或下划线的组合';
+
+$lang->custom->notice->indexPage['product']        = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
+$lang->custom->notice->indexPage['project']        = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";
+$lang->custom->notice->indexPage['qa']             = "从8.2版本起增加了测试主页视图，是否默认进入测试主页？";
+
+$lang->custom->notice->invalidStrlen['ten']        = '键的长度必须小于10个字符！';
+$lang->custom->notice->invalidStrlen['twenty']     = '键的长度必须小于20个字符！';
+$lang->custom->notice->invalidStrlen['thirty']     = '键的长度必须小于30个字符！';
+$lang->custom->notice->invalidStrlen['twoHundred'] = '键的长度必须小于225个字符！';
 
 $lang->custom->storyReview    = '评审流程';
 $lang->custom->forceReview    = '强制评审';

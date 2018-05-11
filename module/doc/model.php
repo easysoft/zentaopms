@@ -22,60 +22,157 @@ class docModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($libID = 0, $moduleID = 0, $crumb = '')
+    public function setMenu($type = '', $libID = 0, $moduleID = 0, $productID = 0, $projectID = 0, $crumb = '')
     {
-        $customMenuKey = $this->config->global->flow . '_doc';
-        if(isset($this->config->customMenu->{$customMenuKey}))
+        $selectHtml  = "<div class='btn-group angle-btn'>";
+        $selectHtml .= html::a(helper::createLink('doc', 'index'), $this->lang->doc->index, '', "class='btn'");
+        $selectHtml .= '</div>';
+
+        if($type)
         {
-            $customMenu = json_decode($this->config->customMenu->{$customMenuKey}, true);
-            $menuLibIdList = array();
-            foreach($customMenu as $i => $menu)
+            $mainLib = in_array($type, array_keys($this->lang->doc->fastMenuList)) ? $this->lang->doc->fastMenuList[$type] : '';
+
+            if($libID)
             {
-                if(strpos($menu['name'], 'custom') === 0)
+                $lib = $this->getLibById($libID);
+                if($this->checkPriv($lib))
                 {
-                    $menuLibID = (int)substr($menu['name'], 6);
-                    if($menuLibID) $menuLibIdList[$i] = $menuLibID;
+                    $type = $lib->product ? 'product' : 'custom';
+                    $type = $lib->project ? 'project' : $type;
                 }
             }
 
-            $productIdList = array();
-            $projectIdList = array();
-            if($menuLibIdList)
+            $mainLib = $type == 'custom' ? $this->lang->doc->customAB : $mainLib;
+            $mainLib = $type == 'product' ? $this->lang->productCommon : $mainLib;
+            $mainLib = $type == 'project' ? $this->lang->projectCommon : $mainLib;
+
+            $selectHtml .= "<div class='btn-group angle-btn'>";
+            $selectHtml .= "<div class='btn-group'>";
+            $selectHtml .= "<a data-toggle='dropdown' class='btn'>" . $mainLib . " <span class='caret'></span></a>";
+            $selectHtml .= "<ul class='dropdown-menu'>";
+            foreach($this->lang->doc->fastMenuList as $key => $fastMenu)
             {
-                $libs = $this->dao->select('id,name,product,project')->from(TABLE_DOCLIB)->where('id')->in($menuLibIdList)->fetchAll('id');
-                foreach($libs as $lib)
+                $link = helper::createLink('doc', 'browse', "libID=0&browseTyp={$key}");
+                $selectHtml .= '<li>' . html::a($link, "<i class='icon {$this->lang->doc->fastMenuIconList[$key]}'></i> {$fastMenu}") . '</li>';
+            }
+            $selectHtml .= "<li class='divider'></li>";
+            $selectHtml .= '<li>' . html::a(helper::createLink('doc', 'allLibs', "type=product"), "<i class='icon icon-cube'></i> {$this->lang->productCommon}") . '</li>';
+            $selectHtml .= '<li>' . html::a(helper::createLink('doc', 'allLibs', "type=project"), "<i class='icon icon-stack'></i> {$this->lang->projectCommon}") . '</li>';
+            $selectHtml .= '<li>' . html::a(helper::createLink('doc', 'allLibs', "type=custom"), "<i class='icon icon-folder-o'></i> {$this->lang->doc->customAB}") . '</li>';
+            $selectHtml .='</ul></div></div>';
+
+            if(strpos('product,project,custom', $type) !== false)
+            {
+                if($type == 'custom')  $currentLib = $libID;
+                if($type == 'product') $currentLib = $productID;
+                if($type == 'project') $currentLib = $projectID;
+                if($currentLib) 
                 {
-                    if($lib->product) $productIdList[] = $lib->product;
-                    if($lib->project) $projectIdList[] = $lib->project;
+                    $allLibGroups = $this->getAllLibGroups();
+                    $currentGroups = $allLibGroups[$type];
+
+                    $selectHtml .= "<div class='btn-group angle-btn'>";
+                    $selectHtml .= "<div class='btn-group'>";
+                    $selectHtml .= '<a data-toggle="dropdown" class="btn">' . (is_array($currentGroups[$currentLib]) ? $currentGroups[$currentLib]['name'] : $currentGroups[$currentLib]) . ' <span class="caret"></span></a>';
+                    $selectHtml .='<ul class="dropdown-menu">';
+                    if($type == 'custom')
+                    {
+                        foreach($currentGroups as $groupID => $groupName)
+                        {
+                            if($type == 'custom')
+                            {
+                                $link = helper::createLink('doc', 'browse', "libID=$groupID");
+                                $icon = 'icon-folder-o';
+                            }
+                            elseif($type == 'product')
+                            {
+                                $link = helper::createLink('doc', 'objectLibs', "type=product&objectID=$groupID");
+                                $icon = 'icon-cube';
+                            }
+                            else
+                            {
+                                $link = helper::createLink('doc', 'objectLibs', "type=project&objectID=$groupID");
+                                $icon = 'icon-stack';
+                            }
+
+                            $active = $currentLib == $groupID ? "class='active'" : '';
+                            $selectHtml .= "<li $active>" . html::a(helper::createLink('doc', 'browse', "libID=$groupID"), "<i class='icon icon-folder-o'></i> {$groupName}") . '</li>';
+                        }
+                    }
+                    else
+                    {
+                        foreach($currentGroups as $groupID => $libGroups)
+                        {
+                            $link = helper::createLink('doc', 'objectLibs', "type=$type&objectID=$groupID");
+                            $icon = $type == 'product' ? 'icon-cube' : 'icon-stack';
+
+                            $active = $currentLib == $groupID ? "class='active'" : '';
+                            $selectHtml .= "<li $active>" . html::a($link, "<i class='icon {$icon}'></i> {$libGroups['name']}") . '</li>';
+                        }
+                    }
+                    $selectHtml .= '</ul></div></div>';
                 }
             }
-            $products = $productIdList ? $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchPairs('id', 'name') : array();
-            $projects = $projectIdList ? $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs('id', 'name') : array();
-            foreach($menuLibIdList as $i => $menuLibID)
+
+            $actions = '';
+            $customMenuKey = $this->config->global->flow . '_doc';
+            if(isset($this->config->customMenu->{$customMenuKey}))
             {
-                $lib = $libs[$menuLibID];
-                $libName = '';
-                if($lib->product) $libName = isset($products[$lib->product]) ? '[' . $products[$lib->product] . ']' : '';
-                if($lib->project) $libName = isset($projects[$lib->project]) ? '[' . $projects[$lib->project] . ']' : '';
-                $libName .= $lib->name;
-                $customMenu[$i]['link'] = "{$libName}|doc|browse|libID={$menuLibID}";
+                $customMenu = json_decode($this->config->customMenu->{$customMenuKey}, true);
+                $menuLibIdList = array();
+                foreach($customMenu as $i => $menu)
+                {
+                    if(strpos($menu['name'], 'custom') === 0)
+                    {
+                        $menuLibID = (int)substr($menu['name'], 6);
+                        if($menuLibID) $menuLibIdList[$i] = $menuLibID;
+                    }
+                }
+
+                $productIdList = array();
+                $projectIdList = array();
+                if($menuLibIdList)
+                {
+                    $libs = $this->dao->select('id,name,product,project')->from(TABLE_DOCLIB)->where('id')->in($menuLibIdList)->fetchAll('id');
+                    foreach($libs as $lib)
+                    {
+                        if($lib->product) $productIdList[] = $lib->product;
+                        if($lib->project) $projectIdList[] = $lib->project;
+                    }
+                }
+                $products = $productIdList ? $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchPairs('id', 'name') : array();
+                $projects = $projectIdList ? $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs('id', 'name') : array();
+                foreach($menuLibIdList as $i => $menuLibID)
+                {
+                    $lib = $libs[$menuLibID];
+                    $libName = '';
+                    if($lib->product) $libName = isset($products[$lib->product]) ? '[' . $products[$lib->product] . ']' : '';
+                    if($lib->project) $libName = isset($projects[$lib->project]) ? '[' . $projects[$lib->project] . ']' : '';
+                    $libName .= $lib->name;
+                    $customMenu[$i]['link'] = "{$libName}|doc|browse|libID={$menuLibID}";
+                }
+
+                foreach($customMenu as $menu)
+                {
+                    if(isset($menu['link']))
+                    {
+                        list($menuLabel, $module, $method, $vars) = explode('|', $menu['link']);
+                        $actions .= html::a(helper::createLink($module, $method, $vars), $menuLabel, '', "class='btn btn-gray'");
+                    }
+                        
+                }
+
             }
-            $this->config->customMenu->{$customMenuKey} = json_encode($customMenu);
+
+            $actions .= html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-folder-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary' data-toggle='modal'");
+            if($libID) $actions .= html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");
+
+            $this->lang->modulePageActions = $actions;
+
         }
 
-        $this->app->loadLang('project');
-        $selectHtml  = "<a id='currentItem' data-lib-id='$libID' href=\"javascript:showLibMenu()\">{$this->lang->doclib->all} <span class='icon-caret-down'></span></a>";
-        $selectHtml .= "<div id='dropMenu'>";
-        $selectHtml .= "<i class='icon icon-spin icon-spinner'></i>";
-        $selectHtml .= "<div id='libMenu'>";
-        $selectHtml .= "<div id='libMenuHeading'><input id='searchLib' type='search' placeholder='{$this->lang->doc->searchDoc}' class='form-control'></div>";
-        $selectHtml .= "<div id='libMenuGroups' class='clearfix'>";
-        if($this->config->global->flow != 'onlyTask' and isset($this->lang->doc->libTypeList['product']))  $selectHtml .= "<div class='lib-menu-group' id='libMenuProductGroup'><div class='lib-menu-list-heading' data-type='product'>{$this->lang->doc->libTypeList['product']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
-        if($this->config->global->flow != 'onlyStory' and $this->config->global->flow != 'onlyTest' and isset($this->lang->doc->libTypeList['project'])) $selectHtml .= "<div class='lib-menu-group' id='libMenuProjectGroup'><div class='lib-menu-list-heading' data-type='project'>{$this->lang->doc->libTypeList['project']}<i class='icon icon-remove'></i></div><div class='lib-menu-project-done'>{$this->lang->project->statusList['done']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
-        $selectHtml .= "<div class='lib-menu-group' id='libMenuCustomGroup'><div class='lib-menu-list-heading' data-type='custom'>{$this->lang->doc->libTypeList['custom']}<i class='icon icon-remove'></i></div><div class='lib-menu-list clearfix'></div></div>";
-        $selectHtml .= "</div></div></div>";
-        common::setMenuVars($this->lang->doc->menu, 'list', $selectHtml);
-        common::setMenuVars($this->lang->doc->menu, 'crumb', $crumb ? $crumb : $this->getCrumbs($libID, $moduleID));
+        //$selectHtml .= $crumb ? $crumb : $this->getCrumbs($libID, $moduleID);
+        $this->lang->modulePageNav     = $selectHtml;
     }
 
     /**
@@ -100,8 +197,8 @@ class docModel extends model
     {
         if($type == 'product' or $type == 'project')
         {
-            $table   = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-            $stmt    = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
+            $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+            $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
                 ->leftJoin($table)->alias('t2')->on("t1.$type=t2.id")
                 ->where("t1.$type")->ne(0)
                 ->andWhere('t1.deleted')->eq(0)
@@ -197,8 +294,61 @@ class docModel extends model
         {
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
-                ->andWhere('lib')->in($libID)
+                ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
                 ->andWhere('addedBy')->eq($this->app->user->account)
+                ->orderBy($sort)
+                ->page($pager)
+                ->fetchAll();
+        }
+        elseif($browseType == 'byediteddate')
+        {
+            $docIdList = $this->getPrivDocs($libID, $moduleID);
+            $files = $this->dao->select('*')->from(TABLE_FILE)
+                ->where('objectType')->eq('doc')
+                ->andWhere('objectID')->in($docIdList)
+                ->fetchGroup('objectID');
+
+            $docs = $this->dao->select('*')->from(TABLE_DOC)
+                ->where('deleted')->eq(0)
+                ->andWhere('id')->in($docIdList)
+                ->orderBy('editedDate_desc')
+                ->page($pager)
+                ->fetchAll('id');
+
+            foreach($docs as $doc)
+            {
+                $docs[$doc->id]->fileSize = 0;
+                if(isset($files[$doc->id]))
+                {
+                    $fileSize = 0;
+                    foreach($files[$doc->id] as $file) $fileSize += $file->size;
+                    if($fileSize < 1024)
+                    {
+                        $fileSize .= 'B';
+                    }
+                    elseif($fileSize < 1024 * 1024)
+                    {
+                        $fileSize = round($fileSize / 1024, 2) . 'KB';
+                    }
+                    elseif($fileSize < 1024 * 1024 * 1024)
+                    {
+                        $fileSize = round($fileSize / 1024 / 1024, 2) . 'MB';
+                    }
+                    else
+                    {
+                        $fileSize = round($fileSize / 1024 / 1024 /1024, 2) . 'G';
+                    }
+
+                    $docs[$doc->id]->fileSize = $fileSize;
+                }
+            }
+        }
+        elseif($browseType == "collectedbyme")
+        {
+            $docs = $this->dao->select('*')->from(TABLE_DOC)
+                ->where('deleted')->eq(0)
+                ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
+                ->andWhere('collector')->like("%,{$this->app->user->account},%")
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll();
@@ -209,13 +359,9 @@ class docModel extends model
             if($moduleID) $modules = $this->loadModel('tree')->getAllChildId($moduleID);
             $docs = $this->getDocs($libID, $modules, $sort, $pager);
         }
-        elseif($browseType == "bymenu")
+        elseif($browseType == "bygrid")
         {
-            $docs = $this->getDocs($libID, $moduleID, $sort, $pager);
-        }
-        elseif($browseType == 'bytree')
-        {
-            return array();
+            $docs = $this->getDocs($libID, 0, $sort, $pager);
         }
         elseif($browseType == "bysearch")
         {
@@ -253,6 +399,12 @@ class docModel extends model
                 if(!$this->checkPriv($doc)) unset($docs[$docID]);
             }
             $docs = $this->dao->select('*')->from(TABLE_DOC)->where('id')->in(array_keys($docs))->orderBy($sort)->page($pager)->fetchAll();
+        }
+        elseif($browseType == 'fastsearch')
+        {
+            if(!$this->post->searchDoc) return array();
+            $docIdList = $this->getPrivDocs($libID, $moduleID);
+            $docs = $this->dao->select('*')->from(TABLE_DOC)->where('id')->in($docIdList)->andWhere('title')->like("%{$this->post->searchDoc}%")->orderBy($sort)->page($pager)->fetchAll();
         }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc');
@@ -297,9 +449,9 @@ class docModel extends model
         $stmt = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
-            ->beginIF($module)->andWhere('module')->in($module)->fi()
-            ->beginIF($this->cookie->browseType == 'bymenu')->andWhere('module')->in($module)->fi()
+            ->andWhere('module')->in($module)
             ->query();
+
 
         $docIdList = array();
         while($doc = $stmt->fetch())
@@ -530,7 +682,7 @@ class docModel extends model
         $this->config->doc->search['queryID']   = $queryID;
         $this->config->doc->search['params']['product']['values'] = array(''=>'') + $this->loadModel('product')->getPairs('nocode') + array('all'=>$this->lang->doc->allProduct);
         $this->config->doc->search['params']['project']['values'] = array(''=>'') + $this->loadModel('project')->getPairs('nocode') + array('all'=>$this->lang->doc->allProject);
-        $this->config->doc->search['params']['lib']['values']     = array(''=>'', $libID => $libs[$libID], 'all' => $this->lang->doclib->all);
+        $this->config->doc->search['params']['lib']['values']     = array(''=>'', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
 
         /* Get the modules. */
         $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
@@ -564,12 +716,21 @@ class docModel extends model
      */
     public function getDocMenu($libID, $parent, $orderBy = 'name_asc')
     {
-        return $this->dao->select('*')->from(TABLE_MODULE)->where('root')->eq($libID)
+        $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('root')->eq($libID)
             ->andWhere('type')->eq('doc')
             ->andWhere('parent')->eq($parent)
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->fetchAll('id');
+
+        $docCounts= $this->dao->select("module, count(id) as docCount")->from(TABLE_DOC)
+            ->where('module')->in(array_keys($modules))
+            ->groupBy('module')
+            ->fetchPairs();
+
+        foreach($modules as $moduleID => $module) $modules[$moduleID]->docCount = isset($docCounts[$moduleID]) ? $docCounts[$moduleID] : 0;
+
+        return $modules;
     }
 
     /**
@@ -691,16 +852,16 @@ class docModel extends model
         }
         if(isset($projects)) $stmt = $stmt->andWhere('project')->in($projects);
 
-        $idList = $stmt->andWhere('id')->in(array_keys($libs))->orderBy("{$key}_desc")->page($pager, $key)->fetchPairs($key, $key);
+        $idList = $stmt->andWhere('id')->in(array_keys($libs))->orderBy("{$key}_desc")->fetchPairs($key, $key);
 
         if($type == 'product' or $type == 'project')
         {
             $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-            $libs = $this->dao->select('id,name,`order`')->from($table)->where('id')->in($idList)->orderBy('`order` desc, id desc')->fetchAll('id');
+            $libs = $this->dao->select('id,name,`order`')->from($table)->where('id')->in($idList)->orderBy('`order` desc, id desc')->page($pager, 'id')->fetchAll('id');
         }
         else
         {
-            $libs = $this->dao->select('id,name')->from(TABLE_DOCLIB)->where('id')->in($idList)->orderBy('`order`, id desc')->fetchAll('id');
+            $libs = $this->dao->select('id,name')->from(TABLE_DOCLIB)->where('id')->in($idList)->orderBy('`order`, id desc')->page($pager, 'id')->fetchAll('id');
         }
 
         return $libs;
@@ -787,7 +948,7 @@ class docModel extends model
             }
         }
 
-        return array('product' => array_values($productOrderLibs), 'project' => array_values($projectOrderLibs), 'custom' => $customLibs);
+        return array('product' => $productOrderLibs, 'project' => $projectOrderLibs, 'custom' => $customLibs);
     }
 
     /**
@@ -798,7 +959,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getLimitLibs($type, $limit = 4)
+    public function getLimitLibs($type, $limit = 0)
     {
         if($type == 'project' and ($this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest')) return array();
         if($type == 'product' and $this->config->global->flow == 'onlyTask')  return array();
@@ -821,7 +982,7 @@ class docModel extends model
         $libs = array();
         while($docLib = $stmt->fetch())
         {
-            if($i > $limit) break;
+            if($limit && $i > $limit) break;
             $key = ($type == 'product' or $type == 'project') ? $type : 'id';
             if($this->checkPriv($docLib) and !isset($libs[$docLib->$key]))
             {
@@ -889,7 +1050,7 @@ class docModel extends model
     public function getLibsByObject($type, $objectID, $mode = '')
     {
         if($type != 'product' and $type != 'project') return false;
-        $objectLibs   = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
+        $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere($type)->eq($objectID)->orderBy('`order`, id')->fetchAll('id');
         if($type == 'product')
         {
             if($this->config->global->flow == 'onlyStory' or $this->config->global->flow == 'onlyTest')
@@ -898,26 +1059,75 @@ class docModel extends model
             }
             else
             {
-                $hasProject  = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                $hasProject  = $this->dao->select('DISTINCT product, count(project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                     ->where('t1.product')->eq($objectID)
                     ->andWhere('t2.deleted')->eq(0)
-                    ->fetchPairs('product', 'product');
+                    ->groupBy('product')
+                    ->fetchPairs('product', 'projectCount');
             }
         }
+
         $libs = array();
         foreach($objectLibs as $lib)
         {
-            if($this->checkPriv($lib)) $libs[$lib->id] = $lib->name;
+            if($this->checkPriv($lib)) $libs[$lib->id] = $lib;
         }
+
+        $itemCounts = $this->statLibCounts(array_keys($libs));
+        foreach($libs as $libID => $lib) $libs[$libID]->allCount = $itemCounts[$libID];
 
         if(strpos($mode, 'onlylib') === false)
         {
-            if($type == 'product' and isset($hasProject[$objectID]) and common::hasPriv('doc', 'allLibs')) $libs['project'] = $this->lang->doclib->project;
-            if(common::hasPriv('doc', 'showFiles')) $libs['files'] = $this->lang->doclib->files;
+            if($type == 'product' and isset($hasProject[$objectID]) and common::hasPriv('doc', 'allLibs'))
+            {
+                $libs['project'] = new stdclass();
+                $libs['project']->name = $this->lang->doclib->project;
+                $libs['project']->allCount = $hasProject[$objectID];
+            }
+            if(common::hasPriv('doc', 'showFiles'))
+            {
+                $libs['files'] = new stdclass();
+                $libs['files']->name = $this->lang->doclib->files;
+                $libs['files']->allCount = count($this->getLibFiles($type, $objectID, 'id_desc'));
+            }
         }
 
         return $libs;
+    }
+
+    /**
+     * Stat module and document counts of lib.
+     * 
+     * @param  array    $idList 
+     * @access public
+     * @return array
+     */
+    public function statLibCounts($idList)
+    {
+        $moduleCounts= $this->dao->select("root, count(id) as moduleCount")->from(TABLE_MODULE)
+            ->where('type')->eq('doc')
+            ->andWhere('root')->in($idList)
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('root')
+            ->fetchPairs();
+
+        $docCounts= $this->dao->select("lib, count(id) as docCount")->from(TABLE_DOC)
+            ->where('lib')->in($idList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('module')->eq(0)
+            ->groupBy('lib')
+            ->fetchPairs();
+
+        $itemCounts = array();
+        foreach($idList as $libID)
+        {
+            $docCount    = isset($docCounts[$libID]) ? $docCounts[$libID] : 0;
+            $moduleCount = isset($moduleCounts[$libID]) ? $moduleCounts[$libID] : 0;
+            $itemCounts[$libID] = $docCount + $moduleCount;
+        }
+
+        return $itemCounts;
     }
 
     /**
@@ -1172,5 +1382,33 @@ class docModel extends model
         }
 
         return $teams;
+    }
+
+    /**
+     * Get statistic information.
+     * 
+     * @access public
+     * @return object
+     */
+    public function getStatisticInfo()
+    {
+        $docIdList = $this->getPrivDocs();
+
+        $today  = date('Y-m-d');
+        $lately = date('Y-m-d', strtotime('-3 day'));
+        $statisticInfo = $this->dao->select("count(id) as totalDocs, count(editedDate like '{$today}%' or null) as todayEditedDocs,
+            count(editedDate > '{$lately}' or null) as lastEditedDocs, count(addedDate > '{$lately}' or null) as lastAddedDocs, 
+            count(collector like '%,{$this->app->user->account},%' or null) as myCollection, count(addedBy = '{$this->app->user->account}' or null) as myDocs")->from(TABLE_DOC)
+            ->where('deleted')->eq(0)
+            ->andWhere('id')->in($docIdList)
+            ->fetch();
+
+        $statisticInfo->pastEditedDocs       = $statisticInfo->totalDocs - $statisticInfo->todayEditedDocs;
+        $statisticInfo->lastEditedProgress   = $statisticInfo->totalDocs ? round($statisticInfo->lastEditedDocs / $statisticInfo->totalDocs, 2) * 100 : 0;
+        $statisticInfo->lastAddedProgress    = $statisticInfo->totalDocs ? round($statisticInfo->lastAddedDocs / $statisticInfo->totalDocs, 2) * 100 : 0;
+        $statisticInfo->myCollectionProgress = $statisticInfo->totalDocs ? round($statisticInfo->myCollection / $statisticInfo->totalDocs, 2) * 100 : 0;
+        $statisticInfo->myDocsProgress       = $statisticInfo->totalDocs ? round($statisticInfo->myDocs / $statisticInfo->totalDocs, 2) * 100 : 0;
+
+        return $statisticInfo;
     }
 }

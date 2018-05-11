@@ -100,25 +100,27 @@ $lang->bug->setPublic          = '設為公共模板';
 $lang->bug->deleteTemplate     = '刪除模板';
 $lang->bug->confirmStoryChange = '確認需求變動';
 $lang->bug->copy               = '複製Bug';
+$lang->bug->search             = '搜索';
 
 /* 查詢條件列表。*/
-$lang->bug->assignToMe     = '指派給我';
-$lang->bug->openedByMe     = '由我創建';
-$lang->bug->resolvedByMe   = '由我解決';
-$lang->bug->closedByMe     = '由我關閉';
-$lang->bug->assignToNull   = '未指派';
-$lang->bug->unResolved     = '未解決';
-$lang->bug->toClosed       = '待關閉';
-$lang->bug->unclosed       = '未關閉';
-$lang->bug->unconfirmed    = '未確認';
-$lang->bug->longLifeBugs   = '久未處理';
-$lang->bug->postponedBugs  = '被延期';
-$lang->bug->overdueBugs    = '過期Bug';
-$lang->bug->allBugs        = '所有';
-$lang->bug->byQuery        = '搜索';
-$lang->bug->needConfirm    = '需求變動';
-$lang->bug->allProduct     = '所有' . $lang->productCommon;
-
+$lang->bug->assignToMe        = '指派給我';
+$lang->bug->openedByMe        = '由我創建';
+$lang->bug->resolvedByMe      = '由我解決';
+$lang->bug->closedByMe        = '由我關閉';
+$lang->bug->assignToNull      = '未指派';
+$lang->bug->unResolved        = '未解決';
+$lang->bug->toClosed          = '待關閉';
+$lang->bug->unclosed          = '未關閉';
+$lang->bug->unconfirmed       = '未確認';
+$lang->bug->longLifeBugs      = '久未處理';
+$lang->bug->postponedBugs     = '被延期';
+$lang->bug->overdueBugs       = '過期Bug';
+$lang->bug->allBugs           = '所有';
+$lang->bug->byQuery           = '搜索';
+$lang->bug->needConfirm       = '需求變動';
+$lang->bug->allProduct        = '所有' . $lang->productCommon;
+$lang->bug->my                = '我的';
+$lang->bug->yesterdayResolved = '昨天解決';
 
 $lang->bug->assignToMeAB   = '指派給我';
 $lang->bug->openedByMeAB   = '由我創建';
@@ -126,15 +128,16 @@ $lang->bug->resolvedByMeAB = '由我解決';
 
 $lang->bug->ditto       = '同上';
 $lang->bug->dittoNotice = '該bug與上一bug不屬於同一產品！';
+$lang->bug->noAssigned  = '未指派';
 
 /* 頁面標籤。*/
-$lang->bug->lblAssignedTo               = '當前指派';
-$lang->bug->lblMailto                   = '抄送給';
-$lang->bug->lblLastEdited               = '最後修改';
-$lang->bug->lblResolved                 = '由誰解決';
-$lang->bug->allUsers                    = '所有用戶';
-$lang->bug->allBuilds                   = '所有';
-$lang->bug->createBuild                 = '新建';
+$lang->bug->lblAssignedTo = '當前指派';
+$lang->bug->lblMailto     = '抄送給';
+$lang->bug->lblLastEdited = '最後修改';
+$lang->bug->lblResolved   = '由誰解決';
+$lang->bug->allUsers      = '所有用戶';
+$lang->bug->allBuilds     = '所有';
+$lang->bug->createBuild   = '新建';
 
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = '基本信息';
@@ -144,14 +147,15 @@ $lang->bug->lblTypeAndSeverity          = '類型/嚴重程度';
 $lang->bug->lblSystemBrowserAndHardware = '系統/瀏覽器';
 $lang->bug->legendSteps                 = '重現步驟';
 $lang->bug->legendComment               = '備註';
-$lang->bug->legendLife                  = 'BUG的一生';
+$lang->bug->legendLife                  = 'Bug的一生';
 $lang->bug->legendMisc                  = '其他相關';
 $lang->bug->legendRelated               = '其他信息';
 
 /* 功能按鈕。*/
-$lang->bug->buttonConfirm        = '確認';
+$lang->bug->buttonConfirm = '確認';
 
 /* 交互提示。*/
+$lang->bug->summary               = "本頁共 <strong>%s</strong> 個Bug，未解決 <strong>%s</strong>。";
 $lang->bug->confirmChangeProduct  = "修改{$lang->productCommon}會導致相應的{$lang->projectCommon}、需求和任務發生變化，確定嗎？";
 $lang->bug->confirmDelete         = '您確認要刪除該Bug嗎？';
 $lang->bug->setTemplateTitle      = '請輸入bug模板標題';
@@ -369,20 +373,16 @@ $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = '選擇相關版本...';
 $lang->bug->placeholder->newBuildName = '新版本名稱';
 
-
-
-
-
-$lang->bug->featureBar['browse']['unclosed']      = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['all']           = $lang->bug->allBugs;
-$lang->bug->featureBar['browse']['assigntome']    = $lang->bug->assignToMe;
+$lang->bug->featureBar['browse']['unclosed']      = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['openedbyme']    = $lang->bug->openedByMe;
+$lang->bug->featureBar['browse']['assigntome']    = $lang->bug->assignToMe;
 $lang->bug->featureBar['browse']['resolvedbyme']  = $lang->bug->resolvedByMe;
+$lang->bug->featureBar['browse']['toclosed']      = $lang->bug->toClosed;
+$lang->bug->featureBar['browse']['unresolved']    = $lang->bug->unResolved;
 
 $lang->bug->featureBar['browse']['unconfirmed']   = $lang->bug->unconfirmed;
 $lang->bug->featureBar['browse']['assigntonull']  = $lang->bug->assignToNull;
-$lang->bug->featureBar['browse']['unresolved']    = $lang->bug->unResolved;
-$lang->bug->featureBar['browse']['toclosed']      = $lang->bug->toClosed;
 $lang->bug->featureBar['browse']['longlifebugs']  = $lang->bug->longLifeBugs;
 $lang->bug->featureBar['browse']['postponedbugs'] = $lang->bug->postponedBugs;
 $lang->bug->featureBar['browse']['overduebugs']   = $lang->bug->overdueBugs;

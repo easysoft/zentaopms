@@ -39,18 +39,17 @@ class doc extends control
     {
         $this->doc->setMenu();
 
-        $products   = $this->doc->getLimitLibs('product', '9');
-        $projects   = $this->doc->getLimitLibs('project', '9');
-        $customLibs = $this->doc->getLimitLibs('custom', '9');
-        $subLibs['product'] = $this->doc->getSubLibGroups('product', array_keys($products));
-        $subLibs['project'] = $this->doc->getSubLibGroups('project', array_keys($projects));
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 5, 1);
 
-        $this->view->title      = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
-        $this->view->position[] = $this->lang->doc->index;
-        $this->view->products   = $products;
-        $this->view->projects   = $projects;
-        $this->view->customLibs = $customLibs;
-        $this->view->subLibs    = $subLibs;
+        $this->view->title            = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
+        $this->view->position[]       = $this->lang->doc->index;
+        $this->view->latestEditedDocs = $this->loadModel('doc')->getDocsByBrowseType(0, 'byediteddate', 0, 0, 'editedDate_desc, id_desc', $pager);
+        $this->view->myDocs           = $this->loadModel('doc')->getDocsByBrowseType(0, 'openedbyme', 0, 0, 'addedDate_desc', $pager);
+        $this->view->statisticInfo    = $this->doc->getStatisticInfo();
+        $this->view->users            = $this->loadModel('user')->getPairs('noletter');
+        $this->view->doingProjects    = $this->loadModel('project')->getList('isdoing', 5);
+
         $this->display();
     }
 
@@ -77,24 +76,25 @@ class doc extends control
 
         /* Set browseType.*/
         $browseType = strtolower($browseType);
-        if(($this->cookie->browseType == 'bymenu' or $this->cookie->browseType == 'bytree') and $browseType != 'bysearch') $browseType = $this->cookie->browseType;
         $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
-        $moduleID   = ($browseType == 'bymodule' or $browseType == 'bymenu') ? (int)$param : 0;
+        $moduleID   = ($browseType == 'bymodule') ? (int)$param : 0;
 
-        $type = 'custom';
+        $type = '';
+        $productID = 0;
+        $projectID = 0;
         if($libID)
         {
-            $lib = $this->doc->getLibByID($libID);
-            if($lib->product or $lib->project) $type = $lib->product ? 'product' : 'project';
+            $type = 'custom';
+            $lib  = $this->doc->getLibByID($libID);
+            if($lib->product or $lib->project)
+            {
+                $type = $lib->product ? 'product' : 'project';
+                $productID = $lib->product; 
+                $projectID = $lib->project; 
+            }
         }
-        if(empty($libID)) $type = 'product';
 
         $this->libs = $this->doc->getLibs($type);
-        if(empty($libID))
-        {
-            $libID = key($this->libs);
-            $lib = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->eq($libID)->orderBy('id')->fetch();
-        }
 
         /* According the from, set menus. */
         if($from == 'product')
@@ -113,20 +113,20 @@ class doc extends control
         }
         else
         {
-            $this->doc->setMenu($libID, $moduleID);
+            $menuType = (!$type && in_array($browseType, array_keys($this->lang->doc->fastMenuList))) ? $browseType : $type;
+            $this->doc->setMenu($menuType, $libID, $moduleID, $productID, $projectID);
         }
-        $this->session->set('docList',   $this->app->getURI(true));
+        $this->session->set('docList', $this->app->getURI(true));
 
         /* Set header and position. */
-        $this->view->title      = $this->lang->doc->common . $this->lang->colon . $this->libs[$libID];
-        $this->view->position[] = $this->libs[$libID];
+        $this->view->title      = $this->lang->doc->common . ($libID ? $this->lang->colon . $this->libs[$libID] : '');
+        $this->view->position[] = $libID ? $this->libs[$libID] : '';
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
-        if($browseType == 'bymenu' and strtolower($orderBy) != 'editeddate_desc' and strtolower($orderBy) != 'addeddate_desc') $orderBy = 'title_asc';
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Get docs by browse type. */
@@ -136,37 +136,25 @@ class doc extends control
         $actionURL = $this->createLink('doc', 'browse', "lib=$libID&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&from=$from");
         $this->doc->buildSearchForm($libID, $this->libs, $queryID, $actionURL, $type);
 
-        $this->view->fixedMenu = false;
-        foreach(customModel::getModuleMenu('doc') as $item)
-        {
-            if($item->name == "custom$libID" and empty($item->hidden)) $this->view->fixedMenu = true;
-        }
+        $title  = '';
+        $module = $moduleID ? $this->loadModel('tree')->getByID($moduleID) : '';
+        if($module) $title = $module->name;
+        if($libID)  $title = $this->libs[$libID];
+        if(in_array($browseType, array_keys($this->lang->doc->fastMenuList))) $title = $this->lang->doc->fastMenuList[$browseType];
+        if($browseType == 'fastsearch') $title = '"' . $this->post->searchDoc  . '" ' . $this->lang->doc->searchResult;
 
-        if($this->cookie->browseType == 'bymenu')
-        {
-            $this->view->modules = $this->doc->getDocMenu($libID, $moduleID, $orderBy == 'title_asc' ? 'name_asc' : 'id_desc');
-            $this->view->parents = $this->loadModel('tree')->getParents($moduleID);
-        }
-        elseif($this->cookie->browseType == 'bytree')
-        {
-            $this->view->tree = $this->doc->getDocTree($libID);
-        }
-        else
-        {
-            $this->view->moduleTree = $this->loadModel('tree')->getTreeMenu($libID, $viewType = 'doc', $startModuleID = 0, array('treeModel', 'createDocLink'));
-        }
-
-        $this->view->libID         = $libID;
-        $this->view->libName       = $this->libs[$libID];
-        $this->view->moduleID      = $moduleID;
-        $this->view->docs          = $docs;
-        $this->view->pager         = $pager;
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->orderBy       = $orderBy;
-        $this->view->browseType    = $browseType;
-        $this->view->param         = $param;
-        $this->view->type          = $type;
-        $this->view->from          = $from;
+        $this->view->title      = $title;
+        $this->view->libID      = $libID;
+        $this->view->moduleID   = $moduleID;
+        $this->view->modules    = $this->doc->getDocMenu($libID, $moduleID, $orderBy == 'title_asc' ? 'name_asc' : 'id_desc');
+        $this->view->docs       = $docs;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->orderBy    = $orderBy;
+        $this->view->browseType = $browseType;
+        $this->view->param      = $param;
+        $this->view->type       = $type;
+        $this->view->from       = $from;
+        $this->view->pager      = $pager;
 
         $this->display();
     }
@@ -283,24 +271,23 @@ class doc extends control
         if(!empty($_POST))
         {
             $docResult = $this->doc->create();
-            if(!$docResult or dao::isError()) die(js::error(dao::getError()));
+            if(!$docResult or dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $docID = $docResult['id'];
             $lib   = $this->doc->getLibByID($this->post->lib);
             if($docResult['status'] == 'exists')
             {
-                echo js::alert(sprintf($this->lang->duplicate, $this->lang->doc->common));
-                die(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
+                $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->doc->common), 'locate' => $this->createLink('doc', 'view', "docID=$docID")));
             }
             $this->action->create('doc', $docID, 'Created');
 
             $vars = "libID=$libID&browseType=byModule&moduleID={$this->post->module}&orderBy=id_desc&from=$this->from";
             $link = $this->createLink('doc', 'browse', $vars);
-            die(js::locate($link, 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
-        $lib        = $this->doc->getLibByID($libID);
-        $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
+        $lib  = $this->doc->getLibByID($libID);
+        $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
 
         /* According the from, set menus. */
         if($this->from == 'product')
@@ -319,7 +306,7 @@ class doc extends control
         }
         else
         {
-            $this->doc->setMenu($libID, $moduleID);
+            $this->doc->setMenu($type, $libID, $moduleID, $lib->product, $lib->project);
         }
 
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->create;
@@ -350,7 +337,7 @@ class doc extends control
             if($comment == false)
             {
                 $result = $this->doc->update($docID);
-                if(dao::isError()) die(js::error(dao::getError()));
+                if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 $changes = $result['changes'];
                 $files   = $result['files'];
             }
@@ -362,7 +349,7 @@ class doc extends control
                 $actionID = $this->action->create('doc', $docID, $action, $fileAction . $this->post->comment);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'view', "docID=$docID")));
         }
 
         /* Get doc and set menu. */
@@ -373,7 +360,7 @@ class doc extends control
 
         $lib        = $this->doc->getLibByID($libID);
         $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
-        $this->doc->setMenu($libID, $doc->module);
+        $this->doc->setMenu($type, $libID, $doc->module, $lib->product, $lib->project);
 
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->edit;
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$libID"), $lib->name);
@@ -412,7 +399,7 @@ class doc extends control
         $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
 
         /* Set menu. */
-        $this->doc->setMenu($doc->lib, $doc->module);
+        $this->doc->setMenu($type, $doc->lib, $doc->module, $lib->product, $lib->project);
 
         $this->view->title      = "DOC #$doc->id $doc->title - " . $lib->name;
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$doc->lib"), $lib->name);
@@ -468,6 +455,39 @@ class doc extends control
     }
 
     /**
+     * Collect doc, doclib or module of doclib. 
+     * 
+     * @param  int    $objectID 
+     * @param  int    $objectType 
+     * @access public
+     * @return void
+     */
+    public function collect($objectID, $objectType)
+    {
+        if($objectType == 'doc')    $table = TABLE_DOC;
+        if($objectType == 'doclib') $table = TABLE_DOCLIB;
+        if($objectType == 'module') $table = TABLE_MODULE;
+        $collectors = $this->dao->select('collector')->from($table)->where('id')->eq($objectID)->fetch('collector');
+
+        if(strpos($collectors, ",{$this->app->user->account},") !== false)
+        {
+            $collectors = str_replace(",{$this->app->user->account},", ',', $collectors);
+        }
+        else
+        {
+            $collectors = explode(',', $collectors);
+            $collectors[] = $this->app->user->account;
+            $collectors = implode(',', $collectors);
+        }
+
+        $collectors = trim($collectors, ',') ? ',' . trim($collectors, ',') . ',' : '';
+
+        $this->dao->update($table)->set('collector')->eq($collectors)->where('id')->eq($objectID)->exec();
+
+        die(js::reload('parent'));
+    }
+
+    /**
      * Sort doc lib.
      * 
      * @access public
@@ -515,6 +535,7 @@ class doc extends control
         if(empty($customMenus))
         {
             if($type == 'remove') die(js::reload('parent'));
+            $customMenus = array();
             $i = 0;
             foreach($this->lang->doc->menu as $name => $item)
             {
@@ -527,6 +548,7 @@ class doc extends control
             }
         }
 
+        $customMenus = (array)$customMenus;
         foreach($customMenus as $i => $customMenu)
         {
             if(isset($customMenu->name) and $customMenu->name == "custom{$libID}") unset($customMenus[$i]);
@@ -575,7 +597,7 @@ class doc extends control
         $this->view->title      = $libName;
         $this->view->position[] = $libName;
 
-        $this->doc->setMenu($libID = 0, $moduleID = 0, $crumb);
+        $this->doc->setMenu($type, $libID = 0, $moduleID = 0, $productID = 0, $projectID = 0, $crumb);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -584,6 +606,7 @@ class doc extends control
         $libs    = $this->doc->getAllLibsByType($type, $pager, $product);
         $subLibs = array();
         if($type == 'product' or $type == 'project') $subLibs = $this->doc->getSubLibGroups($type, array_keys($libs));
+        if($type == 'custom') $this->view->itemCounts = $this->doc->statLibCounts(array_keys($libs));
 
         $this->view->type    = $type;
         $this->view->libs    = $libs;
@@ -636,19 +659,23 @@ class doc extends control
             $crumb .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID"), $object->name);
             $crumb .= $this->lang->doc->separator . ' ' . $this->lang->doclib->files;
 
+            $productID = 0;
+            $projectID = 0;
             if($type == 'product')
             {
+                $productID = $objectID;
                 $lib = $this->product->getById($objectID);
                 if(!$this->product->checkPriv($lib)) $this->accessDenied();
             }
 
             if($type == 'project')
             {
+                $projectID = $objectID;
                 $lib = $this->project->getById($objectID);
                 if(!$this->project->checkPriv($lib)) $this->accessDenied();
             }
 
-            $this->doc->setMenu($libID = 0, $moduleID = 0, $crumb);
+            $this->doc->setMenu($type, $libID = 0, $moduleID = 0, $productID, $projectID, $crumb);
         }
 
         /* Load pager. */
@@ -722,8 +749,15 @@ class doc extends control
             $crumb  = html::a(inlink('allLibs', "type=$type"), $type == 'product' ? $this->lang->productCommon : $this->lang->projectCommon) . $this->lang->doc->separator;
             if($this->productID and $type == 'project') $crumb = $this->doc->getProductCrumb($this->productID, $objectID);
             $crumb .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID"), $object->name);
-            $this->doc->setMenu($libID = 0, $moduleID = 0, $crumb);
+            $productID = $type == 'product' ? $objectID : 0;
+            $projectID = $type == 'project' ? $objectID : 0;
+            $this->doc->setMenu($type, $libID = 0, $moduleID = 0, $productID, $projectID, $crumb);
         }
+
+        /* Set Custom. */
+        foreach(explode(',', $this->config->doc->customObjectLibs) as $libType) $customObjectLibs[$libType] = $this->lang->doc->customObjectLibs[$libType];
+        $this->view->customObjectLibs = $customObjectLibs;
+        $this->view->showLibs         = $this->config->doc->custom->objectLibs;
 
         $this->view->title      = $object->name;
         $this->view->position[] = $object->name;

@@ -12,21 +12,23 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<div class="modal-content">
-  <div class="modal-header" id="todoBatchAddHeader">
-    <div class="modal-actions">
-      <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=todo&section=custom&key=batchCreateFields')?>
-      <?php include '../../common/view/dropdowncustomfield.html.php';?>
-      <?php if(isonlybody()):?>
-      <div class="divider"></div>
-      <button id='closeModal' type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>
-      <?php endif;?>
-    </div>
-    <h4 class="modal-title pull-left"><?php echo $lang->todo->batchCreate . $lang->todo->common;?></h4>
+
+<div id="mainContent" class="main-content">
+  <div class="main-header">
+    <h2><?php echo $lang->todo->batchCreate . $lang->todo->common;?></h2>
     <div class="input-group pull-left">
       <span class="input-group-addon"><?php echo $lang->todo->date;?></span>
       <input type="text" name="date" value="<?php echo $date;?>" class="form-control form-date" autocomplete="off" />
-      <span class="input-group-addon"><label class="checkbox-inline"><input type="checkbox" name="switchDate" class="control-time-switch" /> <?php echo $lang->todo->periods['future'];?></label></span>
+      <span class="input-group-addon">
+        <div class="checkbox-primary">
+          <input type="checkbox" name="switchDate" id='switchDate' class="control-time-switch" />
+          <label for='switchDate'><?php echo $lang->todo->periods['future'];?></label>
+        </div>
+      </span>
+    </div>
+    <div class="pull-right btn-toolbar">
+      <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=todo&section=custom&key=batchCreateFields')?>
+      <?php include '../../common/view/customfield.html.php';?>
     </div>
   </div>
   <form id='todoBatchAddForm' class='modal-body' method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'batchCreate');?>'>
@@ -69,7 +71,12 @@
             echo '<span class="input-group-addon fix-border fix-padding"></span>';
             echo html::select("ends[$i]", $times, '', "onchange=\"setBeginsAndEnds($i, 'end');\" class='form-control chosen control-time-end'" . (isset($visibleFields['beginAndEnd']) ? '' : " disabled"));
             ?>
-            <span class='input-group-addon'><input type='checkbox' name="switchDate[<?php echo $i?>]" class='control-time-switch' id="switchDate<?php echo $i?>" onclick='switchDateList(<?php echo $i?>);'> <?php echo $lang->todo->periods['future'];?></span>
+            <span class='input-group-addon'>
+              <div class='checkbox-primary'>
+                <input type='checkbox' name="switchDate[<?php echo $i?>]" id="switchDate<?php echo $i?>" class='control-time-switch' onclick='switchDateList(<?php echo $i?>);' />
+                <label for="switchDate<?php echo $i?>"> <?php echo $lang->todo->periods['future'];?></label>
+              </div>
+            </span>
           </div>
         </td>
       </tr>  
@@ -85,7 +92,8 @@
     </div>
   </form>
 </div>
-<script language='Javascript'>
+
+<script>
 var $form = $('#todoBatchAddForm').on('change', '.control-time-switch', function()
 {
     var $checkbox = $(this);
@@ -106,13 +114,5 @@ $header.find('[name="date"]').on('change', function()
 });
 
 var batchCreateNum = '<?php echo $config->todo->batchCreate;?>';
-<?php if(isonlybody()):?>
-$(function()
-{
-    parent.$('.modal-header').hide();
-    parent.$('.modal-body').css('padding', '0px');
-    $('#closeModal').click(function(){parent.$.closeModal();});
-})
-<?php endif;?>
 </script>
 <?php include './footer.html.php';?>

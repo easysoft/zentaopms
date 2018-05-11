@@ -13,117 +13,118 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php if(!$todo->private or ($todo->private and $todo->account == $app->user->account)):?>
-<div class='container mw-700px'>
-  <div id='titlebar'>
-    <div class='heading'>
-      <span class='prefix' title='TODO'><?php echo html::icon($lang->icons['todo']);?> <strong><?php echo $todo->id;?></strong></span>
-      <strong><?php echo $todo->name;?></strong>
-    </div>
+<div class='modal-content'>
+  <div class="modal-header">
+    <h4 class='modal-title pull-left'><?php echo html::a($this->createLink('todo', 'view', 'todo=' . $todo->id), "TODO #{$todo->id} {$todo->name}");?></h4>
   </div>
-  <div class='row-table'>
-    <div class='col-main'>
-      <div class='main'>
-        <fieldset>
-          <legend>
+  <div class='main-row'>
+    <div class='main-col col-8'>
+      <div class='cell'>
+        <div class='detail'>
+          <div class='detail-title'>
             <?php
             echo $lang->todo->desc;
             if($todo->type == 'bug')   echo html::a($this->createLink('bug',   'view', "id={$todo->idvalue}"), '  BUG#'   . $todo->idvalue);
             if($todo->type == 'task')  echo html::a($this->createLink('task',  'view', "id={$todo->idvalue}"), '  TASK#'  . $todo->idvalue);
             if($todo->type == 'story') echo html::a($this->createLink('story', 'view', "id={$todo->idvalue}"), '  STORY#' . $todo->idvalue);
             ?>
-          </legend>
-          <div><?php echo $todo->desc;?></div>
-        </fieldset>
-        <?php $actionTheme = 'fieldset'; include '../../common/view/action.html.php';?>
+          </div>
+          <div class='detail-content'><?php echo $todo->desc;?></div>
+        </div>
+        <div class='detail'><?php include '../../common/view/action.html.php';?></div>
       </div>
     </div>
-    <div class='col-side'>
-      <div class='main main-side'>
-        <fieldset>
-          <legend><?php echo $lang->todo->legendBasic;?></legend>
-          <table class='table table-data table-condensed table-borderless'>
-            <tr>
-              <th><?php echo $lang->todo->pri;?></th>
-              <td><?php echo $lang->todo->priList[$todo->pri];?></td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->todo->status;?></th>
-              <td class='todo-<?php echo $todo->status?>'><?php echo $lang->todo->statusList[$todo->status];?></td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->todo->type;?></th>
-              <td><?php echo $lang->todo->typeList[$todo->type];?></td>
-            </tr>
-            <tr>
-              <th class='w-80px'><?php echo $lang->todo->account;?></th>
-              <td><?php echo zget($users, $todo->account);?></td>
-            </tr>
-            <tr>
-              <th class='w-80px'><?php echo $lang->todo->date;?></th>
-              <td><?php echo $todo->date == '20300101' ? $lang->todo->periods['future'] : date(DT_DATE1, strtotime($todo->date));?></td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->todo->beginAndEnd;?></th>
-              <td><?php if(isset($times[$todo->begin])) echo $times[$todo->begin]; if(isset($times[$todo->end])) echo ' ~ ' . $times[$todo->end];?></td>
-            </tr>
-            <?php if(isset($todo->assignedTo)):?>
-            <tr>
-              <th><?php echo $lang->todo->assignTo;?></th>
-              <td><?php echo $todo->assignedTo;?></td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->todo->assignTo . $lang->todo->date;?></th>
-              <td><?php echo $todo->assignedDate;?></td>
-            </tr>
-            <?php endif;?>
-          </table>
-        </fieldset>
+    <div class='side-col col-4'>
+      <div class='cell'>
+        <div class='detail'>
+          <div class='detail-title'><?php echo $lang->todo->legendBasic;?></div>
+          <div class='detail-content'>
+            <table class='table table-data'>
+              <tr>
+                <th><?php echo $lang->todo->pri;?></th>
+                <td><?php echo $lang->todo->priList[$todo->pri];?></td>
+              </tr>
+              <tr>
+                <th><?php echo $lang->todo->status;?></th>
+                <td class='todo-<?php echo $todo->status?>'><?php echo $lang->todo->statusList[$todo->status];?></td>
+              </tr>
+              <tr>
+                <th><?php echo $lang->todo->type;?></th>
+                <td><?php echo $lang->todo->typeList[$todo->type];?></td>
+              </tr>
+              <tr>
+                <th><?php echo $lang->todo->account;?></th>
+                <td><?php echo zget($users, $todo->account);?></td>
+              </tr>
+              <tr>
+                <th><?php echo $lang->todo->date;?></th>
+                <td><?php echo $todo->date == '20300101' ? $lang->todo->periods['future'] : formatTime($todo->date);?></td>
+              </tr>
+              <tr>
+                <th><?php echo $lang->todo->beginAndEnd;?></th>
+                <td><?php if(isset($times[$todo->begin])) echo $times[$todo->begin]; if(isset($times[$todo->end])) echo ' ~ ' . $times[$todo->end];?></td>
+              </tr>
+              <?php if(isset($todo->assignedTo)):?>
+              <tr>
+                <th><?php echo $lang->todo->assignTo;?></th>
+                <td><?php echo $todo->assignedTo;?></td>
+              </tr>
+              <tr>
+                <th><?php echo $lang->todo->assignTo . $lang->todo->date;?></th>
+                <td><?php echo formatTime($todo->assignedDate, DT_DATE1);?></td>
+              </tr>
+              <?php endif;?>
+            </table>
+          </div>
+        </div>
         <?php if($todo->cycle):?>
         <?php $todo->config = json_decode($todo->config);?>
-        <fieldset>
-          <legend><?php echo $lang->todo->cycle;?></legend>
-          <table class='table table-data table-condensed table-borderless'>
-            <tr>
-              <th class='w-80px'><?php echo $lang->todo->beginAndEnd?></th>
-              <td><?php echo $todo->config->begin . " ~ " . $todo->config->end;?></td>
-            </tr>
-            <tr>
-              <th class='w-80px text-top'><?php echo $lang->todo->cycleConfig?></th>
-              <td>
-                <?php
-                if($todo->config->type == 'day')
-                {
-                    echo $lang->todo->every . $todo->config->day . $lang->day;
-                }
-                elseif($todo->config->type == 'week')
-                {
-                    foreach(explode(',', $todo->config->week) as $week) echo $lang->todo->dayNames[$week] . ' ';
-                }
-                elseif($todo->config->type == 'month')
-                {
-                    foreach(explode(',', $todo->config->month) as $month) echo $month . ' ';
-                }
-                echo '<br />';
-                if($todo->config->beforeDays) printf($lang->todo->lblBeforeDays, $todo->config->beforeDays);
-                ?>
-              </td>
-            </tr>
-          </table>
-        </fieldset>
+        <div class='detail'>
+          <div class='detail-title'><?php echo $lang->todo->cycle;?></div>
+          <div class='detail-content'>
+            <table class='table table-data'>
+              <tr>
+                <th class='w-80px'><?php echo $lang->todo->beginAndEnd?></th>
+                <td><?php echo $todo->config->begin . " ~ " . $todo->config->end;?></td>
+              </tr>
+              <tr>
+                <th class='w-80px text-top'><?php echo $lang->todo->cycleConfig?></th>
+                <td>
+                  <?php
+                  if($todo->config->type == 'day')
+                  {
+                      echo $lang->todo->every . $todo->config->day . $lang->day;
+                  }
+                  elseif($todo->config->type == 'week')
+                  {
+                      foreach(explode(',', $todo->config->week) as $week) echo $lang->todo->dayNames[$week] . ' ';
+                  }
+                  elseif($todo->config->type == 'month')
+                  {
+                      foreach(explode(',', $todo->config->month) as $month) echo $month . ' ';
+                  }
+                  echo '<br />';
+                  if($todo->config->beforeDays) printf($lang->todo->lblBeforeDays, $todo->config->beforeDays);
+                  ?>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
         <?php endif;?>
       </div>
     </div>
   </div>
-  <div class='panel-footer text-center'>
+  <div class='modal-footer'>
     <?php
     if($todo->account == $app->user->account)
     {
-        if($todo->status != 'closed') echo html::a($this->createLink('todo', 'edit', "todoID=$todo->id"), "<i class='icon icon-edit'></i> " . $lang->todo->edit, '', "class='btn showinonlybody'");
-        if($todo->status == 'done' || $todo->status == 'closed') echo html::a($this->createLink('todo', 'activate', "todoID=$todo->id"), "<i class='icon icon-magic'></i> " . $lang->todo->activate, 'hiddenwin', "class='btn showinonlybody'");
-        if($todo->status == 'done') echo html::a($this->createLink('todo', 'close', "todoID=$todo->id"), "<i class='icon icon-off'></i> " . $lang->todo->close, 'hiddenwin', "class='btn showinonlybody'");
-        echo html::a($this->createLink('todo', 'delete', "todoID=$todo->id"), "<i class='icon icon-remove'></i> " . $lang->todo->delete, 'hiddenwin', "class='btn showinonlybody'");
+        if($todo->status != 'closed') echo html::a($this->createLink('todo', 'edit', "todoID=$todo->id"), "<i class='icon icon-edit'></i>", '', "title='{$lang->todo->edit}' class='btn showinonlybody'");
+        if($todo->status == 'done' || $todo->status == 'closed') echo html::a($this->createLink('todo', 'activate', "todoID=$todo->id"), "<i class='icon icon-magic'></i>", 'hiddenwin', "title='{$lang->todo->activate}' class='btn showinonlybody'");
+        if($todo->status == 'done') echo html::a($this->createLink('todo', 'close', "todoID=$todo->id"), "<i class='icon icon-off'></i>", 'hiddenwin', "title='{$lang->todo->close}' class='btn showinonlybody'");
+        echo html::a($this->createLink('todo', 'delete', "todoID=$todo->id"), "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->todo->delete}' class='btn showinonlybody'");
 
-        echo html::a('#commentBox', '<i class="icon-comment-alt"></i>', '', "title='$lang->comment' onclick='setComment()' class='btn'");
+        echo html::a('#commentBox', '<i class="icon-chat-line"></i>', '', "title='{$lang->comment}' onclick='setComment()' class='btn'");
     }
 
     if($this->session->todoList)
@@ -142,7 +143,7 @@
     if($todo->status != 'done' && $todo->status != 'closed')
     {
         echo "<div class='btn-group dropup'>";
-        echo html::a($this->createLink('todo', 'finish', "id=$todo->id", 'html', true), "<i class='icon icon-ok'></i> " . $lang->todo->finish, 'hiddenwin', "class='btn showinonlybody btn-success'");
+        echo html::a($this->createLink('todo', 'finish', "id=$todo->id", 'html', true), "<i class='icon icon-checked'></i>", 'hiddenwin', "title='{$lang->todo->finish}' class='btn showinonlybody btn-success'");
         $createStoryPriv = common::hasPriv('story', 'create');
         $createTaskPriv  = common::hasPriv('task', 'create');
         $createBugPriv   = common::hasPriv('bug', 'create');
@@ -163,15 +164,15 @@
 
     common::printRPN($browseLink);
     ?>
+    <div id='commentBox' class='hide'>
+      <h4 class='text-left'><?php echo $lang->comment;?></h2>
+      <form method='post' action='<?php echo $this->createLink('action', 'comment', "objectType=todo&objectID=$todo->id")?>' target='hiddenwin'>
+        <div class="form-group"><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></div>
+        <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+      </form>
+    </div>
   </div>
 </div>
-<fieldset id='commentBox' class='hide'>
-  <legend><?php echo $lang->comment;?></legend>
-  <form method='post' action='<?php echo $this->createLink('action', 'comment', "objectType=todo&objectID=$todo->id")?>' target='hiddenwin'>
-    <div class="form-group"><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></div>
-    <?php echo html::submitButton();?>
-  </form>
-</fieldset>
 <div class="modal fade" id="projectModal">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -182,7 +183,7 @@
       <div class="modal-body">
         <div class='input-group'>
           <?php echo html::select('project', $projects, '', "class='form-control chosen'");?>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['task'], "id='toTaskButton'");?></span>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['task'], "id='toTaskButton'", 'btn btn-primary');?></span>
         </div>
       </div>
     </div>
@@ -198,8 +199,8 @@
       <div class="modal-body">
         <div class='input-group'>
           <?php echo html::select('product', $products, '', "class='form-control chosen'");?>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['story'], "id='toStoryButton'");?></span>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['bug'], "id='toBugButton'");?></span>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['story'], "id='toStoryButton'", 'btn btn-primary');?></span>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['bug'], "id='toBugButton'", 'btn btn-primary');?></span>
         </div>
       </div>
     </div>

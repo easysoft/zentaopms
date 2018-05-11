@@ -1,7 +1,12 @@
 function addItem(obj)
 {
-    var $inputgroup = $(obj).closest('.row-table');
-    $inputgroup.after($inputgroup.clone()).next('.row-table').find('input').val('');
+    var $inputRow = $(obj).closest('.row-module');
+    var $newRow = $('#insertItemBox').children('.row-module').clone().insertAfter($inputRow).addClass('highlight');
+    $newRow.find("input[type!='hidden']").val('');
+    setTimeout(function()
+    {
+        $newRow.removeClass('highlight');
+    }, 1600);
 }
 
 function insertItem(obj)
@@ -9,27 +14,16 @@ function insertItem(obj)
     var $inputgroup = $(obj).closest('.row-table');
     var insertHtml  = $('#insertItemBox').children('.row-table').clone();
     $inputgroup.after(insertHtml).next('.row-table').find('input').val('');
-
-    updateItemOrder();
-}
-
-function updateItemOrder()
-{
-    var order = 10;
-    $('#sonModule').children('.row-table').each(function(){
-        if($(this).find("input[name*='order']").length > 0)
-        {
-            console.log(order);
-            $(this).find("input[name*='order']").val(order);
-            order += 10;
-        }
-    });
-
-    $('#maxOrder').val(order - 10);
 }
 
 function deleteItem(obj)
 {
-    if($(obj).closest('.row-table').siblings('.row-table.addedItem').find('i.icon-remove').size() <= 0) return;
-    $(obj).closest('.row-table').remove();
+    var $inputRow = $(obj).closest('.row-module');
+    if ($inputRow.siblings('.row-module.row-module-new').find('.btn-delete').length > 0)
+    {
+        $inputRow.addClass('highlight').fadeOut(500, function()
+        {
+            $inputRow.remove();
+        });
+    }
 }

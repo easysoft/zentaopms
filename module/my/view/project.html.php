@@ -19,8 +19,8 @@
     <?php if(common::hasPriv('project', 'create')) echo html::a(helper::createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->my->home->createProject, '', "class='btn'") ?>
   </div>
 </div>
-<div id="mainContent">
-  <table class="main-table table has-sort-head table-fixed">
+<div id="mainContent" class='main-table'>
+  <table class="table has-sort-head table-fixed" id='projectList'>
     <thead>
       <tr>
         <th class='w-id'><?php echo $lang->idAB;?></th>

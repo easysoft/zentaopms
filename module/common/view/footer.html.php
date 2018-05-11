@@ -4,7 +4,7 @@
 
   <div id='divider'></div>
   <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='debugwin hidden'></iframe>
-<?php $onlybody = zget($_GET, 'onlybody', 'no');?>
+
 <?php if($onlybody != 'yes'):?>
 </main><?php /* end '#wrap' in 'header.html.php'. */ ?>
 <footer id='footer'>
@@ -38,7 +38,7 @@ $(function()
     {
         $.get(createLink('message', 'ajaxGetMessage', "windowBlur=" + (windowBlur ? '1' : '0')), function(data)
         {
-            if(!windowBlur)
+           if(!windowBlur)
             {
                 $('#noticeBox').append(data);
                 adjustNoticePosition();
@@ -75,8 +75,6 @@ $(function(){ redirect('<?php echo $ranzhiURL?>', '<?php echo $this->config->sso
 </script>
 
 <?php endif;?>
-
-<script>config.onlybody = '<?php echo $onlybody?>';</script>
 <?php
 if($this->loadModel('cron')->runable()) js::execute('startCron()');
 if(isset($pageJS)) js::execute($pageJS);  // load the js for current page.

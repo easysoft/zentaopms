@@ -56,7 +56,7 @@ $config->story->datatable->fieldList['id']['required'] = 'yes';
 
 $config->story->datatable->fieldList['pri']['title']    = 'priAB';
 $config->story->datatable->fieldList['pri']['fixed']    = 'left';
-$config->story->datatable->fieldList['pri']['width']    = '40';
+$config->story->datatable->fieldList['pri']['width']    = '50';
 $config->story->datatable->fieldList['pri']['required'] = 'no';
 
 $config->story->datatable->fieldList['title']['title']    = 'title';
@@ -193,5 +193,5 @@ $config->story->datatable->fieldList['caseCount']['name']     = $lang->story->ca
 
 $config->story->datatable->fieldList['actions']['title']    = 'actions';
 $config->story->datatable->fieldList['actions']['fixed']    = 'right';
-$config->story->datatable->fieldList['actions']['width']    = '156';
+$config->story->datatable->fieldList['actions']['width']    = '157';
 $config->story->datatable->fieldList['actions']['required'] = 'yes';

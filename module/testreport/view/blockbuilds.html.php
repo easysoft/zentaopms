@@ -1,11 +1,11 @@
 <?php $sysURL = $this->session->notHead ? common::getSysURL() : '';?>
-<table class='table' id='builds'>
+<table class='table main-table' id='builds'>
   <thead>
     <tr>
       <th class='w-id'>  <?php echo $lang->build->id;?></th>
       <th>               <?php echo $lang->build->name;?></th>
       <th class='w-user'><?php echo $lang->build->builder;?></th>
-      <th class='w-date'><?php echo $lang->build->date;?></th>
+      <th class='w-100px'><?php echo $lang->build->date;?></th>
     </tr>
   </thead>
   <?php if($builds):?>

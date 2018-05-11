@@ -19,7 +19,14 @@
     <table class='table'>
       <thead>
         <tr>
-          <th class='c-id text-center'><?php echo $lang->idAB;?></th>
+          <th class='c-id'>
+            <?php if($allStories):?>
+            <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
+              <label></label>
+            </div>
+            <?php endif;?>
+            <?php echo $lang->idAB;?>
+          </th>
           <th class='w-pri'><?php echo $lang->priAB;?></th>
           <th class='w-200px'><?php echo $lang->story->plan;?></th>
           <th class='w-150px'><?php echo $lang->story->module;?></th>
@@ -32,40 +39,36 @@
         </tr>
       </thead>
       <tbody>
-      <?php $unlinkedCount = 0;?>
-      <?php foreach($allStories as $story):?>
-      <?php if(isset($planStories[$story->id])) continue;?>
-      <tr>
-        <td class='c-id'>
-          <input class='ml-10px' type='checkbox' name='stories[]' value='<?php echo $story->id;?>'/> 
-          <?php printf('%03d', $story->id);?>
-        </td>
-        <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
-        <td><?php echo $story->planTitle;?></td>
-        <td title='<?php echo $modules[$story->module]?>'><?php echo $modules[$story->module];?></td>
-        <td class='nobr' title='<?php echo $story->title?>'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
-        <td><?php echo zget($users, $story->openedBy);?></td>
-        <td><?php echo zget($users, $story->assignedTo);?></td>
-        <td><?php echo $story->estimate;?></td>
-        <td><span class='status-<?php echo $story->status?>'><span class='label label-dot'></span> <?php echo $lang->story->statusList[$story->status];?></span></td>
-        <td class='text-center'><?php echo $lang->story->stageList[$story->stage];?></td>
-      </tr>
-      <?php $unlinkedCount++;?>
-      <?php endforeach;?>
-      </tbody>
-      <?php if($unlinkedCount):?>
-      <tfoot>
+        <?php $unlinkedCount = 0;?>
+        <?php foreach($allStories as $story):?>
+        <?php if(isset($planStories[$story->id])) continue;?>
         <tr>
-          <td colspan='10' class='text-left'>
-            <div class='clearfix'>
-              <?php echo html::selectButton() . html::submitButton($lang->story->linkStory);?>
-              <?php echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=$orderBy"), $lang->goback, '', "class='btn'");?>
-            </div>
+          <td class='cell-id'>
+            <?php echo html::checkbox('stories', array($story->id => sprintf('%03d', $story->id)));?>
           </td>
+          <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
+          <td><?php echo $story->planTitle;?></td>
+          <td title='<?php echo $modules[$story->module]?>'><?php echo $modules[$story->module];?></td>
+          <td class='nobr' title='<?php echo $story->title?>'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
+          <td><?php echo zget($users, $story->openedBy);?></td>
+          <td><?php echo zget($users, $story->assignedTo);?></td>
+          <td><?php echo $story->estimate;?></td>
+          <td><span class='status-<?php echo $story->status?>'><span class='label label-dot'></span> <?php echo $lang->story->statusList[$story->status];?></span></td>
+          <td class='text-center'><?php echo $lang->story->stageList[$story->stage];?></td>
         </tr>
-      </tfoot>
-      <?php endif;?>
+        <?php $unlinkedCount++;?>
+        <?php endforeach;?>
+      </tbody>
     </table>
+    <div class='table-footer'>
+      <?php if($unlinkedCount):?>
+      <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+      <div class="table-actions btn-toolbar">
+        <?php echo html::submitButton($lang->productplan->linkStory);?>
+      </div>
+      <?php endif;?>
+      <?php echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=$orderBy"), $lang->goback, '', "class='btn'");?>
+    </div>
   </form>
 </div>
 <script>

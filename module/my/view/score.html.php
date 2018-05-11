@@ -20,8 +20,8 @@
     <?php common::printLink('score', 'rule', '', $lang->my->scoreRule, '', "class='btn btn-primary'");?>
   </div>
 </div>
-<div id="mainContent">
-  <table class="main-table table has-sort-head table-fixed">
+<div id="mainContent" class='main-table'>
+  <table class="table table-fixed">
     <thead>
       <tr>
         <th class="w-200px"><?php echo $lang->score->time; ?></th>

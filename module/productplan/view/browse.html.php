@@ -32,7 +32,7 @@
     <table class='table has-sort-head' id="productplanList">
       <thead>
       <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-      <tr class='colhead'>
+      <tr>
         <th class='c-id'>
           <?php if(common::hasPriv('productplan', 'batchEdit')):?>
           <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
@@ -45,13 +45,13 @@
         <?php if($this->session->currentProductType != 'normal'):?>
         <th class='w-100px'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->product->branch);?></th>
         <?php endif;?>
+        <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
+        <th class='w-100px'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
         <th class='w-70px'> <?php echo $lang->productplan->stories;?></th>
         <th class='w-60px'> <?php echo $lang->productplan->bugs;?></th>
         <th class='w-60px'> <?php echo $lang->productplan->hour;?></th>
         <th class='w-60px'> <?php echo $lang->productplan->project;?></th>
         <th>                <?php echo $lang->productplan->desc;?></th>
-        <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
-        <th class='w-100px'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
         <th class='c-actions-3'><?php echo $lang->actions;?></th>
       </tr>
       </thead>
@@ -62,24 +62,22 @@
       <tr>
         <td class='cell-id'>
           <?php if(common::hasPriv('productplan', 'batchEdit')):?>
-          <div class="checkbox-primary">
-            <input type='checkbox' name='planIDList[<?php echo $plan->id;?>]' value='<?php echo $plan->id;?>' />
-            <label></label>
-          </div>
-          <?php endif;?>
+          <?php echo html::checkbox('planIDList', array($plan->id => sprintf('%03d', $plan->id)));?>
+          <?php else:?>
           <?php echo sprintf('%03d', $plan->id);?>
+          <?php endif;?>
         </td>
         <td class='text-left' title="<?php echo $plan->title?>"><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></td>
         <?php if($this->session->currentProductType != 'normal'):?>
         <td><?php echo $branches[$plan->branch];?></td>
         <?php endif;?>
+        <td><?php echo $plan->begin == '2030-01-01' ? $lang->productplan->future : $plan->begin;?></td>
+        <td><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
         <td class='text-center'><?php echo $plan->stories;?></td>
         <td class='text-center'><?php echo $plan->bugs;?></td>
         <td class='text-center'><?php echo $plan->hour;?></td>
         <td class='text-center'><?php if(!empty($plan->projectID)) echo html::a(helper::createLink('project', 'task', 'projectID=' . $plan->projectID), '<i class="icon-search"></i>');?></td>
         <td class='text-left content'><div class='article-content'><?php echo $plan->desc;?></div></td>
-        <td><?php echo $plan->begin;?></td>
-        <td><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
         <td class='c-actions'>
           <div class='more'>
           <?php
@@ -91,9 +89,9 @@
           ?>
           </div>
           <?php
-          if(common::hasPriv('project', 'create')) echo html::a(helper::createLink('project', 'create', "projectID=&copyProjectID=&planID=$plan->id"), '<i class="icon-play"></i>', '', "class='btn btn-icon' title='{$lang->project->create}'");
-          if(common::hasPriv('productplan', 'linkStory')) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i>', '', "class='btn btn-icon' title='{$lang->productplan->linkStory}'");
-          if(common::hasPriv('productplan', 'linkBug') and $config->global->flow != 'onlyStory') echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i>', '', "class='btn btn-icon' title='{$lang->productplan->linkBug}'");
+          if(common::hasPriv('project', 'create')) echo html::a(helper::createLink('project', 'create', "projectID=&copyProjectID=&planID=$plan->id"), '<i class="icon-play"></i>', '', "class='btn' title='{$lang->project->create}'");
+          if(common::hasPriv('productplan', 'linkStory')) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i>', '', "class='btn' title='{$lang->productplan->linkStory}'");
+          if(common::hasPriv('productplan', 'linkBug') and $config->global->flow != 'onlyStory') echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i>', '', "class='btn' title='{$lang->productplan->linkBug}'");
           common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');
           ?>
         </td>
@@ -106,7 +104,7 @@
       <?php if(common::hasPriv('productplan', 'batchEdit')):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar">
-        <?php echo html::submitButton($lang->edit);?>
+        <?php echo html::submitButton($lang->edit, '', 'btn');?>
       </div>
       <?php endif;?>
       <?php $pager->show('right', 'pagerjs');?>
@@ -114,9 +112,4 @@
     <?php endif;?>
   </form>
 </div>
-<script>
-$('#' + browseType + 'Tab').addClass('active');
-$(function(){fixedTfootAction('#productplanForm')});
-$(function(){fixedTheadOfList('#productplan')});
-</script>
 <?php include '../../common/view/footer.html.php';?>

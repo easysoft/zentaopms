@@ -1,7 +1,5 @@
 $(function()
 {
-    ajaxGetSearchForm();
-
     $('#storyList').on('sort.sortable', function(e, data)
     {
         var list = '';
@@ -16,13 +14,10 @@ $(function()
         });
     });
 
-    fixedTfootAction('#projectStoryForm');
-    fixedTheadOfList('#storyList');
-
     $('#module' + moduleID).addClass('active');
     $('#product' + productID).addClass('active');
     $('#branch' + branchID).addClass('active');
-    $(document).on('click', "#storyList tbody tr", function(){showCheckedSummary();});
+    $(document).on('click', "#storyList tbody tr, .table-footer .check-all, #storyList thead .check-all", function(){showCheckedSummary();});
     $(document).on('change', "#storyList :checkbox", function(){showCheckedSummary();});
 
     $("a[data-toggle='linkStoryByPlan']").click(function(){$('#linkStoryByPlan').modal('show')})
@@ -39,12 +34,7 @@ $(function()
 
 function showCheckedSummary()
 {
-    var $summary = $('tfoot .table-actions .text:last');
-    if(!$summary.hasClass('readed'))
-    {
-        taskSummary = $summary.html();
-        $summary.addClass('readed');
-    }
+    var $summary = $('#main #mainContent form.main-table .table-header .table-statistic');
 
     var checkedTotal    = 0;
     var checkedEstimate = 0;
@@ -66,10 +56,6 @@ function showCheckedSummary()
         summary = checkedSummary.replace('%total%', checkedTotal)
           .replace('%estimate%', checkedEstimate)
           .replace('%rate%', rate)
-        $('tfoot .table-actions .text:last').html(summary);
-    }
-    else
-    {
-        $('tfoot .table-actions .text:last').html(taskSummary);
+        $summary.html(summary);
     }
 }

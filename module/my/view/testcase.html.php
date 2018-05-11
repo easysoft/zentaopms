@@ -27,7 +27,7 @@
 </div>
 <div id="mainContent">
   <form id='myCaseForm' class="main-table table-case" data-ride="table" method="post">
-    <table class="main-table table has-sort-head table-fixed" id='caseList'>
+    <table class="table has-sort-head" id='caseList'>
       <?php 
       $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
       $this->app->loadLang('testtask');
@@ -44,7 +44,7 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='w-pri'>   <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+          <th class='w-50px'>   <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
           <th>                 <?php common::printOrderLink('title',    $orderBy, $vars, $lang->testcase->title);?></th>
           <th class='w-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
           <th class='w-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
@@ -52,7 +52,7 @@
           <th class='w-120px'> <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
           <th class='w-80px'>  <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
           <th class='w-status'><?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='w-200px'> <?php echo $lang->actions;?></th>
+          <th class='w-130px'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -63,12 +63,13 @@
         ?>
         <tr>
           <td class="c-id">
+            <?php if($canBatchEdit or $canBatchRun):?>
             <div class="checkbox-primary">
-              <?php if($canBatchEdit or $canBatchRun):?>
               <input type='checkbox' name='caseIDList[]' value='<?php echo $case->id;?>' />
               <label></label>
-              <?php endif;?>
-              <?php printf('%03d', $case->id);?>
+            </div>
+            <?php endif;?>
+            <?php printf('%03d', $case->id);?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $case->pri?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
           <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version"), $case->title, null, "style='color: $case->color'");?></td>
@@ -79,20 +80,23 @@
           <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
           <td class='<?php if(isset($run)) echo $run->status;?>'><?php echo $lang->testcase->statusList[$case->status];?></td>
           <td class='c-actions'>
-          <?php
-          common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', 'iframe', '', "data-width='95%'");
-          common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', '', "data-width='95%'");
-          common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'edit');
-          common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$caseID", $case, 'list', 'copy');
+            <div class='more'>
+              <?php
+              common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug');
+              common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$caseID", $case, 'list', 'copy');
 
-          if(common::hasPriv('testcase', 'delete'))
-          {
-              $deleteURL = $this->createLink('testcase', 'delete', "caseID=$caseID&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->testcase->delete}'");
-          }
-
-          common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug');
-          ?>
+              if(common::hasPriv('testcase', 'delete'))
+              {
+                  $deleteURL = $this->createLink('testcase', 'delete', "caseID=$caseID&confirm=yes");
+                  echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->testcase->delete}'");
+              }
+              ?>
+            </div>
+            <?php
+            common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', 'iframe', '', "data-width='95%'");
+            common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', '', "data-width='95%'");
+            common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'edit');
+            ?>
           </td>
         </tr>
         <?php endforeach;?>

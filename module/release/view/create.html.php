@@ -17,14 +17,20 @@
     <div class='main-header'>
       <h2><?php echo $lang->release->create;?></h2>
     </div>
-    <form class='load-indicator main-form form-ajax' id='dataform' method='post' target='hiddenwin' enctype='multipart/form-data'>
+    <form class='load-indicator main-form form-ajax' id='dataform' method='post' enctype='multipart/form-data'>
       <table class='table table-form'> 
         <tbody>
           <tr>
             <th><?php echo $lang->release->name;?></th>
             <td><?php echo html::input('name', '', "class='form-control' autocomplete='off' required");?></td>
-            <td class='muted'><?php if($lastRelease) echo '(' . $lang->release->last . ': ' . $lastRelease->name . ')';?></td>
-          </tr>
+            <td class='muted'>
+              <div class='checkbox-primary'>
+                <input id='marker' name='marker' value='1' type='checkbox' />
+                <label for='marker'><?php echo $lang->release->marker;?></label>
+              </div>
+              <?php if($lastRelease) echo '(' . $lang->release->last . ': ' . $lastRelease->name . ')';?>
+            </td>
+          </tr> 
           <tr>
             <th><?php echo $lang->release->build;?></th>
             <td><?php echo html::select('build', $builds, '', "class='form-control chosen'");?></td><td></td>

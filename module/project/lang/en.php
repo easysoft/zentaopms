@@ -22,6 +22,7 @@ $lang->project->to            = 'To';
 $lang->project->days          = 'Man-Day';
 $lang->project->day           = 'day';
 $lang->project->workHour      = 'Hour(s)';
+$lang->project->totalHours    = 'Working Hour(s)';
 $lang->project->status        = 'Status';
 $lang->project->desc          = 'Desc';
 $lang->project->owner         = 'Owner';
@@ -96,6 +97,7 @@ $lang->project->statusList['wait']      = 'Wait';
 $lang->project->statusList['doing']     = 'Doing';
 $lang->project->statusList['suspended'] = 'Suspend';
 $lang->project->statusList['done']      = 'Done';
+$lang->project->statusList['closed']    = 'Closed';
 
 $lang->project->aclList['open']    = "Default (Those who can visit ‘project view’ can access.)";
 $lang->project->aclList['private'] = 'Private (Only team members can access.)';
@@ -146,6 +148,7 @@ $lang->project->storySort         = 'Sort Story';
 $lang->project->importPlanStory   = 'Create ' . $lang->projectCommon . ' success!\nImport the stories with the plan?';
 $lang->project->iteration         = 'Iteration';
 $lang->project->iterationInfo     = 'Iteration %s times';
+$lang->project->viewAll           = 'View All';
 
 /* 分组浏览。*/
 $lang->project->allTasks     = 'All';
@@ -190,13 +193,14 @@ $lang->project->lblStats        = 'Man-Hour Summary(h) : ';
 $lang->project->stats           = '<strong>%s</strong> Available, <strong>%s</strong> Total Estimated, <strong>%s</strong> Cost, <strong>%s</strong> Left.';
 $lang->project->taskSummary     = "Tasks on this page : <strong>%s</strong> Total, <strong>%s</strong> Wait, <strong>%s</strong> Doing;  &nbsp;&nbsp;&nbsp;  Hours : <strong>%s</strong> Est., <strong>%s</strong> Cost, <strong>%s</strong> Left.";
 $lang->project->checkedSummary  = " <strong>%total%</strong> Checked, <strong>%wait%</strong> Wait, <strong>%doing%</strong> Doing;    Hours: <strong>%estimate%</strong>  Est., <strong>%consumed%</strong> Cost, <strong>%left%</strong> Left.";
-$lang->project->memberHours     = "%s has <strong>%s</strong> Hour(s) available ";
-$lang->project->groupSummary    = "<strong>%s</strong> Tasks in this group, Wait <strong>%s</strong>, Doing <strong>%s</strong>. <strong>%s</strong> Hour(s) Estimated , <strong>%s</strong> Hour(s) Cost, <strong>%s</strong> Hour(s) Left.";
-$lang->project->groupSummaryAB  = "Tasks:<strong>%s</strong> Total,<strong>%s</strong> Wait, <strong>%s</strong> Doing.<br />Hours: <strong>%s</strong> Est., <strong>%s</strong> Cost，<strong>%s</strong> Left.";
-$lang->project->noTimeSummary   = " <strong>%s</strong> Tasks in this group, Wait <strong>%s</strong>, Doing <strong>%s</strong>.";
+$lang->project->memberHoursAB   = "%s has <strong>%s</strong> Hour(s)";
+$lang->project->memberHours     = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">%s Working Hour(s)</div><div class="segment-value">%s</div></div></div></div>';
+$lang->project->countSummary    = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">Tasks</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">Doing</div><div class="segment-value"><span class="label label-dot label-primary"></span> %s</div></div><div class="segment"><div class="segment-title">Wait</div><div class="segment-value"><span class="label label-dot label-primary muted"></span> %s</div></div></div></div>';
+$lang->project->timeSummary     = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">Est.</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">Cost</div><div class="segment-value text-red">%s</div></div><div class="segment"><div class="segment-title">Left</div><div class="segment-value">%s</div></div></div></div>';
+$lang->project->groupSummaryAB  = "<div>Tasks <strong>%s</strong></div><div><span class='text-muted'>Wait</span> %s &nbsp; <span class='text-muted'>Doing</span> %s</div><div>Est. <strong>%s</strong></div><div><span class='text-muted'>Cost</span> %s &nbsp; <span class='text-muted'>Left</span> %s</div>";
 $lang->project->wbs             = "Decompose Task";
 $lang->project->batchWBS        = "Batch Decompose";
-$lang->project->howToUpdateBurn = "<a href='http://api.zentao.pm/goto.php?item=burndown&lang=zh-cn' target='_blank' title='How to Update the Burndown Chart?' class='btn btn-sm'>Help</a>";
+$lang->project->howToUpdateBurn = "<a href='http://api.zentao.pm/goto.php?item=burndown&lang=zh-cn' target='_blank' title='How to Update the Burndown Chart?' class='btn btn-link'>Help <i class='icon icon-help'></i></a>";
 $lang->project->whyNoStories    = "No Story can be linked. Please check whether there is Story in {$lang->projectCommon} linked {$lang->productCommon} and make sure it has been reviewed.";
 $lang->project->productStories  = "{$lang->projectCommon} linked  story is the subeset of {$lang->productCommon}, which can only be linked after review. Please <a href='%s'> Link Story</a>。";
 $lang->project->doneProjects    = 'Done';
@@ -212,6 +216,7 @@ $lang->project->copyFromProject = "Duplicate from {$lang->projectCommon} <strong
 $lang->project->cancelCopy      = 'Cancel Duplication';
 $lang->project->byPeriod        = 'By Time';
 $lang->project->byUser          = 'ByUser';
+$lang->project->noProject       = 'No project. You could ';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = "Do you want to delete {$lang->projectCommon}[%s]?";
@@ -292,10 +297,10 @@ $lang->project->featureBar['task']['needconfirm']  = 'StoryChanged';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
 
 $lang->project->treeLevel = array();
+$lang->project->treeLevel['all']   = 'Expand All';
 $lang->project->treeLevel['root']  = 'Collapse All';
 $lang->project->treeLevel['story'] = 'Show Story';
 $lang->project->treeLevel['task']  = 'Show Task';
-$lang->project->treeLevel['all']   = 'Expand All';
 
 global $config;
 if($config->global->flow == 'onlyTask')

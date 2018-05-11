@@ -56,9 +56,9 @@
   <div class="main-col">
     <div class="cell" id="queryBox"></div>
     <form class="main-table table-product" data-ride="table" method="post" id='productsForm' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
-      <?php $canOrder = (common::hasPriv('product', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
+      <?php $canOrder = (common::hasPriv('product', 'updateOrder'))?>
       <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
-      <table class="table has-sort-head" id='productList'>
+      <table class="table has-sort-head table-fixed" id='productList'>
         <?php $vars = "productID=$productID&line=$line&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <thead>
           <tr>
@@ -73,11 +73,11 @@
             <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?></th>
             <th class='w-80px text-left'><?php common::printOrderLink('line', $orderBy, $vars, $lang->product->line);?></th>
             <th class='w-80px'><?php echo $lang->product->activeStories;?></th>
-            <th class='w-80px'><?php echo $lang->product->changedStories;?></th>
+            <th class='w-90px'><?php echo $lang->product->changedStories;?></th>
             <th class='w-70px'><?php echo $lang->product->draftStories;?></th>
-            <th class='w-80px'><?php echo $lang->product->closedStories;?></th>
-            <th class='w-80px'><?php echo $lang->product->plans;?></th>
-            <th class='w-80px'><?php echo $lang->product->releases;?></th>
+            <th class='w-90px'><?php echo $lang->product->closedStories;?></th>
+            <th class='w-70px'><?php echo $lang->product->plans;?></th>
+            <th class='w-70px'><?php echo $lang->product->releases;?></th>
             <th class='w-80px'><?php echo $lang->product->bugs;?></th>
             <th class='w-80px'><?php echo $lang->product->unResolvedBugs;?></th>
             <th class='w-80px'><?php echo $lang->product->assignToNullBugs;?></th>
@@ -89,17 +89,15 @@
         <tbody>
         <?php foreach($productStats as $product):?>
         <tr data-id='<?php echo $product->id ?>' data-order='<?php echo $product->code;?>'>
-          <td class='cell-id'>
+          <td class='c-id'>
             <?php if($canBatchEdit):?>
-            <div class="checkbox-primary">
-              <input type='checkbox' name='productIDList[<?php echo $product->id;?>]' value='<?php echo $product->id;?>' /> 
-              <label></label>
-            </div>
+            <?php echo html::checkbox('productIDList', array($product->id => sprintf('%03d', $product->id)));?>
+            <?php else:?>
+            <?php printf('%03d', $product->id);?>
             <?php endif;?>
-            <?php echo sprintf('%03d', $product->id);?>
           </td>
           <td title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
-          <td><?php echo zget($lines, $product->line);?></td>
+          <td title='<?php echo zget($lines, $product->line, '')?>'><?php echo zget($lines, $product->line, '');?></td>
           <td class='text-center'><?php echo $product->stories['active'];?></td>
           <td class='text-center'><?php echo $product->stories['changed'];?></td>
           <td class='text-center'><?php echo $product->stories['draft'];?></td>
@@ -110,7 +108,7 @@
           <td class='text-center'><?php echo $product->unResolved;?></td>
           <td class='text-center'><?php echo $product->assignToNull;?></td>
           <?php if($canOrder):?>
-          <td class='sort-handler'><i class="icon icon-move"></i></td>
+          <td class='c-actions sort-handler'><i class="icon icon-move"></i></td>
           <?php endif;?>
         </tr>
         <?php endforeach;?>
@@ -121,10 +119,9 @@
         <?php if($canBatchEdit):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
-          <?php echo html::submitButton($lang->edit);?>
+          <?php echo html::submitButton($lang->edit, '', 'btn');?>
         </div>
         <?php endif;?>
-        <?php if(!$canOrder and common::hasPriv('product', 'updateOrder')) echo html::a(inlink('all', "productID=$productID&line=$line&status=$status&order=order_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->product->updateOrder, '' , "class='btn'");?>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
       <?php endif;?>

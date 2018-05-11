@@ -23,9 +23,9 @@ class build extends control
         if(!empty($_POST))
         {
             $buildID = $this->build->create($projectID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('build', $buildID, 'opened');
-            die(js::locate($this->createLink('build', 'view', "buildID=$buildID"), 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID")));
         }
 
         $this->session->set('buildCreate', $this->app->getURI(true));
@@ -93,7 +93,7 @@ class build extends control
         if(!empty($_POST))
         {
             $changes = $this->build->update($buildID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $files = $this->loadModel('file')->saveUpload('build', $buildID);
 
             if($changes or $files)
@@ -103,7 +103,7 @@ class build extends control
                 $actionID = $this->loadModel('action')->create('build', $buildID, 'Edited', $fileAction);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate(inlink('view', "buildID=$buildID"), 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "buildID=$buildID")));
         }
 
         $build = $this->build->getById((int)$buildID);
@@ -196,7 +196,7 @@ class build extends control
         if($this->config->global->flow == 'onlyTest')
         {
             $products = $this->loadModel('product')->getPairs();
-            $this->product->setMenu($products, $build->product);
+            $this->product->setMenu($products, $build->product, $buildID);
             $this->lang->build->menu = $this->lang->product->menu;
 
             $this->view->title      = "BUILD #$build->id $build->name - " . $build->productName;
@@ -211,7 +211,7 @@ class build extends control
             $stages  = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($build->stories)->andWhere('branch')->eq($build->branch)->fetchPairs('story', 'stage');
             foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
 
-            $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project);
+            $this->loadModel('project')->setMenu($this->project->getPairs(), $build->project, $buildID);
             $projects = $this->project->getPairs('empty');
 
             $this->view->title         = "BUILD #$build->id $build->name - " . $projects[$build->project];
@@ -353,7 +353,27 @@ class build extends control
         {
             $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty,notrunk');
             if($isJsonView) die(json_encode($builds));
-            else die(html::select('build', $builds, $build, "class='form-control'"));
+            else
+            {
+                if(empty($builds))
+                {
+                    echo html::a($this->createLink('build', 'create', "projectID=$projectID"), $this->lang->build->create, '_blank');
+                    echo '&nbsp; ';
+                    echo html::a("javascript:loadProjectBuilds($projectID)", $this->lang->refresh);
+                }
+                die(html::select('build', $builds, $build, "class='form-control'"));
+            }
+        }
+        if($varName == 'dropdownList')
+        {
+            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, 'noempty,notrunk');
+            if($isJsonView) die(json_encode($builds));
+
+            $list  = "<div class='list-group'>";
+            foreach($builds as $buildID => $buildName) $list .= html::a(inlink('view', "buildID={$buildID}"), $buildName);
+            $list .= '</div>';
+
+            die($list);
         }
     }
 

@@ -27,7 +27,7 @@ function setOwners(result)
     {
         $('#assignedTo').attr('multiple', 'multiple');
         $('#assignedTo').chosen('destroy');
-        $('#assignedTo').chosen(defaultChosenOptions);
+        $('#assignedTo').chosen();
         $('.affair').hide();
         $('.team-group').addClass('hidden');
         $('#selectAllUser').removeClass('hidden');
@@ -36,7 +36,7 @@ function setOwners(result)
     {
         $('#assignedTo').removeAttr('multiple');
         $('#assignedTo').chosen('destroy');
-        $('#assignedTo').chosen(defaultChosenOptions);
+        $('#assignedTo').chosen();
         $('.affair').show();
         $('#selectAllUser').addClass('hidden');
     }
@@ -74,7 +74,7 @@ function setPreview()
     if(!$('#story').val())
     {
         $('#preview').addClass('hidden');
-        $('#copyButton').parent().addClass('hidden');
+        $('#copyButton').addClass('hidden');
     }
     else
     {
@@ -83,7 +83,7 @@ function setPreview()
         storyLink  = storyLink + concat + 'onlybody=yes';
         $('#preview').removeClass('hidden');
         $('#preview a').attr('href', storyLink);
-        $('#copyButton').parent().removeClass('hidden');
+        $('#copyButton').removeClass('hidden');
     }
 
     setAfter();
@@ -152,7 +152,7 @@ function setStories(moduleID, projectID)
         $('#story').val(storyID);
         setPreview();
         $('#story_chosen').remove();
-        $("#story").chosen(defaultChosenOptions);
+        $("#story").chosen();
     });
 }
 
@@ -172,64 +172,52 @@ $(document).ready(function()
 
     $('[data-toggle=tooltip]').tooltip();
 
-    /* Adjust form controls layout */
-    var ajustFormControls = function()
-    {
-        /* Adjust style for file box */
-        applyCssStyle('.fileBox > tbody > tr > td:first-child {transition: none; width: ' + ($('#dataPlanGroup').width() - 1) + 'px}', 'filebox');
-
-        /* Adjust #priRowCol and #estRowCol size */
-        var $priRowCol = $('#priRowCol'),
-            $estRowCol = $('#estRowCol');
-        $priRowCol.css('width', 54 + $priRowCol.find('.input-group-addon').outerWidth());
-        $estRowCol.css('width', 55 + $estRowCol.find('.input-group-addon').outerWidth());
-    };
-    ajustFormControls();
-    $(window).resize(ajustFormControls);
+    $(window).resize();
 
     /* First unbind ajaxForm for form.*/
     $("form[data-type='ajax']").unbind('submit');
     setForm();
 
     /* Bind ajaxForm for form again. */
-    $.ajaxForm("form[data-type='ajax']", function(response)
+    $('.form-ajax').ajaxForm(
     {
-        if(response.message) alert(response.message);
-        if(response.locate)
+        finish:function(response)
         {
-            if(response.locate == 'reload' && response.target == 'parent')
+            if(response.message) alert(response.message);
+            if(response.locate)
             {
-                parent.$.cookie('selfClose', 1);
-                parent.$.closeModal(null, 'this');
+                if(response.locate == 'reload' && response.target == 'parent')
+                {
+                    parent.$.cookie('selfClose', 1);
+                    parent.$.closeModal(null, 'this');
+                }
+                else
+                {
+                    location.href = response.locate;
+                }
             }
-            else
-            {
-                location.href = response.locate;
-            }
+            return false;
         }
-        return false;
     });
-});
 
-/* show team menu. */
-$('[name^=multiple]').change(function()
-{
-    if($(this).prop('checked'))
+    /* show team menu. */
+    $('[name^=multiple]').change(function()
     {
-        $('#assignedTo, #assignedTo_chosen').addClass('hidden');
-        $('.team-group').removeClass('hidden');
-        $('#estimate').attr('readonly', true);
-    }
-    else
+        if($(this).prop('checked'))
+        {
+            $('#assignedTo, #assignedTo_chosen').addClass('hidden');
+            $('.team-group').removeClass('hidden');
+            $('#estimate').attr('readonly', true);
+        }
+        else
+        {
+            $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
+            $('.team-group').addClass('hidden');
+            $('#estimate').attr('readonly', false);
+        }
+    });
+    $('#modalTeam').on('show', function()
     {
-        $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
-        $('.team-group').addClass('hidden');
-        $('#estimate').attr('readonly', false);
-    }
-});
-$(".team-group[data-toggle='modalTeam']").css('cursor', 'pointer');
-$(".team-group[data-toggle='modalTeam']").click(function()
-{
-    $('#modalTeam').modal('show');
-    adjustSortBtn();
+        adjustSortBtn();
+    });
 });

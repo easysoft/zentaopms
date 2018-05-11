@@ -22,10 +22,13 @@
             <div class="panel-body">
               <div class="release-path">
                 <ul class="release-line">
+                  <?php $i = 0;?>
                   <?php foreach($releases as $release):?>
-                  <?php $icon = !empty($release->flag) ? "<i class='icon icon-flag'></i>" : '';?>
-                  <li class="<?php echo end($releases)->id == $release->id ? 'active' : '';?>">
+                  <?php $i++;?>
+                  <?php if($i > 6) break;?>
+                  <li <?php if(date('Y-m-d') < $release->date) echo "class='active'";?>>
                     <a href="<?php echo $this->createLink('release', 'view', "releaseID={$release->id}");?>">
+                      <?php if(!empty($release->marker)) echo "<i class='icon icon-flag text-primary'></i>";?>
                       <span class="title"><?php echo $release->name;?></span>
                       <span class="date"><?php echo $release->date;?></span>
                       <span class="info"><?php echo $release->desc;?></span>
@@ -34,6 +37,7 @@
                   <?php endforeach;?>
                 </ul>
               </div>
+              <?php echo html::a($this->createLink('product', 'roadmap', "productID={$product->id}"), $lang->product->iterationView . "<span class='label label-badge label-icon'><i class='icon icon-arrow-right'></i></span>", '', "class='btn btn-primary btn-circle btn-icon-right btn-sm pull-right'");?>
             </div>
           </div>
         </div>
@@ -74,8 +78,8 @@
               <div class="detail-content article-content">
                 <p><span class="text-limit" data-limit-size="40"><?php echo $product->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></p>
                 <p>
-                  <span class="label label-primary label-outline"><?php echo zget($lang->product->typeList, $product->type);?></span>
-                  <span class="label label-success label-outline"><?php echo zget($lang->product->statusList, $product->status);?></span>
+                  <span class="label label-primary label-outline" title='<?php echo $lang->product->type;?>'><?php echo zget($lang->product->typeList, $product->type);?></span>
+                  <span class="label label-success label-outline" title='<?php echo $lang->product->status;?>'><?php echo zget($lang->product->statusList, $product->status);?></span>
                   <?php if($product->deleted):?>
                   <span class='label label-danger label-outline'><?php echo $lang->product->deleted;?></span>
                   <?php endif; ?>
@@ -206,26 +210,22 @@
     <?php
     $params = "product=$product->id";
     $browseLink = $this->session->productList ? $this->session->productList : inlink('browse', "productID=$product->id");
+    common::printBack($browseLink);
     if(!$product->deleted)
     {
-        ob_start();
+        echo "<div class='divider'></div>";
         if($product->status != 'closed')
         {
-            common::printIcon('product', 'close', "productID=$product->id", $product, 'button', '', '', 'iframe text-danger', true);
+            common::printIcon('product', 'close', "productID=$product->id", $product, 'button', '', '', 'iframe', true);
             echo "<div class='divider'></div>";
         }
 
         common::printIcon('product', 'edit', $params, $product);
         common::printIcon('product', 'delete', $params, $product, 'button', '', 'hiddenwin');
-        common::printRPN($browseLink);
-
-        $actionLinks = ob_get_contents();
-        ob_end_clean();
-        echo $actionLinks;
     }
     else
     {
-        common::printRPN($browseLink);
+        common::printBack($browseLink);
     }
     ?>
   </div>

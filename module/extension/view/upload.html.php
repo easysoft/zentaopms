@@ -11,26 +11,27 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon('upload');?></span>
-    <strong><?php echo $lang->extension->upload;?></strong>
+<div id='mainContent' class='main-content'>
+  <div class='center-block'>
+    <div class='main-header'>
+      <h2><?php echo $lang->extension->upload;?></h2>
+    </div>
+    <?php if(!empty($error)):?>
+    <div class='text-left'>
+      <div class='container mw-500px'>
+        <p class='text-danger'><?php echo $error;?></p>
+      </div>
+      <hr class='small'>
+      <?php echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href');?>
+    </div>
+    <?php else:?>
+    <form method='post' target='hiddenwin' enctype='multipart/form-data' style='padding: 20px 20%'>
+      <div class='input-group'>
+        <input type='file' name='file' class='form-control' />
+        <span class='input-group-btn'><?php echo html::submitButton($lang->extension->install);?></span>
+      </div>
+    </form>
+    <?php endif;?>
   </div>
 </div>
-<?php if(!empty($error)):?>
-<div class='panel panel-body text-left'>
-  <div class='container mw-500px'>
-    <p class='text-danger'><?php echo $error;?></p>
-  </div>
-  <hr>
-  <?php echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href');?>
-</div>
-<?php else:?>
-<form method='post' target='hiddenwin' enctype='multipart/form-data' style='padding: 5% 20%'>
-  <div class='input-group'>
-    <input type='file' name='file' class='form-control' />
-    <span class='input-group-btn'><?php echo html::submitButton($lang->extension->install);?></span>
-  </div>
-</form>
-<?php endif;?>
 <?php include '../../common/view/footer.lite.html.php';?>

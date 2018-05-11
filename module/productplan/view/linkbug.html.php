@@ -18,49 +18,49 @@
     </div>
     <table class='table'>
       <thead>
-      <tr>
-        <th class='c-id text-center'><?php echo $lang->idAB;?></th>
-        <th class='w-pri'><?php echo $lang->priAB;?></th>
-        <th><?php echo $lang->bug->title;?></th>
-        <th class='w-user'><?php echo $lang->openedByAB;?></th>
-        <th class='w-user'><?php echo $lang->bug->assignedToAB;?></th>
-        <th class='w-80px'><?php echo $lang->bug->status;?></th>
-      </tr>
+        <tr>
+          <th class='c-id'>
+            <?php if($allBugs):?>
+            <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
+              <label></label>
+            </div>
+            <?php endif;?>
+            <?php echo $lang->idAB;?>
+          </th>
+          <th class='w-pri'><?php echo $lang->priAB;?></th>
+          <th><?php echo $lang->bug->title;?></th>
+          <th class='w-user'><?php echo $lang->openedByAB;?></th>
+          <th class='w-user'><?php echo $lang->bug->assignedToAB;?></th>
+          <th class='w-80px'><?php echo $lang->bug->status;?></th>
+        </tr>
       </thead>
       <tbody>
-      <?php $unlinkedCount = 0;?>
-      <?php foreach($allBugs as $bug):?>
-      <?php
-      if(isset($planBugs[$bug->id])) continue;
-      if($bug->plan and helper::diffDate($plans[$bug->plan], helper::today()) > 0) continue;
-      ?>
-      <tr>
-        <td class='c-id'>
-          <input class='ml-10px' type='checkbox' name='bugs[]'  value='<?php echo $bug->id;?>'/> 
-          <?php printf('%03d', $bug->id);?>
-        </td>
-        <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
-        <td class='nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
-        <td><?php echo $users[$bug->openedBy];?></td>
-        <td><?php echo $users[$bug->assignedTo];?></td>
-        <td class='text-center bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
-      </tr>
-      <?php $unlinkedCount++;?>
-      <?php endforeach;?>
+        <?php $unlinkedCount = 0;?>
+        <?php foreach($allBugs as $bug):?>
+        <?php if(isset($planBugs[$bug->id])) continue;?>
+        <tr>
+          <td class='c-id'>
+            <?php echo html::checkbox('bugs', array($bug->id => sprintf('%03d', $bug->id)));?>
+          </td>
+          <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
+          <td class='nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
+          <td><?php echo $users[$bug->openedBy];?></td>
+          <td><?php echo $users[$bug->assignedTo];?></td>
+          <td class='text-center bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
+        </tr>
+        <?php $unlinkedCount++;?>
+        <?php endforeach;?>
       </tbody>
-      <?php if($unlinkedCount):?>
-      <tfoot>
-      <tr>
-        <td colspan='6' class='text-left table-footer'>
-          <div class='clearfix'>
-            <?php echo html::selectButton() . html::submitButton($lang->productplan->linkBug);?>
-            <?php echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=$orderBy"), $lang->goback, '', "class='btn'");?>
-          </div>
-        </td>
-      </tr>
-      </tfoot>
-      <?php endif;?>
     </table>
+    <div class='table-footer'>
+      <?php if($unlinkedCount):?>
+      <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+      <div class="table-actions btn-toolbar">
+        <?php echo html::submitButton($lang->productplan->linkBug);?>
+      </div>
+      <?php endif;?>
+      <?php echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=$orderBy"), $lang->goback, '', "class='btn'");?>
+    </div>
   </form>
 </div>
 <script>

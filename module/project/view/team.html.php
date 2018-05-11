@@ -30,56 +30,54 @@
     ?>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
-  <table class='table main-table' id='memberList'>
-    <thead>
-      <tr>
-        <th><?php echo $lang->team->account;?></th>
-        <th><?php echo $lang->team->role;?></th>
-        <th><?php echo $lang->team->join;?></th>
-        <th><?php echo $lang->team->days;?></th>
-        <th><?php echo $lang->team->hours;?></th>
-        <th><?php echo $lang->team->totalHours;?></th>
-        <th><?php echo $lang->team->limited;?></th>
-        <th><?php echo $lang->actions;?></th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php $totalHours = 0;?>
-      <?php foreach($teamMembers as $member):?>
-      <tr class='text-center'>
-        <td>
-        <?php 
-        if(!common::printLink('user', 'view', "account=$member->account", $member->realname)) print $member->realname;
-        $memberHours = $member->days * $member->hours;
-        $totalHours  += $memberHours;
-        ?>
-        </td>
-        <td><?php echo $member->role;?></td>
-        <td><?php echo substr($member->join, 2);?></td>
-        <td><?php echo $member->days . $lang->project->day;?></td>
-        <td><?php echo $member->hours . $lang->project->workHour;?></td>
-        <td><?php echo $memberHours . $lang->project->workHour;?></td>
-        <td><?php echo $lang->team->limitedList[$member->limited];?></td>
-        <td class='c-actions'>
-          <?php
-          if (common::hasPriv('project', 'unlinkMember', $member))
-          {
-              $unlinkURL = $this->createLink('project', 'unlinkMember', "projectID=$project->id&account=$member->account&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"memberList\",confirmUnlinkMember)", '<i class="icon-green-project-unlinkMember icon-trash"></i>', '', "class='btn btn-link' title='{$lang->project->unlinkMember}'");
-          }
+<div id='mainContent'>
+  <form class='main-table' data-ride='table'>
+    <table class='table' id='memberList'>
+      <thead>
+        <tr>
+          <th><?php echo $lang->team->account;?></th>
+          <th><?php echo $lang->team->role;?></th>
+          <th><?php echo $lang->team->join;?></th>
+          <th><?php echo $lang->team->days;?></th>
+          <th><?php echo $lang->team->hours;?></th>
+          <th><?php echo $lang->team->totalHours;?></th>
+          <th class='w-80px'><?php echo $lang->team->limited;?></th>
+          <th class='w-50px'><?php echo $lang->actions;?></th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php $totalHours = 0;?>
+        <?php foreach($teamMembers as $member):?>
+        <tr>
+          <td>
+          <?php 
+          if(!common::printLink('user', 'view', "account=$member->account", $member->realname)) print $member->realname;
+          $memberHours = $member->days * $member->hours;
+          $totalHours  += $memberHours;
           ?>
-        </td>
-      </tr>
-      <?php endforeach;?>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td colspan='8'>
-          <div class='clearfix'><div class='text'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours{$lang->project->workHour}</strong>";?></div></div>
-        </td>
-      </tr>
-    </tfoot>
-  </table>
+          </td>
+          <td><?php echo $member->role;?></td>
+          <td><?php echo substr($member->join, 2);?></td>
+          <td><?php echo $member->days . $lang->project->day;?></td>
+          <td><?php echo $member->hours . $lang->project->workHour;?></td>
+          <td><?php echo $memberHours . $lang->project->workHour;?></td>
+          <td><?php echo $lang->team->limitedList[$member->limited];?></td>
+          <td class='c-actions'>
+            <?php
+            if (common::hasPriv('project', 'unlinkMember', $member))
+            {
+                $unlinkURL = $this->createLink('project', 'unlinkMember', "projectID=$project->id&account=$member->account&confirm=yes");
+                echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"memberList\",confirmUnlinkMember)", '<i class="icon-green-project-unlinkMember icon-trash"></i>', '', "class='btn btn-link' title='{$lang->project->unlinkMember}'");
+            }
+            ?>
+          </td>
+        </tr>
+        <?php endforeach;?>
+      </tbody>
+    </table>
+    <div class='table-footer'>
+      <div class='text'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours{$lang->project->workHour}</strong>";?></div>
+    </div>
+  </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>

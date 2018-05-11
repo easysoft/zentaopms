@@ -14,15 +14,17 @@
 <div class='main-content' id='mainContent'>
   <div class='main-header'>
     <h2>
-      <span class='prefix'><?php echo html::icon($lang->icons['story']);?> <strong><?php echo $story->id;?></strong></span>
-      <strong><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></strong>
+      <span class='label label-id'><?php echo $story->id;?></span>
+      <?php echo isonlybody() ? $story->title : html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?>
+      <?php if(!isonlybody()):?>
       <small><?php echo $lang->arrow . $lang->story->linkStory;?></small>
+      <?php endif;?>
     </h2>
   </div>
   <div id='queryBox' class='show'></div>
-  <form method='post' target='hiddenwin' id='linkStoryForm' class='main-table table-story' data-ride="table">
+  <form method='post' target='hiddenwin' id='linkStoryForm' class='main-table table-story'>
+    <?php if($stories2Link):?>
     <table class='table' id='storyList'>
-      <?php if($stories2Link):?>
       <thead>
       <tr>
         <th class='c-id'>
@@ -43,13 +45,13 @@
       <?php $storyCount = 0;?>
       <?php foreach($stories2Link as $story2Link):?>
       <?php $storyLink = $this->createLink('story', 'view', "storyID=$story2Link->id");?>
-      <tr class='text-center'>
+      <tr>
         <td class='c-id'>
           <div class="checkbox-primary">
             <input type='checkbox' name='stories[]'  value='<?php echo $story2Link->id;?>'/> 
             <label></label>
-            <?php echo html::a($storyLink, sprintf('%03d', $story2Link->id));?>
           </div>
+          <?php echo html::a($storyLink, sprintf('%03d', $story2Link->id));?>
         </td>
         <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story2Link->pri, $story2Link->pri)?>'><?php echo zget($lang->story->priList, $story2Link->pri, $story2Link->pri);?></span></td>
         <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story2Link->product&branch=$story2Link->branch"), $products[$story2Link->product], '_blank');?></td>
@@ -72,7 +74,14 @@
     <?php endif;?>
   </form>
 </div>
-<script type='text/javascript'>
-$(function(){ajaxGetSearchForm();});
+<script>
+$(function()
+{
+    ajaxGetSearchForm();
+    <?php if($stories2Link):?>
+    $('#linkStoryForm').table();
+    setTimeout(function(){$('#linkStoryForm .table-footer').removeClass('fixed-footer');}, 100);
+    <?php endif;?>
+});
 </script>
 <?php include '../../common/view/footer.html.php';?>

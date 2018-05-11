@@ -25,7 +25,6 @@ function setBrowseType(type)
 
 $(function(){
     $('#' + browseType + 'Tab').addClass('active');
-    if(fixedMenu) $('#modulemenu .nav li[data-id="custom' + libID + '"]').addClass('active');
     if(browseType == "bysearch")
     {
         ajaxGetSearchForm();

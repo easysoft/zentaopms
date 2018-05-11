@@ -15,7 +15,7 @@
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
       <h2>
-        <span><?php echo html::icon($lang->icons['story']);?> <?php echo $story->id;?></span>
+        <span class='label label-id'><?php echo $story->id;?></span>
         <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title, '', 'class="story-title"');?>
         <small><?php echo $lang->arrow . ' ' . $lang->story->edit;?></small>
       </h2>
@@ -48,7 +48,7 @@
           </div>
           <div id='linkStoriesBOX'><?php echo html::hidden('linkStories', $story->linkStories);?></div>
           <div id='childStoriesBOX'><?php echo html::hidden('childStories', $story->childStories);?></div>
-          <div class='actions actions-form'>
+          <div class='actions actions-form text-center'>
             <?php 
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
             echo html::submitButton($lang->save, '', 'btn btn-wide btn-primary');
@@ -188,10 +188,13 @@
                 <td><?php echo html::input('duplicateStory', $story->duplicateStory, "class='form-control' autocomplete='off'");?></td>
               </tr>
               <?php endif;?>
-              <tr class='text-top'>
+              <tr>
                 <th class='w-70px'><?php echo $lang->story->linkStories;?></th>
+                <td><?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?></td>
+              </tr>
+              <tr>
+                <th></th>
                 <td>
-                  <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?>
                   <?php if($story->linkStories):?>
                   <ul class='list-unstyled' id='linkStoriesBox'>
                   <?php

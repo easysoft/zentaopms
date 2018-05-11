@@ -17,7 +17,6 @@
   <div class="modal-header">
     <h4 class='modal-title pull-left'><?php echo html::a($this->createLink('todo', 'view', 'todo=' . $todo->id), "TODO #{$todo->id} {$todo->name}");?></h4>
   </div>
-
   <form class='modal-body form-horizontal' method='post' target='hiddenwin' id='dataform'>
     <div class="row form-group">
       <label class="col-sm-2"><?php echo $lang->todo->date;?></label>
@@ -78,7 +77,7 @@
     <?php endif;?>
     <div class="row form-group">
       <label class="col-sm-2"><?php echo $lang->todo->type;?></label>
-      <div class="col-sm-9">
+      <div class="col-sm-9 todoType">
         <input type='hidden' name='type' value='<?php echo $todo->type;?>' />
         <?php echo $lang->todo->typeList[$todo->type];?>
       </div>
@@ -109,7 +108,7 @@
     <div class="row form-group">
       <label class="col-sm-2"><?php echo $lang->todo->status;?></label>
       <div class="col-sm-2">
-        <?php echo html::select('status', $lang->todo->statusList, $todo->status, "class='form-control chosen'");?>
+        <?php echo html::select('status', $lang->todo->statusList, $todo->status, "class='form-control'");?>
       </div>
     </div>
     <div class="row form-group">
@@ -121,21 +120,25 @@
         <?php echo html::select('end', $times, $todo->end, 'class="form-control chosen"');?>
       </div>
       <div class="col-sm-4">
-        <input type='checkbox' id='dateSwitcher' onclick='switchDateFeature(this);' <?php if($todo->begin == 2400) echo 'checked';?> >
-        <label for='dateSwitcher'><?php echo $lang->todo->lblDisableDate;?></label>
+        <div class='checkbox-primary dateSwitcher'>
+          <input type='checkbox' id='dateSwitcher' onclick='switchDateFeature(this);' <?php if($todo->begin == 2400) echo 'checked';?> >
+          <label for='dateSwitcher'><?php echo $lang->todo->lblDisableDate;?></label>
+        </div>
       </div>
     </div>
     <div class="row form-group">
       <label class="col-sm-2"></label>
       <div class="col-sm-9">
-        <input type='checkbox' name='private' id='private' value='1' <?php if($todo->private) echo 'checked';?> />
-        <label for='private'><?php echo $lang->todo->private;?></label>
+        <div class='checkbox-primary'>
+          <input type='checkbox' name='private' id='private' value='1' <?php if($todo->private) echo 'checked';?> />
+          <label for='private'><?php echo $lang->todo->private;?></label>
+        </div>
       </div>
     </div>
     <div class="row form-group form-actions">
       <div class="col-sm-offset-2 col-sm-10">
         <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
-        <?php echo html::backButton('', '', 'btn btn-wide');?>
+        <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
       </div>
     </div>
   </form>

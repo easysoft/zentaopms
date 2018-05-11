@@ -17,56 +17,66 @@
 $(function(){$(".preview").modalTrigger({width:1000, type:'iframe'});});
 var browseType = '<?php echo $browseType;?>';
 </script>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['task']);?></span>
-    <strong><small class='text-muted'><?php echo html::icon($lang->icons['import']);?></small> <?php echo $lang->project->importBug;?></strong>
+<div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
+    <?php echo html::a(inlink('importBug', "projectID=$projectID"), "<span class='text'>{$lang->project->importBug}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
-  <div id='querybox' class='show'></div>
 </div>
-<form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin' id='importBugForm'>
-  <table class='table tablesorter table-fixed table-selectable'>
-    <thead>
-      <tr class='colhead'>
-        <th class='w-id'>       <?php echo $lang->idAB;?></th>
-        <th class='w-severity'> <?php echo $lang->bug->severityAB;?></th>
-        <th class='w-pri'>      <?php echo $lang->priAB;?></th>
-        <th><?php echo $lang->bug->title;?></th>
-        <th class='w-80px'><?php echo $lang->bug->statusAB;?></th>
-        <th class='w-80px'><?php echo $lang->task->pri;?></th>
-        <th class='w-150px'><?php echo $lang->task->assignedTo;?></th>
-        <th class='w-80px nobr {sorter:false}'><?php echo $lang->task->estimate;?></th>
-        <th class='w-120px {sorter:false}'><?php echo $lang->task->deadline;?></th>
-      </tr>
-    </thead>
-    <tbody>
-    <?php foreach($bugs as $bug):?>
-    <tr class='text-center'>
-      <td class='cell-id'>
-        <?php echo html::checkbox("import[$bug->id]", '');?> 
-        <?php echo sprintf('%03d', $bug->id) . html::hidden("id[$bug->id]", $bug->id);?>
-      </td>
-      <td><span class='<?php echo 'severity' . zget($lang->bug->severityList, $bug->severity, $bug->severity)?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?></span></td>
-      <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
-      <td class='text-left nobr'><?php common::printLink('bug', 'view', "bugID=$bug->id", $bug->title, '', "class='preview'", true, true);?></td>
-      <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
-      <td class='td-has-control'><?php echo html::select("pri[$bug->id]", $lang->task->priList, 3, "class='input-sm form-control'");?></td>
-      <td class='td-has-control text-left' style='overflow:visible'><?php echo html::select("assignedTo[$bug->id]", $users, zget($users, $bug->assignedTo, '', $bug->assignedTo), "class='input-sm form-control chosen'");?></td>
-      <td class='td-has-control'><?php echo html::input("estimate[$bug->id]", '', 'size=4 class="input-sm form-control" autocomplete="off"');?></td>
-      <?php $deadline = ($bug->deadline > helper::today() and $bug->deadline > $project->begin) ? $bug->deadline : '0000-00-00';?>
-      <td class='td-has-control'><?php echo html::input("deadline[$bug->id]", $deadline, 'size=4 class="input-sm form-control form-date" autocomplete="off"');?></td>
-    </tr>
-    <?php endforeach;?>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td colspan='9'>
-          <div class='table-actions clearfix'><?php echo html::selectButton() . html::submitButton($lang->import) . html::backButton();?>
-          </div>
-          <?php $pager->show();?>
-        </td>
-      </tr>
-    </tfoot>
-  </table>
-</form>
+<div id='mainContent' class='main-content'>
+  <div id='querybox' class='show'></div>
+  <form class='main-table' method='post' target='hiddenwin' id='importBugForm' data-ride='table'>
+    <table class='table has-sort-head table-fixed'>
+      <thead>
+        <tr>
+          <th class='c-id'>
+            <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
+              <label></label>
+            </div>
+            <?php echo $lang->idAB;?>
+          </th>
+          <th class='w-severity'> <?php echo $lang->bug->severityAB;?></th>
+          <th class='w-pri'>      <?php echo $lang->priAB;?></th>
+          <th><?php echo $lang->bug->title;?></th>
+          <th class='w-80px'><?php echo $lang->bug->statusAB;?></th>
+          <th class='w-100px'><?php echo $lang->task->pri;?></th>
+          <th class='w-150px'><?php echo $lang->task->assignedTo;?></th>
+          <th class='w-80px'><?php echo $lang->task->estimate;?></th>
+          <th class='w-120px'><?php echo $lang->task->deadline;?></th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach($bugs as $bug):?>
+        <tr>
+          <td class='c-id'>
+            <div class="checkbox-primary">
+              <input type='checkbox' name='import[<?php echo $bug->id;?>]' value='<?php echo $bug->id;?>' /> 
+              <label></label>
+            </div>
+            <?php echo sprintf('%03d', $bug->id) . html::hidden("id[$bug->id]", $bug->id);?>
+          </td>
+          <td><span class='<?php echo 'severity' . zget($lang->bug->severityList, $bug->severity, $bug->severity)?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?></span></td>
+          <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri;?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
+          <td class='nobr'><?php common::printLink('bug', 'view', "bugID=$bug->id", $bug->title, '', "class='preview'", true, true);?></td>
+          <td><span class='status-<?php echo $bug->status?>'><span class='label label-dot'></span> <?php echo $lang->bug->statusList[$bug->status];?></span></td>
+          <td style='overflow:visible'><?php echo html::select("pri[$bug->id]", $lang->task->priList, 3, "class='form-control chosen'");?></td>
+          <td style='overflow:visible'><?php echo html::select("assignedTo[$bug->id]", $users, zget($users, $bug->assignedTo, '', $bug->assignedTo), "class='form-control chosen'");?></td>
+          <td><?php echo html::input("estimate[$bug->id]", '', 'size=4 class="form-control" autocomplete="off"');?></td>
+          <?php $deadline = ($bug->deadline > helper::today() and $bug->deadline > $project->begin) ? $bug->deadline : '0000-00-00';?>
+          <td><?php echo html::input("deadline[$bug->id]", $deadline, 'size=4 class="form-control form-date" autocomplete="off"');?></td>
+        </tr>
+        <?php endforeach;?>
+      </tbody>
+    </table>
+    <?php if($bugs):?>
+    <div class='table-footer'>
+      <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+      <div class="table-actions btn-toolbar">
+        <?php echo html::submitButton($lang->import);?>
+      </div>
+      <?php echo html::backButton();?>
+      <?php $pager->show('right', 'pagerjs');?>
+    </div>
+    <?php endif;?>
+  </form>
+</div>
 <?php include '../../common/view/footer.html.php';?>

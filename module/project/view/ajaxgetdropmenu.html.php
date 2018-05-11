@@ -10,16 +10,16 @@
   $projectNames = array();
   foreach($projects as $project)
   {
-      if($project->status != 'done' and $project->PM == $this->app->user->account) $iCharges++;
-      if($project->status != 'done' and !($project->PM == $this->app->user->account)) $others++;
-      if($project->status == 'done') $dones++;
+      if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account) $iCharges++;
+      if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account)) $others++;
+      if($project->status == 'done' or $project->status == 'closed') $dones++;
       $projectNames[] = $project->name;
   }
   $projectsPinYin = common::convert2Pinyin($projectNames);
  
   foreach($projects as $project)
   {
-      if($project->status != 'done' and $project->PM == $this->app->user->account)
+      if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
       {
           echo html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "data-key='" . zget($projectsPinYin, $project->name, '') . "'");
       }
@@ -27,7 +27,7 @@
  
   foreach($projects as $project)
   {
-      if($project->status != 'done' and !($project->PM == $this->app->user->account))
+      if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
       {
           echo html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "data-key='" . zget($projectsPinYin, $project->name, '') . "'");
       }
@@ -35,7 +35,7 @@
 
   foreach($projects as $project)
   {
-    if($project->status == 'done') echo html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "data-key='" . zget($projectsPinYin, $project->name, '') . "'");
+      if($project->status == 'done' or $project->status == 'closed') echo html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "data-key='" . zget($projectsPinYin, $project->name, '') . "'");
   }
   ?>
 </div>

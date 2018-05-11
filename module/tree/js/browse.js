@@ -7,15 +7,17 @@ function syncModule(rootID, type)
     $.getJSON(link, function(modules)
     {
         if(modules.length == 0) return false;
+
         $('.helplink').addClass('hidden');
-        var $inputgroup = $('<div></div>').append($('.input-group .icon-remove:first').closest('.row-table').clone()).html();
+        var $inputgroup = $('<div></div>').append($('.col-actions .icon-trash:first').closest('.table-row').clone()).html();
+
         $.each(modules, function(key, module)
         {
-            $('.row-table').each(function()
+            $('#sonModule > .table-row').each(function()
             {
                 moduleName = $(this).find('input[id^=modules]').val();
                 if(moduleName == module.name) modules[key] = null;
-                if(!moduleName) $(this).closest('.row-table').remove();
+                if(!moduleName) $(this).closest('#sonModule > .table-row').not('.copy').remove();
             })
         });  
 
@@ -25,16 +27,16 @@ function syncModule(rootID, type)
             {
                 /* Duplicate removal for mdoule name. */
                 var unique = true;
-                $('#sonModule > .row-table').each(function()
+                $('#sonModule > .table-row').not('.copy').each(function()
                 {
-                    if($(this).find('.col-table:first').find(':input').val() == module.name) unique = false;
+                    if($(this).find('.table-col:first').find(':input').val() == module.name) unique = false;
                 })
 
                 if(unique)
                 {
                     $('#sonModule').append($inputgroup);
-                    $('#sonModule .row-table:last input[id^=modules]').val(module.name);
-                    $('#sonModule .row-table:last input[id^=shorts]').val(module.short);
+                    $('#sonModule .table-row:last input[id^=modules]').val(module.name);
+                    $('#sonModule .table-row:last input[id^=shorts]').val(module.short);
                 }
             }
         })
@@ -63,7 +65,7 @@ function syncProductOrProject(obj, type)
 
 function toggleCopy()
 {
-   var $copy = $('table.copy');
+   var $copy = $('.table-row.copy');
    if($copy.size() == 0) return false;
    $copy.toggle();
 }

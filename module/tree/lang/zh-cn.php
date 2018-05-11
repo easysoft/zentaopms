@@ -32,7 +32,7 @@ $lang->tree->manageBugChild     = '维护Bug子模块';
 $lang->tree->manageCaseChild    = '维护用例子模块';
 $lang->tree->manageCaselibChild = '维护测试库子模块';
 $lang->tree->manageTaskChild    = "维护{$lang->projectCommon}子模块";
-$lang->tree->syncFromProduct    = '复制';
+$lang->tree->syncFromProduct    = '复制模块';
 $lang->tree->dragAndSort        = "拖放排序";
 $lang->tree->sort               = "排序";
 $lang->tree->addChild           = "增加子模块";
@@ -43,6 +43,7 @@ $lang->tree->successSave   = '成功保存';
 $lang->tree->successFixed  = '成功修正数据！';
 $lang->tree->repeatName    = '模块名“%s”已经存在！';
 
+$lang->tree->module     = '模块';
 $lang->tree->name       = '模块名称';
 $lang->tree->line       = '产品线名称';
 $lang->tree->cate       = '分类名称';

@@ -10,18 +10,18 @@
  * @link        http://www.zentao.net
  */
 ?>
-<div class="panel-body has-table">
-  <table class='table table-borderless table-hover table-fixed-head block-products'>
+<div class="panel-body has-table block-products">
+  <table class='table table-borderless table-hover table-fixed-head table-fixed'>
     <thead>
       <tr>
         <th class='c-name'><?php echo $lang->product->name;?></th>
-        <th class='c-plans'><?php echo $lang->product->plans;?></th>
-        <th class='c-publishs'><?php echo $lang->product->releases;?></th>
+        <th class='c-num'><?php echo $lang->product->plans;?></th>
+        <th class='c-num'><?php echo $lang->product->releases;?></th>
         <?php if($longBlock):?>
-        <th class='c-project'><?php echo $lang->product->currentProject;?></th>
+        <th class='c-name'><?php echo $lang->product->currentProject;?></th>
         <?php endif;?>
-        <th class='c-stories'><?php echo $lang->story->statusList['active'] . $lang->story->common;?></th>
-        <th class='c-bugs'><?php echo $lang->bug->unResolved . $lang->bug->common;?></th>
+        <th class='c-num'><?php echo $lang->story->statusList['active'] . $lang->story->common;?></th>
+        <th class='c-num'><?php echo $lang->bug->unResolved . $lang->bug->common;?></th>
       </tr>
     </thead>
     <tbody>
@@ -32,13 +32,13 @@
       ?>
       <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
         <td class='c-name' title='<?php echo $product->name?>'><?php echo $product->name?></td>
-        <td class="c-plans"><?php echo $product->plans?></td>
-        <td class="c-publishs"><?php echo $product->releases?></td>
+        <td class="c-num"><?php echo $product->plans?></td>
+        <td class="c-num"><?php echo $product->releases?></td>
         <?php if($longBlock):?>
-        <td class='c-project'><?php echo zget($projects, $product->id, '');?></td>
+        <td class='c-name'><?php echo zget($projects, $product->id, '');?></td>
         <?php endif;?>
-        <td class="c-stories"><?php echo $product->stories['active']?></td>
-        <td class="c-bugs"><?php echo $product->unResolved?></td>
+        <td class="c-num"><?php echo $product->stories['active']?></td>
+        <td class="c-num"><?php echo $product->unResolved?></td>
       </tr> 
       <?php endforeach;?>
     </tbody>

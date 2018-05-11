@@ -149,7 +149,7 @@ function loadBranches(product)
     }
 
     var $inputgroup = $(product).closest('.input-group');
-    if($inputgroup.find('select').size() >= 2) $inputgroup.find('select:last').remove();
+    if($inputgroup.find('select').size() >= 2) $inputgroup.removeClass('has-branch').find('select:last').remove();
     if($inputgroup.find('.chosen-container').size() >= 2) $inputgroup.find('.chosen-container:last').remove();
 
     var index = $inputgroup.find('select:first').attr('id').replace('products' , '');
@@ -157,24 +157,32 @@ function loadBranches(product)
     {
         if(data)
         {
-            $inputgroup.append(data);
-            $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).chosen();
+            $inputgroup.addClass('has-branch').append(data);
+            $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).attr('onchange', "loadPlans('#products" + index + "', this.value)").chosen();
         }
     });
 
+    loadPlans(product);
+}
+
+function loadPlans(product, branchID)
+{
+    if($('#plansBox').size() == 0) return false;
+
     var productID = $(product).val();
+    var branchID  = typeof(branchID) == 'undefined' ? 0 : branchID;
+    var index     = $(product).attr('id').replace('products', '');
 
-    if(productID == 0 || productID != $(product).data('last')) $("#plan" + $(product).data('last')).remove();
-
-    if(productID != 0 && $("#plan" + productID).length == 0)
+    if(productID != 0)
     {
-        $(product).data("last", productID);
-        $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID), function(data)
+        if(typeof(planID) == 'undefined') planID = 0;
+        planID = $("select#plans" + productID).val() != '' ? $("select#plans" + productID).val() : planID;
+        $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=' + branchID + '&planID=' + planID + '&fieldID&needCreate=&expired=' + (config.currentMethod == 'create' ? 'unexpired' : '')), function(data)
         {
             if(data)
             {
-                $("#plansBox .row").append('<div class="col-sm-4" id="plan' + productID+ '">' + data + '</div>');
-                $("#plan" + $(product).val()).find('select').attr('name', 'plans[' + productID + ']').attr('id', 'plans' + productID);
+                if($("div#plan" + index).size() == 0) $("#plansBox .row").append('<div class="col-sm-4" id="plan' + index + '"></div>');
+                $("div#plan" + index).width($(product).closest('.col-sm-4').width()).html(data).find('select').attr('name', 'plans[' + productID + ']').attr('id', 'plans' + productID);
 
                 adjustPlanBoxMargin();
             }
@@ -212,15 +220,15 @@ function loadBranch(){}
 /* Auto compute the work days. */
 $(function()
 {
-    if(typeof(replaceID) != 'undefined')
-    {
-        setModal4List('iframe', replaceID, function($list)
-        {
-            $list.find('.progress-pie:visible').progressPie();
-            var datatable = $list.data('zui.datatable');
-            if(datatable) datatable.$datatable.find('.progress-pie:visible').progressPie();
-        });
-    }
+    // if(typeof(replaceID) != 'undefined')
+    // {
+    //     setModal4List('iframe', replaceID, function($list)
+    //     {
+    //         $list.find('.progress-pie:visible').progressPie();
+    //         var datatable = $list.data('zui.datatable');
+    //         if(datatable) datatable.$datatable.find('.progress-pie:visible').progressPie();
+    //     });
+    // }
     $(".date").bind('dateSelected', function()
     {
         computeWorkDays(this.id);
@@ -231,19 +239,10 @@ $(function()
 {
     $(document).on('click', '.task-toggle', function(e)
     {
-        var $toggleIcon = $(this).find('i');
-        var id  = $(this).data('id');
-
-        if($toggleIcon.hasClass('icon-double-angle-down'))
-        {
-            $('tr.parent-'+id).show();
-            $toggleIcon.removeClass('icon-double-angle-down').addClass('icon-double-angle-up');
-        }
-        else if($toggleIcon.hasClass('icon-double-angle-up'))
-        {
-            $('tr.parent-'+id).hide();
-            $toggleIcon.removeClass('icon-double-angle-up').addClass('icon-double-angle-down');
-        }
+        var $toggle = $(this);
+        var id = $(this).data('id');
+        var isCollapsed = $toggle.toggleClass('collapsed').hasClass('collapsed');
+        $toggle.closest('tbody').find('tr.parent-' + id).toggle(!isCollapsed);
 
         e.stopPropagation();
         e.preventDefault();

@@ -264,9 +264,7 @@ class productplan extends control
         }
 
         $this->loadModel('datatable');
-        $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
-        $this->view->modulePairs = $showModule ? $this->loadModel('tree')->getModulePairs($plan->product, 'story', $showModule) : array();
-
+        $this->view->modulePairs = $this->loadModel('tree')->getOptionMenu($plan->product, 'story');
         $this->view->title       = "PLAN #$plan->id $plan->title/" . $products[$plan->product];
         $this->view->position[]  = $this->lang->productplan->view;
         $this->view->planStories = $planStories;
@@ -514,16 +512,15 @@ class productplan extends control
         }
         else
         {
-            $projects = $this->loadModel('project')->getPairs();
+            $projects    = $this->loadModel('project')->getPairs();
             $projects[0] = '';
-            $allBugs= $this->bug->getActiveBugs($this->view->product->id, $plan->branch, $projects);
+            $allBugs     = $this->bug->getActiveBugs($this->view->product->id, $plan->branch, array_keys($projects));
         }
 
         $this->view->allBugs    = $allBugs;
         $this->view->planBugs   = $this->bug->getPlanBugs($planID);
         $this->view->products   = $products;
         $this->view->plan       = $plan;
-        $this->view->plans      = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->browseType = $browseType;
         $this->view->param      = $param;

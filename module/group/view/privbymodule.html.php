@@ -10,43 +10,42 @@
  * @link        http://www.zentao.net
  */
 ?>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><i class='icon-lock'></i></span>
-    <strong><small class='text-muted'><i class='icon-cog'></i></small> <?php echo $lang->group->managePriv ;?></strong>
-    <small class='text-muted'> <?php echo $lang->group->byModuleTips; ?></small>
+<div id='mainContent' class='main-content'>
+  <div class='main-header'>
+    <h2>
+      <?php echo $lang->group->managePriv ;?>
+      <small class='text-muted'> <?php echo $lang->group->byModuleTips; ?></small>
+    </h2>
   </div>
+  
+  <form class='table-bymodule pdb-20' method='post' target='hiddenwin'>
+    <table class='table table-form'>
+      <tr class='text-center'>
+        <td class='strong'><?php echo $lang->group->module;?></td>
+        <td class='strong'><?php echo $lang->group->method;?></td>
+        <td class='strong'><?php echo $lang->group->common;?></td>
+      </tr>
+      <tr class='text-top'>
+        <td class='w-p30'><?php echo html::select('module', $modules, '', " size='10' onclick='setModuleActions(this.value)' class='form-control'");?></td>
+        <td class='w-p30' id='actionBox'>
+          <?php
+          $class = '';
+          foreach($actions as $module => $moduleActions)
+          {
+              echo html::select('actions[]', $moduleActions, '', "multiple='multiple' class='form-control $class {$module}Actions'");
+              $class = 'hidden';
+          }
+          ?>
+        </td>
+        <td><?php echo html::select('groups[]', $groups, '', "multiple='multiple' class='form-control'");?></td>
+      </tr>
+      <tr>
+        <td class='text-center' colspan='3'>
+          <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
+          <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
+          <?php echo html::hidden('foo'); // Just make $_POST not empty..?>
+        </td>
+      </tr>
+    </table>
+  </form>
 </div>
-
-<form class='form-condensed pdb-20' method='post' target='hiddenwin'>
-  <table class='table table-form'>
-    <tr class='text-center'>
-      <td class='strong'><?php echo $lang->group->module;?></td>
-      <td class='strong'><?php echo $lang->group->method;?></td>
-      <td class='strong'><?php echo $lang->group->common;?></td>
-    </tr>
-    <tr valign='top'>
-      <td class='w-p30'><?php echo html::select('module', $modules, '', " size='10' onclick='setModuleActions(this.value)' class='form-control'");?></td>
-      <td class='w-p30' id='actionBox'>
-        <?php
-        $class = '';
-        foreach($actions as $module => $moduleActions)
-        {
-            echo html::select('actions[]', $moduleActions, '', "multiple='multiple' class='form-control $class {$module}Actions'");
-            $class = 'hidden';
-        }
-        ?>
-      </td>
-      <td><?php echo html::select('groups[]', $groups, '', "multiple='multiple' class='form-control'");?></td>
-    </tr>
-    <tr>
-      <td class='text-center' colspan='3'>
-        <?php 
-        echo html::submitButton($lang->save);
-        echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
-        echo html::hidden('foo'); // Just make $_POST not empty..
-        ?>
-      </td>
-    </tr>
-  </table>
-</form>

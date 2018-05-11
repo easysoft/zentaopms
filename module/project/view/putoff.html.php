@@ -17,15 +17,17 @@
   <div class='main-header'>
     <h2>
       <span class='prefix label-id'><strong><?php echo $project->id;?></strong></span>
-      <?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?>
+      <?php echo isonlybody() ? $project->name : html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?>
+      <?php if(!isonlybody()):?>
       <small><?php echo $lang->arrow . $lang->project->putoff;?></small>
+      <?php endif;?>
     </h2>
   </div>
   <form class='load-indicator main-form' method='post' target='hiddenwin'>
     <table class='table table-form'>
       <tbody>
         <tr>
-          <th><?php echo $lang->project->dateRange;?></th>
+          <th class='w-80px'><?php echo $lang->project->dateRange;?></th>
           <td colspan='2'>
             <div class='input-group'>
               <?php echo html::input('begin', $project->begin, "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->project->begin . "'");?>
@@ -41,7 +43,7 @@
               </div>
             </div>
           </td>
-          <td></td>
+          <td class='w-100px'></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->days;?></th>

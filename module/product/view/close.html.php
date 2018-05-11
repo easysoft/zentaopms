@@ -16,14 +16,16 @@
   <div class='main-header'>
     <h2>
       <span class='prefix'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $product->id;?></strong></span>
-      <strong><?php echo html::a($this->createLink('product', 'view', "productID=$product->id"), $product->name);?></strong>
+      <?php echo isonlybody() ? $product->name : html::a($this->createLink('product', 'view', "productID=$product->id"), $product->name);?>
+      <?php if(!isonlybody()):?>
       <small><?php echo $lang->arrow . $lang->product->close;?></small>
+      <?php endif;?>
     </h2>
   </div>
   <form class='load-indicator main-form' method='post' target='hiddenwin'>
     <table class='table table-form'>
       <tr>
-        <th><?php echo $lang->comment;?></th>
+        <th class='w-40px'><?php echo $lang->comment;?></th>
         <td><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
       </tr>
       <tr>

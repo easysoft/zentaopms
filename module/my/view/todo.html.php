@@ -19,8 +19,13 @@
     <?php
     $vars = "date=$period";
     if($period == 'before') $vars .= "&account={$app->user->account}&status=undone";
-    $label  = $period == 'all' ? "<span class='text'>$label</span> <span class='label label-light label-badge'>{$todoCount}</span>" : "<span class='text'>$label</span>";
-    $active = $period == $type ? 'btn-active-text' : '';
+    $label  = "<span class='text'>$label</span>";
+    $active = '';
+    if($period == $type)
+    {
+        $active = 'btn-active-text';
+        $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+    }
     echo html::a(inlink('todo', $vars), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
     <?php endforeach;?>
@@ -31,7 +36,8 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('todo', 'export')) echo html::a(helper::createLink('todo', 'export', "account=$account&orderBy=$orderBy", 'html', true), "<i class='icon-export muted'> </i> " . $lang->todo->export, '', "class='btn btn-link iframe'");?>
-    <?php common::printIcon('todo', 'batchCreate', '', '', 'button', 'plus', '', 'btn-primary iframe', 'true', "id='batchCreate' data-width='80%'");?>
+    <?php common::printLink('todo', 'batchCreate', '', "<i class='icon icon-plus'> </i>" . $lang->todo->batchCreate, '', "id='batchCreate' class='btn btn-secondary iframe' data-width='80%'", '', 'true');?>
+    <?php common::printLink('todo', 'create', '', "<i class='icon icon-plus'> </i>" . $lang->todo->create, '', "id='create' class='btn btn-primary iframe' data-width='80%'", '', 'true');?>
   </div>
 </div>
 <div id="mainContent">
@@ -50,7 +56,8 @@
           </th>
           <th class="c-date">  <?php common::printOrderLink('date',   $orderBy, $vars, $lang->todo->date);?></th>
           <th class="c-type">  <?php common::printOrderLink('type',   $orderBy, $vars, $lang->todo->type);?></th>
-          <th class="c-pri">   <?php common::printOrderLink('pri',    $orderBy, $vars, $lang->priAB);?></th>
+          <?php $style = $this->app->clientLang == 'en' ? "style='width:80px'" : '';?>
+          <th class="c-pri" <?php echo $style;?>> <?php common::printOrderLink('pri',    $orderBy, $vars, $lang->priAB);?></th>
           <th class="c-name">  <?php common::printOrderLink('name',   $orderBy, $vars, $lang->todo->name);?></th>
           <th class="c-begin"> <?php common::printOrderLink('begin',  $orderBy, $vars, $lang->todo->beginAB);?></th>
           <th class="c-end">   <?php common::printOrderLink('end',    $orderBy, $vars, $lang->todo->endAB);?></th>
@@ -62,18 +69,18 @@
         <?php foreach($todos as $todo):?>
         <tr>
           <td class="c-id">
+            <?php if($type != 'cycle' and (common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture))):?>
             <div class="checkbox-primary">
-              <?php if($type != 'cycle' and (common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture))):?>
               <input type='checkbox' name='todoIDList[<?php echo $todo->id;?>]' value='<?php echo $todo->id;?>' />
               <label></label>
-              <?php endif;?>
-              <?php echo $todo->id?>
             </div>
+            <?php endif;?>
+            <?php echo $todo->id?>
           </td>
           <td class="c-date"><?php echo $todo->date == '2030-01-01' ? $lang->todo->periods['future'] : $todo->date;?></td>
           <td class="c-type"><?php echo $lang->todo->typeList[$todo->type];?></td>
-          <td class="c-pri"> <span class='<?php echo 'todo-pri' . $todo->pri;?>'><?php echo zget($lang->todo->priList, $todo->pri, $todo->pri)?></span></td>
-          <td class="c-name"><?php echo html::a($this->createLink('todo', 'view', "id=$todo->id&from=my", '', true), $todo->name, '', "data-toggle='modal' data-type='iframe' data-title='" . $lang->todo->view . "' data-icon='check'");?></td>
+          <td class="c-pri"> <span title="<?php echo zget($lang->todo->priList, $todo->pri);?>" class='label-pri <?php echo 'label-pri-' . $todo->pri;?>'><?php echo zget($lang->todo->priList, $todo->pri)?></span></td>
+          <td class="c-name" title="<?php echo $todo->name;?>"><?php echo html::a($this->createLink('todo', 'view', "id=$todo->id&from=my", '', true), $todo->name, '', "data-toggle='modal' data-type='iframe' data-title='" . $lang->todo->view . "' data-icon='check'");?></td>
           <td class="c-begin"><?php echo $todo->begin;?></td>
           <td class="c-end"><?php echo $todo->end;?></td>
           <td class="c-status"><?php echo $lang->todo->statusList[$todo->status];?></td>

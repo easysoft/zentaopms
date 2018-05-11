@@ -193,7 +193,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function batchCreate($projectID = 0, $storyID = 0, $iframe = 0, $taskID = 0)
+    public function batchCreate($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $iframe = 0)
     {
         $project   = $this->project->getById($projectID);
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
@@ -225,6 +225,8 @@ class task extends control
         $position[] = $this->lang->task->common;
         $position[] = $this->lang->task->batchCreate;
 
+        if($taskID) $this->view->parentTitle = $this->dao->select('name')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('name');
+
         $this->view->title      = $title;
         $this->view->position   = $position;
         $this->view->project    = $project;
@@ -235,9 +237,10 @@ class task extends control
         $this->view->story      = $this->story->getByID($storyID);
         $this->view->storyTasks = $this->task->getStoryTaskCounts(array_keys($stories), $projectID);
         $this->view->members    = $members;
+        $this->view->moduleID   = $moduleID;
         $this->display();
     }
-
+    
     /**
      * Common actions of task module.
      *
@@ -395,6 +398,7 @@ class task extends control
 
         /* Get edited tasks. */
         $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIDList)->fetchAll('id');
+        $teams = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in($taskIDList)->andWhere('type')->eq('task')->fetchAll('root');
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
@@ -415,6 +419,7 @@ class task extends control
         $this->view->typeList    = array('' => '',  'ditto' => $this->lang->task->ditto) + $this->lang->task->typeList;
         $this->view->taskIDList  = $taskIDList;
         $this->view->tasks       = $tasks;
+        $this->view->teams       = $teams;
         $this->view->projectName = isset($project) ? $project->name : '';
 
         $this->display();
@@ -450,7 +455,7 @@ class task extends control
         /* Compute next assignedTo. */
         if(!empty($task->team))
         {
-            $task->assignedTo = $this->task->getNextUser(array_keys($task->team), $task->assignedTo);
+            $task->nextUser = $this->task->getNextUser(array_keys($task->team), $task->assignedTo);
             $members = $this->task->getMemberPairs($task);
         }
 
@@ -785,7 +790,7 @@ class task extends control
 
         $task         = $this->view->task;
         $members      = $this->loadModel('project')->getTeamMemberPairs($task->project, 'nodeleted');
-        $task->nextBy = $task->assignedTo;
+        $task->nextBy = $task->openedBy;
 
         $this->view->users = $members;
         if(!empty($task->team))
@@ -793,11 +798,7 @@ class task extends control
             $teams = array_keys($task->team);
 
             $task->nextBy     = $this->task->getNextUser($teams, $task->assignedTo);
-            $task->myConsumed = $this->dao->select('consumed')->from(TABLE_TEAM)
-                ->where('root')->eq($taskID)
-                ->andWhere('account')->eq($task->assignedTo)
-                ->andWhere('type')->eq('task')
-                ->fetch('consumed');
+            $task->myConsumed = $task->team[$task->assignedTo]->consumed;
 
             $lastAccount = end($teams);
             if($lastAccount != $task->assignedTo)
@@ -1082,11 +1083,19 @@ class task extends control
         }
         else
         {
-            $story = $this->dao->select('story')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('story');
             $this->task->delete(TABLE_TASK, $taskID);
-            $this->task->computeWorkingHours($task->parent);
+            if($task->parent) $this->task->updateParentStatus($task->id);
             if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
-            if($story) $this->loadModel('story')->setStage($story);
+            if($task->story) $this->loadModel('story')->setStage($task->story);
+            if(!empty($task->children))
+            {
+                foreach($task->children as $childTask)
+                {
+                    $this->task->delete(TABLE_TASK, $childTask->id);
+                    if($childTask->story) $this->loadModel('story')->setStage($childTask->story);
+                }
+            }
+
             die(js::locate($this->session->taskList, 'parent'));
         }
     }
@@ -1261,42 +1270,45 @@ class task extends control
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(@array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
             $relatedModules = $this->loadModel('tree')->getTaskOptionMenu($projectID);
 
-            $children = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)
-                ->andWhere('parent')->in(array_keys($tasks))
-                ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
-                ->orderBy($sort)
-                ->fetchGroup('parent', 'id');
-            if(!empty($children))
+            if(!$this->session->taskWithChildren)
             {
-                foreach($children as $parent => $childTasks)
+                $children = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)
+                    ->andWhere('parent')->in(array_keys($tasks))
+                    ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+                    ->orderBy($sort)
+                    ->fetchGroup('parent', 'id');
+                if(!empty($children))
                 {
-                    foreach($childTasks as $task)
+                    foreach($children as $parent => $childTasks)
                     {
-                        /* Compute task progress. */
-                        if($task->consumed == 0 and $task->left == 0)
+                        foreach($childTasks as $task)
                         {
-                            $task->progress = 0;
+                            /* Compute task progress. */
+                            if($task->consumed == 0 and $task->left == 0)
+                            {
+                                $task->progress = 0;
+                            }
+                            elseif($task->consumed != 0 and $task->left == 0)
+                            {
+                                $task->progress = 100;
+                            }
+                            else
+                            {
+                                $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                            }
+                            $task->progress .= '%';
                         }
-                        elseif($task->consumed != 0 and $task->left == 0)
-                        {
-                            $task->progress = 100;
-                        }
-                        else
-                        {
-                            $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
-                        }
-                        $task->progress .= '%';
                     }
-                }
 
-                $position = 0;
-                foreach($tasks as $task)
-                {
-                    $position ++;
-                    if(isset($children[$task->id]))
+                    $position = 0;
+                    foreach($tasks as $task)
                     {
-                        array_splice($tasks, $position, 0, $children[$task->id]);
-                        $position += count($children[$task->id]);
+                        $position ++;
+                        if(isset($children[$task->id]))
+                        {
+                            array_splice($tasks, $position, 0, $children[$task->id]);
+                            $position += count($children[$task->id]);
+                        }
                     }
                 }
             }

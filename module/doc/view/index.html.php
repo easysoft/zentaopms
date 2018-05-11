@@ -11,148 +11,177 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='libs'>
-  <?php
-  $allLibs = array();
-  $allLibs['product'] = $products;
-  $allLibs['project'] = $projects;
-  $allLibs['custom']  = $customLibs;
-  ?>
-  <?php foreach($allLibs as $libsName => $libs):?>
-    <?php if(empty($libs)) continue;?>
-    <?php if($libsName === 'product'): ?>
-      <div class='row'>
-      <?php
-      $objectNum   = 1;
-      $objectCount = count($libs);
-      ?>
-      <?php foreach($libs as $product):?>
-        <?php if($objectCount > 8 and $objectNum == 8):?>
-        <div class='col-md-3'>
-          <div class='libs-group clearfix lib-more'>
-            <?php echo html::a(inlink('allLibs', "type=$libsName"), "{$lang->more}{$lang->doc->libTypeList['product']}<i class='icon icon-double-angle-right'></i>", '', "title='$lang->more' class='more'")?>
+<div class='main-row split-row' id='mainRow'>
+  <?php include './side.html.php';?>
+  <div class="main-col" data-min-width="400">
+    <div class="row">
+      <div class="col-sm-7">
+        <div class="panel block-files block-sm" style="height: 290px;">
+          <div class="panel-heading">
+          <div class="panel-title"><?php echo $lang->doc->orderByEdit;?></div>
+            <nav class="panel-actions nav nav-default">
+              <li><?php echo html::a($this->createLink('doc', 'browse', "libID=0&browseTyp=byediteddate"), 'MORE', '', "title='{$lang->more}'");?></li>
+            </nav>
+          </div>
+          <div class="panel-body has-table">
+            <table class="table table-borderless table-fixed-head table-hover">
+              <thead>
+                <tr>
+                  <th class="c-name"><?php echo $lang->doc->title;?></th>
+                  <th class="c-num text-right"><?php echo $lang->doc->size;?></th>
+                  <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
+                  <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach($latestEditedDocs as $doc):?>
+                <tr data-url="<?php echo $this->createLink('doc', 'view', "docID={$doc->id}");?>">
+                  <td class="c-name"><?php echo $doc->title;?></td>
+                  <td class="c-num text-right"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
+                  <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
+                  <td class="c-datetime"><?php echo $doc->editedDate == '0000-00-00 00:00:00' ? formatTime($doc->addedDate, 'm-d H:i') : formatTime($doc->editedDate, 'm-d H:i');?></td>
+                </tr>
+                <?php endforeach;?>
+              </tbody>
+            </table>
           </div>
         </div>
-        <?php break;?>
-        <?php endif;?>
-        <?php if(isset($subLibs['product'][$product->id])):?>
-        <div class='col-md-3'>
-          <?php
-          $i = 0;
-          $subLibCount = count($subLibs['product'][$product->id]);
-          ?>
-          <div class='libs-group-heading libs-product-heading'>
-            <?php
-            $label = $objectNum == 1 ? "<span class='label label-primary'>{$lang->doclib->product}</span> " : '';
-            echo html::a(inlink('objectLibs', "type=product&objectID=$product->id&from=doc"), $label . $product->name, '', "title='{$product->name}'");
-            if($subLibCount > 3) echo html::a(inlink('objectLibs', "type=product&objectID=$product->id&from=doc"), "{$lang->more}<i class='icon icon-double-angle-right'></i>", '', "title='{$lang->more}' class='pull-right'");
-            ?>
+      </div>
+      <div class="col-sm-5">
+        <div class="panel block-sm" style="height: 290px;">
+          <div class="panel-heading">
+            <div class="panel-title"><?php echo $lang->doc->allDoc . ' ' . $statisticInfo->totalDocs;?></div>
           </div>
-          <div class='libs-group clearfix'>
-            <?php
-            $widthClass = 'w-lib-p100';
-            if($subLibCount == 2) $widthClass = 'w-lib-p50';
-            if($subLibCount >= 3) $widthClass = 'w-lib-p33';
-            ?>
-            <?php foreach($subLibs['product'][$product->id] as $libID => $libName):?>
-            <?php
-            if($libID == 'project')   $libLink = inlink('allLibs', "type=project&product=$product->id");
-            elseif($libID == 'files') $libLink = inlink('showFiles', "type=product&objectID=$product->id");
-            else                      $libLink = inlink('browse', "libID=$libID");
-            ?>
-            <a class='lib <?php echo $widthClass?>' title='<?php echo $libName?>' href='<?php echo $libLink ?>'>
-              <img src='<?php echo $config->webRoot . 'theme/default/images/main/doc-lib.png'?>' class='file-icon' />
-              <div class='lib-name' title='<?php echo $libName?>'><?php echo $libName?></div>
-            </a>
-            <?php if($i >= 2) break;?>
-            <?php $i++;?>
-            <?php endforeach; ?>
+          <div class="panel-body table-row">
+            <div class="col-7 text-middle text-center">
+              <div class="progress-pie inline-block space-lg" data-value="<?php echo $statisticInfo->lastEditedProgress;?>" data-doughnut-size="84" data-real-value="<?php echo $statisticInfo->lastEditedDocs;?>">
+                <canvas width="100" height="100"></canvas>
+                <div class="progress-info">
+                  <small><?php echo $lang->doc->orderByEdit;?></small>
+                  <strong class="progress-value"><?php echo $statisticInfo->lastEditedDocs;?></strong>
+                </div>
+              </div>
+              <div class="table-row text-center small text-muted with-padding">
+                <div class="col-4">
+                  <span class="label label-dot label-primary"></span>
+                  <span><?php echo $lang->doc->todayEdited;?></span>
+                  <em class="strong"><?php echo $statisticInfo->todayEditedDocs;?></em>
+              </div>
+                <div class="col-4">
+                  <span class="label label-dot label-pale"></span>
+                  <span><?php echo $lang->doc->pastEdited;?></span>
+                  <em class="strong"><?php echo $statisticInfo->pastEditedDocs;?></em>
+                </div>
+              </div>
+            </div>
+            <div class="col-5 text-middle text-center">
+              <a class="table-row space-lg">
+                <div class="table-col text-middle">
+                  <small class="muted"><?php echo $lang->doc->orderByOpen;?></small>
+                  <div class="strong"><?php echo $statisticInfo->lastAddedDocs;?></div>
+                </div>
+                <div class="table-col text-middle">
+                  <div class="progress-pie inline-block" data-value="<?php echo $statisticInfo->lastAddedProgress;?>" data-doughnut-size="78" data-color="#00a9fc">
+                    <canvas width="50" height="50"></canvas>
+                    <div class="progress-info">
+                      <strong><span class="progress-value"><?php echo $statisticInfo->lastAddedProgress;?></span><small>%</small></strong>
+                    </div>
+                  </div>
+                </div>
+              </a>
+              <a class="table-row space-lg">
+                <div class="table-col text-middle">
+                  <small class="muted"><?php echo $lang->doc->myDoc;?></small>
+                  <div class="strong"><?php echo $statisticInfo->myDocs;?></div>
+                </div>
+                <div class="table-col text-middle">
+                  <div class="progress-pie inline-block" data-value="<?php echo $statisticInfo->myDocsProgress;?>" data-doughnut-size="78" data-color="#00da88">
+                    <canvas width="50" height="50"></canvas>
+                    <div class="progress-info">
+                      <strong><span class="progress-value"><?php echo $statisticInfo->myDocsProgress;?></span><small><?php echo $lang->percent;?></small></strong>
+                    </div>
+                  </div>
+                </div>
+              </a>
+              <a class="table-row">
+                <div class="table-col text-middle">
+                  <small class="muted"><?php echo $lang->doc->myCollection;?></small>
+                  <div class="strong"><?php echo $statisticInfo->myCollection;?></div>
+                </div>
+                <div class="table-col text-middle">
+                  <div class="progress-pie inline-block" data-value="<?php echo $statisticInfo->myCollectionProgress;?>" data-doughnut-size="78" data-color="#fdc137">
+                    <canvas width="50" height="50"></canvas>
+                    <div class="progress-info">
+                      <strong><span class="progress-value"><?php echo $statisticInfo->myCollectionProgress;?></span><small><?php echo $lang->percent;?></small></strong>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
-        <?php $objectNum++;?>
-        <?php endif; ?>
-      <?php endforeach; ?>
+      </div>
+      <div class="col-sm-7">
+        <div class="panel block-files block-sm" style="height: 290px;">
+          <div class="panel-heading">
+            <div class="panel-title"><?php echo $lang->project->statusList['doing'] . $lang->projectCommon;?></div>
+            <nav class="panel-actions nav nav-default">
+              <li><?php echo html::a($this->createLink('doc', 'allLibs', 'type=project'), 'MORE', '', "title='{$lang->more}'");?></li>
+            </nav>
+          </div>
+          <div class="panel-body has-table">
+            <table class="table table-borderless table-fixed-head table-hover">
+              <thead>
+                <tr>
+                  <th class="c-name"><?php echo $lang->project->name;?></th>
+                  <th class="c-date"><?php echo $lang->project->begin;?></th>
+                  <th class="c-date"><?php echo $lang->project->end;?></th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach($doingProjects as $project):?>
+                <tr data-url="<?php echo $this->createLink('doc', 'objectLibs', "type=project&objectID={$project->id}")?>">
+                  <td class="c-name"><i class="icon icon-folder text-yellow"></i> <?php echo $project->name;?></td>
+                  <td class="c-datetime"><?php echo formatTime($project->begin);?></td>
+                  <td class="c-datetime"><?php echo formatTime($project->end);?></td>
+                </tr>
+                <?php endforeach;?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-5">
+        <div class="panel block-files block-sm" style="height: 290px;">
+          <div class="panel-heading">
+          <div class="panel-title"><?php echo $lang->doc->myDoc;?></div>
+            <nav class="panel-actions nav nav-default">
+              <li><?php echo html::a($this->createLink('doc', 'browse', "libID=0&browseTyp=openedbyme"), 'MORE', '', "title='{$lang->more}'");?></li>
+            </nav>
+          </div>
+          <div class="panel-body has-table">
+            <table class="table table-borderless table-fixed-head table-hover">
+              <thead>
+                <tr>
+                  <th class="c-name"><?php echo $lang->doc->title;?></th>
+                  <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
+                  <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach($myDocs as $doc):?>
+                <tr data-url="">
+                  <td class="c-name"><?php echo $doc->title;?></td>
+                  <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
+                  <td class="c-datetime"><?php echo formatTime($doc->editedDate) ? formatTime($doc->editedDate, 'm-d H:i') : formatTime($doc->addedDate, 'm-d H:i');?></td>
+                </tr>
+                <?php endforeach;?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
-    <hr />
-    <?php elseif($libsName === 'project'): ?>
-    <div class='row'>
-      <?php
-      $objectNum   = 1;
-      $objectCount = count($libs);
-      ?>
-      <?php foreach($libs as $project):?>
-        <?php if($objectCount > 8 and $objectNum == 8):?>
-        <div class='col-md-3'>
-          <div class='libs-group clearfix lib-more'>
-            <?php echo html::a(inlink('allLibs', "type=$libsName"), "{$lang->more}{$lang->doc->libTypeList['project']}<i class='icon icon-double-angle-right'></i>", '', "title='$lang->more' class='more'")?>
-          </div>
-        </div>
-        <?php break;?>
-        <?php endif;?>
-        <?php if(isset($subLibs['project'][$project->id])):?>
-        <div class='col-md-3'>
-          <?php
-          $i = 0;
-          $subLibCount = count($subLibs['project'][$project->id]);
-          ?>
-          <div class='libs-group-heading libs-project-heading'>
-            <?php
-            $label = $objectNum == 1 ? "<span class='label label-success'>{$lang->doclib->project}</span> " : '';
-            echo html::a(inlink('objectLibs', "type=project&objectID=$project->id&from=doc"), $label . $project->name, '', "title='{$project->name}'");
-            if($subLibCount > 3) echo html::a(inlink('objectLibs', "type=project&objectID=$project->id&from=doc"), "{$lang->more}<i class='icon icon-double-angle-right'></i>", '', "title='{$lang->more}' class='pull-right'");
-            ?>
-          </div>
-          <div class='libs-group clearfix'>
-            <?php
-            $widthClass = 'w-lib-p100';
-            if($subLibCount == 2) $widthClass = 'w-lib-p50';
-            if($subLibCount >= 3) $widthClass = 'w-lib-p33';
-            ?>
-            <?php foreach($subLibs['project'][$project->id] as $libID => $libName):?>
-            <?php
-            if($libID == 'files') $libLink = inlink('showFiles', "type=project&objectID=$project->id");
-            else                  $libLink = inlink('browse', "libID=$libID");
-            ?>
-            <a class='lib <?php echo $widthClass?>' title='<?php echo $libName?>' href='<?php echo $libLink ?>'>
-              <img src='<?php echo $config->webRoot . 'theme/default/images/main/doc-lib.png'?>' class='file-icon' />
-              <div class='lib-name' title='<?php echo $libName?>'><?php echo $libName?></div>
-            </a>
-            <?php if($i >= 2) break;?>
-            <?php $i++;?>
-            <?php endforeach; ?>
-          </div>
-        </div>
-        <?php $objectNum++;?>
-        <?php endif; ?>
-      <?php endforeach; ?>
-    </div>
-    <hr />
-    <?php else:?>
-      <div class='row clearfix'>
-      <?php
-      $objectNum   = 1;
-      $objectCount = count($libs);
-      ?>
-      <?php foreach($libs as $libID => $libName):?>
-        <?php if($objectCount > 8 and $objectNum == 8):?>
-        <div class='col-md-3'>
-          <div class='libs-group clearfix lib-more'>
-            <?php echo html::a(inlink('allLibs', "type=$libsName"), "{$lang->more}{$lang->doc->libTypeList['custom']}<i class='icon icon-double-angle-right'></i>", '', "title='$lang->more' class='more'")?>
-          </div>
-        </div>
-        <?php break;?>
-        <?php endif;?>
-        <div class='col-md-3'>
-          <div class='libs-group-heading libs-custom-heading'>
-            <?php
-            if($objectNum == 1) echo "<span class='label label-info lable-custom'>{$lang->doc->customAB}</span> ";
-            echo html::a(inlink('browse', "libID=$libID"), $libName, '', "title='{$libName}'")
-            ?>
-          </div>
-        </div>
-        <?php $objectNum++;?>
-      <?php endforeach; ?>
-    <?php endif; ?>
-  <?php endforeach;?>
+  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

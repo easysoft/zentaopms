@@ -11,48 +11,53 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div>
-  <div id='titlebar'><div class='heading'><i class='icon-code-fork'></i> <?php echo $lang->product->roadmap;?></div></div>
-  <div id='roadmapBox' style='overflow-x:auto'>
-    <table class='table table-grid active-disabled'>
-      <?php 
-      $years = array_keys($roadmaps);
-      echo '<tr class="text-center">';
-      foreach($years as $year)
-      {
-          $colspans = count($roadmaps[$year]);
-          $year = $year == '0000' ? $lang->future : $year . $lang->year;
-          echo "<th" . (empty($branches) ? '' : " colspan='$colspans'") . " style='border-right:1px solid #ddd'><h4>$year</h4></th>";
-      }
-      echo '</tr>';
-      echo '<tr class="text-center text-top">';
-      foreach($years as $year)
-      {
-          foreach($roadmaps[$year] as $branch => $roadmapData)
-          {
-              echo "<td>";
-              if(!empty($branches)) echo "<div class='roadmap branch'>{$branches[$branch]}</div>";
-              foreach($roadmapData as $key => $roadmap)
-              {
-                  if(isset($roadmap->build))
-                  {
-                      echo "<div class='roadmap release'>";
-                      echo "<h5>" . html::a($this->createLink('release', 'view', "releaseID=$roadmap->id"), $roadmap->name, '_blank') . '</h5>' . $roadmap->date;
-                  }
-                  else
-                  {
-                      echo "<div class='roadmap plan'>";
-                      echo "<h5>" . html::a($this->createLink('productplan', 'view', "planID=$roadmap->id"), $roadmap->title, '_blank') . '</h5>' . $roadmap->begin . ' ~ ' . $roadmap->end;
-                  }
-                  echo "</div>";
-                  if(isset($roadmaps[$year][$branch][$key + 1])) echo "<h5>{$lang->downArrow}</h5>";
-              }
-              echo '</td>';
-          }
-      }
-      echo '</tr>';
-      ?>
-    </table>
+<div class='main-content' id='mainContent'>
+  <h2><?php echo $lang->product->iteration;?> <span class="label label-badge label-light"><?php echo sprintf($lang->product->iterationInfo, $roadmaps['total']);?></span></h2>
+  <?php if($product->type != 'normal'):?>
+  <div class="text-center branch-nav">
+    <ul class="nav nav-secondary inline-block">
+      <li class="nav-heading"><?php echo zget($lang->product->branchName, $product->type);?></li>
+      <?php foreach($branches as $branchKey => $branchName):?>
+      <li <?php if($branchKey == 0) echo "class='active'";?>><a data-target="#tabContent<?php echo $branchKey;?>" data-toggle="tab"><?php echo $branchName;?></a></li>
+      <?php endforeach;?>
+    </ul>
+  </div>
+  <?php endif;?>
+  <div class="tab-content">
+    <?php foreach($branches as $branchKey => $branchName):?>
+    <div class="tab-pane fade release-paths <?php if($branchKey == 0) echo 'active in';?>" id="tabContent<?php echo $branchKey;?>">
+      <?php foreach($roadmaps as $year => $yearRoadmaps):?>
+      <?php if(!isset($yearRoadmaps[$branchKey])) continue;?>
+      <?php $groupRoadmaps = zget($yearRoadmaps, $branchKey, array());?>
+      <div class="release-path">
+        <div class="release-head">
+          <div class="title text-primary"><?php echo $year . (is_numeric($year) ? $lang->year : '');?></div>
+          <div class="subtitle"><?php echo sprintf($lang->product->iterationInfo, count($groupRoadmaps, 1) - count($groupRoadmaps));?></div>
+        </div>
+        <?php $i = 0;?>
+        <?php foreach($groupRoadmaps as $row => $roadmapData):?>
+        <ul class="release-line">
+          <?php foreach($roadmapData as $roadmap):?>
+          <li <?php if(isset($roadmap->build) && date('Y-m-d') < $roadmap->date) echo "class='active'";?>>
+            <?php $viewLink = isset($roadmap->build) ? $this->createLink('release', 'view', "releaseID=$roadmap->id") : $this->createLink('productplan', 'view', "planID=$roadmap->id");?>
+            <a href="<?php echo $viewLink;?>">
+              <?php if(!empty($roadmap->marker)):?>
+              <i class="icon icon-flag text-primary"></i>
+              <?php endif;?>
+              <div class="block">
+                <span class="title"><?php echo isset($roadmap->build) ? $roadmap->name : $roadmap->title;?></span>
+                <span class="date"><?php echo isset($roadmap->build) ? $roadmap->date : ($roadmap->end == '2030-01-01' ? $lang->productplan->future : $roadmap->begin . '~' . $roadmap->end);?></span>
+                <span class="info"><?php echo $roadmap->desc;?></span>
+              </div>
+            </a>
+          </li>
+          <?php endforeach;?>
+        </ul>
+        <?php endforeach;?>
+      </div>
+      <?php endforeach;?>
+    </div>
+    <?php endforeach;?>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

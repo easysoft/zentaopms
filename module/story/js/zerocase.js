@@ -1,6 +1,4 @@
 $(document).ready(function()
 {
-    $('#zerocaseTab').addClass('active');
-    fixedTfootAction('#productStoryForm');
-    fixedTheadOfList('#storyList');
+    $('#zerocaseTab').addClass('btn-active-text');
 });

@@ -11,10 +11,12 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form class='form-condensed' method='post' target='hiddenwin'>
-<div class='panel panel-sm'>
-  <div class='panel-heading'><i class='icon-plus'></i> <strong><?php echo $lang->editor->newPage?></strong></div>
-  <div class='panel-body'>
+<style>body{padding-bottom:0px;background-color:#fff;}</style>
+<div class='main-header'>
+  <div class='heading'><i class='icon-plus'></i> <strong><?php echo $lang->editor->newPage?></strong></div>
+</div>
+<form method='post' target='hiddenwin'>
+  <div class='main-content'>
     <table class='table table-form'>
       <tr>
         <th class='w-80px'><?php echo $lang->editor->filePath?></th>
@@ -23,17 +25,13 @@
       <tr>
         <th><?php echo $lang->editor->pageName?></th>
         <td>
-        <?php
-        echo html::input('fileName', '', "class='form-control' autocomplete='off'");
-        echo "<div class='help-block'>" . $lang->editor->examplePHP . "</div>";
-        ?>
+          <?php
+          echo html::input('fileName', '', "class='form-control' autocomplete='off' placeholder='{$lang->editor->examplePHP}'");
+          ?>
         </td>
       </tr>
       <tr><td colspan='2' align='center'><?php echo html::submitButton()?></td></tr>
     </table>
   </div>
-</div>
-
-
 </form>
 <?php include '../../common/view/footer.lite.html.php';?>

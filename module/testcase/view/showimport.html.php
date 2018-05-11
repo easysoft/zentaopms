@@ -9,6 +9,7 @@
   <table class='table table-fixed active-disabled table-custom' id='showData'>
     <thead>
       <tr>
+      <th class='w-50px'><?php echo $lang->lineNumber?></th>
         <th class='w-70px'><?php echo $lang->testcase->id?></th>
         <th><?php echo $lang->testcase->title?></th>
         <?php if(!empty($branches)):?>
@@ -39,6 +40,7 @@
       <?php foreach($caseData as $key => $case):?>
       <?php if(empty($case->title)) continue;?>
       <tr valign='top' align='center'>
+        <td><?php echo $key;?></td>
         <td>
           <?php
           if(!empty($case->id))
@@ -48,7 +50,7 @@
           }
           else
           {
-              echo $addID++ . " <sub class='gray' style='vertical-align:sub;'>{$lang->testcase->new}</sub>";
+              echo "<sub class='gray' style='vertical-align:sub;'>{$lang->testcase->new}</sub>";
           }
           echo html::hidden("product[$key]", $productID);
           ?>
@@ -83,7 +85,7 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan='<?php echo !empty($branches) ? 11 : 10;?>' class='text-center'>
+        <td colspan='<?php echo !empty($branches) ? 12 : 11;?>' class='text-center'>
           <?php
           if(!$insert)
           {

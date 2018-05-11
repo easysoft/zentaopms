@@ -42,7 +42,7 @@
         <tr>
           <td colspan='5' class="text-center">
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
-            <?php echo html::backButton('', '', "btn btn-wide");?>
+            <?php echo html::backButton('', '', "btn btn-wide btn-gray");?>
           </td>
         </tr>
       </tfoot>

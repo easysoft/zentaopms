@@ -32,7 +32,7 @@ $lang->tree->manageBugChild     = '維護Bug子模組';
 $lang->tree->manageCaseChild    = '維護用例子模組';
 $lang->tree->manageCaselibChild = '維護測試庫子模組';
 $lang->tree->manageTaskChild    = "維護{$lang->projectCommon}子模組";
-$lang->tree->syncFromProduct    = '複製';
+$lang->tree->syncFromProduct    = '複製模組';
 $lang->tree->dragAndSort        = "拖放排序";
 $lang->tree->sort               = "排序";
 $lang->tree->addChild           = "增加子模組";
@@ -43,6 +43,7 @@ $lang->tree->successSave   = '成功保存';
 $lang->tree->successFixed  = '成功修正數據！';
 $lang->tree->repeatName    = '模組名“%s”已經存在！';
 
+$lang->tree->module     = '模組';
 $lang->tree->name       = '模組名稱';
 $lang->tree->line       = '產品綫名稱';
 $lang->tree->cate       = '分類名稱';

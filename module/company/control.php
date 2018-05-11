@@ -145,7 +145,7 @@ class company extends control
      * @access public
      * @return void
      */
-    public function dynamic($browseType = 'today', $param = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function dynamic($browseType = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
     {
         $this->company->setMenu();
         $this->app->loadLang('user');
@@ -167,10 +167,11 @@ class company extends control
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
+        $sort    = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Set the user and type. */
         $account = $browseType == 'account' ? $param : 'all';
@@ -178,6 +179,7 @@ class company extends control
         $project = $browseType == 'project' ? $param : 'all';
         $period  = ($browseType == 'account' or $browseType == 'product' or $browseType == 'project') ? 'all'  : $browseType;
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
+        $date    = empty($date) ? '' : date('Y-m-d', $date);
 
         /* Get products' list.*/
         $products = $this->loadModel('product')->getPairs('nocode');
@@ -201,11 +203,11 @@ class company extends control
         /* Get actions. */
         if($browseType != 'bysearch') 
         {
-            $actions = $this->action->getDynamic($account, $period, $sort, $pager, $product, $project);
+            $actions = $this->action->getDynamic($account, $period, $sort, $pager, $product, $project, $date, $direction);
         }
         else
         {
-            $actions = $this->action->getDynamicBySearch($products, $projects, $queryID, $sort, $pager); 
+            $actions = $this->action->getDynamicBySearch($products, $projects, $queryID, $sort, $pager, $date, $direction); 
         }
 
         /* Build search form. */
@@ -216,8 +218,15 @@ class company extends control
         ksort($products);
         $projects['all'] = $this->lang->project->allProject;
         $products['all'] = $this->lang->product->allProduct;
+
+        foreach($this->lang->action->search->label as $action => $name)
+        {
+            if($action) $this->lang->action->search->label[$action] .= " [ $action ]";
+        }
+
         $this->config->company->dynamic->search['actionURL'] = $this->createLink('company', 'dynamic', "browseType=bysearch&param=myQueryID");
         $this->config->company->dynamic->search['queryID']   = $queryID;
+        $this->config->company->dynamic->search['params']['action']['values']  = $this->lang->action->search->label;
         $this->config->company->dynamic->search['params']['project']['values'] = $projects;
         $this->config->company->dynamic->search['params']['product']['values'] = $products; 
         $this->config->company->dynamic->search['params']['actor']['values']   = $users; 
@@ -229,10 +238,11 @@ class company extends control
         $this->view->product    = $product;
         $this->view->project    = $project;
         $this->view->queryID    = $queryID; 
-        $this->view->actions    = $actions;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->param      = $param;
+        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction);
+        $this->view->direction  = $direction;
         $this->display();
     }
 }

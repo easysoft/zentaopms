@@ -2,14 +2,8 @@ $(function()
 {
     var boardID  = '';
     var onlybody = config.requestType == 'GET' ? "&onlybody=yes" : "?onlybody=yes";
-    $(".kanbanFrame").modalTrigger({type: 'iframe', width: '80%', afterShow:function(){ $('#ajaxModal').data('cancel-reload', true)}, afterHidden: function(){refresh()}});
-
     $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
-
     var $kanban = $('#kanban');
-    var $kanbanWrapper = $('#kanbanWrapper');
-
-    initBoards();
 
     var stageMap =
     {
@@ -24,9 +18,9 @@ $(function()
     };
 
     var lastOperation;
-
-    function dropTo(id, from, to, type)
+    var dropTo = function(id, from, to, type)
     {
+      console.log(id);
         if(stageMap[type][from] && stageMap[type][from][to])
         {
             lastOperation = {id: id, from: from, to: to};
@@ -34,106 +28,81 @@ $(function()
             return true;
         }
         return false;
-    }
+    };
 
-    function initBoards()
+    $kanban.droppable(
     {
-        $('.col-droppable').append('<div class="board-shadow"></div>');
-
-        var $boardTasks = $kanban.find('.board-story');
-        $boardTasks.droppable(
+        selector: '.board-item:not(.disabled)',
+        target: function($ele)
         {
-            target: '.col-droppable',
-            flex: true,
-            before: function(e)
+            var itemType = $ele.data('type');
+            var $board = $ele.closest('.board');
+            var type = $board.data('type');
+            return $board.siblings('.board').filter(function()
             {
-                if(e.element.find('.dropdown.open').length) return false;
-            },
-            start: function(e)
+                var typeMap = stageMap[itemType];
+                var actionMap = typeMap && typeMap[type];
+                return !!actionMap && actionMap[$(this).data('type')];
+            });
+        },
+        start: function(e)
+        {
+            $kanban.addClass('dragging');
+            e.targets.addClass('can-drop-in');
+            var $item = $(e.element).addClass('dragging');
+            $item.closest('.boards').addClass('dragging');
+        },
+        drag: function(e)
+        {
+            var $item = $(e.element);
+            var $target = $(e.target);
+            var $holder = $target.find('.board-drag-holder');
+            if (!$holder.length) $holder = $('<div class="board-drag-holder"></div>').appendTo($target);
+            $kanban.find('.c-board.dragging').removeClass('dragging');
+            $kanban.find('.c-board.s-' + $target.data('type')).addClass('dragging');
+            $holder.height($item.outerHeight());
+        },
+        drop: function(e)
+        {
+            var result = dropTo(e.element.data('id'), e.element.closest('.board').data('type'), e.target.data('type'), e.element.data('type'));
+            if(result !== false)
             {
-                e.element.closest('td').addClass('drag-from').closest('tr').addClass('dragging');
-                $kanban.addClass('dragging').find('.board-item-shadow').height(e.element.outerHeight());
-            },
-            drag: function(e)
-            {
-                if(e.isNew)
-                {
-                    var $dargShadow = $('.drag-shadow.board-story');
-                    for(var stage in stageMap['story'])
-                    {
-                        $dargShadow.removeClass('board-story-' + stage);
-                    }
-                    $dargShadow.addClass('board-story-' + e.target.data('id'));
-                }
-            },
-            drop: function(e)
-            {
-                if(e.isNew && e.element.closest('tr').data('id') == e.target.closest('tr').data('id'))
-                {
-                    var result = dropTo(e.element.data('id'), e.element.closest('td').data('id'), e.target.data('id'), 'story');
-                    if(result !== false)
-                    {
-                        for(var stage in stageMap['story'])
-                        {
-                            e.element.removeClass('board-story-' + stage);
-                        }
-                        e.element.addClass('board-story-' + e.target.data('id')).insertBefore(e.target.find('.board-shadow'));
-                    }
-                }
-            },
-            finish: function(e)
-            {
-                $kanban.removeClass('dragging drop-in');
-                $kanbanWrapper.find('tr.dragging').removeClass('dragging').find('.drop-in, .drag-from').removeClass('drop-in drag-from');
+                e.element.insertBefore(e.target.find('.board-drag-holder'));
             }
-        });
-    }
+        },
+        finish: function()
+        {
+            $kanban.removeClass('dragging').find('.can-drop-in').removeClass('can-drop-in');
+            $kanban.find('.dragging').removeClass('dragging');
+        }
+    });
 
-    function refresh()
+    var refresh = function()
     {
         var selfClose = $.cookie('selfClose');
         $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
-        if(selfClose == 1)
-        {
-            $('#kanbanWrapper').wrap("<div id='tempDIV'></div>");
-            $('#tempDIV').load(location.href + ' #kanbanWrapper', function()
-            {
-                $('#kanbanWrapper').unwrap();
-                initBoards()
-                $(".kanbanFrame").modalTrigger(
-                {
-                    type: 'iframe', 
-                    width: '80%', 
-                    afterShow: function()
-                    { 
-                        $('#ajaxModal').data('cancel-reload', true)
-                    }, 
-                    afterHidden: function(){refresh()}
-                });
-            });
-        }
+        if(selfClose == 1) $kanban.load(location.href + ' #kanban');
     }
 
-    var fixH = $("#kanbanHeader").offset().top;
-    $(window).scroll(function()
+    $kanban.on('click', '.kanbaniframe', function(e)
     {
-        var scroH = $(this).scrollTop();
-        if(scroH>=fixH)
+        var $link = $(this);
+        new $.zui.ModalTrigger($.extend(
         {
-            $("#kanbanHeader").addClass('affix');
-            $("#kanbanHeader").width($('#kanbanWrapper').width());
-        }
-        else if(scroH<fixH)
+            type: 'iframe',
+            url: $link.attr('href'),
+            width: '80%',
+        }, $link.data())).show(
         {
-            $("#kanbanHeader").removeClass('affix');
-            $("#kanbanHeader").css('width', '100%');
-        }
+            shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
+            hidden: function(){refresh();}
+        });
+				return false;
     });
 
-    $('#kanban').on('click', '.btn-info-toggle', function()
+    $.extend({'closeModal':function(callback, location)
     {
-          $btn = $(this);
-          $btn.find('i').toggleClass('icon-angle-down').toggleClass('icon-angle-up');
-          $btn.parents('.board').toggleClass('show-info');
-    });
+        kanbanModalTrigger.close();
+        if(callback && $.isFunction(callback)) callback();
+    }});
 });

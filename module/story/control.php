@@ -38,17 +38,43 @@ class story extends control
      * @param  int    $bugID
      * @param  int    $planID
      * @param  int    $todoID
+     * @param  string $extra for example feedbackID=0
      * @access public
      * @return void
      */
-    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $bugID = 0, $planID = 0, $todoID = 0)
+    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '')
     {
+        /* Whether there is a object to transfer story, for example feedback. */
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+        foreach($output as $paramKey => $paramValue)
+        {
+            if(isset($this->config->story->fromObjects[$paramKey]))
+            {
+                $fromObjectIDKey  = $paramKey;
+                $fromObjectID     = $paramValue;
+                $fromObjectName   = $this->config->story->fromObjects[$fromObjectIDKey]['name'];
+                $fromObjectAction = $this->config->story->fromObjects[$fromObjectIDKey]['action'];
+                break;
+            }
+        }
+
+        /* If there is a object to transfer story, get it by getById function and set objectID,object in views. */
+        if(isset($fromObjectID))
+        {
+            $fromObject = $this->loadModel($fromObjectName)->getById($fromObjectID);
+            if(!$fromObject) die(js::error($this->lang->notFound) . js::locate('back', 'parent'));
+
+            $this->view->$fromObjectIDKey = $fromObjectID;
+            $this->view->$fromObjectName  = $fromObject;
+        }
+
         if(!empty($_POST))
         {
             $response['result']  = 'success';
             $response['message'] = '';
 
-            $storyResult = $this->story->create($projectID, $bugID);
+            $storyResult = $this->story->create($projectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '');
             if(!$storyResult or dao::isError())
             {
                 $response['result']  = 'fail';
@@ -71,8 +97,14 @@ class story extends control
                 $this->send($response);
             }
 
-            $action   = $bugID == 0 ? 'Opened' : 'Frombug';
-            $extra    = $bugID == 0 ? '' : $bugID;
+            $action = $bugID == 0 ? 'Opened' : 'Frombug';
+            $extra  = $bugID == 0 ? '' : $bugID;
+            /* Record related action, for example FromFeedback. */
+            if(isset($fromObjectID))
+            {
+                $action = $fromObjectAction;
+                $extra  = $fromObjectID;
+            }
             $actionID = $this->action->create('story', $storyID, $action, '', $extra);
 
             if($todoID > 0)
@@ -169,6 +201,28 @@ class story extends control
             $title  = $todo->name;
             $spec   = $todo->desc;
             $pri    = $todo->pri;
+        }
+
+        /* Replace the value of story that needs to be replaced with the value of the object that is transferred to story. */
+        if(isset($fromObject))
+        {
+            if(isset($this->config->story->fromObjects[$fromObjectIDKey]['source']))
+            {
+                $sourceField = $this->config->story->fromObjects[$fromObjectIDKey]['source'];
+                $sourceUser  = $this->loadModel('user')->getById($fromObject->{$sourceField});
+                $source      = $sourceUser->role;
+                $sourceNote  = $sourceUser->realname;
+            }
+            else
+            {
+                $source      = $fromObjectName;
+                $sourceNote  = $fromObjectID;
+            }
+
+            foreach($this->config->story->fromObjects[$fromObjectIDKey]['fields'] as $storyField => $fromObjectField)
+            {
+                $$storyField = $fromObject->{$fromObjectField};
+            }
         }
 
         /* Set Custom*/
@@ -943,7 +997,9 @@ class story extends control
      */
     public function batchChangeStage($stage)
     {
-        $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
+        $storyIDList = $this->post->storyIDList;
+        if(empty($storyIDList)) die(js::locate($this->session->storyList, 'parent'));
+
         $storyIDList = array_unique($storyIDList);
         $allChanges  = $this->story->batchChangeStage($storyIDList, $stage);
         if(dao::isError()) die(js::error(dao::getError()));
@@ -1168,7 +1224,7 @@ class story extends control
             $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
-        $stories   = $this->story->getProjectStoryPairs($projectID, $productID, $branch, $moduleID, $type);
+        $stories = $this->story->getProjectStoryPairs($projectID, $productID, $branch, $moduleID, $type);
         if($this->app->getViewType() === 'json')
         {
             die(json_encode($stories));
@@ -1453,16 +1509,16 @@ class story extends control
                     $story->verify = str_replace('&nbsp;', ' ', $story->verify);
                 }
                 /* fill some field with useful value. */
-                if(isset($products[$story->product]))       $story->product = $products[$story->product] . "(#$story->product)";
-                if(isset($relatedModules[$story->module]))  $story->module  = $relatedModules[$story->module] . "(#$story->module)";
-                if(isset($relatedBranch[$story->branch]))   $story->branch  = $relatedBranch[$story->branch] . "(#$story->branch)";
+                if(isset($products[$story->product]))      $story->product = $products[$story->product] . "(#$story->product)";
+                if(isset($relatedModules[$story->module])) $story->module  = $relatedModules[$story->module] . "(#$story->module)";
+                if(isset($relatedBranch[$story->branch]))  $story->branch  = $relatedBranch[$story->branch] . "(#$story->branch)";
                 if(isset($story->plan))
                 {
                     $plans = '';
                     foreach(explode(',', $story->plan) as $planID)
                     {
                         if(empty($planID)) continue;
-                        if(isset($relatedPlans[$planID]))$plans .= $relatedPlans[$planID] . "(#$planID) ";
+                        if(isset($relatedPlans[$planID])) $plans .= $relatedPlans[$planID] . "(#$planID)";
                     }
                     $story->plan = $plans;
                 }

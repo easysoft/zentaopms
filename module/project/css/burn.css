@@ -1,7 +1,7 @@
-.container {max-width: 950px!important;}
-.container .actions {margin-bottom: 10px; padding: 0}
-.container .actions > .text {padding: 5px 5px 5px 15px; line-height: 20px}
-.mw-220px {max-width: 220px!important}
-#wrap h1{font-size:14px;}
-#interval{margin-right:10px;}
-.canvas-wrapper {padding: 15px; border: 1px solid #ddd;}
+.main-content > h2 {font-size: 18px;}
+#burnWrapper {max-width: 1200px; margin: 0 auto; padding: 25px 100px 10px; position: relative;}
+#burnYUnit {position: absolute; color: #CBD0DB; top: 0; left: 90px;}
+#burnLegend {position: absolute; right: 0; width: 80px; height: 60px; top: 50%; margin-top: -30px; line-height: 30px; color: #838A9D; font-size: 12px;}
+#burnLegend > div {position: relative; padding-left: 30px;}
+#burnLegend > div:before {content: ' '; display: block; position: absolute; width: 20px; left: 0; top: 13px; height: 3px; background: #EEEEEE;}
+#burnLegend > div.line-real:before {background: #006AF1;}

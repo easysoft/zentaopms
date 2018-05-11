@@ -12,14 +12,17 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['doclib']);?></span>
-    <strong><small class='text-muted'><i class='icon icon-plus'></i></small> <?php echo $lang->doc->createLib;?></strong>
+<div id='mainContent' class='main-content'>
+  <div class='center-block'>
+    <div class='main-header'>
+      <h2>
+        <i class='icon icon-plus'></i>
+        <span class='prefix'><?php echo html::icon($lang->icons['doclib']);?></span>
+        <?php echo $lang->doc->createLib;?>
+      </h2>
+    </div>
   </div>
-</div>
-<div class='main'>
-  <form method='post' target='hiddenwin' class='form-condensed' style='margin: 40px 0 160px 0'>
+  <form method='post' target='hiddenwin' >
     <table class='table table-form'>
       <tr>
         <th class='w-80px'><?php echo $lang->doc->libType?></th>

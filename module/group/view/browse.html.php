@@ -36,7 +36,7 @@
     </thead>
     <tbody>
     <?php foreach($groups as $group):?>
-    <?php $users = implode(' ', $groupUsers[$group->id]);?>
+    <?php $users = implode(',', $groupUsers[$group->id]);?>
     <tr>
       <td class='text-center'><?php echo $group->id;?></td>
       <td><?php echo $group->name;?></td>
@@ -44,10 +44,10 @@
       <td title='<?php echo $users;?>'><?php echo $users;?></td>
       <td class='c-actions'>
         <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
-        <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'plus');?>
-        <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'plus');?>
+        <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'pencil');?>
+        <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'pencil');?>
         <?php $lang->group->managemember = $lang->group->manageMember;?>
-        <?php common::printIcon('group', 'managemember', "groupID=$group->id", $group, 'list', 'plus', '', 'iframe', 'yes');?>
+        <?php common::printIcon('group', 'managemember', "groupID=$group->id", $group, 'list', 'pencil', '', 'iframe', 'yes');?>
         <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
         <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
         <?php

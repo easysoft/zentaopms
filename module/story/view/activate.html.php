@@ -15,9 +15,11 @@
   <div class='center-block'>
     <div class='main-header'>
       <h2>
-        <span class='prefix'><strong><?php echo $story->id;?></strong></span>
-        <strong><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?></strong>
+        <span class='label label-id'><?php echo $story->id;?></span>
+        <?php echo isonlybody() ? $story->title : html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?>
+        <?php if(!isonlybody()):?>
         <small><?php echo $lang->arrow . $lang->story->activate;?></small>
+        <?php endif;?>
       </h2>
     </div>
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>

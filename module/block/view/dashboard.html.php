@@ -25,27 +25,26 @@ $useGuest = $this->app->user->account == 'guest';
       <div class='row'>
         <div class='col-sm-12'>
           <div class='panel block-<?php echo $block->block;?> <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>'>
-            <?php $hasHeading = ($block->block != 'welcome' and $block->block != 'flowchart');?>
+            <?php $hasHeading = ($block->block != 'welcome' and $block->block != 'flowchart' and $block->block != 'statistic');?>
             <?php if($hasHeading):?>
             <div class='panel-heading'>
               <div class='panel-title'><?php echo $block->title;?></div>
             <?php endif;?>
               <nav class='panel-actions nav nav-default'>
-                <?php if(!empty($block->moreLink)):?>
-                   <?php echo '<li>' . html::a($block->moreLink, 'MORE', '', "title='{$lang->more}'") . '</li>'; ?>
-                <?php endif; ?>
+                <?php if(!empty($block->actionLink)) echo '<li>' . $block->actionLink . '</li>';?>
+                <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, 'MORE', '', "title='{$lang->more}'") . '</li>'; ?>
                 <li class='dropdown'>
                   <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
                   <ul class='dropdown-menu pull-right'>
                     <?php if(!$useGuest):?>
-                    <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "id=$block->id&module=$module"); ?>" class='edit-block' data-title='<?php echo $block->title; ?>' data-icon='icon-pencil'><i class='icon-pencil'></i> <?php echo $lang->edit;?></a></li>
+                    <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "id=$block->id&module=$module");?>" class='edit-block' data-title='<?php echo $block->title;?>' ><?php echo $lang->edit;?></a></li>
                     <?php if(!$block->source and $block->block == 'html'):?>
-                    <li><a href="javascript:hiddenBlock(<?php echo $index;?>)" class="hidden-panel"><i class='icon-eye-close'></i><?php echo $lang->block->hidden; ?></a></li>
+                    <li><a href="javascript:hiddenBlock(<?php echo $index;?>)" class="hidden-panel"><?php echo $lang->block->hidden;?></a></li>
                     <?php endif;?>
-                    <li><a href='javascript:deleteBlock(<?php echo $index;?>);' class='remove-panel'><i class='icon-sm icon-close'></i> <?php echo $lang->block->remove;?></a></li>
+                    <li><a href='javascript:deleteBlock(<?php echo $index;?>);' class='remove-panel'><?php echo $lang->block->remove;?></a></li>
                     <?php endif;?>
                     <?php if($this->app->user->admin):?>
-                    <li><?php echo html::a($this->createLink('block', 'close', "blockID={$block->id}"), "<i class='icon-eye-close'></i> {$lang->block->closeForever}", 'hiddenwin', "class='close-block' onclick=\"return confirm('{$lang->block->confirmClose}')\"")?>
+                    <li><?php echo html::a($this->createLink('block', 'close', "blockID={$block->id}"), $lang->block->closeForever, 'hiddenwin', "class='close-block' onclick=\"return confirm('{$lang->block->confirmClose}')\"")?>
                     <?php endif;?>
                   </ul>
                 </li>
@@ -71,21 +70,20 @@ $useGuest = $this->app->user->account == 'guest';
               <div class='panel-title'><?php echo $block->title;?></div>
             <?php endif;?>
               <nav class='panel-actions nav nav-default'>
-                <?php if(!empty($block->moreLink)):?>
-                   <?php echo '<li>' . html::a($block->moreLink, 'MORE', '', "title='{$lang->more}'") . '</li>';?>
-                <?php endif; ?>
+                <?php if(!empty($block->actionLink)) echo '<li>' . $block->actionLink . '</li>';?>
+                <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, 'MORE', '', "title='{$lang->more}'") . '</li>';?>
                 <li class='dropdown'>
                   <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
                   <ul class='dropdown-menu pull-right'>
                     <?php if(!$useGuest):?>
-                    <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "id=$block->id&module=$module"); ?>" class='edit-block' data-title='<?php echo $block->title; ?>' data-icon='icon-pencil'><i class='icon-pencil'></i> <?php echo $lang->edit; ?></a></li>
+                    <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "id=$block->id&module=$module"); ?>" class='edit-block' data-title='<?php echo $block->title; ?>' ><?php echo $lang->edit; ?></a></li>
                     <?php if(!$block->source and $block->block == 'html'):?>
-                    <li><a href="javascript:hiddenBlock(<?php echo $index;?>)" class="hidden-panel"><i class='icon-eye-close'></i><?php echo $lang->block->hidden; ?></a></li>
+                    <li><a href="javascript:hiddenBlock(<?php echo $index;?>)" class="hidden-panel"><?php echo $lang->block->hidden; ?></a></li>
                     <?php endif;?>
-                    <li><a href='javascript:deleteBlock(<?php echo $index?>);' class='remove-panel'><i class='icon-remove'></i> <?php echo $lang->block->remove; ?></a></li>
+                    <li><a href='javascript:deleteBlock(<?php echo $index?>);' class='remove-panel'><?php echo $lang->block->remove; ?></a></li>
                     <?php endif;?>
                     <?php if($this->app->user->admin):?>
-                    <li><?php echo html::a($this->createLink('block', 'close', "blockID={$block->id}"), "<i class='icon-eye-close'></i> {$lang->block->closeForever}", 'hiddenwin', "class='close-block' onclick=\"return confirm('{$lang->block->confirmClose}')\"")?>
+                    <li><?php echo html::a($this->createLink('block', 'close', "blockID={$block->id}"), $lang->block->closeForever, 'hiddenwin', "class='close-block' onclick=\"return confirm('{$lang->block->confirmClose}')\"")?>
                     <?php endif;?>
                   </ul>
                 </li>

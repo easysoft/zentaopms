@@ -10,57 +10,58 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php
-$jsRoot = $this->app->getWebRoot() . "js/";
-include '../../common/view/tablesorter.html.php';
-?>
 <div id='querybox' class='show'></div>
 <div id='unlinkBugList'>
-  <form method='post' id='unlinkedBugsForm' target='hiddenwin' action='<?php echo $this->createLink('build', 'linkBug', "buildID={$build->id}&browseType=$browseType&param=$param");?>'>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable'> 
-      <caption class='text-left text-special'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedBugs;?></strong></caption>
+  <form class='main-table table-bug' data-ride='table' method='post' id='unlinkedBugsForm' target='hiddenwin' action='<?php echo $this->createLink('build', 'linkBug', "buildID={$build->id}&browseType=$browseType&param=$param");?>'>
+    <div class='table-header'>
+      <div class='table-statistic'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedBugs;?></strong></div>
+    </div>
+    <table class='table'> 
       <thead>
-      <tr class='colhead'>
-        <th class='w-id {sorter:"currency"}'><?php echo $lang->idAB;?></th>
-        <th class='w-pri'>   <?php echo $lang->priAB;?></th>
-        <th>                 <?php echo $lang->bug->title;?></th>
-        <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
-        <th class='w-150px'> <?php echo $lang->bug->resolvedBy;?></th>
-        <th class='w-80px'>  <?php echo $lang->statusAB;?></th>
-      </tr>
+        <tr>
+          <th class='c-id'>
+            <?php if($allBugs):?>
+            <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
+              <label></label>
+            </div>
+            <?php endif;?>
+            <?php echo $lang->idAB;?>
+          </th>
+          <th class='w-pri'>  <?php echo $lang->priAB;?></th>
+          <th>                <?php echo $lang->bug->title;?></th>
+          <th class='w-user'> <?php echo $lang->openedByAB;?></th>
+          <th class='w-150px'><?php echo $lang->bug->resolvedBy;?></th>
+          <th class='w-80px'> <?php echo $lang->statusAB;?></th>
+        </tr>
       </thead>
       <tbody>
-      <?php foreach($allBugs as $bug):?>
-      <?php if(strpos(",{$build->bugs},", ",$bug->id,") !== false) continue;?>
-      <?php if($build->product != $bug->product) continue; ?>
-      <tr>
-        <td class='cell-id'>
-          <input type='checkbox' name='bugs[<?php echo $bug->id?>]'  value='<?php echo $bug->id;?>' <?php if($bug->status == 'resolved' or $bug->status == 'closed') echo "checked";?> /> 
-          <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->id);?>
-        </td>
-        <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
-        <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
-        <td><?php echo $users[$bug->openedBy];?></td>
-        <td style='overflow:visible;padding-top:1px;padding-bottom:1px;'><?php echo ($bug->status == 'resolved' or $bug->status == 'closed') ? $users[$bug->resolvedBy] : html::select("resolvedBy[{$bug->id}]", $users, $this->app->user->account, "class='form-control chosen'");?></td>
-        <td class='text-center bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
-      </tr>
-      <?php endforeach;?>
+        <?php $unlinkedCount = 0;?>
+        <?php foreach($allBugs as $bug):?>
+        <?php if(strpos(",{$build->bugs},", ",$bug->id,") !== false) continue;?>
+        <?php if($build->product != $bug->product) continue; ?>
+        <tr>
+          <td class='cell-id'>
+            <?php echo html::checkbox('bugs', array($bug->id => sprintf('%03d', $bug->id)), ($bug->status == 'resolved' or $bug->status == 'closed') ? $bug->id : '');?>
+          </td>
+          <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
+          <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
+          <td><?php echo $users[$bug->openedBy];?></td>
+          <td style='overflow:visible;padding-top:1px;padding-bottom:1px;'><?php echo ($bug->status == 'resolved' or $bug->status == 'closed') ? $users[$bug->resolvedBy] : html::select("resolvedBy[{$bug->id}]", $users, $this->app->user->account, "class='form-control chosen'");?></td>
+          <td class='text-center bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
+        </tr>
+        <?php $unlinkedCount++;?>
+        <?php endforeach;?>
       </tbody>
-      <tfoot>
-      <tr>
-        <td colspan='6' class='text-left'>
-          <?php if(count($allBugs))
-          {
-              echo "<div class='table-actions clearfix'>";
-              echo html::selectButton() . html::submitButton($lang->build->linkBug);
-              echo html::a(inlink('view', "buildID={$build->id}&type=bug"), $lang->goback, '', "class='btn'");
-              echo '</div>';
-          }
-          ?>
-        </td>
-      </tr>
-      </tfoot>
     </table>
+    <div class='table-footer'>
+      <?php if($unlinkedCount):?>
+      <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+      <div class="table-actions btn-toolbar">
+        <?php echo html::submitButton($lang->build->linkBug);?>
+      </div>
+      <?php endif;?>
+      <?php echo html::a(inlink('view', "buildID={$build->id}&type=bug"), $lang->goback, '', "class='btn'");?>
+    </div>
   </form>
 </div>
 <script>

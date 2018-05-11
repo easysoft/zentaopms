@@ -255,10 +255,12 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `keywords` varchar(255) NOT NULL,
   `type` varchar(30) NOT NULL,
   `views` smallint(5) unsigned NOT NULL,
+  `collector` text NOT NULL,
   `addedBy` varchar(30) NOT NULL,
   `addedDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
+  `visitedDate` datetime NOT NULL,
   `acl` varchar(10) NOT NULL DEFAULT 'open',
   `groups` varchar(255) NOT NULL,
   `users` text NOT NULL,
@@ -476,17 +478,17 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `pri` enum('1','2','3','4') NOT NULL default '1',
   `desc` text NOT NULL,
   `openedBy` varchar(30) NOT NULL default '',
-  `openedDate` int(10) unsigned NOT NULL default '0',
+  `openedDate` datetime NOT NULL,
   `openedVersion` varchar(20) NOT NULL,
   `closedBy` varchar(30) NOT NULL default '',
-  `closedDate` int(10) unsigned NOT NULL default '0',
+  `closedDate` datetime NOT NULL,
   `canceledBy` varchar(30) NOT NULL default '',
-  `canceledDate` int(10) unsigned NOT NULL default '0',
+  `canceledDate` datetime NOT NULL,
   `PO` varchar(30) NOT NULL default '',
   `PM` varchar(30) NOT NULL default '',
   `QD` varchar(30) NOT NULL default '',
   `RD` varchar(30) NOT NULL default '',
-  `team` varchar(30) NOT NULL,
+  `team` varchar(90) NOT NULL,
   `acl` enum('open','private','custom') NOT NULL default 'open',
   `whitelist` text NOT NULL,
   `order` mediumint(8) unsigned NOT NULL,
@@ -518,6 +520,7 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   `branch` mediumint(8) unsigned NOT NULL default '0',
   `build` mediumint(8) unsigned NOT NULL,
   `name` char(30) NOT NULL default '',
+  `marker` enum('0','1') NOT NULL default '0',
   `date` date NOT NULL,
   `stories` text NOT NULL,
   `bugs` text NOT NULL,
@@ -644,6 +647,7 @@ CREATE TABLE IF NOT EXISTS `zt_taskestimate` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_team`;
 CREATE TABLE IF NOT EXISTS `zt_team` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
   `root` mediumint(8) unsigned NOT NULL default '0',
   `type` enum('project','task') NOT NULL DEFAULT 'project',
   `account` char(30) NOT NULL default '',
@@ -655,7 +659,9 @@ CREATE TABLE IF NOT EXISTS `zt_team` (
   `estimate` DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT '0',
   `consumed` DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT '0',
   `left` DECIMAL(12,2) UNSIGNED NOT NULL DEFAULT '0',
-  `order` TINYINT(3) NOT NULL DEFAULT '0'
+  `order` TINYINT(3) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `team` (`root`,`type`,`account`)
   ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_testreport`;
 CREATE TABLE IF NOT EXISTS `zt_testreport` (
@@ -773,7 +779,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `account` char(30) NOT NULL default '',
   `password` char(32) NOT NULL default '',
   `role` char(10) NOT NULL default '',
-  `realname` char(30) NOT NULL default '',
+  `realname` varchar(100) NOT NULL default '',
   `nickname` char(60) NOT NULL default '',
   `commiter` varchar(100) NOT NULL,
   `avatar` char(30) NOT NULL default '',

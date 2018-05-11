@@ -6,47 +6,45 @@
 #txtFile{padding: 5px 10px;}
 #txtFile div{overflow-x: auto;}
 #titlebar span{float: right; padding-right: 25px;}
+.main-header .btn-toolbar{margin-left:8px;}
 </style>
-<div id='titlebar'>
-  <div class='heading'>
-    <strong><?php echo $lang->file->common;?></strong>
-    <small class='text-muted'><?php echo $lang->file->preview;?></small>
+<div id='mainContent' class='main-content'>
+  <div class='main-header clearfix'>
+    <h2 class='pull-left'><?php echo $lang->file->preview;?></h2>
     <?php if($fileType == 'txt'):?>
-    <span><?php echo html::select('charset', $config->file->charset, $charset, "onchange='setCharset(this.value)'");?></span>
+    <div class='btn-toolbar pull-left w-120px'><?php echo html::select('charset', $config->file->charset, $charset, "onchange='setCharset(this.value)' class='chosen'");?></div>
     <?php endif;?>
   </div>
-</div>
-<?php if($fileType == 'image'):?>
-<div id='imageFile'><?php echo html::image($this->createLink('file', 'read', "fileID=$file->id"));?></div>
-<?php else:?>
-<div id='txtFile'>
-  <div>
-  <?php
-  $fileContent = file_get_contents($file->realPath);
-  if($charset != $config->charset)
-  {
-      $fileContent = helper::convertEncoding($fileContent, $charset, $config->charset);
-  }
-  else
-  {
-      if(extension_loaded('mbstring'))
-      {
-          $encoding = mb_detect_encoding($fileContent, array('ASCII', 'UTF-8', 'GB2312', 'GBK', 'BIG5'));
-          if($encoding != 'UTF-8') $fileContent = helper::convertEncoding($fileContent, $encoding, $config->charset);
-      }
-      else
-      {
-          $encoding = 'UTF-8';
-          if($config->default->lang == 'zh-cn') $encoding = 'GBK';
-          if($config->default->lang == 'zh-tw') $encoding = 'BIG5';
-          $fileContent = helper::convertEncoding($fileContent, $encoding, $config->charset);
-      }
-  }
-  a($fileContent);
-  ?>
+  <?php if($fileType == 'image'):?>
+  <div id='imageFile'><?php echo html::image($this->createLink('file', 'read', "fileID=$file->id"));?></div>
+  <?php else:?>
+  <div id='txtFile'>
+    <?php
+    $fileContent = file_get_contents($file->realPath);
+    if($charset != $config->charset)
+    {
+        $fileContent = helper::convertEncoding($fileContent, $charset, $config->charset);
+    }
+    else
+    {
+        if(extension_loaded('mbstring'))
+        {
+            $encoding = mb_detect_encoding($fileContent, array('ASCII', 'UTF-8', 'GB2312', 'GBK', 'BIG5'));
+            if($encoding != 'UTF-8') $fileContent = helper::convertEncoding($fileContent, $encoding, $config->charset);
+        }
+        else
+        {
+            $encoding = 'UTF-8';
+            if($config->default->lang == 'zh-cn') $encoding = 'GBK';
+            if($config->default->lang == 'zh-tw') $encoding = 'BIG5';
+            $fileContent = helper::convertEncoding($fileContent, $encoding, $config->charset);
+        }
+    }
+    echo "<pre>" . htmlspecialchars($fileContent) . "</pre>";
+    ?>
   </div>
+  <?php endif;?>
 </div>
-<?php endif;?>
 <script>
 function setCharset(charset)
 {

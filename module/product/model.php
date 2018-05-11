@@ -103,7 +103,6 @@ class productModel extends model
         if($isMobile) $output = "<a id='currentItem' href=\"javascript:showSearchMenu('product', '$productID', '$currentModule', '$currentMethod', '$extra')\">{$currentProduct->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
 
         if($currentProduct->type == 'normal') unset($this->lang->product->menu->branch);
-
         if($currentProduct->type != 'normal')
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
@@ -252,8 +251,8 @@ class productModel extends model
             ->orWhere('createdBy')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
-            ->beginIF($limit > 0)->limit($limit)->fi()
             ->orderBy('`order` desc')
+            ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
     }
 
@@ -334,6 +333,7 @@ class productModel extends model
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
+            ->checkIF(strlen($product->code) == 0, 'code', 'notempty') //the value of product code can be 0 or 00.00
             ->check('name', 'unique', "deleted = '0'")
             ->check('code', 'unique', "deleted = '0'")
             ->exec();
@@ -374,6 +374,7 @@ class productModel extends model
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
+            ->checkIF(strlen($product->code) == 0, 'code', 'notempty') //the value of product code can be 0 or 00.0
             ->check('name', 'unique', "id != $productID and deleted = '0'")
             ->check('code', 'unique', "id != $productID and deleted = '0'")
             ->where('id')->eq($productID)
@@ -408,6 +409,7 @@ class productModel extends model
             $products[$productID]->QD     = $data->QDs[$productID];
             $products[$productID]->RD     = $data->RDs[$productID];
             $products[$productID]->type   = $data->types[$productID];
+            $products[$productID]->line   = $data->lines[$productID];
             $products[$productID]->status = $data->statuses[$productID];
             $products[$productID]->desc   = strip_tags($this->post->descs[$productID], $this->config->allowedTags);
             $products[$productID]->order  = $data->orders[$productID];
@@ -420,6 +422,7 @@ class productModel extends model
                 ->data($product)
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
+                ->checkIF(strlen($product->code) == 0, 'code', 'notempty') //the value of product code can be 0 or 00.0
                 ->check('name', 'unique', "id != $productID and deleted = '0'")
                 ->check('code', 'unique', "id != $productID and deleted = '0'")
                 ->where('id')->eq($productID)
@@ -590,13 +593,7 @@ class productModel extends model
         $plans    = $this->loadModel('productplan')->getList($productID, $branch);
         $releases = $this->loadModel('release')->getList($productID, $branch);
         $roadmap  = array();
-        if(is_array($releases)) $releases = array_reverse($releases);
-        if(is_array($plans))    $plans    = array_reverse($plans);
-        foreach($releases as $release)
-        {
-            $year = substr($release->date, 0, 4);
-            $roadmap[$year][$release->branch][] = $release;
-        }
+
         foreach($plans as $plan)
         {
             if($plan->end != '0000-00-00' and strtotime($plan->end) - time() <= 0) continue;
@@ -604,12 +601,45 @@ class productModel extends model
             $roadmap[$year][$plan->branch][] = $plan;
         }
 
-        ksort($roadmap);
+        foreach($releases as $release)
+        {
+            $year = substr($release->date, 0, 4);
+            $roadmap[$year][$release->branch][] = $release;
+        }
+
+        krsort($roadmap);
+
+        $groupRoadmap = array();
+        foreach($roadmap as $year => $branchRoadmaps)
+        {
+            foreach($branchRoadmaps as $branch => $roadmaps)
+            {
+                $totalData = count($roadmaps);
+                $rows      = ceil($totalData / 8);
+                $maxPerRow = ceil($totalData / $rows);
+
+                $groupRoadmap[$year][$branch] = array_chunk($roadmaps, $maxPerRow);
+                foreach($groupRoadmap[$year][$branch] as $row => $rowRoadmaps) krsort($groupRoadmap[$year][$branch][$row]);
+            }
+        }
 
         /* Get last 5 roadmap. */
-        $lastKeys    = array_slice(array_keys($roadmap), -5);
+        $lastKeys    = array_slice(array_keys($groupRoadmap), -5);
         $lastRoadmap = array();
-        foreach($lastKeys as $key) $lastRoadmap[$key] = $roadmap[$key];
+        $lastRoadmap['total'] = 0;
+        foreach($lastKeys as $key)
+        {
+            if($key == '2030')
+            {
+                $lastRoadmap[$this->lang->productplan->future] = $groupRoadmap[$key];
+            }
+            else
+            {
+                $lastRoadmap[$key] = $groupRoadmap[$key];
+            }
+
+            foreach($groupRoadmap[$key] as $branchRoadmaps) $lastRoadmap['total'] += (count($branchRoadmaps, 1) - count($branchRoadmaps));
+        }
 
         return $lastRoadmap;
     }
@@ -802,7 +832,7 @@ class productModel extends model
 
     /**
      * Get priv products.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -894,7 +924,7 @@ class productModel extends model
             }
         }
 
-        $cases = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('story')->in($storyIdList)->fetchAll();
+        $cases = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll();
         $rate  = count($stories) == 0 ? 0 : round(count($cases) / count($stories), 2);
 
         return sprintf($this->lang->product->storySummary, count($stories), $totalEstimate, $rate * 100 . "%");

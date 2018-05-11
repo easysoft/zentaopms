@@ -30,7 +30,7 @@
       <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <thead>
         <tr>
-          <th class="w-100px">
+          <th class="c-id">
             <?php if($canBatchEdit or $canBatchClose):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
               <label></label>
@@ -38,47 +38,47 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='w-pri'>   <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
-          <th class='w-150px'> <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
-          <th>                 <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
-          <th class='w-user'>  <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='w-user'>  <?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->task->assignedTo);?></th>
-          <th class='w-120px'> <?php common::printOrderLink('finishedBy',  $orderBy, $vars, $lang->task->finishedBy);?></th>
-          <th class='w-hour'>  <?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
-          <th class='w-70px'>  <?php common::printOrderLink('consumed',    $orderBy, $vars, $lang->task->consumedAB);?></th>
-          <th class='w-hour'>  <?php common::printOrderLink('left',        $orderBy, $vars, $lang->task->leftAB);?></th>
-          <th class='w-date'>  <?php common::printOrderLink('deadline',    $orderBy, $vars, $lang->task->deadlineAB);?></th>
-          <th class='w-70px'>  <?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='w-160px'><?php echo $lang->actions;?></th>
+          <th class='c-pri'>     <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-project'> <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
+          <th class='c-name'>    <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
+          <th class='c-user'>    <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='c-user'>    <?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->task->assignedTo);?></th>
+          <th class='c-user'>    <?php common::printOrderLink('finishedBy',  $orderBy, $vars, $lang->task->finishedBy);?></th>
+          <th class='c-hours'>   <?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
+          <th class='c-hours'>   <?php common::printOrderLink('consumed',    $orderBy, $vars, $lang->task->consumedAB);?></th>
+          <th class='c-hours'>   <?php common::printOrderLink('left',        $orderBy, $vars, $lang->task->leftAB);?></th>
+          <th class='c-date'>    <?php common::printOrderLink('deadline',    $orderBy, $vars, $lang->task->deadlineAB);?></th>
+          <th class='c-status'>  <?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='c-actions-4'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach($tasks as $task):?>
         <tr>
           <td class="c-id">
+            <?php if($canBatchEdit or $canBatchClose):?>
             <div class="checkbox-primary">
-              <?php if($canBatchEdit or $canBatchClose):?>
               <input type='checkbox' name='taskIDList[]' value='<?php echo $task->id;?>' />
               <label></label>
-              <?php endif;?>
-              <?php printf('%03d', $task->id);?>
             </div>
+            <?php endif;?>
+            <?php printf('%03d', $task->id);?>
           </td>
-          <td><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>'><?php echo zget($lang->task->priList, $task->pri);?></span></td>
-          <td class='nobr text-left'><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></td>
-          <td class='text-left nobr'>
-            <?php if(!empty($task->team))   echo '<span class="label">' . $this->lang->task->multipleAB . '</span> ';?>
-            <?php if(!empty($task->parent)) echo '<span class="label">' . $this->lang->task->childrenAB . '</span> ';?>
+          <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>'><?php echo zget($lang->task->priList, $task->pri);?></span></td>
+          <td class='c-project' title="<?php echo $task->projectName;?>"><?php echo html::a($this->createLink('project', 'browse', "projectid=$task->projectID"), $task->projectName);?></td>
+          <td class='c-name'>
+            <?php if(!empty($task->team))   echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
+            <?php if(!empty($task->parent)) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, null, "style='color: $task->color'");?>
           </td>
-          <td><?php echo zget($users, $task->openedBy);?></td>
-          <td><?php echo zget($users, $task->assignedTo);?></td>
-          <td><?php echo zget($users, $task->finishedBy);?></td>
-          <td><?php echo $task->estimate;?></td>
-          <td><?php echo $task->consumed;?></td>
-          <td><?php echo $task->left;?></td>
-          <td class='<?php if(isset($task->delay)) echo 'delayed';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
-          <td class='task-<?php echo $task->status;?>'><?php echo $lang->task->statusList[$task->status];?></td>
+          <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
+          <td class='c-user'><?php echo zget($users, $task->assignedTo);?></td>
+          <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
+          <td class='c-hours'><?php echo $task->estimate;?></td>
+          <td class='c-hours'><?php echo $task->consumed;?></td>
+          <td class='c-hours'><?php echo $task->left;?></td>
+          <td class='c-date <?php if(isset($task->delay)) echo 'text-red';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
+          <td class='c-status'><span class="status-<?php echo $task->status;?>"><span class="label label-dot"></span> <?php echo $lang->task->statusList[$task->status];?></span></td>
           <td class='c-actions'>
             <?php
             common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', 'hand-right', '', 'iframe', true);

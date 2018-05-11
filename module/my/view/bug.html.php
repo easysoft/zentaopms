@@ -36,30 +36,30 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='w-severity'>  <?php common::printOrderLink('severity',   $orderBy, $vars, $lang->bug->severityAB);?></th>
-          <th class='w-pri'>       <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+          <th class='w-60px'>      <?php common::printOrderLink('severity',   $orderBy, $vars, $lang->bug->severityAB);?></th>
+          <th class='w-50px'>      <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
           <th class='w-type'>      <?php common::printOrderLink('type',       $orderBy, $vars, $lang->typeAB);?></th>
           <th>                     <?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
           <th class='w-user'>      <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
           <th class='w-user'>      <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
           <th class='w-user'>      <?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
           <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
-          <th class='w-160px'> <?php echo $lang->actions;?></th>
+          <th class='w-180px'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach($bugs as $bug):?>
         <tr>
           <td class="c-id">
+            <?php if($canBatchEdit):?>
             <div class="checkbox-primary">
-              <?php if($canBatchEdit):?>
               <input type='checkbox' name='bugIDList[]' value='<?php echo $bug->id;?>' />
               <label></label>
-              <?php endif;?>
-              <?php printf('%03d', $bug->id);?>
             </div>
+            <?php endif;?>
+            <?php printf('%03d', $bug->id);?>
           </td>
-          <td><span class='<?php echo 'severity' . zget($lang->bug->severityList, $bug->severity, $bug->severity)?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span></td>
+          <td><span class='<?php echo 'label-severity';?>' data-severity='<?php echo $bug->severity;?>'></span></td>
           <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
           <td><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
           <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color'");?></td>

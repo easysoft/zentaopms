@@ -42,14 +42,18 @@
           </tr>
           <tr>
             <th><?php echo $lang->productplan->begin;?></th>
-            <td><?php echo html::input('begin', $plan->begin, "class='form-control form-date' required");?></td><td></td><td></td>
+            <td><?php echo html::input('begin', $plan->begin != '2030-01-01' ? formatTime($plan->begin) : '', "class='form-control form-date'");?></td>
+            <td>
+              <?php $checked = $plan->begin == '2030-01-01' || $plan->end == '2030-01-01' ? "checked='checked'" : '';?>
+              <div class='checkbox-primary'>
+                <input type='checkbox' id='future' name='future' value='1' <?php echo $checked;?> />
+                <label for='future'><?php echo $lang->productplan->future;?></label>
+              </div>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->productplan->end;?></th>
-            <td>
-              <?php $disabled = $plan->end == '2030-01-01' ? ' disabled="disabled"' : '';?>
-              <?php echo html::input('end', empty($disabled) ? $plan->end : '', 'class="form-control form-date"' . $disabled);?>
-            </td>
+            <td><?php echo html::input('end', $plan->end != '2030-01-01' ? formatTime($plan->end) : '', 'class="form-control form-date"');?></td>
             <td colspan='2'><?php echo html::radio('delta', $lang->productplan->endList , '', "onclick='computeEndDate(this.value)'");?></td>
           </tr>
           <tr>

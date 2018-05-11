@@ -1,5 +1,4 @@
 .branch-list {padding-left: 0; margin: 0;}
 .branch-list > li {float: left; list-style: none; width: 50%; margin: 5px 0;}
 .data-basic.table-data tbody > tr > th {width: 80px;}
-.block-release .panel-body, .block-dynamic .panel-body {height: 224px; overflow: auto;}
-.block-release .panel-body .release-line > li > a > .info{min-height: 18px;}
+.block-release .panel-body, .block-dynamic .panel-body {height: 240px; overflow: auto;}

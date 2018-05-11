@@ -40,6 +40,9 @@ $lang->testtask->blocked          = "Blocked";
 $lang->testtask->done             = "Tested";
 $lang->testtask->totalStatus      = "All";
 $lang->testtask->all              = "All " . $lang->productCommon;
+$lang->testtask->allTasks         = 'All';
+$lang->testtask->collapseAll      = 'Collapse';
+$lang->testtask->expandAll        = 'Expand';
 
 $lang->testtask->id             = 'ID';
 $lang->testtask->common         = 'Test Task';

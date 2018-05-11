@@ -6,6 +6,7 @@ $themeRoot    = $webRoot . "theme/";
 $defaultTheme = $webRoot . 'theme/default/';
 $langTheme    = $themeRoot . 'lang/' . $app->getClientLang() . '.css';
 $clientTheme  = $this->app->getClientTheme();
+$onlybody     = zget($_GET, 'onlybody', 'no');
 ?>
 <!DOCTYPE html>
 <html lang='<?php echo $app->getClientLang();?>'>
@@ -16,8 +17,8 @@ $clientTheme  = $this->app->getClientTheme();
   <meta name="renderer" content="webkit">
   <?php
   echo html::title($title . ' - ' . $lang->zentaoPMS);
-
   js::exportConfigVars();
+  echo '<script>config.onlybody = "' . $onlybody . '";</script>';
   if($config->debug)
   {
       js::import($jsRoot . 'jquery/lib.js');

@@ -1182,6 +1182,9 @@ class testcase extends control
                         $childId ++;
                     }
                 }
+                $case->stepDesc   = trim($case->stepDesc);
+                $case->stepExpect = trim($case->stepExpect);
+                $case->real       = trim($case->real);
 
                 if($this->post->fileType == 'csv')
                 {

@@ -15,7 +15,7 @@ class product extends control
 
     /**
      * Construct function.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -39,30 +39,17 @@ class product extends control
      * Index page, to browse.
      *
      * @param  string $locate     locate to browse page or not. If not, display all products.
-     * @param  int    $productID 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * @param  int    $productID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
     public function index($locate = 'auto', $productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if($this->config->global->flow == 'onlyTest') $this->locate($this->createLink($this->moduleName, 'build'));
-
-        if($this->app->user->account == 'guest' or commonModel::isTutorialMode()) $this->config->product->homepage = 'index';
-        if(!isset($this->config->product->homepage))
-        {
-            if($this->products and $this->app->getViewType() != 'mhtml') die($this->fetch('custom', 'ajaxSetHomepage', "module=product"));
-
-            $this->config->product->homepage = 'index';
-            $this->fetch('custom', 'ajaxSetHomepage', "module=product&page=index");
-        }
-
-        $homepage = $this->config->product->homepage;
-        if($homepage == 'browse' and $locate == 'auto') $locate = 'yes';
-
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
 
         if($this->app->getViewType() != 'mhtml') unset($this->lang->product->menu->index);
@@ -76,10 +63,10 @@ class product extends control
     }
 
     /**
-     * project 
-     * 
-     * @param  string $status 
-     * @param  int    $productID 
+     * project
+     *
+     * @param  string $status
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -204,13 +191,12 @@ class product extends control
         $this->view->storyCases    = $storyCases;
         $this->view->param         = $param;
         $this->view->products      = $this->products;
-        $this->view->allCount      = $this->story->getCount($productID);
         $this->display();
     }
 
     /**
-     * Create a product. 
-     * 
+     * Create a product.
+     *
      * @access public
      * @return void
      */
@@ -227,7 +213,8 @@ class product extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
-        $this->product->setMenu($this->products, key($this->products));
+        $rootID = key($this->products);
+        $this->product->setMenu($this->products, $rootID);
 
         $this->view->title      = $this->lang->product->create;
         $this->view->position[] = $this->view->title;
@@ -236,6 +223,7 @@ class product extends control
         $this->view->qdUsers    = $this->loadModel('user')->getPairs('nodeleted|qdfirst|noclosed');
         $this->view->rdUsers    = $this->loadModel('user')->getPairs('nodeleted|devfirst|noclosed');
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
+        $this->view->rootID     = $rootID;
 
         unset($this->lang->product->typeList['']);
         $this->display();
@@ -243,8 +231,8 @@ class product extends control
 
     /**
      * Edit a product.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -252,7 +240,7 @@ class product extends control
     {
         if(!empty($_POST))
         {
-            $changes = $this->product->update($productID); 
+            $changes = $this->product->update($productID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($action == 'undelete')
             {
@@ -272,7 +260,7 @@ class product extends control
 
         $this->product->setMenu($this->products, $productID);
 
-        $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+        $product = $this->product->getById($productID);
         $this->view->title      = $this->lang->product->edit . $this->lang->colon . $product->name;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[] = $this->lang->product->edit;
@@ -289,8 +277,8 @@ class product extends control
 
     /**
      * Batch edit products.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -332,6 +320,7 @@ class product extends control
 
         $this->view->title         = $this->lang->product->batchEdit;
         $this->view->position[]    = $this->lang->product->batchEdit;
+        $this->view->lines         = array('') + $this->tree->getLinePairs();
         $this->view->productIDList = $productIDList;
         $this->view->products      = $products;
         $this->view->poUsers       = $this->loadModel('user')->getPairs('nodeleted|pofirst', $appendPoUsers);
@@ -344,8 +333,8 @@ class product extends control
 
     /**
      * Close product.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -379,8 +368,8 @@ class product extends control
 
     /**
      * View a product.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -414,8 +403,8 @@ class product extends control
 
     /**
      * Delete a product.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @param  string $confirm    yes|no
      * @access public
      * @return void
@@ -436,9 +425,9 @@ class product extends control
     }
 
     /**
-     * Road map of a product. 
-     * 
-     * @param  int    $productID 
+     * Road map of a product.
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -455,23 +444,23 @@ class product extends control
         $this->view->position[] = $this->lang->product->roadmap;
         $this->view->product    = $product;
         $this->view->roadmaps   = $this->product->getRoadmap($productID, $branch);
-        $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches   = $product->type == 'normal' ? array(0 => '') : $this->loadModel('branch')->getPairs($productID);
 
         $this->display();
     }
 
     /**
      * Product dynamic.
-     * 
-     * @param  string $type 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function dynamic($productID = 0, $type = 'today', $param = '', $orderBy = 'date_desc', $recTotal = 0, $recPerPage = 50, $pageID = 1, $lastDate = '')
+    public function dynamic($productID = 0, $type = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
     {
         /* Save session. */
         $uri   = $this->app->getURI(true);
@@ -489,17 +478,18 @@ class product extends control
         $this->product->setMenu($this->products, $productID);
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
+        $sort    = $this->loadModel('common')->appendOrder($orderBy);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
-        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
-        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
 
         /* Set the user and type. */
         $account = $type == 'account' ? $param : 'all';
         $period  = $type == 'account' ? 'all'  : $type;
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, $productID, $lastDate);
+        $date    = empty($date) ? '' : date('Y-m-d', $date);
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, $productID, 'all', $date, $direction);
 
         /* The header and position. */
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
@@ -514,16 +504,16 @@ class product extends control
         $this->view->orderBy    = $orderBy;
         $this->view->param      = $param;
         $this->view->pager      = $pager;
-        $this->view->dateGroups = $this->action->buildDateGroup($actions);
-        $this->view->allCount   = $this->action->getCount('product', $productID);
+        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction);
+        $this->view->direction  = $direction;
         $this->display();
     }
 
     /**
      * AJAX: get projects of a product in html select.
-     * 
-     * @param  int    $productID 
-     * @param  int    $projectID 
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
      * @param  string $number
      * @access public
      * @return void
@@ -539,7 +529,7 @@ class product extends control
             $projects = $this->product->getProjectPairs($productID, $branch ? "0,$branch" : $branch, $params = 'nodeleted');
         }
         if($this->app->getViewType() == 'json') die(json_encode($projects));
-        
+
         if($number === '')
         {
             die(html::select('project', $projects, $projectID, 'class=form-control onchange=loadProjectRelated(this.value)'));
@@ -553,20 +543,21 @@ class product extends control
     }
 
     /**
-     * AJAX: get plans of a product in html select. 
-     * 
-     * @param  int    $productID 
-     * @param  int    $planID 
+     * AJAX: get plans of a product in html select.
+     *
+     * @param  int    $productID
+     * @param  int    $planID
      * @param  bool   $needCreate
+     * @param  string $expired
      * @access public
      * @return void
      */
-    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false)
+    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '')
     {
-        $plans = $this->loadModel('productplan')->getPairs($productID, $branch);
+        $plans = $this->loadModel('productplan')->getPairs($productID, $branch, $expired);
         $field = $fieldID ? "plans[$fieldID]" : 'plan';
         $output = html::select($field, $plans, $planID, "class='form-control chosen'");
-        if(count($plans) == 1 and $needCreate) 
+        if(count($plans) == 1 and $needCreate)
         {
             $output .= "<span class='input-group-addon'>";
             $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch"), $this->lang->productplan->create, '_blank');
@@ -579,11 +570,11 @@ class product extends control
 
     /**
      * Drop menu page.
-     * 
-     * @param  int    $productID 
-     * @param  string $module 
-     * @param  string $method 
-     * @param  string $extra 
+     *
+     * @param  int    $productID
+     * @param  string $module
+     * @param  string $method
+     * @param  string $extra
      * @access public
      * @return void
      */
@@ -607,9 +598,9 @@ class product extends control
         $productList = array();
         foreach($lines as $id => $name)
         {
-            foreach($products as $key => $product) 
+            foreach($products as $key => $product)
             {
-                if($product->line == $id) 
+                if($product->line == $id)
                 {
                     $product->name = $name . '/' . $product->name;
                     $productList[] = $product;
@@ -625,7 +616,7 @@ class product extends control
 
     /**
      * Update order.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -646,8 +637,8 @@ class product extends control
 
     /**
      * Show error no product when visit qa.
-     * 
-     * @param  string $fromModule 
+     *
+     * @param  string $fromModule
      * @access public
      * @return void
      */
@@ -700,10 +691,10 @@ class product extends control
     }
 
     /**
-     * Export product. 
-     * 
-     * @param  string    $status 
-     * @param  string    $orderBy 
+     * Export product.
+     *
+     * @param  string    $status
+     * @param  string    $orderBy
      * @access public
      * @return void
      */
@@ -764,8 +755,8 @@ class product extends control
 
     /**
      * Build of product.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
