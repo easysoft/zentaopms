@@ -14,7 +14,7 @@
 .cols-list {margin-bottom: 10px;}
 .cols-list .col {border: 1px solid #ddd; height: 30px; line-height: 29px; padding: 0 10px; border-bottom: none; background: #fff; float:none; padding-left: 6px;}
 .cols-list .checkbox-primary {display: inline-block; position: relative; top: -1px;}
-.cols-list .checkbox-primary > label {padding: 0; width: 23px;}
+.cols-list .checkbox-primary > label {padding: 0; width: 21px;}
 .cols-list .col.drag-shadow {border: 1px solid #ddd;}
 .cols-list {border-bottom: 1px solid #ddd}
 .cols-list .col:hover {background: #E9F2FB}
