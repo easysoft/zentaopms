@@ -1,3 +1,7 @@
 .ke-toolbar .ke-outline[data-name='savetemplate'] {display: none}
 #modulemenu .nav #dropMenu #searchResult .closed{text-decoration:none;}
 .nav #moreMenus{cursor: pointer;}
+
+.input-group .control-product + .chosen-container-single .chosen-single {border-radius: 2px 0 0 2px; border-right-width: 0; padding-right: 1px;}
+.input-group .control-product + .chosen-container-active .chosen-single {border-right-width: 1px; padding-right: 0;}
+.input-group .control-branch + .chosen-container-single .chosen-single {border-radius: 0 2px 2px 0;}

@@ -11,35 +11,36 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<div class='container mw-1400px'>
-  <div id='titlebar'>
-    <div class='heading'>
-      <strong><?php echo html::a($this->createLink('testsuite', 'view', 'suiteID=' . $suite->id), $suite->name, '_blank');?></strong>
-      <small class='text-muted'> <?php echo $lang->testsuite->edit;?> <?php echo html::icon($lang->icons['edit']);?></small>
+<div id='mainContent' class='main-content'>
+  <div class='center-block'>
+    <div class='main-header'>
+      <h2><?php echo $lang->testsuite->edit;?></h2>
     </div>
+    <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
+      <table class='table table-form'>
+        <tr>
+          <th><?php echo $lang->testsuite->name;?></th>
+          <td colspan='2'><?php echo html::input('name', $suite->name, "class='form-control' autocomplete='off'");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->testsuite->desc;?></th>
+          <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($suite->desc), "rows=10 class='form-control'");?></td>
+        </tr>
+        <?php if($suite->type != 'library'):?>
+        <tr>
+          <th><?php echo $lang->testsuite->author;?></th>
+          <td><?php echo html::radio('type', $lang->testsuite->authorList, $suite->type);?></td>
+        </tr>
+        <?php endif;?>
+        <tr>
+          <td class='text-center' colspan='3'>
+            <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+            <?php echo html::backButton('', '', 'btn btn-wide');?>
+          </td>
+        </tr>
+      </table>
+    </form>
   </div>
-  <form class='form-condensed' method='post' target='hiddenwin' id='dataform'>
-    <table class='table table-form'> 
-      <tr>
-        <th><?php echo $lang->testsuite->name;?></th>
-        <td colspan='2'><?php echo html::input('name', $suite->name, "class='form-control' autocomplete='off'");?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->testsuite->desc;?></th>
-        <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($suite->desc), "rows=10 class='form-control'");?></td>
-      </tr>
-      <?php if($suite->type != 'library'):?>
-      <tr>
-        <th><?php echo $lang->testsuite->author;?></th>
-        <td><?php echo html::radio('type', $lang->testsuite->authorList, $suite->type);?></td>
-      </tr>
-      <?php endif;?>
-      <tr>
-        <td></td><td colspan='2'><?php echo html::submitButton() . html::backButton();?> </td>
-      </tr>
-    </table>
-  </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>

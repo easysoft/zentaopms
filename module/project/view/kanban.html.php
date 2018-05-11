@@ -58,7 +58,7 @@
 <?php
 $taskCols = array('wait', 'doing', 'pause', 'done');
 if($allCols) $taskCols = array('wait', 'doing', 'pause', 'done', 'cancel', 'closed');
-$account = $this->app->user->account
+$account = $this->app->user->account;
 ?>
 <div id="kanban" class="main-table" data-ride="table" data-checkable="false" data-group="true">
   <table class="table table-grouped text-center">
@@ -139,7 +139,7 @@ $account = $this->app->user->account
                 <?php endif?>
                 <?php if(!empty($group->bugs[$col])):?>
                 <?php foreach($group->bugs[$col] as $bug):?>
-                <div class='board-item' data-id='<?php echo $bug->id?>' id='bug-<?php echo $task->id?>' data-type='bug'>
+                <div class='board-item' data-id='<?php echo $bug->id?>' id='bug-<?php echo $bug->id?>' data-type='bug'>
                   <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), "<i class='icon-bug'></i> #{$bug->id}{$bug->title}", '', 'class="title kanbaniframe" title="' . $bug->title . '"');?>
                   <div class='info'>
                     <?php

@@ -720,7 +720,6 @@ class block extends control
 
         $status  = isset($this->params->type) ? $this->params->type : '';
         $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_asc';
-        $num     = isset($this->params->num)  ? (int)$this->params->num : 0;
 
         /* Get products. */
         $products = $this->loadModel('product')->getList($status);
@@ -737,7 +736,6 @@ class block extends control
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('id')->in($productIDList)
             ->orderBy($orderBy)
-            ->beginIF($this->viewType != 'json')->limit($num)->fi()
             ->fetchAll('id');
 
         /* Get stories. */
@@ -967,6 +965,39 @@ class block extends control
     }
 
     /**
+     * Print qa statistic block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printQaStatisticBlock()
+    {
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+
+        $status  = isset($this->params->type) ? $this->params->type : '';
+        $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_asc';
+
+        /* Get products. */
+        $products = $this->loadModel('product')->getList($status);
+        foreach($products as $productID => $product)
+        {
+            if(!$this->product->checkPriv($product)) unset($products[$productID]);
+        }
+        $productIDList = array_keys($products);
+        if(!$productIDList)
+        {
+            $this->view->products = $products;
+            return false;
+        }
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)
+            ->where('id')->in($productIDList)
+            ->orderBy($orderBy)
+            ->fetchAll('id');
+
+        $this->view->products = $products;
+    }
+
+    /**
      * Print overview block.
      *
      * @access public
@@ -1011,6 +1042,38 @@ class block extends control
      * @return void
      */
     public function printProjectOverviewBlock()
+    {
+        $projects = $this->loadModel('project')->getList();
+
+        $total = 0;
+        foreach($projects as $project)
+        {
+            if(!$this->project->checkPriv($project)) continue;
+
+            if(!isset($overview[$project->status])) $overview[$project->status] = 0;
+            $overview[$project->status]++;
+            $total++;
+        }
+
+        $overviewPercent = array();
+        foreach($this->lang->project->statusList as $statusKey => $statusName)
+        {
+            if(!isset($overview[$statusKey])) $overview[$statusKey] = 0;
+            $overviewPercent[$statusKey] = $total ? round($overview[$statusKey] / $total, 2) * 100 . '%' : '0%';
+        }
+
+        $this->view->total           = $total;
+        $this->view->overview        = $overview;
+        $this->view->overviewPercent = $overviewPercent;
+    }
+
+    /**
+     * Print qa overview block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printQaOverviewBlock()
     {
         $projects = $this->loadModel('project')->getList();
 
