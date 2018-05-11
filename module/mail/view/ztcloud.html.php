@@ -60,13 +60,12 @@
           </td>
         </tr>
         <tr>
-          <td></td>
-          <td colspan='4' class='text-left'>
+          <td colspan='5' class='text-center'>
             <?php
             echo html::submitButton('', '', 'btn btn-primary btn-wide');
-            if($this->config->mail->turnon and $mailExist) echo html::linkButton($lang->mail->test, inlink('test'), '', '', 'btn btn-wide');
-            echo html::linkButton($lang->mail->reset, inlink('reset'), '', '', 'btn btn-wide');
-            if(common::hasPriv('mail', 'browse') and !empty($config->mail->async) and !empty($config->global->cron)) echo html::linkButton($lang->mail->browse, inlink('browse'), '', '', 'btn btn-wide');
+            if($this->config->mail->turnon and $mailExist) echo html::a(inlink('test'), $lang->mail->test, '', "class='btn btn-wide'");
+            echo html::a(inlink('reset'), $lang->mail->reset, '', "class='btn btn-wide'");
+            if(common::hasPriv('mail', 'browse') and !empty($config->mail->async) and !empty($config->global->cron)) echo html::a(inlink('browse'), $lang->mail->browse, '', "class='btn btn-wide'");
             ?>
           </td>
         </tr>
