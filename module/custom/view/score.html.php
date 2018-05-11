@@ -22,8 +22,8 @@
         </tr>
         <tr>
           <td class='text-center'>
-            <?php echo html::submitButton();?>
-            <?php common::printLink('score', 'reset', '', "<i class='icon-refresh'></i> " . $lang->custom->scoreReset, '', ' id="scoreRefresh" class="btn iframe" data-width="480"', true, true);?>
+            <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
+            <?php common::printLink('score', 'reset', '', "<i class='icon-refresh'></i> " . $lang->custom->scoreReset, '', ' id="scoreRefresh" class="btn btn-wide iframe" data-width="480"', true, true);?>
           </td>
         </tr>
       </table>

@@ -15,7 +15,7 @@
   <div class='side-col' id='sidebar'>
     <div class='cell'>
       <div class='list-group'>
-        <?php 
+        <?php
         foreach($config->custom->requiredModules as $requiredModule)
         {
             $requiredModuleName = zget($lang->custom->moduleName, $requiredModule, $lang->$requiredModule->common);
@@ -38,7 +38,7 @@
           <th class='w-100px'>
           <?php
           $fields = $this->custom->getFormFields($moduleName, $method);
-  
+
           if($moduleName == 'testsuite' and $method == 'createlib')  $method = 'createLib';
           if($moduleName == 'testsuite' and $method == 'createcase')
           {
@@ -56,10 +56,8 @@
         <tr>
           <td></td>
           <td>
-          <?php
-          echo html::submitButton();
-          if(common::hasPriv('custom', 'resetRequired')) echo html::a(inlink('resetRequired', "module=$moduleName"), $lang->custom->restore, 'hiddenwin', "class='btn'");
-          ?>
+          <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
+          <?php if(common::hasPriv('custom', 'resetRequired')) echo html::a(inlink('resetRequired', "module=$moduleName"), $lang->custom->restore, 'hiddenwin', "class='btn btn-wide'");?>
           </td>
         </tr>
       </table>

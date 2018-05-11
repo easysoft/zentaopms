@@ -35,7 +35,7 @@ EOT;
   <div class='side-col' id='sidebar'>
     <div class='cell'>
       <div class='list-group'>
-        <?php 
+        <?php
         foreach($lang->custom->{$module}->fields as $key => $value)
         {
             echo html::a(inlink('set', "module=$module&field=$key"), $value, '', " id='{$key}Tab'");
@@ -72,7 +72,7 @@ EOT;
         <?php endif;?>
         <tr>
           <td></td>
-          <td><?php echo html::submitButton();?></td>
+          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
       <?php elseif($module == 'task' and $field == 'hours'):?>
@@ -88,7 +88,7 @@ EOT;
         </tr>
         <tr>
           <td></td>
-          <td><?php echo html::submitButton();?></td>
+          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
       <?php elseif($module == 'bug' and $field == 'longlife'):?>
@@ -101,7 +101,7 @@ EOT;
               <span class='input-group-addon'><?php echo $lang->day?></span>
             </div>
           </td>
-          <td><?php echo html::submitButton();?></td>
+          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
       <div class='alert alert-info alert-block'><?php echo $lang->custom->notice->longlife;?></div>
@@ -113,7 +113,7 @@ EOT;
         </tr>
         <tr>
           <td></td>
-          <td><?php echo html::submitButton();?></td>
+          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
       <?php elseif($module == 'user' and $field == 'deleted'):?>
@@ -124,7 +124,7 @@ EOT;
         </tr>
         <tr>
           <td></td>
-          <td><?php echo html::submitButton();?></td>
+          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
       <?php else:?>
@@ -151,11 +151,11 @@ EOT;
         <?php endforeach;?>
         <tr>
           <td colspan='<?php $canAdd ? print(3) : print(2);?>' class='text-center'>
-          <?php 
+          <?php
           $appliedTo = array($currentLang => $lang->custom->currentLang, 'all' => $lang->custom->allLang);
           echo html::radio('lang', $appliedTo, $lang2Set);
-          echo html::submitButton();
-          if(common::hasPriv('custom', 'restore')) echo html::linkButton($lang->custom->restore, inlink('restore', "module=$module&field=$field"), 'hiddenwin');
+          echo html::submitButton('', '', 'btn btn-primary btn-wide');
+          if(common::hasPriv('custom', 'restore')) echo html::linkButton($lang->custom->restore, inlink('restore', "module=$module&field=$field"), 'hiddenwin', '', 'btn btn-wide');
           ?>
           </td>
         </tr>
