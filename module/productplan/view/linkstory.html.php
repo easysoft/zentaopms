@@ -75,6 +75,5 @@
 $(function()
 {
     ajaxGetSearchForm('#stories .linkBox #queryBox');
-    setModal();
 })
 </script>

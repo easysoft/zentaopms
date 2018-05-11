@@ -27,7 +27,7 @@
         <tbody>
           <tr>
             <th class='w-120px'><?php echo $lang->product->name;?></th>
-            <td class='w-p25-f'><?php echo html::input('name', $product->name, "class='form-control' autocomplete='off' required");?></td><td></td>
+            <td class='w-p40-f'><?php echo html::input('name', $product->name, "class='form-control' autocomplete='off' required");?></td><td></td>
           </tr>  
           <tr>
             <th><?php echo $lang->product->code;?></th>
