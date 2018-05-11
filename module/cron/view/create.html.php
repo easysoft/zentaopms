@@ -12,18 +12,18 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
-  <div class='center-block mw-700px'>
+  <div class='center-block mw-800px'>
     <div class='main-header'>
       <h2>
         <?php echo $lang->cron->common?>
-        <small class'text-muted'> <?php echo $lang->cron->create?></small>
+        <small class'text-muted'> <?php echo $lang->arrow . $lang->cron->create?></small>
       </h2>
     </div>
     <form method='post' id='dataform' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <th class='rowhead w-80px'><?php echo $lang->cron->m;?></th>
-          <td class='w-p20'><?php echo html::input('m', '', "class='form-control' autocomplete='off'")?></td>
+          <th class='w-80px'><?php echo $lang->cron->m;?></th>
+          <td class='w-150px'><?php echo html::input('m', '', "class='form-control' autocomplete='off'")?></td>
           <td><?php echo $lang->cron->notice->m;?></td>
         </tr>
         <tr>
@@ -60,7 +60,7 @@
         </tr>
         <tr>
           <th></th>
-          <td><?php echo html::submitButton()?></td>
+          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide')?></td>
         </tr>
       </table>
     </form>

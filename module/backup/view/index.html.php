@@ -30,6 +30,10 @@
       <?php echo $lang->backup->history?>
       <span class='label label-info'><?php echo $lang->backup->restoreTip;?></span>
     </h2>
+    <div class='pull-right'>
+      <?php printf($lang->backup->holdDays, $config->backup->holdDays)?>
+      <?php if(common::hasPriv('backup', 'change')) echo html::a(inlink('change'), $lang->backup->changeAB, '', "class='iframe btn btn-sm btn-info' data-width='300'");?>
+    </div>
   </div>
   <table class='table table-condensed table-bordered active-disabled table-fixed'>
     <thead>
@@ -64,14 +68,6 @@
       <?php endforeach;?>
     <?php endforeach;?>
     </tbody>
-    <tfoot>
-      <tr>
-        <td colspan='4'>
-        <?php printf($lang->backup->holdDays, $config->backup->holdDays)?>
-        <?php if(common::hasPriv('backup', 'change')) echo html::a(inlink('change'), $lang->backup->changeAB, '', "class='iframe btn btn-sm btn-info' data-width='300'");?>
-        </td>
-      </tr>
-    </tfoot>
   </table>
 </div>
 <div class="modal fade" id="waitting" tabindex="-1" role="dialog" aria-hidden="true">

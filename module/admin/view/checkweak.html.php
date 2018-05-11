@@ -18,7 +18,7 @@
   </div>
 </div>
 <div id='mainContent' class='main-content'>
-  <div class='center-block mw-800px main-table pd-0'>
+  <div class='main-table pd-0'>
     <table class='table table-condensed table-hover table-striped table-fixed'>
       <thead>
         <th class='w-id'><?php echo $lang->idAB;?></th>
