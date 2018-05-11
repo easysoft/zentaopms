@@ -60,7 +60,7 @@
         </tr>
         <tr>
           <th></th>
-          <td><?php echo html::submitButton()?></td>
+          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide')?></td>
         </tr>
       </table>
     </form>
