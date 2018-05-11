@@ -103,17 +103,10 @@ $lang->user->roleList['dev']    = 'Developer';
 $lang->user->roleList['qa']     = 'QA';
 $lang->user->roleList['pm']     = 'Project Manager';
 $lang->user->roleList['po']     = 'Product Owner';
-<<<<<<< HEAD
-$lang->user->roleList['td']     = 'Test Director';
-$lang->user->roleList['pd']     = 'Product Director';
-$lang->user->roleList['qd']     = 'QA Director';
-$lang->user->roleList['top']    = 'Top Manager';
-=======
 $lang->user->roleList['td']     = 'Technical Manager';
 $lang->user->roleList['pd']     = 'Product Manager';
 $lang->user->roleList['qd']     = 'QA Manager';
 $lang->user->roleList['top']    = 'Senior Manager';
->>>>>>> d53267cadf32651eb7ccfff3e0b1a5dd744d3d3e
 $lang->user->roleList['others'] = 'Other';
 
 $lang->user->genderList['m'] = 'M';
