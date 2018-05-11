@@ -27,9 +27,8 @@
   <?php else:?>
     <div class='main-header'>
       <h2>
-        <span class='prefix'><?php echo html::icon($lang->icons['mail']);?></span>
         <?php echo $lang->mail->common;?>
-        <small class='text-muted'> <?php echo $lang->mail->edit;?> <?php echo html::icon('pencil');?></small>
+        <small class='text-muted'> <?php echo $lang->arrow . $lang->mail->edit;?></small>
       </h2>
     </div>
     <form method='post' target='hiddenwin' id='dataform'>
@@ -61,15 +60,16 @@
           </td>
         </tr>
         <tr>
-           <td colspan='2' class='text-center'>
-             <?php 
-             echo html::submitButton();
-             if($this->config->mail->turnon and $mailExist) echo html::linkButton($lang->mail->test, inlink('test'));
-             echo html::linkButton($lang->mail->reset, inlink('reset'));
-             if(common::hasPriv('mail', 'browse') and !empty($config->mail->async) and !empty($config->global->cron)) echo html::linkButton($lang->mail->browse, inlink('browse'));
-             ?>
-           </td>
-         </tr>
+          <td></td>
+          <td colspan='4' class='text-left'>
+            <?php
+            echo html::submitButton('', '', 'btn btn-primary btn-wide');
+            if($this->config->mail->turnon and $mailExist) echo html::linkButton($lang->mail->test, inlink('test'), '', '', 'btn btn-wide');
+            echo html::linkButton($lang->mail->reset, inlink('reset'), '', '', 'btn btn-wide');
+            if(common::hasPriv('mail', 'browse') and !empty($config->mail->async) and !empty($config->global->cron)) echo html::linkButton($lang->mail->browse, inlink('browse'), '', '', 'btn btn-wide');
+            ?>
+          </td>
+        </tr>
       </table>
     </form>
   <?php endif;?>

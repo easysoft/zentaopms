@@ -11,12 +11,18 @@
  */
 ?>
 <?php include 'header.html.php';?>
-<div id='mainContent' class='main-content'>
-  <div class='center-block'>
+<div id='mainContent' class='main-row'>
+  <div class='side-col' id='sidebar'></div>
+  <div class='main-col main-content'>
     <form method='post' target='hiddenwin'>
+      <div class='main-header'>
+        <div class='heading'>
+          <strong><?php echo $lang->custom->flow?></strong>
+        </div>
+      </div>
       <table class='table table-form'>
         <tr>
-          <th class='w-150px text-top'><?php echo $lang->custom->select;?></th>
+          <th class='w-120px text-top'><?php echo $lang->custom->select;?></th>
           <?php $checkedKey = isset($config->custom->productProject) ? $config->custom->productProject : '0_0' ?>
           <td>
             <?php foreach($lang->custom->productProject->relation as $key => $value):?>
@@ -24,7 +30,7 @@
             <?php endforeach;?>
           </td>
         </tr>
-        <tr><td></td><td><?php echo html::submitButton()?></td></tr>
+        <tr><td></td><td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide')?></td></tr>
         <tr>
           <td colspan='2' class='pd-0'>
             <div class='alert alert-info alert-block'><strong><?php echo $lang->custom->productProject->notice?></strong></div>

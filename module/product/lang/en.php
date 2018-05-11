@@ -52,7 +52,7 @@ $lang->product->unResolvedBugs   = 'Unresolved Bug';
 $lang->product->assignToNullBugs = 'Unassigned Bug';
 
 $lang->product->confirmDelete  = " Do you want to delete {$lang->productCommon}?";
-$lang->product->errorNoProduct = "{$lang->productCommon} is not created yet!";
+$lang->product->errorNoProduct = "No {$lang->productCommon} is created yet!";
 $lang->product->accessDenied   = "You have no access to {$lang->productCommon}.";
 
 $lang->product->id            = 'ID';
@@ -72,20 +72,20 @@ $lang->product->whitelist     = 'Whitelist';
 $lang->product->branch        = '%s';
 $lang->product->qa            = 'QA';
 $lang->product->release       = 'Release';
-$lang->product->latestDynamic = 'Latest Dynamic';
+$lang->product->latestDynamic = 'Dynamic';
 $lang->product->iteration     = 'Iteration';
-$lang->product->iterationInfo = 'Iterate %s times';
-$lang->product->iterationView = 'Iteration View';
+$lang->product->iterationInfo = '%s Iterations';
+$lang->product->iterationView = 'Details';
 
 $lang->product->searchStory  = 'Search';
-$lang->product->assignedToMe = 'Assigned To Me';
-$lang->product->openedByMe   = 'Created By Me';
-$lang->product->reviewedByMe = 'Reviewed By Me';
+$lang->product->assignedToMe = 'AssignedToMe';
+$lang->product->openedByMe   = 'CreatedByMe';
+$lang->product->reviewedByMe = 'ReviewedByMe';
 $lang->product->closedByMe   = 'ClosedByMe';
 $lang->product->draftStory   = 'Draft';
 $lang->product->activeStory  = 'Activated';
 $lang->product->changedStory = 'Changed';
-$lang->product->willClose    = 'ToBeClose';
+$lang->product->willClose    = 'ToBeClosed';
 $lang->product->closedStory  = 'Closed';
 $lang->product->unclosed     = 'Open';
 $lang->product->unplan       = 'Wait';
@@ -100,8 +100,8 @@ $lang->product->typeList['branch']   = 'Multi Branch';
 $lang->product->typeList['platform'] = 'Multi Platform';
 
 $lang->product->typeTips = array();
-$lang->product->typeTips['branch']   = '(Divide the custom content.)';
-$lang->product->typeTips['platform'] = '(Divide IOS, Android, PC, etc.)';
+$lang->product->typeTips['branch']   = '(for the custom content)';
+$lang->product->typeTips['platform'] = '(for IOS, Android, PC, etc.)';
 
 $lang->product->branchName['normal']   = '';
 $lang->product->branchName['branch']   = 'Branch';
@@ -111,7 +111,7 @@ $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = 'Normal';
 $lang->product->statusList['closed'] = 'Closed';
 
-$lang->product->aclList['open']    = "Default (User with {$lang->productCommon} View privilege have access to it)";
+$lang->product->aclList['open']    = "Default (User with privilege to {$lang->productCommon} can access to it.)";
 $lang->product->aclList['private'] = "Private {$lang->productCommon} ({$lang->projectCommon} team members only)";
 $lang->product->aclList['custom']  = 'Custom (Team members and Whitelist members have access to it.)';
 

@@ -70,7 +70,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan='<?php echo count($lang->message->typeList) + 1?>' class='text-center'><?php echo html::submitButton() . html::backButton();?></td>
+          <td colspan='<?php echo count($lang->message->typeList) + 1?>' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?> <?php echo html::backButton('', '', 'btn btn-default btn-wide');?></td>
         </tr>
       </tfoot>
     </table>

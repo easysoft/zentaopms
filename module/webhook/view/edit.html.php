@@ -5,7 +5,7 @@
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
- * @package     webhook 
+ * @package     webhook
  * @version     $Id$
  * @link        http://www.zentao.net
  */
@@ -68,7 +68,7 @@
         </tr>
         <tr>
           <th></th>
-          <td><?php echo html::submitButton() . html::backButton();?></td>
+          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?> <?php echo html::backButton('', '', 'btn btn-default btn-wide')?></td>
         </tr>
       </table>
     </form>
