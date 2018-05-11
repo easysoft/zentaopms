@@ -39,18 +39,13 @@
         </tr>
         <tr>
           <th><?php echo $lang->entry->ip;?></th>
+          <td><?php echo html::input('ip', '', "class='form-control' title='{$lang->entry->note->ip}' placeholder='{$lang->entry->note->ip}'");?></td>
           <td>
-            <div class='input-group'>
-              <?php echo html::input('ip', '', "class='form-control' title='{$lang->entry->note->ip}' placeholder='{$lang->entry->note->ip}'");?>
-              <div class='input-group-addon'>
-                <div class='checkbox-primary'>
-                  <input type="checkbox" id="allIP" name="allIP" value="1" />
-                  <label for='allIP'><?php echo $lang->entry->note->allIP;?></label>
-                </div>
-              </div>
+            <div class='checkbox-primary'>
+              <input type="checkbox" id="allIP" name="allIP" value="1" />
+              <label for='allIP'><?php echo $lang->entry->note->allIP;?></label>
             </div>
           </td>
-          <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->entry->desc;?></th>

@@ -12,6 +12,9 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div id='mainContent' class='main-content'>
+<div class='main-header'>
+<h2><?php echo $lang->project->fixFirst;?></h2>
+</div>
   <form target='hiddenwin' method='post'>
     <table class='table table-form'>
       <tr>
@@ -21,12 +24,16 @@
             <?php echo html::input('estimate', !empty($firstBurn->estimate) ? $firstBurn->estimate : (!empty($firstBurn->left) ? $firstBurn->left : ''), "class='form-control' placeholder='{$lang->project->placeholder->totalLeft}' autocomplete='off'")?>
             <span class='input-group-addon fix-border'>
               <div class='checkbox-primary'>
-                 <input id='withLeft' type='checkbox' checked name='withLeft' value='1' />
-                 <label for='withLeft'><?php echo $lang->project->fixFirstWithLeft?></label>
+                <input id='withLeft' type='checkbox' checked name='withLeft' value='1' />
+                <label for='withLeft'><?php echo $lang->project->fixFirstWithLeft?></label>
               </div>
             </span>
             <span class='input-group-btn'><?php echo html::submitButton();?></span>
           </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
           <div class='alert alert-info'><?php echo $lang->project->totalEstimate . ' : ' . $project->totalEstimate . $lang->project->workHour;?></div>
         </td>
       </tr>

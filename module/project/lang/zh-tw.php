@@ -114,7 +114,7 @@ $lang->project->story             = '需求列表';
 $lang->project->bug               = 'Bug列表';
 $lang->project->dynamic           = '動態';
 $lang->project->latestDynamic     = '最新動態';
-$lang->project->build             = '版本列表';
+$lang->project->build             = '所有版本';
 $lang->project->testtask          = '測試任務';
 $lang->project->burn              = '燃盡圖';
 $lang->project->baseline          = '基準綫';
@@ -305,10 +305,10 @@ $lang->project->featureBar['task']['needconfirm']  = '需求變動';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
 
 $lang->project->treeLevel = array();
-$lang->project->treeLevel['root']  = '全部摺疊';
-$lang->project->treeLevel['story'] = '顯示需求';
-$lang->project->treeLevel['task']  = '顯示任務';
 $lang->project->treeLevel['all']   = '全部展開';
+$lang->project->treeLevel['root']  = '全部摺疊';
+$lang->project->treeLevel['story'] = '只看需求';
+$lang->project->treeLevel['task']  = '只看任務';
 
 global $config;
 if($config->global->flow == 'onlyTask')

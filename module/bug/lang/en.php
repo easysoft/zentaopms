@@ -128,6 +128,7 @@ $lang->bug->resolvedByMeAB = 'Resolved By Me';
 
 $lang->bug->ditto       = 'Ditto';
 $lang->bug->dittoNotice = 'This bug is not linked to the same product as the last one!';
+$lang->bug->noAssigned  = 'Not Assigned';
 
 /* 页面标签。*/
 $lang->bug->lblAssignedTo = 'Assignee';
@@ -154,7 +155,8 @@ $lang->bug->legendRelated               = 'Related Info';
 $lang->bug->buttonConfirm = 'Confirm';
 
 /* 交互提示。*/
-$lang->bug->confirmChangeProduct = "Change {$lang->productCommon} will cause linked {$lang->projectCommon},Story and Task change. Do you want to do this?";
+$lang->bug->summary               = "Bugs on this page : <strong>%s</strong> Total, <strong>%s</strong> Unresolved.";
+$lang->bug->confirmChangeProduct  = "Change {$lang->productCommon} will cause linked {$lang->projectCommon},Story and Task change. Do you want to do this?";
 $lang->bug->confirmDelete         = 'Do you want to delete this bug?';
 $lang->bug->setTemplateTitle      = 'Please enter the title of template.';
 $lang->bug->remindTask            = 'This Bug has been converted to Task. Do you want to update Status of Task(ID %s)?';
@@ -371,16 +373,16 @@ $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = 'Choose Build...';
 $lang->bug->placeholder->newBuildName = 'The name of new build';
 
-$lang->bug->featureBar['browse']['unclosed']      = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['all']           = $lang->bug->allBugs;
-$lang->bug->featureBar['browse']['assigntome']    = $lang->bug->assignToMe;
+$lang->bug->featureBar['browse']['unclosed']      = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['openedbyme']    = $lang->bug->openedByMe;
+$lang->bug->featureBar['browse']['assigntome']    = $lang->bug->assignToMe;
 $lang->bug->featureBar['browse']['resolvedbyme']  = $lang->bug->resolvedByMe;
+$lang->bug->featureBar['browse']['toclosed']      = $lang->bug->toClosed;
+$lang->bug->featureBar['browse']['unresolved']    = $lang->bug->unResolved;
 
 $lang->bug->featureBar['browse']['unconfirmed']   = $lang->bug->unconfirmed;
 $lang->bug->featureBar['browse']['assigntonull']  = $lang->bug->assignToNull;
-$lang->bug->featureBar['browse']['unresolved']    = $lang->bug->unResolved;
-$lang->bug->featureBar['browse']['toclosed']      = $lang->bug->toClosed;
 $lang->bug->featureBar['browse']['longlifebugs']  = $lang->bug->longLifeBugs;
 $lang->bug->featureBar['browse']['postponedbugs'] = $lang->bug->postponedBugs;
 $lang->bug->featureBar['browse']['overduebugs']   = $lang->bug->overdueBugs;
