@@ -25,7 +25,7 @@
     <?php common::printLink('bug', 'create', "productID=$productID&branch=$branchID&extra=projectID=$project->id", "<i class='icon icon-plus'> </i>" . $lang->bug->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
-<div id="mainContent" class='main-content'>
+<div id="mainContent">
   <div class="cell" id="queryBox"></div>
   <form class='main-table' method='post' id='projectBugForm' data-ride="table">
     <table class='table has-sort-head' id='bugList'>
@@ -45,7 +45,7 @@
           <th class='c-pri'>     <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
           <th>                   <?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
           <th class='w-user'>    <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='w-100px text-center'><?php common::printOrderLink('assignedTo',   $orderBy, $vars, $lang->assignedToAB);?></th>
+          <th class='w-110px'>   <?php common::printOrderLink('assignedTo',   $orderBy, $vars, $lang->assignedToAB);?></th>
           <th class='w-user'>    <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedBy);?></th>
           <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
           <th class='w-130px text-center'><?php echo $lang->actions;?></th>
@@ -61,14 +61,19 @@
           <?php printf('%03d', $bug->id);?>
           <?php endif;?>
         </td>
-        <td><span class='<?php echo 'severity' . zget($lang->bug->severityList, $bug->severity, $bug->severity)?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?></span></td>
+        <td><span class='<?php echo 'label-severity';?>' data-severity='<?php echo $bug->severity;?>'></span></td>
         <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
         <td class='text-left' title="<?php echo $bug->title?>"><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color'");?></td>
         <td><?php echo zget($users, $bug->openedBy, $bug->openedBy);?></td>
-        <td class='c-actions'>
+        <td class='c-assignedTo has-btn text-left'>
+          <?php $assignedTo = zget($users, $bug->assignedTo, $bug->assignedTo);?>
           <?php $params = "bugID=$bug->id";?>
-          <?php common::printIcon('bug', 'assignTo', $params, $bug, 'list', '', '', 'iframe', true);?>
-          <?php echo zget($users, $bug->assignedTo, $bug->assignedTo);?>
+          <?php $class = $bug->assignedTo == $this->app->user->account ? 'text-red' : 'text-primary';?>
+          <?php if(common::hasPriv('bug', 'assignTo')):?>
+          <?php echo html::a($this->createLink('bug', 'assignTo', $params, '', 'true'), "<i class='icon icon-hand-right'></i> <span class='$class'>$assignedTo</span>", '', "class='iframe btn btn-icon-left'");?>
+          <?php else:?>
+          <?php echo $assignedTo;?>
+          <?php endif;?>
         </td>
         <td><?php echo zget($users, $bug->resolvedBy, $bug->resolvedBy);?></td>
         <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>

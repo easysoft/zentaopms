@@ -43,6 +43,7 @@ $lang->tree->successSave   = '成功保存';
 $lang->tree->successFixed  = '成功修正數據！';
 $lang->tree->repeatName    = '模組名“%s”已經存在！';
 
+$lang->tree->module     = '模組';
 $lang->tree->name       = '模組名稱';
 $lang->tree->line       = '產品綫名稱';
 $lang->tree->cate       = '分類名稱';

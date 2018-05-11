@@ -10,14 +10,15 @@
  * @link        http://www.ranzhi.org
  */
 ?>
-<div class='block-todoes'>
+<div class='block-todoes' id="block <?php echo ($block->block)?>">
   <div class='panel-body'>
     <div class="todoes-input">
       <div class="todo-form-trigger"><input type="text" placeholder="<?php echo $lang->todo->lblClickCreate?>" class="form-control"></div>
       <form class="form-horizontal todoes-form layer" method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'create', 'date=today&account=&from=block');?>'>
         <h3><?php echo $lang->todo->create . $lang->todo->common;?></h3>
         <div class="form-group">
-          <div class="col-sm-12"><input required type="text" placeholder="<?php echo $lang->todo->name?>" class="form-control" name="name"></div>
+          <label for="todoName" class="col-sm-2"><?php echo $lang->todo->name?></label>
+          <div class="col-sm-9 required"><input type="text" class="form-control" name="name"></div>
         </div>
         <div class="form-group">
           <label for="todoPri" class="col-sm-2"><?php echo $lang->todo->pri?></label>
@@ -82,6 +83,46 @@
   <script>
   $(function()
   {
+      // Todoes block
+      if(!$.fn.blockTodoes)
+      {
+          $.fn.blockTodoes = function()
+          {
+              return this.each(function()
+              {
+                  var $block = $(this);
+                  if($block.data('blockTodoes')) return;
+                  $block.data('blockTodoes', 1);
+                  var $form = $block.find('form');
+                  var $titleInput = $form.find('[name="name"]');
+    
+                  var toggleForm = function(toggle)
+                  {
+                      if(toggle === undefined)
+                      {
+                          toggle = !$block.hasClass('show-form');
+                      }
+                      $block.toggleClass('show-form', toggle);
+                      if(toggle)
+                      {
+                          setTimeout(function() {$titleInput.focus();}, 50);
+                      }
+                  };
+                  $block.on('click', '.todo-form-trigger', function()
+                  {
+                      toggleForm($(this).data('trigger'));
+                  });
+                  $form.timeSpanControl(
+                  {
+                      onChange: function($control)
+                      {
+                          $control.trigger('chosen:updated');
+                      }
+                  });
+              });
+          };
+      }
+
       $('ul.todoes li .todo-check').click(function()
       {
           var $liTag     = $(this).closest('li');
@@ -94,6 +135,8 @@
               if(isFinished) $liTag.removeClass('active');
           });
       });
+
+      $('.block-todoes').blockTodoes();
   });
 
   function ajaxCreateTodo(obj)

@@ -27,7 +27,7 @@
     </div>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
+<div id='mainContent'>
   <form class='main-table' method='post' id='teamForm'>
     <table class='table table-form'>
       <thead>

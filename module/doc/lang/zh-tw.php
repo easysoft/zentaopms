@@ -43,6 +43,8 @@ $lang->doc->download       = '下載';
 $lang->doc->acl            = '權限';
 $lang->doc->groups         = '分組';
 $lang->doc->users          = '用戶';
+$lang->doc->item           = '項';
+$lang->doc->searchResult   = '搜索結果';
 
 $lang->doc->moduleDoc      = '按模組瀏覽';
 $lang->doc->searchDoc      = '搜索';
@@ -71,6 +73,7 @@ $lang->doc->editType       = '編輯分類';
 $lang->doc->deleteType     = '刪除分類';
 $lang->doc->addType        = '增加分類';
 $lang->doc->childType      = '子分類';
+$lang->doc->collect        = '收藏';
 
 $lang->doc->libName        = '文檔庫名稱';
 $lang->doc->libType        = '文檔庫類型';
@@ -115,19 +118,20 @@ $lang->doc->contentTypeList['markdown'] = 'MarkDown';
 
 $lang->doc->browseType             = '瀏覽方式';
 $lang->doc->browseTypeList['list'] = '列表';
-$lang->doc->browseTypeList['menu'] = '目錄';
-$lang->doc->browseTypeList['tree'] = '樹狀圖';
-$lang->doc->browseTypeList['card'] = '卡片';
+$lang->doc->browseTypeList['grid'] = '目錄';
 
 $lang->doc->fastMenuList['byediteddate']  = '最近更新';
-$lang->doc->fastMenuList['visiteddate']   = '最近訪問';
+//$lang->doc->fastMenuList['visiteddate']   = '最近訪問';
 $lang->doc->fastMenuList['openedbyme']    = '我的文檔';
 $lang->doc->fastMenuList['collectedbyme'] = '我的收藏';
 
 $lang->doc->fastMenuIconList['byediteddate']  = 'icon-folder-upload';
-$lang->doc->fastMenuIconList['visiteddate']   = 'icon-folder-move';
+//$lang->doc->fastMenuIconList['visiteddate']   = 'icon-folder-move';
 $lang->doc->fastMenuIconList['openedbyme']    = 'icon-folder-account';
 $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
+
+$lang->doc->customObjectLibs['files']       = '是否顯示附件庫';
+$lang->doc->customObjectLibs['customFiles'] = '是否顯示自定義檔案';
 
 $lang->doc->confirmDelete      = "您確定刪除該文檔嗎？";
 $lang->doc->confirmDeleteLib   = "您確定刪除該文檔庫嗎？";

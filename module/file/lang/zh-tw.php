@@ -40,8 +40,8 @@ $lang->file->downloads = '下載次數';
 $lang->file->extra     = '備註';
 
 $lang->file->dragFile            = '請拖拽檔案到此處';
-$lang->file->errorNotExists      = "<span class='red'>檔案夾 '%s' 不存在</span>";
-$lang->file->errorCanNotWrite    = "<span class='red'>檔案夾 '%s' 不可寫,請改變檔案夾的權限。在linux中輸入指令:sudo chmod -R 777 %s</span>";
+$lang->file->errorNotExists      = "<span class='text-red'>檔案夾 '%s' 不存在</span>";
+$lang->file->errorCanNotWrite    = "<span class='text-red'>檔案夾 '%s' 不可寫,請改變檔案夾的權限。在linux中輸入指令: <span class='code'>sudo chmod -R 777 %s</span></span>";
 $lang->file->confirmDelete       = " 您確定刪除該附件嗎？";
 $lang->file->errorFileSize       = " 檔案大小已經超過%s，可能不能成功上傳！";
 $lang->file->errorFileUpload     = " 檔案上傳失敗，檔案大小可能超出限制";

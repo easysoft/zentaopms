@@ -23,7 +23,7 @@ $lang->release->batchUnlink      = "批量移除";
 $lang->release->batchUnlinkStory = "批量移除需求";
 $lang->release->batchUnlinkBug   = "批量移除Bug";
 
-$lang->release->confirmDelete      = "您确认删除该release吗？";
+$lang->release->confirmDelete      = "您确认删除该发布吗？";
 $lang->release->confirmUnlinkStory = "您确认移除该需求吗？";
 $lang->release->confirmUnlinkBug   = "您确认移除该Bug吗？";
 

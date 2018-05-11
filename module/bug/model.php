@@ -2380,33 +2380,52 @@ class bugModel extends model
      */
     public function printCell($col, $bug, $users, $builds, $branches, $modulePairs, $projects = array(), $plans = array(), $stories = array(), $tasks = array(), $mode = 'datatable')
     {
+        $canBatchEdit         = common::hasPriv('bug', 'batchEdit');
+        $canBatchConfirm      = common::hasPriv('bug', 'batchConfirm');
+        $canBatchClose        = common::hasPriv('bug', 'batchClose');
+        $canBatchActivate     = common::hasPriv('bug', 'batchActivate');
+        $canBatchChangeBranch = common::hasPriv('bug', 'batchChangeBranch');
+        $canBatchChangeModule = common::hasPriv('bug', 'batchChangeModule');
+        $canBatchResolve      = common::hasPriv('bug', 'batchResolve');
+        $canBatchAssignTo     = common::hasPriv('bug', 'batchAssignTo');
+
+        $canBatchAction = $canBatchEdit or $canBatchConfirm or $canBatchClose or $canBatchActivate or $canBatchChangeBranch or $canBatchChangeModule or $canBatchResolve or $canBatchAssignTo or $canBatchCancel;
+
         $canView = common::hasPriv('bug', 'view');
         $bugLink = inlink('view', "bugID=$bug->id");
         $account = $this->app->user->account;
         $id = $col->id;
         if($col->show)
         {
-            $class = '';
+            $class = "c-$id";
             if($id == 'status') $class .= ' bug-' . $bug->status;
             if($id == 'title')  $class .= ' text-left';
             if($id == 'id')     $class .= ' cell-id';
-            if($id == 'assignedTo' && $bug->assignedTo == $account) $class .= ' red';
+            if($id == 'assignedTo')
+            {
+                $class .= ' has-btn text-left';
+                if($bug->assignedTo == $account) $class .= ' red';
+            }
             if($id == 'deadline' && isset($bug->delay)) $class .= ' delayed';
 
             echo "<td class='" . $class . "'" . ($id=='title' ? " title='{$bug->title}'" : '') . ">";
             switch($id)
             {
             case 'id':
-                if($mode == 'table') echo "<input type='checkbox' name='bugIDList[{$bug->id}]'  value='{$bug->id}'/> ";
-                echo $canView ? html::a($bugLink, sprintf('%03d', $bug->id)) : sprintf('%03d', $bug->id);
+                if($mode == 'table' && $canBatchAction) 
+                {
+                    echo html::checkbox('bugIDList', array($bug->id => sprintf('%03d', $bug->id)));
+                }
+                else
+                {
+                    printf('%03d', $bug->id);
+                }
                 break;
             case 'severity':
-                echo "<span class='severity" . zget($this->lang->bug->severityList, $bug->severity, $bug->severity) . "'>";
-                echo zget($this->lang->bug->severityList, $bug->severity, $bug->severity);
-                echo "</span>";
+                echo "<span class='label-severity' data-severity='{$bug->severity}'></span>";
                 break;
             case 'pri':
-                echo "<span class='pri" . zget($this->lang->bug->priList, $bug->pri, $bug->pri) . "'>";
+                echo "<span class='label-pri label-pri-" . $bug->pri . "'>";
                 echo zget($this->lang->bug->priList, $bug->pri, $bug->pri);
                 echo "</span>";
                 break;
@@ -2499,7 +2518,14 @@ class bugModel extends model
                 }
                 break;
             case 'assignedTo':
-                echo zget($users, $bug->assignedTo, $bug->assignedTo);
+                $btnTextClass   = '';
+                $assignedToText = zget($users, $bug->assignedTo);
+                $btnTextClass   = 'text-primary';
+                if(empty($bug->assignedTo)) $assignedToText = $this->lang->bug->noAssigned;
+                if($bug->assignedTo == $account) $btnTextClass = 'text-red';
+                $btnClass = $assignedToText == 'closed' ? ' disabled' : '';
+
+                echo html::a(helper::createLink('bug', 'assignTo', "bugID=$bug->id", '', true), "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='iframe btn btn-icon-left{$btnClass}'");
                 break;
             case 'assignedDate':
                 echo substr($bug->assignedDate, 5, 11);
@@ -2534,11 +2560,10 @@ class bugModel extends model
             case 'actions':
                 $params = "bugID=$bug->id";
                 common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'search', '', 'iframe', true);
-                common::printIcon('bug', 'assignTo',   $params, $bug, 'list', '', '', 'iframe', true);
-                common::printIcon('bug', 'resolve',    $params, $bug, 'list', '', '', 'iframe', true);
+                common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
                 common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
                 common::printIcon('bug', 'edit',       $params, $bug, 'list');
-                common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=bugID=$bug->id", $bug, 'list', 'copy');
+                common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
                 break;
             }
             echo '</td>';
@@ -2648,5 +2673,16 @@ class bugModel extends model
         }
 
         return array($toList, $ccList);
+    }
+
+    public function summary($bugs)
+    {
+        $unresolved = 0;
+        foreach($bugs as $bug)
+        {
+            if($bug->status != 'resolved' && $bug->status != 'closed') $unresolved++;
+        }
+
+        return sprintf($this->lang->bug->summary, count($bugs), $unresolved);
     }
 }

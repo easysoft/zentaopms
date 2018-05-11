@@ -150,6 +150,7 @@ class bug extends control
         $this->view->modules       = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'bug', $startModuleID = 0, array('treeModel', 'createBugLink'), '', $branch);
         $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
+        $this->view->summary       = $this->bug->summary($bugs);
         $this->view->browseType    = $browseType;
         $this->view->bugs          = $bugs;
         $this->view->users         = $this->user->getPairs('noletter');

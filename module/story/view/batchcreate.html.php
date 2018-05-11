@@ -15,6 +15,7 @@
   <div class="main-header">
     <h2><?php echo $lang->story->batchCreate;?></h2>
     <div class="pull-right btn-toolbar">
+      <button type='button' data-toggle="importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=batchCreateFields')?>
       <?php include '../../common/view/customfield.html.php';?>
     </div>
@@ -45,10 +46,7 @@
           <th class='col-branch<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
           <th class='col-module required'><?php echo $lang->story->module;?></th>
           <th class='col-plan<?php echo zget($visibleFields, 'plan', ' hidden') . zget($requiredFields, 'plan', ' required');?>'><?php echo $lang->story->plan;?></th>
-          <th class='col-name required has-btn'>
-            <?php echo $lang->story->title;?>
-            <button type='button' data-toggle="importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
-          </th>
+          <th class='col-name required has-btn'><?php echo $lang->story->title;?></th>
           <th class='col-desc<?php     echo zget($visibleFields, 'spec',     ' hidden') . zget($requiredFields, 'spec',     ' required');?>'><?php echo $lang->story->spec;?></th>
           <th class='w-100px<?php      echo zget($visibleFields, 'source',   ' hidden') . zget($requiredFields, 'source',   ' required');?>'><?php echo $lang->story->source;?></th>
           <th class='w-p15<?php        echo zget($visibleFields, 'verify',   ' hidden') . zget($requiredFields, 'verify',   ' required');?>'><?php echo $lang->story->verify;?></th>

@@ -13,11 +13,14 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->testreport->browse;?></span></span>
+    <span class='btn btn-link btn-active-text'>
+      <span class='text'><?php echo $lang->testreport->browse;?></span>
+      <span class="label label-light label-badge"><?php echo $pager->recTotal;?></span>
+    </span>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
-  <table class='table has-sort-head main-table table-fixed' id='reportList'>
+<div id='mainContent' class='main-table'>
+  <table class='table has-sort-head table-fixed' id='reportList'>
     <?php $vars = "objectID=$objectID&objectType=$objectType&extra=$extra&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
     <thead>
       <tr>
