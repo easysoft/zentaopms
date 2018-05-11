@@ -11,12 +11,18 @@
  */
 ?>
 <?php include 'header.html.php';?>
-<div id='mainContent' class='main-content'>
-  <div class='center-block'>
+<div id='mainContent' class='main-row'>
+  <div class='side-col' id='sidebar'></div>
+  <div class='main-col main-content'>
     <form method='post' target='hiddenwin'>
+      <div class='main-header'>
+        <div class='heading'>
+          <strong><?php echo $lang->custom->flow?></strong>
+        </div>
+      </div>
       <table class='table table-form'>
         <tr>
-          <th class='w-150px text-top'><?php echo $lang->custom->select;?></th>
+          <th class='w-120px text-top'><?php echo $lang->custom->select;?></th>
           <?php $checkedKey = isset($config->custom->productProject) ? $config->custom->productProject : '0_0' ?>
           <td>
             <?php foreach($lang->custom->productProject->relation as $key => $value):?>
