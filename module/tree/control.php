@@ -385,7 +385,7 @@ class tree extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($rootID, $module, $method, $extra)
+    public function ajaxGetDropMenu($rootID, $module, $method, $extra = '')
     {
         $this->view->productID = $rootID;
         $this->view->module    = $module;
