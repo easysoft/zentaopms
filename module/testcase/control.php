@@ -174,6 +174,9 @@ class testcase extends control
             }
         }
 
+        $this->app->loadLang('project');
+        $this->app->loadLang('task');
+
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
         $this->view->position[]  = html::a($this->createLink('testcase', 'groupTask', "productID=$productID&groupBy=$groupBy"), $this->products[$productID]);
         $this->view->position[]  = $this->lang->testcase->common;

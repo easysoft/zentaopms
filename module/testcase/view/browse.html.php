@@ -198,13 +198,13 @@ js::set('branch',         $branch);
 </div>
 <script>
 $('#module' + moduleID).addClass('active'); 
-$('#' + caseBrowseType + 'Tab').addClass('active');
+$('#' + caseBrowseType + 'Tab').addClass('btn-active-text');
 <?php if($browseType == 'bysearch'):?>
 $shortcut = $('#QUERY<?php echo (int)$param;?>Tab');
 if($shortcut.size() > 0)
 {
-    $shortcut.addClass('active');
-    $('#bysearchTab').removeClass('active');
+    $shortcut.addClass('btn-active-text');
+    $('#bysearchTab').removeClass('btn-active-text');
     $('#querybox').removeClass('show');
 }
 <?php endif;?>
