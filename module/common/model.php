@@ -416,12 +416,12 @@ class commonModel extends model
         foreach ($lang->searchObjects as $key => $value)
         {
             $class = $key == $searchObject ? "class='selected'" : '';
-            echo "<li $class><a href='javascript:;' data-value='{$key}'>{$value}</a></li>";
+            echo "<li $class><a href='javascript:$.setSearchType(\"$key\");' data-value='{$key}'>{$value}</a></li>";
         }
         echo '</ul></div>';
-        echo "<input id='searchInput' class='form-control search-input' type='search' onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) shortcut()' placeholder='" . $lang->searchTips . "'/>";
+        echo "<input id='searchInput' class='form-control search-input' type='search' onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) $.gotoObject();' placeholder='" . $lang->searchTips . "'/>";
         echo '</div>';
-        echo "<a href='javascript:shortcut();' class='btn btn-link' id='searchGo'>GO!</a>";
+        echo "<a href='javascript:$.gotoObject();' class='btn btn-link' id='searchGo'>GO!</a>";
         echo "</div>\n";
     }
 
