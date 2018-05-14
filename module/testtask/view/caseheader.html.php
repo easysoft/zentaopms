@@ -1,6 +1,6 @@
 <div id='pageActions'>
-  <?php common::printLink('testtask', 'view', "taskID=$taskID", "<i class='icon icon-file-text'> </i>{$lang->testtask->view}</i>", '', "class='btn'");?>
-  <?php common::printLink('testreport', 'browse', "objectID=$productID&objectType=product&extra=$taskID", "<span class='text'>{$lang->testtask->reportField}</span>", '', "class='btn'");?>
+  <?php common::printLink('testtask', 'view', "taskID=$taskID", "<i class='icon icon-file-text'> </i>" . $lang->testtask->view, '', "class='btn'");?>
+  <?php common::printLink('testreport', 'browse', "objectID=$productID&objectType=product&extra=$taskID", "<i class='icon icon-flag'> </i>" . $lang->testtask->reportField, '', "class='btn'");?>
 </div>
 <div id='mainMenu' class='clearfix'>
   <div id='sidebarHeader'>

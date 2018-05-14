@@ -244,6 +244,11 @@ class block extends control
             {
                 if($module == 'product' && common::hasPriv('product', 'create')) $block->actionLink = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn btn-sm'");
                 if($module == 'project' && common::hasPriv('project', 'create')) $block->actionLink = html::a($this->createLink('project', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-sm'");
+                if($module == 'qa'      && common::hasPriv('testcase', 'create'))
+                {
+                    $this->app->loadLang('testcase');
+                    $block->actionLink = html::a($this->createLink('testcase', 'create', 'productID='), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->testcase->create, '', "class='btn btn-sm'");
+                }
             }
 
             if($this->block->isLongBlock($block))
@@ -1075,29 +1080,24 @@ class block extends control
      */
     public function printQaOverviewBlock()
     {
-        $projects = $this->loadModel('project')->getList();
+        $casePairs = $this->dao->select('lastRunResult, COUNT(*) AS count')->from(TABLE_CASE)->groupBy('lastRunResult')->fetchPairs();
+        $total     = array_sum($casePairs);
 
-        $total = 0;
-        foreach($projects as $project)
+        $this->app->loadLang('testcase');
+        foreach($this->lang->testcase->resultList as $result => $label)
         {
-            if(!$this->project->checkPriv($project)) continue;
-
-            if(!isset($overview[$project->status])) $overview[$project->status] = 0;
-            $overview[$project->status]++;
-            $total++;
+            if(!isset($casePairs[$result])) $casePairs[$result] = 0;
         }
 
-
-        $overviewPercent = array();
-        foreach($this->lang->project->statusList as $statusKey => $statusName)
+        $casePercents = array();
+        foreach($casePairs as $result => $count)
         {
-            if(!isset($overview[$statusKey])) $overview[$statusKey] = 0;
-            $overviewPercent[$statusKey] = round($overview[$statusKey] / $total, 2) * 100 . '%';
+            $casePercents[$result] = $total ? round($count / $total * 100, 2) : 0;
         }
 
-        $this->view->total           = $total;
-        $this->view->overview        = $overview;
-        $this->view->overviewPercent = $overviewPercent;
+        $this->view->total        = $total;
+        $this->view->casePairs    = $casePairs;
+        $this->view->casePercents = $casePercents;
     }
 
     /**
