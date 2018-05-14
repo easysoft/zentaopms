@@ -102,6 +102,7 @@ $lang->testcase->group                   = '分组';
 $lang->testcase->groupName               = '分组名称';
 $lang->testcase->step                    = '步骤';
 $lang->testcase->stepChild               = '子步骤';
+$lang->testcase->viewAll                 = '查看所有';
 
 $lang->testcase->new = '新增';
 
@@ -111,11 +112,12 @@ $lang->testcase->deleteStep   = '删除';
 $lang->testcase->insertBefore = '之前添加';
 $lang->testcase->insertAfter  = '之后添加';
 
-$lang->testcase->assignToMe  = '给我的用例';
-$lang->testcase->openedByMe  = '我建的用例';
-$lang->testcase->allCases    = '所有';
-$lang->testcase->needConfirm = '需求变动';
-$lang->testcase->bySearch    = '搜索';
+$lang->testcase->assignToMe   = '给我的用例';
+$lang->testcase->openedByMe   = '我建的用例';
+$lang->testcase->allCases     = '所有';
+$lang->testcase->allTestcases = '所有用例';
+$lang->testcase->needConfirm  = '需求变动';
+$lang->testcase->bySearch     = '搜索';
 
 $lang->testcase->lblStory       = '相关需求';
 $lang->testcase->lblLastEdited  = '最后编辑';
@@ -201,4 +203,3 @@ $lang->testcase->featureBar['browse']['group']       = '分组查看';
 $lang->testcase->featureBar['browse']['suite']       = '套件';
 $lang->testcase->featureBar['browse']['zerocase']    = '零用例需求';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];
-
