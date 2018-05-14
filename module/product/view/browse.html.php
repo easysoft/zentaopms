@@ -97,7 +97,6 @@
       </div>
     </div>
   </div>
-
   <div class="main-col">
     <div class="cell" id="queryBox"></div>
     <form class="main-table table-story" data-ride="table" method="post" id='productStoryForm'>

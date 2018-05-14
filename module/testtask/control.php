@@ -484,7 +484,7 @@ class testtask extends control
         if(!empty($_POST))
         {
             $changes = $this->testtask->start($taskID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -492,8 +492,8 @@ class testtask extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isonlybody()) die(js::reload('parent.parent'));
-            die(js::locate($this->createLink('testtask', 'view', "taskID=$taskID"), 'parent'));
+            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
         }
 
         /* Get task info. */
@@ -525,7 +525,7 @@ class testtask extends control
         if(!empty($_POST))
         {
             $changes = $this->testtask->activate($taskID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -533,8 +533,8 @@ class testtask extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isonlybody()) die(js::reload('parent.parent'));
-            die(js::locate($this->createLink('testtask', 'view', "taskID=$taskID"), 'parent'));
+            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent')); 
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
         }
 
         /* Get task info. */
@@ -566,7 +566,7 @@ class testtask extends control
         if(!empty($_POST))
         {
             $changes = $this->testtask->close($taskID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -574,8 +574,8 @@ class testtask extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isonlybody()) die(js::reload('parent.parent'));
-            die(js::locate($this->createLink('testtask', 'view', "taskID=$taskID"), 'parent'));
+            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->success, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
         }
 
         /* Get task info. */
@@ -609,7 +609,7 @@ class testtask extends control
         if(!empty($_POST))
         {
             $changes = $this->testtask->block($taskID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -617,8 +617,8 @@ class testtask extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isonlybody()) die(js::reload('parent.parent'));
-            die(js::locate($this->createLink('testtask', 'view', "taskID=$taskID"), 'parent'));
+            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
         }
 
         /* Get task info. */
@@ -980,6 +980,6 @@ class testtask extends control
             ->where('task')->eq((int)$taskID)
             ->andWhere('`case`')->in($this->post->caseIDList)
             ->exec();
-        die(js::locate($this->session->caseList));
+        die(js::locate($this->session->caseList, 'parent'));
     }
 }

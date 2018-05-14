@@ -1539,50 +1539,50 @@ function revertModuleCookie()
     }
 }
 
-// /**
-//  * Focus move up or down for input.
-//  *
-//  * @param type up|down
-//  */
-// function inputFocusJump(type){
-//     var hasFocus = $('input').is(':focus');
-//     if(hasFocus)
-//     {
-//         var title     = $("input:focus").attr('name').replace(/\[\d]/g, '');
-//         var $input    = $(":input[name^=" + title + "]:text:not(:disabled):not([name*='%'])");
-//         var num       = $input.length;
-//         var index     = parseInt($("input:focus").attr('name').replace(/[^0-9]/g, ''));
-//         var nextIndex = type == 'down' ? index + 1 : index - 1;
+/**
+ * Focus move up or down for input.
+ *
+ * @param type up|down
+ */
+function inputFocusJump(type){
+    var hasFocus = $('input').is(':focus');
+    if(hasFocus)
+    {
+        var title     = $("input:focus").attr('name').replace(/\[\d]/g, '');
+        var $input    = $(":input[name^=" + title + "]:text:not(:disabled):not([name*='%'])");
+        var num       = $input.length;
+        var index     = parseInt($("input:focus").attr('name').replace(/[^0-9]/g, ''));
+        var nextIndex = type == 'down' ? index + 1 : index - 1;
 
-//         if(nextIndex < num && nextIndex >= 0)
-//         {
-//             $input[nextIndex].focus();
-//         }
-//     }
-// }
+        if(nextIndex < num && nextIndex >= 0)
+        {
+            $input[nextIndex].focus();
+        }
+    }
+}
 
-// /**
-//  * Focus move up or down for select.
-//  *
-//  * @param type
-//  */
-// function selectFocusJump(type)
-// {
-//     var hasFocus = $('select').is(':focus');
-//     if(hasFocus)
-//     {
-//         var title     = $("select:focus").attr('name').replace(/\[\d]/g, '');
-//         var $select   = $("select[name^=" + title + "]:not([name*='%'])");
-//         var num       = $select.length;
-//         var index     = parseInt($("select:focus").attr('name').replace(/[^0-9]/g, ''));
-//         var nextIndex = type == 'down' ? index + 1 : index - 1;
+/**
+ * Focus move up or down for select.
+ *
+ * @param type
+ */
+function selectFocusJump(type)
+{
+    var hasFocus = $('select').is(':focus');
+    if(hasFocus)
+    {
+        var title     = $("select:focus").attr('name').replace(/\[\d]/g, '');
+        var $select   = $("select[name^=" + title + "]:not([name*='%'])");
+        var num       = $select.length;
+        var index     = parseInt($("select:focus").attr('name').replace(/[^0-9]/g, ''));
+        var nextIndex = type == 'down' ? index + 1 : index - 1;
 
-//         if(nextIndex < num && nextIndex >= 0)
-//         {
-//             $select[nextIndex].focus();
-//         }
-//     }
-// }
+        if(nextIndex < num && nextIndex >= 0)
+        {
+            $select[nextIndex].focus();
+        }
+    }
+}
 
 function adjustNoticePosition()
 {

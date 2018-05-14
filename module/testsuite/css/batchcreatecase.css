@@ -1,2 +1,2 @@
-.w-180px{width:180px}
-.chosen-container[id^="module"] .chosen-drop {min-width: 400px; border-top: 1px solid #ddd!important}
+#batchCreateForm .input-group .colorpicker {z-index: 2;}
+#batchCreateForm .input-group .colorpicker.open {z-index: 5;}
