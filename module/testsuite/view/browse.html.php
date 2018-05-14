@@ -67,6 +67,8 @@
     <?php endforeach;?>
     </tbody>
   </table>
+  <?php if($suites):?>
   <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

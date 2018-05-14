@@ -69,6 +69,9 @@ js::set('flow',   $this->config->global->flow);
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
 <?php else:?>
+<div id='pageActions'>
+  <?php common::printLink('testsuite', 'libView', "libID=$libID", "<i class='icon icon-file-text'> </i>" . $lang->testsuite->view, '', "class='btn'");?>
+</div>
 <div id='mainMenu' class='clearfix'>
   <div id="sidebarHeader">
     <?php echo html::commonButton('<i class="icon icon-caret-left"></i>', '', 'btn btn-icon btn-sm btn-info sidebar-toggle');?>
@@ -104,9 +107,6 @@ js::set('flow',   $this->config->global->flow);
     <?php common::printLink('testsuite', 'createCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'");?>
   </div>
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
-</div>
-<div id='pageActions'>
-  <?php common::printLink('testsuite', 'libView', "libID=$libID", "<i class='icon icon-file-text'> </i>" . $lang->testsuite->view, '', "class='btn'");?>
 </div>
 <?php endif;?>
 <div id="mainContent" class="main-row">
@@ -190,8 +190,8 @@ js::set('flow',   $this->config->global->flow);
           <?php endif;?>
         </tbody>
       </table>
+      <?php if($cases):?>
       <div class='table-footer'>
-        <?php if($cases):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
           <div class='btn-group dropup'>
@@ -244,9 +244,9 @@ js::set('flow',   $this->config->global->flow);
             <?php endif;?>
           </div>
         </div>
-        <?php endif;?>
         <?php echo $pager->show('right', 'pagerjs');?>
       </div>
+      <?php endif;?>
     </form>
   </div>
 </div>
