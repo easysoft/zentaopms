@@ -25,7 +25,9 @@ js::set('flow',   $this->config->global->flow);
 .outer.with-side #featurebar {background: none; border: none; line-height: 0; margin: 0; min-height: 0; padding: 0; }
 #querybox #searchform{border-bottom: 1px solid #ddd; margin-bottom: 20px;}
 </style>
-<div id='featurebar'>
+<div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
+  </div>
   <ul class='submenu hidden'>
     <?php echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";?>
 
@@ -67,202 +69,190 @@ js::set('flow',   $this->config->global->flow);
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
 <?php else:?>
-<div id='featurebar'>
-  <div class='heading'>
-    <?php echo "<span class='prefix'>" . html::icon($lang->icons['usecase']) . '</span><strong>' . $libName . '</strong>';?>
+<div id='mainMenu' class='clearfix'>
+  <div id="sidebarHeader">
+    <?php echo html::commonButton('<i class="icon icon-caret-left"></i>', '', 'btn btn-icon btn-sm btn-info sidebar-toggle');?>
+    <div class="title">
+      <?php
+      $this->app->loadLang('tree');
+      echo isset($moduleID) ? $moduleName : $this->lang->tree->all;
+      if(!empty($moduleID))
+      {
+          $removeLink = $browseType == 'bymodule' ? inlink('library', "libID=$libID&browseType=$browseType&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("libCaseModule")';
+          echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
+      }
+      ?>
+    </div>
   </div>
-  <div class='nav'>
-    <li>
-      <div class='label-angle <?php echo !empty($moduleID) ? 'with-close' : ''?>'>
-        <?php
-        $this->app->loadLang('tree');
-        echo isset($moduleID) ? $moduleName : $this->lang->tree->all;
-        if(!empty($moduleID))
-        {
-            $removeLink = $browseType == 'bymodule' ? inlink('library', "libID=$libID&browseType=$browseType&param=0&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("libCaseModule")';
-            echo html::a($removeLink, "<span class='close'>&times;</span>", '', "class='text-muted'");
-        }
-        ?>
-      </div>
-    </li>
-    <?php $hasCasesPriv = common::hasPriv('testsuite', 'library'); ?>
+  <div class='btn-toolbar pull-left'>
     <?php
-    if($hasCasesPriv) echo "<li id='allTab'>" . html::a($this->inlink('library', "libID=$libID&browseType=all"), $lang->testcase->allCases) . "</li>";
-    if($hasCasesPriv and ($config->testcase->needReview or !empty($config->testcase->forceReview))) echo "<li id='waitTab'>" . html::a($this->inlink('library', "libID=$libID&browseType=wait"), $lang->testcase->statusList['wait']) . "</li>";
-    echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";
-    if(common::hasPriv('testsuite', 'libView')) echo '<li>' . html::a(inlink('libView', "libID=$libID"), $lang->testsuite->view) . '</li>';
+    if(common::hasPriv('testsuite', 'library'))
+    {
+        echo html::a($this->inlink('library', "libID=$libID&browseType=all"), "<span class='text'>{$lang->testcase->allCases}</span><span class='label label-light label-badge'>{$pager->recTotal}</span>", '', "id='allTab' class='btn btn-link'");
+        if($config->testcase->needReview or !empty($config->testcase->forceReview)) echo html::a($this->inlink('library', "libID=$libID&browseType=wait"), "<span class='text'>" . $lang->testcase->statusList['wait'] . "</span><span class='label label-light label-badge'>{$pager->recTotal}</span>", '', "id='waitTab' class='btn btn-link'");
+    }
     ?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->testcase->bySearch;?></a>
   </div>
-  <div class='actions'>
+  <div class='btn-toolbar pull-right'>
     <div class='btn-group'>
-     <?php
-     $link = common::hasPriv('testsuite', 'exportTemplet') ?  $this->createLink('testsuite', 'exportTemplet', "libID=$libID") : '#';
-     if(common::hasPriv('testsuite', 'exportTemplet')) echo html::a($link, "<i class='icon-download-alt'></i> " . $lang->testsuite->exportTemplet, '', "class='btn export'");
-
-     $link = common::hasPriv('testsuite', 'import') ?  $this->createLink('testsuite', 'import', "libID=$libID") : '#';
-     if(common::hasPriv('testsuite', 'import')) echo html::a($link, "<i class='icon-upload-alt'></i> " . $lang->testcase->importFile, '', "class='btn export'");
-     ?>
+     <?php common::printLink('testsuite', 'exportTemplet', "libID=$libID", "<i class='icon-export'> </i>" . $lang->testsuite->exportTemplet, '', "class='btn btn-link export'");?>
+     <?php common::printLink('testsuite', 'import', "libID=$libID", "<i class='icon-import'> </i>" . $lang->testcase->importFile, '', "class='btn btn-link export'");?>
     </div>
-    <div class='btn-group'>
-      <div class='btn-group' id='createActionMenu'>
-        <?php
-        $misc = common::hasPriv('testsuite', 'createCase') ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
-        $link = common::hasPriv('testsuite', 'createCase') ?  $this->createLink('testsuite', 'createCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)) : '#';
-        echo html::a($link, "<i class='icon-plus'></i>" . $lang->testcase->create, '', $misc);
-        ?>
-        <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
-          <span class='caret'></span>
-        </button>
-        <ul class='dropdown-menu pull-right'>
-        <?php 
-        $misc = common::hasPriv('testsuite', 'batchCreateCase') ? '' : "class=disabled";
-        $link = common::hasPriv('testsuite', 'batchCreateCase') ?  $this->createLink('testsuite', 'batchCreateCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)) : '#';
-        echo "<li>" . html::a($link, $lang->testcase->batchCreate, '', $misc) . "</li>";
-        ?>
-        </ul>
-      </div>
-    </div>
+    <?php $params = "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0);?>
+    <?php common::printLink('testsuite', 'batchCreateCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->batchCreate, '', "class='btn btn-secondary'");?>
+    <?php common::printLink('testsuite', 'createCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'");?>
   </div>
   <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
+<div id='pageActions'>
+  <?php common::printLink('testsuite', 'libView', "libID=$libID", "<i class='icon icon-file-text'> </i>" . $lang->testsuite->view, '', "class='btn'");?>
+</div>
 <?php endif;?>
-<div class='side' id='treebox'>
-  <a class='side-handle' data-id='testcaseTree'><i class='icon-caret-left'></i></a>
-  <div class='side-body'>
-    <div class='panel panel-sm'>
-      <div class='panel-heading nobr'><?php echo html::icon($lang->icons['product']);?> <strong><?php echo $libName;?></strong></div>
-      <div class='panel-body'>
-        <?php echo $moduleTree;?>
-        <div class='text-right'>
-          <?php common::printLink('tree', 'browse', "libID=$libID&view=caselib", $lang->tree->manage);?>
-        </div>
+<div id="mainContent" class="main-row">
+  <div class="side-col" id="sidebar">
+    <div class="cell">
+      <?php if(!$moduleTree):?>
+      <hr class="space">
+      <div class="text-center text-muted">
+        <?php echo $lang->testsuite->noModule;?>
+      </div>
+      <hr class="space">
+      <?php endif;?>
+      <?php echo $moduleTree;?>
+      <div class="text-center">
+        <?php common::printLink('tree', 'browse', "libID=$libID&view=caselib", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
+        <hr class="space-sm" />
       </div>
     </div>
   </div>
-</div>
-<div class='main'>
-  <script>setTreeBox();</script>
-  <form id='batchForm' method='post'>
-    <?php $vars = "libID=$libID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
-    <table class='table table-condensed table-hover table-striped tablesorter table-fixed table-selectable' id='caseList'>
-      <thead>
-        <tr>
-          <th class='w-id {sorter:false}'>    <?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></th>
-          <th class='w-pri {sorter:false}'>   <?php common::printOrderLink('pri',           $orderBy, $vars, $lang->priAB);?></th>
-          <th class='{sorter:false}'>         <?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
-          <th class='w-type {sorter:false}'>  <?php common::printOrderLink('type',          $orderBy, $vars, $lang->typeAB);?></th>
-          <th class='w-user {sorter:false}'>  <?php common::printOrderLink('openedBy',      $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='w-100px {sorter:false}'> <?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='w-70px {sorter:false}'><?php echo $lang->actions;?></th>
-        </tr>
-      </thead>
-      <?php if($cases):?>
-      <tbody>
-      <?php foreach($cases as $case):?>
-      <tr class='text-center'>
-        <?php $viewLink = $this->createLink('testcase', 'view', "caseID=$case->id&version=$case->version");?>
-        <td class='cell-id'>
-          <input type='checkbox' name='caseIDList[]'  value='<?php echo $case->id;?>'/> 
-          <?php echo html::a($viewLink, sprintf('%03d', $case->id));?>
-        </td>
-        <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
-        <td class='text-left' title="<?php echo $case->title?>">
-          <?php if($modulePairs and $case->module)echo "<span title='{$lang->testcase->module}' class='label label-info label-badge'>{$modulePairs[$case->module]}</span> ";?>
-          <?php echo html::a($viewLink, $case->title, null, "style='color: $case->color'");?>
-        </td>
-        <td><?php echo $lang->testcase->typeList[$case->type];?></td>
-        <td><?php echo $users[$case->openedBy];?></td>
-        <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'> <?php echo $lang->testcase->statusList[$case->status];?>
-        </td>
-        <td>
-          <?php
-          if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'review', '', 'iframe');
-          common::printIcon('testcase',  'edit',    "caseID=$case->id", $case, 'list');
-          if(common::hasPriv('testcase', 'delete'))
-          {
-              $deleteURL = $this->createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$lang->testcase->delete}' class='btn-icon'");
-          }
-          ?>
-        </td>
-      </tr>
-      <?php endforeach;?>
-      </tbody>
-      <?php endif;?>
-      <tfoot>
-        <tr>
-          <td colspan='7'>
-            <?php if($cases):?>
-            <div class='table-actions clearfix'>
-              <?php echo html::selectButton();?>
-              <div class='btn-group dropup'>
-                <?php
-                $class = "class='disabled'";
-
-                $actionLink = $this->createLink('testcase', 'batchEdit', "libID=$libID&branch=0&type=lib");
-                $misc       = common::hasPriv('testcase', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
-                echo html::commonButton($lang->edit, $misc);
-                ?>
-                <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
-                <ul class='dropdown-menu' id='moreActionMenu'>
-                  <?php 
-                  $actionLink = $this->createLink('testcase', 'batchDelete', "libID=$libID");
-                  $misc = common::hasPriv('testcase', 'batchDelete') ? "onclick=\"confirmBatchDelete('$actionLink')\"" : $class;
-                  echo "<li>" . html::a('#', $lang->delete, '', $misc) . "</li>";
-
-                  if(common::hasPriv('testcase', 'batchReview') and ($config->testcase->needReview or !empty($config->testcase->forceReview)))
-                  {
-                      echo "<li class='dropdown-submenu'>";
-                      echo html::a('javascript:;', $lang->testcase->review, '', "id='reviewItem'");
-                      echo "<ul class='dropdown-menu'>";
-                      unset($lang->testcase->reviewResultList['']);
-                      foreach($lang->testcase->reviewResultList as $key => $result)
-                      {
-                          $actionLink = $this->createLink('testcase', 'batchReview', "result=$key");
-                          echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . '</li>';
-                      }
-                      echo '</ul></li>';
-                  }
-                  elseif($config->testcase->needReview or !empty($config->testcase->forceReview))
-                  {
-                      echo '<li>' . html::a('javascript:;', $lang->testcase->review,  '', $class) . '</li>';
-                  }
-
-                  if(common::hasPriv('testcase', 'batchChangeModule'))
-                  {
-                      $withSearch = count($modules) > 8;
-                      echo "<li class='dropdown-submenu'>";
-                      echo html::a('javascript:;', $lang->testcase->moduleAB, '', "id='moduleItem'");
-                      echo "<div class='dropdown-menu" . ($withSearch ? ' with-search' : '') . "'>";
-                      echo '<ul class="dropdown-list">';
-                      foreach($modules as $moduleId => $module)
-                      {
-                          $actionLink = $this->createLink('testcase', 'batchChangeModule', "moduleID=$moduleId");
-                          echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
-                      }
-                      echo '</ul>';
-                      if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
-                      echo '</div></li>';
-                  }
-                  else
-                  {
-                      echo '<li>' . html::a('javascript:;', $lang->testcase->moduleAB, '', $class) . '</li>';
-                  }
-                  ?>
-                </ul>
+  <div class="main-col">
+    <div class="cell" id="queryBox"></div>
+    <form class="main-table table-testcase" data-ride="table" method="post" id='testcaseForm'>
+      <?php $canBatchEdit         = common::hasPriv('testcase', 'batchEdit');?>
+      <?php $canBatchDelete       = common::hasPriv('testcase', 'batchDelete');?>
+      <?php $canBatchReview       = common::hasPriv('testcase', 'batchReview') and ($config->testcase->needReview or !empty($config->testcase->forceReview));?>
+      <?php $canBatchChangeModule = common::hasPriv('testcase', 'batchChangeModule');?>
+      <?php $canBatchAction       = $canBatchEdit or $canBatchDelete or $canBatchReview or $canBatchChangeModule;?>
+      <?php $vars = "libID=$libID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+      <table class='table has-sort-head' id='caseList'>
+        <thead>
+          <tr>
+            <th class='c-id'>
+              <?php if($canBatchAction):?>
+              <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
+                <label></label>
               </div>
-            </div>
-            <?php endif?>
-            <div class='text-right'><?php $pager->show();?></div>
-          </td>
-        </tr>
-      </tfoot>
-    </table>
-  </form>
+              <?php endif;?>
+              <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
+            </th>
+            <th class='c-pri'>   <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+            <th class='text-left'><?php common::printOrderLink('title',   $orderBy, $vars, $lang->testcase->title);?></th>
+            <th class='c-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
+            <th class='c-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+            <th class='c-status'><?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
+            <th class='c-actions-2 text-center'><?php echo $lang->actions;?></th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php if($cases):?>
+          <?php foreach($cases as $case):?>
+          <tr>
+            <td class='cell-id'>
+              <?php if($canBatchAction):?>
+              <?php echo html::checkbox('caseIDList', array($case->id => sprintf('%03d', $case->id)));?>
+              <?php else:?>
+              <?php echo sprintf('%03d', $case->id);?>
+              <?php endif;?>
+            </td>
+            <td><span class='label-pri label-pri-<?php echo $case->pri;?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
+            <td class='text-left' title="<?php echo $case->title?>">
+              <?php if($modulePairs and $case->module) echo "<span title='{$lang->testcase->module}' class='label label-info label-badge'>{$modulePairs[$case->module]}</span> ";?>
+              <?php $viewLink = $this->createLink('testcase', 'view', "caseID=$case->id&version=$case->version");?>
+              <?php echo html::a($viewLink, $case->title, null, "style='color: $case->color'");?>
+            </td>
+            <td><?php echo $lang->testcase->typeList[$case->type];?></td>
+            <td><?php echo $users[$case->openedBy];?></td>
+            <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'> <?php echo $lang->testcase->statusList[$case->status];?></td>
+            <td class='c-actions'>
+              <?php
+              if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'review', '', 'iframe');
+              common::printIcon('testcase',  'edit', "caseID=$case->id", $case, 'list');
+              if(common::hasPriv('testcase', 'delete'))
+              {
+                  $deleteURL = $this->createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
+                  echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->testcase->delete}' class='btn'");
+              }
+              ?>
+            </td>
+          </tr>
+          <?php endforeach;?>
+          <?php endif;?>
+        </tbody>
+      </table>
+      <div class='table-footer'>
+        <?php if($cases):?>
+        <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+        <div class="table-actions btn-toolbar">
+          <div class='btn-group dropup'>
+            <?php $actionLink = $this->createLink('testcase', 'batchEdit', "libID=$libID&branch=0&type=lib");?>
+            <?php $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";?>
+            <?php echo html::commonButton($lang->edit, $misc);?>
+            <?php if($canBatchDelete or $canBatchReview or $canBatchChangeModule):?>
+            <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+            <ul class='dropdown-menu' id='moreActionMenu'>
+              <?php
+              if($canBatchDelete)
+              {
+                  $actionLink = $this->createLink('testcase', 'batchDelete', "libID=$libID");
+                  $misc       = "onclick=\"confirmBatchDelete('$actionLink')\"";
+                  echo "<li>" . html::a('#', $lang->delete, '', $misc) . "</li>";
+              }
+
+              if($canBatchReview)
+              {
+                  echo "<li class='dropdown-submenu'>";
+                  echo html::a('javascript:;', $lang->testcase->review, '', "id='reviewItem'");
+                  echo "<ul class='dropdown-menu'>";
+                  unset($lang->testcase->reviewResultList['']);
+                  foreach($lang->testcase->reviewResultList as $key => $result)
+                  {
+                      $actionLink = $this->createLink('testcase', 'batchReview', "result=$key");
+                      echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . '</li>';
+                  }
+                  echo '</ul></li>';
+              }
+
+              if($canBatchChangeModule)
+              {
+                  $withSearch = count($modules) > 8;
+                  echo "<li class='dropdown-submenu'>";
+                  echo html::a('javascript:;', $lang->testcase->moduleAB, '', "id='moduleItem'");
+                  echo "<div class='dropdown-menu" . ($withSearch ? ' with-search' : '') . "'>";
+                  echo '<ul class="dropdown-list">';
+                  foreach($modules as $moduleId => $module)
+                  {
+                      $actionLink = $this->createLink('testcase', 'batchChangeModule', "moduleID=$moduleId");
+                      echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
+                  }
+                  echo '</ul>';
+                  if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
+                  echo '</div></li>';
+              }
+              ?>
+            </ul>
+            <?php endif;?>
+          </div>
+        </div>
+        <?php endif;?>
+        <?php echo $pager->show('right', 'pagerjs');?>
+      </div>
+    </form>
+  </div>
 </div>
 <script>
 $('#module' + moduleID).addClass('active'); 
-$('#<?php echo $this->session->libBrowseType?>Tab').addClass('active');
+$('#<?php echo $this->session->libBrowseType?>Tab').addClass('btn-active-text');
 if(flow == 'onlyTest')
 {
     $('#modulemenu > .nav > li.right').before($('#featurebar .submenu').html());

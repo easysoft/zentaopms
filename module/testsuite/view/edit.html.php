@@ -21,11 +21,11 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->testsuite->name;?></th>
-          <td colspan='2'><?php echo html::input('name', $suite->name, "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::input('name', $suite->name, "class='form-control' autocomplete='off'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testsuite->desc;?></th>
-          <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($suite->desc), "rows=10 class='form-control'");?></td>
+          <td><?php echo html::textarea('desc', htmlspecialchars($suite->desc), "rows=10 class='form-control'");?></td>
         </tr>
         <?php if($suite->type != 'library'):?>
         <tr>
@@ -34,7 +34,7 @@
         </tr>
         <?php endif;?>
         <tr>
-          <td class='text-center' colspan='3'>
+          <td class='text-center' colspan='2'>
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
             <?php echo html::backButton('', '', 'btn btn-wide');?>
           </td>
