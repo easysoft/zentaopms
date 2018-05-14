@@ -23,7 +23,7 @@
     $fileContent = file_get_contents($file->realPath);
     if($charset != $config->charset)
     {
-        $fileContent = helper::convertEncoding($fileContent, $charset, $config->charset);
+        $fileContent = helper::convertEncoding($fileContent, $charset . "//IGNORE", $config->charset);
     }
     else
     {

@@ -27,12 +27,5 @@ function loadProjectBuilds(projectID)
 
 $(function()
 {
-    var adjustPriBoxWidth = function()
-    {
-        var boxWidth   = $('#ownerAndPriBox').width();
-        var beginWidth = $("input[name='begin']").outerWidth();
-        var addonWidth = $('#ownerAndPriBox .input-group-addon').outerWidth();
-        $('#pri').css('width', boxWidth - beginWidth -addonWidth);
-    };
-    adjustPriBoxWidth();//Adjust testtask pri box width.
+    adjustPriBoxWidth();
 })
