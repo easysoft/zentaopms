@@ -10,8 +10,13 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php include '../../common/view/header.html.php';?>
+<?php if(empty($bugs)):?>
+<div class="table-empty-tip">
+  <p><span class="text-muted"><?php echo $lang->bug->noBug;?></span> <?php common::printLink('bug', 'create', "productID={$productID}", "<i class='icon icon-plus'> </i>" . $lang->bug->create, '', "class='btn btn-info'");?></p>
+</div>
+<?php else:?>
 <?php
-include '../../common/view/header.html.php';
 include '../../common/view/datatable.fix.html.php';
 js::set('browseType',    $browseType);
 js::set('moduleID',      $moduleID);
@@ -386,5 +391,6 @@ $(function(){$('#modulemenu .nav li:last').after("<li class='right'><a style='fo
 .outer.with-side #featurebar {background: none; border: none; line-height: 0; margin: 0; min-height: 0; padding: 0; }
 #querybox #searchform{border-bottom: 1px solid #ddd; margin-bottom: 20px;}
 </style>
+<?php endif;?>
 <?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
