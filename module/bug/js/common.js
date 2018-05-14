@@ -1,7 +1,5 @@
 $(function()
 {
-    setModal4List('iframe', 'bugList');
-
     if(typeof page == 'undefined') page = '';
     if(page == 'create')
     {
