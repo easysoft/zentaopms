@@ -46,7 +46,8 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->project->name;?></th>
-          <td><?php echo html::input('name', $name, "class='form-control' autocomplete='off' required");?></td><td></td><td></td>
+          <td class="col-main"><?php echo html::input('name', $name, "class='form-control' autocomplete='off' required");?></td>
+          <td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->code;?></th>
@@ -82,7 +83,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->type;?></th>
-          <td><?php echo html::select('type', $lang->project->typeList, '', "class='form-control' onchange='showTypeTips()'");?></td>
+          <td><?php echo html::select('type', $lang->project->typeList, '', "class='form-control chosen' onchange='showTypeTips()'");?></td>
           <td class='muted' colspan='2'><div class='type-tips'><?php echo $lang->project->typeDesc;?></div></td>
         </tr>
         <tr <?php if($this->config->global->flow == 'onlyTask') echo "class='hidden'";?>>
@@ -115,10 +116,10 @@
           <td colspan="3" id="plansBox">
             <div class='row'>
               <?php if(isset($plan) && !empty($plan->begin)):?>
-              <div class="col-sm-4" id="plan<?php echo $plan->product;?>"><?php echo html::select("plans[" . $plan->product . "]", $productPlan, $plan->id, "class='form-control'");?></div>
+              <div class="col-sm-4" id="plan<?php echo $plan->product;?>"><?php echo html::select("plans[" . $plan->product . "]", $productPlan, $plan->id, "class='form-control chosen'");?></div>
               <?php js::set('currentPlanID', $plan->id)?>
               <?php else:?>
-              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[]", $productPlan, '', "class='form-control'");?></div>
+              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[]", $productPlan, '', "class='form-control chosen'");?></div>
               <?php js::set('currentPlanID', '')?>
               <?php endif;?>
             </div>

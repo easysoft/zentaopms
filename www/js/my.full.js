@@ -365,6 +365,8 @@ function setOuterBox()
  */
 function setForm()
 {
+    if(config.debug) alert('[Zentao-ZUI 通知] setForm 方法已被弃用，为表单元素 form 添加 [type="ajax"] 或者 .ajax-form 来自动配置 Ajax 表单。');
+
     var formClicked = false;
     $('form').submit(function()
     {
@@ -410,6 +412,8 @@ function setForm()
  */
 function setFormAction(actionLink, hiddenwin, obj)
 {
+    if(config.debug) alert('[Zentao-ZUI 通知] setFormAction 方法已被弃用，在表单中使用如下格式会自动初始化表单提交按钮：\n<a data-form-action="要提交的表单地址">编辑</a>');
+
     $form = typeof(obj) == 'undefined' ? $('form') : $(obj).closest('form');
     if(hiddenwin) $form.attr('target', hiddenwin);
     else $form.removeAttr('target');
@@ -870,6 +874,7 @@ function isNum(s)
  */
 function setModal4List(triggerClass, replaceID, callback, width)
 {
+    if(config.debug) return alert('[Zentao-ZUI 通知] setModal4List 方法已被禁用，如果要为表格列表启用表格内触发打开的对话框关闭后动态更新列表有如下两种方式：\n1. 使用 hot 选项初始化 table 插件：<form class="main-table" data-ride="table" data-hot="true">\n2. 在对话框表单POST请求后返回内容中设置 selfClose cookie 值为 1：<script>parent.parent.$.cookie("selfClose", 1);parent.parent.$.closeModal(null, "this"); </script>');
     if(typeof(width) == 'undefined') width = 900;
     $('.' + triggerClass).modalTrigger(
     {
