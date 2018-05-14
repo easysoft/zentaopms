@@ -102,6 +102,7 @@ $lang->testcase->group                   = 'Group';
 $lang->testcase->groupName               = 'Group Name';
 $lang->testcase->step                    = 'Step';
 $lang->testcase->stepChild               = 'Child';
+$lang->testcase->viewAll                 = 'View All';
 
 $lang->testcase->new = 'New';
 
@@ -111,11 +112,12 @@ $lang->testcase->deleteStep   = 'Delete';
 $lang->testcase->insertBefore = 'Inserted Before';
 $lang->testcase->insertAfter  = 'Inserted After';
 
-$lang->testcase->assignToMe  = 'AssignedToMe';
-$lang->testcase->openedByMe  = 'CreatedByMe';
-$lang->testcase->allCases    = 'All';
-$lang->testcase->needConfirm = 'StoryChanged';
-$lang->testcase->bySearch    = 'Search';
+$lang->testcase->assignToMe   = 'AssignedToMe';
+$lang->testcase->openedByMe   = 'CreatedByMe';
+$lang->testcase->allCases     = 'All';
+$lang->testcase->allTestcases = 'All Cases';
+$lang->testcase->needConfirm  = 'StoryChanged';
+$lang->testcase->bySearch     = 'Search';
 
 $lang->testcase->lblStory       = 'Story';
 $lang->testcase->lblLastEdited  = 'Last Edit';

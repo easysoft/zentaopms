@@ -61,5 +61,5 @@ function suitEndDate()
 /* If the mouse hover over the manage contacts button, give tip. */
 $(function()
 {
-    $('[data-toggle=tooltip]').tooltip();
+    adjustPriBoxWidth();
 });
