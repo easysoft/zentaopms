@@ -11,38 +11,38 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<div class='container mw-800px'>
-  <div id='titlebar'>
-    <div class='heading'>
-      <span class='prefix'><?php echo html::icon($lang->icons['testtask']);?> <strong><?php echo $testtask->id;?></strong></span>
-      <strong><?php echo html::a($this->createLink('testtask', 'view', 'taskID=' . $testtask->id), $testtask->name, '_blank');?></strong>
-      <small class='text-danger'> <?php echo $lang->testtask->close;?> <?php echo html::icon($lang->icons['close']);?></small>
+<div id='mainContent' class='main-content'>
+  <div id='center-block'>
+    <div class='main-header'>
+      <h2>
+        <span class='label label-id'><?php echo $testtask->id;?></span>
+        <?php echo html::a($this->createLink('testtask', 'view', 'taskID=' . $testtask->id), $testtask->name, '_blank');?>
+        <small> <?php echo $lang->arrow . $lang->testtask->close;?></small>
+      </h2>
     </div>
-  </div>
-  <form class='form-condensed' method='post' target='hiddenwin'>
-    <table class='table table-form'>
-      <tr>
-        <th><?php echo $lang->comment;?></th>
-        <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->testtask->mailto;?></th>
-        <td colspan='2'>
-          <div class='input-group'>
-            <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $testtask->mailto), "multiple class='form-control'");?>
-            <?php if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");?>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td colspan='2' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList); ?></td>
-      </tr>
-    </table>
-  </form>
-  <div class='main'>
-    <?php include '../../common/view/action.html.php';?>
+    <form class='load-indicator main-form' method='post' id='closeForm'>
+      <table class='table table-form'>
+        <tr>
+          <th class='w-60px'><?php echo $lang->comment;?></th>
+          <td><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->testtask->mailto;?></th>
+          <td>
+            <div class='input-group'>
+              <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $testtask->mailto), "multiple class='form-control chosen'");?>
+              <?php if($contactLists) echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");?>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan='2' class='text-center'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList); ?></td>
+        </tr>
+      </table>
+    </form>
+    <hr class='small' />
+    <div class='main'><?php include '../../common/view/action.html.php';?></div>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
