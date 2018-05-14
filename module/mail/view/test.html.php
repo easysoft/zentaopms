@@ -22,7 +22,7 @@
     <div class='main-header'>
       <h2>
         <?php echo $lang->mail->common;?>
-        <small class='text-muted'> <?php echo $lang->mail->test;?> <?php echo html::icon($lang->icons['test']);?></small>
+        <small class='text-muted'> <?php echo $lang->arrow . $lang->mail->test;?></small>
       </h2>
       <div class='pull-right btn-toolbar'><div class='text text-info'><?php echo $lang->mail->sendmailTips;?></div></div>
     </div>

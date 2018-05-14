@@ -16,6 +16,8 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php $browseLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID=$release->product");?>
+    <?php common::printBack($browseLink, 'btn btn-link');?>
+    <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $release->id;?></span>
       <?php echo $release->name;?>
@@ -38,12 +40,6 @@
 
         common::printIcon('release', 'edit',   "releaseID=$release->id", $release);
         common::printIcon('release', 'delete', "releaseID=$release->id", $release, 'button', '', 'hiddenwin');
-
-        common::printBack($browseLink, 'btn btn-link');
-    }
-    else
-    {
-        common::printBack($browseLink, 'btn btn-link');
     }
     ?>
   </div>

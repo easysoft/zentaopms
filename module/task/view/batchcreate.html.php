@@ -26,6 +26,7 @@
       <?php endif;?>
     </h2>
     <div class="pull-right btn-toolbar">
+      <button type='button' data-toggle="importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=task&section=custom&key=batchCreateFields')?>
       <?php include '../../common/view/customfield.html.php';?>
     </div>
@@ -58,17 +59,14 @@
           <?php if($project->type != 'ops'):?>
           <th class='w-200px<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', ' required'); echo $hiddenStory;?>'><?php echo $lang->task->story;?></th>
           <?php endif;?>
-          <th class='required has-btn'>
-            <?php echo $lang->task->name;?></span>
-            <button type='button' data-toggle="importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
-          </th>
+          <th class='required has-btn'><?php echo $lang->task->name;?></span></th>
           <th class='w-80px required'><?php echo $lang->typeAB;?></span></th>
           <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden') . zget($requiredFields, 'assignedTo', ' required');?>'><?php echo $lang->task->assignedTo;?></th>
-          <th class='w-50px<?php  echo zget($visibleFields, 'estimate',   ' hidden') . zget($requiredFields, 'estimate',   ' required');?>'><?php echo $lang->task->estimateAB;?></th>
+          <th class='w-60px<?php  echo zget($visibleFields, 'estimate',   ' hidden') . zget($requiredFields, 'estimate',   ' required');?>'><?php echo $lang->task->estimateAB;?></th>
           <th class='w-100px<?php echo zget($visibleFields, 'estStarted', ' hidden') . zget($requiredFields, 'estStarted', ' required');?>'><?php echo $lang->task->estStarted;?></th>
           <th class='w-100px<?php echo zget($visibleFields, 'deadline',   ' hidden') . zget($requiredFields, 'deadline',   ' required');?>'><?php echo $lang->task->deadline;?></th>
           <th class='<?php        echo zget($visibleFields, 'desc',       ' hidden') . zget($requiredFields, 'desc',       ' required');?>'><?php echo $lang->task->desc;?></th>
-          <th class='w-70px<?php  echo zget($visibleFields, 'pri',        ' hidden') . zget($requiredFields, 'pri',        ' required');?>'><?php echo $lang->task->pri;?></th>
+          <th class='w-80px<?php  echo zget($visibleFields, 'pri',        ' hidden') . zget($requiredFields, 'pri',        ' required');?>'><?php echo $lang->task->pri;?></th>
         </tr>
       </thead>
       <tbody>

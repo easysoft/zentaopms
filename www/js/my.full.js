@@ -1712,4 +1712,19 @@ $(document).ready(function()
             }
         })
     })
+
+    $.extend({'closeModal':function(callback, location)
+    {
+        $ajaxModal = $('.modal-iframe');
+        $ajaxModal.on('hidden.zui.modal', function()
+        {
+              if(location && (!$ajaxModal.data('cancel-reload')))
+              {
+                if(location == 'this') window.location.reload();
+                else window.location = location;
+              }
+              if(callback && $.isFunction(callback)) callback();
+        });
+        $ajaxModal.modal('hide');
+    }});
 });

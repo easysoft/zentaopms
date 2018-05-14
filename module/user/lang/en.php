@@ -38,7 +38,7 @@ $lang->user->phone       = 'Phone';
 $lang->user->address     = 'Address';
 $lang->user->zipcode     = 'Zip Code';
 $lang->user->join        = 'Join Date';
-$lang->user->visits      = 'Visit Count';
+$lang->user->visits      = 'Visits';
 $lang->user->ip          = 'Last IP';
 $lang->user->last        = 'Last Login';
 $lang->user->ranzhi      = 'Zdoo Account';
@@ -100,7 +100,7 @@ $lang->user->weakPassword = "Your password does not meet the setting requirement
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Developer';
-$lang->user->roleList['qa']     = 'Tester';
+$lang->user->roleList['qa']     = 'QA';
 $lang->user->roleList['pm']     = 'Project Manager';
 $lang->user->roleList['po']     = 'Product Owner';
 $lang->user->roleList['td']     = 'Technical Manager';

@@ -16,7 +16,7 @@
     <div class='main-header'>
       <h2>
         <?php echo $lang->mail->common;?>
-        <small class='text-muted'> <?php echo $lang->mail->detect;?> <?php echo html::icon('cog');?></small>
+        <small class='text-muted'> <?php echo $lang->arrow . $lang->mail->detect;?></small>
       </h2>
     </div>
     <form class='pdt-20' method='post' target='hiddenwin'>
