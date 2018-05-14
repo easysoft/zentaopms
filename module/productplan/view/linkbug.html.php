@@ -67,6 +67,5 @@
 $(function()
 {
     ajaxGetSearchForm('#bugs .linkBox #queryBox');
-    setModal();
 })
 </script>

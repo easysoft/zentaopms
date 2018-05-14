@@ -11,44 +11,41 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix' title='CASELIB'> <strong><?php echo $lib->id;?></strong></span>
-    <strong><?php echo $lib->name;?></strong>
-    <?php if($lib->deleted):?>
-    <span class='label label-danger'><?php echo $lang->testsuite->deleted;?></span>
-    <?php endif; ?>
+<div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
+    <?php $browseLink = $this->session->caseList ? $this->session->caseList : $this->createLink('testsuite', 'library', "libID=$lib->id");?>
+    <?php common::printBack($browseLink, 'btn btn-link');?>
+    <div class='divider'></div>
+    <div class='page-title'>
+      <span class='label label-id'><?php echo $lib->id;?></span>
+      <?php echo $lib->name;?>
+      <?php if($lib->deleted):?>
+      <span class='label label-danger'><?php echo $lang->testsuite->deleted;?></span>
+      <?php endif; ?>
+    </div>
   </div>
-  <div class='actions'>
+</div>
+<div id='mainContent' class='main-content'>
+  <div class='cell'>
+    <div class='detail'>
+      <div class='detail-title'><?php echo $lang->testsuite->legendDesc;?></div>
+      <div class='detail-content article-content'><?php echo $lib->desc;?></div>
+    </div>
+    <?php include '../../common/view/action.html.php';?>
+  </div>
+</div>
+<div id="mainActions">
+  <nav class="container"></nav>
+  <div class="btn-toolbar">
     <?php
-    $browseLink = $this->session->caseList ? $this->session->caseList : $this->createLink('testsuite', 'library', "libID=$lib->id");
-    $actionLinks = '';
+    common::printBack($browseLink);
     if(!$lib->deleted)
     {
-        ob_start();
-
-        echo "<div class='btn-group'>";
-        common::printIcon('testsuite', 'edit',     "libID=$lib->id");
-        common::printIcon('testsuite', 'delete',   "libID=$lib->id", '', 'button', '', 'hiddenwin');
-        echo '</div>';
-
-        echo "<div class='btn-group'>";
-        common::printRPN($browseLink);
-        echo '</div>';
-
-        $actionLinks = ob_get_contents();
-        ob_end_clean();
-        echo $actionLinks;
+        echo "<div class='divider'></div>";
+        common::printIcon('testsuite', 'edit',   "libID=$lib->id");
+        common::printIcon('testsuite', 'delete', "libID=$lib->id", '', 'button', '', 'hiddenwin');
     }
     ?>
   </div>
-</div>
-<div class='main'>
-  <fieldset>
-    <legend><?php echo $lang->testsuite->legendDesc;?></legend>
-    <div class='article-content'><?php echo $lib->desc;?></div>
-  </fieldset>
-  <?php include '../../common/view/action.html.php';?>
-  <div class='actions'><?php echo $actionLinks;?></div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

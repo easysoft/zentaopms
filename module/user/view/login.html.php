@@ -46,10 +46,9 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
                   <td id="keeplogin"><?php echo html::checkBox('keepLogin', $lang->user->keepLogin, $keepLogin);?></td>
                 </tr>
                 <tr>
-                  <th></th>
-                  <td class="form-actions">
+                  <td class="form-actions" colspan='2'>
                   <?php 
-                  echo html::submitButton($lang->login);
+                  echo html::submitButton($lang->login, '', 'btn btn-primary btn-wide');
                   if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));
                   echo html::hidden('referer', $referer);
                   echo html::a(inlink('reset'), $lang->user->resetPassword);

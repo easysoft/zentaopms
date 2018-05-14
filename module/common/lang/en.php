@@ -762,11 +762,10 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of caselib module. */
     $lang->caselib->menu = new stdclass();
-    $lang->caselib->menu->lib    = array('link' => '%s', 'fixed' => true);
-    $lang->caselib->menu->all    = 'All|testsuite|library|libID=%s&browseType=all';
-    $lang->caselib->menu->wait   = 'Wait|testsuite|library|libID=%s&browseType=wait';
-    $lang->caselib->menu->view   = 'View|testsuite|libview|libID=%s';
-    $lang->caselib->menu->create = array('link' => "<i class='icon-plus'></i> Create Library|testsuite|createLib", 'float' => 'right');
+    $lang->caselib->menu->lib  = array('link' => '%s', 'fixed' => true);
+    $lang->caselib->menu->all  = 'All|testsuite|library|libID=%s&browseType=all';
+    $lang->caselib->menu->wait = 'Wait|testsuite|library|libID=%s&browseType=wait';
+    $lang->caselib->menu->view = 'View|testsuite|libview|libID=%s';
 
     $lang->caselib->menuOrder[5]  = 'lib';
     $lang->caselib->menuOrder[10] = 'all';

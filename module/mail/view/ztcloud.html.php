@@ -13,7 +13,7 @@
 <?php include $this->app->getModuleRoot() . 'message/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='center-block mw-800px'>
-  <?php if($step == 'license'):?>
+    <?php if($step == 'license'):?>
     <div class='main-header'>
       <h2><?php echo $lang->mail->license;?></h2>
     </div>
@@ -24,7 +24,7 @@
         <?php echo html::a(inlink('index'), $lang->mail->disagree, '', "class='btn'");?>
       </p>
     </div>
-  <?php else:?>
+    <?php else:?>
     <div class='main-header'>
       <h2>
         <?php echo $lang->mail->common;?>
@@ -34,7 +34,7 @@
     <form method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th class='rowhead w-120px'><?php echo $lang->mail->turnon; ?></th>
+          <th class='w-80px'><?php echo $lang->mail->turnon; ?></th>
           <td class='w-250px'><?php echo html::radio('turnon', $lang->mail->turnonList, isset($mailConfig->turnon) ? $mailConfig->turnon : 1);?></td>
         </tr>
         <?php if(!empty($config->global->cron)):?>
@@ -50,29 +50,28 @@
         <tr>
           <th><?php echo $lang->mail->fromAddress; ?></th>
           <td><?php echo html::input('fromAddress', $mailConfig->fromAddress, "class='form-control' autocomplete='off'");?></td>
-          <td colspan='2'><?php echo $lang->mail->addressWhiteList?></td>
+          <td><?php echo $lang->mail->addressWhiteList?></td>
         </tr>
         <tr>
           <th><?php echo $lang->mail->fromName; ?></th>
-          <td colspan='3'>
-            <div class='required required-wrapper'></div>
+          <td>
+            <div class='required'></div>
             <?php echo html::input('fromName', $mailConfig->fromName, "class='form-control' autocomplete='off'");?>
           </td>
         </tr>
         <tr>
-          <td></td>
-          <td colspan='4' class='text-left'>
+          <td colspan='3' class='text-center'>
             <?php
             echo html::submitButton('', '', 'btn btn-primary btn-wide');
-            if($this->config->mail->turnon and $mailExist) echo html::linkButton($lang->mail->test, inlink('test'), '', '', 'btn btn-wide');
-            echo html::linkButton($lang->mail->reset, inlink('reset'), '', '', 'btn btn-wide');
-            if(common::hasPriv('mail', 'browse') and !empty($config->mail->async) and !empty($config->global->cron)) echo html::linkButton($lang->mail->browse, inlink('browse'), '', '', 'btn btn-wide');
+            if($this->config->mail->turnon and $mailExist) echo html::a(inlink('test'), $lang->mail->test, '', "class='btn btn-wide'");
+            echo html::a(inlink('reset'), $lang->mail->reset, '', "class='btn btn-wide'");
+            if(common::hasPriv('mail', 'browse') and !empty($config->mail->async) and !empty($config->global->cron)) echo html::a(inlink('browse'), $lang->mail->browse, '', "class='btn btn-wide'");
             ?>
           </td>
         </tr>
       </table>
     </form>
-  <?php endif;?>
+    <?php endif;?>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

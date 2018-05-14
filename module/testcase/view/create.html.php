@@ -28,8 +28,8 @@
     <table class='table table-form'>
       <tbody>
         <tr>
-          <th class='w-80px'><?php echo $lang->testcase->product;?></th>
-          <td class='w-p45-f'>
+          <th><?php echo $lang->testcase->product;?></th>
+          <td>
             <div class='input-group'>
               <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen'");?>
               <?php if($this->session->currentProductType != 'normal') echo html::select('branch', $branches, $branch, "onchange='loadBranch();' class='form-control' style='width:120px'");?>
@@ -104,13 +104,36 @@
         <?php if(strpos(",$showFields,", ',pri,') !== false):?>
         <tr>
           <th><?php echo $lang->testcase->pri;?></th>
-          <td><?php echo html::select('pri', (array)$lang->testcase->priList, $pri, "class='form-control minw-80px chosen'");?></td>
+          <td colspan="2">
+            <?php
+            $hasCustomPri = false;
+            foreach($lang->testcase->priList as $priKey => $priValue)
+            {
+                if(!empty($priKey) and (string)$priKey != (string)$priValue)
+                {
+                    $hasCustomPri = true;
+                    break;
+                }
+            }
+            $priList = $lang->testcase->priList;
+            if(end($priList))
+            {
+                unset($priList[0]);
+                $priList[0] = '';
+            }
+            ?>
+            <?php if($hasCustomPri):?>
+                <?php echo html::select('pri', (array)$priList, $pri, "class='form-control chosen'");?>
+            <?php else: ?>
+                <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector'");?>
+            <?php endif; ?>
+          </td>
         </tr>
         <?php endif;?>
         <tr>
           <th><?php echo $lang->testcase->precondition;?></th>
           <td colspan='2'><?php echo html::textarea('precondition', $precondition, " rows='2' class='form-control'");?></td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->testcase->steps;?></th>
           <td colspan='2'>
@@ -171,18 +194,18 @@
                 <?php endforeach; ?>
               </tbody>
             </table>
-          </td> 
+          </td>
         </tr>
         <?php if(strpos(",$showFields,", ',keywords,') !== false):?>
         <tr>
           <th><?php echo $lang->testcase->keywords;?></th>
           <td colspan='2'><?php echo html::input('keywords', $keywords, "class='form-control' autocomplete='off'");?></td>
-        </tr>  
+        </tr>
         <?php endif;?>
          <tr>
           <th><?php echo $lang->testcase->files;?></th>
           <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
-        </tr>  
+        </tr>
       </tbody>
       <tfoot>
         <tr>
@@ -190,7 +213,7 @@
             <?php
             echo html::submitButton($lang->save, '', 'btn btn-wide btn-primary');
             echo ' &nbsp; ';
-            echo html::backButton($lang->goback, '', 'btn btn-wide btn-gray');
+            echo html::backButton($lang->goback, '', 'btn btn-wide');
             ?>
           </td>
         </tr>
