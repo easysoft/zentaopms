@@ -21,10 +21,24 @@ class testtaskModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($products, $productID, $branch = 0)
+    public function setMenu($products, $productID, $branch = 0, $testtask = 0)
     {
         $this->loadModel('product')->setMenu($products, $productID, $branch);
         $selectHtml = $this->product->select($products, $productID, 'testtask', 'browse', '', $branch);
+
+        if($testtask)
+        {
+            $testtasks = $this->getProductTasks($productID, $branch, 'id_desc', null, array('local', 'totalStatus'));
+
+            $selectHtml .= "<div class='btn-group angle-btn'>";
+            $selectHtml .= "<div class='btn-group'>";
+            $selectHtml .= "<a data-toggle='dropdown' class='btn'>" . $testtasks[$testtask]->name . " <span class='caret'></span></a>";
+            $selectHtml .= "<ul class='dropdown-menu'>";
+            foreach($testtasks as $testtask) $selectHtml .= '<li>' . html::a(helper::createLink('testtask', 'cases', "taskID=$testtask->id"), "<i class='icon icon-file-o'></i> {$testtask->name}") . '</li>';
+            $selectHtml .= "</ul>";
+            $selectHtml .= "</div>";
+            $selectHtml .= "</div>";
+        }
 
         $this->app->loadLang('qa');
         $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
@@ -1204,7 +1218,8 @@ class testtaskModel extends model
                 if(!helper::isZeroDate($run->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($run->lastRunDate));
                 break;
             case 'lastRunResult':
-                if($run->lastRunResult) echo $this->lang->testcase->resultList[$run->lastRunResult];
+                $lastRunResult = $run->lastRunResult ? $this->lang->testcase->resultList[$run->lastRunResult] : '';
+                echo html::a(helper::createLink('testtask', 'results', "id=$run->id", '', true), "<i class='icon icon-list-alt'></i> <span>{$lastRunResult}</span>", '', "class='iframe btn btn-icon-left'");
                 break;
             case 'story':
                 if($run->story and $run->storyTitle) echo html::a(helper::createLink('story', 'view', "storyID=$run->story"), $run->storyTitle);
@@ -1223,8 +1238,11 @@ class testtaskModel extends model
                 echo $run->stepNumber;
                 break;
             case 'actions':
+                echo "<div class='more'>";
+                common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$task->id", $run, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
+                echo "</div>";
+
                 common::printIcon('testtask', 'runCase', "id=$run->id", $run, 'list', '', '', 'runCase iframe', false, "data-width='95%'");
-                common::printIcon('testtask', 'results', "id=$run->id", $run, 'list', '', '', 'iframe', '', "data-width='90%'");
 
                 if(common::hasPriv('testtask', 'unlinkCase', $run))
                 {
@@ -1232,7 +1250,6 @@ class testtaskModel extends model
                     echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"casesForm\",confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$this->lang->testtask->unlinkCase}' class='btn'");
                 }
 
-                common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$task->id", $run, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
                 break;
             }
             echo '</td>';
