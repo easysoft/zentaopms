@@ -1132,16 +1132,23 @@ class testtaskModel extends model
             if($id == 'id')     $class .= ' cell-id';
             if($id == 'lastRunResult') $class .= " $run->lastRunResult";
             if($id == 'assignedTo' && $run->assignedTo == $account) $class .= ' red';
+            if($id == 'actions') $class .= 'c-actions';
 
             echo "<td class='" . $class . "'" . ($id=='title' ? "title='{$run->title}'":'') . ">";
             switch ($id)
             {
             case 'id':
-                if($mode == 'table') echo "<input type='checkbox' name='caseIDList[]' value='{$run->case}'/> ";
-                echo $canView ? html::a($caseLink, sprintf('%03d', $run->case)) : sprintf('%03d', $run->case);
+                if($mode == 'table')
+                {
+                    echo html::checkbox('caseIDList', array($run->case => sprintf('%03d', $run->case)));
+                }
+                else
+                {
+                    echo $canView ? html::a($caseLink, sprintf('%03d', $run->case)) : sprintf('%03d', $run->case);
+                }
                 break;
             case 'pri':
-                echo "<span class='pri" . zget($this->lang->testcase->priList, $run->pri, $run->pri) . "'>";
+                echo "<span class='label-pri label-pri-" . $run->pri . "'>";
                 echo zget($this->lang->testcase->priList, $run->pri, $run->pri);
                 echo "</span>";
                 break;
@@ -1222,7 +1229,7 @@ class testtaskModel extends model
                 if(common::hasPriv('testtask', 'unlinkCase', $run))
                 {
                     $unlinkURL = helper::createLink('testtask', 'unlinkCase', "caseID=$run->id&confirm=yes");
-                    echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"casesForm\",confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$this->lang->testtask->unlinkCase}' class='btn-icon'");
+                    echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"casesForm\",confirmUnlink)", '<i class="icon-unlink"></i>', '', "title='{$this->lang->testtask->unlinkCase}' class='btn'");
                 }
 
                 common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$task->id", $run, 'list', 'bug', '', 'iframe', '', "data-width='90%'");

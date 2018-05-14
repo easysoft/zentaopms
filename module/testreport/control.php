@@ -151,7 +151,7 @@ class testreport extends control
                 $build   = $this->build->getById($task->build);
                 $stories = empty($build->stories) ? array() : $this->story->getByList($build->stories);
 
-                $builds[$build->id] = $build;
+                if(!empty($build->id)) $builds[$build->id] = $build;
                 $bugs = $this->testreport->getBugs4Test($builds, $productID, $begin, $end);
             }
 
