@@ -95,6 +95,8 @@ $lang->dev->tableList['entry']          = '应用';
 $lang->dev->tableList['webhook']        = 'WebHook';
 $lang->dev->tableList['webhookdatas']   = 'WebHook数据';
 $lang->dev->tableList['log']            = '接口日志';
+$lang->dev->tableList['message']        = '消息';
+$lang->dev->tableList['notify']         = '通知';
 
 $lang->dev->groupList['my']      = '我的地盘';
 $lang->dev->groupList['product'] = $lang->productCommon;

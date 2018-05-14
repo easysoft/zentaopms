@@ -13,11 +13,11 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <div class='main-header'>
   <div class='heading'>
-    <i class='icon-edit'></i> 
-    <?php if($filePath):?>        
-    <strong><?php echo $lang->editor->filePath;?></strong> 
+    <i class='icon-edit'></i>
+    <?php if($filePath):?>
+    <strong><?php echo $lang->editor->filePath;?></strong>
     <code><?php echo $filePath?></code>
-    <?php endif?>  
+    <?php endif?>
   </div>
 </div>
 <form method='post' target='hiddenwin' action='<?php echo inlink('save', "filePath=$safeFilePath&action=$action")?>'>
@@ -72,7 +72,7 @@
           <?php endif;?>
         </td>
       </tr>
-      <tr><td align='center'><?php echo html::submitButton()?></td></tr>
+      <tr><td align='center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide')?></td></tr>
     </table>
   </div>
 </form>

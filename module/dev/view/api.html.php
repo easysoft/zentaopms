@@ -25,7 +25,7 @@
       $params = array();
       if(isset($api['param']))
       {
-          foreach($api['param'] as $param) $params[] = "{$param['var']}=[{$param['var']}]"; 
+          foreach($api['param'] as $param) $params[] = "{$param['var']}=[{$param['var']}]";
       }
       $params = implode('&', $params);
       ?>
@@ -37,7 +37,7 @@
       </div>
       <div class='detail-content'>
         <?php echo $api['desc'];?>
-        <table class='table table-fixed table-bordered params'>
+        <table class='table table-bordered'>
           <tr>
             <td><?php echo $lang->dev->params?></td>
             <td><?php echo $lang->dev->type?></td>

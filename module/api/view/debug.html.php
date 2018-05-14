@@ -16,7 +16,7 @@
     <div class='detail'>
       <div class='detail-title'><?php echo $lang->api->debug;?></div>
       <div class='detail-content'>
-        <form method='post' id='apiForm' class='form-condensed'>
+        <form method='post' id='apiForm'>
           <?php if($method->parameters):?>
           <table class='table table-form'>
             <?php foreach($method->parameters as $param):?>
@@ -27,12 +27,12 @@
             <?php endforeach;?>
             <tr>
               <td align='center' colspan="2">
-                <?php echo html::submitButton($lang->api->submit)?>
+                <?php echo html::submitButton($lang->api->submit, '', 'btn btn-primary btn-wide')?>
               </td>
             </tr>
           </table>
           <?php else:?>
-          <?php echo html::hidden('noparam', '0') . $lang->api->noParam . html::submitButton($lang->api->submit);?>
+          <?php echo html::hidden('noparam', '0') . $lang->api->noParam . html::submitButton($lang->api->submit, '', 'btn btn-primary btn-wide');?>
           <?php endif;?>
           <?php if($method->post) echo "<p>{$lang->api->post}</p>"?>
         </form>
