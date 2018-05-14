@@ -1,6 +1,6 @@
 $(document).ready(function()
 {    
-    $('#startForm, #closeForm').ajaxForm(
+    $('#startForm, #closeForm, #activateForm, #blockForm').ajaxForm(
     {
         finish:function(response)
         {
