@@ -66,7 +66,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <th><?php common::printOrderLink('qq',       $orderBy, $vars, $lang->user->qq);?></th>
           <th><?php common::printOrderLink('last',     $orderBy, $vars, $lang->user->last);?></th>
           <th><?php common::printOrderLink('visits',   $orderBy, $vars, $lang->user->visits);?></th>
-          <th class='w-90px'><?php echo $lang->actions;?></th>
+          <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
         </thead>
         <tbody>
@@ -87,20 +87,22 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <td><?php echo $user->phone;?></td>
           <td><?php if($user->qq) echo html::a("tencent://message/?uin=$user->qq", $user->qq);?></td>
           <td><?php if($user->last) echo date('Y-m-d', $user->last);?></td>
-          <td><?php echo $user->visits;?></td>
+          <td class='text-center'><?php echo $user->visits;?></td>
           <td class='c-actions'>
             <div class='more'>
-              <?php if(true or $user->ranzhi) common::printIcon('user', 'unbind', "userID=$user->account", '', 'list', 'unlink', "hiddenwin", 'btn-link');?>
+              <?php
+              if($user->ranzhi) common::printIcon('user', 'unbind', "userID=$user->account", '', 'list', 'unlink', "hiddenwin");
+              if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $this->config->user->lockMinutes * 60)
+              {
+                  common::printIcon('user', 'unlock', "userID=$user->account", '', 'list', '', "hiddenwin");
+              }
+              ?>
             </div>
             <?php
-            common::printIcon('user', 'edit', "userID=$user->id&from=company", '', 'button');
+            common::printIcon('user', 'edit', "userID=$user->id&from=company", '', 'list');
             if(strpos($this->app->company->admins, ",{$user->account},") === false and common::hasPriv('user', 'delete'))
             {
-                echo html::a($this->createLink('user', 'delete', "userID=$user->id"), '<i class="icon-trash"></i>', '', "title='{$lang->user->delete}' class='btn btn-link iframe'");
-            }
-            if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $this->config->user->lockMinutes * 60)
-            {
-                common::printIcon('user', 'unlock', "userID=$user->account", '', 'button', '', "hiddenwin");
+                echo html::a($this->createLink('user', 'delete', "userID=$user->id"), '<i class="icon-trash"></i>', '', "title='{$lang->user->delete}' class='btn iframe'");
             }
             ?>
           </td>
