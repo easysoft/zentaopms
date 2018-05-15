@@ -211,7 +211,7 @@ foreach($fieldParams as $fieldName => $param)
         if($style != 'simple')
         {
             if(common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), $lang->save, '', "class='btn-save-form btn btn-secondary btn-wide'") . "&nbsp;";
-            echo html::commonButton($lang->search->reset, 'onclick=resetForm(this)', 'btn-reset-form btn btn-gray btn-wide');
+            echo html::commonButton($lang->search->reset, 'onclick=resetForm(this)', 'btn-reset-form btn btn-wide');
         }
         echo html::commonButton('<i class="icon icon-chevron-double-down"></i>', '', 'btn-expand-form btn btn-info pull-right');
         echo html::hidden('formType', 'lite');

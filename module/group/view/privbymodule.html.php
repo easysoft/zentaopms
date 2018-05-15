@@ -42,7 +42,7 @@
       <tr>
         <td class='text-center' colspan='3'>
           <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
-          <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
+          <?php echo html::backButton('', '', 'btn btn-wide');?>
           <?php echo html::hidden('foo'); // Just make $_POST not empty..?>
         </td>
       </tr>

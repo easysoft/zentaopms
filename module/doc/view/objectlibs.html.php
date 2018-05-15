@@ -23,7 +23,7 @@
         </div>
         <nav class="panel-actions btn-toolbar">
           <div class="dropdown">
-            <button type="button" title="<?php echo $lang->customConfig;?>" class="btn btn-gray btn-icon" data-toggle="dropdown"><i class="icon icon-cog"></i></button>
+            <button type="button" title="<?php echo $lang->customConfig;?>" class="btn btn-icon" data-toggle="dropdown"><i class="icon icon-cog"></i></button>
             <div class="dropdown-menu pull-right col-lg" id="pageSetting">
               <form class='with-padding load-indicator' id='pageSettingForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('custom', 'ajaxSaveCustomFields', 'module=doc&section=custom&key=objectLibs');?>'>
                 <div><?php echo $lang->customConfig;?></div>
@@ -40,7 +40,7 @@
                 </div>
                 <div>
                   <?php echo html::submitButton($lang->save);?>
-                  <?php echo html::commonButton($lang->cancel, '', "btn btn-gray close-dropdown");?>
+                  <?php echo html::commonButton($lang->cancel, '', "btn close-dropdown");?>
                 </div>
               </form>
             </div>

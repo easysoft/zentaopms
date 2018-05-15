@@ -49,13 +49,16 @@ js::set('productID' , $bug->product);
             </div>
           </td>
           <td>
-            <div class='input-group'>
-              <span id='resolvedBuildBox'><?php echo html::select('resolvedBuild', $builds, '', "class='form-control chosen'");?></span>
-              <?php if(common::hasPriv('build', 'create')):?>
-              <span id='newBuildBox' class='hidden'><?php echo html::input('buildName', '', "class='form-control' placeholder='{$lang->bug->placeholder->newBuildName}'");?></span>
-              <span class='input-group-addon'><label class="checkbox-inline"><input name="createBuild" value="1" id="createBuild" type="checkbox"> <?php echo $lang->bug->createBuild?></label></span>
-              <?php endif;?>
+            <span id='resolvedBuildBox'><?php echo html::select('resolvedBuild', $builds, '', "class='form-control chosen'");?></span>
+            <span id='newBuildBox' class='hidden'><?php echo html::input('buildName', '', "class='form-control' placeholder='{$lang->bug->placeholder->newBuildName}'");?></span>
+          </td>
+          <td>
+            <?php if(common::hasPriv('build', 'create')):?>
+            <div class='checkbox-primary'> 
+              <input type='checkbox' id='createBuild' name='createBuild' value='1' />
+              <label for='createBuild'><?php echo $lang->bug->createBuild;?></label>
             </div>
+            <?php endif;?>
           </td>
         </tr>
         <tr>
@@ -72,7 +75,7 @@ js::set('productID' , $bug->product);
         </tr>
         <tr>
           <th><?php echo $lang->comment;?></th>
-          <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
+          <td colspan='3'><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
         </tr>
         <tr>
           <th></th><td colspan='2'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList);?></td>
