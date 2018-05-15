@@ -44,10 +44,10 @@
       <td title='<?php echo $users;?>'><?php echo $users;?></td>
       <td class='c-actions'>
         <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
-        <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'pencil');?>
-        <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'pencil');?>
+        <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye');?>
+        <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
         <?php $lang->group->managemember = $lang->group->manageMember;?>
-        <?php common::printIcon('group', 'managemember', "groupID=$group->id", $group, 'list', 'pencil', '', 'iframe', 'yes');?>
+        <?php common::printIcon('group', 'managemember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='750'");?>
         <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
         <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
         <?php

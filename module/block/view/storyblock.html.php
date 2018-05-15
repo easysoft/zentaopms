@@ -38,8 +38,7 @@
         <?php if($longBlock):?>
         <td class="c-id"><?php echo $story->id;?></td>
         <?php endif;?>
-        <?php $pri = zget($lang->story->priList, $story->pri, $story->pri);?>
-        <td class="c-pri"><span class="label-pri label-pri-<?php echo $pri?>"><?php echo $pri?></span></td>
+        <td class="c-pri"><span class="label-pri label-pri-<?php echo $story->pri?>"><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
         <td class="c-name" style='color: <?php echo $story->color?>' title='<?php echo $story->title?>'><?php echo $story->title?></td>
         <?php if($longBlock):?>
         <td class='c-estimate text-center'><?php echo $story->estimate?></td>

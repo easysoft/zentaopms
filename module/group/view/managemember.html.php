@@ -14,12 +14,12 @@
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>
-      <span class='label label-id' title='GROUP'><?php echo $group->id;?></span>
+      <span class='label label-id'><?php echo $group->id;?></span>
       <?php echo $group->name;?>
     </h2>
   </div>
   <div class='main-row'>
-    <div class="side-col col-3">
+    <div class="side-col">
       <div class='side-body'>
         <div class='panel panel-sm'>
           <div class='panel-heading nobr'><?php echo html::icon($lang->icons['company']);?> <strong><?php echo $lang->dept->common;?></strong></div>
