@@ -15,32 +15,29 @@
 <?php js::set('lblDelete', $lang->testcase->deleteStep);?>
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter',  $lang->testcase->insertAfter);?>
-<form method='post' class='form-condensed' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['testcase']);?> <strong><?php echo $case->id;?></strong></span>
-    <strong><?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id"), $case->title, '', 'class="case-title"');?></strong>
-    <small><?php echo $lang->case->edit;?></small>
-  </div>
-  <div class='actions'>
-    <?php echo html::submitButton($lang->save)?>
-  </div>
+<div id='mainContent' class='main-content'>
+<div class='main-header'>
+  <h2>
+    <span class='label label-id'><?php echo $case->id;?></span>
+    <?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id"), $case->title, '', 'class="case-title"');?>
+  </h2>
 </div>
-<div class='row-table'>
-  <div class='col-main'>
-    <div class='main'>
-      <div class='form-group'>
+<form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
+<div class='main-row'>
+  <div class='main-col col-8'>
+    <div class='cell'>
+      <div class='detail form-group'>
         <div class='input-group'>
           <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->case->colorTag ?>' value='<?php echo $case->color ?>' data-update-text='#title, .case-title'>
           <?php echo html::input('title', $case->title, 'class="form-control" autocomplete="off" placeholder="' . $lang->case->title . '"');?>
         </div>
       </div>
-      <fieldset class='fieldset-pure'>
-        <legend><?php echo $lang->testcase->precondition;?></legend>
-        <div class='form-group'><?php echo html::textarea('precondition', $case->precondition, "rows='4' class='form-control'");?></div>
-      </fieldset>
-      <fieldset class='fieldset-pure'>
-        <legend><?php echo $lang->testcase->steps;?></legend>
+      <div class='detail'>
+        <div class='detail-title'><?php echo $lang->testcase->precondition;?></div>
+        <div class='detail-content'><?php echo html::textarea('precondition', $case->precondition, "rows='4' class='form-control'");?></div>
+      </div>
+      <div class='detail'>
+        <div class='detail-title'><?php echo $lang->testcase->steps;?></div>
         <div class='form-group'>
           <table class='table table-form table-bordered'>
             <thead>
@@ -60,7 +57,10 @@
                     <textarea rows='1' class='form-control autosize step-steps' name='steps[]'></textarea>
                     <span class="input-group-addon step-type-toggle">
                       <input type='hidden' name='stepType[]' value='item' class='step-type'>
-                      <label class="checkbox-inline"><input tabindex='-1' type="checkbox" class='step-group-toggle'> <?php echo $lang->testcase->group ?></label>
+                      <div class='checkbox-primary'>
+                        <input tabindex='-1' type="checkbox" class='step-group-toggle'>
+                        <label><?php echo $lang->testcase->group ?></label>
+                      </div>
                     </span>
                   </div>
                 </td>
@@ -69,7 +69,7 @@
                   <div class='btn-group'>
                     <button type='button' class='btn btn-step-add' tabindex='-1'><i class='icon icon-plus'></i></button>
                     <button type='button' class='btn btn-step-move' tabindex='-1'><i class='icon icon-move'></i></button>
-                    <button type='button' class='btn btn-step-delete' tabindex='-1'><i class='icon icon-remove'></i></button>
+                    <button type='button' class='btn btn-step-delete' tabindex='-1'><i class='icon icon-trash'></i></button>
                   </div>
                 </td>
               </tr>
@@ -83,7 +83,10 @@
                     <span class='input-group-addon step-type-toggle'>
                       <?php if(!isset($step->type)) $step->type = 'step';?>
                       <input type='hidden' name='stepType[]' value='<?php echo $step->type;?>' class='step-type'>
-                      <label class="checkbox-inline"><input tabindex='-1' tabindex='-1' type="checkbox" class='step-group-toggle'<?php if($step->type === 'group') echo ' checked' ?>> <?php echo $lang->testcase->group ?></label>
+                      <div class='checkbox-primary'>
+                        <input tabindex='-1' tabindex='-1' type="checkbox" class='step-group-toggle'<?php if($step->type === 'group') echo ' checked' ?> />
+                        <label><?php echo $lang->testcase->group ?></label>
+                      </div>
                     </span>
                   </div>
                 </td>
@@ -92,7 +95,7 @@
                   <div class='btn-group'>
                     <button type='button' class='btn btn-step-add' tabindex='-1'><i class='icon icon-plus'></i></button>
                     <button type='button' class='btn btn-step-move' tabindex='-1'><i class='icon icon-move'></i></button>
-                    <button type='button' class='btn btn-step-delete' tabindex='-1'><i class='icon icon-remove'></i></button>
+                    <button type='button' class='btn btn-step-delete' tabindex='-1'><i class='icon icon-trash'></i></button>
                   </div>
                 </td>
               </tr>
@@ -100,16 +103,15 @@
             </tbody>
           </table>
         </div>
-      </fieldset>
-      <fieldset class='fieldset-pure'>
-        <legend><?php echo $lang->testcase->legendComment;?></legend>
-        <div class='form-group'><?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?></div>
-      </fieldset>
-      <fieldset class='fieldset-pure'>
-        <legend><?php echo $lang->testcase->legendAttatch;?></legend>
-        <div class='form-group'><?php echo $this->fetch('file', 'buildform');?></div>
-      </fieldset>
-      <div class='text-center mgb-20'>
+      </div>
+      <div class='detail'>
+        <div class='detail-title'><?php echo $lang->testcase->legendComment;?></div>
+        <div class='detail-content'><?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?></div>
+      </div>
+      <div class='detail'>
+        <?php echo $this->fetch('file', 'buildform');?>
+      </div>
+      <div class='text-center detail'>
         <?php echo html::hidden('lastEditedDate', $case->lastEditedDate);?>
         <?php echo html::submitButton();?>
         <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='btn' onclick='location.href="<?php echo $isLibCase ? $this->createLink('testsuite', 'library', "libID=$libID") : $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
@@ -117,10 +119,10 @@
       <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
-  <div class='col-side'>
-    <div class='main main-side'>
-      <fieldset>
-        <legend><?php echo $lang->testcase->legendBasicInfo;?></legend>
+  <div class='side-col col-4'>
+    <div class='cell'>
+      <div class='detail'>
+        <div class='detail-title'><?php echo $lang->testcase->legendBasicInfo;?></div>
         <table class='table table-form' cellpadding='0' cellspacing='0'>
           <?php if($isLibCase):?>
           <tr>
@@ -206,10 +208,13 @@
             <td><?php echo html::input('keywords', $case->keywords, "class='form-control' autocomplete='off'");?></td>
           </tr>
           <?php if(!$isLibCase):?>
-          <tr class='text-top'>
+          <tr>
             <th><?php echo $lang->testcase->linkCase;?></th>
+            <td><?php echo html::a($this->createLink('testcase', 'linkCases', "caseID=$case->id", '', true), $lang->testcase->linkCases, '', "data-type='iframe' data-toggle='modal' data-width='95%'");?></td>
+          </tr>
+          <tr>
+            <th></th>
             <td>
-              <?php echo html::a($this->createLink('testcase', 'linkCases', "caseID=$case->id", '', true), $lang->testcase->linkCases, '', "data-type='iframe' data-toggle='modal' data-width='95%'");?>
               <ul class='list-unstyled' id='linkCaseBox'>
               <?php
               if(isset($case->linkCaseTitles))
@@ -218,7 +223,7 @@
                   {
                       echo '<li>';
                       echo html::a(inlink('view', "caseID=$linkCaseID"), "#$linkCaseID " . $linkCaseTitle, '_blank');
-                      echo html::a("javascript:unlinkCase($case->id, $linkCaseID)", '<i class="icon-remove"></i>', '', "title='{$lang->unlink}' style='float:right'");
+                      echo html::a("javascript:unlinkCase($case->id, $linkCaseID)", '<i class="icon-trash"></i>', '', "title='{$lang->unlink}' style='float:right'");
                       echo '</li>';
                   }
               }
@@ -228,9 +233,9 @@
           </tr>
           <?php endif;?>
         </table>
-      </fieldset>
-      <fieldset>
-        <legend><?php echo $lang->testcase->legendOpenAndEdit;?></legend>
+      </div>
+      <div class='detail'>
+        <div class='detail-title'><?php echo $lang->testcase->legendOpenAndEdit;?></div>
         <table class='table table-form'>
           <tr>
             <th class='w-80px'><?php echo $lang->testcase->openedBy;?></th>
@@ -241,9 +246,10 @@
             <td><?php if($case->lastEditedBy) echo $users[$case->lastEditedBy] . $lang->at . $case->lastEditedDate;?></td>
           </tr>
         </table>
-      </fieldset>
+      </div>
     </div>
   </div>
 </div>
 </form>
+</div>
 <?php include '../../common/view/footer.html.php';?>
