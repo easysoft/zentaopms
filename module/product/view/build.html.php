@@ -11,47 +11,49 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmDelete', $lang->build->confirmDelete)?>
-<div id='titlebar'>
-  <div class='heading'><?php echo html::icon($lang->icons['build']);?> <?php echo $lang->product->build;?></div>
-  <div class='actions'><?php common::printIcon('build', 'create', "product=$product->id");?></div>
+<div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
+    <a class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->product->build;?></span><span class='label label-light label-badge'><?php echo count($builds);?></span></a>
+  </div>
+  <div class='btn-toolbar pull-right'><?php common::printLink('build', 'create', "product=$product->id", "<i class='icon icon-plus'> </i>" . $lang->build->create, '', "class='btn btn-primary'");?></div>
 </div>
-
-<table class='table tablesorter table-fixed' id='buildList'>
-  <thead>
-    <tr class='colhead'>
-      <th class='w-id'><?php echo $lang->build->id;?></th>
-      <th><?php echo $lang->build->name;?></th>
-      <th><?php echo $lang->build->scmPath;?></th>
-      <th><?php echo $lang->build->filePath;?></th>
-      <th class='w-date'><?php echo $lang->build->date;?></th>
-      <th class='w-user'><?php echo $lang->build->builder;?></th>
-      <th class='w-90px'><?php echo $lang->actions;?></th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php foreach($builds as $build):?>
-    <tr class='text-center'>
-      <td><?php echo $build->id;?></td>
-      <td class='text-left'><?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?></td>
-      <td class='text-left' title="<?php echo $build->scmPath?>"><?php  echo strpos($build->scmPath,  'http') === 0 ? html::a($build->scmPath)  : $build->scmPath;?></td>
-      <td class='text-left' title="<?php echo $build->filePath?>"><?php echo strpos($build->filePath, 'http') === 0 ? html::a($build->filePath) : $build->filePath;?></td>
-      <td><?php echo $build->date?></td>
-      <td><?php echo $users[$build->builder]?></td>
-      <td class='text-right'>
-        <?php 
-        common::printIcon('testtask', 'create', "product=$product->id&project=0&build=$build->id", '', 'list', 'check');
-        common::printIcon('build', 'edit',   "buildID=$build->id", '', 'list');
-        if(common::hasPriv('build', 'delete'))
-        {
-            $deleteURL = $this->createLink('build', 'delete', "buildID=$build->id&confirm=yes");
-            echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"buildList\",confirmDelete)", '<i class="icon-remove"></i>', '', "class='btn-icon' title='{$lang->build->delete}'");
-        }
-        ?>
-      </td>
-    </tr>
-    <?php endforeach;?>
-  </tbody>
-</table>
+<div id='mainContent' class='main-table'>
+  <table class='table' id='buildList'>
+    <thead>
+      <tr class='text-center'>
+        <th class='w-id'><?php echo $lang->build->id;?></th>
+        <th><?php echo $lang->build->name;?></th>
+        <th><?php echo $lang->build->scmPath;?></th>
+        <th><?php echo $lang->build->filePath;?></th>
+        <th class='c-date'><?php echo $lang->build->date;?></th>
+        <th class='c-user'><?php echo $lang->build->builder;?></th>
+        <th class='w-130px'><?php echo $lang->actions;?></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach($builds as $build):?>
+      <tr class='text-center'>
+        <td><?php echo $build->id;?></td>
+        <td class='text-left'><?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?></td>
+        <td class='text-left' title="<?php echo $build->scmPath?>"><?php  echo strpos($build->scmPath,  'http') === 0 ? html::a($build->scmPath)  : $build->scmPath;?></td>
+        <td class='text-left' title="<?php echo $build->filePath?>"><?php echo strpos($build->filePath, 'http') === 0 ? html::a($build->filePath) : $build->filePath;?></td>
+        <td><?php echo $build->date?></td>
+        <td><?php echo $users[$build->builder]?></td>
+        <td class='c-actions'>
+          <?php 
+          common::printIcon('testtask', 'create', "product=$product->id&project=0&build=$build->id", '', 'list', 'bullhorn');
+          common::printIcon('build', 'edit', "buildID=$build->id", '', 'list');
+          if(common::hasPriv('build', 'delete'))
+          {
+              $deleteURL = $this->createLink('build', 'delete', "buildID=$build->id&confirm=yes");
+              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"buildList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->build->delete}'");
+          }
+          ?>
+        </td>
+      </tr>
+      <?php endforeach;?>
+    </tbody>
+  </table>
+</div>
 <?php include '../../common/view/footer.html.php';?>

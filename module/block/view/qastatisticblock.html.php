@@ -8,7 +8,7 @@
 .types-line > li > div > small {display: block; color: #A6AAB8;}
 .types-line > li > div > span {display: block; color: #CBD0DB; font-size: 16px;}
 .product-info {position: relative; padding: 10px 10px 10px 200px;}
-.product-info + .product-info {margin-top: 10px;}
+.product-info + .product-info {margin-top: 0;}
 .product-info .progress {position: absolute; left: 10px; top: 33px; width: 180px;}
 .product-info .progress-info {position: absolute; left: 8px; top: 8px; width: 180px; font-size: 12px;}
 .product-info .type-info {color: #A6AAB8; text-align: center;}
@@ -21,99 +21,122 @@
 .block-statistic .tile-amount {font-size: 48px; margin-bottom: 10px;}
 .block-statistic .col-nav {border-left: 1px solid #EBF2FB; width: 260px; padding-left: 0;}
 .block-statistic .nav-secondary > li > a {font-size: 16px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;}
-.block-statistic .nav-secondary > li.active > a {font-size: 20px; color: #3C4353; background: transparent; box-shadow: none;}
+.block-statistic .nav-secondary > li.active > a {color: #3C4353; background: transparent; box-shadow: none;}
 .block-statistic .nav-secondary > li.active > a:hover,
 .block-statistic .nav-secondary > li.active > a:focus,
 .block-statistic .nav-secondary > li > a:hover {box-shadow: none;}
 .block-statistic .nav-secondary > li.active > a:before {content: ' '; display: block; left: -1px; top: 10px; bottom: 10px; width: 4px; background: #006af1; position: absolute;}
+.block-statistic .nav-stacked {overflow: auto; max-height: 247px;}
+.block-statistic .progress-pie .progress-info > strong {font-size: 24px;}
+.block-statistic .chosen-single {font-size: 16px; font-weight: bold;}
 </style>
 <div class="panel-body">
   <div class="table-row">
     <div class="col tab-content">
-      <?php foreach($projects as $project):?>
-      <div class="tab-pane fade<?php if($project == reset($projects)) echo ' active in';?>" id="tab3Content<?php echo $project->id;?>">
-        <div class="table-row">
+      <?php $index = 1;?>
+      <?php foreach($products as $product):?>
+      <div class="tab-pane fade <?php if($index == 1) echo 'active';?> in" id="tabContent<?php echo $product->id;?>">
+        <div class="statistic-menu input-group col-sm space">
+          <?php if($product->builds):?>
+          <select id='build' name='build' class="form-control chosen">
+            <?php foreach($product->builds as $build):?>
+            <option value="<?php echo $build->id;?>"><?php echo $build->name;?></option>
+            <?php endforeach;?>
+          </select>
+          <div class="input-group-cell">
+            <span class="text-muted small">开发已提交测试申请，<a href="<?php echo $this->createLink('testtask', 'browse', "productID={$product->id}");?>" class="text-primary">现在去测试 <i class="icon icon-right-circle icon-sm"></i></a></span>
+          </div>
+          <?php endif;?>
+        </div>
+        <?php foreach($product->builds as $build):?>
+        <div class="table-row" id='bugBox<?php echo $build->id;?>'>
           <div class="col-5 text-middle text-center">
-            <div class="progress-pie inline-block space" data-value="<?php echo $project->progress;?>" data-doughnut-size="84">
-              <canvas width="120" height="120"></canvas>
+            <div class="progress-pie inline-block space progress-pie-100" data-value="<?php echo $build->assignedRate;?>" data-doughnut-size="80">
+              <canvas width="100" height="100" style="width: 100px; height: 100px;"></canvas>
               <div class="progress-info">
-                <small><?php echo $lang->task->statusList['done'];?></small>
-                <strong><?php echo $project->progress;?><small><?php echo $lang->percent;?></small></strong>
+                <small>全部Bug</small>
+                <strong><span class="progress-value"><?php echo $build->total;?></span></strong>
               </div>
             </div>
-            <div class="table-row text-center small text-muted with-padding">
-              <div class="col-4 text-bottom">
-                <div><?php echo $lang->project->totalEstimate;?></div>
-                <div><?php echo $project->totalEstimate;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
-              </div>
-              <div class="col-4">
-                <span class="label label-dot label-primary"></span>
-                <div><?php echo $lang->project->totalConsumed;?></div>
-                <div><?php echo $project->totalConsumed;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
-              </div>
-              <div class="col-4">
-                <span class="label label-dot label-pale"></span>
-                <div><?php echo $lang->project->totalLeft;?></div>
-                <div><?php echo $project->totalLeft;?> <span class="muted"><?php echo $lang->task->hour;?></span></div>
-              </div>
+            <div class="text-center small with-padding">
+              <span class="label label-dot label-primary"></span> &nbsp; 指派给我 &nbsp; <strong><?php echo $build->assignedToMe;?></strong>
             </div>
           </div>
           <div class="col-7">
             <div class="product-info">
-              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->task->yesterdayFinished;?></span> <strong><?php echo $project->yesterdayFinished;?></strong></div>
+              <?php if($build->yesterdayResolved):?>
+              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted">昨日解决</span> <strong><?php echo $build->yesterdayResolved;?></strong></div>
+              <?php endif;?>
               <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $project->taskProgress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->taskProgress;?>%">
-                </div>
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $build->unresovedRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $build->unresovedRate;?>%"></div>
               </div>
               <div class="type-info">
                 <div class="type-label">
-                  <span><?php echo $lang->task->allTasks;?></span> <?php echo DS;?> <span><?php echo $lang->task->noFinished;?></span>
+                  <span>未解决</span>
                 </div>
                 <div class="type-value">
-                  <small><?php echo $project->totalTasks;?></small> <?php echo DS;?> <strong><?php echo $project->undoneTasks;?></strong>
+                  <strong><?php echo $build->unresolved;?></strong>
                 </div>
               </div>
             </div>
             <div class="product-info">
-              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->story->stageList['released'];?></span> <strong><?php echo $project->releasedStories;?></strong></div>
+              <?php if($build->yesterdayConfirmed):?>
+              <div class="progress-info"><i class="icon icon-exclamation-sign text-danger icon-sm"></i> <span class="text-muted">昨日确认</span> <strong><?php echo $build->yesterdayConfirmed;?></strong></div>
+              <?php endif;?>
               <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $project->storyProgress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->storyProgress;?>%"></div>
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $build->unconfirmedRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $build->unconfirmedRate;?>%"></div>
               </div>
               <div class="type-info">
                 <div class="type-label">
-                  <span><?php echo $lang->story->total;?></span> <?php echo DS;?> <span><?php echo $lang->story->unclosed;?></span>
+                  <span>未确认</span>
                 </div>
                 <div class="type-value">
-                  <small><?php echo $project->totalStories;?></small> <?php echo DS;?> <strong><?php echo $project->unclosedStories;?></strong>
+                  <strong><?php echo $build->unconfirmed;?></strong>
                 </div>
               </div>
             </div>
             <div class="product-info">
-              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->bug->yesterdayResolved;?></span> <strong><?php echo $project->yesterdayResolved;?></strong></div>
+              <?php if($build->yesterdayClosed):?>
+              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted">昨日关闭</span> <strong><?php echo $build->yesterdayClosed;?></strong></div>
+              <?php endif;?>
               <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $project->bugProgress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->bugProgress;?>%">
-                </div>
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $build->unclosedRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $build->unclosedRate;?>%"></div>
               </div>
               <div class="type-info">
                 <div class="type-label">
-                  <span><?php echo $lang->bug->allBugs;?></span> <?php echo DS;?> <span><?php echo $lang->bug->unResolved;?></span>
+                  <span>未关闭</span>
                 </div>
                 <div class="type-value">
-                  <small><?php echo $project->totalBugs;?></small> <?php echo DS;?> <strong><?php echo $project->activeBugs;?></strong>
+                  <strong><?php echo $build->unclosed;?></strong>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <?php endforeach;?>
       </div>
+      <?php $index++;?>
       <?php endforeach;?>
     </div>
     <div class="col col-nav">
       <ul class="nav nav-stacked nav-secondary">
-        <?php foreach($projects as $project):?>
-        <li <?php if($project == reset($projects)) echo "class='active'";?>><a href="###" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab"><?php echo $project->name;?></a></li>
+        <?php $index = 1;?>
+        <?php foreach($products as $product):?>
+        <li class="<?php if($index == 1) echo 'active';?>"><a href="###" data-target="#tabContent<?php echo $product->id;?>" data-toggle="tab"><?php echo $product->name;?></a></li>
+        <?php $index++;?>
         <?php endforeach;?>
       </ul>
     </div>
   </div>
 </div>
+<script>
+$(function()
+{
+    $('#build').change(function()
+    {
+        $(this).parents('.tab-pane').find('.table-row').addClass('hidden');
+        $('#bugBox' + $(this).val()) .removeClass('hidden');
+    });
+    $('#build').change();
+})
+</script>
