@@ -74,7 +74,7 @@
         </tr>
           <tr>
             <td colspan='3' class='text-center'>
-              <?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::backButton('', '', 'btn btn-wide btn-gray');?>
+              <?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::backButton('', '', 'btn btn-wide');?>
             </td>
           </tr>
       </table>

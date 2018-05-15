@@ -40,7 +40,7 @@ include '../../common/view/chosen.html.php';
   <div class="form-group form-actions">
     <div class="col-sm-7 col-sm-offset-3">
       <button type="submit" class="btn btn-wide btn-primary"><?php echo $lang->save;?></button>
-      <button type="cancel" class="btn btn-wide btn-gray" data-dismiss="modal"><?php echo $lang->cancel;?></button>
+      <button type="cancel" class="btn btn-wide" data-dismiss="modal"><?php echo $lang->cancel;?></button>
     </div>
   </div>
 </form>

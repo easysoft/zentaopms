@@ -149,7 +149,7 @@ foreach(explode(',', $showFields) as $field)
       <tr>
         <td colspan='<?php echo count($visibleFields) + ($branchProduct ? 3 : 2);?>' class='text-center form-actions'>
           <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
-          <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
+          <?php echo html::backButton('', '', 'btn btn-wide');?>
         </td>
       </tr>
     </tfoot>

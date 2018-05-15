@@ -26,7 +26,7 @@
       </div>
       <div>
         <?php echo html::submitButton($lang->save);?>
-        <?php echo html::commonButton($lang->cancel, '', "btn btn-gray close-dropdown");?>
+        <?php echo html::commonButton($lang->cancel, '', "btn close-dropdown");?>
       </div>
     </form>
   </div>
