@@ -1289,19 +1289,28 @@ class testcaseModel extends model
         if($col->show)
         {
             $class = '';
-            if($id == 'status') $class .= $case->status;
-            if($id == 'title')  $class .= ' text-left';
-            if($id == 'actions')$class .= ' c-actions';
+            $title = '';
+            if($id == 'title')
+            {
+                $class .= ' text-left';
+                $title  = "title='{$case->title}'";
+            }
+            if($id == 'status')
+            {
+                $class .= $case->status;
+                $title  = "title='" . zget($this->lang->testcase->statusList, $case->status) . "'";
+            }
+            if($id == 'actions') $class .= ' c-actions';
             if($id == 'lastRunResult') $class .= $case->lastRunResult;
 
-            echo "<td class='" . $class . "'" . ($id=='title' ? " title='{$case->title}'":'') . ">";
+            echo "<td class='{$class}' {$title}>";
             switch($id)
             {
             case 'id':
                 echo $mode == 'table' ? html::checkbox('caseIDList', array($case->id => sprintf('%03d', $case->id))) : sprintf('%03d', $case->id);
                 break;
             case 'pri':
-                echo "<span class='pri" . zget($this->lang->testcase->priList, $case->pri, $case->pri) . "'>";
+                echo "<span class='label-pri label-pri-" . $case->pri . "'>";
                 echo zget($this->lang->testcase->priList, $case->pri, $case->pri);
                 echo "</span>";
                 break;
@@ -1331,7 +1340,9 @@ class testcaseModel extends model
                 }
                 else
                 {
+                    echo "<span class='status-{$case->status}'><span class='label label-dot'></span><span class='status-text'>";
                     echo $this->lang->testcase->statusList[$case->status];
+                    echo '</span></span>';
                 }
                 break;
             case 'story':

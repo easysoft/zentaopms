@@ -14,10 +14,10 @@
   <table class='table table-borderless table-hover table-fixed-head block-builds'>
     <thead>
       <tr>
-        <th width='50'><?php echo $lang->idAB?></th>
-        <th>           <?php echo $lang->build->product;?></th>
-        <th>           <?php echo $lang->build->name;?></th>
-        <th width='80'><?php echo $lang->build->date;?></th>
+        <th class='w-id text-center'><?php echo $lang->idAB?></th>
+        <th><?php echo $lang->build->product;?></th>
+        <th><?php echo $lang->build->name;?></th>
+        <th class='w-date'><?php echo $lang->build->date;?></th>
       </tr>
     </thead>
     <tbody>

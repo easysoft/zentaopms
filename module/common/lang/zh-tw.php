@@ -657,9 +657,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
     unset($lang->product->menu);
     unset($lang->product->menuOrder);
 
-    $lang->project->menu->task['subModule'] = 'task';
-    $lang->project->menu->task['alias']     = 'grouptask,importtask';
-
     unset($lang->searchObjects['bug']);
     unset($lang->searchObjects['story']);
     unset($lang->searchObjects['product']);
