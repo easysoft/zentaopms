@@ -39,6 +39,7 @@
       if(!$useDatatable) include '../../common/view/tablesorter.html.php';
 
       $this->config->testcase->datatable->defaultField = $this->config->testtask->datatable->defaultField;
+      $this->config->testcase->datatable->fieldList['actions']['width'] = '90';
 
       $setting = $this->datatable->getSetting('testtask');
       $widths  = $this->datatable->setFixedFieldWidth($setting);

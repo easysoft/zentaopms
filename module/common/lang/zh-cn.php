@@ -253,8 +253,8 @@ $lang->project->dividerMenu = ',story,doc,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
-$lang->task->menu      = $lang->project->menu;
-$lang->build->menu     = $lang->project->menu;
+$lang->task->menu  = $lang->project->menu;
+$lang->build->menu = $lang->project->menu;
 
 /* QA视图菜单设置。*/
 $lang->qa = new stdclass();
@@ -709,7 +709,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of bug module. */
     $lang->bug->menu = new stdclass();
-    $lang->bug->menu->product       = array('link' => '%s', 'fixed' => true);
     $lang->bug->menu->unclosed      = '未关闭|bug|browse|productID=%s&branch=%s&browseType=unclosed&param=%s';
     $lang->bug->menu->all           = '所有|bug|browse|productID=%s&branch=%s&browseType=all&param=%s';
     $lang->bug->menu->assigntome    = '指派给我|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
@@ -739,10 +738,9 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of testcase. */
     $lang->testcase->menu = new stdclass();
-    $lang->testcase->menu->product = array('link' => '%s', 'fixed' => true);
-    $lang->testcase->menu->all     = '所有|testcase|browse|productID=%s&branch=%s&browseType=all';
-    $lang->testcase->menu->wait    = '待评审|testcase|browse|productID=%s&branch=%s&browseType=wait';
-    $lang->testcase->menu->suite   = array('link' => '%s', 'fixed' => true);
+    $lang->testcase->menu->all   = '所有|testcase|browse|productID=%s&branch=%s&browseType=all';
+    $lang->testcase->menu->wait  = '待评审|testcase|browse|productID=%s&branch=%s&browseType=wait';
+    $lang->testcase->menu->suite = array('link' => '%s', 'fixed' => true);
 
     $lang->testcase->menuOrder[5]  = 'product';
     $lang->testcase->menuOrder[10] = 'all';
@@ -751,7 +749,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of bug module. */
     $lang->testsuite->menu = new stdclass();
-    $lang->testsuite->menu->product = array('link' => '%s', 'fixed' => true);
     $lang->testsuite->menu->create  = array('link' => "<i class='icon-plus'></i> 建套件|testsuite|create|productID=%s", 'float' => 'right');
 
     $lang->testsuite->menuOrder[5]  = 'product';
@@ -759,8 +756,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of testtask. */
     $lang->testtask->menu = new stdclass();
-    $lang->testtask->menu->product     = array('link' => '%s', 'fixed' => true);
-    $lang->testtask->menu->scope       = array('link' => '%s', 'fixed' => true);
     $lang->testtask->menu->wait        = '待测版本|testtask|browse|productID=%s&branch=%s&type=%s,wait';
     $lang->testtask->menu->doing       = '测试中版本|testtask|browse|productID=%s&branch=%s&type=%s,doing';
     $lang->testtask->menu->blocked     = '被阻塞版本|testtask|browse|productID=%s&branch=%s&type=%s,blocked';
@@ -784,7 +779,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of caselib module. */
     $lang->caselib->menu = new stdclass();
-    $lang->caselib->menu->lib  = array('link' => '%s', 'fixed' => true);
     $lang->caselib->menu->all  = '所有|testsuite|library|libID=%s&browseType=all';
     $lang->caselib->menu->wait = '待评审|testsuite|library|libID=%s&browseType=wait';
     $lang->caselib->menu->view = '概况|testsuite|libview|libID=%s';

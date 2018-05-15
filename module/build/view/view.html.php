@@ -57,16 +57,19 @@ tbody tr td:first-child input{display:none;}
   </div>
   <?php echo $this->fetch('file', 'printFiles', array('files' => $build->files, 'fieldset' => 'true'));?>
   <?php include '../../common/view/action.html.php';?>
-  <div class='actions'>
-    <?php
-    $browseLink = $this->session->buildList ? $this->session->buildList : $this->createLink('product', 'build', "productID=$build->product");
-    if(!$build->deleted)
-    { 
-      common::printIcon('build', 'edit',   "buildID=$build->id", $build);
-      common::printIcon('build', 'delete', "buildID=$build->id", $build, 'button', '', 'hiddenwin');
-    }
-    echo common::printRPN($browseLink);
-    ?>
+  <div id="mainActions">
+    <nav class="container"></nav>
+    <div class="btn-toolbar">
+      <?php
+      common::printBack($browseLink);
+      if(!$build->deleted)
+      {
+          echo "<div class='divider'></div>";
+          common::printIcon('build', 'edit',   "buildID=$build->id", $build);
+          common::printIcon('build', 'delete', "buildID=$build->id", $build, 'button', '', 'hiddenwin');
+      }
+      ?>
+    </div>
   </div>
   <?php else:?>
   <div class='tabs'>

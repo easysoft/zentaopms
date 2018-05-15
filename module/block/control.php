@@ -999,6 +999,87 @@ class block extends control
             ->orderBy($orderBy)
             ->fetchAll('id');
 
+        $testedBuilds = $this->dao->select('build')->from(TABLE_TESTTASK)->where('product')->in(array_keys($products))->fetchPairs();
+        $builds       = $this->dao->select('id, product, name, bugs')->from(TABLE_BUILD)->where('id')->in($testedBuilds)->fetchGroup('product', 'id');
+        $openedBugs   = $this->dao->select('id, openedBuild')->from(TABLE_BUG)->where('openedBuild')->in($testedBuilds)->fetchGroup('openedBuild', 'id');
+
+        /* Get bugs. */
+        $bugIDList = array();
+        foreach($builds as $product => $productBuilds)
+        {
+            foreach($productBuilds as $buildID => $build)
+            {
+                $build->bugs = explode(',', trim($build->bugs, ','));
+                foreach($build->bugs as $bugID) $bugIDList[$bugID] = $bugID;
+            }
+        }
+        foreach($openedBugs as $buildBugs) 
+        {
+            foreach($buildsBugs as $bugID => $bug) $bugIDList[$bugID] = $bugID;
+        }
+
+        $today     = date(DT_DATE1);
+        $yesterday = date(DT_DATE1, strtotime('yesterday'));
+
+        $bugs = $this->loadModel('bug')->getByList($bugIDList);
+        $confirmedBugs = $this->dao->select('objectID')->from(TABLE_ACTION)
+            ->where('objectType')->eq('bug')
+            ->andWhere('action')->eq('bugconfirmed')
+            ->andWhere('date')->ge($yesterday)
+            ->andWhere('date')->lt($today)
+            ->fetchPairs();
+
+        foreach($builds as $product => $productBuilds)
+        {
+            foreach($productBuilds as $buildID => $build)
+            {
+                $build->total              = 0;
+                $build->assignedToMe       = 0;
+                $build->unresolved         = 0;
+                $build->unconfirmed        = 0;
+                $build->unclosed           = 0;
+                $build->yesterdayResolved  = 0;
+                $build->yesterdayConfirmed = 0;
+                $build->yesterdayClosed    = 0;
+
+                $buildOpenedBugs = zget($openedBugs, $buildID, array());
+                $build->bugs     = array_flip(array_merge(array_flip($build->bugs), array_flip(array_keys($buildOpenedBugs))));
+                foreach($build->bugs as $key => $bugID)
+                {
+                    if(!isset($bugs[$bugID])) continue;
+                    
+                    $bug = $bugs[$bugID];
+
+                    if($bug->assignedTo = $this->app->user->account) $build->assignToMe++;
+
+                    if($bug->status != 'closed')
+                    {
+                        $build->unclosed++;
+
+                        if($bug->status != 'resoloved') 
+                        {
+                            $build->unresolved++;
+
+                            if($bug->status != 'confirmed') $build->unconfirmed++;
+                        }
+                    }
+
+                    if($bug->resolvedDate >= $yesterday && $bug->resolvedDate < $today) $build->yesterdayResolved++;
+                    if($bug->closedDate   >= $yesterday && $bug->closedDate   < $today) $build->yesterdayClosed++;
+                    if(isset($confirmedBugs[$bugID])) $yesterdayConfirmed++;
+
+                    $build->total++;
+                } 
+
+                $build->assignedRate    = $build->total ? round($build->assignToMe  / $build->Total * 100, 2) : 0;
+                $build->unresolvedRate  = $build->total ? round($build->unresolved  / $build->total * 100, 2) : 0;
+                $build->unconfirmedRate = $build->total ? round($build->unconfirmed / $build->total * 100, 2) : 0;
+                $build->unclosedRate    = $build->total ? round($build->unclosed    / $build->total * 100, 2) : 0;
+            }
+        }
+
+        foreach($products as $product) $product->builds = zget($builds, $product->id, array());
+
         $this->view->products = $products;
     }
 

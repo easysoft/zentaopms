@@ -73,6 +73,7 @@ $lang->product->branch        = '所属%s';
 $lang->product->qa            = '测试';
 $lang->product->release       = '发布';
 $lang->product->latestDynamic = '最新动态';
+$lang->product->plan          = '计划';
 $lang->product->iteration     = '版本迭代';
 $lang->product->iterationInfo = '迭代 %s 次';
 $lang->product->iterationView = '查看详情';

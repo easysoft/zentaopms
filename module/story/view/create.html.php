@@ -101,26 +101,26 @@
             </td>
           </tr>
           <?php if(strpos(",$showFields,", ',pri,') !== false):?>
+          <?php
+          $hasCustomPri = false;
+          foreach($lang->story->priList as $priKey => $priValue)
+          {
+              if(!empty($priKey) and (string)$priKey != (string)$priValue)
+              {
+                  $hasCustomPri = true;
+                  break;
+              }
+          }
+          $priList = $lang->story->priList;
+          if(end($priList))
+          {
+              unset($priList[0]);
+              $priList[0] = '';
+          }
+          ?>
           <tr>
             <th><?php echo $lang->story->pri;?></th>
-            <td colspan="4">
-              <?php
-              $hasCustomPri = false;
-              foreach($lang->story->priList as $priKey => $priValue)
-              {
-                  if(!empty($priKey) and (string)$priKey != (string)$priValue)
-                  {
-                      $hasCustomPri = true;
-                      break;
-                  }
-              }
-              $priList = $lang->story->priList;
-              if(end($priList))
-              {
-                  unset($priList[0]);
-                  $priList[0] = '';
-              }
-              ?>
+            <td colspan="<?php echo $hasCustomPri ? 1 : 4;?>">
               <?php if($hasCustomPri):?>
               <?php echo html::select('pri', (array)$priList, $pri, "class='form-control chosen'");?> 
               <?php else: ?>
