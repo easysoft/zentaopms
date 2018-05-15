@@ -193,7 +193,6 @@ function loadProductModules(productID)
     $('#moduleIdBox').load(link, function()
     {
         $(this).find('select').chosen(defaultChosenOptions)
-        if(typeof(bugModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon'>" + bugModule + "</span>")
     });
 }
 
