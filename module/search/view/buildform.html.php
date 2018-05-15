@@ -29,7 +29,7 @@ include '../../common/view/chosen.html.php';
 #searchForm > table > tbody > tr > td {padding: 10px 15px; color: #838A9D;}
 #searchForm .form-actions {padding-bottom: 20px; padding-top: 0;}
 #searchForm .chosen-container[id^="field"] .chosen-drop {min-width: 140px;}
-#searchForm [id^="valueBox"] .chosen-container .chosen-single {min-width: 140px;}
+#searchForm [id^="valueBox"] .chosen-container .chosen-single {min-width: 100px;}
 #searchForm [id^="valueBox"] .chosen-container .chosen-drop {min-width: 300px;}
 #searchForm .chosen-container .chosen-drop ul.chosen-results li {white-space:normal}
 #searchForm input.date::-webkit-input-placeholder {color: #000000; opacity: 1;}

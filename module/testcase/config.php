@@ -98,7 +98,7 @@ $config->testcase->datatable->fieldList['branch']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['type']['title']    = 'type';
 $config->testcase->datatable->fieldList['type']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['type']['width']    = '80';
+$config->testcase->datatable->fieldList['type']['width']    = '90';
 $config->testcase->datatable->fieldList['type']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['stage']['title']    = 'stage';
@@ -204,6 +204,6 @@ $config->testcase->datatable->fieldList['stepNumber']['name']     = $lang->testc
 
 $config->testcase->datatable->fieldList['actions']['title']    = 'actions';
 $config->testcase->datatable->fieldList['actions']['fixed']    = 'right';
-$config->testcase->datatable->fieldList['actions']['width']    = '150';
+$config->testcase->datatable->fieldList['actions']['width']    = '160';
 $config->testcase->datatable->fieldList['actions']['required'] = 'yes';
 $config->testcase->datatable->fieldList['actions']['sort']     = 'no';

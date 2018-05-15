@@ -1291,15 +1291,14 @@ class testcaseModel extends model
             $class = '';
             if($id == 'status') $class .= $case->status;
             if($id == 'title')  $class .= ' text-left';
-            if($id == 'id')     $class .= ' cell-id';
+            if($id == 'actions')$class .= ' c-actions';
             if($id == 'lastRunResult') $class .= $case->lastRunResult;
 
             echo "<td class='" . $class . "'" . ($id=='title' ? " title='{$case->title}'":'') . ">";
             switch($id)
             {
             case 'id':
-                if($mode == 'table') echo "<input type='checkbox' name='caseIDList[]' value='{$case->id}'/> ";
-                echo $canView ? html::a($caseLink, sprintf('%03d', $case->id)) : sprintf('%03d', $case->id);
+                echo $mode == 'table' ? html::checkbox('caseIDList', array($case->id => sprintf('%03d', $case->id))) : sprintf('%03d', $case->id);
                 break;
             case 'pri':
                 echo "<span class='pri" . zget($this->lang->testcase->priList, $case->pri, $case->pri) . "'>";
@@ -1326,7 +1325,7 @@ class testcaseModel extends model
             case 'status':
                 if($case->needconfirm)
                 {
-                    echo "(<span class='warning'>{$this->lang->story->changed}</span> ";
+                    echo "(<span class='text-warning'>{$this->lang->story->changed}</span> ";
                     echo html::a(helper::createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $this->lang->confirm, 'hiddenwin');
                     echo ")";
                 }
@@ -1386,10 +1385,8 @@ class testcaseModel extends model
                 echo $case->stepNumber;
                 break;
             case 'actions':
-                common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $case, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
-                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $case, 'list', '', '', 'results iframe', '', "data-width='90%'");
-                if($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'review', '', 'iframe');
-                common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
+                echo "<div class='more'>";
+                if($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
                 common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
 
                 if(common::hasPriv('testcase', 'delete', $case))
@@ -1397,8 +1394,12 @@ class testcaseModel extends model
                     $deleteURL = helper::createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
                     echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"batchForm\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$this->lang->testcase->delete}' class='btn-icon'");
                 }
-
+                echo '</div>';
+                common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $case, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
+                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $case, 'list', '', '', 'results iframe', '', "data-width='90%'");
+                common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
                 common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
+
                 break;
             }
             echo '</td>';

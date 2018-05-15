@@ -8,7 +8,7 @@
     $hasGroupPriv  = common::hasPriv('testcase', 'groupcase');
     $hasZeroPriv   = common::hasPriv('story', 'zerocase');
     ?>
-    <?php if($this->methodName == 'browse') echo "<a id='bysearchTab' class='btn btn-link'><i class='icon-search icon'></i> {$lang->testcase->bySearch}</a>";?>
+    <?php if($this->methodName == 'browse') echo "<a id='bysearchTab' class='btn btn-link querybox-toggle'><i class='icon-search icon'></i> {$lang->testcase->bySearch}</a>";?>
   </div>
   <div class='btn-toolbar pull-right'>
     <div class='btn-group' id='createActionMenu'>
@@ -61,8 +61,8 @@
       </ul>
     </li>
   </ul>
-  <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
+<div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 <?php else:?>
 <div id='mainMenu' class='clearfix'>
   <div id="sidebarHeader">
@@ -73,7 +73,7 @@
       if(!empty($moduleID))
       {
           $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
-          echo html::a($removeLink, "<i class='icon icon-remove'></i>", '', "class='text-muted'");
+          echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
       }
       ?>
     </div>
@@ -93,11 +93,11 @@
     if($hasBrowsePriv and strpos($menuType, 'QUERY') === 0)
     {
         $queryID = (int)substr($menuType, 5);
-        echo html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $menuItem->text, '', "class='btn btn-link' id='{$menuType}Tab'");
+        echo html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=bySearch&param=$queryID"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link' id='{$menuType}Tab'");
     }
     elseif($hasBrowsePriv and ($menuType == 'all' or $menuType == 'needconfirm' or $menuType == 'wait'))
     {
-        echo html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=$menuType"), $menuItem->text, '', "class='btn btn-link' id='{$menuType}Tab'");
+        echo html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=$menuType"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link' id='{$menuType}Tab'");
     }
     elseif($hasBrowsePriv and $menuType == 'suite')
     {
@@ -151,12 +151,12 @@
     }
     elseif($hasZeroPriv and $menuType == 'zerocase')
     {
-        echo html::a($this->createLink('story', 'zeroCase', "productID=$productID"), $lang->story->zeroCase, '', "class='btn btn-link' id='zerocaseTab'");
+        echo html::a($this->createLink('story', 'zeroCase', "productID=$productID"), "<span class='text'>{$lang->story->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab'");
     }
     ?>
     <?php endforeach;?>
     <?php
-    if($this->methodName == 'browse') echo "<a id='bysearchTab' class='btn btn-link'><i class='icon-search icon'></i> {$lang->testcase->bySearch}</a>";
+    if($this->methodName == 'browse') echo "<a id='bysearchTab' class='btn btn-link querybox-toggle'><i class='icon-search icon'></i> {$lang->testcase->bySearch}</a>";
     ?>
   </div>
   <div class='btn-toolbar pull-right'>
@@ -208,7 +208,6 @@
     ?>
   </div>
 </div>
-<div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 <?php endif;?>
 
 <?php
