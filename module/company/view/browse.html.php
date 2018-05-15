@@ -58,21 +58,21 @@ js::set('confirmDelete', $lang->user->confirmDelete);
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th><?php common::printorderlink('realname', $orderBy, $vars, $lang->user->realname);?></th>
-          <th><?php common::printOrderLink('account',  $orderBy, $vars, $lang->user->account);?></th>
-          <th><?php common::printOrderLink('role',     $orderBy, $vars, $lang->user->role);?></th>
-          <th><?php common::printOrderLink('email',    $orderBy, $vars, $lang->user->email);?></th>
-          <th><?php common::printOrderLink('gender',   $orderBy, $vars, $lang->user->gender);?></th>
-          <th><?php common::printOrderLink('phone',    $orderBy, $vars, $lang->user->phone);?></th>
-          <th><?php common::printOrderLink('qq',       $orderBy, $vars, $lang->user->qq);?></th>
-          <th><?php common::printOrderLink('last',     $orderBy, $vars, $lang->user->last);?></th>
-          <th><?php common::printOrderLink('visits',   $orderBy, $vars, $lang->user->visits);?></th>
+          <th><?php common::printOrderLink('account', $orderBy, $vars, $lang->user->account);?></th>
+          <th class="c-type"><?php common::printOrderLink('role', $orderBy, $vars, $lang->user->role);?></th>
+          <th class="c-url"><?php common::printOrderLink('email', $orderBy, $vars, $lang->user->email);?></th>
+          <th class="c-type"><?php common::printOrderLink('gender', $orderBy, $vars, $lang->user->gender);?></th>
+          <th><?php common::printOrderLink('phone', $orderBy, $vars, $lang->user->phone);?></th>
+          <th><?php common::printOrderLink('qq', $orderBy, $vars, $lang->user->qq);?></th>
+          <th class="c-date"><?php common::printOrderLink('last', $orderBy, $vars, $lang->user->last);?></th>
+          <th class="c-num"><?php common::printOrderLink('visits', $orderBy, $vars, $lang->user->visits);?></th>
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
         </thead>
         <tbody>
         <?php foreach($users as $user):?>
         <tr>
-          <td class='cell-id'>
+          <td class='c-id'>
             <?php if($canBatchEdit):?>
             <?php echo html::checkbox('users', array($user->account => sprintf('%03d', $user->id)));?>
             <?php else:?>
@@ -81,13 +81,13 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           </td>
           <td><?php if(!common::printLink('user', 'view', "account=$user->account", $user->realname, '', "title='$user->realname'")) echo $user->realname;?></td>
           <td><?php echo $user->account;?></td>
-          <td><?php echo zget($lang->user->roleList, $user->role, '');?></td>
-          <td><?php echo html::mailto($user->email);?></td>
-          <td><?php if(isset($lang->user->genderList[$user->gender])) echo $lang->user->genderList[$user->gender];?></td>
+          <td class="c-type"><?php echo zget($lang->user->roleList, $user->role, '');?></td>
+          <td class="c-url" title="<?php echo $user->email;?>"><?php echo html::mailto($user->email);?></td>
+          <td class="c-type"<?php if(isset($lang->user->genderList[$user->gender])) echo $lang->user->genderList[$user->gender];?></td>
           <td><?php echo $user->phone;?></td>
           <td><?php if($user->qq) echo html::a("tencent://message/?uin=$user->qq", $user->qq);?></td>
-          <td><?php if($user->last) echo date('Y-m-d', $user->last);?></td>
-          <td class='text-center'><?php echo $user->visits;?></td>
+          <td class='c-date'><?php if($user->last) echo date('Y-m-d', $user->last);?></td>
+          <td class='c-num text-center'><?php echo $user->visits;?></td>
           <td class='c-actions'>
             <div class='more'>
               <?php
