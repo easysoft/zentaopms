@@ -188,6 +188,8 @@ $lang->testcase->noFunction       = '不存在iconv和mb_convert_encoding转码�
 $lang->testcase->noRequire        = "%s行的“%s”是必填字段，不能为空";
 $lang->testcase->noLibrary        = "现在还没有公共库，请先创建！";
 $lang->testcase->mustChooseResult = '必须选择评审结果';
+$lang->testcase->noModule         = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
+$lang->testcase->noCase           = '暂时没有用例，您现在可以';
 
 $lang->testcase->searchStories = '键入来搜索需求';
 $lang->testcase->selectLib     = '请选择库';
