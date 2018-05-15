@@ -92,7 +92,7 @@ $status = $this->session->testTaskVersionStatus;
         }
 
         common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
-        common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'file','','iframe',true);
+        common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'file','','iframe',true, 'data-width=800px');
         common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
         common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
         common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list','','','iframe',true);
