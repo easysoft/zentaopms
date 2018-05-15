@@ -15,55 +15,54 @@
   <div class='btn-toolbar pull-left'>
     <?php common::printBack($this->session->testtaskList, 'btn btn-link');?>
     <div class='divider'></div>
-    <div class='page-title'>
-      <span class='label label-id'><?php echo $task->id;?></span>
-      <?php echo $task->name;?>
-    </div>
-  </div>
-  <div class='btn-toolbar pull-right'>
     <?php
     $lang->testtask->linkCase = $lang->testtask->linkByStory;
-    common::printLink('testtask', 'linkCase', "taskID=$taskID&type=bystory", $lang->testtask->linkByStory, '', "class='btn btn-primary'");
+    $allActive     = $type == 'all' ? 'btn-active-text' : '';
+    $bystoryActive = $type == 'bystory' ? 'btn-active-text' : '';
+    common::printLink('testtask', 'linkCase', "taskID=$taskID&type=all", "<span class='text'>" . $lang->testtask->allCases . '</span>', '', "class='btn btn-link {$allActive}'");
+    common::printLink('testtask', 'linkCase', "taskID=$taskID&type=bystory", "<span class='text'>" . $lang->testtask->linkByStory . '</span>', '', "class='btn btn-link {$bystoryActive}'");
 
-    echo "<span class='dropdown'>";
-    echo "<button class='btn btn-primary' type='button' data-toggle='dropdown'>{$lang->testtask->linkBySuite} <span class='caret'></span></button>";
+    echo "<div class='btn-group'>";
+    $suitViewName = $type == 'bysuite'? $suiteList[$param]->name : $lang->testtask->linkBySuite;
+    echo "<a href='javascript:;' class='btn btn-link' data-toggle='dropdown'><span class='text'>{$suitViewName}</span> <span class='caret'></span></a>";
     echo "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
     if($suiteList)
     {
         foreach($suiteList as $suiteID => $suite)
         {
-            $active = ($type == 'bysuite' and (int)$param == $suiteID) ? "class='active'" : '';
             $suiteName = $suite->name;
             if($suite->type == 'public') $suiteName .= " <span class='label label-info'>{$lang->testsuite->authorList[$suite->type]}</span>";
-            echo "<li $active>" . html::a(inlink('linkCase', "taskID=$taskID&type=bysuite&param=$suiteID"), $suiteName) . "</li>";
+            echo "<li>" . html::a(inlink('linkCase', "taskID=$taskID&type=bysuite&param=$suiteID"), $suiteName) . "</li>";
         }
     }
     else
     {
         echo "<li>" . html::a('###', $lang->testsuite->noticeNone) . "</li>";
     }
-    echo "</ul></span>";
+    echo "</ul></div>";
 
-    echo "<span class='dropdown'>";
-    echo "<button class='btn btn-primary' type='button' data-toggle='dropdown'>{$lang->testtask->linkByBuild} <span class='caret'></span></button>";
+    echo "<div class='btn-group'>";
+    $buildViewName = $type == 'bybuild'? zget($testTask, $param) : $lang->testtask->linkByBuild;
+    echo "<a href='javascript:;' class='btn btn-link' data-toggle='dropdown'><span class='text'>{$buildViewName}</span> <span class='caret'></span></a>";
     echo "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
     if($testTask)
     {
         foreach($testTask as $tmpID => $tmpTitle)
         {
-            $active = ($type == 'bybuild' and (int)$param == $tmpID) ? "class='active'" : '';
-            echo "<li $active>" . html::a(inlink('linkCase', "taskID=$taskID&type=bybuild&param=$tmpID"), $tmpTitle) . "</li>";
+            echo "<li>" . html::a(inlink('linkCase', "taskID=$taskID&type=bybuild&param=$tmpID"), $tmpTitle) . "</li>";
         }
     }
     else
     {
         echo "<li>" . html::a('###', $lang->testtask->noticeNoOther) . "</li>";
     }
-    echo "</ul></span>";
+    echo "</ul></div>";
     ?>
+    <?php echo "<a class='btn btn-link querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'></i>{$lang->testcase->bySearch}</a>";?>
   </div>
 </div>
 <div id='mainContent' class='main-content'>
+  <div class="cell" id="queryBox"></div>
   <form class='main-table table-case' data-ride='table' method='post'>
     <table class='table'>
       <div class="table-header">
