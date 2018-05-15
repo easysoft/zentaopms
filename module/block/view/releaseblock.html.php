@@ -14,12 +14,16 @@
   <table class='table table-borderless table-hover table-fixed block-release'>
     <thead>
       <tr>
-        <th class='text-center w-50px'><?php echo $lang->idAB?></th>
+        <?php if($longBlock):?>
+        <th class='c-id text-center'><?php echo $lang->idAB?></th>
         <th><?php echo $lang->release->product;?></th>
+        <?php endif;?>
         <th><?php echo $lang->release->name;?></th>
+        <?php if($longBlock):?>
         <th><?php echo $lang->release->build;?></th>
-        <th class='text-center w-80px'><?php echo $lang->release->date;?></th>
-        <th class='text-center w-70px'><?php echo $lang->release->status;?></th>
+        <?php endif;?>
+        <th class='c-date text-center'><?php echo $lang->release->date;?></th>
+        <th class='text-center w-90px'><?php echo $lang->release->status;?></th>
       </tr>
     </thead>
     <tbody>
@@ -29,12 +33,21 @@
       $viewLink = $this->createLink('release', 'view', "releaseID={$release->id}");
       ?>
       <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
+        <?php if($longBlock):?>
         <td class='text-center'><?php echo $release->id;?></td>
         <td title='<?php echo $release->productName?>'><?php echo $release->productName?></td>
+        <?php endif;?>
         <td title='<?php echo $release->name?>'><?php echo $release->name?></td>
+        <?php if($longBlock):?>
         <td title='<?php echo $release->buildName?>'><?php echo $release->buildName?></td>
+        <?php endif;?>
         <td class='text-center'><?php echo $release->date?></td>
-        <td class='text-center'><?php echo $lang->release->statusList[$release->status]?></td>
+        <td class='c-status' title='<?php echo zget($lang->release->statusList, $release->status);?>'>
+          <span class="status-<?php echo $release->status?>">
+            <span class="label label-dot"></span>
+            <span class='status-text'><?php echo zget($lang->release->statusList, $release->status);?></span>
+          </span>
+        </td>
       </tr>
       <?php endforeach;?>
     </tbody>

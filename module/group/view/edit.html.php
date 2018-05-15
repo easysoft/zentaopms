@@ -14,7 +14,7 @@
 <div id='mainContent' class='main-content'> 
   <div class='main-header'>
     <h2>
-      <span><?php echo $group->id;?></span>
+      <span class='label label-id'><?php echo $group->id;?></span>
       <?php echo $group->name;?>
       <small><?php echo $lang->arrow . $lang->group->edit;?></small>
     </h2>

@@ -26,6 +26,11 @@ js::set('branch',         $branch);
 <div id="mainContent" class="main-row">
   <div class='side-col' id='sidebar'>
     <div class='cell'>
+      <?php if(!$moduleTree):?>
+      <hr class="space">
+      <div class="text-center text-muted"><?php echo $lang->testcase->noModule;?></div>
+      <hr class="space">
+      <?php endif;?>
       <?php echo $moduleTree;?>
       <div class='text-center'>
         <?php common::printLink('tree', 'browse', "productID=$productID&view=case", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
@@ -185,6 +190,10 @@ js::set('branch',         $branch);
           <?php endif;?>
         </div>
         <?php $pager->show('right', 'pagerjs');?>
+      </div>
+      <?php elseif(common::hasPriv('testcase', 'create')):?>
+      <div class="table-empty-tip">
+        <p><span class="text-muted"><?php echo $lang->testcase->noCase;?></span> <?php common::printLink('testcase', 'create', "productID={$productID}", "<i class='icon icon-plus'> </i>" . $lang->testcase->create, '', "class='btn btn-info'");?></p>
       </div>
       <?php endif;?>
     </form>

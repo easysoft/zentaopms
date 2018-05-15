@@ -286,6 +286,7 @@
     <?php
     if(!$isLibCase)
     {
+        echo "<div class='divider'></div>";
         common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", $case, 'button', '', '', 'runCase', false, "data-width='95%'");
         common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", $case, 'button', '', '', 'results', false, "data-width='95%'");
 
@@ -293,7 +294,6 @@
     }
     if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review', "caseID=$case->id", $case, 'button', 'review', '', 'iframe');
     ?>
-    <div class='divider'></div>
     <?php
     common::printIcon('testcase', 'edit',"caseID=$case->id", $case);
     if(!$isLibCase) common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'button', 'copy');
