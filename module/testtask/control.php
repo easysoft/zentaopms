@@ -259,7 +259,7 @@ class testtask extends control
         $task = $this->testtask->getById($taskID);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
         $productID = $task->product;
-        $this->testtask->setMenu($this->products, $productID, $task->branch);
+        $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot);
 
         if($this->cookie->preProductID != $productID)
