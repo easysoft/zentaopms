@@ -184,7 +184,7 @@ js::set('branch',         $branch);
           </div>
           <?php endif;?>
         </div>
-        <?php $pager->show('right', 'pagerjs');?></div>
+        <?php $pager->show('right', 'pagerjs');?>
       </div>
       <?php endif;?>
     </form>

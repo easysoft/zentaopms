@@ -1,7 +1,6 @@
 // Prevent login page show in a iframe modal
 if(window.self !== window.top) window.top.location.href = window.location.href;
 
-function setForm(){}
 $(document).ready(function()
 {
     var $login = $('#login');
