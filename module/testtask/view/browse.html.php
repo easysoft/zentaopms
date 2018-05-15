@@ -22,16 +22,16 @@ $status = $this->session->testTaskVersionStatus;
 <?php if($this->config->global->flow != 'onlyTest'):?>
 <div id="mainMenu" class='clearfix'>
   <div class="btn-toolbar pull-left">
-      <div class='btn-group'>
-        <?php $viewName = $scope == 'local'? $productName : $lang->testtask->all;?>
-        <a href='javascript:;' class='btn btn-link' data-toggle='dropdown'><span class='text'><?php echo $viewName;?></span> <span class='caret'></span></a>
-        <ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>
-          <?php
-            echo "<li>" . html::a(inlink('browse', "productID=$productID&branch=0&type=all,$status"), $lang->testtask->all) . "</li>";
-            echo "<li>" . html::a(inlink('browse', "productID=$productID&branch=$branch&type=local,$status"), $productName) . "</li>";
-          ?>
-        </ul>
-      </div>
+    <div class='btn-group'>
+      <?php $viewName = $scope == 'local'? $productName : $lang->testtask->all;?>
+      <a href='javascript:;' class='btn btn-link' data-toggle='dropdown'><span class='text'><?php echo $viewName;?></span> <span class='caret'></span></a>
+      <ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>
+        <?php
+          echo "<li>" . html::a(inlink('browse', "productID=$productID&branch=0&type=all,$status"), $lang->testtask->all) . "</li>";
+          echo "<li>" . html::a(inlink('browse', "productID=$productID&branch=$branch&type=local,$status"), $productName) . "</li>";
+        ?>
+      </ul>
+    </div>
     <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,wait"), "<span class='text'>{$lang->testtask->wait}</span>", '', "id='waitTab' class='btn btn-link'");?>
     <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,doing"), "<span class='text'>{$lang->testtask->testing}</span>", '', "id='doingTab' class='btn btn-link'");?>
     <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,blocked"), "<span class='text'>{$lang->testtask->blocked}</span>", '', "id='blockedTab' class='btn btn-link'");?>

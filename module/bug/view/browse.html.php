@@ -57,7 +57,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         </div>
       </li>
       <li class='right'>
-        <?php common::printLink('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", "<i class='icon-common-report icon-bar-chart'></i> " . $lang->bug->report->common); ?>
+        <?php common::printLink('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", "<i class='icon-bar-chart muted'></i> " . $lang->bug->report->common); ?>
       </li>
       <li class='right'>
         <a href='###' class='dropdown-toggle' data-toggle='dropdown'>

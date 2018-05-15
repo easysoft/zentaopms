@@ -121,13 +121,13 @@ $account = $this->app->user->account;
                 <?php foreach($group->tasks[$col] as $task):?>
                 <div class='board-item' data-id='<?php echo $task->id?>' id='task-<?php echo $task->id?>' data-type='task'>
                   <?php
-                  $childrenAB = empty($task->parent) ? '' : "<span class='label'>" . $lang->task->childrenAB . '</span> ';
-                  echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), "#{$task->id}{$childrenAB}{$task->name}", '', 'class="title kanbaniframe" title="' . $task->name . '"');
+                  $childrenAB = empty($task->parent) ? '' : "<span class='label label-light label-badge'>" . $lang->task->childrenAB . '</span> ';
+                  echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), "{$childrenAB}{$task->name}", '', 'class="title kanbaniframe" title="' . $task->name . '"');
                   ?>
                   <div class='info'>
                     <?php
-                    $assignedToRealName = "<span class='text'>" . zget($realnames, $task->assignedTo) . "</span>";
-                    if(empty($task->assignedTo)) $assignedToRealName = "<span class='text-primary text'>{$lang->task->noAssigned}</span>";
+                    $assignedToRealName = "<span>" . zget($realnames, $task->assignedTo) . "</span>";
+                    if(empty($task->assignedTo)) $assignedToRealName = "<span class='text-primary'>{$lang->task->noAssigned}</span>";
                     echo html::a($this->createLink('task', 'assignTo', "projectID={$task->project}&taskID={$task->id}", '', true), '<i class="icon icon-hand-right"></i> ' . $assignedToRealName, '', 'class="btn btn-icon-left kanbaniframe task-assignedTo"');?>
                     <?php if(isset($task->delay)):?>
                     <span class="status-delayed"> <?php echo $lang->task->delayed;?></span>
@@ -143,7 +143,7 @@ $account = $this->app->user->account;
                   <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), "<i class='icon-bug'></i> #{$bug->id}{$bug->title}", '', 'class="title kanbaniframe" title="' . $bug->title . '"');?>
                   <div class='info'>
                     <?php
-                    $assignedToRealName = "<span class='text'>" . zget($realnames, $bug->assignedTo) . "</span>";
+                    $assignedToRealName = "<span>" . zget($realnames, $bug->assignedTo) . "</span>";
                     if(empty($task->assignedTo)) $assignedToRealName = "<span class='text-primary text'>{$lang->task->noAssigned}</span>";
                     echo html::a($this->createLink('bug', 'assignTo', "bugID={$bug->id}", '', true), '<i class="icon icon-hand-right"></i> ' . $assignedToRealName, '', 'class="btn btn-icon-left kanbaniframe bug-assignedTo"');?>
                     <span class='status-<?php echo $bug->status;?>' title='<?php echo $lang->bug->status?>'><span class="label label-dot"></span> <?php echo zget($lang->bug->statusList, $bug->status);?></span>
