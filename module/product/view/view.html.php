@@ -17,7 +17,7 @@
         <div class="col-sm-6">
           <div class="panel block-release">
             <div class="panel-heading">
-              <div class="panel-title"><?php echo $lang->product->iteration;?> <span class="label label-badge label-light"><?php printf($lang->product->iterationInfo, count($releases));?></span></div>
+              <div class="panel-title"><?php echo $lang->product->plan;?> <span class="label label-badge label-light"><?php printf($lang->product->iterationInfo, count($releases));?></span></div>
             </div>
             <div class="panel-body">
               <div class="release-path">
