@@ -1044,6 +1044,7 @@ EOT;
 
         $jsConfig = new stdclass();
         $jsConfig->webRoot        = $config->webRoot;
+        $jsConfig->debug          = $config->debug;
         $jsConfig->appName        = $app->getAppName();
         $jsConfig->cookieLife     = ceil(($config->cookieLife - time()) / 86400);
         $jsConfig->requestType    = $config->requestType;

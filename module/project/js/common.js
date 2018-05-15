@@ -182,7 +182,7 @@ function loadPlans(product, branchID)
             if(data)
             {
                 if($("div#plan" + index).size() == 0) $("#plansBox .row").append('<div class="col-sm-4" id="plan' + index + '"></div>');
-                $("div#plan" + index).width($(product).closest('.col-sm-4').width()).html(data).find('select').attr('name', 'plans[' + productID + ']').attr('id', 'plans' + productID);
+                $("div#plan" + index).width($(product).closest('.col-sm-4').width()).html(data).find('select').attr('name', 'plans[' + productID + ']').attr('id', 'plans' + productID).chosen();
 
                 adjustPlanBoxMargin();
             }
@@ -220,15 +220,6 @@ function loadBranch(){}
 /* Auto compute the work days. */
 $(function()
 {
-    // if(typeof(replaceID) != 'undefined')
-    // {
-    //     setModal4List('iframe', replaceID, function($list)
-    //     {
-    //         $list.find('.progress-pie:visible').progressPie();
-    //         var datatable = $list.data('zui.datatable');
-    //         if(datatable) datatable.$datatable.find('.progress-pie:visible').progressPie();
-    //     });
-    // }
     $(".date").bind('dateSelected', function()
     {
         computeWorkDays(this.id);

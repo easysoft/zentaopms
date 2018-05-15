@@ -14,21 +14,19 @@
 .block-overview .tile-amount {font-size: 48px; margin-bottom: 10px;}
 </style>
 <div class="panel-body table-row">
-  <div class="col-4 text-middle text-center">
+  <div class="col-6 text-middle text-center">
     <div class="tile">
-      <div class="tile-title"><?php echo $lang->project->allProject;?></div>
+      <div class="tile-title"><?php echo $lang->testcase->allTestcases;?></div>
       <div class="tile-amount"><?php echo $total;?></div>
-      <a class="btn btn-primary btn-circle btn-icon-right btn-sm" href="<?php echo $this->createLink('project', 'all');?>"><?php echo $lang->project->viewAll;?> <span class="label label-badge label-icon"><i class="icon icon-arrow-right"></i></span></a>
+      <?php if(common::hasPriv('testcase', 'browse')):?>
+      <a href='<?php echo $this->createLink('testcase', 'browse');?>' class="btn btn-primary btn-circle btn-icon-right btn-sm"><?php echo $lang->testcase->viewAll;?><span class="label label-badge label-icon"><i class="icon icon-arrow-right"></i></span></a>
+      <?php endif;?>
     </div>
   </div>
-  <div class="col-8 text-middle">
-    <ul class="status-bars">
-      <?php foreach($lang->project->statusList as $statusKey => $statusName):?>
-      <li>
-        <span class="value"><?php echo $overview[$statusKey];?></span>
-        <span class="bar" style="height: <?php echo $overviewPercent[$statusKey];?>"></span>
-        <span class="title"><?php echo $statusName;?></span>
-      </li>
+  <div class="col-6 text-middle">
+    <ul class="status-bars-h">
+      <?php foreach(array('pass', 'fail', 'blocked') as $result):?>
+      <li><span class="bar" style="width: <?php echo $casePercents[$result];?>%"><span class="title"><?php echo $lang->testcase->resultList[$result];?></span><span class="value"><?php echo $casePairs[$result];?></span></span></li>
       <?php endforeach;?>
     </ul>
   </div>

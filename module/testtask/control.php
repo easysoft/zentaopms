@@ -211,7 +211,7 @@ class testtask extends control
             $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
         }
 
-        $this->testtask->setMenu($this->products, $productID, $task->branch);
+        $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
 
         $this->view->title      = "TASK #$task->id $task->name/" . $this->products[$productID];
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -259,7 +259,7 @@ class testtask extends control
         $task = $this->testtask->getById($taskID);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
         $productID = $task->product;
-        $this->testtask->setMenu($this->products, $productID, $task->branch);
+        $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot);
 
         if($this->cookie->preProductID != $productID)
@@ -356,7 +356,7 @@ class testtask extends control
             }
         }
 
-        $this->testtask->setMenu($this->products, $productID, $branchID);
+        $this->testtask->setMenu($this->products, $productID, $branchID, $taskID);
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common . $this->lang->colon . $this->lang->testtask->reportChart;
         $this->view->position[]    = html::a($this->createLink('testtask', 'cases', "taskID=$taskID"), $this->products[$productID]);
         $this->view->position[]    = $this->lang->testtask->reportChart;
@@ -390,7 +390,7 @@ class testtask extends control
         $task    = $this->testtask->getById($taskID);
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
         $productID = $task->product;
-        $this->testtask->setMenu($this->products, $productID, $task->branch);
+        $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
 
         $runs = $this->testtask->getRuns($taskID, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
@@ -454,7 +454,7 @@ class testtask extends control
         $productID = $this->product->saveState($task->product, $this->products);
 
         /* Set menu. */
-        $this->testtask->setMenu($this->products, $productID, $task->branch);
+        $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -501,7 +501,7 @@ class testtask extends control
         $productID = $this->product->saveState($testtask->product, $this->products);
 
         /* Set menu. */
-        $this->testtask->setMenu($this->products, $productID, $testtask->branch);
+        $this->testtask->setMenu($this->products, $productID, $testtask->branch, $taskID);
 
         $this->view->testtask   = $testtask;
         $this->view->title      = $testtask->name . $this->lang->colon . $this->lang->testtask->start;
@@ -542,7 +542,7 @@ class testtask extends control
         $productID = $this->product->saveState($testtask->product, $this->products);
 
         /* Set menu. */
-        $this->testtask->setMenu($this->products, $productID, $testtask->branch);
+        $this->testtask->setMenu($this->products, $productID, $testtask->branch, $taskID);
 
         $this->view->testtask   = $testtask;
         $this->view->title      = $testtask->name . $this->lang->colon . $this->lang->testtask->start;
@@ -583,7 +583,7 @@ class testtask extends control
         $productID = $this->product->saveState($testtask->product, $this->products);
 
         /* Set menu. */
-        $this->testtask->setMenu($this->products, $productID, $testtask->branch);
+        $this->testtask->setMenu($this->products, $productID, $testtask->branch, $taskID);
 
         $this->view->testtask     = $this->testtask->getById($taskID);
         $this->view->title        = $testtask->name . $this->lang->colon . $this->lang->close;
@@ -626,7 +626,7 @@ class testtask extends control
         $productID = $this->product->saveState($testtask->product, $this->products);
 
         /* Set menu. */
-        $this->testtask->setMenu($this->products, $productID, $testtask->branch);
+        $this->testtask->setMenu($this->products, $productID, $testtask->branch, $taskID);
 
         $this->view->testtask   = $testtask;
         $this->view->title      = $testtask->name . $this->lang->colon . $this->lang->testtask->start;
@@ -697,7 +697,7 @@ class testtask extends control
         $productID = $this->product->saveState($task->product, $this->products);
 
         /* Save session. */
-        $this->testtask->setMenu($this->products, $productID, $task->branch);
+        $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -903,7 +903,7 @@ class testtask extends control
         /* The case of tasks of qa. */
         if($productID)
         {
-            $this->testtask->setMenu($this->products, $productID);
+            $this->testtask->setMenu($this->products, $productID, $taskID);
             $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0);
         }
         /* The case of my. */

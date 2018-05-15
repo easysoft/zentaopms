@@ -18,7 +18,7 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
         <h2><?php printf($lang->welcome, $app->company->name);?></h2>
         <div class="actions dropdown dropdown-hover" id='langs'>
           <button type='button' class='btn' title='Change Language/更换语言/更換語言'><?php echo $config->langs[$this->app->getClientLang()]; ?> <span class="caret"></span></button>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu pull-right">
             <?php foreach($config->langs as $key => $value):?>
             <li><a class="switch-lang" data-value="<?php echo $key; ?>"><?php echo $value; ?></a></li>
             <?php endforeach;?>
@@ -46,7 +46,8 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
                   <td id="keeplogin"><?php echo html::checkBox('keepLogin', $lang->user->keepLogin, $keepLogin);?></td>
                 </tr>
                 <tr>
-                  <td class="form-actions" colspan='2'>
+                  <td></td>
+                  <td class="form-actions">
                   <?php 
                   echo html::submitButton($lang->login, '', 'btn btn-primary btn-wide');
                   if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));
