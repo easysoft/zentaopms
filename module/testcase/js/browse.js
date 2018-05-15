@@ -26,11 +26,9 @@ $(document).ready(function()
     if(browseType == 'bysearch') ajaxGetSearchForm();
     if($('#caseList thead th.w-title').width() < 150) $('#caseList thead th.w-title').width(150);
 
-    setModal4List('runCase', 'caseList');
-
     if(flow == 'onlyTest')
     {
-        $('#modulemenu > .nav').append($('#featurebar > .submenu').html());
+        $('#modulemenu > .nav').append($('#mainMenu > .pull-left.btn-toolbar').html());
 
         toggleSearch();
         $('.export').modalTrigger({width:650, type:'iframe', afterShown: setCheckedCookie})
