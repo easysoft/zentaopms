@@ -16,9 +16,6 @@
 <div class='main-header'>
   <h2>
     <?php echo $lang->story->common . $lang->colon . $lang->story->batchEdit;?>
-    <?php if($productName):?>
-    <small class='text-muted'><?php echo html::icon($lang->icons['product']) . ' ' . $lang->story->product . $lang->colon . ' ' . $productName;?></small>
-    <?php endif;?>
   </h2>
   <div class='pull-right btn-toolbar'>
     <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=batchEditFields')?>
@@ -35,8 +32,8 @@ foreach(explode(',', $showFields) as $field)
     if($field)$visibleFields[$field] = '';
 }
 ?>
-<form method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "from=storyBatchEdit")?>">
-  <table class='table table-form table-fixed with-border'>
+<form method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "from=storyBatchEdit")?>" id="batchEditForm">
+  <table class='table table-form'>
     <thead>
       <tr>
         <th class='w-40px'> <?php echo $lang->idAB;?></th> 
@@ -82,31 +79,48 @@ foreach(explode(',', $showFields) as $field)
       <tr>
         <td><?php echo $storyID . html::hidden("storyIDList[$storyID]", $storyID);?></td>
         <?php if($branchProduct):?>
-        <td class='text-left<?php echo zget($visibleFields, 'branch', ' hidden')?>' style='overflow:visible'>
+        <td class='text-left<?php echo zget($visibleFields, 'branch', ' hidden')?>'>
           <?php $branchProductID = $productID ? $productID : $product->id;?>
           <?php $disabled        = (isset($product) and $product->type == 'normal') ? "disabled='disabled'" : '';?>
           <?php echo html::select("branches[$storyID]", $branches, $story->branch, "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $storyID);' $disabled");?>
         </td>
         <?php endif;?>
-        <td class='text-left<?php echo zget($visibleFields, 'module')?>' style='overflow:visible'>
+        <td class='text-left<?php echo zget($visibleFields, 'module')?>'>
           <?php echo html::select("modules[$storyID]", $modules, $story->module, "class='form-control chosen'");?>
         </td>
-        <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'>
+        <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>'>
           <?php echo html::select("plans[$storyID]", $productPlans, $story->plan, "class='form-control chosen'");?>
         </td>
-        <td style='overflow:visible' title='<?php echo $story->title?>'>
+        <!-- <td title='<?php echo $story->title?>'>
           <div class='input-group'>
           <?php echo html::hidden("colors[$storyID]", $story->color, "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->story->colorTag}' data-update-text='#titles\\[{$storyID}\\]'");?>
           <?php echo html::input("titles[$storyID]", $story->title, "class='form-control' autocomplete='off'"); ?>
           </div>
+        </td> -->
+        <td title='<?php echo $story->title?>'>
+          <div class="input-group">
+            <div class="input-control has-icon-right">
+              <?php echo html::input("titles[$storyID]", $story->title, "class='form-control input-story-title' autocomplete='off'"); ?>
+
+              <div class="colorpicker">
+                <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+                <ul class="dropdown-menu clearfix">
+                  <li class="heading"><?php echo $lang->story->colorTag;?><i class="icon icon-close"></i></li>
+                </ul>
+                <?php echo html::hidden("colors[$storyID]", $story->color, "class='colorpicker' data-wrapper='input-control-icon-right' data-icon='color' data-btn-tip='{$lang->story->colorTag}' data-update-color='#titles\\[{$storyID}\\]'");?>
+                <!-- <input type="hidden" class="colorpicker" id="color$id" name="color[$id]" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title$id"> -->
+              </div>
+            </div>
+          </div>
         </td>
+        
         <td <?php echo zget($visibleFields, 'estimate', "class='hidden'")?>><?php echo html::input("estimates[$storyID]", $story->estimate, "class='form-control' autocomplete='off'"); ?></td>
         <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$storyID]",     $priList, $story->pri, 'class=form-control');?></td>
-        <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTo[$storyID]",     $users, $story->assignedTo, "class='form-control chosen'");?></td>
+        <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'><?php echo html::select("assignedTo[$storyID]",     $users, $story->assignedTo, "class='form-control chosen'");?></td>
         <td <?php echo zget($visibleFields, 'source', "class='hidden'")?>><?php echo html::select("sources[$storyID]",  $sourceList, $story->source, 'class=form-control');?></td>
         <td class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
         <td <?php echo zget($visibleFields, 'stage', "class='hidden'")?>><?php echo html::select("stages[$storyID]", $stageList, $story->stage, 'class="form-control"' . ($story->status == 'draft' ? ' disabled="disabled"' : ''));?></td>
-        <td class='text-left<?php echo zget($visibleFields, 'closedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("closedBys[$storyID]",     $users, $story->closedBy, "class='form-control" . ($story->status == 'closed' ? " chosen'" : "' disabled='disabled'"));?></td>
+        <td class='text-left<?php echo zget($visibleFields, 'closedBy', ' hidden')?>'><?php echo html::select("closedBys[$storyID]",     $users, $story->closedBy, "class='form-control" . ($story->status == 'closed' ? " chosen'" : "' disabled='disabled'"));?></td>
 
         <?php if($story->status == 'closed'):?>
         <td <?php echo zget($visibleFields, 'closedReason', "class='hidden'")?>>
@@ -133,7 +147,7 @@ foreach(explode(',', $showFields) as $field)
     </tbody>
     <tfoot>
       <tr>
-        <td colspan='<?php echo count($visibleFields) + ($branchProduct ? 3 : 2);?>' class='text-center'>
+        <td colspan='<?php echo count($visibleFields) + ($branchProduct ? 3 : 2);?>' class='text-center form-actions'>
           <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
           <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
         </td>
