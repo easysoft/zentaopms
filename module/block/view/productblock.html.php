@@ -15,11 +15,11 @@
     <thead>
       <tr>
         <th class='c-name'><?php echo $lang->product->name;?></th>
-        <th class='c-num'><?php echo $lang->product->plans;?></th>
-        <th class='c-num'><?php echo $lang->product->releases;?></th>
         <?php if($longBlock):?>
         <th class='c-name'><?php echo $lang->product->currentProject;?></th>
         <?php endif;?>
+        <th class='c-num'><?php echo $lang->product->plans;?></th>
+        <th class='c-num'><?php echo $lang->product->releases;?></th>
         <th class='c-num'><?php echo $lang->story->statusList['active'] . $lang->story->common;?></th>
         <th class='c-num'><?php echo $lang->bug->unResolved . $lang->bug->common;?></th>
       </tr>
@@ -30,13 +30,13 @@
       $appid    = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : "";
       $viewLink = $this->createLink('product', 'browse', 'productID=' . $product->id);
       ?>
-      <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-        <td class='c-name' title='<?php echo $product->name?>'><?php echo $product->name?></td>
+      <tr class='text-center' data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
+        <td class='c-name text-left' title='<?php echo $product->name?>'><?php echo $product->name?></td>
+        <?php if($longBlock):?>
+        <td class='c-name text-left'><?php echo zget($projects, $product->id, '');?></td>
+        <?php endif;?>
         <td class="c-num"><?php echo $product->plans?></td>
         <td class="c-num"><?php echo $product->releases?></td>
-        <?php if($longBlock):?>
-        <td class='c-name'><?php echo zget($projects, $product->id, '');?></td>
-        <?php endif;?>
         <td class="c-num"><?php echo $product->stories['active']?></td>
         <td class="c-num"><?php echo $product->unResolved?></td>
       </tr> 

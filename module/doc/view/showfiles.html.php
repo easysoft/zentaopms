@@ -39,8 +39,8 @@
             </form>
           </div>
           <div class="btn-group">
-            <?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list"), "<i class='icon icon-bars'></i>" , '',  "title={$lang->doc->browseTypeList['list']} class='btn btn-gray btn-icon text-primary'");?>
-            <?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card"), "<i class='icon icon-cards-view'></i>", '', "title={$lang->doc->browseTypeList['grid']} class='btn btn-gray btn-gray btn-icon'");?>
+            <?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list"), "<i class='icon icon-bars'></i>" , '',  "title={$lang->doc->browseTypeList['list']} class='btn btn-icon text-primary'");?>
+            <?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card"), "<i class='icon icon-cards-view'></i>", '', "title={$lang->doc->browseTypeList['grid']} class='btn btn-icon'");?>
           </div>
         </nav>
       </div>

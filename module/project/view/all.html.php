@@ -75,9 +75,19 @@
           <td><?php echo $users[$project->PM];?></td>
           <td><?php echo $project->end;?></td>
           <?php if(isset($project->delay)):?>
-          <td><span class='status-delay'><span class="label label-dot"></span> <?php echo $lang->project->delayed;?></span></td>
+          <td class='c-status' title='<?php echo $lang->project->delayed;?>'>
+            <span class="project-status-delayed">
+              <span class="label label-dot"></span>
+              <span class='status-text'><?php echo $lang->project->delayed;?></span>
+            </span>
+          </td>
           <?php else:?>
-          <td><span class='status-<?php echo $project->status?>'><span class="label label-dot"></span> <?php echo $lang->project->statusList[$project->status];?></span></td>
+          <td class='c-status' title='<?php echo zget($lang->project->statusList, $project->status);?>'>
+            <span class="project-status-<?php echo $project->status?>">
+              <span class="label label-dot"></span>
+              <span class='status-text'><?php echo zget($lang->project->statusList, $project->status);?></span>
+            </span>
+          </td>
           <?php endif;?>
           <td><?php echo $project->hours->totalEstimate;?></td>
           <td><?php echo $project->hours->totalConsumed;?></td>

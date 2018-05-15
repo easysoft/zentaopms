@@ -69,7 +69,7 @@
         <tr>
           <td colspan="3" class="text-center">
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
-            <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
+            <?php echo html::backButton('', '', 'btn btn-wide');?>
             <?php echo $this->config->global->flow != 'onlyTest' ? html::hidden('project', $build->project) : '';?>
           </td>
         </tr>
