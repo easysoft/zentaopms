@@ -28,7 +28,7 @@ class testtaskModel extends model
 
         if($testtask)
         {
-            $testtasks = $this->getProductTasks($productID, $branch, 'id_desc', null, array('local', 'totalStatus'));
+            $testtasks = $this->getProductTasks($productID, 0, 'id_desc', null, array('local', 'totalStatus'));
 
             $selectHtml .= "<div class='btn-group angle-btn'>";
             $selectHtml .= "<div class='btn-group'>";
@@ -38,6 +38,10 @@ class testtaskModel extends model
             $selectHtml .= "</ul>";
             $selectHtml .= "</div>";
             $selectHtml .= "</div>";
+
+            $this->lang->modulePageActions = '';
+            if(common::hasPriv('testtask', 'view'))     $this->lang->modulePageActions .= html::a(helper::createLink('testtask', 'view', "taskID={$testtask->id}"), "<i class='icon icon-file-text'> </i>" . $this->lang->testtask->view, '', "class='btn'");
+            if(common::hasPriv('testreport', 'browse')) $this->lang->modulePageActions .= html::a(helper::createLink('testreport', 'browse', "objectID=$productID&objectType=product&extra={$testtask->id}"), "<i class='icon icon-flag'> </i>" . $this->lang->testtask->reportField, '', "class='btn'");
         }
 
         $this->app->loadLang('qa');

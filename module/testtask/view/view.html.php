@@ -15,11 +15,13 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <span class='label label-id'><?php echo $task->id;?></span>
-      <?php echo $task->name;?>
-      <?php if($task->deleted):?>
-      <span class='label label-danger'><?php echo $lang->task->deleted;?></span>
-      <?php endif; ?>
+      <h2>
+        <span class='label label-id'><?php echo $task->id;?></span>
+        <?php echo $task->name;?>
+        <?php if($task->deleted):?>
+        <span class='label label-danger'><?php echo $lang->task->deleted;?></span>
+        <?php endif; ?>
+      </h2>
     </div>
     <div class="main-row">
       <div class="col-8 main-col">
@@ -87,9 +89,9 @@
   </div>
 </div>
 
-<div class='mainActions'>
+<div id='mainActions'>
   <?php $browseLink = $this->session->testtaskList ? $this->session->testtaskList : $this->createLink('testtask', 'browse', "productID=$task->product");?>
-  <?php common::printRPN($browseLink);?>
+  <?php common::printPreAndNext($browseLink);?>
   <div class="btn-toolbar">
     <?php common::printBack($browseLink);?>
     <?php if(!$task->deleted):?>
