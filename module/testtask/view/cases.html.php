@@ -23,7 +23,7 @@
   </div>
   <div class='main-col'>
     <div class="cell" id="queryBox"></div>
-    <form class='main-table table-cases' data-ride='table' method='post' name='casesform' id='casesForm'>
+    <form class='main-table table-cases' data-ride='table' data-hot='true' method='post' name='casesform' id='casesForm'>
       <?php
       $vars         = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
       $datatableId  = $this->moduleName . ucfirst($this->methodName);

@@ -71,7 +71,7 @@
             <?php if(isset($col['name'])) echo html::hidden('name', $col['name'])?>
             <span><span class='text-muted'><?php echo $lang->datatable->width?></span> <input type='text' id='width' class='form-control' value='<?php echo $col['width']?>'><?php echo $autoWidth ? '&nbsp;' : 'px' ?></span>
           </div>
-          <div class="checkbox-primary"><label></label></div>
+          <div class="checkbox-primary<?php echo $required ? ' disabled' : '';?>"><label></label></div>
           <span class='title'><span class='title-bar'><strong><?php echo $col['title']?></strong><i class='icon-move'></i></span></span> <?php if($required) echo "<span class='text-muted'>({$lang->datatable->required})</span>"?>
         </div>
         <?php endforeach;?>

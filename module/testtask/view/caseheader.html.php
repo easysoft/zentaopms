@@ -1,7 +1,3 @@
-<div id='pageActions'>
-  <?php common::printLink('testtask', 'view', "taskID=$taskID", "<i class='icon icon-file-text'> </i>" . $lang->testtask->view, '', "class='btn'");?>
-  <?php common::printLink('testreport', 'browse', "objectID=$productID&objectType=product&extra=$taskID", "<i class='icon icon-flag'> </i>" . $lang->testtask->reportField, '', "class='btn'");?>
-</div>
 <div id='mainMenu' class='clearfix'>
   <div id='sidebarHeader'>
     <?php echo html::commonButton('<i class="icon icon-caret-left"></i>', '', 'btn btn-icon btn-sm btn-info sidebar-toggle');?>
