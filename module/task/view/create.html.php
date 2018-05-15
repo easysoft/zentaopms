@@ -166,7 +166,7 @@
         <tr>
           <td colspan='4' class='text-center'>
             <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
-            <?php echo html::backButton('', '', 'btn btn-gray btn-wide');?>
+            <?php echo html::backButton('', '', 'btn btn-wide');?>
           </td>
         </tr>
       </table>

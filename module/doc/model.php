@@ -157,7 +157,7 @@ class docModel extends model
                     if(isset($menu['link']))
                     {
                         list($menuLabel, $module, $method, $vars) = explode('|', $menu['link']);
-                        $actions .= html::a(helper::createLink($module, $method, $vars), $menuLabel, '', "class='btn btn-gray'");
+                        $actions .= html::a(helper::createLink($module, $method, $vars), $menuLabel, '', "class='btn'");
                     }
                         
                 }

@@ -38,7 +38,14 @@ function loadBranches(product, branch, storyID)
     $('#plans' + storyID).parent('td').load(planLink, function(){$('#plans' + storyID).chosen(defaultChosenOptions);});
 }
 
-$(document).ready(removeDitto());//Remove 'ditto' in first row.
+$(function()
+{
+    //Remove 'ditto' in first row.
+    removeDitto();
+
+    // Init bactch action form
+    $('#batchEditForm').batchActionForm();
+});
 
 $(document).on('click', '.chosen-with-drop', function(){oldValue = $(this).prev('select').val();})//Save old value.
 

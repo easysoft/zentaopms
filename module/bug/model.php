@@ -2422,7 +2422,7 @@ class bugModel extends model
                 }
                 break;
             case 'severity':
-                echo "<span class='label-severity' data-severity='{$bug->severity}'></span>";
+                echo "<span class='label-severity' data-severity='{$bug->severity}' title='" . zget($this->lang->bug->severityList, $bug->severity) . "'></span>";
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $bug->pri . "'>";

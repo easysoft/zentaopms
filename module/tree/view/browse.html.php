@@ -126,7 +126,7 @@
               <?php endif;?>
               <td colspan="2">
                 <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
-                <?php echo $this->session->{$viewType . 'List'} ? html::linkButton($this->lang->goback, $this->session->{$viewType .'List'}, 'btn btn-wide btn-gray') : html::backButton('', '', 'btn btn-wide btn-gray');?>
+                <?php echo $this->session->{$viewType . 'List'} ? html::linkButton($this->lang->goback, $this->session->{$viewType .'List'}, 'btn btn-wide') : html::backButton('', '', 'btn btn-wide');?>
                 <?php echo html::hidden('parentModuleID', $currentModuleID);?>
                 <?php echo html::hidden('maxOrder', $maxOrder);?>
               </td>

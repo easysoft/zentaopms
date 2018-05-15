@@ -107,7 +107,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->bug->severity;?></th>
-                <td><span class='<?php echo 'severity' . zget($lang->bug->severityList, $bug->severity);?>'><?php echo zget($lang->bug->severityList, $bug->severity)?></span></td>
+                <td><span class='<?php echo 'severity severity-' . $bug->severity;?>'><?php echo zget($lang->bug->severityList, $bug->severity)?></span></td>
               </tr>
               <tr>
                 <th><?php echo $lang->bug->pri;?></th>
