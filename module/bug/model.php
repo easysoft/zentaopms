@@ -2398,9 +2398,18 @@ class bugModel extends model
         if($col->show)
         {
             $class = "c-$id";
-            if($id == 'status') $class .= ' bug-' . $bug->status;
-            if($id == 'title')  $class .= ' text-left';
+            $title = '';
             if($id == 'id')     $class .= ' cell-id';
+            if($id == 'status')
+            {
+                $class .= ' bug-' . $bug->status;
+                $title  = "title='" . zget($this->lang->bug->statusList, $bug->status) . "'";
+            }
+            if($id == 'title')
+            {
+                $class .= ' text-left';
+                $title  = "title='{$bug->title}";
+            }
             if($id == 'assignedTo')
             {
                 $class .= ' has-btn text-left';
@@ -2408,7 +2417,7 @@ class bugModel extends model
             }
             if($id == 'deadline' && isset($bug->delay)) $class .= ' delayed';
 
-            echo "<td class='" . $class . "'" . ($id=='title' ? " title='{$bug->title}'" : '') . ">";
+            echo "<td class='" . $class . "' $title>";
             switch($id)
             {
             case 'id':
@@ -2463,7 +2472,9 @@ class bugModel extends model
                 echo zget($this->lang->bug->typeList, $bug->type);
                 break;
             case 'status':
+                echo "<span class='bug-status-{$bug->status}'><span class='label label-dot'></span><span class='status-text'>";
                 echo zget($this->lang->bug->statusList, $bug->status);
+                echo  '</span></span>';
                 break;
             case 'activatedCount':
                 echo $bug->activatedCount;

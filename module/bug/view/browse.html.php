@@ -11,11 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php if(empty($bugs)):?>
-<div class="table-empty-tip">
-  <p><span class="text-muted"><?php echo $lang->bug->noBug;?></span> <?php common::printLink('bug', 'create', "productID={$productID}", "<i class='icon icon-plus'> </i>" . $lang->bug->create, '', "class='btn btn-info'");?></p>
-</div>
-<?php else:?>
 <?php
 include '../../common/view/datatable.fix.html.php';
 js::set('browseType',    $browseType);
@@ -182,6 +177,11 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
 <div id="mainContent" class="main-row">
   <div class="side-col" id="sidebar">
     <div class="cell">
+      <?php if(!$moduleTree):?>
+      <hr class="space">
+      <div class="text-center text-muted"><?php echo $lang->bug->noModule;?></div>
+      <hr class="space">
+      <?php endif;?>
       <?php echo $moduleTree;?>
       <div class="text-center">
         <?php common::printLink('tree', 'browse', "productID=$productID&view=bug", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
@@ -229,10 +229,10 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           <?php endforeach;?>
         </tbody>
       </table>
+      <?php if(!empty($bugs)):?>
       <div class='table-footer'>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
-          <?php if(!empty($bugs)):?>
           <div class='btn-group dropup'>
             <?php
             $actionLink = $this->createLink('bug', 'batchEdit', "productID=$productID&branch=$branch");
@@ -361,10 +361,14 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
               ?>
             </ul>
           </div>
-          <?php endif;?>
         </div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
+      <?php elseif(common::hasPriv('bug', 'create')):?>
+      <div class="table-empty-tip">
+        <p><span class="text-muted"><?php echo $lang->bug->noBug;?></span> <?php common::printLink('bug', 'create', "productID={$productID}", "<i class='icon icon-plus'> </i>" . $lang->bug->create, '', "class='btn btn-info'");?></p>
+      </div>
+      <?php endif;?>
     </form>
   </div>
 </div>
@@ -391,6 +395,5 @@ $(function(){$('#modulemenu .nav li:last').after("<li class='right'><a style='fo
 .outer.with-side #featurebar {background: none; border: none; line-height: 0; margin: 0; min-height: 0; padding: 0; }
 #querybox #searchform{border-bottom: 1px solid #ddd; margin-bottom: 20px;}
 </style>
-<?php endif;?>
 <?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

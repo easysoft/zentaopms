@@ -33,9 +33,9 @@
         <?php if($product->type != 'normal'):?>
         <th class='text-center w-100px'><?php echo $lang->product->branch;?></th>
         <?php endif;?>
-        <th class='text-center w-100px'><?php echo $lang->release->date;?></th>
-        <th class='text-center w-100px'><?php echo $lang->release->status;?></th>
-        <th class='c-actions-3'><?php echo $lang->actions;?></th>
+        <th class='c-date text-center'><?php echo $lang->release->date;?></th>
+        <th class='text-center w-90px'><?php echo $lang->release->status;?></th>
+        <th class='c-actions-4 text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -48,17 +48,13 @@
         <td class='text-center'><?php echo $branches[$release->branch];?></td>
         <?php endif;?>
         <td class='text-center'><?php echo $release->date;?></td>
-        <td class='text-center'><?php echo $lang->release->statusList[$release->status];?></td>
+        <td class='c-status' title='<?php echo zget($lang->release->statusList, $release->status);?>'>
+          <span class="status-<?php echo $release->status?>">
+            <span class="label label-dot"></span>
+            <span class='status-text'><?php echo zget($lang->release->statusList, $release->status);?></span>
+          </span>
+        </td>
         <td class='c-actions'>
-          <div class='more'>
-          <?php
-          if(common::hasPriv('release', 'delete', $release))
-          {
-              $deleteURL = $this->createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"releaseList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->release->delete}'");
-          }
-          ?>
-          </div>
           <?php
           if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ', '', "class='btn' title='{$lang->release->linkStory}'");
           if(common::hasPriv('release', 'linkBug') and $this->config->global->flow != 'onlyStory') echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"),   '<i class="icon-bug"></i> ',  '', "class='btn' title='{$lang->release->linkBug}'");
@@ -68,6 +64,11 @@
               echo html::a(inlink('changeStatus', "releaseID=$release->id&status=$changedStatus"),   '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ',  'hiddenwin', "class='btn' title='{$lang->release->changeStatusList[$changedStatus]}'");
           }
           common::printIcon('release', 'edit',   "release=$release->id", $release, 'list');
+          if(common::hasPriv('release', 'delete', $release))
+          {
+              $deleteURL = $this->createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
+              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"releaseList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->release->delete}'");
+          }
           ?>
         </td>
       </tr>

@@ -78,7 +78,12 @@
           <td><?php echo $users[$task->owner];?></td>
           <td><?php echo $task->begin?></td>
           <td><?php echo $task->end?></td>
-          <td class='status-<?php echo $task->status?>'><?php echo $lang->testtask->statusList[$task->status];?></td>
+          <td title='<?php echo $lang->testtask->statusList[$task->status];?>'>
+            <span class='status-<?php echo $task->status?>'>
+              <span class='label label-dot'></span>
+              <span class='status-text'><?php echo $lang->testtask->statusList[$task->status];?></span>
+            </span>
+          </td>
           <td class='c-actions'>
             <div class='more'>
               <?php

@@ -181,7 +181,7 @@ $lang->story->lblReview            = '评审需求';
 $lang->story->lblActivate          = '激活需求';
 $lang->story->lblClose             = '关闭需求';
 
-$lang->story->checkAffection       = '检查影响';
+$lang->story->checkAffection       = '影响范围';
 $lang->story->affectedProjects     = '影响的' . $lang->projectCommon;
 $lang->story->affectedBugs         = '影响的Bug';
 $lang->story->affectedCases        = '影响的用例';
