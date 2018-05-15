@@ -47,7 +47,6 @@ $(document).ready(function()
 {
     // First unbind ajaxForm for form.
     $("form[data-type='ajax']").unbind('submit');
-    setForm();
     
     // Bind ajaxForm for form again.
     $.ajaxForm("form[data-type='ajax']", function(response)
