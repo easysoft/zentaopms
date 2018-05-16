@@ -242,12 +242,12 @@ class block extends control
             $block->actionLink = '';
             if($block->block == 'overview')
             {
-                if($module == 'product' && common::hasPriv('product', 'create')) $block->actionLink = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn btn-sm'");
-                if($module == 'project' && common::hasPriv('project', 'create')) $block->actionLink = html::a($this->createLink('project', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-sm'");
+                if($module == 'product' && common::hasPriv('product', 'create')) $block->actionLink = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn'");
+                if($module == 'project' && common::hasPriv('project', 'create')) $block->actionLink = html::a($this->createLink('project', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn'");
                 if($module == 'qa'      && common::hasPriv('testcase', 'create'))
                 {
                     $this->app->loadLang('testcase');
-                    $block->actionLink = html::a($this->createLink('testcase', 'create', 'productID='), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->testcase->create, '', "class='btn btn-sm'");
+                    $block->actionLink = html::a($this->createLink('testcase', 'create', 'productID='), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->testcase->create, '', "class='btn'");
                 }
             }
 
