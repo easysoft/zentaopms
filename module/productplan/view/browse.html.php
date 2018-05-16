@@ -77,13 +77,14 @@
         <td class='text-center'><?php echo $plan->bugs;?></td>
         <td class='text-center'><?php echo $plan->hour;?></td>
         <td class='text-center'><?php if(!empty($plan->projectID)) echo html::a(helper::createLink('project', 'task', 'projectID=' . $plan->projectID), '<i class="icon-search"></i>');?></td>
-        <td class='text-left content'><div class='article-content'><?php echo $plan->desc;?></div></td>
+        <td class='text-left content'><div class='article-content'><?php echo strip_tags($plan->desc, str_replace('<img>', '', $config->allowedTags));?></div></td>
         <td class='c-actions'>
           <?php
           if(common::hasPriv('project', 'create')) echo html::a(helper::createLink('project', 'create', "projectID=&copyProjectID=&planID=$plan->id"), '<i class="icon-play"></i>', '', "class='btn' title='{$lang->project->create}'");
           if(common::hasPriv('productplan', 'linkStory')) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i>', '', "class='btn' title='{$lang->productplan->linkStory}'");
           if(common::hasPriv('productplan', 'linkBug') and $config->global->flow != 'onlyStory') echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i>', '', "class='btn' title='{$lang->productplan->linkBug}'");
           common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');
+
           if(common::hasPriv('productplan', 'delete', $plan))
           {
               $deleteURL = $this->createLink('productplan', 'delete', "planID=$plan->id&confirm=yes");

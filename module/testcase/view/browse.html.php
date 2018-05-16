@@ -41,6 +41,10 @@ js::set('branch',         $branch);
   <div class='main-col'>
     <div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>'></div>
     <form class='main-table table-case' data-ride='table' id='batchForm' method='post'>
+      <div class="table-header">
+        <div class="table-statistic"><?php echo $summary;?></div>
+        <nav class="btn-toolbar pull-right"></nav>
+      </div>
       <?php
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
       $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');

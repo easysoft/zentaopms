@@ -118,6 +118,7 @@ $lang->testcase->allCases     = '所有';
 $lang->testcase->allTestcases = '所有用例';
 $lang->testcase->needConfirm  = '需求变动';
 $lang->testcase->bySearch     = '搜索';
+$lang->testcase->unexecuted   = '未执行';
 
 $lang->testcase->lblStory       = '相关需求';
 $lang->testcase->lblLastEdited  = '最后编辑';
@@ -131,6 +132,7 @@ $lang->testcase->legendLinkBugs    = '相关Bug';
 $lang->testcase->legendOpenAndEdit = '创建编辑';
 $lang->testcase->legendComment     = '备注';
 
+$lang->testcase->summary            = "本页共 <strong>%s</strong> 个用例，已执行<strong>%s</strong>个。";
 $lang->testcase->confirmDelete      = '您确认要删除该测试用例吗？';
 $lang->testcase->confirmBatchDelete = '您确认要批量删除这些测试用例吗？';
 $lang->testcase->ditto              = '同上';

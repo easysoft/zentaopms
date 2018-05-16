@@ -222,6 +222,7 @@ class upgradeModel extends model
        }
 
         $this->deletePatch();
+        return true;
     }
 
     /**
@@ -2133,12 +2134,15 @@ class upgradeModel extends model
      */
     public function fixTaskAssignedTo()
     {
+        $minParent = $this->dao->select('parent')->from(TABLE_TASK)->where('parent')->ne(0)->orderBy('parent')->limit(1)->fetch();
+        if(empty($minParent)) return true;
+
         $needUpdateTasks = $this->dao->select('id,parent,closedBy')->from(TABLE_TASK)
             ->where('status')->eq('closed')
             ->andWhere('assignedTo')->ne('closed')
+            ->andWhere('id')->ge($minParent)
             ->fetchAll('id');
-
-        if(!$needUpdateTasks) return true;
+        if(empty($needUpdateTasks)) return true;
 
         $needUpdateParentTasks = array();
         $needUpdateChildTasks  = array();
