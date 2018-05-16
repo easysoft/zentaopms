@@ -1,19 +1,4 @@
-.cards {padding-bottom: 0;}
-.cards > .col-sm-6 {width: 25%; padding: 0 10px}
-.card {height: 225px; position: relative; padding-top: 50px; margin: 0}
-.card > .media {position: absolute; left: 0; top: 0; width: 100%; background: #f1f1f1; height:50px; bottom: 0; overflow: hidden; z-index: 90; transition: all 0.4s;}
-.card > .media > .icon {position: absolute; display: block; font-size: 56px; color: #ddd; z-index: 99; bottom: -10px; right: -6px; transition: all 0.4s;}
-.card > .media > h5 {position: absolute; display: block; color: #666; z-index: 100; font-size: 14px; left: 15px; top: 10px; transition: all 0.4s;}
-.card:hover > .media {background: #e5e5e5}
-.card:hover > .media > .icon {color: #ccc}
-.card .card-content {padding: 10px 20px}
-.card-content > ul {padding-left: 8px;}
-.card-content > ul > li {margin-bottom: 5px;}
-.card a, .card:hover a {color: #444}
-.card a:hover {color: #000;}
-
-body {padding: 20px; font-size: 12px}
-.modal-dialog.hide-header .modal-header .close {top: 5px; right: 20px}
-.copyright {padding: 0 10px 20px}
-
-#proversion, #zentaotrain{color:#D2322D}
+#mainContent {padding-top: 50px;}
+#mainContent .main-header {display: none;}
+#mainContent .copyright {line-height: 20px;}
+#mainContent .copyright a {vertical-align: baseline;}

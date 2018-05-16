@@ -1,3 +1,2 @@
-.nav > li > a.btn {color: #3c4353; margin-top: 4px;}
-.nav > li > a.btn-sm {padding: 2px 8px; font-size: 12px; line-height: 1.5; border-radius: 4px;}
 .block-statistic .nav-stacked {overflow: auto; max-height: 220px;}
+.nav > li > .btn {padding: 0 5px; line-height: 24px; margin: 3px; color: #3C4353;}

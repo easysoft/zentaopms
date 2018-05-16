@@ -113,8 +113,8 @@
       </div>
       <div class='text-center detail'>
         <?php echo html::hidden('lastEditedDate', $case->lastEditedDate);?>
-        <?php echo html::submitButton();?>
-        <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='btn' onclick='location.href="<?php echo $isLibCase ? $this->createLink('testsuite', 'library', "libID=$libID") : $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
+        <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+        <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='btn btn-wide' onclick='location.href="<?php echo $isLibCase ? $this->createLink('testsuite', 'library', "libID=$libID") : $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
       </div>
       <?php include '../../common/view/action.html.php';?>
     </div>

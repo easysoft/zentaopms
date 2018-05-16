@@ -1,18 +1,2 @@
-.cards {margin: 5% auto;}
-.cards > .col-sm-6 {width: 25%; padding: 0 10px}
-.card {height: 250px; position: relative; padding-top: 50px; border-radius: 0; margin: 0}
-.card > .media {position: absolute; left: 0; top: 0; width: 100%; background: #f1f1f1; height:50px; bottom: 0; overflow: hidden; z-index: 90; transition: all 0.4s;}
-.card > .media > .icon {position: absolute; display: block; font-size: 56px; color: #ddd; z-index: 99; bottom: -10px; right: -6px; transition: all 0.4s;}
-.card > .media > h5 {position: absolute; display: block; color: #666; z-index: 100; font-size: 14px; left: 15px; top: 10px; transition: all 0.4s;}
-.card:hover > .media {background: #F8FAFE}
-.card:hover > .media > .icon {color: #ccc}
-.card .card-content {padding: 20px; border:1px solid #f1f1f1;}
-.card-content > ul {padding-left: 20px;}
-.card-content > ul > li {margin-bottom: 5px;}
-.card a, .card:hover a {color: #444}
-.card a:hover {color: #000;}
-
-#notice {margin: -20px -20px 20px}
-#titlebar {margin-top: -20px; border-top: none}
-#notice + #titlebar {margin-top: 0; border-top: 1px solid #e5e5e5}
-#proversion, #zentaotrain{color:#D2322D}
+#notice {margin: -20px -20px 20px; padding: 20px;}
+#zentaoLinks {margin-top: 20px;}

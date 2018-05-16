@@ -11,36 +11,36 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='titlebar'>
-  <div class='heading'>
-    <strong><small class='text-muted'></small> <?php echo $lang->bug->common . $lang->colon . $lang->bug->batchActivate;?></strong>
+<div id='mainContent' class='main-content'>
+  <div class='main-header'>
+    <h2><?php echo $lang->bug->common . $lang->colon . $lang->bug->batchActivate;?></h2>
   </div>
+  <form method='post' target='hiddenwin'>
+    <table class='table table-fixed with-border'>
+      <thead>
+        <tr>
+          <th class='w-20px'><?php echo $lang->idAB;?></th>
+          <th class='w-50px'><?php echo $lang->bug->title;?></th>
+          <th class='w-70px'><?php echo $lang->bug->assignedTo;?></th>
+          <th class='w-70px'><?php echo $lang->bug->openedBuild;?></th>
+          <th class='w-150px'><?php echo $lang->bug->legendComment;?></th>
+        </tr>
+      </thead>
+      <tbody class='text-left'>
+        <?php foreach($bugs as $bug):?>
+        <tr>
+          <td class='text-center'><?php echo $bug->id . html::hidden("bugIDList[$bug->id]", $bug->id);?></td>
+          <td><?php echo $bug->title . html::hidden("statusList[$bug->id]", $bug->status);?></td>
+          <td style='overflow:visible'><?php echo html::select("assignedToList[$bug->id]", $users, $bug->resolvedBy, "class='form-control chosen'");?></td>
+          <td style='overflow:visible'><?php echo html::select("openedBuildList[$bug->id]", $builds, $bug->openedBuild, 'size=4 multiple=multiple class="form-control chosen"');?></td>
+          <td><?php echo html::input("commentList[$bug->id]", '', "class='form-control'");?></td>
+        </tr>
+        <?php endforeach;?>
+      </tbody>
+      <tfoot>
+        <tr><td colspan='5' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td></tr>
+      </tfoot>
+    </table>
+  </form>
 </div>
-<form class='form-condensed' method='post' target='hiddenwin'>
-  <table class='table table-fixed with-border'>
-    <thead>
-      <tr>
-        <th class='w-20px'><?php echo $lang->idAB;?></th>
-        <th class='w-50px'><?php echo $lang->bug->title;?></th>
-        <th class='w-70px'><?php echo $lang->bug->assignedTo;?></th>
-        <th class='w-70px'><?php echo $lang->bug->openedBuild;?></th>
-        <th class='w-150px'><?php echo $lang->bug->legendComment;?></th>
-      </tr>
-    </thead>
-    <tbody class='text-left'>
-      <?php foreach($bugs as $bug):?>
-      <tr>
-        <td class='text-center'><?php echo $bug->id . html::hidden("bugIDList[$bug->id]", $bug->id);?></td>
-        <td><?php echo $bug->title . html::hidden("statusList[$bug->id]", $bug->status);?></td>
-        <td style='overflow:visible'><?php echo html::select("assignedToList[$bug->id]", $users, $bug->resolvedBy, "class='form-control chosen'");?></td>
-        <td style='overflow:visible'><?php echo html::select("openedBuildList[$bug->id]", $builds, $bug->openedBuild, 'size=4 multiple=multiple class="form-control chosen"');?></td>
-        <td><?php echo html::input("commentList[$bug->id]", '', "class='form-control'");?></td>
-      </tr>
-      <?php endforeach;?>
-    </tbody>
-    <tfoot>
-      <tr><td colspan='5' class='text-center'><?php echo html::submitButton();?></td></tr>
-    </tfoot>
-  </table>
-</form>
 <?php include '../../common/view/footer.html.php';?>

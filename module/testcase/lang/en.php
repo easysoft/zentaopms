@@ -118,6 +118,7 @@ $lang->testcase->allCases     = 'All';
 $lang->testcase->allTestcases = 'All Cases';
 $lang->testcase->needConfirm  = 'StoryChanged';
 $lang->testcase->bySearch     = 'Search';
+$lang->testcase->unexecuted   = 'Unexecuted';
 
 $lang->testcase->lblStory       = 'Story';
 $lang->testcase->lblLastEdited  = 'Last Edit';
@@ -131,6 +132,7 @@ $lang->testcase->legendLinkBugs     = 'Bug';
 $lang->testcase->legendOpenAndEdit  = 'Create/Edit';
 $lang->testcase->legendComment      = 'Remark';
 
+$lang->testcase->summary            = "Cases on this page : <strong>%s</strong> Total, <strong>%s</strong> runed.";
 $lang->testcase->confirmDelete      = 'Do you want to delete this Test Case?';
 $lang->testcase->confirmBatchDelete = 'Do you want to batch delete thess Test Cases?';
 $lang->testcase->ditto              = 'Ditto';

@@ -10,6 +10,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/sortable.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
     <?php echo html::commonButton('<i class="icon icon-caret-left"></i>', '', 'btn btn-icon btn-sm btn-info sidebar-toggle');?>
@@ -86,7 +87,7 @@
             <?php endif;?>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="sortable" id="productTableList">
         <?php foreach($productStats as $product):?>
         <tr data-id='<?php echo $product->id ?>' data-order='<?php echo $product->code;?>'>
           <td class='c-id'>
@@ -96,7 +97,7 @@
             <?php printf('%03d', $product->id);?>
             <?php endif;?>
           </td>
-          <td title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
+          <td class="c-name" title='<?php echo $product->name?>'><?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?></td>
           <td title='<?php echo zget($lines, $product->line, '')?>'><?php echo zget($lines, $product->line, '');?></td>
           <td class='text-center'><?php echo $product->stories['active'];?></td>
           <td class='text-center'><?php echo $product->stories['changed'];?></td>

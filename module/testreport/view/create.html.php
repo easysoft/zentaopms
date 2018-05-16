@@ -18,7 +18,6 @@
   <div class='center-block mw-1400px'>
     <div class='main-header'>
       <h2><?php echo $lang->testreport->create;?></h2>
-      <div class='pull-right btn-toolbar'><?php echo html::backButton();?></div>
     </div>
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <div class='detail'>

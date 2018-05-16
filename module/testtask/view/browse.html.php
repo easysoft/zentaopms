@@ -32,11 +32,11 @@ $status = $this->session->testTaskVersionStatus;
         ?>
       </ul>
     </div>
+    <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,totalStatus"), "<span class='text'>{$lang->testtask->totalStatus}</span>", '', "id='totalStatusTab' class='btn btn-link'");?>
     <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,wait"), "<span class='text'>{$lang->testtask->wait}</span>", '', "id='waitTab' class='btn btn-link'");?>
     <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,doing"), "<span class='text'>{$lang->testtask->testing}</span>", '', "id='doingTab' class='btn btn-link'");?>
     <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,blocked"), "<span class='text'>{$lang->testtask->blocked}</span>", '', "id='blockedTab' class='btn btn-link'");?>
     <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,done"), "<span class='text'>{$lang->testtask->done}</span>", '', "id='doneTab' class='btn btn-link'");?>
-    <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,totalStatus"), "<span class='text'>{$lang->testtask->totalStatus}</span>", '', "id='totalStatusTab' class='btn btn-link'");?>
     <?php $condition = "productID=$productID&branch=$branch&type=$scope,$status&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1"?>
     <div class='input-group w-400px input-group-sm'>
       <span class='input-group-addon'><?php echo $lang->testtask->beginAndEnd;?></span>
@@ -48,6 +48,11 @@ $status = $this->session->testTaskVersionStatus;
   <div class="btn-toolbar pull-right"><?php common::printLink('testtask', 'create', "product=$productID", "<i class='icon icon-plus'> </i>" . $lang->testtask->create, '', "class='btn btn-primary'");?></div>
 </div>
 <?php endif;?>
+<?php if($scope == 'local' && $status == 'totalStatus' && empty($tasks)):?>
+<div class="table-empty-tip">
+  <p><span class="text-muted"><?php echo $lang->testtask->noTesttask;?></span> <?php common::printLink('testtask', 'create', "productID={$productID}", "<i class='icon icon-plus'> </i>" . $lang->testtask->create, '', "class='btn btn-info'");?></p>
+</div>
+<?php else:?>
 <div id='mainContent' class='main-table'>
   <table class='table has-sort-head' id='taskList'>
     <thead>
@@ -111,5 +116,6 @@ $status = $this->session->testTaskVersionStatus;
   <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
   <?php endif;?>
 </div>
+<?php endif;?>
 <script>$(function(){$('#<?php echo $status?>Tab').addClass('btn-active-text').append("<span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>")})</script>
 <?php include '../../common/view/footer.html.php';?>
