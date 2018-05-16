@@ -82,7 +82,7 @@
     <?php if($tasks2Imported):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->project->importTask);?></div>
+      <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->project->importTask, '', 'btn btn-default');?></div>
     </div>
     <?php endif;?>
   </form>

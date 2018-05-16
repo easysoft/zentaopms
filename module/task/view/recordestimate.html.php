@@ -79,7 +79,7 @@
         <?php endfor;?>
         <?php endif;?>
         <tr>
-          <td colspan='6' class='text-center'><?php echo html::submitButton() . html::backButton();?></td>
+          <td colspan='6' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::backButton('', '', 'btn btn-wide');?></td>
         </tr>
       </table>
     </form>

@@ -131,9 +131,8 @@
           </td>
         </tr>  
         <tr>
-          <td></td>
-          <td colspan='2' class='text-center'>
-            <?php echo html::submitButton() . html::backButton();?>
+          <td colspan='3' class='text-center'>
+            <?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::backButton('', '', 'btn btn-wide');?>
           </td>
         </tr>
       </table>

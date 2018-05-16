@@ -125,7 +125,7 @@
               <div class='table-footer'>
                 <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
                 <div class="table-actions btn-toolbar">
-                  <?php echo html::submitButton($lang->release->batchUnlink);?>
+                  <?php echo html::submitButton($lang->release->batchUnlink, '', 'btn btn-default');?>
                 </div>
                 <div class='text'><?php echo sprintf($lang->release->finishStories, $countStories);?></div>
               </div>
@@ -196,7 +196,7 @@
               <div class='table-footer'>
                 <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
                 <div class="table-actions btn-toolbar">
-                  <?php echo html::submitButton($lang->release->batchUnlink);?>
+                  <?php echo html::submitButton($lang->release->batchUnlink, '', 'btn btn-default');?>
                 </div>
                 <div class='text'><?php echo sprintf($lang->release->resolvedBugs, $countBugs);?></div>
               </div>
@@ -265,7 +265,7 @@
               <div class='table-footer'>
                 <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
                 <div class="table-actions btn-toolbar">
-                  <?php echo html::submitButton($lang->release->batchUnlink);?>
+                  <?php echo html::submitButton($lang->release->batchUnlink, '', 'btn btn-default');?>
                 </div>
                 <div class='text'><?php echo sprintf($lang->release->createdBugs, $countLeftBugs);?></div>
               </div>

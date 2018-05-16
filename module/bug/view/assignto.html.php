@@ -43,7 +43,7 @@ js::set('page', 'assignedto');
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
         </tr>
         <tr>
-          <th></th><td colspan='2'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->server->http_referer);?></td>
+          <td colspan='3' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::linkButton($lang->goback, $this->server->http_referer, '', '', 'btn btn-wide');?></td>
         </tr>
       </table>
     </form>

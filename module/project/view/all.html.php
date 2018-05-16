@@ -108,7 +108,7 @@
     <div class='table-footer'>
       <?php if($canBatchEdit):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->project->batchEdit);?></div>
+      <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->project->batchEdit, '', 'btn btn-default');?></div>
       <?php endif;?>
       <?php if(!$canOrder and common::hasPriv('project', 'updateOrder')) echo html::a(inlink('all', "status=$status&projectID=$projectID&order=order_desc&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->project->updateOrder, '', "class='btn'");?>
       <?php $pager->show('right', 'pagerjs');?>

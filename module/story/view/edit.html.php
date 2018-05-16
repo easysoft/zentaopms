@@ -45,7 +45,7 @@
           </div>
           <div id='linkStoriesBOX'><?php echo html::hidden('linkStories', $story->linkStories);?></div>
           <div id='childStoriesBOX'><?php echo html::hidden('childStories', $story->childStories);?></div>
-          <div class='actions actions-form text-center'>
+          <div class='actions form-actions text-center'>
             <?php 
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
             echo html::submitButton($lang->save, '', 'btn btn-wide btn-primary');

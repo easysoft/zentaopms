@@ -70,7 +70,7 @@
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class='table-actions btn-toolbar'>
-        <?php echo html::submitButton($lang->testcase->import);?>
+        <?php echo html::submitButton($lang->testcase->import, '', 'btn btn-default');?>
       </div>
       <?php echo html::linkButton($lang->goback, $this->session->caseList);?>
       <?php $pager->show('right', 'pagerjs');?>

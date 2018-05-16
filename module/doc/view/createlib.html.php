@@ -58,8 +58,7 @@
         </td>
       </tr>
       <tr>
-        <td></td>
-        <td><?php echo html::submitButton();?></td>
+        <td class='text-center' colspan='2'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td>
       </tr>
     </table>
   </form>
