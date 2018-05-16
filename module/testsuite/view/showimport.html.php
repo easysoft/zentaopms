@@ -50,8 +50,8 @@
       </td>
       <td><?php echo html::input("title[$key]", $case->title, "class='form-control' style='margin-top:2px' autocomplete='off'")?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : (!empty($case->id) ? $cases[$case->id]->module : ''), "class='form-control chosen'")?></td>
-      <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : (!empty($case->id) ? $cases[$case->id]->pri : ''), "class='form-control'")?></td>
-      <td><?php echo html::select("type[$key]", $lang->testcase->typeList, isset($case->type) ? $case->type : (!empty($case->id) ? $cases[$case->id]->type : ''), "class='form-control'")?></td>
+      <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : (!empty($case->id) ? $cases[$case->id]->pri : ''), "class='form-control chosen'")?></td>
+      <td><?php echo html::select("type[$key]", $lang->testcase->typeList, isset($case->type) ? $case->type : (!empty($case->id) ? $cases[$case->id]->type : ''), "class='form-control chosen'")?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : (!empty($case->id) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>
       <td><?php echo html::input("keywords[$key]", isset($case->keywords) ? $case->keywords : "", "class='form-control' autocomplete='off'")?></td>
       <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? htmlspecialchars($case->precondition) : "", "class='form-control'")?></td>

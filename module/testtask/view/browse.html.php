@@ -76,7 +76,7 @@ $status = $this->session->testTaskVersionStatus;
       <?php if($this->config->global->flow != 'onlyTest'):?>
       <td title="<?php echo $task->projectName?>"><?php echo $task->projectName?></td>
       <?php endif;?>
-      <td><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build",'',true), $task->buildName, '','class="iframe"');?></td>
+      <td><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build",'',true), $task->buildName);?></td>
       <td><?php echo zget($users, $task->owner);?></td>
       <td><?php echo $task->begin?></td>
       <td><?php echo $task->end?></td>
@@ -100,7 +100,7 @@ $status = $this->session->testTaskVersionStatus;
         common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'file','','iframe',true, 'data-width=800px');
         common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
         common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
-        common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list','','','iframe',true);
+        common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list','','','',true);
         ?>
       </td>
     </tr>

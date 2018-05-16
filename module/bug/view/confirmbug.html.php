@@ -28,7 +28,7 @@ js::set('page', 'confirmbug');
         <?php endif;?>
       </h2>
     </div>
-    <form class='form-condensed' method='post' target='hiddenwin'>
+    <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->bug->assignedTo;?></th>
@@ -37,11 +37,11 @@ js::set('page', 'confirmbug');
         </tr>  
         <tr>
           <th><?php echo $lang->bug->type;?></th>
-          <td><?php echo html::select('type', $lang->bug->typeList, $bug->type, 'class=form-control');?></td>
+          <td><?php echo html::select('type', $lang->bug->typeList, $bug->type, "class='form-control chosen'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->bug->pri;?></th>
-          <td><?php echo html::select('pri', $lang->bug->priList, $bug->pri, 'class=form-control');?></td>
+          <td><?php echo html::select('pri', $lang->bug->priList, $bug->pri, "class='form-control chosen'");?></td>
         </tr>  
         <tr>
           <th><?php echo $lang->bug->mailto;?></th>

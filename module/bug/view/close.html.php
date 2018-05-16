@@ -24,7 +24,7 @@
         <?php endif;?>
       </h2>
     </div>
-    <form class='form-condensed' method='post' target='hiddenwin'>
+    <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->comment;?></th>

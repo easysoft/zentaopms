@@ -75,8 +75,10 @@
             <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
           </tr>
           <tr>
-            <th></th>
-            <td><?php echo html::submitButton() . html::backButton();?></td>
+            <td class='text-center' colspan='3'>
+              <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+              <?php echo html::backButton('', '', 'btn btn-wide');?>
+            </td>
           </tr>
         </table>
       </div>

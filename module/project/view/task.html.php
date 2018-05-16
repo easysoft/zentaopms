@@ -149,7 +149,6 @@ js::set('browseType', $browseType);
       $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
       $vars         = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";
 
-      if($useDatatable) include '../../common/view/datatable.html.php';
       $customFields = $this->datatable->getSetting('project');
       if($project->type == 'ops')
       {
