@@ -29,11 +29,11 @@ js::set('productID' , $bug->product);
         <?php endif;?>
       </h2>
     </div>
-    <form class='form-condensed' method='post' enctype='multipart/form-data' target='hiddenwin'>
+    <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
           <th class='w-100px'><?php echo $lang->bug->resolution;?></th>
-          <td class='w-p35-f'><?php echo html::select('resolution', $lang->bug->resolutionList, '', 'class=form-control onchange=setDuplicate(this.value)');?></td>
+          <td class='w-p35-f'><?php echo html::select('resolution', $lang->bug->resolutionList, '', "class='form-control chosen'  onchange=setDuplicate(this.value)");?></td>
           <td></td>
         </tr>
         <tr id='duplicateBugBox' class='hide'>
@@ -63,7 +63,11 @@ js::set('productID' , $bug->product);
         </tr>
         <tr>
           <th><?php echo $lang->bug->resolvedDate;?></th>
-          <td><?php echo html::input('resolvedDate', helper::now(), "class='form-control form-date'");?></td>
+          <td>
+            <div class='datepicker-wrapper datepicker-date'>
+              <?php echo html::input('resolvedDate', helper::now(), "class='form-control form-date'");?>
+            </div>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->bug->assignedTo;?></th>
