@@ -19,31 +19,29 @@ function closeWindow()
     }
 }
 </script>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['export']);?></span>
-    <strong><?php echo $lang->testcase->exportTemplet;?></strong>
+<div class='main-content'>
+  <div class='main-header'>
+    <h2><?php echo $lang->testcase->exportTemplet;?></h2>
   </div>
-</div>
-
-<form class='form-condensed' method='post' target='hiddenwin' onsubmit='setDownloading();' style='padding: 40px 5%'>
-<table class='w-p100'>
-  <tr>
-    <td>
-      <div class='input-group'>
-        <span class='input-group-addon'><?php echo $lang->testcase->num;?></span>
-        <?php
+  <form method='post' target='hiddenwin' onsubmit='setDownloading();' style='padding: 40px 5%'>
+  <table class='w-p100'>
+    <tr>
+      <td>
+        <div class='input-group'>
+          <span class='input-group-addon'><?php echo $lang->testcase->num;?></span>
+          <?php
           echo html::input('num', '10', "class='form-control' autocomplete='off'");
-        ?>
-      </div>
-    </td>
-    <td class='w-100px'>
-      <?php echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8', "class='form-control'");?>
-    </td>
-    <td>
-      <?php echo html::submitButton();?>
-    </td>
-  </tr>
-</table>
-</form>
+          ?>
+        </div>
+      </td>
+      <td class='w-100px'>
+        <?php echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8', "class='form-control'");?>
+      </td>
+      <td>
+        <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
+      </td>
+    </tr>
+  </table>
+  </form>
+</div>
 <?php include '../../common/view/footer.lite.html.php';?>
