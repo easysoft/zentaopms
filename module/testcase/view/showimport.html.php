@@ -6,7 +6,7 @@
 <div class='alert alert-info'><?php echo $suhosinInfo?></div>
 <?php else:?>
 <div id="mainContent" class="main-content">
-  <form target='hiddenwin' method='post' class='form-condensed'>
+  <form target='hiddenwin' method='post'>
     <table class='table table-fixed active-disabled table-custom' id='showData'>
       <thead>
         <tr>
