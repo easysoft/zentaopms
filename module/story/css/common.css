@@ -1,5 +1,6 @@
 .linkbox{height:180px; overflow-y:auto}
-.tab-pane .table-borderless {border: 1px solid #ddd!important}
+.tab-pane h6 {margin: 0px; padding: 10px;}
+.tab-pane h6, .tab-pane table {border: 1px solid #ddd; border-top: none;}
 .tab-pane .table-data.table-borderless {border: none!important}
 
 .input-group .control-product + .chosen-container-single .chosen-single {border-radius: 2px 0 0 2px; border-right-width: 0; padding-right: 1px;}

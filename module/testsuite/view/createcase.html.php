@@ -190,12 +190,9 @@
         </tbody>
         <tfoot>
         <tr>
-          <td colspan='2' class='text-center'>
-              <?php
-              echo html::submitButton($lang->save, '', 'btn btn-wide btn-primary');
-              echo ' &nbsp; ';
-              echo html::backButton($lang->goback, '', 'btn btn-wide');
-              ?>
+          <td colspan='3' class='text-center'>
+              <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+              <?php echo html::backButton('', '', 'btn btn-wide');?>
           </td>
         </tr>
         </tfoot>

@@ -1384,7 +1384,8 @@ class testcaseModel extends model
                 if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));
                 break;
             case 'lastRunResult':
-                if($case->lastRunResult) echo $this->lang->testcase->resultList[$case->lastRunResult];
+                $lastRunResultText = $case->lastRunResult ? zget($this->lang->testcase->resultList, $case->lastRunResult, $case->lastRunResult) : $this->lang->testcase->unexecuted;
+                echo html::a(helper::createLink('testtask', 'results', "runID=0&caseID=$case->id", '', true), "<i class='icon icon-list-alt'></i> <span>{$lastRunResultText}</span>", '', "class='iframe btn btn-icon-left'");
                 break;
             case 'bugs':
                 echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;
@@ -1398,7 +1399,6 @@ class testcaseModel extends model
             case 'actions':
                 echo "<div class='more'>";
                 if($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
-                common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
 
                 if(common::hasPriv('testcase', 'delete', $case))
                 {
@@ -1407,9 +1407,9 @@ class testcaseModel extends model
                 }
                 echo '</div>';
                 common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $case, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
-                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $case, 'list', '', '', 'results iframe', '', "data-width='90%'");
                 common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
                 common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
+                common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
 
                 break;
             }
@@ -1495,5 +1495,16 @@ class testcaseModel extends model
         if($this->config->testcase->needReview && strpos(",{$this->config->testcase->forceNotReview},", ",{$this->app->user->account},")) return true;
 
         return false;
+    }
+
+    public function summary($cases)
+    {
+        $executed = 0;
+        foreach($cases as $case)
+        {
+            if($case->lastRunResult != '') $executed ++;
+        }
+
+        return sprintf($this->lang->testcase->summary, count($cases), $executed);
     }
 }

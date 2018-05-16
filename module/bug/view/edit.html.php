@@ -264,8 +264,11 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
               <tbody>
                 <tr class='text-top'>
                   <th class='w-80px'><?php echo $lang->bug->linkBug;?></th>
+                  <td><?php echo html::a($this->createLink('bug', 'linkBugs', "bugID=$bug->id", '', true), $lang->bug->linkBugs, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?></td>
+                </tr>
+                <tr>
+                  <th></th>
                   <td>
-                    <?php echo html::a($this->createLink('bug', 'linkBugs', "bugID=$bug->id", '', true), $lang->bug->linkBugs, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?>
                     <ul class='list-unstyled' id='linkBugBox'>
                     <?php
                     if(isset($bug->linkBugTitles))

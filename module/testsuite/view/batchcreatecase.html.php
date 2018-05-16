@@ -23,7 +23,7 @@
   <form method='post' class='load-indicator main-form' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
     <table align='center' class='table table-form' id="tableBody">
       <thead>
-        <tr>
+        <tr class='text-center'>
           <th class='w-50px'> <?php echo $lang->idAB;?></th>
           <th class='w-180px'><?php echo $lang->testcase->module;?></th>
           <th><?php echo $lang->testcase->title;?> <span class='required'></span></th>
@@ -44,7 +44,7 @@
       $type = $i == 0 ? 'feature' : 'ditto';
       $pri  = $i == 0 ? 3 : 'ditto';
       ?>
-      <tr class='text-center'>
+      <tr>
         <td><?php echo $i+1;?></td>
         <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
         <td style='overflow:visible'>

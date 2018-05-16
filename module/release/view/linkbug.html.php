@@ -22,8 +22,8 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
     </div>
     <table class='table'> 
       <thead>
-        <tr>
-          <th class='c-id'>
+        <tr class='text-center'>
+          <th class='c-id text-left'>
             <?php if($allBugs):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
               <label></label>
@@ -31,26 +31,35 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
             <?php endif;?>
             <?php echo $lang->idAB;?>
           </th>
-          <th class='w-pri'><?php echo $lang->priAB;?></th>
-          <th>              <?php echo $lang->bug->title;?></th>
-          <th class='w-user text-left'><?php echo $lang->openedByAB;?></th>
-          <th class='w-user'><?php echo $lang->bug->resolvedBy;?></th>
+          <th class='c-pri'><?php echo $lang->priAB;?></th>
+          <th class='text-left'><?php echo $lang->bug->title;?></th>
+          <th class='c-user'><?php echo $lang->openedByAB;?></th>
+          <th class='c-user'><?php echo $lang->bug->resolvedBy;?></th>
           <th class='w-80px'><?php echo $lang->statusAB;?></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class='text-center'>
         <?php $unlinkedCount = 0;?>
         <?php foreach($allBugs as $bug):?>
         <?php if(strpos(",{$releaseBugs},", ",$bug->id,") !== false) continue;?>
         <tr>
+<<<<<<< HEAD
           <td class='c-id'>
+=======
+          <td class='c-id text-left'>
+>>>>>>> d31cb467eea5b5badeb0fe21a7c21ac7e1b3b15e
             <?php echo html::checkbox('bugs', array($bug->id => sprintf('%03d', $bug->id)), ($type == 'leftBug' or $bug->status == 'resolved' or $bug->status == 'closed') ? $bug->id : '');?>
           </td>
-          <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
+          <td><span class='label-pri label-pri-<?php echo $bug->pri;?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
           <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
           <td><?php echo $users[$bug->openedBy];?></td>
           <td><?php echo $users[$bug->resolvedBy];?></td>
-          <td class='text-center bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
+          <td>
+            <span class='bug-status-<?php echo $bug->status?>'>
+              <span class='label label-dot'></span>
+              <?php echo $lang->bug->statusList[$bug->status];?>
+            </span>
+          </td>
         </tr>
         <?php $unlinkedCount++;?>
         <?php endforeach;?>
@@ -59,8 +68,13 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
     <div class='table-footer'>
       <?php if($unlinkedCount):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+<<<<<<< HEAD
       <div class="table-actions btn-toolbar">
         <?php echo html::submitButton($lang->release->linkBug, '', 'btn btn-default');?>
+=======
+      <div class="btn-toolbar">
+        <?php echo html::submitButton($lang->release->linkBug, '', 'btn');?>
+>>>>>>> d31cb467eea5b5badeb0fe21a7c21ac7e1b3b15e
       </div>
       <?php endif;?>
       <?php echo html::a(inlink('view', "releaseID=$release->id&type=$type"), $lang->goback, '', "class='btn'");?>
@@ -71,6 +85,5 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
 $(function()
 {
     ajaxGetSearchForm('#<?php echo $type == 'bug' ? 'bugs' : 'leftBugs'?> .linkBox #queryBox')
-    setModal();
 })
 </script>

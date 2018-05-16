@@ -596,7 +596,7 @@ class productModel extends model
 
         foreach($plans as $plan)
         {
-            if($plan->end != '0000-00-00' and strtotime($plan->end) - time() <= 0) continue;
+            if(($plan->end != '0000-00-00' and strtotime($plan->end) - time() <= 0) or $plan->end == '2030-01-01') continue;
             $year = substr($plan->end, 0, 4);
             $roadmap[$year][$plan->branch][] = $plan;
         }

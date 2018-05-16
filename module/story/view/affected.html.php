@@ -7,17 +7,17 @@
   <div class='tab-content'>
     <div class='tab-pane active' id='affectedProjects'>
       <?php foreach($story->projects as $projectID => $project):?>
-        <h6><?php echo html::icon($lang->icons['project'], 'icon');?> <strong><?php echo $project->name ?></strong> &nbsp; <small><i class='icon-group'></i> <?php foreach($story->teams[$projectID] as $member) echo zget($users, $member->account, $member->account) . ' ';?></small></h6>
-          <table class='table table-borderless table-condensed'>
+        <h6><?php echo $project->name ?> &nbsp; <small><i class='icon-group'></i> <?php foreach($story->teams[$projectID] as $member) echo zget($users, $member->account, $member->account) . ' ';?></small></h6>
+          <table class='table'>
             <thead>
-             <tr>
-              <th><?php echo $lang->task->id;?></th>
-              <th><?php echo $lang->task->name;?></th>
-              <th><?php echo $lang->task->assignedTo;?></th>
-              <th><?php echo $lang->task->status;?></th>
-              <th><?php echo $lang->task->consumed;?></th>
-              <th><?php echo $lang->task->left;?></th>
-            </tr>
+              <tr class='text-center'>
+                <th class='c-id'><?php echo $lang->task->id;?></th>
+                <th class='text-left'><?php echo $lang->task->name;?></th>
+                <th class='w-100px'><?php echo $lang->task->assignedTo;?></th>
+                <th class='c-status'><?php echo $lang->task->status;?></th>
+                <th class='c-num'><?php echo $lang->task->consumed;?></th>
+                <th class='c-num'><?php echo $lang->task->left;?></th>
+              </tr>
             </thead>
             <?php if(isset($story->tasks[$projectID])):?>
             <tbody class='<?php if(count($story->tasks[$projectID]) > $config->story->affectedFixedNum)  echo "linkbox";?>'>
@@ -26,7 +26,12 @@
                 <td><?php echo $task->id;?></td>
                 <td class='text-left'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, '_blank');?></td>
                 <td><?php echo $users[$task->assignedTo];?></td>
-                <td class='task-<?php echo $task->status?>'><?php echo $lang->task->statusList[$task->status];?></td>
+                <td>
+                  <span class='task-status-<?php echo $task->status?>'>
+                    <span class='label label-dot'></span>
+                    <?php echo $lang->task->statusList[$task->status];?>
+                  </span>
+                </td>
                 <td><?php echo $task->consumed;?></td>
                 <td><?php echo $task->left;?></td>
               </tr>
@@ -37,16 +42,16 @@
       <?php endforeach;?>
     </div>
     <div class='tab-pane' id='affectedBugs'>
-      <table class='table table-borderless table-condensed'>
+      <table class='table'>
         <thead>
-          <tr>
-            <th class='w-80px'><?php echo $lang->bug->id;?></th>
-            <th><?php echo $lang->bug->title;?></th>
-            <th class='w-80px'><?php echo $lang->bug->status;?></th>
-            <th class='w-70px'><?php echo $lang->bug->openedBy;?></th>
-            <th><?php echo $lang->bug->resolvedBy;?></th>
-            <th><?php echo $lang->bug->resolution;?></th>
-            <th><?php echo $lang->bug->lastEditedBy;?></th>
+          <tr class='text-center'>
+            <th class='c-id'><?php echo $lang->idAB;?></th>
+            <th class='text-left'><?php echo $lang->bug->title;?></th>
+            <th class='c-status'><?php echo $lang->statusAB;?></th>
+            <th class='w-100px'><?php echo $lang->bug->openedBy;?></th>
+            <th class='w-100px'><?php echo $lang->bug->resolvedBy;?></th>
+            <th class='text-left'><?php echo $lang->bug->resolution;?></th>
+            <th class='w-100px'><?php echo $lang->bug->lastEditedBy;?></th>
           </tr>
         </thead>
         <tbody class= '<?php if(count($story->bugs) > $config->story->affectedFixedNum) echo "linkbox";?>'>
@@ -54,10 +59,15 @@
           <tr class='text-center'>
             <td><?php echo $bug->id;?></td>
             <td class='text-left'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '_blank');?></td>
-            <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
+            <td>
+              <span class='bug-status-<?php echo $bug->status?>'>
+                <span class='label label-dot'></span>
+                <?php echo $lang->bug->statusList[$bug->status];?>
+              </span>
+            </td>
             <td><?php echo $users[$bug->openedBy];?></td>
             <td><?php echo $users[$bug->resolvedBy];?></td>
-            <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
+            <td class='text-left'><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
             <td><?php echo $users[$bug->lastEditedBy];?></td>
           </tr>
           <?php endforeach;?>
@@ -65,14 +75,14 @@
       </table>
     </div>
     <div class='tab-pane' id='affectedCases'>
-      <table class='table table-borderless table-condensed'>
+      <table class='table'>
         <thead>
-          <tr>
-            <th class='w-70px'><?php echo $lang->testcase->id;?></th>
-            <th><?php echo $lang->testcase->title;?></th>
-            <th class='w-70px'><?php echo $lang->testcase->status;?></th>
-            <th class='w-70px'><?php echo $lang->testcase->openedBy;?></th>
-            <th><?php echo $lang->testcase->lastEditedBy;?></th>
+          <tr class='text-center'>
+            <th class='c-id'><?php echo $lang->idAB;?></th>
+            <th class='text-left'><?php echo $lang->testcase->title;?></th>
+            <th class='c-status'><?php echo $lang->statusAB;?></th>
+            <th class='w-100px'><?php echo $lang->testcase->openedBy;?></th>
+            <th class='w-100px'><?php echo $lang->testcase->lastEditedBy;?></th>
           </tr>
         </thead>
         <tbody class='<?php if(count($story->cases) > $config->story->affectedFixedNum)  echo "linkbox";?>'>
@@ -80,7 +90,12 @@
           <tr class='text-center'>
             <td><?php echo $case->id;?></td>
             <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id"), $case->title, '_blank');?></td>
-            <td class='case-<?php echo $case->status?>'><?php echo $lang->testcase->statusList[$case->status];?></td>
+            <td>
+              <span class='status-<?php echo $case->status?>'>
+                <span class='label label-dot'></span>
+                <?php echo $lang->testcase->statusList[$case->status];?>
+              </span>
+            </td>
             <td><?php echo $users[$case->openedBy];?></td>
             <td><?php echo $users[$case->lastEditedBy];?></td>
           </tr>

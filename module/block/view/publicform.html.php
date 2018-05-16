@@ -15,26 +15,8 @@
   <div class='col-sm-7'><?php echo html::input('title', $block ? $block->title : '', "class='form-control' autocomplete='off'")?></div>
 </div>
 <div class='form-group'>
-  <label for='grid' class='col-sm-3'><?php echo $lang->block->style;?></label>
+  <label for='grid' class='col-sm-3'><?php echo $lang->block->grid;?></label>
   <div class='col-sm-7'>
-      <div class='input-group'>
-        <span class='input-group-addon'><?php echo $lang->block->grid;?></span>
-        <?php echo html::select('grid', $lang->block->gridOptions, $block ? $block->grid : 8, "class='form-control chosen'")?>
-        <div class='input-group-btn block'>
-          <?php $btn = isset($block->params->color) ? 'btn-' . $block->params->color : 'btn-default'?>
-          <button type='button' class="btn <?php echo $btn;?> dropdown-toggle" data-toggle='dropdown'>
-            <?php echo $lang->block->color;?> <span class='caret'></span>
-          </button>
-          <?php echo html::hidden('params[color]', isset($block->params->color) ? $block->params->color : 'default');?>
-          <div class='dropdown-menu buttons pull-right'>
-            <li><button type='button' data-id='default' class='btn btn-block btn-default'>&nbsp;</li>
-            <li><button type='button' data-id='primary' class='btn btn-block btn-primary'>&nbsp;</li>
-            <li><button type='button' data-id='warning' class='btn btn-block btn-warning'>&nbsp;</li>
-            <li><button type='button' data-id='danger' class='btn btn-block btn-danger'>&nbsp;</li>
-            <li><button type='button' data-id='success' class='btn btn-block btn-success'>&nbsp;</li>
-            <li><button type='button' data-id='info' class='btn btn-block btn-info'>&nbsp;</li>
-          </div>
-        </div>
-    </div>
+    <?php echo html::select('grid', $lang->block->gridOptions, $block ? $block->grid : 8, "class='form-control chosen chosen-simple'")?>
   </div>
 </div>
