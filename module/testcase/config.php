@@ -153,7 +153,7 @@ $config->testcase->datatable->fieldList['lastRunDate']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastRunResult']['title']    = 'lastRunResult';
 $config->testcase->datatable->fieldList['lastRunResult']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['lastRunResult']['width']    = '80';
+$config->testcase->datatable->fieldList['lastRunResult']['width']    = '100';
 $config->testcase->datatable->fieldList['lastRunResult']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['status']['title']    = 'statusAB';
