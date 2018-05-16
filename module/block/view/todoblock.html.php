@@ -36,13 +36,13 @@
         <div class="form-group">
           <label for="todoBegin" class="col-sm-2"><?php echo $lang->todo->beginAndEnd?></label>
           <div class="col-sm-4">
-            <select name="begin" id="todoBegin" class="form-control">
+            <select name="begin" id="todoBegin" class="form-control chosen-simple">
               <option value=""><?php echo $lang->todo->lblDisableDate;?></option>
             </select>
           </div>
           <label class="col-sm-1 text-center hide-empty-begin" for="todoEnd"> ~ </label>
           <div class="col-sm-4 hide-empty-begin">
-            <select name="end" id="todoEnd" class="form-control"></select>
+            <select name="end" id="todoEnd" class="form-control chosen-simple"></select>
           </div>
         </div>
         <div class="form-group">
@@ -118,12 +118,12 @@
                       {
                           $control.trigger('chosen:updated');
                       }
-                  });
+                  }).find('[name="begin"]').trigger('chosen:updated');
               });
           };
       }
 
-      $('ul.todoes li .todo-check').click(function()
+      $('.block-todoes').blockTodoes().on('click', '.todo-check', function()
       {
           var $liTag     = $(this).closest('li');
           var isFinished = $liTag.hasClass('active');
@@ -135,8 +135,6 @@
               if(isFinished) $liTag.removeClass('active');
           });
       });
-
-      $('.block-todoes').blockTodoes();
   });
 
   function ajaxCreateTodo(obj)

@@ -1639,44 +1639,41 @@ $(document).ready(function()
 
     // fixStyle();
 
-    // Init tree menu
-    $('.tree').tree({initialState: 'preserve'});
-
     // $(window).resize(saveWindowSize);   // When window resized, call it again.
 
     if(needPing) setTimeout('setPing()', 1000 * 60 * 10);  // After 10 minutes, begin ping.
 
-    initPrioritySelector();
+    // initPrioritySelector();
     // initHotKey();
-    initHelpLink();
+    // initHelpLink();
     checkTutorial();
     revertModuleCookie();
 
     /* Adjust for dropdown position. */
-    $('li.dropdown-submenu').mouseover(function()
-    {
-        $('li.dropdown-submenu > .dropdown-menu').each(function()
-        {
-            if($(this).css('display') == 'block')
-            {
-                var topPosition = $(this).offset().top;
-                if(topPosition < 0) $(this).css('bottom', Number($(this).css('bottom').replace('px', '')) + topPosition);
-            }
-        })
-    })
+    // $('li.dropdown-submenu').mouseover(function()
+    // {
+    //     $('li.dropdown-submenu > .dropdown-menu').each(function()
+    //     {
+    //         if($(this).css('display') == 'block')
+    //         {
+    //             var topPosition = $(this).offset().top;
+    //             if(topPosition < 0) $(this).css('bottom', Number($(this).css('bottom').replace('px', '')) + topPosition);
+    //         }
+    //     })
+    // })
 
-    $.extend({'closeModal':function(callback, location)
-    {
-        $ajaxModal = $('.modal-iframe');
-        $ajaxModal.on('hidden.zui.modal', function()
-        {
-              if(location && (!$ajaxModal.data('cancel-reload')))
-              {
-                if(location == 'this') window.location.reload();
-                else window.location = location;
-              }
-              if(callback && $.isFunction(callback)) callback();
-        });
-        $ajaxModal.modal('hide');
-    }});
+    // $.extend({'closeModal':function(callback, location)
+    // {
+    //     $ajaxModal = $('.modal-iframe');
+    //     $ajaxModal.on('hidden.zui.modal', function()
+    //     {
+    //           if(location && (!$ajaxModal.data('cancel-reload')))
+    //           {
+    //             if(location == 'this') window.location.reload();
+    //             else window.location = location;
+    //           }
+    //           if(callback && $.isFunction(callback)) callback();
+    //     });
+    //     $ajaxModal.modal('hide');
+    // }});
 });
