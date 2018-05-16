@@ -11,65 +11,66 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='container'>
-  <div id='titlebar'>
-    <div class='heading'>
-      <span class='prefix'><?php echo html::icon($lang->icons['bug']);?> <strong><?php echo $bug->id;?></strong></span>
-      <strong><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '_blank');?></strong>
-      <small class='text-muted'> <?php echo $lang->bug->linkBugs;?> <?php echo html::icon($lang->icons['link']);?></small>
-    </div>
-    <div id='querybox' class='show'></div>
+<div id='mainContent' class='main-content'>
+  <div class='main-header'>
+    <h2>
+      <span class='label label-id'><?php echo $bug->id;?></span>
+      <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '_blank');?>
+      <small class='text-muted'> <?php echo $lang->arrow . $lang->bug->linkBugs;?></small>
+    </h2>
   </div>
-  <form method='post' class='form-condensed' target='hiddenwin' id='linkBugsForm'>
-    <table class='table table-condensed table-hover table-striped tablesorter table-selectable' id='bugList'>
-      <?php if($bugs2Link):?>
+  <div id='queryBox' class='show'></div>
+  <?php if($bugs2Link):?>
+  <form class='main-table' method='post' data-ride='table' target='hiddenwin' id='linkBugsForm'>
+    <table class='table' id='bugList'>
       <thead>
-      <tr>
-        <th class='w-id'><?php echo $lang->idAB;?></th>
-        <th class='w-pri'><?php echo $lang->priAB;?></th>
-        <th><?php echo $lang->bug->product;?></th>
-        <th><?php echo $lang->bug->title;?></th>
-        <th><?php echo $lang->bug->statusAB;?></th>
-        <th class='w-user'><?php echo $lang->openedByAB;?></th>
-        <th class='w-user'><?php echo $lang->assignedToAB;?></th>
-      </tr>
+        <tr>
+          <th class="c-id">
+            <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
+              <label></label>
+            </div>
+            <?php echo $lang->idAB;?>
+          </th>
+          <th class='c-pri'><?php echo $lang->priAB;?></th>
+          <th><?php echo $lang->bug->product;?></th>
+          <th><?php echo $lang->bug->title;?></th>
+          <th class='w-status'><?php echo $lang->bug->statusAB;?></th>
+          <th class='w-100px'><?php echo $lang->openedByAB;?></th>
+          <th class='w-100px'><?php echo $lang->assignedToAB;?></th>
+        </tr>
       </thead>
       <tbody>
-      <?php $bugCount = 0;?>
-      <?php foreach($bugs2Link as $bug2Link):?>
-      <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug2Link->id");?>
-      <tr class='text-center'>
-        <td class='cell-id'>
-          <input type='checkbox' name='bugs[]'  value='<?php echo $bug2Link->id;?>'/> 
-          <?php echo html::a($bugLink, sprintf('%03d', $bug2Link->id));?>
-        </td>
-        <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug2Link->pri, $bug2Link->pri)?>'><?php echo zget($lang->bug->priList, $bug2Link->pri, $bug2Link->pri);?></span></td>
-        <td><?php echo html::a($this->createLink('product', 'browse', "productID=$bug2Link->product&branch=$bug2Link->branch"), $products[$bug2Link->product], '_blank');?></td>
-        <td class='text-left nobr' title="<?php echo $bug2Link->title?>"><?php echo html::a($bugLink, $bug2Link->title);?></td>
-        <td><?php echo $lang->bug->statusList[$bug->status];?></td>
-        <td><?php echo $users[$bug2Link->openedBy];?></td>
-        <td><?php echo $users[$bug2Link->assignedTo];?></td>
-      </tr>
-      <?php $bugCount ++;?>
-      <?php endforeach;?>
+        <?php $bugCount = 0;?>
+        <?php foreach($bugs2Link as $bug2Link):?>
+        <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug2Link->id");?>
+        <tr>
+          <td class='c-id'>
+            <div class="checkbox-primary">
+              <input type='checkbox' name='bugs[]'  value='<?php echo $bug2Link->id;?>'/> 
+              <label></label>
+            </div>
+            <?php printf('%03d', $bug2Link->id);?>
+          </td>
+          <td><span class='label-pri <?php echo 'label-pri-' . $bug2Link->pri?>'><?php echo zget($lang->bug->priList, $bug2Link->pri, $bug2Link->pri);?></span></td>
+          <td><?php echo html::a($this->createLink('product', 'browse', "productID=$bug2Link->product&branch=$bug2Link->branch"), $products[$bug2Link->product], '_blank');?></td>
+          <td class='text-left nobr' title="<?php echo $bug2Link->title?>"><?php echo html::a($bugLink, $bug2Link->title);?></td>
+          <td><?php echo zget($lang->bug->statusList, $bug->status, '');?></td>
+          <td><?php echo zget($users, $bug2Link->openedBy);?></td>
+          <td><?php echo zget($users, $bug2Link->assignedTo);?></td>
+        </tr>
+        <?php $bugCount ++;?>
+        <?php endforeach;?>
       </tbody>
-      <tfoot>
-      <tr>
-        <td colspan='7' class='text-left'>
-          <div class='table-actions clearfix'>
-          <?php if($bugCount) echo html::selectButton() . html::submitButton();?>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td class='hidden'><?php echo html::input('bug', $bug->id);?></td>
-      </tr>
-      </tfoot>
-      <?php endif;?>
     </table>
+    <div class='table-footer'>
+      <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+      <div class="table-actions btn-toolbar"><?php echo html::submitButton();?></div>
+      <?php echo html::hidden('bug', $bug->id);?>
+    </div>
   </form>
+  <?php endif;?>
 </div>
-<script type='text/javascript'>
+<script>
 $(function(){ajaxGetSearchForm();});
 </script>
 <?php include '../../common/view/footer.html.php';?>
