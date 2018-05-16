@@ -26,9 +26,6 @@
         <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, '', "class='task-title'");?>
         <small><?php echo $lang->arrow . $lang->task->edit;?></small>
       </h2>
-      <div class='btn-toolbar pull-right'>
-        <?php echo html::submitButton($lang->save)?>
-      </div>
     </div>
     <div class='main-row'>
       <div class='main-col col-8'>
@@ -61,9 +58,11 @@
             <div class='detail-title'><?php echo $lang->files;?></div>
             <div class='detail-content'><?php echo $this->fetch('file', 'buildform');?></div>
           </div>
-          <div class='detail'>
+          <div class='detail text-center'>
             <?php echo html::hidden('lastEditedDate', $task->lastEditedDate);?>
-            <?php echo html::submitButton($lang->save) . html::linkButton($lang->goback, $this->inlink('view', "taskID=$task->id")) . html::hidden('consumed', $task->consumed);?>
+            <?php echo html::hidden('consumed', $task->consumed);?>
+            <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+            <?php echo html::backButton('', '', 'btn btn-wide');?>
           </div>
           <?php include '../../common/view/action.html.php';?>
         </div>
