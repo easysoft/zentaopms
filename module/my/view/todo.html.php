@@ -57,7 +57,7 @@
           <th class="c-date">  <?php common::printOrderLink('date',   $orderBy, $vars, $lang->todo->date);?></th>
           <th class="c-type">  <?php common::printOrderLink('type',   $orderBy, $vars, $lang->todo->type);?></th>
           <?php $style = $this->app->clientLang == 'en' ? "style='width:80px'" : '';?>
-          <th class="c-pri" <?php echo $style;?>> <?php common::printOrderLink('pri',    $orderBy, $vars, $lang->priAB);?></th>
+          <th class="c-pri w-80px" <?php echo $style;?>> <?php common::printOrderLink('pri',    $orderBy, $vars, $lang->priAB);?></th>
           <th class="c-name">  <?php common::printOrderLink('name',   $orderBy, $vars, $lang->todo->name);?></th>
           <th class="c-begin"> <?php common::printOrderLink('begin',  $orderBy, $vars, $lang->todo->beginAB);?></th>
           <th class="c-end">   <?php common::printOrderLink('end',    $orderBy, $vars, $lang->todo->endAB);?></th>
