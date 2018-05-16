@@ -29,7 +29,7 @@
     <?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn btn-link'")?>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
+<div id='mainContent'>
   <?php $canOrder = (common::hasPriv('project', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
   <form class='main-table' id='projectsForm' method='post' action='<?php echo inLink('batchEdit', "projectID=$projectID");?>' data-ride='table'>
     <table class='table has-sort-head table-fixed' id='projectList'>
