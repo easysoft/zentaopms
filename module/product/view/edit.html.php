@@ -17,7 +17,7 @@
   <div class="center-block">
     <div class="main-header">
       <h2>
-        <span><?php echo html::icon($lang->icons['product']);?> <?php echo $product->id;?></span>
+        <span class='label label-id'><?php echo $product->id;?></span>
         <?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?>
         <small><?php echo $lang->arrow . ' ' . $lang->product->edit;?></small>
       </h2>

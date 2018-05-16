@@ -87,7 +87,10 @@
           </td>
         </tr>
         <tr>
-          <td></td><td colspan='2'><?php echo html::submitButton() . html::backButton();?> </td>
+          <td class='text-center' colspan='3'>
+            <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+            <?php echo html::backButton('', '', 'btn btn-wide');?>
+          </td>
         </tr>
       </table>
     </form>

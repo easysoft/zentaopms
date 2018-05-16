@@ -74,8 +74,8 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
           <tr>
             <th><?php echo $lang->bug->openedBuild?></th>
             <td>
-              <div class='input-group'>
-                <div class='input-group' id='buildBox'><?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?></div>
+              <div class='input-group' id='buildBox'>
+                <?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?>
                 <span class='input-group-addon fix-border' id='buildBoxActions'></span>
                 <div class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn btn-default' data-toggle='tooltip' onclick='loadAllBuilds()'")?></div>
               </div>
