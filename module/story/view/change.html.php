@@ -60,12 +60,13 @@
           <td><?php include './affected.html.php';?></td>
         </tr>
         <tr>
-          <td></td><td class='text-center'>
-          <?php 
-          echo html::hidden('lastEditedDate', $story->lastEditedDate);
-          echo html::submitButton('', '', 'btn btn-wide btn-primary');
-          echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"), '', '', 'btn btn-wide');
-          ?>
+          <td></td>
+          <td class='text-center'>
+            <?php
+            echo html::hidden('lastEditedDate', $story->lastEditedDate);
+            echo html::submitButton('', '', 'btn btn-wide btn-primary');
+            echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"), 'self', '', 'btn btn-wide');
+            ?>
           </td>
         </tr>
       </table>

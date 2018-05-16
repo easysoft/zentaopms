@@ -6,7 +6,8 @@
 .checkbox.btn{margin-top:0px}
 #unlinkStoryList, #unlinkBugList, #unlinkLeftBugList{border:1px solid #ddd;}
 
-.table-footer .text{line-height:30px;}
+.table-footer .text {line-height:30px;}
+.table-footer .btn-toolbar {margin-right: 10px;}
 
 #releaseInfo > div {padding-top: 15px;}
 

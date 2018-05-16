@@ -178,7 +178,10 @@
                       <span class='input-group-addon step-type-toggle'>
                         <?php if(!isset($step->type)) $step->type = 'step';?>
                         <input type='hidden' name='stepType[]' value='<?php echo $step->type;?>' class='step-type'>
-                        <label class="checkbox-inline"><input tabindex='-1' type="checkbox" class='step-group-toggle'<?php if($step->type === 'group') echo ' checked' ?>> <?php echo $lang->testcase->group ?></label>
+                        <div class='checkbox-primary'>
+                          <input tabindex='-1' type="checkbox" class='step-group-toggle'<?php if($step->type === 'group') echo ' checked' ?>> 
+                          <label><?php echo $lang->testcase->group ?></label>
+                        </div>
                       </span>
                     </div>
                   </td>
@@ -210,11 +213,8 @@
       <tfoot>
         <tr>
           <td colspan='3' class='text-center'>
-            <?php
-            echo html::submitButton($lang->save, '', 'btn btn-wide btn-primary');
-            echo ' &nbsp; ';
-            echo html::backButton($lang->goback, '', 'btn btn-wide');
-            ?>
+            <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+            <?php echo html::backButton('', '', 'btn btn-wide');?>
           </td>
         </tr>
       </tfoot>

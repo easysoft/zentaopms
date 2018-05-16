@@ -24,6 +24,7 @@
       <?php endif;?>
     </h2>
     <div class="pull-right btn-toolbar">
+      <button type='button' data-toggle="importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=testcase&section=custom&key=batchCreateFields')?>
       <?php include '../../common/view/customfield.html.php';?>
     </div>
@@ -55,10 +56,7 @@
           <th class='w-120px<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
           <th class='w-180px<?php echo zget($visibleFields, 'module', ' hidden') . zget($requiredFields, 'module', ' required');?>'><?php echo $lang->testcase->module;?></th>
           <th class='w-180px<?php echo zget($visibleFields, 'story',  ' hidden') . zget($requiredFields, 'story',  ' required'); echo $hiddenStory;?>'> <?php echo $lang->testcase->story;?></th>
-          <th class='text-left required has-btn'>
-            <?php echo $lang->testcase->title;?></span>
-            <button type='button' data-toggle="importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
-          </th>
+          <th class='text-left required has-btn'><?php echo $lang->testcase->title;?></span></th>
           <th class='w-120px text-left required'><?php echo $lang->testcase->type;?></th>
           <th class='w-80px<?php  echo zget($visibleFields, 'pri',          ' hidden') . zget($requiredFields, 'pri',          ' required')?>'><?php echo $lang->testcase->pri;?></th>
           <th class='w-150px<?php echo zget($visibleFields, 'precondition', ' hidden') . zget($requiredFields, 'precondition', ' required')?>'><?php echo $lang->testcase->precondition;?></th>
