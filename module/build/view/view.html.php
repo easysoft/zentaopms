@@ -91,8 +91,8 @@ tbody tr td:first-child input{display:none;}
             <?php $canBatchUnlink = common::hasPriv('build', 'batchUnlinkStory');?>
             <?php $vars = "buildID={$build->id}&type=story&link=$link&param=$param&orderBy=%s";?>
             <thead>
-              <tr>
-                <th class='c-id'>
+              <tr class='text-center'>
+                <th class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
                   <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
                     <label></label>
@@ -102,29 +102,34 @@ tbody tr td:first-child input{display:none;}
                 </th>
                 <th class='w-70px'>   <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
                 <th class='text-left'><?php common::printOrderLink('title',    $orderBy, $vars, $lang->story->title);?></th>
-                <th class='w-user'>   <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+                <th class='c-user'>   <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
                 <th class='w-70px'>   <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
                 <th class='w-70px'>   <?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
                 <th class='w-100px'>  <?php common::printOrderLink('stage',    $orderBy, $vars, $lang->story->stageAB);?></th>
                 <th class='w-60px'>   <?php echo $lang->actions?></th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class='text-center'>
               <?php foreach($stories as $storyID => $story):?>
               <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
               <tr>
-                <td class='cell-id'>
+                <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
                   <?php echo html::checkbox('unlinkStories', array($story->id => sprintf('%03d', $story->id)));?>
                   <?php else:?>
                   <?php printf('%03d', $story->id);?>
                   <?php endif;?>
                 </td>
-                <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+                <td><span class='label-pri label-pri-<?php echo $story->pri;?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
                 <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($storyLink,$story->title, '', "class='preview'");?></td>
                 <td><?php echo $users[$story->openedBy];?></td>
-                <td class='text-center'><?php echo $story->estimate;?></td>
-                <td class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
+                <td><?php echo $story->estimate;?></td>
+                <td>
+                  <span class='story-status-<?php echo $story->status;?>'>
+                    <span class='label label-dot'></span>
+                    <?php echo $lang->story->statusList[$story->status];?>
+                  </span>
+                </td>
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
                 <td class='c-actions'>
                   <?php
@@ -144,7 +149,7 @@ tbody tr td:first-child input{display:none;}
             <?php if($canBatchUnlink):?>
             <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
             <div class="table-actions btn-toolbar">
-              <?php echo html::submitButton($lang->build->batchUnlink);?>
+              <?php echo html::submitButton($lang->build->batchUnlink, '', 'btn');?>
             </div>
             <?php endif;?>
             <div class='text'><?php echo sprintf($lang->build->finishStories, $countStories);?></div>
@@ -162,8 +167,8 @@ tbody tr td:first-child input{display:none;}
             <?php $canBatchUnlink = common::hasPriv('build', 'batchUnlinkBug');?>
             <?php $vars = "buildID={$build->id}&type=bug&link=$link&param=$param&orderBy=%s";?>
             <thead>
-              <tr>
-                <th class='c-id'>
+              <tr class='text-center'>
+                <th class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
                   <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
                     <label></label>
@@ -173,26 +178,30 @@ tbody tr td:first-child input{display:none;}
                 </th>
                 <th class='text-left'><?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
                 <th class='w-100px'>  <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
-                <th class='w-user'>   <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
-                <th class='w-date'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
-                <th class='w-user'>   <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+                <th class='c-user'>   <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
+                <th class='c-date'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
+                <th class='c-user'>   <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
                 <th class='w-100px'>  <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
                 <th class='w-60px'>   <?php echo $lang->actions?></th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class='text-center'>
               <?php foreach($bugs as $bug):?>
               <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
-              <tr class='text-center'>
-                <td class='cell-id'>
+              <tr>
+                <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
-                  <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
                   <?php echo html::checkbox('unlinkBugs', array($bug->id => sprintf('%03d', $bug->id)));?>
                   <?php else:?>
                   <?php printf('%03d', $bug->id);?>
                   <?php endif;?>
                 <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
-                <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
+                <td>
+                  <span class='bug-status-<?php echo $bug->status?>'>
+                    <span class='label label-dot'></span>
+                    <?php echo $lang->bug->statusList[$bug->status];?>
+                  </span>
+                </td>
                 <td><?php echo $users[$bug->openedBy];?></td>
                 <td><?php echo substr($bug->openedDate, 5, 11)?></td>
                 <td><?php echo $users[$bug->resolvedBy];?></td>
@@ -215,7 +224,7 @@ tbody tr td:first-child input{display:none;}
             <?php if($canBatchUnlink):?>
             <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
             <div class="table-actions btn-toolbar">
-              <?php echo html::submitButton($lang->build->batchUnlink);?>
+              <?php echo html::submitButton($lang->build->batchUnlink, '', 'btn');?>
             </div>
             <?php endif;?>
             <div class='text'><?php echo sprintf($lang->build->resolvedBugs, $countBugs);?></div>
@@ -227,25 +236,32 @@ tbody tr td:first-child input{display:none;}
         <table class='main-table table has-sort-head'>
           <?php $vars = "buildID={$build->id}&type=newbug&link=$link&param=$param&orderBy=%s";?>
           <thead>
-            <tr>
-              <th class='c-id'>      <?php common::printOrderLink('id',           $orderBy, $vars, $lang->idAB);?></th>
+            <tr class='text-center'>
+              <th class='c-id text-left'><?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
               <th class='w-severity'><?php common::printOrderLink('severity',     $orderBy, $vars, $lang->bug->severityAB);?></th>
               <th class='text-left'> <?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
               <th class='w-100px'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
-              <th class='w-user'>    <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
-              <th class='w-date'>    <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
-              <th class='w-user'>    <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+              <th class='c-user'>    <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
+              <th class='c-date'>    <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
+              <th class='c-user'>    <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
               <th class='w-100px'>   <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class='text-center'>
             <?php foreach($generatedBugs as $bug):?>
             <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
-            <tr class='text-center'>
-              <td><?php printf('%03d', $bug->id);?></td>
-              <td><span class='severity<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span></td>
+            <tr>
+              <td class='text-left'><?php printf('%03d', $bug->id);?></td>
+              <td>
+                <span class='label-severity' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?>'></span>
+              </td>
               <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
-              <td class='bug-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></td>
+              <td>
+                <span class='bug-status-<?php echo $bug->status?>'>
+                  <span class='label label-dot'></span>
+                  <?php echo $lang->bug->statusList[$bug->status];?>
+                </span>
+              </td>
               <td><?php echo $users[$bug->openedBy];?></td>
               <td><?php echo substr($bug->openedDate, 5, 11)?></td>
               <td><?php echo $users[$bug->resolvedBy];?></td>

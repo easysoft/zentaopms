@@ -1015,7 +1015,7 @@ class block extends control
         }
         foreach($openedBugs as $buildBugs) 
         {
-            foreach($buildsBugs as $bugID => $bug) $bugIDList[$bugID] = $bugID;
+            foreach($buildBugs as $bugID => $bug) $bugIDList[$bugID] = $bugID;
         }
 
         $today     = date(DT_DATE1);

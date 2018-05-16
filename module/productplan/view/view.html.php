@@ -77,22 +77,22 @@
         <form class='main-table table-story' data-ride='table' method='post' target='hiddenwin' action="<?php echo inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");?>">
           <table class='table has-sort-head' id='storyList'>
             <?php
-              $canBatchUnlink       = common::hasPriv('productPlan', 'batchUnlinkStory');
-              $canBatchClose        = common::hasPriv('story', 'batchClose');
-              $canBatchEdit         = common::hasPriv('story', 'batchEdit');
-              $canBatchReview       = common::hasPriv('story', 'batchReview');
-              $canBatchChangeBranch = common::hasPriv('story', 'batchChangeBranch');
-              $canBatchChangeModule = common::hasPriv('story', 'batchChangeModule');
-              $canBatchChangePlan   = common::hasPriv('story', 'batchChangePlan');
-              $canBatchChangeStage  = common::hasPriv('story', 'batchChangeStage');
-              $canBatchAssignTo     = common::hasPriv('story', 'batchAssignTo');
+            $canBatchUnlink       = common::hasPriv('productPlan', 'batchUnlinkStory');
+            $canBatchClose        = common::hasPriv('story', 'batchClose');
+            $canBatchEdit         = common::hasPriv('story', 'batchEdit');
+            $canBatchReview       = common::hasPriv('story', 'batchReview');
+            $canBatchChangeBranch = common::hasPriv('story', 'batchChangeBranch');
+            $canBatchChangeModule = common::hasPriv('story', 'batchChangeModule');
+            $canBatchChangePlan   = common::hasPriv('story', 'batchChangePlan');
+            $canBatchChangeStage  = common::hasPriv('story', 'batchChangeStage');
+            $canBatchAssignTo     = common::hasPriv('story', 'batchAssignTo');
 
-              $canBatchAction = $canBatchUnlink or $canBatchClose or $canBatchEdit or $canBatchReview or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchChangeStage or $canBatchAssignTo;
-              $vars = "planID={$plan->id}&type=story&orderBy=%s&link=$link&param=$param";
+            $canBatchAction = $canBatchUnlink or $canBatchClose or $canBatchEdit or $canBatchReview or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchChangeStage or $canBatchAssignTo;
+            $vars = "planID={$plan->id}&type=story&orderBy=%s&link=$link&param=$param";
             ?>
             <thead>
-              <tr>
-                <th class='c-id'>
+              <tr class='text-center'>
+                <th class='c-id text-left'>
                   <?php if($planStories && $canBatchAction):?>
                   <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
                     <label></label>
@@ -104,17 +104,17 @@
                 <th class='w-70px'><?php common::printOrderLink('order', $orderBy, $vars, $lang->productplan->updateOrder);?></th>
                 <?php endif;?>
                 <th class='w-70px'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-                <th class='w-150px'><?php common::printOrderLink('module',     $orderBy, $vars, $lang->story->module);?></th>
-                <th>                <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
-                <th class='w-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-                <th class='w-user'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+                <th class='w-150px text-left'><?php common::printOrderLink('module',     $orderBy, $vars, $lang->story->module);?></th>
+                <th class='text-left'><?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
+                <th class='c-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+                <th class='c-user'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
                 <th class='w-70px'> <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
                 <th class='w-70px'> <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
                 <th class='w-80px'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
                 <th class='w-50px'> <?php echo $lang->actions?></th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class='text-center'>
               <?php
               $totalEstimate = 0.0;
               ?>
@@ -124,7 +124,7 @@
               $totalEstimate += $story->estimate;
               ?>
               <tr data-id='<?php echo $story->id;?>'>
-                <td class='cell-id'>
+                <td class='c-id text-left'>
                   <?php if($canBatchAction):?>
                   <?php echo html::checkbox('storyIDList', array($story->id => sprintf('%03d', $story->id)));?>
                   <?php else:?>
@@ -133,19 +133,24 @@
                 </td>
                 <?php if($canOrder):?><td class='sort-handler'><i class='icon-move'></i></td><?php endif;?>
                 <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-                <td class='nobr'><?php echo zget($modulePairs, $story->module, '');?></td>
-                <td class='nobr' title='<?php echo $story->title?>'><?php echo html::a($viewLink , $story->title);?></td>
+                <td class='text-left nobr'><?php echo zget($modulePairs, $story->module, '');?></td>
+                <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($viewLink , $story->title);?></td>
                 <td><?php echo zget($users, $story->openedBy);?></td>
                 <td><?php echo zget($users, $story->assignedTo);?></td>
                 <td><?php echo $story->estimate;?></td>
-                <td class='status-<?php echo $story->status?>'><span class='label label-dot'></span> <?php echo $lang->story->statusList[$story->status];?><span></td>
+                <td>
+                  <span class='story-status-<?php echo $story->status?>'>
+                    <span class='label label-dot'></span>
+                    <?php echo $lang->story->statusList[$story->status];?><span>
+                  </span>
+                </td>
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
                 <td class='c-actions'>
                   <?php
                   if(common::hasPriv('productplan', 'unlinkStory'))
                   {
                       $unlinkURL = $this->createLink('productplan', 'unlinkStory', "story=$story->id&plan=$plan->id&confirm=yes");
-                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn-icon' title='{$lang->productplan->unlinkStory}'");
+                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->productplan->unlinkStory}'");
                   }
                   ?>
                 </td>
@@ -338,8 +343,8 @@
             <?php $canBatchUnlink = common::hasPriv('productplan', 'batchUnlinkBug');?>
             <?php $vars = "planID={$plan->id}&type=bug&orderBy=%s&link=$link&param=$param"; ?>
             <thead>
-              <tr>
-                <th class='c-id'>
+              <tr class='text-center'>
+                <th class='c-id text-left'>
                   <?php if($planBugs && $canBatchUnlink):?>
                   <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
                     <label></label>
@@ -348,34 +353,39 @@
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
                 <th class='w-70px'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-                <th>                <?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
-                <th class='w-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-                <th class='w-user'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedToAB);?></th>
+                <th class='text-left'><?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
+                <th class='c-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+                <th class='c-user'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedToAB);?></th>
                 <th class='w-100px'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->status);?></th>
                 <th class='w-50px'> <?php echo $lang->actions?></th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class='text-center'>
               <?php foreach($planBugs as $bug):?>
               <tr>
-                <td class='c-id'>
+                <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
                   <?php echo html::checkbox('unlinkBugs', array($bug->id => sprintf('%03d', $bug->id)));?>
                   <?php else:?>
                   <?php printf('%03d', $bug->id);?>
                   <?php endif;?>
                 </td>
-                <td><span class='<?php echo 'pri' . zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?></span></td>
-                <td class='nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
+                <td><span class='label-pri label-pri-<?php echo $bug->pri;?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?></span></td>
+                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
                 <td><?php echo zget($users, $bug->openedBy);?></td>
                 <td><?php echo zget($users, $bug->assignedTo);?></td>
-                <td class='status-<?php echo $bug->status?>'><span class='label label-dot'></span> <?php echo $lang->bug->statusList[$bug->status];?></td>
+                <td>
+                  <span class='bug-status-<?php echo $bug->status?>'>
+                    <span class='label label-dot'></span>
+                    <?php echo $lang->bug->statusList[$bug->status];?>
+                  </span>
+                </td>
                 <td class='c-actions'>
                   <?php
                   if(common::hasPriv('productplan', 'unlinkBug'))
                   {
                       $unlinkURL = $this->createLink('productplan', 'unlinkBug', "story=$bug->id&confirm=yes");
-                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn-icon' title='{$lang->productplan->unlinkBug}'");
+                      echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->productplan->unlinkBug}'");
                   }
                   ?>
                 </td>
@@ -388,7 +398,7 @@
             <?php if($canBatchUnlink):?>
             <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
             <div class="table-actions btn-toolbar">
-              <?php echo html::submitButton($lang->productplan->batchUnlink);?>
+              <?php echo html::submitButton($lang->productplan->batchUnlink, '', 'btn');?>
             </div>
             <?php endif;?>
             <div class='text'><?php echo sprintf($lang->productplan->bugSummary, count($planBugs));?></div>
