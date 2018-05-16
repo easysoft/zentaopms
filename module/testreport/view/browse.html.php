@@ -23,13 +23,13 @@
   <table class='table has-sort-head table-fixed' id='reportList'>
     <?php $vars = "objectID=$objectID&objectType=$objectType&extra=$extra&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
     <thead>
-      <tr>
+      <tr class='text-center'>
         <th class='w-id'>   <?php common::printOrderLink('id',          $orderBy, $vars, $lang->idAB);?></th>
-        <th>                <?php common::printOrderLink('title',       $orderBy, $vars, $lang->testreport->title);?></th>
+        <th class='text-left'><?php common::printOrderLink('title',     $orderBy, $vars, $lang->testreport->title);?></th>
         <th class='w-user'> <?php common::printOrderLink('createdBy',   $orderBy, $vars, $lang->openedByAB);?></th>
         <th class='w-150px'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->testreport->createdDate);?></th>
-        <th class='w-250px'><?php common::printOrderLink('project',     $orderBy, $vars, $lang->testreport->project);?></th>
-        <th class='w-250px'><?php echo $lang->testreport->testtask;?></th>
+        <th class='w-250px text-left'><?php common::printOrderLink('project', $orderBy, $vars, $lang->testreport->project);?></th>
+        <th class='w-250px text-left'><?php echo $lang->testreport->testtask;?></th>
         <th class='w-80px'> <?php echo $lang->actions;?></th>
       </tr>
     </thead>

@@ -61,8 +61,8 @@
             </div>
           </div>
         </td>
-        <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class=form-control");?></td>
-        <td><?php echo html::select("pri[$i]", $lang->testcase->priList, $pri, "class=form-control");?></td>
+        <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
+        <td><?php echo html::select("pri[$i]", $lang->testcase->priList, $pri, "class='form-control chosen'");?></td>
         <td><?php echo html::textarea("precondition[$i]", '', "rows='1' class='form-control autosize'")?></td>
         <td><?php echo html::input("keywords[$i]", '', "class='form-control' autocomplete='off'");?></td>
         <td class='text-left' style='overflow:visible'><?php echo html::select("stage[$i][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>

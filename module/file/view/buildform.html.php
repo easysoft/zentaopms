@@ -8,7 +8,7 @@
       <input type="text" name="labels[]" class="form-control file-editbox" placeholder="<?php echo $lang->file->title;?>">
       <div class="input-group-btn">
         <button type="button" class="btn btn-success file-name-confirm"><i class="icon icon-check"></i></button>
-        <button type="button" class="btn file-name-cancel"><i class="icon icon-close"></i></button>
+        <button type="button" class="btn btn-gray file-name-cancel"><i class="icon icon-close"></i></button>
       </div>
     </div>
     <div class="file-input-normal input-group">

@@ -12,3 +12,5 @@
 .col-module .chosen-container-single .chosen-single {border-radius: 2px 0 0 2px; border-right-width: 0; padding-right: 1px;}
 .col-module .chosen-container-active .chosen-single {border-right-width: 1px; padding-right: 0;}
 .col-shorts .chosen-container-single .chosen-single {border-radius: 0 2px 2px 0;}
+
+#modulesTree li {padding-left: 20px;}

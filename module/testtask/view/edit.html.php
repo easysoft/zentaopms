@@ -14,9 +14,10 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='mainContent' class='main-content'>
-  <div class='center-block mw-1400px'>
+  <div class='center-block'>
     <div class='main-header'>
       <h2>
+        <span class='label label-id'><?php echo $task->id;?></span>
         <?php echo html::a($this->createLink('testtask', 'view', 'taskID=' . $task->id), $task->name, '_blank');?>
         <small class='text-muted'><?php echo $lang->arrow . $lang->testtask->edit;?></small>
       </h2>
@@ -79,7 +80,10 @@
           </td>
         </tr>
         <tr>
-          <td></td><td colspan='2'><?php echo html::submitButton() . html::backButton() . html::hidden('product', $task->product);?></td>
+          <td class='text-center' colspan='3'>
+            <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+            <?php echo html::backButton('', '', 'btn btn-wide');?>
+          </td>
         </tr>
       </table>
     </form>
