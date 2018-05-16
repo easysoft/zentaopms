@@ -91,10 +91,10 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <td class='c-actions'>
             <div class='more'>
               <?php
-              if($user->ranzhi) common::printIcon('user', 'unbind', "userID=$user->account", '', 'list', 'unlink', "hiddenwin");
-              if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $this->config->user->lockMinutes * 60)
+              if(true or $user->ranzhi) common::printIcon('user', 'unbind', "userID=$user->account", '', 'list', 'unlink', "hiddenwin");
+              if(true or (strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $this->config->user->lockMinutes * 60)
               {
-                  common::printIcon('user', 'unlock', "userID=$user->account", '', 'list', '', "hiddenwin");
+                  common::printIcon('user', 'unlock', "userID=$user->account", '', 'list', 'unlock', "hiddenwin");
               }
               ?>
             </div>
