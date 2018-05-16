@@ -19,7 +19,7 @@
     </h2>
     <div class="pull-right btn-toolbar">
       <?php if(common::hasPriv('file', 'uploadImages')) echo html::a($this->createLink('file', 'uploadImages', 'module=bug&params=' . helper::safe64Encode("productID=$productID&projectID=$projectID&moduleID=$moduleID")), $lang->uploadImages, '', "data-toggle='modal' data-type='iframe' class='btn btn-info' data-width='70%'")?>
-      <?php echo html::commonButton($lang->pasteText, "data-toggle='importLinesModal'", 'btn btn-info')?>
+      <button type='button' data-toggle="importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=bug&section=custom&key=batchCreateFields')?>
       <?php include '../../common/view/customfield.html.php';?>
     </div>

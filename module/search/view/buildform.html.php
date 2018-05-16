@@ -110,8 +110,7 @@ foreach($fieldParams as $fieldName => $param)
 
                     if($fieldValue && strpos('$lastWeek,$thisWeek,$today,$yesterday,$thisMonth,$lastMonth',$fieldValue) !== false)
                     {
-                        echo html::input("dateValue$fieldNO", '', "class='form-control $extraClass searchInput' placeholder='{$fieldValue}'");
-                        echo html::hidden("value$fieldNO", $fieldValue);
+                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' placeholder='{$fieldValue}'");
                     }
                     else
                     {
@@ -172,8 +171,7 @@ foreach($fieldParams as $fieldName => $param)
 
                     if($fieldValue && strpos('$lastWeek,$thisWeek,$today,$yesterday,$thisMonth,$lastMonth',$fieldValue) !== false)
                     {
-                        echo html::input("dateValue$fieldNO", '', "class='form-control $extraClass searchInput' placeholder='{$fieldValue}'");
-                        echo html::hidden("value$fieldNO", $fieldValue);
+                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' placeholder='{$fieldValue}'");
                     }
                     else
                     {
