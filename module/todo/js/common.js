@@ -44,12 +44,12 @@ function loadList(type, id)
         {
             if(data != ' ')
             {
-                $(divClass).html(data);
+                $(divClass).html(data).find('select').chosen();
             }
             else
             {
                 $("#type").val("custom");
-                $(divClass).html("<select id='bugs' class='form-control'></select>");
+                $(divClass).html("<select id='bugs' class='form-control'></select>").find('select').chosen();
             }
         });
     }

@@ -125,7 +125,7 @@ tbody tr td:first-child input{display:none;}
                 <td><?php echo $users[$story->openedBy];?></td>
                 <td><?php echo $story->estimate;?></td>
                 <td>
-                  <span class='story-status-<?php echo $story->status;?>'>
+                  <span class='status-<?php echo $story->status;?>'>
                     <span class='label label-dot'></span>
                     <?php echo $lang->story->statusList[$story->status];?>
                   </span>
@@ -197,7 +197,7 @@ tbody tr td:first-child input{display:none;}
                   <?php endif;?>
                 <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                 <td>
-                  <span class='bug-status-<?php echo $bug->status?>'>
+                  <span class='status-<?php echo $bug->status?>'>
                     <span class='label label-dot'></span>
                     <?php echo $lang->bug->statusList[$bug->status];?>
                   </span>
@@ -257,7 +257,7 @@ tbody tr td:first-child input{display:none;}
               </td>
               <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
               <td>
-                <span class='bug-status-<?php echo $bug->status?>'>
+                <span class='status-<?php echo $bug->status?>'>
                   <span class='label label-dot'></span>
                   <?php echo $lang->bug->statusList[$bug->status];?>
                 </span>

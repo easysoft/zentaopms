@@ -165,7 +165,7 @@
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->story->legendProjectAndTask;?></summary>
         <div class="detail-content">
-          <ul class="list-unstyled">
+          <ul class="list-unstyled no-margin">
             <?php
             foreach($story->tasks as $projectTasks)
             {
@@ -339,7 +339,7 @@
     {
         $this->app->loadLang('testcase');
         echo "<div class='btn-group dropup'>";
-        echo "<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'><i class='icon icon-sitemap'></i> " . $lang->testcase->common . " <span class='caret'></span></button>";
+        echo "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><i class='icon icon-sitemap'></i> " . $lang->testcase->common . " <span class='caret'></span></button>";
         echo "<ul class='dropdown-menu' id='createCaseActionMenu'>";
 
         $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";

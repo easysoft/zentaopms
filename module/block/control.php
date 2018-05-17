@@ -1050,7 +1050,7 @@ class block extends control
                     
                     $bug = $bugs[$bugID];
 
-                    if($bug->assignedTo = $this->app->user->account) $build->assignToMe++;
+                    if($bug->assignedTo = $this->app->user->account) $build->assignedToMe++;
 
                     if($bug->status != 'closed')
                     {
@@ -1071,7 +1071,7 @@ class block extends control
                     $build->total++;
                 } 
 
-                $build->assignedRate    = $build->total ? round($build->assignToMe  / $build->Total * 100, 2) : 0;
+                $build->assignedRate    = $build->total ? round($build->assignedToMe  / $build->total * 100, 2) : 0;
                 $build->unresolvedRate  = $build->total ? round($build->unresolved  / $build->total * 100, 2) : 0;
                 $build->unconfirmedRate = $build->total ? round($build->unconfirmed / $build->total * 100, 2) : 0;
                 $build->unclosedRate    = $build->total ? round($build->unclosed    / $build->total * 100, 2) : 0;

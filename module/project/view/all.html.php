@@ -76,14 +76,14 @@
           <td><?php echo $project->end;?></td>
           <?php if(isset($project->delay)):?>
           <td class='c-status' title='<?php echo $lang->project->delayed;?>'>
-            <span class="project-status-delayed">
+            <span class="status-delayed">
               <span class="label label-dot"></span>
               <span class='status-text'><?php echo $lang->project->delayed;?></span>
             </span>
           </td>
           <?php else:?>
           <td class='c-status' title='<?php echo zget($lang->project->statusList, $project->status);?>'>
-            <span class="project-status-<?php echo $project->status?>">
+            <span class="status-<?php echo $project->status?>">
               <span class="label label-dot"></span>
               <span class='status-text'><?php echo zget($lang->project->statusList, $project->status);?></span>
             </span>
@@ -108,7 +108,7 @@
     <div class='table-footer'>
       <?php if($canBatchEdit):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->project->batchEdit, '', 'btn btn-default');?></div>
+      <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->project->batchEdit, '', 'btn');?></div>
       <?php endif;?>
       <?php if(!$canOrder and common::hasPriv('project', 'updateOrder')) echo html::a(inlink('all', "status=$status&projectID=$projectID&order=order_desc&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->project->updateOrder, '', "class='btn'");?>
       <?php $pager->show('right', 'pagerjs');?>

@@ -125,7 +125,7 @@
               <div class='table-footer'>
                 <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
                 <div class="table-actions btn-toolbar">
-                  <?php echo html::submitButton($lang->release->batchUnlink, '', 'btn btn-default');?>
+                  <?php echo html::submitButton($lang->release->batchUnlink, '', 'btn');?>
                 </div>
                 <div class='text'><?php echo sprintf($lang->release->finishStories, $countStories);?></div>
               </div>
@@ -196,7 +196,7 @@
               <div class='table-footer'>
                 <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
                 <div class="table-actions btn-toolbar">
-                  <?php echo html::submitButton($lang->release->batchUnlink, '', 'btn btn-default');?>
+                  <?php echo html::submitButton($lang->release->batchUnlink, '', 'btn');?>
                 </div>
                 <div class='text'><?php echo sprintf($lang->release->resolvedBugs, $countBugs);?></div>
               </div>
@@ -247,7 +247,7 @@
                       <span class='label-severity' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?>'></span>
                     </td>
                     <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
-                    <td><span class='bug-status-<?php echo $bug->status?>'><span class="label label-dot"></span> <?php echo zget($lang->bug->statusList, $bug->status);?></span></td>
+                    <td><span class='status-<?php echo $bug->status?>'><span class="label label-dot"></span> <?php echo zget($lang->bug->statusList, $bug->status);?></span></td>
                     <td><?php echo zget($users, $bug->openedBy);?></td>
                     <td><?php echo $bug->openedDate?></td>
                     <td class='c-actions'>
@@ -267,7 +267,7 @@
               <div class='table-footer'>
                 <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
                 <div class="table-actions btn-toolbar">
-                  <?php echo html::submitButton($lang->release->batchUnlink, '', 'btn btn-default');?>
+                  <?php echo html::submitButton($lang->release->batchUnlink, '', 'btn');?>
                 </div>
                 <div class='text'><?php echo sprintf($lang->release->createdBugs, $countLeftBugs);?></div>
               </div>

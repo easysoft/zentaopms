@@ -218,7 +218,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                   <td>
                     <div id='openedBuildBox' class='input-group'>
                       <?php echo html::select('openedBuild[]', $openedBuilds, $bug->openedBuild, 'size=4 multiple=multiple class="chosen form-control"');?>
-                      <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn btn-default' onclick='loadAllBuilds(this)'")?></span>
+                      <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' onclick='loadAllBuilds(this)'")?></span>
                     </div>
                   </td>
                 </tr>
@@ -235,7 +235,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                   <td>
                     <div id='resolvedBuildBox' class='input-group'>
                       <?php echo html::select('resolvedBuild', $resolvedBuilds, $bug->resolvedBuild, "class='form-control chosen'");?>
-                      <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn btn-default' onclick='loadAllBuilds(this)'")?></span>
+                      <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' onclick='loadAllBuilds(this)'")?></span>
                     </div>
                   </td>
                 </tr>

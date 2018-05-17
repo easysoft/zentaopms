@@ -154,14 +154,15 @@
         <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $task->pri?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
         <td class="c-name">
           <?php
-            if(!empty($task->team))   echo '<span class="label">' . $lang->task->multipleAB . '</span> ';
-            if(!empty($task->parent)) echo '<span class="label">' . $lang->task->childrenAB . '</span> ';
+            if(!empty($task->team))   echo '<span class="label label-light label-badge">' . $lang->task->multipleAB . '</span> ';
+            if(!empty($task->parent)) echo '<span class="label label-light label-badge">' . $lang->task->childrenAB . '</span> ';
             if(isset($task->children) && $task->children == true) echo '<span class="label">' . $lang->task->parentAB . '</span> ';
             if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;
           ?>
         </td>
         <td class="c-status"><span class='status-<?php echo $task->status;?>'><span class="label label-dot"></span> <?php echo $lang->task->statusList[$task->status];?></span></td>
-        <td class="c-assign text-left has-btn"><?php echo html::a($this->createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", 'html', true), '<i class="icon icon-hand-right"></i> ' . $task->assignedToRealName, '', "class='iframe btn btn-icon-left' $assignedToClass");?></td>
+        <?php $assignedToRealName = $task->assignedToRealName ? $task->assignedToRealName : $lang->task->noAssigned;?>
+        <td class="c-assign text-left has-btn"><?php echo html::a($this->createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", 'html', true), '<i class="icon icon-hand-right"></i> ' . $assignedToRealName, '', "class='iframe btn btn-icon-left' $assignedToClass");?></td>
         <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
         <td class="c-hours em"><?php echo $task->estimate;?></td>
         <td class="c-hours em"><?php echo $task->consumed;?></td>

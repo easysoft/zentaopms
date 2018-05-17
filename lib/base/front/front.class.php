@@ -392,7 +392,7 @@ class baseHTML
     {
         $html = "<div class='input-append date date-picker' {$options}>";
         $html .= "<input type='text' name='{$name}' id='$name' value='$value' {$attrib} />\n";
-        $html .= "<span class='add-on'><button class='btn btn-default' type='button'><i class='icon-calendar'></i></button></span></div>";
+        $html .= "<span class='add-on'><button class='btn' type='button'><i class='icon-calendar'></i></button></span></div>";
         return $html;
     }
 
@@ -412,7 +412,7 @@ class baseHTML
     {
         $html = "<div class='input-append date time-picker' {$options}>";
         $html .= "<input type='text' name='{$name}' id='$name' value='$value' {$attrib} />\n";
-        $html .= "<span class='add-on'><button class='btn btn-default' type='button'><i class='icon-calendar'></i></button></span></div>";
+        $html .= "<span class='add-on'><button class='btn' type='button'><i class='icon-calendar'></i></button></span></div>";
         return $html;
     }
 
@@ -507,7 +507,7 @@ class baseHTML
      * @access public
      * @return string the common button tag.
      */
-    public static function commonButton($label = '', $class = 'btn btn-default', $misc = '', $icon = '')
+    public static function commonButton($label = '', $class = 'btn', $misc = '', $icon = '')
     {
         if($icon) $label = "<i class='icon-" . $icon . "'></i> " . $label;
         return " <button type='button' class='$class' $misc>$label</button>";
@@ -526,7 +526,7 @@ class baseHTML
      * @access public
      * @return string
      */
-    public static function linkButton($label = '', $link = '', $class='btn btn-default', $misc = '', $target = 'self')
+    public static function linkButton($label = '', $link = '', $class='btn', $misc = '', $target = 'self')
     {
         global $config, $lang;
 
@@ -650,7 +650,7 @@ function selectReverse(scope)
 </script>
 EOT;
         global $lang;
-        $string .= "<input type='button' name='reversechecker' id='reversechecker' value='{$lang->selectReverse}' class='btn btn-default' onclick='selectReverse(\"$scope\")'/>";
+        $string .= "<input type='button' name='reversechecker' id='reversechecker' value='{$lang->selectReverse}' class='btn' onclick='selectReverse(\"$scope\")'/>";
 
         return  $string;
     }
