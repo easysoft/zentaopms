@@ -138,14 +138,10 @@
           <td colspan='3'><?php echo html::checkbox('whitelist', $groups, $whitelist, '', '', 'inline');?></td>
         </tr>
         <tr>
-<<<<<<< HEAD
-          <td colspan='4' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . ' ' . html::backButton('', '', 'btn btn-wide');?></td>
-=======
-          <td colspan='4' class='text-center'>
+          <td colspan='4' class='text-center form-actions'>
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
             <?php echo html::backButton('', '', 'btn btn-wide');?>
           </td>
->>>>>>> d31cb467eea5b5badeb0fe21a7c21ac7e1b3b15e
         </tr>
       </table>
     </form>
