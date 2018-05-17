@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<form target='hiddenwin' method='post' style='padding: 20px 5% 30px'>
+<form target='hiddenwin' method='post' style='padding: 15px 70px 15px 15px'>
   <div class='input-group'>
     <input name='title' id='title' class="form-control" autocomplete="off" type="text">
     <?php if($onMenuBar == 'yes'):?>
