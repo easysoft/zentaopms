@@ -164,7 +164,7 @@ class docModel extends model
 
             }
 
-            $actions .= html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-folder-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary' data-toggle='modal'");
+            $actions .= html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-folder-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe'");
             if($libID) $actions .= html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");
 
             $this->lang->modulePageActions = $actions;
@@ -286,6 +286,7 @@ class docModel extends model
      */
     public function getDocsByBrowseType($libID, $browseType, $queryID, $moduleID, $sort, $pager)
     {
+        $allLibs = array_keys($this->getLibs('all'));
         if($browseType == "all")
         {
             $docs = $this->getDocs($libID, 0, $sort, $pager);
@@ -295,6 +296,7 @@ class docModel extends model
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
                 ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
+                ->andWhere('lib')->in($allLibs)
                 ->andWhere('addedBy')->eq($this->app->user->account)
                 ->orderBy($sort)
                 ->page($pager)
@@ -311,6 +313,7 @@ class docModel extends model
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
                 ->andWhere('id')->in($docIdList)
+                ->andWhere('lib')->in($allLibs)
                 ->orderBy('editedDate_desc')
                 ->page($pager)
                 ->fetchAll('id');
@@ -348,6 +351,7 @@ class docModel extends model
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
                 ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
+                ->andWhere('lib')->in($allLibs)
                 ->andWhere('collector')->like("%,{$this->app->user->account},%")
                 ->orderBy($sort)
                 ->page($pager)
@@ -398,13 +402,24 @@ class docModel extends model
             {
                 if(!$this->checkPriv($doc)) unset($docs[$docID]);
             }
-            $docs = $this->dao->select('*')->from(TABLE_DOC)->where('id')->in(array_keys($docs))->orderBy($sort)->page($pager)->fetchAll();
+            $docs = $this->dao->select('*')->from(TABLE_DOC)
+                ->where('id')->in(array_keys($docs))
+                ->andWhere('lib')->in($allLibs)
+                ->orderBy($sort)
+                ->page($pager)
+                ->fetchAll();
         }
         elseif($browseType == 'fastsearch')
         {
             if(!$this->post->searchDoc) return array();
             $docIdList = $this->getPrivDocs($libID, $moduleID);
-            $docs = $this->dao->select('*')->from(TABLE_DOC)->where('id')->in($docIdList)->andWhere('title')->like("%{$this->post->searchDoc}%")->orderBy($sort)->page($pager)->fetchAll();
+            $docs = $this->dao->select('*')->from(TABLE_DOC)
+                ->where('id')->in($docIdList)
+                ->andWhere('title')->like("%{$this->post->searchDoc}%")
+                ->andWhere('lib')->in($allLibs)
+                ->orderBy($sort)
+                ->page($pager)
+                ->fetchAll();
         }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc');

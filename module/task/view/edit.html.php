@@ -36,10 +36,10 @@
               <?php echo html::input('name', $task->name, 'class="form-control" autocomplete="off" placeholder="' . $lang->task->name . '"');?>
               <?php if(empty($task->children) and empty($task->parent) and $task->type != 'affair'):?>
               <span class='input-group-addon'>
-                <label class='checkbox-inline'>
-                  <input type='checkBox' name='multiple' value='1' <?php echo empty($task->team) ? '' : 'checked';?> />
-                  <?php echo $lang->task->multipleAB;?>
-                </label>
+                <div class='checkbox-primary'>
+                  <input type='checkBox' name='multiple' id='multiple' value='1' <?php echo empty($task->team) ? '' : 'checked';?> />
+                  <label for='multiple'><?php echo $lang->task->multipleAB;?></label>
+                </div>
               </span>
               <?php endif;?>
             </div>

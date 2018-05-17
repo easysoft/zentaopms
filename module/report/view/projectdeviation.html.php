@@ -29,86 +29,88 @@
           <div class="panel-title"><?php echo $title;?></div>
           <nav class="panel-actions btn-toolbar"></nav>
         </div>
-        <table class='table table-condensed table-striped table-bordered table-fixed' id='projectList'>
-          <thead>
-              <tr class='colhead'>
-                <th class='w-id'><?php echo $lang->report->id;?></th>
-                <th><?php echo $lang->report->project;?></th>
-                <th class="w-100px"><?php echo $lang->report->estimate;?></th>
-                <th class="w-100px"><?php echo $lang->report->consumed;?></th>
-                <th class="w-100px"><?php echo $lang->report->deviation;?></th>
-                <th class="w-100px"><?php echo $lang->report->deviationRate;?></th>
-              </tr>
-          </thead>
-          <tbody>
-            <?php $chartData = array();?>
-            <?php foreach($projects as $id  =>$project):?>
-            <tr class="text-center">
-              <td><?php echo $id;?></td>
-              <td class="text-left"><?php echo html::a($this->createLink('project', 'view', "projectID=$id"), $project->name);?></td>
-              <td><?php echo $project->estimate;?></td>
-              <td><?php echo $project->consumed;?></td>
-              <?php $deviation = $project->consumed - $project->estimate;?>
-              <td class="deviation">
-              <?php 
-                  if($deviation > 0)
+        <div data-ride='table'>
+          <table class='table table-condensed table-striped table-bordered table-fixed' id='projectList'>
+            <thead>
+                <tr class='colhead'>
+                  <th class='w-id'><?php echo $lang->report->id;?></th>
+                  <th><?php echo $lang->report->project;?></th>
+                  <th class="w-100px"><?php echo $lang->report->estimate;?></th>
+                  <th class="w-100px"><?php echo $lang->report->consumed;?></th>
+                  <th class="w-100px"><?php echo $lang->report->deviation;?></th>
+                  <th class="w-100px"><?php echo $lang->report->deviationRate;?></th>
+                </tr>
+            </thead>
+            <tbody>
+              <?php $chartData = array();?>
+              <?php foreach($projects as $id  =>$project):?>
+              <tr class="text-center">
+                <td><?php echo $id;?></td>
+                <td class="text-left"><?php echo html::a($this->createLink('project', 'view', "projectID=$id"), $project->name);?></td>
+                <td><?php echo $project->estimate;?></td>
+                <td><?php echo $project->consumed;?></td>
+                <?php $deviation = $project->consumed - $project->estimate;?>
+                <td class="deviation">
+                <?php 
+                    if($deviation > 0)
+                    {
+                        echo '<span class="up">&uarr;</span>' . $deviation;
+                    }
+                    else if($deviation < 0)
+                    {
+                        echo '<span class="down">&darr;</span>' . abs($deviation);
+                    }
+                    else
+                    {
+                        echo '<span class="zero">0</span>'; 
+                    }
+                ?>
+                </td>
+                <td class="deviation">
+                  <?php 
+                  $num = $project->estimate ? round($deviation / $project->estimate * 100, 2) : 'n/a';
+                  if($num >= 50)
                   {
-                      echo '<span class="up">&uarr;</span>' . $deviation;
+                      echo '<span class="u50">' . $num . '%</span>';
                   }
-                  else if($deviation < 0)
+                  elseif($num >= 30)
                   {
-                      echo '<span class="down">&darr;</span>' . abs($deviation);
+                      echo '<span class="u30">' . $num . '%</span>';
+                  }
+                  elseif($num >= 10)
+                  {
+                      echo '<span class="u10">' . $num . '%</span>';
+                  }
+                  elseif($num > 0)
+                  {
+                      echo '<span class="u0">' . abs($num) . '%</span>';
+                  }
+                  elseif($num <= -20)
+                  {
+                      echo '<span class="d20">' . abs($num) . '%</span>';
+                  }
+                  elseif($num < 0)
+                  {
+                      echo '<span class="d0">' . abs($num) . '%</span>';
+                  }
+                  elseif($num == 'n/a')
+                  {
+                      echo '<span class="zero">' . $num . '</span>';
                   }
                   else
                   {
-                      echo '<span class="zero">0</span>'; 
+                      echo '<span class="zero">' . abs($num) . '%</span>';
                   }
-              ?>
-              </td>
-              <td class="deviation">
-                <?php 
-                $num = $project->estimate ? round($deviation / $project->estimate * 100, 2) : 'n/a';
-                if($num >= 50)
-                {
-                    echo '<span class="u50">' . $num . '%</span>';
-                }
-                elseif($num >= 30)
-                {
-                    echo '<span class="u30">' . $num . '%</span>';
-                }
-                elseif($num >= 10)
-                {
-                    echo '<span class="u10">' . $num . '%</span>';
-                }
-                elseif($num > 0)
-                {
-                    echo '<span class="u0">' . abs($num) . '%</span>';
-                }
-                elseif($num <= -20)
-                {
-                    echo '<span class="d20">' . abs($num) . '%</span>';
-                }
-                elseif($num < 0)
-                {
-                    echo '<span class="d0">' . abs($num) . '%</span>';
-                }
-                elseif($num == 'n/a')
-                {
-                    echo '<span class="zero">' . $num . '</span>';
-                }
-                else
-                {
-                    echo '<span class="zero">' . abs($num) . '%</span>';
-                }
 
-                $chartData['labels'][] = $project->name;
-                $chartData['data'][]   = $deviation;
-                ?>
-              </td>
-            </tr>
-          <?php endforeach;?>
-          </tbody>
-        </table> 
+                  $chartData['labels'][] = $project->name;
+                  $chartData['data'][]   = $deviation;
+                  ?>
+                </td>
+              </tr>
+            <?php endforeach;?>
+            </tbody>
+          </table> 
+        </div>
       </div>
     </div>
     <?php if($chartData):?>

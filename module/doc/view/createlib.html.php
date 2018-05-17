@@ -15,52 +15,48 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2>
-        <i class='icon icon-plus'></i>
-        <span class='prefix'><?php echo html::icon($lang->icons['doclib']);?></span>
-        <?php echo $lang->doc->createLib;?>
-      </h2>
+      <h2><?php echo $lang->doc->createLib;?></h2>
     </div>
+    <form method='post' target='hiddenwin' >
+      <table class='table table-form'>
+        <tr>
+          <th class='w-80px'><?php echo $lang->doc->libType?></th>
+          <td><?php echo html::select('libType', $libTypeList, $type, "class='form-control'")?></td>
+        </tr>
+        <tr class='product'>
+          <th><?php echo $lang->doc->product?></th>
+          <td><?php echo html::select('product', $products, $type == 'product' ? $objectID : '', "class='form-control chosen'")?></td>
+        </tr>
+        <tr class='project hidden'>
+          <th><?php echo $lang->doc->project?></th>
+          <td><?php echo html::select('project', $projects, $type == 'project' ? $objectID : '', "class='form-control chosen'")?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->doclib->name?></th>
+          <td><?php echo html::input('name', '', "class='form-control' autocomplete='off'")?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->doclib->control;?></th>
+          <td><?php echo html::radio('acl', $lang->doc->aclList, 'open', "onchange='toggleAcl(this.value)'")?></td>
+        </tr>
+        <tr id='whiteListBox' class='hidden'>
+          <th><?php echo $lang->doc->whiteList;?></th>
+          <td>
+            <div class='input-group'>
+              <span class='input-group-addon groups-addon'><?php echo $lang->doclib->group?></span>
+              <?php echo html::select('groups[]', $groups, '', "class='form-control chosen' multiple")?>
+            </div>
+            <div class='input-group'>
+              <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
+              <?php echo html::select('users[]', $users, '', "class='form-control chosen' multiple")?>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class='text-center' colspan='2'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td>
+        </tr>
+      </table>
+    </form>
   </div>
-  <form method='post' target='hiddenwin' >
-    <table class='table table-form'>
-      <tr>
-        <th class='w-80px'><?php echo $lang->doc->libType?></th>
-        <td><?php echo html::select('libType', $libTypeList, $type, "class='form-control'")?></td>
-      </tr>
-      <tr class='product'>
-        <th><?php echo $lang->doc->product?></th>
-        <td><?php echo html::select('product', $products, $type == 'product' ? $objectID : '', "class='form-control chosen'")?></td>
-      </tr>
-      <tr class='project hidden'>
-        <th><?php echo $lang->doc->project?></th>
-        <td><?php echo html::select('project', $projects, $type == 'project' ? $objectID : '', "class='form-control chosen'")?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->doclib->name?></th>
-        <td><?php echo html::input('name', '', "class='form-control' autocomplete='off'")?></td>
-      </tr>
-      <tr>
-        <th><?php echo $lang->doclib->control;?></th>
-        <td><?php echo html::radio('acl', $lang->doc->aclList, 'open', "onchange='toggleAcl(this.value)'")?></td>
-      </tr>
-      <tr id='whiteListBox' class='hidden'>
-        <th><?php echo $lang->doc->whiteList;?></th>
-        <td>
-          <div class='input-group'>
-            <span class='input-group-addon groups-addon'><?php echo $lang->doclib->group?></span>
-            <?php echo html::select('groups[]', $groups, '', "class='form-control chosen' multiple")?>
-          </div>
-          <div class='input-group'>
-            <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
-            <?php echo html::select('users[]', $users, '', "class='form-control chosen' multiple")?>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td class='text-center' colspan='2'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td>
-      </tr>
-    </table>
-  </form>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>

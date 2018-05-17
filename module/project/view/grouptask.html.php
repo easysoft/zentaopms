@@ -38,7 +38,7 @@
     <?php
     if(!isset($browseType)) $browseType = '';
     if(!isset($orderBy))    $orderBy = '';
-    common::printIcon('task', 'report', "project=$projectID&browseType=$browseType", '', 'button', 'bar-chart');
+    common::printIcon('task', 'report', "project=$projectID&browseType=$browseType", '', 'button', 'bar-chart muted');
     ?>
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export;?></span> <span class="caret"></span></button>
