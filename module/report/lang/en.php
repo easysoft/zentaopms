@@ -50,8 +50,8 @@ $lang->report->deviationChart   = $lang->projectCommon . ' Deviation Chart';
 
 $lang->reportList->project->lists[10] = $lang->projectCommon . ' Deviation|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . ' Summary|report|productsummary';
-$lang->reportList->test->lists[10]    = 'Bugs Creation|report|bugcreate';
-$lang->reportList->test->lists[13]    = 'Bug Assignment|report|bugassign';
+$lang->reportList->test->lists[10]    = 'Bugs Reported|report|bugcreate';
+$lang->reportList->test->lists[13]    = 'Bugs Assigned|report|bugassign';
 $lang->reportList->staff->lists[10]   = 'Workload|report|workload';
 
 $lang->report->id            = 'ID';
@@ -89,7 +89,7 @@ $lang->report->idAB  = 'ID';
 $lang->report->bugTitle     = 'Bug Title';
 $lang->report->taskName     = 'Task Name';
 $lang->report->todoName     = 'Todo Name';
-$lang->report->testTaskName = 'Test Task Name';
+$lang->report->testTaskName = 'TestTask Name';
 $lang->report->deadline     = 'Deadline';
 
 $lang->report->mailTitle           = new stdclass();
