@@ -27,7 +27,7 @@
                 <td class='text-left'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, '_blank');?></td>
                 <td><?php echo $users[$task->assignedTo];?></td>
                 <td>
-                  <span class='task-status-<?php echo $task->status?>'>
+                  <span class='status-<?php echo $task->status?>'>
                     <span class='label label-dot'></span>
                     <?php echo $lang->task->statusList[$task->status];?>
                   </span>
@@ -60,7 +60,7 @@
             <td><?php echo $bug->id;?></td>
             <td class='text-left'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '_blank');?></td>
             <td>
-              <span class='bug-status-<?php echo $bug->status?>'>
+              <span class='status-<?php echo $bug->status?>'>
                 <span class='label label-dot'></span>
                 <?php echo $lang->bug->statusList[$bug->status];?>
               </span>

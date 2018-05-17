@@ -41,14 +41,14 @@
           <td><?php echo $project->end;?></td>
           <?php if(isset($project->delay)):?>
           <td class='c-status' title='<?php echo $lang->project->delayed;?>'>
-            <span class="project-status-delayed">
+            <span class="status-delayed">
               <span class="label label-dot"></span>
               <span class='status-text'><?php echo $lang->project->delayed;?></span>
             </span>
           </td>
           <?php else:?>
           <td class='c-status' title='<?php echo zget($lang->project->statusList, $project->status);?>'>
-            <span class="project-status-<?php echo $project->status?>">
+            <span class="status-<?php echo $project->status?>">
               <span class="label label-dot"></span>
               <span class='status-text'><?php echo zget($lang->project->statusList, $project->status);?></span>
             </span>

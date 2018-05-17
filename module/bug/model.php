@@ -2472,7 +2472,7 @@ class bugModel extends model
                 echo zget($this->lang->bug->typeList, $bug->type);
                 break;
             case 'status':
-                echo "<span class='bug-status-{$bug->status}'><span class='label label-dot'></span><span class='status-text'>";
+                echo "<span class='status-{$bug->status}'><span class='label label-dot'></span><span class='status-text'>";
                 echo zget($this->lang->bug->statusList, $bug->status);
                 echo  '</span></span>';
                 break;

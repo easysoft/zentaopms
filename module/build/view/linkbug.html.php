@@ -48,7 +48,7 @@
           <td><?php echo $users[$bug->openedBy];?></td>
           <td style='overflow:visible;padding-top:1px;padding-bottom:1px;'><?php echo ($bug->status == 'resolved' or $bug->status == 'closed') ? $users[$bug->resolvedBy] : html::select("resolvedBy[{$bug->id}]", $users, $this->app->user->account, "class='form-control chosen'");?></td>
           <td>
-            <span class='bug-status-<?php echo $bug->status?>'>
+            <span class='status-<?php echo $bug->status?>'>
               <span class='label label-dot'></span>
               <?php echo $lang->bug->statusList[$bug->status];?>
             </span>
