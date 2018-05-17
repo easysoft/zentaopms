@@ -31,7 +31,7 @@
           <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
         </tr>
         <tr>
-          <td colspan='2'>
+          <td colspan='2' class='text-center'>
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
             <?php echo html::linkButton($lang->goback, $this->session->taskList, '', '', 'btn btn-wide');?>
           </td>

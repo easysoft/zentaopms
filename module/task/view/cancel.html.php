@@ -27,12 +27,11 @@
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <th><?php echo $lang->comment;?></th>
+          <th class='w-50px'><?php echo $lang->comment;?></th>
           <td><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
         </tr>
         <tr>
-          <th></th>
-          <td>
+          <td colspan='2' class='text-center'>
             <?php echo html::submitButton($lang->task->cancel);?>
             <?php echo html::linkButton($lang->goback, $this->session->taskList);?>
           </td>
