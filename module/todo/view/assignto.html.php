@@ -18,7 +18,7 @@
         <h4 class="modal-title"><i class="icon-file-text"></i> <?php echo $lang->todo->assignTo;?></h4>
       </div>
       <div class="modal-body">
-        <form class='form-condensed' method='post' target='hiddenwin' id="todoAssignForm">
+        <form class='load-indicator main-form' method='post' target='hiddenwin' id="todoAssignForm">
           <table class='table table-form'>
             <tr>
               <th class='w-80px'><?php echo $lang->todo->assignTo;?></th>
@@ -49,7 +49,7 @@
               <td><input type='checkbox' id='switchDate' onclick='switchDateFeature(this);' name="lblDisableDate"> <?php echo $lang->todo->lblDisableDate;?></td>
             </tr>
             <tfoot>
-            <tr><td colspan='3'><?php echo html::submitButton();?></td></tr>
+            <tr><td colspan='3' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td></tr>
             </tfoot>
           </table>
         </form>

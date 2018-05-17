@@ -71,8 +71,7 @@ EOT;
         </tr>
         <?php endif;?>
         <tr>
-          <td></td>
-          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
+          <td colspan='2' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
       <?php elseif($module == 'task' and $field == 'hours'):?>
@@ -87,8 +86,7 @@ EOT;
           <td><?php echo html::radio('weekend', $lang->custom->weekendList, $weekend);?></td>
         </tr>
         <tr>
-          <td></td>
-          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
+          <td colspan='2' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
       <?php elseif($module == 'bug' and $field == 'longlife'):?>
@@ -112,8 +110,7 @@ EOT;
           <td><?php echo html::select('closed[]', $blockPairs, $closedBlock, "class='form-control chosen' multiple");?></td>
         </tr>
         <tr>
-          <td></td>
-          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
+          <td colspan='2' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
       <?php elseif($module == 'user' and $field == 'deleted'):?>

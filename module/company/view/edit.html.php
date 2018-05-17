@@ -20,10 +20,10 @@
       <?php endif;?>
     </h2>
   </div>
-  <form method='post' target='hiddenwin'>
-    <table align='center' class='table table-form'> 
+  <form class='main-form' method='post' target='hiddenwin'>
+    <table class='table table-form'> 
       <tr>
-        <th class='w-150px'><?php echo $lang->company->name;?></th>
+        <th><?php echo $lang->company->name;?></th>
         <td><?php echo html::input('name', $company->name, "class='form-control' autocomplete='off'");?></td>
       </tr>  
       <tr>
@@ -54,7 +54,7 @@
         <th><?php echo $lang->company->guest;?></th>
         <td><?php echo html::radio('guest', $lang->company->guestOptions, $company->guest);?></td>
       </tr>  
-      <tr><td></td><td><?php echo html::submitButton();?></td></tr>
+      <tr><td class='text-center' colspan='2'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td></tr>
     </table>
   </form>
 </div>

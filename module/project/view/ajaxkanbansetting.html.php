@@ -42,8 +42,8 @@
         <tr>
           <td colspan='2' class='text-center'>
             <?php
-            echo html::submitButton();
-            echo html::a(inlink('ajaxResetKanban', "projectID=$projectID"), $lang->project->resetKanban, 'hiddenwin', "class='btn'");
+            echo html::submitButton('', '', 'btn btn-wide btn-primary');
+            echo '&nbsp;' . html::a(inlink('ajaxResetKanban', "projectID=$projectID"), $lang->project->resetKanban, 'hiddenwin', "class='btn btn-wide'");
             ?>
           </td>
         </tr>

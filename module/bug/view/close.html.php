@@ -27,11 +27,11 @@
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <th><?php echo $lang->comment;?></th>
+          <th class='w-60px'><?php echo $lang->comment;?></th>
           <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
         </tr>
         <tr>
-          <th></th><td><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList);?></td>
+          <td colspan='2' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::linkButton($lang->goback, $this->session->bugList);?></td>
         </tr>
       </table>
     </form>

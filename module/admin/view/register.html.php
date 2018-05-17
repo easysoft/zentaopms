@@ -83,9 +83,8 @@
             </td>
           </tr>
           <tr>
-            <th></th>
-            <td>
-              <?php echo html::submitButton($lang->admin->register->submit) . html::hidden('sn', $sn) . html::hidden('bindSite', common::getSysURL());?>
+            <td colspan='2' class='text-center'>
+              <?php echo html::submitButton($lang->admin->register->submit, '', 'btn btn-wide btn-primary') . html::hidden('sn', $sn) . html::hidden('bindSite', common::getSysURL());?>
             </td>
           </tr>
         </table>
@@ -110,7 +109,7 @@
             <td><?php echo html::password('password', '', "class='form-control'");?></td>
           </tr>
           <tr>
-            <th></th><td class="text-center"><?php echo html::submitButton() . html::hidden('sn', $sn) . html::hidden('site', common::getSysURL());?></td>
+            <td colspan='2' class="text-center"><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::hidden('sn', $sn) . html::hidden('site', common::getSysURL());?></td>
           </tr>
         </table>
       </form>

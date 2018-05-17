@@ -30,8 +30,7 @@
         <td><?php echo html::textarea('desc', $group->desc, "rows='5' class='form-control'");?></td>
       </tr>  
       <tr>
-        <th></th>
-        <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
+        <td colspan='2' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
       </tr>
     </table>
   </form>

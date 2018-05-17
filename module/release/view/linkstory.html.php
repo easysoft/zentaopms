@@ -64,8 +64,13 @@
     <div class='table-footer'>
       <?php if($unlinkedCount):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+<<<<<<< HEAD
+      <div class='table-actions btn-toolbar'>
+        <?php echo html::submitButton($lang->release->linkStory, '', 'btn btn-default');?>
+=======
       <div class='btn-toolbar'>
         <?php echo html::submitButton($lang->release->linkStory, '', 'btn');?>
+>>>>>>> d31cb467eea5b5badeb0fe21a7c21ac7e1b3b15e
       </div>
       <?php endif;?>
       <?php echo html::a(inlink('view', "releaseID=$release->id&type=story"), $lang->goback, '', "class='btn'");?>

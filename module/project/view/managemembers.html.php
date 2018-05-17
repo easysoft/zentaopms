@@ -120,7 +120,7 @@
         <?php endfor;?>
       </tbody>
     </table>
-    <div class='table-footer text-center'><?php echo html::submitButton() . ' ' . html::backButton(); ?></div>
+    <div class='table-footer text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . ' ' . html::backButton('', '', 'btn btn-wide'); ?></div>
     <?php js::set('i', $i);?>
   </form>
 </div>

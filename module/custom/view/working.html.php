@@ -22,7 +22,7 @@
       </div>
       <table class='table table-form'>
         <tr>
-          <th class='w-150px text-top'><?php echo $lang->custom->working;?></th>
+          <th class='text-top'><?php echo $lang->custom->working;?></th>
           <td>
             <?php $checkedKey = isset($config->global->flow) ? $config->global->flow : 'full';?>
             <?php foreach($lang->custom->workingList as $key => $value):?>

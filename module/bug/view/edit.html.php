@@ -35,7 +35,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <small><?php echo $lang->arrow . ' ' . $lang->bug->edit;?></small>
       </h2>
       <div class="pull-right btn-toolbar">
-        <?php echo html::submitButton($lang->save)?>
+        <?php echo html::submitButton($lang->save);?>
       </div>
     </div>
     <div class='main-row'>
@@ -70,9 +70,9 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           <div class='actions actions-form text-center'>
             <?php 
             echo html::hidden('lastEditedDate', $bug->lastEditedDate);
-            echo html::submitButton();
+            echo html::submitButton('', '', 'btn btn-wide btn-primary');
             $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
-            echo html::linkButton($lang->goback, $browseLink);
+            echo html::linkButton($lang->goback, $browseLink, '', '', "btn btn-wide");
             ?>
           </div>
           <hr class='small' />

@@ -66,7 +66,7 @@
           ?>
         </td>
         <td><?php echo $lang->testcase->typeList[$case->type];?></td>
-        <td><?php echo $users[$case->openedBy];?></td>
+        <td><?php echo zget($users, $case->openedBy);?></td>
         <td class='case-<?php echo $case->status?>'><?php echo $lang->testcase->statusList[$case->status];?></td>
       </tr>
       <?php endforeach;?>
