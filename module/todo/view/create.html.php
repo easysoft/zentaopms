@@ -86,11 +86,11 @@
         </tr>
         <tr>
           <th><?php echo $lang->todo->type;?></th>
-          <td><?php echo html::select('type', $lang->todo->typeList, '', 'onchange=loadList(this.value); class=form-control');?></td>
+          <td><?php echo html::select('type', $lang->todo->typeList, '', 'onchange="loadList(this.value);" class="form-control chosen-simple"');?></td>
         </tr>  
         <tr>
           <th><?php echo $lang->todo->pri;?></th>
-          <td><?php echo html::select('pri', $lang->todo->priList, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select('pri', $lang->todo->priList, '', "class='form-control chosen-simple'");?></td>
         </tr>  
         <tr>
           <th><?php echo $lang->todo->name;?></th>

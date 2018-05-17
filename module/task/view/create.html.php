@@ -85,26 +85,26 @@
         <?php if(strpos(",$showFields,", ',pri,') !== false):?>
         <tr>
           <th><?php echo $lang->task->pri;?></th>
-          <td colspan='2'>
-            <?php
-            $hasCustomPri = false;
-            foreach($lang->task->priList as $priKey => $priValue)
-            {
-                if(!empty($priKey) and (string)$priKey != (string)$priValue)
-                {
-                    $hasCustomPri = true;
-                    break;
-                }
-            }
-            $priList = $lang->task->priList;
-            if(end($priList))
-            {
-                unset($priList[0]);
-                $priList[0] = '';
-            }
-            ?>
+          <?php
+          $hasCustomPri = false;
+          foreach($lang->task->priList as $priKey => $priValue)
+          {
+              if(!empty($priKey) and (string)$priKey != (string)$priValue)
+              {
+                  $hasCustomPri = true;
+                  break;
+              }
+          }
+          $priList = $lang->task->priList;
+          if(end($priList))
+          {
+              unset($priList[0]);
+              $priList[0] = '';
+          }
+          ?> 
+          <td colspan='<?php echo $hasCustomPri ? 1 : 3 ?>'>
             <?php if($hasCustomPri):?>
-            <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control chosen'");?> 
+            <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control chosen chosen-simple'");?> 
             <?php else: ?>
             <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control' data-provide='labelSelector'");?> 
             <?php endif; ?>
