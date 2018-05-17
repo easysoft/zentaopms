@@ -1,8 +1,3 @@
-$(document).ready(function()
-{
-    setTimeout(function(){fixedTheadOfList('#workload')}, 100);
-});
-
 function changeParams(obj)
 {
     var begin = $('.main .row').find('#begin').val();

@@ -77,7 +77,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
               <div class='input-group' id='buildBox'>
                 <?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?>
                 <span class='input-group-addon fix-border' id='buildBoxActions'></span>
-                <div class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn btn-default' data-toggle='tooltip' onclick='loadAllBuilds()'")?></div>
+                <div class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' data-toggle='tooltip' onclick='loadAllBuilds()'")?></div>
               </div>
             </td>
           </tr>
@@ -86,7 +86,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
             <td>
               <div class='input-group'>
                 <div class='input-group' id='assignedToBox'><?php echo html::select('assignedTo', $projectMembers, $assignedTo, "class='form-control chosen'");?></div>
-                <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
+                <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
               </div>
             </td>
           </tr>

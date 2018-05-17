@@ -16,7 +16,9 @@
 <?php js::set('roles', $roles);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->project->manageMembers;?></div></span>
+    <span class='btn btn-link btn-active-text'>
+      <?php echo html::a($this->createLink('project', 'managemembers', "projectID={$project->id}"), "<span class='text'> {$lang->project->manageMembers}</span>");?>
+    </span>
     <div class='input-group space w-200px'>
       <span class='input-group-addon'><?php echo $lang->project->selectDept?></span>
       <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->project->selectDeptTitle}'");?>
@@ -65,7 +67,7 @@
 
         <?php foreach($members2Import as $member2Import):?>
         <tr class='addedItem'>
-          <td><?php echo html::select("accounts[]", $users, $member2Import->account, "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
+          <td><?php echo html::select("accounts[]", $users, $member2Import->account, "class='form-control chosen' onchange='setRole(this.value, $i)'");?></td>
           <td><input type='text' name='roles[]' id='role<?php echo $i;?>' class='form-control' value='<?php echo $member2Import->role;?>' /></td>
           <td><input type='text' name='days[]'  id='days<?php echo $i;?>' class='form-control' value='<?php echo $project->days?>'/></td>
           <td>
@@ -84,7 +86,7 @@
         <?php foreach($deptUsers as $deptAccount => $userName):?>
         <?php if(!isset($users[$deptAccount])) continue;?>
         <tr class='addedItem'>
-          <td><?php echo html::select("accounts[]", $users, $deptAccount, "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
+          <td><?php echo html::select("accounts[]", $users, $deptAccount, "class='form-control chosen' onchange='setRole(this.value, $i)'");?></td>
           <td><input type='text' name='roles[]' id='role<?php echo $i;?>' class='form-control' value='<?php echo $roles[$deptAccount]?>'/></td>
           <td><input type='text' name='days[]'  id='days<?php echo $i;?>' class='form-control' value='<?php echo $project->days?>'/></td>
           <td>
@@ -103,7 +105,7 @@
 
         <?php for($j = 0; $j < 5; $j ++):?>
         <tr class='addedItem'>
-          <td><?php echo html::select("accounts[]", $users, '', "class='select-2 chosen' onchange='setRole(this.value, $i)'");?></td>
+          <td><?php echo html::select("accounts[]", $users, '', "class='form-control chosen' onchange='setRole(this.value, $i)'");?></td>
           <td><input type='text' name='roles[]' id='role<?php  echo ($i);?>' class='form-control' /></td>
           <td><input type='text' name='days[]'  id='days<?php  echo ($i);?>' class='form-control' value='<?php echo $project->days?>'/></td>
           <td>

@@ -10,11 +10,21 @@
  * @link        http://www.ranzhi.org
  */
 ?>
+<style>
+.block-bugs .c-id {width: 55px;}
+.block-bugs .c-level {width: 50px;text-align: center;}
+.block-bugs .c-pri {width: 35px;text-align: center;}
+.block-bugs .c-deadline {width: 95px;}
+.block-bugs .c-status {width: 80px;}
+.block-bugs.block-sm .c-pri,
+.block-bugs.block-sm .c-status .label-dot {display: none;}
+.block-bugs.block-sm .c-status {text-align: center;}
+</style>
 <div class='panel-body has-table'>
   <table class='table table-borderless table-fixed-head table-hover block-bugs <?php if(!$longBlock) echo 'block-sm'?>'>
     <thead>
       <tr>
-        <th class='c-id'><?php echo $lang->idAB?></th>
+        <th class='c-id-xs'><?php echo $lang->idAB?></th>
         <?php if($longBlock):?>
         <th class='c-pri'><?php echo $lang->priAB?></th>
         <?php endif;?>
@@ -30,7 +40,7 @@
       $viewLink = $this->createLink('bug', 'view', "bugID={$bug->id}");
       ?>
       <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-        <td class='c-id'><?php echo $bug->id;?></td>
+        <td class='c-id-xs'><?php echo $bug->id;?></td>
         <?php if($longBlock):?>
         <td class='c-pri'><span class='label-pri label-pri-<?php echo $bug->pri?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
         <?php endif;?>

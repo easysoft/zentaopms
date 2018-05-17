@@ -106,7 +106,7 @@
             </tr>
             <tr>
               <td></td>
-              <td colspan='2'>
+              <td colspan='2' class="form-actions">
                 <?php 
                 echo html::submitButton('', '', 'btn btn-primary btn-wide');
                 echo $this->session->taskList ? html::linkButton($this->lang->goback, $this->session->taskList) : html::backButton();

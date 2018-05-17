@@ -56,49 +56,51 @@
           <div class="panel-title"><?php echo $title;?></div>
           <nav class="panel-actions btn-toolbar"></nav>
         </div>
-        <table class='table table-condensed table-striped table-bordered table-fixed' id="workload">
-          <thead>
-            <tr class='colhead'>
-              <th class="w-200px"><?php echo $lang->report->user;?></th>
-              <th><?php echo $lang->report->project;?></th>
-              <th class="w-100px"><?php echo $lang->report->task;?></th>
-              <th class="w-100px"><?php echo $lang->report->remain;?></th>
-              <th class="w-100px"><?php echo $lang->report->taskTotal;?></th>
-              <th class="w-100px"><?php echo $lang->report->manhourTotal;?></th>
-              <th class="w-100px"><?php echo $lang->report->workloadAB;?></th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php $color = false;?>
-            <?php foreach($workload as $account => $load):?>
-            <?php if(!isset($users[$account])) continue;?>
-            <tr class="text-center">
-              <td rowspan="<?php echo count($load['task']);?>"><?php echo $users[$account];?></td>
-              <?php $id = 1;?>
-              <?php foreach($load['task'] as $project => $info):?>
-              <?php $class = $color ? 'rowcolor' : '';?>
-              <?php if($id != 1) echo '<tr class="text-center">';?>
-              <td class="<?php echo $class;?>"><?php echo html::a($this->createLink('project', 'view', "projectID={$info['projectID']}"), $project);?></td>
-              <td class="<?php echo $class;?> text-center"><?php echo $info['count'];?></td>
-              <td class="<?php echo $class;?> text-center"><?php echo $info['manhour'];?></td>
-              <?php if($id == 1):?>
-              <td rowspan="<?php echo count($load['task']);?>" class="text-center">
-                <?php echo $load['total']['count'];?>
-              </td>
-              <td rowspan="<?php echo count($load['task']);?>" class="text-center">
-                <?php echo $load['total']['manhour'];?>
-              </td>
-              <td rowspan="<?php echo count($load['task']);?>" class="text-center">
-                <?php echo round($load['total']['manhour'] / $allHour * 100, 2) . '%';?>
-              </td>
-              <?php endif;?>
-              <?php if($id != 1) echo '</tr>'; $id ++;?>
-              <?php $color = !$color;?>
-              <?php endforeach;?>
-            </tr>
-          <?php endforeach;?>
-          </tbody>
-        </table>
+        <div data-ride='table'>
+          <table class='table table-condensed table-striped table-bordered table-fixed' id="workload">
+            <thead>
+              <tr class='colhead'>
+                <th class="w-200px"><?php echo $lang->report->user;?></th>
+                <th><?php echo $lang->report->project;?></th>
+                <th class="w-100px"><?php echo $lang->report->task;?></th>
+                <th class="w-100px"><?php echo $lang->report->remain;?></th>
+                <th class="w-100px"><?php echo $lang->report->taskTotal;?></th>
+                <th class="w-100px"><?php echo $lang->report->manhourTotal;?></th>
+                <th class="w-100px"><?php echo $lang->report->workloadAB;?></th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php $color = false;?>
+              <?php foreach($workload as $account => $load):?>
+              <?php if(!isset($users[$account])) continue;?>
+              <tr class="text-center">
+                <td rowspan="<?php echo count($load['task']);?>"><?php echo $users[$account];?></td>
+                <?php $id = 1;?>
+                <?php foreach($load['task'] as $project => $info):?>
+                <?php $class = $color ? 'rowcolor' : '';?>
+                <?php if($id != 1) echo '<tr class="text-center">';?>
+                <td class="<?php echo $class;?>"><?php echo html::a($this->createLink('project', 'view', "projectID={$info['projectID']}"), $project);?></td>
+                <td class="<?php echo $class;?> text-center"><?php echo $info['count'];?></td>
+                <td class="<?php echo $class;?> text-center"><?php echo $info['manhour'];?></td>
+                <?php if($id == 1):?>
+                <td rowspan="<?php echo count($load['task']);?>" class="text-center">
+                  <?php echo $load['total']['count'];?>
+                </td>
+                <td rowspan="<?php echo count($load['task']);?>" class="text-center">
+                  <?php echo $load['total']['manhour'];?>
+                </td>
+                <td rowspan="<?php echo count($load['task']);?>" class="text-center">
+                  <?php echo round($load['total']['manhour'] / $allHour * 100, 2) . '%';?>
+                </td>
+                <?php endif;?>
+                <?php if($id != 1) echo '</tr>'; $id ++;?>
+                <?php $color = !$color;?>
+                <?php endforeach;?>
+              </tr>
+            <?php endforeach;?>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

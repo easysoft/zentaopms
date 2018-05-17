@@ -10,12 +10,23 @@
  * @link        http://www.ranzhi.org
  */
 ?>
+<style>
+.block-stories .c-id {width: 55px;}
+.block-stories .c-pri {width: 45px;text-align: center;}
+.block-stories .c-estimate {width: 55px;}
+.block-stories .c-status {width: 80px;}
+.block-stories .c-stage {width: 80px;}
+.block-stories.block-sm .estimate,
+.block-stories.block-sm .c-stage,
+.block-stories.block-sm .c-status .label-dot {display: none;}
+.block-stories.block-sm .c-status {text-align: center;}
+</style>
 <div class='panel-body has-table'>
   <table class='table table-borderless table-hover table-fixed-head block-stories <?php if(!$longBlock) echo 'block-sm'?>'>
     <thead>
       <tr>
         <?php if($longBlock):?>
-        <th class="c-id"><?php echo $lang->idAB?></th>
+        <th class="c-id-xs"><?php echo $lang->idAB?></th>
         <?php endif;?>
         <th class="c-pri"><?php echo $lang->priAB?></th>
         <th class="c-name"><?php echo $lang->story->title;?></th>
@@ -36,7 +47,7 @@
       ?>
       <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
         <?php if($longBlock):?>
-        <td class="c-id"><?php echo $story->id;?></td>
+        <td class="c-id-xs"><?php echo $story->id;?></td>
         <?php endif;?>
         <td class="c-pri"><span class="label-pri label-pri-<?php echo $story->pri?>"><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
         <td class="c-name" style='color: <?php echo $story->color?>' title='<?php echo $story->title?>'><?php echo $story->title?></td>

@@ -38,7 +38,7 @@
     <?php
     if(!isset($browseType)) $browseType = '';
     if(!isset($orderBy))    $orderBy = '';
-    common::printIcon('task', 'report', "project=$projectID&browseType=$browseType", '', 'button', 'bar-chart');
+    common::printIcon('task', 'report', "project=$projectID&browseType=$browseType", '', 'button', 'bar-chart muted');
     ?>
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export;?></span> <span class="caret"></span></button>
@@ -161,7 +161,8 @@
           ?>
         </td>
         <td class="c-status"><span class='status-<?php echo $task->status;?>'><span class="label label-dot"></span> <?php echo $lang->task->statusList[$task->status];?></span></td>
-        <td class="c-assign text-left has-btn"><?php echo html::a($this->createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", 'html', true), '<i class="icon icon-hand-right"></i> ' . $task->assignedToRealName, '', "class='iframe btn btn-icon-left' $assignedToClass");?></td>
+        <?php $assignedToRealName = $task->assignedToRealName ? $task->assignedToRealName : $lang->task->noAssigned;?>
+        <td class="c-assign text-left has-btn"><?php echo html::a($this->createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", 'html', true), '<i class="icon icon-hand-right"></i> ' . $assignedToRealName, '', "class='iframe btn btn-icon-left' $assignedToClass");?></td>
         <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
         <td class="c-hours em"><?php echo $task->estimate;?></td>
         <td class="c-hours em"><?php echo $task->consumed;?></td>

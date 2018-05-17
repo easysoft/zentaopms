@@ -62,19 +62,15 @@
         <?php endforeach;?>
       </tbody>
     </table>
+    <?php if($unlinkedCount):?>
     <div class='table-footer'>
-      <?php if($unlinkedCount):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar">
-<<<<<<< HEAD
-        <?php echo html::submitButton($lang->build->linkStory, '', 'btn btn-default');?>
-=======
         <?php echo html::submitButton($lang->build->linkStory, '', 'btn');?>
->>>>>>> d31cb467eea5b5badeb0fe21a7c21ac7e1b3b15e
       </div>
-      <?php endif;?>
       <?php echo html::a(inlink('view', "buildID={$build->id}&type=story"), $lang->goback, '', "class='btn'");?>
     </div>
+    <?php endif;?>
   </form>
 </div>
 <script>

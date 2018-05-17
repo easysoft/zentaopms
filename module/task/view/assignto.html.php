@@ -46,8 +46,7 @@
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control w-p98'");?></td>
         </tr>
         <tr>
-          <th></th>
-          <td colspan='2'>
+          <td colspan='3' class='text-center'>
             <?php echo html::submitButton();?>
             <?php echo html::linkButton($lang->goback, $this->session->taskList);?>
           </td>
