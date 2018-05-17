@@ -29,7 +29,7 @@
       </ul>
     </div>
 
-      <a href='###' class='dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon-import'></i> <?php echo $lang->import ?><span class='caret'></span></a>
+      <a href='###' class='dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <?php echo $lang->import ?><span class='caret'></span></a>
       <ul class='dropdown-menu' id='importActionMenu'>
       <?php 
       $misc = common::hasPriv('testcase', 'import') ? "class='export'" : "class=disabled";
@@ -162,7 +162,7 @@
   <div class='btn-toolbar pull-right'>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
-        <i class='icon-export'></i> <?php echo $lang->export ?>
+        <i class='icon icon-export muted'></i> <?php echo $lang->export ?>
         <span class='caret'></span>
       </button>
       <ul class='dropdown-menu' id='exportActionMenu'>
@@ -178,7 +178,7 @@
       </ul>
     </div>
     <div class='btn-group'>
-      <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon-import'></i> <?php echo $lang->import ?><span class='caret'></span></button>
+      <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <?php echo $lang->import ?><span class='caret'></span></button>
       <ul class='dropdown-menu' id='importActionMenu'>
       <?php 
       $misc = common::hasPriv('testcase', 'import') ? "class='export'" : "class=disabled";

@@ -25,8 +25,7 @@
     <ul class="status-bars">
       <?php foreach($lang->project->statusList as $statusKey => $statusName):?>
       <li>
-        <span class="value"><?php echo $overview[$statusKey];?></span>
-        <span class="bar" style="height: <?php echo $overviewPercent[$statusKey];?>"></span>
+        <span class="bar" style="height: <?php echo $overviewPercent[$statusKey];?>"><span class="value"><?php echo $overview[$statusKey];?></span></span>
         <span class="title"><?php echo $statusName;?></span>
       </li>
       <?php endforeach;?>
