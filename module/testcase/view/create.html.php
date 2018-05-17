@@ -104,7 +104,7 @@
         <?php if(strpos(",$showFields,", ',pri,') !== false):?>
         <tr>
           <th><?php echo $lang->testcase->pri;?></th>
-          <td colspan="2">
+          <td>
             <?php
             $hasCustomPri = false;
             foreach($lang->testcase->priList as $priKey => $priValue)
@@ -155,7 +155,10 @@
                       <textarea rows='1' class='form-control autosize step-steps' name='steps[]'></textarea>
                       <span class="input-group-addon step-type-toggle">
                         <input type='hidden' name='stepType[]' value='item' class='step-type'>
-                        <label class="checkbox-inline"><input tabindex='-1' type="checkbox" class='step-group-toggle'> <?php echo $lang->testcase->group ?></label>
+                        <div class='checkbox-primary'>
+                          <input tabindex='-1' type="checkbox" class='step-group-toggle'>
+                          <label class="checkbox-inline"><?php echo $lang->testcase->group ?></label>
+                        </div>
                       </span>
                     </div>
                   </td>

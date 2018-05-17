@@ -16,7 +16,7 @@
           <div class='col-sm-5'>
             <div class='input-group input-group-sm'>
               <span class='input-group-addon'><?php echo $lang->report->bugOpenedDate;?></span>
-              <div class='datepicker-wrapper datepicker-date'><?php echo html::input('begin', $begin, "class='w-100px form-control form-date' onchange='changeParams(this)'");?></div>
+              <div class='datepicker-wrapper datepicker-date'><?php echo html::input('begin', $begin, "class='form-control form-date' onchange='changeParams(this)'");?></div>
               <span class='input-group-addon fix-border'><?php echo $lang->report->to;?></span>
               <div class='datepicker-wrapper datepicker-date'><?php echo html::input('end', $end, "class='form-control form-date' onchange='changeParams(this)'");?></div>
             </div>

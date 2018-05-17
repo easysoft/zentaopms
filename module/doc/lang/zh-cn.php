@@ -130,8 +130,8 @@ $lang->doc->fastMenuIconList['byediteddate']  = 'icon-folder-upload';
 $lang->doc->fastMenuIconList['openedbyme']    = 'icon-folder-account';
 $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 
-$lang->doc->customObjectLibs['files']       = '是否显示附件库';
-$lang->doc->customObjectLibs['customFiles'] = '是否显示自定义文件';
+$lang->doc->customObjectLibs['files']       = '显示附件库';
+$lang->doc->customObjectLibs['customFiles'] = '显示自定义文件';
 
 $lang->doc->confirmDelete      = "您确定删除该文档吗？";
 $lang->doc->confirmDeleteLib   = "您确定删除该文档库吗？";

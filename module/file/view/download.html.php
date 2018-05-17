@@ -12,7 +12,7 @@
   <div class='main-header clearfix'>
     <h2 class='pull-left'><?php echo $lang->file->preview;?></h2>
     <?php if($fileType == 'txt'):?>
-    <div class='btn-toolbar pull-left w-120px'><?php echo html::select('charset', $config->file->charset, $charset, "onchange='setCharset(this.value)' class='chosen'");?></div>
+    <div class='btn-toolbar pull-left w-120px'><?php echo html::select('charset', $config->file->charset, $charset, "onchange='setCharset(this.value)' class='form-control'");?></div>
     <?php endif;?>
   </div>
   <?php if($fileType == 'image'):?>
