@@ -11,7 +11,7 @@
 include '../../common/view/header.lite.html.php';
 if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
 ?>
-<main id="main">
+<main id="main" class="fade">
   <div class="container" id="login">
     <div id="loginPanel">
       <header>
