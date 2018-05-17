@@ -139,7 +139,7 @@
                 <td><?php echo zget($users, $story->assignedTo);?></td>
                 <td><?php echo $story->estimate;?></td>
                 <td>
-                  <span class='story-status-<?php echo $story->status?>'>
+                  <span class='status-<?php echo $story->status?>'>
                     <span class='label label-dot'></span>
                     <?php echo $lang->story->statusList[$story->status];?><span>
                   </span>
@@ -375,7 +375,7 @@
                 <td><?php echo zget($users, $bug->openedBy);?></td>
                 <td><?php echo zget($users, $bug->assignedTo);?></td>
                 <td>
-                  <span class='bug-status-<?php echo $bug->status?>'>
+                  <span class='status-<?php echo $bug->status?>'>
                     <span class='label label-dot'></span>
                     <?php echo $lang->bug->statusList[$bug->status];?>
                   </span>
