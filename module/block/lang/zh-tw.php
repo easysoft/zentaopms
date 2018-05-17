@@ -54,7 +54,7 @@ $lang->block->confirmClose       = '確定永久關閉該區塊嗎？閉後所�
 $lang->block->remove             = '移除';
 $lang->block->refresh            = '刷新';
 $lang->block->hidden             = '隱藏';
-$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span>, <span class='timeline-text'>%s <em>%s</em> %s <a href='%s'>%s</a></span>";
+$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s'>%s</a></span>";
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . '統計';
 $lang->block->default['product']['1']['block'] = 'statistic';
