@@ -154,8 +154,8 @@
         <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $task->pri?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
         <td class="c-name">
           <?php
-            if(!empty($task->team))   echo '<span class="label">' . $lang->task->multipleAB . '</span> ';
-            if(!empty($task->parent)) echo '<span class="label">' . $lang->task->childrenAB . '</span> ';
+            if(!empty($task->team))   echo '<span class="label label-light label-badge">' . $lang->task->multipleAB . '</span> ';
+            if(!empty($task->parent)) echo '<span class="label label-light label-badge">' . $lang->task->childrenAB . '</span> ';
             if(isset($task->children) && $task->children == true) echo '<span class="label">' . $lang->task->parentAB . '</span> ';
             if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;
           ?>
