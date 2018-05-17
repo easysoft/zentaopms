@@ -334,6 +334,7 @@
 </div>
 
 <div id="mainActions">
+  <?php echo $preAndNext;?>
   <?php common::printPreAndNext($preAndNext);?>
   <div class="btn-toolbar">
     <?php common::printBack($browseLink);?>

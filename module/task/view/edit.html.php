@@ -23,7 +23,7 @@
     <div class='main-header'>
       <h2>
         <span class='label label-id'><?php echo $task->id;?></span>
-        <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, '', "class='task-title'");?>
+        <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, '', "class='task-name'");?>
         <small><?php echo $lang->arrow . $lang->task->edit;?></small>
       </h2>
     </div>
@@ -32,8 +32,16 @@
         <div class='cell'>
           <div class='form-group'>
             <div class='input-group'>
-              <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->task->colorTag ?>' value='<?php echo $task->color ?>' data-update-text='.task-title, #name'>
-              <?php echo html::input('name', $task->name, 'class="form-control" autocomplete="off" placeholder="' . $lang->task->name . '"');?>
+              <div class="input-control has-icon-right">
+                <div class="colorpicker">
+                  <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" title="<?php echo $lang->task->colorTag ?>"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+                  <ul class="dropdown-menu clearfix">
+                    <li class="heading"><?php echo $lang->task->colorTag;?><i class="icon icon-close"></i></li>
+                  </ul>
+                  <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $task->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".task-name"  data-provide="colorpicker">
+                </div>
+                <?php echo html::input('name', $task->name, 'class="form-control task-name" autocomplete="off" placeholder="' . $lang->task->name . '"');?>
+              </div>
               <?php if(empty($task->children) and empty($task->parent) and $task->type != 'affair'):?>
               <span class='input-group-addon'>
                 <div class='checkbox-primary'>
@@ -143,7 +151,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->task->consumed;?></th>
-                <td><?php echo $task->consumed . ' '; common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);?></td>
+                <td><?php echo $task->consumed . ' '; common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', '', '', 'record-estimate-toggle btn-link', true);?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->left;?></th>
@@ -218,8 +226,8 @@
                 </div>
               </td>
               <td class='w-90px'>
-                <a href='javascript:;' class='btn btn-move-up btn-sm'><i class='icon-arrow-up'></i></a>
-                <a href='javascript:;' class='btn btn-move-down btn-sm'><i class='icon-arrow-down'></i></a>
+                <a href='javascript:;' class='btn btn-icon btn-move-up btn-sm'><i class='icon-arrow-up'></i></a>
+                <a href='javascript:;' class='btn btn-icon btn-move-down btn-sm'><i class='icon-arrow-down'></i></a>
               </td>
             </tr>
             <?php endforeach;?>
@@ -237,8 +245,8 @@
                 </div>
               </td>
               <td class='w-90px'>
-                <a href='javascript:;' class='btn btn-move-up btn-sm'><i class='icon-arrow-up'></i></a>
-                <a href='javascript:;' class='btn btn-move-down btn-sm'><i class='icon-arrow-down'></i></a>
+                <a href='javascript:;' class='btn btn-icon btn-move-up btn-sm'><i class='icon-arrow-up'></i></a>
+                <a href='javascript:;' class='btn btn-icon btn-move-down btn-sm'><i class='icon-arrow-down'></i></a>
               </td>
             </tr>
             <?php endfor;?>
