@@ -14,21 +14,21 @@
   <table class='table table-borderless table-hover table-fixed-head block-projects'>
     <thead>
       <tr class='text-center'>
-        <th class='text-left c-name'><?php echo $lang->project->name;?></th>
-        <th class="c-deadline"><?php echo $lang->project->end;?></th>
+        <th class='c-name text-left'><?php echo $lang->project->name;?></th>
+        <th class="c-date"><?php echo $lang->project->end;?></th>
         <?php if($longBlock):?>
         <th class="c-status"><?php echo $lang->statusAB;?></th>
-        <th class="c-estimate"><?php echo $lang->project->totalEstimate;?></th>
-        <th class="c-consumed"><?php echo $lang->project->totalConsumed;?></th>
-        <th class="c-left"><?php echo $lang->project->totalLeft;?></th>
+        <th class="c-hours"><?php echo $lang->project->totalEstimate;?></th>
+        <th class="c-hours"><?php echo $lang->project->totalConsumed;?></th>
+        <th class="c-hours"><?php echo $lang->project->totalLeft;?></th>
         <?php endif;?>
         <th class="c-progress"><?php echo $lang->project->progress;?></th>
         <?php if($longBlock):?>
-        <th class="c-spark"><?php echo $lang->project->burn;?></th>
+        <th><?php echo $lang->project->burn;?></th>
         <?php endif;?>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="text-center">
      <?php $id = 0; ?>
      <?php foreach($projectStats as $project):?>
       <?php
@@ -36,8 +36,8 @@
       $viewLink = $this->createLink('project', 'task', 'project=' . $project->id);
       ?>
       <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-        <td class='text-left c-name' title='<?php echo $project->name;?>'><nobr><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '', "title='$project->name'");?></nobr></td>
-        <td class="c-deadline"><?php echo $project->end;?></td>
+        <td class='c-name text-left' title='<?php echo $project->name;?>'><nobr><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '', "title='$project->name'");?></nobr></td>
+        <td class="c-date"><?php echo $project->end;?></td>
         <?php if($longBlock):?>
         <td class="c-status">
           <?php if(isset($project->delay)):?>
@@ -46,9 +46,9 @@
           <span class="project-status-<?php echo $project->status?>"><span class="label label-dot"></span> <?php echo zget($lang->project->statusList, $project->status, '');?></span>
           <?php endif;?>
         </td>
-        <td class="c-estimate"><?php echo $project->hours->totalEstimate;?></td>
-        <td class="c-consumed"><?php echo $project->hours->totalConsumed;?></td>
-        <td class="c-left"><?php echo $project->hours->totalLeft;?></td>
+        <td class="c-hours"><?php echo $project->hours->totalEstimate;?></td>
+        <td class="c-hours"><?php echo $project->hours->totalConsumed;?></td>
+        <td class="c-hours"><?php echo $project->hours->totalLeft;?></td>
         <?php endif;?>
         <td class="c-progress">
           <div class="progress progress-text-left">
@@ -58,7 +58,7 @@
           </div>
         </td>
         <?php if($longBlock):?>
-        <td id='spark-<?php echo $id++?>' class='c-spark sparkline' values='<?php echo join(',', $project->burns);?>'></td>
+        <td id='spark-<?php echo $id++?>' class='no-padding sparkline' values='<?php echo join(',', $project->burns);?>'></td>
         <?php endif;?>
      </tr>
      <?php endforeach;?>
