@@ -165,7 +165,7 @@
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->story->legendProjectAndTask;?></summary>
         <div class="detail-content">
-          <ul class="list-unstyled">
+          <ul class="list-unstyled no-margin">
             <?php
             foreach($story->tasks as $projectTasks)
             {

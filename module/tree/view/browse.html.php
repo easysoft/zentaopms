@@ -124,7 +124,7 @@
               <?php if($viewType != 'line'):?>
               <td></td>
               <?php endif;?>
-              <td colspan="2">
+              <td colspan="2" class="form-actions">
                 <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
                 <?php echo $this->session->{$viewType . 'List'} ? html::linkButton($this->lang->goback, $this->session->{$viewType .'List'}, 'btn btn-wide') : html::backButton('', '', 'btn btn-wide');?>
                 <?php echo html::hidden('parentModuleID', $currentModuleID);?>

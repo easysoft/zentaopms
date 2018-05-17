@@ -25,7 +25,7 @@
     <thead>
       <tr class='text-center'>
         <?php if($longBlock):?>
-        <th class='c-id'><?php echo $lang->idAB?></th>
+        <th class='c-id-xs'><?php echo $lang->idAB?></th>
         <?php endif;?>
         <th class='c-pri'><?php echo $lang->priAB?></th>
         <th class='c-title text-left'><?php echo $lang->case->title;?></th>
@@ -44,7 +44,7 @@
       ?>
       <tr class='text-center' data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
         <?php if($longBlock):?>
-        <td class='c-id'><?php echo $case->id;?></td>
+        <td class='c-id-xs'><?php echo $case->id;?></td>
         <?php endif;?>
         <td class='c-pri'><span class='label-pri label-pri-<?php echo $case->pri?>'><?php echo zget($lang->case->priList, $case->pri, $case->pri)?></span></td>
         <td class='c-title text-left' style='color: <?php echo $case->color?>' title='<?php echo $case->title?>'><?php echo $case->title?></td>
