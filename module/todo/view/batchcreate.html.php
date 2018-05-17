@@ -31,7 +31,7 @@
       <?php include '../../common/view/customfield.html.php';?>
     </div>
   </div>
-  <form id='todoBatchAddForm' class='modal-body' method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'batchCreate');?>'>
+  <form id='todoBatchAddForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'batchCreate');?>'>
     <?php
     $visibleFields = array();
     foreach(explode(',', $showFields) as $field)
