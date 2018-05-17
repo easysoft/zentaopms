@@ -15,7 +15,7 @@
     <thead>
       <tr>
         <?php if($longBlock):?>
-        <th class='c-id text-center'><?php echo $lang->idAB?></th>
+        <th class='c-id-xs text-center'><?php echo $lang->idAB?></th>
         <th><?php echo $lang->release->product;?></th>
         <?php endif;?>
         <th><?php echo $lang->release->name;?></th>
