@@ -54,15 +54,15 @@
         <tr class='text-center'>
           <th class='w-50px'><?php echo $lang->idAB;?></th>
           <th class='w-120px<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
-          <th class='w-180px<?php echo zget($visibleFields, 'module', ' hidden') . zget($requiredFields, 'module', ' required');?>'><?php echo $lang->testcase->module;?></th>
-          <th class='w-180px<?php echo zget($visibleFields, 'story',  ' hidden') . zget($requiredFields, 'story',  ' required'); echo $hiddenStory;?>'> <?php echo $lang->testcase->story;?></th>
+          <th class='w-180px<?php echo zget($visibleFields, 'module', ' hidden') . zget($requiredFields, 'module', '', ' required');?>'><?php echo $lang->testcase->module;?></th>
+          <th class='w-180px<?php echo zget($visibleFields, 'story',  ' hidden') . zget($requiredFields, 'story',  '', ' required'); echo $hiddenStory;?>'> <?php echo $lang->testcase->story;?></th>
           <th class='text-left required has-btn'><?php echo $lang->testcase->title;?></span></th>
           <th class='w-120px text-left required'><?php echo $lang->testcase->type;?></th>
-          <th class='w-80px<?php  echo zget($visibleFields, 'pri',          ' hidden') . zget($requiredFields, 'pri',          ' required')?>'><?php echo $lang->testcase->pri;?></th>
-          <th class='w-150px<?php echo zget($visibleFields, 'precondition', ' hidden') . zget($requiredFields, 'precondition', ' required')?>'><?php echo $lang->testcase->precondition;?></th>
-          <th class='w-100px<?php echo zget($visibleFields, 'keywords',     ' hidden') . zget($requiredFields, 'keywords',     ' required')?>'><?php echo $lang->testcase->keywords;?></th>
-          <th class='w-140px<?php echo zget($visibleFields, 'stage',        ' hidden') . zget($requiredFields, 'stage',        ' required')?>'><?php echo $lang->testcase->stage;?></th>
-          <th class='w-70px<?php  echo zget($visibleFields, 'review',       ' hidden') . zget($requiredFields, 'review',       ' required')?>'><?php echo $lang->testcase->review;?></th>
+          <th class='w-80px<?php  echo zget($visibleFields, 'pri',          ' hidden') . zget($requiredFields, 'pri',          '', ' required')?>'><?php echo $lang->testcase->pri;?></th>
+          <th class='w-150px<?php echo zget($visibleFields, 'precondition', ' hidden') . zget($requiredFields, 'precondition', '', ' required')?>'><?php echo $lang->testcase->precondition;?></th>
+          <th class='w-100px<?php echo zget($visibleFields, 'keywords',     ' hidden') . zget($requiredFields, 'keywords',     '', ' required')?>'><?php echo $lang->testcase->keywords;?></th>
+          <th class='w-140px<?php echo zget($visibleFields, 'stage',        ' hidden') . zget($requiredFields, 'stage',        '', ' required')?>'><?php echo $lang->testcase->stage;?></th>
+          <th class='w-70px<?php  echo zget($visibleFields, 'review',       ' hidden') . zget($requiredFields, 'review',       '', ' required')?>'><?php echo $lang->testcase->review;?></th>
         </tr>
       </thead>
       <tbody>
