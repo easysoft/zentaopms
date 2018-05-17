@@ -158,10 +158,10 @@ $lang->user->contacts->userList = 'User List';
 
 $lang->user->contacts->manage        = 'Manage';
 $lang->user->contacts->contactsList  = 'Contacts';
-$lang->user->contacts->selectedUsers = 'Select User';
+$lang->user->contacts->selectedUsers = 'Select';
 $lang->user->contacts->selectList    = 'List';
-$lang->user->contacts->createList    = 'Create a List';
-$lang->user->contacts->noListYet     = 'No contact list exists. Please create a list first.';
+$lang->user->contacts->createList    = 'Create a Contact List';
+$lang->user->contacts->noListYet     = 'No contact list exists. Please create one first.';
 $lang->user->contacts->confirmDelete = 'Do you want to delete this list?';
 $lang->user->contacts->or            = ' or ';
 
