@@ -105,7 +105,7 @@ config.confirmRemoveBlock = '<?php echo $lang->block->confirmRemoveBlock; ?>';
 var module   = '<?php echo $module?>';
 var useGuest = <?php echo $useGuest ? 'true' : 'false';?>;
 <?php if(!$useGuest):?>
-$('#subHeader #pageActions .btn-toolbar:last').append(<?php echo json_encode(html::a($this->createLink("block", "admin", "id=0&module=$module"), "<i class='icon icon-plus text-muted'></i> {$lang->block->createBlock}", '', "class='btn btn-default' data-toggle='modal' data-type='ajax' data-width='700' data-title='{$lang->block->createBlock}'"))?>);
+$('#subHeader #pageActions .btn-toolbar:last').append(<?php echo json_encode(html::a($this->createLink("block", "admin", "id=0&module=$module"), "<i class='icon icon-plus text-muted'></i> {$lang->block->createBlock}", '', "class='btn' data-toggle='modal' data-type='ajax' data-width='700' data-title='{$lang->block->createBlock}'"))?>);
 <?php endif;?>
 </script>
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>

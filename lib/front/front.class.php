@@ -92,12 +92,12 @@ class html extends baseHTML
         return parent::submitButton($label, $class, $misc);
     }
 
-    public static function commonButton($label = '', $misc = '', $class = 'btn btn-default', $icon = '')
+    public static function commonButton($label = '', $misc = '', $class = 'btn', $icon = '')
     {
         return parent::commonButton($label, $class, $misc, $icon);
     }
 
-    public static function linkButton($label = '', $link = '', $target = 'self', $misc = '', $class = 'btn btn-default')
+    public static function linkButton($label = '', $link = '', $target = 'self', $misc = '', $class = 'btn')
     {
         return parent::linkButton($label, $link, $class, $misc, $target);
     }
