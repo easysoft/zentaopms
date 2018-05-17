@@ -52,7 +52,7 @@ js::set('page', 'confirmbug');
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='w-p94'");?></td>
         </tr>
         <tr>
-          <th></th><td colspan='2'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->server->http_referer);?></td>
+          <td class='text-center' colspan='3'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::linkButton($lang->goback, $this->server->http_referer, '', '', 'btn btn-wide');?></td>
         </tr>
       </table>
     </form>

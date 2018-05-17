@@ -29,10 +29,9 @@
         <td><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
       </tr>
       <tr>
-        <th></th>
-        <td>
-          <?php echo html::submitButton();?>
-          <?php echo html::linkButton($lang->goback, $this->session->taskList);?>
+        <td colspan='2'>
+          <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+          <?php echo html::linkButton($lang->goback, $this->session->taskList, '', '', 'btn btn-wide');?>
         </td>
       </tr>
     </table>

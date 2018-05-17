@@ -54,8 +54,7 @@
         </tr>
         <?php endforeach;?>
         <tr>
-          <td></td>
-          <td>
+          <td colspan='2' class='text-center'>
           <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
           <?php if(common::hasPriv('custom', 'resetRequired')) echo html::a(inlink('resetRequired', "module=$moduleName"), $lang->custom->restore, 'hiddenwin', "class='btn btn-wide'");?>
           </td>

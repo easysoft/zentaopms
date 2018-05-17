@@ -60,7 +60,7 @@
           <td colspan='3'><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
         </tr>
         <tr>
-          <th></th><td colspan='3'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList); ?></td>
+          <td colspan='4' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::linkButton($lang->goback, $this->session->taskList, '', '', 'btn btn-wide'); ?></td>
         </tr>
       </tbody>
     </table>
