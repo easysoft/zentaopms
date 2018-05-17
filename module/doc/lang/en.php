@@ -113,6 +113,21 @@ $lang->doc->browseTypeList['menu'] = 'Menu';
 $lang->doc->browseTypeList['tree'] = 'Tree';
 $lang->doc->browseTypeList['card'] = 'Card';
 
+$lang->doc->orderByOpen    = 'Recently Added';
+
+$lang->doc->fastMenuList['byediteddate']  = 'Recently Modified';
+//$lang->doc->fastMenuList['visiteddate']   = 'Recently Visited';
+$lang->doc->fastMenuList['openedbyme']    = 'My Doc';
+$lang->doc->fastMenuList['collectedbyme'] = 'My collection';
+
+$lang->doc->fastMenuIconList['byediteddate']  = 'icon-folder-upload';
+//$lang->doc->fastMenuIconList['visiteddate']   = 'icon-folder-move';
+$lang->doc->fastMenuIconList['openedbyme']    = 'icon-folder-account';
+$lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
+
+$lang->doc->customObjectLibs['files']       = 'Display File Library';
+$lang->doc->customObjectLibs['customFiles'] = 'Display Custom Library';
+
 $lang->doc->confirmDelete      = "Do you want to delete this document?";
 $lang->doc->confirmDeleteLib   = "Do you want to delete this Doc Lib?";
 $lang->doc->errorEditSystemDoc = "System Doc Lib needs no modifications.";
