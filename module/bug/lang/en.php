@@ -163,7 +163,7 @@ $lang->bug->confirmDelete         = 'Do you want to delete this bug?';
 $lang->bug->setTemplateTitle      = 'Please enter the title of template.';
 $lang->bug->remindTask            = 'This Bug has been converted to Task. Do you want to update Status of Task(ID %s)?';
 $lang->bug->skipClose             = 'Bug %s is not resolved. You cannot close it.';
-$lang->bug->applyTemplate         = 'Apply Template';
+$lang->bug->applyTemplate         = 'Template';
 $lang->bug->confirmDeleteTemplate = 'Do you want to delete this template?';
 
 /* 模板。*/
