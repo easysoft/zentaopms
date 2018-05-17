@@ -91,7 +91,7 @@
       ?>
 
       <div class='btn-group'>
-        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' id='exportAction'>
+        <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' id='exportAction'>
             <i class='icon-download-alt'></i> <?php echo $lang->export ?>
             <span class='caret'></span>
         </button>
@@ -105,7 +105,7 @@
       </div>
 
       <div class='btn-group'>
-        <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' id='importAction'>
+        <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' id='importAction'>
             <i class='icon-upload-alt'></i> <?php echo $lang->import ?>
             <span class='caret'></span>
         </button>

@@ -65,7 +65,10 @@
         </tr>
         <tr>
           <th></th>
-          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?> <?php echo html::backButton('', '', 'btn btn-default btn-wide');?></td>
+          <td>
+            <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+            <?php echo html::backButton('', '', 'btn btn-wide');?>
+          </td>
         </tr>
       </table>
     </form>

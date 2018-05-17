@@ -43,11 +43,7 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
         <?php foreach($allBugs as $bug):?>
         <?php if(strpos(",{$releaseBugs},", ",$bug->id,") !== false) continue;?>
         <tr>
-<<<<<<< HEAD
-          <td class='c-id'>
-=======
           <td class='c-id text-left'>
->>>>>>> d31cb467eea5b5badeb0fe21a7c21ac7e1b3b15e
             <?php echo html::checkbox('bugs', array($bug->id => sprintf('%03d', $bug->id)), ($type == 'leftBug' or $bug->status == 'resolved' or $bug->status == 'closed') ? $bug->id : '');?>
           </td>
           <td><span class='label-pri label-pri-<?php echo $bug->pri;?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
@@ -68,13 +64,8 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
     <div class='table-footer'>
       <?php if($unlinkedCount):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-<<<<<<< HEAD
       <div class="table-actions btn-toolbar">
-        <?php echo html::submitButton($lang->release->linkBug, '', 'btn btn-default');?>
-=======
-      <div class="btn-toolbar">
         <?php echo html::submitButton($lang->release->linkBug, '', 'btn');?>
->>>>>>> d31cb467eea5b5badeb0fe21a7c21ac7e1b3b15e
       </div>
       <?php endif;?>
       <?php echo html::a(inlink('view', "releaseID=$release->id&type=$type"), $lang->goback, '', "class='btn'");?>

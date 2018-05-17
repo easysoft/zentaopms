@@ -59,7 +59,7 @@
           <div class="col-sm-10">
             <?php echo html::hidden('type', 'custom');?>
             <?php echo html::commonButton($lang->save, "onclick='ajaxCreateTodo(this)'", "btn btn-primary btn-wide");?>
-            <button type="button" class="btn btn-default btn-wide todo-form-trigger" data-trigger="false"><?php echo $lang->goback;?></button>
+            <button type="button" class="btn btn-wide todo-form-trigger" data-trigger="false"><?php echo $lang->goback;?></button>
           </div>
         </div>
       </form>
