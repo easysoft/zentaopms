@@ -101,7 +101,7 @@ function loadAllBuilds(that)
     {
         productID = $('#product').val();
         projectID = $('#project').val();
-        if(page == 'edit') buildBox = $(that).parent().prev().filter('span').attr('id');
+        if(page == 'edit') buildBox = $(that).closest('.input-group').attr('id');
 
         if(projectID)
         {

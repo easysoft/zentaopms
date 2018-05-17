@@ -121,7 +121,7 @@ $(document).ready(function()
     <h2><?php echo $lang->export;?></h2>
   </div>
   <?php $isCustomExport = (!empty($customExport) and !empty($allExportFields));?>
-  <form class='main-form' method='post' target='hiddenwin' style='padding: 50px 1% 50px'>
+  <form class='main-form' method='post' target='hiddenwin' style='padding: 50px 0 50px'>
     <table class='w-p100 table-fixed'>
       <tr>
         <td>
@@ -133,10 +133,10 @@ $(document).ready(function()
         <td class='w-80px'>
           <?php echo html::select('fileType',   $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value) class="form-control"');?>
         </td>
-        <td class='w-90px'>
+        <td class='w-80px'>
           <?php echo html::select('encode',     $config->charsets[$this->cookie->lang], 'utf-8', key($lang->exportFileTypeList) == 'csv' ? "class='form-control'" : "class='form-control'");?>
         </td>
-        <td class='w-110px'>
+        <td class='w-100px'>
           <?php echo html::select('exportType', $lang->exportTypeList, 'all', "class='form-control'");?>
         </td>
         <?php if($isCustomExport):?>
@@ -144,7 +144,7 @@ $(document).ready(function()
           <span id='tplBox'><?php echo $this->fetch('file', 'buildExportTPL', 'module=' . $this->moduleName);?></span>
         </td>
         <?php endif?>
-        <td style='width:<?php echo $isCustomExport ? '130px' : '70px'?>'>
+        <td style='width:<?php echo $isCustomExport ? '110px' : '60px'?>'>
           <div class='input-group'>
             <?php echo html::submitButton($lang->export, "onclick='setDownloading();' ");?>
             <?php if($isCustomExport):?>

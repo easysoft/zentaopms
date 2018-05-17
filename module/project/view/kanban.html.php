@@ -12,20 +12,11 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-right'>
     <?php echo html::a($this->createLink('project', 'ajaxKanbanSetting', "projectID=$projectID"), "<i class='icon-cog muted'></i> " . $lang->project->kanbanSetting, '', "class='iframe btn btn-link'");?>
-    <?php if(common::hasPriv('project', 'printKanban')) echo html::a('###', "<i class='icon-printer muted'></i> " . $lang->project->printKanban, '', "class='btn btn-link' id='printKanban' title='{$lang->project->printKanban}'");?>
-    <div class='btn-group'>
-      <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='exportAction'>
-        <i class='icon-import muted'></i> <?php echo $lang->export ?>
-        <span class='caret'></span>
-      </button>
-      <ul class='dropdown-menu' id='exportActionMenu'>
-        <?php 
-        $misc = common::hasPriv('task', 'export') ? "class='export iframe' data-width='700'" : "class=disabled";
-        $link = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=$browseType") : '#';
-        echo "<li>" . html::a($link, $lang->task->export, '', $misc) . "</li>";
-        ?>
-      </ul>
-    </div>
+    <?php if(common::hasPriv('project', 'printKanban')) echo html::a($this->createLink('project', 'printKanban', "projectID=$projectID"), "<i class='icon-printer muted'></i> " . $lang->project->printKanban, '', "class='iframe btn btn-link' id='printKanban' title='{$lang->project->printKanban}'");?>
+    <?php 
+    $link = $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=$browseType");
+    if(common::hasPriv('task', 'export')) echo html::a($link, "<i class='icon-import muted'></i> " . $lang->task->export, '', "class='btn btn-link iframe' data-width='700'");
+    ?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'>
         <i class='icon-export muted'></i> <?php echo $lang->import ?>
