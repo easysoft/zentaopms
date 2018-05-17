@@ -38,7 +38,7 @@
           <th class='w-100px'>  <?php echo $lang->todo->date;?></th>
           <th class='w-80px'>  <?php echo $lang->todo->type;?></th>
           <th class='w-100px<?php echo zget($visibleFields, 'pri', ' hidden')?>'>   <?php echo $lang->todo->pri;?></th>
-          <th class='red'><?php echo $lang->todo->name;?></th>
+          <th><?php echo $lang->todo->name;?></th>
           <th <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo $lang->todo->desc;?></th>
           <th class='w-180px<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
           <th class='w-120px<?php echo zget($visibleFields, 'status', ' hidden')?>'>   <?php echo $lang->todo->status;?></th>

@@ -26,8 +26,8 @@
         <tr class='text-center'>
           <th class='w-50px'> <?php echo $lang->idAB;?></th>
           <th class='w-180px'><?php echo $lang->testcase->module;?></th>
-          <th><?php echo $lang->testcase->title;?> <span class='required'></span></th>
-          <th class='w-100px'><?php echo $lang->testcase->type;?> <span class='required'></span></th>
+          <th class='required'><?php echo $lang->testcase->title;?></th>
+          <th class='w-100px required'><?php echo $lang->testcase->type;?></th>
           <th class='w-80px'> <?php echo $lang->testcase->pri;?></th>
           <th class='w-150px'><?php echo $lang->testcase->precondition;?></th>
           <th class='w-100px'><?php echo $lang->testcase->keywords;?></th>
