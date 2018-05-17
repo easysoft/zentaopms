@@ -19,7 +19,7 @@ var browseType = '<?php echo $browseType;?>';
 <?php js::set('libID', $libID);?>
 <?php if($this->from != 'doc') js::set('type', 'doc');?>
 
-<div class='main-row split-row' id='mainRow'>
+<div class="main-row <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
   <?php if($this->from == 'doc'):?>
   <?php include './side.html.php';?>
   <div class="col-spliter"></div>
@@ -65,6 +65,7 @@ var browseType = '<?php echo $browseType;?>';
               <td class="c-name"><?php echo html::a(inlink('browse', "libID=$libID&browseType=bymodule&param=$module->id&orderBy=$orderBy&from=$from"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $module->name);?></td>
               <td class="c-actions">
                 <?php common::printLink('doc', 'collect', "objectID=$module->id&objectType=module", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$lang->doc->collect}' class='btn btn-link'")?>
+                <?php common::printLink('tree', 'browse', "rootID=$libID&type=doc", "<i class='icon icon-cog'></i>", '', "title='{$lang->tree->manage}' class='btn btn-link'")?>
               </td>
               <td class="c-num"></td>
               <td class="c-user"></td>
