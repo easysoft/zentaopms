@@ -27,7 +27,7 @@
   <form class='load-indicator main-form' method='post' target='hiddenwin'>
     <table class='table table-form'>
       <tr>
-        <th><?php echo $lang->project->beginAndEnd;?></th>
+        <th class='w-70px'><?php echo $lang->project->beginAndEnd;?></th>
         <td class='muted' colspan='2'>
           <div id='sourceTimeBox'><?php echo $project->begin . ' ~ ' . $project->end;?></div>
           <div id='readjustTimeBox' class='hide'>
