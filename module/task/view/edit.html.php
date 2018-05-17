@@ -195,18 +195,18 @@
       </div>
     </div>
     <div class="modal fade modal-team" id="modalTeam">
-      <div class="modal-dialog" style='width: 700px'>
+      <div class="modal-dialog">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">
             <span aria-hidden="true">×</span><span class="sr-only"><?php echo $lang->task->close;?></span>
           </button>
           <h4 class="modal-title"><?php echo $lang->task->team?></h4>
         </div>
-        <div class="modal-content">
+        <div class="modal-content with-padding">
           <table class='table table-form'>
             <?php foreach($task->team as $member):?>
             <tr>
-              <td class='w-80px'><?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'")?></td>
+              <td class='w-250px'><?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'")?></td>
               <td>
                 <div class='input-group'>
                   <span class='input-group-addon'><?php echo $lang->task->estimate?></span>

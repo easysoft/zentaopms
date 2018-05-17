@@ -1,7 +1,7 @@
 <?php
 $lang->testreport->common   = 'Test Report';
-$lang->testreport->browse   = 'Test Statements';
-$lang->testreport->create   = 'Create Statements';
+$lang->testreport->browse   = 'Test Report';
+$lang->testreport->create   = 'Create a Report';
 $lang->testreport->edit     = 'Edit Report';
 $lang->testreport->delete   = 'Delete';
 $lang->testreport->export   = 'Export';
@@ -59,7 +59,7 @@ $lang->testreport->buildSummary   = 'Tested <strong>%s</strong> build.';
 $lang->testreport->confirmDelete  = 'Do you want tot delete this report?';
 $lang->testreport->moreNotice     = 'More features can be extended with reference to the ZenTao extension mechanism, or you can contact us for customization.';
 $lang->testreport->exportNotice   = "Export By <a href='http://www.zentao.net' target='_blank' style='color:grey'>ZenTaoPMS</a>";
-$lang->testreport->noReport       = "No statements has been generated. Please check it later.";
+$lang->testreport->noReport       = "No report has been generated. Please check it later.";
 $lang->testreport->foundBugTip    = "Bugs created in this build and created in the test period.";
 $lang->testreport->legacyBugTip   = "Active Bugs, or the resolved beyond the test period.";
 $lang->testreport->fromCaseBugTip = "Bugs created after case-failure in the test period.";
