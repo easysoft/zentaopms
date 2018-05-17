@@ -55,18 +55,18 @@
       <thead>
         <tr>
           <th class='w-30px'><?php echo $lang->idAB;?></th>
-          <th class='w-150px<?php echo zget($visibleFields, 'module', ' hidden') . zget($requiredFields, 'module', ' required');?>'><?php echo $lang->task->module?></th>
+          <th class='w-150px<?php echo zget($visibleFields, 'module', ' hidden') . zget($requiredFields, 'module', '', ' required');?>'><?php echo $lang->task->module?></th>
           <?php if($project->type != 'ops'):?>
-          <th class='w-200px<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', ' required'); echo $hiddenStory;?>'><?php echo $lang->task->story;?></th>
+          <th class='w-200px<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', '', ' required'); echo $hiddenStory;?>'><?php echo $lang->task->story;?></th>
           <?php endif;?>
           <th class='required has-btn'><?php echo $lang->task->name;?></span></th>
           <th class='w-80px required'><?php echo $lang->typeAB;?></span></th>
-          <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden') . zget($requiredFields, 'assignedTo', ' required');?>'><?php echo $lang->task->assignedTo;?></th>
-          <th class='w-60px<?php  echo zget($visibleFields, 'estimate',   ' hidden') . zget($requiredFields, 'estimate',   ' required');?>'><?php echo $lang->task->estimateAB;?></th>
-          <th class='w-100px<?php echo zget($visibleFields, 'estStarted', ' hidden') . zget($requiredFields, 'estStarted', ' required');?>'><?php echo $lang->task->estStarted;?></th>
-          <th class='w-100px<?php echo zget($visibleFields, 'deadline',   ' hidden') . zget($requiredFields, 'deadline',   ' required');?>'><?php echo $lang->task->deadline;?></th>
-          <th class='<?php        echo zget($visibleFields, 'desc',       ' hidden') . zget($requiredFields, 'desc',       ' required');?>'><?php echo $lang->task->desc;?></th>
-          <th class='w-80px<?php  echo zget($visibleFields, 'pri',        ' hidden') . zget($requiredFields, 'pri',        ' required');?>'><?php echo $lang->task->pri;?></th>
+          <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden') . zget($requiredFields, 'assignedTo', '', ' required');?>'><?php echo $lang->task->assignedTo;?></th>
+          <th class='w-60px<?php  echo zget($visibleFields, 'estimate',   ' hidden') . zget($requiredFields, 'estimate',   '', ' required');?>'><?php echo $lang->task->estimateAB;?></th>
+          <th class='w-100px<?php echo zget($visibleFields, 'estStarted', ' hidden') . zget($requiredFields, 'estStarted', '', ' required');?>'><?php echo $lang->task->estStarted;?></th>
+          <th class='w-100px<?php echo zget($visibleFields, 'deadline',   ' hidden') . zget($requiredFields, 'deadline',   '', ' required');?>'><?php echo $lang->task->deadline;?></th>
+          <th class='<?php        echo zget($visibleFields, 'desc',       ' hidden') . zget($requiredFields, 'desc',       '', ' required');?>'><?php echo $lang->task->desc;?></th>
+          <th class='w-80px<?php  echo zget($visibleFields, 'pri',        ' hidden') . zget($requiredFields, 'pri',        '', ' required');?>'><?php echo $lang->task->pri;?></th>
         </tr>
       </thead>
       <tbody>
