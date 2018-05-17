@@ -85,6 +85,5 @@ $extHookRule  = $extPath . 'footer.*.hook.php';
 $extHookFiles = glob($extHookRule);
 if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 ?>
-<script src="http://zui.io/templates/zentao/dist/lib/live/live.js"></script>
 </body>
 </html>

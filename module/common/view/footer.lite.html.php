@@ -4,6 +4,5 @@
 <script>
 <?php if(isset($pageJS)) echo $pageJS;?>
 </script>
-<script src="http://zui.io/templates/zentao/dist/lib/live/live.js"></script>
 </body>
 </html>
