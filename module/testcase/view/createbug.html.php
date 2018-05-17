@@ -11,9 +11,12 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<div class='main' id='resultsContainer'>
+<div id='mainContent' class='main-content'>
+  <div class='main-header'>
+    <h2><?php echo $lang->testcase->createBug;?></h2>
+  </div>
+  <div class='main' id='resultsContainer'></div>
 </div>
-</form>
 <script>
 $(function()
 {

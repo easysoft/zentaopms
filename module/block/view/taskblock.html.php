@@ -21,7 +21,7 @@
         <th class='c-estimate'><?php echo $lang->task->estimateAB;?></th>
         <th class='c-deadline'><?php echo $lang->task->deadline;?></th>
         <?php endif;?>
-        <th class='c-status'><?php echo $lang->statusAB;?></th>
+        <th class='c-status text-center'><?php echo $lang->statusAB;?></th>
       </tr>
     </thead>
     <tbody>
@@ -35,11 +35,11 @@
         <td class='c-pri'><span class='label-pri label-pri-<?php echo $task->pri;?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri)?></span></td>
         <td class='c-name' style='color: <?php echo $task->color?>' title='<?php echo $task->name?>'><?php echo $task->name?></td>
         <?php if($longBlock):?>
-        <td class='c-estimate'><?php echo $task->estimate?></td>
+        <td class='c-estimate text-center'><?php echo $task->estimate?></td>
         <td class='c-deadline'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
         <?php endif;?>
         <td class='c-status' title='<?php echo zget($lang->task->statusList, $task->status)?>'>
-          <span class="task-status-<?php echo $task->status?>">
+          <span class="status-<?php echo $task->status?>">
             <span class="label label-dot"></span>
             <span class='status-text'><?php echo zget($lang->task->statusList, $task->status);?></span>
           </span>

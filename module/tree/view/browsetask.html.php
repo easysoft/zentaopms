@@ -29,7 +29,7 @@
         <div class='panel-title'><?php echo $title;?></div>
       </div>
       <div class='panel-body'>
-        <ul class='tree-lines' id='modulesTree' data-name='tree-task'></ul>
+        <ul id='modulesTree' data-name='tree-task'></ul>
       </div>
     </div>
   </div>
@@ -40,9 +40,9 @@
           <div class='panel-title'><?php echo $lang->tree->manageTaskChild;?></div>
         </div>
         <div class='panel-body'>
-          <table class='table table-form'>
+          <table class='table table-form table-auto'>
             <tr>
-              <td class="text-middle text-nowrap text-right with-padding">
+              <td class="text-middle text-right with-padding">
                 <?php
                 echo html::a($this->createLink('tree', 'browsetask', "root={$root->id}&productID=$productID&viewType=task"), $root->name) . "<i class='icon icon-angle-right muted'></i>";
                 foreach($parentModules as $module)

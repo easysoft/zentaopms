@@ -7,7 +7,7 @@ tbody.sortable-sorting > tr {transition: all .2s; position: relative; z-index: 5
 tbody.sortable-sorting {cursor: move;}
 tbody.sortable-sorting > tr.drag-row {opacity: 1; z-index: 10; box-shadow: 0 2px 4px red}
 tbody.sortable-sorting > tr.drag-row + tr > td {box-shadow: inset 0 4px 2px rgba(0,0,0,.2)}
-tbody.sortable-sorting > tr.drag-row > td {background-color: #edf3fe!important}
+tbody.sortable-sorting > tr.drag-row > td {background-color: #E9F2FB!important}
 tbody.sortable > tr.drop-success > td {background-color: #cfe0ff; transition: background-color 2s;}
 </style>
 <script> 

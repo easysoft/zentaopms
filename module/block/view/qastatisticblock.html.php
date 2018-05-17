@@ -1,0 +1,142 @@
+<style>
+.types-line {display: table; padding: 0; margin: 0 auto;}
+.types-line > li {display: table-cell;}
+.types-line > li > div {position: relative; padding: 18px 5px 5px; text-align: center;}
+.types-line > li > div:before {content: ''; display: block; background: #eee;  width: 100%; height: 2px; position: absolute; left: 50%; top: 4px;}
+.types-line > li:last-child > div:before {display: none;}
+.types-line > li > div:after {content: ''; display: block; background: #FFFFFF; box-shadow: 0 2px 4px 0 rgba(170,170,170,0.50), 0 0 5px 0 rgba(0,0,0,0.1); width: 10px; height: 10px; position: absolute; border-radius: 50%; top: 0; left: 50%; margin-left: -2px;}
+.types-line > li > div > small {display: block; color: #A6AAB8;}
+.types-line > li > div > span {display: block; color: #CBD0DB; font-size: 16px;}
+.product-info {position: relative; padding: 10px 10px 10px 200px;}
+.product-info + .product-info {margin-top: 0;}
+.product-info .progress {position: absolute; left: 10px; top: 33px; width: 180px;}
+.product-info .progress-info {position: absolute; left: 8px; top: 8px; width: 180px; font-size: 12px;}
+.product-info .type-info {color: #A6AAB8; text-align: center;}
+.product-info .type-label {font-size: 12px;}
+.product-info .type-value {font-size: 14px;}
+.product-info .type-value > strong {font-size: 20px; color: #3C4353;}
+.product-info .actions {position: absolute; left: 10px; top: 14px;}
+.block-statistic .tile {margin-bottom: 30px;}
+.block-statistic .tile-title {font-size: 18px; color: #A6AAB8;}
+.block-statistic .tile-amount {font-size: 48px; margin-bottom: 10px;}
+.block-statistic .col-nav {border-left: 1px solid #EBF2FB; width: 260px; padding-left: 0;}
+.block-statistic .nav-secondary > li > a {font-size: 16px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;}
+.block-statistic .nav-secondary > li.active > a {color: #3C4353; background: transparent; box-shadow: none;}
+.block-statistic .nav-secondary > li.active > a:hover,
+.block-statistic .nav-secondary > li.active > a:focus,
+.block-statistic .nav-secondary > li > a:hover {box-shadow: none;}
+.block-statistic .nav-secondary > li.active > a:before {content: ' '; display: block; left: -1px; top: 10px; bottom: 10px; width: 4px; background: #006af1; position: absolute;}
+.block-statistic .nav-stacked {overflow: auto; max-height: 247px;}
+.block-statistic .progress-pie .progress-info > strong {font-size: 24px;}
+.block-statistic .chosen-single {font-size: 16px; font-weight: bold;}
+</style>
+<div class="panel-body">
+  <div class="table-row">
+    <div class="col tab-content">
+      <?php $index = 1;?>
+      <?php foreach($products as $product):?>
+      <div class="tab-pane fade <?php if($index == 1) echo 'active';?> in" id="tabContent<?php echo $product->id;?>">
+        <div class="statistic-menu input-group col-sm space">
+          <?php if($product->builds):?>
+          <select id='build' name='build' class="form-control chosen">
+            <?php foreach($product->builds as $build):?>
+            <option value="<?php echo $build->id;?>"><?php echo $build->name;?></option>
+            <?php endforeach;?>
+          </select>
+          <div class="input-group-cell">
+            <span class="text-muted small">开发已提交测试申请，<a href="<?php echo $this->createLink('testtask', 'browse', "productID={$product->id}");?>" class="text-primary">现在去测试 <i class="icon icon-right-circle icon-sm"></i></a></span>
+          </div>
+          <?php endif;?>
+        </div>
+        <?php foreach($product->builds as $build):?>
+        <div class="table-row" id='bugBox<?php echo $build->id;?>'>
+          <div class="col-5 text-middle text-center">
+            <div class="progress-pie inline-block space progress-pie-100" data-value="<?php echo $build->assignedRate;?>" data-doughnut-size="80">
+              <canvas width="100" height="100" style="width: 100px; height: 100px;"></canvas>
+              <div class="progress-info">
+                <small>全部Bug</small>
+                <strong><span class="progress-value"><?php echo $build->total;?></span></strong>
+              </div>
+            </div>
+            <div class="text-center small with-padding">
+              <span class="label label-dot label-primary"></span> &nbsp; 指派给我 &nbsp; <strong><?php echo $build->assignedToMe;?></strong>
+            </div>
+          </div>
+          <div class="col-7">
+            <div class="product-info">
+              <?php if($build->yesterdayResolved):?>
+              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted">昨日解决</span> <strong><?php echo $build->yesterdayResolved;?></strong></div>
+              <?php endif;?>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $build->unresovedRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $build->unresovedRate;?>%"></div>
+              </div>
+              <div class="type-info">
+                <div class="type-label">
+                  <span>未解决</span>
+                </div>
+                <div class="type-value">
+                  <strong><?php echo $build->unresolved;?></strong>
+                </div>
+              </div>
+            </div>
+            <div class="product-info">
+              <?php if($build->yesterdayConfirmed):?>
+              <div class="progress-info"><i class="icon icon-exclamation-sign text-danger icon-sm"></i> <span class="text-muted">昨日确认</span> <strong><?php echo $build->yesterdayConfirmed;?></strong></div>
+              <?php endif;?>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $build->unconfirmedRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $build->unconfirmedRate;?>%"></div>
+              </div>
+              <div class="type-info">
+                <div class="type-label">
+                  <span>未确认</span>
+                </div>
+                <div class="type-value">
+                  <strong><?php echo $build->unconfirmed;?></strong>
+                </div>
+              </div>
+            </div>
+            <div class="product-info">
+              <?php if($build->yesterdayClosed):?>
+              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted">昨日关闭</span> <strong><?php echo $build->yesterdayClosed;?></strong></div>
+              <?php endif;?>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $build->unclosedRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $build->unclosedRate;?>%"></div>
+              </div>
+              <div class="type-info">
+                <div class="type-label">
+                  <span>未关闭</span>
+                </div>
+                <div class="type-value">
+                  <strong><?php echo $build->unclosed;?></strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <?php endforeach;?>
+      </div>
+      <?php $index++;?>
+      <?php endforeach;?>
+    </div>
+    <div class="col col-nav">
+      <ul class="nav nav-stacked nav-secondary">
+        <?php $index = 1;?>
+        <?php foreach($products as $product):?>
+        <li class="<?php if($index == 1) echo 'active';?>"><a href="###" data-target="#tabContent<?php echo $product->id;?>" data-toggle="tab"><?php echo $product->name;?></a></li>
+        <?php $index++;?>
+        <?php endforeach;?>
+      </ul>
+    </div>
+  </div>
+</div>
+<script>
+$(function()
+{
+    $('#build').change(function()
+    {
+        $(this).parents('.tab-pane').find('.table-row').addClass('hidden');
+        $('#bugBox' + $(this).val()) .removeClass('hidden');
+    });
+    $('#build').change();
+})
+</script>

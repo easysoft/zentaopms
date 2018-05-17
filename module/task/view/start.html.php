@@ -66,9 +66,9 @@
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
         </tr>
         <tr>
-          <td colspan='2'>
-            <?php echo html::submitButton($lang->task->start);?>
-            <?php echo html::linkButton($lang->goback, $this->session->taskList);?>
+          <td colspan='3' class='text-center'>
+            <?php echo html::submitButton($lang->task->start, '', 'btn btn-wide btn-primary');?>
+            <?php echo html::linkButton($lang->goback, $this->session->taskList, '', '', 'btn btn-wide');?>
           </td>
         </tr>
       </table>

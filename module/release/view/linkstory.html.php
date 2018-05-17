@@ -18,8 +18,8 @@
     </div>
     <table class='table'> 
       <thead>
-        <tr>
-          <th class='c-id'>
+        <tr class='text-center'>
+          <th class='c-id text-left'>
             <?php if($allStories):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
               <label></label>
@@ -27,22 +27,22 @@
             <?php endif;?>
             <?php echo $lang->idAB;?>
           </th>
-          <th class='w-pri'><?php echo $lang->priAB;?></th>
-          <th>              <?php echo $lang->story->title;?></th>
-          <th class='w-user text-left'>  <?php echo $lang->openedByAB;?></th>
-          <th class='w-user text-left'>  <?php echo $lang->assignedToAB;?></th>
-          <th class='w-50px text-left'>  <?php echo $lang->story->estimateAB;?></th>
-          <th class='w-status text-left'><?php echo $lang->statusAB;?></th>
-          <th class='w-80px text-center'><?php echo $lang->story->stageAB;?></th>
+          <th class='c-pri'><?php echo $lang->priAB;?></th>
+          <th class='text-left'><?php echo $lang->story->title;?></th>
+          <th class='c-user'>  <?php echo $lang->openedByAB;?></th>
+          <th class='c-user'>  <?php echo $lang->assignedToAB;?></th>
+          <th class='w-50px'>  <?php echo $lang->story->estimateAB;?></th>
+          <th class='c-status'><?php echo $lang->statusAB;?></th>
+          <th class='w-80px'><?php echo $lang->story->stageAB;?></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class='text-center'>
         <?php $unlinkedCount = 0;?>
         <?php foreach($allStories as $story):?>
         <?php if(strpos(",{$release->stories},", ",{$story->id},") !== false) continue; ?>
         <?php if($release->product != $story->product) continue; ?>
         <tr>
-          <td class='c-id'>
+          <td class='c-id text-left'>
             <div class="checkbox-primary">
               <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' <?php if($story->stage == 'developed' or $story->status == 'closed') echo 'checked';?> /> 
               <label></label>
@@ -55,7 +55,7 @@
           <td><?php echo zget($users, $story->assignedTo);?></td>
           <td><?php echo $story->estimate;?></td>
           <td><span class='status-<?php echo $story->status?>'><span class="label label-dot"></span> <?php echo zget($lang->story->statusList, $story->status);?></span></td>
-          <td class='text-center'><?php echo zget($lang->story->stageList, $story->stage);?></td>
+          <td><?php echo zget($lang->story->stageList, $story->stage);?></td>
         </tr>
         <?php $unlinkedCount++;?>
         <?php endforeach;?>
@@ -64,8 +64,13 @@
     <div class='table-footer'>
       <?php if($unlinkedCount):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+<<<<<<< HEAD
+      <div class='table-actions btn-toolbar'>
+        <?php echo html::submitButton($lang->release->linkStory, '', 'btn btn-default');?>
+=======
       <div class='btn-toolbar'>
-        <?php echo html::submitButton($lang->release->linkStory);?>
+        <?php echo html::submitButton($lang->release->linkStory, '', 'btn');?>
+>>>>>>> d31cb467eea5b5badeb0fe21a7c21ac7e1b3b15e
       </div>
       <?php endif;?>
       <?php echo html::a(inlink('view', "releaseID=$release->id&type=story"), $lang->goback, '', "class='btn'");?>
@@ -76,6 +81,5 @@
 $(function()
 {
     ajaxGetSearchForm('#stories .linkBox #queryBox');
-    setModal();
 })
 </script>

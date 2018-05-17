@@ -17,7 +17,7 @@
   <div class="center-block">
     <div class="main-header">
       <h2>
-        <span><?php echo html::icon($lang->icons['product']);?> <?php echo $product->id;?></span>
+        <span class='label label-id'><?php echo $product->id;?></span>
         <?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?>
         <small><?php echo $lang->arrow . ' ' . $lang->product->edit;?></small>
       </h2>
@@ -27,7 +27,7 @@
         <tbody>
           <tr>
             <th class='w-120px'><?php echo $lang->product->name;?></th>
-            <td class='w-p25-f'><?php echo html::input('name', $product->name, "class='form-control' autocomplete='off' required");?></td><td></td>
+            <td class='w-p40-f'><?php echo html::input('name', $product->name, "class='form-control' autocomplete='off' required");?></td><td></td>
           </tr>  
           <tr>
             <th><?php echo $lang->product->code;?></th>
@@ -73,7 +73,7 @@
           <tr>
             <td colspan='3' class='text-center'>
               <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
-              <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
+              <?php echo html::backButton('', '', 'btn btn-wide');?>
             </td>
           </tr>
         </tbody>

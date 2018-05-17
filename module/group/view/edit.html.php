@@ -14,7 +14,7 @@
 <div id='mainContent' class='main-content'> 
   <div class='main-header'>
     <h2>
-      <span><?php echo $group->id;?></span>
+      <span class='label label-id'><?php echo $group->id;?></span>
       <?php echo $group->name;?>
       <small><?php echo $lang->arrow . $lang->group->edit;?></small>
     </h2>
@@ -30,8 +30,7 @@
         <td><?php echo html::textarea('desc', $group->desc, "rows='5' class='form-control'");?></td>
       </tr>  
       <tr>
-        <th></th>
-        <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
+        <td colspan='2' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
       </tr>
     </table>
   </form>

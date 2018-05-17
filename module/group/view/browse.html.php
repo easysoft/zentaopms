@@ -44,21 +44,21 @@
       <td title='<?php echo $users;?>'><?php echo $users;?></td>
       <td class='c-actions'>
         <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
-        <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'pencil');?>
-        <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'pencil');?>
+        <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye');?>
+        <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
         <?php $lang->group->managemember = $lang->group->manageMember;?>
-        <?php common::printIcon('group', 'managemember', "groupID=$group->id", $group, 'list', 'pencil', '', 'iframe', 'yes');?>
+        <?php common::printIcon('group', 'managemember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='750'");?>
         <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
         <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
         <?php
         if(common::hasPriv('group', 'delete') and $group->role != 'limited')
         {
             $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
-            echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"groupList\", confirmDelete)", '<i class="icon icon-sm icon-close"></i>', '', "title='{$lang->group->delete}' class='btn'");
+            echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"groupList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->group->delete}' class='btn'");
         }
         else
         {
-            echo "<button class='btn disabled'><i class='icon icon-sm icon-close disabled' title='{$lang->group->delete}'></i></button>";
+            echo "<button class='btn disabled'><i class='icon icon-trash disabled' title='{$lang->group->delete}'></i></button>";
         }
         ?>
       </td>

@@ -124,6 +124,7 @@ class testcase extends control
         $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), '', $branch);
         $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->moduleID      = $moduleID;
+        $this->view->summary       = $this->testcase->summary($cases);
         $this->view->pager         = $pager;
         $this->view->users         = $this->user->getPairs('noletter');
         $this->view->orderBy       = $orderBy;
@@ -173,6 +174,9 @@ class testcase extends control
                 $groupByList[$case->story]  = $case->storyTitle;
             }
         }
+
+        $this->app->loadLang('project');
+        $this->app->loadLang('task');
 
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
         $this->view->position[]  = html::a($this->createLink('testcase', 'groupTask', "productID=$productID&groupBy=$groupBy"), $this->products[$productID]);

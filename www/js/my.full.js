@@ -1,88 +1,35 @@
-/**
- * Create link. 
- * 
- * @param  string $moduleName 
- * @param  string $methodName 
- * @param  string $vars 
- * @param  string $viewType 
- * @access public
- * @return string
- */
-function createLink(moduleName, methodName, vars, viewType, isOnlyBody)
-{
-    if(!viewType)   viewType   = config.defaultView;
-    if(!isOnlyBody) isOnlyBody = false;
-    if(vars)
-    {
-        vars = vars.split('&');
-        for(i = 0; i < vars.length; i ++)
-        {
-            splited = vars[i].split('=');
+// /**
+//  * Bind Event for searchbox
+//  * 
+//  */
+// function setSearchBox()
+// {
+//     $('#searchTypeMenu a').click(function()
+//     {
+//         $('#searchTypeMenu li.selected').removeClass('selected');
+//         var $this = $(this);
+//         $this.closest('li').addClass('selected');
+//         $("#searchType").val($this.data('value'));
+//         $("#searchTypeName").text($this.text());
+//     });
+// }
 
-            var newvars = new Array()
-            newvars[0] = splited.shift();
-            newvars[1] = splited.join('=');
-
-            vars[i] = newvars;
-        }
-    }
-    if(config.requestType != 'GET')
-    {
-        if(config.requestType == 'PATH_INFO')  link = config.webRoot + moduleName + config.requestFix + methodName;
-        if(config.requestType == 'PATH_INFO2') link = config.webRoot + 'index.php/'  + moduleName + config.requestFix + methodName;
-        if(vars)
-        {
-            for(i = 0; i < vars.length; i ++) link += config.requestFix + vars[i][1];
-        }
-        link += '.' + viewType;
-    }
-    else
-    {
-        link = config.router + '?' + config.moduleVar + '=' + moduleName + '&' + config.methodVar + '=' + methodName + '&' + config.viewVar + '=' + viewType;
-        if(vars) for(i = 0; i < vars.length; i ++) link += '&' + vars[i][0] + '=' + vars[i][1];
-    }
-
-    /* if page has onlybody param then add this param in all link. the param hide header and footer. */
-    if((typeof(config.onlybody) != 'undefined' && config.onlybody == 'yes') || isOnlyBody)
-    {
-        var onlybody = config.requestType != 'GET' ? "?onlybody=yes" : '&onlybody=yes';
-        link = link + onlybody;
-    }
-    return link;
-}
-
-/**
- * Bind Event for searchbox
- * 
- */
-function setSearchBox()
-{
-    $('#searchTypeMenu a').click(function()
-    {
-        $('#searchTypeMenu li.selected').removeClass('selected');
-        var $this = $(this);
-        $this.closest('li').addClass('selected');
-        $("#searchType").val($this.data('value'));
-        $("#searchTypeName").text($this.text());
-    });
-}
-
-/**
- * Go to the view page of one object.
- * 
- * @access public
- * @return void
- */
-function shortcut()
-{
-    objectType  = $('#searchType').attr('value');
-    objectValue = $("input#searchInput").attr('value');
-    if(objectType && objectValue)
-    {
-        method = objectType == 'testsuite' ? 'library' : 'view';
-        location.href=createLink(objectType, method, "id=" + objectValue);
-    }
-}
+// /**
+//  * Go to the view page of one object.
+//  * 
+//  * @access public
+//  * @return void
+//  */
+// function shortcut()
+// {
+//     objectType  = $('#searchType').attr('value');
+//     objectValue = $("input#searchInput").attr('value');
+//     if(objectType && objectValue)
+//     {
+//         method = objectType == 'testsuite' ? 'library' : 'view';
+//         location.href=createLink(objectType, method, "id=" + objectValue);
+//     }
+// }
 
 /**
  * Show search drop menu. 
@@ -203,30 +150,30 @@ function setRequiredFields()
     $('.required').closest('td,th').next().css('padding-left', '15px');
 }
 
-/**
- * Set the help links of forum's items.
- * 
- * @access public
- * @return void
- */
-function setHelpLink()
-{
-    if(!$.cookie('help')) $.cookie('help', 'off', {expires:config.cookieLife, path:config.webRoot});
-    className = $.cookie('help') == 'off' ? 'hidden' : '';
+// /**
+//  * Set the help links of forum's items.
+//  * 
+//  * @access public
+//  * @return void
+//  */
+// function setHelpLink()
+// {
+//     if(!$.cookie('help')) $.cookie('help', 'off', {expires:config.cookieLife, path:config.webRoot});
+//     className = $.cookie('help') == 'off' ? 'hidden' : '';
 
-    $('form input[id], form select[id], form textarea[id]').each(function()
-    {
-        if($(this).attr('type') == 'hidden' || $(this).attr('type') == 'file') return;
-        currentFieldName = $(this).attr('name') ? $(this).attr('name') : $(this).attr('id');
-        if(currentFieldName == 'submit' || currentFieldName == 'reset') return;
-        if(currentFieldName.indexOf('[') > 0) currentFieldName = currentFieldName.substr(0, currentFieldName.indexOf('['));
-        currentFieldName = currentFieldName.toLowerCase();
-        helpLink = createLink('help', 'field', 'module=' + config.currentModule + '&method=' + config.currentMethod + '&field=' + currentFieldName);
-        $(this).after(' <a class="helplink ' + className + '" href=' + helpLink + ' target="_blank">?</a> ');
-    });
+//     $('form input[id], form select[id], form textarea[id]').each(function()
+//     {
+//         if($(this).attr('type') == 'hidden' || $(this).attr('type') == 'file') return;
+//         currentFieldName = $(this).attr('name') ? $(this).attr('name') : $(this).attr('id');
+//         if(currentFieldName == 'submit' || currentFieldName == 'reset') return;
+//         if(currentFieldName.indexOf('[') > 0) currentFieldName = currentFieldName.substr(0, currentFieldName.indexOf('['));
+//         currentFieldName = currentFieldName.toLowerCase();
+//         helpLink = createLink('help', 'field', 'module=' + config.currentModule + '&method=' + config.currentMethod + '&field=' + currentFieldName);
+//         $(this).after(' <a class="helplink ' + className + '" href=' + helpLink + ' target="_blank">?</a> ');
+//     });
 
-    $("a.helplink").modalTrigger({width:600, type:'iframe'});
-}
+//     $("a.helplink").modalTrigger({width:600, type:'iframe'});
+// }
 
 /**
  * Set paceholder. 
@@ -367,19 +314,19 @@ function removeAnchor(url)
     return url;
 }
 
-/**
- * Get the window size and save to cookie.
- * 
- * @access public
- * @return void
- */
-function saveWindowSize()
-{
-    width  = $(window).width(); 
-    height = $(window).height();
-    $.cookie('windowWidth',  width)
-    $.cookie('windowHeight', height)
-}
+// /**
+//  * Get the window size and save to cookie.
+//  * 
+//  * @access public
+//  * @return void
+//  */
+// function saveWindowSize()
+// {
+//     width  = $(window).width(); 
+//     height = $(window).height();
+//     $.cookie('windowWidth',  width)
+//     $.cookie('windowHeight', height)
+// }
 
 /**
  * Adjust Outer box's width and height.
@@ -418,6 +365,8 @@ function setOuterBox()
  */
 function setForm()
 {
+    if(config.debug) alert('[Zentao-ZUI 通知] setForm 方法已被弃用，为表单元素 form 添加 [type="ajax"] 或者 .ajax-form 来自动配置 Ajax 表单。');
+
     var formClicked = false;
     $('form').submit(function()
     {
@@ -463,6 +412,8 @@ function setForm()
  */
 function setFormAction(actionLink, hiddenwin, obj)
 {
+    if(config.debug) alert('[Zentao-ZUI 通知] setFormAction 方法已被弃用，在表单中使用如下格式会自动初始化表单提交按钮：\n<a data-form-action="要提交的表单地址">编辑</a>');
+
     $form = typeof(obj) == 'undefined' ? $('form') : $(obj).closest('form');
     if(hiddenwin) $form.attr('target', hiddenwin);
     else $form.removeAttr('target');
@@ -678,39 +629,39 @@ function checkTable($table)
  * @access public
  * @return void
  */
-function toggleSearch()
-{
-    $("#bysearchTab").toggle
-    (
-        function()
-        {
-            if(typeof(browseType) == 'undefined' || browseType == 'bymodule')
-            {
-                $('#bymoduleTab').removeClass('btn-active-text');
-            }
-            else
-            {
-                $('#' + browseType + 'Tab').removeClass('btn-active-text');
-            }
-            $('#bysearchTab').addClass('btn-active-text');
-            ajaxGetSearchForm();
-            $('#queryBox').addClass('show');
-        },
-        function()
-        {
-            if(typeof(browseType) == 'undefined' || browseType == 'bymodule')
-            {
-                $('#bymoduleTab').addClass('btn-active-text');
-            }
-            else
-            {
-                $('#' + browseType +'Tab').addClass('btn-active-text');
-            }
-            $('#bysearchTab').removeClass('btn-active-text');
-            $('#queryBox').removeClass('show');
-        } 
-    );
-}
+// function toggleSearch()
+// {
+//     $("#bysearchTab").toggle
+//     (
+//         function()
+//         {
+//             if(typeof(browseType) == 'undefined' || browseType == 'bymodule')
+//             {
+//                 $('#bymoduleTab').removeClass('btn-active-text');
+//             }
+//             else
+//             {
+//                 $('#' + browseType + 'Tab').removeClass('btn-active-text');
+//             }
+//             $('#bysearchTab').addClass('btn-active-text');
+//             ajaxGetSearchForm();
+//             $('#queryBox').addClass('show');
+//         },
+//         function()
+//         {
+//             if(typeof(browseType) == 'undefined' || browseType == 'bymodule')
+//             {
+//                 $('#bymoduleTab').addClass('btn-active-text');
+//             }
+//             else
+//             {
+//                 $('#' + browseType +'Tab').addClass('btn-active-text');
+//             }
+//             $('#bysearchTab').removeClass('btn-active-text');
+//             $('#queryBox').removeClass('show');
+//         } 
+//     );
+// }
 
 /**
  * Ajax get search form 
@@ -923,6 +874,7 @@ function isNum(s)
  */
 function setModal4List(triggerClass, replaceID, callback, width)
 {
+    if(config.debug) return alert('[Zentao-ZUI 通知] setModal4List 方法已被禁用，如果要为表格列表启用表格内触发打开的对话框关闭后动态更新列表有如下两种方式：\n1. 使用 hot 选项初始化 table 插件：<form class="main-table" data-ride="table" data-hot="true">\n2. 在对话框表单POST请求后返回内容中设置 selfClose cookie 值为 1：<script>parent.parent.$.cookie("selfClose", 1);parent.parent.$.closeModal(null, "this"); </script>');
     if(typeof(width) == 'undefined') width = 900;
     $('.' + triggerClass).modalTrigger(
     {
@@ -1400,47 +1352,47 @@ function removeCookieByKey(cookieKey)
     location.href = location.href;
 }
 
-/**
- * Bind hotkey event
- * @access public
- * @return void
- */
-function initHotKey()
-{
-    $(document).bind('keydown', 'Ctrl+g', function(e)
-    {
-        /* CTRL+g, auto focus on the search box. */
-        $('#searchQuery').val('').focus();
-        e.stopPropagation();
-        e.preventDefault();
-        return false;
-    }).bind('keydown', 'Alt+up', function()
-    {
-        /* Alt+up, go back to the previous page. */
-        var backLink = $('#back').attr('href');
-        if(backLink) location.href = backLink;
-    }).bind('keydown', 'left', function()
-    {
-        /* left, go to pre object. */
-        var preLink = $('#pre').attr('href');
-        if(!$.cookie('ajax_lastNext'))
-        {
-            $.cookie('ajax_lastNext', 'on', {expires: config.cookieLife, path: config.webRoot});
-            $.get(createLink('score', 'ajax', "method=lastNext"));
-        }
-        if(preLink) location.href = preLink;
-    }).bind('keydown', 'right', function()
-    {
-        /* right, go to next object. */
-        var nextLink = $('#next').attr('href');
-        if(!$.cookie('ajax_lastNext'))
-        {
-            $.cookie('ajax_lastNext', 'on', {expires: config.cookieLife, path: config.webRoot});
-            $.get(createLink('score', 'ajax', "method=lastNext"));
-        }
-        if(nextLink) location.href = nextLink;
-    });
-}
+// /**
+//  * Bind hotkey event
+//  * @access public
+//  * @return void
+//  */
+// function initHotKey()
+// {
+//     $(document).bind('keydown.ctrl_g', function(e)
+//     {
+//         /* CTRL+g, auto focus on the search box. */
+//         $('#searchQuery').val('').focus();
+//         e.stopPropagation();
+//         e.preventDefault();
+//         return false;
+//     }).bind('keydown.Alt+up', function()
+//     {
+//         /* Alt+up, go back to the previous page. */
+//         var backLink = $('#back').attr('href');
+//         if(backLink) location.href = backLink;
+//     }).bind('keydown.left', function()
+//     {
+//         /* left, go to pre object. */
+//         var preLink = $('#pre').attr('href');
+//         if(!$.cookie('ajax_lastNext'))
+//         {
+//             $.cookie('ajax_lastNext', 'on', {expires: config.cookieLife, path: config.webRoot});
+//             $.get(createLink('score', 'ajax', "method=lastNext"));
+//         }
+//         if(preLink) location.href = preLink;
+//     }).bind('keydown.right', function()
+//     {
+//         /* right, go to next object. */
+//         var nextLink = $('#next').attr('href');
+//         if(!$.cookie('ajax_lastNext'))
+//         {
+//             $.cookie('ajax_lastNext', 'on', {expires: config.cookieLife, path: config.webRoot});
+//             $.get(createLink('score', 'ajax', "method=lastNext"));
+//         }
+//         if(nextLink) location.href = nextLink;
+//     });
+// }
 
 /**
  * Init help link for user to open zentao help website in iframe
@@ -1671,45 +1623,57 @@ needPing = true;
 /* When body's ready, execute these. */
 $(document).ready(function() 
 {
-    setTableBehavior();
-    setForm();
-    saveWindowSize();
-    setSearchBox();
-    setOuterBox();
+    // setTableBehavior();
+    // setForm();
+    // saveWindowSize();
+    // setSearchBox();
+    // setOuterBox();
 
     //setRequiredFields();
     setPlaceholder();
 
     setModalTriggerLink();
 
-    checkTable();
-    toggleSearch();
+    // checkTable();
+    // toggleSearch();
 
-    fixStyle();
+    // fixStyle();
 
-    // Init tree menu
-    $('.tree').tree({initialState: 'preserve'});
-
-    $(window).resize(saveWindowSize);   // When window resized, call it again.
+    // $(window).resize(saveWindowSize);   // When window resized, call it again.
 
     if(needPing) setTimeout('setPing()', 1000 * 60 * 10);  // After 10 minutes, begin ping.
 
-    initPrioritySelector();
-    initHotKey();
-    initHelpLink();
+    // initPrioritySelector();
+    // initHotKey();
+    // initHelpLink();
     checkTutorial();
     revertModuleCookie();
 
     /* Adjust for dropdown position. */
-    $('li.dropdown-submenu').mouseover(function()
-    {
-        $('li.dropdown-submenu > .dropdown-menu').each(function()
-        {
-            if($(this).css('display') == 'block')
-            {
-                var topPosition = $(this).offset().top;
-                if(topPosition < 0) $(this).css('bottom', Number($(this).css('bottom').replace('px', '')) + topPosition);
-            }
-        })
-    })
+    // $('li.dropdown-submenu').mouseover(function()
+    // {
+    //     $('li.dropdown-submenu > .dropdown-menu').each(function()
+    //     {
+    //         if($(this).css('display') == 'block')
+    //         {
+    //             var topPosition = $(this).offset().top;
+    //             if(topPosition < 0) $(this).css('bottom', Number($(this).css('bottom').replace('px', '')) + topPosition);
+    //         }
+    //     })
+    // })
+
+    // $.extend({'closeModal':function(callback, location)
+    // {
+    //     $ajaxModal = $('.modal-iframe');
+    //     $ajaxModal.on('hidden.zui.modal', function()
+    //     {
+    //           if(location && (!$ajaxModal.data('cancel-reload')))
+    //           {
+    //             if(location == 'this') window.location.reload();
+    //             else window.location = location;
+    //           }
+    //           if(callback && $.isFunction(callback)) callback();
+    //     });
+    //     $ajaxModal.modal('hide');
+    // }});
 });

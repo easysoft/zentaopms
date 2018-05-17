@@ -125,13 +125,14 @@ class datatableModel extends model
         $id = $col->id;
         if($col->show)
         {
-            $fixed  = $col->fixed == 'no' ? 'true': 'false';
-            $width  = is_numeric($col->width) ? "{$col->width}px" : $col->width;
-            $title  = isset($col->name) ? "title='$col->name'" : '';
+            $fixed = $col->fixed == 'no' ? 'true': 'false';
+            $width = is_numeric($col->width) ? "{$col->width}px" : $col->width;
+            $title = isset($col->name) ? "title='$col->name'" : '';
             if($id == 'id' and (int)$width < 90) $width = '90px';
             $width = "data-width='$width' style='width:$width'";
+            $align = $id == 'actions' ? 'text-center' : '';
 
-            echo "<th data-flex='$fixed' $width class='c-$id' $title>";
+            echo "<th data-flex='$fixed' $width class='c-$id $align' $title>";
             if($id == 'actions')
             {
                 echo $this->lang->actions;

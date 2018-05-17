@@ -95,6 +95,8 @@ $lang->dev->tableList['entry']          = 'Entry';
 $lang->dev->tableList['webhook']        = 'WebHook';
 $lang->dev->tableList['webhookdatas']   = 'WebHookDatas';
 $lang->dev->tableList['log']            = 'Log';
+$lang->dev->tableList['message']        = 'Message';
+$lang->dev->tableList['notify']         = 'Notify';
 
 $lang->dev->groupList['my']      = 'Dashboard';
 $lang->dev->groupList['product'] = $lang->productCommon;

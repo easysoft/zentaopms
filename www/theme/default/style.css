@@ -9,3 +9,4 @@
 * @link        http://www.zentao.net
 */
 th.required:after{position: relative; right: 10px;}
+.divider + .divider{display:none;}

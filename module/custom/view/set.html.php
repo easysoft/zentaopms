@@ -71,8 +71,7 @@ EOT;
         </tr>
         <?php endif;?>
         <tr>
-          <td></td>
-          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
+          <td colspan='2' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
       <?php elseif($module == 'task' and $field == 'hours'):?>
@@ -87,8 +86,7 @@ EOT;
           <td><?php echo html::radio('weekend', $lang->custom->weekendList, $weekend);?></td>
         </tr>
         <tr>
-          <td></td>
-          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
+          <td colspan='2' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
       <?php elseif($module == 'bug' and $field == 'longlife'):?>
@@ -112,8 +110,7 @@ EOT;
           <td><?php echo html::select('closed[]', $blockPairs, $closedBlock, "class='form-control chosen' multiple");?></td>
         </tr>
         <tr>
-          <td></td>
-          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
+          <td colspan='2' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
       <?php elseif($module == 'user' and $field == 'deleted'):?>
@@ -132,7 +129,7 @@ EOT;
         <tr class='text-center'>
           <td class='w-120px'><strong><?php echo $lang->custom->key;?></strong></td>
           <td><strong><?php echo $lang->custom->value;?></strong></td>
-          <?php if($canAdd):?><th class='w-40px'></th><?php endif;?>
+          <?php if($canAdd):?><th class='w-90px'></th><?php endif;?>
         </tr>
         <?php foreach($fieldList as $key => $value):?>
         <tr class='text-center'>
@@ -142,9 +139,9 @@ EOT;
             <?php echo html::input("values[]", isset($dbFields[$key]) ? $dbFields[$key]->value : $value, "class='form-control' autocomplete='off' " . (empty($key) ? 'readonly' : ''));?>
           </td>
           <?php if($canAdd):?>
-          <td class='text-left w-100px'>
-            <a href="javascript:void(0)" onclick="addItem(this)" class='btn-icon'><i class='icon-plus'></i></a>
-            <a href="javascript:void(0)" onclick="delItem(this)" class='btn-icon'><i class='icon-remove'></i></a>
+          <td class='c-actions'>
+            <a href="javascript:void(0)" onclick="addItem(this)" class='btn btn-link'><i class='icon-plus'></i></a>
+            <a href="javascript:void(0)" onclick="delItem(this)" class='btn btn-link'><i class='icon-trash'></i></a>
           </td>
           <?php endif;?>
         </tr>

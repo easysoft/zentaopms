@@ -76,8 +76,9 @@
             <tr>
               <th></th>
               <td colspan="2">
-                <label class="checkbox-inline">
-                  <input type="checkbox" name="share" value="1" <?php if($mode != 'new' && in_array($list->id, $globalContacts)) echo 'checked';?>/> <?php echo $lang->my->shareContacts;?>
+                <label class="checkbox-primary">
+                  <input type="checkbox" name="share" value="1" id="shareCheckbox" <?php if($mode != 'new' && in_array($list->id, $globalContacts)) echo 'checked';?>/>
+                  <label for="shareCheckbox"><?php echo $lang->my->shareContacts;?></label>
                 </label>
               </td>
             </tr>
@@ -86,7 +87,7 @@
             <tr>
               <td></td>
               <td>
-              <?php echo html::submitButton() . html::hidden('mode', $mode);?>
+              <?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::hidden('mode', $mode);?>
               <?php if($mode == 'edit') echo html::a(inlink('deleteContacts', "listID=$listID"), $lang->delete, 'hiddenwin', "class='btn btn-danger'");?>
               </td>
             </tr>

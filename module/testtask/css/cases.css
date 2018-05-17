@@ -1,10 +1,11 @@
 tbody > tr > td > .btn-icon {margin-right: 3px;}
 tbody > tr > td   .icon-bug {margin-left: -8px;}
 
-tfoot .table-actions #assignedTo_chosen a.chosen-default{height:26px;line-height:15px}
-tfoot .table-actions .input-group-addon{padding:4px 12px;}
-
-tfoot.fixedTfootAction .chosen-results li.active-result {color: black;}
-tfoot .table-actions .input-group #assignedTo_chosen .chosen-single{height:24px;padding:3px 6px}
-tfoot .table-actions .input-group #assignedTo_chosen .chosen-single span{font-size:12px;}
-tfoot .table-actions .input-group #assignedTo_chosen .chosen-single div{line-height:10px;}
+.table-footer .table-actions .input-group {float: left;}
+.table-footer .table-actions #assignedTo_chosen a.chosen-default{height:28px;line-height:15px}
+.table-footer .table-actions .input-group-addon{padding:4px 12px;}
+.table-footer
+.table-footer.fixedTfootAction .chosen-results li.active-result {color: black;}
+.table-footer .table-actions .input-group #assignedTo_chosen .chosen-single{height:28px;padding:3px 6px}
+.table-footer .table-actions .input-group #assignedTo_chosen .chosen-single span{font-size:12px;}
+.table-footer .table-actions .input-group #assignedTo_chosen .chosen-single div{line-height:10px;}

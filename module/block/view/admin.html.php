@@ -31,16 +31,12 @@ include '../../common/view/chosen.html.php';
   <?php else:?>
   <?php echo html::hidden('modules', $module);?>
   <?php endif;?>
-  <!-- #blockParams 用于动态加载区块设置参数 -->
   <div id="blocksList"><?php if(!empty($blocks)) echo $blocks;?></div>
-
-  <!-- #blockParams 用于动态加载区块设置参数 -->
   <div id="blockParams"></div>
-
   <div class="form-group form-actions">
     <div class="col-sm-7 col-sm-offset-3">
       <button type="submit" class="btn btn-wide btn-primary"><?php echo $lang->save;?></button>
-      <button type="cancel" class="btn btn-wide btn-gray" data-dismiss="modal"><?php echo $lang->cancel;?></button>
+      <button type="cancel" class="btn btn-wide" data-dismiss="modal"><?php echo $lang->cancel;?></button>
     </div>
   </div>
 </form>

@@ -1,3 +1,5 @@
 #begin_chosen{width:50% !important;}
 .switchDate{border-left: none;}
 #end_chosen .chosen-single{border-left: none;}
+.cycleConfig .checkbox-primary{float:left; width:100px;}
+.cycleConfig .tab-pane{padding:8px 0px;}

@@ -14,62 +14,86 @@
 <?php include '../../common/view/treetable.html.php';?>
 <?php include './caseheader.html.php';?>
 <?php js::set('browseType', $browseType);?>
-<table class='table table-fixed' id='treetable'>
-  <thead>
-    <tr>
-      <th class='w-50px'></th>
-      <th><?php echo $lang->testcase->title;?></th>
-      <th class='w-pri'>  <?php echo $lang->priAB;?></th>
-      <th class='w-80px'> <?php echo $lang->typeAB;?></th>
-      <th class='w-80px'> <?php echo $lang->testtask->lastRunAccount;?></th>
-      <th class='w-120px'><?php echo $lang->testtask->lastRunTime;?></th>
-      <th class='w-80px'> <?php echo $lang->testtask->lastRunResult;?></th>
-      <th class='w-80px'> <?php echo $lang->testcase->status;?></th>
-      <th class='w-30px' title='<?php echo $lang->testcase->bugs?>'><?php echo $lang->testcase->bugsAB;?></th>
-      <th class='w-30px' title='<?php echo $lang->testcase->results?>'><?php echo $lang->testcase->resultsAB;?></th>
-      <th class='w-30px' title='<?php echo $lang->testcase->stepNumber?>'><?php echo $lang->testcase->stepNumberAB;?></th>
-      <th class='w-60px'> <?php echo $lang->actions;?></th>
-    </tr>
-  </thead>
-  <?php $i = 0;?>
-  <?php foreach($cases as $groupKey => $groupTasks):?>
-  <?php $groupClass = ($i % 2 == 0) ? 'even' : 'highlight-warning'; $i ++;?>
-  <tr id='node-<?php echo $groupKey;?>' class='actie-disabled group-title'>
-    <td class='text-right <?php echo $groupClass;?> text-left large strong group-name'><?php echo $groupKey;?></td>
-    <td colspan='11' class='text-left'><?php if($groupByList) echo $groupByList[$groupKey];?></td>
-  </tr>
-  <?php foreach($groupTasks as $case):?>
-  <tr id='<?php echo $case->id;?>' class='text-center child-of-node-<?php echo $groupKey;?>'>
-    <td class='<?php echo $groupClass;?>'></td>
-    <td class='text-left'>&nbsp;<?php echo $case->id . $lang->colon; if(!common::printLink('testcase', 'view', "case=$case->id", $case->title)) echo $case->title;?></td>
-    <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
-    <td><?php echo $lang->case->typeList[$case->type];?></td>
-    <td><?php echo $users[$case->lastRunner];?></td>
-    <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
-    <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
-    <td class='<?php if(isset($run)) echo $run->status;?>'>
+<div class="main-table" data-ride="table" data-checkable="false" data-group="true">
+  <table class="table table-grouped text-center">
+    <thead>
+      <tr class="divider">
+        <th class="c-side text-left has-btn group-menu">
+          <div class="table-group-btns">
+            <button type="button" class="btn btn-block btn-link group-collapse-all"><?php echo $lang->project->treeLevel['root'];?> <i class="icon-caret-up"></i></button>
+            <button type="button" class="btn btn-block btn-link group-expand-all"><?php echo $lang->project->treeLevel['all'];?> <i class="icon-caret-down"></i></button>
+          </div>
+        </th>
+        <th class='c-id-sm'><?php echo $lang->idAB;?></th>
+        <th class='w-pri'>  <?php echo $lang->priAB;?></th>
+        <th><?php echo $lang->testcase->title;?></th>
+        <th class='w-80px'> <?php echo $lang->typeAB;?></th>
+        <th class='w-80px'> <?php echo $lang->testtask->lastRunAccount;?></th>
+        <th class='w-120px'><?php echo $lang->testtask->lastRunTime;?></th>
+        <th class='w-80px'> <?php echo $lang->testtask->lastRunResult;?></th>
+        <th class='w-80px'> <?php echo $lang->testcase->status;?></th>
+        <th class='w-30px' title='<?php echo $lang->testcase->bugs?>'><?php echo $lang->testcase->bugsAB;?></th>
+        <th class='w-30px' title='<?php echo $lang->testcase->results?>'><?php echo $lang->testcase->resultsAB;?></th>
+        <th class='w-30px' title='<?php echo $lang->testcase->stepNumber?>'><?php echo $lang->testcase->stepNumberAB;?></th>
+        <th class='w-100px'> <?php echo $lang->actions;?></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php $groupIndex = 0;?>
+      <?php foreach($cases as $groupKey => $groupTasks):?>
       <?php
-      if($case->needconfirm)
-      {
-          echo "(<span class='warning'>{$lang->story->changed}</span> ";
-          echo html::a(helper::createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
-          echo ")";
-      }
-      else
-      {
-          echo $lang->testcase->statusList[$case->status];
-      }
+      $i = 0;
+      $groupName = $groupByList ? $groupByList[$groupKey] : '';
+      if(empty($groupName) and $groupBy == 'story') $groupName = $lang->task->noStory;
+      if(empty($groupName) and $groupBy == 'assignedTo') $groupName = $lang->task->noAssigned;
       ?>
-    </td>
-    <td><?php echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(inlink('bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;?></td>
-    <td><?php echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a($this->createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;?></td>
-    <td><?php echo $case->stepNumber;?></td>
-    <td>
-      <?php common::printIcon('testcase', 'edit', "caseID=$case->id", '', 'list');?>
-      <?php common::printIcon('testcase', 'delete', "caseID=$case->id", '', 'list', '', 'hiddenwin');?>
-    </td>
-  </tr>
-  <?php endforeach;?>
-  <?php endforeach;?>
-</table>
+      <?php foreach($groupTasks as $case):?>
+      <tr data-id='<?php echo $groupIndex;?>' <?php if($i == 0) echo "class='divider-top'";?>>
+        <?php if($i == 0):?>
+        <td rowspan='<?php echo count($groupTasks);?>' class='c-side text-left group-toggle text-top'>
+          <?php echo html::a('###', "<i class='icon-caret-down'></i> $groupName", '', "class='text-primary'");?>
+        </td>
+        <?php endif;?>
+        <td class='c-id-sm'><?php echo $case->id;?></td>
+        <td><span class='label-pri <?php echo 'label-pri-' . $case->pri;?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
+        <td class='text-left'><?php if(!common::printLink('testcase', 'view', "case=$case->id", $case->title)) echo $case->title;?></td>
+        <td><?php echo zget($lang->case->typeList, $case->type, '');?></td>
+        <td><?php echo zget($users, $case->lastRunner);?></td>
+        <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
+        <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
+        <td class='<?php if(isset($run)) echo $run->status;?>'>
+          <?php
+          if($case->needconfirm)
+          {
+              echo "(<span class='warning'>{$lang->story->changed}</span> ";
+              echo html::a(helper::createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
+              echo ")";
+          }
+          else
+          {
+              echo "<span class='status-{$case->status}'><span class='label label-dot'></span><span class='status-text'>";
+              echo $lang->testcase->statusList[$case->status];
+              echo '</span></span>';
+          }
+          ?>
+        </td>
+        <td><?php echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(inlink('bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;?></td>
+        <td><?php echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a($this->createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;?></td>
+        <td><?php echo $case->stepNumber;?></td>
+        <td class='c-actions'>
+          <?php common::printIcon('testcase', 'edit', "caseID=$case->id", '', 'list');?>
+          <?php common::printIcon('testcase', 'delete', "caseID=$case->id", '', 'list', '', 'hiddenwin');?>
+        </td>
+      </tr>
+      <?php $i++;?>
+      <?php endforeach;?>
+      <tr data-id='<?php echo $groupIndex;?>' class='group-toggle group-summary hidden divider-top'>
+        <td class='c-side text-left'><?php echo html::a('###', "<i class='icon-caret-right'></i> $groupName");?></td>
+        <td colspan='12'></td>
+      </tr>
+      <?php $groupIndex++;?>
+      <?php endforeach;?>
+    </tbody>
+  </table>
+</div>
 <?php include '../../common/view/footer.html.php';?>

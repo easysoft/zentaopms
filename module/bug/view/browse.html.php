@@ -10,8 +10,8 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php include '../../common/view/header.html.php';?>
 <?php
-include '../../common/view/header.html.php';
 include '../../common/view/datatable.fix.html.php';
 js::set('browseType',    $browseType);
 js::set('moduleID',      $moduleID);
@@ -52,7 +52,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         </div>
       </li>
       <li class='right'>
-        <?php common::printLink('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", "<i class='icon-common-report icon-bar-chart'></i> " . $lang->bug->report->common); ?>
+        <?php common::printLink('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", "<i class='icon-bar-chart muted'></i> " . $lang->bug->report->common); ?>
       </li>
       <li class='right'>
         <a href='###' class='dropdown-toggle' data-toggle='dropdown'>
@@ -177,6 +177,11 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
 <div id="mainContent" class="main-row">
   <div class="side-col" id="sidebar">
     <div class="cell">
+      <?php if(!$moduleTree):?>
+      <hr class="space">
+      <div class="text-center text-muted"><?php echo $lang->bug->noModule;?></div>
+      <hr class="space">
+      <?php endif;?>
       <?php echo $moduleTree;?>
       <div class="text-center">
         <?php common::printLink('tree', 'browse', "productID=$productID&view=bug", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
@@ -224,10 +229,10 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           <?php endforeach;?>
         </tbody>
       </table>
+      <?php if(!empty($bugs)):?>
       <div class='table-footer'>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
-          <?php if(!empty($bugs)):?>
           <div class='btn-group dropup'>
             <?php
             $actionLink = $this->createLink('bug', 'batchEdit', "productID=$productID&branch=$branch");
@@ -249,44 +254,6 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
               $actionLink = $this->createLink('bug', 'batchActivate', "productID=$productID&branch=$branch");
               $misc = common::hasPriv('bug', 'batchActivate') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
               if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->activate, '', $misc) . "</li>";
-
-              if(common::hasPriv('bug', 'batchChangeBranch') and $this->session->currentProductType != 'normal')
-              {
-                  $withSearch = count($branches) > 8;
-                  echo "<li class='dropdown-submenu'>";
-                  echo html::a('javascript:;', $lang->product->branchName[$this->session->currentProductType], '', "id='branchItem'");
-                  echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
-                  echo "<ul class='dropdown-list'>";
-                  foreach($branches as $branchID => $branchName)
-                  {
-                      $actionLink = $this->createLink('bug', 'batchChangeBranch', "branchID=$branchID");
-                      echo "<li class='option' data-key='$branchID'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
-                  }
-                  echo '</ul>';
-                  if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
-                  echo '</div></li>';
-              }
-
-              if(common::hasPriv('bug', 'batchChangeModule'))
-              {
-                  $withSearch = count($modules) > 8;
-                  echo "<li class='dropdown-submenu'>";
-                  echo html::a('javascript:;', $lang->bug->moduleAB, '', "id='moduleItem'");
-                  echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
-                  echo '<ul class="dropdown-list">';
-                  foreach($modules as $moduleId => $module)
-                  {
-                      $actionLink = $this->createLink('bug', 'batchChangeModule', "moduleID=$moduleId");
-                      echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
-                  }
-                  echo "</ul>";
-                  if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
-                  echo '</div></li>';
-              }
-              else
-              {
-                  echo '<li>' . html::a('javascript:;', $lang->bug->moduleAB, '', $class) . '</li>';
-              }
 
               $misc = common::hasPriv('bug', 'batchResolve') ? "id='resolveItem'" : '';
               if($misc)
@@ -325,41 +292,97 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                   }
                   echo '</ul></li>';
               }
-              else
-              {
-                  echo "<li>" . html::a('javascript:;', $lang->bug->resolve,  '', $class);
-              }
-
-              $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
-              if($canBatchAssignTo && count($bugs))
-              {
-                  $withSearch = count($memberPairs) > 10;
-                  $actionLink = $this->createLink('bug', 'batchAssignTo', "productID={$productID}&type=product");
-                  echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
-                  echo "<li class='dropdown-submenu'>";
-                  echo html::a('javascript::', $lang->bug->assignedTo, 'id="assignItem"');
-                  echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
-                  echo '<ul class="dropdown-list">';
-                  foreach ($memberPairs as $key => $value)
-                  {
-                      if(empty($key)) continue;
-                      echo "<li class='option' data-key='$key'>" . html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\",\"hiddenwin\")", $value, '', '') . '</li>';
-                  }
-                  echo "</ul>";
-                  if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
-                  echo "</div></li>";
-              }
-              else
-              {
-                  echo "<li>" . html::a('javascript:;', $lang->bug->assignedTo,  '', $class);
-              }
               ?>
             </ul>
+          </div>
+          <?php if(common::hasPriv('bug', 'batchChangeBranch') and $this->session->currentProductType != 'normal'):?>
+          <div class="btn-group dropup">
+            <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->product->branchName[$this->session->currentProductType];?> <span class="caret"></span></button>
+            <?php $withSearch = count($branches) > 8;?>
+            <?php if($withSearch):?>
+            <div class="dropdown-menu search-list" data-ride="searchList">
+              <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">
+                <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
+                <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
+                <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
+              </div>
+            <?php else:?>
+            <div class="dropdown-menu">
+            <?php endif;?>
+              <div class="list-group">
+                <?php
+                foreach($branches as $branchID => $branchName)
+                {
+                    $actionLink = $this->createLink('bug', 'batchChangeBranch', "branchID=$branchID");
+                    echo html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\" data-key='$branchID'");
+                }
+                ?>
+              </div>
+            </div>
+          </div>
+          <?php endif;?>
+          <?php if(common::hasPriv('bug', 'batchChangeModule')):?>
+          <div class="btn-group dropup">
+            <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->moduleAB;?> <span class="caret"></span></button>
+            <?php $withSearch = count($modules) > 8;?>
+            <?php if($withSearch):?>
+            <div class="dropdown-menu search-list" data-ride="searchList">
+              <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">
+                <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
+                <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
+                <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
+              </div>
+            <?php else:?>
+            <div class="dropdown-menu">
+            <?php endif;?>
+              <div class="list-group">
+                <?php
+                foreach($modules as $moduleId => $module)
+                {
+                    $actionLink = $this->createLink('bug', 'batchChangeModule', "moduleID=$moduleId");
+                    echo html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\" data-key='$moduleID'");
+                }
+                ?>
+              </div>
+            </div>
+          </div>
+          <?php endif;?>
+          <?php if(common::hasPriv('bug', 'batchAssignTo')):?>
+          <div class="btn-group dropup">
+            <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->assignedTo;?> <span class="caret"></span></button>
+            <?php $withSearch = count($memberPairs) > 10;?>
+            <?php if($withSearch):?>
+            <div class="dropdown-menu search-list" data-ride="searchList">
+              <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">
+                <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
+                <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
+                <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
+              </div>
+            <?php else:?>
+            <div class="dropdown-menu">
+            <?php endif;?>
+              <div class="list-group">
+                <?php
+                $actionLink = $this->createLink('bug', 'batchAssignTo', "productID={$productID}&type=product");
+                echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
+                foreach ($memberPairs as $key => $value)
+                {
+                    if(empty($key)) continue;
+                    echo html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\",\"hiddenwin\")", $value, '', "data-key='$key'");
+                }
+                ?>
+              </div>
+            </div>
           </div>
           <?php endif;?>
         </div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
+      <?php elseif(common::hasPriv('bug', 'create')):?>
+      <div class="table-empty-tip">
+        <p><span class="text-muted"><?php echo $lang->bug->noBug;?></span> <?php common::printLink('bug', 'create', "productID={$productID}", "<i class='icon icon-plus'> </i>" . $lang->bug->create, '', "class='btn btn-info'");?></p>
+      </div>
+      <?php endif;?>
     </form>
   </div>
 </div>

@@ -38,7 +38,7 @@
           <td colspan='2'><?php echo html::textarea('work', $estimate->work, "class=form-control");?></td>
         </tr>  
         <tr>
-          <td colspan='3' class='text-center'><?php echo html::submitButton() . html::backButton();?></td>
+          <td colspan='3' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::backButton('', '', 'btn btn-wide');?></td>
         </tr>
       </table>
     </form>

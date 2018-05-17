@@ -102,6 +102,7 @@ $lang->testcase->group                   = 'Group';
 $lang->testcase->groupName               = 'Group Name';
 $lang->testcase->step                    = 'Step';
 $lang->testcase->stepChild               = 'Child';
+$lang->testcase->viewAll                 = 'View All';
 
 $lang->testcase->new = 'New';
 
@@ -111,11 +112,13 @@ $lang->testcase->deleteStep   = 'Delete';
 $lang->testcase->insertBefore = 'Inserted Before';
 $lang->testcase->insertAfter  = 'Inserted After';
 
-$lang->testcase->assignToMe  = 'AssignedToMe';
-$lang->testcase->openedByMe  = 'CreatedByMe';
-$lang->testcase->allCases    = 'All';
-$lang->testcase->needConfirm = 'StoryChanged';
-$lang->testcase->bySearch    = 'Search';
+$lang->testcase->assignToMe   = 'AssignedToMe';
+$lang->testcase->openedByMe   = 'CreatedByMe';
+$lang->testcase->allCases     = 'All';
+$lang->testcase->allTestcases = 'All Cases';
+$lang->testcase->needConfirm  = 'StoryChanged';
+$lang->testcase->bySearch     = 'Search';
+$lang->testcase->unexecuted   = 'Unexecuted';
 
 $lang->testcase->lblStory       = 'Story';
 $lang->testcase->lblLastEdited  = 'Last Edit';
@@ -129,6 +132,7 @@ $lang->testcase->legendLinkBugs     = 'Bug';
 $lang->testcase->legendOpenAndEdit  = 'Create/Edit';
 $lang->testcase->legendComment      = 'Remark';
 
+$lang->testcase->summary            = "Cases on this page : <strong>%s</strong> Total, <strong>%s</strong> runed.";
 $lang->testcase->confirmDelete      = 'Do you want to delete this Test Case?';
 $lang->testcase->confirmBatchDelete = 'Do you want to batch delete thess Test Cases?';
 $lang->testcase->ditto              = 'Ditto';
@@ -186,6 +190,8 @@ $lang->testcase->noFunction       = 'Iconv and mb_convert_encoding is not found.
 $lang->testcase->noRequire        = "Row %s has“%s”which is a required field and it should not be blank.";
 $lang->testcase->noLibrary        = "No library exists. Please create one first.";
 $lang->testcase->mustChooseResult = 'Review result is required.';
+$lang->testcase->noCase           = 'No Case. You could ';
+$lang->testcase->noModule         = '<div>You have no modules</div><div>Manage now</div>';
 
 $lang->testcase->searchStories = 'Enter to searcu Story';
 $lang->testcase->selectLib     = 'Select Library';

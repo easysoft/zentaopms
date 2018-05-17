@@ -61,7 +61,7 @@
       </div>
       <div class="detail text-center">
         <?php echo html::hidden("post", 'post');?>
-        <?php echo html::submitButton();?>
+        <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
       </div>
     </form>
   </div>

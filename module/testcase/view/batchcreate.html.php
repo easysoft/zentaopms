@@ -24,6 +24,7 @@
       <?php endif;?>
     </h2>
     <div class="pull-right btn-toolbar">
+      <button type='button' data-toggle="importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=testcase&section=custom&key=batchCreateFields')?>
       <?php include '../../common/view/customfield.html.php';?>
     </div>
@@ -55,10 +56,7 @@
           <th class='w-120px<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
           <th class='w-180px<?php echo zget($visibleFields, 'module', ' hidden') . zget($requiredFields, 'module', ' required');?>'><?php echo $lang->testcase->module;?></th>
           <th class='w-180px<?php echo zget($visibleFields, 'story',  ' hidden') . zget($requiredFields, 'story',  ' required'); echo $hiddenStory;?>'> <?php echo $lang->testcase->story;?></th>
-          <th class='text-left required has-btn'>
-            <?php echo $lang->testcase->title;?></span>
-            <button type='button' data-toggle="importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
-          </th>
+          <th class='text-left required has-btn'><?php echo $lang->testcase->title;?></span></th>
           <th class='w-120px text-left required'><?php echo $lang->testcase->type;?></th>
           <th class='w-80px<?php  echo zget($visibleFields, 'pri',          ' hidden') . zget($requiredFields, 'pri',          ' required')?>'><?php echo $lang->testcase->pri;?></th>
           <th class='w-150px<?php echo zget($visibleFields, 'precondition', ' hidden') . zget($requiredFields, 'precondition', ' required')?>'><?php echo $lang->testcase->precondition;?></th>
@@ -96,18 +94,18 @@
               </div>
             </div>
           </td>
-          <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class=form-control");?></td>
-          <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[$i]", $lang->testcase->priList, $pri, "class=form-control");?></td>
+          <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
+          <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[$i]", $lang->testcase->priList, $pri, "class='form-control chosen'");?></td>
           <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[$i]", '', "rows='1' class='form-control autosize'")?></td>
           <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$i]", '', "class='form-control' autocomplete='off'");?></td>
           <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[$i][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
-          <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[$i]", $lang->testcase->reviewList, $needReview, "class='form-control'");?></td>
+          <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[$i]", $lang->testcase->reviewList, $needReview, "class='form-control chosen'");?></td>
         </tr>
         <?php endfor;?>
         <tr>
           <td colspan='<?php echo $colspan?>' class='text-center'>
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
-            <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
+            <?php echo html::backButton('', '', 'btn btn-wide');?>
           </td>
         </tr>
       </tbody>

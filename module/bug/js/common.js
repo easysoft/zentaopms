@@ -1,7 +1,5 @@
 $(function()
 {
-    setModal4List('iframe', 'bugList');
-
     if(typeof page == 'undefined') page = '';
     if(page == 'create')
     {
@@ -103,7 +101,7 @@ function loadAllBuilds(that)
     {
         productID = $('#product').val();
         projectID = $('#project').val();
-        if(page == 'edit') buildBox = $(that).parent().prev().filter('span').attr('id');
+        if(page == 'edit') buildBox = $(that).closest('.input-group').attr('id');
 
         if(projectID)
         {
@@ -195,7 +193,6 @@ function loadProductModules(productID)
     $('#moduleIdBox').load(link, function()
     {
         $(this).find('select').chosen(defaultChosenOptions)
-        if(typeof(bugModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon'>" + bugModule + "</span>")
     });
 }
 

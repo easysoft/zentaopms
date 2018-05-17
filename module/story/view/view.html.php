@@ -12,14 +12,14 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php $browseLink  = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch&moduleID=$story->module");?>
+<?php $browseLink = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch&moduleID=$story->module");?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-link'");?>
     <div class="divider"></div>
     <div class="page-title">
       <span class="label label-id"><?php echo $story->id?></span>
-      <span class="text" style='color: <?php echo $story->color; ?>'><?php echo $story->title;?></span>
+      <span class="text" style='color: <?php echo $story->color;?>'><?php echo $story->title;?></span>
       <?php if($story->version > 1):?>
       <small class='dropdown'>
         <a href='#' data-toggle='dropdown' class='text-muted'><?php echo '#' . $version;?> <span class='caret'></span></a>

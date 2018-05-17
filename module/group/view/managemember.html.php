@@ -14,21 +14,21 @@
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>
-      <span class='label label-id' title='GROUP'><?php echo $group->id;?></span>
+      <span class='label label-id'><?php echo $group->id;?></span>
       <?php echo $group->name;?>
     </h2>
   </div>
   <div class='main-row'>
-    <div class="side-col col-3">
+    <div class="side-col">
       <div class='side-body'>
         <div class='panel panel-sm'>
-          <div class='panel-heading nobr'><?php echo html::icon($lang->icons['company']);?> <strong><?php echo $lang->dept->common;?></strong></div>
+          <div class='panel-heading nobr'><strong><?php echo $lang->dept->common;?></strong></div>
           <?php echo $deptTree;?>
         </div>
       </div>
     </div>
     <div class="main-col">
-      <form class='pdb-20' method='post' target='hiddenwin'>
+      <form class='main-table table-members' method='post' target='hiddenwin'>
         <table class='table table-form'> 
           <?php if($groupUsers):?>
           <tr>
@@ -59,10 +59,9 @@
             </td>
           </tr>
           <tr>
-            <th></th>
-            <td class='text-center'>
+            <td class='text-center' colspan='2'>
               <?php 
-              echo html::submitButton();
+              echo html::submitButton('', '', 'btn btn-wide btn-primary');
               echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
               echo html::hidden('foo'); // Just a var, to make sure $_POST is not empty.
               ?>

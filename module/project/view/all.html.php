@@ -29,7 +29,7 @@
     <?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn btn-link'")?>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
+<div id='mainContent'>
   <?php $canOrder = (common::hasPriv('project', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
   <form class='main-table' id='projectsForm' method='post' action='<?php echo inLink('batchEdit', "projectID=$projectID");?>' data-ride='table'>
     <table class='table has-sort-head table-fixed' id='projectList'>
@@ -75,9 +75,19 @@
           <td><?php echo $users[$project->PM];?></td>
           <td><?php echo $project->end;?></td>
           <?php if(isset($project->delay)):?>
-          <td><span class='status-delay'><span class="label label-dot"></span> <?php echo $lang->project->delayed;?></span></td>
+          <td class='c-status' title='<?php echo $lang->project->delayed;?>'>
+            <span class="status-delayed">
+              <span class="label label-dot"></span>
+              <span class='status-text'><?php echo $lang->project->delayed;?></span>
+            </span>
+          </td>
           <?php else:?>
-          <td><span class='status-<?php echo $project->status?>'><span class="label label-dot"></span> <?php echo $lang->project->statusList[$project->status];?></span></td>
+          <td class='c-status' title='<?php echo zget($lang->project->statusList, $project->status);?>'>
+            <span class="status-<?php echo $project->status?>">
+              <span class="label label-dot"></span>
+              <span class='status-text'><?php echo zget($lang->project->statusList, $project->status);?></span>
+            </span>
+          </td>
           <?php endif;?>
           <td><?php echo $project->hours->totalEstimate;?></td>
           <td><?php echo $project->hours->totalConsumed;?></td>
@@ -98,7 +108,7 @@
     <div class='table-footer'>
       <?php if($canBatchEdit):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->project->batchEdit);?></div>
+      <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->project->batchEdit, '', 'btn btn-default');?></div>
       <?php endif;?>
       <?php if(!$canOrder and common::hasPriv('project', 'updateOrder')) echo html::a(inlink('all', "status=$status&projectID=$projectID&order=order_desc&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"), $lang->project->updateOrder, '', "class='btn'");?>
       <?php $pager->show('right', 'pagerjs');?>

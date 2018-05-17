@@ -1289,20 +1289,28 @@ class testcaseModel extends model
         if($col->show)
         {
             $class = '';
-            if($id == 'status') $class .= $case->status;
-            if($id == 'title')  $class .= ' text-left';
-            if($id == 'id')     $class .= ' cell-id';
+            $title = '';
+            if($id == 'title')
+            {
+                $class .= ' text-left';
+                $title  = "title='{$case->title}'";
+            }
+            if($id == 'status')
+            {
+                $class .= $case->status;
+                $title  = "title='" . zget($this->lang->testcase->statusList, $case->status) . "'";
+            }
+            if($id == 'actions') $class .= ' c-actions';
             if($id == 'lastRunResult') $class .= $case->lastRunResult;
 
-            echo "<td class='" . $class . "'" . ($id=='title' ? " title='{$case->title}'":'') . ">";
+            echo "<td class='{$class}' {$title}>";
             switch($id)
             {
             case 'id':
-                if($mode == 'table') echo "<input type='checkbox' name='caseIDList[]' value='{$case->id}'/> ";
-                echo $canView ? html::a($caseLink, sprintf('%03d', $case->id)) : sprintf('%03d', $case->id);
+                echo $mode == 'table' ? html::checkbox('caseIDList', array($case->id => sprintf('%03d', $case->id))) : sprintf('%03d', $case->id);
                 break;
             case 'pri':
-                echo "<span class='pri" . zget($this->lang->testcase->priList, $case->pri, $case->pri) . "'>";
+                echo "<span class='label-pri label-pri-" . $case->pri . "'>";
                 echo zget($this->lang->testcase->priList, $case->pri, $case->pri);
                 echo "</span>";
                 break;
@@ -1326,13 +1334,15 @@ class testcaseModel extends model
             case 'status':
                 if($case->needconfirm)
                 {
-                    echo "(<span class='warning'>{$this->lang->story->changed}</span> ";
+                    echo "(<span class='text-warning'>{$this->lang->story->changed}</span> ";
                     echo html::a(helper::createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $this->lang->confirm, 'hiddenwin');
                     echo ")";
                 }
                 else
                 {
+                    echo "<span class='status-{$case->status}'><span class='label label-dot'></span><span class='status-text'>";
                     echo $this->lang->testcase->statusList[$case->status];
+                    echo '</span></span>';
                 }
                 break;
             case 'story':
@@ -1374,7 +1384,8 @@ class testcaseModel extends model
                 if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));
                 break;
             case 'lastRunResult':
-                if($case->lastRunResult) echo $this->lang->testcase->resultList[$case->lastRunResult];
+                $lastRunResultText = $case->lastRunResult ? zget($this->lang->testcase->resultList, $case->lastRunResult, $case->lastRunResult) : $this->lang->testcase->unexecuted;
+                echo html::a(helper::createLink('testtask', 'results', "runID=0&caseID=$case->id", '', true), "<i class='icon icon-list-alt'></i> <span>{$lastRunResultText}</span>", '', "class='iframe btn btn-icon-left'");
                 break;
             case 'bugs':
                 echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;
@@ -1386,19 +1397,20 @@ class testcaseModel extends model
                 echo $case->stepNumber;
                 break;
             case 'actions':
-                common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $case, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
-                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $case, 'list', '', '', 'results iframe', '', "data-width='90%'");
-                if($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'review', '', 'iframe');
-                common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
-                common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
+                echo "<div class='more'>";
+                if($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
 
                 if(common::hasPriv('testcase', 'delete', $case))
                 {
                     $deleteURL = helper::createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
                     echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"batchForm\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$this->lang->testcase->delete}' class='btn-icon'");
                 }
-
+                echo '</div>';
+                common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $case, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
+                common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
                 common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
+                common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
+
                 break;
             }
             echo '</td>';
@@ -1483,5 +1495,16 @@ class testcaseModel extends model
         if($this->config->testcase->needReview && strpos(",{$this->config->testcase->forceNotReview},", ",{$this->app->user->account},")) return true;
 
         return false;
+    }
+
+    public function summary($cases)
+    {
+        $executed = 0;
+        foreach($cases as $case)
+        {
+            if($case->lastRunResult != '') $executed ++;
+        }
+
+        return sprintf($this->lang->testcase->summary, count($cases), $executed);
     }
 }

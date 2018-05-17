@@ -245,8 +245,8 @@ class commonModel extends model
             if(!$isGuest)
             {
                 echo '<li class="user-profile-item">';
-                echo '<a href="###">';
-                echo "<div class='avatar avatar-sm bg-info avatar-circle'>" . strtoupper($app->user->account{0}) . "</div>\n";
+                echo "<a href='". helper::createLink('my', 'profile', '', '', true) . "' class='iframe" . (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role]) ? '' : ' no-role') . "' data-width='600'>";
+                echo "<div class='avatar avatar bg-info avatar-circle'>" . strtoupper($app->user->account{0}) . "</div>\n";
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';
@@ -416,12 +416,12 @@ class commonModel extends model
         foreach ($lang->searchObjects as $key => $value)
         {
             $class = $key == $searchObject ? "class='selected'" : '';
-            echo "<li $class><a href='javascript:;' data-value='{$key}'>{$value}</a></li>";
+            echo "<li $class><a href='javascript:$.setSearchType(\"$key\");' data-value='{$key}'>{$value}</a></li>";
         }
         echo '</ul></div>';
-        echo "<input id='searchInput' class='form-control search-input' type='search' onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) shortcut()' placeholder='" . $lang->searchTips . "'/>";
+        echo "<input id='searchInput' class='form-control search-input' type='search' onclick='this.value=\"\"' onkeydown='if(event.keyCode==13) $.gotoObject();' placeholder='" . $lang->searchTips . "'/>";
         echo '</div>';
-        echo "<a href='javascript:shortcut();' class='btn btn-link' id='searchGo'>GO!</a>";
+        echo "<a href='javascript:$.gotoObject();' class='btn btn-link' id='searchGo'>GO!</a>";
         echo "</div>\n";
     }
 

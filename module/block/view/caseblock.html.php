@@ -23,17 +23,17 @@
   </style>
   <table class='table table-borderless table-hover table-fixed-head block-cases <?php if(!$longBlock) echo 'block-sm';?>'>
     <thead>
-      <tr>
+      <tr class='text-center'>
         <?php if($longBlock):?>
-        <th class='c-id' width='50'><?php echo $lang->idAB?></th>
+        <th class='c-id'><?php echo $lang->idAB?></th>
         <?php endif;?>
-        <th class='c-pri' width='50'><?php echo $lang->priAB?></th>
-        <th class='c-title'><?php echo $lang->case->title;?></th>
+        <th class='c-pri'><?php echo $lang->priAB?></th>
+        <th class='c-title text-left'><?php echo $lang->case->title;?></th>
         <?php if($longBlock):?>
-        <th class='c-runtime' width='120'> <?php echo $lang->testtask->lastRunTime;?></th>
-        <th class='c-result' width='60'>  <?php echo $lang->testtask->lastRunResult;?></th>
+        <th class='c-runtime'><?php echo $lang->testtask->lastRunTime;?></th>
+        <th class='c-result'><?php echo $lang->testtask->lastRunResult;?></th>
         <?php endif;?>
-        <th class='c-status' width='70'><?php echo $lang->statusAB;?></th> 
+        <th class='c-status'><?php echo $lang->statusAB;?></th> 
       </tr>
     </thead>
     <tbody>
@@ -42,17 +42,17 @@
       $appid    = isset($_GET['entry']) ? "class='app-btn' data-id='{$this->get->entry}'" : '';
       $viewLink = $this->createLink('testcase', 'view', "caseID={$case->id}");
       ?>
-      <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
+      <tr class='text-center' data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
         <?php if($longBlock):?>
-        <td class='text-center c-id'><?php echo $case->id;?></td>
+        <td class='c-id'><?php echo $case->id;?></td>
         <?php endif;?>
-        <td class='text-center c-pri'><span class='label-pri label-pri-<?php echo $case->pri?>'><?php echo zget($lang->case->priList, $case->pri, $case->pri)?></span></td>
-        <td class='c-title' style='color: <?php echo $case->color?>' title='<?php echo $case->title?>'><?php echo $case->title?></td>
+        <td class='c-pri'><span class='label-pri label-pri-<?php echo $case->pri?>'><?php echo zget($lang->case->priList, $case->pri, $case->pri)?></span></td>
+        <td class='c-title text-left' style='color: <?php echo $case->color?>' title='<?php echo $case->title?>'><?php echo $case->title?></td>
         <?php if($longBlock):?>
-        <td class='text-center c-runtime'><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
-        <td class='text-center c-result'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
+        <td class='c-runtime'><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
+        <td class='c-result'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
         <?php endif;?>
-        <td class='text-left c-status' title='<?php echo zget($lang->testcase->statusList, $case->status)?>'>
+        <td class='c-status' title='<?php echo zget($lang->testcase->statusList, $case->status)?>'>
           <span class="case-status-<?php echo $case->status?>">
             <span class="label label-dot"></span>
             <span class='status-text'><?php echo zget($lang->testcase->statusList, $case->status);?></span>

@@ -42,6 +42,7 @@ $lang->testsuite->confirmDelete     = '您确认要删除该套件吗？';
 $lang->testsuite->libraryDelete     = '您确认要删除该用例库吗？';
 $lang->testsuite->confirmUnlinkCase = '您确认要移除该用例吗？';
 $lang->testsuite->noticeNone        = '您还没有创建套件';
+$lang->testsuite->noModule          = '<div>您现在还没有模块信息</div><div>请维护用例库模块</div>';
 
 $lang->testsuite->lblCases      = '用例列表';
 $lang->testsuite->lblUnlinkCase = '移除用例';

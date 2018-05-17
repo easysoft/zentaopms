@@ -17,7 +17,7 @@
         <div class="col-sm-6">
           <div class="panel block-release">
             <div class="panel-heading">
-            <div class="panel-title"><?php echo $lang->product->iteration;?> <span class="label label-badge label-light"><?php echo sprintf($lang->product->iterationInfo, count($releases));?></span></div>
+              <div class="panel-title"><?php echo $lang->product->plan;?> <span class="label label-badge label-light"><?php printf($lang->product->iterationInfo, count($releases));?></span></div>
             </div>
             <div class="panel-body">
               <div class="release-path">
@@ -216,17 +216,14 @@
         echo "<div class='divider'></div>";
         if($product->status != 'closed')
         {
-            common::printIcon('product', 'close', "productID=$product->id", $product, 'button', '', '', 'iframe', true);
+            common::printIcon('product', 'close', $params, $product, 'button', '', '', 'iframe', true);
             echo "<div class='divider'></div>";
         }
 
         common::printIcon('product', 'edit', $params, $product);
         common::printIcon('product', 'delete', $params, $product, 'button', '', 'hiddenwin');
     }
-    else
-    {
-        common::printBack($browseLink);
-    }
     ?>
   </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

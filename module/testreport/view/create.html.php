@@ -18,7 +18,6 @@
   <div class='center-block mw-1400px'>
     <div class='main-header'>
       <h2><?php echo $lang->testreport->create;?></h2>
-      <div class='pull-right btn-toolbar'><?php echo html::backButton();?></div>
     </div>
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <div class='detail'>
@@ -76,8 +75,10 @@
             <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
           </tr>
           <tr>
-            <th></th>
-            <td><?php echo html::submitButton() . html::backButton();?></td>
+            <td class='text-center' colspan='3'>
+              <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+              <?php echo html::backButton('', '', 'btn btn-wide');?>
+            </td>
           </tr>
         </table>
       </div>

@@ -33,7 +33,7 @@
         <th class='w-hour'><?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
         <th>               <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
         <th>               <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
-        <th class='w-140px'><?php echo $lang->actions;?></th>
+        <th class='w-180px'><?php echo $lang->actions;?></th>
       </tr>
       </thead>
       <tbody>
@@ -47,8 +47,8 @@
           <div class="checkbox-primary">
             <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
             <label></label>
-            <?php printf('%03d', $story->id);?>
           </div>
+          <?php printf('%03d', $story->id);?>
         </td>
         <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
         <td class='text-left' title="<?php echo $story->title?>"><nobr><?php echo html::a($viewLink, $story->title);?></nobr></td>

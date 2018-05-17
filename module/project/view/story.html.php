@@ -141,7 +141,12 @@
             <td><?php echo $users[$story->openedBy];?></td>
             <td><?php echo $users[$story->assignedTo];?></td>
             <td><?php echo $story->estimate;?></td>
-            <td class='story-<?php echo $story->status;?>'><?php echo zget($lang->story->statusList, $story->status);?></td>
+            <td title='<?php echo zget($lang->story->statusList, $story->status);?>'>
+              <span class='status-<?php echo $story->status;?>'>
+                <span class='label label-dot'></span>
+                <span class='status-text'><?php echo zget($lang->story->statusList, $story->status);?></span>
+              </span>
+            </td>
             <td><?php echo $lang->story->stageList[$story->stage];?></td>
             <td class='linkbox'>
               <?php

@@ -129,6 +129,8 @@ $lang->bug->resolvedByMeAB = 'Resolved By Me';
 $lang->bug->ditto       = 'Ditto';
 $lang->bug->dittoNotice = 'This bug is not linked to the same product as the last one!';
 $lang->bug->noAssigned  = 'Not Assigned';
+$lang->bug->noBug       = 'No BUG. You could ';
+$lang->bug->noModule    = '<div>You have no modules</div><div>Manage now</div>';
 
 /* 页面标签。*/
 $lang->bug->lblAssignedTo = 'Assignee';

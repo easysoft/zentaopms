@@ -54,7 +54,7 @@ $lang->block->confirmClose       = 'Do you want to permanently close this block?
 $lang->block->remove             = 'Remove';
 $lang->block->refresh            = 'Refresh';
 $lang->block->hidden             = 'Hide';
-$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span>, <span class='timeline-text'>%s <em>%s</em> %s <a href='%s'>%s</a></span>";
+$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s'>%s</a></span>";
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . ' Report';
 $lang->block->default['product']['1']['block'] = 'statistic';
@@ -111,29 +111,40 @@ $lang->block->default['project']['4']['params']['num']     = 15;
 $lang->block->default['project']['4']['params']['orderBy'] = 'id_desc';
 $lang->block->default['project']['4']['params']['type']    = 'assignedTo';
 
-$lang->block->default['qa']['1']['title'] = 'My Bugs';
-$lang->block->default['qa']['1']['block'] = 'bug';
-$lang->block->default['qa']['1']['grid']  = 4;
+$lang->block->default['qa']['1']['title'] = 'Test Statistic';
+$lang->block->default['qa']['1']['block'] = 'statistic';
+$lang->block->default['qa']['1']['grid']  = 8;
 
-$lang->block->default['qa']['1']['params']['num']     = 15;
 $lang->block->default['qa']['1']['params']['orderBy'] = 'id_desc';
-$lang->block->default['qa']['1']['params']['type']    = 'assignedTo';
+$lang->block->default['qa']['1']['params']['type']    = 'noclosed';
 
-$lang->block->default['qa']['2']['title'] = 'My Cases';
-$lang->block->default['qa']['2']['block'] = 'case';
+//$lang->block->default['qa']['2']['title'] = 'Testcase Overview';
+//$lang->block->default['qa']['2']['block'] = 'overview';
+//$lang->block->default['qa']['2']['grid']  = 4;
+
+$lang->block->default['qa']['2']['title'] = 'My Bugs';
+$lang->block->default['qa']['2']['block'] = 'bug';
 $lang->block->default['qa']['2']['grid']  = 4;
 
 $lang->block->default['qa']['2']['params']['num']     = 15;
 $lang->block->default['qa']['2']['params']['orderBy'] = 'id_desc';
-$lang->block->default['qa']['2']['params']['type']    = 'assigntome';
+$lang->block->default['qa']['2']['params']['type']    = 'assignedTo';
 
-$lang->block->default['qa']['3']['title'] = 'Pending Builds';
-$lang->block->default['qa']['3']['block'] = 'testtask';
+$lang->block->default['qa']['3']['title'] = 'My Cases';
+$lang->block->default['qa']['3']['block'] = 'case';
 $lang->block->default['qa']['3']['grid']  = 4;
 
 $lang->block->default['qa']['3']['params']['num']     = 15;
 $lang->block->default['qa']['3']['params']['orderBy'] = 'id_desc';
-$lang->block->default['qa']['3']['params']['type']    = 'wait';
+$lang->block->default['qa']['3']['params']['type']    = 'assigntome';
+
+$lang->block->default['qa']['4']['title'] = 'Pending Builds';
+$lang->block->default['qa']['4']['block'] = 'testtask';
+$lang->block->default['qa']['4']['grid']  = 4;
+
+$lang->block->default['qa']['4']['params']['num']     = 15;
+$lang->block->default['qa']['4']['params']['orderBy'] = 'id_desc';
+$lang->block->default['qa']['4']['params']['type']    = 'wait';
 
 $lang->block->default['full']['my']['1']['title']  = 'Welcome';
 $lang->block->default['full']['my']['1']['block']  = 'welcome';
@@ -251,6 +262,8 @@ $lang->block->modules['project']->availableBlocks->task  = 'Tasks';
 $lang->block->modules['project']->availableBlocks->build = 'Builds';
 $lang->block->modules['qa'] = new stdclass();
 $lang->block->modules['qa']->availableBlocks = new stdclass();
+$lang->block->modules['qa']->availableBlocks->statistic = 'Test Statistic';
+//$lang->block->modules['qa']->availableBlocks->overview  = 'Testcase Overview';
 $lang->block->modules['qa']->availableBlocks->bug      = 'Bugs';
 $lang->block->modules['qa']->availableBlocks->case     = 'Cases';
 $lang->block->modules['qa']->availableBlocks->testtask = 'Test Builds';

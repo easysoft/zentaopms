@@ -38,7 +38,7 @@
         <th class='text-right'></th>
         <td>
           <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
-          <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
+          <?php echo html::backButton('', '', 'btn btn-wide');?>
           <?php echo html::hidden('noChecked'); // Save the value of no checked.?>
         </td>
       </tr>
@@ -122,7 +122,7 @@
         </th>
         <td>
           <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
-          <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
+          <?php echo html::backButton('', '', 'btn btn-wide');?>
           <?php echo html::hidden('noChecked'); // Save the value of no checked.?>
         </td>
       </tr>

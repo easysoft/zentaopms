@@ -242,8 +242,13 @@ class block extends control
             $block->actionLink = '';
             if($block->block == 'overview')
             {
-                if($module == 'product' && common::hasPriv('product', 'create')) $block->actionLink = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn btn-sm'");
-                if($module == 'project' && common::hasPriv('project', 'create')) $block->actionLink = html::a($this->createLink('project', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-sm'");
+                if($module == 'product' && common::hasPriv('product', 'create')) $block->actionLink = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn'");
+                if($module == 'project' && common::hasPriv('project', 'create')) $block->actionLink = html::a($this->createLink('project', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn'");
+                if($module == 'qa'      && common::hasPriv('testcase', 'create'))
+                {
+                    $this->app->loadLang('testcase');
+                    $block->actionLink = html::a($this->createLink('testcase', 'create', 'productID='), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->testcase->create, '', "class='btn'");
+                }
             }
 
             if($this->block->isLongBlock($block))
@@ -720,7 +725,6 @@ class block extends control
 
         $status  = isset($this->params->type) ? $this->params->type : '';
         $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_asc';
-        $num     = isset($this->params->num)  ? (int)$this->params->num : 0;
 
         /* Get products. */
         $products = $this->loadModel('product')->getList($status);
@@ -737,7 +741,6 @@ class block extends control
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('id')->in($productIDList)
             ->orderBy($orderBy)
-            ->beginIF($this->viewType != 'json')->limit($num)->fi()
             ->fetchAll('id');
 
         /* Get stories. */
@@ -967,6 +970,120 @@ class block extends control
     }
 
     /**
+     * Print qa statistic block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printQaStatisticBlock()
+    {
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
+
+        $status  = isset($this->params->type) ? $this->params->type : '';
+        $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_asc';
+
+        /* Get products. */
+        $products = $this->loadModel('product')->getList($status);
+        foreach($products as $productID => $product)
+        {
+            if(!$this->product->checkPriv($product)) unset($products[$productID]);
+        }
+        $productIDList = array_keys($products);
+        if(!$productIDList)
+        {
+            $this->view->products = $products;
+            return false;
+        }
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)
+            ->where('id')->in($productIDList)
+            ->orderBy($orderBy)
+            ->fetchAll('id');
+
+        $testedBuilds = $this->dao->select('build')->from(TABLE_TESTTASK)->where('product')->in(array_keys($products))->fetchPairs();
+        $builds       = $this->dao->select('id, product, name, bugs')->from(TABLE_BUILD)->where('id')->in($testedBuilds)->fetchGroup('product', 'id');
+        $openedBugs   = $this->dao->select('id, openedBuild')->from(TABLE_BUG)->where('openedBuild')->in($testedBuilds)->fetchGroup('openedBuild', 'id');
+
+        /* Get bugs. */
+        $bugIDList = array();
+        foreach($builds as $product => $productBuilds)
+        {
+            foreach($productBuilds as $buildID => $build)
+            {
+                $build->bugs = explode(',', trim($build->bugs, ','));
+                foreach($build->bugs as $bugID) $bugIDList[$bugID] = $bugID;
+            }
+        }
+        foreach($openedBugs as $buildBugs) 
+        {
+            foreach($buildBugs as $bugID => $bug) $bugIDList[$bugID] = $bugID;
+        }
+
+        $today     = date(DT_DATE1);
+        $yesterday = date(DT_DATE1, strtotime('yesterday'));
+
+        $bugs = $this->loadModel('bug')->getByList($bugIDList);
+        $confirmedBugs = $this->dao->select('objectID')->from(TABLE_ACTION)
+            ->where('objectType')->eq('bug')
+            ->andWhere('action')->eq('bugconfirmed')
+            ->andWhere('date')->ge($yesterday)
+            ->andWhere('date')->lt($today)
+            ->fetchPairs();
+
+        foreach($builds as $product => $productBuilds)
+        {
+            foreach($productBuilds as $buildID => $build)
+            {
+                $build->total              = 0;
+                $build->assignedToMe       = 0;
+                $build->unresolved         = 0;
+                $build->unconfirmed        = 0;
+                $build->unclosed           = 0;
+                $build->yesterdayResolved  = 0;
+                $build->yesterdayConfirmed = 0;
+                $build->yesterdayClosed    = 0;
+
+                $buildOpenedBugs = zget($openedBugs, $buildID, array());
+                $build->bugs     = array_flip(array_merge(array_flip($build->bugs), array_flip(array_keys($buildOpenedBugs))));
+                foreach($build->bugs as $key => $bugID)
+                {
+                    if(!isset($bugs[$bugID])) continue;
+                    
+                    $bug = $bugs[$bugID];
+
+                    if($bug->assignedTo = $this->app->user->account) $build->assignedToMe++;
+
+                    if($bug->status != 'closed')
+                    {
+                        $build->unclosed++;
+
+                        if($bug->status != 'resoloved') 
+                        {
+                            $build->unresolved++;
+
+                            if($bug->status != 'confirmed') $build->unconfirmed++;
+                        }
+                    }
+
+                    if($bug->resolvedDate >= $yesterday && $bug->resolvedDate < $today) $build->yesterdayResolved++;
+                    if($bug->closedDate   >= $yesterday && $bug->closedDate   < $today) $build->yesterdayClosed++;
+                    if(isset($confirmedBugs[$bugID])) $yesterdayConfirmed++;
+
+                    $build->total++;
+                } 
+
+                $build->assignedRate    = $build->total ? round($build->assignedToMe  / $build->total * 100, 2) : 0;
+                $build->unresolvedRate  = $build->total ? round($build->unresolved  / $build->total * 100, 2) : 0;
+                $build->unconfirmedRate = $build->total ? round($build->unconfirmed / $build->total * 100, 2) : 0;
+                $build->unclosedRate    = $build->total ? round($build->unclosed    / $build->total * 100, 2) : 0;
+            }
+        }
+
+        foreach($products as $product) $product->builds = zget($builds, $product->id, array());
+
+        $this->view->products = $products;
+    }
+
+    /**
      * Print overview block.
      *
      * @access public
@@ -1024,17 +1141,44 @@ class block extends control
             $total++;
         }
 
-
         $overviewPercent = array();
         foreach($this->lang->project->statusList as $statusKey => $statusName)
         {
             if(!isset($overview[$statusKey])) $overview[$statusKey] = 0;
-            $overviewPercent[$statusKey] = round($overview[$statusKey] / $total, 2) * 100 . '%';
+            $overviewPercent[$statusKey] = $total ? round($overview[$statusKey] / $total, 2) * 100 . '%' : '0%';
         }
 
         $this->view->total           = $total;
         $this->view->overview        = $overview;
         $this->view->overviewPercent = $overviewPercent;
+    }
+
+    /**
+     * Print qa overview block.
+     *
+     * @access public
+     * @return void
+     */
+    public function printQaOverviewBlock()
+    {
+        $casePairs = $this->dao->select('lastRunResult, COUNT(*) AS count')->from(TABLE_CASE)->groupBy('lastRunResult')->fetchPairs();
+        $total     = array_sum($casePairs);
+
+        $this->app->loadLang('testcase');
+        foreach($this->lang->testcase->resultList as $result => $label)
+        {
+            if(!isset($casePairs[$result])) $casePairs[$result] = 0;
+        }
+
+        $casePercents = array();
+        foreach($casePairs as $result => $count)
+        {
+            $casePercents[$result] = $total ? round($count / $total * 100, 2) : 0;
+        }
+
+        $this->view->total        = $total;
+        $this->view->casePairs    = $casePairs;
+        $this->view->casePercents = $casePercents;
     }
 
     /**

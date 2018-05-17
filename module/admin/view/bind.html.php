@@ -34,8 +34,7 @@
           <td><?php echo html::password('password', '', "class='form-control'");?></td>
         </tr>  
         <tr>
-          <th></th>
-          <td class="text-center">
+          <td colspan='2' class="text-center">
             <?php
             echo html::submitButton('', '', 'btn btn-wide btn-primary');
             echo html::hidden('sn', $sn) . html::hidden('site', common::getSysURL());

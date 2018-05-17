@@ -12,26 +12,31 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<div id='titlebar'>
-  <div class='heading'>
-    <span class='prefix'><?php echo html::icon($lang->icons['bug']);?>  <strong><?php echo $bug->id;?></strong></span>
-    <strong><?php echo html::a($this->createLink('bug', 'view', 'bug=' . $bug->id), $bug->title, '_blank');?></strong>
-    <small class='text-danger'> <?php echo $lang->bug->close;?></small>
-  </div>
-</div>
+<div id='mainContent' class='main-content'>
+  <div class='center-block'>
+    <div class='main-header'>
+      <h2>
+        <span class='label label-id'><?php echo $bug->id;?></span>
+        <?php echo isonlybody() ? $bug->title : html::a($this->createLink('bug', 'view', 'bug=' . $bug->id), $bug->title);?>
 
-<form class='form-condensed' method='post' target='hiddenwin'>
-  <table class='table table-form'>
-    <tr>
-      <th><?php echo $lang->comment;?></th>
-      <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
-    </tr>
-    <tr>
-      <th></th><td><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList);?></td>
-    </tr>
-  </table>
-</form>
-<div class='main'>
-  <?php include '../../common/view/action.html.php';?>
+        <?php if(!isonlybody()):?>
+        <small><?php echo $lang->arrow . $lang->bug->close;?></small>
+        <?php endif;?>
+      </h2>
+    </div>
+    <form method='post' target='hiddenwin'>
+      <table class='table table-form'>
+        <tr>
+          <th class='w-60px'><?php echo $lang->comment;?></th>
+          <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
+        </tr>
+        <tr>
+          <td colspan='2' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::linkButton($lang->goback, $this->session->bugList);?></td>
+        </tr>
+      </table>
+    </form>
+    <hr class='small' />
+    <div class='main'><?php include '../../common/view/action.html.php';?></div>
+  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

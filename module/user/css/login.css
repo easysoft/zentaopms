@@ -1,23 +1,15 @@
-body{background-color: #036}
-#container{margin: 10% auto 0 auto}
-#login-panel{margin: 0 auto;width: 540px;min-height: 280px;background-color: #fff;border: 1px solid #dfdfdf;-moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px;-moz-box-shadow:0px 0px 30px rgba(0,0,0,0.75); -webkit-box-shadow:0px 0px 30px rgba(0,0,0,0.75); box-shadow:0px 0px 30px rgba(0,0,0,0.75)}
-#login-panel .panel-head{min-height: 70px;background-color: #edf3fe;border-bottom: 1px solid #dfdfdf;position: relative}
-#login-panel .panel-head h4{margin: 0 0 0 20px;padding: 0;line-height: 70px; font-size: 14px}
-#login-panel .panel-actions{float: right;position: absolute;right: 15px;top: 18px;padding: 0}
-#login-panel .panel-actions .dropdown {display: inline-block; margin-right: 2px}
-#mobile {font-size: 28px; padding: 1px 12px; line-height: 28px}
-#mobile i {font-size: 28px;}
-#login-panel .panel-content{padding-left: 150px;background:url('theme/default/images/main/zt-logo.png') 50px top no-repeat; min-height: 161px}
-#login-panel .panel-content table{border: none;width: 300px;margin: 20px auto}
-#login-panel .panel-content .button-s{width: 80px}
-#login-panel .panel-content .button-c{width: 88px;margin-right: 0}
-#login-panel .panel-foot{text-align: center;padding: 15px;line-height: 2em;background-color: #e5e5e5;border-top: 1px solid #dfdfdf}
-#poweredby{float: none; color: #eee;text-align: center;margin: 10px auto}
-#poweredby a{color: #fff}
-#keeplogin label {font-weight: normal}
-.popover {max-width: 500px}
-.popover-content {padding: 0; width: 297px}
-.btn-submit {min-width: 70px}
-
-.body-modal #container {margin: 0;}
-.body-modal {padding: 40px 0 25px;}
+body {background: #00B1FD linear-gradient(-90deg, #0072F3 0%, #00B1FD 100%);}
+#main {}
+#login {max-width: 540px; margin: 0 auto; margin-top: 5%;}
+#loginPanel {background: #fff; overflow: hidden; box-shadow: 0 0 20px 0 rgba(0,0,0,.1); border-radius: 3px;}
+#loginPanel > header {padding: 20px; border-bottom: 1px #eee solid; position: relative;}
+#loginPanel > header > h2 {font-size: 16px; margin: 0; line-height: 32px;}
+#loginPanel > header > .actions {position: absolute; right: 20px; top: 20px;}
+#loginPanel > .table-row {margin: 20px 0;}
+#loginPanel .table-form > tbody > tr > th {width: 80px;}
+#loginPanel form {margin-right: 40px;}
+#loginPanel > footer {background: #eee; padding: 20px; color: #838a9d}
+#loginPanel > footer a {display: inline-block; margin-left: 5px;}
+#info {margin-top: 10px; color: #fff;}
+#info .btn + .btn {margin-left: 5px;}
+.alert-info {color: #00a9fc;}

@@ -54,9 +54,9 @@
       </tr>  
       <?php endforeach;?>
       <tr>
-        <td colspan='5' class='text-center'>
+        <td colspan='5' class='text-center form-actions'>
           <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
-          <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
+          <?php echo html::backButton('', '', 'btn btn-wide');?>
         </td>
       </tr>
     </table>

@@ -53,7 +53,7 @@
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", '', 'button', 'bar-chart'); ?>
+    <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", '', 'button', 'bar-chart muted'); ?>
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export ?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu" id='exportActionMenu'>
@@ -90,16 +90,13 @@
       </div>
       <hr class="space">
       <?php endif;?>
-
       <?php echo $moduleTree;?>
       <div class="text-center">
         <?php common::printLink('tree', 'browse', "rootID=$productID&view=story", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
       </div>
-
     </div>
   </div>
-
   <div class="main-col">
     <div class="cell" id="queryBox"></div>
     <form class="main-table table-story" data-ride="table" method="post" id='productStoryForm'>

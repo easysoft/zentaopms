@@ -33,7 +33,7 @@
         <div class="panel-title"><?php echo $title;?></div>
       </div>
       <div class="panel-body">
-        <ul class='tree-lines' id='modulesTree' data-name='tree-<?php echo $viewType;?>'></ul>
+        <ul id='modulesTree' data-name='tree-<?php echo $viewType;?>'></ul>
       </div>
     </div>
   </div>
@@ -50,10 +50,10 @@
       </div>
       <div class="panel-body">
         <form id='childrenForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "root=$rootID&viewType=$viewType");?>'>
-          <table class='table table-form'>
+          <table class='table table-form table-auto'>
             <tr>
               <?php if($viewType != 'line'):?>
-              <td class="text-middle text-nowrap text-right with-padding">
+              <td class="text-middle text-right with-padding">
                 <?php
                 echo html::a($this->createLink('tree', 'browse', "root=$rootID&viewType=$viewType"), empty($root->name) ? '' : $root->name) . "<i class='icon icon-angle-right muted'></i>";
                 foreach($parentModules as $module)
@@ -126,7 +126,7 @@
               <?php endif;?>
               <td colspan="2">
                 <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
-                <?php echo $this->session->{$viewType . 'List'} ? html::linkButton($this->lang->goback, $this->session->{$viewType .'List'}, 'btn btn-wide btn-gray') : html::backButton('', '', 'btn btn-wide btn-gray');?>
+                <?php echo $this->session->{$viewType . 'List'} ? html::linkButton($this->lang->goback, $this->session->{$viewType .'List'}, 'btn btn-wide') : html::backButton('', '', 'btn btn-wide');?>
                 <?php echo html::hidden('parentModuleID', $currentModuleID);?>
                 <?php echo html::hidden('maxOrder', $maxOrder);?>
               </td>
@@ -143,10 +143,12 @@
 $(function()
 {
     var data = $.parseJSON('<?php echo helper::jsonEncode4Parse($tree);?>');
-    var options = {
+    var options =
+    {
         initialState: 'preserve',
         data: data,
-        sortable: {
+        sortable: 
+        {
             lazy: true,
             nested: true,
             canMoveHere: function($ele, $target)
@@ -234,6 +236,7 @@ $(function()
     var $tree = $('#modulesTree').tree(options);
 
     var tree = $tree.data('zui.tree');
+    console.log('tree', tree, options);
     if(<?php echo $currentModuleID ?>)
     if(0)
     {

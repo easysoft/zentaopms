@@ -66,7 +66,7 @@
               <td></td>
               <td>
                 <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
-                <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
+                <?php echo html::backButton('', '', 'btn btn-wide');?>
                 <?php echo html::hidden('maxOrder', $maxOrder);?>
                 <?php echo html::hidden('parentDeptID', $deptID);?>
               </td>

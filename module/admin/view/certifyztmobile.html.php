@@ -28,8 +28,7 @@
           <td><?php echo html::input('captcha', '', "class='form-control' autocomplete='off'");?></td>
         </tr>
         <tr>
-          <th></th>
-          <td><?php echo html::submitButton();?></td>
+          <td colspan='2' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td>
         </tr>
       </table>
     </form>

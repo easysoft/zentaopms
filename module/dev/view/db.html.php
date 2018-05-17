@@ -22,7 +22,7 @@
     <div class='detail'>
       <div class='detail-title'><?php echo $selectedTable?></div>
       <div class='detail-content'>
-        <table class="table table-condensed table-bordered table-fixed">
+        <table class="table table-bordered">
           <thead>
             <tr>
               <th class='w-id'><?php echo $lang->dev->fields['id']?></th>

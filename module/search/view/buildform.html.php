@@ -29,7 +29,7 @@ include '../../common/view/chosen.html.php';
 #searchForm > table > tbody > tr > td {padding: 10px 15px; color: #838A9D;}
 #searchForm .form-actions {padding-bottom: 20px; padding-top: 0;}
 #searchForm .chosen-container[id^="field"] .chosen-drop {min-width: 140px;}
-#searchForm [id^="valueBox"] .chosen-container .chosen-single {min-width: 140px;}
+#searchForm [id^="valueBox"] .chosen-container .chosen-single {min-width: 100px;}
 #searchForm [id^="valueBox"] .chosen-container .chosen-drop {min-width: 300px;}
 #searchForm .chosen-container .chosen-drop ul.chosen-results li {white-space:normal}
 #searchForm input.date::-webkit-input-placeholder {color: #000000; opacity: 1;}
@@ -110,8 +110,7 @@ foreach($fieldParams as $fieldName => $param)
 
                     if($fieldValue && strpos('$lastWeek,$thisWeek,$today,$yesterday,$thisMonth,$lastMonth',$fieldValue) !== false)
                     {
-                        echo html::input("dateValue$fieldNO", '', "class='form-control $extraClass searchInput' placeholder='{$fieldValue}'");
-                        echo html::hidden("value$fieldNO", $fieldValue);
+                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' placeholder='{$fieldValue}'");
                     }
                     else
                     {
@@ -172,8 +171,7 @@ foreach($fieldParams as $fieldName => $param)
 
                     if($fieldValue && strpos('$lastWeek,$thisWeek,$today,$yesterday,$thisMonth,$lastMonth',$fieldValue) !== false)
                     {
-                        echo html::input("dateValue$fieldNO", '', "class='form-control $extraClass searchInput' placeholder='{$fieldValue}'");
-                        echo html::hidden("value$fieldNO", $fieldValue);
+                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' placeholder='{$fieldValue}'");
                     }
                     else
                     {
@@ -211,7 +209,7 @@ foreach($fieldParams as $fieldName => $param)
         if($style != 'simple')
         {
             if(common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), $lang->save, '', "class='btn-save-form btn btn-secondary btn-wide'") . "&nbsp;";
-            echo html::commonButton($lang->search->reset, 'onclick=resetForm(this)', 'btn-reset-form btn btn-gray btn-wide');
+            echo html::commonButton($lang->search->reset, 'onclick=resetForm(this)', 'btn-reset-form btn btn-wide');
         }
         echo html::commonButton('<i class="icon icon-chevron-double-down"></i>', '', 'btn-expand-form btn btn-info pull-right');
         echo html::hidden('formType', 'lite');

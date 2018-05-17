@@ -54,7 +54,7 @@ $lang->block->confirmClose       = '確定永久關閉該區塊嗎？閉後所�
 $lang->block->remove             = '移除';
 $lang->block->refresh            = '刷新';
 $lang->block->hidden             = '隱藏';
-$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span>, <span class='timeline-text'>%s <em>%s</em> %s <a href='%s'>%s</a></span>";
+$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s'>%s</a></span>";
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . '統計';
 $lang->block->default['product']['1']['block'] = 'statistic';
@@ -111,29 +111,40 @@ $lang->block->default['project']['4']['params']['num']     = 15;
 $lang->block->default['project']['4']['params']['orderBy'] = 'id_desc';
 $lang->block->default['project']['4']['params']['type']    = 'assignedTo';
 
-$lang->block->default['qa']['1']['title'] = '指派給我的Bug';
-$lang->block->default['qa']['1']['block'] = 'bug';
-$lang->block->default['qa']['1']['grid']  = 4;
+$lang->block->default['qa']['1']['title'] = '測試統計';
+$lang->block->default['qa']['1']['block'] = 'statistic';
+$lang->block->default['qa']['1']['grid']  = 8;
 
-$lang->block->default['qa']['1']['params']['num']     = 15;
 $lang->block->default['qa']['1']['params']['orderBy'] = 'id_desc';
-$lang->block->default['qa']['1']['params']['type']    = 'assignedTo';
+$lang->block->default['qa']['1']['params']['type']    = 'noclosed';
 
-$lang->block->default['qa']['2']['title'] = '指派給我的用例';
-$lang->block->default['qa']['2']['block'] = 'case';
+//$lang->block->default['qa']['2']['title'] = '測試用例總覽';
+//$lang->block->default['qa']['2']['block'] = 'overview';
+//$lang->block->default['qa']['2']['grid']  = 4;
+
+$lang->block->default['qa']['2']['title'] = '指派給我的Bug';
+$lang->block->default['qa']['2']['block'] = 'bug';
 $lang->block->default['qa']['2']['grid']  = 4;
 
 $lang->block->default['qa']['2']['params']['num']     = 15;
 $lang->block->default['qa']['2']['params']['orderBy'] = 'id_desc';
-$lang->block->default['qa']['2']['params']['type']    = 'assigntome';
+$lang->block->default['qa']['2']['params']['type']    = 'assignedTo';
 
-$lang->block->default['qa']['3']['title'] = '待測版本列表';
-$lang->block->default['qa']['3']['block'] = 'testtask';
+$lang->block->default['qa']['3']['title'] = '指派給我的用例';
+$lang->block->default['qa']['3']['block'] = 'case';
 $lang->block->default['qa']['3']['grid']  = 4;
 
 $lang->block->default['qa']['3']['params']['num']     = 15;
 $lang->block->default['qa']['3']['params']['orderBy'] = 'id_desc';
-$lang->block->default['qa']['3']['params']['type']    = 'wait';
+$lang->block->default['qa']['3']['params']['type']    = 'assigntome';
+
+$lang->block->default['qa']['4']['title'] = '待測版本列表';
+$lang->block->default['qa']['4']['block'] = 'testtask';
+$lang->block->default['qa']['4']['grid']  = 8;
+
+$lang->block->default['qa']['4']['params']['num']     = 15;
+$lang->block->default['qa']['4']['params']['orderBy'] = 'id_desc';
+$lang->block->default['qa']['4']['params']['type']    = 'wait';
 
 $lang->block->default['full']['my']['1']['title']  = '歡迎';
 $lang->block->default['full']['my']['1']['block']  = 'welcome';
@@ -251,9 +262,11 @@ $lang->block->modules['project']->availableBlocks->task      = '任務列表';
 $lang->block->modules['project']->availableBlocks->build     = '版本列表';
 $lang->block->modules['qa'] = new stdclass();
 $lang->block->modules['qa']->availableBlocks = new stdclass();
-$lang->block->modules['qa']->availableBlocks->bug      = 'Bug列表';
-$lang->block->modules['qa']->availableBlocks->case     = '用例列表';
-$lang->block->modules['qa']->availableBlocks->testtask = '版本列表';
+$lang->block->modules['qa']->availableBlocks->statistic = '測試統計';
+//$lang->block->modules['qa']->availableBlocks->overview  = '測試用例總覽';
+$lang->block->modules['qa']->availableBlocks->bug       = 'Bug列表';
+$lang->block->modules['qa']->availableBlocks->case      = '用例列表';
+$lang->block->modules['qa']->availableBlocks->testtask  = '版本列表';
 $lang->block->modules['todo'] = new stdclass();
 $lang->block->modules['todo']->availableBlocks = new stdclass();
 $lang->block->modules['todo']->availableBlocks->list = '待辦列表';
@@ -350,7 +363,7 @@ $lang->block->typeList->testtask['done']    = '已測版本';
 $lang->block->typeList->testtask['all']     = '全部';
 
 $lang->block->modules['product']->moreLinkList = new stdclass();
-$lang->block->modules['product']->moreLinkList->list  = 'product|all|product=&status=%s';
+$lang->block->modules['product']->moreLinkList->list  = 'product|all|product=&line=0&status=%s';
 $lang->block->modules['product']->moreLinkList->story = 'my|story|type=%s';
 $lang->block->modules['project']->moreLinkList = new stdclass();
 $lang->block->modules['project']->moreLinkList->list = 'project|all|status=%s&project=';

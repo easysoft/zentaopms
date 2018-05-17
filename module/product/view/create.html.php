@@ -66,7 +66,7 @@
               $proudctTypeList = array();
               foreach($lang->product->typeList as $key => $type) $productTypeList[$key] = $type . zget($lang->product->typeTips, $key, '');
               ?>
-              <?php echo html::select('type', $productTypeList, 'normal', "class='form-control'");?>
+              <?php echo html::select('type', $productTypeList, 'normal', "class='form-control chosen-simple'");?>
             </td><td></td>
           </tr>  
           <tr>
@@ -84,7 +84,7 @@
           <tr>
             <td colspan='3' class='text-center'>
               <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
-              <?php echo html::backButton('', '', 'btn btn-wide btn-gray');?>
+              <?php echo html::backButton('', '', 'btn btn-wide');?>
             </td>
           </tr>
         </tbody>

@@ -253,8 +253,8 @@ $lang->project->dividerMenu = ',story,doc,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
-$lang->task->menu      = $lang->project->menu;
-$lang->build->menu     = $lang->project->menu;
+$lang->task->menu  = $lang->project->menu;
+$lang->build->menu = $lang->project->menu;
 
 /* QA視圖菜單設置。*/
 $lang->qa = new stdclass();
@@ -279,20 +279,39 @@ $lang->bug->menu->caselib   = array('link' => '用例庫|testsuite|library');
 
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
-
 $lang->testcase->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testcase->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree');
-$lang->testcase->menu->testtask  = array('link' => '測試單|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
-$lang->testcase->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
-$lang->testcase->menu->report    = array('link' => '報告|testreport|browse|productID=%s', 'alias' => 'view,create,edit');
+$lang->testcase->menu->testtask  = array('link' => '測試單|testtask|browse|productID=%s');
+$lang->testcase->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
+$lang->testcase->menu->report    = array('link' => '報告|testreport|browse|productID=%s');
 $lang->testcase->menu->caselib   = array('link' => '用例庫|testsuite|library');
 
 $lang->testtask = new stdclass();
-$lang->testtask->menu = $lang->testcase->menu;
+$lang->testtask->menu = new stdclass();
+$lang->testtask->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
+$lang->testtask->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
+$lang->testtask->menu->testtask  = array('link' => '測試單|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
+$lang->testtask->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
+$lang->testtask->menu->report    = array('link' => '報告|testreport|browse|productID=%s');
+$lang->testtask->menu->caselib   = array('link' => '用例庫|testsuite|library');
+
 $lang->testsuite = new stdclass();
-$lang->testsuite->menu = $lang->testcase->menu;
+$lang->testsuite->menu = new stdclass();
+$lang->testsuite->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
+$lang->testsuite->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
+$lang->testsuite->menu->testtask  = array('link' => '測試單|testtask|browse|productID=%s');
+$lang->testsuite->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
+$lang->testsuite->menu->report    = array('link' => '報告|testreport|browse|productID=%s');
+$lang->testsuite->menu->caselib   = array('link' => '用例庫|testsuite|library');
+
 $lang->testreport = new stdclass();
-$lang->testreport->menu = $lang->testcase->menu;
+$lang->testreport->menu = new stdclass();
+$lang->testreport->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
+$lang->testreport->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
+$lang->testreport->menu->testtask  = array('link' => '測試單|testtask|browse|productID=%s');
+$lang->testreport->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
+$lang->testreport->menu->report    = array('link' => '報告|testreport|browse|productID=%s', 'alias' => 'view,create,edit');
+$lang->testreport->menu->caselib   = array('link' => '用例庫|testsuite|library');
 
 $lang->caselib = new stdclass();
 $lang->caselib->menu = new stdclass();
@@ -638,9 +657,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
     unset($lang->product->menu);
     unset($lang->product->menuOrder);
 
-    $lang->project->menu->task['subModule'] = 'task';
-    $lang->project->menu->task['alias']     = 'grouptask,importtask';
-
     unset($lang->searchObjects['bug']);
     unset($lang->searchObjects['story']);
     unset($lang->searchObjects['product']);
@@ -690,7 +706,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of bug module. */
     $lang->bug->menu = new stdclass();
-    $lang->bug->menu->product       = array('link' => '%s', 'fixed' => true);
     $lang->bug->menu->unclosed      = '未關閉|bug|browse|productID=%s&branch=%s&browseType=unclosed&param=%s';
     $lang->bug->menu->all           = '所有|bug|browse|productID=%s&branch=%s&browseType=all&param=%s';
     $lang->bug->menu->assigntome    = '指派給我|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
@@ -720,10 +735,9 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of testcase. */
     $lang->testcase->menu = new stdclass();
-    $lang->testcase->menu->product = array('link' => '%s', 'fixed' => true);
-    $lang->testcase->menu->all     = '所有|testcase|browse|productID=%s&branch=%s&browseType=all';
-    $lang->testcase->menu->wait    = '待評審|testcase|browse|productID=%s&branch=%s&browseType=wait';
-    $lang->testcase->menu->suite   = array('link' => '%s', 'fixed' => true);
+    $lang->testcase->menu->all   = '所有|testcase|browse|productID=%s&branch=%s&browseType=all';
+    $lang->testcase->menu->wait  = '待評審|testcase|browse|productID=%s&branch=%s&browseType=wait';
+    $lang->testcase->menu->suite = array('link' => '%s', 'fixed' => true);
 
     $lang->testcase->menuOrder[5]  = 'product';
     $lang->testcase->menuOrder[10] = 'all';
@@ -732,7 +746,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of bug module. */
     $lang->testsuite->menu = new stdclass();
-    $lang->testsuite->menu->product = array('link' => '%s', 'fixed' => true);
     $lang->testsuite->menu->create  = array('link' => "<i class='icon-plus'></i> 建套件|testsuite|create|productID=%s", 'float' => 'right');
 
     $lang->testsuite->menuOrder[5]  = 'product';
@@ -740,8 +753,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of testtask. */
     $lang->testtask->menu = new stdclass();
-    $lang->testtask->menu->product     = array('link' => '%s', 'fixed' => true);
-    $lang->testtask->menu->scope       = array('link' => '%s', 'fixed' => true);
     $lang->testtask->menu->wait        = '待測版本|testtask|browse|productID=%s&branch=%s&type=%s,wait';
     $lang->testtask->menu->doing       = '測試中版本|testtask|browse|productID=%s&branch=%s&type=%s,doing';
     $lang->testtask->menu->blocked     = '被阻塞版本|testtask|browse|productID=%s&branch=%s&type=%s,blocked';
@@ -765,11 +776,9 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of caselib module. */
     $lang->caselib->menu = new stdclass();
-    $lang->caselib->menu->lib    = array('link' => '%s', 'fixed' => true);
-    $lang->caselib->menu->all    = '所有|testsuite|library|libID=%s&browseType=all';
-    $lang->caselib->menu->wait   = '待評審|testsuite|library|libID=%s&browseType=wait';
-    $lang->caselib->menu->view   = '概況|testsuite|libview|libID=%s';
-    $lang->caselib->menu->create = array('link' => "<i class='icon-plus'></i> 創建庫|testsuite|createLib", 'float' => 'right');
+    $lang->caselib->menu->all  = '所有|testsuite|library|libID=%s&browseType=all';
+    $lang->caselib->menu->wait = '待評審|testsuite|library|libID=%s&browseType=wait';
+    $lang->caselib->menu->view = '概況|testsuite|libview|libID=%s';
 
     $lang->caselib->menuOrder[5]  = 'lib';
     $lang->caselib->menuOrder[10] = 'all';

@@ -71,7 +71,7 @@ var browseType = '<?php echo $browseType;?>';
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar">
-        <?php echo html::submitButton($lang->import);?>
+        <?php echo html::submitButton($lang->import, '', 'btn btn-default');?>
       </div>
       <?php echo html::backButton();?>
       <?php $pager->show('right', 'pagerjs');?>
