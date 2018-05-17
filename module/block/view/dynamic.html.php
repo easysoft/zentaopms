@@ -1,5 +1,5 @@
 <div class='panel-body'>
-  <ul class="timeline timeline-tag-left">
+  <ul class="timeline timeline-tag-left no-margin">
     <?php 
     $i = 0;
     foreach($actions as $action)

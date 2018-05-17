@@ -10,6 +10,16 @@
  * @link        http://www.ranzhi.org
  */
 ?>
+<style>
+.block-bugs .c-id {width: 55px;}
+.block-bugs .c-level {width: 50px;text-align: center;}
+.block-bugs .c-pri {width: 35px;text-align: center;}
+.block-bugs .c-deadline {width: 95px;}
+.block-bugs .c-status {width: 80px;}
+.block-bugs.block-sm .c-pri,
+.block-bugs.block-sm .c-status .label-dot {display: none;}
+.block-bugs.block-sm .c-status {text-align: center;}
+</style>
 <div class='panel-body has-table'>
   <table class='table table-borderless table-fixed-head table-hover block-bugs <?php if(!$longBlock) echo 'block-sm'?>'>
     <thead>

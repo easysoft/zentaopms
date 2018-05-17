@@ -10,6 +10,17 @@
  * @link        http://www.ranzhi.org
  */
 ?>
+<style>
+.block-tasks .c-id {width: 55px;}
+.block-tasks .c-pri {width: 45px;text-align: center;}
+.block-tasks .c-estimate {width: 55px;}
+.block-tasks .c-deadline {width: 95px;}
+.block-tasks .c-status {width: 80px;}
+.block-tasks.block-sm .estimate,
+.block-tasks.block-sm .c-deadline,
+.block-tasks.block-sm .c-status .label-dot {display: none;}
+.block-tasks.block-sm .c-status {text-align: center;}
+</style>
 <div class='panel-body has-table'>
   <table class='table table-borderless table-hover table-fixed-head block-tasks <?php if(!$longBlock) echo 'block-sm';?>'>
     <thead>
