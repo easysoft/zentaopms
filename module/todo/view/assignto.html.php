@@ -28,25 +28,30 @@
             </tr>
             <tr>
               <th><?php echo $lang->todo->date;?></th>
+              <td><?php echo html::input('date', $date, "class='form-control form-date' id='todoDate'");?></td>
               <td>
-                <div class='input-group'>
-                  <?php echo html::input('date', $date, "class='form-control form-date' id='todoDate'");?>
-                  <span class='input-group-addon'>
-                    <label class='checkbox-inline'>
-                      <input type='checkbox' name="future" id='switchDate' onclick='switchDateTodo(this);'> <?php echo $lang->todo->periods['future'];?>
-                    </label>
-                  </span>
+                <div class='checkbox-primary'>
+                  <input type='checkbox' name="future" id='switchDate' onclick='switchDateTodo(this);' />
+                  <label for='switchDate'><?php echo $lang->todo->periods['future'];?></label>
                 </div>
-              </td><td></td>
+              </td>
             </tr>
             <tr>
               <th><?php echo $lang->todo->beginAndEnd;?></th>
               <td>
-                <div class='input-group'>
-                  <?php echo html::select('begin', $times, date('Y-m-d') != $date ? key($times) : $time, 'onchange=selectNext(); class="form-control chosen" style="width: 50%;"') . html::select('end', $times, '', 'class="form-control chosen" style="width: 50%; margin-left:-1px"');?>
+                <div class='w-p50 pull-left'>
+                  <?php echo html::select('begin', $times, date('Y-m-d') != $date ? key($times) : $time, 'onchange=selectNext(); class="form-control chosen"');?>
+                </div>
+                <div class='w-p50 pull-left'>
+                  <?php echo html::select('end', $times, '', 'class="form-control chosen" margin-left:-1px"');?>
                 </div>
               </td>
-              <td><input type='checkbox' id='switchDate' onclick='switchDateFeature(this);' name="lblDisableDate"> <?php echo $lang->todo->lblDisableDate;?></td>
+              <td>
+                <div class='checkbox-primary'>
+                  <input type='checkbox' id='switchDate' onclick='switchDateFeature(this);' name="lblDisableDate">
+                  <label for='switchDate'><?php echo $lang->todo->lblDisableDate;?></label>
+                </div>
+              </td>
             </tr>
             <tfoot>
             <tr><td colspan='3' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td></tr>
