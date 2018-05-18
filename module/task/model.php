@@ -2258,7 +2258,8 @@ class taskModel extends model
             switch($id)
             {
                 case 'id':
-                    if($mode == 'table' && $canBatchAction) 
+                    //if($mode == 'table' && $canBatchAction) 
+                    if($canBatchAction) 
                     {
                         echo html::checkbox('taskIDList', array($task->id => sprintf('%03d', $task->id)));
                     }
