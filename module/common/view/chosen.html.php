@@ -6,12 +6,11 @@ var defaultChosenOptions = {no_results_text: noResultsMatch, width:'100%', allow
 $(document).ready(function()
 {
     $("#mailto").attr('data-placeholder', chooseUsersToMail);
-    $("#mailto, .chosen, #productID").chosen(defaultChosenOptions).on('chosen:showing_dropdown', function()
+    $("#mailto, #productID").chosen(defaultChosenOptions).on('chosen:showing_dropdown', function()
     {
         var $this = $(this);
         var $chosen = $this.next('.chosen-container').removeClass('chosen-up');
         var $drop = $chosen.find('.chosen-drop');
-        $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
     });
 });
 </script>
