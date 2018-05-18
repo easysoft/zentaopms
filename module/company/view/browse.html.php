@@ -83,7 +83,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <td><?php echo $user->account;?></td>
           <td class="c-type"><?php echo zget($lang->user->roleList, $user->role, '');?></td>
           <td class="c-url" title="<?php echo $user->email;?>"><?php echo html::mailto($user->email);?></td>
-          <td class="c-type"<?php if(isset($lang->user->genderList[$user->gender])) echo $lang->user->genderList[$user->gender];?></td>
+          <td class="c-type"><?php echo zget($lang->user->genderList, $user->gender, $user->gender);?></td>
           <td><?php echo $user->phone;?></td>
           <td><?php if($user->qq) echo html::a("tencent://message/?uin=$user->qq", $user->qq);?></td>
           <td class='c-date'><?php if($user->last) echo date('Y-m-d', $user->last);?></td>
