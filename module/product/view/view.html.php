@@ -31,7 +31,7 @@
                       <?php if(!empty($release->marker)) echo "<i class='icon icon-flag text-primary'></i>";?>
                       <span class="title"><?php echo $release->name;?></span>
                       <span class="date"><?php echo $release->date;?></span>
-                      <span class="info"><?php echo $release->desc;?></span>
+                      <span class="info text-ellipsis" title="<?php echo strip_tags($release->desc);?>"><?php echo $release->desc;?></span>
                     </a>
                   </li>
                   <?php endforeach;?>
