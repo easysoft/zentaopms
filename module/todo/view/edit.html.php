@@ -19,8 +19,8 @@
   </div>
   <form class='modal-body form-horizontal' method='post' target='hiddenwin' id='dataform'>
     <div class="row form-group">
-      <label class="col-sm-2"><?php echo $lang->todo->date;?></label>
-      <div class="col-sm-9">
+      <label class="col-sm-1"><?php echo $lang->todo->date;?></label>
+      <div class="col-sm-10">
         <div class='input-group has-icon-right'>
           <?php echo html::input('date', $todo->date, "class='form-control form-date'");?>
           <label for="date" class="input-control-icon-right"><i class="icon icon-delay"></i></label>
@@ -30,8 +30,8 @@
     <?php if($todo->cycle):?>
     <?php $todo->config = json_decode($todo->config);?>
     <div class="row form-group cycleConfig">
-      <label class="col-sm-2"><?php echo $lang->todo->cycleConfig;?></label>
-      <div class="col-sm-9">
+      <label class="col-sm-1"><?php echo $lang->todo->cycleConfig;?></label>
+      <div class="col-sm-10">
         <ul class="nav nav-tabs">
           <li <?php if($todo->config->type == 'day')   echo "class='active'"?>><a data-tab data-type='day' href="#day"><?php echo $lang->todo->cycleDay;?></a></li>
           <li <?php if($todo->config->type == 'week')  echo "class='active'"?>><a data-tab data-type='week' href="#week"><?php echo $lang->todo->cycleWeek;?></a></li>
@@ -69,28 +69,28 @@
       </div>
     </div>
     <div class="row form-group cycleConfig">
-      <label class="col-sm-2"><?php echo $lang->todo->deadline;?></label>
-      <div class="col-sm-9">
+      <label class="col-sm-1"><?php echo $lang->todo->deadline;?></label>
+      <div class="col-sm-10">
         <?php echo html::input("config[end]", $todo->config->end, "class='form-control form-date'");?>
       </div>
     </div>
     <?php endif;?>
     <div class="row form-group">
-      <label class="col-sm-2"><?php echo $lang->todo->type;?></label>
-      <div class="col-sm-9 todoType">
+      <label class="col-sm-1"><?php echo $lang->todo->type;?></label>
+      <div class="col-sm-10 todoType">
         <input type='hidden' name='type' value='<?php echo $todo->type;?>' />
         <?php echo $lang->todo->typeList[$todo->type];?>
       </div>
     </div>
     <div class="row form-group">
-      <label class="col-sm-2"><?php echo $lang->todo->pri;?></label>
+      <label class="col-sm-1"><?php echo $lang->todo->pri;?></label>
       <div class="col-sm-2">
         <?php echo html::select('pri', $lang->todo->priList, $todo->pri, "class='form-control chosen'");?>
       </div>
     </div>
     <div class="row form-group">
-      <label class="col-sm-2"><?php echo $lang->todo->name;?></label>
-      <div class="col-sm-9">
+      <label class="col-sm-1"><?php echo $lang->todo->name;?></label>
+      <div class="col-sm-10">
         <div id='nameBox'>
           <?php
           $readType = ($todo->type == 'bug' or $todo->type == 'task') ? 'readonly' : '';
@@ -100,19 +100,19 @@
       </div>
     </div>
     <div class="row form-group">
-      <label class="col-sm-2"><?php echo $lang->todo->desc;?></label>
-      <div class="col-sm-9">
+      <label class="col-sm-1"><?php echo $lang->todo->desc;?></label>
+      <div class="col-sm-10">
         <?php echo html::textarea('desc', htmlspecialchars($todo->desc), "rows='8' class='form-control'");?>
       </div>
     </div>
     <div class="row form-group">
-      <label class="col-sm-2"><?php echo $lang->todo->status;?></label>
+      <label class="col-sm-1"><?php echo $lang->todo->status;?></label>
       <div class="col-sm-2">
         <?php echo html::select('status', $lang->todo->statusList, $todo->status, "class='form-control chosen-simple'");?>
       </div>
     </div>
     <div class="row form-group">
-      <label class="col-sm-2"><?php echo $lang->todo->beginAndEnd;?></label>
+      <label class="col-sm-1"><?php echo $lang->todo->beginAndEnd;?></label>
       <div class="col-sm-2" style='padding-right:0px'>
         <?php echo html::select('begin', $times, $todo->begin, 'onchange=selectNext(); class="form-control chosen" data-drop_direction="up"')?>
       </div>
@@ -127,8 +127,8 @@
       </div>
     </div>
     <div class="row form-group">
-      <label class="col-sm-2"></label>
-      <div class="col-sm-9">
+      <label class="col-sm-1"></label>
+      <div class="col-sm-10">
         <div class='checkbox-primary'>
           <input type='checkbox' name='private' id='private' value='1' <?php if($todo->private) echo 'checked';?> />
           <label for='private'><?php echo $lang->todo->private;?></label>
