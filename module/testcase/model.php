@@ -1307,7 +1307,8 @@ class testcaseModel extends model
             switch($id)
             {
             case 'id':
-                echo $mode == 'table' ? html::checkbox('caseIDList', array($case->id => sprintf('%03d', $case->id))) : sprintf('%03d', $case->id);
+                //echo $mode == 'table' ? html::checkbox('caseIDList', array($case->id => sprintf('%03d', $case->id))) : sprintf('%03d', $case->id);
+                echo html::checkbox('caseIDList', array($case->id => sprintf('%03d', $case->id)));
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $case->pri . "'>";

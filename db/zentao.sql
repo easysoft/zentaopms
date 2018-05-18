@@ -260,7 +260,6 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `addedDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
-  `visitedDate` datetime NOT NULL,
   `acl` varchar(10) NOT NULL DEFAULT 'open',
   `groups` varchar(255) NOT NULL,
   `users` text NOT NULL,

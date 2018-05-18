@@ -4,6 +4,7 @@ $lang->my->common = '我的地盤';
 /* 方法列表。*/
 $lang->my->index          = '首頁';
 $lang->my->todo           = '我的待辦';
+$lang->my->calendar       = '日程';
 $lang->my->task           = '我的任務';
 $lang->my->bug            = '我的Bug';
 $lang->my->testTask       = '我的版本';

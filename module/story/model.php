@@ -160,7 +160,7 @@ class storyModel extends model
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->join('mailto', ',')
             ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
-            ->remove('files,labels,needNotReview,newStory,uid')
+            ->remove('files,labels,needNotReview,newStory,uid,contactListMenu')
             ->get();
 
         /* Check repeat story. */
@@ -492,7 +492,7 @@ class storyModel extends model
             ->setIF($this->post->closedReason != false and $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
             ->join('reviewedBy', ',')
             ->join('mailto', ',')
-            ->remove('linkStories,childStories,files,labels,comment')
+            ->remove('linkStories,childStories,files,labels,comment,contactListMenu')
             ->get();
         if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
         if(empty($_POST['product'])) $story->branch = $oldStory->branch;

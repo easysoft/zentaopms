@@ -52,7 +52,7 @@
           <?php foreach($libs as $libID => $lib):?>
           <?php if($libID == 'project' and $from != 'doc') continue;?>
           <?php if(strpos($this->config->doc->custom->objectLibs, 'files') === false && $libID == 'files') continue;?>
-          <?php if(strpos($this->config->doc->custom->objectLibs, 'customFiles') === false && !$lib->main) continue;?>
+          <?php if(strpos($this->config->doc->custom->objectLibs, 'customFiles') === false && isset($lib->main) && !$lib->main) continue;?>
 
           <?php $libLink = inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=$from");?>
           <?php if($libID == 'project') $libLink = inlink('allLibs', "type=project&product=$object->id");?>

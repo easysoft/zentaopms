@@ -71,7 +71,7 @@ class bugModel extends model
             ->cleanInt('product, module, severity')
             ->join('openedBuild', ',')
             ->join('mailto', ',')
-            ->remove('files, labels,uid,oldTaskID')
+            ->remove('files, labels,uid,oldTaskID,contactListMenu')
             ->get();
 
         /* Check repeat bug. */
@@ -545,7 +545,7 @@ class bugModel extends model
             ->setIF($this->post->resolution  == '' and $this->post->resolvedDate =='', 'status', 'active')
             ->setIF($this->post->resolution  != '', 'confirmed', 1)
             ->setIF($this->post->story != false and $this->post->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->remove('comment,files,labels,uid')
+            ->remove('comment,files,labels,uid,contactListMenu')
             ->get();
 
         $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->edit['id'], $this->post->uid);
@@ -2421,7 +2421,8 @@ class bugModel extends model
             switch($id)
             {
             case 'id':
-                if($mode == 'table' && $canBatchAction) 
+                //if($mode == 'table' && $canBatchAction) 
+                if($canBatchAction) 
                 {
                     echo html::checkbox('bugIDList', array($bug->id => sprintf('%03d', $bug->id)));
                 }
