@@ -60,20 +60,21 @@ $lang->doc->myDoc          = '我的文档';
 $lang->doc->myCollection   = '我的收藏';
 
 /* 方法列表。*/
-$lang->doc->index          = '文档主页';
-$lang->doc->create         = '创建文档';
-$lang->doc->edit           = '编辑文档';
-$lang->doc->delete         = '删除文档';
-$lang->doc->browse         = '文档列表';
-$lang->doc->view           = '文档详情';
-$lang->doc->diff           = '对比';
-$lang->doc->sort           = '排序';
-$lang->doc->manageType     = '维护分类';
-$lang->doc->editType       = '编辑分类';
-$lang->doc->deleteType     = '删除分类';
-$lang->doc->addType        = '增加分类';
-$lang->doc->childType      = '子分类';
-$lang->doc->collect        = '收藏';
+$lang->doc->index            = '文档主页';
+$lang->doc->create           = '创建文档';
+$lang->doc->edit             = '编辑文档';
+$lang->doc->delete           = '删除文档';
+$lang->doc->browse           = '文档列表';
+$lang->doc->view             = '文档详情';
+$lang->doc->diff             = '对比';
+$lang->doc->sort             = '排序';
+$lang->doc->manageType       = '维护分类';
+$lang->doc->editType         = '编辑分类';
+$lang->doc->deleteType       = '删除分类';
+$lang->doc->addType          = '增加分类';
+$lang->doc->childType        = '子分类';
+$lang->doc->collect          = '收藏';
+$lang->doc->cancelCollection = '取消收藏';
 
 $lang->doc->libName        = '文档库名称';
 $lang->doc->libType        = '文档库类型';

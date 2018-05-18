@@ -176,31 +176,6 @@ $(document).ready(function()
 
     $(window).resize();
 
-    /* First unbind ajaxForm for form.*/
-    $("form[data-type='ajax']").unbind('submit');
-
-    /* Bind ajaxForm for form again. */
-    $('.form-ajax').ajaxForm(
-    {
-        finish:function(response)
-        {
-            if(response.message) alert(response.message);
-            if(response.locate)
-            {
-                if(response.locate == 'reload' && response.target == 'parent')
-                {
-                    parent.$.cookie('selfClose', 1);
-                    parent.$.closeModal(null, 'this');
-                }
-                else
-                {
-                    location.href = response.locate;
-                }
-            }
-            return false;
-        }
-    });
-
     /* show team menu. */
     $('[name^=multiple]').change(function()
     {

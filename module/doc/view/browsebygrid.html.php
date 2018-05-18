@@ -27,6 +27,7 @@
         <?php endforeach;?>
         <?php foreach($docs as $doc):?>
         <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
+        <?php $collectTitle = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
         <div class="col">
           <a class="file" href="<?php echo inlink('view', "docID=$doc->id");?>">
             <i class="file-icon icon icon-file-text text-muted"></i>
@@ -34,7 +35,7 @@
             <div class="text-primary file-info"><?php echo zget($users, $doc->addedBy);?></div>
           </a>
           <div class="actions">
-            <?php common::printLink('doc', 'collect', "objectID={$doc->id}&objectType=doc", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$lang->doc->collect}' class='btn btn-link'")?>
+            <?php common::printLink('doc', 'collect', "objectID={$doc->id}&objectType=doc", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$collectTitle}' class='btn btn-link'")?>
             <?php common::printLink('doc', 'edit', "docID={$doc->id}", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'")?>
             <?php common::printLink('doc', 'delete', "docID={$doc->id}", "<i class='icon icon-trash'></i>", '', "title='{$lang->delete}' class='btn btn-link'")?>
           </div>
