@@ -16,10 +16,10 @@
     <input name='title' id='title' class="form-control" autocomplete="off" type="text">
     <?php if($onMenuBar == 'yes'):?>
     <span class='input-group-addon'>
-      <label class="checkbox-inline">
+      <div class="checkbox-primary">
         <input type="checkbox" name="onMenuBar" value="1" id="onMenuBar" />
-        <?php echo $lang->search->onMenuBar?>
-      </label>
+        <label for="onMenuBar"><?php echo $lang->search->onMenuBar?></label>
+      </div>
     </span>
     <?php endif;?>
     <span class='input-group-btn'><?php echo html::submitButton() . html::hidden('module', $module)?></span>
