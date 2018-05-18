@@ -94,17 +94,10 @@ $lang->todo->lblClickCreate = "Clict to add todo";
 $lang->todo->noTodo         = 'No this type of Todo.';
 $lang->todo->noAssignedTo   = "The AssignedTo user can't be empty.";
 
-$lang->todo->periods['today']      = 'Today';
-$lang->todo->periods['yesterday']  = 'Yesterday';
-$lang->todo->periods['thisWeek']   = 'ThisWeek';
-$lang->todo->periods['lastWeek']   = 'LastWeek';
-$lang->todo->periods['thisMonth']  = 'ThisMonth';
-$lang->todo->periods['lastmonth']  = 'LastMonth';
-$lang->todo->periods['thisSeason'] = 'ThisQuarter';
+$lang->todo->periods['all']        = 'All';
 $lang->todo->periods['thisYear']   = 'ThisYear';
 $lang->todo->periods['future']     = 'Pending';
 $lang->todo->periods['before']     = 'Unfinished';
-$lang->todo->periods['all']        = 'All';
 $lang->todo->periods['cycle']      = 'Cycle';
 
 $lang->todo->action = new stdclass();

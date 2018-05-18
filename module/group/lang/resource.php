@@ -691,6 +691,7 @@ $lang->resource->doc->allLibs    = 'allLibs';
 $lang->resource->doc->objectLibs = 'objectLibs';
 $lang->resource->doc->showFiles  = 'showFiles';
 $lang->resource->doc->sort       = 'sort';
+$lang->resource->doc->collect    = 'collect';
 //$lang->resource->doc->diff       = 'diff';
 
 $lang->doc->methodOrder[0]  = 'index';
@@ -706,6 +707,7 @@ $lang->doc->methodOrder[45] = 'allLibs';
 $lang->doc->methodOrder[50] = 'showFiles';
 $lang->doc->methodOrder[55] = 'objectLibs';
 $lang->doc->methodOrder[60] = 'sort';
+$lang->doc->methodOrder[65] = 'collect';
 //$lang->doc->methodOrder[55] = 'diff';
 
 /* mail. */
