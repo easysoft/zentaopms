@@ -76,12 +76,12 @@ $status = $this->session->testTaskVersionStatus;
     <?php foreach($tasks as $task):?>
     <tr class='text-left'>
       <td><?php echo html::a(inlink('cases', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
-      <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a(inlink('cases', "taskID=$task->id"), $task->name);?></td>
-      <td title="<?php echo $task->productName?>"><?php echo $task->productName?></td>
+      <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a(inlink('cases', "taskID=$task->id"), $task->name);?></td>
+      <td class='c-name' title="<?php echo $task->productName?>"><?php echo $task->productName?></td>
       <?php if($this->config->global->flow != 'onlyTest'):?>
-      <td title="<?php echo $task->projectName?>"><?php echo $task->projectName?></td>
+      <td class='c-name' title="<?php echo $task->projectName?>"><?php echo $task->projectName?></td>
       <?php endif;?>
-      <td><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build",'',true), $task->buildName);?></td>
+      <td class='c-name'><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build",'',true), $task->buildName);?></td>
       <td><?php echo zget($users, $task->owner);?></td>
       <td><?php echo $task->begin?></td>
       <td><?php echo $task->end?></td>
