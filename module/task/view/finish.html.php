@@ -71,7 +71,7 @@
         <tr>
           <td colspan='3' class='text-center'>
             <?php echo html::submitButton($lang->task->finish, '', 'btn btn-wide btn-primary');?>
-            <?php echo html::linkButton($lang->goback, $this->session->taskList, '', '', 'btn btn-wide');?>
+            <?php echo html::linkButton($lang->goback, $this->session->taskList, 'self', '', 'btn btn-wide');?>
           </td>
         </tr>
       </table>
