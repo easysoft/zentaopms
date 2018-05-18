@@ -31,7 +31,7 @@
       <div class='main-col col-8'>
         <div class='cell'>
           <div class='form-group'>
-            <div class='input-group'>
+            <div class='<?php if(empty($task->children) and empty($task->parent) and $task->type != 'affair') echo 'input-group';?>'>
               <div class="input-control has-icon-right">
                 <div class="colorpicker">
                   <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" title="<?php echo $lang->task->colorTag ?>"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
