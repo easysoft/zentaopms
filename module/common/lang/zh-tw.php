@@ -243,8 +243,8 @@ $lang->project->subMenu->list->tree      = '樹狀圖|project|tree|projectID=%s'
 
 $lang->project->subMenu->qa = new stdclass();
 $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
-$lang->project->subMenu->qa->build    = '版本|project|build|projectID=%s';
-$lang->project->subMenu->qa->testtask = array('link' => '測試單|project|testtask|projectID=%s', 'subModule' => 'testreport');
+$lang->project->subMenu->qa->build    = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
+$lang->project->subMenu->qa->testtask = array('link' => '測試單|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
 
 $lang->project->subMenu->action = new stdclass();
 $lang->project->subMenu->action->dynamic  = '動態|project|dynamic|projectID=%s';
@@ -345,7 +345,7 @@ $lang->company->menu = new stdclass();
 $lang->company->menu->browseUser  = array('link' => '用戶|company|browse', 'subModule' => 'user');
 $lang->company->menu->dept        = array('link' => '部門|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup = array('link' => '權限|group|browse', 'subModule' => 'group');
-$lang->company->menu->view        = array('link' => '公司|company|view', 'alias' => 'edit');
+$lang->company->menu->view        = array('link' => '公司|company|view');
 $lang->company->menu->dynamic     = '動態|company|dynamic|';
 
 $lang->dept  = new stdclass();

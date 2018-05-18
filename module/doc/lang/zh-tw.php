@@ -60,20 +60,21 @@ $lang->doc->myDoc          = '我的文檔';
 $lang->doc->myCollection   = '我的收藏';
 
 /* 方法列表。*/
-$lang->doc->index          = '文檔主頁';
-$lang->doc->create         = '創建文檔';
-$lang->doc->edit           = '編輯文檔';
-$lang->doc->delete         = '刪除文檔';
-$lang->doc->browse         = '文檔列表';
-$lang->doc->view           = '文檔詳情';
-$lang->doc->diff           = '對比';
-$lang->doc->sort           = '排序';
-$lang->doc->manageType     = '維護分類';
-$lang->doc->editType       = '編輯分類';
-$lang->doc->deleteType     = '刪除分類';
-$lang->doc->addType        = '增加分類';
-$lang->doc->childType      = '子分類';
-$lang->doc->collect        = '收藏';
+$lang->doc->index            = '文檔主頁';
+$lang->doc->create           = '創建文檔';
+$lang->doc->edit             = '編輯文檔';
+$lang->doc->delete           = '刪除文檔';
+$lang->doc->browse           = '文檔列表';
+$lang->doc->view             = '文檔詳情';
+$lang->doc->diff             = '對比';
+$lang->doc->sort             = '排序';
+$lang->doc->manageType       = '維護分類';
+$lang->doc->editType         = '編輯分類';
+$lang->doc->deleteType       = '刪除分類';
+$lang->doc->addType          = '增加分類';
+$lang->doc->childType        = '子分類';
+$lang->doc->collect          = '收藏';
+$lang->doc->cancelCollection = '取消收藏';
 
 $lang->doc->libName        = '文檔庫名稱';
 $lang->doc->libType        = '文檔庫類型';
@@ -130,8 +131,8 @@ $lang->doc->fastMenuIconList['byediteddate']  = 'icon-folder-upload';
 $lang->doc->fastMenuIconList['openedbyme']    = 'icon-folder-account';
 $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 
-$lang->doc->customObjectLibs['files']       = '是否顯示附件庫';
-$lang->doc->customObjectLibs['customFiles'] = '是否顯示自定義檔案';
+$lang->doc->customObjectLibs['files']       = '顯示附件庫';
+$lang->doc->customObjectLibs['customFiles'] = '顯示自定義檔案';
 
 $lang->doc->confirmDelete      = "您確定刪除該文檔嗎？";
 $lang->doc->confirmDeleteLib   = "您確定刪除該文檔庫嗎？";
