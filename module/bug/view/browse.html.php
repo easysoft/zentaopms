@@ -52,7 +52,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         </div>
       </li>
       <li class='right'>
-        <?php common::printLink('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", "<i class='icon-bar-chart muted'></i> " . $lang->bug->report->common); ?>
+        <?php common::printLink('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", "<i class='icon icon-bar-chart muted'></i> " . $lang->bug->report->common); ?>
       </li>
       <li class='right'>
         <a href='###' class='dropdown-toggle' data-toggle='dropdown'>
@@ -145,7 +145,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->bug->byQuery;?></a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID");?>
+    <?php common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", '', 'button', 'bar-chart muted');?>
     <?php if(common::hasPriv('bug', 'export')):?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
