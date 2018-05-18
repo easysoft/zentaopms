@@ -2071,7 +2071,7 @@ class upgradeModel extends model
     public function adjustPriv9_8()
     {
         $groups = $this->dao->select('id')->from(TABLE_GROUP)->fetchPairs('id', 'id');
-        foreach($groups as $group)
+        foreach($groups as $groupID)
         {
             $groupPriv = new stdclass();
             $groupPriv->group  = $groupID;
@@ -2081,7 +2081,7 @@ class upgradeModel extends model
         }
 
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('mail')->orWhere('module')->eq('webhook')->fetchPairs('group', 'group');
-        foreach($groups as $group)
+        foreach($groups as $groupID)
         {
             $groupPriv = new stdclass();
             $groupPriv->group  = $groupID;
@@ -2091,7 +2091,7 @@ class upgradeModel extends model
         }
 
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->andWhere('method')->eq('linkStory')->fetchPairs('group', 'group');
-        foreach($groups as $group)
+        foreach($groups as $groupID)
         {
             $groupPriv = new stdclass();
             $groupPriv->group  = $groupID;
@@ -2292,7 +2292,7 @@ class upgradeModel extends model
     public function adjustPriv10_0_alpha()
     {
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('my')->andWhere('method')->eq('todo')->fetchPairs('group', 'group');
-        foreach($groups as $group)
+        foreach($groups as $groupID)
         {
             $groupPriv = new stdclass();
             $groupPriv->group  = $groupID;
