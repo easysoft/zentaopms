@@ -1156,14 +1156,14 @@ class testtaskModel extends model
             switch ($id)
             {
             case 'id':
-                if($mode == 'table')
-                {
+                //if($mode == 'table')
+                //{
                     echo html::checkbox('caseIDList', array($run->case => sprintf('%03d', $run->case)));
-                }
-                else
-                {
-                    echo $canView ? html::a($caseLink, sprintf('%03d', $run->case)) : sprintf('%03d', $run->case);
-                }
+                //}
+                //else
+                //{
+                //    echo $canView ? html::a($caseLink, sprintf('%03d', $run->case)) : sprintf('%03d', $run->case);
+                //}
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $run->pri . "'>";
