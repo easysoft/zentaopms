@@ -110,13 +110,15 @@ $lang->task->parentAB          = 'Parent Task';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 
-$lang->task->ditto         = 'Ditto';
-$lang->task->dittoNotice   = "This Task does not belong to the Project as the previous one does!";
-$lang->task->selectAllUser = 'All';
-$lang->task->noStory       = 'No Story';
-$lang->task->noAssigned    = 'Unassigned';
-$lang->task->noFinished    = 'Unfinished';
-$lang->task->noClosed      = 'Unclosed';
+$lang->task->ditto             = 'Ditto';
+$lang->task->dittoNotice       = "This Task does not belong to the Project as the previous one does!";
+$lang->task->selectAllUser     = 'All';
+$lang->task->noStory           = 'No Story';
+$lang->task->noAssigned        = 'Unassigned';
+$lang->task->noFinished        = 'Unfinished';
+$lang->task->noClosed          = 'Unclosed';
+$lang->task->yesterdayFinished = 'Finishied Yesterday';
+$lang->task->allTasks          = 'All Tasks';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = 'Wait';

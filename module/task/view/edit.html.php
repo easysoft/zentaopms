@@ -30,26 +30,31 @@
     <div class='main-row'>
       <div class='main-col col-8'>
         <div class='cell'>
-          <div class='form-group'>
-            <div class='input-group'>
-              <div class="input-control has-icon-right">
-                <div class="colorpicker">
-                  <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" title="<?php echo $lang->task->colorTag ?>"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
-                  <ul class="dropdown-menu clearfix">
-                    <li class="heading"><?php echo $lang->task->colorTag;?><i class="icon icon-close"></i></li>
-                  </ul>
-                  <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $task->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".task-name"  data-provide="colorpicker">
+          <div class='detail'>
+            <div class='detail-title'><?php echo $lang->task->name;?></div>
+            <div class='detail-content'>
+              <div class='form-group'>
+                <div class='<?php if(empty($task->children) and empty($task->parent) and $task->type != 'affair') echo 'input-group';?>'>
+                  <div class="input-control has-icon-right">
+                    <div class="colorpicker">
+                      <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" title="<?php echo $lang->task->colorTag ?>"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+                      <ul class="dropdown-menu clearfix">
+                        <li class="heading"><?php echo $lang->task->colorTag;?><i class="icon icon-close"></i></li>
+                      </ul>
+                      <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $task->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".task-name"  data-provide="colorpicker">
+                    </div>
+                    <?php echo html::input('name', $task->name, 'class="form-control task-name" autocomplete="off" placeholder="' . $lang->task->name . '"');?>
+                  </div>
+                  <?php if(empty($task->children) and empty($task->parent) and $task->type != 'affair'):?>
+                  <span class='input-group-addon'>
+                    <div class='checkbox-primary'>
+                      <input type='checkBox' name='multiple' id='multiple' value='1' <?php echo empty($task->team) ? '' : 'checked';?> />
+                      <label for='multiple'><?php echo $lang->task->multipleAB;?></label>
+                    </div>
+                  </span>
+                  <?php endif;?>
                 </div>
-                <?php echo html::input('name', $task->name, 'class="form-control task-name" autocomplete="off" placeholder="' . $lang->task->name . '"');?>
               </div>
-              <?php if(empty($task->children) and empty($task->parent) and $task->type != 'affair'):?>
-              <span class='input-group-addon'>
-                <div class='checkbox-primary'>
-                  <input type='checkBox' name='multiple' id='multiple' value='1' <?php echo empty($task->team) ? '' : 'checked';?> />
-                  <label for='multiple'><?php echo $lang->task->multipleAB;?></label>
-                </div>
-              </span>
-              <?php endif;?>
             </div>
           </div>
           <div class='detail'>

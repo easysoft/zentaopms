@@ -66,13 +66,13 @@
         <tr>
           <th><?php echo $lang->task->name;?></th>
           <td colspan='3'>
-            <div class="input-control has-icon-right">
+            <div class="input-control has-icon-left has-icon-right">
               <div class="colorpicker">
                 <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                 <ul class="dropdown-menu clearfix">
                   <li class="heading"><?php echo $lang->task->colorTag;?><i class="icon icon-close"></i></li>
                 </ul>
-                <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#name"  data-provide="colorpicker">
+                <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-left" data-update-color="#name"  data-provide="colorpicker">
               </div>
               <?php echo html::input('name', $task->name, "class='form-control' autocomplete='off' required");?>
               <?php if($this->config->global->flow != 'onlyTask'):?>

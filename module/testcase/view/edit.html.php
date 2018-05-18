@@ -117,8 +117,9 @@
             <div class='detail-title'><?php echo $lang->testcase->legendComment;?></div>
             <div class='detail-content'><?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?></div>
           </div>
-          <div class='detail'>
-            <?php echo $this->fetch('file', 'buildform');?>
+          <div class="detail">
+            <div class="detail-title"><?php echo $lang->files;?></div>
+            <div class='detail-content'><?php echo $this->fetch('file', 'buildform');?></div>
           </div>
           <div class='text-center detail'>
             <?php echo html::hidden('lastEditedDate', $case->lastEditedDate);?>

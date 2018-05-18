@@ -43,13 +43,21 @@ $lang->doc->download       = 'Download';
 $lang->doc->acl            = 'Right';
 $lang->doc->groups         = 'Groups';
 $lang->doc->users          = 'Users';
+$lang->doc->item           = 'Item';
+$lang->doc->searchResult   = 'Search Result';
 
 $lang->doc->moduleDoc      = 'By Module';
 $lang->doc->searchDoc      = 'Search';
+$lang->doc->fast           = 'Fast access';
 $lang->doc->allDoc         = 'All';
 $lang->doc->openedByMe     = 'My';
 $lang->doc->orderByOpen    = 'Recently Added';
-$lang->doc->orderByEdit    = 'Recently Modifie';
+$lang->doc->orderByEdit    = 'Recently Modified';
+$lang->doc->orderByVisit   = 'Recently Visited';
+$lang->doc->todayEdited    = 'Today Modified';
+$lang->doc->pastEdited     = 'Past Modified';
+$lang->doc->myDoc          = 'My Doc';
+$lang->doc->myCollection   = 'My Collection';
 
 /* 方法列表。*/
 $lang->doc->index          = 'Home';
@@ -65,6 +73,7 @@ $lang->doc->editType       = 'Edit';
 $lang->doc->deleteType     = 'Delete';
 $lang->doc->addType        = 'Add';
 $lang->doc->childType      = 'Child';
+$lang->doc->collect        = 'Collect';
 
 $lang->doc->libName        = 'Name';
 $lang->doc->libType        = 'Category';
@@ -109,11 +118,7 @@ $lang->doc->contentTypeList['markdown'] = 'MarkDown';
 
 $lang->doc->browseType             = 'Categories';
 $lang->doc->browseTypeList['list'] = 'List';
-$lang->doc->browseTypeList['menu'] = 'Menu';
-$lang->doc->browseTypeList['tree'] = 'Tree';
-$lang->doc->browseTypeList['card'] = 'Card';
-
-$lang->doc->orderByOpen    = 'Recently Added';
+$lang->doc->browseTypeList['grid'] = 'Card';
 
 $lang->doc->fastMenuList['byediteddate']  = 'Recently Modified';
 //$lang->doc->fastMenuList['visiteddate']   = 'Recently Visited';
