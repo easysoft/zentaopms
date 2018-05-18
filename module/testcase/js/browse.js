@@ -21,20 +21,18 @@ function confirmBatchDelete(actionLink)
     return false;
 }
 
-$(document).ready(function()
+$(function()
 {
     if(browseType == 'bysearch') ajaxGetSearchForm();
     if($('#caseList thead th.w-title').width() < 150) $('#caseList thead th.w-title').width(150);
 
     if(flow == 'onlyTest')
     {
-        $('#modulemenu > .nav').append($('#mainMenu > .pull-left.btn-toolbar').html());
-
         toggleSearch();
         $('.export').modalTrigger({width:650, type:'iframe', afterShown: setCheckedCookie})
 
-        $('#modulemenu > .nav > li').removeClass('active');
-        $('#modulemenu > .nav > li[data-id=' + browseType + ']').addClass('active');
+        $('#subNavbar > .nav > li').removeClass('active');
+        $('#subNavbar > .nav > li[data-id=' + browseType + ']').addClass('active');
     }
 });
 

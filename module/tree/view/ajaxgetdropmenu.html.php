@@ -6,6 +6,11 @@
   <?php
   foreach($modules as $moduleID => $module)
   {
+      if(empty($module))
+      {
+          $module = '/';
+          $modulesPinyin[$module] = '';
+      }
       echo html::a(sprintf($link, $productID, $moduleID), $module, '', "data-key='{$modulesPinyin[$module]}'");
   }
   ?>
