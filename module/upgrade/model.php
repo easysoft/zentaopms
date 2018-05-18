@@ -2077,7 +2077,7 @@ class upgradeModel extends model
             $groupPriv->group  = $groupID;
             $groupPriv->module = 'todo';
             $groupPriv->method = 'createcycle';
-            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
         }
 
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('mail')->orWhere('module')->eq('webhook')->fetchPairs('group', 'group');
@@ -2087,7 +2087,7 @@ class upgradeModel extends model
             $groupPriv->group  = $groupID;
             $groupPriv->module = 'message';
             $groupPriv->method = 'index';
-            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
         }
 
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->andWhere('method')->eq('linkStory')->fetchPairs('group', 'group');
@@ -2097,7 +2097,7 @@ class upgradeModel extends model
             $groupPriv->group  = $groupID;
             $groupPriv->module = 'project';
             $groupPriv->method = 'importPlanStories';
-            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
         }
         return true;
     }
@@ -2298,7 +2298,7 @@ class upgradeModel extends model
             $groupPriv->group  = $groupID;
             $groupPriv->module = 'my';
             $groupPriv->method = 'calendar';
-            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
         }
         return true;
     }
