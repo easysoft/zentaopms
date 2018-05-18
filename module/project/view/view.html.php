@@ -258,7 +258,7 @@
                   $whitelist = explode(',', $project->whitelist);
                   foreach($whitelist as $groupID) if(isset($groups[$groupID])) echo $groups[$groupID] . '&nbsp;';
                   ?>
-                </p>  
+                </p>
                 <?php endif;?>
               </div>
             </div>
@@ -303,7 +303,7 @@ $(function()
         labels: <?php echo json_encode($chartData['labels'])?>,
         datasets: [
         {
-            label: "<?php echo $lang->project->baseline;?>",
+            label: "<?php echo $lang->project->charts->burn->graph->reference;?>",
             color: "#F1F1F1",
             pointColor: '#D8D8D8',
             pointStrokeColor: '#D8D8D8',
@@ -313,7 +313,7 @@ $(function()
             data: <?php echo $chartData['baseLine']?>
         },
         {
-            label: "<?php echo $lang->project->Left?>",
+            label: "<?php echo $lang->project->charts->burn->graph->actuality;?>",
             color: "#006AF1",
             pointStrokeColor: '#006AF1',
             pointHighlightStroke: '#006AF1',
