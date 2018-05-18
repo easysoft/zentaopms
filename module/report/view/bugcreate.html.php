@@ -16,7 +16,7 @@
           <div class='col-sm-5'>
             <div class='input-group input-group-sm'>
               <span class='input-group-addon'><?php echo $lang->report->bugOpenedDate;?></span>
-              <div class='datepicker-wrapper datepicker-date'><?php echo html::input('begin', $begin, "class='w-100px form-control form-date' onchange='changeParams(this)'");?></div>
+              <div class='datepicker-wrapper datepicker-date'><?php echo html::input('begin', $begin, "class='form-control form-date' onchange='changeParams(this)'");?></div>
               <span class='input-group-addon fix-border'><?php echo $lang->report->to;?></span>
               <div class='datepicker-wrapper datepicker-date'><?php echo html::input('end', $end, "class='form-control form-date' onchange='changeParams(this)'");?></div>
             </div>
@@ -38,35 +38,37 @@
           <div class="panel-title"><?php echo $title;?></div>
           <nav class="panel-actions btn-toolbar"></nav>
         </div>
-        <table class='table table-condensed table-striped table-bordered table-fixed' id="bug">
-          <thead>
-            <tr class='colhead'>
-              <th><?php echo $lang->bug->openedBy;?></th>
-              <th><?php echo $lang->bug->unResolved;?></th>
-              <?php foreach($lang->bug->resolutionList as $resolutionType => $resolution):?>
-              <?php if(empty($resolutionType)) continue;?>
-              <th><?php echo $resolution;?></th>
-              <?php endforeach;?>
-              <th title='<?php echo $lang->report->validRateTips;?>'><?php echo $lang->report->validRate;?></th>
-              <th><?php echo $lang->report->total;?></th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach($bugs as $user => $bug):?>
-            <?php if(isset($users[$user])) continue;?>
-            <tr class="text-center">
-              <td><?php echo $users[$user];?></td>
-              <td><?php echo isset($bug['']) ? $bug[''] : 0;?></td>
-              <?php foreach($lang->bug->resolutionList as $resolutionType => $resolution):?>
-              <?php if(empty($resolutionType)) continue;?>
-              <td><?php echo isset($bug[$resolutionType]) ? $bug[$resolutionType] : 0;?></td>
-              <?php endforeach;?>
-              <td title='<?php echo $lang->report->validRateTips;?>'><?php echo round($bug['validRate'] * 100, 2) . '%';?></td>
-              <td><?php echo $bug['all'];?></td>
-            </tr>
-          <?php endforeach;?>
-          </tbody>
-        </table> 
+        <div data-ride='table'>
+          <table class='table table-condensed table-striped table-bordered table-fixed' id="bug">
+            <thead>
+              <tr class='colhead'>
+                <th><?php echo $lang->bug->openedBy;?></th>
+                <th><?php echo $lang->bug->unResolved;?></th>
+                <?php foreach($lang->bug->resolutionList as $resolutionType => $resolution):?>
+                <?php if(empty($resolutionType)) continue;?>
+                <th><?php echo $resolution;?></th>
+                <?php endforeach;?>
+                <th title='<?php echo $lang->report->validRateTips;?>'><?php echo $lang->report->validRate;?></th>
+                <th><?php echo $lang->report->total;?></th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach($bugs as $user => $bug):?>
+              <?php if(isset($users[$user])) continue;?>
+              <tr class="text-center">
+                <td><?php echo $users[$user];?></td>
+                <td><?php echo isset($bug['']) ? $bug[''] : 0;?></td>
+                <?php foreach($lang->bug->resolutionList as $resolutionType => $resolution):?>
+                <?php if(empty($resolutionType)) continue;?>
+                <td><?php echo isset($bug[$resolutionType]) ? $bug[$resolutionType] : 0;?></td>
+                <?php endforeach;?>
+                <td title='<?php echo $lang->report->validRateTips;?>'><?php echo round($bug['validRate'] * 100, 2) . '%';?></td>
+                <td><?php echo $bug['all'];?></td>
+              </tr>
+            <?php endforeach;?>
+            </tbody>
+          </table> 
+        </div>
       </div>
     </div>
   </div>

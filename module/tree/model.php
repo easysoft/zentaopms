@@ -355,12 +355,12 @@ class treeModel extends model
             ksort($treeMenu);
             if(!empty($branchID) and $branch and $branchID != 'null')
             {
-                $linkHtml = ($type == 'case' and !empty($extra)) ? $branch : $this->createBranchLink($type, $rootID, $branchID, $branch);
+                $linkHtml = ($type == 'case' and !empty($extra)) ? '<a>' . $branch . '</a>' : $this->createBranchLink($type, $rootID, $branchID, $branch);
                 $linkHtml = $manage ? html::a(inlink('browse', "root=$rootID&viewType=$type&currentModuleID=0&branch=$branchID"), $branch) : $linkHtml;
-                if($type == 'story' || $type == 'bug') $linkHtml = $branch;
+                if($type == 'story' || $type == 'bug') $linkHtml = '<a>' . $branch . '</a>';
                 if($firstBranch and $product->type != 'normal')
                 {
-                    $linkHtml = $this->lang->product->branchName[$product->type] . '<ul><li>' . $linkHtml;
+                    $linkHtml = '<a>' . $this->lang->product->branchName[$product->type] . '</a><ul><li>' . $linkHtml;
                     $firstBranch = false;
                 }
                 $lastMenu .= "<li>$linkHtml<ul>" . @array_shift($treeMenu) . "</ul></li>\n";
@@ -372,7 +372,7 @@ class treeModel extends model
         }
 
         if(!$firstBranch) $lastMenu .= '</li></ul>';
-        if($lastMenu) $lastMenu = "<ul id='modulesTree' class='tree tree-lines' data-name='tree-{$type}'>$lastMenu</ul>\n";
+        if($lastMenu) $lastMenu = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-{$type}'>$lastMenu</ul>\n";
         return $lastMenu;
     }
 
@@ -402,7 +402,7 @@ class treeModel extends model
         }
 
         /* createdVersion > 4.1. */
-        $menu = "<ul id='modulesTree' class='tree tree-lines' data-name='tree-task'>";
+        $menu = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-task'>";
 
         /* Set the start module. */
         $startModulePath = '';
@@ -450,11 +450,11 @@ class treeModel extends model
                     if(!$manage and !isset($projectModules[$module->id])) continue;
                     $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
                 }
-                if(isset($treeMenu[0]) and $branch) $treeMenu[0] = "<li>$branchName<ul>{$treeMenu[0]}</ul></li>";
+                if(isset($treeMenu[0]) and $branch) $treeMenu[0] = "<li><a>$branchName</a><ul>{$treeMenu[0]}</ul></li>";
                 $tree .= isset($treeMenu[0]) ? $treeMenu[0] : '';
             }
 
-            if($productNum > 1 or $manage) $tree = "<ul>" . $tree . "</ul>\n</li>";
+            if($tree && ($productNum > 1 or $manage)) $tree = "<ul>" . $tree . "</ul>\n</li>";
             $menu .= $tree;
         }
 
@@ -566,7 +566,7 @@ class treeModel extends model
     public function getProjectStoryTreeMenu($rootID, $startModule = 0, $userFunc)
     {
         $extra['projectID'] = $rootID;
-        $menu = "<ul id='modulesTree' class='tree tree-lines' data-name='tree-story'>";
+        $menu = "<ul id='modules' class='tree' data-ride='tree' data-name='tree-story'>";
         $startModulePath = '';
         if($startModule > 0)
         {

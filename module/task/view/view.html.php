@@ -20,8 +20,8 @@
     <div class="page-title">
       <span class="label label-id"><?php echo $task->id?></span>
       <span class="text" style='color: <?php echo $task->color; ?>'>
-        <?php if(!empty($task->parent)) echo '<span class="label no-margin">' . $this->lang->task->childrenAB . '</span>';?>
-        <?php if(!empty($task->team)) echo '<span class="label no-margin">' . $this->lang->task->multipleAB . '</span>';?>
+        <?php if(!empty($task->parent)) echo '<span class="label label-badge label-light no-margin">' . $this->lang->task->childrenAB . '</span>';?>
+        <?php if(!empty($task->team)) echo '<span class="label label-badge label-light no-margin">' . $this->lang->task->multipleAB . '</span>';?>
         <?php echo isset($task->parentName) ? $task->parentName . '/' : '';?><?php echo $task->name;?>
       </span>
       <?php if($task->deleted):?>
@@ -334,6 +334,7 @@
 </div>
 
 <div id="mainActions">
+  <?php echo $preAndNext;?>
   <?php common::printPreAndNext($preAndNext);?>
   <div class="btn-toolbar">
     <?php common::printBack($browseLink);?>

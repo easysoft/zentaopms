@@ -69,6 +69,7 @@ $(function()
           isItemLoading = false;
           $itemContent.find('.text-limit').textLimit();
           $itemContent.find('.histories').histories();
+          $itemContent.find('.iframe').modalTrigger();
         },
         error: function()
         {

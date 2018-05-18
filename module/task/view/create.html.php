@@ -101,7 +101,7 @@
               unset($priList[0]);
               $priList[0] = '';
           }
-          ?> 
+          ?>
           <td colspan='<?php echo $hasCustomPri ? 1 : 3 ?>'>
             <?php if($hasCustomPri):?>
             <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control chosen chosen-simple'");?> 

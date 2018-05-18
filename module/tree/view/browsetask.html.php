@@ -21,6 +21,7 @@
     <div class="page-title">
       <span class='text'><?php echo $lang->tree->common . $lang->colon . $root->name;?></span>
     </div>
+  </div>
 </div>
 <div id="mainContent" class="main-row">
   <div class="side-col col-4">

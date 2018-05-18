@@ -10,6 +10,29 @@
  * @link        http://www.ranzhi.org
  */
 ?>
+<style>
+.block-todoes .panel-body {position: relative;padding-top: 42px;overflow: visible;}
+.block-todoes .todoes-input {position: absolute;top: 0;right: 0;left: 0;padding: 0 20px 20px 20px;}
+.block-todoes .todoes-input .form-control::-webkit-input-placeholder {font-size: 12px;line-height: 20px;color: #a4a8b6;}
+.block-todoes .todoes-input .form-control::-moz-placeholder {font-size: 12px;line-height: 20px;color: #a4a8b6;}
+.block-todoes .todoes-input .form-control:-ms-input-placeholder {font-size: 12px;line-height: 20px;color: #a4a8b6;}
+.block-todoes .todoes-input .form-control::placeholder {font-size: 12px;line-height: 20px;color: #a4a8b6;}
+.block-todoes .todoes {padding-left: 0;margin: 0 -10px;}
+.block-todoes .todoes > li {position: relative;padding: 5px 10px 5px 35px;list-style: none;}
+.block-todoes .todoes > li:hover {background-color: #e9f2fb;}
+.block-todoes .todo-title {display: block;padding: 5px;}
+.block-todoes .todo-pri {display: inline-block;padding: 0 5px;font-size: 12px;color: #3c4353;}
+.block-todoes .todo-time {display: inline-block;padding: 0 5px;font-size: 12px;color: #8e939a;}
+.block-todoes .todo-check {position: absolute;top: 10px;left: 10px;display: block;width: 20px;height: 20px;font-size: 20px;color: transparent;cursor: pointer;background: #fff;border: 2px solid #eee;border-radius: 50%;}
+.block-todoes .todo-check:hover {border-color: #8e939a;}
+.block-todoes .active > .todo-check {color: #00da88;background: transparent;border: none;}
+.block-todoes .todoes-form {position: absolute;top: -45px;right: 0;left: 0;z-index: 15;max-width: 500px;padding: 12px 20px 20px;visibility: hidden;background: #fff;-webkit-box-shadow: 0 0 20px 0 #bdc9d8;box-shadow: 0 0 20px 0 #bdc9d8;opacity: 0;-webkit-transition: .4s cubic-bezier(.175, .885, .32, 1); -o-transition: .4s cubic-bezier(.175, .885, .32, 1);transition: .4s cubic-bezier(.175, .885, .32, 1);-webkit-transition-property: opacity, visibility; -o-transition-property: opacity, visibility;transition-property: opacity, visibility;}
+.block-todoes .todoes-form .form-group > label {padding-left: 0;}
+.block-todoes .todoes-form .form-group > label.text-center {text-align: center!important;}
+.block-todoes .todoes-form > .form-group:last-child {margin-bottom: 0;}
+.block-todoes .todoes-form > h3 {padding: 0 20px 15px;margin: 0 -20px 5px;font-size: 14px;line-height: 20px;}
+.block-todoes.show-form .todoes-form {visibility: visible;opacity: 1;}
+</style>
 <div class='block-todoes' id="block <?php echo ($block->block)?>">
   <div class='panel-body'>
     <div class="todoes-input">
@@ -56,7 +79,7 @@
         </div>
         <div class="form-group">
           <div class="col-sm-2"></div>
-          <div class="col-sm-10">
+          <div class="col-sm-10 form-actions no-margin">
             <?php echo html::hidden('type', 'custom');?>
             <?php echo html::commonButton($lang->save, "onclick='ajaxCreateTodo(this)'", "btn btn-primary btn-wide");?>
             <button type="button" class="btn btn-wide todo-form-trigger" data-trigger="false"><?php echo $lang->goback;?></button>

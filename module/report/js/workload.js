@@ -1,16 +1,11 @@
-$(document).ready(function()
-{
-    setTimeout(function(){fixedTheadOfList('#workload')}, 100);
-});
-
 function changeParams(obj)
 {
-    var begin = $('.main .row').find('#begin').val();
-    var end = $('.main .row').find('#end').val();
-    var workday = $('.main .row').find('#workday').val();
-    var dept = $('.main .row').find('#dept').val();
-    var assign = $('.main .row').find('#assign').val();
-    var days = diffDate(begin, end);
+    var begin   = $('#conditions').find('#begin').val();
+    var end     = $('#conditions').find('#end').val();
+    var workday = $('#conditions').find('#workday').val();
+    var dept    = $('#conditions').find('#dept').val();
+    var assign  = $('#conditions').find('#assign').val();
+    var days    = diffDate(begin, end);
 
     $('#days').val(days);
 
@@ -24,7 +19,7 @@ function changeParams(obj)
     {
         var endarray = end.split("-");
         var end = '';
-        for(i=0 ; i < endarray.length ; i++) end = end + endarray[i];
+        for(i = 0 ; i < endarray.length ; i++) end = end + endarray[i];
     }
 
     var link = createLink('report', 'workload', 'begin=' + begin + '&end=' + end + '&days=' + days + '&workday=' + workday + '&dept=' + dept + '&assign=' + assign);

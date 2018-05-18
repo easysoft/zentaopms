@@ -1,2 +1,4 @@
 .block-statistic .nav-stacked {overflow: auto; max-height: 220px;}
 .nav > li > .btn {padding: 0 5px; line-height: 24px; margin: 3px; color: #3C4353;}
+.dashboard .panel-body {max-height: 400px;overflow: auto;}
+  

@@ -37,3 +37,4 @@ td .deviation{padding-left:20px; text-align:left;}
 
 .checkboxes {margin-bottom: 10px;}
 .checkboxes .checkbox-primary {margin-bottom: 5px;}
+.fixed-header-copy thead tr th{color:#fff !important;}

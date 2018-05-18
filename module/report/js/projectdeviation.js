@@ -1,7 +1,6 @@
 $(document).ready(function()
 {
     initChart();
-    setTimeout(function(){fixedTheadOfList('#projectList')}, 100);
 });
 
 function changeDate(begin, end)

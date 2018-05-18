@@ -17,3 +17,7 @@
   </div>
   <?php endforeach;?>
 </div>
+<style>
+#assigntomeBlock #todo,
+#assigntomeBlock #task {border-bottom: 1px solid #eee;}
+</style>

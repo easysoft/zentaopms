@@ -318,8 +318,8 @@ $lang->block->orderByList->story['pri_asc']     = 'Priority Ascending';
 $lang->block->orderByList->story['pri_desc']    = 'Priority Descending';
 $lang->block->orderByList->story['status_asc']  = 'Status Ascending';
 $lang->block->orderByList->story['status_desc'] = 'Status Descending';
-$lang->block->orderByList->story['stage_asc']   = 'Stage Ascending';
-$lang->block->orderByList->story['stage_desc']  = 'Stage Descending';
+$lang->block->orderByList->story['stage_asc']   = 'Phase Ascending';
+$lang->block->orderByList->story['stage_desc']  = 'Phase Descending';
 
 $lang->block->todoNum = 'Todo Number';
 $lang->block->taskNum = 'Task Number';

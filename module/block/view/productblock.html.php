@@ -10,6 +10,13 @@
  * @link        http://www.zentao.net
  */
 ?>
+<style>
+.block-products .c-plans {width: 70px;color: #8e939a;text-align: center;}
+.block-products .c-publishs {width: 70px;color: #8e939a;text-align: center;}
+.block-products .c-stories {width: 80px;color: #8e939a;text-align: center;}
+.block-products .c-bugs {width: 90px;color: #8e939a;text-align: center;}
+.block-products.block-sm .c-project {display: none;}
+</style>
 <div class="panel-body has-table block-products">
   <table class='table table-borderless table-hover table-fixed-head table-fixed'>
     <thead>

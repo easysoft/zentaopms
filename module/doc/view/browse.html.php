@@ -19,7 +19,7 @@ var browseType = '<?php echo $browseType;?>';
 <?php js::set('libID', $libID);?>
 <?php if($this->from != 'doc') js::set('type', 'doc');?>
 
-<div class='main-row split-row' id='mainRow'>
+<div class="main-row <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
   <?php if($this->from == 'doc'):?>
   <?php include './side.html.php';?>
   <div class="col-spliter"></div>
@@ -50,11 +50,11 @@ var browseType = '<?php echo $browseType;?>';
           <thead>
             <tr class="muted">
               <th class="c-name"><?php echo $lang->doc->title;?></th>
-              <th class="c-actions"></th>
               <th class="c-num"><?php echo $lang->doc->size;?></th>
               <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
               <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
               <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
+              <th class="c-actions"></th>
             </tr>
           </thead>
           <tbody>
@@ -63,13 +63,14 @@ var browseType = '<?php echo $browseType;?>';
             <?php $star = strpos($module->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
             <tr>
               <td class="c-name"><?php echo html::a(inlink('browse', "libID=$libID&browseType=bymodule&param=$module->id&orderBy=$orderBy&from=$from"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $module->name);?></td>
-              <td class="c-actions">
-                <?php common::printLink('doc', 'collect', "objectID=$module->id&objectType=module", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$lang->doc->collect}' class='btn btn-link'")?>
-              </td>
               <td class="c-num"></td>
               <td class="c-user"></td>
               <td class="c-datetime"></td>
               <td class="c-datetime"></td>
+              <td>
+                <?php common::printLink('doc', 'collect', "objectID=$module->id&objectType=module", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$lang->doc->collect}' class='btn btn-link'")?>
+                <?php common::printLink('tree', 'browse', "rootID=$libID&type=doc", "<i class='icon icon-cog'></i>", '', "title='{$lang->tree->manage}' class='btn btn-link'")?>
+              </td>
             </tr>
             <?php endforeach;?>
             <?php endif;?>
@@ -77,15 +78,15 @@ var browseType = '<?php echo $browseType;?>';
             <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
             <tr>
               <td class="c-name"><?php echo html::a(inlink('view', "docID=$doc->id"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title);?></td>
-              <td class="c-actions">
-                <?php common::printLink('doc', 'collect', "objectID=$doc->id&objectType=doc", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$lang->doc->collect}' class='btn btn-link'")?>
-                <?php common::printLink('doc', 'edit', "docID=$doc->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'")?>
-                <?php common::printLink('doc', 'delete', "docID=$doc->id", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
-              </td>
               <td class="c-num"></td>
               <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
               <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'm-d h:i');?></td>
               <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'm-d h:i');?></td>
+              <td>
+                <?php common::printLink('doc', 'collect', "objectID=$doc->id&objectType=doc", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$lang->doc->collect}' class='btn btn-link'")?>
+                <?php common::printLink('doc', 'edit', "docID=$doc->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'")?>
+                <?php common::printLink('doc', 'delete', "docID=$doc->id", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
+              </td>
             </tr>
             <?php endforeach;?>
           </tbody>

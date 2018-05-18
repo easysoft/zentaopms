@@ -1,14 +1,9 @@
-$(document).ready(function()
-{
-    setTimeout(function(){fixedTheadOfList('#bug')}, 100);
-});
-
 function changeParams(obj)
 {
-    var begin = $('.main .row').find('#begin').val();
-    var end = $('.main .row').find('#end').val();
-    var product = $('.main .row').find('#product').val();
-    var project = $('.main .row').find('#project').val();
+    var begin   = $('#conditions').find('#begin').val();
+    var end     = $('#conditions').find('#end').val();
+    var product = $('#conditions').find('#product').val();
+    var project = $('#conditions').find('#project').val();
     if(begin.indexOf('-') != -1)
     {
         var beginarray = begin.split("-");

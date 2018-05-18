@@ -21,7 +21,7 @@ $lang->doc->digest         = 'Summary';
 $lang->doc->comment        = 'Remark';
 $lang->doc->type           = 'Type';
 $lang->doc->content        = 'Text';
-$lang->doc->keywords       = 'Keywords';
+$lang->doc->keywords       = 'Tags';
 $lang->doc->url            = 'URL';
 $lang->doc->files          = 'File';
 $lang->doc->addedBy        = 'Creator';
@@ -35,7 +35,7 @@ $lang->doc->fileObject     = 'The Object';
 $lang->doc->whiteList      = 'White List';
 $lang->doc->contentType    = 'Format';
 $lang->doc->separator      = "<i class='icon-angle-right'></i>";
-$lang->doc->fileTitle      = 'File Title';
+$lang->doc->fileTitle      = 'File Name';
 $lang->doc->filePath       = 'File Path';
 $lang->doc->extension      = 'Extension';
 $lang->doc->size           = 'Size';
@@ -53,14 +53,14 @@ $lang->doc->orderByEdit    = 'Recently Modifie';
 
 /* 方法列表。*/
 $lang->doc->index          = 'Home';
-$lang->doc->create         = 'Create Doc';
+$lang->doc->create         = 'Create a Doc';
 $lang->doc->edit           = 'Edit';
 $lang->doc->delete         = 'Delete';
 $lang->doc->browse         = 'List';
 $lang->doc->view           = 'Details';
 $lang->doc->diff           = 'Diff';
 $lang->doc->sort           = 'Sort';
-$lang->doc->manageType     = 'Manage category';
+$lang->doc->manageType     = 'Manage Category';
 $lang->doc->editType       = 'Edit';
 $lang->doc->deleteType     = 'Delete';
 $lang->doc->addType        = 'Add';
@@ -73,11 +73,11 @@ $lang->doc->customAB       = 'Custom Library';
 $lang->doc->createLib      = 'Create Library';
 $lang->doc->allLibs        = 'Libraries';
 $lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->projectCommon} Library List";
-$lang->doc->showFiles      = 'File Library';
+$lang->doc->showFiles      = 'Doc Library';
 $lang->doc->editLib        = 'Edit Library';
 $lang->doc->deleteLib      = 'Delete Library';
-$lang->doc->fixedMenu      = 'Fixed In Menu';
-$lang->doc->removeMenu     = 'Remove From Menu';
+$lang->doc->fixedMenu      = 'Fixed to Menu';
+$lang->doc->removeMenu     = 'Remove from Menu';
 $lang->doc->search         = 'Search';
 
 /* 查询条件列表 */
@@ -112,6 +112,21 @@ $lang->doc->browseTypeList['list'] = 'List';
 $lang->doc->browseTypeList['menu'] = 'Menu';
 $lang->doc->browseTypeList['tree'] = 'Tree';
 $lang->doc->browseTypeList['card'] = 'Card';
+
+$lang->doc->orderByOpen    = 'Recently Added';
+
+$lang->doc->fastMenuList['byediteddate']  = 'Recently Modified';
+//$lang->doc->fastMenuList['visiteddate']   = 'Recently Visited';
+$lang->doc->fastMenuList['openedbyme']    = 'My Doc';
+$lang->doc->fastMenuList['collectedbyme'] = 'My collection';
+
+$lang->doc->fastMenuIconList['byediteddate']  = 'icon-folder-upload';
+//$lang->doc->fastMenuIconList['visiteddate']   = 'icon-folder-move';
+$lang->doc->fastMenuIconList['openedbyme']    = 'icon-folder-account';
+$lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
+
+$lang->doc->customObjectLibs['files']       = 'Display File Library';
+$lang->doc->customObjectLibs['customFiles'] = 'Display Custom Library';
 
 $lang->doc->confirmDelete      = "Do you want to delete this document?";
 $lang->doc->confirmDeleteLib   = "Do you want to delete this Doc Lib?";
