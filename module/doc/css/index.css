@@ -9,3 +9,4 @@
 #libs .libs-custom-heading a{display:block;height:100%;}
 #libs .libs-custom-heading .lable-custom{position: absolute;left:8px;}
 #libs hr {margin-top:0px;}
+#libs .panel-body {overflow: auto; max-height: 224px;}
