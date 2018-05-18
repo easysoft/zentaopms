@@ -13,12 +13,10 @@ $jqueryRoot = $jsRoot . 'jquery/';
 
 /* Set js files to combined. */
 $jsFiles[] = $jqueryRoot . 'lib.js'; 
+$jsFiles[] = $jqueryRoot . 'tablesorter/min.js';
+$jsFiles[] = $jqueryRoot . 'tablesorter/metadata.js';
 $jsFiles[] = $jsRoot     . 'zui/min.js'; 
 $jsFiles[] = $jsRoot     . 'my.full.js';
-$jsFiles[] = $jqueryRoot . 'chosen/min.js';
-$jsFiles[] = $jqueryRoot . 'treeview/min.js';
-$jsFiles[] = $jqueryRoot . 'datetimepicker/min.js';
-$jsFiles[] = $jsRoot     . 'chartjs/chart.min.js';
 
 /* Combine these js files. */
 $allJSFile  = $jsRoot . 'all.js';
@@ -52,9 +50,6 @@ foreach($langs as $lang)
         /* Common css files. */
         $cssCode  = $zuiCode;
         $cssCode .= file_get_contents($themeRoot  . 'default/style.css');
-        $cssCode .= file_get_contents($jqueryRoot . 'chosen/min.css');
-        $cssCode .= file_get_contents($themeRoot  . 'default/treeview.css');
-        $cssCode .= file_get_contents($jqueryRoot . 'datetimepicker/min.css');
 
         /* Css file for current lang and current them. */
         $cssCode .= file_get_contents($themeRoot . "lang/$lang.css");
