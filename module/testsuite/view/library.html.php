@@ -243,7 +243,7 @@ js::set('flow',   $this->config->global->flow);
             <?php endif;?>
           </div>
         </div>
-        <?php echo $pager->show('right', 'pagerjs');?>
+        <?php $pager->show('right', 'pagerjs');?>
       </div>
       <?php endif;?>
     </form>
