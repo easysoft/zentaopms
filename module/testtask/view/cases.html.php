@@ -126,7 +126,7 @@
           ?>
         </div>
         <?php endif;?>
-        <?php echo $pager->show('right', 'pagerjs');?>
+        <?php $pager->show('right', 'pagerjs');?>
       </div>
       <?php endif;?>
     </form>
