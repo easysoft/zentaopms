@@ -243,7 +243,7 @@ $lang->project->subMenu->list->tree      = '树状图|project|tree|projectID=%s'
 
 $lang->project->subMenu->qa = new stdclass();
 $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
-$lang->project->subMenu->qa->build    = '版本|project|build|projectID=%s';
+$lang->project->subMenu->qa->build    = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->subMenu->qa->testtask = array('link' => '测试单|project|testtask|projectID=%s', 'subModule' => 'testreport');
 
 $lang->project->subMenu->action = new stdclass();
