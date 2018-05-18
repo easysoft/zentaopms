@@ -665,8 +665,6 @@ class commonModel extends model
      */
     public static function printCommentIcon($commentFormLink, $object = null)
     {
-        if(isonlybody()) return false;
-
         global $lang;
 
         if(!commonModel::hasPriv('action', 'comment', $object)) return false;
@@ -676,7 +674,7 @@ class commonModel extends model
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+        <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
         <h4 class="modal-title">{$lang->action->create}</h4>
       </div>
       <div class="modal-body">

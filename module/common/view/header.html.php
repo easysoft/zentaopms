@@ -52,6 +52,6 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
   ?>
 </header>
 
-<main id='main' <?php if(!empty($this->config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >
 <?php endif;?>
+<main id='main' <?php if(!empty($this->config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >
   <div class='container'>
