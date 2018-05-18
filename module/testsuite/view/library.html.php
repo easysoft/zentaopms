@@ -22,7 +22,6 @@ js::set('flow',   $this->config->global->flow);
 <?php if($this->config->global->flow == 'onlyTest'):?>
 <style>
 .nav > li > .btn-group > a, .nav > li > .btn-group > a:hover, .nav > li > .btn-group > a:focus{background: #1a4f85; border-color: #164270;}
-.outer.with-side #featurebar {background: none; border: none; line-height: 0; margin: 0; min-height: 0; padding: 0; }
 #querybox #searchform{border-bottom: 1px solid #ddd; margin-bottom: 20px;}
 </style>
 <div id='mainMenu' class='clearfix'>
@@ -91,8 +90,8 @@ js::set('flow',   $this->config->global->flow);
     <?php
     if(common::hasPriv('testsuite', 'library'))
     {
-        echo html::a($this->inlink('library', "libID=$libID&browseType=all"), "<span class='text'>{$lang->testcase->allCases}</span><span class='label label-light label-badge'>{$pager->recTotal}</span>", '', "id='allTab' class='btn btn-link'");
-        if($config->testcase->needReview or !empty($config->testcase->forceReview)) echo html::a($this->inlink('library', "libID=$libID&browseType=wait"), "<span class='text'>" . $lang->testcase->statusList['wait'] . "</span><span class='label label-light label-badge'>{$pager->recTotal}</span>", '', "id='waitTab' class='btn btn-link'");
+        echo html::a($this->inlink('library', "libID=$libID&browseType=all"), "<span class='text'>{$lang->testcase->allCases}</span>", '', "id='allTab' class='btn btn-link'");
+        if($config->testcase->needReview or !empty($config->testcase->forceReview)) echo html::a($this->inlink('library', "libID=$libID&browseType=wait"), "<span class='text'>" . $lang->testcase->statusList['wait'] . "</span>", '', "id='waitTab' class='btn btn-link'");
     }
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->testcase->bySearch;?></a>
@@ -151,14 +150,14 @@ js::set('flow',   $this->config->global->flow);
             <th class='c-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
             <th class='c-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
             <th class='c-status'><?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
-            <th class='c-actions-2 text-center'><?php echo $lang->actions;?></th>
+            <th class='w-130px text-center'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
           <?php if($cases):?>
           <?php foreach($cases as $case):?>
           <tr>
-            <td class='cell-id'>
+            <td class='c-id'>
               <?php if($canBatchAction):?>
               <?php echo html::checkbox('caseIDList', array($case->id => sprintf('%03d', $case->id)));?>
               <?php else:?>
@@ -176,7 +175,7 @@ js::set('flow',   $this->config->global->flow);
             <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'> <?php echo $lang->testcase->statusList[$case->status];?></td>
             <td class='c-actions'>
               <?php
-              if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'review', '', 'iframe');
+              if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
               common::printIcon('testcase',  'edit', "caseID=$case->id", $case, 'list');
               if(common::hasPriv('testcase', 'delete'))
               {
@@ -252,14 +251,13 @@ js::set('flow',   $this->config->global->flow);
 </div>
 <script>
 $('#module' + moduleID).addClass('active'); 
-$('#<?php echo $this->session->libBrowseType?>Tab').addClass('btn-active-text');
+$('#<?php echo $this->session->libBrowseType?>Tab').addClass('btn-active-text').append("<span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>");
 if(flow == 'onlyTest')
 {
-    $('#modulemenu > .nav > li.right').before($('#featurebar .submenu').html());
     toggleSearch();
 
-    $('#modulemenu > .nav > li').removeClass('active');
-    $('#modulemenu > .nav > li[data-id=' + browseType + ']').addClass('active');
+    $('#subNavbar > .nav > li').removeClass('active');
+    $('#subNavbar > .nav > li[data-id=' + browseType + ']').addClass('active');
 }
 </script>
 <?php include '../../common/view/footer.html.php';?>
