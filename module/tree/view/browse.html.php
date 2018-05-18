@@ -236,7 +236,6 @@ $(function()
     var $tree = $('#modulesTree').tree(options);
 
     var tree = $tree.data('zui.tree');
-    console.log('tree', tree, options);
     if(<?php echo $currentModuleID ?>)
     if(0)
     {

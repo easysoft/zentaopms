@@ -108,16 +108,16 @@
     <div class="row form-group">
       <label class="col-sm-1"><?php echo $lang->todo->status;?></label>
       <div class="col-sm-2">
-        <?php echo html::select('status', $lang->todo->statusList, $todo->status, "class='form-control'");?>
+        <?php echo html::select('status', $lang->todo->statusList, $todo->status, "class='form-control chosen-simple'");?>
       </div>
     </div>
     <div class="row form-group">
       <label class="col-sm-1"><?php echo $lang->todo->beginAndEnd;?></label>
       <div class="col-sm-2" style='padding-right:0px'>
-        <?php echo html::select('begin', $times, $todo->begin, 'onchange=selectNext(); class="form-control chosen"')?>
+        <?php echo html::select('begin', $times, $todo->begin, 'onchange=selectNext(); class="form-control chosen" data-drop_direction="up"')?>
       </div>
       <div class="col-sm-2" style='padding-left:0px'>
-        <?php echo html::select('end', $times, $todo->end, 'class="form-control chosen"');?>
+        <?php echo html::select('end', $times, $todo->end, 'class="form-control chosen" data-drop_direction="up"');?>
       </div>
       <div class="col-sm-4">
         <div class='checkbox-primary dateSwitcher'>
