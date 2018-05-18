@@ -170,7 +170,7 @@
               </thead>
               <tbody>
                 <?php foreach($myDocs as $doc):?>
-                <tr data-url="">
+                <tr data-url="<?php echo $this->createLink('doc', 'view', "docID={$doc->id}");?>">
                   <td class="c-name"><?php echo $doc->title;?></td>
                   <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
                   <td class="c-datetime"><?php echo formatTime($doc->editedDate) ? formatTime($doc->editedDate, 'm-d H:i') : formatTime($doc->addedDate, 'm-d H:i');?></td>
