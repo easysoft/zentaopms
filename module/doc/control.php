@@ -103,6 +103,8 @@ class doc extends control
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $lib->product);
             $this->lang->set('menugroup.doc', 'product');
+
+            if(common::hasPriv('doc', 'create')) $this->lang->modulePageActions = html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");
         }
         elseif($from == 'project')
         {
@@ -110,6 +112,8 @@ class doc extends control
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             $this->project->setMenu($this->project->getPairs('nocode'), $lib->project);
             $this->lang->set('menugroup.doc', 'project');
+
+            if(common::hasPriv('doc', 'create')) $this->lang->modulePageActions = html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");
         }
         else
         {
@@ -296,6 +300,8 @@ class doc extends control
             $this->lang->doc->menuOrder = $this->lang->product->menuOrder;
             $this->product->setMenu($this->product->getPairs(), $lib->product);
             $this->lang->set('menugroup.doc', 'product');
+
+            if(common::hasPriv('doc', 'create')) $this->lang->modulePageActions = html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");
         }
         elseif($this->from == 'project')
         {
@@ -303,6 +309,8 @@ class doc extends control
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             $this->project->setMenu($this->project->getPairs('nocode'), $lib->project);
             $this->lang->set('menugroup.doc', 'project');
+
+            if(common::hasPriv('doc', 'create')) $this->lang->modulePageActions = html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");
         }
         else
         {
