@@ -99,7 +99,7 @@ class testtaskModel extends model
             ->setDefault('build', '')
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->remove('uid')
+            ->remove('uid,contactListMenu')
             ->get();
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->create['id'], $this->post->uid);
