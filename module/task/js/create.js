@@ -75,6 +75,7 @@ function setPreview()
     {
         $('#preview').addClass('hidden');
         $('#copyButton').addClass('hidden');
+        $('div.colorpicker').css('right', '1px');//Adjust for task #4151;
     }
     else
     {
@@ -84,6 +85,7 @@ function setPreview()
         $('#preview').removeClass('hidden');
         $('#preview a').attr('href', storyLink);
         $('#copyButton').removeClass('hidden');
+        $('div.colorpicker').css('right', '57px');//Adjust for task #4151;
     }
 
     setAfter();
