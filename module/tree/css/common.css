@@ -14,3 +14,4 @@
 .col-shorts .chosen-container-single .chosen-single {border-radius: 0 2px 2px 0;}
 
 #modulesTree li {padding-left: 20px;}
+#modulesTree li > .list-toggle {top: 0}
