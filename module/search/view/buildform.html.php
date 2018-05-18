@@ -16,12 +16,6 @@ include '../../common/view/datepicker.html.php';
 include '../../common/view/chosen.html.php';
 ?>
 <style>
-.w-400px {width: 400px;}
-.w-60px {width: 60px;}
-.w-160px {width: 160px;}
-.w-120px {width: 120px;}
-.w-70px {width: 70px;}
-.w-110px {width: 110px;}
 #selectPeriod {padding: 4px 0; height: 197px; min-width: 120px}
 #selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 4px 0; line-height: 20px; margin: 5px 10px; font-size: 14px; border-radius: 2px; color: #333; font-size: 12px}
 #groupAndOr {display: inline-block;}
@@ -41,9 +35,11 @@ include '../../common/view/chosen.html.php';
 
 #userQueries {border-left: 1px solid #eee; vertical-align: top;}
 #userQueries > h4 {margin: 0 0 6px;}
-#userQueries .label {line-height: 24px; padding: 0 4px 0 8px; display: inline-block; background-color: #EEEEEE; color: #A6AAB8; border-radius: 12px; margin-bottom: 5px;}
+#userQueries ul {list-style: none; padding-left: 0; margin: 0;}
+#userQueries ul li + li {margin-top: 5px;}
+#userQueries .label {line-height: 24px; padding: 0 20px 0 8px; display: inline-block; background-color: #EEEEEE; color: #A6AAB8; border-radius: 12px; max-width: 100%; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; position: relative;}
 #userQueries .label:hover {background-color: #aaa; color: #fff;}
-#userQueries .label > .icon-close {position: relative; top: 0; border-radius: 9px; font-size: 12px; line-height: 18px; width: 18px; display: inline-block;}
+#userQueries .label > .icon-close {position: absolute; top: 2px; right: 2px; border-radius: 9px; font-size: 12px; line-height: 18px; width: 18px; display: inline-block;}
 #userQueries .label > .icon-close:hover {background-color: #ff5d5d; color: #fff;}
 </style>
 <form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='searchForm'>
@@ -190,12 +186,12 @@ foreach($fieldParams as $fieldName => $param)
       <?php if($style != 'simple'):?>
       <td class='w-160px' rowspan='2' id='userQueries'>
         <h4><?php echo $lang->search->savedQuery;?></h4>
-        <div>
+        <ul>
           <?php foreach($queries as $queryID => $queryName):?>
           <?php if(empty($queryID)) continue;?>
-          <?php echo html::a("javascript:executeQuery($queryID)", $queryName . (common::hasPriv('search', 'deleteQuery') ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID'");?>
+          <li><?php echo html::a("javascript:executeQuery($queryID)", $queryName . (common::hasPriv('search', 'deleteQuery') ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID'");?></li>
           <?php endforeach;?>
-        </div>
+        </ul>
       </td>
       <?php endif;?>
     </tr>
