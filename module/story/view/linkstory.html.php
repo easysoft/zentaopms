@@ -67,7 +67,7 @@
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar">
-        <?php if($storyCount) echo html::submitButton();?>
+        <?php if($storyCount) echo html::submitButton('', '', 'btn btn-default');?>
       </div>
       <?php echo html::hidden('story', $story->id);?>
     </div>
