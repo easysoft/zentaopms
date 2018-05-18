@@ -13,11 +13,11 @@ function setRole(account, roleID)
     roleOBJ.val(role)               // set the role.
 }
 
-function addItem()
+function addItem(obj)
 {
     var item = $('#addItem').html().replace(/%i%/g, i);
-    $('#teamForm table tbody').append('<tr class="addedItem">' + item  + '</tr>');
-    var accounts = $('#submit').closest('table').find('tr.addedItem:last').find('select:first')
+    $(obj).closest('tr').after('<tr class="addedItem">' + item  + '</tr>');
+    var accounts = $('#hours' + i).closest('tr').find('select:first')
     accounts.trigger('liszt:updated');
     accounts.chosen();
     i ++;
