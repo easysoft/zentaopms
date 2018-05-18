@@ -72,6 +72,7 @@ $lang->index->methodOrder[0] = 'index';
 $lang->resource->my = new stdclass();
 $lang->resource->my->index          = 'index';
 $lang->resource->my->todo           = 'todo';
+$lang->resource->my->calendar       = 'calendar';
 $lang->resource->my->task           = 'task';
 $lang->resource->my->bug            = 'bug';
 $lang->resource->my->testTask       = 'testTask';

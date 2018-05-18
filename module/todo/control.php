@@ -62,6 +62,7 @@ class todo extends control
                 $this->send(array('result' => 'success', 'id' => $todoID, 'name' => $todo->name, 'pri' => $todo->pri, 'priName' => $this->lang->todo->priList[$todo->pri], 'time' => date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin));
             }
 
+            if(isonlybody()) die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent.parent'));
             die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
         }
 

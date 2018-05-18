@@ -22,7 +22,7 @@
       <span class='text' style='color: <?php echo $case->color; ?>'><?php echo $case->title;?></span>
 
       <?php if($case->deleted):?>
-      <span class='label label-danger'><?php echo $lang->case->deleted;?></span>
+      <span class='label label-danger'><?php echo $lang->product->deleted;?></span>
       <?php endif; ?>
 
       <?php if($case->version > 1):?>

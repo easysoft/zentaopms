@@ -217,8 +217,8 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('9.8.2'));
                 $this->addUniqueKeyToTeam();
              case '9_8_3':
-             case '10_0_beta':
-                $this->execSQL($this->getUpgradeFile('10_0_beta'));
+                $this->execSQL($this->getUpgradeFile('9.8.3'));
+                $this->adjustPriv10_0_alpha();
        }
 
         $this->deletePatch();
@@ -326,8 +326,7 @@ class upgradeModel extends model
         case '9_8':
         case '9_8_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.8.1'));
         case '9_8_2':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.8.2'));
-        case '9_8_3':
-        case '10_0_beta': $confirmContent .= file_get_contents($this->getUpgradeFile('10.0.beta'));
+        case '9_8_3':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.8.3'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -2282,5 +2281,25 @@ class upgradeModel extends model
         }
         $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " ADD UNIQUE `team` (`root`, `type`, `account`)");
         return !dao::isError();
+    }
+
+    /**
+     * Adjust priv for 10_0_alpha.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv10_0_alpha()
+    {
+        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('my')->andWhere('method')->eq('todo')->fetchPairs('group', 'group');
+        foreach($groups as $group)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'my';
+            $groupPriv->method = 'calendar';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+        return true;
     }
 }
