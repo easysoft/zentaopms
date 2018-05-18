@@ -65,10 +65,13 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
               <?php echo html::textarea('comment', '', "rows='5' class='form-control kindeditor' hidefocus='true'");?>
             </div>
           </div>
-          <div class='form-group'><?php echo $this->fetch('file', 'buildform');?></div>
+          <div class="detail">
+            <div class="detail-title"><?php echo $lang->files;?></div>
+            <div class='detail-content'><?php echo $this->fetch('file', 'buildform');?></div>
+          </div>
 
           <div class='actions actions-form text-center'>
-            <?php 
+            <?php
             echo html::hidden('lastEditedDate', $bug->lastEditedDate);
             echo html::submitButton('', '', 'btn btn-wide btn-primary');
             $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
@@ -98,7 +101,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                   <th><?php echo $lang->bug->module;?></th>
                   <td>
                     <div class='input-group' id='moduleIdBox'>
-                    <?php 
+                    <?php
                     echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control chosen'");
                     if(count($moduleOptionMenu) == 1)
                     {
@@ -125,7 +128,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                   <td>
                     <?php
                     /**
-                     * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task. 
+                     * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task.
                      * These thress types if upgrade from bugfree2.x.
                      */
                     if($bug->type != 'designchange') unset($lang->bug->typeList['designchange']);
