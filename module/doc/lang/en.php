@@ -60,20 +60,21 @@ $lang->doc->myDoc          = 'My Doc';
 $lang->doc->myCollection   = 'My Collection';
 
 /* 方法列表。*/
-$lang->doc->index          = 'Home';
-$lang->doc->create         = 'Create a Doc';
-$lang->doc->edit           = 'Edit';
-$lang->doc->delete         = 'Delete';
-$lang->doc->browse         = 'List';
-$lang->doc->view           = 'Details';
-$lang->doc->diff           = 'Diff';
-$lang->doc->sort           = 'Sort';
-$lang->doc->manageType     = 'Manage Category';
-$lang->doc->editType       = 'Edit';
-$lang->doc->deleteType     = 'Delete';
-$lang->doc->addType        = 'Add';
-$lang->doc->childType      = 'Child';
-$lang->doc->collect        = 'Collect';
+$lang->doc->index            = 'Home';
+$lang->doc->create           = 'Create a Doc';
+$lang->doc->edit             = 'Edit';
+$lang->doc->delete           = 'Delete';
+$lang->doc->browse           = 'List';
+$lang->doc->view             = 'Details';
+$lang->doc->diff             = 'Diff';
+$lang->doc->sort             = 'Sort';
+$lang->doc->manageType       = 'Manage Category';
+$lang->doc->editType         = 'Edit';
+$lang->doc->deleteType       = 'Delete';
+$lang->doc->addType          = 'Add';
+$lang->doc->childType        = 'Child';
+$lang->doc->collect          = 'Collect';
+$lang->doc->cancelCollection = 'Collect Collection';
 
 $lang->doc->libName        = 'Name';
 $lang->doc->libType        = 'Category';

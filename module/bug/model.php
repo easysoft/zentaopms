@@ -2408,7 +2408,7 @@ class bugModel extends model
             if($id == 'title')
             {
                 $class .= ' text-left';
-                $title  = "title='{$bug->title}";
+                $title  = "title='{$bug->title}'";
             }
             if($id == 'assignedTo')
             {

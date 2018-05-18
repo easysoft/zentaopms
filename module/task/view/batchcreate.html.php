@@ -50,7 +50,7 @@
   $hiddenStory = ((isonlybody() and $storyID) || $this->config->global->flow == 'onlyTask') ? ' hidden' : '';
   if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
   ?>
-  <form method='post' class='load-indicator' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
+  <form method='post' class='load-indicator batch-actions-form' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
     <table class="table table-form" id="tableBody">
       <thead>
         <tr>
@@ -103,7 +103,7 @@
             <div class='input-group'>
               <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
               <span class='input-group-btn'>
-                <a href='javascript:copyStoryTitle(<?php echo $i;?>)' class='btn' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-angle-right'></i></a>
+                <a href='javascript:copyStoryTitle(<?php echo $i;?>)' class='btn btn-link btn-icon btn-copy' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-arrow-right'></i></a>
                 <?php echo html::hidden("storyEstimate$i") . html::hidden("storyDesc$i") . html::hidden("storyPri$i");?>
               </span>
             </div>
@@ -154,7 +154,7 @@
         <div class='input-group'>
           <?php echo html::select("story[%s]", $stories, $currentStory, "class='form-control' onchange='setStoryRelated(\"%s\")'");?>
           <span class='input-group-btn'>
-            <a href='javascript:copyStoryTitle("%s")' class='btn' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-angle-right'></i></a>
+            <a href='javascript:copyStoryTitle("%s")' class='btn btn-link btn-icon btn-copy' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-arrow-right'></i></a>
           </span>
         </div>
       </td>

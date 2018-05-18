@@ -75,7 +75,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
             echo html::hidden('lastEditedDate', $bug->lastEditedDate);
             echo html::submitButton('', '', 'btn btn-wide btn-primary');
             $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
-            echo html::linkButton($lang->goback, $browseLink, '', '', "btn btn-wide");
+            echo html::linkButton($lang->goback, $browseLink, 'self', '', "btn btn-wide");
             ?>
           </div>
           <hr class='small' />
