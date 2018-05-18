@@ -68,8 +68,10 @@
               <div class="text-primary file-info"><?php echo  $lib->allCount . $lang->doc->item;?></div>
             </a>
             <?php if($libID != 'project' and $libID != 'files'):?>
+            <?php $star = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
+            <?php $collectTitle = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
             <div class="actions">
-              <?php common::printLink('doc', 'collect', "objectID=$libID&objectType=doclib", "<i class='icon icon-star-empty'></i>", 'hiddenwin', "title='{$lang->doc->collect}' class='btn btn-link'")?>
+              <?php common::printLink('doc', 'collect', "objectID=$libID&objectType=doclib", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$collectTitle}' class='btn btn-link'")?>
               <?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link iframe'")?>
               <?php common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
               <?php common::printLink('tree', 'browse', "rootID=$libID&type=doc", "<i class='icon icon-cog'></i>", '', "title='{$lang->tree->manage}' class='btn btn-link'")?>
