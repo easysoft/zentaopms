@@ -12,7 +12,6 @@
 ?>
 <?php
 include '../../common/view/header.html.php';
-include '../../common/view/form.html.php';
 include '../../common/view/kindeditor.html.php';
 include '../../common/view/datepicker.html.php';
 js::set('holders', $lang->bug->placeholder);
@@ -31,7 +30,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
         <?php include '../../common/view/customfield.html.php';?>
       </div>
     </div>
-    <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
+    <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class="table table-form">
         <tbody>
           <tr>
