@@ -49,8 +49,8 @@ $lang->user->resetPassword    = 'Forgot Password?';
 
 $lang->user->index           = "Home";
 $lang->user->view            = "Overview";
-$lang->user->create          = "Add User";
-$lang->user->batchCreate     = "Batch Add User";
+$lang->user->create          = "Add a User";
+$lang->user->batchCreate     = "Batch Add";
 $lang->user->edit            = "Edit";
 $lang->user->batchEdit       = "Batch Edit";
 $lang->user->unlock          = "Unlock";
@@ -59,7 +59,7 @@ $lang->user->unbind          = "Unbind Zdoo";
 $lang->user->login           = "Login";
 $lang->user->mobileLogin     = "Mobile";
 $lang->user->editProfile     = "Edit";
-$lang->user->deny            = "Access Denied";
+$lang->user->deny            = "Access is denied.";
 $lang->user->confirmDelete   = "Are you sure to delete this user?";
 $lang->user->confirmUnlock   = "Are you sure to unlock this user?";
 $lang->user->confirmUnbind   = "Are you sure to unbind this user from Zdoo?";
@@ -74,8 +74,8 @@ $lang->user->project     = $lang->projectCommon;
 $lang->user->task        = 'Task';
 $lang->user->bug         = 'Bug';
 $lang->user->test        = 'Test';
-$lang->user->testTask    = 'Test Task';
-$lang->user->testCase    = 'Test Case';
+$lang->user->testTask    = 'TestTask';
+$lang->user->testCase    = 'TestCase';
 $lang->user->todo        = 'Todo';
 $lang->user->story       = 'Story';
 $lang->user->dynamic     = 'Dynamic';
@@ -86,7 +86,7 @@ $lang->user->finishedBy  = 'Finished';
 $lang->user->resolvedBy  = 'Resolved';
 $lang->user->closedBy    = 'Closed';
 $lang->user->reviewedBy  = 'Reviewed';
-$lang->user->canceledBy  = 'Cancelled';
+$lang->user->canceledBy  = 'Canceled';
 
 $lang->user->testTask2Him = 'Build';
 $lang->user->case2Him     = 'Case Assigned';
@@ -119,7 +119,7 @@ $lang->user->passwordStrengthList[2] = "<span style='color:green'>Strong</span>"
 $lang->user->statusList['active'] = 'Activated';
 $lang->user->statusList['delete'] = 'Deleted';
 
-$lang->user->keepLogin['on']      = 'Keep login';
+$lang->user->keepLogin['on']      = 'Remember Me';
 $lang->user->loginWithDemoUser    = 'Login as Demo User:';
 
 $lang->user->tpl = new stdclass();
@@ -133,7 +133,7 @@ $lang->user->placeholder->account   = 'Letters, Underline and Numbers, at least 
 $lang->user->placeholder->password1 = 'six characters at lease ';
 $lang->user->placeholder->role      = "Role affects content and user order.";
 $lang->user->placeholder->group     = "Group decides user privilege.";
-$lang->user->placeholder->commiter  = 'Svn or Git like';
+$lang->user->placeholder->commiter  = 'SVN/Git account';
 $lang->user->placeholder->verify    = 'Password is required.';
 
 $lang->user->placeholder->passwordStrength[1] = 'Letters and Numbers, at least 6 characters';
