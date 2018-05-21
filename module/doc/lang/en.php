@@ -48,16 +48,16 @@ $lang->doc->searchResult   = 'Search Result';
 
 $lang->doc->moduleDoc      = 'By Module';
 $lang->doc->searchDoc      = 'Search';
-$lang->doc->fast           = 'Fast access';
+$lang->doc->fast           = 'Qucik Entry';
 $lang->doc->allDoc         = 'All';
 $lang->doc->openedByMe     = 'My';
-$lang->doc->orderByOpen    = 'Recently Added';
-$lang->doc->orderByEdit    = 'Recently Modified';
-$lang->doc->orderByVisit   = 'Recently Visited';
-$lang->doc->todayEdited    = 'Today Modified';
-$lang->doc->pastEdited     = 'Past Modified';
+$lang->doc->orderByOpen    = 'Last Added';
+$lang->doc->orderByEdit    = 'Last Modified';
+$lang->doc->orderByVisit   = 'Last Visited';
+$lang->doc->todayEdited    = 'Update Today';
+$lang->doc->pastEdited     = 'Updated';
 $lang->doc->myDoc          = 'My Doc';
-$lang->doc->myCollection   = 'My Collection';
+$lang->doc->myCollection   = 'My Favorites';
 
 /* 方法列表。*/
 $lang->doc->index            = 'Home';
@@ -73,15 +73,15 @@ $lang->doc->editType         = 'Edit';
 $lang->doc->deleteType       = 'Delete';
 $lang->doc->addType          = 'Add';
 $lang->doc->childType        = 'Child';
-$lang->doc->collect          = 'Collect';
-$lang->doc->cancelCollection = 'Collect Collection';
+$lang->doc->collect          = 'Add Favorites';
+$lang->doc->cancelCollection = 'Remove Favorites';
 
 $lang->doc->libName        = 'Name';
 $lang->doc->libType        = 'Category';
 $lang->doc->custom         = 'Custom Library';
 $lang->doc->customAB       = 'Custom Library';
 $lang->doc->createLib      = 'Create Library';
-$lang->doc->allLibs        = 'Libraries';
+$lang->doc->allLibs        = 'Library';
 $lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->projectCommon} Library List";
 $lang->doc->showFiles      = 'Doc Library';
 $lang->doc->editLib        = 'Edit Library';
@@ -121,10 +121,10 @@ $lang->doc->browseType             = 'Categories';
 $lang->doc->browseTypeList['list'] = 'List';
 $lang->doc->browseTypeList['grid'] = 'Card';
 
-$lang->doc->fastMenuList['byediteddate']  = 'Recently Modified';
+$lang->doc->fastMenuList['byediteddate']  = 'Last Modified';
 //$lang->doc->fastMenuList['visiteddate']   = 'Recently Visited';
 $lang->doc->fastMenuList['openedbyme']    = 'My Doc';
-$lang->doc->fastMenuList['collectedbyme'] = 'My collection';
+$lang->doc->fastMenuList['collectedbyme'] = 'My Favorite';
 
 $lang->doc->fastMenuIconList['byediteddate']  = 'icon-folder-upload';
 //$lang->doc->fastMenuIconList['visiteddate']   = 'icon-folder-move';
@@ -152,7 +152,7 @@ $lang->doclib->control = 'Access Control';
 $lang->doclib->group   = 'Group';
 $lang->doclib->user    = 'User';
 $lang->doclib->files   = 'Files';
-$lang->doclib->all     = 'All Library';
+$lang->doclib->all     = 'All Libraries';
 $lang->doclib->select  = 'Select';
 $lang->doclib->project = $lang->projectCommon . ' Library';
 $lang->doclib->product = $lang->productCommon . ' Library';
