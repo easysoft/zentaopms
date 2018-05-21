@@ -67,8 +67,8 @@ $lang->testreport->errorTrunk     = "主幹版本不能創建測試報告，請�
 $lang->testreport->moreProduct    = "只能對同一個產品生成測試報告。";
 
 $lang->testreport->bugSummary = <<<EOD
-共發現<strong>%s</strong>個Bug <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-info-sign'></i></a>，
-遺留<strong>%s</strong>個Bug <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->legacyBugTip}'><i class='icon-info-sign'></i></a>。
-用例執行產生<strong>%s</strong>個Bug <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->fromCaseBugTip}'><i class='icon-info-sign'></i></a>。
+共發現<strong>%s</strong>個Bug <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-exclamation-sign'></i></a>，
+遺留<strong>%s</strong>個Bug <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->legacyBugTip}'><i class='icon-exclamation-sign'></i></a>。
+用例執行產生<strong>%s</strong>個Bug <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->fromCaseBugTip}'><i class='icon-exclamation-sign'></i></a>。
 有效Bug率（方案為已解決或延期 / 狀態為已解決或已關閉）：<strong>%s</strong>，用例發現Bug率（用例創建的Bug / 發現Bug數）：<strong>%s</strong>
 EOD;

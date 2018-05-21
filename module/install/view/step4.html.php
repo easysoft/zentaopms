@@ -18,7 +18,7 @@
     </div>
     <div class='modal-body'>
       <div class='alert alert-danger alert-pure with-icon'>
-        <i class='icon-info-sign'></i>
+        <i class='icon-exclamation-sign'></i>
         <div class='content'><?php echo $error;?></div>
       </div>
     </div>

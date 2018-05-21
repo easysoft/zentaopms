@@ -17,7 +17,7 @@
   <div class='center-block'>
     <?php if(!empty($task->team) && $task->assignedTo != $this->app->user->account):?>
     <div class="alert with-icon">
-      <i class="icon-info-sign"></i>
+      <i class="icon-exclamation-sign"></i>
       <div class="content">
         <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->finish);?></p>
       </div>

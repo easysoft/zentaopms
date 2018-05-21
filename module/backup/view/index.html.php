@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php if(!empty($error)):?>
 <div id="notice" class='alert alert-success' style="margin-bottom:35px;">
-  <div class="content"><i class='icon-info-sign'></i> <?php echo $error;?></div>
+  <div class="content"><i class='icon-exclamation-sign'></i> <?php echo $error;?></div>
 </div>
 <?php endif;?>
 
