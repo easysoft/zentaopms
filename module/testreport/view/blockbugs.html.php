@@ -16,7 +16,7 @@
     <?php foreach($bugs as $bug):?>
     <tr>
       <td><?php echo $bug->id . html::hidden('bugs[]', $bug->id)?></td>
-      <td><span class='label-pri label-pri-<?php echo $bug->pri?>'><?php echo zget($lang->bug->priList, $bug->pri);?></span></td>
+      <td><span class='label-pri label-pri-<?php echo $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri);?></span></td>
       <td class='text-left' title='<?php echo $bug->title?>'><?php echo html::a($sysURL . $this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
       <td><?php echo zget($users, $bug->openedBy);?></td>
       <td><?php echo zget($users, $bug->resolvedBy);?></td>

@@ -1166,7 +1166,7 @@ class testtaskModel extends model
                 //}
                 break;
             case 'pri':
-                echo "<span class='label-pri label-pri-" . $run->pri . "'>";
+                echo "<span class='label-pri label-pri-" . $run->pri . "' title='" . zget($this->lang->testcase->priList, $run->pri, $run->pri) . "'>";
                 echo zget($this->lang->testcase->priList, $run->pri, $run->pri);
                 echo "</span>";
                 break;

@@ -55,7 +55,7 @@
         </td>
         <?php endif;?>
         <td class='c-id-sm'><?php echo $case->id;?></td>
-        <td><span class='label-pri <?php echo 'label-pri-' . $case->pri;?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
+        <td><span class='label-pri <?php echo 'label-pri-' . $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
         <td class='text-left'><?php if(!common::printLink('testcase', 'view', "case=$case->id", $case->title)) echo $case->title;?></td>
         <td><?php echo zget($lang->case->typeList, $case->type, '');?></td>
         <td><?php echo zget($users, $case->lastRunner);?></td>

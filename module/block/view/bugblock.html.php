@@ -42,7 +42,7 @@
       <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
         <td class='c-id-xs'><?php echo $bug->id;?></td>
         <?php if($longBlock):?>
-        <td class='c-pri'><span class='label-pri label-pri-<?php echo $bug->pri?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
+        <td class='c-pri'><span class='label-pri label-pri-<?php echo $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
         <?php endif;?>
         <td class='c-severity'><span class='label-severity' data-severity='<?php echo zget($lang->bug->severityList, $bug->severity);?>'></span></td>
         <td class='c-name' style='color: <?php echo $bug->color?>' title='<?php echo $bug->title?>'><?php echo $bug->title?></td>

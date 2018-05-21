@@ -151,7 +151,7 @@
         </td>
         <?php endif;?>
         <td class='c-id-sm'><?php echo $task->id;?></td>
-        <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $task->pri?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
+        <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $task->pri?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
         <td class="c-name">
           <?php
             if(!empty($task->team))   echo '<span class="label label-light label-badge">' . $lang->task->multipleAB . '</span> ';
