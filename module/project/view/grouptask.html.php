@@ -162,7 +162,7 @@
         </td>
         <td class="c-status"><span class='status-<?php echo $task->status;?>'><span class="label label-dot"></span> <?php echo $lang->task->statusList[$task->status];?></span></td>
         <?php $assignedToRealName = $task->assignedToRealName ? $task->assignedToRealName : $lang->task->noAssigned;?>
-        <td class="c-assign text-left has-btn"><?php echo html::a($this->createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", 'html', true), '<i class="icon icon-hand-right"></i> ' . $assignedToRealName, '', "class='iframe btn btn-icon-left' $assignedToClass");?></td>
+        <td class="c-assign text-left has-btn"><?php echo html::a($this->createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", 'html', true), '<i class="icon icon-hand-right"></i> ' . $assignedToRealName, '', "class='iframe btn btn-icon-left btn-sm' $assignedToClass");?></td>
         <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
         <td class="c-hours em"><?php echo $task->estimate;?></td>
         <td class="c-hours em"><?php echo $task->consumed;?></td>

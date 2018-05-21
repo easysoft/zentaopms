@@ -2319,12 +2319,15 @@ class taskModel extends model
                 case 'assignedTo':
                     $btnTextClass   = '';
                     $assignedToText = zget($users, $task->assignedTo);
-                    $btnTextClass   = 'text-primary';
-                    if(empty($task->assignedTo)) $assignedToText = $this->lang->task->noAssigned;
-                    if($task->assignedTo == $account) $btnTextClass = 'text-red';
+                    $btnTextClass   = '';
+                    if(empty($task->assignedTo))
+                    {
+                        $btnTextClass = 'text-primary';
+                        $assignedToText = $this->lang->task->noAssigned;
+                    } else if($task->assignedTo == $account) $btnTextClass = 'text-red';
                     $btnClass = $assignedToText == 'closed' ? ' disabled' : '';
                     
-                    echo html::a(helper::createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", '', true), "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='iframe btn btn-icon-left{$btnClass}'");
+                    echo html::a(helper::createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", '', true), "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='iframe btn btn-icon-left btn-sm {$btnClass}'");
                     break;
                 case 'assignedDate':
                     echo substr($task->assignedDate, 5, 11);

@@ -12,4 +12,3 @@
 .segment + .segment > .segment-value {padding-left: 10px;}
 .segment-title {color: #828A9D; font-size: 12px;}
 .segment-value {font-weight: bold;}
-.c-assign a{height:30px}
