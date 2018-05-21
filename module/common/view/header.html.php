@@ -19,7 +19,8 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
     <div class='container'>
       <hrgroup id='heading'>
         <?php if(empty($this->config->sso->redirect)):?>
-        <h1 id='companyname' title='<?php printf($lang->welcome, $app->company->name);?>'><?php printf($lang->welcome, $app->company->name);?></h1>
+        <?php $heading = sprintf($lang->welcome, $app->company->name);?>
+        <h1 id='companyname' title='<?php echo $heading . strlen($heading);?>'<?php if(strlen($heading) > 36) echo " class='long-name'" ?>><?php echo $heading;?></h1>
         <?php endif;?>
       </hrgroup>
       <nav id='navbar'><?php commonModel::printMainmenu($this->moduleName);?></nav>
