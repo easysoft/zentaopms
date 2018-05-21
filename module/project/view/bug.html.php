@@ -70,7 +70,7 @@
           <?php $params = "bugID=$bug->id";?>
           <?php $class = $bug->assignedTo == $this->app->user->account ? 'text-red' : 'text-primary';?>
           <?php if(common::hasPriv('bug', 'assignTo')):?>
-          <?php echo html::a($this->createLink('bug', 'assignTo', $params, '', 'true'), "<i class='icon icon-hand-right'></i> <span class='$class'>$assignedTo</span>", '', "class='iframe btn btn-icon-left'");?>
+          <?php echo html::a($this->createLink('bug', 'assignTo', $params, '', 'true'), "<i class='icon icon-hand-right'></i> <span class='$class'>$assignedTo</span>", '', "class='iframe btn btn-icon-left btn-sm'");?>
           <?php else:?>
           <?php echo $assignedTo;?>
           <?php endif;?>
