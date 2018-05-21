@@ -134,7 +134,7 @@
               <th><?php echo $lang->testcase->story;?></th>
               <td>
                 <?php
-                if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story"), "#$case->story:$case->storyTitle");
+                if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story", '', true), "#$case->story:$case->storyTitle", '', "class='iframe' data-width='80%'");
                 if($case->story and $case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
                 {
                     echo "(<span class='warning'>{$lang->story->changed}</span> ";
@@ -207,7 +207,7 @@
                 {
                     foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
                     {
-                        echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID"), "#$linkCaseID $linkCaseTitle", '_blank') . '<br />';
+                        echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID", '', true), "#$linkCaseID $linkCaseTitle", '', "class='iframe' data-width='80%'") . '<br />';
                     }
                 }
                 ?>
@@ -227,7 +227,7 @@
             <?php if($case->fromBug):?>
             <tr>
               <th class='w-60px'><?php echo $lang->testcase->fromBug;?></th>
-              <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$case->fromBug"), $case->fromBugTitle);?></td>
+              <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$case->fromBug", '', true), $case->fromBugTitle, '', "class='iframe' data-width='80%'");?></td>
             </tr>
             <?php endif;?>
             <?php if($case->toBugs):?>
@@ -237,7 +237,7 @@
               <?php 
               foreach($case->toBugs as $bugID => $bugTitle) 
               {
-                  echo '<p style="margin-bottom:0;">' . html::a($this->createLink('bug', 'view', "bugID=$bugID"), $bugTitle) . '</p>';
+                  echo '<p style="margin-bottom:0;">' . html::a($this->createLink('bug', 'view', "bugID=$bugID", '', true), $bugTitle, '', "class='iframe' data-width='80%'") . '</p>';
               }
               ?>
               </td>
