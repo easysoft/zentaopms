@@ -25,14 +25,14 @@ $lang->action->undelete    = 'Restore';
 $lang->action->hideOne     = 'Hide';
 $lang->action->hideAll     = 'Hide All';
 $lang->action->editComment = 'Edit';
-$lang->action->create      = 'Create Comment';
+$lang->action->create      = 'Add a Comment';
 $lang->action->comment     = 'Comment';
 
 $lang->action->trashTips      = 'Note: All Deletion in ZenTao are logical.';
 $lang->action->textDiff       = 'Text Format';
 $lang->action->original       = 'Original Format';
 $lang->action->confirmHideAll = 'Do you want to hide all the records?';
-$lang->action->needEdit       = '%s you want to restore exists. Please edit it.';
+$lang->action->needEdit       = '%s that you want to restore exists. Please edit it.';
 $lang->action->historyEdit    = 'The history editor cannot be empty.';
 
 $lang->action->history = new stdclass();
