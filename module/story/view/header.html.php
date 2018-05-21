@@ -1,6 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<script language='Javascript'>
+<script>
 function loadProduct(productID)
 {
     loadProductBranches(productID)

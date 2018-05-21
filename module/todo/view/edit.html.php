@@ -144,4 +144,4 @@
   </form>
 </div>
 <?php include './footer.html.php';?>
-<script language='Javascript'>switchDateFeature(document.getElementById('dateSwitcher'));</script>
+<script>switchDateFeature(document.getElementById('dateSwitcher'));</script>

@@ -4,7 +4,7 @@
 <body <?php if($browser != 'opera') echo "bgcolor='transparent'";?> style='color:white; font-size:13px; text-align:center'>
 <?php if($note):?>
 <?php echo $note;?>
-<script language='javascript'>window.parent.document.getElementById('updater').className=''</script>
+<script>window.parent.document.getElementById('updater').className=''</script>
 <?php endif;?>
 </body>
 </html>
