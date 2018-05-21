@@ -43,28 +43,38 @@ $lang->doc->download       = 'Download';
 $lang->doc->acl            = 'Right';
 $lang->doc->groups         = 'Groups';
 $lang->doc->users          = 'Users';
+$lang->doc->item           = 'Item';
+$lang->doc->searchResult   = 'Search Result';
 
 $lang->doc->moduleDoc      = 'By Module';
 $lang->doc->searchDoc      = 'Search';
+$lang->doc->fast           = 'Fast access';
 $lang->doc->allDoc         = 'All';
 $lang->doc->openedByMe     = 'My';
 $lang->doc->orderByOpen    = 'Recently Added';
-$lang->doc->orderByEdit    = 'Recently Modifie';
+$lang->doc->orderByEdit    = 'Recently Modified';
+$lang->doc->orderByVisit   = 'Recently Visited';
+$lang->doc->todayEdited    = 'Today Modified';
+$lang->doc->pastEdited     = 'Past Modified';
+$lang->doc->myDoc          = 'My Doc';
+$lang->doc->myCollection   = 'My Collection';
 
 /* 方法列表。*/
-$lang->doc->index          = 'Home';
-$lang->doc->create         = 'Create a Doc';
-$lang->doc->edit           = 'Edit';
-$lang->doc->delete         = 'Delete';
-$lang->doc->browse         = 'List';
-$lang->doc->view           = 'Details';
-$lang->doc->diff           = 'Diff';
-$lang->doc->sort           = 'Sort';
-$lang->doc->manageType     = 'Manage Category';
-$lang->doc->editType       = 'Edit';
-$lang->doc->deleteType     = 'Delete';
-$lang->doc->addType        = 'Add';
-$lang->doc->childType      = 'Child';
+$lang->doc->index            = 'Home';
+$lang->doc->create           = 'Create a Doc';
+$lang->doc->edit             = 'Edit';
+$lang->doc->delete           = 'Delete';
+$lang->doc->browse           = 'List';
+$lang->doc->view             = 'Details';
+$lang->doc->diff             = 'Diff';
+$lang->doc->sort             = 'Sort';
+$lang->doc->manageType       = 'Manage Category';
+$lang->doc->editType         = 'Edit';
+$lang->doc->deleteType       = 'Delete';
+$lang->doc->addType          = 'Add';
+$lang->doc->childType        = 'Child';
+$lang->doc->collect          = 'Collect';
+$lang->doc->cancelCollection = 'Collect Collection';
 
 $lang->doc->libName        = 'Name';
 $lang->doc->libType        = 'Category';
@@ -109,9 +119,20 @@ $lang->doc->contentTypeList['markdown'] = 'MarkDown';
 
 $lang->doc->browseType             = 'Categories';
 $lang->doc->browseTypeList['list'] = 'List';
-$lang->doc->browseTypeList['menu'] = 'Menu';
-$lang->doc->browseTypeList['tree'] = 'Tree';
-$lang->doc->browseTypeList['card'] = 'Card';
+$lang->doc->browseTypeList['grid'] = 'Card';
+
+$lang->doc->fastMenuList['byediteddate']  = 'Recently Modified';
+//$lang->doc->fastMenuList['visiteddate']   = 'Recently Visited';
+$lang->doc->fastMenuList['openedbyme']    = 'My Doc';
+$lang->doc->fastMenuList['collectedbyme'] = 'My collection';
+
+$lang->doc->fastMenuIconList['byediteddate']  = 'icon-folder-upload';
+//$lang->doc->fastMenuIconList['visiteddate']   = 'icon-folder-move';
+$lang->doc->fastMenuIconList['openedbyme']    = 'icon-folder-account';
+$lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
+
+$lang->doc->customObjectLibs['files']       = 'Display File Library';
+$lang->doc->customObjectLibs['customFiles'] = 'Display Custom Library';
 
 $lang->doc->confirmDelete      = "Do you want to delete this document?";
 $lang->doc->confirmDeleteLib   = "Do you want to delete this Doc Lib?";

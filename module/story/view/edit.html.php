@@ -24,9 +24,15 @@
       <div class='main-col col-8'>
         <div class='cell'>
           <div class='form-group'>
-            <div class='input-group'>
-              <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->story->colorTag ?>' value='<?php echo $story->color ?>' data-update-text='#title, .story-title'>
-              <?php echo html::input('title', $story->title, 'class="form-control disabled" disabled="disabled" autocomplete="off"');?>
+            <div class="input-control has-icon-right">
+              <div class="colorpicker">
+                <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" title="<?php echo $lang->task->colorTag ?>"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+                <ul class="dropdown-menu clearfix">
+                  <li class="heading"><?php echo $lang->story->colorTag;?><i class="icon icon-close"></i></li>
+                </ul>
+                <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $story->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".story-title"  data-provide="colorpicker">
+              </div>
+              <?php echo html::input('title', $story->title, 'class="form-control disabled story-title" disabled="disabled" autocomplete="off"');?>
             </div>
           </div>
           <div class='detail'>

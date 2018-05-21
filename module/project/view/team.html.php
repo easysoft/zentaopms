@@ -31,7 +31,7 @@
   </div>
 </div>
 <div id='mainContent'>
-  <form class='main-table' data-ride='table'>
+  <form class='main-table'>
     <table class='table' id='memberList'>
       <thead>
         <tr>

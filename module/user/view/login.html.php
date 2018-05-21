@@ -49,7 +49,7 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
                   <td></td>
                   <td class="form-actions">
                   <?php 
-                  echo html::submitButton($lang->login, '', 'btn btn-primary btn-wide');
+                  echo html::submitButton($lang->login, '', 'btn btn-primary');
                   if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));
                   echo html::hidden('referer', $referer);
                   echo html::a(inlink('reset'), $lang->user->resetPassword);

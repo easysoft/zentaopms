@@ -99,7 +99,7 @@ class testtaskModel extends model
             ->setDefault('build', '')
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->remove('uid')
+            ->remove('uid,contactListMenu')
             ->get();
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->create['id'], $this->post->uid);
@@ -1156,14 +1156,14 @@ class testtaskModel extends model
             switch ($id)
             {
             case 'id':
-                if($mode == 'table')
-                {
+                //if($mode == 'table')
+                //{
                     echo html::checkbox('caseIDList', array($run->case => sprintf('%03d', $run->case)));
-                }
-                else
-                {
-                    echo $canView ? html::a($caseLink, sprintf('%03d', $run->case)) : sprintf('%03d', $run->case);
-                }
+                //}
+                //else
+                //{
+                //    echo $canView ? html::a($caseLink, sprintf('%03d', $run->case)) : sprintf('%03d', $run->case);
+                //}
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $run->pri . "'>";
@@ -1222,8 +1222,8 @@ class testtaskModel extends model
                 if(!helper::isZeroDate($run->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($run->lastRunDate));
                 break;
             case 'lastRunResult':
-                $lastRunResult = $run->lastRunResult ? $this->lang->testcase->resultList[$run->lastRunResult] : '';
-                echo html::a(helper::createLink('testtask', 'results', "id=$run->id", '', true), "<i class='icon icon-list-alt'></i> <span>{$lastRunResult}</span>", '', "class='iframe btn btn-icon-left'");
+                $lastRunResultText = $run->lastRunResult ? zget($this->lang->testcase->resultList, $run->lastRunResult, $run->lastRunResult) : $this->lang->testcase->unexecuted;
+                echo html::a(helper::createLink('testtask', 'results', "id={$run->id}", '', true), "<i class='icon icon-list-alt'></i> <span>{$lastRunResultText}</span>", '', "class='iframe btn btn-icon-left'");
                 break;
             case 'story':
                 if($run->story and $run->storyTitle) echo html::a(helper::createLink('story', 'view', "storyID=$run->story"), $run->storyTitle);

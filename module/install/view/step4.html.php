@@ -18,7 +18,7 @@
     </div>
     <div class='modal-body'>
       <div class='alert alert-danger alert-pure with-icon'>
-        <i class='icon-info-sign'></i>
+        <i class='icon-exclamation-sign'></i>
         <div class='content'><?php echo $error;?></div>
       </div>
     </div>
@@ -43,7 +43,7 @@
       <strong><?php echo $lang->install->getPriv;?></strong>
     </div>
     <div class='modal-body'>
-      <form class='form-condensed' method='post' target='hiddenwin'>
+      <form method='post' target='hiddenwin'>
         <table class='table table-form mw-400px' style='margin: 0 auto'>
           <tr>
             <th class='w-100px'><?php echo $lang->install->company;?></th>

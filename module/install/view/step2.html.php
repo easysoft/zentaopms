@@ -12,7 +12,7 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <div class='container'>
   <div class='modal-dialog'>
-    <form method='post' action='<?php echo $this->createLink('install', 'step3');?>' class='form-condensed'>
+    <form method='post' action='<?php echo $this->createLink('install', 'step3');?>'>
       <div class='modal-header'><strong><?php echo $lang->install->setConfig;?></strong></div>
       <div class='modal-body'>
         <table align='center' class='table table-bordered table-form'>

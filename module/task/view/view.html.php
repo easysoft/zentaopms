@@ -15,13 +15,15 @@
 <?php $browseLink = $app->session->taskList != false ? $app->session->taskList : $this->createLink('project', 'browse', "projectID=$task->project");?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
+    <?php if(!isonlybody()):?>
     <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-link'");?>
     <div class="divider"></div>
+    <?php endif;?>
     <div class="page-title">
       <span class="label label-id"><?php echo $task->id?></span>
       <span class="text" style='color: <?php echo $task->color; ?>'>
-        <?php if(!empty($task->parent)) echo '<span class="label no-margin">' . $this->lang->task->childrenAB . '</span>';?>
-        <?php if(!empty($task->team)) echo '<span class="label no-margin">' . $this->lang->task->multipleAB . '</span>';?>
+        <?php if(!empty($task->parent)) echo '<span class="label label-badge label-light no-margin">' . $this->lang->task->childrenAB . '</span>';?>
+        <?php if(!empty($task->team)) echo '<span class="label label-badge label-light no-margin">' . $this->lang->task->multipleAB . '</span>';?>
         <?php echo isset($task->parentName) ? $task->parentName . '/' : '';?><?php echo $task->name;?>
       </span>
       <?php if($task->deleted):?>
@@ -334,6 +336,7 @@
 </div>
 
 <div id="mainActions">
+  <?php echo $preAndNext;?>
   <?php common::printPreAndNext($preAndNext);?>
   <div class="btn-toolbar">
     <?php common::printBack($browseLink);?>

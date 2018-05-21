@@ -231,19 +231,19 @@ $dataType = '';
 <script language='Javascript'>
 function initBurnChar()
 {
-    var data = 
+    var data =
     {
         labels: <?php echo json_encode($chartData['labels'])?>,
         datasets: [
         {
-            label: "<?php echo $lang->project->baseline;?>",
+            label: "<?php echo $lang->project->charts->burn->graph->reference;?>",
             color: "#CCC",
             fillColor: "rgba(0,0,0,0)",
             showTooltips: false,
             data: <?php echo $chartData['baseLine']?>
         },
         {
-            label: "<?php echo $lang->project->Left?>",
+            label: "<?php echo $lang->project->charts->burn->graph->actuality;?>",
             color: "#0033CC",
             data: <?php echo $chartData['burnLine']?>
         }]

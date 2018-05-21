@@ -22,7 +22,7 @@
       <span class='text' style='color: <?php echo $case->color; ?>'><?php echo $case->title;?></span>
 
       <?php if($case->deleted):?>
-      <span class='label label-danger'><?php echo $lang->case->deleted;?></span>
+      <span class='label label-danger'><?php echo $lang->product->deleted;?></span>
       <?php endif; ?>
 
       <?php if($case->version > 1):?>
@@ -168,7 +168,7 @@
             </tr>
             <tr>
               <th><?php echo $lang->testcase->pri;?></th>
-              <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri)?></span></td>
+              <td><span class='label-pri label-pri-<?php echo $case->pri;?>'><?php echo zget($lang->testcase->priList, $case->pri)?></span></td>
             </tr>
             <tr>
               <th><?php echo $lang->testcase->status;?></th>

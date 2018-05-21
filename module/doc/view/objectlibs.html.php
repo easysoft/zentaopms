@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class="main-row split-row" id="mainRow">
+<div class="main-row <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
   <?php if($this->from == 'doc'):?>
   <?php include './side.html.php';?>
   <?php endif;?>
@@ -52,7 +52,7 @@
           <?php foreach($libs as $libID => $lib):?>
           <?php if($libID == 'project' and $from != 'doc') continue;?>
           <?php if(strpos($this->config->doc->custom->objectLibs, 'files') === false && $libID == 'files') continue;?>
-          <?php if(strpos($this->config->doc->custom->objectLibs, 'customFiles') === false && !$lib->main) continue;?>
+          <?php if(strpos($this->config->doc->custom->objectLibs, 'customFiles') === false && isset($lib->main) && !$lib->main) continue;?>
 
           <?php $libLink = inlink('browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=$from");?>
           <?php if($libID == 'project') $libLink = inlink('allLibs', "type=project&product=$object->id");?>
@@ -68,10 +68,13 @@
               <div class="text-primary file-info"><?php echo  $lib->allCount . $lang->doc->item;?></div>
             </a>
             <?php if($libID != 'project' and $libID != 'files'):?>
+            <?php $star = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
+            <?php $collectTitle = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
             <div class="actions">
-              <?php common::printLink('doc', 'collect', "objectID=$libID&objectType=doclib", "<i class='icon icon-star-empty'></i>", 'hiddenwin', "title='{$lang->doc->collect}' class='btn btn-link'")?>
+              <?php common::printLink('doc', 'collect', "objectID=$libID&objectType=doclib", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$collectTitle}' class='btn btn-link'")?>
               <?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link iframe'")?>
               <?php common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
+              <?php common::printLink('tree', 'browse', "rootID=$libID&type=doc", "<i class='icon icon-cog'></i>", '', "title='{$lang->tree->manage}' class='btn btn-link'")?>
             </div>
             <?php endif;?>
           </div>

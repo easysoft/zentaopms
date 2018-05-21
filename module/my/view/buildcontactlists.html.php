@@ -13,7 +13,7 @@
 <?php 
 if($contactLists)
 {
-    echo html::select('', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");
+    echo html::select('contactListMenu', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");
 }
 else
 {
@@ -23,3 +23,6 @@ else
     echo '</span>';
 }
 ?>
+<style>
+#contactListMenu + .chosen-container {min-width: 100px;}
+</style>

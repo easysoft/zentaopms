@@ -11,18 +11,18 @@
  */
 ?>
 <div class="modal fade" id="assigntoModal">
-  <div class="modal-dialog">
+  <div class="modal-dialog mw-600px">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title"><i class="icon-file-text"></i> <?php echo $lang->todo->assignTo;?></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $lang->todo->assignTo;?></h4>
       </div>
       <div class="modal-body">
         <form class='load-indicator main-form' method='post' target='hiddenwin' id="todoAssignForm">
           <table class='table table-form'>
             <tr>
               <th class='w-80px'><?php echo $lang->todo->assignTo;?></th>
-              <td class='w-p25-f'>
+              <td>
                   <?php echo html::select('assignedTo', $members, '', "class='form-control chosen'");?>
               </td><td></td>
             </tr>

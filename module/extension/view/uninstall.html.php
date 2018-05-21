@@ -22,7 +22,7 @@
     </div>
     <?php if(isset($confirm) and $confirm == 'no'):?>
     <div class='alert alert-pure with-icon'>
-      <i class='icon-info-sign'></i>
+      <i class='icon-exclamation-sign'></i>
       <div class='content'>
       <?php
         echo "<p class='waring'>{$lang->extension->confirmUninstall}";
@@ -33,7 +33,7 @@
     </div>
     <?php elseif(!empty($error)):?>
     <div class='alert alert-pure with-icon'>
-      <i class='icon-info-sign'></i>
+      <i class='icon-exclamation-sign'></i>
       <div class='content'>
       <?php
         echo "<h3 class='error'>" . $lang->extension->uninstallFailed . "</h3>"; 

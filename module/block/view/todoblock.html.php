@@ -11,7 +11,7 @@
  */
 ?>
 <style>
-.block-todoes .panel-body {position: relative;padding-top: 42px;overflow: visible;}
+.block-todoes .panel-body {position: relative; padding-top: 42px;}
 .block-todoes .todoes-input {position: absolute;top: 0;right: 0;left: 0;padding: 0 20px 20px 20px;}
 .block-todoes .todoes-input .form-control::-webkit-input-placeholder {font-size: 12px;line-height: 20px;color: #a4a8b6;}
 .block-todoes .todoes-input .form-control::-moz-placeholder {font-size: 12px;line-height: 20px;color: #a4a8b6;}

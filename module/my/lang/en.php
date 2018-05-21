@@ -4,6 +4,7 @@ $lang->my->common = 'Dashboard';
 /* Method List。*/
 $lang->my->index          = 'Home';
 $lang->my->todo           = 'My Todo';
+$lang->my->calendar       = 'Calendar';
 $lang->my->task           = 'My Task';
 $lang->my->bug            = 'My Bug';
 $lang->my->testTask       = 'My Build';

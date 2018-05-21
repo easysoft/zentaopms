@@ -219,7 +219,7 @@ class todoModel extends model
                 $todo->type   = $data->types[$todoID];
                 $todo->pri    = $data->pris[$todoID];
                 $todo->status = $data->status[$todoID];
-                $todo->name   = $todo->type == 'custom' ? $data->names[$todoID] : '';
+                $todo->name   = ($todo->type == 'custom' or $todo->type == 'cycle') ? $data->names[$todoID] : '';
                 $todo->begin  = $data->begins[$todoID];
                 $todo->end    = $data->ends[$todoID];
                 if($todo->type == 'task') $todo->idvalue = isset($data->tasks[$todoID]) ? $data->tasks[$todoID] : 0;

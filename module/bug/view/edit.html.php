@@ -43,13 +43,13 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <div class='cell'>
           <div class='form-group'>
             <div class="input-control has-icon-right">
-              <?php echo html::input('title', $bug->title, "class='form-control' autocomplete='off' style='color:{$bug->color}' required");?>
+              <?php echo html::input('title', $bug->title, "class='form-control bug-title' autocomplete='off' style='color:{$bug->color}' required");?>
               <div class="colorpicker">
                 <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar" style="background:<?php echo $bug->color;?>"></span><i class="ic"></i></button>
                 <ul class="dropdown-menu clearfix">
                   <li class="heading"><?php echo $lang->story->colorTag;?><i class="icon icon-close"></i></li>
                 </ul>
-                <input type="hidden" class="colorpicker" id="color" name="color" value="<?php $bug->color;?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title"  data-provide="colorpicker">
+                <input type="hidden" class="colorpicker" id="color" name="color" value="<?php $bug->color;?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".bug-title"  data-provide="colorpicker">
               </div>
             </div>
           </div>
@@ -65,14 +65,17 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
               <?php echo html::textarea('comment', '', "rows='5' class='form-control kindeditor' hidefocus='true'");?>
             </div>
           </div>
-          <div class='form-group'><?php echo $this->fetch('file', 'buildform');?></div>
+          <div class="detail">
+            <div class="detail-title"><?php echo $lang->files;?></div>
+            <div class='detail-content'><?php echo $this->fetch('file', 'buildform');?></div>
+          </div>
 
           <div class='actions actions-form text-center'>
-            <?php 
+            <?php
             echo html::hidden('lastEditedDate', $bug->lastEditedDate);
             echo html::submitButton('', '', 'btn btn-wide btn-primary');
             $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
-            echo html::linkButton($lang->goback, $browseLink, '', '', "btn btn-wide");
+            echo html::linkButton($lang->goback, $browseLink, 'self', '', "btn btn-wide");
             ?>
           </div>
           <hr class='small' />
@@ -98,7 +101,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                   <th><?php echo $lang->bug->module;?></th>
                   <td>
                     <div class='input-group' id='moduleIdBox'>
-                    <?php 
+                    <?php
                     echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control chosen'");
                     if(count($moduleOptionMenu) == 1)
                     {
@@ -125,7 +128,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                   <td>
                     <?php
                     /**
-                     * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task. 
+                     * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task.
                      * These thress types if upgrade from bugfree2.x.
                      */
                     if($bug->type != 'designchange') unset($lang->bug->typeList['designchange']);

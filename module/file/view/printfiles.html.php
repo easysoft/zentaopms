@@ -15,7 +15,7 @@ $sessionString .= session_name() . '=' . session_id();
   $(function(){
        $(".edit").modalTrigger({width:350, type:'iframe'});
   })
-  
+
   /* Delete a file. */
   function deleteFile(fileID)
   {
@@ -49,7 +49,7 @@ $sessionString .= session_name() . '=' . session_id();
           if(common::hasPriv('file', 'download'))
           {
               $uploadDate = $lang->file->uploadDate . substr($file->addedDate, 0, 10);
-              $fileTitle  = "<li title='{$uploadDate}'><i class='icon icon-file-text'></i> &nbsp;" . $file->title .'.' . $file->extension;
+              $fileTitle  = "<li title='{$uploadDate}'><i class='icon icon-file-text'></i> &nbsp;" . $file->title;
               $imageWidth = 0;
               if(stripos('jpg|jpeg|gif|png|bmp', $file->extension) !== false)
               {

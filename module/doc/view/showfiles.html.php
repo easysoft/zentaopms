@@ -11,9 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class='main-row split-row' id='mainRow'>
+<div class="main-row <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
+  <?php if($this->from == 'doc'):?>
   <?php include './side.html.php';?>
   <div class="col-spliter"></div>
+  <?php endif;?>
   <div class="main-col" data-min-width="400">
     <div class="panel block-files block-sm no-margin">
       <div class="panel-heading">
@@ -141,7 +143,7 @@
         </div>
       </div>
       <?php endif?>
-      <div class='table-footer'><?php echo $pager->show('right', 'pagerjs');?></div>
+      <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
     </div>
   </div>
 </div>

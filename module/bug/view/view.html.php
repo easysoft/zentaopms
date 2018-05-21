@@ -15,8 +15,10 @@
 <?php $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
+    <?php if(!isonlybody()):?>
     <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-link'");?>
     <div class="divider"></div>
+    <?php endif;?>
     <div class="page-title">
       <span class="label label-id"><?php echo $bug->id?></span>
       <span class="text" style='color: <?php echo $bug->color; ?>'><?php echo $bug->title;?></span>
@@ -107,7 +109,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->bug->severity;?></th>
-                <td><span class='<?php echo 'severity severity-' . $bug->severity;?>'><?php echo zget($lang->bug->severityList, $bug->severity)?></span></td>
+                <td><span class='label-severity' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity)?>'></span></td>
               </tr>
               <tr>
                 <th><?php echo $lang->bug->pri;?></th>

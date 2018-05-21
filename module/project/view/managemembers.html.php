@@ -58,8 +58,7 @@
           </td>
           <td><?php echo html::radio("limited[$i]", $lang->team->limitedList, $member->limited);?></td>
           <td class='c-actions'>
-            <a href='javascript:;' onclick='addItem()' class='btn btn-link'><i class='icon-plus'></i></a>
-            <a href='javascript:;' onclick='deleteItem()' class='disabled btn btn-link'><i class='icon icon-trash'></i></a>
+            <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
           </td>
         </tr>
         <?php $i ++; $memberCount ++;?>
@@ -76,7 +75,7 @@
           </td>
           <td><?php echo html::radio("limited[$i]", $lang->team->limitedList, 'no');?></td>
           <td class='c-actions'>
-            <a href='javascript:;' onclick='addItem()' class='btn btn-link'><i class='icon-plus'></i></a>
+            <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
             <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-trash'></i></a>
           </td>
         </tr>
@@ -95,7 +94,7 @@
           </td>
           <td><?php echo html::radio("limited[$i]", $lang->team->limitedList, 'no');?></td>
           <td class='c-actions'>
-            <a href='javascript:;' onclick='addItem()' class='btn btn-link'><i class='icon-plus'></i></a>
+            <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
             <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-trash'></i></a>
           </td>
         </tr>
@@ -114,15 +113,15 @@
           </td>
           <td><?php echo html::radio("limited[$i]", $lang->team->limitedList, 'no');?></td>
           <td class='c-actions'>
-            <a href='javascript:;' onclick='addItem()' class='btn btn-link'><i class='icon-plus'></i></a>
+            <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
             <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-trash'></i></a>
           </td>
         </tr>
         <?php $i ++; $memberCount ++;?>
         <?php endfor;?>
       </tbody>
+      <tfoot><tr><td colspan='6' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . ' ' . html::backButton('', '', 'btn btn-wide'); ?></td></tr></tfoot>
     </table>
-    <div class='table-footer text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . ' ' . html::backButton('', '', 'btn btn-wide'); ?></div>
     <?php js::set('i', $i);?>
   </form>
 </div>
@@ -139,7 +138,7 @@
       </td>
       <td><?php echo html::radio("limited[$i]", $lang->team->limitedList, $member->realname ? $member->limited : 'no');?></td>
       <td class='c-actions'>
-        <a href='javascript:;' onclick='addItem()' class='btn btn-link'><i class='icon-plus'></i></a>
+        <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
         <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-trash'></i></a>
       </td>
     </tr>

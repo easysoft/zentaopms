@@ -256,13 +256,13 @@ class commonModel extends model
                 echo "<li class='divider'></li>";
             }
 
-            echo "<li class='dropdown-submenu'>";
-            echo "<a href='javascript:;'>" . $lang->theme . "</a><ul class='dropdown-menu pull-left'>";
-            foreach($app->lang->themes as $key => $value)
-            {
-                echo "<li " . ($app->cookie->theme == $key ? "class='selected'" : '') . "><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
-            }
-            echo '</ul></li>';
+            //echo "<li class='dropdown-submenu'>";
+            //echo "<a href='javascript:;'>" . $lang->theme . "</a><ul class='dropdown-menu pull-left'>";
+            //foreach($app->lang->themes as $key => $value)
+            //{
+            //    echo "<li " . ($app->cookie->theme == $key ? "class='selected'" : '') . "><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
+            //}
+            //echo '</ul></li>';
 
             echo "<li class='dropdown-submenu'>";
             echo "<a href='javascript:;'>" . $lang->lang . "</a><ul class='dropdown-menu pull-left'>";
@@ -665,8 +665,6 @@ class commonModel extends model
      */
     public static function printCommentIcon($commentFormLink, $object = null)
     {
-        if(isonlybody()) return false;
-
         global $lang;
 
         if(!commonModel::hasPriv('action', 'comment', $object)) return false;
@@ -676,7 +674,7 @@ class commonModel extends model
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">关闭</span></button>
+        <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
         <h4 class="modal-title">{$lang->action->create}</h4>
       </div>
       <div class="modal-body">

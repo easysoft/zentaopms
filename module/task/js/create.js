@@ -75,6 +75,7 @@ function setPreview()
     {
         $('#preview').addClass('hidden');
         $('#copyButton').addClass('hidden');
+        $('div.colorpicker').css('right', '1px');//Adjust for task #4151;
     }
     else
     {
@@ -84,6 +85,7 @@ function setPreview()
         $('#preview').removeClass('hidden');
         $('#preview a').attr('href', storyLink);
         $('#copyButton').removeClass('hidden');
+        $('div.colorpicker').css('right', '57px');//Adjust for task #4151;
     }
 
     setAfter();
@@ -173,31 +175,6 @@ $(document).ready(function()
     $('[data-toggle=tooltip]').tooltip();
 
     $(window).resize();
-
-    /* First unbind ajaxForm for form.*/
-    $("form[data-type='ajax']").unbind('submit');
-
-    /* Bind ajaxForm for form again. */
-    $('.form-ajax').ajaxForm(
-    {
-        finish:function(response)
-        {
-            if(response.message) alert(response.message);
-            if(response.locate)
-            {
-                if(response.locate == 'reload' && response.target == 'parent')
-                {
-                    parent.$.cookie('selfClose', 1);
-                    parent.$.closeModal(null, 'this');
-                }
-                else
-                {
-                    location.href = response.locate;
-                }
-            }
-            return false;
-        }
-    });
 
     /* show team menu. */
     $('[name^=multiple]').change(function()

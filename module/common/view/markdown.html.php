@@ -12,9 +12,25 @@ $editor['id'] = explode(',', $editor['id']);
 .CodeMirror,.CodeMirror-scroll{min-height:200px!important;}
 .CodeMirror-fullscreen + .editor-preview-side{display:block;}
 .CodeMirror-fullscreen, .editor-preview-side{margin-bottom:40px;}
-.editor-toolbar .icon-html {position: relative; top: -1px;}
-.editor-toolbar .icon-html:before {content:"HTML"; font-size: 12px; padding: 0 2px;}
 .editor-preview-side table > tbody > tr:last-child td{border:1px solid #e5e5e5 !important}
+.editor-toolbar {padding: 1px;}
+.editor-toolbar .icon-html:before {content:"HTML"; font-size: 12px; padding: 0 2px;}
+.editor-toolbar .icon:before {font-size: 14px;}
+.editor-toolbar a.icon:before {line-height: 22px;}
+.editor-toolbar a {opacity: 0.8}
+.editor-toolbar a:hover {opacity: 1}
+.icon-bold:before {content: '\e953';}
+.icon-italic:before {content: '\e955';}
+.icon-header:before {content: '\e954';}
+.icon-quote-left:before {content: '\e96a';}
+.icon-list-ul:before {content: '\e956';}
+.icon-list-ol:before {content: '\e969';}
+.icon-picture:before {content: '\e96c';}
+.icon-table:before {content: '\e96d';}
+.icon-eye-open:before {content: '\e94e';}
+.icon-columns:before {content: '\f0db';}
+.icon-expand-full:before {content: '\e96b';}
+.icon-question-sign:before {content: '\e968';}
 </style>
 
 <script>

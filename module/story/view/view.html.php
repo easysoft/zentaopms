@@ -15,8 +15,10 @@
 <?php $browseLink = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch&moduleID=$story->module");?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
+    <?php if(!isonlybody()):?>
     <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-link'");?>
     <div class="divider"></div>
+    <?php endif;?>
     <div class="page-title">
       <span class="label label-id"><?php echo $story->id?></span>
       <span class="text" style='color: <?php echo $story->color;?>'><?php echo $story->title;?></span>

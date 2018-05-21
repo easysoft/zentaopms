@@ -190,8 +190,8 @@ $lang->testcase->noFunction       = 'Iconv and mb_convert_encoding is not found.
 $lang->testcase->noRequire        = "Row %s has“%s”which is a required field and it should not be blank.";
 $lang->testcase->noLibrary        = "No library exists. Please create one first.";
 $lang->testcase->mustChooseResult = 'Review result is required.';
-$lang->testcase->noCase           = 'No Case. You could ';
 $lang->testcase->noModule         = '<div>You have no modules</div><div>Manage now</div>';
+$lang->testcase->noCase           = 'No Case. You could ';
 
 $lang->testcase->searchStories = 'Enter to searcu Story';
 $lang->testcase->selectLib     = 'Select Library';

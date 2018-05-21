@@ -26,10 +26,19 @@
     <div class='main-row'>
       <div class='main-col col-8'>
         <div class='cell'>
-          <div class='detail form-group'>
-            <div class='input-group'>
-              <input type='hidden' id='color' name='color' data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='<?php echo $lang->case->colorTag ?>' value='<?php echo $case->color ?>' data-update-text='#title, .case-title'>
-              <?php echo html::input('title', $case->title, 'class="form-control" autocomplete="off" placeholder="' . $lang->case->title . '"');?>
+          <div class='detail'>
+            <div class='detail-title'><?php echo $lang->testcase->title;?></div>
+            <div class="detail-content">
+              <div class="input-control has-icon-right">
+                <?php echo html::input('title', $case->title, 'class="form-control" autocomplete="off" placeholder="' . $lang->case->title . '"');?>
+                <div class="colorpicker">
+                  <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+                  <ul class="dropdown-menu clearfix">
+                    <li class="heading"><?php echo $lang->testcase->colorTag;?><i class="icon icon-close"></i></li>
+                  </ul>
+                  <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $case->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title"  data-provide="colorpicker">
+                </div>
+              </div>
             </div>
           </div>
           <div class='detail'>
@@ -108,8 +117,9 @@
             <div class='detail-title'><?php echo $lang->testcase->legendComment;?></div>
             <div class='detail-content'><?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?></div>
           </div>
-          <div class='detail'>
-            <?php echo $this->fetch('file', 'buildform');?>
+          <div class="detail">
+            <div class="detail-title"><?php echo $lang->files;?></div>
+            <div class='detail-content'><?php echo $this->fetch('file', 'buildform');?></div>
           </div>
           <div class='text-center detail'>
             <?php echo html::hidden('lastEditedDate', $case->lastEditedDate);?>
@@ -137,7 +147,7 @@
                 <th><?php echo $lang->testcase->module;?></th>
                 <td>
                   <div class='input-group' id='moduleIdBox'>
-                  <?php 
+                  <?php
                   echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control chosen'");
                   if(count($moduleOptionMenu) == 1)
                   {
@@ -165,7 +175,7 @@
                 <th><?php echo $lang->testcase->module;?></th>
                 <td>
                   <div class='input-group' id='moduleIdBox'>
-                  <?php 
+                  <?php
                   echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated()' class='form-control chosen'");
                   if(count($moduleOptionMenu) == 1)
                   {
@@ -194,7 +204,7 @@
               <tr>
                 <th><?php echo $lang->testcase->stage;?></th>
                 <td><?php echo html::select('stage[]', $lang->testcase->stageList, $case->stage, "class='form-control chosen' multiple='multiple'");?></td>
-              </tr>  
+              </tr>
               <tr>
                 <th><?php echo $lang->testcase->pri;?></th>
                 <td><?php echo html::select('pri', (array)$lang->testcase->priList, $case->pri, "class='form-control chosen'");?></td>

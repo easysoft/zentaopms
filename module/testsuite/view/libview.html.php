@@ -25,7 +25,7 @@
     </div>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
+<div id='mainContent'>
   <div class='cell'>
     <div class='detail'>
       <div class='detail-title'><?php echo $lang->testsuite->legendDesc;?></div>

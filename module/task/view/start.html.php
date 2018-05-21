@@ -20,7 +20,7 @@
   if(!empty($task->team) && $task->assignedTo != $this->app->user->account):
   ?>
   <div class="alert with-icon">
-    <i class="icon-info-sign"></i>
+    <i class="icon-exclamation-sign"></i>
     <div class="content">
       <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->start);?></p>
     </div>
@@ -68,7 +68,7 @@
         <tr>
           <td colspan='3' class='text-center'>
             <?php echo html::submitButton($lang->task->start, '', 'btn btn-wide btn-primary');?>
-            <?php echo html::linkButton($lang->goback, $this->session->taskList, '', '', 'btn btn-wide');?>
+            <?php echo html::linkButton($lang->goback, $this->session->taskList, 'self', '', 'btn btn-wide');?>
           </td>
         </tr>
       </table>
