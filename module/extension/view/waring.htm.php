@@ -21,7 +21,7 @@
     </div>
     <?php if($error):?>
     <div class='alert alert-danger with-icon'>
-      <i class='icon-info-sign'></i>
+      <i class='icon-exclamation-sign'></i>
       <div class='content'>
         <h3><?php echo $lang->extension->waringInstall;?></h3>
         <p><?php echo $error;?></p>

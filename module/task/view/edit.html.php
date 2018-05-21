@@ -71,7 +71,7 @@
             <div class='detail-title'><?php echo $lang->files;?></div>
             <div class='detail-content'><?php echo $this->fetch('file', 'buildform');?></div>
           </div>
-          <div class='detail text-center'>
+          <div class='detail text-center form-actions'>
             <?php echo html::hidden('lastEditedDate', $task->lastEditedDate);?>
             <?php echo html::hidden('consumed', $task->consumed);?>
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>

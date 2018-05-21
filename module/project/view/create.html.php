@@ -156,7 +156,7 @@
     <div class='modal-body'>
       <?php if(count($projects) == 1):?>
       <div class='alert alert-warning with-icon'>
-        <i class='icon-info-sign'></i>
+        <i class='icon-exclamation-sign'></i>
         <div class='content'><?php echo $lang->project->copyNoProject;?></div>
       </div>
       <?php else:?>

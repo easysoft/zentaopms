@@ -18,7 +18,7 @@
   </div>
 </div>
 <div class="alert with-icon hidden" id="scoreLoading">
-  <i class="icon-info-sign"></i>
+  <i class="icon-exclamation-sign"></i>
   <div class="content">
     <p><?php echo $lang->score->resetTips; ?></p>
     <p id="loadingContent"></p>

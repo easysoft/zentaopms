@@ -96,7 +96,7 @@ $lang->user->errorDeny    = "Sorry, your access to <b>%s</b> Module <b>%s</b> Fe
 $lang->user->loginFailed  = "Login failed. Please check your account and password.";
 $lang->user->lockWarning  = "You can try %s times.";
 $lang->user->loginLocked  = "Please contact the administrator to unlock your account or try %s mins later.";
-$lang->user->weakPassword = "Your password does not meet the setting requirements.";
+$lang->user->weakPassword = "Your password does not meet the complexity requirements.";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Developer';

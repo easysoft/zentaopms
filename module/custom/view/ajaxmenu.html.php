@@ -38,7 +38,7 @@
         <button id='saveMenuBtn' type='button' class='btn btn-primary'><?php echo $lang->save ?></button> &nbsp;
         <button id='closeModalBtn' type='button' class='btn'><?php echo $lang->close ?></button> &nbsp;
         <button id='resetMenuBtn' type='button' class='btn'><?php echo $lang->custom->restore ?></button> &nbsp;
-        <span class='text-danger'> &nbsp; <i class="icon icon-info-sign"></i> <?php echo $lang->custom->menuTip ?></span>
+        <span class='text-danger'> &nbsp; <i class="icon exclamation-sign"></i> <?php echo $lang->custom->menuTip ?></span>
       </div>
     </div>
   </div>
