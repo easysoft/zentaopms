@@ -70,7 +70,7 @@
         <?php if($canEditComment):?>
         <form method='post' class='comment-edit-form' action='<?php echo $this->createLink('action', 'editComment', "actionID=$action->id")?>'>
           <div class="form-group">
-          <?php echo html::textarea('lastComment', htmlspecialchars($action->comment), "rows='8'");?>
+          <?php echo html::textarea('lastComment', htmlspecialchars($action->comment), "rows='8' autofocus='autofocus'");?>
           </div>
           <div class="form-group form-actions">
           <?php echo html::submitButton($lang->save, '', 'btn btn-primary btn-wide');?>

@@ -83,46 +83,50 @@
         <div class='detail-title'><?php echo $this->lang->task->children;?></div>
         <div class='detail-content article-content'>
           <table class='table table-hover table-fixed'>
-            <tr class='text-center'>
-              <td class='w-50px'> <?php echo $lang->task->id;?></th>
-              <td class='w-40px'> <?php echo $lang->task->lblPri;?></th>
-              <td>                <?php echo $lang->task->name;?></th>
-              <td class='w-100px'><?php echo $lang->task->deadline;?></th>
-              <td class='w-80px'> <?php echo $lang->task->assignedTo;?></th>
-              <td class='w-80px'> <?php echo $lang->task->status;?></th>
-              <td class='w-60px visible-lg'><?php echo $lang->task->consumedAB . $lang->task->lblHour;?></th>
-              <td class='w-60px visible-lg'><?php echo $lang->task->leftAB . $lang->task->lblHour;?></th>
-              <td class='w-250px'><?php echo $lang->actions;?></th>
-            </tr>
-            <?php foreach($task->children as $child):?>
-            <tr class='text-center'>
-              <td><?php echo $child->id;?></td>
-              <td>
-                <?php
-                echo "<span class='pri-" . $child->pri . "'>";
-                echo $child->pri == '0' ? '' : zget($this->lang->task->priList, $child->pri, $child->pri);
-                echo "</span>";
-                ?>
-              </td>
-              <td class='text-left' title='<?php echo $child->name;?>'><a href="<?php echo $this->createLink('task', 'view', "taskID=$child->id"); ?>"><?php echo $child->name;?></a></td>
-              <td><?php echo $child->deadline;?></td>
-              <td><?php if(isset($users[$child->assignedTo])) echo $users[$child->assignedTo];?></td>
-              <td><?php echo zget($lang->task->statusList, $child->status);?></td>
-              <td class='visible-lg'><?php echo $child->consumed;?></td>
-              <td class='visible-lg'><?php echo $child->left;?></td>
-              <td class='c-actions'>
-                <?php
-                common::printIcon('task', 'assignTo', "projectID=$child->project&taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                common::printIcon('task', 'start',    "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                common::printIcon('task', 'activate', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true);
-                common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                common::printIcon('task', 'edit',   "taskID=$child->id", $child, 'list');
-                ?>
-              </td>
-            </tr>
-            <?php endforeach;?>
+            <thead>
+              <tr class='text-center'>
+                <th class='w-50px'> <?php echo $lang->task->id;?></th>
+                <th class='w-40px'> <?php echo $lang->task->lblPri;?></th>
+                <th>                <?php echo $lang->task->name;?></th>
+                <th class='w-100px'><?php echo $lang->task->deadline;?></th>
+                <th class='w-80px'> <?php echo $lang->task->assignedTo;?></th>
+                <th class='w-80px'> <?php echo $lang->task->status;?></th>
+                <th class='w-60px visible-lg'><?php echo $lang->task->consumedAB . $lang->task->lblHour;?></th>
+                <th class='w-60px visible-lg'><?php echo $lang->task->leftAB . $lang->task->lblHour;?></th>
+                <th class='w-250px'><?php echo $lang->actions;?></th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach($task->children as $child):?>
+              <tr class='text-center'>
+                <td><?php echo $child->id;?></td>
+                <td>
+                  <?php
+                  echo "<span class='pri-" . $child->pri . "'>";
+                  echo $child->pri == '0' ? '' : zget($this->lang->task->priList, $child->pri, $child->pri);
+                  echo "</span>";
+                  ?>
+                </td>
+                <td class='text-left' title='<?php echo $child->name;?>'><a class="iframe" data-width="90%" href="<?php echo $this->createLink('task', 'view', "taskID=$child->id", '', true); ?>"><?php echo $child->name;?></a></td>
+                <td><?php echo $child->deadline;?></td>
+                <td><?php if(isset($users[$child->assignedTo])) echo $users[$child->assignedTo];?></td>
+                <td><?php echo zget($lang->task->statusList, $child->status);?></td>
+                <td class='visible-lg'><?php echo $child->consumed;?></td>
+                <td class='visible-lg'><?php echo $child->left;?></td>
+                <td class='c-actions'>
+                  <?php
+                  common::printIcon('task', 'assignTo', "projectID=$child->project&taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                  common::printIcon('task', 'start',    "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                  common::printIcon('task', 'activate', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                  common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true);
+                  common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                  common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                  common::printIcon('task', 'edit',   "taskID=$child->id", $child, 'list');
+                  ?>
+                </td>
+              </tr>
+              <?php endforeach;?>
+            </tbody>
           </table>
         </div> 
       </div>
@@ -194,7 +198,7 @@
               <?php if($task->fromBug):?>
               <tr>
                 <th><?php echo $lang->task->fromBug;?></th>
-                <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$task->fromBug"), "#$task->fromBug " . $fromBug->title, '_blank');?></td>
+                <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$task->fromBug", '', true), "#$task->fromBug " . $fromBug->title, '', "class='iframe' data-width='80%'");?></td>
               </tr>
               <?php endif;?>
               <tr>

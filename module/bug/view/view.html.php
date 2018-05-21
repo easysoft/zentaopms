@@ -199,7 +199,7 @@
                 <td>
                   <?php
                   echo $lang->bug->resolutionList[$bug->resolution];
-                  if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug"), $bug->duplicateBugTitle);
+                  if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug", '', true), $bug->duplicateBugTitle, '', "class='iframe' data-width='80%'");
                   ?>
                 </td>
               </tr>
@@ -230,7 +230,7 @@
                 <th><?php echo $lang->bug->story;?></th>
                 <td>
                   <?php
-                  if($bug->story) echo html::a($this->createLink('story', 'view', "storyID=$bug->story"), "#$bug->story $bug->storyTitle");
+                  if($bug->story) echo html::a($this->createLink('story', 'view', "storyID=$bug->story", '', true), "#$bug->story $bug->storyTitle", '', "class='iframe' data-width='80%'");
                   if($bug->storyStatus == 'active' and $bug->latestStoryVersion > $bug->storyVersion)
                   {
                       echo "(<span class='warning'>{$lang->story->changed}</span> ";
@@ -242,7 +242,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->bug->task;?></th>
-                <td><?php if($bug->task) echo html::a($this->createLink('task', 'view', "taskID=$bug->task"), $bug->taskName);?></td>
+                <td><?php if($bug->task) echo html::a($this->createLink('task', 'view', "taskID=$bug->task", '', true), $bug->taskName, '', "class='iframe' data-width='80%'");?></td>
               </tr>
             </tbody>
           </table>
@@ -263,7 +263,7 @@
                   {
                       foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
                       {
-                          echo html::a($this->createLink('bug', 'view', "bugID=$linkBugID"), "#$linkBugID $linkBugTitle", '_blank') . '<br />';
+                          echo html::a($this->createLink('bug', 'view', "bugID=$linkBugID", '', true), "#$linkBugID $linkBugTitle", '', "class='iframe' data-width='80%'") . '<br />';
                       }
                   }
                   ?>
@@ -272,7 +272,7 @@
               <?php if($bug->case):?>
               <tr>
                 <th class='w-60px'><?php echo $lang->bug->fromCase;?></th>
-                <td><?php echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case"), "#$bug->case $bug->caseTitle", '_blank');?></td>
+                <td><?php echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case", '', true), "#$bug->case $bug->caseTitle", '', "class='iframe' data-width='80%'");?></td>
               </tr>
               <?php endif;?>
               <?php if($bug->toCases):?>
@@ -282,7 +282,7 @@
                 <?php 
                 foreach($bug->toCases as $caseID => $case) 
                 {
-                    echo '<p style="margin-bottom:0;">' . html::a($this->createLink('testcase', 'view', "caseID=$caseID"), $case) . '</p>';
+                    echo '<p style="margin-bottom:0;">' . html::a($this->createLink('testcase', 'view', "caseID=$caseID", '', true), $case, '', "class='iframe' data-width='80%'") . '</p>';
                 }
                 ?>
                 </td>
@@ -292,13 +292,13 @@
               <?php if($bug->toStory != 0):?>
               <tr>
                 <th><?php echo $lang->bug->toStory;?></th>
-                <td><?php echo html::a($this->createLink('story', 'view', "storyID=$bug->toStory"), "#$bug->toStory $bug->toStoryTitle", '_blank');?></td>
+                <td><?php echo html::a($this->createLink('story', 'view', "storyID=$bug->toStory", '', true), "#$bug->toStory $bug->toStoryTitle", '', "class='iframe' data-width='80%'");?></td>
               </tr>
               <?php endif;?>
               <?php if($bug->toTask != 0):?>
               <tr>
                 <th><?php echo $lang->bug->toTask;?></th>
-                <td><?php echo html::a($this->createLink('task', 'view', "taskID=$bug->toTask"), "#$bug->toTask $bug->toTaskTitle", '_blank');?></td>
+                <td><?php echo html::a($this->createLink('task', 'view', "taskID=$bug->toTask", '', true), "#$bug->toTask $bug->toTaskTitle", '', "class='iframe' data-width='80%'");?></td>
               </tr>
               <?php endif;?>
               <?php endif;?>

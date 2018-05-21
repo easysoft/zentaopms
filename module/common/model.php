@@ -680,7 +680,7 @@ class commonModel extends model
       <div class="modal-body">
     <form action="$commentFormLink" target='hiddenwin' method='post'>
           <div class="form-group">
-            <textarea id='comment' name='comment' class="form-control" rows="8"></textarea>
+            <textarea id='comment' name='comment' class="form-control" rows="8" autofocus="autofocus"></textarea>
           </div>
           <div class="form-group form-actions">
             <button type="submit" class="btn btn-primary btn-wide">{$lang->save}</button>

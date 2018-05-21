@@ -203,7 +203,7 @@
                 <th class='w-70px'><?php echo $lang->story->legendFromBug;?></th>
                 <td class='pd-0'>
                   <ul class='list-unstyled'>
-                  <?php echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id"), "#$fromBug->id $fromBug->title") . '</li>';?>
+                  <?php echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id", '', true), "#$fromBug->id $fromBug->title", '', "class='iframe' data-width='80%'") . '</li>';?>
                   </ul>
                 </td>
               </tr>
@@ -215,7 +215,7 @@
                   <?php
                   foreach($bugs as $bug)
                   {
-                      echo "<li title='#$bug->id $bug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$bug->id"), "#$bug->id $bug->title") . '</li>';
+                      echo "<li title='#$bug->id $bug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), "#$bug->id $bug->title", '', "class='iframe' data-width='80%'") . '</li>';
                   }
                   ?>
                   </ul>
@@ -228,7 +228,7 @@
                   <?php
                   foreach($cases as $case)
                   {
-                      echo "<li title='#$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id"), "#$case->id $case->title") . '</li>';
+                      echo "<li title='#$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id", '', true), "#$case->id $case->title", '', "class='iframe' data-width='80%'") . '</li>';
                   }
                   ?>
                   </ul>
@@ -243,7 +243,7 @@
                     $linkStories = explode(',', $story->linkStories) ;
                     foreach($linkStories as $linkStoryID)
                     {
-                        if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]) . '</li>';
+                        if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$linkStoryID", '', true), "#$linkStoryID " . $story->extraStories[$linkStoryID], '', "class='iframe' data-width='80%'") . '</li>';
                     }
                     ?>
                   </ul>
@@ -257,7 +257,7 @@
                     $childStories = explode(',', $story->childStories) ;
                     foreach($childStories as $childStoryID)
                     {
-                      if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$childStoryID"), "#$childStoryID " . $story->extraStories[$childStoryID]) . '</li>';
+                      if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$childStoryID", '', true), "#$childStoryID " . $story->extraStories[$childStoryID], '', "class='iframe' data-width='80%'") . '</li>';
                     }
                     ?>
                   </ul>
