@@ -61,7 +61,7 @@
           <?php printf('%03d', $bug->id);?>
           <?php endif;?>
         </td>
-        <td><span class='<?php echo 'label-severity';?>' data-severity='<?php echo $bug->severity;?>'></span></td>
+        <td><span class='<?php echo 'label-severity';?>' title='<?php echo zget($lang->bug->severityList, $bug->severity);?>' data-severity='<?php echo $bug->severity;?>'></span></td>
         <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
         <td class='text-left' title="<?php echo $bug->title?>"><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color'");?></td>
         <td><?php echo zget($users, $bug->openedBy, $bug->openedBy);?></td>

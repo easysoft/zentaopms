@@ -44,7 +44,7 @@
         <?php if($longBlock):?>
         <td class='c-pri'><span class='label-pri label-pri-<?php echo $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
         <?php endif;?>
-        <td class='c-severity'><span class='label-severity' data-severity='<?php echo zget($lang->bug->severityList, $bug->severity);?>'></span></td>
+        <td class='c-severity'><span class='label-severity' title='<?php echo zget($lang->bug->severityList, $bug->severity);?>' data-severity='<?php echo zget($lang->bug->severityList, $bug->severity);?>'></span></td>
         <td class='c-name' style='color: <?php echo $bug->color?>' title='<?php echo $bug->title?>'><?php echo $bug->title?></td>
         <td class='c-status' title='<?php echo zget($lang->bug->statusList, $bug->status)?>'>
           <span class="status-<?php echo $bug->status?>">
