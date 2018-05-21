@@ -668,7 +668,7 @@ class commonModel extends model
         global $lang;
 
         if(!commonModel::hasPriv('action', 'comment', $object)) return false;
-        echo html::commonButton('<i class="icon icon-chat-line"></i> ' . $lang->action->create, "title='$lang->comment'", 'btn btn-link pull-right btn-comment');
+        echo html::commonButton('<i class="icon icon-chat-line"></i> ' . $lang->action->create, '', 'btn btn-link pull-right btn-comment');
         echo <<<EOD
 <div class="modal fade modal-comment">
   <div class="modal-dialog">
