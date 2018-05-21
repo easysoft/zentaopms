@@ -21,7 +21,7 @@ class block extends control
     {
         parent::__construct($moduleName, $methodName);
         /* Mark the call from zentao or ranzhi. */
-        $this->selfCall = strpos($this->server->http_referer, common::getSysURL() . $this->config->webRoot) === 0 || $this->session->blockModule;
+        $this->selfCall = !$this->server->http_referer || strpos($this->server->http_referer, common::getSysURL() . $this->config->webRoot) === 0 || $this->session->blockModule;
         if($this->methodName != 'admin' and $this->methodName != 'dashboard' and !$this->selfCall and !$this->loadModel('sso')->checkKey()) die('');
     }
 
