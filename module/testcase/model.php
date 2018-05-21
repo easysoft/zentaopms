@@ -1311,7 +1311,7 @@ class testcaseModel extends model
                 echo html::checkbox('caseIDList', array($case->id => sprintf('%03d', $case->id)));
                 break;
             case 'pri':
-                echo "<span class='label-pri label-pri-" . $case->pri . "'>";
+                echo "<span class='label-pri label-pri-" . $case->pri . "' title='" . zget($this->lang->testcase->priList, $case->pri, $case->pri) . "'>";
                 echo zget($this->lang->testcase->priList, $case->pri, $case->pri);
                 echo "</span>";
                 break;

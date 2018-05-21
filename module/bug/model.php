@@ -2435,7 +2435,7 @@ class bugModel extends model
                 echo "<span class='label-severity' data-severity='{$bug->severity}' title='" . zget($this->lang->bug->severityList, $bug->severity) . "'></span>";
                 break;
             case 'pri':
-                echo "<span class='label-pri label-pri-" . $bug->pri . "'>";
+                echo "<span class='label-pri label-pri-" . $bug->pri . "' title='" . zget($this->lang->bug->priList, $bug->pri, $bug->pri) . "'>";
                 echo zget($this->lang->bug->priList, $bug->pri, $bug->pri);
                 echo "</span>";
                 break;

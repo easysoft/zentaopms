@@ -96,7 +96,7 @@
           <?php echo html::checkbox('cases', array($case->id => sprintf('%03d', $case->id)));?>
         </td>
         <td class='text-center'><?php echo html::select("versions[$case->id]", array_combine(range($case->version, 1), range($case->version, 1)), '', 'class="form-control"');?> </td>
-        <td><span class='label-pri label-pri-<?php echo $case->pri;?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
+        <td><span class='label-pri label-pri-<?php echo $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
         <td class='text-left'>
           <?php
           echo $case->title . ' ( ';

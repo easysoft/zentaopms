@@ -164,7 +164,7 @@ js::set('flow',   $this->config->global->flow);
               <?php echo sprintf('%03d', $case->id);?>
               <?php endif;?>
             </td>
-            <td><span class='label-pri label-pri-<?php echo $case->pri;?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
+            <td><span class='label-pri label-pri-<?php echo $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
             <td class='text-left' title="<?php echo $case->title?>">
               <?php if($modulePairs and $case->module) echo "<span title='{$lang->testcase->module}' class='label label-info label-badge'>{$modulePairs[$case->module]}</span> ";?>
               <?php $viewLink = $this->createLink('testcase', 'view', "caseID=$case->id&version=$case->version");?>

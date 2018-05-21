@@ -113,7 +113,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->bug->pri;?></th>
-                <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri;?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
+                <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
               </tr>
               <tr>
                 <th><?php echo $lang->bug->status;?></th>

@@ -215,7 +215,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->task->pri;?></th>
-                <td><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>'><?php echo $task->pri == '0' ? $lang->task->noData : zget($lang->task->priList, $task->pri)?></span></td>
+                <td><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri);?>'><?php echo $task->pri == '0' ? $lang->task->noData : zget($lang->task->priList, $task->pri)?></span></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->mailto;?></th>
