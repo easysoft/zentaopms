@@ -20,7 +20,7 @@ $config->doc->custom->objectLibs = $config->doc->customObjectLibs;
 $config->doc->editor = new stdclass();
 $config->doc->editor->create = array('id' => 'content', 'tools' => 'fullTools');
 $config->doc->editor->edit   = array('id' => 'content', 'tools' => 'fullTools');
-$config->doc->editor->view   = array('id' => 'comment,lastComment', 'tools' => 'fullTools');
+$config->doc->editor->view   = array('id' => 'comment,lastComment', 'tools' => 'simple');
 
 $config->doc->markdown = new stdclass();
 $config->doc->markdown->create = array('id' => 'contentMarkdown', 'tools' => 'withchange');
