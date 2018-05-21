@@ -12,7 +12,7 @@
 ?>
 <?php include './header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<script language='Javascript'>
+<script>
 var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : print($story->openedBy);?>';
 </script>
 <div class='main-content' id='mainContent'>

@@ -328,7 +328,7 @@
   </div>
 </div>
 <?php js::set('checkedSummary', $lang->product->checkedSummary);?>
-<script language='javascript'>
+<script>
 var moduleID = <?php echo $moduleID?>;
 $('#module<?php echo $moduleID;?>').addClass('active');
 <?php if($browseType == 'bysearch'):?>

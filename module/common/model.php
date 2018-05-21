@@ -196,7 +196,7 @@ class commonModel extends model
         if(strpos($this->server->http_user_agent, 'Trident') !== false)
         {
             echo "<a href='$denyLink' id='denylink' style='display:none'>deny</a>";
-            echo "<script language='javascript'>document.getElementById('denylink').click();</script>";
+            echo "<script>document.getElementById('denylink').click();</script>";
         }
         else
         {

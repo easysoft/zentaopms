@@ -140,7 +140,7 @@
   </div>
 </div>
 
-<script language='Javascript'>
+<script>
 var nowTime = '<?php echo $time?>';
 var today   = '<?php echo date('Y-m-d')?>';
 var start   = '<?php echo key($times)?>';

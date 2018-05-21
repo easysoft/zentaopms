@@ -11,7 +11,7 @@ $sessionString .= session_name() . '=' . session_id();
   <style>
     .files-list>li>a {display: inline;}
   </style>
-  <script language='Javascript'>
+  <script>
   $(function(){
        $(".edit").modalTrigger({width:350, type:'iframe'});
   })
