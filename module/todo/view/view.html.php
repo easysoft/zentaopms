@@ -64,7 +64,7 @@
             </tr>
             <tr>
               <th><?php echo $lang->todo->date;?></th>
-              <td><?php echo $todo->date == '20300101' ? $lang->todo->periods['future'] : formatTime($todo->date);?></td>
+              <td><?php echo $todo->date == '20300101' ? $lang->todo->periods['future'] : formatTime($todo->date, DT_DATE1);?></td>
             </tr>
             <tr>
               <th><?php echo $lang->todo->beginAndEnd;?></th>

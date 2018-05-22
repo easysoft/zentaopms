@@ -1,4 +1,7 @@
 <?php $datatableId = $this->moduleName . ucfirst($this->methodName);?>
+<style>
+#setShowModule {margin-left: 30px;}
+</style>
 <script>
 $(function()
 {
@@ -13,7 +16,7 @@ $(function()
         <?php $mode = isset($this->config->datatable->$datatableId->mode) ? $this->config->datatable->$datatableId->mode : 'table';?>
         // $btnToolbar.append("<a href=\"javascript:saveDatatableConfig('mode', 'table', true);\" class='btn btn-link <?php echo $mode == 'table' ? 'btn-active-line' : '';?>'><?php echo $lang->datatable->table?></a>");
         // $btnToolbar.append("<a href=\"javascript:saveDatatableConfig('mode', 'datatable', true);\" class='btn btn-link <?php echo $mode == 'datatable' ? 'btn-active-line' : '';?>'><?php echo $lang->datatable->datatable?></a>");
-        $btnToolbar.append("<a id='tableCustomBtn' class='btn btn-link' href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><i class='icon icon-cog'></i></a>");
+        $btnToolbar.append("<a id='tableCustomBtn' class='btn btn-link' title='<?php echo $lang->datatable->custom?>' href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><i class='icon icon-cog'></i></a>");
         $('#tableCustomBtn').modalTrigger();
     }
 
