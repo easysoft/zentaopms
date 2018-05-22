@@ -19,6 +19,7 @@
 <?php js::set('moduleID', $moduleID);?>
 <div id='mainContent' class='main-row'>
   <div class='side-col' id='sidebar'>
+    <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class='cell'><?php echo $moduleTree;?></div>
   </div>
   <div class='main-col'>

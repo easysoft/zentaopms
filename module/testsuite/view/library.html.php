@@ -73,7 +73,6 @@ js::set('flow',   $this->config->global->flow);
 </div>
 <div id='mainMenu' class='clearfix'>
   <div id="sidebarHeader">
-    <?php echo html::commonButton('<i class="icon icon-caret-left"></i>', '', 'btn btn-icon btn-sm btn-info sidebar-toggle');?>
     <div class="title">
       <?php
       $this->app->loadLang('tree');
@@ -110,6 +109,7 @@ js::set('flow',   $this->config->global->flow);
 <?php endif;?>
 <div id="mainContent" class="main-row">
   <div class="side-col" id="sidebar">
+    <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
       <?php if(!$moduleTree):?>
       <hr class="space">

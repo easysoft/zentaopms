@@ -66,7 +66,6 @@
 <?php else:?>
 <div id='mainMenu' class='clearfix'>
   <div id="sidebarHeader">
-    <?php echo html::commonButton('<i class="icon icon-caret-left"></i>', '', 'btn btn-icon btn-sm btn-info sidebar-toggle');?>
     <div class="title">
       <?php
       echo !empty($moduleID) ? $moduleName : $this->lang->tree->all;
