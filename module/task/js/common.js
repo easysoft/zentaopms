@@ -2,7 +2,7 @@
 function checkLeft()
 {
     value = $("#left").val();
-    if(isNaN(parseInt(value)) || value == 0) 
+    if(isNaN(parseInt(value)) || value == 0)
     {
         if(confirm(confirmFinish))
         {
@@ -57,4 +57,9 @@ $('#modalTeam .btn').click(function()
         $('#teamMember').val(team).attr('title', team);
         $('#estimate').val(time);
     })
+});
+
+$('a.btn-move-add').on('click', function () {
+  var html = $("#modalTeam table.table tr").eq(-2).html();
+  $("#modalTeam table.table tr:last").before('<tr>' + html + '</tr>');
 });
