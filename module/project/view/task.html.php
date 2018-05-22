@@ -22,7 +22,6 @@ js::set('browseType', $browseType);
 ?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
-    <?php echo html::commonButton('<i class="icon icon-caret-left"></i>', '', 'btn btn-icon btn-sm btn-info sidebar-toggle');?>
     <div class="title">
       <?php
       if(!empty($productID))
@@ -129,6 +128,7 @@ js::set('browseType', $browseType);
 </div>
 <div id="mainContent" class="main-row">
   <div class="side-col" id="sidebar">
+    <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
       <?php echo $moduleTree;?>
       <div class="text-center">
