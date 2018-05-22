@@ -139,9 +139,8 @@ js::set('browseType', $browseType);
   </div>
   <div class="main-col">
     <div class="cell" id="queryBox"></div>
-    <form class="main-table table-task" data-ride="table" method="post" id='projectTaskForm'>
-      <div class="table-header">
-        <div class="table-statistic"><?php echo $summary;?></div>
+    <form class="main-table table-task" method="post" id='projectTaskForm'>
+      <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
       <?php
@@ -276,13 +275,13 @@ js::set('browseType', $browseType);
           </div>
           <?php endif;?>
         </div>
+        <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
       <?php endif;?>
     </form>
   </div>
 </div>
-<?php js::set('checkedSummary', $lang->project->checkedSummary);?>
 <?php js::set('replaceID', 'taskList')?>
 <script>
 <?php if($browseType == 'bysearch'):?>
@@ -295,6 +294,49 @@ if($shortcut.size() > 0)
 }
 <?php endif;?>
 statusActive = '<?php echo isset($lang->project->statusSelects[$this->session->taskBrowseType]);?>';
-if(statusActive) $('#statusTab').addClass('active')
+if(statusActive) $('#statusTab').addClass('active');
+
+$(function()
+{
+    // Update table summary text
+    var checkedSummary = '<?php echo $lang->project->checkedSummary?>';
+    $('#projectTaskForm').table(
+    {
+        statisticCreator: function(table)
+        {
+            var $checkedRows = table.$.find('tbody>tr.checked');
+            var checkedTotal = $checkedRows.length;
+            if(!checkedTotal) return;
+
+            var checkedWait     = 0;
+            var checkedDoing    = 0;
+            var checkedEstimate = 0;
+            var checkedConsumed = 0;
+            var checkedLeft     = 0;
+            $checkedRows.each(function()
+            {
+                var $row = $(this);
+                var data = $row.data();
+                var status = data.status;
+                if(status === 'wait') checkedWait++;
+                if(status === 'doing') checkedDoing++;
+                if(!$row.hasClass('table-children'))
+                {
+                    if(status !== 'cancel')
+                    {
+                        checkedEstimate += Number(data.estimate);
+                        checkedConsumed += Number(data.consumed);
+                    }
+                    if(status != 'cancel' && status != 'closed') checkedLeft += Number(data.left);
+                }
+            });
+            return checkedSummary.replace('%total%', checkedTotal).replace('%wait%', checkedWait)
+              .replace('%doing%', checkedDoing)
+              .replace('%estimate%', checkedEstimate)
+              .replace('%consumed%', checkedConsumed)
+              .replace('%left%', checkedLeft);
+        }
+    })
+});
 </script>
 <?php include '../../common/view/footer.html.php';?>
