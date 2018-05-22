@@ -31,4 +31,5 @@
 #kanban .table-grouped tbody > tr:hover {background: transparent;}
 #kanban .c-boards, #kanban td.c-side {border-bottom: 1px solid #eee;}
 #kanban .group-info > span + span {display: inline-block; margin-left: 8px;}
+#kanban th.c-board {color: #3c4353; font-weight: bold;}
 .story-estimate{margin-right: 5px;}

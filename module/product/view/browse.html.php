@@ -99,9 +99,8 @@
   </div>
   <div class="main-col">
     <div class="cell" id="queryBox"></div>
-    <form class="main-table table-story" data-ride="table" method="post" id='productStoryForm'>
-      <div class="table-header">
-        <div class="table-statistic"><?php echo $summary;?></div>
+    <form class="main-table table-story skip-iframe-modal" method="post" id='productStoryForm'>
+      <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
       <?php
@@ -317,6 +316,7 @@
           </div>
           <?php endif;?>
         </div>
+        <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
       <?php elseif(common::hasPriv('story', 'create')):?>
@@ -327,7 +327,6 @@
     </form>
   </div>
 </div>
-<?php js::set('checkedSummary', $lang->product->checkedSummary);?>
 <script>
 var moduleID = <?php echo $moduleID?>;
 $('#module<?php echo $moduleID;?>').addClass('active');
@@ -343,5 +342,34 @@ else
     ajaxGetSearchForm();
 }
 <?php endif;?>
+
+$(function()
+{
+    // Update table summary text
+    var checkedSummary = '<?php echo $lang->product->checkedSummary?>';
+    $('#productStoryForm').table(
+    {
+        statisticCreator: function(table)
+        {
+            var $checkedRows = table.$.find('tbody>tr.checked');
+            var checkedTotal = $checkedRows.length;
+            if(!checkedTotal) return;
+
+            var checkedEstimate = 0;
+            var checkedCase     = 0;
+            $checkedRows.each(function()
+            {
+                var $row = $(this);
+                var data = $row.data();
+                checkedEstimate += data.estimate;
+                checkedCase += data.cases;
+            });
+            var rate = Math.round(checkedCase / checkedTotal * 10000) / 100 + '' + '%';
+            return checkedSummary.replace('%total%', checkedTotal)
+                  .replace('%estimate%', checkedEstimate)
+                  .replace('%rate%', rate);
+        }
+    });
+});
 </script>
 <?php include '../../common/view/footer.html.php';?>
