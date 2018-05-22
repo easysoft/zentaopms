@@ -237,7 +237,7 @@ class docModel extends model
 
         if($lib->acl == 'private') $lib->users = $this->app->user->account;
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
-            ->batchCheck('name', 'notempty')
+            ->batchCheck($this->config->doc->createlib->requiredFields, 'notempty')
             ->exec();
 
         return $this->dao->lastInsertID();
@@ -261,7 +261,7 @@ class docModel extends model
             $lib->users   = $libCreatedBy ? $libCreatedBy : $this->app->user->account;
         }
         $this->dao->update(TABLE_DOCLIB)->data($lib)->autoCheck()
-            ->batchCheck('name', 'notempty')
+            ->batchCheck($this->config->doc->editlib->requiredFields, 'notempty')
             ->where('id')->eq($libID)
             ->exec();
         if(!dao::isError()) return common::createChanges($oldLib, $lib);
