@@ -195,8 +195,8 @@ class todo extends control
                 if($todo->type == 'story') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_STORY)->fetch('title');
                 if($todo->type == 'task')  $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
                 if($todo->type == 'bug')   $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
-                $todo->begin = str_replace(':', '', $todo->begin);
-                $todo->end   = str_replace(':', '', $todo->end);
+                $todo->begin = $todo->begin ? str_replace(':', '', $todo->begin) : '2400';
+                $todo->end   = $todo->end ? str_replace(':', '', $todo->end) : '2400';
             }
 
             /* Judge whether the edited todos is too large. */
