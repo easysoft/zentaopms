@@ -2,13 +2,13 @@
 global $lang;
 
 $config->doc = new stdclass();
-$config->doc->createLib = new stdclass();
-$config->doc->editLib   = new stdclass();
+$config->doc->createlib = new stdclass();
+$config->doc->editlib   = new stdclass();
 $config->doc->create    = new stdclass();
 $config->doc->edit      = new stdclass();
 
-$config->doc->createLib->requiredFields = 'name';
-$config->doc->editLib->requiredFields   = 'name';
+$config->doc->createlib->requiredFields = 'name';
+$config->doc->editlib->requiredFields   = 'name';
 $config->doc->create->requiredFields = 'title';
 $config->doc->edit->requiredFields   = 'title';
 
