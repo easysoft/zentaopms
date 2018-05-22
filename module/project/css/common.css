@@ -18,6 +18,7 @@
 .table td.has-child > .task-toggle > .icon {font-size: 16px; display: inline-block; transition: transform .2s;}
 .table td.has-child > .task-toggle > .icon:before {text-align: left;}
 .table td.has-child > .task-toggle.collapsed > .icon {transform: rotate(-90deg);}
+.main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
 
 .chosen-container-single .chosen-single > span{max-width:200px;}
 

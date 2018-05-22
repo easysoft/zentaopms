@@ -53,7 +53,7 @@
           <th><?php echo $lang->task->story;?></th>
           <td colspan='3'>
             <?php if(empty($stories)):?>
-            <span id='story'><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('project', 'linkStory', "projectID=$project->id"), $lang->project->linkStory, '_blank'), html::a("javascript:loadStories($project->id)", $lang->refresh));?></span>
+            <span id='story'><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('project', 'linkStory', "projectID=$project->id"), $lang->project->linkStory, '_blank', 'class="text-primary"'), html::a("javascript:loadStories($project->id)", $lang->refresh, '', 'class="text-primary"'));?></span>
             <?php else:?>
             <div class='input-group'>
               <?php echo html::select('story', $stories, $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
