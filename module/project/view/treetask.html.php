@@ -16,8 +16,8 @@
       <span><?php echo $lang->task->left;?> <?php echo $task->left . $lang->workingHour;?></span>
     </div>
     <div class="infos">
-      <span><?php echo $lang->task->type;?>: <?php echo $lang->task->typeList[$task->type];?></span>
-      <span><?php echo $lang->task->deadline;?>: <?php echo $task->deadline; if(isset($task->delay)) printf($lang->task->delayWarning, $task->delay);?></span>
+      <span><?php echo $lang->task->type;?> <?php echo $lang->task->typeList[$task->type];?></span>
+      <span><?php echo $lang->task->deadline;?> <?php echo $task->deadline; if(isset($task->delay)) printf($lang->task->delayWarning, $task->delay);?></span>
     </div>
     <div class="btn-toolbar">
       <?php

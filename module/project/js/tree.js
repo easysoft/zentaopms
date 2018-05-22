@@ -11,17 +11,22 @@ $(function()
   // 根据列表展开树形列表
   var showTreeLevel = function(level)
   {
+    $('.btn-tree-view').removeClass('btn-active-text');
+
     if (level === 'root')
     {
+      $('[data-type=root]').addClass('btn-active-text');
       taskTree.collapse();
     }
     else if (level === 'all')
     {
+      $('[data-type=all]').addClass('btn-active-text');
       taskTree.collapse();
       taskTree.expand($taskTree.find('li.has-list'), true);
     }
     else if (level === 'task')
     {
+      $('[data-type=task]').addClass('btn-active-text');
       taskTree.collapse();
       taskTree.show($taskTree.find('li.item-task').parent().parent(), true);
     }
@@ -29,13 +34,15 @@ $(function()
     {
       taskTree.collapse();
       taskTree.show($taskTree.find('li.item-story').parent().parent(), true);
+      $('[data-type=story]').addClass('btn-active-text');
     }
     $('#main').toggleClass('tree-show-root', level === 'root');
   };
 
   $(document).on('click', '.btn-tree-view', function()
   {
-    showTreeLevel($(this).data('type'));
+      showTreeLevel($(this).data('type'));
+      return false;
   });
 
   // 第一次访问时，展示所以节点
