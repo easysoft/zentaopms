@@ -76,7 +76,10 @@
       <tr class="divider">
         <th class="c-side text-left has-btn group-menu">
           <div class="dropdown">
-            <a href="" data-toggle="dropdown" class="btn text-left btn-block btn-link"><?php echo zget($lang->project->groups, $groupBy, null);?> <i class="icon icon-caret-down hl-primary text-primary pull-right"></i></a>
+            <a href="" data-toggle="dropdown" class="btn text-left btn-block btn-link clearfix">
+              <span class='pull-left'><?php echo zget($lang->project->groups, $groupBy, null);?></span>
+              <i class="icon icon-caret-down hl-primary text-primary pull-right"></i>
+            </a>
             <ul class="dropdown-menu">
               <?php foreach($lang->project->groups as $key => $value):?>
               <?php
@@ -152,7 +155,7 @@
         <?php endif;?>
         <td class='c-id-sm'><?php echo $task->id;?></td>
         <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $task->pri?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
-        <td class="c-name">
+        <td class="c-name" title="<?php echo $task->name;?>">
           <?php
             if(!empty($task->team))   echo '<span class="label label-light label-badge">' . $lang->task->multipleAB . '</span> ';
             if(!empty($task->parent)) echo '<span class="label label-light label-badge">' . $lang->task->childrenAB . '</span> ';
