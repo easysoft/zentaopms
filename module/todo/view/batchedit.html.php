@@ -31,9 +31,9 @@
   $columns = count($visibleFields) + 4;
   ?>
   <form method='post' target='hiddenwin' action='<?php echo $this->inlink('batchEdit', "from=todoBatchEdit");?>'>
-    <table class='table table-form table-fixed with-border'>
+    <table class='table table-form'>
       <thead>
-        <tr>
+        <tr class='text-center'>
           <th class='w-40px'>   <?php echo $lang->idAB;?></th>
           <th class='w-100px'>  <?php echo $lang->todo->date;?></th>
           <th class='w-80px'>  <?php echo $lang->todo->type;?></th>
@@ -94,7 +94,12 @@
       <?php endforeach;?>
       </tbody>
       <tfoot>
-        <tr><td colspan='<?php echo $columns?>' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td></tr>
+        <tr>
+          <td colspan='<?php echo $columns?>' class='text-center'>
+            <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
+            <?php echo html::backButton('', '', 'btn btn-wide');?>
+          </td>
+        </tr>
       </tfoot>
     </table>
   </form>
