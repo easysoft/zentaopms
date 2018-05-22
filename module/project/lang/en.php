@@ -178,7 +178,7 @@ $lang->project->groupFilter['story']['all']         = $lang->project->all;
 $lang->project->groupFilter['story']['linked']      = 'Task Linked to Story';
 $lang->project->groupFilter['pri']['all']           = $lang->project->all;
 $lang->project->groupFilter['pri']['noset']         = 'Not set';
-$lang->project->groupFilter['assignedTo']['undone'] = 'Pending';
+$lang->project->groupFilter['assignedTo']['undone'] = 'Unfinished';
 $lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
 
 $lang->project->byQuery = 'Search';

@@ -12,3 +12,5 @@
 .segment + .segment > .segment-value {padding-left: 10px;}
 .segment-title {color: #828A9D; font-size: 12px;}
 .segment-value {font-weight: bold;}
+
+.group-menu > .dropdown > .dropdown-menu{right: 0; width: 100%;}
