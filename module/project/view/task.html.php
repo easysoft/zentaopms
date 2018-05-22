@@ -139,7 +139,7 @@ js::set('browseType', $browseType);
   </div>
   <div class="main-col">
     <div class="cell" id="queryBox"></div>
-    <form class="main-table table-task" method="post" id='projectTaskForm'>
+    <form class="main-table table-task skip-iframe-modal" method="post" id='projectTaskForm'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>

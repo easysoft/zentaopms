@@ -99,7 +99,7 @@
   </div>
   <div class="main-col">
     <div class="cell" id="queryBox"></div>
-    <form class="main-table table-story" method="post" id='productStoryForm'>
+    <form class="main-table table-story skip-iframe-modal" method="post" id='productStoryForm'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
@@ -369,7 +369,7 @@ $(function()
                   .replace('%estimate%', checkedEstimate)
                   .replace('%rate%', rate);
         }
-    })
+    });
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>
