@@ -45,7 +45,7 @@
           <td class='c-id text-left'>
             <?php echo html::checkbox('stories', array($story->id => sprintf('%03d', $story->id)), ($story->stage == 'developed' or $story->status == 'closed') ? $story->id : '');?>
           </td>
-          <td><span class='label-pri label-pri-<?php echo $story->pri;?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
+          <td><span class='label-pri label-pri-<?php echo $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
           <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
           <td><?php echo $users[$story->openedBy];?></td>
           <td><?php echo $users[$story->assignedTo];?></td>

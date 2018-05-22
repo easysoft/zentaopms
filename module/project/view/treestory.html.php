@@ -116,7 +116,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->story->pri;?></th>
-          <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
+          <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
         </tr>
         <tr>
           <th><?php echo $lang->story->estimate;?></th>

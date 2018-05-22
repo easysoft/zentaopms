@@ -228,7 +228,7 @@ $dataType = '';
   <canvas id='burnChart' data-bezier-curve='false' data-responsive='true'></canvas>
 </div>
 </body>
-<script language='Javascript'>
+<script>
 function initBurnChar()
 {
     var data =

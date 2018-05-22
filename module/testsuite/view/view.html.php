@@ -81,7 +81,7 @@
                 <?php printf('%03d', $case->id);?>
                 <?php endif;?>
               </td>
-              <td><span class='label-pri label-pri-<?php echo $case->pri;?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
+              <td><span class='label-pri label-pri-<?php echo $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
               <td class='text-left' title='<?php echo $modules[$case->module]?>'><?php echo $modules[$case->module];?></td>
               <td class='text-left nobr' title='<?php echo $case->title;?>'>
                 <?php if($case->branch) echo "<span class='label label-info label-badge'>{$branches[$case->branch]}</span>"?>

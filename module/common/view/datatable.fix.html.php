@@ -7,7 +7,7 @@ $(function()
     $("a[data-toggle='showModuleModal']").click(function(){$('#showModuleModal').modal('show')});
     <?php endif;?>
 
-    var $btnToolbar = $('#main #mainContent form.main-table .table-header .btn-toolbar:first');
+    var $btnToolbar = $('#main .table-header .btn-toolbar:first');
     if($btnToolbar.length > 0)
     {
         <?php $mode = isset($this->config->datatable->$datatableId->mode) ? $this->config->datatable->$datatableId->mode : 'table';?>

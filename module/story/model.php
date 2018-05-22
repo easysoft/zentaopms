@@ -2363,7 +2363,7 @@ class storyModel extends model
                 echo html::checkbox('storyIDList', array($story->id => sprintf('%03d', $story->id)));
                 break;
             case 'pri':
-                echo "<span class='label-pri label-pri-" . $story->pri . "'>";
+                echo "<span class='label-pri label-pri-" . $story->pri . "' title='" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>";
                 echo zget($this->lang->story->priList, $story->pri, $story->pri);
                 echo "</span>";
                 break;

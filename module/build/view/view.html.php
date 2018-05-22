@@ -120,7 +120,7 @@ tbody tr td:first-child input{display:none;}
                   <?php printf('%03d', $story->id);?>
                   <?php endif;?>
                 </td>
-                <td><span class='label-pri label-pri-<?php echo $story->pri;?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+                <td><span class='label-pri label-pri-<?php echo $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
                 <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($storyLink,$story->title, '', "class='preview'");?></td>
                 <td><?php echo $users[$story->openedBy];?></td>
                 <td><?php echo $story->estimate;?></td>

@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/ueditor.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <?php echo css::internal($keTableCSS);?>
 <?php $browseLink = $this->session->docList ? $this->session->docList : inlink('browse');?>
 <div id="mainMenu" class="clearfix">

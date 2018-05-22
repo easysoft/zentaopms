@@ -250,8 +250,9 @@
                 </div>
               </td>
               <td class='w-90px'>
-                <a href='javascript:;' class='btn btn-icon btn-move-up btn-sm'><i class='icon-arrow-up'></i></a>
-                <a href='javascript:;' class='btn btn-icon btn-move-down btn-sm'><i class='icon-arrow-down'></i></a>
+                <a class='btn btn-move-add btn-icon btn-sm'><i class='icon-plus'></i></a>
+                <a class='btn btn-icon btn-move-up btn-sm'><i class='icon-arrow-up'></i></a>
+                <a class='btn btn-icon btn-move-down btn-sm'><i class='icon-arrow-down'></i></a>
               </td>
             </tr>
             <?php endfor;?>

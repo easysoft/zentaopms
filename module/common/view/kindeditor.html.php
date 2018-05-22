@@ -16,7 +16,7 @@ js::set('kuid', $uid);
 <link rel="stylesheet" href="<?php echo $jsRoot;?>kindeditor/themes/default/default.css" />
 <script src='<?php echo $jsRoot;?>kindeditor/kindeditor-min.js' type='text/javascript'></script>
 <script src='<?php echo $jsRoot;?>kindeditor/lang/<?php echo $editorLang;?>.js' type='text/javascript'></script>
-<script language='javascript'>
+<script>
 var editor = <?php echo json_encode($editor);?>;
 
 var bugTools =

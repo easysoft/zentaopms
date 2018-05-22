@@ -46,7 +46,7 @@
         <?php if($longBlock):?>
         <td class='c-id-xs'><?php echo $case->id;?></td>
         <?php endif;?>
-        <td class='c-pri'><span class='label-pri label-pri-<?php echo $case->pri?>'><?php echo zget($lang->case->priList, $case->pri, $case->pri)?></span></td>
+        <td class='c-pri'><span class='label-pri label-pri-<?php echo $case->pri?>' title='<?php echo zget($lang->case->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->case->priList, $case->pri, $case->pri)?></span></td>
         <td class='c-title text-left' style='color: <?php echo $case->color?>' title='<?php echo $case->title?>'><?php echo $case->title?></td>
         <?php if($longBlock):?>
         <td class='c-runtime'><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>

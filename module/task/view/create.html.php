@@ -23,7 +23,7 @@
       </div>
     </div>
     <form class='load-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
-      <table class='table table-form'> 
+      <table class='table table-form'>
         <tr>
           <th><?php echo $lang->task->type;?></th>
           <td><?php echo html::select('type', $lang->task->typeList, $task->type, "class='form-control chosen' onchange='setOwners(this.value)' required");?></td><td></td><td></td>
@@ -53,7 +53,7 @@
           <th><?php echo $lang->task->story;?></th>
           <td colspan='3'>
             <?php if(empty($stories)):?>
-            <span id='story'><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('project', 'linkStory', "projectID=$project->id"), $lang->project->linkStory, '_blank'), html::a("javascript:loadStories($project->id)", $lang->refresh));?></span>
+            <span id='story'><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('project', 'linkStory', "projectID=$project->id"), $lang->project->linkStory, '_blank', 'class="text-primary"'), html::a("javascript:loadStories($project->id)", $lang->refresh, '', 'class="text-primary"'));?></span>
             <?php else:?>
             <div class='input-group'>
               <?php echo html::select('story', $stories, $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
@@ -104,9 +104,9 @@
           ?>
           <td colspan='<?php echo $hasCustomPri ? 1 : 3 ?>'>
             <?php if($hasCustomPri):?>
-            <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control chosen chosen-simple'");?> 
+            <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control chosen chosen-simple'");?>
             <?php else: ?>
-            <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control' data-provide='labelSelector'");?> 
+            <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control' data-provide='labelSelector'");?>
             <?php endif; ?>
            </td>
          </tr>
@@ -190,7 +190,8 @@
                     <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
                   </div>
                 </td>
-                <td class='w-70px'>
+                <td class='w-90px'>
+                  <a class='btn btn-move-add btn-icon btn-sm'><i class='icon-plus'></i></a>
                   <a class='btn btn-move-up btn-sm btn-icon'><i class='icon-arrow-up'></i></a>
                   <a class='btn btn-move-down btn-sm btn-icon'><i class='icon-arrow-down'></i></a>
                 </td>

@@ -168,7 +168,7 @@
             </tr>
             <tr>
               <th><?php echo $lang->testcase->pri;?></th>
-              <td><span class='label-pri label-pri-<?php echo $case->pri;?>'><?php echo zget($lang->testcase->priList, $case->pri)?></span></td>
+              <td><span class='label-pri label-pri-<?php echo $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri)?></span></td>
             </tr>
             <tr>
               <th><?php echo $lang->testcase->status;?></th>
