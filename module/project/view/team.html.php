@@ -41,8 +41,8 @@
           <th><?php echo $lang->team->days;?></th>
           <th><?php echo $lang->team->hours;?></th>
           <th><?php echo $lang->team->totalHours;?></th>
-          <th class='w-80px'><?php echo $lang->team->limited;?></th>
-          <th class='w-50px'><?php echo $lang->actions;?></th>
+          <th class='w-80px text-center'><?php echo $lang->team->limited;?></th>
+          <th class='c-actions-1'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -61,13 +61,13 @@
           <td><?php echo $member->days . $lang->project->day;?></td>
           <td><?php echo $member->hours . $lang->project->workHour;?></td>
           <td><?php echo $memberHours . $lang->project->workHour;?></td>
-          <td><?php echo $lang->team->limitedList[$member->limited];?></td>
+          <td class="text-center"><?php echo $lang->team->limitedList[$member->limited];?></td>
           <td class='c-actions'>
             <?php
             if (common::hasPriv('project', 'unlinkMember', $member))
             {
                 $unlinkURL = $this->createLink('project', 'unlinkMember', "projectID=$project->id&account=$member->account&confirm=yes");
-                echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"memberList\",confirmUnlinkMember)", '<i class="icon-green-project-unlinkMember icon-trash"></i>', '', "class='btn btn-link' title='{$lang->project->unlinkMember}'");
+                echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"memberList\",confirmUnlinkMember)", '<i class="icon-green-project-unlinkMember icon-trash"></i>', '', "class='btn' title='{$lang->project->unlinkMember}'");
             }
             ?>
           </td>
@@ -76,7 +76,7 @@
       </tbody>
     </table>
     <div class='table-footer'>
-      <div class='text'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours{$lang->project->workHour}</strong>";?></div>
+      <div class='table-statistic'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours{$lang->project->workHour}</strong>";?></div>
     </div>
   </form>
 </div>
