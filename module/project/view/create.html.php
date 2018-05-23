@@ -39,7 +39,7 @@
     <div class='main-header'>
       <h2><?php echo $lang->project->create;?></h2>
       <div class="pull-right btn-toolbar">
-        <button type='button' class='btn btn-link' id='cpmBtn'><?php echo html::icon($lang->icons['copy']) . ' ' . $lang->project->copy;?></button>
+        <button type='button' class='btn btn-link' id='cpmBtn'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
       </div>
     </div>
     <form class='form-indicator main-form' method='post' target='hiddenwin' id='dataform'>
@@ -150,12 +150,12 @@
 <div class='modal fade' id='copyProjectModal'>
   <div class='modal-dialog mw-800px'>
     <div class='modal-header'>
-      <button type='button' class='close' data-dismiss='modal'>&times;</button>
+      <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
       <h4 class='modal-title' id='myModalLabel'><?php echo $lang->project->copyTitle;?></h4>
     </div>
     <div class='modal-body'>
       <?php if(count($projects) == 1):?>
-      <div class='alert alert-warning with-icon'>
+      <div class='alert with-icon'>
         <i class='icon-exclamation-sign'></i>
         <div class='content'><?php echo $lang->project->copyNoProject;?></div>
       </div>

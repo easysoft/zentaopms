@@ -146,8 +146,10 @@
               <tr>
                 <th><?php echo $lang->story->mailto;?></th>
                 <td>
-                  <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='form-control' multiple");?>
-                  <?php echo $this->fetch('my', 'buildContactLists')?>
+                  <div class='input-group'>
+                    <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='form-control' multiple");?>
+                    <div class='input-group-btn'><?php echo $this->fetch('my', 'buildContactLists')?></div>
+                  </div>
                 </td>
               </tr>
             </table>
