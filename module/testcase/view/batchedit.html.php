@@ -42,7 +42,7 @@
   <form method='post' target='hiddenwin' action="<?php echo inLink('batchEdit');?>" id='batchEditForm'>
     <table class='table table-form table-fixed'>
       <thead>
-        <tr>
+        <tr class='text-center'>
           <th class='w-50px'><?php  echo $lang->idAB;?></th>
           <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden') . zget($requiredFields, 'pri', '', ' required');?>'><?php echo $lang->priAB;?></th>
           <th class='w-100px<?php echo zget($visibleFields, 'status', ' hidden') . zget($requiredFields, 'status', '', ' required');?>'><?php echo $lang->statusAB;?></th>
@@ -51,11 +51,11 @@
           <?php endif;?>
           <th class='w-150px<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->testcase->module;?></th>
           <th class='w-150px<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', '', ' required');?>'><?php echo $lang->testcase->story;?></th>
-          <th class='required'><?php echo $lang->testcase->title;?></th>
+          <th class='text-left required'><?php echo $lang->testcase->title;?></th>
           <th class='w-120px required'><?php echo $lang->testcase->type;?></th>
           <th class='<?php echo zget($visibleFields, 'precondition', 'hidden') . zget($requiredFields, 'precondition', '', ' required');?>'><?php echo $lang->testcase->precondition;?></th>
           <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->testcase->keywords;?></th>
-          <th class='w-300px<?php echo zget($visibleFields, 'stage', ' hidden') . zget($requiredFields, 'stage', '', ' required');?>'><?php echo $lang->testcase->stage;?></th>
+          <th class='w-250px<?php echo zget($visibleFields, 'stage', ' hidden') . zget($requiredFields, 'stage', '', ' required');?>'><?php echo $lang->testcase->stage;?></th>
         </tr>
       </thead>
       <tbody>
@@ -112,7 +112,12 @@
         <?php endforeach;?>
       </tbody>
       <tfoot>
-        <tr><td colspan='<?php echo $branchProduct ? (count($visibleFields) + 3) : (count($visibleFields) + 2);?>' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td></tr>
+        <tr>
+          <td colspan='<?php echo $branchProduct ? (count($visibleFields) + 3) : (count($visibleFields) + 2);?>' class='text-center'>
+            <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
+            <?php echo html::backButton('', '', 'btn btn-wide');?>
+          </td>
+        </tr>
       </tfoot>
     </table>
   </form>
