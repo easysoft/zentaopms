@@ -31,6 +31,7 @@
   </div>
 
   <div id="dynamics" class='main-content'>
+    <?php if(!empty($dateGroups)):?>
     <?php $firstAction = '';?>
     <?php foreach($dateGroups as $date => $actions):?>
     <?php $isToday = date(DT_DATE4) == $date;?>
@@ -61,6 +62,11 @@
       </ul>
     </div>
     <?php endforeach;?>
+    <?php else:?>
+    <div class="text-center text-muted">
+      <?php echo $lang->action->noDynamic;?>
+    </div>
+    <?php endif;?>
   </div>
   <?php if(!empty($firstAction)):?>
   <?php
