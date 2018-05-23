@@ -24,10 +24,9 @@
         <th class='w-id'><?php echo $lang->idAB;?></th>
         <th class='w-150px'><?php echo $lang->user->realname;?></th>
         <th><?php echo $lang->user->account;?></th>
-        <th class='w-100px'><?php echo $lang->user->phone;?></th>
-        <th class='w-100px'><?php echo $lang->user->mobile;?></th>
-        <th class='w-100px'><?php echo $lang->user->birthyear;?></th>
-        <th class='w-100px'><?php echo $lang->admin->safe->reason;?></th>
+        <th class='w-150px'><?php echo $lang->user->phone;?></th>
+        <th class='w-150px'><?php echo $lang->user->mobile;?></th>
+        <th class='w-150px'><?php echo $lang->admin->safe->reason;?></th>
         <th class='w-50px'><?php echo $lang->actions;?></th>
       </thead>
       <tbody>
@@ -38,7 +37,6 @@
           <td class='text-left'><?php echo $user->account?></td>
           <td><?php echo $user->phone?></td>
           <td><?php echo $user->mobile?></td>
-          <td><?php echo $user->birthday?></td>
           <td><?php echo $lang->admin->safe->reasonList[$user->weakReason];?></td>
           <td class='c-actions'><?php common::printIcon('user', 'edit', "userID=$user->id", '', 'list');?></td>
         </tr>
