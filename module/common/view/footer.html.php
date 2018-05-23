@@ -55,14 +55,6 @@ $(function()
     }, 60 * 1000);
 })
 
-<?php if(!isset($config->global->novice) and $this->loadModel('tutorial')->checkNovice() and $config->global->flow == 'full'):?>
-novice = confirm('<?php echo $lang->tutorial->novice?>');
-$.get(createLink('tutorial', 'ajaxSaveNovice', 'novice=' + (novice ? 'true' : 'false')), function()
-{
-    if(novice) location.href=createLink('tutorial', 'index');
-});
-<?php endif;?>
-
 <?php if(!empty($this->config->sso->redirect)):?>
 <?php
 $ranzhiAddr = $this->config->sso->addr;

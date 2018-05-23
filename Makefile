@@ -78,6 +78,15 @@ rpm:
 	rpmbuild -ba ~/rpmbuild/SPECS/zentaopms.spec
 	cp ~/rpmbuild/RPMS/noarch/zentaopms-${VERSION}-1.noarch.rpm ./
 	rm -rf ~/rpmbuild
+en:
+	unzip ZenTaoPMS.${VERSION}.zip
+	cd zentaopms/; grep -rl 'zentao.net'|xargs sed -i 's/zentao.net/zentao.pm/g';
+	zip -r -9 ZenTaoPMS.$(VERSION).int.zip zentaopms
+	rm -fr zentaopms
+	echo $(VERSION).int > VERSION 
+	make deb
+	make rpm
+	echo $(VERSION) > VERSION
 patchphpdoc:
 	sudo cp misc/doc/phpdoc/*.tpl /usr/share/php/data/PhpDocumentor/phpDocumentor/Converters/HTML/frames/templates/phphtmllib/templates/
 phpdoc:
