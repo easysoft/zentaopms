@@ -21,9 +21,9 @@ $itemRow = <<<EOT
     <td>
       <input type='text' class="form-control" autocomplete='off' value="" name="values[]">
     </td>
-    <td class='text-left'>
-      <a href="javascript:void(0)" class='btn-icon' onclick="addItem(this)"><i class='icon-plus'></i></a>
-      <a href="javascript:void(0)" class='btn-icon' onclick="delItem(this)"><i class='icon-remove'></i></a>
+    <td class='c-actions'>
+      <a href="javascript:void(0)" class='btn btn-link' onclick="addItem(this)"><i class='icon-plus'></i></a>
+      <a href="javascript:void(0)" class='btn btn-link' onclick="delItem(this)"><i class='icon-trash'></i></a>
     </td>
   </tr>
 EOT;
@@ -54,9 +54,9 @@ EOT;
       <?php if(($module == 'story' or $module == 'testcase') and $field == 'review'):?>
       <table class='table table-form mw-800px'>
         <tr>
-          <th class='w-120px'><?php echo $lang->custom->storyReview;?></th>
+          <th class='w-80px'><?php echo $lang->custom->storyReview;?></th>
           <td><?php echo html::radio('needReview', $lang->custom->reviewList, $needReview);?></td>
-          <td class='w-100px'></td>
+          <td></td>
         </tr>
         <tr <?php if($needReview and $module == 'testcase') echo "class='hidden'"?>>
           <th><?php echo $lang->custom->forceReview;?></th>
