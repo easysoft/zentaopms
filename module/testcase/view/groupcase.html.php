@@ -54,7 +54,7 @@
           <?php echo html::a('###', "<i class='icon-caret-down'></i> $groupName", '', "class='text-primary'");?>
         </td>
         <?php endif;?>
-        <td class='c-id-sm'><?php echo $case->id;?></td>
+        <td class='c-id-sm'><?php echo sprintf('%03d', $case->id);?></td>
         <td><span class='label-pri <?php echo 'label-pri-' . $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
         <td class='text-left'><?php if(!common::printLink('testcase', 'view', "case=$case->id", $case->title)) echo $case->title;?></td>
         <td><?php echo zget($lang->case->typeList, $case->type, '');?></td>

@@ -47,7 +47,7 @@
       ?>
       <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
         <?php if($longBlock):?>
-        <td class="c-id-xs"><?php echo $story->id;?></td>
+        <td class="c-id-xs"><?php echo sprintf('%03d', $story->id);?></td>
         <?php endif;?>
         <td class="c-pri"><span class="label-pri label-pri-<?php echo $story->pri?>" title="<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>"><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
         <td class="c-name" style='color: <?php echo $story->color?>' title='<?php echo $story->title?>'><?php echo $story->title?></td>
