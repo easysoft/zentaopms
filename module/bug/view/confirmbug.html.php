@@ -32,17 +32,19 @@ js::set('page', 'confirmbug');
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->bug->assignedTo;?></th>
-          <td class='w-p25-f'><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='select-2 chosen'");?></td>
+          <td class='w-p25-f'><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='form-controlform-control chosen'");?></td>
           <td></td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->bug->type;?></th>
           <td><?php echo html::select('type', $lang->bug->typeList, $bug->type, "class='form-control chosen'");?></td>
+          <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->bug->pri;?></th>
           <td><?php echo html::select('pri', $lang->bug->priList, $bug->pri, "class='form-control chosen'");?></td>
-        </tr>  
+          <td></td>
+        </tr>
         <tr>
           <th><?php echo $lang->bug->mailto;?></th>
           <td colspan='2'><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $bug->mailto), 'class="form-control chosen" multiple');?></td>
