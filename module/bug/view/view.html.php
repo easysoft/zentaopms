@@ -336,8 +336,6 @@ $convertParams = "productID=$productID&branch=$bug->branch&moduleID=0&from=bug&b
     common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy');
     common::printIcon('bug', 'delete', $params, $bug, 'button', '', 'hiddenwin');
     ?>
-    <?php else:?>
-    <?php common::printBack($browseLink);?>
     <?php endif;?>
   </div>
 </div>

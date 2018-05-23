@@ -221,7 +221,7 @@ class scoreModel extends model
         $data->time     = empty($time) ? helper::now() : $time;
         $this->dao->insert(TABLE_SCORE)->data($data)->exec();
 
-        $this->dao->update(TABLE_USER)->set("`score`=`score` + " . (int)$rule['score'])->set("`scoreLevel`=`scoreLevel` + " . $rule['score'])->where('account')->eq($account)->exec();
+        $this->dao->update(TABLE_USER)->set("`score`=`score` + " . (int)$rule['score'])->set("`scoreLevel`=`scoreLevel` + " . (int)$rule['score'])->where('account')->eq($account)->exec();
     }
 
     /**
