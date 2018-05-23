@@ -11,11 +11,11 @@
  */
 $lang->todo->common       = 'Todo';
 $lang->todo->index        = "Home";
-$lang->todo->create       = "Create Todo";
-$lang->todo->createCycle  = "Create Cycle Todo";
+$lang->todo->create       = "Add a Todo";
+$lang->todo->createCycle  = "Add Recurring Todo";
 $lang->todo->assignTo     = "Assign";
 $lang->todo->activate     = "Activate";
-$lang->todo->batchCreate  = "Batch Create";
+$lang->todo->batchCreate  = "Batch Add";
 $lang->todo->edit         = "Edit";
 $lang->todo->close        = "Close";
 $lang->todo->batchEdit    = "Batch Edit";
@@ -27,8 +27,8 @@ $lang->todo->delete       = "Delete";
 $lang->todo->import2Today = "Import to Today";
 $lang->todo->import       = "Import";
 $lang->todo->legendBasic  = "Basic Info";
-$lang->todo->cycle        = "Cycle";
-$lang->todo->cycleConfig  = "Cycle Config";
+$lang->todo->cycle        = "Recurrence";
+$lang->todo->cycleConfig  = "Set Recurrence";
 
 $lang->todo->reasonList['story'] = "Transfer Story";
 $lang->todo->reasonList['task']  = "Transfer Task";
@@ -46,7 +46,7 @@ $lang->todo->beginAndEnd = 'Duration';
 $lang->todo->idvalue     = 'Link ID';
 $lang->todo->type        = 'Type';
 $lang->todo->pri         = 'Priority';
-$lang->todo->name        = 'Todo Name';
+$lang->todo->name        = 'Title';
 $lang->todo->status      = 'Status';
 $lang->todo->desc        = 'Description';
 $lang->todo->private     = 'Private';
@@ -77,7 +77,7 @@ $lang->todo->priList[4] = 'Low';
 $lang->todo->priList[0] = '';
 
 $lang->todo->typeList['custom'] = 'Custom';
-$lang->todo->typeList['cycle']  = 'Periodic';
+$lang->todo->typeList['cycle']  = 'Recurrence';
 $lang->todo->typeList['bug']    = 'Bug';
 $lang->todo->typeList['task']   = $lang->projectCommon . 'Task';
 $lang->todo->typeList['story']  = $lang->projectCommon . 'Story';
@@ -98,7 +98,7 @@ $lang->todo->periods['all']        = 'All';
 $lang->todo->periods['thisYear']   = 'ThisYear';
 $lang->todo->periods['future']     = 'Pending';
 $lang->todo->periods['before']     = 'Unfinished';
-$lang->todo->periods['cycle']      = 'Cycle';
+$lang->todo->periods['cycle']      = 'Recurrence';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, is $extra by <strong>$actor</strong>.', 'extra' => 'reasonList');
