@@ -437,6 +437,7 @@ class commonModel extends model
     {
         global $lang, $app;
 
+        if(isset($lang->menugroup->$moduleName)) $moduleName = $lang->menugroup->$moduleName;
         if(!isset($lang->$moduleName->menu))
         {
             echo "<ul></ul>";

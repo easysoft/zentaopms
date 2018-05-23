@@ -1589,6 +1589,7 @@ class story extends control
                     $mailto = trim($mailto);
                     if(isset($users[$mailto])) $story->mailto .= $users[$mailto] . ',';
                 }
+                $story->mailto = rtrim($story->mailto, ',');
 
                 $story->reviewedBy = trim(trim($story->reviewedBy), ',');
                 $reviewedBys = explode(',', $story->reviewedBy);
@@ -1598,6 +1599,7 @@ class story extends control
                     $reviewedBy = trim($reviewedBy);
                     if(isset($users[$reviewedBy])) $story->reviewedBy .= $users[$reviewedBy] . ',';
                 }
+                $story->reviewedBy = rtrim($story->reviewedBy, ',');
 
             }
 
