@@ -24,7 +24,7 @@
   </nav>
 
   <div class='main-table'>
-    <table class='table has-sort-head table-lg'>
+    <table class='table has-sort-head'>
       <?php $vars = "account=$account&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <thead>
         <tr class='colhead'>
@@ -32,14 +32,14 @@
           <th>               <?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
           <th>               <?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->project);?></th>
           <th>               <?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
-          <th class='w-80px'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
-          <th class='w-80px'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
-          <th class='w-50px'><?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='w-100px'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
+          <th class='w-100px'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
+          <th class='w-80px'><?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach($tasks as $task):?>
-        <tr class='text-center'>
+        <tr>
           <td><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
           <td class='text-left nobr'><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name);?></td>
           <td class='nobr'><?php echo $task->projectName?></td>

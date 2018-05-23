@@ -27,7 +27,7 @@
   </nav>
 
   <div class='main-table'>
-    <table class='table has-sort-head table-lg'>
+    <table class='table has-sort-head'>
       <?php 
       $vars = "account=$account&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
       $this->app->loadLang('testtask');
