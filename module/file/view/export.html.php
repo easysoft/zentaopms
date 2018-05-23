@@ -174,9 +174,6 @@ if($isCustomExport)
                 <button type='button' onclick='setExportTPL()' class='btn'><?php echo $lang->file->setExportTPL?></button>
               </td>
             </tr>
-            <?php
-
-            ?>
             <tr id='customFields' class="hidden">
               <th></th>
               <td colspan="2">
