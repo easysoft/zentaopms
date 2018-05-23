@@ -33,7 +33,7 @@
   </nav>
 
   <div class='main-table'>
-    <table class='table has-sort-head table-lg'>
+    <table class='table has-sort-head'>
       <thead>
         <tr class='colhead'>
           <th class='w-id'>    <?php echo $lang->idAB;?></th>

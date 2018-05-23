@@ -34,7 +34,7 @@
       ?>
       <tr class='text-center' data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
         <?php if($longBlock):?>
-        <td><?php echo $testtask->id;?></td>
+        <td><?php echo sprintf('%03d', $testtask->id);?></td>
         <td class='text-left' title='<?php echo $testtask->productName?>'><?php echo $testtask->productName?></td>
         <?php endif;?>
         <td class='text-left' title='<?php echo $testtask->name?>'><?php echo $testtask->name?></td>

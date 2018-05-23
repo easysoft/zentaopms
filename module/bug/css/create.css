@@ -27,13 +27,9 @@
 #contactListGroup .input-group-btn > .btn {margin-left: -1px!important;}
 #contactListGroup .chosen-container-single a {border-left-width: 0px;}
 
-.chosen-container {max-width: 580px;}
-
 .minw-80px {min-width: 80px;}
 
 .colorpicker.input-group-btn > .btn {border-right: none}
-
-#branch {border-left-width: 0;}
 
 .input-group-addon.w-90px{min-width:90px;}
 .input-group .input-group-btn .btn{padding: 6px 12px;}

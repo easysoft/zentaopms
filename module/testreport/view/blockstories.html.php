@@ -16,7 +16,7 @@
   <tbody class='text-center'>
     <?php foreach($stories as $story):?>
     <tr>
-      <td><?php echo $story->id . html::hidden('stories[]', $story->id)?></td>
+      <td><?php echo sprintf('%03d', $story->id) . html::hidden('stories[]', $story->id)?></td>
       <td><span class='label-pri lable-pri-<?php echo $story->pri?>' title='<?php echo zget($lang->story->priList, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri);?></span></td>
       <td class='text-left' title='<?php echo $story->title?>'><?php echo html::a($sysURL . $this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
       <td><?php echo zget($users, $story->openedBy);?></td>
