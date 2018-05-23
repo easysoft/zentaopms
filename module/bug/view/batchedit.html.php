@@ -138,7 +138,12 @@
         <?php endforeach;?>
       </tbody>
       <tfoot>
-        <tr><td colspan='<?php echo $branchProduct ? $columns : ($columns - 1);?>' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td></tr>
+        <tr>
+          <td colspan='<?php echo $branchProduct ? $columns : ($columns - 1);?>' class='text-center form-actions'>
+            <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+            <?php echo html::backButton('', '', 'btn btn-wide');?>
+          </td>
+        </tr>
       </tfoot>
     </table>
   </form>
