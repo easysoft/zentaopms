@@ -39,7 +39,6 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
               <div class='input-group'>
                 <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen control-product' autocomplete='off'");?>
                 <?php if($this->session->currentProductType != 'normal'):?>
-                <span class='input-group-addon'></span>
                 <?php  echo html::select('branch', $branches, $branch, "onchange='loadBranch()' class='form-control chosen control-branch'");?>
                 <?php endif;?>
               </div>
@@ -67,7 +66,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
           <?php if($showProject):?>
           <tr>
             <th><?php echo $lang->bug->project;?></th>
-            <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProjectRelated(this.value)' autocomplete='off'");?></span></td>
+            <td><div id='projectIdBox'><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProjectRelated(this.value)' autocomplete='off'");?></div></td>
           </tr>
           <?php endif;?>
           <tr>
