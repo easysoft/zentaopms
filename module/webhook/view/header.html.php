@@ -25,7 +25,7 @@
   <div class='btn-toolbar pull-right'>
     <div class='btn-group'>
       <div class='btn-group' id='createActionMenu'>
-        <?php common::printIcon('webhook', 'create', '', '', 'button', '', '', 'btn-primary');?>
+        <?php if(common::hasPriv('webhook', 'create')) echo html::a($this->createLink('webhook', 'create'), "<i class='icon-plus'></i> {$lang->webhook->create}", '', "class='btn btn-primary'");?>
       </div>
     </div>
   </div>
