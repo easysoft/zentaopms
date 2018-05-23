@@ -93,7 +93,7 @@ class scoreModel extends model
 
                     if(!empty($task->estimate))
                     {
-                        $rule['score'] = $rule['score'] + round(($task->consumed / 10 * $task->estimate / $task->consumed));
+                        $rule['score'] = $rule['score'] + (empty($task->consumed) ? 0 : round($task->consumed / 10 * $task->estimate / $task->consumed));
                     }
                 }
                 break;
