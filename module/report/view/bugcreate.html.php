@@ -11,23 +11,25 @@
   </div>
   <div class='main-col'>
     <div class='cell'>
-      <div class='with-padding'>
-        <div class="table-row" id='conditions'>
-          <div class='col-sm-5'>
-            <div class='input-group input-group-sm'>
-              <span class='input-group-addon'><?php echo $lang->report->bugOpenedDate;?></span>
-              <div class='datepicker-wrapper datepicker-date'><?php echo html::input('begin', $begin, "class='form-control form-date' onchange='changeParams(this)'");?></div>
-              <span class='input-group-addon fix-border'><?php echo $lang->report->to;?></span>
-              <div class='datepicker-wrapper datepicker-date'><?php echo html::input('end', $end, "class='form-control form-date' onchange='changeParams(this)'");?></div>
-            </div>
+      <div class="row" id='conditions'>
+        <div class='col-sm-4'>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->report->bugOpenedDate;?></span>
+            <div class='datepicker-wrapper datepicker-date'><?php echo html::input('begin', $begin, "class='form-control form-date' onchange='changeParams(this)'");?></div>
+            <span class='input-group-addon'><?php echo $lang->report->to;?></span>
+            <div class='datepicker-wrapper datepicker-date'><?php echo html::input('end', $end, "class='form-control form-date' onchange='changeParams(this)'");?></div>
           </div>
-          <div class='col-sm-4'>
-            <div class='input-group w-200px input-group-sm'>
-              <span class='input-group-addon'><?php echo $lang->report->product;?></span>
-              <?php echo html::select('product', $products, $product, "class='form-control chosen' onchange='changeParams(this)'");?>
-              <span class='input-group-addon fix-border'><?php echo $lang->report->project;?></span>
-              <?php echo html::select('project', $projects, $project, "class='form-control chosen' onchange='changeParams(this)'");?>
-            </div>
+        </div>
+        <div class='col-sm-4'>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->report->product;?></span>
+            <?php echo html::select('product', $products, $product, "class='form-control chosen' onchange='changeParams(this)'");?>
+          </div>
+        </div>
+        <div class='col-sm-4'>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->report->project;?></span>
+            <?php echo html::select('project', $projects, $project, "class='form-control chosen' onchange='changeParams(this)'");?>
           </div>
         </div>
       </div>
