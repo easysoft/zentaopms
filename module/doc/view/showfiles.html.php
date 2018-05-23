@@ -66,7 +66,7 @@
             <?php foreach($files as $file):?>
             <?php if(empty($file->pathname)) continue;?>
               <tr>
-                <td><?php echo $file->id;?></td>
+                <td><?php echo sprintf('%03d', $file->id);?></td>
                 <td>
                   <a href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID");?>'><?php echo $file->title . ' [' . strtoupper($file->objectType) . ' #' . $file->objectID . ']';?></a>
                 </td>

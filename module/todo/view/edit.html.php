@@ -91,7 +91,7 @@
     <div class="row form-group">
       <label class="col-sm-1"><?php echo $lang->todo->name;?></label>
       <div class="col-sm-10">
-        <div id='nameBox'>
+        <div id='nameBox' class='required'>
           <?php
           $readType = ($todo->type == 'bug' or $todo->type == 'task') ? 'readonly' : '';
           echo html::input('name', $todo->name, "$readType class='form-control' autocomplete='off'");

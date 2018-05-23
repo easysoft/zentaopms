@@ -83,7 +83,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->type;?></th>
-          <td><?php echo html::select('type', $lang->project->typeList, '', "class='form-control chosen' onchange='showTypeTips()'");?></td>
+          <td><?php echo html::select('type', $lang->project->typeList, '', "class='form-control chosen-simple' onchange='showTypeTips()'");?></td>
           <td class='muted' colspan='2'><div class='type-tips'><?php echo $lang->project->typeDesc;?></div></td>
         </tr>
         <tr <?php if($this->config->global->flow == 'onlyTask') echo "class='hidden'";?>>
