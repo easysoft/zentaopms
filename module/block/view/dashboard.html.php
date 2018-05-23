@@ -18,7 +18,7 @@ $useGuest = $this->app->user->account == 'guest';
 ?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <div class='dashboard' id='dashboard' data-confirm-remove-block='<?php  echo $lang->block->confirmRemoveBlock;?>'>
-  <div>
+  <div class="row">
     <div class='col-md-8 col-main'>
       <?php foreach($longBlocks as $index => $block):?>
       <?php if(isset($config->block->closed) and strpos(",{$config->block->closed},", ",{$block->source}|{$block->block},") !== false) continue;?>

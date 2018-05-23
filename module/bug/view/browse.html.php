@@ -380,7 +380,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       </div>
       <?php elseif(common::hasPriv('bug', 'create')):?>
       <div class="table-empty-tip">
-        <p><span class="text-muted"><?php echo $lang->bug->noBug;?></span> <?php common::printLink('bug', 'create', "productID={$productID}", "<i class='icon icon-plus'> </i>" . $lang->bug->create, '', "class='btn btn-info'");?></p>
+        <p><span class="text-muted"><?php echo $lang->bug->noBug;?></span> <?php common::printLink('bug', 'create', "productID={$productID}", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info'");?></p>
       </div>
       <?php endif;?>
     </form>

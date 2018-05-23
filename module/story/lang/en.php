@@ -96,6 +96,7 @@ $lang->story->copy           = "Copy a Story";
 $lang->story->total          = "Total Stories";
 $lang->story->allStories     = 'All';
 $lang->story->unclosed       = 'Unclosed';
+$lang->story->deleted        = 'Deleted';
 
 $lang->story->ditto       = 'Ditto';
 $lang->story->dittoNotice = 'This Story does not belong to the same Product as the last Story does!';

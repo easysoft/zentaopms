@@ -93,7 +93,7 @@ class scoreModel extends model
 
                     if(!empty($task->estimate))
                     {
-                        $rule['score'] = $rule['score'] + round(($task->consumed / 10 * $task->estimate / $task->consumed));
+                        $rule['score'] = $rule['score'] + (empty($task->consumed) ? 0 : round($task->consumed / 10 * $task->estimate / $task->consumed));
                     }
                 }
                 break;
@@ -221,7 +221,7 @@ class scoreModel extends model
         $data->time     = empty($time) ? helper::now() : $time;
         $this->dao->insert(TABLE_SCORE)->data($data)->exec();
 
-        $this->dao->update(TABLE_USER)->set("`score`=`score` + " . $rule['score'])->set("`scoreLevel`=`scoreLevel` + " . $rule['score'])->where('account')->eq($account)->exec();
+        $this->dao->update(TABLE_USER)->set("`score`=`score` + " . (int)$rule['score'])->set("`scoreLevel`=`scoreLevel` + " . (int)$rule['score'])->where('account')->eq($account)->exec();
     }
 
     /**

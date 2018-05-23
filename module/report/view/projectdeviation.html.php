@@ -12,14 +12,12 @@
   </div>
   <div class='main-col'>
     <div class='cell'>
-      <div class='with-padding'>
-        <div class="table-row" id='conditions'>
-          <div class='input-group w-400px input-group-sm'>
-            <span class='input-group-addon'><?php echo $lang->projectCommon . $lang->report->beginAndEnd;?></span>
-            <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $begin, "class='form-control form-date' onchange='changeDate(this.value, \"$end\")'");?></div>
-            <span class='input-group-addon'><?php echo $lang->report->to;?></span>
-            <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $end, "class='form-control form-date' onchange='changeDate(\"$begin\", this.value)'");?></div>
-          </div>
+      <div class="table-row" id='conditions'>
+        <div class='input-group w-400px input-group-sm'>
+          <span class='input-group-addon'><?php echo $lang->projectCommon . $lang->report->beginAndEnd;?></span>
+          <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $begin, "class='form-control form-date' onchange='changeDate(this.value, \"$end\")'");?></div>
+          <span class='input-group-addon'><?php echo $lang->report->to;?></span>
+          <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $end, "class='form-control form-date' onchange='changeDate(\"$begin\", this.value)'");?></div>
         </div>
       </div>
     </div>
@@ -30,7 +28,7 @@
           <nav class="panel-actions btn-toolbar"></nav>
         </div>
         <div data-ride='table'>
-          <table class='table table-condensed table-striped table-bordered table-fixed' id='projectList'>
+          <table class='table table-condensed table-striped table-bordered table-fixed no-margin' id='projectList'>
             <thead>
               <tr class='colhead'>
                 <th class='w-id'><?php echo $lang->report->id;?></th>

@@ -189,7 +189,7 @@ foreach($fieldParams as $fieldName => $param)
         <ul>
           <?php foreach($queries as $queryID => $queryName):?>
           <?php if(empty($queryID)) continue;?>
-          <li><?php echo html::a("javascript:executeQuery($queryID)", $queryName . (common::hasPriv('search', 'deleteQuery') ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID'");?></li>
+          <li><?php echo html::a("javascript:executeQuery($queryID)", $queryName . (common::hasPriv('search', 'deleteQuery') ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID' title='{$queryName}'");?></li>
           <?php endforeach;?>
         </ul>
       </td>
