@@ -643,8 +643,8 @@ class gitModel extends model
         {
             foreach($actionFiles as $file)
             {
-                $catLink  = trim(html::a($this->buildURL('cat',  $repoRoot . $file, $log->revision), 'view', '', "class='repolink'"));
-                $diffLink = trim(html::a($this->buildURL('diff', $repoRoot . $file, $log->revision), 'diff', '', "class='repolink'"));
+                $catLink  = trim(html::a($this->buildURL('cat',  $repoRoot . $file, $log->revision), 'view', '', "class='iframe' data-width='960'"));
+                $diffLink = trim(html::a($this->buildURL('diff', $repoRoot . $file, $log->revision), 'diff', '', "class='iframe' data-width='960'"));
                 $diff .= $action . " " . $file . " $catLink ";
                 $diff .= $action == 'M' ? "$diffLink\n" : "\n" ;
             }
