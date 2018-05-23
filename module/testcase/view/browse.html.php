@@ -24,8 +24,8 @@ js::set('productID',      $productID);
 js::set('branch',         $branch);
 ?>
 <div id="mainContent" class="main-row">
-  <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
   <div class='side-col' id='sidebar'>
+    <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class='cell'>
       <?php if(!$moduleTree):?>
       <hr class="space">
