@@ -17,7 +17,7 @@
     </div>
     <div class='modal-body'>
       <div class='alert with-icon alert-pure'>
-        <i class='icon-ok-sign'></i>
+        <i class='icon-check-circle'></i>
         <div class='content'><?php echo nl2br(sprintf($lang->install->joinZentao, $config->version, $this->createLink('admin', 'register'), $this->createLink('admin', 'bind'), inlink('step6')));?></div>
       </div>
     </div>

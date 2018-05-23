@@ -21,7 +21,7 @@
       </h2>
     </div>
     <div class='alert alert-success with-icon'>
-      <i class='icon-ok-sign'></i>
+      <i class='icon-check-circle'></i>
       <div class='content'>
         <h3><?php echo $title;?></h3>
         <?php if($removeCommands):?>

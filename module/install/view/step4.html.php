@@ -31,7 +31,7 @@
     </div>
     <div class='modal-body'>
       <div class='alert alert-success alert-pure with-icon'>
-        <i class='icon-ok-sign'></i>
+        <i class='icon-check-circle'></i>
         <div class='content'><?php echo $afterSuccess;?></div>
       </div>
     </div>

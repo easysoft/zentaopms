@@ -43,7 +43,7 @@ $lang->convert->sourceList['Redmine'] = array('Redmine_1.1' => '1.1');
 $lang->convert->setting     = 'Settings';
 $lang->convert->checkConfig = 'Check Settings';
 
-$lang->convert->ok          = '<span class="text-success"><i class="icon-ok-sign"></i> OK </span>';
+$lang->convert->ok          = '<span class="text-success"><i class="icon-check-sign"></i> OK </span>';
 $lang->convert->fail        = '<span class="text-danger"><i class="icon-remove-sign"></i> Failed</span>';
 
 $lang->convert->dbHost      = 'Database Server';
