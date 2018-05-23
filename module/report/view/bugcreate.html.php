@@ -41,7 +41,7 @@
           <nav class="panel-actions btn-toolbar"></nav>
         </div>
         <div data-ride='table'>
-          <table class='table table-condensed table-striped table-bordered table-fixed' id="bug">
+          <table class='table table-condensed table-striped table-bordered table-fixed no-margin' id="bug">
             <thead>
               <tr class='colhead'>
                 <th><?php echo $lang->bug->openedBy;?></th>
