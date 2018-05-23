@@ -17,7 +17,7 @@
   <tbody class='text-center'>
     <?php foreach($cases as $case):?>
     <tr>
-      <td><?php echo $case->id . html::hidden('cases[]', $case->id)?></td>
+      <td><?php echo sprintf('%03d', $case->id) . html::hidden('cases[]', $case->id)?></td>
       <td><span class='label-pri label-pri-<?php echo $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri);?></span></td>
       <td class='text-left' title='<?php echo $case->title?>'><?php echo html::a($sysURL . $this->createLink('testcase', 'view', "caseID=$case->id", '', true), $case->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
       <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
