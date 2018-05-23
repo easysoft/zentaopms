@@ -122,25 +122,17 @@ $(function()
     var adjustBugTypeGroup = function()
     {
         var $group = $('#bugTypeInputGroup');
-        var width = $group.width(), addonWidth = 0;
+        var width = ($group.parent().width() - 10), addonWidth = 0;
         var $controls = $group.find('.chosen-single');
         $group.children('.input-group-addon').each(function()
         {
             addonWidth += $(this).outerWidth();
         });
-        $controls.css('width', Math.floor((width - addonWidth)/$controls.length));
+        var bestWidth = Math.floor((width - addonWidth)/$controls.length);
+        $controls.css('width', bestWidth);
+        var lastWidth = width - addonWidth - bestWidth * ($controls.length - 1);
+        $controls.last().css('width', lastWidth);
     };
     adjustBugTypeGroup();
-
-    // adjust style for file box
-    var ajustFilebox = function()
-    {
-        applyCssStyle('.fileBox > tbody > tr > td:first-child {transition: none; width: ' + ($('#contactListGroup').width() - 2) + 'px}', 'filebox')
-    };
-    ajustFilebox();
-    $(window).resize(function()
-    {
-        ajustFilebox();
-        adjustBugTypeGroup();
-    });
+    $(window).on('resize', adjustBugTypeGroup);
 });
