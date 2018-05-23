@@ -43,8 +43,13 @@
           <td><?php echo $action->objectID;?></td>
           <td class='text-left'>
             <?php
-            $methodName = $module == 'caselib' ? 'libview' : 'view';
             $params     = $action->objectType == 'user' ? "account={$action->objectName}" : "id={$action->objectID}";
+            $methodName = 'view';
+            if($module == 'caselib')
+            {
+                $methodName = 'libview';
+                $module     = 'testsuite';
+            }
             if($module == 'doclib' or $module == 'module')
             {
                 echo $action->objectName;
