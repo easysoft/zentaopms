@@ -13,7 +13,7 @@
 <div id='mainContent' class='main-row'>
   <div class='side-col' id='sidebar'></div>
   <div class='main-col main-content'>
-    <form method='post' target='hiddenwin'>
+    <form class="load-indicator main-form form-ajax" method='post'>
       <div class='main-header'>
         <div class='heading'>
           <strong><?php echo $lang->custom->score?></strong>
@@ -25,7 +25,7 @@
           <td>
             <?php $checkedKey = isset($config->global->scoreStatus) ? $config->global->scoreStatus : 0;?>
             <?php foreach($lang->custom->scoreStatus as $key => $value):?>
-            <p><label class="radio-inline"><input type="radio" name="flow" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="flow<?php echo $key;?>"><?php echo $value;?></label></p>
+            <p><label class="radio-inline"><input type="radio" name="score" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="score<?php echo $key;?>"><?php echo $value;?></label></p>
             <?php endforeach;?>
           </td>
         </tr>

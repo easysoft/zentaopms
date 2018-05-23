@@ -19,7 +19,7 @@
 </div>
 <div id='mainContent' class='main-content'>
   <div class='center-block mw-800px'>
-    <form method='post' target='hiddenwin'>
+    <form class="load-indicator main-form form-ajax" method='post'>
       <table class='table table-form'>
         <tr>
           <th style='width:130px'><?php echo $lang->admin->safe->password?></th>
@@ -36,7 +36,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->admin->safe->weak?></th>
-          <td colspan='2'><?php echo html::textarea('weak', $config->safe->weak, "class='form-control' rows='4'")?></td>
+          <td colspan='2'><?php echo html::textarea('weak', $config->safe->weak, "class='form-control' style='height:100px'")?></td>
         </tr>
         <tr>
           <th><?php echo $lang->admin->safe->changeWeak?></th>

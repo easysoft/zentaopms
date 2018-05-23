@@ -172,7 +172,7 @@ class admin extends control
         {
             $data = fixer::input('post')->get();
             $this->loadModel('setting')->setItems('system.common.safe', $data);
-            die(js::reload('parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
         $this->view->title      = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->set;
         $this->view->position[] = $this->lang->admin->safe->common;
