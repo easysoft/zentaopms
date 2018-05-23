@@ -456,17 +456,17 @@ function setImageSize(image, maxWidth)
     $(image).wrap('<a href="' + $(image).attr('src') + '" target="_blank"></a>');
 }
 
-/**
- * Set the modal trigger to link.
- * 
- * @access public
- * @return void
- */
-function setModalTriggerLink()
-{
-    $('.repolink').modalTrigger({width:960, type:'iframe'});
-    $('.export').modalTrigger({width:800, type:'iframe', afterShown: setCheckedCookie});
-}
+// /**
+//  * Set the modal trigger to link.
+//  * 
+//  * @access public
+//  * @return void
+//  */
+// function setModalTriggerLink()
+// {
+//     $('.repolink').modalTrigger({width:960, type:'iframe'});
+//     $('.export').modalTrigger({width:800, type:'iframe', afterShown: setCheckedCookie});
+// }
 
 /**
  * Set mailto list from a contact list..
@@ -925,29 +925,29 @@ function setModal4List(triggerClass, replaceID, callback, width)
     });
 }
 
-/**
- * Set checked in cookie.
- * 
- * @access public
- * @return void
- */
-function setCheckedCookie()
-{
-    var checkeds = '';
-    $(':checkbox').each(function()
-    {
-        if($(this).attr('checked'))
-        {
-            if(!isNaN($(this).val()))
-            {
-                var checkedVal = parseInt($(this).val());
-                if(checkedVal != 0) checkeds = checkeds + checkedVal + ',';
-            }
-        }
-    })
-    if(checkeds != '') checkeds = checkeds.substring(0, checkeds.length - 1);
-    $.cookie('checkedItem', checkeds, {expires:config.cookieLife, path:config.webRoot});
-}
+// /**
+//  * Set checked in cookie.
+//  * 
+//  * @access public
+//  * @return void
+//  */
+// function setCheckedCookie()
+// {
+//     var checkeds = '';
+//     $(':checkbox').each(function()
+//     {
+//         if($(this).attr('checked'))
+//         {
+//             if(!isNaN($(this).val()))
+//             {
+//                 var checkedVal = parseInt($(this).val());
+//                 if(checkedVal != 0) checkeds = checkeds + checkedVal + ',';
+//             }
+//         }
+//     })
+//     if(checkeds != '') checkeds = checkeds.substring(0, checkeds.length - 1);
+//     $.cookie('checkedItem', checkeds, {expires:config.cookieLife, path:config.webRoot});
+// }
 
 /**
  * Set table behavior
@@ -1632,7 +1632,7 @@ $(document).ready(function()
     //setRequiredFields();
     setPlaceholder();
 
-    setModalTriggerLink();
+    // setModalTriggerLink();
 
     // checkTable();
     // toggleSearch();
