@@ -41,7 +41,7 @@
     <tbody>
       <?php foreach($releases as $release):?>
       <tr>
-        <td><?php echo $release->id;?></td>
+        <td><?php echo sprintf('%03d', $release->id);?></td>
         <td><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></td>
         <td title='<?php echo $release->buildName?>'><?php echo html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName);?></td>
         <?php if($product->type != 'normal'):?>

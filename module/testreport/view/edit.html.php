@@ -18,7 +18,7 @@
   <div class='center-block mw-1400px'>
     <div class='main-header'>
       <h2><?php echo $lang->testreport->edit;?></h2>
-      <div class='btn-toolbar pull-right'><?php echo html::backButton();?></div>
+      <div class='btn-toolbar pull-right'><?php echo html::backButton('<i class="icon icon-back icon-sm"></i>' . $lang->goback, '', 'btn btn-link');?></div>
     </div>
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <div class='detail'>

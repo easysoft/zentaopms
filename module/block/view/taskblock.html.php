@@ -42,7 +42,7 @@
       $viewLink = $this->createLink('task', 'view', "taskID={$task->id}");
       ?>
       <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-        <td class='c-id-xs'><?php echo $task->id;?></td>
+        <td class='c-id-xs'><?php echo sprintf('%03d', $task->id);?></td>
         <td class='c-pri'><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri)?></span></td>
         <td class='c-name' style='color: <?php echo $task->color?>' title='<?php echo $task->name?>'><?php echo $task->name?></td>
         <?php if($longBlock):?>

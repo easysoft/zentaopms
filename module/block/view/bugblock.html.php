@@ -40,7 +40,7 @@
       $viewLink = $this->createLink('bug', 'view', "bugID={$bug->id}");
       ?>
       <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-        <td class='c-id-xs'><?php echo $bug->id;?></td>
+        <td class='c-id-xs'><?php echo sprintf('%03d', $bug->id);?></td>
         <?php if($longBlock):?>
         <td class='c-pri'><span class='label-pri label-pri-<?php echo $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
         <?php endif;?>
