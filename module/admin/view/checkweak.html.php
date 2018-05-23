@@ -17,20 +17,19 @@
     <?php common::printLink('admin', 'checkWeak', '', "<span class='text'>{$lang->admin->safe->checkWeak}</span>", '', "class='btn btn-link btn-active-text'");?></li>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
+<div id='mainContent'>
   <div class='main-table pd-0'>
     <table class='table table-condensed table-hover table-striped table-fixed'>
       <thead>
         <th class='w-id'><?php echo $lang->idAB;?></th>
-        <th><?php echo $lang->user->realname;?></th>
+        <th class='w-150px'><?php echo $lang->user->realname;?></th>
         <th><?php echo $lang->user->account;?></th>
-        <th><?php echo $lang->user->phone;?></th>
-        <th><?php echo $lang->user->mobile;?></th>
-        <th><?php echo $lang->user->birthyear;?></th>
-        <th><?php echo $lang->admin->safe->reason;?></th>
+        <th class='w-150px'><?php echo $lang->user->phone;?></th>
+        <th class='w-150px'><?php echo $lang->user->mobile;?></th>
+        <th class='w-150px'><?php echo $lang->admin->safe->reason;?></th>
         <th class='w-50px'><?php echo $lang->actions;?></th>
       </thead>
-      <tbody class='text-center'>
+      <tbody>
         <?php foreach($weakUsers as $user):?>
         <tr>
           <td class='text-right'><?php echo $user->id?></td>
@@ -38,7 +37,6 @@
           <td class='text-left'><?php echo $user->account?></td>
           <td><?php echo $user->phone?></td>
           <td><?php echo $user->mobile?></td>
-          <td><?php echo $user->birthday?></td>
           <td><?php echo $lang->admin->safe->reasonList[$user->weakReason];?></td>
           <td class='c-actions'><?php common::printIcon('user', 'edit', "userID=$user->id", '', 'list');?></td>
         </tr>
