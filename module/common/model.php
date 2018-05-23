@@ -437,7 +437,6 @@ class commonModel extends model
     {
         global $lang, $app;
 
-        if(isset($lang->menugroup->$moduleName)) $moduleName = $lang->menugroup->$moduleName;
         if(!isset($lang->$moduleName->menu))
         {
             echo "<ul></ul>";
@@ -454,6 +453,7 @@ class commonModel extends model
         /* The beginning of the menu. */
         echo $isMobile ? '' : "<ul class='nav nav-default'>\n";
 
+        if(isset($lang->menugroup->$moduleName)) $moduleName = $lang->menugroup->$moduleName;
         /* Cycling to print every sub menus. */
         foreach($menu as $menuItem)
         {
