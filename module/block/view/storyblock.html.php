@@ -22,7 +22,7 @@
 .block-stories.block-sm .c-status {text-align: center;}
 </style>
 <div class='panel-body has-table'>
-  <table class='table table-borderless table-hover table-fixed-head block-stories <?php if(!$longBlock) echo 'block-sm'?>'>
+  <table class='table table-borderless table-hover table-fixed-head tablesorter block-stories <?php if(!$longBlock) echo 'block-sm'?>'>
     <thead>
       <tr>
         <?php if($longBlock):?>
