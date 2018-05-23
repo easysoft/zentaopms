@@ -70,7 +70,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
             <div class='detail-content'><?php echo $this->fetch('file', 'buildform');?></div>
           </div>
 
-          <div class='actions actions-form text-center'>
+          <div class='actions form-actions text-center'>
             <?php
             echo html::hidden('lastEditedDate', $bug->lastEditedDate);
             echo html::submitButton('', '', 'btn btn-wide btn-primary');
