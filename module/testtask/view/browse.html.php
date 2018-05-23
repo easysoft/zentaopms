@@ -45,12 +45,12 @@ $status = $this->session->testTaskVersionStatus;
       <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $endTime, "class='form-control form-date' onchange='changeDate(\"$beginTime\", this.value, \"$condition\")'");?></div>
     </div>
   </div>
-  <div class="btn-toolbar pull-right"><?php common::printLink('testtask', 'create', "product=$productID", "<i class='icon icon-plus'> </i>" . $lang->testtask->create, '', "class='btn btn-primary'");?></div>
+  <div class="btn-toolbar pull-right"><?php common::printLink('testtask', 'create', "product=$productID", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?></div>
 </div>
 <?php endif;?>
 <?php if($scope == 'local' && $status == 'totalStatus' && empty($tasks)):?>
 <div class="table-empty-tip">
-  <p><span class="text-muted"><?php echo $lang->testtask->noTesttask;?></span> <?php common::printLink('testtask', 'create', "productID={$productID}", "<i class='icon icon-plus'> </i>" . $lang->testtask->create, '', "class='btn btn-info'");?></p>
+  <p><span class="text-muted"><?php echo $lang->testtask->noTesttask;?></span> <?php common::printLink('testtask', 'create', "productID={$productID}", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-info'");?></p>
 </div>
 <?php else:?>
 <div id='mainContent' class='main-table'>

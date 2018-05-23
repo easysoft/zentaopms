@@ -27,8 +27,8 @@ js::set('confirmDelete', $lang->user->confirmDelete);
   </div>
   <div class='btn-toolbar pull-right'>
     <?php common::printIcon('group', 'create', '', '', 'button', '', '', 'iframe', true, "data-width='550px'");?>
-    <?php common::printLink('user', 'batchCreate', "dept={$deptID}", "<i class='icon icon-plus'> </i>" . $lang->user->batchCreate, '', "class='btn btn-secondary'");?>
-    <?php common::printLink('user', 'create', "dept={$deptID}", "<i class='icon icon-plus'> </i>" . $lang->user->create, '', "class='btn btn-primary'");?>
+    <?php common::printLink('user', 'batchCreate', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->batchCreate, '', "class='btn btn-secondary'");?>
+    <?php common::printLink('user', 'create', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent' class='main-row'>

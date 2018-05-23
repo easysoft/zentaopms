@@ -36,7 +36,7 @@
     }
     ?>
     </div>
-    <?php if($productID and !$this->loadModel('story')->checkForceReview()) common::printLink('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&project=$project->id", "<i class='icon icon-plus'> </i>" . $lang->project->createStory, '', "class='btn btn-primary'");?>
+    <?php if($productID and !$this->loadModel('story')->checkForceReview()) common::printLink('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&project=$project->id", "<i class='icon icon-plus'></i> " . $lang->project->createStory, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php

@@ -27,7 +27,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printIcon('testreport', 'browse', "objectID=$projectID&objectType=project", '', 'button','flag');?>
-    <?php common::printLink('testtask', 'create', "product=0&project=$projectID", "<i class='icon icon-plus'> </i>" . $lang->testtask->create, '', "class='btn btn-primary'");?>
+    <?php common::printLink('testtask', 'create', "product=0&project=$projectID", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent">
