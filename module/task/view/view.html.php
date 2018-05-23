@@ -22,8 +22,8 @@
     <div class="page-title">
       <span class="label label-id"><?php echo $task->id?></span>
       <span class="text" style='color: <?php echo $task->color; ?>'>
-        <?php if(!empty($task->parent)) echo '<span class="label label-badge label-light no-margin">' . $this->lang->task->childrenAB . '</span>';?>
-        <?php if(!empty($task->team)) echo '<span class="label label-badge label-light no-margin">' . $this->lang->task->multipleAB . '</span>';?>
+        <?php if(!empty($task->parent)) echo '<span class="label label-badge label-primary no-margin">' . $this->lang->task->childrenAB . '</span>';?>
+        <?php if(!empty($task->team)) echo '<span class="label label-badge label-primary no-margin">' . $this->lang->task->multipleAB . '</span>';?>
         <?php echo isset($task->parentName) ? $task->parentName . '/' : '';?><?php echo $task->name;?>
       </span>
       <?php if($task->deleted):?>
