@@ -10,18 +10,16 @@
   </div>
   <div class='main-col'>
     <div class='cell'>
-      <div class='with-padding'>
-        <div class="table-row" id='conditions'>
-          <div class="col-xs text-right side-col text-gray"><?php echo $lang->report->conditions?></div>
-          <div class='col'>
-            <div class="checkbox-primary inline-block">
-              <input type="checkbox" name="closedProduct" value="closedProduct" id="closedProduct" <?php if(strpos($conditions, 'closedProduct') !== false) echo "checked='checked'"?> />
-              <label for="closedProduct"><?php echo $lang->report->closedProduct?></label>
-            </div>
-            <div class="checkbox-primary inline-block">
-              <input type="checkbox" name="overduePlan" value="overduePlan" id="overduePlan" <?php if(strpos($conditions, 'overduePlan') !== false) echo "checked='checked'"?> />
-              <label for="overduePlan"><?php echo $lang->report->overduePlan?></label>
-            </div>
+      <div class="table-row" id='conditions'>
+        <div class="col-xs text-right text-gray text-middle"><?php echo $lang->report->conditions?></div>
+        <div class='col'>
+          <div class="checkbox-primary inline-block">
+            <input type="checkbox" name="closedProduct" value="closedProduct" id="closedProduct" <?php if(strpos($conditions, 'closedProduct') !== false) echo "checked='checked'"?> />
+            <label for="closedProduct"><?php echo $lang->report->closedProduct?></label>
+          </div>
+          <div class="checkbox-primary inline-block">
+            <input type="checkbox" name="overduePlan" value="overduePlan" id="overduePlan" <?php if(strpos($conditions, 'overduePlan') !== false) echo "checked='checked'"?> />
+            <label for="overduePlan"><?php echo $lang->report->overduePlan?></label>
           </div>
         </div>
       </div>
@@ -33,7 +31,7 @@
           <nav class="panel-actions btn-toolbar"></nav>
         </div>
         <div data-ride='table'>
-          <table class='table table-condensed table-striped table-bordered table-fixed' id='productList'>
+          <table class='table table-condensed table-striped table-bordered table-fixed no-margin' id='productList'>
             <thead>
               <tr>
                 <th class='w-200px'><?php echo $lang->product->name;?></th>
