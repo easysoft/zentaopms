@@ -19,7 +19,7 @@
       if($name == 'root') $icon = ' <i class="icon-fold-all"></i>';
       if($name == 'all') $icon = ' <i class="icon-unfold-all"></i>';
       ?>
-      <button type='button' class='btn btn-link btn-tree-view' data-type='<?php echo $name ?>'><?php echo $btnLevel . $icon;?></button>
+      <a href='' class='btn btn-link btn-tree-view' data-type='<?php echo $name ?>'><span class='text'><?php echo $btnLevel . $icon;?></span></button>
     <?php endforeach; ?>
   </div>
   <div class="btn-toolbar pull-right">

@@ -1,3 +1,5 @@
+.block-burn .panel-body{margin-top: 20px;}
+
 #burnWrapper {max-width: 400px; margin: 0 auto; padding: 8px; position: relative;}
 #burnYUnit {position: absolute; color: #CBD0DB; top: -10px; left: 10px;}
 #burnLegend {position: absolute; right: 0; width: 80px; height: 40px; top: 0; margin-top: -20px; line-height: 20px; color: #838A9D; font-size: 12px;}

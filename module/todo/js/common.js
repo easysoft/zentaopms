@@ -82,15 +82,33 @@ function setBeginsAndEnds(i, beginOrEnd)
         if(beginOrEnd == 'begin')
         {
             $("#ends" + i)[0].selectedIndex = $("#begins" + i)[0].selectedIndex + 3;
-            $("#ends" + j).trigger('chosen:updated');
+            $("#ends" + i).trigger('chosen:updated');
         }
-        for(j = i+1; j < batchCreateNum; j++)
+
+        if(typeof batchCreateNum != 'undefined')
         {
-            $("#begins" + j)[0].selectedIndex = $("#ends" + (j - 1))[0].selectedIndex;
-            $("#ends" + j)[0].selectedIndex = $("#begins" + j)[0].selectedIndex + 3;
-            $("#begins" + j).trigger('chosen:updated');
-            $("#ends" + j).trigger('chosen:updated');
+            for(j = i+1; j < batchCreateNum; j++)
+            {
+                $("#begins" + j)[0].selectedIndex = $("#ends" + (j - 1))[0].selectedIndex;
+                $("#ends" + j)[0].selectedIndex = $("#begins" + j)[0].selectedIndex + 3;
+                $("#begins" + j).trigger('chosen:updated');
+                $("#ends" + j).trigger('chosen:updated');
+            }
         }
+    }
+}
+
+function switchDateList(number)
+{
+    if($('#switchDate' + number).prop('checked'))
+    {
+        $('#begins' + number).attr('disabled', 'disabled').trigger('chosen:updated');
+        $('#ends' + number).attr('disabled', 'disabled').trigger('chosen:updated');
+    }
+    else
+    {
+        $('#begins' + number).removeAttr('disabled').trigger('chosen:updated');
+        $('#ends' + number).removeAttr('disabled').trigger('chosen:updated');
     }
 }
 

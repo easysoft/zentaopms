@@ -112,7 +112,7 @@
           <td style='overflow:visible'>
             <div class='input-group'>
               <div class="input-control has-icon-right">
-                <?php echo html::input("name[$i]", '', "class='form-control' autocomplete='off'");?>
+                <?php echo html::input("name[$i]", '', "class='form-control input-story-title' autocomplete='off'");?>
                 <div class="colorpicker">
                   <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                   <ul class="dropdown-menu clearfix">

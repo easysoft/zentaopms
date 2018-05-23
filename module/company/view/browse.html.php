@@ -17,7 +17,6 @@ js::set('confirmDelete', $lang->user->confirmDelete);
 ?>
 <div id='mainMenu' class='clearfix'>
   <div id='sidebarHeader'>
-    <?php echo html::commonButton('<i class="icon icon-caret-left"></i>', '', 'btn btn-icon btn-sm btn-info sidebar-toggle');?>
     <div class="title">
       <?php echo empty($dept->name) ? $lang->dept->common : $dept->name;?>
       <?php if($deptID) echo html::a(inlink('browse', "deptID=0"), "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");?>
@@ -34,6 +33,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
 </div>
 <div id='mainContent' class='main-row'>
   <div class='side-col' id='sidebar'>
+    <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class='cell'>
       <?php echo $deptTree;?>
       <div class='text-center'>

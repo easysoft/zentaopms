@@ -25,7 +25,7 @@
   </div>
 </div>
 <div class="alert with-icon hidden" id="scoreFinish">
-  <i class="icon-ok-sign"></i>
+  <i class="icon-check-circle"></i>
   <div class="content">
     <strong><?php echo $lang->score->resetFinish; ?></strong>
   </div>

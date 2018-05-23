@@ -72,7 +72,6 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   </div>
   <?php else:?>
   <div id="sidebarHeader">
-    <?php echo html::commonButton('<i class="icon icon-caret-left"></i>', '', 'btn btn-icon btn-sm btn-info sidebar-toggle');?>
     <div class="title">
       <?php
       echo $moduleName;
@@ -176,6 +175,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
 </div>
 <div id="mainContent" class="main-row">
   <div class="side-col" id="sidebar">
+    <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
       <?php if(!$moduleTree):?>
       <hr class="space">
@@ -192,8 +192,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   <div class="main-col">
     <div class="cell" id="queryBox"></div>
     <form class='main-table table-bug' data-ride='table' method='post' id='bugForm'>
-      <div class="table-header">
-        <div class="table-statistic"><?php echo $summary;?></div>
+      <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
       <?php
@@ -376,6 +375,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           </div>
           <?php endif;?>
         </div>
+        <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
       <?php elseif(common::hasPriv('bug', 'create')):?>

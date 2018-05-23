@@ -25,6 +25,7 @@ js::set('branch',         $branch);
 ?>
 <div id="mainContent" class="main-row">
   <div class='side-col' id='sidebar'>
+    <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class='cell'>
       <?php if(!$moduleTree):?>
       <hr class="space">
@@ -41,8 +42,7 @@ js::set('branch',         $branch);
   <div class='main-col'>
     <div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>'></div>
     <form class='main-table table-case' data-ride='table' id='batchForm' method='post'>
-      <div class="table-header">
-        <div class="table-statistic"><?php echo $summary;?></div>
+      <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
       <?php
@@ -193,6 +193,7 @@ js::set('branch',         $branch);
           </div>
           <?php endif;?>
         </div>
+        <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
       <?php elseif(common::hasPriv('testcase', 'create')):?>

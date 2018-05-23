@@ -16,7 +16,7 @@
     <div class='main-header'>
       <h2>
         <?php echo $lang->mail->common;?>
-        <small class='text-success'> <?php echo $lang->saveSuccess;?> <?php echo html::icon('ok-sign');?></small>
+        <small class='text-success'> <?php echo $lang->saveSuccess;?> <?php echo html::icon('check-circle');?></small>
       </h2>
     </div>
     <div class='alert alert-block with-icon'>

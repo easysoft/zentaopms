@@ -43,7 +43,7 @@
     </div>
     <?php else:?>
     <div class='alert alert-pure with-icon'>
-      <i class='icon-ok-sign'></i>
+      <i class='icon-check-circle'></i>
       <div class='content'>
         <?php
         echo "<h3>{$title}</h3>";
