@@ -25,4 +25,5 @@ else
 ?>
 <style>
 #contactListMenu + .chosen-container {min-width: 100px;}
+#contactListMenu_chosen > a {border-top: 0px;}
 </style>

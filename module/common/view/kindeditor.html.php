@@ -2,7 +2,6 @@
 <?php
 $module = $this->moduleName;
 $method = $this->methodName;
-js::set('themeRoot', $themeRoot);
 if(!isset($config->$module->editor->$method)) return;
 $editor = $config->$module->editor->$method;
 $editor['id'] = explode(',', $editor['id']);
@@ -11,62 +10,71 @@ $editorLang   = isset($editorLangs[$app->getClientLang()]) ? $editorLangs[$app->
 
 /* set uid for upload. */
 $uid = uniqid('');
-js::set('kuid', $uid);
 ?>
 <link rel="stylesheet" href="<?php echo $jsRoot;?>kindeditor/themes/default/default.css" />
-<script src='<?php echo $jsRoot;?>kindeditor/kindeditor-min.js' type='text/javascript'></script>
-<script src='<?php echo $jsRoot;?>kindeditor/lang/<?php echo $editorLang;?>.js' type='text/javascript'></script>
+<script src='<?php echo $jsRoot;?>kindeditor/kindeditor-min.js'></script>
+<script src='<?php echo $jsRoot;?>kindeditor/lang/<?php echo $editorLang;?>.js'></script>
 <script>
-var editor = <?php echo json_encode($editor);?>;
+(function($) {
+    var kuid = '<?php echo $uid;?>';
+    var editor = <?php echo json_encode($editor);?>;
+    var K = KindEditor;
 
-var bugTools =
-[ 'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic','underline', '|', 
-'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist', 'insertunorderedlist', '|',
-'emoticons', 'image', 'code', 'link', '|', 'removeformat','undo', 'redo', 'fullscreen', 'source', 'about'];
+    var bugTools =
+    [ 'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic','underline', '|', 
+    'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist', 'insertunorderedlist', '|',
+    'emoticons', 'image', 'code', 'link', '|', 'removeformat','undo', 'redo', 'fullscreen', 'source', 'about'];
+    var simpleTools = 
+    [ 'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic','underline', '|', 
+    'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist', 'insertunorderedlist', '|',
+    'emoticons', 'image', 'code', 'link', '|', 'removeformat','undo', 'redo', 'fullscreen', 'source', 'about'];
+    var fullTools = 
+    [ 'formatblock', 'fontname', 'fontsize', 'lineheight', '|', 'forecolor', 'hilitecolor', '|', 'bold', 'italic','underline', 'strikethrough', '|',
+    'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', '|',
+    'insertorderedlist', 'insertunorderedlist', '|',
+    'emoticons', 'image', 'insertfile', 'hr', '|', 'link', 'unlink', '/',
+    'undo', 'redo', '|', 'selectall', 'cut', 'copy', 'paste', '|', 'plainpaste', 'wordpaste', '|', 'removeformat', 'clearhtml','quickformat', '|',
+    'indent', 'outdent', 'subscript', 'superscript', '|',
+    'table', 'code', '|', 'pagebreak', 'anchor', '|', 
+    'fullscreen', 'source', 'preview', 'about'];
+    var editorToolsMap = {fullTools: fullTools, simpleTools: simpleTools, bugTools: bugTools};
 
-var simpleTools = 
-[ 'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic','underline', '|', 
-'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist', 'insertunorderedlist', '|',
-'emoticons', 'image', 'code', 'link', '|', 'removeformat','undo', 'redo', 'fullscreen', 'source', 'about'];
-
-var fullTools = 
-[ 'formatblock', 'fontname', 'fontsize', 'lineheight', '|', 'forecolor', 'hilitecolor', '|', 'bold', 'italic','underline', 'strikethrough', '|',
-'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', '|',
-'insertorderedlist', 'insertunorderedlist', '|',
-'emoticons', 'image', 'insertfile', 'hr', '|', 'link', 'unlink', '/',
-'undo', 'redo', '|', 'selectall', 'cut', 'copy', 'paste', '|', 'plainpaste', 'wordpaste', '|', 'removeformat', 'clearhtml','quickformat', '|',
-'indent', 'outdent', 'subscript', 'superscript', '|',
-'table', 'code', '|', 'pagebreak', 'anchor', '|', 
-'fullscreen', 'source', 'preview', 'about'];
-
-$(document).ready(initKindeditor);
-function initKindeditor(afterInit)
-{
-    $(':input[type=submit]').next('#uid').remove();
-    $(':input[type=submit]').after("<input type='hidden' id='uid' name='uid' value=" + kuid + ">");
-    var nextFormControl = 'input:not([type="hidden"]), textarea:not(.ke-edit-textarea), button[type="submit"], select';
-    $.each(editor.id, function(key, editorID)
+    // Kindeditor default options
+    var editorDefaults = 
     {
-        editorTool = simpleTools;
-        if(editor.tools == 'bugTools')  editorTool = bugTools;
-        if(editor.tools == 'fullTools') editorTool = fullTools;
+        cssPath: [config.themeRoot + 'zui/css/min.css'],
+        width: '100%',
+        height: '200px',
+        filterMode: true, 
+        bodyClass: 'article-content',
+        urlType: 'absolute', 
+        uploadJson: createLink('file', 'ajaxUpload', 'uid=' + kuid),
+        allowFileManager: true,
+        langType: '<?php echo $editorLang?>',
+    };
 
-        var K = KindEditor, $editor = $('#' + editorID);
-        var placeholderText = $editor.attr('placeholder');
-        if(placeholderText == undefined) placeholderText = '';
-        var pasted;
-        var options = 
+    window.editor = {};
+    var nextFormControl = 'input:not([type="hidden"]), textarea:not(.ke-edit-textarea), button[type="submit"], select';
+
+    // Init kindeditor
+    var setKindeditor = function(element, options)
+    {
+        var $editor  = $(element);
+        var pasted   = false;
+        options      = $.extend({}, editorDefaults, $editor.data(), options);
+        var editorID = $editor.attr('id');
+        if(editorID === undefined)
         {
-            cssPath:[themeRoot + 'zui/css/min.css'],
-            width:'100%',
-            height:'200px',
-            items:editorTool,
-            filterMode: true, 
-            bodyClass:'article-content',
-            urlType:'absolute', 
-            uploadJson: createLink('file', 'ajaxUpload', 'uid=' + kuid),
-            allowFileManager:true,
-            langType:'<?php echo $editorLang?>',
+            editorID = 'kindeditor-' + $.zui.uuid();
+            $editor.attr('id', editorID);
+        }
+        
+        var editorTool  = editorToolsMap[options.tools || editor.tools] || simpleTools;
+        var placeholder = $editor.attr('placeholder') || options.placeholder || '';
+        
+        $.extend(options, 
+        {
+            items: editorTool,
             afterChange: function(){$editor.change().hide();},
             afterCreate : function()
             {
@@ -95,10 +103,10 @@ function initKindeditor(afterInit)
                         })
                     }, 10);
                 }
-                if(pasted && placeholderText.indexOf('<?php echo $this->lang->noticePasteImg?>') < 0)
+                if(pasted && placeholder.indexOf('<?php echo $this->lang->noticePasteImg?>') < 0)
                 {
-                    if(placeholderText) placeholderText += '<br />';
-                    placeholderText += ' <?php echo $this->lang->noticePasteImg?>';
+                    if(placeholder) placeholder += '<br />';
+                    placeholder += ' <?php echo $this->lang->noticePasteImg?>';
                 }
 
                 /* Paste in chrome.*/
@@ -161,7 +169,7 @@ function initKindeditor(afterInit)
                 /* Add for placeholder. */
                 $(this.edit.doc).find('body').after('<span class="kindeditor-ph" style="width:100%;color:#888; padding:5px 5px 5px 7px; background-color:transparent; position:absolute;z-index:10;top:2px;border:0;overflow:auto;resize:none; font-size:13px;"></span>');
                 var $placeholder = $(this.edit.doc).find('.kindeditor-ph');
-                $placeholder.html(placeholderText);
+                $placeholder.html(placeholder);
                 $placeholder.css('pointerEvents', 'none');
                 $placeholder.click(function(){frame.doc.body.focus()});
                 if(frame.html() != '') $placeholder.hide();
@@ -197,17 +205,44 @@ function initKindeditor(afterInit)
                 if(keditor) keditor.focus();
                 else if($next.hasClass('chosen')) $next.trigger('chosen:activate');
             }
-        };
+        });
+
         try
         {
-            if(!window.editor) window.editor = {};
             var keditor = K.create('#' + editorID, options);
             window.editor['#'] = window.editor[editorID] = keditor;
             $editor.data('keditor', keditor);
+            return keditor;
         }
-        catch(e){}
-    });
+        catch(e){return false;}
+    };
 
-    if($.isFunction(afterInit)) afterInit();
-}
+    // Init kindeditor with jquery way
+    $.fn.kindeditor = function(options)
+    {
+        return this.each(function()
+        {
+            setKindeditor(this, options);
+        });
+    };
+
+    // Init all kindeditor    
+    var initKindeditor = function(afterInit)
+    {
+        var $submitBtn = $('form :input[type=submit]');
+        if($submitBtn.length)
+        {
+            $submitBtn.next('#uid').remove();
+            $submitBtn.after("<input type='hidden' id='uid' name='uid' value=" + kuid + ">");
+        }
+        if($.isFunction(afterInit)) afterInit();
+        $.each(editor.id, function(key, editorID)
+        {
+            setKindeditor('#' + editorID);
+        });
+    };
+
+    // Init all kindeditors when document is ready
+    $(initKindeditor);
+}(jQuery));
 </script>
