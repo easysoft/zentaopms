@@ -194,8 +194,7 @@ $(function()
             return sets;
         }).get();
 
-        //window.saveDatatableConfig('<?php echo $mode == 'table' ? 'tablecols' : 'cols';?>', setting, true, $('#global1').prop('checked') ? 1 : 0);
-        window.saveDatatableConfig('<?php echo 'cols';?>', setting, true, $('#global1').prop('checked') ? 1 : 0);
+        window.saveDatatableConfig('<?php echo $mode == 'table' ? 'tablecols' : 'cols';?>', setting, true, $('#global1').prop('checked') ? 1 : 0);
     });
 
     $('#resetBtn').on("click", function()
