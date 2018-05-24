@@ -23,7 +23,7 @@
         <div class='panel-title'><?php echo $title;?></div>
       </div>
       <div class='panel-body'>
-          <ul class='tree-lines' id='deptTree'></ul>
+        <ul data-name='tree-dept' id='deptTree'></ul>
       </div>
     </div>
   </div>
@@ -85,10 +85,19 @@ $(function()
         name: 'deptTree',
         initialState: 'preserve',
         data: data,
+        sortable: 
+        {
+            lazy: true,
+            nested: true,
+            canMoveHere: function($ele, $target)
+            {
+                if($ele && $target && $ele.parent().closest('li').attr('data-id') !== $target.parent().closest('li').attr('data-id')) return false;
+            }
+        },
         itemCreator: function($li, item)
         {
             var link = item.id !== undefined ? ('<a href="' + createLink('dept', 'browse', 'dept={0}'.format(item.id)) + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
-            var $toggle = $('<span class="dept-name" data-id="' + item.id + '">' + link + '</span>');
+            var $toggle = $('<span class="dept-name module-name" data-id="' + item.id + '">' + link + '</span>');
             if(item.manager)
             {
                 $toggle.append('&nbsp; <span class="dept-manager text-muted"><i class="icon icon-user"></i> ' + item.managerName + '</span>');
@@ -101,19 +110,19 @@ $(function()
             sort:
             {
                 title: '<?php echo $lang->dept->dragAndSort ?>',
-                template: '<a class="sort-handler" data-toggle="tooltip" href="javascript:;"><?php echo $lang->sort;?></a>'
+                template: '<a class="sort-handler" href="javascript:;"><?php echo $lang->sort;?></a>'
             },
             edit:
             {
                 linkTemplate: '<?php echo helper::createLink('dept', 'edit', "deptid={0}"); ?>',
                 title: '<?php echo $lang->dept->edit ?>',
-                template: '<a data-toggle="tooltip" href="javascript:;" data-width="600"><?php echo $lang->edit?></a>'
+                template: '<a href="javascript:;" data-width="600"><?php echo $lang->edit?></a>'
             },
             "delete":
             {
                 linkTemplate: '<?php echo helper::createLink('dept', 'delete', "deptid={0}"); ?>',
                 title: '<?php echo $lang->dept->delete ?>',
-                template: '<a data-toggle="tooltip" href="javascript:;"><?php echo $lang->delete?></a>'
+                template: '<a href="javascript:;"><?php echo $lang->delete?></a>'
             }
         },
         action: function(event)
@@ -163,8 +172,6 @@ $(function()
         $(this).addClass('hover');
         e.stopPropagation();
     });
-
-    $tree.find('[data-toggle="tooltip"]').tooltip();
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>

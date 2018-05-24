@@ -7,3 +7,4 @@
 
 #addChildModal form > .form-control {margin-bottom: 8px;}
 #addChildModal .modal-dialog {max-width: 360px;}
+#deptTree li {padding-left: 20px;}

@@ -186,8 +186,8 @@ $(function()
         {
             sort:
             {
-                 title: '<?php echo $lang->tree->dragAndSort ?>',
-                 template: '<a class="sort-handler"><?php echo $lang->tree->sort ?></a>'
+                title: '<?php echo $lang->tree->dragAndSort ?>',
+                template: '<a class="sort-handler"><?php echo $lang->tree->sort ?></a>'
             },
             edit:
             {
