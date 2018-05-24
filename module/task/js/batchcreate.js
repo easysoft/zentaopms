@@ -71,32 +71,25 @@ function setStoryRelated(num)
 /* Toggle zero task story. */
 function toggleZeroTaskStory()
 {
-    if($('#zeroTaskStory').hasClass('zeroTask'))
-    {
-        $('#zeroTaskStory').removeClass('zeroTask');
-        zeroTask = false;
-    }
-    else
-    {
-        $('#zeroTaskStory').addClass('zeroTask');
-        zeroTask = true;
-    }
+    var $toggle = $('#zeroTaskStory').toggleClass('checked');
+    var zeroTask = $toggle.hasClass('checked');
     $.cookie('zeroTask', zeroTask, {expires:config.cookieLife, path:config.webRoot});
     $('select[name^="story"]').each(function()
     {
-        selectVal = $(this).val();
-        $(this).find('option').each(function()
+        var $select = $(this);
+        var selectVal = $select.val();
+        $select.find('option').each(function()
         {
-            value = $(this).attr('value');
-            $(this).show();
+            var $option = $(this);
+            var value = $option.attr('value');
+            $option.show();
             if(value != 'ditto' && storyTasks[value] > 0 && zeroTask)
             {
-              $(this).hide();
-              if(selectVal == value) selectVal = '';
+                $option.hide();
+                if(selectVal == value) selectVal = '';
             }
         })
-        $(this).val(selectVal);
-        $(this).trigger("chosen:updated");
+        $select.val(selectVal).trigger("chosen:updated");
     })
 }
 
