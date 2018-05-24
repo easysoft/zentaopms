@@ -35,11 +35,11 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->bug->byQuery;?></a></li>
       <li class='right'>
         <div class='btn-group' id='createActionMenu'>
-          <?php 
+          <?php
           $misc = common::hasPriv('bug', 'create') ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
           $link = common::hasPriv('bug', 'create') ?  $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID") : '#';
           echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->bug->create, '', $misc);
-  
+
           $misc = common::hasPriv('bug', 'batchCreate') ? '' : "disabled";
           $link = common::hasPriv('bug', 'batchCreate') ?  $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID") : '#';
           ?>
@@ -60,7 +60,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           <span class='caret'></span>
         </a>
         <ul class='dropdown-menu' id='exportActionMenu'>
-          <?php 
+          <?php
           $misc = common::hasPriv('bug', 'export') ? "class='export'" : "class=disabled";
           $link = common::hasPriv('bug', 'export') ?  $this->createLink('bug', 'export', "productID=$productID&orderBy=$orderBy") : '#';
           echo "<li>" . html::a($link, $lang->bug->export, '', $misc) . "</li>";
@@ -84,7 +84,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     </div>
   </div>
   <div class="btn-toolbar pull-left">
-    <?php 
+    <?php
     $menus           = customModel::getFeatureMenu($this->moduleName, $this->methodName);
     $moreLabel       = $lang->more;
     $moreLabelActive = '';
@@ -151,15 +151,15 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         <i class="icon icon-export muted"></i> <span class="text"> <?php echo $lang->export;?></span> <span class="caret"></span></button>
       </button>
       <ul class='dropdown-menu' id='exportActionMenu'>
-        <?php 
+        <?php
         $link = $this->createLink('bug', 'export', "productID=$productID&orderBy=$orderBy");
         echo "<li>" . html::a($link, $lang->bug->export, '', "class='export'") . "</li>";
         ?>
       </ul>
     </div>
-    <?php endif;?> 
-    <?php 
-    common::printLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate, '', "class='btn btn-secondary'"); 
+    <?php endif;?>
+    <?php
+    common::printLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate, '', "class='btn btn-secondary'");
     if(commonModel::isTutorialMode())
     {
         $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
@@ -167,7 +167,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     }
     else
     {
-        common::printLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary'"); 
+        common::printLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary'");
     }
     ?>
   </div>
@@ -388,7 +388,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
 </div>
 <script>
 $('#' + bugBrowseType + 'Tab').addClass('active');
-$('#module' + moduleID).addClass('active'); 
+$('#module' + moduleID).addClass('active');
 <?php if($browseType == 'bysearch'):?>
 $shortcut = $('#QUERY<?php echo (int)$param;?>Tab');
 if($shortcut.size() > 0)
