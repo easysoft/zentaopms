@@ -69,11 +69,16 @@ js::set('browseType', $browseType);
         {
             echo "<div class='btn-group'>";
             $taskBrowseType = isset($status) ? $this->session->taskBrowseType : '';
-            $current        = zget($lang->project->statusSelects, $taskBrowseType, '');
-            if(empty($current)) $current = $menuItem->text;
-            echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link'");
+            $current        = $menuItem->text;
+            $active         = '';
+            if(isset($lang->project->statusSelects[$taskBrowseType]))
+            {
+                $current = "<span class='text'>{$lang->project->statusSelects[$taskBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+                $active  = 'btn-active-text';
+            }
+            echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $active'");
             echo "<ul class='dropdown-menu'>";
-            foreach ($lang->project->statusSelects as $key => $value)
+            foreach($lang->project->statusSelects as $key => $value)
             {
                 if($key == '') continue;
                 echo '<li' . ($key == $taskBrowseType ? " class='active'" : '') . '>';
