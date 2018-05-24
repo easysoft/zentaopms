@@ -1,7 +1,7 @@
 <?php $sysURL = $this->session->notHead ? common::getSysURL() : '';?>
 <table class='table main-table' id='stories'>
   <thead>
-    <tr class='text-center'>
+    <tr>
       <th class='w-id'>  <?php echo $lang->idAB;?></th>
       <th class='w-pri'> <?php echo $lang->priAB;?></th>
       <th class='text-left'><?php echo $lang->testreport->storyTitle;?></th>
@@ -13,7 +13,7 @@
     </tr>
   </thead>
   <?php if($stories):?>
-  <tbody class='text-center'>
+  <tbody>
     <?php foreach($stories as $story):?>
     <tr>
       <td><?php echo sprintf('%03d', $story->id) . html::hidden('stories[]', $story->id)?></td>
