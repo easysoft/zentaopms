@@ -104,7 +104,7 @@
           ?>
           <td colspan='<?php echo $hasCustomPri ? 1 : 3 ?>'>
             <?php if($hasCustomPri):?>
-            <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control chosen chosen-simple'");?>
+            <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control chosen'");?>
             <?php else: ?>
             <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control' data-provide='labelSelector'");?>
             <?php endif; ?>

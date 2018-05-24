@@ -108,7 +108,7 @@
     <div class="row form-group">
       <label class="col-sm-1"><?php echo $lang->todo->status;?></label>
       <div class="col-sm-2">
-        <?php echo html::select('status', $lang->todo->statusList, $todo->status, "class='form-control chosen-simple'");?>
+        <?php echo html::select('status', $lang->todo->statusList, $todo->status, "class='form-control'");?>
       </div>
     </div>
     <div class="row form-group">

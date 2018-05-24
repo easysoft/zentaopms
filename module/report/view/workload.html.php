@@ -42,7 +42,7 @@
                 </div>
               </div>
               <div class="col-sm-4">
-                <?php echo html::select('assign', $lang->report->assign, $assign, "class='form-control chosen-simple' onchange='changeParams(this)'");?>
+                <?php echo html::select('assign', $lang->report->assign, $assign, "class='form-control' onchange='changeParams(this)'");?>
               </div>
               <div class="col-sm-3">
                 <?php echo html::submitButton($lang->report->query, '', 'btn btn-primary btn-block');?>

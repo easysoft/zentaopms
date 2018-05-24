@@ -12,7 +12,7 @@
               <input type='file' name='file' class='form-control'/>
             </td>
             <td>
-              <?php echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8', "class='form-control chosen-simple'");?>
+              <?php echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8', "class='form-control'");?>
             </td>
             <td class="w-150px">
               <?php echo html::submitButton('', '', 'btn btn-primary btn-block');?>

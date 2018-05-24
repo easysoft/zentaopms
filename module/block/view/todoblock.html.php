@@ -59,13 +59,13 @@
         <div class="form-group">
           <label for="todoBegin" class="col-sm-2"><?php echo $lang->todo->beginAndEnd?></label>
           <div class="col-sm-4">
-            <select name="begin" id="todoBegin" class="form-control chosen-simple">
+            <select name="begin" id="todoBegin" class="form-control">
               <option value=""><?php echo $lang->todo->lblDisableDate;?></option>
             </select>
           </div>
           <label class="col-sm-1 text-center hide-empty-begin" for="todoEnd"> ~ </label>
           <div class="col-sm-4 hide-empty-begin">
-            <select name="end" id="todoEnd" class="form-control chosen-simple"></select>
+            <select name="end" id="todoEnd" class="form-control"></select>
           </div>
         </div>
         <div class="form-group">
