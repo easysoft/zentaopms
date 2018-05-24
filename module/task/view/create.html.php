@@ -164,7 +164,7 @@
           <td colspan='3'><?php echo html::radio('after', $lang->task->afterChoices, $this->config->global->flow == 'onlyTask' || !empty($task->id) ? 'toTaskList' : 'continueAdding');?></td>
         </tr>
         <tr>
-          <td colspan='4' class='text-center'>
+          <td colspan='4' class='text-center form-actions'>
             <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
             <?php echo html::backButton('', '', 'btn btn-wide');?>
           </td>

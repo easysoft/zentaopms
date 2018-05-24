@@ -38,7 +38,7 @@ $status = $this->session->testTaskVersionStatus;
     <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,blocked"), "<span class='text'>{$lang->testtask->blocked}</span>", '', "id='blockedTab' class='btn btn-link'");?>
     <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,done"), "<span class='text'>{$lang->testtask->done}</span>", '', "id='doneTab' class='btn btn-link'");?>
     <?php $condition = "productID=$productID&branch=$branch&type=$scope,$status&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1"?>
-    <div class='input-group w-400px input-group-sm'>
+    <div class='input-group w-300px input-group-sm'>
       <span class='input-group-addon'><?php echo $lang->testtask->beginAndEnd;?></span>
       <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $beginTime, "class='form-control form-date' onchange='changeDate(this.value, \"$endTime\", \"$condition\")'");?></div>
       <span class='input-group-addon'><?php echo $lang->testtask->to;?></span>
@@ -102,7 +102,7 @@ $status = $this->session->testTaskVersionStatus;
         }
 
         common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
-        common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'file','','iframe',true, 'data-width=800px');
+        common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'list-alt','','iframe',true, 'data-width=800px');
         common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
         common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
         common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list','','','',true);

@@ -19,29 +19,33 @@ function closeWindow()
     }
 }
 </script>
-<div class='main-content'>
-  <div class='main-header'>
-    <h2><?php echo $lang->testcase->exportTemplet;?></h2>
+<main id="main">
+  <div class="container">
+    <div id="mainContent" class='main-content'>
+      <div class='main-header'>
+        <h2><?php echo $lang->testcase->exportTemplet;?></h2>
+      </div>
+      <form method='post' target='hiddenwin' onsubmit='setDownloading();' style='padding: 40px 5%'>
+        <table class='table table-form'>
+          <tr>
+            <td>
+              <div class='input-group'>
+                <span class='input-group-addon'><?php echo $lang->testcase->num;?></span>
+                <?php
+                echo html::input('num', '10', "class='form-control' autocomplete='off'");
+                ?>
+              </div>
+            </td>
+            <td class='w-100px'>
+              <?php echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8', "class='form-control chosen-simple'");?>
+            </td>
+            <td class="w-150px">
+              <?php echo html::submitButton('', '', 'btn btn-primary btn-block');?>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
   </div>
-  <form method='post' target='hiddenwin' onsubmit='setDownloading();' style='padding: 40px 5%'>
-  <table class='w-p100'>
-    <tr>
-      <td>
-        <div class='input-group'>
-          <span class='input-group-addon'><?php echo $lang->testcase->num;?></span>
-          <?php
-          echo html::input('num', '10', "class='form-control' autocomplete='off'");
-          ?>
-        </div>
-      </td>
-      <td class='w-100px'>
-        <?php echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8', "class='form-control'");?>
-      </td>
-      <td>
-        <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
-      </td>
-    </tr>
-  </table>
-  </form>
-</div>
+</main>
 <?php include '../../common/view/footer.lite.html.php';?>
