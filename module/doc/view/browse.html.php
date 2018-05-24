@@ -45,6 +45,11 @@ var browseType = '<?php echo $browseType;?>';
           </div>
         </nav>
       </div>
+      <?php if(empty($docs)):?>
+      <div class="table-empty-tip">
+        <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span></p>
+      </div>
+      <?php else:?>
       <div class="panel-body has-table">
         <table class="table table-borderless table-hover table-files">
           <thead>
@@ -95,6 +100,7 @@ var browseType = '<?php echo $browseType;?>';
         </table>
       </div>
       <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+      <?php endif;?>
     </div>
   </div>
   <?php endif;?>

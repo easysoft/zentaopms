@@ -9,6 +9,11 @@
         </div>
       </nav>
     </div>
+    <?php if(empty($docs)):?>
+    <div class="table-empty-tip">
+      <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span></p>
+    </div>
+    <?php else:?>
     <div class="panel-body">
       <div class="row row-grid files-grid" data-size="300">
         <?php foreach($modules as $module):?>
@@ -44,5 +49,6 @@
       </div>
     </div>
     <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+    <?php endif;?>
   </div>
 </div>
