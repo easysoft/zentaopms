@@ -48,3 +48,25 @@ $(function()
         parent.location.href = link;
     })
 });
+
+function createProduct()
+{
+    var onlybody    = config.onlybody;
+    config.onlybody = 'no';
+
+    var link = createLink('product', 'create');
+
+    config.onlybody      = onlybody;
+    parent.location.href = link;
+}
+
+function createProject()
+{
+    var onlybody    = config.onlybody;
+    config.onlybody = 'no';
+
+    var link      = createLink('project', 'create');
+
+    config.onlybody      = onlybody;
+    parent.location.href = link;
+}

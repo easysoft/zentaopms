@@ -130,12 +130,13 @@
     }
     elseif($hasGroupPriv and $menuType == 'group')
     {
-        $groupBy  = isset($groupBy) ? $groupBy : '';
+        $groupBy  = isset($groupBy)  ? $groupBy : '';
+        $active   = !empty($groupBy) ? 'btn-active-text' : '';
         $current  = zget($lang->testcase->groups, isset($groupBy) ? $groupBy : '', '');
         if(empty($current)) $current = $lang->testcase->groups[''];
 
         echo "<div id='groupTab' class='btn-group'>";
-        echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "class='btn btn-link' data-toggle='dropdown'");
+        echo html::a('javascript:;', "<span class='text'>{$current}</span>" . " <span class='caret'></span>", '', "class='btn btn-link {$active}' data-toggle='dropdown'");
         echo "<ul class='dropdown-menu'>";
 
         foreach($lang->testcase->groups as $key => $value)
