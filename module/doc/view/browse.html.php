@@ -19,7 +19,7 @@ var browseType = '<?php echo $browseType;?>';
 <?php js::set('libID', $libID);?>
 <?php if($this->from != 'doc') js::set('type', 'doc');?>
 
-<div class="main-row <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
+<div class="main-row fade <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
   <?php if($this->from == 'doc'):?>
   <?php include './side.html.php';?>
   <div class="col-spliter"></div>
@@ -40,8 +40,8 @@ var browseType = '<?php echo $browseType;?>';
         </div>
         <nav class="panel-actions btn-toolbar">
           <div class="btn-group">
-            <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon btn-gray text-primary'");?>
-            <?php echo html::a('javascript:setBrowseType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='{$lang->doc->browseTypeList['grid']}' class='btn btn-icon btn-gray'");?>
+            <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon text-primary'");?>
+            <?php echo html::a('javascript:setBrowseType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='{$lang->doc->browseTypeList['grid']}' class='btn btn-icon'");?>
           </div>
         </nav>
       </div>
@@ -53,7 +53,7 @@ var browseType = '<?php echo $browseType;?>';
       <div class="panel-body has-table">
         <table class="table table-borderless table-hover table-files">
           <thead>
-            <tr class="muted">
+            <tr>
               <th class="c-name"><?php echo $lang->doc->title;?></th>
               <th class="c-num"><?php echo $lang->doc->size;?></th>
               <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
@@ -89,7 +89,7 @@ var browseType = '<?php echo $browseType;?>';
               <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
               <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'm-d h:i');?></td>
               <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'm-d h:i');?></td>
-              <td>
+              <td class="c-actions">
                 <?php common::printLink('doc', 'collect', "objectID=$doc->id&objectType=doc", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$collectTitle}' class='btn btn-link'")?>
                 <?php common::printLink('doc', 'edit', "docID=$doc->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'")?>
                 <?php common::printLink('doc', 'delete', "docID=$doc->id", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>

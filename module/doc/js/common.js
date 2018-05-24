@@ -168,5 +168,12 @@ $(document).ready(function()
         $('.split-row').splitRow();
     });
 
-    $('#main').addClass('in');
+    var $pageSetting = $('#pageSetting');
+    if($pageSetting.length)
+    {
+        $pageSetting.on('click', '.close-dropdown', function()
+        {
+            $pageSetting.parent().removeClass('open');
+        }).on('click', function(e){e.stopPropagation()});
+    }
 });
