@@ -69,7 +69,7 @@ js::set('flow',   $this->config->global->flow);
 </div>
 <?php else:?>
 <div id='pageActions'>
-  <?php common::printLink('testsuite', 'libView', "libID=$libID", "<i class='icon icon-file-text'> </i>" . $lang->testsuite->view, '', "class='btn'");?>
+  <?php common::printLink('testsuite', 'libView', "libID=$libID", "<i class='icon icon-list-alt'> </i>" . $lang->testsuite->view, '', "class='btn'");?>
 </div>
 <div id='mainMenu' class='clearfix'>
   <div id="sidebarHeader">

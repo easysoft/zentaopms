@@ -14,7 +14,7 @@
 <?php js::set('testcaseBatchCreateNum', $config->testcase->batchCreate);?>
 <?php js::set('productID', $productID);?>
 <?php js::set('branch', $branch);?>
-<div id="mainContent" class="main-content">
+<div id="mainContent" class="main-content fade">
   <div class="main-header">
     <h2>
       <?php echo $lang->testcase->batchCreate;?>
@@ -75,8 +75,8 @@
         $type = $i == 0 ? 'feature' : 'ditto';
         $pri  = $i == 0 ? 3 : 'ditto';
         ?>
-        <tr class='text-center'>
-          <td><?php echo $i+1;?></td>
+        <tr>
+          <td class="text-center"><?php echo $i+1;?></td>
           <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModules(this.value, $productID, $i)'");?></td>
           <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
           <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>' style='overflow:visible'> <?php echo html::select("story[$i]", $storyList, $story ? $story->id : '', 'class="form-control chosen"');?></td>
@@ -103,7 +103,7 @@
         </tr>
         <?php endfor;?>
         <tr>
-          <td colspan='<?php echo $colspan?>' class='text-center'>
+          <td colspan='<?php echo $colspan?>' class='text-center form-actions'>
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
             <?php echo html::backButton('', '', 'btn btn-wide');?>
           </td>
@@ -114,8 +114,8 @@
 </div>
 <table class='hide' id='trTemp'>
   <tbody>
-    <tr class='text-center'>
-      <td>%s</td>
+    <tr>
+      <td class="text-center">%s</td>
       <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[%s]", $branches, $branch, "class='form-control' onchange='setModules(this.value, $productID, \"%s\")'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>' style='overflow:visible'> <?php echo html::select("story[%s]", '', '', 'class="form-control"');?></td>
