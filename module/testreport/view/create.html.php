@@ -47,14 +47,17 @@
           <tr>
             <th><?php echo $lang->testreport->members?></th>
             <td colspan='2'><?php echo html::select('members[]', $users, $members, "class='form-control chosen' multiple")?></td>
+            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->testreport->title?></th>
             <td colspan='2'><?php echo html::input('title', $reportTitle, "class='form-control'")?></td>
+            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->testreport->goal?></th>
             <td colspan='2'><?php echo $project->desc?></td>
+            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->testreport->profile?></th>
@@ -66,17 +69,20 @@
             unset($bugInfo['countBugByTask']); unset($bugInfo['bugConfirmedRate']); unset($bugInfo['bugCreateByCaseRate']); unset($bugInfo['foundBugs']);
             ?>
             </td>
+            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->testreport->report?></th>
             <td colspan='2'><?php echo html::textarea('report', '', "class='form-control'")?></td>
+            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->files?></th>
             <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
+            <td></td>
           </tr>
           <tr>
-            <td class='text-center' colspan='3'>
+            <td class='text-center' colspan='4'>
               <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
               <?php echo html::backButton('', '', 'btn btn-wide');?>
             </td>

@@ -54,7 +54,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->testreport->owner?></th>
-          <td><?php echo zget($users, $report->owner);?></td>
+          <td colspan='2'><?php echo zget($users, $report->owner);?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testreport->members?></th>
@@ -78,7 +78,7 @@
         <?php if(!$this->session->notHead):?>
         <tr>
           <th><?php echo $lang->files?></th>
-          <td><?php echo $this->fetch('file', 'printFiles', array('files' => $report->files, 'fieldset' => 'false'));?></td>
+          <td colspan='2'><?php echo $this->fetch('file', 'printFiles', array('files' => $report->files, 'fieldset' => 'false'));?></td>
         </tr>
         <?php endif;?>
       </table>

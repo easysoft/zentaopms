@@ -1,7 +1,7 @@
 <?php $sysURL = $this->session->notHead ? common::getSysURL() : '';?>
 <table class='table main-table' id='legacyBugs'>
   <thead>
-    <tr class='text-center'>
+    <tr>
       <th class='w-id'>   <?php echo $lang->idAB;?></th>
       <th class='w-pri'>  <?php echo $lang->priAB;?></th>
       <th class='text-left'><?php echo $lang->bug->title;?></th>
@@ -12,7 +12,7 @@
     </tr>
   </thead>
   <?php if($legacyBugs):?>
-  <tbody class='text-center'>
+  <tbody>
     <?php foreach($legacyBugs as $bug):?>
     <tr>
       <td><?php echo sprintf('%03d', $bug->id);?></td>
