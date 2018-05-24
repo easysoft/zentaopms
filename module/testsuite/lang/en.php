@@ -24,6 +24,7 @@ $lang->testsuite->exportTemplet    = 'Export template';
 $lang->testsuite->batchCreateCase  = 'Batch create cases';
 $lang->testsuite->import           = 'Import';
 $lang->testsuite->showImport       = 'Show import data';
+$lang->testsuite->successSaved     = 'Success Saved';
 
 $lang->testsuite->common         = 'Test Suite';
 $lang->testsuite->product        = $lang->productCommon;

@@ -78,10 +78,19 @@ class testsuite extends control
     {
         if(!empty($_POST))
         {
+            $response['result']  = 'success';
+            $response['message'] = '';
             $suiteID = $this->testsuite->create($productID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                $this->send($response);
+            }
             $actionID = $this->loadModel('action')->create('testsuite', $suiteID, 'opened');
-            die(js::locate($this->createLink('testsuite', 'browse', "productID=$productID"), 'parent'));
+            $response['locate']  = $this->createLink('testsuite', 'browse', "productID=$productID");
+            $response['message'] = $this->lang->testsuite->successSaved;
+            $this->send($response);
         }
 
         /* Set menu. */
@@ -160,8 +169,15 @@ class testsuite extends control
         $suite = $this->testsuite->getById($suiteID);
         if(!empty($_POST))
         {
+            $response['result']  = 'success';
+            $response['message'] = '';
             $changes = $this->testsuite->update($suiteID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                $this->send($response);
+            }
             if($changes)
             {
                 $objectType = $suite->type == 'library' ? 'caselib' : 'testsuite';
@@ -169,7 +185,9 @@ class testsuite extends control
                 $this->action->logHistory($actionID, $changes);
             }
             $method = $suite->type == 'library' ? 'libView' : 'view';
-            die(js::locate(inlink($method, "suiteID=$suiteID"), 'parent'));
+            $response['locate']  = inlink($method, "suiteID=$suiteID");
+            $response['message'] = $this->lang->testsuite->successSaved;
+            $this->send($response);
         }
 
         if($suite->type == 'library')
@@ -456,10 +474,19 @@ class testsuite extends control
     {
         if(!empty($_POST))
         {
+            $response['result']  = 'success';
+            $response['message'] = '';
             $libID = $this->testsuite->createLib();
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                $this->send($response);
+            }
             $this->loadModel('action')->create('caselib', $libID, 'opened');
-            die(js::locate($this->createLink('testsuite', 'library', "libID=$libID"), 'parent'));
+            $response['locate']  = $this->createLink('testsuite', 'library', "libID=$libID");
+            $response['message'] = $this->lang->testsuite->successSaved;
+            $this->send($response);
         }
 
         /* Set menu. */
