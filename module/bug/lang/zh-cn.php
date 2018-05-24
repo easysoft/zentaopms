@@ -129,7 +129,7 @@ $lang->bug->resolvedByMeAB = '由我解决';
 $lang->bug->ditto       = '同上';
 $lang->bug->dittoNotice = '该bug与上一bug不属于同一产品！';
 $lang->bug->noAssigned  = '未指派';
-$lang->bug->noBug       = '暂时没有BUG，您现在可以';
+$lang->bug->noBug       = '暂时没有Bug，您现在可以';
 $lang->bug->noModule    = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
 
 /* 页面标签。*/
