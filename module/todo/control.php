@@ -481,9 +481,10 @@ class todo extends control
             foreach($todos as $todo)
             {
                 /* fill some field with useful value. */
+                $todo->begin = $todo->begin == '2400' ? '' : (isset($times[$todo->begin]) ? $times[$todo->begin] : $todo->begin);
+                $todo->end   = $todo->end   == '2400' ? '' : (isset($times[$todo->end])   ? $times[$todo->end] : $todo->end);
+
                 if(isset($users[$todo->account]))               $todo->account = $users[$todo->account];
-                if(isset($times[$todo->begin]))                 $todo->begin   = $times[$todo->begin];
-                if(isset($times[$todo->end]))                   $todo->end     = $times[$todo->end];
                 if($todo->type == 'bug')                        $todo->name    = isset($bugs[$todo->idvalue])  ? $bugs[$todo->idvalue] . "(#$todo->idvalue)" : '';
                 if($todo->type == 'task')                       $todo->name    = isset($tasks[$todo->idvalue]) ? $tasks[$todo->idvalue] . "(#$todo->idvalue)" : '';
                 if(isset($todoLang->typeList[$todo->type]))     $todo->type    = $todoLang->typeList[$todo->type];
