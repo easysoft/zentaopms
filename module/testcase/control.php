@@ -1279,26 +1279,30 @@ class testcase extends control
 
             $modules = $this->loadModel('tree')->getOptionMenu($productID, 'case');
             $rows    = array();
-            foreach($modules as $moduleID => $module)
+            $num     = (int)$this->post->num;
+            for($i = 0; $i < $num; $i++)
             {
-                $row = new stdclass();
-                $row->module     = $module . "(#$moduleID)";
-                $row->stepDesc   = "1. \n2. \n3.";
-                $row->stepExpect = "1. \n2. \n3.";
-
-                if(empty($rows))
+                foreach($modules as $moduleID => $module)
                 {
-                    $row->typeValue   = join("\n", $this->lang->testcase->typeList);
-                    $row->stageValue  = join("\n", $this->lang->testcase->stageList);
-                    if($product->type != 'normal') $row->branchValue = join("\n", $branches);
+                    $row = new stdclass();
+                    $row->module     = $module . "(#$moduleID)";
+                    $row->stepDesc   = "1. \n2. \n3.";
+                    $row->stepExpect = "1. \n2. \n3.";
+
+                    if(empty($rows))
+                    {
+                        $row->typeValue   = join("\n", $this->lang->testcase->typeList);
+                        $row->stageValue  = join("\n", $this->lang->testcase->stageList);
+                        if($product->type != 'normal') $row->branchValue = join("\n", $branches);
+                    }
+                    $rows[] = $row;
                 }
-                $rows[] = $row;
             }
 
             $this->post->set('fields', $fields);
             $this->post->set('kind', 'testcase');
             $this->post->set('rows', $rows);
-            $this->post->set('extraNum',   $this->post->num);
+            $this->post->set('extraNum', $num);
             $this->post->set('fileName', 'templet');
             $this->fetch('file', 'export2csv', $_POST);
         }
