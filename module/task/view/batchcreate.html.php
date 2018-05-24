@@ -12,19 +12,21 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<div id="mainContent" class="main-content">
-  <div class="main-header">
-    <h2>
+<div id="mainContent" class="main-content fade">
+  <div class="main-header clearfix">
+    <h2 class="pull-left">
       <?php if($parent):?>
       <span class='pull-left'><?php echo $parentTitle;?></span> 
       <?php echo $lang->task->batchCreateChildren;?>
       <?php else:?>
       <?php echo $lang->task->batchCreate;?>
       <?php endif;?>
-      <?php if($project->type != 'ops'):?>
-      <span><small><a href='javascript:toggleZeroTaskStory();' id='zeroTaskStory'><?php echo $lang->story->zeroTask;?><i class='icon icon-sm icon-close'></i></a></small></span>
-      <?php endif;?>
     </h2>
+    <?php if($project->type != 'ops'):?>
+    <a class="checkbox-primary pull-left" id='zeroTaskStory' href='javascript:toggleZeroTaskStory();'>
+      <label><?php echo $lang->story->zeroTask;?></label>
+    </a>
+    <?php endif;?>
     <div class="pull-right btn-toolbar">
       <button type='button' data-toggle="importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=task&section=custom&key=batchCreateFields')?>
@@ -115,7 +117,7 @@
                 <?php echo html::input("name[$i]", '', "class='form-control input-story-title' autocomplete='off'");?>
                 <div class="colorpicker">
                   <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
-                  <ul class="dropdown-menu clearfix">
+                  <ul class="dropdown-menu clearfix pull-right">
                     <li class="heading"><?php echo $lang->story->colorTag;?><i class="icon icon-close"></i></li>
                   </ul>
                   <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-icon='color' data-wrapper='input-control-icon-right'  data-update-color='#name\\[$i\\]'");?>
@@ -133,7 +135,7 @@
         </tr>
         <?php endfor;?>
         <tr>
-          <td colspan='<?php echo $colspan?>' class='text-center'>
+          <td colspan='<?php echo $colspan?>' class='text-center form-actions'>
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
             <?php echo html::backButton('', '', 'btn btn-wide');?>
           </td>
