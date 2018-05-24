@@ -477,10 +477,14 @@ $lang->proVersion     = "<a href='http://api.zentao.pm/goto.php?item=proversion&
 $lang->downNotify     = "Download Desktop Notification";
 $lang->website    = "http://www.zentao.pm";
 
-$lang->suhosinInfo   = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
-$lang->maxVarsInfo   = "Warning! Data is reaching the limit. Please change <font color=red>max_input_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
-$lang->pasteTextInfo = "Paste text here. Each line will be the title of each record. ";
-$lang->noticeImport  = "<p style='font-size:14px'>Imported data contains data that has already existed in system. Please confirm you actions on the date </p><p><a href='javascript:submitForm(\"cover\")' class='btn btn-mini'>Override</a> <a href='javascript:submitForm(\"insert\")' class='btn btn-mini'>New Insertion</a></p>";
+$lang->suhosinInfo     = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
+$lang->maxVarsInfo     = "Warning! Data is reaching the limit. Please change <font color=red>max_input_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
+$lang->pasteTextInfo   = "Paste text here. Each line will be the title of each record. ";
+$lang->noticeImport    = "Imported data contains data that has already existed in system. Please confirm you actions on the date.";
+$lang->importConfirm   = "Import Confirm";
+$lang->importAndCover  = "Override";
+$lang->importAndInsert = "New Insertion";
+
 
 $lang->noResultsMatch     = "No results match!";
 $lang->searchMore         = "More results：";
