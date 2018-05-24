@@ -641,7 +641,7 @@ class testcase extends control
      */
     public function batchEdit($productID = 0, $branch = 0, $type = 'case')
     {
-        if($this->post->titles)
+        if($this->post->title)
         {
             $allChanges = $this->testcase->batchUpdate();
             if($allChanges)
