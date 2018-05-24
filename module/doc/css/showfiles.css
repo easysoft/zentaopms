@@ -1,6 +1,1 @@
-@keyframes flash-icon
-{
-  0% {color: #666;}
-  100% {color: #fff;}
-}
-.lib-file > .file > a > .file-path{width: 64px; height: 64px; line-height: 64px; margin: 0 auto 10px;}
+.main-col > .panel > .panel-body {padding-top: 20px;}

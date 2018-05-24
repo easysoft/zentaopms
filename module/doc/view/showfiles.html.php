@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class="main-row <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
+<div class="main-row fade <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
   <?php if($this->from == 'doc'):?>
   <?php include './side.html.php';?>
   <div class="col-spliter"></div>
@@ -41,8 +41,8 @@
             </form>
           </div>
           <div class="btn-group">
-            <?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list"), "<i class='icon icon-bars'></i>" , '',  "title={$lang->doc->browseTypeList['list']} class='btn btn-icon text-primary'");?>
-            <?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card"), "<i class='icon icon-cards-view'></i>", '', "title={$lang->doc->browseTypeList['grid']} class='btn btn-icon'");?>
+            <?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list"), "<i class='icon icon-bars'></i>" , '',  "title={$lang->doc->browseTypeList['list']} class='btn btn-icon" . ($viewType == 'list' ? ' text-primary' : '') . "'");?>
+            <?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card"), "<i class='icon icon-cards-view'></i>", '', "title={$lang->doc->browseTypeList['grid']} class='btn btn-icon" . ($viewType != 'list' ? ' text-primary' : '') . "'");?>
           </div>
         </nav>
       </div>
@@ -51,7 +51,7 @@
       <div class="panel-body has-table">
         <table class="table table-borderless table-hover table-files">
           <thead>
-            <tr class="muted">
+            <tr class="text-center">
               <th class="w-80px"><?php echo $lang->doc->id;?></th>
               <th><?php echo $lang->doc->fileTitle;?></th>
               <th><?php echo $lang->doc->filePath;?></th>
@@ -66,15 +66,15 @@
             <?php foreach($files as $file):?>
             <?php if(empty($file->pathname)) continue;?>
               <tr>
-                <td><?php echo sprintf('%03d', $file->id);?></td>
-                <td>
+                <td class="text-center"><?php echo sprintf('%03d', $file->id);?></td>
+                <td class="c-url">
                   <a href='<?php echo $this->createLink($file->objectType, 'view', "objectID=$file->objectID");?>'><?php echo $file->title . ' [' . strtoupper($file->objectType) . ' #' . $file->objectID . ']';?></a>
                 </td>
                 <td> <?php echo $file->pathname;?> </td>
-                <td><?php echo $file->extension;?></td>
+                <td class="text-center"><?php echo $file->extension;?></td>
                 <td><?php echo number_format($file->size / 1024 , 1) . 'K';?></td>
-                <td><?php echo isset($file->addedBy) ? zget($users, $file->addedBy) : '';?></td>
-                <td><?php echo isset($file->addedDate) ? substr($file->addedDate, 0, 10) : '';?></td>
+                <td class="text-center"><?php echo isset($file->addedBy) ? zget($users, $file->addedBy) : '';?></td>
+                <td class="text-center"><?php echo isset($file->addedDate) ? substr($file->addedDate, 0, 10) : '';?></td>
                 <td>
                   <?php
                   common::printLink('file', 'download', "fileID=$file->id", $lang->doc->download, "data-toggle='modal'", '', true, false, $file);
@@ -112,7 +112,7 @@
                 $downloadLink = $this->createLink('file', 'download', "fileID=$file->id&mouse=left");
                 if(in_array($file->extension, $config->file->imageExtensions))
                 {
-                    echo "<div class='file-path'><img src='$file->webPath'/></div>";
+                    echo "<div class='img-holder' style='background-image: url($file->webPath)'><img src='$file->webPath'/></div>";
                 }
                 else
                 {

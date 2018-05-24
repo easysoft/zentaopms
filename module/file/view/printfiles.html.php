@@ -8,14 +8,10 @@ $sessionString .= session_name() . '=' . session_id();
   <div class="detail-title"><?php echo $lang->file->common;?> <i class="icon icon-paper-clip icon-sm"></i></div>
   <div class="detail-content">
 <?php endif;?>
-  <style>
-    .files-list>li>a {display: inline;}
-  </style>
+<style>
+.files-list>li>a {display: inline;}
+</style>
   <script>
-  $(function(){
-       $(".edit").modalTrigger({width:350, type:'iframe'});
-  })
-
   /* Delete a file. */
   function deleteFile(fileID)
   {
@@ -81,9 +77,9 @@ $sessionString .= session_name() . '=' . session_id();
               echo html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $fileTitle . " ({$fileSize})", '_blank', "onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth)\"");
 
 
-              echo "<span class='right-icon'>";
-              common::printLink('file', 'edit', "fileID=$file->id", "<i class='icon-pencil'></i>", '', "class='edit btn-icon' title='{$lang->file->edit}'");
-              if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon-trash'></i>", '', "class='btn-icon' onclick='deleteFile($file->id)' title='$lang->delete'");
+              echo "<span class='right-icon'>&nbsp; ";
+              common::printLink('file', 'edit', "fileID=$file->id", "<i class='icon-pencil'></i>", '', "data-width='400' class='edit iframe text-primary' title='{$lang->file->edit}'");
+              if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon-trash'></i>", '', "class='text-primary' onclick='deleteFile($file->id)' title='$lang->delete'");
               echo '</span>';
               echo '</li>';
           }

@@ -13,7 +13,8 @@
 .row-spliting .col-spliter:before,
 .row-spliting .col-spliter:after {opacity: 1;}
 
-@media (max-width: 720px) {
+@media (max-width: 720px)
+{
   .split-row > .side-col,
   .split-row > .main-col {width: 100%!important;}
 }
@@ -28,19 +29,25 @@
 .table-files .c-actions .btn > .icon.text-yellow,
 .table-files tr:hover .c-actions .btn > .icon {opacity: 1;}
 
-#main {opacity: 0; transition: opacity .4s;}
-#main.in {opacity: 1;}
-
 .files-grid .col {width: 167px; text-align: center; padding: 0; margin-bottom: 10px;}
-.files-grid .actions {position: absolute; bottom: -30px; left: 0; right: 0; background: #E9F2FB; z-index: 10; opacity: 0; transition: opacity .2s; padding-bottom: 8px;}
+.files-grid .actions {position: absolute; bottom: -38px; left: 0; right: 0; background: #E9F2FB; z-index: 10; opacity: 0; transition: opacity .2s; padding-bottom: 8px; border-radius: 0 0 3px 3px; padding-top: 8px;}
 .files-grid .col:hover .actions {opacity: 1;}
-.files-grid .file {padding: 10px; cursor: pointer; display: block; border-radius: 2px;}
+.files-grid .file {padding: 10px; cursor: pointer; display: block; border-radius: 2px; transition: background-color .2s; border-radius: 3px 3px 0 0}
 .files-grid .col:hover .file {background-color: #E9F2FB;}
-.files-grid .file-icon {font-size: 54px; width: 64px; height: 64px; display: block; margin: 0 auto 8px; line-height: 64px;}
+.files-grid .file-icon {font-size: 54px; width: 64px; height: 64px; display: block; margin: 0 auto 8px; line-height: 64px; color: #8E939A}
 .files-grid .file-name,
 .files-grid .file-info {text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
 .files-grid .file-info {font-size: 12px; margin-top: 3px;}
 .files-grid .icon-folder {background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHdpZHRoPSI1MnB4IiBoZWlnaHQ9IjQ2cHgiIHZpZXdCb3g9IjAgMCA1MiA0NiIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4gICAgICAgIDx0aXRsZT5pY29uLWJpZy1mb2xkZXJpY29uLWJpZy1mb2xkZXI8L3RpdGxlPiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4gICAgPGRlZnM+PC9kZWZzPiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4gICAgICAgIDxnIGlkPSJ3ZWItbWF4IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMTA5NS4wMDAwMDAsIC02OTUuMDAwMDAwKSI+ICAgICAgICAgICAgPGcgaWQ9Ijgt5paH5qGjIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMDkwLjAwMDAwMCwgNTgzLjAwMDAwMCkiPiAgICAgICAgICAgICAgICA8ZyBpZD0iaWNvbi1iaWctZm9sZGVyIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1LjAwMDAwMCwgMTEyLjAwMDAwMCkiPiAgICAgICAgICAgICAgICAgICAgPHBhdGggZD0iTTIxLjA0NTY4OTEsNC4yNzAyMzU0MiBDMjEuOTYxODA1OSw1LjEwNzIwMzY1IDIzLjAyMjcwMDQsNS41NTc5NjY1OSAyNC4zNjg4OTQ0LDUuNTI1MDEyMTggTDI2LjE2MDIzOCw1LjUyNTAxMjE4IEwzMC44MTIxMDExLDUuNTI1MDEyMTggQzI5LjYwMDkxMDksNS41MjUwMTIxOCAyOC40Mzg1MTg2LDUuMDM1NzUxMTMgMjcuNTc3MDQ3LDQuMTg1ODk1OTMgTDI0LjY3ODE1NjYsMS4zMjY0MDI3MSBDMjMuODE2NTgwOCwwLjQ3NjU0NzUxMSAyMi42NTQyOTI3LDAgMjEuNDQzMTAyNSwwIEwxNS4xMTQ5MDQ2LDAgTDE1LDAgQzE2LjIyNjg2NzksMC4wMzk0MzcwODA1IDE3LjMwMjA1NTcsMC41NTY4NjUwODcgMTguMTYzNTI3MywxLjQwNjYxNjIyIEwyMS4wNDU2ODkxLDQuMjcwMjM1NDIgWiIgaWQ9IlNoYXBlLUNvcHktNyIgZmlsbD0iI0ZGQzg1QSI+PC9wYXRoPiAgICAgICAgICAgICAgICAgICAgPHBhdGggZD0iTTQ5LjMxMDMyMDMsNS41MjAwMjkxOCBMMzguNTUxNzAzMSw1LjUyMDAyOTE4IEwzNi44MDY4NTk0LDUuNTIwMDI5MTggTDMyLjI3NTc1LDUuNTIwMDI5MTggTDMwLjUzMDkwNjMsNS41MjAwMjkxOCBMMjYsNS41MjAwMjkxOCBMMjQuMjU1MTU2Miw1LjUyMDAyOTE4IEMyMy4wNzU0MDYzLDUuNTIwMDI5MTggMjEuOTQzMTg3NSw1LjA0MjgxMzM1IDIxLjEwNDA3ODEsNC4xOTE3NjYzIEwxOC4yODA0Mzc1LDEuMzI4MjYyODggQzE3LjQ0MTIyNjYsMC40NzcyMTU4MjkgMTYuMzA5MTA5NCwwIDE1LjEyOTM1OTQsMCBMOC45NjU1MzEyNSwwIEwyLjY4OTY3OTY5LDAgQzEuMjA0MjI2NTYsNy40MDUxNTkyM2UtMTYgMCwxLjIzNTcxNjk5IDAsMi43NjAwMTQ1OSBMMCw4LjI4MDA0Mzc3IEwwLDkuMjAwMDgzMzcgTDAsNDMuMjM5OTg1NCBDMCw0NC43NjQyODMgMS4yMDQyMjY1Niw0NiAyLjY4OTY3OTY5LDQ2IEw0OS4zMTAzMjAzLDQ2IEM1MC43OTU3NzM0LDQ2IDUyLDQ0Ljc2NDI4MyA1Miw0My4yMzk5ODU0IEw1Miw4LjI4MDA0Mzc3IEM1Miw2Ljc1NTY0MTk1IDUwLjc5NTc3MzQsNS41MjAwMjkxOCA0OS4zMTAzMjAzLDUuNTIwMDI5MTggTDQ5LjMxMDMyMDMsNS41MjAwMjkxOCBaIiBpZD0iU2hhcGUtQ29weS04IiBmaWxsPSIjRkZFMDY2Ij48L3BhdGg+ICAgICAgICAgICAgICAgIDwvZz4gICAgICAgICAgICA8L2c+ICAgICAgICA8L2c+ICAgIDwvZz48L3N2Zz4=) no-repeat center;}
+.files-grid .icon-folder:before {display: none;}
+.files-grid .img-holder {height: 64px; line-height: 64px; margin: 0 auto 8px; width: 100%; background-size: contain; background-repeat: no-repeat; background-position: center;}
+.files-grid .img-holder > img {max-height: 64px; opacity: 0; width: 100%;}
 
 .panel{padding-bottom: 40px;}
 .panel .table-footer{position: absolute; bottom: 0; width: 100%;}
+
+@keyframes flash-icon
+{
+  0% {color: #666;}
+  100% {color: #fff;}
+}
