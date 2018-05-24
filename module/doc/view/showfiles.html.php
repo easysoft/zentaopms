@@ -75,7 +75,7 @@
                 <td><?php echo number_format($file->size / 1024 , 1) . 'K';?></td>
                 <td class="text-center"><?php echo isset($file->addedBy) ? zget($users, $file->addedBy) : '';?></td>
                 <td class="text-center"><?php echo isset($file->addedDate) ? substr($file->addedDate, 0, 10) : '';?></td>
-                <td>
+                <td class="c-actions">
                   <?php
                   common::printLink('file', 'download', "fileID=$file->id", $lang->doc->download, "data-toggle='modal'", '', true, false, $file);
                   common::printLink('file', 'delete',   "fileID=$file->id", $lang->delete, 'hiddenwin', '', true, false, $file);
