@@ -21,6 +21,9 @@
     <div class='page-title'>
       <span class='label label-id'><?php echo $report->id;?></span>
       <span class='text'><?php echo $report->title;?></span>
+      <?php if($report->deleted):?>
+      <span class='label label-danger'><?php echo $lang->testreport->deleted;?></span>
+      <?php endif; ?>
     </div>
   </div>
 </div>
