@@ -314,10 +314,10 @@ tbody tr td:first-child input{display:none;}
                 </tr>
                 <?php if($this->config->global->flow != 'onlyTest'):?>
                 <tr>
-                  <th><?php echo $lang->build->desc;?></th>
+                  <th style="vertical-align:top"><?php echo $lang->build->desc;?></th>
                   <td>
                     <?php if($build->desc):?>
-                    <div class='article-content'><?php echo $build->desc;?></div>
+                    <?php echo $build->desc;?>
                     <?php else:?>
                     <?php echo $lang->build->noData;?>
                     <?php endif;?>
