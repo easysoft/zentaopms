@@ -545,7 +545,7 @@ class commonModel extends model
         if(strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows') !== false)
         {
             global $lang;
-            echo html::a(helper::createLink('misc', 'downNotify'), "<i class='icon-bell'></i>", '', "title='$lang->downNotify'") . ' &nbsp; ';
+            echo html::a(helper::createLink('misc', 'downNotify'), "<i class='icon-bell'></i>", '', "title='$lang->downNotify' class='text-primary'") . ' &nbsp; ';
         }
     }
 
