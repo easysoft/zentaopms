@@ -36,9 +36,17 @@
     <?php if($menuItem->name == 'more'):?>
     <?php
     echo '<div class="btn-group">';
-    echo html::a('javascript:;', $menuItem->text . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link'");
+    $active  = '';
+    $current = $menuItem->text;
+    $storyBrowseType = $this->session->storyBrowseType;
+    if(isset($lang->product->moreSelects[$storyBrowseType]))
+    {
+        $active = 'btn-active-text';
+        $current = "<span class='text'>{$lang->product->moreSelects[$storyBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+    }
+    echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $active'");
     echo "<ul class='dropdown-menu'>";
-    foreach ($lang->product->moreSelects as $key => $value)
+    foreach($lang->product->moreSelects as $key => $value)
     {
         echo '<li' . ($key == $this->session->storyBrowseType ? " class='active'" : '') . '>';
         echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$key" . $queryParam), $value);
