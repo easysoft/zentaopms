@@ -42,6 +42,7 @@
                 <?php echo html::select('owner', $users, $owner, "class='form-control chosen'")?>
               </div>
             </td>
+            <td class='w-50px'></td>
           </tr>
           <tr>
             <th><?php echo $lang->testreport->members?></th>
