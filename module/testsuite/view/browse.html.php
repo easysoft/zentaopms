@@ -22,7 +22,7 @@
     </a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('testsuite', 'create', "product=$productID", "<i class='icon icon-plus'> </i>" . $lang->testsuite->create, '', "class='btn btn-primary'");?>
+    <?php common::printLink('testsuite', 'create', "product=$productID", "<i class='icon icon-plus'></i> " . $lang->testsuite->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php endif;?>

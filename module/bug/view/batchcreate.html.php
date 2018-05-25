@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='mainContent' class='main-content'>
+<div id='mainContent' class='main-content fade'>
   <div class='main-header'>
     <h2>
       <?php echo $lang->bug->batchCreate;?>
@@ -161,7 +161,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan='<?php echo count($visibleFields) + 3?>' class='text-center'>
+          <td colspan='<?php echo count($visibleFields) + 3?>' class='text-center form-actions'>
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
             <?php echo html::backButton('', '', 'btn btn-wide');?>
           </td>

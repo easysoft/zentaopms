@@ -69,7 +69,7 @@ js::set('flow',   $this->config->global->flow);
 </div>
 <?php else:?>
 <div id='pageActions'>
-  <?php common::printLink('testsuite', 'libView', "libID=$libID", "<i class='icon icon-file-text'> </i>" . $lang->testsuite->view, '', "class='btn'");?>
+  <?php common::printLink('testsuite', 'libView', "libID=$libID", "<i class='icon icon-list-alt muted'> </i>" . $lang->testsuite->view, '', "class='btn'");?>
 </div>
 <div id='mainMenu' class='clearfix'>
   <div id="sidebarHeader">
@@ -150,7 +150,7 @@ js::set('flow',   $this->config->global->flow);
             <th class='c-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
             <th class='c-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
             <th class='c-status'><?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
-            <th class='w-130px text-center'><?php echo $lang->actions;?></th>
+            <th class='c-actions-2 text-center'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>

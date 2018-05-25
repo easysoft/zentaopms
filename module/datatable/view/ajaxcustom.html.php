@@ -78,9 +78,9 @@
       </div>
       <div class='form-actions text-left'>
         <?php if(common::hasPriv('datatable', 'setGlobal')) echo html::checkbox('global', array(1 => $lang->datatable->setGlobal));?>
-        <button type='button' class='btn btn-primary btn-save' id='btnSaveCustom'><?php echo $lang->save ?></button>
-        <button type='button' class='btn' data-dismiss='modal'><?php echo $lang->close ?></button>
-        <button type='button' class='btn' id='resetBtn'><?php echo $lang->datatable->reset ?></button>
+        <button type='button' class='btn btn-wide btn-primary btn-save' id='btnSaveCustom'><?php echo $lang->save ?></button>
+        <button type='button' class='btn btn-wide' data-dismiss='modal'><?php echo $lang->close ?></button>
+        <button type='button' class='btn btn-wide' id='resetBtn'><?php echo $lang->datatable->reset ?></button>
       </div>
     </div>
   </div>
@@ -194,8 +194,7 @@ $(function()
             return sets;
         }).get();
 
-        //window.saveDatatableConfig('<?php echo $mode == 'table' ? 'tablecols' : 'cols';?>', setting, true, $('#global1').prop('checked') ? 1 : 0);
-        window.saveDatatableConfig('<?php echo 'cols';?>', setting, true, $('#global1').prop('checked') ? 1 : 0);
+        window.saveDatatableConfig('<?php echo $mode == 'table' ? 'tablecols' : 'cols';?>', setting, true, $('#global1').prop('checked') ? 1 : 0);
     });
 
     $('#resetBtn').on("click", function()

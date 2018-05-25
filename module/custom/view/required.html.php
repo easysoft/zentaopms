@@ -26,7 +26,7 @@
     </div>
   </div>
   <div class='main-col main-content'>
-    <form method='post' target='hiddenwin'>
+    <form class="load-indicator main-form form-ajax" method='post'>
       <div class='main-header'>
         <div class='heading'>
           <strong><?php echo $lang->$moduleName->common?></strong>
@@ -54,7 +54,7 @@
         </tr>
         <?php endforeach;?>
         <tr>
-          <td colspan='2' class='text-center'>
+          <td colspan='2' class='text-center form-actions'>
           <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
           <?php if(common::hasPriv('custom', 'resetRequired')) echo html::a(inlink('resetRequired', "module=$moduleName"), $lang->custom->restore, 'hiddenwin', "class='btn btn-wide'");?>
           </td>

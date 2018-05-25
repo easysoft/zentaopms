@@ -6,4 +6,4 @@
 .product + .product {margin-left: 0;}
 #productsBox .row > .product.has-branch label {margin-right: 40%;}
 #productsBox .row > .product.has-branch > .form-control,
-#productsBox .row > .product.has-branch > .chosen-container {position: absolute; width: 40%!important; right: 3px; top: 3px;}
+#productsBox .row > .product.has-branch > .chosen-container {position: absolute; width: 40%!important; right: 1px; top: 1px;}

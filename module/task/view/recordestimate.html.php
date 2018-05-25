@@ -45,44 +45,46 @@
             <th class="w-60px"><?php echo $lang->task->consumedThisTime;?></th>
             <th class="w-60px"><?php echo $lang->task->leftThisTime;?></th>
             <th><?php echo $lang->comment;?></th>
-            <th class='w-10px'></th>
+            <th class='c-actions'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
-        <?php if(count($estimates)):?>
-        <?php foreach($estimates as $estimate):?>
-        <tr class="text-center">
-          <td><?php echo $estimate->id;?></td>
-          <td><?php echo $estimate->date;?></td>
-          <td><?php echo $estimate->consumed;?></td>
-          <td><?php echo $estimate->left;?></td>
-          <td class="text-left"><?php echo $estimate->work;?></td>
-          <td align='center'>
-            <?php
-            if($task->status == 'wait' or $task->status == 'pause' or $task->status == 'doing')
-            {
-                common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', 'pencil', '', 'showinonlybody', true);
-                common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'remove', 'hiddenwin', 'showinonlybody');
-            }
-            ?>
-          </td>
-        </tr>
-        <?php endforeach;?>
-        <?php endif;?>
-        <?php if(in_array($task->status, array('wait', 'pause', 'doing'))):?>
-        <?php for($i = 1; $i <= 3; $i++):?>
-        <tr class="text-center">
-          <td><?php echo $i . html::hidden("id[$i]", $i);?></td>
-          <td><?php echo html::input("dates[$i]", '', "class='form-control text-center form-date'");?></td>
-          <td><?php echo html::input("consumed[$i]", '', "class='form-control text-center' autocomplete='off'");?></td>
-          <td><?php echo html::input("left[$i]", '', "class='form-control text-center left' autocomplete='off'");?></td>
-          <td class="text-left"><?php echo html::textarea("work[$i]", '', "class='form-control' style='height:50px;'");?></td>
-          <td></td>
-        </tr>
-        <?php endfor;?>
-        <?php endif;?>
-        <tr>
-          <td colspan='6' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::backButton('', '', 'btn btn-wide');?></td>
-        </tr>
+        <tbody>
+          <?php if(count($estimates)):?>
+          <?php foreach($estimates as $estimate):?>
+          <tr class="text-center">
+            <td><?php echo $estimate->id;?></td>
+            <td><?php echo $estimate->date;?></td>
+            <td><?php echo $estimate->consumed;?></td>
+            <td><?php echo $estimate->left;?></td>
+            <td class="text-left"><?php echo $estimate->work;?></td>
+            <td align='center' class='c-actions'>
+              <?php
+              if($task->status == 'wait' or $task->status == 'pause' or $task->status == 'doing')
+              {
+                  common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', 'pencil', '', 'showinonlybody', true);
+                  common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody');
+              }
+              ?>
+            </td>
+          </tr>
+          <?php endforeach;?>
+          <?php endif;?>
+          <?php if(in_array($task->status, array('wait', 'pause', 'doing'))):?>
+          <?php for($i = 1; $i <= 3; $i++):?>
+          <tr class="text-center">
+            <td><?php echo $i . html::hidden("id[$i]", $i);?></td>
+            <td><?php echo html::input("dates[$i]", '', "class='form-control text-center form-date'");?></td>
+            <td><?php echo html::input("consumed[$i]", '', "class='form-control text-center' autocomplete='off'");?></td>
+            <td><?php echo html::input("left[$i]", '', "class='form-control text-center left' autocomplete='off'");?></td>
+            <td class="text-left"><?php echo html::textarea("work[$i]", '', "class='form-control' style='height:50px;'");?></td>
+            <td></td>
+          </tr>
+          <?php endfor;?>
+          <?php endif;?>
+          <tr>
+            <td colspan='6' class='text-center form-actions'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::backButton('', '', 'btn btn-wide');?></td>
+          </tr>
+        </tbody>
       </table>
     </form>
     <?php endif;?>

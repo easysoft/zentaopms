@@ -34,7 +34,7 @@
         </tr>
         <?php endif;?>
         <tr>
-          <td class='text-center' colspan='2'>
+          <td class='text-center form-actions' colspan='2'>
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
             <?php echo html::backButton('', '', 'btn btn-wide');?>
           </td>

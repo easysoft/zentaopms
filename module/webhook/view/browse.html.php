@@ -12,7 +12,7 @@
 ?>
 <?php include 'header.html.php';?>
 <?php js::set('confirmDelete', $lang->webhook->confirmDelete);?>
-<div id='mainContent' class='main-content'>
+<div id='mainContent'>
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='webhookList' class='table has-sort-head table-fixed'>
       <thead>
@@ -34,12 +34,12 @@
           <td class='text' title='<?php echo $webhook->url;?>'><?php echo $webhook->url;?></td>
           <td class='c-actions'>
             <?php
-            common::printIcon('webhook', 'log', "webhookID=$id", '', 'list', 'file-text');
+            common::printIcon('webhook', 'log', "webhookID=$id", '', 'list', 'file-text2');
             common::printIcon('webhook', 'edit', "webhookID=$id", '', 'list');
             if(common::hasPriv('webhook', 'delete'))
             {
                 $deleteURL = $this->createLink('webhook', 'delete', "webhookID=$id&confirm=yes");
-                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"webhookList\",confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->webhook->delete}' class='btn btn-link'");
+                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"webhookList\",confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->webhook->delete}' class='btn'");
             }
             ?>
           </td>

@@ -2537,7 +2537,7 @@ class bugModel extends model
                 if($bug->assignedTo == $account) $btnTextClass = 'text-red';
                 $btnClass = $assignedToText == 'closed' ? ' disabled' : '';
 
-                echo html::a(helper::createLink('bug', 'assignTo', "bugID=$bug->id", '', true), "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='iframe btn btn-icon-left{$btnClass}'");
+                echo html::a(helper::createLink('bug', 'assignTo', "bugID=$bug->id", '', true), "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='iframe btn btn-sm btn-icon-left{$btnClass}'");
                 break;
             case 'assignedDate':
                 echo substr($bug->assignedDate, 5, 11);

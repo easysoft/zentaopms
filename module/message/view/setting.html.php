@@ -12,7 +12,7 @@
 ?>
 <?php include './header.html.php';?>
 <div id='mainContent' class='main-content'>
-  <form target='hiddenwin' method='post'>
+  <form class='load-indicator main-form form-ajax' method='post'>
     <table class='table table-bordered'>
       <thead>
         <th></th>
@@ -70,7 +70,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan='<?php echo count($lang->message->typeList) + 1?>' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?> <?php echo html::backButton('', '', 'btn btn-wide');?></td>
+          <td colspan='<?php echo count($lang->message->typeList) + 1?>' class='text-center form-actions'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?> <?php echo html::backButton('', '', 'btn btn-wide');?></td>
         </tr>
       </tfoot>
     </table>

@@ -53,17 +53,17 @@
       </tr>
       <tr id='productBox' style='display:none'>
         <th class='text-right'><?php echo $lang->group->productList?></th>
-        <td><?php echo html::select("actions[products][]", $products, isset($group->acl['products']) ? join(',', $group->acl['products']) : '', "class='chosen' multiple")?></td>
+        <td><?php echo html::select("actions[products][]", $products, isset($group->acl['products']) ? join(',', $group->acl['products']) : '', "class='form-control chosen' multiple")?></td>
         <td><?php echo $lang->group->noticeVisit?></td>
       </tr>
       <tr id='projectBox' style='display:none'>
         <th class='text-right'><?php echo $lang->group->projectList?></th>
-        <td><?php echo html::select("actions[projects][]", $projects, isset($group->acl['projects']) ? join(',', $group->acl['projects']) : '', "class='chosen' multiple")?></td>
+        <td><?php echo html::select("actions[projects][]", $projects, isset($group->acl['projects']) ? join(',', $group->acl['projects']) : '', "class='form-control chosen' multiple")?></td>
         <td><?php echo $lang->group->noticeVisit?></td>
       </tr>
       <tr>
         <th><span class='hidden'><?php echo html::selectAll('', 'checkbox')?></span></th>
-        <td colspan='2'>
+        <td colspan='2' class='form-actions'>
           <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
           <?php echo html::backButton('', '', 'btn btn-wide');?>
           <?php echo html::hidden('foo'); // Just a hidden var, to make sure $_POST is not empty.?>

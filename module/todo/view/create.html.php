@@ -23,7 +23,7 @@
       <table class='table table-form'> 
         <tr>
           <th class='w-80px'><?php echo $lang->todo->date;?></th>
-          <td class='w-p25-f'>
+          <td class='w-300px'>
             <div class='input-group'>
               <?php echo html::input('date', $date, "class='form-control form-date'");?>
               <span class='input-group-addon switchDate'>
@@ -86,11 +86,11 @@
         </tr>
         <tr>
           <th><?php echo $lang->todo->type;?></th>
-          <td><?php echo html::select('type', $lang->todo->typeList, '', 'onchange="loadList(this.value);" class="form-control chosen-simple"');?></td>
+          <td><?php echo html::select('type', $lang->todo->typeList, '', 'onchange="loadList(this.value);" class="form-control"');?></td>
         </tr>  
         <tr>
           <th><?php echo $lang->todo->pri;?></th>
-          <td><?php echo html::select('pri', $lang->todo->priList, '', "class='form-control chosen-simple'");?></td>
+          <td><?php echo html::select('pri', $lang->todo->priList, '', "class='form-control'");?></td>
         </tr>  
         <tr>
           <th><?php echo $lang->todo->name;?></th>
@@ -131,7 +131,7 @@
           </td>
         </tr>  
         <tr>
-          <td colspan='3' class='text-center'>
+          <td colspan='3' class='text-center form-actions'>
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::backButton('', '', 'btn btn-wide');?>
           </td>
         </tr>

@@ -16,7 +16,7 @@
           <nav class="panel-actions btn-toolbar"></nav>
         </div>
         <div data-ride='table'>
-          <table class='table table-condensed table-striped table-bordered table-fixed' id='bugAssign'>
+          <table class='table table-condensed table-striped table-bordered table-fixed no-margin' id='bugAssign'>
             <thead>
               <tr class='colhead'>
                 <th><?php echo $lang->report->user;?></th>

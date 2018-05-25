@@ -11,42 +11,46 @@
   </div>
   <div class='main-col'>
     <div class='cell'>
-      <div class='with-padding'>
-        <form method='post'>
-          <div class="table-row" id='conditions'>
-            <div class='col-2'>
-              <div class='input-group'>
-                <span class='input-group-addon'><?php echo $lang->report->dept;?></span>
-                <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='changeParams(this)'");?>
-              </div>
+      <form method='post'>
+        <div class="row" id='conditions'>
+          <div class='col-sm-2'>
+            <div class='input-group'>
+              <span class='input-group-addon'><?php echo $lang->report->dept;?></span>
+              <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='changeParams(this)'");?>
             </div>
-            <div class='col-4'>
-              <div class='input-group input-group-sm'>
-                <span class='input-group-addon'><?php echo $lang->report->taskAssignedDate;?></span>
-                <div class='datepicker-wrapper datepicker-date'><?php echo html::input('begin', $begin, "class='form-control' style='padding-right:10px' onchange='changeParams(this)'");?></div>
-                <span class='input-group-addon fix-border'><?php echo $lang->report->to;?></span>
-                <div class='datepicker-wrapper datepicker-date'><?php echo html::input('end', $end, "class='form-control' style='padding-right:10px' onchange='changeParams(this)'");?></div>
-              </div>
-            </div>
-            <div class='col-2'>
-              <div class='input-group'>
-                <span class='input-group-addon'><?php echo $lang->report->diffDays;?></span>
-                <?php echo html::input('days', $days, "class='form-control' autocomplete='off' style='text-align:center'");?>
-              </div>
-            </div>
-            <div class='col-2'>
-              <div class='input-group'>
-                <span class='input-group-addon'><?php echo $lang->report->workday;?></span>
-                <?php echo html::input('workday', $workday, "class='form-control' autocomplete='off' style='width:50px'");?>
-              </div>
-            </div>
-            <div class='col-1'>
-              <?php echo html::select('assign', $lang->report->assign, $assign, "class='form-control' onchange='changeParams(this)' style='width:90px'");?>
-            </div>
-            <div class='col-1 text-right'><?php echo html::submitButton($lang->report->query);?></div>
           </div>
-        </form>
-      </div>
+          <div class='col-sm-4'>
+            <div class='input-group input-group-sm'>
+              <span class='input-group-addon'><?php echo $lang->report->taskAssignedDate;?></span>
+              <div class='datepicker-wrapper datepicker-date'><?php echo html::input('begin', $begin, "class='form-control' style='padding-right:10px' onchange='changeParams(this)'");?></div>
+              <span class='input-group-addon fix-border'><?php echo $lang->report->to;?></span>
+              <div class='datepicker-wrapper datepicker-date'><?php echo html::input('end', $end, "class='form-control' style='padding-right:10px' onchange='changeParams(this)'");?></div>
+            </div>
+          </div>
+          <div class='col-sm-2'>
+            <div class='input-group'>
+              <span class='input-group-addon'><?php echo $lang->report->diffDays;?></span>
+              <?php echo html::input('days', $days, "class='form-control' autocomplete='off' style='text-align:center'");?>
+            </div>
+          </div>
+          <div class='col-sm-4'>
+            <div class="row">
+              <div class="col-sm-5">
+                <div class='input-group'>
+                  <span class='input-group-addon'><?php echo $lang->report->workday;?></span>
+                  <?php echo html::input('workday', $workday, "class='form-control' autocomplete='off'");?>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <?php echo html::select('assign', $lang->report->assign, $assign, "class='form-control' onchange='changeParams(this)'");?>
+              </div>
+              <div class="col-sm-3">
+                <?php echo html::submitButton($lang->report->query, '', 'btn btn-primary btn-block');?>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
     <div class='cell'>
       <div class='panel'>
@@ -55,7 +59,7 @@
           <nav class="panel-actions btn-toolbar"></nav>
         </div>
         <div data-ride='table'>
-          <table class='table table-condensed table-striped table-bordered table-fixed' id="workload">
+          <table class='table table-condensed table-striped table-bordered table-fixed no-margin' id="workload">
             <thead>
               <tr class='colhead'>
                 <th class="w-200px"><?php echo $lang->report->user;?></th>

@@ -161,9 +161,9 @@
             unset($_GET['onlybody']);
             echo "<button type='button' class='btn btn-success dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
             echo "<ul class='dropdown-menu pull-right' role='menu'>";
-            if($createStoryPriv) echo '<li>' . html::a('###', $lang->todo->reasonList['story'], '', "data-toggle='modal' data-target='#productModal' data-moveable='true' data-position='193px' id='toStoryLink'") . '</li>';
-            if($createTaskPriv)  echo '<li>' . html::a('###', $lang->todo->reasonList['task'], '', "data-toggle='modal' data-target='#projectModal' data-moveable='true' data-position='193px' id='toTaskLink'") . '</li>';
-            if($createBugPriv)   echo '<li>' . html::a('###', $lang->todo->reasonList['bug'], '', "data-toggle='modal' data-target='#productModal' data-moveable='true' data-position='193px' id='toBugLink'") . '</li>';
+            if($createStoryPriv) echo '<li>' . html::a('###', $lang->todo->reasonList['story'], '', "data-toggle='modal' data-target='#productModal' data-moveable='true' data-position='center' id='toStoryLink'") . '</li>';
+            if($createTaskPriv)  echo '<li>' . html::a('###', $lang->todo->reasonList['task'], '', "data-toggle='modal' data-target='#projectModal' data-moveable='true' data-position='center' id='toTaskLink'") . '</li>';
+            if($createBugPriv)   echo '<li>' . html::a('###', $lang->todo->reasonList['bug'], '', "data-toggle='modal' data-target='#productModal' data-moveable='true' data-position='center' id='toBugLink'") . '</li>';
             echo "</ul>";
             if($isonlybody) $_GET['onlybody'] = 'yes';
         }
@@ -198,10 +198,19 @@
         <h4 class="modal-title"><?php echo $lang->project->selectProject;?></h4>
       </div>
       <div class="modal-body">
+        <?php if(empty($projects)):?>
+        <div class="table-empty-tip">
+          <p>
+            <span class="text-muted"><?php echo $lang->project->noProject;?></span>
+            <?php echo html::a("javascript:createProject()", "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
+          </p>
+        </div>
+        <?php else:?>
         <div class='input-group'>
           <?php echo html::select('project', $projects, '', "class='form-control chosen'");?>
           <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['task'], "id='toTaskButton'", 'btn btn-primary');?></span>
         </div>
+        <?php endif;?>
       </div>
     </div>
   </div>
@@ -214,11 +223,20 @@
         <h4 class="modal-title"><?php echo $lang->product->select;?></h4>
       </div>
       <div class="modal-body">
+        <?php if(empty($products)):?>
+        <div class="table-empty-tip">
+          <p>
+            <span class="text-muted"><?php echo $lang->product->noProduct;?></span>
+            <?php echo html::a("javascript:createProduct()", "<i class='icon icon-plus'></i> " . $lang->product->create, '', "class='btn btn-info'");?>
+          </p>
+        </div>
+        <?php else:?>
         <div class='input-group'>
           <?php echo html::select('product', $products, '', "class='form-control chosen'");?>
           <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['story'], "id='toStoryButton'", 'btn btn-primary');?></span>
           <span class='input-group-btn'><?php echo html::commonButton($lang->todo->reasonList['bug'], "id='toBugButton'", 'btn btn-primary');?></span>
         </div>
+        <?php endif;?>
       </div>
     </div>
   </div>

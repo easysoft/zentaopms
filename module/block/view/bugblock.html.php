@@ -12,7 +12,7 @@
 ?>
 <style>
 .block-bugs .c-id {width: 55px;}
-.block-bugs .c-level {width: 50px;text-align: center;}
+.block-bugs .c-level {width: 60px;text-align: center;}
 .block-bugs .c-pri {width: 35px;text-align: center;}
 .block-bugs .c-deadline {width: 95px;}
 .block-bugs .c-status {width: 80px;}
@@ -21,7 +21,7 @@
 .block-bugs.block-sm .c-status {text-align: center;}
 </style>
 <div class='panel-body has-table'>
-  <table class='table table-borderless table-fixed-head table-hover block-bugs <?php if(!$longBlock) echo 'block-sm'?>'>
+  <table class='table table-borderless table-fixed-head table-hover tablesorter block-bugs <?php if(!$longBlock) echo 'block-sm'?>'>
     <thead>
       <tr>
         <th class='c-id-xs'><?php echo $lang->idAB?></th>
@@ -40,11 +40,13 @@
       $viewLink = $this->createLink('bug', 'view', "bugID={$bug->id}");
       ?>
       <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-        <td class='c-id-xs'><?php echo $bug->id;?></td>
+        <td class='c-id-xs'><?php echo sprintf('%03d', $bug->id);?></td>
         <?php if($longBlock):?>
         <td class='c-pri'><span class='label-pri label-pri-<?php echo $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
         <?php endif;?>
-        <td class='c-severity'><span class='label-severity' title='<?php echo zget($lang->bug->severityList, $bug->severity);?>' data-severity='<?php echo zget($lang->bug->severityList, $bug->severity);?>'></span></td>
+        <td class='c-severity'>
+          <span class='label-severity' title='<?php echo zget($lang->bug->severityList, $bug->severity);?>' data-severity='<?php echo $bug->severity;?>'></span>
+        </td>
         <td class='c-name' style='color: <?php echo $bug->color?>' title='<?php echo $bug->title?>'><?php echo $bug->title?></td>
         <td class='c-status' title='<?php echo zget($lang->bug->statusList, $bug->status)?>'>
           <span class="status-<?php echo $bug->status?>">

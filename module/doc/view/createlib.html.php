@@ -23,7 +23,7 @@
           <table class='table table-form'>
             <tr>
               <th class='w-80px'><?php echo $lang->doc->libType?></th>
-              <td><?php echo html::select('libType', $libTypeList, $type, "class='form-control chosen-simple'")?></td>
+              <td><?php echo html::select('libType', $libTypeList, $type, "class='form-control'")?></td>
             </tr>
             <tr class='product'>
               <th><?php echo $lang->doc->product?></th>
@@ -55,7 +55,7 @@
               </td>
             </tr>
             <tr>
-              <td class='text-center' colspan='2'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td>
+              <td class='text-center form-actions' colspan='2'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td>
             </tr>
           </table>
         </form>

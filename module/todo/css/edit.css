@@ -1,2 +1,3 @@
 .todoType {margin-top: 6px;}
 .dateSwitcher {margin-top: 6px;}
+.form-horizontal .required::after{right: -10px;}

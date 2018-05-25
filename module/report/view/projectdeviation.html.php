@@ -12,14 +12,12 @@
   </div>
   <div class='main-col'>
     <div class='cell'>
-      <div class='with-padding'>
-        <div class="table-row" id='conditions'>
-          <div class='input-group w-400px input-group-sm'>
-            <span class='input-group-addon'><?php echo $lang->projectCommon . $lang->report->beginAndEnd;?></span>
-            <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $begin, "class='w-100px form-control form-date' onchange='changeDate(this.value, \"$end\")'");?></div>
-            <span class='input-group-addon'><?php echo $lang->report->to;?></span>
-            <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $end, "class='form-control form-date' onchange='changeDate(\"$begin\", this.value)'");?></div>
-          </div>
+      <div class="table-row" id='conditions'>
+        <div class='input-group w-400px input-group-sm'>
+          <span class='input-group-addon'><?php echo $lang->projectCommon . $lang->report->beginAndEnd;?></span>
+          <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $begin, "class='form-control form-date' onchange='changeDate(this.value, \"$end\")'");?></div>
+          <span class='input-group-addon'><?php echo $lang->report->to;?></span>
+          <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $end, "class='form-control form-date' onchange='changeDate(\"$begin\", this.value)'");?></div>
         </div>
       </div>
     </div>
@@ -30,16 +28,16 @@
           <nav class="panel-actions btn-toolbar"></nav>
         </div>
         <div data-ride='table'>
-          <table class='table table-condensed table-striped table-bordered table-fixed' id='projectList'>
+          <table class='table table-condensed table-striped table-bordered table-fixed no-margin' id='projectList'>
             <thead>
-                <tr class='colhead'>
-                  <th class='w-id'><?php echo $lang->report->id;?></th>
-                  <th><?php echo $lang->report->project;?></th>
-                  <th class="w-100px"><?php echo $lang->report->estimate;?></th>
-                  <th class="w-100px"><?php echo $lang->report->consumed;?></th>
-                  <th class="w-100px"><?php echo $lang->report->deviation;?></th>
-                  <th class="w-100px"><?php echo $lang->report->deviationRate;?></th>
-                </tr>
+              <tr class='colhead'>
+                <th class='w-id'><?php echo $lang->report->id;?></th>
+                <th><?php echo $lang->report->project;?></th>
+                <th class="w-100px"><?php echo $lang->report->estimate;?></th>
+                <th class="w-100px"><?php echo $lang->report->consumed;?></th>
+                <th class="w-100px"><?php echo $lang->report->deviation;?></th>
+                <th class="w-100px"><?php echo $lang->report->deviationRate;?></th>
+              </tr>
             </thead>
             <tbody>
               <?php $chartData = array();?>
@@ -51,7 +49,7 @@
                 <td><?php echo $project->consumed;?></td>
                 <?php $deviation = $project->consumed - $project->estimate;?>
                 <td class="deviation">
-                <?php 
+                <?php
                     if($deviation > 0)
                     {
                         echo '<span class="up">&uarr;</span>' . $deviation;
@@ -62,12 +60,12 @@
                     }
                     else
                     {
-                        echo '<span class="zero">0</span>'; 
+                        echo '<span class="zero">0</span>';
                     }
                 ?>
                 </td>
                 <td class="deviation">
-                  <?php 
+                  <?php
                   $num = $project->estimate ? round($deviation / $project->estimate * 100, 2) : 'n/a';
                   if($num >= 50)
                   {
@@ -109,7 +107,7 @@
               </tr>
             <?php endforeach;?>
             </tbody>
-          </table> 
+          </table>
         </div>
       </div>
     </div>

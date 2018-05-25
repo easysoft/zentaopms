@@ -33,6 +33,7 @@ $lang->testreport->profile     = 'Profile';
 $lang->testreport->value       = 'Value';
 $lang->testreport->none        = 'None';
 $lang->testreport->all         = 'All Report';
+$lang->testreport->deleted     = 'Deleted';
 
 $lang->testreport->legendBasic       = 'Basic Info';
 $lang->testreport->legendStoryAndBug = 'Stories and Bugs of Test';

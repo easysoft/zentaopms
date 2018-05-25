@@ -70,7 +70,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
             <div class='detail-content'><?php echo $this->fetch('file', 'buildform');?></div>
           </div>
 
-          <div class='actions actions-form text-center'>
+          <div class='actions form-actions text-center'>
             <?php
             echo html::hidden('lastEditedDate', $bug->lastEditedDate);
             echo html::submitButton('', '', 'btn btn-wide btn-primary');
@@ -177,10 +177,8 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                 <tr>
                   <th><?php echo $lang->bug->mailto;?></th>
                   <td>
-                    <div class='input-group'>
                     <?php echo html::select('mailto[]', $users, str_replace(' ', '', $bug->mailto), 'class="form-control chosen" multiple');?>
-                    <div class='input-group-btn'><?php echo $this->fetch('my', 'buildContactLists');?></div>
-                    </div>
+                    <?php echo $this->fetch('my', 'buildContactLists');?>
                   </td>
                 </tr>
               </tbody>

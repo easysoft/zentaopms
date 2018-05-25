@@ -85,14 +85,34 @@
     ?>
     <?php foreach(customModel::getFeatureMenu('testcase', 'browse') as $menuItem):?>
     <?php
-    if(isset($menuItem->hidden)) continue;
+    if(isset($menuItem->hidden) and $menuItem->name != 'QUERY') continue;
     $menuType = $menuItem->name;
     if(!$config->testcase->needReview and empty($config->testcase->forceReview) and $menuType == 'wait') continue;
     if($this->config->global->flow == 'onlyTest' and (strpos(',needconfirm,group,zerocase,', ',' . $menuType . ',') !== false)) continue;
-    if($hasBrowsePriv and strpos($menuType, 'QUERY') === 0)
+    if($hasBrowsePriv and $menuType == 'QUERY')
     {
-        $queryID = (int)substr($menuType, 5);
-        echo html::a($this->createLink('testcase', 'browse', "productid=$productID&branch=$branch&browseType=bySearch&param=$queryID"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link' id='{$menuType}Tab'");
+        if(isset($lang->custom->queryList))
+        {
+            echo '<div class="btn-group" id="query">';
+            $active  = '';
+            $current = $menuItem->text;
+            $dropdownHtml = "<ul class='dropdown-menu'>";
+            foreach($lang->custom->queryList as $queryID => $queryTitle)
+            {
+                if($browseType == 'bysearch' and $queryID == $param)
+                {
+                    $active  = 'btn-active-text';
+                    $current = "<span class='text'>{$queryTitle}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+                }
+                $dropdownHtml .= '<li' . ($param == $queryID ? " class='active'" : '') . '>';
+                $dropdownHtml .= html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $queryTitle);
+            }
+            $dropdownHtml .= '</ul>';
+
+            echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $active'");
+            echo $dropdownHtml;
+            echo '</div>';
+        }
     }
     elseif($hasBrowsePriv and ($menuType == 'all' or $menuType == 'needconfirm' or $menuType == 'wait'))
     {
@@ -130,12 +150,13 @@
     }
     elseif($hasGroupPriv and $menuType == 'group')
     {
-        $groupBy  = isset($groupBy) ? $groupBy : '';
+        $groupBy  = isset($groupBy)  ? $groupBy : '';
+        $active   = !empty($groupBy) ? 'btn-active-text' : '';
         $current  = zget($lang->testcase->groups, isset($groupBy) ? $groupBy : '', '');
         if(empty($current)) $current = $lang->testcase->groups[''];
 
         echo "<div id='groupTab' class='btn-group'>";
-        echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "class='btn btn-link' data-toggle='dropdown'");
+        echo html::a('javascript:;', "<span class='text'>{$current}</span>" . " <span class='caret'></span>", '', "class='btn btn-link {$active}' data-toggle='dropdown'");
         echo "<ul class='dropdown-menu'>";
 
         foreach($lang->testcase->groups as $key => $value)

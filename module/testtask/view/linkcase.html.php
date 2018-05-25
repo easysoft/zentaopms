@@ -24,7 +24,8 @@
 
     echo "<div class='btn-group'>";
     $suitViewName = $type == 'bysuite'? $suiteList[$param]->name : $lang->testtask->linkBySuite;
-    echo "<a href='javascript:;' class='btn btn-link' data-toggle='dropdown'><span class='text'>{$suitViewName}</span> <span class='caret'></span></a>";
+    $suitActive   = $type == 'bysuite' ? 'btn-active-text' : '';
+    echo "<a href='javascript:;' class='btn btn-link {$suitActive}' data-toggle='dropdown'><span class='text'>{$suitViewName}</span> <span class='caret'></span></a>";
     echo "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
     if($suiteList)
     {
@@ -43,7 +44,8 @@
 
     echo "<div class='btn-group'>";
     $buildViewName = $type == 'bybuild'? zget($testTask, $param) : $lang->testtask->linkByBuild;
-    echo "<a href='javascript:;' class='btn btn-link' data-toggle='dropdown'><span class='text'>{$buildViewName}</span> <span class='caret'></span></a>";
+    $buildActive   = $type == 'bybuild' ? 'btn-active-text' : '';
+    echo "<a href='javascript:;' class='btn btn-link {$buildActive}' data-toggle='dropdown'><span class='text'>{$buildViewName}</span> <span class='caret'></span></a>";
     echo "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
     if($testTask)
     {

@@ -189,7 +189,7 @@
                   if($task->needConfirm)
                   {
                       echo "(<span class='warning'>{$lang->story->changed}</span> ";
-                      echo html::a($this->createLink('task', 'confirmStoryChange', "taskID=$task->id"), $lang->confirm, 'hiddenwin');
+                      echo html::a($this->createLink('task', 'confirmStoryChange', "taskID=$task->id"), $lang->confirm, 'hiddenwin', "class='btn btn-mini btn-info'");
                       echo ")";
                   }
                   ?>
@@ -365,8 +365,6 @@
   
     if(!empty($task->parent)) echo html::a(helper::createLink('task', 'view', "taskID=$task->parent"), "<i class='icon icon-chevron-double-up'></i>", '', "class='btn btn-link' title='{$lang->task->parent}'");
     ?>
-    <?php else:?>
-    <?php common::printBack($browseLink);?>
     <?php endif;?>
   </div>
 </div>

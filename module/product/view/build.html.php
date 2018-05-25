@@ -16,7 +16,7 @@
   <div class='btn-toolbar pull-left'>
     <a class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->product->build;?></span><span class='label label-light label-badge'><?php echo count($builds);?></span></a>
   </div>
-  <div class='btn-toolbar pull-right'><?php common::printLink('build', 'create', "product=$product->id", "<i class='icon icon-plus'> </i>" . $lang->build->create, '', "class='btn btn-primary'");?></div>
+  <div class='btn-toolbar pull-right'><?php common::printLink('build', 'create', "product=$product->id", "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-primary'");?></div>
 </div>
 <div id='mainContent' class='main-table'>
   <table class='table' id='buildList'>

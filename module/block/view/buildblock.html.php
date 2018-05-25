@@ -11,7 +11,7 @@
  */
 ?>
 <div class='panel-body has-table'>
-  <table class='table table-borderless table-hover table-fixed-head block-builds'>
+  <table class='table table-borderless table-hover table-fixed-head tablesorter block-builds'>
     <thead>
       <tr>
         <th class='w-id text-center'><?php echo $lang->idAB?></th>
@@ -29,7 +29,7 @@
       $viewLink = $this->createLink('build', 'view', "buildID={$build->id}");
       ?>
       <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-        <td class='text-center'><?php echo $build->id;?></td>
+        <td class='text-center'><?php echo sprintf('%03d', $build->id);?></td>
         <?php if($longBlock):?>
         <td title='<?php echo $build->productName?>'><?php echo $build->productName?></td>
         <?php endif;?>

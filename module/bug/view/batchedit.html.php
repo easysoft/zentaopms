@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('dittoNotice', $this->lang->bug->dittoNotice);?>
-<div id='mainContent' class='main-content'>
+<div id='mainContent' class='main-content fade'>
   <div class='main-header'>
     <h2><?php echo $lang->bug->common . $lang->colon . $lang->bug->batchEdit;?></h2>
     <div class="pull-right btn-toolbar">
@@ -62,7 +62,7 @@
           <th class='w-100px<?php echo zget($visibleFields, 'browser', ' hidden') . zget($requiredFields, 'browser', '', ' required');?>'><?php echo $lang->bug->browser;?></th>
           <th class='w-100px<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->bug->keywords;?></th>
           <th class='w-120px<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>'><?php echo $lang->bug->resolvedByAB;?></th>
-          <th class='w-120px<?php echo zget($visibleFields, 'resolution', ' hidden')?>'><?php echo $lang->bug->resolutionAB;?></th>
+          <th class='w-150px<?php echo zget($visibleFields, 'resolution', ' hidden')?>'><?php echo $lang->bug->resolutionAB;?></th>
         </tr>
       </thead>
       <tbody>
@@ -125,11 +125,11 @@
           <td <?php echo zget($visibleFields, 'keywords', "class='hidden'")?>><?php echo html::input("keywords[$bugID]", $bug->keywords, 'class=form-control');?></td>
           <td class='<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("resolvedBys[$bugID]", $users, $bug->resolvedBy, "class='form-control chosen'");?></td>
           <td <?php echo zget($visibleFields, 'resolution', "class='hidden'")?>>
-            <table class='table-borderless w-100px'>
+            <table class='table-borderless table no-margin'>
               <tr>
-                <td class='pd-0'><?php echo html::select("resolutions[$bugID]", $resolutionList, $bug->resolution, "class=form-control onchange=setDuplicate(this.value,$bugID)");?></td>
+                <td class='pd-0'><?php echo html::select("resolutions[$bugID]", $resolutionList, $bug->resolution, "class='form-control' onchange=setDuplicate(this.value,$bugID)");?></td>
                 <td class='pd-0 w-p50' id='<?php echo 'duplicateBugBox' . $bugID;?>' <?php if($bug->resolution != 'duplicate') echo "style='display:none'";?>>
-                  <?php echo html::input("duplicateBugs[$bugID]", '', "class=form-control placeholder='{$lang->bug->duplicateBug}'");?>
+                  <?php echo html::input("duplicateBugs[$bugID]", '', "class='form-control duplicate-input' placeholder='{$lang->bug->duplicateBug}'");?>
                 </td>
               </tr>
             </table>
@@ -138,7 +138,12 @@
         <?php endforeach;?>
       </tbody>
       <tfoot>
-        <tr><td colspan='<?php echo $branchProduct ? $columns : ($columns - 1);?>' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td></tr>
+        <tr>
+          <td colspan='<?php echo $branchProduct ? $columns : ($columns - 1);?>' class='text-center form-actions'>
+            <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+            <?php echo html::backButton('', '', 'btn btn-wide');?>
+          </td>
+        </tr>
       </tfoot>
     </table>
   </form>

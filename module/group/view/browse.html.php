@@ -23,47 +23,47 @@
     <?php endif;?>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
+<div id='mainContent' class='main-table'>
   <table class='table' id='groupList'>
     <thead>
       <tr>
-       <th class='w-id text-center'><?php echo $lang->group->id;?></th>
-       <th class='w-100px'><?php echo $lang->group->name;?></th>
-       <th class='w-300px'><?php echo $lang->group->desc;?></th>
-       <th><?php echo $lang->group->users;?></th>
-       <th class='c-actions text-center'><?php echo $lang->actions;?></th>
+        <th class='w-id text-center'><?php echo $lang->group->id;?></th>
+        <th class='w-130px'><?php echo $lang->group->name;?></th>
+        <th class='w-300px'><?php echo $lang->group->desc;?></th>
+        <th><?php echo $lang->group->users;?></th>
+        <th class='c-actions text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
-    <?php foreach($groups as $group):?>
-    <?php $users = implode(',', $groupUsers[$group->id]);?>
-    <tr>
-      <td class='text-center'><?php echo $group->id;?></td>
-      <td><?php echo $group->name;?></td>
-      <td title='<?php echo $group->desc?>'><?php echo $group->desc;?></td>
-      <td title='<?php echo $users;?>'><?php echo $users;?></td>
-      <td class='c-actions'>
-        <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
-        <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye');?>
-        <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
-        <?php $lang->group->managemember = $lang->group->manageMember;?>
-        <?php common::printIcon('group', 'managemember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='750'");?>
-        <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
-        <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
-        <?php
-        if(common::hasPriv('group', 'delete') and $group->role != 'limited')
-        {
-            $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
-            echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"groupList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->group->delete}' class='btn'");
-        }
-        else
-        {
-            echo "<button class='btn disabled'><i class='icon icon-trash disabled' title='{$lang->group->delete}'></i></button>";
-        }
-        ?>
-      </td>
-    </tr>
-    <?php endforeach;?>
+      <?php foreach($groups as $group):?>
+      <?php $users = implode(',', $groupUsers[$group->id]);?>
+      <tr>
+        <td class='text-center'><?php echo $group->id;?></td>
+        <td><?php echo $group->name;?></td>
+        <td title='<?php echo $group->desc?>'><?php echo $group->desc;?></td>
+        <td title='<?php echo $users;?>'><?php echo $users;?></td>
+        <td class='c-actions'>
+          <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
+          <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye');?>
+          <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
+          <?php $lang->group->managemember = $lang->group->manageMember;?>
+          <?php common::printIcon('group', 'managemember', "groupID=$group->id", $group, 'list', 'persons', '', 'iframe', 'yes', "data-width='750'");?>
+          <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
+          <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', 'iframe', 'yes', "data-width='550'");?>
+          <?php
+          if(common::hasPriv('group', 'delete') and $group->role != 'limited')
+          {
+              $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
+              echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"groupList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->group->delete}' class='btn'");
+          }
+          else
+          {
+              echo "<button class='btn disabled'><i class='icon icon-trash disabled' title='{$lang->group->delete}'></i></button>";
+          }
+          ?>
+        </td>
+      </tr>
+      <?php endforeach;?>
     </tbody>
   </table>
 </div>

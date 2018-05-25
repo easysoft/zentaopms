@@ -11,7 +11,7 @@
 ?>
 <?php include '../../common/view/header.html.php'; ?>
 <div class="alert with-icon" id="scoreStart">
-  <i class="icon-inbox"></i>
+  <i class="icon-cube"></i>
   <div class="content">
     <p><?php echo $lang->score->resetTips; ?></p>
     <p><button class="btn btn-primary" id="scoreReset"><?php echo $lang->score->resetStart; ?></button></p>

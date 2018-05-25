@@ -786,8 +786,8 @@ class testcaseModel extends model
             $case->branch         = $data->branches[$caseID];
             $case->module         = $data->modules[$caseID];
             $case->story          = $data->stories[$caseID];
-            $case->color          = $data->colors[$caseID];
-            $case->title          = $data->titles[$caseID];
+            $case->color          = $data->color[$caseID];
+            $case->title          = $data->title[$caseID];
             $case->precondition   = $data->precondition[$caseID];
             $case->keywords       = $data->keywords[$caseID];
             $case->type           = $data->types[$caseID];
@@ -1333,18 +1333,7 @@ class testcaseModel extends model
                 echo "<span title='$stages'>$stages</span>";
                 break;
             case 'status':
-                if($case->needconfirm)
-                {
-                    echo "(<span class='text-warning'>{$this->lang->story->changed}</span> ";
-                    echo html::a(helper::createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $this->lang->confirm, 'hiddenwin');
-                    echo ")";
-                }
-                else
-                {
-                    echo "<span class='status-{$case->status}'><span class='label label-dot'></span><span class='status-text'>";
-                    echo $this->lang->testcase->statusList[$case->status];
-                    echo '</span></span>';
-                }
+                $case->needconfirm ? print("<span class='status-changed'><span class='label label-dot'></span> {$this->lang->story->changed}</span>") : print("<span class='status-{$case->status}'><span class='label label-dot'></span><span class='status-text'>{$this->lang->testcase->statusList[$case->status]}</span></span>");
                 break;
             case 'story':
                 static $stories = array();

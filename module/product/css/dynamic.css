@@ -7,7 +7,7 @@
 .dynamic-date > .date-label + .date-text {font-size: 14px; line-height: 14px;}
 .dynamic-date > .date-label {margin-top: -8px;}
 .dynamic-date > .btn {position: absolute; right: 10px; top: 15px;}
-.dynamic .timeline {border: 2px solid #eee; border-radius: 4px; margin-bottom: 20px; padding: 10px 20px 10px 100px; max-height: 800px; transition: max-height .2s; overflow: hidden;}
+.dynamic .timeline {border: 2px solid #eee; border-radius: 4px; margin-bottom: 20px; padding: 10px 20px 10px 100px; transition: max-height .2s; overflow: hidden;}
 .dynamic .timeline-tag {left: -75px; font-size: 14px; color: #838A9D;}
 .dynamic .timeline-text {color: #3C4353;}
 .dynamic .text-muted {color: #838A9D;}
@@ -16,5 +16,5 @@
 .dynamic.active .dynamic-date {border-color: #00a9fc;}
 .dynamic.active .dynamic-date:before {background-color: #00a9fc;}
 .dynamic.collapsed .timeline {max-height: 58px;}
-.dynamic.collapsed .timeline > li + li:after {display: none;}
-.dynamic.collapsed .dynamic-btn > .icon:before {content: '\f0d7';}
+.dynamic.collapsed .timeline > li + li {display: none;}
+.dynamic.collapsed .dynamic-btn > .icon:before {content: '\f0d7'; }

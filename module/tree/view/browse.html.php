@@ -26,7 +26,7 @@
         <?php
         if($viewType == 'doc')
         {
-            echo $lang->doc->manageType;
+            echo $lang->doc->manageType . $lang->colon . $root->name;
         }
         elseif($viewType == 'line')
         {
@@ -34,9 +34,8 @@
         }
         else
         {
-            echo $lang->tree->common;
+            echo $lang->tree->common . $lang->colon . $root->name;
         }
-        echo $lang->colon . $root->name;
         ?>
       </span>
     </div>
@@ -187,8 +186,8 @@ $(function()
         {
             sort:
             {
-                 title: '<?php echo $lang->tree->dragAndSort ?>',
-                 template: '<a class="sort-handler"><?php echo $lang->tree->sort ?></a>'
+                title: '<?php echo $lang->tree->dragAndSort ?>',
+                template: '<a class="sort-handler"><?php echo $lang->tree->sort ?></a>'
             },
             edit:
             {
@@ -266,7 +265,7 @@ $(function()
         e.stopPropagation();
     });
 
-    $('#modulemenu > .nav > li > a[href*=tree][href*=browse]').not('[href*=<?php echo $viewType;?>]').parent().removeClass('active');
+    $('#subNavbar > ul > li > a[href*=tree][href*=browse]').not('[href*=<?php echo $viewType;?>]').parent().removeClass('active');
     if(window.config.viewType == 'line') $('#modulemenu > .nav > li > a[href*=product][href*=all]').parent('li[data-id=all]').addClass('active');
 });
 </script>

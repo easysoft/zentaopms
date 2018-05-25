@@ -3,8 +3,8 @@
     <span class="label-id"><?php echo $task->id?></span>
     <span class="label label-task"><?php echo $lang->task->common?></span>
     <span class="title">
-      <?php if(!empty($task->parent)) echo '<span class="label no-margin">' . $this->lang->task->childrenAB . '</span>';?>
-      <?php if(!empty($task->team)) echo '<span class="label no-margin">' . $this->lang->task->multipleAB . '</span>';?>
+      <?php if(!empty($task->parent)) echo '<span class="label no-margin label-badge label-light">' . $this->lang->task->childrenAB . '</span>';?>
+      <?php if(!empty($task->team)) echo '<span class="label no-margin label-badge label-light">' . $this->lang->task->multipleAB . '</span>';?>
       <?php echo isset($task->parentName) ? $task->parentName . '/' : '';?><?php echo $task->name;?>
     </span>
   </h2>

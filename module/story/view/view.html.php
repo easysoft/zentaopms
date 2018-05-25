@@ -36,7 +36,10 @@
         </ul>
       </small>
       <?php endif; ?>
-	</div>
+      <?php if($story->deleted):?>
+      <span class='label label-danger'><?php echo $lang->story->deleted;?></span>
+      <?php endif; ?>
+    </div>
   </div>
 </div>
 <div id="mainContent" class="main-row">

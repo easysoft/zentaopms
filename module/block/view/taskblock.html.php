@@ -13,7 +13,7 @@
 <style>
 .block-tasks .c-id {width: 55px;}
 .block-tasks .c-pri {width: 45px;text-align: center;}
-.block-tasks .c-estimate {width: 55px;}
+.block-tasks .c-estimate {width: 60px;}
 .block-tasks .c-deadline {width: 95px;}
 .block-tasks .c-status {width: 80px;}
 .block-tasks.block-sm .estimate,
@@ -22,7 +22,7 @@
 .block-tasks.block-sm .c-status {text-align: center;}
 </style>
 <div class='panel-body has-table'>
-  <table class='table table-borderless table-hover table-fixed-head block-tasks <?php if(!$longBlock) echo 'block-sm';?>'>
+  <table class='table table-borderless table-hover table-fixed-head tablesorter block-tasks <?php if(!$longBlock) echo 'block-sm';?>'>
     <thead>
       <tr>
         <th class='c-id-xs'><?php echo $lang->idAB;?></th>
@@ -42,7 +42,7 @@
       $viewLink = $this->createLink('task', 'view', "taskID={$task->id}");
       ?>
       <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
-        <td class='c-id-xs'><?php echo $task->id;?></td>
+        <td class='c-id-xs'><?php echo sprintf('%03d', $task->id);?></td>
         <td class='c-pri'><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri)?></span></td>
         <td class='c-name' style='color: <?php echo $task->color?>' title='<?php echo $task->name?>'><?php echo $task->name?></td>
         <?php if($longBlock):?>

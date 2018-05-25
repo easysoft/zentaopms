@@ -15,24 +15,32 @@ $webRoot = $this->app->getWebRoot();
 $jsRoot  = $webRoot . "js/";
 ?>
 <?php include '../../common/view/chosen.html.php';?>
-<form action="<?php echo inlink('edit', 'deptID=' . $dept->id);?>" target='hiddenwin' method='post' class='mt-10px' id='dataform'>
-  <table class='table table-form' style='width:100%'>
-    <tr>
-      <th class='w-80px'><?php echo $lang->dept->parent;?></th>
-      <td><?php echo html::select('parent', $optionMenu, $dept->parent, "class='form-control chosen'");?></td>
-    </tr>
-    <tr>
-      <th class='w-80px'><?php echo $lang->dept->name;?></th>
-      <td><?php echo html::input('name', $dept->name, "class='form-control' autocomplete='off'");?></td>
-    </tr>
-    <tr>
-      <th class='w-80px'><?php echo $lang->dept->manager;?></th>
-      <td><?php echo html::select('manager', $users, $dept->manager, "class='form-control chosen'", true);?></td>
-    </tr>
-    <tr>
-      <td colspan='2' class='text-center'>
-      <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
-      </td>
-    </tr>
-  </table>
-</form>
+<div class='modal-dialog w-500px'>
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
+    <h4 class="modal-title"><strong><?php echo $lang->dept->edit;?></strong></h4>
+  </div>
+  <div class='modal-body'>
+    <form action="<?php echo inlink('edit', 'deptID=' . $dept->id);?>" target='hiddenwin' method='post' class='mt-10px' id='dataform'>
+      <table class='table table-form' style='width:100%'>
+        <tr>
+          <th class='w-80px'><?php echo $lang->dept->parent;?></th>
+          <td><?php echo html::select('parent', $optionMenu, $dept->parent, "class='form-control chosen'");?></td>
+        </tr>
+        <tr>
+          <th class='w-80px'><?php echo $lang->dept->name;?></th>
+          <td><?php echo html::input('name', $dept->name, "class='form-control' autocomplete='off'");?></td>
+        </tr>
+        <tr>
+          <th class='w-80px'><?php echo $lang->dept->manager;?></th>
+          <td><?php echo html::select('manager', $users, $dept->manager, "class='form-control chosen'", true);?></td>
+        </tr>
+        <tr>
+          <td colspan='2' class='text-center'>
+          <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>

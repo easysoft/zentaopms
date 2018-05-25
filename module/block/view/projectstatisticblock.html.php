@@ -29,6 +29,11 @@
 </style>
 <div class="panel-body">
   <div class="table-row">
+    <?php if(empty($projects)):?>
+    <div class="table-empty-tip">
+      <p><span class="text-muted"><?php echo $lang->project->noProject;?></span> <?php common::printLink('project', 'create', '', "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?></p>
+    </div>
+    <?php else:?>
     <div class="col tab-content">
       <?php foreach($projects as $project):?>
       <div class="tab-pane fade<?php if($project == reset($projects)) echo ' active in';?>" id="tab3Content<?php echo $project->id;?>">
@@ -115,5 +120,6 @@
         <?php endforeach;?>
       </ul>
     </div>
+    <?php endif;?>
   </div>
 </div>

@@ -18,7 +18,7 @@
   <div class='center-block mw-1400px'>
     <div class='main-header'>
       <h2><?php echo $lang->testreport->edit;?></h2>
-      <div class='btn-toolbar pull-right'><?php echo html::backButton();?></div>
+      <div class='btn-toolbar pull-right'><?php echo html::backButton('<i class="icon icon-back icon-sm"></i>' . $lang->goback, '', 'btn btn-link');?></div>
     </div>
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <div class='detail'>
@@ -42,18 +42,22 @@
                 <?php echo html::select('owner', $users, $report->owner, "class='form-control chosen'")?>
               </div>
             </td>
+            <td class='w-50px'></td>
           </tr>
           <tr>
             <th><?php echo $lang->testreport->members?></th>
             <td colspan='2'><?php echo html::select('members[]', $users, $report->members, "class='form-control chosen' multiple")?></td>
+            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->testreport->title?></th>
             <td colspan='2'><?php echo html::input('title', $report->title, "class='form-control'")?></td>
+            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->testreport->goal?></th>
             <td colspan='2'><?php echo $project->desc?></td>
+            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->testreport->profile?></th>
@@ -65,17 +69,20 @@
             unset($bugInfo['countBugByTask']); unset($bugInfo['bugConfirmedRate']); unset($bugInfo['bugCreateByCaseRate']); unset($bugInfo['foundBugs']);
             ?>
             </td>
+            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->testreport->report?></th>
             <td colspan='2'><?php echo html::textarea('report', $report->report, "class='form-control'")?></td>
+            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->files?></th>
             <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
+            <td></td>
           </tr>
           <tr>
-            <td class='text-center' colspan='3'>
+            <td class='text-center form-actions' colspan='4'>
               <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
               <?php echo html::backButton('', '', 'btn btn-wide');?>
             </td>

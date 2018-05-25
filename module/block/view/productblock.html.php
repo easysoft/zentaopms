@@ -11,24 +11,20 @@
  */
 ?>
 <style>
-.block-products .c-plans {width: 70px;color: #8e939a;text-align: center;}
-.block-products .c-publishs {width: 70px;color: #8e939a;text-align: center;}
-.block-products .c-stories {width: 80px;color: #8e939a;text-align: center;}
-.block-products .c-bugs {width: 90px;color: #8e939a;text-align: center;}
 .block-products.block-sm .c-project {display: none;}
 </style>
 <div class="panel-body has-table block-products">
-  <table class='table table-borderless table-hover table-fixed-head table-fixed'>
+  <table class='table table-borderless table-hover table-fixed-head tablesorter table-fixed'>
     <thead>
       <tr>
         <th class='c-name'><?php echo $lang->product->name;?></th>
         <?php if($longBlock):?>
-        <th class='c-name'><?php echo $lang->product->currentProject;?></th>
+        <th class='c-name .c-project'><?php echo $lang->product->currentProject;?></th>
         <?php endif;?>
         <th class='c-num'><?php echo $lang->product->plans;?></th>
         <th class='c-num'><?php echo $lang->product->releases;?></th>
         <th class='c-num'><?php echo $lang->story->statusList['active'] . $lang->story->common;?></th>
-        <th class='c-num'><?php echo $lang->bug->unResolved . $lang->bug->common;?></th>
+        <th class='c-num w-90px'><?php echo $lang->bug->unResolved . $lang->bug->common;?></th>
       </tr>
     </thead>
     <tbody>
@@ -40,7 +36,7 @@
       <tr class='text-center' data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
         <td class='c-name text-left' title='<?php echo $product->name?>'><?php echo $product->name?></td>
         <?php if($longBlock):?>
-        <td class='c-name text-left'><?php echo zget($projects, $product->id, '');?></td>
+        <td class='c-name .c-project text-left'><?php echo zget($projects, $product->id, '');?></td>
         <?php endif;?>
         <td class="c-num"><?php echo $product->plans?></td>
         <td class="c-num"><?php echo $product->releases?></td>

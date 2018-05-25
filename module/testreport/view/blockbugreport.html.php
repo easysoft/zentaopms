@@ -1,8 +1,6 @@
 <table class='table table-form'>
-<?php $row = 0;?>
-<?php foreach($bugInfo as $infoKey => $infoValue):?>
-  <?php if(($row % 1) == 0) echo '<tr>';?>
-  <?php $row++;?>
+  <?php foreach($bugInfo as $infoKey => $infoValue):?>
+  <tr>
     <td class='text-top'>
       <table class='table table-condensed table-report' id='bugSeverityGroups'>
         <?php if(empty($infoValue)):?>
@@ -68,6 +66,6 @@
         <?php endif;?>
       </table>
     </td>
-  <?php if(($row % 1) == 0) echo '<tr>';?>
+  </tr>
   <?php endforeach;?>
 </table>

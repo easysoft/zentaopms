@@ -39,7 +39,7 @@
     <div class='main-header'>
       <h2><?php echo $lang->project->create;?></h2>
       <div class="pull-right btn-toolbar">
-        <button type='button' class='btn btn-link' id='cpmBtn'><?php echo html::icon($lang->icons['copy']) . ' ' . $lang->project->copy;?></button>
+        <button type='button' class='btn btn-link' id='cpmBtn'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
       </div>
     </div>
     <form class='form-indicator main-form' method='post' target='hiddenwin' id='dataform'>
@@ -83,7 +83,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->type;?></th>
-          <td><?php echo html::select('type', $lang->project->typeList, '', "class='form-control chosen' onchange='showTypeTips()'");?></td>
+          <td><?php echo html::select('type', $lang->project->typeList, '', "class='form-control' onchange='showTypeTips()'");?></td>
           <td class='muted' colspan='2'><div class='type-tips'><?php echo $lang->project->typeDesc;?></div></td>
         </tr>
         <tr <?php if($this->config->global->flow == 'onlyTask') echo "class='hidden'";?>>
@@ -150,12 +150,12 @@
 <div class='modal fade' id='copyProjectModal'>
   <div class='modal-dialog mw-800px'>
     <div class='modal-header'>
-      <button type='button' class='close' data-dismiss='modal'>&times;</button>
+      <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
       <h4 class='modal-title' id='myModalLabel'><?php echo $lang->project->copyTitle;?></h4>
     </div>
     <div class='modal-body'>
       <?php if(count($projects) == 1):?>
-      <div class='alert alert-warning with-icon'>
+      <div class='alert with-icon'>
         <i class='icon-exclamation-sign'></i>
         <div class='content'><?php echo $lang->project->copyNoProject;?></div>
       </div>

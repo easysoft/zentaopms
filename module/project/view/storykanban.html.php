@@ -36,7 +36,7 @@
     }
     ?>
     </div>
-    <?php if($productID and !$this->loadModel('story')->checkForceReview()) common::printLink('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&project=$project->id", "<i class='icon icon-plus'> </i>" . $lang->project->createStory, '', "class='btn btn-primary'");?>
+    <?php if($productID and !$this->loadModel('story')->checkForceReview()) common::printLink('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&project=$project->id", "<i class='icon icon-plus'></i> " . $lang->project->createStory, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php
@@ -65,9 +65,9 @@ $account = $this->app->user->account;
                   <?php echo html::a($this->createLink('story', 'view', "story=$story->id", '', true), "#{$story->id} {$story->title}", '', 'class="title kanbaniframe" title="' . $story->title . '"');?>
                   <div class='info'>
                     <span class='label-pri label-pri-<?php echo $story->pri?>' title='<?php echo $lang->story->pri?>'><?php echo zget($lang->story->priList, $story->pri);?></span>
-                    <span class='status-<?php echo $story->status;?>' title='<?php echo $lang->story->status?>'><span class="label label-dot"></span> <?php echo $lang->story->statusList[$story->status];?></span>
+                    <span class='status status-<?php echo $story->status;?>' title='<?php echo $lang->story->status?>'><span class="label label-dot"></span> <?php echo $lang->story->statusList[$story->status];?></span>
                     <?php if(common::hasPriv('project', 'unlinkStory')):?>
-                    <div class='pull-right'><?php echo html::a($this->createLink('project', 'unlinkStory', "projectID=$projectID&story=$story->id"), "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->project->unlinkStory}'");?></div>
+                    <div class='pull-right'><?php echo html::a($this->createLink('project', 'unlinkStory', "projectID=$projectID&story=$story->id"), "<i class='icon icon-unlink icon-sm'></i>", 'hiddenwin', "title='{$lang->project->unlinkStory}'");?></div>
                     <?php endif;?>
                     <div class='pull-right text-muted story-estimate' title='<?php echo $lang->story->estimate?>'><?php echo $story->estimate . 'h ';?></div>
                   </div>

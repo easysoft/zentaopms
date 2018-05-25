@@ -26,7 +26,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->story->closedReason;?></th>
-          <td class='w-p25-f'><?php echo html::select('closedReason', $lang->story->reasonList, '', 'class="form-control chosen-simple" onchange="setStory(this.value)"');?></td><td></td>
+          <td class='w-p25-f'><?php echo html::select('closedReason', $lang->story->reasonList, '', 'class="form-control" onchange="setStory(this.value)"');?></td><td></td>
         </tr>
         <tr id='duplicateStoryBox' style='display:none'>
           <th><?php echo $lang->story->duplicateStory;?></th>
@@ -41,7 +41,7 @@
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='8' class='form-control'");?></td>
         </tr>
         <tr>
-          <td colspan='3' class='text-center'>
+          <td colspan='3' class='text-center form-actions'>
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
             <?php echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"), 'self', '', 'btn btn-wide');?>
           </td>

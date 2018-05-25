@@ -74,16 +74,15 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan='9' class='text-center'>
+        <td colspan='9' class='text-center form-actions'>
           <?php
           if(!$insert)
           {
-            include '../../common/view/noticeimport.html.php';
-            echo "<button type='button' data-toggle='myModal' class='btn btn-primary btn-wide'>{$lang->save}</button>";
+            echo "<button type='button' data-toggle='modal' data-target='#importNoticeModal' class='btn btn-primary btn-wide'>{$lang->save}</button>";
           }
           else
           {
-              echo html::submitButton('', '', 'btn btn-primary btn-wide');
+            echo html::submitButton('', '', 'btn btn-primary btn-wide');
           }
           echo ' &nbsp; ' . html::backButton('', '', 'btn btn-wide')
           ?>
@@ -91,6 +90,7 @@
       </tr>
     </tfoot>
   </table>
+  <?php if(!$insert) include '../../common/view/noticeimport.html.php';?>
   </form>
 </div>
 <?php endif;?>

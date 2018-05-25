@@ -25,4 +25,7 @@ else
 ?>
 <style>
 #contactListMenu + .chosen-container {min-width: 100px;}
+td > #mailto + .chosen-container .chosen-choices {border-radius: 2px 2px 0 0;}
+td > #mailto + .chosen-container + #contactListMenu + .chosen-container > .chosen-single {border-radius: 0 0 2px 2px; border-top-width: 0; padding-top: 6px;}
+#contactListMenu + .chosen-container.chosen-container-active > .chosen-single {border-top-width: 1px!important; padding-top: 5px!important;}
 </style>

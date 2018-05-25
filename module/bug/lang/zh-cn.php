@@ -103,24 +103,26 @@ $lang->bug->copy               = '复制Bug';
 $lang->bug->search             = '搜索';
 
 /* 查询条件列表。*/
-$lang->bug->assignToMe        = '指派给我';
-$lang->bug->openedByMe        = '由我创建';
-$lang->bug->resolvedByMe      = '由我解决';
-$lang->bug->closedByMe        = '由我关闭';
-$lang->bug->assignToNull      = '未指派';
-$lang->bug->unResolved        = '未解决';
-$lang->bug->toClosed          = '待关闭';
-$lang->bug->unclosed          = '未关闭';
-$lang->bug->unconfirmed       = '未确认';
-$lang->bug->longLifeBugs      = '久未处理';
-$lang->bug->postponedBugs     = '被延期';
-$lang->bug->overdueBugs       = '过期Bug';
-$lang->bug->allBugs           = '所有';
-$lang->bug->byQuery           = '搜索';
-$lang->bug->needConfirm       = '需求变动';
-$lang->bug->allProduct        = '所有' . $lang->productCommon;
-$lang->bug->my                = '我的';
-$lang->bug->yesterdayResolved = '昨天解决';
+$lang->bug->assignToMe         = '指派给我';
+$lang->bug->openedByMe         = '由我创建';
+$lang->bug->resolvedByMe       = '由我解决';
+$lang->bug->closedByMe         = '由我关闭';
+$lang->bug->assignToNull       = '未指派';
+$lang->bug->unResolved         = '未解决';
+$lang->bug->toClosed           = '待关闭';
+$lang->bug->unclosed           = '未关闭';
+$lang->bug->unconfirmed        = '未确认';
+$lang->bug->longLifeBugs       = '久未处理';
+$lang->bug->postponedBugs      = '被延期';
+$lang->bug->overdueBugs        = '过期Bug';
+$lang->bug->allBugs            = '所有';
+$lang->bug->byQuery            = '搜索';
+$lang->bug->needConfirm        = '需求变动';
+$lang->bug->allProduct         = '所有' . $lang->productCommon;
+$lang->bug->my                 = '我的';
+$lang->bug->yesterdayResolved  = '昨天解决';
+$lang->bug->yesterdayConfirmed = '昨天确认';
+$lang->bug->yesterdayClosed    = '昨天关闭';
 
 $lang->bug->assignToMeAB   = '指派给我';
 $lang->bug->openedByMeAB   = '由我创建';
@@ -129,7 +131,7 @@ $lang->bug->resolvedByMeAB = '由我解决';
 $lang->bug->ditto       = '同上';
 $lang->bug->dittoNotice = '该bug与上一bug不属于同一产品！';
 $lang->bug->noAssigned  = '未指派';
-$lang->bug->noBug       = '暂时没有BUG，您现在可以';
+$lang->bug->noBug       = '暂时没有Bug，您现在可以';
 $lang->bug->noModule    = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
 
 /* 页面标签。*/
@@ -165,6 +167,8 @@ $lang->bug->remindTask            = '该Bug已经转化为任务，是否更新�
 $lang->bug->skipClose             = 'Bug %s 不是已解决状态，不能关闭。';
 $lang->bug->applyTemplate         = '应用模板';
 $lang->bug->confirmDeleteTemplate = '您确认要删除该模板吗？';
+$lang->bug->hasSubmittedTest      = '开发已提交测试申请，';
+$lang->bug->nowToTest             = '现在去测试';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步骤]</p>";
@@ -334,18 +338,18 @@ $lang->bug->report->bugsPerProject->graph->xAxisName     = $lang->projectCommon;
 $lang->bug->report->bugsPerBuild->graph->xAxisName       = '版本';
 $lang->bug->report->bugsPerModule->graph->xAxisName      = '模块';
 
-$lang->bug->report->openedBugsPerDay->type                = 'bar';
+$lang->bug->report->openedBugsPerDay->type               = 'bar';
 $lang->bug->report->openedBugsPerDay->graph->xAxisName   = '日期';
 
-$lang->bug->report->resolvedBugsPerDay->type              = 'bar';
+$lang->bug->report->resolvedBugsPerDay->type             = 'bar';
 $lang->bug->report->resolvedBugsPerDay->graph->xAxisName = '日期';
 
-$lang->bug->report->closedBugsPerDay->type                = 'bar';
+$lang->bug->report->closedBugsPerDay->type               = 'bar';
 $lang->bug->report->closedBugsPerDay->graph->xAxisName   = '日期';
 
-$lang->bug->report->openedBugsPerUser->graph->xAxisName  = '用户';
-$lang->bug->report->resolvedBugsPerUser->graph->xAxisName= '用户';
-$lang->bug->report->closedBugsPerUser->graph->xAxisName  = '用户';
+$lang->bug->report->openedBugsPerUser->graph->xAxisName   = '用户';
+$lang->bug->report->resolvedBugsPerUser->graph->xAxisName = '用户';
+$lang->bug->report->closedBugsPerUser->graph->xAxisName   = '用户';
 
 $lang->bug->report->bugsPerSeverity->graph->xAxisName       = '严重程度';
 $lang->bug->report->bugsPerResolution->graph->xAxisName     = '解决方案';

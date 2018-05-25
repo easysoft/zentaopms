@@ -62,8 +62,8 @@
     $this->lang->story->create = $this->lang->project->createStory;
     if($productID and !$this->loadModel('story')->checkForceReview())
     {
-        common::printLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&project=$project->id", "<i class='icon icon-plus'> </i>" . $lang->story->batchCreate, '', "class='btn btn-secondary'");
-        common::printLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&project=$project->id", "<i class='icon icon-plus'> </i>" . $lang->story->create, '', "class='btn btn-primary'");
+        common::printLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&project=$project->id", "<i class='icon icon-plus'></i> " . $lang->story->batchCreate, '', "class='btn btn-secondary'");
+        common::printLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&project=$project->id", "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-primary'");
     }
     ?>
   </div>

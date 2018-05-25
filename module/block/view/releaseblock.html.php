@@ -11,7 +11,7 @@
  */
 ?>
 <div class='panel-body has-table'>
-  <table class='table table-borderless table-hover table-fixed block-release'>
+  <table class='table table-borderless table-hover table-fixed tablesorter block-release'>
     <thead>
       <tr>
         <?php if($longBlock):?>
@@ -34,7 +34,7 @@
       ?>
       <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
         <?php if($longBlock):?>
-        <td class='text-center'><?php echo $release->id;?></td>
+        <td class='text-center'><?php echo sprintf('%03d', $release->id);?></td>
         <td title='<?php echo $release->productName?>'><?php echo $release->productName?></td>
         <?php endif;?>
         <td title='<?php echo $release->name?>'><?php echo $release->name?></td>

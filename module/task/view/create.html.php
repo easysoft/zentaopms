@@ -22,7 +22,7 @@
         <?php include '../../common/view/customfield.html.php';?>
       </div>
     </div>
-    <form class='load-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
+    <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->task->type;?></th>
@@ -104,7 +104,7 @@
           ?>
           <td colspan='<?php echo $hasCustomPri ? 1 : 3 ?>'>
             <?php if($hasCustomPri):?>
-            <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control chosen chosen-simple'");?>
+            <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control chosen'");?>
             <?php else: ?>
             <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control' data-provide='labelSelector'");?>
             <?php endif; ?>
@@ -164,7 +164,7 @@
           <td colspan='3'><?php echo html::radio('after', $lang->task->afterChoices, $this->config->global->flow == 'onlyTask' || !empty($task->id) ? 'toTaskList' : 'continueAdding');?></td>
         </tr>
         <tr>
-          <td colspan='4' class='text-center'>
+          <td colspan='4' class='text-center form-actions'>
             <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
             <?php echo html::backButton('', '', 'btn btn-wide');?>
           </td>

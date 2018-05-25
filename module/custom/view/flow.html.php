@@ -14,7 +14,7 @@
 <div id='mainContent' class='main-row'>
   <div class='side-col' id='sidebar'></div>
   <div class='main-col main-content'>
-    <form method='post' target='hiddenwin'>
+    <form class="load-indicator main-form form-ajax" method='post'>
       <div class='main-header'>
         <div class='heading'>
           <strong><?php echo $lang->custom->flow?></strong>

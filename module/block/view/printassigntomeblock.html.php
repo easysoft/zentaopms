@@ -11,13 +11,22 @@
  */
 ?>
 <div id='assigntomeBlock'>
-  <?php foreach($hasViewPriv as $type => $bool):?>
-  <div id="<?php echo $type?>">
-    <?php include "{$type}block.html.php";?>
+  <ul class="nav nav-secondary">
+    <?php foreach($hasViewPriv as $type => $bool):?>
+    <li<?php if($type === 'todo') echo ' class="active"';?>><a data-tab href='#assigntomeTab-<?php echo $type;?>'><?php echo $lang->block->availableBlocks->$type;?></a></li>
+    <?php endforeach;?>
+  </ul>
+  <div class="tab-content">
+    <?php foreach($hasViewPriv as $type => $bool):?>
+    <div class="tab-pane<?php if($type === 'todo') echo ' active';?>" id="assigntomeTab-<?php echo $type?>">
+      <?php include "{$type}block.html.php";?>
+    </div>
+    <?php endforeach;?>
   </div>
-  <?php endforeach;?>
 </div>
 <style>
-#assigntomeBlock #todo,
-#assigntomeBlock #task {border-bottom: 1px solid #eee;}
+#assigntomeBlock {position: relative;}
+#assigntomeBlock .block-todoes {padding-top: 10px}
+#assigntomeBlock > .nav {position: absolute; top: -41px; left: 120px;}
+#assigntomeBlock .block-todoes .todoes-form{top: -55px;}
 </style>

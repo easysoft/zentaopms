@@ -1598,6 +1598,7 @@ class bug extends control
                     $mailto = trim($mailto);
                     if(isset($users[$mailto])) $bug->mailto .= $users[$mailto] . ',';
                 }
+                $bug->mailto = rtrim($bug->mailto, ',');
 
                 unset($bug->caseVersion);
                 unset($bug->result);

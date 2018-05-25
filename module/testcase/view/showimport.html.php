@@ -6,8 +6,11 @@
 <div class='alert alert-info'><?php echo $suhosinInfo?></div>
 <?php else:?>
 <div id="mainContent" class="main-content">
+  <div class="main-header clearfix">
+    <h2><?php echo $lang->testcase->import;?></h2>
+  </div>
   <form target='hiddenwin' method='post'>
-    <table class='table table-fixed active-disabled table-custom' id='showData'>
+    <table class='table table-form' id='showData'>
       <thead>
         <tr>
         <th class='w-50px'><?php echo $lang->lineNumber?></th>
@@ -26,8 +29,8 @@
           <th class='w-300px'>
             <table class='w-p100 table-borderless'>
               <tr>
-                <th><?php echo $lang->testcase->stepDesc?></th>
-                <th><?php echo $lang->testcase->stepExpect?></th>
+                <th class="no-padding"><?php echo $lang->testcase->stepDesc?></th>
+                <th class="no-padding"><?php echo $lang->testcase->stepExpect?></th>
               </tr>
             </table>
           </th>
@@ -86,12 +89,11 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan='<?php echo !empty($branches) ? 12 : 11;?>' class='text-center'>
+          <td colspan='<?php echo !empty($branches) ? 12 : 11;?>' class='text-center form-actions'>
             <?php
             if(!$insert)
             {
-              include '../../common/view/noticeimport.html.php';
-              echo "<button type='button' data-toggle='myModal' class='btn btn-primary btn-wide'>{$lang->save}</button>";
+              echo "<button type='button' data-toggle='modal' data-target='#importNoticeModal' class='btn btn-primary btn-wide'>{$lang->save}</button>";
             }
             else
             {
@@ -103,31 +105,11 @@
         </tr>
       </tfoot>
     </table>
+    <?php if(!$insert) include '../../common/view/noticeimport.html.php';?>
   </form>
 </div>
 <?php endif;?>
 <script>
-$(function(){affix('#showData thead')})
-function affix(obj)
-{
-    var fixH = $(obj).offset().top;
-    var first = true;
-    $(window).scroll(function()
-    {
-        var scroH = $(this).scrollTop();
-        if(scroH>=fixH && first)
-        {
-            $(obj).parent().parent().before("<table id='headerClone' class='table'></table>");
-            $('#headerClone').append($(obj).clone()).addClass('affix');
-            $('.active-disabled ' + obj + ' th').each(function(i){$('#headerClone ' + obj + ' th').eq(i).width($(this).width())});
-            first = false;
-        }
-        else if(scroH<fixH)
-        {
-            $("#headerClone").remove();
-            first = true;
-        }
-    });
-}
+$(function(){$.fixedTableHead('#showData');});
 </script>
 <?php include '../../common/view/footer.html.php';?>

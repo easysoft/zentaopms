@@ -13,3 +13,5 @@ body {background: #00B1FD linear-gradient(-90deg, #0072F3 0%, #00B1FD 100%);}
 #info {margin-top: 10px; color: #fff;}
 #info .btn + .btn {margin-left: 5px;}
 .alert-info {color: #00a9fc;}
+#langs > .btn,
+#langs > .dropdown-menu {min-width: 0; width: 85px;}

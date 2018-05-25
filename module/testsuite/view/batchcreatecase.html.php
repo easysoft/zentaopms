@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('testcaseBatchCreateNum', $config->testcase->batchCreate);?>
 <?php js::set('libID', $libID);?>
-<div id="mainContent" class="main-content">
+<div id="mainContent" class="main-content fade">
   <div class="main-header">
     <h2><?php echo $lang->testcase->batchCreate;?></h2>
     <div class="pull-right btn-toolbar">
@@ -70,7 +70,7 @@
       <?php endfor;?>
       </tbody>
       <tfoot>
-        <tr><td colspan='8' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide')?> <?php echo  html::backButton('', '', 'btn btn-wide');?></td></tr>
+        <tr><td colspan='8' class='text-center form-actions'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide')?> <?php echo  html::backButton('', '', 'btn btn-wide');?></td></tr>
       </tfoot>
     </table>
   </form>

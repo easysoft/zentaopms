@@ -156,15 +156,15 @@ if($isCustomExport)
             </tr>
             <tr>
               <th><?php echo $lang->file->extension;?></th>
-              <td><?php echo html::select('fileType', $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value) class="form-control chosen-simple"');?></td>
+              <td><?php echo html::select('fileType', $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value) class="form-control"');?></td>
             </tr>
             <tr>
               <th><?php echo $lang->file->encoding;?></th>
-              <td><?php echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8', key($lang->exportFileTypeList) == 'csv' ? "class='form-control chosen-simple'" : "class='form-control chosen-simple'");?></td>
+              <td><?php echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8', key($lang->exportFileTypeList) == 'csv' ? "class='form-control'" : "class='form-control'");?></td>
             </tr>
             <tr>
               <th><?php echo $lang->file->exportRange;?></th>
-              <td><?php echo html::select('exportType', $lang->exportTypeList, 'all', "class='form-control chosen-simple'");?></td>
+              <td><?php echo html::select('exportType', $lang->exportTypeList, 'all', "class='form-control'");?></td>
             </tr>
             <?php if($isCustomExport):?>
             <tr>

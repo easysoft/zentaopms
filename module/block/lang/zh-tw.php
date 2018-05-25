@@ -50,7 +50,7 @@ $lang->block->editBlock          = '編輯區塊';
 $lang->block->ordersSaved        = '排序已保存';
 $lang->block->confirmRemoveBlock = '確定移除區塊嗎？';
 $lang->block->closeForever       = '永久關閉';
-$lang->block->confirmClose       = '確定永久關閉該區塊嗎？閉後所有人都將無法使用該區塊，可以在後台自定義中打開';
+$lang->block->confirmClose       = '確定永久關閉該區塊嗎？關閉後所有人都將無法使用該區塊，可以在後台自定義中打開。';
 $lang->block->remove             = '移除';
 $lang->block->refresh            = '刷新';
 $lang->block->hidden             = '隱藏';
@@ -88,7 +88,7 @@ $lang->block->default['project']['1']['block'] = 'statistic';
 $lang->block->default['project']['1']['grid']  = 8;
 
 $lang->block->default['project']['1']['params']['orderBy'] = 'id_desc';
-$lang->block->default['project']['1']['params']['type']    = 'noclosed';
+$lang->block->default['project']['1']['params']['type']    = 'undone';
 $lang->block->default['project']['1']['params']['num']     = 5;
 
 $lang->block->default['project']['2']['title'] = $lang->projectCommon . '總覽';

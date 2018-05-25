@@ -103,24 +103,26 @@ $lang->bug->copy               = 'Copy';
 $lang->bug->search             = 'Search';
 
 /* 查询条件列表。*/
-$lang->bug->assignToMe        = 'AssignedToMe';
-$lang->bug->openedByMe        = 'CreatedByMe';
-$lang->bug->resolvedByMe      = 'ResolvedByMe';
-$lang->bug->closedByMe        = 'ClosedByMe';
-$lang->bug->assignToNull      = 'Unassigned';
-$lang->bug->unResolved        = 'Unresolved';
-$lang->bug->toClosed          = 'ToBeClosed';
-$lang->bug->unclosed          = 'Active';
-$lang->bug->unconfirmed       = 'UnConfirmed';
-$lang->bug->longLifeBugs      = 'Pending';
-$lang->bug->postponedBugs     = 'Postponed';
-$lang->bug->overdueBugs       = 'Overdue';
-$lang->bug->allBugs           = 'All';
-$lang->bug->byQuery           = 'Search';
-$lang->bug->needConfirm       = 'StoryChanged';
-$lang->bug->allProduct        = 'All' . $lang->productCommon;
-$lang->bug->my                = 'My';
-$lang->bug->yesterdayResolved = 'Resolved Yesterday ';
+$lang->bug->assignToMe         = 'AssignedToMe';
+$lang->bug->openedByMe         = 'CreatedByMe';
+$lang->bug->resolvedByMe       = 'ResolvedByMe';
+$lang->bug->closedByMe         = 'ClosedByMe';
+$lang->bug->assignToNull       = 'Unassigned';
+$lang->bug->unResolved         = 'Unresolved';
+$lang->bug->toClosed           = 'ToBeClosed';
+$lang->bug->unclosed           = 'Active';
+$lang->bug->unconfirmed        = 'UnConfirmed';
+$lang->bug->longLifeBugs       = 'Pending';
+$lang->bug->postponedBugs      = 'Postponed';
+$lang->bug->overdueBugs        = 'Overdue';
+$lang->bug->allBugs            = 'All';
+$lang->bug->byQuery            = 'Search';
+$lang->bug->needConfirm        = 'StoryChanged';
+$lang->bug->allProduct         = 'All' . $lang->productCommon;
+$lang->bug->my                 = 'My';
+$lang->bug->yesterdayResolved  = 'Resolved Yesterday ';
+$lang->bug->yesterdayConfirmed = 'Confirmed Yesterday ';
+$lang->bug->yesterdayClosed    = 'Closed Yesterday ';
 
 $lang->bug->assignToMeAB   = 'Assigned To Me';
 $lang->bug->openedByMeAB   = 'Created By Me';
@@ -165,6 +167,8 @@ $lang->bug->remindTask            = 'This Bug has been converted to Task. Do you
 $lang->bug->skipClose             = 'Bug %s is not resolved. You cannot close it.';
 $lang->bug->applyTemplate         = 'Template';
 $lang->bug->confirmDeleteTemplate = 'Do you want to delete this template?';
+$lang->bug->hasSubmittedTest      = 'Development has submitted test application,';
+$lang->bug->nowToTest             = 'Now to test';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[Steps]</p>\n";
@@ -334,18 +338,18 @@ $lang->bug->report->bugsPerProject->graph->xAxisName     = $lang->projectCommon;
 $lang->bug->report->bugsPerBuild->graph->xAxisName       = 'Build';
 $lang->bug->report->bugsPerModule->graph->xAxisName      = 'Module';
 
-$lang->bug->report->openedBugsPerDay->type                = 'bar';
+$lang->bug->report->openedBugsPerDay->type               = 'bar';
 $lang->bug->report->openedBugsPerDay->graph->xAxisName   = 'Date';
 
-$lang->bug->report->resolvedBugsPerDay->type              = 'bar';
+$lang->bug->report->resolvedBugsPerDay->type             = 'bar';
 $lang->bug->report->resolvedBugsPerDay->graph->xAxisName = 'Date';
 
-$lang->bug->report->closedBugsPerDay->type                = 'bar';
+$lang->bug->report->closedBugsPerDay->type               = 'bar';
 $lang->bug->report->closedBugsPerDay->graph->xAxisName   = 'Date';
 
-$lang->bug->report->openedBugsPerUser->graph->xAxisName  = 'User';
-$lang->bug->report->resolvedBugsPerUser->graph->xAxisName= 'User';
-$lang->bug->report->closedBugsPerUser->graph->xAxisName  = 'User';
+$lang->bug->report->openedBugsPerUser->graph->xAxisName   = 'User';
+$lang->bug->report->resolvedBugsPerUser->graph->xAxisName = 'User';
+$lang->bug->report->closedBugsPerUser->graph->xAxisName   = 'User';
 
 $lang->bug->report->bugsPerSeverity->graph->xAxisName       = 'Priority';
 $lang->bug->report->bugsPerResolution->graph->xAxisName     = 'Solution';

@@ -21,8 +21,8 @@
   </div>
 </div>
 
-<div id='mainContent' class='main-content'>
-  <div class='main-table'>
+<div id='mainContent'>
+  <div class='main-table' data-ride='table'>
     <table class='table has-sort-head'>
       <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <thead>
@@ -38,13 +38,18 @@
       <tbody>
         <?php foreach($trashes as $action):?>
         <?php $module = $action->objectType == 'case' ? 'testcase' : $action->objectType;?>
-        <tr class='text-center'>
+        <tr>
           <td><?php echo zget($lang->action->objectTypes, $action->objectType, '');?></td>
           <td><?php echo $action->objectID;?></td>
           <td class='text-left'>
             <?php
-            $methodName = $module == 'caselib' ? 'libview' : 'view';
             $params     = $action->objectType == 'user' ? "account={$action->objectName}" : "id={$action->objectID}";
+            $methodName = 'view';
+            if($module == 'caselib')
+            {
+                $methodName = 'libview';
+                $module     = 'testsuite';
+            }
             if($module == 'doclib' or $module == 'module')
             {
                 echo $action->objectName;

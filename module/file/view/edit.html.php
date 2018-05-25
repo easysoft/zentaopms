@@ -11,10 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<style>
-body{padding-bottom:0px}
-</style>
-
+<style>.main-form {margin: 15px -15px 0}</style>
 <script>
 function setFileName()
 {
@@ -28,23 +25,26 @@ function closeWindow()
     clearInterval(time);
 }
 </script>
-<div id='mainContent' class='main-content'>
-  <div class='main-header'>
-    <h2><?php echo $lang->file->inputFileName;?></h2>
+<main id="main">
+  <div class="container">
+    <div id='mainContent' class='main-content'>
+      <div class='main-header'>
+        <h2><?php echo $lang->file->inputFileName;?></h2>
+      </div>
+      <form class='main-form' method='post' target='hiddenwin' onsubmit='setFileName();'>
+        <table class='table table-form'>
+          <tr>
+            <td>
+              <div class='input-group'>
+                <?php echo html::input('fileName', $file->title, "class='form-control' autocomplete='off'");?>
+                <strong class='input-group-addon'>.<?php echo $file->extension;?></strong>
+              </div>
+            </td>
+            <td class='w-80px'><?php echo html::submitButton('', '', 'btn btn-primary btn-block');?></td>
+          </tr>
+        </table>
+      </form>
+    </div>
   </div>
-
-  <form class='main-form' method='post' target='hiddenwin' onsubmit='setFileName();'>
-    <table class='table table-form'>
-      <tr>
-        <td>
-          <div class='input-group'>
-            <?php echo html::input('fileName', $file->title, "class='form-control' autocomplete='off'");?>
-            <strong class='input-group-addon'>.<?php echo $file->extension;?></strong>
-          </div>
-        </td>
-        <td class='w-80px'><?php echo html::submitButton();?></td>
-      </tr>
-    </table>
-  </form>
-</div>
+</main>
 <?php include '../../common/view/footer.lite.html.php';?>
