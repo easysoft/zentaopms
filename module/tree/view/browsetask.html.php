@@ -178,12 +178,11 @@ $(function()
             var action = event.action, $target = $(event.target), item = event.item;
             if(action.type === 'edit')
             {
-                $target.modalTrigger(
-                {
+                new $.zui.ModalTrigger({
                     type: 'ajax',
                     url: action.linkTemplate.format(item.id),
                     keyboard: true
-                }).trigger('click');
+                }).show();
             }
             else if(action.type === 'delete')
             {

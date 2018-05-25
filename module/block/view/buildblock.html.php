@@ -11,7 +11,7 @@
  */
 ?>
 <div class='panel-body has-table'>
-  <table class='table table-borderless table-hover table-fixed-head block-builds'>
+  <table class='table table-borderless table-hover table-fixed-head tablesorter block-builds'>
     <thead>
       <tr>
         <th class='w-id text-center'><?php echo $lang->idAB?></th>

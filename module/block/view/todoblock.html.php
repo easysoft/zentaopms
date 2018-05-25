@@ -11,13 +11,13 @@
  */
 ?>
 <style>
-.block-todoes .panel-body {position: relative; padding-top: 42px;}
+.block-todoes .panel-body {position: relative; padding-top: 42px; overflow: visible;}
 .block-todoes .todoes-input {position: absolute;top: 0;right: 0;left: 0;padding: 0 20px 20px 20px;}
 .block-todoes .todoes-input .form-control::-webkit-input-placeholder {font-size: 12px;line-height: 20px;color: #a4a8b6;}
 .block-todoes .todoes-input .form-control::-moz-placeholder {font-size: 12px;line-height: 20px;color: #a4a8b6;}
 .block-todoes .todoes-input .form-control:-ms-input-placeholder {font-size: 12px;line-height: 20px;color: #a4a8b6;}
 .block-todoes .todoes-input .form-control::placeholder {font-size: 12px;line-height: 20px;color: #a4a8b6;}
-.block-todoes .todoes {padding-left: 0;margin: 0 -10px;}
+.block-todoes .todoes {padding: 0 10px; margin: 0 -20px; max-height: 350px; overflow: auto;}
 .block-todoes .todoes > li {position: relative;padding: 5px 10px 5px 35px;list-style: none;}
 .block-todoes .todoes > li:hover {background-color: #e9f2fb;}
 .block-todoes .todo-title {display: block;padding: 5px;}
@@ -59,13 +59,13 @@
         <div class="form-group">
           <label for="todoBegin" class="col-sm-2"><?php echo $lang->todo->beginAndEnd?></label>
           <div class="col-sm-4">
-            <select name="begin" id="todoBegin" class="form-control chosen-simple">
+            <select name="begin" id="todoBegin" class="form-control">
               <option value=""><?php echo $lang->todo->lblDisableDate;?></option>
             </select>
           </div>
           <label class="col-sm-1 text-center hide-empty-begin" for="todoEnd"> ~ </label>
           <div class="col-sm-4 hide-empty-begin">
-            <select name="end" id="todoEnd" class="form-control chosen-simple"></select>
+            <select name="end" id="todoEnd" class="form-control"></select>
           </div>
         </div>
         <div class="form-group">

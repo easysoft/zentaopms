@@ -198,7 +198,7 @@ js::set('branch',         $branch);
       </div>
       <?php elseif(common::hasPriv('testcase', 'create')):?>
       <div class="table-empty-tip">
-        <p><span class="text-muted"><?php echo $lang->testcase->noCase;?></span> <?php common::printLink('testcase', 'create', "productID={$productID}", "<i class='icon icon-plus'> </i>" . $lang->testcase->create, '', "class='btn btn-info'");?></p>
+        <p><span class="text-muted"><?php echo $lang->testcase->noCase;?></span> <?php common::printLink('testcase', 'create', "productID={$productID}", "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?></p>
       </div>
       <?php endif;?>
     </form>

@@ -365,8 +365,6 @@
   
     if(!empty($task->parent)) echo html::a(helper::createLink('task', 'view', "taskID=$task->parent"), "<i class='icon icon-chevron-double-up'></i>", '', "class='btn btn-link' title='{$lang->task->parent}'");
     ?>
-    <?php else:?>
-    <?php common::printBack($browseLink);?>
     <?php endif;?>
   </div>
 </div>

@@ -57,7 +57,7 @@
             <td colspan='3'><?php echo html::textarea('desc', htmlspecialchars($plan->desc), "rows='10' class='form-control kindeditor' hidefocus='true'");?></td>
           </tr>
           <tr>
-            <td colspan='4' class='text-center'>
+            <td colspan='4' class='text-center form-actions'>
               <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
               <?php echo html::backButton('', '', 'btn btn-wide');?>
               <?php echo html::hidden('product', $product->id);?>

@@ -11,7 +11,7 @@
  */
 ?>
 <div class="panel-body has-table">
-  <table class='table table-borderless table-hover table-fixed-head block-projects'>
+  <table class='table table-borderless table-hover table-fixed-head tablesorter block-projects tablesorter'>
     <thead>
       <tr class='text-center'>
         <th class='c-name text-left'><?php echo $lang->project->name;?></th>

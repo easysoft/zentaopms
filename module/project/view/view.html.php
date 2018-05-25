@@ -289,10 +289,6 @@
         common::printIcon('project', 'edit', $params, $project);
         common::printIcon('project', 'delete', $params, $project, 'button', '', 'hiddenwin');
     }
-    else
-    {
-        common::printBack($browseLink);
-    }
     ?>
   </div>
 <script>

@@ -6,8 +6,11 @@
 <div class='alert alert-info'><?php echo $suhosinInfo?></div>
 <?php else:?>
 <div id="mainContent" class="main-content">
+  <div class="main-header clearfix">
+    <h2><?php echo $lang->testcase->import;?></h2>
+  </div>
   <form target='hiddenwin' method='post'>
-    <table class='table table-fixed active-disabled table-custom' id='showData'>
+    <table class='table table-form' id='showData'>
       <thead>
         <tr>
         <th class='w-50px'><?php echo $lang->lineNumber?></th>
@@ -86,12 +89,11 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan='<?php echo !empty($branches) ? 12 : 11;?>' class='text-center'>
+          <td colspan='<?php echo !empty($branches) ? 12 : 11;?>' class='text-center form-actions'>
             <?php
             if(!$insert)
             {
-              include '../../common/view/noticeimport.html.php';
-              echo "<button type='button' data-toggle='myModal' class='btn btn-primary btn-wide'>{$lang->save}</button>";
+              echo "<button type='button' data-toggle='modal' data-target='#importNoticeModal' class='btn btn-primary btn-wide'>{$lang->save}</button>";
             }
             else
             {
@@ -103,11 +105,11 @@
         </tr>
       </tfoot>
     </table>
+    <?php if(!$insert) include '../../common/view/noticeimport.html.php';?>
   </form>
 </div>
 <?php endif;?>
 <script>
-$(function(){affix('#showData thead')})
 function affix(obj)
 {
     var fixH = $(obj).offset().top;
@@ -129,5 +131,6 @@ function affix(obj)
         }
     });
 }
+$(function(){affix('#showData thead')});
 </script>
 <?php include '../../common/view/footer.html.php';?>

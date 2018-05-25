@@ -11,7 +11,7 @@
  */
 ?>
 <div class='panel-body has-table'>
-  <table class='table table-borderless table-hover table-fixed block-release'>
+  <table class='table table-borderless table-hover table-fixed tablesorter block-release'>
     <thead>
       <tr>
         <?php if($longBlock):?>

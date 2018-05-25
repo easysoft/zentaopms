@@ -4,11 +4,16 @@
       <div class="panel-title font-normal"><i class="icon icon-folder-open-o text-muted"></i> <?php echo $title;?></div>
       <nav class="panel-actions btn-toolbar">
         <div class="btn-group">
-          <?php echo html::a('javascript:setBrowseType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='{$lang->doc->browseTypeList['grid']}' class='btn btn-icon btn-gray'");?>
-          <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon btn-gray text-primary'");?>
+          <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon'");?>
+          <?php echo html::a('javascript:setBrowseType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='{$lang->doc->browseTypeList['grid']}' class='btn btn-icon text-primary'");?>
         </div>
       </nav>
     </div>
+    <?php if(empty($docs)):?>
+    <div class="table-empty-tip">
+      <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span></p>
+    </div>
+    <?php else:?>
     <div class="panel-body">
       <div class="row row-grid files-grid" data-size="300">
         <?php foreach($modules as $module):?>
@@ -44,5 +49,6 @@
       </div>
     </div>
     <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+    <?php endif;?>
   </div>
 </div>

@@ -35,15 +35,23 @@
     <?php $queryParam = strpos($menuItem->name, 'QUERY') === 0 ? '&param=' . (int)substr($menuItem->name, 5) : '';?>
     <?php if($menuItem->name == 'more'):?>
     <?php
-        echo '<div class="btn-group">';
-        echo html::a('javascript:;', $menuItem->text . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link'");
-        echo "<ul class='dropdown-menu'>";
-        foreach ($lang->product->moreSelects as $key => $value)
-        {
-            echo '<li' . ($key == $this->session->storyBrowseType ? " class='active'" : '') . '>';
-            echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$key" . $queryParam), $value);
-        }
-        echo '</ul></div>';
+    echo '<div class="btn-group">';
+    $active  = '';
+    $current = $menuItem->text;
+    $storyBrowseType = $this->session->storyBrowseType;
+    if(isset($lang->product->moreSelects[$storyBrowseType]))
+    {
+        $active = 'btn-active-text';
+        $current = "<span class='text'>{$lang->product->moreSelects[$storyBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+    }
+    echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $active'");
+    echo "<ul class='dropdown-menu'>";
+    foreach($lang->product->moreSelects as $key => $value)
+    {
+        echo '<li' . ($key == $this->session->storyBrowseType ? " class='active'" : '') . '>';
+        echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$key" . $queryParam), $value);
+    }
+    echo '</ul></div>';
     ?>
     <?php else:?>
     <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType" . $queryParam), "<span class='text'>$menuItem->text</span>" . ($menuItem->name == $this->session->storyBrowseType ? ' <span class="label label-light label-badge">' . $pager->recTotal . '</span>' : ''), '', "id='{$menuItem->name}Tab' class='btn btn-link" . ($this->session->storyBrowseType == $menuItem->name ? ' btn-active-text' : '') . "'");?>
@@ -109,7 +117,6 @@
       $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
       if($useDatatable) include '../../common/view/datatable.html.php';
-      if(!$useDatatable) include '../../common/view/tablesorter.html.php';
       $setting = $this->datatable->getSetting('product');
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;

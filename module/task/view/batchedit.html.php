@@ -13,10 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('dittoNotice', $this->lang->task->dittoNotice);?>
-<div id='mainContent' class='main-content'>
+<div id='mainContent' class='main-content fade'>
   <div class='main-header'>
     <h2>
-     <?php echo $lang->task->common . $lang->colon . $lang->task->batchEdit;?>
+      <?php echo $lang->task->common . $lang->colon . $lang->task->batchEdit;?>
       <?php if($projectName):?>
       <small class='text-muted'><?php echo html::icon($lang->icons['project']) . ' ' . $lang->task->project . $lang->colon . ' ' . $projectName;?></small>
       <?php endif;?>
@@ -85,9 +85,15 @@
           <?php $disableHour = isset($teams[$taskID]) ? "disabled='disabled'" : '';?>
           <td><?php echo $taskID . html::hidden("taskIDList[$taskID]", $taskID);?></td>
           <td style='overflow:visible' title='<?php echo $tasks[$taskID]->name?>'>
-            <div class='input-group'>
-            <?php echo html::hidden("colors[$taskID]", $tasks[$taskID]->color, "data-provide='colorpicker' data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->task->colorTag}' data-update-text='#names\\[{$taskID}\\]'");?>
-            <?php echo html::input("names[$taskID]", $tasks[$taskID]->name, "class='form-control' autocomplete='off'");?>
+            <div class="input-control has-icon-right">
+              <?php echo html::input("names[$taskID]", $tasks[$taskID]->name, "class='form-control' autocomplete='off'");?>
+              <div class="colorpicker">
+                <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+                <ul class="dropdown-menu clearfix">
+                  <li class="heading"><?php echo $lang->story->colorTag;?><i class="icon icon-close"></i></li>
+                </ul>
+                <?php echo html::hidden("colors[$taskID]", $tasks[$taskID]->color, "data-provide='colorpicker' data-wrapper='input-control-icon-right' data-icon='color' data-btn-tip='{$lang->task->colorTag}' data-update-text='#names\\[{$taskID}\\]'");?>
+              </div>
             </div>
           </td>
           <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$taskID]",     $modules, $tasks[$taskID]->module, "class='form-control chosen'")?></td>
@@ -109,7 +115,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan='<?php echo count($visibleFields) + 3;?>' class='text-center'>
+          <td colspan='<?php echo count($visibleFields) + 3;?>' class='text-center form-actions'>
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
             <?php echo html::backButton('', '', 'btn btn-wide');?>
           </td>

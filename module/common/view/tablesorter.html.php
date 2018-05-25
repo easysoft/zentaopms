@@ -4,9 +4,11 @@ js::import($jsRoot . 'jquery/tablesorter/min.js');
 js::import($jsRoot . 'jquery/tablesorter/metadata.js');
 ?>
 <style>
-table.tablesorter tr.tablesorter-headerRow .header.tablesorter-headerUnSorted .tablesorter-header-inner:after{font-family: NewZenIcon; font-weight: normal; content: "\e6bd"; font-size: 14px;}
-table.tablesorter tr.tablesorter-headerRow .header.headerSortUp .tablesorter-header-inner:after{font-family: NewZenIcon; font-weight: normal; content: "\e6b9"; font-size: 14px; color: #03C;}
-table.tablesorter tr.tablesorter-headerRow .header.headerSortDown .tablesorter-header-inner:after{font-family: NewZenIcon; font-weight: normal; content: "\e6b8"; font-size: 14px; color: #03C;}
+.tablesorter-header-inner {cursor: pointer;}
+.tablesorter-header-inner:hover {color: #006af1;}
+table.tablesorter tr.tablesorter-headerRow .header.tablesorter-headerUnSorted .tablesorter-header-inner:after {font-family: ZentaoIcon; font-weight: normal; content: "\f0dc"; font-size: 14px;}
+table.tablesorter tr.tablesorter-headerRow .header.headerSortUp .tablesorter-header-inner:after{font-family: ZentaoIcon; font-weight: normal; content: "\f0d8"; color: #006af1;}
+table.tablesorter tr.tablesorter-headerRow .header.headerSortDown .tablesorter-header-inner:after{font-family: ZentaoIcon; font-weight: normal; content: "\f0d7"; color: #006af1;}
 table.tablesorter tr.tablesorter-headerRow .header.sorter-false .tablesorter-header-inner:after{content:"";}
 </style>
 <script>

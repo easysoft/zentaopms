@@ -39,7 +39,7 @@
                   <?php endforeach;?>
                 </div>
                 <div>
-                  <?php echo html::submitButton($lang->save);?>
+                  <?php echo html::submitButton($lang->save);?> &nbsp; 
                   <?php echo html::commonButton($lang->cancel, '', "btn close-dropdown");?>
                 </div>
               </form>

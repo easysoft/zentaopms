@@ -24,7 +24,7 @@
     </span>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('build', 'create', "project=$project->id", "<i class='icon icon-plus'> </i>" . $lang->build->create, '', "class='btn btn-primary'");?>
+    <?php common::printLink('build', 'create', "project=$project->id", "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent">

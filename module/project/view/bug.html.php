@@ -22,7 +22,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('bug', 'export', "productID=$productID&orderBy=$orderBy", "<i class='icon icon-export muted'> </i>" . $lang->bug->export, '', "class='btn btn-link export'");?>
-    <?php common::printLink('bug', 'create', "productID=$productID&branch=$branchID&extra=projectID=$project->id", "<i class='icon icon-plus'> </i>" . $lang->bug->create, '', "class='btn btn-primary'");?>
+    <?php common::printLink('bug', 'create', "productID=$productID&branch=$branchID&extra=projectID=$project->id", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent">

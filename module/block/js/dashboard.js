@@ -69,10 +69,10 @@ function resizeBlock(event)
  */
 function initTableHeader()
 {
-    $('#dashboard .panel-block').each(function()
+    $('#dashboard .table-fixed-head').each(function()
     {
-        var $panel = $(this);
-        var $table = $panel.find('.table:first');
+        var $table = $(this);
+        var $panel = $table.closest('.panel');
 
         if(!$table.length || !$table.children('thead').length || ($panel.find('#assigntomeBlock').length && $panel.find('#assigntomeBlock > div').length > 1)) return;
         var isFixed = $panel.find('.panel-body').height() < $table.outerHeight();
@@ -87,7 +87,7 @@ function initTableHeader()
         var tableWidth = $table.width();
         if(!$header.length)
         {
-            $header = $('<div class="table-header-fixed" style="position: absolute; left: 0; top: 0; right: 0;"><table class="table table-fixed"></table></div>').css('right', $panel.width() - tableWidth).css('min-width', tableWidth);
+            $header = $('<div class="table-header-fixed" style="position: absolute; left: 0; top: 0; right: 0; padding: 10px 10px 0; background: #fff;"><table class="table table-fixed no-margin"></table></div>').css('right', $panel.width() - tableWidth - 20).css('min-width', tableWidth);
             var $oldTableHead = $table.find('thead');
             $oldTableHead.find('th').each(function(idx)
             {
@@ -123,6 +123,16 @@ function initTableHeader()
                 $fixedTh.eq(idx).width($(this).width());
             });
         }
+
+        var timeoutCall = null;
+        $table.parent().off('scroll.initTableHeader').on('scroll.initTableHeader', function()
+        {
+            clearTimeout(timeoutCall);
+            var $tableContainer = $(this);
+            timeoutCall = setTimeout(function() {
+                $panel.toggleClass('table-scrolled', $tableContainer.scrollTop() > 0);
+            }, 200);
+        });
     });
 }
 
@@ -182,5 +192,7 @@ $(function()
 //    // $dashboard.find('ul.dashboard-actions').addClass('hide').children('li').addClass('right').appendTo($('#modulemenu > .nav'));
 //    $dashboard.find('[data-toggle=tooltip]').tooltip({container: 'body'});
 
-//    initTableHeader();
+   initTableHeader();
 });
+
+

@@ -21,7 +21,7 @@
   .case-status-investigate {color: #a6aab8;}
   .case-status-investigate > .label-dot {background-color: #006af1;}
   </style>
-  <table class='table table-borderless table-hover table-fixed-head block-cases <?php if(!$longBlock) echo 'block-sm';?>'>
+  <table class='table table-borderless table-hover table-fixed-head tablesorter block-cases <?php if(!$longBlock) echo 'block-sm';?>'>
     <thead>
       <tr class='text-center'>
         <?php if($longBlock):?>

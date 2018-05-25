@@ -17,6 +17,6 @@
 <div class='form-group'>
   <label for='grid' class='col-sm-3'><?php echo $lang->block->grid;?></label>
   <div class='col-sm-7'>
-    <?php echo html::select('grid', $lang->block->gridOptions, $block ? $block->grid : 8, "class='form-control chosen chosen-simple'")?>
+    <?php echo html::select('grid', $lang->block->gridOptions, $block ? $block->grid : 8, "class='form-control chosen'")?>
   </div>
 </div>
