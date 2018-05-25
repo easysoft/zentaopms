@@ -130,8 +130,8 @@ $lang->bug->resolvedByMeAB = 'Resolved By Me';
 
 $lang->bug->ditto       = 'Ditto';
 $lang->bug->dittoNotice = 'This bug is not linked to the same product as the last one!';
-$lang->bug->noAssigned  = 'Not Assigned';
-$lang->bug->noBug       = 'No Bug. You could ';
+$lang->bug->noAssigned  = 'Assign';
+$lang->bug->noBug       = 'No bugs. You could ';
 $lang->bug->noModule    = '<div>You have no modules</div><div>Manage now</div>';
 
 /* 页面标签。*/
@@ -147,11 +147,11 @@ $lang->bug->createBuild   = 'New';
 $lang->bug->legendBasicInfo             = 'Basic Info';
 $lang->bug->legendAttatch               = 'Attachment';
 $lang->bug->legendPrjStoryTask          = $lang->projectCommon . '/Story/Task';
-$lang->bug->lblTypeAndSeverity          = 'Type/Priority Level';
+$lang->bug->lblTypeAndSeverity          = 'Type/Severity';
 $lang->bug->lblSystemBrowserAndHardware = 'System/Browser';
 $lang->bug->legendSteps                 = 'Repro Steps';
 $lang->bug->legendComment               = 'Note';
-$lang->bug->legendLife                  = 'Life of Bug';
+$lang->bug->legendLife                  = 'About the Bug';
 $lang->bug->legendMisc                  = 'Misc';
 $lang->bug->legendRelated               = 'Related Info';
 
@@ -242,10 +242,10 @@ $lang->bug->typeList['performance']  = 'Performance';
 $lang->bug->typeList['standard']     = 'Standard';
 $lang->bug->typeList['automation']   = 'Testing Script';
 $lang->bug->typeList['others']       = 'Other';
-$lang->bug->typeList['designchange'] = 'Design Changed';
+$lang->bug->typeList['designchange'] = 'Design Change';
 $lang->bug->typeList['newfeature']   = 'New Feature';
 $lang->bug->typeList['designdefect'] = 'Design Defect';
-$lang->bug->typeList['trackthings']  = 'Track Things';
+$lang->bug->typeList['trackthings']  = 'Track Work';
 
 $lang->bug->statusList['']         = '';
 $lang->bug->statusList['active']   = 'Active';
@@ -256,19 +256,19 @@ $lang->bug->confirmedList[1] = 'Yes';
 $lang->bug->confirmedList[0] = 'No';
 
 $lang->bug->resolutionList['']           = '';
-$lang->bug->resolutionList['bydesign']   = 'By Design';
-$lang->bug->resolutionList['duplicate']  = 'Duplicated';
-$lang->bug->resolutionList['external']   = 'External';
+$lang->bug->resolutionList['bydesign']   = 'As Design';
+$lang->bug->resolutionList['duplicate']  = 'Duplicated Bug';
+$lang->bug->resolutionList['external']   = 'External Cause';
 $lang->bug->resolutionList['fixed']      = 'Resolved';
 $lang->bug->resolutionList['notrepro']   = 'Irreproducible';
-$lang->bug->resolutionList['postponed']  = 'Postponed';
-$lang->bug->resolutionList['willnotfix'] = "Not to Resolve";
-$lang->bug->resolutionList['tostory']    = 'Converted to Story';
+$lang->bug->resolutionList['postponed']  = 'Postpone';
+$lang->bug->resolutionList['willnotfix'] = "Ignore";
+$lang->bug->resolutionList['tostory']    = 'Convert to Story';
 
 /* 统计报表。*/
 $lang->bug->report = new stdclass();
 $lang->bug->report->common = 'Report';
-$lang->bug->report->select = 'Select Report Type ';
+$lang->bug->report->select = 'Select Type ';
 $lang->bug->report->create = 'Generate Report';
 
 $lang->bug->report->charts['bugsPerProject']        = $lang->projectCommon . ' Bugs';

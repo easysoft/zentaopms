@@ -27,7 +27,7 @@ class commonModel extends model
             $this->setCompany();
             $this->setUser();
             $this->loadConfigFromDB();
-            $this->loadCustomFromDB();
+            if(version_compare($this->config->global->version, '4.3.beta') > 0) $this->loadCustomFromDB();
             if(!$this->checkIP()) die($this->lang->ipLimited);
             $this->app->loadLang('company');
         }
