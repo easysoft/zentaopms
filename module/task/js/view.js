@@ -5,11 +5,3 @@ function assign(taskID, assignedTo)
   $('.assign').load(createLink('user', 'ajaxGetUser', 'taskID=' + taskID + '&assignedTo=' + assignedTo));
 }
 
-$(document).ready(function()
-{
-  var num = $("#mainActions .btn-toolbar a").size();
-  if(num == 0)
-  {
-    $("#mainActions .btn-toolbar").hide();
-  }
-});
