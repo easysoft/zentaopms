@@ -21,15 +21,16 @@ $onlybody     = zget($_GET, 'onlybody', 'no');
   echo '<script>config.onlybody = "' . $onlybody . '";</script>';
   if($config->debug)
   {
+      $timestamp = time();
       js::import($jsRoot . 'jquery/lib.js');
-      js::import($jsRoot . 'zui/min.js');
-      js::import($jsRoot . 'my.full.js');
+      js::import($jsRoot . 'zui/min.js?t=' . $timestamp);
+      js::import($jsRoot . 'my.full.js?t=' . $timestamp);
 
-      css::import($themeRoot . 'zui/css/min.css');
-      css::import($defaultTheme . 'style.css');
+      css::import($themeRoot . 'zui/css/min.css?t=' . $timestamp);
+      css::import($defaultTheme . 'style.css?t=' . $timestamp);
 
       css::import($langTheme);
-      if(strpos($clientTheme, 'default') === false) css::import($clientTheme . 'style.css');
+      if(strpos($clientTheme, 'default') === false) css::import($clientTheme . 'style.css?t=' . $timestamp);
   }
   else
   {
