@@ -66,7 +66,7 @@
               $proudctTypeList = array();
               foreach($lang->product->typeList as $key => $type) $productTypeList[$key] = $type . zget($lang->product->typeTips, $key, '');
               ?>
-              <?php echo html::select('type', $productTypeList, 'normal', "class='form-control chosen-simple'");?>
+              <?php echo html::select('type', $productTypeList, 'normal', "class='form-control'");?>
             </td><td></td>
           </tr>  
           <tr>

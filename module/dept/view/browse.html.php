@@ -64,7 +64,7 @@
             </tr>
             <tr>
               <td></td>
-              <td>
+              <td class='form-actions'>
                 <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
                 <?php echo html::backButton('', '', 'btn btn-wide');?>
                 <?php echo html::hidden('maxOrder', $maxOrder);?>
@@ -130,11 +130,11 @@ $(function()
             var action = event.action, $target = $(event.target), item = event.item;
             if(action.type === 'edit')
             {
-                $target.modalTrigger(
-                {
+                new $.zui.ModalTrigger({
                     type: 'ajax',
-                    url: action.linkTemplate.format(item.id)
-                }).trigger('click');
+                    url: action.linkTemplate.format(item.id),
+                    keyboard: true
+                }).show();
             }
             else if(action.type === 'delete')
             {

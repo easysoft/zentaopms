@@ -1,25 +1,27 @@
 $(function()
 {
-    if($('#needNotReview').prop('checked'))
+    var $assignedTo = $('#assignedTo');
+    var $needNotReview = $('#needNotReview');
+    if($needNotReview.prop('checked'))
     {
-        $('#assignedTo').attr('disabled', 'disabled');
+        $assignedTo.attr('disabled', 'disabled');
     }
     else
     {
-        $('#assignedTo').removeAttr('disabled');
+        $assignedTo.removeAttr('disabled');
     }
-    $('#assignedTo').trigger("chosen:updated");
-})
+    $assignedTo.trigger("chosen:updated");
 
-$('#needNotReview').change(function()
-{
-    if($('#needNotReview').prop('checked'))
+    $needNotReview.change(function()
     {
-        $('#assignedTo').attr('disabled', 'disabled');
-    }
-    else
-    {
-        $('#assignedTo').removeAttr('disabled');
-    }
-    $('#assignedTo').trigger("chosen:updated");
-})
+        if($needNotReview.prop('checked'))
+        {
+            $assignedTo.attr('disabled', 'disabled');
+        }
+        else
+        {
+            $assignedTo.removeAttr('disabled');
+        }
+        $assignedTo.trigger("chosen:updated");
+    })
+});
