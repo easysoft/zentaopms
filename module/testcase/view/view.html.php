@@ -177,8 +177,8 @@
                 echo $lang->testcase->statusList[$case->status];
                 if($case->version > $case->currentVersion and $from == 'testtask')
                 {
-                    echo " (<span class='warning'>{$lang->testcase->changed}</span> ";
-                    echo html::a($this->createLink('testcase', 'confirmchange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
+                    echo "(<span class='warning'>{$lang->testcase->changed}</span> ";
+                    echo html::a($this->createLink('testcase', 'confirmchange', "caseID=$case->id"), $lang->confirm, 'hiddenwin', "class='btn btn-mini btn-info'");
                     echo ")";
                 }
                 ?>

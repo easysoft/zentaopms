@@ -12,7 +12,7 @@
 ?>
 <?php include './header.html.php';?>
 <div id='mainContent' class='main-content'>
-  <form target='hiddenwin' method='post'>
+  <form class='load-indicator main-form form-ajax' method='post'>
     <table class='table table-bordered'>
       <thead>
         <th></th>

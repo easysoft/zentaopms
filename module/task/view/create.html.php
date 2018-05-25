@@ -22,7 +22,7 @@
         <?php include '../../common/view/customfield.html.php';?>
       </div>
     </div>
-    <form class='load-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
+    <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->task->type;?></th>
