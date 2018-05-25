@@ -51,14 +51,35 @@ js::set('browseType', $browseType);
     foreach(customModel::getFeatureMenu('project', 'task') as $menuItem)
     {
         if($project->type == 'ops' && $menuItem->name == 'needconfirm') continue;
-        if(isset($menuItem->hidden)) continue;
+        if(isset($menuItem->hidden) and $menuItem->name != 'QUERY') continue;
         $menuType = $menuItem->name;
-        if(strpos($menuType, 'QUERY') === 0)
+        if($menuType == 'QUERY')
         {
-            $queryID = (int)substr($menuType, 5);
-            echo html::a(inlink('task', "project=$projectID&type=bySearch&param=$queryID"), $menuItem->text, '', "id='{$menuType}Tab' class='btn btn-link'");
+            if(isset($lang->custom->queryList))
+            {
+                echo "<div class='btn-group' id='query'>";
+                $current      = $menuItem->text;
+                $active       = '';
+                $dropdownHtml = "<ul class='dropdown-menu'>";
+                foreach($lang->custom->queryList as $queryID => $queryTitle)
+                {
+                    if($this->session->taskBrowseType == 'bysearch' and $queryID == $param)
+                    {
+                        $current = "<span class='text'>{$queryTitle}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+                        $active  = 'btn-active-text';
+                    }
+
+                    $dropdownHtml .= '<li' . ($queryID == $param ? " class='active'" : '') . '>';
+                    $dropdownHtml .= html::a($this->createLink('project', 'task', "project=$projectID&type=bySearch&param=$queryID"), $queryTitle);
+                }
+                $dropdownHtml .= '</ul>';
+
+                echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $active'");
+                echo $dropdownHtml;
+                echo '</div>';
+            }
         }
-        elseif($menuType != 'status')
+        elseif($menuType != 'status' and $menuType != 'QUERY')
         {
             $label   = "<span class='text'>{$menuItem->text}</span>";
             $label  .= $menuType == $browseType ? "<span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
@@ -290,17 +311,8 @@ js::set('browseType', $browseType);
 <?php js::set('replaceID', 'taskList')?>
 <script>
 <?php if($browseType == 'bysearch'):?>
-$shortcut = $('#QUERY<?php echo (int)$param;?>Tab');
-if($shortcut.size() > 0)
-{
-    $shortcut.addClass('btn-active-text');
-    $('#bysearchTab').removeClass('btn-active-text');
-    $('#querybox').removeClass('show');
-}
+if($('#query li.active').size() == 0) ajaxGetSearchForm();
 <?php endif;?>
-statusActive = '<?php echo isset($lang->project->statusSelects[$this->session->taskBrowseType]);?>';
-if(statusActive) $('#statusTab').addClass('active');
-
 $(function()
 {
     // Update table summary text

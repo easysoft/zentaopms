@@ -9,8 +9,8 @@
  * @version     $Id: en.php 5141 2013-07-15 05:57:15Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->story->create      = "Create Story";
-$lang->story->batchCreate = "Batch Create";
+$lang->story->create      = "Add a Story";
+$lang->story->batchCreate = "Batch Add";
 $lang->story->change      = "Change";
 $lang->story->changed     = 'Change';
 $lang->story->review      = 'Review';
@@ -37,7 +37,7 @@ $lang->story->linkStory   = 'Link';
 $lang->story->unlinkStory = 'UnLinked';
 $lang->story->export      = "Export Data";
 $lang->story->zeroCase    = "Story w/o cases";
-$lang->story->zeroTask    = "Only show stories w/o tasks";
+$lang->story->zeroTask    = "Display stories w/o tasks";
 $lang->story->reportChart = "Report";
 $lang->story->copyTitle   = "Copy Title";
 $lang->story->batchChangePlan   = "Batch Change Plans";
@@ -45,7 +45,7 @@ $lang->story->batchChangeBranch = "Batch Change Branches";
 $lang->story->batchChangeStage  = "Batch Change Phases";
 $lang->story->batchAssignTo     = "Batch Assign";
 $lang->story->batchChangeModule = "Batch Change Modules";
-$lang->story->viewAll           = "View All";
+$lang->story->viewAll           = "All";
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
@@ -66,7 +66,7 @@ $lang->story->hour           = 'Hour';
 $lang->story->status         = 'Status';
 $lang->story->stage          = 'Phase';
 $lang->story->stageAB        = 'Phase';
-$lang->story->mailto         = 'Mailto';
+$lang->story->mailto         = 'Mail to';
 $lang->story->openedBy       = 'Creator';
 $lang->story->openedDate     = 'Create on';
 $lang->story->assignedTo     = 'Assignee';
@@ -86,10 +86,10 @@ $lang->story->comment        = 'Comment';
 $lang->story->linkStories    = 'Linked Story';
 $lang->story->childStories   = 'Decompose Story';
 $lang->story->duplicateStory = 'Copy Story';
-$lang->story->reviewResult   = 'Review Results';
+$lang->story->reviewResult   = 'Review Result';
 $lang->story->preVersion     = 'Previous Version';
 $lang->story->keywords       = 'Tags';
-$lang->story->newStory       = 'Continue adding Story.';
+$lang->story->newStory       = 'Continue adding';
 $lang->story->colorTag       = 'Color Tag';
 $lang->story->files          = 'Files';
 $lang->story->copy           = "Copy a Story";
@@ -99,7 +99,7 @@ $lang->story->unclosed       = 'Unclosed';
 $lang->story->deleted        = 'Deleted';
 
 $lang->story->ditto       = 'Ditto';
-$lang->story->dittoNotice = 'This Story does not belong to the same Product as the last Story does!';
+$lang->story->dittoNotice = 'This Story does not belong to the same Product as the last one does!';
 
 $lang->story->useList[0] = 'Yes';
 $lang->story->useList[1] = 'No';
@@ -165,7 +165,7 @@ $lang->story->priList[4] = '4';
 $lang->story->legendBasicInfo      = 'Basic Info';
 $lang->story->legendLifeTime       = 'Story Life ';
 $lang->story->legendRelated        = 'Related Info';
-$lang->story->legendMailto         = 'Mail To';
+$lang->story->legendMailto         = 'Mail to';
 $lang->story->legendAttatch        = 'Files';
 $lang->story->legendProjectAndTask = $lang->projectCommon . ' Task';
 $lang->story->legendBugs           = 'Linked Bug';
@@ -189,7 +189,7 @@ $lang->story->affectedCases        = 'Case';
 
 $lang->story->specTemplate          = "As a < type of user >, I want < some goal > so that < some reason >.";
 $lang->story->needNotReview         = 'No Review';
-$lang->story->successSaved          = "Story saved!";
+$lang->story->successSaved          = "Story is saved!";
 $lang->story->confirmDelete         = "Do you want to delete this Story?";
 $lang->story->errorEmptyChildStory  = '『Subdivide Story』canot be blank.';
 $lang->story->mustChooseResult      = 'Select a result.';
@@ -197,8 +197,8 @@ $lang->story->mustChoosePreVersion  = 'Select a Version to revert to.';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = 'Story Scope';
-$lang->story->form->desc      = 'What Story is it? How to verify it?';
-$lang->story->form->resource  = 'How to finish it? How long does it take?';
+$lang->story->form->desc      = 'What Story is it? What is the acceptance criteria?';
+$lang->story->form->resource  = 'Who will allocate resources? How long does it take?';
 $lang->story->form->file      = 'If there are Story linked files, please click Here to upload it.';
 
 $lang->story->action = new stdclass();
