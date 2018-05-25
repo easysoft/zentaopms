@@ -20,8 +20,6 @@ $(function()
     $(document).on('click', "#storyList tbody tr, .table-footer .check-all, #storyList thead .check-all", function(){showCheckedSummary();});
     $(document).on('change', "#storyList :checkbox", function(){showCheckedSummary();});
 
-    $("a[data-toggle='linkStoryByPlan']").click(function(){$('#linkStoryByPlan').modal('show')})
-
     $('#toTaskButton').on('click', function ()
     {
         var planID = $('#plan').val();
