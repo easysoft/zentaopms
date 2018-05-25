@@ -86,13 +86,13 @@ global $config;
 if($config->global->flow == 'onlyTest' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['task']);
 if($config->global->flow == 'onlyTask' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['bug']);
 
-$lang->todo->confirmDelete  = "Are you sure to delete this Todo?";
+$lang->todo->confirmDelete  = "Do you want to delete this Todo?";
 $lang->todo->thisIsPrivate  = 'This is a private Todo';
-$lang->todo->lblDisableDate = 'Set later.';
-$lang->todo->lblBeforeDays  = "%s early in advance to be done";
-$lang->todo->lblClickCreate = "Clict to add todo";
-$lang->todo->noTodo         = 'No this type of Todo.';
-$lang->todo->noAssignedTo   = "The AssignedTo user can't be empty.";
+$lang->todo->lblDisableDate = 'Set later';
+$lang->todo->lblBeforeDays  = "Create a todo %s days(s) earlier";
+$lang->todo->lblClickCreate = "Click to add a todo";
+$lang->todo->noTodo         = 'No todos of this type.';
+$lang->todo->noAssignedTo   = "The AssignedTo should not be empty.";
 
 $lang->todo->periods['all']        = 'All';
 $lang->todo->periods['thisYear']   = 'ThisYear';
