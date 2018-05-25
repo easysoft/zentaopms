@@ -162,7 +162,8 @@ if($isCustomExport)
               <th><?php echo $lang->file->encoding;?></th>
               <td><?php echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8', key($lang->exportFileTypeList) == 'csv' ? "class='form-control'" : "class='form-control'");?></td>
             </tr>
-            <tr>
+            <?php $hide = isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'kanban') !== false ? 'style="display:none"' : '';?>
+            <tr <?php echo $hide;?>>
               <th><?php echo $lang->file->exportRange;?></th>
               <td><?php echo html::select('exportType', $lang->exportTypeList, 'all', "class='form-control'");?></td>
             </tr>

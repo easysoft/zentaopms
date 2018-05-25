@@ -833,6 +833,7 @@ CREATE TABLE IF NOT EXISTS `zt_userquery` (
   `title` varchar(90) NOT NULL,
   `form` text NOT NULL,
   `sql` text NOT NULL,
+  `shortcut` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`),
   KEY `query` (`account`, `module`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
