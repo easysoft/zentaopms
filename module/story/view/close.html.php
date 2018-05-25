@@ -41,7 +41,7 @@
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='8' class='form-control'");?></td>
         </tr>
         <tr>
-          <td colspan='3' class='text-center'>
+          <td colspan='3' class='text-center form-actions'>
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
             <?php echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"), 'self', '', 'btn btn-wide');?>
           </td>
