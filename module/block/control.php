@@ -12,8 +12,8 @@
 class block extends control
 {
     /**
-     * construct. 
-     * 
+     * construct.
+     *
      * @access public
      * @return void
      */
@@ -26,10 +26,10 @@ class block extends control
     }
 
     /**
-     * Block admin. 
-     * 
-     * @param  int    $id 
-     * @param  string $module 
+     * Block admin.
+     *
+     * @param  int    $id
+     * @param  string $module
      * @access public
      * @return void
      */
@@ -78,13 +78,13 @@ class block extends control
         $this->display();
     }
 
-    /**                        
-     * Set params when type is rss or html. 
-     * 
-     * @param  int    $id   
-     * @param  string $type    
-     * @access public          
-     * @return void            
+    /**
+     * Set params when type is rss or html.
+     *
+     * @param  int    $id
+     * @param  string $type
+     * @access public
+     * @return void
      */
     public function set($id, $type, $source = '')
     {
@@ -92,7 +92,7 @@ class block extends control
         {
             $source = isset($this->lang->block->moduleList[$source]) ? $source : '';
             $this->block->save($id, $source, $type, $this->session->blockModule);
-            if(dao::isError())  die(js::error(dao::geterror())); 
+            if(dao::isError())  die(js::error(dao::geterror()));
             die(js::reload('parent'));
         }
 
@@ -115,26 +115,26 @@ class block extends control
         $this->view->type   = $type;
         $this->view->id     = $id;
         $this->view->block  = ($block) ? $block : array();
-        $this->display();      
+        $this->display();
     }
 
     /**
-     * Delete block 
-     * 
-     * @param  int    $id 
-     * @param  string $sys 
-     * @param  string $type 
+     * Delete block
+     *
+     * @param  int    $id
+     * @param  string $sys
+     * @param  string $type
      * @access public
      * @return void
      */
     public function delete($id, $module = 'my', $type = 'delete')
-    {   
+    {
         if($type == 'hidden')
-        {   
+        {
             $this->dao->update(TABLE_BLOCK)->set('hidden')->eq(1)->where('`id`')->eq($id)->andWhere('account')->eq($this->app->user->account)->andWhere('module')->eq($module)->exec();
         }
         else
-        {   
+        {
             $this->dao->delete()->from(TABLE_BLOCK)->where('`id`')->eq($id)->andWhere('account')->eq($this->app->user->account)->andWhere('module')->eq($module)->exec();
         }
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -144,10 +144,10 @@ class block extends control
 
     /**
      * Sort block.
-     * 
-     * @param  string    $oldOrder 
-     * @param  string    $newOrder 
-     * @param  string    $module 
+     *
+     * @param  string    $oldOrder
+     * @param  string    $newOrder
+     * @param  string    $module
      * @access public
      * @return void
      */
@@ -155,7 +155,7 @@ class block extends control
     {
         $orders    = explode(',', $orders);
         $blockList = $this->block->getBlockList($module);
-        
+
         foreach ($orders as $order => $blockID)
         {
             $block = $blockList[$blockID];
@@ -199,8 +199,8 @@ class block extends control
 
     /**
      * Display dashboard for app.
-     * 
-     * @param  string    $module 
+     *
+     * @param  string    $module
      * @access public
      * @return void
      */
@@ -272,7 +272,7 @@ class block extends control
 
     /**
      * latest dynamic.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -285,7 +285,7 @@ class block extends control
 
     /**
      * Welcome block.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -317,9 +317,9 @@ class block extends control
     }
 
     /**
-     * Print block. 
-     * 
-     * @param  int    $id 
+     * Print block.
+     *
+     * @param  int    $id
      * @access public
      * @return void
      */
@@ -361,13 +361,13 @@ class block extends control
         {
             $html = $this->fetch('block', 'welcome');
         }
-        
+
         echo $html;
     }
 
     /**
      * Main function.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -383,7 +383,7 @@ class block extends control
 
         $mode = strtolower($this->get->mode);
         if($mode == 'getblocklist')
-        {   
+        {
             $blocks = $this->block->getAvailableBlocks($module);
             if(!$this->selfCall)
             {
@@ -401,13 +401,13 @@ class block extends control
             echo '<div class="col-sm-7">';
             echo html::select('moduleBlock', $blockPairs, ($block and $block->source != '') ? $block->block : '', "class='form-control chosen'");
             echo '</div></div>';
-        }   
+        }
         elseif($mode == 'getblockform')
-        {   
+        {
             $code = strtolower($this->get->blockid);
             $func = 'get' . ucfirst($code) . 'Params';
             echo $this->block->$func($module);
-        }   
+        }
         elseif($mode == 'getblockdata')
         {
             $code = strtolower($this->get->blockid);
@@ -417,7 +417,7 @@ class block extends control
             if(!$this->selfCall)
             {
                 $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('ranzhi')->eq($params->account)->fetch();
-                if(empty($this->app->user)) 
+                if(empty($this->app->user))
                 {
                     $this->app->user = new stdclass();
                     $this->app->user->account = 'guest';
@@ -475,7 +475,7 @@ class block extends control
 
     /**
      * Print List block.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -489,7 +489,7 @@ class block extends control
 
     /**
      * Print todo block.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -504,7 +504,7 @@ class block extends control
 
     /**
      * Print task block.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -518,7 +518,7 @@ class block extends control
 
     /**
      * Print bug block.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -531,7 +531,7 @@ class block extends control
 
     /**
      * Print case block.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -569,7 +569,7 @@ class block extends control
 
     /**
      * Print testtask block.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -595,7 +595,7 @@ class block extends control
 
     /**
      * Print story block.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -613,7 +613,7 @@ class block extends control
 
     /**
      * Print plan block.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -674,7 +674,7 @@ class block extends control
 
     /**
      * Print product block.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -701,8 +701,8 @@ class block extends control
 
     /**
      * Print statistic block.
-     * 
-     * @param  string $module 
+     *
+     * @param  string $module
      * @access public
      * @return void
      */
@@ -849,7 +849,7 @@ class block extends control
 
     /**
      * Print project statistic block.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1013,7 +1013,7 @@ class block extends control
                 foreach($build->bugs as $bugID) $bugIDList[$bugID] = $bugID;
             }
         }
-        foreach($openedBugs as $buildBugs) 
+        foreach($openedBugs as $buildBugs)
         {
             foreach($buildBugs as $bugID => $bug) $bugIDList[$bugID] = $bugID;
         }
@@ -1047,7 +1047,7 @@ class block extends control
                 foreach($build->bugs as $key => $bugID)
                 {
                     if(!isset($bugs[$bugID])) continue;
-                    
+
                     $bug = $bugs[$bugID];
 
                     if($bug->assignedTo = $this->app->user->account) $build->assignedToMe++;
@@ -1056,7 +1056,7 @@ class block extends control
                     {
                         $build->unclosed++;
 
-                        if($bug->status != 'resoloved') 
+                        if($bug->status != 'resoloved')
                         {
                             $build->unresolved++;
 
@@ -1069,7 +1069,7 @@ class block extends control
                     if(isset($confirmedBugs[$bugID])) $yesterdayConfirmed++;
 
                     $build->total++;
-                } 
+                }
 
                 $build->assignedRate    = $build->total ? round($build->assignedToMe  / $build->total * 100, 2) : 0;
                 $build->unresolvedRate  = $build->total ? round($build->unresolved  / $build->total * 100, 2) : 0;
@@ -1098,7 +1098,7 @@ class block extends control
 
     /**
      * Print product overview block.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1123,7 +1123,7 @@ class block extends control
 
     /**
      * Print project overview block.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1183,7 +1183,7 @@ class block extends control
 
     /**
      * Print project block.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1199,7 +1199,7 @@ class block extends control
 
     /**
      * Print assign to me block.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1277,9 +1277,9 @@ class block extends control
     }
 
     /**
-     * Close block forever. 
-     * 
-     * @param  int    $blockID 
+     * Close block forever.
+     *
+     * @param  int    $blockID
      * @access public
      * @return void
      */

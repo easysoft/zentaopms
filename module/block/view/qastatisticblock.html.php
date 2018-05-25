@@ -45,7 +45,7 @@
             <?php endforeach;?>
           </select>
           <div class="input-group-cell">
-            <span class="text-muted small">开发已提交测试申请，<a href="<?php echo $this->createLink('testtask', 'browse', "productID={$product->id}");?>" class="text-primary">现在去测试 <i class="icon icon-right-circle icon-sm"></i></a></span>
+          <span class="text-muted small"><?php echo $lang->bug->hasSubmittedTest;?><a href="<?php echo $this->createLink('testtask', 'browse', "productID={$product->id}");?>" class="text-primary"><?php echo $lang->bug->nowToTest;?> <i class="icon icon-right-circle icon-sm"></i></a></span>
           </div>
           <?php endif;?>
         </div>
@@ -55,25 +55,25 @@
             <div class="progress-pie inline-block space progress-pie-100" data-value="<?php echo $build->assignedRate;?>" data-doughnut-size="80">
               <canvas width="100" height="100" style="width: 100px; height: 100px;"></canvas>
               <div class="progress-info">
-                <small>全部Bug</small>
+                <small><?php echo $lang->bug->allBugs . ' Bug';?></small>
                 <strong><span class="progress-value"><?php echo $build->total;?></span></strong>
               </div>
             </div>
             <div class="text-center small with-padding">
-              <span class="label label-dot label-primary"></span> &nbsp; 指派给我 &nbsp; <strong><?php echo $build->assignedToMe;?></strong>
+              <span class="label label-dot label-primary"></span> &nbsp; <?php echo $lang->bug->assignToMe;?> &nbsp; <strong><?php echo $build->assignedToMe;?></strong>
             </div>
           </div>
           <div class="col-7">
             <div class="product-info">
               <?php if($build->yesterdayResolved):?>
-              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted">昨日解决</span> <strong><?php echo $build->yesterdayResolved;?></strong></div>
+              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->bug->yesterdayResolved;?></span> <strong><?php echo $build->yesterdayResolved;?></strong></div>
               <?php endif;?>
               <div class="progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $build->unresovedRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $build->unresovedRate;?>%"></div>
               </div>
               <div class="type-info">
                 <div class="type-label">
-                  <span>未解决</span>
+                  <span><?php echo $lang->bug->unResolved;?></span>
                 </div>
                 <div class="type-value">
                   <strong><?php echo $build->unresolved;?></strong>
@@ -82,14 +82,14 @@
             </div>
             <div class="product-info">
               <?php if($build->yesterdayConfirmed):?>
-              <div class="progress-info"><i class="icon icon-exclamation-sign text-danger icon-sm"></i> <span class="text-muted">昨日确认</span> <strong><?php echo $build->yesterdayConfirmed;?></strong></div>
+              <div class="progress-info"><i class="icon icon-exclamation-sign text-danger icon-sm"></i> <span class="text-muted"><?php echo $lang->bug->yesterdayConfirmed;?></span> <strong><?php echo $build->yesterdayConfirmed;?></strong></div>
               <?php endif;?>
               <div class="progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $build->unconfirmedRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $build->unconfirmedRate;?>%"></div>
               </div>
               <div class="type-info">
                 <div class="type-label">
-                  <span>未确认</span>
+                  <span><?php echo $lang->bug->unconfirmed;?></span>
                 </div>
                 <div class="type-value">
                   <strong><?php echo $build->unconfirmed;?></strong>
@@ -98,14 +98,14 @@
             </div>
             <div class="product-info">
               <?php if($build->yesterdayClosed):?>
-              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted">昨日关闭</span> <strong><?php echo $build->yesterdayClosed;?></strong></div>
+              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->bug->yesterdayClosed;?></span> <strong><?php echo $build->yesterdayClosed;?></strong></div>
               <?php endif;?>
               <div class="progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $build->unclosedRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $build->unclosedRate;?>%"></div>
               </div>
               <div class="type-info">
                 <div class="type-label">
-                  <span>未关闭</span>
+                  <span><?php echo $lang->bug->unclosed;?></span>
                 </div>
                 <div class="type-value">
                   <strong><?php echo $build->unclosed;?></strong>
@@ -123,7 +123,7 @@
       <ul class="nav nav-stacked nav-secondary">
         <?php $index = 1;?>
         <?php foreach($products as $product):?>
-        <li class="<?php if($index == 1) echo 'active';?>"><a href="###" data-target="#tabContent<?php echo $product->id;?>" data-toggle="tab"><?php echo $product->name;?></a></li>
+        <li class="<?php if($index == 1) echo 'active';?>"><a data-target="#tabContent<?php echo $product->id;?>" data-toggle="tab"><?php echo $product->name;?></a></li>
         <?php $index++;?>
         <?php endforeach;?>
       </ul>
