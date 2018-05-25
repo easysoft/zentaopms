@@ -29,6 +29,7 @@
 .block-statistic .nav-stacked {overflow: auto; max-height: 247px;}
 .block-statistic .progress-pie .progress-info > strong {font-size: 24px;}
 .block-statistic .chosen-single {font-size: 16px; font-weight: bold;}
+.block-statistic .chosen-container-single .chosen-single div b {top: -2px}
 </style>
 <div class="panel-body">
   <div class="table-row">
