@@ -59,7 +59,7 @@
             </td>
           </tr>
           <tr>
-            <td class='text-center' colspan='2'>
+            <td class='text-center form-actions' colspan='2'>
               <?php 
               echo html::submitButton('', '', 'btn btn-wide btn-primary');
               echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));

@@ -36,7 +36,7 @@
       </tr>
       <tr>
         <th class='text-right'></th>
-        <td>
+        <td class='form-actions'>
           <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
           <?php echo html::backButton('', '', 'btn btn-wide');?>
           <?php echo html::hidden('noChecked'); // Save the value of no checked.?>
@@ -120,7 +120,7 @@
             <label class='text-right' for='allChecker'><?php echo $lang->selectAll;?></label>
           </div>
         </th>
-        <td>
+        <td class='form-actions'>
           <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
           <?php echo html::backButton('', '', 'btn btn-wide');?>
           <?php echo html::hidden('noChecked'); // Save the value of no checked.?>
