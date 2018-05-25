@@ -41,6 +41,11 @@
 </style>
 <div class="panel-body">
   <div class="table-row">
+    <?php if(empty($products)):?>
+    <div class="table-empty-tip">
+      <p><span class="text-muted"><?php echo $lang->product->noProduct;?></span> <?php common::printLink('product', 'create', '', "<i class='icon icon-plus'></i> " . $lang->product->create, '', "class='btn btn-info'");?></p>
+    </div>
+    <?php else:?>
     <div class="col tab-content">
       <?php foreach($products as $product):?>
       <div class="tab-pane fade <?php if($product == reset($products)) echo 'active';?> in" id="tab<?php echo $product->code;?>">
@@ -160,5 +165,6 @@
         <?php endforeach;?>
       </ul>
     </div>
+    <?php endif;?>
   </div>
 </div>

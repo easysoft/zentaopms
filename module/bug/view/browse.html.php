@@ -101,14 +101,13 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     }
     foreach($menus as $menuItem)
     {
-        if(isset($menuItem->hidden)) continue;
+        if(isset($menuItem->hidden) and $menuItem->name != 'QUERY') continue;
         if($this->config->global->flow == 'onlyTest' and $menuItem->name == 'needconfirm') continue;
 
         $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;
-        $barParam       = strpos($menuItem->name, 'QUERY') === 0 ? (int)substr($menuItem->name, 5) : 0;
-        $label          = "<span class='text'>{$menuItem->text}</span>";
-        $label         .= $menuBrowseType == $browseType ? "<span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
-        $active         = $menuBrowseType == $browseType ? 'btn-active-text' : '';
+        $label  = "<span class='text'>{$menuItem->text}</span>";
+        $label .= $menuBrowseType == $browseType ? "<span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
+        $active = $menuBrowseType == $browseType ? 'btn-active-text' : '';
 
         if($menuItem->name == 'my')
         {
@@ -118,9 +117,34 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             foreach($lang->bug->mySelects as $key => $value)
             {
                 echo '<li' . ($key == $currentBrowseType ? " class='active'" : '') . '>';
-                echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$key&param=$barParam"), $value);
+                echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$key"), $value);
             }
             echo '</ul></li>';
+        }
+        elseif($menuItem->name == 'QUERY')
+        {
+            if(isset($lang->custom->queryList))
+            {
+                echo '<div class="btn-group" id="query">';
+                $active  = '';
+                $current = $menuItem->text;
+                $dropdownHtml = "<ul class='dropdown-menu'>";
+                foreach($lang->custom->queryList as $queryID => $queryTitle)
+                {
+                    if($browseType == 'bysearch' and $queryID == $param)
+                    {
+                        $active  = 'btn-active-text';
+                        $current = "<span class='text'>{$queryTitle}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+                    }
+                    $dropdownHtml .= '<li' . ($param == $queryID ? " class='active'" : '') . '>';
+                    $dropdownHtml .= html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $queryTitle);
+                }
+                $dropdownHtml .= '</ul>';
+
+                echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $active'");
+                echo $dropdownHtml;
+                echo '</div>';
+            }
         }
         else
         {
@@ -131,12 +155,12 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                     echo "<div class='btn-group'><a href='javascript:;' data-toggle='dropdown' class='btn btn-link {$moreLabelActive}'>{$moreLabel} <span class='caret'></span></a>";
                     echo "<ul class='dropdown-menu'>";
                 }
-                echo '<li>' . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType&param=$barParam"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link $active'") . '</li>';
+                echo '<li>' . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link $active'") . '</li>';
                 if($menuItem->name == 'needconfirm') echo '</ul></div>';
             }
             else
             {
-                echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType&param=$barParam"), $label, '', "class='btn btn-link $active'");
+                echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType"), $label, '', "class='btn btn-link $active'");
             }
         }
     }
@@ -387,16 +411,9 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   </div>
 </div>
 <script>
-$('#' + bugBrowseType + 'Tab').addClass('active');
-$('#module' + moduleID).addClass('active');
+$('#module' + moduleID).closest('li').addClass('active');
 <?php if($browseType == 'bysearch'):?>
-$shortcut = $('#QUERY<?php echo (int)$param;?>Tab');
-if($shortcut.size() > 0)
-{
-    $shortcut.addClass('active');
-    $('#bysearchTab').removeClass('active');
-    $('#querybox').removeClass('show');
-}
+if($('#query li.active').size() == 0) ajaxGetSearchForm();
 <?php endif;?>
 <?php $this->app->loadConfig('qa', '', false);?>
 <?php if(isset($config->qa->homepage) and $config->qa->homepage != 'browse' and $config->global->flow == 'full'):?>

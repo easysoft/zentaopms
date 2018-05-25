@@ -29,8 +29,8 @@
           <th class='w-300px'>
             <table class='w-p100 table-borderless'>
               <tr>
-                <th><?php echo $lang->testcase->stepDesc?></th>
-                <th><?php echo $lang->testcase->stepExpect?></th>
+                <th class="no-padding"><?php echo $lang->testcase->stepDesc?></th>
+                <th class="no-padding"><?php echo $lang->testcase->stepExpect?></th>
               </tr>
             </table>
           </th>
@@ -110,27 +110,6 @@
 </div>
 <?php endif;?>
 <script>
-function affix(obj)
-{
-    var fixH = $(obj).offset().top;
-    var first = true;
-    $(window).scroll(function()
-    {
-        var scroH = $(this).scrollTop();
-        if(scroH>=fixH && first)
-        {
-            $(obj).parent().parent().before("<table id='headerClone' class='table'></table>");
-            $('#headerClone').append($(obj).clone()).addClass('affix');
-            $('.active-disabled ' + obj + ' th').each(function(i){$('#headerClone ' + obj + ' th').eq(i).width($(this).width())});
-            first = false;
-        }
-        else if(scroH<fixH)
-        {
-            $("#headerClone").remove();
-            first = true;
-        }
-    });
-}
-$(function(){affix('#showData thead')});
+$(function(){$.fixedTableHead('#showData');});
 </script>
 <?php include '../../common/view/footer.html.php';?>
