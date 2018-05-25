@@ -88,7 +88,7 @@ $lang->block->default['project']['1']['block'] = 'statistic';
 $lang->block->default['project']['1']['grid']  = 8;
 
 $lang->block->default['project']['1']['params']['orderBy'] = 'id_desc';
-$lang->block->default['project']['1']['params']['type']    = 'noclosed';
+$lang->block->default['project']['1']['params']['type']    = 'undone';
 $lang->block->default['project']['1']['params']['num']     = 5;
 
 $lang->block->default['project']['2']['title'] = $lang->projectCommon . 'overview';

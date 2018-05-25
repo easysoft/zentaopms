@@ -219,6 +219,9 @@ class upgradeModel extends model
              case '9_8_3':
                 $this->execSQL($this->getUpgradeFile('9.8.3'));
                 $this->adjustPriv10_0_alpha();
+             case '10_0_alpha':
+                $this->execSQL($this->getUpgradeFile('10.0.alpha'));
+                $this->fixProjectStatisticBlock();
        }
 
         $this->deletePatch();
@@ -2299,6 +2302,28 @@ class upgradeModel extends model
             $groupPriv->module = 'my';
             $groupPriv->method = 'calendar';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * Fix project statistic block.
+     * 
+     * @access public
+     * @return void
+     */
+    public function fixProjectStatisticBlock()
+    {
+        $block = $this->dao->select('*')->from(TABLE_BLOCK)->where('module')->eq('my')->andWhere('source')->eq('project')->andWhere('block')->eq('statistic')->fetch();
+        if($block)
+        {
+            $blockParams = json_decode($block->params);
+            if($blockParams->type == 'noclosed')
+            {
+                $blockParams->type = 'undone';
+                $this->dao->update(TABLE_BLOCK)->set('params')->eq(helper::jsonEncode($blockParams))->where('id')->eq($block->id)->exec();
+                return !dao::isError();
+            }
         }
         return true;
     }
