@@ -59,7 +59,7 @@
           <?php endforeach;?>
         </div>
       </div>
-      <div class="detail text-center">
+      <div class="detail text-center form-actions">
         <?php echo html::hidden("post", 'post');?>
         <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
       </div>

@@ -145,7 +145,7 @@
           <th><?php echo $lang->project->whitelist;?></th>
           <td colspan='2'><?php echo html::checkbox('whitelist', $groups, $project->whitelist, '', '', 'inline');?></td>
         </tr>
-        <tr><td colspan='3' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . ' ' . html::backButton('', '', 'btn btn-wide');?></td></tr>
+        <tr><td colspan='3' class='text-center form-actions'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . ' ' . html::backButton('', '', 'btn btn-wide');?></td></tr>
       </table>
     </form>
   </div>
