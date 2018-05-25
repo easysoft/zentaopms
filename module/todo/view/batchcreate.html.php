@@ -83,7 +83,7 @@
         <?php endfor;?>
       </tbody>
       <tfoot>
-        <tr><td class='text-center' colspan='<?php echo isset($visibleFields['beginAndEnd']) ? $columns + 1 : $columns;?>'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::backButton('', '', 'btn btn-wide');?></td></tr>
+        <tr><td class='text-center form-actions' colspan='<?php echo isset($visibleFields['beginAndEnd']) ? $columns + 1 : $columns;?>'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::backButton('', '', 'btn btn-wide');?></td></tr>
       </tfoot>
     </table>
     <div class="hidden">

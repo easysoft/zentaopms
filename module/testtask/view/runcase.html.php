@@ -81,7 +81,7 @@
       <?php $childId ++;?>
       <?php endforeach;?>
       <tr class='text-center'>
-        <td colspan='5'>
+        <td colspan='5' class='form-actions'>
           <?php
           if($preCase)  echo html::a(inlink('runCase', "runID={$preCase['runID']}&caseID={$preCase['caseID']}&version={$preCase['version']}"), $lang->testtask->pre, '', "id='pre' class='btn'");
           echo html::submitButton('', '', 'btn btn-wide btn-primary');

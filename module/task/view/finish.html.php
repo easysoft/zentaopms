@@ -69,7 +69,7 @@
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
         </tr>
         <tr>
-          <td colspan='3' class='text-center'>
+          <td colspan='3' class='text-center form-actions'>
             <?php echo html::submitButton($lang->task->finish, '', 'btn btn-wide btn-primary');?>
             <?php echo html::linkButton($lang->goback, $this->session->taskList, 'self', '', 'btn btn-wide');?>
           </td>
