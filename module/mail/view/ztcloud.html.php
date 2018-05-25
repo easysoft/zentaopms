@@ -60,7 +60,7 @@
           </td>
         </tr>
         <tr>
-          <td colspan='3' class='text-center'>
+          <td colspan='3' class='text-center form-actions'>
             <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
             <?php
             if($this->config->mail->turnon and $mailExist) echo html::a(inlink('test'), $lang->mail->test, '', "class='btn btn-wide'");

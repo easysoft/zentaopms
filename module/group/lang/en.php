@@ -19,7 +19,7 @@ $lang->group->manageView         = 'View';
 $lang->group->managePriv         = 'Batch Assign Privileges';
 $lang->group->managePrivByGroup  = 'Privilege';
 $lang->group->managePrivByModule = 'Module Privileges';
-$lang->group->byModuleTips       = '<span class="tips">(Press Shift/Control to Multi-select)</span>';
+$lang->group->byModuleTips       = '<span class="tips">(Press Shift/Ctrl to Multi-select)</span>';
 $lang->group->manageMember       = 'Member';
 $lang->group->confirmDelete      = 'Do you want to delete this User Group?';
 $lang->group->successSaved       = 'Saved!';

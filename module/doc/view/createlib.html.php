@@ -55,7 +55,7 @@
               </td>
             </tr>
             <tr>
-              <td class='text-center' colspan='2'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td>
+              <td class='text-center form-actions' colspan='2'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td>
             </tr>
           </table>
         </form>

@@ -88,7 +88,7 @@
               <td></td>
               <td class="form-actions">
               <?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::hidden('mode', $mode);?>
-              <?php if($mode == 'edit') echo html::a(inlink('deleteContacts', "listID=$listID"), $lang->delete, 'hiddenwin', "class='btn btn-danger'");?>
+              <?php if($mode == 'edit') echo html::a(inlink('deleteContacts', "listID=$listID"), $lang->delete, 'hiddenwin', "class='btn btn-danger btn-wide'");?>
               </td>
             </tr>
             <?php endif;?>

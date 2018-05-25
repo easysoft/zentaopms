@@ -76,7 +76,7 @@
             </td>
           </tr>
           <tr>
-            <td colspan='3' class='text-center'>
+            <td colspan='3' class='text-center form-actions'>
               <?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . ' ' . html::backButton('', '', 'btn btn-wide') . html::hidden('lib', $libID);?>
             </td>
           </tr>

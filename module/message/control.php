@@ -44,7 +44,7 @@ class message extends control
             $data = fixer::input('post')->get();
             $data->messageSetting = json_encode($data->messageSetting);
             $this->loadModel('setting')->setItem('system.message.setting', $data->messageSetting);
-            die(js::reload('parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
         $this->loadModel('webhook');

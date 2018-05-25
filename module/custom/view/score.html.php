@@ -31,7 +31,7 @@
         </tr>
         <tr>
           <th></th>
-          <td>
+          <td class='form-actions'>
             <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
             <?php common::printLink('score', 'reset', '', "<i class='icon-refresh'></i> " . $lang->custom->scoreReset, '', ' id="scoreRefresh" class="btn btn-wide iframe" data-width="480"', true, true);?>
           </td>

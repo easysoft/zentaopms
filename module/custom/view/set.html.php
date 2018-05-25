@@ -147,7 +147,7 @@ EOT;
         </tr>
         <?php endforeach;?>
         <tr>
-          <td colspan='<?php $canAdd ? print(3) : print(2);?>' class='text-center'>
+          <td colspan='<?php $canAdd ? print(3) : print(2);?>' class='text-center form-actions'>
           <?php
           $appliedTo = array($currentLang => $lang->custom->currentLang, 'all' => $lang->custom->allLang);
           echo html::radio('lang', $appliedTo, $lang2Set);
