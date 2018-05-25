@@ -63,7 +63,7 @@
       </tr>
       <tr>
         <th><span class='hidden'><?php echo html::selectAll('', 'checkbox')?></span></th>
-        <td colspan='2'>
+        <td colspan='2' class='form-actions'>
           <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
           <?php echo html::backButton('', '', 'btn btn-wide');?>
           <?php echo html::hidden('foo'); // Just a hidden var, to make sure $_POST is not empty.?>
