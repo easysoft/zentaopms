@@ -129,6 +129,10 @@
         <?php endif;?>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
+      <?php else:?>
+      <div class="table-empty-tip">
+        <p><span class="text-muted"><?php echo $lang->testcase->noCase;?></span> <?php common::printLink('testtask', 'linkCase', "taskID={$taskID}", "<i class='icon icon-plus'></i> " . $lang->testtask->linkCase, '', "class='btn btn-info'");?></p>
+      </div>
       <?php endif;?>
     </form>
   </div>
