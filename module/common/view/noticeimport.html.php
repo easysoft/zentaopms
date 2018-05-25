@@ -14,8 +14,8 @@
           </div>
         </div>
         <div class="text-center form-actions">
-          <a href='javascript:submitForm(\"cover\")' class='btn btn-danger btn-wide'><?php echo $lang->importAndCover;?></a>
-          <a href='javascript:submitForm(\"insert\")' class='btn btn-primary btn-wide'><?php echo $lang->importAndInsert;?></a>
+          <a href='javascript:submitForm("cover")' class='btn btn-danger btn-wide'><?php echo $lang->importAndCover;?></a>
+          <a href='javascript:submitForm("insert")' class='btn btn-primary btn-wide'><?php echo $lang->importAndInsert;?></a>
           <button class="btn btn-wide" type="button" data-dismiss="modal"><?php echo $lang->goback;?></button>
         </div>
       </div>

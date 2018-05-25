@@ -74,7 +74,7 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan='9' class='text-center'>
+        <td colspan='9' class='text-center form-actions'>
           <?php
           if(!$insert)
           {
