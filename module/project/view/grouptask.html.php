@@ -14,8 +14,8 @@
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolbar pull-left">
     <div class="pull-left table-group-btns">
-      <button type="button" class="btn btn-link group-collapse-all"><?php echo $lang->project->treeLevel['root'];?> <i class="icon-caret-up"></i></button>
-      <button type="button" class="btn btn-link group-expand-all"><?php echo $lang->project->treeLevel['all'];?> <i class="icon-caret-down"></i></button>
+      <button type="button" class="btn btn-link group-collapse-all"><?php echo $lang->project->treeLevel['root'];?> <i class="icon-fold-all"></i></button>
+      <button type="button" class="btn btn-link group-expand-all"><?php echo $lang->project->treeLevel['all'];?> <i class="icon-unfold-all"></i></button>
     </div>
     <?php if(isset($lang->project->groupFilter[$groupBy])):?>
     <?php foreach($lang->project->groupFilter[$groupBy] as $filterKey => $name):?>
