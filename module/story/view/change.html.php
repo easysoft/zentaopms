@@ -20,7 +20,7 @@
         <small><?php echo $lang->arrow . ' ' . $lang->story->change;?></small>
       </h2>
     </div>
-    <form method='post' enctype='multipart/form-data' target='hiddenwin'>
+    <form class="main-form" method='post' enctype='multipart/form-data' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->story->reviewedBy;?></th>
@@ -61,7 +61,7 @@
         </tr>
         <tr>
           <td></td>
-          <td class='text-center'>
+          <td class='text-center form-actions'>
             <?php
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
             echo html::submitButton('', '', 'btn btn-wide btn-primary');
