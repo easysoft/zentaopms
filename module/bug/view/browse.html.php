@@ -190,7 +190,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     </div>
   </div>
   <div class="main-col">
-    <div class="cell" id="queryBox"></div>
+    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox"></div>
     <form class='main-table table-bug' data-ride='table' method='post' id='bugForm'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
