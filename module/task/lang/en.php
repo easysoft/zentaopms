@@ -11,7 +11,7 @@
  */
 $lang->task->index               = "Index";
 $lang->task->create              = "Create Task";
-$lang->task->batchCreate         = "Batch Create Tasks";
+$lang->task->batchCreate         = "Batch Create";
 $lang->task->batchCreateChildren = "Batch Create Children";
 $lang->task->batchEdit           = "Batch Edit";
 $lang->task->batchChangeModule   = "Batch Change Module";
