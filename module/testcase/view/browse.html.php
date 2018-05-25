@@ -40,7 +40,7 @@ js::set('branch',         $branch);
     </div>
   </div>
   <div class='main-col'>
-    <div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>'></div>
+    <div id='queryBox' class='cell'></div>
     <form class='main-table table-case' data-ride='table' id='batchForm' method='post'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
@@ -205,16 +205,10 @@ js::set('branch',         $branch);
   </div>
 </div>
 <script>
-$('#module' + moduleID).addClass('active'); 
+$('#module' + moduleID).closest('li').addClass('active'); 
 $('#' + caseBrowseType + 'Tab').addClass('btn-active-text').find('.text').after("<span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>");
 <?php if($browseType == 'bysearch'):?>
-$shortcut = $('#QUERY<?php echo (int)$param;?>Tab');
-if($shortcut.size() > 0)
-{
-    $shortcut.addClass('btn-active-text');
-    $('#bysearchTab').removeClass('btn-active-text');
-    $('#querybox').removeClass('show');
-}
+if($('#query li.active').size() == 0) ajaxGetSearchForm();
 <?php endif;?>
 </script>
 <?php include '../../common/view/footer.html.php';?>
