@@ -65,7 +65,7 @@
         </tr>
         <tr>
           <th></th>
-          <td>
+          <td class='form-actions'>
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
             <?php echo html::backButton('', '', 'btn btn-wide');?>
           </td>

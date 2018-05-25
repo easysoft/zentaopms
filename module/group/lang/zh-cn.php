@@ -19,7 +19,7 @@ $lang->group->manageView         = '视图维护';
 $lang->group->managePriv         = '权限维护';
 $lang->group->managePrivByGroup  = '权限维护';
 $lang->group->managePrivByModule = '按模块分配权限';
-$lang->group->byModuleTips       = '<span class="tips">（可以按住Shift或者Control键进行多选）</span>';
+$lang->group->byModuleTips       = '<span class="tips">（可以按住Shift或者Ctrl键进行多选）</span>';
 $lang->group->manageMember       = '成员维护';
 $lang->group->confirmDelete      = '您确定删除该用户分组吗？';
 $lang->group->successSaved       = '成功保存';

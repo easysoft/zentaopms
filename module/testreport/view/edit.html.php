@@ -82,7 +82,7 @@
             <td></td>
           </tr>
           <tr>
-            <td class='text-center' colspan='4'>
+            <td class='text-center form-actions' colspan='4'>
               <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
               <?php echo html::backButton('', '', 'btn btn-wide');?>
             </td>

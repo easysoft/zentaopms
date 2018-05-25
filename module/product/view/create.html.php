@@ -82,7 +82,7 @@
             <td colspan='2'><?php echo html::checkbox('whitelist', $groups, '', '', 'inline');?></td>
           </tr>  
           <tr>
-            <td colspan='3' class='text-center'>
+            <td colspan='3' class='text-center form-actions'>
               <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
               <?php echo html::backButton('', '', 'btn btn-wide');?>
             </td>

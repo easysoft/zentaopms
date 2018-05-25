@@ -56,7 +56,7 @@
             <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
           </tr>  
           <tr>
-            <td colspan='3' class='text-center'>
+            <td colspan='3' class='text-center form-actions'>
               <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
               <?php echo html::backButton('', '', 'btn btn-wide');?>
               <?php echo html::hidden('product', $release->product);?>
