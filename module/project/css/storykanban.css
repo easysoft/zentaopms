@@ -16,6 +16,7 @@
 .board-item.dragging {opacity: .35;}
 .board-item .btn {padding: 2px 10px 2px 30px; font-size: 12px;}
 .board-item .btn-icon-left > .icon {width: 22px; height: 22px; line-height: 20px; font-size: 14px;}
+.board-item .status {line-height: 20px; display: inline-block; vertical-align: middle;}
 #kanban.dragging .boards.dragging .board {background: #eee; opacity: .35; border-color: #f1f1f1}
 #kanban thead .c-side {padding: 5px;}
 #kanban .label-pri {width: 16px; height: 16px; line-height: 16px; min-width: 16px; font-size: 12px;}
