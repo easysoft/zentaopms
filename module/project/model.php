@@ -336,6 +336,7 @@ class projectModel extends model
                 $members = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($copyProjectID)->andWhere('type')->eq('project')->fetchAll();
                 foreach($members as $member)
                 {
+                    unset($member->id);
                     $member->root = $projectID;
                     $member->join = $today;
                     $member->days = $project->days;

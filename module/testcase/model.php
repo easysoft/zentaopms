@@ -1031,7 +1031,7 @@ class testcaseModel extends model
                 }
             }
 
-            $cases[$key] =$caseData;
+            $cases[$key] = $caseData;
         }
 
         $forceNotReview = $this->forceNotReview();
@@ -1387,6 +1387,12 @@ class testcaseModel extends model
                 echo $case->stepNumber;
                 break;
             case 'actions':
+                if($case->needconfirm or $browseType == 'needconfirm')
+                {
+                    if(common::hasPriv('testcase', 'confirmchange')) echo html::a(helper::createLink('testcase', 'confirmchange', "caseID=$case->id"), $this->lang->confirm, 'hiddenwin', "class='btn-wide'");
+                    break;
+                }
+
                 echo "<div class='more'>";
                 if($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
 

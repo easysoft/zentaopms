@@ -6,7 +6,7 @@
         <h4 class="modal-title"><?php echo $lang->importConfirm;?></h4>
       </div>
       <div class="modal-body">
-        <?php echo html::hidden('insert', '');?>
+        <?php echo html::hidden('insert', 0);?>
         <div class='alert with-icon'>
           <i class="icon icon-exclamation-sign"></i>
           <div class="content">
@@ -25,7 +25,7 @@
 <script>
 function submitForm(type)
 {
-    $('#insert').val(type == 'insert' ? 1 : 0);
+    $('.modal-body #insert').val(type == 'insert' ? 1 : 0);
     $("button[data-target='#importNoticeModal']").closest('form').submit();
 }
 </script>

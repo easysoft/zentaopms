@@ -45,7 +45,7 @@
       }
   }
   ?>
-  <form class='main-form' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "projectID={$projectID}")?>">
+  <form id='batchEditForm' class='main-form' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "projectID={$projectID}")?>">
     <table class='table table-form table-fixed with-border'>
       <thead>
         <tr>
