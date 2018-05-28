@@ -36,7 +36,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php
-    common::printLink('story', 'export', "productID=$productID&orderBy=id_desc", "<i class='icon icon-export'> </i>" . $lang->story->export, '', "class='btn btn-link export'");
+    common::printLink('story', 'export', "productID=$productID&orderBy=id_desc", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export'");
 
     if(commonModel::isTutorialMode())
     {
@@ -45,15 +45,15 @@
     }
     else
     {
-        echo "<div class='btn-group' id='createActionMenu'>";
-        common::printIcon('project', 'linkStory', "project=$project->id", '', 'button', 'link', '', 'link-story-btn');
+        echo "<div class='btn-group dropdown-hover' id='createActionMenu'>";
         if(common::hasPriv('project', 'importPlanStories'))
         {
-            echo "<button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>";
-            echo "<span class='caret'></span>";
+            echo "<button type='button' class='btn btn-link dropdown-toggle btn-icon'>";
+            echo "<i class='icon-link muted'></i> {$lang->project->linkStory} <span class='caret'></span>";
             echo '</button>';
             echo "<ul class='dropdown-menu pull-right'>";
-            echo "<li>" . html::a('###', $lang->project->linkStoryByPlan, '', 'data-toggle="linkStoryByPlan"') . "</li>";
+            echo "<li>" . html::a($this->createLink('project', 'linkStory', "project=$project->id"), $lang->project->linkStory). "</li>";
+            echo "<li>" . html::a('#linkStoryByPlan', $lang->project->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
             echo '</ul>';
         }
         echo '</div>';
@@ -197,7 +197,11 @@
           <?php endforeach;?>
         </tbody>
       </table>
-      <?php if($stories):?>
+      <?php if(!$stories):?>
+      <div class="table-empty-tip">
+        <p><span class="text-muted"><?php echo $lang->product->noStory;?></span> <?php common::printLink('project', 'linkStory', "project=$project->id", "<i class='icon icon-link'></i> " . $lang->project->linkStory, '', "class='btn btn-info'");?></p>
+      </div>
+      <?php else:?>
       <div class='table-footer'>
         <?php if($canBatchEdit or $canBatchClose):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -230,7 +234,7 @@
             ?>
           </div>
           <?php endif;?>
-          <?php 
+          <?php
           if(common::hasPriv('project', 'batchUnlinkStory'))
           {
               $actionLink = $this->createLink('project', 'batchUnlinkStory', "projectID=$project->id");
@@ -247,16 +251,16 @@
 </div>
 
 <div class="modal fade" id="linkStoryByPlan">
-  <div class="modal-dialog">
+  <div class="modal-dialog mw-500px">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title"><i class="icon-file-text"></i> <?php echo $lang->project->linkStoryByPlan;?></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $lang->project->linkStoryByPlan;?></h4>
       </div>
       <div class="modal-body">
         <div class='input-group'>
           <?php echo html::select('plan', $allPlans, '', "class='form-control chosen' id='plan'");?>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->project->linkStory, "id='toTaskButton'");?></span>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->project->linkStory, "id='toTaskButton'", 'btn btn-primary');?></span>
         </div>
       </div>
     </div>
@@ -293,6 +297,9 @@ $(function()
                   .replace('%rate%', rate);
         }
     });
+    <?php if(!$stories):?>
+    $("#main").addClass('hide-sidebar');
+    <?php endif;?>
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>
