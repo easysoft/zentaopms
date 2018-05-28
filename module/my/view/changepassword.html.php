@@ -11,6 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php if(!isonlybody()):?>
+<style>
+.main-content{width: 500px; margin: 0 auto;}
+</style>
+<?php endif;?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><i class='icon-key'></i> <?php echo $lang->my->changePassword;?></h2>
@@ -18,7 +23,7 @@
   <form method='post' target='hiddenwin'>
     <table align='center' class='table table-form w-320px'>
       <tr>
-        <th class='rowhead w-120px'><?php echo $lang->user->account;?></th>
+        <th class='rowhead w-90px'><?php echo $lang->user->account;?></th>
         <td><?php echo $user->account . html::hidden('account',$user->account);?></td>
       </tr>  
       <tr>

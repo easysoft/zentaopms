@@ -59,7 +59,7 @@ var browseType = '<?php echo $browseType;?>';
               <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
               <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
               <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
-              <th class="c-actions"><?php echo $lang->actions;?></th>
+              <th class="c-actions-3"><?php echo $lang->actions;?></th>
             </tr>
           </thead>
           <tbody>
@@ -85,7 +85,7 @@ var browseType = '<?php echo $browseType;?>';
             <?php $collectTitle = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
             <tr>
               <td class="c-name"><?php echo html::a(inlink('view', "docID=$doc->id"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title);?></td>
-              <td class="c-num"></td>
+              <td class="c-num"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
               <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
               <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'm-d h:i');?></td>
               <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'm-d h:i');?></td>

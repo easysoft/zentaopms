@@ -34,7 +34,7 @@
         <th class='w-90px'> <?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
         <th class='w-90px'> <?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
         <th class='w-80px'> <?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
-        <th class='w-150px'><?php echo $lang->actions;?></th>
+        <th class='c-actions-3'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -52,12 +52,6 @@
           common::printIcon('testtask', 'cases',    "taskID=$task->id", 'play', 'list', 'sitemap');
           common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list', 'link');
           common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
-
-          if(common::hasPriv('testtask', 'delete'))
-          {
-              $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->testtask->delete}' class='btn'");
-          }
           ?>
         </td>
       </tr>

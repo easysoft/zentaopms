@@ -66,7 +66,7 @@ class docModel extends model
                 if($type == 'custom')  $currentLib = $libID;
                 if($type == 'product') $currentLib = $productID;
                 if($type == 'project') $currentLib = $projectID;
-                if($currentLib) 
+                if($currentLib)
                 {
                     $allLibGroups = $this->getAllLibGroups();
                     $currentGroups = $allLibGroups[$type];
@@ -283,7 +283,13 @@ class docModel extends model
      */
     public function getDocsByBrowseType($libID, $browseType, $queryID, $moduleID, $sort, $pager)
     {
-        $allLibs = array_keys($this->getLibs('all'));
+        $allLibs   = array_keys($this->getLibs('all'));
+        $docIdList = $this->getPrivDocs($libID, $moduleID);
+
+        $files = $this->dao->select('*')->from(TABLE_FILE)
+            ->where('objectType')->eq('doc')
+            ->andWhere('objectID')->in($docIdList)
+            ->fetchGroup('objectID');
         if($browseType == "all")
         {
             $docs = $this->getDocs($libID, 0, $sort, $pager);
@@ -301,12 +307,6 @@ class docModel extends model
         }
         elseif($browseType == 'byediteddate')
         {
-            $docIdList = $this->getPrivDocs($libID, $moduleID);
-            $files = $this->dao->select('*')->from(TABLE_FILE)
-                ->where('objectType')->eq('doc')
-                ->andWhere('objectID')->in($docIdList)
-                ->fetchGroup('objectID');
-
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
                 ->andWhere('id')->in($docIdList)
@@ -314,34 +314,6 @@ class docModel extends model
                 ->orderBy('editedDate_desc')
                 ->page($pager)
                 ->fetchAll('id');
-
-            foreach($docs as $doc)
-            {
-                $docs[$doc->id]->fileSize = 0;
-                if(isset($files[$doc->id]))
-                {
-                    $fileSize = 0;
-                    foreach($files[$doc->id] as $file) $fileSize += $file->size;
-                    if($fileSize < 1024)
-                    {
-                        $fileSize .= 'B';
-                    }
-                    elseif($fileSize < 1024 * 1024)
-                    {
-                        $fileSize = round($fileSize / 1024, 2) . 'KB';
-                    }
-                    elseif($fileSize < 1024 * 1024 * 1024)
-                    {
-                        $fileSize = round($fileSize / 1024 / 1024, 2) . 'MB';
-                    }
-                    else
-                    {
-                        $fileSize = round($fileSize / 1024 / 1024 /1024, 2) . 'G';
-                    }
-
-                    $docs[$doc->id]->fileSize = $fileSize;
-                }
-            }
         }
         elseif($browseType == "collectedbyme")
         {
@@ -420,9 +392,37 @@ class docModel extends model
         }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc');
-        if($docs) return $docs;
+        if(!$docs) return array();
 
-        return array();
+        foreach($docs as $index => $doc)
+        {
+            $docs[$index]->fileSize = 0;
+            if(isset($files[$index]))
+            {
+                $fileSize = 0;
+                foreach($files[$index] as $file) $fileSize += $file->size;
+                if($fileSize < 1024)
+                {
+                    $fileSize .= 'B';
+                }
+                elseif($fileSize < 1024 * 1024)
+                {
+                    $fileSize = round($fileSize / 1024, 2) . 'KB';
+                }
+                elseif($fileSize < 1024 * 1024 * 1024)
+                {
+                    $fileSize = round($fileSize / 1024 / 1024, 2) . 'MB';
+                }
+                else
+                {
+                    $fileSize = round($fileSize / 1024 / 1024 /1024, 2) . 'G';
+                }
+
+                $docs[$index]->fileSize = $fileSize;
+            }
+        }
+
+        return $docs;
     }
 
     /**
@@ -1110,8 +1110,8 @@ class docModel extends model
 
     /**
      * Stat module and document counts of lib.
-     * 
-     * @param  array    $idList 
+     *
+     * @param  array    $idList
      * @access public
      * @return array
      */
@@ -1398,7 +1398,7 @@ class docModel extends model
 
     /**
      * Get statistic information.
-     * 
+     *
      * @access public
      * @return object
      */

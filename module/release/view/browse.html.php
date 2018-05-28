@@ -35,7 +35,7 @@
         <?php endif;?>
         <th class='c-date text-center'><?php echo $lang->release->date;?></th>
         <th class='text-center w-90px'><?php echo $lang->release->status;?></th>
-        <th class='c-actions-4 text-center'><?php echo $lang->actions;?></th>
+        <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>

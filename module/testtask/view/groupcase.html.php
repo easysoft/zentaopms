@@ -36,7 +36,7 @@
         <th class='w-30px' title='<?php echo $lang->testcase->bugs?>'><?php echo $lang->testcase->bugsAB;?></th>
         <th class='w-30px' title='<?php echo $lang->testcase->results?>'><?php echo $lang->testcase->resultsAB;?></th>
         <th class='w-30px' title='<?php echo $lang->testcase->stepNumber?>'><?php echo $lang->testcase->stepNumberAB;?></th>
-        <th class='w-130px'> <?php echo $lang->actions;?></th>
+        <th class='c-actions-3'> <?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>

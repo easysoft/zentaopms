@@ -39,7 +39,7 @@
           <th class="c-url"><?php echo $lang->build->filePath;?></th>
           <th class="c-date"><?php echo $lang->build->date;?></th>
           <th class="c-user"><?php echo $lang->build->builder;?></th>
-          <th class="c-actions-3"><?php echo $lang->actions;?></th>
+          <th class="c-actions-4"><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

@@ -30,7 +30,7 @@
         for($i = $story->version; $i >= 1; $i --)
         {
       	  $class = $i == $version ? " class='active'" : '';
-      	  echo '<li' . $class .'>' . html::a(inlink('view', "storyID=$story->id&version=$i"), '#' . $i) . '</li>'; 
+      	  echo '<li' . $class .'>' . html::a(inlink('view', "storyID=$story->id&version=$i"), '#' . $i) . '</li>';
         }
         ?>
         </ul>
@@ -325,11 +325,11 @@
   <?php common::printPreAndNext($preAndNext);?>
   <div class="btn-toolbar">
     <?php common::printBack($browseLink);?>
+    <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
     <?php if(!$story->deleted):?>
-    <div class='divider'></div>
     <?php
-    common::printIcon('story', 'change', "storyID=$story->id", $story);
-    common::printIcon('story', 'review', "storyID=$story->id", $story);
+    common::printIcon('story', 'change', "storyID=$story->id", $story, '', '', '', 'showinonlybody');
+    common::printIcon('story', 'review', "storyID=$story->id", $story, '', '', '', 'showinonlybody');
     if($story->status != 'closed' and !isonlybody())
     {
         $misc = "class='btn' data-toggle='modal' data-type='iframe' data-width='95%'";
@@ -337,8 +337,8 @@
         if(common::hasPriv('story', 'batchCreate')) echo html::a($link, "<i class='icon icon-sitemap'></i> " . $lang->story->subdivide, '', $misc);
     }
 
-    common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe', true);
-    common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe', true);
+    common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
+    common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
 
     if($this->config->global->flow != 'onlyStory' and !isonlybody() and (common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'batchCreate')))
     {
@@ -359,11 +359,11 @@
         echo "</div>";
     }
 
-    if($from == 'project') common::printIcon('task', 'create', "project=$param&storyID=$story->id&moduleID=$story->module", $story, 'button', 'smile');
+    if($from == 'project') common::printIcon('task', 'create', "project=$param&storyID=$story->id&moduleID=$story->module", $story, 'button', 'smile', '', 'showinonlybody');
 
     echo "<div class='divider'></div>";
-    common::printIcon('story', 'edit', "storyID=$story->id", $story);
-    common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", $story, 'button', 'copy');
+    common::printIcon('story', 'edit', "storyID=$story->id", $story, '', '', '', 'iframe showinonlybody');
+    common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", $story, 'button', 'copy', '', 'iframe showinonlybody');
     common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', '', 'hiddenwin');
     ?>
     <?php endif;?>
