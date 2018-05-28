@@ -23,3 +23,9 @@ $config->action->objectNameFields['entry']       = 'name';
 $config->action->objectNameFields['webhook']     = 'name';
 
 $config->action->commonImgSize = 870;
+
+$config->action->majorList = array();
+$config->action->majorList['task']    = array('assigned', 'finished', 'activated');
+$config->action->majorList['bug']     = array('assigned', 'resolved');
+$config->action->majorList['release'] = array('opened');
+$config->action->majorList['build']   = array('opened');
