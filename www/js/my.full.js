@@ -504,7 +504,7 @@ function ajaxGetContacts(obj)
       $inputgroup = $(obj).closest('.input-group');
       $inputgroup.find('.input-group-btn').remove();
       $inputgroup.append(contacts);
-      $inputgroup.find('select:last').chosen(defaultChosenOptions);
+      $inputgroup.find('select:last').chosen(defaultChosenOptions).fixInputGroup();
     });
 }
 
