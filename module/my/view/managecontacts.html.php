@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='mainContent' class='main-row main-content'>
+<div id='mainContent' class='main-content <?php if($mode == 'edit') echo ' main-row';?>'>
   <?php if($mode == 'edit'):?>
   <div class='side-col'>
     <?php
@@ -24,9 +24,8 @@
     ?>
     <?php echo html::a(inlink('managecontacts', "listID=0&mode=new"), '<i class="icon icon-plus"></i> ' . $lang->user->contacts->createList, '', "class='btn btn-block'"); ?>
   </div>
+  <div class='main-col'>
   <?php endif;?>
-  <?php $class = $mode == 'edit' ? 'main-col' : '';?>
-  <div class='<?php echo $class?>'>
     <div class='main-header'>
       <h2>
         <?php if($mode == 'new'):?>
@@ -95,6 +94,8 @@
         <?php endif;?>
       </table>
     </form>
+  <?php if($mode == 'edit'):?>
   </div>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
