@@ -228,7 +228,7 @@
   <div class='modal-dialog'>
     <div class='modal-content'>
       <div class='modal-header'>
-        <button type='button' class='close' data-dismiss='modal'>&times;</button>
+        <button type='button' class='close' data-dismiss='modal'><i class='icon icon-close'></i></button>
         <div class='searchInput w-p90'>
           <input id='storySearchInput' type='text' class='form-control' placeholder='<?php echo $lang->testcase->searchStories?>'>
           <i class='icon icon-search'></i>

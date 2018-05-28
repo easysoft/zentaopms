@@ -1,9 +1,3 @@
-.outer .chosen-container-single .chosen-drop {border-top: 1px solid #ddd!important}
-.outer .chosen-container-single {max-width: 160px; border-radius: 0}
-.outer .chosen-container-single .chosen-single {border-radius: 2px 0 0 2px;}
-.outer .chosen-container-single + .input-group-btn > .btn {border-left: 0}
-.outer .input-group > span {display: block; padding-right: 29px; max-width: 100%;}
-.outer .input-group-btn > a {display: block; position: absolute; right: 0; width: 29px; top: 0}
 .chosen-container[id^="story"] {width: 200px; max-width: 150px;}
 .chosen-container[id^="story"] .chosen-drop {min-width: 450px !important;}
 .chosen-container[id^="module"] .chosen-drop {min-width: 400px !important;}
@@ -13,6 +7,7 @@
 #batchCreateForm .input-group .form-control {position: static;}
 #batchCreateForm .input-group .colorpicker {z-index: 2;}
 #batchCreateForm .input-group .colorpicker.open {z-index: 5;}
+#batchCreateForm{overflow-x:auto;}
 
 .main-header .pull-left {max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 

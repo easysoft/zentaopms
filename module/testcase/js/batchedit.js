@@ -34,7 +34,10 @@ function loadBranches(product, branch, caseID)
     $('#modules' + caseID).parent('td').load(moduleLink, function(){$('#modules' + caseID).chosen(defaultChosenOptions);})
 }
 
-$(document).ready(removeDitto());//Remove 'ditto' in first row.
+$(function()
+{
+    removeDitto();  //Remove 'ditto' in first row.
+});
 
 $(document).on('click', '.chosen-with-drop', function(){oldValue = $(this).prev('select').val();})//Save old value.
 

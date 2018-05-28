@@ -1,3 +1,2 @@
-#wrap .outer>table#actionbox>caption {margin-top:0px;}
-.table-data tbody > tr > th {width: 80px;}
-.modal-footer {text-align: center;}
+#projectModal .modal-dialog, #productModal .modal-dialog {top: auto!important; bottom: 90px;}
+.body-modal #projectModal .modal-dialog, .body-modal #productModal .modal-dialog {top: auto!important; bottom: 55px;}
