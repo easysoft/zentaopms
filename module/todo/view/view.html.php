@@ -48,11 +48,11 @@
           <table class='table table-data'>
             <tr>
               <th><?php echo $lang->todo->pri;?></th>
-              <td><?php echo $lang->todo->priList[$todo->pri];?></td>
+              <td><span title="<?php echo zget($lang->todo->priList, $todo->pri);?>" class='label-pri <?php echo 'label-pri-' . $todo->pri;?>' title='<?php echo zget($lang->todo->priList, $todo->pri, $todo->pri);?>'><?php echo zget($lang->todo->priList, $todo->pri)?></span></td>
             </tr>
             <tr>
               <th><?php echo $lang->todo->status;?></th>
-              <td class='todo-<?php echo $todo->status?>'><?php echo $lang->todo->statusList[$todo->status];?></td>
+              <td><span class="status-<?php echo $todo->status;?>"><span class="label label-dot"></span> <?php echo $lang->todo->statusList[$todo->status];?></span></td>
             </tr>
             <tr>
               <th><?php echo $lang->todo->type;?></th>
