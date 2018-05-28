@@ -171,9 +171,9 @@ $lang->bug->hasSubmittedTest      = '开发已提交测试申请，';
 $lang->bug->nowToTest             = '现在去测试';
 
 /* 模板。*/
-$lang->bug->tplStep   = "<p>[步骤]</p>";
-$lang->bug->tplResult = "<p>[结果]</p>";
-$lang->bug->tplExpect = "<p>[期望]</p>";
+$lang->bug->tplStep   = "<p>[步骤]</p><br/>";
+$lang->bug->tplResult = "<p>[结果]</p><br/>";
+$lang->bug->tplExpect = "<p>[期望]</p><br/>";
 
 /* 各个字段取值列表。*/
 $lang->bug->severityList[3] = '3';
