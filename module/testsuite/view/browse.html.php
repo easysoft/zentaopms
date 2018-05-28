@@ -36,7 +36,7 @@
         <th><?php echo $lang->testsuite->desc;?></th>
         <th class='w-90px'><?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->testsuite->addedBy);?></th>
         <th class='w-150px'><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->testsuite->addedDate);?></th>
-        <th class='w-130px text-center'><?php echo $lang->actions;?></th>
+        <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>

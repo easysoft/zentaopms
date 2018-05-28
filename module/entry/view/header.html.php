@@ -16,6 +16,6 @@
     <?php common::printLink('entry', 'browse', '', "<span class='text'>{$lang->entry->common}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printIcon('entry', 'create', '', '', 'button', '', '', 'btn-primary');?>
+    <?php echo html::a($this->createLink('entry', 'create'), "<i class='icon icon-plus'></i> {$lang->entry->create}", '', "class='btn btn-primary'"); ?>
   </div>
 </div>

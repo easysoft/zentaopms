@@ -45,7 +45,7 @@
             <th class="w-60px"><?php echo $lang->task->consumedThisTime;?></th>
             <th class="w-60px"><?php echo $lang->task->leftThisTime;?></th>
             <th><?php echo $lang->comment;?></th>
-            <th class='c-actions'><?php echo $lang->actions;?></th>
+            <th class='c-actions-2'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>

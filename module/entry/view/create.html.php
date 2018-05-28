@@ -13,14 +13,14 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <div id='mainContent' class='main-content'>
-  <div class='center-block mw-800px'>
+  <div class='center-block mw-800px center-block-sm'>
     <div class="main-header">
       <h2>
         <?php echo $lang->entry->api;?>
-        <small class="text-muted"> <?php echo $lang->entry->create;?></small>
+        <small><?php echo $lang->arrow . ' ' . $lang->entry->create;?></small>
       </h2>
     </div>
-    <form id='entryForm' method='post' class='ajaxForm'>
+    <form class='main-form' id='entryForm' method='post' class='ajaxForm'>
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->entry->name;?></th>

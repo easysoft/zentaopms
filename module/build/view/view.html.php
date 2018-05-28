@@ -106,7 +106,7 @@ tbody tr td:first-child input{display:none;}
                 <th class='w-70px'>   <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
                 <th class='w-70px'>   <?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
                 <th class='w-100px'>  <?php common::printOrderLink('stage',    $orderBy, $vars, $lang->story->stageAB);?></th>
-                <th class='w-60px'>   <?php echo $lang->actions?></th>
+                <th class='c-actions-1'>   <?php echo $lang->actions?></th>
               </tr>
             </thead>
             <tbody class='text-center'>
