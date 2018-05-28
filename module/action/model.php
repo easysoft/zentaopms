@@ -782,6 +782,8 @@ class actionModel extends model
             {
                 $action->objectLink = '';
             }
+
+            $action->major = (isset($this->config->action->majorList[$action->objectType]) && in_array($action->action, $this->config->action->majorList[$action->objectType])) ? 1 : 0;
         }
         return $actions;
     }

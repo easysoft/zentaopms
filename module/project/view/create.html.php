@@ -13,10 +13,10 @@
 <?php if(isset($tips)):?>
 <?php $defaultURL = $this-> createLink('project', 'task', 'projectID=' . $projectID);?>
 <?php include '../../common/view/header.lite.html.php';?>
-<body style='background: #e5e5e5'>
+<body>
   <div class='modal-dialog mw-500px' id='tipsModal'>
     <div class='modal-header'>
-      <a href='<?php echo $defaultURL;?>' class='close'>&times;</a>
+      <a href='<?php echo $defaultURL;?>' class='close'><i class="icon icon-close"></i></a>
       <h4 class='modal-title' id='myModalLabel'><?php echo $lang->project->tips;?></h4>
     </div>
     <div class='modal-body'>
