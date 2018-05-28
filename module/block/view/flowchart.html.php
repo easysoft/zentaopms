@@ -11,7 +11,7 @@
 .block-flowchart .table > thead > tr > th:first-child {width: auto;padding: 10px 10px 15px 10px;background: none;}
 .block-flowchart .table > thead > tr > th:first-child + th > div {background: none;}
 .block-flowchart .table > thead > tr > th,
-.block-flowchart .table > thead > tr > th > div {padding: 0;background: url('data:image/gif;base64,R0lGODlhLQAPAJEAAAAAAP///+7u7v///yH5BAEAAAMALAAAAAAtAA8AAAJPlIY5psn92jrSUGVrRFlfvHHh9JGS6aVQ2K2l+LYOO6KuCpby/No8DjvtgrfiD+gj5ozLpvMIfSanu2FyiKX1qqOsrsaNdbXCcfm8Ok1OBQA7') no-repeat;background-position: right -22px top 15px;}
+.block-flowchart .table > thead > tr > th > div {padding: 0;background: url('data:image/gif;base64,R0lGODlhLQAPAJEAAAAAAP///+7u7v///yH5BAEAAAMALAAAAAAtAA8AAAJEnH8imMvKopzKofrg3FRfb2Dc+FmNOYgkqZ4ZunZwm4KxHNH0nds1uuOFfDqf8NcDGoW7IuzYtAWZROmSF1U+oc+qsAAAOw==') no-repeat;background-position: right -22px top 15px;}
 .block-flowchart .table > thead > tr > th > div {padding: 10px 10px 15px 10px;background-position: left -23px top 15px;}
 .block-flowchart .table > thead > tr > th:last-child {background: none;}
 .block-flowchart .table > tbody > tr > td {color: #3c4353;}
