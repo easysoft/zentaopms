@@ -27,7 +27,11 @@ $(function()
         {
             parent.location.href = createLink('project', 'importPlanStories', 'projectID=' + projectID + '&planID=' + planID);
         }
-    })
+    });
+
+    $('.export').click(function () {
+      setCheckedCookie();
+    });
 });
 
 function showCheckedSummary()
