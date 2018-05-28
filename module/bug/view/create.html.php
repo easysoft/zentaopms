@@ -112,9 +112,9 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
               }
               ?>
               <?php if($hasCustomSeverity):?>
-              <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control chosen'");?> 
+              <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control chosen'");?>
               <?php else: ?>
-              <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control' data-provide='labelSelector' data-label-class='label-severity'");?> 
+              <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control' data-provide='labelSelector' data-label-class='label-severity'");?>
               <?php endif; ?>
             </td>
           </tr>
@@ -141,9 +141,9 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
               }
               ?>
               <?php if($hasCustomPri):?>
-              <?php echo html::select('pri', (array)$priList, $pri, "class='form-control chosen'");?> 
+              <?php echo html::select('pri', (array)$priList, $pri, "class='form-control chosen'");?>
               <?php else: ?>
-              <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector'");?> 
+              <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector'");?>
               <?php endif; ?>
             </td>
           </tr>

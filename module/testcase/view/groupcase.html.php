@@ -89,7 +89,9 @@
       <?php endforeach;?>
       <tr data-id='<?php echo $groupIndex;?>' class='group-toggle group-summary hidden divider-top'>
         <td class='c-side text-left'><?php echo html::a('###', "<i class='icon-caret-right'></i> $groupName");?></td>
-        <td colspan='12'></td>
+        <td colspan='12' class="text-left">
+          <div class="small with-padding"><span class="text-muted"><?php echo $lang->testcase->allTestcases;?></span> <?php echo $i;?></div>
+        </td>
       </tr>
       <?php $groupIndex++;?>
       <?php endforeach;?>

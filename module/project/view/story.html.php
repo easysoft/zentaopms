@@ -197,7 +197,11 @@
           <?php endforeach;?>
         </tbody>
       </table>
-      <?php if($stories):?>
+      <?php if(!$stories):?>
+      <div class="table-empty-tip">
+        <p><span class="text-muted"><?php echo $lang->product->noStory;?></span> <?php common::printLink('project', 'linkStory', "project=$project->id", "<i class='icon icon-link'></i> " . $lang->project->linkStory, '', "class='btn btn-info'");?></p>
+      </div>
+      <?php else:?>
       <div class='table-footer'>
         <?php if($canBatchEdit or $canBatchClose):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -230,7 +234,7 @@
             ?>
           </div>
           <?php endif;?>
-          <?php 
+          <?php
           if(common::hasPriv('project', 'batchUnlinkStory'))
           {
               $actionLink = $this->createLink('project', 'batchUnlinkStory', "projectID=$project->id");
@@ -293,6 +297,9 @@ $(function()
                   .replace('%rate%', rate);
         }
     });
+    <?php if(!$stories):?>
+    $("#main").addClass('hide-sidebar');
+    <?php endif;?>
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>
