@@ -64,9 +64,10 @@
                 if(count($plans) != 1)
                 {
                     echo "<div class='input-group-btn'>";
-                    echo html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch"), "<i class='icon icon-plus'></i>", '_blank', "class='btn' data-toggle='tooltip' title='{$lang->productplan->create}'");
-                    echo '&nbsp; ';
-                    echo html::a("javascript:loadProductPlans($productID)", "<i class='icon icon-refresh'></i>", '', "class='btn' data-toggle='tooltip' title='{$lang->refresh}'");
+                    echo html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch"), "<i class='icon icon-plus'></i>", '_blank', "class='btn btn-icon' data-toggle='tooltip' title='{$lang->productplan->create}'");
+                    echo '</div>';
+                    echo "<div class='input-group-btn'>";
+                    echo html::a("javascript:loadProductPlans($productID)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon' data-toggle='tooltip' title='{$lang->refresh}'");
                     echo '</div>';
                 }
                 ?>
