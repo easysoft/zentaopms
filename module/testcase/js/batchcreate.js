@@ -1,6 +1,7 @@
 $(document).ready(function()
 {
     removeDitto();//Remove 'ditto' in first row.
+    if($('#batchCreateForm table thead tr th.c-title').width() < 150) $('#batchCreateForm table thead tr th.c-title').width('150');
 
     $(document).on('click', '.chosen-with-drop', function()
     {
