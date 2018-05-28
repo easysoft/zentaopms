@@ -52,7 +52,7 @@
         <?php if($direction == 'next') $actions = array_reverse($actions);?>
         <?php foreach($actions as $i => $action):?>
         <?php if(empty($firstAction)) $firstAction = $action;?>
-        <li <?php if($action->actor == $this->app->user->account) echo "class='active'";?>>
+        <li <?php if($action->major) echo "class='active'";?>>
           <div>
             <span class="timeline-tag"><?php echo $action->time?></span>
             <span class="timeline-text">
