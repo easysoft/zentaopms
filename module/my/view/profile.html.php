@@ -11,10 +11,15 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php if(!isonlybody()):?>
+<style>
+.main-content{width: 600px; margin: 0 auto;}
+</style>
+<?php endif;?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><?php echo html::icon($lang->icons['user']);?> <?php echo $lang->my->profile;?></h2>
-    <div class='actions'>
+    <div class='actions pull-right'>
       <?php echo html::a($this->createLink('my', 'editprofile'), $lang->user->editProfile, '', "class='btn btn-primary'");?>
     </div>
   </div>
