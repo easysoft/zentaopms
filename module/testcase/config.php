@@ -83,7 +83,7 @@ $config->testcase->datatable->fieldList['id']['required'] = 'yes';
 
 $config->testcase->datatable->fieldList['pri']['title']    = 'priAB';
 $config->testcase->datatable->fieldList['pri']['fixed']    = 'left';
-$config->testcase->datatable->fieldList['pri']['width']    = '50';
+$config->testcase->datatable->fieldList['pri']['width']    = '40';
 $config->testcase->datatable->fieldList['pri']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['title']['title']    = 'title';
@@ -148,7 +148,7 @@ $config->testcase->datatable->fieldList['lastRunner']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastRunDate']['title']    = 'lastRunDate';
 $config->testcase->datatable->fieldList['lastRunDate']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['lastRunDate']['width']    = '100';
+$config->testcase->datatable->fieldList['lastRunDate']['width']    = '90';
 $config->testcase->datatable->fieldList['lastRunDate']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastRunResult']['title']    = 'lastRunResult';
