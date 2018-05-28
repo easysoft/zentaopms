@@ -192,7 +192,7 @@ $(document).ready(function()
             $('#estimate').attr('readonly', false);
         }
     });
-    $('#modalTeam').on('show', function()
+    $("[href='#modalTeam']").click(function()
     {
         adjustSortBtn();
     });
