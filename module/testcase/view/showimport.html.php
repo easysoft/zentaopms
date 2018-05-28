@@ -99,7 +99,7 @@
             {
                 echo html::submitButton('', '', 'btn btn-primary btn-wide');
             }
-            echo ' &nbsp; ' . html::backButton('', '', 'btn btn-wide')
+            echo ' &nbsp; ' . html::backButton('', '', 'btn btn-wide');
             ?>
           </td>
         </tr>

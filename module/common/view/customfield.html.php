@@ -27,6 +27,7 @@
       <div>
         <?php echo html::submitButton($lang->save);?>
         <?php echo html::commonButton($lang->cancel, '', "btn close-dropdown");?>
+        <?php echo html::a($customLink, $lang->restore, 'hiddenwin', "class='btn'");?>
       </div>
     </form>
   </div>

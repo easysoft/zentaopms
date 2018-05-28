@@ -57,6 +57,7 @@ $lang->required     = 'Required';
 $lang->noData       = 'No record';
 
 $lang->actions         = 'Actions';
+$lang->restore         = 'Restore';
 $lang->comment         = 'Note';
 $lang->history         = 'History';
 $lang->attatch         = 'Attachment';
