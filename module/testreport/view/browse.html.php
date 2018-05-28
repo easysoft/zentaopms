@@ -30,7 +30,7 @@
         <th class='w-150px'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->testreport->createdDate);?></th>
         <th class='w-250px text-left'><?php common::printOrderLink('project', $orderBy, $vars, $lang->testreport->project);?></th>
         <th class='w-250px text-left'><?php echo $lang->testreport->testtask;?></th>
-        <th class='w-80px'> <?php echo $lang->actions;?></th>
+        <th class='c-actions-2'> <?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <?php if($reports):?>

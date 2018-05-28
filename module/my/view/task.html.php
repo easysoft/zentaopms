@@ -49,7 +49,7 @@
           <th class='c-hours'>   <?php common::printOrderLink('left',        $orderBy, $vars, $lang->task->leftAB);?></th>
           <th class='c-date'>    <?php common::printOrderLink('deadline',    $orderBy, $vars, $lang->task->deadlineAB);?></th>
           <th class='c-status'>  <?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='c-actions-4'><?php echo $lang->actions;?></th>
+          <th class='c-actions-5'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

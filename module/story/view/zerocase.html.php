@@ -33,7 +33,7 @@
         <th class='w-hour'><?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
         <th>               <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
         <th>               <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
-        <th class='w-180px'><?php echo $lang->actions;?></th>
+        <th class='c-actions-5'><?php echo $lang->actions;?></th>
       </tr>
       </thead>
       <tbody>

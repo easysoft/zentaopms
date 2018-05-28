@@ -150,7 +150,7 @@ js::set('flow',   $this->config->global->flow);
             <th class='c-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
             <th class='c-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
             <th class='c-status'><?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
-            <th class='c-actions text-center'><?php echo $lang->actions;?></th>
+            <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>

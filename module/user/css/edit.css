@@ -1,1 +1,1 @@
-.table caption {border: none; border-bottom: 1px solid #ddd}
+.main-form .table + .table {margin-top: 10px;}

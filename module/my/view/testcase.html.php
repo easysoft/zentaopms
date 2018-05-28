@@ -52,7 +52,7 @@
           <th class='w-120px'> <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
           <th class='w-80px'>  <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
           <th class='w-status'><?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='w-130px'> <?php echo $lang->actions;?></th>
+          <th class='c-actions-5'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -80,19 +80,9 @@
           <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
           <td class='<?php if(isset($run)) echo $run->status;?>'><?php echo $lang->testcase->statusList[$case->status];?></td>
           <td class='c-actions'>
-            <div class='more'>
-              <?php
-              common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug');
-              common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$caseID", $case, 'list', 'copy');
-
-              if(common::hasPriv('testcase', 'delete'))
-              {
-                  $deleteURL = $this->createLink('testcase', 'delete', "caseID=$caseID&confirm=yes");
-                  echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->testcase->delete}'");
-              }
-              ?>
-            </div>
             <?php
+            common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug');
+            common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$caseID", $case, 'list', 'copy');
             common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', 'iframe', '', "data-width='95%'");
             common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', '', "data-width='95%'");
             common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'edit');

@@ -31,7 +31,7 @@
         <th class='w-130px'><?php echo $lang->group->name;?></th>
         <th class='w-300px'><?php echo $lang->group->desc;?></th>
         <th><?php echo $lang->group->users;?></th>
-        <th class='c-actions text-center'><?php echo $lang->actions;?></th>
+        <th class='c-actions-6 text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>

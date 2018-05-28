@@ -70,7 +70,4 @@
   </form>
   <?php endif;?>
 </div>
-<script>
-$(function(){ajaxGetSearchForm();});
-</script>
 <?php include '../../common/view/footer.html.php';?>
