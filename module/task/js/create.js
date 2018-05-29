@@ -192,8 +192,58 @@ $(document).ready(function()
             $('#estimate').attr('readonly', false);
         }
     });
-    $("[href='#modalTeam']").click(function()
+
+
+    /* Init task team manage dialog */
+    var $taskTeamEditor = $('#taskTeamEditor').batchActionForm(
     {
-        adjustSortBtn();
+        idStart: 0,
+        idEnd: 5,
+        chosen: true,
+        datetimepicker: false,
+        colorPicker: false,
     });
+    var taskTeamEditor = $taskTeamEditor.data('zui.batchActionForm');
+
+    var adjustButtons = function()
+    {
+        $taskTeamEditor.find('.btn-move-up.disabled,.btn-move-down.disabled,.btn-delete.disabled').removeClass('disabled').attr('disabled', null);
+        $taskTeamEditor.find('.btn-move-up:first').addClass('disabled').attr('disabled', 'disabled');
+        $taskTeamEditor.find('.btn-move-down:last').addClass('disabled').attr('disabled', 'disabled');
+        var $deleteBtn = $taskTeamEditor.find('.btn-delete');
+        if ($deleteBtn.length == 1) $deleteBtn.addClass('disabled').attr('disabled', 'disabled');
+    };
+
+    $taskTeamEditor.on('click', '.btn-add', function()
+    {
+        var $newRow = taskTeamEditor.createRow(null, $(this).closest('tr'));
+        $newRow.addClass('highlight');
+        setTimeout(function()
+        {
+            $newRow.removeClass('highlight');
+        }, 1600);
+        adjustButtons();
+    }).on('click', '.btn-delete', function()
+    {
+        var $row = $(this).closest('tr');
+        $row.addClass('highlight').fadeOut(700, function()
+        {
+            $row.remove();
+            adjustButtons();
+        });
+    }).on('click', '.btn-move-up, .btn-move-down', function()
+    {
+        var $this = $(this);
+        if($this.hasClass('btn-move-up'))
+        {
+            $(this).parents('tr').prev().before($(this).parents('tr'));
+        }
+        else
+        {
+            $this.parents('tr').next().after($(this).parents('tr'));
+        }
+        adjustButtons();
+    });;
+
+    adjustButtons();
 });

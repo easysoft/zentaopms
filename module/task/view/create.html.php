@@ -180,10 +180,9 @@
             <h4 class='modal-title'><?php echo $lang->task->team;?></h4>
           </div>
           <div class='modal-content with-padding'>
-            <table class="table table-form">
+            <table class="table table-form" id='taskTeamEditor'>
               <tbody>
-                <?php for($i = 0; $i < 5; $i++):?>
-                <tr>
+                <tr class='template'>
                   <td><?php echo html::select("team[]", $members, '', "class='form-control chosen'");?></td>
                   <td>
                     <div class='input-group'>
@@ -191,13 +190,13 @@
                       <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
                     </div>
                   </td>
-                  <td class='w-90px'>
-                    <a class='btn btn-move-add btn-icon btn-sm'><i class='icon-plus'></i></a>
-                    <a class='btn btn-move-up btn-sm btn-icon'><i class='icon-arrow-up'></i></a>
-                    <a class='btn btn-move-down btn-sm btn-icon'><i class='icon-arrow-down'></i></a>
+                  <td class='w-130px'>
+                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move-up'><i class='icon-arrow-up'></i></button>
+                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move-down'><i class='icon-arrow-down'></i></button>
+                  <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+                  <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-trash"></i></button>
                   </td>
                 </tr>
-                <?php endfor;?>
               </tbody>
               <tfoot>
                 <tr>
