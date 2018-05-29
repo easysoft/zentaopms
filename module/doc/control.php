@@ -31,7 +31,7 @@ class doc extends control
 
     /**
      * Go to browse page.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -89,8 +89,8 @@ class doc extends control
             if($lib->product or $lib->project)
             {
                 $type = $lib->product ? 'product' : 'project';
-                $productID = $lib->product; 
-                $projectID = $lib->project; 
+                $productID = $lib->product;
+                $projectID = $lib->project;
             }
         }
 
@@ -145,7 +145,15 @@ class doc extends control
         if($module) $title = $module->name;
         if($libID)  $title = $this->libs[$libID];
         if(in_array($browseType, array_keys($this->lang->doc->fastMenuList))) $title = $this->lang->doc->fastMenuList[$browseType];
-        if($browseType == 'fastsearch') $title = '"' . $this->post->searchDoc  . '" ' . $this->lang->doc->searchResult;
+        if($browseType == 'fastsearch')
+        {
+            if($this->post->searchDoc) $this->session->set('searchDoc', $this->post->searchDoc);
+            $title = '"' . $this->session->searchDoc  . '" ' . $this->lang->doc->searchResult;
+        }
+        else
+        {
+            $this->session->set('searchDoc', '');
+        }
 
         $this->view->title      = $title;
         $this->view->libID      = $libID;
@@ -165,9 +173,9 @@ class doc extends control
 
     /**
      * Create a library.
-     * 
-     * @param  string $type 
-     * @param  int    $objectID 
+     *
+     * @param  string $type
+     * @param  int    $objectID
      * @access public
      * @return void
      */
@@ -204,8 +212,8 @@ class doc extends control
 
     /**
      * Edit a library.
-     * 
-     * @param  int    $libID 
+     *
+     * @param  int    $libID
      * @access public
      * @return void
      */
@@ -213,7 +221,7 @@ class doc extends control
     {
         if(!empty($_POST))
         {
-            $changes = $this->doc->updateLib($libID); 
+            $changes = $this->doc->updateLib($libID);
             if(dao::isError()) die(js::error(dao::getError()));
             if($changes)
             {
@@ -230,14 +238,14 @@ class doc extends control
         $this->view->groups  = $this->loadModel('group')->getPairs();
         $this->view->users   = $this->user->getPairs('noletter', $lib->users);
         $this->view->libID   = $libID;
-        
+
         die($this->display());
     }
 
     /**
      * Delete a library.
-     * 
-     * @param  int    $libID 
+     *
+     * @param  int    $libID
      * @param  string $confirm  yes|no
      * @access public
      * @return void
@@ -261,12 +269,12 @@ class doc extends control
 
     /**
      * Create a doc.
-     * 
-     * @param  int|string   $libID 
-     * @param  int          $moduleID 
-     * @param  int          $productID 
-     * @param  int          $projectID 
-     * @param  string       $from 
+     *
+     * @param  int|string   $libID
+     * @param  int          $moduleID
+     * @param  int          $productID
+     * @param  int          $projectID
+     * @param  string       $from
      * @access public
      * @return void
      */
@@ -333,8 +341,8 @@ class doc extends control
 
     /**
      * Edit a doc.
-     * 
-     * @param  int    $docID 
+     *
+     * @param  int    $docID
      * @access public
      * @return void
      */
@@ -427,8 +435,8 @@ class doc extends control
 
     /**
      * Delete a doc.
-     * 
-     * @param  int    $docID 
+     *
+     * @param  int    $docID
      * @param  string $confirm  yes|no
      * @access public
      * @return void
@@ -463,10 +471,10 @@ class doc extends control
     }
 
     /**
-     * Collect doc, doclib or module of doclib. 
-     * 
-     * @param  int    $objectID 
-     * @param  int    $objectType 
+     * Collect doc, doclib or module of doclib.
+     *
+     * @param  int    $objectID
+     * @param  int    $objectType
      * @access public
      * @return void
      */
@@ -497,7 +505,7 @@ class doc extends control
 
     /**
      * Sort doc lib.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -516,8 +524,8 @@ class doc extends control
 
     /**
      * Ajax get modules by libID.
-     * 
-     * @param  int    $libID 
+     *
+     * @param  int    $libID
      * @access public
      * @return void
      */
@@ -529,9 +537,9 @@ class doc extends control
 
     /**
      * Ajax fixed menu.
-     * 
-     * @param  int    $libID 
-     * @param  string $type 
+     *
+     * @param  int    $libID
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -549,8 +557,8 @@ class doc extends control
             {
                 if($name == 'list') continue;
                 $customMenu = new stdclass();
-                $customMenu->name = $name; 
-                $customMenu->order = $i; 
+                $customMenu->name = $name;
+                $customMenu->order = $i;
                 $customMenus[] = $customMenu;
                 $i++;
             }
@@ -565,16 +573,16 @@ class doc extends control
         $lib = $this->doc->getLibByID($libID);
         $customMenu = new stdclass();
         $customMenu->name      = "custom{$libID}";
-        $customMenu->order     = count($customMenus); 
-        $customMenu->float     = 'right'; 
+        $customMenu->order     = count($customMenus);
+        $customMenu->float     = 'right';
         if($type == 'fixed') $customMenus[] = $customMenu;
         $this->setting->setItem("{$this->app->user->account}.common.customMenu.{$customMenuKey}", json_encode($customMenus));
         die(js::reload('parent'));
     }
 
     /**
-     * Ajax get all libs 
-     * 
+     * Ajax get all libs
+     *
      * @access public
      * @return void
      */
@@ -585,12 +593,12 @@ class doc extends control
 
     /**
      * Show all libs by type.
-     * 
-     * @param  string $type 
-     * @param  string $product 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  string $type
+     * @param  string $product
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -626,9 +634,9 @@ class doc extends control
 
     /**
      * Show files for product or project.
-     * 
-     * @param  int    $type 
-     * @param  int    $objectID 
+     *
+     * @param  int    $type
+     * @param  int    $objectID
      * @access public
      * @return void
      */
@@ -707,7 +715,7 @@ class doc extends control
 
     /**
      * Show libs for product or project
-     * 
+     *
      * @access private
      * @return void
      */
@@ -723,10 +731,10 @@ class doc extends control
 
     /**
      * Show libs for product or project
-     * 
-     * @param  string $type 
-     * @param  int    $objectID 
-     * @param  string $from 
+     *
+     * @param  string $type
+     * @param  int    $objectID
+     * @param  string $from
      * @access public
      * @return void
      */

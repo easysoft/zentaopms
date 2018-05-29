@@ -380,11 +380,11 @@ class docModel extends model
         }
         elseif($browseType == 'fastsearch')
         {
-            if(!$this->post->searchDoc) return array();
+            if($this->session->searchDoc == false) return array();
             $docIdList = $this->getPrivDocs($libID, $moduleID);
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('id')->in($docIdList)
-                ->andWhere('title')->like("%{$this->post->searchDoc}%")
+                ->andWhere('title')->like("%{$this->session->searchDoc}%")
                 ->andWhere('lib')->in($allLibs)
                 ->orderBy($sort)
                 ->page($pager)
