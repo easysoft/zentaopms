@@ -45,10 +45,10 @@
             <tr>
               <td class="text-middle text-right with-padding">
                 <?php
-                echo html::a($this->createLink('tree', 'browsetask', "root={$root->id}&productID=$productID&viewType=task"), $root->name) . "<i class='icon icon-angle-right muted'></i>";
+                echo "<span>" . html::a($this->createLink('tree', 'browsetask', "root={$root->id}&productID=$productID&viewType=task"), $root->name) . "<i class='icon icon-angle-right muted'></i></span>";
                 foreach($parentModules as $module)
                 {
-                    echo html::a($this->createLink('tree', 'browsetask', "root={$root->id}&productID=$productID&moduleID=$module->id"), $module->name) . " <i class='icon icon-angle-right muted'></i>";
+                    echo "<span>" . html::a($this->createLink('tree', 'browsetask', "root={$root->id}&productID=$productID&moduleID=$module->id"), $module->name) . " <i class='icon icon-angle-right muted'></i></span>";
                 }
                 ?>
               </td>

@@ -44,7 +44,7 @@
           <td><?php echo html::input('name', '', "class='form-control' autocomplete='off' required");?></td>
           <td class='text-muted'>
             <?php if($lastBuild):?>
-            <div class='help-block'> &nbsp; <?php echo $lang->build->last . ': <strong>' . $lastBuild->name . '</strong>';?></div>
+            <div class='help-block'> &nbsp; <?php echo $lang->build->last . ': <a class="code label label-badge label-light" href="javascript:$(\'#name\').val(\'' . $lastBuild->name . '\').focus();">' . $lastBuild->name . '</a>';?></div>
             <?php endif;?>
           </td>
         </tr>

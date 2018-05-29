@@ -132,16 +132,14 @@
         $misc = common::hasPriv('task', 'batchCreate', $project) ? '' : "disabled";
         $link = common::hasPriv('task', 'batchCreate', $project) ?  $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')) : '#';
         ?>
-        <button type='button' class='btn btn-primary dropdown-toggle <?php echo $misc?>' data-toggle='dropdown'>
-          <span class='caret'></span>
-        </button>
+        <button type='button' class='btn btn-primary dropdown-toggle <?php echo $misc?>' data-toggle='dropdown'><span class='caret'></span></button>
         <ul class='dropdown-menu pull-right'>
         <?php echo "<li>" . html::a($link, $lang->task->batchCreate, '', "class='$misc'") . "</li>";?>
         </ul>
       </div>
     </div>
   </div>
-  <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
+  <div id='queryBox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
 <?php
 $headerHooks = glob(dirname(dirname(__FILE__)) . "/ext/view/featurebar.*.html.hook.php");

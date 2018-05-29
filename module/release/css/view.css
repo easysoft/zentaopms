@@ -1,15 +1,10 @@
-.tabs{position:relative;}
-.tabs .nav-tabs>li{margin-bottom:0px;}
-.tabs .tab-content .tab-pane #queryBox{margin:0px; border-left:1px solid #ddd; border-right:1px solid #ddd;}
-.tabs .tab-content .tab-pane #queryBox form{padding-left:0px;}
 
 .checkbox.btn{margin-top:0px}
-#unlinkStoryList, #unlinkBugList, #unlinkLeftBugList{border:1px solid #ddd;}
-
-.table-footer .text {line-height:30px;}
-.table-footer .btn-toolbar {margin-right: 10px;}
-
 #releaseInfo > div {padding-top: 15px;}
 
-#queryBox form {margin: 0px !important;}
-#moreOrLite {right: 0px !important;}
+.linkBox #queryBox .search-form .form-actions {padding-bottom: 5px;}
+.linkBox .table-header {padding: 8px 15px; border-bottom: 1px solid #cbd0db;}
+#unlinkStoryList, #unlinkBugList, #unlinkLeftBugList {border-top: 1px solid #cbd0db;}
+
+#tabsNav .nav-tabs > li.pull-right {margin-right: 120px; margin-top: -5px}
+#tabsNav .nav-tabs > li.active + li.pull-right {margin-right: 0;}

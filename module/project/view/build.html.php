@@ -31,7 +31,7 @@
   <div class='main-table' data-ride="table" data-checkable="false" data-group="true">
     <table class="table table-grouped text-center" id='buildList'>
       <thead>
-        <tr class="divider">
+        <tr class="<?php if($buildsTotal) echo 'divider';?>">
           <th class="c-side"><?php echo $lang->build->product;?></th>
           <th class="c-id-sm"><?php echo $lang->build->id;?></th>
           <th class="c-name"><?php echo $lang->build->name;?></th>

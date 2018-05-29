@@ -21,7 +21,7 @@
     </div>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
+<div id='mainContent'>
   <form class='main-table' method='post' target='hiddenwin' id='importTaskForm' data-ride='table'>
     <table class='table table-fixed'>
       <thead>
@@ -87,7 +87,7 @@
     <?php if($tasks2Imported):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar"><?php echo html::submitButton($lang->project->importTask, '', 'btn');?></div>
+      <div class="table-actions btn-toolbar show-always"><?php echo html::submitButton('<i class="icon icon-import icon-sm"></i> ' . $lang->project->importTask, '', 'btn btn-secondary btn-wide');?></div>
     </div>
     <?php endif;?>
   </form>

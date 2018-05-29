@@ -62,7 +62,7 @@
     </li>
   </ul>
 </div>
-<div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
+<div id='queryBox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 <?php else:?>
 <div id='mainMenu' class='clearfix'>
   <div id="sidebarHeader">

@@ -20,7 +20,7 @@
   </div>
 </div>
 <div id='mainContent' class='main-content'>
-  <div id='querybox' class='show'></div>
+  <div id='queryBox' class='show'></div>
   <hr class='small' />
   <form class='main-table' method='post' target='hiddenwin' id='importFromLib' data-ride='table'>
     <table class='table has-sort-head table-fixed'>

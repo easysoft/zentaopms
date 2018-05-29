@@ -139,7 +139,7 @@ $lang->bug->lblAssignedTo = 'Assignee';
 $lang->bug->lblMailto     = 'Mail To';
 $lang->bug->lblLastEdited = 'Last Edited';
 $lang->bug->lblResolved   = 'Resolved By';
-$lang->bug->allUsers      = 'All User';
+$lang->bug->allUsers      = 'Load All User';
 $lang->bug->allBuilds     = 'All';
 $lang->bug->createBuild   = 'New';
 

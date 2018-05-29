@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <style>
-#searchForm .form-actions {padding-bottom: 10px!important;}
+.search-form .form-actions {padding-bottom: 10px!important;}
 </style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">

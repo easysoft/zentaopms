@@ -13,8 +13,8 @@
 <div id='queryBox' class='show'></div>
 <div id='unlinkStoryList'>
   <form class='main-table' method='post' target='hiddenwin' id='unlinkedStoriesForm' action='<?php echo $this->createLink('release', 'linkStory', "releaseID=$release->id&browseType=$browseType&param=$param")?>' data-ride='table'>
-    <div class='table-header'>
-      <div class='table-statistic'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedStories;?></strong></div>
+    <div class='table-header hl-primary text-primary strong'>
+      <?php echo html::icon('unlink');?> <?php echo $lang->productplan->unlinkedStories;?>
     </div>
     <table class='table'> 
       <thead>
@@ -68,13 +68,10 @@
         <?php echo html::submitButton($lang->release->linkStory, '', 'btn');?>
       </div>
       <?php endif;?>
-      <?php echo html::a(inlink('view', "releaseID=$release->id&type=story"), $lang->goback, '', "class='btn'");?>
+      <div class="btn-toolbar">
+        <?php echo html::a(inlink('view', "releaseID=$release->id&type=story"), $lang->goback, '', "class='btn'");?>
+      </div>
+      <div class='table-statistic'></div>
     </div>
   </form>
 </div>
-<script>
-$(function()
-{
-    ajaxGetSearchForm('#stories .linkBox #queryBox');
-})
-</script>

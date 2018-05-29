@@ -382,16 +382,19 @@ class docModel extends model
         {
             if($this->session->searchDoc == false) return array();
             $docIdList = $this->getPrivDocs($libID, $moduleID);
-            $docs = $this->dao->select('*')->from(TABLE_DOC)
-                ->where('id')->in($docIdList)
-                ->andWhere('title')->like("%{$this->session->searchDoc}%")
-                ->andWhere('lib')->in($allLibs)
+            $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
+                ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t2.doc = t1.id')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.id')->in($docIdList)
+                ->andWhere('t1.title', true)->like("%{$this->session->searchDoc}%")
+                ->orWhere('t2.content')->like("%{$this->session->searchDoc}%")->markRight(1)
+                ->andWhere('t1.lib')->in($allLibs)
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll();
         }
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc', false);
         if(!$docs) return array();
 
         foreach($docs as $index => $doc)

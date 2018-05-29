@@ -77,7 +77,7 @@
         <td class='text-center'><?php echo $plan->bugs;?></td>
         <td class='text-center'><?php echo $plan->hour;?></td>
         <td class='text-center'><?php if(!empty($plan->projectID)) echo html::a(helper::createLink('project', 'task', 'projectID=' . $plan->projectID), '<i class="icon-search"></i>');?></td>
-        <td class='text-left content'><div class='article-content'><?php echo strip_tags($plan->desc, str_replace('<img>', '', $config->allowedTags));?></div></td>
+        <td title='<?php echo strip_tags($plan->desc)?>' class='text-left content'><?php echo strip_tags($plan->desc);?></td>
         <td class='c-actions'>
           <?php
           if(common::hasPriv('project', 'create')) echo html::a(helper::createLink('project', 'create', "projectID=&copyProjectID=&planID=$plan->id"), '<i class="icon-play"></i>', '', "class='btn' title='{$lang->project->create}'");
