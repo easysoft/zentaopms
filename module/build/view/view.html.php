@@ -75,16 +75,16 @@ tbody tr td:first-child input{display:none;}
   <div class='tabs' id='tabsNav'>
   <?php $countStories = count($stories); $countBugs = count($bugs); $countNewBugs = count($generatedBugs);?>
     <ul class='nav nav-tabs'>
-      <li <?php if($type == 'story')     echo "class='active'"?>><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story'], 'green') . ' ' . $lang->build->stories;?></a></li>
-      <li <?php if($type == 'bug')       echo "class='active'"?>><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'green') . ' ' . $lang->build->bugs;?></a></li>
-      <li <?php if($type == 'newbug')    echo "class='active'"?>><a href='#newBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'red') . ' ' . $lang->build->generatedBugs;?></a></li>
-      <li <?php if($type == 'buildInfo') echo "class='active'"?>><a href='#buildInfo' data-toggle='tab'><?php echo html::icon($lang->icons['plan'], 'blue') . ' ' . $lang->build->view;?></a></li>
+      <li <?php if($type == 'story')     echo "class='active'"?>><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->build->stories;?></a></li>
+      <li <?php if($type == 'bug')       echo "class='active'"?>><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'text-green') . ' ' . $lang->build->bugs;?></a></li>
+      <li <?php if($type == 'newbug')    echo "class='active'"?>><a href='#newBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'text-red') . ' ' . $lang->build->generatedBugs;?></a></li>
+      <li <?php if($type == 'buildInfo') echo "class='active'"?>><a href='#buildInfo' data-toggle='tab'><?php echo html::icon($lang->icons['plan'], 'text-info') . ' ' . $lang->build->view;?></a></li>
     </ul>
     <div class='tab-content'>
       <div class='tab-pane <?php if($type == 'story') echo 'active'?>' id='stories'>
         <?php if(common::hasPriv('build', 'linkStory')):?>
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"story\")", '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn btn-primary'");?></div>
-        <div class='linkBox'></div>
+        <div class='linkBox cell hidden'></div>
         <?php endif;?>
         <form class='main-table table-story' data-ride='table' method='post' target='hiddenwin' action='<?php echo inlink('batchUnlinkStory', "buildID={$build->id}")?>' id='linkedStoriesForm'>
           <table class='table has-sort-head' id='storyList'>
@@ -152,7 +152,7 @@ tbody tr td:first-child input{display:none;}
               <?php echo html::submitButton($lang->build->batchUnlink, '', 'btn');?>
             </div>
             <?php endif;?>
-            <div class='text'><?php echo sprintf($lang->build->finishStories, $countStories);?></div>
+            <div class='table-statistic'><?php echo sprintf($lang->build->finishStories, $countStories);?></div>
           </div>
           <?php endif;?>
         </form>
@@ -160,7 +160,7 @@ tbody tr td:first-child input{display:none;}
       <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
         <?php if(common::hasPriv('build', 'linkBug')):?>
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn btn-primary'");?></div>
-        <div class='linkBox'></div>
+        <div class='linkBox cell hidden'></div>
         <?php endif;?>
         <form class='main-table table-bug' data-ride='table' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "build=$build->id");?>" id='linkedBugsForm'>
           <table class='table has-sort-head' id='bugList'>
@@ -233,48 +233,50 @@ tbody tr td:first-child input{display:none;}
         </form>
       </div>
       <div class='tab-pane <?php if($type == 'newbug') echo 'active'?>' id='newBugs'>
-        <table class='main-table table has-sort-head'>
-          <?php $vars = "buildID={$build->id}&type=newbug&link=$link&param=$param&orderBy=%s";?>
-          <thead>
-            <tr class='text-center'>
-              <th class='c-id text-left'><?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
-              <th class='w-severity'><?php common::printOrderLink('severity',     $orderBy, $vars, $lang->bug->severityAB);?></th>
-              <th class='text-left'> <?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
-              <th class='w-100px'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
-              <th class='c-user'>    <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
-              <th class='c-date'>    <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
-              <th class='c-user'>    <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
-              <th class='w-100px'>   <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
-            </tr>
-          </thead>
-          <tbody class='text-center'>
-            <?php foreach($generatedBugs as $bug):?>
-            <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
-            <tr>
-              <td class='text-left'><?php printf('%03d', $bug->id);?></td>
-              <td>
-                <span class='label-severity' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?>'></span>
-              </td>
-              <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='iframe' data-width='1000'");?></td>
-              <td>
-                <span class='status-<?php echo $bug->status?>'>
-                  <span class='label label-dot'></span>
-                  <?php echo $lang->bug->statusList[$bug->status];?>
-                </span>
-              </td>
-              <td><?php echo $users[$bug->openedBy];?></td>
-              <td><?php echo substr($bug->openedDate, 5, 11)?></td>
-              <td><?php echo $users[$bug->resolvedBy];?></td>
-              <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
-            </tr>
-            <?php endforeach;?>
-          </tbody>
-        </table>
-        <?php if($countNewBugs):?>
-        <div class='table-footer'>
-          <div class='text'><?php echo sprintf($lang->build->createdBugs, $countNewBugs);?></div>
+        <div class='main-table'>
+          <table class='table has-sort-head'>
+            <?php $vars = "buildID={$build->id}&type=newbug&link=$link&param=$param&orderBy=%s";?>
+            <thead>
+              <tr class='text-center'>
+                <th class='c-id text-left'><?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
+                <th class='w-severity'><?php common::printOrderLink('severity',     $orderBy, $vars, $lang->bug->severityAB);?></th>
+                <th class='text-left'> <?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
+                <th class='w-100px'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
+                <th class='c-user'>    <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
+                <th class='c-date'>    <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
+                <th class='c-user'>    <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+                <th class='w-100px'>   <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
+              </tr>
+            </thead>
+            <tbody class='text-center'>
+              <?php foreach($generatedBugs as $bug):?>
+              <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
+              <tr>
+                <td class='text-left'><?php printf('%03d', $bug->id);?></td>
+                <td>
+                  <span class='label-severity' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?>'></span>
+                </td>
+                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='iframe' data-width='1000'");?></td>
+                <td>
+                  <span class='status-<?php echo $bug->status?>'>
+                    <span class='label label-dot'></span>
+                    <?php echo $lang->bug->statusList[$bug->status];?>
+                  </span>
+                </td>
+                <td><?php echo $users[$bug->openedBy];?></td>
+                <td><?php echo substr($bug->openedDate, 5, 11)?></td>
+                <td><?php echo $users[$bug->resolvedBy];?></td>
+                <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
+              </tr>
+              <?php endforeach;?>
+            </tbody>
+          </table>
+          <?php if($countNewBugs):?>
+          <div class='table-footer'>
+            <div class='text'><?php echo sprintf($lang->build->createdBugs, $countNewBugs);?></div>
+          </div>
+          <?php endif;?>
         </div>
-        <?php endif;?>
       </div>
       <div class='tab-pane <?php if($type == 'buildInfo') echo 'active'?>' id='buildInfo'>
         <div class='cell'>

@@ -3,13 +3,11 @@ function showLink(buildID, type, param)
     var method = type == 'story' ? 'linkStory' : 'linkBug';
     $.get(createLink('build', method, 'buildID=' + buildID + (typeof(param) == 'undefined' ? '' : param)), function(data)
     {
-        var obj = type == 'story' ? '.tab-pane#stories .linkBox' : '.tab-pane#bugs .linkBox';
-        $(obj).html(data);
-        $('#' + type + 'List').closest('form').hide();
-
-        var formID = type == 'story' ? '#unlinkedStoriesForm' : '#unlinkedBugsForm';
-
-        $('[data-ride="table"]').table();
+        var $pane = $(type == 'story' ? '#stories' : '#bugs');
+        $pane.find('.main-table').hide();
+        var $linkBox = $pane.find('.linkBox').html(data).removeClass('hidden');
+        $linkBox.find('[data-ride="table"]').table();
+        $.toggleQueryBox(true, $linkBox.find('#queryBox'));
     });
 }
 $(function()

@@ -13,8 +13,8 @@
 <div id='queryBox' class='show'></div>
 <div id='unlinkBugList'>
   <form class='main-table table-bug' data-ride='table' method='post' id='unlinkedBugsForm' target='hiddenwin' action='<?php echo $this->createLink('build', 'linkBug', "buildID={$build->id}&browseType=$browseType&param=$param");?>'>
-    <div class='table-header'>
-      <div class='table-statistic'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedBugs;?></strong></div>
+    <div class='table-header hl-primary text-primary strong'>
+      <?php echo html::icon('unlink');?>  <?php echo $lang->productplan->unlinkedBugs;?>
     </div>
     <table class='table'> 
       <thead>
@@ -61,17 +61,14 @@
     <?php if($unlinkedCount):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar">
+      <div class="table-actions btn-toolbar show-always">
         <?php echo html::submitButton($lang->build->linkBug, '', 'btn');?>
       </div>
-      <?php echo html::a(inlink('view', "buildID={$build->id}&type=bug"), $lang->goback, '', "class='btn'");?>
+      <div class="btn-toolbar">
+        <?php echo html::a(inlink('view', "buildID={$build->id}&type=bug"), $lang->goback, '', "class='btn'");?>
+      </div>
+      <div class='table-statistic'></div>
     </div>
     <?php endif;?>
   </form>
 </div>
-<script>
-$(function()
-{
-    // ajaxGetSearchForm('#bugs .linkBox #querybox');
-})
-</script>

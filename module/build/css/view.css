@@ -1,9 +1,3 @@
-#unlinkStoryList, #unlinkBugList{border:1px solid #ddd;}
-
-.table-footer .text {line-height: 30px;}
-.table-footer .table-actions {margin-right: 10px;}
-
-#buildInfo > div {padding-top: 15px;}
-
-#querybox form {margin: 0px !important;}
-#moreOrLite {right: 0px !important;}
+.linkBox #searchForm .form-actions {padding-bottom: 5px;}
+.linkBox .table-header {padding: 8px 15px; border-bottom: 1px solid #cbd0db;}
+#unlinkStoryList, #unlinkBugList {border-top: 1px solid #cbd0db;}

@@ -242,7 +242,7 @@ function executeQuery(queryID)
 
 $(function()
 {
-    var $searchForm = $('#searchForm');
+    var $searchForm = $('<?php echo "#{$module}-search";?>').closest('form');
     $searchForm.find('select.chosen').chosen();
 
     /*
