@@ -22,7 +22,7 @@
       <?php echo $lang->task->batchCreate;?>
       <?php endif;?>
     </h2>
-    <?php if($project->type != 'ops'):?>
+    <?php if($project->type != 'ops' && $this->config->global->flow != 'onlyTask'):?>
     <a class="checkbox-primary pull-left" id='zeroTaskStory' href='javascript:toggleZeroTaskStory();'>
       <label><?php echo $lang->story->zeroTask;?></label>
     </a>
