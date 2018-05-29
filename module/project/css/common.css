@@ -19,6 +19,7 @@
 .table td.has-child > .task-toggle > .icon:before {text-align: left;}
 .table td.has-child > .task-toggle.collapsed > .icon {transform: rotate(-90deg);}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
+@-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;}}
 
 .chosen-container-single .chosen-single > span{max-width:200px;}
 
