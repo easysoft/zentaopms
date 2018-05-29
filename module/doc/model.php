@@ -206,6 +206,14 @@ class docModel extends model
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->orderBy('`order`, id desc')->query();
         }
+        elseif($type == 'collectedbyme')
+        {
+            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
+                ->where('deleted')->eq(0)
+                ->andWhere('collector')->like("%,{$this->app->user->account},%")
+                ->orderBy('`order`, id desc')
+                ->query();
+        }
         else
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('product')->eq('0')->andWhere('project')->eq(0)->orderBy('`order`, id desc')->query();
@@ -380,11 +388,11 @@ class docModel extends model
         }
         elseif($browseType == 'fastsearch')
         {
-            if(!$this->post->searchDoc) return array();
+            if($this->session->searchDoc == false) return array();
             $docIdList = $this->getPrivDocs($libID, $moduleID);
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('id')->in($docIdList)
-                ->andWhere('title')->like("%{$this->post->searchDoc}%")
+                ->andWhere('title')->like("%{$this->session->searchDoc}%")
                 ->andWhere('lib')->in($allLibs)
                 ->orderBy($sort)
                 ->page($pager)
