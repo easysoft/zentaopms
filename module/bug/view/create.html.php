@@ -82,10 +82,10 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
           <tr>
             <th><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
             <td>
-              <div class='input-group'>
-                <div class='input-group' id='assignedToBox'><?php echo html::select('assignedTo', $projectMembers, $assignedTo, "class='form-control chosen'");?></div>
-                <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
-              </div>
+              <?php echo html::select('assignedTo', $projectMembers, $assignedTo, "class='form-control chosen'");?>
+            </td>
+            <td>
+              <a href='javascript:loadAllUsers();' class='btn btn-link'><?php echo $lang->bug->allUsers;?></a>
             </td>
           </tr>
           <?php $showDeadline = strpos(",$showFields,", ',deadline,') !== false;?>
@@ -252,7 +252,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="3" class="text-center">
+            <td colspan="3" class="text-center form-actions">
               <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
               <?php echo html::backButton('', '', 'btn btn-wide');?>
               <?php echo html::hidden('case', (int)$caseID) . html::hidden('caseVersion', (int)$version);?>

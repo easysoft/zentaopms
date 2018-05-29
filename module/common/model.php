@@ -1244,7 +1244,7 @@ EOD;
         global $app, $lang;
 
         /* Check is the super admin or not. */
-        if(!empty($app->user->admin)) return true;
+        if(!empty($app->user->admin) || strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
         /* If not super admin, check the rights. */
         $rights  = $app->user->rights['rights'];
         $acls    = $app->user->rights['acls'];

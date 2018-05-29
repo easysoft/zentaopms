@@ -8,7 +8,7 @@
         $product    = $this->product->getById($productID);
         $removeLink = $browseType == 'byproduct' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("productBrowseParam")';
         echo '<i class="icon icon-cube"></i> ' . $product->name;
-        echo html::a($removeLink, "<span class='close'>&times;</span>", '', "class='text-muted'");
+        echo html::a($removeLink, "<span class='close'><i class='icon icon-close'></i></span>", '', "class='text-muted'");
     }
     elseif(!empty($moduleID))
     {
@@ -16,7 +16,7 @@
         $module     = $this->tree->getById($moduleID);
         $removeLink = $browseType == 'bymodule' ? inlink('task', "projectID=$projectID&browseType=$status&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("moduleBrowseParam")';
         echo $module->name;
-        echo html::a($removeLink, "<span class='close'>&times;</span>", '', "class='text-muted'");
+        echo html::a($removeLink, "<span class='close'><i class='icon icon-close'></i></span>", '', "class='text-muted'");
     }
     else
     {
@@ -132,16 +132,14 @@
         $misc = common::hasPriv('task', 'batchCreate', $project) ? '' : "disabled";
         $link = common::hasPriv('task', 'batchCreate', $project) ?  $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')) : '#';
         ?>
-        <button type='button' class='btn btn-primary dropdown-toggle <?php echo $misc?>' data-toggle='dropdown'>
-          <span class='caret'></span>
-        </button>
+        <button type='button' class='btn btn-primary dropdown-toggle <?php echo $misc?>' data-toggle='dropdown'><span class='caret'></span></button>
         <ul class='dropdown-menu pull-right'>
         <?php echo "<li>" . html::a($link, $lang->task->batchCreate, '', "class='$misc'") . "</li>";?>
         </ul>
       </div>
     </div>
   </div>
-  <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
+  <div id='queryBox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
 <?php
 $headerHooks = glob(dirname(dirname(__FILE__)) . "/ext/view/featurebar.*.html.hook.php");

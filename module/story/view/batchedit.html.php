@@ -38,20 +38,20 @@ foreach(explode(',', $showFields) as $field)
       <tr>
         <th class='w-40px'> <?php echo $lang->idAB;?></th> 
         <?php if($branchProduct):?>
-        <th class='w-150px<?php echo zget($visibleFields, 'branch', ' hidden')?>'><?php echo $lang->story->branch;?></th>
+        <th class='w-120px<?php echo zget($visibleFields, 'branch', ' hidden')?>'><?php echo $lang->story->branch;?></th>
         <?php endif;?>
-        <th class='w-150px'><?php echo $lang->story->module;?></th>
+        <th class='w-120px'><?php echo $lang->story->module;?></th>
         <th class='w-150px<?php echo zget($visibleFields, 'plan', ' hidden')?>'><?php echo $lang->story->planAB;?></th>
         <th class='w-150px required'><?php echo $lang->story->title;?></th>
-        <th class='w-50px<?php echo zget($visibleFields, 'estimate', ' hidden')?>'> <?php echo $lang->story->estimateAB;?></th>
-        <th class='w-70px<?php echo zget($visibleFields, 'pri', ' hidden')?>'> <?php echo $lang->priAB;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'> <?php echo $lang->story->assignedTo;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'source', ' hidden')?>'> <?php echo $lang->story->source;?></th>
+        <th class='w-50px<?php   echo zget($visibleFields, 'estimate', ' hidden')?>'> <?php echo $lang->story->estimateAB;?></th>
+        <th class='w-70px<?php   echo zget($visibleFields, 'pri', ' hidden')?>'> <?php echo $lang->priAB;?></th>
+        <th class='w-100px<?php  echo zget($visibleFields, 'assignedTo', ' hidden')?>'> <?php echo $lang->story->assignedTo;?></th>
+        <th class='w-100px<?php  echo zget($visibleFields, 'source', ' hidden')?>'> <?php echo $lang->story->source;?></th>
         <th class='w-80px'><?php echo $lang->story->status;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'stage', ' hidden')?>'> <?php echo $lang->story->stageAB;?></th>
-        <th class='w-130px<?php echo zget($visibleFields, 'closedBy', ' hidden')?>'><?php echo $lang->story->closedBy;?></th>
-        <th class='w-100px<?php echo zget($visibleFields, 'closedReason', ' hidden')?>'> <?php echo $lang->story->closedReason;?></th>
-        <th class='w-80px<?php echo zget($visibleFields, 'keywords', ' hidden')?>'><?php echo $lang->story->keywords;?></th>
+        <th class='w-100px<?php  echo zget($visibleFields, 'stage', ' hidden')?>'> <?php echo $lang->story->stageAB;?></th>
+        <th class='w-130px<?php  echo zget($visibleFields, 'closedBy', ' hidden')?>'><?php echo $lang->story->closedBy;?></th>
+        <th class='w-100px<?php  echo zget($visibleFields, 'closedReason', ' hidden')?>'> <?php echo $lang->story->closedReason;?></th>
+        <th class='w-80px<?php   echo zget($visibleFields, 'keywords', ' hidden')?>'><?php echo $lang->story->keywords;?></th>
       </tr>
     </thead>
     <tbody>

@@ -15,7 +15,7 @@ function checkLeft()
     }
 }
 
-$('.btn-move-up, .btn-move-down').click(function()
+$(document).on('click', '.btn-move-up, .btn-move-down', function()
 {
     var $this = $(this);
     if($this.hasClass('btn-move-up'))
@@ -59,7 +59,11 @@ $('#modalTeam .btn').click(function()
     })
 });
 
-$('a.btn-move-add').on('click', function () {
-  var html = $("#modalTeam table.table tr").eq(-2).html();
-  $("#modalTeam table.table tr:last").before('<tr>' + html + '</tr>');
+$(document).on('click', 'a.btn-move-add', function()
+{
+    var html = $("#modalTeam table.table tbody tr:last").html();
+    $("#modalTeam table.table tbody tr:last").after('<tr>' + html + '</tr>');
+    $("#modalTeam table.table tbody tr:last").prev().find('.btn-move-down').removeClass('disabled').removeAttr('disabled');
+
+    adjustSortBtn();
 });

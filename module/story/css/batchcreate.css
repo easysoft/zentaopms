@@ -6,3 +6,4 @@
 #batchCreateForm .col-pri {width: 100px;}
 #batchCreateForm .col-review,
 #batchCreateForm .col-estimate {width: 90px;}
+#batchCreateForm {overflow-x:auto;}

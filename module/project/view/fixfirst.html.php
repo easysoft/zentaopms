@@ -28,13 +28,13 @@
                 <label for='withLeft'><?php echo $lang->project->fixFirstWithLeft?></label>
               </div>
             </span>
-            <span class='input-group-btn'><?php echo html::submitButton();?></span>
+            <span class='input-group-btn'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></span>
           </div>
         </td>
       </tr>
       <tr>
         <td>
-          <div class='alert alert-info'><?php echo $lang->project->totalEstimate . ' : ' . $project->totalEstimate . $lang->project->workHour;?></div>
+          <div class='alert alert-primary no-margin'><?php echo $lang->project->totalEstimate;?> : <code class='strong text-primary'><?php echo $project->totalEstimate;?></code> <?php echo $lang->project->workHour;?></div>
         </td>
       </tr>
     </table>

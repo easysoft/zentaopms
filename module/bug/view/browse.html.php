@@ -68,7 +68,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         </ul>
       </li>
     </ul>
-    <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
+    <div id='queryBox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
   </div>
   <?php else:?>
   <div id="sidebarHeader">
@@ -413,7 +413,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
 <script>
 $('#module' + moduleID).closest('li').addClass('active');
 <?php if($browseType == 'bysearch'):?>
-if($('#query li.active').size() == 0) ajaxGetSearchForm();
+if($('#query li.active').size() == 0) $.toggleQueryBox(true);
 <?php endif;?>
 <?php $this->app->loadConfig('qa', '', false);?>
 <?php if(isset($config->qa->homepage) and $config->qa->homepage != 'browse' and $config->global->flow == 'full'):?>

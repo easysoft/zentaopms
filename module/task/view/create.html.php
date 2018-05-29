@@ -181,27 +181,29 @@
           </div>
           <div class='modal-content with-padding'>
             <table class="table table-form">
-              <?php for($i = 0; $i < 5; $i++):?>
-              <tr>
-                <td><?php echo html::select("team[]", $members, '', "class='form-control chosen'");?></td>
-                <td>
-                  <div class='input-group'>
-                    <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
-                    <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
-                  </div>
-                </td>
-                <td class='w-90px'>
-                  <a class='btn btn-move-add btn-icon btn-sm'><i class='icon-plus'></i></a>
-                  <a class='btn btn-move-up btn-sm btn-icon'><i class='icon-arrow-up'></i></a>
-                  <a class='btn btn-move-down btn-sm btn-icon'><i class='icon-arrow-down'></i></a>
-                </td>
-              </tr>
-              <?php endfor;?>
-              <tr>
-                <td colspan='3' class='text-center'>
-                  <?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary' data-dismiss='modal'");?>
-                </td>
-              </tr>
+              <tbody>
+                <?php for($i = 0; $i < 5; $i++):?>
+                <tr>
+                  <td><?php echo html::select("team[]", $members, '', "class='form-control chosen'");?></td>
+                  <td>
+                    <div class='input-group'>
+                      <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
+                      <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
+                    </div>
+                  </td>
+                  <td class='w-90px'>
+                    <a class='btn btn-move-add btn-icon btn-sm'><i class='icon-plus'></i></a>
+                    <a class='btn btn-move-up btn-sm btn-icon'><i class='icon-arrow-up'></i></a>
+                    <a class='btn btn-move-down btn-sm btn-icon'><i class='icon-arrow-down'></i></a>
+                  </td>
+                </tr>
+                <?php endfor;?>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary' data-dismiss='modal'");?></td>
+                </tr>
+              </tfoot>
             </table>
           </div>
         </div>

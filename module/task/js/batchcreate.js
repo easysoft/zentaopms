@@ -2,7 +2,11 @@
 delete defaultChosenOptions.width;
 
 /* Remove 'ditto' in first row. */
-$(document).ready(removeDitto());
+$(function()
+{
+    removeDitto();
+    if($('#batchCreateForm table thead tr th.c-name').width() < 200) $('#batchCreateForm table thead tr th.c-name').width(200);
+});
 
 /* Get select of stories.*/
 function setStories(moduleID, projectID, num)

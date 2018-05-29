@@ -66,7 +66,7 @@ class docModel extends model
                 if($type == 'custom')  $currentLib = $libID;
                 if($type == 'product') $currentLib = $productID;
                 if($type == 'project') $currentLib = $projectID;
-                if($currentLib) 
+                if($currentLib)
                 {
                     $allLibGroups = $this->getAllLibGroups();
                     $currentGroups = $allLibGroups[$type];
@@ -283,7 +283,13 @@ class docModel extends model
      */
     public function getDocsByBrowseType($libID, $browseType, $queryID, $moduleID, $sort, $pager)
     {
-        $allLibs = array_keys($this->getLibs('all'));
+        $allLibs   = array_keys($this->getLibs('all'));
+        $docIdList = $this->getPrivDocs($libID, $moduleID);
+
+        $files = $this->dao->select('*')->from(TABLE_FILE)
+            ->where('objectType')->eq('doc')
+            ->andWhere('objectID')->in($docIdList)
+            ->fetchGroup('objectID');
         if($browseType == "all")
         {
             $docs = $this->getDocs($libID, 0, $sort, $pager);
@@ -301,12 +307,6 @@ class docModel extends model
         }
         elseif($browseType == 'byediteddate')
         {
-            $docIdList = $this->getPrivDocs($libID, $moduleID);
-            $files = $this->dao->select('*')->from(TABLE_FILE)
-                ->where('objectType')->eq('doc')
-                ->andWhere('objectID')->in($docIdList)
-                ->fetchGroup('objectID');
-
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
                 ->andWhere('id')->in($docIdList)
@@ -314,34 +314,6 @@ class docModel extends model
                 ->orderBy('editedDate_desc')
                 ->page($pager)
                 ->fetchAll('id');
-
-            foreach($docs as $doc)
-            {
-                $docs[$doc->id]->fileSize = 0;
-                if(isset($files[$doc->id]))
-                {
-                    $fileSize = 0;
-                    foreach($files[$doc->id] as $file) $fileSize += $file->size;
-                    if($fileSize < 1024)
-                    {
-                        $fileSize .= 'B';
-                    }
-                    elseif($fileSize < 1024 * 1024)
-                    {
-                        $fileSize = round($fileSize / 1024, 2) . 'KB';
-                    }
-                    elseif($fileSize < 1024 * 1024 * 1024)
-                    {
-                        $fileSize = round($fileSize / 1024 / 1024, 2) . 'MB';
-                    }
-                    else
-                    {
-                        $fileSize = round($fileSize / 1024 / 1024 /1024, 2) . 'G';
-                    }
-
-                    $docs[$doc->id]->fileSize = $fileSize;
-                }
-            }
         }
         elseif($browseType == "collectedbyme")
         {
@@ -408,21 +380,52 @@ class docModel extends model
         }
         elseif($browseType == 'fastsearch')
         {
-            if(!$this->post->searchDoc) return array();
+            if($this->session->searchDoc == false) return array();
             $docIdList = $this->getPrivDocs($libID, $moduleID);
-            $docs = $this->dao->select('*')->from(TABLE_DOC)
-                ->where('id')->in($docIdList)
-                ->andWhere('title')->like("%{$this->post->searchDoc}%")
-                ->andWhere('lib')->in($allLibs)
+            $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
+                ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t2.doc = t1.id')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.id')->in($docIdList)
+                ->andWhere('t1.title', true)->like("%{$this->session->searchDoc}%")
+                ->orWhere('t2.content')->like("%{$this->session->searchDoc}%")->markRight(1)
+                ->andWhere('t1.lib')->in($allLibs)
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll();
         }
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc');
-        if($docs) return $docs;
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc', false);
+        if(!$docs) return array();
 
-        return array();
+        foreach($docs as $index => $doc)
+        {
+            $docs[$index]->fileSize = 0;
+            if(isset($files[$index]))
+            {
+                $fileSize = 0;
+                foreach($files[$index] as $file) $fileSize += $file->size;
+                if($fileSize < 1024)
+                {
+                    $fileSize .= 'B';
+                }
+                elseif($fileSize < 1024 * 1024)
+                {
+                    $fileSize = round($fileSize / 1024, 2) . 'KB';
+                }
+                elseif($fileSize < 1024 * 1024 * 1024)
+                {
+                    $fileSize = round($fileSize / 1024 / 1024, 2) . 'MB';
+                }
+                else
+                {
+                    $fileSize = round($fileSize / 1024 / 1024 /1024, 2) . 'G';
+                }
+
+                $docs[$index]->fileSize = $fileSize;
+            }
+        }
+
+        return $docs;
     }
 
     /**
@@ -1110,8 +1113,8 @@ class docModel extends model
 
     /**
      * Stat module and document counts of lib.
-     * 
-     * @param  array    $idList 
+     *
+     * @param  array    $idList
      * @access public
      * @return array
      */
@@ -1398,7 +1401,7 @@ class docModel extends model
 
     /**
      * Get statistic information.
-     * 
+     *
      * @access public
      * @return object
      */

@@ -252,7 +252,6 @@ $(function()
 
     var tree = $tree.data('zui.tree');
     if(<?php echo $currentModuleID ?>)
-    if(0)
     {
         var $currentLi = $tree.find('.module-name[data-id=' + <?php echo $currentModuleID ?> + ']').closest('li');
         if($currentLi.length) tree.show($currentLi);

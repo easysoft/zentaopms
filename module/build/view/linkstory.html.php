@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<div id='querybox' class='show'></div>
+<div id='queryBox' class='show'></div>
 <div id='unlinkStoryList'>
   <form class='main-table table-story' data-ride='table' method='post' id='unlinkedStoriesForm' target='hiddenwin' action='<?php echo $this->createLink('build', 'linkStory', "buildID={$build->id}&browseType=$browseType&param=$param");?>'>
     <div class='table-header'>
@@ -76,6 +76,6 @@
 <script>
 $(function()
 {
-    ajaxGetSearchForm('#stories .linkBox #querybox');
+    // ajaxGetSearchForm('#stories .linkBox #querybox');
 })
 </script>

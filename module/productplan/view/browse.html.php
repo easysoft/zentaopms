@@ -52,7 +52,7 @@
         <th class='w-60px'> <?php echo $lang->productplan->hour;?></th>
         <th class='w-60px'> <?php echo $lang->productplan->project;?></th>
         <th>                <?php echo $lang->productplan->desc;?></th>
-        <th class='c-actions-4'><?php echo $lang->actions;?></th>
+        <th class='c-actions-5'><?php echo $lang->actions;?></th>
       </tr>
       </thead>
       <tbody>

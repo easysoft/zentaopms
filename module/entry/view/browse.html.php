@@ -12,7 +12,7 @@
 ?>
 <?php include 'header.html.php';?>
 <?php js::set('confirmDelete', $lang->entry->confirmDelete);?>
-<div id='mainContent' class='main-content'>
+<div id='mainContent'>
   <form id='ajaxForm' class='main-table' method='post'>
     <table id='entryList' class='table has-sort-head table-fix'>
       <thead>
@@ -24,7 +24,7 @@
           <th class='w-200px'><?php common::printOrderLink('key',  $orderBy, $vars, $lang->entry->key);?></th>
           <th class='w-200px'><?php common::printOrderLink('ip',   $orderBy, $vars, $lang->entry->ip);?></th>
           <th><?php echo common::printOrderLink('desc', $orderBy, $vars, $lang->entry->desc);?></th>
-          <th class='w-130px'><?php echo $lang->actions;?></th>
+          <th class='c-actions-3'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

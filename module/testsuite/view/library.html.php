@@ -41,7 +41,7 @@ js::set('flow',   $this->config->global->flow);
           <span class='caret'></span>
         </button>
         <ul class='dropdown-menu pull-right'>
-        <?php 
+        <?php
         $misc = common::hasPriv('testsuite', 'batchCreateCase') ? '' : "class=disabled";
         $link = common::hasPriv('testsuite', 'batchCreateCase') ?  $this->createLink('testsuite', 'batchCreateCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)) : '#';
         echo "<li>" . html::a($link, $lang->testcase->batchCreate, '', $misc) . "</li>";
@@ -65,7 +65,7 @@ js::set('flow',   $this->config->global->flow);
     </li>
   </ul>
 
-  <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
+  <div id='queryBox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
 <?php else:?>
 <div id='pageActions'>
@@ -104,7 +104,7 @@ js::set('flow',   $this->config->global->flow);
     <?php common::printLink('testsuite', 'batchCreateCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->batchCreate, '', "class='btn btn-secondary'");?>
     <?php common::printLink('testsuite', 'createCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'");?>
   </div>
-  <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
+  <div id='queryBox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
 <?php endif;?>
 <div id="mainContent" class="main-row">
@@ -150,7 +150,7 @@ js::set('flow',   $this->config->global->flow);
             <th class='c-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
             <th class='c-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
             <th class='c-status'><?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
-            <th class='c-actions-2 text-center'><?php echo $lang->actions;?></th>
+            <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
@@ -250,7 +250,7 @@ js::set('flow',   $this->config->global->flow);
   </div>
 </div>
 <script>
-$('#module' + moduleID).addClass('active'); 
+$('#module' + moduleID).addClass('active');
 $('#<?php echo $this->session->libBrowseType?>Tab').addClass('btn-active-text').append("<span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>");
 if(flow == 'onlyTest')
 {

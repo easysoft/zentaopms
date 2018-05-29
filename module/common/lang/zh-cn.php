@@ -57,6 +57,7 @@ $lang->required     = '必填';
 $lang->noData       = '暂无';
 
 $lang->actions         = '操作';
+$lang->restore         = '恢复默认';
 $lang->comment         = '备注';
 $lang->history         = '历史记录';
 $lang->attatch         = '附件';

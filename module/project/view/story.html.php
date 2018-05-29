@@ -112,7 +112,7 @@
             <th title='<?php echo $lang->story->taskCount?>' class='w-30px'><?php echo $lang->story->taskCountAB;?></th>
             <th title='<?php echo $lang->story->bugCount?>'  class='w-30px'><?php echo $lang->story->bugCountAB;?></th>
             <th title='<?php echo $lang->story->caseCount?>' class='w-30px'><?php echo $lang->story->caseCountAB;?></th>
-            <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
+            <th class='c-actions-4 text-center'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody id='storyTableList' class='sortable'>

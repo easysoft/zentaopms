@@ -36,7 +36,7 @@
         <th><?php echo $lang->testsuite->desc;?></th>
         <th class='w-90px'><?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->testsuite->addedBy);?></th>
         <th class='w-150px'><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->testsuite->addedDate);?></th>
-        <th class='w-130px text-center'><?php echo $lang->actions;?></th>
+        <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -44,8 +44,8 @@
     <tr class='text-left'>
       <td><?php echo sprintf('%03d', $suite->id);?></td>
       <td class='text-left' title="<?php echo $suite->name?>">
-        <?php if($suite->type == 'public') echo "<span class='label label-info'>{$lang->testsuite->authorList['public']}</span> ";?>
-        <?php if($suite->type == 'private') echo "<span class='label label-warning'>{$lang->testsuite->authorList['private']}</span> ";?>
+        <?php if($suite->type == 'public') echo "<span class='label label-success label-badge'>{$lang->testsuite->authorList['public']}</span> ";?>
+        <?php if($suite->type == 'private') echo "<span class='label label-info label-badge'>{$lang->testsuite->authorList['private']}</span> ";?>
         <?php echo html::a(inlink('view', "suiteID=$suite->id"), $suite->name);?>
       </td>
       <td><?php echo $suite->desc;?></td>

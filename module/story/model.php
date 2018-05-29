@@ -2466,14 +2466,12 @@ class storyModel extends model
                 break;
             case 'actions':
                 $vars = "story={$story->id}";
-                echo "<div class='more'>";
-                common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
-                common::printIcon('story', 'delete',     $vars, $story, 'list', 'trash', 'hiddenwin');
-                echo "</div>";
                 common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
                 common::printIcon('story', 'close',      $vars, $story, 'list', 'off', '', 'iframe', true);
                 common::printIcon('story', 'edit',       $vars, $story, 'list');
                 if($this->config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
+                common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
+                common::printIcon('story', 'delete',     $vars, $story, 'list', 'trash', 'hiddenwin');
                 break;
             }
             echo '</td>';

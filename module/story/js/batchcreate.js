@@ -1,3 +1,7 @@
+$(function()
+{
+    if($('#batchCreateForm table thead tr th.col-name').width() < 200) $('#batchCreateForm table thead tr th.col-name').width(200);
+});
 $(document).on('click', '.chosen-with-drop', function()
 {
     var select = $(this).prev('select');

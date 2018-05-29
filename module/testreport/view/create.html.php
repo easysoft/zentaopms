@@ -22,93 +22,105 @@
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->testreport->legendBasic?></div>
-        <table class='table table-form'>
-          <tr>
-            <th class='w-80px'><?php echo $lang->testreport->startEnd?></th>
-            <td class='w-p50'>
-              <div class='input-group'>
-                <?php echo html::input('begin', $begin, "class='form-control form-date'")?>
-                <span class='input-group-addon'> ~ </span>
-                <?php echo html::input('end', $end, "class='form-control form-date'")?>
-                <?php
-                echo html::hidden('product', $productIdList) . html::hidden('project', $project->id) . html::hidden('tasks', $tasks);
-                echo html::hidden('objectID', $objectID) . html::hidden('objectType', $objectType);
-                ?>
-              </div>
-            </td>
-            <td>
-              <div class='input-group'>
-                <span class='input-group-addon'><?php echo $lang->testreport->owner?></span>
-                <?php echo html::select('owner', $users, $owner, "class='form-control chosen'")?>
-              </div>
-            </td>
-            <td class='w-50px'></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->testreport->members?></th>
-            <td colspan='2'><?php echo html::select('members[]', $users, $members, "class='form-control chosen' multiple")?></td>
-            <td></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->testreport->title?></th>
-            <td colspan='2'><?php echo html::input('title', $reportTitle, "class='form-control'")?></td>
-            <td></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->testreport->goal?></th>
-            <td colspan='2'><?php echo $project->desc?></td>
-            <td></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->testreport->profile?></th>
-            <td colspan='2'>
-            <?php
-            echo '<p>' . $storySummary . '</p>';
-            echo '<p>' . sprintf($lang->testreport->buildSummary, empty($builds) ? 1 : count($builds)) . $caseSummary . '</p>';
-            echo '<p>' . sprintf($lang->testreport->bugSummary, $bugInfo['foundBugs'], count($legacyBugs), $bugInfo['countBugByTask'], $bugInfo['bugConfirmedRate'] . '%', $bugInfo['bugCreateByCaseRate'] . '%') . '</p>';
-            unset($bugInfo['countBugByTask']); unset($bugInfo['bugConfirmedRate']); unset($bugInfo['bugCreateByCaseRate']); unset($bugInfo['foundBugs']);
-            ?>
-            </td>
-            <td></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->testreport->report?></th>
-            <td colspan='2'><?php echo html::textarea('report', '', "class='form-control'")?></td>
-            <td></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->files?></th>
-            <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class='text-center form-actions' colspan='4'>
-              <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
-              <?php echo html::backButton('', '', 'btn btn-wide');?>
-            </td>
-          </tr>
-        </table>
+        <div class="detail-content">
+          <table class='table table-form'>
+            <tr>
+              <th class='w-80px'><?php echo $lang->testreport->startEnd?></th>
+              <td class='w-p50'>
+                <div class='input-group'>
+                  <?php echo html::input('begin', $begin, "class='form-control form-date'")?>
+                  <span class='input-group-addon'> ~ </span>
+                  <?php echo html::input('end', $end, "class='form-control form-date'")?>
+                  <?php
+                  echo html::hidden('product', $productIdList) . html::hidden('project', $project->id) . html::hidden('tasks', $tasks);
+                  echo html::hidden('objectID', $objectID) . html::hidden('objectType', $objectType);
+                  ?>
+                </div>
+              </td>
+              <td>
+                <div class='input-group'>
+                  <span class='input-group-addon'><?php echo $lang->testreport->owner?></span>
+                  <?php echo html::select('owner', $users, $owner, "class='form-control chosen'")?>
+                </div>
+              </td>
+              <td class='w-50px'></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->testreport->members?></th>
+              <td colspan='2'><?php echo html::select('members[]', $users, $members, "class='form-control chosen' multiple")?></td>
+              <td></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->testreport->title?></th>
+              <td colspan='2'><?php echo html::input('title', $reportTitle, "class='form-control'")?></td>
+              <td></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->testreport->goal?></th>
+              <td colspan='2'><?php echo $project->desc?></td>
+              <td></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->testreport->profile?></th>
+              <td colspan='2'>
+              <?php
+              echo '<div>' . $storySummary . '</div>';
+              echo '<div>' . sprintf($lang->testreport->buildSummary, empty($builds) ? 1 : count($builds)) . $caseSummary . '</div>';
+              echo '<div>' . sprintf($lang->testreport->bugSummary, $bugInfo['foundBugs'], count($legacyBugs), $bugInfo['countBugByTask'], $bugInfo['bugConfirmedRate'] . '%', $bugInfo['bugCreateByCaseRate'] . '%') . '</div>';
+              unset($bugInfo['countBugByTask']); unset($bugInfo['bugConfirmedRate']); unset($bugInfo['bugCreateByCaseRate']); unset($bugInfo['foundBugs']);
+              ?>
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->testreport->report?></th>
+              <td colspan='2'><?php echo html::textarea('report', '', "class='form-control'")?></td>
+              <td></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->files?></th>
+              <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class='text-center form-actions' colspan='4'>
+                <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+                <?php echo html::backButton('', '', 'btn btn-wide');?>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->testreport->legendStoryAndBug?></div>
-        <?php include './blockstories.html.php'?>
-        <?php include './blockbugs.html.php'?>
+        <div class="detail-content">
+          <?php include './blockstories.html.php'?>
+          <?php include './blockbugs.html.php'?>
+        </div>
       </div>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->testreport->legendBuild?></div>
-        <?php include './blockbuilds.html.php'?>
+        <div class="detail-content">
+          <?php include './blockbuilds.html.php'?>
+        </div>
       </div>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->testreport->legendCase?></div>
-        <?php include './blockcases.html.php'?>
+        <div class="detail-content">
+          <?php include './blockcases.html.php'?>
+        </div>
       </div>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->testreport->legendLegacyBugs?></div>
-        <?php include './blocklegacybugs.html.php'?>
+        <div class="detail-content">
+          <?php include './blocklegacybugs.html.php'?>
+        </div>
       </div>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->testreport->legendReport?></div>
-        <?php include './blockbugreport.html.php'?>
+        <div class="detail-content">
+          <?php include './blockbugreport.html.php'?>
+        </div>
       </div>
     </form>
   </div>

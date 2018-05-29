@@ -65,8 +65,8 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <th><?php common::printOrderLink('phone', $orderBy, $vars, $lang->user->phone);?></th>
           <th><?php common::printOrderLink('qq', $orderBy, $vars, $lang->user->qq);?></th>
           <th class="c-date"><?php common::printOrderLink('last', $orderBy, $vars, $lang->user->last);?></th>
-          <th class="c-num"><?php common::printOrderLink('visits', $orderBy, $vars, $lang->user->visits);?></th>
-          <th class='c-actions-2'><?php echo $lang->actions;?></th>
+          <th class="w-90px"><?php common::printOrderLink('visits', $orderBy, $vars, $lang->user->visits);?></th>
+          <th class='c-actions'><?php echo $lang->actions;?></th>
         </tr>
         </thead>
         <tbody>
@@ -89,16 +89,12 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <td class='c-date'><?php if($user->last) echo date('Y-m-d', $user->last);?></td>
           <td class='c-num text-center'><?php echo $user->visits;?></td>
           <td class='c-actions'>
-            <div class='more'>
-              <?php
-              if(true or $user->ranzhi) common::printIcon('user', 'unbind', "userID=$user->account", '', 'list', 'unlink', "hiddenwin");
-              if(true or (strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $this->config->user->lockMinutes * 60)
-              {
-                  common::printIcon('user', 'unlock', "userID=$user->account", '', 'list', 'unlock', "hiddenwin");
-              }
-              ?>
-            </div>
             <?php
+            if(true or $user->ranzhi) common::printIcon('user', 'unbind', "userID=$user->account", '', 'list', 'unlink', "hiddenwin");
+            if(true or (strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $this->config->user->lockMinutes * 60)
+            {
+                common::printIcon('user', 'unlock', "userID=$user->account", '', 'list', 'unlock', "hiddenwin");
+            }
             common::printIcon('user', 'edit', "userID=$user->id&from=company", '', 'list');
             if(strpos($this->app->company->admins, ",{$user->account},") === false and common::hasPriv('user', 'delete'))
             {
