@@ -206,14 +206,6 @@ class docModel extends model
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->orderBy('`order`, id desc')->query();
         }
-        elseif($type == 'collectedbyme')
-        {
-            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
-                ->where('deleted')->eq(0)
-                ->andWhere('collector')->like("%,{$this->app->user->account},%")
-                ->orderBy('`order`, id desc')
-                ->query();
-        }
         else
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('product')->eq('0')->andWhere('project')->eq(0)->orderBy('`order`, id desc')->query();

@@ -155,8 +155,6 @@ class doc extends control
             $this->session->set('searchDoc', '');
         }
 
-        if($browseType == 'collectedbyme')  $this->view->doclibs = $this->doc->getLibs('collectedbyme');
-
         $this->view->title      = $title;
         $this->view->libID      = $libID;
         $this->view->moduleID   = $moduleID;
