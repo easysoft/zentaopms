@@ -15,7 +15,7 @@
   #formSetting {min-width: 300px;}
   #formSettingForm .checkboxes {padding: 10px 3px;}
   #formSettingForm .checkbox-primary {width: 50%; float: left; margin: 3px 0;}
-  #formSetting .btn[type="submit"] {margin-right: 8px;}
+  #formSetting .btn {margin-right: 8px;}
   </style>
   <button type="button" title="<?php echo $lang->customField;?>" class="btn btn-link" data-toggle="dropdown"><i class="icon icon-cog"></i></button>
   <div class="dropdown-menu pull-right" id="formSetting">
