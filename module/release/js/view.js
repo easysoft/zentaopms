@@ -5,15 +5,14 @@ function showLink(releaseID, type, param)
     if(type == 'leftBug') param += '&type=leftBug';
     $.get(createLink('release', method, 'releaseID=' + releaseID + param), function(data)
     {
-        var obj = type == 'story' ? '.tab-pane#stories .linkBox' : (type == 'leftBug' ? '.tab-pane#leftBugs .linkBox' : '.tab-pane#bugs .linkBox');
-        $(obj).html(data);
-        $('#' + type + 'List').closest('form').hide();
-
-        var formID = type == 'story' ? '#unlinkedStoriesForm' : (type == 'leftBug' ? '#unlinkedLeftBugsForm' : '#unlinkedBugsForm');
-
-        $('[data-ride="table"]').table();
+        var $pane = $(type == 'story' ? '#stories' : (type == 'leftBug' ? '#leftBugs' : '#bugs'));
+        $pane.find('.main-table').hide();
+        var $linkBox = $pane.find('.linkBox').html(data).removeClass('hidden');
+        $linkBox.find('[data-ride="table"]').table();
+        $.toggleQueryBox(true, $linkBox.find('#queryBox'));
     });
 }
+
 $(function()
 {
     if(link == 'true') showLink(releaseID, type, param);

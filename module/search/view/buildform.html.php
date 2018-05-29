@@ -14,23 +14,24 @@
 $jsRoot = $this->app->getWebRoot() . "js/";
 include '../../common/view/datepicker.html.php';
 include '../../common/view/chosen.html.php';
+$formId = 'searchForm-' . uniqid('');
 ?>
 <style>
 #selectPeriod {padding: 4px 0; height: 197px; min-width: 120px}
 #selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 4px 0; line-height: 20px; margin: 5px 10px; font-size: 14px; border-radius: 2px; color: #333; font-size: 12px}
 #groupAndOr {display: inline-block;}
-#searchForm > table {margin: 0 auto;}
-#searchForm > table > tbody > tr > td {padding: 10px 15px; color: #838A9D;}
-#searchForm .form-actions {padding-bottom: 20px; padding-top: 0;}
-#searchForm .chosen-container[id^="field"] .chosen-drop {min-width: 140px;}
-#searchForm [id^="valueBox"] .chosen-container .chosen-single {min-width: 100px;}
-#searchForm [id^="valueBox"] .chosen-container .chosen-drop {min-width: 300px;}
-#searchForm .chosen-container .chosen-drop ul.chosen-results li {white-space:normal}
-#searchForm input.date::-webkit-input-placeholder {color: #000000; opacity: 1;}
-#searchForm input.date::-moz-placeholder {color: #000000; opacity: 1;}
-#searchForm input.date:-ms-input-placeholder {color: #000000; opacity: 1;}
-#searchForm .btn-expand-form {background: transparent;}
-#searchForm .btn-expand-form:hover {background: #e9f2fb;}
+#<?php echo $formId;?> > table {margin: 0 auto;}
+#<?php echo $formId;?> > table > tbody > tr > td {padding: 10px 15px; color: #838A9D;}
+#<?php echo $formId;?> .form-actions {padding-bottom: 20px; padding-top: 0;}
+#<?php echo $formId;?> .chosen-container[id^="field"] .chosen-drop {min-width: 140px;}
+#<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-single {min-width: 100px;}
+#<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-drop {min-width: 300px;}
+#<?php echo $formId;?> .chosen-container .chosen-drop ul.chosen-results li {white-space:normal}
+#<?php echo $formId;?> input.date::-webkit-input-placeholder {color: #000000; opacity: 1;}
+#<?php echo $formId;?> input.date::-moz-placeholder {color: #000000; opacity: 1;}
+#<?php echo $formId;?> input.date:-ms-input-placeholder {color: #000000; opacity: 1;}
+#<?php echo $formId;?> .btn-expand-form {background: transparent;}
+#<?php echo $formId;?> .btn-expand-form:hover {background: #e9f2fb;}
 .showmore .btn-expand-form .icon-chevron-double-down:before {content: '\e959';}
 
 #userQueries {border-left: 1px solid #eee; vertical-align: top;}
@@ -42,7 +43,7 @@ include '../../common/view/chosen.html.php';
 #userQueries .label > .icon-close {position: absolute; top: 2px; right: 2px; border-radius: 9px; font-size: 12px; line-height: 18px; width: 18px; display: inline-block;}
 #userQueries .label > .icon-close:hover {background-color: #ff5d5d; color: #fff;}
 </style>
-<form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='searchForm'>
+<form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='<?php echo $formId;?>' class='search-form'>
 <div class='hidden'>
 <?php
 /* Print every field as an html object, select or input. Thus when setFiled is called, copy it's html to build the search form. */
@@ -242,7 +243,7 @@ function executeQuery(queryID)
 
 $(function()
 {
-    var $searchForm = $('<?php echo "#{$module}-search";?>').closest('form');
+    var $searchForm = $('#<?php echo $formId;?>');
     $searchForm.find('select.chosen').chosen();
 
     /*

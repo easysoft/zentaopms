@@ -1,4 +1,4 @@
-function showLink(buildID, type, param)
+function showLink(planID, type, param)
 {
     var method = type == 'story' ? 'linkStory' : 'linkBug';
     $.get(createLink('productplan', method, 'planID=' + planID + (typeof(param) == 'undefined' ? '' : param) + (typeof(orderBy) == 'undefined' ? '' : "&orderBy=" + orderBy)), function(data)

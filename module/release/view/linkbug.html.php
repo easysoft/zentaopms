@@ -17,8 +17,8 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
 ?>
 <div id='<?php echo $type == 'bug' ? 'unlinkBugList' : 'unlinkLeftBugList';?>'>
   <form class='main-table' method='post' target='hiddenwin' id='<?php echo $formID?>' action='<?php echo $this->createLink('release', 'linkBug', "releaseID=$release->id&browseType=$browseType&param=$param&type=$type")?>' data-ride='table'>
-    <div class='table-header'>
-      <div class='table-statistic'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedBugs;?></strong></div>
+    <div class='table-header hl-primary text-primary strong'>
+      <?php echo html::icon('unlink');?> <?php echo $lang->productplan->unlinkedBugs;?>
     </div>
     <table class='table'> 
       <thead>
@@ -68,13 +68,10 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
         <?php echo html::submitButton($lang->release->linkBug, '', 'btn');?>
       </div>
       <?php endif;?>
-      <?php echo html::a(inlink('view', "releaseID=$release->id&type=$type"), $lang->goback, '', "class='btn'");?>
+      <div class="btn-toolbar">
+        <?php echo html::a(inlink('view', "releaseID=$release->id&type=$type"), $lang->goback, '', "class='btn'");?>
+      </div>
+      <div class='table-statistic'></div>
     </div>
   </form>
 </div>
-<script>
-$(function()
-{
-    ajaxGetSearchForm('#<?php echo $type == 'bug' ? 'bugs' : 'leftBugs'?> .linkBox #queryBox')
-})
-</script>

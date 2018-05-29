@@ -10,6 +10,7 @@ function showLink(buildID, type, param)
         $.toggleQueryBox(true, $linkBox.find('#queryBox'));
     });
 }
+
 $(function()
 {
     if(flow != 'onlyTest')
