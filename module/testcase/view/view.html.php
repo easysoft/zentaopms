@@ -26,8 +26,8 @@
       <?php endif; ?>
 
       <?php if($case->version > 1):?>
-      <small class='dropdown'>
-        <a href='#' data-toggle='dropdown' class='text-muted'><?php echo '#' . $version;?> <span class='caret'></span></a>
+      <span class='dropdown'>
+        &nbsp; <a href='#' data-toggle='dropdown' class='text-muted'><?php echo '#' . $version;?> <span class='caret'></span></a>
         <ul class='dropdown-menu'>
         <?php
         for($i = $case->version; $i >= 1; $i --)
@@ -37,7 +37,7 @@
         }
         ?>
         </ul>
-      </small>
+      </span>
       <?php endif; ?>
     </div>
   </div>
@@ -52,36 +52,38 @@
       </div>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->testcase->steps;?></div>
-        <table class='table table-condensed table-hover table-striped' id='steps'>
-          <thead>
-            <tr>
-              <th class='w-50px'><?php echo $lang->testcase->stepID;?></th>
-              <th class='w-p70 text-left'><?php echo $lang->testcase->stepDesc;?></th>
-              <th class='text-left'><?php echo $lang->testcase->stepExpect;?></th>
-            </tr>
-          </thead>
-          <?php
-          $stepId = $childId = 0;
-          foreach($case->steps as $stepID => $step)
-          {
-              $stepClass = "step-{$step->type}";
-              if($step->type == 'group' or $step->type == 'step')
-              {
-                  $stepId++;
-                  $childId = 0;
-              }
-              if($step->type == 'step') $stepClass = 'step-group';
-              echo "<tr class='step {$stepClass}'>";
-              echo "<th class='step-id'>$stepId</th>";
-              echo "<td class='text-left'><div class='input-group'>";
-              if($step->type == 'item') echo "<span class='step-item-id'>{$stepId}.{$childId}</span>";
-              echo nl2br($step->desc) . "</td>";
-              echo "<td class='text-left'>" . nl2br($step->expect) . "</div></td>";
-              echo "</tr>";
-              $childId ++;
-          }
-          ?>
-        </table>
+        <div class="detail-content">
+          <table class='table table-condensed table-hover table-striped table-bordered' id='steps'>
+            <thead>
+              <tr>
+                <th class='w-50px'><?php echo $lang->testcase->stepID;?></th>
+                <th class='w-p70 text-left'><?php echo $lang->testcase->stepDesc;?></th>
+                <th class='text-left'><?php echo $lang->testcase->stepExpect;?></th>
+              </tr>
+            </thead>
+            <?php
+            $stepId = $childId = 0;
+            foreach($case->steps as $stepID => $step)
+            {
+                $stepClass = "step-{$step->type}";
+                if($step->type == 'group' or $step->type == 'step')
+                {
+                    $stepId++;
+                    $childId = 0;
+                }
+                if($step->type == 'step') $stepClass = 'step-group';
+                echo "<tr class='step {$stepClass}'>";
+                echo "<th class='step-id'>$stepId</th>";
+                echo "<td class='text-left'><div class='input-group'>";
+                if($step->type == 'item') echo "<span class='step-item-id'>{$stepId}.{$childId}</span>";
+                echo nl2br($step->desc) . "</td>";
+                echo "<td class='text-left'>" . nl2br($step->expect) . "</div></td>";
+                echo "</tr>";
+                $childId ++;
+            }
+            ?>
+          </table>
+        </div>
       </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>

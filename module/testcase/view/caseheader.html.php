@@ -138,8 +138,8 @@
         foreach($suiteList as $suiteID => $suite)
         {
             $suiteName = $suite->name;
-            if($suite->type == 'public') $suiteName .= " <span class='label label-info'>{$lang->testsuite->authorList[$suite->type]}</span>";
-            if($suite->type == 'private') $suiteName .= " <span class='label label-warning'>{$lang->testsuite->authorList[$suite->type]}</span>";
+            if($suite->type == 'public') $suiteName .= " <span class='label label-success label-badge'>{$lang->testsuite->authorList[$suite->type]}</span>";
+            if($suite->type == 'private') $suiteName .= " <span class='label label-info label-badge'>{$lang->testsuite->authorList[$suite->type]}</span>";
 
             echo '<li' . ($suiteID == (int)$currentSuiteID ? " class='active'" : '') . '>';
             echo html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=$suiteID"), $suiteName);
