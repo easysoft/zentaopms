@@ -57,22 +57,22 @@
   </div>
 </div>
 <div id='mainContent' class='main-content'>
-  <div class='tabs'>
+  <div class='tabs' id='tabsNav'>
     <ul class='nav nav-tabs'>
-      <li class='<?php if($type == 'story') echo 'active'?>'><a href='#stories' data-toggle='tab'><?php echo  html::icon($lang->icons['story']) . ' ' . $lang->productplan->linkedStories;?></a></li>
+      <li class='<?php if($type == 'story') echo 'active'?>'><a href='#stories' data-toggle='tab'><?php echo  html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->productplan->linkedStories;?></a></li>
       <?php if($config->global->flow != 'onlyStory'):?>
-      <li class='<?php if($type == 'bug') echo 'active'?>'><a href='#bugs' data-toggle='tab'><?php echo  html::icon($lang->icons['bug']) . ' ' . $lang->productplan->linkedBugs;?></a></li>
+      <li class='<?php if($type == 'bug') echo 'active'?>'><a href='#bugs' data-toggle='tab'><?php echo  html::icon($lang->icons['bug'], 'text-red') . ' ' . $lang->productplan->linkedBugs;?></a></li>
       <?php endif;?>
-      <li><a href='#planInfo' data-toggle='tab'><?php echo  html::icon($lang->icons['plan']) . ' ' . $lang->productplan->view;?></a></li>
+      <li><a href='#planInfo' data-toggle='tab'><?php echo  html::icon($lang->icons['plan'], 'text-info') . ' ' . $lang->productplan->view;?></a></li>
     </ul>
     <div class='tab-content'>
       <div id='stories' class='tab-pane <?php if($type == 'story') echo 'active'?>'>
         <?php if(common::hasPriv('productplan', 'linkStory')):?>
         <?php $canOrder = common::hasPriv('project', 'storySort');?>
-        <div class='action'>
-        <?php echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-sm btn-primary'");?>
+        <div class='actions'>
+        <?php echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-primary'");?>
         </div>
-        <div class='linkBox'></div>
+        <div class='linkBox cell hidden'></div>
         <?php endif;?>
         <form class='main-table table-story' data-ride='table' method='post' target='hiddenwin' action="<?php echo inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");?>">
           <table class='table has-sort-head' id='storyList'>
@@ -333,10 +333,10 @@
       </div>
       <div id='bugs' class='tab-pane <?php if($type == 'bug') echo 'active';?>'>
         <?php if(common::hasPriv('productplan', 'linkBug')):?>
-        <div class='action'>
-        <?php echo html::a("javascript:showLink($plan->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn btn-sm btn-primary'");?>
+        <div class='actions'>
+        <?php echo html::a("javascript:showLink($plan->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn btn-primary'");?>
         </div>
-        <div class='linkBox'></div>
+        <div class='linkBox cell hidden'></div>
         <?php endif;?>
         <form class='main-table table-bug' data-ride='table' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy");?>">
           <table class='table has-sort-head' id='bugList'>
@@ -407,38 +407,38 @@
         </form>
       </div>
       <div id='planInfo' class='tab-pane'>
-         <div class='cell'>
-           <div class='detail'>
-             <div class='detail-title'><?php echo $lang->productplan->basicInfo;?></div>
-             <div class='detail-content'>
-               <table class='table table-data table-condensed table-borderless'>
-                 <tr>
-                   <th class='w-80px strong'><?php echo $lang->productplan->title;?></th>
-                   <td><?php echo $plan->title;?></td>
-                 </tr>
-                 <?php if($product->type != 'normal'):?>
-                 <tr>
-                   <th><?php echo $lang->product->branch;?></th>
-                   <td><?php echo $branches[$plan->branch];?></td>
-                 </tr>
-                 <?php endif;?>
-                 <tr>
-                   <th><?php echo $lang->productplan->begin;?></th>
-                   <td><?php echo $plan->begin == '2030-01-01' ? $lang->productplan->future : $plan->begin;?></td>
-                 </tr>
-                 <tr>
-                   <th><?php echo $lang->productplan->end;?></th>
-                   <td><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
-                 </tr>
-                 <tr>
-                   <th><?php echo $lang->productplan->desc;?></th>
-                   <td><?php echo $plan->desc;?></td>
-                 </tr>
-               </table>
-             </div>
-           </div>
-           <?php include '../../common/view/action.html.php';?>
-         </div>
+        <div class='cell'>
+          <div class='detail'>
+            <div class='detail-title'><?php echo $lang->productplan->basicInfo;?></div>
+            <div class='detail-content'>
+              <table class='table table-data table-condensed table-borderless'>
+                <tr>
+                  <th class='w-80px strong'><?php echo $lang->productplan->title;?></th>
+                  <td><?php echo $plan->title;?></td>
+                </tr>
+                <?php if($product->type != 'normal'):?>
+                <tr>
+                  <th><?php echo $lang->product->branch;?></th>
+                  <td><?php echo $branches[$plan->branch];?></td>
+                </tr>
+                <?php endif;?>
+                <tr>
+                  <th><?php echo $lang->productplan->begin;?></th>
+                  <td><?php echo $plan->begin == '2030-01-01' ? $lang->productplan->future : $plan->begin;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->productplan->end;?></th>
+                  <td><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->productplan->desc;?></th>
+                  <td><?php echo $plan->desc;?></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <?php include '../../common/view/action.html.php';?>
+        </div>
       </div>
     </div>
   </div>

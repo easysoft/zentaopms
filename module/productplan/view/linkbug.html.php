@@ -13,8 +13,8 @@
 <div id='queryBox' class='show'></div>
 <div id='unlinkBugList'>
   <form class='main-table table-bug' data-ride='table' method='post' id='unlinkedBugsForm' target='hiddenwin' action='<?php echo $this->createLink('productplan', 'linkBug', "planID=$plan->id&browseType=$browseType&param=$param&orderBy=$orderBy")?>'>
-    <div class='table-header'>
-      <div class='table-statistic'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedBugs;?></strong></div>
+    <div class='table-header hl-primary text-primary strong'>
+      <?php echo html::icon('unlink');?> <?php echo $lang->productplan->unlinkedBugs;?>
     </div>
     <table class='table'>
       <thead>
@@ -64,13 +64,10 @@
         <?php echo html::submitButton($lang->productplan->linkBug, '', 'btn');?>
       </div>
       <?php endif;?>
-      <?php echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=$orderBy"), $lang->goback, '', "class='btn'");?>
+      <div class="btn-toolbar">
+        <?php echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=$orderBy"), $lang->goback, '', "class='btn'");?>
+      </div>
+      <div class='table-statistic'></div>
     </div>
   </form>
 </div>
-<script>
-$(function()
-{
-    ajaxGetSearchForm('#bugs .linkBox #queryBox');
-})
-</script>
