@@ -19,13 +19,14 @@
   .types-line > li > div:after {content: ''; display: block; background: #FFFFFF; box-shadow: 0 2px 4px 0 rgba(170,170,170,0.50), 0 0 5px 0 rgba(0,0,0,0.1); width: 10px; height: 10px; position: absolute; border-radius: 50%; top: 0; left: 50%; margin-left: -2px;}
   .types-line > li > div > small {display: block; color: #A6AAB8;}
   .types-line > li > div > span {display: block; color: #CBD0DB; font-size: 16px;}
-  .product-info {position: relative; padding: 10px 10px 10px 200px;}
-  .product-info + .product-info {margin-top: 10px;}
-  .product-info .progress {position: absolute; left: 10px; top: 35px; width: 180px;}
-  .product-info .progress-info {position: absolute; left: 8px; top: 10px; width: 180px; font-size: 12px;}
-  .product-info .type-info {color: #A6AAB8; text-align: center;}
-  .product-info .type-label {font-size: 12px;}
-  .product-info .type-value {font-size: 14px;}
+  .product-info {position: relative; height: 65px;}
+.product-info + .product-info {margin-top: 10px;}
+.product-info .progress {position: absolute; left: 10px; top: 35px; right: 90px;}
+.product-info .progress-info {position: absolute; left: 8px; top: 10px; width: 180px; font-size: 12px;}
+.product-info .type-info {color: #A6AAB8; text-align: center; position: absolute; right: 0; top: 6px; width: 100px;}
+.product-info .type-value,
+.product-info .type-label {font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.product-info .type-value {font-size: 14px;}
   .product-info .type-value > strong {font-size: 20px; color: #3C4353;}
   .product-info .actions {position: absolute; left: 10px; top: 14px;}
   .block-statistic .tile {margin-bottom: 30px;}
