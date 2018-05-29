@@ -63,11 +63,11 @@
           <?php
           if($mode == 'new')
           {
-              echo html::select('users[]', $users, '', "multiple class='form-control chosen'");
+              echo html::select('users[]', $users, '', "multiple class='form-control chosen' data-drop_direction='down'");
           }
           else
           {
-              echo html::select('users[]', $users, $list->userList, "multiple $readonly class='form-control chosen'");
+              echo html::select('users[]', $users, $list->userList, "multiple $readonly class='form-control chosen' data-drop_direction='down'");
           }
           ?>
           </td>
