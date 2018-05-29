@@ -63,12 +63,12 @@
     <?php echo "<a class='btn btn-link querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'></i>{$lang->testcase->bySearch}</a>";?>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
-  <div class="cell" id="queryBox"></div>
+<div class="cell show" id="queryBox"></div>
+<div id='mainContent'>
   <form class='main-table table-case' data-ride='table' method='post'>
     <table class='table'>
       <div class="table-header">
-        <div class="table-statistic"><strong><?php echo $lang->testtask->unlinkedCases;?></strong> (<?php echo $pager->recTotal;?>)</div>
+        <i class="icon-unlink"></i> &nbsp;<strong><?php echo $lang->testtask->unlinkedCases;?></strong> (<?php echo $pager->recTotal;?>)
       </div>
       <thead>
         <tr>
@@ -122,7 +122,8 @@
     <?php if($cases):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar"><?php echo html::submitButton('', '', 'btn');?></div>
+      <div class="table-actions btn-toolbar show-always"><?php echo html::submitButton('', '', 'btn btn-secondary');?></div>
+      <div class="table-statistic"></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>
