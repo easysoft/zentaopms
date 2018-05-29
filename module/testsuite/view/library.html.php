@@ -65,7 +65,7 @@ js::set('flow',   $this->config->global->flow);
     </li>
   </ul>
 
-  <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
+  <div id='queryBox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
 <?php else:?>
 <div id='pageActions'>
@@ -104,7 +104,7 @@ js::set('flow',   $this->config->global->flow);
     <?php common::printLink('testsuite', 'batchCreateCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->batchCreate, '', "class='btn btn-secondary'");?>
     <?php common::printLink('testsuite', 'createCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'");?>
   </div>
-  <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
+  <div id='queryBox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
 <?php endif;?>
 <div id="mainContent" class="main-row">

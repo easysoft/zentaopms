@@ -72,7 +72,7 @@ tbody tr td:first-child input{display:none;}
     </div>
   </div>
   <?php else:?>
-  <div class='tabs'>
+  <div class='tabs' id='tabsNav'>
   <?php $countStories = count($stories); $countBugs = count($bugs); $countNewBugs = count($generatedBugs);?>
     <ul class='nav nav-tabs'>
       <li <?php if($type == 'story')     echo "class='active'"?>><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story'], 'green') . ' ' . $lang->build->stories;?></a></li>
@@ -83,7 +83,7 @@ tbody tr td:first-child input{display:none;}
     <div class='tab-content'>
       <div class='tab-pane <?php if($type == 'story') echo 'active'?>' id='stories'>
         <?php if(common::hasPriv('build', 'linkStory')):?>
-        <div class='action'><?php echo html::a("javascript:showLink($build->id, \"story\")", '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn btn-sm btn-primary'");?></div>
+        <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"story\")", '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn btn-primary'");?></div>
         <div class='linkBox'></div>
         <?php endif;?>
         <form class='main-table table-story' data-ride='table' method='post' target='hiddenwin' action='<?php echo inlink('batchUnlinkStory', "buildID={$build->id}")?>' id='linkedStoriesForm'>
@@ -121,7 +121,7 @@ tbody tr td:first-child input{display:none;}
                   <?php endif;?>
                 </td>
                 <td><span class='label-pri label-pri-<?php echo $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-                <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($storyLink,$story->title, '', "class='preview'");?></td>
+                <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($storyLink,$story->title, '', "class='iframe' data-width='1000'");?></td>
                 <td><?php echo $users[$story->openedBy];?></td>
                 <td><?php echo $story->estimate;?></td>
                 <td>
@@ -159,7 +159,7 @@ tbody tr td:first-child input{display:none;}
       </div>
       <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
         <?php if(common::hasPriv('build', 'linkBug')):?>
-        <div class='action'><?php echo html::a("javascript:showLink($build->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn btn-sm btn-primary'");?></div>
+        <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn btn-primary'");?></div>
         <div class='linkBox'></div>
         <?php endif;?>
         <form class='main-table table-bug' data-ride='table' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "build=$build->id");?>" id='linkedBugsForm'>
@@ -195,7 +195,7 @@ tbody tr td:first-child input{display:none;}
                   <?php else:?>
                   <?php printf('%03d', $bug->id);?>
                   <?php endif;?>
-                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
+                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='iframe' data-width='1000'");?></td>
                 <td>
                   <span class='status-<?php echo $bug->status?>'>
                     <span class='label label-dot'></span>
@@ -255,7 +255,7 @@ tbody tr td:first-child input{display:none;}
               <td>
                 <span class='label-severity' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?>'></span>
               </td>
-              <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
+              <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='iframe' data-width='1000'");?></td>
               <td>
                 <span class='status-<?php echo $bug->status?>'>
                   <span class='label label-dot'></span>
