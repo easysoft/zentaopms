@@ -15,8 +15,8 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <div class="pull-left table-group-btns">
-      <button type="button" class="btn btn-link group-collapse-all"><?php echo $lang->testtask->collapseAll;?> <i class="icon-fold-all"></i></button>
-      <button type="button" class="btn btn-link group-expand-all"><?php echo $lang->testtask->expandAll;?> <i class="icon-unfold-all"></i></button>
+      <button type="button" class="btn btn-link group-collapse-all"><?php echo $lang->testtask->collapseAll;?> <i class="icon-fold-all muted"></i></button>
+      <button type="button" class="btn btn-link group-expand-all"><?php echo $lang->testtask->expandAll;?> <i class="icon-unfold-all muted"></i></button>
     </div>
     <?php $total = 0;?>
     <?php foreach($tasks as $productTasks) $total += count($productTasks);?>
@@ -26,7 +26,7 @@
     </a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printIcon('testreport', 'browse', "objectID=$projectID&objectType=project", '', 'button','flag');?>
+    <?php common::printIcon('testreport', 'browse', "objectID=$projectID&objectType=project", '', 'button','flag muted');?>
     <?php common::printLink('testtask', 'create', "product=0&project=$projectID", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
@@ -36,7 +36,7 @@
       <thead>
         <?php $vars = "projectID=$projectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <?php $canTestReport = common::hasPriv('testreport', 'browse');?>
-        <tr class='divider'>
+        <tr class='<?php if($total) echo 'divider'; ?>'>
           <th class='c-side text-center'><?php common::printOrderLink('product', $orderBy, $vars, $lang->testtask->product);?></th>
           <th class="c-id">
             <?php if($canTestReport):?>
