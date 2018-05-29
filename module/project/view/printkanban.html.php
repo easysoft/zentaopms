@@ -10,21 +10,26 @@
 ?>
 <?php if($_POST) die(include 'preview.html.php')?>
 <?php include '../../common/view/header.lite.html.php';?>
-<div id='mainContent' class='main-content'>
-  <div class='center-block'>
-    <div class='main-header'>
-      <h2><?php echo $lang->printKanban->common;?></h2>
+<main class='main'>
+  <div class='container'>
+    <div id='mainContent' class='main-content'>
+      <div class='center-block'>
+        <div class='main-header'>
+          <h2><?php echo $lang->printKanban->common;?></h2>
+        </div>
+        <form target='_blank' method='post'>
+          <table class='table table-form'>
+            <tr>
+              <td class='text-right w-100px'><?php echo $lang->printKanban->content?>:</td>
+              <td class='text-left text-middle'>
+                <?php echo html::radio('content', $lang->printKanban->typeList, 'all')?>
+                &nbsp; &nbsp; <?php echo html::submitButton($lang->printKanban->print, '', 'btn btn-primary btn-wide')?>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
     </div>
-    <form target='_blank' method='post'>
-      <table class='table'>
-        <tr>
-          <td class='text-center text-middle'>
-            <?php echo $lang->printKanban->content . ' ： ' . html::radio('content', $lang->printKanban->typeList, 'all')?>
-            <?php echo html::submitButton($lang->printKanban->print)?>
-          </td>
-        </tr>
-      </table>
-    </form>
   </div>
-</div>
+</main>
 <?php include '../../common/view/footer.lite.html.php';?>

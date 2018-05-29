@@ -34,9 +34,9 @@
   </div>
 </div>
   
-<div id="mainContent" class="main-content">
-  <div id='queryBox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
-  <div id="dynamics">
+<div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>'></div>
+<div id='mainContent' class='main-content'>
+  <div id='dynamics'>
     <?php $firstAction = '';?>
     <?php foreach($dateGroups as $date => $actions):?>
     <?php $isToday = date(DT_DATE4) == $date;?>

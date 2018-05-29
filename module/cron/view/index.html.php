@@ -66,7 +66,8 @@
     <?php endforeach;?>
     </tbody>
   </table>
-  <div class='alert alert-info'><?php echo $lang->cron->notice->help?></div>
+  <div class='space'></div>
+  <div class='alert alert-info no-margin'><?php echo $lang->cron->notice->help?></div>
   <?php else:?>
   <div class='container mw-700px'>
     <div class='panel-body'>
