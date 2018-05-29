@@ -19,8 +19,3 @@ function setModule(obj)
         }
     })
 }
-
-$(function()
-{
-    ajaxGetSearchForm('#querybox');
-});

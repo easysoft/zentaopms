@@ -19,9 +19,8 @@
     </div>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
-  <div id='queryBox' class='show'></div>
-  <hr class='small' />
+<div id='queryBox' class='show cell'></div>
+<div id='mainContent'>
   <form class='main-table' method='post' target='hiddenwin' id='importFromLib' data-ride='table'>
     <table class='table has-sort-head table-fixed'>
       <thead>
@@ -69,10 +68,13 @@
     <?php if($cases):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class='table-actions btn-toolbar'>
-        <?php echo html::submitButton($lang->testcase->import, '', 'btn');?>
+      <div class='table-actions btn-toolbar show-always'>
+        <?php echo html::submitButton($lang->testcase->import, '', 'btn btn-secondary');?>
       </div>
-      <?php echo html::linkButton($lang->goback, $this->session->caseList);?>
+      <div class="btn-toolbar">
+        <?php echo html::linkButton($lang->goback, $this->session->caseList);?>
+      </div>
+      <div class='table-statistic'></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>

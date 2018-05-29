@@ -362,7 +362,7 @@
     if($from == 'project') common::printIcon('task', 'create', "project=$param&storyID=$story->id&moduleID=$story->module", $story, 'button', 'smile', '', 'showinonlybody');
 
     echo "<div class='divider'></div>";
-    common::printIcon('story', 'edit', "storyID=$story->id", $story, '', '', '', 'iframe showinonlybody');
+    common::printIcon('story', 'edit', "storyID=$story->id", $story);
     common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", $story, 'button', 'copy', '', 'iframe showinonlybody');
     common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', '', 'hiddenwin');
     ?>

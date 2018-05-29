@@ -129,7 +129,7 @@
     </div>
   </div>
   <div class="main-col">
-    <div class="cell" id="queryBox"></div>
+    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox"></div>
     <form class="main-table table-story skip-iframe-modal" method="post" id='productStoryForm'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
@@ -360,9 +360,6 @@
 <script>
 var moduleID = <?php echo $moduleID?>;
 $('#module<?php echo $moduleID;?>').closest('li').addClass('active');
-<?php if($browseType == 'bysearch'):?>
-if($('#query li.active').size() == 0) ajaxGetSearchForm();
-<?php endif;?>
 
 $(function()
 {

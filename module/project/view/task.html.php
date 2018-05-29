@@ -164,7 +164,7 @@ js::set('browseType', $browseType);
     </div>
   </div>
   <div class="main-col">
-    <div class="cell" id="queryBox"></div>
+    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox"></div>
     <form class="main-table table-task skip-iframe-modal" method="post" id='projectTaskForm'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
@@ -310,9 +310,6 @@ js::set('browseType', $browseType);
 </div>
 <?php js::set('replaceID', 'taskList')?>
 <script>
-<?php if($browseType == 'bysearch'):?>
-if($('#query li.active').size() == 0) ajaxGetSearchForm();
-<?php endif;?>
 $(function()
 {
     // Update table summary text

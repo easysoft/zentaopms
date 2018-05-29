@@ -64,8 +64,6 @@ js::set('flow',   $this->config->global->flow);
       ?>
     </li>
   </ul>
-
-  <div id='queryBox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
 <?php else:?>
 <div id='pageActions'>
@@ -104,7 +102,6 @@ js::set('flow',   $this->config->global->flow);
     <?php common::printLink('testsuite', 'batchCreateCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->batchCreate, '', "class='btn btn-secondary'");?>
     <?php common::printLink('testsuite', 'createCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'");?>
   </div>
-  <div id='queryBox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
 <?php endif;?>
 <div id="mainContent" class="main-row">
@@ -126,7 +123,7 @@ js::set('flow',   $this->config->global->flow);
     </div>
   </div>
   <div class="main-col">
-    <div class="cell" id="queryBox"></div>
+    <div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>'></div>
     <form class="main-table table-testcase" data-ride="table" method="post" id='testcaseForm'>
       <?php $canBatchEdit         = common::hasPriv('testcase', 'batchEdit');?>
       <?php $canBatchDelete       = common::hasPriv('testcase', 'batchDelete');?>

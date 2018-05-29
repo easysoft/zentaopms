@@ -21,7 +21,7 @@
       <?php endif;?>
     </h2>
   </div>
-  <div id='queryBox' class='show'></div>
+  <div id='queryBox' class='show divider'></div>
   <form method='post' target='hiddenwin' id='linkStoryForm' class='main-table table-story'>
     <?php if($stories2Link):?>
     <table class='table' id='storyList'>
@@ -77,7 +77,6 @@
 <script>
 $(function()
 {
-    ajaxGetSearchForm();
     <?php if($stories2Link):?>
     $('#linkStoryForm').table();
     setTimeout(function(){$('#linkStoryForm .table-footer').removeClass('fixed-footer');}, 100);

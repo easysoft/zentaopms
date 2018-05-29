@@ -27,7 +27,7 @@ $(function(){
     $('#' + browseType + 'Tab').addClass('active');
     if(browseType == "bysearch")
     {
-        ajaxGetSearchForm();
+        $.toggleQueryBox(true);
         browseBySearch();
     }
 });
