@@ -388,7 +388,7 @@ $(function()
     /*
      * Reset form
      */
-    var resetForm = function()
+    window.resetForm = function()
     {
         for(i = 1; i <= groupItems * 2; i ++)
         {
