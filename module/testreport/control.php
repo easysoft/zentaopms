@@ -12,10 +12,10 @@
 class testreport extends control
 {
     /**
-     * Construct 
-     * 
-     * @param  string $moduleName 
-     * @param  string $methodName 
+     * Construct
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return void
      */
@@ -35,15 +35,15 @@ class testreport extends control
     }
 
     /**
-     * Browse report. 
-     * 
-     * @param  int    $objectID 
-     * @param  string $objectType 
-     * @param  string $extra 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * Browse report.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @param  string $extra
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -76,10 +76,10 @@ class testreport extends control
         if(empty($reports) and common::hasPriv('testreport', 'create'))
         {
             $param = '';
-            if($objectType == 'product' and $extra) $param = "objectID=$extra&objectType=testtask"; 
+            if($objectType == 'product' and $extra) $param = "objectID=$extra&objectType=testtask";
             if($objectType == 'project')
             {
-                $param = "objectID=$objectID&objectType=project"; 
+                $param = "objectID=$objectID&objectType=project";
                 if(isset($_POST['taskIdList'])) $param .= '&extra=' . join(',', $_POST['taskIdList']);
             }
             if($param) $this->locate($this->createLink('testreport', 'create', $param));
@@ -112,11 +112,11 @@ class testreport extends control
     }
 
     /**
-     * Create report. 
-     * 
-     * @param  int    $objectID 
-     * @param  string $objectType 
-     * @param  string $extra 
+     * Create report.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @param  string $extra
      * @access public
      * @return void
      */
@@ -241,10 +241,10 @@ class testreport extends control
     }
 
     /**
-     * Edit report 
-     * 
-     * @param  int    $reportID 
-     * @param  string $from 
+     * Edit report
+     *
+     * @param  int    $reportID
+     * @param  string $from
      * @access public
      * @return void
      */
@@ -302,7 +302,7 @@ class testreport extends control
                 $build   = $this->build->getById($task->build);
                 $stories = empty($build->stories) ? array() : $this->story->getByList($build->stories);
 
-                $builds[$build->id] = $build;
+                if(!empty($build->id)) $builds[$build->id] = $build;
                 $bugs = $this->testreport->getBugs4Test($builds, $report->product, $report->begin, $report->end);
             }
             $tasks = array($task->id => $task);
@@ -345,9 +345,9 @@ class testreport extends control
     }
 
     /**
-     * View report. 
-     * 
-     * @param  int    $reportID 
+     * View report.
+     *
+     * @param  int    $reportID
      * @access public
      * @return void
      */
@@ -411,10 +411,10 @@ class testreport extends control
     }
 
     /**
-     * Delete report. 
-     * 
-     * @param  int    $reportID 
-     * @param  string $confirm 
+     * Delete report.
+     *
+     * @param  int    $reportID
+     * @param  string $confirm
      * @access public
      * @return void
      */
@@ -433,9 +433,9 @@ class testreport extends control
 
     /**
      * Common action.
-     * 
-     * @param  int    $objectID 
-     * @param  string $objectType 
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
      * @access public
      * @return int
      */
@@ -446,7 +446,7 @@ class testreport extends control
             $this->products = $this->product->getPairs('nocode');
             $productID      = $this->product->saveState($objectID, $this->products);
             $this->testreport->setMenu($this->products, $productID);
-            return $productID; 
+            return $productID;
         }
         elseif($objectType == 'project')
         {
@@ -456,7 +456,7 @@ class testreport extends control
             $this->lang->testreport->menu = $this->lang->project->menu;
             $this->lang->testreport->menu->testtask['subModule'] = 'testreport';
             $this->lang->menugroup->testreport = 'project';
-            return $projectID; 
+            return $projectID;
         }
     }
 }
