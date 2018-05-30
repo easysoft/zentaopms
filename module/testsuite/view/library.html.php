@@ -131,61 +131,63 @@ js::set('flow',   $this->config->global->flow);
       <?php $canBatchChangeModule = common::hasPriv('testcase', 'batchChangeModule');?>
       <?php $canBatchAction       = $canBatchEdit or $canBatchDelete or $canBatchReview or $canBatchChangeModule;?>
       <?php $vars = "libID=$libID&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
-      <table class='table has-sort-head' id='caseList'>
-        <thead>
-          <tr>
-            <th class='c-id'>
-              <?php if($canBatchAction):?>
-              <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
-                <label></label>
-              </div>
-              <?php endif;?>
-              <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
-            </th>
-            <th class='c-pri'>   <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
-            <th class='text-left'><?php common::printOrderLink('title',   $orderBy, $vars, $lang->testcase->title);?></th>
-            <th class='c-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
-            <th class='c-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
-            <th class='c-status'><?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
-            <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php if($cases):?>
-          <?php foreach($cases as $case):?>
-          <tr>
-            <td class='c-id'>
-              <?php if($canBatchAction):?>
-              <?php echo html::checkbox('caseIDList', array($case->id => sprintf('%03d', $case->id)));?>
-              <?php else:?>
-              <?php echo sprintf('%03d', $case->id);?>
-              <?php endif;?>
-            </td>
-            <td><span class='label-pri label-pri-<?php echo $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
-            <td class='text-left' title="<?php echo $case->title?>">
-              <?php if($modulePairs and $case->module) echo "<span title='{$lang->testcase->module}' class='label label-info label-badge'>{$modulePairs[$case->module]}</span> ";?>
-              <?php $viewLink = $this->createLink('testcase', 'view', "caseID=$case->id&version=$case->version");?>
-              <?php echo html::a($viewLink, $case->title, null, "style='color: $case->color'");?>
-            </td>
-            <td><?php echo $lang->testcase->typeList[$case->type];?></td>
-            <td><?php echo $users[$case->openedBy];?></td>
-            <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'> <?php echo $lang->testcase->statusList[$case->status];?></td>
-            <td class='c-actions'>
-              <?php
-              if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
-              common::printIcon('testcase',  'edit', "caseID=$case->id", $case, 'list');
-              if(common::hasPriv('testcase', 'delete'))
-              {
-                  $deleteURL = $this->createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
-                  echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->testcase->delete}' class='btn'");
-              }
-              ?>
-            </td>
-          </tr>
-          <?php endforeach;?>
-          <?php endif;?>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class='table has-sort-head' id='caseList'>
+          <thead>
+            <tr>
+              <th class='c-id'>
+                <?php if($canBatchAction):?>
+                <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
+                  <label></label>
+                </div>
+                <?php endif;?>
+                <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
+              </th>
+              <th class='c-pri'>   <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+              <th class='text-left'><?php common::printOrderLink('title',   $orderBy, $vars, $lang->testcase->title);?></th>
+              <th class='c-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
+              <th class='c-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+              <th class='c-status'><?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
+              <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php if($cases):?>
+            <?php foreach($cases as $case):?>
+            <tr>
+              <td class='c-id'>
+                <?php if($canBatchAction):?>
+                <?php echo html::checkbox('caseIDList', array($case->id => sprintf('%03d', $case->id)));?>
+                <?php else:?>
+                <?php echo sprintf('%03d', $case->id);?>
+                <?php endif;?>
+              </td>
+              <td><span class='label-pri label-pri-<?php echo $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
+              <td class='text-left' title="<?php echo $case->title?>">
+                <?php if($modulePairs and $case->module) echo "<span title='{$lang->testcase->module}' class='label label-info label-badge'>{$modulePairs[$case->module]}</span> ";?>
+                <?php $viewLink = $this->createLink('testcase', 'view', "caseID=$case->id&version=$case->version");?>
+                <?php echo html::a($viewLink, $case->title, null, "style='color: $case->color'");?>
+              </td>
+              <td><?php echo $lang->testcase->typeList[$case->type];?></td>
+              <td><?php echo $users[$case->openedBy];?></td>
+              <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'> <?php echo $lang->testcase->statusList[$case->status];?></td>
+              <td class='c-actions'>
+                <?php
+                if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
+                common::printIcon('testcase',  'edit', "caseID=$case->id", $case, 'list');
+                if(common::hasPriv('testcase', 'delete'))
+                {
+                    $deleteURL = $this->createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
+                    echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->testcase->delete}' class='btn'");
+                }
+                ?>
+              </td>
+            </tr>
+            <?php endforeach;?>
+            <?php endif;?>
+          </tbody>
+        </table>
+      </div>
       <?php if($cases):?>
       <div class='table-footer'>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
