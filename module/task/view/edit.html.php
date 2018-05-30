@@ -128,7 +128,7 @@
                 <td>
                   <div class='input-group'>
                     <?php echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ' , '', $task->mailto), 'class="form-control" multiple');?>
-                    <div class='input-group-btn'><?php echo $this->fetch('my', 'buildContactLists');?></div>
+                    <?php echo $this->fetch('my', 'buildContactLists');?>
                   </div>
                 </td>
               </tr>
