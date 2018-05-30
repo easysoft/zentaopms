@@ -67,7 +67,7 @@
 
   </form>
 </div>
-<script type='text/javascript'>
+<script>
 $(function(){$('#<?php echo $type?>').addClass('active');})
 </script>
 <?php include '../../common/view/footer.html.php';?>

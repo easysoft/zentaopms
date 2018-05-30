@@ -87,7 +87,7 @@ $nextLink  = $hasNext ? inlink('dynamic', "type=$type&recTotal={$pager->recTotal
 </div>
 <?php endif;?>
 <?php endif;?>
-<script type='text/javascript'>
+<script>
 $(function()
 {
     $('#dynamics').on('click', '.dynamic-btn', function()
