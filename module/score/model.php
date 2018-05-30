@@ -298,7 +298,7 @@ class scoreModel extends model
 <div id='noticeAttend' class='alert alert-success with-icon alert-dismissable' style='width:280px; position:fixed; bottom:25px; right:15px; z-index: 9999;' id='planInfo'>
    <i class='icon icon-diamond'>  </i>
    <div class='content'>{$notice}</div>
-   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+   <button type="button" class="close" data-dismiss="alert">×</button>
  </div>
 EOT;
         return $fullNotice;

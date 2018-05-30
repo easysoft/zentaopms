@@ -110,7 +110,7 @@
     ?>
   </div>
 </div>
-<div id="mainContent" class="main-row">
+<div id="mainContent" class="main-row fade">
   <div class="side-col" id="sidebar">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">

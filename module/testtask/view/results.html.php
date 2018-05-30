@@ -128,7 +128,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
               <h4 class="modal-title"><?php echo $lang->files;?></h4>
             </div>
             <div class="modal-body"><?php echo $this->fetch('file', 'printFiles', array('files' => $result->files, 'fieldset' => 'false'));?></div>
@@ -140,7 +140,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
               <h4 class="modal-title"><?php echo $lang->files;?></h4>
             </div>
             <div class="modal-body"><?php echo $this->fetch('file', 'printFiles', array('files' => $stepResult['files'], 'fieldset' => 'false'));?></div>

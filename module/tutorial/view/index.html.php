@@ -18,7 +18,7 @@
     <iframe id='iframePage' name='iframePage' src='<?php echo $referer ?>' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0; top: 0'></iframe>
     <div id='taskModalBack'></div>
     <div id='taskModal'>
-      <button class='close'>×</button>
+      <button class='close'><i class="icon icon-close"></i></button>
       <div class='finish-all'>
         <div class='start-icon'><i class='icon icon-certificate icon-spin icon-back'></i><i class='icon icon-check icon-front'></i></div>
         <h3><?php echo $lang->tutorial->congratulation ?></h3>

@@ -31,7 +31,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
     <?php common::printLink('user', 'create', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
-<div id='mainContent' class='main-row'>
+<div id='mainContent' class='main-row fade'>
   <div class='side-col' id='sidebar'>
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class='cell'>

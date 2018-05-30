@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class="main-row <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
+<div class="fade main-row <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
   <?php if($this->from == 'doc'):?>
   <?php include './side.html.php';?>
   <?php endif;?>
