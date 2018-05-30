@@ -328,8 +328,8 @@
     <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
     <?php if(!$story->deleted):?>
     <?php
-    common::printIcon('story', 'change', "storyID=$story->id", $story, '', '', '', 'showinonlybody');
-    common::printIcon('story', 'review', "storyID=$story->id", $story, '', '', '', 'showinonlybody');
+    common::printIcon('story', 'change', "storyID=$story->id", $story, 'button', '', '', 'showinonlybody');
+    common::printIcon('story', 'review', "storyID=$story->id", $story, 'button', '', '', 'showinonlybody');
     if($story->status != 'closed' and !isonlybody())
     {
         $misc = "class='btn' data-toggle='modal' data-type='iframe' data-width='95%'";
