@@ -10,7 +10,8 @@
 #productsBox .input-group.has-branch > select[name*="branch"] + .chosen-container .chosen-single {border-radius: 0 2px 2px 0; border-left-width: 0; padding-left: 9px;}
 #productsBox .input-group.has-branch > select[name*="branch"] + .chosen-container.chosen-container-active  .chosen-single {border-left-width: 1px; padding-left: 8px;}
 
-.table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
+.table-children > td:first-child {box-shadow: inset 2px 0 0 #cbd0db;}
+.table-children > td:last-child {box-shadow: inset -2px 0 0 #cbd0db;}
 .table-children.table-child-top {border-top: 2px solid #cbd0db;}
 .table-children.table-child-bottom {border-bottom: 2px solid #cbd0db;}
 .table td.has-child > .task-toggle {color: #838a9d; position: relative; top: -1px;}
@@ -18,8 +19,6 @@
 .table td.has-child > .task-toggle > .icon {font-size: 16px; display: inline-block; transition: transform .2s;}
 .table td.has-child > .task-toggle > .icon:before {text-align: left;}
 .table td.has-child > .task-toggle.collapsed > .icon {transform: rotate(-90deg);}
-.main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
-@-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;}}
 
 .chosen-container-single .chosen-single > span{max-width:200px;}
 
