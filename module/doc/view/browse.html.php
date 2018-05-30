@@ -47,7 +47,7 @@ var browseType = '<?php echo $browseType;?>';
       </div>
       <?php if(empty($docs)):?>
       <div class="table-empty-tip">
-        <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span></p>
+        <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span> <?php common::printLink('doc', 'create', "libID={$libID}", "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?></p>
       </div>
       <?php else:?>
       <div class="panel-body has-table">

@@ -142,7 +142,7 @@ $lang->doc->errorEmptyProject  = "没有{$lang->projectCommon}，无法创建文
 $lang->doc->errorMainSysLib    = "该系统文档库不能删除！";
 $lang->doc->accessDenied       = "您没有权限访问！";
 $lang->doc->versionNotFount    = '该版本文档不存在';
-$lang->doc->noDoc              = '文档不存在';
+$lang->doc->noDoc              = '文档不存在，您现在可以';
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = '相应的链接地址';

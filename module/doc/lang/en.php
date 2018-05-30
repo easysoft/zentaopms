@@ -142,7 +142,7 @@ $lang->doc->errorEmptyProject  = "No {$lang->projectCommon}. It cannot be create
 $lang->doc->errorMainSysLib    = "This library cannot be deleted.";
 $lang->doc->accessDenied       = "Access denied!";
 $lang->doc->versionNotFount    = 'It does not exist in this build.';
-$lang->doc->noDoc              = 'It does not exist.';
+$lang->doc->noDoc              = 'It does not exist. You could ';
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = 'Url';
