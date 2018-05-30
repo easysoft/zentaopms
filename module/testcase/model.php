@@ -1389,7 +1389,7 @@ class testcaseModel extends model
             case 'actions':
                 if($case->needconfirm or $browseType == 'needconfirm')
                 {
-                    if(common::hasPriv('testcase', 'confirmchange')) echo html::a(helper::createLink('testcase', 'confirmchange', "caseID=$case->id"), $this->lang->confirm, 'hiddenwin', "class='btn-wide'");
+                    common::printIcon('testcase', 'confirmstorychange',  "caseID=$case->id", $case, 'list', 'search', 'hiddenwin', '', '', '', $this->lang->confirm);
                     break;
                 }
 

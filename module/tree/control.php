@@ -295,7 +295,7 @@ class tree extends control
     {
         if(!empty($_POST))
         {
-            $this->tree->manageChild($rootID, $viewType, $_POST['parentModuleID'], $_POST['modules']);
+            $this->tree->manageChild($rootID, $viewType);
             die(js::reload('parent'));
         }
     }
