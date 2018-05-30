@@ -73,7 +73,7 @@
 <div class="main-table" data-ride="table" data-checkable="false" data-group="true">
   <table class="table table-grouped text-center">
     <thead>
-      <tr class="divider">
+      <tr class="<?php if($allCount) echo 'divider';?>">
         <th class="c-side text-left has-btn group-menu">
           <div class="dropdown">
             <a href="" data-toggle="dropdown" class="btn text-left btn-block btn-link clearfix">

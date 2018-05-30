@@ -68,39 +68,26 @@
       <?php echo $lang->action->noDynamic;?>
     </div>
     <?php endif;?>
-
   </div>
-  <?php if(!empty($firstAction)):?>
-  <?php
-  $firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
-  $lastDate  = substr($action->originalDate, 0, 10);
-  $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
-  $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
-  ?>
-  <?php if($hasPre or $hasNext):?>
-  <div class='table-footer'>
-    <ul class='pager'>
-      <?php $class = $hasPre ? '' : 'disabled';?>
-      <li class='<?php echo $class;?> pager-item-left'>
-        <?php
-        $link = '###';
-        if($hasPre) $link = inlink('dynamic', "productID=$productID&type=$type&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . '&direction=pre');
-        echo html::a($link, '<i class="icon icon-angle-left"></i>', '', "class='pager-item'");
-        ?>
-      </li>
-      <?php $class = $hasNext ? '' : 'disabled';?>
-      <li class='<?php echo $class;?> pager-item-left'>
-        <?php
-        $link = '###';
-        if($hasNext) $link = inlink('dynamic', "productID=$productID&type=$type&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next');
-        echo html::a($link, '<i class="icon icon-angle-right"></i>', '', "class='pager-item'");
-        ?>
-      </li>
-    </ul>
-  </div>
-  <?php endif;?>
-  <?php endif;?>
 </div>
+<?php if(!empty($firstAction)):?>
+<?php
+$firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
+$lastDate  = substr($action->originalDate, 0, 10);
+$hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
+$hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
+$preLink   = $hasPre ? inlink('dynamic', "productID=$productID&type=$type&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
+$nextLink  = $hasNext ? inlink('dynamic', "productID=$productID&type=$type&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
+?>
+<?php if($hasPre or $hasNext):?>
+<div id="mainActions">
+  <nav class="container">
+    <a id="prevPage" class="btn btn-info<?php if(!$hasPre) echo ' disabled';?>" href="<?php echo $preLink;?>"><i class="icon icon-chevron-left"></i></a>
+    <a id="nextPage" class="btn btn-info<?php if(!$hasNext) echo ' disabled';?>" href="<?php echo $nextLink;?>"><i class="icon icon-chevron-right"></i></a>
+  </nav>
+</div>
+<?php endif;?>
+<?php endif;?>
 <script>
 $(function()
 {
