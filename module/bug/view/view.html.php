@@ -324,7 +324,7 @@ $convertParams = "productID=$productID&branch=$bug->branch&moduleID=0&from=bug&b
     <?php
     common::printIcon('bug', 'confirmBug', $params, $bug, 'button', 'search', '', 'iframe', true);
     common::printIcon('bug', 'assignTo',   $params, $bug, 'button', '', '', 'iframe', true);
-    common::printIcon('bug', 'resolve',    $params, $bug, 'button', '', '', 'iframe showinonlybody', true);
+    common::printIcon('bug', 'resolve',    $params, $bug, 'button', 'checked', '', 'iframe showinonlybody', true);
     common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
     common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
   
