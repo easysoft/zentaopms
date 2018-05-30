@@ -64,17 +64,24 @@
           <td><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
           <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color'");?></td>
           <td><?php echo zget($users, $bug->openedBy);?></td>
-          <td><?php echo zget($users, $bug->assignedTo);?></td>
+          <td>
+            <?php
+            $assignedToText = !empty($bug->assignedTo) ? zget($users, $bug->assignedTo) : $this->lang->bug->noAssigned;
+            $btnTextClass   = 'text-red';
+            $btnClass = $assignedToText == 'closed' ? ' disabled' : '';
+            echo html::a(helper::createLink('bug', 'assignTo', "bugID=$bug->id", '', true), "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='iframe btn btn-sm btn-icon-left{$btnClass}'");
+            ?>
+          </td>
           <td><?php echo zget($users, $bug->resolvedBy);?></td>
           <td><?php echo zget($lang->bug->resolutionList, $bug->resolution);?></td>
           <td class='c-actions'>
             <?php
             $params = "bugID=$bug->id";
             common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'search', '', 'iframe', true);
-            common::printIcon('bug', 'assignTo',   $params, '', 'list', 'hand-right', '', 'iframe', true);
             common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
-            common::printIcon('bug', 'close',      $params, $bug, 'list', 'off', '', 'iframe', true);
-            common::printIcon('bug', 'edit',       $params, '', 'list');
+            common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
+            common::printIcon('bug', 'edit',       $params, $bug, 'list');
+            common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
             ?>
           </td>
         </tr>
