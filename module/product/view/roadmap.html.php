@@ -47,7 +47,6 @@
               <div class="block">
                 <span class="title"><?php echo isset($roadmap->build) ? $roadmap->name : $roadmap->title;?></span>
                 <span class="date"><?php echo isset($roadmap->build) ? $roadmap->date : ($roadmap->end == '2030-01-01' ? $lang->productplan->future : $roadmap->begin . '~' . $roadmap->end);?></span>
-                <span class="info text-ellipsis">&nbsp;</span>
               </div>
             </a>
           </li>
