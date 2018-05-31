@@ -18,17 +18,18 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    echo html::a(inlink('testtask', "type=wait"),       "<span class='text'>{$lang->testtask->wait}</span>",       '', "class='btn btn-link'");
-    echo html::a(inlink('testtask', "type=done"),       "<span class='text'>{$lang->testtask->done}</span>",       '', "class='btn btn-link'");
-    echo html::a(inlink('testcase', "type=assigntome"), "<span class='text'>{$lang->testcase->assignToMe}</span>", '', "class='btn btn-link" . ($type == 'assigntome' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('testcase', "type=openedbyme"), "<span class='text'>{$lang->testcase->openedByMe}</span>", '', "class='btn btn-link" . ($type == 'openedbyme' ? ' btn-active-text' : '') . "'");
+    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+    echo html::a(inlink('testtask', "type=wait"),       "<span class='text'>{$lang->testtask->wait}</span>", '', "class='btn btn-link'");
+    echo html::a(inlink('testtask', "type=done"),       "<span class='text'>{$lang->testtask->done}</span>", '', "class='btn btn-link'");
+    echo html::a(inlink('testcase', "type=assigntome"), "<span class='text'>{$lang->testcase->assignToMe}</span>" . ($type == 'assigntome' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assigntome' ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('testcase', "type=openedbyme"), "<span class='text'>{$lang->testcase->openedByMe}</span>" . ($type == 'openedbyme' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedbyme' ? ' btn-active-text' : '') . "'");
     ?>
   </div>
 </div>
 <div id="mainContent">
   <form id='myCaseForm' class="main-table table-case" data-ride="table" method="post">
     <table class="table has-sort-head" id='caseList'>
-      <?php 
+      <?php
       $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
       $this->app->loadLang('testtask');
       $canBatchEdit = common::hasPriv('testcase', 'batchEdit');
@@ -99,12 +100,12 @@
       <?php endif;?>
       <div class="table-actions btn-toolbar">
       <?php
-      if($canBatchEdit) 
+      if($canBatchEdit)
       {
           $actionLink = $this->createLink('testcase', 'batchEdit');
           echo html::commonButton($lang->edit, "onclick=setFormAction('$actionLink')");
       }
-      if($canBatchRun and $type != 'assigntome') 
+      if($canBatchRun and $type != 'assigntome')
       {
           $actionLink = $this->createLink('testtask', 'batchRun', "productID=0&orderBy=$orderBy&from=testcase");
           echo html::commonButton($lang->testtask->runCase,  "onclick=setFormAction('$actionLink')");
