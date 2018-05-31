@@ -20,8 +20,9 @@ $(function()
                 }
                 $line.css(
                 {
-                    top: $prev.position().top + 97,
-                    right: $next.find('li:last-child').width() - 4
+                    top: $prev.position().top + 90,
+                    right: $next.find('li:last-child').width() - 4,
+                    height: $prev.outerHeight() - 10
                 });
             });
         });

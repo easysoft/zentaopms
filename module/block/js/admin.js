@@ -26,7 +26,14 @@ $(function()
         $blockParams.empty();
         $form.removeClass('form-inited');
 
-        $.get(createLink('block', 'set', 'id=' + blockID + '&type=' + type), updateParams);
+        $.get(createLink('block', 'set', 'id=' + blockID + '&type=' + type), function(data)
+        {
+            updateParams(data);
+            if (type === 'welcome')
+            {
+                $blockParams.find('#title').closest('.form-group').hide();
+            }
+        });
     };
 
     // 用于获取指定区块的设置参数
