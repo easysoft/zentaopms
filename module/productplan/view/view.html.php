@@ -27,7 +27,7 @@
         <?php echo ($plan->begin == '2030-01-01' || $plan->end == '2030-01-01') ? $lang->productplan->future : $plan->begin . '~' . $plan->end;?>
       </span>
       <?php if($plan->deleted):?>
-      <span class='label label-danger'><?php echo $lang->plan->deleted;?></span>
+      <span class='label label-danger'><?php echo $lang->product->deleted;?></span>
       <?php endif; ?>
     </div>
   </div>
