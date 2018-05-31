@@ -34,7 +34,7 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
             <table class='table table-form'>
               <tbody>
                 <tr>
-                  <th class='w-70px'><?php echo $lang->user->account;?></th>
+                  <th class='w-60px'><?php echo $lang->user->account;?></th>
                   <td><input class='form-control' type='text' name='account' id='account' autofocus /></td>
                 </tr>
                 <tr>

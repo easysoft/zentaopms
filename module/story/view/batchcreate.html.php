@@ -105,8 +105,12 @@
 <script>
 $(function()
 {
+    var imageTitles = <?php echo json_encode($titles);?>;
+    var storyTitles = <?php echo json_encode(array_keys($titles));?>;
+
     $('#batchCreateForm').batchActionForm(
     {
+        idEnd: <?php echo max(count($titles), 9)?>,
         rowCreator: function($row, index)
         {
             $row.find('select').each(function()
@@ -119,7 +123,12 @@ $(function()
                 {
                     $select.next('.chosen-container').find('.chosen-drop').width($select.closest('td').width() + 50);
                 }, 200);
-            });
+              });
+              var storyTitle = storyTitles && storyTitles[index];
+              if (storyTitle && storyTitle.length)
+              {
+                  $row.find('.input-story-title').val(storyTitle).after('<input type="hidden" name="uploadImage[' + index + ']" id="uploadImage[' + index + ']" value="' + imageTitles[storyTitle] + '">');
+              }
         }
     });
 });

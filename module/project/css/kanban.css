@@ -32,3 +32,6 @@
 #kanban .c-boards, #kanban td.c-side {border-bottom: 1px solid #eee;}
 #kanban .group-info > span + span {display: inline-block; margin-left: 8px;}
 #kanban th.c-board {color: #3c4353; font-weight: bold;}
+#kanban .fix-table-copy-wrapper {overflow: visible!important;}
+#kanban .fix-table-copy-wrapper th.c-board {color: #eee;}
+#kanban .fix-table-copy-wrapper th.c-board .btn-link {color: #fff;}

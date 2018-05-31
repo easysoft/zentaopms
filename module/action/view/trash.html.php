@@ -50,7 +50,7 @@
                 $methodName = 'libview';
                 $module     = 'testsuite';
             }
-            if($module == 'doclib' or $module == 'module')
+            if(strpos(',doclib,module,webhook,', ",{$module},") !== false)
             {
                 echo $action->objectName;
             }
