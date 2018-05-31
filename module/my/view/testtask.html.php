@@ -15,8 +15,9 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    echo html::a(inlink('testtask', "type=wait"),       "<span class='text'>{$lang->testtask->wait}</span>",       '', "class='btn btn-link" . ($type == 'wait' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('testtask', "type=done"),       "<span class='text'>{$lang->testtask->done}</span>",       '', "class='btn btn-link" . ($type == 'done' ? ' btn-active-text' : '') . "'");
+    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+    echo html::a(inlink('testtask', "type=wait"),       "<span class='text'>{$lang->testtask->wait}</span>" . ($type == 'wait' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'wait' ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('testtask', "type=done"),       "<span class='text'>{$lang->testtask->done}</span>" . ($type == 'done' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'done' ? ' btn-active-text' : '') . "'");
     echo html::a(inlink('testcase', "type=assigntome"), "<span class='text'>{$lang->testcase->assignToMe}</span>", '', "class='btn btn-link'");
     echo html::a(inlink('testcase', "type=openedbyme"), "<span class='text'>{$lang->testcase->openedByMe}</span>", '', "class='btn btn-link'");
     ?>
