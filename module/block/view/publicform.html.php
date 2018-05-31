@@ -10,12 +10,10 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php if($block->block != 'welcome' and $block->block != 'flowchart' and $block->block != 'statistic'):?>
 <div class='form-group'>
   <label for='title' class='col-sm-3'><?php echo $lang->block->name?></label>
   <div class='col-sm-7'><?php echo html::input('title', $block ? $block->title : '', "class='form-control' autocomplete='off'")?></div>
 </div>
-<?php endif;?>
 <div class='form-group'>
   <label for='grid' class='col-sm-3'><?php echo $lang->block->grid;?></label>
   <div class='col-sm-7'>
