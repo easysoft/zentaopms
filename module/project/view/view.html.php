@@ -122,11 +122,17 @@
                 <?php $i = 0;?>
                 <?php foreach($docLibs as $libID => $docLib):?>
                 <?php if($i > 8) break;?>
-                <div class="col-xs-6"><?php echo html::a($this->createLink('doc', 'browse', "libID=$libID&browseTyp=all&param=&orderBy=&from=project"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?></div>
+                <div class="col-xs-6">
+                  <?php if($libID == 'files'):?>
+                  <?php echo html::a($this->createLink('doc', 'showFiles', "type=project&objectID=$project->id"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?>
+                  <?php else:?>
+                  <?php echo html::a($this->createLink('doc', 'browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=project"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?>
+                  <?php endif;?>
+                </div>
                 <?php $i++;?>
                 <?php endforeach;?>
                 <div class="col-xs-6">
-                  <?php common::printLink('doc', 'createLib', "type=project&objectID=$project->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->doc->createLib, '', "class='text-muted' data-toggle='modal'");?>
+                  <?php common::printLink('doc', 'createLib', "type=project&objectID=$project->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->doc->createLib, '', "class='text-muted iframe'");?>
                 </div>
                 <?php endif;?>
               </div>
