@@ -72,7 +72,14 @@
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, null, "style='color: $task->color'");?>
           </td>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
-          <td class='c-user'><?php echo zget($users, $task->assignedTo);?></td>
+          <td class='c-user'>
+            <?php
+            $assignedToText = !empty($task->assignedTo) ? zget($users, $task->assignedTo) : $this->lang->task->noAssigned;
+            $btnTextClass   = 'text-red';
+            $btnClass = $assignedToText == 'closed' ? ' disabled' : '';
+            echo html::a(helper::createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", '', true), "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='iframe btn btn-sm btn-icon-left{$btnClass}'");
+            ?>
+          </td>
           <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
           <td class='c-hours'><?php echo $task->estimate;?></td>
           <td class='c-hours'><?php echo $task->consumed;?></td>
@@ -81,11 +88,28 @@
           <td class='c-status'><span class="status-<?php echo $task->status;?>"><span class="label label-dot"></span> <?php echo $lang->task->statusList[$task->status];?></span></td>
           <td class='c-actions'>
             <?php
-            common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', 'hand-right', '', 'iframe', true);
-            common::printIcon('task', 'start',    "taskID=$task->id", $task, 'list', 'play', '', 'iframe', true);
+            if($task->storyStatus == 'changed')
+            {
+                $this->lang->task->confirmStoryChange = $this->lang->confirm;
+                common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin', 'btn-wide');
+                break;
+            }
+
+            echo "<div class='more'>";
+            if($task->status == 'wait') common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+            echo "</div>";
+
+            if($task->status == 'wait') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+            if($task->status == 'pause') common::printIcon('task', 'restart', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+            if($task->status == 'done' or $task->status == 'cancel' or $task->status == 'closed') common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+            if($task->status == 'doing') common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+
             common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
-            common::printIcon('task', 'finish',   "taskID=$task->id", $task, 'list', 'checked', '', 'iframe', true);
-            common::printIcon('task', 'close',    "taskID=$task->id", $task, 'list', 'off', '', 'iframe', true);
+            common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list');
+            if(empty($task->team) or empty($task->children))
+            {
+                common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'plus', '', '', '', '', $this->lang->task->children);
+            }
             ?>
           </td>
         </tr>

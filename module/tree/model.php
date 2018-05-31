@@ -1220,19 +1220,20 @@ class treeModel extends model
      *
      * @param  int    $rootID
      * @param  string $type
-     * @param  int    $parentModuleID
-     * @param  array  $childs
      * @access public
      * @return void
      */
-    public function manageChild($rootID, $type, $parentModuleID, $childs)
+    public function manageChild($rootID, $type)
     {
         if($type == 'line') $rootID = 0;
+
+        $data           = fixer::input('post')->get();
+        $childs         = $data->modules;
+        $parentModuleID = $data->parentModuleID;
 
         $this->checkUnique($rootID, $type, $parentModuleID, $childs);
         $parentModule = $this->getByID($parentModuleID);
 
-        $data     = fixer::input('post')->get();
         $branches = isset($data->branch) ? $data->branch : array();
         $orders   = isset($data->order)  ? $data->order  : array();
         $shorts   = $data->shorts;

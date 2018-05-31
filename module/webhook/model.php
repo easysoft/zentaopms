@@ -342,7 +342,7 @@ class webhookModel extends model
                 {
                     $attachment = array();
                     $attachment['title'] = $file->title;
-                    $attachment['images'][]['url'] = $data->host . $this->file->webPath . $file->pathname; 
+                    $attachment['images'][]['url'] = common::getSysURL() . $this->file->webPath . $file->pathname; 
                     $data->attachments[] = $attachment;
                 }
             }

@@ -72,7 +72,7 @@ class story extends control
         if(!empty($_POST))
         {
             $response['result']  = 'success';
-            $response['message'] = '';
+            $response['message'] = $this->lang->saveSuccess;
 
             $storyResult = $this->story->create($projectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '');
             if(!$storyResult or dao::isError())

@@ -11,7 +11,6 @@
  */
 ?>
 <?php include './header.html.php';?>
-<?php include '../../common/view/form.html.php';?>
 <?php js::set('holders', $lang->story->placeholder); ?>
 <div id="mainContent" class="main-content">
   <div class="center-block">
@@ -22,7 +21,7 @@
         <?php include '../../common/view/customfield.html.php';?>
       </div>
     </div>
-    <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
+    <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <div class="table-responsive">
         <table class="table table-form">
           <tbody>
@@ -194,7 +193,6 @@
           </tfoot>
         </table>
       </div>
-      <span id='responser'></span>
     </form>
   </div>
 </div>

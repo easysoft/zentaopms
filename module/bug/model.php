@@ -2531,9 +2531,8 @@ class bugModel extends model
                 break;
             case 'assignedTo':
                 $btnTextClass   = '';
-                $assignedToText = zget($users, $bug->assignedTo);
+                $assignedToText = !empty($bug->assignedTo) ? zget($users, $bug->assignedTo) : $this->lang->bug->noAssigned;
                 $btnTextClass   = 'text-primary';
-                if(empty($bug->assignedTo)) $assignedToText = $this->lang->bug->noAssigned;
                 if($bug->assignedTo == $account) $btnTextClass = 'text-red';
                 $btnClass = $assignedToText == 'closed' ? ' disabled' : '';
 

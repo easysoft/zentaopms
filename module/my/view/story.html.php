@@ -57,7 +57,7 @@
           <td class="c-id">
             <?php if($canBatchEdit or $canBatchClose):?>
             <div class="checkbox-primary">
-              <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
+              <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' />
               <label></label>
             </div>
             <?php endif;?>
@@ -73,11 +73,12 @@
           <td class='c-stage'><?php echo zget($lang->story->stageList, $story->stage);?></td>
           <td class='c-actions'>
             <?php
-            common::printIcon('story', 'change',     "storyID=$story->id", $story, 'list', 'fork');
-            common::printIcon('story', 'review',     "storyID=$story->id", $story, 'list', 'glasses');
-            common::printIcon('story', 'close',      "storyID=$story->id", $story, 'list', 'off', '', 'iframe', true);
-            common::printIcon('story', 'edit',       "storyID=$story->id", $story, 'list');
-            common::printIcon('story', 'createCase', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", '', 'list', 'sitemap');
+            $vars = "story={$story->id}";
+            common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
+            common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
+            common::printIcon('story', 'close',      $vars, $story, 'list', 'off', '', 'iframe', true);
+            common::printIcon('story', 'edit',       $vars, $story, 'list');
+            if($this->config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
             ?>
           </td>
         </tr>
