@@ -357,8 +357,8 @@ class commonModel extends model
         /* Print all main menus. */
         $menu       = customModel::getMainMenu();
         $activeName = 'active';
+        $lastMenu   = end($menu);
 
-        $lastMenu = end($menu);
         echo "<ul class='nav nav-default'>\n";
         foreach($menu as $menuItem)
         {
