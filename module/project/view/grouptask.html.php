@@ -70,7 +70,7 @@
     ?>
   </div>
 </div>
-<div class="main-table" data-ride="table" data-checkable="false" data-group="true">
+<div id='tasksTable' class='main-table' data-ride='table' data-checkable='false' data-group='true' data-hot='true'>
   <table class="table table-grouped text-center">
     <thead>
       <tr class="<?php if($allCount) echo 'divider';?>">
@@ -96,7 +96,7 @@
         <th class="c-pri"><?php echo $lang->priAB;?></th>
         <th class="c-name"><?php echo $lang->task->name;?></th>
         <th class="c-status"><?php echo $lang->task->status;?></th>
-        <th class="c-assign"><?php echo $lang->task->assignedTo;?></th>
+        <th class="c-assign text-left"><?php echo $lang->task->assignedTo;?></th>
         <th class="c-user"><?php echo $lang->task->finishedBy;?></th>
         <th class="c-hours"><?php echo $lang->task->estimateAB;?></th>
         <th class="c-hours"><?php echo $lang->task->consumedAB;?></th>

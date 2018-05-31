@@ -48,7 +48,7 @@
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control w-p98'");?></td>
         </tr>
         <tr>
-          <td colspan='3' class='text-center'>
+          <td colspan='3' class='text-center form-actions'>
             <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
             <?php echo html::linkButton($lang->goback, $this->session->taskList);?>
           </td>
@@ -56,7 +56,7 @@
       </table>
     </form>
     <hr class='small' />
-    <div class='main'><?php include '../../common/view/action.html.php';?></div>
+    <?php include '../../common/view/action.html.php';?>
     <?php endif;?>
   </div>
 </div>
