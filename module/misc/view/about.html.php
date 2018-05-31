@@ -8,7 +8,7 @@
       <table class='table table-form'>
         <tr>
           <td class='text-center w-160px'>
-            <img src='theme/default/images/main/logo2.png' />
+            <img src='theme/default/images/main/zt-logo.png' />
             <h4><?php printf($lang->misc->zentao->version, $config->version);?></h4>
           </td>
           <td><?php include './links.html.php';?></td>
