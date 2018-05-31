@@ -105,12 +105,14 @@
   <nav class='container'></nav>
   <div class='btn-toolbar'>
     <?php common::printBack($browseLink);?>
+    <?php if(!$report->deleted):?>
     <div class='divider'></div>
     <?php
     if(common::hasPriv('testreport', 'create')) echo html::a(inLink('create', "objectID=$report->objectID&objectType=$report->objectType"),  "<i class='icon-refresh'></i>", '', "class='btn' title='{$lang->testreport->recreate}'");
     common::printIcon('testreport', 'edit', "reportID=$report->id", '', 'button');
     common::printIcon('testreport', 'delete', "reportID=$report->id", '', 'button', '', 'hiddenwin');
     ?>
+    <?php endif;?>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
