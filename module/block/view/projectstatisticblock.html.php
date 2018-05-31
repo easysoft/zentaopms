@@ -32,7 +32,7 @@
   <div class="table-row">
     <?php if(empty($projects)):?>
     <div class="table-empty-tip">
-      <p><span class="text-muted"><?php echo $lang->project->noProject;?></span> <?php common::printLink('project', 'create', '', "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?></p>
+      <p><span class="text-muted"><?php echo $lang->block->noData;?></span></p>
     </div>
     <?php else:?>
     <div class="col tab-content">

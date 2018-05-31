@@ -23,6 +23,7 @@ $lang->block->source  = 'Source module';
 $lang->block->block   = 'Source block';
 $lang->block->order   = 'Order';
 $lang->block->height  = 'Height';
+$lang->block->role    = 'Role';
 
 $lang->block->lblModule    = 'Module';
 $lang->block->lblBlock     = 'Block';
@@ -40,6 +41,7 @@ $lang->block->myBug     = 'My Bug';
 $lang->block->myProject = 'My ' . $lang->projectCommon;
 $lang->block->myProduct = 'My ' . $lang->productCommon;
 $lang->block->delayed   = 'Delayed';
+$lang->block->noData    = 'There is no data in this type of reports.';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Name';
@@ -61,7 +63,7 @@ $lang->block->default['product']['1']['block'] = 'statistic';
 $lang->block->default['product']['1']['grid']  = 8;
 
 $lang->block->default['product']['1']['params']['orderBy'] = 'id_desc';
-$lang->block->default['product']['1']['params']['type']    = 'noclosed';
+$lang->block->default['product']['1']['params']['type']    = 'all';
 $lang->block->default['product']['1']['params']['num']     = 5;
 
 $lang->block->default['product']['2']['title'] = $lang->productCommon . ' Overview';
@@ -88,7 +90,7 @@ $lang->block->default['project']['1']['block'] = 'statistic';
 $lang->block->default['project']['1']['grid']  = 8;
 
 $lang->block->default['project']['1']['params']['orderBy'] = 'id_desc';
-$lang->block->default['project']['1']['params']['type']    = 'undone';
+$lang->block->default['project']['1']['params']['type']    = 'all';
 $lang->block->default['project']['1']['params']['num']     = 5;
 
 $lang->block->default['project']['2']['title'] = $lang->projectCommon . ' Overview';
