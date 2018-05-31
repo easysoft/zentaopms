@@ -358,6 +358,7 @@ class commonModel extends model
         $menu       = customModel::getMainMenu();
         $activeName = 'active';
 
+        $lastMenu = end($menu);
         echo "<ul class='nav nav-default'>\n";
         foreach($menu as $menuItem)
         {
@@ -367,7 +368,9 @@ class commonModel extends model
                 $link   = commonModel::createMenuLink($menuItem);
                 echo "<li $active data-id='$menuItem->name'><a href='$link' $active>$menuItem->text</a></li>\n";
             }
-            if(strpos($lang->dividerMenu, ",{$menuItem->name},") !== false) echo "<li class='divider'></li>";
+
+            if(($lastMenu->name != $menuItem->name) && strpos($lang->dividerMenu, ",{$menuItem->name},") !== false) echo "<li class='divider'></li>";
+
         }
         $customLink = helper::createLink('custom', 'ajaxMenu', "module={$app->getModuleName()}&method={$app->getMethodName()}", '', true);
         if(!commonModel::isTutorialMode() and $app->viewType != 'mhtml' and $app->user->account != 'guest') echo "<li class='custom-item'><a href='$customLink' class='hidden' data-toggle='modal' data-type='iframe' title='$lang->customMenu' data-icon='cog' data-width='80%'><i class='icon icon-cog'></i></a></li>";
