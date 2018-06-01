@@ -19,7 +19,7 @@ $lang->null      = 'null';
 $lang->ellipsis  = '…';
 $lang->percent   = '%';
 
-$lang->zentaoPMS      = 'ZenTao'; 
+$lang->zentaoPMS      = 'ZenTao';
 $lang->welcome        = "%s PMS";
 $lang->logout         = 'Logout';
 $lang->login          = 'Login';
@@ -81,6 +81,7 @@ $lang->homepage        = 'Set as Home';
 $lang->tutorial        = 'Tutorial';
 $lang->changeLog       = 'Change Log';
 $lang->manual          = 'Manual';
+$lang->manualUrl       = 'http://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
 $lang->customMenu      = 'Custom Menu';
 $lang->customField     = 'Custom Field';
 $lang->lineNumber      = 'Line No.';
@@ -621,7 +622,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyStory')
     /* Adjust sub menu of product module. */
     unset($lang->product->menu->project);
     unset($lang->product->menu->doc);
-    
+
     /* Rename product module. */
     $lang->menu->product = "{$lang->productCommon}|product|index";
 
@@ -809,7 +810,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     $lang->build->menu      = $lang->product->menu;
     $lang->build->menuOrder = $lang->product->menuOrder;
-    
+
     /* Adjust menu group. */
     $lang->menugroup->bug        = 'bug';
     $lang->menugroup->testcase   = 'testcase';
@@ -817,8 +818,8 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->menugroup->testsuite  = 'testsuite';
     $lang->menugroup->testreport = 'testtask';
     $lang->menugroup->build      = 'product';
-    
-    /* Adjust search objects. */ 
+
+    /* Adjust search objects. */
     unset($lang->searchObjects['story']);
     unset($lang->searchObjects['task']);
     unset($lang->searchObjects['release']);
