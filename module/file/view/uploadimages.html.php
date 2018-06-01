@@ -47,6 +47,13 @@ js::set('uid', $uid);
 </main>
 <script>
 $('#uploader').uploader({
+    filters:
+    {
+        mime_types: [
+            {title: 'uploadImages', extensions: 'jpg,gif,png,jpeg,.bmp'},
+        ],
+        prevent_duplicates: true
+    },
     onUploadComplete:function()
     {
         location.href = createLink('file', 'uploadImages', 'module=' + module + '&params=' + params + '&uid=' + uid + '&locate=true');
