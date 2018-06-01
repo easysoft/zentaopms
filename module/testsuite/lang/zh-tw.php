@@ -24,6 +24,7 @@ $lang->testsuite->exportTemplet    = '導出模板';
 $lang->testsuite->batchCreateCase  = '批量創建用例';
 $lang->testsuite->import           = '導入';
 $lang->testsuite->showImport       = '顯示導入數據';
+$lang->testsuite->successSaved     = '保存成功';
 
 $lang->testsuite->common         = '套件';
 $lang->testsuite->product        = '所屬' . $lang->productCommon;

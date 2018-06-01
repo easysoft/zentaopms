@@ -57,6 +57,7 @@ $lang->required     = '必填';
 $lang->noData       = '暫無';
 
 $lang->actions         = '操作';
+$lang->restore         = '恢復預設';
 $lang->comment         = '備註';
 $lang->history         = '歷史記錄';
 $lang->attatch         = '附件';
@@ -80,6 +81,7 @@ $lang->homepage        = '設為模組首頁';
 $lang->tutorial        = '新手教程';
 $lang->changeLog       = '修改日誌';
 $lang->manual          = '手冊';
+$lang->manualUrl       = 'http://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
 $lang->customMenu      = '自定義導航';
 $lang->customField     = '自定義表單項';
 $lang->lineNumber      = '行號';
@@ -477,10 +479,14 @@ $lang->proVersion = "<a href='http://api.zentao.net/goto.php?item=proversion&fro
 $lang->downNotify = "下載桌面提醒";
 $lang->website    = "http://www.zentao.net";
 
-$lang->suhosinInfo   = "警告：數據太多，請在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（大於%s的數）。 保存並重新啟動apache或php-fpm，否則會造成部分數據無法保存。";
-$lang->maxVarsInfo   = "警告：數據太多，請在php.ini中修改<font color=red>max_input_vars</font>（大於%s的數）。 保存並重新啟動apache或php-fpm，否則會造成部分數據無法保存。";
-$lang->pasteTextInfo = "粘貼文本到文本域中，每行文字作為一條數據的標題。";
-$lang->noticeImport  = "<p style='font-size:14px'>導入數據中，含有已經存在系統的數據，請確認這些數據要覆蓋或者全新插入</p><p><a href='javascript:submitForm(\"cover\")' class='btn btn-mini'>覆蓋</a> <a href='javascript:submitForm(\"insert\")' class='btn btn-mini'>全新插入</a></p>";
+$lang->suhosinInfo     = "警告：數據太多，請在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（大於%s的數）。 保存並重新啟動apache或php-fpm，否則會造成部分數據無法保存。";
+$lang->maxVarsInfo     = "警告：數據太多，請在php.ini中修改<font color=red>max_input_vars</font>（大於%s的數）。 保存並重新啟動apache或php-fpm，否則會造成部分數據無法保存。";
+$lang->pasteTextInfo   = "粘貼文本到文本域中，每行文字作為一條數據的標題。";
+$lang->noticeImport    = "導入數據中，含有已經存在系統的數據，請確認這些數據要覆蓋或者全新插入。";
+$lang->importConfirm   = "導入確認";
+$lang->importAndCover  = "覆蓋";
+$lang->importAndInsert = "全新插入";
+
 
 $lang->noResultsMatch    = "沒有匹配結果";
 $lang->searchMore        = "搜索此關鍵字的更多結果：";
@@ -528,7 +534,7 @@ $lang->icons['product']   = 'cube';
 $lang->icons['bug']       = 'bug';
 $lang->icons['task']      = 'check-sign';
 $lang->icons['tasks']     = 'tasks';
-$lang->icons['project']   = 'folder-close-alt';
+$lang->icons['project']   = 'stack';
 $lang->icons['doc']       = 'file-text';
 $lang->icons['doclib']    = 'folder-close';
 $lang->icons['story']     = 'lightbulb';
