@@ -142,6 +142,7 @@ $lang->doc->errorEmptyProject  = "沒有{$lang->projectCommon}，無法創建文
 $lang->doc->errorMainSysLib    = "該系統文檔庫不能刪除！";
 $lang->doc->accessDenied       = "您沒有權限訪問！";
 $lang->doc->versionNotFount    = '該版本文檔不存在';
+$lang->doc->noDoc              = '文檔不存在，您現在可以';
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = '相應的連結地址';

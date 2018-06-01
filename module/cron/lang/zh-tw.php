@@ -37,7 +37,7 @@ $lang->cron->confirmDelete = '是否刪除該計劃任務？';
 $lang->cron->confirmTurnon = '是否關閉計劃任務？';
 $lang->cron->introduction  = <<<EOD
 <p>計劃任務功能可以定時執行諸如更新燃盡圖、備份等操作，免除自己佈置計劃任務。</p>
-<p>該功能還有待完善，所以預設關閉該功能</p>
+<p>該功能還有待完善，所以預設關閉該功能。</p>
 EOD;
 $lang->cron->confirmOpen = <<<EOD
 <p>是否開啟該功能？<a href="%s" target='hiddenwin'><strong>打開計劃任務</strong></a></p>

@@ -19,7 +19,7 @@ js::set('params', $params);
 js::set('uid', $uid);
 ?>
 <style>
-#uploader .uploader-files {border-bottom: 1px solid #e5e5e5; margin: 0 0 10px 0; min-height: 164px;}
+#uploader .uploader-files {border-bottom: 1px solid #eee; margin: 0 0 10px 0; min-height: 164px;}
 .file-list .file[data-status=queue] .file-status>.icon:before {content: '\e92b'}
 .uploader-files .file-status > .icon:before, .file-list .file-status > .icon:before {content: '\e92f'}
 </style>
@@ -47,9 +47,19 @@ js::set('uid', $uid);
 </main>
 <script>
 $('#uploader').uploader({
-    onUploadComplete:function()
+    filters:
     {
-        location.href = createLink('file', 'uploadImages', 'module=' + module + '&params=' + params + '&uid=' + uid + '&locate=true');
+        mime_types: [
+            {title: 'uploadImages', extensions: 'jpg,gif,png,jpeg,.bmp'},
+        ],
+        prevent_duplicates: true
+    },
+    onUploadComplete: function(files)
+    {
+        if (files && files.length)
+        {
+            location.href = createLink('file', 'uploadImages', 'module=' + module + '&params=' + params + '&uid=' + uid + '&locate=true');
+        }
     },
     onBeforeUpload: function(file)
     {

@@ -96,6 +96,7 @@ $lang->story->copy           = "複製需求";
 $lang->story->total          = '總需求';
 $lang->story->allStories     = '所有需求';
 $lang->story->unclosed       = '未關閉';
+$lang->story->deleted        = '已刪除';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = '該需求與上一需求不屬於同一產品！';

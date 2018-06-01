@@ -33,6 +33,7 @@ $lang->testreport->profile     = '概況';
 $lang->testreport->value       = '值';
 $lang->testreport->none        = '無';
 $lang->testreport->all         = '所有報告';
+$lang->testreport->deleted     = '已刪除';
 
 $lang->testreport->legendBasic       = '基本信息';
 $lang->testreport->legendStoryAndBug = '測試範圍';
