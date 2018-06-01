@@ -90,7 +90,7 @@ var browseType = '<?php echo $browseType;?>';
               <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'm-d h:i');?></td>
               <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'm-d h:i');?></td>
               <td class="c-actions">
-                <?php common::printLink('doc', 'collect', "objectID=$doc->id&objectType=doc", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$collectTitle}' class='btn btn-link'")?>
+                <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
                 <?php common::printLink('doc', 'edit', "docID=$doc->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'")?>
                 <?php common::printLink('doc', 'delete', "docID=$doc->id", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
               </td>
