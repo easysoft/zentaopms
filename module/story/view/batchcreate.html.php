@@ -125,7 +125,7 @@ $(function()
                 }, 200);
               });
               var storyTitle = storyTitles && storyTitles[index];
-              if (storyTitle && storyTitle.length)
+              if (storyTitle !== undefined && storyTitle !== null)
               {
                   $row.find('.input-story-title').val(storyTitle).after('<input type="hidden" name="uploadImage[' + index + ']" id="uploadImage[' + index + ']" value="' + imageTitles[storyTitle] + '">');
               }

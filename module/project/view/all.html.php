@@ -14,8 +14,8 @@
 <?php include '../../common/view/sortable.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::a(inlink("all", "status=undone&projectID=$project->id&orderBy=$orderBy&productID=$productID"),    "<span class='text'>{$lang->project->undone}</span>", '', "class='btn btn-link' id='undoneTab'");?>
     <?php echo html::a(inlink("all", "status=all&projectID=$project->id&orderBy=$orderBy&productID=$productID"),       "<span class='text'>{$lang->project->all}</span>", '', "class='btn btn-link' id='allTab'");?>
+    <?php echo html::a(inlink("all", "status=undone&projectID=$project->id&orderBy=$orderBy&productID=$productID"),    "<span class='text'>{$lang->project->undone}</span>", '', "class='btn btn-link' id='undoneTab'");?>
     <?php echo html::a(inlink("all", "status=wait&projectID=$project->id&orderBy=$orderBy&productID=$productID"),      "<span class='text'>{$lang->project->statusList['wait']}</span>", '', "class='btn btn-link' id='waitTab'");?>
     <?php echo html::a(inlink("all", "status=doing&projectID=$project->id&orderBy=$orderBy&productID=$productID"),     "<span class='text'>{$lang->project->statusList['doing']}</span>", '', "class='btn btn-link' id='doingTab'");?>
     <?php echo html::a(inlink("all", "status=suspended&projectID=$project->id&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$lang->project->statusList['suspended']}</span>", '', "class='btn btn-link' id='suspendedTab'");?>
@@ -64,7 +64,7 @@
           <td class='c-id'>
             <?php if($canBatchEdit):?>
             <div class="checkbox-primary">
-              <input type='checkbox' name='projectIDList[<?php echo $project->id;?>]' value='<?php echo $project->id;?>' /> 
+              <input type='checkbox' name='projectIDList[<?php echo $project->id;?>]' value='<?php echo $project->id;?>' />
               <label></label>
             </div>
             <?php endif;?>
