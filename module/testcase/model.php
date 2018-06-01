@@ -1288,7 +1288,7 @@ class testcaseModel extends model
         $id = $col->id;
         if($col->show)
         {
-            $class = '';
+            $class = 'c-' . $id;
             $title = '';
             if($id == 'title')
             {
@@ -1301,7 +1301,8 @@ class testcaseModel extends model
                 $title  = "title='" . zget($this->lang->testcase->statusList, $case->status) . "'";
             }
             if($id == 'actions') $class .= ' c-actions';
-            if($id == 'lastRunResult') $class .= $case->lastRunResult;
+            if($id == 'lastRunResult') $class .= " {$case->lastRunResult}";
+            if(strpos(',stage,precondition,keywords,story,', ",{$id},") !== false) $class .= ' text-ellipsis';
 
             echo "<td class='{$class}' {$title}>";
             switch($id)
