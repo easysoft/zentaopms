@@ -44,7 +44,7 @@
       <table class="table table-form">
         <thead>
           <tr>
-            <th class='col-id'><?php echo $lang->idAB;?></th> 
+            <th class='col-id'><?php echo $lang->idAB;?></th>
             <th class='w-150px<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
             <th class='col-module required'><?php echo $lang->story->module;?></th>
             <th class='col-plan<?php echo zget($visibleFields, 'plan', ' hidden') . zget($requiredFields, 'plan', '', ' required');?>'><?php echo $lang->story->plan;?></th>
@@ -61,7 +61,7 @@
         <tbody>
           <tr class="template">
             <td class="col-id">$idPlus</td>
-          <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select('branch[$id]', $branches, $branch, "class='form-control' onchange='setModuleAndPlan(this.value, $productID, \$id)'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select('branch[$id]', $branches, $branch, "class='form-control' onchange='setModuleAndPlan(this.value, $productID, \$id)'");?></td>
             <td class='text-left' style='overflow:visible'><?php echo html::select('module[$id]', $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'><?php echo html::select('plan[$id]', $plans, $planID, "class='form-control'");?></td>
             <td style='overflow:visible'>
@@ -105,12 +105,12 @@
 <script>
 $(function()
 {
-    var imageTitles = <?php echo json_encode($titles);?>;
-    var storyTitles = <?php echo json_encode(array_keys($titles));?>;
+    var imageTitles = <?php echo empty($titles) ? '""' : json_encode($titles);?>;
+    var storyTitles = <?php echo empty($titles) ? '""' : json_encode(array_keys($titles));?>;
 
     $('#batchCreateForm').batchActionForm(
     {
-        idEnd: <?php echo max(count($titles), 9)?>,
+        idEnd: <?php echo max((empty($titles) ? 0 : count($titles)), 9)?>,
         rowCreator: function($row, index)
         {
             $row.find('select').each(function()
