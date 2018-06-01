@@ -81,6 +81,7 @@ $lang->homepage        = '设为模块首页';
 $lang->tutorial        = '新手教程';
 $lang->changeLog       = '修改日志';
 $lang->manual          = '手册';
+$lang->manualUrl       = 'http://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
 $lang->customMenu      = '自定义导航';
 $lang->customField     = '自定义表单项';
 $lang->lineNumber      = '行号';
