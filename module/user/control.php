@@ -14,8 +14,8 @@ class user extends control
     public $referer;
 
     /**
-     * Construct 
-     * 
+     * Construct
+     *
      * @access public
      * @return void
      */
@@ -29,8 +29,8 @@ class user extends control
 
     /**
      * View a user.
-     * 
-     * @param  string $account 
+     *
+     * @param  string $account
      * @access public
      * @return void
      */
@@ -43,15 +43,15 @@ class user extends control
     }
 
     /**
-     * Todos of a user. 
-     * 
-     * @param  string $account 
+     * Todos of a user.
+     *
+     * @param  string $account
      * @param  string $type         the todo type, today|lastweek|thisweek|all|undone, or a date.
-     * @param  string $status 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * @param  string $status
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -97,12 +97,12 @@ class user extends control
 
     /**
      * Story of a user.
-     * 
-     * @param  string $account 
-     * @param  string $type 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  string $account
+     * @param  string $type
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -132,13 +132,13 @@ class user extends control
     }
 
     /**
-     * Tasks of a user. 
-     * 
-     * @param  string $account 
+     * Tasks of a user.
+     *
+     * @param  string $account
      * @param  string $type
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -169,14 +169,14 @@ class user extends control
     }
 
     /**
-     * User bugs. 
-     * 
-     * @param  string $account 
-     * @param  string $type 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * User bugs.
+     *
+     * @param  string $account
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -195,7 +195,7 @@ class user extends control
 
         /* Load the lang of bug module. */
         $this->app->loadLang('bug');
- 
+
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->bug;
         $this->view->position[] = $this->lang->user->bug;
         $this->view->tabID      = 'bug';
@@ -210,13 +210,13 @@ class user extends control
     }
 
     /**
-     * User's testtask 
-     * 
-     * @param  string $account 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     * User's testtask
+     *
+     * @param  string $account
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -254,12 +254,12 @@ class user extends control
 
     /**
      * User's test case.
-     * 
-     * @param  string $type 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -268,7 +268,7 @@ class user extends control
         /* Save session, load lang. */
         $this->session->set('caseList', $this->app->getURI(true));
         $this->app->loadLang('testcase');
-        
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
@@ -279,7 +279,7 @@ class user extends control
          /* Set menu. */
         $this->lang->set('menugroup.user', 'company');
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclosed|nodeleted'), $account);
-       
+
         $cases = array();
         if($type == 'case2Him')
         {
@@ -290,7 +290,7 @@ class user extends control
             $cases = $this->loadModel('testcase')->getByOpenedBy($account, $sort, $pager);
         }
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'case2Him' ? false : true);
-        
+
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testCase;
         $this->view->position[] = $this->lang->user->testCase;
@@ -304,14 +304,14 @@ class user extends control
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        
+
         $this->display();
     }
 
     /**
-     * User projects. 
-     * 
-     * @param  string $account 
+     * User projects.
+     *
+     * @param  string $account
      * @access public
      * @return void
      */
@@ -334,8 +334,8 @@ class user extends control
 
     /**
      * The profile of a user.
-     * 
-     * @param  string $account 
+     *
+     * @param  string $account
      * @access public
      * @return void
      */
@@ -347,7 +347,7 @@ class user extends control
         $this->view->userList = $this->user->setUserList($this->user->getPairs('noempty|noclose|nodeleted'), $account);
 
         $user = $this->user->getById($account);
-       
+
         $this->view->title      = "USER #$user->id $user->account/" . $this->lang->user->profile;
         $this->view->position[] = $this->lang->user->common;
         $this->view->position[] = $this->lang->user->profile;
@@ -361,8 +361,8 @@ class user extends control
 
     /**
      * Set the rerferer.
-     * 
-     * @param  string   $referer 
+     *
+     * @param  string   $referer
      * @access public
      * @return void
      */
@@ -380,8 +380,8 @@ class user extends control
 
     /**
      * Create a suer.
-     * 
-     * @param  int    $deptID 
+     *
+     * @param  int    $deptID
      * @access public
      * @return void
      */
@@ -428,8 +428,8 @@ class user extends control
 
     /**
      * Batch create users.
-     * 
-     * @param  int    $deptID 
+     *
+     * @param  int    $deptID
      * @access public
      * @return void
      */
@@ -474,7 +474,7 @@ class user extends control
 
     /**
      * Edit a user.
-     * 
+     *
      * @param  string|int $userID   the int user id or account
      * @access public
      * @return void
@@ -511,8 +511,8 @@ class user extends control
 
     /**
      * Batch edit user.
-     * 
-     * @param  int    $deptID 
+     *
+     * @param  int    $deptID
      * @access public
      * @return void
      */
@@ -546,8 +546,8 @@ class user extends control
 
     /**
      * Delete a user.
-     * 
-     * @param  int    $userID 
+     *
+     * @param  int    $userID
      * @param  string $confirm  yes|no
      * @access public
      * @return void
@@ -590,9 +590,9 @@ class user extends control
 
     /**
      * Unlock a user.
-     * 
-     * @param  int    $account 
-     * @param  string $confirm 
+     *
+     * @param  int    $account
+     * @param  string $confirm
      * @access public
      * @return void
      */
@@ -611,9 +611,9 @@ class user extends control
 
     /**
      * Unbind  Ranzhi
-     * 
-     * @param  string $account 
-     * @param  string $confirm 
+     *
+     * @param  string $account
+     * @param  string $confirm
      * @access public
      * @return void
      */
@@ -671,7 +671,7 @@ class user extends control
                 die(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
             }
 
-            if(strpos($this->referer, $loginLink) === false and 
+            if(strpos($this->referer, $loginLink) === false and
                strpos($this->referer, $denyLink)  === false and $this->referer
             )
             {
@@ -802,9 +802,9 @@ class user extends control
 
     /**
      * Deny page.
-     * 
+     *
      * @param  string $module
-     * @param  string $method 
+     * @param  string $method
      * @param  string $refererBeforeDeny    the referer of the denied page.
      * @access public
      * @return void
@@ -825,7 +825,7 @@ class user extends control
 
     /**
      * Logout.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -842,8 +842,8 @@ class user extends control
     }
 
     /**
-     * Reset password. 
-     * 
+     * Reset password.
+     *
      * @access public
      * @return void
      */
@@ -869,9 +869,8 @@ class user extends control
             if(!$result) die(js::alert($this->lang->user->resetFail));
 
             echo js::alert($this->lang->user->resetSuccess);
-            $referer = $this->server->http_host . $this->createLink('index', 'index');
-            $referer = helper::safe64Encode($referer);
-            die(js::locate(inlink('logout', $referer), 'parent'));
+            $referer = helper::safe64Encode($this->createLink('index', 'index'));
+            die(js::locate(inlink('logout', 'referer=' . $referer), 'parent'));
         }
 
         /* Remove the real path for security reason. */
@@ -888,13 +887,13 @@ class user extends control
 
     /**
      * User dynamic.
-     * 
-     * @param  string $period 
-     * @param  string $account 
-     * @param  string $orderBy 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  string $period
+     * @param  string $account
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -961,8 +960,8 @@ class user extends control
 
     /**
      * AJAX: get users from a contact list.
-     * 
-     * @param  int    $contactListID 
+     *
+     * @param  int    $contactListID
      * @access public
      * @return string
      */
@@ -976,7 +975,7 @@ class user extends control
 
     /**
      * Ajax get contact list.
-     * 
+     *
      * @access public
      * @return string
      */
