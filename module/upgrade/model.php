@@ -248,88 +248,89 @@ class upgradeModel extends model
         case '1_0rc1':  $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.rc1'));
         case '1_0rc2':
         case '1_0':
-        case '1_0_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
-        case '1_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('1.1'));
-        case '1_2':       $confirmContent .= file_get_contents($this->getUpgradeFile('1.2'));
-        case '1_3':       $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
-        case '1_4':       $confirmContent .= file_get_contents($this->getUpgradeFile('1.4'));
-        case '1_5':       $confirmContent .= file_get_contents($this->getUpgradeFile('1.5'));
-        case '2_0':       $confirmContent .= file_get_contents($this->getUpgradeFile('2.0'));
-        case '2_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('2.1'));
-        case '2_2':       $confirmContent .= file_get_contents($this->getUpgradeFile('2.2'));
-        case '2_3':       $confirmContent .= file_get_contents($this->getUpgradeFile('2.3'));
-        case '2_4':       $confirmContent .= file_get_contents($this->getUpgradeFile('2.4'));
-        case '3_0_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('3.0.beta1'));
+        case '1_0_1':      $confirmContent .= file_get_contents($this->getUpgradeFile('1.0.1'));
+        case '1_1':        $confirmContent .= file_get_contents($this->getUpgradeFile('1.1'));
+        case '1_2':        $confirmContent .= file_get_contents($this->getUpgradeFile('1.2'));
+        case '1_3':        $confirmContent .= file_get_contents($this->getUpgradeFile('1.3'));
+        case '1_4':        $confirmContent .= file_get_contents($this->getUpgradeFile('1.4'));
+        case '1_5':        $confirmContent .= file_get_contents($this->getUpgradeFile('1.5'));
+        case '2_0':        $confirmContent .= file_get_contents($this->getUpgradeFile('2.0'));
+        case '2_1':        $confirmContent .= file_get_contents($this->getUpgradeFile('2.1'));
+        case '2_2':        $confirmContent .= file_get_contents($this->getUpgradeFile('2.2'));
+        case '2_3':        $confirmContent .= file_get_contents($this->getUpgradeFile('2.3'));
+        case '2_4':        $confirmContent .= file_get_contents($this->getUpgradeFile('2.4'));
+        case '3_0_beta1':  $confirmContent .= file_get_contents($this->getUpgradeFile('3.0.beta1'));
         case '3_0_beta2':
         case '3_0':
-        case '3_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('3.1'));
-        case '3_2':       $confirmContent .= file_get_contents($this->getUpgradeFile('3.2'));
-        case '3_2_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('3.2.1'));
-        case '3_3':       $confirmContent .= file_get_contents($this->getUpgradeFile('3.3'));
-        case '4_0_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('4.0.beta1'));
-        case '4_0_beta2': $confirmContent .= file_get_contents($this->getUpgradeFile('4.0.beta2'));
-        case '4_0':       $confirmContent .= file_get_contents($this->getUpgradeFile('4.0'));
-        case '4_0_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('4.0.1'));
-        case '4_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('4.1'));
-        case '4_2_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('4.2'));
-        case '4_3_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('4.3'));
+        case '3_1':        $confirmContent .= file_get_contents($this->getUpgradeFile('3.1'));
+        case '3_2':        $confirmContent .= file_get_contents($this->getUpgradeFile('3.2'));
+        case '3_2_1':      $confirmContent .= file_get_contents($this->getUpgradeFile('3.2.1'));
+        case '3_3':        $confirmContent .= file_get_contents($this->getUpgradeFile('3.3'));
+        case '4_0_beta1':  $confirmContent .= file_get_contents($this->getUpgradeFile('4.0.beta1'));
+        case '4_0_beta2':  $confirmContent .= file_get_contents($this->getUpgradeFile('4.0.beta2'));
+        case '4_0':        $confirmContent .= file_get_contents($this->getUpgradeFile('4.0'));
+        case '4_0_1':      $confirmContent .= file_get_contents($this->getUpgradeFile('4.0.1'));
+        case '4_1':        $confirmContent .= file_get_contents($this->getUpgradeFile('4.1'));
+        case '4_2_beta':   $confirmContent .= file_get_contents($this->getUpgradeFile('4.2'));
+        case '4_3_beta':   $confirmContent .= file_get_contents($this->getUpgradeFile('4.3'));
         case '5_0_beta1':
         case '5_0_beta2':
         case '5_0':
         case '5_1':
         case '5_2':
-        case '5_2_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('5.2.1'));
+        case '5_2_1':      $confirmContent .= file_get_contents($this->getUpgradeFile('5.2.1'));
         case '5_3':
-        case '6_0_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('6.0.beta1'));
-        case '6_0':       $confirmContent .= file_get_contents($this->getUpgradeFile('6.0'));
-        case '6_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('6.1'));
+        case '6_0_beta1':  $confirmContent .= file_get_contents($this->getUpgradeFile('6.0.beta1'));
+        case '6_0':        $confirmContent .= file_get_contents($this->getUpgradeFile('6.0'));
+        case '6_1':        $confirmContent .= file_get_contents($this->getUpgradeFile('6.1'));
         case '6_2':
         case '6_3':
         case '6_4':
-        case '7_0':       $confirmContent .= file_get_contents($this->getUpgradeFile('7.0'));
-        case '7_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('7.1'));
+        case '7_0':        $confirmContent .= file_get_contents($this->getUpgradeFile('7.0'));
+        case '7_1':        $confirmContent .= file_get_contents($this->getUpgradeFile('7.1'));
         case '7_2':
-        case '7_2_4':     $confirmContent .= file_get_contents($this->getUpgradeFile('7.2.4'));
+        case '7_2_4':      $confirmContent .= file_get_contents($this->getUpgradeFile('7.2.4'));
         case '7_2_5':
-        case '7_3':       $confirmContent .= file_get_contents($this->getUpgradeFile('7.3'));
-        case '7_4_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('7.4.beta'));
+        case '7_3':        $confirmContent .= file_get_contents($this->getUpgradeFile('7.3'));
+        case '7_4_beta':   $confirmContent .= file_get_contents($this->getUpgradeFile('7.4.beta'));
         case '8_0':
-        case '8_0_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.0.1'));
-        case '8_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('8.1'));
-        case '8_1_3':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.1.3'));
+        case '8_0_1':      $confirmContent .= file_get_contents($this->getUpgradeFile('8.0.1'));
+        case '8_1':        $confirmContent .= file_get_contents($this->getUpgradeFile('8.1'));
+        case '8_1_3':      $confirmContent .= file_get_contents($this->getUpgradeFile('8.1.3'));
         case '8_2_beta':
         case '8_2':
-        case '8_2_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.2.1'));
+        case '8_2_1':      $confirmContent .= file_get_contents($this->getUpgradeFile('8.2.1'));
         case '8_2_2':
         case '8_2_3':
         case '8_2_4':
         case '8_2_5':
-        case '8_2_6':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.2.6'));
+        case '8_2_6':      $confirmContent .= file_get_contents($this->getUpgradeFile('8.2.6'));
         case '8_3':
-        case '8_3_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.3.1'));
+        case '8_3_1':      $confirmContent .= file_get_contents($this->getUpgradeFile('8.3.1'));
         case '8_4':
-        case '8_4_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('8.4.1'));
-        case '9_0_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('9.0.beta'));
+        case '8_4_1':      $confirmContent .= file_get_contents($this->getUpgradeFile('8.4.1'));
+        case '9_0_beta':   $confirmContent .= file_get_contents($this->getUpgradeFile('9.0.beta'));
         case '9_0':
-        case '9_0_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.0.1'));
-        case '9_1':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.1'));
-        case '9_1_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.1.1'));
-        case '9_1_2':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.1.2'));
+        case '9_0_1':      $confirmContent .= file_get_contents($this->getUpgradeFile('9.0.1'));
+        case '9_1':        $confirmContent .= file_get_contents($this->getUpgradeFile('9.1'));
+        case '9_1_1':      $confirmContent .= file_get_contents($this->getUpgradeFile('9.1.1'));
+        case '9_1_2':      $confirmContent .= file_get_contents($this->getUpgradeFile('9.1.2'));
         case '9_2':
         case '9_2_1':
-        case '9_3_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('9.3.beta'));
-        case '9_4':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.4'));
-        case '9_5':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.5'));
-        case '9_5_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.5.1'));
-        case '9_6':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.6'));
+        case '9_3_beta':   $confirmContent .= file_get_contents($this->getUpgradeFile('9.3.beta'));
+        case '9_4':        $confirmContent .= file_get_contents($this->getUpgradeFile('9.4'));
+        case '9_5':        $confirmContent .= file_get_contents($this->getUpgradeFile('9.5'));
+        case '9_5_1':      $confirmContent .= file_get_contents($this->getUpgradeFile('9.5.1'));
+        case '9_6':        $confirmContent .= file_get_contents($this->getUpgradeFile('9.6'));
         case '9_6_1':
         case '9_6_2':
-        case '9_6_3':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.6.3'));
-        case '9_7':       $confirmContent .= file_get_contents($this->getUpgradeFile('9.7'));
+        case '9_6_3':      $confirmContent .= file_get_contents($this->getUpgradeFile('9.6.3'));
+        case '9_7':        $confirmContent .= file_get_contents($this->getUpgradeFile('9.7'));
         case '9_8':
-        case '9_8_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.8.1'));
-        case '9_8_2':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.8.2'));
-        case '9_8_3':     $confirmContent .= file_get_contents($this->getUpgradeFile('9.8.3'));
+        case '9_8_1':      $confirmContent .= file_get_contents($this->getUpgradeFile('9.8.1'));
+        case '9_8_2':      $confirmContent .= file_get_contents($this->getUpgradeFile('9.8.2'));
+        case '9_8_3':      $confirmContent .= file_get_contents($this->getUpgradeFile('9.8.3'));
+        case '10_0_alpha': $confirmContent .= file_get_contents($this->getUpgradeFile('10.0.alpha'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
