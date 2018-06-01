@@ -2354,7 +2354,11 @@ class storyModel extends model
 
             $title = '';
             if($id == 'title') $title = $story->title;
-            if($id == 'plan')  $title = $story->planTitle;
+            if($id == 'plan')
+            {
+                $title  = $story->planTitle;
+                $class .= ' text-ellipsis';
+            }
 
             echo "<td class='" . $class . "' title='$title'>";
             switch($id)

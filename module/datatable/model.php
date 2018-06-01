@@ -127,7 +127,7 @@ class datatableModel extends model
         {
             $fixed = $col->fixed == 'no' ? 'true': 'false';
             $width = is_numeric($col->width) ? "{$col->width}px" : $col->width;
-            $title = isset($col->name) ? "title='$col->name'" : '';
+            $title = isset($col->title) ? "title='$col->title'" : '';
             if($id == 'id' and (int)$width < 90) $width = '90px';
             $width = "data-width='$width' style='width:$width'";
             $align = $id == 'actions' ? 'text-center' : '';

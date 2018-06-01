@@ -284,11 +284,11 @@
   <div class="btn-toolbar">
     <?php common::printBack($browseLink);?>
     <?php if(!$case->deleted):?>
-    <div class='divider'></div>
+    <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
     <?php
     if(!$isLibCase)
     {
-        echo "<div class='divider'></div>";
+        if(!isonlybody()) echo "<div class='divider'></div>";
         common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", $case, 'button', '', '', 'runCase', false, "data-width='95%'");
         common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", $case, 'button', '', '', 'results', false, "data-width='95%'");
 
