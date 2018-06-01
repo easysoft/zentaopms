@@ -1,6 +1,6 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 <style>
-.projectline {padding: 2px!important}
+.projectline {padding: 2px!important; text-align: left!important;}
 </style>
 <!--[if lte IE 8]>
 <?php

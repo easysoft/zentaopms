@@ -25,7 +25,7 @@ $useGuest = $this->app->user->account == 'guest';
       <div class='row'>
         <div class='col-sm-12'>
           <div class='panel block-<?php echo $block->block;?> <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>'>
-            <?php $hasHeading = ($block->block != 'welcome' and $block->block != 'flowchart' and $block->block != 'statistic');?>
+            <?php $hasHeading = ($block->block != 'welcome');?>
             <?php if($hasHeading):?>
             <div class='panel-heading'>
               <div class='panel-title'><?php echo $block->title;?></div>
@@ -64,7 +64,7 @@ $useGuest = $this->app->user->account == 'guest';
       <div class='row'>
         <div class='col-sm-12'>
           <div class='panel block-<?php echo $block->block;?> <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>'>
-            <?php $hasHeading = ($block->block != 'welcome' and $block->block != 'flowchart');?>
+            <?php $hasHeading = ($block->block != 'welcome');?>
             <?php if($hasHeading):?>
             <div class='panel-heading'>
               <div class='panel-title'><?php echo $block->title;?></div>

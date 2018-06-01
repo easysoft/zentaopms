@@ -19,29 +19,31 @@
 .block-flowchart .flowchart-title {font-size: 14px;font-weight: bold;color: #3c4353;}
 .block-flowchart .flowchart-step {display: inline-block;width: 24px;height: 24px;font-size: 14px;line-height: 24px;color: #fff;background-color: #00a9fc;border-radius: 50%;}
 </style>
-<table class="table table-borderless">
-  <thead>
-    <tr>
-      <?php for($i = 0; $i < 6; $i++):?>
-      <?php if($i == 0):?>
-      <th><span class="flowchart-title"><?php echo $lang->block->lblFlowchart?></span></th>
-      <?php else:?>
-      <th><div><span class="flowchart-step"><?php echo $i?></span></div></th>
-      <?php endif;?>
-      <?php endfor;?>
-    </tr>
-  </thead>
-  <tbody>
-    <?php foreach($lang->block->flowchart as $flowchart):?>
-    <tr>
-      <?php for($i = 0; $i < 6; $i++):?>
-      <?php if($i == 0):?>
-      <th><?php echo $flowchart[$i];?></th>
-      <?php else:?>
-      <td><?php echo zget($flowchart, $i, '')?></td>
-      <?php endif;?>
-      <?php endfor;?>
-    </tr>
-    <?php endforeach;?>
-  </tbody>
-</table>
+<div class='panel-body'>
+  <table class="table table-borderless">
+    <thead>
+      <tr>
+        <?php for($i = 0; $i < 6; $i++):?>
+        <?php if($i == 0):?>
+        <th><span class="flowchart-title"><?php echo $lang->block->role?></span></th>
+        <?php else:?>
+        <th><div><span class="flowchart-step"><?php echo $i?></span></div></th>
+        <?php endif;?>
+        <?php endfor;?>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach($lang->block->flowchart as $flowchart):?>
+      <tr>
+        <?php for($i = 0; $i < 6; $i++):?>
+        <?php if($i == 0):?>
+        <th><?php echo $flowchart[$i];?></th>
+        <?php else:?>
+        <td><?php echo zget($flowchart, $i, '')?></td>
+        <?php endif;?>
+        <?php endfor;?>
+      </tr>
+      <?php endforeach;?>
+    </tbody>
+  </table>
+</div>
