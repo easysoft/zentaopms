@@ -1,5 +1,6 @@
 <style>
-.block-flowchart {padding: 10px;}
+.block-flowchart {}
+.block-flowchart .panel-body {padding-top: 0}
 .block-flowchart .table {margin-bottom: 0;}
 .block-flowchart .table > thead > tr > th,
 .block-flowchart .table > tbody > tr > td,
@@ -19,7 +20,7 @@
 .block-flowchart .flowchart-title {font-size: 14px;font-weight: bold;color: #3c4353;}
 .block-flowchart .flowchart-step {display: inline-block;width: 24px;height: 24px;font-size: 14px;line-height: 24px;color: #fff;background-color: #00a9fc;border-radius: 50%;}
 </style>
-<div class='panel-body'>
+<div class='panel-body has-table'>
   <table class="table table-borderless">
     <thead>
       <tr>

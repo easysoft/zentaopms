@@ -18,6 +18,7 @@
 .product-info .type-value > strong {font-size: 20px; color: #3C4353;}
 .product-info .actions {position: absolute; left: 10px; top: 14px;}
 .block-statistic .tile {margin-bottom: 30px;}
+.block-statistic .tile {margin-bottom: 30px;}
 .block-statistic .tile-title {font-size: 18px; color: #A6AAB8;}
 .block-statistic .tile-amount {font-size: 48px; margin-bottom: 10px;}
 .block-statistic .col-nav {border-left: 1px solid #EBF2FB; width: 260px; padding-left: 0;}

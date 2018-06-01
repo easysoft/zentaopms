@@ -1,6 +1,7 @@
 <style>
 .block-dynamic .timeline > li .timeline-text {display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .block-dynamic .timeline > li:hover .timeline-text {overflow: visible; text-overflow: normal; white-space: normal;}
+.block-dynamic .panel-body {padding-top: 0;}
 </style>
 <div class='panel-body'>
   <ul class="timeline timeline-tag-left no-margin">
