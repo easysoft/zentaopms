@@ -256,13 +256,13 @@ class commonModel extends model
                 echo "<li class='divider'></li>";
             }
 
-            //echo "<li class='dropdown-submenu'>";
-            //echo "<a href='javascript:;'>" . $lang->theme . "</a><ul class='dropdown-menu pull-left'>";
-            //foreach($app->lang->themes as $key => $value)
-            //{
-            //    echo "<li " . ($app->cookie->theme == $key ? "class='selected'" : '') . "><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
-            //}
-            //echo '</ul></li>';
+            echo "<li class='dropdown-submenu'>";
+            echo "<a href='javascript:;'>" . $lang->theme . "</a><ul class='dropdown-menu pull-left'>";
+            foreach($app->lang->themes as $key => $value)
+            {
+                echo "<li " . ($app->cookie->theme == $key ? "class='selected'" : '') . "><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
+            }
+            echo '</ul></li>';
 
             echo "<li class='dropdown-submenu'>";
             echo "<a href='javascript:;'>" . $lang->lang . "</a><ul class='dropdown-menu pull-left'>";
