@@ -173,11 +173,11 @@
               if(commonModel::isTutorialMode())
               {
                   $wizardParams = helper::safe64Encode($param);
-                  echo html::a($this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams"), "<i class='icon-plus-border'></i>",'', "class='btn btn-link btn-task-create' title='{$lang->project->wbs}'");
+                  echo html::a($this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams"), "<i class='icon-pluses'></i>",'', "class='btn btn-task-create' title='{$lang->project->wbs}'");
               }
               else
               {
-                  if($hasDBPriv) common::printIcon('task', 'create', $param, '', 'list', 'plus', '', 'btn-task-create');
+                  if($hasDBPriv) common::printIcon('task', 'create', $param, '', 'list', 'pluses', '', 'btn-task-create');
               }
 
               $lang->task->batchCreate = $lang->project->batchWBS;

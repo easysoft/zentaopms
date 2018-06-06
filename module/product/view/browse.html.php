@@ -100,7 +100,7 @@
     {
         $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
         $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams");
-        echo html::a($link, "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn btn-primary'");
+        echo html::a($link, "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn btn-primary create-story-btn'");
     }
     else
     {

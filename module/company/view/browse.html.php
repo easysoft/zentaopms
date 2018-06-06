@@ -28,7 +28,18 @@ js::set('confirmDelete', $lang->user->confirmDelete);
   <div class='btn-toolbar pull-right'>
     <?php common::printIcon('group', 'create', '', '', 'button', '', '', 'iframe', true, "data-width='550px'");?>
     <?php common::printLink('user', 'batchCreate', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->batchCreate, '', "class='btn btn-secondary'");?>
-    <?php common::printLink('user', 'create', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->create, '', "class='btn btn-primary'");?>
+    <?php
+      if(commonModel::isTutorialMode())
+      {
+          $wizardParams = helper::safe64Encode("dept=$deptID");
+          $link = $this->createLink('tutorial', 'wizard', "module=user&method=create&params=$wizardParams");
+          echo html::a($link, "<i class='icon icon-plus'></i> {$lang->user->create}", '', "class='btn btn-primary create-user-btn'");
+      }
+      else
+      {
+          common::printLink('user', 'create', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->create, '', "class='btn btn-primary'");
+      }
+    ?>
   </div>
 </div>
 <div id='mainContent' class='main-row fade'>
