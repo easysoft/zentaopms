@@ -485,7 +485,8 @@ class doc extends control
         if($objectType == 'module') $table = TABLE_MODULE;
         $collectors = $this->dao->select('collector')->from($table)->where('id')->eq($objectID)->fetch('collector');
 
-        if(strpos($collectors, ",{$this->app->user->account},") !== false)
+        $hasCollect = strpos($collectors, ",{$this->app->user->account},") !== false;
+        if($hasCollect)
         {
             $collectors = str_replace(",{$this->app->user->account},", ',', $collectors);
         }
@@ -500,7 +501,7 @@ class doc extends control
 
         $this->dao->update($table)->set('collector')->eq($collectors)->where('id')->eq($objectID)->exec();
 
-        die(js::reload('parent'));
+        $this->send(array('status' => $hasCollect ? 'no' : 'yes'));
     }
 
     /**

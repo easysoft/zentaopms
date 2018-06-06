@@ -482,6 +482,7 @@ class storyModel extends model
             ->add('assignedDate', $oldStory->assignedDate)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
+            ->setDefault('plan', '')
             ->setDefault('status', $oldStory->status)
             ->setDefault('product', $oldStory->product)
             ->setDefault('branch', $oldStory->branch)
