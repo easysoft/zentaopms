@@ -39,14 +39,15 @@
     </div>
     <div id="burnYUnit"><?php echo "({$lang->project->workHour})";?></div>
     <div id="burnLegend">
-      <div class="line-ref"><?php echo $lang->project->charts->burn->graph->reference;?></div>
-      <div class="line-real"><?php echo $lang->project->charts->burn->graph->actuality;?></div>
+      <div class="line-ref"><div class='barline'></div><?php echo $lang->project->charts->burn->graph->reference;?></div>
+      <div class="line-real"><div class='barline bg-primary'></div><?php echo $lang->project->charts->burn->graph->actuality;?></div>
     </div>
   </div>
 </div>
 <script>
 function initBurnChar()
 {
+    var themePrimaryColor = $.getThemeColor('primary');
     var data =
     {
         labels: <?php echo json_encode($chartData['labels'])?>,
@@ -63,10 +64,10 @@ function initBurnChar()
         },
         {
             label: "<?php echo $lang->project->charts->burn->graph->actuality;?>",
-            color: "#006AF1",
-            pointStrokeColor: '#006AF1',
-            pointHighlightStroke: '#006AF1',
-            pointColor: '#006AF1',
+            color: themePrimaryColor,
+            pointStrokeColor: themePrimaryColor,
+            pointHighlightStroke: themePrimaryColor,
+            pointColor: themePrimaryColor,
             fillColor: 'rgba(0,106,241, .07)',
             pointHighlightFill: '#fff',
             data: <?php echo $chartData['burnLine']?>
