@@ -21,7 +21,7 @@
 </style>
 <div class="panel-body table-row">
   <div class="col-6 text-middle text-center">
-    <div class="progress-pie inline-block" data-value="72" data-doughnut-size="80">
+    <div class="progress-pie inline-block" data-value="<?php echo 100 * $normal/($closed + $normal);?>" data-doughnut-size="80">
       <canvas width="100" height="100" style="width: 100px; height: 100px;"></canvas>
       <div class="progress-info">
       <small><?php echo $lang->product->all;?></small>
@@ -31,8 +31,8 @@
   </div>
   <div class="col-6 text-middle">
     <ul class="list-unstyled status-list">
-    <li><span class="status-unclosed"><span class="label label-dot"></span> <?php echo $lang->product->statusList['normal'];?></span> &nbsp; <strong><?php echo $normal;?></strong></li>
-    <li><span class="status-closed"><span class="label label-dot"></span> <?php echo $lang->product->statusList['closed'];?></span> &nbsp; <strong><?php echo $closed;?></strong></li>
+    <li><span class="status-unclosed"><span class="label label-dot label-primary"></span> <?php echo $lang->product->statusList['normal'];?></span> &nbsp; <strong><?php echo $normal;?></strong></li>
+    <li><span class="status-closed"><span class="label label-dot label-pale"></span> <?php echo $lang->product->statusList['closed'];?></span> &nbsp; <strong><?php echo $closed;?></strong></li>
     </ul>
   </div>
 </div>
