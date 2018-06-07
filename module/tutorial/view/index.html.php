@@ -33,7 +33,7 @@
   </div>
   <div id='sidebar'>
     <header class='bg-primary'>
-      <div class='start-icon'><i class='icon icon-certificate icon-back'></i><i class='icon icon-flag icon-front'></i></div>
+      <div class='start-icon'><i class='icon icon-certificate icon-back'></i><i class='icon icon-flag icon-front text-secondary'></i></div>
       <h2><?php echo $lang->tutorial->common ?></h2>
       <div class='actions'>
         <a href='<?php echo helper::createLink('tutorial', 'quit', 'referer=' . base64_encode($referer)) ?>' class='btn btn-danger btn-sm'><i class="icon icon-signout"></i> <?php echo $lang->tutorial->exit ?></a>

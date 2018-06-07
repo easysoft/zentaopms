@@ -166,6 +166,7 @@ $lang->themes['red']         = 'Red';
 $lang->themes['purple']      = 'Purple';
 $lang->themes['pink']        = 'Pink';
 $lang->themes['blackberry']  = 'Blackberry';
+$lang->themes['classic']     = 'Classic';
 
 /* 首页菜单设置。*/
 $lang->index = new stdclass();

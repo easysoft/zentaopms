@@ -13,6 +13,5 @@ html[lang='en'] #loginPanel .table-form > tbody > tr > th {width: 80px;}
 #loginPanel > footer a {display: inline-block; margin-left: 5px;}
 #info {margin-top: 10px; color: #fff;}
 #info .btn + .btn {margin-left: 5px;}
-.alert-info {color: #00a9fc;}
 #langs > .btn,
 #langs > .dropdown-menu {min-width: 0; width: 85px;}

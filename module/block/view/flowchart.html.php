@@ -18,7 +18,7 @@
 .block-flowchart .table > tbody > tr > td {color: #3c4353;}
 .block-flowchart .table > tbody > tr:nth-child(even) > td {background: #f7f8f9;}
 .block-flowchart .flowchart-title {font-size: 14px;font-weight: bold;color: #3c4353;}
-.block-flowchart .flowchart-step {display: inline-block;width: 24px;height: 24px;font-size: 14px;line-height: 24px;color: #fff;background-color: #00a9fc;border-radius: 50%;}
+.block-flowchart .flowchart-step {display: inline-block;width: 24px;height: 24px;font-size: 14px;line-height: 24px;color: #fff; border-radius: 50%;}
 </style>
 <div class='panel-body has-table'>
   <table class="table table-borderless">
@@ -28,7 +28,7 @@
         <?php if($i == 0):?>
         <th><span class="flowchart-title"><?php echo $lang->block->role?></span></th>
         <?php else:?>
-        <th><div><span class="flowchart-step"><?php echo $i?></span></div></th>
+        <th><div><span class="flowchart-step bg-secondary"><?php echo $i?></span></div></th>
         <?php endif;?>
         <?php endfor;?>
       </tr>
