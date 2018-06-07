@@ -1,34 +1,4 @@
 /**
- * Switch doc library.
- * 
- * @param  int    $libID 
- * @param  string $module 
- * @param  string $method 
- * @param  string $extra 
- * @access public
- * @return void
- */
-function switchDocLib(libID, module, method, extra)
-{
-    if(module == 'doc')
-    {
-        if(method != 'view' && method != 'edit')
-        {
-            link = createLink(module, method, 'rootID=' + libID);
-        }
-        else
-        {
-            link = createLink('doc', 'browse');
-        }
-    }
-    else if(module == 'tree')
-    {
-        link = createLink(module, method, 'rootID=' + libID + '&type=' + extra);
-    }
-    location.href = link;
-}
-
-/**
  * Set the ping url.
  * 
  * @access public
@@ -64,26 +34,6 @@ function setPing()
 
 //     $("a.helplink").modalTrigger({width:600, type:'iframe'});
 // }
-
-/**
- * Set paceholder. 
- * 
- * @access public
- * @return void
- */
-function setPlaceholder()
-{
-    if(typeof(holders) != 'undefined')
-    {
-        for(var key in holders)
-        {
-            if($('#' + key).prop('tagName') == 'INPUT')
-            {
-                $("#" + key).attr('placeholder', holders[key]);
-            }
-        }
-    }
-}
 
 // /**
 //  * Toggle the help links.
@@ -891,8 +841,6 @@ needPing = true;
 /* When body's ready, execute these. */
 $(document).ready(function() 
 {
-    setPlaceholder();
-
     if(needPing) setTimeout('setPing()', 1000 * 60 * 10);  // After 10 minutes, begin ping.
 
     checkTutorial();
