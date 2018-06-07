@@ -87,7 +87,7 @@ function initTableHeader()
         var tableWidth = $table.width();
         if(!$header.length)
         {
-            $header = $('<div class="table-header-fixed" style="position: absolute; left: 0; top: 0; right: 0; padding: 10px 10px 0; background: #fff;"><table class="table table-fixed no-margin"></table></div>').css('right', $panel.width() - tableWidth - 20).css('min-width', tableWidth);
+            $header = $('<div class="table-header-fixed" style="position: absolute; left: 0; top: 0; right: 0; padding: 10px 10px 0; background: #fff;"><table class="table table-fixed no-margin"></table></div>').css('right', $panel.width() - tableWidth - 20);
             var $oldTableHead = $table.find('thead');
             $oldTableHead.find('th').each(function(idx)
             {
@@ -102,7 +102,7 @@ function initTableHeader()
                 $header.on('mousedown mouseup', 'th[data-idx]', function(e)
                 {
                     var $th = $(this);
-                    var $targetTh = $oldTableHead.find('th[data-idx="' + $th.data('idx') + '"]').trigger(e);
+                    $oldTableHead.find('th[data-idx="' + $th.data('idx') + '"]').trigger(e);
                     if(e.type === 'mouseup')
                     {
                         var updateTh = function()

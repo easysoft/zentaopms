@@ -363,7 +363,7 @@
 
     echo "<div class='divider'></div>";
     common::printIcon('story', 'edit', "storyID=$story->id", $story);
-    common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", $story, 'button', 'copy', '', 'iframe showinonlybody');
+    common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", $story, 'button', 'copy', '', 'iframe showinonlybody', true);
     common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', '', 'hiddenwin');
     ?>
     <?php endif;?>
