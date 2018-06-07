@@ -98,62 +98,6 @@ function setPlaceholder()
 //     if($.cookie('help') == 'on')  return $.cookie('help', 'off', {expires:config.cookieLife, path:config.webRoot});
 // }
 
-
-/**
- * Set language.
- * 
- * @access public
- * @return void
- */
-function selectLang(lang)
-{
-    $.cookie('lang', lang, {expires:config.cookieLife, path:config.webRoot});
-    $.get(createLink('score', 'ajax', "method=selectLang"));
-    location.href = removeAnchor(location.href);
-}
-
-/**
- * Set theme.
- * 
- * @access public
- * @return void
- */
-function selectTheme(theme)
-{
-    $.cookie('theme', theme, {expires:config.cookieLife, path:config.webRoot});
-    $.get(createLink('score', 'ajax', "method=selectTheme"));
-    location.href = removeAnchor(location.href);
-}
-
-/**
- * Remove anchor from the url.
- * 
- * @param  string $url 
- * @access public
- * @return string
- */
-function removeAnchor(url)
-{
-    pos = url.indexOf('#');
-    if(pos > 0) return url.substring(0, pos);
-    return url;
-}
-
-// /**
-//  * Get the window size and save to cookie.
-//  * 
-//  * @access public
-//  * @return void
-//  */
-// function saveWindowSize()
-// {
-//     width  = $(window).width(); 
-//     height = $(window).height();
-//     $.cookie('windowWidth',  width)
-//     $.cookie('windowHeight', height)
-// }
-
-
 /**
  * Disable the submit button when submit form.
  * 
