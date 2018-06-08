@@ -52,7 +52,7 @@ $(function()
                 }
             }
         });
-    }, 60 * 1000);
+    }, 90 * 1000);
 })
 
 <?php if(!empty($this->config->sso->redirect)):?>
