@@ -1477,6 +1477,7 @@ class treeModel extends model
     public function checkUnique($rootID, $viewType, $parentModuleID, $modules = array(), $branches = array())
     {
         if(empty($branches)) $branches = $this->post->branch;
+        if(empty($branches)) $branches = array(0);
         $branches = array_unique($branches);
 
         if($this->isMergeModule($rootID, $viewType) and $viewType != 'task') $viewType .= ',story';
