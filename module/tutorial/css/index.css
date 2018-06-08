@@ -22,7 +22,7 @@
 #task .task-desc > ul > li[data-target].finish {color: #999; text-decoration: line-through;}
 #task .task-desc > ul > li[data-target].finish .task-nav {opacity: .6; text-decoration: line-through;}
 #task .task-desc > ul > li:before {font-family: ZentaoIcon; font-size: 14px; font-style: normal; font-weight: 400; font-variant: normal; line-height: 1; text-transform: none; speak: none; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; content: '\e836'; display: block; width: 26px; height: 20px; line-height: 20px; text-align: center; opacity: .6; color: #808080; position: absolute; top: 2px; left: 0}
-#task .task-desc > ul > li[data-target]:after {content: ' '; display: block; position: absolute; left: 0; top: -100%; width: 100%; height: 100%; border: 2px solid #F1A325; transition: top .5s; pointer-events: none;}
+#task .task-desc > ul > li[data-target]:after {content: ' '; display: block; position: absolute; left: 0; top: -100%; width: 100%; height: 100%; border: 2px solid #F1A325; transition: top .5s; pointer-events: none; border-radius: 4px;}
 #task .task-desc > ul > li[data-target]:before {font-family: ZentaoIcon; content: '\e836'; color: #333}
 #task .task-desc > ul > li[data-target].finish:after {top: 100%;}
 #task .task-desc > ul > li[data-target].finish:before {content: '\e92f'; color: #00da88}
