@@ -205,11 +205,21 @@ $(function()
     {
         if(!$e.length) return;
         $e.closest('body').find('[data-toggle=tooltip]').tooltip('destroy');
+        var offset   = $e.offset();
+        var winWidth = $(window).width();
+        var placement = 'top';
+        if (offset.left > (winWidth*2/3)) {
+            placement = 'left';
+        } else if (offset.left < (winWidth/3) && (offset.left + $e.outerWidth()) < (winWidth*2/3)) {
+            placement = 'right';
+        } else if (offset.top < 50) {
+            placement = 'bottom';
+        }
         options = $.extend(
         {
             trigger: 'manual',
             title: text,
-            placement: $e.offset().left > ($(window).width()*2/3) ? 'left' : 'top',
+            placement: placement,
             container: 'body',
             tipClass: 'tooltip-warning tooltip-max'
         }, options);
