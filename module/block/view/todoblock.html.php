@@ -11,13 +11,13 @@
  */
 ?>
 <style>
-.block-todoes .panel-body {position: relative; padding-top: 42px; overflow: visible;}
+.block-todoes .panel-body {position: relative; padding-top: 42px; overflow: visible; padding-bottom: 0;}
 .block-todoes .todoes-input {position: absolute; top: 0; right: 0; left: 0; padding: 0 20px 20px 20px;}
 .block-todoes .todoes-input .form-control::-webkit-input-placeholder {font-size: 12px; line-height: 20px;color: #a4a8b6;}
 .block-todoes .todoes-input .form-control::-moz-placeholder {font-size: 12px; line-height: 20px; color: #a4a8b6;}
 .block-todoes .todoes-input .form-control:-ms-input-placeholder {font-size: 12px; line-height: 20px;color: #a4a8b6;}
 .block-todoes .todoes-input .form-control::placeholder {font-size: 12px; line-height: 20px; color: #a4a8b6;}
-.block-todoes .todoes {padding: 0 10px; margin: 0 -20px; max-height: 350px; overflow: auto;}
+.block-todoes .todoes {padding: 0 10px 10px 10px; margin: 0 -20px; max-height: 350px; overflow: auto;}
 .block-todoes .todoes > li {position: relative; padding: 5px 10px 5px 35px; list-style: none;}
 .block-todoes .todoes > li:hover {background-color: #e9f2fb;}
 .block-todoes .todo-title {display: block; padding: 5px;}
