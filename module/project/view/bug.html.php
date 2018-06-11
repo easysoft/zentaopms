@@ -79,7 +79,7 @@
         <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
         <td class='c-actions'>
           <?php
-          if($bug->status == 'active') common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'search', '', 'iframe', true);
+          if($bug->status == 'active') common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirmBug', '', 'iframe', true);
           if($bug->status == 'active') common::printIcon('bug', 'resolve', $params, $bug, 'list', 'check', '', 'iframe', true);
           if($bug->status != 'active') common::printIcon('bug', 'close',   $params, $bug, 'list', '', '', 'iframe', true);
           common::printIcon('bug', 'create', "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
