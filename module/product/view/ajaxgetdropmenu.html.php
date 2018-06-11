@@ -21,7 +21,7 @@
   {
       if($product->status == 'normal' and $product->PO == $this->app->user->account) 
       {
-          echo html::a(sprintf($link, $product->id), "<i class='icon-cube'></i> " . $product->name, '', "data-key='" . zget($productsPinYin, $product->name, '') . "'");
+          echo html::a(sprintf($link, $product->id), "<i class='icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
       }
   }
  
@@ -29,13 +29,13 @@
   {
       if($product->status == 'normal' and !($product->PO == $this->app->user->account))
       {
-          echo html::a(sprintf($link, $product->id), "<i class='icon-cube'></i> " . $product->name, '', "data-key='" . zget($productsPinYin, $product->name, '') . "'");
+          echo html::a(sprintf($link, $product->id), "<i class='icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
       }
   }
 
   foreach($products as $product)
   {
-      if($product->status == 'closed') echo html::a(sprintf($link, $product->id), "<i class='icon-cube'></i> " . $product->name, '', "class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+      if($product->status == 'closed') echo html::a(sprintf($link, $product->id), "<i class='icon-cube'></i> " . $product->name, '', "title='{$product->name}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "'");
   }
   ?>
 </div>
