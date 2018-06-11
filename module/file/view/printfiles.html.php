@@ -8,9 +8,10 @@ $sessionString .= session_name() . '=' . session_id();
   <div class="detail-title"><?php echo $lang->file->common;?> <i class="icon icon-paper-clip icon-sm"></i></div>
   <div class="detail-content">
 <?php endif;?>
-<style>
-.files-list>li>a {display: inline;}
-</style>
+  <style>
+  .files-list>li>a {display: inline;}
+  .files-list>li>.right-icon {opacity: 1;}
+  </style>
   <script>
   /* Delete a file. */
   function deleteFile(fileID)
@@ -78,8 +79,8 @@ $sessionString .= session_name() . '=' . session_id();
 
 
               echo "<span class='right-icon'>&nbsp; ";
-              common::printLink('file', 'edit', "fileID=$file->id", "<i class='icon-pencil'></i>", '', "data-width='400' class='edit iframe text-primary' title='{$lang->file->edit}'");
-              if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon-trash'></i>", '', "class='text-primary' onclick='deleteFile($file->id)' title='$lang->delete'");
+              common::printLink('file', 'edit', "fileID=$file->id", $lang->file->edit, '', "data-width='400' class='edit iframe text-primary' title='{$lang->file->edit}'");
+              if(common::hasPriv('file', 'delete')) echo html::a('###', $lang->delete, '', "class='text-primary' onclick='deleteFile($file->id)' title='$lang->delete'");
               echo '</span>';
               echo '</li>';
           }
