@@ -101,15 +101,30 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <td class='c-num text-center'><?php echo $user->visits;?></td>
           <td class='c-actions'>
             <?php
-            if(true or $user->ranzhi) common::printIcon('user', 'unbind', "userID=$user->account", '', 'list', 'unlink', "hiddenwin");
-            if(true or (strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $this->config->user->lockMinutes * 60)
+            if($user->ranzhi) 
+            {
+                common::printIcon('user', 'unbind', "userID=$user->account", '', 'list', 'unlink', "hiddenwin");
+            }
+            else
+            {
+                echo html::a('javascript:;', "<i class='icon icon-unlink'></i>", '', "class='btn disabled'");
+            }
+            if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $this->config->user->lockMinutes * 60)
             {
                 common::printIcon('user', 'unlock', "userID=$user->account", '', 'list', 'unlock', "hiddenwin");
+            }
+            else
+            {
+                echo html::a('javascript:;', "<i class='icon icon-unlock'></i>", '', "class='btn disabled'");
             }
             common::printIcon('user', 'edit', "userID=$user->id&from=company", '', 'list');
             if(strpos($this->app->company->admins, ",{$user->account},") === false and common::hasPriv('user', 'delete'))
             {
                 echo html::a($this->createLink('user', 'delete', "userID=$user->id"), '<i class="icon-trash"></i>', '', "title='{$lang->user->delete}' class='btn iframe'");
+            }
+            else
+            {
+                echo html::a('javascript:;', "<i class='icon icon-trash'></i>", '', "class='btn disabled'");
             }
             ?>
           </td>
