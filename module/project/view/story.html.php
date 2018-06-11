@@ -173,15 +173,15 @@
               if(commonModel::isTutorialMode())
               {
                   $wizardParams = helper::safe64Encode($param);
-                  echo html::a($this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams"), "<i class='icon-pluses'></i>",'', "class='btn btn-task-create' title='{$lang->project->wbs}'");
+                  echo html::a($this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams"), "<i class='icon-plus'></i>",'', "class='btn btn-task-create' title='{$lang->project->wbs}'");
               }
               else
               {
-                  if($hasDBPriv) common::printIcon('task', 'create', $param, '', 'list', 'pluses', '', 'btn-task-create');
+                  if($hasDBPriv) common::printIcon('task', 'create', $param, '', 'list', 'plus', '', 'btn-task-create');
               }
 
               $lang->task->batchCreate = $lang->project->batchWBS;
-              if($hasDBPriv) common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list', 'plus-sign');
+              if($hasDBPriv) common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list', 'pluses');
 
               $lang->testcase->batchCreate = $lang->testcase->create;
               if($productID && $hasDBPriv) common::printIcon('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', 'list', 'sitemap');

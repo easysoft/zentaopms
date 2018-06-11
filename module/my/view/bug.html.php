@@ -78,7 +78,7 @@
           <td class='c-actions'>
             <?php
             $params = "bugID=$bug->id";
-            common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'search', '', 'iframe', true);
+            common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
             common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
             common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
             common::printIcon('bug', 'edit',       $params, $bug, 'list');
