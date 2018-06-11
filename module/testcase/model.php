@@ -1390,7 +1390,7 @@ class testcaseModel extends model
             case 'actions':
                 if($case->needconfirm or $browseType == 'needconfirm')
                 {
-                    common::printIcon('testcase', 'confirmstorychange',  "caseID=$case->id", $case, 'list', 'search', 'hiddenwin', '', '', '', $this->lang->confirm);
+                    common::printIcon('testcase', 'confirmstorychange',  "caseID=$case->id", $case, 'list', 'confirm', 'hiddenwin', '', '', '', $this->lang->confirm);
                     break;
                 }
 

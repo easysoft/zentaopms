@@ -83,6 +83,7 @@ js::set('flow',   $this->config->global->flow);
       ?>
     </div>
   </div>
+<?php endif;?>
   <div class='btn-toolbar pull-left'>
     <?php
     if(common::hasPriv('testsuite', 'library'))
@@ -103,7 +104,6 @@ js::set('flow',   $this->config->global->flow);
     <?php common::printLink('testsuite', 'createCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
-<?php endif;?>
 <div id="mainContent" class="main-row fade">
   <div class="side-col" id="sidebar">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
