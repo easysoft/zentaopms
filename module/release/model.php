@@ -111,7 +111,7 @@ class releaseModel extends model
                 ->add('builder', $this->app->user->account)
                 ->add('branch', $branch)
                 ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
-                ->remove('build,files,labels,uid')
+                ->remove('marker,build,files,labels,uid')
                 ->get();
             $build = $this->loadModel('file')->processImgURL($build, $this->config->release->editor->create['id']);
             $this->dao->insert(TABLE_BUILD)->data($build)

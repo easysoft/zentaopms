@@ -161,11 +161,13 @@ $lang->lang = 'Language';
 
 /* 風格列表。*/
 $lang->theme                = '主題';
-$lang->themes['default']    = '預設';
-$lang->themes['green']      = '綠色';
-$lang->themes['red']        = '紅色';
-$lang->themes['lightblue']  = '亮藍';
+$lang->themes['default']    = '禪道藍（預設）';
+$lang->themes['green']      = '葉蘭綠';
+$lang->themes['red']        = '赤誠紅';
+$lang->themes['purple']     = '玉煙紫';
+$lang->themes['pink']       = '芙蕖粉';
 $lang->themes['blackberry'] = '黑莓';
+$lang->themes['classic']    = '經典';
 
 /* 首頁菜單設置。*/
 $lang->index = new stdclass();
@@ -440,7 +442,7 @@ $lang->error = new stdclass();
 $lang->error->companyNotFound = "您訪問的域名 %s 沒有對應的公司。";
 $lang->error->length          = array("『%s』長度錯誤，應當為『%s』", "『%s』長度應當不超過『%s』，且大於『%s』。");
 $lang->error->reg             = "『%s』不符合格式，應當為:『%s』。";
-$lang->error->unique          = "『%s』已經有『%s』這條記錄了。如果您確定該記錄已刪除，請到後台管理-資源回收筒還原。。";
+$lang->error->unique          = "『%s』已經有『%s』這條記錄了。如果您確定該記錄已刪除，請到後台管理-資源回收筒還原。";
 $lang->error->gt              = "『%s』應當大於『%s』。";
 $lang->error->ge              = "『%s』應當不小於『%s』。";
 $lang->error->notempty        = "『%s』不能為空。";

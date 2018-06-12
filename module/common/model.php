@@ -686,7 +686,7 @@ class commonModel extends model
           <div class="form-group">
             <textarea id='comment' name='comment' class="form-control" rows="8" autofocus="autofocus"></textarea>
           </div>
-          <div class="form-group form-actions">
+          <div class="form-group form-actions text-center">
             <button type="submit" class="btn btn-primary btn-wide">{$lang->save}</button>
             <button type="button" class="btn btn-wide" data-dismiss="modal">{$lang->close}</button>
           </div>

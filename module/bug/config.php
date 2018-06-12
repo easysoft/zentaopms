@@ -38,12 +38,12 @@ $config->bug->list->exportFields = 'id, product, branch, module, project, story,
     lastEditedDate, files';
 
 $config->bug->list->customCreateFields      = 'project,story,task,pri,severity,os,browser,deadline,mailto,keywords';
-$config->bug->list->customBatchCreateFields = 'module,project,steps,type,pri,deadline,severity,os,browser,keywords';
+$config->bug->list->customBatchCreateFields = 'project,steps,type,pri,deadline,severity,os,browser,keywords';
 $config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,assignedTo,deadline,status,resolvedBy,resolution,os,browser,keywords';
 
 $config->bug->custom = new stdclass();
 $config->bug->custom->createFields      = $config->bug->list->customCreateFields;
-$config->bug->custom->batchCreateFields = 'module,project,steps,type,severity,os,browser';
+$config->bug->custom->batchCreateFields = 'project,deadline,steps,type,severity,os,browser';
 $config->bug->custom->batchEditFields   = 'type,severity,pri,branch,assignedTo,deadline,status,resolvedBy,resolution';
 
 if($config->global->flow == 'onlyTest')
