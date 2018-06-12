@@ -11,25 +11,25 @@
     <?php if($this->methodName == 'browse') echo "<a id='bysearchTab' class='btn btn-link querybox-toggle'><i class='icon-search icon'></i> {$lang->testcase->bySearch}</a>";?>
   </div>
   <div class='btn-toolbar pull-right'>
-    <div class='btn-group' id='createActionMenu'>
-      <?php
-      $initModule = isset($moduleID) ? (int)$moduleID : 0;
-      $misc = common::hasPriv('testcase', 'create') ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
-      $link = common::hasPriv('testcase', 'create') ?  $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule") : '#';
-      echo html::a($link, "<i class='icon-plus'></i>" . $lang->testcase->create, '', $misc);
-
-      $misc = common::hasPriv('testcase', 'batchCreate') ? '' : "disabled";
-      $link = common::hasPriv('testcase', 'batchCreate') ?  $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule") : '#';
-      ?>
-      <button type='button' class='btn btn-primary dropdown-toggle <?php echo $misc?>' data-toggle='dropdown'>
+    <div class='btn-group'>
+      <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
+        <i class='icon icon-export muted'></i> <?php echo $lang->export ?>
         <span class='caret'></span>
       </button>
-      <ul class='dropdown-menu pull-right'>
-      <?php echo "<li>" . html::a($link, $lang->testcase->batchCreate, '', "class='$misc'") . "</li>";?>
+      <ul class='dropdown-menu' id='exportActionMenu'>
+      <?php
+      $misc = common::hasPriv('testcase', 'export') ? "class='export'" : "class=disabled";
+      $link = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy") : '#';
+      echo "<li>" . html::a($link, $lang->testcase->export, '', $misc) . "</li>";
+
+      $misc = common::hasPriv('testcase', 'exportTemplet') ? "class='export'" : "class=disabled";
+      $link = common::hasPriv('testcase', 'exportTemplet') ?  $this->createLink('testcase', 'exportTemplet', "productID=$productID") : '#';
+      echo "<li>" . html::a($link, $lang->testcase->exportTemplet, '', $misc) . "</li>";
+      ?>
       </ul>
     </div>
-
-      <a href='###' class='dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <?php echo $lang->import ?><span class='caret'></span></a>
+    <div class='btn-group'>
+      <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <?php echo $lang->import ?><span class='caret'></span></button>
       <ul class='dropdown-menu' id='importActionMenu'>
       <?php 
       $misc = common::hasPriv('testcase', 'import') ? "class='export'" : "class=disabled";
@@ -41,26 +41,23 @@
       echo "<li>" . html::a($link, $lang->testcase->importFromLib, '', $misc) . "</li>";
       ?>
       </ul>
-    </li>
+    </div>
+    <?php
+    $initModule = isset($moduleID) ? (int)$moduleID : 0;
 
-    <li class='pull-right'>
-      <a href='###' class='dropdown-toggle' data-toggle='dropdown'>
-        <i class='icon-download-alt'></i> <?php echo $lang->export ?>
-        <span class='caret'></span>
-      </a>
-      <ul class='dropdown-menu' id='exportActionMenu'>
-      <?php 
-      $misc = common::hasPriv('testcase', 'export') ? "class='export'" : "class=disabled";
-      $link = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy") : '#';
-      echo "<li>" . html::a($link, $lang->testcase->export, '', $misc) . "</li>";
+    if(common::hasPriv('testcase', 'batchCreate'))
+    {
+        $link = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
+        echo html::a($link, "<i class='icon-plus'></i> " . $lang->testcase->batchCreate, '', "class='btn btn-secondary'");
+    }
 
-      $misc = common::hasPriv('testcase', 'exportTemplet') ? "class='export'" : "class=disabled";
-      $link = common::hasPriv('testcase', 'exportTemplet') ?  $this->createLink('testcase', 'exportTemplet', "productID=$productID") : '#';
-      echo "<li>" . html::a($link, $lang->testcase->exportTemplet, '', $misc) . "</li>";
-      ?>
-      </ul>
-    </li>
-  </ul>
+    if(common::hasPriv('testcase', 'create'))
+    {
+        $link = $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule");
+        echo html::a($link, "<i class='icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary'");
+    }
+    ?>
+  </div>
 </div>
 <div id='queryBox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 <?php else:?>
